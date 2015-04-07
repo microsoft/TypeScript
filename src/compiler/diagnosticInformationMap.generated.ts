@@ -19,7 +19,7 @@ module ts {
         An_index_signature_parameter_cannot_have_an_initializer: { code: 1020, category: DiagnosticCategory.Error, key: "An index signature parameter cannot have an initializer." },
         An_index_signature_must_have_a_type_annotation: { code: 1021, category: DiagnosticCategory.Error, key: "An index signature must have a type annotation." },
         An_index_signature_parameter_must_have_a_type_annotation: { code: 1022, category: DiagnosticCategory.Error, key: "An index signature parameter must have a type annotation." },
-        An_index_signature_parameter_type_must_be_string_number_or_Enum: { code: 1023, category: DiagnosticCategory.Error, key: "An index signature parameter type must be 'string', 'number' or Enum." },
+        An_index_signature_parameter_type_must_be_string_number_or_an_enum_type: { code: 1023, category: DiagnosticCategory.Error, key: "An index signature parameter type must be 'string', 'number', or an enum type." },
         A_class_or_interface_declaration_can_only_have_one_extends_clause: { code: 1024, category: DiagnosticCategory.Error, key: "A class or interface declaration can only have one 'extends' clause." },
         An_extends_clause_must_precede_an_implements_clause: { code: 1025, category: DiagnosticCategory.Error, key: "An 'extends' clause must precede an 'implements' clause." },
         A_class_can_only_extend_a_single_class: { code: 1026, category: DiagnosticCategory.Error, key: "A class can only extend a single class." },

@@ -63,7 +63,7 @@
         "category": "Error",
         "code": 1022
     },
-    "An index signature parameter type must be 'string', 'number' or Enum.": {
+    "An index signature parameter type must be 'string', 'number', or an enum type.": {
         "category": "Error",
         "code": 1023
     },

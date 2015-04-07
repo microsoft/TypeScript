@@ -6338,7 +6338,7 @@ module ts {
             if (allConstituentTypesHaveKind(indexType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
 
                 // Try to use a number indexer.
-                if (allConstituentTypesHaveKind(indexType, TypeFlags.Any | TypeFlags.NumberLike )) {
+                if (allConstituentTypesHaveKind(indexType, TypeFlags.Any | TypeFlags.NumberLike)) {
                     let numberIndexType = getIndexTypeOfType(objectType, IndexKind.Number);
                     if (numberIndexType) {
                         return numberIndexType;
@@ -12288,6 +12288,20 @@ module ts {
             return false;
         }
 
+        function isValidTypeOfIndexSignatureParameter(parameter: ParameterDeclaration): boolean {
+            if (parameter.type.kind === SyntaxKind.StringKeyword || parameter.type.kind === SyntaxKind.NumberKeyword) {
+                return true;
+            }
+
+            if (parameter.type.kind === SyntaxKind.TypeReference) {
+                var type = getTypeFromTypeReference(<TypeReferenceNode>(parameter.type));
+                if (type.flags & TypeFlags.NumberLike) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         function checkGrammarIndexSignatureParameters(node: SignatureDeclaration): boolean {
             let parameter = node.parameters[0];
             if (node.parameters.length !== 1) {
@@ -12313,14 +12327,8 @@ module ts {
             if (!parameter.type) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
             }
-            if (parameter.type.kind === SyntaxKind.TypeReference) {
-                var type = getTypeFromTypeReference(<TypeReferenceNode>(parameter.type));
-                if (!(type.flags & TypeFlags.NumberLike)) {
-                    return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_must_be_string_number_or_Enum);
-                }
-
-            } else if (parameter.type.kind !== SyntaxKind.StringKeyword && parameter.type.kind !== SyntaxKind.NumberKeyword) {
-                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_must_be_string_number_or_Enum);
+            if (!isValidTypeOfIndexSignatureParameter(parameter)) {
+                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_must_be_string_number_or_an_enum_type);
             }
             if (!node.type) {
                 return grammarErrorOnNode(node, Diagnostics.An_index_signature_must_have_a_type_annotation);
