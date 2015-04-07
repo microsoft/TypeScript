@@ -23,7 +23,11 @@ module ts {
         reScanSlashToken(): SyntaxKind;
         reScanTemplateToken(): SyntaxKind;
         scan(): SyntaxKind;
-        setText(text: string): void;
+
+        // Sets the text for the scanner to scan.  An optional subrange starting point and length
+        // can be provided to have the scanner only scan a portion of the text.
+        setText(text: string, start?: number, length?: number): void;
+
         setTextPos(textPos: number): void;
         // Invokes the provided callback then unconditionally restores the scanner to the state it 
         // was in immediately prior to invoking the callback.  The result of invoking the callback
@@ -587,9 +591,10 @@ module ts {
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
 
-    export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, text?: string, onError?: ErrorCallback): Scanner {
+    // Creates a scanner over a (possibly unspecified) range of a piece of text.
+    export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, text?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner {
         let pos: number;       // Current position (end position of text of current token)
-        let len: number;       // Length of text
+        let end: number;       // end of text
         let startPos: number;  // Start position of whitespace before current token
         let tokenPos: number;  // Start position of text of current token
         let token: SyntaxKind;
@@ -597,6 +602,30 @@ module ts {
         let precedingLineBreak: boolean;
         let hasExtendedUnicodeEscape: boolean;
         let tokenIsUnterminated: boolean;
+
+        setText(text, start, length);
+
+        return {
+            getStartPos: () => startPos,
+            getTextPos: () => pos,
+            getToken: () => token,
+            getTokenPos: () => tokenPos,
+            getTokenText: () => text.substring(tokenPos, pos),
+            getTokenValue: () => tokenValue,
+            hasExtendedUnicodeEscape: () => hasExtendedUnicodeEscape,
+            hasPrecedingLineBreak: () => precedingLineBreak,
+            isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
+            isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
+            isUnterminated: () => tokenIsUnterminated,
+            reScanGreaterToken,
+            reScanSlashToken,
+            reScanTemplateToken,
+            scan,
+            setText,
+            setTextPos,
+            tryScan,
+            lookAhead,
+        };
 
         function error(message: DiagnosticMessage, length?: number): void {
             if (onError) {
@@ -694,7 +723,7 @@ module ts {
             let result = "";
             let start = pos;
             while (true) {
-                if (pos >= len) {
+                if (pos >= end) {
                     result += text.substring(start, pos);
                     tokenIsUnterminated = true;
                     error(Diagnostics.Unterminated_string_literal);
@@ -736,7 +765,7 @@ module ts {
             let resultingToken: SyntaxKind;
 
             while (true) {
-                if (pos >= len) {
+                if (pos >= end) {
                     contents += text.substring(start, pos);
                     tokenIsUnterminated = true;
                     error(Diagnostics.Unterminated_template_literal);
@@ -755,7 +784,7 @@ module ts {
                 }
 
                 // '${'
-                if (currChar === CharacterCodes.$ && pos + 1 < len && text.charCodeAt(pos + 1) === CharacterCodes.openBrace) {
+                if (currChar === CharacterCodes.$ && pos + 1 < end && text.charCodeAt(pos + 1) === CharacterCodes.openBrace) {
                     contents += text.substring(start, pos);
                     pos += 2;
                     resultingToken = startedWithBacktick ? SyntaxKind.TemplateHead : SyntaxKind.TemplateMiddle;
@@ -776,7 +805,7 @@ module ts {
                     contents += text.substring(start, pos);
                     pos++;
 
-                    if (pos < len && text.charCodeAt(pos) === CharacterCodes.lineFeed) {
+                    if (pos < end && text.charCodeAt(pos) === CharacterCodes.lineFeed) {
                         pos++;
                     }
 
@@ -796,7 +825,7 @@ module ts {
 
         function scanEscapeSequence(): string {
             pos++;
-            if (pos >= len) {
+            if (pos >= end) {
                 error(Diagnostics.Unexpected_end_of_text);
                 return "";
             }
@@ -822,7 +851,7 @@ module ts {
                     return "\"";
                 case CharacterCodes.u:
                     // '\u{DDDDDDDD}'
-                    if (pos < len && text.charCodeAt(pos) === CharacterCodes.openBrace) {
+                    if (pos < end && text.charCodeAt(pos) === CharacterCodes.openBrace) {
                         hasExtendedUnicodeEscape = true;
                         pos++;
                         return scanExtendedUnicodeEscape();
@@ -838,7 +867,7 @@ module ts {
                 // when encountering a LineContinuation (i.e. a backslash and a line terminator sequence),
                 // the line terminator is interpreted to be "the empty code unit sequence".
                 case CharacterCodes.carriageReturn:
-                    if (pos < len && text.charCodeAt(pos) === CharacterCodes.lineFeed) {
+                    if (pos < end && text.charCodeAt(pos) === CharacterCodes.lineFeed) {
                         pos++;
                     }
                     // fall through
@@ -877,7 +906,7 @@ module ts {
                 isInvalidExtendedEscape = true;
             }
 
-            if (pos >= len) {
+            if (pos >= end) {
                 error(Diagnostics.Unexpected_end_of_text);
                 isInvalidExtendedEscape = true;
             }
@@ -914,7 +943,7 @@ module ts {
         // Current character is known to be a backslash. Check for Unicode escape of the form '\uXXXX'
         // and return code point value if valid Unicode escape is found. Otherwise return -1.
         function peekUnicodeEscape(): number {
-            if (pos + 5 < len && text.charCodeAt(pos + 1) === CharacterCodes.u) {
+            if (pos + 5 < end && text.charCodeAt(pos + 1) === CharacterCodes.u) {
                 let start = pos;
                 pos += 2;
                 let value = scanExactNumberOfHexDigits(4);
@@ -927,7 +956,7 @@ module ts {
         function scanIdentifierParts(): string {
             let result = "";
             let start = pos;
-            while (pos < len) {
+            while (pos < end) {
                 let ch = text.charCodeAt(pos);
                 if (isIdentifierPart(ch)) {
                     pos++;
@@ -994,7 +1023,7 @@ module ts {
             tokenIsUnterminated = false;
             while (true) {
                 tokenPos = pos;
-                if (pos >= len) {
+                if (pos >= end) {
                     return token = SyntaxKind.EndOfFileToken;
                 }
                 let ch = text.charCodeAt(pos);
@@ -1007,7 +1036,7 @@ module ts {
                             continue;
                         }
                         else {
-                            if (ch === CharacterCodes.carriageReturn && pos + 1 < len && text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
+                            if (ch === CharacterCodes.carriageReturn && pos + 1 < end && text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
                                 // consume both CR and LF
                                 pos += 2;
                             }
@@ -1025,7 +1054,7 @@ module ts {
                             continue;
                         }
                         else {
-                            while (pos < len && isWhiteSpace(text.charCodeAt(pos))) {
+                            while (pos < end && isWhiteSpace(text.charCodeAt(pos))) {
                                 pos++;
                             }
                             return token = SyntaxKind.WhitespaceTrivia;
@@ -1098,7 +1127,7 @@ module ts {
                         if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
                             pos += 2;
 
-                            while (pos < len) {
+                            while (pos < end) {
                                 if (isLineBreak(text.charCodeAt(pos))) {
                                     break;
                                 }
@@ -1118,7 +1147,7 @@ module ts {
                             pos += 2;
 
                             let commentClosed = false;
-                            while (pos < len) {
+                            while (pos < end) {
                                 let ch = text.charCodeAt(pos);
 
                                 if (ch === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
@@ -1153,7 +1182,7 @@ module ts {
                         return pos++, token = SyntaxKind.SlashToken;
 
                     case CharacterCodes._0:
-                        if (pos + 2 < len && (text.charCodeAt(pos + 1) === CharacterCodes.X || text.charCodeAt(pos + 1) === CharacterCodes.x)) {
+                        if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.X || text.charCodeAt(pos + 1) === CharacterCodes.x)) {
                             pos += 2;
                             let value = scanMinimumNumberOfHexDigits(1);
                             if (value < 0) {
@@ -1163,7 +1192,7 @@ module ts {
                             tokenValue = "" + value;
                             return token = SyntaxKind.NumericLiteral;
                         }
-                        else if (pos + 2 < len && (text.charCodeAt(pos + 1) === CharacterCodes.B || text.charCodeAt(pos + 1) === CharacterCodes.b)) {
+                        else if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.B || text.charCodeAt(pos + 1) === CharacterCodes.b)) {
                             pos += 2;
                             let value = scanBinaryOrOctalDigits(/* base */ 2);
                             if (value < 0) {
@@ -1173,7 +1202,7 @@ module ts {
                             tokenValue = "" + value;
                             return token = SyntaxKind.NumericLiteral;
                         }
-                        else if (pos + 2 < len && (text.charCodeAt(pos + 1) === CharacterCodes.O || text.charCodeAt(pos + 1) === CharacterCodes.o)) {
+                        else if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.O || text.charCodeAt(pos + 1) === CharacterCodes.o)) {
                             pos += 2;
                             let value = scanBinaryOrOctalDigits(/* base */ 8);
                             if (value < 0) {
@@ -1184,7 +1213,7 @@ module ts {
                             return token = SyntaxKind.NumericLiteral;
                         }
                         // Try to parse as an octal
-                        if (pos + 1 < len && isOctalDigit(text.charCodeAt(pos + 1))) {
+                        if (pos + 1 < end && isOctalDigit(text.charCodeAt(pos + 1))) {
                             tokenValue = "" + scanOctalDigits();
                             return token = SyntaxKind.NumericLiteral;
                         }
@@ -1299,7 +1328,7 @@ module ts {
                     default:
                         if (isIdentifierStart(ch)) {
                             pos++;
-                            while (pos < len && isIdentifierPart(ch = text.charCodeAt(pos))) pos++;
+                            while (pos < end && isIdentifierPart(ch = text.charCodeAt(pos))) pos++;
                             tokenValue = text.substring(tokenPos, pos);
                             if (ch === CharacterCodes.backslash) {
                                 tokenValue += scanIdentifierParts();
@@ -1350,7 +1379,7 @@ module ts {
                 while (true) {
                     // If we reach the end of a file, or hit a newline, then this is an unterminated
                     // regex.  Report error and return what we have so far.
-                    if (p >= len) {
+                    if (p >= end) {
                         tokenIsUnterminated = true;
                         error(Diagnostics.Unterminated_regular_expression_literal)
                         break;
@@ -1386,7 +1415,7 @@ module ts {
                     p++;
                 }
 
-                while (p < len && isIdentifierPart(text.charCodeAt(p))) {
+                while (p < end && isIdentifierPart(text.charCodeAt(p))) {
                     p++;
                 }
                 pos = p;
@@ -1435,43 +1464,19 @@ module ts {
             return speculationHelper(callback, /*isLookahead:*/ false);
         }
 
-        function setText(newText: string) {
+        function setText(newText: string, start?: number, length?: number) {
             text = newText || "";
-            len = text.length;
-            setTextPos(0);
+            end = length === undefined ? text.length : start + length;
+            setTextPos(start || 0);
         }
 
         function setTextPos(textPos: number) {
+            Debug.assert(textPos >= 0);
             pos = textPos;
             startPos = textPos;
             tokenPos = textPos;
             token = SyntaxKind.Unknown;
             precedingLineBreak = false;
         }
-
-        setText(text);
-
-
-        return {
-            getStartPos: () => startPos,
-            getTextPos: () => pos,
-            getToken: () => token,
-            getTokenPos: () => tokenPos,
-            getTokenText: () => text.substring(tokenPos, pos),
-            getTokenValue: () => tokenValue,
-            hasExtendedUnicodeEscape: () => hasExtendedUnicodeEscape,
-            hasPrecedingLineBreak: () => precedingLineBreak,
-            isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
-            isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
-            isUnterminated: () => tokenIsUnterminated,
-            reScanGreaterToken,
-            reScanSlashToken,
-            reScanTemplateToken,
-            scan,
-            setText,
-            setTextPos,
-            tryScan,
-            lookAhead,
-        };
     }
 }
