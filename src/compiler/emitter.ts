@@ -1136,8 +1136,8 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         if (!computedPropertyNamesToGeneratedNames) {
                             computedPropertyNamesToGeneratedNames = [];
                         }
-
-                        let generatedName = computedPropertyNamesToGeneratedNames[node.id];
+                        
+                        let generatedName = computedPropertyNamesToGeneratedNames[getNodeId(node)];
                         if (generatedName) {
                             // we have already generated a variable for this node, write that value instead.
                             write(generatedName);
@@ -1145,7 +1145,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         }
 
                         generatedName = createAndRecordTempVariable(TempFlags.Auto).text;
-                        computedPropertyNamesToGeneratedNames[node.id] = generatedName;
+                        computedPropertyNamesToGeneratedNames[getNodeId(node)] = generatedName;
                         write(generatedName);
                         write(" = ");
                     }
