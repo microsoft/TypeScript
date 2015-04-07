@@ -5434,42 +5434,45 @@ module ts {
         }
 
         function parseJSDocType(): JSDocType {
-            let type = parseJSDocTypeCore();
-            if (type && token === SyntaxKind.EqualsToken) {
-                return parseJSDocOptionalType(type);
-            }
+            if (!error) {
+                let type = parseJSDocTypeCore();
+                if (type && token === SyntaxKind.EqualsToken) {
+                    return parseJSDocOptionalType(type);
+                }
 
-            return type;
+                return type;
+            }
         }
 
         function parseJSDocTypeCore(): JSDocType {
-            switch (token) {
-                case SyntaxKind.AsteriskToken:
-                    return parseJSDocAllType();
-                case SyntaxKind.QuestionToken:
-                    return parseJSDocUnknownOrNullableType();
-                case SyntaxKind.OpenParenToken:
-                    return parseJSDocUnionType();
-                case SyntaxKind.ExclamationToken:
-                    return parseJSDocNonNullableType();
-                case SyntaxKind.OpenBraceToken:
-                    return parseJSDocRecordType();
-                case SyntaxKind.FunctionKeyword:
-                    return parseJSDocFunctionType();
-                case SyntaxKind.DotDotDotToken:
-                    return parseJSDocVariadicType();
-                case SyntaxKind.NewKeyword:
-                    return parseJSDocConstructorType();
-                case SyntaxKind.ThisKeyword:
-                    return parseJSDocThisType();
-            }
+            if (!error) {
+                switch (token) {
+                    case SyntaxKind.AsteriskToken:
+                        return parseJSDocAllType();
+                    case SyntaxKind.QuestionToken:
+                        return parseJSDocUnknownOrNullableType();
+                    case SyntaxKind.OpenParenToken:
+                        return parseJSDocUnionType();
+                    case SyntaxKind.ExclamationToken:
+                        return parseJSDocNonNullableType();
+                    case SyntaxKind.OpenBraceToken:
+                        return parseJSDocRecordType();
+                    case SyntaxKind.FunctionKeyword:
+                        return parseJSDocFunctionType();
+                    case SyntaxKind.DotDotDotToken:
+                        return parseJSDocVariadicType();
+                    case SyntaxKind.NewKeyword:
+                        return parseJSDocConstructorType();
+                    case SyntaxKind.ThisKeyword:
+                        return parseJSDocThisType();
+                }
 
-            if (isIdentifier()) {
-                return parseJSDocTypeReference();
-            }
+                if (isIdentifier()) {
+                    return parseJSDocTypeReference();
+                }
 
-            error = true;
-            return undefined;
+                error = true;
+            }
         }
 
         function parseJSDocThisType(): JSDocThisType {
@@ -5527,6 +5530,7 @@ module ts {
         function parseJSDocOptionalType(type: JSDocType): JSDocOptionalType {
             let result = <JSDocOptionalType>createNode(SyntaxKind.JSDocOptionalType, type.pos);
             nextToken();
+            result.type = type;
             return finishNode(result);
         }
 
@@ -5535,6 +5539,8 @@ module ts {
             result.name = parseIdentifier();
 
             while (!error && result.name && token === SyntaxKind.DotToken) {
+                nextToken();
+
                 if (isIdentifierOrKeyword()) {
                     result.name = parseQualifiedName(result.name);
                 }
@@ -5572,9 +5578,6 @@ module ts {
         }
 
         function parseQualifiedName(left: EntityName): QualifiedName {
-            // Move past the .
-            nextToken();
-
             let result = <QualifiedName>createNode(SyntaxKind.QualifiedName, left.pos);
             result.left = left;
             result.right = parseIdentifierOrKeyword();

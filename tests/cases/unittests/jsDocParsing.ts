@@ -328,7 +328,6 @@ module ts {
             });
 
             it("unionType", () => {
-                debugger;
                 parsesCorrectly("{(number|string)}",
 `{
     "kind": "JSDocUnionType",
@@ -360,6 +359,267 @@ module ts {
         "length": 2,
         "pos": 2,
         "end": 15
+    }
+}`);
+            });
+
+            it("functionType1", () => {
+                parsesCorrectly("{function(string, boolean)}",
+                    `{
+    "kind": "JSDocFunctionType",
+    "pos": 1,
+    "end": 26,
+    "parameters": {
+        "0": {
+            "kind": "JSDocTypeReference",
+            "pos": 10,
+            "end": 16,
+            "name": {
+                "kind": "Identifier",
+                "pos": 10,
+                "end": 16,
+                "text": "string"
+            }
+        },
+        "1": {
+            "kind": "JSDocTypeReference",
+            "pos": 17,
+            "end": 25,
+            "name": {
+                "kind": "Identifier",
+                "pos": 17,
+                "end": 25,
+                "text": "boolean"
+            }
+        },
+        "length": 2,
+        "pos": 10,
+        "end": 25
+    }
+}`);
+            });
+
+            it("functionReturnType1", () => {
+                parsesCorrectly("{function(string, boolean)}",
+                    `{
+    "kind": "JSDocFunctionType",
+    "pos": 1,
+    "end": 26,
+    "parameters": {
+        "0": {
+            "kind": "JSDocTypeReference",
+            "pos": 10,
+            "end": 16,
+            "name": {
+                "kind": "Identifier",
+                "pos": 10,
+                "end": 16,
+                "text": "string"
+            }
+        },
+        "1": {
+            "kind": "JSDocTypeReference",
+            "pos": 17,
+            "end": 25,
+            "name": {
+                "kind": "Identifier",
+                "pos": 17,
+                "end": 25,
+                "text": "boolean"
+            }
+        },
+        "length": 2,
+        "pos": 10,
+        "end": 25
+    }
+}`);
+            });
+
+            it("thisType1", () => {
+                parsesCorrectly("{this:a.b}",
+                    `{
+    "kind": "JSDocThisType",
+    "pos": 1,
+    "end": 9,
+    "type": {
+        "kind": "JSDocTypeReference",
+        "pos": 6,
+        "end": 9,
+        "name": {
+            "kind": "FirstNode",
+            "pos": 6,
+            "end": 9,
+            "left": {
+                "kind": "Identifier",
+                "pos": 6,
+                "end": 7,
+                "text": "a"
+            },
+            "right": {
+                "kind": "Identifier",
+                "pos": 8,
+                "end": 9,
+                "text": "b"
+            }
+        }
+    }
+}`);
+            });
+
+            it("newType1", () => {
+                parsesCorrectly("{new:a.b}",
+                    `{
+    "kind": "JSDocConstructorType",
+    "pos": 1,
+    "end": 8,
+    "type": {
+        "kind": "JSDocTypeReference",
+        "pos": 5,
+        "end": 8,
+        "name": {
+            "kind": "FirstNode",
+            "pos": 5,
+            "end": 8,
+            "left": {
+                "kind": "Identifier",
+                "pos": 5,
+                "end": 6,
+                "text": "a"
+            },
+            "right": {
+                "kind": "Identifier",
+                "pos": 7,
+                "end": 8,
+                "text": "b"
+            }
+        }
+    }
+}`);
+            });
+
+            it("variadicType", () => {
+                parsesCorrectly("{...number}",
+                    `{
+    "kind": "JSDocVariadicType",
+    "pos": 1,
+    "end": 10,
+    "type": {
+        "kind": "JSDocTypeReference",
+        "pos": 4,
+        "end": 10,
+        "name": {
+            "kind": "Identifier",
+            "pos": 4,
+            "end": 10,
+            "text": "number"
+        }
+    }
+}`);
+            });
+
+            it("optionalType", () => {
+                parsesCorrectly("{number=}",
+                    `{
+    "kind": "JSDocOptionalType",
+    "pos": 1,
+    "end": 8,
+    "type": {
+        "kind": "JSDocTypeReference",
+        "pos": 1,
+        "end": 7,
+        "name": {
+            "kind": "Identifier",
+            "pos": 1,
+            "end": 7,
+            "text": "number"
+        }
+    }
+}`);
+            });
+
+            it("optionalNullable", () => {
+                parsesCorrectly("{?=}",
+                    `{
+    "kind": "JSDocOptionalType",
+    "pos": 1,
+    "end": 3,
+    "type": {
+        "kind": "JSDocUnknownType",
+        "pos": 1,
+        "end": 2
+    }
+}`);
+            });
+
+            it("typeReference1", () => {
+                parsesCorrectly("{a.<number>}",
+                    `{
+    "kind": "JSDocTypeReference",
+    "pos": 1,
+    "end": 11,
+    "name": {
+        "kind": "Identifier",
+        "pos": 1,
+        "end": 2,
+        "text": "a"
+    },
+    "typeArguments": {
+        "0": {
+            "kind": "JSDocTypeReference",
+            "pos": 4,
+            "end": 10,
+            "name": {
+                "kind": "Identifier",
+                "pos": 4,
+                "end": 10,
+                "text": "number"
+            }
+        },
+        "length": 1,
+        "pos": 4,
+        "end": 10
+    }
+}`);
+            });
+
+            it("typeReference2", () => {
+                parsesCorrectly("{a.<number,string>}",
+                    `{
+    "kind": "JSDocTypeReference",
+    "pos": 1,
+    "end": 18,
+    "name": {
+        "kind": "Identifier",
+        "pos": 1,
+        "end": 2,
+        "text": "a"
+    },
+    "typeArguments": {
+        "0": {
+            "kind": "JSDocTypeReference",
+            "pos": 4,
+            "end": 10,
+            "name": {
+                "kind": "Identifier",
+                "pos": 4,
+                "end": 10,
+                "text": "number"
+            }
+        },
+        "1": {
+            "kind": "JSDocTypeReference",
+            "pos": 11,
+            "end": 17,
+            "name": {
+                "kind": "Identifier",
+                "pos": 11,
+                "end": 17,
+                "text": "string"
+            }
+        },
+        "length": 2,
+        "pos": 4,
+        "end": 17
     }
 }`);
             });
