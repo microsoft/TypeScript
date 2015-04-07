@@ -5512,6 +5512,8 @@ module ts {
             }
 
             parameters.end = scanner.getStartPos();
+
+            result.parameters = parameters;
             parseExpected(SyntaxKind.CloseParenToken);
 
             if (token === SyntaxKind.ColonToken) {
@@ -5613,6 +5615,7 @@ module ts {
             }
 
             members.end = scanner.getStartPos();
+            result.member = members;
 
             parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(result);
@@ -5663,6 +5666,7 @@ module ts {
             }
 
             types.end = scanner.getStartPos();
+            result.types = types;
 
             parseExpected(SyntaxKind.CloseParenToken);
 
