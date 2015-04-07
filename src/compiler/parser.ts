@@ -5503,7 +5503,7 @@ module ts {
             let parameters = <NodeArray<JSDocType>>[];
             parameters.pos = scanner.getStartPos();
 
-            while (!error && token !== SyntaxKind.CloseParenToken && token !== SyntaxKind.EndOfFileToken) {
+            while (!error && token !== SyntaxKind.CloseParenToken) {
                 if (parameters.length > 0) {
                     parseExpected(SyntaxKind.CommaToken);
                 }
@@ -5610,7 +5610,11 @@ module ts {
             let members = <NodeArray<JSDocMember>>[];
             members.pos = scanner.getStartPos();
 
-            while (token !== SyntaxKind.CloseBraceToken && token !== SyntaxKind.EndOfFileToken && !error) {
+            while (!error && token !== SyntaxKind.CloseBraceToken) {
+                if (members.length > 0) {
+                    parseExpected(SyntaxKind.CommaToken);
+                }
+
                 members.push(parseJSDocMember());
             }
 
@@ -5660,7 +5664,7 @@ module ts {
             types.pos = scanner.getStartPos();
 
             types.push(parseJSDocType());
-            while (token === SyntaxKind.BarToken) {
+            while (!error && token === SyntaxKind.BarToken) {
                 nextToken();
                 types.push(parseJSDocType());
             }
