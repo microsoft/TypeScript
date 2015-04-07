@@ -73,6 +73,7 @@ module ts {
     }
 
     export interface Shim {
+        logger: Logger;
         dispose(dummy: any): void;
     }
 
@@ -198,13 +199,13 @@ module ts {
         }
 
         public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
-            var oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
-            var encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
+            let oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
+            let encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
             if (encoded == null) {
                 return null;
             }
 
-            var decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded);
+            let decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded);
             return createTextChangeRange(
                 createTextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
         }
@@ -212,7 +213,7 @@ module ts {
 
     export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
         private files: string[];
-        
+
         constructor(private shimHost: LanguageServiceShimHost) {
         }
 
@@ -223,13 +224,13 @@ module ts {
         public trace(s: string): void {
             this.shimHost.trace(s);
         }
-        
+
         public error(s: string): void {
             this.shimHost.error(s);
         }
 
         public getCompilationSettings(): CompilerOptions {
-            var settingsJson = this.shimHost.getCompilationSettings();
+            let settingsJson = this.shimHost.getCompilationSettings();
             if (settingsJson == null || settingsJson == "") {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
                 return null;
@@ -238,7 +239,7 @@ module ts {
         }
 
         public getScriptFileNames(): string[] {
-            var encoded = this.shimHost.getScriptFileNames();
+            let encoded = this.shimHost.getScriptFileNames();
             return this.files = JSON.parse(encoded);
         }
 
@@ -248,7 +249,7 @@ module ts {
             if (this.files && this.files.indexOf(fileName) < 0) {
                 return undefined;
             }
-            var scriptSnapshot = this.shimHost.getScriptSnapshot(fileName);
+            let scriptSnapshot = this.shimHost.getScriptSnapshot(fileName);
             return scriptSnapshot && new ScriptSnapshotShimAdapter(scriptSnapshot);
         }
 
@@ -257,7 +258,7 @@ module ts {
         }
 
         public getLocalizedDiagnosticMessages(): any {
-            var diagnosticMessagesJson = this.shimHost.getLocalizedDiagnosticMessages();
+            let diagnosticMessagesJson = this.shimHost.getLocalizedDiagnosticMessages();
             if (diagnosticMessagesJson == null || diagnosticMessagesJson == "") {
                 return null;
             }
@@ -293,12 +294,12 @@ module ts {
 
     function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any): any {
         logger.log(actionDescription);
-        var start = Date.now();
-        var result = action();
-        var end = Date.now();
+        let start = Date.now();
+        let result = action();
+        let end = Date.now();
         logger.log(actionDescription + " completed in " + (end - start) + " msec");
         if (typeof (result) === "string") {
-            var str = <string>result;
+            let str = <string>result;
             if (str.length > 128) {
                 str = str.substring(0, 128) + "...";
             }
@@ -309,7 +310,7 @@ module ts {
 
     function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any): string {
         try {
-            var result = simpleForwardCall(logger, actionDescription, action);
+            let result = simpleForwardCall(logger, actionDescription, action);
             return JSON.stringify({ result: result });
         }
         catch (err) {
@@ -322,24 +323,19 @@ module ts {
         }
     }
 
-    var globalLogger: Logger;
-
-    function serialize(target: Function, key: string| symbol, descriptor: PropertyDescriptor) {
+    function serializeResultAsJson(target: Shim, key: string | symbol, descriptor: PropertyDescriptor) {
         let action = descriptor.value;
         descriptor.value = function () {
-            var _this = this;
-            var _arguments = arguments;
-            debugger;
-            var result = forwardJSONCall(globalLogger,
-                <string>key + "(" + Array.prototype.join.call(_arguments, ", ") + ")",
-                () => action.apply(_this, _arguments));
-            return result;
+            let _arguments = arguments;
+            return forwardJSONCall((<Shim>this).logger,
+                <string>key + "(" + JSON.stringify(Array.prototype.join.call(_arguments, ", ")) + ")",
+                () => action.apply(this, _arguments));
         };
         return descriptor;
     }
 
     class ShimBase implements Shim {
-        constructor(private factory: ShimFactory) {
+        constructor(private factory: ShimFactory, public logger: Logger) {
             factory.registerShim(this);
         }
         public dispose(dummy: any): void {
@@ -348,7 +344,7 @@ module ts {
     }
 
     /* @internal */
-    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; } []{
+    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; }[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
     }
 
@@ -364,14 +360,10 @@ module ts {
     }
 
     class LanguageServiceShimObject extends ShimBase implements LanguageServiceShim {
-        private logger: Logger;
-
         constructor(factory: ShimFactory,
             private host: LanguageServiceShimHost,
             public languageService: LanguageService) {
-            super(factory);
-            this.logger = this.host;
-            globalLogger = this.logger;
+            super(factory, host);
         }
 
         /// DISPOSE
@@ -401,28 +393,28 @@ module ts {
         /**
          * Update the list of scripts known to the compiler
          */
-        @serialize
+        @serializeResultAsJson
         public refresh(throwOnError: boolean): void {
             return <any>null;
         }
 
-        @serialize
+        @serializeResultAsJson
         public cleanupSemanticCache(): void {
             this.languageService.cleanupSemanticCache();
             return <any>null;
         }
 
         private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[] {
-            var newLine = this.getNewLine();
-            return ts.realizeDiagnostics(diagnostics, newLine);
+            return ts.realizeDiagnostics(diagnostics, this.getNewLine());
         }
 
-        @serialize
+        @serializeResultAsJson
         public getSyntacticClassifications(fileName: string, start: number, length: number): any {
             return this.languageService.getSyntacticClassifications(fileName, createTextSpan(start, length));
         }
 
-        @serialize
+        @serializeResultAsJson
+
         public getSemanticClassifications(fileName: string, start: number, length: number): any {
             return this.languageService.getSemanticClassifications(fileName, createTextSpan(start, length));
         }
@@ -431,21 +423,21 @@ module ts {
             return this.host.getNewLine ? this.host.getNewLine() : "\r\n";
         }
 
-        @serialize
+        @serializeResultAsJson
         public getSyntacticDiagnostics(fileName: string): any {
-            var diagnostics = this.languageService.getSyntacticDiagnostics(fileName);
+            let diagnostics = this.languageService.getSyntacticDiagnostics(fileName);
             return this.realizeDiagnostics(diagnostics);
         }
 
-        @serialize
+        @serializeResultAsJson
         public getSemanticDiagnostics(fileName: string): any {
-            var diagnostics = this.languageService.getSemanticDiagnostics(fileName);
+            let diagnostics = this.languageService.getSemanticDiagnostics(fileName);
             return this.realizeDiagnostics(diagnostics);
         }
 
-        @serialize
+        @serializeResultAsJson
         public getCompilerOptionsDiagnostics(): any {
-            var diagnostics = this.languageService.getCompilerOptionsDiagnostics();
+            let diagnostics = this.languageService.getCompilerOptionsDiagnostics();
             return this.realizeDiagnostics(diagnostics);
         }
 
@@ -455,7 +447,7 @@ module ts {
          * Computes a string representation of the type at the requested position
          * in the active file.
          */
-        @serialize
+        @serializeResultAsJson
         public getQuickInfoAtPosition(fileName: string, position: number): any {
             return this.languageService.getQuickInfoAtPosition(fileName, position);
         }
@@ -466,7 +458,7 @@ module ts {
          * Computes span information of the name or dotted name at the requested position
          * in the active file.
          */
-        @serialize
+        @serializeResultAsJson
         public getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): any {
             return this.languageService.getNameOrDottedNameSpan(fileName, startPos, endPos);
         }
@@ -475,14 +467,14 @@ module ts {
          * STATEMENTSPAN
          * Computes span information of statement at the requested position in the active file.
          */
-        @serialize
+        @serializeResultAsJson
         public getBreakpointStatementAtPosition(fileName: string, position: number): any {
             return this.languageService.getBreakpointStatementAtPosition(fileName, position);
         }
 
         /// SIGNATUREHELP
 
-        @serialize
+        @serializeResultAsJson
         public getSignatureHelpItems(fileName: string, position: number): any {
             return this.languageService.getSignatureHelpItems(fileName, position);
         }
@@ -493,45 +485,45 @@ module ts {
          * Computes the definition location and file for the symbol
          * at the requested position. 
          */
-        @serialize
+        @serializeResultAsJson
         public getDefinitionAtPosition(fileName: string, position: number): any {
             return this.languageService.getDefinitionAtPosition(fileName, position);
         }
 
-        @serialize
+        @serializeResultAsJson
         public getRenameInfo(fileName: string, position: number): any {
             return this.languageService.getRenameInfo(fileName, position);
         }
 
-        @serialize
+        @serializeResultAsJson
         public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): any {
             return this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments);
         }
 
         /// GET BRACE MATCHING
-        @serialize
+        @serializeResultAsJson
         public getBraceMatchingAtPosition(fileName: string, position: number): any {
             return this.languageService.getBraceMatchingAtPosition(fileName, position);
         }
 
         /// GET SMART INDENT
-        @serialize
+        @serializeResultAsJson
         public getIndentationAtPosition(fileName: string, position: number, options: string /*Services.EditorOptions*/): any {
             return this.languageService.getIndentationAtPosition(fileName, position, <EditorOptions>JSON.parse(options));
         }
 
         /// GET REFERENCES
-        @serialize
+        @serializeResultAsJson
         public getReferencesAtPosition(fileName: string, position: number): any {
             return this.languageService.getReferencesAtPosition(fileName, position);
         }
 
-        @serialize
+        @serializeResultAsJson
         public findReferences(fileName: string, position: number): any {
             return this.languageService.findReferences(fileName, position);
         }
 
-        @serialize
+        @serializeResultAsJson
         public getOccurrencesAtPosition(fileName: string, position: number): any {
             return this.languageService.getOccurrencesAtPosition(fileName, position);
         }
@@ -543,65 +535,62 @@ module ts {
          * to provide at the given source position and providing a member completion 
          * list if requested.
          */
-        @serialize
+        @serializeResultAsJson
         public getCompletionsAtPosition(fileName: string, position: number): any {
             return this.languageService.getCompletionsAtPosition(fileName, position);
         }
 
         /** Get a string based representation of a completion list entry details */
-        @serialize
+        @serializeResultAsJson
         public getCompletionEntryDetails(fileName: string, position: number, entryName: string): any {
             return this.languageService.getCompletionEntryDetails(fileName, position, entryName);
         }
 
-        @serialize
+        @serializeResultAsJson
         public getFormattingEditsForRange(fileName: string, start: number, end: number, options: string/*Services.FormatCodeOptions*/): any {
-            var localOptions: ts.FormatCodeOptions = JSON.parse(options);
-            var edits = this.languageService.getFormattingEditsForRange(fileName, start, end, localOptions);
-            return edits;
+            let localOptions: ts.FormatCodeOptions = JSON.parse(options);
+            return this.languageService.getFormattingEditsForRange(fileName, start, end, localOptions);
         }
 
-        @serialize
+        @serializeResultAsJson
         public getFormattingEditsForDocument(fileName: string, options: string/*Services.FormatCodeOptions*/): any {
-            var localOptions: ts.FormatCodeOptions = JSON.parse(options);
-            var edits = this.languageService.getFormattingEditsForDocument(fileName, localOptions);
-            return edits;
+            let localOptions: ts.FormatCodeOptions = JSON.parse(options);
+            return this.languageService.getFormattingEditsForDocument(fileName, localOptions);
         }
 
-        @serialize
+        @serializeResultAsJson
         public getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: string/*Services.FormatCodeOptions*/): any {
-            var localOptions: ts.FormatCodeOptions = JSON.parse(options);
-            var edits = this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
-            return edits;
+            let localOptions: ts.FormatCodeOptions = JSON.parse(options);
+            return this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
         }
 
         /// NAVIGATE TO
 
         /** Return a list of symbols that are interesting to navigate to */
-        @serialize
+        @serializeResultAsJson
         public getNavigateToItems(searchValue: string, maxResultCount?: number): any {
             return this.languageService.getNavigateToItems(searchValue, maxResultCount);
         }
 
-        @serialize
+        @serializeResultAsJson
         public getNavigationBarItems(fileName: string): any {
             return this.languageService.getNavigationBarItems(fileName);
         }
 
-        @serialize
+        @serializeResultAsJson
         public getOutliningSpans(fileName: string): any {
             return this.languageService.getOutliningSpans(fileName);
         }
 
-        @serialize
+        @serializeResultAsJson
         public getTodoComments(fileName: string, descriptors: string): any {
             return this.languageService.getTodoComments(fileName, JSON.parse(descriptors));
         }
 
         /// Emit
-        @serialize
+        @serializeResultAsJson
         public getEmitOutput(fileName: string): any {
-            var output = this.languageService.getEmitOutput(fileName);
+            let output = this.languageService.getEmitOutput(fileName);
             // Shim the API changes for 1.5 release. This should be removed once
             // TypeScript 1.5 has shipped.
             (<any>output).emitOutputStatus = output.emitSkipped ? 1 : 0;
@@ -612,17 +601,17 @@ module ts {
     class ClassifierShimObject extends ShimBase implements ClassifierShim {
         public classifier: Classifier;
 
-        constructor(factory: ShimFactory) {
-            super(factory);
+        constructor(factory: ShimFactory, logger: Logger) {
+            super(factory, logger);
             this.classifier = createClassifier();
         }
 
         /// COLORIZATION
         public getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): string {
-            var classification = this.classifier.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics);
-            var items = classification.entries;
-            var result = "";
-            for (var i = 0; i < items.length; i++) {
+            let classification = this.classifier.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics);
+            let items = classification.entries;
+            let result = "";
+            for (let i = 0; i < items.length; i++) {
                 result += items[i].length + "\n";
                 result += items[i].classification + "\n";
             }
@@ -632,14 +621,14 @@ module ts {
     }
 
     class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
-        constructor(factory: ShimFactory) {
-            super(factory);
+        constructor(factory: ShimFactory, logger: Logger) {
+            super(factory, logger);
         }
 
-        @serialize
+        @serializeResultAsJson
         public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): any {
-            var result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()));
-            var convertResult = {
+            let result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()));
+            let convertResult = {
                 referencedFiles: <IFileReference[]>[],
                 importedFiles: <IFileReference[]>[],
                 isLibFile: result.isLibFile
@@ -663,7 +652,7 @@ module ts {
             return convertResult;
         }
 
-        @serialize
+        @serializeResultAsJson
         public getDefaultCompilationSettings(): any {
             return getDefaultCompilerOptions();
         }
@@ -682,9 +671,8 @@ module ts {
 
         public createLanguageServiceShim(host: LanguageServiceShimHost): LanguageServiceShim {
             try {
-                globalLogger = host;
-                var hostAdapter = new LanguageServiceShimHostAdapter(host);
-                var languageService = createLanguageService(hostAdapter, this.documentRegistry);
+                let hostAdapter = new LanguageServiceShimHostAdapter(host);
+                let languageService = createLanguageService(hostAdapter, this.documentRegistry);
                 return new LanguageServiceShimObject(this, host, languageService);
             }
             catch (err) {
@@ -695,8 +683,7 @@ module ts {
 
         public createClassifierShim(logger: Logger): ClassifierShim {
             try {
-                globalLogger = logger;
-                return new ClassifierShimObject(this);
+                return new ClassifierShimObject(this, logger);
             }
             catch (err) {
                 logInternalError(logger, err);
@@ -706,8 +693,7 @@ module ts {
 
         public createCoreServicesShim(logger: Logger): CoreServicesShim {
             try {
-                globalLogger = logger;
-                return new CoreServicesShimObject(this);
+                return new CoreServicesShimObject(this, logger);
             }
             catch (err) {
                 logInternalError(logger, err);
@@ -726,7 +712,7 @@ module ts {
         }
 
         public unregisterShim(shim: Shim): void {
-            for (var i = 0, n = this._shims.length; i < n; i++) {
+            for (let i = 0, n = this._shims.length; i < n; i++) {
                 if (this._shims[i] === shim) {
                     delete this._shims[i];
                     return;
@@ -739,7 +725,7 @@ module ts {
 
     // Here we expose the TypeScript services as an external module
     // so that it may be consumed easily like a node module.
-    declare var module: any;
+    declare let module: any;
     if (typeof module !== "undefined" && module.exports) {
         module.exports = ts;
     }
