@@ -749,6 +749,10 @@ module ts {
                 parsesIncorrectly("{*foo}");
             });
 
+            it("typeArgumentsNotFollowingDot", () => {
+                parsesIncorrectly("{a<>}");
+            });
+
             it("emptyTypeArguments", () => {
                 parsesIncorrectly("{a.<>}");
             });
