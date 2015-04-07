@@ -5641,8 +5641,9 @@ module ts {
         }
 
         function parsePropertyName(): Identifier | LiteralExpression {
-            if (token === SyntaxKind.Identifier || token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral) {
+            if (isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral) {
                 let result = <Identifier | LiteralExpression>createNode(token);
+                result.text = scanner.getTokenValue();
                 nextToken();
                 return finishNode(result);
             }
