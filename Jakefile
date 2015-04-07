@@ -218,8 +218,9 @@ var compilerFilename = "tsc.js";
     * @param outDir: true to compile using --outDir
     * @param keepComments: false to compile using --removeComments
     * @param callback: a function to execute after the compilation process ends
+    * @param target: a string represting the compilation target, e.g. "es5"
     */
-function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback, targetES5) {
+function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback, target) {
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
         var options = "--module commonjs -noImplicitAny";
@@ -230,8 +231,8 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
             options += " --removeComments";
         }
 
-        if (targetES5) {
-            options += " --target es5";
+        if (target) {
+            options += " --target " + target;
         }
  
         if (generateDeclarations) {
@@ -371,7 +372,7 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
             /*stripInternal*/ false,
             /*callback*/ function () { 
                 jake.cpR(servicesFile, nodePackageFile, {silent: true});
-            }, /*targetES5*/ true);
+            }, /*target*/ "es5");
 
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
 var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
@@ -411,7 +412,7 @@ compileFile(nodeDefinitionsFile, servicesSources,[builtLocalDirectory, copyright
 
                 // Delete the temp dir
                 jake.rmRf(tempDirPath, {silent: true});
-           }, /*targetES5*/ true);
+           }, /*target*/ "es5");
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
@@ -506,7 +507,7 @@ compileFile(run, harnessSources, [builtLocalDirectory, tscFile].concat(libraryTa
             /*noResolve*/ undefined,
             /*stripInternal*/ undefined,
             /*callback*/ undefined,
-            /*targetES5*/ true);
+            /*target*/ "es5");
 
 var internalTests = "internal/"
 
