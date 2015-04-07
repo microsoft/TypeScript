@@ -5445,34 +5445,33 @@ module ts {
         }
 
         function parseJSDocTypeCore(): JSDocType {
-            if (!error) {
-                switch (token) {
-                    case SyntaxKind.AsteriskToken:
-                        return parseJSDocAllType();
-                    case SyntaxKind.QuestionToken:
-                        return parseJSDocUnknownOrNullableType();
-                    case SyntaxKind.OpenParenToken:
-                        return parseJSDocUnionType();
-                    case SyntaxKind.ExclamationToken:
-                        return parseJSDocNonNullableType();
-                    case SyntaxKind.OpenBraceToken:
-                        return parseJSDocRecordType();
-                    case SyntaxKind.FunctionKeyword:
-                        return parseJSDocFunctionType();
-                    case SyntaxKind.DotDotDotToken:
-                        return parseJSDocVariadicType();
-                    case SyntaxKind.NewKeyword:
-                        return parseJSDocConstructorType();
-                    case SyntaxKind.ThisKeyword:
-                        return parseJSDocThisType();
-                }
-
-                if (isIdentifier()) {
-                    return parseJSDocTypeReference();
-                }
-
-                error = true;
+            switch (token) {
+                case SyntaxKind.AsteriskToken:
+                    return parseJSDocAllType();
+                case SyntaxKind.QuestionToken:
+                    return parseJSDocUnknownOrNullableType();
+                case SyntaxKind.OpenParenToken:
+                    return parseJSDocUnionType();
+                case SyntaxKind.ExclamationToken:
+                    return parseJSDocNonNullableType();
+                case SyntaxKind.OpenBraceToken:
+                    return parseJSDocRecordType();
+                case SyntaxKind.FunctionKeyword:
+                    return parseJSDocFunctionType();
+                case SyntaxKind.DotDotDotToken:
+                    return parseJSDocVariadicType();
+                case SyntaxKind.NewKeyword:
+                    return parseJSDocConstructorType();
+                case SyntaxKind.ThisKeyword:
+                    return parseJSDocThisType();
             }
+
+            if (isIdentifier()) {
+                return parseJSDocTypeReference();
+            }
+
+            error = true;
+            return undefined;
         }
 
         function parseJSDocThisType(): JSDocThisType {
@@ -5538,7 +5537,7 @@ module ts {
             let result = <JSDocTypeReference>createNode(SyntaxKind.JSDocTypeReference);
             result.name = parseIdentifier();
 
-            while (!error && result.name && token === SyntaxKind.DotToken) {
+            while (!error && token === SyntaxKind.DotToken) {
                 nextToken();
 
                 if (isIdentifierOrKeyword()) {
