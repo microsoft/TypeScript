@@ -929,7 +929,7 @@ module ts {
             // The ES6 spec permits export * declarations in a module to circularly reference the module itself. For example,
             // module 'a' can 'export * from "b"' and 'b' can 'export * from "a"' without error.
             function visit(symbol: Symbol) {
-                if (symbol.flags & SymbolFlags.HasExports && !contains(visitedSymbols, symbol)) {
+                if (symbol && symbol.flags & SymbolFlags.HasExports && !contains(visitedSymbols, symbol)) {
                     visitedSymbols.push(symbol);
                     if (symbol !== moduleSymbol) {
                         if (!result) {
@@ -12596,7 +12596,9 @@ module ts {
             else {
                 let elements = (<BindingPattern>name).elements;
                 for (let element of elements) {
-                    checkGrammarNameInLetOrConstDeclarations(element.name);
+                    if (element.kind !== SyntaxKind.OmittedExpression) {
+                        checkGrammarNameInLetOrConstDeclarations(element.name);
+                    }
                 }
             }
         }
