@@ -2105,8 +2105,75 @@ module ts {
             return type;
         }
 
+        function getTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration) {
+            // First see if this node has a doc comment on it directly.
+            let jsDocType = getJSDocTypeForVariableLikeDeclarationFromJSDocComment(declaration);
+            return getTypeFromJSDocType(jsDocType);
+        }
+
+        function getJSDocTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration): JSDocType {
+            // First, see if this node has an @type annotation on it directly.
+            let sourceFile = getSourceFileOfNode(declaration);
+            let docComment = getJSDocComment(declaration, sourceFile);
+
+            if (docComment && docComment.type) {
+                return docComment.type;
+            }
+
+            if (declaration.kind === SyntaxKind.VariableDeclaration &&
+                declaration.parent.kind === SyntaxKind.VariableDeclarationList &&
+                declaration.parent.parent.kind === SyntaxKind.VariableStatement) {
+
+                // @type annotation might have been on the variable statement, try that instead.
+                docComment = getJSDocComment(declaration.parent.parent, sourceFile);
+                if (docComment && docComment.type) {
+                    return docComment.type;
+                }
+            }
+            else if (declaration.kind === SyntaxKind.Parameter && (<ParameterDeclaration>declaration).name.kind === SyntaxKind.Identifier) {
+                // If it's a parameter, see if the parent has a jsdoc comment with an @param 
+                // annotation.
+                let parameterName = (<Identifier>(<ParameterDeclaration>declaration).name).text;
+
+                docComment = getJSDocComment(declaration.parent, sourceFile);
+                if (docComment && docComment.parameters) {
+                    for (let parameter of docComment.parameters) {
+                        if (parameter.name === parameterName) {
+                            return parameter.type;
+                        }
+                    }
+                }
+            }
+
+            return undefined;
+        }
+
+        function getJSDocComment(node: Node, sourceFile: SourceFile) {
+            let comments = getLeadingCommentRangesOfNode(node, sourceFile);
+            if (comments) {
+                for (let comment of comments) {
+                    let jsDocComment = parseJSDocComment(sourceFile.text, comment.pos, comment.end - comment.pos);
+                    if (jsDocComment) {
+                        return jsDocComment;
+                    }
+                }
+            }
+
+            return undefined;
+        }
+
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration): Type {
+            if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                // If this is a variable in a JavaScript file, then use the JSDoc type (if it has
+                // one as it's type), otherwise fallback to the below standard TS codepaths to 
+                // try to figure it out.
+                let type = getTypeForVariableLikeDeclarationFromJSDocComment(declaration);
+                if (type) {
+                    return type;
+                }
+            }
+
             // A variable declared in a for..in statement is always of type any
             if (declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
                 return anyType;
@@ -2121,6 +2188,7 @@ module ts {
             if (isBindingPattern(declaration.parent)) {
                 return getTypeForBindingElement(<BindingElement>declaration);
             }
+
             // Use type from type annotation if one is present
             if (declaration.type) {
                 return getTypeFromTypeNodeOrHeritageClauseElement(declaration.type);
@@ -3616,6 +3684,79 @@ module ts {
                 links.resolvedType = getStringLiteralType(node);
             }
             return links.resolvedType;
+        }
+
+        function getTypeFromJSDocType(jsDocType: JSDocType): Type {
+            if (jsDocType) {
+                switch (jsDocType.kind) {
+                    case SyntaxKind.JSDocAllType:
+                        return anyType;
+                    case SyntaxKind.JSDocUnknownType:
+                        return unknownType;
+                    case SyntaxKind.JSDocUnionType:
+                        return getTypeFromJSDocUnionType(<JSDocUnionType>jsDocType);
+                    case SyntaxKind.JSDocNullableType:
+                        return getTypeFromJSDocType((<JSDocNullableType>jsDocType).type);
+                    case SyntaxKind.JSDocNonNullableType:
+                        return getTypeFromJSDocType((<JSDocNonNullableType>jsDocType).type);
+                    case SyntaxKind.JSDocRecordType:
+                        // NYI:
+                        break;
+                    case SyntaxKind.JSDocTypeReference:
+                        return getTypeForJSDocTypeReference(<JSDocTypeReference>jsDocType);
+                    case SyntaxKind.JSDocOptionalType:
+                        return getTypeFromJSDocType((<JSDocOptionalType>jsDocType).type);
+                    case SyntaxKind.JSDocFunctionType:
+                        // NYI:
+                        break;
+                    case SyntaxKind.JSDocVariadicType:
+                        return getTypeFromJSDocType((<JSDocVariadicType>jsDocType).type);
+                    case SyntaxKind.JSDocConstructorType:
+                        // NYI:
+                        break;
+                    case SyntaxKind.JSDocThisType:
+                        // NYI:
+                        break;
+                }
+            }
+        }
+
+        function getTypeForJSDocTypeReference(node: JSDocTypeReference): Type {
+            if (node.name.kind === SyntaxKind.Identifier) {
+                switch ((<Identifier>node.name).text) {
+                    case "any":     return anyType;
+                    case "boolean": return booleanType;
+                    case "number":  return numberType;
+                    case "string":  return stringType;
+                    case "symbol":  return esSymbolType;
+                }
+            }
+
+            let symbol = resolveEntityName(node.name, SymbolFlags.Type);
+            if (symbol) {
+                let type = getDeclaredTypeOfSymbol(symbol);
+                if (type.flags & (TypeFlags.Class | TypeFlags.Interface) && type.flags & TypeFlags.Reference) {
+                    let typeParameters = (<InterfaceType>type).typeParameters;
+                    if (node.typeArguments && node.typeArguments.length === typeParameters.length) {
+                        let typeArguments = map(node.typeArguments, getTypeFromJSDocType);
+                        for (let typeArgument in typeArguments) {
+                            if (!typeArgument) {
+                                return undefined;
+                            }
+                        }
+
+                        type = createTypeReference(<GenericType>type, typeArguments);
+                    }
+                }
+
+                return type;
+            }
+
+            return undefined;
+        }
+
+        function getTypeFromJSDocUnionType(node: JSDocUnionType): Type {
+            return getUnionType(map(node.types, getTypeFromJSDocType), /*noSubtypeReduction*/ true);
         }
 
         function getTypeFromTypeNodeOrHeritageClauseElement(node: TypeNode | LiteralExpression | HeritageClauseElement): Type {
