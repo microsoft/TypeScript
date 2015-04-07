@@ -76,13 +76,14 @@ module ts.server {
     }
 
     export module CommandNames {
+        export var Brace = "brace";
         export var Change = "change";
         export var Close = "close";
         export var Completions = "completions";
         export var CompletionDetails = "completionEntryDetails";
-        export var SignatureHelp = "signatureHelp";        
         export var Configure = "configure";
         export var Definition = "definition";
+        export var Exit = "exit";
         export var Format = "format";
         export var Formatonkey = "formatonkey";
         export var Geterr = "geterr";
@@ -94,7 +95,7 @@ module ts.server {
         export var Reload = "reload";
         export var Rename = "rename";
         export var Saveto = "saveto";
-        export var Brace = "brace";
+        export var SignatureHelp = "signatureHelp";        
         export var Unknown = "unknown";
     }
 
@@ -758,6 +759,9 @@ module ts.server {
             }));
         }
 
+        exit() {
+        }
+
         onMessage(message: string) {
             if (this.logger.isVerbose()) {
                 this.logger.info("request: " + message);
@@ -769,6 +773,11 @@ module ts.server {
                 var errorMessage: string;
                 var responseRequired = true;
                 switch (request.command) {
+                    case CommandNames.Exit: {
+                        this.exit();
+                        responseRequired = false;
+                        break;
+                    }
                     case CommandNames.Definition: { 
                         var defArgs = <protocol.FileLocationRequestArgs>request.arguments;
                         response = this.getDefinition(defArgs.line, defArgs.offset, defArgs.file);
