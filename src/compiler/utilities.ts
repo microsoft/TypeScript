@@ -1815,4 +1815,8 @@ module ts {
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
             return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
+
+    export function isJavaScript(fileName: string) {
+        return fileExtensionIs(fileName, ".js");
+    }
 }

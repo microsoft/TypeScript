@@ -1074,7 +1074,9 @@ module ts {
         // Note: it should not be necessary to save/restore these flags during speculative/lookahead
         // parsing.  These context flags are naturally stored and restored through normal recursive
         // descent parsing and unwinding.
-        let contextFlags: ParserContextFlags = 0;
+        let contextFlags = isJavaScript(fileName)
+            ? ParserContextFlags.JavaScriptFile 
+            : ParserContextFlags.None;
 
         // Whether or not we've had a parse error since creating the last AST node.  If we have
         // encountered an error, it will be stored on the next AST node we create.  Parse errors

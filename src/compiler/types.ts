@@ -338,6 +338,8 @@ module ts {
     }
 
     export const enum ParserContextFlags {
+        None = 0,
+
         // Set if this node was parsed in strict mode.  Used for grammar error checks, as well as
         // checking if the node can be reused in incremental settings.
         StrictMode = 1 << 0,
@@ -359,6 +361,10 @@ module ts {
         // error.
         ThisNodeHasError = 1 << 5,
 
+        // This node was parsed in a JavaScript file and can be processed differently.  For example
+        // its type can be specified usign a JSDoc comment.
+        JavaScriptFile = 1 << 6,
+
         // Context flags set directly by the parser.
         ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | Decorator | ThisNodeHasError,
 
@@ -366,10 +372,10 @@ module ts {
 
         // Used during incremental parsing to determine if this node or any of its children had an
         // error.  Computed only once and then cached.
-        ThisNodeOrAnySubNodesHasError = 1 << 6,
+        ThisNodeOrAnySubNodesHasError = 1 << 7,
 
         // Used to know if we've computed data from children and cached it in this node.
-        HasAggregatedChildData = 1 << 7
+        HasAggregatedChildData = 1 << 8
     }
 
     export const enum RelationComparisonResult {
