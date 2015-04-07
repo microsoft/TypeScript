@@ -1,21 +1,47 @@
-tests/cases/compiler/indexSignatureTypeCheck.ts(14,8): error TS1019: An index signature parameter cannot have a question mark.
-tests/cases/compiler/indexSignatureTypeCheck.ts(15,6): error TS1017: An index signature cannot have a rest parameter.
-tests/cases/compiler/indexSignatureTypeCheck.ts(16,6): error TS1096: An index signature must have exactly one parameter.
-tests/cases/compiler/indexSignatureTypeCheck.ts(17,6): error TS1096: An index signature must have exactly one parameter.
+tests/cases/compiler/indexSignatureTypeCheck.ts(34,1): error TS2342: An index expression argument must be of type 'string', 'number', 'symbol, or 'any'.
+tests/cases/compiler/indexSignatureTypeCheck.ts(37,8): error TS1019: An index signature parameter cannot have a question mark.
+tests/cases/compiler/indexSignatureTypeCheck.ts(38,6): error TS1017: An index signature cannot have a rest parameter.
+tests/cases/compiler/indexSignatureTypeCheck.ts(39,6): error TS1096: An index signature must have exactly one parameter.
+tests/cases/compiler/indexSignatureTypeCheck.ts(40,6): error TS1096: An index signature must have exactly one parameter.
 
 
-==== tests/cases/compiler/indexSignatureTypeCheck.ts (4 errors) ====
+==== tests/cases/compiler/indexSignatureTypeCheck.ts (5 errors) ====
     interface IPropertySet {
-    
         [index: string]: any;
-    
     }
-    
     
     var ps: IPropertySet = null;
     var index: any = "hello";
     ps[index] = 12;
     
+    enum Val {
+        a = 1,
+        b = 2
+    }
+    
+    type Val2 = Val;
+    type Val3 = number;
+     
+    interface IEnum {
+        [index: Val]: Val;
+    }
+    
+    interface IEnum2 {
+        [index: Val2]: Val2;
+    }
+    interface IEnum3 {
+        [index: Val3]: Val3;
+    }
+    
+    var pe: IEnum = null;
+    
+    pe[1] = null
+    pe[3] = null
+    pe[Val.b] = 5
+    
+    pe[true] = null
+    ~~~~~~~~
+!!! error TS2342: An index expression argument must be of type 'string', 'number', 'symbol, or 'any'.
     
     interface indexErrors {
         [p2?: string];
