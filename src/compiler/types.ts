@@ -1069,6 +1069,13 @@ module ts {
         type?: JSDocType
     }
 
+    export interface JSDocComment {
+        type?: JSDocType;
+        parameterTypes?: JSDocType[];
+        returnType?: JSDocType;
+        typeParameterNames?: string[];
+    }
+
     // Source files are declarations when they are external modules.
     export interface SourceFile extends Declaration {
         statements: NodeArray<ModuleElement>;

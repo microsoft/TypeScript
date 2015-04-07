@@ -5388,6 +5388,7 @@ module ts {
 
     // Parses out a JSDoc type expression.  The starting position should be right at the open
     // curly in the type expression.  Returns 'undefined' if it encounters any errors while parsing.
+    /* @internal */
     export function parseJSDocTypeExpression(content: string, start?: number, length?: number): JSDocType {
         let scanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ true, content, /*onError:*/ undefined, start, length);
         
@@ -5722,6 +5723,202 @@ module ts {
         function finishNode<T extends Node>(node: T): T {
             node.end = scanner.getStartPos();
             return node;
+        }
+    }
+
+    /* @internal */
+    export function parseJSDocComment(content: string, start?: number, length?: number): JSDocComment {
+        start = start || 0;
+        let end = length === undefined ? content.length : start + length;
+        length = end - start;
+
+        Debug.assert(start >= 0);
+        Debug.assert(start <= end);
+        Debug.assert(end <= content.length);
+
+        let error = false;
+        let type : JSDocType;
+        let parameterTypes: JSDocType[];
+        let returnType: JSDocType;
+        let typeParameterNames: string[];
+
+        if (length >= "/** */".length) {
+            if (content.charCodeAt(start) === CharacterCodes.slash &&
+                content.charCodeAt(start + 1) === CharacterCodes.asterisk &&
+                content.charCodeAt(start + 2) === CharacterCodes.asterisk &&
+                content.charCodeAt(start + 3) !== CharacterCodes.asterisk) {
+
+                // Initially we can parse out a tag.  We also have seen a starting asterisk.
+                // This is so that /** * @type */ doesn't parse.
+                let canParseTag = true;
+                let seenAsterisk = true;
+
+                for (let i = start + 3; !error && i < end; i++) {
+                    let ch = content.charCodeAt(i);
+
+                    if (isLineBreak(ch)) {
+                        // After a line break, we can parse a tag, and we haven't seen as asterisk
+                        // on the next line yet.
+                        canParseTag = true;
+                        seenAsterisk = false;
+                        continue;
+                    }
+
+                    if (isWhiteSpace(ch)) {
+                        // Whitespace doesn't affect any of our parsing.
+                        continue;
+                    }
+
+                    if (ch === CharacterCodes.at && canParseTag) {
+                        i = parseTag(i);
+                        
+                        // Once we parse out a tag, we cannot keep parsing out tags on this line.
+                        canParseTag = false;
+                        continue;
+                    }
+
+                    // Ignore the first asterisk on a line.
+                    if (ch === CharacterCodes.asterisk) {
+                        if (seenAsterisk) {
+                            // If we've already seen an asterisk, then we can no longer parse a tag
+                            // on this line.
+                            canParseTag = false;
+                        }
+                        seenAsterisk = true;
+                        continue;
+                    }
+
+                    // Anything else is doc comment text.  We can't do anything with it.  Because it
+                    // wasn't a tag, we can no longer parse a tag on this line until we hit the next
+                    // line break.
+                    canParseTag = false;
+                }
+            }
+        }
+
+        return error ? undefined : createJSDocComment();
+
+        function createJSDocComment(): JSDocComment {
+            if (!returnType && !type && !parameterTypes && !typeParameterNames) {
+                return undefined;
+            }
+
+            return { returnType, type, parameterTypes, typeParameterNames };
+        }
+
+        function skipWhitespace(pos: number): number {
+            while (pos < end && isWhiteSpace(content.charCodeAt(pos))) {
+                pos++;
+            }
+
+            return pos;
+        }
+
+        function parseTag(pos: number): number {
+            Debug.assert(content.charCodeAt(pos) === CharacterCodes.at);
+
+            // Scan forward to figure out the tag name.
+            for (var i = pos + 1; i < end; i++) {
+                if (!isIdentifierStart(content.charCodeAt(i), ScriptTarget.Latest)) {
+                    break;
+                }
+            }
+
+            let tagName = content.substring(pos + 1, i);
+            switch (tagName) {
+                case "param":
+                    return handleParamTag(i);
+                case "return":
+                    return handleReturnTag(i);
+                case "template":
+                    return handleTemplateTag(i);
+                case "type":
+                    return handleTypeTag(i);
+            }
+
+            return i;
+        }
+
+        function handleParamTag(pos: number) {
+            let typeExpr = parseJSDocTypeExpression(content, pos, end - pos);
+            if (!typeExpr) {
+                error = true;
+                return pos;
+            }
+
+            parameterTypes = parameterTypes || [];
+            parameterTypes.push(typeExpr);
+            return typeExpr.end;
+        }
+
+        function handleReturnTag(pos: number) {
+            if (!returnType) {
+                let typeExpr = parseJSDocTypeExpression(content, pos, end - pos);
+                if (typeExpr) {
+                    returnType = typeExpr;
+                    return typeExpr.end;
+                }
+            }
+
+            error = true;
+            return pos;
+        }
+
+        function handleTypeTag(pos: number) {
+            if (!type) {
+                let typeExpr = parseJSDocTypeExpression(content, pos, end - pos);
+                if (typeExpr) {
+                    type = typeExpr;
+                    return typeExpr.end;
+                }
+            }
+
+            error = true;
+            return pos;
+        }
+
+        function handleTemplateTag(pos: number): number {
+            if (!typeParameterNames) {
+                typeParameterNames = [];
+
+                while (!error) {
+                    pos = skipWhitespace(pos);
+                    scanTypeParameterName();
+                    pos = skipWhitespace(pos);
+                    if (content.charCodeAt(pos) !== CharacterCodes.comma) {
+                        break;
+                    }
+                }
+
+                if (typeParameterNames.length > 0) {
+                    return pos;
+                }
+            }
+
+            error = true;
+            return pos;
+
+            function scanTypeParameterName() {
+                for (var i = pos; i < end; i++) {
+                    let ch = content.charCodeAt(i);
+                    if (i === pos && isIdentifierStart(ch, ScriptTarget.Latest)) {
+                        continue;
+                    }
+                    else if (i > pos && isIdentifierPart(ch, ScriptTarget.Latest)) {
+                        continue;
+                    }
+
+                    break;
+                }
+
+                if (i === pos) {
+                    error = true;
+                    return;
+                }
+
+                typeParameterNames.push(content.substring(pos, i));
+                pos = i;
+            }
         }
     }
 
