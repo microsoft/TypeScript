@@ -19,7 +19,7 @@ module ts {
         getChildCount(sourceFile?: SourceFile): number;
         getChildAt(index: number, sourceFile?: SourceFile): Node;
         getChildren(sourceFile?: SourceFile): Node[];
-        getStart(sourceFile?: SourceFile): number;
+        getStart(sourceFile?: SourceFile, skipDecorators?: boolean): number;
         getFullStart(): number;
         getEnd(): number;
         getWidth(sourceFile?: SourceFile): number;
@@ -149,8 +149,8 @@ module ts {
             return getSourceFileOfNode(this);
         }
 
-        public getStart(sourceFile?: SourceFile): number {
-            return getTokenPosOfNode(this, sourceFile);
+        public getStart(sourceFile?: SourceFile, skipDecorators?: boolean): number {
+            return getTokenPosOfNode(this, sourceFile, skipDecorators);
         }
 
         public getFullStart(): number {
