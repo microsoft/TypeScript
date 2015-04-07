@@ -5600,7 +5600,7 @@ module ts {
                 }
             }
 
-            if (container.kind === SyntaxKind.ComputedPropertyName) {
+            if (container && container.kind === SyntaxKind.ComputedPropertyName) {
                 error(node, Diagnostics.super_cannot_be_referenced_in_a_computed_property_name);
             }
             else if (isCallExpression) {
