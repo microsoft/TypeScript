@@ -36,10 +36,7 @@ export = C1; // Should work, private type I1 of visible class C1 only used in pr
 
 
 //// [foo1.js]
-var x = {
-    a: "test",
-    b: 42
-};
+var x = { a: "test", b: 42 };
 module.exports = x;
 //// [foo2.js]
 var C1 = (function () {

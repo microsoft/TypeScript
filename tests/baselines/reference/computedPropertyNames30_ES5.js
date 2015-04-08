@@ -33,9 +33,12 @@ var C = (function (_super) {
         _super.call(this);
         (function () {
             var obj = (_a = {},
-                _a[(_super.call(this), "prop")] = function () {
-                },
-                _a);
+                // Ideally, we would capture this. But the reference is
+                // illegal, and not capturing this is consistent with
+                //treatment of other similar violations.
+                _a[(_super.call(this), "prop")] = function () { },
+                _a
+            );
             var _a;
         });
     }

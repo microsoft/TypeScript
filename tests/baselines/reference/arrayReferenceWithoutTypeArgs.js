@@ -7,7 +7,6 @@ class X {
 var X = (function () {
     function X() {
     }
-    X.prototype.f = function (a) {
-    };
+    X.prototype.f = function (a) { };
     return X;
 })();

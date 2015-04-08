@@ -20,9 +20,7 @@ module M {
 //// [recursiveIdenticalOverloadResolution.js]
 var M;
 (function (M) {
-    function f(p) {
-        return f;
-    }
+    function f(p) { return f; }
     ;
     var i;
     f(i);

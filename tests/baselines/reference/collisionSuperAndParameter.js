@@ -75,17 +75,13 @@ var Foo = (function () {
     Foo.prototype.a = function () {
         var _this = this;
         var lamda = function (_super) {
-            return function (x) {
-                return _this;
-            }; // New scope.  So should inject new _this capture
+            return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
     Foo.prototype.b = function (_super) {
         var _this = this;
         var lambda = function () {
-            return function (x) {
-                return _this;
-            }; // New scope.  So should inject new _this capture
+            return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
     Object.defineProperty(Foo.prototype, "c", {
@@ -108,17 +104,13 @@ var Foo2 = (function (_super) {
     Foo2.prototype.x = function () {
         var _this = this;
         var lamda = function (_super) {
-            return function (x) {
-                return _this;
-            }; // New scope.  So should inject new _this capture
+            return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
     Foo2.prototype.y = function (_super) {
         var _this = this;
         var lambda = function () {
-            return function (x) {
-                return _this;
-            }; // New scope.  So should inject new _this capture
+            return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
     Object.defineProperty(Foo2.prototype, "z", {
@@ -137,9 +129,7 @@ var Foo4 = (function (_super) {
     Foo4.prototype.y = function (_super) {
         var _this = this;
         var lambda = function () {
-            return function (x) {
-                return _this;
-            }; // New scope.  So should inject new _this capture
+            return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
     return Foo4;

@@ -3,11 +3,7 @@ for (var v of ['a', 'b', 'c'])
     var x = v;
 
 //// [ES5For-of3.js]
-for (var _i = 0, _a = [
-    'a',
-    'b',
-    'c'
-]; _i < _a.length; _i++) {
+for (var _i = 0, _a = ['a', 'b', 'c']; _i < _a.length; _i++) {
     var v = _a[_i];
     var x = v;
 }

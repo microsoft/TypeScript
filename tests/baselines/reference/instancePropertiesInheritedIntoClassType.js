@@ -60,14 +60,11 @@ var NonGeneric;
             get: function () {
                 return 1;
             },
-            set: function (v) {
-            },
+            set: function (v) { },
             enumerable: true,
             configurable: true
         });
-        C.prototype.fn = function () {
-            return this;
-        };
+        C.prototype.fn = function () { return this; };
         return C;
     })();
     var D = (function (_super) {
@@ -95,14 +92,11 @@ var Generic;
             get: function () {
                 return null;
             },
-            set: function (v) {
-            },
+            set: function (v) { },
             enumerable: true,
             configurable: true
         });
-        C.prototype.fn = function () {
-            return this;
-        };
+        C.prototype.fn = function () { return this; };
         return C;
     })();
     var D = (function (_super) {

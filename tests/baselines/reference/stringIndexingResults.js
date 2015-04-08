@@ -54,9 +54,7 @@ var a;
 var r7 = a['y'];
 var r8 = a['a'];
 var r9 = a[1];
-var b = {
-    y: ''
-};
+var b = { y: '' };
 var r10 = b['y'];
 var r11 = b['a'];
 var r12 = b[1];

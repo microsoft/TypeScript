@@ -11,6 +11,5 @@ class C {
 var methodName = "method";
 var accessorName = "accessor";
 class C {
-    [methodName](v) {
-    }
+    [methodName](v) { }
 }

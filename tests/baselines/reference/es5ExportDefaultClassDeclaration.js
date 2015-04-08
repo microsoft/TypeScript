@@ -9,11 +9,10 @@ export default class C {
 var C = (function () {
     function C() {
     }
-    C.prototype.method = function () {
-    };
+    C.prototype.method = function () { };
     return C;
 })();
-exports.C = C;
+exports.default = C;
 
 
 //// [es5ExportDefaultClassDeclaration.d.ts]

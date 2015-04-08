@@ -92,17 +92,15 @@ var M;
 //'this' as type parameter constraint
 // function fn<T extends this >() { } // Error
 //'this' as a type argument
-function genericFunc(x) {
-}
+function genericFunc(x) { }
 genericFunc < this > (undefined); // Should be an error
-var ErrClass3 = (function () {
+var ErrClass3 = (function (_super) {
+    __extends(ErrClass3, _super);
     function ErrClass3() {
+        _super.apply(this, arguments);
     }
     return ErrClass3;
-})();
-this;
-{
-}
+})(this);
 //'this' as a computed enum value
 var SomeEnum;
 (function (SomeEnum) {

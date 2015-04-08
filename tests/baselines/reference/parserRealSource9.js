@@ -364,9 +364,7 @@ var TypeScript;
                         // context of a given module  (E.g., an outer import statement)
                         if (typeSymbol.aliasLink && !typeSymbol.type && typeSymbol.aliasLink.alias.nodeType == NodeType.Name) {
                             var modPath = typeSymbol.aliasLink.alias.text;
-                            var modSym = this.checker.findSymbolForDynamicModule(modPath, this.checker.locationInfo.filename, function (id) {
-                                return scope.find(id, false, true);
-                            });
+                            var modSym = this.checker.findSymbolForDynamicModule(modPath, this.checker.locationInfo.filename, function (id) { return scope.find(id, false, true); });
                             if (modSym) {
                                 typeSymbol.type = modSym.getType();
                             }

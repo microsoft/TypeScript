@@ -28,8 +28,7 @@ class B {
 class A {
     constructor(x) {
     }
-    foo() {
-    }
+    foo() { }
 }
 class B {
     constructor(x, z = "hello", ...args) {

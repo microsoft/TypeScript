@@ -21,9 +21,7 @@ var C = (function () {
     function C() {
     }
     Object.defineProperty(C, "x", {
-        get: function () {
-            return 1;
-        },
+        get: function () { return 1; },
         enumerable: true,
         configurable: true
     });
@@ -33,8 +31,7 @@ var D = (function () {
     function D() {
     }
     Object.defineProperty(D, "x", {
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });
@@ -47,8 +44,7 @@ var E = (function () {
         get: function () {
             return 1;
         },
-        set: function (v) {
-        },
+        set: function (v) { },
         enumerable: true,
         configurable: true
     });

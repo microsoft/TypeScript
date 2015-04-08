@@ -60,19 +60,12 @@ z: typeof M.n;
 //// [typeofOperatorWithNumberType.js]
 // typeof  operator on number type
 var NUMBER;
-var NUMBER1 = [
-    1,
-    2
-];
-function foo() {
-    return 1;
-}
+var NUMBER1 = [1, 2];
+function foo() { return 1; }
 var A = (function () {
     function A() {
     }
-    A.foo = function () {
-        return 1;
-    };
+    A.foo = function () { return 1; };
     return A;
 })();
 var M;
@@ -85,16 +78,8 @@ var ResultIsString1 = typeof NUMBER;
 var ResultIsString2 = typeof NUMBER1;
 // number type literal
 var ResultIsString3 = typeof 1;
-var ResultIsString4 = typeof {
-    x: 1,
-    y: 2
-};
-var ResultIsString5 = typeof {
-    x: 1,
-    y: function (n) {
-        return n;
-    }
-};
+var ResultIsString4 = typeof { x: 1, y: 2 };
+var ResultIsString5 = typeof { x: 1, y: function (n) { return n; } };
 // number type expressions
 var ResultIsString6 = typeof objA.a;
 var ResultIsString7 = typeof M.n;
@@ -119,10 +104,7 @@ var x;
 z: typeof NUMBER;
 x: typeof NUMBER1;
 r: typeof foo;
-var y = {
-    a: 1,
-    b: 2
-};
+var y = { a: 1, b: 2 };
 z: typeof y.a;
 z: typeof objA.a;
 z: typeof A.foo;

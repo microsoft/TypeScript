@@ -7,12 +7,8 @@ var z: number = h<number>(f);
 var z: number = h(f);
 
 //// [compositeGenericFunction.js]
-function f(value) {
-    return value;
-}
+function f(value) { return value; }
 ;
-function h(func) {
-    return null;
-}
+function h(func) { return null; }
 var z = h(f);
 var z = h(f);

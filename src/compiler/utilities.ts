@@ -145,7 +145,7 @@ module ts {
 
         return node.pos === node.end && node.kind !== SyntaxKind.EndOfFileToken;
     }
-    
+
     export function nodeIsPresent(node: Node) {
         return !nodeIsMissing(node);
     }
@@ -274,11 +274,19 @@ module ts {
     export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
         let errorNode = node;
         switch (node.kind) {
+            case SyntaxKind.SourceFile:
+                let pos = skipTrivia(sourceFile.text, 0, /*stopAfterLineBreak*/ false);
+                if (pos === sourceFile.text.length) {
+                    // file is empty - return span for the beginning of the file
+                    return createTextSpan(0, 0);
+                }
+                return getSpanOfTokenAtPosition(sourceFile, pos);
             // This list is a work in progress. Add missing node kinds to improve their error
             // spans.
             case SyntaxKind.VariableDeclaration:
             case SyntaxKind.BindingElement:
             case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.ModuleDeclaration:
             case SyntaxKind.EnumDeclaration:
@@ -288,7 +296,7 @@ module ts {
                 errorNode = (<Declaration>node).name;
                 break;
         }
-        
+
         if (errorNode === undefined) {
             // If we don't have a better node, then just set the error on the first token of 
             // construct.
@@ -441,6 +449,18 @@ module ts {
         return false;
     }
 
+    export function isAccessor(node: Node): boolean {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
     export function isFunctionLike(node: Node): boolean {
         if (node) {
             switch (node.kind) {
@@ -506,6 +526,19 @@ module ts {
                     // the *body* of the container.
                     node = node.parent;
                     break;
+                case SyntaxKind.Decorator:
+                    // Decorators are always applied outside of the body of a class or method. 
+                    if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
+                        // If the decorator's parent is a Parameter, we resolve the this container from
+                        // the grandparent class declaration.
+                        node = node.parent.parent;
+                    }
+                    else if (isClassElement(node.parent)) {
+                        // If the decorator's parent is a class element, we resolve the 'this' container
+                        // from the parent class declaration.
+                        node = node.parent;
+                    }
+                    break;
                 case SyntaxKind.ArrowFunction:
                     if (!includeArrowFunctions) {
                         continue;
@@ -547,6 +580,19 @@ module ts {
                     // such a parent to be a super container, the reference must be in
                     // the *body* of the container.
                     node = node.parent;
+                    break;
+                case SyntaxKind.Decorator:
+                    // Decorators are always applied outside of the body of a class or method. 
+                    if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
+                        // If the decorator's parent is a Parameter, we resolve the this container from
+                        // the grandparent class declaration.
+                        node = node.parent.parent;
+                    }
+                    else if (isClassElement(node.parent)) {
+                        // If the decorator's parent is a class element, we resolve the 'this' container
+                        // from the parent class declaration.
+                        node = node.parent;
+                    }
                     break;
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
@@ -634,7 +680,7 @@ module ts {
 
         return false;
     }
-    
+
     export function childIsDecorated(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.ClassDeclaration:
@@ -670,6 +716,7 @@ module ts {
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ClassExpression:
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.VoidExpression:
             case SyntaxKind.DeleteExpression:
@@ -745,7 +792,7 @@ module ts {
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
         let moduleState = getModuleInstanceState(node)
         return moduleState === ModuleInstanceState.Instantiated ||
-               (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
+            (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
     }
 
     export function isExternalModuleImportEqualsDeclaration(node: Node) {
@@ -898,6 +945,7 @@ module ts {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.MethodSignature:
             case SyntaxKind.IndexSignature:
                 return true;
             default:
@@ -942,12 +990,12 @@ module ts {
             node.kind === SyntaxKind.ExportAssignment && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier;
     }
 
-    export function getClassBaseTypeNode(node: ClassDeclaration) {
+    export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration) {
         let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
         return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
     }
 
-    export function getClassImplementedTypeNodes(node: ClassDeclaration) {
+    export function getClassImplementsHeritageClauseElements(node: ClassDeclaration) {
         let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ImplementsKeyword);
         return heritageClause ? heritageClause.types : undefined;
     }
@@ -1161,7 +1209,7 @@ module ts {
     export function createTextSpanFromBounds(start: number, end: number) {
         return createTextSpan(start, end - start);
     }
-    
+
     export function textChangeRangeNewSpan(range: TextChangeRange) {
         return createTextSpan(range.span.start, range.newLength);
     }
@@ -1435,13 +1483,13 @@ module ts {
             return escapedCharsMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
         }
     }
-    
+
     function get16BitUnicodeEscapeSequence(charCode: number): string {
         let hexCharCode = charCode.toString(16).toUpperCase();
         let paddedHexCode = ("0000" + hexCharCode).slice(-4);
         return "\\u" + paddedHexCode;
     }
-    
+
     let nonAsciiCharacters = /[^\u0000-\u007F]/g;
     export function escapeNonAsciiCharacters(s: string): string {
         // Replace non-ASCII characters with '\uNNNN' escapes if any exist.
@@ -1573,7 +1621,7 @@ module ts {
         return getLineAndCharacterOfPosition(currentSourceFile, pos).line;
     }
 
-    export function getFirstConstructorWithBody(node: ClassDeclaration): ConstructorDeclaration {
+    export function getFirstConstructorWithBody(node: ClassLikeDeclaration): ConstructorDeclaration {
         return forEach(node.members, member => {
             if (member.kind === SyntaxKind.Constructor && nodeIsPresent((<ConstructorDeclaration>member).body)) {
                 return <ConstructorDeclaration>member;
@@ -1768,4 +1816,30 @@ module ts {
         }
     }
 
+    // Returns false if this heritage clause element's expression contains something unsupported
+    // (i.e. not a name or dotted name).
+    export function isSupportedHeritageClauseElement(node: HeritageClauseElement): boolean {
+        return isSupportedHeritageClauseElementExpression(node.expression);
+    }
+
+    function isSupportedHeritageClauseElementExpression(node: Expression): boolean {
+        if (node.kind === SyntaxKind.Identifier) {
+            return true;
+        }
+        else if (node.kind === SyntaxKind.PropertyAccessExpression) {
+            return isSupportedHeritageClauseElementExpression((<PropertyAccessExpression>node).expression);
+        }
+        else {
+            return false;
+        }
+    }
+
+    export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
+        return (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node) ||
+            (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node);
+    }
+
+    export function getLocalSymbolForExportDefault(symbol: Symbol) {
+            return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
+    }
 }

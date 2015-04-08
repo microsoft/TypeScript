@@ -314,10 +314,12 @@ var TypeScriptAllInOne;
         Program.prototype.if = function (retValue) {
             if (retValue === void 0) { retValue =  != 0; }
             return 1;
-             ^ retValue;
+                ^
+                    retValue;
             bfs.TYPES();
             if (retValue != 0) {
-                return 1 && ;
+                return 1 &&
+                ;
             }
             retValue = bfs.OPERATOR;
             ' );;
@@ -340,6 +342,7 @@ var TypeScriptAllInOne;
 })(TypeScriptAllInOne || (TypeScriptAllInOne = {}));
 var BasicFeatures = (function () {
     function BasicFeatures() {
+        this.implements = 0;
     }
     /// <summary>
     /// Test various of variables. Including nullable,key world as variable,special format
@@ -348,7 +351,8 @@ var BasicFeatures = (function () {
     BasicFeatures.prototype.VARIABLES = function () {
         var local = Number.MAX_VALUE;
         var min = Number.MIN_VALUE;
-        var inf = Number.NEGATIVE_INFINITY - ;
+        var inf = Number.NEGATIVE_INFINITY -
+        ;
         var nan = Number.NaN;
         var undef = undefined;
         var _\uD4A5\u7204\uC316, uE59F = local;
@@ -357,163 +361,135 @@ var BasicFeatures = (function () {
         var local6 = local5 instanceof fs.File;
         var hex = 0xBADC0DE, Hex = 0XDEADBEEF;
         var float = 6.02e23, float2 = 6.02E-23;
-        var char = 'c', \u0066 = '\u0066', hexchar = '\x42' != ;
+        var char = 'c', \u0066 = '\u0066', hexchar = '\x42' !=
+        ;
         var quoted = '"', quoted2 = "'";
         var reg = /\w*/;
-        var objLit = {
-            "var": number = 42,
-            equals: function (x) {
-                return x["var"] === 42;
-            },
-            instanceof: function () {
-                return 'objLit{42}';
-            }
-        };
+        var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; }, instanceof: function () { return 'objLit{42}'; } };
         var weekday = Weekdays.Monday;
         var con = char + f + hexchar + float.toString() + float2.toString() + reg.toString() + objLit + weekday;
         //
-        var any = 0 ^= ;
+        var any = 0 ^=
+        ;
         var bool = 0;
         var declare = 0;
         var constructor = 0;
         var get = 0;
-        var implements = 0;
-        var interface = 0;
-        var let = 0;
-        var module = 0;
-        var number = 0;
-        var package = 0;
-        var private = 0;
-        var protected = 0;
-        var public = 0;
-        var set = 0;
-        var static = 0;
-        var string = 0 /  > ;
-        var yield = 0;
-        var sum3 = any + bool + declare + constructor + get + implements + interface + let + module + number + package + private + protected + public + set + static + string + yield;
-        return 0;
-    };
-    /// <summary>
-    /// Test different statements. Including if-else,swith,foreach,(un)checked,lock,using,try-catch-finally
-    /// </summary>
-    /// <param name="i"></param>
-    /// <returns></returns>
-    BasicFeatures.prototype.STATEMENTS = function (i) {
-        var retVal = 0;
-        if (i == 1)
-            retVal = 1;
-        else
-            retVal = 0;
-        switch (i) {
-            case 2:
-                retVal = 1;
-                break;
-            case 3:
-                retVal = 1;
-                break;
-            default:
-                break;
-        }
-        for (var x in {
-            x: 0,
-            y: 1
-        }) {
-            !;
-            try {
-                throw null;
-            }
-            catch (Exception) {
-            }
-        }
-        try {
-        }
-        finally {
-            try {
-            }
-            catch (Exception) {
-            }
-        }
-        return retVal;
-    };
-    /// <summary>
-    /// Test types in ts language. Including class,struct,interface,delegate,anonymous type
-    /// </summary>
-    /// <returns></returns>
-    BasicFeatures.prototype.TYPES = function () {
-        var retVal = 0;
-        var c = new CLASS();
-        var xx = c;
-        retVal += ;
-        try {
-        }
-        catch () {
-        }
-        Property;
-        retVal += c.Member();
-        retVal += xx.Foo() ? 0 : 1;
-        //anonymous type
-        var anony = {
-            a: new CLASS()
-        };
-        retVal += anony.a.d();
-        return retVal;
-    };
-    ///// <summary>
-    ///// Test different operators
-    ///// </summary>
-    ///// <returns></returns>
-    BasicFeatures.prototype.OPERATOR = function () {
-        var a = [
-            1,
-            2,
-            3,
-            4,
-            5,
-        ]; /*[] bug*/ // YES []
-        var i = a[1]; /*[]*/
-        i = i + i - i * i / i % i & i | i ^ i; /*+ - * / % & | ^*/
-        var b = true && false || true ^ false; /*& | ^*/
-        b = !b; /*!*/
-        i = ~i; /*~i*/
-        b = i < (i - 1) && (i + 1) > i; /*< && >*/
-        var f = true ? 1 : 0; /*? :*/ // YES :
-        i++; /*++*/
-        i--; /*--*/
-        b = true && false || true; /*&& ||*/
-        i = i << 5; /*<<*/
-        i = i >> 5; /*>>*/
-        var j = i;
-        b = i == j && i != j && i <= j && i >= j; /*= == && != <= >=*/
-        i += 5.0; /*+=*/
-        i -= i; /*-=*/
-        i *= i; /**=*/
-        if (i == 0)
-            i++;
-        i /= i; /*/=*/
-        i %= i; /*%=*/
-        i &= i; /*&=*/
-        i |= i; /*|=*/
-        i ^= i; /*^=*/
-        i <<= i; /*<<=*/
-        i >>= i; /*>>=*/
-        if (i == 0 &&  != b && f == 1)
-            return 0;
-        else
-            return 1;
+        var ;
     };
     return BasicFeatures;
 })();
+var interface = 0;
+var let = 0;
+var module = 0;
+var number = 0;
+var package = 0;
+var private = 0;
+var protected = 0;
+var public = 0;
+var set = 0;
+var static = 0;
+var string = 0 /  >
+;
+var yield = 0;
+var sum3 = any + bool + declare + constructor + get + implements + interface + let + module + number + package + private + protected + public + set + static + string + yield;
+return 0;
+/// <summary>
+/// Test different statements. Including if-else,swith,foreach,(un)checked,lock,using,try-catch-finally
+/// </summary>
+/// <param name="i"></param>
+/// <returns></returns>
+STATEMENTS(i, number);
+number;
+{
+    var retVal = 0;
+    if (i == 1)
+        retVal = 1;
+    else
+        retVal = 0;
+    switch (i) {
+        case 2:
+            retVal = 1;
+            break;
+        case 3:
+            retVal = 1;
+            break;
+        default:
+            break;
+    }
+    for (var x in { x: 0, y: 1 }) {
+        !;
+        try {
+            throw null;
+        }
+        catch (Exception) { }
+    }
+    try {
+    }
+    finally {
+        try { }
+        catch (Exception) { }
+    }
+    return retVal;
+}
+TYPES();
+number;
+{
+    var retVal = 0;
+    var c = new CLASS();
+    var xx = c;
+    retVal += ;
+    try { }
+    catch () { }
+    Property;
+    retVal += c.Member();
+    retVal += xx.Foo() ? 0 : 1;
+    //anonymous type
+    var anony = { a: new CLASS() };
+    retVal += anony.a.d();
+    return retVal;
+}
+OPERATOR();
+number;
+{
+    var a = [1, 2, 3, 4, 5,]; /*[] bug*/ // YES []
+    var i = a[1]; /*[]*/
+    i = i + i - i * i / i % i & i | i ^ i; /*+ - * / % & | ^*/
+    var b = true && false || true ^ false; /*& | ^*/
+    b = !b; /*!*/
+    i = ~i; /*~i*/
+    b = i < (i - 1) && (i + 1) > i; /*< && >*/
+    var f = true ? 1 : 0; /*? :*/ // YES :
+    i++; /*++*/
+    i--; /*--*/
+    b = true && false || true; /*&& ||*/
+    i = i << 5; /*<<*/
+    i = i >> 5; /*>>*/
+    var j = i;
+    b = i == j && i != j && i <= j && i >= j; /*= == && != <= >=*/
+    i += 5.0; /*+=*/
+    i -= i; /*-=*/
+    i *= i; /**=*/
+    if (i == 0)
+        i++;
+    i /= i; /*/=*/
+    i %= i; /*%=*/
+    i &= i; /*&=*/
+    i |= i; /*|=*/
+    i ^= i; /*^=*/
+    i <<= i; /*<<=*/
+    i >>= i; /*>>=*/
+    if (i == 0 &&  != b && f == 1)
+        return 0;
+    else
+        return 1;
+}
 var CLASS = (function () {
     function CLASS() {
-        this.d = function () {
-            yield;
-            0;
-        };
+        this.d = function () { ; };
     }
     Object.defineProperty(CLASS.prototype, "Property", {
-        get: function () {
-            return 0;
-        },
+        get: function () { return 0; },
         enumerable: true,
         configurable: true
     });
@@ -521,11 +497,11 @@ var CLASS = (function () {
         return 0;
     };
     CLASS.prototype.Foo = function () {
-        var myEvent = function () {
-            return 1;
-        };
+        var myEvent = function () { return 1; };
         if (myEvent() == 1)
-            return true ?  : ;
+            return true ?
+                :
+            ;
         else
             return false;
     };
@@ -567,10 +543,10 @@ while ()
     : string, ;
 rest: string[];
 {
-     & public;
+     &
+        public;
     DefaultValue(value ?  : string = "Hello");
-    {
-    }
+    { }
 }
 var Weekdays;
 (function (Weekdays) {

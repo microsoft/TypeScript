@@ -406,6 +406,13 @@ declare module ts.server.protocol {
     }
 
     /**
+      *  Exit request; value of command field is "exit".  Ask the server process
+      *  to exit.
+      */
+    export interface ExitRequest extends Request {
+    }
+
+    /**
       * Close request; value of command field is "close". Notify the
       * server that the client has closed a previously open file.  If
       * file is still referenced by open files, the server will resume
@@ -617,12 +624,29 @@ declare module ts.server.protocol {
           * Optional modifiers for the kind (such as 'public').
           */
         kindModifiers: string;
+        /** 
+         * A string that is used for comparing completion items so that they can be ordered.  This
+         * is often the same as the name but may be different in certain circumstances.
+         */
+        sortText: string;
     }
 
     /**
       * Additional completion entry details, available on demand
       */
-    export interface CompletionEntryDetails extends CompletionEntry {
+    export interface CompletionEntryDetails {
+        /**
+          * The symbol's name.
+          */
+        name: string;
+        /**
+          * The symbol's kind (such as 'className' or 'parameterName').
+          */
+        kind: string;
+        /**
+          * Optional modifiers for the kind (such as 'public').
+          */
+        kindModifiers: string;
         /**
           * Display parts of the symbol (similar to quick info).
           */

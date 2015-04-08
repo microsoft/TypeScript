@@ -177,9 +177,5 @@ new fn4(null, null); // Error
 new fn4(true, null); // Error
 new fn4(null, true); // Error
 var fn5;
-var n = new fn5(function (n) {
-    return n.toFixed();
-});
-var s = new fn5(function (n) {
-    return n.substr(0);
-});
+var n = new fn5(function (n) { return n.toFixed(); });
+var s = new fn5(function (n) { return n.substr(0); });

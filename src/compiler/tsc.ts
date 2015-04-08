@@ -276,6 +276,7 @@ module ts {
 
         // If a source file changes, mark it as unwatched and start the recompilation timer
         function sourceFileChanged(sourceFile: SourceFile) {
+            sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
             startTimer();
         }

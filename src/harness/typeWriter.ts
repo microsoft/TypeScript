@@ -38,7 +38,6 @@ class TypeWriterWalker {
             case ts.SyntaxKind.SuperKeyword:
             case ts.SyntaxKind.ArrayLiteralExpression:
             case ts.SyntaxKind.ObjectLiteralExpression:
-            case ts.SyntaxKind.PropertyAccessExpression:
             case ts.SyntaxKind.ElementAccessExpression:
             case ts.SyntaxKind.CallExpression:
             case ts.SyntaxKind.NewExpression:
@@ -55,6 +54,14 @@ class TypeWriterWalker {
             case ts.SyntaxKind.ConditionalExpression:
             case ts.SyntaxKind.SpreadElementExpression:
                 this.log(node, this.getTypeOfNode(node));
+                break;
+
+            case ts.SyntaxKind.PropertyAccessExpression:
+                for (var current = node; current.kind === ts.SyntaxKind.PropertyAccessExpression; current = current.parent) {
+                }
+                if (current.kind !== ts.SyntaxKind.HeritageClauseElement) {
+                    this.log(node, this.getTypeOfNode(node));
+                }
                 break;
 
             // Should not change expression status (maybe expressions)

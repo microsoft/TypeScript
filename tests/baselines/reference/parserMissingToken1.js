@@ -3,7 +3,5 @@ a / finally
 
 //// [parserMissingToken1.js]
 a / ;
-try {
-}
-finally {
-}
+try { }
+finally { }

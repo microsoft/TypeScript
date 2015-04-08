@@ -47,10 +47,7 @@ var cl = B.Point.Origin;
 var A;
 (function (A) {
     function Point() {
-        return {
-            x: 0,
-            y: 0
-        };
+        return { x: 0, y: 0 };
     }
     A.Point = Point;
 })(A || (A = {}));
@@ -59,10 +56,7 @@ var A;
 (function (A) {
     var Point;
     (function (Point) {
-        Point.Origin = {
-            x: 0,
-            y: 0
-        };
+        Point.Origin = { x: 0, y: 0 };
     })(Point = A.Point || (A.Point = {}));
 })(A || (A = {}));
 //// [test.js]
@@ -75,18 +69,12 @@ var cl = A.Point.Origin; // not expected to be an error.
 var B;
 (function (B) {
     function Point() {
-        return {
-            x: 0,
-            y: 0
-        };
+        return { x: 0, y: 0 };
     }
     B.Point = Point;
     var Point;
     (function (Point) {
-        Point.Origin = {
-            x: 0,
-            y: 0
-        };
+        Point.Origin = { x: 0, y: 0 };
     })(Point = B.Point || (B.Point = {}));
 })(B || (B = {}));
 var fn;

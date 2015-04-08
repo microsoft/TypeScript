@@ -4,14 +4,11 @@
 /// <reference path="scanner.ts"/>
 
 module ts {
+    /* @internal */
     export var optionDeclarations: CommandLineOption[] = [
         {
             name: "charset",
             type: "string",
-        },
-        {
-            name: "codepage",
-            type: "number",
         },
         {
             name: "declaration",
@@ -79,10 +76,6 @@ module ts {
             type: "boolean",
         },
         {
-            name: "noLibCheck",
-            type: "boolean",
-        },
-        {
             name: "noResolve",
             type: "boolean",
         },
@@ -118,6 +111,10 @@ module ts {
             description: Diagnostics.Do_not_emit_comments_to_output,
         },
         {
+            name: "separateCompilation",
+            type: "boolean",
+        },
+        {
             name: "sourceMap",
             type: "boolean",
             description: Diagnostics.Generates_corresponding_map_file,
@@ -141,18 +138,6 @@ module ts {
             experimental: true
         },
         {
-            name: "preserveNewLines",
-            type: "boolean",
-            description: Diagnostics.Preserve_new_lines_when_emitting_code,
-            experimental: true
-        },
-        {
-            name: "cacheDownlevelForOfLength",
-            type: "boolean",
-            description: "Cache length access when downlevel emitting for-of statements",
-            experimental: true,
-        },
-        {
             name: "target",
             shortName: "t",
             type: { "es3": ScriptTarget.ES3, "es5": ScriptTarget.ES5, "es6": ScriptTarget.ES6 },
@@ -171,9 +156,15 @@ module ts {
             shortName: "w",
             type: "boolean",
             description: Diagnostics.Watch_input_files,
+        },
+        {
+            name: "emitDecoratorMetadata",
+            type: "boolean",
+            experimental: true
         }
     ];
-    
+
+    /* @internal */
     export function parseCommandLine(commandLine: string[]): ParsedCommandLine {
         var options: CompilerOptions = {};
         var fileNames: string[] = [];
@@ -283,6 +274,10 @@ module ts {
         }
     }
 
+    /**
+      * Read tsconfig.json file
+      * @param fileName The path to the config file
+      */
     export function readConfigFile(fileName: string): any {
         try {
             var text = sys.readFile(fileName);
@@ -292,6 +287,12 @@ module ts {
         }
     }
 
+    /**
+      * Parse the contents of a config file (tsconfig.json).
+      * @param json The contents of the config file to parse
+      * @param basePath A root directory to resolve relative path entries in the config
+      *    file to. e.g. outDir 
+      */
     export function parseConfigFile(json: any, basePath?: string): ParsedCommandLine {
         var errors: Diagnostic[] = [];
 

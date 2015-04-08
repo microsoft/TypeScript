@@ -458,7 +458,7 @@ module ts.server {
                 var info = this.filenameToScriptInfo[args.file];
                 if (info) {
                     info.setFormatOptions(args.formatOptions);  
-                    this.log("Host configuration update for file " + args.file);
+                    this.log("Host configuration update for file " + args.file, "Info");
                 }
             }
             else {
@@ -764,6 +764,26 @@ module ts.server {
             return info;
         }
 
+        // This is different from the method the compiler uses because
+        // the compiler can assume it will always start searching in the
+        // current directory (the directory in which tsc was invoked).
+        // The server must start searching from the directory containing
+        // the newly opened file.
+        findConfigFile(searchPath: string): string {
+            while (true) {
+                var fileName = ts.combinePaths(searchPath, "tsconfig.json");
+                if (sys.fileExists(fileName)) {
+                    return fileName;
+                }
+                var parentPath = ts.getDirectoryPath(searchPath);
+                if (parentPath === searchPath) {
+                    break;
+                }
+                searchPath = parentPath;
+            }
+            return undefined;
+        }
+
         /**
          * Open file whose contents is managed by the client
          * @param filename is absolute pathname
@@ -771,7 +791,13 @@ module ts.server {
 
         openClientFile(fileName: string) {
             var searchPath = ts.normalizePath(getDirectoryPath(fileName));
-            var configFileName = ts.findConfigFile(searchPath);
+            this.log("Search path: " + searchPath,"Info");
+            var configFileName = this.findConfigFile(searchPath);
+            if (configFileName) {
+                this.log("Config file name: " + configFileName, "Info");
+            } else {
+                this.log("no config file");
+            }
             if (configFileName) {
                 configFileName = getAbsolutePath(configFileName, searchPath);
             }
@@ -797,7 +823,6 @@ module ts.server {
          */
 
         closeClientFile(filename: string) {
-            // TODO: tsconfig check
             var info = ts.lookUp(this.filenameToScriptInfo, filename);
             if (info) {
                 this.closeOpenFile(info);
@@ -830,6 +855,9 @@ module ts.server {
         }
 
         printProjects() {
+            if (!this.psLogger.isVerbose()) {
+                return;
+            }
             this.psLogger.startGroup();
             for (var i = 0, len = this.inferredProjects.length; i < len; i++) {
                 var project = this.inferredProjects[i];
@@ -1438,6 +1466,10 @@ module ts.server {
                 });
             }
             return accum;
+        }
+
+        getLength(): number {
+            return this.root.charCount();
         }
 
         every(f: (ll: LineLeaf, s: number, len: number) => boolean, rangeStart: number, rangeEnd?: number) {

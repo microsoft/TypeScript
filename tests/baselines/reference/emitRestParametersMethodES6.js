@@ -18,16 +18,12 @@ class D {
 class C {
     constructor(name, ...rest) {
     }
-    bar(...rest) {
-    }
-    foo(x, ...rest) {
-    }
+    bar(...rest) { }
+    foo(x, ...rest) { }
 }
 class D {
     constructor(...rest) {
     }
-    bar(...rest) {
-    }
-    foo(x, ...rest) {
-    }
+    bar(...rest) { }
+    foo(x, ...rest) { }
 }

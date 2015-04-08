@@ -8,7 +8,7 @@ module ts {
     /* @internal */ export let ioWriteTime = 0;
 
     /** The version of the TypeScript compiler release */
-    export let version = "1.5.0.0";
+    export let version = "1.5.0";
 
     export function findConfigFile(searchPath: string): string {
         var fileName = "tsconfig.json";
@@ -454,6 +454,24 @@ module ts {
         }
 
         function verifyCompilerOptions() {
+            if (options.separateCompilation) {
+                if (options.sourceMap) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_sourceMap_cannot_be_specified_with_option_separateCompilation));
+                }
+
+                if (options.declaration) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_declaration_cannot_be_specified_with_option_separateCompilation));
+                }
+
+                if (options.noEmitOnError) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_noEmitOnError_cannot_be_specified_with_option_separateCompilation));
+                }
+
+                if (options.out) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_out_cannot_be_specified_with_option_separateCompilation));
+                }
+            }
+
             if (!options.sourceMap && (options.mapRoot || options.sourceRoot)) {
                 // Error to specify --mapRoot or --sourceRoot without mapSourceFiles
                 if (options.mapRoot) {
@@ -468,12 +486,21 @@ module ts {
             let languageVersion = options.target || ScriptTarget.ES3;
 
             let firstExternalModuleSourceFile = forEach(files, f => isExternalModule(f) ? f : undefined);
-            if (firstExternalModuleSourceFile && !options.module) {
+            if (options.separateCompilation) {
                 if (!options.module && languageVersion < ScriptTarget.ES6) {
-                    // We cannot use createDiagnosticFromNode because nodes do not have parents yet 
-                    let span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
-                    diagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_separateCompilation_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES6_or_higher));
                 }
+
+                let firstNonExternalModuleSourceFile = forEach(files, f => !isExternalModule(f) && !isDeclarationFile(f) ? f : undefined);
+                if (firstNonExternalModuleSourceFile) {
+                    let span = getErrorSpanForNode(firstNonExternalModuleSourceFile, firstNonExternalModuleSourceFile);
+                    diagnostics.add(createFileDiagnostic(firstNonExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_non_external_modules_when_the_separateCompilation_flag_is_provided));
+                }
+            }
+            else if (firstExternalModuleSourceFile && languageVersion < ScriptTarget.ES6 && !options.module) {
+                // We cannot use createDiagnosticFromNode because nodes do not have parents yet 
+                let span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
+                diagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
             }
 
             // Cannot specify module gen target when in es6 or above
@@ -481,11 +508,11 @@ module ts {
                 diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_external_modules_into_amd_or_commonjs_when_targeting_es6_or_higher));
             }
 
-            // there has to be common source directory if user specified --outdir || --sourcRoot
+            // there has to be common source directory if user specified --outdir || --sourceRoot
             // if user specified --mapRoot, there needs to be common source directory if there would be multiple files being emitted
             if (options.outDir || // there is --outDir specified
                 options.sourceRoot || // there is --sourceRoot specified
-                (options.mapRoot &&  // there is --mapRoot Specified and there would be multiple js files generated
+                (options.mapRoot &&  // there is --mapRoot specified and there would be multiple js files generated
                     (!options.out || firstExternalModuleSourceFile !== undefined))) {
 
                 let commonPathComponents: string[];

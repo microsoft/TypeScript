@@ -9,9 +9,7 @@ var z = new (f1())();
 
 //// [targetTypeVoidFunc.js]
 function f1() {
-    return function () {
-        return;
-    };
+    return function () { return; };
 }
 ;
 var x = f1();

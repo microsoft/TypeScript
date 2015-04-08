@@ -314,12 +314,12 @@ module ts {
             }
         }
 
-        function emitTypeWithNewGetSymbolAccessibilityDiagnostic(type: TypeNode | EntityName, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
+        function emitTypeWithNewGetSymbolAccessibilityDiagnostic(type: TypeNode | EntityName | HeritageClauseElement, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
             writer.getSymbolAccessibilityDiagnostic = getSymbolAccessibilityDiagnostic;
             emitType(type);
         }
 
-        function emitType(type: TypeNode | StringLiteralExpression | Identifier | QualifiedName) {
+        function emitType(type: TypeNode | StringLiteralExpression | Identifier | QualifiedName | HeritageClauseElement) {
             switch (type.kind) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
@@ -329,6 +329,8 @@ module ts {
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.StringLiteral:
                     return writeTextOfNode(currentSourceFile, type);
+                case SyntaxKind.HeritageClauseElement:
+                    return emitHeritageClauseElement(<HeritageClauseElement>type);
                 case SyntaxKind.TypeReference:
                     return emitTypeReference(<TypeReferenceNode>type);
                 case SyntaxKind.TypeQuery:
@@ -350,11 +352,9 @@ module ts {
                     return emitEntityName(<Identifier>type);
                 case SyntaxKind.QualifiedName:
                     return emitEntityName(<QualifiedName>type);
-                default:
-                    Debug.fail("Unknown type annotation: " + type.kind);
             }
 
-            function emitEntityName(entityName: EntityName) {
+            function emitEntityName(entityName: EntityName | PropertyAccessExpression) {
                 let visibilityResult = resolver.isEntityNameVisible(entityName,
                     // Aliases can be written asynchronously so use correct enclosing declaration
                     entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration ? entityName.parent : enclosingDeclaration);
@@ -362,15 +362,28 @@ module ts {
                 handleSymbolAccessibilityError(visibilityResult);
                 writeEntityName(entityName);
 
-                function writeEntityName(entityName: EntityName) {
+                function writeEntityName(entityName: EntityName | Expression) {
                     if (entityName.kind === SyntaxKind.Identifier) {
                         writeTextOfNode(currentSourceFile, entityName);
                     }
                     else {
-                        let qualifiedName = <QualifiedName>entityName;
-                        writeEntityName(qualifiedName.left);
+                        let left = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).left : (<PropertyAccessExpression>entityName).expression;
+                        let right = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).right : (<PropertyAccessExpression>entityName).name;
+                        writeEntityName(left);
                         write(".");
-                        writeTextOfNode(currentSourceFile, qualifiedName.right);
+                        writeTextOfNode(currentSourceFile, right);
+                    }
+                }
+            }
+
+            function emitHeritageClauseElement(node: HeritageClauseElement) {
+                if (isSupportedHeritageClauseElement(node)) {
+                    Debug.assert(node.expression.kind === SyntaxKind.Identifier || node.expression.kind === SyntaxKind.PropertyAccessExpression);
+                    emitEntityName(<Identifier | PropertyAccessExpression>node.expression);
+                    if (node.typeArguments) {
+                        write("<");
+                        emitCommaList(node.typeArguments, emitType);
+                        write(">");
                     }
                 }
             }
@@ -827,14 +840,16 @@ module ts {
             }
         }
 
-        function emitHeritageClause(typeReferences: TypeReferenceNode[], isImplementsList: boolean) {
+        function emitHeritageClause(typeReferences: HeritageClauseElement[], isImplementsList: boolean) {
             if (typeReferences) {
                 write(isImplementsList ? " implements " : " extends ");
                 emitCommaList(typeReferences, emitTypeOfTypeReference);
             }
 
-            function emitTypeOfTypeReference(node: TypeReferenceNode) {
-                emitTypeWithNewGetSymbolAccessibilityDiagnostic(node, getHeritageClauseVisibilityError);
+            function emitTypeOfTypeReference(node: HeritageClauseElement) {
+                if (isSupportedHeritageClauseElement(node)) {
+                    emitTypeWithNewGetSymbolAccessibilityDiagnostic(node, getHeritageClauseVisibilityError);
+                }
 
                 function getHeritageClauseVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
                     let diagnosticMessage: DiagnosticMessage;
@@ -877,11 +892,11 @@ module ts {
             let prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
             emitTypeParameters(node.typeParameters);
-            let baseTypeNode = getClassBaseTypeNode(node);
+            let baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
                 emitHeritageClause([baseTypeNode], /*isImplementsList*/ false);
             }
-            emitHeritageClause(getClassImplementedTypeNodes(node), /*isImplementsList*/ true);
+            emitHeritageClause(getClassImplementsHeritageClauseElements(node), /*isImplementsList*/ true);
             write(" {");
             writeLine();
             increaseIndent();
@@ -993,7 +1008,18 @@ module ts {
             }
 
             function emitBindingPattern(bindingPattern: BindingPattern) {
-                emitCommaList(bindingPattern.elements, emitBindingElement);
+                // Only select non-omitted expression from the bindingPattern's elements.
+                // We have to do this to avoid emitting trailing commas.
+                // For example:
+                //      original: var [, c,,] = [ 2,3,4]
+                //      emitted: declare var c: number; // instead of declare var c:number, ;
+                let elements: Node[] = [];
+                for (let element of bindingPattern.elements) {
+                    if (element.kind !== SyntaxKind.OmittedExpression){
+                        elements.push(element);
+                    }
+                }
+                emitCommaList(elements, emitBindingElement);
             }
 
             function emitBindingElement(bindingElement: BindingElement) {
@@ -1291,7 +1317,10 @@ module ts {
                 write("...");
             }
             if (isBindingPattern(node.name)) {
-                write("_" + indexOf((<FunctionLikeDeclaration>node.parent).parameters, node));
+                // For bindingPattern, we can't simply writeTextOfNode from the source file
+                // because we want to omit the initializer and using writeTextOfNode will result in initializer get emitted.
+                // Therefore, we will have to recursively emit each element in the bindingPattern.
+                emitBindingPattern(<BindingPattern>node.name);
             }
             else {
                 writeTextOfNode(currentSourceFile, node.name);
@@ -1311,41 +1340,46 @@ module ts {
             }
 
             function getParameterDeclarationTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
-                let diagnosticMessage: DiagnosticMessage;
+                let diagnosticMessage: DiagnosticMessage = getParameterDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult);
+                return diagnosticMessage !== undefined ? {
+                    diagnosticMessage,
+                    errorNode: node,
+                    typeName: node.name
+                } : undefined;
+            }
+
+            function getParameterDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult: SymbolAccessiblityResult): DiagnosticMessage {
                 switch (node.parent.kind) {
                     case SyntaxKind.Constructor:
-                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        return symbolAccesibilityResult.errorModuleName ?
                             symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                                 Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
                                 Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
                             Diagnostics.Parameter_0_of_constructor_from_exported_class_has_or_is_using_private_name_1;
-                        break;
 
                     case SyntaxKind.ConstructSignature:
                         // Interfaces cannot have parameter types that cannot be named
-                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        return symbolAccesibilityResult.errorModuleName ?
                             Diagnostics.Parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
                             Diagnostics.Parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_1;
-                        break;
 
                     case SyntaxKind.CallSignature:
                         // Interfaces cannot have parameter types that cannot be named
-                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        return symbolAccesibilityResult.errorModuleName ?
                             Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
                             Diagnostics.Parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1;
-                        break;
 
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
                         if (node.parent.flags & NodeFlags.Static) {
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            return symbolAccesibilityResult.errorModuleName ?
                                 symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                                     Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
                                     Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
                                 Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
                         }
                         else if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                             return symbolAccesibilityResult.errorModuleName ?
                                 symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                                     Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
                                     Diagnostics.Parameter_0_of_public_method_from_exported_class_has_or_is_using_name_1_from_private_module_2 :
@@ -1353,30 +1387,99 @@ module ts {
                         }
                         else {
                             // Interfaces cannot have parameter types that cannot be named
-                            diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                            return symbolAccesibilityResult.errorModuleName ?
                                 Diagnostics.Parameter_0_of_method_from_exported_interface_has_or_is_using_name_1_from_private_module_2 :
                                 Diagnostics.Parameter_0_of_method_from_exported_interface_has_or_is_using_private_name_1;
                         }
-                        break;
 
                     case SyntaxKind.FunctionDeclaration:
-                        diagnosticMessage = symbolAccesibilityResult.errorModuleName ?
+                        return symbolAccesibilityResult.errorModuleName ?
                             symbolAccesibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                                 Diagnostics.Parameter_0_of_exported_function_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
                                 Diagnostics.Parameter_0_of_exported_function_has_or_is_using_name_1_from_private_module_2 :
                             Diagnostics.Parameter_0_of_exported_function_has_or_is_using_private_name_1;
-                        break;
 
                     default:
                         Debug.fail("This is unknown parent for parameter: " + node.parent.kind);
                 }
-
-                return {
-                    diagnosticMessage,
-                    errorNode: node,
-                    typeName: node.name
-                };
             }
+
+            function emitBindingPattern(bindingPattern: BindingPattern) {
+                // We have to explicitly emit square bracket and bracket because these tokens are not store inside the node.
+                if (bindingPattern.kind === SyntaxKind.ObjectBindingPattern) {
+                    write("{");
+                    emitCommaList(bindingPattern.elements, emitBindingElement);
+                    write("}");
+                }
+                else if (bindingPattern.kind === SyntaxKind.ArrayBindingPattern) {
+                    write("[");
+                    let elements = bindingPattern.elements;
+                    emitCommaList(elements, emitBindingElement);
+                    if (elements && elements.hasTrailingComma) {
+                        write(", ");
+                    }
+                    write("]");
+                }
+            }
+
+            function emitBindingElement(bindingElement: BindingElement) {
+                function getBindingElementTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
+                    let diagnosticMessage = getParameterDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult);
+                    return diagnosticMessage !== undefined ? {
+                        diagnosticMessage,
+                        errorNode: bindingElement,
+                        typeName: bindingElement.name
+                    } : undefined;
+                }
+
+                if (bindingElement.kind === SyntaxKind.OmittedExpression) {
+                    // If bindingElement is an omittedExpression (i.e. containing elision),
+                    // we will emit blank space (although this may differ from users' original code,
+                    // it allows emitSeparatedList to write separator appropriately)
+                    // Example:
+                    //      original: function foo([, x, ,]) {}
+                    //      emit    : function foo([ , x,  , ]) {}
+                    write(" ");
+                }
+                else if (bindingElement.kind === SyntaxKind.BindingElement) {
+                    if (bindingElement.propertyName) {
+                        // bindingElement has propertyName property in the following case:
+                        //      { y: [a,b,c] ...} -> bindingPattern will have a property called propertyName for "y"
+                        // We have to explicitly emit the propertyName before descending into its binding elements.
+                        // Example:
+                        //      original: function foo({y: [a,b,c]}) {}
+                        //      emit    : declare function foo({y: [a, b, c]}: { y: [any, any, any] }) void;
+                        writeTextOfNode(currentSourceFile, bindingElement.propertyName);
+                        write(": ");
+
+                        // If bindingElement has propertyName property, then its name must be another bindingPattern of SyntaxKind.ObjectBindingPattern
+                        emitBindingPattern(<BindingPattern>bindingElement.name);
+                    }
+                    else if (bindingElement.name) {
+                        if (isBindingPattern(bindingElement.name)) {
+                            // If it is a nested binding pattern, we will recursively descend into each element and emit each one separately.
+                            // In the case of rest element, we will omit rest element.
+                            // Example:
+                            //      original: function foo([a, [[b]], c] = [1,[["string"]], 3]) {}
+                            //      emit    : declare function foo([a, [[b]], c]: [number, [[string]], number]): void;
+                            //      original with rest: function foo([a, ...c]) {}
+                            //      emit              : declare function foo([a, ...c]): void;
+                            emitBindingPattern(<BindingPattern>bindingElement.name);
+                        }
+                        else {
+                            Debug.assert(bindingElement.name.kind === SyntaxKind.Identifier);
+                            // If the node is just an identifier, we will simply emit the text associated with the node's name
+                            // Example:
+                            //      original: function foo({y = 10, x}) {}
+                            //      emit    : declare function foo({y, x}: {number, any}): void;
+                            if (bindingElement.dotDotDotToken) {
+                                write("...");
+                            }
+                            writeTextOfNode(currentSourceFile, bindingElement.name);
+                        }
+                    }
+                }
+            } 
         }
 
         function emitNode(node: Node) {

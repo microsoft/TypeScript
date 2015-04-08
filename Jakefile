@@ -111,6 +111,7 @@ var definitionsRoots = [
     "compiler/parser.d.ts",
     "compiler/checker.d.ts",
     "compiler/program.d.ts",
+    "compiler/commandLineParser.d.ts",
     "services/services.d.ts",
 ];
 
@@ -143,7 +144,8 @@ var harnessSources = [
     "services/colorization.ts",
     "services/documentRegistry.ts",
     "services/preProcessFile.ts",
-    "services/patternMatcher.ts"
+    "services/patternMatcher.ts",
+    "versionCache.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -222,15 +224,17 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
         var options = "--module commonjs -noImplicitAny";
 
-        if (!keepComments) {
-            options += " -removeComments";
+        // Keep comments when specifically requested
+        // or when in debug mode.
+        if (!(keepComments || useDebugMode)) {
+            options += " --removeComments";
         }
 
         if (generateDeclarations) {
             options += " --declaration";
         }
 
-        if (useDebugMode || preserveConstEnums) {
+        if (preserveConstEnums || useDebugMode) {
             options += " --preserveConstEnums";
         }
 
@@ -253,8 +257,6 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
         if (stripInternal) {
             options += " --stripInternal"
         }
-
-        options += " --cacheDownlevelForOfLength --preserveNewLines";
 
         var cmd = host + " " + dir + compilerFilename + " " + options + " ";
         cmd = cmd + sources.join(" ");

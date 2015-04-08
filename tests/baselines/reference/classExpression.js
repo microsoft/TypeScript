@@ -13,20 +13,21 @@ module M {
 }
 
 //// [classExpression.js]
-var x = ;
-var C = (function () {
+var x = (function () {
     function C() {
     }
     return C;
 })();
 var y = {
-    foo: ,
-    class: C2
-}, _a = void 0;
+    foo: (function () {
+        function C2() {
+        }
+        return C2;
+    })()
+};
 var M;
 (function (M) {
-    var z = ;
-    var C4 = (function () {
+    var z = (function () {
         function C4() {
         }
         return C4;

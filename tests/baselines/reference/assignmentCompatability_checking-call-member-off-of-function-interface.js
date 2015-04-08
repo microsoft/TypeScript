@@ -35,25 +35,18 @@ fn(a => { });
 var x;
 // Should fail
 x = '';
-x = [
-    ''
-];
+x = [''];
 x = 4;
 x = {};
 // Should work
-function f() {
-}
+function f() { }
 ;
 x = f;
-function fn(c) {
-}
+function fn(c) { }
 // Should Fail
 fn('');
-fn([
-    ''
-]);
+fn(['']);
 fn(4);
 fn({});
 // Should work
-fn(function (a) {
-});
+fn(function (a) { });

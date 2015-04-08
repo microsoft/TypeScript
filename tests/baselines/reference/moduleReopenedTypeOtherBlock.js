@@ -23,9 +23,7 @@ var M;
     var C2 = (function () {
         function C2() {
         }
-        C2.prototype.f = function () {
-            return null;
-        };
+        C2.prototype.f = function () { return null; };
         return C2;
     })();
     M.C2 = C2;

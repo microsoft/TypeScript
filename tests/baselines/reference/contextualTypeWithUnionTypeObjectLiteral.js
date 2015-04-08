@@ -79,9 +79,7 @@ var objStrOrNum3 = {
 var objStrOrNum4 = {
     prop: strOrNumber
 };
-var objStrOrNum5 = {
-    prop: strOrNumber
-};
+var objStrOrNum5 = { prop: strOrNumber };
 var objStrOrNum6 = {
     prop: strOrNumber,
     anotherP: str
@@ -113,7 +111,5 @@ var i11Ori21 = {
 };
 var strOrNumber;
 var i11Ori21 = {
-    commonMethodDifferentReturnType: function (a, b) {
-        return strOrNumber;
-    }
+    commonMethodDifferentReturnType: function (a, b) { return strOrNumber; }
 };

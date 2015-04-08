@@ -122,8 +122,5 @@ var E;
 f15(E.x).toLowerCase();
 var x;
 f16(x);
-var y = [
-    "1",
-    false
-];
+var y = ["1", false];
 y[0].toLowerCase();

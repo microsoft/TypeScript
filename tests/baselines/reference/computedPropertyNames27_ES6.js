@@ -9,6 +9,5 @@ class C extends Base {
 class Base {
 }
 class C extends Base {
-    [(super(), "prop")]() {
-    }
+    [(super(), "prop")]() { }
 }
