@@ -796,10 +796,6 @@ module ts {
         }
     }
 
-    export function hasDotDotDotToken(node: Node) {
-        return node && node.kind === SyntaxKind.Parameter && (<ParameterDeclaration>node).dotDotDotToken !== undefined;
-    }
-
     export function hasQuestionToken(node: Node) {
         if (node) {
             switch (node.kind) {

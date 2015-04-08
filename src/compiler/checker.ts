@@ -1738,8 +1738,24 @@ module ts {
                 }
             }
 
+            function isVariadic(node: Node) {
+                if (node && node.kind === SyntaxKind.Parameter) {
+                    let parameter = <ParameterDeclaration>node;
+                    if (isFunctionLike(parameter.parent)) {
+                        let functionParent = <FunctionLikeDeclaration>parameter.parent;
+                        if (parameter === lastOrUndefined(functionParent.parameters) &&
+                            hasRestParameters(functionParent)) {
+
+                            return true;
+                        }
+                    }
+
+                    return parameter.dotDotDotToken !== undefined;
+                }
+            }
+
             function buildParameterDisplay(p: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
-                if (hasDotDotDotToken(p.valueDeclaration)) {
+                if (isVariadic(p.valueDeclaration)) {
                     writePunctuation(writer, SyntaxKind.DotDotDotToken);
                 }
                 appendSymbolNameOnly(p, writer);
