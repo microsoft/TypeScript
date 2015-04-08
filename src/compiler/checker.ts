@@ -1738,28 +1738,13 @@ module ts {
                 }
             }
 
-            function isVariadic(node: Node) {
-                if (node && node.kind === SyntaxKind.Parameter) {
-                    let parameter = <ParameterDeclaration>node;
-                    if (isFunctionLike(parameter.parent)) {
-                        let functionParent = <FunctionLikeDeclaration>parameter.parent;
-                        if (parameter === lastOrUndefined(functionParent.parameters) &&
-                            hasRestParameters(functionParent)) {
-
-                            return true;
-                        }
-                    }
-
-                    return parameter.dotDotDotToken !== undefined;
-                }
-            }
-
             function buildParameterDisplay(p: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
-                if (isVariadic(p.valueDeclaration)) {
+                let parameterNode = <ParameterDeclaration>p.valueDeclaration;
+                if (isVariadic(parameterNode)) {
                     writePunctuation(writer, SyntaxKind.DotDotDotToken);
                 }
                 appendSymbolNameOnly(p, writer);
-                if (hasQuestionToken(p.valueDeclaration) || (<ParameterDeclaration>p.valueDeclaration).initializer) {
+                if (isOptional(parameterNode)) {
                     writePunctuation(writer, SyntaxKind.QuestionToken);
                 }
                 writePunctuation(writer, SyntaxKind.ColonToken);
@@ -3126,14 +3111,30 @@ module ts {
         }
 
         function isVariadicOrOptional(node: ParameterDeclaration) {
+            return isVariadic(node) || isOptional(node);
+        }
+
+        function isVariadic(node: ParameterDeclaration) {
             if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
                 let docParam = getJSDocParameter(node, getSourceFile(node));
                 if (docParam) {
-                    return docParam.type.kind === SyntaxKind.JSDocVariadicType || docParam.type.kind === SyntaxKind.JSDocOptionalType;
+                    return docParam.type.kind === SyntaxKind.JSDocVariadicType;
                 }
             }
 
-            return !!(node.initializer || node.questionToken || node.dotDotDotToken);
+            return node.dotDotDotToken !== undefined;
+        }
+
+
+        function isOptional(node: ParameterDeclaration) {
+            if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                let docParam = getJSDocParameter(node, getSourceFile(node));
+                if (docParam) {
+                    return docParam.type.kind === SyntaxKind.JSDocOptionalType;
+                }
+            }
+
+            return hasQuestionToken(node) || !!node.initializer;
         }
 
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
