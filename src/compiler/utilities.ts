@@ -302,9 +302,9 @@ module ts {
             return getSpanOfTokenAtPosition(sourceFile, node.pos);
         }
 
-        let pos = nodeIsMissing(errorNode)
-            ? errorNode.pos
-            : skipTrivia(sourceFile.text, errorNode.pos);
+        let pos = sourceFile && !nodeIsMissing(errorNode)
+            ? skipTrivia(sourceFile.text, errorNode.pos)
+            : errorNode.pos;
 
         return createTextSpanFromBounds(pos, errorNode.end);
     }
