@@ -165,6 +165,10 @@ module ts {
             return "";
         }
 
+        if (!sourceFile && node.kind === SyntaxKind.Identifier) {
+            return (<Identifier>node).text;
+        }
+
         let text = sourceFile.text;
         return text.substring(skipTrivia(text, node.pos), node.end);
     }
