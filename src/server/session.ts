@@ -916,8 +916,9 @@ module ts.server {
                         break;
                     }
                     case CommandNames.Occurrences: {
-                        var occurrencesArgs = <protocol.FileLocationRequestArgs>request.arguments;
-                        response = this
+                        var { line, offset, file: fileName } = <protocol.FileLocationRequestArgs>request.arguments;
+                        response = this.getOccurrences(line, offset, fileName);
+                        break;
                     }
                     default: {
                         this.projectService.log("Unrecognized JSON command: " + message);
