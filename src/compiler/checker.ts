@@ -2106,7 +2106,6 @@ module ts {
         }
 
         function getTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration) {
-            // First see if this node has a doc comment on it directly.
             let jsDocType = getJSDocTypeForVariableLikeDeclarationFromJSDocComment(declaration);
             return getTypeFromJSDocType(jsDocType);
         }
@@ -7310,12 +7309,27 @@ module ts {
             }
         }
 
+        function getReturnTypeFromJSDocComment(func: FunctionLikeDeclaration): Type {
+            let jsDocComment = getJSDocComment(func, getSourceFile(func));
+            if (jsDocComment && jsDocComment.returnType) {
+                return getTypeFromJSDocType(jsDocComment.returnType);
+            }
+        }
+
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
+            let type: Type;
+            if (func.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                type = getReturnTypeFromJSDocComment(func);
+                if (type) {
+                    return type;
+                }
+            }
+
             let contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
             if (!func.body) {
                 return unknownType;
             }
-            let type: Type;
+
             if (func.body.kind !== SyntaxKind.Block) {
                 type = checkExpressionCached(<Expression>func.body, contextualMapper);
             }
