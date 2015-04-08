@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser553699.ts(3,21): error TS2304: Cannot find name 'public'.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser553699.ts(3,21): error TS1110: Type expected.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser553699.ts (1 errors) ====
@@ -6,7 +6,7 @@ tests/cases/conformance/parser/ecmascript5/RegressionTests/parser553699.ts(3,21)
       constructor() { }
       public banana (x: public) { }
                         ~~~~~~
-!!! error TS2304: Cannot find name 'public'.
+!!! error TS1110: Type expected.
     }
     
     class Bar {
