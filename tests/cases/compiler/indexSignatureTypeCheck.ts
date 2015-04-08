@@ -18,6 +18,7 @@ interface IEnum {
     [index: Val]: Val;
 }
 
+
 interface IEnum2 {
     [index: Val2]: Val2;
 }
@@ -39,3 +40,35 @@ interface indexErrors {
     [p4: string, p5?: string];
     [p6: string, ...p7: any[]];
 }
+
+enum E {
+    A, B, C
+}
+
+
+interface DuplicateAccess {
+	[index: Val]: Val;
+	[index: Val2]: Val2;
+}
+
+interface DuplicateAccess2 {
+	[index: number]: Val;
+	[index: Val3]: Val3;
+}
+
+var x: { [x: string]: string }
+var y: { [x: number]: string }
+var z: { [x: E]: number }
+
+x = x;
+x = y;
+x = z;
+
+y = x;
+y = y;
+y = z;
+
+z = x;
+z = y;
+z = z;
+

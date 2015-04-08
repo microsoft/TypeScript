@@ -3237,15 +3237,15 @@ module ts {
         }
 
         function getIndexDeclarationOfSymbol(symbol: Symbol, kind: IndexKind): SignatureDeclaration {
-            let syntaxKind = kind === IndexKind.Number ? SyntaxKind.NumberKeyword : SyntaxKind.StringKeyword;
+            let flagCheck = kind === IndexKind.Number ? TypeFlags.NumberLike : TypeFlags.String;
             let indexSymbol = getIndexSymbol(symbol);
             if (indexSymbol) {
                 let len = indexSymbol.declarations.length;
                 for (let decl of indexSymbol.declarations) {
                     let node = <SignatureDeclaration>decl;
                     if (node.parameters.length === 1) {
-                        let parameter = node.parameters[0];
-                        if (parameter && parameter.type && parameter.type.kind === syntaxKind) {
+                        let type = getTypeFromIndexSignatureParameter(node.parameters[0]);
+                        if(type && (type.flags & flagCheck)) {
                             return node;
                         }
                     }
@@ -8160,24 +8160,27 @@ module ts {
                 let seenStringIndexer = false;
                 for (let decl of indexSymbol.declarations) {
                     let declaration = <SignatureDeclaration>decl;
-                    if (declaration.parameters.length === 1 && declaration.parameters[0].type) {
-                        switch (declaration.parameters[0].type.kind) {
-                            case SyntaxKind.StringKeyword:
-                                if (!seenStringIndexer) {
-                                    seenStringIndexer = true;
-                                }
-                                else {
-                                    error(declaration, Diagnostics.Duplicate_string_index_signature);
-                                }
-                                break;
-                            case SyntaxKind.NumberKeyword:
-                                if (!seenNumericIndexer) {
-                                    seenNumericIndexer = true;
-                                }
-                                else {
-                                    error(declaration, Diagnostics.Duplicate_number_index_signature);
-                                }
-                                break;
+                    if (declaration.parameters.length === 1) {
+                        let type = getTypeFromIndexSignatureParameter(declaration.parameters[0])
+                        if (!type) {
+                            continue;
+                        }
+
+                        if (type.flags & TypeFlags.String) {
+                            if (!seenStringIndexer) {
+                                seenStringIndexer = true;
+                            }
+                            else {
+                                error(declaration, Diagnostics.Duplicate_string_index_signature);
+                            }
+                        }
+                        else if (type.flags & TypeFlags.NumberLike) {
+                            if (!seenNumericIndexer) {
+                                seenNumericIndexer = true;
+                            }
+                            else {
+                                error(declaration, Diagnostics.Duplicate_number_index_signature);
+                            }
                         }
                     }
                 }
@@ -12288,18 +12291,23 @@ module ts {
             return false;
         }
 
-        function isValidTypeOfIndexSignatureParameter(parameter: ParameterDeclaration): boolean {
-            if (parameter.type.kind === SyntaxKind.StringKeyword || parameter.type.kind === SyntaxKind.NumberKeyword) {
-                return true;
-            }
+        function getTypeFromIndexSignatureParameter(parameter: ParameterDeclaration): Type {
+            if (parameter.type) {
+                if(parameter.type.kind === SyntaxKind.StringKeyword) {
+                    return stringType;
+                }
+                if(parameter.type.kind === SyntaxKind.NumberKeyword) {
+                    return numberType;
+                }
 
-            if (parameter.type.kind === SyntaxKind.TypeReference) {
-                var type = getTypeFromTypeReference(<TypeReferenceNode>(parameter.type));
-                if (type.flags & TypeFlags.NumberLike) {
-                    return true;
+                if (parameter.type.kind === SyntaxKind.TypeReference) {
+                    var type = getTypeFromTypeReference(<TypeReferenceNode>(parameter.type));
+                    if (type.flags & TypeFlags.NumberLike) {
+                        return type;
+                    }
                 }
             }
-            return false;
+            return undefined;
         }
 
         function checkGrammarIndexSignatureParameters(node: SignatureDeclaration): boolean {
@@ -12327,7 +12335,7 @@ module ts {
             if (!parameter.type) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
             }
-            if (!isValidTypeOfIndexSignatureParameter(parameter)) {
+            if (!getTypeFromIndexSignatureParameter(parameter)) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_must_be_string_number_or_an_enum_type);
             }
             if (!node.type) {
