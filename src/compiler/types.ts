@@ -1084,7 +1084,7 @@ module ts {
         type?: JSDocType;
         parameters?: JSDocParameter[];
         returnType?: JSDocType;
-        typeParameterNames?: string[];
+        typeParameters?: TypeParameterDeclaration[];
     }
 
     // Source files are declarations when they are external modules.

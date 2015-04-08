@@ -1115,8 +1115,18 @@ module ts {
   * @template T
   */`,
                         `{
-    "typeParameterNames": [
-        "T"
+    "typeParameters": [
+        {
+            "kind": "TypeParameter",
+            "name": {
+                "kind": 65,
+                "text": "T",
+                "pos": 18,
+                "end": 19
+            },
+            "pos": 18,
+            "end": 19
+        }
     ]
 }`);
                 });
@@ -1127,9 +1137,29 @@ module ts {
   * @template K,V
   */`,
                         `{
-    "typeParameterNames": [
-        "K",
-        "V"
+    "typeParameters": [
+        {
+            "kind": "TypeParameter",
+            "name": {
+                "kind": 65,
+                "text": "K",
+                "pos": 18,
+                "end": 19
+            },
+            "pos": 18,
+            "end": 19
+        },
+        {
+            "kind": "TypeParameter",
+            "name": {
+                "kind": 65,
+                "text": "V",
+                "pos": 20,
+                "end": 21
+            },
+            "pos": 20,
+            "end": 21
+        }
     ]
 }`);
                 });
@@ -1140,9 +1170,29 @@ module ts {
   * @template K ,V
   */`,
                         `{
-    "typeParameterNames": [
-        "K",
-        "V"
+    "typeParameters": [
+        {
+            "kind": "TypeParameter",
+            "name": {
+                "kind": 65,
+                "text": "K",
+                "pos": 18,
+                "end": 19
+            },
+            "pos": 18,
+            "end": 19
+        },
+        {
+            "kind": "TypeParameter",
+            "name": {
+                "kind": 65,
+                "text": "V",
+                "pos": 21,
+                "end": 22
+            },
+            "pos": 21,
+            "end": 22
+        }
     ]
 }`);
                 });
@@ -1153,9 +1203,29 @@ module ts {
   * @template K, V
   */`,
                         `{
-    "typeParameterNames": [
-        "K",
-        "V"
+    "typeParameters": [
+        {
+            "kind": "TypeParameter",
+            "name": {
+                "kind": 65,
+                "text": "K",
+                "pos": 18,
+                "end": 19
+            },
+            "pos": 18,
+            "end": 19
+        },
+        {
+            "kind": "TypeParameter",
+            "name": {
+                "kind": 65,
+                "text": "V",
+                "pos": 21,
+                "end": 22
+            },
+            "pos": 21,
+            "end": 22
+        }
     ]
 }`);
                 });
@@ -1166,9 +1236,29 @@ module ts {
   * @template K , V
   */`,
                         `{
-    "typeParameterNames": [
-        "K",
-        "V"
+    "typeParameters": [
+        {
+            "kind": "TypeParameter",
+            "name": {
+                "kind": 65,
+                "text": "K",
+                "pos": 18,
+                "end": 19
+            },
+            "pos": 18,
+            "end": 19
+        },
+        {
+            "kind": "TypeParameter",
+            "name": {
+                "kind": 65,
+                "text": "V",
+                "pos": 22,
+                "end": 23
+            },
+            "pos": 22,
+            "end": 23
+        }
     ]
 }`);
                 });
@@ -1179,9 +1269,29 @@ module ts {
   * @template K , V Description of type parameters.
   */`,
                         `{
-    "typeParameterNames": [
-        "K",
-        "V"
+    "typeParameters": [
+        {
+            "kind": "TypeParameter",
+            "name": {
+                "kind": 65,
+                "text": "K",
+                "pos": 18,
+                "end": 19
+            },
+            "pos": 18,
+            "end": 19
+        },
+        {
+            "kind": "TypeParameter",
+            "name": {
+                "kind": 65,
+                "text": "V",
+                "pos": 22,
+                "end": 23
+            },
+            "pos": 22,
+            "end": 23
+        }
     ]
 }`);
                 });

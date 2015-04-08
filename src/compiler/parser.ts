@@ -5774,7 +5774,7 @@ module ts {
         let type : JSDocType;
         let parameters: JSDocParameter[];
         let returnType: JSDocType;
-        let typeParameterNames: string[];
+        let typeParameters: TypeParameterDeclaration[];
 
         let pos: number;
 
@@ -5839,11 +5839,11 @@ module ts {
         return error ? undefined : createJSDocComment();
 
         function createJSDocComment(): JSDocComment {
-            if (!returnType && !type && !parameters && !typeParameterNames) {
+            if (!returnType && !type && !parameters && !typeParameters) {
                 return undefined;
             }
 
-            return { returnType, type, parameters, typeParameterNames };
+            return { returnType, type, parameters, typeParameters };
         }
 
         function skipWhitespace(): void {
@@ -5919,13 +5919,27 @@ module ts {
         }
 
         function handleTemplateTag(): void {
-            if (!typeParameterNames) {
-                typeParameterNames = [];
+            if (!typeParameters) {
+                typeParameters = [];
 
                 while (!error) {
                     skipWhitespace();
+
+                    let startPos = pos;
                     let name = scanIdentifier();
-                    typeParameterNames.push(name);
+
+                    let identifier = <Identifier>createNode(SyntaxKind.Identifier);
+                    let typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
+                    
+                    identifier.text = name;
+                    typeParameter.name = identifier;
+                    
+                    identifier.pos = typeParameter.pos = startPos;
+                    identifier.end = typeParameter.end = pos;
+                    
+                    fixupParentReferences(typeParameter);
+                    typeParameter.parent = parent;
+                    typeParameters.push(typeParameter);
 
                     skipWhitespace();
                     if (content.charCodeAt(pos) !== CharacterCodes.comma) {
