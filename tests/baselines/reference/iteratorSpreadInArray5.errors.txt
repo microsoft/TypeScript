@@ -1,0 +1,24 @@
+tests/cases/conformance/es6/spread/iteratorSpreadInArray5.ts(1,5): error TS2322: Type '(number | symbol)[]' is not assignable to type 'number[]'.
+  Type 'number | symbol' is not assignable to type 'number'.
+    Type 'symbol' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/es6/spread/iteratorSpreadInArray5.ts (1 errors) ====
+    var array: number[] = [0, 1, ...new SymbolIterator];
+        ~~~~~
+!!! error TS2322: Type '(number | symbol)[]' is not assignable to type 'number[]'.
+!!! error TS2322:   Type 'number | symbol' is not assignable to type 'number'.
+!!! error TS2322:     Type 'symbol' is not assignable to type 'number'.
+    
+    class SymbolIterator {
+        next() {
+            return {
+                value: Symbol(),
+                done: false
+            };
+        }
+    
+        [Symbol.iterator]() {
+            return this;
+        }
+    }
