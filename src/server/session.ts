@@ -285,6 +285,36 @@ module ts.server {
             }));
         }
 
+        getOccurrences(line: number, offset: number, fileName: string): protocol.OccurrencesResponseItem[] {
+            fileName = ts.normalizePath(fileName);
+            let project = this.projectService.getProjectForFile(fileName);
+
+            if (!project) {
+                throw Errors.NoProject;
+            }
+
+            let { compilerService } = project;
+            let position = compilerService.host.lineOffsetToPosition(fileName, line, offset);
+
+            let occurrences = compilerService.languageService.getOccurrencesAtPosition(fileName, position);
+
+            if (!occurrences) {
+                return undefined;
+            }
+
+            return occurrences.map(occurrence => {
+                let { fileName, isWriteAccess, textSpan } = occurrence;
+                let start = compilerService.host.positionToLineOffset(fileName, textSpan.start);
+                let end = compilerService.host.positionToLineOffset(fileName, ts.textSpanEnd(textSpan));
+                return {
+                    start,
+                    end,
+                    file: fileName,
+                    isWriteAccess
+                }
+            });
+        }
+
         getRenameLocations(line: number, offset: number, fileName: string,findInComments: boolean, findInStrings: boolean): protocol.RenameResponseBody {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
@@ -379,7 +409,7 @@ module ts.server {
             var nameSpan = nameInfo.textSpan;
             var nameColStart = compilerService.host.positionToLineOffset(file, nameSpan.start).offset;
             var nameText = compilerService.host.getScriptSnapshot(file).getText(nameSpan.start, ts.textSpanEnd(nameSpan));
-            var bakedRefs: protocol.ReferencesResponseItem[] = references.map((ref) => {
+            var bakedRefs: protocol.ReferencesResponseItem[] = references.map(ref => {
                 var start = compilerService.host.positionToLineOffset(ref.fileName, ref.textSpan.start);
                 var refLineSpan = compilerService.host.lineToTextSpan(ref.fileName, start.line - 1);
                 var snap = compilerService.host.getScriptSnapshot(ref.fileName);
@@ -884,6 +914,10 @@ module ts.server {
                         var navBarArgs = <protocol.FileRequestArgs>request.arguments;
                         response = this.getNavigationBarItems(navBarArgs.file);
                         break;
+                    }
+                    case CommandNames.Occurrences: {
+                        var occurrencesArgs = <protocol.FileLocationRequestArgs>request.arguments;
+                        response = this
                     }
                     default: {
                         this.projectService.log("Unrecognized JSON command: " + message);
