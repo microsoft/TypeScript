@@ -469,8 +469,14 @@ module ts {
 
             // Ditch any existing LS children we may have created.  This way we can avoid
             // moving them forward.
-            node._children = undefined;
-            node._docComment = undefined;
+            if (node._children) {
+                node._children = undefined;
+            }
+
+            if (node._docComment) {
+                node._docComment = undefined;
+            }
+
             node.pos += delta;
             node.end += delta;
 
