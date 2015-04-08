@@ -518,7 +518,6 @@ module ts {
         types_can_only_be_used_in_a_ts_file: { code: 8010, category: DiagnosticCategory.Error, key: "'types' can only be used in a .ts file." },
         type_arguments_can_only_be_used_in_a_ts_file: { code: 8011, category: DiagnosticCategory.Error, key: "'type arguments' can only be used in a .ts file." },
         parameter_modifiers_can_only_be_used_in_a_ts_file: { code: 8012, category: DiagnosticCategory.Error, key: "'parameter modifiers' can only be used in a .ts file." },
-        can_only_be_used_in_a_ts_file: { code: 8013, category: DiagnosticCategory.Error, key: "'?' can only be used in a .ts file." },
         property_declarations_can_only_be_used_in_a_ts_file: { code: 8014, category: DiagnosticCategory.Error, key: "'property declarations' can only be used in a .ts file." },
         enum_declarations_can_only_be_used_in_a_ts_file: { code: 8015, category: DiagnosticCategory.Error, key: "'enum declarations' can only be used in a .ts file." },
         type_assertion_expressions_can_only_be_used_in_a_ts_file: { code: 8016, category: DiagnosticCategory.Error, key: "'type assertion expressions' can only be used in a .ts file." },
