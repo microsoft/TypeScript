@@ -1815,4 +1815,81 @@ module ts {
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
             return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
+
+    /**
+     * Replace each instance of non-ascii characters by one, two, three, or four escape sequences 
+     * representing the UTF-8 encoding of the character, and return the expanded char code list.
+     */
+    function getExpandedCharCodes(input: string): number[] {
+        let output: number[] = [];
+        let length = input.length;
+        let leadSurrogate: number = undefined;
+
+        for (let i = 0; i < length; i++) {
+            let charCode = input.charCodeAt(i);
+
+            // handel utf8
+            if (charCode < 0x80) {
+                output.push(charCode);
+            }
+            else if (charCode < 0x800) {
+                output.push((charCode >> 6) | 0B11000000);
+                output.push((charCode & 0B00111111) | 0B10000000);
+            }
+            else if (charCode < 0x10000) {
+                output.push((charCode >> 12) | 0B11100000);
+                output.push(((charCode >> 6) & 0B00111111) | 0B10000000);
+                output.push((charCode & 0B00111111) | 0B10000000);
+            }
+            else if (charCode < 0x20000) {
+                output.push((charCode >> 18) | 0B11110000);
+                output.push(((charCode >> 12) & 0B00111111) | 0B10000000);
+                output.push(((charCode >> 6) & 0B00111111) | 0B10000000);
+                output.push((charCode & 0B00111111) | 0B10000000);
+            }
+            else {
+                Debug.assert(false, "Unexpected code point");
+            }
+        }
+
+        return output;
+    }
+
+    const base64Digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+    /**
+     * Converts a string to a base-64 encoded ASCII string.
+     */
+    export function convertToBase64(input: string): string {
+        var result = "";
+        let charCodes = getExpandedCharCodes(input);
+        let i = 0;
+        let length = charCodes.length;
+        let byte1: number, byte2: number, byte3: number, byte4: number;
+
+        while (i < length) {
+            // Convert every 6-bits in the input 3 character points
+            // into a base64 digit
+            byte1 = charCodes[i] >> 2;
+            byte2 = (charCodes[i] & 0B00000011) << 4 | charCodes[i + 1] >> 4;
+            byte3 = (charCodes[i + 1] & 0B00001111) << 2 | charCodes[i + 2] >> 6;
+            byte4 = charCodes[i + 2] & 0B00111111;
+
+            // We are out of characters in the input, set the extra
+            // digits to 64 (padding character).
+            if (i + 1 >= length) {
+                byte3 = byte4 = 64;
+            }
+            else if (i + 2 >= length) {
+                byte4 = 64;
+            }
+
+            // Write to the ouput
+            result += base64Digits.charAt(byte1) + base64Digits.charAt(byte2) + base64Digits.charAt(byte3) + base64Digits.charAt(byte4);
+
+            i += 3;
+        }
+
+        return result;
+    }
 }
