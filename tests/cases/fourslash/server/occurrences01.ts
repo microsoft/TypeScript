@@ -6,8 +6,8 @@
 ////    [|case|] 3:
 ////        [|break|];
 ////        [|break|] foo;
-////        co/*1*/ntinue;
-////        contin/*2*/ue foo;
+////        continue;
+////        continue foo;
 ////}
 
 let ranges = test.ranges();
@@ -17,11 +17,6 @@ for (let r of ranges) {
     verify.occurrencesAtPositionCount(ranges.length);
 
     for (let range of ranges) {
-        verify.occurrencesAtPositionContains(range, false);
+        verify.occurrencesAtPositionContains(range, /*isWriteAccess*/ false);
     }
-}
-
-for (let m of test.markers()) {
-    goTo.position(m.position);
-    verify.occurrencesAtPositionCount(0);
 }
