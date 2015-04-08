@@ -211,6 +211,7 @@ module ts.formatting {
         // Insert space after @ in decorator
         public SpaceBeforeAt: Rule;
         public NoSpaceAfterAt: Rule;
+        public SpaceAfterDecorator: Rule;
 
         constructor() {
             ///
@@ -351,6 +352,7 @@ module ts.formatting {
             // decorators
             this.SpaceBeforeAt = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.AtToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
             this.NoSpaceAfterAt = new Rule(RuleDescriptor.create3(SyntaxKind.AtToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+            this.SpaceAfterDecorator = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.ExportKeyword, SyntaxKind.DefaultKeyword, SyntaxKind.ClassKeyword, SyntaxKind.StaticKeyword, SyntaxKind.PublicKeyword, SyntaxKind.PrivateKeyword, SyntaxKind.ProtectedKeyword, SyntaxKind.GetKeyword, SyntaxKind.SetKeyword, SyntaxKind.OpenBracketToken, SyntaxKind.AsteriskToken])), RuleOperation.create2(new RuleOperationContext(Rules.IsEndOfDecoratorContextOnSameLine), RuleAction.Space));
 
             // These rules are higher in priority than user-configurable rules.
             this.HighPriorityCommonRules =
@@ -392,6 +394,7 @@ module ts.formatting {
                 this.NoSpaceAfterCloseAngularBracket,
                 this.SpaceBeforeAt,
                 this.NoSpaceAfterAt,
+                this.SpaceAfterDecorator,
             ];
 
             // These rules are lower in priority than user-configurable rules.
@@ -657,6 +660,28 @@ module ts.formatting {
 
         static IsSameLineTokenContext(context: FormattingContext): boolean {
             return context.TokensAreOnSameLine();
+        }
+
+        static IsEndOfDecoratorContextOnSameLine(context: FormattingContext): boolean {
+            return context.TokensAreOnSameLine() &&
+                context.contextNode.decorators &&
+                Rules.NodeIsInDecoratorContext(context.currentTokenParent) &&
+                !Rules.NodeIsInDecoratorContext(context.nextTokenParent);
+        }
+
+        static NodeIsInDecoratorContext(node: Node): boolean {
+            if (node.parserContextFlags & ParserContextFlags.Decorator) {
+                return true;
+            }
+            while (node) {
+                if (isExpression(node)) {
+                    node = node.parent;
+                }
+                else {
+                    return node.kind === SyntaxKind.Decorator;
+                }
+            }
+            return false;
         }
 
         static IsStartOfVariableDeclarationList(context: FormattingContext): boolean {

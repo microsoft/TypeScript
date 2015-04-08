@@ -237,9 +237,9 @@ export function delint(sourceFile: ts.SourceFile) {
 >sourceFile : ts.SourceFile
 >getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
 >node.getStart() : number
->node.getStart : (sourceFile?: ts.SourceFile) => number
+>node.getStart : (sourceFile?: ts.SourceFile, skipDecorators?: boolean) => number
 >node : ts.Node
->getStart : (sourceFile?: ts.SourceFile) => number
+>getStart : (sourceFile?: ts.SourceFile, skipDecorators?: boolean) => number
 
         console.log(`${sourceFile.fileName} (${line + 1},${character + 1}): ${message}`);
 >console.log(`${sourceFile.fileName} (${line + 1},${character + 1}): ${message}`) : any
