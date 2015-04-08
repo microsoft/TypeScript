@@ -6,31 +6,30 @@ var ps: IPropertySet = null;
 var index: any = "hello";
 ps[index] = 12;
 
-enum Val {
+enum Values {
     a = 1,
     b = 2
 }
 
-type Val2 = Val;
-type Val3 = number;
+type Values2 = Values;
+type Values3 = number;
  
-interface IEnum {
-    [index: Val]: Val;
+interface EnumMap {
+    [index: Values]: Values;
 }
 
-
-interface IEnum2 {
-    [index: Val2]: Val2;
+interface EnumMap2 {
+    [index: Values2]: Values2;
 }
-interface IEnum3 {
-    [index: Val3]: Val3;
+interface NumberMap {
+    [index: Values3]: Values3;
 }
 
-var pe: IEnum = null;
+var pe: Values = null;
 
 pe[1] = null
 pe[3] = null
-pe[Val.b] = 5
+pe[Values.b] = 5
 
 pe[true] = null
 
@@ -47,13 +46,13 @@ enum E {
 
 
 interface DuplicateAccess {
-	[index: Val]: Val;
-	[index: Val2]: Val2;
+    [index: Values]: Values;
+    [index: Values2]: Values2;
 }
 
 interface DuplicateAccess2 {
-	[index: number]: Val;
-	[index: Val3]: Val3;
+    [index: number]: Values;
+    [index: Values3]: Values3;
 }
 
 var x: { [x: string]: string }
@@ -72,3 +71,8 @@ z = x;
 z = y;
 z = z;
 
+
+type foo = string
+var s: { [x: foo]: string }
+x = s
+s = x

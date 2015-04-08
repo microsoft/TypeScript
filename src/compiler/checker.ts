@@ -12302,7 +12302,7 @@ module ts {
 
                 if (parameter.type.kind === SyntaxKind.TypeReference) {
                     var type = getTypeFromTypeReference(<TypeReferenceNode>(parameter.type));
-                    if (type.flags & TypeFlags.NumberLike) {
+                    if ((type.flags & TypeFlags.NumberLike) || (type.flags & TypeFlags.String)) {
                         return type;
                     }
                 }
