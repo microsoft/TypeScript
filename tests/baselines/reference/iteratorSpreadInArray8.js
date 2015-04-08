@@ -11,9 +11,7 @@ class SymbolIterator {
 }
 
 //// [iteratorSpreadInArray8.js]
-var array = [
-    ...new SymbolIterator
-];
+var array = [...new SymbolIterator];
 class SymbolIterator {
     next() {
         return {

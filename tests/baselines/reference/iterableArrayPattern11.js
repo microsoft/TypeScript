@@ -17,8 +17,7 @@ class FooIterator {
 }
 
 //// [iterableArrayPattern11.js]
-function fun([a, b] = new FooIterator) {
-}
+function fun([a, b] = new FooIterator) { }
 fun(new FooIterator);
 class Bar {
 }

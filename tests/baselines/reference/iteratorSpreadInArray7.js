@@ -17,9 +17,7 @@ class SymbolIterator {
 
 //// [iteratorSpreadInArray7.js]
 var array;
-array.concat([
-    ...new SymbolIterator
-]);
+array.concat([...new SymbolIterator]);
 class SymbolIterator {
     next() {
         return {

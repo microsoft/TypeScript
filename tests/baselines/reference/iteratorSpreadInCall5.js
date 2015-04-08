@@ -30,8 +30,7 @@ class StringIterator {
 
 //// [iteratorSpreadInCall5.js]
 foo(...new SymbolIterator, ...new StringIterator);
-function foo(...s) {
-}
+function foo(...s) { }
 class SymbolIterator {
     next() {
         return {

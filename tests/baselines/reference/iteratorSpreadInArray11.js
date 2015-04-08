@@ -4,6 +4,4 @@ var array = [...iter];
 
 //// [iteratorSpreadInArray11.js]
 var iter;
-var array = [
-    ...iter
-];
+var array = [...iter];

@@ -17,8 +17,7 @@ class SymbolIterator {
 
 //// [iteratorSpreadInCall4.js]
 foo(...new SymbolIterator);
-function foo(s1, ...s) {
-}
+function foo(s1, ...s) { }
 class SymbolIterator {
     next() {
         return {

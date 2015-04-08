@@ -17,8 +17,7 @@ class FooArrayIterator {
 }
 
 //// [iterableArrayPattern19.js]
-function fun([[a], b]) {
-}
+function fun([[a], b]) { }
 fun(new FooArrayIterator);
 class Bar {
 }
@@ -27,9 +26,7 @@ class Foo extends Bar {
 class FooArrayIterator {
     next() {
         return {
-            value: [
-                new Foo
-            ],
+            value: [new Foo],
             done: false
         };
     }

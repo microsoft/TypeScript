@@ -8,9 +8,7 @@ class SymbolIterator {
 }
 
 //// [iteratorSpreadInArray10.js]
-var array = [
-    ...new SymbolIterator
-];
+var array = [...new SymbolIterator];
 class SymbolIterator {
     [Symbol.iterator]() {
         return this;

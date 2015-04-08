@@ -28,10 +28,7 @@ class NumberIterator {
 }
 
 //// [iteratorSpreadInArray2.js]
-var array = [
-    ...new NumberIterator,
-    ...new SymbolIterator
-];
+var array = [...new NumberIterator, ...new SymbolIterator];
 class SymbolIterator {
     next() {
         return {

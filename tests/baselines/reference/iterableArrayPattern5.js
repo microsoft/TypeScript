@@ -18,10 +18,7 @@ class FooIterator {
 
 //// [iterableArrayPattern5.js]
 var a, b;
-[
-    a,
-    b
-] = new FooIterator;
+[a, b] = new FooIterator;
 class Bar {
 }
 class Foo extends Bar {

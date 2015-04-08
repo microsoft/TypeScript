@@ -32,9 +32,7 @@ class StringIterator {
 }
 
 //// [iteratorSpreadInCall9.js]
-new Foo(...new SymbolIterator, ...[
-    ...new StringIterator
-]);
+new Foo(...new SymbolIterator, ...[...new StringIterator]);
 class Foo {
     constructor(...s) {
     }

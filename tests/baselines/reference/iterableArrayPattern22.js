@@ -2,7 +2,4 @@
 var [...a] = { 0: "", 1: true };
 
 //// [iterableArrayPattern22.js]
-var [...a] = {
-    0: "",
-    1: true
-};
+var [...a] = { 0: "", 1: true };

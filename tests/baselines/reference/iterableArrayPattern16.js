@@ -30,8 +30,7 @@ class FooIteratorIterator {
 }
 
 //// [iterableArrayPattern16.js]
-function fun(...[a, b]) {
-}
+function fun(...[a, b]) { }
 fun(...new FooIteratorIterator);
 class Bar {
 }

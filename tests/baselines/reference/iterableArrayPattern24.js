@@ -4,10 +4,4 @@ var a: string, b: boolean[];
 
 //// [iterableArrayPattern24.js]
 var a, b;
-[
-    a,
-    ...b
-] = {
-    0: "",
-    1: true
-};
+[a, ...b] = { 0: "", 1: true };

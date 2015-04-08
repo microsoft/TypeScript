@@ -16,13 +16,8 @@ class SymbolIterator {
 }
 
 //// [iteratorSpreadInArray6.js]
-var array = [
-    0,
-    1
-];
-array.concat([
-    ...new SymbolIterator
-]);
+var array = [0, 1];
+array.concat([...new SymbolIterator]);
 class SymbolIterator {
     next() {
         return {

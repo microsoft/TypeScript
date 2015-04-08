@@ -4,5 +4,4 @@ for (let num of iter) { }
 
 //// [for-of57.js]
 var iter;
-for (let num of iter) {
-}
+for (let num of iter) { }

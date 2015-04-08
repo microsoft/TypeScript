@@ -15,13 +15,7 @@ class SymbolIterator {
 }
 
 //// [iteratorSpreadInArray3.js]
-var array = [
-    ...[
-        0,
-        1
-    ],
-    ...new SymbolIterator
-];
+var array = [...[0, 1], ...new SymbolIterator];
 class SymbolIterator {
     next() {
         return {
