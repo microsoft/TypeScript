@@ -11,6 +11,6 @@ for (let r of ranges) {
     verify.occurrencesAtPositionCount(ranges.length);
 
     for (let range of ranges) {
-        verify.occurrencesAtPositionContains(range, false);
+        verify.occurrencesAtPositionContains(range);
     }
 }
