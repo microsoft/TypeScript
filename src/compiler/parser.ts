@@ -470,6 +470,7 @@ module ts {
             // Ditch any existing LS children we may have created.  This way we can avoid
             // moving them forward.
             node._children = undefined;
+            node._docComment = undefined;
             node.pos += delta;
             node.end += delta;
 
@@ -904,6 +905,7 @@ module ts {
         intersectsChange: boolean
         length?: number;
         _children: Node[];
+        _docComment: JSDocComment;
     }
 
     interface IncrementalNode extends Node, IncrementalElement {
@@ -5760,8 +5762,26 @@ module ts {
         }
     }
 
+    interface NodeWithComment extends Node {
+        _docComment: JSDocComment;
+    }
+
     /* @internal */
     export function parseJSDocComment(parent: Node, content: string, start?: number, length?: number): JSDocComment {
+        let nodeWithComment = <NodeWithComment>parent;
+        if (nodeWithComment && nodeWithComment._docComment) {
+            return nodeWithComment._docComment;
+        }
+
+        let result = parseJSDocCommentWorker(parent, content, start, length);
+        if (nodeWithComment && result) {
+            nodeWithComment._docComment = result;
+        }
+
+        return result;
+    }
+
+    function parseJSDocCommentWorker(parent: Node, content: string, start: number, length: number): JSDocComment {
         start = start || 0;
         let end = length === undefined ? content.length : start + length;
         length = end - start;

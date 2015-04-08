@@ -2147,20 +2147,6 @@ module ts {
             return undefined;
         }
 
-        function getJSDocComment(node: Node, sourceFile: SourceFile) {
-            let comments = getLeadingCommentRangesOfNode(node, sourceFile);
-            if (comments) {
-                for (let comment of comments) {
-                    let jsDocComment = parseJSDocComment(node, sourceFile.text, comment.pos, comment.end - comment.pos);
-                    if (jsDocComment) {
-                        return jsDocComment;
-                    }
-                }
-            }
-
-            return undefined;
-        }
-
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration): Type {
             if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
@@ -3091,19 +3077,6 @@ module ts {
             return getIndexTypeOfObjectOrUnionType(getApparentType(type), kind);
         }
 
-        // Return list of type parameters with duplicates removed (duplicate identifier errors are generated in the actual
-        // type checking functions).
-        function getTypeParametersFromDeclaration(typeParameterDeclarations: TypeParameterDeclaration[]): TypeParameter[] {
-            let result: TypeParameter[] = [];
-            forEach(typeParameterDeclarations, node => {
-                let tp = getDeclaredTypeOfTypeParameter(node.symbol);
-                if (!contains(result, tp)) {
-                    result.push(tp);
-                }
-            });
-            return result;
-        }
-
         function symbolsToArray(symbols: SymbolTable): Symbol[] {
             let result: Symbol[] = [];
             for (let id in symbols) {
@@ -3114,12 +3087,40 @@ module ts {
             return result;
         }
 
+        function getTypeParametersFromSignatureDeclaration(declaration: SignatureDeclaration): TypeParameter[] {
+            if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                let jsDocComment = getJSDocComment(declaration, getSourceFile(declaration));
+                if (jsDocComment && jsDocComment.typeParameters) {
+                    return getTypeParametersFromTypeParameterDeclarations(jsDocComment.typeParameters);
+                }
+            }
+
+            if (declaration.typeParameters) {
+                return getTypeParametersFromTypeParameterDeclarations(declaration.typeParameters);
+            }
+
+            return undefined;
+        }
+
+        // Return list of type parameters with duplicates removed (duplicate identifier errors are generated in the actual
+        // type checking functions).
+        function getTypeParametersFromTypeParameterDeclarations(typeParameterDeclarations: TypeParameterDeclaration[]): TypeParameter[] {
+            let result: TypeParameter[] = [];
+            forEach(typeParameterDeclarations, node => {
+                let tp = getDeclaredTypeOfTypeParameter(node.symbol);
+                if (!contains(result, tp)) {
+                    result.push(tp);
+                }
+            });
+            return result;
+        }
+
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
             let links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
                 let classType = declaration.kind === SyntaxKind.Constructor ? getDeclaredTypeOfClass((<ClassDeclaration>declaration.parent).symbol) : undefined;
-                let typeParameters = classType ? classType.typeParameters :
-                    declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) : undefined;
+                let typeParameters = classType ? classType.typeParameters : getTypeParametersFromSignatureDeclaration(declaration);
+
                 let parameters: Symbol[] = [];
                 let hasStringLiterals = false;
                 let minArgumentCount = -1;

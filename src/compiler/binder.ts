@@ -255,10 +255,23 @@ module ts {
                 setBlockScopeContainer(node, /*cleanLocals*/  (symbolKind & SymbolFlags.HasLocals) === 0 && node.kind !== SyntaxKind.SourceFile);
             }
 
+            if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                if (node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.FunctionDeclaration) {
+                    bindJSDocTypeParameters(<FunctionLikeDeclaration>node);
+                }
+            }
+
             forEachChild(node, bind);
             container = saveContainer;
             parent = saveParent;
             blockScopeContainer = savedBlockScopeContainer;
+        }
+
+        function bindJSDocTypeParameters(node: FunctionLikeDeclaration) {
+            let jsDocComment = getJSDocComment(node, file);
+            if (jsDocComment) {
+                forEach(jsDocComment.typeParameters, bind);
+            } 
         }
 
         function bindDeclaration(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags, isBlockScopeContainer: boolean) {
