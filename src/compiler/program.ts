@@ -472,6 +472,21 @@ module ts {
                 }
             }
 
+            if (options.inlineSourceMap) {
+                if (options.sourceMap) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_sourceMap_cannot_be_specified_with_option_inlineSourceMap));
+                }
+                if (options.mapRoot) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_mapRoot_cannot_be_specified_with_option_inlineSourceMap));
+                }
+                if (options.sourceRoot) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_sourceRoot_cannot_be_specified_with_option_inlineSourceMap));
+                }
+                if (options.out) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_out_cannot_be_specified_with_option_inlineSourceMap));
+                }
+            }
+
             if (!options.sourceMap && (options.mapRoot || options.sourceRoot)) {
                 // Error to specify --mapRoot or --sourceRoot without mapSourceFiles
                 if (options.mapRoot) {

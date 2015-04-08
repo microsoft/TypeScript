@@ -1016,6 +1016,10 @@ module Harness {
                             options.sourceRoot = setting.value;
                             break;
 
+                        case 'maproot':
+                            options.mapRoot = setting.value;
+                            break;
+
                         case 'sourcemap':
                             options.sourceMap = !!setting.value;
                             break;
@@ -1067,6 +1071,10 @@ module Harness {
                         case 'includebuiltfile':
                             let builtFileName = libFolder + setting.value;
                             includeBuiltFiles.push({ unitName: builtFileName, content: normalizeLineEndings(IO.readFile(builtFileName), newLine) });
+                            break;
+
+                        case 'inlinesourcemap':
+                            options.inlineSourceMap = setting.value === 'true';
                             break;
 
                         default:
@@ -1465,7 +1473,7 @@ module Harness {
             "noimplicitany", "noresolve", "newline", "newlines", "emitbom",
             "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
             "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
-            "separatecompilation"];
+            "separatecompilation", "inlinesourcemap", "maproot", "sourceroot"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

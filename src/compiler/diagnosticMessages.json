@@ -661,7 +661,7 @@
     },
     "Invalid use of '{0}'. Class definitions are automatically in strict mode.": {
         "category": "Error",
-        "code":  1210
+        "code": 1210
     },
     "A class declaration without the 'default' modifier must have a name": {
         "category": "Error",
@@ -1772,6 +1772,23 @@
         "category": "Error",
         "code": 5047
     },
+    "Option 'sourceMap' cannot be specified with option 'inlineSourceMap'.": {
+        "category": "Error",
+        "code": 5048
+    },
+    "Option 'sourceRoot' cannot be specified with option 'inlineSourceMap'.": {
+        "category": "Error",
+        "code": 5049
+    },
+    "Option 'mapRoot' cannot be specified with option 'inlineSourceMap'.": {
+        "category": "Error",
+        "code": 5050
+    },
+    "Option 'out' cannot be specified with option 'inlineSourceMap'.": {
+        "category": "Error",
+        "code": 5051
+    },
+
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
