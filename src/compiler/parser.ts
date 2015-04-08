@@ -316,6 +316,33 @@ module ts {
                 return visitNode(cbNode, (<ExternalModuleReference>node).expression);
             case SyntaxKind.MissingDeclaration:
                 return visitNodes(cbNodes, node.decorators);
+            case SyntaxKind.JSDocTypeExpression:
+                return visitNode(cbNode, (<JSDocTypeExpression>node).type);
+            case SyntaxKind.JSDocUnionType:
+                return visitNodes(cbNodes, (<JSDocUnionType>node).types);
+            case SyntaxKind.JSDocNonNullableType:
+                return visitNode(cbNode, (<JSDocNonNullableType>node).type);
+            case SyntaxKind.JSDocNullableType:
+                return visitNode(cbNode, (<JSDocNullableType>node).type);
+            case SyntaxKind.JSDocRecordType:
+                return visitNodes(cbNodes, (<JSDocRecordType>node).members);
+            case SyntaxKind.JSDocTypeReference:
+                return visitNode(cbNode, (<JSDocTypeReference>node).name) ||
+                    visitNodes(cbNodes, (<JSDocTypeReference>node).typeArguments);
+            case SyntaxKind.JSDocOptionalType:
+                return visitNode(cbNode, (<JSDocOptionalType>node).type);
+            case SyntaxKind.JSDocFunctionType:
+                return visitNodes(cbNodes, (<JSDocFunctionType>node).parameters) ||
+                    visitNode(cbNode, (<JSDocFunctionType>node).type);
+            case SyntaxKind.JSDocVariadicType:
+                return visitNode(cbNode, (<JSDocVariadicType>node).type);
+            case SyntaxKind.JSDocConstructorType:
+                return visitNode(cbNode, (<JSDocConstructorType>node).type);
+            case SyntaxKind.JSDocThisType:
+                return visitNode(cbNode, (<JSDocThisType>node).type);
+            case SyntaxKind.JSDocMember:
+                return visitNode(cbNode, (<JSDocMember>node).name) ||
+                    visitNode(cbNode, (<JSDocMember>node).type);
         }
     }
 
@@ -5625,7 +5652,7 @@ module ts {
             }
 
             members.end = scanner.getStartPos();
-            result.member = members;
+            result.members = members;
 
             parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(result);

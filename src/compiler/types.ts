@@ -1041,7 +1041,7 @@ module ts {
     }
 
     export interface JSDocRecordType extends JSDocType {
-        member: NodeArray<JSDocMember>;
+        members: NodeArray<JSDocMember>;
     }
 
     export interface JSDocTypeReference extends JSDocType {

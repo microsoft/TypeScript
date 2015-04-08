@@ -83,7 +83,7 @@ module ts {
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 3,
-    "member": {
+    "members": {
         "length": 0,
         "pos": 2,
         "end": 2
@@ -97,7 +97,7 @@ module ts {
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 6,
-    "member": {
+    "members": {
         "0": {
             "kind": "JSDocMember",
             "pos": 2,
@@ -122,7 +122,7 @@ module ts {
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 14,
-    "member": {
+    "members": {
         "0": {
             "kind": "JSDocMember",
             "pos": 2,
@@ -158,7 +158,7 @@ module ts {
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 11,
-    "member": {
+    "members": {
         "0": {
             "kind": "JSDocMember",
             "pos": 2,
@@ -194,7 +194,7 @@ module ts {
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 19,
-    "member": {
+    "members": {
         "0": {
             "kind": "JSDocMember",
             "pos": 2,
@@ -241,7 +241,7 @@ module ts {
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 19,
-    "member": {
+    "members": {
         "0": {
             "kind": "JSDocMember",
             "pos": 2,
@@ -288,7 +288,7 @@ module ts {
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 27,
-    "member": {
+    "members": {
         "0": {
             "kind": "JSDocMember",
             "pos": 2,
@@ -346,7 +346,7 @@ module ts {
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 11,
-    "member": {
+    "members": {
         "0": {
             "kind": "JSDocMember",
             "pos": 2,
