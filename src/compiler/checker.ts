@@ -2145,18 +2145,12 @@ module ts {
                     return docComment.type;
                 }
             }
-            else if (declaration.kind === SyntaxKind.Parameter && (<ParameterDeclaration>declaration).name.kind === SyntaxKind.Identifier) {
+            else if (declaration.kind === SyntaxKind.Parameter) {
                 // If it's a parameter, see if the parent has a jsdoc comment with an @param 
                 // annotation.
-                let parameterName = (<Identifier>(<ParameterDeclaration>declaration).name).text;
-
-                docComment = getJSDocComment(declaration.parent, sourceFile);
-                if (docComment && docComment.parameters) {
-                    for (let parameter of docComment.parameters) {
-                        if (parameter.name === parameterName) {
-                            return parameter.type;
-                        }
-                    }
+                let parameter = getJSDocParameter(<ParameterDeclaration>declaration, sourceFile);
+                if (parameter) {
+                    return parameter.type;
                 }
             }
 
@@ -3131,6 +3125,17 @@ module ts {
             return result;
         }
 
+        function isVariadicOrOptional(node: ParameterDeclaration) {
+            if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                let docParam = getJSDocParameter(node, getSourceFile(node));
+                if (docParam) {
+                    return docParam.type.kind === SyntaxKind.JSDocVariadicType || docParam.type.kind === SyntaxKind.JSDocOptionalType;
+                }
+            }
+
+            return !!(node.initializer || node.questionToken || node.dotDotDotToken);
+        }
+
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
             let links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
@@ -3147,7 +3152,7 @@ module ts {
                         hasStringLiterals = true;
                     }
                     if (minArgumentCount < 0) {
-                        if (param.initializer || param.questionToken || param.dotDotDotToken) {
+                        if (isVariadicOrOptional(param)) {
                             minArgumentCount = i;
                         }
                     }

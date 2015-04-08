@@ -815,6 +815,23 @@ module ts {
         return false;
     }
 
+    export function getJSDocParameter(parameter: ParameterDeclaration, sourceFile: SourceFile): JSDocParameter {
+        if (parameter.name.kind === SyntaxKind.Identifier) {
+            // If it's a parameter, see if the parent has a jsdoc comment with an @param 
+            // annotation.
+            let parameterName = (<Identifier>parameter.name).text;
+
+            let docComment = getJSDocComment(parameter.parent, sourceFile);
+            if (docComment && docComment.parameters) {
+                for (let parameter of docComment.parameters) {
+                    if (parameter.name === parameterName) {
+                        return parameter;
+                    }
+                }
+            }
+        }
+    }
+
     export function hasRestParameters(s: SignatureDeclaration): boolean {
         let lastParameter = lastOrUndefined(s.parameters);
         if (!lastParameter) {
@@ -822,16 +839,9 @@ module ts {
         }
 
         if (s.parserContextFlags & ParserContextFlags.JavaScriptFile) {
-            if (lastParameter.name.kind === SyntaxKind.Identifier) {
-                let lastParameterName = (<Identifier>lastParameter.name).text;
-
-                let docComment = getJSDocComment(s, getSourceFileOfNode(s));
-                if (docComment) {
-                    let parameter = forEach(docComment.parameters, p => p.name === lastParameterName ? p : undefined);
-                    if (parameter) {
-                        return parameter.type.kind === SyntaxKind.JSDocVariadicType;
-                    }
-                }
+            let parameter = getJSDocParameter(lastParameter, getSourceFileOfNode(lastParameter));
+            if (parameter) {
+                return parameter.type.kind === SyntaxKind.JSDocVariadicType;
             }
         }
 
