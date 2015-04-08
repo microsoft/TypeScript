@@ -417,14 +417,14 @@ module ts {
         return 0;
     }
 
-    function fixupParentReferences(sourceFile: SourceFile) {
+    function fixupParentReferences(node: Node) {
         // normally parent references are set during binding. However, for clients that only need
         // a syntax tree, and no semantic features, then the binding process is an unnecessary
         // overhead.  This functions allows us to set all the parents, without all the expense of
         // binding.
 
-        let parent: Node = sourceFile;
-        forEachChild(sourceFile, visitNode);
+        let parent: Node = node;
+        forEachChild(node, visitNode);
         return;
 
         function visitNode(n: Node): void {
@@ -5429,7 +5429,12 @@ module ts {
         result.type = parseJSDocType();
         parseExpected(SyntaxKind.CloseBraceToken);
 
-        return error ? undefined : finishNode(result);
+        if (error) {
+            return undefined;
+        }
+
+        fixupParentReferences(result);
+        return finishNode(result);
 
         function nextToken(): SyntaxKind {
             return token = scanner.scan();
