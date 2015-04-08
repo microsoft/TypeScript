@@ -165,10 +165,6 @@ module ts {
             return "";
         }
 
-        if (!sourceFile && node.kind === SyntaxKind.Identifier) {
-            return (<Identifier>node).text;
-        }
-
         let text = sourceFile.text;
         return text.substring(skipTrivia(text, node.pos), node.end);
     }
@@ -306,7 +302,7 @@ module ts {
             return getSpanOfTokenAtPosition(sourceFile, node.pos);
         }
 
-        let pos = sourceFile && !nodeIsMissing(errorNode)
+        let pos = !nodeIsMissing(errorNode)
             ? skipTrivia(sourceFile.text, errorNode.pos)
             : errorNode.pos;
 

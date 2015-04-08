@@ -2151,7 +2151,7 @@ module ts {
             let comments = getLeadingCommentRangesOfNode(node, sourceFile);
             if (comments) {
                 for (let comment of comments) {
-                    let jsDocComment = parseJSDocComment(sourceFile.text, comment.pos, comment.end - comment.pos);
+                    let jsDocComment = parseJSDocComment(node, sourceFile.text, comment.pos, comment.end - comment.pos);
                     if (jsDocComment) {
                         return jsDocComment;
                     }

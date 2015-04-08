@@ -5761,7 +5761,7 @@ module ts {
     }
 
     /* @internal */
-    export function parseJSDocComment(content: string, start?: number, length?: number): JSDocComment {
+    export function parseJSDocComment(parent: Node, content: string, start?: number, length?: number): JSDocComment {
         start = start || 0;
         let end = length === undefined ? content.length : start + length;
         length = end - start;
@@ -5878,6 +5878,7 @@ module ts {
                 return undefined;
             }
 
+            typeExpression.parent = parent;
             pos = typeExpression.end;
             return typeExpression.type;
         }
