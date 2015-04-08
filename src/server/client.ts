@@ -446,6 +446,7 @@ module ts.server {
             if (!response.body) {
                 return undefined;
             }
+
             var helpItems: protocol.SignatureHelpItems = response.body;
             var span = helpItems.applicableSpan;
             var start = this.lineOffsetToPosition(fileName, span.start);
@@ -465,7 +466,26 @@ module ts.server {
         }
 
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
-            throw new Error("Not Implemented Yet.");
+            var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
+            var args: protocol.FileLocationRequestArgs = {
+                file: fileName,
+                line: lineOffset.line,
+                offset: lineOffset.offset,
+            };
+
+            var request = this.processRequest<protocol.OccurrencesRequest>(CommandNames.Occurrences, args);
+            var response = this.processResponse<protocol.OccurrencesResponse>(request);
+
+            return response.body.map(entry => {
+                var fileName = entry.file;
+                var start = this.lineOffsetToPosition(fileName, entry.start);
+                var end = this.lineOffsetToPosition(fileName, entry.end);
+                return {
+                    fileName,
+                    textSpan: ts.createTextSpanFromBounds(start, end),
+                    isWriteAccess: entry.isWriteAccess,
+                };
+            });
         }
 
         getOutliningSpans(fileName: string): OutliningSpan[] {

@@ -89,6 +89,7 @@ module ts.server {
         export var Geterr = "geterr";
         export var NavBar = "navbar";
         export var Navto = "navto";
+        export var Occurrences = "occurrences";
         export var Open = "open";
         export var Quickinfo = "quickinfo";
         export var References = "references";
