@@ -703,7 +703,6 @@ module ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.OmittedExpression:
-            case SyntaxKind.Decorator:
                 return true;
             case SyntaxKind.QualifiedName:
                 while (node.parent.kind === SyntaxKind.QualifiedName) {
@@ -755,6 +754,8 @@ module ts {
                         return node === (<TemplateSpan>parent).expression;
                     case SyntaxKind.ComputedPropertyName:
                         return node === (<ComputedPropertyName>parent).expression;
+                    case SyntaxKind.Decorator:
+                        return true;
                     default:
                         if (isExpression(parent)) {
                             return true;
