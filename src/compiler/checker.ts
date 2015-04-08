@@ -3710,7 +3710,7 @@ module ts {
                         // NYI:
                         break;
                     case SyntaxKind.JSDocVariadicType:
-                        return getTypeFromJSDocType((<JSDocVariadicType>jsDocType).type);
+                        return getTypeFromJSDocVariadicType(<JSDocVariadicType>jsDocType);
                     case SyntaxKind.JSDocConstructorType:
                         // NYI:
                         break;
@@ -3718,6 +3718,13 @@ module ts {
                         // NYI:
                         break;
                 }
+            }
+        }
+
+        function getTypeFromJSDocVariadicType(node: JSDocVariadicType): Type {
+            let type = getTypeFromJSDocType(node.type);
+            if (type) {
+                return createArrayType(type);
             }
         }
 

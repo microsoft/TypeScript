@@ -820,7 +820,26 @@ module ts {
     }
 
     export function hasRestParameters(s: SignatureDeclaration): boolean {
-        return s.parameters.length > 0 && s.parameters[s.parameters.length - 1].dotDotDotToken !== undefined;
+        let lastParameter = lastOrUndefined(s.parameters);
+        if (!lastParameter) {
+            return false;
+        }
+
+        if (s.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+            if (lastParameter.name.kind === SyntaxKind.Identifier) {
+                let lastParameterName = (<Identifier>lastParameter.name).text;
+
+                let docComment = getJSDocComment(s, getSourceFileOfNode(s));
+                if (docComment) {
+                    let parameter = forEach(docComment.parameters, p => p.name === lastParameterName ? p : undefined);
+                    if (parameter) {
+                        return parameter.type.kind === SyntaxKind.JSDocVariadicType;
+                    }
+                }
+            }
+        }
+
+        return lastParameter.dotDotDotToken !== undefined;
     }
 
     export function isLiteralKind(kind: SyntaxKind): boolean {
