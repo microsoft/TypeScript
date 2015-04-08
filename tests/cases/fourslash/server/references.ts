@@ -1,4 +1,4 @@
-/// <reference path='fourslash.ts'/>
+/// <reference path="../fourslash.ts"/>
 
 // Global class reference.
 

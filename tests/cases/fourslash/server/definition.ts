@@ -1,4 +1,4 @@
-/// <reference path='fourslash.ts'/>
+/// <reference path="../fourslash.ts"/>
 
 // @Filename: b.ts
 ////import n = require('a/*1*/');
