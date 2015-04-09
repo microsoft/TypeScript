@@ -945,7 +945,7 @@ module ts {
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         findReferences(fileName: string, position: number): ReferencedSymbol[];
-        getDocumentHighlights(fileName: string, position: number): DocumentHighlights[];
+        getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[];
 
         /** @deprecated */
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
@@ -3983,9 +3983,11 @@ module ts {
             return results;
         }
 
-        function getDocumentHighlights(fileName: string, position: number): DocumentHighlights[] {
+        function getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] {
             synchronizeHostData();
 
+            filesToSearch = map(filesToSearch, normalizeSlashes);
+            let sourceFilesToSearch = filter(program.getSourceFiles(), f => contains(filesToSearch, f.fileName));
             let sourceFile = getValidSourceFile(fileName);
 
             let node = getTouchingWord(sourceFile, position);
@@ -4014,7 +4016,7 @@ module ts {
                     isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
                     isNameOfExternalModuleImportOrDeclaration(node)) {
 
-                    let referencedSymbols = getReferencedSymbolsForNodes(node, [node.getSourceFile()], /*searchOnlyInCurrentFile*/ true, /*findInStrings:*/ false, /*findInComments:*/ false);
+                    let referencedSymbols = getReferencedSymbolsForNodes(node, sourceFilesToSearch, /*findInStrings:*/ false, /*findInComments:*/ false);
                     return convertReferencedSymbols(referencedSymbols);
                 }
 
@@ -4595,7 +4597,7 @@ module ts {
         function getOccurrencesAtPositionCore(fileName: string, position: number): ReferenceEntry[] {
             synchronizeHostData();
 
-            return convertDocumentHighlights(getDocumentHighlights(fileName, position));
+            return convertDocumentHighlights(getDocumentHighlights(fileName, position, [fileName]));
 
             function convertDocumentHighlights(documentHighlights: DocumentHighlights[]): ReferenceEntry[] {
                 if (!documentHighlights) {
@@ -4668,10 +4670,10 @@ module ts {
             }
 
             Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.NumericLiteral || node.kind === SyntaxKind.StringLiteral);
-            return getReferencedSymbolsForNodes(node, program.getSourceFiles(), /*searchOnlyInCurrentFile*/ false, findInStrings, findInComments);
+            return getReferencedSymbolsForNodes(node, program.getSourceFiles(), findInStrings, findInComments);
         }
 
-        function getReferencedSymbolsForNodes(node: Node, sourceFiles: SourceFile[], searchOnlyInCurrentFile: boolean, findInStrings: boolean, findInComments: boolean): ReferencedSymbol[]{
+        function getReferencedSymbolsForNodes(node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean): ReferencedSymbol[]{
             // Labels
             if (isLabelName(node)) {
                 if (isJumpStatementTarget(node)) {
@@ -4729,23 +4731,16 @@ module ts {
                 getReferencesInNode(scope, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
             }
             else {
-                if (searchOnlyInCurrentFile) {
-                    Debug.assert(sourceFiles.length === 1);
-                    result = [];
-                    getReferencesInNode(sourceFiles[0], symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
-                }
-                else {
-                    let internedName = getInternedName(symbol, node, declarations)
-                    forEach(sourceFiles, sourceFile => {
-                        cancellationToken.throwIfCancellationRequested();
+                let internedName = getInternedName(symbol, node, declarations)
+                for (let sourceFile of sourceFiles) {
+                    cancellationToken.throwIfCancellationRequested();
 
-                        let nameTable = getNameTable(sourceFile);
+                    let nameTable = getNameTable(sourceFile);
 
-                        if (lookUp(nameTable, internedName)) {
-                            result = result || [];
-                            getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
-                        }
-                    });
+                    if (lookUp(nameTable, internedName)) {
+                        result = result || [];
+                        getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
+                    }
                 }
             }
 

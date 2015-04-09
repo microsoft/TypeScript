@@ -144,8 +144,11 @@ module ts {
         /**
          * Returns a JSON-encoded value of the type:
          * { fileName: string; highlights: { start: number; length: number, isDefinition: boolean }[] }[]
+         * 
+         * @param fileToSearch A JSON encoded string[] containing the file names that should be 
+         *  considered when searching.
          */
-        getDocumentHighlights(fileName: string, position: number): string;
+        getDocumentHighlights(fileName: string, position: number, filesToSearch: string): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -597,11 +600,11 @@ module ts {
                 });
         }
 
-        public getDocumentHighlights(fileName: string, position: number): string {
+        public getDocumentHighlights(fileName: string, position: number, filesToSearch: string): string {
             return this.forwardJSONCall(
                 "getDocumentHighlights('" + fileName + "', " + position + ")",
                 () => {
-                    return this.languageService.getDocumentHighlights(fileName, position);
+                    return this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
                 });
         }
 
