@@ -51,11 +51,6 @@ interface SymbolConstructor {
     isConcatSpreadable: symbol;
 
     /** 
-      * A Boolean value that if true indicates that an object may be used as a regular expression. 
-      */
-    isRegExp: symbol;
-
-    /** 
       * A method that returns the default iterator for an object.Called by the semantics of the 
       * for-of statement. 
       */
@@ -598,8 +593,6 @@ interface Math {
 }
 
 interface RegExp {
-    [Symbol.isRegExp]: boolean;
-
     /** 
       * Matches a string with a regular expression, and returns an array containing the results of 
       * that search.
