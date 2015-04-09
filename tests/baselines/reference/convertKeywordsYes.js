@@ -505,81 +505,66 @@ var bigModule;
         }
         return constructor;
     })();
-    var default_1 = (function () {
-        function default_1() {
+    var implements = (function () {
+        function implements() {
         }
-        return default_1;
+        return implements;
     })();
-    var default_2 = (function () {
-        function default_2() {
+    var interface = (function () {
+        function interface() {
         }
-        return default_2;
+        return interface;
     })();
-    interface;
-    { }
-    var default_3 = (function () {
-        function default_3() {
+    var let = (function () {
+        function let() {
         }
-        return default_3;
+        return let;
     })();
-    var _a = void 0;
     var module = (function () {
         function module() {
         }
         return module;
     })();
-    var default_4 = (function () {
-        function default_4() {
+    var package = (function () {
+        function package() {
         }
-        return default_4;
+        return package;
     })();
-    package;
-    { }
-    var default_5 = (function () {
-        function default_5() {
+    var private = (function () {
+        function private() {
         }
-        return default_5;
+        return private;
     })();
-    private;
-    { }
-    var default_6 = (function () {
-        function default_6() {
+    var protected = (function () {
+        function protected() {
         }
-        return default_6;
+        return protected;
     })();
-    protected;
-    { }
-    var default_7 = (function () {
-        function default_7() {
+    var public = (function () {
+        function public() {
         }
-        return default_7;
+        return public;
     })();
-    public;
-    { }
     var set = (function () {
         function set() {
         }
         return set;
     })();
-    var default_8 = (function () {
-        function default_8() {
+    var static = (function () {
+        function static() {
         }
-        return default_8;
+        return static;
     })();
-    static;
-    { }
     var get = (function () {
         function get() {
         }
         return get;
     })();
-    var default_9 = (function () {
-        function default_9() {
+    var yield = (function () {
+        function yield() {
         }
-        return default_9;
+        return yield;
     })();
-    yield;
-    { }
     var declare = (function () {
         function declare() {
         }
