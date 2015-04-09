@@ -7294,7 +7294,7 @@ module ts {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
 
             // Grammar checking
-            let hasGrammarError = checkGrammarFunctionLikeDeclaration(node);
+            let hasGrammarError = checkGrammarDeclarationNameInStrictMode(node) || checkGrammarFunctionLikeDeclaration(node);
             if (!hasGrammarError && node.kind === SyntaxKind.FunctionExpression) {
                 checkGrammarFunctionName(node.name) || checkGrammarForGenerator(node);
             }
@@ -7954,6 +7954,7 @@ module ts {
         }
 
         function checkExpression(node: Expression, contextualMapper?: TypeMapper): Type {
+            checkGrammarExpressionInStrictMode(node);
             return checkExpressionOrQualifiedName(node, contextualMapper);
         }
 
@@ -8069,6 +8070,8 @@ module ts {
         // DECLARATION AND STATEMENT TYPE CHECKING
 
         function checkTypeParameter(node: TypeParameterDeclaration) {
+            checkGrammarDeclarationNameInStrictMode(node);
+
             // Grammar Checking
             if (node.expression) {
                 grammarErrorOnFirstToken(node.expression, Diagnostics.Type_expected);
@@ -8337,10 +8340,23 @@ module ts {
         }
 
         function checkTypeReferenceNode(node: TypeReferenceNode) {
+            // Check if the type reference is using strict mode keyword
+            // Example:
+            //      class C {
+            //          foo(x: public){}  // Error.
+            //      }
+            if (node.typeName.kind === SyntaxKind.Identifier && (<Identifier>node.typeName).strictModeKind) {
+                let typeName = <Identifier>node.typeName;
+                let nameText = declarationNameToString(typeName);
+                reportStrictModeGrammarErrorInClassDeclaration(typeName, Diagnostics.Type_expected_0_is_a_reserved_word_Class_definitions_are_automatically_in_strict_mode, nameText) ||
+                    reportStrictModeGrammarErrorInModule(typeName, Diagnostics.Type_expected_0_is_a_reserved_word_Module_is_automatically_in_strict_mode, nameText) ||
+                    grammarErrorOnNode(typeName, Diagnostics.Type_expected_0_is_a_reserved_word_in_strict_mode, nameText);
+            }
             return checkTypeReferenceOrHeritageClauseElement(node);
         }
 
         function checkHeritageClauseElement(node: HeritageClauseElement) {
+            checkGrammarExpressionInStrictMode(node.expression);
             return checkTypeReferenceOrHeritageClauseElement(node);
         }
 
@@ -8871,6 +8887,7 @@ module ts {
         }
 
         function checkFunctionLikeDeclaration(node: FunctionLikeDeclaration): void {
+            checkGrammarDeclarationNameInStrictMode(node);
             checkDecorators(node);
             checkSignatureDeclaration(node);
 
@@ -9154,6 +9171,7 @@ module ts {
 
         // Check variable, parameter, or property declaration
         function checkVariableLikeDeclaration(node: VariableLikeDeclaration) {
+            checkGrammarDeclarationNameInStrictMode(node);
             checkDecorators(node);
             checkSourceElement(node.type);
             // For a computed property, just check the initializer and exit
@@ -9880,6 +9898,7 @@ module ts {
         }
 
         function checkClassDeclaration(node: ClassDeclaration) {
+            checkGrammarDeclarationNameInStrictMode(node);
             // Grammar checking
             if (node.parent.kind !== SyntaxKind.ModuleBlock && node.parent.kind !== SyntaxKind.SourceFile) {
                 grammarErrorOnNode(node, Diagnostics.class_declarations_are_only_supported_directly_inside_a_module_or_as_a_top_level_declaration);
@@ -10106,7 +10125,7 @@ module ts {
 
         function checkInterfaceDeclaration(node: InterfaceDeclaration) {
             // Grammar checking
-            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarInterfaceDeclaration(node);
+            checkGrammarDeclarationNameInStrictMode(node) || checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarInterfaceDeclaration(node);
 
             checkTypeParameters(node.typeParameters);
             if (produceDiagnostics) {
@@ -10331,7 +10350,7 @@ module ts {
             }
 
             // Grammar checking
-            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarEnumDeclaration(node);
+            checkGrammarDeclarationNameInStrictMode(node) || checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarEnumDeclaration(node);
 
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
@@ -10401,7 +10420,7 @@ module ts {
         function checkModuleDeclaration(node: ModuleDeclaration) {
             if (produceDiagnostics) {
                 // Grammar checking
-                if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node)) {
+                if (!checkGrammarDeclarationNameInStrictMode(node) && !checkGrammarDecorators(node) && !checkGrammarModifiers(node)) {
                     if (!isInAmbientContext(node) && node.name.kind === SyntaxKind.StringLiteral) {
                         grammarErrorOnNode(node.name, Diagnostics.Only_ambient_modules_can_use_quoted_names);
                     }
@@ -10567,7 +10586,7 @@ module ts {
                     // export { x, y } from "foo"
                     forEach(node.exportClause.elements, checkExportSpecifier);
 
-                    let inAmbientExternalModule = node.parent.kind === SyntaxKind.ModuleBlock && (<ModuleDeclaration>node.parent.parent).name.kind === SyntaxKind.StringLiteral;
+                let inAmbientExternalModule = node.parent.kind === SyntaxKind.ModuleBlock && (<ModuleDeclaration>node.parent.parent).name.kind === SyntaxKind.StringLiteral;
                     if (node.parent.kind !== SyntaxKind.SourceFile && !inAmbientExternalModule) {
                         error(node, Diagnostics.Export_declarations_are_not_permitted_in_an_internal_module);
                     }
@@ -11915,6 +11934,65 @@ module ts {
 
 
         // GRAMMAR CHECKING
+        function reportStrictModeGrammarErrorInClassDeclaration(identifier: Identifier, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
+            // We are checking if this name is inside class declaration or class expression (which are under class definitions inside ES6 spec.)
+            // if so, we would like to give more explicit invalid usage error.
+            if (getAncestor(identifier, SyntaxKind.ClassDeclaration) || getAncestor(identifier, SyntaxKind.ClassExpression)) {
+                return grammarErrorOnNode(identifier, message, arg0);
+            }
+            return false;
+        }
+
+        function reportStrictModeGrammarErrorInModule(identifier: Identifier, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
+            // We are checking if this name is inside module declaration which is automatically a strict mode code in ES6.
+            // If so, we would like to give more explicit invalid usage error.
+            if (getAncestor(identifier, SyntaxKind.ModuleDeclaration)) {
+                return grammarErrorOnNode(identifier, message, arg0);
+            }
+            return false;
+        }
+
+        function checkGrammarDeclarationNameInStrictMode(node: Declaration): boolean {
+            let name = node.name;
+            if (name && name.kind === SyntaxKind.Identifier && (<Identifier>name).strictModeKind) {
+                let nameText = declarationNameToString(name);
+                switch (node.kind) {
+                    case SyntaxKind.Parameter:
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.TypeParameter:
+                    case SyntaxKind.BindingElement:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.TypeAliasDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                        let reportError = reportStrictModeGrammarErrorInClassDeclaration(<Identifier>name, Diagnostics.Identifier_expected_0_is_a_reserved_word_Class_definitions_are_automatically_in_strict_mode, nameText) ||
+                            reportStrictModeGrammarErrorInModule(<Identifier>name, Diagnostics.Identifier_expected_0_is_a_reserved_word_Module_is_automatically_in_strict_mode, nameText) ||
+                            grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
+                        return reportError ? reportError : false;
+
+                    case SyntaxKind.ClassDeclaration:
+                        return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_Class_definitions_are_automatically_in_strict_mode, nameText);
+
+                    case SyntaxKind.ModuleDeclaration:
+                        return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_Class_definitions_are_automatically_in_strict_mode, nameText);
+
+                    case SyntaxKind.ImportDeclaration:
+                    case SyntaxKind.ExportDeclaration:
+                    case SyntaxKind.ImportEqualsDeclaration:
+                        return grammarErrorOnNode(name, Diagnostics.ImportDecl_SlashExportDecl_SlashImportEqaul);
+                }
+            }
+            return false;
+        }
+
+        function checkGrammarExpressionInStrictMode(node: Expression): boolean {
+            if (node.kind === SyntaxKind.Identifier && (<Identifier>node).strictModeKind) {
+                let nameText = declarationNameToString(<Identifier>node);
+                return grammarErrorOnNode(node, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
+            }
+            return false;
+        }
+
         function checkGrammarDecorators(node: Node): boolean {
             if (!node.decorators) {
                 return false;
@@ -12775,15 +12853,14 @@ module ts {
                 if (contextNode && (contextNode.parserContextFlags & ParserContextFlags.StrictMode) && isEvalOrArgumentsIdentifier(identifier)) {
                     let nameText = declarationNameToString(identifier);
 
-                    // We are checking if this name is inside class declaration or class expression (which are under class definitions inside ES6 spec.)
-                    // if so, we would like to give more explicit invalid usage error.
-                    // This will be particularly helpful in the case of "arguments" as such case is very common mistake.
-                    if (getAncestor(name, SyntaxKind.ClassDeclaration) || getAncestor(name, SyntaxKind.ClassExpression)) {
-                        return grammarErrorOnNode(identifier, Diagnostics.Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode, nameText);
-                    }
-                    else {
+                    // We check first if the name is inside class declaration or class expression; if so give explicit message
+                    // otherwise report generic error message.
+                    // reportGrammarErrorInClassDeclaration only return true if grammar error is successfully reported and false otherwise
+                    let reportErrorInClassDeclaration = reportStrictModeGrammarErrorInClassDeclaration(identifier, Diagnostics.Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode, nameText);
+                    if (!reportErrorInClassDeclaration){
                         return grammarErrorOnNode(identifier, Diagnostics.Invalid_use_of_0_in_strict_mode, nameText);
                     }
+                    return reportErrorInClassDeclaration;
                 }
             }
         }
