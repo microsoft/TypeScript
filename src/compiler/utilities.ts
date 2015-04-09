@@ -780,6 +780,8 @@ module ts {
                         return node === (<TemplateSpan>parent).expression;
                     case SyntaxKind.ComputedPropertyName:
                         return node === (<ComputedPropertyName>parent).expression;
+                    case SyntaxKind.Decorator:
+                        return true;
                     default:
                         if (isExpression(parent)) {
                             return true;
