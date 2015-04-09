@@ -468,6 +468,10 @@ module ts.server {
             throw new Error("Not Implemented Yet.");
         }
 
+        getDocumentHighlights(fileName: string, position: number): DocumentHighlights[] {
+            throw new Error("Not Implemented Yet.");
+        }
+
         getOutliningSpans(fileName: string): OutliningSpan[] {
             throw new Error("Not Implemented Yet.");
         }

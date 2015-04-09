@@ -135,10 +135,17 @@ module ts {
         findReferences(fileName: string, position: number): string;
 
         /**
+         * @deprecated
          * Returns a JSON-encoded value of the type:
          * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
          */
         getOccurrencesAtPosition(fileName: string, position: number): string;
+
+        /**
+         * Returns a JSON-encoded value of the type:
+         * { fileName: string; highlights: { start: number; length: number, isDefinition: boolean }[] }[]
+         */
+        getDocumentHighlights(fileName: string, position: number): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -587,6 +594,14 @@ module ts {
                 "getOccurrencesAtPosition('" + fileName + "', " + position + ")",
                 () => {
                     return this.languageService.getOccurrencesAtPosition(fileName, position);
+                });
+        }
+
+        public getDocumentHighlights(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                "getDocumentHighlights('" + fileName + "', " + position + ")",
+                () => {
+                    return this.languageService.getDocumentHighlights(fileName, position);
                 });
         }
 
