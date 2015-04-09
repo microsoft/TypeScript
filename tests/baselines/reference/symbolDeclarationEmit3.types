@@ -2,21 +2,21 @@
 class C {
 >C : C
 
-    [Symbol.isRegExp](x: number);
->Symbol.isRegExp : symbol
+    [Symbol.toPrimitive](x: number);
+>Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
->isRegExp : symbol
+>toPrimitive : symbol
 >x : number
 
-    [Symbol.isRegExp](x: string);
->Symbol.isRegExp : symbol
+    [Symbol.toPrimitive](x: string);
+>Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
->isRegExp : symbol
+>toPrimitive : symbol
 >x : string
 
-    [Symbol.isRegExp](x: any) { }
->Symbol.isRegExp : symbol
+    [Symbol.toPrimitive](x: any) { }
+>Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
->isRegExp : symbol
+>toPrimitive : symbol
 >x : any
 }

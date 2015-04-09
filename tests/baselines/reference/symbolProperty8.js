@@ -1,7 +1,7 @@
 //// [symbolProperty8.ts]
 interface I {
     [Symbol.unscopables]: number;
-    [Symbol.isRegExp]();
+    [Symbol.toPrimitive]();
 }
 
 //// [symbolProperty8.js]
