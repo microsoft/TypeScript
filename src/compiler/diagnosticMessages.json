@@ -671,11 +671,11 @@
         "category": "Error",
         "code": 1212
     },
-    "Identifier expected. '{0}' is a reserved word. Class definitions are automatically in strict mode.": {
+    "Identifier expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode.": {
         "category": "Error",
         "code": 1213
     },
-    "Identifier expected. '{0}' is a reserved word. Module is automatically in strict mode.": {
+    "Identifier expected. '{0}' is a reserved word in strict mode. Module is automatically in strict mode.": {
         "category": "Error",
         "code": 1214
     },
@@ -683,11 +683,11 @@
         "category": "Error",
         "code": 1215
     },
-    "Type expected. '{0}' is a reserved word. Class definitions are automatically in strict mode.": {
+    "Type expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode.": {
         "category": "Error",
         "code": 1216
     },
-    "Type expected. '{0}' is a reserved word. Module is automatically in strict mode.": {
+    "Type expected. '{0}' is a reserved word in strict mode. Module is automatically in strict mode.": {
         "category": "Error",
         "code": 1217
     },

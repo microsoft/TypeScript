@@ -8345,12 +8345,12 @@ module ts {
             //      class C {
             //          foo(x: public){}  // Error.
             //      }
-            if (node.typeName.kind === SyntaxKind.Identifier && (<Identifier>node.typeName).strictModeKind) {
+            if (node.typeName.kind === SyntaxKind.Identifier && (<Identifier>node.typeName).isKeywordInStrictMode) {
                 let typeName = <Identifier>node.typeName;
                 let nameText = declarationNameToString(typeName);
-                reportStrictModeGrammarErrorInClassDeclaration(typeName, Diagnostics.Type_expected_0_is_a_reserved_word_Class_definitions_are_automatically_in_strict_mode, nameText) ||
-                    reportStrictModeGrammarErrorInModule(typeName, Diagnostics.Type_expected_0_is_a_reserved_word_Module_is_automatically_in_strict_mode, nameText) ||
-                    grammarErrorOnNode(typeName, Diagnostics.Type_expected_0_is_a_reserved_word_in_strict_mode, nameText);
+                reportStrictModeGrammarErrorInClassDeclaration(typeName, Diagnostics.Type_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode, nameText) ||
+                reportStrictModeGrammarErrorInModule(typeName, Diagnostics.Type_expected_0_is_a_reserved_word_in_strict_mode_Module_is_automatically_in_strict_mode, nameText) ||
+                grammarErrorOnNode(typeName, Diagnostics.Type_expected_0_is_a_reserved_word_in_strict_mode, nameText);
             }
             return checkTypeReferenceOrHeritageClauseElement(node);
         }
@@ -11960,7 +11960,7 @@ module ts {
                     let nameBindings = impotClause.namedBindings;
                     if (nameBindings.kind === SyntaxKind.NamespaceImport) {
                         let name = <Identifier>(<NamespaceImport>nameBindings).name;
-                        if (name.strictModeKind) {
+                        if (name.isKeywordInStrictMode) {
                             let nameText = declarationNameToString(name);
                             return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
                         }
@@ -11969,7 +11969,7 @@ module ts {
                         let reportError = false;
                         for (let element of (<NamedImports>nameBindings).elements) {
                             let name = element.name;
-                            if (name.strictModeKind) {
+                            if (name.isKeywordInStrictMode) {
                                 let nameText = declarationNameToString(name);
                                 reportError = grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
                             }
@@ -11983,7 +11983,7 @@ module ts {
 
         function checkGrammarDeclarationNameInStrictMode(node: Declaration): boolean {
             let name = node.name;
-            if (name && name.kind === SyntaxKind.Identifier && (<Identifier>name).strictModeKind) {
+            if (name && name.kind === SyntaxKind.Identifier && (<Identifier>name).isKeywordInStrictMode) {
                 let nameText = declarationNameToString(name);
                 switch (node.kind) {
                     case SyntaxKind.Parameter:
@@ -11994,18 +11994,18 @@ module ts {
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.TypeAliasDeclaration:
                     case SyntaxKind.EnumDeclaration:
-                        let reportError = reportStrictModeGrammarErrorInClassDeclaration(<Identifier>name, Diagnostics.Identifier_expected_0_is_a_reserved_word_Class_definitions_are_automatically_in_strict_mode, nameText) ||
-                            reportStrictModeGrammarErrorInModule(<Identifier>name, Diagnostics.Identifier_expected_0_is_a_reserved_word_Module_is_automatically_in_strict_mode, nameText) ||
+                        let reportError = reportStrictModeGrammarErrorInClassDeclaration(<Identifier>name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode, nameText) ||
+                            reportStrictModeGrammarErrorInModule(<Identifier>name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Module_is_automatically_in_strict_mode, nameText) ||
                             grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
                         return reportError ? reportError : false;
 
                     case SyntaxKind.ClassDeclaration:
                         // Report an error if the class declaration uses strict-mode reserved word.
-                        return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_Class_definitions_are_automatically_in_strict_mode, nameText);
+                        return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode, nameText);
 
                     case SyntaxKind.ModuleDeclaration:
                         // Report an error if the module declaration uses strict-mode reserved word.
-                        return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_Module_is_automatically_in_strict_mode, nameText);
+                        return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Module_is_automatically_in_strict_mode, nameText);
 
                     case SyntaxKind.ImportEqualsDeclaration:
                         return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
@@ -12015,7 +12015,7 @@ module ts {
         }
 
         function checkGrammarExpressionInStrictMode(node: Expression): boolean {
-            if (node.kind === SyntaxKind.Identifier && (<Identifier>node).strictModeKind) {
+            if (node.kind === SyntaxKind.Identifier && (<Identifier>node).isKeywordInStrictMode) {
                 let nameText = declarationNameToString(<Identifier>node);
                 return grammarErrorOnNode(node, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
             }

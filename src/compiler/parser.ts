@@ -1489,7 +1489,7 @@ module ts {
 
                 // Set strictModeKind property so that we can report appropriate error later in type checker
                 if (inStrictModeContext() && (token > SyntaxKind.Identifier && token <= SyntaxKind.LastFutureReservedWord)) {
-                    node.strictModeKind = token;
+                    node.isKeywordInStrictMode = token;
                 }
                 node.text = internIdentifier(scanner.getTokenValue());
                 nextToken();
