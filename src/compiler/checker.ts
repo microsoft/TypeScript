@@ -11749,7 +11749,7 @@ module ts {
             return !!resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
         }
 
-        function getNamedValueId(n: Identifier, meaning: SymbolFlags): number {
+        function getBlockScopedValueId(n: Identifier): number {
             Debug.assert(!nodeIsSynthesized(n));
 
             let isDeclarationOrBindingElement =
@@ -11760,12 +11760,12 @@ module ts {
                 getNodeLinks(n).resolvedSymbol ||
                 resolveName(n, n.text, SymbolFlags.Value | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
 
-            let hasMatchingMeaning =
+            let isBlockScopedValue =
                 symbol &&
-                (symbol.flags & meaning) &&
-                (!(meaning & SymbolFlags.BlockScopedVariable) || symbol.valueDeclaration.parent.kind !== SyntaxKind.CatchClause);
+                (symbol.flags & SymbolFlags.BlockScopedValue) &&
+                (symbol.valueDeclaration.parent.kind !== SyntaxKind.CatchClause);
 
-            if (hasMatchingMeaning) {
+            if (isBlockScopedValue) {
                 // side-effect of calling this method:
                 //   assign id to symbol if it was not yet set
                 getSymbolLinks(symbol);
@@ -11806,7 +11806,7 @@ module ts {
                 getConstantValue,
                 resolvesToSomeValue,
                 collectLinkedAliases,
-                getNamedValueId,
+                getBlockScopedValueId,
                 serializeTypeOfNode,
                 serializeParameterTypesOfNode,
                 serializeReturnTypeOfNode,

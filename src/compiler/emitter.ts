@@ -1217,12 +1217,12 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     return undefined;
                 }
 
-                var variableId = resolver.getNamedValueId(node, SymbolFlags.BlockScopedVariable | SymbolFlags.Class);
-                if (variableId === undefined) {
+                var valueId = resolver.getBlockScopedValueId(node);
+                if (valueId === undefined) {
                     return undefined;
                 }
 
-                return blockScopedNameToGeneratedName[variableId];
+                return blockScopedNameToGeneratedName[valueId];
             }
 
             function emitIdentifier(node: Identifier, allowGeneratedIdentifiers: boolean) {
@@ -2776,9 +2776,9 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 return getCombinedNodeFlags(node.parent);
             }
 
-            function renameBlockScopedValueIfNecessary(node: Node, meaning: SymbolFlags): void {
+            function renameBlockScopedValueIfNecessary(node: Node, expectedMeaning: SymbolFlags): void {
                 // currently supported scenarios - classes and block scoped variables
-                Debug.assert(meaning === SymbolFlags.BlockScopedVariable || meaning === SymbolFlags.Class);
+                Debug.assert(expectedMeaning === SymbolFlags.BlockScopedVariable || expectedMeaning === SymbolFlags.Class);
 
                 // do not rename if
                 // - language version is ES6+
@@ -2792,7 +2792,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
                 let flags: NodeFlags;
                 let container: Node;
-                if (meaning === SymbolFlags.BlockScopedVariable) {
+                if (expectedMeaning === SymbolFlags.BlockScopedVariable) {
                     // block scoped variable case
                     // do not rename node is definitely not name of variable declaration. 
                     if (node.parent.kind !== SyntaxKind.VariableDeclaration && node.parent.kind !== SyntaxKind.BindingElement) {
@@ -2807,6 +2807,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
                     let list = getAncestor(node, SyntaxKind.VariableDeclarationList);
                     if (list.parent.kind === SyntaxKind.VariableStatement) {
+                        // variable declaration list -> variable statement -> container
                         container = list.parent.parent;
                     }
                 }
@@ -2816,6 +2817,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     }
                     // class declaration case
                     flags = node.parent.flags;
+                    // class name -> class -> class container
                     container = node.parent.parent;
                 }
 
@@ -2841,13 +2843,13 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     : blockScopeContainer.parent;
 
                 if (resolver.resolvesToSomeValue(parent, (<Identifier>node).text)) {
-                    let variableId = resolver.getNamedValueId(<Identifier>node, meaning);
+                    let valueId = resolver.getBlockScopedValueId(<Identifier>node);
                     if (!blockScopedNameToGeneratedName) {
                         blockScopedNameToGeneratedName = [];
                     }
 
                     let generatedName = makeUniqueName((<Identifier>node).text);
-                    blockScopedNameToGeneratedName[variableId] = generatedName;
+                    blockScopedNameToGeneratedName[valueId] = generatedName;
                 }
             }
 
