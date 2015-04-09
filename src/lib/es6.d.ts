@@ -52,19 +52,19 @@ interface SymbolConstructor {
 
     /** 
       * A method that returns the default iterator for an object.Called by the semantics of the 
-      * for-of statement. 
+      * for-of statement.
       */
     iterator: symbol;
 
     /** 
       * A method that converts an object to a corresponding primitive value.Called by the ToPrimitive
-      * abstract operation. 
+      * abstract operation.
       */
     toPrimitive: symbol;
 
     /** 
-      * A String value that is used in the creation of the default string description of an object. 
-      * Called by the built- in method Object.prototype.toString. 
+      * A String value that is used in the creation of the default string description of an object.
+      * Called by the built-in method Object.prototype.toString.
       */
     toStringTag: symbol;
 
@@ -106,7 +106,7 @@ interface ObjectConstructor {
     getOwnPropertySymbols(o: any): symbol[];
 
     /**
-      *  Returns true if the values are the same value, false otherwise.
+      * Returns true if the values are the same value, false otherwise.
       * @param value1 The first value.
       * @param value2 The second value.
       */
