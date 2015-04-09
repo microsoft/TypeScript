@@ -7,31 +7,30 @@ var ps: IPropertySet = null;
 var index: any = "hello";
 ps[index] = 12;
 
-enum Val {
+enum Values {
     a = 1,
     b = 2
 }
 
-type Val2 = Val;
-type Val3 = number;
+type Values2 = Values;
+type Values3 = number;
  
-interface IEnum {
-    [index: Val]: Val;
+interface EnumMap {
+    [index: Values]: Values;
 }
 
-
-interface IEnum2 {
-    [index: Val2]: Val2;
+interface EnumMap2 {
+    [index: Values2]: Values2;
 }
-interface IEnum3 {
-    [index: Val3]: Val3;
+interface NumberMap {
+    [index: Values3]: Values3;
 }
 
-var pe: IEnum = null;
+var pe: Values = null;
 
 pe[1] = null
 pe[3] = null
-pe[Val.b] = 5
+pe[Values.b] = 5
 
 pe[true] = null
 
@@ -48,17 +47,19 @@ enum E {
 
 
 interface DuplicateAccess {
-	[index: Val]: Val;
-	[index: Val2]: Val2;
+    [index: Values]: Values;
+    [index: Values2]: Values2;
 }
 
 interface DuplicateAccess2 {
-	[index: number]: Val;
-	[index: Val3]: Val3;
+    [index: number]: Values;
+    [index: Values3]: Values3;
 }
 
 var x: { [x: string]: string }
+var xn: {[x: string]: number }
 var y: { [x: number]: string }
+var yn: { [x: number]: number }
 var z: { [x: E]: number }
 
 x = x;
@@ -72,22 +73,31 @@ y = z;
 z = x;
 z = y;
 z = z;
+z = yn;
+z = xn;
 
+// TODO: Should fail
+yn = z;
+
+type foo = string
+var s: { [x: foo]: string }
+x = s
+s = x
 
 
 //// [indexSignatureTypeCheck.js]
 var ps = null;
 var index = "hello";
 ps[index] = 12;
-var Val;
-(function (Val) {
-    Val[Val["a"] = 1] = "a";
-    Val[Val["b"] = 2] = "b";
-})(Val || (Val = {}));
+var Values;
+(function (Values) {
+    Values[Values["a"] = 1] = "a";
+    Values[Values["b"] = 2] = "b";
+})(Values || (Values = {}));
 var pe = null;
 pe[1] = null;
 pe[3] = null;
-pe[Val.b] = 5;
+pe[Values.b] = 5;
 pe[true] = null;
 var E;
 (function (E) {
@@ -96,7 +106,9 @@ var E;
     E[E["C"] = 2] = "C";
 })(E || (E = {}));
 var x;
+var xn;
 var y;
+var yn;
 var z;
 x = x;
 x = y;
@@ -107,3 +119,10 @@ y = z;
 z = x;
 z = y;
 z = z;
+z = yn;
+z = xn;
+// TODO: Should fail
+yn = z;
+var s;
+x = s;
+s = x;

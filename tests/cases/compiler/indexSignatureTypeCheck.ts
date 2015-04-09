@@ -56,7 +56,9 @@ interface DuplicateAccess2 {
 }
 
 var x: { [x: string]: string }
+var xn: {[x: string]: number }
 var y: { [x: number]: string }
+var yn: { [x: number]: number }
 var z: { [x: E]: number }
 
 x = x;
@@ -70,7 +72,11 @@ y = z;
 z = x;
 z = y;
 z = z;
+z = yn;
+z = xn;
 
+// TODO: Should fail
+yn = z;
 
 type foo = string
 var s: { [x: foo]: string }

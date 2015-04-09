@@ -1,21 +1,21 @@
-tests/cases/compiler/indexSignatureTypeCheck.ts(35,1): error TS2342: An index expression argument must be of type 'string', 'number', 'symbol, or 'any'.
-tests/cases/compiler/indexSignatureTypeCheck.ts(38,8): error TS1019: An index signature parameter cannot have a question mark.
-tests/cases/compiler/indexSignatureTypeCheck.ts(39,6): error TS1017: An index signature cannot have a rest parameter.
+tests/cases/compiler/indexSignatureTypeCheck.ts(34,1): error TS2342: An index expression argument must be of type 'string', 'number', 'symbol, or 'any'.
+tests/cases/compiler/indexSignatureTypeCheck.ts(37,8): error TS1019: An index signature parameter cannot have a question mark.
+tests/cases/compiler/indexSignatureTypeCheck.ts(38,6): error TS1017: An index signature cannot have a rest parameter.
+tests/cases/compiler/indexSignatureTypeCheck.ts(39,6): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/indexSignatureTypeCheck.ts(40,6): error TS1096: An index signature must have exactly one parameter.
-tests/cases/compiler/indexSignatureTypeCheck.ts(41,6): error TS1096: An index signature must have exactly one parameter.
-tests/cases/compiler/indexSignatureTypeCheck.ts(51,2): error TS2375: Duplicate number index signature.
-tests/cases/compiler/indexSignatureTypeCheck.ts(56,2): error TS2375: Duplicate number index signature.
-tests/cases/compiler/indexSignatureTypeCheck.ts(64,1): error TS2322: Type '{ [x: number]: string; }' is not assignable to type '{ [x: string]: string; }'.
+tests/cases/compiler/indexSignatureTypeCheck.ts(50,5): error TS2375: Duplicate number index signature.
+tests/cases/compiler/indexSignatureTypeCheck.ts(55,5): error TS2375: Duplicate number index signature.
+tests/cases/compiler/indexSignatureTypeCheck.ts(65,1): error TS2322: Type '{ [x: number]: string; }' is not assignable to type '{ [x: string]: string; }'.
   Index signature is missing in type '{ [x: number]: string; }'.
-tests/cases/compiler/indexSignatureTypeCheck.ts(65,1): error TS2322: Type '{ [x: number]: number; }' is not assignable to type '{ [x: string]: string; }'.
+tests/cases/compiler/indexSignatureTypeCheck.ts(66,1): error TS2322: Type '{ [x: number]: number; }' is not assignable to type '{ [x: string]: string; }'.
   Index signature is missing in type '{ [x: number]: number; }'.
-tests/cases/compiler/indexSignatureTypeCheck.ts(69,1): error TS2322: Type '{ [x: number]: number; }' is not assignable to type '{ [x: number]: string; }'.
+tests/cases/compiler/indexSignatureTypeCheck.ts(70,1): error TS2322: Type '{ [x: number]: number; }' is not assignable to type '{ [x: number]: string; }'.
   Index signatures are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/indexSignatureTypeCheck.ts(71,1): error TS2322: Type '{ [x: string]: string; }' is not assignable to type '{ [x: number]: number; }'.
+tests/cases/compiler/indexSignatureTypeCheck.ts(72,1): error TS2322: Type '{ [x: string]: string; }' is not assignable to type '{ [x: number]: number; }'.
   Index signatures are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/indexSignatureTypeCheck.ts(72,1): error TS2322: Type '{ [x: number]: string; }' is not assignable to type '{ [x: number]: number; }'.
+tests/cases/compiler/indexSignatureTypeCheck.ts(73,1): error TS2322: Type '{ [x: number]: string; }' is not assignable to type '{ [x: number]: number; }'.
   Index signatures are incompatible.
     Type 'string' is not assignable to type 'number'.
 
@@ -29,31 +29,30 @@ tests/cases/compiler/indexSignatureTypeCheck.ts(72,1): error TS2322: Type '{ [x:
     var index: any = "hello";
     ps[index] = 12;
     
-    enum Val {
+    enum Values {
         a = 1,
         b = 2
     }
     
-    type Val2 = Val;
-    type Val3 = number;
+    type Values2 = Values;
+    type Values3 = number;
      
-    interface IEnum {
-        [index: Val]: Val;
+    interface EnumMap {
+        [index: Values]: Values;
     }
     
-    
-    interface IEnum2 {
-        [index: Val2]: Val2;
+    interface EnumMap2 {
+        [index: Values2]: Values2;
     }
-    interface IEnum3 {
-        [index: Val3]: Val3;
+    interface NumberMap {
+        [index: Values3]: Values3;
     }
     
-    var pe: IEnum = null;
+    var pe: Values = null;
     
     pe[1] = null
     pe[3] = null
-    pe[Val.b] = 5
+    pe[Values.b] = 5
     
     pe[true] = null
     ~~~~~~~~
@@ -80,21 +79,23 @@ tests/cases/compiler/indexSignatureTypeCheck.ts(72,1): error TS2322: Type '{ [x:
     
     
     interface DuplicateAccess {
-    	[index: Val]: Val;
-    	[index: Val2]: Val2;
-    	~~~~~~~~~~~~~~~~~~~~
+        [index: Values]: Values;
+        [index: Values2]: Values2;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2375: Duplicate number index signature.
     }
     
     interface DuplicateAccess2 {
-    	[index: number]: Val;
-    	[index: Val3]: Val3;
-    	~~~~~~~~~~~~~~~~~~~~
+        [index: number]: Values;
+        [index: Values3]: Values3;
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2375: Duplicate number index signature.
     }
     
     var x: { [x: string]: string }
+    var xn: {[x: string]: number }
     var y: { [x: number]: string }
+    var yn: { [x: number]: number }
     var z: { [x: E]: number }
     
     x = x;
@@ -126,5 +127,14 @@ tests/cases/compiler/indexSignatureTypeCheck.ts(72,1): error TS2322: Type '{ [x:
 !!! error TS2322:   Index signatures are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
     z = z;
+    z = yn;
+    z = xn;
     
+    // TODO: Should fail
+    yn = z;
+    
+    type foo = string
+    var s: { [x: foo]: string }
+    x = s
+    s = x
     
