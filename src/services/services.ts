@@ -1019,10 +1019,15 @@ module ts {
         highlightSpans: HighlightSpan[];
     }
 
+    export class DocumentHighlightKind {
+        public static definition = "definition";
+        public static reference = "reference";
+        public static writtenReference = "writtenReference";
+    } 
+
     export interface HighlightSpan {
         textSpan: TextSpan;
-        isDefinition: boolean;
-        isWriteAccess: boolean;
+        kind: string;
     }
 
     export interface NavigateToItem {
@@ -4004,8 +4009,7 @@ module ts {
                 return {
                     fileName: sourceFile.fileName,
                     textSpan: createTextSpanFromBounds(start, end),
-                    isDefinition: false,
-                    isWriteAccess: false,
+                    kind: DocumentHighlightKind.reference
                 };
             }
 
@@ -4042,8 +4046,7 @@ module ts {
 
                             documentHighlights.highlightSpans.push({
                                 textSpan: referenceEntry.textSpan,
-                                isDefinition: false,
-                                isWriteAccess: referenceEntry.isWriteAccess
+                                kind: referenceEntry.isWriteAccess ? DocumentHighlightKind.writtenReference : DocumentHighlightKind.reference
                             });
                         }
                     }
@@ -4576,8 +4579,7 @@ module ts {
                                 result.push({
                                     fileName: fileName,
                                     textSpan: createTextSpanFromBounds(elseKeyword.getStart(), ifKeyword.end),
-                                    isDefinition: false,
-                                    isWriteAccess: false,
+                                    kind: DocumentHighlightKind.reference
                                 });
                                 i++; // skip the next keyword
                                 continue;
@@ -4610,7 +4612,7 @@ module ts {
                         result.push({
                             fileName: entry.fileName,
                             textSpan: highlightSpan.textSpan,
-                            isWriteAccess: highlightSpan.isWriteAccess
+                            isWriteAccess: highlightSpan.kind === DocumentHighlightKind.writtenReference
                         });
                     }
                 }
