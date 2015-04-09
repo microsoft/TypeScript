@@ -12729,6 +12729,11 @@ module ts {
                 if (node !== elements[elements.length - 1]) {
                     return grammarErrorOnNode(node, Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
                 }
+
+                if (node.name.kind === SyntaxKind.ArrayBindingPattern || node.name.kind === SyntaxKind.ObjectBindingPattern) {
+                    return grammarErrorOnNode(node.name, Diagnostics.A_rest_element_cannot_contain_a_binding_pattern);
+                }
+
                 if (node.initializer) {
                     // Error on equals token which immediate precedes the initializer
                     return grammarErrorAtPos(getSourceFileOfNode(node), node.initializer.pos - 1, 1, Diagnostics.A_rest_element_cannot_have_an_initializer);
