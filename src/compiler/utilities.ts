@@ -150,20 +150,22 @@ module ts {
         return !nodeIsMissing(node);
     }
 
-    export function getTokenPosOfNode(node: Node, sourceFile?: SourceFile, skipDecorators?: boolean): number {
+    export function getTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
         // With nodes that have no width (i.e. 'Missing' nodes), we actually *don't*
         // want to skip trivia because this will launch us forward to the next token.
         if (nodeIsMissing(node)) {
             return node.pos;
         }
 
-        let pos = node.pos;
-        if (skipDecorators && node.decorators) {
-            // Skip past decorators
-            pos = node.decorators.end;
+        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
+    }
+
+    export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
+        if (nodeIsMissing(node) || !node.decorators) {
+            return getTokenPosOfNode(node, sourceFile);
         }
 
-        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, pos);
+        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.decorators.end);        
     }
 
     export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node): string {

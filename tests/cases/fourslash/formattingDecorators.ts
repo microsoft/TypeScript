@@ -1,11 +1,11 @@
 /// <reference path='fourslash.ts' />
 
-/////*1*/        @    decorator1
+/////*1*/        @    decorator1    
 /////*2*/            @        decorator2
 /////*3*/    @decorator3
 /////*4*/        @    decorator4    @            decorator5
 /////*5*/class C {
-/////*6*/            @    decorator6
+/////*6*/            @    decorator6    
 /////*7*/                @        decorator7
 /////*8*/        @decorator8
 /////*9*/    method1() { }
@@ -13,7 +13,7 @@
 /////*10*/        @    decorator9    @            decorator10 @decorator11            method2() { }
 ////
 ////    method3(
-/////*11*/                @    decorator12
+/////*11*/                @    decorator12    
 /////*12*/                    @        decorator13
 /////*13*/            @decorator14
 /////*14*/        x) { }
@@ -21,21 +21,21 @@
 ////    method4(
 /////*15*/            @    decorator15    @            decorator16 @decorator17             x) { }
 ////
-/////*16*/            @    decorator18
+/////*16*/            @    decorator18    
 /////*17*/                @        decorator19
-/////*18*/        @decorator20
+/////*18*/        @decorator20    
 /////*19*/    ["computed1"]() { }
 ////
 /////*20*/        @    decorator21    @            decorator22 @decorator23            ["computed2"]() { }
 ////
-/////*21*/            @    decorator24
+/////*21*/            @    decorator24    
 /////*22*/                @        decorator25
 /////*23*/        @decorator26
 /////*24*/    get accessor1() { }
 ////
 /////*25*/        @    decorator27    @            decorator28 @decorator29            get accessor2() { }
 ////
-/////*26*/            @    decorator30
+/////*26*/            @    decorator30    
 /////*27*/                @        decorator31
 /////*28*/        @decorator32
 /////*29*/    property1;

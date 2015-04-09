@@ -330,7 +330,7 @@ module ts.formatting {
             let startLine = sourceFile.getLineAndCharacterOfPosition(enclosingNode.getStart(sourceFile)).line;
             let undecoratedStartLine = startLine;
             if (enclosingNode.decorators) {
-                undecoratedStartLine = sourceFile.getLineAndCharacterOfPosition(enclosingNode.getStart(sourceFile, /*skipDecorators*/ true)).line;
+                undecoratedStartLine = sourceFile.getLineAndCharacterOfPosition(getNonDecoratorTokenPosOfNode(enclosingNode, sourceFile)).line;
             }
 
             let delta = getOwnOrInheritedDelta(enclosingNode, options, sourceFile);
@@ -561,7 +561,7 @@ module ts.formatting {
 
                 let undecoratedChildStartLine = childStartLine;
                 if (child.decorators) {
-                    undecoratedChildStartLine = sourceFile.getLineAndCharacterOfPosition(child.getStart(sourceFile, /*skipDecorators*/ true)).line;
+                    undecoratedChildStartLine = sourceFile.getLineAndCharacterOfPosition(getNonDecoratorTokenPosOfNode(child, sourceFile)).line;
                 }
 
                 // if child is a list item - try to get its indentation

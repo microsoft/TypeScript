@@ -670,18 +670,10 @@ module ts.formatting {
         }
 
         static NodeIsInDecoratorContext(node: Node): boolean {
-            if (node.parserContextFlags & ParserContextFlags.Decorator) {
-                return true;
+            while (isExpression(node)) {
+                node = node.parent;
             }
-            while (node) {
-                if (isExpression(node)) {
-                    node = node.parent;
-                }
-                else {
-                    return node.kind === SyntaxKind.Decorator;
-                }
-            }
-            return false;
+            return node.kind === SyntaxKind.Decorator;
         }
 
         static IsStartOfVariableDeclarationList(context: FormattingContext): boolean {
