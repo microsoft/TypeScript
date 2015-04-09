@@ -1350,7 +1350,7 @@ module ts {
             return speculationHelper(callback, /*isLookAhead:*/ false);
         }
 
-        // Ignore strict mode flag because we will be report an error in type checker instead.
+        // Ignore strict mode flag because we will report an error in type checker instead.
         function isIdentifier(): boolean {
             if (token === SyntaxKind.Identifier) {
                 return true;

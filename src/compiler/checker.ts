@@ -10524,6 +10524,8 @@ module ts {
         }
 
         function checkImportDeclaration(node: ImportDeclaration) {
+            checkGrammarImportDeclarationNameInStrictMode(node);
+
             if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_import_declaration_cannot_have_modifiers);
             }
@@ -10546,6 +10548,8 @@ module ts {
         }
 
         function checkImportEqualsDeclaration(node: ImportEqualsDeclaration) {
+            checkGrammarDeclarationNameInStrictMode(node);
+
             checkGrammarDecorators(node) || checkGrammarModifiers(node);
             if (isInternalModuleImportEqualsDeclaration(node) || checkExternalImportOrExportDeclaration(node)) {
                 checkImportBinding(node);
@@ -11952,6 +11956,35 @@ module ts {
             return false;
         }
 
+        function checkGrammarImportDeclarationNameInStrictMode(node: ImportDeclaration): boolean {
+            // Check if the import declaration used strict-mode reserved word in its names bindings
+            if (node.importClause) {
+                let impotClause = node.importClause;
+                if (impotClause.namedBindings) {
+                    let nameBindings = impotClause.namedBindings;
+                    if (nameBindings.kind === SyntaxKind.NamespaceImport) {
+                        let name = <Identifier>(<NamespaceImport>nameBindings).name;
+                        if (name.strictModeKind) {
+                            let nameText = declarationNameToString(name);
+                            return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
+                        }
+                    }
+                    else if (nameBindings.kind === SyntaxKind.NamedImports) {
+                        let reportError = false;
+                        for (let element of (<NamedImports>nameBindings).elements) {
+                            let name = element.name;
+                            if (name.strictModeKind) {
+                                let nameText = declarationNameToString(name);
+                                reportError = grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
+                            }
+                        }
+                        return reportError;
+                    }
+                }
+            }
+            return false;
+        }
+
         function checkGrammarDeclarationNameInStrictMode(node: Declaration): boolean {
             let name = node.name;
             if (name && name.kind === SyntaxKind.Identifier && (<Identifier>name).strictModeKind) {
@@ -11971,15 +12004,15 @@ module ts {
                         return reportError ? reportError : false;
 
                     case SyntaxKind.ClassDeclaration:
+                        // Report an error if the class declaration uses strict-mode reserved word.
                         return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_Class_definitions_are_automatically_in_strict_mode, nameText);
 
                     case SyntaxKind.ModuleDeclaration:
-                        return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_Class_definitions_are_automatically_in_strict_mode, nameText);
+                        // Report an error if the module declaration uses strict-mode reserved word.
+                        return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_Module_is_automatically_in_strict_mode, nameText);
 
-                    case SyntaxKind.ImportDeclaration:
-                    case SyntaxKind.ExportDeclaration:
                     case SyntaxKind.ImportEqualsDeclaration:
-                        return grammarErrorOnNode(name, Diagnostics.ImportDecl_SlashExportDecl_SlashImportEqaul);
+                        return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
                 }
             }
             return false;
