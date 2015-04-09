@@ -387,7 +387,7 @@ module ts {
 
     export interface Identifier extends PrimaryExpression {
         text: string;                 // Text of identifier (with escapes converted to characters)
-        strictModeKind?: SyntaxKind;  // TODO(yuisu): comment
+        strictModeKind?: SyntaxKind;  // SyntaxKind set when violating strict mode reserved word
     }
 
     export interface QualifiedName extends Node {
