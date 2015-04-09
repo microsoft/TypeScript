@@ -15,8 +15,10 @@
 
 /// <reference path='services.ts' />
 
+/* @internal */
 var debugObjectHost = (<any>this);
 
+/* @internal */
 module ts {
     export interface ScriptSnapshotShim {
         /** Gets a portion of the script snapshot specified by [start, end). */
@@ -331,7 +333,6 @@ module ts {
         }
     }
 
-    /* @internal */
     export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; } []{
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
     }
@@ -844,8 +845,10 @@ module ts {
 
 
 /// TODO: this is used by VS, clean this up on both sides of the interface
+/* @internal */
 module TypeScript.Services {
     export var TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
 }
 
+/* @internal */
 let toolsVersion = "1.4";

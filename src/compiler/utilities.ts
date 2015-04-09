@@ -1,5 +1,6 @@
 /// <reference path="binder.ts" />
 
+/** @internal */
 module ts {
     export interface ReferencePathMatchResult {
         fileReference?: FileReference

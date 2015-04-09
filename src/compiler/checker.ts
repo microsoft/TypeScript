@@ -1,19 +1,18 @@
 /// <reference path="binder.ts"/>
 
+/* @internal */
 module ts {
     let nextSymbolId = 1;
     let nextNodeId = 1;
     let nextMergeId = 1;
 
-    // @internal
     export function getNodeId(node: Node): number {
         if (!node.id) node.id = nextNodeId++;
         return node.id;
     }
 
-    /* @internal */ export let checkTime = 0;
+    export let checkTime = 0;
 
-    /* @internal */
     export function getSymbolId(symbol: Symbol): number {
         if (!symbol.id) {
             symbol.id = nextSymbolId++;
