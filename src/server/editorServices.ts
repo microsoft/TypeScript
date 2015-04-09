@@ -458,7 +458,7 @@ module ts.server {
                 var info = this.filenameToScriptInfo[args.file];
                 if (info) {
                     info.setFormatOptions(args.formatOptions);  
-                    this.log("Host configuration update for file " + args.file);
+                    this.log("Host configuration update for file " + args.file, "Info");
                 }
             }
             else {
@@ -823,7 +823,6 @@ module ts.server {
          */
 
         closeClientFile(filename: string) {
-            // TODO: tsconfig check
             var info = ts.lookUp(this.filenameToScriptInfo, filename);
             if (info) {
                 this.closeOpenFile(info);
@@ -856,6 +855,9 @@ module ts.server {
         }
 
         printProjects() {
+            if (!this.psLogger.isVerbose()) {
+                return;
+            }
             this.psLogger.startGroup();
             for (var i = 0, len = this.inferredProjects.length; i < len; i++) {
                 var project = this.inferredProjects[i];
@@ -1464,6 +1466,10 @@ module ts.server {
                 });
             }
             return accum;
+        }
+
+        getLength(): number {
+            return this.root.charCount();
         }
 
         every(f: (ll: LineLeaf, s: number, len: number) => boolean, rangeStart: number, rangeEnd?: number) {

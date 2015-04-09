@@ -44,7 +44,6 @@
 ////            protected prot1;
 ////
 ////            protected constructor(public public, protected protected, private private) {
-////                public = private = protected;
 ////            }
 ////        }
 ////    }

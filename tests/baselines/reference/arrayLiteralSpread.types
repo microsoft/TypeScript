@@ -9,44 +9,55 @@ function f0() {
     var a1 = [...a];
 >a1 : number[]
 >[...a] : number[]
+>...a : number
 >a : number[]
 
     var a2 = [1, ...a];
 >a2 : number[]
 >[1, ...a] : number[]
+>...a : number
 >a : number[]
 
     var a3 = [1, 2, ...a];
 >a3 : number[]
 >[1, 2, ...a] : number[]
+>...a : number
 >a : number[]
 
     var a4 = [...a, 1];
 >a4 : number[]
 >[...a, 1] : number[]
+>...a : number
 >a : number[]
 
     var a5 = [...a, 1, 2];
 >a5 : number[]
 >[...a, 1, 2] : number[]
+>...a : number
 >a : number[]
 
     var a6 = [1, 2, ...a, 1, 2];
 >a6 : number[]
 >[1, 2, ...a, 1, 2] : number[]
+>...a : number
 >a : number[]
 
     var a7 = [1, ...a, 2, ...a];
 >a7 : number[]
 >[1, ...a, 2, ...a] : number[]
+>...a : number
 >a : number[]
+>...a : number
 >a : number[]
 
     var a8 = [...a, ...a, ...a];
 >a8 : number[]
 >[...a, ...a, ...a] : number[]
+>...a : number
 >a : number[]
+>...a : number
 >a : number[]
+>...a : number
 >a : number[]
 }
 
@@ -60,6 +71,7 @@ function f1() {
     var b = ["hello", ...a, true];
 >b : (string | number | boolean)[]
 >["hello", ...a, true] : (string | number | boolean)[]
+>...a : number
 >a : number[]
 
     var b: (string | number | boolean)[];
@@ -72,19 +84,29 @@ function f2() {
     var a = [...[...[...[...[...[]]]]]];
 >a : any[]
 >[...[...[...[...[...[]]]]]] : undefined[]
+>...[...[...[...[...[]]]]] : undefined
 >[...[...[...[...[]]]]] : undefined[]
+>...[...[...[...[]]]] : undefined
 >[...[...[...[]]]] : undefined[]
+>...[...[...[]]] : undefined
 >[...[...[]]] : undefined[]
+>...[...[]] : undefined
 >[...[]] : undefined[]
+>...[] : undefined
 >[] : undefined[]
 
     var b = [...[...[...[...[...[5]]]]]];
 >b : number[]
 >[...[...[...[...[...[5]]]]]] : number[]
+>...[...[...[...[...[5]]]]] : number
 >[...[...[...[...[5]]]]] : number[]
+>...[...[...[...[5]]]] : number
 >[...[...[...[5]]]] : number[]
+>...[...[...[5]]] : number
 >[...[...[5]]] : number[]
+>...[...[5]] : number
 >[...[5]] : number[]
+>...[5] : number
 >[5] : number[]
 }
 

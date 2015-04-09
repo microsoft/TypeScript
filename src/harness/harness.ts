@@ -781,7 +781,7 @@ module Harness {
 
             public reset() { this.fileCollection = {}; }
 
-            public toArray(): { fileName: string; file: WriterAggregator; }[] {
+            public toArray(): { fileName: string; file: WriterAggregator; }[]{
                 var result: { fileName: string; file: WriterAggregator; }[] = [];
                 for (var p in this.fileCollection) {
                     if (this.fileCollection.hasOwnProperty(p)) {
@@ -944,6 +944,10 @@ module Harness {
 
                 var newLine = '\r\n';
 
+                // Files from built\local that are requested by test "@includeBuiltFiles" to be in the context.
+                // Treat them as library files, so include them in build, but not in baselines.
+                var includeBuiltFiles: { unitName: string; content: string }[] = [];
+
                 var useCaseSensitiveFileNames = ts.sys.useCaseSensitiveFileNames;
                 this.settings.forEach(setting => {
                     switch (setting.flag.toLowerCase()) {
@@ -1061,18 +1065,19 @@ module Harness {
                             break;
 
                         case 'includebuiltfile':
-                            inputFiles.push({ unitName: setting.value, content: normalizeLineEndings(IO.readFile(libFolder + setting.value), newLine) });
+                            let builtFileName = libFolder + setting.value;
+                            includeBuiltFiles.push({ unitName: builtFileName, content: normalizeLineEndings(IO.readFile(builtFileName), newLine) });
                             break;
 
                         default:
                             throw new Error('Unsupported compiler setting ' + setting.flag);
                     }
                 });
-
+                
                 var fileOutputs: GeneratedFile[] = [];
                 
-                var programFiles = inputFiles.map(file => file.unitName);
-                var program = ts.createProgram(programFiles, options, createCompilerHost(inputFiles.concat(otherFiles),
+                var programFiles = inputFiles.concat(includeBuiltFiles).map(file => file.unitName);
+                var program = ts.createProgram(programFiles, options, createCompilerHost(inputFiles.concat(includeBuiltFiles).concat(otherFiles),
                     (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark }),
                     options.target, useCaseSensitiveFileNames, currentDirectory));
 
@@ -1295,7 +1300,7 @@ module Harness {
             });
 
             var numLibraryDiagnostics = ts.countWhere(diagnostics, diagnostic => {
-                return diagnostic.fileName && isLibraryFile(diagnostic.fileName);
+                return diagnostic.fileName && (isLibraryFile(diagnostic.fileName) || isBuiltFile(diagnostic.fileName));
             });
 
             var numTest262HarnessDiagnostics = ts.countWhere(diagnostics, diagnostic => {
@@ -1696,6 +1701,10 @@ module Harness {
 
     export function isLibraryFile(filePath: string): boolean {
         return (Path.getFileName(filePath) === 'lib.d.ts') || (Path.getFileName(filePath) === 'lib.core.d.ts');
+    }
+
+    export function isBuiltFile(filePath: string): boolean {
+        return filePath.indexOf(Harness.libFolder) === 0;
     }
 
     export function getDefaultLibraryFile(): { unitName: string, content: string } {
