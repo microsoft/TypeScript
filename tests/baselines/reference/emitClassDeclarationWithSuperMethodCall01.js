@@ -18,7 +18,6 @@ class Parent {
 }
 class Foo extends Parent {
     foo() {
-        var _this = this;
         var x = () => super.foo();
     }
 }
