@@ -1136,8 +1136,8 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         if (!computedPropertyNamesToGeneratedNames) {
                             computedPropertyNamesToGeneratedNames = [];
                         }
-
-                        let generatedName = computedPropertyNamesToGeneratedNames[node.id];
+                        
+                        let generatedName = computedPropertyNamesToGeneratedNames[getNodeId(node)];
                         if (generatedName) {
                             // we have already generated a variable for this node, write that value instead.
                             write(generatedName);
@@ -1145,7 +1145,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         }
 
                         generatedName = createAndRecordTempVariable(TempFlags.Auto).text;
-                        computedPropertyNamesToGeneratedNames[node.id] = generatedName;
+                        computedPropertyNamesToGeneratedNames[getNodeId(node)] = generatedName;
                         write(generatedName);
                         write(" = ");
                     }
@@ -1381,211 +1381,163 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
             }
 
-            function emitDownlevelObjectLiteralWithComputedProperties(node: ObjectLiteralExpression, firstComputedPropertyIndex: number): void {
-                let parenthesizedObjectLiteral = createDownlevelObjectLiteralWithComputedProperties(node, firstComputedPropertyIndex);
-                return emit(parenthesizedObjectLiteral);
+            function emitObjectLiteralBody(node: ObjectLiteralExpression, numElements: number): void {
+                if (numElements === 0) {
+                    write("{}");
+                    return;
+                }
+
+                write("{");
+
+                if (numElements > 0) {
+                    var properties = node.properties;
+
+                    // If we are not doing a downlevel transformation for object literals,
+                    // then try to preserve the original shape of the object literal.
+                    // Otherwise just try to preserve the formatting.
+                    if (numElements === properties.length) {
+                        emitLinePreservingList(node, properties, /* allowTrailingComma */ languageVersion >= ScriptTarget.ES5, /* spacesBetweenBraces */ true);
+                    }
+                    else {
+                        let multiLine = (node.flags & NodeFlags.MultiLine) !== 0;
+                        if (!multiLine) {
+                            write(" ");
+                        }
+                        else {
+                            increaseIndent();
+                        }
+
+                        emitList(properties, 0, numElements, /*multiLine*/ multiLine, /*trailingComma*/ false);
+
+                        if (!multiLine) {
+                            write(" ");
+                        }
+                        else {
+                            decreaseIndent();
+                        }
+                    }
+                }
+
+                write("}");
             }
 
-            function createDownlevelObjectLiteralWithComputedProperties(originalObjectLiteral: ObjectLiteralExpression, firstComputedPropertyIndex: number): ParenthesizedExpression {
+            function emitDownlevelObjectLiteralWithComputedProperties(node: ObjectLiteralExpression, firstComputedPropertyIndex: number) {
+                let multiLine = (node.flags & NodeFlags.MultiLine) !== 0;
+                let properties = node.properties;
+
+                write("(");
+
+                if (multiLine) {
+                    increaseIndent();
+                }
+
                 // For computed properties, we need to create a unique handle to the object
                 // literal so we can modify it without risking internal assignments tainting the object.
                 let tempVar = createAndRecordTempVariable(TempFlags.Auto);
 
-                // Hold onto the initial non-computed properties in a new object literal,
-                // then create the rest through property accesses on the temp variable.
-                let initialObjectLiteral = <ObjectLiteralExpression>createSynthesizedNode(SyntaxKind.ObjectLiteralExpression);
-                initialObjectLiteral.properties = <NodeArray<ObjectLiteralElement>>originalObjectLiteral.properties.slice(0, firstComputedPropertyIndex);
-                initialObjectLiteral.flags |= NodeFlags.MultiLine;
+                // Write out the first non-computed properties
+                // (or all properties if none of them are computed),
+                // then emit the rest through indexing on the temp variable.
+                emit(tempVar)
+                write(" = ");
+                emitObjectLiteralBody(node, firstComputedPropertyIndex);
 
-                // The comma expressions that will patch the object literal.
-                // This will end up being something like '_a = { ... }, _a.x = 10, _a.y = 20, _a'.
-                let propertyPatches = createBinaryExpression(tempVar, SyntaxKind.EqualsToken, initialObjectLiteral);
+                for (let i = firstComputedPropertyIndex, n = properties.length; i < n; i++) {
+                    writeComma();
 
-                ts.forEach(originalObjectLiteral.properties, property => {
-                    let patchedProperty = tryCreatePatchingPropertyAssignment(originalObjectLiteral, tempVar, property);
-                    if (patchedProperty) {
-                        // TODO(drosen): Preserve comments
-                        //let leadingComments = getLeadingCommentRanges(currentSourceFile.text, property.pos);
-                        //let trailingComments = getTrailingCommentRanges(currentSourceFile.text, property.end);
-                        //addCommentsToSynthesizedNode(patchedProperty, leadingComments, trailingComments);
+                    let property = properties[i];
 
-                        propertyPatches = createBinaryExpression(propertyPatches, SyntaxKind.CommaToken, patchedProperty);
+                    emitStart(property)
+                    if (property.kind === SyntaxKind.GetAccessor || property.kind === SyntaxKind.SetAccessor) {
+                        // TODO (drosen): Reconcile with 'emitMemberFunctions'.
+                        let accessors = getAllAccessorDeclarations(node.properties, <AccessorDeclaration>property);
+                        if (property !== accessors.firstAccessor) {
+                            continue;
+                        }
+                        write("Object.defineProperty(");
+                        emit(tempVar);
+                        write(", ");
+                        emitStart(node.name);
+                        emitExpressionForPropertyName(property.name);
+                        emitEnd(property.name);
+                        write(", {");
+                        increaseIndent();
+                        if (accessors.getAccessor) {
+                            writeLine()
+                            emitLeadingComments(accessors.getAccessor);
+                            write("get: ");
+                            emitStart(accessors.getAccessor);
+                            write("function ");
+                            emitSignatureAndBody(accessors.getAccessor);
+                            emitEnd(accessors.getAccessor);
+                            emitTrailingComments(accessors.getAccessor);
+                            write(",");
+                        }
+                        if (accessors.setAccessor) {
+                            writeLine();
+                            emitLeadingComments(accessors.setAccessor);
+                            write("set: ");
+                            emitStart(accessors.setAccessor);
+                            write("function ");
+                            emitSignatureAndBody(accessors.setAccessor);
+                            emitEnd(accessors.setAccessor);
+                            emitTrailingComments(accessors.setAccessor);
+                            write(",");
+                        }
+                        writeLine();
+                        write("enumerable: true,");
+                        writeLine();
+                        write("configurable: true");
+                        decreaseIndent();
+                        writeLine();
+                        write("})");
+                        emitEnd(property);
                     }
-                });
+                    else {
+                        emitLeadingComments(property);
+                        emitStart(property.name);
+                        emit(tempVar);
+                        emitMemberAccessForPropertyName(property.name);
+                        emitEnd(property.name);
 
-                // Finally, return the temp variable.
-                propertyPatches = createBinaryExpression(propertyPatches, SyntaxKind.CommaToken, createIdentifier(tempVar.text, /*startsOnNewLine:*/ true));
+                        write(" = ");
 
-                let result = createParenthesizedExpression(propertyPatches);
-                
-                // TODO(drosen): Preserve comments
-                // let leadingComments = getLeadingCommentRanges(currentSourceFile.text, originalObjectLiteral.pos);
-                // let trailingComments = getTrailingCommentRanges(currentSourceFile.text, originalObjectLiteral.end);
-                //addCommentsToSynthesizedNode(result, leadingComments, trailingComments);
-
-                return result;
-            }
-
-            function addCommentsToSynthesizedNode(node: SynthesizedNode, leadingCommentRanges: CommentRange[], trailingCommentRanges: CommentRange[]): void {
-                node.leadingCommentRanges = leadingCommentRanges;
-                node.trailingCommentRanges = trailingCommentRanges;
-            }
-
-            // Returns 'undefined' if a property has already been accounted for
-            // (e.g. a 'get' accessor which has already been emitted along with its 'set' accessor).
-            function tryCreatePatchingPropertyAssignment(objectLiteral: ObjectLiteralExpression, tempVar: Identifier, property: ObjectLiteralElement): Expression {
-                let leftHandSide = createMemberAccessForPropertyName(tempVar, property.name);
-                let maybeRightHandSide = tryGetRightHandSideOfPatchingPropertyAssignment(objectLiteral, property);
-
-                return maybeRightHandSide && createBinaryExpression(leftHandSide, SyntaxKind.EqualsToken, maybeRightHandSide, /*startsOnNewLine:*/ true);
-            }
-
-            function tryGetRightHandSideOfPatchingPropertyAssignment(objectLiteral: ObjectLiteralExpression, property: ObjectLiteralElement) {
-                switch (property.kind) {
-                    case SyntaxKind.PropertyAssignment:
-                        return (<PropertyAssignment>property).initializer;
-
-                    case SyntaxKind.ShorthandPropertyAssignment:
-                        // TODO: (andersh) Technically it isn't correct to make an identifier here since getExpressionNamePrefix returns
-                        // a string containing a dotted name. In general I'm not a fan of mini tree rewriters as this one, elsewhere we
-                        // manage by just emitting strings (which is a lot more performant).
-                        //let prefix = createIdentifier(resolver.getExpressionNamePrefix((<ShorthandPropertyAssignment>property).name));
-                        //return createPropertyAccessExpression(prefix, (<ShorthandPropertyAssignment>property).name);
-                        return createIdentifier(resolver.getExpressionNameSubstitution((<ShorthandPropertyAssignment>property).name, getGeneratedNameForNode));
-
-                    case SyntaxKind.MethodDeclaration:
-                        return createFunctionExpression((<MethodDeclaration>property).parameters, (<MethodDeclaration>property).body);
-
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                        let { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(objectLiteral.properties, <AccessorDeclaration>property);
-
-                        // Only emit the first accessor.
-                        if (firstAccessor !== property) {
-                            return undefined;
+                        if (property.kind === SyntaxKind.PropertyAssignment) {
+                            emit((<PropertyAssignment>property).initializer);
                         }
-
-                        let propertyDescriptor = <ObjectLiteralExpression>createSynthesizedNode(SyntaxKind.ObjectLiteralExpression);
-
-                        let descriptorProperties = <NodeArray<ObjectLiteralElement>>[];
-                        if (getAccessor) {
-                            let getProperty = createPropertyAssignment(createIdentifier("get"), createFunctionExpression(getAccessor.parameters, getAccessor.body));
-                            descriptorProperties.push(getProperty);
+                        else if (property.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                            emitExpressionIdentifier((<ShorthandPropertyAssignment>property).name);
                         }
-                        if (setAccessor) {
-                            let setProperty = createPropertyAssignment(createIdentifier("set"), createFunctionExpression(setAccessor.parameters, setAccessor.body));
-                            descriptorProperties.push(setProperty);
+                        else if (property.kind === SyntaxKind.MethodDeclaration) {
+                            emitFunctionDeclaration(<MethodDeclaration>property);
                         }
+                        else {
+                            Debug.fail("ObjectLiteralElement type not accounted for: " + property.kind);
+                        }
+                    }
 
-                        let trueExpr = <PrimaryExpression>createSynthesizedNode(SyntaxKind.TrueKeyword);
-
-                        let enumerableTrue = createPropertyAssignment(createIdentifier("enumerable"), trueExpr);
-                        descriptorProperties.push(enumerableTrue);
-
-                        let configurableTrue = createPropertyAssignment(createIdentifier("configurable"), trueExpr);
-                        descriptorProperties.push(configurableTrue);
-
-                        propertyDescriptor.properties = descriptorProperties;
-
-                        let objectDotDefineProperty = createPropertyAccessExpression(createIdentifier("Object"), createIdentifier("defineProperty"));
-                        return createCallExpression(objectDotDefineProperty, createNodeArray(propertyDescriptor));
-
-                    default:
-                        Debug.fail(`ObjectLiteralElement kind ${property.kind} not accounted for.`);
+                    emitEnd(property);
                 }
-            }
 
-            function createParenthesizedExpression(expression: Expression) {
-                let result = <ParenthesizedExpression>createSynthesizedNode(SyntaxKind.ParenthesizedExpression);
-                result.expression = expression;
+                writeComma();
+                emit(tempVar);
 
-                return result;
-            }
-
-            function createNodeArray<T extends Node>(...elements: T[]): NodeArray<T> {
-                let result = <NodeArray<T>>elements;
-                result.pos = -1;
-                result.end = -1;
-
-                return result;
-            }
-
-            function createBinaryExpression(left: Expression, operator: SyntaxKind, right: Expression, startsOnNewLine?: boolean): BinaryExpression {
-                let result = <BinaryExpression>createSynthesizedNode(SyntaxKind.BinaryExpression, startsOnNewLine);
-                result.operatorToken = createSynthesizedNode(operator);
-                result.left = left;
-                result.right = right;
-
-                return result;
-            }
-
-            function createExpressionStatement(expression: Expression): ExpressionStatement {
-                let result = <ExpressionStatement>createSynthesizedNode(SyntaxKind.ExpressionStatement);
-                result.expression = expression;
-                return result;
-            }
-
-            function createMemberAccessForPropertyName(expression: LeftHandSideExpression, memberName: DeclarationName): PropertyAccessExpression | ElementAccessExpression {
-                if (memberName.kind === SyntaxKind.Identifier) {
-                    return createPropertyAccessExpression(expression, <Identifier>memberName);
+                if (multiLine) {
+                    decreaseIndent();
+                    writeLine();
                 }
-                else if (memberName.kind === SyntaxKind.StringLiteral || memberName.kind === SyntaxKind.NumericLiteral) {
-                    return createElementAccessExpression(expression, <LiteralExpression>memberName);
+
+                write(")");
+
+                function writeComma() {
+                    if (multiLine) {
+                        write(",");
+                        writeLine();
+                    }
+                    else {
+                        write(", ");
+                    }
                 }
-                else if (memberName.kind === SyntaxKind.ComputedPropertyName) {
-                    return createElementAccessExpression(expression, (<ComputedPropertyName>memberName).expression);
-                }
-                else {
-                    Debug.fail(`Kind '${memberName.kind}' not accounted for.`);
-                }
-            }
-
-            function createPropertyAssignment(name: LiteralExpression | Identifier, initializer: Expression) {
-                let result = <PropertyAssignment>createSynthesizedNode(SyntaxKind.PropertyAssignment);
-                result.name = name;
-                result.initializer = initializer;
-
-                return result;
-            }
-
-            function createFunctionExpression(parameters: NodeArray<ParameterDeclaration>, body: Block): FunctionExpression {
-                let result = <FunctionExpression>createSynthesizedNode(SyntaxKind.FunctionExpression);
-                result.parameters = parameters;
-                result.body = body;
-
-                return result;
-            }
-
-            function createPropertyAccessExpression(expression: LeftHandSideExpression, name: Identifier): PropertyAccessExpression {
-                let result = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
-                result.expression = expression;
-                result.dotToken = createSynthesizedNode(SyntaxKind.DotToken);
-                result.name = name;
-
-                return result;
-            }
-
-            function createElementAccessExpression(expression: LeftHandSideExpression, argumentExpression: Expression): ElementAccessExpression {
-                let result = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression);
-                result.expression = expression;
-                result.argumentExpression = argumentExpression;
-
-                return result;
-            }
-
-            function createIdentifier(name: string, startsOnNewLine?: boolean) {
-                let result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier, startsOnNewLine);
-                result.text = name;
-
-                return result;
-            }
-
-            function createCallExpression(invokedExpression: MemberExpression, arguments: NodeArray<Expression>) {
-                let result = <CallExpression>createSynthesizedNode(SyntaxKind.CallExpression);
-                result.expression = invokedExpression;
-                result.arguments = arguments;
-
-                return result;
             }
 
             function emitObjectLiteral(node: ObjectLiteralExpression): void {
@@ -1613,13 +1565,33 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
                 // Ordinary case: either the object has no computed properties
                 // or we're compiling with an ES6+ target.
-                write("{");
+                emitObjectLiteralBody(node, properties.length);
+            }
 
-                if (properties.length) {
-                    emitLinePreservingList(node, properties, /*allowTrailingComma:*/ languageVersion >= ScriptTarget.ES5, /*spacesBetweenBraces:*/ true)
-                }
+            function createBinaryExpression(left: Expression, operator: SyntaxKind, right: Expression, startsOnNewLine?: boolean): BinaryExpression {
+                let result = <BinaryExpression>createSynthesizedNode(SyntaxKind.BinaryExpression, startsOnNewLine);
+                result.operatorToken = createSynthesizedNode(operator);
+                result.left = left;
+                result.right = right;
 
-                write("}");
+                return result;
+            }
+
+            function createPropertyAccessExpression(expression: LeftHandSideExpression, name: Identifier): PropertyAccessExpression {
+                let result = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
+                result.expression = expression;
+                result.dotToken = createSynthesizedNode(SyntaxKind.DotToken);
+                result.name = name;
+
+                return result;
+             }
+
+            function createElementAccessExpression(expression: LeftHandSideExpression, argumentExpression: Expression): ElementAccessExpression {
+                let result = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression);
+                result.expression = expression;
+                result.argumentExpression = argumentExpression;
+
+                return result;
             }
 
             function emitComputedPropertyName(node: ComputedPropertyName) {
