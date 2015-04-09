@@ -295,34 +295,12 @@ declare module ts {
         AccessibilityModifier = 112,
         BlockScoped = 12288,
     }
-    const enum ParserContextFlags {
-        StrictMode = 1,
-        DisallowIn = 2,
-        Yield = 4,
-        GeneratorParameter = 8,
-        Decorator = 16,
-        ThisNodeHasError = 32,
-        ParserGeneratedFlags = 63,
-        ThisNodeOrAnySubNodesHasError = 64,
-        HasAggregatedChildData = 128,
-    }
-    const enum RelationComparisonResult {
-        Succeeded = 1,
-        Failed = 2,
-        FailedAndReported = 3,
-    }
     interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
-        parserContextFlags?: ParserContextFlags;
         decorators?: NodeArray<Decorator>;
         modifiers?: ModifiersArray;
-        id?: number;
         parent?: Node;
-        symbol?: Symbol;
-        locals?: SymbolTable;
-        nextContainer?: Node;
-        localSymbol?: Symbol;
     }
     interface NodeArray<T> extends Array<T>, TextRange {
         hasTrailingComma?: boolean;
@@ -723,7 +701,7 @@ declare module ts {
     interface ExternalModuleReference extends Node {
         expression?: Expression;
     }
-    interface ImportDeclaration extends Statement, ModuleElement {
+    interface ImportDeclaration extends ModuleElement {
         importClause?: ImportClause;
         moduleSpecifier: Expression;
     }
@@ -772,9 +750,7 @@ declare module ts {
         amdModuleName: string;
         referencedFiles: FileReference[];
         hasNoDefaultLib: boolean;
-        externalModuleIndicator: Node;
         languageVersion: ScriptTarget;
-        identifiers: Map<string>;
     }
     interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
@@ -785,6 +761,9 @@ declare module ts {
         (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
     }
     interface Program extends ScriptReferenceHost {
+        /**
+         * Get a list of files in the program
+         */
         getSourceFiles(): SourceFile[];
         /**
          * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
@@ -801,15 +780,23 @@ declare module ts {
         getGlobalDiagnostics(): Diagnostic[];
         getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        /**
+         * Gets a type checker that can be used to semantically analyze source fils in the program.
+         */
         getTypeChecker(): TypeChecker;
-        getCommonSourceDirectory(): string;
     }
     interface SourceMapSpan {
+        /** Line number in the .js file. */
         emittedLine: number;
+        /** Column number in the .js file. */
         emittedColumn: number;
+        /** Line number in the .ts file. */
         sourceLine: number;
+        /** Column number in the .ts file. */
         sourceColumn: number;
+        /** Optional name (index into names array) associated with this span. */
         nameIndex?: number;
+        /** .ts file (index into sources array) associated with this span */
         sourceIndex: number;
     }
     interface SourceMapData {
@@ -823,6 +810,7 @@ declare module ts {
         sourceMapMappings: string;
         sourceMapDecodedMappings: SourceMapSpan[];
     }
+    /** Return code used by getEmitOutput function to indicate status of the function */
     enum ExitStatus {
         Success = 0,
         DiagnosticsPresent_OutputsSkipped = 1,
@@ -831,7 +819,6 @@ declare module ts {
     interface EmitResult {
         emitSkipped: boolean;
         diagnostics: Diagnostic[];
-        sourceMaps: SourceMapData[];
     }
     interface TypeCheckerHost {
         getCompilerOptions(): CompilerOptions;
@@ -865,7 +852,7 @@ declare module ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
-        getExportsOfExternalModule(node: ImportDeclaration): Symbol[];
+        getExportsOfModule(moduleSymbol: Symbol): Symbol[];
     }
     interface SymbolDisplayBuilder {
         buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
@@ -907,40 +894,6 @@ declare module ts {
         None = 0,
         WriteTypeParametersOrArguments = 1,
         UseOnlyExternalAliasing = 2,
-    }
-    const enum SymbolAccessibility {
-        Accessible = 0,
-        NotAccessible = 1,
-        CannotBeNamed = 2,
-    }
-    type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
-    interface SymbolVisibilityResult {
-        accessibility: SymbolAccessibility;
-        aliasesToMakeVisible?: AnyImportSyntax[];
-        errorSymbolName?: string;
-        errorNode?: Node;
-    }
-    interface SymbolAccessiblityResult extends SymbolVisibilityResult {
-        errorModuleName?: string;
-    }
-    interface EmitResolver {
-        hasGlobalName(name: string): boolean;
-        getExpressionNameSubstitution(node: Identifier, getGeneratedNameForNode: (node: Node) => string): string;
-        isValueAliasDeclaration(node: Node): boolean;
-        isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean;
-        isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
-        getNodeCheckFlags(node: Node): NodeCheckFlags;
-        isDeclarationVisible(node: Declaration): boolean;
-        collectLinkedAliases(node: Identifier): Node[];
-        isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
-        writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
-        writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
-        writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
-        isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
-        isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
-        getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
-        resolvesToSomeValue(location: Node, name: string): boolean;
-        getBlockScopedVariableId(node: Identifier): number;
     }
     const enum SymbolFlags {
         FunctionScopedVariable = 1,
@@ -1011,56 +964,13 @@ declare module ts {
     interface Symbol {
         flags: SymbolFlags;
         name: string;
-        id?: number;
-        mergeId?: number;
         declarations?: Declaration[];
-        parent?: Symbol;
         members?: SymbolTable;
         exports?: SymbolTable;
-        exportSymbol?: Symbol;
         valueDeclaration?: Declaration;
-        constEnumOnlyModule?: boolean;
-    }
-    interface SymbolLinks {
-        target?: Symbol;
-        type?: Type;
-        declaredType?: Type;
-        mapper?: TypeMapper;
-        referenced?: boolean;
-        unionType?: UnionType;
-        resolvedExports?: SymbolTable;
-        exportsChecked?: boolean;
-    }
-    interface TransientSymbol extends Symbol, SymbolLinks {
     }
     interface SymbolTable {
         [index: string]: Symbol;
-    }
-    const enum NodeCheckFlags {
-        TypeChecked = 1,
-        LexicalThis = 2,
-        CaptureThis = 4,
-        EmitExtends = 8,
-        SuperInstance = 16,
-        SuperStatic = 32,
-        ContextChecked = 64,
-        EnumValuesComputed = 128,
-        BlockScopedBindingInLoop = 256,
-        EmitDecorate = 512,
-    }
-    interface NodeLinks {
-        resolvedType?: Type;
-        resolvedSignature?: Signature;
-        resolvedSymbol?: Symbol;
-        flags?: NodeCheckFlags;
-        enumMemberValue?: number;
-        isIllegalTypeReferenceInConstraint?: boolean;
-        isVisible?: boolean;
-        generatedName?: string;
-        generatedNames?: Map<string>;
-        assignmentChecks?: Map<boolean>;
-        hasReportedStatementInAmbientContext?: boolean;
-        importOnRightSide?: Symbol;
     }
     const enum TypeFlags {
         Any = 1,
@@ -1079,25 +989,15 @@ declare module ts {
         Tuple = 8192,
         Union = 16384,
         Anonymous = 32768,
-        FromSignature = 65536,
         ObjectLiteral = 131072,
-        ContainsUndefinedOrNull = 262144,
-        ContainsObjectLiteral = 524288,
         ESSymbol = 1048576,
-        Intrinsic = 1048703,
-        Primitive = 1049086,
         StringLike = 258,
         NumberLike = 132,
         ObjectType = 48128,
-        RequiresWidening = 786432,
     }
     interface Type {
         flags: TypeFlags;
-        id: number;
         symbol?: Symbol;
-    }
-    interface IntrinsicType extends Type {
-        intrinsicName: string;
     }
     interface StringLiteralType extends Type {
         text: string;
@@ -1118,7 +1018,6 @@ declare module ts {
         typeArguments: Type[];
     }
     interface GenericType extends InterfaceType, TypeReference {
-        instantiations: Map<TypeReference>;
     }
     interface TupleType extends ObjectType {
         elementTypes: Type[];
@@ -1126,20 +1025,9 @@ declare module ts {
     }
     interface UnionType extends Type {
         types: Type[];
-        resolvedProperties: SymbolTable;
-    }
-    interface ResolvedType extends ObjectType, UnionType {
-        members: SymbolTable;
-        properties: Symbol[];
-        callSignatures: Signature[];
-        constructSignatures: Signature[];
-        stringIndexType: Type;
-        numberIndexType: Type;
     }
     interface TypeParameter extends Type {
         constraint: Type;
-        target?: TypeParameter;
-        mapper?: TypeMapper;
     }
     const enum SignatureKind {
         Call = 0,
@@ -1149,28 +1037,22 @@ declare module ts {
         declaration: SignatureDeclaration;
         typeParameters: TypeParameter[];
         parameters: Symbol[];
-        resolvedReturnType: Type;
-        minArgumentCount: number;
-        hasRestParameter: boolean;
-        hasStringLiterals: boolean;
-        target?: Signature;
-        mapper?: TypeMapper;
-        unionSignatures?: Signature[];
-        erasedSignatureCache?: Signature;
-        isolatedSignatureType?: ObjectType;
     }
     const enum IndexKind {
         String = 0,
         Number = 1,
-    }
-    interface TypeMapper {
-        (t: Type): Type;
     }
     interface DiagnosticMessage {
         key: string;
         category: DiagnosticCategory;
         code: number;
     }
+    /**
+     * A linked list of formatted diagnostic messages to be used as part of a multiline message.
+     * It is built from the bottom up, leaving the head to be the "main" diagnostic.
+     * While it seems that DiagnosticMessageChain is structurally similar to DiagnosticMessage,
+     * the difference is that messages are all preformatted in DMC.
+     */
     interface DiagnosticMessageChain {
         messageText: string;
         category: DiagnosticCategory;
@@ -1219,6 +1101,7 @@ declare module ts {
         version?: boolean;
         watch?: boolean;
         separateCompilation?: boolean;
+        emitDecoratorMetadata?: boolean;
         [option: string]: string | number | boolean;
     }
     const enum ModuleKind {
@@ -1240,142 +1123,6 @@ declare module ts {
         options: CompilerOptions;
         fileNames: string[];
         errors: Diagnostic[];
-    }
-    interface CommandLineOption {
-        name: string;
-        type: string | Map<number>;
-        isFilePath?: boolean;
-        shortName?: string;
-        description?: DiagnosticMessage;
-        paramType?: DiagnosticMessage;
-        error?: DiagnosticMessage;
-        experimental?: boolean;
-    }
-    const enum CharacterCodes {
-        nullCharacter = 0,
-        maxAsciiCharacter = 127,
-        lineFeed = 10,
-        carriageReturn = 13,
-        lineSeparator = 8232,
-        paragraphSeparator = 8233,
-        nextLine = 133,
-        space = 32,
-        nonBreakingSpace = 160,
-        enQuad = 8192,
-        emQuad = 8193,
-        enSpace = 8194,
-        emSpace = 8195,
-        threePerEmSpace = 8196,
-        fourPerEmSpace = 8197,
-        sixPerEmSpace = 8198,
-        figureSpace = 8199,
-        punctuationSpace = 8200,
-        thinSpace = 8201,
-        hairSpace = 8202,
-        zeroWidthSpace = 8203,
-        narrowNoBreakSpace = 8239,
-        ideographicSpace = 12288,
-        mathematicalSpace = 8287,
-        ogham = 5760,
-        _ = 95,
-        $ = 36,
-        _0 = 48,
-        _1 = 49,
-        _2 = 50,
-        _3 = 51,
-        _4 = 52,
-        _5 = 53,
-        _6 = 54,
-        _7 = 55,
-        _8 = 56,
-        _9 = 57,
-        a = 97,
-        b = 98,
-        c = 99,
-        d = 100,
-        e = 101,
-        f = 102,
-        g = 103,
-        h = 104,
-        i = 105,
-        j = 106,
-        k = 107,
-        l = 108,
-        m = 109,
-        n = 110,
-        o = 111,
-        p = 112,
-        q = 113,
-        r = 114,
-        s = 115,
-        t = 116,
-        u = 117,
-        v = 118,
-        w = 119,
-        x = 120,
-        y = 121,
-        z = 122,
-        A = 65,
-        B = 66,
-        C = 67,
-        D = 68,
-        E = 69,
-        F = 70,
-        G = 71,
-        H = 72,
-        I = 73,
-        J = 74,
-        K = 75,
-        L = 76,
-        M = 77,
-        N = 78,
-        O = 79,
-        P = 80,
-        Q = 81,
-        R = 82,
-        S = 83,
-        T = 84,
-        U = 85,
-        V = 86,
-        W = 87,
-        X = 88,
-        Y = 89,
-        Z = 90,
-        ampersand = 38,
-        asterisk = 42,
-        at = 64,
-        backslash = 92,
-        backtick = 96,
-        bar = 124,
-        caret = 94,
-        closeBrace = 125,
-        closeBracket = 93,
-        closeParen = 41,
-        colon = 58,
-        comma = 44,
-        dot = 46,
-        doubleQuote = 34,
-        equals = 61,
-        exclamation = 33,
-        greaterThan = 62,
-        hash = 35,
-        lessThan = 60,
-        minus = 45,
-        openBrace = 123,
-        openBracket = 91,
-        openParen = 40,
-        percent = 37,
-        plus = 43,
-        question = 63,
-        semicolon = 59,
-        singleQuote = 39,
-        slash = 47,
-        tilde = 126,
-        backspace = 8,
-        formFeed = 12,
-        byteOrderMark = 65279,
-        tab = 9,
-        verticalTab = 11,
     }
     interface CancellationToken {
         isCancellationRequested(): boolean;
@@ -1400,49 +1147,39 @@ declare module ts {
     }
 }
 declare module ts {
-    interface ErrorCallback {
-        (message: DiagnosticMessage, length: number): void;
+    interface System {
+        args: string[];
+        newLine: string;
+        useCaseSensitiveFileNames: boolean;
+        write(s: string): void;
+        readFile(path: string, encoding?: string): string;
+        writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
+        watchFile?(path: string, callback: (path: string) => void): FileWatcher;
+        resolvePath(path: string): string;
+        fileExists(path: string): boolean;
+        directoryExists(path: string): boolean;
+        createDirectory(path: string): void;
+        getExecutingFilePath(): string;
+        getCurrentDirectory(): string;
+        readDirectory(path: string, extension?: string): string[];
+        getMemoryUsage?(): number;
+        exit(exitCode?: number): void;
     }
-    interface Scanner {
-        getStartPos(): number;
-        getToken(): SyntaxKind;
-        getTextPos(): number;
-        getTokenPos(): number;
-        getTokenText(): string;
-        getTokenValue(): string;
-        hasExtendedUnicodeEscape(): boolean;
-        hasPrecedingLineBreak(): boolean;
-        isIdentifier(): boolean;
-        isReservedWord(): boolean;
-        isUnterminated(): boolean;
-        reScanGreaterToken(): SyntaxKind;
-        reScanSlashToken(): SyntaxKind;
-        reScanTemplateToken(): SyntaxKind;
-        scan(): SyntaxKind;
-        setText(text: string): void;
-        setTextPos(textPos: number): void;
-        lookAhead<T>(callback: () => T): T;
-        tryScan<T>(callback: () => T): T;
+    interface FileWatcher {
+        close(): void;
     }
+    var sys: System;
+}
+declare module ts {
     function tokenToString(t: SyntaxKind): string;
-    function computeLineStarts(text: string): number[];
     function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
-    function computePositionOfLineAndCharacter(lineStarts: number[], line: number, character: number): number;
-    function getLineStarts(sourceFile: SourceFile): number[];
-    function computeLineAndCharacterOfPosition(lineStarts: number[], position: number): {
-        line: number;
-        character: number;
-    };
     function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
     function isWhiteSpace(ch: number): boolean;
     function isLineBreak(ch: number): boolean;
-    function isOctalDigit(ch: number): boolean;
-    function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean): number;
     function getLeadingCommentRanges(text: string, pos: number): CommentRange[];
     function getTrailingCommentRanges(text: string, pos: number): CommentRange[];
     function isIdentifierStart(ch: number, languageVersion: ScriptTarget): boolean;
     function isIdentifierPart(ch: number, languageVersion: ScriptTarget): boolean;
-    function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, text?: string, onError?: ErrorCallback): Scanner;
 }
 declare module ts {
     function getNodeConstructor(kind: SyntaxKind): new () => Node;
@@ -1456,11 +1193,8 @@ declare module ts {
     function isAssignmentOperator(token: SyntaxKind): boolean;
 }
 declare module ts {
-    function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker;
-}
-declare module ts {
     /** The version of the TypeScript compiler release */
-    let version: string;
+    const version: string;
     function findConfigFile(searchPath: string): string;
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
     function getPreEmitDiagnostics(program: Program): Diagnostic[];
@@ -1468,6 +1202,7 @@ declare module ts {
     function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program;
 }
 declare module ts {
+    function parseCommandLine(commandLine: string[]): ParsedCommandLine;
     /**
       * Read tsconfig.json file
       * @param fileName The path to the config file
@@ -1765,6 +1500,7 @@ declare module ts {
         name: string;
         kind: string;
         kindModifiers: string;
+        sortText: string;
     }
     interface CompletionEntryDetails {
         name: string;
@@ -1907,6 +1643,7 @@ declare module ts {
     }
     class ScriptElementKind {
         static unknown: string;
+        static warning: string;
         static keyword: string;
         static scriptElement: string;
         static moduleElement: string;

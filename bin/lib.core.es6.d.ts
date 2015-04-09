@@ -1183,7 +1183,7 @@ interface TypedPropertyDescriptor<T> {
 declare type ClassDecorator = <TFunction extends Function>(target: TFunction) => TFunction | void;
 declare type PropertyDecorator = (target: Object, propertyKey: string | symbol) => void;
 declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
-declare type ParameterDecorator = (target: Function, propertyKey: string | symbol, parameterIndex: number) => void;
+declare type ParameterDecorator = (target: Object, propertyKey: string | symbol, parameterIndex: number) => void;
 declare type PropertyKey = string | number | symbol;
 
 interface Symbol {
@@ -4699,27 +4699,27 @@ interface ProxyHandler<T> {
 
 interface ProxyConstructor {
     revocable<T>(target: T, handler: ProxyHandler<T>): { proxy: T; revoke: () => void; };
-    new <T>(target: T, handeler: ProxyHandler<T>): T
+    new <T>(target: T, handler: ProxyHandler<T>): T
 }
 declare var Proxy: ProxyConstructor;
 
-declare var Reflect: {
-    apply(target: Function, thisArgument: any, argumentsList: ArrayLike<any>): any;
-    construct(target: Function, argumentsList: ArrayLike<any>): any;
-    defineProperty(target: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): boolean;
-    deleteProperty(target: any, propertyKey: PropertyKey): boolean;
-    enumerate(target: any): IterableIterator<any>;
-    get(target: any, propertyKey: PropertyKey, receiver?: any): any;
-    getOwnPropertyDescriptor(target: any, propertyKey: PropertyKey): PropertyDescriptor;
-    getPrototypeOf(target: any): any;
-    has(target: any, propertyKey: string): boolean;
-    has(target: any, propertyKey: symbol): boolean;
-    isExtensible(target: any): boolean;
-    ownKeys(target: any): Array<PropertyKey>;
-    preventExtensions(target: any): boolean;
-    set(target: any, propertyKey: PropertyKey, value: any, receiver? :any): boolean;
-    setPrototypeOf(target: any, proto: any): boolean;
-};
+declare module Reflect {
+    function apply(target: Function, thisArgument: any, argumentsList: ArrayLike<any>): any;
+    function construct(target: Function, argumentsList: ArrayLike<any>): any;
+    function defineProperty(target: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): boolean;
+    function deleteProperty(target: any, propertyKey: PropertyKey): boolean;
+    function enumerate(target: any): IterableIterator<any>;
+    function get(target: any, propertyKey: PropertyKey, receiver?: any): any;
+    function getOwnPropertyDescriptor(target: any, propertyKey: PropertyKey): PropertyDescriptor;
+    function getPrototypeOf(target: any): any;
+    function has(target: any, propertyKey: string): boolean;
+    function has(target: any, propertyKey: symbol): boolean;
+    function isExtensible(target: any): boolean;
+    function ownKeys(target: any): Array<PropertyKey>;
+    function preventExtensions(target: any): boolean;
+    function set(target: any, propertyKey: PropertyKey, value: any, receiver? :any): boolean;
+    function setPrototypeOf(target: any, proto: any): boolean;
+}
 
 /**
  * Represents the completion of an asynchronous operation
