@@ -15,6 +15,7 @@ class C {
         var z = function let() { };
     }
 
+    public pulbic() { } // No Error;
 }
 
 class D<public, private>{ }
