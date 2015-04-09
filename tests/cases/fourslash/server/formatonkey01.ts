@@ -1,4 +1,4 @@
-/// <reference path='fourslash.ts' />
+/// <reference path="../fourslash.ts"/>
 
 ////switch (1) {
 ////    case 1:

@@ -1,4 +1,4 @@
-/// <reference path='fourslash.ts'/>
+/// <reference path="../fourslash.ts"/>
 
 ////var x: string[] = [];
 ////x.forEach(function (y) { y/*1*/

@@ -1,4 +1,4 @@
-/// <reference path="fourslash.ts"/>
+/// <reference path="../fourslash.ts"/>
 
 /////// Module
 ////{| "itemName": "MyShapes", "kind": "module", "parentName": "", "matchKind": "substring" |}module MyShapes {
