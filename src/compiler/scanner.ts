@@ -523,6 +523,7 @@ module ts {
                     let nextChar = text.charCodeAt(pos + 1);
                     let hasTrailingNewLine = false;
                     if (nextChar === CharacterCodes.slash || nextChar === CharacterCodes.asterisk) {
+                        let kind = nextChar === CharacterCodes.slash ? SyntaxKind.SingleLineCommentTrivia : SyntaxKind.MultiLineCommentTrivia;
                         let startPos = pos;
                         pos += 2;
                         if (nextChar === CharacterCodes.slash) {
@@ -548,7 +549,7 @@ module ts {
                                 result = [];
                             }
 
-                            result.push({ pos: startPos, end: pos, hasTrailingNewLine: hasTrailingNewLine });
+                            result.push({ pos: startPos, end: pos, hasTrailingNewLine, kind });
                         }
                         continue;
                     }

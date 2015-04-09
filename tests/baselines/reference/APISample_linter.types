@@ -2565,6 +2565,10 @@ declare module "typescript" {
 
         hasTrailingNewLine?: boolean;
 >hasTrailingNewLine : boolean
+
+        kind: SyntaxKind;
+>kind : SyntaxKind
+>SyntaxKind : SyntaxKind
     }
     interface SourceFile extends Declaration {
 >SourceFile : SourceFile
