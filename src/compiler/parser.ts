@@ -4596,6 +4596,18 @@ module ts {
             return finishNode(node);
         }
 
+        function isClassMemberModifier(idToken: SyntaxKind) {
+            switch (idToken) {
+                case SyntaxKind.PublicKeyword:
+                case SyntaxKind.PrivateKeyword:
+                case SyntaxKind.ProtectedKeyword:
+                case SyntaxKind.StaticKeyword:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         function isClassMemberStart(): boolean {
             let idToken: SyntaxKind;
 
@@ -4606,6 +4618,16 @@ module ts {
             // Eat up all modifiers, but hold on to the last one in case it is actually an identifier.
             while (isModifier(token)) {
                 idToken = token;
+                // If the idToken is a class modifier (protected, private, public, and static), it is
+                // certain that we are starting to parse class member. This allows better error recovery
+                // Example:
+                //      public foo() ...     // true
+                //      public @dec blah ... // true; we will then report an error later
+                //      export public ...    // true; we will then report an error later
+                if (isClassMemberModifier(idToken)) {
+                    return true;
+                }
+
                 nextToken();
             }
 
@@ -4640,7 +4662,6 @@ module ts {
                     case SyntaxKind.ColonToken:         // Type Annotation for declaration
                     case SyntaxKind.EqualsToken:        // Initializer for declaration
                     case SyntaxKind.QuestionToken:      // Not valid, but permitted so that it gets caught later on.
-                    case SyntaxKind.AtToken:
                         return true;
                     default:
                         // Covers
