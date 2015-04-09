@@ -1019,11 +1019,11 @@ module ts {
         highlightSpans: HighlightSpan[];
     }
 
-    export class DocumentHighlightKind {
-        public static none = "none";
-        public static definition = "definition";
-        public static reference = "reference";
-        public static writtenReference = "writtenReference";
+    export module DocumentHighlightKind {
+        export const none = "none";
+        export const definition = "definition";
+        export const reference = "reference";
+        export const writtenReference = "writtenReference";
     } 
 
     export interface HighlightSpan {
@@ -1335,92 +1335,92 @@ module ts {
     }
 
     // TODO: move these to enums
-    export class ScriptElementKind {
-        static unknown = "";
-        static warning = "warning";
+    export module ScriptElementKind {
+        export const unknown = "";
+        export const warning = "warning";
 
         // predefined type (void) or keyword (class)
-        static keyword = "keyword";
+        export const keyword = "keyword";
 
         // top level script node
-        static scriptElement = "script";
+        export const scriptElement = "script";
 
         // module foo {}
-        static moduleElement = "module";
+        export const moduleElement = "module";
 
         // class X {}
-        static classElement = "class";
+        export const classElement = "class";
 
         // interface Y {}
-        static interfaceElement = "interface";
+        export const interfaceElement = "interface";
 
         // type T = ...
-        static typeElement = "type";
+        export const typeElement = "type";
 
         // enum E
-        static enumElement = "enum";
+        export const enumElement = "enum";
 
         // Inside module and script only
         // let v = ..
-        static variableElement = "var";
+        export const variableElement = "var";
 
         // Inside function
-        static localVariableElement = "local var";
+        export const localVariableElement = "local var";
 
         // Inside module and script only
         // function f() { }
-        static functionElement = "function";
+        export const functionElement = "function";
 
         // Inside function
-        static localFunctionElement = "local function";
+        export const localFunctionElement = "local function";
 
         // class X { [public|private]* foo() {} }
-        static memberFunctionElement = "method";
+        export const memberFunctionElement = "method";
 
         // class X { [public|private]* [get|set] foo:number; }
-        static memberGetAccessorElement = "getter";
-        static memberSetAccessorElement = "setter";
+        export const memberGetAccessorElement = "getter";
+        export const memberSetAccessorElement = "setter";
 
         // class X { [public|private]* foo:number; }
         // interface Y { foo:number; }
-        static memberVariableElement = "property";
+        export const memberVariableElement = "property";
 
         // class X { constructor() { } }
-        static constructorImplementationElement = "constructor";
+        export const constructorImplementationElement = "constructor";
 
         // interface Y { ():number; }
-        static callSignatureElement = "call";
+        export const callSignatureElement = "call";
 
         // interface Y { []:number; }
-        static indexSignatureElement = "index";
+        export const indexSignatureElement = "index";
 
         // interface Y { new():Y; }
-        static constructSignatureElement = "construct";
+        export const constructSignatureElement = "construct";
 
         // function foo(*Y*: string)
-        static parameterElement = "parameter";
+        export const parameterElement = "parameter";
 
-        static typeParameterElement = "type parameter";
+        export const typeParameterElement = "type parameter";
 
-        static primitiveType = "primitive type";
+        export const primitiveType = "primitive type";
 
-        static label = "label";
+        export const label = "label";
 
-        static alias = "alias";
+        export const alias = "alias";
 
-        static constElement = "const";
+        export const constElement = "const";
 
-        static letElement = "let";
+        export const letElement = "let";
     }
 
-    export class ScriptElementKindModifier {
-        static none = "";
-        static publicMemberModifier = "public";
-        static privateMemberModifier = "private";
-        static protectedMemberModifier = "protected";
-        static exportedModifier = "export";
-        static ambientModifier = "declare";
-        static staticModifier = "static";
+    export module ScriptElementKindModifier {
+        export const none = "";
+        export const publicMemberModifier = "public";
+        export const privateMemberModifier = "private";
+        export const protectedMemberModifier = "protected";
+        export const exportedModifier = "export";
+        export const ambientModifier = "declare";
+        export const staticModifier = "static";
     }
 
     export class ClassificationTypeNames {
