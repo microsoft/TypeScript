@@ -4000,7 +4000,7 @@ module ts {
                 let end = node.getEnd();
 
                 return {
-                    fileName: node.getSourceFile().fileName,
+                    fileName: sourceFile.fileName,
                     textSpan: createTextSpanFromBounds(start, end),
                     isDefinition: false,
                     isWriteAccess: false,
