@@ -4154,9 +4154,9 @@ module ts {
                 }
 
                 /**
-     * Aggregates all throw-statements within this node *without* crossing
-     * into function boundaries and try-blocks with catch-clauses.
-     */
+                 * Aggregates all throw-statements within this node *without* crossing
+                 * into function boundaries and try-blocks with catch-clauses.
+                 */
                 function aggregateOwnedThrowStatements(node: Node): ThrowStatement[] {
                     let statementAccumulator: ThrowStatement[] = []
                     aggregate(node);
@@ -4562,17 +4562,17 @@ module ts {
                             let elseKeyword = keywords[i];
                             let ifKeyword = keywords[i + 1]; // this *should* always be an 'if' keyword.
 
-                            let shouldHighlightNextKeyword = true;
+                            let shouldCombindElseAndIf = true;
 
                             // Avoid recalculating getStart() by iterating backwards.
                             for (let j = ifKeyword.getStart() - 1; j >= elseKeyword.end; j--) {
                                 if (!isWhiteSpace(sourceFile.text.charCodeAt(j))) {
-                                    shouldHighlightNextKeyword = false;
+                                    shouldCombindElseAndIf = false;
                                     break;
                                 }
                             }
 
-                            if (shouldHighlightNextKeyword) {
+                            if (shouldCombindElseAndIf) {
                                 result.push({
                                     fileName: fileName,
                                     textSpan: createTextSpanFromBounds(elseKeyword.getStart(), ifKeyword.end),
