@@ -3999,11 +3999,6 @@ module ts {
                 let start = node.getStart();
                 let end = node.getEnd();
 
-                if (node.kind === SyntaxKind.StringLiteral) {
-                    start += 1;
-                    end -= 1;
-                }
-
                 return {
                     fileName: node.getSourceFile().fileName,
                     textSpan: createTextSpanFromBounds(start, end),
