@@ -659,9 +659,13 @@
         "category": "Error",
         "code": 1209
     },
+    "Invalid use of '{0}'. Class definitions are automatically in strict mode.": {
+        "category": "Error",
+        "code":  1210
+    },
     "A class declaration without the 'default' modifier must have a name": {
         "category": "Error",
-        "code": 1210
+        "code": 1211
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1363,11 +1367,11 @@
         "category": "Error",
         "code": 2487
     },
-    "The right-hand side of a 'for...of' statement must have a '[Symbol.iterator]()' method that returns an iterator.": {
+    "Type must have a '[Symbol.iterator]()' method that returns an iterator.": {
         "category": "Error",
         "code": 2488
     },
-    "The iterator returned by the right-hand side of a 'for...of' statement must have a 'next()' method.": {
+    "An iterator must have a 'next()' method.": {
         "category": "Error",
         "code": 2489
     },

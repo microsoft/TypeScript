@@ -1256,6 +1256,9 @@ module ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         resolvesToSomeValue(location: Node, name: string): boolean;
         getBlockScopedVariableId(node: Identifier): number;
+        serializeTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
+        serializeParameterTypesOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): (string | string[])[];
+        serializeReturnTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
     }
 
     export const enum SymbolFlags {
@@ -1381,6 +1384,7 @@ module ts {
         EnumValuesComputed          = 0x00000080,
         BlockScopedBindingInLoop    = 0x00000100,
         EmitDecorate                = 0x00000200,  // Emit __decorate
+        EmitParam                   = 0x00000400,  // Emit __param helper for decorators
     }
 
     export interface NodeLinks {
@@ -1606,6 +1610,7 @@ module ts {
         version?: boolean;
         watch?: boolean;
         separateCompilation?: boolean;
+        emitDecoratorMetadata?: boolean;
         /* @internal */ stripInternal?: boolean;
         [option: string]: string | number | boolean;
     }
