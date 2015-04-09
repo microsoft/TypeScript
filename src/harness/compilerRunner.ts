@@ -228,14 +228,17 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             it('Correct Sourcemap output for ' + fileName, () => {
-                if (options.sourceMap && result.sourceMaps.length !== result.files.length) {
-                    throw new Error('Number of sourcemap files should be same as js files.');
+                if (options.inlineSourceMap) {
+                    if (result.sourceMaps.length > 0) {
+                        throw new Error('No sourcemap files should be generated if inlineSourceMaps was set.');
+                    }
+                    return null;
                 }
-                else if (options.inlineSourceMap && result.sourceMaps.length > 0) {
-                    throw new Error('No sourcemap files should be generated if inlineSourceMaps was set.');
-                }
+                else if (options.sourceMap) {
+                    if (result.sourceMaps.length !== result.files.length) {
+                        throw new Error('Number of sourcemap files should be same as js files.');
+                    }
 
-                if (options.sourceMap) {
                     Harness.Baseline.runBaseline('Correct Sourcemap output for ' + fileName, justName.replace(/\.ts/, '.js.map'), () => {
                         if (options.noEmitOnError && result.errors.length !== 0 && result.sourceMaps.length === 0) {
                             // We need to return null here or the runBaseLine will actually create a empty file.
