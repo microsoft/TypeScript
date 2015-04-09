@@ -1487,8 +1487,8 @@ module ts {
             if (isIdentifier) {
                 let node = <Identifier>createNode(SyntaxKind.Identifier);
 
-                // Set strictModeKind property so that we can report appropriate error later in type checker
-                if (inStrictModeContext() && (token > SyntaxKind.Identifier && token <= SyntaxKind.LastFutureReservedWord)) {
+                // Store original token kind so we can report appropriate error later in type checker
+                if (token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastFutureReservedWord) {
                     node.isKeywordInStrictMode = token;
                 }
                 node.text = internIdentifier(scanner.getTokenValue());
@@ -4640,6 +4640,7 @@ module ts {
                     case SyntaxKind.ColonToken:         // Type Annotation for declaration
                     case SyntaxKind.EqualsToken:        // Initializer for declaration
                     case SyntaxKind.QuestionToken:      // Not valid, but permitted so that it gets caught later on.
+                    case SyntaxKind.AtToken:
                         return true;
                     default:
                         // Covers
