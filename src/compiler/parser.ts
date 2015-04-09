@@ -3221,10 +3221,27 @@ module ts {
                     }
                 }
 
-                // Simple case: "(..."
+                // If we had "(" followed by "{" or "[", this could be the start of a binding pattern.
+                let possiblyInArrayBindingPattern = false;
+                let possiblyInObjectBindingPattern = false;
+                while (second === SyntaxKind.OpenBraceToken || second === SyntaxKind.OpenBracketToken) {
+                    possiblyInObjectBindingPattern = second === SyntaxKind.OpenBraceToken;
+                    possiblyInArrayBindingPattern = second === SyntaxKind.OpenBracketToken;
+                    second = nextToken();
+                }
+
+                if (possiblyInArrayBindingPattern) {
+                    // If we are possibly in an array binding pattern, skip empty elements
+                    while (second === SyntaxKind.CommaToken) {
+                        second = nextToken();
+                    }
+                }
+
+                // Simple case: "(..." or "([...", but not "({..."
                 // This is an arrow function with a rest parameter.
-                if (second === SyntaxKind.DotDotDotToken) {
-                    return Tristate.True;
+                if (second === SyntaxKind.DotDotDotToken && !possiblyInObjectBindingPattern) {
+                    // if we are possibly in an array binding pattern, then this may be a lambda, otherwise it must be a lambda.
+                    return possiblyInArrayBindingPattern ? Tristate.Unknown : Tristate.True;
                 }
 
                 // If we had "(" followed by something that's not an identifier,
@@ -3236,9 +3253,9 @@ module ts {
                     return Tristate.False;
                 }
 
-                // If we have something like "(a:", then we must have a
+                // If we have something like "(a:", but not "({ a:", then we must have a
                 // type-annotated parameter in an arrow function expression.
-                if (nextToken() === SyntaxKind.ColonToken) {
+                if (nextToken() === SyntaxKind.ColonToken && !possiblyInObjectBindingPattern) {
                     return Tristate.True;
                 }
 
