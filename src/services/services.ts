@@ -1020,6 +1020,7 @@ module ts {
     }
 
     export class DocumentHighlightKind {
+        public static none = "none";
         public static definition = "definition";
         public static reference = "reference";
         public static writtenReference = "writtenReference";
@@ -4009,7 +4010,7 @@ module ts {
                 return {
                     fileName: sourceFile.fileName,
                     textSpan: createTextSpanFromBounds(start, end),
-                    kind: DocumentHighlightKind.reference
+                    kind: DocumentHighlightKind.none
                 };
             }
 
