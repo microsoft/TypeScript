@@ -1350,7 +1350,13 @@ module ts {
             return speculationHelper(callback, /*isLookAhead:*/ false);
         }
 
-        function isIdentifier(): boolean {
+        // The function takes a flag "considerStrictModeContext" because in the case of parsing
+        // an identifier, we don't want to consider whether we are in strict mode. This is because
+        // if the identifier violates strict-mode reserved word, we want to report more explicit error
+        // in the checker.
+        // However, in some cases such as isLetDeclaration, we want to know at the parse time whether
+        // next token is really an identifier in strict mode and report an error.
+        function isIdentifier(considerStrictModeContext = true): boolean {
             if (token === SyntaxKind.Identifier) {
                 return true;
             }
@@ -1361,7 +1367,12 @@ module ts {
                 return false;
             }
 
-            return inStrictModeContext() ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord;
+            if (considerStrictModeContext) {
+                return inStrictModeContext() ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord;
+            }
+            else {
+                return token > SyntaxKind.LastReservedWord;
+            }
         }
 
         function parseExpected(kind: SyntaxKind, diagnosticMessage?: DiagnosticMessage): boolean {
@@ -1485,6 +1496,11 @@ module ts {
             identifierCount++;
             if (isIdentifier) {
                 let node = <Identifier>createNode(SyntaxKind.Identifier);
+
+                // Set strictModeKind property so that we can report appropriate error later in type checker
+                if (inStrictModeContext() && (token > SyntaxKind.Identifier && token <= SyntaxKind.LastFutureReservedWord)) {
+                    node.strictModeKind = token;
+                }
                 node.text = internIdentifier(scanner.getTokenValue());
                 nextToken();
                 return finishNode(node);
@@ -1494,7 +1510,7 @@ module ts {
         }
 
         function parseIdentifier(diagnosticMessage?: DiagnosticMessage): Identifier {
-            return createIdentifier(isIdentifier(), diagnosticMessage);
+            return createIdentifier(isIdentifier(/*considerStrictModeContext*/ false), diagnosticMessage);
         }
 
         function parseIdentifierName(): Identifier {
