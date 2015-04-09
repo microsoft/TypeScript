@@ -1367,11 +1367,11 @@
         "category": "Error",
         "code": 2487
     },
-    "The right-hand side of a 'for...of' statement must have a '[Symbol.iterator]()' method that returns an iterator.": {
+    "Type must have a '[Symbol.iterator]()' method that returns an iterator.": {
         "category": "Error",
         "code": 2488
     },
-    "The iterator returned by the right-hand side of a 'for...of' statement must have a 'next()' method.": {
+    "An iterator must have a 'next()' method.": {
         "category": "Error",
         "code": 2489
     },

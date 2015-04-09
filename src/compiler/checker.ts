@@ -2078,15 +2078,20 @@ module ts {
                 }
             }
             else {
-                // For an array binding element the specified or inferred type of the parent must be an array-like type
-                if (!isArrayLikeType(parentType)) {
-                    error(pattern, Diagnostics.Type_0_is_not_an_array_type, typeToString(parentType));
-                    return unknownType;
-                }
+                // This elementType will be used if the specific property corresponding to this index is not
+                // present (aka the tuple element property). This call also checks that the parentType is in
+                // fact an iterable or array (depending on target language).
+                let elementType = checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false);
                 if (!declaration.dotDotDotToken) {
+                    if (elementType.flags & TypeFlags.Any) {
+                        return elementType;
+                    }
+
                     // Use specific property type when parent is a tuple or numeric index type when parent is an array
                     let propName = "" + indexOf(pattern.elements, declaration);
-                    type = isTupleLikeType(parentType) ? getTypeOfPropertyOfType(parentType, propName) : getIndexTypeOfType(parentType, IndexKind.Number);
+                    type = isTupleLikeType(parentType)
+                        ? getTypeOfPropertyOfType(parentType, propName)
+                        : elementType;
                     if (!type) {
                         if (isTupleType(parentType)) {
                             error(declaration, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2, typeToString(parentType), (<TupleType>parentType).elementTypes.length, pattern.elements.length);
@@ -2099,7 +2104,7 @@ module ts {
                 }
                 else {
                     // Rest element has an array type with the same element type as the parent type
-                    type = createArrayType(getIndexTypeOfType(parentType, IndexKind.Number));
+                    type = createArrayType(elementType);
                 }
             }
             return type;
@@ -2188,7 +2193,34 @@ module ts {
                     hasSpreadElement = true;
                 }
             });
-            return !elementTypes.length ? anyArrayType : hasSpreadElement ? createArrayType(getUnionType(elementTypes)) : createTupleType(elementTypes);
+            if (!elementTypes.length) {
+                return languageVersion >= ScriptTarget.ES6 ? createIterableType(anyType) : anyArrayType;
+            }
+            else if (hasSpreadElement) {
+                let unionOfElements = getUnionType(elementTypes);
+                if (languageVersion >= ScriptTarget.ES6) {
+                    // If the user has something like:
+                    //
+                    //     function fun(...[a, ...b]) { }
+                    //
+                    // Normally, in ES6, the implied type of an array binding pattern with a rest element is
+                    // an iterable. However, there is a requirement in our type system that all rest
+                    // parameters be array types. To satisfy this, we have an exception to the rule that
+                    // says the type of an array binding pattern with a rest element is an array type
+                    // if it is *itself* in a rest parameter. It will still be compatible with a spreaded
+                    // iterable argument, but within the function it will be an array.
+                    let parent = pattern.parent;
+                    let isRestParameter = parent.kind === SyntaxKind.Parameter &&
+                        pattern === (<ParameterDeclaration>parent).name &&
+                        (<ParameterDeclaration>parent).dotDotDotToken !== undefined;
+                    return isRestParameter ? createArrayType(unionOfElements) : createIterableType(unionOfElements);
+                }
+
+                return createArrayType(unionOfElements);
+            }
+
+            // If the pattern has at least one element, and no rest element, then it should imply a tuple type.
+            return createTupleType(elementTypes);
         }
 
         // Return the type implied by a binding pattern. This is the type implied purely by the binding pattern itself
@@ -3459,6 +3491,10 @@ module ts {
 
         function getGlobalESSymbolConstructorSymbol() {
             return globalESSymbolConstructorSymbol || (globalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol"));
+        }
+
+        function createIterableType(elementType: Type): Type {
+            return globalIterableType !== emptyObjectType ? createTypeReference(<GenericType>globalIterableType, [elementType]) : emptyObjectType;
         }
 
         function createArrayType(elementType: Type): Type {
@@ -5600,7 +5636,7 @@ module ts {
                 }
             }
 
-            if (container.kind === SyntaxKind.ComputedPropertyName) {
+            if (container && container.kind === SyntaxKind.ComputedPropertyName) {
                 error(node, Diagnostics.super_cannot_be_referenced_in_a_computed_property_name);
             }
             else if (isCallExpression) {
@@ -5968,12 +6004,14 @@ module ts {
         }
 
         function checkSpreadElementExpression(node: SpreadElementExpression, contextualMapper?: TypeMapper): Type {
-            let type = checkExpressionCached(node.expression, contextualMapper);
-            if (!isArrayLikeType(type)) {
-                error(node.expression, Diagnostics.Type_0_is_not_an_array_type, typeToString(type));
-                return unknownType;
-            }
-            return type;
+            // It is usually not safe to call checkExpressionCached if we can be contextually typing.
+            // You can tell that we are contextually typing because of the contextualMapper parameter.
+            // While it is true that a spread element can have a contextual type, it does not do anything
+            // with this type. It is neither affected by it, nor does it propagate it to its operand.
+            // So the fact that contextualMapper is passed is not important, because the operand of a spread
+            // element is not contextually typed.
+            let arrayOrIterableType = checkExpressionCached(node.expression, contextualMapper);
+            return checkIteratedTypeOrElementType(arrayOrIterableType, node.expression, /*allowStringInput*/ false);
         }
 
         function checkArrayLiteral(node: ArrayLiteralExpression, contextualMapper?: TypeMapper): Type {
@@ -5981,18 +6019,13 @@ module ts {
             if (!elements.length) {
                 return createArrayType(undefinedType);
             }
-            let hasSpreadElement: boolean = false;
+            let hasSpreadElement = false;
             let elementTypes: Type[] = [];
-            forEach(elements, e => {
+            for (let e of elements) {
                 let type = checkExpression(e, contextualMapper);
-                if (e.kind === SyntaxKind.SpreadElementExpression) {
-                    elementTypes.push(getIndexTypeOfType(type, IndexKind.Number) || anyType);
-                    hasSpreadElement = true;
-                }
-                else {
-                    elementTypes.push(type);
-                }
-            });
+                elementTypes.push(type);
+                hasSpreadElement = hasSpreadElement || e.kind === SyntaxKind.SpreadElementExpression;
+            }
             if (!hasSpreadElement) {
                 let contextualType = getContextualType(node);
                 if (contextualType && contextualTypeIsTupleLikeType(contextualType) || isAssignmentTarget(node)) {
@@ -6615,7 +6648,7 @@ module ts {
             for (let i = 0; i < args.length; i++) {
                 let arg = args[i];
                 if (arg.kind !== SyntaxKind.OmittedExpression) {
-                    let paramType = getTypeAtPosition(signature, arg.kind === SyntaxKind.SpreadElementExpression ? -1 : i);
+                    let paramType = getTypeAtPosition(signature, i);
                     let argType: Type;
                     if (i === 0 && args[i].parent.kind === SyntaxKind.TaggedTemplateExpression) {
                         argType = globalTemplateStringsArrayType;
@@ -6638,7 +6671,7 @@ module ts {
                     // No need to check for omitted args and template expressions, their exlusion value is always undefined
                     if (excludeArgument[i] === false) {
                         let arg = args[i];
-                        let paramType = getTypeAtPosition(signature, arg.kind === SyntaxKind.SpreadElementExpression ? -1 : i);
+                        let paramType = getTypeAtPosition(signature, i);
                         inferTypes(context, checkExpressionWithContextualType(arg, paramType, inferenceMapper), paramType);
                     }
                 }
@@ -6671,7 +6704,7 @@ module ts {
                 let arg = args[i];
                 if (arg.kind !== SyntaxKind.OmittedExpression) {
                     // Check spread elements against rest type (from arity check we know spread argument corresponds to a rest parameter)
-                    let paramType = getTypeAtPosition(signature, arg.kind === SyntaxKind.SpreadElementExpression ? -1 : i);
+                    let paramType = getTypeAtPosition(signature, i);
                     // A tagged template expression provides a special first argument, and string literals get string literal types
                     // unless we're reporting errors
                     let argType = i === 0 && node.kind === SyntaxKind.TaggedTemplateExpression ? globalTemplateStringsArrayType :
@@ -7145,14 +7178,9 @@ module ts {
         }
 
         function getTypeAtPosition(signature: Signature, pos: number): Type {
-            if (pos >= 0) {
-                return signature.hasRestParameter ?
-                    pos < signature.parameters.length - 1 ? getTypeOfSymbol(signature.parameters[pos]) : getRestTypeOfSignature(signature) :
-                    pos < signature.parameters.length ? getTypeOfSymbol(signature.parameters[pos]) : anyType;
-            }
             return signature.hasRestParameter ?
-                getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]) :
-                anyArrayType;
+                pos < signature.parameters.length - 1 ? getTypeOfSymbol(signature.parameters[pos]) : getRestTypeOfSignature(signature) :
+                pos < signature.parameters.length ? getTypeOfSymbol(signature.parameters[pos]) : anyType;
         }
 
         function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper) {
@@ -7588,11 +7616,10 @@ module ts {
         }
 
         function checkArrayLiteralAssignment(node: ArrayLiteralExpression, sourceType: Type, contextualMapper?: TypeMapper): Type {
-            // TODOO(andersh): Allow iterable source type in ES6
-            if (!isArrayLikeType(sourceType)) {
-                error(node, Diagnostics.Type_0_is_not_an_array_type, typeToString(sourceType));
-                return sourceType;
-            }
+            // This elementType will be used if the specific property corresponding to this index is not
+            // present (aka the tuple element property). This call also checks that the parentType is in
+            // fact an iterable or array (depending on target language).
+            let elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false);
             let elements = node.elements;
             for (let i = 0; i < elements.length; i++) {
                 let e = elements[i];
@@ -7600,8 +7627,9 @@ module ts {
                     if (e.kind !== SyntaxKind.SpreadElementExpression) {
                         let propName = "" + i;
                         let type = sourceType.flags & TypeFlags.Any ? sourceType :
-                            isTupleLikeType(sourceType) ? getTypeOfPropertyOfType(sourceType, propName) :
-                                getIndexTypeOfType(sourceType, IndexKind.Number);
+                            isTupleLikeType(sourceType)
+                                ? getTypeOfPropertyOfType(sourceType, propName)
+                                : elementType;
                         if (type) {
                             checkDestructuringAssignment(e, type, contextualMapper);
                         }
@@ -7616,7 +7644,7 @@ module ts {
                     }
                     else {
                         if (i === elements.length - 1) {
-                            checkReferenceAssignment((<SpreadElementExpression>e).expression, sourceType, contextualMapper);
+                            checkReferenceAssignment((<SpreadElementExpression>e).expression, createArrayType(elementType), contextualMapper);
                         }
                         else {
                             error(e, Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
@@ -9373,29 +9401,41 @@ module ts {
 
         function checkRightHandSideOfForOf(rhsExpression: Expression): Type {
             let expressionType = getTypeOfExpression(rhsExpression);
-            return languageVersion >= ScriptTarget.ES6
-                ? checkIteratedType(expressionType, rhsExpression)
-                : checkElementTypeOfArrayOrString(expressionType, rhsExpression);
+            return checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true);
+        }
+
+        function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean): Type {
+            if (languageVersion >= ScriptTarget.ES6) {
+                return checkIteratedType(inputType, errorNode) || anyType;
+            }
+
+            if (allowStringInput) {
+                return checkElementTypeOfArrayOrString(inputType, errorNode);
+            }
+            
+            if (isArrayLikeType(inputType)) {
+                return getIndexTypeOfType(inputType, IndexKind.Number);
+            }
+
+            error(errorNode, Diagnostics.Type_0_is_not_an_array_type, typeToString(inputType));
+            return unknownType;
         }
 
         /**
-         * When expressionForError is undefined, it means we should not report any errors.
+         * When errorNode is undefined, it means we should not report any errors.
          */
-        function checkIteratedType(iterable: Type, expressionForError: Expression): Type {
+        function checkIteratedType(iterable: Type, errorNode: Node): Type {
             Debug.assert(languageVersion >= ScriptTarget.ES6);
-            let iteratedType = getIteratedType(iterable, expressionForError);
+            let iteratedType = getIteratedType(iterable, errorNode);
             // Now even though we have extracted the iteratedType, we will have to validate that the type
             // passed in is actually an Iterable.
-            if (expressionForError && iteratedType) {
-                let completeIterableType = globalIterableType !== emptyObjectType
-                    ? createTypeReference(<GenericType>globalIterableType, [iteratedType])
-                    : emptyObjectType;
-                checkTypeAssignableTo(iterable, completeIterableType, expressionForError);
+            if (errorNode && iteratedType) {
+                checkTypeAssignableTo(iterable, createIterableType(iteratedType), errorNode);
             }
 
             return iteratedType;
 
-            function getIteratedType(iterable: Type, expressionForError: Expression) {
+            function getIteratedType(iterable: Type, errorNode: Node) {
                 // We want to treat type as an iterable, and get the type it is an iterable of. The iterable
                 // must have the following structure (annotated with the names of the variables below):
                 //
@@ -9426,6 +9466,12 @@ module ts {
                     return undefined;
                 }
 
+                // As an optimization, if the type is instantiated directly using the globalIterableType (Iterable<number>),
+                // then just grab its type argument.
+                if ((iterable.flags & TypeFlags.Reference) && (<GenericType>iterable).target === globalIterableType) {
+                    return (<GenericType>iterable).typeArguments[0];
+                }
+
                 let iteratorFunction = getTypeOfPropertyOfType(iterable, getPropertyNameForKnownSymbolName("iterator"));
                 if (iteratorFunction && allConstituentTypesHaveKind(iteratorFunction, TypeFlags.Any)) {
                     return undefined;
@@ -9433,8 +9479,8 @@ module ts {
 
                 let iteratorFunctionSignatures = iteratorFunction ? getSignaturesOfType(iteratorFunction, SignatureKind.Call) : emptyArray;
                 if (iteratorFunctionSignatures.length === 0) {
-                    if (expressionForError) {
-                        error(expressionForError, Diagnostics.The_right_hand_side_of_a_for_of_statement_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
+                    if (errorNode) {
+                        error(errorNode, Diagnostics.Type_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
                     }
                     return undefined;
                 }
@@ -9451,8 +9497,8 @@ module ts {
 
                 let iteratorNextFunctionSignatures = iteratorNextFunction ? getSignaturesOfType(iteratorNextFunction, SignatureKind.Call) : emptyArray;
                 if (iteratorNextFunctionSignatures.length === 0) {
-                    if (expressionForError) {
-                        error(expressionForError, Diagnostics.The_iterator_returned_by_the_right_hand_side_of_a_for_of_statement_must_have_a_next_method);
+                    if (errorNode) {
+                        error(errorNode, Diagnostics.An_iterator_must_have_a_next_method);
                     }
                     return undefined;
                 }
@@ -9464,8 +9510,8 @@ module ts {
 
                 let iteratorNextValue = getTypeOfPropertyOfType(iteratorNextResult, "value");
                 if (!iteratorNextValue) {
-                    if (expressionForError) {
-                        error(expressionForError, Diagnostics.The_type_returned_by_the_next_method_of_an_iterator_must_have_a_value_property);
+                    if (errorNode) {
+                        error(errorNode, Diagnostics.The_type_returned_by_the_next_method_of_an_iterator_must_have_a_value_property);
                     }
                     return undefined;
                 }
@@ -9491,7 +9537,7 @@ module ts {
          *   1. Some constituent is neither a string nor an array.
          *   2. Some constituent is a string and target is less than ES5 (because in ES3 string is not indexable).
          */
-        function checkElementTypeOfArrayOrString(arrayOrStringType: Type, expressionForError: Expression): Type {
+        function checkElementTypeOfArrayOrString(arrayOrStringType: Type, errorNode: Node): Type {
             Debug.assert(languageVersion < ScriptTarget.ES6);
 
             // After we remove all types that are StringLike, we will know if there was a string constituent
@@ -9502,7 +9548,7 @@ module ts {
             let reportedError = false;
             if (hasStringConstituent) {
                 if (languageVersion < ScriptTarget.ES5) {
-                    error(expressionForError, Diagnostics.Using_a_string_in_a_for_of_statement_is_only_supported_in_ECMAScript_5_and_higher);
+                    error(errorNode, Diagnostics.Using_a_string_in_a_for_of_statement_is_only_supported_in_ECMAScript_5_and_higher);
                     reportedError = true;
                 }
 
@@ -9522,7 +9568,7 @@ module ts {
                     let diagnostic = hasStringConstituent
                         ? Diagnostics.Type_0_is_not_an_array_type
                         : Diagnostics.Type_0_is_not_an_array_type_or_a_string_type;
-                    error(expressionForError, diagnostic, typeToString(arrayType));
+                    error(errorNode, diagnostic, typeToString(arrayType));
                 }
                 return hasStringConstituent ? stringType : unknownType;
             }
