@@ -5301,7 +5301,7 @@ module ts {
                     break;
                 }
 
-                let range = { pos: triviaScanner.getTokenPos(), end: triviaScanner.getTextPos() };
+                let range = { pos: triviaScanner.getTokenPos(), end: triviaScanner.getTextPos(), kind: triviaScanner.getToken() };
 
                 let comment = sourceText.substring(range.pos, range.end);
                 let referencePathMatchResult = getFileReferenceFromReferencePath(comment, range);

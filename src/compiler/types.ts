@@ -985,6 +985,7 @@ module ts {
 
     export interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
+        kind: SyntaxKind;
     }
 
     // Source files are declarations when they are external modules.
