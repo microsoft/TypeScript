@@ -673,27 +673,23 @@
     },
     "Identifier expected. '{0}' is a reserved word. Class definitions are automatically in strict mode.": {
         "category": "Error",
-        "code": 1212
+        "code": 1213
     },
     "Identifier expected. '{0}' is a reserved word. Module is automatically in strict mode.": {
         "category": "Error",
-        "code": 1212
+        "code": 1214
     },
     "Type expected. '{0}' is a reserved word in strict mode": {
         "category": "Error",
-        "code": 1212
+        "code": 1215
     },
     "Type expected. '{0}' is a reserved word. Class definitions are automatically in strict mode.": {
         "category": "Error",
-        "code": 1212
+        "code": 1216
     },
     "Type expected. '{0}' is a reserved word. Module is automatically in strict mode.": {
         "category": "Error",
-        "code": 1212
-    },
-    "ImportDecl/ExportDecl/ImportEqaul": {
-        "category": "Error",
-        "code": 1212
+        "code": 1217
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",

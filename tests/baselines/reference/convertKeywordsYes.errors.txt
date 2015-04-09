@@ -1,12 +1,12 @@
-tests/cases/compiler/convertKeywordsYes.ts(292,11): error TS1212: Identifier expected. 'implements' is a reserved word. Class definitions are automatically in strict mode.
-tests/cases/compiler/convertKeywordsYes.ts(293,11): error TS1212: Identifier expected. 'interface' is a reserved word. Class definitions are automatically in strict mode.
-tests/cases/compiler/convertKeywordsYes.ts(294,11): error TS1212: Identifier expected. 'let' is a reserved word. Class definitions are automatically in strict mode.
-tests/cases/compiler/convertKeywordsYes.ts(296,11): error TS1212: Identifier expected. 'package' is a reserved word. Class definitions are automatically in strict mode.
-tests/cases/compiler/convertKeywordsYes.ts(297,11): error TS1212: Identifier expected. 'private' is a reserved word. Class definitions are automatically in strict mode.
-tests/cases/compiler/convertKeywordsYes.ts(298,11): error TS1212: Identifier expected. 'protected' is a reserved word. Class definitions are automatically in strict mode.
-tests/cases/compiler/convertKeywordsYes.ts(299,11): error TS1212: Identifier expected. 'public' is a reserved word. Class definitions are automatically in strict mode.
-tests/cases/compiler/convertKeywordsYes.ts(301,11): error TS1212: Identifier expected. 'static' is a reserved word. Class definitions are automatically in strict mode.
-tests/cases/compiler/convertKeywordsYes.ts(303,11): error TS1212: Identifier expected. 'yield' is a reserved word. Class definitions are automatically in strict mode.
+tests/cases/compiler/convertKeywordsYes.ts(292,11): error TS1213: Identifier expected. 'implements' is a reserved word. Class definitions are automatically in strict mode.
+tests/cases/compiler/convertKeywordsYes.ts(293,11): error TS1213: Identifier expected. 'interface' is a reserved word. Class definitions are automatically in strict mode.
+tests/cases/compiler/convertKeywordsYes.ts(294,11): error TS1213: Identifier expected. 'let' is a reserved word. Class definitions are automatically in strict mode.
+tests/cases/compiler/convertKeywordsYes.ts(296,11): error TS1213: Identifier expected. 'package' is a reserved word. Class definitions are automatically in strict mode.
+tests/cases/compiler/convertKeywordsYes.ts(297,11): error TS1213: Identifier expected. 'private' is a reserved word. Class definitions are automatically in strict mode.
+tests/cases/compiler/convertKeywordsYes.ts(298,11): error TS1213: Identifier expected. 'protected' is a reserved word. Class definitions are automatically in strict mode.
+tests/cases/compiler/convertKeywordsYes.ts(299,11): error TS1213: Identifier expected. 'public' is a reserved word. Class definitions are automatically in strict mode.
+tests/cases/compiler/convertKeywordsYes.ts(301,11): error TS1213: Identifier expected. 'static' is a reserved word. Class definitions are automatically in strict mode.
+tests/cases/compiler/convertKeywordsYes.ts(303,11): error TS1213: Identifier expected. 'yield' is a reserved word. Class definitions are automatically in strict mode.
 
 
 ==== tests/cases/compiler/convertKeywordsYes.ts (9 errors) ====
@@ -303,33 +303,33 @@ tests/cases/compiler/convertKeywordsYes.ts(303,11): error TS1212: Identifier exp
         class constructor { }
         class implements { }
               ~~~~~~~~~~
-!!! error TS1212: Identifier expected. 'implements' is a reserved word. Class definitions are automatically in strict mode.
+!!! error TS1213: Identifier expected. 'implements' is a reserved word. Class definitions are automatically in strict mode.
         class interface { }
               ~~~~~~~~~
-!!! error TS1212: Identifier expected. 'interface' is a reserved word. Class definitions are automatically in strict mode.
+!!! error TS1213: Identifier expected. 'interface' is a reserved word. Class definitions are automatically in strict mode.
         class let { }
               ~~~
-!!! error TS1212: Identifier expected. 'let' is a reserved word. Class definitions are automatically in strict mode.
+!!! error TS1213: Identifier expected. 'let' is a reserved word. Class definitions are automatically in strict mode.
         class module { }
         class package { }
               ~~~~~~~
-!!! error TS1212: Identifier expected. 'package' is a reserved word. Class definitions are automatically in strict mode.
+!!! error TS1213: Identifier expected. 'package' is a reserved word. Class definitions are automatically in strict mode.
         class private { }
               ~~~~~~~
-!!! error TS1212: Identifier expected. 'private' is a reserved word. Class definitions are automatically in strict mode.
+!!! error TS1213: Identifier expected. 'private' is a reserved word. Class definitions are automatically in strict mode.
         class protected { }
               ~~~~~~~~~
-!!! error TS1212: Identifier expected. 'protected' is a reserved word. Class definitions are automatically in strict mode.
+!!! error TS1213: Identifier expected. 'protected' is a reserved word. Class definitions are automatically in strict mode.
         class public { }
               ~~~~~~
-!!! error TS1212: Identifier expected. 'public' is a reserved word. Class definitions are automatically in strict mode.
+!!! error TS1213: Identifier expected. 'public' is a reserved word. Class definitions are automatically in strict mode.
         class set { }
         class static { }
               ~~~~~~
-!!! error TS1212: Identifier expected. 'static' is a reserved word. Class definitions are automatically in strict mode.
+!!! error TS1213: Identifier expected. 'static' is a reserved word. Class definitions are automatically in strict mode.
         class get { }
         class yield { }
               ~~~~~
-!!! error TS1212: Identifier expected. 'yield' is a reserved word. Class definitions are automatically in strict mode.
+!!! error TS1213: Identifier expected. 'yield' is a reserved word. Class definitions are automatically in strict mode.
         class declare { }
     }
