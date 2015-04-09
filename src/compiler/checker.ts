@@ -8345,12 +8345,14 @@ module ts {
             //      class C {
             //          foo(x: public){}  // Error.
             //      }
-            if (node.typeName.kind === SyntaxKind.Identifier && (<Identifier>node.typeName).isKeywordInStrictMode) {
+            if (node.typeName.kind === SyntaxKind.Identifier) {
                 let typeName = <Identifier>node.typeName;
-                let nameText = declarationNameToString(typeName);
-                reportStrictModeGrammarErrorInClassDeclaration(typeName, Diagnostics.Type_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode, nameText) ||
-                reportStrictModeGrammarErrorInModule(typeName, Diagnostics.Type_expected_0_is_a_reserved_word_in_strict_mode_Module_is_automatically_in_strict_mode, nameText) ||
-                grammarErrorOnNode(typeName, Diagnostics.Type_expected_0_is_a_reserved_word_in_strict_mode, nameText);
+                if (isReservedwordInStrictMode(typeName)) {
+                    let nameText = declarationNameToString(typeName);
+                    // TODO(yuisu): Fix this when external module becomes strict mode code;
+                    reportStrictModeGrammarErrorInClassDeclaration(typeName, Diagnostics.Type_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode, nameText) ||
+                    grammarErrorOnNode(typeName, Diagnostics.Type_expected_0_is_a_reserved_word_in_strict_mode, nameText);
+                }
             }
             return checkTypeReferenceOrHeritageClauseElement(node);
         }
@@ -11932,21 +11934,18 @@ module ts {
             anyArrayType = createArrayType(anyType);
         }
 
-
         // GRAMMAR CHECKING
+        function isReservedwordInStrictMode(node: Identifier): boolean {
+            if ((node.parserContextFlags & ParserContextFlags.StrictMode) && node.isKeywordInStrictMode) {
+                return true;
+            }
+            return false
+        }
+
         function reportStrictModeGrammarErrorInClassDeclaration(identifier: Identifier, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
             // We are checking if this name is inside class declaration or class expression (which are under class definitions inside ES6 spec.)
             // if so, we would like to give more explicit invalid usage error.
             if (getAncestor(identifier, SyntaxKind.ClassDeclaration) || getAncestor(identifier, SyntaxKind.ClassExpression)) {
-                return grammarErrorOnNode(identifier, message, arg0);
-            }
-            return false;
-        }
-
-        function reportStrictModeGrammarErrorInModule(identifier: Identifier, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
-            // We are checking if this name is inside module declaration which is automatically a strict mode code in ES6.
-            // If so, we would like to give more explicit invalid usage error.
-            if (getAncestor(identifier, SyntaxKind.ModuleDeclaration)) {
                 return grammarErrorOnNode(identifier, message, arg0);
             }
             return false;
@@ -11983,7 +11982,7 @@ module ts {
 
         function checkGrammarDeclarationNameInStrictMode(node: Declaration): boolean {
             let name = node.name;
-            if (name && name.kind === SyntaxKind.Identifier && (<Identifier>name).isKeywordInStrictMode) {
+            if (name && name.kind === SyntaxKind.Identifier && isReservedwordInStrictMode(<Identifier>name)) {
                 let nameText = declarationNameToString(name);
                 switch (node.kind) {
                     case SyntaxKind.Parameter:
@@ -11994,8 +11993,8 @@ module ts {
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.TypeAliasDeclaration:
                     case SyntaxKind.EnumDeclaration:
+                        // TODO(yuisu): fix this when having external moduel in strict mode
                         let reportError = reportStrictModeGrammarErrorInClassDeclaration(<Identifier>name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode, nameText) ||
-                            reportStrictModeGrammarErrorInModule(<Identifier>name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Module_is_automatically_in_strict_mode, nameText) ||
                             grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
                         return reportError ? reportError : false;
 
@@ -12005,9 +12004,11 @@ module ts {
 
                     case SyntaxKind.ModuleDeclaration:
                         // Report an error if the module declaration uses strict-mode reserved word.
-                        return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Module_is_automatically_in_strict_mode, nameText);
+                        // TODO(yuisu): fix this when having external module in strict mode
+                        return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
 
                     case SyntaxKind.ImportEqualsDeclaration:
+                        // TODO(yuisu): fix this when having external moduel in strict mode
                         return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
                 }
             }
@@ -12015,7 +12016,7 @@ module ts {
         }
 
         function checkGrammarExpressionInStrictMode(node: Expression): boolean {
-            if (node.kind === SyntaxKind.Identifier && (<Identifier>node).isKeywordInStrictMode) {
+            if (node.kind === SyntaxKind.Identifier && isReservedwordInStrictMode(<Identifier>node)) {
                 let nameText = declarationNameToString(<Identifier>node);
                 return grammarErrorOnNode(node, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
             }
