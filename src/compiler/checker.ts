@@ -11936,7 +11936,7 @@ module ts {
 
         // GRAMMAR CHECKING
         function isReservedwordInStrictMode(node: Identifier): boolean {
-            if ((node.parserContextFlags & ParserContextFlags.StrictMode) && node.isKeywordInStrictMode) {
+            if ((node.parserContextFlags & ParserContextFlags.StrictMode) && node.originalSyntaxKind) {
                 return true;
             }
             return false
@@ -11959,7 +11959,7 @@ module ts {
                     let nameBindings = impotClause.namedBindings;
                     if (nameBindings.kind === SyntaxKind.NamespaceImport) {
                         let name = <Identifier>(<NamespaceImport>nameBindings).name;
-                        if (name.isKeywordInStrictMode) {
+                        if (name.originalSyntaxKind) {
                             let nameText = declarationNameToString(name);
                             return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
                         }
@@ -11968,7 +11968,7 @@ module ts {
                         let reportError = false;
                         for (let element of (<NamedImports>nameBindings).elements) {
                             let name = element.name;
-                            if (name.isKeywordInStrictMode) {
+                            if (name.originalSyntaxKind) {
                                 let nameText = declarationNameToString(name);
                                 reportError = grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
                             }

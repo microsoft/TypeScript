@@ -1489,7 +1489,7 @@ module ts {
 
                 // Store original token kind so we can report appropriate error later in type checker
                 if (token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastFutureReservedWord) {
-                    node.isKeywordInStrictMode = token;
+                    node.originalSyntaxKind = token;
                 }
                 node.text = internIdentifier(scanner.getTokenValue());
                 nextToken();
