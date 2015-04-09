@@ -1350,6 +1350,7 @@ module ts {
             return speculationHelper(callback, /*isLookAhead:*/ false);
         }
 
+        // Ignore strict mode flag because we will be report an error in type checker instead.
         function isIdentifier(): boolean {
             if (token === SyntaxKind.Identifier) {
                 return true;
@@ -1361,7 +1362,7 @@ module ts {
                 return false;
             }
 
-            return inStrictModeContext() ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord;
+            return token > SyntaxKind.LastReservedWord;
         }
 
         function parseExpected(kind: SyntaxKind, diagnosticMessage?: DiagnosticMessage): boolean {
@@ -1485,6 +1486,11 @@ module ts {
             identifierCount++;
             if (isIdentifier) {
                 let node = <Identifier>createNode(SyntaxKind.Identifier);
+
+                // Set strictModeKind property so that we can report appropriate error later in type checker
+                if (inStrictModeContext() && (token > SyntaxKind.Identifier && token <= SyntaxKind.LastFutureReservedWord)) {
+                    node.strictModeKind = token;
+                }
                 node.text = internIdentifier(scanner.getTokenValue());
                 nextToken();
                 return finishNode(node);
