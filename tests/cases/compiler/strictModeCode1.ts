@@ -23,5 +23,6 @@ class D<public, private>{ }
 class E implements public { }
 
 class F implements public.private.B { }
+class F1 implements public.private.implements { }
 class G extends package { }
 class H extends package.A { }

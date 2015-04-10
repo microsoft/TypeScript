@@ -12012,35 +12012,22 @@ module ts {
             }
             // Report an error for each identifier in QualifiedName
             // Example:
-            //      foo (x: public.private.bar)  // Error at public, private
-            //      foo (x: public.private.package)  // Error at public, private, package
+            //      foo (x: public.private.bar)      // no Error
+            //      foo (x: public.private.package)  // error at package
             else if (typeName.kind === SyntaxKind.QualifiedName) {
-                let partOfTypeName = typeName;
-
-                // Keep traverse from right to left in QualifiedName and report an error at each one
-                // Stop when the next left is not longer a QualifiedName, then it must be the first component
-                // in QualifiedName and must be an Identifier.
+                // Report strict mode at the property of memberExpression
                 // Example:
-                //      x1: public.private.package // Error at public, private
-                while (partOfTypeName && partOfTypeName.kind === SyntaxKind.QualifiedName) {
-                    let name = (<QualifiedName>partOfTypeName).right;
-                    checkGrammarTypeNameInStrictMode(name);
-                    partOfTypeName = (<QualifiedName>partOfTypeName).left;
-                }
-
-                // Report and error at the component in QualifiedName which must be an identifier.
-                // Example:
-                //      x1: public.private.package // Error at package
-                checkGrammarTypeNameInStrictMode(<Identifier>partOfTypeName);
+                //      x1: public.private.package // error at package as memberExpression can be IdentifierName
+                checkGrammarTypeNameInStrictMode((<QualifiedName>typeName).right);
             }
         }
 
         // This function will report an error for every identifier in property access expression
         // whether it violates strict mode reserved words.
         // Example:
-        //      public.B          // error at public
-        //      public.private.A  // error at public and private
-        //      public.private.package  // error at public and private and package
+        //      public                  // error at public
+        //      public.private.package  // error at package
+        //      public.private.B        // no error
         function checkGrammarHeritageClauseElementInStrictMode(expression: Expression) {
             // Example:
             //      class C extends public // error at public
@@ -12050,21 +12037,10 @@ module ts {
             else if (expression && expression.kind === SyntaxKind.PropertyAccessExpression) {
                 let propertyAccessExp = <PropertyAccessExpression>expression;
 
-                // Keep traverse from right to left in propertyAccessExpression and report an error at each name
-                // in the PropertyAccessExpression.
-                // Stop when expression is no longer a propertyAccessExpression, then it must be the first
-                // expression in PropertyAccessExpression and must be an Identifier.
+                // Report strict mode at the property of memberExpression
                 // Example:
-                //      public.private.package  // error at package, private
-                while (propertyAccessExp && propertyAccessExp.kind === SyntaxKind.PropertyAccessExpression) {
-                    checkGrammarIdentifierInStrictMode(propertyAccessExp.name);
-                    propertyAccessExp = <PropertyAccessExpression>propertyAccessExp.expression;
-                }
-
-                // Report an error at the first expression in PropertyAccessExpression
-                // Example:
-                //      public.private.package  // error at public
-                checkGrammarIdentifierInStrictMode(propertyAccessExp);
+                //      public.private.package  // error at package as memberExpression can be IdentifierName
+                checkGrammarIdentifierInStrictMode((<PropertyAccessExpression>expression).name);
             }
 
         }

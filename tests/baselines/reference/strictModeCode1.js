@@ -24,6 +24,7 @@ class D<public, private>{ }
 class E implements public { }
 
 class F implements public.private.B { }
+class F1 implements public.private.implements { }
 class G extends package { }
 class H extends package.A { }
 
@@ -66,6 +67,11 @@ var F = (function () {
     function F() {
     }
     return F;
+})();
+var F1 = (function () {
+    function F1() {
+    }
+    return F1;
 })();
 var G = (function (_super) {
     __extends(G, _super);
