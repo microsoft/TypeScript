@@ -1,7 +1,7 @@
 ///<reference path='references.ts' />
 
 
-/** @internal */
+/* @internal */
 module ts.formatting {
     export const enum RuleFlags {
         None,

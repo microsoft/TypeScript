@@ -1,5 +1,5 @@
 ///<reference path='services.ts' />
-/** @internal */
+/* @internal */
 module ts.SignatureHelp {
 
     // A partially written generic type expression is not guaranteed to have the correct syntax tree. the expression could be parsed as less than/greater than expression or a comma expression

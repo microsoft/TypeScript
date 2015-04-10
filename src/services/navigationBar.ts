@@ -1,6 +1,6 @@
 /// <reference path='services.ts' />
 
-/** @internal */
+/* @internal */
 module ts.NavigationBar {
     export function getNavigationBarItems(sourceFile: SourceFile): ts.NavigationBarItem[]  {
         // If the source file has any child items, then it included in the tree

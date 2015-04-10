@@ -1,6 +1,6 @@
 ///<reference path='references.ts' />
 
-/** @internal */
+/* @internal */
 module ts.formatting {
     export class RuleOperation {
         public Context: RuleOperationContext;

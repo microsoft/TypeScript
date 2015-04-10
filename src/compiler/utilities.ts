@@ -1,6 +1,6 @@
 /// <reference path="binder.ts" />
 
-/** @internal */
+/* @internal */
 module ts {
     export interface ReferencePathMatchResult {
         fileReference?: FileReference
@@ -1379,7 +1379,7 @@ module ts {
         return node;
     }
 
-    // @internal
+    /* @internal */
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
         let fileDiagnostics: Map<Diagnostic[]> = {};

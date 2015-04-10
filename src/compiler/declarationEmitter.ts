@@ -1,6 +1,6 @@
 /// <reference path="checker.ts"/>
 
-/** @internal */
+/* @internal */
 module ts {
     interface ModuleElementDeclarationEmitInfo {
         node: Node;
@@ -1561,7 +1561,7 @@ module ts {
         }
     }
     
-    // @internal
+    /* @internal */
     export function writeDeclarationFile(jsFilePath: string, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[]) {
         let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, jsFilePath, sourceFile);
         // TODO(shkamat): Should we not write any declaration file if any of them can produce error,

@@ -1,6 +1,6 @@
 ///<reference path='references.ts' />
 
-/** @internal */
+/* @internal */
 module ts.formatting {
     export const enum RuleAction {
         Ignore      = 0x00000001,

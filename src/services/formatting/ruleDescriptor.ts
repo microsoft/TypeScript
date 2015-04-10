@@ -1,6 +1,6 @@
 ///<reference path='references.ts' />
 
-/** @internal */
+/* @internal */
 module ts.formatting {
     export class RuleDescriptor {
         constructor(public LeftTokenRange: Shared.TokenRange, public RightTokenRange: Shared.TokenRange) {

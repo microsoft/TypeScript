@@ -1573,7 +1573,7 @@ module ts {
         (t: Type): Type;
     }
 
-    // @internal
+    /* @internal */
     export interface TypeInferences {
         primary: Type[];    // Inferences made directly to a type parameter
         secondary: Type[];  // Inferences made to a type parameter in a union type
@@ -1581,7 +1581,7 @@ module ts {
                             // If a type parameter is fixed, no more inferences can be made for the type parameter
     }
 
-    // @internal
+    /* @internal */
     export interface InferenceContext {
         typeParameters: TypeParameter[];    // Type parameters for which inferences are made
         inferUnionTypes: boolean;           // Infer union types for disjoint candidates (otherwise undefinedType)
@@ -1860,7 +1860,7 @@ module ts {
         newLength: number;
     }
 
-    // @internal
+    /* @internal */
     export interface DiagnosticCollection {
         // Adds a diagnostic to this diagnostic collection.
         add(diagnostic: Diagnostic): void;

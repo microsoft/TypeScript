@@ -1,6 +1,6 @@
 ///<reference path='..\services.ts' />
 
-/** @internal */
+/* @internal */
 module ts.formatting {
     export module SmartIndenter {
 

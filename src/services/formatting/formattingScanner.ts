@@ -1,7 +1,7 @@
 /// <reference path="formatting.ts"/>
 /// <reference path="..\..\compiler\scanner.ts"/>
 
-/** @internal */
+/* @internal */
 module ts.formatting {
     let scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
 
