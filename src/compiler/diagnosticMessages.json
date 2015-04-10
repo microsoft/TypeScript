@@ -1419,6 +1419,14 @@
         "category": "Error",
         "code": 2500
     },
+    "Duplicate identifier '_arguments'. Compiler uses variable declaration '_arguments' to capture 'arguments' reference.": {
+        "category": "Error",
+        "code": 2501
+    },
+    "Expression resolves to variable declaration '_arguments' that compiler uses to capture 'arguments' reference.": {
+        "category": "Error",
+        "code": 2502
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
