@@ -218,8 +218,9 @@ var compilerFilename = "tsc.js";
     * @param outDir: true to compile using --outDir
     * @param keepComments: false to compile using --removeComments
     * @param callback: a function to execute after the compilation process ends
+    * @param target: a string represting the compilation target, e.g. "es5"
     */
-function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
+function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback, target) {
     file(outFile, prereqs, function() {
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
         var options = "--module commonjs -noImplicitAny";
@@ -230,6 +231,10 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
             options += " --removeComments";
         }
 
+        if (target) {
+            options += " --target " + target;
+        }
+ 
         if (generateDeclarations) {
             options += " --declaration";
         }
@@ -367,7 +372,7 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
             /*stripInternal*/ false,
             /*callback*/ function () { 
                 jake.cpR(servicesFile, nodePackageFile, {silent: true});
-            });
+            }, /*target*/ "es5");
 
 var nodeDefinitionsFile = path.join(builtLocalDirectory, "typescript.d.ts");
 var standaloneDefinitionsFile = path.join(builtLocalDirectory, "typescriptServices.d.ts");
@@ -407,7 +412,7 @@ compileFile(nodeDefinitionsFile, servicesSources,[builtLocalDirectory, copyright
 
                 // Delete the temp dir
                 jake.rmRf(tempDirPath, {silent: true});
-           });
+           }, /*target*/ "es5");
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
@@ -493,7 +498,16 @@ directory(builtLocalDirectory);
 
 // Task to build the tests infrastructure using the built compiler
 var run = path.join(builtLocalDirectory, "run.js");
-compileFile(run, harnessSources, [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources), [], /*useBuiltCompiler:*/ true);
+compileFile(run, harnessSources, [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources), [], /*useBuiltCompiler:*/ true, 
+            /*noOutFile*/ undefined,
+            /*generateDeclarations*/ undefined,
+            /*outDir*/ undefined,
+            /*preserveConstEnums*/ undefined,
+            /*keepComments*/ undefined,
+            /*noResolve*/ undefined,
+            /*stripInternal*/ undefined,
+            /*callback*/ undefined,
+            /*target*/ "es5");
 
 var internalTests = "internal/"
 
