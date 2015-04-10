@@ -10,6 +10,6 @@ class C {
 >C : C
 
     constructor(@dec p: number) {}
->dec : unknown
+>dec : (target: Function, propertyKey: string | symbol, parameterIndex: number) => void
 >p : number
 }
