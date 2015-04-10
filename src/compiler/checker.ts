@@ -12243,6 +12243,10 @@ module ts {
                         return grammarErrorOnNode(parameter.dotDotDotToken, Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list);
                     }
 
+                    if (parameter.name.kind === SyntaxKind.ArrayBindingPattern || parameter.name.kind === SyntaxKind.ObjectBindingPattern) {
+                        return grammarErrorOnNode(parameter.name, Diagnostics.A_rest_element_cannot_contain_a_binding_pattern);
+                    }
+
                     if (parameter.questionToken) {
                         return grammarErrorOnNode(parameter.questionToken, Diagnostics.A_rest_parameter_cannot_be_optional);
                     }
