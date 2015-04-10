@@ -7633,7 +7633,7 @@ module ts {
             // This elementType will be used if the specific property corresponding to this index is not
             // present (aka the tuple element property). This call also checks that the parentType is in
             // fact an iterable or array (depending on target language).
-            let elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false);
+            let elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false) || unknownType;
             let elements = node.elements;
             for (let i = 0; i < elements.length; i++) {
                 let e = elements[i];
