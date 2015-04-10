@@ -3602,6 +3602,13 @@ module ts {
             filename = normalizeSlashes(filename);
             var sourceFile = getSourceFile(filename);
 
+            var result = getOccurrencesAtPositionCore(sourceFile, position);
+
+            // Only return results that are from the file being asked for.
+            return filter(result, r => r.fileName === filename);
+        }
+
+        function getOccurrencesAtPositionCore(sourceFile: SourceFile, position: number): ReferenceEntry[]{
             var node = getTouchingWord(sourceFile, position);
             if (!node) {
                 return undefined;
@@ -3731,7 +3738,7 @@ module ts {
                         
                         if (shouldHighlightNextKeyword) {
                             result.push({
-                                fileName: filename,
+                                fileName: sourceFile.filename,
                                 textSpan: TextSpan.fromBounds(elseKeyword.getStart(), ifKeyword.end),
                                 isWriteAccess: false
                             });
