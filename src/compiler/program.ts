@@ -505,7 +505,7 @@ module ts {
 
             // Cannot specify module gen target when in es6 or above
             if (options.module && languageVersion >= ScriptTarget.ES6) {
-                diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_external_modules_into_amd_or_commonjs_when_targeting_es6_or_higher));
+                diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_external_modules_into_amd_system_or_commonjs_when_targeting_es6_or_higher));
             }
 
             // there has to be common source directory if user specified --outdir || --sourceRoot

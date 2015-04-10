@@ -50,11 +50,12 @@ module ts {
             shortName: "m",
             type: {
                 "commonjs": ModuleKind.CommonJS,
-                "amd": ModuleKind.AMD
+                "amd": ModuleKind.AMD,
+                "system": ModuleKind.System,
             },
-            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_or_amd,
+            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_system_or_amd,
             paramType: Diagnostics.KIND,
-            error: Diagnostics.Argument_for_module_option_must_be_commonjs_or_amd
+            error: Diagnostics.Argument_for_module_option_must_be_commonjs_system_or_amd
         },
         {
             name: "noEmit",

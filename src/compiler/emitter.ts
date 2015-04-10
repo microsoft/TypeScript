@@ -117,6 +117,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
             let decreaseIndent = writer.decreaseIndent;
 
             let currentSourceFile: SourceFile;
+            let exportFunctionForFile: string;
 
             let generatedNameSet: Map<string> = {};
             let nodeToGeneratedName: string[] = [];
@@ -191,6 +192,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
             function emitSourceFile(sourceFile: SourceFile): void {
                 currentSourceFile = sourceFile;
+                exportFunctionForFile = undefined;
                 emit(sourceFile);
             }
 
@@ -1136,7 +1138,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         if (!computedPropertyNamesToGeneratedNames) {
                             computedPropertyNamesToGeneratedNames = [];
                         }
-                        
+
                         let generatedName = computedPropertyNamesToGeneratedNames[getNodeId(node)];
                         if (generatedName) {
                             // we have already generated a variable for this node, write that value instead.
@@ -1584,7 +1586,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 result.name = name;
 
                 return result;
-             }
+            }
 
             function createElementAccessExpression(expression: LeftHandSideExpression, argumentExpression: Expression): ElementAccessExpression {
                 let result = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression);
@@ -2060,6 +2062,10 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function emitStartOfVariableDeclarationList(decl: Node, startPos?: number): void {
+                if (currentFileIsEmittedAsSystemModule() && isSourceFileLevelDeclaration(decl)) {
+                    Debug.assert(compilerOptions.module === ModuleKind.System);
+                    return;
+                }
                 let tokenKind = SyntaxKind.VarKeyword;
                 if (decl && languageVersion >= ScriptTarget.ES6) {
                     if (isLet(decl)) {
@@ -2072,6 +2078,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
                 if (startPos !== undefined) {
                     emitToken(tokenKind, startPos);
+                    write(" ")
                 }
                 else {
                     switch (tokenKind) {
@@ -2093,7 +2100,6 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     let variableDeclarationList = <VariableDeclarationList>node.initializer;
                     let declarations = variableDeclarationList.declarations;
                     emitStartOfVariableDeclarationList(declarations[0], endPos);
-                    write(" ");
                     emitCommaList(declarations);
                 }
                 else if (node.initializer) {
@@ -2120,7 +2126,6 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     if (variableDeclarationList.declarations.length >= 1) {
                         let decl = variableDeclarationList.declarations[0];
                         emitStartOfVariableDeclarationList(decl, endPos);
-                        write(" ");
                         emit(decl);
                     }
                 }
@@ -2415,7 +2420,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         write(getGeneratedNameForNode(container));
                         write(".");
                     }
-                    else if (languageVersion < ScriptTarget.ES6) {
+                    else if (languageVersion < ScriptTarget.ES6 && compilerOptions.module !== ModuleKind.System) {
                         write("exports.");
                     }
                 }
@@ -2435,14 +2440,28 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 if (node.flags & NodeFlags.Export) {
                     writeLine();
                     emitStart(node);
-                    if (node.flags & NodeFlags.Default) {
-                        write("exports.default");
+                    if (compilerOptions.module === ModuleKind.System) {
+                        write(`${exportFunctionForFile}("`);
+                        if (node.flags & NodeFlags.Default) {
+                            write("default");
+                        }
+                        else {
+                            emitNodeWithoutSourceMap(node.name);
+                        }
+                        write(`", `);
+                        emitDeclarationName(node);
+                        write(")")
                     }
                     else {
-                        emitModuleMemberName(node);
+                        if (node.flags & NodeFlags.Default) {
+                            write("exports.default");
+                        }
+                        else {
+                            emitModuleMemberName(node);
+                        }
+                        write(" = ");
+                        emitDeclarationName(node);
                     }
-                    write(" = ");
-                    emitDeclarationName(node);
                     emitEnd(node);
                     write(";");
                 }
@@ -2453,12 +2472,21 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     for (let specifier of exportSpecifiers[name.text]) {
                         writeLine();
                         emitStart(specifier.name);
-                        emitContainingModuleName(specifier);
-                        write(".");
-                        emitNodeWithoutSourceMap(specifier.name);
-                        emitEnd(specifier.name);
-                        write(" = ");
-                        emitExpressionIdentifier(name);
+                        if (compilerOptions.module === ModuleKind.System) {
+                            write(`${exportFunctionForFile}("`);
+                            emitNodeWithoutSourceMap(specifier.name);
+                            write(`", `);
+                            emitExpressionIdentifier(name);
+                            write(")")
+                        }
+                        else {
+                            emitContainingModuleName(specifier);
+                            write(".");
+                            emitNodeWithoutSourceMap(specifier.name);
+                            emitEnd(specifier.name);
+                            write(" = ");
+                            emitExpressionIdentifier(name);
+                        }
                         write(";");
                     }
                 }
@@ -2477,7 +2505,18 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 let emitCount = 0;
                 // An exported declaration is actually emitted as an assignment (to a property on the module object), so
                 // temporary variables in an exported declaration need to have real declarations elsewhere
-                let isDeclaration = (root.kind === SyntaxKind.VariableDeclaration && !(getCombinedNodeFlags(root) & NodeFlags.Export)) || root.kind === SyntaxKind.Parameter;
+                // Also temporary variables should be explicitly allocated for source level declarations when module target is system
+                // because actual variable declarations are hoisted
+                let canDefineTempVariablesInplace = false;
+                if (root.kind === SyntaxKind.VariableDeclaration) {
+                    let isExported = getCombinedNodeFlags(root) & NodeFlags.Export;
+                    let isSourceLevelForSystemModuleKind = currentFileIsEmittedAsSystemModule() && isSourceFileLevelDeclaration(root);
+                    canDefineTempVariablesInplace = !isExported && !isSourceLevelForSystemModuleKind;
+                }
+                else if (root.kind === SyntaxKind.Parameter) {
+                    canDefineTempVariablesInplace = true;
+                }
+
                 if (root.kind === SyntaxKind.BinaryExpression) {
                     emitAssignmentExpression(<BinaryExpression>root);
                 }
@@ -2508,7 +2547,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         // as the location for determining uniqueness of the variable we are about to
                         // generate.
                         let identifier = createTempVariable(TempFlags.Auto);
-                        if (!isDeclaration) {
+                        if (!canDefineTempVariablesInplace) {
                             recordTempDeclaration(identifier);
                         }
                         emitAssignment(identifier, expr);
@@ -2788,6 +2827,10 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
                 if (resolver.resolvesToSomeValue(parent, (<Identifier>node).text)) {
                     let variableId = resolver.getBlockScopedVariableId(<Identifier>node);
+                    if (blockScopedVariableToGeneratedName && blockScopedVariableToGeneratedName[variableId]) {
+                        // already renamed
+                        return;
+                    }
                     if (!blockScopedVariableToGeneratedName) {
                         blockScopedVariableToGeneratedName = [];
                     }
@@ -4418,6 +4461,8 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function emitExportDeclaration(node: ExportDeclaration) {
+                Debug.assert(compilerOptions.module !== ModuleKind.System);
+
                 if (languageVersion < ScriptTarget.ES6) {
                     if (node.moduleSpecifier && (!node.exportClause || resolver.isValueAliasDeclaration(node))) {
                         emitStart(node);
@@ -4523,9 +4568,16 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     else {
                         writeLine();
                         emitStart(node);
-                        emitContainingModuleName(node);
-                        write(".default = ");
-                        emit(node.expression);
+                        if (compilerOptions.module === ModuleKind.System) {
+                            write(`${exportFunctionForFile}("default",`);
+                            emit(node.expression);
+                            write(")");
+                        }
+                        else {
+                            emitContainingModuleName(node);
+                            write(".default = ");
+                            emit(node.expression);
+                        }
                         write(";");
                         emitEnd(node);
                     }
@@ -4611,6 +4663,248 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
             }
 
+            function writeModuleNamesForExternalImports(startWithComma: boolean): void {
+                let started = startWithComma;
+                for (let importNode of externalImports) {
+                    if (started) {
+                        write(", ");
+                    }
+                    else {
+                        started = true;
+                    }
+                    let moduleName = getExternalModuleName(importNode);
+                    if (moduleName.kind === SyntaxKind.StringLiteral) {
+                        emitLiteral(<LiteralExpression>moduleName);
+                    }
+                    else {
+                        write("\"\"");
+                    }
+                }
+            }
+
+            function writeLocalNameForExternalImport(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): void {
+                let namespaceDeclaration = getNamespaceDeclarationNode(importNode);
+                if (namespaceDeclaration && !isDefaultImport(importNode)) {
+                    emit(namespaceDeclaration.name);
+                }
+                else {
+                    write(getGeneratedNameForNode(<ImportDeclaration | ExportDeclaration>importNode));
+                }
+            }
+
+            function writeLocalNamesForExternalImports(startWithComma: boolean): void {
+                let started = startWithComma;
+                for (let importNode of externalImports) {
+
+                    if (started) {
+                        write(", ");
+                    }
+                    else {
+                        started = true;
+                    }
+
+                    writeLocalNameForExternalImport(importNode);
+                }
+
+            }
+
+            function emitVariableDeclarationsForImports(): void {
+                if (externalImports.length === 0) {
+                    return;
+                }
+
+                writeLine();
+                let started = false;
+                for (let importNode of externalImports) {
+                    if (importNode.kind === SyntaxKind.ExportDeclaration) {
+                        continue;
+                    }
+
+                    if (!started) {
+                        write("var ");
+                        started = true;
+                    }
+                    else {
+                        write(", ");
+                    }
+                    writeLocalNameForExternalImport(importNode);
+                }
+
+                if (started) {
+                    write(";");
+                }
+            }
+
+            function hoistTopLevelVariableAndFunctionDeclarations(node: SourceFile): void {
+                let hoistedLocals: Identifier[];
+                let hoistedFunctionDeclarations: FunctionDeclaration[];
+
+                visit(node);
+
+                if (hoistedLocals) {
+                    writeLine();
+                    write("var ");
+                    for (let i = 0; i < hoistedLocals.length; ++i) {
+                        let local = hoistedLocals[i];
+                        if (i !== 0) {
+                            write(", ");
+                        }
+                        emit(local);
+                    }
+                    write(";")
+                }
+
+                if (hoistedFunctionDeclarations) {
+                    for (let f of hoistedFunctionDeclarations) {
+                        writeLine();
+                        emit(f);
+                    }
+                }
+
+                function visit(node: Node): void {
+                    if (node.kind === SyntaxKind.FunctionDeclaration) {
+                        (hoistedFunctionDeclarations || (hoistedFunctionDeclarations = [])).push(<FunctionDeclaration>node);
+                        return;
+                    }
+
+                    if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
+                        let name = (<VariableDeclaration | BindingElement>node).name;
+                        if (name.kind === SyntaxKind.Identifier) {
+                            renameNonTopLevelLetAndConst(name);
+                            (hoistedLocals || (hoistedLocals = [])).push(<Identifier>name);
+                        }
+                        else {
+                            forEachChild(name, visit);
+                        }
+                        return;
+                    }
+
+                    if (isBindingPattern(node)) {
+                        forEach((<BindingPattern>node).elements, visit);
+                        return;
+                    }
+
+                    if (!isDeclaration(node)) {
+                        forEachChild(node, visit);
+                    }
+                }
+            }
+
+            function currentFileIsEmittedAsSystemModule(): boolean {
+                return exportFunctionForFile !== undefined;
+            }
+
+            function emitSystemModuleBody(node: SourceFile, startIndex: number): void {
+                emitVariableDeclarationsForImports();
+                writeLine();
+                hoistTopLevelVariableAndFunctionDeclarations(node);
+                writeLine();
+                write("return {");
+                increaseIndent();
+                writeLine();
+                emitSetters();
+                writeLine();
+                emitExecute(node, startIndex);
+                decreaseIndent();
+                writeLine();
+                write("}"); // return
+            }
+
+            function emitSetters() {
+                write("setters:[")
+                let setterParameterName = makeUniqueName("v");
+                for (let i = 0; i < externalImports.length; ++i) {
+                    if (i !== 0) {
+                        write(",");
+                    }
+
+                    writeLine();
+                    increaseIndent();
+                    write(`function (${setterParameterName}) {`);
+                    let importNode = externalImports[i];
+
+                    switch (importNode.kind) {
+                        case SyntaxKind.ImportDeclaration:
+                            if (!(<ImportDeclaration>importNode).importClause) {
+                                break;
+                            }
+                            // fall-through
+                        case SyntaxKind.ImportEqualsDeclaration:
+                            increaseIndent();
+                            writeLine();
+                            writeLocalNameForExternalImport(importNode);
+                            write(` = ${setterParameterName}`);
+                            writeLine();
+                            decreaseIndent();
+                            break;
+                        case SyntaxKind.ExportDeclaration:
+                            increaseIndent();
+
+                            if ((<ExportDeclaration>importNode).exportClause) {
+                                for (let e of (<ExportDeclaration>importNode).exportClause.elements) {
+                                    writeLine();
+                                    write(`${exportFunctionForFile}("`);
+                                    emitNodeWithoutSourceMap(e.name);
+                                    write(`", ${setterParameterName}["`);
+                                    emitNodeWithoutSourceMap(e.propertyName || e.name);
+                                    write(`"];`);
+                                }
+                            }
+                            else {
+                                writeLine();
+                                // export * from
+                                write(`for (var n in ${setterParameterName}) ${exportFunctionForFile}(n, ${setterParameterName}[n]);`);
+                            }
+
+                            writeLine();
+                            decreaseIndent();
+                            break;
+                    }
+
+                    write("}")
+                    decreaseIndent();
+                }
+                write("],");
+            }
+
+            function emitExecute(node: SourceFile, startIndex: number) {
+                write("execute: function() {");
+                increaseIndent();
+                writeLine();
+                for (let i = startIndex; i < node.statements.length; ++i) {
+                    let statement = node.statements[i];
+                    switch (statement.kind) {
+                        case SyntaxKind.ExportDeclaration:
+                        case SyntaxKind.ImportDeclaration:
+                        case SyntaxKind.ImportEqualsDeclaration:
+                        case SyntaxKind.FunctionDeclaration:
+                            continue;
+                    }
+                    writeLine();
+                    emit(statement);
+                }
+                decreaseIndent();
+                writeLine();
+                write("}") // execute
+                emitTempDeclarations(/*newLine*/ true);
+            }
+
+            function emitSystemModule(node: SourceFile, startIndex: number): void {
+                collectExternalModuleInfo(node);
+                Debug.assert(!exportFunctionForFile);
+                exportFunctionForFile = makeUniqueName("exports");
+                write("System.register([");
+                writeModuleNamesForExternalImports(/*startWithComma*/ false);
+                write(`], function(${exportFunctionForFile}) {`);
+                writeLine();
+                increaseIndent();
+                emitCaptureThisForNodeIfNecessary(node);
+                emitSystemModuleBody(node, startIndex);
+                decreaseIndent();
+                writeLine();
+                write("});");
+            }
+
             function emitAMDModule(node: SourceFile, startIndex: number) {
                 collectExternalModuleInfo(node);
                 writeLine();
@@ -4620,32 +4914,14 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     write("\"" + node.amdModuleName + "\", ");
                 }
                 write("[\"require\", \"exports\"");
-                for (let importNode of externalImports) {
-                    write(", ");
-                    let moduleName = getExternalModuleName(importNode);
-                    if (moduleName.kind === SyntaxKind.StringLiteral) {
-                        emitLiteral(<LiteralExpression>moduleName);
-                    }
-                    else {
-                        write("\"\"");
-                    }
-                }
+                writeModuleNamesForExternalImports(/*startWithComma*/ true);
                 for (let amdDependency of node.amdDependencies) {
                     let text = "\"" + amdDependency.path + "\"";
                     write(", ");
                     write(text);
                 }
                 write("], function (require, exports");
-                for (let importNode of externalImports) {
-                    write(", ");
-                    let namespaceDeclaration = getNamespaceDeclarationNode(importNode);
-                    if (namespaceDeclaration && !isDefaultImport(importNode)) {
-                        emit(namespaceDeclaration.name);
-                    }
-                    else {
-                        write(getGeneratedNameForNode(<ImportDeclaration | ExportDeclaration>importNode));
-                    }
-                }
+                writeLocalNamesForExternalImports(/*startWithComma*/ true);
                 for (let amdDependency of node.amdDependencies) {
                     if (amdDependency.name) {
                         write(", ");
@@ -4757,7 +5033,9 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     else if (compilerOptions.module === ModuleKind.AMD) {
                         emitAMDModule(node, startIndex);
                     }
-                    else {
+                    else if (compilerOptions.module === ModuleKind.System) {
+                        emitSystemModule(node, startIndex);
+                    } else {
                         emitCommonJSModule(node, startIndex);
                     }
                 }

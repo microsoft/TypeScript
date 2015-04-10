@@ -1619,6 +1619,7 @@ module ts {
         None = 0,
         CommonJS = 1,
         AMD = 2,
+        System = 3,
     }
 
     export interface LineAndCharacter {
