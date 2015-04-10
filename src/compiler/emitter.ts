@@ -2740,7 +2740,6 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
                 else {
                     renameNonTopLevelLetAndConst(<Identifier>node.name);
-                    emitModuleMemberName(node);
 
                     let initializer = node.initializer;
                     if (!initializer && languageVersion < ScriptTarget.ES6) {
@@ -2763,7 +2762,21 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         }
                     }
 
+                    let publishExportedValue =
+                        currentFileIsEmittedAsSystemModule() && (getCombinedNodeFlags(node) & NodeFlags.Export) && isSourceFileLevelDeclaration(node);
+
+                    if (publishExportedValue) {
+                        write(`${exportFunctionForFile}("`);
+                        emitNodeWithoutSourceMap(node.name);
+                        write(`", `);
+                    }
+
+                    emitModuleMemberName(node);
                     emitOptional(" = ", initializer);
+
+                    if (publishExportedValue) {
+                        write(")")
+                    }
                 }
             }
 
