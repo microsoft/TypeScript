@@ -1,0 +1,14 @@
+=== tests/cases/conformance/decorators/class/decorated.ts ===
+function decorate() { }
+>decorate : () => void
+
+@decorate
+>decorate : () => void
+
+export default class Decorated { }
+>Decorated : Decorated
+
+=== tests/cases/conformance/decorators/class/undecorated.ts ===
+import Decorated from 'decorated';
+>Decorated : typeof Decorated
+
