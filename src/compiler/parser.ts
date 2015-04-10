@@ -3221,30 +3221,44 @@ module ts {
                     }
                 }
 
-                // If we had "(" followed by "{" or "[", this could be the start of a binding pattern.
-                let possiblyInArrayBindingPattern = false;
-                let possiblyInObjectBindingPattern = false;
-                while (second === SyntaxKind.OpenBraceToken || second === SyntaxKind.OpenBracketToken) {
-                    possiblyInObjectBindingPattern = second === SyntaxKind.OpenBraceToken;
-                    possiblyInArrayBindingPattern = second === SyntaxKind.OpenBracketToken;
-                    second = nextToken();
-                }
-
-                if (possiblyInArrayBindingPattern) {
-                    // If we are possibly in an array binding pattern, skip empty elements
-                    while (second === SyntaxKind.CommaToken) {
-                        second = nextToken();
+                // If encounter "([", this could be the start of an array binding pattern.
+                // Examples:
+                //      ([ x ]) => { }
+                //      ([ x ])
+                if (second === SyntaxKind.OpenBracketToken) {
+                    // If the next token is not ",", "...", "[", "{", or an identifier, then this could either be
+                    // an arrow function with an array binding pattern or a parenthesized array literal expression. 
+                    // Otherwise, it cannot be an array binding pattern.
+                    let third = nextToken();
+                    if (isIdentifierOrPattern() || third === SyntaxKind.CommaToken || third === SyntaxKind.DotDotDotToken) {
+                        return Tristate.Unknown;
                     }
+
+                    return Tristate.False;
                 }
 
-                // Simple case: "(..." or "([...", but not "({..."
+                // If we encounter "({", this could be the start of an object binding pattern.
+                // Examples:
+                //      ({ x }) => { }
+                //      ({ x })
+                //      ({ *x() { })
+                if (second === SyntaxKind.OpenBraceToken) {
+                    // If we encountered an asterisk, then this is a generator method on an 
+                    // object literal and cannot be a binding pattern.
+                    if (nextToken() === SyntaxKind.AsteriskToken) {
+                        return Tristate.False;
+                    }
+
+                    return Tristate.Unknown;
+                }
+
+                // Simple case: "(..."
                 // This is an arrow function with a rest parameter.
-                if (second === SyntaxKind.DotDotDotToken && !possiblyInObjectBindingPattern) {
-                    // if we are possibly in an array binding pattern, then this may be a lambda, otherwise it must be a lambda.
-                    return possiblyInArrayBindingPattern ? Tristate.Unknown : Tristate.True;
+                if (second === SyntaxKind.DotDotDotToken) {
+                    return Tristate.True;
                 }
 
-                // If we had "(" followed by something that's not an identifier,
+                // If we had something like "(" followed by something that's not an identifier,
                 // then this definitely doesn't look like a lambda.
                 // Note: we could be a little more lenient and allow
                 // "(public" or "(private". These would not ever actually be allowed,
@@ -3253,9 +3267,9 @@ module ts {
                     return Tristate.False;
                 }
 
-                // If we have something like "(a:", but not "({ a:", then we must have a
+                // If we have something like "(a:", then we may have a
                 // type-annotated parameter in an arrow function expression.
-                if (nextToken() === SyntaxKind.ColonToken && !possiblyInObjectBindingPattern) {
+                if (nextToken() === SyntaxKind.ColonToken) {
                     return Tristate.True;
                 }
 
