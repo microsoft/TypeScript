@@ -1399,7 +1399,7 @@
         "category": "Error",
         "code": 2495
     },
-    "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.": {
+    "The 'arguments' object cannot be referenced in an arrow function below ES6. Consider using a standard function expression.": {
         "category": "Error",
         "code": 2496
     },

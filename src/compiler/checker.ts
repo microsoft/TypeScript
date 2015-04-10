@@ -429,7 +429,7 @@ module ts {
                             // at runtime. Rather than simply make a semantic breaking change, we also error
                             // so that users are aware that something is wrong, and may change it.
                             if (nameNotFoundMessage) {
-                                error(errorLocation, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_Consider_using_a_standard_function_expression);
+                                error(errorLocation, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_below_ES6_Consider_using_a_standard_function_expression);
                                 argumentsInArrowFunctionErrorReported = true;
                             }
                             if (typeof nameArg !== "string") {
