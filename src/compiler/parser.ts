@@ -3258,7 +3258,7 @@ module ts {
                     return Tristate.True;
                 }
 
-                // If we had something like "(" followed by something that's not an identifier,
+                // If we had "(" followed by something that's not an identifier,
                 // then this definitely doesn't look like a lambda.
                 // Note: we could be a little more lenient and allow
                 // "(public" or "(private". These would not ever actually be allowed,
@@ -3267,7 +3267,7 @@ module ts {
                     return Tristate.False;
                 }
 
-                // If we have something like "(a:", then we may have a
+                // If we have something like "(a:", then we must have a
                 // type-annotated parameter in an arrow function expression.
                 if (nextToken() === SyntaxKind.ColonToken) {
                     return Tristate.True;
