@@ -3221,34 +3221,13 @@ module ts {
                     }
                 }
 
-                // If encounter "([", this could be the start of an array binding pattern.
+                // If encounter "([" or "({", this could be the start of a binding pattern.
                 // Examples:
                 //      ([ x ]) => { }
-                //      ([ x ])
-                if (second === SyntaxKind.OpenBracketToken) {
-                    // If the next token is not ",", "...", "[", "{", or an identifier, then this could either be
-                    // an arrow function with an array binding pattern or a parenthesized array literal expression. 
-                    // Otherwise, it cannot be an array binding pattern.
-                    let third = nextToken();
-                    if (isIdentifierOrPattern() || third === SyntaxKind.CommaToken || third === SyntaxKind.DotDotDotToken) {
-                        return Tristate.Unknown;
-                    }
-
-                    return Tristate.False;
-                }
-
-                // If we encounter "({", this could be the start of an object binding pattern.
-                // Examples:
                 //      ({ x }) => { }
+                //      ([ x ])
                 //      ({ x })
-                //      ({ *x() { })
-                if (second === SyntaxKind.OpenBraceToken) {
-                    // If we encountered an asterisk, then this is a generator method on an 
-                    // object literal and cannot be a binding pattern.
-                    if (nextToken() === SyntaxKind.AsteriskToken) {
-                        return Tristate.False;
-                    }
-
+                if (second === SyntaxKind.OpenBracketToken || second === SyntaxKind.OpenBraceToken) {
                     return Tristate.Unknown;
                 }
 
