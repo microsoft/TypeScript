@@ -8,13 +8,13 @@ declare function foo<T, U>(p: I<T, U>): { t: T; u: U };
 
 foo({
     [Symbol.isConcatSpreadable]: "",
-    [Symbol.isRegExp]: 0,
+    [Symbol.toPrimitive]: 0,
     [Symbol.unscopables]: true
 });
 
 //// [symbolProperty21.js]
 foo({
     [Symbol.isConcatSpreadable]: "",
-    [Symbol.isRegExp]: 0,
+    [Symbol.toPrimitive]: 0,
     [Symbol.unscopables]: true
 });
