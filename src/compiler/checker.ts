@@ -331,6 +331,7 @@ module ts {
             let lastLocation: Node;
             let propertyWithInvalidInitializer: Node;
             let errorLocation = location;
+            let argumentsInArrowFunctionErrorReported = false;
             let grandparent: Node;
 
             loop: while (location) {
@@ -342,7 +343,10 @@ module ts {
                 }
                 switch (location.kind) {
                     case SyntaxKind.SourceFile:
-                        if (!isExternalModule(<SourceFile>location)) break;
+                        if (!isExternalModule(<SourceFile>location)) {
+                            break;
+                        }
+                        // fall through
                     case SyntaxKind.ModuleDeclaration:
                         if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & SymbolFlags.ModuleMember)) {
                             if (result.flags & meaning || !(result.flags & SymbolFlags.Alias && getDeclarationOfAliasSymbol(result).kind === SyntaxKind.ExportSpecifier)) {
@@ -389,6 +393,7 @@ module ts {
                                 // TypeScript 1.0 spec (April 2014): 3.4.1
                                 // The scope of a type parameter extends over the entire declaration with which the type
                                 // parameter list is associated, with the exception of static member declarations in classes.
+                                // TODO (jfreeman): Should we be reporting an error even if 'nameNotFoundMessage' was not supplied?
                                 error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
                                 return undefined;
                             }
@@ -409,8 +414,26 @@ module ts {
                         if (grandparent.kind === SyntaxKind.ClassDeclaration || grandparent.kind === SyntaxKind.InterfaceDeclaration) {
                             // A reference to this grandparent's type parameters would be an error
                             if (result = getSymbol(getSymbolOfNode(grandparent).members, name, meaning & SymbolFlags.Type)) {
+                                // TODO (jfreeman): Should we be reporting an error even if 'nameNotFoundMessage' was not supplied?
                                 error(errorLocation, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
                                 return undefined;
+                            }
+                        }
+                        break;
+                    case SyntaxKind.ArrowFunction:
+                        if (name === "arguments") {
+                            // According to the ECMAScript 6 language spec, arrow functions don't introduce
+                            // an 'arguments' object; however, when emitting arrow functions downlevel,
+                            // we use function expressions which *do* introduce an 'arguments' object.
+                            // This means that between ES3/ES5 emit and ES6 emit, there is inconsistent behavior
+                            // at runtime. Rather than simply make a semantic breaking change, we also error
+                            // so that users are aware that something is wrong, and may change it.
+                            if (nameNotFoundMessage) {
+                                error(errorLocation, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_Consider_using_a_standard_function_expression);
+                                argumentsInArrowFunctionErrorReported = true;
+                            }
+                            if (typeof nameArg !== "string") {
+                                getNodeLinks(nameArg).flags |= NodeCheckFlags.CaptureArguments;
                             }
                         }
                         break;
@@ -420,7 +443,6 @@ module ts {
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.ArrowFunction:
                         if (name === "arguments") {
                             result = argumentsSymbol;
                             break loop;
@@ -475,15 +497,17 @@ module ts {
                 result = getSymbol(globals, name, meaning);
             }
 
+            let shouldStillReportError = nameNotFoundMessage && !argumentsInArrowFunctionErrorReported;
+
             if (!result) {
-                if (nameNotFoundMessage) {
+                if (shouldStillReportError) {
                     error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
                 }
                 return undefined;
             }
 
             // Perform extra checks only if error reporting was requested
-            if (nameNotFoundMessage) {
+            if (shouldStillReportError) {
                 if (propertyWithInvalidInitializer) {
                     // We have a match, but the reference occurred within a property initializer and the identifier also binds
                     // to a local variable in the constructor where the code will be emitted.
@@ -5402,16 +5426,6 @@ module ts {
         function checkIdentifier(node: Identifier): Type {
             let symbol = getResolvedSymbol(node);
 
-            // As noted in ECMAScript 6 language spec, arrow functions never have an arguments objects.
-            // Although in down-level emit of arrow function, we emit it using function expression which means that
-            // arguments objects will be bound to the inner object; emitting arrow function natively in ES6, arguments objects
-            // will be bound to non-arrow function that contain this arrow function. This results in inconsistent behavior.
-            // To avoid that we will give an error to users if they use arguments objects in arrow function so that they
-            // can explicitly bound arguments objects
-            if (symbol === argumentsSymbol && getContainingFunction(node).kind === SyntaxKind.ArrowFunction) {
-                error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_Consider_using_a_standard_function_expression);
-            }
-
             if (symbol.flags & SymbolFlags.Alias && !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveAlias(symbol))) {
                 markAliasSymbolAsReferenced(symbol);
             }
@@ -9089,7 +9103,7 @@ module ts {
                                 : undefined;
 
                         // names of block-scoped and function scoped variables can collide only
-                        // if block scoped variable is defined in the function\module\source file scope (because of variable hoisting)
+                        // if block scoped variable is defined in the function/module/source file scope (because of variable hoisting)
                         let namesShareScope =
                             container &&
                             (container.kind === SyntaxKind.Block && isFunctionLike(container.parent) ||
