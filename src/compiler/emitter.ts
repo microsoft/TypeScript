@@ -1246,7 +1246,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function emitThis(node: Node) {
-                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalThis) {
+                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalThisOrArguments) {
                     write("_this");
                 }
                 else {

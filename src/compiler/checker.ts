@@ -5477,7 +5477,7 @@ module ts {
 
         function captureLexicalThis(node: Node, container: Node): void {
             let classNode = container.parent && container.parent.kind === SyntaxKind.ClassDeclaration ? container.parent : undefined;
-            getNodeLinks(node).flags |= NodeCheckFlags.LexicalThis;
+            getNodeLinks(node).flags |= NodeCheckFlags.LexicalThisOrArguments;
             if (container.kind === SyntaxKind.PropertyDeclaration || container.kind === SyntaxKind.Constructor) {
                 getNodeLinks(classNode).flags |= NodeCheckFlags.CaptureThis;
             }
