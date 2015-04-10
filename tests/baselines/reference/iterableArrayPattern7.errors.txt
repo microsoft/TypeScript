@@ -1,0 +1,24 @@
+tests/cases/conformance/es6/destructuring/iterableArrayPattern7.ts(2,5): error TS2322: Type 'Foo' is not assignable to type 'string[]'.
+  Property 'length' is missing in type 'Foo'.
+
+
+==== tests/cases/conformance/es6/destructuring/iterableArrayPattern7.ts (1 errors) ====
+    var a: Bar, b: string[];
+    [a, b] = new FooIterator;
+        ~
+!!! error TS2322: Type 'Foo' is not assignable to type 'string[]'.
+!!! error TS2322:   Property 'length' is missing in type 'Foo'.
+    class Bar { x }
+    class Foo extends Bar { y }
+    class FooIterator {
+        next() {
+            return {
+                value: new Foo,
+                done: false
+            };
+        }
+    
+        [Symbol.iterator]() {
+            return this;
+        }
+    }

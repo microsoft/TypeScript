@@ -1,6 +1,6 @@
 //// [parserSymbolProperty4.ts]
 declare class C {
-    [Symbol.isRegExp]: string;
+    [Symbol.toPrimitive]: string;
 }
 
 //// [parserSymbolProperty4.js]

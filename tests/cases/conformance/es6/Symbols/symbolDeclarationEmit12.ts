@@ -8,7 +8,7 @@ module M {
         [Symbol.isConcatSpreadable](): I {
             return undefined
         }
-        get [Symbol.isRegExp]() { return undefined; }
-        set [Symbol.isRegExp](x: I) { }
+        get [Symbol.toPrimitive]() { return undefined; }
+        set [Symbol.toPrimitive](x: I) { }
     }
 }

@@ -7,8 +7,8 @@ interface I {
 >Symbol : SymbolConstructor
 >unscopables : symbol
 
-    [Symbol.isRegExp]();
->Symbol.isRegExp : symbol
+    [Symbol.toPrimitive]();
+>Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
->isRegExp : symbol
+>toPrimitive : symbol
 }
