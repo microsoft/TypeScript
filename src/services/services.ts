@@ -1019,7 +1019,7 @@ module ts {
         highlightSpans: HighlightSpan[];
     }
 
-    export module DocumentHighlightKind {
+    export module HighlightSpanKind {
         export const none = "none";
         export const definition = "definition";
         export const reference = "reference";
@@ -4010,7 +4010,7 @@ module ts {
                 return {
                     fileName: sourceFile.fileName,
                     textSpan: createTextSpanFromBounds(start, end),
-                    kind: DocumentHighlightKind.none
+                    kind: HighlightSpanKind.none
                 };
             }
 
@@ -4047,7 +4047,7 @@ module ts {
 
                             documentHighlights.highlightSpans.push({
                                 textSpan: referenceEntry.textSpan,
-                                kind: referenceEntry.isWriteAccess ? DocumentHighlightKind.writtenReference : DocumentHighlightKind.reference
+                                kind: referenceEntry.isWriteAccess ? HighlightSpanKind.writtenReference : HighlightSpanKind.reference
                             });
                         }
                     }
@@ -4580,7 +4580,7 @@ module ts {
                                 result.push({
                                     fileName: fileName,
                                     textSpan: createTextSpanFromBounds(elseKeyword.getStart(), ifKeyword.end),
-                                    kind: DocumentHighlightKind.reference
+                                    kind: HighlightSpanKind.reference
                                 });
                                 i++; // skip the next keyword
                                 continue;
@@ -4613,7 +4613,7 @@ module ts {
                         result.push({
                             fileName: entry.fileName,
                             textSpan: highlightSpan.textSpan,
-                            isWriteAccess: highlightSpan.kind === DocumentHighlightKind.writtenReference
+                            isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference
                         });
                     }
                 }
