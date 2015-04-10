@@ -331,7 +331,7 @@ module ts {
             let lastLocation: Node;
             let propertyWithInvalidInitializer: Node;
             let errorLocation = location;
-            let argumentsInArrowFunctionErrorReported = false;
+            let argumentsUsedInArrowFunction = false;
             let grandparent: Node;
 
             loop: while (location) {
@@ -428,12 +428,12 @@ module ts {
                             // This means that between ES3/ES5 emit and ES6 emit, there is inconsistent behavior
                             // at runtime. Rather than simply make a semantic breaking change, we also error
                             // so that users are aware that something is wrong, and may change it.
-                            if (nameNotFoundMessage) {
+                            if (nameNotFoundMessage && languageVersion < ScriptTarget.ES6) {
                                 error(errorLocation, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_below_ES6_Consider_using_a_standard_function_expression);
-                                argumentsInArrowFunctionErrorReported = true;
+                                argumentsUsedInArrowFunction = true;
                             }
-                            if (typeof nameArg !== "string") {
-                                getNodeLinks(nameArg).flags |= NodeCheckFlags.CaptureArguments;
+                            if (nameArg && typeof nameArg !== "string") {
+                                getNodeLinks(nameArg).flags |= NodeCheckFlags.LexicalThisOrArguments;
                             }
                         }
                         break;
@@ -497,7 +497,7 @@ module ts {
                 result = getSymbol(globals, name, meaning);
             }
 
-            let shouldStillReportError = nameNotFoundMessage && !argumentsInArrowFunctionErrorReported;
+            let shouldStillReportError = nameNotFoundMessage && !argumentsUsedInArrowFunction;
 
             if (!result) {
                 if (shouldStillReportError) {
