@@ -10867,6 +10867,8 @@ module ts {
                 checkGrammarSourceFile(node);
 
                 emitExtends = false;
+                emitDecorate = false;
+                emitParam = false;
                 potentialThisCollisions.length = 0;
 
                 forEach(node.statements, checkSourceElement);
