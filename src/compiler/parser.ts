@@ -3221,6 +3221,16 @@ module ts {
                     }
                 }
 
+                // If encounter "([" or "({", this could be the start of a binding pattern.
+                // Examples:
+                //      ([ x ]) => { }
+                //      ({ x }) => { }
+                //      ([ x ])
+                //      ({ x })
+                if (second === SyntaxKind.OpenBracketToken || second === SyntaxKind.OpenBraceToken) {
+                    return Tristate.Unknown;
+                }
+
                 // Simple case: "(..."
                 // This is an arrow function with a rest parameter.
                 if (second === SyntaxKind.DotDotDotToken) {
