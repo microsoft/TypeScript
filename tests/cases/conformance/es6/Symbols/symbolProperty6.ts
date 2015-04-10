@@ -2,7 +2,7 @@
 class C {
     [Symbol.iterator] = 0;
     [Symbol.unscopables]: number;
-    [Symbol.isRegExp]() { }
+    [Symbol.toPrimitive]() { }
     get [Symbol.toStringTag]() {
         return 0;
     }

@@ -977,8 +977,7 @@ module ts {
 
     export interface ExportAssignment extends Declaration, ModuleElement {
         isExportEquals?: boolean;
-        expression?: Expression;
-        type?: TypeNode;
+        expression: Expression;
     }
 
     export interface FileReference extends TextRange {
@@ -987,6 +986,7 @@ module ts {
 
     export interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
+        kind: SyntaxKind;
     }
 
     // Source files are declarations when they are external modules.

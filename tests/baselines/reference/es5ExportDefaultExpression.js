@@ -8,4 +8,5 @@ exports.default = (1 + 2);
 
 
 //// [es5ExportDefaultExpression.d.ts]
-export default : number;
+declare var _default: number;
+export default _default;

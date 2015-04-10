@@ -623,10 +623,6 @@
         "category": "Error",
         "code": 1200
     },
-    "A type annotation on an export statement is only allowed in an ambient external module declaration.": {
-        "category": "Error",
-        "code": 1201
-    },
     "Import assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"' or 'import d from \"mod\"' instead.": {
         "category": "Error",
         "code": 1202
@@ -1367,11 +1363,11 @@
         "category": "Error",
         "code": 2487
     },
-    "The right-hand side of a 'for...of' statement must have a '[Symbol.iterator]()' method that returns an iterator.": {
+    "Type must have a '[Symbol.iterator]()' method that returns an iterator.": {
         "category": "Error",
         "code": 2488
     },
-    "The iterator returned by the right-hand side of a 'for...of' statement must have a 'next()' method.": {
+    "An iterator must have a 'next()' method.": {
         "category": "Error",
         "code": 2489
     },

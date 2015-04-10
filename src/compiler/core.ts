@@ -434,7 +434,7 @@ module ts {
         return path.replace(/\\/g, "/");
     }
 
-    // Returns length of path root (i.e. length of "/", "x:/", "//server/share/")
+    // Returns length of path root (i.e. length of "/", "x:/", "//server/share/, file:///user/files")
     export function getRootLength(path: string): number {
         if (path.charCodeAt(0) === CharacterCodes.slash) {
             if (path.charCodeAt(1) !== CharacterCodes.slash) return 1;
@@ -448,6 +448,8 @@ module ts {
             if (path.charCodeAt(2) === CharacterCodes.slash) return 3;
             return 2;
         }
+        let idx = path.indexOf('://');
+        if (idx !== -1) return idx + 3
         return 0;
     }
 
