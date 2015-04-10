@@ -5582,7 +5582,7 @@ module ts {
                     needToCaptureLexicalThis = false;
                     while (container && container.kind === SyntaxKind.ArrowFunction) {
                         container = getSuperContainer(container, /*includeFunctions*/ true);
-                        needToCaptureLexicalThis = true;
+                        needToCaptureLexicalThis = languageVersion < ScriptTarget.ES6;
                     }
 
                     // topmost container must be something that is directly nested in the class declaration
