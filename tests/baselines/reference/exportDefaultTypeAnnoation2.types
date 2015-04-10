@@ -1,6 +1,0 @@
-=== tests/cases/compiler/exportDefaultTypeAnnoation2.ts ===
-
-No type information for this code.declare module "mod" {
-No type information for this code.    export default : number;
-No type information for this code.}
-No type information for this code.

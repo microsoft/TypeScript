@@ -682,7 +682,7 @@ module ts {
         }
 
         function getTargetOfExportAssignment(node: ExportAssignment): Symbol {
-            return node.expression && resolveEntityName(<Identifier>node.expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
+            return resolveEntityName(<Identifier>node.expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
         }
 
         function getTargetOfAliasDeclaration(node: Declaration): Symbol {
@@ -748,7 +748,7 @@ module ts {
             if (!links.referenced) {
                 links.referenced = true;
                 let node = getDeclarationOfAliasSymbol(symbol);
-                if (node.kind === SyntaxKind.ExportAssignment && (<ExportAssignment>node).expression) {
+                if (node.kind === SyntaxKind.ExportAssignment) {
                     // export default <symbol>
                     checkExpressionCached((<ExportAssignment>node).expression);
                 }
@@ -2287,16 +2287,7 @@ module ts {
                 }
                 // Handle export default expressions
                 if (declaration.kind === SyntaxKind.ExportAssignment) {
-                    var exportAssignment = <ExportAssignment>declaration;
-                    if (exportAssignment.expression) {
-                        return links.type = checkExpression(exportAssignment.expression);
-                    }
-                    else if (exportAssignment.type) {
-                        return links.type = getTypeFromTypeNodeOrHeritageClauseElement(exportAssignment.type);
-                    }
-                    else {
-                        return links.type = anyType;
-                    }
+                    return links.type = checkExpression((<ExportAssignment>declaration).expression);
                 }
                 // Handle variable, parameter or property
                 links.type = resolvingType;
@@ -10599,21 +10590,12 @@ module ts {
             if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_assignment_cannot_have_modifiers);
             }
-            if (node.expression) {
-                if (node.expression.kind === SyntaxKind.Identifier) {
-                    markExportAsReferenced(node);
-                }
-                else {
-                    checkExpressionCached(node.expression);
-                }
+            if (node.expression.kind === SyntaxKind.Identifier) {
+                markExportAsReferenced(node);
             }
-            if (node.type) {
-                checkSourceElement(node.type);
-                if (!isInAmbientContext(node)) {
-                    grammarErrorOnFirstToken(node.type, Diagnostics.A_type_annotation_on_an_export_statement_is_only_allowed_in_an_ambient_external_module_declaration);
-                }
+            else {
+                checkExpressionCached(node.expression);
             }
-
             checkExternalModuleExports(container);
 
             if (node.isExportEquals && languageVersion >= ScriptTarget.ES6) {
