@@ -1487,9 +1487,9 @@ module ts {
             if (isIdentifier) {
                 let node = <Identifier>createNode(SyntaxKind.Identifier);
 
-                // Store original token kind so we can report appropriate error later in type checker
-                if (token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastFutureReservedWord) {
-                    node.originalSyntaxKind = token;
+                // Store original token kind if it is not just an Identifier so we can report appropriate error later in type checker
+                if (token !== SyntaxKind.Identifier) {
+                    node.originalStrictModeSyntaxKind = token;
                 }
                 node.text = internIdentifier(scanner.getTokenValue());
                 nextToken();
