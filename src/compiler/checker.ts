@@ -506,6 +506,10 @@ module ts {
                 return undefined;
             }
 
+            if (argumentsUsedInArrowFunction) {
+                getNodeLinks(location || lastLocation).flags |= NodeCheckFlags.CaptureArguments;
+            }
+
             // Perform extra checks only if error reporting was requested
             if (shouldStillReportError) {
                 if (propertyWithInvalidInitializer) {
