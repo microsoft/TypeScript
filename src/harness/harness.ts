@@ -959,6 +959,8 @@ module Harness {
                                     options.module = ts.ModuleKind.AMD;
                                 } else if (setting.value.toLowerCase() === 'commonjs') {
                                     options.module = ts.ModuleKind.CommonJS;
+                                } else if (setting.value.toLowerCase() === 'system') {
+                                    options.module = ts.ModuleKind.System;
                                 } else if (setting.value.toLowerCase() === 'unspecified') {
                                     options.module = ts.ModuleKind.None;
                                 } else {
