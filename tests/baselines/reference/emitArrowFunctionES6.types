@@ -44,8 +44,8 @@ var p1 = ([a]) => { };
 >a : any
 
 var p2 = ([...a]) => { };
->p2 : ([...a]: any[]) => void
->([...a]) => { } : ([...a]: any[]) => void
+>p2 : ([...a]: Iterable<any>) => void
+>([...a]) => { } : ([...a]: Iterable<any>) => void
 >a : any[]
 
 var p3 = ([, a]) => { };
@@ -54,8 +54,8 @@ var p3 = ([, a]) => { };
 >a : any
 
 var p4 = ([, ...a]) => { };
->p4 : ([, ...a]: any[]) => void
->([, ...a]) => { } : ([, ...a]: any[]) => void
+>p4 : ([, ...a]: Iterable<any>) => void
+>([, ...a]) => { } : ([, ...a]: Iterable<any>) => void
 >a : any[]
 
 var p5 = ([a = 1]) => { };
