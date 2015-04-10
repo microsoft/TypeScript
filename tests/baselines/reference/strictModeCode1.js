@@ -23,7 +23,17 @@ class D<public, private>{ }
 
 class E implements public { }
 
+class F implements public.private.B { }
+class G extends package { }
+class H extends package.A { }
+
 //// [strictModeCode1.js]
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
 var Foo = (function () {
     function Foo(private, public, static) {
         private = public = static;
@@ -52,3 +62,22 @@ var E = (function () {
     }
     return E;
 })();
+var F = (function () {
+    function F() {
+    }
+    return F;
+})();
+var G = (function (_super) {
+    __extends(G, _super);
+    function G() {
+        _super.apply(this, arguments);
+    }
+    return G;
+})(package);
+var H = (function (_super) {
+    __extends(H, _super);
+    function H() {
+        _super.apply(this, arguments);
+    }
+    return H;
+})(package.A);

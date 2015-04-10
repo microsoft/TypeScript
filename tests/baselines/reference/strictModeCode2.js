@@ -14,6 +14,13 @@ function foo() {
     barn((private, public, package) => { });
 
     var myClass = class package extends public {}
+
+    var b: public.bar;
+
+    function foo(x: private.x) { }
+    function foo1(x: private.package.x) { }
+    function foo2(x: private.package.protected) { }
+    let b: interface.package.implements.B;
 }
 
 
@@ -38,4 +45,9 @@ function foo() {
         }
         return package;
     })(public);
+    var b;
+    function foo(x) { }
+    function foo1(x) { }
+    function foo2(x) { }
+    var b;
 }
