@@ -1893,7 +1893,23 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 emit(node.expression);
             }
 
+            function shouldEmitPublishOfExportedValue(node: PrefixUnaryExpression | PostfixUnaryExpression): boolean {
+                if (!currentFileIsEmittedAsSystemModule() || node.operand.kind !== SyntaxKind.Identifier) {
+                    return false;
+                }
+
+                return isExportedSourceLevelDeclaration(resolver.getReferencedValueDeclaration(<Identifier>node.operand));
+            }
+
             function emitPrefixUnaryExpression(node: PrefixUnaryExpression) {
+                const emitPublishOfExportedValue = shouldEmitPublishOfExportedValue(node);
+
+                if (emitPublishOfExportedValue) {
+                    write(`${exportFunctionForFile}("`);
+                    emitNodeWithoutSourceMap(node.operand);
+                    write(`", `);
+                }
+
                 write(tokenToString(node.operator));
                 // In some cases, we need to emit a space between the operator and the operand. One obvious case
                 // is when the operator is an identifier, like delete or typeof. We also need to do this for plus
@@ -1917,11 +1933,35 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     }
                 }
                 emit(node.operand);
+
+                if (emitPublishOfExportedValue) {
+                    write(")");
+                }
             }
 
             function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
+                const emitPublishOfExportedValue = shouldEmitPublishOfExportedValue(node);
+                if (emitPublishOfExportedValue) {
+                    write(`${exportFunctionForFile}("`);
+                    emitNodeWithoutSourceMap(node.operand);
+                    write(`", `);
+                }
+
                 emit(node.operand);
                 write(tokenToString(node.operator));
+
+                if (emitPublishOfExportedValue) {
+                    write("), ");
+                    emitNodeWithoutSourceMap(node.operand);
+                    write(node.operator === SyntaxKind.PlusPlusToken ? " - 1" : " + 1");
+                }
+            }
+
+            function isExportedSourceLevelDeclaration(decl: Declaration): boolean {
+                if (!decl) {
+                    return false;
+                }
+                return (getCombinedNodeFlags(decl) & NodeFlags.Export) && isSourceFileLevelDeclaration(decl);
             }
 
             function emitBinaryExpression(node: BinaryExpression) {
@@ -1936,11 +1976,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         node.left.kind === SyntaxKind.Identifier &&
                         node.operatorToken.kind >= SyntaxKind.FirstAssignment &&
                         node.operatorToken.kind <= SyntaxKind.LastAssignment) {
-
-                        let referencedDecl = resolver.getReferencedValueDeclaration(<Identifier>node.left);
-                        if (referencedDecl && (getCombinedNodeFlags(referencedDecl) & NodeFlags.Export) && isSourceFileLevelDeclaration(referencedDecl)) {
-                            emitPublishOfExportedValue = true;
-                        }
+                        emitPublishOfExportedValue = isExportedSourceLevelDeclaration(resolver.getReferencedValueDeclaration(<Identifier>node.left));
                     }
 
                     if (emitPublishOfExportedValue) {
