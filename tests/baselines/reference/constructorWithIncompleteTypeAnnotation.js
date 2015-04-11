@@ -486,7 +486,7 @@ number;
 }
 var CLASS = (function () {
     function CLASS() {
-        this.d = function () { ; };
+        this.d = function () { yield 0; };
     }
     Object.defineProperty(CLASS.prototype, "Property", {
         get: function () { return 0; },
