@@ -1489,7 +1489,7 @@ module ts {
 
                 // Store original token kind if it is not just an Identifier so we can report appropriate error later in type checker
                 if (token !== SyntaxKind.Identifier) {
-                    node.originalStrictModeSyntaxKind = token;
+                    node.originalKeywordKind  = token;
                 }
                 node.text = internIdentifier(scanner.getTokenValue());
                 nextToken();

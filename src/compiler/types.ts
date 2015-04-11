@@ -387,7 +387,7 @@ module ts {
 
     export interface Identifier extends PrimaryExpression {
         text: string;                                  // Text of identifier (with escapes converted to characters)
-        originalStrictModeSyntaxKind?: SyntaxKind;     // Original syntaxKind which get set so that we can report an error later
+        originalKeywordKind?: SyntaxKind;     // Original syntaxKind which get set so that we can report an error later
     }
 
     export interface QualifiedName extends Node {
