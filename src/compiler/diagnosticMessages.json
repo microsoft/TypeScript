@@ -667,7 +667,7 @@
         "category": "Error",
         "code": 1211
     },
-    "Export assignment is not supported with '--module' flag is 'system'.": {
+    "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
         "code": 1212
     },

@@ -10623,7 +10623,7 @@ module ts {
                 }
                 else if (compilerOptions.module === ModuleKind.System) {
                     // system modules does not support export assignment
-                    grammarErrorOnNode(node, Diagnostics.Export_assignment_is_not_supported_with_module_flag_is_system);
+                    grammarErrorOnNode(node, Diagnostics.Export_assignment_is_not_supported_when_module_flag_is_system);
                 }
             }
         }

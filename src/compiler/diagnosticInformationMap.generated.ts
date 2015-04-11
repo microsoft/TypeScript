@@ -169,7 +169,7 @@ module ts {
         Ambient_const_enums_are_not_allowed_when_the_separateCompilation_flag_is_provided: { code: 1209, category: DiagnosticCategory.Error, key: "Ambient const enums are not allowed when the '--separateCompilation' flag is provided." },
         Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode: { code: 1210, category: DiagnosticCategory.Error, key: "Invalid use of '{0}'. Class definitions are automatically in strict mode." },
         A_class_declaration_without_the_default_modifier_must_have_a_name: { code: 1211, category: DiagnosticCategory.Error, key: "A class declaration without the 'default' modifier must have a name" },
-        Export_assignment_is_not_supported_with_module_flag_is_system: { code: 1212, category: DiagnosticCategory.Error, key: "Export assignment is not supported with '--module' flag is 'system'." },
+        Export_assignment_is_not_supported_when_module_flag_is_system: { code: 1212, category: DiagnosticCategory.Error, key: "Export assignment is not supported when '--module' flag is 'system'." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },

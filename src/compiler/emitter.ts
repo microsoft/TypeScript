@@ -3818,7 +3818,9 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
             function emitClassLikeDeclarationBelowES6(node: ClassLikeDeclaration) {
                 if (node.kind === SyntaxKind.ClassDeclaration) {
-                    write("var ");
+                    if (!currentFileIsEmittedAsSystemModule() || !isSourceFileLevelDeclaration(node)) {
+                        write("var ");
+                    }
                     emitDeclarationName(node);
                     write(" = ");
                 }
@@ -4827,20 +4829,25 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function hoistTopLevelVariableAndFunctionDeclarations(node: SourceFile): void {
-                let hoistedLocals: Identifier[];
+                let hoistedVars: (Identifier | ClassDeclaration)[];
                 let hoistedFunctionDeclarations: FunctionDeclaration[];
 
                 visit(node);
 
-                if (hoistedLocals) {
+                if (hoistedVars) {
                     writeLine();
                     write("var ");
-                    for (let i = 0; i < hoistedLocals.length; ++i) {
-                        let local = hoistedLocals[i];
+                    for (let i = 0; i < hoistedVars.length; ++i) {
+                        let local = hoistedVars[i];
                         if (i !== 0) {
                             write(", ");
                         }
-                        emit(local);
+                        if (local.kind === SyntaxKind.ClassDeclaration) {
+                            emitDeclarationName(<ClassDeclaration>local);
+                        }
+                        else {
+                            emit(local);
+                        }
                     }
                     write(";")
                 }
@@ -4858,11 +4865,17 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         return;
                     }
 
+                    if (node.kind === SyntaxKind.ClassDeclaration) {
+                        // TODO: rename block scoped classes
+                        (hoistedVars || (hoistedVars = [])).push(<ClassDeclaration>node);
+                        return;
+                    }
+
                     if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
                         let name = (<VariableDeclaration | BindingElement>node).name;
                         if (name.kind === SyntaxKind.Identifier) {
                             renameNonTopLevelLetAndConst(name);
-                            (hoistedLocals || (hoistedLocals = [])).push(<Identifier>name);
+                            (hoistedVars || (hoistedVars = [])).push(<Identifier>name);
                         }
                         else {
                             forEachChild(name, visit);
