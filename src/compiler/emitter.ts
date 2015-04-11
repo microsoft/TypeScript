@@ -2276,7 +2276,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     if (node.initializer.kind === SyntaxKind.ArrayLiteralExpression || node.initializer.kind === SyntaxKind.ObjectLiteralExpression) {
                         // This is a destructuring pattern, so call emitDestructuring instead of emit. Calling emit will not work, because it will cause
                         // the BinaryExpression to be passed in instead of the expression statement, which will cause emitDestructuring to crash.
-                        emitDestructuring(assignmentExpression, /*isAssignmentExpressionStatement*/ true, /*value*/ undefined, /*locationForCheckingExistingName*/ node);
+                        emitDestructuring(assignmentExpression, /*isAssignmentExpressionStatement*/ true, /*value*/ undefined);
                     }
                     else {
                         emitNodeWithoutSourceMap(assignmentExpression);
@@ -2480,16 +2480,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
             }
 
-            /**
-             * If the root has a chance of being a synthesized node, callers should also pass a value for
-             * lowestNonSynthesizedAncestor. This should be an ancestor of root, it should not be synthesized,
-             * and there should not be a lower ancestor that introduces a scope. This node will be used as the
-             * location for ensuring that temporary names are unique.
-             */
-            function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration,
-                isAssignmentExpressionStatement: boolean,
-                value?: Expression,
-                lowestNonSynthesizedAncestor?: Node) {
+            function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration, isAssignmentExpressionStatement: boolean, value?: Expression) {
                 let emitCount = 0;
                 // An exported declaration is actually emitted as an assignment (to a property on the module object), so
                 // temporary variables in an exported declaration need to have real declarations elsewhere
@@ -2520,9 +2511,6 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
                 function ensureIdentifier(expr: Expression): Expression {
                     if (expr.kind !== SyntaxKind.Identifier) {
-                        // In case the root is a synthesized node, we need to pass lowestNonSynthesizedAncestor
-                        // as the location for determining uniqueness of the variable we are about to
-                        // generate.
                         let identifier = createTempVariable(TempFlags.Auto);
                         if (!isDeclaration) {
                             recordTempDeclaration(identifier);
