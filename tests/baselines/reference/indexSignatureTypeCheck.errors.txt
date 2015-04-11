@@ -7,15 +7,15 @@ tests/cases/compiler/indexSignatureTypeCheck.ts(50,5): error TS2375: Duplicate n
 tests/cases/compiler/indexSignatureTypeCheck.ts(55,5): error TS2375: Duplicate number index signature.
 tests/cases/compiler/indexSignatureTypeCheck.ts(65,1): error TS2322: Type '{ [x: number]: string; }' is not assignable to type '{ [x: string]: string; }'.
   Index signature is missing in type '{ [x: number]: string; }'.
-tests/cases/compiler/indexSignatureTypeCheck.ts(66,1): error TS2322: Type '{ [x: number]: number; }' is not assignable to type '{ [x: string]: string; }'.
-  Index signature is missing in type '{ [x: number]: number; }'.
-tests/cases/compiler/indexSignatureTypeCheck.ts(70,1): error TS2322: Type '{ [x: number]: number; }' is not assignable to type '{ [x: number]: string; }'.
+tests/cases/compiler/indexSignatureTypeCheck.ts(66,1): error TS2322: Type '{ [x: E<number>]: number; }' is not assignable to type '{ [x: string]: string; }'.
+  Index signature is missing in type '{ [x: E<number>]: number; }'.
+tests/cases/compiler/indexSignatureTypeCheck.ts(70,1): error TS2322: Type '{ [x: E<number>]: number; }' is not assignable to type '{ [x: number]: string; }'.
   Index signatures are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/indexSignatureTypeCheck.ts(72,1): error TS2322: Type '{ [x: string]: string; }' is not assignable to type '{ [x: number]: number; }'.
+tests/cases/compiler/indexSignatureTypeCheck.ts(72,1): error TS2322: Type '{ [x: string]: string; }' is not assignable to type '{ [x: E<number>]: number; }'.
   Index signatures are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/indexSignatureTypeCheck.ts(73,1): error TS2322: Type '{ [x: number]: string; }' is not assignable to type '{ [x: number]: number; }'.
+tests/cases/compiler/indexSignatureTypeCheck.ts(73,1): error TS2322: Type '{ [x: number]: string; }' is not assignable to type '{ [x: E<number>]: number; }'.
   Index signatures are incompatible.
     Type 'string' is not assignable to type 'number'.
 
@@ -105,25 +105,25 @@ tests/cases/compiler/indexSignatureTypeCheck.ts(73,1): error TS2322: Type '{ [x:
 !!! error TS2322:   Index signature is missing in type '{ [x: number]: string; }'.
     x = z;
     ~
-!!! error TS2322: Type '{ [x: number]: number; }' is not assignable to type '{ [x: string]: string; }'.
-!!! error TS2322:   Index signature is missing in type '{ [x: number]: number; }'.
+!!! error TS2322: Type '{ [x: E<number>]: number; }' is not assignable to type '{ [x: string]: string; }'.
+!!! error TS2322:   Index signature is missing in type '{ [x: E<number>]: number; }'.
     
     y = x;
     y = y;
     y = z;
     ~
-!!! error TS2322: Type '{ [x: number]: number; }' is not assignable to type '{ [x: number]: string; }'.
+!!! error TS2322: Type '{ [x: E<number>]: number; }' is not assignable to type '{ [x: number]: string; }'.
 !!! error TS2322:   Index signatures are incompatible.
 !!! error TS2322:     Type 'number' is not assignable to type 'string'.
     
     z = x;
     ~
-!!! error TS2322: Type '{ [x: string]: string; }' is not assignable to type '{ [x: number]: number; }'.
+!!! error TS2322: Type '{ [x: string]: string; }' is not assignable to type '{ [x: E<number>]: number; }'.
 !!! error TS2322:   Index signatures are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
     z = y;
     ~
-!!! error TS2322: Type '{ [x: number]: string; }' is not assignable to type '{ [x: number]: number; }'.
+!!! error TS2322: Type '{ [x: number]: string; }' is not assignable to type '{ [x: E<number>]: number; }'.
 !!! error TS2322:   Index signatures are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
     z = z;

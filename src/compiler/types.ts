@@ -1448,6 +1448,7 @@ module ts {
         /* @internal */ 
         ContainsObjectLiteral = 0x00080000,  // Type is or contains object literal type
         ESSymbol                = 0x00100000,  // Type of symbol primitive introduced in ES6
+        Subset                  = 0x00200000,  // Type that has a subset of valid values
 
         /* @internal */ 
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -1455,6 +1456,7 @@ module ts {
         Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
+        SubsetMaybe = Enum | Reference,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
         /* @internal */ 
         RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral
@@ -1488,8 +1490,8 @@ module ts {
         declaredProperties: Symbol[];              // Declared members
         declaredCallSignatures: Signature[];       // Declared call signatures
         declaredConstructSignatures: Signature[];  // Declared construct signatures
-        declaredStringIndexType: Type;             // Declared string index type
-        declaredNumberIndexType: Type;             // Declared numeric index type
+        declaredStringIndex: IndexType;            // Declared string type
+        declaredNumberIndex: IndexType;            // Declared numeric type
     }
 
     // Type references (TypeFlags.Reference)
@@ -1515,15 +1517,21 @@ module ts {
         resolvedProperties: SymbolTable;  // Cache of resolved properties
     }
 
-    /* @internal */
-    // Resolved object or union type
+    export interface IndexType {
+        typeOfIndex?: Type // string|number|enum
+        typeOfValue: Type
+        declaredNode?: Declaration
+        inherited?: boolean
+    }
+
+    /* @internal */    // Resolved object or union type
     export interface ResolvedType extends ObjectType, UnionType {
         members: SymbolTable;              // Properties by name
         properties: Symbol[];              // Properties
         callSignatures: Signature[];       // Call signatures of type
         constructSignatures: Signature[];  // Construct signatures of type
-        stringIndexType: Type;             // String index type
-        numberIndexType: Type;             // Numeric index type
+        stringIndex: IndexType;            // String index type
+        numberIndex: IndexType;            // Number index type
     }
 
     // Type parameters (TypeFlags.TypeParameter)
