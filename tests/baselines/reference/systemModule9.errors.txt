@@ -1,0 +1,41 @@
+tests/cases/compiler/systemModule9.ts(2,21): error TS2307: Cannot find external module 'file1'.
+tests/cases/compiler/systemModule9.ts(3,25): error TS2307: Cannot find external module 'file2'.
+tests/cases/compiler/systemModule9.ts(4,15): error TS2307: Cannot find external module 'file3'.
+tests/cases/compiler/systemModule9.ts(5,25): error TS2307: Cannot find external module 'file4'.
+tests/cases/compiler/systemModule9.ts(6,22): error TS2307: Cannot find external module 'file5'.
+tests/cases/compiler/systemModule9.ts(16,15): error TS2307: Cannot find external module 'file6'.
+
+
+==== tests/cases/compiler/systemModule9.ts (6 errors) ====
+    
+    import * as ns from 'file1';
+                        ~~~~~~~
+!!! error TS2307: Cannot find external module 'file1'.
+    import {a, b as c} from 'file2';
+                            ~~~~~~~
+!!! error TS2307: Cannot find external module 'file2'.
+    import d from 'file3'
+                  ~~~~~~~
+!!! error TS2307: Cannot find external module 'file3'.
+    import e, * as ns2 from 'file4';
+                            ~~~~~~~
+!!! error TS2307: Cannot find external module 'file4'.
+    import ns3 = require('file5');
+                         ~~~~~~~
+!!! error TS2307: Cannot find external module 'file5'.
+    
+    ns.f();
+    a();
+    c();
+    d();
+    e();
+    ns2.f();
+    ns3.f();
+    
+    export * from 'file6';
+                  ~~~~~~~
+!!! error TS2307: Cannot find external module 'file6'.
+    
+    var x, y = true;
+    export {x};
+    export {y as z};

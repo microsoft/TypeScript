@@ -1,0 +1,8 @@
+=== tests/cases/compiler/systemModule4.ts ===
+
+export var x = 1;
+>x : number
+
+export var y;
+>y : any
+
