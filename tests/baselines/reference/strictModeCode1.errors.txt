@@ -14,15 +14,17 @@ tests/cases/compiler/strictModeCode1.ts(14,18): error TS1213: Identifier expecte
 tests/cases/compiler/strictModeCode1.ts(21,9): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeCode1.ts(21,17): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeCode1.ts(23,20): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+tests/cases/compiler/strictModeCode1.ts(25,20): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeCode1.ts(25,20): error TS2304: Cannot find name 'public'.
+tests/cases/compiler/strictModeCode1.ts(26,21): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeCode1.ts(26,21): error TS2304: Cannot find name 'public'.
-tests/cases/compiler/strictModeCode1.ts(26,36): error TS1213: Identifier expected. 'implements' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeCode1.ts(27,17): error TS1213: Identifier expected. 'package' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeCode1.ts(27,17): error TS2304: Cannot find name 'package'.
+tests/cases/compiler/strictModeCode1.ts(28,17): error TS1213: Identifier expected. 'package' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeCode1.ts(28,17): error TS2304: Cannot find name 'package'.
 
 
-==== tests/cases/compiler/strictModeCode1.ts (22 errors) ====
+==== tests/cases/compiler/strictModeCode1.ts (24 errors) ====
     interface public { }
     
     class Foo {
@@ -81,17 +83,21 @@ tests/cases/compiler/strictModeCode1.ts(28,17): error TS2304: Cannot find name '
     
     class F implements public.private.B { }
                        ~~~~~~
+!!! error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+                       ~~~~~~
 !!! error TS2304: Cannot find name 'public'.
     class F1 implements public.private.implements { }
                         ~~~~~~
+!!! error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+                        ~~~~~~
 !!! error TS2304: Cannot find name 'public'.
-                                       ~~~~~~~~~~
-!!! error TS1213: Identifier expected. 'implements' is a reserved word in strict mode. Class definitions are automatically in strict mode.
     class G extends package { }
                     ~~~~~~~
 !!! error TS1213: Identifier expected. 'package' is a reserved word in strict mode. Class definitions are automatically in strict mode.
                     ~~~~~~~
 !!! error TS2304: Cannot find name 'package'.
     class H extends package.A { }
+                    ~~~~~~~
+!!! error TS1213: Identifier expected. 'package' is a reserved word in strict mode. Class definitions are automatically in strict mode.
                     ~~~~~~~
 !!! error TS2304: Cannot find name 'package'.

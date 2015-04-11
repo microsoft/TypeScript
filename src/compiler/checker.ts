@@ -11925,10 +11925,7 @@ module ts {
         // GRAMMAR CHECKING
         function isReservedwordInStrictMode(node: Identifier): boolean {
             // Check that originalStrictModeSyntaxKind is less than LastFurtureReservedWord to see if an Identifier is a strict-mode reserved word
-            if ((node.parserContextFlags & ParserContextFlags.StrictMode) && node.originalStrictModeSyntaxKind <= SyntaxKind.LastFutureReservedWord) {
-                return true;
-            }
-            return false
+            return (node.parserContextFlags & ParserContextFlags.StrictMode) && node.originalStrictModeSyntaxKind <= SyntaxKind.LastFutureReservedWord;
         }
 
         function reportStrictModeGrammarErrorInClassDeclaration(identifier: Identifier, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
@@ -11959,7 +11956,7 @@ module ts {
                             let name = element.name;
                             if (name.originalStrictModeSyntaxKind) {
                                 let nameText = declarationNameToString(name);
-                                reportError = grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
+                                reportError = reportError || grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
                             }
                         }
                         return reportError;
@@ -12012,13 +12009,22 @@ module ts {
             }
             // Report an error for each identifier in QualifiedName
             // Example:
-            //      foo (x: public.private.bar)      // no Error
-            //      foo (x: public.private.package)  // error at package
+            //      foo (x: B.private.bar)      // error at private
+            //      foo (x: public.private.package)  // error at public, private, and package
             else if (typeName.kind === SyntaxKind.QualifiedName) {
-                // Report strict mode at the property of memberExpression
+                // Walk from right to left and report a possible error at each Identifier in QualifiedName
                 // Example:
-                //      x1: public.private.package // error at package as memberExpression can be IdentifierName
-                checkGrammarTypeNameInStrictMode((<QualifiedName>typeName).right);
+                //      x1: public.private.package  // error at public and private
+                let qualifiedName = typeName;
+                while (qualifiedName && qualifiedName.kind === SyntaxKind.QualifiedName) {
+                    checkGrammarTypeNameInStrictMode((<QualifiedName>qualifiedName).right);
+                    qualifiedName = (<QualifiedName>qualifiedName).left;
+                }
+
+                // Report an error at the last Identifier in QualifiedName
+                // Example:
+                //      x1: public.private.package  // error at package
+                checkGrammarTypeNameInStrictMode(<Identifier>qualifiedName);
             }
         }
 
@@ -12026,8 +12032,8 @@ module ts {
         // whether it violates strict mode reserved words.
         // Example:
         //      public                  // error at public
-        //      public.private.package  // error at package
-        //      public.private.B        // no error
+        //      public.private.package  // error at public
+        //      B.private.B             // no error
         function checkGrammarHeritageClauseElementInStrictMode(expression: Expression) {
             // Example:
             //      class C extends public // error at public
@@ -12037,10 +12043,18 @@ module ts {
             else if (expression && expression.kind === SyntaxKind.PropertyAccessExpression) {
                 let propertyAccessExp = <PropertyAccessExpression>expression;
 
+                // Walk from left to right in PropertyAccessExpression until we are at the left most expression
+                // in PropertyAccessExpression. According to grammar production of MemberExpression,
+                // the left component expression is a PrimaryExpression (i.e. Identifier) while the other
+                // component after dots can be IdentifierName.
+                while (propertyAccessExp && propertyAccessExp.kind === SyntaxKind.PropertyAccessExpression) {
+                    propertyAccessExp = <PropertyAccessExpression>propertyAccessExp.expression;
+                }
+
                 // Report strict mode at the property of memberExpression
                 // Example:
-                //      public.private.package  // error at package as memberExpression can be IdentifierName
-                checkGrammarIdentifierInStrictMode((<PropertyAccessExpression>expression).name);
+                //      public.private.package  // error at public as it is parsed as an Identifier in the PropertyAccessExpression
+                checkGrammarIdentifierInStrictMode(propertyAccessExp);
             }
 
         }
