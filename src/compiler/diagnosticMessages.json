@@ -623,10 +623,6 @@
         "category": "Error",
         "code": 1200
     },
-    "A type annotation on an export statement is only allowed in an ambient external module declaration.": {
-        "category": "Error",
-        "code": 1201
-    },
     "Import assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"' or 'import d from \"mod\"' instead.": {
         "category": "Error",
         "code": 1202

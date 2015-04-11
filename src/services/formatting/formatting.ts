@@ -3,6 +3,7 @@
 ///<reference path='rulesProvider.ts' />
 ///<reference path='references.ts' />
 
+/* @internal */
 module ts.formatting {
 
     export interface TextRangeWithKind extends TextRange {

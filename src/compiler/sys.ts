@@ -6,17 +6,17 @@ module ts {
         newLine: string;
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
-        readFile(fileName: string, encoding?: string): string;
-        writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void;
-        watchFile? (fileName: string, callback: (fileName: string) => void): FileWatcher;
+        readFile(path: string, encoding?: string): string;
+        writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
+        watchFile?(path: string, callback: (path: string) => void): FileWatcher;
         resolvePath(path: string): string;
         fileExists(path: string): boolean;
         directoryExists(path: string): boolean;
-        createDirectory(directoryName: string): void;
+        createDirectory(path: string): void;
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
         readDirectory(path: string, extension?: string): string[];
-        getMemoryUsage? (): number;
+        getMemoryUsage?(): number;
         exit(exitCode?: number): void;
     }
 
