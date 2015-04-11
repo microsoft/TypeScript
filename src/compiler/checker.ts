@@ -7657,11 +7657,17 @@ module ts {
                         }
                     }
                     else {
-                        if (i === elements.length - 1) {
-                            checkDestructuringAssignment((<SpreadElementExpression>e).expression, createArrayType(elementType), contextualMapper);
+                        if (i < elements.length - 1) {
+                            error(e, Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
                         }
                         else {
-                            error(e, Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
+                            let restExpression = (<SpreadElementExpression>e).expression;
+                            if (restExpression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>restExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
+                                error((<BinaryExpression>restExpression).operatorToken, Diagnostics.A_rest_element_cannot_have_an_initializer);
+                            }
+                            else {
+                                checkDestructuringAssignment(restExpression, createArrayType(elementType), contextualMapper);
+                            }
                         }
                     }
                 }
