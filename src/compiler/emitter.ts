@@ -2588,14 +2588,35 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     }
 
                     renameNonTopLevelLetAndConst(name);
-                    if (name.parent && (name.parent.kind === SyntaxKind.VariableDeclaration || name.parent.kind === SyntaxKind.BindingElement)) {
+                    
+                    const isVariableDeclarationOrBindingElement =
+                        name.parent && (name.parent.kind === SyntaxKind.VariableDeclaration || name.parent.kind === SyntaxKind.BindingElement);
+
+                    let emitPublishOfExportedValue = false;
+                    if (currentFileIsEmittedAsSystemModule() && !nodeIsSynthesized(name)) {
+                        let nodeToCheck = isVariableDeclarationOrBindingElement ? name.parent : resolver.getReferencedValueDeclaration(name);
+                        emitPublishOfExportedValue = nodeToCheck && (getCombinedNodeFlags(nodeToCheck) & NodeFlags.Export) && isSourceFileLevelDeclaration(nodeToCheck);
+                    }
+
+                    if (emitPublishOfExportedValue) {
+                        write(`${exportFunctionForFile}("`);
+                        emitNodeWithoutSourceMap(name);
+                        write(`", `);
+                    }
+
+                    if (isVariableDeclarationOrBindingElement) {
                         emitModuleMemberName(<Declaration>name.parent);
                     }
                     else {
                         emit(name);
                     }
+
                     write(" = ");
                     emit(value);
+
+                    if (emitPublishOfExportedValue) {
+                        write(")");
+                    }
                 }
 
                 function ensureIdentifier(expr: Expression): Expression {
