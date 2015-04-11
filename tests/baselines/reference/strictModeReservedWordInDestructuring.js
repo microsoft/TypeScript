@@ -1,4 +1,4 @@
-//// [strictModeCode5.ts]
+//// [strictModeReservedWordInDestructuring.ts]
 "use strict"
 var [public] = [1];
 var { x: public } = { x: 1 };
@@ -6,7 +6,7 @@ var [[private]] = [["hello"]];
 var { y: { s: static }, z: { o: { p: package} }} = { y: { s: 1 }, z: { o: { p: 'h' } } };
 var {public, protected} = { public: 1, protected: 2 };
 
-//// [strictModeCode5.js]
+//// [strictModeReservedWordInDestructuring.js]
 "use strict";
 var public = ([1])[0];
 var public = ({ x: 1 }).x;

@@ -1,4 +1,4 @@
-//// [strictModeCode1.ts]
+//// [strictModeReservedWordInClassDeclaration.ts]
 interface public { }
 
 class Foo {
@@ -28,7 +28,7 @@ class F1 implements public.private.implements { }
 class G extends package { }
 class H extends package.A { }
 
-//// [strictModeCode1.js]
+//// [strictModeReservedWordInClassDeclaration.js]
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }

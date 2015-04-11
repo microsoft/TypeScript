@@ -1,4 +1,4 @@
-//// [strictModeCode8.ts]
+//// [strictModeReservedWordInModuleDeclaration.ts]
 "use strict"
 module public { }
 module private { }
@@ -6,5 +6,5 @@ module public.whatever {
 }
 module private.public.foo { }
 
-//// [strictModeCode8.js]
+//// [strictModeReservedWordInModuleDeclaration.js]
 "use strict";

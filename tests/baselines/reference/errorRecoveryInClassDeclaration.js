@@ -1,4 +1,4 @@
-//// [strictModeCode4.ts]
+//// [errorRecoveryInClassDeclaration.ts]
 class C {
     public bar() {
         var v = foo(
@@ -7,7 +7,7 @@ class C {
     }
 }
 
-//// [strictModeCode4.js]
+//// [errorRecoveryInClassDeclaration.js]
 var C = (function () {
     function C() {
     }

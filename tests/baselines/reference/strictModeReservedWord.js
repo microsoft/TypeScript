@@ -1,4 +1,4 @@
-//// [strictModeCode2.ts]
+//// [strictModeReservedWord.ts]
 let let = 10;
 
 function foo() {
@@ -21,11 +21,13 @@ function foo() {
     function foo1(x: private.package.x) { }
     function foo2(x: private.package.protected) { }
     let b: interface.package.implements.B;
+    ublic();
+    static();
 }
 
 
 
-//// [strictModeCode2.js]
+//// [strictModeReservedWord.js]
 var let = 10;
 function foo() {
     "use strict";
@@ -50,4 +52,6 @@ function foo() {
     function foo1(x) { }
     function foo2(x) { }
     var b;
+    ublic();
+    static();
 }

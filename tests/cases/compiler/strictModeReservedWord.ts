@@ -20,5 +20,7 @@ function foo() {
     function foo1(x: private.package.x) { }
     function foo2(x: private.package.protected) { }
     let b: interface.package.implements.B;
+    ublic();
+    static();
 }
 
