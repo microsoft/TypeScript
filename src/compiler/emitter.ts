@@ -1589,21 +1589,30 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 return result;
             }
 
-            function createPropertyAccessExpression(expression: LeftHandSideExpression, name: Identifier): PropertyAccessExpression {
+            function createPropertyAccessExpression(expression: Expression, name: Identifier): PropertyAccessExpression {
                 let result = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
-                result.expression = expression;
+                result.expression = parenthesizeForAccess(expression);
                 result.dotToken = createSynthesizedNode(SyntaxKind.DotToken);
                 result.name = name;
 
                 return result;
-             }
+            }
 
-            function createElementAccessExpression(expression: LeftHandSideExpression, argumentExpression: Expression): ElementAccessExpression {
+            function createElementAccessExpression(expression: Expression, argumentExpression: Expression): ElementAccessExpression {
                 let result = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression);
-                result.expression = expression;
+                result.expression = parenthesizeForAccess(expression);
                 result.argumentExpression = argumentExpression;
 
                 return result;
+            }
+
+            function parenthesizeForAccess(expr: Expression): LeftHandSideExpression {
+                if (expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) {
+                    return <LeftHandSideExpression>expr;
+                }
+                let node = <ParenthesizedExpression>createSynthesizedNode(SyntaxKind.ParenthesizedExpression);
+                node.expression = expr;
+                return node;
             }
 
             function emitComputedPropertyName(node: ComputedPropertyName) {
@@ -2549,27 +2558,12 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     return node;
                 }
 
-                function parenthesizeForAccess(expr: Expression): LeftHandSideExpression {
-                    if (expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) {
-                        return <LeftHandSideExpression>expr;
-                    }
-                    let node = <ParenthesizedExpression>createSynthesizedNode(SyntaxKind.ParenthesizedExpression);
-                    node.expression = expr;
-                    return node;
-                }
-
-                function createPropertyAccess(object: Expression, propName: Identifier): Expression {
+                function createPropertyAccessForDestructuringProperty(object: Expression, propName: Identifier): Expression {
                     if (propName.kind !== SyntaxKind.Identifier) {
-                        return createElementAccess(object, propName);
+                        return createElementAccessExpression(object, propName);
                     }
-                    return createPropertyAccessExpression(parenthesizeForAccess(object), propName);
-                }
 
-                function createElementAccess(object: Expression, index: Expression): Expression {
-                    let node = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression);
-                    node.expression = parenthesizeForAccess(object);
-                    node.argumentExpression = index;
-                    return node;
+                    return createPropertyAccessExpression(object, propName);
                 }
 
                 function emitObjectLiteralAssignment(target: ObjectLiteralExpression, value: Expression) {
@@ -2583,7 +2577,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                             // TODO(andersh): Computed property support
                             let propName = <Identifier>((<PropertyAssignment>p).name);
-                            emitDestructuringAssignment((<PropertyAssignment>p).initializer || propName, createPropertyAccess(value, propName));
+                            emitDestructuringAssignment((<PropertyAssignment>p).initializer || propName, createPropertyAccessForDestructuringProperty(value, propName));
                         }
                     }
                 }
@@ -2599,14 +2593,12 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         let e = elements[i];
                         if (e.kind !== SyntaxKind.OmittedExpression) {
                             if (e.kind !== SyntaxKind.SpreadElementExpression) {
-                                emitDestructuringAssignment(e, createElementAccess(value, createNumericLiteral(i)));
+                                emitDestructuringAssignment(e, createElementAccessExpression(value, createNumericLiteral(i)));
                             }
-                            else {
-                                if (i === elements.length - 1) {
-                                    value = ensureIdentifier(value);
-                                    emitAssignment(<Identifier>(<SpreadElementExpression>e).expression, value);
-                                    write(".slice(" + i + ")");
-                                }
+                            else if (i === elements.length - 1) {
+                                value = ensureIdentifier(value);
+                                emitAssignment(<Identifier>(<SpreadElementExpression>e).expression, value);
+                                write(".slice(" + i + ")");
                             }
                         }
                     }
@@ -2670,19 +2662,17 @@ var __param = this.__param || function(index, decorator) { return function (targ
                             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                                 // Rewrite element to a declaration with an initializer that fetches property
                                 let propName = element.propertyName || <Identifier>element.name;
-                                emitBindingElement(element, createPropertyAccess(value, propName));
+                                emitBindingElement(element, createPropertyAccessForDestructuringProperty(value, propName));
                             }
                             else if (element.kind !== SyntaxKind.OmittedExpression) {
                                 if (!element.dotDotDotToken) {
                                     // Rewrite element to a declaration that accesses array element at index i
-                                    emitBindingElement(element, createElementAccess(value, createNumericLiteral(i)));
+                                    emitBindingElement(element, createElementAccessExpression(value, createNumericLiteral(i)));
                                 }
-                                else {
-                                    if (i === elements.length - 1) {
-                                        value = ensureIdentifier(value);
-                                        emitAssignment(<Identifier>element.name, value);
-                                        write(".slice(" + i + ")");
-                                    }
+                                else if (i === elements.length - 1) {
+                                    value = ensureIdentifier(value);
+                                    emitAssignment(<Identifier>element.name, value);
+                                    write(".slice(" + i + ")");
                                 }
                             }
                         }
