@@ -729,14 +729,14 @@ declare module ts {
     type ExportSpecifier = ImportOrExportSpecifier;
     interface ExportAssignment extends Declaration, ModuleElement {
         isExportEquals?: boolean;
-        expression?: Expression;
-        type?: TypeNode;
+        expression: Expression;
     }
     interface FileReference extends TextRange {
         fileName: string;
     }
     interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
+        kind: SyntaxKind;
     }
     interface SourceFile extends Declaration {
         statements: NodeArray<ModuleElement>;
@@ -1324,8 +1324,10 @@ declare module ts {
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[];
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
-        getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         findReferences(fileName: string, position: number): ReferencedSymbol[];
+        getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[];
+        /** @deprecated */
+        getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getOutliningSpans(fileName: string): OutliningSpan[];
@@ -1375,6 +1377,20 @@ declare module ts {
         textSpan: TextSpan;
         fileName: string;
         isWriteAccess: boolean;
+    }
+    interface DocumentHighlights {
+        fileName: string;
+        highlightSpans: HighlightSpan[];
+    }
+    module HighlightSpanKind {
+        const none: string;
+        const definition: string;
+        const reference: string;
+        const writtenReference: string;
+    }
+    interface HighlightSpan {
+        textSpan: TextSpan;
+        kind: string;
     }
     interface NavigateToItem {
         name: string;
@@ -1641,44 +1657,44 @@ declare module ts {
           */
         releaseDocument(fileName: string, compilationSettings: CompilerOptions): void;
     }
-    class ScriptElementKind {
-        static unknown: string;
-        static warning: string;
-        static keyword: string;
-        static scriptElement: string;
-        static moduleElement: string;
-        static classElement: string;
-        static interfaceElement: string;
-        static typeElement: string;
-        static enumElement: string;
-        static variableElement: string;
-        static localVariableElement: string;
-        static functionElement: string;
-        static localFunctionElement: string;
-        static memberFunctionElement: string;
-        static memberGetAccessorElement: string;
-        static memberSetAccessorElement: string;
-        static memberVariableElement: string;
-        static constructorImplementationElement: string;
-        static callSignatureElement: string;
-        static indexSignatureElement: string;
-        static constructSignatureElement: string;
-        static parameterElement: string;
-        static typeParameterElement: string;
-        static primitiveType: string;
-        static label: string;
-        static alias: string;
-        static constElement: string;
-        static letElement: string;
+    module ScriptElementKind {
+        const unknown: string;
+        const warning: string;
+        const keyword: string;
+        const scriptElement: string;
+        const moduleElement: string;
+        const classElement: string;
+        const interfaceElement: string;
+        const typeElement: string;
+        const enumElement: string;
+        const variableElement: string;
+        const localVariableElement: string;
+        const functionElement: string;
+        const localFunctionElement: string;
+        const memberFunctionElement: string;
+        const memberGetAccessorElement: string;
+        const memberSetAccessorElement: string;
+        const memberVariableElement: string;
+        const constructorImplementationElement: string;
+        const callSignatureElement: string;
+        const indexSignatureElement: string;
+        const constructSignatureElement: string;
+        const parameterElement: string;
+        const typeParameterElement: string;
+        const primitiveType: string;
+        const label: string;
+        const alias: string;
+        const constElement: string;
+        const letElement: string;
     }
-    class ScriptElementKindModifier {
-        static none: string;
-        static publicMemberModifier: string;
-        static privateMemberModifier: string;
-        static protectedMemberModifier: string;
-        static exportedModifier: string;
-        static ambientModifier: string;
-        static staticModifier: string;
+    module ScriptElementKindModifier {
+        const none: string;
+        const publicMemberModifier: string;
+        const privateMemberModifier: string;
+        const protectedMemberModifier: string;
+        const exportedModifier: string;
+        const ambientModifier: string;
+        const staticModifier: string;
     }
     class ClassificationTypeNames {
         static comment: string;
