@@ -1930,12 +1930,33 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     emitDestructuring(node, node.parent.kind === SyntaxKind.ExpressionStatement);
                 }
                 else {
+                    let emitPublishOfExportedValue = false;
+
+                    if (currentFileIsEmittedAsSystemModule() &&
+                        node.left.kind === SyntaxKind.Identifier &&
+                        node.operatorToken.kind >= SyntaxKind.FirstAssignment &&
+                        node.operatorToken.kind <= SyntaxKind.LastAssignment) {
+
+                        let referencedDecl = resolver.getReferencedValueDeclaration(<Identifier>node.left);
+                        if (referencedDecl && (getCombinedNodeFlags(referencedDecl) & NodeFlags.Export) && isSourceFileLevelDeclaration(referencedDecl)) {
+                            emitPublishOfExportedValue = true;
+                        }
+                    }
+
+                    if (emitPublishOfExportedValue) {
+                        write(`${exportFunctionForFile}("`);
+                        emitNodeWithoutSourceMap(node.left);
+                        write(`", `);
+                    }
                     emit(node.left);
                     let indentedBeforeOperator = indentIfOnDifferentLines(node, node.left, node.operatorToken, node.operatorToken.kind !== SyntaxKind.CommaToken ? " " : undefined);
                     write(tokenToString(node.operatorToken.kind));
                     let indentedAfterOperator = indentIfOnDifferentLines(node, node.operatorToken, node.right, " ");
                     emit(node.right);
                     decreaseIndentIf(indentedBeforeOperator, indentedAfterOperator);
+                    if (emitPublishOfExportedValue) {
+                        write(")");
+                    }
                 }
             }
 
