@@ -4327,15 +4327,18 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     return emitOnlyPinnedOrTripleSlashComments(node);
                 }
 
-                emitStart(node);
-                if (isES6ExportedDeclaration(node)) {
-                    write("export ");
+                let hoistedInDeclarationScope = currentFileIsEmittedAsSystemModule() && isSourceFileLevelDeclaration(node)
+                if (!hoistedInDeclarationScope) {
+                    emitStart(node);
+                    if (isES6ExportedDeclaration(node)) {
+                        write("export ");
+                    }
+                    write("var ");
+                    emit(node.name);
+                    write(";");
+                    emitEnd(node);
+                    writeLine();
                 }
-                write("var ");
-                emit(node.name);
-                write(";");
-                emitEnd(node);
-                writeLine();
                 emitStart(node);
                 write("(function (");
                 emitStart(node.name);
@@ -4378,6 +4381,14 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 write(" = {}));");
                 emitEnd(node);
                 if (!isES6ExportedDeclaration(node) && node.name.kind === SyntaxKind.Identifier && node.parent === currentSourceFile) {
+                    if (currentFileIsEmittedAsSystemModule() && node.flags & NodeFlags.Export) {
+                        writeLine();
+                        write(`${exportFunctionForFile}("`);
+                        emitDeclarationName(node);
+                        write(`", `);
+                        emitDeclarationName(node);
+                        write(")");
+                    }
                     emitExportMemberAssignments(<Identifier>node.name);
                 }
             }
@@ -4829,7 +4840,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function hoistTopLevelVariableAndFunctionDeclarations(node: SourceFile): void {
-                let hoistedVars: (Identifier | ClassDeclaration)[];
+                let hoistedVars: (Identifier | ClassDeclaration | ModuleDeclaration)[];
                 let hoistedFunctionDeclarations: FunctionDeclaration[];
 
                 visit(node);
@@ -4842,7 +4853,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         if (i !== 0) {
                             write(", ");
                         }
-                        if (local.kind === SyntaxKind.ClassDeclaration) {
+                        if (local.kind === SyntaxKind.ClassDeclaration || local.kind === SyntaxKind.ModuleDeclaration) {
                             emitDeclarationName(<ClassDeclaration>local);
                         }
                         else {
@@ -4868,6 +4879,11 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     if (node.kind === SyntaxKind.ClassDeclaration) {
                         // TODO: rename block scoped classes
                         (hoistedVars || (hoistedVars = [])).push(<ClassDeclaration>node);
+                        return;
+                    }
+
+                    if (node.kind === SyntaxKind.ModuleDeclaration && shouldEmitModuleDeclaration(<ModuleDeclaration>node)) {
+                        (hoistedVars || (hoistedVars = [])).push(<ModuleDeclaration>node);
                         return;
                     }
 
