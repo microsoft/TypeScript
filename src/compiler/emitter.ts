@@ -1893,7 +1893,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 emit(node.expression);
             }
 
-            function shouldEmitPublishOfExportedValue(node: PrefixUnaryExpression | PostfixUnaryExpression): boolean {
+            function shouldEmitPublishOfExportedValueForUnaryExpressions(node: PrefixUnaryExpression | PostfixUnaryExpression): boolean {
                 if (!currentFileIsEmittedAsSystemModule() || node.operand.kind !== SyntaxKind.Identifier) {
                     return false;
                 }
@@ -1902,7 +1902,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function emitPrefixUnaryExpression(node: PrefixUnaryExpression) {
-                const emitPublishOfExportedValue = shouldEmitPublishOfExportedValue(node);
+                const emitPublishOfExportedValue = shouldEmitPublishOfExportedValueForUnaryExpressions(node);
 
                 if (emitPublishOfExportedValue) {
                     write(`${exportFunctionForFile}("`);
@@ -1940,7 +1940,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
-                const emitPublishOfExportedValue = shouldEmitPublishOfExportedValue(node);
+                const emitPublishOfExportedValue = shouldEmitPublishOfExportedValueForUnaryExpressions(node);
                 if (emitPublishOfExportedValue) {
                     write(`${exportFunctionForFile}("`);
                     emitNodeWithoutSourceMap(node.operand);
@@ -2118,10 +2118,10 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 emitEmbeddedStatement(node.statement);
             }
 
-            function emitStartOfVariableDeclarationList(decl: Node, startPos?: number): void {
+            function emitStartOfVariableDeclarationList(decl: Node, startPos?: number): boolean {
                 if (currentFileIsEmittedAsSystemModule() && isSourceFileLevelDeclaration(decl)) {
                     Debug.assert(compilerOptions.module === ModuleKind.System);
-                    return;
+                    return false;
                 }
                 let tokenKind = SyntaxKind.VarKeyword;
                 if (decl && languageVersion >= ScriptTarget.ES6) {
@@ -2140,13 +2140,38 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 else {
                     switch (tokenKind) {
                         case SyntaxKind.VarKeyword:
-                            return write("var ");
+                            write("var ");
+                            break;
                         case SyntaxKind.LetKeyword:
-                            return write("let ");
+                            write("let ");
+                            break;
                         case SyntaxKind.ConstKeyword:
-                            return write("const ");
+                            write("const ");
+                            break;
                     }
                 }
+
+                return true;
+            }
+
+            function emitVariableDeclarationListSkippingUninitializedEntries(list: VariableDeclarationList): boolean {
+                let started = false;
+                for (let decl of list.declarations) {
+                    if (!decl.initializer) {
+                        continue;
+                    }
+
+                    if (!started) {
+                        started = true;
+                    }
+                    else {
+                        write(", ");
+                    }
+
+                    emit(decl);
+                }
+
+                return started;
             }
 
             function emitForStatement(node: ForStatement) {
@@ -2156,8 +2181,13 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 if (node.initializer && node.initializer.kind === SyntaxKind.VariableDeclarationList) {
                     let variableDeclarationList = <VariableDeclarationList>node.initializer;
                     let declarations = variableDeclarationList.declarations;
-                    emitStartOfVariableDeclarationList(declarations[0], endPos);
-                    emitCommaList(declarations);
+                    let startIsEmitted = emitStartOfVariableDeclarationList(declarations[0], endPos);
+                    if (startIsEmitted) {
+                        emitCommaList(declarations);
+                    }
+                    else {
+                        emitVariableDeclarationListSkippingUninitializedEntries(variableDeclarationList);
+                    }
                 }
                 else if (node.initializer) {
                     emit(node.initializer);
@@ -2938,16 +2968,25 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function emitVariableStatement(node: VariableStatement) {
+                let startIsEmitted = true;
                 if (!(node.flags & NodeFlags.Export)) {
-                    emitStartOfVariableDeclarationList(node.declarationList);
+                    startIsEmitted = emitStartOfVariableDeclarationList(node.declarationList);
                 }
                 else if (isES6ExportedDeclaration(node)) {
                     // Exported ES6 module member
                     write("export ");
-                    emitStartOfVariableDeclarationList(node.declarationList);
+                    startIsEmitted = emitStartOfVariableDeclarationList(node.declarationList);
                 }
-                emitCommaList(node.declarationList.declarations);
-                write(";");
+                if (startIsEmitted) {
+                    emitCommaList(node.declarationList.declarations);
+                    write(";");
+                }
+                else {
+                    let atLeastOneItem = emitVariableDeclarationListSkippingUninitializedEntries(node.declarationList);
+                    if (atLeastOneItem) {
+                        write(";");
+                    }
+                }
                 if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile) {
                     forEach(node.declarationList.declarations, emitExportVariableAssignments);
                 }
@@ -4799,7 +4838,6 @@ var __param = this.__param || function(index, decorator) { return function (targ
             function writeLocalNamesForExternalImports(startWithComma: boolean): void {
                 let started = startWithComma;
                 for (let importNode of externalImports) {
-
                     if (started) {
                         write(", ");
                     }
@@ -4854,7 +4892,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                             write(", ");
                         }
                         if (local.kind === SyntaxKind.ClassDeclaration || local.kind === SyntaxKind.ModuleDeclaration) {
-                            emitDeclarationName(<ClassDeclaration>local);
+                            emitDeclarationName(<ClassDeclaration | ModuleDeclaration>local);
                         }
                         else {
                             emit(local);
