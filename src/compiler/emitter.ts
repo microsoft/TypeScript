@@ -1,6 +1,7 @@
 /// <reference path="checker.ts"/>
 /// <reference path="declarationEmitter.ts"/>
 
+/* @internal */
 module ts {
     // represents one LexicalEnvironment frame to store unique generated names
     interface ScopeFrame {
@@ -20,7 +21,6 @@ module ts {
         _n        = 0x20000000,  // Use/preference flag for '_n'
     }
 
-    // @internal
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
         // emit output for the __extends helper function

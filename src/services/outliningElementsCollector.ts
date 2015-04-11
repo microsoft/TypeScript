@@ -1,3 +1,4 @@
+/* @internal */
 module ts {
     export module OutliningElementsCollector {
         export function collectElements(sourceFile: SourceFile): OutliningSpan[] {

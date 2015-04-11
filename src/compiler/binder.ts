@@ -1,7 +1,8 @@
 /// <reference path="parser.ts"/>
 
+/* @internal */
 module ts {
-    /* @internal */ export let bindTime = 0;
+    export let bindTime = 0;
 
     export const enum ModuleInstanceState {
         NonInstantiated = 0,
