@@ -9,6 +9,6 @@ class C {
 >C : C
 
     @dec prop;
->dec : unknown
+>dec : () => <T>(target: any, propertyKey: string) => void
 >prop : any
 }

@@ -2,11 +2,12 @@
 /// <reference path="diagnosticInformationMap.generated.ts"/>
 
 module ts {
-
+    /* @internal */ 
     export interface ErrorCallback {
         (message: DiagnosticMessage, length: number): void;
     }
 
+    /* @internal */ 
     export interface Scanner {
         getStartPos(): number;
         getToken(): SyntaxKind;
@@ -266,6 +267,7 @@ module ts {
         return textToToken[s];
     }
 
+    /* @internal */ 
     export function computeLineStarts(text: string): number[] {
         let result: number[] = new Array();
         let pos = 0;
@@ -297,15 +299,18 @@ module ts {
         return computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character);
     }
 
+    /* @internal */ 
     export function computePositionOfLineAndCharacter(lineStarts: number[], line: number, character: number): number {
         Debug.assert(line >= 0 && line < lineStarts.length);
         return lineStarts[line] + character;
     }
 
+    /* @internal */ 
     export function getLineStarts(sourceFile: SourceFile): number[] {
         return sourceFile.lineMap || (sourceFile.lineMap = computeLineStarts(sourceFile.text));
     }
 
+    /* @internal */ 
     export function computeLineAndCharacterOfPosition(lineStarts: number[], position: number) {
         let lineNumber = binarySearch(lineStarts, position);
         if (lineNumber < 0) {
@@ -366,10 +371,12 @@ module ts {
         return ch >= CharacterCodes._0 && ch <= CharacterCodes._9;
     }
 
+    /* @internal */ 
     export function isOctalDigit(ch: number): boolean {
         return ch >= CharacterCodes._0 && ch <= CharacterCodes._7;
     }
 
+    /* @internal */ 
     export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean): number {
         while (true) {
             let ch = text.charCodeAt(pos);
@@ -527,6 +534,7 @@ module ts {
                     let nextChar = text.charCodeAt(pos + 1);
                     let hasTrailingNewLine = false;
                     if (nextChar === CharacterCodes.slash || nextChar === CharacterCodes.asterisk) {
+                        let kind = nextChar === CharacterCodes.slash ? SyntaxKind.SingleLineCommentTrivia : SyntaxKind.MultiLineCommentTrivia;
                         let startPos = pos;
                         pos += 2;
                         if (nextChar === CharacterCodes.slash) {
@@ -552,7 +560,7 @@ module ts {
                                 result = [];
                             }
 
-                            result.push({ pos: startPos, end: pos, hasTrailingNewLine: hasTrailingNewLine });
+                            result.push({ pos: startPos, end: pos, hasTrailingNewLine, kind });
                         }
                         continue;
                     }
@@ -591,6 +599,7 @@ module ts {
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
 
+    /* @internal */ 
     // Creates a scanner over a (possibly unspecified) range of a piece of text.
     export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, text?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner {
         let pos: number;       // Current position (end position of text of current token)

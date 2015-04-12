@@ -177,6 +177,12 @@ module ts.server {
             super(host, logger);
         }
 
+        exit() {
+            this.projectService.log("Exiting...","Info");
+            this.projectService.closeLog();
+            process.exit(0);
+        }
+
         listen() {
             rl.on('line',(input: string) => {
                 var message = input.trim();
@@ -184,9 +190,7 @@ module ts.server {
             });
 
             rl.on('close',() => {
-                this.projectService.log("Exiting...");
-                this.projectService.closeLog();
-                process.exit(0);
+                this.exit();
             });
         }
     }

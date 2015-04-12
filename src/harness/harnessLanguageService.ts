@@ -336,6 +336,9 @@ module Harness.LanguageService {
         getOccurrencesAtPosition(fileName: string, position: number): ts.ReferenceEntry[] {
             return unwrapJSONCallResult(this.shim.getOccurrencesAtPosition(fileName, position));
         }
+        getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): ts.DocumentHighlights[] {
+            return unwrapJSONCallResult(this.shim.getDocumentHighlights(fileName, position, JSON.stringify(filesToSearch)));
+        }
         getNavigateToItems(searchValue: string): ts.NavigateToItem[] {
             return unwrapJSONCallResult(this.shim.getNavigateToItems(searchValue));
         }

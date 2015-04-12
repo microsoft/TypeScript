@@ -10,6 +10,7 @@ var M;
 (function (M) {
     var obj = (_a = {},
         _a[this.bar] = 0,
-        _a);
+        _a
+    );
     var _a;
 })(M || (M = {}));

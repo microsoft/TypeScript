@@ -1,5 +1,6 @@
 /// <reference path="binder.ts" />
 
+/* @internal */
 module ts {
     export interface ReferencePathMatchResult {
         fileReference?: FileReference
@@ -158,6 +159,14 @@ module ts {
         }
 
         return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
+    }
+
+    export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
+        if (nodeIsMissing(node) || !node.decorators) {
+            return getTokenPosOfNode(node, sourceFile);
+        }
+
+        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.decorators.end);        
     }
 
     export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node): string {
@@ -525,6 +534,19 @@ module ts {
                     // the *body* of the container.
                     node = node.parent;
                     break;
+                case SyntaxKind.Decorator:
+                    // Decorators are always applied outside of the body of a class or method. 
+                    if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
+                        // If the decorator's parent is a Parameter, we resolve the this container from
+                        // the grandparent class declaration.
+                        node = node.parent.parent;
+                    }
+                    else if (isClassElement(node.parent)) {
+                        // If the decorator's parent is a class element, we resolve the 'this' container
+                        // from the parent class declaration.
+                        node = node.parent;
+                    }
+                    break;
                 case SyntaxKind.ArrowFunction:
                     if (!includeArrowFunctions) {
                         continue;
@@ -566,6 +588,19 @@ module ts {
                     // such a parent to be a super container, the reference must be in
                     // the *body* of the container.
                     node = node.parent;
+                    break;
+                case SyntaxKind.Decorator:
+                    // Decorators are always applied outside of the body of a class or method. 
+                    if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
+                        // If the decorator's parent is a Parameter, we resolve the this container from
+                        // the grandparent class declaration.
+                        node = node.parent.parent;
+                    }
+                    else if (isClassElement(node.parent)) {
+                        // If the decorator's parent is a class element, we resolve the 'this' container
+                        // from the parent class declaration.
+                        node = node.parent;
+                    }
                     break;
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
@@ -753,6 +788,8 @@ module ts {
                         return node === (<TemplateSpan>parent).expression;
                     case SyntaxKind.ComputedPropertyName:
                         return node === (<ComputedPropertyName>parent).expression;
+                    case SyntaxKind.Decorator:
+                        return true;
                     default:
                         if (isExpression(parent)) {
                             return true;
@@ -943,6 +980,7 @@ module ts {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.MethodSignature:
             case SyntaxKind.IndexSignature:
                 return true;
             default:
@@ -1365,7 +1403,7 @@ module ts {
         return node;
     }
 
-    // @internal
+    /* @internal */
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
         let fileDiagnostics: Map<Diagnostic[]> = {};

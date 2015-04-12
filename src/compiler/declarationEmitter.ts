@@ -1,7 +1,7 @@
 /// <reference path="checker.ts"/>
 
+/* @internal */
 module ts {
-
     interface ModuleElementDeclarationEmitInfo {
         node: Node;
         outputPos: number;
@@ -442,20 +442,41 @@ module ts {
             emitLines(node.statements);
         }
 
+        // Return a temp variable name to be used in `export default` statements.
+        // The temp name will be of the form _default_counter.
+        // Note that export default is only allowed at most once in a module, so we
+        // do not need to keep track of created temp names.
+        function getExportDefaultTempVariableName(): string {
+            let baseName = "_default";
+            if (!hasProperty(currentSourceFile.identifiers, baseName)) {
+                return baseName;
+            }
+            let count = 0;
+            while (true) {
+                let name = baseName + "_" + (++count);
+                if (!hasProperty(currentSourceFile.identifiers, name)) {
+                    return name;
+                }
+            }
+        }
+
         function emitExportAssignment(node: ExportAssignment) {
-            write(node.isExportEquals ? "export = " : "export default ");
             if (node.expression.kind === SyntaxKind.Identifier) {
+                write(node.isExportEquals ? "export = " : "export default ");
                 writeTextOfNode(currentSourceFile, node.expression);
             }
             else {
+                // Expression
+                let tempVarName = getExportDefaultTempVariableName();
+                write("declare var ");
+                write(tempVarName);
                 write(": ");
-                if (node.type) {
-                    emitType(node.type);
-                }
-                else {
-                    writer.getSymbolAccessibilityDiagnostic = getDefaultExportAccessibilityDiagnostic;
-                    resolver.writeTypeOfExpression(node.expression, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
-                }
+                writer.getSymbolAccessibilityDiagnostic = getDefaultExportAccessibilityDiagnostic;
+                resolver.writeTypeOfExpression(node.expression, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                write(";");
+                writeLine();
+                write(node.isExportEquals ? "export = " : "export default ");
+                write(tempVarName);
             }
             write(";");
             writeLine();
@@ -1540,7 +1561,7 @@ module ts {
         }
     }
     
-    // @internal
+    /* @internal */
     export function writeDeclarationFile(jsFilePath: string, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[]) {
         let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, jsFilePath, sourceFile);
         // TODO(shkamat): Should we not write any declaration file if any of them can produce error,

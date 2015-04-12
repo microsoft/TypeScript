@@ -338,6 +338,7 @@ module ts {
         BlockScoped = Let | Const
     }
 
+    /* @internal */
     export const enum ParserContextFlags {
         None = 0,
 
@@ -379,6 +380,7 @@ module ts {
         HasAggregatedChildData = 1 << 8
     }
 
+    /* @internal */
     export const enum RelationComparisonResult {
         Succeeded = 1, // Should be truthy
         Failed = 2,
@@ -390,15 +392,15 @@ module ts {
         flags: NodeFlags;
         // Specific context the parser was in when this node was created.  Normally undefined.
         // Only set when the parser was in some interesting context (like async/yield).
-        parserContextFlags?: ParserContextFlags;
-        decorators?: NodeArray<Decorator>;  // Array of decorators (in document order)
-        modifiers?: ModifiersArray;         // Array of modifiers
-        id?: number;                        // Unique id (used to look up NodeLinks)
-        parent?: Node;                      // Parent node (initialized by binding)
-        symbol?: Symbol;                    // Symbol declared by node (initialized by binding)
-        locals?: SymbolTable;               // Locals associated with node (initialized by binding)
-        nextContainer?: Node;               // Next container in declaration order (initialized by binding)
-        localSymbol?: Symbol;               // Local symbol declared by node (initialized by binding only for exported nodes)
+        /* @internal */ parserContextFlags?: ParserContextFlags;
+        decorators?: NodeArray<Decorator>;    // Array of decorators (in document order)
+        modifiers?: ModifiersArray;           // Array of modifiers
+        /* @internal */ id?: number;          // Unique id (used to look up NodeLinks)
+        parent?: Node;                        // Parent node (initialized by binding)
+        /* @internal */ symbol?: Symbol;      // Symbol declared by node (initialized by binding)
+        /* @internal */ locals?: SymbolTable; // Locals associated with node (initialized by binding)
+        /* @internal */ nextContainer?: Node; // Next container in declaration order (initialized by binding)
+        /* @internal */ localSymbol?: Symbol; // Local symbol declared by node (initialized by binding only for exported nodes)
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange {
@@ -999,8 +1001,7 @@ module ts {
 
     export interface ExportAssignment extends Declaration, ModuleElement {
         isExportEquals?: boolean;
-        expression?: Expression;
-        type?: TypeNode;
+        expression: Expression;
     }
 
     export interface FileReference extends TextRange {
@@ -1009,6 +1010,7 @@ module ts {
 
     export interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
+        kind: SyntaxKind;
     }
 
     // represents a top level: { type } expression in a JSDoc comment.
@@ -1101,11 +1103,12 @@ module ts {
 
         hasNoDefaultLib: boolean;
 
-        // The first node that causes this file to be an external module
-        externalModuleIndicator: Node;
         languageVersion: ScriptTarget;
-        identifiers: Map<string>;
 
+        // The first node that causes this file to be an external module
+        /* @internal */ externalModuleIndicator: Node;
+        
+        /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
         /* @internal */ symbolCount: number;
@@ -1133,6 +1136,9 @@ module ts {
     }
 
     export interface Program extends ScriptReferenceHost {
+        /**
+         * Get a list of files in the program
+         */
         getSourceFiles(): SourceFile[];
 
         /**
@@ -1152,10 +1158,12 @@ module ts {
         getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
 
-        // Gets a type checker that can be used to semantically analyze source fils in the program.
+        /** 
+         * Gets a type checker that can be used to semantically analyze source fils in the program.
+         */
         getTypeChecker(): TypeChecker;
 
-        getCommonSourceDirectory(): string;
+        /* @internal */ getCommonSourceDirectory(): string;
 
         // For testing purposes only.  Should not be used by any other consumers (including the
         // language service).
@@ -1168,12 +1176,18 @@ module ts {
     }
 
     export interface SourceMapSpan {
-        emittedLine: number;    // Line number in the .js file
-        emittedColumn: number;  // Column number in the .js file
-        sourceLine: number;     // Line number in the .ts file
-        sourceColumn: number;   // Column number in the .ts file
-        nameIndex?: number;     // Optional name (index into names array) associated with this span
-        sourceIndex: number;    // .ts file (index into sources array) associated with this span*/
+        /** Line number in the .js file. */
+        emittedLine: number; 
+        /** Column number in the .js file. */
+        emittedColumn: number;  
+        /** Line number in the .ts file. */
+        sourceLine: number; 
+        /** Column number in the .ts file. */
+        sourceColumn: number; 
+        /** Optional name (index into names array) associated with this span. */
+        nameIndex?: number; 
+        /** .ts file (index into sources array) associated with this span */
+        sourceIndex: number;
     }
 
     export interface SourceMapData {
@@ -1188,7 +1202,7 @@ module ts {
         sourceMapDecodedMappings: SourceMapSpan[];  // Raw source map spans that were encoded into the sourceMapMappings
     }
 
-    // Return code used by getEmitOutput function to indicate status of the function
+    /** Return code used by getEmitOutput function to indicate status of the function */
     export enum ExitStatus {
         // Compiler ran successfully.  Either this was a simple do-nothing compilation (for example,
         // when -version or -help was provided, or this was a normal compilation, no diagnostics
@@ -1205,7 +1219,7 @@ module ts {
     export interface EmitResult {
         emitSkipped: boolean;
         diagnostics: Diagnostic[];
-        sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
+        /* @internal */ sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
 
     export interface TypeCheckerHost {
@@ -1224,8 +1238,6 @@ module ts {
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getReturnTypeOfSignature(signature: Signature): Type;
 
-        // If 'predicate' is supplied, then only the first symbol in scope matching the predicate 
-        // will be returned.  Otherwise, all symbols in scope will be returned.
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
         getShorthandAssignmentValueSymbol(location: Node): Symbol;
@@ -1317,14 +1329,17 @@ module ts {
         UseOnlyExternalAliasing = 0x00000002,
     }
 
+    /* @internal */
     export const enum SymbolAccessibility {
         Accessible,
         NotAccessible,
         CannotBeNamed
     }
 
+    /* @internal */
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
 
+    /* @internal */
     export interface SymbolVisibilityResult {
         accessibility: SymbolAccessibility;
         aliasesToMakeVisible?: AnyImportSyntax[]; // aliases that need to have this symbol visible
@@ -1332,10 +1347,12 @@ module ts {
         errorNode?: Node; // optional node that results in error
     }
 
+    /* @internal */
     export interface SymbolAccessiblityResult extends SymbolVisibilityResult {
         errorModuleName?: string // If the symbol is not visible from module, module's name
     }
 
+    /* @internal */
     export interface EmitResolver {
         hasGlobalName(name: string): boolean;
         getExpressionNameSubstitution(node: Identifier, getGeneratedNameForNode: (node: Node) => string): string;
@@ -1440,19 +1457,20 @@ module ts {
     }
 
     export interface Symbol {
-        flags: SymbolFlags;            // Symbol flags
-        name: string;                  // Name of symbol
-        id?: number;                   // Unique id (used to look up SymbolLinks)
-        mergeId?: number;              // Merge id (used to look up merged symbol)
-        declarations?: Declaration[];  // Declarations associated with this symbol
-        parent?: Symbol;               // Parent symbol
-        members?: SymbolTable;         // Class, interface or literal instance members
-        exports?: SymbolTable;         // Module exports
-        exportSymbol?: Symbol;         // Exported symbol associated with this symbol
-        valueDeclaration?: Declaration // First value declaration of the symbol
-        constEnumOnlyModule?: boolean  // True if module contains only const enums or other modules with only const enums
+        flags: SymbolFlags;                     // Symbol flags
+        name: string;                           // Name of symbol
+        /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
+        /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
+        declarations?: Declaration[];           // Declarations associated with this symbol
+        /* @internal */ parent?: Symbol;        // Parent symbol
+        members?: SymbolTable;                  // Class, interface or literal instance members
+        exports?: SymbolTable;                  // Module exports
+        /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
+        valueDeclaration?: Declaration;         // First value declaration of the symbol
+        /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
     }
 
+    /* @internal */ 
     export interface SymbolLinks {
         target?: Symbol;                    // Resolved (non-alias) target of an alias
         type?: Type;                        // Type of value symbol
@@ -1464,12 +1482,14 @@ module ts {
         exportsChecked?: boolean;           // True if exports of external module have been checked
     }
 
+    /* @internal */ 
     export interface TransientSymbol extends Symbol, SymbolLinks { }
 
     export interface SymbolTable {
         [index: string]: Symbol;
     }
 
+    /* @internal */ 
     export const enum NodeCheckFlags {
         TypeChecked                 = 0x00000001,  // Node has been type checked
         LexicalThis                 = 0x00000002,  // Lexical 'this' reference
@@ -1486,6 +1506,7 @@ module ts {
         EmitParam                   = 0x00000400,  // Emit __param helper for decorators
     }
 
+    /* @internal */ 
     export interface NodeLinks {
         resolvedType?: Type;              // Cached type of type node
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
@@ -1518,27 +1539,34 @@ module ts {
         Tuple                   = 0x00002000,  // Tuple
         Union                   = 0x00004000,  // Union
         Anonymous               = 0x00008000,  // Anonymous
+        /* @internal */ 
         FromSignature           = 0x00010000,  // Created for signature assignment check
         ObjectLiteral           = 0x00020000,  // Originates in an object literal
+        /* @internal */ 
         ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
-        ContainsObjectLiteral   = 0x00080000,  // Type is or contains object literal type
+        /* @internal */ 
+        ContainsObjectLiteral = 0x00080000,  // Type is or contains object literal type
         ESSymbol                = 0x00100000,  // Type of symbol primitive introduced in ES6
 
+        /* @internal */ 
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
+        /* @internal */ 
         Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
+        /* @internal */ 
         RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral
     }
 
     // Properties common to all types
     export interface Type {
-        flags: TypeFlags;  // Flags
-        id: number;        // Unique ID
-        symbol?: Symbol;   // Symbol associated with type (if any)
+        flags: TypeFlags;               // Flags
+        /* @internal */ id: number;     // Unique ID
+        symbol?: Symbol;                // Symbol associated with type (if any)
     }
 
+    /* @internal */ 
     // Intrinsic types (TypeFlags.Intrinsic)
     export interface IntrinsicType extends Type {
         intrinsicName: string;  // Name of intrinsic type
@@ -1571,6 +1599,7 @@ module ts {
 
     // Generic class and interface types
     export interface GenericType extends InterfaceType, TypeReference {
+        /* @internal */
         instantiations: Map<TypeReference>;   // Generic instantiation cache
     }
 
@@ -1581,9 +1610,11 @@ module ts {
 
     export interface UnionType extends Type {
         types: Type[];                    // Constituent types
+        /* @internal */
         resolvedProperties: SymbolTable;  // Cache of resolved properties
     }
 
+    /* @internal */
     // Resolved object or union type
     export interface ResolvedType extends ObjectType, UnionType {
         members: SymbolTable;              // Properties by name
@@ -1597,7 +1628,9 @@ module ts {
     // Type parameters (TypeFlags.TypeParameter)
     export interface TypeParameter extends Type {
         constraint: Type;        // Constraint
+        /* @internal */
         target?: TypeParameter;  // Instantiation target
+        /* @internal */
         mapper?: TypeMapper;     // Instantiation mapper
     }
 
@@ -1610,14 +1643,23 @@ module ts {
         declaration: SignatureDeclaration;  // Originating declaration
         typeParameters: TypeParameter[];    // Type parameters (undefined if non-generic)
         parameters: Symbol[];               // Parameters
+        /* @internal */
         resolvedReturnType: Type;           // Resolved return type
+        /* @internal */
         minArgumentCount: number;           // Number of non-optional parameters
+        /* @internal */
         hasRestParameter: boolean;          // True if last parameter is rest parameter
+        /* @internal */
         hasStringLiterals: boolean;         // True if specialized
+        /* @internal */
         target?: Signature;                 // Instantiation target
+        /* @internal */
         mapper?: TypeMapper;                // Instantiation mapper
+        /* @internal */
         unionSignatures?: Signature[];      // Underlying signatures of a union signature
+        /* @internal */
         erasedSignatureCache?: Signature;   // Erased version of signature (deferred)
+        /* @internal */
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
     }
 
@@ -1626,11 +1668,12 @@ module ts {
         Number,
     }
 
+    /* @internal */
     export interface TypeMapper {
         (t: Type): Type;
     }
 
-    // @internal
+    /* @internal */
     export interface TypeInferences {
         primary: Type[];    // Inferences made directly to a type parameter
         secondary: Type[];  // Inferences made to a type parameter in a union type
@@ -1638,7 +1681,7 @@ module ts {
                             // If a type parameter is fixed, no more inferences can be made for the type parameter
     }
 
-    // @internal
+    /* @internal */
     export interface InferenceContext {
         typeParameters: TypeParameter[];    // Type parameters for which inferences are made
         inferUnionTypes: boolean;           // Infer union types for disjoint candidates (otherwise undefinedType)
@@ -1654,10 +1697,12 @@ module ts {
         code: number;
     }
 
-    // A linked list of formatted diagnostic messages to be used as part of a multiline message.
-    // It is built from the bottom up, leaving the head to be the "main" diagnostic.
-    // While it seems that DiagnosticMessageChain is structurally similar to DiagnosticMessage,
-    // the difference is that messages are all preformatted in DMC.
+    /**
+     * A linked list of formatted diagnostic messages to be used as part of a multiline message.
+     * It is built from the bottom up, leaving the head to be the "main" diagnostic.
+     * While it seems that DiagnosticMessageChain is structurally similar to DiagnosticMessage,
+     * the difference is that messages are all preformatted in DMC.
+     */
     export interface DiagnosticMessageChain {
         messageText: string;
         category: DiagnosticCategory;
@@ -1741,6 +1786,7 @@ module ts {
         errors: Diagnostic[];
     }
 
+    /* @internal */
     export interface CommandLineOption {
         name: string;
         type: string | Map<number>;         // "string", "number", "boolean", or an object literal mapping named values to actual values
@@ -1752,6 +1798,7 @@ module ts {
         experimental?: boolean;
     }
 
+    /* @internal */
     export const enum CharacterCodes {
         nullCharacter = 0,
         maxAsciiCharacter = 0x7F,
@@ -1913,7 +1960,7 @@ module ts {
         newLength: number;
     }
 
-    // @internal
+    /* @internal */
     export interface DiagnosticCollection {
         // Adds a diagnostic to this diagnostic collection.
         add(diagnostic: Diagnostic): void;
