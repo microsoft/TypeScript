@@ -1517,21 +1517,28 @@ module ts {
         resolvedProperties: SymbolTable;  // Cache of resolved properties
     }
 
+    export enum IndexAlphaNumeric {
+        NO,
+        YES,           // string & number indexes come from different types 
+        INHERITED      // string & number indexes are both from an inherited type 
+    }
+
     export interface IndexType {
-        typeOfIndex?: Type // string|number|enum
-        typeOfValue: Type
-        declaredNode?: Declaration
-        inherited?: boolean
+        typeOfIndex?: Type              // string|number|enum
+        typeOfValue: Type               // any
+        declaredNode?: Declaration,     // Declaration of [x: typeOfIndex]: typeOfValue
+        inherited?: Symbol              // Symbol of baseType where inherited
     }
 
     /* @internal */    // Resolved object or union type
     export interface ResolvedType extends ObjectType, UnionType {
-        members: SymbolTable;              // Properties by name
-        properties: Symbol[];              // Properties
-        callSignatures: Signature[];       // Call signatures of type
-        constructSignatures: Signature[];  // Construct signatures of type
-        stringIndex: IndexType;            // String index type
-        numberIndex: IndexType;            // Number index type
+        members: SymbolTable;                 // Properties by name
+        properties: Symbol[];                 // Properties
+        callSignatures: Signature[];          // Call signatures of type
+        constructSignatures: Signature[];     // Construct signatures of type
+        stringIndex: IndexType;               // String index type
+        numberIndex: IndexType;               // Number index type
+        alphaNumericIndex?: IndexAlphaNumeric // Information about alphanumeric index
     }
 
     // Type parameters (TypeFlags.TypeParameter)

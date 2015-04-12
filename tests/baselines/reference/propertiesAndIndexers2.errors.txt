@@ -1,5 +1,4 @@
-tests/cases/compiler/propertiesAndIndexers2.ts(2,5): error TS2413: Numeric index type '[string]: string' is not assignable to string index type '[string]: number'.
-tests/cases/compiler/propertiesAndIndexers2.ts(3,5): error TS2413: Numeric index type '[string]: string' is not assignable to string index type '[string]: number'.
+tests/cases/compiler/propertiesAndIndexers2.ts(2,5): error TS2413: Numeric index type '[number]: string' is not assignable to string index type '[string]: number'.
 tests/cases/compiler/propertiesAndIndexers2.ts(8,5): error TS2411: Property 'c' of type 'string' is not assignable to string index type 'number'.
 tests/cases/compiler/propertiesAndIndexers2.ts(9,5): error TS2411: Property '3' of type 'string' is not assignable to string index type 'number'.
 tests/cases/compiler/propertiesAndIndexers2.ts(10,5): error TS2411: Property 'Infinity' of type 'string' is not assignable to string index type 'number'.
@@ -10,14 +9,12 @@ tests/cases/compiler/propertiesAndIndexers2.ts(14,5): error TS2411: Property '6'
 tests/cases/compiler/propertiesAndIndexers2.ts(14,5): error TS2412: Property '6' of type '() => string' is not assignable to numeric index type 'string'.
 
 
-==== tests/cases/compiler/propertiesAndIndexers2.ts (10 errors) ====
+==== tests/cases/compiler/propertiesAndIndexers2.ts (9 errors) ====
     interface A {
         [n: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2413: Numeric index type '[string]: string' is not assignable to string index type '[string]: number'.
+!!! error TS2413: Numeric index type '[number]: string' is not assignable to string index type '[string]: number'.
         [s: string]: number;
-        ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2413: Numeric index type '[string]: string' is not assignable to string index type '[string]: number'.
     }
     
     // All of these should fail.

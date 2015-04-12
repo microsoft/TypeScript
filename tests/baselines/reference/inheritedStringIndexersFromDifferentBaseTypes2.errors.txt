@@ -1,16 +1,12 @@
-tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes2.ts(3,5): error TS2413: Numeric index type '[string]: {}' is not assignable to string index type '[string]: { a: any; }'.
+tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes2.ts(18,11): error TS2413: Numeric index type '[number]: {}' is not assignable to string index type '[string]: { a: any; }'.
 
 
 ==== tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes2.ts (1 errors) ====
     // indexer in B is a subtype of indexer in A
     interface A {
         [s: string]: {
-        ~~~~~~~~~~~~~~
             a;
-    ~~~~~~~~~~
         };
-    ~~~~~~
-!!! error TS2413: Numeric index type '[string]: {}' is not assignable to string index type '[string]: { a: any; }'.
     }
     interface B {
         [s: number]: {
@@ -24,6 +20,8 @@ tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes2.ts(3,5): err
         [s: number]: {};
     }
     interface E extends A, D { } // error
+              ~
+!!! error TS2413: Numeric index type '[number]: {}' is not assignable to string index type '[string]: { a: any; }'.
     
     interface F extends A, D {
         [s: number]: {
