@@ -1,13 +1,10 @@
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509668.ts(3,16): error TS1003: Identifier expected.
 tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509668.ts(3,23): error TS1005: ',' expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509668.ts (2 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509668.ts (1 errors) ====
     class Foo3 {
       // Doesn't work, but should
       constructor (public ...args: string[]) { }
-                   ~~~~~~
-!!! error TS1003: Identifier expected.
                           ~~~
 !!! error TS1005: ',' expected.
     }

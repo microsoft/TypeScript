@@ -15,7 +15,7 @@ var __decorate = this.__decorate || (typeof Reflect === "object" && Reflect.deco
 };
 var __param = this.__param || function(index, decorator) { return function (target, key) { decorator(target, key, index); } };
 var C = (function () {
-    function C(, p) {
+    function C(public, p) {
     }
     C = __decorate([
         __param(1, dec)

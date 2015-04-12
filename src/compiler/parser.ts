@@ -1349,6 +1349,7 @@ module ts {
             return speculationHelper(callback, /*isLookAhead:*/ false);
         }
 
+        // Ignore strict mode flag because we will report an error in type checker instead.
         function isIdentifier(): boolean {
             if (token === SyntaxKind.Identifier) {
                 return true;
@@ -1360,7 +1361,7 @@ module ts {
                 return false;
             }
 
-            return inStrictModeContext() ? token > SyntaxKind.LastFutureReservedWord : token > SyntaxKind.LastReservedWord;
+            return token > SyntaxKind.LastReservedWord;
         }
 
         function parseExpected(kind: SyntaxKind, diagnosticMessage?: DiagnosticMessage): boolean {
@@ -1484,6 +1485,11 @@ module ts {
             identifierCount++;
             if (isIdentifier) {
                 let node = <Identifier>createNode(SyntaxKind.Identifier);
+
+                // Store original token kind if it is not just an Identifier so we can report appropriate error later in type checker
+                if (token !== SyntaxKind.Identifier) {
+                    node.originalKeywordKind  = token;
+                }
                 node.text = internIdentifier(scanner.getTokenValue());
                 nextToken();
                 return finishNode(node);
@@ -4599,6 +4605,18 @@ module ts {
             return finishNode(node);
         }
 
+        function isClassMemberModifier(idToken: SyntaxKind) {
+            switch (idToken) {
+                case SyntaxKind.PublicKeyword:
+                case SyntaxKind.PrivateKeyword:
+                case SyntaxKind.ProtectedKeyword:
+                case SyntaxKind.StaticKeyword:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         function isClassMemberStart(): boolean {
             let idToken: SyntaxKind;
 
@@ -4609,6 +4627,16 @@ module ts {
             // Eat up all modifiers, but hold on to the last one in case it is actually an identifier.
             while (isModifier(token)) {
                 idToken = token;
+                // If the idToken is a class modifier (protected, private, public, and static), it is
+                // certain that we are starting to parse class member. This allows better error recovery
+                // Example:
+                //      public foo() ...     // true
+                //      public @dec blah ... // true; we will then report an error later
+                //      export public ...    // true; we will then report an error later
+                if (isClassMemberModifier(idToken)) {
+                    return true;
+                }
+
                 nextToken();
             }
 

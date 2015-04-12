@@ -13,12 +13,14 @@ tests/cases/compiler/classUpdateTests.ts(95,1): error TS1128: Declaration or sta
 tests/cases/compiler/classUpdateTests.ts(99,3): error TS1129: Statement expected.
 tests/cases/compiler/classUpdateTests.ts(101,1): error TS1128: Declaration or statement expected.
 tests/cases/compiler/classUpdateTests.ts(105,3): error TS1129: Statement expected.
-tests/cases/compiler/classUpdateTests.ts(105,15): error TS2339: Property 'p1' does not exist on type 'Q'.
+tests/cases/compiler/classUpdateTests.ts(105,14): error TS1005: ';' expected.
+tests/cases/compiler/classUpdateTests.ts(107,1): error TS1128: Declaration or statement expected.
 tests/cases/compiler/classUpdateTests.ts(111,3): error TS1129: Statement expected.
-tests/cases/compiler/classUpdateTests.ts(111,16): error TS2339: Property 'p1' does not exist on type 'R'.
+tests/cases/compiler/classUpdateTests.ts(111,15): error TS1005: ';' expected.
+tests/cases/compiler/classUpdateTests.ts(113,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/classUpdateTests.ts (16 errors) ====
+==== tests/cases/compiler/classUpdateTests.ts (18 errors) ====
     //
     // test codegen for instance properties
     //
@@ -158,17 +160,21 @@ tests/cases/compiler/classUpdateTests.ts(111,16): error TS2339: Property 'p1' do
     		public this.p1 = 0; // ERROR
     		~~~~~~
 !!! error TS1129: Statement expected.
-    		            ~~
-!!! error TS2339: Property 'p1' does not exist on type 'Q'.
+    		           ~
+!!! error TS1005: ';' expected.
     	}
     }
+    ~
+!!! error TS1128: Declaration or statement expected.
     
     class R {
     	constructor() {
     		private this.p1 = 0; // ERROR
     		~~~~~~~
 !!! error TS1129: Statement expected.
-    		             ~~
-!!! error TS2339: Property 'p1' does not exist on type 'R'.
+    		            ~
+!!! error TS1005: ';' expected.
     	}
     }
+    ~
+!!! error TS1128: Declaration or statement expected.
