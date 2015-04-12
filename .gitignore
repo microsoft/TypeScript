@@ -46,3 +46,5 @@ scripts/*.js.map
 coverage/
 internal/
 **/.DS_Store
+src/lib/backup/webworker.generated.d.ts
+src/lib/backup/dom.generated.d.ts
