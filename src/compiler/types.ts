@@ -1458,6 +1458,7 @@ module ts {
 
     export interface UnionType extends Type {
         types: Type[];                    // Constituent types
+        reducedType: Type;                // Reduced union type (all subtypes removed)
         resolvedProperties: SymbolTable;  // Cache of resolved properties
     }
 
