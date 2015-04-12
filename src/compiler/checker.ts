@@ -12027,7 +12027,7 @@ module ts {
         //      public                  // error at public
         //      public.private.package  // error at public
         //      B.private.B             // no error
-        function checkGrammarHeritageClauseElementInStrictMode(expression: PropertyAccessExpression) {
+        function checkGrammarHeritageClauseElementInStrictMode(expression: Expression) {
             // Example:
             //      class C extends public // error at public
             if (expression && expression.kind === SyntaxKind.Identifier) {
@@ -12038,7 +12038,7 @@ module ts {
                 // in PropertyAccessExpression. According to grammar production of MemberExpression,
                 // the left component expression is a PrimaryExpression (i.e. Identifier) while the other
                 // component after dots can be IdentifierName.
-                checkGrammarHeritageClauseElementInStrictMode(<PropertyAccessExpression>expression.expression);
+                checkGrammarHeritageClauseElementInStrictMode((<PropertyAccessExpression>expression).expression);
             }
 
         }
