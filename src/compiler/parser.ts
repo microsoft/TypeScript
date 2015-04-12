@@ -1006,30 +1006,32 @@ module ts {
         return result;
     }
 
+    interface Parser {
+        parse(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: SyntaxCursor, setParentNodes?: boolean): SourceFile;
+    }
+
     // Share a single scanner across all calls to parse a source file.  This helps speed things
     // up by avoiding the cost of creating/compiling scanners over and over again.
     let scanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ true);
+    let parser = createParser(ScriptTarget.Latest);
 
     function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: SyntaxCursor, setParentNodes = false): SourceFile {
-        const disallowInAndDecoratorContext = ParserContextFlags.DisallowIn | ParserContextFlags.Decorator;
+        return parser.parse(fileName, sourceText, languageVersion, syntaxCursor, setParentNodes);
+    }
 
-        let parsingContext: ParsingContext = 0;
-        let identifiers: Map<string> = {};
-        let identifierCount = 0;
-        let nodeCount = 0;
+    const disallowInAndDecoratorContext = ParserContextFlags.DisallowIn | ParserContextFlags.Decorator;
+
+    function createParser(languageVersion: ScriptTarget): Parser {
+        let sourceFile: SourceFile;
+        let syntaxCursor: SyntaxCursor;
+
         let token: SyntaxKind;
+        let sourceText: string;
+        let nodeCount: number;
+        let identifiers: Map<string>;
+        let identifierCount: number;
 
-        let sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, /*pos*/ 0);
-
-        sourceFile.pos = 0;
-        sourceFile.end = sourceText.length;
-        sourceFile.text = sourceText;
-
-        sourceFile.parseDiagnostics = [];
-        sourceFile.bindDiagnostics = [];
-        sourceFile.languageVersion = languageVersion;
-        sourceFile.fileName = normalizePath(fileName);
-        sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
+        let parsingContext: ParsingContext;
 
         // Flags that dictate what parsing context we're in.  For example:
         // Whether or not we are in strict parsing mode.  All that changes in strict parsing mode is
@@ -1108,35 +1110,74 @@ module ts {
         // attached to the EOF token.
         let parseErrorBeforeNextFinishedNode: boolean = false;
 
-        // Create and prime the scanner before parsing the source elements.
+        return { parse };
 
-        scanner.setText(sourceText);
-        scanner.setOnError(scanError);
-        scanner.setScriptTarget(languageVersion);
-        token = nextToken();
+        function parse(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: SyntaxCursor, setParentNodes?: boolean): SourceFile {
+            sourceText = _sourceText;
+            syntaxCursor = _syntaxCursor;
 
-        processReferenceComments(sourceFile);
+            parsingContext = 0;
+            identifiers = {};
+            identifierCount = 0;
+            nodeCount = 0;
 
-        sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
-        Debug.assert(token === SyntaxKind.EndOfFileToken);
-        sourceFile.endOfFileToken = parseTokenNode();
+            contextFlags = 0;
+            parseErrorBeforeNextFinishedNode = false;
 
-        setExternalModuleIndicator(sourceFile);
+            createSourceFile(fileName);
 
-        sourceFile.nodeCount = nodeCount;
-        sourceFile.identifierCount = identifierCount;
-        sourceFile.identifiers = identifiers;
+            // Initialize and prime the scanner before parsing the source elements.
+            scanner.setText(sourceText);
+            scanner.setOnError(scanError);
+            scanner.setScriptTarget(languageVersion);
+            token = nextToken();
 
-        if (setParentNodes) {
-            fixupParentReferences(sourceFile);
+            processReferenceComments(sourceFile);
+
+            sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
+            Debug.assert(token === SyntaxKind.EndOfFileToken);
+            sourceFile.endOfFileToken = parseTokenNode();
+
+            setExternalModuleIndicator(sourceFile);
+
+            sourceFile.nodeCount = nodeCount;
+            sourceFile.identifierCount = identifierCount;
+            sourceFile.identifiers = identifiers;
+
+            if (setParentNodes) {
+                fixupParentReferences(sourceFile);
+            }
+
+            syntaxCursor = undefined;
+
+            // Clear out the text the scanner is pointing at, so it doesn't keep anything alive unnecessarily.
+            scanner.setText("");
+            scanner.setOnError(undefined);
+
+            let result = sourceFile;
+
+            // Clear any data.  We don't want to accidently hold onto it for too long.
+            sourceFile = undefined;
+            identifiers = undefined;
+            syntaxCursor = undefined;
+            sourceText = undefined;
+
+            return result;
         }
 
-        syntaxCursor = undefined;
+        function createSourceFile(fileName: string) {
+            sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, /*pos*/ 0);
 
-        // Clear out the text the scanner is pointing at, so it doesn't keep anything alive unnecessarily.
-        scanner.setText("");
-        scanner.setOnError(undefined);
-        return sourceFile;
+            sourceFile.pos = 0;
+            sourceFile.end = sourceText.length;
+            sourceFile.text = sourceText;
+
+            sourceFile.parseDiagnostics = [];
+            sourceFile.bindDiagnostics = [];
+            sourceFile.languageVersion = languageVersion;
+            sourceFile.fileName = normalizePath(fileName);
+            sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
+        }
 
         function setContextFlag(val: Boolean, flag: ParserContextFlags) {
             if (val) {
