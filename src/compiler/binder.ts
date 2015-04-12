@@ -52,6 +52,17 @@ module ts {
         }
     }
 
+    /* @internal */
+    export function addDeclarationToSymbol(symbol: Symbol, node: Declaration, symbolKind: SymbolFlags) {
+        symbol.flags |= symbolKind;
+        if (!symbol.declarations) symbol.declarations = [];
+        symbol.declarations.push(node);
+        if (symbolKind & SymbolFlags.HasExports && !symbol.exports) symbol.exports = {};
+        if (symbolKind & SymbolFlags.HasMembers && !symbol.members) symbol.members = {};
+        node.symbol = symbol;
+        if (symbolKind & SymbolFlags.Value && !symbol.valueDeclaration) symbol.valueDeclaration = node;
+    }
+
     export function bindSourceFile(file: SourceFile): void {
         let start = new Date().getTime();
         bindSourceFileWorker(file);
@@ -84,16 +95,6 @@ module ts {
             if (cleanLocals) {
                 blockScopeContainer.locals = undefined;
             }
-        }
-
-        function addDeclarationToSymbol(symbol: Symbol, node: Declaration, symbolKind: SymbolFlags) {
-            symbol.flags |= symbolKind;
-            if (!symbol.declarations) symbol.declarations = [];
-            symbol.declarations.push(node);
-            if (symbolKind & SymbolFlags.HasExports && !symbol.exports) symbol.exports = {};
-            if (symbolKind & SymbolFlags.HasMembers && !symbol.members) symbol.members = {};
-            node.symbol = symbol;
-            if (symbolKind & SymbolFlags.Value && !symbol.valueDeclaration) symbol.valueDeclaration = node;
         }
 
         // Should not be called on a declaration with a computed property name,

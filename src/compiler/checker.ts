@@ -3230,6 +3230,7 @@ module ts {
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.JSDocFunctionType:
                         // Don't include signature if node is the implementation of an overloaded function. A node is considered
                         // an implementation node if it has a body and the previous node is of the same kind and immediately
                         // precedes the implementation node (i.e. has the same parent and ends where the implementation starts).
@@ -3734,6 +3735,29 @@ module ts {
             return links.resolvedType;
         }
 
+        function getTypeFromJSDocFunctionType(node: JSDocFunctionType): Type {
+            let isConstructSignature = node.parameters.length > 0 && node.parameters[0].kind === SyntaxKind.JSDocConstructorType;
+            let name = isConstructSignature ? "__new" : "__call";
+
+            let symbol = createSymbol(SymbolFlags.Signature, name);
+            addDeclarationToSymbol(symbol, node, SymbolFlags.Signature);
+            node.locals = {};
+            for (let i = isConstructSignature ? 1 : 0; i < node.parameters.length; i++) {
+                let paramName = "p" + i;
+                let paramSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, name);
+                addDeclarationToSymbol(paramSymbol, node.parameters[i], SymbolFlags.FunctionScopedVariable);
+
+                node.locals[paramName] = paramSymbol;
+            }
+
+            let typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
+            addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
+            typeLiteralSymbol.members = {};
+            typeLiteralSymbol.members[name] = symbol
+
+            return createObjectType(TypeFlags.Anonymous, typeLiteralSymbol);
+        }
+
         function getTypeFromJSDocVariadicType(node: JSDocVariadicType): Type {
             let type = getTypeFromTypeNode(node.type);
             if (type) {
@@ -3854,8 +3878,7 @@ module ts {
                 case SyntaxKind.JSDocOptionalType:
                     return getTypeFromTypeNode((<JSDocOptionalType>node).type);
                 case SyntaxKind.JSDocFunctionType:
-                    // NYI:
-                    break;
+                    return getTypeFromJSDocFunctionType(<JSDocFunctionType>node);
                 case SyntaxKind.JSDocVariadicType:
                     return getTypeFromJSDocVariadicType(<JSDocVariadicType>node);
                 case SyntaxKind.JSDocConstructorType:

@@ -1055,7 +1055,7 @@ module ts {
         type: JSDocType;
     }
 
-    export interface JSDocFunctionType extends JSDocType {
+    export interface JSDocFunctionType extends JSDocType, SignatureDeclaration {
         parameters: NodeArray<ParameterDeclaration>;
         type: JSDocType;
     }
