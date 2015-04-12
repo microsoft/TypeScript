@@ -10,9 +10,9 @@
 
 declare var process: any;
 declare var console: any;
-declare var fs: any;
+declare var readFileSync: any;
 
-import ts = require("typescript");
+import * as ts from "typescript";
 
 export function delint(sourceFile: ts.SourceFile) {
     delintNode(sourceFile);
@@ -27,21 +27,22 @@ export function delint(sourceFile: ts.SourceFile) {
                     report(node, "A looping statement's contents should be wrapped in a block body.");
                 }
                 break;
+
             case ts.SyntaxKind.IfStatement:
-                var ifStatement = (<ts.IfStatement>node);
+                let ifStatement = (<ts.IfStatement>node);
                 if (ifStatement.thenStatement.kind !== ts.SyntaxKind.Block) {
                     report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
                 }
                 if (ifStatement.elseStatement &&
-                    ifStatement.elseStatement.kind !== ts.SyntaxKind.Block && ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement) {
+                    ifStatement.elseStatement.kind !== ts.SyntaxKind.Block &&
+                    ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement) {
                     report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.");
                 }
                 break;
 
             case ts.SyntaxKind.BinaryExpression:
-                var op = (<ts.BinaryExpression>node).operatorToken.kind;
-
-                if (op === ts.SyntaxKind.EqualsEqualsToken || op === ts.SyntaxKind.ExclamationEqualsToken) {
+                let op = (<ts.BinaryExpression>node).operatorToken.kind;
+                if (op === ts.SyntaxKind.EqualsEqualsToken || op == ts.SyntaxKind.ExclamationEqualsToken) {
                     report(node, "Use '===' and '!=='.")
                 }
                 break;
@@ -51,15 +52,15 @@ export function delint(sourceFile: ts.SourceFile) {
     }
 
     function report(node: ts.Node, message: string) {
-        var lineChar = sourceFile.getLineAndCharacterOfPosition(node.getStart());
-        console.log(`${sourceFile.fileName} (${lineChar.line + 1},${lineChar.character + 1}): ${message}`)
+        let { line, character } = sourceFile.getLineAndCharacterOfPosition(node.getStart());
+        console.log(`${sourceFile.fileName} (${line + 1},${character + 1}): ${message}`);
     }
 }
 
-var fileNames = process.argv.slice(2);
+const fileNames = process.argv.slice(2);
 fileNames.forEach(fileName => {
     // Parse a file
-    var sourceFile = ts.createSourceFile(fileName, fs.readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);
+    let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);
 
     // delint it
     delint(sourceFile);

@@ -10,8 +10,7 @@ tests/cases/conformance/decorators/invalid/decoratorOnImportEquals1.ts(8,5): err
     
     module M2 {
         @dec
-        ~~~~
-        import X = M1.X;
-    ~~~~~~~~~~~~~~~~~~~~
+        ~
 !!! error TS1206: Decorators are not valid here.
+        import X = M1.X;
     }

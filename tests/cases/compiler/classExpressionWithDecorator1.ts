@@ -1,0 +1,1 @@
+var v = @decorate class C { static p = 1 };

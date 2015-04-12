@@ -33,12 +33,11 @@ module.exports = typeof x;
 //// [foo2.js]
 module.exports = "sausages";
 //// [foo3.js]
-var Foo3 = (function () {
+module.exports = (function () {
     function Foo3() {
     }
     return Foo3;
 })();
-; // Error, not an expression
 //// [foo4.js]
 module.exports = true;
 //// [foo5.js]

@@ -14,7 +14,7 @@ class C {
 >C : C
 
     @dec public set accessor(value: number) { }
->dec : unknown
+>dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
 >accessor : number
 >value : number
 }

@@ -1,6 +1,6 @@
 //// [symbolDeclarationEmit1.ts]
 class C {
-    [Symbol.isRegExp]: number;
+    [Symbol.toPrimitive]: number;
 }
 
 //// [symbolDeclarationEmit1.js]
@@ -10,5 +10,5 @@ class C {
 
 //// [symbolDeclarationEmit1.d.ts]
 declare class C {
-    [Symbol.isRegExp]: number;
+    [Symbol.toPrimitive]: number;
 }

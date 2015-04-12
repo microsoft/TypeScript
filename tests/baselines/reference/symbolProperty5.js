@@ -1,7 +1,7 @@
 //// [symbolProperty5.ts]
 var x = {
     [Symbol.iterator]: 0,
-    [Symbol.isRegExp]() { },
+    [Symbol.toPrimitive]() { },
     get [Symbol.toStringTag]() {
         return 0;
     }
@@ -10,7 +10,7 @@ var x = {
 //// [symbolProperty5.js]
 var x = {
     [Symbol.iterator]: 0,
-    [Symbol.isRegExp]() { },
+    [Symbol.toPrimitive]() { },
     get [Symbol.toStringTag]() {
         return 0;
     }

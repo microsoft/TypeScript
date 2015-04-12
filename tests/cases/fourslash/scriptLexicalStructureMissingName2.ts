@@ -8,4 +8,4 @@
 
 
 // The class is unnamed, so its method is not included either.
-verify.getScriptLexicalStructureListCount(0);
+verify.getScriptLexicalStructureListCount(2);

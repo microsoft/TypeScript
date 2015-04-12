@@ -838,7 +838,7 @@ interface RegExp {
       */
     test(string: string): boolean;
 
-    /** Returns a copy of the text of the regular expression pattern. Read-only. The rgExp argument is a Regular expression object. It can be a variable name or a literal. */
+    /** Returns a copy of the text of the regular expression pattern. Read-only. The regExp argument is a Regular expression object. It can be a variable name or a literal. */
     source: string;
 
     /** Returns a Boolean value indicating the state of the global flag (g) used with a regular expression. Default is false. Read-only. */
@@ -1183,7 +1183,7 @@ interface TypedPropertyDescriptor<T> {
 declare type ClassDecorator = <TFunction extends Function>(target: TFunction) => TFunction | void;
 declare type PropertyDecorator = (target: Object, propertyKey: string | symbol) => void;
 declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
-declare type ParameterDecorator = (target: Function, propertyKey: string | symbol, parameterIndex: number) => void;
+declare type ParameterDecorator = (target: Object, propertyKey: string | symbol, parameterIndex: number) => void;
 declare type PropertyKey = string | number | symbol;
 
 interface Symbol {
@@ -1237,25 +1237,20 @@ interface SymbolConstructor {
     isConcatSpreadable: symbol;
 
     /** 
-      * A Boolean value that if true indicates that an object may be used as a regular expression. 
-      */
-    isRegExp: symbol;
-
-    /** 
       * A method that returns the default iterator for an object.Called by the semantics of the 
-      * for-of statement. 
+      * for-of statement.
       */
     iterator: symbol;
 
     /** 
       * A method that converts an object to a corresponding primitive value.Called by the ToPrimitive
-      * abstract operation. 
+      * abstract operation.
       */
     toPrimitive: symbol;
 
     /** 
-      * A String value that is used in the creation of the default string description of an object. 
-      * Called by the built- in method Object.prototype.toString. 
+      * A String value that is used in the creation of the default string description of an object.
+      * Called by the built-in method Object.prototype.toString.
       */
     toStringTag: symbol;
 
@@ -1297,7 +1292,7 @@ interface ObjectConstructor {
     getOwnPropertySymbols(o: any): symbol[];
 
     /**
-      *  Returns true if the values are the same value, false otherwise.
+      * Returns true if the values are the same value, false otherwise.
       * @param value1 The first value.
       * @param value2 The second value.
       */
@@ -1784,8 +1779,6 @@ interface Math {
 }
 
 interface RegExp {
-    [Symbol.isRegExp]: boolean;
-
     /** 
       * Matches a string with a regular expression, and returns an array containing the results of 
       * that search.
@@ -1816,6 +1809,20 @@ interface RegExp {
       * than limit elements.
       */
     split(string: string, limit?: number): string[];
+
+    /**
+      * Returns a string indicating the flags of the regular expression in question. This field is read-only.
+      * The characters in this string are sequenced and concatenated in the following order:
+      *
+      *    - "g" for global
+      *    - "i" for ignoreCase
+      *    - "m" for multiline
+      *    - "u" for unicode
+      *    - "y" for sticky
+      *
+      * If no flags are set, the value is the empty string.
+      */
+    flags: string;
 
     /** 
       * Returns a Boolean value indicating the state of the sticky flag (y) used with a regular 
@@ -4699,27 +4706,27 @@ interface ProxyHandler<T> {
 
 interface ProxyConstructor {
     revocable<T>(target: T, handler: ProxyHandler<T>): { proxy: T; revoke: () => void; };
-    new <T>(target: T, handeler: ProxyHandler<T>): T
+    new <T>(target: T, handler: ProxyHandler<T>): T
 }
 declare var Proxy: ProxyConstructor;
 
-declare var Reflect: {
-    apply(target: Function, thisArgument: any, argumentsList: ArrayLike<any>): any;
-    construct(target: Function, argumentsList: ArrayLike<any>): any;
-    defineProperty(target: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): boolean;
-    deleteProperty(target: any, propertyKey: PropertyKey): boolean;
-    enumerate(target: any): IterableIterator<any>;
-    get(target: any, propertyKey: PropertyKey, receiver?: any): any;
-    getOwnPropertyDescriptor(target: any, propertyKey: PropertyKey): PropertyDescriptor;
-    getPrototypeOf(target: any): any;
-    has(target: any, propertyKey: string): boolean;
-    has(target: any, propertyKey: symbol): boolean;
-    isExtensible(target: any): boolean;
-    ownKeys(target: any): Array<PropertyKey>;
-    preventExtensions(target: any): boolean;
-    set(target: any, propertyKey: PropertyKey, value: any, receiver? :any): boolean;
-    setPrototypeOf(target: any, proto: any): boolean;
-};
+declare module Reflect {
+    function apply(target: Function, thisArgument: any, argumentsList: ArrayLike<any>): any;
+    function construct(target: Function, argumentsList: ArrayLike<any>): any;
+    function defineProperty(target: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): boolean;
+    function deleteProperty(target: any, propertyKey: PropertyKey): boolean;
+    function enumerate(target: any): IterableIterator<any>;
+    function get(target: any, propertyKey: PropertyKey, receiver?: any): any;
+    function getOwnPropertyDescriptor(target: any, propertyKey: PropertyKey): PropertyDescriptor;
+    function getPrototypeOf(target: any): any;
+    function has(target: any, propertyKey: string): boolean;
+    function has(target: any, propertyKey: symbol): boolean;
+    function isExtensible(target: any): boolean;
+    function ownKeys(target: any): Array<PropertyKey>;
+    function preventExtensions(target: any): boolean;
+    function set(target: any, propertyKey: PropertyKey, value: any, receiver? :any): boolean;
+    function setPrototypeOf(target: any, proto: any): boolean;
+}
 
 /**
  * Represents the completion of an asynchronous operation
@@ -17205,7 +17212,11 @@ declare function importScripts(...urls: string[]): void;
 /// Windows Script Host APIS
 /////////////////////////////
 
-declare var ActiveXObject: { new (s: string): any; };
+
+interface ActiveXObject {
+    new (s: string): any;
+}
+declare var ActiveXObject: ActiveXObject;
 
 interface ITextWriter {
     Write(s: string): void;
@@ -17213,11 +17224,157 @@ interface ITextWriter {
     Close(): void;
 }
 
-declare var WScript: {
-    Echo(s: any): void;
-    StdErr: ITextWriter;
-    StdOut: ITextWriter;
-    Arguments: { length: number; Item(n: number): string; };
-    ScriptFullName: string;
-    Quit(exitCode?: number): number;
+interface TextStreamBase {
+    /**
+     * The column number of the current character position in an input stream.
+     */
+    Column: number;
+    /**
+     * The current line number in an input stream.
+     */
+    Line: number;
+    /**
+     * Closes a text stream.
+     * It is not necessary to close standard streams; they close automatically when the process ends. If you close a standard stream, be aware that any other pointers to that standard stream become invalid.
+     */
+    Close(): void;
 }
+
+interface TextStreamWriter extends TextStreamBase {
+    /**
+     * Sends a string to an output stream.
+     */
+    Write(s: string): void;
+    /**
+     * Sends a specified number of blank lines (newline characters) to an output stream.
+     */
+    WriteBlankLines(intLines: number): void;
+    /**
+     * Sends a string followed by a newline character to an output stream.
+     */
+    WriteLine(s: string): void;
+}
+
+interface TextStreamReader extends TextStreamBase {
+    /**
+     * Returns a specified number of characters from an input stream, beginning at the current pointer position.
+     * Does not return until the ENTER key is pressed.
+     * Can only be used on a stream in reading mode; causes an error in writing or appending mode.
+     */
+    Read(characters: number): string;
+    /**
+     * Returns all characters from an input stream.
+     * Can only be used on a stream in reading mode; causes an error in writing or appending mode.
+     */
+    ReadAll(): string;
+    /**
+     * Returns an entire line from an input stream.
+     * Although this method extracts the newline character, it does not add it to the returned string.
+     * Can only be used on a stream in reading mode; causes an error in writing or appending mode.
+     */
+    ReadLine(): string;
+    /**
+     * Skips a specified number of characters when reading from an input text stream.
+     * Can only be used on a stream in reading mode; causes an error in writing or appending mode.
+     * @param characters Positive number of characters to skip forward. (Backward skipping is not supported.)
+     */
+    Skip(characters: number): void;
+    /**
+     * Skips the next line when reading from an input text stream.
+     * Can only be used on a stream in reading mode, not writing or appending mode.
+     */
+    SkipLine(): void;
+    /**
+     * Indicates whether the stream pointer position is at the end of a line.
+     */
+    AtEndOfLine: boolean;
+    /**
+     * Indicates whether the stream pointer position is at the end of a stream.
+     */
+    AtEndOfStream: boolean;
+}
+
+declare var WScript: {
+    /**
+    * Outputs text to either a message box (under WScript.exe) or the command console window followed by a newline (under CScript.ext).
+    */
+    Echo(s: any): void;
+    /**
+     * Exposes the write-only error output stream for the current script.
+     * Can be accessed only while using CScript.exe.
+     */
+    StdErr: TextStreamWriter;
+    /**
+     * Exposes the write-only output stream for the current script.
+     * Can be accessed only while using CScript.exe.
+     */
+    StdOut: TextStreamWriter;
+    Arguments: { length: number; Item(n: number): string; };
+    /**
+     *  The full path of the currently running script.
+     */
+    ScriptFullName: string;
+    /**
+     * Forces the script to stop immediately, with an optional exit code.
+     */
+    Quit(exitCode?: number): number;
+    /**
+     * The Windows Script Host build version number.
+     */
+    BuildVersion: number;
+    /**
+     * Fully qualified path of the host executable.
+     */
+    FullName: string;
+    /**
+     * Gets/sets the script mode - interactive(true) or batch(false).
+     */
+    Interactive: boolean;
+    /**
+     * The name of the host executable (WScript.exe or CScript.exe).
+     */
+    Name: string;
+    /**
+     * Path of the directory containing the host executable.
+     */
+    Path: string;
+    /**
+     * The filename of the currently running script.
+     */
+    ScriptName: string;
+    /**
+     * Exposes the read-only input stream for the current script.
+     * Can be accessed only while using CScript.exe.
+     */
+    StdIn: TextStreamReader;
+    /**
+     * Windows Script Host version
+     */
+    Version: string;
+    /**
+     * Connects a COM object's event sources to functions named with a given prefix, in the form prefix_event.
+     */
+    ConnectObject(objEventSource: any, strPrefix: string): void;
+    /**
+     * Creates a COM object.
+     * @param strProgiID
+     * @param strPrefix Function names in the form prefix_event will be bound to this object's COM events.
+     */
+    CreateObject(strProgID: string, strPrefix?: string): any;
+    /**
+     * Disconnects a COM object from its event sources.
+     */
+    DisconnectObject(obj: any): void;
+    /**
+     * Retrieves an existing object with the specified ProgID from memory, or creates a new one from a file.
+     * @param strPathname Fully qualified path to the file containing the object persisted to disk. For objects in memory, pass a zero-length string.
+     * @param strProgID
+     * @param strPrefix Function names in the form prefix_event will be bound to this object's COM events.
+     */
+    GetObject(strPathname: string, strProgID?: string, strPrefix?: string): any;
+    /**
+     * Suspends script execution for a specified length of time, then continues execution.
+     * @param intTime Interval (in milliseconds) to suspend script execution.
+     */
+    Sleep(intTime: number): void;
+};

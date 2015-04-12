@@ -68,12 +68,12 @@ module ts.server {
             };
         }
 
-        private processRequest<T extends protocol.Request>(command: string, arguments?: any): T {
+        private processRequest<T extends protocol.Request>(command: string, args?: any): T {
             var request: protocol.Request = {
                 seq: this.sequence++,
                 type: "request",
-                command: command,
-                arguments: arguments
+                arguments: args,
+                command
             };
 
             this.writeMessage(JSON.stringify(request));
@@ -104,7 +104,7 @@ module ts.server {
                 var response: T = JSON.parse(responseBody);
             }
             catch (e) {
-                throw new Error("Malformed response: Failed to parse server response: " + lastMessage + ". \r\n  Error detailes: " + e.message);
+                throw new Error("Malformed response: Failed to parse server response: " + lastMessage + ". \r\n  Error details: " + e.message);
             }
 
             // verify the sequence numbers
@@ -446,6 +446,7 @@ module ts.server {
             if (!response.body) {
                 return undefined;
             }
+
             var helpItems: protocol.SignatureHelpItems = response.body;
             var span = helpItems.applicableSpan;
             var start = this.lineOffsetToPosition(fileName, span.start);
@@ -465,6 +466,29 @@ module ts.server {
         }
 
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
+            var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
+            var args: protocol.FileLocationRequestArgs = {
+                file: fileName,
+                line: lineOffset.line,
+                offset: lineOffset.offset,
+            };
+
+            var request = this.processRequest<protocol.OccurrencesRequest>(CommandNames.Occurrences, args);
+            var response = this.processResponse<protocol.OccurrencesResponse>(request);
+
+            return response.body.map(entry => {
+                var fileName = entry.file;
+                var start = this.lineOffsetToPosition(fileName, entry.start);
+                var end = this.lineOffsetToPosition(fileName, entry.end);
+                return {
+                    fileName,
+                    textSpan: ts.createTextSpanFromBounds(start, end),
+                    isWriteAccess: entry.isWriteAccess,
+                };
+            });
+        }
+
+        getDocumentHighlights(fileName: string, position: number): DocumentHighlights[] {
             throw new Error("Not Implemented Yet.");
         }
 

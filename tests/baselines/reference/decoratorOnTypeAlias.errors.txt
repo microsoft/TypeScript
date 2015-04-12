@@ -5,7 +5,6 @@ tests/cases/conformance/decorators/invalid/decoratorOnTypeAlias.ts(3,1): error T
     declare function dec<T>(target: T): T;
     
     @dec
-    ~~~~
-    type T = number;
-    ~~~~~~~~~~~~~~~~
+    ~
 !!! error TS1206: Decorators are not valid here.
+    type T = number;

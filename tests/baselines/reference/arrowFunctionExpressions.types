@@ -51,6 +51,61 @@ var d: (n: any) => any;
 >d : (n: any) => any
 >n : any
 
+// Binding patterns in arrow functions
+var p1 = ([a]) => { };
+>p1 : ([a]: [any]) => void
+>([a]) => { } : ([a]: [any]) => void
+>a : any
+
+var p2 = ([...a]) => { };
+>p2 : ([...a]: any[]) => void
+>([...a]) => { } : ([...a]: any[]) => void
+>a : any[]
+
+var p3 = ([, a]) => { };
+>p3 : ([, a]: [any, any]) => void
+>([, a]) => { } : ([, a]: [any, any]) => void
+>a : any
+
+var p4 = ([, ...a]) => { };
+>p4 : ([, ...a]: any[]) => void
+>([, ...a]) => { } : ([, ...a]: any[]) => void
+>a : any[]
+
+var p5 = ([a = 1]) => { };
+>p5 : ([a = 1]: [number]) => void
+>([a = 1]) => { } : ([a = 1]: [number]) => void
+>a : number
+
+var p6 = ({ a }) => { };
+>p6 : ({ a }: { a: any; }) => void
+>({ a }) => { } : ({ a }: { a: any; }) => void
+>a : any
+
+var p7 = ({ a: { b } }) => { };
+>p7 : ({ a: { b } }: { a: { b: any; }; }) => void
+>({ a: { b } }) => { } : ({ a: { b } }: { a: { b: any; }; }) => void
+>a : unknown
+>b : any
+
+var p8 = ({ a = 1 }) => { };
+>p8 : ({ a = 1 }: { a?: number; }) => void
+>({ a = 1 }) => { } : ({ a = 1 }: { a?: number; }) => void
+>a : number
+
+var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
+>p9 : ({ a: { b = 1 } = { b: 1 } }: { a?: { b: number; }; }) => void
+>({ a: { b = 1 } = { b: 1 } }) => { } : ({ a: { b = 1 } = { b: 1 } }: { a?: { b: number; }; }) => void
+>a : unknown
+>b : number
+>{ b: 1 } : { b: number; }
+>b : number
+
+var p10 = ([{ value, done }]) => { };
+>p10 : ([{ value, done }]: [{ value: any; done: any; }]) => void
+>([{ value, done }]) => { } : ([{ value, done }]: [{ value: any; done: any; }]) => void
+>value : any
+>done : any
 
 // Arrow function used in class member initializer
 // Arrow function used in class member function

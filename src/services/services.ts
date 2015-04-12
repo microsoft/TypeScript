@@ -730,7 +730,7 @@ module ts {
         public statements: NodeArray<Statement>;
         public endOfFileToken: Node;
 
-        public amdDependencies: {name: string; path: string}[];
+        public amdDependencies: { name: string; path: string }[];
         public amdModuleName: string;
         public referencedFiles: FileReference[];
 
@@ -769,125 +769,130 @@ module ts {
 
         public getNamedDeclarations() {
             if (!this.namedDeclarations) {
-                let sourceFile = this;
-                let namedDeclarations: Declaration[] = [];
-
-                forEachChild(sourceFile, function visit(node: Node): void {
-                    switch (node.kind) {
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.MethodDeclaration:
-                        case SyntaxKind.MethodSignature:
-                            let functionDeclaration = <FunctionLikeDeclaration>node;
-
-                            if (functionDeclaration.name && functionDeclaration.name.getFullWidth() > 0) {
-                                let lastDeclaration = namedDeclarations.length > 0 ?
-                                    namedDeclarations[namedDeclarations.length - 1] :
-                                    undefined;
-
-                                // Check whether this declaration belongs to an "overload group".
-                                if (lastDeclaration && functionDeclaration.symbol === lastDeclaration.symbol) {
-                                    // Overwrite the last declaration if it was an overload
-                                    // and this one is an implementation.
-                                    if (functionDeclaration.body && !(<FunctionLikeDeclaration>lastDeclaration).body) {
-                                        namedDeclarations[namedDeclarations.length - 1] = functionDeclaration;
-                                    }
-                                }
-                                else {
-                                    namedDeclarations.push(functionDeclaration);
-                                }
-
-                                forEachChild(node, visit);
-                            }
-                            break;
-
-                        case SyntaxKind.ClassDeclaration:
-                        case SyntaxKind.InterfaceDeclaration:
-                        case SyntaxKind.TypeAliasDeclaration:
-                        case SyntaxKind.EnumDeclaration:
-                        case SyntaxKind.ModuleDeclaration:
-                        case SyntaxKind.ImportEqualsDeclaration:
-                        case SyntaxKind.ExportSpecifier:
-                        case SyntaxKind.ImportSpecifier:
-                        case SyntaxKind.ImportEqualsDeclaration:
-                        case SyntaxKind.ImportClause:
-                        case SyntaxKind.NamespaceImport:
-                        case SyntaxKind.GetAccessor:
-                        case SyntaxKind.SetAccessor:
-                        case SyntaxKind.TypeLiteral:
-                            if ((<Declaration>node).name) {
-                                namedDeclarations.push(<Declaration>node);
-                            }
-                        // fall through
-                        case SyntaxKind.Constructor:
-                        case SyntaxKind.VariableStatement:
-                        case SyntaxKind.VariableDeclarationList:
-                        case SyntaxKind.ObjectBindingPattern:
-                        case SyntaxKind.ArrayBindingPattern:
-                        case SyntaxKind.ModuleBlock:
-                            forEachChild(node, visit);
-                            break;
-
-                        case SyntaxKind.Block:
-                            if (isFunctionBlock(node)) {
-                                forEachChild(node, visit);
-                            }
-                            break;
-
-                        case SyntaxKind.Parameter:
-                            // Only consider properties defined as constructor parameters
-                            if (!(node.flags & NodeFlags.AccessibilityModifier)) {
-                                break;
-                            }
-                        // fall through
-                        case SyntaxKind.VariableDeclaration:
-                        case SyntaxKind.BindingElement:
-                            if (isBindingPattern((<VariableDeclaration>node).name)) {
-                                forEachChild((<VariableDeclaration>node).name, visit);
-                                break;
-                            }
-                        case SyntaxKind.EnumMember:
-                        case SyntaxKind.PropertyDeclaration:
-                        case SyntaxKind.PropertySignature:
-                            namedDeclarations.push(<Declaration>node);
-                            break;
-                        
-                        case SyntaxKind.ExportDeclaration:
-                            // Handle named exports case e.g.:
-                            //    export {a, b as B} from "mod";
-                            if ((<ExportDeclaration>node).exportClause) {
-                                forEach((<ExportDeclaration>node).exportClause.elements, visit);
-                            }
-                            break;
-
-                        case SyntaxKind.ImportDeclaration:
-                            let importClause = (<ImportDeclaration>node).importClause;
-                            if (importClause) {
-                                // Handle default import case e.g.:
-                                //    import d from "mod";
-                                if (importClause.name) {
-                                    namedDeclarations.push(importClause);
-                                }
-
-                                // Handle named bindings in imports e.g.:
-                                //    import * as NS from "mod";
-                                //    import {a, b as B} from "mod";
-                                if (importClause.namedBindings) {
-                                    if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-                                        namedDeclarations.push(<NamespaceImport>importClause.namedBindings);
-                                    }
-                                    else {
-                                        forEach((<NamedImports>importClause.namedBindings).elements, visit);
-                                    }
-                                }
-                            }
-                            break;
-                    }
-                });
-
-                this.namedDeclarations = namedDeclarations;
+                this.namedDeclarations = this.computeNamedDeclarations();
             }
 
             return this.namedDeclarations;
+        }
+
+        private computeNamedDeclarations() {
+            let namedDeclarations: Declaration[] = [];
+
+            forEachChild(this, visit);
+
+            return namedDeclarations;
+
+            function visit(node: Node): void {
+                switch (node.kind) {
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
+                        let functionDeclaration = <FunctionLikeDeclaration>node;
+
+                        if (functionDeclaration.name && functionDeclaration.name.getFullWidth() > 0) {
+                            let lastDeclaration = namedDeclarations.length > 0 ?
+                                namedDeclarations[namedDeclarations.length - 1] :
+                                undefined;
+
+                            // Check whether this declaration belongs to an "overload group".
+                            if (lastDeclaration && functionDeclaration.symbol === lastDeclaration.symbol) {
+                                // Overwrite the last declaration if it was an overload
+                                // and this one is an implementation.
+                                if (functionDeclaration.body && !(<FunctionLikeDeclaration>lastDeclaration).body) {
+                                    namedDeclarations[namedDeclarations.length - 1] = functionDeclaration;
+                                }
+                            }
+                            else {
+                                namedDeclarations.push(functionDeclaration);
+                            }
+
+                            forEachChild(node, visit);
+                        }
+                        break;
+
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.TypeAliasDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.ImportEqualsDeclaration:
+                    case SyntaxKind.ExportSpecifier:
+                    case SyntaxKind.ImportSpecifier:
+                    case SyntaxKind.ImportEqualsDeclaration:
+                    case SyntaxKind.ImportClause:
+                    case SyntaxKind.NamespaceImport:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.TypeLiteral:
+                        if ((<Declaration>node).name) {
+                            namedDeclarations.push(<Declaration>node);
+                        }
+                    // fall through
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.VariableStatement:
+                    case SyntaxKind.VariableDeclarationList:
+                    case SyntaxKind.ObjectBindingPattern:
+                    case SyntaxKind.ArrayBindingPattern:
+                    case SyntaxKind.ModuleBlock:
+                        forEachChild(node, visit);
+                        break;
+
+                    case SyntaxKind.Block:
+                        if (isFunctionBlock(node)) {
+                            forEachChild(node, visit);
+                        }
+                        break;
+
+                    case SyntaxKind.Parameter:
+                        // Only consider properties defined as constructor parameters
+                        if (!(node.flags & NodeFlags.AccessibilityModifier)) {
+                            break;
+                        }
+                    // fall through
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.BindingElement:
+                        if (isBindingPattern((<VariableDeclaration>node).name)) {
+                            forEachChild((<VariableDeclaration>node).name, visit);
+                            break;
+                        }
+                    case SyntaxKind.EnumMember:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.PropertySignature:
+                        namedDeclarations.push(<Declaration>node);
+                        break;
+
+                    case SyntaxKind.ExportDeclaration:
+                        // Handle named exports case e.g.:
+                        //    export {a, b as B} from "mod";
+                        if ((<ExportDeclaration>node).exportClause) {
+                            forEach((<ExportDeclaration>node).exportClause.elements, visit);
+                        }
+                        break;
+
+                    case SyntaxKind.ImportDeclaration:
+                        let importClause = (<ImportDeclaration>node).importClause;
+                        if (importClause) {
+                            // Handle default import case e.g.:
+                            //    import d from "mod";
+                            if (importClause.name) {
+                                namedDeclarations.push(importClause);
+                            }
+
+                            // Handle named bindings in imports e.g.:
+                            //    import * as NS from "mod";
+                            //    import {a, b as B} from "mod";
+                            if (importClause.namedBindings) {
+                                if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                                    namedDeclarations.push(<NamespaceImport>importClause.namedBindings);
+                                }
+                                else {
+                                    forEach((<NamedImports>importClause.namedBindings).elements, visit);
+                                }
+                            }
+                        }
+                        break;
+                }
+            }
         }
     }
 
@@ -939,8 +944,11 @@ module ts {
 
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
-        getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         findReferences(fileName: string, position: number): ReferencedSymbol[];
+        getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[];
+
+        /** @deprecated */
+        getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[];
 
         getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
@@ -1004,6 +1012,23 @@ module ts {
         textSpan: TextSpan;
         fileName: string;
         isWriteAccess: boolean;
+    }
+
+    export interface DocumentHighlights {
+        fileName: string;
+        highlightSpans: HighlightSpan[];
+    }
+
+    export module HighlightSpanKind {
+        export const none = "none";
+        export const definition = "definition";
+        export const reference = "reference";
+        export const writtenReference = "writtenReference";
+    } 
+
+    export interface HighlightSpan {
+        textSpan: TextSpan;
+        kind: string;
     }
 
     export interface NavigateToItem {
@@ -1143,6 +1168,7 @@ module ts {
         name: string;
         kind: string;            // see ScriptElementKind
         kindModifiers: string;   // see ScriptElementKindModifier, comma separated
+        sortText: string;
     }
 
     export interface CompletionEntryDetails {
@@ -1309,91 +1335,92 @@ module ts {
     }
 
     // TODO: move these to enums
-    export class ScriptElementKind {
-        static unknown = "";
+    export module ScriptElementKind {
+        export const unknown = "";
+        export const warning = "warning";
 
         // predefined type (void) or keyword (class)
-        static keyword = "keyword";
+        export const keyword = "keyword";
 
         // top level script node
-        static scriptElement = "script";
+        export const scriptElement = "script";
 
         // module foo {}
-        static moduleElement = "module";
+        export const moduleElement = "module";
 
         // class X {}
-        static classElement = "class";
+        export const classElement = "class";
 
         // interface Y {}
-        static interfaceElement = "interface";
+        export const interfaceElement = "interface";
 
         // type T = ...
-        static typeElement = "type";
+        export const typeElement = "type";
 
         // enum E
-        static enumElement = "enum";
+        export const enumElement = "enum";
 
         // Inside module and script only
         // let v = ..
-        static variableElement = "var";
+        export const variableElement = "var";
 
         // Inside function
-        static localVariableElement = "local var";
+        export const localVariableElement = "local var";
 
         // Inside module and script only
         // function f() { }
-        static functionElement = "function";
+        export const functionElement = "function";
 
         // Inside function
-        static localFunctionElement = "local function";
+        export const localFunctionElement = "local function";
 
         // class X { [public|private]* foo() {} }
-        static memberFunctionElement = "method";
+        export const memberFunctionElement = "method";
 
         // class X { [public|private]* [get|set] foo:number; }
-        static memberGetAccessorElement = "getter";
-        static memberSetAccessorElement = "setter";
+        export const memberGetAccessorElement = "getter";
+        export const memberSetAccessorElement = "setter";
 
         // class X { [public|private]* foo:number; }
         // interface Y { foo:number; }
-        static memberVariableElement = "property";
+        export const memberVariableElement = "property";
 
         // class X { constructor() { } }
-        static constructorImplementationElement = "constructor";
+        export const constructorImplementationElement = "constructor";
 
         // interface Y { ():number; }
-        static callSignatureElement = "call";
+        export const callSignatureElement = "call";
 
         // interface Y { []:number; }
-        static indexSignatureElement = "index";
+        export const indexSignatureElement = "index";
 
         // interface Y { new():Y; }
-        static constructSignatureElement = "construct";
+        export const constructSignatureElement = "construct";
 
         // function foo(*Y*: string)
-        static parameterElement = "parameter";
+        export const parameterElement = "parameter";
 
-        static typeParameterElement = "type parameter";
+        export const typeParameterElement = "type parameter";
 
-        static primitiveType = "primitive type";
+        export const primitiveType = "primitive type";
 
-        static label = "label";
+        export const label = "label";
 
-        static alias = "alias";
+        export const alias = "alias";
 
-        static constElement = "const";
+        export const constElement = "const";
 
-        static letElement = "let";
+        export const letElement = "let";
     }
 
-    export class ScriptElementKindModifier {
-        static none = "";
-        static publicMemberModifier = "public";
-        static privateMemberModifier = "private";
-        static protectedMemberModifier = "protected";
-        static exportedModifier = "export";
-        static ambientModifier = "declare";
-        static staticModifier = "static";
+    export module ScriptElementKindModifier {
+        export const none = "";
+        export const publicMemberModifier = "public";
+        export const privateMemberModifier = "private";
+        export const protectedMemberModifier = "protected";
+        export const exportedModifier = "export";
+        export const ambientModifier = "declare";
+        export const staticModifier = "static";
     }
 
     export class ClassificationTypeNames {
@@ -1633,6 +1660,61 @@ module ts {
     function setSourceFileFields(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string) {
         sourceFile.version = version;
         sourceFile.scriptSnapshot = scriptSnapshot;
+    }
+
+    /*
+     * This function will compile source text from 'input' argument using specified compiler options.
+     * If not options are provided - it will use a set of default compiler options.
+     * Extra compiler options that will unconditionally be used bu this function are:
+     * - separateCompilation = true
+     * - allowNonTsExtensions = true
+     */
+    export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[]): string {
+        let options = compilerOptions ? clone(compilerOptions) : getDefaultCompilerOptions();
+
+        options.separateCompilation = true;
+
+        // Filename can be non-ts file.
+        options.allowNonTsExtensions = true;
+
+        // Parse
+        var inputFileName = fileName || "module.ts";
+        var sourceFile = createSourceFile(inputFileName, input, options.target);
+
+        // Store syntactic diagnostics
+        if (diagnostics && sourceFile.parseDiagnostics) {
+            diagnostics.push(...sourceFile.parseDiagnostics);
+        }
+
+        // Output
+        let outputText: string;
+
+        // Create a compilerHost object to allow the compiler to read and write files
+        var compilerHost: CompilerHost = {
+            getSourceFile: (fileName, target) => fileName === inputFileName ? sourceFile : undefined,
+            writeFile: (name, text, writeByteOrderMark) => {
+                Debug.assert(outputText === undefined, "Unexpected multiple outputs for the file: " + name);
+                outputText = text;
+            },
+            getDefaultLibFileName: () => "lib.d.ts",
+            useCaseSensitiveFileNames: () => false,
+            getCanonicalFileName: fileName => fileName,
+            getCurrentDirectory: () => "",
+            getNewLine: () => (sys && sys.newLine) || "\r\n"
+        };
+
+        var program = createProgram([inputFileName], options, compilerHost);
+
+        if (diagnostics) {
+            diagnostics.push(...program.getGlobalDiagnostics());
+        }
+
+        // Emit
+        program.emit();
+
+        Debug.assert(outputText !== undefined, "Output generation failed");
+
+        return outputText;
     }
 
     export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile {
@@ -2106,7 +2188,8 @@ module ts {
         keywordCompletions.push({
             name: tokenToString(i),
             kind: ScriptElementKind.keyword,
-            kindModifiers: ScriptElementKindModifier.none
+            kindModifiers: ScriptElementKindModifier.none,
+            sortText: "0"
         });
     }
 
@@ -2370,14 +2453,25 @@ module ts {
             return program.getSyntacticDiagnostics(getValidSourceFile(fileName));
         }
 
+        function isJavaScript(fileName: string) {
+            return fileExtensionIs(fileName, ".js");
+        }
+
         /**
          * getSemanticDiagnostiscs return array of Diagnostics. If '-d' is not enabled, only report semantic errors
          * If '-d' enabled, report both semantic and emitter errors  
          */
-        function getSemanticDiagnostics(fileName: string) {
+        function getSemanticDiagnostics(fileName: string): Diagnostic[] {
             synchronizeHostData();
 
             let targetSourceFile = getValidSourceFile(fileName);
+
+            // For JavaScript files, we don't want to report the normal typescript semantic errors.
+            // Instead, we just report errors for using TypeScript-only constructs from within a 
+            // JavaScript file.
+            if (isJavaScript(fileName)) {
+                return getJavaScriptSemanticDiagnostics(targetSourceFile);
+            }
 
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
             // Therefore only get diagnostics for given file.
@@ -2392,27 +2486,199 @@ module ts {
             return concatenate(semanticDiagnostics, declarationDiagnostics);
         }
 
+        function getJavaScriptSemanticDiagnostics(sourceFile: SourceFile): Diagnostic[] {
+            let diagnostics: Diagnostic[] = [];
+            walk(sourceFile);
+
+            return diagnostics;
+
+            function walk(node: Node): boolean {
+                if (!node) {
+                    return false;
+                }
+
+                switch (node.kind) {
+                    case SyntaxKind.ImportEqualsDeclaration:
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_a_ts_file));
+                        return true;
+                    case SyntaxKind.ExportAssignment:
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_a_ts_file));
+                        return true;
+                    case SyntaxKind.ClassDeclaration:
+                        let classDeclaration = <ClassDeclaration>node;
+                        if (checkModifiers(classDeclaration.modifiers) ||
+                            checkTypeParameters(classDeclaration.typeParameters)) {
+                            return true;
+                        }
+                        break;
+                    case SyntaxKind.HeritageClause:
+                        let heritageClause = <HeritageClause>node;
+                        if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.implements_clauses_can_only_be_used_in_a_ts_file));
+                            return true;
+                        }
+                        break;
+                    case SyntaxKind.InterfaceDeclaration:
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.interface_declarations_can_only_be_used_in_a_ts_file));
+                        return true;
+                    case SyntaxKind.ModuleDeclaration:
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.module_declarations_can_only_be_used_in_a_ts_file));
+                        return true;
+                    case SyntaxKind.TypeAliasDeclaration:
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.type_aliases_can_only_be_used_in_a_ts_file));
+                        return true;
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.FunctionDeclaration:
+                        let functionDeclaration = <FunctionLikeDeclaration>node;
+                        if (checkModifiers(functionDeclaration.modifiers) ||
+                            checkTypeParameters(functionDeclaration.typeParameters) ||
+                            checkTypeAnnotation(functionDeclaration.type)) {
+                            return true;
+                        }
+                        break;
+                    case SyntaxKind.VariableStatement:
+                        let variableStatement = <VariableStatement>node;
+                        if (checkModifiers(variableStatement.modifiers)) {
+                            return true;
+                        }
+                        break;
+                    case SyntaxKind.VariableDeclaration:
+                        let variableDeclaration = <VariableDeclaration>node;
+                        if (checkTypeAnnotation(variableDeclaration.type)) {
+                            return true;
+                        }
+                        break;
+                    case SyntaxKind.CallExpression:
+                    case SyntaxKind.NewExpression:
+                        let expression = <CallExpression>node;
+                        if (expression.typeArguments && expression.typeArguments.length > 0) {
+                            let start = expression.typeArguments.pos;
+                            diagnostics.push(createFileDiagnostic(sourceFile, start, expression.typeArguments.end - start,
+                                Diagnostics.type_arguments_can_only_be_used_in_a_ts_file));
+                            return true;
+                        }
+                        break;
+                    case SyntaxKind.Parameter:
+                        let parameter = <ParameterDeclaration>node;
+                        if (parameter.modifiers) {
+                            let start = parameter.modifiers.pos;
+                            diagnostics.push(createFileDiagnostic(sourceFile, start, parameter.modifiers.end - start,
+                                Diagnostics.parameter_modifiers_can_only_be_used_in_a_ts_file));
+                            return true;
+                        }
+                        if (parameter.questionToken) {
+                            diagnostics.push(createDiagnosticForNode(parameter.questionToken, Diagnostics.can_only_be_used_in_a_ts_file));
+                            return true;
+                        }
+                        if (parameter.type) {
+                            diagnostics.push(createDiagnosticForNode(parameter.type, Diagnostics.types_can_only_be_used_in_a_ts_file));
+                            return true;
+                        }
+                        break;
+                    case SyntaxKind.PropertyDeclaration:
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.property_declarations_can_only_be_used_in_a_ts_file));
+                        return true;
+                    case SyntaxKind.EnumDeclaration:
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.enum_declarations_can_only_be_used_in_a_ts_file));
+                        return true;
+                    case SyntaxKind.TypeAssertionExpression:
+                        let typeAssertionExpression = <TypeAssertion>node;
+                        diagnostics.push(createDiagnosticForNode(typeAssertionExpression.type, Diagnostics.type_assertion_expressions_can_only_be_used_in_a_ts_file));
+                        return true;
+                    case SyntaxKind.Decorator:
+                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.decorators_can_only_be_used_in_a_ts_file));
+                        return true;
+                }
+
+                return forEachChild(node, walk);
+            }
+
+            function checkTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
+                if (typeParameters) {
+                    let start = typeParameters.pos;
+                    diagnostics.push(createFileDiagnostic(sourceFile, start, typeParameters.end - start, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
+                    return true;
+                }
+                return false;
+            }
+
+            function checkTypeAnnotation(type: TypeNode): boolean {
+                if (type) {
+                    diagnostics.push(createDiagnosticForNode(type, Diagnostics.types_can_only_be_used_in_a_ts_file));
+                    return true;
+                }
+
+                return false;
+            }
+
+            function checkModifiers(modifiers: ModifiersArray): boolean {
+                if (modifiers) {
+                    for (let modifier of modifiers) {
+                        switch (modifier.kind) {
+                            case SyntaxKind.PublicKeyword:
+                            case SyntaxKind.PrivateKeyword:
+                            case SyntaxKind.ProtectedKeyword:
+                            case SyntaxKind.DeclareKeyword:
+                                diagnostics.push(createDiagnosticForNode(modifier, Diagnostics._0_can_only_be_used_in_a_ts_file, tokenToString(modifier.kind)));
+                                return true;
+
+                            // These are all legal modifiers.
+                            case SyntaxKind.StaticKeyword:
+                            case SyntaxKind.ExportKeyword:
+                            case SyntaxKind.ConstKeyword:
+                            case SyntaxKind.DefaultKeyword:
+                        }
+                    }
+                }
+
+                return false;
+            }
+        }
+
         function getCompilerOptionsDiagnostics() {
             synchronizeHostData();
             return program.getGlobalDiagnostics();
         }
 
         /// Completion
-        function getCompletionEntryDisplayName(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean): string {
+        function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean): string {
             let displayName = symbol.getName();
+            if (displayName) {
+                // If this is the default export, get the name of the declaration if it exists
+                if (displayName === "default") {
+                    let localSymbol = getLocalSymbolForExportDefault(symbol);
+                    if (localSymbol && localSymbol.name) {
+                        displayName = symbol.valueDeclaration.localSymbol.name;
+                    }
+                }
+
+                let firstCharCode = displayName.charCodeAt(0);
+                // First check of the displayName is not external module; if it is an external module, it is not valid entry
+                if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
+                    // If the symbol is external module, don't show it in the completion list
+                    // (i.e declare module "http" { let x; } | // <= request completion here, "http" should not be there)
+                    return undefined;
+                }
+            }
+
+            return getCompletionEntryDisplayName(displayName, target, performCharacterChecks);
+        }
+
+        function getCompletionEntryDisplayName(displayName: string, target: ScriptTarget, performCharacterChecks: boolean): string {
             if (!displayName) {
                 return undefined;
             }
 
             let firstCharCode = displayName.charCodeAt(0);
-            // First check of the displayName is not external module; if it is an external module, it is not valid entry
-            if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
-                // If the symbol is external module, don't show it in the completion list
-                // (i.e declare module "http" { let x; } | // <= request completion here, "http" should not be there)
-                return undefined;
-            }
-
-            if (displayName && displayName.length >= 2 && firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
+            if (displayName.length >= 2 &&
+                firstCharCode === displayName.charCodeAt(displayName.length - 1) &&
                 (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
                 // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
                 // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
@@ -2442,19 +2708,24 @@ module ts {
             // Try to get a valid display name for this symbol, if we could not find one, then ignore it. 
             // We would like to only show things that can be added after a dot, so for instance numeric properties can
             // not be accessed with a dot (a.1 <- invalid)
-            let displayName = getCompletionEntryDisplayName(symbol, program.getCompilerOptions().target, /*performCharacterChecks:*/ true);
+            let displayName = getCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target, /*performCharacterChecks:*/ true);
             if (!displayName) {
                 return undefined;
             }
 
-            // TODO(drosen): Right now we just permit *all* semantic meanings when calling 'getSymbolKind'
-            //               which is permissible given that it is backwards compatible; but really we should consider
-            //               passing the meaning for the node so that we don't report that a suggestion for a value is an interface.
-            //               We COULD also just do what 'getSymbolModifiers' does, which is to use the first declaration.
+            // TODO(drosen): Right now we just permit *all* semantic meanings when calling 
+            // 'getSymbolKind' which is permissible given that it is backwards compatible; but 
+            // really we should consider passing the meaning for the node so that we don't report
+            // that a suggestion for a value is an interface.  We COULD also just do what 
+            // 'getSymbolModifiers' does, which is to use the first declaration.
+
+            // Use a 'sortText' of 0' so that all symbol completion entries come before any other
+            // entries (like JavaScript identifier entries).
             return {
                 name: displayName,
                 kind: getSymbolKind(symbol, typeChecker, location),
-                kindModifiers: getSymbolModifiers(symbol)
+                kindModifiers: getSymbolModifiers(symbol),
+                sortText: "0",
             };
         }
 
@@ -2498,8 +2769,9 @@ module ts {
                 return undefined;
             }
 
-            // Find the node where completion is requested on, in the case of a completion after a dot, it is the member access expression
-            // otherwise, it is a request for all visible symbols in the scope, and the node is the current location
+            // Find the node where completion is requested on, in the case of a completion after 
+            // a dot, it is the member access expression other wise, it is a request for all 
+            // visible symbols in the scope, and the node is the current location.
             let node = currentToken;
             let isRightOfDot = false;
             if (contextToken && contextToken.kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.PropertyAccessExpression) {
@@ -2517,11 +2789,26 @@ module ts {
             let semanticStart = new Date().getTime();
             let isMemberCompletion: boolean;
             let isNewIdentifierLocation: boolean;
-            let symbols: Symbol[];
+            let symbols: Symbol[] = [];
 
             if (isRightOfDot) {
+                getTypeScriptMemberSymbols();
+            }
+            else {
+                // For JavaScript or TypeScript, if we're not after a dot, then just try to get the
+                // global symbols in scope.  These results should be valid for either language as
+                // the set of symbols that can be referenced from this location.
+                if (!tryGetGlobalSymbols()) {
+                    return undefined;
+                }
+            }
+
+            log("getCompletionData: Semantic work: " + (new Date().getTime() - semanticStart));
+
+            return { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot };
+
+            function getTypeScriptMemberSymbols(): void {
                 // Right of dot member completion list
-                symbols = [];
                 isMemberCompletion = true;
                 isNewIdentifierLocation = false;
 
@@ -2535,7 +2822,8 @@ module ts {
 
                     if (symbol && symbol.flags & SymbolFlags.HasExports) {
                         // Extract module or enum members
-                        forEachValue(symbol.exports, symbol => {
+                        let exportedSymbols = typeInfoResolver.getExportsOfModule(symbol);
+                        forEach(exportedSymbols, symbol => {
                             if (typeInfoResolver.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
                                 symbols.push(symbol);
                             }
@@ -2553,7 +2841,8 @@ module ts {
                     });
                 }
             }
-            else {
+
+            function tryGetGlobalSymbols(): boolean {
                 let containingObjectLiteral = getContainingObjectLiteralApplicableForCompletion(contextToken);
                 if (containingObjectLiteral) {
                     // Object literal expression, look up possible property names from contextual type
@@ -2562,7 +2851,7 @@ module ts {
 
                     let contextualType = typeInfoResolver.getContextualType(containingObjectLiteral);
                     if (!contextualType) {
-                        return undefined;
+                        return false;
                     }
 
                     let contextualTypeMembers = typeInfoResolver.getPropertiesOfType(contextualType);
@@ -2579,8 +2868,17 @@ module ts {
                     if (showCompletionsInImportsClause(contextToken)) {
                         let importDeclaration = <ImportDeclaration>getAncestor(contextToken, SyntaxKind.ImportDeclaration);
                         Debug.assert(importDeclaration !== undefined);
-                        let exports = typeInfoResolver.getExportsOfExternalModule(importDeclaration);
-                        symbols = filterModuleExports(exports, importDeclaration);
+
+                        let exports: Symbol[];
+                        if (importDeclaration.moduleSpecifier) {
+                            let moduleSpecifierSymbol = typeInfoResolver.getSymbolAtLocation(importDeclaration.moduleSpecifier);
+                            if (moduleSpecifierSymbol) {
+                                exports = typeInfoResolver.getExportsOfModule(moduleSpecifierSymbol);
+                            }
+                        }
+
+                        //let exports = typeInfoResolver.getExportsOfImportDeclaration(importDeclaration);
+                        symbols = exports ? filterModuleExports(exports, importDeclaration) : emptyArray;
                     }
                 }
                 else {
@@ -2620,17 +2918,15 @@ module ts {
                         previousToken.getStart() :
                         position;
 
-                    let scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile);
+                    let scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile) || sourceFile;
 
                     /// TODO filter meaning based on the current context
                     let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
                     symbols = typeInfoResolver.getSymbolsInScope(scopeNode, symbolMeanings);
                 }
+
+                return true;
             }
-
-            log("getCompletionData: Semantic work: " + (new Date().getTime() - semanticStart));
-
-            return { symbols, isMemberCompletion, isNewIdentifierLocation, location };
 
             /**
              * Finds the first node that "embraces" the position, so that one may
@@ -2932,18 +3228,26 @@ module ts {
 
         function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             synchronizeHostData();
-            
+
             let completionData = getCompletionData(fileName, position);
             if (!completionData) {
                 return undefined;
             }
 
-            let { symbols, isMemberCompletion, isNewIdentifierLocation, location } = completionData;
-            if (!symbols || symbols.length === 0) {
-                return undefined;
-            }
+            let { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot } = completionData;
 
-            var entries = getCompletionEntriesFromSymbols(symbols);
+            let entries: CompletionEntry[];
+            if (isRightOfDot && isJavaScript(fileName)) {
+                entries = getCompletionEntriesFromSymbols(symbols);
+                addRange(entries, getJavaScriptCompletionEntries());
+            }
+            else {
+                if (!symbols || symbols.length === 0) {
+                    return undefined;
+                }
+
+                entries = getCompletionEntriesFromSymbols(symbols);
+            }
 
             // Add keywords if this is not a member completion list
             if (!isMemberCompletion) {
@@ -2952,21 +3256,51 @@ module ts {
 
             return { isMemberCompletion, isNewIdentifierLocation, entries };
 
-            function getCompletionEntriesFromSymbols(symbols: Symbol[]): CompletionEntry[] {
-                let start = new Date().getTime();
-                var entries: CompletionEntry[] = [];
-                var nameToSymbol: Map<Symbol> = {};
+            function getJavaScriptCompletionEntries(): CompletionEntry[] {
+                let entries: CompletionEntry[] = [];
+                let allNames: Map<string> = {};
+                let target = program.getCompilerOptions().target;
 
-                for (let symbol of symbols) {
-                    let entry = createCompletionEntry(symbol, typeInfoResolver, location);
-                    if (entry) {
-                        let id = escapeIdentifier(entry.name);
-                        if (!lookUp(nameToSymbol, id)) {
-                            entries.push(entry);
-                            nameToSymbol[id] = symbol;
+                for (let sourceFile of program.getSourceFiles()) {
+                    let nameTable = getNameTable(sourceFile);
+                    for (let name in nameTable) {
+                        if (!allNames[name]) {
+                            allNames[name] = name;
+                            let displayName = getCompletionEntryDisplayName(name, target, /*performCharacterChecks:*/ true);
+                            if (displayName) {
+                                let entry = {
+                                    name: displayName,
+                                    kind: ScriptElementKind.warning,
+                                    kindModifiers: "",
+                                    sortText: "1"
+                                };
+                                entries.push(entry);
+                            }
                         }
                     }
                 }
+
+                return entries;
+            }
+
+            function getCompletionEntriesFromSymbols(symbols: Symbol[]): CompletionEntry[] {
+                let start = new Date().getTime();
+                var entries: CompletionEntry[] = [];
+
+                if (symbols) {
+                    var nameToSymbol: Map<Symbol> = {};
+                    for (let symbol of symbols) {
+                        let entry = createCompletionEntry(symbol, typeInfoResolver, location);
+                        if (entry) {
+                            let id = escapeIdentifier(entry.name);
+                            if (!lookUp(nameToSymbol, id)) {
+                                entries.push(entry);
+                                nameToSymbol[id] = symbol;
+                            }
+                        }
+                    }
+                }
+
                 log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
                 return entries;
             }
@@ -2985,7 +3319,7 @@ module ts {
                 // We don't need to perform character checks here because we're only comparing the 
                 // name against 'entryName' (which is known to be good), not building a new 
                 // completion entry.
-                let symbol = forEach(symbols, s => getCompletionEntryDisplayName(s, target, /*performCharacterChecks:*/ false) === entryName ? s : undefined);
+                let symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(s, target, /*performCharacterChecks:*/ false) === entryName ? s : undefined);
 
                 if (symbol) {
                     let displayPartsDocumentationsAndSymbolKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(fileName), location, typeInfoResolver, location, SemanticMeaning.All);
@@ -3641,10 +3975,25 @@ module ts {
             }
         }
 
-        /// References and Occurrences
         function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
+            let results = getOccurrencesAtPositionCore(fileName, position);
+            
+            if (results) {
+                let sourceFile = getCanonicalFileName(normalizeSlashes(fileName));
+
+                // Get occurrences only supports reporting occurrences for the file queried.  So 
+                // filter down to that list.
+                results = filter(results, r => r.fileName === fileName);
+            }
+
+            return results;
+        }
+
+        function getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] {
             synchronizeHostData();
 
+            filesToSearch = map(filesToSearch, normalizeSlashes);
+            let sourceFilesToSearch = filter(program.getSourceFiles(), f => contains(filesToSearch, f.fileName));
             let sourceFile = getValidSourceFile(fileName);
 
             let node = getTouchingWord(sourceFile, position);
@@ -3652,549 +4001,642 @@ module ts {
                 return undefined;
             }
 
-            if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword ||
-                isLiteralNameOfPropertyDeclarationOrIndexAccess(node) || isNameOfExternalModuleImportOrDeclaration(node)) {
-                return convertReferences(getReferencesForNode(node, [sourceFile], /*searchOnlyInCurrentFile*/ true, /*findInStrings:*/ false, /*findInComments:*/ false));
+            return getSemanticDocumentHighlights(node) || getSyntacticDocumentHighlights(node);
+
+            function getHighlightSpanForNode(node: Node): HighlightSpan {
+                let start = node.getStart();
+                let end = node.getEnd();
+
+                return {
+                    fileName: sourceFile.fileName,
+                    textSpan: createTextSpanFromBounds(start, end),
+                    kind: HighlightSpanKind.none
+                };
             }
 
-            switch (node.kind) {
-                case SyntaxKind.IfKeyword:
-                case SyntaxKind.ElseKeyword:
-                    if (hasKind(node.parent, SyntaxKind.IfStatement)) {
-                        return getIfElseOccurrences(<IfStatement>node.parent);
-                    }
-                    break;
-                case SyntaxKind.ReturnKeyword:
-                    if (hasKind(node.parent, SyntaxKind.ReturnStatement)) {
-                        return getReturnOccurrences(<ReturnStatement>node.parent);
-                    }
-                    break;
-                case SyntaxKind.ThrowKeyword:
-                    if (hasKind(node.parent, SyntaxKind.ThrowStatement)) {
-                        return getThrowOccurrences(<ThrowStatement>node.parent);
-                    }
-                    break;
-                case SyntaxKind.CatchKeyword:
-                    if (hasKind(parent(parent(node)), SyntaxKind.TryStatement)) {
-                        return getTryCatchFinallyOccurrences(<TryStatement>node.parent.parent);
-                    }
-                    break;
-                case SyntaxKind.TryKeyword:
-                case SyntaxKind.FinallyKeyword:
-                    if (hasKind(parent(node), SyntaxKind.TryStatement)) {
-                        return getTryCatchFinallyOccurrences(<TryStatement>node.parent);
-                    }
-                    break;
-                case SyntaxKind.SwitchKeyword:
-                    if (hasKind(node.parent, SyntaxKind.SwitchStatement)) {
-                        return getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent);
-                    }
-                    break;
-                case SyntaxKind.CaseKeyword:
-                case SyntaxKind.DefaultKeyword:
-                    if (hasKind(parent(parent(parent(node))), SyntaxKind.SwitchStatement)) {
-                        return getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent.parent.parent);
-                    }
-                    break;
-                case SyntaxKind.BreakKeyword:
-                case SyntaxKind.ContinueKeyword:
-                    if (hasKind(node.parent, SyntaxKind.BreakStatement) || hasKind(node.parent, SyntaxKind.ContinueStatement)) {
-                        return getBreakOrContinueStatementOccurences(<BreakOrContinueStatement>node.parent);
-                    }
-                    break;
-                case SyntaxKind.ForKeyword:
-                    if (hasKind(node.parent, SyntaxKind.ForStatement) ||
-                        hasKind(node.parent, SyntaxKind.ForInStatement) ||
-                        hasKind(node.parent, SyntaxKind.ForOfStatement)) {
-                        return getLoopBreakContinueOccurrences(<IterationStatement>node.parent);
-                    }
-                    break;
-                case SyntaxKind.WhileKeyword:
-                case SyntaxKind.DoKeyword:
-                    if (hasKind(node.parent, SyntaxKind.WhileStatement) || hasKind(node.parent, SyntaxKind.DoStatement)) {
-                        return getLoopBreakContinueOccurrences(<IterationStatement>node.parent);
-                    }
-                    break;
-                case SyntaxKind.ConstructorKeyword:
-                    if (hasKind(node.parent, SyntaxKind.Constructor)) {
-                        return getConstructorOccurrences(<ConstructorDeclaration>node.parent);
-                    }
-                    break;
-                case SyntaxKind.GetKeyword:
-                case SyntaxKind.SetKeyword:
-                    if (hasKind(node.parent, SyntaxKind.GetAccessor) || hasKind(node.parent, SyntaxKind.SetAccessor)) {
-                        return getGetAndSetOccurrences(<AccessorDeclaration>node.parent);
-                    }
-                default:
-                    if (isModifier(node.kind) && node.parent &&
-                        (isDeclaration(node.parent) || node.parent.kind === SyntaxKind.VariableStatement)) {
-                        return getModifierOccurrences(node.kind, node.parent);
-                    }
-            }
+            function getSemanticDocumentHighlights(node: Node): DocumentHighlights[] {
+                if (node.kind === SyntaxKind.Identifier ||
+                    node.kind === SyntaxKind.ThisKeyword ||
+                    node.kind === SyntaxKind.SuperKeyword ||
+                    isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
+                    isNameOfExternalModuleImportOrDeclaration(node)) {
 
-            return undefined;
-
-            function getIfElseOccurrences(ifStatement: IfStatement): ReferenceEntry[] {
-                let keywords: Node[] = [];
-
-                // Traverse upwards through all parent if-statements linked by their else-branches.
-                while (hasKind(ifStatement.parent, SyntaxKind.IfStatement) && (<IfStatement>ifStatement.parent).elseStatement === ifStatement) {
-                    ifStatement = <IfStatement>ifStatement.parent;
+                    let referencedSymbols = getReferencedSymbolsForNodes(node, sourceFilesToSearch, /*findInStrings:*/ false, /*findInComments:*/ false);
+                    return convertReferencedSymbols(referencedSymbols);
                 }
 
-                // Now traverse back down through the else branches, aggregating if/else keywords of if-statements.
-                while (ifStatement) {
-                    let children = ifStatement.getChildren();
-                    pushKeywordIf(keywords, children[0], SyntaxKind.IfKeyword);
+                return undefined;
 
-                    // Generally the 'else' keyword is second-to-last, so we traverse backwards.
-                    for (let i = children.length - 1; i >= 0; i--) {
-                        if (pushKeywordIf(keywords, children[i], SyntaxKind.ElseKeyword)) {
-                            break;
+                function convertReferencedSymbols(referencedSymbols: ReferencedSymbol[]): DocumentHighlights[] {
+                    if (!referencedSymbols) {
+                        return undefined;
+                    }
+
+                    let fileNameToDocumentHighlights: Map<DocumentHighlights> = {};
+                    let result: DocumentHighlights[] = [];
+                    for (let referencedSymbol of referencedSymbols) {
+                        for (let referenceEntry of referencedSymbol.references) {
+                            let fileName = referenceEntry.fileName;
+                            let documentHighlights = getProperty(fileNameToDocumentHighlights, fileName);
+                            if (!documentHighlights) {
+                                documentHighlights = { fileName, highlightSpans: [] };
+
+                                fileNameToDocumentHighlights[fileName] = documentHighlights;
+                                result.push(documentHighlights);
+                            }
+
+                            documentHighlights.highlightSpans.push({
+                                textSpan: referenceEntry.textSpan,
+                                kind: referenceEntry.isWriteAccess ? HighlightSpanKind.writtenReference : HighlightSpanKind.reference
+                            });
                         }
                     }
 
-                    if (!hasKind(ifStatement.elseStatement, SyntaxKind.IfStatement)) {
-                        break
-                    }
+                    return result;
+                }
+            }
 
-                    ifStatement = <IfStatement>ifStatement.elseStatement;
+            function getSyntacticDocumentHighlights(node: Node): DocumentHighlights[] {
+                let fileName = sourceFile.fileName;
+
+                var highlightSpans = getHighlightSpans(node);
+                if (!highlightSpans || highlightSpans.length === 0) {
+                    return undefined;
                 }
 
-                let result: ReferenceEntry[] = [];
+                return [{ fileName, highlightSpans }];
 
-                // We'd like to highlight else/ifs together if they are only separated by whitespace
-                // (i.e. the keywords are separated by no comments, no newlines).
-                for (let i = 0; i < keywords.length; i++) {
-                    if (keywords[i].kind === SyntaxKind.ElseKeyword && i < keywords.length - 1) {
-                        let elseKeyword = keywords[i];
-                        let ifKeyword = keywords[i + 1]; // this *should* always be an 'if' keyword.
+                // returns true if 'node' is defined and has a matching 'kind'.
+                function hasKind(node: Node, kind: SyntaxKind) {
+                    return node !== undefined && node.kind === kind;
+                }
 
-                        let shouldHighlightNextKeyword = true;
+                // Null-propagating 'parent' function.
+                function parent(node: Node): Node {
+                    return node && node.parent;
+                }
 
-                        // Avoid recalculating getStart() by iterating backwards.
-                        for (let j = ifKeyword.getStart() - 1; j >= elseKeyword.end; j--) {
-                            if (!isWhiteSpace(sourceFile.text.charCodeAt(j))) {
-                                shouldHighlightNextKeyword = false;
+                function getHighlightSpans(node: Node): HighlightSpan[] {
+                    if (node) {
+                        switch (node.kind) {
+                            case SyntaxKind.IfKeyword:
+                            case SyntaxKind.ElseKeyword:
+                                if (hasKind(node.parent, SyntaxKind.IfStatement)) {
+                                    return getIfElseOccurrences(<IfStatement>node.parent);
+                                }
+                                break;
+                            case SyntaxKind.ReturnKeyword:
+                                if (hasKind(node.parent, SyntaxKind.ReturnStatement)) {
+                                    return getReturnOccurrences(<ReturnStatement>node.parent);
+                                }
+                                break;
+                            case SyntaxKind.ThrowKeyword:
+                                if (hasKind(node.parent, SyntaxKind.ThrowStatement)) {
+                                    return getThrowOccurrences(<ThrowStatement>node.parent);
+                                }
+                                break;
+                            case SyntaxKind.CatchKeyword:
+                                if (hasKind(parent(parent(node)), SyntaxKind.TryStatement)) {
+                                    return getTryCatchFinallyOccurrences(<TryStatement>node.parent.parent);
+                                }
+                                break;
+                            case SyntaxKind.TryKeyword:
+                            case SyntaxKind.FinallyKeyword:
+                                if (hasKind(parent(node), SyntaxKind.TryStatement)) {
+                                    return getTryCatchFinallyOccurrences(<TryStatement>node.parent);
+                                }
+                                break;
+                            case SyntaxKind.SwitchKeyword:
+                                if (hasKind(node.parent, SyntaxKind.SwitchStatement)) {
+                                    return getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent);
+                                }
+                                break;
+                            case SyntaxKind.CaseKeyword:
+                            case SyntaxKind.DefaultKeyword:
+                                if (hasKind(parent(parent(parent(node))), SyntaxKind.SwitchStatement)) {
+                                    return getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent.parent.parent);
+                                }
+                                break;
+                            case SyntaxKind.BreakKeyword:
+                            case SyntaxKind.ContinueKeyword:
+                                if (hasKind(node.parent, SyntaxKind.BreakStatement) || hasKind(node.parent, SyntaxKind.ContinueStatement)) {
+                                    return getBreakOrContinueStatementOccurences(<BreakOrContinueStatement>node.parent);
+                                }
+                                break;
+                            case SyntaxKind.ForKeyword:
+                                if (hasKind(node.parent, SyntaxKind.ForStatement) ||
+                                    hasKind(node.parent, SyntaxKind.ForInStatement) ||
+                                    hasKind(node.parent, SyntaxKind.ForOfStatement)) {
+                                    return getLoopBreakContinueOccurrences(<IterationStatement>node.parent);
+                                }
+                                break;
+                            case SyntaxKind.WhileKeyword:
+                            case SyntaxKind.DoKeyword:
+                                if (hasKind(node.parent, SyntaxKind.WhileStatement) || hasKind(node.parent, SyntaxKind.DoStatement)) {
+                                    return getLoopBreakContinueOccurrences(<IterationStatement>node.parent);
+                                }
+                                break;
+                            case SyntaxKind.ConstructorKeyword:
+                                if (hasKind(node.parent, SyntaxKind.Constructor)) {
+                                    return getConstructorOccurrences(<ConstructorDeclaration>node.parent);
+                                }
+                                break;
+                            case SyntaxKind.GetKeyword:
+                            case SyntaxKind.SetKeyword:
+                                if (hasKind(node.parent, SyntaxKind.GetAccessor) || hasKind(node.parent, SyntaxKind.SetAccessor)) {
+                                    return getGetAndSetOccurrences(<AccessorDeclaration>node.parent);
+                                }
+                            default:
+                                if (isModifier(node.kind) && node.parent &&
+                                    (isDeclaration(node.parent) || node.parent.kind === SyntaxKind.VariableStatement)) {
+                                    return getModifierOccurrences(node.kind, node.parent);
+                                }
+                        }
+                    }
+
+                    return undefined;
+                }
+
+                /**
+                 * Aggregates all throw-statements within this node *without* crossing
+                 * into function boundaries and try-blocks with catch-clauses.
+                 */
+                function aggregateOwnedThrowStatements(node: Node): ThrowStatement[] {
+                    let statementAccumulator: ThrowStatement[] = []
+                    aggregate(node);
+                    return statementAccumulator;
+
+                    function aggregate(node: Node): void {
+                        if (node.kind === SyntaxKind.ThrowStatement) {
+                            statementAccumulator.push(<ThrowStatement>node);
+                        }
+                        else if (node.kind === SyntaxKind.TryStatement) {
+                            let tryStatement = <TryStatement>node;
+
+                            if (tryStatement.catchClause) {
+                                aggregate(tryStatement.catchClause);
+                            }
+                            else {
+                                // Exceptions thrown within a try block lacking a catch clause
+                                // are "owned" in the current context.
+                                aggregate(tryStatement.tryBlock);
+                            }
+
+                            if (tryStatement.finallyBlock) {
+                                aggregate(tryStatement.finallyBlock);
+                            }
+                        }
+                        // Do not cross function boundaries.
+                        else if (!isFunctionLike(node)) {
+                            forEachChild(node, aggregate);
+                        }
+                    };
+                }
+
+                /**
+                 * For lack of a better name, this function takes a throw statement and returns the
+                 * nearest ancestor that is a try-block (whose try statement has a catch clause),
+                 * function-block, or source file.
+                 */
+                function getThrowStatementOwner(throwStatement: ThrowStatement): Node {
+                    let child: Node = throwStatement;
+
+                    while (child.parent) {
+                        let parent = child.parent;
+
+                        if (isFunctionBlock(parent) || parent.kind === SyntaxKind.SourceFile) {
+                            return parent;
+                        }
+                    
+                        // A throw-statement is only owned by a try-statement if the try-statement has
+                        // a catch clause, and if the throw-statement occurs within the try block.
+                        if (parent.kind === SyntaxKind.TryStatement) {
+                            let tryStatement = <TryStatement>parent;
+
+                            if (tryStatement.tryBlock === child && tryStatement.catchClause) {
+                                return child;
+                            }
+                        }
+
+                        child = parent;
+                    }
+
+                    return undefined;
+                }
+
+                function aggregateAllBreakAndContinueStatements(node: Node): BreakOrContinueStatement[] {
+                    let statementAccumulator: BreakOrContinueStatement[] = []
+                    aggregate(node);
+                    return statementAccumulator;
+
+                    function aggregate(node: Node): void {
+                        if (node.kind === SyntaxKind.BreakStatement || node.kind === SyntaxKind.ContinueStatement) {
+                            statementAccumulator.push(<BreakOrContinueStatement>node);
+                        }
+                        // Do not cross function boundaries.
+                        else if (!isFunctionLike(node)) {
+                            forEachChild(node, aggregate);
+                        }
+                    };
+                }
+
+                function ownsBreakOrContinueStatement(owner: Node, statement: BreakOrContinueStatement): boolean {
+                    let actualOwner = getBreakOrContinueOwner(statement);
+
+                    return actualOwner && actualOwner === owner;
+                }
+
+                function getBreakOrContinueOwner(statement: BreakOrContinueStatement): Node {
+                    for (let node = statement.parent; node; node = node.parent) {
+                        switch (node.kind) {
+                            case SyntaxKind.SwitchStatement:
+                                if (statement.kind === SyntaxKind.ContinueStatement) {
+                                    continue;
+                                }
+                            // Fall through.
+                            case SyntaxKind.ForStatement:
+                            case SyntaxKind.ForInStatement:
+                            case SyntaxKind.ForOfStatement:
+                            case SyntaxKind.WhileStatement:
+                            case SyntaxKind.DoStatement:
+                                if (!statement.label || isLabeledBy(node, statement.label.text)) {
+                                    return node;
+                                }
+                                break;
+                            default:
+                                // Don't cross function boundaries.
+                                if (isFunctionLike(node)) {
+                                    return undefined;
+                                }
+                                break;
+                        }
+                    }
+
+                    return undefined;
+                }
+
+                function getModifierOccurrences(modifier: SyntaxKind, declaration: Node): HighlightSpan[] {
+                    let container = declaration.parent;
+
+                    // Make sure we only highlight the keyword when it makes sense to do so.
+                    if (isAccessibilityModifier(modifier)) {
+                        if (!(container.kind === SyntaxKind.ClassDeclaration ||
+                            (declaration.kind === SyntaxKind.Parameter && hasKind(container, SyntaxKind.Constructor)))) {
+                            return undefined;
+                        }
+                    }
+                    else if (modifier === SyntaxKind.StaticKeyword) {
+                        if (container.kind !== SyntaxKind.ClassDeclaration) {
+                            return undefined;
+                        }
+                    }
+                    else if (modifier === SyntaxKind.ExportKeyword || modifier === SyntaxKind.DeclareKeyword) {
+                        if (!(container.kind === SyntaxKind.ModuleBlock || container.kind === SyntaxKind.SourceFile)) {
+                            return undefined;
+                        }
+                    }
+                    else { 
+                        // unsupported modifier
+                        return undefined;
+                    }
+
+                    let keywords: Node[] = [];
+                    let modifierFlag: NodeFlags = getFlagFromModifier(modifier);
+
+                    let nodes: Node[];
+                    switch (container.kind) {
+                        case SyntaxKind.ModuleBlock:
+                        case SyntaxKind.SourceFile:
+                            nodes = (<Block>container).statements;
+                            break;
+                        case SyntaxKind.Constructor:
+                            nodes = (<Node[]>(<ConstructorDeclaration>container).parameters).concat(
+                                (<ClassDeclaration>container.parent).members);
+                            break;
+                        case SyntaxKind.ClassDeclaration:
+                            nodes = (<ClassDeclaration>container).members;
+
+                            // If we're an accessibility modifier, we're in an instance member and should search
+                            // the constructor's parameter list for instance members as well.
+                            if (modifierFlag & NodeFlags.AccessibilityModifier) {
+                                let constructor = forEach((<ClassDeclaration>container).members, member => {
+                                    return member.kind === SyntaxKind.Constructor && <ConstructorDeclaration>member;
+                                });
+
+                                if (constructor) {
+                                    nodes = nodes.concat(constructor.parameters);
+                                }
+                            }
+                            break;
+                        default:
+                            Debug.fail("Invalid container kind.")
+                    }
+
+                    forEach(nodes, node => {
+                        if (node.modifiers && node.flags & modifierFlag) {
+                            forEach(node.modifiers, child => pushKeywordIf(keywords, child, modifier));
+                        }
+                    });
+
+                    return map(keywords, getHighlightSpanForNode);
+
+                    function getFlagFromModifier(modifier: SyntaxKind) {
+                        switch (modifier) {
+                            case SyntaxKind.PublicKeyword:
+                                return NodeFlags.Public;
+                            case SyntaxKind.PrivateKeyword:
+                                return NodeFlags.Private;
+                            case SyntaxKind.ProtectedKeyword:
+                                return NodeFlags.Protected;
+                            case SyntaxKind.StaticKeyword:
+                                return NodeFlags.Static;
+                            case SyntaxKind.ExportKeyword:
+                                return NodeFlags.Export;
+                            case SyntaxKind.DeclareKeyword:
+                                return NodeFlags.Ambient;
+                            default:
+                                Debug.fail();
+                        }
+                    }
+                }
+
+                function pushKeywordIf(keywordList: Node[], token: Node, ...expected: SyntaxKind[]): boolean {
+                    if (token && contains(expected, token.kind)) {
+                        keywordList.push(token);
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                function getGetAndSetOccurrences(accessorDeclaration: AccessorDeclaration): HighlightSpan[] {
+                    let keywords: Node[] = [];
+
+                    tryPushAccessorKeyword(accessorDeclaration.symbol, SyntaxKind.GetAccessor);
+                    tryPushAccessorKeyword(accessorDeclaration.symbol, SyntaxKind.SetAccessor);
+
+                    return map(keywords, getHighlightSpanForNode);
+
+                    function tryPushAccessorKeyword(accessorSymbol: Symbol, accessorKind: SyntaxKind): void {
+                        let accessor = getDeclarationOfKind(accessorSymbol, accessorKind);
+
+                        if (accessor) {
+                            forEach(accessor.getChildren(), child => pushKeywordIf(keywords, child, SyntaxKind.GetKeyword, SyntaxKind.SetKeyword));
+                        }
+                    }
+                }
+
+                function getConstructorOccurrences(constructorDeclaration: ConstructorDeclaration): HighlightSpan[] {
+                    let declarations = constructorDeclaration.symbol.getDeclarations()
+
+                    let keywords: Node[] = [];
+
+                    forEach(declarations, declaration => {
+                        forEach(declaration.getChildren(), token => {
+                            return pushKeywordIf(keywords, token, SyntaxKind.ConstructorKeyword);
+                        });
+                    });
+
+                    return map(keywords, getHighlightSpanForNode);
+                }
+
+                function getLoopBreakContinueOccurrences(loopNode: IterationStatement): HighlightSpan[] {
+                    let keywords: Node[] = [];
+
+                    if (pushKeywordIf(keywords, loopNode.getFirstToken(), SyntaxKind.ForKeyword, SyntaxKind.WhileKeyword, SyntaxKind.DoKeyword)) {
+                        // If we succeeded and got a do-while loop, then start looking for a 'while' keyword.
+                        if (loopNode.kind === SyntaxKind.DoStatement) {
+                            let loopTokens = loopNode.getChildren();
+
+                            for (let i = loopTokens.length - 1; i >= 0; i--) {
+                                if (pushKeywordIf(keywords, loopTokens[i], SyntaxKind.WhileKeyword)) {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    let breaksAndContinues = aggregateAllBreakAndContinueStatements(loopNode.statement);
+
+                    forEach(breaksAndContinues, statement => {
+                        if (ownsBreakOrContinueStatement(loopNode, statement)) {
+                            pushKeywordIf(keywords, statement.getFirstToken(), SyntaxKind.BreakKeyword, SyntaxKind.ContinueKeyword);
+                        }
+                    });
+
+                    return map(keywords, getHighlightSpanForNode);
+                }
+
+                function getBreakOrContinueStatementOccurences(breakOrContinueStatement: BreakOrContinueStatement): HighlightSpan[] {
+                    let owner = getBreakOrContinueOwner(breakOrContinueStatement);
+
+                    if (owner) {
+                        switch (owner.kind) {
+                            case SyntaxKind.ForStatement:
+                            case SyntaxKind.ForInStatement:
+                            case SyntaxKind.ForOfStatement:
+                            case SyntaxKind.DoStatement:
+                            case SyntaxKind.WhileStatement:
+                                return getLoopBreakContinueOccurrences(<IterationStatement>owner)
+                            case SyntaxKind.SwitchStatement:
+                                return getSwitchCaseDefaultOccurrences(<SwitchStatement>owner);
+
+                        }
+                    }
+
+                    return undefined;
+                }
+
+                function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement): HighlightSpan[] {
+                    let keywords: Node[] = [];
+
+                    pushKeywordIf(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
+
+                    // Go through each clause in the switch statement, collecting the 'case'/'default' keywords.
+                    forEach(switchStatement.caseBlock.clauses, clause => {
+                        pushKeywordIf(keywords, clause.getFirstToken(), SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
+
+                        let breaksAndContinues = aggregateAllBreakAndContinueStatements(clause);
+
+                        forEach(breaksAndContinues, statement => {
+                            if (ownsBreakOrContinueStatement(switchStatement, statement)) {
+                                pushKeywordIf(keywords, statement.getFirstToken(), SyntaxKind.BreakKeyword);
+                            }
+                        });
+                    });
+
+                    return map(keywords, getHighlightSpanForNode);
+                }
+
+                function getTryCatchFinallyOccurrences(tryStatement: TryStatement): HighlightSpan[] {
+                    let keywords: Node[] = [];
+
+                    pushKeywordIf(keywords, tryStatement.getFirstToken(), SyntaxKind.TryKeyword);
+
+                    if (tryStatement.catchClause) {
+                        pushKeywordIf(keywords, tryStatement.catchClause.getFirstToken(), SyntaxKind.CatchKeyword);
+                    }
+
+                    if (tryStatement.finallyBlock) {
+                        let finallyKeyword = findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile);
+                        pushKeywordIf(keywords, finallyKeyword, SyntaxKind.FinallyKeyword);
+                    }
+
+                    return map(keywords, getHighlightSpanForNode);
+                }
+
+                function getThrowOccurrences(throwStatement: ThrowStatement): HighlightSpan[] {
+                    let owner = getThrowStatementOwner(throwStatement);
+
+                    if (!owner) {
+                        return undefined;
+                    }
+
+                    let keywords: Node[] = [];
+
+                    forEach(aggregateOwnedThrowStatements(owner), throwStatement => {
+                        pushKeywordIf(keywords, throwStatement.getFirstToken(), SyntaxKind.ThrowKeyword);
+                    });
+
+                    // If the "owner" is a function, then we equate 'return' and 'throw' statements in their
+                    // ability to "jump out" of the function, and include occurrences for both.
+                    if (isFunctionBlock(owner)) {
+                        forEachReturnStatement(<Block>owner, returnStatement => {
+                            pushKeywordIf(keywords, returnStatement.getFirstToken(), SyntaxKind.ReturnKeyword);
+                        });
+                    }
+
+                    return map(keywords, getHighlightSpanForNode);
+                }
+
+                function getReturnOccurrences(returnStatement: ReturnStatement): HighlightSpan[] {
+                    let func = <FunctionLikeDeclaration>getContainingFunction(returnStatement);
+
+                    // If we didn't find a containing function with a block body, bail out.
+                    if (!(func && hasKind(func.body, SyntaxKind.Block))) {
+                        return undefined;
+                    }
+
+                    let keywords: Node[] = []
+                    forEachReturnStatement(<Block>func.body, returnStatement => {
+                        pushKeywordIf(keywords, returnStatement.getFirstToken(), SyntaxKind.ReturnKeyword);
+                    });
+
+                    // Include 'throw' statements that do not occur within a try block.
+                    forEach(aggregateOwnedThrowStatements(func.body), throwStatement => {
+                        pushKeywordIf(keywords, throwStatement.getFirstToken(), SyntaxKind.ThrowKeyword);
+                    });
+
+                    return map(keywords, getHighlightSpanForNode);
+                }
+
+                function getIfElseOccurrences(ifStatement: IfStatement): HighlightSpan[] {
+                    let keywords: Node[] = [];
+
+                    // Traverse upwards through all parent if-statements linked by their else-branches.
+                    while (hasKind(ifStatement.parent, SyntaxKind.IfStatement) && (<IfStatement>ifStatement.parent).elseStatement === ifStatement) {
+                        ifStatement = <IfStatement>ifStatement.parent;
+                    }
+
+                    // Now traverse back down through the else branches, aggregating if/else keywords of if-statements.
+                    while (ifStatement) {
+                        let children = ifStatement.getChildren();
+                        pushKeywordIf(keywords, children[0], SyntaxKind.IfKeyword);
+
+                        // Generally the 'else' keyword is second-to-last, so we traverse backwards.
+                        for (let i = children.length - 1; i >= 0; i--) {
+                            if (pushKeywordIf(keywords, children[i], SyntaxKind.ElseKeyword)) {
                                 break;
                             }
                         }
 
-                        if (shouldHighlightNextKeyword) {
-                            result.push({
-                                fileName: fileName,
-                                textSpan: createTextSpanFromBounds(elseKeyword.getStart(), ifKeyword.end),
-                                isWriteAccess: false
-                            });
-                            i++; // skip the next keyword
-                            continue;
+                        if (!hasKind(ifStatement.elseStatement, SyntaxKind.IfStatement)) {
+                            break
                         }
+
+                        ifStatement = <IfStatement>ifStatement.elseStatement;
                     }
 
-                    // Ordinary case: just highlight the keyword.
-                    result.push(getReferenceEntryFromNode(keywords[i]));
+                    let result: HighlightSpan[] = [];
+
+                    // We'd like to highlight else/ifs together if they are only separated by whitespace
+                    // (i.e. the keywords are separated by no comments, no newlines).
+                    for (let i = 0; i < keywords.length; i++) {
+                        if (keywords[i].kind === SyntaxKind.ElseKeyword && i < keywords.length - 1) {
+                            let elseKeyword = keywords[i];
+                            let ifKeyword = keywords[i + 1]; // this *should* always be an 'if' keyword.
+
+                            let shouldCombindElseAndIf = true;
+
+                            // Avoid recalculating getStart() by iterating backwards.
+                            for (let j = ifKeyword.getStart() - 1; j >= elseKeyword.end; j--) {
+                                if (!isWhiteSpace(sourceFile.text.charCodeAt(j))) {
+                                    shouldCombindElseAndIf = false;
+                                    break;
+                                }
+                            }
+
+                            if (shouldCombindElseAndIf) {
+                                result.push({
+                                    fileName: fileName,
+                                    textSpan: createTextSpanFromBounds(elseKeyword.getStart(), ifKeyword.end),
+                                    kind: HighlightSpanKind.reference
+                                });
+                                i++; // skip the next keyword
+                                continue;
+                            }
+                        }
+
+                        // Ordinary case: just highlight the keyword.
+                        result.push(getHighlightSpanForNode(keywords[i]));
+                    }
+
+                    return result;
+                }
+            }
+        }
+
+        /// References and Occurrences
+        function getOccurrencesAtPositionCore(fileName: string, position: number): ReferenceEntry[] {
+            synchronizeHostData();
+
+            return convertDocumentHighlights(getDocumentHighlights(fileName, position, [fileName]));
+
+            function convertDocumentHighlights(documentHighlights: DocumentHighlights[]): ReferenceEntry[] {
+                if (!documentHighlights) {
+                    return undefined;
+                }
+
+                let result: ReferenceEntry[] = [];
+                for (let entry of documentHighlights) {
+                    for (let highlightSpan of entry.highlightSpans) {
+                        result.push({
+                            fileName: entry.fileName,
+                            textSpan: highlightSpan.textSpan,
+                            isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference
+                        });
+                    }
                 }
 
                 return result;
             }
-
-            function getReturnOccurrences(returnStatement: ReturnStatement): ReferenceEntry[] {
-                let func = <FunctionLikeDeclaration>getContainingFunction(returnStatement);
-
-                // If we didn't find a containing function with a block body, bail out.
-                if (!(func && hasKind(func.body, SyntaxKind.Block))) {
-                    return undefined;
-                }
-
-                let keywords: Node[] = []
-                forEachReturnStatement(<Block>func.body, returnStatement => {
-                    pushKeywordIf(keywords, returnStatement.getFirstToken(), SyntaxKind.ReturnKeyword);
-                });
-
-                // Include 'throw' statements that do not occur within a try block.
-                forEach(aggregateOwnedThrowStatements(func.body), throwStatement => {
-                    pushKeywordIf(keywords, throwStatement.getFirstToken(), SyntaxKind.ThrowKeyword);
-                });
-
-                return map(keywords, getReferenceEntryFromNode);
-            }
-
-            function getThrowOccurrences(throwStatement: ThrowStatement) {
-                let owner = getThrowStatementOwner(throwStatement);
-
-                if (!owner) {
-                    return undefined;
-                }
-
-                let keywords: Node[] = [];
-
-                forEach(aggregateOwnedThrowStatements(owner), throwStatement => {
-                    pushKeywordIf(keywords, throwStatement.getFirstToken(), SyntaxKind.ThrowKeyword);
-                });
-
-                // If the "owner" is a function, then we equate 'return' and 'throw' statements in their
-                // ability to "jump out" of the function, and include occurrences for both.
-                if (isFunctionBlock(owner)) {
-                    forEachReturnStatement(<Block>owner, returnStatement => {
-                        pushKeywordIf(keywords, returnStatement.getFirstToken(), SyntaxKind.ReturnKeyword);
-                    });
-                }
-
-                return map(keywords, getReferenceEntryFromNode);
-            }
-
-            /**
-             * Aggregates all throw-statements within this node *without* crossing
-             * into function boundaries and try-blocks with catch-clauses.
-             */
-            function aggregateOwnedThrowStatements(node: Node): ThrowStatement[] {
-                let statementAccumulator: ThrowStatement[] = []
-                aggregate(node);
-                return statementAccumulator;
-
-                function aggregate(node: Node): void {
-                    if (node.kind === SyntaxKind.ThrowStatement) {
-                        statementAccumulator.push(<ThrowStatement>node);
-                    }
-                    else if (node.kind === SyntaxKind.TryStatement) {
-                        let tryStatement = <TryStatement>node;
-
-                        if (tryStatement.catchClause) {
-                            aggregate(tryStatement.catchClause);
-                        }
-                        else {
-                            // Exceptions thrown within a try block lacking a catch clause
-                            // are "owned" in the current context.
-                            aggregate(tryStatement.tryBlock);
-                        }
-
-                        if (tryStatement.finallyBlock) {
-                            aggregate(tryStatement.finallyBlock);
-                        }
-                    }
-                    // Do not cross function boundaries.
-                    else if (!isFunctionLike(node)) {
-                        forEachChild(node, aggregate);
-                    }
-                };
-            }
-
-            /**
-             * For lack of a better name, this function takes a throw statement and returns the
-             * nearest ancestor that is a try-block (whose try statement has a catch clause),
-             * function-block, or source file.
-             */
-            function getThrowStatementOwner(throwStatement: ThrowStatement): Node {
-                let child: Node = throwStatement;
-
-                while (child.parent) {
-                    let parent = child.parent;
-
-                    if (isFunctionBlock(parent) || parent.kind === SyntaxKind.SourceFile) {
-                        return parent;
-                    }
-                    
-                    // A throw-statement is only owned by a try-statement if the try-statement has
-                    // a catch clause, and if the throw-statement occurs within the try block.
-                    if (parent.kind === SyntaxKind.TryStatement) {
-                        let tryStatement = <TryStatement>parent;
-
-                        if (tryStatement.tryBlock === child && tryStatement.catchClause) {
-                            return child;
-                        }
-                    }
-
-                    child = parent;
-                }
-
-                return undefined;
-            }
-
-            function getTryCatchFinallyOccurrences(tryStatement: TryStatement): ReferenceEntry[] {
-                let keywords: Node[] = [];
-
-                pushKeywordIf(keywords, tryStatement.getFirstToken(), SyntaxKind.TryKeyword);
-
-                if (tryStatement.catchClause) {
-                    pushKeywordIf(keywords, tryStatement.catchClause.getFirstToken(), SyntaxKind.CatchKeyword);
-                }
-
-                if (tryStatement.finallyBlock) {
-                    let finallyKeyword = findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile);
-                    pushKeywordIf(keywords, finallyKeyword, SyntaxKind.FinallyKeyword);
-                }
-
-                return map(keywords, getReferenceEntryFromNode);
-            }
-
-            function getLoopBreakContinueOccurrences(loopNode: IterationStatement): ReferenceEntry[] {
-                let keywords: Node[] = [];
-
-                if (pushKeywordIf(keywords, loopNode.getFirstToken(), SyntaxKind.ForKeyword, SyntaxKind.WhileKeyword, SyntaxKind.DoKeyword)) {
-                    // If we succeeded and got a do-while loop, then start looking for a 'while' keyword.
-                    if (loopNode.kind === SyntaxKind.DoStatement) {
-                        let loopTokens = loopNode.getChildren();
-
-                        for (let i = loopTokens.length - 1; i >= 0; i--) {
-                            if (pushKeywordIf(keywords, loopTokens[i], SyntaxKind.WhileKeyword)) {
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                let breaksAndContinues = aggregateAllBreakAndContinueStatements(loopNode.statement);
-
-                forEach(breaksAndContinues, statement => {
-                    if (ownsBreakOrContinueStatement(loopNode, statement)) {
-                        pushKeywordIf(keywords, statement.getFirstToken(), SyntaxKind.BreakKeyword, SyntaxKind.ContinueKeyword);
-                    }
-                });
-
-                return map(keywords, getReferenceEntryFromNode);
-            }
-
-            function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement): ReferenceEntry[] {
-                let keywords: Node[] = [];
-
-                pushKeywordIf(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
-
-                // Go through each clause in the switch statement, collecting the 'case'/'default' keywords.
-                forEach(switchStatement.caseBlock.clauses, clause => {
-                    pushKeywordIf(keywords, clause.getFirstToken(), SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
-
-                    let breaksAndContinues = aggregateAllBreakAndContinueStatements(clause);
-
-                    forEach(breaksAndContinues, statement => {
-                        if (ownsBreakOrContinueStatement(switchStatement, statement)) {
-                            pushKeywordIf(keywords, statement.getFirstToken(), SyntaxKind.BreakKeyword);
-                        }
-                    });
-                });
-
-                return map(keywords, getReferenceEntryFromNode);
-            }
-
-            function getBreakOrContinueStatementOccurences(breakOrContinueStatement: BreakOrContinueStatement): ReferenceEntry[] {
-                let owner = getBreakOrContinueOwner(breakOrContinueStatement);
-
-                if (owner) {
-                    switch (owner.kind) {
-                        case SyntaxKind.ForStatement:
-                        case SyntaxKind.ForInStatement:
-                        case SyntaxKind.ForOfStatement:
-                        case SyntaxKind.DoStatement:
-                        case SyntaxKind.WhileStatement:
-                            return getLoopBreakContinueOccurrences(<IterationStatement>owner)
-                        case SyntaxKind.SwitchStatement:
-                            return getSwitchCaseDefaultOccurrences(<SwitchStatement>owner);
-
-                    }
-                }
-
-                return undefined;
-            }
-
-            function aggregateAllBreakAndContinueStatements(node: Node): BreakOrContinueStatement[] {
-                let statementAccumulator: BreakOrContinueStatement[] = []
-                aggregate(node);
-                return statementAccumulator;
-
-                function aggregate(node: Node): void {
-                    if (node.kind === SyntaxKind.BreakStatement || node.kind === SyntaxKind.ContinueStatement) {
-                        statementAccumulator.push(<BreakOrContinueStatement>node);
-                    }
-                    // Do not cross function boundaries.
-                    else if (!isFunctionLike(node)) {
-                        forEachChild(node, aggregate);
-                    }
-                };
-            }
-
-            function ownsBreakOrContinueStatement(owner: Node, statement: BreakOrContinueStatement): boolean {
-                let actualOwner = getBreakOrContinueOwner(statement);
-
-                return actualOwner && actualOwner === owner;
-            }
-
-            function getBreakOrContinueOwner(statement: BreakOrContinueStatement): Node {
-                for (let node = statement.parent; node; node = node.parent) {
-                    switch (node.kind) {
-                        case SyntaxKind.SwitchStatement:
-                            if (statement.kind === SyntaxKind.ContinueStatement) {
-                                continue;
-                            }
-                        // Fall through.
-                        case SyntaxKind.ForStatement:
-                        case SyntaxKind.ForInStatement:
-                        case SyntaxKind.ForOfStatement:
-                        case SyntaxKind.WhileStatement:
-                        case SyntaxKind.DoStatement:
-                            if (!statement.label || isLabeledBy(node, statement.label.text)) {
-                                return node;
-                            }
-                            break;
-                        default:
-                            // Don't cross function boundaries.
-                            if (isFunctionLike(node)) {
-                                return undefined;
-                            }
-                            break;
-                    }
-                }
-
-                return undefined;
-            }
-
-            function getConstructorOccurrences(constructorDeclaration: ConstructorDeclaration): ReferenceEntry[] {
-                let declarations = constructorDeclaration.symbol.getDeclarations()
-
-                let keywords: Node[] = [];
-
-                forEach(declarations, declaration => {
-                    forEach(declaration.getChildren(), token => {
-                        return pushKeywordIf(keywords, token, SyntaxKind.ConstructorKeyword);
-                    });
-                });
-
-                return map(keywords, getReferenceEntryFromNode);
-            }
-
-            function getGetAndSetOccurrences(accessorDeclaration: AccessorDeclaration): ReferenceEntry[] {
-                let keywords: Node[] = [];
-
-                tryPushAccessorKeyword(accessorDeclaration.symbol, SyntaxKind.GetAccessor);
-                tryPushAccessorKeyword(accessorDeclaration.symbol, SyntaxKind.SetAccessor);
-
-                return map(keywords, getReferenceEntryFromNode);
-
-                function tryPushAccessorKeyword(accessorSymbol: Symbol, accessorKind: SyntaxKind): void {
-                    let accessor = getDeclarationOfKind(accessorSymbol, accessorKind);
-
-                    if (accessor) {
-                        forEach(accessor.getChildren(), child => pushKeywordIf(keywords, child, SyntaxKind.GetKeyword, SyntaxKind.SetKeyword));
-                    }
-                }
-            }
-
-            function getModifierOccurrences(modifier: SyntaxKind, declaration: Node): ReferenceEntry[] {
-                let container = declaration.parent;
-
-                // Make sure we only highlight the keyword when it makes sense to do so.
-                if (isAccessibilityModifier(modifier)) {
-                    if (!(container.kind === SyntaxKind.ClassDeclaration ||
-                        (declaration.kind === SyntaxKind.Parameter && hasKind(container, SyntaxKind.Constructor)))) {
-                        return undefined;
-                    }
-                }
-                else if (modifier === SyntaxKind.StaticKeyword) {
-                    if (container.kind !== SyntaxKind.ClassDeclaration) {
-                        return undefined;
-                    }
-                }
-                else if (modifier === SyntaxKind.ExportKeyword || modifier === SyntaxKind.DeclareKeyword) {
-                    if (!(container.kind === SyntaxKind.ModuleBlock || container.kind === SyntaxKind.SourceFile)) {
-                        return undefined;
-                    }
-                }
-                else { 
-                    // unsupported modifier
-                    return undefined;
-                }
-
-                let keywords: Node[] = [];
-                let modifierFlag: NodeFlags = getFlagFromModifier(modifier);
-
-                let nodes: Node[];
-                switch (container.kind) {
-                    case SyntaxKind.ModuleBlock:
-                    case SyntaxKind.SourceFile:
-                        nodes = (<Block>container).statements;
-                        break;
-                    case SyntaxKind.Constructor:
-                        nodes = (<Node[]>(<ConstructorDeclaration>container).parameters).concat(
-                            (<ClassDeclaration>container.parent).members);
-                        break;
-                    case SyntaxKind.ClassDeclaration:
-                        nodes = (<ClassDeclaration>container).members;
-
-                        // If we're an accessibility modifier, we're in an instance member and should search
-                        // the constructor's parameter list for instance members as well.
-                        if (modifierFlag & NodeFlags.AccessibilityModifier) {
-                            let constructor = forEach((<ClassDeclaration>container).members, member => {
-                                return member.kind === SyntaxKind.Constructor && <ConstructorDeclaration>member;
-                            });
-
-                            if (constructor) {
-                                nodes = nodes.concat(constructor.parameters);
-                            }
-                        }
-                        break;
-                    default:
-                        Debug.fail("Invalid container kind.")
-                }
-                
-                forEach(nodes, node => {
-                    if (node.modifiers && node.flags & modifierFlag) {
-                        forEach(node.modifiers, child => pushKeywordIf(keywords, child, modifier));
-                    }
-                });
-
-                return map(keywords, getReferenceEntryFromNode);
-
-                function getFlagFromModifier(modifier: SyntaxKind) {
-                    switch (modifier) {
-                        case SyntaxKind.PublicKeyword:
-                            return NodeFlags.Public;
-                        case SyntaxKind.PrivateKeyword:
-                            return NodeFlags.Private;
-                        case SyntaxKind.ProtectedKeyword:
-                            return NodeFlags.Protected;
-                        case SyntaxKind.StaticKeyword:
-                            return NodeFlags.Static;
-                        case SyntaxKind.ExportKeyword:
-                            return NodeFlags.Export;
-                        case SyntaxKind.DeclareKeyword:
-                            return NodeFlags.Ambient;
-                        default:
-                            Debug.fail();
-                    }
-                }
-            }
-
-            // returns true if 'node' is defined and has a matching 'kind'.
-            function hasKind(node: Node, kind: SyntaxKind) {
-                return node !== undefined && node.kind === kind;
-            }
-
-            // Null-propagating 'parent' function.
-            function parent(node: Node): Node {
-                return node && node.parent;
-            }
-
-            function pushKeywordIf(keywordList: Node[], token: Node, ...expected: SyntaxKind[]): boolean {
-                if (token && contains(expected, token.kind)) {
-                    keywordList.push(token);
-                    return true;
-                }
-
-                return false;
-            }
         }
 
-        function convertReferences(referenceSymbols: ReferencedSymbol[]): ReferenceEntry[]{
+        function convertReferences(referenceSymbols: ReferencedSymbol[]): ReferenceEntry[] {
             if (!referenceSymbols) {
                 return undefined;
             }
 
             let referenceEntries: ReferenceEntry[] = [];
+
             for (let referenceSymbol of referenceSymbols) {
                 addRange(referenceEntries, referenceSymbol.references);
             }
+
             return referenceEntries;
         }
 
-        function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[]{
+        function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
             var referencedSymbols = findReferencedSymbols(fileName, position, findInStrings, findInComments);
             return convertReferences(referencedSymbols);
         }
@@ -4231,10 +4673,10 @@ module ts {
             }
 
             Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.NumericLiteral || node.kind === SyntaxKind.StringLiteral);
-            return getReferencesForNode(node, program.getSourceFiles(), /*searchOnlyInCurrentFile*/ false, findInStrings, findInComments);
+            return getReferencedSymbolsForNodes(node, program.getSourceFiles(), findInStrings, findInComments);
         }
 
-        function getReferencesForNode(node: Node, sourceFiles: SourceFile[], searchOnlyInCurrentFile: boolean, findInStrings: boolean, findInComments: boolean): ReferencedSymbol[]{
+        function getReferencedSymbolsForNodes(node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean): ReferencedSymbol[]{
             // Labels
             if (isLabelName(node)) {
                 if (isJumpStatementTarget(node)) {
@@ -4292,23 +4734,16 @@ module ts {
                 getReferencesInNode(scope, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
             }
             else {
-                if (searchOnlyInCurrentFile) {
-                    Debug.assert(sourceFiles.length === 1);
-                    result = [];
-                    getReferencesInNode(sourceFiles[0], symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
-                }
-                else {
-                    let internedName = getInternedName(symbol, node, declarations)
-                    forEach(sourceFiles, sourceFile => {
-                        cancellationToken.throwIfCancellationRequested();
+                let internedName = getInternedName(symbol, node, declarations)
+                for (let sourceFile of sourceFiles) {
+                    cancellationToken.throwIfCancellationRequested();
 
-                        let nameTable = getNameTable(sourceFile);
+                    let nameTable = getNameTable(sourceFile);
 
-                        if (lookUp(nameTable, internedName)) {
-                            result = result || [];
-                            getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
-                        }
-                    });
+                    if (lookUp(nameTable, internedName)) {
+                        result = result || [];
+                        getReferencesInNode(sourceFile, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
+                    }
                 }
             }
 
@@ -4877,8 +5312,8 @@ module ts {
                 if (symbol && symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     forEach(symbol.getDeclarations(), declaration => {
                         if (declaration.kind === SyntaxKind.ClassDeclaration) {
-                            getPropertySymbolFromTypeReference(getClassBaseTypeNode(<ClassDeclaration>declaration));
-                            forEach(getClassImplementedTypeNodes(<ClassDeclaration>declaration), getPropertySymbolFromTypeReference);
+                            getPropertySymbolFromTypeReference(getClassExtendsHeritageClauseElement(<ClassDeclaration>declaration));
+                            forEach(getClassImplementsHeritageClauseElements(<ClassDeclaration>declaration), getPropertySymbolFromTypeReference);
                         }
                         else if (declaration.kind === SyntaxKind.InterfaceDeclaration) {
                             forEach(getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration), getPropertySymbolFromTypeReference);
@@ -4887,7 +5322,7 @@ module ts {
                 }
                 return;
 
-                function getPropertySymbolFromTypeReference(typeReference: TypeReferenceNode) {
+                function getPropertySymbolFromTypeReference(typeReference: HeritageClauseElement) {
                     if (typeReference) {
                         let type = typeInfoResolver.getTypeAtLocation(typeReference);
                         if (type) {
@@ -5144,19 +5579,44 @@ module ts {
         }
 
         function isTypeReference(node: Node): boolean {
-            if (isRightSideOfQualifiedName(node)) {
+            if (isRightSideOfQualifiedNameOrPropertyAccess(node) ) {
                 node = node.parent;
             }
 
-            return node.parent.kind === SyntaxKind.TypeReference;
+            return node.parent.kind === SyntaxKind.TypeReference || node.parent.kind === SyntaxKind.HeritageClauseElement;
         }
 
         function isNamespaceReference(node: Node): boolean {
+            return isQualifiedNameNamespaceReference(node) || isPropertyAccessNamespaceReference(node);
+        }
+
+        function isPropertyAccessNamespaceReference(node: Node): boolean {
+            let root = node;
+            let isLastClause = true;
+            if (root.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                while (root.parent && root.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                    root = root.parent;
+                }
+
+                isLastClause = (<PropertyAccessExpression>root).name === node;
+            }
+
+            if (!isLastClause && root.parent.kind === SyntaxKind.HeritageClauseElement && root.parent.parent.kind === SyntaxKind.HeritageClause) {
+                let decl = root.parent.parent.parent;
+                return (decl.kind === SyntaxKind.ClassDeclaration && (<HeritageClause>root.parent.parent).token === SyntaxKind.ImplementsKeyword) ||
+                    (decl.kind === SyntaxKind.InterfaceDeclaration && (<HeritageClause>root.parent.parent).token === SyntaxKind.ExtendsKeyword);
+            }
+
+            return false;
+        }
+
+        function isQualifiedNameNamespaceReference(node: Node): boolean {
             let root = node;
             let isLastClause = true;
             if (root.parent.kind === SyntaxKind.QualifiedName) {
-                while (root.parent && root.parent.kind === SyntaxKind.QualifiedName)
+                while (root.parent && root.parent.kind === SyntaxKind.QualifiedName) {
                     root = root.parent;
+                }
 
                 isLastClause = (<QualifiedName>root).right === node;
             }
@@ -5900,6 +6360,7 @@ module ts {
             getReferencesAtPosition,
             findReferences,
             getOccurrencesAtPosition,
+            getDocumentHighlights,
             getNameOrDottedNameSpan,
             getBreakpointStatementAtPosition,
             getNavigateToItems,

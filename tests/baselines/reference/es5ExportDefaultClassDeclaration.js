@@ -12,7 +12,7 @@ var C = (function () {
     C.prototype.method = function () { };
     return C;
 })();
-exports.C = C;
+exports.default = C;
 
 
 //// [es5ExportDefaultClassDeclaration.d.ts]

@@ -7,4 +7,5 @@ export default 1 + 2;
 
 
 //// [declarationEmitDefaultExport5.d.ts]
-export default : number;
+declare var _default: number;
+export default _default;

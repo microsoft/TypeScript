@@ -623,10 +623,6 @@
         "category": "Error",
         "code": 1200
     },
-    "A type annotation on an export statement is only allowed in an ambient external module declaration.": {
-        "category": "Error",
-        "code": 1201
-    },
     "Import assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"' or 'import d from \"mod\"' instead.": {
         "category": "Error",
         "code": 1202
@@ -651,7 +647,46 @@
         "category": "Error",
         "code": 1207
     },
-
+    "Cannot compile non-external modules when the '--separateCompilation' flag is provided.": {
+        "category": "Error",
+        "code": 1208
+    },
+    "Ambient const enums are not allowed when the '--separateCompilation' flag is provided.": {
+        "category": "Error",
+        "code": 1209
+    },
+    "Invalid use of '{0}'. Class definitions are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1210
+    },
+    "A class declaration without the 'default' modifier must have a name": {
+        "category": "Error",
+        "code": 1211
+    },
+    "Identifier expected. '{0}' is a reserved word in strict mode": {
+        "category": "Error",
+        "code": 1212
+    },
+    "Identifier expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1213
+    },
+    "Identifier expected. '{0}' is a reserved word in strict mode. External Module is automatically in strict mode.": {
+        "category": "Error",
+        "code": 1214
+    },
+    "Type expected. '{0}' is a reserved word in strict mode": {
+        "category": "Error",
+        "code": 1215
+    },
+    "Type expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1216
+    },
+    "Type expected. '{0}' is a reserved word in strict mode. Module is automatically in strict mode.": {
+        "category": "Error",
+        "code": 1217
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1352,11 +1387,11 @@
         "category": "Error",
         "code": 2487
     },
-    "The right-hand side of a 'for...of' statement must have a '[Symbol.iterator]()' method that returns an iterator.": {
+    "Type must have a '[Symbol.iterator]()' method that returns an iterator.": {
         "category": "Error",
         "code": 2488
     },
-    "The iterator returned by the right-hand side of a 'for...of' statement must have a 'next()' method.": {
+    "An iterator must have a 'next()' method.": {
         "category": "Error",
         "code": 2489
     },
@@ -1395,6 +1430,14 @@
     "External module '{0}' uses 'export =' and cannot be used with 'export *'.": {
         "category": "Error",
         "code": 2498
+    },
+    "An interface can only extend an identifier/qualified-name with optional type arguments.": {
+        "category": "Error",
+        "code": 2499
+    },
+    "A class can only implement an identifier/qualified-name with optional type arguments.": {
+        "category": "Error",
+        "code": 2500
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -1729,6 +1772,26 @@
         "category": "Error",
         "code": 5042
     },
+    "Option 'sourceMap' cannot be specified with option 'separateCompilation'.": {
+        "category": "Error",
+        "code": 5043
+    },
+    "Option 'declaration' cannot be specified with option 'separateCompilation'.": {
+        "category": "Error",
+        "code": 5044
+    },
+    "Option 'noEmitOnError' cannot be specified with option 'separateCompilation'.": {
+        "category": "Error",
+        "code": 5045
+    },
+    "Option 'out' cannot be specified with option 'separateCompilation'.": {
+        "category": "Error",
+        "code": 5046
+    },
+    "Option 'separateCompilation' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher.": {
+        "category": "Error",
+        "code": 5047
+    },
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -1978,6 +2041,71 @@
         "category": "Error",
         "code": 8001
     },
+    "'import ... =' can only be used in a .ts file.": {
+        "category": "Error",
+        "code":  8002
+    },
+    "'export=' can only be used in a .ts file.": {
+        "category": "Error",
+        "code":  8003
+    },
+    "'type parameter declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code":  8004
+    },
+    "'implements clauses' can only be used in a .ts file.": {
+        "category": "Error",
+        "code":  8005
+    },
+    "'interface declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8006
+    },
+    "'module declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8007
+    },
+    "'type aliases' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8008
+    },
+    "'{0}' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8009
+    },
+    "'types' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8010
+    },
+    "'type arguments' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8011
+    },
+    "'parameter modifiers' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8012
+    },
+    "'?' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8013
+    },
+    "'property declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8014
+    },
+    "'enum declarations' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8015
+    },
+    "'type assertion expressions' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8016
+    },
+    "'decorators' can only be used in a .ts file.": {
+        "category": "Error",
+        "code": 8017
+    },
+
     "'yield' expressions are not currently supported.": {
         "category": "Error",
         "code": 9000
@@ -1985,5 +2113,17 @@
     "Generators are not currently supported.": {
         "category": "Error",
         "code": 9001
+    },
+    "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.": {
+        "category": "Error",
+        "code": 9002
+    },
+    "'class' expressions are not currently supported.": {
+        "category": "Error",
+        "code": 9003
+    },
+    "'class' declarations are only supported directly inside a module or as a top level declaration.": {
+        "category": "Error",
+        "code": 9004
     }
 }
