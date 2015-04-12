@@ -299,8 +299,7 @@ module ts {
             case SyntaxKind.ExportAssignment:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ExportAssignment>node).expression) ||
-                    visitNode(cbNode, (<ExportAssignment>node).type);
+                    visitNode(cbNode, (<ExportAssignment>node).expression);
             case SyntaxKind.TemplateExpression:
                 return visitNode(cbNode, (<TemplateExpression>node).head) || visitNodes(cbNodes, (<TemplateExpression>node).templateSpans);
             case SyntaxKind.TemplateSpan:
@@ -3227,6 +3226,16 @@ module ts {
                     }
                 }
 
+                // If encounter "([" or "({", this could be the start of a binding pattern.
+                // Examples:
+                //      ([ x ]) => { }
+                //      ({ x }) => { }
+                //      ([ x ])
+                //      ({ x })
+                if (second === SyntaxKind.OpenBracketToken || second === SyntaxKind.OpenBraceToken) {
+                    return Tristate.Unknown;
+                }
+
                 // Simple case: "(..."
                 // This is an arrow function with a rest parameter.
                 if (second === SyntaxKind.DotDotDotToken) {
@@ -5151,17 +5160,11 @@ module ts {
             setModifiers(node, modifiers);
             if (parseOptional(SyntaxKind.EqualsToken)) {
                 node.isExportEquals = true;
-                node.expression = parseAssignmentExpressionOrHigher();
             }
             else {
                 parseExpected(SyntaxKind.DefaultKeyword);
-                if (parseOptional(SyntaxKind.ColonToken)) {
-                    node.type = parseType();
-                }
-                else {
-                    node.expression = parseAssignmentExpressionOrHigher();
-                }
             }
+            node.expression = parseAssignmentExpressionOrHigher();
             parseSemicolon();
             return finishNode(node);
         }
@@ -5327,7 +5330,7 @@ module ts {
                     break;
                 }
 
-                let range = { pos: triviaScanner.getTokenPos(), end: triviaScanner.getTextPos() };
+                let range = { pos: triviaScanner.getTokenPos(), end: triviaScanner.getTextPos(), kind: triviaScanner.getToken() };
 
                 let comment = sourceText.substring(range.pos, range.end);
                 let referencePathMatchResult = getFileReferenceFromReferencePath(comment, range);

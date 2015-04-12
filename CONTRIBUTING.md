@@ -25,7 +25,7 @@ Your pull request should:
     * Tests should include reasonable permutations of the target fix/change
     * Include baseline changes with your change
     * All changed code must have 100% code coverage
-* Follow the code conventions descriped in [Coding guidlines](https://github.com/Microsoft/TypeScript/wiki/Coding-guidlines)
+* Follow the code conventions descriped in [Coding guidelines](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines)
 * To avoid line ending issues, set `autocrlf = input` and `whitespace = cr-at-eol` in your git configuration
 
 ## Running the Tests

@@ -1,19 +1,18 @@
 /// <reference path="binder.ts"/>
 
+/* @internal */
 module ts {
     let nextSymbolId = 1;
     let nextNodeId = 1;
     let nextMergeId = 1;
 
-    // @internal
     export function getNodeId(node: Node): number {
         if (!node.id) node.id = nextNodeId++;
         return node.id;
     }
 
-    /* @internal */ export let checkTime = 0;
+    export let checkTime = 0;
 
-    /* @internal */
     export function getSymbolId(symbol: Symbol): number {
         if (!symbol.id) {
             symbol.id = nextSymbolId++;
@@ -682,7 +681,7 @@ module ts {
         }
 
         function getTargetOfExportAssignment(node: ExportAssignment): Symbol {
-            return node.expression && resolveEntityName(<Identifier>node.expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
+            return resolveEntityName(<Identifier>node.expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
         }
 
         function getTargetOfAliasDeclaration(node: Declaration): Symbol {
@@ -748,7 +747,7 @@ module ts {
             if (!links.referenced) {
                 links.referenced = true;
                 let node = getDeclarationOfAliasSymbol(symbol);
-                if (node.kind === SyntaxKind.ExportAssignment && (<ExportAssignment>node).expression) {
+                if (node.kind === SyntaxKind.ExportAssignment) {
                     // export default <symbol>
                     checkExpressionCached((<ExportAssignment>node).expression);
                 }
@@ -2287,16 +2286,7 @@ module ts {
                 }
                 // Handle export default expressions
                 if (declaration.kind === SyntaxKind.ExportAssignment) {
-                    var exportAssignment = <ExportAssignment>declaration;
-                    if (exportAssignment.expression) {
-                        return links.type = checkExpression(exportAssignment.expression);
-                    }
-                    else if (exportAssignment.type) {
-                        return links.type = getTypeFromTypeNodeOrHeritageClauseElement(exportAssignment.type);
-                    }
-                    else {
-                        return links.type = anyType;
-                    }
+                    return links.type = checkExpression((<ExportAssignment>declaration).expression);
                 }
                 // Handle variable, parameter or property
                 links.type = resolvingType;
@@ -5582,7 +5572,7 @@ module ts {
                     needToCaptureLexicalThis = false;
                     while (container && container.kind === SyntaxKind.ArrowFunction) {
                         container = getSuperContainer(container, /*includeFunctions*/ true);
-                        needToCaptureLexicalThis = true;
+                        needToCaptureLexicalThis = languageVersion < ScriptTarget.ES6;
                     }
 
                     // topmost container must be something that is directly nested in the class declaration
@@ -7340,7 +7330,7 @@ module ts {
 
         function checkFunctionExpressionOrObjectLiteralMethodBody(node: FunctionExpression | MethodDeclaration) {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
-            if (node.type) {
+            if (node.type && !node.asteriskToken) {
                 checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNodeOrHeritageClauseElement(node.type));
             }
 
@@ -8913,7 +8903,7 @@ module ts {
             }
 
             checkSourceElement(node.body);
-            if (node.type && !isAccessor(node.kind)) {
+            if (node.type && !isAccessor(node.kind) && !node.asteriskToken) {
                 checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNodeOrHeritageClauseElement(node.type));
             }
 
@@ -10608,21 +10598,12 @@ module ts {
             if (!checkGrammarDecorators(node) && !checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_assignment_cannot_have_modifiers);
             }
-            if (node.expression) {
-                if (node.expression.kind === SyntaxKind.Identifier) {
-                    markExportAsReferenced(node);
-                }
-                else {
-                    checkExpressionCached(node.expression);
-                }
+            if (node.expression.kind === SyntaxKind.Identifier) {
+                markExportAsReferenced(node);
             }
-            if (node.type) {
-                checkSourceElement(node.type);
-                if (!isInAmbientContext(node)) {
-                    grammarErrorOnFirstToken(node.type, Diagnostics.A_type_annotation_on_an_export_statement_is_only_allowed_in_an_ambient_external_module_declaration);
-                }
+            else {
+                checkExpressionCached(node.expression);
             }
-
             checkExternalModuleExports(container);
 
             if (node.isExportEquals && languageVersion >= ScriptTarget.ES6) {
@@ -10876,6 +10857,8 @@ module ts {
                 checkGrammarSourceFile(node);
 
                 emitExtends = false;
+                emitDecorate = false;
+                emitParam = false;
                 potentialThisCollisions.length = 0;
 
                 forEach(node.statements, checkSourceElement);

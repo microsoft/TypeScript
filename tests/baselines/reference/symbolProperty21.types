@@ -31,19 +31,19 @@ declare function foo<T, U>(p: I<T, U>): { t: T; u: U };
 >U : U
 
 foo({
->foo({    [Symbol.isConcatSpreadable]: "",    [Symbol.isRegExp]: 0,    [Symbol.unscopables]: true}) : { t: boolean; u: string; }
+>foo({    [Symbol.isConcatSpreadable]: "",    [Symbol.toPrimitive]: 0,    [Symbol.unscopables]: true}) : { t: boolean; u: string; }
 >foo : <T, U>(p: I<T, U>) => { t: T; u: U; }
->{    [Symbol.isConcatSpreadable]: "",    [Symbol.isRegExp]: 0,    [Symbol.unscopables]: true} : { [Symbol.isConcatSpreadable]: string; [Symbol.isRegExp]: number; [Symbol.unscopables]: boolean; }
+>{    [Symbol.isConcatSpreadable]: "",    [Symbol.toPrimitive]: 0,    [Symbol.unscopables]: true} : { [Symbol.isConcatSpreadable]: string; [Symbol.toPrimitive]: number; [Symbol.unscopables]: boolean; }
 
     [Symbol.isConcatSpreadable]: "",
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
 
-    [Symbol.isRegExp]: 0,
->Symbol.isRegExp : symbol
+    [Symbol.toPrimitive]: 0,
+>Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
->isRegExp : symbol
+>toPrimitive : symbol
 
     [Symbol.unscopables]: true
 >Symbol.unscopables : symbol
