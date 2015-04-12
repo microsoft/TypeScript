@@ -1180,6 +1180,7 @@ declare module "typescript" {
     }
     interface UnionType extends Type {
         types: Type[];
+        reducedType: Type;
         resolvedProperties: SymbolTable;
     }
     interface ResolvedType extends ObjectType, UnionType {

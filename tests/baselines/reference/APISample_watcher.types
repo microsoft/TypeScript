@@ -3972,6 +3972,10 @@ declare module "typescript" {
 >types : Type[]
 >Type : Type
 
+        reducedType: Type;
+>reducedType : Type
+>Type : Type
+
         resolvedProperties: SymbolTable;
 >resolvedProperties : SymbolTable
 >SymbolTable : SymbolTable
