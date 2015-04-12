@@ -2112,7 +2112,7 @@ module ts {
 
         function getTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration) {
             let jsDocType = getJSDocTypeForVariableLikeDeclarationFromJSDocComment(declaration);
-            return getTypeFromJSDocType(jsDocType);
+            return getTypeFromTypeNode(jsDocType);
         }
 
         function getJSDocTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration): JSDocType {
@@ -3734,43 +3734,8 @@ module ts {
             return links.resolvedType;
         }
 
-        function getTypeFromJSDocType(jsDocType: JSDocType): Type {
-            if (jsDocType) {
-                switch (jsDocType.kind) {
-                    case SyntaxKind.JSDocAllType:
-                        return anyType;
-                    case SyntaxKind.JSDocUnknownType:
-                        return unknownType;
-                    case SyntaxKind.JSDocUnionType:
-                        return getTypeFromJSDocUnionType(<JSDocUnionType>jsDocType);
-                    case SyntaxKind.JSDocNullableType:
-                        return getTypeFromJSDocType((<JSDocNullableType>jsDocType).type);
-                    case SyntaxKind.JSDocNonNullableType:
-                        return getTypeFromJSDocType((<JSDocNonNullableType>jsDocType).type);
-                    case SyntaxKind.JSDocRecordType:
-                        // NYI:
-                        break;
-                    case SyntaxKind.JSDocTypeReference:
-                        return getTypeForJSDocTypeReference(<JSDocTypeReference>jsDocType);
-                    case SyntaxKind.JSDocOptionalType:
-                        return getTypeFromJSDocType((<JSDocOptionalType>jsDocType).type);
-                    case SyntaxKind.JSDocFunctionType:
-                        // NYI:
-                        break;
-                    case SyntaxKind.JSDocVariadicType:
-                        return getTypeFromJSDocVariadicType(<JSDocVariadicType>jsDocType);
-                    case SyntaxKind.JSDocConstructorType:
-                        // NYI:
-                        break;
-                    case SyntaxKind.JSDocThisType:
-                        // NYI:
-                        break;
-                }
-            }
-        }
-
         function getTypeFromJSDocVariadicType(node: JSDocVariadicType): Type {
-            let type = getTypeFromJSDocType(node.type);
+            let type = getTypeFromTypeNode(node.type);
             if (type) {
                 return createArrayType(type);
             }
@@ -3793,7 +3758,7 @@ module ts {
                 if (type.flags & (TypeFlags.Class | TypeFlags.Interface) && type.flags & TypeFlags.Reference) {
                     let typeParameters = (<InterfaceType>type).typeParameters;
                     if (node.typeArguments && node.typeArguments.length === typeParameters.length) {
-                        let typeArguments = map(node.typeArguments, getTypeFromJSDocType);
+                        let typeArguments = map(node.typeArguments, getTypeFromTypeNode);
                         for (let typeArgument in typeArguments) {
                             if (!typeArgument) {
                                 return undefined;
@@ -3811,7 +3776,22 @@ module ts {
         }
 
         function getTypeFromJSDocUnionType(node: JSDocUnionType): Type {
-            return getUnionType(map(node.types, getTypeFromJSDocType), /*noSubtypeReduction*/ true);
+            let types = map(node.types, getTypeFromTypeNode);
+            for (let type of types) {
+                if (!type) {
+                    return undefined;
+                }
+            }
+
+            return getUnionType(types, /*noSubtypeReduction*/ true);
+        }
+
+        function getTypeFromTypeNode(node: TypeNode): Type {
+            if (!node) {
+                return undefined;
+            }
+
+            return getTypeFromTypeNodeOrHeritageClauseElement(node);
         }
 
         function getTypeFromTypeNodeOrHeritageClauseElement(node: TypeNode | LiteralExpression | HeritageClauseElement): Type {
@@ -3843,7 +3823,7 @@ module ts {
                 case SyntaxKind.UnionType:
                     return getTypeFromUnionTypeNode(<UnionTypeNode>node);
                 case SyntaxKind.ParenthesizedType:
-                    return getTypeFromTypeNodeOrHeritageClauseElement((<ParenthesizedTypeNode>node).type);
+                    return getTypeFromTypeNode((<ParenthesizedTypeNode>node).type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.TypeLiteral:
@@ -3856,6 +3836,34 @@ module ts {
                     return symbol && getDeclaredTypeOfSymbol(symbol);
                 default:
                     return unknownType;
+                case SyntaxKind.JSDocAllType:
+                    return anyType;
+                case SyntaxKind.JSDocUnknownType:
+                    return unknownType;
+                case SyntaxKind.JSDocUnionType:
+                    return getTypeFromJSDocUnionType(<JSDocUnionType>node);
+                case SyntaxKind.JSDocNullableType:
+                    return getTypeFromTypeNode((<JSDocNullableType>node).type);
+                case SyntaxKind.JSDocNonNullableType:
+                    return getTypeFromTypeNode((<JSDocNonNullableType>node).type);
+                case SyntaxKind.JSDocRecordType:
+                    // NYI:
+                    break;
+                case SyntaxKind.JSDocTypeReference:
+                    return getTypeForJSDocTypeReference(<JSDocTypeReference>node);
+                case SyntaxKind.JSDocOptionalType:
+                    return getTypeFromTypeNode((<JSDocOptionalType>node).type);
+                case SyntaxKind.JSDocFunctionType:
+                    // NYI:
+                    break;
+                case SyntaxKind.JSDocVariadicType:
+                    return getTypeFromJSDocVariadicType(<JSDocVariadicType>node);
+                case SyntaxKind.JSDocConstructorType:
+                    // NYI:
+                    break;
+                case SyntaxKind.JSDocThisType:
+                    // NYI:
+                    break;
             }
         }
 
@@ -7360,7 +7368,7 @@ module ts {
         function getReturnTypeFromJSDocComment(func: FunctionLikeDeclaration): Type {
             let jsDocComment = getJSDocComment(func, getSourceFile(func));
             if (jsDocComment && jsDocComment.returnType) {
-                return getTypeFromJSDocType(jsDocComment.returnType);
+                return getTypeFromTypeNode(jsDocComment.returnType);
             }
         }
 
