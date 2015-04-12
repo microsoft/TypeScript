@@ -1,0 +1,37 @@
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclarationES6.ts(17,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclarationES6.ts(18,4): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ z: number; }'.
+  Property 'z' is missing in type '{}'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclarationES6.ts(19,14): error TS2300: Duplicate identifier 'z'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclarationES6.ts(19,18): error TS2300: Duplicate identifier 'z'.
+
+
+==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclarationES6.ts (4 errors) ====
+    enum Foo { a }
+    function a({x, a}: { x: number, a: number }) { }
+    function a1({z: {x, y: {j}}}) { }
+    function a2({z: {x, y: {j}}} = { z: { x: "hi", y: { j: 1 } } }) { }
+    function a3({z} = {z:10}) { }
+    function a4({z=10}) { }
+    function a6({b}: { b: number|string|boolean } = { b: "hello" }) { }
+    a2();
+    a2({ z: { x: "hello" , y: { j: Foo.a } }});
+    a3();
+    a3({ z: Foo.a });
+    a4({});
+    a6({ b: 10 });
+    a6({ b: true });
+    
+    // error
+    a4();
+    ~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+    a3({});
+       ~~
+!!! error TS2345: Argument of type '{}' is not assignable to parameter of type '{ z: number; }'.
+!!! error TS2345:   Property 'z' is missing in type '{}'.
+    function a5([z], z: number) { }
+                 ~
+!!! error TS2300: Duplicate identifier 'z'.
+                     ~
+!!! error TS2300: Duplicate identifier 'z'.
+    

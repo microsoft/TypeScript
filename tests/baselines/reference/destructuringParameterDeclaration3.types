@@ -1,0 +1,92 @@
+=== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3.ts ===
+function a([x, [y, z], [[j]]]) {
+>a : ([x, [y, z], [[j]]]: [any, [any, any], [[any]]]) => any[]
+>x : any
+>y : any
+>z : any
+>j : any
+
+    return [x, y, z, j];
+>[x, y, z, j] : any[]
+>x : any
+>y : any
+>z : any
+>j : any
+}
+
+function a1([...x]) {
+>a1 : ([...x]: any[]) => any[][]
+>x : any[]
+
+    return [x];
+>[x] : any[][]
+>x : any[]
+}
+
+function a2({public} = { "public": "1" }) {
+>a2 : ({public}?: { "public": string; }) => string
+>public : string
+>{ "public": "1" } : { "public": string; }
+
+    return public;
+>public : string
+}
+
+function a3({x: { y, z}, j: {k: {a}} }) {
+>a3 : ({x: { y, z}, j: {k: {a}} }: { x: { y: any; z: any; }; j: { k: { a: any; }; }; }) => any[]
+>x : unknown
+>y : any
+>z : any
+>j : unknown
+>k : unknown
+>a : any
+
+    return [y, z, a];
+>[y, z, a] : any[]
+>y : any
+>z : any
+>a : any
+}
+
+function a4({x: { y, z}, j: {k: {a}} } = { x: { y: 1, z: 1 }, j: { k: { a: "hello" } } }): (number| string) [] {
+>a4 : ({x: { y, z}, j: {k: {a}} }?: { x: { y: number; z: number; }; j: { k: { a: string; }; }; }) => (string | number)[]
+>x : unknown
+>y : number
+>z : number
+>j : unknown
+>k : unknown
+>a : string
+>{ x: { y: 1, z: 1 }, j: { k: { a: "hello" } } } : { x: { y: number; z: number; }; j: { k: { a: string; }; }; }
+>x : { y: number; z: number; }
+>{ y: 1, z: 1 } : { y: number; z: number; }
+>y : number
+>z : number
+>j : { k: { a: string; }; }
+>{ k: { a: "hello" } } : { k: { a: string; }; }
+>k : { a: string; }
+>{ a: "hello" } : { a: string; }
+>a : string
+
+    return [y, z, a];
+>[y, z, a] : (string | number)[]
+>y : number
+>z : number
+>a : string
+}
+
+function a5({x: { y, z}, j: {k: {a}} }): (number| string) [] {
+>a5 : ({x: { y, z}, j: {k: {a}} }: { x: { y: any; z: any; }; j: { k: { a: any; }; }; }) => (string | number)[]
+>x : unknown
+>y : any
+>z : any
+>j : unknown
+>k : unknown
+>a : any
+
+    return [y, z, a];
+>[y, z, a] : any[]
+>y : any
+>z : any
+>a : any
+}
+
