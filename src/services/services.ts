@@ -3798,6 +3798,10 @@ module ts {
                 // Try getting just type at this position and show
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
+                        if(isLabelName(node)){
+                            return undefined;
+                        }
+                    // Fall through.
                     case SyntaxKind.PropertyAccessExpression:
                     case SyntaxKind.QualifiedName:
                     case SyntaxKind.ThisKeyword:
