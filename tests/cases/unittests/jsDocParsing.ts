@@ -423,25 +423,35 @@ module ts {
     "end": 26,
     "parameters": {
         "0": {
-            "kind": "JSDocTypeReference",
+            "kind": "Parameter",
             "pos": 10,
             "end": 16,
-            "name": {
-                "kind": "Identifier",
+            "type": {
+                "kind": "JSDocTypeReference",
                 "pos": 10,
                 "end": 16,
-                "text": "string"
+                "name": {
+                    "kind": "Identifier",
+                    "pos": 10,
+                    "end": 16,
+                    "text": "string"
+                }
             }
         },
         "1": {
-            "kind": "JSDocTypeReference",
+            "kind": "Parameter",
             "pos": 17,
             "end": 25,
-            "name": {
-                "kind": "Identifier",
+            "type": {
+                "kind": "JSDocTypeReference",
                 "pos": 17,
                 "end": 25,
-                "text": "boolean"
+                "name": {
+                    "kind": "Identifier",
+                    "pos": 17,
+                    "end": 25,
+                    "text": "boolean"
+                }
             }
         },
         "length": 2,
@@ -459,25 +469,35 @@ module ts {
     "end": 26,
     "parameters": {
         "0": {
-            "kind": "JSDocTypeReference",
+            "kind": "Parameter",
             "pos": 10,
             "end": 16,
-            "name": {
-                "kind": "Identifier",
+            "type": {
+                "kind": "JSDocTypeReference",
                 "pos": 10,
                 "end": 16,
-                "text": "string"
+                "name": {
+                    "kind": "Identifier",
+                    "pos": 10,
+                    "end": 16,
+                    "text": "string"
+                }
             }
         },
         "1": {
-            "kind": "JSDocTypeReference",
+            "kind": "Parameter",
             "pos": 17,
             "end": 25,
-            "name": {
-                "kind": "Identifier",
+            "type": {
+                "kind": "JSDocTypeReference",
                 "pos": 17,
                 "end": 25,
-                "text": "boolean"
+                "name": {
+                    "kind": "Identifier",
+                    "pos": 17,
+                    "end": 25,
+                    "text": "boolean"
+                }
             }
         },
         "length": 2,

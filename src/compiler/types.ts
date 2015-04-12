@@ -1018,7 +1018,7 @@ module ts {
         type: JSDocType;
     }
 
-    export interface JSDocType extends Node {
+    export interface JSDocType extends TypeNode {
         _jsDocTypeBrand: any;
     }
 
@@ -1056,7 +1056,7 @@ module ts {
     }
 
     export interface JSDocFunctionType extends JSDocType {
-        parameters: NodeArray<JSDocType>;
+        parameters: NodeArray<ParameterDeclaration>;
         type: JSDocType;
     }
 

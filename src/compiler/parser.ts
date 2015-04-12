@@ -5549,7 +5549,7 @@ module ts {
             nextToken();
             parseExpected(SyntaxKind.OpenParenToken);
 
-            let parameters = <NodeArray<JSDocType>>[];
+            let parameters = <NodeArray<ParameterDeclaration>>[];
             parameters.pos = scanner.getStartPos();
 
             while (!error && token !== SyntaxKind.CloseParenToken) {
@@ -5557,7 +5557,16 @@ module ts {
                     parseExpected(SyntaxKind.CommaToken);
                 }
 
-                parameters.push(parseJSDocType());
+                let parameterType = parseJSDocType();
+                if (!parameterType) {
+                    return undefined;
+                }
+
+                let parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter, parameterType.pos);
+                parameter.type = parameterType;
+                finishNode(parameter);
+
+                parameters.push(parameter);
             }
 
             parameters.end = scanner.getStartPos();
