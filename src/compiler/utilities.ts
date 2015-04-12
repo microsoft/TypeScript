@@ -876,6 +876,10 @@ module ts {
         }
 
         if (s.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+            if (lastParameter.type && lastParameter.type.kind === SyntaxKind.JSDocVariadicType) {
+                return true;
+            }
+
             let parameter = getJSDocParameter(lastParameter, getSourceFileOfNode(lastParameter));
             if (parameter) {
                 return parameter.type.kind === SyntaxKind.JSDocVariadicType;

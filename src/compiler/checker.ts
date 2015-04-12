@@ -3138,6 +3138,10 @@ module ts {
 
         function isVariadic(node: ParameterDeclaration) {
             if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType) {
+                    return true;
+                }
+
                 let docParam = getJSDocParameter(node, getSourceFile(node));
                 if (docParam) {
                     return docParam.type.kind === SyntaxKind.JSDocVariadicType;
@@ -3150,6 +3154,10 @@ module ts {
 
         function isOptional(node: ParameterDeclaration) {
             if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {
+                    return true;
+                }
+
                 let docParam = getJSDocParameter(node, getSourceFile(node));
                 if (docParam) {
                     return docParam.type.kind === SyntaxKind.JSDocOptionalType;
@@ -3162,13 +3170,16 @@ module ts {
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
             let links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
-                let classType = declaration.kind === SyntaxKind.Constructor ? getDeclaredTypeOfClass((<ClassDeclaration>declaration.parent).symbol) : undefined;
-                let typeParameters = classType ? classType.typeParameters : getTypeParametersFromSignatureDeclaration(declaration);
-
                 let parameters: Symbol[] = [];
                 let hasStringLiterals = false;
                 let minArgumentCount = -1;
-                for (let i = 0, n = declaration.parameters.length; i < n; i++) {
+                let returnType: Type;
+
+                let classType = declaration.kind === SyntaxKind.Constructor ? getDeclaredTypeOfClass((<ClassDeclaration>declaration.parent).symbol) : undefined;
+                let typeParameters = classType ? classType.typeParameters : getTypeParametersFromSignatureDeclaration(declaration);
+                let isJSConstructSignature = isJSDocConstructSignature(declaration);
+
+                for (let i = isJSConstructSignature ? 1 : 0, n = declaration.parameters.length; i < n; i++) {
                     let param = declaration.parameters[i];
                     parameters.push(param.symbol);
                     if (param.type && param.type.kind === SyntaxKind.StringLiteral) {
@@ -3185,12 +3196,18 @@ module ts {
                     minArgumentCount = declaration.parameters.length;
                 }
 
-                let returnType: Type;
+                if (isJSConstructSignature) {
+                    minArgumentCount--;
+                }
+
                 if (classType) {
                     returnType = classType;
                 }
+                else if (isJSConstructSignature) {
+                    returnType = getTypeFromTypeNode(declaration.parameters[0].type);
+                }
                 else if (declaration.type) {
-                    returnType = getTypeFromTypeNodeOrHeritageClauseElement(declaration.type);
+                    returnType = getTypeFromTypeNode(declaration.type);
                 }
                 else {
                     // TypeScript 1.0 spec (April 2014):
@@ -3735,8 +3752,14 @@ module ts {
             return links.resolvedType;
         }
 
+        function isJSDocConstructSignature(node: SignatureDeclaration) {
+            return node.kind === SyntaxKind.JSDocFunctionType &&
+                node.parameters.length > 0 &&
+                node.parameters[0].type.kind === SyntaxKind.JSDocConstructorType;
+        }
+
         function getTypeFromJSDocFunctionType(node: JSDocFunctionType): Type {
-            let isConstructSignature = node.parameters.length > 0 && node.parameters[0].kind === SyntaxKind.JSDocConstructorType;
+            let isConstructSignature = isJSDocConstructSignature(node);
             let name = isConstructSignature ? "__new" : "__call";
 
             let symbol = createSymbol(SymbolFlags.Signature, name);
@@ -3744,7 +3767,7 @@ module ts {
             node.locals = {};
             for (let i = isConstructSignature ? 1 : 0; i < node.parameters.length; i++) {
                 let paramName = "p" + i;
-                let paramSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, name);
+                let paramSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, paramName);
                 addDeclarationToSymbol(paramSymbol, node.parameters[i], SymbolFlags.FunctionScopedVariable);
 
                 node.locals[paramName] = paramSymbol;
@@ -3882,8 +3905,7 @@ module ts {
                 case SyntaxKind.JSDocVariadicType:
                     return getTypeFromJSDocVariadicType(<JSDocVariadicType>node);
                 case SyntaxKind.JSDocConstructorType:
-                    // NYI:
-                    break;
+                    return getTypeFromTypeNode((<JSDocConstructorType>node).type);
                 case SyntaxKind.JSDocThisType:
                     // NYI:
                     break;
@@ -7340,7 +7362,8 @@ module ts {
                 if (declaration &&
                     declaration.kind !== SyntaxKind.Constructor &&
                     declaration.kind !== SyntaxKind.ConstructSignature &&
-                    declaration.kind !== SyntaxKind.ConstructorType) {
+                    declaration.kind !== SyntaxKind.ConstructorType &&
+                    !isJSDocConstructSignature(declaration)) {
 
                     // When resolved signature is a call signature (and not a construct signature) the result type is any
                     if (compilerOptions.noImplicitAny) {
