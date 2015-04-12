@@ -1006,6 +1006,10 @@ module ts {
         return result;
     }
 
+    // Share a single scanner across all calls to parse a source file.  This helps speed things
+    // up by avoiding the cost of creating/compiling scanners over and over again.
+    let scanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ true);
+
     function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: SyntaxCursor, setParentNodes = false): SourceFile {
         const disallowInAndDecoratorContext = ParserContextFlags.DisallowIn | ParserContextFlags.Decorator;
 
@@ -1105,7 +1109,10 @@ module ts {
         let parseErrorBeforeNextFinishedNode: boolean = false;
 
         // Create and prime the scanner before parsing the source elements.
-        let scanner = createScanner(languageVersion, /*skipTrivia*/ true, sourceText, scanError);
+
+        scanner.setText(sourceText);
+        scanner.setOnError(scanError);
+        scanner.setScriptTarget(languageVersion);
         token = nextToken();
 
         processReferenceComments(sourceFile);
@@ -1125,6 +1132,10 @@ module ts {
         }
 
         syntaxCursor = undefined;
+
+        // Clear out the text the scanner is pointing at, so it doesn't keep anything alive unnecessarily.
+        scanner.setText("");
+        scanner.setOnError(undefined);
         return sourceFile;
 
         function setContextFlag(val: Boolean, flag: ParserContextFlags) {
