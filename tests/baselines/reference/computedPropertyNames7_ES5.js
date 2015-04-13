@@ -13,5 +13,6 @@ var E;
 })(E || (E = {}));
 var v = (_a = {},
     _a[E.member] = 0,
-    _a);
+    _a
+);
 var _a;

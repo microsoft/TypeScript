@@ -38,11 +38,13 @@ foo(1, 2, "abc");
 foo(1, 2, ...a);
 >foo(1, 2, ...a) : void
 >foo : (x: number, y: number, ...z: string[]) => void
+>...a : string
 >a : string[]
 
 foo(1, 2, ...a, "abc");
 >foo(1, 2, ...a, "abc") : void
 >foo : (x: number, y: number, ...z: string[]) => void
+>...a : string
 >a : string[]
 
 obj.foo(1, 2, "abc");
@@ -56,6 +58,7 @@ obj.foo(1, 2, ...a);
 >obj.foo : (x: number, y: number, ...z: string[]) => any
 >obj : X
 >foo : (x: number, y: number, ...z: string[]) => any
+>...a : string
 >a : string[]
 
 obj.foo(1, 2, ...a, "abc");
@@ -63,6 +66,7 @@ obj.foo(1, 2, ...a, "abc");
 >obj.foo : (x: number, y: number, ...z: string[]) => any
 >obj : X
 >foo : (x: number, y: number, ...z: string[]) => any
+>...a : string
 >a : string[]
 
 (obj.foo)(1, 2, "abc");
@@ -78,6 +82,7 @@ obj.foo(1, 2, ...a, "abc");
 >obj.foo : (x: number, y: number, ...z: string[]) => any
 >obj : X
 >foo : (x: number, y: number, ...z: string[]) => any
+>...a : string
 >a : string[]
 
 (obj.foo)(1, 2, ...a, "abc");
@@ -86,6 +91,7 @@ obj.foo(1, 2, ...a, "abc");
 >obj.foo : (x: number, y: number, ...z: string[]) => any
 >obj : X
 >foo : (x: number, y: number, ...z: string[]) => any
+>...a : string
 >a : string[]
 
 xa[1].foo(1, 2, "abc");
@@ -101,6 +107,7 @@ xa[1].foo(1, 2, ...a);
 >xa[1] : X
 >xa : X[]
 >foo : (x: number, y: number, ...z: string[]) => any
+>...a : string
 >a : string[]
 
 xa[1].foo(1, 2, ...a, "abc");
@@ -109,6 +116,7 @@ xa[1].foo(1, 2, ...a, "abc");
 >xa[1] : X
 >xa : X[]
 >foo : (x: number, y: number, ...z: string[]) => any
+>...a : string
 >a : string[]
 
 (<Function>xa[1].foo)(...[1, 2, "abc"]);
@@ -120,6 +128,7 @@ xa[1].foo(1, 2, ...a, "abc");
 >xa[1] : X
 >xa : X[]
 >foo : (x: number, y: number, ...z: string[]) => any
+>...[1, 2, "abc"] : string | number
 >[1, 2, "abc"] : (string | number)[]
 
 class C {
@@ -145,6 +154,7 @@ class C {
 >foo : (x: number, y: number, ...z: string[]) => void
 >x : number
 >y : number
+>...z : string
 >z : string[]
     }
     foo(x: number, y: number, ...z: string[]) {
@@ -167,6 +177,7 @@ class D extends C {
         super(1, 2, ...a);
 >super(1, 2, ...a) : void
 >super : typeof C
+>...a : string
 >a : string[]
     }
     foo() {
@@ -183,6 +194,7 @@ class D extends C {
 >super.foo : (x: number, y: number, ...z: string[]) => void
 >super : C
 >foo : (x: number, y: number, ...z: string[]) => void
+>...a : string
 >a : string[]
     }
 }
@@ -192,5 +204,6 @@ var c = new C(1, 2, ...a);
 >c : C
 >new C(1, 2, ...a) : C
 >C : typeof C
+>...a : string
 >a : string[]
 
