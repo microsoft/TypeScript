@@ -5038,7 +5038,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                                     emitNodeWithoutSourceMap(e.name);
                                     write(`", ${setterParameterName}["`);
                                     emitNodeWithoutSourceMap(e.propertyName || e.name);
-                                    write(`"];`);
+                                    write(`"]);`);
                                 }
                             }
                             else {
