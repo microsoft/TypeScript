@@ -80,6 +80,7 @@ module ts.server {
         export var Close = "close";
         export var Completions = "completions";
         export var CompletionDetails = "completionEntryDetails";
+        export var SignatureHelp = "signatureHelp";        
         export var Configure = "configure";
         export var Definition = "definition";
         export var Format = "format";
@@ -575,6 +576,35 @@ module ts.server {
             }, []);
         }
 
+        getSignatureHelpItems(line: number, offset: number, fileName: string): protocol.SignatureHelpItems {
+            var file = ts.normalizePath(fileName);
+            var project = this.projectService.getProjectForFile(file);
+            if (!project) {
+                throw Errors.NoProject;
+            }
+            
+            var compilerService = project.compilerService;
+            var position = compilerService.host.lineOffsetToPosition(file, line, offset);
+            var helpItems = compilerService.languageService.getSignatureHelpItems(file, position);
+            if (!helpItems) {
+                return undefined;
+            }
+            
+            var span = helpItems.applicableSpan;
+            var result: protocol.SignatureHelpItems = {
+                items: helpItems.items,
+                applicableSpan: {
+                    start: compilerService.host.positionToLineOffset(file, span.start),
+                    end: compilerService.host.positionToLineOffset(file, span.start + span.length)
+                },
+                selectedItemIndex: helpItems.selectedItemIndex,
+                argumentIndex: helpItems.argumentIndex,
+                argumentCount: helpItems.argumentCount,
+            }
+            
+            return result;
+        }
+                
         getDiagnostics(delay: number, fileNames: string[]) {
             var checkList = fileNames.reduce((accum: PendingErrorCheck[], fileName: string) => {
                 fileName = ts.normalizePath(fileName);
@@ -788,6 +818,11 @@ module ts.server {
                                                            completionDetailsArgs.entryNames,completionDetailsArgs.file);
                         break;
                     }
+                    case CommandNames.SignatureHelp: {
+                        var signatureHelpArgs = <protocol.SignatureHelpRequestArgs>request.arguments;
+                        response = this.getSignatureHelpItems(signatureHelpArgs.line, signatureHelpArgs.offset, signatureHelpArgs.file);
+                        break;
+                    }    
                     case CommandNames.Geterr: {
                         var geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
                         response = this.getDiagnostics(geterrArgs.delay, geterrArgs.files);

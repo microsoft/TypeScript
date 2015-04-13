@@ -20,5 +20,5 @@ var C = (function () {
         _a)[0]] = function () {
     };
     return C;
+    var _a;
 })();
-var _a;

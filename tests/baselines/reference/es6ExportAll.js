@@ -19,11 +19,10 @@ export * from "server";
 //// [server.js]
 export class c {
 }
-var m;
+export var m;
 (function (m) {
     m.x = 10;
 })(m || (m = {}));
-export { m };
 export var x = 10;
 //// [client.js]
 export * from "server";

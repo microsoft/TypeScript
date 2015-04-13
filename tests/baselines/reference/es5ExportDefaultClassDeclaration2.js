@@ -13,7 +13,7 @@ var default_1 = (function () {
     };
     return default_1;
 })();
-module.exports = default_1;
+exports.default = default_1;
 
 
 //// [es5ExportDefaultClassDeclaration2.d.ts]

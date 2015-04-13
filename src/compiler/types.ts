@@ -67,6 +67,7 @@ module ts {
         BarBarToken,
         QuestionToken,
         ColonToken,
+        AtToken,
         // Assignments
         EqualsToken,
         PlusEqualsToken,
@@ -154,6 +155,7 @@ module ts {
         // Signature elements
         TypeParameter,
         Parameter,
+        Decorator,
         // TypeMember
         PropertySignature,
         PropertyDeclaration,
@@ -244,6 +246,7 @@ module ts {
         ExportDeclaration,
         NamedExports,
         ExportSpecifier,
+        MissingDeclaration,
 
         // Module references
         ExternalModuleReference,
@@ -307,6 +310,7 @@ module ts {
         Let =               0x00001000,  // Variable declaration
         Const =             0x00002000,  // Variable declaration
         OctalLiteral =      0x00004000,
+        ExportContext =     0x00008000,  // Export context (initialized by binding)
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Default,
         AccessibilityModifier = Public | Private | Protected,
@@ -327,22 +331,25 @@ module ts {
         // If this node was parsed in the parameters of a generator.
         GeneratorParameter = 1 << 3,
 
+        // If this node was parsed as part of a decorator
+        Decorator = 1 << 4,
+
         // If the parser encountered an error when parsing the code that created this node.  Note
         // the parser only sets this directly on the node it creates right after encountering the
         // error.
-        ThisNodeHasError = 1 << 4,
+        ThisNodeHasError = 1 << 5,
 
         // Context flags set directly by the parser.
-        ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | ThisNodeHasError,
+        ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | Decorator | ThisNodeHasError,
 
         // Context flags computed by aggregating child flags upwards.
 
         // Used during incremental parsing to determine if this node or any of its children had an
         // error.  Computed only once and then cached.
-        ThisNodeOrAnySubNodesHasError = 1 << 5,
+        ThisNodeOrAnySubNodesHasError = 1 << 6,
 
         // Used to know if we've computed data from children and cached it in this node.
-        HasAggregatedChildData = 1 << 6
+        HasAggregatedChildData = 1 << 7
     }
 
     export const enum RelationComparisonResult {
@@ -357,13 +364,14 @@ module ts {
         // Specific context the parser was in when this node was created.  Normally undefined.
         // Only set when the parser was in some interesting context (like async/yield).
         parserContextFlags?: ParserContextFlags;
-        modifiers?: ModifiersArray;   // Array of modifiers
-        id?: number;                  // Unique id (used to look up NodeLinks)
-        parent?: Node;                // Parent node (initialized by binding)
-        symbol?: Symbol;              // Symbol declared by node (initialized by binding)
-        locals?: SymbolTable;         // Locals associated with node (initialized by binding)
-        nextContainer?: Node;         // Next container in declaration order (initialized by binding)
-        localSymbol?: Symbol;         // Local symbol declared by node (initialized by binding only for exported nodes)
+        decorators?: NodeArray<Decorator>;  // Array of decorators (in document order)
+        modifiers?: ModifiersArray;         // Array of modifiers
+        id?: number;                        // Unique id (used to look up NodeLinks)
+        parent?: Node;                      // Parent node (initialized by binding)
+        symbol?: Symbol;                    // Symbol declared by node (initialized by binding)
+        locals?: SymbolTable;               // Locals associated with node (initialized by binding)
+        nextContainer?: Node;               // Next container in declaration order (initialized by binding)
+        localSymbol?: Symbol;               // Local symbol declared by node (initialized by binding only for exported nodes)
     }
 
     export interface NodeArray<T> extends Array<T> {
@@ -397,6 +405,10 @@ module ts {
 
     export interface ComputedPropertyName extends Node {
         expression: Expression;
+    }
+
+    export interface Decorator extends Node {
+        expression: LeftHandSideExpression;
     }
 
     export interface TypeParameterDeclaration extends Declaration {
@@ -1210,8 +1222,8 @@ module ts {
     export interface EmitResolver {
         hasGlobalName(name: string): boolean;
         getExpressionNameSubstitution(node: Identifier, getGeneratedNameForNode: (node: Node) => string): string;
-        hasExportDefaultValue(node: SourceFile): boolean;
-        isReferencedAliasDeclaration(node: Node): boolean;
+        isValueAliasDeclaration(node: Node): boolean;
+        isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         isDeclarationVisible(node: Declaration): boolean;
@@ -1339,17 +1351,18 @@ module ts {
     }
 
     export const enum NodeCheckFlags {
-        TypeChecked         = 0x00000001,  // Node has been type checked
-        LexicalThis         = 0x00000002,  // Lexical 'this' reference
-        CaptureThis         = 0x00000004,  // Lexical 'this' used in body
-        EmitExtends         = 0x00000008,  // Emit __extends
-        SuperInstance       = 0x00000010,  // Instance 'super' reference
-        SuperStatic         = 0x00000020,  // Static 'super' reference
-        ContextChecked      = 0x00000040,  // Contextual types have been assigned
+        TypeChecked                 = 0x00000001,  // Node has been type checked
+        LexicalThis                 = 0x00000002,  // Lexical 'this' reference
+        CaptureThis                 = 0x00000004,  // Lexical 'this' used in body
+        EmitExtends                 = 0x00000008,  // Emit __extends
+        SuperInstance               = 0x00000010,  // Instance 'super' reference
+        SuperStatic                 = 0x00000020,  // Static 'super' reference
+        ContextChecked              = 0x00000040,  // Contextual types have been assigned
 
         // Values for enum members have been computed, and any errors have been reported for them.
-        EnumValuesComputed  = 0x00000080,
-        BlockScopedBindingInLoop = 0x00000100,
+        EnumValuesComputed          = 0x00000080,
+        BlockScopedBindingInLoop    = 0x00000100,
+        EmitDecorate                = 0x00000200,  // Emit __decorate
     }
 
     export interface NodeLinks {

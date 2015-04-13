@@ -29,8 +29,10 @@ var m;
 })(m = exports.m || (exports.m = {}));
 exports.x = 10;
 //// [client.js]
-var server_1 = require("server");
-for (var _a in server_1) if (!exports.hasOwnProperty(_a)) exports[_a] = server_1[_a];
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+__export(require("server"));
 
 
 //// [server.d.ts]

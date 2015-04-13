@@ -26,8 +26,7 @@ var m;
 var x = 10;
 export { c };
 export { c as c2 };
-export { i, m as instantiatedModule };
-export { uninstantiated };
+export { m as instantiatedModule };
 export { x };
 
 

@@ -31,12 +31,6 @@ var m;
 exports.instantiatedModule = m;
 var x = 10;
 exports.x = x;
-exports.c = c;
-exports.c2 = c;
-exports.i = i;
-exports.instantiatedModule = m;
-exports.uninstantiated = uninstantiated;
-exports.x = x;
 
 
 //// [es6ExportClauseInEs5.d.ts]

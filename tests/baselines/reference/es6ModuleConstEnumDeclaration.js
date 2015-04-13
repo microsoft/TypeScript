@@ -48,14 +48,13 @@ module m2 {
 //// [es6ModuleConstEnumDeclaration.js]
 var x = 0 /* a */;
 var y = 0 /* x */;
-var m1;
+export var m1;
 (function (m1) {
     var x1 = 0 /* a */;
     var y1 = 0 /* x */;
     var x2 = 0 /* a */;
     var y2 = 0 /* x */;
 })(m1 || (m1 = {}));
-export { m1 };
 var m2;
 (function (m2) {
     var x1 = 0 /* a */;

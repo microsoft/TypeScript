@@ -162,6 +162,39 @@ module ts {
         return ~low;
     }
 
+    export function reduceLeft<T>(array: T[], f: (a: T, x: T) => T): T;
+    export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
+    export function reduceLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
+        if (array) {
+            var count = array.length;
+            if (count > 0) {
+                var pos = 0;
+                var result = arguments.length <= 2 ? array[pos++] : initial;
+                while (pos < count) {
+                    result = f(<U>result, array[pos++]);
+                }
+                return <U>result;
+            }
+        }
+        return initial;
+    }
+
+    export function reduceRight<T>(array: T[], f: (a: T, x: T) => T): T;
+    export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
+    export function reduceRight<T, U>(array: T[], f: (a: U, x: T) => U, initial?: U): U {
+        if (array) {
+            var pos = array.length - 1;
+            if (pos >= 0) {
+                var result = arguments.length <= 2 ? array[pos--] : initial;
+                while (pos >= 0) {
+                    result = f(<U>result, array[pos--]);
+                }
+                return <U>result;
+            }
+        }
+        return initial;
+    }
+
     let hasOwnProperty = Object.prototype.hasOwnProperty;
 
     export function hasProperty<T>(map: Map<T>, key: string): boolean {
@@ -220,16 +253,6 @@ module ts {
 
     export function lookUp<T>(map: Map<T>, key: string): T {
         return hasProperty(map, key) ? map[key] : undefined;
-    }
-
-    export function mapToArray<T>(map: Map<T>): T[] {
-        let result: T[] = [];
-
-        for (let id in map) {
-            result.push(map[id]);
-        }
-
-        return result;
     }
 
     export function copyMap<T>(source: Map<T>, target: Map<T>): void {

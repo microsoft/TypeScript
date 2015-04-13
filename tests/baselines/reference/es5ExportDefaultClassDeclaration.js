@@ -13,7 +13,7 @@ var C = (function () {
     };
     return C;
 })();
-module.exports = C;
+exports.C = C;
 
 
 //// [es5ExportDefaultClassDeclaration.d.ts]
