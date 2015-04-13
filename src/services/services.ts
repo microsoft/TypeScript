@@ -3987,7 +3987,7 @@ module ts {
 
                 // Get occurrences only supports reporting occurrences for the file queried.  So 
                 // filter down to that list.
-                results = filter(results, r => r.fileName === fileName);
+                results = filter(results, r => getCanonicalFileName(ts.normalizeSlashes(r.fileName)) === sourceFile);
             }
 
             return results;
