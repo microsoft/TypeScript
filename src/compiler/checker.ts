@@ -8634,36 +8634,47 @@ module ts {
             //          const x = 0; // localDeclarationSymbol obtained after name resolution will correspond to this declaration
             //          let x = 0; // symbol for this declaration will be 'symbol'
             //      }
-            if (node.initializer && (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === 0) {
-                let symbol = getSymbolOfNode(node);
-                if (symbol.flags & SymbolFlags.FunctionScopedVariable) {
-                    let localDeclarationSymbol = resolveName(node, (<Identifier>node.name).text, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
-                    if (localDeclarationSymbol &&
-                        localDeclarationSymbol !== symbol &&
-                        localDeclarationSymbol.flags & SymbolFlags.BlockScopedVariable) {
-                        if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & NodeFlags.BlockScoped) {
 
-                            let varDeclList = getAncestor(localDeclarationSymbol.valueDeclaration, SyntaxKind.VariableDeclarationList);
-                            let container =
-                                varDeclList.parent.kind === SyntaxKind.VariableStatement &&
-                                varDeclList.parent.parent;
+            // skip block-scoped variables and parameters
+            if ((getCombinedNodeFlags(node) & NodeFlags.BlockScoped) !== 0 || isParameterDeclaration(node)) {
+                return;
+            }
 
-                            // names of block-scoped and function scoped variables can collide only
-                            // if block scoped variable is defined in the function\module\source file scope (because of variable hoisting)
-                            let namesShareScope =
-                                container &&
-                                (container.kind === SyntaxKind.Block && isFunctionLike(container.parent) ||
-                                    (container.kind === SyntaxKind.ModuleBlock && container.kind === SyntaxKind.ModuleDeclaration) ||
-                                    container.kind === SyntaxKind.SourceFile);
+            // skip variable declarations that don't have initializers
+            // NOTE: in ES6 spec initializer is required in variable declarations where name is binding pattern
+            // so we'll always treat binding elements as initialized
+            if (node.kind === SyntaxKind.VariableDeclaration && !node.initializer) {
+                return;
+            }
 
-                            // here we know that function scoped variable is shadowed by block scoped one
-                            // if they are defined in the same scope - binder has already reported redeclaration error
-                            // otherwise if variable has an initializer - show error that initialization will fail
-                            // since LHS will be block scoped name instead of function scoped
-                            if (!namesShareScope) {
-                                let name = symbolToString(localDeclarationSymbol);
-                                error(node, Diagnostics.Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1, name, name);
-                            }
+            var symbol = getSymbolOfNode(node);
+            if (symbol.flags & SymbolFlags.FunctionScopedVariable) {
+                let localDeclarationSymbol = resolveName(node, (<Identifier>node.name).text, SymbolFlags.Variable, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined);
+                if (localDeclarationSymbol &&
+                    localDeclarationSymbol !== symbol &&
+                    localDeclarationSymbol.flags & SymbolFlags.BlockScopedVariable) {
+                    if (getDeclarationFlagsFromSymbol(localDeclarationSymbol) & NodeFlags.BlockScoped) {
+
+                        let varDeclList = getAncestor(localDeclarationSymbol.valueDeclaration, SyntaxKind.VariableDeclarationList);
+                        let container =
+                            varDeclList.parent.kind === SyntaxKind.VariableStatement &&
+                            varDeclList.parent.parent;
+
+                        // names of block-scoped and function scoped variables can collide only
+                        // if block scoped variable is defined in the function\module\source file scope (because of variable hoisting)
+                        let namesShareScope =
+                            container &&
+                            (container.kind === SyntaxKind.Block && isFunctionLike(container.parent) ||
+                                (container.kind === SyntaxKind.ModuleBlock && container.kind === SyntaxKind.ModuleDeclaration) ||
+                                container.kind === SyntaxKind.SourceFile);
+
+                        // here we know that function scoped variable is shadowed by block scoped one
+                        // if they are defined in the same scope - binder has already reported redeclaration error
+                        // otherwise if variable has an initializer - show error that initialization will fail
+                        // since LHS will be block scoped name instead of function scoped
+                        if (!namesShareScope) {
+                            let name = symbolToString(localDeclarationSymbol);
+                            error(node, Diagnostics.Cannot_initialize_outer_scoped_variable_0_in_the_same_scope_as_block_scoped_declaration_1, name, name);
                         }
                     }
                 }
