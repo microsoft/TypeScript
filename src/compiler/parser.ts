@@ -27,8 +27,8 @@ module ts {
 
     function visitEachNode<T>(cbNode: (node: Node) => T, nodes: Node[]) {
         if (nodes) {
-            for (let i = 0, len = nodes.length; i < len; i++) {
-                let result = cbNode(nodes[i]);
+            for (let node of nodes) {
+                var result = cbNode(node);
                 if (result) {
                     return result;
                 }
@@ -434,8 +434,8 @@ module ts {
             array._children = undefined;
             array.start += delta;
 
-            for (let i = 0, n = array.length; i < n; i++) {
-                visitNode(array[i]);
+            for (let node of array) {
+                visitNode(node);
             }
         }
     }
@@ -590,8 +590,8 @@ module ts {
 
                 // Adjust the pos or end (or both) of the intersecting array accordingly.
                 adjustIntersectingElement(array, fullEnd, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta, /*isArray:*/ true);
-                for (let i = 0, n = array.length; i < n; i++) {
-                    visitNode(array[i]);
+                for (let node of array) {
+                    visitNode(node);
                 }
                 return;
             }
