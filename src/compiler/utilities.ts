@@ -322,7 +322,7 @@ module ts {
         return node.kind === SyntaxKind.EnumDeclaration && isConst(node);
     }
 
-    function walkUpBindingElementsAndPatterns(node: Node): Node {
+    export function walkUpBindingElementsAndPatterns(node: Node): Node {
         while (node && (node.kind === SyntaxKind.BindingElement || isBindingPattern(node))) {
             node = node.parent;
         }
@@ -500,6 +500,16 @@ module ts {
             node = node.parent;
             if (!node || isFunctionLike(node)) {
                 return <FunctionLikeDeclaration>node;
+            }
+        }
+    }
+
+    export function getArgumentsContainer(node: Node, includeArrowFunctions: boolean) {
+        while (true) {
+            node = getThisContainer(node, includeArrowFunctions);
+
+            if (!node || isFunctionLike(node) || node.kind === SyntaxKind.SourceFile) {
+                return <FunctionLikeDeclaration | SourceFile>node;
             }
         }
     }

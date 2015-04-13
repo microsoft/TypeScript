@@ -1249,6 +1249,7 @@ module ts {
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
+        isCapturedArgumentsIdentifier(node: Identifier): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
         isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
@@ -1372,7 +1373,7 @@ module ts {
 
     export const enum NodeCheckFlags {
         TypeChecked                 = 0x00000001,  // Node has been type checked
-        LexicalThisOrArguments      = 0x00000002,  // 'this'/'arguments' refers to a lexically captured '_this'/'_arguments'.
+        LexicalThis                 = 0x00000002,  // 'this' refers to a lexically captured '_this'.
         CaptureThis                 = 0x00000004,  // 'this' needs to be captured as '_this'
         CaptureArguments            = 0x00000008,  // 'arguments' needs to be captured as '_arguments'
         EmitExtends                 = 0x00000010,  // Emit __extends

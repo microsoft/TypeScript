@@ -36,13 +36,15 @@ var a = function () {
     var arg = arguments[0]; // error
 };
 var b = function () {
+    var _arguments = arguments;
     var a = function () {
-        var arg = arguments[0]; // error
+        var arg = _arguments[0]; // error
     };
 };
 function baz() {
+    var _arguments = arguments;
     (function () {
-        var arg = arguments[0];
+        var arg = _arguments[0];
     });
 }
 function foo(inputFunc) { }

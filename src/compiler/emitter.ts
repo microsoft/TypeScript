@@ -1203,14 +1203,21 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
             }
 
-            function emitExpressionIdentifier(node: Identifier) {
-                let substitution = resolver.getExpressionNameSubstitution(node, getGeneratedNameForNode);
-                if (substitution) {
-                    write(substitution);
+            function emitExpressionIdentifier(node: Identifier, allowGeneratedIdentifiers: boolean): void {
+                if (allowGeneratedIdentifiers) {
+                    if (resolver.isCapturedArgumentsIdentifier(node)) {
+                        write("_arguments");
+                        return;
+                    }
+
+                    let substitution = resolver.getExpressionNameSubstitution(node, getGeneratedNameForNode);
+                    if (substitution) {
+                        write(substitution);
+                        return;
+                    }
                 }
-                else {
-                    writeTextOfNode(currentSourceFile, node);
-                }
+                
+                writeTextOfNode(currentSourceFile, node);
             }
 
             function getGeneratedNameForIdentifier(node: Identifier): string {
@@ -1234,19 +1241,30 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         return;
                     }
                 }
+
                 if (!node.parent) {
                     write(node.text);
+                    return;
                 }
-                else if (!isNotExpressionIdentifier(node)) {
-                    emitExpressionIdentifier(node);
+
+                if (!isNotExpressionIdentifier(node)) {
+                    emitExpressionIdentifier(node, /*allowGeneratedIdentifiers*/ allowGeneratedIdentifiers);
+                    return;
                 }
-                else {
-                    writeTextOfNode(currentSourceFile, node);
+
+                if (allowGeneratedIdentifiers && isDeclarationName(node)) {
+                    if (resolver.isCapturedArgumentsIdentifier(node)) {
+                        write("_arguments");
+                        return;
+                    }
+                   
                 }
+                
+                writeTextOfNode(currentSourceFile, node);
             }
 
             function emitThis(node: Node) {
-                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalThisOrArguments) {
+                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalThis) {
                     write("_this");
                 }
                 else {
@@ -1506,7 +1524,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                             emit((<PropertyAssignment>property).initializer);
                         }
                         else if (property.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                            emitExpressionIdentifier((<ShorthandPropertyAssignment>property).name);
+                            emitExpressionIdentifier((<ShorthandPropertyAssignment>property).name, /*allowGeneratedIdentifiers*/ true);
                         }
                         else if (property.kind === SyntaxKind.MethodDeclaration) {
                             emitFunctionDeclaration(<MethodDeclaration>property);
@@ -1634,7 +1652,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     else {
                         // Even though this is stored as identifier treat it as an expression
                         // Short-hand, { x }, is equivalent of normal form { x: x }
-                        emitExpressionIdentifier(node.name);
+                        emitExpressionIdentifier(node.name, /*allowGeneratedIdentifiers*/ true);
                     }
                 }
                 else if (resolver.getExpressionNameSubstitution(node.name, getGeneratedNameForNode)) {
@@ -1642,7 +1660,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     write(": ");
                     // Even though this is stored as identifier treat it as an expression
                     // Short-hand, { x }, is equivalent of normal form { x: x }
-                    emitExpressionIdentifier(node.name);
+                    emitExpressionIdentifier(node.name, /*allowGeneratedIdentifiers*/ true);
                 }
             }
 
@@ -2458,7 +2476,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         emitNodeWithoutSourceMap(specifier.name);
                         emitEnd(specifier.name);
                         write(" = ");
-                        emitExpressionIdentifier(name);
+                        emitExpressionIdentifier(name, /*allowGeneratedIdentifiers*/ true);
                         write(";");
                     }
                 }
@@ -2983,6 +3001,16 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     write("var _this = this;");
                     emitEnd(node);
                 }
+                else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureArguments && !hasProperty(node.locals, "arguments")) {
+                    // Only emit this prologue if 'arguments' has't been "shadowed"
+                    // by a local binding named "arguments", since it will already
+                    // have been declared and emitted that way elsewhere.
+                    writeLine();
+                    emitStart(node);
+                    write("var _arguments = arguments;");
+                    emitEnd(node);
+                }
+                
             }
 
             function emitSignatureParameters(node: FunctionLikeDeclaration) {

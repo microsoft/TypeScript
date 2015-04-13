@@ -10,8 +10,8 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.prototype.f = function (arguments) {
-        var a = function () { return arguments; };
+    C.prototype.f = function (_arguments) {
+        var a = function () { return _arguments; };
     };
     return C;
 })();

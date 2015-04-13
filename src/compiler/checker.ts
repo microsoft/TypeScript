@@ -432,9 +432,6 @@ module ts {
                                 error(errorLocation, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_below_ES6_Consider_using_a_standard_function_expression);
                                 argumentsUsedInArrowFunction = true;
                             }
-                            if (nameArg && typeof nameArg !== "string") {
-                                getNodeLinks(nameArg).flags |= NodeCheckFlags.LexicalThisOrArguments;
-                            }
                         }
                         break;
                     case SyntaxKind.MethodDeclaration:
@@ -5495,7 +5492,7 @@ module ts {
 
         function captureLexicalThis(node: Node, container: Node): void {
             let classNode = container.parent && container.parent.kind === SyntaxKind.ClassDeclaration ? container.parent : undefined;
-            getNodeLinks(node).flags |= NodeCheckFlags.LexicalThisOrArguments;
+            getNodeLinks(node).flags |= NodeCheckFlags.LexicalThis;
             if (container.kind === SyntaxKind.PropertyDeclaration || container.kind === SyntaxKind.Constructor) {
                 getNodeLinks(classNode).flags |= NodeCheckFlags.CaptureThis;
             }
@@ -5514,7 +5511,7 @@ module ts {
             if (container.kind === SyntaxKind.ArrowFunction) {
                 container = getThisContainer(container, /* includeArrowFunctions */ false);
 
-                // When targeting es6, arrow function lexically bind "this" so we do not need to do the work of binding "this" in emitted code
+                // When targeting es6, arrow functions lexically bind "this" so we do not need to do the work of binding "this" in emitted code
                 needToCaptureLexicalThis = (languageVersion < ScriptTarget.ES6);
             }
 
@@ -11467,6 +11464,43 @@ module ts {
             }
         }
 
+        function isCapturedArgumentsIdentifier(node: Identifier): boolean {
+            if (node.text !== "arguments") {
+                return false
+            }
+
+            let symbol = getNodeLinks(node).resolvedSymbol || (isDeclarationName(node) ? getSymbolOfNode(node.parent) : undefined);
+            if (symbol) {
+                if (symbol === argumentsSymbol) {
+                    // According to the ES6 spec, 'arguments' refers to the special 'arguments' object
+                    // when inside a function where
+                    //      - the [[ThisMode]] internal slot is not 'lexical'
+                    //          and there is no parameter named "arguments".
+                    //      - the [[ThisMode]] internal slot is 'lexical' and an outer scope has a
+                    //          special 'arguments' object.
+                    //
+                    // So when dealing with the 'arguments' symbol, we're interested in the 'this' container.
+                    let argumentsContainer = getArgumentsContainer(node, /*includeArrowFunctions*/ false);
+                    return argumentsContainerRequiresCapturing(argumentsContainer, getNodeCheckFlags(argumentsContainer));
+                }
+                else if (symbol.valueDeclaration) {
+                    // Otherwise, we're either looking for a parameter or global.
+                    // Go to the declaration and find the function who owns it.
+                    // The 'this' container is still interesting to us because it
+                    // includes sourcefiles (where we have globals) and
+                    // arrow functions (where we have parameters)
+                    let argumentsContainer = getArgumentsContainer(symbol.valueDeclaration, /*includeArrowFunctions*/ true);
+                    return argumentsContainerRequiresCapturing(argumentsContainer, getNodeCheckFlags(argumentsContainer));
+                }
+            }
+            
+            return false;
+        }
+
+        function argumentsContainerRequiresCapturing(argumentsContainer: FunctionLikeDeclaration | SourceFile, containerCheckFlags: NodeCheckFlags): boolean {
+            return !!(argumentsContainer && (containerCheckFlags & NodeCheckFlags.CaptureArguments))
+        }
+
         function getExpressionNameSubstitution(node: Identifier, getGeneratedNameForNode: (Node: Node) => string): string {
             let symbol = getNodeLinks(node).resolvedSymbol || (isDeclarationName(node) ? getSymbolOfNode(node.parent) : undefined);
             if (symbol) {
@@ -11482,6 +11516,7 @@ module ts {
                 if (symbol !== exportSymbol && !(exportSymbol.flags & SymbolFlags.ExportHasLocal)) {
                     return getExportNameSubstitution(exportSymbol, node.parent, getGeneratedNameForNode);
                 }
+
                 // Named imports from ES6 import declarations are rewritten
                 if (symbol.flags & SymbolFlags.Alias) {
                     return getAliasNameSubstitution(symbol, getGeneratedNameForNode);
@@ -11859,6 +11894,7 @@ module ts {
                 hasGlobalName,
                 isReferencedAliasDeclaration,
                 getNodeCheckFlags,
+                isCapturedArgumentsIdentifier,
                 isTopLevelValueImportEqualsWithEntityName,
                 isDeclarationVisible,
                 isImplementationOfOverload,

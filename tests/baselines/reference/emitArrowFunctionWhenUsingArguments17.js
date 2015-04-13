@@ -10,9 +10,9 @@ function f() {
 
 //// [emitArrowFunctionWhenUsingArguments17.js]
 function f() {
-    var arguments = ({ arguments: "hello" }).arguments;
+    var _arguments = ({ arguments: "hello" }).arguments;
     if (Math.random()) {
-        return function () { return arguments[0]; };
+        return function () { return _arguments[0]; };
     }
-    var arguments = "world";
+    var _arguments = "world";
 }

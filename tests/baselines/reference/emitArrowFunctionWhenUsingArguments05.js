@@ -5,6 +5,6 @@ function f(arguments) {
 }
 
 //// [emitArrowFunctionWhenUsingArguments05.js]
-function f(arguments) {
-    var a = function () { return arguments; };
+function f(_arguments) {
+    var a = function () { return _arguments; };
 }

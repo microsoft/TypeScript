@@ -7,6 +7,6 @@ function f() {
 
 //// [emitArrowFunctionWhenUsingArguments04.js]
 function f() {
-    var arguments;
-    var a = function () { return arguments; };
+    var _arguments;
+    var a = function () { return _arguments; };
 }
