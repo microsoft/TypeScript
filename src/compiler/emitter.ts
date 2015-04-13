@@ -4207,6 +4207,10 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 return isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.separateCompilation);
             }
 
+            function isModuleMergedWithES6Class(node: ModuleDeclaration) {
+                return languageVersion === ScriptTarget.ES6 && !!(resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalModuleMergesWithClass);
+            }
+
             function emitModuleDeclaration(node: ModuleDeclaration) {
                 // Emit only if this module is non-ambient.
                 let shouldEmit = shouldEmitModuleDeclaration(node);
@@ -4215,15 +4219,19 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     return emitOnlyPinnedOrTripleSlashComments(node);
                 }
 
-                emitStart(node);
-                if (isES6ExportedDeclaration(node)) {
-                    write("export ");
+                if (!isModuleMergedWithES6Class(node)) {
+                    emitStart(node);
+                    if (isES6ExportedDeclaration(node)) {
+                        write("export ");
+                    }
+
+                    write("var ");
+                    emit(node.name);
+                    write(";");
+                    emitEnd(node);
+                    writeLine();
                 }
-                write("var ");
-                emit(node.name);
-                write(";");
-                emitEnd(node);
-                writeLine();
+
                 emitStart(node);
                 write("(function (");
                 emitStart(node.name);
