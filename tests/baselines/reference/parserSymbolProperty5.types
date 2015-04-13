@@ -2,8 +2,8 @@
 class C {
 >C : C
 
-    [Symbol.isRegExp]: string;
->Symbol.isRegExp : symbol
+    [Symbol.toPrimitive]: string;
+>Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
->isRegExp : symbol
+>toPrimitive : symbol
 }

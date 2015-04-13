@@ -7,7 +7,7 @@ declare function dec<T>(target: T): T;
 >T : T
 
 @dec
->dec : unknown
+>dec : <T>(target: T) => T
 
 class C {
 >C : C

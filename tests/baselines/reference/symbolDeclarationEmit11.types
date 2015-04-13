@@ -7,19 +7,19 @@ class C {
 >Symbol : SymbolConstructor
 >iterator : symbol
 
-    static [Symbol.toPrimitive]() { }
+    static [Symbol.isConcatSpreadable]() { }
+>Symbol.isConcatSpreadable : symbol
+>Symbol : SymbolConstructor
+>isConcatSpreadable : symbol
+
+    static get [Symbol.toPrimitive]() { return ""; }
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
 
-    static get [Symbol.isRegExp]() { return ""; }
->Symbol.isRegExp : symbol
+    static set [Symbol.toPrimitive](x) { }
+>Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
->isRegExp : symbol
-
-    static set [Symbol.isRegExp](x) { }
->Symbol.isRegExp : symbol
->Symbol : SymbolConstructor
->isRegExp : symbol
+>toPrimitive : symbol
 >x : string
 }

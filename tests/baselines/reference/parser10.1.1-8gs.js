@@ -33,5 +33,4 @@ var public = 1;
 "use strict";
 "use strict";
 throw NotEarlyError;
-var ;
-1;
+var public = 1;

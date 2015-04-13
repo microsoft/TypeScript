@@ -45,5 +45,6 @@ var x1 = m;
 export declare var a: number;
 export declare var x: number;
 export declare var m: number;
-export default : {};
+declare var _default: {};
+export default _default;
 //// [es6ImportDefaultBindingFollowedWithNamedImport_1.d.ts]

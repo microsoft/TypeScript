@@ -15,8 +15,10 @@
 
 /// <reference path='services.ts' />
 
+/* @internal */
 var debugObjectHost = (<any>this);
 
+/* @internal */
 module ts {
     export interface ScriptSnapshotShim {
         /** Gets a portion of the script snapshot specified by [start, end). */
@@ -135,10 +137,20 @@ module ts {
         findReferences(fileName: string, position: number): string;
 
         /**
+         * @deprecated
          * Returns a JSON-encoded value of the type:
          * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
          */
         getOccurrencesAtPosition(fileName: string, position: number): string;
+
+        /**
+         * Returns a JSON-encoded value of the type:
+         * { fileName: string; highlights: { start: number; length: number, isDefinition: boolean }[] }[]
+         * 
+         * @param fileToSearch A JSON encoded string[] containing the file names that should be 
+         *  considered when searching.
+         */
+        getDocumentHighlights(fileName: string, position: number, filesToSearch: string): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -331,7 +343,6 @@ module ts {
         }
     }
 
-    /* @internal */
     export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; } []{
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
     }
@@ -590,6 +601,14 @@ module ts {
                 });
         }
 
+        public getDocumentHighlights(fileName: string, position: number, filesToSearch: string): string {
+            return this.forwardJSONCall(
+                "getDocumentHighlights('" + fileName + "', " + position + ")",
+                () => {
+                    return this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
+                });
+        }
+
         /// COMPLETION LISTS
 
         /**
@@ -844,8 +863,10 @@ module ts {
 
 
 /// TODO: this is used by VS, clean this up on both sides of the interface
+/* @internal */
 module TypeScript.Services {
     export var TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
 }
 
+/* @internal */
 let toolsVersion = "1.4";

@@ -1,8 +1,7 @@
-tests/cases/compiler/varArgConstructorMemberParameter.ts(10,18): error TS1003: Identifier expected.
 tests/cases/compiler/varArgConstructorMemberParameter.ts(10,25): error TS1005: ',' expected.
 
 
-==== tests/cases/compiler/varArgConstructorMemberParameter.ts (2 errors) ====
+==== tests/cases/compiler/varArgConstructorMemberParameter.ts (1 errors) ====
     class Foo1 {
         constructor (...args: string[]) { }
     }
@@ -13,8 +12,6 @@ tests/cases/compiler/varArgConstructorMemberParameter.ts(10,25): error TS1005: '
     
     class Foo3 {
         constructor (public ...args: string[]) { }
-                     ~~~~~~
-!!! error TS1003: Identifier expected.
                             ~~~
 !!! error TS1005: ',' expected.
     }

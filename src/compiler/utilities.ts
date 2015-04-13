@@ -1,5 +1,6 @@
 /// <reference path="binder.ts" />
 
+/* @internal */
 module ts {
     export interface ReferencePathMatchResult {
         fileReference?: FileReference
@@ -158,6 +159,14 @@ module ts {
         }
 
         return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.start);
+    }
+
+    export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
+        if (nodeIsMissing(node) || !node.decorators) {
+            return getTokenPosOfNode(node, sourceFile);
+        }
+
+        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, nodeArrayEnd(node.decorators));        
     }
 
     export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node): string {
@@ -780,6 +789,8 @@ module ts {
                         return node === (<TemplateSpan>parent).expression;
                     case SyntaxKind.ComputedPropertyName:
                         return node === (<ComputedPropertyName>parent).expression;
+                    case SyntaxKind.Decorator:
+                        return true;
                     default:
                         if (isExpression(parent)) {
                             return true;
@@ -1380,7 +1391,7 @@ module ts {
         return node;
     }
 
-    // @internal
+    /* @internal */
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
         let fileDiagnostics: Map<Diagnostic[]> = {};

@@ -3,6 +3,7 @@
 ///<reference path='rulesProvider.ts' />
 ///<reference path='references.ts' />
 
+/* @internal */
 module ts.formatting {
 
     export interface SpanWithKind extends Span {
@@ -326,8 +327,13 @@ module ts.formatting {
 
         if (formattingScanner.isOnToken()) {
             let startLine = sourceFile.getLineAndCharacterOfPosition(enclosingNode.getStart(sourceFile)).line;
+            let undecoratedStartLine = startLine;
+            if (enclosingNode.decorators) {
+                undecoratedStartLine = sourceFile.getLineAndCharacterOfPosition(getNonDecoratorTokenPosOfNode(enclosingNode, sourceFile)).line;
+            }
+
             let delta = getOwnOrInheritedDelta(enclosingNode, options, sourceFile);
-            processNode(enclosingNode, enclosingNode, startLine, initialIndentation, delta);
+            processNode(enclosingNode, enclosingNode, startLine, undecoratedStartLine, initialIndentation, delta);
         }
 
         formattingScanner.close();
@@ -498,7 +504,7 @@ module ts.formatting {
             }
         }
 
-        function processNode(node: Node, contextNode: Node, nodeStartLine: number, indentation: number, delta: number) {
+        function processNode(node: Node, contextNode: Node, nodeStartLine: number, undecoratedNodeStartLine: number, indentation: number, delta: number) {
             if (!rangeOverlapsWithStartEnd(originalSpan, node.getStart(sourceFile), node.getEnd())) {
                 return;
             }
@@ -524,7 +530,7 @@ module ts.formatting {
             forEachChild(
                 node,
                 child => {
-                    processChildNode(child, /*inheritedIndentation*/ Constants.Unknown, node, nodeDynamicIndentation, nodeStartLine, /*isListElement*/ false)
+                    processChildNode(child, /*inheritedIndentation*/ Constants.Unknown, node, nodeDynamicIndentation, nodeStartLine, undecoratedNodeStartLine, /*isListElement*/ false)
                 },
                 (nodes: NodeArray<Node>) => {
                     processChildNodes(nodes, node, nodeStartLine, nodeDynamicIndentation);
@@ -545,11 +551,17 @@ module ts.formatting {
                 parent: Node,
                 parentDynamicIndentation: DynamicIndentation,
                 parentStartLine: number,
+                undecoratedParentStartLine: number,
                 isListItem: boolean): number {
 
                 let childStartPos = child.getStart(sourceFile);
 
-                let childStart = sourceFile.getLineAndCharacterOfPosition(childStartPos);
+                let childStartLine = sourceFile.getLineAndCharacterOfPosition(childStartPos).line;
+
+                let undecoratedChildStartLine = childStartLine;
+                if (child.decorators) {
+                    undecoratedChildStartLine = sourceFile.getLineAndCharacterOfPosition(getNonDecoratorTokenPosOfNode(child, sourceFile)).line;
+                }
 
                 // if child is a list item - try to get its indentation
                 let childIndentationAmount = Constants.Unknown;
@@ -592,9 +604,10 @@ module ts.formatting {
                     return inheritedIndentation;
                 }
 
-                let childIndentation = computeIndentation(child, childStart.line, childIndentationAmount, node, parentDynamicIndentation, parentStartLine);
+                let effectiveParentStartLine = child.kind === SyntaxKind.Decorator ? childStartLine : undecoratedParentStartLine;
+                let childIndentation = computeIndentation(child, childStartLine, childIndentationAmount, node, parentDynamicIndentation, effectiveParentStartLine);
 
-                processNode(child, childContextNode, childStart.line, childIndentation.indentation, childIndentation.delta);
+                processNode(child, childContextNode, childStartLine, undecoratedChildStartLine, childIndentation.indentation, childIndentation.delta);
 
                 childContextNode = node;
 
@@ -639,7 +652,7 @@ module ts.formatting {
 
                 let inheritedIndentation = Constants.Unknown;
                 for (let child of nodes) {
-                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, /*isListElement*/ true)
+                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListElement*/ true)
                 }
 
                 if (listEndToken !== SyntaxKind.Unknown) {
