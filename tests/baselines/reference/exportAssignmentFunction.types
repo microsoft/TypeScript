@@ -1,17 +1,17 @@
 === tests/cases/compiler/exportAssignmentFunction_B.ts ===
 import fooFunc = require("exportAssignmentFunction_A");
->fooFunc : () => number
+>fooFunc : () => number, Symbol(fooFunc,Decl(exportAssignmentFunction_B.ts,0,0))
 
 var n: number = fooFunc();
->n : number
+>n : number, Symbol(n,Decl(exportAssignmentFunction_B.ts,2,3))
 >fooFunc() : number
->fooFunc : () => number
+>fooFunc : () => number, Symbol(fooFunc,Decl(exportAssignmentFunction_B.ts,0,0))
 
 === tests/cases/compiler/exportAssignmentFunction_A.ts ===
 function foo() { return 0; }
->foo : () => number
+>foo : () => number, Symbol(foo,Decl(exportAssignmentFunction_A.ts,0,0))
 >0 : number
 
 export = foo;
->foo : () => number
+>foo : () => number, Symbol(foo,Decl(exportAssignmentFunction_A.ts,0,0))
 

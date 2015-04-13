@@ -1,34 +1,34 @@
 === tests/cases/compiler/ambiguousOverloadResolution.ts ===
 class A { }
->A : A
+>A : A, Symbol(A,Decl(ambiguousOverloadResolution.ts,0,0))
 
 class B extends A { x: number; }
->B : B
->A : A
->x : number
+>B : B, Symbol(B,Decl(ambiguousOverloadResolution.ts,0,11))
+>A : A, Symbol(A,Decl(ambiguousOverloadResolution.ts,0,0))
+>x : number, Symbol(x,Decl(ambiguousOverloadResolution.ts,1,19))
 
 declare function f(p: A, q: B): number;
->f : { (p: A, q: B): number; (p: B, q: A): string; }
->p : A
->A : A
->q : B
->B : B
+>f : { (p: A, q: B): number; (p: B, q: A): string; }, Symbol(f,Decl(ambiguousOverloadResolution.ts,1,32),Decl(ambiguousOverloadResolution.ts,3,39))
+>p : A, Symbol(p,Decl(ambiguousOverloadResolution.ts,3,19))
+>A : A, Symbol(A,Decl(ambiguousOverloadResolution.ts,0,0))
+>q : B, Symbol(q,Decl(ambiguousOverloadResolution.ts,3,24))
+>B : B, Symbol(B,Decl(ambiguousOverloadResolution.ts,0,11))
 
 declare function f(p: B, q: A): string;
->f : { (p: A, q: B): number; (p: B, q: A): string; }
->p : B
->B : B
->q : A
->A : A
+>f : { (p: A, q: B): number; (p: B, q: A): string; }, Symbol(f,Decl(ambiguousOverloadResolution.ts,1,32),Decl(ambiguousOverloadResolution.ts,3,39))
+>p : B, Symbol(p,Decl(ambiguousOverloadResolution.ts,4,19))
+>B : B, Symbol(B,Decl(ambiguousOverloadResolution.ts,0,11))
+>q : A, Symbol(q,Decl(ambiguousOverloadResolution.ts,4,24))
+>A : A, Symbol(A,Decl(ambiguousOverloadResolution.ts,0,0))
 
 var x: B;
->x : B
->B : B
+>x : B, Symbol(x,Decl(ambiguousOverloadResolution.ts,6,3))
+>B : B, Symbol(B,Decl(ambiguousOverloadResolution.ts,0,11))
 
 var t: number = f(x, x); // Not an error
->t : number
+>t : number, Symbol(t,Decl(ambiguousOverloadResolution.ts,7,3))
 >f(x, x) : number
->f : { (p: A, q: B): number; (p: B, q: A): string; }
->x : B
->x : B
+>f : { (p: A, q: B): number; (p: B, q: A): string; }, Symbol(f,Decl(ambiguousOverloadResolution.ts,1,32),Decl(ambiguousOverloadResolution.ts,3,39))
+>x : B, Symbol(x,Decl(ambiguousOverloadResolution.ts,6,3))
+>x : B, Symbol(x,Decl(ambiguousOverloadResolution.ts,6,3))
 

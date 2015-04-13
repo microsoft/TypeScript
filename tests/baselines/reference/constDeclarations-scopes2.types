@@ -2,35 +2,35 @@
 
 // global
 const c = "string";
->c : string
+>c : string, Symbol(c,Decl(constDeclarations-scopes2.ts,2,5))
 >"string" : string
 
 var n: number;
->n : number
+>n : number, Symbol(n,Decl(constDeclarations-scopes2.ts,4,3))
 
 var b: boolean;
->b : boolean
+>b : boolean, Symbol(b,Decl(constDeclarations-scopes2.ts,5,3))
 
 // for scope
 for (const c = 0; c < 10; n = c ) {
->c : number
+>c : number, Symbol(c,Decl(constDeclarations-scopes2.ts,8,10))
 >0 : number
 >c < 10 : boolean
->c : number
+>c : number, Symbol(c,Decl(constDeclarations-scopes2.ts,8,10))
 >10 : number
 >n = c : number
->n : number
->c : number
+>n : number, Symbol(n,Decl(constDeclarations-scopes2.ts,4,3))
+>c : number, Symbol(c,Decl(constDeclarations-scopes2.ts,8,10))
 
     // for block
     const c = false;
->c : boolean
+>c : boolean, Symbol(c,Decl(constDeclarations-scopes2.ts,10,9))
 >false : boolean
 
     b = c;
 >b = c : boolean
->b : boolean
->c : boolean
+>b : boolean, Symbol(b,Decl(constDeclarations-scopes2.ts,5,3))
+>c : boolean, Symbol(c,Decl(constDeclarations-scopes2.ts,10,9))
 }
 
 

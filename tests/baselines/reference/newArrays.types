@@ -1,43 +1,43 @@
 === tests/cases/compiler/newArrays.ts ===
 module M {
->M : typeof M
+>M : typeof M, Symbol(M,Decl(newArrays.ts,0,0))
 
 	class Foo {}
->Foo : Foo
+>Foo : Foo, Symbol(Foo,Decl(newArrays.ts,0,10))
 
 	class Gar {
->Gar : Gar
+>Gar : Gar, Symbol(Gar,Decl(newArrays.ts,1,13))
 
 		public fa: Foo[];
->fa : Foo[]
->Foo : Foo
+>fa : Foo[], Symbol(fa,Decl(newArrays.ts,2,12))
+>Foo : Foo, Symbol(Foo,Decl(newArrays.ts,0,10))
 
 		public x = 10;
->x : number
+>x : number, Symbol(x,Decl(newArrays.ts,3,19))
 >10 : number
 
 		public y = 10;
->y : number
+>y : number, Symbol(y,Decl(newArrays.ts,4,16))
 >10 : number
 
 		public m () {
->m : () => void
+>m : () => void, Symbol(m,Decl(newArrays.ts,5,16))
 
 			this.fa = new Array<Foo>(this.x * this.y);		
 >this.fa = new Array<Foo>(this.x * this.y) : Foo[]
->this.fa : Foo[]
->this : Gar
->fa : Foo[]
+>this.fa : Foo[], Symbol(fa,Decl(newArrays.ts,2,12))
+>this : Gar, Symbol(Gar,Decl(newArrays.ts,1,13))
+>fa : Foo[], Symbol(fa,Decl(newArrays.ts,2,12))
 >new Array<Foo>(this.x * this.y) : Foo[]
->Array : ArrayConstructor
->Foo : Foo
+>Array : ArrayConstructor, Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
+>Foo : Foo, Symbol(Foo,Decl(newArrays.ts,0,10))
 >this.x * this.y : number
->this.x : number
->this : Gar
->x : number
->this.y : number
->this : Gar
->y : number
+>this.x : number, Symbol(x,Decl(newArrays.ts,3,19))
+>this : Gar, Symbol(Gar,Decl(newArrays.ts,1,13))
+>x : number, Symbol(x,Decl(newArrays.ts,3,19))
+>this.y : number, Symbol(y,Decl(newArrays.ts,4,16))
+>this : Gar, Symbol(Gar,Decl(newArrays.ts,1,13))
+>y : number, Symbol(y,Decl(newArrays.ts,4,16))
 		}
 	}
 }

@@ -1,17 +1,17 @@
 === tests/cases/conformance/es6/Symbols/symbolDeclarationEmit10.ts ===
 var obj = {
->obj : { [Symbol.isConcatSpreadable]: string; }
+>obj : { [Symbol.isConcatSpreadable]: string; }, Symbol(obj,Decl(symbolDeclarationEmit10.ts,0,3))
 >{    get [Symbol.isConcatSpreadable]() { return '' },    set [Symbol.isConcatSpreadable](x) { }} : { [Symbol.isConcatSpreadable]: string; }
 
     get [Symbol.isConcatSpreadable]() { return '' },
->Symbol.isConcatSpreadable : symbol
->Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : symbol, Symbol(SymbolConstructor.isConcatSpreadable,Decl(lib.d.ts,1230,24))
+>Symbol : SymbolConstructor, Symbol(Symbol,Decl(lib.d.ts,1186,52),Decl(lib.d.ts,1262,11))
+>isConcatSpreadable : symbol, Symbol(SymbolConstructor.isConcatSpreadable,Decl(lib.d.ts,1230,24))
 >'' : string
 
     set [Symbol.isConcatSpreadable](x) { }
->Symbol.isConcatSpreadable : symbol
->Symbol : SymbolConstructor
->isConcatSpreadable : symbol
->x : string
+>Symbol.isConcatSpreadable : symbol, Symbol(SymbolConstructor.isConcatSpreadable,Decl(lib.d.ts,1230,24))
+>Symbol : SymbolConstructor, Symbol(Symbol,Decl(lib.d.ts,1186,52),Decl(lib.d.ts,1262,11))
+>isConcatSpreadable : symbol, Symbol(SymbolConstructor.isConcatSpreadable,Decl(lib.d.ts,1230,24))
+>x : string, Symbol(x,Decl(symbolDeclarationEmit10.ts,2,36))
 }

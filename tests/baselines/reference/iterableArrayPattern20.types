@@ -1,59 +1,59 @@
 === tests/cases/conformance/es6/destructuring/iterableArrayPattern20.ts ===
 function fun(...[[a = new Foo], b = [new Foo]]: Bar[][]) { }
->fun : (...[[a = new Foo], b = [new Foo]]: Bar[][]) => void
->a : Bar
+>fun : (...[[a = new Foo], b = [new Foo]]: Bar[][]) => void, Symbol(fun,Decl(iterableArrayPattern20.ts,0,0))
+>a : Bar, Symbol(a,Decl(iterableArrayPattern20.ts,0,18))
 >new Foo : Foo
->Foo : typeof Foo
->b : Bar[]
+>Foo : typeof Foo, Symbol(Foo,Decl(iterableArrayPattern20.ts,2,15))
+>b : Bar[], Symbol(b,Decl(iterableArrayPattern20.ts,0,31))
 >[new Foo] : Foo[]
 >new Foo : Foo
->Foo : typeof Foo
->Bar : Bar
+>Foo : typeof Foo, Symbol(Foo,Decl(iterableArrayPattern20.ts,2,15))
+>Bar : Bar, Symbol(Bar,Decl(iterableArrayPattern20.ts,1,29))
 
 fun(...new FooArrayIterator);
 >fun(...new FooArrayIterator) : void
->fun : (...[[a = new Foo], b = [new Foo]]: Bar[][]) => void
+>fun : (...[[a = new Foo], b = [new Foo]]: Bar[][]) => void, Symbol(fun,Decl(iterableArrayPattern20.ts,0,0))
 >...new FooArrayIterator : Foo[]
 >new FooArrayIterator : FooArrayIterator
->FooArrayIterator : typeof FooArrayIterator
+>FooArrayIterator : typeof FooArrayIterator, Symbol(FooArrayIterator,Decl(iterableArrayPattern20.ts,3,27))
 
 class Bar { x }
->Bar : Bar
->x : any
+>Bar : Bar, Symbol(Bar,Decl(iterableArrayPattern20.ts,1,29))
+>x : any, Symbol(x,Decl(iterableArrayPattern20.ts,2,11))
 
 class Foo extends Bar { y }
->Foo : Foo
->Bar : Bar
->y : any
+>Foo : Foo, Symbol(Foo,Decl(iterableArrayPattern20.ts,2,15))
+>Bar : Bar, Symbol(Bar,Decl(iterableArrayPattern20.ts,1,29))
+>y : any, Symbol(y,Decl(iterableArrayPattern20.ts,3,23))
 
 class FooArrayIterator {
->FooArrayIterator : FooArrayIterator
+>FooArrayIterator : FooArrayIterator, Symbol(FooArrayIterator,Decl(iterableArrayPattern20.ts,3,27))
 
     next() {
->next : () => { value: Foo[]; done: boolean; }
+>next : () => { value: Foo[]; done: boolean; }, Symbol(next,Decl(iterableArrayPattern20.ts,4,24))
 
         return {
 >{            value: [new Foo],            done: false        } : { value: Foo[]; done: boolean; }
 
             value: [new Foo],
->value : Foo[]
+>value : Foo[], Symbol(value,Decl(iterableArrayPattern20.ts,6,16))
 >[new Foo] : Foo[]
 >new Foo : Foo
->Foo : typeof Foo
+>Foo : typeof Foo, Symbol(Foo,Decl(iterableArrayPattern20.ts,2,15))
 
             done: false
->done : boolean
+>done : boolean, Symbol(done,Decl(iterableArrayPattern20.ts,7,29))
 >false : boolean
 
         };
     }
 
     [Symbol.iterator]() {
->Symbol.iterator : symbol
->Symbol : SymbolConstructor
->iterator : symbol
+>Symbol.iterator : symbol, Symbol(SymbolConstructor.iterator,Decl(lib.d.ts,1236,31))
+>Symbol : SymbolConstructor, Symbol(Symbol,Decl(lib.d.ts,1186,52),Decl(lib.d.ts,1262,11))
+>iterator : symbol, Symbol(SymbolConstructor.iterator,Decl(lib.d.ts,1236,31))
 
         return this;
->this : FooArrayIterator
+>this : FooArrayIterator, Symbol(FooArrayIterator,Decl(iterableArrayPattern20.ts,3,27))
     }
 }

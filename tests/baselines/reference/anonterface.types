@@ -1,41 +1,41 @@
 === tests/cases/compiler/anonterface.ts ===
 module M {
->M : typeof M
+>M : typeof M, Symbol(M,Decl(anonterface.ts,0,0))
 
     export class C {
->C : C
+>C : C, Symbol(C,Decl(anonterface.ts,0,10))
 
         m(fn:{ (n:number):string; },n2:number):string {
->m : (fn: (n: number) => string, n2: number) => string
->fn : (n: number) => string
->n : number
->n2 : number
+>m : (fn: (n: number) => string, n2: number) => string, Symbol(m,Decl(anonterface.ts,1,20))
+>fn : (n: number) => string, Symbol(fn,Decl(anonterface.ts,2,10))
+>n : number, Symbol(n,Decl(anonterface.ts,2,16))
+>n2 : number, Symbol(n2,Decl(anonterface.ts,2,36))
 
             return fn(n2);
 >fn(n2) : string
->fn : (n: number) => string
->n2 : number
+>fn : (n: number) => string, Symbol(fn,Decl(anonterface.ts,2,10))
+>n2 : number, Symbol(n2,Decl(anonterface.ts,2,36))
         }
     }
 }
 
 var c=new M.C();
->c : M.C
+>c : M.C, Symbol(c,Decl(anonterface.ts,8,3))
 >new M.C() : M.C
->M.C : typeof M.C
->M : typeof M
->C : typeof M.C
+>M.C : typeof M.C, Symbol(M.C,Decl(anonterface.ts,0,10))
+>M : typeof M, Symbol(M,Decl(anonterface.ts,0,0))
+>C : typeof M.C, Symbol(M.C,Decl(anonterface.ts,0,10))
 
 c.m(function(n) { return "hello: "+n; },18);
 >c.m(function(n) { return "hello: "+n; },18) : string
->c.m : (fn: (n: number) => string, n2: number) => string
->c : M.C
->m : (fn: (n: number) => string, n2: number) => string
+>c.m : (fn: (n: number) => string, n2: number) => string, Symbol(M.C.m,Decl(anonterface.ts,1,20))
+>c : M.C, Symbol(c,Decl(anonterface.ts,8,3))
+>m : (fn: (n: number) => string, n2: number) => string, Symbol(M.C.m,Decl(anonterface.ts,1,20))
 >function(n) { return "hello: "+n; } : (n: number) => string
->n : number
+>n : number, Symbol(n,Decl(anonterface.ts,9,13))
 >"hello: "+n : string
 >"hello: " : string
->n : number
+>n : number, Symbol(n,Decl(anonterface.ts,9,13))
 >18 : number
 
 

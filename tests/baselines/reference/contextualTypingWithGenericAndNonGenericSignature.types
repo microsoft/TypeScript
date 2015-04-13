@@ -2,54 +2,54 @@
 //•	If e is a FunctionExpression or ArrowFunctionExpression with no type parameters and no parameter or return type annotations, and T is a function type with EXACTLY ONE non - generic call signature, then any inferences made for type parameters referenced by the parameters of T’s call signature are fixed(section 4.12.2) and e is processed with the contextual type T, as described in section 4.9.3.
 
 var f2: {
->f2 : { (x: string, y: number): string; <T, U>(x: T, y: U): T; }
+>f2 : { (x: string, y: number): string; <T, U>(x: T, y: U): T; }, Symbol(f2,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,2,3))
 
     (x: string, y: number): string;
->x : string
->y : number
+>x : string, Symbol(x,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,3,5))
+>y : number, Symbol(y,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,3,15))
 
     <T, U>(x: T, y: U): T
->T : T
->U : U
->x : T
->T : T
->y : U
->U : U
->T : T
+>T : T, Symbol(T,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,4,5))
+>U : U, Symbol(U,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,4,7))
+>x : T, Symbol(x,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,4,11))
+>T : T, Symbol(T,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,4,5))
+>y : U, Symbol(y,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,4,16))
+>U : U, Symbol(U,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,4,7))
+>T : T, Symbol(T,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,4,5))
 
 };
 
 f2 = (x, y) => { return x }
 >f2 = (x, y) => { return x } : (x: any, y: any) => any
->f2 : { (x: string, y: number): string; <T, U>(x: T, y: U): T; }
+>f2 : { (x: string, y: number): string; <T, U>(x: T, y: U): T; }, Symbol(f2,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,2,3))
 >(x, y) => { return x } : (x: any, y: any) => any
->x : any
->y : any
->x : any
+>x : any, Symbol(x,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,7,6))
+>y : any, Symbol(y,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,7,8))
+>x : any, Symbol(x,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,7,6))
 
 var f3: {
->f3 : { <T, U>(x: T, y: U): T; (x: string, y: number): string; }
+>f3 : { <T, U>(x: T, y: U): T; (x: string, y: number): string; }, Symbol(f3,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,9,3))
 
     <T, U>(x: T, y: U): T
->T : T
->U : U
->x : T
->T : T
->y : U
->U : U
->T : T
+>T : T, Symbol(T,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,10,5))
+>U : U, Symbol(U,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,10,7))
+>x : T, Symbol(x,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,10,11))
+>T : T, Symbol(T,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,10,5))
+>y : U, Symbol(y,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,10,16))
+>U : U, Symbol(U,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,10,7))
+>T : T, Symbol(T,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,10,5))
 
     (x: string, y: number): string;
->x : string
->y : number
+>x : string, Symbol(x,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,11,5))
+>y : number, Symbol(y,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,11,15))
 
 };
 
 f3 = (x, y) => { return x }
 >f3 = (x, y) => { return x } : (x: any, y: any) => any
->f3 : { <T, U>(x: T, y: U): T; (x: string, y: number): string; }
+>f3 : { <T, U>(x: T, y: U): T; (x: string, y: number): string; }, Symbol(f3,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,9,3))
 >(x, y) => { return x } : (x: any, y: any) => any
->x : any
->y : any
->x : any
+>x : any, Symbol(x,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,14,6))
+>y : any, Symbol(y,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,14,8))
+>x : any, Symbol(x,Decl(contextualTypingWithGenericAndNonGenericSignature.ts,14,6))
 

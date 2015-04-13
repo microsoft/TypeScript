@@ -1,55 +1,55 @@
 === tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts ===
 class Point {
->Point : Point
+>Point : Point, Symbol(Point,Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,0,0),Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,4,1))
 
     constructor(public x: number, public y: number) { }
->x : number
->y : number
+>x : number, Symbol(x,Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,1,16))
+>y : number, Symbol(y,Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,1,33))
 
     static Origin(): Point { return { x: 0, y: 0 }; }
->Origin : () => Point
->Point : Point
+>Origin : () => Point, Symbol(Point.Origin,Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,1,55))
+>Point : Point, Symbol(Point,Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,0,0),Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,4,1))
 >{ x: 0, y: 0 } : { x: number; y: number; }
->x : number
+>x : number, Symbol(x,Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,3,37))
 >0 : number
->y : number
+>y : number, Symbol(y,Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,3,43))
 >0 : number
 }
 
 module Point {
->Point : typeof Point
+>Point : typeof Point, Symbol(Point,Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,0,0),Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,4,1))
 
     function Origin() { return ""; }// not an error, since not exported
->Origin : () => string
+>Origin : () => string, Symbol(Origin,Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,6,14))
 >"" : string
 }
 
 
 module A {
->A : typeof A
+>A : typeof A, Symbol(A,Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,8,1))
 
     export class Point {
->Point : Point
+>Point : Point, Symbol(Point,Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,11,10),Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,16,5))
 
         constructor(public x: number, public y: number) { }
->x : number
->y : number
+>x : number, Symbol(x,Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,13,20))
+>y : number, Symbol(y,Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,13,37))
 
         static Origin(): Point { return { x: 0, y: 0 }; }
->Origin : () => Point
->Point : Point
+>Origin : () => Point, Symbol(Point.Origin,Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,13,59))
+>Point : Point, Symbol(Point,Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,11,10),Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,16,5))
 >{ x: 0, y: 0 } : { x: number; y: number; }
->x : number
+>x : number, Symbol(x,Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,15,41))
 >0 : number
->y : number
+>y : number, Symbol(y,Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,15,47))
 >0 : number
     }
 
     export module Point {
->Point : typeof Point
+>Point : typeof Point, Symbol(Point,Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,11,10),Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,16,5))
 
         function Origin() { return ""; }// not an error since not exported
->Origin : () => string
+>Origin : () => string, Symbol(Origin,Decl(ClassAndModuleThatMergeWithStaticFunctionAndNonExportedFunctionThatShareAName.ts,18,25))
 >"" : string
     }
 }

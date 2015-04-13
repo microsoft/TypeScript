@@ -3,44 +3,44 @@
 // Before fix this code would cause infinite loop
 
 interface IObservable<T> {
->IObservable : IObservable<T>
->T : T
+>IObservable : IObservable<T>, Symbol(IObservable,Decl(checkInfiniteExpansionTermination2.ts,0,0))
+>T : T, Symbol(T,Decl(checkInfiniteExpansionTermination2.ts,3,22))
 
     n: IObservable<T[]>;
->n : IObservable<T[]>
->IObservable : IObservable<T>
->T : T
+>n : IObservable<T[]>, Symbol(n,Decl(checkInfiniteExpansionTermination2.ts,3,26))
+>IObservable : IObservable<T>, Symbol(IObservable,Decl(checkInfiniteExpansionTermination2.ts,0,0))
+>T : T, Symbol(T,Decl(checkInfiniteExpansionTermination2.ts,3,22))
 }
 interface ISubject<T> extends IObservable<T> { }
->ISubject : ISubject<T>
->T : T
->IObservable : IObservable<T>
->T : T
+>ISubject : ISubject<T>, Symbol(ISubject,Decl(checkInfiniteExpansionTermination2.ts,5,1))
+>T : T, Symbol(T,Decl(checkInfiniteExpansionTermination2.ts,6,19))
+>IObservable : IObservable<T>, Symbol(IObservable,Decl(checkInfiniteExpansionTermination2.ts,0,0))
+>T : T, Symbol(T,Decl(checkInfiniteExpansionTermination2.ts,6,19))
 
 declare function combineLatest<TOther>(x: IObservable<TOther>[]): void;
->combineLatest : { <TOther>(x: IObservable<TOther>[]): void; (): void; }
->TOther : TOther
->x : IObservable<TOther>[]
->IObservable : IObservable<T>
->TOther : TOther
+>combineLatest : { <TOther>(x: IObservable<TOther>[]): void; (): void; }, Symbol(combineLatest,Decl(checkInfiniteExpansionTermination2.ts,6,48),Decl(checkInfiniteExpansionTermination2.ts,8,71))
+>TOther : TOther, Symbol(TOther,Decl(checkInfiniteExpansionTermination2.ts,8,31))
+>x : IObservable<TOther>[], Symbol(x,Decl(checkInfiniteExpansionTermination2.ts,8,39))
+>IObservable : IObservable<T>, Symbol(IObservable,Decl(checkInfiniteExpansionTermination2.ts,0,0))
+>TOther : TOther, Symbol(TOther,Decl(checkInfiniteExpansionTermination2.ts,8,31))
 
 declare function combineLatest(): void;
->combineLatest : { <TOther>(x: IObservable<TOther>[]): void; (): void; }
+>combineLatest : { <TOther>(x: IObservable<TOther>[]): void; (): void; }, Symbol(combineLatest,Decl(checkInfiniteExpansionTermination2.ts,6,48),Decl(checkInfiniteExpansionTermination2.ts,8,71))
 
 function fn<T>() {
->fn : <T>() => void
->T : T
+>fn : <T>() => void, Symbol(fn,Decl(checkInfiniteExpansionTermination2.ts,9,39))
+>T : T, Symbol(T,Decl(checkInfiniteExpansionTermination2.ts,11,12))
 
     var values: ISubject<any>[] = [];
->values : ISubject<any>[]
->ISubject : ISubject<T>
+>values : ISubject<any>[], Symbol(values,Decl(checkInfiniteExpansionTermination2.ts,12,7))
+>ISubject : ISubject<T>, Symbol(ISubject,Decl(checkInfiniteExpansionTermination2.ts,5,1))
 >[] : undefined[]
 
     // Hang when using <T>, but not <any>
     combineLatest<T>(values);
 >combineLatest<T>(values) : void
->combineLatest : { <TOther>(x: IObservable<TOther>[]): void; (): void; }
->T : T
->values : ISubject<any>[]
+>combineLatest : { <TOther>(x: IObservable<TOther>[]): void; (): void; }, Symbol(combineLatest,Decl(checkInfiniteExpansionTermination2.ts,6,48),Decl(checkInfiniteExpansionTermination2.ts,8,71))
+>T : T, Symbol(T,Decl(checkInfiniteExpansionTermination2.ts,11,12))
+>values : ISubject<any>[], Symbol(values,Decl(checkInfiniteExpansionTermination2.ts,12,7))
 }
 

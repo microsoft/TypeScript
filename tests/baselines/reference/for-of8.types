@@ -1,9 +1,9 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of8.ts ===
 v;
->v : number
+>v : number, Symbol(v,Decl(for-of8.ts,1,8))
 
 for (var v of [0]) { }
->v : number
+>v : number, Symbol(v,Decl(for-of8.ts,1,8))
 >[0] : number[]
 >0 : number
 

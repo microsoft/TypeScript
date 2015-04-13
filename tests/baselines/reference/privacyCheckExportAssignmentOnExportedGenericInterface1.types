@@ -1,22 +1,22 @@
 === tests/cases/compiler/privacyCheckExportAssignmentOnExportedGenericInterface1.ts ===
 module Foo {
->Foo : new () => A<Foo<string>>
+>Foo : new () => A<Foo<string>>, Symbol(Foo,Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,0,0),Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,3,1),Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,6,3))
 
     export interface A<T> {
->A : A<T>
->T : T
+>A : A<T>, Symbol(A,Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,0,12))
+>T : T, Symbol(T,Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,1,23))
     }
 }
 interface Foo<T> {
->Foo : Foo<T>
->T : T
+>Foo : Foo<T>, Symbol(Foo,Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,0,0),Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,3,1),Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,6,3))
+>T : T, Symbol(T,Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,4,14))
 }
 var Foo: new () => Foo.A<Foo<string>>;
->Foo : new () => Foo.A<Foo<string>>
->Foo : unknown
->A : Foo.A<T>
->Foo : Foo<T>
+>Foo : new () => Foo.A<Foo<string>>, Symbol(Foo,Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,0,0),Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,3,1),Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,6,3))
+>Foo : any, Symbol(Foo,Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,0,0),Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,3,1),Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,6,3))
+>A : Foo.A<T>, Symbol(Foo.A,Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,0,12))
+>Foo : Foo<T>, Symbol(Foo,Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,0,0),Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,3,1),Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,6,3))
 
 export = Foo;
->Foo : Foo<T>
+>Foo : Foo<T>, Symbol(Foo,Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,0,0),Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,3,1),Decl(privacyCheckExportAssignmentOnExportedGenericInterface1.ts,6,3))
 

@@ -1,23 +1,23 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of42.ts ===
 var array = [{ x: "", y: 0 }]
->array : { x: string; y: number; }[]
+>array : { x: string; y: number; }[], Symbol(array,Decl(for-of42.ts,0,3))
 >[{ x: "", y: 0 }] : { x: string; y: number; }[]
 >{ x: "", y: 0 } : { x: string; y: number; }
->x : string
+>x : string, Symbol(x,Decl(for-of42.ts,0,14))
 >"" : string
->y : number
+>y : number, Symbol(y,Decl(for-of42.ts,0,21))
 >0 : number
 
 for (var {x: a, y: b} of array) {
->x : unknown
->a : string
->y : unknown
->b : number
->array : { x: string; y: number; }[]
+>x : any
+>a : string, Symbol(a,Decl(for-of42.ts,1,10))
+>y : any
+>b : number, Symbol(b,Decl(for-of42.ts,1,15))
+>array : { x: string; y: number; }[], Symbol(array,Decl(for-of42.ts,0,3))
 
     a;
->a : string
+>a : string, Symbol(a,Decl(for-of42.ts,1,10))
 
     b;
->b : number
+>b : number, Symbol(b,Decl(for-of42.ts,1,15))
 }

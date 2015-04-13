@@ -1,31 +1,31 @@
 === tests/cases/compiler/declFileWithInternalModuleNameConflictsInExtendsClause1.ts ===
 
 module X.A.C {
->X : typeof X
->A : typeof A
->C : unknown
+>X : typeof X, Symbol(X,Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,0,0),Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,4,1))
+>A : typeof A, Symbol(A,Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,1,9),Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,5,9))
+>C : any, Symbol(C,Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,1,11))
 
     export interface Z {
->Z : Z
+>Z : Z, Symbol(Z,Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,1,14))
     }
 }
 module X.A.B.C {
->X : typeof X
->A : typeof A
->B : typeof B
->C : typeof C
+>X : typeof X, Symbol(X,Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,0,0),Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,4,1))
+>A : typeof A, Symbol(A,Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,1,9),Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,5,9))
+>B : typeof B, Symbol(B,Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,5,11))
+>C : typeof C, Symbol(C,Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,5,13))
 
     module A {
->A : unknown
+>A : any, Symbol(A,Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,5,16))
     }
     export class W implements X.A.C.Z { // This needs to be refered as X.A.C.Z as A has conflict
->W : W
->X.A.C.Z : unknown
->X.A.C : unknown
->X.A : typeof A
->X : typeof X
->A : typeof A
->C : unknown
->Z : X.A.C.Z
+>W : W, Symbol(W,Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,7,5))
+>X.A.C.Z : any, Symbol(X.A.C.Z,Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,1,14))
+>X.A.C : any, Symbol(C,Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,1,11))
+>X.A : typeof A, Symbol(A,Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,1,9),Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,5,9))
+>X : typeof X, Symbol(X,Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,0,0),Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,4,1))
+>A : typeof A, Symbol(A,Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,1,9),Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,5,9))
+>C : any, Symbol(C,Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,1,11))
+>Z : X.A.C.Z, Symbol(X.A.C.Z,Decl(declFileWithInternalModuleNameConflictsInExtendsClause1.ts,1,14))
     }
 }

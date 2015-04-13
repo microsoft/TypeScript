@@ -1,23 +1,23 @@
 === tests/cases/compiler/staticMemberAccessOffDerivedType1.ts ===
 class SomeBase {
->SomeBase : SomeBase
+>SomeBase : SomeBase, Symbol(SomeBase,Decl(staticMemberAccessOffDerivedType1.ts,0,0))
 
     static GetNumber() {
->GetNumber : () => number
+>GetNumber : () => number, Symbol(SomeBase.GetNumber,Decl(staticMemberAccessOffDerivedType1.ts,0,16))
 
         return 2;
 >2 : number
     }
 }
 class P extends SomeBase {
->P : P
->SomeBase : SomeBase
+>P : P, Symbol(P,Decl(staticMemberAccessOffDerivedType1.ts,4,1))
+>SomeBase : SomeBase, Symbol(SomeBase,Decl(staticMemberAccessOffDerivedType1.ts,0,0))
 
     static SomeNumber = P.GetNumber();
->SomeNumber : number
+>SomeNumber : number, Symbol(P.SomeNumber,Decl(staticMemberAccessOffDerivedType1.ts,5,26))
 >P.GetNumber() : number
->P.GetNumber : () => number
->P : typeof P
->GetNumber : () => number
+>P.GetNumber : () => number, Symbol(SomeBase.GetNumber,Decl(staticMemberAccessOffDerivedType1.ts,0,16))
+>P : typeof P, Symbol(P,Decl(staticMemberAccessOffDerivedType1.ts,4,1))
+>GetNumber : () => number, Symbol(SomeBase.GetNumber,Decl(staticMemberAccessOffDerivedType1.ts,0,16))
 }
 

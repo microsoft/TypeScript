@@ -1,9 +1,9 @@
 === tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolProperty8.ts ===
 var x: {
->x : { [Symbol.toPrimitive](): string; }
+>x : { [Symbol.toPrimitive](): string; }, Symbol(x,Decl(parserSymbolProperty8.ts,0,3))
 
     [Symbol.toPrimitive](): string
->Symbol.toPrimitive : symbol
->Symbol : SymbolConstructor
->toPrimitive : symbol
+>Symbol.toPrimitive : symbol, Symbol(SymbolConstructor.toPrimitive,Decl(lib.d.ts,1242,21))
+>Symbol : SymbolConstructor, Symbol(Symbol,Decl(lib.d.ts,1186,52),Decl(lib.d.ts,1262,11))
+>toPrimitive : symbol, Symbol(SymbolConstructor.toPrimitive,Decl(lib.d.ts,1242,21))
 }

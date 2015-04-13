@@ -2,10 +2,10 @@
 // these are widened to any at the point of assignment
 
 var x = null;
->x : any
+>x : any, Symbol(x,Decl(initializersWidened.ts,2,3))
 >null : null
 
 var y = undefined;
->y : any
->undefined : undefined
+>y : any, Symbol(y,Decl(initializersWidened.ts,3,3))
+>undefined : undefined, Symbol(undefined)
 

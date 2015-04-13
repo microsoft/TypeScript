@@ -1,49 +1,49 @@
 === tests/cases/compiler/genericTypeWithMultipleBases3.ts ===
 interface IA<T> {
->IA : IA<T>
->T : T
+>IA : IA<T>, Symbol(IA,Decl(genericTypeWithMultipleBases3.ts,0,0))
+>T : T, Symbol(T,Decl(genericTypeWithMultipleBases3.ts,0,13))
 
 foo(x: T): T;
->foo : (x: T) => T
->x : T
->T : T
->T : T
+>foo : (x: T) => T, Symbol(foo,Decl(genericTypeWithMultipleBases3.ts,0,17))
+>x : T, Symbol(x,Decl(genericTypeWithMultipleBases3.ts,2,4))
+>T : T, Symbol(T,Decl(genericTypeWithMultipleBases3.ts,0,13))
+>T : T, Symbol(T,Decl(genericTypeWithMultipleBases3.ts,0,13))
 
 }
 
 interface IB<T> {
->IB : IB<T>
->T : T
+>IB : IB<T>, Symbol(IB,Decl(genericTypeWithMultipleBases3.ts,4,1))
+>T : T, Symbol(T,Decl(genericTypeWithMultipleBases3.ts,6,13))
 
 bar(x: T): T;
->bar : (x: T) => T
->x : T
->T : T
->T : T
+>bar : (x: T) => T, Symbol(bar,Decl(genericTypeWithMultipleBases3.ts,6,17))
+>x : T, Symbol(x,Decl(genericTypeWithMultipleBases3.ts,8,4))
+>T : T, Symbol(T,Decl(genericTypeWithMultipleBases3.ts,6,13))
+>T : T, Symbol(T,Decl(genericTypeWithMultipleBases3.ts,6,13))
 
 }
 
 interface IC<T> extends IA<T>, IB<T> { }
->IC : IC<T>
->T : T
->IA : IA<T>
->T : T
->IB : IB<T>
->T : T
+>IC : IC<T>, Symbol(IC,Decl(genericTypeWithMultipleBases3.ts,10,1))
+>T : T, Symbol(T,Decl(genericTypeWithMultipleBases3.ts,12,13))
+>IA : IA<T>, Symbol(IA,Decl(genericTypeWithMultipleBases3.ts,0,0))
+>T : T, Symbol(T,Decl(genericTypeWithMultipleBases3.ts,12,13))
+>IB : IB<T>, Symbol(IB,Decl(genericTypeWithMultipleBases3.ts,4,1))
+>T : T, Symbol(T,Decl(genericTypeWithMultipleBases3.ts,12,13))
 
 var c: IC<number>;
->c : IC<number>
->IC : IC<T>
+>c : IC<number>, Symbol(c,Decl(genericTypeWithMultipleBases3.ts,14,3))
+>IC : IC<T>, Symbol(IC,Decl(genericTypeWithMultipleBases3.ts,10,1))
 
 var x = c.foo;
->x : (x: number) => number
->c.foo : (x: number) => number
->c : IC<number>
->foo : (x: number) => number
+>x : (x: number) => number, Symbol(x,Decl(genericTypeWithMultipleBases3.ts,16,3))
+>c.foo : (x: number) => number, Symbol(IA.foo,Decl(genericTypeWithMultipleBases3.ts,0,17))
+>c : IC<number>, Symbol(c,Decl(genericTypeWithMultipleBases3.ts,14,3))
+>foo : (x: number) => number, Symbol(IA.foo,Decl(genericTypeWithMultipleBases3.ts,0,17))
 
 var y = c.bar;
->y : (x: number) => number
->c.bar : (x: number) => number
->c : IC<number>
->bar : (x: number) => number
+>y : (x: number) => number, Symbol(y,Decl(genericTypeWithMultipleBases3.ts,18,3))
+>c.bar : (x: number) => number, Symbol(IB.bar,Decl(genericTypeWithMultipleBases3.ts,6,17))
+>c : IC<number>, Symbol(c,Decl(genericTypeWithMultipleBases3.ts,14,3))
+>bar : (x: number) => number, Symbol(IB.bar,Decl(genericTypeWithMultipleBases3.ts,6,17))
 

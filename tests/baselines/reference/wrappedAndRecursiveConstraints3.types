@@ -2,61 +2,61 @@
 // no errors expected
 
 class C<T extends { length: number }> {
->C : C<T>
->T : T
->length : number
+>C : C<T>, Symbol(C,Decl(wrappedAndRecursiveConstraints3.ts,0,0))
+>T : T, Symbol(T,Decl(wrappedAndRecursiveConstraints3.ts,2,8))
+>length : number, Symbol(length,Decl(wrappedAndRecursiveConstraints3.ts,2,19))
 
     constructor(x: T) { }
->x : T
->T : T
+>x : T, Symbol(x,Decl(wrappedAndRecursiveConstraints3.ts,3,16))
+>T : T, Symbol(T,Decl(wrappedAndRecursiveConstraints3.ts,2,8))
 
     foo<U extends T>(x: U) {
->foo : <U extends T>(x: U) => <V extends U>(x: V) => V
->U : U
->T : T
->x : U
->U : U
+>foo : <U extends T>(x: U) => <V extends U>(x: V) => V, Symbol(foo,Decl(wrappedAndRecursiveConstraints3.ts,3,25))
+>U : U, Symbol(U,Decl(wrappedAndRecursiveConstraints3.ts,4,8))
+>T : T, Symbol(T,Decl(wrappedAndRecursiveConstraints3.ts,2,8))
+>x : U, Symbol(x,Decl(wrappedAndRecursiveConstraints3.ts,4,21))
+>U : U, Symbol(U,Decl(wrappedAndRecursiveConstraints3.ts,4,8))
 
         function bar<V extends U>(x: V) {
->bar : <V extends U>(x: V) => V
->V : V
->U : U
->x : V
->V : V
+>bar : <V extends U>(x: V) => V, Symbol(bar,Decl(wrappedAndRecursiveConstraints3.ts,4,28))
+>V : V, Symbol(V,Decl(wrappedAndRecursiveConstraints3.ts,5,21))
+>U : U, Symbol(U,Decl(wrappedAndRecursiveConstraints3.ts,4,8))
+>x : V, Symbol(x,Decl(wrappedAndRecursiveConstraints3.ts,5,34))
+>V : V, Symbol(V,Decl(wrappedAndRecursiveConstraints3.ts,5,21))
 
             return x;
->x : V
+>x : V, Symbol(x,Decl(wrappedAndRecursiveConstraints3.ts,5,34))
         }
         return bar;
->bar : <V extends U>(x: V) => V
+>bar : <V extends U>(x: V) => V, Symbol(bar,Decl(wrappedAndRecursiveConstraints3.ts,4,28))
     }
 }
 
 var c = new C({ length: 2 });
->c : C<{ length: number; }>
+>c : C<{ length: number; }>, Symbol(c,Decl(wrappedAndRecursiveConstraints3.ts,12,3))
 >new C({ length: 2 }) : C<{ length: number; }>
->C : typeof C
+>C : typeof C, Symbol(C,Decl(wrappedAndRecursiveConstraints3.ts,0,0))
 >{ length: 2 } : { length: number; }
->length : number
+>length : number, Symbol(length,Decl(wrappedAndRecursiveConstraints3.ts,12,15))
 >2 : number
 
 var r = c.foo({ length: 3, charAt: (x: number) => { '' } });
->r : <V extends { length: number; charAt: (x: number) => void; }>(x: V) => V
+>r : <V extends { length: number; charAt: (x: number) => void; }>(x: V) => V, Symbol(r,Decl(wrappedAndRecursiveConstraints3.ts,13,3))
 >c.foo({ length: 3, charAt: (x: number) => { '' } }) : <V extends { length: number; charAt: (x: number) => void; }>(x: V) => V
->c.foo : <U extends { length: number; }>(x: U) => <V extends U>(x: V) => V
->c : C<{ length: number; }>
->foo : <U extends { length: number; }>(x: U) => <V extends U>(x: V) => V
+>c.foo : <U extends { length: number; }>(x: U) => <V extends U>(x: V) => V, Symbol(C.foo,Decl(wrappedAndRecursiveConstraints3.ts,3,25))
+>c : C<{ length: number; }>, Symbol(c,Decl(wrappedAndRecursiveConstraints3.ts,12,3))
+>foo : <U extends { length: number; }>(x: U) => <V extends U>(x: V) => V, Symbol(C.foo,Decl(wrappedAndRecursiveConstraints3.ts,3,25))
 >{ length: 3, charAt: (x: number) => { '' } } : { length: number; charAt: (x: number) => void; }
->length : number
+>length : number, Symbol(length,Decl(wrappedAndRecursiveConstraints3.ts,13,15))
 >3 : number
->charAt : (x: number) => void
+>charAt : (x: number) => void, Symbol(charAt,Decl(wrappedAndRecursiveConstraints3.ts,13,26))
 >(x: number) => { '' } : (x: number) => void
->x : number
+>x : number, Symbol(x,Decl(wrappedAndRecursiveConstraints3.ts,13,36))
 >'' : string
 
 var r2 = r('');
->r2 : string
+>r2 : string, Symbol(r2,Decl(wrappedAndRecursiveConstraints3.ts,14,3))
 >r('') : string
->r : <V extends { length: number; charAt: (x: number) => void; }>(x: V) => V
+>r : <V extends { length: number; charAt: (x: number) => void; }>(x: V) => V, Symbol(r,Decl(wrappedAndRecursiveConstraints3.ts,13,3))
 >'' : string
 

@@ -1,20 +1,20 @@
 === tests/cases/compiler/genericConstructSignatureInInterface.ts ===
 interface C {
->C : C
+>C : C, Symbol(C,Decl(genericConstructSignatureInInterface.ts,0,0))
 
     new <T>(x: T);
->T : T
->x : T
->T : T
+>T : T, Symbol(T,Decl(genericConstructSignatureInInterface.ts,1,9))
+>x : T, Symbol(x,Decl(genericConstructSignatureInInterface.ts,1,12))
+>T : T, Symbol(T,Decl(genericConstructSignatureInInterface.ts,1,9))
 }
 
 var v: C;
->v : C
->C : C
+>v : C, Symbol(v,Decl(genericConstructSignatureInInterface.ts,4,3))
+>C : C, Symbol(C,Decl(genericConstructSignatureInInterface.ts,0,0))
 
 var r = new v<number>(1);
->r : any
+>r : any, Symbol(r,Decl(genericConstructSignatureInInterface.ts,5,3))
 >new v<number>(1) : any
->v : C
+>v : C, Symbol(v,Decl(genericConstructSignatureInInterface.ts,4,3))
 >1 : number
 

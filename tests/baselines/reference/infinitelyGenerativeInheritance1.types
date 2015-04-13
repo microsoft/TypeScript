@@ -1,41 +1,41 @@
 === tests/cases/compiler/infinitelyGenerativeInheritance1.ts ===
 interface Stack<T> {
->Stack : Stack<T>
->T : T
+>Stack : Stack<T>, Symbol(Stack,Decl(infinitelyGenerativeInheritance1.ts,0,0))
+>T : T, Symbol(T,Decl(infinitelyGenerativeInheritance1.ts,0,16))
 
       pop(): T
->pop : () => T
->T : T
+>pop : () => T, Symbol(pop,Decl(infinitelyGenerativeInheritance1.ts,0,20))
+>T : T, Symbol(T,Decl(infinitelyGenerativeInheritance1.ts,0,16))
 
       zip<S>(a: Stack<S>): Stack<{ x: T; y: S }>
->zip : <S>(a: Stack<S>) => Stack<{ x: T; y: S; }>
->S : S
->a : Stack<S>
->Stack : Stack<T>
->S : S
->Stack : Stack<T>
->x : T
->T : T
->y : S
->S : S
+>zip : <S>(a: Stack<S>) => Stack<{ x: T; y: S; }>, Symbol(zip,Decl(infinitelyGenerativeInheritance1.ts,1,14))
+>S : S, Symbol(S,Decl(infinitelyGenerativeInheritance1.ts,2,10))
+>a : Stack<S>, Symbol(a,Decl(infinitelyGenerativeInheritance1.ts,2,13))
+>Stack : Stack<T>, Symbol(Stack,Decl(infinitelyGenerativeInheritance1.ts,0,0))
+>S : S, Symbol(S,Decl(infinitelyGenerativeInheritance1.ts,2,10))
+>Stack : Stack<T>, Symbol(Stack,Decl(infinitelyGenerativeInheritance1.ts,0,0))
+>x : T, Symbol(x,Decl(infinitelyGenerativeInheritance1.ts,2,34))
+>T : T, Symbol(T,Decl(infinitelyGenerativeInheritance1.ts,0,16))
+>y : S, Symbol(y,Decl(infinitelyGenerativeInheritance1.ts,2,40))
+>S : S, Symbol(S,Decl(infinitelyGenerativeInheritance1.ts,2,10))
 }
 
 interface MyStack<T> extends Stack<T> {
->MyStack : MyStack<T>
->T : T
->Stack : Stack<T>
->T : T
+>MyStack : MyStack<T>, Symbol(MyStack,Decl(infinitelyGenerativeInheritance1.ts,3,1))
+>T : T, Symbol(T,Decl(infinitelyGenerativeInheritance1.ts,5,18))
+>Stack : Stack<T>, Symbol(Stack,Decl(infinitelyGenerativeInheritance1.ts,0,0))
+>T : T, Symbol(T,Decl(infinitelyGenerativeInheritance1.ts,5,18))
 
       zip<S>(a: Stack<S>): Stack<{ x: T; y: S }>
->zip : <S>(a: Stack<S>) => Stack<{ x: T; y: S; }>
->S : S
->a : Stack<S>
->Stack : Stack<T>
->S : S
->Stack : Stack<T>
->x : T
->T : T
->y : S
->S : S
+>zip : <S>(a: Stack<S>) => Stack<{ x: T; y: S; }>, Symbol(zip,Decl(infinitelyGenerativeInheritance1.ts,5,39))
+>S : S, Symbol(S,Decl(infinitelyGenerativeInheritance1.ts,6,10))
+>a : Stack<S>, Symbol(a,Decl(infinitelyGenerativeInheritance1.ts,6,13))
+>Stack : Stack<T>, Symbol(Stack,Decl(infinitelyGenerativeInheritance1.ts,0,0))
+>S : S, Symbol(S,Decl(infinitelyGenerativeInheritance1.ts,6,10))
+>Stack : Stack<T>, Symbol(Stack,Decl(infinitelyGenerativeInheritance1.ts,0,0))
+>x : T, Symbol(x,Decl(infinitelyGenerativeInheritance1.ts,6,34))
+>T : T, Symbol(T,Decl(infinitelyGenerativeInheritance1.ts,5,18))
+>y : S, Symbol(y,Decl(infinitelyGenerativeInheritance1.ts,6,40))
+>S : S, Symbol(S,Decl(infinitelyGenerativeInheritance1.ts,6,10))
 }
 

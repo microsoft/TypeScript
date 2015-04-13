@@ -16,42 +16,42 @@ while (true) {
 }
 
 ONE:
->ONE : unknown
+>ONE : any
 
 while (true) {
 >true : boolean
 
     continue ONE;
->ONE : unknown
+>ONE : any
 }
 
 TWO:
->TWO : unknown
+>TWO : any
 
 THREE:
->THREE : unknown
+>THREE : any
 
 while (true) {
 >true : boolean
 
     continue THREE;
->THREE : unknown
+>THREE : any
 }
 
 FOUR:
->FOUR : unknown
+>FOUR : any
 
 while (true) {
 >true : boolean
 
     FIVE:
->FIVE : unknown
+>FIVE : any
 
     while (true) {
 >true : boolean
 
         continue FOUR;
->FOUR : unknown
+>FOUR : any
     }
 }
 
@@ -59,17 +59,17 @@ while (true) {
 >true : boolean
 
     SIX:
->SIX : unknown
+>SIX : any
 
     while (true)
 >true : boolean
 
         continue SIX;
->SIX : unknown
+>SIX : any
 }
 
 SEVEN:
->SEVEN : unknown
+>SEVEN : any
 
 while (true)
 >true : boolean
@@ -81,30 +81,30 @@ while (true)
 >true : boolean
 
             continue SEVEN;
->SEVEN : unknown
+>SEVEN : any
 
 EIGHT:
->EIGHT : unknown
+>EIGHT : any
 
 while (true) {
 >true : boolean
 
     var fn = function () { }
->fn : () => void
+>fn : () => void, Symbol(fn,Decl(whileContinueStatements.ts,44,7))
 >function () { } : () => void
 
     continue EIGHT;
->EIGHT : unknown
+>EIGHT : any
 }
 
 NINE:
->NINE : unknown
+>NINE : any
 
 while (true) {
 >true : boolean
 
     if (true) { continue NINE; }
 >true : boolean
->NINE : unknown
+>NINE : any
 }
 

@@ -1,64 +1,64 @@
 === tests/cases/conformance/expressions/superCalls/superCalls.ts ===
 class Base {
->Base : Base
+>Base : Base, Symbol(Base,Decl(superCalls.ts,0,0))
 
     x = 43;
->x : number
+>x : number, Symbol(x,Decl(superCalls.ts,0,12))
 >43 : number
 
     constructor(n: string) {
->n : string
+>n : string, Symbol(n,Decl(superCalls.ts,2,16))
 
     }
 }
 
 function v(): void { }
->v : () => void
+>v : () => void, Symbol(v,Decl(superCalls.ts,5,1))
 
 class Derived extends Base {
->Derived : Derived
->Base : Base
+>Derived : Derived, Symbol(Derived,Decl(superCalls.ts,7,22))
+>Base : Base, Symbol(Base,Decl(superCalls.ts,0,0))
 
     //super call in class constructor of derived type
     constructor(public q: number) {
->q : number
+>q : number, Symbol(q,Decl(superCalls.ts,11,16))
 
         super('');
 >super('') : void
->super : typeof Base
+>super : typeof Base, Symbol(Base,Decl(superCalls.ts,0,0))
 >'' : string
 
         //type of super call expression is void
         var p = super('');
->p : void
+>p : void, Symbol(p,Decl(superCalls.ts,14,11),Decl(superCalls.ts,15,11))
 >super('') : void
->super : typeof Base
+>super : typeof Base, Symbol(Base,Decl(superCalls.ts,0,0))
 >'' : string
 
         var p = v();
->p : void
+>p : void, Symbol(p,Decl(superCalls.ts,14,11),Decl(superCalls.ts,15,11))
 >v() : void
->v : () => void
+>v : () => void, Symbol(v,Decl(superCalls.ts,5,1))
     }
 }
 
 class OtherBase {
->OtherBase : OtherBase
+>OtherBase : OtherBase, Symbol(OtherBase,Decl(superCalls.ts,17,1))
 
 }
 
 class OtherDerived extends OtherBase {
->OtherDerived : OtherDerived
->OtherBase : OtherBase
+>OtherDerived : OtherDerived, Symbol(OtherDerived,Decl(superCalls.ts,21,1))
+>OtherBase : OtherBase, Symbol(OtherBase,Decl(superCalls.ts,17,1))
 
     constructor() {
         var p = '';
->p : string
+>p : string, Symbol(p,Decl(superCalls.ts,25,11))
 >'' : string
 
         super();
 >super() : void
->super : typeof OtherBase
+>super : typeof OtherBase, Symbol(OtherBase,Decl(superCalls.ts,17,1))
     }
 }
 

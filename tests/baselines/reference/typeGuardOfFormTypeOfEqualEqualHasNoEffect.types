@@ -1,82 +1,82 @@
 === tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts ===
 class C { private p: string };
->C : C
->p : string
+>C : C, Symbol(C,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,0,0))
+>p : string, Symbol(p,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,0,9))
 
 var strOrNum: string | number;
->strOrNum : string | number
+>strOrNum : string | number, Symbol(strOrNum,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,2,3))
 
 var strOrBool: string | boolean;
->strOrBool : string | boolean
+>strOrBool : string | boolean, Symbol(strOrBool,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,3,3))
 
 var numOrBool: number | boolean
->numOrBool : number | boolean
+>numOrBool : number | boolean, Symbol(numOrBool,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,4,3))
 
 var strOrC: string | C;
->strOrC : string | C
->C : C
+>strOrC : string | C, Symbol(strOrC,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,5,3))
+>C : C, Symbol(C,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,0,0))
 
 // typeof x == s has not effect on typeguard
 if (typeof strOrNum == "string") {
 >typeof strOrNum == "string" : boolean
 >typeof strOrNum : string
->strOrNum : string | number
+>strOrNum : string | number, Symbol(strOrNum,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,2,3))
 >"string" : string
 
     var r1 = strOrNum; // string | number
->r1 : string | number
->strOrNum : string | number
+>r1 : string | number, Symbol(r1,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,9,7),Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,12,7))
+>strOrNum : string | number, Symbol(strOrNum,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,2,3))
 }
 else {
     var r1 = strOrNum; // string | number
->r1 : string | number
->strOrNum : string | number
+>r1 : string | number, Symbol(r1,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,9,7),Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,12,7))
+>strOrNum : string | number, Symbol(strOrNum,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,2,3))
 }
 
 if (typeof strOrBool == "boolean") {
 >typeof strOrBool == "boolean" : boolean
 >typeof strOrBool : string
->strOrBool : string | boolean
+>strOrBool : string | boolean, Symbol(strOrBool,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,3,3))
 >"boolean" : string
 
     var r2 = strOrBool; // string | boolean
->r2 : string | boolean
->strOrBool : string | boolean
+>r2 : string | boolean, Symbol(r2,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,16,7),Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,19,7))
+>strOrBool : string | boolean, Symbol(strOrBool,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,3,3))
 }
 else {
     var r2 = strOrBool; // string | boolean
->r2 : string | boolean
->strOrBool : string | boolean
+>r2 : string | boolean, Symbol(r2,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,16,7),Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,19,7))
+>strOrBool : string | boolean, Symbol(strOrBool,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,3,3))
 }
 
 if (typeof numOrBool == "number") {
 >typeof numOrBool == "number" : boolean
 >typeof numOrBool : string
->numOrBool : number | boolean
+>numOrBool : number | boolean, Symbol(numOrBool,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,4,3))
 >"number" : string
 
     var r3 = numOrBool; // number | boolean
->r3 : number | boolean
->numOrBool : number | boolean
+>r3 : number | boolean, Symbol(r3,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,23,7),Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,26,7))
+>numOrBool : number | boolean, Symbol(numOrBool,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,4,3))
 }
 else {
     var r3 =  numOrBool; // number | boolean
->r3 : number | boolean
->numOrBool : number | boolean
+>r3 : number | boolean, Symbol(r3,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,23,7),Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,26,7))
+>numOrBool : number | boolean, Symbol(numOrBool,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,4,3))
 }
 
 if (typeof strOrC == "Object") {
 >typeof strOrC == "Object" : boolean
 >typeof strOrC : string
->strOrC : string | C
+>strOrC : string | C, Symbol(strOrC,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,5,3))
 >"Object" : string
 
     var r4 = strOrC; // string | C
->r4 : string | C
->strOrC : string | C
+>r4 : string | C, Symbol(r4,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,30,7),Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,33,7))
+>strOrC : string | C, Symbol(strOrC,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,5,3))
 }
 else {
     var r4 = strOrC; // string | C
->r4 : string | C
->strOrC : string | C
+>r4 : string | C, Symbol(r4,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,30,7),Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,33,7))
+>strOrC : string | C, Symbol(strOrC,Decl(typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts,5,3))
 }

@@ -1,19 +1,19 @@
 === tests/cases/compiler/Bar.ts ===
 import Error = require('Foo');
->Error : typeof Error
+>Error : typeof Error, Symbol(Error,Decl(Bar.ts,0,0))
 
 class Bar extends Error {}
->Bar : Bar
->Error : Error
+>Bar : Bar, Symbol(Bar,Decl(Bar.ts,0,30))
+>Error : Error, Symbol(Error,Decl(Bar.ts,0,0))
 
 export = Bar;
->Bar : Bar
+>Bar : Bar, Symbol(Bar,Decl(Bar.ts,0,30))
 
 === tests/cases/compiler/Foo.ts ===
 
 class Foo {}
->Foo : Foo
+>Foo : Foo, Symbol(Foo,Decl(Foo.ts,0,0))
 
 export = Foo;
->Foo : Foo
+>Foo : Foo, Symbol(Foo,Decl(Foo.ts,0,0))
 

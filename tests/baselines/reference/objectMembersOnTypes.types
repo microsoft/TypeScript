@@ -1,37 +1,37 @@
 === tests/cases/compiler/objectMembersOnTypes.ts ===
 interface I {}
->I : I
+>I : I, Symbol(I,Decl(objectMembersOnTypes.ts,0,0))
 
 class AAA implements I { }
->AAA : AAA
->I : I
+>AAA : AAA, Symbol(AAA,Decl(objectMembersOnTypes.ts,0,14))
+>I : I, Symbol(I,Decl(objectMembersOnTypes.ts,0,0))
 
 var x: number;
->x : number
+>x : number, Symbol(x,Decl(objectMembersOnTypes.ts,2,3))
 
 x.toString();
 >x.toString() : string
->x.toString : (radix?: number) => string
->x : number
->toString : (radix?: number) => string
+>x.toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
+>x : number, Symbol(x,Decl(objectMembersOnTypes.ts,2,3))
+>toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
 
 var i: I;
->i : I
->I : I
+>i : I, Symbol(i,Decl(objectMembersOnTypes.ts,4,3))
+>I : I, Symbol(I,Decl(objectMembersOnTypes.ts,0,0))
 
 i.toString(); // used to be an error
 >i.toString() : string
->i.toString : () => string
->i : I
->toString : () => string
+>i.toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
+>i : I, Symbol(i,Decl(objectMembersOnTypes.ts,4,3))
+>toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
 
 var c: AAA;
->c : AAA
->AAA : AAA
+>c : AAA, Symbol(c,Decl(objectMembersOnTypes.ts,6,3))
+>AAA : AAA, Symbol(AAA,Decl(objectMembersOnTypes.ts,0,14))
 
 c.toString(); // used to be an error
 >c.toString() : string
->c.toString : () => string
->c : AAA
->toString : () => string
+>c.toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
+>c : AAA, Symbol(c,Decl(objectMembersOnTypes.ts,6,3))
+>toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
 

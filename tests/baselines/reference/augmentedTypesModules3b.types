@@ -1,55 +1,55 @@
 === tests/cases/compiler/augmentedTypesModules3b.ts ===
 class m3b { foo() { } }
->m3b : m3b
->foo : () => void
+>m3b : m3b, Symbol(m3b,Decl(augmentedTypesModules3b.ts,0,0),Decl(augmentedTypesModules3b.ts,0,23))
+>foo : () => void, Symbol(foo,Decl(augmentedTypesModules3b.ts,0,11))
 
 module m3b { var y = 2; }
->m3b : typeof m3b
->y : number
+>m3b : typeof m3b, Symbol(m3b,Decl(augmentedTypesModules3b.ts,0,0),Decl(augmentedTypesModules3b.ts,0,23))
+>y : number, Symbol(y,Decl(augmentedTypesModules3b.ts,1,16))
 >2 : number
 
 class m3c { foo() { } }
->m3c : m3c
->foo : () => void
+>m3c : m3c, Symbol(m3c,Decl(augmentedTypesModules3b.ts,1,25),Decl(augmentedTypesModules3b.ts,3,23))
+>foo : () => void, Symbol(foo,Decl(augmentedTypesModules3b.ts,3,11))
 
 module m3c { export var y = 2; } 
->m3c : typeof m3c
->y : number
+>m3c : typeof m3c, Symbol(m3c,Decl(augmentedTypesModules3b.ts,1,25),Decl(augmentedTypesModules3b.ts,3,23))
+>y : number, Symbol(y,Decl(augmentedTypesModules3b.ts,4,23))
 >2 : number
 
 declare class m3d { foo(): void }
->m3d : m3d
->foo : () => void
+>m3d : m3d, Symbol(m3d,Decl(augmentedTypesModules3b.ts,4,32),Decl(augmentedTypesModules3b.ts,6,33))
+>foo : () => void, Symbol(foo,Decl(augmentedTypesModules3b.ts,6,19))
 
 module m3d { export var y = 2; } 
->m3d : typeof m3d
->y : number
+>m3d : typeof m3d, Symbol(m3d,Decl(augmentedTypesModules3b.ts,4,32),Decl(augmentedTypesModules3b.ts,6,33))
+>y : number, Symbol(y,Decl(augmentedTypesModules3b.ts,7,23))
 >2 : number
 
 module m3e { export var y = 2; } 
->m3e : typeof m3e
->y : number
+>m3e : typeof m3e, Symbol(m3e,Decl(augmentedTypesModules3b.ts,7,32),Decl(augmentedTypesModules3b.ts,9,32))
+>y : number, Symbol(y,Decl(augmentedTypesModules3b.ts,9,23))
 >2 : number
 
 declare class m3e { foo(): void } 
->m3e : m3e
->foo : () => void
+>m3e : m3e, Symbol(m3e,Decl(augmentedTypesModules3b.ts,7,32),Decl(augmentedTypesModules3b.ts,9,32))
+>foo : () => void, Symbol(foo,Decl(augmentedTypesModules3b.ts,10,19))
 
 declare class m3f { foo(): void }
->m3f : m3f
->foo : () => void
+>m3f : m3f, Symbol(m3f,Decl(augmentedTypesModules3b.ts,10,33),Decl(augmentedTypesModules3b.ts,12,33))
+>foo : () => void, Symbol(foo,Decl(augmentedTypesModules3b.ts,12,19))
 
 module m3f { export interface I { foo(): void } }
->m3f : typeof m3f
->I : I
->foo : () => void
+>m3f : typeof m3f, Symbol(m3f,Decl(augmentedTypesModules3b.ts,10,33),Decl(augmentedTypesModules3b.ts,12,33))
+>I : I, Symbol(I,Decl(augmentedTypesModules3b.ts,13,12))
+>foo : () => void, Symbol(foo,Decl(augmentedTypesModules3b.ts,13,33))
 
 declare class m3g { foo(): void }
->m3g : m3g
->foo : () => void
+>m3g : m3g, Symbol(m3g,Decl(augmentedTypesModules3b.ts,13,49),Decl(augmentedTypesModules3b.ts,15,33))
+>foo : () => void, Symbol(foo,Decl(augmentedTypesModules3b.ts,15,19))
 
 module m3g { export class C { foo() { } } }
->m3g : typeof m3g
->C : C
->foo : () => void
+>m3g : typeof m3g, Symbol(m3g,Decl(augmentedTypesModules3b.ts,13,49),Decl(augmentedTypesModules3b.ts,15,33))
+>C : C, Symbol(C,Decl(augmentedTypesModules3b.ts,16,12))
+>foo : () => void, Symbol(foo,Decl(augmentedTypesModules3b.ts,16,29))
 

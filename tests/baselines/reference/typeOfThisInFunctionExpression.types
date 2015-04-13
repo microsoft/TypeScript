@@ -2,106 +2,106 @@
 // type of 'this' in FunctionExpression is Any
 
 function fn() {
->fn : () => void
+>fn : () => void, Symbol(fn,Decl(typeOfThisInFunctionExpression.ts,0,0))
 
     var p = this;
->p : any
+>p : any, Symbol(p,Decl(typeOfThisInFunctionExpression.ts,3,7),Decl(typeOfThisInFunctionExpression.ts,4,7))
 >this : any
 
     var p: any;
->p : any
+>p : any, Symbol(p,Decl(typeOfThisInFunctionExpression.ts,3,7),Decl(typeOfThisInFunctionExpression.ts,4,7))
 }
 
 var t = function () {
->t : () => void
+>t : () => void, Symbol(t,Decl(typeOfThisInFunctionExpression.ts,7,3))
 >function () {    var p = this;    var p: any;} : () => void
 
     var p = this;
->p : any
+>p : any, Symbol(p,Decl(typeOfThisInFunctionExpression.ts,8,7),Decl(typeOfThisInFunctionExpression.ts,9,7))
 >this : any
 
     var p: any;
->p : any
+>p : any, Symbol(p,Decl(typeOfThisInFunctionExpression.ts,8,7),Decl(typeOfThisInFunctionExpression.ts,9,7))
 }
 
 var t2 = function f() {
->t2 : () => void
+>t2 : () => void, Symbol(t2,Decl(typeOfThisInFunctionExpression.ts,12,3))
 >function f() {    var x = this;    var x: any;} : () => void
->f : () => void
+>f : () => void, Symbol(f,Decl(typeOfThisInFunctionExpression.ts,12,8))
 
     var x = this;
->x : any
+>x : any, Symbol(x,Decl(typeOfThisInFunctionExpression.ts,13,7),Decl(typeOfThisInFunctionExpression.ts,14,7))
 >this : any
 
     var x: any;
->x : any
+>x : any, Symbol(x,Decl(typeOfThisInFunctionExpression.ts,13,7),Decl(typeOfThisInFunctionExpression.ts,14,7))
 }
 
 class C {
->C : C
+>C : C, Symbol(C,Decl(typeOfThisInFunctionExpression.ts,15,1))
 
     x = function () {
->x : () => void
+>x : () => void, Symbol(x,Decl(typeOfThisInFunctionExpression.ts,17,9))
 >function () {        var q: any;        var q = this;    } : () => void
 
         var q: any;
->q : any
+>q : any, Symbol(q,Decl(typeOfThisInFunctionExpression.ts,19,11),Decl(typeOfThisInFunctionExpression.ts,20,11))
 
         var q = this;
->q : any
+>q : any, Symbol(q,Decl(typeOfThisInFunctionExpression.ts,19,11),Decl(typeOfThisInFunctionExpression.ts,20,11))
 >this : any
     }
     y = function ff() {
->y : () => void
+>y : () => void, Symbol(y,Decl(typeOfThisInFunctionExpression.ts,21,5))
 >function ff() {        var q: any;        var q = this;    } : () => void
->ff : () => void
+>ff : () => void, Symbol(ff,Decl(typeOfThisInFunctionExpression.ts,22,7))
 
         var q: any;
->q : any
+>q : any, Symbol(q,Decl(typeOfThisInFunctionExpression.ts,23,11),Decl(typeOfThisInFunctionExpression.ts,24,11))
 
         var q = this;
->q : any
+>q : any, Symbol(q,Decl(typeOfThisInFunctionExpression.ts,23,11),Decl(typeOfThisInFunctionExpression.ts,24,11))
 >this : any
     }
 }
 
 module M {
->M : typeof M
+>M : typeof M, Symbol(M,Decl(typeOfThisInFunctionExpression.ts,26,1))
 
     function fn() {
->fn : () => void
+>fn : () => void, Symbol(fn,Decl(typeOfThisInFunctionExpression.ts,28,10))
 
         var p = this;
->p : any
+>p : any, Symbol(p,Decl(typeOfThisInFunctionExpression.ts,30,11),Decl(typeOfThisInFunctionExpression.ts,31,11))
 >this : any
 
         var p: any;
->p : any
+>p : any, Symbol(p,Decl(typeOfThisInFunctionExpression.ts,30,11),Decl(typeOfThisInFunctionExpression.ts,31,11))
     }
 
     var t = function () {
->t : () => void
+>t : () => void, Symbol(t,Decl(typeOfThisInFunctionExpression.ts,34,7))
 >function () {        var p = this;        var p: any;    } : () => void
 
         var p = this;
->p : any
+>p : any, Symbol(p,Decl(typeOfThisInFunctionExpression.ts,35,11),Decl(typeOfThisInFunctionExpression.ts,36,11))
 >this : any
 
         var p: any;
->p : any
+>p : any, Symbol(p,Decl(typeOfThisInFunctionExpression.ts,35,11),Decl(typeOfThisInFunctionExpression.ts,36,11))
     }
 
     var t2 = function f() {
->t2 : () => void
+>t2 : () => void, Symbol(t2,Decl(typeOfThisInFunctionExpression.ts,39,7))
 >function f() {        var x = this;        var x: any;    } : () => void
->f : () => void
+>f : () => void, Symbol(f,Decl(typeOfThisInFunctionExpression.ts,39,12))
 
         var x = this;
->x : any
+>x : any, Symbol(x,Decl(typeOfThisInFunctionExpression.ts,40,11),Decl(typeOfThisInFunctionExpression.ts,41,11))
 >this : any
 
         var x: any;
->x : any
+>x : any, Symbol(x,Decl(typeOfThisInFunctionExpression.ts,40,11),Decl(typeOfThisInFunctionExpression.ts,41,11))
     }
 
 }

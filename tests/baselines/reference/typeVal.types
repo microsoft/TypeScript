@@ -1,23 +1,23 @@
 === tests/cases/compiler/typeVal.ts ===
 interface I {
->I : I
+>I : I, Symbol(I,Decl(typeVal.ts,0,0),Decl(typeVal.ts,4,3))
 
     I:number;
->I : number
+>I : number, Symbol(I,Decl(typeVal.ts,0,13))
 }
 
 var I:I = { I: 3};
->I : I
->I : I
+>I : I, Symbol(I,Decl(typeVal.ts,0,0),Decl(typeVal.ts,4,3))
+>I : I, Symbol(I,Decl(typeVal.ts,0,0),Decl(typeVal.ts,4,3))
 >{ I: 3} : { I: number; }
->I : number
+>I : number, Symbol(I,Decl(typeVal.ts,4,11))
 >3 : number
 
 I.I=4;
 >I.I=4 : number
->I.I : number
->I : I
->I : number
+>I.I : number, Symbol(I.I,Decl(typeVal.ts,0,13))
+>I : I, Symbol(I,Decl(typeVal.ts,0,0),Decl(typeVal.ts,4,3))
+>I : number, Symbol(I.I,Decl(typeVal.ts,0,13))
 >4 : number
 
 

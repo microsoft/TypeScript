@@ -1,17 +1,17 @@
 === tests/cases/compiler/functionOverloads23.ts ===
 function foo(bar:(b:string)=>void);
->foo : { (bar: (b: string) => void): any; (bar: (a: number) => void): any; }
->bar : (b: string) => void
->b : string
+>foo : { (bar: (b: string) => void): any; (bar: (a: number) => void): any; }, Symbol(foo,Decl(functionOverloads23.ts,0,0),Decl(functionOverloads23.ts,0,35),Decl(functionOverloads23.ts,1,35))
+>bar : (b: string) => void, Symbol(bar,Decl(functionOverloads23.ts,0,13))
+>b : string, Symbol(b,Decl(functionOverloads23.ts,0,18))
 
 function foo(bar:(a:number)=>void);
->foo : { (bar: (b: string) => void): any; (bar: (a: number) => void): any; }
->bar : (a: number) => void
->a : number
+>foo : { (bar: (b: string) => void): any; (bar: (a: number) => void): any; }, Symbol(foo,Decl(functionOverloads23.ts,0,0),Decl(functionOverloads23.ts,0,35),Decl(functionOverloads23.ts,1,35))
+>bar : (a: number) => void, Symbol(bar,Decl(functionOverloads23.ts,1,13))
+>a : number, Symbol(a,Decl(functionOverloads23.ts,1,18))
 
 function foo(bar:(a?)=>void) { return 0 }
->foo : { (bar: (b: string) => void): any; (bar: (a: number) => void): any; }
->bar : (a?: any) => void
->a : any
+>foo : { (bar: (b: string) => void): any; (bar: (a: number) => void): any; }, Symbol(foo,Decl(functionOverloads23.ts,0,0),Decl(functionOverloads23.ts,0,35),Decl(functionOverloads23.ts,1,35))
+>bar : (a?: any) => void, Symbol(bar,Decl(functionOverloads23.ts,2,13))
+>a : any, Symbol(a,Decl(functionOverloads23.ts,2,18))
 >0 : number
 

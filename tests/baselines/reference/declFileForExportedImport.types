@@ -1,25 +1,25 @@
 === tests/cases/compiler/declFileForExportedImport_1.ts ===
 ///<reference path='declFileForExportedImport_0.ts'/>
 export import a = require('declFileForExportedImport_0');
->a : typeof a
+>a : typeof a, Symbol(a,Decl(declFileForExportedImport_1.ts,0,0))
 
 var y = a.x;
->y : number
->a.x : number
->a : typeof a
->x : number
+>y : number, Symbol(y,Decl(declFileForExportedImport_1.ts,2,3))
+>a.x : number, Symbol(a.x,Decl(declFileForExportedImport_0.ts,0,10))
+>a : typeof a, Symbol(a,Decl(declFileForExportedImport_1.ts,0,0))
+>x : number, Symbol(a.x,Decl(declFileForExportedImport_0.ts,0,10))
 
 export import b = a;
->b : typeof a
->a : typeof a
+>b : typeof a, Symbol(b,Decl(declFileForExportedImport_1.ts,2,12))
+>a : typeof a, Symbol(a,Decl(declFileForExportedImport_0.ts,0,0))
 
 var z = b.x;
->z : number
->b.x : number
->b : typeof a
->x : number
+>z : number, Symbol(z,Decl(declFileForExportedImport_1.ts,5,3))
+>b.x : number, Symbol(a.x,Decl(declFileForExportedImport_0.ts,0,10))
+>b : typeof a, Symbol(b,Decl(declFileForExportedImport_1.ts,2,12))
+>x : number, Symbol(a.x,Decl(declFileForExportedImport_0.ts,0,10))
 
 === tests/cases/compiler/declFileForExportedImport_0.ts ===
 export var x: number;
->x : number
+>x : number, Symbol(x,Decl(declFileForExportedImport_0.ts,0,10))
 

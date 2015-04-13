@@ -3,38 +3,38 @@
 
 // returns { s?: number; }
 function f<T>(a: T) {
->f : <T>(a: T) => { s?: number; }
->T : T
->a : T
->T : T
+>f : <T>(a: T) => { s?: number; }, Symbol(f,Decl(subtypingWithOptionalProperties.ts,0,0))
+>T : T, Symbol(T,Decl(subtypingWithOptionalProperties.ts,3,11))
+>a : T, Symbol(a,Decl(subtypingWithOptionalProperties.ts,3,14))
+>T : T, Symbol(T,Decl(subtypingWithOptionalProperties.ts,3,11))
 
     var b: { s?: number } = a;
->b : { s?: number; }
->s : number
->a : T
+>b : { s?: number; }, Symbol(b,Decl(subtypingWithOptionalProperties.ts,4,7))
+>s : number, Symbol(s,Decl(subtypingWithOptionalProperties.ts,4,12))
+>a : T, Symbol(a,Decl(subtypingWithOptionalProperties.ts,3,14))
 
     return b;
->b : { s?: number; }
+>b : { s?: number; }, Symbol(b,Decl(subtypingWithOptionalProperties.ts,4,7))
 }
 
 var r = f({ s: new Object() }); // ok
->r : { s?: number; }
+>r : { s?: number; }, Symbol(r,Decl(subtypingWithOptionalProperties.ts,8,3))
 >f({ s: new Object() }) : { s?: number; }
->f : <T>(a: T) => { s?: number; }
+>f : <T>(a: T) => { s?: number; }, Symbol(f,Decl(subtypingWithOptionalProperties.ts,0,0))
 >{ s: new Object() } : { s: Object; }
->s : Object
+>s : Object, Symbol(s,Decl(subtypingWithOptionalProperties.ts,8,11))
 >new Object() : Object
->Object : ObjectConstructor
+>Object : ObjectConstructor, Symbol(Object,Decl(lib.d.ts,92,1),Decl(lib.d.ts,223,11))
 
 r.s && r.s.toFixed(); // would blow up at runtime
 >r.s && r.s.toFixed() : string
->r.s : number
->r : { s?: number; }
->s : number
+>r.s : number, Symbol(s,Decl(subtypingWithOptionalProperties.ts,4,12))
+>r : { s?: number; }, Symbol(r,Decl(subtypingWithOptionalProperties.ts,8,3))
+>s : number, Symbol(s,Decl(subtypingWithOptionalProperties.ts,4,12))
 >r.s.toFixed() : string
->r.s.toFixed : (fractionDigits?: number) => string
->r.s : number
->r : { s?: number; }
->s : number
->toFixed : (fractionDigits?: number) => string
+>r.s.toFixed : (fractionDigits?: number) => string, Symbol(Number.toFixed,Decl(lib.d.ts,463,37))
+>r.s : number, Symbol(s,Decl(subtypingWithOptionalProperties.ts,4,12))
+>r : { s?: number; }, Symbol(r,Decl(subtypingWithOptionalProperties.ts,8,3))
+>s : number, Symbol(s,Decl(subtypingWithOptionalProperties.ts,4,12))
+>toFixed : (fractionDigits?: number) => string, Symbol(Number.toFixed,Decl(lib.d.ts,463,37))
 

@@ -1,71 +1,71 @@
 === tests/cases/compiler/chainedSpecializationToObjectTypeLiteral.ts ===
 interface Sequence<T> {
->Sequence : Sequence<T>
->T : T
+>Sequence : Sequence<T>, Symbol(Sequence,Decl(chainedSpecializationToObjectTypeLiteral.ts,0,0))
+>T : T, Symbol(T,Decl(chainedSpecializationToObjectTypeLiteral.ts,0,19))
 
     each(iterator: (value: T) => void): void;
->each : (iterator: (value: T) => void) => void
->iterator : (value: T) => void
->value : T
->T : T
+>each : (iterator: (value: T) => void) => void, Symbol(each,Decl(chainedSpecializationToObjectTypeLiteral.ts,0,23))
+>iterator : (value: T) => void, Symbol(iterator,Decl(chainedSpecializationToObjectTypeLiteral.ts,1,9))
+>value : T, Symbol(value,Decl(chainedSpecializationToObjectTypeLiteral.ts,1,20))
+>T : T, Symbol(T,Decl(chainedSpecializationToObjectTypeLiteral.ts,0,19))
 
     map<U>(iterator: (value: T) => U): Sequence<U>;
->map : <U>(iterator: (value: T) => U) => Sequence<U>
->U : U
->iterator : (value: T) => U
->value : T
->T : T
->U : U
->Sequence : Sequence<T>
->U : U
+>map : <U>(iterator: (value: T) => U) => Sequence<U>, Symbol(map,Decl(chainedSpecializationToObjectTypeLiteral.ts,1,45))
+>U : U, Symbol(U,Decl(chainedSpecializationToObjectTypeLiteral.ts,2,8))
+>iterator : (value: T) => U, Symbol(iterator,Decl(chainedSpecializationToObjectTypeLiteral.ts,2,11))
+>value : T, Symbol(value,Decl(chainedSpecializationToObjectTypeLiteral.ts,2,22))
+>T : T, Symbol(T,Decl(chainedSpecializationToObjectTypeLiteral.ts,0,19))
+>U : U, Symbol(U,Decl(chainedSpecializationToObjectTypeLiteral.ts,2,8))
+>Sequence : Sequence<T>, Symbol(Sequence,Decl(chainedSpecializationToObjectTypeLiteral.ts,0,0))
+>U : U, Symbol(U,Decl(chainedSpecializationToObjectTypeLiteral.ts,2,8))
 
     filter(iterator: (value: T) => boolean): Sequence<T>;
->filter : (iterator: (value: T) => boolean) => Sequence<T>
->iterator : (value: T) => boolean
->value : T
->T : T
->Sequence : Sequence<T>
->T : T
+>filter : (iterator: (value: T) => boolean) => Sequence<T>, Symbol(filter,Decl(chainedSpecializationToObjectTypeLiteral.ts,2,51))
+>iterator : (value: T) => boolean, Symbol(iterator,Decl(chainedSpecializationToObjectTypeLiteral.ts,3,11))
+>value : T, Symbol(value,Decl(chainedSpecializationToObjectTypeLiteral.ts,3,22))
+>T : T, Symbol(T,Decl(chainedSpecializationToObjectTypeLiteral.ts,0,19))
+>Sequence : Sequence<T>, Symbol(Sequence,Decl(chainedSpecializationToObjectTypeLiteral.ts,0,0))
+>T : T, Symbol(T,Decl(chainedSpecializationToObjectTypeLiteral.ts,0,19))
 
     groupBy<K>(keySelector: (value: T) => K): Sequence<{ key: K; items: T[]; }>;
->groupBy : <K>(keySelector: (value: T) => K) => Sequence<{ key: K; items: T[]; }>
->K : K
->keySelector : (value: T) => K
->value : T
->T : T
->K : K
->Sequence : Sequence<T>
->key : K
->K : K
->items : T[]
->T : T
+>groupBy : <K>(keySelector: (value: T) => K) => Sequence<{ key: K; items: T[]; }>, Symbol(groupBy,Decl(chainedSpecializationToObjectTypeLiteral.ts,3,57))
+>K : K, Symbol(K,Decl(chainedSpecializationToObjectTypeLiteral.ts,4,12))
+>keySelector : (value: T) => K, Symbol(keySelector,Decl(chainedSpecializationToObjectTypeLiteral.ts,4,15))
+>value : T, Symbol(value,Decl(chainedSpecializationToObjectTypeLiteral.ts,4,29))
+>T : T, Symbol(T,Decl(chainedSpecializationToObjectTypeLiteral.ts,0,19))
+>K : K, Symbol(K,Decl(chainedSpecializationToObjectTypeLiteral.ts,4,12))
+>Sequence : Sequence<T>, Symbol(Sequence,Decl(chainedSpecializationToObjectTypeLiteral.ts,0,0))
+>key : K, Symbol(key,Decl(chainedSpecializationToObjectTypeLiteral.ts,4,56))
+>K : K, Symbol(K,Decl(chainedSpecializationToObjectTypeLiteral.ts,4,12))
+>items : T[], Symbol(items,Decl(chainedSpecializationToObjectTypeLiteral.ts,4,64))
+>T : T, Symbol(T,Decl(chainedSpecializationToObjectTypeLiteral.ts,0,19))
 }
 
 var s: Sequence<string>;
->s : Sequence<string>
->Sequence : Sequence<T>
+>s : Sequence<string>, Symbol(s,Decl(chainedSpecializationToObjectTypeLiteral.ts,7,3))
+>Sequence : Sequence<T>, Symbol(Sequence,Decl(chainedSpecializationToObjectTypeLiteral.ts,0,0))
 
 var s2 = s.groupBy(s => s.length);
->s2 : Sequence<{ key: number; items: string[]; }>
+>s2 : Sequence<{ key: number; items: string[]; }>, Symbol(s2,Decl(chainedSpecializationToObjectTypeLiteral.ts,8,3))
 >s.groupBy(s => s.length) : Sequence<{ key: number; items: string[]; }>
->s.groupBy : <K>(keySelector: (value: string) => K) => Sequence<{ key: K; items: string[]; }>
->s : Sequence<string>
->groupBy : <K>(keySelector: (value: string) => K) => Sequence<{ key: K; items: string[]; }>
+>s.groupBy : <K>(keySelector: (value: string) => K) => Sequence<{ key: K; items: string[]; }>, Symbol(Sequence.groupBy,Decl(chainedSpecializationToObjectTypeLiteral.ts,3,57))
+>s : Sequence<string>, Symbol(s,Decl(chainedSpecializationToObjectTypeLiteral.ts,7,3))
+>groupBy : <K>(keySelector: (value: string) => K) => Sequence<{ key: K; items: string[]; }>, Symbol(Sequence.groupBy,Decl(chainedSpecializationToObjectTypeLiteral.ts,3,57))
 >s => s.length : (s: string) => number
->s : string
->s.length : number
->s : string
->length : number
+>s : string, Symbol(s,Decl(chainedSpecializationToObjectTypeLiteral.ts,8,19))
+>s.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>s : string, Symbol(s,Decl(chainedSpecializationToObjectTypeLiteral.ts,8,19))
+>length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
 
 var s3 = s2.each(x => { x.key /* Type is K, should be number */ });
->s3 : void
+>s3 : void, Symbol(s3,Decl(chainedSpecializationToObjectTypeLiteral.ts,9,3))
 >s2.each(x => { x.key /* Type is K, should be number */ }) : void
->s2.each : (iterator: (value: { key: number; items: string[]; }) => void) => void
->s2 : Sequence<{ key: number; items: string[]; }>
->each : (iterator: (value: { key: number; items: string[]; }) => void) => void
+>s2.each : (iterator: (value: { key: number; items: string[]; }) => void) => void, Symbol(Sequence.each,Decl(chainedSpecializationToObjectTypeLiteral.ts,0,23))
+>s2 : Sequence<{ key: number; items: string[]; }>, Symbol(s2,Decl(chainedSpecializationToObjectTypeLiteral.ts,8,3))
+>each : (iterator: (value: { key: number; items: string[]; }) => void) => void, Symbol(Sequence.each,Decl(chainedSpecializationToObjectTypeLiteral.ts,0,23))
 >x => { x.key /* Type is K, should be number */ } : (x: { key: number; items: string[]; }) => void
->x : { key: number; items: string[]; }
->x.key : number
->x : { key: number; items: string[]; }
->key : number
+>x : { key: number; items: string[]; }, Symbol(x,Decl(chainedSpecializationToObjectTypeLiteral.ts,9,17))
+>x.key : number, Symbol(key,Decl(chainedSpecializationToObjectTypeLiteral.ts,4,56))
+>x : { key: number; items: string[]; }, Symbol(x,Decl(chainedSpecializationToObjectTypeLiteral.ts,9,17))
+>key : number, Symbol(key,Decl(chainedSpecializationToObjectTypeLiteral.ts,4,56))
 

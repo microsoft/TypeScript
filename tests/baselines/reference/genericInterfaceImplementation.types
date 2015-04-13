@@ -1,43 +1,43 @@
 === tests/cases/compiler/genericInterfaceImplementation.ts ===
 interface IOption<A> {
->IOption : IOption<A>
->A : A
+>IOption : IOption<A>, Symbol(IOption,Decl(genericInterfaceImplementation.ts,0,0))
+>A : A, Symbol(A,Decl(genericInterfaceImplementation.ts,0,18))
 
     get(): A;
->get : () => A
->A : A
+>get : () => A, Symbol(get,Decl(genericInterfaceImplementation.ts,0,22))
+>A : A, Symbol(A,Decl(genericInterfaceImplementation.ts,0,18))
 
     flatten<B>(): IOption<B>;
->flatten : <B>() => IOption<B>
->B : B
->IOption : IOption<A>
->B : B
+>flatten : <B>() => IOption<B>, Symbol(flatten,Decl(genericInterfaceImplementation.ts,1,13))
+>B : B, Symbol(B,Decl(genericInterfaceImplementation.ts,3,12))
+>IOption : IOption<A>, Symbol(IOption,Decl(genericInterfaceImplementation.ts,0,0))
+>B : B, Symbol(B,Decl(genericInterfaceImplementation.ts,3,12))
 }
 
 class None<T> implements IOption<T>{
->None : None<T>
->T : T
->IOption : IOption<A>
->T : T
+>None : None<T>, Symbol(None,Decl(genericInterfaceImplementation.ts,4,1))
+>T : T, Symbol(T,Decl(genericInterfaceImplementation.ts,6,11))
+>IOption : IOption<A>, Symbol(IOption,Decl(genericInterfaceImplementation.ts,0,0))
+>T : T, Symbol(T,Decl(genericInterfaceImplementation.ts,6,11))
 
     get(): T {
->get : () => T
->T : T
+>get : () => T, Symbol(get,Decl(genericInterfaceImplementation.ts,6,36))
+>T : T, Symbol(T,Decl(genericInterfaceImplementation.ts,6,11))
 
         throw null;
 >null : null
     }
 
     flatten<U>() : IOption<U> {
->flatten : <U>() => IOption<U>
->U : U
->IOption : IOption<A>
->U : U
+>flatten : <U>() => IOption<U>, Symbol(flatten,Decl(genericInterfaceImplementation.ts,9,5))
+>U : U, Symbol(U,Decl(genericInterfaceImplementation.ts,11,12))
+>IOption : IOption<A>, Symbol(IOption,Decl(genericInterfaceImplementation.ts,0,0))
+>U : U, Symbol(U,Decl(genericInterfaceImplementation.ts,11,12))
 
         return new None<U>();
 >new None<U>() : None<U>
->None : typeof None
->U : U
+>None : typeof None, Symbol(None,Decl(genericInterfaceImplementation.ts,4,1))
+>U : U, Symbol(U,Decl(genericInterfaceImplementation.ts,11,12))
     }
 }
 

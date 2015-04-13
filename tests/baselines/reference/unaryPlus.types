@@ -1,42 +1,42 @@
 === tests/cases/compiler/unaryPlus.ts ===
 // allowed per spec
 var a = +1;
->a : number
+>a : number, Symbol(a,Decl(unaryPlus.ts,1,3))
 >+1 : number
 >1 : number
 
 var b = +(<any>"");
->b : number
+>b : number, Symbol(b,Decl(unaryPlus.ts,2,3))
 >+(<any>"") : number
 >(<any>"") : any
 ><any>"" : any
 >"" : string
 
 enum E { some, thing };
->E : E
->some : E
->thing : E
+>E : E, Symbol(E,Decl(unaryPlus.ts,2,19))
+>some : E, Symbol(E.some,Decl(unaryPlus.ts,3,8))
+>thing : E, Symbol(E.thing,Decl(unaryPlus.ts,3,14))
 
 var c = +E.some;
->c : number
+>c : number, Symbol(c,Decl(unaryPlus.ts,4,3))
 >+E.some : number
->E.some : E
->E : typeof E
->some : E
+>E.some : E, Symbol(E.some,Decl(unaryPlus.ts,3,8))
+>E : typeof E, Symbol(E,Decl(unaryPlus.ts,2,19))
+>some : E, Symbol(E.some,Decl(unaryPlus.ts,3,8))
 
 // also allowed, used to be errors
 var x = +"3"; //should be valid
->x : number
+>x : number, Symbol(x,Decl(unaryPlus.ts,7,3))
 >+"3" : number
 >"3" : string
 
 var y = -"3"; // should be valid
->y : number
+>y : number, Symbol(y,Decl(unaryPlus.ts,8,3))
 >-"3" : number
 >"3" : string
 
 var z = ~"3"; // should be valid
->z : number
+>z : number, Symbol(z,Decl(unaryPlus.ts,9,3))
 >~"3" : number
 >"3" : string
 

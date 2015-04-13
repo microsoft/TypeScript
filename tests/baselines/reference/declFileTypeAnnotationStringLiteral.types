@@ -1,32 +1,32 @@
 === tests/cases/compiler/declFileTypeAnnotationStringLiteral.ts ===
 
 function foo(a: "hello"): number;
->foo : { (a: "hello"): number; (a: "name"): string; (a: string): string | number; }
->a : "hello"
+>foo : { (a: "hello"): number; (a: "name"): string; (a: string): string | number; }, Symbol(foo,Decl(declFileTypeAnnotationStringLiteral.ts,0,0),Decl(declFileTypeAnnotationStringLiteral.ts,1,33),Decl(declFileTypeAnnotationStringLiteral.ts,2,32),Decl(declFileTypeAnnotationStringLiteral.ts,3,41))
+>a : "hello", Symbol(a,Decl(declFileTypeAnnotationStringLiteral.ts,1,13))
 
 function foo(a: "name"): string;
->foo : { (a: "hello"): number; (a: "name"): string; (a: string): string | number; }
->a : "name"
+>foo : { (a: "hello"): number; (a: "name"): string; (a: string): string | number; }, Symbol(foo,Decl(declFileTypeAnnotationStringLiteral.ts,0,0),Decl(declFileTypeAnnotationStringLiteral.ts,1,33),Decl(declFileTypeAnnotationStringLiteral.ts,2,32),Decl(declFileTypeAnnotationStringLiteral.ts,3,41))
+>a : "name", Symbol(a,Decl(declFileTypeAnnotationStringLiteral.ts,2,13))
 
 function foo(a: string): string | number;
->foo : { (a: "hello"): number; (a: "name"): string; (a: string): string | number; }
->a : string
+>foo : { (a: "hello"): number; (a: "name"): string; (a: string): string | number; }, Symbol(foo,Decl(declFileTypeAnnotationStringLiteral.ts,0,0),Decl(declFileTypeAnnotationStringLiteral.ts,1,33),Decl(declFileTypeAnnotationStringLiteral.ts,2,32),Decl(declFileTypeAnnotationStringLiteral.ts,3,41))
+>a : string, Symbol(a,Decl(declFileTypeAnnotationStringLiteral.ts,3,13))
 
 function foo(a: string): string | number {
->foo : { (a: "hello"): number; (a: "name"): string; (a: string): string | number; }
->a : string
+>foo : { (a: "hello"): number; (a: "name"): string; (a: string): string | number; }, Symbol(foo,Decl(declFileTypeAnnotationStringLiteral.ts,0,0),Decl(declFileTypeAnnotationStringLiteral.ts,1,33),Decl(declFileTypeAnnotationStringLiteral.ts,2,32),Decl(declFileTypeAnnotationStringLiteral.ts,3,41))
+>a : string, Symbol(a,Decl(declFileTypeAnnotationStringLiteral.ts,4,13))
 
     if (a === "hello") {
 >a === "hello" : boolean
->a : string
+>a : string, Symbol(a,Decl(declFileTypeAnnotationStringLiteral.ts,4,13))
 >"hello" : string
 
         return a.length;
->a.length : number
->a : string
->length : number
+>a.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>a : string, Symbol(a,Decl(declFileTypeAnnotationStringLiteral.ts,4,13))
+>length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
     }
 
     return a;
->a : string
+>a : string, Symbol(a,Decl(declFileTypeAnnotationStringLiteral.ts,4,13))
 }

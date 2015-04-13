@@ -2,68 +2,68 @@
 // basic uses of function literals with overloads
 
 var f: {
->f : { (x: string): string; (x: number): number; }
+>f : { (x: string): string; (x: number): number; }, Symbol(f,Decl(functionLiteralForOverloads.ts,2,3))
 
     (x: string): string;
->x : string
+>x : string, Symbol(x,Decl(functionLiteralForOverloads.ts,3,5))
 
     (x: number): number;
->x : number
+>x : number, Symbol(x,Decl(functionLiteralForOverloads.ts,4,5))
 
 } = (x) => x;
 >(x) => x : (x: any) => any
->x : any
->x : any
+>x : any, Symbol(x,Decl(functionLiteralForOverloads.ts,5,5))
+>x : any, Symbol(x,Decl(functionLiteralForOverloads.ts,5,5))
 
 var f2: {
->f2 : { <T>(x: string): string; <T>(x: number): number; }
+>f2 : { <T>(x: string): string; <T>(x: number): number; }, Symbol(f2,Decl(functionLiteralForOverloads.ts,7,3))
 
     <T>(x: string): string;
->T : T
->x : string
+>T : T, Symbol(T,Decl(functionLiteralForOverloads.ts,8,5))
+>x : string, Symbol(x,Decl(functionLiteralForOverloads.ts,8,8))
 
     <T>(x: number): number;
->T : T
->x : number
+>T : T, Symbol(T,Decl(functionLiteralForOverloads.ts,9,5))
+>x : number, Symbol(x,Decl(functionLiteralForOverloads.ts,9,8))
 
 } = (x) => x;
 >(x) => x : (x: any) => any
->x : any
->x : any
+>x : any, Symbol(x,Decl(functionLiteralForOverloads.ts,10,5))
+>x : any, Symbol(x,Decl(functionLiteralForOverloads.ts,10,5))
 
 var f3: {
->f3 : { <T>(x: T): string; <T>(x: T): number; }
+>f3 : { <T>(x: T): string; <T>(x: T): number; }, Symbol(f3,Decl(functionLiteralForOverloads.ts,12,3))
 
     <T>(x: T): string;
->T : T
->x : T
->T : T
+>T : T, Symbol(T,Decl(functionLiteralForOverloads.ts,13,5))
+>x : T, Symbol(x,Decl(functionLiteralForOverloads.ts,13,8))
+>T : T, Symbol(T,Decl(functionLiteralForOverloads.ts,13,5))
 
     <T>(x: T): number;
->T : T
->x : T
->T : T
+>T : T, Symbol(T,Decl(functionLiteralForOverloads.ts,14,5))
+>x : T, Symbol(x,Decl(functionLiteralForOverloads.ts,14,8))
+>T : T, Symbol(T,Decl(functionLiteralForOverloads.ts,14,5))
 
 } = (x) => x;
 >(x) => x : (x: any) => any
->x : any
->x : any
+>x : any, Symbol(x,Decl(functionLiteralForOverloads.ts,15,5))
+>x : any, Symbol(x,Decl(functionLiteralForOverloads.ts,15,5))
 
 var f4: {
->f4 : { <T>(x: string): T; <T>(x: number): T; }
+>f4 : { <T>(x: string): T; <T>(x: number): T; }, Symbol(f4,Decl(functionLiteralForOverloads.ts,17,3))
 
     <T>(x: string): T;
->T : T
->x : string
->T : T
+>T : T, Symbol(T,Decl(functionLiteralForOverloads.ts,18,5))
+>x : string, Symbol(x,Decl(functionLiteralForOverloads.ts,18,8))
+>T : T, Symbol(T,Decl(functionLiteralForOverloads.ts,18,5))
 
     <T>(x: number): T;
->T : T
->x : number
->T : T
+>T : T, Symbol(T,Decl(functionLiteralForOverloads.ts,19,5))
+>x : number, Symbol(x,Decl(functionLiteralForOverloads.ts,19,8))
+>T : T, Symbol(T,Decl(functionLiteralForOverloads.ts,19,5))
 
 } = (x) => x;
 >(x) => x : (x: any) => any
->x : any
->x : any
+>x : any, Symbol(x,Decl(functionLiteralForOverloads.ts,20,5))
+>x : any, Symbol(x,Decl(functionLiteralForOverloads.ts,20,5))
 

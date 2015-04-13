@@ -1,19 +1,19 @@
 === tests/cases/compiler/prototypeInstantiatedWithBaseConstraint.ts ===
 class C<T> {
->C : C<T>
->T : T
+>C : C<T>, Symbol(C,Decl(prototypeInstantiatedWithBaseConstraint.ts,0,0))
+>T : T, Symbol(T,Decl(prototypeInstantiatedWithBaseConstraint.ts,0,8))
 
     x: T;
->x : T
->T : T
+>x : T, Symbol(x,Decl(prototypeInstantiatedWithBaseConstraint.ts,0,12))
+>T : T, Symbol(T,Decl(prototypeInstantiatedWithBaseConstraint.ts,0,8))
 }
 
 C.prototype.x.boo; // No error, prototype is instantiated to any
 >C.prototype.x.boo : any
->C.prototype.x : any
->C.prototype : C<any>
->C : typeof C
->prototype : C<any>
->x : any
+>C.prototype.x : any, Symbol(C.x,Decl(prototypeInstantiatedWithBaseConstraint.ts,0,12))
+>C.prototype : C<any>, Symbol(C.prototype)
+>C : typeof C, Symbol(C,Decl(prototypeInstantiatedWithBaseConstraint.ts,0,0))
+>prototype : C<any>, Symbol(C.prototype)
+>x : any, Symbol(C.x,Decl(prototypeInstantiatedWithBaseConstraint.ts,0,12))
 >boo : any
 

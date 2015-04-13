@@ -1,63 +1,63 @@
 === tests/cases/compiler/ambientModuleExports.ts ===
 declare module Foo {
->Foo : typeof Foo
+>Foo : typeof Foo, Symbol(Foo,Decl(ambientModuleExports.ts,0,0))
 
 	function a():void;
->a : () => void
+>a : () => void, Symbol(a,Decl(ambientModuleExports.ts,0,20))
 
 	var b:number;
->b : number
+>b : number, Symbol(b,Decl(ambientModuleExports.ts,2,4))
 
 	class C {}
->C : C
+>C : C, Symbol(C,Decl(ambientModuleExports.ts,2,14))
 }
 
 Foo.a();
 >Foo.a() : void
->Foo.a : () => void
->Foo : typeof Foo
->a : () => void
+>Foo.a : () => void, Symbol(Foo.a,Decl(ambientModuleExports.ts,0,20))
+>Foo : typeof Foo, Symbol(Foo,Decl(ambientModuleExports.ts,0,0))
+>a : () => void, Symbol(Foo.a,Decl(ambientModuleExports.ts,0,20))
 
 Foo.b;
->Foo.b : number
->Foo : typeof Foo
->b : number
+>Foo.b : number, Symbol(Foo.b,Decl(ambientModuleExports.ts,2,4))
+>Foo : typeof Foo, Symbol(Foo,Decl(ambientModuleExports.ts,0,0))
+>b : number, Symbol(Foo.b,Decl(ambientModuleExports.ts,2,4))
 
 var c = new Foo.C();
->c : Foo.C
+>c : Foo.C, Symbol(c,Decl(ambientModuleExports.ts,8,3))
 >new Foo.C() : Foo.C
->Foo.C : typeof Foo.C
->Foo : typeof Foo
->C : typeof Foo.C
+>Foo.C : typeof Foo.C, Symbol(Foo.C,Decl(ambientModuleExports.ts,2,14))
+>Foo : typeof Foo, Symbol(Foo,Decl(ambientModuleExports.ts,0,0))
+>C : typeof Foo.C, Symbol(Foo.C,Decl(ambientModuleExports.ts,2,14))
 
 declare module Foo2 {
->Foo2 : typeof Foo2
+>Foo2 : typeof Foo2, Symbol(Foo2,Decl(ambientModuleExports.ts,8,20))
 
     export function a(): void;
->a : () => void
+>a : () => void, Symbol(a,Decl(ambientModuleExports.ts,10,21))
 
     export var b: number;
->b : number
+>b : number, Symbol(b,Decl(ambientModuleExports.ts,12,14))
 
     export class C { }
->C : C
+>C : C, Symbol(C,Decl(ambientModuleExports.ts,12,25))
 }
 
 Foo2.a();
 >Foo2.a() : void
->Foo2.a : () => void
->Foo2 : typeof Foo2
->a : () => void
+>Foo2.a : () => void, Symbol(Foo2.a,Decl(ambientModuleExports.ts,10,21))
+>Foo2 : typeof Foo2, Symbol(Foo2,Decl(ambientModuleExports.ts,8,20))
+>a : () => void, Symbol(Foo2.a,Decl(ambientModuleExports.ts,10,21))
 
 Foo2.b;
->Foo2.b : number
->Foo2 : typeof Foo2
->b : number
+>Foo2.b : number, Symbol(Foo2.b,Decl(ambientModuleExports.ts,12,14))
+>Foo2 : typeof Foo2, Symbol(Foo2,Decl(ambientModuleExports.ts,8,20))
+>b : number, Symbol(Foo2.b,Decl(ambientModuleExports.ts,12,14))
 
 var c2 = new Foo2.C();
->c2 : Foo2.C
+>c2 : Foo2.C, Symbol(c2,Decl(ambientModuleExports.ts,18,3))
 >new Foo2.C() : Foo2.C
->Foo2.C : typeof Foo2.C
->Foo2 : typeof Foo2
->C : typeof Foo2.C
+>Foo2.C : typeof Foo2.C, Symbol(Foo2.C,Decl(ambientModuleExports.ts,12,25))
+>Foo2 : typeof Foo2, Symbol(Foo2,Decl(ambientModuleExports.ts,8,20))
+>C : typeof Foo2.C, Symbol(Foo2.C,Decl(ambientModuleExports.ts,12,25))
 

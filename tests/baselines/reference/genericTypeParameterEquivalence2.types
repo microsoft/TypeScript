@@ -1,169 +1,169 @@
 === tests/cases/compiler/genericTypeParameterEquivalence2.ts ===
 // compose :: (b->c) -> (a->b) -> (a->c)
 function compose<A, B, C>(f: (b: B) => C, g: (a:A) => B): (a:A) => C {
->compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
->A : A
->B : B
->C : C
->f : (b: B) => C
->b : B
->B : B
->C : C
->g : (a: A) => B
->a : A
->A : A
->B : B
->a : A
->A : A
->C : C
+>compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C, Symbol(compose,Decl(genericTypeParameterEquivalence2.ts,0,0))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,1,17))
+>B : B, Symbol(B,Decl(genericTypeParameterEquivalence2.ts,1,19))
+>C : C, Symbol(C,Decl(genericTypeParameterEquivalence2.ts,1,22))
+>f : (b: B) => C, Symbol(f,Decl(genericTypeParameterEquivalence2.ts,1,26))
+>b : B, Symbol(b,Decl(genericTypeParameterEquivalence2.ts,1,30))
+>B : B, Symbol(B,Decl(genericTypeParameterEquivalence2.ts,1,19))
+>C : C, Symbol(C,Decl(genericTypeParameterEquivalence2.ts,1,22))
+>g : (a: A) => B, Symbol(g,Decl(genericTypeParameterEquivalence2.ts,1,41))
+>a : A, Symbol(a,Decl(genericTypeParameterEquivalence2.ts,1,46))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,1,17))
+>B : B, Symbol(B,Decl(genericTypeParameterEquivalence2.ts,1,19))
+>a : A, Symbol(a,Decl(genericTypeParameterEquivalence2.ts,1,59))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,1,17))
+>C : C, Symbol(C,Decl(genericTypeParameterEquivalence2.ts,1,22))
 
     return function (a:A) : C {
 >function (a:A) : C {        return f(g.apply(null, a));    } : (a: A) => C
->a : A
->A : A
->C : C
+>a : A, Symbol(a,Decl(genericTypeParameterEquivalence2.ts,2,21))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,1,17))
+>C : C, Symbol(C,Decl(genericTypeParameterEquivalence2.ts,1,22))
 
         return f(g.apply(null, a));
 >f(g.apply(null, a)) : C
->f : (b: B) => C
+>f : (b: B) => C, Symbol(f,Decl(genericTypeParameterEquivalence2.ts,1,26))
 >g.apply(null, a) : any
->g.apply : (thisArg: any, argArray?: any) => any
->g : (a: A) => B
->apply : (thisArg: any, argArray?: any) => any
+>g.apply : (thisArg: any, argArray?: any) => any, Symbol(Function.apply,Decl(lib.d.ts,228,20))
+>g : (a: A) => B, Symbol(g,Decl(genericTypeParameterEquivalence2.ts,1,41))
+>apply : (thisArg: any, argArray?: any) => any, Symbol(Function.apply,Decl(lib.d.ts,228,20))
 >null : null
->a : A
+>a : A, Symbol(a,Decl(genericTypeParameterEquivalence2.ts,2,21))
 
     };
 }
 
 // forEach :: [a] -> (a -> ()) -> ()
 function forEach<A>(list: A[], f: (a: A, n?: number) => void ): void {
->forEach : <A>(list: A[], f: (a: A, n?: number) => void) => void
->A : A
->list : A[]
->A : A
->f : (a: A, n?: number) => void
->a : A
->A : A
->n : number
+>forEach : <A>(list: A[], f: (a: A, n?: number) => void) => void, Symbol(forEach,Decl(genericTypeParameterEquivalence2.ts,5,1))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,8,17))
+>list : A[], Symbol(list,Decl(genericTypeParameterEquivalence2.ts,8,20))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,8,17))
+>f : (a: A, n?: number) => void, Symbol(f,Decl(genericTypeParameterEquivalence2.ts,8,30))
+>a : A, Symbol(a,Decl(genericTypeParameterEquivalence2.ts,8,35))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,8,17))
+>n : number, Symbol(n,Decl(genericTypeParameterEquivalence2.ts,8,40))
 
     for (var i = 0; i < list.length; ++i) {
->i : number
+>i : number, Symbol(i,Decl(genericTypeParameterEquivalence2.ts,9,12))
 >0 : number
 >i < list.length : boolean
->i : number
->list.length : number
->list : A[]
->length : number
+>i : number, Symbol(i,Decl(genericTypeParameterEquivalence2.ts,9,12))
+>list.length : number, Symbol(Array.length,Decl(lib.d.ts,1007,20))
+>list : A[], Symbol(list,Decl(genericTypeParameterEquivalence2.ts,8,20))
+>length : number, Symbol(Array.length,Decl(lib.d.ts,1007,20))
 >++i : number
->i : number
+>i : number, Symbol(i,Decl(genericTypeParameterEquivalence2.ts,9,12))
 
         f(list[i], i);
 >f(list[i], i) : void
->f : (a: A, n?: number) => void
+>f : (a: A, n?: number) => void, Symbol(f,Decl(genericTypeParameterEquivalence2.ts,8,30))
 >list[i] : A
->list : A[]
->i : number
->i : number
+>list : A[], Symbol(list,Decl(genericTypeParameterEquivalence2.ts,8,20))
+>i : number, Symbol(i,Decl(genericTypeParameterEquivalence2.ts,9,12))
+>i : number, Symbol(i,Decl(genericTypeParameterEquivalence2.ts,9,12))
     }
 }
 
 // filter :: (a->bool) -> [a] -> [a]
 function filter<A>(f: (a: A) => boolean, ar: A[]): A[] {
->filter : <A>(f: (a: A) => boolean, ar: A[]) => A[]
->A : A
->f : (a: A) => boolean
->a : A
->A : A
->ar : A[]
->A : A
->A : A
+>filter : <A>(f: (a: A) => boolean, ar: A[]) => A[], Symbol(filter,Decl(genericTypeParameterEquivalence2.ts,12,1))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,15,16))
+>f : (a: A) => boolean, Symbol(f,Decl(genericTypeParameterEquivalence2.ts,15,19))
+>a : A, Symbol(a,Decl(genericTypeParameterEquivalence2.ts,15,23))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,15,16))
+>ar : A[], Symbol(ar,Decl(genericTypeParameterEquivalence2.ts,15,40))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,15,16))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,15,16))
 
     var ret = [];
->ret : any[]
+>ret : any[], Symbol(ret,Decl(genericTypeParameterEquivalence2.ts,16,7))
 >[] : undefined[]
 
     forEach(ar, (el) => {
 >forEach(ar, (el) => {        if (f(el)) {            ret.push(el);        }    } ) : void
->forEach : <A>(list: A[], f: (a: A, n?: number) => void) => void
->ar : A[]
+>forEach : <A>(list: A[], f: (a: A, n?: number) => void) => void, Symbol(forEach,Decl(genericTypeParameterEquivalence2.ts,5,1))
+>ar : A[], Symbol(ar,Decl(genericTypeParameterEquivalence2.ts,15,40))
 >(el) => {        if (f(el)) {            ret.push(el);        }    } : (el: A) => void
->el : A
+>el : A, Symbol(el,Decl(genericTypeParameterEquivalence2.ts,17,17))
 
         if (f(el)) {
 >f(el) : boolean
->f : (a: A) => boolean
->el : A
+>f : (a: A) => boolean, Symbol(f,Decl(genericTypeParameterEquivalence2.ts,15,19))
+>el : A, Symbol(el,Decl(genericTypeParameterEquivalence2.ts,17,17))
 
             ret.push(el);
 >ret.push(el) : number
->ret.push : (...items: any[]) => number
->ret : any[]
->push : (...items: any[]) => number
->el : A
+>ret.push : (...items: any[]) => number, Symbol(Array.push,Decl(lib.d.ts,1016,29))
+>ret : any[], Symbol(ret,Decl(genericTypeParameterEquivalence2.ts,16,7))
+>push : (...items: any[]) => number, Symbol(Array.push,Decl(lib.d.ts,1016,29))
+>el : A, Symbol(el,Decl(genericTypeParameterEquivalence2.ts,17,17))
         }
     } );
 
     return ret;
->ret : any[]
+>ret : any[], Symbol(ret,Decl(genericTypeParameterEquivalence2.ts,16,7))
 }
 
 // length :: [a] -> Num
 function length2<A>(ar: A[]): number {
->length2 : <A>(ar: A[]) => number
->A : A
->ar : A[]
->A : A
+>length2 : <A>(ar: A[]) => number, Symbol(length2,Decl(genericTypeParameterEquivalence2.ts,24,1))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,27,17))
+>ar : A[], Symbol(ar,Decl(genericTypeParameterEquivalence2.ts,27,20))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,27,17))
 
     return ar.length;
->ar.length : number
->ar : A[]
->length : number
+>ar.length : number, Symbol(Array.length,Decl(lib.d.ts,1007,20))
+>ar : A[], Symbol(ar,Decl(genericTypeParameterEquivalence2.ts,27,20))
+>length : number, Symbol(Array.length,Decl(lib.d.ts,1007,20))
 }
 
 // curry1 :: ((a,b)->c) -> (a->(b->c))
 function curry1<A, B, C>(f: (a: A, b: B) => C): (ax: A) => (bx: B) => C {
->curry1 : <A, B, C>(f: (a: A, b: B) => C) => (ax: A) => (bx: B) => C
->A : A
->B : B
->C : C
->f : (a: A, b: B) => C
->a : A
->A : A
->b : B
->B : B
->C : C
->ax : A
->A : A
->bx : B
->B : B
->C : C
+>curry1 : <A, B, C>(f: (a: A, b: B) => C) => (ax: A) => (bx: B) => C, Symbol(curry1,Decl(genericTypeParameterEquivalence2.ts,29,1))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,32,16))
+>B : B, Symbol(B,Decl(genericTypeParameterEquivalence2.ts,32,18))
+>C : C, Symbol(C,Decl(genericTypeParameterEquivalence2.ts,32,21))
+>f : (a: A, b: B) => C, Symbol(f,Decl(genericTypeParameterEquivalence2.ts,32,25))
+>a : A, Symbol(a,Decl(genericTypeParameterEquivalence2.ts,32,29))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,32,16))
+>b : B, Symbol(b,Decl(genericTypeParameterEquivalence2.ts,32,34))
+>B : B, Symbol(B,Decl(genericTypeParameterEquivalence2.ts,32,18))
+>C : C, Symbol(C,Decl(genericTypeParameterEquivalence2.ts,32,21))
+>ax : A, Symbol(ax,Decl(genericTypeParameterEquivalence2.ts,32,49))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,32,16))
+>bx : B, Symbol(bx,Decl(genericTypeParameterEquivalence2.ts,32,60))
+>B : B, Symbol(B,Decl(genericTypeParameterEquivalence2.ts,32,18))
+>C : C, Symbol(C,Decl(genericTypeParameterEquivalence2.ts,32,21))
 
     return function (ay: A) {
 >function (ay: A) {        return function (by: B) {            return f(ay, by);        };    } : (ay: A) => (by: B) => C
->ay : A
->A : A
+>ay : A, Symbol(ay,Decl(genericTypeParameterEquivalence2.ts,33,21))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,32,16))
 
         return function (by: B) {
 >function (by: B) {            return f(ay, by);        } : (by: B) => C
->by : B
->B : B
+>by : B, Symbol(by,Decl(genericTypeParameterEquivalence2.ts,34,25))
+>B : B, Symbol(B,Decl(genericTypeParameterEquivalence2.ts,32,18))
 
             return f(ay, by);
 >f(ay, by) : C
->f : (a: A, b: B) => C
->ay : A
->by : B
+>f : (a: A, b: B) => C, Symbol(f,Decl(genericTypeParameterEquivalence2.ts,32,25))
+>ay : A, Symbol(ay,Decl(genericTypeParameterEquivalence2.ts,33,21))
+>by : B, Symbol(by,Decl(genericTypeParameterEquivalence2.ts,34,25))
 
         };
     };
 }
 
 var cfilter = curry1(filter);
->cfilter : (ax: {}) => (bx: {}) => {}[]
+>cfilter : (ax: {}) => (bx: {}) => {}[], Symbol(cfilter,Decl(genericTypeParameterEquivalence2.ts,40,3))
 >curry1(filter) : (ax: {}) => (bx: {}) => {}[]
->curry1 : <A, B, C>(f: (a: A, b: B) => C) => (ax: A) => (bx: B) => C
->filter : <A>(f: (a: A) => boolean, ar: A[]) => A[]
+>curry1 : <A, B, C>(f: (a: A, b: B) => C) => (ax: A) => (bx: B) => C, Symbol(curry1,Decl(genericTypeParameterEquivalence2.ts,29,1))
+>filter : <A>(f: (a: A) => boolean, ar: A[]) => A[], Symbol(filter,Decl(genericTypeParameterEquivalence2.ts,12,1))
 
 // compose :: (b->c) -> (a->b) -> (a->c)
 // length :: [a] -> Num
@@ -174,41 +174,41 @@ var cfilter = curry1(filter);
 // countWhere :: (a -> Bool) -> [a] -> Num
 
 function countWhere_1<A>(pred: (a: A) => boolean): (a: A[]) => number {
->countWhere_1 : <A>(pred: (a: A) => boolean) => (a: A[]) => number
->A : A
->pred : (a: A) => boolean
->a : A
->A : A
->a : A[]
->A : A
+>countWhere_1 : <A>(pred: (a: A) => boolean) => (a: A[]) => number, Symbol(countWhere_1,Decl(genericTypeParameterEquivalence2.ts,40,29))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,50,22))
+>pred : (a: A) => boolean, Symbol(pred,Decl(genericTypeParameterEquivalence2.ts,50,25))
+>a : A, Symbol(a,Decl(genericTypeParameterEquivalence2.ts,50,32))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,50,22))
+>a : A[], Symbol(a,Decl(genericTypeParameterEquivalence2.ts,50,52))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,50,22))
 
     return compose(length2, cfilter(pred));
 >compose(length2, cfilter(pred)) : (a: {}) => number
->compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
->length2 : <A>(ar: A[]) => number
+>compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C, Symbol(compose,Decl(genericTypeParameterEquivalence2.ts,0,0))
+>length2 : <A>(ar: A[]) => number, Symbol(length2,Decl(genericTypeParameterEquivalence2.ts,24,1))
 >cfilter(pred) : (bx: {}) => {}[]
->cfilter : (ax: {}) => (bx: {}) => {}[]
->pred : (a: A) => boolean
+>cfilter : (ax: {}) => (bx: {}) => {}[], Symbol(cfilter,Decl(genericTypeParameterEquivalence2.ts,40,3))
+>pred : (a: A) => boolean, Symbol(pred,Decl(genericTypeParameterEquivalence2.ts,50,25))
 }
 
 function countWhere_2<A>(pred: (a: A) => boolean): (a: A[]) => number {
->countWhere_2 : <A>(pred: (a: A) => boolean) => (a: A[]) => number
->A : A
->pred : (a: A) => boolean
->a : A
->A : A
->a : A[]
->A : A
+>countWhere_2 : <A>(pred: (a: A) => boolean) => (a: A[]) => number, Symbol(countWhere_2,Decl(genericTypeParameterEquivalence2.ts,52,1))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,54,22))
+>pred : (a: A) => boolean, Symbol(pred,Decl(genericTypeParameterEquivalence2.ts,54,25))
+>a : A, Symbol(a,Decl(genericTypeParameterEquivalence2.ts,54,32))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,54,22))
+>a : A[], Symbol(a,Decl(genericTypeParameterEquivalence2.ts,54,52))
+>A : A, Symbol(A,Decl(genericTypeParameterEquivalence2.ts,54,22))
 
     var where = cfilter(pred);
->where : (bx: {}) => {}[]
+>where : (bx: {}) => {}[], Symbol(where,Decl(genericTypeParameterEquivalence2.ts,55,7))
 >cfilter(pred) : (bx: {}) => {}[]
->cfilter : (ax: {}) => (bx: {}) => {}[]
->pred : (a: A) => boolean
+>cfilter : (ax: {}) => (bx: {}) => {}[], Symbol(cfilter,Decl(genericTypeParameterEquivalence2.ts,40,3))
+>pred : (a: A) => boolean, Symbol(pred,Decl(genericTypeParameterEquivalence2.ts,54,25))
 
     return compose(length2, where);
 >compose(length2, where) : (a: {}) => number
->compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
->length2 : <A>(ar: A[]) => number
->where : (bx: {}) => {}[]
+>compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C, Symbol(compose,Decl(genericTypeParameterEquivalence2.ts,0,0))
+>length2 : <A>(ar: A[]) => number, Symbol(length2,Decl(genericTypeParameterEquivalence2.ts,24,1))
+>where : (bx: {}) => {}[], Symbol(where,Decl(genericTypeParameterEquivalence2.ts,55,7))
 }

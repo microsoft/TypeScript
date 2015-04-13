@@ -1,43 +1,43 @@
 === tests/cases/compiler/collisionExportsRequireAndFunctionInGlobalFile.ts ===
 function exports() {
->exports : () => number
+>exports : () => number, Symbol(exports,Decl(collisionExportsRequireAndFunctionInGlobalFile.ts,0,0))
 
     return 1;
 >1 : number
 }
 function require() {
->require : () => string
+>require : () => string, Symbol(require,Decl(collisionExportsRequireAndFunctionInGlobalFile.ts,2,1))
 
     return "require";
 >"require" : string
 }
 module m3 {
->m3 : typeof m3
+>m3 : typeof m3, Symbol(m3,Decl(collisionExportsRequireAndFunctionInGlobalFile.ts,5,1))
 
     function exports() {
->exports : () => number
+>exports : () => number, Symbol(exports,Decl(collisionExportsRequireAndFunctionInGlobalFile.ts,6,11))
 
         return 1;
 >1 : number
     }
     function require() {
->require : () => string
+>require : () => string, Symbol(require,Decl(collisionExportsRequireAndFunctionInGlobalFile.ts,9,5))
 
         return "require";
 >"require" : string
     }
 }
 module m4 {
->m4 : typeof m4
+>m4 : typeof m4, Symbol(m4,Decl(collisionExportsRequireAndFunctionInGlobalFile.ts,13,1))
 
     export function exports() {
->exports : () => number
+>exports : () => number, Symbol(exports,Decl(collisionExportsRequireAndFunctionInGlobalFile.ts,14,11))
 
         return 1;
 >1 : number
     }
     export function require() {
->require : () => string
+>require : () => string, Symbol(require,Decl(collisionExportsRequireAndFunctionInGlobalFile.ts,17,5))
 
         return "require";
 >"require" : string

@@ -1,40 +1,40 @@
 === tests/cases/compiler/2dArrays.ts ===
 class Cell {
->Cell : Cell
+>Cell : Cell, Symbol(Cell,Decl(2dArrays.ts,0,0))
 }
 
 class Ship {
->Ship : Ship
+>Ship : Ship, Symbol(Ship,Decl(2dArrays.ts,1,1))
 
     isSunk: boolean;
->isSunk : boolean
+>isSunk : boolean, Symbol(isSunk,Decl(2dArrays.ts,3,12))
 }
 
 class Board {
->Board : Board
+>Board : Board, Symbol(Board,Decl(2dArrays.ts,5,1))
 
     ships: Ship[];
->ships : Ship[]
->Ship : Ship
+>ships : Ship[], Symbol(ships,Decl(2dArrays.ts,7,13))
+>Ship : Ship, Symbol(Ship,Decl(2dArrays.ts,1,1))
 
     cells: Cell[];
->cells : Cell[]
->Cell : Cell
+>cells : Cell[], Symbol(cells,Decl(2dArrays.ts,8,18))
+>Cell : Cell, Symbol(Cell,Decl(2dArrays.ts,0,0))
 
     private allShipsSunk() {
->allShipsSunk : () => boolean
+>allShipsSunk : () => boolean, Symbol(allShipsSunk,Decl(2dArrays.ts,9,18))
 
         return this.ships.every(function (val) { return val.isSunk; });
 >this.ships.every(function (val) { return val.isSunk; }) : boolean
->this.ships.every : (callbackfn: (value: Ship, index: number, array: Ship[]) => boolean, thisArg?: any) => boolean
->this.ships : Ship[]
->this : Board
->ships : Ship[]
->every : (callbackfn: (value: Ship, index: number, array: Ship[]) => boolean, thisArg?: any) => boolean
+>this.ships.every : (callbackfn: (value: Ship, index: number, array: Ship[]) => boolean, thisArg?: any) => boolean, Symbol(Array.every,Decl(lib.d.ts,1094,62))
+>this.ships : Ship[], Symbol(ships,Decl(2dArrays.ts,7,13))
+>this : Board, Symbol(Board,Decl(2dArrays.ts,5,1))
+>ships : Ship[], Symbol(ships,Decl(2dArrays.ts,7,13))
+>every : (callbackfn: (value: Ship, index: number, array: Ship[]) => boolean, thisArg?: any) => boolean, Symbol(Array.every,Decl(lib.d.ts,1094,62))
 >function (val) { return val.isSunk; } : (val: Ship) => boolean
->val : Ship
->val.isSunk : boolean
->val : Ship
->isSunk : boolean
+>val : Ship, Symbol(val,Decl(2dArrays.ts,12,42))
+>val.isSunk : boolean, Symbol(Ship.isSunk,Decl(2dArrays.ts,3,12))
+>val : Ship, Symbol(val,Decl(2dArrays.ts,12,42))
+>isSunk : boolean, Symbol(Ship.isSunk,Decl(2dArrays.ts,3,12))
     }    
 }

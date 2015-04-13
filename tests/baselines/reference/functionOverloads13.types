@@ -1,14 +1,14 @@
 === tests/cases/compiler/functionOverloads13.ts ===
 function foo(bar:number):string;
->foo : { (bar: number): string; (bar: number): number; }
->bar : number
+>foo : { (bar: number): string; (bar: number): number; }, Symbol(foo,Decl(functionOverloads13.ts,0,0),Decl(functionOverloads13.ts,0,32),Decl(functionOverloads13.ts,1,32))
+>bar : number, Symbol(bar,Decl(functionOverloads13.ts,0,13))
 
 function foo(bar:number):number;
->foo : { (bar: number): string; (bar: number): number; }
->bar : number
+>foo : { (bar: number): string; (bar: number): number; }, Symbol(foo,Decl(functionOverloads13.ts,0,0),Decl(functionOverloads13.ts,0,32),Decl(functionOverloads13.ts,1,32))
+>bar : number, Symbol(bar,Decl(functionOverloads13.ts,1,13))
 
 function foo(bar?:number):any { return "" }
->foo : { (bar: number): string; (bar: number): number; }
->bar : number
+>foo : { (bar: number): string; (bar: number): number; }, Symbol(foo,Decl(functionOverloads13.ts,0,0),Decl(functionOverloads13.ts,0,32),Decl(functionOverloads13.ts,1,32))
+>bar : number, Symbol(bar,Decl(functionOverloads13.ts,2,13))
 >"" : string
 

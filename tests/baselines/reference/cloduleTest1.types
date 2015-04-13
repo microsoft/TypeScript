@@ -1,36 +1,36 @@
 === tests/cases/compiler/cloduleTest1.ts ===
   declare function $(selector: string): $;  
->$ : typeof $
->selector : string
->$ : $
+>$ : typeof $, Symbol($,Decl(cloduleTest1.ts,0,0),Decl(cloduleTest1.ts,0,42),Decl(cloduleTest1.ts,3,3))
+>selector : string, Symbol(selector,Decl(cloduleTest1.ts,0,21))
+>$ : $, Symbol($,Decl(cloduleTest1.ts,0,0),Decl(cloduleTest1.ts,0,42),Decl(cloduleTest1.ts,3,3))
 
   interface $ {
->$ : $
+>$ : $, Symbol($,Decl(cloduleTest1.ts,0,0),Decl(cloduleTest1.ts,0,42),Decl(cloduleTest1.ts,3,3))
 
       addClass(className: string): $;
->addClass : (className: string) => $
->className : string
->$ : $
+>addClass : (className: string) => $, Symbol(addClass,Decl(cloduleTest1.ts,1,15))
+>className : string, Symbol(className,Decl(cloduleTest1.ts,2,15))
+>$ : $, Symbol($,Decl(cloduleTest1.ts,0,0),Decl(cloduleTest1.ts,0,42),Decl(cloduleTest1.ts,3,3))
   }
   module $ {
->$ : typeof $
+>$ : typeof $, Symbol($,Decl(cloduleTest1.ts,0,0),Decl(cloduleTest1.ts,0,42),Decl(cloduleTest1.ts,3,3))
 
     export interface AjaxSettings {
->AjaxSettings : AjaxSettings
+>AjaxSettings : AjaxSettings, Symbol(AjaxSettings,Decl(cloduleTest1.ts,4,12))
     }
     export function ajax(options: AjaxSettings) { }
->ajax : (options: AjaxSettings) => void
->options : AjaxSettings
->AjaxSettings : AjaxSettings
+>ajax : (options: AjaxSettings) => void, Symbol(ajax,Decl(cloduleTest1.ts,6,5))
+>options : AjaxSettings, Symbol(options,Decl(cloduleTest1.ts,7,25))
+>AjaxSettings : AjaxSettings, Symbol(AjaxSettings,Decl(cloduleTest1.ts,4,12))
   }
   var it: $ = $('.foo').addClass('bar');
->it : $
->$ : $
+>it : $, Symbol(it,Decl(cloduleTest1.ts,9,5))
+>$ : $, Symbol($,Decl(cloduleTest1.ts,0,0),Decl(cloduleTest1.ts,0,42),Decl(cloduleTest1.ts,3,3))
 >$('.foo').addClass('bar') : $
->$('.foo').addClass : (className: string) => $
+>$('.foo').addClass : (className: string) => $, Symbol($.addClass,Decl(cloduleTest1.ts,1,15))
 >$('.foo') : $
->$ : typeof $
+>$ : typeof $, Symbol($,Decl(cloduleTest1.ts,0,0),Decl(cloduleTest1.ts,0,42),Decl(cloduleTest1.ts,3,3))
 >'.foo' : string
->addClass : (className: string) => $
+>addClass : (className: string) => $, Symbol($.addClass,Decl(cloduleTest1.ts,1,15))
 >'bar' : string
 

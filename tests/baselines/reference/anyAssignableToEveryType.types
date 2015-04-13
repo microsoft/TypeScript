@@ -1,152 +1,152 @@
 === tests/cases/conformance/types/typeRelationships/assignmentCompatibility/anyAssignableToEveryType.ts ===
 var a: any;
->a : any
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 class C {
->C : C
+>C : C, Symbol(C,Decl(anyAssignableToEveryType.ts,0,11))
 
     foo: string;
->foo : string
+>foo : string, Symbol(foo,Decl(anyAssignableToEveryType.ts,2,9))
 }
 var ac: C;
->ac : C
->C : C
+>ac : C, Symbol(ac,Decl(anyAssignableToEveryType.ts,5,3))
+>C : C, Symbol(C,Decl(anyAssignableToEveryType.ts,0,11))
 
 interface I {
->I : I
+>I : I, Symbol(I,Decl(anyAssignableToEveryType.ts,5,10))
 
     foo: string;
->foo : string
+>foo : string, Symbol(foo,Decl(anyAssignableToEveryType.ts,6,13))
 }
 var ai: I;
->ai : I
->I : I
+>ai : I, Symbol(ai,Decl(anyAssignableToEveryType.ts,9,3))
+>I : I, Symbol(I,Decl(anyAssignableToEveryType.ts,5,10))
 
 enum E { A }
->E : E
->A : E
+>E : E, Symbol(E,Decl(anyAssignableToEveryType.ts,9,10))
+>A : E, Symbol(E.A,Decl(anyAssignableToEveryType.ts,11,8))
 
 var ae: E;
->ae : E
->E : E
+>ae : E, Symbol(ae,Decl(anyAssignableToEveryType.ts,12,3))
+>E : E, Symbol(E,Decl(anyAssignableToEveryType.ts,9,10))
 
 var b: number = a;
->b : number
->a : any
+>b : number, Symbol(b,Decl(anyAssignableToEveryType.ts,14,3))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 var c: string = a;
->c : string
->a : any
+>c : string, Symbol(c,Decl(anyAssignableToEveryType.ts,15,3))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 var d: boolean = a;
->d : boolean
->a : any
+>d : boolean, Symbol(d,Decl(anyAssignableToEveryType.ts,16,3))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 var e: Date = a;
->e : Date
->Date : Date
->a : any
+>e : Date, Symbol(e,Decl(anyAssignableToEveryType.ts,17,3))
+>Date : Date, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 var f: any = a;
->f : any
->a : any
+>f : any, Symbol(f,Decl(anyAssignableToEveryType.ts,18,3))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 var g: void = a;
->g : void
->a : any
+>g : void, Symbol(g,Decl(anyAssignableToEveryType.ts,19,3))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 var h: Object = a;
->h : Object
->Object : Object
->a : any
+>h : Object, Symbol(h,Decl(anyAssignableToEveryType.ts,20,3))
+>Object : Object, Symbol(Object,Decl(lib.d.ts,92,1),Decl(lib.d.ts,223,11))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 var i: {} = a;
->i : {}
->a : any
+>i : {}, Symbol(i,Decl(anyAssignableToEveryType.ts,21,3))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 var j: () => {} = a;
->j : () => {}
->a : any
+>j : () => {}, Symbol(j,Decl(anyAssignableToEveryType.ts,22,3))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 var k: Function = a;
->k : Function
->Function : Function
->a : any
+>k : Function, Symbol(k,Decl(anyAssignableToEveryType.ts,23,3))
+>Function : Function, Symbol(Function,Decl(lib.d.ts,223,38),Decl(lib.d.ts,269,11))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 var l: (x: number) => string = a;
->l : (x: number) => string
->x : number
->a : any
+>l : (x: number) => string, Symbol(l,Decl(anyAssignableToEveryType.ts,24,3))
+>x : number, Symbol(x,Decl(anyAssignableToEveryType.ts,24,8))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 ac = a;
 >ac = a : any
->ac : C
->a : any
+>ac : C, Symbol(ac,Decl(anyAssignableToEveryType.ts,5,3))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 ai = a;
 >ai = a : any
->ai : I
->a : any
+>ai : I, Symbol(ai,Decl(anyAssignableToEveryType.ts,9,3))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 ae = a;
 >ae = a : any
->ae : E
->a : any
+>ae : E, Symbol(ae,Decl(anyAssignableToEveryType.ts,12,3))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 var m: number[] = a;
->m : number[]
->a : any
+>m : number[], Symbol(m,Decl(anyAssignableToEveryType.ts,28,3))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 var n: { foo: string } = a;
->n : { foo: string; }
->foo : string
->a : any
+>n : { foo: string; }, Symbol(n,Decl(anyAssignableToEveryType.ts,29,3))
+>foo : string, Symbol(foo,Decl(anyAssignableToEveryType.ts,29,8))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 var o: <T>(x: T) => T = a;
->o : <T>(x: T) => T
->T : T
->x : T
->T : T
->T : T
->a : any
+>o : <T>(x: T) => T, Symbol(o,Decl(anyAssignableToEveryType.ts,30,3))
+>T : T, Symbol(T,Decl(anyAssignableToEveryType.ts,30,8))
+>x : T, Symbol(x,Decl(anyAssignableToEveryType.ts,30,11))
+>T : T, Symbol(T,Decl(anyAssignableToEveryType.ts,30,8))
+>T : T, Symbol(T,Decl(anyAssignableToEveryType.ts,30,8))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 var p: Number = a;
->p : Number
->Number : Number
->a : any
+>p : Number, Symbol(p,Decl(anyAssignableToEveryType.ts,31,3))
+>Number : Number, Symbol(Number,Decl(lib.d.ts,456,40),Decl(lib.d.ts,518,11))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 var q: String = a;
->q : String
->String : String
->a : any
+>q : String, Symbol(q,Decl(anyAssignableToEveryType.ts,32,3))
+>String : String, Symbol(String,Decl(lib.d.ts,275,1),Decl(lib.d.ts,443,11))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
 function foo<T, U /*extends T*/, V extends Date>(x: T, y: U, z: V) {
->foo : <T, U, V extends Date>(x: T, y: U, z: V) => void
->T : T
->U : U
->V : V
->Date : Date
->x : T
->T : T
->y : U
->U : U
->z : V
->V : V
+>foo : <T, U, V extends Date>(x: T, y: U, z: V) => void, Symbol(foo,Decl(anyAssignableToEveryType.ts,32,18))
+>T : T, Symbol(T,Decl(anyAssignableToEveryType.ts,34,13))
+>U : U, Symbol(U,Decl(anyAssignableToEveryType.ts,34,15))
+>V : V, Symbol(V,Decl(anyAssignableToEveryType.ts,34,32))
+>Date : Date, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
+>x : T, Symbol(x,Decl(anyAssignableToEveryType.ts,34,49))
+>T : T, Symbol(T,Decl(anyAssignableToEveryType.ts,34,13))
+>y : U, Symbol(y,Decl(anyAssignableToEveryType.ts,34,54))
+>U : U, Symbol(U,Decl(anyAssignableToEveryType.ts,34,15))
+>z : V, Symbol(z,Decl(anyAssignableToEveryType.ts,34,60))
+>V : V, Symbol(V,Decl(anyAssignableToEveryType.ts,34,32))
 
     x = a;
 >x = a : any
->x : T
->a : any
+>x : T, Symbol(x,Decl(anyAssignableToEveryType.ts,34,49))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
     y = a;
 >y = a : any
->y : U
->a : any
+>y : U, Symbol(y,Decl(anyAssignableToEveryType.ts,34,54))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 
     z = a;
 >z = a : any
->z : V
->a : any
+>z : V, Symbol(z,Decl(anyAssignableToEveryType.ts,34,60))
+>a : any, Symbol(a,Decl(anyAssignableToEveryType.ts,0,3))
 }
 
 //function foo<T, U extends T, V extends Date>(x: T, y: U, z: V) {

@@ -1,8 +1,8 @@
 === tests/cases/compiler/declFileClassWithIndexSignature.ts ===
 
 class BlockIntrinsics {
->BlockIntrinsics : BlockIntrinsics
+>BlockIntrinsics : BlockIntrinsics, Symbol(BlockIntrinsics,Decl(declFileClassWithIndexSignature.ts,0,0))
 
     [s: string]: string;
->s : string
+>s : string, Symbol(s,Decl(declFileClassWithIndexSignature.ts,2,5))
 }

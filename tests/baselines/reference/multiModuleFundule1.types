@@ -1,38 +1,38 @@
 === tests/cases/compiler/multiModuleFundule1.ts ===
 function C(x: number) { }
->C : typeof C
->x : number
+>C : typeof C, Symbol(C,Decl(multiModuleFundule1.ts,0,0),Decl(multiModuleFundule1.ts,0,25),Decl(multiModuleFundule1.ts,4,1))
+>x : number, Symbol(x,Decl(multiModuleFundule1.ts,0,11))
 
 module C {
->C : typeof C
+>C : typeof C, Symbol(C,Decl(multiModuleFundule1.ts,0,0),Decl(multiModuleFundule1.ts,0,25),Decl(multiModuleFundule1.ts,4,1))
 
     export var x = 1;
->x : number
+>x : number, Symbol(x,Decl(multiModuleFundule1.ts,3,14))
 >1 : number
 }
 module C {
->C : typeof C
+>C : typeof C, Symbol(C,Decl(multiModuleFundule1.ts,0,0),Decl(multiModuleFundule1.ts,0,25),Decl(multiModuleFundule1.ts,4,1))
 
     export function foo() { }
->foo : () => void
+>foo : () => void, Symbol(foo,Decl(multiModuleFundule1.ts,5,10))
 }
 
 var r = C(2);
->r : void
+>r : void, Symbol(r,Decl(multiModuleFundule1.ts,9,3))
 >C(2) : void
->C : typeof C
+>C : typeof C, Symbol(C,Decl(multiModuleFundule1.ts,0,0),Decl(multiModuleFundule1.ts,0,25),Decl(multiModuleFundule1.ts,4,1))
 >2 : number
 
 var r2 = new C(2); // using void returning function as constructor
->r2 : any
+>r2 : any, Symbol(r2,Decl(multiModuleFundule1.ts,10,3))
 >new C(2) : any
->C : typeof C
+>C : typeof C, Symbol(C,Decl(multiModuleFundule1.ts,0,0),Decl(multiModuleFundule1.ts,0,25),Decl(multiModuleFundule1.ts,4,1))
 >2 : number
 
 var r3 = C.foo();
->r3 : void
+>r3 : void, Symbol(r3,Decl(multiModuleFundule1.ts,11,3))
 >C.foo() : void
->C.foo : () => void
->C : typeof C
->foo : () => void
+>C.foo : () => void, Symbol(C.foo,Decl(multiModuleFundule1.ts,5,10))
+>C : typeof C, Symbol(C,Decl(multiModuleFundule1.ts,0,0),Decl(multiModuleFundule1.ts,0,25),Decl(multiModuleFundule1.ts,4,1))
+>foo : () => void, Symbol(C.foo,Decl(multiModuleFundule1.ts,5,10))
 

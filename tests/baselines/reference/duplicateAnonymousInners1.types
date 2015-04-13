@@ -1,29 +1,29 @@
 === tests/cases/compiler/duplicateAnonymousInners1.ts ===
 module Foo {
->Foo : typeof Foo
+>Foo : typeof Foo, Symbol(Foo,Decl(duplicateAnonymousInners1.ts,0,0),Decl(duplicateAnonymousInners1.ts,10,1))
 
     class Helper {
->Helper : Helper
+>Helper : Helper, Symbol(Helper,Decl(duplicateAnonymousInners1.ts,0,12))
 
     }
     
     class Inner {}
->Inner : Inner
+>Inner : Inner, Symbol(Inner,Decl(duplicateAnonymousInners1.ts,4,5))
 
     // Inner should show up in intellisense
     
     export var Outer=0;
->Outer : number
+>Outer : number, Symbol(Outer,Decl(duplicateAnonymousInners1.ts,9,14))
 >0 : number
 }
 
 
 module Foo {
->Foo : typeof Foo
+>Foo : typeof Foo, Symbol(Foo,Decl(duplicateAnonymousInners1.ts,0,0),Decl(duplicateAnonymousInners1.ts,10,1))
     
     // Should not be an error
     class Helper {
->Helper : Helper
+>Helper : Helper, Symbol(Helper,Decl(duplicateAnonymousInners1.ts,13,12))
 
     }
     

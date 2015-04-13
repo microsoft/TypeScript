@@ -1,75 +1,75 @@
 === tests/cases/compiler/conditionallyDuplicateOverloadsCausedByOverloadResolution.ts ===
 declare function foo(func: (x: string, y: string) => any): boolean;
->foo : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }
->func : (x: string, y: string) => any
->x : string
->y : string
+>foo : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }, Symbol(foo,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,0,0),Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,0,67))
+>func : (x: string, y: string) => any, Symbol(func,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,0,21))
+>x : string, Symbol(x,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,0,28))
+>y : string, Symbol(y,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,0,38))
 
 declare function foo(func: (x: string, y: number) => any): string;
->foo : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }
->func : (x: string, y: number) => any
->x : string
->y : number
+>foo : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }, Symbol(foo,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,0,0),Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,0,67))
+>func : (x: string, y: number) => any, Symbol(func,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,1,21))
+>x : string, Symbol(x,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,1,28))
+>y : number, Symbol(y,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,1,38))
 
 var out = foo((x, y) => {
->out : boolean
+>out : boolean, Symbol(out,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,3,3))
 >foo((x, y) => {    function bar(a: typeof x): void;    function bar(b: typeof y): void;    function bar() { }    return bar;}) : boolean
->foo : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }
+>foo : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }, Symbol(foo,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,0,0),Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,0,67))
 >(x, y) => {    function bar(a: typeof x): void;    function bar(b: typeof y): void;    function bar() { }    return bar;} : (x: string, y: string) => { (a: string): void; (b: string): void; }
->x : string
->y : string
+>x : string, Symbol(x,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,3,15))
+>y : string, Symbol(y,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,3,17))
 
     function bar(a: typeof x): void;
->bar : { (a: string): void; (b: string): void; }
->a : string
->x : string
+>bar : { (a: string): void; (b: string): void; }, Symbol(bar,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,3,25),Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,4,36),Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,5,36))
+>a : string, Symbol(a,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,4,17))
+>x : string, Symbol(x,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,3,15))
 
     function bar(b: typeof y): void;
->bar : { (a: string): void; (b: string): void; }
->b : string
->y : string
+>bar : { (a: string): void; (b: string): void; }, Symbol(bar,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,3,25),Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,4,36),Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,5,36))
+>b : string, Symbol(b,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,5,17))
+>y : string, Symbol(y,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,3,17))
 
     function bar() { }
->bar : { (a: string): void; (b: string): void; }
+>bar : { (a: string): void; (b: string): void; }, Symbol(bar,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,3,25),Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,4,36),Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,5,36))
 
     return bar;
->bar : { (a: string): void; (b: string): void; }
+>bar : { (a: string): void; (b: string): void; }, Symbol(bar,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,3,25),Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,4,36),Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,5,36))
 
 });
 
 declare function foo2(func: (x: string, y: string) => any): boolean;
->foo2 : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }
->func : (x: string, y: string) => any
->x : string
->y : string
+>foo2 : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }, Symbol(foo2,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,8,3),Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,10,68))
+>func : (x: string, y: string) => any, Symbol(func,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,10,22))
+>x : string, Symbol(x,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,10,29))
+>y : string, Symbol(y,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,10,39))
 
 declare function foo2(func: (x: string, y: number) => any): string;
->foo2 : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }
->func : (x: string, y: number) => any
->x : string
->y : number
+>foo2 : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }, Symbol(foo2,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,8,3),Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,10,68))
+>func : (x: string, y: number) => any, Symbol(func,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,11,22))
+>x : string, Symbol(x,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,11,29))
+>y : number, Symbol(y,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,11,39))
 
 var out2 = foo2((x, y) => {
->out2 : boolean
+>out2 : boolean, Symbol(out2,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,13,3))
 >foo2((x, y) => {    var bar: {        (a: typeof x): void;        (b: typeof y): void;    };    return bar;}) : boolean
->foo2 : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }
+>foo2 : { (func: (x: string, y: string) => any): boolean; (func: (x: string, y: number) => any): string; }, Symbol(foo2,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,8,3),Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,10,68))
 >(x, y) => {    var bar: {        (a: typeof x): void;        (b: typeof y): void;    };    return bar;} : (x: string, y: string) => { (a: string): void; (b: string): void; }
->x : string
->y : string
+>x : string, Symbol(x,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,13,17))
+>y : string, Symbol(y,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,13,19))
 
     var bar: {
->bar : { (a: string): void; (b: string): void; }
+>bar : { (a: string): void; (b: string): void; }, Symbol(bar,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,14,7))
 
         (a: typeof x): void;
->a : string
->x : string
+>a : string, Symbol(a,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,15,9))
+>x : string, Symbol(x,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,13,17))
 
         (b: typeof y): void;
->b : string
->y : string
+>b : string, Symbol(b,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,16,9))
+>y : string, Symbol(y,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,13,19))
 
     };
     return bar;
->bar : { (a: string): void; (b: string): void; }
+>bar : { (a: string): void; (b: string): void; }, Symbol(bar,Decl(conditionallyDuplicateOverloadsCausedByOverloadResolution.ts,14,7))
 
 });

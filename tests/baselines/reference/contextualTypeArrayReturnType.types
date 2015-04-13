@@ -1,37 +1,37 @@
 === tests/cases/compiler/contextualTypeArrayReturnType.ts ===
 interface IBookStyle {
->IBookStyle : IBookStyle
+>IBookStyle : IBookStyle, Symbol(IBookStyle,Decl(contextualTypeArrayReturnType.ts,0,0))
 
     initialLeftPageTransforms?: (width: number) => NamedTransform[];
->initialLeftPageTransforms : (width: number) => NamedTransform[]
->width : number
->NamedTransform : NamedTransform
+>initialLeftPageTransforms : (width: number) => NamedTransform[], Symbol(initialLeftPageTransforms,Decl(contextualTypeArrayReturnType.ts,0,22))
+>width : number, Symbol(width,Decl(contextualTypeArrayReturnType.ts,1,33))
+>NamedTransform : NamedTransform, Symbol(NamedTransform,Decl(contextualTypeArrayReturnType.ts,2,1))
 }
 
 interface NamedTransform {
->NamedTransform : NamedTransform
+>NamedTransform : NamedTransform, Symbol(NamedTransform,Decl(contextualTypeArrayReturnType.ts,2,1))
 
     [name: string]: Transform3D;
->name : string
->Transform3D : Transform3D
+>name : string, Symbol(name,Decl(contextualTypeArrayReturnType.ts,5,5))
+>Transform3D : Transform3D, Symbol(Transform3D,Decl(contextualTypeArrayReturnType.ts,6,1))
 }
 
 interface Transform3D {
->Transform3D : Transform3D
+>Transform3D : Transform3D, Symbol(Transform3D,Decl(contextualTypeArrayReturnType.ts,6,1))
 
     cachedCss: string;
->cachedCss : string
+>cachedCss : string, Symbol(cachedCss,Decl(contextualTypeArrayReturnType.ts,8,23))
 }
 
 var style: IBookStyle = {
->style : IBookStyle
->IBookStyle : IBookStyle
+>style : IBookStyle, Symbol(style,Decl(contextualTypeArrayReturnType.ts,12,3))
+>IBookStyle : IBookStyle, Symbol(IBookStyle,Decl(contextualTypeArrayReturnType.ts,0,0))
 >{    initialLeftPageTransforms: (width: number) => {        return [            {'ry': null }        ];    }} : { initialLeftPageTransforms: (width: number) => { [x: string]: any; 'ry': any; }[]; }
 
     initialLeftPageTransforms: (width: number) => {
->initialLeftPageTransforms : (width: number) => { [x: string]: any; 'ry': any; }[]
+>initialLeftPageTransforms : (width: number) => { [x: string]: any; 'ry': any; }[], Symbol(initialLeftPageTransforms,Decl(contextualTypeArrayReturnType.ts,12,25))
 >(width: number) => {        return [            {'ry': null }        ];    } : (width: number) => { [x: string]: any; 'ry': any; }[]
->width : number
+>width : number, Symbol(width,Decl(contextualTypeArrayReturnType.ts,13,32))
 
         return [
 >[            {'ry': null }        ] : { [x: string]: null; 'ry': null; }[]

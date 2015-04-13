@@ -1,15 +1,15 @@
 === tests/cases/compiler/recursiveSpecializationOfExtendedTypeWithError.ts ===
 interface HTMLSelectElement {
->HTMLSelectElement : HTMLSelectElement
+>HTMLSelectElement : HTMLSelectElement, Symbol(HTMLSelectElement,Decl(recursiveSpecializationOfExtendedTypeWithError.ts,0,0))
 
     options: HTMLSelectElement;
->options : HTMLSelectElement
->HTMLSelectElement : HTMLSelectElement
+>options : HTMLSelectElement, Symbol(options,Decl(recursiveSpecializationOfExtendedTypeWithError.ts,0,29))
+>HTMLSelectElement : HTMLSelectElement, Symbol(HTMLSelectElement,Decl(recursiveSpecializationOfExtendedTypeWithError.ts,0,0))
 
     <A>(name: A): any;
->A : A
->name : A
->A : A
+>A : A, Symbol(A,Decl(recursiveSpecializationOfExtendedTypeWithError.ts,2,5))
+>name : A, Symbol(name,Decl(recursiveSpecializationOfExtendedTypeWithError.ts,2,8))
+>A : A, Symbol(A,Decl(recursiveSpecializationOfExtendedTypeWithError.ts,2,5))
 }
  
 

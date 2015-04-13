@@ -1,43 +1,43 @@
 === tests/cases/compiler/exportAssignmentWithPrivacyError.ts ===
 interface connectmodule {
->connectmodule : connectmodule
+>connectmodule : connectmodule, Symbol(connectmodule,Decl(exportAssignmentWithPrivacyError.ts,0,0))
 
     (res, req, next): void;
->res : any
->req : any
->next : any
+>res : any, Symbol(res,Decl(exportAssignmentWithPrivacyError.ts,1,5))
+>req : any, Symbol(req,Decl(exportAssignmentWithPrivacyError.ts,1,9))
+>next : any, Symbol(next,Decl(exportAssignmentWithPrivacyError.ts,1,14))
 }
 interface connectexport {
->connectexport : connectexport
+>connectexport : connectexport, Symbol(connectexport,Decl(exportAssignmentWithPrivacyError.ts,2,1))
 
     use: (mod: connectmodule) => connectexport;
->use : (mod: connectmodule) => connectexport
->mod : connectmodule
->connectmodule : connectmodule
->connectexport : connectexport
+>use : (mod: connectmodule) => connectexport, Symbol(use,Decl(exportAssignmentWithPrivacyError.ts,3,25))
+>mod : connectmodule, Symbol(mod,Decl(exportAssignmentWithPrivacyError.ts,4,10))
+>connectmodule : connectmodule, Symbol(connectmodule,Decl(exportAssignmentWithPrivacyError.ts,0,0))
+>connectexport : connectexport, Symbol(connectexport,Decl(exportAssignmentWithPrivacyError.ts,2,1))
 
     listen: (port: number) => void;
->listen : (port: number) => void
->port : number
+>listen : (port: number) => void, Symbol(listen,Decl(exportAssignmentWithPrivacyError.ts,4,47))
+>port : number, Symbol(port,Decl(exportAssignmentWithPrivacyError.ts,5,13))
 }
 
 var server: {
->server : { (): connectexport; test1: connectmodule; test2(): connectmodule; }
+>server : { (): connectexport; test1: connectmodule; test2(): connectmodule; }, Symbol(server,Decl(exportAssignmentWithPrivacyError.ts,8,3))
 
     (): connectexport;
->connectexport : connectexport
+>connectexport : connectexport, Symbol(connectexport,Decl(exportAssignmentWithPrivacyError.ts,2,1))
 
     test1: connectmodule;
->test1 : connectmodule
->connectmodule : connectmodule
+>test1 : connectmodule, Symbol(test1,Decl(exportAssignmentWithPrivacyError.ts,9,22))
+>connectmodule : connectmodule, Symbol(connectmodule,Decl(exportAssignmentWithPrivacyError.ts,0,0))
 
     test2(): connectmodule;
->test2 : () => connectmodule
->connectmodule : connectmodule
+>test2 : () => connectmodule, Symbol(test2,Decl(exportAssignmentWithPrivacyError.ts,10,25))
+>connectmodule : connectmodule, Symbol(connectmodule,Decl(exportAssignmentWithPrivacyError.ts,0,0))
 
 };
 
 export = server;
->server : { (): connectexport; test1: connectmodule; test2(): connectmodule; }
+>server : { (): connectexport; test1: connectmodule; test2(): connectmodule; }, Symbol(server,Decl(exportAssignmentWithPrivacyError.ts,8,3))
 
 

@@ -1,33 +1,33 @@
 === tests/cases/compiler/contextuallyTypingOrOperator2.ts ===
 var v: { a: (_: string) => number } = { a: s => s.length } || { a: s => 1 };
->v : { a: (_: string) => number; }
->a : (_: string) => number
->_ : string
+>v : { a: (_: string) => number; }, Symbol(v,Decl(contextuallyTypingOrOperator2.ts,0,3))
+>a : (_: string) => number, Symbol(a,Decl(contextuallyTypingOrOperator2.ts,0,8))
+>_ : string, Symbol(_,Decl(contextuallyTypingOrOperator2.ts,0,13))
 >{ a: s => s.length } || { a: s => 1 } : { a: (s: string) => number; }
 >{ a: s => s.length } : { a: (s: string) => number; }
->a : (s: string) => number
+>a : (s: string) => number, Symbol(a,Decl(contextuallyTypingOrOperator2.ts,0,39))
 >s => s.length : (s: string) => number
->s : string
->s.length : number
->s : string
->length : number
+>s : string, Symbol(s,Decl(contextuallyTypingOrOperator2.ts,0,42))
+>s.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>s : string, Symbol(s,Decl(contextuallyTypingOrOperator2.ts,0,42))
+>length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
 >{ a: s => 1 } : { a: (s: string) => number; }
->a : (s: string) => number
+>a : (s: string) => number, Symbol(a,Decl(contextuallyTypingOrOperator2.ts,0,63))
 >s => 1 : (s: string) => number
->s : string
+>s : string, Symbol(s,Decl(contextuallyTypingOrOperator2.ts,0,66))
 >1 : number
 
 var v2 = (s: string) => s.length || function (s) { s.aaa };
->v2 : (s: string) => number | ((s: any) => void)
+>v2 : (s: string) => number | ((s: any) => void), Symbol(v2,Decl(contextuallyTypingOrOperator2.ts,2,3))
 >(s: string) => s.length || function (s) { s.aaa } : (s: string) => number | ((s: any) => void)
->s : string
+>s : string, Symbol(s,Decl(contextuallyTypingOrOperator2.ts,2,10))
 >s.length || function (s) { s.aaa } : number | ((s: any) => void)
->s.length : number
->s : string
->length : number
+>s.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>s : string, Symbol(s,Decl(contextuallyTypingOrOperator2.ts,2,10))
+>length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
 >function (s) { s.aaa } : (s: any) => void
->s : any
+>s : any, Symbol(s,Decl(contextuallyTypingOrOperator2.ts,2,46))
 >s.aaa : any
->s : any
+>s : any, Symbol(s,Decl(contextuallyTypingOrOperator2.ts,2,46))
 >aaa : any
 

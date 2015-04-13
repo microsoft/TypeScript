@@ -1,23 +1,23 @@
 === tests/cases/compiler/fatarrowfunctionsInFunctionParameterDefaults.ts ===
 function fn(x = () => this, y = x()) {
->fn : (x?: () => any, y?: any) => any
->x : () => any
+>fn : (x?: () => any, y?: any) => any, Symbol(fn,Decl(fatarrowfunctionsInFunctionParameterDefaults.ts,0,0))
+>x : () => any, Symbol(x,Decl(fatarrowfunctionsInFunctionParameterDefaults.ts,0,12))
 >() => this : () => any
 >this : any
->y : any
+>y : any, Symbol(y,Decl(fatarrowfunctionsInFunctionParameterDefaults.ts,0,27))
 >x() : any
->x : () => any
+>x : () => any, Symbol(x,Decl(fatarrowfunctionsInFunctionParameterDefaults.ts,0,12))
 
     // should be 4
     return y;
->y : any
+>y : any, Symbol(y,Decl(fatarrowfunctionsInFunctionParameterDefaults.ts,0,27))
 
 }
 
 fn.call(4); // Should be 4
 >fn.call(4) : any
->fn.call : (thisArg: any, ...argArray: any[]) => any
->fn : (x?: () => any, y?: any) => any
->call : (thisArg: any, ...argArray: any[]) => any
+>fn.call : (thisArg: any, ...argArray: any[]) => any, Symbol(Function.call,Decl(lib.d.ts,234,45))
+>fn : (x?: () => any, y?: any) => any, Symbol(fn,Decl(fatarrowfunctionsInFunctionParameterDefaults.ts,0,0))
+>call : (thisArg: any, ...argArray: any[]) => any, Symbol(Function.call,Decl(lib.d.ts,234,45))
 >4 : number
 

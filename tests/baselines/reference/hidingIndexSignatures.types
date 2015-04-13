@@ -1,34 +1,34 @@
 === tests/cases/compiler/hidingIndexSignatures.ts ===
 interface A {
->A : A
+>A : A, Symbol(A,Decl(hidingIndexSignatures.ts,0,0))
 
     [a: string]: {};
->a : string
+>a : string, Symbol(a,Decl(hidingIndexSignatures.ts,1,5))
 }
 
 interface B extends A {
->B : B
->A : A
+>B : B, Symbol(B,Decl(hidingIndexSignatures.ts,2,1))
+>A : A, Symbol(A,Decl(hidingIndexSignatures.ts,0,0))
 
     [a: string]: number; // Number is not a subtype of string.  Should error.
->a : string
+>a : string, Symbol(a,Decl(hidingIndexSignatures.ts,5,5))
 }
 
 var b: B;
->b : B
->B : B
+>b : B, Symbol(b,Decl(hidingIndexSignatures.ts,8,3))
+>B : B, Symbol(B,Decl(hidingIndexSignatures.ts,2,1))
 
 b[""]; // Should be number
 >b[""] : number
->b : B
+>b : B, Symbol(b,Decl(hidingIndexSignatures.ts,8,3))
 >"" : string
 
 var a: A;
->a : A
->A : A
+>a : A, Symbol(a,Decl(hidingIndexSignatures.ts,10,3))
+>A : A, Symbol(A,Decl(hidingIndexSignatures.ts,0,0))
 
 a[""]; // Should be {}
 >a[""] : {}
->a : A
+>a : A, Symbol(a,Decl(hidingIndexSignatures.ts,10,3))
 >"" : string
 

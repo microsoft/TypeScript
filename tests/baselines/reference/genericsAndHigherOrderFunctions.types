@@ -2,124 +2,124 @@
 // no errors expected
 
 var combine: <T, S>(f: (_: T) => S) =>
->combine : <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T) => (x: U) => S
->T : T
->S : S
->f : (_: T) => S
->_ : T
->T : T
->S : S
+>combine : <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T) => (x: U) => S, Symbol(combine,Decl(genericsAndHigherOrderFunctions.ts,2,3))
+>T : T, Symbol(T,Decl(genericsAndHigherOrderFunctions.ts,2,14))
+>S : S, Symbol(S,Decl(genericsAndHigherOrderFunctions.ts,2,16))
+>f : (_: T) => S, Symbol(f,Decl(genericsAndHigherOrderFunctions.ts,2,20))
+>_ : T, Symbol(_,Decl(genericsAndHigherOrderFunctions.ts,2,24))
+>T : T, Symbol(T,Decl(genericsAndHigherOrderFunctions.ts,2,14))
+>S : S, Symbol(S,Decl(genericsAndHigherOrderFunctions.ts,2,16))
 
     <U>(g: (_: U) => T) =>
->U : U
->g : (_: U) => T
->_ : U
->U : U
->T : T
+>U : U, Symbol(U,Decl(genericsAndHigherOrderFunctions.ts,3,5))
+>g : (_: U) => T, Symbol(g,Decl(genericsAndHigherOrderFunctions.ts,3,8))
+>_ : U, Symbol(_,Decl(genericsAndHigherOrderFunctions.ts,3,12))
+>U : U, Symbol(U,Decl(genericsAndHigherOrderFunctions.ts,3,5))
+>T : T, Symbol(T,Decl(genericsAndHigherOrderFunctions.ts,2,14))
 
     (x: U) => S
->x : U
->U : U
->S : S
+>x : U, Symbol(x,Decl(genericsAndHigherOrderFunctions.ts,4,5))
+>U : U, Symbol(U,Decl(genericsAndHigherOrderFunctions.ts,3,5))
+>S : S, Symbol(S,Decl(genericsAndHigherOrderFunctions.ts,2,16))
 
     = <T, S>(f: (_: T) => S) =>
 ><T, S>(f: (_: T) => S) =>        <U>(g: (_: U) => T) =>            (x: U) => f(g(x)) : <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T) => (x: U) => S
->T : T
->S : S
->f : (_: T) => S
->_ : T
->T : T
->S : S
+>T : T, Symbol(T,Decl(genericsAndHigherOrderFunctions.ts,6,7))
+>S : S, Symbol(S,Decl(genericsAndHigherOrderFunctions.ts,6,9))
+>f : (_: T) => S, Symbol(f,Decl(genericsAndHigherOrderFunctions.ts,6,13))
+>_ : T, Symbol(_,Decl(genericsAndHigherOrderFunctions.ts,6,17))
+>T : T, Symbol(T,Decl(genericsAndHigherOrderFunctions.ts,6,7))
+>S : S, Symbol(S,Decl(genericsAndHigherOrderFunctions.ts,6,9))
 
         <U>(g: (_: U) => T) =>
 ><U>(g: (_: U) => T) =>            (x: U) => f(g(x)) : <U>(g: (_: U) => T) => (x: U) => S
->U : U
->g : (_: U) => T
->_ : U
->U : U
->T : T
+>U : U, Symbol(U,Decl(genericsAndHigherOrderFunctions.ts,7,9))
+>g : (_: U) => T, Symbol(g,Decl(genericsAndHigherOrderFunctions.ts,7,12))
+>_ : U, Symbol(_,Decl(genericsAndHigherOrderFunctions.ts,7,16))
+>U : U, Symbol(U,Decl(genericsAndHigherOrderFunctions.ts,7,9))
+>T : T, Symbol(T,Decl(genericsAndHigherOrderFunctions.ts,6,7))
 
             (x: U) => f(g(x))
 >(x: U) => f(g(x)) : (x: U) => S
->x : U
->U : U
+>x : U, Symbol(x,Decl(genericsAndHigherOrderFunctions.ts,8,13))
+>U : U, Symbol(U,Decl(genericsAndHigherOrderFunctions.ts,7,9))
 >f(g(x)) : S
->f : (_: T) => S
+>f : (_: T) => S, Symbol(f,Decl(genericsAndHigherOrderFunctions.ts,6,13))
 >g(x) : T
->g : (_: U) => T
->x : U
+>g : (_: U) => T, Symbol(g,Decl(genericsAndHigherOrderFunctions.ts,7,12))
+>x : U, Symbol(x,Decl(genericsAndHigherOrderFunctions.ts,8,13))
 
 var foo: <K, N>(g: (x: K) => N) =>
->foo : <K, N>(g: (x: K) => N) => (h: <M>(_: (_: K) => (_: M) => M) => (_: M) => M) => <R>(f: (_: N) => (_: R) => R) => (_: R) => R
->K : K
->N : N
->g : (x: K) => N
->x : K
->K : K
->N : N
+>foo : <K, N>(g: (x: K) => N) => (h: <M>(_: (_: K) => (_: M) => M) => (_: M) => M) => <R>(f: (_: N) => (_: R) => R) => (_: R) => R, Symbol(foo,Decl(genericsAndHigherOrderFunctions.ts,10,3))
+>K : K, Symbol(K,Decl(genericsAndHigherOrderFunctions.ts,10,10))
+>N : N, Symbol(N,Decl(genericsAndHigherOrderFunctions.ts,10,12))
+>g : (x: K) => N, Symbol(g,Decl(genericsAndHigherOrderFunctions.ts,10,16))
+>x : K, Symbol(x,Decl(genericsAndHigherOrderFunctions.ts,10,20))
+>K : K, Symbol(K,Decl(genericsAndHigherOrderFunctions.ts,10,10))
+>N : N, Symbol(N,Decl(genericsAndHigherOrderFunctions.ts,10,12))
 
     (h: <M>(_: (_: K) => (_: M) => M) => (_: M) => M) =>
->h : <M>(_: (_: K) => (_: M) => M) => (_: M) => M
->M : M
->_ : (_: K) => (_: M) => M
->_ : K
->K : K
->_ : M
->M : M
->M : M
->_ : M
->M : M
->M : M
+>h : <M>(_: (_: K) => (_: M) => M) => (_: M) => M, Symbol(h,Decl(genericsAndHigherOrderFunctions.ts,11,5))
+>M : M, Symbol(M,Decl(genericsAndHigherOrderFunctions.ts,11,9))
+>_ : (_: K) => (_: M) => M, Symbol(_,Decl(genericsAndHigherOrderFunctions.ts,11,12))
+>_ : K, Symbol(_,Decl(genericsAndHigherOrderFunctions.ts,11,16))
+>K : K, Symbol(K,Decl(genericsAndHigherOrderFunctions.ts,10,10))
+>_ : M, Symbol(_,Decl(genericsAndHigherOrderFunctions.ts,11,26))
+>M : M, Symbol(M,Decl(genericsAndHigherOrderFunctions.ts,11,9))
+>M : M, Symbol(M,Decl(genericsAndHigherOrderFunctions.ts,11,9))
+>_ : M, Symbol(_,Decl(genericsAndHigherOrderFunctions.ts,11,42))
+>M : M, Symbol(M,Decl(genericsAndHigherOrderFunctions.ts,11,9))
+>M : M, Symbol(M,Decl(genericsAndHigherOrderFunctions.ts,11,9))
 
     <R>(f: (_: N) => (_: R) => R) => (_: R) => R
->R : R
->f : (_: N) => (_: R) => R
->_ : N
->N : N
->_ : R
->R : R
->R : R
->_ : R
->R : R
->R : R
+>R : R, Symbol(R,Decl(genericsAndHigherOrderFunctions.ts,12,5))
+>f : (_: N) => (_: R) => R, Symbol(f,Decl(genericsAndHigherOrderFunctions.ts,12,8))
+>_ : N, Symbol(_,Decl(genericsAndHigherOrderFunctions.ts,12,12))
+>N : N, Symbol(N,Decl(genericsAndHigherOrderFunctions.ts,10,12))
+>_ : R, Symbol(_,Decl(genericsAndHigherOrderFunctions.ts,12,22))
+>R : R, Symbol(R,Decl(genericsAndHigherOrderFunctions.ts,12,5))
+>R : R, Symbol(R,Decl(genericsAndHigherOrderFunctions.ts,12,5))
+>_ : R, Symbol(_,Decl(genericsAndHigherOrderFunctions.ts,12,38))
+>R : R, Symbol(R,Decl(genericsAndHigherOrderFunctions.ts,12,5))
+>R : R, Symbol(R,Decl(genericsAndHigherOrderFunctions.ts,12,5))
 
     = <K, N>(g: (x: K) => N) =>
 ><K, N>(g: (x: K) => N) =>        (h: <M>(_: (_: K) => (_: M) => M) => (_: M) => M) =>            <R>(f: (_: N) => (_: R) => R) => h(combine(f)(g)) : <K, N>(g: (x: K) => N) => (h: <M>(_: (_: K) => (_: M) => M) => (_: M) => M) => <R>(f: (_: N) => (_: R) => R) => (_: R) => R
->K : K
->N : N
->g : (x: K) => N
->x : K
->K : K
->N : N
+>K : K, Symbol(K,Decl(genericsAndHigherOrderFunctions.ts,14,7))
+>N : N, Symbol(N,Decl(genericsAndHigherOrderFunctions.ts,14,9))
+>g : (x: K) => N, Symbol(g,Decl(genericsAndHigherOrderFunctions.ts,14,13))
+>x : K, Symbol(x,Decl(genericsAndHigherOrderFunctions.ts,14,17))
+>K : K, Symbol(K,Decl(genericsAndHigherOrderFunctions.ts,14,7))
+>N : N, Symbol(N,Decl(genericsAndHigherOrderFunctions.ts,14,9))
 
         (h: <M>(_: (_: K) => (_: M) => M) => (_: M) => M) =>
 >(h: <M>(_: (_: K) => (_: M) => M) => (_: M) => M) =>            <R>(f: (_: N) => (_: R) => R) => h(combine(f)(g)) : (h: <M>(_: (_: K) => (_: M) => M) => (_: M) => M) => <R>(f: (_: N) => (_: R) => R) => (_: R) => R
->h : <M>(_: (_: K) => (_: M) => M) => (_: M) => M
->M : M
->_ : (_: K) => (_: M) => M
->_ : K
->K : K
->_ : M
->M : M
->M : M
->_ : M
->M : M
->M : M
+>h : <M>(_: (_: K) => (_: M) => M) => (_: M) => M, Symbol(h,Decl(genericsAndHigherOrderFunctions.ts,15,9))
+>M : M, Symbol(M,Decl(genericsAndHigherOrderFunctions.ts,15,13))
+>_ : (_: K) => (_: M) => M, Symbol(_,Decl(genericsAndHigherOrderFunctions.ts,15,16))
+>_ : K, Symbol(_,Decl(genericsAndHigherOrderFunctions.ts,15,20))
+>K : K, Symbol(K,Decl(genericsAndHigherOrderFunctions.ts,14,7))
+>_ : M, Symbol(_,Decl(genericsAndHigherOrderFunctions.ts,15,30))
+>M : M, Symbol(M,Decl(genericsAndHigherOrderFunctions.ts,15,13))
+>M : M, Symbol(M,Decl(genericsAndHigherOrderFunctions.ts,15,13))
+>_ : M, Symbol(_,Decl(genericsAndHigherOrderFunctions.ts,15,46))
+>M : M, Symbol(M,Decl(genericsAndHigherOrderFunctions.ts,15,13))
+>M : M, Symbol(M,Decl(genericsAndHigherOrderFunctions.ts,15,13))
 
             <R>(f: (_: N) => (_: R) => R) => h(combine(f)(g))
 ><R>(f: (_: N) => (_: R) => R) => h(combine(f)(g)) : <R>(f: (_: N) => (_: R) => R) => (_: R) => R
->R : R
->f : (_: N) => (_: R) => R
->_ : N
->N : N
->_ : R
->R : R
->R : R
+>R : R, Symbol(R,Decl(genericsAndHigherOrderFunctions.ts,16,13))
+>f : (_: N) => (_: R) => R, Symbol(f,Decl(genericsAndHigherOrderFunctions.ts,16,16))
+>_ : N, Symbol(_,Decl(genericsAndHigherOrderFunctions.ts,16,20))
+>N : N, Symbol(N,Decl(genericsAndHigherOrderFunctions.ts,14,9))
+>_ : R, Symbol(_,Decl(genericsAndHigherOrderFunctions.ts,16,30))
+>R : R, Symbol(R,Decl(genericsAndHigherOrderFunctions.ts,16,13))
+>R : R, Symbol(R,Decl(genericsAndHigherOrderFunctions.ts,16,13))
 >h(combine(f)(g)) : (_: R) => R
->h : <M>(_: (_: K) => (_: M) => M) => (_: M) => M
+>h : <M>(_: (_: K) => (_: M) => M) => (_: M) => M, Symbol(h,Decl(genericsAndHigherOrderFunctions.ts,15,9))
 >combine(f)(g) : (x: K) => (_: R) => R
 >combine(f) : <U>(g: (_: U) => N) => (x: U) => (_: R) => R
->combine : <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T) => (x: U) => S
->f : (_: N) => (_: R) => R
->g : (x: K) => N
+>combine : <T, S>(f: (_: T) => S) => <U>(g: (_: U) => T) => (x: U) => S, Symbol(combine,Decl(genericsAndHigherOrderFunctions.ts,2,3))
+>f : (_: N) => (_: R) => R, Symbol(f,Decl(genericsAndHigherOrderFunctions.ts,16,16))
+>g : (x: K) => N, Symbol(g,Decl(genericsAndHigherOrderFunctions.ts,14,13))
 

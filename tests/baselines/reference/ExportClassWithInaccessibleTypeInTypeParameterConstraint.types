@@ -1,62 +1,62 @@
 === tests/cases/conformance/internalModules/exportDeclarations/ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts ===
 module A {
->A : typeof A
+>A : typeof A, Symbol(A,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,0,0))
 
     class Point {
->Point : Point
+>Point : Point, Symbol(Point,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,0,10))
 
         x: number;
->x : number
+>x : number, Symbol(x,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,2,17))
 
         y: number;
->y : number
+>y : number, Symbol(y,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,3,18))
     }
 
     export var Origin: Point = { x: 0, y: 0 };
->Origin : Point
->Point : Point
+>Origin : Point, Symbol(Origin,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,7,14))
+>Point : Point, Symbol(Point,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,0,10))
 >{ x: 0, y: 0 } : { x: number; y: number; }
->x : number
+>x : number, Symbol(x,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,7,32))
 >0 : number
->y : number
+>y : number, Symbol(y,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,7,38))
 >0 : number
 
     export class Point3d extends Point {
->Point3d : Point3d
->Point : Point
+>Point3d : Point3d, Symbol(Point3d,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,7,46))
+>Point : Point, Symbol(Point,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,0,10))
 
         z: number;
->z : number
+>z : number, Symbol(z,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,9,40))
     }
 
     export var Origin3d: Point3d = { x: 0, y: 0, z: 0 };
->Origin3d : Point3d
->Point3d : Point3d
+>Origin3d : Point3d, Symbol(Origin3d,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,13,14))
+>Point3d : Point3d, Symbol(Point3d,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,7,46))
 >{ x: 0, y: 0, z: 0 } : { x: number; y: number; z: number; }
->x : number
+>x : number, Symbol(x,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,13,36))
 >0 : number
->y : number
+>y : number, Symbol(y,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,13,42))
 >0 : number
->z : number
+>z : number, Symbol(z,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,13,48))
 >0 : number
 
     export class Line<TPoint extends Point>{
->Line : Line<TPoint>
->TPoint : TPoint
->Point : Point
+>Line : Line<TPoint>, Symbol(Line,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,13,56))
+>TPoint : TPoint, Symbol(TPoint,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,15,22))
+>Point : Point, Symbol(Point,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,0,10))
 
         constructor(public start: TPoint, public end: TPoint) { }
->start : TPoint
->TPoint : TPoint
->end : TPoint
->TPoint : TPoint
+>start : TPoint, Symbol(start,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,16,20))
+>TPoint : TPoint, Symbol(TPoint,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,15,22))
+>end : TPoint, Symbol(end,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,16,41))
+>TPoint : TPoint, Symbol(TPoint,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,15,22))
 
         static fromorigin2d(p: Point): Line<Point>{
->fromorigin2d : (p: Point) => Line<Point>
->p : Point
->Point : Point
->Line : Line<TPoint>
->Point : Point
+>fromorigin2d : (p: Point) => Line<Point>, Symbol(Line.fromorigin2d,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,16,65))
+>p : Point, Symbol(p,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,18,28))
+>Point : Point, Symbol(Point,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,0,10))
+>Line : Line<TPoint>, Symbol(Line,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,13,56))
+>Point : Point, Symbol(Point,Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts,0,10))
 
             return null;
 >null : null

@@ -1,47 +1,47 @@
 === tests/cases/compiler/assignmentCompatability9.ts ===
 module __test1__ {
->__test1__ : typeof __test1__
+>__test1__ : typeof __test1__, Symbol(__test1__,Decl(assignmentCompatability9.ts,0,0))
 
     export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
->interfaceWithPublicAndOptional : interfaceWithPublicAndOptional<T, U>
->T : T
->U : U
->one : T
->T : T
->two : U
->U : U
->obj4 : interfaceWithPublicAndOptional<number, string>
->interfaceWithPublicAndOptional : interfaceWithPublicAndOptional<T, U>
+>interfaceWithPublicAndOptional : interfaceWithPublicAndOptional<T, U>, Symbol(interfaceWithPublicAndOptional,Decl(assignmentCompatability9.ts,0,18))
+>T : T, Symbol(T,Decl(assignmentCompatability9.ts,1,52))
+>U : U, Symbol(U,Decl(assignmentCompatability9.ts,1,54))
+>one : T, Symbol(one,Decl(assignmentCompatability9.ts,1,58))
+>T : T, Symbol(T,Decl(assignmentCompatability9.ts,1,52))
+>two : U, Symbol(two,Decl(assignmentCompatability9.ts,1,66))
+>U : U, Symbol(U,Decl(assignmentCompatability9.ts,1,54))
+>obj4 : interfaceWithPublicAndOptional<number, string>, Symbol(obj4,Decl(assignmentCompatability9.ts,1,83))
+>interfaceWithPublicAndOptional : interfaceWithPublicAndOptional<T, U>, Symbol(interfaceWithPublicAndOptional,Decl(assignmentCompatability9.ts,0,18))
 >{ one: 1 } : { one: number; }
->one : number
+>one : number, Symbol(one,Decl(assignmentCompatability9.ts,1,139))
 >1 : number
 
     export var __val__obj4 = obj4;
->__val__obj4 : interfaceWithPublicAndOptional<number, string>
->obj4 : interfaceWithPublicAndOptional<number, string>
+>__val__obj4 : interfaceWithPublicAndOptional<number, string>, Symbol(__val__obj4,Decl(assignmentCompatability9.ts,2,14))
+>obj4 : interfaceWithPublicAndOptional<number, string>, Symbol(obj4,Decl(assignmentCompatability9.ts,1,83))
 }
 module __test2__ {
->__test2__ : typeof __test2__
+>__test2__ : typeof __test2__, Symbol(__test2__,Decl(assignmentCompatability9.ts,3,1))
 
     export          class classWithOptional<T> { constructor(public one?: T) {} }                       var x3 = new classWithOptional<number>();;
->classWithOptional : classWithOptional<T>
->T : T
->one : T
->T : T
->x3 : classWithOptional<number>
+>classWithOptional : classWithOptional<T>, Symbol(classWithOptional,Decl(assignmentCompatability9.ts,4,18))
+>T : T, Symbol(T,Decl(assignmentCompatability9.ts,5,44))
+>one : T, Symbol(one,Decl(assignmentCompatability9.ts,5,61))
+>T : T, Symbol(T,Decl(assignmentCompatability9.ts,5,44))
+>x3 : classWithOptional<number>, Symbol(x3,Decl(assignmentCompatability9.ts,5,107))
 >new classWithOptional<number>() : classWithOptional<number>
->classWithOptional : typeof classWithOptional
+>classWithOptional : typeof classWithOptional, Symbol(classWithOptional,Decl(assignmentCompatability9.ts,4,18))
 
     export var __val__x3 = x3;
->__val__x3 : classWithOptional<number>
->x3 : classWithOptional<number>
+>__val__x3 : classWithOptional<number>, Symbol(__val__x3,Decl(assignmentCompatability9.ts,6,14))
+>x3 : classWithOptional<number>, Symbol(x3,Decl(assignmentCompatability9.ts,5,107))
 }
 __test2__.__val__x3 = __test1__.__val__obj4
 >__test2__.__val__x3 = __test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
->__test2__.__val__x3 : __test2__.classWithOptional<number>
->__test2__ : typeof __test2__
->__val__x3 : __test2__.classWithOptional<number>
->__test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
->__test1__ : typeof __test1__
->__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
+>__test2__.__val__x3 : __test2__.classWithOptional<number>, Symbol(__test2__.__val__x3,Decl(assignmentCompatability9.ts,6,14))
+>__test2__ : typeof __test2__, Symbol(__test2__,Decl(assignmentCompatability9.ts,3,1))
+>__val__x3 : __test2__.classWithOptional<number>, Symbol(__test2__.__val__x3,Decl(assignmentCompatability9.ts,6,14))
+>__test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>, Symbol(__test1__.__val__obj4,Decl(assignmentCompatability9.ts,2,14))
+>__test1__ : typeof __test1__, Symbol(__test1__,Decl(assignmentCompatability9.ts,0,0))
+>__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>, Symbol(__test1__.__val__obj4,Decl(assignmentCompatability9.ts,2,14))
 

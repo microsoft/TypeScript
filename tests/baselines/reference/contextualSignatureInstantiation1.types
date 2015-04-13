@@ -1,60 +1,60 @@
 === tests/cases/compiler/contextualSignatureInstantiation1.ts ===
 declare function map<S, T>(f: (x: S) => T): (a: S[]) => T[];
->map : <S, T>(f: (x: S) => T) => (a: S[]) => T[]
->S : S
->T : T
->f : (x: S) => T
->x : S
->S : S
->T : T
->a : S[]
->S : S
->T : T
+>map : <S, T>(f: (x: S) => T) => (a: S[]) => T[], Symbol(map,Decl(contextualSignatureInstantiation1.ts,0,0))
+>S : S, Symbol(S,Decl(contextualSignatureInstantiation1.ts,0,21))
+>T : T, Symbol(T,Decl(contextualSignatureInstantiation1.ts,0,23))
+>f : (x: S) => T, Symbol(f,Decl(contextualSignatureInstantiation1.ts,0,27))
+>x : S, Symbol(x,Decl(contextualSignatureInstantiation1.ts,0,31))
+>S : S, Symbol(S,Decl(contextualSignatureInstantiation1.ts,0,21))
+>T : T, Symbol(T,Decl(contextualSignatureInstantiation1.ts,0,23))
+>a : S[], Symbol(a,Decl(contextualSignatureInstantiation1.ts,0,45))
+>S : S, Symbol(S,Decl(contextualSignatureInstantiation1.ts,0,21))
+>T : T, Symbol(T,Decl(contextualSignatureInstantiation1.ts,0,23))
 
 var e = <K>(x: string, y?: K) => x.length;
->e : <K>(x: string, y?: K) => number
+>e : <K>(x: string, y?: K) => number, Symbol(e,Decl(contextualSignatureInstantiation1.ts,1,3))
 ><K>(x: string, y?: K) => x.length : <K>(x: string, y?: K) => number
->K : K
->x : string
->y : K
->K : K
->x.length : number
->x : string
->length : number
+>K : K, Symbol(K,Decl(contextualSignatureInstantiation1.ts,1,9))
+>x : string, Symbol(x,Decl(contextualSignatureInstantiation1.ts,1,12))
+>y : K, Symbol(y,Decl(contextualSignatureInstantiation1.ts,1,22))
+>K : K, Symbol(K,Decl(contextualSignatureInstantiation1.ts,1,9))
+>x.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>x : string, Symbol(x,Decl(contextualSignatureInstantiation1.ts,1,12))
+>length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
 
 var r99 = map(e); // should be {}[] for S since a generic lambda is not inferentially typed
->r99 : (a: {}[]) => number[]
+>r99 : (a: {}[]) => number[], Symbol(r99,Decl(contextualSignatureInstantiation1.ts,2,3))
 >map(e) : (a: {}[]) => number[]
->map : <S, T>(f: (x: S) => T) => (a: S[]) => T[]
->e : <K>(x: string, y?: K) => number
+>map : <S, T>(f: (x: S) => T) => (a: S[]) => T[], Symbol(map,Decl(contextualSignatureInstantiation1.ts,0,0))
+>e : <K>(x: string, y?: K) => number, Symbol(e,Decl(contextualSignatureInstantiation1.ts,1,3))
 
 declare function map2<S extends { length: number }, T>(f: (x: S) => T): (a: S[]) => T[];
->map2 : <S extends { length: number; }, T>(f: (x: S) => T) => (a: S[]) => T[]
->S : S
->length : number
->T : T
->f : (x: S) => T
->x : S
->S : S
->T : T
->a : S[]
->S : S
->T : T
+>map2 : <S extends { length: number; }, T>(f: (x: S) => T) => (a: S[]) => T[], Symbol(map2,Decl(contextualSignatureInstantiation1.ts,2,17))
+>S : S, Symbol(S,Decl(contextualSignatureInstantiation1.ts,4,22))
+>length : number, Symbol(length,Decl(contextualSignatureInstantiation1.ts,4,33))
+>T : T, Symbol(T,Decl(contextualSignatureInstantiation1.ts,4,51))
+>f : (x: S) => T, Symbol(f,Decl(contextualSignatureInstantiation1.ts,4,55))
+>x : S, Symbol(x,Decl(contextualSignatureInstantiation1.ts,4,59))
+>S : S, Symbol(S,Decl(contextualSignatureInstantiation1.ts,4,22))
+>T : T, Symbol(T,Decl(contextualSignatureInstantiation1.ts,4,51))
+>a : S[], Symbol(a,Decl(contextualSignatureInstantiation1.ts,4,73))
+>S : S, Symbol(S,Decl(contextualSignatureInstantiation1.ts,4,22))
+>T : T, Symbol(T,Decl(contextualSignatureInstantiation1.ts,4,51))
 
 var e2 = <K>(x: string, y?: K) => x.length;
->e2 : <K>(x: string, y?: K) => number
+>e2 : <K>(x: string, y?: K) => number, Symbol(e2,Decl(contextualSignatureInstantiation1.ts,5,3))
 ><K>(x: string, y?: K) => x.length : <K>(x: string, y?: K) => number
->K : K
->x : string
->y : K
->K : K
->x.length : number
->x : string
->length : number
+>K : K, Symbol(K,Decl(contextualSignatureInstantiation1.ts,5,10))
+>x : string, Symbol(x,Decl(contextualSignatureInstantiation1.ts,5,13))
+>y : K, Symbol(y,Decl(contextualSignatureInstantiation1.ts,5,23))
+>K : K, Symbol(K,Decl(contextualSignatureInstantiation1.ts,5,10))
+>x.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>x : string, Symbol(x,Decl(contextualSignatureInstantiation1.ts,5,13))
+>length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
 
 var r100 = map2(e2); // type arg inference should fail for S since a generic lambda is not inferentially typed. Falls back to { length: number }
->r100 : (a: { length: number; }[]) => number[]
+>r100 : (a: { length: number; }[]) => number[], Symbol(r100,Decl(contextualSignatureInstantiation1.ts,6,3))
 >map2(e2) : (a: { length: number; }[]) => number[]
->map2 : <S extends { length: number; }, T>(f: (x: S) => T) => (a: S[]) => T[]
->e2 : <K>(x: string, y?: K) => number
+>map2 : <S extends { length: number; }, T>(f: (x: S) => T) => (a: S[]) => T[], Symbol(map2,Decl(contextualSignatureInstantiation1.ts,2,17))
+>e2 : <K>(x: string, y?: K) => number, Symbol(e2,Decl(contextualSignatureInstantiation1.ts,5,3))
 

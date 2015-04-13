@@ -1,39 +1,39 @@
 === tests/cases/compiler/declFileTypeofClass.ts ===
 
 class c {
->c : c
+>c : c, Symbol(c,Decl(declFileTypeofClass.ts,0,0))
 
     static x : string;
->x : string
+>x : string, Symbol(c.x,Decl(declFileTypeofClass.ts,1,9))
 
     private static y: number;
->y : number
+>y : number, Symbol(c.y,Decl(declFileTypeofClass.ts,2,22))
 
     private x3: string;
->x3 : string
+>x3 : string, Symbol(x3,Decl(declFileTypeofClass.ts,3,29))
 
     public y3: number;
->y3 : number
+>y3 : number, Symbol(y3,Decl(declFileTypeofClass.ts,4,23))
 }
 
 var x: c;
->x : c
->c : c
+>x : c, Symbol(x,Decl(declFileTypeofClass.ts,8,3))
+>c : c, Symbol(c,Decl(declFileTypeofClass.ts,0,0))
 
 var y = c;
->y : typeof c
->c : typeof c
+>y : typeof c, Symbol(y,Decl(declFileTypeofClass.ts,9,3))
+>c : typeof c, Symbol(c,Decl(declFileTypeofClass.ts,0,0))
 
 var z: typeof c;
->z : typeof c
->c : typeof c
+>z : typeof c, Symbol(z,Decl(declFileTypeofClass.ts,10,3))
+>c : typeof c, Symbol(c,Decl(declFileTypeofClass.ts,0,0))
 
 class genericC<T>
->genericC : genericC<T>
->T : T
+>genericC : genericC<T>, Symbol(genericC,Decl(declFileTypeofClass.ts,10,16))
+>T : T, Symbol(T,Decl(declFileTypeofClass.ts,11,15))
 {
 }
 var genericX = genericC;
->genericX : typeof genericC
->genericC : typeof genericC
+>genericX : typeof genericC, Symbol(genericX,Decl(declFileTypeofClass.ts,14,3))
+>genericC : typeof genericC, Symbol(genericC,Decl(declFileTypeofClass.ts,10,16))
 

@@ -2,104 +2,104 @@
 // Also note that it is possible to defeat a type guard by calling a function that changes the 
 // type of the guarded variable.
 function foo(x: number | string) {
->foo : (x: string | number) => number
->x : string | number
+>foo : (x: string | number) => number, Symbol(foo,Decl(typeGuardsDefeat.ts,0,0))
+>x : string | number, Symbol(x,Decl(typeGuardsDefeat.ts,2,13))
 
     function f() {
->f : () => void
+>f : () => void, Symbol(f,Decl(typeGuardsDefeat.ts,2,34))
 
         x = 10;
 >x = 10 : number
->x : string | number
+>x : string | number, Symbol(x,Decl(typeGuardsDefeat.ts,2,13))
 >10 : number
     }
     if (typeof x === "string") {
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | number
+>x : string | number, Symbol(x,Decl(typeGuardsDefeat.ts,2,13))
 >"string" : string
 
         f();
 >f() : void
->f : () => void
+>f : () => void, Symbol(f,Decl(typeGuardsDefeat.ts,2,34))
 
         return x.length; // string
->x.length : number
->x : string
->length : number
+>x.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>x : string, Symbol(x,Decl(typeGuardsDefeat.ts,2,13))
+>length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
     }
     else {
         return x++; // number
 >x++ : number
->x : number
+>x : number, Symbol(x,Decl(typeGuardsDefeat.ts,2,13))
     }
 }
 function foo2(x: number | string) {
->foo2 : (x: string | number) => number
->x : string | number
+>foo2 : (x: string | number) => number, Symbol(foo2,Decl(typeGuardsDefeat.ts,13,1))
+>x : string | number, Symbol(x,Decl(typeGuardsDefeat.ts,14,14))
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | number
+>x : string | number, Symbol(x,Decl(typeGuardsDefeat.ts,14,14))
 >"string" : string
 
         return x.length; // string
->x.length : number
->x : string
->length : number
+>x.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>x : string, Symbol(x,Decl(typeGuardsDefeat.ts,14,14))
+>length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
     }
     else {
         var f = function () {
->f : () => number
+>f : () => number, Symbol(f,Decl(typeGuardsDefeat.ts,19,11))
 >function () {            return x * x;        } : () => number
 
             return x * x;
 >x * x : number
->x : number
->x : number
+>x : number, Symbol(x,Decl(typeGuardsDefeat.ts,14,14))
+>x : number, Symbol(x,Decl(typeGuardsDefeat.ts,14,14))
 
         };
     }
     x = "hello";
 >x = "hello" : string
->x : string | number
+>x : string | number, Symbol(x,Decl(typeGuardsDefeat.ts,14,14))
 >"hello" : string
 
     f();
 >f() : number
->f : () => number
+>f : () => number, Symbol(f,Decl(typeGuardsDefeat.ts,19,11))
 }
 function foo3(x: number | string) {
->foo3 : (x: string | number) => number
->x : string | number
+>foo3 : (x: string | number) => number, Symbol(foo3,Decl(typeGuardsDefeat.ts,25,1))
+>x : string | number, Symbol(x,Decl(typeGuardsDefeat.ts,26,14))
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | number
+>x : string | number, Symbol(x,Decl(typeGuardsDefeat.ts,26,14))
 >"string" : string
 
         return x.length; // string
->x.length : number
->x : string
->length : number
+>x.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>x : string, Symbol(x,Decl(typeGuardsDefeat.ts,26,14))
+>length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
     }
     else {
         var f = () => x * x;
->f : () => number
+>f : () => number, Symbol(f,Decl(typeGuardsDefeat.ts,31,11))
 >() => x * x : () => number
 >x * x : number
->x : number
->x : number
+>x : number, Symbol(x,Decl(typeGuardsDefeat.ts,26,14))
+>x : number, Symbol(x,Decl(typeGuardsDefeat.ts,26,14))
     }
     x = "hello";
 >x = "hello" : string
->x : string | number
+>x : string | number, Symbol(x,Decl(typeGuardsDefeat.ts,26,14))
 >"hello" : string
 
     f();
 >f() : number
->f : () => number
+>f : () => number, Symbol(f,Decl(typeGuardsDefeat.ts,31,11))
 }
 

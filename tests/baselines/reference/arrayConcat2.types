@@ -1,32 +1,32 @@
 === tests/cases/compiler/arrayConcat2.ts ===
 var a: string[] = [];
->a : string[]
+>a : string[], Symbol(a,Decl(arrayConcat2.ts,0,3))
 >[] : undefined[]
 
 a.concat("hello", 'world');
 >a.concat("hello", 'world') : string[]
->a.concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }
->a : string[]
->concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }
+>a.concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }, Symbol(Array.concat,Decl(lib.d.ts,1025,13),Decl(lib.d.ts,1030,46))
+>a : string[], Symbol(a,Decl(arrayConcat2.ts,0,3))
+>concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }, Symbol(Array.concat,Decl(lib.d.ts,1025,13),Decl(lib.d.ts,1030,46))
 >"hello" : string
 >'world' : string
 
 a.concat('Hello');
 >a.concat('Hello') : string[]
->a.concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }
->a : string[]
->concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }
+>a.concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }, Symbol(Array.concat,Decl(lib.d.ts,1025,13),Decl(lib.d.ts,1030,46))
+>a : string[], Symbol(a,Decl(arrayConcat2.ts,0,3))
+>concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }, Symbol(Array.concat,Decl(lib.d.ts,1025,13),Decl(lib.d.ts,1030,46))
 >'Hello' : string
 
 var b = new Array<string>();
->b : string[]
+>b : string[], Symbol(b,Decl(arrayConcat2.ts,5,3))
 >new Array<string>() : string[]
->Array : ArrayConstructor
+>Array : ArrayConstructor, Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
 
 b.concat('hello');
 >b.concat('hello') : string[]
->b.concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }
->b : string[]
->concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }
+>b.concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }, Symbol(Array.concat,Decl(lib.d.ts,1025,13),Decl(lib.d.ts,1030,46))
+>b : string[], Symbol(b,Decl(arrayConcat2.ts,5,3))
+>concat : { <U extends string[]>(...items: U[]): string[]; (...items: string[]): string[]; }, Symbol(Array.concat,Decl(lib.d.ts,1025,13),Decl(lib.d.ts,1030,46))
 >'hello' : string
 

@@ -1,9 +1,9 @@
 === tests/cases/compiler/inheritanceMemberFuncOverridingMethod.ts ===
 class a {
->a : a
+>a : a, Symbol(a,Decl(inheritanceMemberFuncOverridingMethod.ts,0,0))
 
     x() {
->x : () => string
+>x : () => string, Symbol(x,Decl(inheritanceMemberFuncOverridingMethod.ts,0,9))
 
         return "10";
 >"10" : string
@@ -11,11 +11,11 @@ class a {
 }
 
 class b extends a {
->b : b
->a : a
+>b : b, Symbol(b,Decl(inheritanceMemberFuncOverridingMethod.ts,4,1))
+>a : a, Symbol(a,Decl(inheritanceMemberFuncOverridingMethod.ts,0,0))
 
     x() {
->x : () => string
+>x : () => string, Symbol(x,Decl(inheritanceMemberFuncOverridingMethod.ts,6,19))
 
         return "20";
 >"20" : string

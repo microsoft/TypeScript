@@ -1,24 +1,24 @@
 === tests/cases/compiler/inferentialTypingWithFunctionType2.ts ===
 function identity<A>(a: A): A {
->identity : <A>(a: A) => A
->A : A
->a : A
->A : A
->A : A
+>identity : <A>(a: A) => A, Symbol(identity,Decl(inferentialTypingWithFunctionType2.ts,0,0))
+>A : A, Symbol(A,Decl(inferentialTypingWithFunctionType2.ts,0,18))
+>a : A, Symbol(a,Decl(inferentialTypingWithFunctionType2.ts,0,21))
+>A : A, Symbol(A,Decl(inferentialTypingWithFunctionType2.ts,0,18))
+>A : A, Symbol(A,Decl(inferentialTypingWithFunctionType2.ts,0,18))
 
     return a;
->a : A
+>a : A, Symbol(a,Decl(inferentialTypingWithFunctionType2.ts,0,21))
 }
 var x = [1, 2, 3].map(identity)[0];
->x : number
+>x : number, Symbol(x,Decl(inferentialTypingWithFunctionType2.ts,3,3))
 >[1, 2, 3].map(identity)[0] : number
 >[1, 2, 3].map(identity) : number[]
->[1, 2, 3].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>[1, 2, 3].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
 >[1, 2, 3] : number[]
 >1 : number
 >2 : number
 >3 : number
->map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->identity : <A>(a: A) => A
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
+>identity : <A>(a: A) => A, Symbol(identity,Decl(inferentialTypingWithFunctionType2.ts,0,0))
 >0 : number
 

@@ -1,57 +1,57 @@
 === tests/cases/compiler/duplicateOverloadInTypeAugmentation1.ts ===
 interface Array<T> {
->Array : T[]
->T : T
+>Array : T[], Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11),Decl(duplicateOverloadInTypeAugmentation1.ts,0,0))
+>T : T, Symbol(T,Decl(lib.d.ts,1007,16),Decl(duplicateOverloadInTypeAugmentation1.ts,0,16))
 
     reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T,
->reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
->callbackfn : (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T
->previousValue : T
->T : T
->currentValue : T
->T : T
->currentIndex : number
->array : T[]
->T : T
->T : T
+>reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }, Symbol(reduce,Decl(lib.d.ts,1129,93),Decl(lib.d.ts,1136,120),Decl(duplicateOverloadInTypeAugmentation1.ts,0,20),Decl(duplicateOverloadInTypeAugmentation1.ts,2,29))
+>callbackfn : (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, Symbol(callbackfn,Decl(duplicateOverloadInTypeAugmentation1.ts,1,11))
+>previousValue : T, Symbol(previousValue,Decl(duplicateOverloadInTypeAugmentation1.ts,1,24))
+>T : T, Symbol(T,Decl(lib.d.ts,1007,16),Decl(duplicateOverloadInTypeAugmentation1.ts,0,16))
+>currentValue : T, Symbol(currentValue,Decl(duplicateOverloadInTypeAugmentation1.ts,1,41))
+>T : T, Symbol(T,Decl(lib.d.ts,1007,16),Decl(duplicateOverloadInTypeAugmentation1.ts,0,16))
+>currentIndex : number, Symbol(currentIndex,Decl(duplicateOverloadInTypeAugmentation1.ts,1,58))
+>array : T[], Symbol(array,Decl(duplicateOverloadInTypeAugmentation1.ts,1,80))
+>T : T, Symbol(T,Decl(lib.d.ts,1007,16),Decl(duplicateOverloadInTypeAugmentation1.ts,0,16))
+>T : T, Symbol(T,Decl(lib.d.ts,1007,16),Decl(duplicateOverloadInTypeAugmentation1.ts,0,16))
 
         initialValue?: T): T;
->initialValue : T
->T : T
->T : T
+>initialValue : T, Symbol(initialValue,Decl(duplicateOverloadInTypeAugmentation1.ts,1,98))
+>T : T, Symbol(T,Decl(lib.d.ts,1007,16),Decl(duplicateOverloadInTypeAugmentation1.ts,0,16))
+>T : T, Symbol(T,Decl(lib.d.ts,1007,16),Decl(duplicateOverloadInTypeAugmentation1.ts,0,16))
 
     reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U,
->reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
->U : U
->callbackfn : (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U
->previousValue : U
->U : U
->currentValue : T
->T : T
->currentIndex : number
->array : T[]
->T : T
->U : U
+>reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }, Symbol(reduce,Decl(lib.d.ts,1129,93),Decl(lib.d.ts,1136,120),Decl(duplicateOverloadInTypeAugmentation1.ts,0,20),Decl(duplicateOverloadInTypeAugmentation1.ts,2,29))
+>U : U, Symbol(U,Decl(duplicateOverloadInTypeAugmentation1.ts,3,11))
+>callbackfn : (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, Symbol(callbackfn,Decl(duplicateOverloadInTypeAugmentation1.ts,3,14))
+>previousValue : U, Symbol(previousValue,Decl(duplicateOverloadInTypeAugmentation1.ts,3,27))
+>U : U, Symbol(U,Decl(duplicateOverloadInTypeAugmentation1.ts,3,11))
+>currentValue : T, Symbol(currentValue,Decl(duplicateOverloadInTypeAugmentation1.ts,3,44))
+>T : T, Symbol(T,Decl(lib.d.ts,1007,16),Decl(duplicateOverloadInTypeAugmentation1.ts,0,16))
+>currentIndex : number, Symbol(currentIndex,Decl(duplicateOverloadInTypeAugmentation1.ts,3,61))
+>array : T[], Symbol(array,Decl(duplicateOverloadInTypeAugmentation1.ts,3,83))
+>T : T, Symbol(T,Decl(lib.d.ts,1007,16),Decl(duplicateOverloadInTypeAugmentation1.ts,0,16))
+>U : U, Symbol(U,Decl(duplicateOverloadInTypeAugmentation1.ts,3,11))
 
         initialValue: U): U;
->initialValue : U
->U : U
->U : U
+>initialValue : U, Symbol(initialValue,Decl(duplicateOverloadInTypeAugmentation1.ts,3,101))
+>U : U, Symbol(U,Decl(duplicateOverloadInTypeAugmentation1.ts,3,11))
+>U : U, Symbol(U,Decl(duplicateOverloadInTypeAugmentation1.ts,3,11))
 }
 var a: Array<string>;
->a : string[]
->Array : T[]
+>a : string[], Symbol(a,Decl(duplicateOverloadInTypeAugmentation1.ts,6,3))
+>Array : T[], Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11),Decl(duplicateOverloadInTypeAugmentation1.ts,0,0))
 
 var r5 = a.reduce((x, y) => x + y);
->r5 : string
+>r5 : string, Symbol(r5,Decl(duplicateOverloadInTypeAugmentation1.ts,7,3))
 >a.reduce((x, y) => x + y) : string
->a.reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue?: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue?: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }
->a : string[]
->reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue?: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue?: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }
+>a.reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue?: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue?: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }, Symbol(Array.reduce,Decl(lib.d.ts,1129,93),Decl(lib.d.ts,1136,120),Decl(duplicateOverloadInTypeAugmentation1.ts,0,20),Decl(duplicateOverloadInTypeAugmentation1.ts,2,29))
+>a : string[], Symbol(a,Decl(duplicateOverloadInTypeAugmentation1.ts,6,3))
+>reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue?: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue?: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }, Symbol(Array.reduce,Decl(lib.d.ts,1129,93),Decl(lib.d.ts,1136,120),Decl(duplicateOverloadInTypeAugmentation1.ts,0,20),Decl(duplicateOverloadInTypeAugmentation1.ts,2,29))
 >(x, y) => x + y : (x: string, y: string) => string
->x : string
->y : string
+>x : string, Symbol(x,Decl(duplicateOverloadInTypeAugmentation1.ts,7,19))
+>y : string, Symbol(y,Decl(duplicateOverloadInTypeAugmentation1.ts,7,21))
 >x + y : string
->x : string
->y : string
+>x : string, Symbol(x,Decl(duplicateOverloadInTypeAugmentation1.ts,7,19))
+>y : string, Symbol(y,Decl(duplicateOverloadInTypeAugmentation1.ts,7,21))
 

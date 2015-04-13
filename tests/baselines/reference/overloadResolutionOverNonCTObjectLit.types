@@ -1,75 +1,75 @@
 === tests/cases/compiler/overloadResolutionOverNonCTObjectLit.ts ===
 module Bugs {
->Bugs : typeof Bugs
+>Bugs : typeof Bugs, Symbol(Bugs,Decl(overloadResolutionOverNonCTObjectLit.ts,0,0))
 
                 export interface IToken {
->IToken : IToken
+>IToken : IToken, Symbol(IToken,Decl(overloadResolutionOverNonCTObjectLit.ts,0,13))
 
                                 startIndex:number;
->startIndex : number
+>startIndex : number, Symbol(startIndex,Decl(overloadResolutionOverNonCTObjectLit.ts,1,41))
 
                                 type:string;
->type : string
+>type : string, Symbol(type,Decl(overloadResolutionOverNonCTObjectLit.ts,2,50))
 
                                 bracket:number;
->bracket : number
+>bracket : number, Symbol(bracket,Decl(overloadResolutionOverNonCTObjectLit.ts,3,44))
                 }
                 
                 export interface IState {
->IState : IState
+>IState : IState, Symbol(IState,Decl(overloadResolutionOverNonCTObjectLit.ts,5,17))
                 }
 
                 export interface IStateToken extends IToken {
->IStateToken : IStateToken
->IToken : IToken
+>IStateToken : IStateToken, Symbol(IStateToken,Decl(overloadResolutionOverNonCTObjectLit.ts,8,17))
+>IToken : IToken, Symbol(IToken,Decl(overloadResolutionOverNonCTObjectLit.ts,0,13))
 
                                 state: IState;
->state : IState
->IState : IState
+>state : IState, Symbol(state,Decl(overloadResolutionOverNonCTObjectLit.ts,10,61))
+>IState : IState, Symbol(IState,Decl(overloadResolutionOverNonCTObjectLit.ts,5,17))
 
                                 length: number;
->length : number
+>length : number, Symbol(length,Decl(overloadResolutionOverNonCTObjectLit.ts,11,46))
                 }
                 
                 function bug3() {
->bug3 : () => void
+>bug3 : () => void, Symbol(bug3,Decl(overloadResolutionOverNonCTObjectLit.ts,13,17))
 
                                 var tokens:IToken[]= [];
->tokens : IToken[]
->IToken : IToken
+>tokens : IToken[], Symbol(tokens,Decl(overloadResolutionOverNonCTObjectLit.ts,16,35))
+>IToken : IToken, Symbol(IToken,Decl(overloadResolutionOverNonCTObjectLit.ts,0,13))
 >[] : undefined[]
 
                                 tokens.push({ startIndex: 1, type: '', bracket: 3 });
 >tokens.push({ startIndex: 1, type: '', bracket: 3 }) : number
->tokens.push : (...items: IToken[]) => number
->tokens : IToken[]
->push : (...items: IToken[]) => number
+>tokens.push : (...items: IToken[]) => number, Symbol(Array.push,Decl(lib.d.ts,1016,29))
+>tokens : IToken[], Symbol(tokens,Decl(overloadResolutionOverNonCTObjectLit.ts,16,35))
+>push : (...items: IToken[]) => number, Symbol(Array.push,Decl(lib.d.ts,1016,29))
 >{ startIndex: 1, type: '', bracket: 3 } : { startIndex: number; type: string; bracket: number; }
->startIndex : number
+>startIndex : number, Symbol(startIndex,Decl(overloadResolutionOverNonCTObjectLit.ts,17,45))
 >1 : number
->type : string
+>type : string, Symbol(type,Decl(overloadResolutionOverNonCTObjectLit.ts,17,60))
 >'' : string
->bracket : number
+>bracket : number, Symbol(bracket,Decl(overloadResolutionOverNonCTObjectLit.ts,17,70))
 >3 : number
 
                                 tokens.push(<IToken>({ startIndex: 1, type: '', bracket: 3, state: null, length: 10 }));
 >tokens.push(<IToken>({ startIndex: 1, type: '', bracket: 3, state: null, length: 10 })) : number
->tokens.push : (...items: IToken[]) => number
->tokens : IToken[]
->push : (...items: IToken[]) => number
+>tokens.push : (...items: IToken[]) => number, Symbol(Array.push,Decl(lib.d.ts,1016,29))
+>tokens : IToken[], Symbol(tokens,Decl(overloadResolutionOverNonCTObjectLit.ts,16,35))
+>push : (...items: IToken[]) => number, Symbol(Array.push,Decl(lib.d.ts,1016,29))
 ><IToken>({ startIndex: 1, type: '', bracket: 3, state: null, length: 10 }) : IToken
->IToken : IToken
+>IToken : IToken, Symbol(IToken,Decl(overloadResolutionOverNonCTObjectLit.ts,0,13))
 >({ startIndex: 1, type: '', bracket: 3, state: null, length: 10 }) : { startIndex: number; type: string; bracket: number; state: null; length: number; }
 >{ startIndex: 1, type: '', bracket: 3, state: null, length: 10 } : { startIndex: number; type: string; bracket: number; state: null; length: number; }
->startIndex : number
+>startIndex : number, Symbol(startIndex,Decl(overloadResolutionOverNonCTObjectLit.ts,18,54))
 >1 : number
->type : string
+>type : string, Symbol(type,Decl(overloadResolutionOverNonCTObjectLit.ts,18,69))
 >'' : string
->bracket : number
+>bracket : number, Symbol(bracket,Decl(overloadResolutionOverNonCTObjectLit.ts,18,79))
 >3 : number
->state : null
+>state : null, Symbol(state,Decl(overloadResolutionOverNonCTObjectLit.ts,18,91))
 >null : null
->length : number
+>length : number, Symbol(length,Decl(overloadResolutionOverNonCTObjectLit.ts,18,104))
 >10 : number
                 }
 }

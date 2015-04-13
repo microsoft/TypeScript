@@ -1,10 +1,10 @@
 === tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithES5.ts ===
 
 class C {
->C : C
+>C : C, Symbol(C,Decl(accessorWithES5.ts,0,0))
 
     get x() {
->x : number
+>x : number, Symbol(x,Decl(accessorWithES5.ts,1,9))
 
         return 1;
 >1 : number
@@ -12,28 +12,28 @@ class C {
 }
 
 class D {
->D : D
+>D : D, Symbol(D,Decl(accessorWithES5.ts,5,1))
 
     set x(v) {
->x : any
->v : any
+>x : any, Symbol(x,Decl(accessorWithES5.ts,7,9))
+>v : any, Symbol(v,Decl(accessorWithES5.ts,8,10))
     }
 }
 
 var x = {
->x : { a: number; }
+>x : { a: number; }, Symbol(x,Decl(accessorWithES5.ts,12,3))
 >{    get a() { return 1 }} : { a: number; }
 
     get a() { return 1 }
->a : number
+>a : number, Symbol(a,Decl(accessorWithES5.ts,12,9))
 >1 : number
 }
 
 var y = {
->y : { b: any; }
+>y : { b: any; }, Symbol(y,Decl(accessorWithES5.ts,16,3))
 >{    set b(v) { }} : { b: any; }
 
     set b(v) { }
->b : any
->v : any
+>b : any, Symbol(b,Decl(accessorWithES5.ts,16,9))
+>v : any, Symbol(v,Decl(accessorWithES5.ts,17,10))
 }

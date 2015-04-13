@@ -1,39 +1,39 @@
 === tests/cases/compiler/privacyCheckAnonymousFunctionParameter2.ts ===
 export var x = 1;  // Makes this an external module 
->x : number
+>x : number, Symbol(x,Decl(privacyCheckAnonymousFunctionParameter2.ts,0,10))
 >1 : number
 
 interface Iterator<T> { x: T }
->Iterator : Iterator<T>
->T : T
->x : T
->T : T
+>Iterator : Iterator<T>, Symbol(Iterator,Decl(privacyCheckAnonymousFunctionParameter2.ts,0,17))
+>T : T, Symbol(T,Decl(privacyCheckAnonymousFunctionParameter2.ts,1,19))
+>x : T, Symbol(x,Decl(privacyCheckAnonymousFunctionParameter2.ts,1,23))
+>T : T, Symbol(T,Decl(privacyCheckAnonymousFunctionParameter2.ts,1,19))
 
 module Q {
->Q : typeof Q
+>Q : typeof Q, Symbol(Q,Decl(privacyCheckAnonymousFunctionParameter2.ts,1,30),Decl(privacyCheckAnonymousFunctionParameter2.ts,7,1))
 
     export function foo<T>(x: (a: Iterator<T>) => number) {
->foo : <T>(x: (a: Iterator<T>) => number) => (a: Iterator<T>) => number
->T : T
->x : (a: Iterator<T>) => number
->a : Iterator<T>
->Iterator : Iterator<T>
->T : T
+>foo : <T>(x: (a: Iterator<T>) => number) => (a: Iterator<T>) => number, Symbol(foo,Decl(privacyCheckAnonymousFunctionParameter2.ts,3,10))
+>T : T, Symbol(T,Decl(privacyCheckAnonymousFunctionParameter2.ts,4,24))
+>x : (a: Iterator<T>) => number, Symbol(x,Decl(privacyCheckAnonymousFunctionParameter2.ts,4,27))
+>a : Iterator<T>, Symbol(a,Decl(privacyCheckAnonymousFunctionParameter2.ts,4,31))
+>Iterator : Iterator<T>, Symbol(Iterator,Decl(privacyCheckAnonymousFunctionParameter2.ts,0,17))
+>T : T, Symbol(T,Decl(privacyCheckAnonymousFunctionParameter2.ts,4,24))
 
         return x;
->x : (a: Iterator<T>) => number
+>x : (a: Iterator<T>) => number, Symbol(x,Decl(privacyCheckAnonymousFunctionParameter2.ts,4,27))
     }
 }
 
 module Q {
->Q : typeof Q
+>Q : typeof Q, Symbol(Q,Decl(privacyCheckAnonymousFunctionParameter2.ts,1,30),Decl(privacyCheckAnonymousFunctionParameter2.ts,7,1))
 
     function bar() {
->bar : () => void
+>bar : () => void, Symbol(bar,Decl(privacyCheckAnonymousFunctionParameter2.ts,9,10))
 
         foo(null);
 >foo(null) : (a: Iterator<{}>) => number
->foo : <T>(x: (a: Iterator<T>) => number) => (a: Iterator<T>) => number
+>foo : <T>(x: (a: Iterator<T>) => number) => (a: Iterator<T>) => number, Symbol(foo,Decl(privacyCheckAnonymousFunctionParameter2.ts,3,10))
 >null : null
     }
 }

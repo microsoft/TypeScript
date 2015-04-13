@@ -1,12 +1,12 @@
 === tests/cases/conformance/expressions/contextualTyping/iterableContextualTyping1.ts ===
 var iter: Iterable<(x: string) => number> = [s => s.length];
->iter : Iterable<(x: string) => number>
->Iterable : Iterable<T>
->x : string
+>iter : Iterable<(x: string) => number>, Symbol(iter,Decl(iterableContextualTyping1.ts,0,3))
+>Iterable : Iterable<T>, Symbol(Iterable,Decl(lib.d.ts,1633,1))
+>x : string, Symbol(x,Decl(iterableContextualTyping1.ts,0,20))
 >[s => s.length] : ((s: string) => number)[]
 >s => s.length : (s: string) => number
->s : string
->s.length : number
->s : string
->length : number
+>s : string, Symbol(s,Decl(iterableContextualTyping1.ts,0,45))
+>s.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>s : string, Symbol(s,Decl(iterableContextualTyping1.ts,0,45))
+>length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
 

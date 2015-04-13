@@ -1,61 +1,61 @@
 === tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern2.ts ===
 
 var { a: x11, b: { a: y11, b: { a: z11 }}} = { a: 1, b: { a: "hello", b: { a: true } } };
->a : unknown
->x11 : number
->b : unknown
->a : unknown
->y11 : string
->b : unknown
->a : unknown
->z11 : boolean
+>a : any
+>x11 : number, Symbol(x11,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,1,5))
+>b : any
+>a : any
+>y11 : string, Symbol(y11,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,1,18))
+>b : any
+>a : any
+>z11 : boolean, Symbol(z11,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,1,31))
 >{ a: 1, b: { a: "hello", b: { a: true } } } : { a: number; b: { a: string; b: { a: boolean; }; }; }
->a : number
+>a : number, Symbol(a,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,1,46))
 >1 : number
->b : { a: string; b: { a: boolean; }; }
+>b : { a: string; b: { a: boolean; }; }, Symbol(b,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,1,52))
 >{ a: "hello", b: { a: true } } : { a: string; b: { a: boolean; }; }
->a : string
+>a : string, Symbol(a,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,1,57))
 >"hello" : string
->b : { a: boolean; }
+>b : { a: boolean; }, Symbol(b,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,1,69))
 >{ a: true } : { a: boolean; }
->a : boolean
+>a : boolean, Symbol(a,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,1,74))
 >true : boolean
 
 function f15() {
->f15 : () => { a4: string; b4: number; c4: boolean; }
+>f15 : () => { a4: string; b4: number; c4: boolean; }, Symbol(f15,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,1,89))
 
     var a4 = "hello";
->a4 : string
+>a4 : string, Symbol(a4,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,4,7))
 >"hello" : string
 
     var b4 = 1;
->b4 : number
+>b4 : number, Symbol(b4,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,5,7))
 >1 : number
 
     var c4 = true;
->c4 : boolean
+>c4 : boolean, Symbol(c4,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,6,7))
 >true : boolean
 
     return { a4, b4, c4 };
 >{ a4, b4, c4 } : { a4: string; b4: number; c4: boolean; }
->a4 : string
->b4 : number
->c4 : boolean
+>a4 : string, Symbol(a4,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,7,12))
+>b4 : number, Symbol(b4,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,7,16))
+>c4 : boolean, Symbol(c4,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,7,20))
 }
 var { a4, b4, c4 } = f15();
->a4 : string
->b4 : number
->c4 : boolean
+>a4 : string, Symbol(a4,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,9,5))
+>b4 : number, Symbol(b4,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,9,9))
+>c4 : boolean, Symbol(c4,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,9,13))
 >f15() : { a4: string; b4: number; c4: boolean; }
->f15 : () => { a4: string; b4: number; c4: boolean; }
+>f15 : () => { a4: string; b4: number; c4: boolean; }, Symbol(f15,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,1,89))
 
 module m {
->m : typeof m
+>m : typeof m, Symbol(m,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,9,27))
 
     export var { a4, b4, c4 } = f15();
->a4 : string
->b4 : number
->c4 : boolean
+>a4 : string, Symbol(a4,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,12,16))
+>b4 : number, Symbol(b4,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,12,20))
+>c4 : boolean, Symbol(c4,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,12,24))
 >f15() : { a4: string; b4: number; c4: boolean; }
->f15 : () => { a4: string; b4: number; c4: boolean; }
+>f15 : () => { a4: string; b4: number; c4: boolean; }, Symbol(f15,Decl(declarationEmitDestructuringObjectLiteralPattern2.ts,1,89))
 }

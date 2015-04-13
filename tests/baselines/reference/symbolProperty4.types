@@ -1,20 +1,20 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty4.ts ===
 var x = {
->x : {}
+>x : {}, Symbol(x,Decl(symbolProperty4.ts,0,3))
 >{    [Symbol()]: 0,    [Symbol()]() { },    get [Symbol()]() {        return 0;    }} : {}
 
     [Symbol()]: 0,
 >Symbol() : symbol
->Symbol : SymbolConstructor
+>Symbol : SymbolConstructor, Symbol(Symbol,Decl(lib.d.ts,1186,52),Decl(lib.d.ts,1262,11))
 >0 : number
 
     [Symbol()]() { },
 >Symbol() : symbol
->Symbol : SymbolConstructor
+>Symbol : SymbolConstructor, Symbol(Symbol,Decl(lib.d.ts,1186,52),Decl(lib.d.ts,1262,11))
 
     get [Symbol()]() {
 >Symbol() : symbol
->Symbol : SymbolConstructor
+>Symbol : SymbolConstructor, Symbol(Symbol,Decl(lib.d.ts,1186,52),Decl(lib.d.ts,1262,11))
 
         return 0;
 >0 : number

@@ -2,29 +2,29 @@
 // module export
 
 module m {
->m : typeof m
+>m : typeof m, Symbol(m,Decl(objectLiteralShorthandPropertiesWithModule.ts,0,0),Decl(objectLiteralShorthandPropertiesWithModule.ts,4,1))
 
     export var x;
->x : any
+>x : any, Symbol(x,Decl(objectLiteralShorthandPropertiesWithModule.ts,3,14))
 }
 
 module m {
->m : typeof m
+>m : typeof m, Symbol(m,Decl(objectLiteralShorthandPropertiesWithModule.ts,0,0),Decl(objectLiteralShorthandPropertiesWithModule.ts,4,1))
 
     var z = x;
->z : any
->x : any
+>z : any, Symbol(z,Decl(objectLiteralShorthandPropertiesWithModule.ts,7,7))
+>x : any, Symbol(x,Decl(objectLiteralShorthandPropertiesWithModule.ts,3,14))
 
     var y = {
->y : { a: any; x: any; }
+>y : { a: any; x: any; }, Symbol(y,Decl(objectLiteralShorthandPropertiesWithModule.ts,8,7))
 >{        a: x,        x    } : { a: any; x: any; }
 
         a: x,
->a : any
->x : any
+>a : any, Symbol(a,Decl(objectLiteralShorthandPropertiesWithModule.ts,8,13))
+>x : any, Symbol(x,Decl(objectLiteralShorthandPropertiesWithModule.ts,3,14))
 
         x
->x : any
+>x : any, Symbol(x,Decl(objectLiteralShorthandPropertiesWithModule.ts,9,13))
 
     };
 }

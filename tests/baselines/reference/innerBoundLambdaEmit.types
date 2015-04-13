@@ -1,21 +1,21 @@
 === tests/cases/compiler/innerBoundLambdaEmit.ts ===
 module M {
->M : typeof M
+>M : typeof M, Symbol(M,Decl(innerBoundLambdaEmit.ts,0,0))
 
     export class Foo {
->Foo : Foo
+>Foo : Foo, Symbol(Foo,Decl(innerBoundLambdaEmit.ts,0,10))
     }
     var bar = () => { };
->bar : () => void
+>bar : () => void, Symbol(bar,Decl(innerBoundLambdaEmit.ts,3,7))
 >() => { } : () => void
 }
 interface Array<T> {
->Array : T[]
->T : T
+>Array : T[], Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11),Decl(innerBoundLambdaEmit.ts,4,1))
+>T : T, Symbol(T,Decl(lib.d.ts,1007,16),Decl(innerBoundLambdaEmit.ts,5,16))
 
     toFoo(): M.Foo
->toFoo : () => M.Foo
->M : unknown
->Foo : M.Foo
+>toFoo : () => M.Foo, Symbol(toFoo,Decl(innerBoundLambdaEmit.ts,5,20))
+>M : any, Symbol(M,Decl(innerBoundLambdaEmit.ts,0,0))
+>Foo : M.Foo, Symbol(M.Foo,Decl(innerBoundLambdaEmit.ts,0,10))
 }
 

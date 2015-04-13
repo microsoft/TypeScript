@@ -1,52 +1,52 @@
 === tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTwoOperandsAreAny.ts ===
 var a: any;
->a : any
+>a : any, Symbol(a,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,0,3))
 
 var r1 = a < a;
->r1 : boolean
+>r1 : boolean, Symbol(r1,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,2,3))
 >a < a : boolean
->a : any
->a : any
+>a : any, Symbol(a,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,0,3))
+>a : any, Symbol(a,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,0,3))
 
 var r2 = a > a;
->r2 : boolean
+>r2 : boolean, Symbol(r2,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,3,3))
 >a > a : boolean
->a : any
->a : any
+>a : any, Symbol(a,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,0,3))
+>a : any, Symbol(a,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,0,3))
 
 var r3 = a <= a;
->r3 : boolean
+>r3 : boolean, Symbol(r3,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,4,3))
 >a <= a : boolean
->a : any
->a : any
+>a : any, Symbol(a,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,0,3))
+>a : any, Symbol(a,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,0,3))
 
 var r4 = a >= a;
->r4 : boolean
+>r4 : boolean, Symbol(r4,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,5,3))
 >a >= a : boolean
->a : any
->a : any
+>a : any, Symbol(a,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,0,3))
+>a : any, Symbol(a,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,0,3))
 
 var r5 = a == a;
->r5 : boolean
+>r5 : boolean, Symbol(r5,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,6,3))
 >a == a : boolean
->a : any
->a : any
+>a : any, Symbol(a,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,0,3))
+>a : any, Symbol(a,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,0,3))
 
 var r6 = a != a;
->r6 : boolean
+>r6 : boolean, Symbol(r6,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,7,3))
 >a != a : boolean
->a : any
->a : any
+>a : any, Symbol(a,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,0,3))
+>a : any, Symbol(a,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,0,3))
 
 var r7 = a === a;
->r7 : boolean
+>r7 : boolean, Symbol(r7,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,8,3))
 >a === a : boolean
->a : any
->a : any
+>a : any, Symbol(a,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,0,3))
+>a : any, Symbol(a,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,0,3))
 
 var r8 = a !== a;
->r8 : boolean
+>r8 : boolean, Symbol(r8,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,9,3))
 >a !== a : boolean
->a : any
->a : any
+>a : any, Symbol(a,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,0,3))
+>a : any, Symbol(a,Decl(comparisonOperatorWithTwoOperandsAreAny.ts,0,3))
 

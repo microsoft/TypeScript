@@ -1,62 +1,62 @@
 === tests/cases/conformance/types/objectTypeLiteral/propertySignatures/stringNamedPropertyAccess.ts ===
 class C {
->C : C
+>C : C, Symbol(C,Decl(stringNamedPropertyAccess.ts,0,0))
 
     "a b": number;
     static "c d": number;
 }
 var c: C;
->c : C
->C : C
+>c : C, Symbol(c,Decl(stringNamedPropertyAccess.ts,4,3))
+>C : C, Symbol(C,Decl(stringNamedPropertyAccess.ts,0,0))
 
 var r1 = c["a b"];
->r1 : number
+>r1 : number, Symbol(r1,Decl(stringNamedPropertyAccess.ts,5,3))
 >c["a b"] : number
->c : C
->"a b" : string
+>c : C, Symbol(c,Decl(stringNamedPropertyAccess.ts,4,3))
+>"a b" : string, Symbol(C."a b",Decl(stringNamedPropertyAccess.ts,0,9))
 
 var r1b = C['c d'];
->r1b : number
+>r1b : number, Symbol(r1b,Decl(stringNamedPropertyAccess.ts,6,3))
 >C['c d'] : number
->C : typeof C
->'c d' : string
+>C : typeof C, Symbol(C,Decl(stringNamedPropertyAccess.ts,0,0))
+>'c d' : string, Symbol(C."c d",Decl(stringNamedPropertyAccess.ts,1,18))
 
 interface I {
->I : I
+>I : I, Symbol(I,Decl(stringNamedPropertyAccess.ts,6,19))
 
     "a b": number;
 }
 var i: I;
->i : I
->I : I
+>i : I, Symbol(i,Decl(stringNamedPropertyAccess.ts,11,3))
+>I : I, Symbol(I,Decl(stringNamedPropertyAccess.ts,6,19))
 
 var r2 = i["a b"];
->r2 : number
+>r2 : number, Symbol(r2,Decl(stringNamedPropertyAccess.ts,12,3))
 >i["a b"] : number
->i : I
->"a b" : string
+>i : I, Symbol(i,Decl(stringNamedPropertyAccess.ts,11,3))
+>"a b" : string, Symbol(I."a b",Decl(stringNamedPropertyAccess.ts,8,13))
 
 var a: {
->a : { "a b": number; }
+>a : { "a b": number; }, Symbol(a,Decl(stringNamedPropertyAccess.ts,14,3))
 
     "a b": number;
 }
 var r3 = a["a b"];
->r3 : number
+>r3 : number, Symbol(r3,Decl(stringNamedPropertyAccess.ts,17,3))
 >a["a b"] : number
->a : { "a b": number; }
->"a b" : string
+>a : { "a b": number; }, Symbol(a,Decl(stringNamedPropertyAccess.ts,14,3))
+>"a b" : string, Symbol("a b",Decl(stringNamedPropertyAccess.ts,14,8))
 
 var b = {
->b : { "a b": number; }
+>b : { "a b": number; }, Symbol(b,Decl(stringNamedPropertyAccess.ts,19,3))
 >{    "a b": 1} : { "a b": number; }
 
     "a b": 1
 >1 : number
 }
 var r4 = b["a b"];
->r4 : number
+>r4 : number, Symbol(r4,Decl(stringNamedPropertyAccess.ts,22,3))
 >b["a b"] : number
->b : { "a b": number; }
->"a b" : string
+>b : { "a b": number; }, Symbol(b,Decl(stringNamedPropertyAccess.ts,19,3))
+>"a b" : string, Symbol("a b",Decl(stringNamedPropertyAccess.ts,19,9))
 

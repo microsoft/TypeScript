@@ -1,26 +1,26 @@
 === tests/cases/conformance/expressions/typeGuards/TypeGuardWithArrayUnion.ts ===
 class Message {
->Message : Message
+>Message : Message, Symbol(Message,Decl(TypeGuardWithArrayUnion.ts,0,0))
 
     value: string;
->value : string
+>value : string, Symbol(value,Decl(TypeGuardWithArrayUnion.ts,0,15))
 }
 
 function saySize(message: Message | Message[]) {
->saySize : (message: Message | Message[]) => number
->message : Message | Message[]
->Message : Message
->Message : Message
+>saySize : (message: Message | Message[]) => number, Symbol(saySize,Decl(TypeGuardWithArrayUnion.ts,2,1))
+>message : Message | Message[], Symbol(message,Decl(TypeGuardWithArrayUnion.ts,4,17))
+>Message : Message, Symbol(Message,Decl(TypeGuardWithArrayUnion.ts,0,0))
+>Message : Message, Symbol(Message,Decl(TypeGuardWithArrayUnion.ts,0,0))
 
     if (message instanceof Array) {
 >message instanceof Array : boolean
->message : Message | Message[]
->Array : ArrayConstructor
+>message : Message | Message[], Symbol(message,Decl(TypeGuardWithArrayUnion.ts,4,17))
+>Array : ArrayConstructor, Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
 
         return message.length;  // Should have type Message[] here
->message.length : number
->message : Message[]
->length : number
+>message.length : number, Symbol(Array.length,Decl(lib.d.ts,1007,20))
+>message : Message[], Symbol(message,Decl(TypeGuardWithArrayUnion.ts,4,17))
+>length : number, Symbol(Array.length,Decl(lib.d.ts,1007,20))
     }
 }
 

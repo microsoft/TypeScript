@@ -1,8 +1,8 @@
 === tests/cases/compiler/es5ExportDefaultIdentifier.ts ===
 
 export function f() { }
->f : () => void
+>f : () => void, Symbol(f,Decl(es5ExportDefaultIdentifier.ts,0,0))
 
 export default f;
->f : () => void
+>f : () => void, Symbol(f,Decl(es5ExportDefaultIdentifier.ts,0,0))
 

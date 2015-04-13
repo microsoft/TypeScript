@@ -1,16 +1,16 @@
 === tests/cases/compiler/inOperatorWithGeneric.ts ===
 class C<T> {
->C : C<T>
->T : T
+>C : C<T>, Symbol(C,Decl(inOperatorWithGeneric.ts,0,0))
+>T : T, Symbol(T,Decl(inOperatorWithGeneric.ts,0,8))
 
     foo(x:T) {
->foo : (x: T) => void
->x : T
->T : T
+>foo : (x: T) => void, Symbol(foo,Decl(inOperatorWithGeneric.ts,0,12))
+>x : T, Symbol(x,Decl(inOperatorWithGeneric.ts,1,8))
+>T : T, Symbol(T,Decl(inOperatorWithGeneric.ts,0,8))
 
         for (var p in x) {
->p : any
->x : T
+>p : any, Symbol(p,Decl(inOperatorWithGeneric.ts,2,16))
+>x : T, Symbol(x,Decl(inOperatorWithGeneric.ts,1,8))
         }
     }
 }

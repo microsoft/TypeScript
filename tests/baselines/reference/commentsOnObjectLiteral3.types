@@ -1,27 +1,27 @@
 === tests/cases/compiler/commentsOnObjectLiteral3.ts ===
 
 var v = {
->v : { prop: number; func: () => void; func1(): void; a: any; }
+>v : { prop: number; func: () => void; func1(): void; a: any; }, Symbol(v,Decl(commentsOnObjectLiteral3.ts,1,3))
 >{ //property prop: 1 /* multiple trailing comments */ /*trailing comments*/, //property func: function () { }, //PropertyName + CallSignature func1() { }, //getter get a() {  return this.prop; } /*trailing 1*/, //setter set a(value) {  this.prop = value; } // trailing 2} : { prop: number; func: () => void; func1(): void; a: any; }
 
  //property
  prop: 1 /* multiple trailing comments */ /*trailing comments*/,
->prop : number
+>prop : number, Symbol(prop,Decl(commentsOnObjectLiteral3.ts,1,9))
 >1 : number
 
  //property
  func: function () {
->func : () => void
+>func : () => void, Symbol(func,Decl(commentsOnObjectLiteral3.ts,3,64))
 >function () { } : () => void
 
  },
  //PropertyName + CallSignature
  func1() { },
->func1 : () => void
+>func1 : () => void, Symbol(func1,Decl(commentsOnObjectLiteral3.ts,6,3))
 
  //getter
  get a() {
->a : any
+>a : any, Symbol(a,Decl(commentsOnObjectLiteral3.ts,8,13),Decl(commentsOnObjectLiteral3.ts,12,18))
 
   return this.prop;
 >this.prop : any
@@ -31,15 +31,15 @@ var v = {
  } /*trailing 1*/,
  //setter
  set a(value) {
->a : any
->value : any
+>a : any, Symbol(a,Decl(commentsOnObjectLiteral3.ts,8,13),Decl(commentsOnObjectLiteral3.ts,12,18))
+>value : any, Symbol(value,Decl(commentsOnObjectLiteral3.ts,14,7))
 
   this.prop = value;
 >this.prop = value : any
 >this.prop : any
 >this : any
 >prop : any
->value : any
+>value : any, Symbol(value,Decl(commentsOnObjectLiteral3.ts,14,7))
 
  } // trailing 2
 };

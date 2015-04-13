@@ -3,186 +3,186 @@
 // Inferences are made quadratic-pairwise to and from these overload sets
 
 module NonGenericParameter {
->NonGenericParameter : typeof NonGenericParameter
+>NonGenericParameter : typeof NonGenericParameter, Symbol(NonGenericParameter,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,0,0))
 
     var a: {
->a : { (x: boolean): boolean; (x: string): string; }
+>a : { (x: boolean): boolean; (x: string): string; }, Symbol(a,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,4,7))
 
         (x: boolean): boolean;
->x : boolean
+>x : boolean, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,5,9))
 
         (x: string): string;
->x : string
+>x : string, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,6,9))
     }
 
     function foo4(cb: typeof a) {
->foo4 : (cb: { (x: boolean): boolean; (x: string): string; }) => { (x: boolean): boolean; (x: string): string; }
->cb : { (x: boolean): boolean; (x: string): string; }
->a : { (x: boolean): boolean; (x: string): string; }
+>foo4 : (cb: { (x: boolean): boolean; (x: string): string; }) => { (x: boolean): boolean; (x: string): string; }, Symbol(foo4,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,7,5))
+>cb : { (x: boolean): boolean; (x: string): string; }, Symbol(cb,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,9,18))
+>a : { (x: boolean): boolean; (x: string): string; }, Symbol(a,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,4,7))
 
         return cb;
->cb : { (x: boolean): boolean; (x: string): string; }
+>cb : { (x: boolean): boolean; (x: string): string; }, Symbol(cb,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,9,18))
     }
 
     var r = foo4(a);
->r : { (x: boolean): boolean; (x: string): string; }
+>r : { (x: boolean): boolean; (x: string): string; }, Symbol(r,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,13,7))
 >foo4(a) : { (x: boolean): boolean; (x: string): string; }
->foo4 : (cb: { (x: boolean): boolean; (x: string): string; }) => { (x: boolean): boolean; (x: string): string; }
->a : { (x: boolean): boolean; (x: string): string; }
+>foo4 : (cb: { (x: boolean): boolean; (x: string): string; }) => { (x: boolean): boolean; (x: string): string; }, Symbol(foo4,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,7,5))
+>a : { (x: boolean): boolean; (x: string): string; }, Symbol(a,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,4,7))
 
     var r2 = foo4(<T>(x: T) => x);
->r2 : { (x: boolean): boolean; (x: string): string; }
+>r2 : { (x: boolean): boolean; (x: string): string; }, Symbol(r2,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,14,7))
 >foo4(<T>(x: T) => x) : { (x: boolean): boolean; (x: string): string; }
->foo4 : (cb: { (x: boolean): boolean; (x: string): string; }) => { (x: boolean): boolean; (x: string): string; }
+>foo4 : (cb: { (x: boolean): boolean; (x: string): string; }) => { (x: boolean): boolean; (x: string): string; }, Symbol(foo4,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,7,5))
 ><T>(x: T) => x : <T>(x: T) => T
->T : T
->x : T
->T : T
->x : T
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,14,19))
+>x : T, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,14,22))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,14,19))
+>x : T, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,14,22))
 
     var r4 = foo4(x => x);    
->r4 : { (x: boolean): boolean; (x: string): string; }
+>r4 : { (x: boolean): boolean; (x: string): string; }, Symbol(r4,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,15,7))
 >foo4(x => x) : { (x: boolean): boolean; (x: string): string; }
->foo4 : (cb: { (x: boolean): boolean; (x: string): string; }) => { (x: boolean): boolean; (x: string): string; }
+>foo4 : (cb: { (x: boolean): boolean; (x: string): string; }) => { (x: boolean): boolean; (x: string): string; }, Symbol(foo4,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,7,5))
 >x => x : (x: any) => any
->x : any
->x : any
+>x : any, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,15,18))
+>x : any, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,15,18))
 }
 
 module GenericParameter {
->GenericParameter : typeof GenericParameter
+>GenericParameter : typeof GenericParameter, Symbol(GenericParameter,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,16,1))
 
     function foo5<T>(cb: { (x: T): string; (x: number): T }) {
->foo5 : <T>(cb: { (x: T): string; (x: number): T; }) => { (x: T): string; (x: number): T; }
->T : T
->cb : { (x: T): string; (x: number): T; }
->x : T
->T : T
->x : number
->T : T
+>foo5 : <T>(cb: { (x: T): string; (x: number): T; }) => { (x: T): string; (x: number): T; }, Symbol(foo5,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,18,25))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,19,18))
+>cb : { (x: T): string; (x: number): T; }, Symbol(cb,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,19,21))
+>x : T, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,19,28))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,19,18))
+>x : number, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,19,44))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,19,18))
 
         return cb;
->cb : { (x: T): string; (x: number): T; }
+>cb : { (x: T): string; (x: number): T; }, Symbol(cb,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,19,21))
     }
 
     var r5 = foo5(x => x); // any => string (+1 overload) [inferences are made for T, but lambda not contextually typed]. T is any
->r5 : { (x: any): string; (x: number): any; }
+>r5 : { (x: any): string; (x: number): any; }, Symbol(r5,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,23,7))
 >foo5(x => x) : { (x: any): string; (x: number): any; }
->foo5 : <T>(cb: { (x: T): string; (x: number): T; }) => { (x: T): string; (x: number): T; }
+>foo5 : <T>(cb: { (x: T): string; (x: number): T; }) => { (x: T): string; (x: number): T; }, Symbol(foo5,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,18,25))
 >x => x : (x: any) => any
->x : any
->x : any
+>x : any, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,23,18))
+>x : any, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,23,18))
 
     var a: { <T>(x: T): string; <T>(x: number): T; }
->a : { <T>(x: T): string; <T>(x: number): T; }
->T : T
->x : T
->T : T
->T : T
->x : number
->T : T
+>a : { <T>(x: T): string; <T>(x: number): T; }, Symbol(a,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,24,7),Decl(genericCallWithOverloadedFunctionTypedArguments.ts,41,7))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,24,14))
+>x : T, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,24,17))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,24,14))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,24,33))
+>x : number, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,24,36))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,24,33))
 
     var r7 = foo5(a); // any => string (+1 overload)
->r7 : { (x: any): string; (x: number): any; }
+>r7 : { (x: any): string; (x: number): any; }, Symbol(r7,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,25,7))
 >foo5(a) : { (x: any): string; (x: number): any; }
->foo5 : <T>(cb: { (x: T): string; (x: number): T; }) => { (x: T): string; (x: number): T; }
->a : { <T>(x: T): string; <T>(x: number): T; }
+>foo5 : <T>(cb: { (x: T): string; (x: number): T; }) => { (x: T): string; (x: number): T; }, Symbol(foo5,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,18,25))
+>a : { <T>(x: T): string; <T>(x: number): T; }, Symbol(a,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,24,7),Decl(genericCallWithOverloadedFunctionTypedArguments.ts,41,7))
 
     function foo6<T>(cb: { (x: T): string; (x: T, y?: T): string }) {
->foo6 : <T>(cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
->T : T
->cb : { (x: T): string; (x: T, y?: T): string; }
->x : T
->T : T
->x : T
->T : T
->y : T
->T : T
+>foo6 : <T>(cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }, Symbol(foo6,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,25,21))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,27,18))
+>cb : { (x: T): string; (x: T, y?: T): string; }, Symbol(cb,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,27,21))
+>x : T, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,27,28))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,27,18))
+>x : T, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,27,44))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,27,18))
+>y : T, Symbol(y,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,27,49))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,27,18))
 
         return cb;
->cb : { (x: T): string; (x: T, y?: T): string; }
+>cb : { (x: T): string; (x: T, y?: T): string; }, Symbol(cb,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,27,21))
     }
 
     var r8 = foo6(x => x); // any => string (+1 overload) [inferences are made for T, but lambda not contextually typed]. T is any
->r8 : { (x: any): string; (x: any, y?: any): string; }
+>r8 : { (x: any): string; (x: any, y?: any): string; }, Symbol(r8,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,31,7))
 >foo6(x => x) : { (x: any): string; (x: any, y?: any): string; }
->foo6 : <T>(cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
+>foo6 : <T>(cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }, Symbol(foo6,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,25,21))
 >x => x : (x: any) => any
->x : any
->x : any
+>x : any, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,31,18))
+>x : any, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,31,18))
 
     var r9 = foo6(<T>(x: T) => ''); // any => string (+1 overload)
->r9 : { (x: any): string; (x: any, y?: any): string; }
+>r9 : { (x: any): string; (x: any, y?: any): string; }, Symbol(r9,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,32,7))
 >foo6(<T>(x: T) => '') : { (x: any): string; (x: any, y?: any): string; }
->foo6 : <T>(cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
+>foo6 : <T>(cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }, Symbol(foo6,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,25,21))
 ><T>(x: T) => '' : <T>(x: T) => string
->T : T
->x : T
->T : T
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,32,19))
+>x : T, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,32,22))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,32,19))
 >'' : string
 
     var r11 = foo6(<T>(x: T, y?: T) => ''); // any => string (+1 overload)
->r11 : { (x: any): string; (x: any, y?: any): string; }
+>r11 : { (x: any): string; (x: any, y?: any): string; }, Symbol(r11,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,33,7))
 >foo6(<T>(x: T, y?: T) => '') : { (x: any): string; (x: any, y?: any): string; }
->foo6 : <T>(cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
+>foo6 : <T>(cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }, Symbol(foo6,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,25,21))
 ><T>(x: T, y?: T) => '' : <T>(x: T, y?: T) => string
->T : T
->x : T
->T : T
->y : T
->T : T
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,33,20))
+>x : T, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,33,23))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,33,20))
+>y : T, Symbol(y,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,33,28))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,33,20))
 >'' : string
 
     function foo7<T>(x:T, cb: { (x: T): string; (x: T, y?: T): string }) {
->foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
->T : T
->x : T
->T : T
->cb : { (x: T): string; (x: T, y?: T): string; }
->x : T
->T : T
->x : T
->T : T
->y : T
->T : T
+>foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }, Symbol(foo7,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,33,43))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,35,18))
+>x : T, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,35,21))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,35,18))
+>cb : { (x: T): string; (x: T, y?: T): string; }, Symbol(cb,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,35,25))
+>x : T, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,35,33))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,35,18))
+>x : T, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,35,49))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,35,18))
+>y : T, Symbol(y,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,35,54))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,35,18))
 
         return cb;
->cb : { (x: T): string; (x: T, y?: T): string; }
+>cb : { (x: T): string; (x: T, y?: T): string; }, Symbol(cb,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,35,25))
     }
 
     var r12 = foo7(1, (x) => x); // any => string (+1 overload) [inferences are made for T, but lambda not contextually typed]
->r12 : { (x: any): string; (x: any, y?: any): string; }
+>r12 : { (x: any): string; (x: any, y?: any): string; }, Symbol(r12,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,39,7))
 >foo7(1, (x) => x) : { (x: any): string; (x: any, y?: any): string; }
->foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
+>foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }, Symbol(foo7,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,33,43))
 >1 : number
 >(x) => x : (x: any) => any
->x : any
->x : any
+>x : any, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,39,23))
+>x : any, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,39,23))
 
     var r13 = foo7(1, <T>(x: T) => ''); // any => string (+1 overload) [inferences are made for T, but lambda not contextually typed]
->r13 : { (x: any): string; (x: any, y?: any): string; }
+>r13 : { (x: any): string; (x: any, y?: any): string; }, Symbol(r13,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,40,7))
 >foo7(1, <T>(x: T) => '') : { (x: any): string; (x: any, y?: any): string; }
->foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
+>foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }, Symbol(foo7,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,33,43))
 >1 : number
 ><T>(x: T) => '' : <T>(x: T) => string
->T : T
->x : T
->T : T
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,40,23))
+>x : T, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,40,26))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,40,23))
 >'' : string
 
     var a: { <T>(x: T): string; <T>(x: number): T; }
->a : { <T>(x: T): string; <T>(x: number): T; }
->T : T
->x : T
->T : T
->T : T
->x : number
->T : T
+>a : { <T>(x: T): string; <T>(x: number): T; }, Symbol(a,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,24,7),Decl(genericCallWithOverloadedFunctionTypedArguments.ts,41,7))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,41,14))
+>x : T, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,41,17))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,41,14))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,41,33))
+>x : number, Symbol(x,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,41,36))
+>T : T, Symbol(T,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,41,33))
 
     var r14 = foo7(1, a); // any => string (+1 overload) [inferences are made for T, but lambda not contextually typed]
->r14 : { (x: any): string; (x: any, y?: any): string; }
+>r14 : { (x: any): string; (x: any, y?: any): string; }, Symbol(r14,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,42,7))
 >foo7(1, a) : { (x: any): string; (x: any, y?: any): string; }
->foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
+>foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }, Symbol(foo7,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,33,43))
 >1 : number
->a : { <T>(x: T): string; <T>(x: number): T; }
+>a : { <T>(x: T): string; <T>(x: number): T; }, Symbol(a,Decl(genericCallWithOverloadedFunctionTypedArguments.ts,24,7),Decl(genericCallWithOverloadedFunctionTypedArguments.ts,41,7))
 }

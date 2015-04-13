@@ -1,92 +1,92 @@
 === tests/cases/conformance/statements/continueStatements/forInContinueStatements.ts ===
 for(var x in {}) {
->x : any
+>x : any, Symbol(x,Decl(forInContinueStatements.ts,0,7),Decl(forInContinueStatements.ts,5,7),Decl(forInContinueStatements.ts,11,7),Decl(forInContinueStatements.ts,16,7),Decl(forInContinueStatements.ts,18,11),Decl(forInContinueStatements.ts,23,7),Decl(forInContinueStatements.ts,25,11),Decl(forInContinueStatements.ts,29,8),Decl(forInContinueStatements.ts,29,26),Decl(forInContinueStatements.ts,29,44),Decl(forInContinueStatements.ts,32,8))
 >{} : {}
 
     continue;
 }
 
 ONE:
->ONE : unknown
+>ONE : any
 
 for(var x in {}) {
->x : any
+>x : any, Symbol(x,Decl(forInContinueStatements.ts,0,7),Decl(forInContinueStatements.ts,5,7),Decl(forInContinueStatements.ts,11,7),Decl(forInContinueStatements.ts,16,7),Decl(forInContinueStatements.ts,18,11),Decl(forInContinueStatements.ts,23,7),Decl(forInContinueStatements.ts,25,11),Decl(forInContinueStatements.ts,29,8),Decl(forInContinueStatements.ts,29,26),Decl(forInContinueStatements.ts,29,44),Decl(forInContinueStatements.ts,32,8))
 >{} : {}
 
     continue ONE;
->ONE : unknown
+>ONE : any
 }
 
 TWO:
->TWO : unknown
+>TWO : any
 
 THREE:
->THREE : unknown
+>THREE : any
 
 for(var x in {}) {
->x : any
+>x : any, Symbol(x,Decl(forInContinueStatements.ts,0,7),Decl(forInContinueStatements.ts,5,7),Decl(forInContinueStatements.ts,11,7),Decl(forInContinueStatements.ts,16,7),Decl(forInContinueStatements.ts,18,11),Decl(forInContinueStatements.ts,23,7),Decl(forInContinueStatements.ts,25,11),Decl(forInContinueStatements.ts,29,8),Decl(forInContinueStatements.ts,29,26),Decl(forInContinueStatements.ts,29,44),Decl(forInContinueStatements.ts,32,8))
 >{} : {}
 
     continue THREE;
->THREE : unknown
+>THREE : any
 }
 
 FOUR:
->FOUR : unknown
+>FOUR : any
 
 for(var x in {}) {
->x : any
+>x : any, Symbol(x,Decl(forInContinueStatements.ts,0,7),Decl(forInContinueStatements.ts,5,7),Decl(forInContinueStatements.ts,11,7),Decl(forInContinueStatements.ts,16,7),Decl(forInContinueStatements.ts,18,11),Decl(forInContinueStatements.ts,23,7),Decl(forInContinueStatements.ts,25,11),Decl(forInContinueStatements.ts,29,8),Decl(forInContinueStatements.ts,29,26),Decl(forInContinueStatements.ts,29,44),Decl(forInContinueStatements.ts,32,8))
 >{} : {}
 
     FIVE:
->FIVE : unknown
+>FIVE : any
 
     for(var x in {}) {
->x : any
+>x : any, Symbol(x,Decl(forInContinueStatements.ts,0,7),Decl(forInContinueStatements.ts,5,7),Decl(forInContinueStatements.ts,11,7),Decl(forInContinueStatements.ts,16,7),Decl(forInContinueStatements.ts,18,11),Decl(forInContinueStatements.ts,23,7),Decl(forInContinueStatements.ts,25,11),Decl(forInContinueStatements.ts,29,8),Decl(forInContinueStatements.ts,29,26),Decl(forInContinueStatements.ts,29,44),Decl(forInContinueStatements.ts,32,8))
 >{} : {}
 
         continue FOUR;
->FOUR : unknown
+>FOUR : any
     }
 }
 
 for(var x in {}) {
->x : any
+>x : any, Symbol(x,Decl(forInContinueStatements.ts,0,7),Decl(forInContinueStatements.ts,5,7),Decl(forInContinueStatements.ts,11,7),Decl(forInContinueStatements.ts,16,7),Decl(forInContinueStatements.ts,18,11),Decl(forInContinueStatements.ts,23,7),Decl(forInContinueStatements.ts,25,11),Decl(forInContinueStatements.ts,29,8),Decl(forInContinueStatements.ts,29,26),Decl(forInContinueStatements.ts,29,44),Decl(forInContinueStatements.ts,32,8))
 >{} : {}
 
     SIX:
->SIX : unknown
+>SIX : any
 
     for(var x in {}) continue SIX;
->x : any
+>x : any, Symbol(x,Decl(forInContinueStatements.ts,0,7),Decl(forInContinueStatements.ts,5,7),Decl(forInContinueStatements.ts,11,7),Decl(forInContinueStatements.ts,16,7),Decl(forInContinueStatements.ts,18,11),Decl(forInContinueStatements.ts,23,7),Decl(forInContinueStatements.ts,25,11),Decl(forInContinueStatements.ts,29,8),Decl(forInContinueStatements.ts,29,26),Decl(forInContinueStatements.ts,29,44),Decl(forInContinueStatements.ts,32,8))
 >{} : {}
->SIX : unknown
+>SIX : any
 }
 
 SEVEN:
->SEVEN : unknown
+>SEVEN : any
 
 for (var x in {}) for (var x in {}) for (var x in {}) continue SEVEN;
->x : any
+>x : any, Symbol(x,Decl(forInContinueStatements.ts,0,7),Decl(forInContinueStatements.ts,5,7),Decl(forInContinueStatements.ts,11,7),Decl(forInContinueStatements.ts,16,7),Decl(forInContinueStatements.ts,18,11),Decl(forInContinueStatements.ts,23,7),Decl(forInContinueStatements.ts,25,11),Decl(forInContinueStatements.ts,29,8),Decl(forInContinueStatements.ts,29,26),Decl(forInContinueStatements.ts,29,44),Decl(forInContinueStatements.ts,32,8))
 >{} : {}
->x : any
+>x : any, Symbol(x,Decl(forInContinueStatements.ts,0,7),Decl(forInContinueStatements.ts,5,7),Decl(forInContinueStatements.ts,11,7),Decl(forInContinueStatements.ts,16,7),Decl(forInContinueStatements.ts,18,11),Decl(forInContinueStatements.ts,23,7),Decl(forInContinueStatements.ts,25,11),Decl(forInContinueStatements.ts,29,8),Decl(forInContinueStatements.ts,29,26),Decl(forInContinueStatements.ts,29,44),Decl(forInContinueStatements.ts,32,8))
 >{} : {}
->x : any
+>x : any, Symbol(x,Decl(forInContinueStatements.ts,0,7),Decl(forInContinueStatements.ts,5,7),Decl(forInContinueStatements.ts,11,7),Decl(forInContinueStatements.ts,16,7),Decl(forInContinueStatements.ts,18,11),Decl(forInContinueStatements.ts,23,7),Decl(forInContinueStatements.ts,25,11),Decl(forInContinueStatements.ts,29,8),Decl(forInContinueStatements.ts,29,26),Decl(forInContinueStatements.ts,29,44),Decl(forInContinueStatements.ts,32,8))
 >{} : {}
->SEVEN : unknown
+>SEVEN : any
 
 EIGHT:
->EIGHT : unknown
+>EIGHT : any
 
 for (var x in {}){
->x : any
+>x : any, Symbol(x,Decl(forInContinueStatements.ts,0,7),Decl(forInContinueStatements.ts,5,7),Decl(forInContinueStatements.ts,11,7),Decl(forInContinueStatements.ts,16,7),Decl(forInContinueStatements.ts,18,11),Decl(forInContinueStatements.ts,23,7),Decl(forInContinueStatements.ts,25,11),Decl(forInContinueStatements.ts,29,8),Decl(forInContinueStatements.ts,29,26),Decl(forInContinueStatements.ts,29,44),Decl(forInContinueStatements.ts,32,8))
 >{} : {}
 
     var fn = function () { }
->fn : () => void
+>fn : () => void, Symbol(fn,Decl(forInContinueStatements.ts,33,7))
 >function () { } : () => void
 
     continue EIGHT;
->EIGHT : unknown
+>EIGHT : any
 }
 

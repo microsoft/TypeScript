@@ -1,46 +1,46 @@
 === tests/cases/compiler/constructorArgWithGenericCallSignature.ts ===
 module Test {
->Test : typeof Test
+>Test : typeof Test, Symbol(Test,Decl(constructorArgWithGenericCallSignature.ts,0,0))
 
     export interface MyFunc {
->MyFunc : MyFunc
+>MyFunc : MyFunc, Symbol(MyFunc,Decl(constructorArgWithGenericCallSignature.ts,0,13))
 
         <T>(value1: T): T;
->T : T
->value1 : T
->T : T
->T : T
+>T : T, Symbol(T,Decl(constructorArgWithGenericCallSignature.ts,2,9))
+>value1 : T, Symbol(value1,Decl(constructorArgWithGenericCallSignature.ts,2,12))
+>T : T, Symbol(T,Decl(constructorArgWithGenericCallSignature.ts,2,9))
+>T : T, Symbol(T,Decl(constructorArgWithGenericCallSignature.ts,2,9))
     }
     export class MyClass {
->MyClass : MyClass
+>MyClass : MyClass, Symbol(MyClass,Decl(constructorArgWithGenericCallSignature.ts,3,5))
 
         constructor(func: MyFunc) { }
->func : MyFunc
->MyFunc : MyFunc
+>func : MyFunc, Symbol(func,Decl(constructorArgWithGenericCallSignature.ts,5,20))
+>MyFunc : MyFunc, Symbol(MyFunc,Decl(constructorArgWithGenericCallSignature.ts,0,13))
     }
  
  export function F(func: MyFunc) { }
->F : (func: MyFunc) => void
->func : MyFunc
->MyFunc : MyFunc
+>F : (func: MyFunc) => void, Symbol(F,Decl(constructorArgWithGenericCallSignature.ts,6,5))
+>func : MyFunc, Symbol(func,Decl(constructorArgWithGenericCallSignature.ts,8,19))
+>MyFunc : MyFunc, Symbol(MyFunc,Decl(constructorArgWithGenericCallSignature.ts,0,13))
 }
 var func: Test.MyFunc;
->func : Test.MyFunc
->Test : unknown
->MyFunc : Test.MyFunc
+>func : Test.MyFunc, Symbol(func,Decl(constructorArgWithGenericCallSignature.ts,10,3))
+>Test : any, Symbol(Test,Decl(constructorArgWithGenericCallSignature.ts,0,0))
+>MyFunc : Test.MyFunc, Symbol(Test.MyFunc,Decl(constructorArgWithGenericCallSignature.ts,0,13))
 
 Test.F(func); // OK
 >Test.F(func) : void
->Test.F : (func: Test.MyFunc) => void
->Test : typeof Test
->F : (func: Test.MyFunc) => void
->func : Test.MyFunc
+>Test.F : (func: Test.MyFunc) => void, Symbol(Test.F,Decl(constructorArgWithGenericCallSignature.ts,6,5))
+>Test : typeof Test, Symbol(Test,Decl(constructorArgWithGenericCallSignature.ts,0,0))
+>F : (func: Test.MyFunc) => void, Symbol(Test.F,Decl(constructorArgWithGenericCallSignature.ts,6,5))
+>func : Test.MyFunc, Symbol(func,Decl(constructorArgWithGenericCallSignature.ts,10,3))
 
 var test = new Test.MyClass(func); // Should be OK
->test : Test.MyClass
+>test : Test.MyClass, Symbol(test,Decl(constructorArgWithGenericCallSignature.ts,12,3))
 >new Test.MyClass(func) : Test.MyClass
->Test.MyClass : typeof Test.MyClass
->Test : typeof Test
->MyClass : typeof Test.MyClass
->func : Test.MyFunc
+>Test.MyClass : typeof Test.MyClass, Symbol(Test.MyClass,Decl(constructorArgWithGenericCallSignature.ts,3,5))
+>Test : typeof Test, Symbol(Test,Decl(constructorArgWithGenericCallSignature.ts,0,0))
+>MyClass : typeof Test.MyClass, Symbol(Test.MyClass,Decl(constructorArgWithGenericCallSignature.ts,3,5))
+>func : Test.MyFunc, Symbol(func,Decl(constructorArgWithGenericCallSignature.ts,10,3))
 

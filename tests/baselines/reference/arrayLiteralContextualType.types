@@ -1,90 +1,90 @@
 === tests/cases/compiler/arrayLiteralContextualType.ts ===
 interface IAnimal {
->IAnimal : IAnimal
+>IAnimal : IAnimal, Symbol(IAnimal,Decl(arrayLiteralContextualType.ts,0,0))
 
     name: string;
->name : string
+>name : string, Symbol(name,Decl(arrayLiteralContextualType.ts,0,19))
 }
 
 class Giraffe {
->Giraffe : Giraffe
+>Giraffe : Giraffe, Symbol(Giraffe,Decl(arrayLiteralContextualType.ts,2,1))
 
     name = "Giraffe";
->name : string
+>name : string, Symbol(name,Decl(arrayLiteralContextualType.ts,4,15))
 >"Giraffe" : string
 
     neckLength = "3m";
->neckLength : string
+>neckLength : string, Symbol(neckLength,Decl(arrayLiteralContextualType.ts,5,21))
 >"3m" : string
 }
 
 class Elephant {
->Elephant : Elephant
+>Elephant : Elephant, Symbol(Elephant,Decl(arrayLiteralContextualType.ts,7,1))
 
     name = "Elephant";
->name : string
+>name : string, Symbol(name,Decl(arrayLiteralContextualType.ts,9,16))
 >"Elephant" : string
 
     trunkDiameter = "20cm";
->trunkDiameter : string
+>trunkDiameter : string, Symbol(trunkDiameter,Decl(arrayLiteralContextualType.ts,10,22))
 >"20cm" : string
 }
 
 function foo(animals: IAnimal[]) { }
->foo : (animals: IAnimal[]) => void
->animals : IAnimal[]
->IAnimal : IAnimal
+>foo : (animals: IAnimal[]) => void, Symbol(foo,Decl(arrayLiteralContextualType.ts,12,1))
+>animals : IAnimal[], Symbol(animals,Decl(arrayLiteralContextualType.ts,14,13))
+>IAnimal : IAnimal, Symbol(IAnimal,Decl(arrayLiteralContextualType.ts,0,0))
 
 function bar(animals: { [n: number]: IAnimal }) { }
->bar : (animals: { [n: number]: IAnimal; }) => void
->animals : { [n: number]: IAnimal; }
->n : number
->IAnimal : IAnimal
+>bar : (animals: { [n: number]: IAnimal; }) => void, Symbol(bar,Decl(arrayLiteralContextualType.ts,14,36))
+>animals : { [n: number]: IAnimal; }, Symbol(animals,Decl(arrayLiteralContextualType.ts,15,13))
+>n : number, Symbol(n,Decl(arrayLiteralContextualType.ts,15,25))
+>IAnimal : IAnimal, Symbol(IAnimal,Decl(arrayLiteralContextualType.ts,0,0))
 
 foo([
 >foo([    new Giraffe(),    new Elephant()]) : void
->foo : (animals: IAnimal[]) => void
+>foo : (animals: IAnimal[]) => void, Symbol(foo,Decl(arrayLiteralContextualType.ts,12,1))
 >[    new Giraffe(),    new Elephant()] : (Giraffe | Elephant)[]
 
     new Giraffe(),
 >new Giraffe() : Giraffe
->Giraffe : typeof Giraffe
+>Giraffe : typeof Giraffe, Symbol(Giraffe,Decl(arrayLiteralContextualType.ts,2,1))
 
     new Elephant()
 >new Elephant() : Elephant
->Elephant : typeof Elephant
+>Elephant : typeof Elephant, Symbol(Elephant,Decl(arrayLiteralContextualType.ts,7,1))
 
 ]); // Legal because of the contextual type IAnimal provided by the parameter
 bar([
 >bar([    new Giraffe(),    new Elephant()]) : void
->bar : (animals: { [n: number]: IAnimal; }) => void
+>bar : (animals: { [n: number]: IAnimal; }) => void, Symbol(bar,Decl(arrayLiteralContextualType.ts,14,36))
 >[    new Giraffe(),    new Elephant()] : (Giraffe | Elephant)[]
 
     new Giraffe(),
 >new Giraffe() : Giraffe
->Giraffe : typeof Giraffe
+>Giraffe : typeof Giraffe, Symbol(Giraffe,Decl(arrayLiteralContextualType.ts,2,1))
 
     new Elephant()
 >new Elephant() : Elephant
->Elephant : typeof Elephant
+>Elephant : typeof Elephant, Symbol(Elephant,Decl(arrayLiteralContextualType.ts,7,1))
 
 ]); // Legal because of the contextual type IAnimal provided by the parameter
 
 var arr = [new Giraffe(), new Elephant()];
->arr : (Giraffe | Elephant)[]
+>arr : (Giraffe | Elephant)[], Symbol(arr,Decl(arrayLiteralContextualType.ts,26,3))
 >[new Giraffe(), new Elephant()] : (Giraffe | Elephant)[]
 >new Giraffe() : Giraffe
->Giraffe : typeof Giraffe
+>Giraffe : typeof Giraffe, Symbol(Giraffe,Decl(arrayLiteralContextualType.ts,2,1))
 >new Elephant() : Elephant
->Elephant : typeof Elephant
+>Elephant : typeof Elephant, Symbol(Elephant,Decl(arrayLiteralContextualType.ts,7,1))
 
 foo(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
 >foo(arr) : void
->foo : (animals: IAnimal[]) => void
->arr : (Giraffe | Elephant)[]
+>foo : (animals: IAnimal[]) => void, Symbol(foo,Decl(arrayLiteralContextualType.ts,12,1))
+>arr : (Giraffe | Elephant)[], Symbol(arr,Decl(arrayLiteralContextualType.ts,26,3))
 
 bar(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
 >bar(arr) : void
->bar : (animals: { [n: number]: IAnimal; }) => void
->arr : (Giraffe | Elephant)[]
+>bar : (animals: { [n: number]: IAnimal; }) => void, Symbol(bar,Decl(arrayLiteralContextualType.ts,14,36))
+>arr : (Giraffe | Elephant)[], Symbol(arr,Decl(arrayLiteralContextualType.ts,26,3))
 

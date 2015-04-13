@@ -1,38 +1,38 @@
 === tests/cases/compiler/typeParameterConstrainedToOuterTypeParameter2.ts ===
 interface A<T> {
->A : A<T>
->T : T
+>A : A<T>, Symbol(A,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,0,0))
+>T : T, Symbol(T,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,0,12))
 
     foo<U extends T>(x: A<A<U>>)
->foo : <U extends T>(x: A<A<U>>) => any
->U : U
->T : T
->x : A<A<U>>
->A : A<T>
->A : A<T>
->U : U
+>foo : <U extends T>(x: A<A<U>>) => any, Symbol(foo,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,0,16))
+>U : U, Symbol(U,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,1,8))
+>T : T, Symbol(T,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,0,12))
+>x : A<A<U>>, Symbol(x,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,1,21))
+>A : A<T>, Symbol(A,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,0,0))
+>A : A<T>, Symbol(A,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,0,0))
+>U : U, Symbol(U,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,1,8))
 }
 
 interface B<T> {
->B : B<T>
->T : T
+>B : B<T>, Symbol(B,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,2,1))
+>T : T, Symbol(T,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,4,12))
 
     foo<U extends T>(x: B<B<U>>)
->foo : <U extends T>(x: B<B<U>>) => any
->U : U
->T : T
->x : B<B<U>>
->B : B<T>
->B : B<T>
->U : U
+>foo : <U extends T>(x: B<B<U>>) => any, Symbol(foo,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,4,16))
+>U : U, Symbol(U,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,5,8))
+>T : T, Symbol(T,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,4,12))
+>x : B<B<U>>, Symbol(x,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,5,21))
+>B : B<T>, Symbol(B,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,2,1))
+>B : B<T>, Symbol(B,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,2,1))
+>U : U, Symbol(U,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,5,8))
 }
 
 var a: A<string>
->a : A<string>
->A : A<T>
+>a : A<string>, Symbol(a,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,8,3))
+>A : A<T>, Symbol(A,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,0,0))
 
 var b: B<string> = a;
->b : B<string>
->B : B<T>
->a : A<string>
+>b : B<string>, Symbol(b,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,9,3))
+>B : B<T>, Symbol(B,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,2,1))
+>a : A<string>, Symbol(a,Decl(typeParameterConstrainedToOuterTypeParameter2.ts,8,3))
 

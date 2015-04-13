@@ -2,70 +2,70 @@
 // duplicate local variables are only reported at global scope
 
 module M {
->M : typeof M
+>M : typeof M, Symbol(M,Decl(duplicateVariablesByScope.ts,0,0))
 
     for (var j = 0; j < 10; j++) {
->j : number
+>j : number, Symbol(j,Decl(duplicateVariablesByScope.ts,3,12),Decl(duplicateVariablesByScope.ts,6,12))
 >0 : number
 >j < 10 : boolean
->j : number
+>j : number, Symbol(j,Decl(duplicateVariablesByScope.ts,3,12),Decl(duplicateVariablesByScope.ts,6,12))
 >10 : number
 >j++ : number
->j : number
+>j : number, Symbol(j,Decl(duplicateVariablesByScope.ts,3,12),Decl(duplicateVariablesByScope.ts,6,12))
     }
 
     for (var j = 0; j < 10; j++) {
->j : number
+>j : number, Symbol(j,Decl(duplicateVariablesByScope.ts,3,12),Decl(duplicateVariablesByScope.ts,6,12))
 >0 : number
 >j < 10 : boolean
->j : number
+>j : number, Symbol(j,Decl(duplicateVariablesByScope.ts,3,12),Decl(duplicateVariablesByScope.ts,6,12))
 >10 : number
 >j++ : number
->j : number
+>j : number, Symbol(j,Decl(duplicateVariablesByScope.ts,3,12),Decl(duplicateVariablesByScope.ts,6,12))
     }
 }
 
 function foo() {
->foo : () => void
+>foo : () => void, Symbol(foo,Decl(duplicateVariablesByScope.ts,8,1))
 
     var x = 2;
->x : number
+>x : number, Symbol(x,Decl(duplicateVariablesByScope.ts,11,7),Decl(duplicateVariablesByScope.ts,12,7))
 >2 : number
 
     var x = 1;
->x : number
+>x : number, Symbol(x,Decl(duplicateVariablesByScope.ts,11,7),Decl(duplicateVariablesByScope.ts,12,7))
 >1 : number
 
     if (true) {
 >true : boolean
 
         var result = 1;
->result : number
+>result : number, Symbol(result,Decl(duplicateVariablesByScope.ts,14,11),Decl(duplicateVariablesByScope.ts,17,11))
 >1 : number
     }
     else {
         var result = 2;
->result : number
+>result : number, Symbol(result,Decl(duplicateVariablesByScope.ts,14,11),Decl(duplicateVariablesByScope.ts,17,11))
 >2 : number
     }
 }
 
 class C {
->C : C
+>C : C, Symbol(C,Decl(duplicateVariablesByScope.ts,19,1))
 
     foo() {
->foo : () => void
+>foo : () => void, Symbol(foo,Decl(duplicateVariablesByScope.ts,21,9))
 
         try {
             var x = 1;
->x : number
+>x : number, Symbol(x,Decl(duplicateVariablesByScope.ts,24,15),Decl(duplicateVariablesByScope.ts,27,15))
 >1 : number
         }
         catch (e) {
->e : any
+>e : any, Symbol(e,Decl(duplicateVariablesByScope.ts,26,15))
 
             var x = 2;
->x : number
+>x : number, Symbol(x,Decl(duplicateVariablesByScope.ts,24,15),Decl(duplicateVariablesByScope.ts,27,15))
 >2 : number
         }
     }

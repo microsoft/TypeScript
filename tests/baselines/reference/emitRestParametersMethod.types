@@ -1,33 +1,33 @@
 === tests/cases/conformance/es6/restParameters/emitRestParametersMethod.ts ===
 class C {
->C : C
+>C : C, Symbol(C,Decl(emitRestParametersMethod.ts,0,0))
 
     constructor(name: string, ...rest) { }
->name : string
->rest : any[]
+>name : string, Symbol(name,Decl(emitRestParametersMethod.ts,1,16))
+>rest : any[], Symbol(rest,Decl(emitRestParametersMethod.ts,1,29))
 
     public bar(...rest) { }
->bar : (...rest: any[]) => void
->rest : any[]
+>bar : (...rest: any[]) => void, Symbol(bar,Decl(emitRestParametersMethod.ts,1,42))
+>rest : any[], Symbol(rest,Decl(emitRestParametersMethod.ts,3,15))
 
     public foo(x: number, ...rest) { }
->foo : (x: number, ...rest: any[]) => void
->x : number
->rest : any[]
+>foo : (x: number, ...rest: any[]) => void, Symbol(foo,Decl(emitRestParametersMethod.ts,3,27))
+>x : number, Symbol(x,Decl(emitRestParametersMethod.ts,4,15))
+>rest : any[], Symbol(rest,Decl(emitRestParametersMethod.ts,4,25))
 }
 
 class D {
->D : D
+>D : D, Symbol(D,Decl(emitRestParametersMethod.ts,5,1))
 
     constructor(...rest) { }
->rest : any[]
+>rest : any[], Symbol(rest,Decl(emitRestParametersMethod.ts,8,16))
 
     public bar(...rest) { }
->bar : (...rest: any[]) => void
->rest : any[]
+>bar : (...rest: any[]) => void, Symbol(bar,Decl(emitRestParametersMethod.ts,8,28))
+>rest : any[], Symbol(rest,Decl(emitRestParametersMethod.ts,10,15))
 
     public foo(x: number, ...rest) { }
->foo : (x: number, ...rest: any[]) => void
->x : number
->rest : any[]
+>foo : (x: number, ...rest: any[]) => void, Symbol(foo,Decl(emitRestParametersMethod.ts,10,27))
+>x : number, Symbol(x,Decl(emitRestParametersMethod.ts,11,15))
+>rest : any[], Symbol(rest,Decl(emitRestParametersMethod.ts,11,25))
 }

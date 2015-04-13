@@ -1,18 +1,18 @@
 === tests/cases/compiler/namedFunctionExpressionInModule.ts ===
 module Variables{
->Variables : typeof Variables
+>Variables : typeof Variables, Symbol(Variables,Decl(namedFunctionExpressionInModule.ts,0,0))
 
     var x = function bar(a, b, c) {
->x : (a: any, b: any, c: any) => void
+>x : (a: any, b: any, c: any) => void, Symbol(x,Decl(namedFunctionExpressionInModule.ts,1,7))
 >function bar(a, b, c) {    } : (a: any, b: any, c: any) => void
->bar : (a: any, b: any, c: any) => void
->a : any
->b : any
->c : any
+>bar : (a: any, b: any, c: any) => void, Symbol(bar,Decl(namedFunctionExpressionInModule.ts,1,11))
+>a : any, Symbol(a,Decl(namedFunctionExpressionInModule.ts,1,25))
+>b : any, Symbol(b,Decl(namedFunctionExpressionInModule.ts,1,27))
+>c : any, Symbol(c,Decl(namedFunctionExpressionInModule.ts,1,30))
     }
     x(1, 2, 3);
 >x(1, 2, 3) : void
->x : (a: any, b: any, c: any) => void
+>x : (a: any, b: any, c: any) => void, Symbol(x,Decl(namedFunctionExpressionInModule.ts,1,7))
 >1 : number
 >2 : number
 >3 : number

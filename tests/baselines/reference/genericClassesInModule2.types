@@ -1,63 +1,63 @@
 === tests/cases/compiler/genericClassesInModule2.ts ===
 export class A<T1>{
->A : A<T1>
->T1 : T1
+>A : A<T1>, Symbol(A,Decl(genericClassesInModule2.ts,0,0))
+>T1 : T1, Symbol(T1,Decl(genericClassesInModule2.ts,0,15))
 
     constructor( public callback: (self: A<T1>) => void) {
->callback : (self: A<T1>) => void
->self : A<T1>
->A : A<T1>
->T1 : T1
+>callback : (self: A<T1>) => void, Symbol(callback,Decl(genericClassesInModule2.ts,1,16))
+>self : A<T1>, Symbol(self,Decl(genericClassesInModule2.ts,1,35))
+>A : A<T1>, Symbol(A,Decl(genericClassesInModule2.ts,0,0))
+>T1 : T1, Symbol(T1,Decl(genericClassesInModule2.ts,0,15))
 
         var child = new B(this);
->child : B<A<T1>>
+>child : B<A<T1>>, Symbol(child,Decl(genericClassesInModule2.ts,2,11))
 >new B(this) : B<A<T1>>
->B : typeof B
->this : A<T1>
+>B : typeof B, Symbol(B,Decl(genericClassesInModule2.ts,13,1))
+>this : A<T1>, Symbol(A,Decl(genericClassesInModule2.ts,0,0))
     }
     AAA( callback: (self: A<T1>) => void) {
->AAA : (callback: (self: A<T1>) => void) => void
->callback : (self: A<T1>) => void
->self : A<T1>
->A : A<T1>
->T1 : T1
+>AAA : (callback: (self: A<T1>) => void) => void, Symbol(AAA,Decl(genericClassesInModule2.ts,3,5))
+>callback : (self: A<T1>) => void, Symbol(callback,Decl(genericClassesInModule2.ts,4,8))
+>self : A<T1>, Symbol(self,Decl(genericClassesInModule2.ts,4,20))
+>A : A<T1>, Symbol(A,Decl(genericClassesInModule2.ts,0,0))
+>T1 : T1, Symbol(T1,Decl(genericClassesInModule2.ts,0,15))
 
         var child = new B(this);
->child : B<A<T1>>
+>child : B<A<T1>>, Symbol(child,Decl(genericClassesInModule2.ts,5,11))
 >new B(this) : B<A<T1>>
->B : typeof B
->this : A<T1>
+>B : typeof B, Symbol(B,Decl(genericClassesInModule2.ts,13,1))
+>this : A<T1>, Symbol(A,Decl(genericClassesInModule2.ts,0,0))
     }
 }
 
 export interface C<T1>{
->C : C<T1>
->T1 : T1
+>C : C<T1>, Symbol(C,Decl(genericClassesInModule2.ts,7,1))
+>T1 : T1, Symbol(T1,Decl(genericClassesInModule2.ts,9,19))
 
     child: B<T1>;
->child : B<T1>
->B : B<T2>
->T1 : T1
+>child : B<T1>, Symbol(child,Decl(genericClassesInModule2.ts,9,23))
+>B : B<T2>, Symbol(B,Decl(genericClassesInModule2.ts,13,1))
+>T1 : T1, Symbol(T1,Decl(genericClassesInModule2.ts,9,19))
 
     (self: C<T1>): void;
->self : C<T1>
->C : C<T1>
->T1 : T1
+>self : C<T1>, Symbol(self,Decl(genericClassesInModule2.ts,11,5))
+>C : C<T1>, Symbol(C,Decl(genericClassesInModule2.ts,7,1))
+>T1 : T1, Symbol(T1,Decl(genericClassesInModule2.ts,9,19))
 
     new(callback: (self: C<T1>) => void)
->callback : (self: C<T1>) => void
->self : C<T1>
->C : C<T1>
->T1 : T1
+>callback : (self: C<T1>) => void, Symbol(callback,Decl(genericClassesInModule2.ts,12,8))
+>self : C<T1>, Symbol(self,Decl(genericClassesInModule2.ts,12,19))
+>C : C<T1>, Symbol(C,Decl(genericClassesInModule2.ts,7,1))
+>T1 : T1, Symbol(T1,Decl(genericClassesInModule2.ts,9,19))
 }
 
 export class B<T2> {
->B : B<T2>
->T2 : T2
+>B : B<T2>, Symbol(B,Decl(genericClassesInModule2.ts,13,1))
+>T2 : T2, Symbol(T2,Decl(genericClassesInModule2.ts,15,15))
 
     constructor(public parent: T2) { }
->parent : T2
->T2 : T2
+>parent : T2, Symbol(parent,Decl(genericClassesInModule2.ts,16,16))
+>T2 : T2, Symbol(T2,Decl(genericClassesInModule2.ts,15,15))
 }
 
 

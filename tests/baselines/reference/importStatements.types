@@ -1,99 +1,99 @@
 === tests/cases/conformance/internalModules/codeGeneration/importStatements.ts ===
 module A {
->A : typeof A
+>A : typeof A, Symbol(A,Decl(importStatements.ts,0,0))
 
     export class Point {
->Point : Point
+>Point : Point, Symbol(Point,Decl(importStatements.ts,0,10))
 
         constructor(public x: number, public y: number) { }
->x : number
->y : number
+>x : number, Symbol(x,Decl(importStatements.ts,2,20))
+>y : number, Symbol(y,Decl(importStatements.ts,2,37))
     }
 
     export var Origin = new Point(0, 0);
->Origin : Point
+>Origin : Point, Symbol(Origin,Decl(importStatements.ts,5,14))
 >new Point(0, 0) : Point
->Point : typeof Point
+>Point : typeof Point, Symbol(Point,Decl(importStatements.ts,0,10))
 >0 : number
 >0 : number
 }
 
 // no code gen expected
 module B {
->B : unknown
+>B : any, Symbol(B,Decl(importStatements.ts,6,1))
 
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
->a : typeof a
->A : typeof a
+>a : typeof a, Symbol(a,Decl(importStatements.ts,9,10))
+>A : typeof a, Symbol(a,Decl(importStatements.ts,0,0))
 }
 
 // no code gen expected
 module C {
->C : typeof C
+>C : typeof C, Symbol(C,Decl(importStatements.ts,11,1))
 
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
->a : typeof a
->A : typeof a
+>a : typeof a, Symbol(a,Decl(importStatements.ts,14,10))
+>A : typeof a, Symbol(a,Decl(importStatements.ts,0,0))
 
     var m: typeof a;
->m : typeof a
->a : typeof a
+>m : typeof a, Symbol(m,Decl(importStatements.ts,16,7))
+>a : typeof a, Symbol(a,Decl(importStatements.ts,14,10))
 
     var p: a.Point;
->p : a.Point
->a : unknown
->Point : a.Point
+>p : a.Point, Symbol(p,Decl(importStatements.ts,17,7),Decl(importStatements.ts,18,7))
+>a : any, Symbol(a,Decl(importStatements.ts,14,10))
+>Point : a.Point, Symbol(a.Point,Decl(importStatements.ts,0,10))
 
     var p = {x:0, y:0 };
->p : a.Point
+>p : a.Point, Symbol(p,Decl(importStatements.ts,17,7),Decl(importStatements.ts,18,7))
 >{x:0, y:0 } : { x: number; y: number; }
->x : number
+>x : number, Symbol(x,Decl(importStatements.ts,18,13))
 >0 : number
->y : number
+>y : number, Symbol(y,Decl(importStatements.ts,18,17))
 >0 : number
 }
 
 // code gen expected
 module D {
->D : typeof D
+>D : typeof D, Symbol(D,Decl(importStatements.ts,19,1))
 
     import a = A;
->a : typeof a
->A : typeof a
+>a : typeof a, Symbol(a,Decl(importStatements.ts,22,10))
+>A : typeof a, Symbol(a,Decl(importStatements.ts,0,0))
 
     var p = new a.Point(1, 1);
->p : a.Point
+>p : a.Point, Symbol(p,Decl(importStatements.ts,25,7))
 >new a.Point(1, 1) : a.Point
->a.Point : typeof a.Point
->a : typeof a
->Point : typeof a.Point
+>a.Point : typeof a.Point, Symbol(a.Point,Decl(importStatements.ts,0,10))
+>a : typeof a, Symbol(a,Decl(importStatements.ts,22,10))
+>Point : typeof a.Point, Symbol(a.Point,Decl(importStatements.ts,0,10))
 >1 : number
 >1 : number
 }
 
 module E {
->E : typeof E
+>E : typeof E, Symbol(E,Decl(importStatements.ts,26,1))
 
     import a = A;
->a : typeof a
->A : typeof a
+>a : typeof a, Symbol(a,Decl(importStatements.ts,28,10))
+>A : typeof a, Symbol(a,Decl(importStatements.ts,0,0))
 
     export function xDist(x: a.Point) {
->xDist : (x: a.Point) => number
->x : a.Point
->a : unknown
->Point : a.Point
+>xDist : (x: a.Point) => number, Symbol(xDist,Decl(importStatements.ts,29,17))
+>x : a.Point, Symbol(x,Decl(importStatements.ts,30,26))
+>a : any, Symbol(a,Decl(importStatements.ts,28,10))
+>Point : a.Point, Symbol(a.Point,Decl(importStatements.ts,0,10))
 
         return (a.Origin.x - x.x);
 >(a.Origin.x - x.x) : number
 >a.Origin.x - x.x : number
->a.Origin.x : number
->a.Origin : a.Point
->a : typeof a
->Origin : a.Point
->x : number
->x.x : number
->x : a.Point
->x : number
+>a.Origin.x : number, Symbol(a.Point.x,Decl(importStatements.ts,2,20))
+>a.Origin : a.Point, Symbol(a.Origin,Decl(importStatements.ts,5,14))
+>a : typeof a, Symbol(a,Decl(importStatements.ts,28,10))
+>Origin : a.Point, Symbol(a.Origin,Decl(importStatements.ts,5,14))
+>x : number, Symbol(a.Point.x,Decl(importStatements.ts,2,20))
+>x.x : number, Symbol(a.Point.x,Decl(importStatements.ts,2,20))
+>x : a.Point, Symbol(x,Decl(importStatements.ts,30,26))
+>x : number, Symbol(a.Point.x,Decl(importStatements.ts,2,20))
     }
 }

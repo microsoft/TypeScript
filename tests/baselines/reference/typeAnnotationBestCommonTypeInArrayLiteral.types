@@ -1,28 +1,28 @@
 === tests/cases/compiler/typeAnnotationBestCommonTypeInArrayLiteral.ts ===
 interface IMenuItem {
->IMenuItem : IMenuItem
+>IMenuItem : IMenuItem, Symbol(IMenuItem,Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts,0,0))
 
     id: string;
->id : string
+>id : string, Symbol(id,Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts,0,21))
 
     type: string;
->type : string
+>type : string, Symbol(type,Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts,1,15))
 
     link?: string;
->link : string
+>link : string, Symbol(link,Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts,2,17))
 
     classes?: string;
->classes : string
+>classes : string, Symbol(classes,Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts,3,18))
 
     text?: string;
->text : string
+>text : string, Symbol(text,Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts,4,21))
 
     icon?: string;
->icon : string
+>icon : string, Symbol(icon,Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts,5,18))
 }
 var menuData: IMenuItem[] = [
->menuData : IMenuItem[]
->IMenuItem : IMenuItem
+>menuData : IMenuItem[], Symbol(menuData,Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts,8,3))
+>IMenuItem : IMenuItem, Symbol(IMenuItem,Decl(typeAnnotationBestCommonTypeInArrayLiteral.ts,0,0))
 >[    {        "id": "ourLogo",        "type": "image",        "link": "",        "icon": "modules/menu/logo.svg"    }, {        "id": "productName",        "type": "default",        "link": "",        "text": "Product Name"    }] : ({ "id": string; "type": string; "link": string; "icon": string; } | { "id": string; "type": string; "link": string; "text": string; })[]
     {
 >{        "id": "ourLogo",        "type": "image",        "link": "",        "icon": "modules/menu/logo.svg"    } : { "id": string; "type": string; "link": string; "icon": string; }

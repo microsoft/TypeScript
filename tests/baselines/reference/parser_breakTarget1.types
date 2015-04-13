@@ -1,7 +1,7 @@
 === tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakTarget1.ts ===
 target:
->target : unknown
+>target : any
 
   break target;
->target : unknown
+>target : any
 

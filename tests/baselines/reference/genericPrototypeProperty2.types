@@ -1,39 +1,39 @@
 === tests/cases/compiler/genericPrototypeProperty2.ts ===
 interface EventTarget { x } 
->EventTarget : EventTarget
->x : any
+>EventTarget : EventTarget, Symbol(EventTarget,Decl(genericPrototypeProperty2.ts,0,0))
+>x : any, Symbol(x,Decl(genericPrototypeProperty2.ts,0,23))
 
 class BaseEvent {
->BaseEvent : BaseEvent
+>BaseEvent : BaseEvent, Symbol(BaseEvent,Decl(genericPrototypeProperty2.ts,0,27))
 
     target: EventTarget;
->target : EventTarget
->EventTarget : EventTarget
+>target : EventTarget, Symbol(target,Decl(genericPrototypeProperty2.ts,1,17))
+>EventTarget : EventTarget, Symbol(EventTarget,Decl(genericPrototypeProperty2.ts,0,0))
 }
 
 class MyEvent<T extends EventTarget> extends BaseEvent {
->MyEvent : MyEvent<T>
->T : T
->EventTarget : EventTarget
->BaseEvent : BaseEvent
+>MyEvent : MyEvent<T>, Symbol(MyEvent,Decl(genericPrototypeProperty2.ts,3,1))
+>T : T, Symbol(T,Decl(genericPrototypeProperty2.ts,5,14))
+>EventTarget : EventTarget, Symbol(EventTarget,Decl(genericPrototypeProperty2.ts,0,0))
+>BaseEvent : BaseEvent, Symbol(BaseEvent,Decl(genericPrototypeProperty2.ts,0,27))
 
     target: T;
->target : T
->T : T
+>target : T, Symbol(target,Decl(genericPrototypeProperty2.ts,5,56))
+>T : T, Symbol(T,Decl(genericPrototypeProperty2.ts,5,14))
 }
 class BaseEventWrapper {
->BaseEventWrapper : BaseEventWrapper
+>BaseEventWrapper : BaseEventWrapper, Symbol(BaseEventWrapper,Decl(genericPrototypeProperty2.ts,7,1))
 
     t: BaseEvent;
->t : BaseEvent
->BaseEvent : BaseEvent
+>t : BaseEvent, Symbol(t,Decl(genericPrototypeProperty2.ts,8,24))
+>BaseEvent : BaseEvent, Symbol(BaseEvent,Decl(genericPrototypeProperty2.ts,0,27))
 }
 
 class MyEventWrapper extends BaseEventWrapper {
->MyEventWrapper : MyEventWrapper
->BaseEventWrapper : BaseEventWrapper
+>MyEventWrapper : MyEventWrapper, Symbol(MyEventWrapper,Decl(genericPrototypeProperty2.ts,10,1))
+>BaseEventWrapper : BaseEventWrapper, Symbol(BaseEventWrapper,Decl(genericPrototypeProperty2.ts,7,1))
 
     t: MyEvent<any>; // any satisfies constraint and passes assignability check between 'target' properties
->t : MyEvent<any>
->MyEvent : MyEvent<T>
+>t : MyEvent<any>, Symbol(t,Decl(genericPrototypeProperty2.ts,12,47))
+>MyEvent : MyEvent<T>, Symbol(MyEvent,Decl(genericPrototypeProperty2.ts,3,1))
 }

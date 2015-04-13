@@ -2,7 +2,7 @@
 // Empty array literal with no contextual type has type Undefined[]
 
 var arr1= [[], [1], ['']];
->arr1 : (number[] | string[])[]
+>arr1 : (number[] | string[])[], Symbol(arr1,Decl(arrayLiterals.ts,2,3))
 >[[], [1], ['']] : (number[] | string[])[]
 >[] : undefined[]
 >[1] : number[]
@@ -11,7 +11,7 @@ var arr1= [[], [1], ['']];
 >'' : string
 
 var arr2 = [[null], [1], ['']];
->arr2 : (number[] | string[])[]
+>arr2 : (number[] | string[])[], Symbol(arr2,Decl(arrayLiterals.ts,4,3))
 >[[null], [1], ['']] : (number[] | string[])[]
 >[null] : null[]
 >null : null
@@ -23,7 +23,7 @@ var arr2 = [[null], [1], ['']];
 
 // Array literal with elements of only EveryType E has type E[]
 var stringArrArr = [[''], [""]];
->stringArrArr : string[][]
+>stringArrArr : string[][], Symbol(stringArrArr,Decl(arrayLiterals.ts,8,3))
 >[[''], [""]] : string[][]
 >[''] : string[]
 >'' : string
@@ -31,13 +31,13 @@ var stringArrArr = [[''], [""]];
 >"" : string
 
 var stringArr = ['', ""];
->stringArr : string[]
+>stringArr : string[], Symbol(stringArr,Decl(arrayLiterals.ts,10,3))
 >['', ""] : string[]
 >'' : string
 >"" : string
 
 var numberArr = [0, 0.0, 0x00, 1e1];
->numberArr : number[]
+>numberArr : number[], Symbol(numberArr,Decl(arrayLiterals.ts,12,3))
 >[0, 0.0, 0x00, 1e1] : number[]
 >0 : number
 >0.0 : number
@@ -45,7 +45,7 @@ var numberArr = [0, 0.0, 0x00, 1e1];
 >1e1 : number
 
 var boolArr = [false, true, false, true];
->boolArr : boolean[]
+>boolArr : boolean[], Symbol(boolArr,Decl(arrayLiterals.ts,14,3))
 >[false, true, false, true] : boolean[]
 >false : boolean
 >true : boolean
@@ -53,101 +53,101 @@ var boolArr = [false, true, false, true];
 >true : boolean
 
 class C { private p; }
->C : C
->p : any
+>C : C, Symbol(C,Decl(arrayLiterals.ts,14,41))
+>p : any, Symbol(p,Decl(arrayLiterals.ts,16,9))
 
 var classArr = [new C(), new C()];
->classArr : C[]
+>classArr : C[], Symbol(classArr,Decl(arrayLiterals.ts,17,3))
 >[new C(), new C()] : C[]
 >new C() : C
->C : typeof C
+>C : typeof C, Symbol(C,Decl(arrayLiterals.ts,14,41))
 >new C() : C
->C : typeof C
+>C : typeof C, Symbol(C,Decl(arrayLiterals.ts,14,41))
 
 var classTypeArray = [C, C, C];
->classTypeArray : typeof C[]
+>classTypeArray : typeof C[], Symbol(classTypeArray,Decl(arrayLiterals.ts,19,3),Decl(arrayLiterals.ts,20,3))
 >[C, C, C] : typeof C[]
->C : typeof C
->C : typeof C
->C : typeof C
+>C : typeof C, Symbol(C,Decl(arrayLiterals.ts,14,41))
+>C : typeof C, Symbol(C,Decl(arrayLiterals.ts,14,41))
+>C : typeof C, Symbol(C,Decl(arrayLiterals.ts,14,41))
 
 var classTypeArray: Array<typeof C>; // Should OK, not be a parse error
->classTypeArray : typeof C[]
->Array : T[]
->C : typeof C
+>classTypeArray : typeof C[], Symbol(classTypeArray,Decl(arrayLiterals.ts,19,3),Decl(arrayLiterals.ts,20,3))
+>Array : T[], Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
+>C : typeof C, Symbol(C,Decl(arrayLiterals.ts,14,41))
 
 // Contextual type C with numeric index signature makes array literal of EveryType E of type BCT(E,C)[]
 var context1: { [n: number]: { a: string; b: number; }; } = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
->context1 : { [n: number]: { a: string; b: number; }; }
->n : number
->a : string
->b : number
+>context1 : { [n: number]: { a: string; b: number; }; }, Symbol(context1,Decl(arrayLiterals.ts,23,3))
+>n : number, Symbol(n,Decl(arrayLiterals.ts,23,17))
+>a : string, Symbol(a,Decl(arrayLiterals.ts,23,30))
+>b : number, Symbol(b,Decl(arrayLiterals.ts,23,41))
 >[{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }] : ({ a: string; b: number; c: string; } | { a: string; b: number; c: number; })[]
 >{ a: '', b: 0, c: '' } : { a: string; b: number; c: string; }
->a : string
+>a : string, Symbol(a,Decl(arrayLiterals.ts,23,62))
 >'' : string
->b : number
+>b : number, Symbol(b,Decl(arrayLiterals.ts,23,69))
 >0 : number
->c : string
+>c : string, Symbol(c,Decl(arrayLiterals.ts,23,75))
 >'' : string
 >{ a: "", b: 3, c: 0 } : { a: string; b: number; c: number; }
->a : string
+>a : string, Symbol(a,Decl(arrayLiterals.ts,23,86))
 >"" : string
->b : number
+>b : number, Symbol(b,Decl(arrayLiterals.ts,23,93))
 >3 : number
->c : number
+>c : number, Symbol(c,Decl(arrayLiterals.ts,23,99))
 >0 : number
 
 var context2 = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
->context2 : ({ a: string; b: number; c: string; } | { a: string; b: number; c: number; })[]
+>context2 : ({ a: string; b: number; c: string; } | { a: string; b: number; c: number; })[], Symbol(context2,Decl(arrayLiterals.ts,24,3))
 >[{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }] : ({ a: string; b: number; c: string; } | { a: string; b: number; c: number; })[]
 >{ a: '', b: 0, c: '' } : { a: string; b: number; c: string; }
->a : string
+>a : string, Symbol(a,Decl(arrayLiterals.ts,24,17))
 >'' : string
->b : number
+>b : number, Symbol(b,Decl(arrayLiterals.ts,24,24))
 >0 : number
->c : string
+>c : string, Symbol(c,Decl(arrayLiterals.ts,24,30))
 >'' : string
 >{ a: "", b: 3, c: 0 } : { a: string; b: number; c: number; }
->a : string
+>a : string, Symbol(a,Decl(arrayLiterals.ts,24,41))
 >"" : string
->b : number
+>b : number, Symbol(b,Decl(arrayLiterals.ts,24,48))
 >3 : number
->c : number
+>c : number, Symbol(c,Decl(arrayLiterals.ts,24,54))
 >0 : number
 
 // Contextual type C with numeric index signature of type Base makes array literal of Derived have type Base[]
 class Base { private p; }
->Base : Base
->p : any
+>Base : Base, Symbol(Base,Decl(arrayLiterals.ts,24,63))
+>p : any, Symbol(p,Decl(arrayLiterals.ts,27,12))
 
 class Derived1 extends Base { private m };
->Derived1 : Derived1
->Base : Base
->m : any
+>Derived1 : Derived1, Symbol(Derived1,Decl(arrayLiterals.ts,27,25))
+>Base : Base, Symbol(Base,Decl(arrayLiterals.ts,24,63))
+>m : any, Symbol(m,Decl(arrayLiterals.ts,28,29))
 
 class Derived2 extends Base { private n };
->Derived2 : Derived2
->Base : Base
->n : any
+>Derived2 : Derived2, Symbol(Derived2,Decl(arrayLiterals.ts,28,42))
+>Base : Base, Symbol(Base,Decl(arrayLiterals.ts,24,63))
+>n : any, Symbol(n,Decl(arrayLiterals.ts,29,29))
 
 var context3: Base[] = [new Derived1(), new Derived2()];
->context3 : Base[]
->Base : Base
+>context3 : Base[], Symbol(context3,Decl(arrayLiterals.ts,30,3))
+>Base : Base, Symbol(Base,Decl(arrayLiterals.ts,24,63))
 >[new Derived1(), new Derived2()] : (Derived1 | Derived2)[]
 >new Derived1() : Derived1
->Derived1 : typeof Derived1
+>Derived1 : typeof Derived1, Symbol(Derived1,Decl(arrayLiterals.ts,27,25))
 >new Derived2() : Derived2
->Derived2 : typeof Derived2
+>Derived2 : typeof Derived2, Symbol(Derived2,Decl(arrayLiterals.ts,28,42))
 
 // Contextual type C with numeric index signature of type Base makes array literal of Derived1 and Derived2 have type Base[]
 var context4: Base[] = [new Derived1(), new Derived1()];
->context4 : Base[]
->Base : Base
+>context4 : Base[], Symbol(context4,Decl(arrayLiterals.ts,33,3))
+>Base : Base, Symbol(Base,Decl(arrayLiterals.ts,24,63))
 >[new Derived1(), new Derived1()] : Derived1[]
 >new Derived1() : Derived1
->Derived1 : typeof Derived1
+>Derived1 : typeof Derived1, Symbol(Derived1,Decl(arrayLiterals.ts,27,25))
 >new Derived1() : Derived1
->Derived1 : typeof Derived1
+>Derived1 : typeof Derived1, Symbol(Derived1,Decl(arrayLiterals.ts,27,25))
 
 

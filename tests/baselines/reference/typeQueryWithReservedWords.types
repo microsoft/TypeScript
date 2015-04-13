@@ -1,43 +1,43 @@
 === tests/cases/conformance/types/specifyingTypes/typeQueries/typeQueryWithReservedWords.ts ===
 class Controller {
->Controller : Controller
+>Controller : Controller, Symbol(Controller,Decl(typeQueryWithReservedWords.ts,0,0))
 
     create() {
->create : () => void
+>create : () => void, Symbol(create,Decl(typeQueryWithReservedWords.ts,0,18))
     }
     delete() {
->delete : () => void
+>delete : () => void, Symbol(delete,Decl(typeQueryWithReservedWords.ts,2,5))
     }
     var() {
->var : () => void
+>var : () => void, Symbol(var,Decl(typeQueryWithReservedWords.ts,4,5))
     }
 }
 
 interface IScope {
->IScope : IScope
+>IScope : IScope, Symbol(IScope,Decl(typeQueryWithReservedWords.ts,7,1))
 
     create: typeof Controller.prototype.create;  
->create : () => void
->Controller.prototype.create : () => void
->Controller.prototype : Controller
->Controller : typeof Controller
->prototype : Controller
->create : () => void
+>create : () => void, Symbol(create,Decl(typeQueryWithReservedWords.ts,9,18))
+>Controller.prototype.create : () => void, Symbol(Controller.create,Decl(typeQueryWithReservedWords.ts,0,18))
+>Controller.prototype : Controller, Symbol(Controller.prototype)
+>Controller : typeof Controller, Symbol(Controller,Decl(typeQueryWithReservedWords.ts,0,0))
+>prototype : Controller, Symbol(Controller.prototype)
+>create : () => void, Symbol(Controller.create,Decl(typeQueryWithReservedWords.ts,0,18))
 
     delete: typeof Controller.prototype.delete;  // Should not error
->delete : () => void
->Controller.prototype.delete : () => void
->Controller.prototype : Controller
->Controller : typeof Controller
->prototype : Controller
->delete : () => void
+>delete : () => void, Symbol(delete,Decl(typeQueryWithReservedWords.ts,10,47))
+>Controller.prototype.delete : () => void, Symbol(Controller.delete,Decl(typeQueryWithReservedWords.ts,2,5))
+>Controller.prototype : Controller, Symbol(Controller.prototype)
+>Controller : typeof Controller, Symbol(Controller,Decl(typeQueryWithReservedWords.ts,0,0))
+>prototype : Controller, Symbol(Controller.prototype)
+>delete : () => void, Symbol(Controller.delete,Decl(typeQueryWithReservedWords.ts,2,5))
 
     var: typeof Controller.prototype.var;        // Should not error
->var : () => void
->Controller.prototype.var : () => void
->Controller.prototype : Controller
->Controller : typeof Controller
->prototype : Controller
->var : () => void
+>var : () => void, Symbol(var,Decl(typeQueryWithReservedWords.ts,11,47))
+>Controller.prototype.var : () => void, Symbol(Controller.var,Decl(typeQueryWithReservedWords.ts,4,5))
+>Controller.prototype : Controller, Symbol(Controller.prototype)
+>Controller : typeof Controller, Symbol(Controller,Decl(typeQueryWithReservedWords.ts,0,0))
+>prototype : Controller, Symbol(Controller.prototype)
+>var : () => void, Symbol(Controller.var,Decl(typeQueryWithReservedWords.ts,4,5))
 }
 

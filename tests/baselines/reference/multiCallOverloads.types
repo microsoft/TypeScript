@@ -1,46 +1,46 @@
 === tests/cases/compiler/multiCallOverloads.ts ===
 interface ICallback {
->ICallback : ICallback
+>ICallback : ICallback, Symbol(ICallback,Decl(multiCallOverloads.ts,0,0))
 
     (x?: string):void;
->x : string
+>x : string, Symbol(x,Decl(multiCallOverloads.ts,1,5))
 }
 
 function load(f: ICallback) {}
->load : (f: ICallback) => void
->f : ICallback
->ICallback : ICallback
+>load : (f: ICallback) => void, Symbol(load,Decl(multiCallOverloads.ts,2,1))
+>f : ICallback, Symbol(f,Decl(multiCallOverloads.ts,4,14))
+>ICallback : ICallback, Symbol(ICallback,Decl(multiCallOverloads.ts,0,0))
 
 var f1: ICallback = function(z?) {}
->f1 : ICallback
->ICallback : ICallback
+>f1 : ICallback, Symbol(f1,Decl(multiCallOverloads.ts,6,3))
+>ICallback : ICallback, Symbol(ICallback,Decl(multiCallOverloads.ts,0,0))
 >function(z?) {} : (z?: string) => void
->z : string
+>z : string, Symbol(z,Decl(multiCallOverloads.ts,6,29))
 
 var f2: ICallback = function(z?) {}
->f2 : ICallback
->ICallback : ICallback
+>f2 : ICallback, Symbol(f2,Decl(multiCallOverloads.ts,7,3))
+>ICallback : ICallback, Symbol(ICallback,Decl(multiCallOverloads.ts,0,0))
 >function(z?) {} : (z?: string) => void
->z : string
+>z : string, Symbol(z,Decl(multiCallOverloads.ts,7,29))
 
 load(f1) // ok
 >load(f1) : void
->load : (f: ICallback) => void
->f1 : ICallback
+>load : (f: ICallback) => void, Symbol(load,Decl(multiCallOverloads.ts,2,1))
+>f1 : ICallback, Symbol(f1,Decl(multiCallOverloads.ts,6,3))
 
 load(f2) // ok
 >load(f2) : void
->load : (f: ICallback) => void
->f2 : ICallback
+>load : (f: ICallback) => void, Symbol(load,Decl(multiCallOverloads.ts,2,1))
+>f2 : ICallback, Symbol(f2,Decl(multiCallOverloads.ts,7,3))
 
 load(function() {}) // this shouldn’t be an error
 >load(function() {}) : void
->load : (f: ICallback) => void
+>load : (f: ICallback) => void, Symbol(load,Decl(multiCallOverloads.ts,2,1))
 >function() {} : () => void
 
 load(function(z?) {}) // this shouldn't be an error
 >load(function(z?) {}) : void
->load : (f: ICallback) => void
+>load : (f: ICallback) => void, Symbol(load,Decl(multiCallOverloads.ts,2,1))
 >function(z?) {} : (z?: string) => void
->z : string
+>z : string, Symbol(z,Decl(multiCallOverloads.ts,11,14))
 

@@ -1,41 +1,41 @@
 === tests/cases/conformance/internalModules/exportDeclarations/ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts ===
 module A {
->A : typeof A
+>A : typeof A, Symbol(A,Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts,0,0))
 
     export class Point {
->Point : Point
+>Point : Point, Symbol(Point,Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts,0,10))
 
         x: number;
->x : number
+>x : number, Symbol(x,Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts,2,24))
 
         y: number;
->y : number
+>y : number, Symbol(y,Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts,3,18))
     }
 
     export class Line {
->Line : Line
+>Line : Line, Symbol(Line,Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts,5,5))
 
         constructor(public start: Point, public end: Point) { }
->start : Point
->Point : Point
->end : Point
->Point : Point
+>start : Point, Symbol(start,Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts,8,20))
+>Point : Point, Symbol(Point,Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts,0,10))
+>end : Point, Symbol(end,Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts,8,40))
+>Point : Point, Symbol(Point,Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts,0,10))
     }
 
     export function fromOrigin(p: Point): Line {
->fromOrigin : (p: Point) => Line
->p : Point
->Point : Point
->Line : Line
+>fromOrigin : (p: Point) => Line, Symbol(fromOrigin,Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts,9,5))
+>p : Point, Symbol(p,Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts,11,31))
+>Point : Point, Symbol(Point,Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts,0,10))
+>Line : Line, Symbol(Line,Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts,5,5))
 
         return new Line({ x: 0, y: 0 }, p);
 >new Line({ x: 0, y: 0 }, p) : Line
->Line : typeof Line
+>Line : typeof Line, Symbol(Line,Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts,5,5))
 >{ x: 0, y: 0 } : { x: number; y: number; }
->x : number
+>x : number, Symbol(x,Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts,12,25))
 >0 : number
->y : number
+>y : number, Symbol(y,Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts,12,31))
 >0 : number
->p : Point
+>p : Point, Symbol(p,Decl(ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts,11,31))
     }
 }

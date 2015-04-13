@@ -1,56 +1,56 @@
 === tests/cases/compiler/objectLiteralArraySpecialization.ts ===
 declare function create<T>(initialValues?: T[]): MyArrayWrapper<T>;
->create : <T>(initialValues?: T[]) => MyArrayWrapper<T>
->T : T
->initialValues : T[]
->T : T
->MyArrayWrapper : MyArrayWrapper<T>
->T : T
+>create : <T>(initialValues?: T[]) => MyArrayWrapper<T>, Symbol(create,Decl(objectLiteralArraySpecialization.ts,0,0))
+>T : T, Symbol(T,Decl(objectLiteralArraySpecialization.ts,0,24))
+>initialValues : T[], Symbol(initialValues,Decl(objectLiteralArraySpecialization.ts,0,27))
+>T : T, Symbol(T,Decl(objectLiteralArraySpecialization.ts,0,24))
+>MyArrayWrapper : MyArrayWrapper<T>, Symbol(MyArrayWrapper,Decl(objectLiteralArraySpecialization.ts,0,67))
+>T : T, Symbol(T,Decl(objectLiteralArraySpecialization.ts,0,24))
 
 interface MyArrayWrapper<T> {
->MyArrayWrapper : MyArrayWrapper<T>
->T : T
+>MyArrayWrapper : MyArrayWrapper<T>, Symbol(MyArrayWrapper,Decl(objectLiteralArraySpecialization.ts,0,67))
+>T : T, Symbol(T,Decl(objectLiteralArraySpecialization.ts,1,25))
 
 	constructor(initialItems?: T[]);
->constructor : (initialItems?: T[]) => any
->initialItems : T[]
->T : T
+>constructor : (initialItems?: T[]) => any, Symbol(constructor,Decl(objectLiteralArraySpecialization.ts,1,29))
+>initialItems : T[], Symbol(initialItems,Decl(objectLiteralArraySpecialization.ts,2,13))
+>T : T, Symbol(T,Decl(objectLiteralArraySpecialization.ts,1,25))
 
 	doSomething(predicate: (x: T, y: T) => boolean): void;
->doSomething : (predicate: (x: T, y: T) => boolean) => void
->predicate : (x: T, y: T) => boolean
->x : T
->T : T
->y : T
->T : T
+>doSomething : (predicate: (x: T, y: T) => boolean) => void, Symbol(doSomething,Decl(objectLiteralArraySpecialization.ts,2,33))
+>predicate : (x: T, y: T) => boolean, Symbol(predicate,Decl(objectLiteralArraySpecialization.ts,3,13))
+>x : T, Symbol(x,Decl(objectLiteralArraySpecialization.ts,3,25))
+>T : T, Symbol(T,Decl(objectLiteralArraySpecialization.ts,1,25))
+>y : T, Symbol(y,Decl(objectLiteralArraySpecialization.ts,3,30))
+>T : T, Symbol(T,Decl(objectLiteralArraySpecialization.ts,1,25))
 }
 var thing = create([ { name: "bob", id: 24 }, { name: "doug", id: 32 } ]); // should not error
->thing : MyArrayWrapper<{ name: string; id: number; }>
+>thing : MyArrayWrapper<{ name: string; id: number; }>, Symbol(thing,Decl(objectLiteralArraySpecialization.ts,5,3))
 >create([ { name: "bob", id: 24 }, { name: "doug", id: 32 } ]) : MyArrayWrapper<{ name: string; id: number; }>
->create : <T>(initialValues?: T[]) => MyArrayWrapper<T>
+>create : <T>(initialValues?: T[]) => MyArrayWrapper<T>, Symbol(create,Decl(objectLiteralArraySpecialization.ts,0,0))
 >[ { name: "bob", id: 24 }, { name: "doug", id: 32 } ] : { name: string; id: number; }[]
 >{ name: "bob", id: 24 } : { name: string; id: number; }
->name : string
+>name : string, Symbol(name,Decl(objectLiteralArraySpecialization.ts,5,22))
 >"bob" : string
->id : number
+>id : number, Symbol(id,Decl(objectLiteralArraySpecialization.ts,5,35))
 >24 : number
 >{ name: "doug", id: 32 } : { name: string; id: number; }
->name : string
+>name : string, Symbol(name,Decl(objectLiteralArraySpecialization.ts,5,47))
 >"doug" : string
->id : number
+>id : number, Symbol(id,Decl(objectLiteralArraySpecialization.ts,5,61))
 >32 : number
 
 thing.doSomething((x, y) => x.name === "bob"); // should not error
 >thing.doSomething((x, y) => x.name === "bob") : void
->thing.doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => boolean) => void
->thing : MyArrayWrapper<{ name: string; id: number; }>
->doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => boolean) => void
+>thing.doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => boolean) => void, Symbol(MyArrayWrapper.doSomething,Decl(objectLiteralArraySpecialization.ts,2,33))
+>thing : MyArrayWrapper<{ name: string; id: number; }>, Symbol(thing,Decl(objectLiteralArraySpecialization.ts,5,3))
+>doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => boolean) => void, Symbol(MyArrayWrapper.doSomething,Decl(objectLiteralArraySpecialization.ts,2,33))
 >(x, y) => x.name === "bob" : (x: { name: string; id: number; }, y: { name: string; id: number; }) => boolean
->x : { name: string; id: number; }
->y : { name: string; id: number; }
+>x : { name: string; id: number; }, Symbol(x,Decl(objectLiteralArraySpecialization.ts,6,19))
+>y : { name: string; id: number; }, Symbol(y,Decl(objectLiteralArraySpecialization.ts,6,21))
 >x.name === "bob" : boolean
->x.name : string
->x : { name: string; id: number; }
->name : string
+>x.name : string, Symbol(name,Decl(objectLiteralArraySpecialization.ts,5,22))
+>x : { name: string; id: number; }, Symbol(x,Decl(objectLiteralArraySpecialization.ts,6,19))
+>name : string, Symbol(name,Decl(objectLiteralArraySpecialization.ts,5,22))
 >"bob" : string
 

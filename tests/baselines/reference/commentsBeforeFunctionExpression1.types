@@ -1,12 +1,12 @@
 === tests/cases/compiler/commentsBeforeFunctionExpression1.ts ===
 var v = {
->v : { f: (a: any) => number; }
+>v : { f: (a: any) => number; }, Symbol(v,Decl(commentsBeforeFunctionExpression1.ts,0,3))
 >{    f: /**own f*/ (a) => 0} : { f: (a: any) => number; }
 
     f: /**own f*/ (a) => 0
->f : (a: any) => number
+>f : (a: any) => number, Symbol(f,Decl(commentsBeforeFunctionExpression1.ts,0,9))
 >(a) => 0 : (a: any) => number
->a : any
+>a : any, Symbol(a,Decl(commentsBeforeFunctionExpression1.ts,1,19))
 >0 : number
 }
 

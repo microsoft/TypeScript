@@ -1,30 +1,30 @@
 === tests/cases/compiler/innerOverloads.ts ===
 
 function outer() {
->outer : () => any
+>outer : () => any, Symbol(outer,Decl(innerOverloads.ts,0,0))
 
     function inner(x:number); // should work
->inner : { (x: number): any; (x: string): any; }
->x : number
+>inner : { (x: number): any; (x: string): any; }, Symbol(inner,Decl(innerOverloads.ts,1,18),Decl(innerOverloads.ts,2,29),Decl(innerOverloads.ts,3,29))
+>x : number, Symbol(x,Decl(innerOverloads.ts,2,19))
 
     function inner(x:string);
->inner : { (x: number): any; (x: string): any; }
->x : string
+>inner : { (x: number): any; (x: string): any; }, Symbol(inner,Decl(innerOverloads.ts,1,18),Decl(innerOverloads.ts,2,29),Decl(innerOverloads.ts,3,29))
+>x : string, Symbol(x,Decl(innerOverloads.ts,3,19))
 
     function inner(a:any) { return a; }
->inner : { (x: number): any; (x: string): any; }
->a : any
->a : any
+>inner : { (x: number): any; (x: string): any; }, Symbol(inner,Decl(innerOverloads.ts,1,18),Decl(innerOverloads.ts,2,29),Decl(innerOverloads.ts,3,29))
+>a : any, Symbol(a,Decl(innerOverloads.ts,4,19))
+>a : any, Symbol(a,Decl(innerOverloads.ts,4,19))
 
     return inner(0);
 >inner(0) : any
->inner : { (x: number): any; (x: string): any; }
+>inner : { (x: number): any; (x: string): any; }, Symbol(inner,Decl(innerOverloads.ts,1,18),Decl(innerOverloads.ts,2,29),Decl(innerOverloads.ts,3,29))
 >0 : number
 }
 
 var x = outer(); // should work
->x : any
+>x : any, Symbol(x,Decl(innerOverloads.ts,9,3))
 >outer() : any
->outer : () => any
+>outer : () => any, Symbol(outer,Decl(innerOverloads.ts,0,0))
 
 

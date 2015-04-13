@@ -1,7 +1,7 @@
 === tests/cases/compiler/stringLiteralPropertyNameWithLineContinuation1.ts ===
 var x = {'text\
 >x : { 'text\
-': string; }
+': string; }, Symbol(x,Decl(stringLiteralPropertyNameWithLineContinuation1.ts,0,3))
 >{'text\':'hello'} : { 'text\
 ': string; }
 
@@ -10,9 +10,11 @@ var x = {'text\
 
 x.text = "bar"
 >x.text = "bar" : string
->x.text : string
+>x.text : string, Symbol('text\
+',Decl(stringLiteralPropertyNameWithLineContinuation1.ts,0,9))
 >x : { 'text\
-': string; }
->text : string
+': string; }, Symbol(x,Decl(stringLiteralPropertyNameWithLineContinuation1.ts,0,3))
+>text : string, Symbol('text\
+',Decl(stringLiteralPropertyNameWithLineContinuation1.ts,0,9))
 >"bar" : string
 

@@ -1,24 +1,24 @@
 === tests/cases/compiler/assign1.ts ===
 module M {
->M : typeof M
+>M : typeof M, Symbol(M,Decl(assign1.ts,0,0))
 
     interface I {
->I : I
+>I : I, Symbol(I,Decl(assign1.ts,0,10))
 
         salt:number;
->salt : number
+>salt : number, Symbol(salt,Decl(assign1.ts,1,17))
 
         pepper:number;
->pepper : number
+>pepper : number, Symbol(pepper,Decl(assign1.ts,2,20))
     }
 
     var x:I={salt:2,pepper:0};
->x : I
->I : I
+>x : I, Symbol(x,Decl(assign1.ts,6,7))
+>I : I, Symbol(I,Decl(assign1.ts,0,10))
 >{salt:2,pepper:0} : { salt: number; pepper: number; }
->salt : number
+>salt : number, Symbol(salt,Decl(assign1.ts,6,13))
 >2 : number
->pepper : number
+>pepper : number, Symbol(pepper,Decl(assign1.ts,6,20))
 >0 : number
 }
 

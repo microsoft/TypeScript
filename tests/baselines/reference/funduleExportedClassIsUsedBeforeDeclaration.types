@@ -1,26 +1,26 @@
 === tests/cases/compiler/funduleExportedClassIsUsedBeforeDeclaration.ts ===
 interface A {   // interface before module declaration
->A : A
+>A : A, Symbol(A,Decl(funduleExportedClassIsUsedBeforeDeclaration.ts,0,0))
 
     (): B.C;    // uses defined below class in module
->B : unknown
->C : B.C
+>B : any, Symbol(B,Decl(funduleExportedClassIsUsedBeforeDeclaration.ts,2,1),Decl(funduleExportedClassIsUsedBeforeDeclaration.ts,3,26))
+>C : B.C, Symbol(B.C,Decl(funduleExportedClassIsUsedBeforeDeclaration.ts,4,18))
 }
 declare function B(): B.C;  // function merged with module
->B : typeof B
->B : unknown
->C : B.C
+>B : typeof B, Symbol(B,Decl(funduleExportedClassIsUsedBeforeDeclaration.ts,2,1),Decl(funduleExportedClassIsUsedBeforeDeclaration.ts,3,26))
+>B : any, Symbol(B,Decl(funduleExportedClassIsUsedBeforeDeclaration.ts,2,1),Decl(funduleExportedClassIsUsedBeforeDeclaration.ts,3,26))
+>C : B.C, Symbol(B.C,Decl(funduleExportedClassIsUsedBeforeDeclaration.ts,4,18))
 
 declare module B {
->B : typeof B
+>B : typeof B, Symbol(B,Decl(funduleExportedClassIsUsedBeforeDeclaration.ts,2,1),Decl(funduleExportedClassIsUsedBeforeDeclaration.ts,3,26))
 
     export class C {    // class defined in module 
->C : C
+>C : C, Symbol(C,Decl(funduleExportedClassIsUsedBeforeDeclaration.ts,4,18))
     }
 }
 new B.C(); 
 >new B.C() : B.C
->B.C : typeof B.C
->B : typeof B
->C : typeof B.C
+>B.C : typeof B.C, Symbol(B.C,Decl(funduleExportedClassIsUsedBeforeDeclaration.ts,4,18))
+>B : typeof B, Symbol(B,Decl(funduleExportedClassIsUsedBeforeDeclaration.ts,2,1),Decl(funduleExportedClassIsUsedBeforeDeclaration.ts,3,26))
+>C : typeof B.C, Symbol(B.C,Decl(funduleExportedClassIsUsedBeforeDeclaration.ts,4,18))
 

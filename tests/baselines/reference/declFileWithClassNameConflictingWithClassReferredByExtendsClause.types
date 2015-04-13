@@ -1,56 +1,56 @@
 === tests/cases/compiler/declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts ===
 
 declare module A.B.Base {
->A : typeof A
->B : typeof B
->Base : typeof Base
+>A : typeof A, Symbol(A,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,0,0))
+>B : typeof B, Symbol(B,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,1,17))
+>Base : typeof Base, Symbol(Base,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,1,19))
 
     export class W {
->W : W
+>W : W, Symbol(W,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,1,25))
 
         id: number;
->id : number
+>id : number, Symbol(id,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,2,20))
     }
 }
 module X.Y.base {
->X : typeof X
->Y : typeof Y
->base : typeof base
+>X : typeof X, Symbol(X,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,5,1),Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,11,1))
+>Y : typeof Y, Symbol(Y,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,6,9),Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,13,9))
+>base : typeof base, Symbol(base,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,6,11),Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,13,11))
 
     export class W extends A.B.Base.W {
->W : W
->A.B.Base.W : unknown
->A.B.Base : typeof A.B.Base
->A.B : typeof A.B
->A : typeof A
->B : typeof A.B
->Base : typeof A.B.Base
->W : A.B.Base.W
+>W : W, Symbol(W,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,6,17))
+>A.B.Base.W : any, Symbol(A.B.Base.W,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,1,25))
+>A.B.Base : typeof A.B.Base, Symbol(A.B.Base,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,1,19))
+>A.B : typeof A.B, Symbol(A.B,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,1,17))
+>A : typeof A, Symbol(A,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,0,0))
+>B : typeof A.B, Symbol(A.B,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,1,17))
+>Base : typeof A.B.Base, Symbol(A.B.Base,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,1,19))
+>W : A.B.Base.W, Symbol(A.B.Base.W,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,1,25))
 
         name: string;
->name : string
+>name : string, Symbol(name,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,8,39))
     }
 }
 
 module X.Y.base.Z {
->X : typeof X
->Y : typeof Y
->base : typeof base
->Z : typeof Z
+>X : typeof X, Symbol(X,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,5,1),Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,11,1))
+>Y : typeof Y, Symbol(Y,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,6,9),Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,13,9))
+>base : typeof base, Symbol(base,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,6,11),Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,13,11))
+>Z : typeof Z, Symbol(Z,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,13,16))
 
     export class W<TValue> extends X.Y.base.W {
->W : W<TValue>
->TValue : TValue
->X.Y.base.W : unknown
->X.Y.base : typeof base
->X.Y : typeof Y
->X : typeof X
->Y : typeof Y
->base : typeof base
->W : base.W
+>W : W<TValue>, Symbol(W,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,13,19))
+>TValue : TValue, Symbol(TValue,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,15,19))
+>X.Y.base.W : any, Symbol(W,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,6,17))
+>X.Y.base : typeof base, Symbol(base,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,6,11),Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,13,11))
+>X.Y : typeof Y, Symbol(Y,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,6,9),Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,13,9))
+>X : typeof X, Symbol(X,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,5,1),Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,11,1))
+>Y : typeof Y, Symbol(Y,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,6,9),Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,13,9))
+>base : typeof base, Symbol(base,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,6,11),Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,13,11))
+>W : base.W, Symbol(W,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,6,17))
 
         value: boolean;
->value : boolean
+>value : boolean, Symbol(value,Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts,15,47))
     }
 }
 

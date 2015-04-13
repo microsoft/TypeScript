@@ -1,41 +1,41 @@
 === tests/cases/conformance/internalModules/exportDeclarations/ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts ===
 module A {
->A : typeof A
+>A : typeof A, Symbol(A,Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts,0,0))
 
     class Point {
->Point : Point
+>Point : Point, Symbol(Point,Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts,0,10))
 
         x: number;
->x : number
+>x : number, Symbol(x,Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts,2,17))
 
         y: number;
->y : number
+>y : number, Symbol(y,Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts,3,18))
     }
 
     export class Line {
->Line : Line
+>Line : Line, Symbol(Line,Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts,5,5))
 
         constructor(public start: Point, public end: Point) { }
->start : Point
->Point : Point
->end : Point
->Point : Point
+>start : Point, Symbol(start,Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts,8,20))
+>Point : Point, Symbol(Point,Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts,0,10))
+>end : Point, Symbol(end,Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts,8,40))
+>Point : Point, Symbol(Point,Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts,0,10))
     }
 
     export function fromOrigin(p: Point): Line {
->fromOrigin : (p: Point) => Line
->p : Point
->Point : Point
->Line : Line
+>fromOrigin : (p: Point) => Line, Symbol(fromOrigin,Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts,9,5))
+>p : Point, Symbol(p,Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts,11,31))
+>Point : Point, Symbol(Point,Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts,0,10))
+>Line : Line, Symbol(Line,Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts,5,5))
 
         return new Line({ x: 0, y: 0 }, p);
 >new Line({ x: 0, y: 0 }, p) : Line
->Line : typeof Line
+>Line : typeof Line, Symbol(Line,Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts,5,5))
 >{ x: 0, y: 0 } : { x: number; y: number; }
->x : number
+>x : number, Symbol(x,Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts,12,25))
 >0 : number
->y : number
+>y : number, Symbol(y,Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts,12,31))
 >0 : number
->p : Point
+>p : Point, Symbol(p,Decl(ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts,11,31))
     }
 }

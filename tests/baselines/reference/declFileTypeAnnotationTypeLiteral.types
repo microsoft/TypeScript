@@ -1,85 +1,85 @@
 === tests/cases/compiler/declFileTypeAnnotationTypeLiteral.ts ===
 
 class c {
->c : c
+>c : c, Symbol(c,Decl(declFileTypeAnnotationTypeLiteral.ts,0,0))
 }
 class g<T> {
->g : g<T>
->T : T
+>g : g<T>, Symbol(g,Decl(declFileTypeAnnotationTypeLiteral.ts,2,1))
+>T : T, Symbol(T,Decl(declFileTypeAnnotationTypeLiteral.ts,3,8))
 }
 module m {
->m : typeof m
+>m : typeof m, Symbol(m,Decl(declFileTypeAnnotationTypeLiteral.ts,4,1))
 
     export class c {
->c : c
+>c : c, Symbol(c,Decl(declFileTypeAnnotationTypeLiteral.ts,5,10))
     }
 }
 
 // Object literal with everything
 var x: {
->x : { (a: number): c; (a: string): g<string>; new (a: number): c; new (a: string): m.c; [n: string]: c; [n: number]: c; a: c; b: g<string>; m1(): g<number>; m2(a: string, b?: number, ...c: c[]): string; }
+>x : { (a: number): c; (a: string): g<string>; new (a: number): c; new (a: string): m.c; [n: string]: c; [n: number]: c; a: c; b: g<string>; m1(): g<number>; m2(a: string, b?: number, ...c: c[]): string; }, Symbol(x,Decl(declFileTypeAnnotationTypeLiteral.ts,11,3))
 
     // Call signatures
     (a: number): c;
->a : number
->c : c
+>a : number, Symbol(a,Decl(declFileTypeAnnotationTypeLiteral.ts,13,5))
+>c : c, Symbol(c,Decl(declFileTypeAnnotationTypeLiteral.ts,0,0))
 
     (a: string): g<string>;
->a : string
->g : g<T>
+>a : string, Symbol(a,Decl(declFileTypeAnnotationTypeLiteral.ts,14,5))
+>g : g<T>, Symbol(g,Decl(declFileTypeAnnotationTypeLiteral.ts,2,1))
 
     // Construct signatures
     new (a: number): c;
->a : number
->c : c
+>a : number, Symbol(a,Decl(declFileTypeAnnotationTypeLiteral.ts,17,9))
+>c : c, Symbol(c,Decl(declFileTypeAnnotationTypeLiteral.ts,0,0))
 
     new (a: string): m.c;
->a : string
->m : unknown
->c : m.c
+>a : string, Symbol(a,Decl(declFileTypeAnnotationTypeLiteral.ts,18,9))
+>m : any, Symbol(m,Decl(declFileTypeAnnotationTypeLiteral.ts,4,1))
+>c : m.c, Symbol(m.c,Decl(declFileTypeAnnotationTypeLiteral.ts,5,10))
 
     // Indexers
     [n: number]: c;
->n : number
->c : c
+>n : number, Symbol(n,Decl(declFileTypeAnnotationTypeLiteral.ts,21,5))
+>c : c, Symbol(c,Decl(declFileTypeAnnotationTypeLiteral.ts,0,0))
 
     [n: string]: c;
->n : string
->c : c
+>n : string, Symbol(n,Decl(declFileTypeAnnotationTypeLiteral.ts,22,5))
+>c : c, Symbol(c,Decl(declFileTypeAnnotationTypeLiteral.ts,0,0))
 
     // Properties
     a: c;
->a : c
->c : c
+>a : c, Symbol(a,Decl(declFileTypeAnnotationTypeLiteral.ts,22,19))
+>c : c, Symbol(c,Decl(declFileTypeAnnotationTypeLiteral.ts,0,0))
 
     b: g<string>;
->b : g<string>
->g : g<T>
+>b : g<string>, Symbol(b,Decl(declFileTypeAnnotationTypeLiteral.ts,25,9))
+>g : g<T>, Symbol(g,Decl(declFileTypeAnnotationTypeLiteral.ts,2,1))
 
     // methods
     m1(): g<number>;
->m1 : () => g<number>
->g : g<T>
+>m1 : () => g<number>, Symbol(m1,Decl(declFileTypeAnnotationTypeLiteral.ts,26,17))
+>g : g<T>, Symbol(g,Decl(declFileTypeAnnotationTypeLiteral.ts,2,1))
 
     m2(a: string, b?: number, ...c: c[]): string;
->m2 : (a: string, b?: number, ...c: c[]) => string
->a : string
->b : number
->c : c[]
->c : c
+>m2 : (a: string, b?: number, ...c: c[]) => string, Symbol(m2,Decl(declFileTypeAnnotationTypeLiteral.ts,29,20))
+>a : string, Symbol(a,Decl(declFileTypeAnnotationTypeLiteral.ts,30,7))
+>b : number, Symbol(b,Decl(declFileTypeAnnotationTypeLiteral.ts,30,17))
+>c : c[], Symbol(c,Decl(declFileTypeAnnotationTypeLiteral.ts,30,29))
+>c : c, Symbol(c,Decl(declFileTypeAnnotationTypeLiteral.ts,0,0))
 
 };
 
 
 // Function type
 var y: (a: string) => string;
->y : (a: string) => string
->a : string
+>y : (a: string) => string, Symbol(y,Decl(declFileTypeAnnotationTypeLiteral.ts,35,3))
+>a : string, Symbol(a,Decl(declFileTypeAnnotationTypeLiteral.ts,35,8))
 
 // constructor type
 var z: new (a: string) => m.c;
->z : new (a: string) => m.c
->a : string
->m : unknown
->c : m.c
+>z : new (a: string) => m.c, Symbol(z,Decl(declFileTypeAnnotationTypeLiteral.ts,38,3))
+>a : string, Symbol(a,Decl(declFileTypeAnnotationTypeLiteral.ts,38,12))
+>m : any, Symbol(m,Decl(declFileTypeAnnotationTypeLiteral.ts,4,1))
+>c : m.c, Symbol(m.c,Decl(declFileTypeAnnotationTypeLiteral.ts,5,10))
 

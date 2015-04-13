@@ -1,20 +1,20 @@
 === tests/cases/compiler/argumentsUsedInObjectLiteralProperty.ts ===
 class A {
->A : A
+>A : A, Symbol(A,Decl(argumentsUsedInObjectLiteralProperty.ts,0,0))
 
     public static createSelectableViewModel(initialState?: any, selectedValue?: any) {
->createSelectableViewModel : (initialState?: any, selectedValue?: any) => { selectedValue: number; }
->initialState : any
->selectedValue : any
+>createSelectableViewModel : (initialState?: any, selectedValue?: any) => { selectedValue: number; }, Symbol(A.createSelectableViewModel,Decl(argumentsUsedInObjectLiteralProperty.ts,0,9))
+>initialState : any, Symbol(initialState,Decl(argumentsUsedInObjectLiteralProperty.ts,1,44))
+>selectedValue : any, Symbol(selectedValue,Decl(argumentsUsedInObjectLiteralProperty.ts,1,63))
 
         return {
 >{            selectedValue: arguments.length        } : { selectedValue: number; }
 
             selectedValue: arguments.length
->selectedValue : number
->arguments.length : number
->arguments : IArguments
->length : number
+>selectedValue : number, Symbol(selectedValue,Decl(argumentsUsedInObjectLiteralProperty.ts,2,16))
+>arguments.length : number, Symbol(IArguments.length,Decl(lib.d.ts,272,25))
+>arguments : IArguments, Symbol(arguments)
+>length : number, Symbol(IArguments.length,Decl(lib.d.ts,272,25))
 
         };
     }

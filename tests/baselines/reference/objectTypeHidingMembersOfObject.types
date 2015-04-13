@@ -2,68 +2,68 @@
 // all of these valueOf calls should return the type shown in the overriding signatures here
 
 class C {
->C : C
+>C : C, Symbol(C,Decl(objectTypeHidingMembersOfObject.ts,0,0))
 
     valueOf() { }
->valueOf : () => void
+>valueOf : () => void, Symbol(valueOf,Decl(objectTypeHidingMembersOfObject.ts,2,9))
 }
 
 var c: C;
->c : C
->C : C
+>c : C, Symbol(c,Decl(objectTypeHidingMembersOfObject.ts,6,3))
+>C : C, Symbol(C,Decl(objectTypeHidingMembersOfObject.ts,0,0))
 
 var r1: void = c.valueOf();
->r1 : void
+>r1 : void, Symbol(r1,Decl(objectTypeHidingMembersOfObject.ts,7,3))
 >c.valueOf() : void
->c.valueOf : () => void
->c : C
->valueOf : () => void
+>c.valueOf : () => void, Symbol(C.valueOf,Decl(objectTypeHidingMembersOfObject.ts,2,9))
+>c : C, Symbol(c,Decl(objectTypeHidingMembersOfObject.ts,6,3))
+>valueOf : () => void, Symbol(C.valueOf,Decl(objectTypeHidingMembersOfObject.ts,2,9))
 
 interface I {
->I : I
+>I : I, Symbol(I,Decl(objectTypeHidingMembersOfObject.ts,7,27))
 
     valueOf(): void;
->valueOf : () => void
+>valueOf : () => void, Symbol(valueOf,Decl(objectTypeHidingMembersOfObject.ts,9,13))
 }
 
 var i: I;
->i : I
->I : I
+>i : I, Symbol(i,Decl(objectTypeHidingMembersOfObject.ts,13,3))
+>I : I, Symbol(I,Decl(objectTypeHidingMembersOfObject.ts,7,27))
 
 var r2: void = i.valueOf();
->r2 : void
+>r2 : void, Symbol(r2,Decl(objectTypeHidingMembersOfObject.ts,14,3))
 >i.valueOf() : void
->i.valueOf : () => void
->i : I
->valueOf : () => void
+>i.valueOf : () => void, Symbol(I.valueOf,Decl(objectTypeHidingMembersOfObject.ts,9,13))
+>i : I, Symbol(i,Decl(objectTypeHidingMembersOfObject.ts,13,3))
+>valueOf : () => void, Symbol(I.valueOf,Decl(objectTypeHidingMembersOfObject.ts,9,13))
 
 var a = {
->a : { valueOf: () => void; }
+>a : { valueOf: () => void; }, Symbol(a,Decl(objectTypeHidingMembersOfObject.ts,16,3))
 >{    valueOf: () => { }} : { valueOf: () => void; }
 
     valueOf: () => { }
->valueOf : () => void
+>valueOf : () => void, Symbol(valueOf,Decl(objectTypeHidingMembersOfObject.ts,16,9))
 >() => { } : () => void
 }
 
 var r3: void = a.valueOf();
->r3 : void
+>r3 : void, Symbol(r3,Decl(objectTypeHidingMembersOfObject.ts,20,3))
 >a.valueOf() : void
->a.valueOf : () => void
->a : { valueOf: () => void; }
->valueOf : () => void
+>a.valueOf : () => void, Symbol(valueOf,Decl(objectTypeHidingMembersOfObject.ts,16,9))
+>a : { valueOf: () => void; }, Symbol(a,Decl(objectTypeHidingMembersOfObject.ts,16,3))
+>valueOf : () => void, Symbol(valueOf,Decl(objectTypeHidingMembersOfObject.ts,16,9))
 
 var b: {
->b : { valueOf(): void; }
+>b : { valueOf(): void; }, Symbol(b,Decl(objectTypeHidingMembersOfObject.ts,22,3))
 
     valueOf(): void;
->valueOf : () => void
+>valueOf : () => void, Symbol(valueOf,Decl(objectTypeHidingMembersOfObject.ts,22,8))
 }
 
 var r4: void = b.valueOf();
->r4 : void
+>r4 : void, Symbol(r4,Decl(objectTypeHidingMembersOfObject.ts,26,3))
 >b.valueOf() : void
->b.valueOf : () => void
->b : { valueOf(): void; }
->valueOf : () => void
+>b.valueOf : () => void, Symbol(valueOf,Decl(objectTypeHidingMembersOfObject.ts,22,8))
+>b : { valueOf(): void; }, Symbol(b,Decl(objectTypeHidingMembersOfObject.ts,22,3))
+>valueOf : () => void, Symbol(valueOf,Decl(objectTypeHidingMembersOfObject.ts,22,8))
 

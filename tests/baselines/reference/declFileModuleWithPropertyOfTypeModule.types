@@ -1,13 +1,13 @@
 === tests/cases/compiler/declFileModuleWithPropertyOfTypeModule.ts ===
 
 module m {
->m : typeof m
+>m : typeof m, Symbol(m,Decl(declFileModuleWithPropertyOfTypeModule.ts,0,0))
 
     export class c {
->c : c
+>c : c, Symbol(c,Decl(declFileModuleWithPropertyOfTypeModule.ts,1,10))
     }
 
     export var a = m;
->a : typeof m
->m : typeof m
+>a : typeof m, Symbol(a,Decl(declFileModuleWithPropertyOfTypeModule.ts,5,14))
+>m : typeof m, Symbol(m,Decl(declFileModuleWithPropertyOfTypeModule.ts,0,0))
 }

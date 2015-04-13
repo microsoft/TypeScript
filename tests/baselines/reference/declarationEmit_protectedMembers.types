@@ -2,122 +2,122 @@
 
 // Class with protected members
 class C1 {
->C1 : C1
+>C1 : C1, Symbol(C1,Decl(declarationEmit_protectedMembers.ts,0,0))
 
     protected x: number;
->x : number
+>x : number, Symbol(x,Decl(declarationEmit_protectedMembers.ts,2,10))
 
     protected f() {
->f : () => number
+>f : () => number, Symbol(f,Decl(declarationEmit_protectedMembers.ts,3,24))
 
         return this.x;
->this.x : number
->this : C1
->x : number
+>this.x : number, Symbol(x,Decl(declarationEmit_protectedMembers.ts,2,10))
+>this : C1, Symbol(C1,Decl(declarationEmit_protectedMembers.ts,0,0))
+>x : number, Symbol(x,Decl(declarationEmit_protectedMembers.ts,2,10))
     }
 
     protected set accessor(a: number) { }
->accessor : number
->a : number
+>accessor : number, Symbol(accessor,Decl(declarationEmit_protectedMembers.ts,7,5),Decl(declarationEmit_protectedMembers.ts,9,41))
+>a : number, Symbol(a,Decl(declarationEmit_protectedMembers.ts,9,27))
 
     protected get accessor() { return 0; }
->accessor : number
+>accessor : number, Symbol(accessor,Decl(declarationEmit_protectedMembers.ts,7,5),Decl(declarationEmit_protectedMembers.ts,9,41))
 >0 : number
 
     protected static sx: number;
->sx : number
+>sx : number, Symbol(C1.sx,Decl(declarationEmit_protectedMembers.ts,10,42))
 
     protected static sf() {
->sf : () => number
+>sf : () => number, Symbol(C1.sf,Decl(declarationEmit_protectedMembers.ts,12,32))
 
         return this.sx;
->this.sx : number
->this : typeof C1
->sx : number
+>this.sx : number, Symbol(C1.sx,Decl(declarationEmit_protectedMembers.ts,10,42))
+>this : typeof C1, Symbol(C1,Decl(declarationEmit_protectedMembers.ts,0,0))
+>sx : number, Symbol(C1.sx,Decl(declarationEmit_protectedMembers.ts,10,42))
     }
 
     protected static set staticSetter(a: number) { }
->staticSetter : number
->a : number
+>staticSetter : number, Symbol(C1.staticSetter,Decl(declarationEmit_protectedMembers.ts,16,5))
+>a : number, Symbol(a,Decl(declarationEmit_protectedMembers.ts,18,38))
 
     protected static get staticGetter() { return 0; }
->staticGetter : number
+>staticGetter : number, Symbol(C1.staticGetter,Decl(declarationEmit_protectedMembers.ts,18,52))
 >0 : number
 }
 
 // Derived class overriding protected members
 class C2 extends C1 {
->C2 : C2
->C1 : C1
+>C2 : C2, Symbol(C2,Decl(declarationEmit_protectedMembers.ts,20,1))
+>C1 : C1, Symbol(C1,Decl(declarationEmit_protectedMembers.ts,0,0))
 
     protected f() {
->f : () => number
+>f : () => number, Symbol(f,Decl(declarationEmit_protectedMembers.ts,23,21))
 
         return super.f() + this.x;
 >super.f() + this.x : number
 >super.f() : number
->super.f : () => number
->super : C1
->f : () => number
->this.x : number
->this : C2
->x : number
+>super.f : () => number, Symbol(C1.f,Decl(declarationEmit_protectedMembers.ts,3,24))
+>super : C1, Symbol(C1,Decl(declarationEmit_protectedMembers.ts,0,0))
+>f : () => number, Symbol(C1.f,Decl(declarationEmit_protectedMembers.ts,3,24))
+>this.x : number, Symbol(C1.x,Decl(declarationEmit_protectedMembers.ts,2,10))
+>this : C2, Symbol(C2,Decl(declarationEmit_protectedMembers.ts,20,1))
+>x : number, Symbol(C1.x,Decl(declarationEmit_protectedMembers.ts,2,10))
     }
     protected static sf() {
->sf : () => number
+>sf : () => number, Symbol(C2.sf,Decl(declarationEmit_protectedMembers.ts,26,5))
 
         return super.sf() + this.sx;
 >super.sf() + this.sx : number
 >super.sf() : number
->super.sf : () => number
->super : typeof C1
->sf : () => number
->this.sx : number
->this : typeof C2
->sx : number
+>super.sf : () => number, Symbol(C1.sf,Decl(declarationEmit_protectedMembers.ts,12,32))
+>super : typeof C1, Symbol(C1,Decl(declarationEmit_protectedMembers.ts,0,0))
+>sf : () => number, Symbol(C1.sf,Decl(declarationEmit_protectedMembers.ts,12,32))
+>this.sx : number, Symbol(C1.sx,Decl(declarationEmit_protectedMembers.ts,10,42))
+>this : typeof C2, Symbol(C2,Decl(declarationEmit_protectedMembers.ts,20,1))
+>sx : number, Symbol(C1.sx,Decl(declarationEmit_protectedMembers.ts,10,42))
     }
 }
 
 // Derived class making protected members public
 class C3 extends C2 {
->C3 : C3
->C2 : C2
+>C3 : C3, Symbol(C3,Decl(declarationEmit_protectedMembers.ts,30,1))
+>C2 : C2, Symbol(C2,Decl(declarationEmit_protectedMembers.ts,20,1))
 
     x: number;
->x : number
+>x : number, Symbol(x,Decl(declarationEmit_protectedMembers.ts,33,21))
 
     static sx: number;
->sx : number
+>sx : number, Symbol(C3.sx,Decl(declarationEmit_protectedMembers.ts,34,14))
 
     f() {
->f : () => number
+>f : () => number, Symbol(f,Decl(declarationEmit_protectedMembers.ts,35,22))
 
         return super.f();
 >super.f() : number
->super.f : () => number
->super : C2
->f : () => number
+>super.f : () => number, Symbol(C2.f,Decl(declarationEmit_protectedMembers.ts,23,21))
+>super : C2, Symbol(C2,Decl(declarationEmit_protectedMembers.ts,20,1))
+>f : () => number, Symbol(C2.f,Decl(declarationEmit_protectedMembers.ts,23,21))
     }
     static sf() {
->sf : () => number
+>sf : () => number, Symbol(C3.sf,Decl(declarationEmit_protectedMembers.ts,38,5))
 
         return super.sf();
 >super.sf() : number
->super.sf : () => number
->super : typeof C2
->sf : () => number
+>super.sf : () => number, Symbol(C2.sf,Decl(declarationEmit_protectedMembers.ts,26,5))
+>super : typeof C2, Symbol(C2,Decl(declarationEmit_protectedMembers.ts,20,1))
+>sf : () => number, Symbol(C2.sf,Decl(declarationEmit_protectedMembers.ts,26,5))
     }
 
     static get staticGetter() { return 1; }
->staticGetter : number
+>staticGetter : number, Symbol(C3.staticGetter,Decl(declarationEmit_protectedMembers.ts,41,5))
 >1 : number
 }
 
 // Protected properties in constructors
 class C4 {
->C4 : C4
+>C4 : C4, Symbol(C4,Decl(declarationEmit_protectedMembers.ts,44,1))
 
     constructor(protected a: number, protected b) { }
->a : number
->b : any
+>a : number, Symbol(a,Decl(declarationEmit_protectedMembers.ts,48,16))
+>b : any, Symbol(b,Decl(declarationEmit_protectedMembers.ts,48,36))
 }

@@ -1,108 +1,108 @@
 === tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithValidOperands.ts ===
 var x: any;
->x : any
+>x : any, Symbol(x,Decl(inOperatorWithValidOperands.ts,0,3))
 
 // valid left operands
 // the left operand is required to be of type Any, the String primitive type, or the Number primitive type
 var a1: string;
->a1 : string
+>a1 : string, Symbol(a1,Decl(inOperatorWithValidOperands.ts,4,3))
 
 var a2: number;
->a2 : number
+>a2 : number, Symbol(a2,Decl(inOperatorWithValidOperands.ts,5,3))
 
 var ra1 = x in x;
->ra1 : boolean
+>ra1 : boolean, Symbol(ra1,Decl(inOperatorWithValidOperands.ts,7,3))
 >x in x : boolean
->x : any
->x : any
+>x : any, Symbol(x,Decl(inOperatorWithValidOperands.ts,0,3))
+>x : any, Symbol(x,Decl(inOperatorWithValidOperands.ts,0,3))
 
 var ra2 = a1 in x;
->ra2 : boolean
+>ra2 : boolean, Symbol(ra2,Decl(inOperatorWithValidOperands.ts,8,3))
 >a1 in x : boolean
->a1 : string
->x : any
+>a1 : string, Symbol(a1,Decl(inOperatorWithValidOperands.ts,4,3))
+>x : any, Symbol(x,Decl(inOperatorWithValidOperands.ts,0,3))
 
 var ra3 = a2 in x;
->ra3 : boolean
+>ra3 : boolean, Symbol(ra3,Decl(inOperatorWithValidOperands.ts,9,3))
 >a2 in x : boolean
->a2 : number
->x : any
+>a2 : number, Symbol(a2,Decl(inOperatorWithValidOperands.ts,5,3))
+>x : any, Symbol(x,Decl(inOperatorWithValidOperands.ts,0,3))
 
 var ra4 = '' in x;
->ra4 : boolean
+>ra4 : boolean, Symbol(ra4,Decl(inOperatorWithValidOperands.ts,10,3))
 >'' in x : boolean
 >'' : string
->x : any
+>x : any, Symbol(x,Decl(inOperatorWithValidOperands.ts,0,3))
 
 var ra5 = 0 in x;
->ra5 : boolean
+>ra5 : boolean, Symbol(ra5,Decl(inOperatorWithValidOperands.ts,11,3))
 >0 in x : boolean
 >0 : number
->x : any
+>x : any, Symbol(x,Decl(inOperatorWithValidOperands.ts,0,3))
 
 // valid right operands
 // the right operand is required to be of type Any, an object type, or a type parameter type
 var b1: {};
->b1 : {}
+>b1 : {}, Symbol(b1,Decl(inOperatorWithValidOperands.ts,15,3))
 
 var rb1 = x in b1;
->rb1 : boolean
+>rb1 : boolean, Symbol(rb1,Decl(inOperatorWithValidOperands.ts,17,3))
 >x in b1 : boolean
->x : any
->b1 : {}
+>x : any, Symbol(x,Decl(inOperatorWithValidOperands.ts,0,3))
+>b1 : {}, Symbol(b1,Decl(inOperatorWithValidOperands.ts,15,3))
 
 var rb2 = x in {};
->rb2 : boolean
+>rb2 : boolean, Symbol(rb2,Decl(inOperatorWithValidOperands.ts,18,3))
 >x in {} : boolean
->x : any
+>x : any, Symbol(x,Decl(inOperatorWithValidOperands.ts,0,3))
 >{} : {}
 
 function foo<T>(t: T) {
->foo : <T>(t: T) => void
->T : T
->t : T
->T : T
+>foo : <T>(t: T) => void, Symbol(foo,Decl(inOperatorWithValidOperands.ts,18,18))
+>T : T, Symbol(T,Decl(inOperatorWithValidOperands.ts,20,13))
+>t : T, Symbol(t,Decl(inOperatorWithValidOperands.ts,20,16))
+>T : T, Symbol(T,Decl(inOperatorWithValidOperands.ts,20,13))
 
     var rb3 = x in t;
->rb3 : boolean
+>rb3 : boolean, Symbol(rb3,Decl(inOperatorWithValidOperands.ts,21,7))
 >x in t : boolean
->x : any
->t : T
+>x : any, Symbol(x,Decl(inOperatorWithValidOperands.ts,0,3))
+>t : T, Symbol(t,Decl(inOperatorWithValidOperands.ts,20,16))
 }
 
 interface X { x: number }
->X : X
->x : number
+>X : X, Symbol(X,Decl(inOperatorWithValidOperands.ts,22,1))
+>x : number, Symbol(x,Decl(inOperatorWithValidOperands.ts,24,13))
 
 interface Y { y: number }
->Y : Y
->y : number
+>Y : Y, Symbol(Y,Decl(inOperatorWithValidOperands.ts,24,25))
+>y : number, Symbol(y,Decl(inOperatorWithValidOperands.ts,25,13))
 
 var c1: X | Y;
->c1 : X | Y
->X : X
->Y : Y
+>c1 : X | Y, Symbol(c1,Decl(inOperatorWithValidOperands.ts,27,3))
+>X : X, Symbol(X,Decl(inOperatorWithValidOperands.ts,22,1))
+>Y : Y, Symbol(Y,Decl(inOperatorWithValidOperands.ts,24,25))
 
 var c2: X;
->c2 : X
->X : X
+>c2 : X, Symbol(c2,Decl(inOperatorWithValidOperands.ts,28,3))
+>X : X, Symbol(X,Decl(inOperatorWithValidOperands.ts,22,1))
 
 var c3: Y;
->c3 : Y
->Y : Y
+>c3 : Y, Symbol(c3,Decl(inOperatorWithValidOperands.ts,29,3))
+>Y : Y, Symbol(Y,Decl(inOperatorWithValidOperands.ts,24,25))
 
 var rc1 = x in c1;
->rc1 : boolean
+>rc1 : boolean, Symbol(rc1,Decl(inOperatorWithValidOperands.ts,31,3))
 >x in c1 : boolean
->x : any
->c1 : X | Y
+>x : any, Symbol(x,Decl(inOperatorWithValidOperands.ts,0,3))
+>c1 : X | Y, Symbol(c1,Decl(inOperatorWithValidOperands.ts,27,3))
 
 var rc2 = x in (c2 || c3);
->rc2 : boolean
+>rc2 : boolean, Symbol(rc2,Decl(inOperatorWithValidOperands.ts,32,3))
 >x in (c2 || c3) : boolean
->x : any
+>x : any, Symbol(x,Decl(inOperatorWithValidOperands.ts,0,3))
 >(c2 || c3) : X | Y
 >c2 || c3 : X | Y
->c2 : X
->c3 : Y
+>c2 : X, Symbol(c2,Decl(inOperatorWithValidOperands.ts,28,3))
+>c3 : Y, Symbol(c3,Decl(inOperatorWithValidOperands.ts,29,3))
 

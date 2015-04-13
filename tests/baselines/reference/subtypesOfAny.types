@@ -2,252 +2,252 @@
 // every type is a subtype of any, no errors expected
 
 interface I {
->I : I
+>I : I, Symbol(I,Decl(subtypesOfAny.ts,0,0))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,3,5))
 
     foo: any;
->foo : any
+>foo : any, Symbol(foo,Decl(subtypesOfAny.ts,3,21))
 }
 
 
 interface I2 {
->I2 : I2
+>I2 : I2, Symbol(I2,Decl(subtypesOfAny.ts,5,1))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,9,5))
 
     foo: number;
->foo : number
+>foo : number, Symbol(foo,Decl(subtypesOfAny.ts,9,21))
 }
 
 
 interface I3 {
->I3 : I3
+>I3 : I3, Symbol(I3,Decl(subtypesOfAny.ts,11,1))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,15,5))
 
     foo: string;
->foo : string
+>foo : string, Symbol(foo,Decl(subtypesOfAny.ts,15,21))
 }
 
 
 interface I4 {
->I4 : I4
+>I4 : I4, Symbol(I4,Decl(subtypesOfAny.ts,17,1))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,21,5))
 
     foo: boolean;
->foo : boolean
+>foo : boolean, Symbol(foo,Decl(subtypesOfAny.ts,21,21))
 }
 
 
 interface I5 {
->I5 : I5
+>I5 : I5, Symbol(I5,Decl(subtypesOfAny.ts,23,1))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,27,5))
 
     foo: Date;
->foo : Date
->Date : Date
+>foo : Date, Symbol(foo,Decl(subtypesOfAny.ts,27,21))
+>Date : Date, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
 }
 
 
 interface I6 {
->I6 : I6
+>I6 : I6, Symbol(I6,Decl(subtypesOfAny.ts,29,1))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,33,5))
 
     foo: RegExp;
->foo : RegExp
->RegExp : RegExp
+>foo : RegExp, Symbol(foo,Decl(subtypesOfAny.ts,33,21))
+>RegExp : RegExp, Symbol(RegExp,Decl(lib.d.ts,825,1),Decl(lib.d.ts,876,11))
 }
 
 
 interface I7 {
->I7 : I7
+>I7 : I7, Symbol(I7,Decl(subtypesOfAny.ts,35,1))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,39,5))
 
     foo: { bar: number };
->foo : { bar: number; }
->bar : number
+>foo : { bar: number; }, Symbol(foo,Decl(subtypesOfAny.ts,39,21))
+>bar : number, Symbol(bar,Decl(subtypesOfAny.ts,40,10))
 }
 
 
 interface I8 {
->I8 : I8
+>I8 : I8, Symbol(I8,Decl(subtypesOfAny.ts,41,1))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,45,5))
 
     foo: number[];
->foo : number[]
+>foo : number[], Symbol(foo,Decl(subtypesOfAny.ts,45,21))
 }
 
 
 interface I9 {
->I9 : I9
+>I9 : I9, Symbol(I9,Decl(subtypesOfAny.ts,47,1))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,51,5))
 
     foo: I8;
->foo : I8
->I8 : I8
+>foo : I8, Symbol(foo,Decl(subtypesOfAny.ts,51,21))
+>I8 : I8, Symbol(I8,Decl(subtypesOfAny.ts,41,1))
 }
 
 class A { foo: number; }
->A : A
->foo : number
+>A : A, Symbol(A,Decl(subtypesOfAny.ts,53,1))
+>foo : number, Symbol(foo,Decl(subtypesOfAny.ts,55,9))
 
 interface I10 {
->I10 : I10
+>I10 : I10, Symbol(I10,Decl(subtypesOfAny.ts,55,24))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,57,5))
 
     foo: A;
->foo : A
->A : A
+>foo : A, Symbol(foo,Decl(subtypesOfAny.ts,57,21))
+>A : A, Symbol(A,Decl(subtypesOfAny.ts,53,1))
 }
 
 class A2<T> { foo: T; }
->A2 : A2<T>
->T : T
->foo : T
->T : T
+>A2 : A2<T>, Symbol(A2,Decl(subtypesOfAny.ts,59,1))
+>T : T, Symbol(T,Decl(subtypesOfAny.ts,61,9))
+>foo : T, Symbol(foo,Decl(subtypesOfAny.ts,61,13))
+>T : T, Symbol(T,Decl(subtypesOfAny.ts,61,9))
 
 interface I11 {
->I11 : I11
+>I11 : I11, Symbol(I11,Decl(subtypesOfAny.ts,61,23))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,63,5))
 
     foo: A2<number>;
->foo : A2<number>
->A2 : A2<T>
+>foo : A2<number>, Symbol(foo,Decl(subtypesOfAny.ts,63,21))
+>A2 : A2<T>, Symbol(A2,Decl(subtypesOfAny.ts,59,1))
 }
 
 
 interface I12 {
->I12 : I12
+>I12 : I12, Symbol(I12,Decl(subtypesOfAny.ts,65,1))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,69,5))
 
     foo: (x) => number;
->foo : (x: any) => number
->x : any
+>foo : (x: any) => number, Symbol(foo,Decl(subtypesOfAny.ts,69,21))
+>x : any, Symbol(x,Decl(subtypesOfAny.ts,70,10))
 }
 
 
 interface I13 {
->I13 : I13
+>I13 : I13, Symbol(I13,Decl(subtypesOfAny.ts,71,1))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,75,5))
 
     foo: <T>(x:T) => T;
->foo : <T>(x: T) => T
->T : T
->x : T
->T : T
->T : T
+>foo : <T>(x: T) => T, Symbol(foo,Decl(subtypesOfAny.ts,75,21))
+>T : T, Symbol(T,Decl(subtypesOfAny.ts,76,10))
+>x : T, Symbol(x,Decl(subtypesOfAny.ts,76,13))
+>T : T, Symbol(T,Decl(subtypesOfAny.ts,76,10))
+>T : T, Symbol(T,Decl(subtypesOfAny.ts,76,10))
 }
 
 
 enum E { A }
->E : E
->A : E
+>E : E, Symbol(E,Decl(subtypesOfAny.ts,77,1))
+>A : E, Symbol(E.A,Decl(subtypesOfAny.ts,80,8))
 
 interface I14 {
->I14 : I14
+>I14 : I14, Symbol(I14,Decl(subtypesOfAny.ts,80,12))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,82,5))
 
     foo: E;
->foo : E
->E : E
+>foo : E, Symbol(foo,Decl(subtypesOfAny.ts,82,21))
+>E : E, Symbol(E,Decl(subtypesOfAny.ts,77,1))
 }
 
 
 function f() { }
->f : typeof f
+>f : typeof f, Symbol(f,Decl(subtypesOfAny.ts,84,1),Decl(subtypesOfAny.ts,87,16))
 
 module f {
->f : typeof f
+>f : typeof f, Symbol(f,Decl(subtypesOfAny.ts,84,1),Decl(subtypesOfAny.ts,87,16))
 
     export var bar = 1;
->bar : number
+>bar : number, Symbol(bar,Decl(subtypesOfAny.ts,89,14))
 >1 : number
 }
 interface I15 {
->I15 : I15
+>I15 : I15, Symbol(I15,Decl(subtypesOfAny.ts,90,1))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,92,5))
 
     foo: typeof f;
->foo : typeof f
->f : typeof f
+>foo : typeof f, Symbol(foo,Decl(subtypesOfAny.ts,92,21))
+>f : typeof f, Symbol(f,Decl(subtypesOfAny.ts,84,1),Decl(subtypesOfAny.ts,87,16))
 }
 
 
 class c { baz: string }
->c : c
->baz : string
+>c : c, Symbol(c,Decl(subtypesOfAny.ts,94,1),Decl(subtypesOfAny.ts,97,23))
+>baz : string, Symbol(baz,Decl(subtypesOfAny.ts,97,9))
 
 module c {
->c : typeof c
+>c : typeof c, Symbol(c,Decl(subtypesOfAny.ts,94,1),Decl(subtypesOfAny.ts,97,23))
 
     export var bar = 1;
->bar : number
+>bar : number, Symbol(bar,Decl(subtypesOfAny.ts,99,14))
 >1 : number
 }
 interface I16 {
->I16 : I16
+>I16 : I16, Symbol(I16,Decl(subtypesOfAny.ts,100,1))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,102,5))
 
     foo: typeof c;
->foo : typeof c
->c : typeof c
+>foo : typeof c, Symbol(foo,Decl(subtypesOfAny.ts,102,21))
+>c : typeof c, Symbol(c,Decl(subtypesOfAny.ts,94,1),Decl(subtypesOfAny.ts,97,23))
 }
 
 
 interface I17<T> {
->I17 : I17<T>
->T : T
+>I17 : I17<T>, Symbol(I17,Decl(subtypesOfAny.ts,104,1))
+>T : T, Symbol(T,Decl(subtypesOfAny.ts,107,14))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,108,5))
 
     foo: T;
->foo : T
->T : T
+>foo : T, Symbol(foo,Decl(subtypesOfAny.ts,108,21))
+>T : T, Symbol(T,Decl(subtypesOfAny.ts,107,14))
 }
 
 
 interface I18<T, U> {
->I18 : I18<T, U>
->T : T
->U : U
+>I18 : I18<T, U>, Symbol(I18,Decl(subtypesOfAny.ts,110,1))
+>T : T, Symbol(T,Decl(subtypesOfAny.ts,113,14))
+>U : U, Symbol(U,Decl(subtypesOfAny.ts,113,16))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,114,5))
 
     foo: U;
->foo : U
->U : U
+>foo : U, Symbol(foo,Decl(subtypesOfAny.ts,114,21))
+>U : U, Symbol(U,Decl(subtypesOfAny.ts,113,16))
 }
 //interface I18<T, U extends T> {
 //    [x: string]: any;
@@ -256,23 +256,23 @@ interface I18<T, U> {
 
 
 interface I19 {
->I19 : I19
+>I19 : I19, Symbol(I19,Decl(subtypesOfAny.ts,116,1))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,124,5))
 
     foo: Object;
->foo : Object
->Object : Object
+>foo : Object, Symbol(foo,Decl(subtypesOfAny.ts,124,21))
+>Object : Object, Symbol(Object,Decl(lib.d.ts,92,1),Decl(lib.d.ts,223,11))
 }
 
 
 interface I20 {
->I20 : I20
+>I20 : I20, Symbol(I20,Decl(subtypesOfAny.ts,126,1))
 
     [x: string]: any;
->x : string
+>x : string, Symbol(x,Decl(subtypesOfAny.ts,130,5))
 
     foo: {};
->foo : {}
+>foo : {}, Symbol(foo,Decl(subtypesOfAny.ts,130,21))
 }

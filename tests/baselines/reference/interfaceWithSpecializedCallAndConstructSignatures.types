@@ -1,46 +1,46 @@
 === tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithSpecializedCallAndConstructSignatures.ts ===
 interface Foo {
->Foo : Foo
+>Foo : Foo, Symbol(Foo,Decl(interfaceWithSpecializedCallAndConstructSignatures.ts,0,0))
 
     (x: 'a'): number;
->x : 'a'
+>x : 'a', Symbol(x,Decl(interfaceWithSpecializedCallAndConstructSignatures.ts,1,5))
 
     (x: string): any;
->x : string
+>x : string, Symbol(x,Decl(interfaceWithSpecializedCallAndConstructSignatures.ts,2,5))
 
     new (x: 'a'): any;
->x : 'a'
+>x : 'a', Symbol(x,Decl(interfaceWithSpecializedCallAndConstructSignatures.ts,4,9))
 
     new (x: string): Object;
->x : string
->Object : Object
+>x : string, Symbol(x,Decl(interfaceWithSpecializedCallAndConstructSignatures.ts,5,9))
+>Object : Object, Symbol(Object,Decl(lib.d.ts,92,1),Decl(lib.d.ts,223,11))
 }
 
 var f: Foo;
->f : Foo
->Foo : Foo
+>f : Foo, Symbol(f,Decl(interfaceWithSpecializedCallAndConstructSignatures.ts,8,3))
+>Foo : Foo, Symbol(Foo,Decl(interfaceWithSpecializedCallAndConstructSignatures.ts,0,0))
 
 var r = f('a');
->r : number
+>r : number, Symbol(r,Decl(interfaceWithSpecializedCallAndConstructSignatures.ts,9,3))
 >f('a') : number
->f : Foo
+>f : Foo, Symbol(f,Decl(interfaceWithSpecializedCallAndConstructSignatures.ts,8,3))
 >'a' : string
 
 var r2 = f('A');
->r2 : any
+>r2 : any, Symbol(r2,Decl(interfaceWithSpecializedCallAndConstructSignatures.ts,10,3))
 >f('A') : any
->f : Foo
+>f : Foo, Symbol(f,Decl(interfaceWithSpecializedCallAndConstructSignatures.ts,8,3))
 >'A' : string
 
 var r3 = new f('a');
->r3 : any
+>r3 : any, Symbol(r3,Decl(interfaceWithSpecializedCallAndConstructSignatures.ts,11,3))
 >new f('a') : any
->f : Foo
+>f : Foo, Symbol(f,Decl(interfaceWithSpecializedCallAndConstructSignatures.ts,8,3))
 >'a' : string
 
 var r4 = new f('A');
->r4 : Object
+>r4 : Object, Symbol(r4,Decl(interfaceWithSpecializedCallAndConstructSignatures.ts,12,3))
 >new f('A') : Object
->f : Foo
+>f : Foo, Symbol(f,Decl(interfaceWithSpecializedCallAndConstructSignatures.ts,8,3))
 >'A' : string
 

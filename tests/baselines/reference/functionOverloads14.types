@@ -1,16 +1,16 @@
 === tests/cases/compiler/functionOverloads14.ts ===
 function foo():{a:number;}
->foo : { (): { a: number; }; (): { a: string; }; }
->a : number
+>foo : { (): { a: number; }; (): { a: string; }; }, Symbol(foo,Decl(functionOverloads14.ts,0,0),Decl(functionOverloads14.ts,0,26),Decl(functionOverloads14.ts,1,26))
+>a : number, Symbol(a,Decl(functionOverloads14.ts,0,16))
 
 function foo():{a:string;}
->foo : { (): { a: number; }; (): { a: string; }; }
->a : string
+>foo : { (): { a: number; }; (): { a: string; }; }, Symbol(foo,Decl(functionOverloads14.ts,0,0),Decl(functionOverloads14.ts,0,26),Decl(functionOverloads14.ts,1,26))
+>a : string, Symbol(a,Decl(functionOverloads14.ts,1,16))
 
 function foo():{a:any;} { return {a:1} }
->foo : { (): { a: number; }; (): { a: string; }; }
->a : any
+>foo : { (): { a: number; }; (): { a: string; }; }, Symbol(foo,Decl(functionOverloads14.ts,0,0),Decl(functionOverloads14.ts,0,26),Decl(functionOverloads14.ts,1,26))
+>a : any, Symbol(a,Decl(functionOverloads14.ts,2,16))
 >{a:1} : { a: number; }
->a : number
+>a : number, Symbol(a,Decl(functionOverloads14.ts,2,34))
 >1 : number
 

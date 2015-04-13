@@ -1,28 +1,28 @@
 === tests/cases/compiler/classImplementsImportedInterface.ts ===
 module M1 {
->M1 : unknown
+>M1 : any, Symbol(M1,Decl(classImplementsImportedInterface.ts,0,0))
 
     export interface I {
->I : I
+>I : I, Symbol(I,Decl(classImplementsImportedInterface.ts,0,11))
 
         foo();
->foo : () => any
+>foo : () => any, Symbol(foo,Decl(classImplementsImportedInterface.ts,1,24))
     }
 }
 
 module M2 {
->M2 : typeof M2
+>M2 : typeof M2, Symbol(M2,Decl(classImplementsImportedInterface.ts,4,1))
 
     import T = M1.I;
->T : unknown
->M1 : unknown
->I : T
+>T : any, Symbol(T,Decl(classImplementsImportedInterface.ts,6,11))
+>M1 : any, Symbol(M1,Decl(classImplementsImportedInterface.ts,0,0))
+>I : T, Symbol(T,Decl(classImplementsImportedInterface.ts,0,11))
 
     class C implements T {
->C : C
->T : T
+>C : C, Symbol(C,Decl(classImplementsImportedInterface.ts,7,20))
+>T : T, Symbol(T,Decl(classImplementsImportedInterface.ts,6,11))
 
         foo() {}
->foo : () => void
+>foo : () => void, Symbol(foo,Decl(classImplementsImportedInterface.ts,8,26))
     }
 }

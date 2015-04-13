@@ -3,136 +3,136 @@
 // no errors expected 
 
 class C<T extends Date> {
->C : C<T>
->T : T
->Date : Date
+>C : C<T>, Symbol(C,Decl(propertyAccessOnTypeParameterWithConstraints.ts,0,0))
+>T : T, Symbol(T,Decl(propertyAccessOnTypeParameterWithConstraints.ts,3,8))
+>Date : Date, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
 
     f() {
->f : () => number
+>f : () => number, Symbol(f,Decl(propertyAccessOnTypeParameterWithConstraints.ts,3,25))
 
         var x: T;
->x : T
->T : T
+>x : T, Symbol(x,Decl(propertyAccessOnTypeParameterWithConstraints.ts,5,11))
+>T : T, Symbol(T,Decl(propertyAccessOnTypeParameterWithConstraints.ts,3,8))
 
         var a = x['getDate'](); // number
->a : number
+>a : number, Symbol(a,Decl(propertyAccessOnTypeParameterWithConstraints.ts,6,11))
 >x['getDate']() : number
 >x['getDate'] : () => number
->x : T
->'getDate' : string
+>x : T, Symbol(x,Decl(propertyAccessOnTypeParameterWithConstraints.ts,5,11))
+>'getDate' : string, Symbol(Date.getDate,Decl(lib.d.ts,660,26))
 
         return a + x.getDate();
 >a + x.getDate() : number
->a : number
+>a : number, Symbol(a,Decl(propertyAccessOnTypeParameterWithConstraints.ts,6,11))
 >x.getDate() : number
->x.getDate : () => number
->x : T
->getDate : () => number
+>x.getDate : () => number, Symbol(Date.getDate,Decl(lib.d.ts,660,26))
+>x : T, Symbol(x,Decl(propertyAccessOnTypeParameterWithConstraints.ts,5,11))
+>getDate : () => number, Symbol(Date.getDate,Decl(lib.d.ts,660,26))
     }
 }
 
 var r = (new C<Date>()).f();
->r : number
+>r : number, Symbol(r,Decl(propertyAccessOnTypeParameterWithConstraints.ts,11,3))
 >(new C<Date>()).f() : number
->(new C<Date>()).f : () => number
+>(new C<Date>()).f : () => number, Symbol(C.f,Decl(propertyAccessOnTypeParameterWithConstraints.ts,3,25))
 >(new C<Date>()) : C<Date>
 >new C<Date>() : C<Date>
->C : typeof C
->Date : Date
->f : () => number
+>C : typeof C, Symbol(C,Decl(propertyAccessOnTypeParameterWithConstraints.ts,0,0))
+>Date : Date, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
+>f : () => number, Symbol(C.f,Decl(propertyAccessOnTypeParameterWithConstraints.ts,3,25))
 
 interface I<T extends Date> {
->I : I<T>
->T : T
->Date : Date
+>I : I<T>, Symbol(I,Decl(propertyAccessOnTypeParameterWithConstraints.ts,11,28))
+>T : T, Symbol(T,Decl(propertyAccessOnTypeParameterWithConstraints.ts,13,12))
+>Date : Date, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
 
     foo: T;
->foo : T
->T : T
+>foo : T, Symbol(foo,Decl(propertyAccessOnTypeParameterWithConstraints.ts,13,29))
+>T : T, Symbol(T,Decl(propertyAccessOnTypeParameterWithConstraints.ts,13,12))
 }
 var i: I<Date>;
->i : I<Date>
->I : I<T>
->Date : Date
+>i : I<Date>, Symbol(i,Decl(propertyAccessOnTypeParameterWithConstraints.ts,16,3))
+>I : I<T>, Symbol(I,Decl(propertyAccessOnTypeParameterWithConstraints.ts,11,28))
+>Date : Date, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
 
 var r2 = i.foo.getDate();
->r2 : number
+>r2 : number, Symbol(r2,Decl(propertyAccessOnTypeParameterWithConstraints.ts,17,3))
 >i.foo.getDate() : number
->i.foo.getDate : () => number
->i.foo : Date
->i : I<Date>
->foo : Date
->getDate : () => number
+>i.foo.getDate : () => number, Symbol(Date.getDate,Decl(lib.d.ts,660,26))
+>i.foo : Date, Symbol(I.foo,Decl(propertyAccessOnTypeParameterWithConstraints.ts,13,29))
+>i : I<Date>, Symbol(i,Decl(propertyAccessOnTypeParameterWithConstraints.ts,16,3))
+>foo : Date, Symbol(I.foo,Decl(propertyAccessOnTypeParameterWithConstraints.ts,13,29))
+>getDate : () => number, Symbol(Date.getDate,Decl(lib.d.ts,660,26))
 
 var r2b = i.foo['getDate']();
->r2b : number
+>r2b : number, Symbol(r2b,Decl(propertyAccessOnTypeParameterWithConstraints.ts,18,3))
 >i.foo['getDate']() : number
 >i.foo['getDate'] : () => number
->i.foo : Date
->i : I<Date>
->foo : Date
->'getDate' : string
+>i.foo : Date, Symbol(I.foo,Decl(propertyAccessOnTypeParameterWithConstraints.ts,13,29))
+>i : I<Date>, Symbol(i,Decl(propertyAccessOnTypeParameterWithConstraints.ts,16,3))
+>foo : Date, Symbol(I.foo,Decl(propertyAccessOnTypeParameterWithConstraints.ts,13,29))
+>'getDate' : string, Symbol(Date.getDate,Decl(lib.d.ts,660,26))
 
 var a: {
->a : <T extends Date>() => T
+>a : <T extends Date>() => T, Symbol(a,Decl(propertyAccessOnTypeParameterWithConstraints.ts,20,3))
 
     <T extends Date>(): T;
->T : T
->Date : Date
->T : T
+>T : T, Symbol(T,Decl(propertyAccessOnTypeParameterWithConstraints.ts,21,5))
+>Date : Date, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
+>T : T, Symbol(T,Decl(propertyAccessOnTypeParameterWithConstraints.ts,21,5))
 }
 var r3 = a<Date>().getDate();
->r3 : number
+>r3 : number, Symbol(r3,Decl(propertyAccessOnTypeParameterWithConstraints.ts,23,3))
 >a<Date>().getDate() : number
->a<Date>().getDate : () => number
+>a<Date>().getDate : () => number, Symbol(Date.getDate,Decl(lib.d.ts,660,26))
 >a<Date>() : Date
->a : <T extends Date>() => T
->Date : Date
->getDate : () => number
+>a : <T extends Date>() => T, Symbol(a,Decl(propertyAccessOnTypeParameterWithConstraints.ts,20,3))
+>Date : Date, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
+>getDate : () => number, Symbol(Date.getDate,Decl(lib.d.ts,660,26))
 
 var r3b = a()['getDate']();
->r3b : number
+>r3b : number, Symbol(r3b,Decl(propertyAccessOnTypeParameterWithConstraints.ts,24,3))
 >a()['getDate']() : number
 >a()['getDate'] : () => number
 >a() : Date
->a : <T extends Date>() => T
->'getDate' : string
+>a : <T extends Date>() => T, Symbol(a,Decl(propertyAccessOnTypeParameterWithConstraints.ts,20,3))
+>'getDate' : string, Symbol(Date.getDate,Decl(lib.d.ts,660,26))
 
 var b = {
->b : { foo: <T extends Date>(x: T) => number; }
+>b : { foo: <T extends Date>(x: T) => number; }, Symbol(b,Decl(propertyAccessOnTypeParameterWithConstraints.ts,26,3))
 >{    foo: <T extends Date>(x: T) => {        var a = x['getDate'](); // number        return a + x.getDate();    }} : { foo: <T extends Date>(x: T) => number; }
 
     foo: <T extends Date>(x: T) => {
->foo : <T extends Date>(x: T) => number
+>foo : <T extends Date>(x: T) => number, Symbol(foo,Decl(propertyAccessOnTypeParameterWithConstraints.ts,26,9))
 ><T extends Date>(x: T) => {        var a = x['getDate'](); // number        return a + x.getDate();    } : <T extends Date>(x: T) => number
->T : T
->Date : Date
->x : T
->T : T
+>T : T, Symbol(T,Decl(propertyAccessOnTypeParameterWithConstraints.ts,27,10))
+>Date : Date, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
+>x : T, Symbol(x,Decl(propertyAccessOnTypeParameterWithConstraints.ts,27,26))
+>T : T, Symbol(T,Decl(propertyAccessOnTypeParameterWithConstraints.ts,27,10))
 
         var a = x['getDate'](); // number
->a : number
+>a : number, Symbol(a,Decl(propertyAccessOnTypeParameterWithConstraints.ts,28,11))
 >x['getDate']() : number
 >x['getDate'] : () => number
->x : T
->'getDate' : string
+>x : T, Symbol(x,Decl(propertyAccessOnTypeParameterWithConstraints.ts,27,26))
+>'getDate' : string, Symbol(Date.getDate,Decl(lib.d.ts,660,26))
 
         return a + x.getDate();
 >a + x.getDate() : number
->a : number
+>a : number, Symbol(a,Decl(propertyAccessOnTypeParameterWithConstraints.ts,28,11))
 >x.getDate() : number
->x.getDate : () => number
->x : T
->getDate : () => number
+>x.getDate : () => number, Symbol(Date.getDate,Decl(lib.d.ts,660,26))
+>x : T, Symbol(x,Decl(propertyAccessOnTypeParameterWithConstraints.ts,27,26))
+>getDate : () => number, Symbol(Date.getDate,Decl(lib.d.ts,660,26))
     }
 }
 
 var r4 = b.foo(new Date());
->r4 : number
+>r4 : number, Symbol(r4,Decl(propertyAccessOnTypeParameterWithConstraints.ts,33,3))
 >b.foo(new Date()) : number
->b.foo : <T extends Date>(x: T) => number
->b : { foo: <T extends Date>(x: T) => number; }
->foo : <T extends Date>(x: T) => number
+>b.foo : <T extends Date>(x: T) => number, Symbol(foo,Decl(propertyAccessOnTypeParameterWithConstraints.ts,26,9))
+>b : { foo: <T extends Date>(x: T) => number; }, Symbol(b,Decl(propertyAccessOnTypeParameterWithConstraints.ts,26,3))
+>foo : <T extends Date>(x: T) => number, Symbol(foo,Decl(propertyAccessOnTypeParameterWithConstraints.ts,26,9))
 >new Date() : Date
->Date : DateConstructor
+>Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
 

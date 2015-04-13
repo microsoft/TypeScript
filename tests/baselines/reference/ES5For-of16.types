@@ -1,21 +1,21 @@
 === tests/cases/conformance/statements/for-ofStatements/ES5For-of16.ts ===
 for (let v of []) {
->v : any
+>v : any, Symbol(v,Decl(ES5For-of16.ts,0,8))
 >[] : undefined[]
 
     v;
->v : any
+>v : any, Symbol(v,Decl(ES5For-of16.ts,0,8))
 
     for (let v of []) {
->v : any
+>v : any, Symbol(v,Decl(ES5For-of16.ts,2,12))
 >[] : undefined[]
 
         var x = v;
->x : any
->v : any
+>x : any, Symbol(x,Decl(ES5For-of16.ts,3,11))
+>v : any, Symbol(v,Decl(ES5For-of16.ts,2,12))
 
         v++;
 >v++ : number
->v : any
+>v : any, Symbol(v,Decl(ES5For-of16.ts,2,12))
     }
 }

@@ -1,7 +1,7 @@
 === tests/cases/compiler/separate1-2.ts ===
 module X {
->X : typeof X
+>X : typeof X, Symbol(X,Decl(separate1-2.ts,0,0))
 
     export function f() { }
->f : () => void
+>f : () => void, Symbol(f,Decl(separate1-2.ts,0,10))
 }

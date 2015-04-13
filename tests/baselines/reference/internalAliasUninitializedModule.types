@@ -1,35 +1,35 @@
 === tests/cases/compiler/internalAliasUninitializedModule.ts ===
 module a {
->a : unknown
+>a : any, Symbol(a,Decl(internalAliasUninitializedModule.ts,0,0))
 
     export module b {
->b : unknown
+>b : any, Symbol(b,Decl(internalAliasUninitializedModule.ts,0,10))
 
         export interface I {
->I : I
+>I : I, Symbol(I,Decl(internalAliasUninitializedModule.ts,1,21))
 
             foo();
->foo : () => any
+>foo : () => any, Symbol(foo,Decl(internalAliasUninitializedModule.ts,2,28))
         }
     }
 }
 
 module c {
->c : typeof c
+>c : typeof c, Symbol(c,Decl(internalAliasUninitializedModule.ts,6,1))
 
     import b = a.b;
->b : unknown
->a : unknown
->b : unknown
+>b : any, Symbol(b,Decl(internalAliasUninitializedModule.ts,8,10))
+>a : any, Symbol(a,Decl(internalAliasUninitializedModule.ts,0,0))
+>b : any, Symbol(b,Decl(internalAliasUninitializedModule.ts,0,10))
 
     export var x: b.I;
->x : b.I
->b : unknown
->I : b.I
+>x : b.I, Symbol(x,Decl(internalAliasUninitializedModule.ts,10,14))
+>b : any, Symbol(b,Decl(internalAliasUninitializedModule.ts,8,10))
+>I : b.I, Symbol(b.I,Decl(internalAliasUninitializedModule.ts,1,21))
 
     x.foo();
 >x.foo() : any
->x.foo : () => any
->x : b.I
->foo : () => any
+>x.foo : () => any, Symbol(b.I.foo,Decl(internalAliasUninitializedModule.ts,2,28))
+>x : b.I, Symbol(x,Decl(internalAliasUninitializedModule.ts,10,14))
+>foo : () => any, Symbol(b.I.foo,Decl(internalAliasUninitializedModule.ts,2,28))
 }

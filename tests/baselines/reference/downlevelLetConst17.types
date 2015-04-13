@@ -3,89 +3,89 @@
 >'use strict' : string
 
 declare function use(a: any);
->use : (a: any) => any
->a : any
+>use : (a: any) => any, Symbol(use,Decl(downlevelLetConst17.ts,0,12))
+>a : any, Symbol(a,Decl(downlevelLetConst17.ts,2,21))
 
 var x;
->x : any
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,4,3))
 
 for (let x = 10; ;) {
->x : number
+>x : number, Symbol(x,Decl(downlevelLetConst17.ts,5,8))
 >10 : number
 
     use(x);
 >use(x) : any
->use : (a: any) => any
->x : number
+>use : (a: any) => any, Symbol(use,Decl(downlevelLetConst17.ts,0,12))
+>x : number, Symbol(x,Decl(downlevelLetConst17.ts,5,8))
 }
 use(x);
 >use(x) : any
->use : (a: any) => any
->x : any
+>use : (a: any) => any, Symbol(use,Decl(downlevelLetConst17.ts,0,12))
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,4,3))
 
 for (const x = 10; ;) {
->x : number
+>x : number, Symbol(x,Decl(downlevelLetConst17.ts,10,10))
 >10 : number
 
     use(x);
 >use(x) : any
->use : (a: any) => any
->x : number
+>use : (a: any) => any, Symbol(use,Decl(downlevelLetConst17.ts,0,12))
+>x : number, Symbol(x,Decl(downlevelLetConst17.ts,10,10))
 }
 
 for (; ;) {
     let x = 10;
->x : number
+>x : number, Symbol(x,Decl(downlevelLetConst17.ts,15,7))
 >10 : number
 
     use(x);
 >use(x) : any
->use : (a: any) => any
->x : number
+>use : (a: any) => any, Symbol(use,Decl(downlevelLetConst17.ts,0,12))
+>x : number, Symbol(x,Decl(downlevelLetConst17.ts,15,7))
 
     x = 1;
 >x = 1 : number
->x : number
+>x : number, Symbol(x,Decl(downlevelLetConst17.ts,15,7))
 >1 : number
 }
 
 for (; ;) {
     const x = 10;
->x : number
+>x : number, Symbol(x,Decl(downlevelLetConst17.ts,21,9))
 >10 : number
 
     use(x);
 >use(x) : any
->use : (a: any) => any
->x : number
+>use : (a: any) => any, Symbol(use,Decl(downlevelLetConst17.ts,0,12))
+>x : number, Symbol(x,Decl(downlevelLetConst17.ts,21,9))
 }
 
 for (let x; ;) {
->x : any
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,25,8))
 
     use(x);
 >use(x) : any
->use : (a: any) => any
->x : any
+>use : (a: any) => any, Symbol(use,Decl(downlevelLetConst17.ts,0,12))
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,25,8))
 
     x = 1;
 >x = 1 : number
->x : any
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,25,8))
 >1 : number
 }
 
 for (; ;) {
     let x;
->x : any
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,31,7))
 
     use(x);
 >use(x) : any
->use : (a: any) => any
->x : any
+>use : (a: any) => any, Symbol(use,Decl(downlevelLetConst17.ts,0,12))
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,31,7))
 
     x = 1;
 >x = 1 : number
->x : any
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,31,7))
 >1 : number
 }
 
@@ -93,77 +93,77 @@ while (true) {
 >true : boolean
 
     let x;
->x : any
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,37,7))
 
     use(x);
 >use(x) : any
->use : (a: any) => any
->x : any
+>use : (a: any) => any, Symbol(use,Decl(downlevelLetConst17.ts,0,12))
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,37,7))
 }
 
 while (true) {
 >true : boolean
 
     const x = true;
->x : boolean
+>x : boolean, Symbol(x,Decl(downlevelLetConst17.ts,42,9))
 >true : boolean
 
     use(x);
 >use(x) : any
->use : (a: any) => any
->x : boolean
+>use : (a: any) => any, Symbol(use,Decl(downlevelLetConst17.ts,0,12))
+>x : boolean, Symbol(x,Decl(downlevelLetConst17.ts,42,9))
 }
 
 do {
     let x;
->x : any
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,47,7))
 
     use(x);
 >use(x) : any
->use : (a: any) => any
->x : any
+>use : (a: any) => any, Symbol(use,Decl(downlevelLetConst17.ts,0,12))
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,47,7))
 
 } while (true);
 >true : boolean
 
 do {
     let x;
->x : any
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,52,7))
 
     use(x);
 >use(x) : any
->use : (a: any) => any
->x : any
+>use : (a: any) => any, Symbol(use,Decl(downlevelLetConst17.ts,0,12))
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,52,7))
 
 } while (true);
 >true : boolean
 
 for (let x in []) {
->x : any
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,56,8))
 >[] : undefined[]
 
     use(x);
 >use(x) : any
->use : (a: any) => any
->x : any
+>use : (a: any) => any, Symbol(use,Decl(downlevelLetConst17.ts,0,12))
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,56,8))
 }
 
 for (const x in []) {
->x : any
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,60,10))
 >[] : undefined[]
 
     use(x);
 >use(x) : any
->use : (a: any) => any
->x : any
+>use : (a: any) => any, Symbol(use,Decl(downlevelLetConst17.ts,0,12))
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,60,10))
 }
 
 for (const x of []) {
->x : any
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,64,10))
 >[] : undefined[]
 
     use(x);
 >use(x) : any
->use : (a: any) => any
->x : any
+>use : (a: any) => any, Symbol(use,Decl(downlevelLetConst17.ts,0,12))
+>x : any, Symbol(x,Decl(downlevelLetConst17.ts,64,10))
 }

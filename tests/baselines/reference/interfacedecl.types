@@ -1,95 +1,95 @@
 === tests/cases/compiler/interfacedecl.ts ===
 interface a0 {
->a0 : a0
+>a0 : a0, Symbol(a0,Decl(interfacedecl.ts,0,0))
 
     (): string;
     (a, b, c?: string): number;
->a : any
->b : any
->c : string
+>a : any, Symbol(a,Decl(interfacedecl.ts,2,5))
+>b : any, Symbol(b,Decl(interfacedecl.ts,2,7))
+>c : string, Symbol(c,Decl(interfacedecl.ts,2,10))
     
     new (): string;
     new (s: string);
->s : string
+>s : string, Symbol(s,Decl(interfacedecl.ts,5,9))
 
     [n: number]: ()=>string;
->n : number
+>n : number, Symbol(n,Decl(interfacedecl.ts,7,5))
 
     [s: string]: any;
->s : string
+>s : string, Symbol(s,Decl(interfacedecl.ts,8,5))
 
     p1;
->p1 : any
+>p1 : any, Symbol(p1,Decl(interfacedecl.ts,8,21))
 
     p2: string;
->p2 : string
+>p2 : string, Symbol(p2,Decl(interfacedecl.ts,10,7))
 
     p3?;
->p3 : any
+>p3 : any, Symbol(p3,Decl(interfacedecl.ts,11,15))
 
     p4?: number;
->p4 : number
+>p4 : number, Symbol(p4,Decl(interfacedecl.ts,12,8))
 
     p5: (s: number) =>string;
->p5 : (s: number) => string
->s : number
+>p5 : (s: number) => string, Symbol(p5,Decl(interfacedecl.ts,13,16))
+>s : number, Symbol(s,Decl(interfacedecl.ts,14,9))
 
     f1();
->f1 : () => any
+>f1 : () => any, Symbol(f1,Decl(interfacedecl.ts,14,29))
 
     f2? ();
->f2 : () => any
+>f2 : () => any, Symbol(f2,Decl(interfacedecl.ts,16,9))
 
     f3(a: string): number;
->f3 : (a: string) => number
->a : string
+>f3 : (a: string) => number, Symbol(f3,Decl(interfacedecl.ts,17,11))
+>a : string, Symbol(a,Decl(interfacedecl.ts,18,7))
 
     f4? (s: number): string;
->f4 : (s: number) => string
->s : number
+>f4 : (s: number) => string, Symbol(f4,Decl(interfacedecl.ts,18,26))
+>s : number, Symbol(s,Decl(interfacedecl.ts,19,9))
 }
 
 
 interface a1 {
->a1 : a1
+>a1 : a1, Symbol(a1,Decl(interfacedecl.ts,20,1))
 
     [n: number]: number;
->n : number
+>n : number, Symbol(n,Decl(interfacedecl.ts,24,5))
 }
 
 interface a2 {
->a2 : a2
+>a2 : a2, Symbol(a2,Decl(interfacedecl.ts,25,1))
 
     [s: string]: number;
->s : string
+>s : string, Symbol(s,Decl(interfacedecl.ts,28,5))
 }
 
 interface a {
->a : a
+>a : a, Symbol(a,Decl(interfacedecl.ts,29,1))
 }
 
 interface b extends a {
->b : b
->a : a
+>b : b, Symbol(b,Decl(interfacedecl.ts,32,1))
+>a : a, Symbol(a,Decl(interfacedecl.ts,29,1))
 }
 
 interface c extends a, b {
->c : c
->a : a
->b : b
+>c : c, Symbol(c,Decl(interfacedecl.ts,35,1))
+>a : a, Symbol(a,Decl(interfacedecl.ts,29,1))
+>b : b, Symbol(b,Decl(interfacedecl.ts,32,1))
 }
 
 interface d extends a {
->d : d
->a : a
+>d : d, Symbol(d,Decl(interfacedecl.ts,38,1))
+>a : a, Symbol(a,Decl(interfacedecl.ts,29,1))
 }
 
 class c1 implements a {
->c1 : c1
->a : a
+>c1 : c1, Symbol(c1,Decl(interfacedecl.ts,41,1))
+>a : a, Symbol(a,Decl(interfacedecl.ts,29,1))
 }
 var instance2 = new c1();
->instance2 : c1
+>instance2 : c1, Symbol(instance2,Decl(interfacedecl.ts,45,3))
 >new c1() : c1
->c1 : typeof c1
+>c1 : typeof c1, Symbol(c1,Decl(interfacedecl.ts,41,1))
 

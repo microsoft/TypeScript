@@ -1,37 +1,37 @@
 === tests/cases/compiler/typeConstraintsWithConstructSignatures.ts ===
 interface Constructable {
->Constructable : Constructable
+>Constructable : Constructable, Symbol(Constructable,Decl(typeConstraintsWithConstructSignatures.ts,0,0))
 
     new (): any;
 }
 
 class C<T extends Constructable> {
->C : C<T>
->T : T
->Constructable : Constructable
+>C : C<T>, Symbol(C,Decl(typeConstraintsWithConstructSignatures.ts,2,1))
+>T : T, Symbol(T,Decl(typeConstraintsWithConstructSignatures.ts,4,8))
+>Constructable : Constructable, Symbol(Constructable,Decl(typeConstraintsWithConstructSignatures.ts,0,0))
 
     constructor(public data: T, public data2: Constructable) { }
->data : T
->T : T
->data2 : Constructable
->Constructable : Constructable
+>data : T, Symbol(data,Decl(typeConstraintsWithConstructSignatures.ts,5,16))
+>T : T, Symbol(T,Decl(typeConstraintsWithConstructSignatures.ts,4,8))
+>data2 : Constructable, Symbol(data2,Decl(typeConstraintsWithConstructSignatures.ts,5,31))
+>Constructable : Constructable, Symbol(Constructable,Decl(typeConstraintsWithConstructSignatures.ts,0,0))
 
     create() {
->create : () => void
+>create : () => void, Symbol(create,Decl(typeConstraintsWithConstructSignatures.ts,5,64))
 
         var x = new this.data(); // should not error
->x : any
+>x : any, Symbol(x,Decl(typeConstraintsWithConstructSignatures.ts,7,11))
 >new this.data() : any
->this.data : T
->this : C<T>
->data : T
+>this.data : T, Symbol(data,Decl(typeConstraintsWithConstructSignatures.ts,5,16))
+>this : C<T>, Symbol(C,Decl(typeConstraintsWithConstructSignatures.ts,2,1))
+>data : T, Symbol(data,Decl(typeConstraintsWithConstructSignatures.ts,5,16))
 
         var x2 = new this.data2(); // should not error
->x2 : any
+>x2 : any, Symbol(x2,Decl(typeConstraintsWithConstructSignatures.ts,8,11))
 >new this.data2() : any
->this.data2 : Constructable
->this : C<T>
->data2 : Constructable
+>this.data2 : Constructable, Symbol(data2,Decl(typeConstraintsWithConstructSignatures.ts,5,31))
+>this : C<T>, Symbol(C,Decl(typeConstraintsWithConstructSignatures.ts,2,1))
+>data2 : Constructable, Symbol(data2,Decl(typeConstraintsWithConstructSignatures.ts,5,31))
     }
 }
 

@@ -6,42 +6,42 @@ while(true) {
 } 
 
 ONE:
->ONE : unknown
+>ONE : any
 
 while (true) {
 >true : boolean
 
     break ONE;
->ONE : unknown
+>ONE : any
 }
 
 TWO:
->TWO : unknown
+>TWO : any
 
 THREE:
->THREE : unknown
+>THREE : any
 
 while (true) {
 >true : boolean
 
     break THREE;
->THREE : unknown
+>THREE : any
 }
 
 FOUR:
->FOUR : unknown
+>FOUR : any
 
 while (true) {
 >true : boolean
 
     FIVE:
->FIVE : unknown
+>FIVE : any
 
     while (true) {
 >true : boolean
 
         break FOUR;
->FOUR : unknown
+>FOUR : any
     }
 }
 
@@ -49,17 +49,17 @@ while (true) {
 >true : boolean
 
     SIX:
->SIX : unknown
+>SIX : any
 
     while (true)
 >true : boolean
 
         break SIX;
->SIX : unknown
+>SIX : any
 }
 
 SEVEN:
->SEVEN : unknown
+>SEVEN : any
 
 while (true)
 >true : boolean
@@ -71,19 +71,19 @@ while (true)
 >true : boolean
 
             break SEVEN;
->SEVEN : unknown
+>SEVEN : any
 
 EIGHT:
->EIGHT : unknown
+>EIGHT : any
 
 while (true) {
 >true : boolean
 
     var fn = function () { }
->fn : () => void
+>fn : () => void, Symbol(fn,Decl(whileBreakStatements.ts,38,7))
 >function () { } : () => void
 
     break EIGHT;
->EIGHT : unknown
+>EIGHT : any
 }
 

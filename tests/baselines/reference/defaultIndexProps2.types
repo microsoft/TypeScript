@@ -1,23 +1,23 @@
 === tests/cases/compiler/defaultIndexProps2.ts ===
 class Foo {
->Foo : Foo
+>Foo : Foo, Symbol(Foo,Decl(defaultIndexProps2.ts,0,0))
 
 	public v = "Yo";
->v : string
+>v : string, Symbol(v,Decl(defaultIndexProps2.ts,0,11))
 >"Yo" : string
 }
 
 var f = new Foo();
->f : Foo
+>f : Foo, Symbol(f,Decl(defaultIndexProps2.ts,4,3))
 >new Foo() : Foo
->Foo : typeof Foo
+>Foo : typeof Foo, Symbol(Foo,Decl(defaultIndexProps2.ts,0,0))
 
 // WScript.Echo(f[0]);
 
 var o = {v:"Yo2"};
->o : { v: string; }
+>o : { v: string; }, Symbol(o,Decl(defaultIndexProps2.ts,8,3))
 >{v:"Yo2"} : { v: string; }
->v : string
+>v : string, Symbol(v,Decl(defaultIndexProps2.ts,8,9))
 >"Yo2" : string
 
 // WScript.Echo(o[0]);
@@ -28,7 +28,7 @@ var o = {v:"Yo2"};
 >0 : number
 
 var q = "s"[0];
->q : string
+>q : string, Symbol(q,Decl(defaultIndexProps2.ts,13,3))
 >"s"[0] : string
 >"s" : string
 >0 : number

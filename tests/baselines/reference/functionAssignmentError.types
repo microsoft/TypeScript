@@ -1,12 +1,12 @@
 === tests/cases/compiler/functionAssignmentError.ts ===
 var func = function (){return "ONE";};
->func : () => string
+>func : () => string, Symbol(func,Decl(functionAssignmentError.ts,0,3))
 >function (){return "ONE";} : () => string
 >"ONE" : string
 
 func = function (){return "ONE";};
 >func = function (){return "ONE";} : () => string
->func : () => string
+>func : () => string, Symbol(func,Decl(functionAssignmentError.ts,0,3))
 >function (){return "ONE";} : () => string
 >"ONE" : string
 

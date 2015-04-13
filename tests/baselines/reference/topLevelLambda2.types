@@ -1,11 +1,11 @@
 === tests/cases/compiler/topLevelLambda2.ts ===
 function foo(x:any) {}
->foo : (x: any) => void
->x : any
+>foo : (x: any) => void, Symbol(foo,Decl(topLevelLambda2.ts,0,0))
+>x : any, Symbol(x,Decl(topLevelLambda2.ts,0,13))
 
 foo(()=>this.window);
 >foo(()=>this.window) : void
->foo : (x: any) => void
+>foo : (x: any) => void, Symbol(foo,Decl(topLevelLambda2.ts,0,0))
 >()=>this.window : () => any
 >this.window : any
 >this : any

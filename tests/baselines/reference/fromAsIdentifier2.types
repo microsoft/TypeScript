@@ -3,5 +3,5 @@
 >"use strict" : string
 
 var from;
->from : any
+>from : any, Symbol(from,Decl(fromAsIdentifier2.ts,1,3))
 

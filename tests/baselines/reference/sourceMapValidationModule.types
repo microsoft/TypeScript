@@ -1,32 +1,32 @@
 === tests/cases/compiler/sourceMapValidationModule.ts ===
 module m2 {
->m2 : typeof m2
+>m2 : typeof m2, Symbol(m2,Decl(sourceMapValidationModule.ts,0,0))
 
     var a = 10;
->a : number
+>a : number, Symbol(a,Decl(sourceMapValidationModule.ts,1,7))
 >10 : number
 
     a++;
 >a++ : number
->a : number
+>a : number, Symbol(a,Decl(sourceMapValidationModule.ts,1,7))
 }
 module m3 {
->m3 : typeof m3
+>m3 : typeof m3, Symbol(m3,Decl(sourceMapValidationModule.ts,3,1))
 
     module m4 {
->m4 : typeof m4
+>m4 : typeof m4, Symbol(m4,Decl(sourceMapValidationModule.ts,4,11))
 
         export var x = 30;
->x : number
+>x : number, Symbol(x,Decl(sourceMapValidationModule.ts,6,18))
 >30 : number
     }
 
     export function foo() {
->foo : () => number
+>foo : () => number, Symbol(foo,Decl(sourceMapValidationModule.ts,7,5))
 
         return m4.x;
->m4.x : number
->m4 : typeof m4
->x : number
+>m4.x : number, Symbol(m4.x,Decl(sourceMapValidationModule.ts,6,18))
+>m4 : typeof m4, Symbol(m4,Decl(sourceMapValidationModule.ts,4,11))
+>x : number, Symbol(m4.x,Decl(sourceMapValidationModule.ts,6,18))
     }
 }

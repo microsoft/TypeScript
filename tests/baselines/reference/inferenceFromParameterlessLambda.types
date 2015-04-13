@@ -1,38 +1,38 @@
 === tests/cases/compiler/inferenceFromParameterlessLambda.ts ===
 function foo<T>(o: Take<T>, i: Make<T>) { }
->foo : <T>(o: Take<T>, i: Make<T>) => void
->T : T
->o : Take<T>
->Take : Take<T>
->T : T
->i : Make<T>
->Make : Make<T>
->T : T
+>foo : <T>(o: Take<T>, i: Make<T>) => void, Symbol(foo,Decl(inferenceFromParameterlessLambda.ts,0,0))
+>T : T, Symbol(T,Decl(inferenceFromParameterlessLambda.ts,0,13))
+>o : Take<T>, Symbol(o,Decl(inferenceFromParameterlessLambda.ts,0,16))
+>Take : Take<T>, Symbol(Take,Decl(inferenceFromParameterlessLambda.ts,3,1))
+>T : T, Symbol(T,Decl(inferenceFromParameterlessLambda.ts,0,13))
+>i : Make<T>, Symbol(i,Decl(inferenceFromParameterlessLambda.ts,0,27))
+>Make : Make<T>, Symbol(Make,Decl(inferenceFromParameterlessLambda.ts,0,43))
+>T : T, Symbol(T,Decl(inferenceFromParameterlessLambda.ts,0,13))
 
 interface Make<T> {
->Make : Make<T>
->T : T
+>Make : Make<T>, Symbol(Make,Decl(inferenceFromParameterlessLambda.ts,0,43))
+>T : T, Symbol(T,Decl(inferenceFromParameterlessLambda.ts,1,15))
 
     (): T;
->T : T
+>T : T, Symbol(T,Decl(inferenceFromParameterlessLambda.ts,1,15))
 }
 interface Take<T> {
->Take : Take<T>
->T : T
+>Take : Take<T>, Symbol(Take,Decl(inferenceFromParameterlessLambda.ts,3,1))
+>T : T, Symbol(T,Decl(inferenceFromParameterlessLambda.ts,4,15))
 
     (n: T): void;
->n : T
->T : T
+>n : T, Symbol(n,Decl(inferenceFromParameterlessLambda.ts,5,5))
+>T : T, Symbol(T,Decl(inferenceFromParameterlessLambda.ts,4,15))
 }
 // Infer string from second argument because it isn't context sensitive
 foo(n => n.length, () => 'hi');
 >foo(n => n.length, () => 'hi') : void
->foo : <T>(o: Take<T>, i: Make<T>) => void
+>foo : <T>(o: Take<T>, i: Make<T>) => void, Symbol(foo,Decl(inferenceFromParameterlessLambda.ts,0,0))
 >n => n.length : (n: string) => number
->n : string
->n.length : number
->n : string
->length : number
+>n : string, Symbol(n,Decl(inferenceFromParameterlessLambda.ts,8,4))
+>n.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>n : string, Symbol(n,Decl(inferenceFromParameterlessLambda.ts,8,4))
+>length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
 >() => 'hi' : () => string
 >'hi' : string
 

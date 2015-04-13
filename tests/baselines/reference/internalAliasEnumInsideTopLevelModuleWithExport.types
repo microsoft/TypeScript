@@ -1,30 +1,30 @@
 === tests/cases/compiler/internalAliasEnumInsideTopLevelModuleWithExport.ts ===
 export module a {
->a : typeof a
+>a : typeof a, Symbol(a,Decl(internalAliasEnumInsideTopLevelModuleWithExport.ts,0,0))
 
     export enum weekend {
->weekend : weekend
+>weekend : weekend, Symbol(weekend,Decl(internalAliasEnumInsideTopLevelModuleWithExport.ts,0,17))
 
         Friday,
->Friday : weekend
+>Friday : weekend, Symbol(b.Friday,Decl(internalAliasEnumInsideTopLevelModuleWithExport.ts,1,25))
 
         Saturday,
->Saturday : weekend
+>Saturday : weekend, Symbol(b.Saturday,Decl(internalAliasEnumInsideTopLevelModuleWithExport.ts,2,15))
 
         Sunday
->Sunday : weekend
+>Sunday : weekend, Symbol(b.Sunday,Decl(internalAliasEnumInsideTopLevelModuleWithExport.ts,3,17))
     }
 }
 
 export import b = a.weekend;
->b : typeof b
->a : typeof a
->weekend : b
+>b : typeof b, Symbol(b,Decl(internalAliasEnumInsideTopLevelModuleWithExport.ts,6,1))
+>a : typeof a, Symbol(a,Decl(internalAliasEnumInsideTopLevelModuleWithExport.ts,0,0))
+>weekend : b, Symbol(b,Decl(internalAliasEnumInsideTopLevelModuleWithExport.ts,0,17))
 
 export var bVal: b = b.Sunday;
->bVal : b
->b : b
->b.Sunday : b
->b : typeof b
->Sunday : b
+>bVal : b, Symbol(bVal,Decl(internalAliasEnumInsideTopLevelModuleWithExport.ts,9,10))
+>b : b, Symbol(b,Decl(internalAliasEnumInsideTopLevelModuleWithExport.ts,6,1))
+>b.Sunday : b, Symbol(b.Sunday,Decl(internalAliasEnumInsideTopLevelModuleWithExport.ts,3,17))
+>b : typeof b, Symbol(b,Decl(internalAliasEnumInsideTopLevelModuleWithExport.ts,6,1))
+>Sunday : b, Symbol(b.Sunday,Decl(internalAliasEnumInsideTopLevelModuleWithExport.ts,3,17))
 

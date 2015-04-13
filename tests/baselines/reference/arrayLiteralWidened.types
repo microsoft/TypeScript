@@ -2,23 +2,23 @@
 // array literals are widened upon assignment according to their element type
 
 var a = []; // any[]
->a : any[]
+>a : any[], Symbol(a,Decl(arrayLiteralWidened.ts,2,3),Decl(arrayLiteralWidened.ts,4,3),Decl(arrayLiteralWidened.ts,5,3))
 >[] : undefined[]
 
 var a = [null, null];
->a : any[]
+>a : any[], Symbol(a,Decl(arrayLiteralWidened.ts,2,3),Decl(arrayLiteralWidened.ts,4,3),Decl(arrayLiteralWidened.ts,5,3))
 >[null, null] : null[]
 >null : null
 >null : null
 
 var a = [undefined, undefined];
->a : any[]
+>a : any[], Symbol(a,Decl(arrayLiteralWidened.ts,2,3),Decl(arrayLiteralWidened.ts,4,3),Decl(arrayLiteralWidened.ts,5,3))
 >[undefined, undefined] : undefined[]
->undefined : undefined
->undefined : undefined
+>undefined : undefined, Symbol(undefined)
+>undefined : undefined, Symbol(undefined)
 
 var b = [[], [null, null]]; // any[][]
->b : any[][]
+>b : any[][], Symbol(b,Decl(arrayLiteralWidened.ts,7,3),Decl(arrayLiteralWidened.ts,8,3),Decl(arrayLiteralWidened.ts,9,3))
 >[[], [null, null]] : null[][]
 >[] : undefined[]
 >[null, null] : null[]
@@ -26,30 +26,30 @@ var b = [[], [null, null]]; // any[][]
 >null : null
 
 var b = [[], []];
->b : any[][]
+>b : any[][], Symbol(b,Decl(arrayLiteralWidened.ts,7,3),Decl(arrayLiteralWidened.ts,8,3),Decl(arrayLiteralWidened.ts,9,3))
 >[[], []] : undefined[][]
 >[] : undefined[]
 >[] : undefined[]
 
 var b = [[undefined, undefined]];
->b : any[][]
+>b : any[][], Symbol(b,Decl(arrayLiteralWidened.ts,7,3),Decl(arrayLiteralWidened.ts,8,3),Decl(arrayLiteralWidened.ts,9,3))
 >[[undefined, undefined]] : undefined[][]
 >[undefined, undefined] : undefined[]
->undefined : undefined
->undefined : undefined
+>undefined : undefined, Symbol(undefined)
+>undefined : undefined, Symbol(undefined)
 
 var c = [[[]]]; // any[][][]
->c : any[][][]
+>c : any[][][], Symbol(c,Decl(arrayLiteralWidened.ts,11,3),Decl(arrayLiteralWidened.ts,12,3))
 >[[[]]] : undefined[][][]
 >[[]] : undefined[][]
 >[] : undefined[]
 
 var c = [[[null]],[undefined]]
->c : any[][][]
+>c : any[][][], Symbol(c,Decl(arrayLiteralWidened.ts,11,3),Decl(arrayLiteralWidened.ts,12,3))
 >[[[null]],[undefined]] : null[][][]
 >[[null]] : null[][]
 >[null] : null[]
 >null : null
 >[undefined] : undefined[]
->undefined : undefined
+>undefined : undefined, Symbol(undefined)
 

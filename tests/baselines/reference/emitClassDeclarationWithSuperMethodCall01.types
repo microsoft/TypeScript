@@ -1,26 +1,26 @@
 === tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithSuperMethodCall01.ts ===
 
 class Parent {
->Parent : Parent
+>Parent : Parent, Symbol(Parent,Decl(emitClassDeclarationWithSuperMethodCall01.ts,0,0))
 
     foo() {
->foo : () => void
+>foo : () => void, Symbol(foo,Decl(emitClassDeclarationWithSuperMethodCall01.ts,1,14))
     }
 }
 
 class Foo extends Parent {
->Foo : Foo
->Parent : Parent
+>Foo : Foo, Symbol(Foo,Decl(emitClassDeclarationWithSuperMethodCall01.ts,4,1))
+>Parent : Parent, Symbol(Parent,Decl(emitClassDeclarationWithSuperMethodCall01.ts,0,0))
 
     foo() {
->foo : () => void
+>foo : () => void, Symbol(foo,Decl(emitClassDeclarationWithSuperMethodCall01.ts,6,26))
 
         var x = () => super.foo();
->x : () => void
+>x : () => void, Symbol(x,Decl(emitClassDeclarationWithSuperMethodCall01.ts,8,11))
 >() => super.foo() : () => void
 >super.foo() : void
->super.foo : () => void
->super : Parent
->foo : () => void
+>super.foo : () => void, Symbol(Parent.foo,Decl(emitClassDeclarationWithSuperMethodCall01.ts,1,14))
+>super : Parent, Symbol(Parent,Decl(emitClassDeclarationWithSuperMethodCall01.ts,0,0))
+>foo : () => void, Symbol(Parent.foo,Decl(emitClassDeclarationWithSuperMethodCall01.ts,1,14))
     }
 }

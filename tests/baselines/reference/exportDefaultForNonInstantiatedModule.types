@@ -1,13 +1,13 @@
 === tests/cases/compiler/exportDefaultForNonInstantiatedModule.ts ===
 
 module m {
->m : unknown
+>m : any, Symbol(m,Decl(exportDefaultForNonInstantiatedModule.ts,0,0))
 
     export interface foo {
->foo : foo
+>foo : foo, Symbol(foo,Decl(exportDefaultForNonInstantiatedModule.ts,1,10))
     }
 }
 // Should not be emitted
 export default m;
->m : unknown
+>m : any, Symbol(m,Decl(exportDefaultForNonInstantiatedModule.ts,0,0))
 

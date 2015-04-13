@@ -1,72 +1,72 @@
 === tests/cases/conformance/es6/templates/templateStringWithEmptyLiteralPortionsES6.ts ===
 var a = ``;
->a : string
+>a : string, Symbol(a,Decl(templateStringWithEmptyLiteralPortionsES6.ts,0,3))
 >`` : string
 
 var b = `${ 0 }`;
->b : string
+>b : string, Symbol(b,Decl(templateStringWithEmptyLiteralPortionsES6.ts,2,3))
 >`${ 0 }` : string
 >0 : number
 
 var c = `1${ 0 }`;
->c : string
+>c : string, Symbol(c,Decl(templateStringWithEmptyLiteralPortionsES6.ts,4,3))
 >`1${ 0 }` : string
 >0 : number
 
 var d = `${ 0 }2`;
->d : string
+>d : string, Symbol(d,Decl(templateStringWithEmptyLiteralPortionsES6.ts,6,3))
 >`${ 0 }2` : string
 >0 : number
 
 var e = `1${ 0 }2`;
->e : string
+>e : string, Symbol(e,Decl(templateStringWithEmptyLiteralPortionsES6.ts,8,3))
 >`1${ 0 }2` : string
 >0 : number
 
 var f = `${ 0 }${ 0 }`;
->f : string
+>f : string, Symbol(f,Decl(templateStringWithEmptyLiteralPortionsES6.ts,10,3))
 >`${ 0 }${ 0 }` : string
 >0 : number
 >0 : number
 
 var g = `1${ 0 }${ 0 }`;
->g : string
+>g : string, Symbol(g,Decl(templateStringWithEmptyLiteralPortionsES6.ts,12,3))
 >`1${ 0 }${ 0 }` : string
 >0 : number
 >0 : number
 
 var h = `${ 0 }2${ 0 }`;
->h : string
+>h : string, Symbol(h,Decl(templateStringWithEmptyLiteralPortionsES6.ts,14,3))
 >`${ 0 }2${ 0 }` : string
 >0 : number
 >0 : number
 
 var i = `1${ 0 }2${ 0 }`;
->i : string
+>i : string, Symbol(i,Decl(templateStringWithEmptyLiteralPortionsES6.ts,16,3))
 >`1${ 0 }2${ 0 }` : string
 >0 : number
 >0 : number
 
 var j = `${ 0 }${ 0 }3`;
->j : string
+>j : string, Symbol(j,Decl(templateStringWithEmptyLiteralPortionsES6.ts,18,3))
 >`${ 0 }${ 0 }3` : string
 >0 : number
 >0 : number
 
 var k = `1${ 0 }${ 0 }3`;
->k : string
+>k : string, Symbol(k,Decl(templateStringWithEmptyLiteralPortionsES6.ts,20,3))
 >`1${ 0 }${ 0 }3` : string
 >0 : number
 >0 : number
 
 var l = `${ 0 }2${ 0 }3`;
->l : string
+>l : string, Symbol(l,Decl(templateStringWithEmptyLiteralPortionsES6.ts,22,3))
 >`${ 0 }2${ 0 }3` : string
 >0 : number
 >0 : number
 
 var m = `1${ 0 }2${ 0 }3`;
->m : string
+>m : string, Symbol(m,Decl(templateStringWithEmptyLiteralPortionsES6.ts,24,3))
 >`1${ 0 }2${ 0 }3` : string
 >0 : number
 >0 : number

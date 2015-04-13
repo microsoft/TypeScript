@@ -1,19 +1,19 @@
 === tests/cases/compiler/forInModule.ts ===
 module Foo {
->Foo : typeof Foo
+>Foo : typeof Foo, Symbol(Foo,Decl(forInModule.ts,0,0))
 
 	for (var i = 0; i < 1; i++) {
->i : number
+>i : number, Symbol(i,Decl(forInModule.ts,1,9))
 >0 : number
 >i < 1 : boolean
->i : number
+>i : number, Symbol(i,Decl(forInModule.ts,1,9))
 >1 : number
 >i++ : number
->i : number
+>i : number, Symbol(i,Decl(forInModule.ts,1,9))
 
 		i+i;
 >i+i : number
->i : number
->i : number
+>i : number, Symbol(i,Decl(forInModule.ts,1,9))
+>i : number, Symbol(i,Decl(forInModule.ts,1,9))
 	}
 }

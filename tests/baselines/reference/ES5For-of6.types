@@ -1,16 +1,16 @@
 === tests/cases/conformance/statements/for-ofStatements/ES5For-of6.ts ===
 for (var w of []) {
->w : any
+>w : any, Symbol(w,Decl(ES5For-of6.ts,0,8))
 >[] : undefined[]
 
     for (var v of []) {
->v : any
+>v : any, Symbol(v,Decl(ES5For-of6.ts,1,12))
 >[] : undefined[]
 
         var x = [w, v];
->x : any[]
+>x : any[], Symbol(x,Decl(ES5For-of6.ts,2,11))
 >[w, v] : any[]
->w : any
->v : any
+>w : any, Symbol(w,Decl(ES5For-of6.ts,0,8))
+>v : any, Symbol(v,Decl(ES5For-of6.ts,1,12))
     }
 }

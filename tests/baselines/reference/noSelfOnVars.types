@@ -1,13 +1,13 @@
 === tests/cases/compiler/noSelfOnVars.ts ===
 function foo() {
->foo : () => void
+>foo : () => void, Symbol(foo,Decl(noSelfOnVars.ts,0,0))
 
     function bar() { }
->bar : () => void
+>bar : () => void, Symbol(bar,Decl(noSelfOnVars.ts,0,16))
 
     var x = bar;
->x : () => void
->bar : () => void
+>x : () => void, Symbol(x,Decl(noSelfOnVars.ts,2,7))
+>bar : () => void, Symbol(bar,Decl(noSelfOnVars.ts,0,16))
 }
 
 

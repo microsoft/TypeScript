@@ -3,77 +3,77 @@
 // type as the second operand.
 
 function foo<T, U, V/* extends T*/>(t: T, u: U, v: V) {
->foo : <T, U, V>(t: T, u: U, v: V) => void
->T : T
->U : U
->V : V
->t : T
->T : T
->u : U
->U : U
->v : V
->V : V
+>foo : <T, U, V>(t: T, u: U, v: V) => void, Symbol(foo,Decl(logicalAndOperatorWithTypeParameters.ts,0,0))
+>T : T, Symbol(T,Decl(logicalAndOperatorWithTypeParameters.ts,3,13))
+>U : U, Symbol(U,Decl(logicalAndOperatorWithTypeParameters.ts,3,15))
+>V : V, Symbol(V,Decl(logicalAndOperatorWithTypeParameters.ts,3,18))
+>t : T, Symbol(t,Decl(logicalAndOperatorWithTypeParameters.ts,3,36))
+>T : T, Symbol(T,Decl(logicalAndOperatorWithTypeParameters.ts,3,13))
+>u : U, Symbol(u,Decl(logicalAndOperatorWithTypeParameters.ts,3,41))
+>U : U, Symbol(U,Decl(logicalAndOperatorWithTypeParameters.ts,3,15))
+>v : V, Symbol(v,Decl(logicalAndOperatorWithTypeParameters.ts,3,47))
+>V : V, Symbol(V,Decl(logicalAndOperatorWithTypeParameters.ts,3,18))
 
     var r1 = t && t;
->r1 : T
+>r1 : T, Symbol(r1,Decl(logicalAndOperatorWithTypeParameters.ts,4,7))
 >t && t : T
->t : T
->t : T
+>t : T, Symbol(t,Decl(logicalAndOperatorWithTypeParameters.ts,3,36))
+>t : T, Symbol(t,Decl(logicalAndOperatorWithTypeParameters.ts,3,36))
 
     var r2 = u && t;
->r2 : T
+>r2 : T, Symbol(r2,Decl(logicalAndOperatorWithTypeParameters.ts,5,7))
 >u && t : T
->u : U
->t : T
+>u : U, Symbol(u,Decl(logicalAndOperatorWithTypeParameters.ts,3,41))
+>t : T, Symbol(t,Decl(logicalAndOperatorWithTypeParameters.ts,3,36))
 
     var r3 = v && t;
->r3 : T
+>r3 : T, Symbol(r3,Decl(logicalAndOperatorWithTypeParameters.ts,6,7))
 >v && t : T
->v : V
->t : T
+>v : V, Symbol(v,Decl(logicalAndOperatorWithTypeParameters.ts,3,47))
+>t : T, Symbol(t,Decl(logicalAndOperatorWithTypeParameters.ts,3,36))
 
     var r4 = t && u;
->r4 : U
+>r4 : U, Symbol(r4,Decl(logicalAndOperatorWithTypeParameters.ts,8,7))
 >t && u : U
->t : T
->u : U
+>t : T, Symbol(t,Decl(logicalAndOperatorWithTypeParameters.ts,3,36))
+>u : U, Symbol(u,Decl(logicalAndOperatorWithTypeParameters.ts,3,41))
 
     var r5 = u && u;
->r5 : U
+>r5 : U, Symbol(r5,Decl(logicalAndOperatorWithTypeParameters.ts,9,7))
 >u && u : U
->u : U
->u : U
+>u : U, Symbol(u,Decl(logicalAndOperatorWithTypeParameters.ts,3,41))
+>u : U, Symbol(u,Decl(logicalAndOperatorWithTypeParameters.ts,3,41))
 
     var r6 = v && u;
->r6 : U
+>r6 : U, Symbol(r6,Decl(logicalAndOperatorWithTypeParameters.ts,10,7))
 >v && u : U
->v : V
->u : U
+>v : V, Symbol(v,Decl(logicalAndOperatorWithTypeParameters.ts,3,47))
+>u : U, Symbol(u,Decl(logicalAndOperatorWithTypeParameters.ts,3,41))
 
     var r7 = t && v;
->r7 : V
+>r7 : V, Symbol(r7,Decl(logicalAndOperatorWithTypeParameters.ts,12,7))
 >t && v : V
->t : T
->v : V
+>t : T, Symbol(t,Decl(logicalAndOperatorWithTypeParameters.ts,3,36))
+>v : V, Symbol(v,Decl(logicalAndOperatorWithTypeParameters.ts,3,47))
 
     var r8 = u && v;
->r8 : V
+>r8 : V, Symbol(r8,Decl(logicalAndOperatorWithTypeParameters.ts,13,7))
 >u && v : V
->u : U
->v : V
+>u : U, Symbol(u,Decl(logicalAndOperatorWithTypeParameters.ts,3,41))
+>v : V, Symbol(v,Decl(logicalAndOperatorWithTypeParameters.ts,3,47))
 
     var r9 = v && v;
->r9 : V
+>r9 : V, Symbol(r9,Decl(logicalAndOperatorWithTypeParameters.ts,14,7))
 >v && v : V
->v : V
->v : V
+>v : V, Symbol(v,Decl(logicalAndOperatorWithTypeParameters.ts,3,47))
+>v : V, Symbol(v,Decl(logicalAndOperatorWithTypeParameters.ts,3,47))
 
     var a: number;
->a : number
+>a : number, Symbol(a,Decl(logicalAndOperatorWithTypeParameters.ts,16,7))
 
     var r10 = t && a;
->r10 : number
+>r10 : number, Symbol(r10,Decl(logicalAndOperatorWithTypeParameters.ts,17,7))
 >t && a : number
->t : T
->a : number
+>t : T, Symbol(t,Decl(logicalAndOperatorWithTypeParameters.ts,3,36))
+>a : number, Symbol(a,Decl(logicalAndOperatorWithTypeParameters.ts,16,7))
 }

@@ -1,26 +1,26 @@
 === tests/cases/compiler/functionOverloads42.ts ===
 function foo(bar:{a:number;}[]):string;
->foo : { (bar: { a: number; }[]): string; (bar: { a: any; }[]): number; }
->bar : { a: number; }[]
->a : number
+>foo : { (bar: { a: number; }[]): string; (bar: { a: any; }[]): number; }, Symbol(foo,Decl(functionOverloads42.ts,0,0),Decl(functionOverloads42.ts,0,39),Decl(functionOverloads42.ts,1,36))
+>bar : { a: number; }[], Symbol(bar,Decl(functionOverloads42.ts,0,13))
+>a : number, Symbol(a,Decl(functionOverloads42.ts,0,18))
 
 function foo(bar:{a:any;}[]):number;
->foo : { (bar: { a: number; }[]): string; (bar: { a: any; }[]): number; }
->bar : { a: any; }[]
->a : any
+>foo : { (bar: { a: number; }[]): string; (bar: { a: any; }[]): number; }, Symbol(foo,Decl(functionOverloads42.ts,0,0),Decl(functionOverloads42.ts,0,39),Decl(functionOverloads42.ts,1,36))
+>bar : { a: any; }[], Symbol(bar,Decl(functionOverloads42.ts,1,13))
+>a : any, Symbol(a,Decl(functionOverloads42.ts,1,18))
 
 function foo(bar:{a:any;}[]):any{ return bar }
->foo : { (bar: { a: number; }[]): string; (bar: { a: any; }[]): number; }
->bar : { a: any; }[]
->a : any
->bar : { a: any; }[]
+>foo : { (bar: { a: number; }[]): string; (bar: { a: any; }[]): number; }, Symbol(foo,Decl(functionOverloads42.ts,0,0),Decl(functionOverloads42.ts,0,39),Decl(functionOverloads42.ts,1,36))
+>bar : { a: any; }[], Symbol(bar,Decl(functionOverloads42.ts,2,13))
+>a : any, Symbol(a,Decl(functionOverloads42.ts,2,18))
+>bar : { a: any; }[], Symbol(bar,Decl(functionOverloads42.ts,2,13))
 
 var x = foo([{a:'s'}]);
->x : number
+>x : number, Symbol(x,Decl(functionOverloads42.ts,3,3))
 >foo([{a:'s'}]) : number
->foo : { (bar: { a: number; }[]): string; (bar: { a: any; }[]): number; }
+>foo : { (bar: { a: number; }[]): string; (bar: { a: any; }[]): number; }, Symbol(foo,Decl(functionOverloads42.ts,0,0),Decl(functionOverloads42.ts,0,39),Decl(functionOverloads42.ts,1,36))
 >[{a:'s'}] : { a: string; }[]
 >{a:'s'} : { a: string; }
->a : string
+>a : string, Symbol(a,Decl(functionOverloads42.ts,3,14))
 >'s' : string
 

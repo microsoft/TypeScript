@@ -1,23 +1,23 @@
 === tests/cases/compiler/declFileImportedTypeUseInTypeArgPosition.ts ===
 class List<T> { }
->List : List<T>
->T : T
+>List : List<T>, Symbol(List,Decl(declFileImportedTypeUseInTypeArgPosition.ts,0,0))
+>T : T, Symbol(T,Decl(declFileImportedTypeUseInTypeArgPosition.ts,0,11))
 
 declare module 'mod1' {
     class Foo {
->Foo : Foo
+>Foo : Foo, Symbol(Foo,Decl(declFileImportedTypeUseInTypeArgPosition.ts,1,23))
     }
 }
 
 declare module 'moo' {
     import x = require('mod1');
->x : typeof x
+>x : typeof x, Symbol(x,Decl(declFileImportedTypeUseInTypeArgPosition.ts,6,22))
 
     export var p: List<x.Foo>;
->p : List<x.Foo>
->List : List<T>
->x : unknown
->Foo : x.Foo
+>p : List<x.Foo>, Symbol(p,Decl(declFileImportedTypeUseInTypeArgPosition.ts,8,14))
+>List : List<T>, Symbol(List,Decl(declFileImportedTypeUseInTypeArgPosition.ts,0,0))
+>x : any, Symbol(x,Decl(declFileImportedTypeUseInTypeArgPosition.ts,6,22))
+>Foo : x.Foo, Symbol(x.Foo,Decl(declFileImportedTypeUseInTypeArgPosition.ts,1,23))
 }
 
 

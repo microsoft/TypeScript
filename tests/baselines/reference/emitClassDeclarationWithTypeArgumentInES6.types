@@ -1,53 +1,53 @@
 === tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithTypeArgumentInES6.ts ===
 class B<T> {
->B : B<T>
->T : T
+>B : B<T>, Symbol(B,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,0,0))
+>T : T, Symbol(T,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,0,8))
 
     x: T;
->x : T
->T : T
+>x : T, Symbol(x,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,0,12))
+>T : T, Symbol(T,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,0,8))
 
     B: T;
->B : T
->T : T
+>B : T, Symbol(B,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,1,9))
+>T : T, Symbol(T,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,0,8))
 
     constructor(a: T) { this.B = a;}
->a : T
->T : T
+>a : T, Symbol(a,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,3,16))
+>T : T, Symbol(T,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,0,8))
 >this.B = a : T
->this.B : T
->this : B<T>
->B : T
->a : T
+>this.B : T, Symbol(B,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,1,9))
+>this : B<T>, Symbol(B,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,0,0))
+>B : T, Symbol(B,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,1,9))
+>a : T, Symbol(a,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,3,16))
 
     foo(): T {
->foo : () => T
->T : T
+>foo : () => T, Symbol(foo,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,3,36))
+>T : T, Symbol(T,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,0,8))
 
         return this.x;
->this.x : T
->this : B<T>
->x : T
+>this.x : T, Symbol(x,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,0,12))
+>this : B<T>, Symbol(B,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,0,0))
+>x : T, Symbol(x,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,0,12))
     }
     get BB(): T {
->BB : T
->T : T
+>BB : T, Symbol(BB,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,6,5))
+>T : T, Symbol(T,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,0,8))
 
         return this.B;
->this.B : T
->this : B<T>
->B : T
+>this.B : T, Symbol(B,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,1,9))
+>this : B<T>, Symbol(B,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,0,0))
+>B : T, Symbol(B,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,1,9))
     }
     set BBWith(c: T) {
->BBWith : T
->c : T
->T : T
+>BBWith : T, Symbol(BBWith,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,9,5))
+>c : T, Symbol(c,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,10,15))
+>T : T, Symbol(T,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,0,8))
 
         this.B = c;
 >this.B = c : T
->this.B : T
->this : B<T>
->B : T
->c : T
+>this.B : T, Symbol(B,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,1,9))
+>this : B<T>, Symbol(B,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,0,0))
+>B : T, Symbol(B,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,1,9))
+>c : T, Symbol(c,Decl(emitClassDeclarationWithTypeArgumentInES6.ts,10,15))
     }
 }

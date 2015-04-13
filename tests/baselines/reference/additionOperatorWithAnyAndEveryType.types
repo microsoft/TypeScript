@@ -1,171 +1,171 @@
 === tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithAnyAndEveryType.ts ===
 function foo() { }
->foo : () => void
+>foo : () => void, Symbol(foo,Decl(additionOperatorWithAnyAndEveryType.ts,0,0))
 
 class C {
->C : C
+>C : C, Symbol(C,Decl(additionOperatorWithAnyAndEveryType.ts,0,18))
 
     public a: string;
->a : string
+>a : string, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,1,9))
 
     static foo() { }
->foo : () => void
+>foo : () => void, Symbol(C.foo,Decl(additionOperatorWithAnyAndEveryType.ts,2,21))
 }
 enum E { a, b, c }
->E : E
->a : E
->b : E
->c : E
+>E : E, Symbol(E,Decl(additionOperatorWithAnyAndEveryType.ts,4,1))
+>a : E, Symbol(E.a,Decl(additionOperatorWithAnyAndEveryType.ts,5,8))
+>b : E, Symbol(E.b,Decl(additionOperatorWithAnyAndEveryType.ts,5,11))
+>c : E, Symbol(E.c,Decl(additionOperatorWithAnyAndEveryType.ts,5,14))
 
 module M { export var a }
->M : typeof M
->a : any
+>M : typeof M, Symbol(M,Decl(additionOperatorWithAnyAndEveryType.ts,5,18))
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,6,21))
 
 var a: any;
->a : any
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
 
 var b: boolean;
->b : boolean
+>b : boolean, Symbol(b,Decl(additionOperatorWithAnyAndEveryType.ts,9,3))
 
 var c: number;
->c : number
+>c : number, Symbol(c,Decl(additionOperatorWithAnyAndEveryType.ts,10,3))
 
 var d: string;
->d : string
+>d : string, Symbol(d,Decl(additionOperatorWithAnyAndEveryType.ts,11,3))
 
 var e: Object;
->e : Object
->Object : Object
+>e : Object, Symbol(e,Decl(additionOperatorWithAnyAndEveryType.ts,12,3))
+>Object : Object, Symbol(Object,Decl(lib.d.ts,92,1),Decl(lib.d.ts,223,11))
 
 // any as left operand, result is type Any except plusing string
 var r1 = a + a;
->r1 : any
+>r1 : any, Symbol(r1,Decl(additionOperatorWithAnyAndEveryType.ts,15,3))
 >a + a : any
->a : any
->a : any
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
 
 var r2 = a + b;
->r2 : any
+>r2 : any, Symbol(r2,Decl(additionOperatorWithAnyAndEveryType.ts,16,3))
 >a + b : any
->a : any
->b : boolean
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
+>b : boolean, Symbol(b,Decl(additionOperatorWithAnyAndEveryType.ts,9,3))
 
 var r3 = a + c;
->r3 : any
+>r3 : any, Symbol(r3,Decl(additionOperatorWithAnyAndEveryType.ts,17,3))
 >a + c : any
->a : any
->c : number
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
+>c : number, Symbol(c,Decl(additionOperatorWithAnyAndEveryType.ts,10,3))
 
 var r4 = a + d;
->r4 : string
+>r4 : string, Symbol(r4,Decl(additionOperatorWithAnyAndEveryType.ts,18,3))
 >a + d : string
->a : any
->d : string
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
+>d : string, Symbol(d,Decl(additionOperatorWithAnyAndEveryType.ts,11,3))
 
 var r5 = a + e;
->r5 : any
+>r5 : any, Symbol(r5,Decl(additionOperatorWithAnyAndEveryType.ts,19,3))
 >a + e : any
->a : any
->e : Object
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
+>e : Object, Symbol(e,Decl(additionOperatorWithAnyAndEveryType.ts,12,3))
 
 // any as right operand, result is type Any except plusing string
 var r6 = b + a;
->r6 : any
+>r6 : any, Symbol(r6,Decl(additionOperatorWithAnyAndEveryType.ts,22,3))
 >b + a : any
->b : boolean
->a : any
+>b : boolean, Symbol(b,Decl(additionOperatorWithAnyAndEveryType.ts,9,3))
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
 
 var r7 = c + a;
->r7 : any
+>r7 : any, Symbol(r7,Decl(additionOperatorWithAnyAndEveryType.ts,23,3))
 >c + a : any
->c : number
->a : any
+>c : number, Symbol(c,Decl(additionOperatorWithAnyAndEveryType.ts,10,3))
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
 
 var r8 = d + a;
->r8 : string
+>r8 : string, Symbol(r8,Decl(additionOperatorWithAnyAndEveryType.ts,24,3))
 >d + a : string
->d : string
->a : any
+>d : string, Symbol(d,Decl(additionOperatorWithAnyAndEveryType.ts,11,3))
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
 
 var r9 = e + a;
->r9 : any
+>r9 : any, Symbol(r9,Decl(additionOperatorWithAnyAndEveryType.ts,25,3))
 >e + a : any
->e : Object
->a : any
+>e : Object, Symbol(e,Decl(additionOperatorWithAnyAndEveryType.ts,12,3))
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
 
 // other cases
 var r10 = a + foo;
->r10 : any
+>r10 : any, Symbol(r10,Decl(additionOperatorWithAnyAndEveryType.ts,28,3))
 >a + foo : any
->a : any
->foo : () => void
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
+>foo : () => void, Symbol(foo,Decl(additionOperatorWithAnyAndEveryType.ts,0,0))
 
 var r11 = a + foo();
->r11 : any
+>r11 : any, Symbol(r11,Decl(additionOperatorWithAnyAndEveryType.ts,29,3))
 >a + foo() : any
->a : any
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
 >foo() : void
->foo : () => void
+>foo : () => void, Symbol(foo,Decl(additionOperatorWithAnyAndEveryType.ts,0,0))
 
 var r12 = a + C;
->r12 : any
+>r12 : any, Symbol(r12,Decl(additionOperatorWithAnyAndEveryType.ts,30,3))
 >a + C : any
->a : any
->C : typeof C
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
+>C : typeof C, Symbol(C,Decl(additionOperatorWithAnyAndEveryType.ts,0,18))
 
 var r13 = a + new C();
->r13 : any
+>r13 : any, Symbol(r13,Decl(additionOperatorWithAnyAndEveryType.ts,31,3))
 >a + new C() : any
->a : any
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
 >new C() : C
->C : typeof C
+>C : typeof C, Symbol(C,Decl(additionOperatorWithAnyAndEveryType.ts,0,18))
 
 var r14 = a + E;
->r14 : any
+>r14 : any, Symbol(r14,Decl(additionOperatorWithAnyAndEveryType.ts,32,3))
 >a + E : any
->a : any
->E : typeof E
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
+>E : typeof E, Symbol(E,Decl(additionOperatorWithAnyAndEveryType.ts,4,1))
 
 var r15 = a + E.a;
->r15 : any
+>r15 : any, Symbol(r15,Decl(additionOperatorWithAnyAndEveryType.ts,33,3))
 >a + E.a : any
->a : any
->E.a : E
->E : typeof E
->a : E
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
+>E.a : E, Symbol(E.a,Decl(additionOperatorWithAnyAndEveryType.ts,5,8))
+>E : typeof E, Symbol(E,Decl(additionOperatorWithAnyAndEveryType.ts,4,1))
+>a : E, Symbol(E.a,Decl(additionOperatorWithAnyAndEveryType.ts,5,8))
 
 var r16 = a + M;
->r16 : any
+>r16 : any, Symbol(r16,Decl(additionOperatorWithAnyAndEveryType.ts,34,3))
 >a + M : any
->a : any
->M : typeof M
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
+>M : typeof M, Symbol(M,Decl(additionOperatorWithAnyAndEveryType.ts,5,18))
 
 var r17 = a + '';
->r17 : string
+>r17 : string, Symbol(r17,Decl(additionOperatorWithAnyAndEveryType.ts,35,3))
 >a + '' : string
->a : any
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
 >'' : string
 
 var r18 = a + 123;
->r18 : any
+>r18 : any, Symbol(r18,Decl(additionOperatorWithAnyAndEveryType.ts,36,3))
 >a + 123 : any
->a : any
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
 >123 : number
 
 var r19 = a + { a: '' };
->r19 : any
+>r19 : any, Symbol(r19,Decl(additionOperatorWithAnyAndEveryType.ts,37,3))
 >a + { a: '' } : any
->a : any
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
 >{ a: '' } : { a: string; }
->a : string
+>a : string, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,37,15))
 >'' : string
 
 var r20 = a + ((a: string) => { return a });
->r20 : any
+>r20 : any, Symbol(r20,Decl(additionOperatorWithAnyAndEveryType.ts,38,3))
 >a + ((a: string) => { return a }) : any
->a : any
+>a : any, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,8,3))
 >((a: string) => { return a }) : (a: string) => string
 >(a: string) => { return a } : (a: string) => string
->a : string
->a : string
+>a : string, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,38,16))
+>a : string, Symbol(a,Decl(additionOperatorWithAnyAndEveryType.ts,38,16))
 

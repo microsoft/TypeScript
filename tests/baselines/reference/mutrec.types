@@ -1,106 +1,106 @@
 === tests/cases/compiler/mutrec.ts ===
 interface A {
->A : A
+>A : A, Symbol(A,Decl(mutrec.ts,0,0))
 
     x:B[];
->x : B[]
->B : B
+>x : B[], Symbol(x,Decl(mutrec.ts,0,13))
+>B : B, Symbol(B,Decl(mutrec.ts,2,1))
 }
 
 interface B {
->B : B
+>B : B, Symbol(B,Decl(mutrec.ts,2,1))
 
     x:A[];
->x : A[]
->A : A
+>x : A[], Symbol(x,Decl(mutrec.ts,4,13))
+>A : A, Symbol(A,Decl(mutrec.ts,0,0))
 }
 
 function f(p: A) { return p };
->f : (p: A) => A
->p : A
->A : A
->p : A
+>f : (p: A) => A, Symbol(f,Decl(mutrec.ts,6,1))
+>p : A, Symbol(p,Decl(mutrec.ts,8,11))
+>A : A, Symbol(A,Decl(mutrec.ts,0,0))
+>p : A, Symbol(p,Decl(mutrec.ts,8,11))
 
 var b:B;
->b : B
->B : B
+>b : B, Symbol(b,Decl(mutrec.ts,9,3))
+>B : B, Symbol(B,Decl(mutrec.ts,2,1))
 
 f(b);
 >f(b) : A
->f : (p: A) => A
->b : B
+>f : (p: A) => A, Symbol(f,Decl(mutrec.ts,6,1))
+>b : B, Symbol(b,Decl(mutrec.ts,9,3))
 
 interface I1 {
->I1 : I1
+>I1 : I1, Symbol(I1,Decl(mutrec.ts,10,5))
 
     y:I2;
->y : I2
->I2 : I2
+>y : I2, Symbol(y,Decl(mutrec.ts,12,14))
+>I2 : I2, Symbol(I2,Decl(mutrec.ts,14,1))
 }
 
 interface I2 {
->I2 : I2
+>I2 : I2, Symbol(I2,Decl(mutrec.ts,14,1))
 
     y:I3;
->y : I3
->I3 : I3
+>y : I3, Symbol(y,Decl(mutrec.ts,16,14))
+>I3 : I3, Symbol(I3,Decl(mutrec.ts,18,1))
 }
 
 interface I3 {
->I3 : I3
+>I3 : I3, Symbol(I3,Decl(mutrec.ts,18,1))
 
     y:I1;
->y : I1
->I1 : I1
+>y : I1, Symbol(y,Decl(mutrec.ts,20,14))
+>I1 : I1, Symbol(I1,Decl(mutrec.ts,10,5))
 }
 
 function g(p: I1) { return p };
->g : (p: I1) => I1
->p : I1
->I1 : I1
->p : I1
+>g : (p: I1) => I1, Symbol(g,Decl(mutrec.ts,22,1))
+>p : I1, Symbol(p,Decl(mutrec.ts,24,11))
+>I1 : I1, Symbol(I1,Decl(mutrec.ts,10,5))
+>p : I1, Symbol(p,Decl(mutrec.ts,24,11))
 
 var i2:I2;
->i2 : I2
->I2 : I2
+>i2 : I2, Symbol(i2,Decl(mutrec.ts,25,3))
+>I2 : I2, Symbol(I2,Decl(mutrec.ts,14,1))
 
 g(i2);
 >g(i2) : I1
->g : (p: I1) => I1
->i2 : I2
+>g : (p: I1) => I1, Symbol(g,Decl(mutrec.ts,22,1))
+>i2 : I2, Symbol(i2,Decl(mutrec.ts,25,3))
 
 var i3:I3;
->i3 : I3
->I3 : I3
+>i3 : I3, Symbol(i3,Decl(mutrec.ts,27,3))
+>I3 : I3, Symbol(I3,Decl(mutrec.ts,18,1))
 
 g(i3);
 >g(i3) : I1
->g : (p: I1) => I1
->i3 : I3
+>g : (p: I1) => I1, Symbol(g,Decl(mutrec.ts,22,1))
+>i3 : I3, Symbol(i3,Decl(mutrec.ts,27,3))
 
 interface I4 {
->I4 : I4
+>I4 : I4, Symbol(I4,Decl(mutrec.ts,28,6))
 
     y:I5;
->y : I5
->I5 : I5
+>y : I5, Symbol(y,Decl(mutrec.ts,30,14))
+>I5 : I5, Symbol(I5,Decl(mutrec.ts,32,1))
 }
 
 interface I5 {
->I5 : I5
+>I5 : I5, Symbol(I5,Decl(mutrec.ts,32,1))
 
     y:I4;
->y : I4
->I4 : I4
+>y : I4, Symbol(y,Decl(mutrec.ts,34,14))
+>I4 : I4, Symbol(I4,Decl(mutrec.ts,28,6))
 }
 
 var i4:I4;
->i4 : I4
->I4 : I4
+>i4 : I4, Symbol(i4,Decl(mutrec.ts,38,3))
+>I4 : I4, Symbol(I4,Decl(mutrec.ts,28,6))
 
 g(i4);
 >g(i4) : I1
->g : (p: I1) => I1
->i4 : I4
+>g : (p: I1) => I1, Symbol(g,Decl(mutrec.ts,22,1))
+>i4 : I4, Symbol(i4,Decl(mutrec.ts,38,3))
 
 

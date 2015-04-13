@@ -1,101 +1,101 @@
 === tests/cases/conformance/interfaces/declarationMerging/twoMergedInterfacesWithDifferingOverloads2.ts ===
 interface A {
->A : A
+>A : A, Symbol(A,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,0,0),Decl(twoMergedInterfacesWithDifferingOverloads2.ts,3,1))
 
     (): string;
     (x: number): number;
->x : number
+>x : number, Symbol(x,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,2,5))
 }
 
 interface A {
->A : A
+>A : A, Symbol(A,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,0,0),Decl(twoMergedInterfacesWithDifferingOverloads2.ts,3,1))
 
     (x: number, y: number): boolean;
->x : number
->y : number
+>x : number, Symbol(x,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,6,5))
+>y : number, Symbol(y,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,6,15))
 }
 
 var a: A;
->a : A
->A : A
+>a : A, Symbol(a,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,9,3))
+>A : A, Symbol(A,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,0,0),Decl(twoMergedInterfacesWithDifferingOverloads2.ts,3,1))
 
 var r = a();
->r : string
+>r : string, Symbol(r,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,10,3))
 >a() : string
->a : A
+>a : A, Symbol(a,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,9,3))
 
 var r2 = a(1);
->r2 : number
+>r2 : number, Symbol(r2,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,11,3))
 >a(1) : number
->a : A
+>a : A, Symbol(a,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,9,3))
 >1 : number
 
 var r3 = a(1, 2);
->r3 : boolean
+>r3 : boolean, Symbol(r3,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,12,3))
 >a(1, 2) : boolean
->a : A
+>a : A, Symbol(a,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,9,3))
 >1 : number
 >2 : number
 
 module G {
->G : typeof G
+>G : typeof G, Symbol(G,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,12,17))
 
     interface A<T> {
->A : A<T>
->T : T
+>A : A<T>, Symbol(A,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,14,10),Decl(twoMergedInterfacesWithDifferingOverloads2.ts,18,5))
+>T : T, Symbol(T,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,15,16),Decl(twoMergedInterfacesWithDifferingOverloads2.ts,20,16))
 
         (): string;
         (x: T): T;
->x : T
->T : T
->T : T
+>x : T, Symbol(x,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,17,9))
+>T : T, Symbol(T,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,15,16),Decl(twoMergedInterfacesWithDifferingOverloads2.ts,20,16))
+>T : T, Symbol(T,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,15,16),Decl(twoMergedInterfacesWithDifferingOverloads2.ts,20,16))
     }
 
     interface A<T> {
->A : A<T>
->T : T
+>A : A<T>, Symbol(A,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,14,10),Decl(twoMergedInterfacesWithDifferingOverloads2.ts,18,5))
+>T : T, Symbol(T,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,15,16),Decl(twoMergedInterfacesWithDifferingOverloads2.ts,20,16))
 
         (x: T, y: number): T;
->x : T
->T : T
->y : number
->T : T
+>x : T, Symbol(x,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,21,9))
+>T : T, Symbol(T,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,15,16),Decl(twoMergedInterfacesWithDifferingOverloads2.ts,20,16))
+>y : number, Symbol(y,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,21,14))
+>T : T, Symbol(T,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,15,16),Decl(twoMergedInterfacesWithDifferingOverloads2.ts,20,16))
 
         <U>(x: U, y: T): U;
->U : U
->x : U
->U : U
->y : T
->T : T
->U : U
+>U : U, Symbol(U,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,22,9))
+>x : U, Symbol(x,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,22,12))
+>U : U, Symbol(U,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,22,9))
+>y : T, Symbol(y,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,22,17))
+>T : T, Symbol(T,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,15,16),Decl(twoMergedInterfacesWithDifferingOverloads2.ts,20,16))
+>U : U, Symbol(U,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,22,9))
     }
 
     var a: A<boolean>;
->a : A<boolean>
->A : A<T>
+>a : A<boolean>, Symbol(a,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,25,7))
+>A : A<T>, Symbol(A,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,14,10),Decl(twoMergedInterfacesWithDifferingOverloads2.ts,18,5))
 
     var r = a();
->r : string
+>r : string, Symbol(r,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,26,7))
 >a() : string
->a : A<boolean>
+>a : A<boolean>, Symbol(a,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,25,7))
 
     var r2 = a(true);
->r2 : boolean
+>r2 : boolean, Symbol(r2,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,27,7))
 >a(true) : boolean
->a : A<boolean>
+>a : A<boolean>, Symbol(a,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,25,7))
 >true : boolean
 
     var r3 = a(true, 2);
->r3 : boolean
+>r3 : boolean, Symbol(r3,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,28,7))
 >a(true, 2) : boolean
->a : A<boolean>
+>a : A<boolean>, Symbol(a,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,25,7))
 >true : boolean
 >2 : number
 
     var r4 = a(1, true);
->r4 : number
+>r4 : number, Symbol(r4,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,29,7))
 >a(1, true) : number
->a : A<boolean>
+>a : A<boolean>, Symbol(a,Decl(twoMergedInterfacesWithDifferingOverloads2.ts,25,7))
 >1 : number
 >true : boolean
 }

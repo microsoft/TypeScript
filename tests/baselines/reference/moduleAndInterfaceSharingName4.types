@@ -1,22 +1,22 @@
 === tests/cases/compiler/moduleAndInterfaceSharingName4.ts ===
 declare module D3 {
->D3 : typeof D3
+>D3 : typeof D3, Symbol(D3,Decl(moduleAndInterfaceSharingName4.ts,0,0))
 
     var x: D3.Color.Color;
->x : Color.Color
->D3 : unknown
->Color : unknown
->Color : Color.Color
+>x : Color.Color, Symbol(x,Decl(moduleAndInterfaceSharingName4.ts,1,7))
+>D3 : any, Symbol(D3,Decl(moduleAndInterfaceSharingName4.ts,0,0))
+>Color : any, Symbol(Color,Decl(moduleAndInterfaceSharingName4.ts,1,26))
+>Color : Color.Color, Symbol(Color.Color,Decl(moduleAndInterfaceSharingName4.ts,3,18))
 
     module Color {
->Color : unknown
+>Color : any, Symbol(Color,Decl(moduleAndInterfaceSharingName4.ts,1,26))
 
         export interface Color {
->Color : Color
+>Color : Color, Symbol(Color,Decl(moduleAndInterfaceSharingName4.ts,3,18))
 
             darker: Color;
->darker : Color
->Color : Color
+>darker : Color, Symbol(darker,Decl(moduleAndInterfaceSharingName4.ts,4,32))
+>Color : Color, Symbol(Color,Decl(moduleAndInterfaceSharingName4.ts,3,18))
         }
     }
 }

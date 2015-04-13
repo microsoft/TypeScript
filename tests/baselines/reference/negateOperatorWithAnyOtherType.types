@@ -2,194 +2,194 @@
 // - operator on any type
 
 var ANY: any;
->ANY : any
+>ANY : any, Symbol(ANY,Decl(negateOperatorWithAnyOtherType.ts,2,3))
 
 var ANY1;
->ANY1 : any
+>ANY1 : any, Symbol(ANY1,Decl(negateOperatorWithAnyOtherType.ts,3,3))
 
 var ANY2: any[] = ["", ""];
->ANY2 : any[]
+>ANY2 : any[], Symbol(ANY2,Decl(negateOperatorWithAnyOtherType.ts,4,3))
 >["", ""] : string[]
 >"" : string
 >"" : string
 
 var obj: () => {}
->obj : () => {}
+>obj : () => {}, Symbol(obj,Decl(negateOperatorWithAnyOtherType.ts,5,3))
 
 var obj1 = { x: "", y: () => { }};
->obj1 : { x: string; y: () => void; }
+>obj1 : { x: string; y: () => void; }, Symbol(obj1,Decl(negateOperatorWithAnyOtherType.ts,6,3))
 >{ x: "", y: () => { }} : { x: string; y: () => void; }
->x : string
+>x : string, Symbol(x,Decl(negateOperatorWithAnyOtherType.ts,6,12))
 >"" : string
->y : () => void
+>y : () => void, Symbol(y,Decl(negateOperatorWithAnyOtherType.ts,6,19))
 >() => { } : () => void
 
 function foo(): any {
->foo : () => any
+>foo : () => any, Symbol(foo,Decl(negateOperatorWithAnyOtherType.ts,6,34))
 
     var a;
->a : any
+>a : any, Symbol(a,Decl(negateOperatorWithAnyOtherType.ts,9,7))
 
     return a;
->a : any
+>a : any, Symbol(a,Decl(negateOperatorWithAnyOtherType.ts,9,7))
 }
 class A {
->A : A
+>A : A, Symbol(A,Decl(negateOperatorWithAnyOtherType.ts,11,1))
 
     public a: any;
->a : any
+>a : any, Symbol(a,Decl(negateOperatorWithAnyOtherType.ts,12,9))
 
     static foo() {
->foo : () => any
+>foo : () => any, Symbol(A.foo,Decl(negateOperatorWithAnyOtherType.ts,13,18))
 
         var a;
->a : any
+>a : any, Symbol(a,Decl(negateOperatorWithAnyOtherType.ts,15,11))
 
         return a;
->a : any
+>a : any, Symbol(a,Decl(negateOperatorWithAnyOtherType.ts,15,11))
     }
 }
 module M {
->M : typeof M
+>M : typeof M, Symbol(M,Decl(negateOperatorWithAnyOtherType.ts,18,1))
 
     export var n: any;
->n : any
+>n : any, Symbol(n,Decl(negateOperatorWithAnyOtherType.ts,20,14))
 }
 var objA = new A();
->objA : A
+>objA : A, Symbol(objA,Decl(negateOperatorWithAnyOtherType.ts,22,3))
 >new A() : A
->A : typeof A
+>A : typeof A, Symbol(A,Decl(negateOperatorWithAnyOtherType.ts,11,1))
 
 // any type var
 var ResultIsNumber1 = -ANY1;
->ResultIsNumber1 : number
+>ResultIsNumber1 : number, Symbol(ResultIsNumber1,Decl(negateOperatorWithAnyOtherType.ts,25,3))
 >-ANY1 : number
->ANY1 : any
+>ANY1 : any, Symbol(ANY1,Decl(negateOperatorWithAnyOtherType.ts,3,3))
 
 var ResultIsNumber2 = -ANY2;
->ResultIsNumber2 : number
+>ResultIsNumber2 : number, Symbol(ResultIsNumber2,Decl(negateOperatorWithAnyOtherType.ts,26,3))
 >-ANY2 : number
->ANY2 : any[]
+>ANY2 : any[], Symbol(ANY2,Decl(negateOperatorWithAnyOtherType.ts,4,3))
 
 var ResultIsNumber3 = -A;
->ResultIsNumber3 : number
+>ResultIsNumber3 : number, Symbol(ResultIsNumber3,Decl(negateOperatorWithAnyOtherType.ts,27,3))
 >-A : number
->A : typeof A
+>A : typeof A, Symbol(A,Decl(negateOperatorWithAnyOtherType.ts,11,1))
 
 var ResultIsNumber4 = -M;
->ResultIsNumber4 : number
+>ResultIsNumber4 : number, Symbol(ResultIsNumber4,Decl(negateOperatorWithAnyOtherType.ts,28,3))
 >-M : number
->M : typeof M
+>M : typeof M, Symbol(M,Decl(negateOperatorWithAnyOtherType.ts,18,1))
 
 var ResultIsNumber5 = -obj;
->ResultIsNumber5 : number
+>ResultIsNumber5 : number, Symbol(ResultIsNumber5,Decl(negateOperatorWithAnyOtherType.ts,29,3))
 >-obj : number
->obj : () => {}
+>obj : () => {}, Symbol(obj,Decl(negateOperatorWithAnyOtherType.ts,5,3))
 
 var ResultIsNumber6 = -obj1;
->ResultIsNumber6 : number
+>ResultIsNumber6 : number, Symbol(ResultIsNumber6,Decl(negateOperatorWithAnyOtherType.ts,30,3))
 >-obj1 : number
->obj1 : { x: string; y: () => void; }
+>obj1 : { x: string; y: () => void; }, Symbol(obj1,Decl(negateOperatorWithAnyOtherType.ts,6,3))
 
 // any type literal
 var ResultIsNumber7 = -undefined;
->ResultIsNumber7 : number
+>ResultIsNumber7 : number, Symbol(ResultIsNumber7,Decl(negateOperatorWithAnyOtherType.ts,33,3))
 >-undefined : number
->undefined : undefined
+>undefined : undefined, Symbol(undefined)
 
 var ResultIsNumber = -null;
->ResultIsNumber : number
+>ResultIsNumber : number, Symbol(ResultIsNumber,Decl(negateOperatorWithAnyOtherType.ts,34,3))
 >-null : number
 >null : null
 
 // any type expressions
 var ResultIsNumber8 = -ANY2[0];
->ResultIsNumber8 : number
+>ResultIsNumber8 : number, Symbol(ResultIsNumber8,Decl(negateOperatorWithAnyOtherType.ts,37,3))
 >-ANY2[0] : number
 >ANY2[0] : any
->ANY2 : any[]
+>ANY2 : any[], Symbol(ANY2,Decl(negateOperatorWithAnyOtherType.ts,4,3))
 >0 : number
 
 var ResultIsNumber9 = -obj1.x;
->ResultIsNumber9 : number
+>ResultIsNumber9 : number, Symbol(ResultIsNumber9,Decl(negateOperatorWithAnyOtherType.ts,38,3))
 >-obj1.x : number
->obj1.x : string
->obj1 : { x: string; y: () => void; }
->x : string
+>obj1.x : string, Symbol(x,Decl(negateOperatorWithAnyOtherType.ts,6,12))
+>obj1 : { x: string; y: () => void; }, Symbol(obj1,Decl(negateOperatorWithAnyOtherType.ts,6,3))
+>x : string, Symbol(x,Decl(negateOperatorWithAnyOtherType.ts,6,12))
 
 var ResultIsNumber10 = -obj1.y;
->ResultIsNumber10 : number
+>ResultIsNumber10 : number, Symbol(ResultIsNumber10,Decl(negateOperatorWithAnyOtherType.ts,39,3))
 >-obj1.y : number
->obj1.y : () => void
->obj1 : { x: string; y: () => void; }
->y : () => void
+>obj1.y : () => void, Symbol(y,Decl(negateOperatorWithAnyOtherType.ts,6,19))
+>obj1 : { x: string; y: () => void; }, Symbol(obj1,Decl(negateOperatorWithAnyOtherType.ts,6,3))
+>y : () => void, Symbol(y,Decl(negateOperatorWithAnyOtherType.ts,6,19))
 
 var ResultIsNumber11 = -objA.a;
->ResultIsNumber11 : number
+>ResultIsNumber11 : number, Symbol(ResultIsNumber11,Decl(negateOperatorWithAnyOtherType.ts,40,3))
 >-objA.a : number
->objA.a : any
->objA : A
->a : any
+>objA.a : any, Symbol(A.a,Decl(negateOperatorWithAnyOtherType.ts,12,9))
+>objA : A, Symbol(objA,Decl(negateOperatorWithAnyOtherType.ts,22,3))
+>a : any, Symbol(A.a,Decl(negateOperatorWithAnyOtherType.ts,12,9))
 
 var ResultIsNumber12 = -M.n;
->ResultIsNumber12 : number
+>ResultIsNumber12 : number, Symbol(ResultIsNumber12,Decl(negateOperatorWithAnyOtherType.ts,41,3))
 >-M.n : number
->M.n : any
->M : typeof M
->n : any
+>M.n : any, Symbol(M.n,Decl(negateOperatorWithAnyOtherType.ts,20,14))
+>M : typeof M, Symbol(M,Decl(negateOperatorWithAnyOtherType.ts,18,1))
+>n : any, Symbol(M.n,Decl(negateOperatorWithAnyOtherType.ts,20,14))
 
 var ResultIsNumber13 = -foo();
->ResultIsNumber13 : number
+>ResultIsNumber13 : number, Symbol(ResultIsNumber13,Decl(negateOperatorWithAnyOtherType.ts,42,3))
 >-foo() : number
 >foo() : any
->foo : () => any
+>foo : () => any, Symbol(foo,Decl(negateOperatorWithAnyOtherType.ts,6,34))
 
 var ResultIsNumber14 = -A.foo();
->ResultIsNumber14 : number
+>ResultIsNumber14 : number, Symbol(ResultIsNumber14,Decl(negateOperatorWithAnyOtherType.ts,43,3))
 >-A.foo() : number
 >A.foo() : any
->A.foo : () => any
->A : typeof A
->foo : () => any
+>A.foo : () => any, Symbol(A.foo,Decl(negateOperatorWithAnyOtherType.ts,13,18))
+>A : typeof A, Symbol(A,Decl(negateOperatorWithAnyOtherType.ts,11,1))
+>foo : () => any, Symbol(A.foo,Decl(negateOperatorWithAnyOtherType.ts,13,18))
 
 var ResultIsNumber15 = -(ANY - ANY1);
->ResultIsNumber15 : number
+>ResultIsNumber15 : number, Symbol(ResultIsNumber15,Decl(negateOperatorWithAnyOtherType.ts,44,3))
 >-(ANY - ANY1) : number
 >(ANY - ANY1) : number
 >ANY - ANY1 : number
->ANY : any
->ANY1 : any
+>ANY : any, Symbol(ANY,Decl(negateOperatorWithAnyOtherType.ts,2,3))
+>ANY1 : any, Symbol(ANY1,Decl(negateOperatorWithAnyOtherType.ts,3,3))
 
 // miss assignment operators
 -ANY;
 >-ANY : number
->ANY : any
+>ANY : any, Symbol(ANY,Decl(negateOperatorWithAnyOtherType.ts,2,3))
 
 -ANY1;
 >-ANY1 : number
->ANY1 : any
+>ANY1 : any, Symbol(ANY1,Decl(negateOperatorWithAnyOtherType.ts,3,3))
 
 -ANY2[0];
 >-ANY2[0] : number
 >ANY2[0] : any
->ANY2 : any[]
+>ANY2 : any[], Symbol(ANY2,Decl(negateOperatorWithAnyOtherType.ts,4,3))
 >0 : number
 
 -ANY, ANY1;
 >-ANY, ANY1 : any
 >-ANY : number
->ANY : any
->ANY1 : any
+>ANY : any, Symbol(ANY,Decl(negateOperatorWithAnyOtherType.ts,2,3))
+>ANY1 : any, Symbol(ANY1,Decl(negateOperatorWithAnyOtherType.ts,3,3))
 
 -objA.a;
 >-objA.a : number
->objA.a : any
->objA : A
->a : any
+>objA.a : any, Symbol(A.a,Decl(negateOperatorWithAnyOtherType.ts,12,9))
+>objA : A, Symbol(objA,Decl(negateOperatorWithAnyOtherType.ts,22,3))
+>a : any, Symbol(A.a,Decl(negateOperatorWithAnyOtherType.ts,12,9))
 
 -M.n;
 >-M.n : number
->M.n : any
->M : typeof M
->n : any
+>M.n : any, Symbol(M.n,Decl(negateOperatorWithAnyOtherType.ts,20,14))
+>M : typeof M, Symbol(M,Decl(negateOperatorWithAnyOtherType.ts,18,1))
+>n : any, Symbol(M.n,Decl(negateOperatorWithAnyOtherType.ts,20,14))
 

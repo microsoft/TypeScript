@@ -1,6 +1,5 @@
 interface TypeWriterResult {
     line: number;
-    column: number;
     syntaxKind: number;
     sourceText: string;
     type: string;
@@ -30,34 +29,42 @@ class TypeWriterWalker {
 
     private visitNode(node: ts.Node): void {
         if (ts.isExpression(node) || node.kind === ts.SyntaxKind.Identifier) {
-            this.log(node, this.getTypeOfNode(node));
+            this.logTypeAndSymbol(node);
         }
 
         ts.forEachChild(node, child => this.visitNode(child));
     }
 
-    private log(node: ts.Node, type: ts.Type): void {
+    private logTypeAndSymbol(node: ts.Node): void {
         var actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
         var lineAndCharacter = this.currentSourceFile.getLineAndCharacterOfPosition(actualPos);
         var sourceText = ts.getTextOfNodeFromSourceText(this.currentSourceFile.text, node);
-        
-        // If we got an unknown type, we temporarily want to fall back to just pretending the name
-        // (source text) of the node is the type. This is to align with the old typeWriter to make
-        // baseline comparisons easier. In the long term, we will want to just call typeToString
-        this.results.push({
-            line: lineAndCharacter.line,
-            // todo(cyrusn): Not sure why column is one-based for type-writer.  But I'm preserving 
-            // that behavior to prevent having a lot of baselines to fix up.
-            column: lineAndCharacter.character + 1,
-            syntaxKind: node.kind,
-            sourceText: sourceText,
-            type: this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.WriteOwnNameForAnyLike)
-        });
-    }
 
-    private getTypeOfNode(node: ts.Node): ts.Type {
         var type = this.checker.getTypeAtLocation(node);
         ts.Debug.assert(type !== undefined, "type doesn't exist");
-        return type;
+        var symbol = this.checker.getSymbolAtLocation(node);
+
+        var typeString = this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation);
+        if (symbol) {
+            var symbolString = "Symbol(" + this.checker.symbolToString(symbol, node.parent);
+            if (symbol.declarations) {
+                for (let declaration of symbol.declarations) {
+                    symbolString += ",";
+                    let declSourceFile = declaration.getSourceFile();
+                    let declLineAndCharacter = declSourceFile.getLineAndCharacterOfPosition(declaration.pos);
+                    symbolString += `Decl(${ ts.getBaseFileName(declSourceFile.fileName) },${ declLineAndCharacter.line },${ declLineAndCharacter.character })`
+                }
+            }
+            symbolString += ")";
+
+            typeString += ", " + symbolString;
+        }
+
+        this.results.push({
+            line: lineAndCharacter.line,
+            syntaxKind: node.kind,
+            sourceText: sourceText,
+            type: typeString
+        });
     }
 }

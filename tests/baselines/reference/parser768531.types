@@ -1,6 +1,6 @@
 === tests/cases/conformance/parser/ecmascript5/Fuzz/parser768531.ts ===
 {a: 3}
->a : unknown
+>a : any
 >3 : number
 
 /x/

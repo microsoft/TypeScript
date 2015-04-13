@@ -1,25 +1,25 @@
 === tests/cases/conformance/internalModules/exportDeclarations/ExportVariableWithAccessibleTypeInTypeAnnotation.ts ===
 module A {
->A : typeof A
+>A : typeof A, Symbol(A,Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts,0,0))
 
     export interface Point {
->Point : Point
+>Point : Point, Symbol(Point,Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts,0,10))
 
         x: number;
->x : number
+>x : number, Symbol(x,Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts,2,28))
 
         y: number;
->y : number
+>y : number, Symbol(y,Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts,3,18))
     }
 
     // valid since Point is exported
     export var Origin: Point = { x: 0, y: 0 };
->Origin : Point
->Point : Point
+>Origin : Point, Symbol(Origin,Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts,8,14))
+>Point : Point, Symbol(Point,Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts,0,10))
 >{ x: 0, y: 0 } : { x: number; y: number; }
->x : number
+>x : number, Symbol(x,Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts,8,32))
 >0 : number
->y : number
+>y : number, Symbol(y,Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts,8,38))
 >0 : number
 }
 

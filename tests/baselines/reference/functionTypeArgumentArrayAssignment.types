@@ -1,26 +1,26 @@
 === tests/cases/compiler/functionTypeArgumentArrayAssignment.ts ===
 module test {
->test : typeof test
+>test : typeof test, Symbol(test,Decl(functionTypeArgumentArrayAssignment.ts,0,0))
 
     interface Array<T> {
->Array : Array<T>
->T : T
+>Array : Array<T>, Symbol(Array,Decl(functionTypeArgumentArrayAssignment.ts,0,13))
+>T : T, Symbol(T,Decl(functionTypeArgumentArrayAssignment.ts,1,20))
 
         foo: T;
->foo : T
->T : T
+>foo : T, Symbol(foo,Decl(functionTypeArgumentArrayAssignment.ts,1,24))
+>T : T, Symbol(T,Decl(functionTypeArgumentArrayAssignment.ts,1,20))
 
         length: number;
->length : number
+>length : number, Symbol(length,Decl(functionTypeArgumentArrayAssignment.ts,2,15))
     }
 
     function map<U>() {
->map : <U>() => void
->U : U
+>map : <U>() => void, Symbol(map,Decl(functionTypeArgumentArrayAssignment.ts,4,5))
+>U : U, Symbol(U,Decl(functionTypeArgumentArrayAssignment.ts,6,17))
 
         var ys: U[] = [];
->ys : U[]
->U : U
+>ys : U[], Symbol(ys,Decl(functionTypeArgumentArrayAssignment.ts,7,11))
+>U : U, Symbol(U,Decl(functionTypeArgumentArrayAssignment.ts,6,17))
 >[] : undefined[]
     }
 }

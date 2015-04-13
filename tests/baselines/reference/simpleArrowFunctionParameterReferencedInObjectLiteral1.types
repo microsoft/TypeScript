@@ -1,18 +1,18 @@
 === tests/cases/compiler/simpleArrowFunctionParameterReferencedInObjectLiteral1.ts ===
 [].map(() => [].map(p => ({ X: p })));
 >[].map(() => [].map(p => ({ X: p }))) : { X: any; }[][]
->[].map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
+>[].map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
 >[] : undefined[]
->map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
+>map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
 >() => [].map(p => ({ X: p })) : () => { X: any; }[]
 >[].map(p => ({ X: p })) : { X: any; }[]
->[].map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
+>[].map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
 >[] : undefined[]
->map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
+>map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
 >p => ({ X: p }) : (p: any) => { X: any; }
->p : any
+>p : any, Symbol(p,Decl(simpleArrowFunctionParameterReferencedInObjectLiteral1.ts,0,20))
 >({ X: p }) : { X: any; }
 >{ X: p } : { X: any; }
->X : any
->p : any
+>X : any, Symbol(X,Decl(simpleArrowFunctionParameterReferencedInObjectLiteral1.ts,0,27))
+>p : any, Symbol(p,Decl(simpleArrowFunctionParameterReferencedInObjectLiteral1.ts,0,20))
 

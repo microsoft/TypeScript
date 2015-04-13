@@ -1,12 +1,12 @@
 === tests/cases/compiler/functionType.ts ===
 function salt() {}
->salt : () => void
+>salt : () => void, Symbol(salt,Decl(functionType.ts,0,0))
 
 salt.apply("hello", []);
 >salt.apply("hello", []) : any
->salt.apply : (thisArg: any, argArray?: any) => any
->salt : () => void
->apply : (thisArg: any, argArray?: any) => any
+>salt.apply : (thisArg: any, argArray?: any) => any, Symbol(Function.apply,Decl(lib.d.ts,228,20))
+>salt : () => void, Symbol(salt,Decl(functionType.ts,0,0))
+>apply : (thisArg: any, argArray?: any) => any, Symbol(Function.apply,Decl(lib.d.ts,228,20))
 >"hello" : string
 >[] : undefined[]
 
@@ -14,7 +14,7 @@ salt.apply("hello", []);
 >(new Function("return 5"))() : any
 >(new Function("return 5")) : Function
 >new Function("return 5") : Function
->Function : FunctionConstructor
+>Function : FunctionConstructor, Symbol(Function,Decl(lib.d.ts,223,38),Decl(lib.d.ts,269,11))
 >"return 5" : string
  
  

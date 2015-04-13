@@ -1,16 +1,16 @@
 === tests/cases/compiler/functionOverloads6.ts ===
 class foo { 
->foo : foo
+>foo : foo, Symbol(foo,Decl(functionOverloads6.ts,0,0))
 
    static fnOverload();
->fnOverload : { (): any; (foo: string): any; }
+>fnOverload : { (): any; (foo: string): any; }, Symbol(foo.fnOverload,Decl(functionOverloads6.ts,0,11),Decl(functionOverloads6.ts,1,23),Decl(functionOverloads6.ts,2,33))
 
    static fnOverload(foo:string);
->fnOverload : { (): any; (foo: string): any; }
->foo : string
+>fnOverload : { (): any; (foo: string): any; }, Symbol(foo.fnOverload,Decl(functionOverloads6.ts,0,11),Decl(functionOverloads6.ts,1,23),Decl(functionOverloads6.ts,2,33))
+>foo : string, Symbol(foo,Decl(functionOverloads6.ts,2,21))
 
    static fnOverload(foo?: any){ }
->fnOverload : { (): any; (foo: string): any; }
->foo : any
+>fnOverload : { (): any; (foo: string): any; }, Symbol(foo.fnOverload,Decl(functionOverloads6.ts,0,11),Decl(functionOverloads6.ts,1,23),Decl(functionOverloads6.ts,2,33))
+>foo : any, Symbol(foo,Decl(functionOverloads6.ts,3,21))
 }
 

@@ -1,41 +1,41 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty22.ts ===
 interface I<T, U> {
->I : I<T, U>
->T : T
->U : U
+>I : I<T, U>, Symbol(I,Decl(symbolProperty22.ts,0,0))
+>T : T, Symbol(T,Decl(symbolProperty22.ts,0,12))
+>U : U, Symbol(U,Decl(symbolProperty22.ts,0,14))
 
     [Symbol.unscopables](x: T): U;
->Symbol.unscopables : symbol
->Symbol : SymbolConstructor
->unscopables : symbol
->x : T
->T : T
->U : U
+>Symbol.unscopables : symbol, Symbol(SymbolConstructor.unscopables,Decl(lib.d.ts,1254,24))
+>Symbol : SymbolConstructor, Symbol(Symbol,Decl(lib.d.ts,1186,52),Decl(lib.d.ts,1262,11))
+>unscopables : symbol, Symbol(SymbolConstructor.unscopables,Decl(lib.d.ts,1254,24))
+>x : T, Symbol(x,Decl(symbolProperty22.ts,1,25))
+>T : T, Symbol(T,Decl(symbolProperty22.ts,0,12))
+>U : U, Symbol(U,Decl(symbolProperty22.ts,0,14))
 }
 
 declare function foo<T, U>(p1: T, p2: I<T, U>): U;
->foo : <T, U>(p1: T, p2: I<T, U>) => U
->T : T
->U : U
->p1 : T
->T : T
->p2 : I<T, U>
->I : I<T, U>
->T : T
->U : U
->U : U
+>foo : <T, U>(p1: T, p2: I<T, U>) => U, Symbol(foo,Decl(symbolProperty22.ts,2,1))
+>T : T, Symbol(T,Decl(symbolProperty22.ts,4,21))
+>U : U, Symbol(U,Decl(symbolProperty22.ts,4,23))
+>p1 : T, Symbol(p1,Decl(symbolProperty22.ts,4,27))
+>T : T, Symbol(T,Decl(symbolProperty22.ts,4,21))
+>p2 : I<T, U>, Symbol(p2,Decl(symbolProperty22.ts,4,33))
+>I : I<T, U>, Symbol(I,Decl(symbolProperty22.ts,0,0))
+>T : T, Symbol(T,Decl(symbolProperty22.ts,4,21))
+>U : U, Symbol(U,Decl(symbolProperty22.ts,4,23))
+>U : U, Symbol(U,Decl(symbolProperty22.ts,4,23))
 
 foo("", { [Symbol.unscopables]: s => s.length });
 >foo("", { [Symbol.unscopables]: s => s.length }) : number
->foo : <T, U>(p1: T, p2: I<T, U>) => U
+>foo : <T, U>(p1: T, p2: I<T, U>) => U, Symbol(foo,Decl(symbolProperty22.ts,2,1))
 >"" : string
 >{ [Symbol.unscopables]: s => s.length } : { [Symbol.unscopables]: (s: string) => number; }
->Symbol.unscopables : symbol
->Symbol : SymbolConstructor
->unscopables : symbol
+>Symbol.unscopables : symbol, Symbol(SymbolConstructor.unscopables,Decl(lib.d.ts,1254,24))
+>Symbol : SymbolConstructor, Symbol(Symbol,Decl(lib.d.ts,1186,52),Decl(lib.d.ts,1262,11))
+>unscopables : symbol, Symbol(SymbolConstructor.unscopables,Decl(lib.d.ts,1254,24))
 >s => s.length : (s: string) => number
->s : string
->s.length : number
->s : string
->length : number
+>s : string, Symbol(s,Decl(symbolProperty22.ts,6,31))
+>s.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>s : string, Symbol(s,Decl(symbolProperty22.ts,6,31))
+>length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
 

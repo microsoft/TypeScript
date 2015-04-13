@@ -1,11 +1,11 @@
 === tests/cases/conformance/es6/spread/iteratorSpreadInArray11.ts ===
 var iter: Iterable<number>;
->iter : Iterable<number>
->Iterable : Iterable<T>
+>iter : Iterable<number>, Symbol(iter,Decl(iteratorSpreadInArray11.ts,0,3))
+>Iterable : Iterable<T>, Symbol(Iterable,Decl(lib.d.ts,1633,1))
 
 var array = [...iter];
->array : number[]
+>array : number[], Symbol(array,Decl(iteratorSpreadInArray11.ts,1,3))
 >[...iter] : number[]
 >...iter : number
->iter : Iterable<number>
+>iter : Iterable<number>, Symbol(iter,Decl(iteratorSpreadInArray11.ts,0,3))
 

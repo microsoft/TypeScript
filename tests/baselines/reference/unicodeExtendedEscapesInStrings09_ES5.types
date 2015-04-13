@@ -4,6 +4,6 @@
 //  2. If cp ≤ 65535, return cp.
 // (10000 == 65536)
 var x = "\u{10000}";
->x : string
+>x : string, Symbol(x,Decl(unicodeExtendedEscapesInStrings09_ES5.ts,4,3))
 >"\u{10000}" : string
 

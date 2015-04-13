@@ -1,95 +1,95 @@
 === tests/cases/compiler/derivedClasses.ts ===
 class Red extends Color {
->Red : Red
->Color : Color
+>Red : Red, Symbol(Red,Decl(derivedClasses.ts,0,0))
+>Color : Color, Symbol(Color,Decl(derivedClasses.ts,5,1))
 
     public shade() { 
->shade : () => string
+>shade : () => string, Symbol(shade,Decl(derivedClasses.ts,0,25))
 
     	var getHue = () => { return this.hue(); };
->getHue : () => string
+>getHue : () => string, Symbol(getHue,Decl(derivedClasses.ts,2,8))
 >() => { return this.hue(); } : () => string
 >this.hue() : string
->this.hue : () => string
->this : Red
->hue : () => string
+>this.hue : () => string, Symbol(Color.hue,Decl(derivedClasses.ts,8,43))
+>this : Red, Symbol(Red,Decl(derivedClasses.ts,0,0))
+>hue : () => string, Symbol(Color.hue,Decl(derivedClasses.ts,8,43))
 
     	return getHue() + " red"; 
 >getHue() + " red" : string
 >getHue() : string
->getHue : () => string
+>getHue : () => string, Symbol(getHue,Decl(derivedClasses.ts,2,8))
 >" red" : string
     }
 }
 
 class Color {
->Color : Color
+>Color : Color, Symbol(Color,Decl(derivedClasses.ts,5,1))
 
     public shade() { return "some shade"; }
->shade : () => string
+>shade : () => string, Symbol(shade,Decl(derivedClasses.ts,7,13))
 >"some shade" : string
 
     public hue() { return "some hue"; }
->hue : () => string
+>hue : () => string, Symbol(hue,Decl(derivedClasses.ts,8,43))
 >"some hue" : string
 }
 
 class Blue extends Color {
->Blue : Blue
->Color : Color
+>Blue : Blue, Symbol(Blue,Decl(derivedClasses.ts,10,1))
+>Color : Color, Symbol(Color,Decl(derivedClasses.ts,5,1))
     
     public shade() { 
->shade : () => string
+>shade : () => string, Symbol(shade,Decl(derivedClasses.ts,12,26))
 
     	var getHue = () => { return this.hue(); };
->getHue : () => string
+>getHue : () => string, Symbol(getHue,Decl(derivedClasses.ts,15,8))
 >() => { return this.hue(); } : () => string
 >this.hue() : string
->this.hue : () => string
->this : Blue
->hue : () => string
+>this.hue : () => string, Symbol(Color.hue,Decl(derivedClasses.ts,8,43))
+>this : Blue, Symbol(Blue,Decl(derivedClasses.ts,10,1))
+>hue : () => string, Symbol(Color.hue,Decl(derivedClasses.ts,8,43))
 
     	return getHue() + " blue"; 
 >getHue() + " blue" : string
 >getHue() : string
->getHue : () => string
+>getHue : () => string, Symbol(getHue,Decl(derivedClasses.ts,15,8))
 >" blue" : string
     }
 }
 
 var r = new Red();
->r : Red
+>r : Red, Symbol(r,Decl(derivedClasses.ts,20,3))
 >new Red() : Red
->Red : typeof Red
+>Red : typeof Red, Symbol(Red,Decl(derivedClasses.ts,0,0))
 
 var b = new Blue();
->b : Blue
+>b : Blue, Symbol(b,Decl(derivedClasses.ts,21,3))
 >new Blue() : Blue
->Blue : typeof Blue
+>Blue : typeof Blue, Symbol(Blue,Decl(derivedClasses.ts,10,1))
 
 r.shade();
 >r.shade() : string
->r.shade : () => string
->r : Red
->shade : () => string
+>r.shade : () => string, Symbol(Red.shade,Decl(derivedClasses.ts,0,25))
+>r : Red, Symbol(r,Decl(derivedClasses.ts,20,3))
+>shade : () => string, Symbol(Red.shade,Decl(derivedClasses.ts,0,25))
 
 r.hue();
 >r.hue() : string
->r.hue : () => string
->r : Red
->hue : () => string
+>r.hue : () => string, Symbol(Color.hue,Decl(derivedClasses.ts,8,43))
+>r : Red, Symbol(r,Decl(derivedClasses.ts,20,3))
+>hue : () => string, Symbol(Color.hue,Decl(derivedClasses.ts,8,43))
 
 b.shade();
 >b.shade() : string
->b.shade : () => string
->b : Blue
->shade : () => string
+>b.shade : () => string, Symbol(Blue.shade,Decl(derivedClasses.ts,12,26))
+>b : Blue, Symbol(b,Decl(derivedClasses.ts,21,3))
+>shade : () => string, Symbol(Blue.shade,Decl(derivedClasses.ts,12,26))
 
 b.hue();
 >b.hue() : string
->b.hue : () => string
->b : Blue
->hue : () => string
+>b.hue : () => string, Symbol(Color.hue,Decl(derivedClasses.ts,8,43))
+>b : Blue, Symbol(b,Decl(derivedClasses.ts,21,3))
+>hue : () => string, Symbol(Color.hue,Decl(derivedClasses.ts,8,43))
 
 
 

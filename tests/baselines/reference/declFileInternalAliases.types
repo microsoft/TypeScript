@@ -1,34 +1,34 @@
 === tests/cases/compiler/declFileInternalAliases.ts ===
 module m {
->m : typeof m
+>m : typeof m, Symbol(m,Decl(declFileInternalAliases.ts,0,0))
 
     export class c {
->c : c
+>c : c, Symbol(c,Decl(declFileInternalAliases.ts,0,10))
     }
 }
 module m1 {
->m1 : typeof m1
+>m1 : typeof m1, Symbol(m1,Decl(declFileInternalAliases.ts,3,1))
 
     import x = m.c;
->x : typeof x
->m : typeof m
->c : x
+>x : typeof x, Symbol(x,Decl(declFileInternalAliases.ts,4,11))
+>m : typeof m, Symbol(m,Decl(declFileInternalAliases.ts,0,0))
+>c : x, Symbol(x,Decl(declFileInternalAliases.ts,0,10))
 
     export var d = new x(); // emit the type as m.c
->d : x
+>d : x, Symbol(d,Decl(declFileInternalAliases.ts,6,14))
 >new x() : x
->x : typeof x
+>x : typeof x, Symbol(x,Decl(declFileInternalAliases.ts,4,11))
 }
 module m2 {
->m2 : typeof m2
+>m2 : typeof m2, Symbol(m2,Decl(declFileInternalAliases.ts,7,1))
 
     export import x = m.c;
->x : typeof x
->m : typeof m
->c : x
+>x : typeof x, Symbol(x,Decl(declFileInternalAliases.ts,8,11))
+>m : typeof m, Symbol(m,Decl(declFileInternalAliases.ts,0,0))
+>c : x, Symbol(x,Decl(declFileInternalAliases.ts,0,10))
 
     export var d = new x(); // emit the type as x
->d : x
+>d : x, Symbol(d,Decl(declFileInternalAliases.ts,10,14))
 >new x() : x
->x : typeof x
+>x : typeof x, Symbol(x,Decl(declFileInternalAliases.ts,8,11))
 }

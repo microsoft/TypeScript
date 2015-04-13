@@ -1,24 +1,24 @@
 === tests/cases/conformance/externalModules/foo_1.ts ===
 import foo = require("./foo_0");
->foo : typeof foo
+>foo : typeof foo, Symbol(foo,Decl(foo_1.ts,0,0))
 
 if(foo.answer === 42){
 >foo.answer === 42 : boolean
->foo.answer : number
->foo : typeof foo
->answer : number
+>foo.answer : number, Symbol(foo.answer,Decl(foo_0.ts,1,11))
+>foo : typeof foo, Symbol(foo,Decl(foo_1.ts,0,0))
+>answer : number, Symbol(foo.answer,Decl(foo_0.ts,1,11))
 >42 : number
 
 }
 
 === tests/cases/conformance/externalModules/foo_0.ts ===
 module Foo {
->Foo : typeof Foo
+>Foo : typeof Foo, Symbol(Foo,Decl(foo_0.ts,0,0))
 
 	export var answer = 42;
->answer : number
+>answer : number, Symbol(answer,Decl(foo_0.ts,1,11))
 >42 : number
 }
 export = Foo;
->Foo : typeof Foo
+>Foo : typeof Foo, Symbol(Foo,Decl(foo_0.ts,0,0))
 

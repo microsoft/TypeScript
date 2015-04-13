@@ -1,96 +1,96 @@
 === tests/cases/conformance/expressions/functionCalls/callWithSpreadES6.ts ===
 
 interface X {
->X : X
+>X : X, Symbol(X,Decl(callWithSpreadES6.ts,0,0))
 
     foo(x: number, y: number, ...z: string[]);
->foo : (x: number, y: number, ...z: string[]) => any
->x : number
->y : number
->z : string[]
+>foo : (x: number, y: number, ...z: string[]) => any, Symbol(foo,Decl(callWithSpreadES6.ts,1,13))
+>x : number, Symbol(x,Decl(callWithSpreadES6.ts,2,8))
+>y : number, Symbol(y,Decl(callWithSpreadES6.ts,2,18))
+>z : string[], Symbol(z,Decl(callWithSpreadES6.ts,2,29))
 }
 
 function foo(x: number, y: number, ...z: string[]) {
->foo : (x: number, y: number, ...z: string[]) => void
->x : number
->y : number
->z : string[]
+>foo : (x: number, y: number, ...z: string[]) => void, Symbol(foo,Decl(callWithSpreadES6.ts,3,1))
+>x : number, Symbol(x,Decl(callWithSpreadES6.ts,5,13))
+>y : number, Symbol(y,Decl(callWithSpreadES6.ts,5,23))
+>z : string[], Symbol(z,Decl(callWithSpreadES6.ts,5,34))
 }
 
 var a: string[];
->a : string[]
+>a : string[], Symbol(a,Decl(callWithSpreadES6.ts,8,3))
 
 var z: number[];
->z : number[]
+>z : number[], Symbol(z,Decl(callWithSpreadES6.ts,9,3))
 
 var obj: X;
->obj : X
->X : X
+>obj : X, Symbol(obj,Decl(callWithSpreadES6.ts,10,3))
+>X : X, Symbol(X,Decl(callWithSpreadES6.ts,0,0))
 
 var xa: X[];
->xa : X[]
->X : X
+>xa : X[], Symbol(xa,Decl(callWithSpreadES6.ts,11,3))
+>X : X, Symbol(X,Decl(callWithSpreadES6.ts,0,0))
 
 foo(1, 2, "abc");
 >foo(1, 2, "abc") : void
->foo : (x: number, y: number, ...z: string[]) => void
+>foo : (x: number, y: number, ...z: string[]) => void, Symbol(foo,Decl(callWithSpreadES6.ts,3,1))
 >1 : number
 >2 : number
 >"abc" : string
 
 foo(1, 2, ...a);
 >foo(1, 2, ...a) : void
->foo : (x: number, y: number, ...z: string[]) => void
+>foo : (x: number, y: number, ...z: string[]) => void, Symbol(foo,Decl(callWithSpreadES6.ts,3,1))
 >1 : number
 >2 : number
 >...a : string
->a : string[]
+>a : string[], Symbol(a,Decl(callWithSpreadES6.ts,8,3))
 
 foo(1, 2, ...a, "abc");
 >foo(1, 2, ...a, "abc") : void
->foo : (x: number, y: number, ...z: string[]) => void
+>foo : (x: number, y: number, ...z: string[]) => void, Symbol(foo,Decl(callWithSpreadES6.ts,3,1))
 >1 : number
 >2 : number
 >...a : string
->a : string[]
+>a : string[], Symbol(a,Decl(callWithSpreadES6.ts,8,3))
 >"abc" : string
 
 obj.foo(1, 2, "abc");
 >obj.foo(1, 2, "abc") : any
->obj.foo : (x: number, y: number, ...z: string[]) => any
->obj : X
->foo : (x: number, y: number, ...z: string[]) => any
+>obj.foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
+>obj : X, Symbol(obj,Decl(callWithSpreadES6.ts,10,3))
+>foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
 >1 : number
 >2 : number
 >"abc" : string
 
 obj.foo(1, 2, ...a);
 >obj.foo(1, 2, ...a) : any
->obj.foo : (x: number, y: number, ...z: string[]) => any
->obj : X
->foo : (x: number, y: number, ...z: string[]) => any
+>obj.foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
+>obj : X, Symbol(obj,Decl(callWithSpreadES6.ts,10,3))
+>foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
 >1 : number
 >2 : number
 >...a : string
->a : string[]
+>a : string[], Symbol(a,Decl(callWithSpreadES6.ts,8,3))
 
 obj.foo(1, 2, ...a, "abc");
 >obj.foo(1, 2, ...a, "abc") : any
->obj.foo : (x: number, y: number, ...z: string[]) => any
->obj : X
->foo : (x: number, y: number, ...z: string[]) => any
+>obj.foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
+>obj : X, Symbol(obj,Decl(callWithSpreadES6.ts,10,3))
+>foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
 >1 : number
 >2 : number
 >...a : string
->a : string[]
+>a : string[], Symbol(a,Decl(callWithSpreadES6.ts,8,3))
 >"abc" : string
 
 (obj.foo)(1, 2, "abc");
 >(obj.foo)(1, 2, "abc") : any
 >(obj.foo) : (x: number, y: number, ...z: string[]) => any
->obj.foo : (x: number, y: number, ...z: string[]) => any
->obj : X
->foo : (x: number, y: number, ...z: string[]) => any
+>obj.foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
+>obj : X, Symbol(obj,Decl(callWithSpreadES6.ts,10,3))
+>foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
 >1 : number
 >2 : number
 >"abc" : string
@@ -98,72 +98,72 @@ obj.foo(1, 2, ...a, "abc");
 (obj.foo)(1, 2, ...a);
 >(obj.foo)(1, 2, ...a) : any
 >(obj.foo) : (x: number, y: number, ...z: string[]) => any
->obj.foo : (x: number, y: number, ...z: string[]) => any
->obj : X
->foo : (x: number, y: number, ...z: string[]) => any
+>obj.foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
+>obj : X, Symbol(obj,Decl(callWithSpreadES6.ts,10,3))
+>foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
 >1 : number
 >2 : number
 >...a : string
->a : string[]
+>a : string[], Symbol(a,Decl(callWithSpreadES6.ts,8,3))
 
 (obj.foo)(1, 2, ...a, "abc");
 >(obj.foo)(1, 2, ...a, "abc") : any
 >(obj.foo) : (x: number, y: number, ...z: string[]) => any
->obj.foo : (x: number, y: number, ...z: string[]) => any
->obj : X
->foo : (x: number, y: number, ...z: string[]) => any
+>obj.foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
+>obj : X, Symbol(obj,Decl(callWithSpreadES6.ts,10,3))
+>foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
 >1 : number
 >2 : number
 >...a : string
->a : string[]
+>a : string[], Symbol(a,Decl(callWithSpreadES6.ts,8,3))
 >"abc" : string
 
 xa[1].foo(1, 2, "abc");
 >xa[1].foo(1, 2, "abc") : any
->xa[1].foo : (x: number, y: number, ...z: string[]) => any
+>xa[1].foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
 >xa[1] : X
->xa : X[]
+>xa : X[], Symbol(xa,Decl(callWithSpreadES6.ts,11,3))
 >1 : number
->foo : (x: number, y: number, ...z: string[]) => any
+>foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
 >1 : number
 >2 : number
 >"abc" : string
 
 xa[1].foo(1, 2, ...a);
 >xa[1].foo(1, 2, ...a) : any
->xa[1].foo : (x: number, y: number, ...z: string[]) => any
+>xa[1].foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
 >xa[1] : X
->xa : X[]
+>xa : X[], Symbol(xa,Decl(callWithSpreadES6.ts,11,3))
 >1 : number
->foo : (x: number, y: number, ...z: string[]) => any
+>foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
 >1 : number
 >2 : number
 >...a : string
->a : string[]
+>a : string[], Symbol(a,Decl(callWithSpreadES6.ts,8,3))
 
 xa[1].foo(1, 2, ...a, "abc");
 >xa[1].foo(1, 2, ...a, "abc") : any
->xa[1].foo : (x: number, y: number, ...z: string[]) => any
+>xa[1].foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
 >xa[1] : X
->xa : X[]
+>xa : X[], Symbol(xa,Decl(callWithSpreadES6.ts,11,3))
 >1 : number
->foo : (x: number, y: number, ...z: string[]) => any
+>foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
 >1 : number
 >2 : number
 >...a : string
->a : string[]
+>a : string[], Symbol(a,Decl(callWithSpreadES6.ts,8,3))
 >"abc" : string
 
 (<Function>xa[1].foo)(...[1, 2, "abc"]);
 >(<Function>xa[1].foo)(...[1, 2, "abc"]) : any
 >(<Function>xa[1].foo) : Function
 ><Function>xa[1].foo : Function
->Function : Function
->xa[1].foo : (x: number, y: number, ...z: string[]) => any
+>Function : Function, Symbol(Function,Decl(lib.d.ts,223,38),Decl(lib.d.ts,269,11),Decl(lib.d.ts,1325,1))
+>xa[1].foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
 >xa[1] : X
->xa : X[]
+>xa : X[], Symbol(xa,Decl(callWithSpreadES6.ts,11,3))
 >1 : number
->foo : (x: number, y: number, ...z: string[]) => any
+>foo : (x: number, y: number, ...z: string[]) => any, Symbol(X.foo,Decl(callWithSpreadES6.ts,1,13))
 >...[1, 2, "abc"] : string | number
 >[1, 2, "abc"] : (string | number)[]
 >1 : number
@@ -171,88 +171,88 @@ xa[1].foo(1, 2, ...a, "abc");
 >"abc" : string
 
 class C {
->C : C
+>C : C, Symbol(C,Decl(callWithSpreadES6.ts,29,40))
 
     constructor(x: number, y: number, ...z: string[]) {
->x : number
->y : number
->z : string[]
+>x : number, Symbol(x,Decl(callWithSpreadES6.ts,32,16))
+>y : number, Symbol(y,Decl(callWithSpreadES6.ts,32,26))
+>z : string[], Symbol(z,Decl(callWithSpreadES6.ts,32,37))
 
         this.foo(x, y);
 >this.foo(x, y) : void
->this.foo : (x: number, y: number, ...z: string[]) => void
->this : C
->foo : (x: number, y: number, ...z: string[]) => void
->x : number
->y : number
+>this.foo : (x: number, y: number, ...z: string[]) => void, Symbol(foo,Decl(callWithSpreadES6.ts,35,5))
+>this : C, Symbol(C,Decl(callWithSpreadES6.ts,29,40))
+>foo : (x: number, y: number, ...z: string[]) => void, Symbol(foo,Decl(callWithSpreadES6.ts,35,5))
+>x : number, Symbol(x,Decl(callWithSpreadES6.ts,32,16))
+>y : number, Symbol(y,Decl(callWithSpreadES6.ts,32,26))
 
         this.foo(x, y, ...z);
 >this.foo(x, y, ...z) : void
->this.foo : (x: number, y: number, ...z: string[]) => void
->this : C
->foo : (x: number, y: number, ...z: string[]) => void
->x : number
->y : number
+>this.foo : (x: number, y: number, ...z: string[]) => void, Symbol(foo,Decl(callWithSpreadES6.ts,35,5))
+>this : C, Symbol(C,Decl(callWithSpreadES6.ts,29,40))
+>foo : (x: number, y: number, ...z: string[]) => void, Symbol(foo,Decl(callWithSpreadES6.ts,35,5))
+>x : number, Symbol(x,Decl(callWithSpreadES6.ts,32,16))
+>y : number, Symbol(y,Decl(callWithSpreadES6.ts,32,26))
 >...z : string
->z : string[]
+>z : string[], Symbol(z,Decl(callWithSpreadES6.ts,32,37))
     }
     foo(x: number, y: number, ...z: string[]) {
->foo : (x: number, y: number, ...z: string[]) => void
->x : number
->y : number
->z : string[]
+>foo : (x: number, y: number, ...z: string[]) => void, Symbol(foo,Decl(callWithSpreadES6.ts,35,5))
+>x : number, Symbol(x,Decl(callWithSpreadES6.ts,36,8))
+>y : number, Symbol(y,Decl(callWithSpreadES6.ts,36,18))
+>z : string[], Symbol(z,Decl(callWithSpreadES6.ts,36,29))
     }
 }
 
 class D extends C {
->D : D
->C : C
+>D : D, Symbol(D,Decl(callWithSpreadES6.ts,38,1))
+>C : C, Symbol(C,Decl(callWithSpreadES6.ts,29,40))
 
     constructor() {
         super(1, 2);
 >super(1, 2) : void
->super : typeof C
+>super : typeof C, Symbol(C,Decl(callWithSpreadES6.ts,29,40))
 >1 : number
 >2 : number
 
         super(1, 2, ...a);
 >super(1, 2, ...a) : void
->super : typeof C
+>super : typeof C, Symbol(C,Decl(callWithSpreadES6.ts,29,40))
 >1 : number
 >2 : number
 >...a : string
->a : string[]
+>a : string[], Symbol(a,Decl(callWithSpreadES6.ts,8,3))
     }
     foo() {
->foo : () => void
+>foo : () => void, Symbol(foo,Decl(callWithSpreadES6.ts,44,5))
 
         super.foo(1, 2);
 >super.foo(1, 2) : void
->super.foo : (x: number, y: number, ...z: string[]) => void
->super : C
->foo : (x: number, y: number, ...z: string[]) => void
+>super.foo : (x: number, y: number, ...z: string[]) => void, Symbol(C.foo,Decl(callWithSpreadES6.ts,35,5))
+>super : C, Symbol(C,Decl(callWithSpreadES6.ts,29,40))
+>foo : (x: number, y: number, ...z: string[]) => void, Symbol(C.foo,Decl(callWithSpreadES6.ts,35,5))
 >1 : number
 >2 : number
 
         super.foo(1, 2, ...a);
 >super.foo(1, 2, ...a) : void
->super.foo : (x: number, y: number, ...z: string[]) => void
->super : C
->foo : (x: number, y: number, ...z: string[]) => void
+>super.foo : (x: number, y: number, ...z: string[]) => void, Symbol(C.foo,Decl(callWithSpreadES6.ts,35,5))
+>super : C, Symbol(C,Decl(callWithSpreadES6.ts,29,40))
+>foo : (x: number, y: number, ...z: string[]) => void, Symbol(C.foo,Decl(callWithSpreadES6.ts,35,5))
 >1 : number
 >2 : number
 >...a : string
->a : string[]
+>a : string[], Symbol(a,Decl(callWithSpreadES6.ts,8,3))
     }
 }
 
 // Only supported in when target is ES6
 var c = new C(1, 2, ...a);
->c : C
+>c : C, Symbol(c,Decl(callWithSpreadES6.ts,52,3))
 >new C(1, 2, ...a) : C
->C : typeof C
+>C : typeof C, Symbol(C,Decl(callWithSpreadES6.ts,29,40))
 >1 : number
 >2 : number
 >...a : string
->a : string[]
+>a : string[], Symbol(a,Decl(callWithSpreadES6.ts,8,3))
 

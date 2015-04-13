@@ -1,105 +1,105 @@
 === tests/cases/conformance/types/primitives/enum/validEnumAssignments.ts ===
 enum E {
->E : E
+>E : E, Symbol(E,Decl(validEnumAssignments.ts,0,0))
 
     A,
->A : E
+>A : E, Symbol(E.A,Decl(validEnumAssignments.ts,0,8))
 
     B
->B : E
+>B : E, Symbol(E.B,Decl(validEnumAssignments.ts,1,6))
 }
 
 var n: number;
->n : number
+>n : number, Symbol(n,Decl(validEnumAssignments.ts,5,3))
 
 var a: any;
->a : any
+>a : any, Symbol(a,Decl(validEnumAssignments.ts,6,3))
 
 var e: E;
->e : E
->E : E
+>e : E, Symbol(e,Decl(validEnumAssignments.ts,7,3))
+>E : E, Symbol(E,Decl(validEnumAssignments.ts,0,0))
 
 n = e;
 >n = e : E
->n : number
->e : E
+>n : number, Symbol(n,Decl(validEnumAssignments.ts,5,3))
+>e : E, Symbol(e,Decl(validEnumAssignments.ts,7,3))
 
 n = E.A;
 >n = E.A : E
->n : number
->E.A : E
->E : typeof E
->A : E
+>n : number, Symbol(n,Decl(validEnumAssignments.ts,5,3))
+>E.A : E, Symbol(E.A,Decl(validEnumAssignments.ts,0,8))
+>E : typeof E, Symbol(E,Decl(validEnumAssignments.ts,0,0))
+>A : E, Symbol(E.A,Decl(validEnumAssignments.ts,0,8))
 
 a = n;
 >a = n : number
->a : any
->n : number
+>a : any, Symbol(a,Decl(validEnumAssignments.ts,6,3))
+>n : number, Symbol(n,Decl(validEnumAssignments.ts,5,3))
 
 a = e;
 >a = e : E
->a : any
->e : E
+>a : any, Symbol(a,Decl(validEnumAssignments.ts,6,3))
+>e : E, Symbol(e,Decl(validEnumAssignments.ts,7,3))
 
 a = E.A;
 >a = E.A : E
->a : any
->E.A : E
->E : typeof E
->A : E
+>a : any, Symbol(a,Decl(validEnumAssignments.ts,6,3))
+>E.A : E, Symbol(E.A,Decl(validEnumAssignments.ts,0,8))
+>E : typeof E, Symbol(E,Decl(validEnumAssignments.ts,0,0))
+>A : E, Symbol(E.A,Decl(validEnumAssignments.ts,0,8))
 
 e = e;
 >e = e : E
->e : E
->e : E
+>e : E, Symbol(e,Decl(validEnumAssignments.ts,7,3))
+>e : E, Symbol(e,Decl(validEnumAssignments.ts,7,3))
 
 e = E.A;
 >e = E.A : E
->e : E
->E.A : E
->E : typeof E
->A : E
+>e : E, Symbol(e,Decl(validEnumAssignments.ts,7,3))
+>E.A : E, Symbol(E.A,Decl(validEnumAssignments.ts,0,8))
+>E : typeof E, Symbol(E,Decl(validEnumAssignments.ts,0,0))
+>A : E, Symbol(E.A,Decl(validEnumAssignments.ts,0,8))
 
 e = E.B;
 >e = E.B : E
->e : E
->E.B : E
->E : typeof E
->B : E
+>e : E, Symbol(e,Decl(validEnumAssignments.ts,7,3))
+>E.B : E, Symbol(E.B,Decl(validEnumAssignments.ts,1,6))
+>E : typeof E, Symbol(E,Decl(validEnumAssignments.ts,0,0))
+>B : E, Symbol(E.B,Decl(validEnumAssignments.ts,1,6))
 
 e = n;
 >e = n : number
->e : E
->n : number
+>e : E, Symbol(e,Decl(validEnumAssignments.ts,7,3))
+>n : number, Symbol(n,Decl(validEnumAssignments.ts,5,3))
 
 e = null;
 >e = null : null
->e : E
+>e : E, Symbol(e,Decl(validEnumAssignments.ts,7,3))
 >null : null
 
 e = undefined;
 >e = undefined : undefined
->e : E
->undefined : undefined
+>e : E, Symbol(e,Decl(validEnumAssignments.ts,7,3))
+>undefined : undefined, Symbol(undefined)
 
 e = 1;
 >e = 1 : number
->e : E
+>e : E, Symbol(e,Decl(validEnumAssignments.ts,7,3))
 >1 : number
 
 e = 1.;
 >e = 1. : number
->e : E
+>e : E, Symbol(e,Decl(validEnumAssignments.ts,7,3))
 >1. : number
 
 e = 1.0;
 >e = 1.0 : number
->e : E
+>e : E, Symbol(e,Decl(validEnumAssignments.ts,7,3))
 >1.0 : number
 
 e = -1;
 >e = -1 : number
->e : E
+>e : E, Symbol(e,Decl(validEnumAssignments.ts,7,3))
 >-1 : number
 >1 : number
 

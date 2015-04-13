@@ -1,32 +1,32 @@
 === tests/cases/compiler/inferTypeArgumentsInSignatureWithRestParameters.ts ===
 function f<T>(array: T[], ...args) { }
->f : <T>(array: T[], ...args: any[]) => void
->T : T
->array : T[]
->T : T
->args : any[]
+>f : <T>(array: T[], ...args: any[]) => void, Symbol(f,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,0,0))
+>T : T, Symbol(T,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,0,11))
+>array : T[], Symbol(array,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,0,14))
+>T : T, Symbol(T,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,0,11))
+>args : any[], Symbol(args,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,0,25))
 
 function g(array: number[], ...args) { }
->g : (array: number[], ...args: any[]) => void
->array : number[]
->args : any[]
+>g : (array: number[], ...args: any[]) => void, Symbol(g,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,0,38))
+>array : number[], Symbol(array,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,1,11))
+>args : any[], Symbol(args,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,1,27))
 
 function h<T>(nonarray: T, ...args) { }
->h : <T>(nonarray: T, ...args: any[]) => void
->T : T
->nonarray : T
->T : T
->args : any[]
+>h : <T>(nonarray: T, ...args: any[]) => void, Symbol(h,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,1,40))
+>T : T, Symbol(T,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,2,11))
+>nonarray : T, Symbol(nonarray,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,2,14))
+>T : T, Symbol(T,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,2,11))
+>args : any[], Symbol(args,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,2,26))
 
 function i<T>(array: T[], opt?: any[]) { }
->i : <T>(array: T[], opt?: any[]) => void
->T : T
->array : T[]
->T : T
->opt : any[]
+>i : <T>(array: T[], opt?: any[]) => void, Symbol(i,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,2,39))
+>T : T, Symbol(T,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,3,11))
+>array : T[], Symbol(array,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,3,14))
+>T : T, Symbol(T,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,3,11))
+>opt : any[], Symbol(opt,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,3,25))
 
 var a = [1, 2, 3, 4, 5];
->a : number[]
+>a : number[], Symbol(a,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,4,3))
 >[1, 2, 3, 4, 5] : number[]
 >1 : number
 >2 : number
@@ -36,21 +36,21 @@ var a = [1, 2, 3, 4, 5];
 
 f(a); // OK
 >f(a) : void
->f : <T>(array: T[], ...args: any[]) => void
->a : number[]
+>f : <T>(array: T[], ...args: any[]) => void, Symbol(f,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,0,0))
+>a : number[], Symbol(a,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,4,3))
 
 g(a); // OK
 >g(a) : void
->g : (array: number[], ...args: any[]) => void
->a : number[]
+>g : (array: number[], ...args: any[]) => void, Symbol(g,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,0,38))
+>a : number[], Symbol(a,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,4,3))
 
 h(a); // OK
 >h(a) : void
->h : <T>(nonarray: T, ...args: any[]) => void
->a : number[]
+>h : <T>(nonarray: T, ...args: any[]) => void, Symbol(h,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,1,40))
+>a : number[], Symbol(a,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,4,3))
 
 i(a); // OK
 >i(a) : void
->i : <T>(array: T[], opt?: any[]) => void
->a : number[]
+>i : <T>(array: T[], opt?: any[]) => void, Symbol(i,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,2,39))
+>a : number[], Symbol(a,Decl(inferTypeArgumentsInSignatureWithRestParameters.ts,4,3))
 

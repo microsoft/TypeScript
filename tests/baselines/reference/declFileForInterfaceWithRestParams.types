@@ -1,22 +1,22 @@
 === tests/cases/compiler/declFileForInterfaceWithRestParams.ts ===
 
 interface I {
->I : I
+>I : I, Symbol(I,Decl(declFileForInterfaceWithRestParams.ts,0,0))
 
     foo(...x): typeof x;
->foo : (...x: any[]) => any[]
->x : any[]
->x : any[]
+>foo : (...x: any[]) => any[], Symbol(foo,Decl(declFileForInterfaceWithRestParams.ts,1,13))
+>x : any[], Symbol(x,Decl(declFileForInterfaceWithRestParams.ts,2,8))
+>x : any[], Symbol(x,Decl(declFileForInterfaceWithRestParams.ts,2,8))
 
     foo2(a: number, ...x): typeof x;
->foo2 : (a: number, ...x: any[]) => any[]
->a : number
->x : any[]
->x : any[]
+>foo2 : (a: number, ...x: any[]) => any[], Symbol(foo2,Decl(declFileForInterfaceWithRestParams.ts,2,24))
+>a : number, Symbol(a,Decl(declFileForInterfaceWithRestParams.ts,3,9))
+>x : any[], Symbol(x,Decl(declFileForInterfaceWithRestParams.ts,3,19))
+>x : any[], Symbol(x,Decl(declFileForInterfaceWithRestParams.ts,3,19))
 
     foo3(b: string, ...x: string[]): typeof x;
->foo3 : (b: string, ...x: string[]) => string[]
->b : string
->x : string[]
->x : string[]
+>foo3 : (b: string, ...x: string[]) => string[], Symbol(foo3,Decl(declFileForInterfaceWithRestParams.ts,3,36))
+>b : string, Symbol(b,Decl(declFileForInterfaceWithRestParams.ts,4,9))
+>x : string[], Symbol(x,Decl(declFileForInterfaceWithRestParams.ts,4,19))
+>x : string[], Symbol(x,Decl(declFileForInterfaceWithRestParams.ts,4,19))
 }

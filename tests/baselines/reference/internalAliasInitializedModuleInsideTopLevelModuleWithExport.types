@@ -1,27 +1,27 @@
 === tests/cases/compiler/internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts ===
 export module a {
->a : typeof a
+>a : typeof a, Symbol(a,Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts,0,0))
 
     export module b {
->b : typeof b
+>b : typeof b, Symbol(b,Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts,0,17))
 
         export class c {
->c : c
+>c : c, Symbol(c,Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts,1,21))
         }
     }
 }
 
 export import b = a.b;
->b : typeof b
->a : typeof a
->b : typeof b
+>b : typeof b, Symbol(b,Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts,5,1))
+>a : typeof a, Symbol(a,Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts,0,0))
+>b : typeof b, Symbol(b,Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts,0,17))
 
 export var x: b.c = new b.c();
->x : b.c
->b : unknown
->c : b.c
+>x : b.c, Symbol(x,Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts,8,10))
+>b : any, Symbol(b,Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts,5,1))
+>c : b.c, Symbol(b.c,Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts,1,21))
 >new b.c() : b.c
->b.c : typeof b.c
->b : typeof b
->c : typeof b.c
+>b.c : typeof b.c, Symbol(b.c,Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts,1,21))
+>b : typeof b, Symbol(b,Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts,5,1))
+>c : typeof b.c, Symbol(b.c,Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts,1,21))
 

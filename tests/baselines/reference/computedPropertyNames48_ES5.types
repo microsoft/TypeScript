@@ -1,46 +1,46 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNames48_ES5.ts ===
 declare function extractIndexer<T>(p: { [n: number]: T }): T;
->extractIndexer : <T>(p: { [n: number]: T; }) => T
->T : T
->p : { [n: number]: T; }
->n : number
->T : T
->T : T
+>extractIndexer : <T>(p: { [n: number]: T; }) => T, Symbol(extractIndexer,Decl(computedPropertyNames48_ES5.ts,0,0))
+>T : T, Symbol(T,Decl(computedPropertyNames48_ES5.ts,0,32))
+>p : { [n: number]: T; }, Symbol(p,Decl(computedPropertyNames48_ES5.ts,0,35))
+>n : number, Symbol(n,Decl(computedPropertyNames48_ES5.ts,0,41))
+>T : T, Symbol(T,Decl(computedPropertyNames48_ES5.ts,0,32))
+>T : T, Symbol(T,Decl(computedPropertyNames48_ES5.ts,0,32))
 
 enum E { x }
->E : E
->x : E
+>E : E, Symbol(E,Decl(computedPropertyNames48_ES5.ts,0,61))
+>x : E, Symbol(E.x,Decl(computedPropertyNames48_ES5.ts,2,8))
 
 var a: any;
->a : any
+>a : any, Symbol(a,Decl(computedPropertyNames48_ES5.ts,4,3))
 
 extractIndexer({
 >extractIndexer({    [a]: ""}) : string
->extractIndexer : <T>(p: { [n: number]: T; }) => T
+>extractIndexer : <T>(p: { [n: number]: T; }) => T, Symbol(extractIndexer,Decl(computedPropertyNames48_ES5.ts,0,0))
 >{    [a]: ""} : { [x: number]: string; }
 
     [a]: ""
->a : any
+>a : any, Symbol(a,Decl(computedPropertyNames48_ES5.ts,4,3))
 >"" : string
 
 }); // Should return string
 
 extractIndexer({
 >extractIndexer({    [E.x]: ""}) : string
->extractIndexer : <T>(p: { [n: number]: T; }) => T
+>extractIndexer : <T>(p: { [n: number]: T; }) => T, Symbol(extractIndexer,Decl(computedPropertyNames48_ES5.ts,0,0))
 >{    [E.x]: ""} : { [x: number]: string; }
 
     [E.x]: ""
->E.x : E
->E : typeof E
->x : E
+>E.x : E, Symbol(E.x,Decl(computedPropertyNames48_ES5.ts,2,8))
+>E : typeof E, Symbol(E,Decl(computedPropertyNames48_ES5.ts,0,61))
+>x : E, Symbol(E.x,Decl(computedPropertyNames48_ES5.ts,2,8))
 >"" : string
 
 }); // Should return string
 
 extractIndexer({
 >extractIndexer({    ["" || 0]: ""}) : any
->extractIndexer : <T>(p: { [n: number]: T; }) => T
+>extractIndexer : <T>(p: { [n: number]: T; }) => T, Symbol(extractIndexer,Decl(computedPropertyNames48_ES5.ts,0,0))
 >{    ["" || 0]: ""} : { [x: number]: undefined; }
 
     ["" || 0]: ""

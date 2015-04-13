@@ -1,30 +1,30 @@
 === tests/cases/compiler/classMemberInitializerWithLamdaScoping5.ts ===
 declare var console: {
->console : { log(message?: any, ...optionalParams: any[]): void; }
+>console : { log(message?: any, ...optionalParams: any[]): void; }, Symbol(console,Decl(classMemberInitializerWithLamdaScoping5.ts,0,11))
 
     log(message?: any, ...optionalParams: any[]): void;
->log : (message?: any, ...optionalParams: any[]) => void
->message : any
->optionalParams : any[]
+>log : (message?: any, ...optionalParams: any[]) => void, Symbol(log,Decl(classMemberInitializerWithLamdaScoping5.ts,0,22))
+>message : any, Symbol(message,Decl(classMemberInitializerWithLamdaScoping5.ts,1,8))
+>optionalParams : any[], Symbol(optionalParams,Decl(classMemberInitializerWithLamdaScoping5.ts,1,22))
 
 };
 class Greeter {
->Greeter : Greeter
+>Greeter : Greeter, Symbol(Greeter,Decl(classMemberInitializerWithLamdaScoping5.ts,2,2))
 
     constructor(message: string) {
->message : string
+>message : string, Symbol(message,Decl(classMemberInitializerWithLamdaScoping5.ts,4,16))
     }
 
     messageHandler = (message: string) => {
->messageHandler : (message: string) => void
+>messageHandler : (message: string) => void, Symbol(messageHandler,Decl(classMemberInitializerWithLamdaScoping5.ts,5,5))
 >(message: string) => {        console.log(message); // This shouldnt be error    } : (message: string) => void
->message : string
+>message : string, Symbol(message,Decl(classMemberInitializerWithLamdaScoping5.ts,7,22))
 
         console.log(message); // This shouldnt be error
 >console.log(message) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
->console : { log(message?: any, ...optionalParams: any[]): void; }
->log : (message?: any, ...optionalParams: any[]) => void
->message : string
+>console.log : (message?: any, ...optionalParams: any[]) => void, Symbol(log,Decl(classMemberInitializerWithLamdaScoping5.ts,0,22))
+>console : { log(message?: any, ...optionalParams: any[]): void; }, Symbol(console,Decl(classMemberInitializerWithLamdaScoping5.ts,0,11))
+>log : (message?: any, ...optionalParams: any[]) => void, Symbol(log,Decl(classMemberInitializerWithLamdaScoping5.ts,0,22))
+>message : string, Symbol(message,Decl(classMemberInitializerWithLamdaScoping5.ts,7,22))
     }
 }

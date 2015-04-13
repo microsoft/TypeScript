@@ -1,33 +1,33 @@
 === tests/cases/compiler/detachedCommentAtStartOfConstructor1.ts ===
 class TestFile {
->TestFile : TestFile
+>TestFile : TestFile, Symbol(TestFile,Decl(detachedCommentAtStartOfConstructor1.ts,0,0))
 
     public message: string;
->message : string
+>message : string, Symbol(message,Decl(detachedCommentAtStartOfConstructor1.ts,0,16))
 
     public name;
->name : any
+>name : any, Symbol(name,Decl(detachedCommentAtStartOfConstructor1.ts,1,27))
 
     constructor(message: string) {
->message : string
+>message : string, Symbol(message,Decl(detachedCommentAtStartOfConstructor1.ts,3,16))
 
         /// <summary>Test summary</summary>
         /// <param name="message" type="String" />
         var getMessage = () => message + this.name;
->getMessage : () => string
+>getMessage : () => string, Symbol(getMessage,Decl(detachedCommentAtStartOfConstructor1.ts,6,11))
 >() => message + this.name : () => string
 >message + this.name : string
->message : string
->this.name : any
->this : TestFile
->name : any
+>message : string, Symbol(message,Decl(detachedCommentAtStartOfConstructor1.ts,3,16))
+>this.name : any, Symbol(name,Decl(detachedCommentAtStartOfConstructor1.ts,1,27))
+>this : TestFile, Symbol(TestFile,Decl(detachedCommentAtStartOfConstructor1.ts,0,0))
+>name : any, Symbol(name,Decl(detachedCommentAtStartOfConstructor1.ts,1,27))
 
         this.message = getMessage();
 >this.message = getMessage() : string
->this.message : string
->this : TestFile
->message : string
+>this.message : string, Symbol(message,Decl(detachedCommentAtStartOfConstructor1.ts,0,16))
+>this : TestFile, Symbol(TestFile,Decl(detachedCommentAtStartOfConstructor1.ts,0,0))
+>message : string, Symbol(message,Decl(detachedCommentAtStartOfConstructor1.ts,0,16))
 >getMessage() : string
->getMessage : () => string
+>getMessage : () => string, Symbol(getMessage,Decl(detachedCommentAtStartOfConstructor1.ts,6,11))
     }
 }

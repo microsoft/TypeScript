@@ -2,31 +2,31 @@
 
 /** Variable comments*/
 var myVariable = 10;
->myVariable : number
+>myVariable : number, Symbol(myVariable,Decl(commentsemitComments.ts,2,3))
 >10 : number
 
 /** function comments*/
 function foo(/** parameter comment*/p: number) {
->foo : (p: number) => void
->p : number
+>foo : (p: number) => void, Symbol(foo,Decl(commentsemitComments.ts,2,20))
+>p : number, Symbol(p,Decl(commentsemitComments.ts,5,13))
 }
 
 /** variable with function type comment*/
 var fooVar: () => void;
->fooVar : () => void
+>fooVar : () => void, Symbol(fooVar,Decl(commentsemitComments.ts,9,3))
 
 foo(50);
 >foo(50) : void
->foo : (p: number) => void
+>foo : (p: number) => void, Symbol(foo,Decl(commentsemitComments.ts,2,20))
 >50 : number
 
 fooVar();
 >fooVar() : void
->fooVar : () => void
+>fooVar : () => void, Symbol(fooVar,Decl(commentsemitComments.ts,9,3))
 
 /**class comment*/
 class c {
->c : c
+>c : c, Symbol(c,Decl(commentsemitComments.ts,11,9))
 
     /** constructor comment*/
     constructor() {
@@ -34,123 +34,123 @@ class c {
 
     /** property comment */
     public b = 10;
->b : number
+>b : number, Symbol(b,Decl(commentsemitComments.ts,17,5))
 >10 : number
 
     /** function comment */
     public myFoo() {
->myFoo : () => number
+>myFoo : () => number, Symbol(myFoo,Decl(commentsemitComments.ts,20,18))
 
         return this.b;
->this.b : number
->this : c
->b : number
+>this.b : number, Symbol(b,Decl(commentsemitComments.ts,17,5))
+>this : c, Symbol(c,Decl(commentsemitComments.ts,11,9))
+>b : number, Symbol(b,Decl(commentsemitComments.ts,17,5))
     }
 
     /** getter comment*/
     public get prop1() {
->prop1 : number
+>prop1 : number, Symbol(prop1,Decl(commentsemitComments.ts,25,5),Decl(commentsemitComments.ts,30,5))
 
         return this.b;
->this.b : number
->this : c
->b : number
+>this.b : number, Symbol(b,Decl(commentsemitComments.ts,17,5))
+>this : c, Symbol(c,Decl(commentsemitComments.ts,11,9))
+>b : number, Symbol(b,Decl(commentsemitComments.ts,17,5))
     }
 
     /** setter comment*/
     public set prop1(val: number) {
->prop1 : number
->val : number
+>prop1 : number, Symbol(prop1,Decl(commentsemitComments.ts,25,5),Decl(commentsemitComments.ts,30,5))
+>val : number, Symbol(val,Decl(commentsemitComments.ts,33,21))
 
         this.b = val;
 >this.b = val : number
->this.b : number
->this : c
->b : number
->val : number
+>this.b : number, Symbol(b,Decl(commentsemitComments.ts,17,5))
+>this : c, Symbol(c,Decl(commentsemitComments.ts,11,9))
+>b : number, Symbol(b,Decl(commentsemitComments.ts,17,5))
+>val : number, Symbol(val,Decl(commentsemitComments.ts,33,21))
     }
 
     /** overload signature1*/
     public foo1(a: number): string;
->foo1 : { (a: number): string; (b: string): string; }
->a : number
+>foo1 : { (a: number): string; (b: string): string; }, Symbol(foo1,Decl(commentsemitComments.ts,35,5),Decl(commentsemitComments.ts,38,35),Decl(commentsemitComments.ts,40,35))
+>a : number, Symbol(a,Decl(commentsemitComments.ts,38,16))
 
     /** Overload signature 2*/
     public foo1(b: string): string;
->foo1 : { (a: number): string; (b: string): string; }
->b : string
+>foo1 : { (a: number): string; (b: string): string; }, Symbol(foo1,Decl(commentsemitComments.ts,35,5),Decl(commentsemitComments.ts,38,35),Decl(commentsemitComments.ts,40,35))
+>b : string, Symbol(b,Decl(commentsemitComments.ts,40,16))
 
     /** overload implementation signature*/
     public foo1(aOrb) {
->foo1 : { (a: number): string; (b: string): string; }
->aOrb : any
+>foo1 : { (a: number): string; (b: string): string; }, Symbol(foo1,Decl(commentsemitComments.ts,35,5),Decl(commentsemitComments.ts,38,35),Decl(commentsemitComments.ts,40,35))
+>aOrb : any, Symbol(aOrb,Decl(commentsemitComments.ts,42,16))
 
         return aOrb.toString();
 >aOrb.toString() : any
 >aOrb.toString : any
->aOrb : any
+>aOrb : any, Symbol(aOrb,Decl(commentsemitComments.ts,42,16))
 >toString : any
     }
 }
 
 /**instance comment*/
 var i = new c();
->i : c
+>i : c, Symbol(i,Decl(commentsemitComments.ts,48,3))
 >new c() : c
->c : typeof c
+>c : typeof c, Symbol(c,Decl(commentsemitComments.ts,11,9))
 
 /** interface comments*/
 interface i1 {
->i1 : i1
+>i1 : i1, Symbol(i1,Decl(commentsemitComments.ts,48,16))
 
     /** caller comments*/
     (a: number): number;
->a : number
+>a : number, Symbol(a,Decl(commentsemitComments.ts,53,5))
 
     /** new comments*/
     new (b: string);
->b : string
+>b : string, Symbol(b,Decl(commentsemitComments.ts,56,9))
 
     /**indexer property*/
     [a: number]: string;
->a : number
+>a : number, Symbol(a,Decl(commentsemitComments.ts,59,5))
 
     /** function property;*/
     myFoo(/*param prop*/a: number): string;
->myFoo : (a: number) => string
->a : number
+>myFoo : (a: number) => string, Symbol(myFoo,Decl(commentsemitComments.ts,59,24))
+>a : number, Symbol(a,Decl(commentsemitComments.ts,62,10))
 
     /** prop*/
     prop: string;
->prop : string
+>prop : string, Symbol(prop,Decl(commentsemitComments.ts,62,43))
 }
 
 /**interface instance comments*/
 var i1_i: i1;
->i1_i : i1
->i1 : i1
+>i1_i : i1, Symbol(i1_i,Decl(commentsemitComments.ts,69,3))
+>i1 : i1, Symbol(i1,Decl(commentsemitComments.ts,48,16))
 
 /** this is module comment*/
 module m1 {
->m1 : typeof m1
+>m1 : typeof m1, Symbol(m1,Decl(commentsemitComments.ts,69,13))
 
     /** class b */
     export class b {
->b : b
+>b : b, Symbol(b,Decl(commentsemitComments.ts,72,11))
 
         constructor(public x: number) {
->x : number
+>x : number, Symbol(x,Decl(commentsemitComments.ts,75,20))
 
         }
     }
 
     /// module m2
     export module m2 {
->m2 : unknown
+>m2 : any, Symbol(m2,Decl(commentsemitComments.ts,78,5))
     }
 }
 
 /// this is x
 declare var x;
->x : any
+>x : any, Symbol(x,Decl(commentsemitComments.ts,86,11))
 

@@ -1,23 +1,23 @@
 === tests/cases/compiler/exportAssignedTypeAsTypeAnnotation_1.ts ===
 ///<reference path='exportAssignedTypeAsTypeAnnotation_0.ts'/>
 import test = require('exportAssignedTypeAsTypeAnnotation_0');
->test : unknown
+>test : any, Symbol(test,Decl(exportAssignedTypeAsTypeAnnotation_1.ts,0,0))
 
 var t2: test; // should not raise a 'container type' error
->t2 : test
->test : test
+>t2 : test, Symbol(t2,Decl(exportAssignedTypeAsTypeAnnotation_1.ts,2,3))
+>test : test, Symbol(test,Decl(exportAssignedTypeAsTypeAnnotation_1.ts,0,0))
 
 === tests/cases/compiler/exportAssignedTypeAsTypeAnnotation_0.ts ===
 
 interface x {
->x : x
+>x : x, Symbol(x,Decl(exportAssignedTypeAsTypeAnnotation_0.ts,0,0))
 
     (): Date;
->Date : Date
+>Date : Date, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
 
     foo: string;
->foo : string
+>foo : string, Symbol(foo,Decl(exportAssignedTypeAsTypeAnnotation_0.ts,2,13))
 }
 export = x;
->x : x
+>x : x, Symbol(x,Decl(exportAssignedTypeAsTypeAnnotation_0.ts,0,0))
  

@@ -1,71 +1,71 @@
 === tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/typeOfThisInMemberFunctions.ts ===
 class C {
->C : C
+>C : C, Symbol(C,Decl(typeOfThisInMemberFunctions.ts,0,0))
 
     foo() {
->foo : () => void
+>foo : () => void, Symbol(foo,Decl(typeOfThisInMemberFunctions.ts,0,9))
 
         var r = this;
->r : C
->this : C
+>r : C, Symbol(r,Decl(typeOfThisInMemberFunctions.ts,2,11))
+>this : C, Symbol(C,Decl(typeOfThisInMemberFunctions.ts,0,0))
     }
 
     static bar() {
->bar : () => void
+>bar : () => void, Symbol(C.bar,Decl(typeOfThisInMemberFunctions.ts,3,5))
 
         var r2 = this;
->r2 : typeof C
->this : typeof C
+>r2 : typeof C, Symbol(r2,Decl(typeOfThisInMemberFunctions.ts,6,11))
+>this : typeof C, Symbol(C,Decl(typeOfThisInMemberFunctions.ts,0,0))
     }
 }
 
 class D<T> {
->D : D<T>
->T : T
+>D : D<T>, Symbol(D,Decl(typeOfThisInMemberFunctions.ts,8,1))
+>T : T, Symbol(T,Decl(typeOfThisInMemberFunctions.ts,10,8))
 
     x: T;
->x : T
->T : T
+>x : T, Symbol(x,Decl(typeOfThisInMemberFunctions.ts,10,12))
+>T : T, Symbol(T,Decl(typeOfThisInMemberFunctions.ts,10,8))
 
     foo() {
->foo : () => void
+>foo : () => void, Symbol(foo,Decl(typeOfThisInMemberFunctions.ts,11,9))
 
         var r = this;
->r : D<T>
->this : D<T>
+>r : D<T>, Symbol(r,Decl(typeOfThisInMemberFunctions.ts,13,11))
+>this : D<T>, Symbol(D,Decl(typeOfThisInMemberFunctions.ts,8,1))
     }
 
     static bar() {
->bar : () => void
+>bar : () => void, Symbol(D.bar,Decl(typeOfThisInMemberFunctions.ts,14,5))
 
         var r2 = this;
->r2 : typeof D
->this : typeof D
+>r2 : typeof D, Symbol(r2,Decl(typeOfThisInMemberFunctions.ts,17,11))
+>this : typeof D, Symbol(D,Decl(typeOfThisInMemberFunctions.ts,8,1))
     }
 }
 
 class E<T extends Date> {
->E : E<T>
->T : T
->Date : Date
+>E : E<T>, Symbol(E,Decl(typeOfThisInMemberFunctions.ts,19,1))
+>T : T, Symbol(T,Decl(typeOfThisInMemberFunctions.ts,21,8))
+>Date : Date, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
 
     x: T;
->x : T
->T : T
+>x : T, Symbol(x,Decl(typeOfThisInMemberFunctions.ts,21,25))
+>T : T, Symbol(T,Decl(typeOfThisInMemberFunctions.ts,21,8))
 
     foo() {
->foo : () => void
+>foo : () => void, Symbol(foo,Decl(typeOfThisInMemberFunctions.ts,22,9))
 
         var r = this;
->r : E<T>
->this : E<T>
+>r : E<T>, Symbol(r,Decl(typeOfThisInMemberFunctions.ts,24,11))
+>this : E<T>, Symbol(E,Decl(typeOfThisInMemberFunctions.ts,19,1))
     }
 
     static bar() {
->bar : () => void
+>bar : () => void, Symbol(E.bar,Decl(typeOfThisInMemberFunctions.ts,25,5))
 
         var r2 = this;
->r2 : typeof E
->this : typeof E
+>r2 : typeof E, Symbol(r2,Decl(typeOfThisInMemberFunctions.ts,28,11))
+>this : typeof E, Symbol(E,Decl(typeOfThisInMemberFunctions.ts,19,1))
     }
 }

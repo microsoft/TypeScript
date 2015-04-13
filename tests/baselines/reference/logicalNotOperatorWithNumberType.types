@@ -1,137 +1,137 @@
 === tests/cases/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithNumberType.ts ===
 // ! operator on number type
 var NUMBER: number;
->NUMBER : number
+>NUMBER : number, Symbol(NUMBER,Decl(logicalNotOperatorWithNumberType.ts,1,3))
 
 var NUMBER1: number[] = [1, 2];
->NUMBER1 : number[]
+>NUMBER1 : number[], Symbol(NUMBER1,Decl(logicalNotOperatorWithNumberType.ts,2,3))
 >[1, 2] : number[]
 >1 : number
 >2 : number
 
 function foo(): number { return 1; }
->foo : () => number
+>foo : () => number, Symbol(foo,Decl(logicalNotOperatorWithNumberType.ts,2,31))
 >1 : number
 
 class A {
->A : A
+>A : A, Symbol(A,Decl(logicalNotOperatorWithNumberType.ts,4,36))
 
     public a: number;
->a : number
+>a : number, Symbol(a,Decl(logicalNotOperatorWithNumberType.ts,6,9))
 
     static foo() { return 1; }
->foo : () => number
+>foo : () => number, Symbol(A.foo,Decl(logicalNotOperatorWithNumberType.ts,7,21))
 >1 : number
 }
 module M {
->M : typeof M
+>M : typeof M, Symbol(M,Decl(logicalNotOperatorWithNumberType.ts,9,1))
 
     export var n: number;
->n : number
+>n : number, Symbol(n,Decl(logicalNotOperatorWithNumberType.ts,11,14))
 }
 
 var objA = new A();
->objA : A
+>objA : A, Symbol(objA,Decl(logicalNotOperatorWithNumberType.ts,14,3))
 >new A() : A
->A : typeof A
+>A : typeof A, Symbol(A,Decl(logicalNotOperatorWithNumberType.ts,4,36))
 
 // number type var
 var ResultIsBoolean1 = !NUMBER;
->ResultIsBoolean1 : boolean
+>ResultIsBoolean1 : boolean, Symbol(ResultIsBoolean1,Decl(logicalNotOperatorWithNumberType.ts,17,3))
 >!NUMBER : boolean
->NUMBER : number
+>NUMBER : number, Symbol(NUMBER,Decl(logicalNotOperatorWithNumberType.ts,1,3))
 
 var ResultIsBoolean2 = !NUMBER1;
->ResultIsBoolean2 : boolean
+>ResultIsBoolean2 : boolean, Symbol(ResultIsBoolean2,Decl(logicalNotOperatorWithNumberType.ts,18,3))
 >!NUMBER1 : boolean
->NUMBER1 : number[]
+>NUMBER1 : number[], Symbol(NUMBER1,Decl(logicalNotOperatorWithNumberType.ts,2,3))
 
 // number type literal
 var ResultIsBoolean3 = !1;
->ResultIsBoolean3 : boolean
+>ResultIsBoolean3 : boolean, Symbol(ResultIsBoolean3,Decl(logicalNotOperatorWithNumberType.ts,21,3))
 >!1 : boolean
 >1 : number
 
 var ResultIsBoolean4 = !{ x: 1, y: 2};
->ResultIsBoolean4 : boolean
+>ResultIsBoolean4 : boolean, Symbol(ResultIsBoolean4,Decl(logicalNotOperatorWithNumberType.ts,22,3))
 >!{ x: 1, y: 2} : boolean
 >{ x: 1, y: 2} : { x: number; y: number; }
->x : number
+>x : number, Symbol(x,Decl(logicalNotOperatorWithNumberType.ts,22,25))
 >1 : number
->y : number
+>y : number, Symbol(y,Decl(logicalNotOperatorWithNumberType.ts,22,31))
 >2 : number
 
 var ResultIsBoolean5 = !{ x: 1, y: (n: number) => { return n; } };
->ResultIsBoolean5 : boolean
+>ResultIsBoolean5 : boolean, Symbol(ResultIsBoolean5,Decl(logicalNotOperatorWithNumberType.ts,23,3))
 >!{ x: 1, y: (n: number) => { return n; } } : boolean
 >{ x: 1, y: (n: number) => { return n; } } : { x: number; y: (n: number) => number; }
->x : number
+>x : number, Symbol(x,Decl(logicalNotOperatorWithNumberType.ts,23,25))
 >1 : number
->y : (n: number) => number
+>y : (n: number) => number, Symbol(y,Decl(logicalNotOperatorWithNumberType.ts,23,31))
 >(n: number) => { return n; } : (n: number) => number
->n : number
->n : number
+>n : number, Symbol(n,Decl(logicalNotOperatorWithNumberType.ts,23,36))
+>n : number, Symbol(n,Decl(logicalNotOperatorWithNumberType.ts,23,36))
 
 // number type expressions
 var ResultIsBoolean6 = !objA.a;
->ResultIsBoolean6 : boolean
+>ResultIsBoolean6 : boolean, Symbol(ResultIsBoolean6,Decl(logicalNotOperatorWithNumberType.ts,26,3))
 >!objA.a : boolean
->objA.a : number
->objA : A
->a : number
+>objA.a : number, Symbol(A.a,Decl(logicalNotOperatorWithNumberType.ts,6,9))
+>objA : A, Symbol(objA,Decl(logicalNotOperatorWithNumberType.ts,14,3))
+>a : number, Symbol(A.a,Decl(logicalNotOperatorWithNumberType.ts,6,9))
 
 var ResultIsBoolean7 = !M.n;
->ResultIsBoolean7 : boolean
+>ResultIsBoolean7 : boolean, Symbol(ResultIsBoolean7,Decl(logicalNotOperatorWithNumberType.ts,27,3))
 >!M.n : boolean
->M.n : number
->M : typeof M
->n : number
+>M.n : number, Symbol(M.n,Decl(logicalNotOperatorWithNumberType.ts,11,14))
+>M : typeof M, Symbol(M,Decl(logicalNotOperatorWithNumberType.ts,9,1))
+>n : number, Symbol(M.n,Decl(logicalNotOperatorWithNumberType.ts,11,14))
 
 var ResultIsBoolean8 = !NUMBER1[0];
->ResultIsBoolean8 : boolean
+>ResultIsBoolean8 : boolean, Symbol(ResultIsBoolean8,Decl(logicalNotOperatorWithNumberType.ts,28,3))
 >!NUMBER1[0] : boolean
 >NUMBER1[0] : number
->NUMBER1 : number[]
+>NUMBER1 : number[], Symbol(NUMBER1,Decl(logicalNotOperatorWithNumberType.ts,2,3))
 >0 : number
 
 var ResultIsBoolean9 = !foo();
->ResultIsBoolean9 : boolean
+>ResultIsBoolean9 : boolean, Symbol(ResultIsBoolean9,Decl(logicalNotOperatorWithNumberType.ts,29,3))
 >!foo() : boolean
 >foo() : number
->foo : () => number
+>foo : () => number, Symbol(foo,Decl(logicalNotOperatorWithNumberType.ts,2,31))
 
 var ResultIsBoolean10 = !A.foo();
->ResultIsBoolean10 : boolean
+>ResultIsBoolean10 : boolean, Symbol(ResultIsBoolean10,Decl(logicalNotOperatorWithNumberType.ts,30,3))
 >!A.foo() : boolean
 >A.foo() : number
->A.foo : () => number
->A : typeof A
->foo : () => number
+>A.foo : () => number, Symbol(A.foo,Decl(logicalNotOperatorWithNumberType.ts,7,21))
+>A : typeof A, Symbol(A,Decl(logicalNotOperatorWithNumberType.ts,4,36))
+>foo : () => number, Symbol(A.foo,Decl(logicalNotOperatorWithNumberType.ts,7,21))
 
 var ResultIsBoolean11 = !(NUMBER + NUMBER);
->ResultIsBoolean11 : boolean
+>ResultIsBoolean11 : boolean, Symbol(ResultIsBoolean11,Decl(logicalNotOperatorWithNumberType.ts,31,3))
 >!(NUMBER + NUMBER) : boolean
 >(NUMBER + NUMBER) : number
 >NUMBER + NUMBER : number
->NUMBER : number
->NUMBER : number
+>NUMBER : number, Symbol(NUMBER,Decl(logicalNotOperatorWithNumberType.ts,1,3))
+>NUMBER : number, Symbol(NUMBER,Decl(logicalNotOperatorWithNumberType.ts,1,3))
 
 // multiple ! operator
 var ResultIsBoolean12 = !!NUMBER;
->ResultIsBoolean12 : boolean
+>ResultIsBoolean12 : boolean, Symbol(ResultIsBoolean12,Decl(logicalNotOperatorWithNumberType.ts,34,3))
 >!!NUMBER : boolean
 >!NUMBER : boolean
->NUMBER : number
+>NUMBER : number, Symbol(NUMBER,Decl(logicalNotOperatorWithNumberType.ts,1,3))
 
 var ResultIsBoolean13 = !!!(NUMBER + NUMBER);
->ResultIsBoolean13 : boolean
+>ResultIsBoolean13 : boolean, Symbol(ResultIsBoolean13,Decl(logicalNotOperatorWithNumberType.ts,35,3))
 >!!!(NUMBER + NUMBER) : boolean
 >!!(NUMBER + NUMBER) : boolean
 >!(NUMBER + NUMBER) : boolean
 >(NUMBER + NUMBER) : number
 >NUMBER + NUMBER : number
->NUMBER : number
->NUMBER : number
+>NUMBER : number, Symbol(NUMBER,Decl(logicalNotOperatorWithNumberType.ts,1,3))
+>NUMBER : number, Symbol(NUMBER,Decl(logicalNotOperatorWithNumberType.ts,1,3))
 
 // miss assignment operators
 !1;
@@ -140,36 +140,36 @@ var ResultIsBoolean13 = !!!(NUMBER + NUMBER);
 
 !NUMBER;
 >!NUMBER : boolean
->NUMBER : number
+>NUMBER : number, Symbol(NUMBER,Decl(logicalNotOperatorWithNumberType.ts,1,3))
 
 !NUMBER1;
 >!NUMBER1 : boolean
->NUMBER1 : number[]
+>NUMBER1 : number[], Symbol(NUMBER1,Decl(logicalNotOperatorWithNumberType.ts,2,3))
 
 !foo();
 >!foo() : boolean
 >foo() : number
->foo : () => number
+>foo : () => number, Symbol(foo,Decl(logicalNotOperatorWithNumberType.ts,2,31))
 
 !objA.a;
 >!objA.a : boolean
->objA.a : number
->objA : A
->a : number
+>objA.a : number, Symbol(A.a,Decl(logicalNotOperatorWithNumberType.ts,6,9))
+>objA : A, Symbol(objA,Decl(logicalNotOperatorWithNumberType.ts,14,3))
+>a : number, Symbol(A.a,Decl(logicalNotOperatorWithNumberType.ts,6,9))
 
 !M.n;
 >!M.n : boolean
->M.n : number
->M : typeof M
->n : number
+>M.n : number, Symbol(M.n,Decl(logicalNotOperatorWithNumberType.ts,11,14))
+>M : typeof M, Symbol(M,Decl(logicalNotOperatorWithNumberType.ts,9,1))
+>n : number, Symbol(M.n,Decl(logicalNotOperatorWithNumberType.ts,11,14))
 
 !objA.a, M.n;
 >!objA.a, M.n : number
 >!objA.a : boolean
->objA.a : number
->objA : A
->a : number
->M.n : number
->M : typeof M
->n : number
+>objA.a : number, Symbol(A.a,Decl(logicalNotOperatorWithNumberType.ts,6,9))
+>objA : A, Symbol(objA,Decl(logicalNotOperatorWithNumberType.ts,14,3))
+>a : number, Symbol(A.a,Decl(logicalNotOperatorWithNumberType.ts,6,9))
+>M.n : number, Symbol(M.n,Decl(logicalNotOperatorWithNumberType.ts,11,14))
+>M : typeof M, Symbol(M,Decl(logicalNotOperatorWithNumberType.ts,9,1))
+>n : number, Symbol(M.n,Decl(logicalNotOperatorWithNumberType.ts,11,14))
 

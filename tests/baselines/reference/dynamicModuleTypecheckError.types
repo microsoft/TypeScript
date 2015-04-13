@@ -1,22 +1,22 @@
 === tests/cases/compiler/dynamicModuleTypecheckError.ts ===
 export var x = 1;
->x : number
+>x : number, Symbol(x,Decl(dynamicModuleTypecheckError.ts,0,10))
 >1 : number
  
 for(var i = 0; i < 30; i++) {
->i : number
+>i : number, Symbol(i,Decl(dynamicModuleTypecheckError.ts,2,7))
 >0 : number
 >i < 30 : boolean
->i : number
+>i : number, Symbol(i,Decl(dynamicModuleTypecheckError.ts,2,7))
 >30 : number
 >i++ : number
->i : number
+>i : number, Symbol(i,Decl(dynamicModuleTypecheckError.ts,2,7))
  
     x = i * 1000; // should not be an error here
 >x = i * 1000 : number
->x : number
+>x : number, Symbol(x,Decl(dynamicModuleTypecheckError.ts,0,10))
 >i * 1000 : number
->i : number
+>i : number, Symbol(i,Decl(dynamicModuleTypecheckError.ts,2,7))
 >1000 : number
  
 }

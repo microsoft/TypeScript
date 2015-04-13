@@ -1,7 +1,7 @@
 === tests/cases/compiler/recursiveObjectLiteral.ts ===
 var a = { f: a };
->a : any
+>a : any, Symbol(a,Decl(recursiveObjectLiteral.ts,0,3))
 >{ f: a } : { f: any; }
->f : any
->a : any
+>f : any, Symbol(f,Decl(recursiveObjectLiteral.ts,0,9))
+>a : any, Symbol(a,Decl(recursiveObjectLiteral.ts,0,3))
 

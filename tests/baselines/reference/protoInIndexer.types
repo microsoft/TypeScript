@@ -1,12 +1,12 @@
 === tests/cases/compiler/protoInIndexer.ts ===
 class X {
->X : X
+>X : X, Symbol(X,Decl(protoInIndexer.ts,0,0))
 
     constructor() {
         this['__proto__'] = null; // used to cause ICE
 >this['__proto__'] = null : null
 >this['__proto__'] : any
->this : X
+>this : X, Symbol(X,Decl(protoInIndexer.ts,0,0))
 >'__proto__' : string
 >null : null
     }

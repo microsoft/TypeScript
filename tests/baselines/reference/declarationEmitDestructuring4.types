@@ -3,17 +3,17 @@
 // we will not make any modification and will emit
 // the similar binding pattern users' have written
 function baz([]) { }
->baz : ([]: any[]) => void
+>baz : ([]: any[]) => void, Symbol(baz,Decl(declarationEmitDestructuring4.ts,0,0))
 
 function baz1([] = [1,2,3]) { }
->baz1 : ([]?: number[]) => void
+>baz1 : ([]?: number[]) => void, Symbol(baz1,Decl(declarationEmitDestructuring4.ts,3,20))
 >[1,2,3] : number[]
 >1 : number
 >2 : number
 >3 : number
 
 function baz2([[]] = [[1,2,3]]) { }
->baz2 : ([[]]?: [number[]]) => void
+>baz2 : ([[]]?: [number[]]) => void, Symbol(baz2,Decl(declarationEmitDestructuring4.ts,4,31))
 >[[1,2,3]] : [number[]]
 >[1,2,3] : number[]
 >1 : number
@@ -21,12 +21,12 @@ function baz2([[]] = [[1,2,3]]) { }
 >3 : number
 
 function baz3({}) { }
->baz3 : ({}: {}) => void
+>baz3 : ({}: {}) => void, Symbol(baz3,Decl(declarationEmitDestructuring4.ts,5,35))
 
 function baz4({} = { x: 10 }) { }
->baz4 : ({}?: { x: number; }) => void
+>baz4 : ({}?: { x: number; }) => void, Symbol(baz4,Decl(declarationEmitDestructuring4.ts,7,21))
 >{ x: 10 } : { x: number; }
->x : number
+>x : number, Symbol(x,Decl(declarationEmitDestructuring4.ts,8,20))
 >10 : number
 
 

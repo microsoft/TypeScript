@@ -1,29 +1,29 @@
 === tests/cases/compiler/nonConflictingRecursiveBaseTypeMembers.ts ===
 interface A<T> {
->A : A<T>
->T : T
+>A : A<T>, Symbol(A,Decl(nonConflictingRecursiveBaseTypeMembers.ts,0,0))
+>T : T, Symbol(T,Decl(nonConflictingRecursiveBaseTypeMembers.ts,0,12))
 
     x: C<T>
->x : C<T>
->C : C<T>
->T : T
+>x : C<T>, Symbol(x,Decl(nonConflictingRecursiveBaseTypeMembers.ts,0,16))
+>C : C<T>, Symbol(C,Decl(nonConflictingRecursiveBaseTypeMembers.ts,6,1))
+>T : T, Symbol(T,Decl(nonConflictingRecursiveBaseTypeMembers.ts,0,12))
 }
 
 interface B<T> {
->B : B<T>
->T : T
+>B : B<T>, Symbol(B,Decl(nonConflictingRecursiveBaseTypeMembers.ts,2,1))
+>T : T, Symbol(T,Decl(nonConflictingRecursiveBaseTypeMembers.ts,4,12))
 
     x: C<T>
->x : C<T>
->C : C<T>
->T : T
+>x : C<T>, Symbol(x,Decl(nonConflictingRecursiveBaseTypeMembers.ts,4,16))
+>C : C<T>, Symbol(C,Decl(nonConflictingRecursiveBaseTypeMembers.ts,6,1))
+>T : T, Symbol(T,Decl(nonConflictingRecursiveBaseTypeMembers.ts,4,12))
 }
 
 interface C<T> extends A<T>, B<T> { } // Should not be an error
->C : C<T>
->T : T
->A : A<T>
->T : T
->B : B<T>
->T : T
+>C : C<T>, Symbol(C,Decl(nonConflictingRecursiveBaseTypeMembers.ts,6,1))
+>T : T, Symbol(T,Decl(nonConflictingRecursiveBaseTypeMembers.ts,8,12))
+>A : A<T>, Symbol(A,Decl(nonConflictingRecursiveBaseTypeMembers.ts,0,0))
+>T : T, Symbol(T,Decl(nonConflictingRecursiveBaseTypeMembers.ts,8,12))
+>B : B<T>, Symbol(B,Decl(nonConflictingRecursiveBaseTypeMembers.ts,2,1))
+>T : T, Symbol(T,Decl(nonConflictingRecursiveBaseTypeMembers.ts,8,12))
 

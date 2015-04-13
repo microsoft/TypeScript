@@ -4,6 +4,6 @@
 //  2. If cp ≤ 65535, return cp.
 // (FFFF == 65535)
 var x = /\u{FFFF}/g;
->x : RegExp
+>x : RegExp, Symbol(x,Decl(unicodeExtendedEscapesInRegularExpressions08_ES6.ts,4,3))
 >/\u{FFFF}/g : RegExp
 

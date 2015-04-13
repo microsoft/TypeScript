@@ -1,19 +1,19 @@
 === tests/cases/compiler/functionOverloads21.ts ===
 function foo(bar:{a:number;}[]);
->foo : { (bar: { a: number; }[]): any; (bar: { a: number; b: string; }[]): any; }
->bar : { a: number; }[]
->a : number
+>foo : { (bar: { a: number; }[]): any; (bar: { a: number; b: string; }[]): any; }, Symbol(foo,Decl(functionOverloads21.ts,0,0),Decl(functionOverloads21.ts,0,32),Decl(functionOverloads21.ts,1,42))
+>bar : { a: number; }[], Symbol(bar,Decl(functionOverloads21.ts,0,13))
+>a : number, Symbol(a,Decl(functionOverloads21.ts,0,18))
 
 function foo(bar:{a:number; b:string;}[]);
->foo : { (bar: { a: number; }[]): any; (bar: { a: number; b: string; }[]): any; }
->bar : { a: number; b: string; }[]
->a : number
->b : string
+>foo : { (bar: { a: number; }[]): any; (bar: { a: number; b: string; }[]): any; }, Symbol(foo,Decl(functionOverloads21.ts,0,0),Decl(functionOverloads21.ts,0,32),Decl(functionOverloads21.ts,1,42))
+>bar : { a: number; b: string; }[], Symbol(bar,Decl(functionOverloads21.ts,1,13))
+>a : number, Symbol(a,Decl(functionOverloads21.ts,1,18))
+>b : string, Symbol(b,Decl(functionOverloads21.ts,1,27))
 
 function foo(bar:{a:any; b?:string;}[]) { return 0 }
->foo : { (bar: { a: number; }[]): any; (bar: { a: number; b: string; }[]): any; }
->bar : { a: any; b?: string; }[]
->a : any
->b : string
+>foo : { (bar: { a: number; }[]): any; (bar: { a: number; b: string; }[]): any; }, Symbol(foo,Decl(functionOverloads21.ts,0,0),Decl(functionOverloads21.ts,0,32),Decl(functionOverloads21.ts,1,42))
+>bar : { a: any; b?: string; }[], Symbol(bar,Decl(functionOverloads21.ts,2,13))
+>a : any, Symbol(a,Decl(functionOverloads21.ts,2,18))
+>b : string, Symbol(b,Decl(functionOverloads21.ts,2,24))
 >0 : number
 

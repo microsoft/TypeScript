@@ -1,19 +1,19 @@
 === tests/cases/compiler/compoundVarDecl1.ts ===
 module Foo { var a = 1, b = 1; a = b + 2; }
->Foo : typeof Foo
->a : number
+>Foo : typeof Foo, Symbol(Foo,Decl(compoundVarDecl1.ts,0,0))
+>a : number, Symbol(a,Decl(compoundVarDecl1.ts,0,16))
 >1 : number
->b : number
+>b : number, Symbol(b,Decl(compoundVarDecl1.ts,0,23))
 >1 : number
 >a = b + 2 : number
->a : number
+>a : number, Symbol(a,Decl(compoundVarDecl1.ts,0,16))
 >b + 2 : number
->b : number
+>b : number, Symbol(b,Decl(compoundVarDecl1.ts,0,23))
 >2 : number
 
 var foo = 4, bar = 5;
->foo : number
+>foo : number, Symbol(foo,Decl(compoundVarDecl1.ts,2,3))
 >4 : number
->bar : number
+>bar : number, Symbol(bar,Decl(compoundVarDecl1.ts,2,12))
 >5 : number
 

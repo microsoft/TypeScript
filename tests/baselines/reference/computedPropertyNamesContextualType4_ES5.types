@@ -1,17 +1,17 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType4_ES5.ts ===
 interface I {
->I : I
+>I : I, Symbol(I,Decl(computedPropertyNamesContextualType4_ES5.ts,0,0))
 
     [s: string]: any;
->s : string
+>s : string, Symbol(s,Decl(computedPropertyNamesContextualType4_ES5.ts,1,5))
 
     [s: number]: any;
->s : number
+>s : number, Symbol(s,Decl(computedPropertyNamesContextualType4_ES5.ts,2,5))
 }
 
 var o: I = {
->o : I
->I : I
+>o : I, Symbol(o,Decl(computedPropertyNamesContextualType4_ES5.ts,5,3))
+>I : I, Symbol(I,Decl(computedPropertyNamesContextualType4_ES5.ts,0,0))
 >{    [""+"foo"]: "",    [""+"bar"]: 0} : { [x: string]: string | number; [x: number]: undefined; }
 
     [""+"foo"]: "",

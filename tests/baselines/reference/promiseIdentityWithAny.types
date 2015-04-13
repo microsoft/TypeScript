@@ -1,45 +1,45 @@
 === tests/cases/compiler/promiseIdentityWithAny.ts ===
 interface IPromise<T, V> {
->IPromise : IPromise<T, V>
->T : T
->V : V
+>IPromise : IPromise<T, V>, Symbol(IPromise,Decl(promiseIdentityWithAny.ts,0,0))
+>T : T, Symbol(T,Decl(promiseIdentityWithAny.ts,0,19))
+>V : V, Symbol(V,Decl(promiseIdentityWithAny.ts,0,21))
 
     then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
->then : <U, W>(callback: (x: T) => IPromise<U, W>) => IPromise<U, W>
->U : U
->W : W
->callback : (x: T) => IPromise<U, W>
->x : T
->T : T
->IPromise : IPromise<T, V>
->U : U
->W : W
->IPromise : IPromise<T, V>
->U : U
->W : W
+>then : <U, W>(callback: (x: T) => IPromise<U, W>) => IPromise<U, W>, Symbol(then,Decl(promiseIdentityWithAny.ts,0,26))
+>U : U, Symbol(U,Decl(promiseIdentityWithAny.ts,1,9))
+>W : W, Symbol(W,Decl(promiseIdentityWithAny.ts,1,11))
+>callback : (x: T) => IPromise<U, W>, Symbol(callback,Decl(promiseIdentityWithAny.ts,1,15))
+>x : T, Symbol(x,Decl(promiseIdentityWithAny.ts,1,26))
+>T : T, Symbol(T,Decl(promiseIdentityWithAny.ts,0,19))
+>IPromise : IPromise<T, V>, Symbol(IPromise,Decl(promiseIdentityWithAny.ts,0,0))
+>U : U, Symbol(U,Decl(promiseIdentityWithAny.ts,1,9))
+>W : W, Symbol(W,Decl(promiseIdentityWithAny.ts,1,11))
+>IPromise : IPromise<T, V>, Symbol(IPromise,Decl(promiseIdentityWithAny.ts,0,0))
+>U : U, Symbol(U,Decl(promiseIdentityWithAny.ts,1,9))
+>W : W, Symbol(W,Decl(promiseIdentityWithAny.ts,1,11))
 }
 interface Promise<T, V> {
->Promise : Promise<T, V>
->T : T
->V : V
+>Promise : Promise<T, V>, Symbol(Promise,Decl(promiseIdentityWithAny.ts,2,1))
+>T : T, Symbol(T,Decl(promiseIdentityWithAny.ts,3,18))
+>V : V, Symbol(V,Decl(promiseIdentityWithAny.ts,3,20))
 
     then<U, W>(callback: (x: T) => Promise<any, any>): Promise<any, any>;
->then : <U, W>(callback: (x: T) => Promise<any, any>) => Promise<any, any>
->U : U
->W : W
->callback : (x: T) => Promise<any, any>
->x : T
->T : T
->Promise : Promise<T, V>
->Promise : Promise<T, V>
+>then : <U, W>(callback: (x: T) => Promise<any, any>) => Promise<any, any>, Symbol(then,Decl(promiseIdentityWithAny.ts,3,25))
+>U : U, Symbol(U,Decl(promiseIdentityWithAny.ts,4,9))
+>W : W, Symbol(W,Decl(promiseIdentityWithAny.ts,4,11))
+>callback : (x: T) => Promise<any, any>, Symbol(callback,Decl(promiseIdentityWithAny.ts,4,15))
+>x : T, Symbol(x,Decl(promiseIdentityWithAny.ts,4,26))
+>T : T, Symbol(T,Decl(promiseIdentityWithAny.ts,3,18))
+>Promise : Promise<T, V>, Symbol(Promise,Decl(promiseIdentityWithAny.ts,2,1))
+>Promise : Promise<T, V>, Symbol(Promise,Decl(promiseIdentityWithAny.ts,2,1))
 }
 
 // Should be ok because signature type parameters get erased to any
 var x: IPromise<string, number>;
->x : IPromise<string, number>
->IPromise : IPromise<T, V>
+>x : IPromise<string, number>, Symbol(x,Decl(promiseIdentityWithAny.ts,8,3),Decl(promiseIdentityWithAny.ts,9,3))
+>IPromise : IPromise<T, V>, Symbol(IPromise,Decl(promiseIdentityWithAny.ts,0,0))
 
 var x: Promise<string, boolean>;
->x : IPromise<string, number>
->Promise : Promise<T, V>
+>x : IPromise<string, number>, Symbol(x,Decl(promiseIdentityWithAny.ts,8,3),Decl(promiseIdentityWithAny.ts,9,3))
+>Promise : Promise<T, V>, Symbol(Promise,Decl(promiseIdentityWithAny.ts,2,1))
 

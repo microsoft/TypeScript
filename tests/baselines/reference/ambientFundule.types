@@ -1,12 +1,12 @@
 === tests/cases/compiler/ambientFundule.ts ===
 declare function f();
->f : typeof f
+>f : typeof f, Symbol(f,Decl(ambientFundule.ts,0,0),Decl(ambientFundule.ts,0,21),Decl(ambientFundule.ts,1,26))
 
 declare module f { var x }
->f : typeof f
->x : any
+>f : typeof f, Symbol(f,Decl(ambientFundule.ts,0,0),Decl(ambientFundule.ts,0,21),Decl(ambientFundule.ts,1,26))
+>x : any, Symbol(x,Decl(ambientFundule.ts,1,22))
 
 declare function f(x);
->f : typeof f
->x : any
+>f : typeof f, Symbol(f,Decl(ambientFundule.ts,0,0),Decl(ambientFundule.ts,0,21),Decl(ambientFundule.ts,1,26))
+>x : any, Symbol(x,Decl(ambientFundule.ts,2,19))
 

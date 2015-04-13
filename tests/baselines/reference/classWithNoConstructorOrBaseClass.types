@@ -1,45 +1,45 @@
 === tests/cases/conformance/classes/members/constructorFunctionTypes/classWithNoConstructorOrBaseClass.ts ===
 class C {
->C : C
+>C : C, Symbol(C,Decl(classWithNoConstructorOrBaseClass.ts,0,0))
 
     x: string;
->x : string
+>x : string, Symbol(x,Decl(classWithNoConstructorOrBaseClass.ts,0,9))
 }
 
 var c = new C();
->c : C
+>c : C, Symbol(c,Decl(classWithNoConstructorOrBaseClass.ts,4,3))
 >new C() : C
->C : typeof C
+>C : typeof C, Symbol(C,Decl(classWithNoConstructorOrBaseClass.ts,0,0))
 
 var r = C;
->r : typeof C
->C : typeof C
+>r : typeof C, Symbol(r,Decl(classWithNoConstructorOrBaseClass.ts,5,3))
+>C : typeof C, Symbol(C,Decl(classWithNoConstructorOrBaseClass.ts,0,0))
 
 class D<T,U> {
->D : D<T, U>
->T : T
->U : U
+>D : D<T, U>, Symbol(D,Decl(classWithNoConstructorOrBaseClass.ts,5,10))
+>T : T, Symbol(T,Decl(classWithNoConstructorOrBaseClass.ts,7,8))
+>U : U, Symbol(U,Decl(classWithNoConstructorOrBaseClass.ts,7,10))
 
     x: T;
->x : T
->T : T
+>x : T, Symbol(x,Decl(classWithNoConstructorOrBaseClass.ts,7,14))
+>T : T, Symbol(T,Decl(classWithNoConstructorOrBaseClass.ts,7,8))
 
     y: U;
->y : U
->U : U
+>y : U, Symbol(y,Decl(classWithNoConstructorOrBaseClass.ts,8,9))
+>U : U, Symbol(U,Decl(classWithNoConstructorOrBaseClass.ts,7,10))
 }
 
 var d = new D();
->d : D<{}, {}>
+>d : D<{}, {}>, Symbol(d,Decl(classWithNoConstructorOrBaseClass.ts,12,3))
 >new D() : D<{}, {}>
->D : typeof D
+>D : typeof D, Symbol(D,Decl(classWithNoConstructorOrBaseClass.ts,5,10))
 
 var d2 = new D<string, number>();
->d2 : D<string, number>
+>d2 : D<string, number>, Symbol(d2,Decl(classWithNoConstructorOrBaseClass.ts,13,3))
 >new D<string, number>() : D<string, number>
->D : typeof D
+>D : typeof D, Symbol(D,Decl(classWithNoConstructorOrBaseClass.ts,5,10))
 
 var r2 = D;
->r2 : typeof D
->D : typeof D
+>r2 : typeof D, Symbol(r2,Decl(classWithNoConstructorOrBaseClass.ts,14,3))
+>D : typeof D, Symbol(D,Decl(classWithNoConstructorOrBaseClass.ts,5,10))
 

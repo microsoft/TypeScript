@@ -1,30 +1,30 @@
 === tests/cases/compiler/moduleSharesNameWithImportDeclarationInsideIt2.ts ===
 module Z.M {
->Z : typeof Z
->M : typeof M
+>Z : typeof Z, Symbol(Z,Decl(moduleSharesNameWithImportDeclarationInsideIt2.ts,0,0))
+>M : typeof M, Symbol(M,Decl(moduleSharesNameWithImportDeclarationInsideIt2.ts,0,9))
 
     export function bar() {
->bar : () => string
+>bar : () => string, Symbol(bar,Decl(moduleSharesNameWithImportDeclarationInsideIt2.ts,0,12))
 
         return "";
 >"" : string
     }
 }
 module A.M {
->A : typeof A
->M : typeof A.M
+>A : typeof A, Symbol(A,Decl(moduleSharesNameWithImportDeclarationInsideIt2.ts,4,1))
+>M : typeof A.M, Symbol(M,Decl(moduleSharesNameWithImportDeclarationInsideIt2.ts,5,9))
 
     export import M = Z.M;
->M : typeof M
->Z : typeof Z
->M : typeof M
+>M : typeof M, Symbol(M,Decl(moduleSharesNameWithImportDeclarationInsideIt2.ts,5,12))
+>Z : typeof Z, Symbol(Z,Decl(moduleSharesNameWithImportDeclarationInsideIt2.ts,0,0))
+>M : typeof M, Symbol(M,Decl(moduleSharesNameWithImportDeclarationInsideIt2.ts,0,9))
 
     export function bar() {
->bar : () => void
+>bar : () => void, Symbol(bar,Decl(moduleSharesNameWithImportDeclarationInsideIt2.ts,6,26))
     }
     M.bar(); // Should call Z.M.bar
 >M.bar() : string
->M.bar : () => string
->M : typeof M
->bar : () => string
+>M.bar : () => string, Symbol(M.bar,Decl(moduleSharesNameWithImportDeclarationInsideIt2.ts,0,12))
+>M : typeof M, Symbol(M,Decl(moduleSharesNameWithImportDeclarationInsideIt2.ts,5,12))
+>bar : () => string, Symbol(M.bar,Decl(moduleSharesNameWithImportDeclarationInsideIt2.ts,0,12))
 }

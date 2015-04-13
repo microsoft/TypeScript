@@ -1,56 +1,56 @@
 === tests/cases/compiler/multiModuleClodule1.ts ===
 class C {
->C : C
+>C : C, Symbol(C,Decl(multiModuleClodule1.ts,0,0),Decl(multiModuleClodule1.ts,5,1),Decl(multiModuleClodule1.ts,10,1))
 
     constructor(x: number) { }
->x : number
+>x : number, Symbol(x,Decl(multiModuleClodule1.ts,1,16))
 
     foo() { }
->foo : () => void
+>foo : () => void, Symbol(foo,Decl(multiModuleClodule1.ts,1,30))
 
     bar() { }
->bar : () => void
+>bar : () => void, Symbol(bar,Decl(multiModuleClodule1.ts,2,13))
 
     static boo() { }
->boo : () => void
+>boo : () => void, Symbol(C.boo,Decl(multiModuleClodule1.ts,3,13))
 }
 
 module C {
->C : typeof C
+>C : typeof C, Symbol(C,Decl(multiModuleClodule1.ts,0,0),Decl(multiModuleClodule1.ts,5,1),Decl(multiModuleClodule1.ts,10,1))
 
     export var x = 1;
->x : number
+>x : number, Symbol(x,Decl(multiModuleClodule1.ts,8,14))
 >1 : number
 
     var y = 2;
->y : number
+>y : number, Symbol(y,Decl(multiModuleClodule1.ts,9,7))
 >2 : number
 }
 module C {
->C : typeof C
+>C : typeof C, Symbol(C,Decl(multiModuleClodule1.ts,0,0),Decl(multiModuleClodule1.ts,5,1),Decl(multiModuleClodule1.ts,10,1))
 
     export function foo() { }
->foo : () => void
+>foo : () => void, Symbol(foo,Decl(multiModuleClodule1.ts,11,10))
 
     function baz() { return ''; }
->baz : () => string
+>baz : () => string, Symbol(baz,Decl(multiModuleClodule1.ts,12,29))
 >'' : string
 }
 
 var c = new C(C.x);
->c : C
+>c : C, Symbol(c,Decl(multiModuleClodule1.ts,16,3))
 >new C(C.x) : C
->C : typeof C
->C.x : number
->C : typeof C
->x : number
+>C : typeof C, Symbol(C,Decl(multiModuleClodule1.ts,0,0),Decl(multiModuleClodule1.ts,5,1),Decl(multiModuleClodule1.ts,10,1))
+>C.x : number, Symbol(C.x,Decl(multiModuleClodule1.ts,8,14))
+>C : typeof C, Symbol(C,Decl(multiModuleClodule1.ts,0,0),Decl(multiModuleClodule1.ts,5,1),Decl(multiModuleClodule1.ts,10,1))
+>x : number, Symbol(C.x,Decl(multiModuleClodule1.ts,8,14))
 
 c.foo = C.foo;
 >c.foo = C.foo : () => void
->c.foo : () => void
->c : C
->foo : () => void
->C.foo : () => void
->C : typeof C
->foo : () => void
+>c.foo : () => void, Symbol(C.foo,Decl(multiModuleClodule1.ts,1,30))
+>c : C, Symbol(c,Decl(multiModuleClodule1.ts,16,3))
+>foo : () => void, Symbol(C.foo,Decl(multiModuleClodule1.ts,1,30))
+>C.foo : () => void, Symbol(C.foo,Decl(multiModuleClodule1.ts,11,10))
+>C : typeof C, Symbol(C,Decl(multiModuleClodule1.ts,0,0),Decl(multiModuleClodule1.ts,5,1),Decl(multiModuleClodule1.ts,10,1))
+>foo : () => void, Symbol(C.foo,Decl(multiModuleClodule1.ts,11,10))
 

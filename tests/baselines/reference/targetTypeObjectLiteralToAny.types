@@ -1,30 +1,30 @@
 === tests/cases/compiler/targetTypeObjectLiteralToAny.ts ===
 function suggest(){ 
->suggest : () => void
+>suggest : () => void, Symbol(suggest,Decl(targetTypeObjectLiteralToAny.ts,0,0))
 
 	var TypeScriptKeywords:string[];  
->TypeScriptKeywords : string[]
+>TypeScriptKeywords : string[], Symbol(TypeScriptKeywords,Decl(targetTypeObjectLiteralToAny.ts,1,4))
 
 	var result:any;	
->result : any
+>result : any, Symbol(result,Decl(targetTypeObjectLiteralToAny.ts,2,4))
 					
 	TypeScriptKeywords.forEach(function(keyword) {						
 >TypeScriptKeywords.forEach(function(keyword) {								result.push({text:keyword, type:"keyword"}); // this should not cause a crash - push should be typed to any	}) : void
->TypeScriptKeywords.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->TypeScriptKeywords : string[]
->forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>TypeScriptKeywords.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void, Symbol(Array.forEach,Decl(lib.d.ts,1108,95))
+>TypeScriptKeywords : string[], Symbol(TypeScriptKeywords,Decl(targetTypeObjectLiteralToAny.ts,1,4))
+>forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void, Symbol(Array.forEach,Decl(lib.d.ts,1108,95))
 >function(keyword) {								result.push({text:keyword, type:"keyword"}); // this should not cause a crash - push should be typed to any	} : (keyword: string) => void
->keyword : string
+>keyword : string, Symbol(keyword,Decl(targetTypeObjectLiteralToAny.ts,4,37))
 
 		result.push({text:keyword, type:"keyword"}); // this should not cause a crash - push should be typed to any
 >result.push({text:keyword, type:"keyword"}) : any
 >result.push : any
->result : any
+>result : any, Symbol(result,Decl(targetTypeObjectLiteralToAny.ts,2,4))
 >push : any
 >{text:keyword, type:"keyword"} : { text: string; type: string; }
->text : string
->keyword : string
->type : string
+>text : string, Symbol(text,Decl(targetTypeObjectLiteralToAny.ts,5,15))
+>keyword : string, Symbol(keyword,Decl(targetTypeObjectLiteralToAny.ts,4,37))
+>type : string, Symbol(type,Decl(targetTypeObjectLiteralToAny.ts,5,28))
 >"keyword" : string
 
 	});			

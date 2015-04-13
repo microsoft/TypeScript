@@ -1,11 +1,11 @@
 === tests/cases/compiler/catch.ts ===
 function f() {
->f : () => void
+>f : () => void, Symbol(f,Decl(catch.ts,0,0))
 
     try {} catch(e) { }
->e : any
+>e : any, Symbol(e,Decl(catch.ts,1,17))
 
     try {} catch(e) { }
->e : any
+>e : any, Symbol(e,Decl(catch.ts,2,17))
 }
 

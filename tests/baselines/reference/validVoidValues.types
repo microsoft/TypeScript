@@ -1,14 +1,14 @@
 === tests/cases/conformance/types/primitives/void/validVoidValues.ts ===
 var x: void;
->x : void
+>x : void, Symbol(x,Decl(validVoidValues.ts,0,3))
 
 x = undefined;
 >x = undefined : undefined
->x : void
->undefined : undefined
+>x : void, Symbol(x,Decl(validVoidValues.ts,0,3))
+>undefined : undefined, Symbol(undefined)
 
 x = null;
 >x = null : null
->x : void
+>x : void, Symbol(x,Decl(validVoidValues.ts,0,3))
 >null : null
 

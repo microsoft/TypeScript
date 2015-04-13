@@ -1,13 +1,13 @@
 === tests/cases/compiler/inOperatorWithFunction.ts ===
 var fn = function (val: boolean) { return val; }
->fn : (val: boolean) => boolean
+>fn : (val: boolean) => boolean, Symbol(fn,Decl(inOperatorWithFunction.ts,0,3))
 >function (val: boolean) { return val; } : (val: boolean) => boolean
->val : boolean
->val : boolean
+>val : boolean, Symbol(val,Decl(inOperatorWithFunction.ts,0,19))
+>val : boolean, Symbol(val,Decl(inOperatorWithFunction.ts,0,19))
 
 fn("a" in { "a": true });
 >fn("a" in { "a": true }) : boolean
->fn : (val: boolean) => boolean
+>fn : (val: boolean) => boolean, Symbol(fn,Decl(inOperatorWithFunction.ts,0,3))
 >"a" in { "a": true } : boolean
 >"a" : string
 >{ "a": true } : { "a": boolean; }

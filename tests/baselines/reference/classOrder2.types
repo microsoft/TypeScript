@@ -1,36 +1,36 @@
 === tests/cases/compiler/classOrder2.ts ===
 
 class A extends B {
->A : A
->B : B
+>A : A, Symbol(A,Decl(classOrder2.ts,0,0))
+>B : B, Symbol(B,Decl(classOrder2.ts,5,1))
 
   foo() { this.bar(); }
->foo : () => void
+>foo : () => void, Symbol(foo,Decl(classOrder2.ts,1,19))
 >this.bar() : void
->this.bar : () => void
->this : A
->bar : () => void
+>this.bar : () => void, Symbol(B.bar,Decl(classOrder2.ts,7,9))
+>this : A, Symbol(A,Decl(classOrder2.ts,0,0))
+>bar : () => void, Symbol(B.bar,Decl(classOrder2.ts,7,9))
 
 }
 
 class B {
->B : B
+>B : B, Symbol(B,Decl(classOrder2.ts,5,1))
 
   bar() { }
->bar : () => void
+>bar : () => void, Symbol(bar,Decl(classOrder2.ts,7,9))
 
 }
 
 
 var a = new A();
->a : A
+>a : A, Symbol(a,Decl(classOrder2.ts,14,3))
 >new A() : A
->A : typeof A
+>A : typeof A, Symbol(A,Decl(classOrder2.ts,0,0))
 
 a.foo();
 >a.foo() : void
->a.foo : () => void
->a : A
->foo : () => void
+>a.foo : () => void, Symbol(A.foo,Decl(classOrder2.ts,1,19))
+>a : A, Symbol(a,Decl(classOrder2.ts,14,3))
+>foo : () => void, Symbol(A.foo,Decl(classOrder2.ts,1,19))
 
 

@@ -1,9 +1,9 @@
 === tests/cases/compiler/es5ExportDefaultClassDeclaration.ts ===
 
 export default class C {
->C : C
+>C : C, Symbol(C,Decl(es5ExportDefaultClassDeclaration.ts,0,0))
 
     method() { }
->method : () => void
+>method : () => void, Symbol(method,Decl(es5ExportDefaultClassDeclaration.ts,1,24))
 }
 

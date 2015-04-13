@@ -1,11 +1,11 @@
 === tests/cases/compiler/collisionCodeGenEnumWithEnumMemberConflict.ts ===
 enum Color {
->Color : Color
+>Color : Color, Symbol(Color,Decl(collisionCodeGenEnumWithEnumMemberConflict.ts,0,0))
 
     Color,
->Color : Color
+>Color : Color, Symbol(Color.Color,Decl(collisionCodeGenEnumWithEnumMemberConflict.ts,0,12))
 
     Thing = Color
->Thing : Color
->Color : Color
+>Thing : Color, Symbol(Color.Thing,Decl(collisionCodeGenEnumWithEnumMemberConflict.ts,1,10))
+>Color : Color, Symbol(Color.Color,Decl(collisionCodeGenEnumWithEnumMemberConflict.ts,0,12))
 }

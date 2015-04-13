@@ -2,104 +2,104 @@
 // accessing any protected outside the class is an error
 
 class C {
->C : C
+>C : C, Symbol(C,Decl(classWithProtectedProperty.ts,0,0))
 
     protected x;
->x : any
+>x : any, Symbol(x,Decl(classWithProtectedProperty.ts,2,9))
 
     protected a = '';
->a : string
+>a : string, Symbol(a,Decl(classWithProtectedProperty.ts,3,16))
 >'' : string
 
     protected b: string = '';
->b : string
+>b : string, Symbol(b,Decl(classWithProtectedProperty.ts,4,21))
 >'' : string
 
     protected c() { return '' }
->c : () => string
+>c : () => string, Symbol(c,Decl(classWithProtectedProperty.ts,5,29))
 >'' : string
 
     protected d = () => '';
->d : () => string
+>d : () => string, Symbol(d,Decl(classWithProtectedProperty.ts,6,31))
 >() => '' : () => string
 >'' : string
 
     protected static e;
->e : any
+>e : any, Symbol(C.e,Decl(classWithProtectedProperty.ts,7,27))
 
     protected static f() { return '' }
->f : () => string
+>f : () => string, Symbol(C.f,Decl(classWithProtectedProperty.ts,8,23))
 >'' : string
 
     protected static g = () => '';
->g : () => string
+>g : () => string, Symbol(C.g,Decl(classWithProtectedProperty.ts,9,38))
 >() => '' : () => string
 >'' : string
 }
 
 class D extends C {
->D : D
->C : C
+>D : D, Symbol(D,Decl(classWithProtectedProperty.ts,11,1))
+>C : C, Symbol(C,Decl(classWithProtectedProperty.ts,0,0))
 
     method() {
->method : () => void
+>method : () => void, Symbol(method,Decl(classWithProtectedProperty.ts,13,19))
 
         // No errors
         var d = new D();
->d : D
+>d : D, Symbol(d,Decl(classWithProtectedProperty.ts,16,11))
 >new D() : D
->D : typeof D
+>D : typeof D, Symbol(D,Decl(classWithProtectedProperty.ts,11,1))
 
         var r1: string = d.x;
->r1 : string
->d.x : any
->d : D
->x : any
+>r1 : string, Symbol(r1,Decl(classWithProtectedProperty.ts,17,11))
+>d.x : any, Symbol(C.x,Decl(classWithProtectedProperty.ts,2,9))
+>d : D, Symbol(d,Decl(classWithProtectedProperty.ts,16,11))
+>x : any, Symbol(C.x,Decl(classWithProtectedProperty.ts,2,9))
 
         var r2: string = d.a;
->r2 : string
->d.a : string
->d : D
->a : string
+>r2 : string, Symbol(r2,Decl(classWithProtectedProperty.ts,18,11))
+>d.a : string, Symbol(C.a,Decl(classWithProtectedProperty.ts,3,16))
+>d : D, Symbol(d,Decl(classWithProtectedProperty.ts,16,11))
+>a : string, Symbol(C.a,Decl(classWithProtectedProperty.ts,3,16))
 
         var r3: string = d.b;
->r3 : string
->d.b : string
->d : D
->b : string
+>r3 : string, Symbol(r3,Decl(classWithProtectedProperty.ts,19,11))
+>d.b : string, Symbol(C.b,Decl(classWithProtectedProperty.ts,4,21))
+>d : D, Symbol(d,Decl(classWithProtectedProperty.ts,16,11))
+>b : string, Symbol(C.b,Decl(classWithProtectedProperty.ts,4,21))
 
         var r4: string = d.c();
->r4 : string
+>r4 : string, Symbol(r4,Decl(classWithProtectedProperty.ts,20,11))
 >d.c() : string
->d.c : () => string
->d : D
->c : () => string
+>d.c : () => string, Symbol(C.c,Decl(classWithProtectedProperty.ts,5,29))
+>d : D, Symbol(d,Decl(classWithProtectedProperty.ts,16,11))
+>c : () => string, Symbol(C.c,Decl(classWithProtectedProperty.ts,5,29))
 
         var r5: string = d.d();
->r5 : string
+>r5 : string, Symbol(r5,Decl(classWithProtectedProperty.ts,21,11))
 >d.d() : string
->d.d : () => string
->d : D
->d : () => string
+>d.d : () => string, Symbol(C.d,Decl(classWithProtectedProperty.ts,6,31))
+>d : D, Symbol(d,Decl(classWithProtectedProperty.ts,16,11))
+>d : () => string, Symbol(C.d,Decl(classWithProtectedProperty.ts,6,31))
 
         var r6: string = C.e;
->r6 : string
->C.e : any
->C : typeof C
->e : any
+>r6 : string, Symbol(r6,Decl(classWithProtectedProperty.ts,22,11))
+>C.e : any, Symbol(C.e,Decl(classWithProtectedProperty.ts,7,27))
+>C : typeof C, Symbol(C,Decl(classWithProtectedProperty.ts,0,0))
+>e : any, Symbol(C.e,Decl(classWithProtectedProperty.ts,7,27))
 
         var r7: string = C.f();
->r7 : string
+>r7 : string, Symbol(r7,Decl(classWithProtectedProperty.ts,23,11))
 >C.f() : string
->C.f : () => string
->C : typeof C
->f : () => string
+>C.f : () => string, Symbol(C.f,Decl(classWithProtectedProperty.ts,8,23))
+>C : typeof C, Symbol(C,Decl(classWithProtectedProperty.ts,0,0))
+>f : () => string, Symbol(C.f,Decl(classWithProtectedProperty.ts,8,23))
 
         var r8: string = C.g();
->r8 : string
+>r8 : string, Symbol(r8,Decl(classWithProtectedProperty.ts,24,11))
 >C.g() : string
->C.g : () => string
->C : typeof C
->g : () => string
+>C.g : () => string, Symbol(C.g,Decl(classWithProtectedProperty.ts,9,38))
+>C : typeof C, Symbol(C,Decl(classWithProtectedProperty.ts,0,0))
+>g : () => string, Symbol(C.g,Decl(classWithProtectedProperty.ts,9,38))
     }
 }

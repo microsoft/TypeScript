@@ -1,60 +1,60 @@
 === tests/cases/compiler/genericInterfaceTypeCall.ts ===
 interface Foo<T> {
->Foo : Foo<T>
->T : T
+>Foo : Foo<T>, Symbol(Foo,Decl(genericInterfaceTypeCall.ts,0,0))
+>T : T, Symbol(T,Decl(genericInterfaceTypeCall.ts,0,14))
 
     reject(arg: T): void;
->reject : (arg: T) => void
->arg : T
->T : T
+>reject : (arg: T) => void, Symbol(reject,Decl(genericInterfaceTypeCall.ts,0,18))
+>arg : T, Symbol(arg,Decl(genericInterfaceTypeCall.ts,1,11))
+>T : T, Symbol(T,Decl(genericInterfaceTypeCall.ts,0,14))
 }
 var foo: Foo<string>
->foo : Foo<string>
->Foo : Foo<T>
+>foo : Foo<string>, Symbol(foo,Decl(genericInterfaceTypeCall.ts,3,3))
+>Foo : Foo<T>, Symbol(Foo,Decl(genericInterfaceTypeCall.ts,0,0))
  
 interface bar<T> {
->bar : bar<T>
->T : T
+>bar : bar<T>, Symbol(bar,Decl(genericInterfaceTypeCall.ts,3,20))
+>T : T, Symbol(T,Decl(genericInterfaceTypeCall.ts,5,14))
 
     fail(func: (arg: T) => void ): void;
->fail : (func: (arg: T) => void) => void
->func : (arg: T) => void
->arg : T
->T : T
+>fail : (func: (arg: T) => void) => void, Symbol(fail,Decl(genericInterfaceTypeCall.ts,5,18))
+>func : (arg: T) => void, Symbol(func,Decl(genericInterfaceTypeCall.ts,6,9))
+>arg : T, Symbol(arg,Decl(genericInterfaceTypeCall.ts,6,16))
+>T : T, Symbol(T,Decl(genericInterfaceTypeCall.ts,5,14))
 
     fail2(func2: { (arg: T): void; }): void;
->fail2 : (func2: (arg: T) => void) => void
->func2 : (arg: T) => void
->arg : T
->T : T
+>fail2 : (func2: (arg: T) => void) => void, Symbol(fail2,Decl(genericInterfaceTypeCall.ts,6,40))
+>func2 : (arg: T) => void, Symbol(func2,Decl(genericInterfaceTypeCall.ts,7,10))
+>arg : T, Symbol(arg,Decl(genericInterfaceTypeCall.ts,7,20))
+>T : T, Symbol(T,Decl(genericInterfaceTypeCall.ts,5,14))
 }
 var test: bar<string>;
->test : bar<string>
->bar : bar<T>
+>test : bar<string>, Symbol(test,Decl(genericInterfaceTypeCall.ts,9,3))
+>bar : bar<T>, Symbol(bar,Decl(genericInterfaceTypeCall.ts,3,20))
  
 test.fail(arg => foo.reject(arg));
 >test.fail(arg => foo.reject(arg)) : void
->test.fail : (func: (arg: string) => void) => void
->test : bar<string>
->fail : (func: (arg: string) => void) => void
+>test.fail : (func: (arg: string) => void) => void, Symbol(bar.fail,Decl(genericInterfaceTypeCall.ts,5,18))
+>test : bar<string>, Symbol(test,Decl(genericInterfaceTypeCall.ts,9,3))
+>fail : (func: (arg: string) => void) => void, Symbol(bar.fail,Decl(genericInterfaceTypeCall.ts,5,18))
 >arg => foo.reject(arg) : (arg: string) => void
->arg : string
+>arg : string, Symbol(arg,Decl(genericInterfaceTypeCall.ts,11,10))
 >foo.reject(arg) : void
->foo.reject : (arg: string) => void
->foo : Foo<string>
->reject : (arg: string) => void
->arg : string
+>foo.reject : (arg: string) => void, Symbol(Foo.reject,Decl(genericInterfaceTypeCall.ts,0,18))
+>foo : Foo<string>, Symbol(foo,Decl(genericInterfaceTypeCall.ts,3,3))
+>reject : (arg: string) => void, Symbol(Foo.reject,Decl(genericInterfaceTypeCall.ts,0,18))
+>arg : string, Symbol(arg,Decl(genericInterfaceTypeCall.ts,11,10))
 
 test.fail2(arg => foo.reject(arg)); // Error: Supplied parameters do not match any signature of call target
 >test.fail2(arg => foo.reject(arg)) : void
->test.fail2 : (func2: (arg: string) => void) => void
->test : bar<string>
->fail2 : (func2: (arg: string) => void) => void
+>test.fail2 : (func2: (arg: string) => void) => void, Symbol(bar.fail2,Decl(genericInterfaceTypeCall.ts,6,40))
+>test : bar<string>, Symbol(test,Decl(genericInterfaceTypeCall.ts,9,3))
+>fail2 : (func2: (arg: string) => void) => void, Symbol(bar.fail2,Decl(genericInterfaceTypeCall.ts,6,40))
 >arg => foo.reject(arg) : (arg: string) => void
->arg : string
+>arg : string, Symbol(arg,Decl(genericInterfaceTypeCall.ts,12,11))
 >foo.reject(arg) : void
->foo.reject : (arg: string) => void
->foo : Foo<string>
->reject : (arg: string) => void
->arg : string
+>foo.reject : (arg: string) => void, Symbol(Foo.reject,Decl(genericInterfaceTypeCall.ts,0,18))
+>foo : Foo<string>, Symbol(foo,Decl(genericInterfaceTypeCall.ts,3,3))
+>reject : (arg: string) => void, Symbol(Foo.reject,Decl(genericInterfaceTypeCall.ts,0,18))
+>arg : string, Symbol(arg,Decl(genericInterfaceTypeCall.ts,12,11))
 

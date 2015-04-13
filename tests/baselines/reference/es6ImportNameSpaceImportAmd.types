@@ -1,19 +1,19 @@
 === tests/cases/compiler/es6ImportNameSpaceImportAmd_0.ts ===
 
 export var a = 10;
->a : number
+>a : number, Symbol(a,Decl(es6ImportNameSpaceImportAmd_0.ts,1,10))
 >10 : number
 
 === tests/cases/compiler/es6ImportNameSpaceImportAmd_1.ts ===
 import * as nameSpaceBinding from "es6ImportNameSpaceImportAmd_0";
->nameSpaceBinding : typeof nameSpaceBinding
+>nameSpaceBinding : typeof nameSpaceBinding, Symbol(nameSpaceBinding,Decl(es6ImportNameSpaceImportAmd_1.ts,0,6))
 
 var x = nameSpaceBinding.a;
->x : number
->nameSpaceBinding.a : number
->nameSpaceBinding : typeof nameSpaceBinding
->a : number
+>x : number, Symbol(x,Decl(es6ImportNameSpaceImportAmd_1.ts,1,3))
+>nameSpaceBinding.a : number, Symbol(nameSpaceBinding.a,Decl(es6ImportNameSpaceImportAmd_0.ts,1,10))
+>nameSpaceBinding : typeof nameSpaceBinding, Symbol(nameSpaceBinding,Decl(es6ImportNameSpaceImportAmd_1.ts,0,6))
+>a : number, Symbol(nameSpaceBinding.a,Decl(es6ImportNameSpaceImportAmd_0.ts,1,10))
 
 import * as nameSpaceBinding2 from "es6ImportNameSpaceImportAmd_0"; // elide this
->nameSpaceBinding2 : typeof nameSpaceBinding
+>nameSpaceBinding2 : typeof nameSpaceBinding, Symbol(nameSpaceBinding2,Decl(es6ImportNameSpaceImportAmd_1.ts,2,6))
 

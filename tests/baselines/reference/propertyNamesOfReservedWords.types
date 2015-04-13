@@ -1,828 +1,828 @@
 === tests/cases/conformance/types/objectTypeLiteral/propertySignatures/propertyNamesOfReservedWords.ts ===
 class C {
->C : C
+>C : C, Symbol(C,Decl(propertyNamesOfReservedWords.ts,0,0))
 
     abstract;
->abstract : any
+>abstract : any, Symbol(abstract,Decl(propertyNamesOfReservedWords.ts,0,9))
 
     as;
->as : any
+>as : any, Symbol(as,Decl(propertyNamesOfReservedWords.ts,1,13))
 
     boolean;
->boolean : any
+>boolean : any, Symbol(boolean,Decl(propertyNamesOfReservedWords.ts,2,7))
 
     break;
->break : any
+>break : any, Symbol(break,Decl(propertyNamesOfReservedWords.ts,3,12))
 
     byte;
->byte : any
+>byte : any, Symbol(byte,Decl(propertyNamesOfReservedWords.ts,4,10))
 
     case;
->case : any
+>case : any, Symbol(case,Decl(propertyNamesOfReservedWords.ts,5,9))
 
     catch;
->catch : any
+>catch : any, Symbol(catch,Decl(propertyNamesOfReservedWords.ts,6,9))
 
     char;
->char : any
+>char : any, Symbol(char,Decl(propertyNamesOfReservedWords.ts,7,10))
 
     class;
->class : any
+>class : any, Symbol(class,Decl(propertyNamesOfReservedWords.ts,8,9))
 
     continue;
->continue : any
+>continue : any, Symbol(continue,Decl(propertyNamesOfReservedWords.ts,9,10))
 
     const;
->const : any
+>const : any, Symbol(const,Decl(propertyNamesOfReservedWords.ts,10,13))
 
     debugger;
->debugger : any
+>debugger : any, Symbol(debugger,Decl(propertyNamesOfReservedWords.ts,11,10))
 
     default;
->default : any
+>default : any, Symbol(default,Decl(propertyNamesOfReservedWords.ts,12,13))
 
     delete;
->delete : any
+>delete : any, Symbol(delete,Decl(propertyNamesOfReservedWords.ts,13,12))
 
     do;
->do : any
+>do : any, Symbol(do,Decl(propertyNamesOfReservedWords.ts,14,11))
 
     double;
->double : any
+>double : any, Symbol(double,Decl(propertyNamesOfReservedWords.ts,15,7))
 
     else;
->else : any
+>else : any, Symbol(else,Decl(propertyNamesOfReservedWords.ts,16,11))
 
     enum;
->enum : any
+>enum : any, Symbol(enum,Decl(propertyNamesOfReservedWords.ts,17,9))
 
     export;
->export : any
+>export : any, Symbol(export,Decl(propertyNamesOfReservedWords.ts,18,9))
 
     extends;
->extends : any
+>extends : any, Symbol(extends,Decl(propertyNamesOfReservedWords.ts,19,11))
 
     false;
->false : any
+>false : any, Symbol(false,Decl(propertyNamesOfReservedWords.ts,20,12))
 
     final;
->final : any
+>final : any, Symbol(final,Decl(propertyNamesOfReservedWords.ts,21,10))
 
     finally;
->finally : any
+>finally : any, Symbol(finally,Decl(propertyNamesOfReservedWords.ts,22,10))
 
     float;
->float : any
+>float : any, Symbol(float,Decl(propertyNamesOfReservedWords.ts,23,12))
 
     for;
->for : any
+>for : any, Symbol(for,Decl(propertyNamesOfReservedWords.ts,24,10))
 
     function;
->function : any
+>function : any, Symbol(function,Decl(propertyNamesOfReservedWords.ts,25,8))
 
     goto;
->goto : any
+>goto : any, Symbol(goto,Decl(propertyNamesOfReservedWords.ts,26,13))
 
     if;
->if : any
+>if : any, Symbol(if,Decl(propertyNamesOfReservedWords.ts,27,9))
 
     implements;
->implements : any
+>implements : any, Symbol(implements,Decl(propertyNamesOfReservedWords.ts,28,7))
 
     import;
->import : any
+>import : any, Symbol(import,Decl(propertyNamesOfReservedWords.ts,29,15))
 
     in;
->in : any
+>in : any, Symbol(in,Decl(propertyNamesOfReservedWords.ts,30,11))
 
     instanceof;
->instanceof : any
+>instanceof : any, Symbol(instanceof,Decl(propertyNamesOfReservedWords.ts,31,7))
 
     int;
->int : any
+>int : any, Symbol(int,Decl(propertyNamesOfReservedWords.ts,32,15))
 
     interface;
->interface : any
+>interface : any, Symbol(interface,Decl(propertyNamesOfReservedWords.ts,33,8))
 
     is;
->is : any
+>is : any, Symbol(is,Decl(propertyNamesOfReservedWords.ts,34,14))
 
     long;
->long : any
+>long : any, Symbol(long,Decl(propertyNamesOfReservedWords.ts,35,7))
 
     namespace;
->namespace : any
+>namespace : any, Symbol(namespace,Decl(propertyNamesOfReservedWords.ts,36,9))
 
     native;
->native : any
+>native : any, Symbol(native,Decl(propertyNamesOfReservedWords.ts,37,14))
 
     new;
->new : any
+>new : any, Symbol(new,Decl(propertyNamesOfReservedWords.ts,38,11))
 
     null;
->null : any
+>null : any, Symbol(null,Decl(propertyNamesOfReservedWords.ts,39,8))
 
     package;
->package : any
+>package : any, Symbol(package,Decl(propertyNamesOfReservedWords.ts,40,9))
 
     private;
->private : any
+>private : any, Symbol(private,Decl(propertyNamesOfReservedWords.ts,41,12))
 
     protected;
->protected : any
+>protected : any, Symbol(protected,Decl(propertyNamesOfReservedWords.ts,42,12))
 
     public;
->public : any
+>public : any, Symbol(public,Decl(propertyNamesOfReservedWords.ts,43,14))
 
     return;
->return : any
+>return : any, Symbol(return,Decl(propertyNamesOfReservedWords.ts,44,11))
 
     short;
->short : any
+>short : any, Symbol(short,Decl(propertyNamesOfReservedWords.ts,45,11))
 
     static;
->static : any
+>static : any, Symbol(static,Decl(propertyNamesOfReservedWords.ts,46,10))
 
     super;
->super : any
+>super : any, Symbol(super,Decl(propertyNamesOfReservedWords.ts,47,11))
 
     switch;
->switch : any
+>switch : any, Symbol(switch,Decl(propertyNamesOfReservedWords.ts,48,10))
 
     synchronized;
->synchronized : any
+>synchronized : any, Symbol(synchronized,Decl(propertyNamesOfReservedWords.ts,49,11))
 
     this;
->this : any
+>this : any, Symbol(this,Decl(propertyNamesOfReservedWords.ts,50,17))
 
     throw;
->throw : any
+>throw : any, Symbol(throw,Decl(propertyNamesOfReservedWords.ts,51,9))
 
     throws;
->throws : any
+>throws : any, Symbol(throws,Decl(propertyNamesOfReservedWords.ts,52,10))
 
     transient;
->transient : any
+>transient : any, Symbol(transient,Decl(propertyNamesOfReservedWords.ts,53,11))
 
     true;
->true : any
+>true : any, Symbol(true,Decl(propertyNamesOfReservedWords.ts,54,14))
 
     try;
->try : any
+>try : any, Symbol(try,Decl(propertyNamesOfReservedWords.ts,55,9))
 
     typeof;
->typeof : any
+>typeof : any, Symbol(typeof,Decl(propertyNamesOfReservedWords.ts,56,8))
 
     use;
->use : any
+>use : any, Symbol(use,Decl(propertyNamesOfReservedWords.ts,57,11))
 
     var;
->var : any
+>var : any, Symbol(var,Decl(propertyNamesOfReservedWords.ts,58,8))
 
     void;
->void : any
+>void : any, Symbol(void,Decl(propertyNamesOfReservedWords.ts,59,8))
 
     volatile;
->volatile : any
+>volatile : any, Symbol(volatile,Decl(propertyNamesOfReservedWords.ts,60,9))
 
     while;
->while : any
+>while : any, Symbol(while,Decl(propertyNamesOfReservedWords.ts,61,13))
 
     with;
->with : any
+>with : any, Symbol(with,Decl(propertyNamesOfReservedWords.ts,62,10))
 }
 var c: C;
->c : C
->C : C
+>c : C, Symbol(c,Decl(propertyNamesOfReservedWords.ts,65,3))
+>C : C, Symbol(C,Decl(propertyNamesOfReservedWords.ts,0,0))
 
 var r1 = c.abstract;
->r1 : any
->c.abstract : any
->c : C
->abstract : any
+>r1 : any, Symbol(r1,Decl(propertyNamesOfReservedWords.ts,66,3))
+>c.abstract : any, Symbol(C.abstract,Decl(propertyNamesOfReservedWords.ts,0,9))
+>c : C, Symbol(c,Decl(propertyNamesOfReservedWords.ts,65,3))
+>abstract : any, Symbol(C.abstract,Decl(propertyNamesOfReservedWords.ts,0,9))
 
 var r2 = c.as;
->r2 : any
->c.as : any
->c : C
->as : any
+>r2 : any, Symbol(r2,Decl(propertyNamesOfReservedWords.ts,67,3))
+>c.as : any, Symbol(C.as,Decl(propertyNamesOfReservedWords.ts,1,13))
+>c : C, Symbol(c,Decl(propertyNamesOfReservedWords.ts,65,3))
+>as : any, Symbol(C.as,Decl(propertyNamesOfReservedWords.ts,1,13))
 
 interface I {
->I : I
+>I : I, Symbol(I,Decl(propertyNamesOfReservedWords.ts,67,14))
 
     abstract;
->abstract : any
+>abstract : any, Symbol(abstract,Decl(propertyNamesOfReservedWords.ts,69,13))
 
     as;
->as : any
+>as : any, Symbol(as,Decl(propertyNamesOfReservedWords.ts,70,13))
 
     boolean;
->boolean : any
+>boolean : any, Symbol(boolean,Decl(propertyNamesOfReservedWords.ts,71,7))
 
     break;
->break : any
+>break : any, Symbol(break,Decl(propertyNamesOfReservedWords.ts,72,12))
 
     byte;
->byte : any
+>byte : any, Symbol(byte,Decl(propertyNamesOfReservedWords.ts,73,10))
 
     case;
->case : any
+>case : any, Symbol(case,Decl(propertyNamesOfReservedWords.ts,74,9))
 
     catch;
->catch : any
+>catch : any, Symbol(catch,Decl(propertyNamesOfReservedWords.ts,75,9))
 
     char;
->char : any
+>char : any, Symbol(char,Decl(propertyNamesOfReservedWords.ts,76,10))
 
     class;
->class : any
+>class : any, Symbol(class,Decl(propertyNamesOfReservedWords.ts,77,9))
 
     continue;
->continue : any
+>continue : any, Symbol(continue,Decl(propertyNamesOfReservedWords.ts,78,10))
 
     const;
->const : any
+>const : any, Symbol(const,Decl(propertyNamesOfReservedWords.ts,79,13))
 
     debugger;
->debugger : any
+>debugger : any, Symbol(debugger,Decl(propertyNamesOfReservedWords.ts,80,10))
 
     default;
->default : any
+>default : any, Symbol(default,Decl(propertyNamesOfReservedWords.ts,81,13))
 
     delete;
->delete : any
+>delete : any, Symbol(delete,Decl(propertyNamesOfReservedWords.ts,82,12))
 
     do;
->do : any
+>do : any, Symbol(do,Decl(propertyNamesOfReservedWords.ts,83,11))
 
     double;
->double : any
+>double : any, Symbol(double,Decl(propertyNamesOfReservedWords.ts,84,7))
 
     else;
->else : any
+>else : any, Symbol(else,Decl(propertyNamesOfReservedWords.ts,85,11))
 
     enum;
->enum : any
+>enum : any, Symbol(enum,Decl(propertyNamesOfReservedWords.ts,86,9))
 
     export;
->export : any
+>export : any, Symbol(export,Decl(propertyNamesOfReservedWords.ts,87,9))
 
     extends;
->extends : any
+>extends : any, Symbol(extends,Decl(propertyNamesOfReservedWords.ts,88,11))
 
     false;
->false : any
+>false : any, Symbol(false,Decl(propertyNamesOfReservedWords.ts,89,12))
 
     final;
->final : any
+>final : any, Symbol(final,Decl(propertyNamesOfReservedWords.ts,90,10))
 
     finally;
->finally : any
+>finally : any, Symbol(finally,Decl(propertyNamesOfReservedWords.ts,91,10))
 
     float;
->float : any
+>float : any, Symbol(float,Decl(propertyNamesOfReservedWords.ts,92,12))
 
     for;
->for : any
+>for : any, Symbol(for,Decl(propertyNamesOfReservedWords.ts,93,10))
 
     function;
->function : any
+>function : any, Symbol(function,Decl(propertyNamesOfReservedWords.ts,94,8))
 
     goto;
->goto : any
+>goto : any, Symbol(goto,Decl(propertyNamesOfReservedWords.ts,95,13))
 
     if;
->if : any
+>if : any, Symbol(if,Decl(propertyNamesOfReservedWords.ts,96,9))
 
     implements;
->implements : any
+>implements : any, Symbol(implements,Decl(propertyNamesOfReservedWords.ts,97,7))
 
     import;
->import : any
+>import : any, Symbol(import,Decl(propertyNamesOfReservedWords.ts,98,15))
 
     in;
->in : any
+>in : any, Symbol(in,Decl(propertyNamesOfReservedWords.ts,99,11))
 
     instanceof;
->instanceof : any
+>instanceof : any, Symbol(instanceof,Decl(propertyNamesOfReservedWords.ts,100,7))
 
     int;
->int : any
+>int : any, Symbol(int,Decl(propertyNamesOfReservedWords.ts,101,15))
 
     interface;
->interface : any
+>interface : any, Symbol(interface,Decl(propertyNamesOfReservedWords.ts,102,8))
 
     is;
->is : any
+>is : any, Symbol(is,Decl(propertyNamesOfReservedWords.ts,103,14))
 
     long;
->long : any
+>long : any, Symbol(long,Decl(propertyNamesOfReservedWords.ts,104,7))
 
     namespace;
->namespace : any
+>namespace : any, Symbol(namespace,Decl(propertyNamesOfReservedWords.ts,105,9))
 
     native;
->native : any
+>native : any, Symbol(native,Decl(propertyNamesOfReservedWords.ts,106,14))
 
     new;
->new : any
+>new : any, Symbol(new,Decl(propertyNamesOfReservedWords.ts,107,11))
 
     null;
->null : any
+>null : any, Symbol(null,Decl(propertyNamesOfReservedWords.ts,108,8))
 
     package;
->package : any
+>package : any, Symbol(package,Decl(propertyNamesOfReservedWords.ts,109,9))
 
     private;
->private : any
+>private : any, Symbol(private,Decl(propertyNamesOfReservedWords.ts,110,12))
 
     protected;
->protected : any
+>protected : any, Symbol(protected,Decl(propertyNamesOfReservedWords.ts,111,12))
 
     public;
->public : any
+>public : any, Symbol(public,Decl(propertyNamesOfReservedWords.ts,112,14))
 
     return;
->return : any
+>return : any, Symbol(return,Decl(propertyNamesOfReservedWords.ts,113,11))
 
     short;
->short : any
+>short : any, Symbol(short,Decl(propertyNamesOfReservedWords.ts,114,11))
 
     static;
->static : any
+>static : any, Symbol(static,Decl(propertyNamesOfReservedWords.ts,115,10))
 
     super;
->super : any
+>super : any, Symbol(super,Decl(propertyNamesOfReservedWords.ts,116,11))
 
     switch;
->switch : any
+>switch : any, Symbol(switch,Decl(propertyNamesOfReservedWords.ts,117,10))
 
     synchronized;
->synchronized : any
+>synchronized : any, Symbol(synchronized,Decl(propertyNamesOfReservedWords.ts,118,11))
 
     this;
->this : any
+>this : any, Symbol(this,Decl(propertyNamesOfReservedWords.ts,119,17))
 
     throw;
->throw : any
+>throw : any, Symbol(throw,Decl(propertyNamesOfReservedWords.ts,120,9))
 
     throws;
->throws : any
+>throws : any, Symbol(throws,Decl(propertyNamesOfReservedWords.ts,121,10))
 
     transient;
->transient : any
+>transient : any, Symbol(transient,Decl(propertyNamesOfReservedWords.ts,122,11))
 
     true;
->true : any
+>true : any, Symbol(true,Decl(propertyNamesOfReservedWords.ts,123,14))
 
     try;
->try : any
+>try : any, Symbol(try,Decl(propertyNamesOfReservedWords.ts,124,9))
 
     typeof;
->typeof : any
+>typeof : any, Symbol(typeof,Decl(propertyNamesOfReservedWords.ts,125,8))
 
     use;
->use : any
+>use : any, Symbol(use,Decl(propertyNamesOfReservedWords.ts,126,11))
 
     var;
->var : any
+>var : any, Symbol(var,Decl(propertyNamesOfReservedWords.ts,127,8))
 
     void;
->void : any
+>void : any, Symbol(void,Decl(propertyNamesOfReservedWords.ts,128,8))
 
     volatile;
->volatile : any
+>volatile : any, Symbol(volatile,Decl(propertyNamesOfReservedWords.ts,129,9))
 
     while;
->while : any
+>while : any, Symbol(while,Decl(propertyNamesOfReservedWords.ts,130,13))
 
     with;
->with : any
+>with : any, Symbol(with,Decl(propertyNamesOfReservedWords.ts,131,10))
 }
 
 var i: I;
->i : I
->I : I
+>i : I, Symbol(i,Decl(propertyNamesOfReservedWords.ts,135,3))
+>I : I, Symbol(I,Decl(propertyNamesOfReservedWords.ts,67,14))
 
 var r3 = i.abstract;
->r3 : any
->i.abstract : any
->i : I
->abstract : any
+>r3 : any, Symbol(r3,Decl(propertyNamesOfReservedWords.ts,136,3))
+>i.abstract : any, Symbol(I.abstract,Decl(propertyNamesOfReservedWords.ts,69,13))
+>i : I, Symbol(i,Decl(propertyNamesOfReservedWords.ts,135,3))
+>abstract : any, Symbol(I.abstract,Decl(propertyNamesOfReservedWords.ts,69,13))
 
 var r4 = i.as;
->r4 : any
->i.as : any
->i : I
->as : any
+>r4 : any, Symbol(r4,Decl(propertyNamesOfReservedWords.ts,137,3))
+>i.as : any, Symbol(I.as,Decl(propertyNamesOfReservedWords.ts,70,13))
+>i : I, Symbol(i,Decl(propertyNamesOfReservedWords.ts,135,3))
+>as : any, Symbol(I.as,Decl(propertyNamesOfReservedWords.ts,70,13))
 
 var a: {
->a : { abstract: any; as: any; boolean: any; break: any; byte: any; case: any; catch: any; char: any; class: any; continue: any; const: any; debugger: any; default: any; delete: any; do: any; double: any; else: any; enum: any; export: any; extends: any; false: any; final: any; finally: any; float: any; for: any; function: any; goto: any; if: any; implements: any; import: any; in: any; instanceof: any; int: any; interface: any; is: any; long: any; namespace: any; native: any; new: any; null: any; package: any; private: any; protected: any; public: any; return: any; short: any; static: any; super: any; switch: any; synchronized: any; this: any; throw: any; throws: any; transient: any; true: any; try: any; typeof: any; use: any; var: any; void: any; volatile: any; while: any; with: any; }
+>a : { abstract: any; as: any; boolean: any; break: any; byte: any; case: any; catch: any; char: any; class: any; continue: any; const: any; debugger: any; default: any; delete: any; do: any; double: any; else: any; enum: any; export: any; extends: any; false: any; final: any; finally: any; float: any; for: any; function: any; goto: any; if: any; implements: any; import: any; in: any; instanceof: any; int: any; interface: any; is: any; long: any; namespace: any; native: any; new: any; null: any; package: any; private: any; protected: any; public: any; return: any; short: any; static: any; super: any; switch: any; synchronized: any; this: any; throw: any; throws: any; transient: any; true: any; try: any; typeof: any; use: any; var: any; void: any; volatile: any; while: any; with: any; }, Symbol(a,Decl(propertyNamesOfReservedWords.ts,139,3))
 
     abstract;
->abstract : any
+>abstract : any, Symbol(abstract,Decl(propertyNamesOfReservedWords.ts,139,8))
 
     as;
->as : any
+>as : any, Symbol(as,Decl(propertyNamesOfReservedWords.ts,140,13))
 
     boolean;
->boolean : any
+>boolean : any, Symbol(boolean,Decl(propertyNamesOfReservedWords.ts,141,7))
 
     break;
->break : any
+>break : any, Symbol(break,Decl(propertyNamesOfReservedWords.ts,142,12))
 
     byte;
->byte : any
+>byte : any, Symbol(byte,Decl(propertyNamesOfReservedWords.ts,143,10))
 
     case;
->case : any
+>case : any, Symbol(case,Decl(propertyNamesOfReservedWords.ts,144,9))
 
     catch;
->catch : any
+>catch : any, Symbol(catch,Decl(propertyNamesOfReservedWords.ts,145,9))
 
     char;
->char : any
+>char : any, Symbol(char,Decl(propertyNamesOfReservedWords.ts,146,10))
 
     class;
->class : any
+>class : any, Symbol(class,Decl(propertyNamesOfReservedWords.ts,147,9))
 
     continue;
->continue : any
+>continue : any, Symbol(continue,Decl(propertyNamesOfReservedWords.ts,148,10))
 
     const;
->const : any
+>const : any, Symbol(const,Decl(propertyNamesOfReservedWords.ts,149,13))
 
     debugger;
->debugger : any
+>debugger : any, Symbol(debugger,Decl(propertyNamesOfReservedWords.ts,150,10))
 
     default;
->default : any
+>default : any, Symbol(default,Decl(propertyNamesOfReservedWords.ts,151,13))
 
     delete;
->delete : any
+>delete : any, Symbol(delete,Decl(propertyNamesOfReservedWords.ts,152,12))
 
     do;
->do : any
+>do : any, Symbol(do,Decl(propertyNamesOfReservedWords.ts,153,11))
 
     double;
->double : any
+>double : any, Symbol(double,Decl(propertyNamesOfReservedWords.ts,154,7))
 
     else;
->else : any
+>else : any, Symbol(else,Decl(propertyNamesOfReservedWords.ts,155,11))
 
     enum;
->enum : any
+>enum : any, Symbol(enum,Decl(propertyNamesOfReservedWords.ts,156,9))
 
     export;
->export : any
+>export : any, Symbol(export,Decl(propertyNamesOfReservedWords.ts,157,9))
 
     extends;
->extends : any
+>extends : any, Symbol(extends,Decl(propertyNamesOfReservedWords.ts,158,11))
 
     false;
->false : any
+>false : any, Symbol(false,Decl(propertyNamesOfReservedWords.ts,159,12))
 
     final;
->final : any
+>final : any, Symbol(final,Decl(propertyNamesOfReservedWords.ts,160,10))
 
     finally;
->finally : any
+>finally : any, Symbol(finally,Decl(propertyNamesOfReservedWords.ts,161,10))
 
     float;
->float : any
+>float : any, Symbol(float,Decl(propertyNamesOfReservedWords.ts,162,12))
 
     for;
->for : any
+>for : any, Symbol(for,Decl(propertyNamesOfReservedWords.ts,163,10))
 
     function;
->function : any
+>function : any, Symbol(function,Decl(propertyNamesOfReservedWords.ts,164,8))
 
     goto;
->goto : any
+>goto : any, Symbol(goto,Decl(propertyNamesOfReservedWords.ts,165,13))
 
     if;
->if : any
+>if : any, Symbol(if,Decl(propertyNamesOfReservedWords.ts,166,9))
 
     implements;
->implements : any
+>implements : any, Symbol(implements,Decl(propertyNamesOfReservedWords.ts,167,7))
 
     import;
->import : any
+>import : any, Symbol(import,Decl(propertyNamesOfReservedWords.ts,168,15))
 
     in;
->in : any
+>in : any, Symbol(in,Decl(propertyNamesOfReservedWords.ts,169,11))
 
     instanceof;
->instanceof : any
+>instanceof : any, Symbol(instanceof,Decl(propertyNamesOfReservedWords.ts,170,7))
 
     int;
->int : any
+>int : any, Symbol(int,Decl(propertyNamesOfReservedWords.ts,171,15))
 
     interface;
->interface : any
+>interface : any, Symbol(interface,Decl(propertyNamesOfReservedWords.ts,172,8))
 
     is;
->is : any
+>is : any, Symbol(is,Decl(propertyNamesOfReservedWords.ts,173,14))
 
     long;
->long : any
+>long : any, Symbol(long,Decl(propertyNamesOfReservedWords.ts,174,7))
 
     namespace;
->namespace : any
+>namespace : any, Symbol(namespace,Decl(propertyNamesOfReservedWords.ts,175,9))
 
     native;
->native : any
+>native : any, Symbol(native,Decl(propertyNamesOfReservedWords.ts,176,14))
 
     new;
->new : any
+>new : any, Symbol(new,Decl(propertyNamesOfReservedWords.ts,177,11))
 
     null;
->null : any
+>null : any, Symbol(null,Decl(propertyNamesOfReservedWords.ts,178,8))
 
     package;
->package : any
+>package : any, Symbol(package,Decl(propertyNamesOfReservedWords.ts,179,9))
 
     private;
->private : any
+>private : any, Symbol(private,Decl(propertyNamesOfReservedWords.ts,180,12))
 
     protected;
->protected : any
+>protected : any, Symbol(protected,Decl(propertyNamesOfReservedWords.ts,181,12))
 
     public;
->public : any
+>public : any, Symbol(public,Decl(propertyNamesOfReservedWords.ts,182,14))
 
     return;
->return : any
+>return : any, Symbol(return,Decl(propertyNamesOfReservedWords.ts,183,11))
 
     short;
->short : any
+>short : any, Symbol(short,Decl(propertyNamesOfReservedWords.ts,184,11))
 
     static;
->static : any
+>static : any, Symbol(static,Decl(propertyNamesOfReservedWords.ts,185,10))
 
     super;
->super : any
+>super : any, Symbol(super,Decl(propertyNamesOfReservedWords.ts,186,11))
 
     switch;
->switch : any
+>switch : any, Symbol(switch,Decl(propertyNamesOfReservedWords.ts,187,10))
 
     synchronized;
->synchronized : any
+>synchronized : any, Symbol(synchronized,Decl(propertyNamesOfReservedWords.ts,188,11))
 
     this;
->this : any
+>this : any, Symbol(this,Decl(propertyNamesOfReservedWords.ts,189,17))
 
     throw;
->throw : any
+>throw : any, Symbol(throw,Decl(propertyNamesOfReservedWords.ts,190,9))
 
     throws;
->throws : any
+>throws : any, Symbol(throws,Decl(propertyNamesOfReservedWords.ts,191,10))
 
     transient;
->transient : any
+>transient : any, Symbol(transient,Decl(propertyNamesOfReservedWords.ts,192,11))
 
     true;
->true : any
+>true : any, Symbol(true,Decl(propertyNamesOfReservedWords.ts,193,14))
 
     try;
->try : any
+>try : any, Symbol(try,Decl(propertyNamesOfReservedWords.ts,194,9))
 
     typeof;
->typeof : any
+>typeof : any, Symbol(typeof,Decl(propertyNamesOfReservedWords.ts,195,8))
 
     use;
->use : any
+>use : any, Symbol(use,Decl(propertyNamesOfReservedWords.ts,196,11))
 
     var;
->var : any
+>var : any, Symbol(var,Decl(propertyNamesOfReservedWords.ts,197,8))
 
     void;
->void : any
+>void : any, Symbol(void,Decl(propertyNamesOfReservedWords.ts,198,8))
 
     volatile;
->volatile : any
+>volatile : any, Symbol(volatile,Decl(propertyNamesOfReservedWords.ts,199,9))
 
     while;
->while : any
+>while : any, Symbol(while,Decl(propertyNamesOfReservedWords.ts,200,13))
 
     with;
->with : any
+>with : any, Symbol(with,Decl(propertyNamesOfReservedWords.ts,201,10))
 }
 
 var r5 = a.abstract;
->r5 : any
->a.abstract : any
->a : { abstract: any; as: any; boolean: any; break: any; byte: any; case: any; catch: any; char: any; class: any; continue: any; const: any; debugger: any; default: any; delete: any; do: any; double: any; else: any; enum: any; export: any; extends: any; false: any; final: any; finally: any; float: any; for: any; function: any; goto: any; if: any; implements: any; import: any; in: any; instanceof: any; int: any; interface: any; is: any; long: any; namespace: any; native: any; new: any; null: any; package: any; private: any; protected: any; public: any; return: any; short: any; static: any; super: any; switch: any; synchronized: any; this: any; throw: any; throws: any; transient: any; true: any; try: any; typeof: any; use: any; var: any; void: any; volatile: any; while: any; with: any; }
->abstract : any
+>r5 : any, Symbol(r5,Decl(propertyNamesOfReservedWords.ts,205,3))
+>a.abstract : any, Symbol(abstract,Decl(propertyNamesOfReservedWords.ts,139,8))
+>a : { abstract: any; as: any; boolean: any; break: any; byte: any; case: any; catch: any; char: any; class: any; continue: any; const: any; debugger: any; default: any; delete: any; do: any; double: any; else: any; enum: any; export: any; extends: any; false: any; final: any; finally: any; float: any; for: any; function: any; goto: any; if: any; implements: any; import: any; in: any; instanceof: any; int: any; interface: any; is: any; long: any; namespace: any; native: any; new: any; null: any; package: any; private: any; protected: any; public: any; return: any; short: any; static: any; super: any; switch: any; synchronized: any; this: any; throw: any; throws: any; transient: any; true: any; try: any; typeof: any; use: any; var: any; void: any; volatile: any; while: any; with: any; }, Symbol(a,Decl(propertyNamesOfReservedWords.ts,139,3))
+>abstract : any, Symbol(abstract,Decl(propertyNamesOfReservedWords.ts,139,8))
 
 var r6 = a.as;
->r6 : any
->a.as : any
->a : { abstract: any; as: any; boolean: any; break: any; byte: any; case: any; catch: any; char: any; class: any; continue: any; const: any; debugger: any; default: any; delete: any; do: any; double: any; else: any; enum: any; export: any; extends: any; false: any; final: any; finally: any; float: any; for: any; function: any; goto: any; if: any; implements: any; import: any; in: any; instanceof: any; int: any; interface: any; is: any; long: any; namespace: any; native: any; new: any; null: any; package: any; private: any; protected: any; public: any; return: any; short: any; static: any; super: any; switch: any; synchronized: any; this: any; throw: any; throws: any; transient: any; true: any; try: any; typeof: any; use: any; var: any; void: any; volatile: any; while: any; with: any; }
->as : any
+>r6 : any, Symbol(r6,Decl(propertyNamesOfReservedWords.ts,206,3))
+>a.as : any, Symbol(as,Decl(propertyNamesOfReservedWords.ts,140,13))
+>a : { abstract: any; as: any; boolean: any; break: any; byte: any; case: any; catch: any; char: any; class: any; continue: any; const: any; debugger: any; default: any; delete: any; do: any; double: any; else: any; enum: any; export: any; extends: any; false: any; final: any; finally: any; float: any; for: any; function: any; goto: any; if: any; implements: any; import: any; in: any; instanceof: any; int: any; interface: any; is: any; long: any; namespace: any; native: any; new: any; null: any; package: any; private: any; protected: any; public: any; return: any; short: any; static: any; super: any; switch: any; synchronized: any; this: any; throw: any; throws: any; transient: any; true: any; try: any; typeof: any; use: any; var: any; void: any; volatile: any; while: any; with: any; }, Symbol(a,Decl(propertyNamesOfReservedWords.ts,139,3))
+>as : any, Symbol(as,Decl(propertyNamesOfReservedWords.ts,140,13))
 
 enum E {
->E : E
+>E : E, Symbol(E,Decl(propertyNamesOfReservedWords.ts,206,14))
 
     abstract,
->abstract : E
+>abstract : E, Symbol(E.abstract,Decl(propertyNamesOfReservedWords.ts,208,8))
 
     as,
->as : E
+>as : E, Symbol(E.as,Decl(propertyNamesOfReservedWords.ts,209,13))
 
     boolean,
->boolean : E
+>boolean : E, Symbol(E.boolean,Decl(propertyNamesOfReservedWords.ts,210,7))
 
     break,
->break : E
+>break : E, Symbol(E.break,Decl(propertyNamesOfReservedWords.ts,211,12))
 
     byte,
->byte : E
+>byte : E, Symbol(E.byte,Decl(propertyNamesOfReservedWords.ts,212,10))
 
     case,
->case : E
+>case : E, Symbol(E.case,Decl(propertyNamesOfReservedWords.ts,213,9))
 
     catch,
->catch : E
+>catch : E, Symbol(E.catch,Decl(propertyNamesOfReservedWords.ts,214,9))
 
     char,
->char : E
+>char : E, Symbol(E.char,Decl(propertyNamesOfReservedWords.ts,215,10))
 
     class,
->class : E
+>class : E, Symbol(E.class,Decl(propertyNamesOfReservedWords.ts,216,9))
 
     continue,
->continue : E
+>continue : E, Symbol(E.continue,Decl(propertyNamesOfReservedWords.ts,217,10))
 
     const,
->const : E
+>const : E, Symbol(E.const,Decl(propertyNamesOfReservedWords.ts,218,13))
 
     debugger,
->debugger : E
+>debugger : E, Symbol(E.debugger,Decl(propertyNamesOfReservedWords.ts,219,10))
 
     default,
->default : E
+>default : E, Symbol(E.default,Decl(propertyNamesOfReservedWords.ts,220,13))
 
     delete,
->delete : E
+>delete : E, Symbol(E.delete,Decl(propertyNamesOfReservedWords.ts,221,12))
 
     do,
->do : E
+>do : E, Symbol(E.do,Decl(propertyNamesOfReservedWords.ts,222,11))
 
     double,
->double : E
+>double : E, Symbol(E.double,Decl(propertyNamesOfReservedWords.ts,223,7))
 
     else,
->else : E
+>else : E, Symbol(E.else,Decl(propertyNamesOfReservedWords.ts,224,11))
 
     enum,
->enum : E
+>enum : E, Symbol(E.enum,Decl(propertyNamesOfReservedWords.ts,225,9))
 
     export,
->export : E
+>export : E, Symbol(E.export,Decl(propertyNamesOfReservedWords.ts,226,9))
 
     extends,
->extends : E
+>extends : E, Symbol(E.extends,Decl(propertyNamesOfReservedWords.ts,227,11))
 
     false,
->false : E
+>false : E, Symbol(E.false,Decl(propertyNamesOfReservedWords.ts,228,12))
 
     final,
->final : E
+>final : E, Symbol(E.final,Decl(propertyNamesOfReservedWords.ts,229,10))
 
     finally,
->finally : E
+>finally : E, Symbol(E.finally,Decl(propertyNamesOfReservedWords.ts,230,10))
 
     float,
->float : E
+>float : E, Symbol(E.float,Decl(propertyNamesOfReservedWords.ts,231,12))
 
     for,
->for : E
+>for : E, Symbol(E.for,Decl(propertyNamesOfReservedWords.ts,232,10))
 
     function,
->function : E
+>function : E, Symbol(E.function,Decl(propertyNamesOfReservedWords.ts,233,8))
 
     goto,
->goto : E
+>goto : E, Symbol(E.goto,Decl(propertyNamesOfReservedWords.ts,234,13))
 
     if,
->if : E
+>if : E, Symbol(E.if,Decl(propertyNamesOfReservedWords.ts,235,9))
 
     implements,
->implements : E
+>implements : E, Symbol(E.implements,Decl(propertyNamesOfReservedWords.ts,236,7))
 
     import,
->import : E
+>import : E, Symbol(E.import,Decl(propertyNamesOfReservedWords.ts,237,15))
 
     in,
->in : E
+>in : E, Symbol(E.in,Decl(propertyNamesOfReservedWords.ts,238,11))
 
     instanceof,
->instanceof : E
+>instanceof : E, Symbol(E.instanceof,Decl(propertyNamesOfReservedWords.ts,239,7))
 
     int,
->int : E
+>int : E, Symbol(E.int,Decl(propertyNamesOfReservedWords.ts,240,15))
 
     interface,
->interface : E
+>interface : E, Symbol(E.interface,Decl(propertyNamesOfReservedWords.ts,241,8))
 
     is,
->is : E
+>is : E, Symbol(E.is,Decl(propertyNamesOfReservedWords.ts,242,14))
 
     long,
->long : E
+>long : E, Symbol(E.long,Decl(propertyNamesOfReservedWords.ts,243,7))
 
     namespace,
->namespace : E
+>namespace : E, Symbol(E.namespace,Decl(propertyNamesOfReservedWords.ts,244,9))
 
     native,
->native : E
+>native : E, Symbol(E.native,Decl(propertyNamesOfReservedWords.ts,245,14))
 
     new,
->new : E
+>new : E, Symbol(E.new,Decl(propertyNamesOfReservedWords.ts,246,11))
 
     null,
->null : E
+>null : E, Symbol(E.null,Decl(propertyNamesOfReservedWords.ts,247,8))
 
     package,
->package : E
+>package : E, Symbol(E.package,Decl(propertyNamesOfReservedWords.ts,248,9))
 
     private,
->private : E
+>private : E, Symbol(E.private,Decl(propertyNamesOfReservedWords.ts,249,12))
 
     protected,
->protected : E
+>protected : E, Symbol(E.protected,Decl(propertyNamesOfReservedWords.ts,250,12))
 
     public,
->public : E
+>public : E, Symbol(E.public,Decl(propertyNamesOfReservedWords.ts,251,14))
 
     return,
->return : E
+>return : E, Symbol(E.return,Decl(propertyNamesOfReservedWords.ts,252,11))
 
     short,
->short : E
+>short : E, Symbol(E.short,Decl(propertyNamesOfReservedWords.ts,253,11))
 
     static,
->static : E
+>static : E, Symbol(E.static,Decl(propertyNamesOfReservedWords.ts,254,10))
 
     super,
->super : E
+>super : E, Symbol(E.super,Decl(propertyNamesOfReservedWords.ts,255,11))
 
     switch,
->switch : E
+>switch : E, Symbol(E.switch,Decl(propertyNamesOfReservedWords.ts,256,10))
 
     synchronized,
->synchronized : E
+>synchronized : E, Symbol(E.synchronized,Decl(propertyNamesOfReservedWords.ts,257,11))
 
     this,
->this : E
+>this : E, Symbol(E.this,Decl(propertyNamesOfReservedWords.ts,258,17))
 
     throw,
->throw : E
+>throw : E, Symbol(E.throw,Decl(propertyNamesOfReservedWords.ts,259,9))
 
     throws,
->throws : E
+>throws : E, Symbol(E.throws,Decl(propertyNamesOfReservedWords.ts,260,10))
 
     transient,
->transient : E
+>transient : E, Symbol(E.transient,Decl(propertyNamesOfReservedWords.ts,261,11))
 
     true,
->true : E
+>true : E, Symbol(E.true,Decl(propertyNamesOfReservedWords.ts,262,14))
 
     try,
->try : E
+>try : E, Symbol(E.try,Decl(propertyNamesOfReservedWords.ts,263,9))
 
     typeof,
->typeof : E
+>typeof : E, Symbol(E.typeof,Decl(propertyNamesOfReservedWords.ts,264,8))
 
     use,
->use : E
+>use : E, Symbol(E.use,Decl(propertyNamesOfReservedWords.ts,265,11))
 
     var,
->var : E
+>var : E, Symbol(E.var,Decl(propertyNamesOfReservedWords.ts,266,8))
 
     void,
->void : E
+>void : E, Symbol(E.void,Decl(propertyNamesOfReservedWords.ts,267,8))
 
     volatile,
->volatile : E
+>volatile : E, Symbol(E.volatile,Decl(propertyNamesOfReservedWords.ts,268,9))
 
     while,
->while : E
+>while : E, Symbol(E.while,Decl(propertyNamesOfReservedWords.ts,269,13))
 
     with,
->with : E
+>with : E, Symbol(E.with,Decl(propertyNamesOfReservedWords.ts,270,10))
 }
 
 var r7 = E.abstract;
->r7 : E
->E.abstract : E
->E : typeof E
->abstract : E
+>r7 : E, Symbol(r7,Decl(propertyNamesOfReservedWords.ts,274,3))
+>E.abstract : E, Symbol(E.abstract,Decl(propertyNamesOfReservedWords.ts,208,8))
+>E : typeof E, Symbol(E,Decl(propertyNamesOfReservedWords.ts,206,14))
+>abstract : E, Symbol(E.abstract,Decl(propertyNamesOfReservedWords.ts,208,8))
 
 var r8 = E.as;
->r8 : E
->E.as : E
->E : typeof E
->as : E
+>r8 : E, Symbol(r8,Decl(propertyNamesOfReservedWords.ts,275,3))
+>E.as : E, Symbol(E.as,Decl(propertyNamesOfReservedWords.ts,209,13))
+>E : typeof E, Symbol(E,Decl(propertyNamesOfReservedWords.ts,206,14))
+>as : E, Symbol(E.as,Decl(propertyNamesOfReservedWords.ts,209,13))
 

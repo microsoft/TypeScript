@@ -2,36 +2,36 @@
 // object literal properties are widened to any
 
 var x = {
->x : { foo: any; bar: any; }
+>x : { foo: any; bar: any; }, Symbol(x,Decl(objectLiteralWidened.ts,2,3))
 >{    foo: null,    bar: undefined} : { foo: null; bar: undefined; }
 
     foo: null,
->foo : null
+>foo : null, Symbol(foo,Decl(objectLiteralWidened.ts,2,9))
 >null : null
 
     bar: undefined
->bar : undefined
->undefined : undefined
+>bar : undefined, Symbol(bar,Decl(objectLiteralWidened.ts,3,14))
+>undefined : undefined, Symbol(undefined)
 }
 
 var y = {
->y : { foo: any; bar: { baz: any; boo: any; }; }
+>y : { foo: any; bar: { baz: any; boo: any; }; }, Symbol(y,Decl(objectLiteralWidened.ts,7,3))
 >{    foo: null,    bar: {        baz: null,        boo: undefined    }} : { foo: null; bar: { baz: null; boo: undefined; }; }
 
     foo: null,
->foo : null
+>foo : null, Symbol(foo,Decl(objectLiteralWidened.ts,7,9))
 >null : null
 
     bar: {
->bar : { baz: null; boo: undefined; }
+>bar : { baz: null; boo: undefined; }, Symbol(bar,Decl(objectLiteralWidened.ts,8,14))
 >{        baz: null,        boo: undefined    } : { baz: null; boo: undefined; }
 
         baz: null,
->baz : null
+>baz : null, Symbol(baz,Decl(objectLiteralWidened.ts,9,10))
 >null : null
 
         boo: undefined
->boo : undefined
->undefined : undefined
+>boo : undefined, Symbol(boo,Decl(objectLiteralWidened.ts,10,18))
+>undefined : undefined, Symbol(undefined)
     }
 }

@@ -1,44 +1,44 @@
 === tests/cases/conformance/es6/spread/iteratorSpreadInArray7.ts ===
 var array: symbol[];
->array : symbol[]
+>array : symbol[], Symbol(array,Decl(iteratorSpreadInArray7.ts,0,3))
 
 array.concat([...new SymbolIterator]);
 >array.concat([...new SymbolIterator]) : symbol[]
->array.concat : { <U extends symbol[]>(...items: U[]): symbol[]; (...items: symbol[]): symbol[]; }
->array : symbol[]
->concat : { <U extends symbol[]>(...items: U[]): symbol[]; (...items: symbol[]): symbol[]; }
+>array.concat : { <U extends symbol[]>(...items: U[]): symbol[]; (...items: symbol[]): symbol[]; }, Symbol(Array.concat,Decl(lib.d.ts,1025,13),Decl(lib.d.ts,1030,46))
+>array : symbol[], Symbol(array,Decl(iteratorSpreadInArray7.ts,0,3))
+>concat : { <U extends symbol[]>(...items: U[]): symbol[]; (...items: symbol[]): symbol[]; }, Symbol(Array.concat,Decl(lib.d.ts,1025,13),Decl(lib.d.ts,1030,46))
 >[...new SymbolIterator] : symbol[]
 >...new SymbolIterator : symbol
 >new SymbolIterator : SymbolIterator
->SymbolIterator : typeof SymbolIterator
+>SymbolIterator : typeof SymbolIterator, Symbol(SymbolIterator,Decl(iteratorSpreadInArray7.ts,1,38))
 
 class SymbolIterator {
->SymbolIterator : SymbolIterator
+>SymbolIterator : SymbolIterator, Symbol(SymbolIterator,Decl(iteratorSpreadInArray7.ts,1,38))
 
     next() {
->next : () => { value: symbol; done: boolean; }
+>next : () => { value: symbol; done: boolean; }, Symbol(next,Decl(iteratorSpreadInArray7.ts,3,22))
 
         return {
 >{            value: Symbol(),            done: false        } : { value: symbol; done: boolean; }
 
             value: Symbol(),
->value : symbol
+>value : symbol, Symbol(value,Decl(iteratorSpreadInArray7.ts,5,16))
 >Symbol() : symbol
->Symbol : SymbolConstructor
+>Symbol : SymbolConstructor, Symbol(Symbol,Decl(lib.d.ts,1186,52),Decl(lib.d.ts,1262,11))
 
             done: false
->done : boolean
+>done : boolean, Symbol(done,Decl(iteratorSpreadInArray7.ts,6,28))
 >false : boolean
 
         };
     }
 
     [Symbol.iterator]() {
->Symbol.iterator : symbol
->Symbol : SymbolConstructor
->iterator : symbol
+>Symbol.iterator : symbol, Symbol(SymbolConstructor.iterator,Decl(lib.d.ts,1236,31))
+>Symbol : SymbolConstructor, Symbol(Symbol,Decl(lib.d.ts,1186,52),Decl(lib.d.ts,1262,11))
+>iterator : symbol, Symbol(SymbolConstructor.iterator,Decl(lib.d.ts,1236,31))
 
         return this;
->this : SymbolIterator
+>this : SymbolIterator, Symbol(SymbolIterator,Decl(iteratorSpreadInArray7.ts,1,38))
     }
 }

@@ -1,76 +1,76 @@
 === tests/cases/compiler/withImportDecl_1.ts ===
 ///<reference path='withImportDecl_0.ts'/>
 var simpleVar;
->simpleVar : any
+>simpleVar : any, Symbol(simpleVar,Decl(withImportDecl_1.ts,1,3))
 
 var anotherVar: any;
->anotherVar : any
+>anotherVar : any, Symbol(anotherVar,Decl(withImportDecl_1.ts,3,3))
 
 var varWithSimpleType: number;
->varWithSimpleType : number
+>varWithSimpleType : number, Symbol(varWithSimpleType,Decl(withImportDecl_1.ts,4,3))
 
 var varWithArrayType: number[];
->varWithArrayType : number[]
+>varWithArrayType : number[], Symbol(varWithArrayType,Decl(withImportDecl_1.ts,5,3))
 
 var varWithInitialValue = 30;
->varWithInitialValue : number
+>varWithInitialValue : number, Symbol(varWithInitialValue,Decl(withImportDecl_1.ts,7,3))
 >30 : number
 
 var withComplicatedValue = { x: 30, y: 70, desc: "position" };
->withComplicatedValue : { x: number; y: number; desc: string; }
+>withComplicatedValue : { x: number; y: number; desc: string; }, Symbol(withComplicatedValue,Decl(withImportDecl_1.ts,9,3))
 >{ x: 30, y: 70, desc: "position" } : { x: number; y: number; desc: string; }
->x : number
+>x : number, Symbol(x,Decl(withImportDecl_1.ts,9,28))
 >30 : number
->y : number
+>y : number, Symbol(y,Decl(withImportDecl_1.ts,9,35))
 >70 : number
->desc : string
+>desc : string, Symbol(desc,Decl(withImportDecl_1.ts,9,42))
 >"position" : string
 
 declare var declaredVar;
->declaredVar : any
+>declaredVar : any, Symbol(declaredVar,Decl(withImportDecl_1.ts,11,11),Decl(withImportDecl_1.ts,14,11))
 
 declare var declareVar2
->declareVar2 : any
+>declareVar2 : any, Symbol(declareVar2,Decl(withImportDecl_1.ts,12,11))
 
 declare var declaredVar;
->declaredVar : any
+>declaredVar : any, Symbol(declaredVar,Decl(withImportDecl_1.ts,11,11),Decl(withImportDecl_1.ts,14,11))
 
 declare var deckareVarWithType: number;
->deckareVarWithType : number
+>deckareVarWithType : number, Symbol(deckareVarWithType,Decl(withImportDecl_1.ts,15,11))
 
 var arrayVar: string[] = ['a', 'b'];
->arrayVar : string[]
+>arrayVar : string[], Symbol(arrayVar,Decl(withImportDecl_1.ts,17,3))
 >['a', 'b'] : string[]
 >'a' : string
 >'b' : string
 
 
 function simpleFunction() {
->simpleFunction : () => { x: string; y: string; n: number; }
+>simpleFunction : () => { x: string; y: string; n: number; }, Symbol(simpleFunction,Decl(withImportDecl_1.ts,17,36))
 
     return {
 >{        x: "Hello",        y: "word",        n: 2    } : { x: string; y: string; n: number; }
 
         x: "Hello",
->x : string
+>x : string, Symbol(x,Decl(withImportDecl_1.ts,21,12))
 >"Hello" : string
 
         y: "word",
->y : string
+>y : string, Symbol(y,Decl(withImportDecl_1.ts,22,19))
 >"word" : string
 
         n: 2
->n : number
+>n : number, Symbol(n,Decl(withImportDecl_1.ts,23,18))
 >2 : number
 
     };
 }
 
 module m1 {
->m1 : typeof m1
+>m1 : typeof m1, Symbol(m1,Decl(withImportDecl_1.ts,26,1))
 
     export function foo() {
->foo : () => string
+>foo : () => string, Symbol(foo,Decl(withImportDecl_1.ts,28,11))
 
         return "Hello";
 >"Hello" : string
@@ -78,22 +78,22 @@ module m1 {
 }
 
 import m3 = require("withImportDecl_0");
->m3 : typeof m3
+>m3 : typeof m3, Symbol(m3,Decl(withImportDecl_1.ts,32,1))
 
 var b = new m3.A();
->b : m3.A
+>b : m3.A, Symbol(b,Decl(withImportDecl_1.ts,36,3))
 >new m3.A() : m3.A
->m3.A : typeof m3.A
->m3 : typeof m3
->A : typeof m3.A
+>m3.A : typeof m3.A, Symbol(m3.A,Decl(withImportDecl_0.ts,0,0))
+>m3 : typeof m3, Symbol(m3,Decl(withImportDecl_1.ts,32,1))
+>A : typeof m3.A, Symbol(m3.A,Decl(withImportDecl_0.ts,0,0))
 
 b.foo;
->b.foo : string
->b : m3.A
->foo : string
+>b.foo : string, Symbol(m3.A.foo,Decl(withImportDecl_0.ts,0,16))
+>b : m3.A, Symbol(b,Decl(withImportDecl_1.ts,36,3))
+>foo : string, Symbol(m3.A.foo,Decl(withImportDecl_0.ts,0,16))
 
 === tests/cases/compiler/withImportDecl_0.ts ===
 export class A { foo: string; }
->A : A
->foo : string
+>A : A, Symbol(A,Decl(withImportDecl_0.ts,0,0))
+>foo : string, Symbol(foo,Decl(withImportDecl_0.ts,0,16))
 

@@ -1,21 +1,21 @@
 === tests/cases/compiler/functionWithDefaultParameterWithNoStatements14.ts ===
 var v: any[];
->v : any[]
+>v : any[], Symbol(v,Decl(functionWithDefaultParameterWithNoStatements14.ts,0,3))
 
 function foo(a = v[1 + 1]) { }
->foo : (a?: any) => void
->a : any
+>foo : (a?: any) => void, Symbol(foo,Decl(functionWithDefaultParameterWithNoStatements14.ts,0,13))
+>a : any, Symbol(a,Decl(functionWithDefaultParameterWithNoStatements14.ts,2,13))
 >v[1 + 1] : any
->v : any[]
+>v : any[], Symbol(v,Decl(functionWithDefaultParameterWithNoStatements14.ts,0,3))
 >1 + 1 : number
 >1 : number
 >1 : number
 
 function bar(a = v[1 + 1]) {
->bar : (a?: any) => void
->a : any
+>bar : (a?: any) => void, Symbol(bar,Decl(functionWithDefaultParameterWithNoStatements14.ts,2,30))
+>a : any, Symbol(a,Decl(functionWithDefaultParameterWithNoStatements14.ts,4,13))
 >v[1 + 1] : any
->v : any[]
+>v : any[], Symbol(v,Decl(functionWithDefaultParameterWithNoStatements14.ts,0,3))
 >1 + 1 : number
 >1 : number
 >1 : number

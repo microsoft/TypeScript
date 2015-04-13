@@ -1,12 +1,12 @@
 === tests/cases/conformance/types/tuple/indexerWithTuple.ts ===
 var strNumTuple: [string, number] = ["foo", 10]; 
->strNumTuple : [string, number]
+>strNumTuple : [string, number], Symbol(strNumTuple,Decl(indexerWithTuple.ts,0,3))
 >["foo", 10] : [string, number]
 >"foo" : string
 >10 : number
 
 var numTupleTuple: [number, [string, number]] = [10, ["bar", 20]];
->numTupleTuple : [number, [string, number]]
+>numTupleTuple : [number, [string, number]], Symbol(numTupleTuple,Decl(indexerWithTuple.ts,1,3))
 >[10, ["bar", 20]] : [number, [string, number]]
 >10 : number
 >["bar", 20] : [string, number]
@@ -14,161 +14,161 @@ var numTupleTuple: [number, [string, number]] = [10, ["bar", 20]];
 >20 : number
 
 var unionTuple1: [number, string| number] = [10, "foo"]; 
->unionTuple1 : [number, string | number]
+>unionTuple1 : [number, string | number], Symbol(unionTuple1,Decl(indexerWithTuple.ts,2,3))
 >[10, "foo"] : [number, string]
 >10 : number
 >"foo" : string
 
 var unionTuple2: [boolean, string| number] = [true, "foo"]; 
->unionTuple2 : [boolean, string | number]
+>unionTuple2 : [boolean, string | number], Symbol(unionTuple2,Decl(indexerWithTuple.ts,3,3))
 >[true, "foo"] : [boolean, string]
 >true : boolean
 >"foo" : string
 
 // no error
 var idx0 = 0;
->idx0 : number
+>idx0 : number, Symbol(idx0,Decl(indexerWithTuple.ts,6,3))
 >0 : number
 
 var idx1 = 1;
->idx1 : number
+>idx1 : number, Symbol(idx1,Decl(indexerWithTuple.ts,7,3))
 >1 : number
 
 var ele10 = strNumTuple[0]; // string
->ele10 : string
+>ele10 : string, Symbol(ele10,Decl(indexerWithTuple.ts,8,3))
 >strNumTuple[0] : string
->strNumTuple : [string, number]
->0 : number
+>strNumTuple : [string, number], Symbol(strNumTuple,Decl(indexerWithTuple.ts,0,3))
+>0 : number, Symbol(0)
 
 var ele11 = strNumTuple[1]; // number
->ele11 : number
+>ele11 : number, Symbol(ele11,Decl(indexerWithTuple.ts,9,3))
 >strNumTuple[1] : number
->strNumTuple : [string, number]
->1 : number
+>strNumTuple : [string, number], Symbol(strNumTuple,Decl(indexerWithTuple.ts,0,3))
+>1 : number, Symbol(1)
 
 var ele12 = strNumTuple[2]; // string | number
->ele12 : string | number
+>ele12 : string | number, Symbol(ele12,Decl(indexerWithTuple.ts,10,3))
 >strNumTuple[2] : string | number
->strNumTuple : [string, number]
+>strNumTuple : [string, number], Symbol(strNumTuple,Decl(indexerWithTuple.ts,0,3))
 >2 : number
 
 var ele13 = strNumTuple[idx0]; // string | number
->ele13 : string | number
+>ele13 : string | number, Symbol(ele13,Decl(indexerWithTuple.ts,11,3))
 >strNumTuple[idx0] : string | number
->strNumTuple : [string, number]
->idx0 : number
+>strNumTuple : [string, number], Symbol(strNumTuple,Decl(indexerWithTuple.ts,0,3))
+>idx0 : number, Symbol(idx0,Decl(indexerWithTuple.ts,6,3))
 
 var ele14 = strNumTuple[idx1]; // string | number
->ele14 : string | number
+>ele14 : string | number, Symbol(ele14,Decl(indexerWithTuple.ts,12,3))
 >strNumTuple[idx1] : string | number
->strNumTuple : [string, number]
->idx1 : number
+>strNumTuple : [string, number], Symbol(strNumTuple,Decl(indexerWithTuple.ts,0,3))
+>idx1 : number, Symbol(idx1,Decl(indexerWithTuple.ts,7,3))
 
 var ele15 = strNumTuple["0"]; // string
->ele15 : string
+>ele15 : string, Symbol(ele15,Decl(indexerWithTuple.ts,13,3))
 >strNumTuple["0"] : string
->strNumTuple : [string, number]
->"0" : string
+>strNumTuple : [string, number], Symbol(strNumTuple,Decl(indexerWithTuple.ts,0,3))
+>"0" : string, Symbol(0)
 
 var ele16 = strNumTuple["1"]; // number
->ele16 : number
+>ele16 : number, Symbol(ele16,Decl(indexerWithTuple.ts,14,3))
 >strNumTuple["1"] : number
->strNumTuple : [string, number]
->"1" : string
+>strNumTuple : [string, number], Symbol(strNumTuple,Decl(indexerWithTuple.ts,0,3))
+>"1" : string, Symbol(1)
 
 var strNumTuple1 = numTupleTuple[1];  //[string, number];
->strNumTuple1 : [string, number]
+>strNumTuple1 : [string, number], Symbol(strNumTuple1,Decl(indexerWithTuple.ts,15,3))
 >numTupleTuple[1] : [string, number]
->numTupleTuple : [number, [string, number]]
->1 : number
+>numTupleTuple : [number, [string, number]], Symbol(numTupleTuple,Decl(indexerWithTuple.ts,1,3))
+>1 : number, Symbol(1)
 
 var ele17 = numTupleTuple[2]; // number | [string, number]
->ele17 : number | [string, number]
+>ele17 : number | [string, number], Symbol(ele17,Decl(indexerWithTuple.ts,16,3))
 >numTupleTuple[2] : number | [string, number]
->numTupleTuple : [number, [string, number]]
+>numTupleTuple : [number, [string, number]], Symbol(numTupleTuple,Decl(indexerWithTuple.ts,1,3))
 >2 : number
 
 var eleUnion10 = unionTuple1[0]; // number
->eleUnion10 : number
+>eleUnion10 : number, Symbol(eleUnion10,Decl(indexerWithTuple.ts,17,3))
 >unionTuple1[0] : number
->unionTuple1 : [number, string | number]
->0 : number
+>unionTuple1 : [number, string | number], Symbol(unionTuple1,Decl(indexerWithTuple.ts,2,3))
+>0 : number, Symbol(0)
 
 var eleUnion11 = unionTuple1[1]; // string | number
->eleUnion11 : string | number
+>eleUnion11 : string | number, Symbol(eleUnion11,Decl(indexerWithTuple.ts,18,3))
 >unionTuple1[1] : string | number
->unionTuple1 : [number, string | number]
->1 : number
+>unionTuple1 : [number, string | number], Symbol(unionTuple1,Decl(indexerWithTuple.ts,2,3))
+>1 : number, Symbol(1)
 
 var eleUnion12 = unionTuple1[2]; // string | number
->eleUnion12 : string | number
+>eleUnion12 : string | number, Symbol(eleUnion12,Decl(indexerWithTuple.ts,19,3))
 >unionTuple1[2] : string | number
->unionTuple1 : [number, string | number]
+>unionTuple1 : [number, string | number], Symbol(unionTuple1,Decl(indexerWithTuple.ts,2,3))
 >2 : number
 
 var eleUnion13 = unionTuple1[idx0]; // string | number
->eleUnion13 : string | number
+>eleUnion13 : string | number, Symbol(eleUnion13,Decl(indexerWithTuple.ts,20,3))
 >unionTuple1[idx0] : string | number
->unionTuple1 : [number, string | number]
->idx0 : number
+>unionTuple1 : [number, string | number], Symbol(unionTuple1,Decl(indexerWithTuple.ts,2,3))
+>idx0 : number, Symbol(idx0,Decl(indexerWithTuple.ts,6,3))
 
 var eleUnion14 = unionTuple1[idx1]; // string | number
->eleUnion14 : string | number
+>eleUnion14 : string | number, Symbol(eleUnion14,Decl(indexerWithTuple.ts,21,3))
 >unionTuple1[idx1] : string | number
->unionTuple1 : [number, string | number]
->idx1 : number
+>unionTuple1 : [number, string | number], Symbol(unionTuple1,Decl(indexerWithTuple.ts,2,3))
+>idx1 : number, Symbol(idx1,Decl(indexerWithTuple.ts,7,3))
 
 var eleUnion15 = unionTuple1["0"]; // number
->eleUnion15 : number
+>eleUnion15 : number, Symbol(eleUnion15,Decl(indexerWithTuple.ts,22,3))
 >unionTuple1["0"] : number
->unionTuple1 : [number, string | number]
->"0" : string
+>unionTuple1 : [number, string | number], Symbol(unionTuple1,Decl(indexerWithTuple.ts,2,3))
+>"0" : string, Symbol(0)
 
 var eleUnion16 = unionTuple1["1"]; // string | number
->eleUnion16 : string | number
+>eleUnion16 : string | number, Symbol(eleUnion16,Decl(indexerWithTuple.ts,23,3))
 >unionTuple1["1"] : string | number
->unionTuple1 : [number, string | number]
->"1" : string
+>unionTuple1 : [number, string | number], Symbol(unionTuple1,Decl(indexerWithTuple.ts,2,3))
+>"1" : string, Symbol(1)
 
 var eleUnion20 = unionTuple2[0]; // boolean
->eleUnion20 : boolean
+>eleUnion20 : boolean, Symbol(eleUnion20,Decl(indexerWithTuple.ts,25,3))
 >unionTuple2[0] : boolean
->unionTuple2 : [boolean, string | number]
->0 : number
+>unionTuple2 : [boolean, string | number], Symbol(unionTuple2,Decl(indexerWithTuple.ts,3,3))
+>0 : number, Symbol(0)
 
 var eleUnion21 = unionTuple2[1]; // string | number
->eleUnion21 : string | number
+>eleUnion21 : string | number, Symbol(eleUnion21,Decl(indexerWithTuple.ts,26,3))
 >unionTuple2[1] : string | number
->unionTuple2 : [boolean, string | number]
->1 : number
+>unionTuple2 : [boolean, string | number], Symbol(unionTuple2,Decl(indexerWithTuple.ts,3,3))
+>1 : number, Symbol(1)
 
 var eleUnion22 = unionTuple2[2]; // string | number | boolean
->eleUnion22 : string | number | boolean
+>eleUnion22 : string | number | boolean, Symbol(eleUnion22,Decl(indexerWithTuple.ts,27,3))
 >unionTuple2[2] : string | number | boolean
->unionTuple2 : [boolean, string | number]
+>unionTuple2 : [boolean, string | number], Symbol(unionTuple2,Decl(indexerWithTuple.ts,3,3))
 >2 : number
 
 var eleUnion23 = unionTuple2[idx0]; // string | number | boolean
->eleUnion23 : string | number | boolean
+>eleUnion23 : string | number | boolean, Symbol(eleUnion23,Decl(indexerWithTuple.ts,28,3))
 >unionTuple2[idx0] : string | number | boolean
->unionTuple2 : [boolean, string | number]
->idx0 : number
+>unionTuple2 : [boolean, string | number], Symbol(unionTuple2,Decl(indexerWithTuple.ts,3,3))
+>idx0 : number, Symbol(idx0,Decl(indexerWithTuple.ts,6,3))
 
 var eleUnion24 = unionTuple2[idx1]; // string | number | boolean
->eleUnion24 : string | number | boolean
+>eleUnion24 : string | number | boolean, Symbol(eleUnion24,Decl(indexerWithTuple.ts,29,3))
 >unionTuple2[idx1] : string | number | boolean
->unionTuple2 : [boolean, string | number]
->idx1 : number
+>unionTuple2 : [boolean, string | number], Symbol(unionTuple2,Decl(indexerWithTuple.ts,3,3))
+>idx1 : number, Symbol(idx1,Decl(indexerWithTuple.ts,7,3))
 
 var eleUnion25 = unionTuple2["0"]; // boolean
->eleUnion25 : boolean
+>eleUnion25 : boolean, Symbol(eleUnion25,Decl(indexerWithTuple.ts,30,3))
 >unionTuple2["0"] : boolean
->unionTuple2 : [boolean, string | number]
->"0" : string
+>unionTuple2 : [boolean, string | number], Symbol(unionTuple2,Decl(indexerWithTuple.ts,3,3))
+>"0" : string, Symbol(0)
 
 var eleUnion26 = unionTuple2["1"]; // string | number
->eleUnion26 : string | number
+>eleUnion26 : string | number, Symbol(eleUnion26,Decl(indexerWithTuple.ts,31,3))
 >unionTuple2["1"] : string | number
->unionTuple2 : [boolean, string | number]
->"1" : string
+>unionTuple2 : [boolean, string | number], Symbol(unionTuple2,Decl(indexerWithTuple.ts,3,3))
+>"1" : string, Symbol(1)
 

@@ -1,53 +1,53 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNames11_ES6.ts ===
 var s: string;
->s : string
+>s : string, Symbol(s,Decl(computedPropertyNames11_ES6.ts,0,3))
 
 var n: number;
->n : number
+>n : number, Symbol(n,Decl(computedPropertyNames11_ES6.ts,1,3))
 
 var a: any;
->a : any
+>a : any, Symbol(a,Decl(computedPropertyNames11_ES6.ts,2,3))
 
 var v = {
->v : {}
+>v : {}, Symbol(v,Decl(computedPropertyNames11_ES6.ts,3,3))
 >{    get [s]() { return 0; },    set [n](v) { },    get [s + s]() { return 0; },    set [s + n](v) { },    get [+s]() { return 0; },    set [""](v) { },    get [0]() { return 0; },    set [a](v) { },    get [<any>true]() { return 0; },    set [`hello bye`](v) { },    get [`hello ${a} bye`]() { return 0; }} : {}
 
     get [s]() { return 0; },
->s : string
+>s : string, Symbol(s,Decl(computedPropertyNames11_ES6.ts,0,3))
 >0 : number
 
     set [n](v) { },
->n : number
->v : any
+>n : number, Symbol(n,Decl(computedPropertyNames11_ES6.ts,1,3))
+>v : any, Symbol(v,Decl(computedPropertyNames11_ES6.ts,5,12))
 
     get [s + s]() { return 0; },
 >s + s : string
->s : string
->s : string
+>s : string, Symbol(s,Decl(computedPropertyNames11_ES6.ts,0,3))
+>s : string, Symbol(s,Decl(computedPropertyNames11_ES6.ts,0,3))
 >0 : number
 
     set [s + n](v) { },
 >s + n : string
->s : string
->n : number
->v : any
+>s : string, Symbol(s,Decl(computedPropertyNames11_ES6.ts,0,3))
+>n : number, Symbol(n,Decl(computedPropertyNames11_ES6.ts,1,3))
+>v : any, Symbol(v,Decl(computedPropertyNames11_ES6.ts,7,16))
 
     get [+s]() { return 0; },
 >+s : number
->s : string
+>s : string, Symbol(s,Decl(computedPropertyNames11_ES6.ts,0,3))
 >0 : number
 
     set [""](v) { },
 >"" : string
->v : any
+>v : any, Symbol(v,Decl(computedPropertyNames11_ES6.ts,9,13))
 
     get [0]() { return 0; },
 >0 : number
 >0 : number
 
     set [a](v) { },
->a : any
->v : any
+>a : any, Symbol(a,Decl(computedPropertyNames11_ES6.ts,2,3))
+>v : any, Symbol(v,Decl(computedPropertyNames11_ES6.ts,11,12))
 
     get [<any>true]() { return 0; },
 ><any>true : any
@@ -56,10 +56,10 @@ var v = {
 
     set [`hello bye`](v) { },
 >`hello bye` : string
->v : any
+>v : any, Symbol(v,Decl(computedPropertyNames11_ES6.ts,13,22))
 
     get [`hello ${a} bye`]() { return 0; }
 >`hello ${a} bye` : string
->a : any
+>a : any, Symbol(a,Decl(computedPropertyNames11_ES6.ts,2,3))
 >0 : number
 }

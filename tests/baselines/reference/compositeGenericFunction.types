@@ -1,29 +1,29 @@
 === tests/cases/compiler/compositeGenericFunction.ts ===
 function f<T>(value: T) { return value; };
->f : <T>(value: T) => T
->T : T
->value : T
->T : T
->value : T
+>f : <T>(value: T) => T, Symbol(f,Decl(compositeGenericFunction.ts,0,0))
+>T : T, Symbol(T,Decl(compositeGenericFunction.ts,0,11))
+>value : T, Symbol(value,Decl(compositeGenericFunction.ts,0,14))
+>T : T, Symbol(T,Decl(compositeGenericFunction.ts,0,11))
+>value : T, Symbol(value,Decl(compositeGenericFunction.ts,0,14))
 
 function h<R>(func: (x: number) => R): R { return null; }
->h : <R>(func: (x: number) => R) => R
->R : R
->func : (x: number) => R
->x : number
->R : R
->R : R
+>h : <R>(func: (x: number) => R) => R, Symbol(h,Decl(compositeGenericFunction.ts,0,42))
+>R : R, Symbol(R,Decl(compositeGenericFunction.ts,2,11))
+>func : (x: number) => R, Symbol(func,Decl(compositeGenericFunction.ts,2,14))
+>x : number, Symbol(x,Decl(compositeGenericFunction.ts,2,21))
+>R : R, Symbol(R,Decl(compositeGenericFunction.ts,2,11))
+>R : R, Symbol(R,Decl(compositeGenericFunction.ts,2,11))
 >null : null
 
 var z: number = h<number>(f);
->z : number
+>z : number, Symbol(z,Decl(compositeGenericFunction.ts,4,3),Decl(compositeGenericFunction.ts,5,3))
 >h<number>(f) : number
->h : <R>(func: (x: number) => R) => R
->f : <T>(value: T) => T
+>h : <R>(func: (x: number) => R) => R, Symbol(h,Decl(compositeGenericFunction.ts,0,42))
+>f : <T>(value: T) => T, Symbol(f,Decl(compositeGenericFunction.ts,0,0))
 
 var z: number = h(f);
->z : number
+>z : number, Symbol(z,Decl(compositeGenericFunction.ts,4,3),Decl(compositeGenericFunction.ts,5,3))
 >h(f) : number
->h : <R>(func: (x: number) => R) => R
->f : <T>(value: T) => T
+>h : <R>(func: (x: number) => R) => R, Symbol(h,Decl(compositeGenericFunction.ts,0,42))
+>f : <T>(value: T) => T, Symbol(f,Decl(compositeGenericFunction.ts,0,0))
 

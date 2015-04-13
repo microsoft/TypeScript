@@ -1,55 +1,55 @@
 === tests/cases/compiler/indexSignaturesInferentialTyping.ts ===
 function foo<T>(items: { [index: number]: T }): T { return undefined; }
->foo : <T>(items: { [index: number]: T; }) => T
->T : T
->items : { [index: number]: T; }
->index : number
->T : T
->T : T
->undefined : undefined
+>foo : <T>(items: { [index: number]: T; }) => T, Symbol(foo,Decl(indexSignaturesInferentialTyping.ts,0,0))
+>T : T, Symbol(T,Decl(indexSignaturesInferentialTyping.ts,0,13))
+>items : { [index: number]: T; }, Symbol(items,Decl(indexSignaturesInferentialTyping.ts,0,16))
+>index : number, Symbol(index,Decl(indexSignaturesInferentialTyping.ts,0,26))
+>T : T, Symbol(T,Decl(indexSignaturesInferentialTyping.ts,0,13))
+>T : T, Symbol(T,Decl(indexSignaturesInferentialTyping.ts,0,13))
+>undefined : undefined, Symbol(undefined)
 
 function bar<T>(items: { [index: string]: T }): T { return undefined; }
->bar : <T>(items: { [index: string]: T; }) => T
->T : T
->items : { [index: string]: T; }
->index : string
->T : T
->T : T
->undefined : undefined
+>bar : <T>(items: { [index: string]: T; }) => T, Symbol(bar,Decl(indexSignaturesInferentialTyping.ts,0,71))
+>T : T, Symbol(T,Decl(indexSignaturesInferentialTyping.ts,1,13))
+>items : { [index: string]: T; }, Symbol(items,Decl(indexSignaturesInferentialTyping.ts,1,16))
+>index : string, Symbol(index,Decl(indexSignaturesInferentialTyping.ts,1,26))
+>T : T, Symbol(T,Decl(indexSignaturesInferentialTyping.ts,1,13))
+>T : T, Symbol(T,Decl(indexSignaturesInferentialTyping.ts,1,13))
+>undefined : undefined, Symbol(undefined)
 
 var x1 = foo({ 0: 0, 1: 1 });       // type should be number
->x1 : number
+>x1 : number, Symbol(x1,Decl(indexSignaturesInferentialTyping.ts,3,3))
 >foo({ 0: 0, 1: 1 }) : number
->foo : <T>(items: { [index: number]: T; }) => T
+>foo : <T>(items: { [index: number]: T; }) => T, Symbol(foo,Decl(indexSignaturesInferentialTyping.ts,0,0))
 >{ 0: 0, 1: 1 } : { [x: number]: number; 0: number; 1: number; }
 >0 : number
 >1 : number
 
 var x2 = foo({ zero: 0, one: 1 });
->x2 : any
+>x2 : any, Symbol(x2,Decl(indexSignaturesInferentialTyping.ts,4,3))
 >foo({ zero: 0, one: 1 }) : any
->foo : <T>(items: { [index: number]: T; }) => T
+>foo : <T>(items: { [index: number]: T; }) => T, Symbol(foo,Decl(indexSignaturesInferentialTyping.ts,0,0))
 >{ zero: 0, one: 1 } : { [x: number]: undefined; zero: number; one: number; }
->zero : number
+>zero : number, Symbol(zero,Decl(indexSignaturesInferentialTyping.ts,4,14))
 >0 : number
->one : number
+>one : number, Symbol(one,Decl(indexSignaturesInferentialTyping.ts,4,23))
 >1 : number
 
 var x3 = bar({ 0: 0, 1: 1 });
->x3 : number
+>x3 : number, Symbol(x3,Decl(indexSignaturesInferentialTyping.ts,5,3))
 >bar({ 0: 0, 1: 1 }) : number
->bar : <T>(items: { [index: string]: T; }) => T
+>bar : <T>(items: { [index: string]: T; }) => T, Symbol(bar,Decl(indexSignaturesInferentialTyping.ts,0,71))
 >{ 0: 0, 1: 1 } : { [x: string]: number; 0: number; 1: number; }
 >0 : number
 >1 : number
 
 var x4 = bar({ zero: 0, one: 1 });  // type should be number
->x4 : number
+>x4 : number, Symbol(x4,Decl(indexSignaturesInferentialTyping.ts,6,3))
 >bar({ zero: 0, one: 1 }) : number
->bar : <T>(items: { [index: string]: T; }) => T
+>bar : <T>(items: { [index: string]: T; }) => T, Symbol(bar,Decl(indexSignaturesInferentialTyping.ts,0,71))
 >{ zero: 0, one: 1 } : { [x: string]: number; zero: number; one: number; }
->zero : number
+>zero : number, Symbol(zero,Decl(indexSignaturesInferentialTyping.ts,6,14))
 >0 : number
->one : number
+>one : number, Symbol(one,Decl(indexSignaturesInferentialTyping.ts,6,23))
 >1 : number
 

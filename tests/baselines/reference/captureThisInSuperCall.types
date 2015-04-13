@@ -1,26 +1,26 @@
 === tests/cases/compiler/captureThisInSuperCall.ts ===
 class A {
->A : A
+>A : A, Symbol(A,Decl(captureThisInSuperCall.ts,0,0))
 
     constructor(p:any) {}
->p : any
+>p : any, Symbol(p,Decl(captureThisInSuperCall.ts,1,16))
 }
 
 class B extends A {
->B : B
->A : A
+>B : B, Symbol(B,Decl(captureThisInSuperCall.ts,2,1))
+>A : A, Symbol(A,Decl(captureThisInSuperCall.ts,0,0))
 
     constructor() { super({ test: () => this.someMethod()}); } 
 >super({ test: () => this.someMethod()}) : void
->super : typeof A
+>super : typeof A, Symbol(A,Decl(captureThisInSuperCall.ts,0,0))
 >{ test: () => this.someMethod()} : { test: () => void; }
->test : () => void
+>test : () => void, Symbol(test,Decl(captureThisInSuperCall.ts,5,27))
 >() => this.someMethod() : () => void
 >this.someMethod() : void
->this.someMethod : () => void
->this : B
->someMethod : () => void
+>this.someMethod : () => void, Symbol(someMethod,Decl(captureThisInSuperCall.ts,5,62))
+>this : B, Symbol(B,Decl(captureThisInSuperCall.ts,2,1))
+>someMethod : () => void, Symbol(someMethod,Decl(captureThisInSuperCall.ts,5,62))
 
     someMethod() {}
->someMethod : () => void
+>someMethod : () => void, Symbol(someMethod,Decl(captureThisInSuperCall.ts,5,62))
 }

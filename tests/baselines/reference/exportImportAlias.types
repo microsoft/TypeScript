@@ -2,182 +2,182 @@
 // expect no errors here
 
 module A {
->A : typeof A
+>A : typeof A, Symbol(A,Decl(exportImportAlias.ts,0,0))
 
     export var x = 'hello world'
->x : string
+>x : string, Symbol(x,Decl(exportImportAlias.ts,4,14))
 >'hello world' : string
 
     export class Point {
->Point : Point
+>Point : Point, Symbol(Point,Decl(exportImportAlias.ts,4,32))
 
         constructor(public x: number, public y: number) { }
->x : number
->y : number
+>x : number, Symbol(x,Decl(exportImportAlias.ts,6,20))
+>y : number, Symbol(y,Decl(exportImportAlias.ts,6,37))
     }
     export module B {
->B : unknown
+>B : any, Symbol(B,Decl(exportImportAlias.ts,7,5))
 
         export interface Id {
->Id : Id
+>Id : Id, Symbol(Id,Decl(exportImportAlias.ts,8,21))
 
             name: string;
->name : string
+>name : string, Symbol(name,Decl(exportImportAlias.ts,9,29))
         }
     }
 }
 
 module C {
->C : typeof C
+>C : typeof C, Symbol(C,Decl(exportImportAlias.ts,13,1))
 
     export import a = A;
->a : typeof a
->A : typeof a
+>a : typeof a, Symbol(a,Decl(exportImportAlias.ts,15,10))
+>A : typeof a, Symbol(a,Decl(exportImportAlias.ts,0,0))
 }
 
 var a: string = C.a.x;
->a : string
->C.a.x : string
->C.a : typeof A
->C : typeof C
->a : typeof A
->x : string
+>a : string, Symbol(a,Decl(exportImportAlias.ts,19,3))
+>C.a.x : string, Symbol(A.x,Decl(exportImportAlias.ts,4,14))
+>C.a : typeof A, Symbol(C.a,Decl(exportImportAlias.ts,15,10))
+>C : typeof C, Symbol(C,Decl(exportImportAlias.ts,13,1))
+>a : typeof A, Symbol(C.a,Decl(exportImportAlias.ts,15,10))
+>x : string, Symbol(A.x,Decl(exportImportAlias.ts,4,14))
 
 var b: { x: number; y: number; } = new C.a.Point(0, 0);
->b : { x: number; y: number; }
->x : number
->y : number
+>b : { x: number; y: number; }, Symbol(b,Decl(exportImportAlias.ts,20,3))
+>x : number, Symbol(x,Decl(exportImportAlias.ts,20,8))
+>y : number, Symbol(y,Decl(exportImportAlias.ts,20,19))
 >new C.a.Point(0, 0) : A.Point
->C.a.Point : typeof A.Point
->C.a : typeof A
->C : typeof C
->a : typeof A
->Point : typeof A.Point
+>C.a.Point : typeof A.Point, Symbol(A.Point,Decl(exportImportAlias.ts,4,32))
+>C.a : typeof A, Symbol(C.a,Decl(exportImportAlias.ts,15,10))
+>C : typeof C, Symbol(C,Decl(exportImportAlias.ts,13,1))
+>a : typeof A, Symbol(C.a,Decl(exportImportAlias.ts,15,10))
+>Point : typeof A.Point, Symbol(A.Point,Decl(exportImportAlias.ts,4,32))
 >0 : number
 >0 : number
 
 var c: { name: string };
->c : { name: string; }
->name : string
+>c : { name: string; }, Symbol(c,Decl(exportImportAlias.ts,21,3),Decl(exportImportAlias.ts,22,3))
+>name : string, Symbol(name,Decl(exportImportAlias.ts,21,8))
 
 var c: C.a.B.Id;
->c : { name: string; }
->C : unknown
->a : unknown
->B : unknown
->Id : A.B.Id
+>c : { name: string; }, Symbol(c,Decl(exportImportAlias.ts,21,3),Decl(exportImportAlias.ts,22,3))
+>C : any, Symbol(C,Decl(exportImportAlias.ts,13,1))
+>a : any, Symbol(C.a,Decl(exportImportAlias.ts,15,10))
+>B : any, Symbol(A.B,Decl(exportImportAlias.ts,7,5))
+>Id : A.B.Id, Symbol(A.B.Id,Decl(exportImportAlias.ts,8,21))
 
 module X {
->X : typeof X
+>X : typeof X, Symbol(X,Decl(exportImportAlias.ts,22,16))
 
     export function Y() {
->Y : typeof Y
+>Y : typeof Y, Symbol(Y,Decl(exportImportAlias.ts,24,10),Decl(exportImportAlias.ts,27,5))
 
         return 42;
 >42 : number
     }
 
     export module Y {
->Y : typeof Y
+>Y : typeof Y, Symbol(Y,Decl(exportImportAlias.ts,24,10),Decl(exportImportAlias.ts,27,5))
 
         export class Point {
->Point : Point
+>Point : Point, Symbol(Point,Decl(exportImportAlias.ts,29,21))
 
             constructor(public x: number, public y: number) { }
->x : number
->y : number
+>x : number, Symbol(x,Decl(exportImportAlias.ts,31,24))
+>y : number, Symbol(y,Decl(exportImportAlias.ts,31,41))
         }
     }
 }
 
 module Z {
->Z : typeof Z
+>Z : typeof Z, Symbol(Z,Decl(exportImportAlias.ts,34,1))
 
     // 'y' should be a fundule here
     export import y = X.Y;
->y : typeof y
->X : typeof X
->Y : typeof y
+>y : typeof y, Symbol(y,Decl(exportImportAlias.ts,36,10))
+>X : typeof X, Symbol(X,Decl(exportImportAlias.ts,22,16))
+>Y : typeof y, Symbol(y,Decl(exportImportAlias.ts,24,10),Decl(exportImportAlias.ts,27,5))
 }
 
 var m: number = Z.y();
->m : number
+>m : number, Symbol(m,Decl(exportImportAlias.ts,42,3))
 >Z.y() : number
->Z.y : typeof X.Y
->Z : typeof Z
->y : typeof X.Y
+>Z.y : typeof X.Y, Symbol(Z.y,Decl(exportImportAlias.ts,36,10))
+>Z : typeof Z, Symbol(Z,Decl(exportImportAlias.ts,34,1))
+>y : typeof X.Y, Symbol(Z.y,Decl(exportImportAlias.ts,36,10))
 
 var n: { x: number; y: number; } = new Z.y.Point(0, 0);
->n : { x: number; y: number; }
->x : number
->y : number
+>n : { x: number; y: number; }, Symbol(n,Decl(exportImportAlias.ts,43,3))
+>x : number, Symbol(x,Decl(exportImportAlias.ts,43,8))
+>y : number, Symbol(y,Decl(exportImportAlias.ts,43,19))
 >new Z.y.Point(0, 0) : X.Y.Point
->Z.y.Point : typeof X.Y.Point
->Z.y : typeof X.Y
->Z : typeof Z
->y : typeof X.Y
->Point : typeof X.Y.Point
+>Z.y.Point : typeof X.Y.Point, Symbol(X.Y.Point,Decl(exportImportAlias.ts,29,21))
+>Z.y : typeof X.Y, Symbol(Z.y,Decl(exportImportAlias.ts,36,10))
+>Z : typeof Z, Symbol(Z,Decl(exportImportAlias.ts,34,1))
+>y : typeof X.Y, Symbol(Z.y,Decl(exportImportAlias.ts,36,10))
+>Point : typeof X.Y.Point, Symbol(X.Y.Point,Decl(exportImportAlias.ts,29,21))
 >0 : number
 >0 : number
 
 module K {
->K : typeof K
+>K : typeof K, Symbol(K,Decl(exportImportAlias.ts,43,55))
 
     export class L {
->L : L
+>L : L, Symbol(L,Decl(exportImportAlias.ts,45,10),Decl(exportImportAlias.ts,48,5))
 
         constructor(public name: string) { }
->name : string
+>name : string, Symbol(name,Decl(exportImportAlias.ts,47,20))
     }
 
     export module L {
->L : typeof L
+>L : typeof L, Symbol(L,Decl(exportImportAlias.ts,45,10),Decl(exportImportAlias.ts,48,5))
 
         export var y = 12;
->y : number
+>y : number, Symbol(y,Decl(exportImportAlias.ts,51,18))
 >12 : number
 
         export interface Point {
->Point : Point
+>Point : Point, Symbol(Point,Decl(exportImportAlias.ts,51,26))
 
             x: number;
->x : number
+>x : number, Symbol(x,Decl(exportImportAlias.ts,52,32))
 
             y: number;
->y : number
+>y : number, Symbol(y,Decl(exportImportAlias.ts,53,22))
         }
     }
 }
 
 module M {
->M : typeof M
+>M : typeof M, Symbol(M,Decl(exportImportAlias.ts,57,1))
 
     export import D = K.L;
->D : typeof D
->K : typeof K
->L : D
+>D : typeof D, Symbol(D,Decl(exportImportAlias.ts,59,10))
+>K : typeof K, Symbol(K,Decl(exportImportAlias.ts,43,55))
+>L : D, Symbol(D,Decl(exportImportAlias.ts,45,10),Decl(exportImportAlias.ts,48,5))
 }
 
 var o: { name: string };
->o : { name: string; }
->name : string
+>o : { name: string; }, Symbol(o,Decl(exportImportAlias.ts,63,3),Decl(exportImportAlias.ts,64,3))
+>name : string, Symbol(name,Decl(exportImportAlias.ts,63,8))
 
 var o = new M.D('Hello');
->o : { name: string; }
+>o : { name: string; }, Symbol(o,Decl(exportImportAlias.ts,63,3),Decl(exportImportAlias.ts,64,3))
 >new M.D('Hello') : K.L
->M.D : typeof K.L
->M : typeof M
->D : typeof K.L
+>M.D : typeof K.L, Symbol(M.D,Decl(exportImportAlias.ts,59,10))
+>M : typeof M, Symbol(M,Decl(exportImportAlias.ts,57,1))
+>D : typeof K.L, Symbol(M.D,Decl(exportImportAlias.ts,59,10))
 >'Hello' : string
 
 var p: { x: number; y: number; }
->p : { x: number; y: number; }
->x : number
->y : number
+>p : { x: number; y: number; }, Symbol(p,Decl(exportImportAlias.ts,66,3),Decl(exportImportAlias.ts,67,3))
+>x : number, Symbol(x,Decl(exportImportAlias.ts,66,8))
+>y : number, Symbol(y,Decl(exportImportAlias.ts,66,19))
 
 var p: M.D.Point;
->p : { x: number; y: number; }
->M : unknown
->D : unknown
->Point : K.L.Point
+>p : { x: number; y: number; }, Symbol(p,Decl(exportImportAlias.ts,66,3),Decl(exportImportAlias.ts,67,3))
+>M : any, Symbol(M,Decl(exportImportAlias.ts,57,1))
+>D : any, Symbol(M.D,Decl(exportImportAlias.ts,59,10))
+>Point : K.L.Point, Symbol(K.L.Point,Decl(exportImportAlias.ts,51,26))
 

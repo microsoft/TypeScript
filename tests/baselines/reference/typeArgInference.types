@@ -1,113 +1,113 @@
 === tests/cases/compiler/typeArgInference.ts ===
 interface I {
->I : I
+>I : I, Symbol(I,Decl(typeArgInference.ts,0,0))
 
     f<T, U>(a1: { a: T; b: U }[], a2: { a: T; b: U }[]): { c: T; d: U };
->f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }
->T : T
->U : U
->a1 : { a: T; b: U; }[]
->a : T
->T : T
->b : U
->U : U
->a2 : { a: T; b: U; }[]
->a : T
->T : T
->b : U
->U : U
->c : T
->T : T
->d : U
->U : U
+>f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }, Symbol(f,Decl(typeArgInference.ts,0,13))
+>T : T, Symbol(T,Decl(typeArgInference.ts,1,6))
+>U : U, Symbol(U,Decl(typeArgInference.ts,1,8))
+>a1 : { a: T; b: U; }[], Symbol(a1,Decl(typeArgInference.ts,1,12))
+>a : T, Symbol(a,Decl(typeArgInference.ts,1,17))
+>T : T, Symbol(T,Decl(typeArgInference.ts,1,6))
+>b : U, Symbol(b,Decl(typeArgInference.ts,1,23))
+>U : U, Symbol(U,Decl(typeArgInference.ts,1,8))
+>a2 : { a: T; b: U; }[], Symbol(a2,Decl(typeArgInference.ts,1,33))
+>a : T, Symbol(a,Decl(typeArgInference.ts,1,39))
+>T : T, Symbol(T,Decl(typeArgInference.ts,1,6))
+>b : U, Symbol(b,Decl(typeArgInference.ts,1,45))
+>U : U, Symbol(U,Decl(typeArgInference.ts,1,8))
+>c : T, Symbol(c,Decl(typeArgInference.ts,1,58))
+>T : T, Symbol(T,Decl(typeArgInference.ts,1,6))
+>d : U, Symbol(d,Decl(typeArgInference.ts,1,64))
+>U : U, Symbol(U,Decl(typeArgInference.ts,1,8))
 
     g<T, U>(...arg: { a: T; b: U }[][]): { c: T; d: U };
->g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }
->T : T
->U : U
->arg : { a: T; b: U; }[][]
->a : T
->T : T
->b : U
->U : U
->c : T
->T : T
->d : U
->U : U
+>g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }, Symbol(g,Decl(typeArgInference.ts,1,72))
+>T : T, Symbol(T,Decl(typeArgInference.ts,2,6))
+>U : U, Symbol(U,Decl(typeArgInference.ts,2,8))
+>arg : { a: T; b: U; }[][], Symbol(arg,Decl(typeArgInference.ts,2,12))
+>a : T, Symbol(a,Decl(typeArgInference.ts,2,21))
+>T : T, Symbol(T,Decl(typeArgInference.ts,2,6))
+>b : U, Symbol(b,Decl(typeArgInference.ts,2,27))
+>U : U, Symbol(U,Decl(typeArgInference.ts,2,8))
+>c : T, Symbol(c,Decl(typeArgInference.ts,2,42))
+>T : T, Symbol(T,Decl(typeArgInference.ts,2,6))
+>d : U, Symbol(d,Decl(typeArgInference.ts,2,48))
+>U : U, Symbol(U,Decl(typeArgInference.ts,2,8))
 }
 var o = { a: 3, b: "test" };
->o : { a: number; b: string; }
+>o : { a: number; b: string; }, Symbol(o,Decl(typeArgInference.ts,4,3))
 >{ a: 3, b: "test" } : { a: number; b: string; }
->a : number
+>a : number, Symbol(a,Decl(typeArgInference.ts,4,9))
 >3 : number
->b : string
+>b : string, Symbol(b,Decl(typeArgInference.ts,4,15))
 >"test" : string
 
 var x: I;
->x : I
->I : I
+>x : I, Symbol(x,Decl(typeArgInference.ts,5,3))
+>I : I, Symbol(I,Decl(typeArgInference.ts,0,0))
 
 var t1 = x.f([o], [o]);
->t1 : { c: number; d: string; }
+>t1 : { c: number; d: string; }, Symbol(t1,Decl(typeArgInference.ts,6,3),Decl(typeArgInference.ts,7,3))
 >x.f([o], [o]) : { c: number; d: string; }
->x.f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }
->x : I
->f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }
+>x.f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }, Symbol(I.f,Decl(typeArgInference.ts,0,13))
+>x : I, Symbol(x,Decl(typeArgInference.ts,5,3))
+>f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }, Symbol(I.f,Decl(typeArgInference.ts,0,13))
 >[o] : { a: number; b: string; }[]
->o : { a: number; b: string; }
+>o : { a: number; b: string; }, Symbol(o,Decl(typeArgInference.ts,4,3))
 >[o] : { a: number; b: string; }[]
->o : { a: number; b: string; }
+>o : { a: number; b: string; }, Symbol(o,Decl(typeArgInference.ts,4,3))
 
 var t1: { c: number; d: string }; 
->t1 : { c: number; d: string; }
->c : number
->d : string
+>t1 : { c: number; d: string; }, Symbol(t1,Decl(typeArgInference.ts,6,3),Decl(typeArgInference.ts,7,3))
+>c : number, Symbol(c,Decl(typeArgInference.ts,7,9))
+>d : string, Symbol(d,Decl(typeArgInference.ts,7,20))
 
 var t2 = x.f<number, string>([o], [o]);
->t2 : { c: number; d: string; }
+>t2 : { c: number; d: string; }, Symbol(t2,Decl(typeArgInference.ts,8,3),Decl(typeArgInference.ts,9,3))
 >x.f<number, string>([o], [o]) : { c: number; d: string; }
->x.f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }
->x : I
->f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }
+>x.f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }, Symbol(I.f,Decl(typeArgInference.ts,0,13))
+>x : I, Symbol(x,Decl(typeArgInference.ts,5,3))
+>f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }, Symbol(I.f,Decl(typeArgInference.ts,0,13))
 >[o] : { a: number; b: string; }[]
->o : { a: number; b: string; }
+>o : { a: number; b: string; }, Symbol(o,Decl(typeArgInference.ts,4,3))
 >[o] : { a: number; b: string; }[]
->o : { a: number; b: string; }
+>o : { a: number; b: string; }, Symbol(o,Decl(typeArgInference.ts,4,3))
 
 var t2: { c: number; d: string }; 
->t2 : { c: number; d: string; }
->c : number
->d : string
+>t2 : { c: number; d: string; }, Symbol(t2,Decl(typeArgInference.ts,8,3),Decl(typeArgInference.ts,9,3))
+>c : number, Symbol(c,Decl(typeArgInference.ts,9,9))
+>d : string, Symbol(d,Decl(typeArgInference.ts,9,20))
 
 var t3 = x.g([o], [o]);
->t3 : { c: number; d: string; }
+>t3 : { c: number; d: string; }, Symbol(t3,Decl(typeArgInference.ts,10,3),Decl(typeArgInference.ts,11,3))
 >x.g([o], [o]) : { c: number; d: string; }
->x.g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }
->x : I
->g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }
+>x.g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }, Symbol(I.g,Decl(typeArgInference.ts,1,72))
+>x : I, Symbol(x,Decl(typeArgInference.ts,5,3))
+>g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }, Symbol(I.g,Decl(typeArgInference.ts,1,72))
 >[o] : { a: number; b: string; }[]
->o : { a: number; b: string; }
+>o : { a: number; b: string; }, Symbol(o,Decl(typeArgInference.ts,4,3))
 >[o] : { a: number; b: string; }[]
->o : { a: number; b: string; }
+>o : { a: number; b: string; }, Symbol(o,Decl(typeArgInference.ts,4,3))
 
 var t3: { c: number; d: string };
->t3 : { c: number; d: string; }
->c : number
->d : string
+>t3 : { c: number; d: string; }, Symbol(t3,Decl(typeArgInference.ts,10,3),Decl(typeArgInference.ts,11,3))
+>c : number, Symbol(c,Decl(typeArgInference.ts,11,9))
+>d : string, Symbol(d,Decl(typeArgInference.ts,11,20))
 
 var t4 = x.g<number, string>([o], [o]);
->t4 : { c: number; d: string; }
+>t4 : { c: number; d: string; }, Symbol(t4,Decl(typeArgInference.ts,12,3),Decl(typeArgInference.ts,13,3))
 >x.g<number, string>([o], [o]) : { c: number; d: string; }
->x.g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }
->x : I
->g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }
+>x.g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }, Symbol(I.g,Decl(typeArgInference.ts,1,72))
+>x : I, Symbol(x,Decl(typeArgInference.ts,5,3))
+>g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }, Symbol(I.g,Decl(typeArgInference.ts,1,72))
 >[o] : { a: number; b: string; }[]
->o : { a: number; b: string; }
+>o : { a: number; b: string; }, Symbol(o,Decl(typeArgInference.ts,4,3))
 >[o] : { a: number; b: string; }[]
->o : { a: number; b: string; }
+>o : { a: number; b: string; }, Symbol(o,Decl(typeArgInference.ts,4,3))
 
 var t4: { c: number; d: string };
->t4 : { c: number; d: string; }
->c : number
->d : string
+>t4 : { c: number; d: string; }, Symbol(t4,Decl(typeArgInference.ts,12,3),Decl(typeArgInference.ts,13,3))
+>c : number, Symbol(c,Decl(typeArgInference.ts,13,9))
+>d : string, Symbol(d,Decl(typeArgInference.ts,13,20))
 

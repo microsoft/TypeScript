@@ -2,17 +2,17 @@
 
 // No errors, const declaration is not shadowed
 function outer() {
->outer : () => void
+>outer : () => void, Symbol(outer,Decl(constDeclarationShadowedByVarDeclaration2.ts,0,0))
 
     const x = 0;
->x : number
+>x : number, Symbol(x,Decl(constDeclarationShadowedByVarDeclaration2.ts,3,9))
 >0 : number
 
     function inner() {
->inner : () => void
+>inner : () => void, Symbol(inner,Decl(constDeclarationShadowedByVarDeclaration2.ts,3,16))
 
         var x = "inner";
->x : string
+>x : string, Symbol(x,Decl(constDeclarationShadowedByVarDeclaration2.ts,5,11))
 >"inner" : string
     }
 }

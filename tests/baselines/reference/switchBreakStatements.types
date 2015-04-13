@@ -9,7 +9,7 @@ switch ('') {
 }
 
 ONE:
->ONE : unknown
+>ONE : any
 
 switch ('') {
 >'' : string
@@ -18,14 +18,14 @@ switch ('') {
 >'a' : string
 
         break ONE;
->ONE : unknown
+>ONE : any
 }
 
 TWO:
->TWO : unknown
+>TWO : any
 
 THREE:
->THREE : unknown
+>THREE : any
 
 switch ('') {
 >'' : string
@@ -34,11 +34,11 @@ switch ('') {
 >'a' : string
 
         break THREE;
->THREE : unknown
+>THREE : any
 }
 
 FOUR:
->FOUR : unknown
+>FOUR : any
 
 switch ('') {
 >'' : string
@@ -47,7 +47,7 @@ switch ('') {
 >'a' : string
 
         FIVE:
->FIVE : unknown
+>FIVE : any
 
         switch ('') {
 >'' : string
@@ -56,7 +56,7 @@ switch ('') {
 >'a' : string
 
                 break FOUR;
->FOUR : unknown
+>FOUR : any
         }
 }
 
@@ -67,7 +67,7 @@ switch ('') {
 >'a' : string
 
         SIX:
->SIX : unknown
+>SIX : any
 
         switch ('') {
 >'' : string
@@ -76,12 +76,12 @@ switch ('') {
 >'a' : string
 
                 break SIX;
->SIX : unknown
+>SIX : any
         }
 }
 
 SEVEN:
->SEVEN : unknown
+>SEVEN : any
 
 switch ('') {
 >'' : string
@@ -102,10 +102,10 @@ switch ('') {
 >'a' : string
 
                         break SEVEN;
->SEVEN : unknown
+>SEVEN : any
 
                         EIGHT:
->EIGHT : unknown
+>EIGHT : any
 
                         switch ('') {
 >'' : string
@@ -114,11 +114,11 @@ switch ('') {
 >'a' : string
 
                                 var fn = function () { }
->fn : () => void
+>fn : () => void, Symbol(fn,Decl(switchBreakStatements.ts,48,35))
 >function () { } : () => void
 
                                 break EIGHT;
->EIGHT : unknown
+>EIGHT : any
                         }
                 }
         }

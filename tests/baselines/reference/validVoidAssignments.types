@@ -1,25 +1,25 @@
 === tests/cases/conformance/types/primitives/void/validVoidAssignments.ts ===
 var x: void;
->x : void
+>x : void, Symbol(x,Decl(validVoidAssignments.ts,0,3))
 
 var y: any;
->y : any
+>y : any, Symbol(y,Decl(validVoidAssignments.ts,1,3))
 
 var z: void;
->z : void
+>z : void, Symbol(z,Decl(validVoidAssignments.ts,2,3))
 
 y = x;
 >y = x : void
->y : any
->x : void
+>y : any, Symbol(y,Decl(validVoidAssignments.ts,1,3))
+>x : void, Symbol(x,Decl(validVoidAssignments.ts,0,3))
 
 x = y;
 >x = y : any
->x : void
->y : any
+>x : void, Symbol(x,Decl(validVoidAssignments.ts,0,3))
+>y : any, Symbol(y,Decl(validVoidAssignments.ts,1,3))
 
 x = z;
 >x = z : void
->x : void
->z : void
+>x : void, Symbol(x,Decl(validVoidAssignments.ts,0,3))
+>z : void, Symbol(z,Decl(validVoidAssignments.ts,2,3))
 

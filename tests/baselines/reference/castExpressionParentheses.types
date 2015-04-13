@@ -1,6 +1,6 @@
 === tests/cases/compiler/castExpressionParentheses.ts ===
 declare var a;
->a : any
+>a : any, Symbol(a,Decl(castExpressionParentheses.ts,0,11))
 
 // parentheses should be omitted
 // literals
@@ -8,7 +8,7 @@ declare var a;
 >(<any>{a:0}) : any
 ><any>{a:0} : any
 >{a:0} : { a: number; }
->a : number
+>a : number, Symbol(a,Decl(castExpressionParentheses.ts,4,7))
 >0 : number
 
 (<any>[1,3,]); 
@@ -67,20 +67,20 @@ declare var a;
 >(<any>a).x : any
 >(<any>a) : any
 ><any>a : any
->a : any
+>a : any, Symbol(a,Decl(castExpressionParentheses.ts,0,11))
 >x : any
 
 (<any><any>a);
 >(<any><any>a) : any
 ><any><any>a : any
 ><any>a : any
->a : any
+>a : any, Symbol(a,Decl(castExpressionParentheses.ts,0,11))
 
 (<any>a[0]);
 >(<any>a[0]) : any
 ><any>a[0] : any
 >a[0] : any
->a : any
+>a : any, Symbol(a,Decl(castExpressionParentheses.ts,0,11))
 >0 : number
 
 (<any>a.b["0"]);
@@ -88,7 +88,7 @@ declare var a;
 ><any>a.b["0"] : any
 >a.b["0"] : any
 >a.b : any
->a : any
+>a : any, Symbol(a,Decl(castExpressionParentheses.ts,0,11))
 >b : any
 >"0" : string
 
@@ -97,11 +97,11 @@ declare var a;
 >(<any>a()) : any
 ><any>a() : any
 >a() : any
->a : any
+>a : any, Symbol(a,Decl(castExpressionParentheses.ts,0,11))
 >x : any
 
 declare var A;
->A : any
+>A : any, Symbol(A,Decl(castExpressionParentheses.ts,21,11))
 
 // should keep the parentheses in emit
 (<any>new A).foo; 
@@ -109,7 +109,7 @@ declare var A;
 >(<any>new A) : any
 ><any>new A : any
 >new A : any
->A : any
+>A : any, Symbol(A,Decl(castExpressionParentheses.ts,21,11))
 >foo : any
 
 (<any>typeof A).x; 
@@ -117,7 +117,7 @@ declare var A;
 >(<any>typeof A) : any
 ><any>typeof A : any
 >typeof A : string
->A : any
+>A : any, Symbol(A,Decl(castExpressionParentheses.ts,21,11))
 >x : any
 
 (<any>-A).x; 
@@ -125,7 +125,7 @@ declare var A;
 >(<any>-A) : any
 ><any>-A : any
 >-A : number
->A : any
+>A : any, Symbol(A,Decl(castExpressionParentheses.ts,21,11))
 >x : any
 
 new (<any>A());
@@ -133,20 +133,20 @@ new (<any>A());
 >(<any>A()) : any
 ><any>A() : any
 >A() : any
->A : any
+>A : any, Symbol(A,Decl(castExpressionParentheses.ts,21,11))
 
 (<Tany>()=> {})();
 >(<Tany>()=> {})() : void
 >(<Tany>()=> {}) : <Tany>() => void
 ><Tany>()=> {} : <Tany>() => void
->Tany : Tany
+>Tany : Tany, Symbol(Tany,Decl(castExpressionParentheses.ts,28,2))
 
 (<any>function foo() { })();
 >(<any>function foo() { })() : any
 >(<any>function foo() { }) : any
 ><any>function foo() { } : any
 >function foo() { } : () => void
->foo : () => void
+>foo : () => void, Symbol(foo,Decl(castExpressionParentheses.ts,29,6))
 
 (<any><number><any>-A).x; 
 >(<any><number><any>-A).x : any
@@ -155,7 +155,7 @@ new (<any>A());
 ><number><any>-A : number
 ><any>-A : any
 >-A : number
->A : any
+>A : any, Symbol(A,Decl(castExpressionParentheses.ts,21,11))
 >x : any
 
 // nested cast, should keep one pair of parenthese
@@ -167,7 +167,7 @@ new (<any>A());
 >(<any>-A) : any
 ><any>-A : any
 >-A : number
->A : any
+>A : any, Symbol(A,Decl(castExpressionParentheses.ts,21,11))
 >x : any
 
 // nested parenthesized expression, should keep one pair of parenthese
@@ -175,6 +175,6 @@ new (<any>A());
 >(<any>(A)) : any
 ><any>(A) : any
 >(A) : any
->A : any
+>A : any, Symbol(A,Decl(castExpressionParentheses.ts,21,11))
 
 

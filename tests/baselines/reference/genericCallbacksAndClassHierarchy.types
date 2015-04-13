@@ -1,83 +1,83 @@
 === tests/cases/compiler/genericCallbacksAndClassHierarchy.ts ===
 module M {
->M : typeof M
+>M : typeof M, Symbol(M,Decl(genericCallbacksAndClassHierarchy.ts,0,0))
 
     export interface I<T> {
->I : I<T>
->T : T
+>I : I<T>, Symbol(I,Decl(genericCallbacksAndClassHierarchy.ts,0,10))
+>T : T, Symbol(T,Decl(genericCallbacksAndClassHierarchy.ts,1,23))
 
         subscribe(callback: (newValue: T) => void ): any;
->subscribe : (callback: (newValue: T) => void) => any
->callback : (newValue: T) => void
->newValue : T
->T : T
+>subscribe : (callback: (newValue: T) => void) => any, Symbol(subscribe,Decl(genericCallbacksAndClassHierarchy.ts,1,27))
+>callback : (newValue: T) => void, Symbol(callback,Decl(genericCallbacksAndClassHierarchy.ts,2,18))
+>newValue : T, Symbol(newValue,Decl(genericCallbacksAndClassHierarchy.ts,2,29))
+>T : T, Symbol(T,Decl(genericCallbacksAndClassHierarchy.ts,1,23))
     }
     export class C1<T> {
->C1 : C1<T>
->T : T
+>C1 : C1<T>, Symbol(C1,Decl(genericCallbacksAndClassHierarchy.ts,3,5))
+>T : T, Symbol(T,Decl(genericCallbacksAndClassHierarchy.ts,4,20))
 
         public value: I<T>;
->value : I<T>
->I : I<T>
->T : T
+>value : I<T>, Symbol(value,Decl(genericCallbacksAndClassHierarchy.ts,4,24))
+>I : I<T>, Symbol(I,Decl(genericCallbacksAndClassHierarchy.ts,0,10))
+>T : T, Symbol(T,Decl(genericCallbacksAndClassHierarchy.ts,4,20))
     }
     export class A<T> {
->A : A<T>
->T : T
+>A : A<T>, Symbol(A,Decl(genericCallbacksAndClassHierarchy.ts,6,5))
+>T : T, Symbol(T,Decl(genericCallbacksAndClassHierarchy.ts,7,19))
 
         public dummy: any;
->dummy : any
+>dummy : any, Symbol(dummy,Decl(genericCallbacksAndClassHierarchy.ts,7,23))
     }
     export class B<T> extends C1<A<T>> { }
->B : B<T>
->T : T
->C1 : C1<T>
->A : A<T>
->T : T
+>B : B<T>, Symbol(B,Decl(genericCallbacksAndClassHierarchy.ts,9,5))
+>T : T, Symbol(T,Decl(genericCallbacksAndClassHierarchy.ts,10,19))
+>C1 : C1<T>, Symbol(C1,Decl(genericCallbacksAndClassHierarchy.ts,3,5))
+>A : A<T>, Symbol(A,Decl(genericCallbacksAndClassHierarchy.ts,6,5))
+>T : T, Symbol(T,Decl(genericCallbacksAndClassHierarchy.ts,10,19))
 
     export class D<T> {
->D : D<T>
->T : T
+>D : D<T>, Symbol(D,Decl(genericCallbacksAndClassHierarchy.ts,10,42))
+>T : T, Symbol(T,Decl(genericCallbacksAndClassHierarchy.ts,11,19))
 
         _subscribe(viewModel: B<T>): void {
->_subscribe : (viewModel: B<T>) => void
->viewModel : B<T>
->B : B<T>
->T : T
+>_subscribe : (viewModel: B<T>) => void, Symbol(_subscribe,Decl(genericCallbacksAndClassHierarchy.ts,11,23))
+>viewModel : B<T>, Symbol(viewModel,Decl(genericCallbacksAndClassHierarchy.ts,12,19))
+>B : B<T>, Symbol(B,Decl(genericCallbacksAndClassHierarchy.ts,9,5))
+>T : T, Symbol(T,Decl(genericCallbacksAndClassHierarchy.ts,11,19))
 
             var f = (newValue: A<T>) => { };
->f : (newValue: A<T>) => void
+>f : (newValue: A<T>) => void, Symbol(f,Decl(genericCallbacksAndClassHierarchy.ts,13,15))
 >(newValue: A<T>) => { } : (newValue: A<T>) => void
->newValue : A<T>
->A : A<T>
->T : T
+>newValue : A<T>, Symbol(newValue,Decl(genericCallbacksAndClassHierarchy.ts,13,21))
+>A : A<T>, Symbol(A,Decl(genericCallbacksAndClassHierarchy.ts,6,5))
+>T : T, Symbol(T,Decl(genericCallbacksAndClassHierarchy.ts,11,19))
 
             var v: I<A<T>> = viewModel.value;
->v : I<A<T>>
->I : I<T>
->A : A<T>
->T : T
->viewModel.value : I<A<T>>
->viewModel : B<T>
->value : I<A<T>>
+>v : I<A<T>>, Symbol(v,Decl(genericCallbacksAndClassHierarchy.ts,15,15))
+>I : I<T>, Symbol(I,Decl(genericCallbacksAndClassHierarchy.ts,0,10))
+>A : A<T>, Symbol(A,Decl(genericCallbacksAndClassHierarchy.ts,6,5))
+>T : T, Symbol(T,Decl(genericCallbacksAndClassHierarchy.ts,11,19))
+>viewModel.value : I<A<T>>, Symbol(C1.value,Decl(genericCallbacksAndClassHierarchy.ts,4,24))
+>viewModel : B<T>, Symbol(viewModel,Decl(genericCallbacksAndClassHierarchy.ts,12,19))
+>value : I<A<T>>, Symbol(C1.value,Decl(genericCallbacksAndClassHierarchy.ts,4,24))
 
             // both of these should work
             v.subscribe(f);
 >v.subscribe(f) : any
->v.subscribe : (callback: (newValue: A<T>) => void) => any
->v : I<A<T>>
->subscribe : (callback: (newValue: A<T>) => void) => any
->f : (newValue: A<T>) => void
+>v.subscribe : (callback: (newValue: A<T>) => void) => any, Symbol(I.subscribe,Decl(genericCallbacksAndClassHierarchy.ts,1,27))
+>v : I<A<T>>, Symbol(v,Decl(genericCallbacksAndClassHierarchy.ts,15,15))
+>subscribe : (callback: (newValue: A<T>) => void) => any, Symbol(I.subscribe,Decl(genericCallbacksAndClassHierarchy.ts,1,27))
+>f : (newValue: A<T>) => void, Symbol(f,Decl(genericCallbacksAndClassHierarchy.ts,13,15))
 
             v.subscribe((newValue: A<T>) => { });
 >v.subscribe((newValue: A<T>) => { }) : any
->v.subscribe : (callback: (newValue: A<T>) => void) => any
->v : I<A<T>>
->subscribe : (callback: (newValue: A<T>) => void) => any
+>v.subscribe : (callback: (newValue: A<T>) => void) => any, Symbol(I.subscribe,Decl(genericCallbacksAndClassHierarchy.ts,1,27))
+>v : I<A<T>>, Symbol(v,Decl(genericCallbacksAndClassHierarchy.ts,15,15))
+>subscribe : (callback: (newValue: A<T>) => void) => any, Symbol(I.subscribe,Decl(genericCallbacksAndClassHierarchy.ts,1,27))
 >(newValue: A<T>) => { } : (newValue: A<T>) => void
->newValue : A<T>
->A : A<T>
->T : T
+>newValue : A<T>, Symbol(newValue,Decl(genericCallbacksAndClassHierarchy.ts,19,25))
+>A : A<T>, Symbol(A,Decl(genericCallbacksAndClassHierarchy.ts,6,5))
+>T : T, Symbol(T,Decl(genericCallbacksAndClassHierarchy.ts,11,19))
         }
     }
 }

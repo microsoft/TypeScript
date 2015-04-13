@@ -1,54 +1,54 @@
 === tests/cases/compiler/objectLiteralIndexers.ts ===
 interface A {
->A : A
+>A : A, Symbol(A,Decl(objectLiteralIndexers.ts,0,0))
 
     x: number;
->x : number
+>x : number, Symbol(x,Decl(objectLiteralIndexers.ts,0,13))
 }
 
 interface B extends A {
->B : B
->A : A
+>B : B, Symbol(B,Decl(objectLiteralIndexers.ts,2,1))
+>A : A, Symbol(A,Decl(objectLiteralIndexers.ts,0,0))
 
     y: string;
->y : string
+>y : string, Symbol(y,Decl(objectLiteralIndexers.ts,4,23))
 }
 
 var a: A;
->a : A
->A : A
+>a : A, Symbol(a,Decl(objectLiteralIndexers.ts,8,3))
+>A : A, Symbol(A,Decl(objectLiteralIndexers.ts,0,0))
 
 var b: B;
->b : B
->B : B
+>b : B, Symbol(b,Decl(objectLiteralIndexers.ts,9,3))
+>B : B, Symbol(B,Decl(objectLiteralIndexers.ts,2,1))
 
 var c: any;
->c : any
+>c : any, Symbol(c,Decl(objectLiteralIndexers.ts,10,3))
 
 var o1: { [s: string]: A;[n: number]: B; } = { x: a, 0: b }; // string indexer is A, number indexer is B
->o1 : { [s: string]: A; [n: number]: B; }
->s : string
->A : A
->n : number
->B : B
+>o1 : { [s: string]: A; [n: number]: B; }, Symbol(o1,Decl(objectLiteralIndexers.ts,12,3))
+>s : string, Symbol(s,Decl(objectLiteralIndexers.ts,12,11))
+>A : A, Symbol(A,Decl(objectLiteralIndexers.ts,0,0))
+>n : number, Symbol(n,Decl(objectLiteralIndexers.ts,12,26))
+>B : B, Symbol(B,Decl(objectLiteralIndexers.ts,2,1))
 >{ x: a, 0: b } : { [x: string]: A; [x: number]: B; 0: B; x: A; }
->x : A
->a : A
->b : B
+>x : A, Symbol(x,Decl(objectLiteralIndexers.ts,12,46))
+>a : A, Symbol(a,Decl(objectLiteralIndexers.ts,8,3))
+>b : B, Symbol(b,Decl(objectLiteralIndexers.ts,9,3))
 
 o1 = { x: b, 0: c }; // both indexers are any
 >o1 = { x: b, 0: c } : { [x: string]: any; [x: number]: any; 0: any; x: B; }
->o1 : { [s: string]: A; [n: number]: B; }
+>o1 : { [s: string]: A; [n: number]: B; }, Symbol(o1,Decl(objectLiteralIndexers.ts,12,3))
 >{ x: b, 0: c } : { [x: string]: any; [x: number]: any; 0: any; x: B; }
->x : B
->b : B
->c : any
+>x : B, Symbol(x,Decl(objectLiteralIndexers.ts,13,6))
+>b : B, Symbol(b,Decl(objectLiteralIndexers.ts,9,3))
+>c : any, Symbol(c,Decl(objectLiteralIndexers.ts,10,3))
 
 o1 = { x: c, 0: b }; // string indexer is any, number indexer is B
 >o1 = { x: c, 0: b } : { [x: string]: any; [x: number]: B; 0: B; x: any; }
->o1 : { [s: string]: A; [n: number]: B; }
+>o1 : { [s: string]: A; [n: number]: B; }, Symbol(o1,Decl(objectLiteralIndexers.ts,12,3))
 >{ x: c, 0: b } : { [x: string]: any; [x: number]: B; 0: B; x: any; }
->x : any
->c : any
->b : B
+>x : any, Symbol(x,Decl(objectLiteralIndexers.ts,14,6))
+>c : any, Symbol(c,Decl(objectLiteralIndexers.ts,10,3))
+>b : B, Symbol(b,Decl(objectLiteralIndexers.ts,9,3))
 

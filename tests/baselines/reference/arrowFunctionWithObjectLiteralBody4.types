@@ -1,8 +1,8 @@
 === tests/cases/compiler/arrowFunctionWithObjectLiteralBody4.ts ===
 var v = a => <any><any>{}
->v : (a: any) => any
+>v : (a: any) => any, Symbol(v,Decl(arrowFunctionWithObjectLiteralBody4.ts,0,3))
 >a => <any><any>{} : (a: any) => any
->a : any
+>a : any, Symbol(a,Decl(arrowFunctionWithObjectLiteralBody4.ts,0,7))
 ><any><any>{} : any
 ><any>{} : any
 >{} : {}

@@ -1,259 +1,259 @@
 === tests/cases/compiler/genericClassPropertyInheritanceSpecialization.ts ===
 interface KnockoutObservableBase<T> {
->KnockoutObservableBase : KnockoutObservableBase<T>
->T : T
+>KnockoutObservableBase : KnockoutObservableBase<T>, Symbol(KnockoutObservableBase,Decl(genericClassPropertyInheritanceSpecialization.ts,0,0))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,0,33))
 
     peek(): T;
->peek : () => T
->T : T
+>peek : () => T, Symbol(peek,Decl(genericClassPropertyInheritanceSpecialization.ts,0,37))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,0,33))
 
     (): T;
->T : T
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,0,33))
 
     (value: T): void;
->value : T
->T : T
+>value : T, Symbol(value,Decl(genericClassPropertyInheritanceSpecialization.ts,3,5))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,0,33))
 }
 
 interface KnockoutObservable<T> extends KnockoutObservableBase<T> {
->KnockoutObservable : KnockoutObservable<T>
->T : T
->KnockoutObservableBase : KnockoutObservableBase<T>
->T : T
+>KnockoutObservable : KnockoutObservable<T>, Symbol(KnockoutObservable,Decl(genericClassPropertyInheritanceSpecialization.ts,4,1))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,6,29))
+>KnockoutObservableBase : KnockoutObservableBase<T>, Symbol(KnockoutObservableBase,Decl(genericClassPropertyInheritanceSpecialization.ts,0,0))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,6,29))
 
     equalityComparer(a: T, b: T): boolean;
->equalityComparer : (a: T, b: T) => boolean
->a : T
->T : T
->b : T
->T : T
+>equalityComparer : (a: T, b: T) => boolean, Symbol(equalityComparer,Decl(genericClassPropertyInheritanceSpecialization.ts,6,67))
+>a : T, Symbol(a,Decl(genericClassPropertyInheritanceSpecialization.ts,7,21))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,6,29))
+>b : T, Symbol(b,Decl(genericClassPropertyInheritanceSpecialization.ts,7,26))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,6,29))
 
     valueHasMutated(): void;
->valueHasMutated : () => void
+>valueHasMutated : () => void, Symbol(valueHasMutated,Decl(genericClassPropertyInheritanceSpecialization.ts,7,42))
 
     valueWillMutate(): void;
->valueWillMutate : () => void
+>valueWillMutate : () => void, Symbol(valueWillMutate,Decl(genericClassPropertyInheritanceSpecialization.ts,8,28))
 }
 
 interface KnockoutObservableArray<T> extends KnockoutObservable<T[]> {
->KnockoutObservableArray : KnockoutObservableArray<T>
->T : T
->KnockoutObservable : KnockoutObservable<T>
->T : T
+>KnockoutObservableArray : KnockoutObservableArray<T>, Symbol(KnockoutObservableArray,Decl(genericClassPropertyInheritanceSpecialization.ts,10,1))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
+>KnockoutObservable : KnockoutObservable<T>, Symbol(KnockoutObservable,Decl(genericClassPropertyInheritanceSpecialization.ts,4,1))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
 
     indexOf(searchElement: T, fromIndex?: number): number;
->indexOf : (searchElement: T, fromIndex?: number) => number
->searchElement : T
->T : T
->fromIndex : number
+>indexOf : (searchElement: T, fromIndex?: number) => number, Symbol(indexOf,Decl(genericClassPropertyInheritanceSpecialization.ts,12,70))
+>searchElement : T, Symbol(searchElement,Decl(genericClassPropertyInheritanceSpecialization.ts,13,12))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
+>fromIndex : number, Symbol(fromIndex,Decl(genericClassPropertyInheritanceSpecialization.ts,13,29))
 
     slice(start: number, end?: number): T[];
->slice : (start: number, end?: number) => T[]
->start : number
->end : number
->T : T
+>slice : (start: number, end?: number) => T[], Symbol(slice,Decl(genericClassPropertyInheritanceSpecialization.ts,13,58))
+>start : number, Symbol(start,Decl(genericClassPropertyInheritanceSpecialization.ts,14,10))
+>end : number, Symbol(end,Decl(genericClassPropertyInheritanceSpecialization.ts,14,24))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
 
     splice(start: number, deleteCount?: number, ...items: T[]): T[];
->splice : (start: number, deleteCount?: number, ...items: T[]) => T[]
->start : number
->deleteCount : number
->items : T[]
->T : T
->T : T
+>splice : (start: number, deleteCount?: number, ...items: T[]) => T[], Symbol(splice,Decl(genericClassPropertyInheritanceSpecialization.ts,14,44))
+>start : number, Symbol(start,Decl(genericClassPropertyInheritanceSpecialization.ts,15,11))
+>deleteCount : number, Symbol(deleteCount,Decl(genericClassPropertyInheritanceSpecialization.ts,15,25))
+>items : T[], Symbol(items,Decl(genericClassPropertyInheritanceSpecialization.ts,15,47))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
 
     pop(): T;
->pop : () => T
->T : T
+>pop : () => T, Symbol(pop,Decl(genericClassPropertyInheritanceSpecialization.ts,15,68))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
 
     push(...items: T[]): void;
->push : (...items: T[]) => void
->items : T[]
->T : T
+>push : (...items: T[]) => void, Symbol(push,Decl(genericClassPropertyInheritanceSpecialization.ts,16,13))
+>items : T[], Symbol(items,Decl(genericClassPropertyInheritanceSpecialization.ts,17,9))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
 
     shift(): T;
->shift : () => T
->T : T
+>shift : () => T, Symbol(shift,Decl(genericClassPropertyInheritanceSpecialization.ts,17,30))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
 
     unshift(...items: T[]): number;
->unshift : (...items: T[]) => number
->items : T[]
->T : T
+>unshift : (...items: T[]) => number, Symbol(unshift,Decl(genericClassPropertyInheritanceSpecialization.ts,18,15))
+>items : T[], Symbol(items,Decl(genericClassPropertyInheritanceSpecialization.ts,19,12))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
 
     reverse(): T[];
->reverse : () => T[]
->T : T
+>reverse : () => T[], Symbol(reverse,Decl(genericClassPropertyInheritanceSpecialization.ts,19,35))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
 
     sort(compareFunction?: (a: T, b: T) => number): void;
->sort : (compareFunction?: (a: T, b: T) => number) => void
->compareFunction : (a: T, b: T) => number
->a : T
->T : T
->b : T
->T : T
+>sort : (compareFunction?: (a: T, b: T) => number) => void, Symbol(sort,Decl(genericClassPropertyInheritanceSpecialization.ts,20,19))
+>compareFunction : (a: T, b: T) => number, Symbol(compareFunction,Decl(genericClassPropertyInheritanceSpecialization.ts,21,9))
+>a : T, Symbol(a,Decl(genericClassPropertyInheritanceSpecialization.ts,21,28))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
+>b : T, Symbol(b,Decl(genericClassPropertyInheritanceSpecialization.ts,21,33))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
 
     replace(oldItem: T, newItem: T): void;
->replace : (oldItem: T, newItem: T) => void
->oldItem : T
->T : T
->newItem : T
->T : T
+>replace : (oldItem: T, newItem: T) => void, Symbol(replace,Decl(genericClassPropertyInheritanceSpecialization.ts,21,57))
+>oldItem : T, Symbol(oldItem,Decl(genericClassPropertyInheritanceSpecialization.ts,22,12))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
+>newItem : T, Symbol(newItem,Decl(genericClassPropertyInheritanceSpecialization.ts,22,23))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
 
     remove(item: T): T[];
->remove : (item: T) => T[]
->item : T
->T : T
->T : T
+>remove : (item: T) => T[], Symbol(remove,Decl(genericClassPropertyInheritanceSpecialization.ts,22,42))
+>item : T, Symbol(item,Decl(genericClassPropertyInheritanceSpecialization.ts,23,11))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
 
     removeAll(items?: T[]): T[];
->removeAll : (items?: T[]) => T[]
->items : T[]
->T : T
->T : T
+>removeAll : (items?: T[]) => T[], Symbol(removeAll,Decl(genericClassPropertyInheritanceSpecialization.ts,23,25))
+>items : T[], Symbol(items,Decl(genericClassPropertyInheritanceSpecialization.ts,24,14))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
 
     destroy(item: T): void;
->destroy : (item: T) => void
->item : T
->T : T
+>destroy : (item: T) => void, Symbol(destroy,Decl(genericClassPropertyInheritanceSpecialization.ts,24,32))
+>item : T, Symbol(item,Decl(genericClassPropertyInheritanceSpecialization.ts,25,12))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
 
     destroyAll(items?: T[]): void;
->destroyAll : (items?: T[]) => void
->items : T[]
->T : T
+>destroyAll : (items?: T[]) => void, Symbol(destroyAll,Decl(genericClassPropertyInheritanceSpecialization.ts,25,27))
+>items : T[], Symbol(items,Decl(genericClassPropertyInheritanceSpecialization.ts,26,15))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,12,34))
 }
 
 interface KnockoutObservableArrayStatic {
->KnockoutObservableArrayStatic : KnockoutObservableArrayStatic
+>KnockoutObservableArrayStatic : KnockoutObservableArrayStatic, Symbol(KnockoutObservableArrayStatic,Decl(genericClassPropertyInheritanceSpecialization.ts,27,1))
 
     fn: KnockoutObservableArray<any>;
->fn : KnockoutObservableArray<any>
->KnockoutObservableArray : KnockoutObservableArray<T>
+>fn : KnockoutObservableArray<any>, Symbol(fn,Decl(genericClassPropertyInheritanceSpecialization.ts,29,41))
+>KnockoutObservableArray : KnockoutObservableArray<T>, Symbol(KnockoutObservableArray,Decl(genericClassPropertyInheritanceSpecialization.ts,10,1))
 
     <T>(value?: T[]): KnockoutObservableArray<T>;
->T : T
->value : T[]
->T : T
->KnockoutObservableArray : KnockoutObservableArray<T>
->T : T
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,32,5))
+>value : T[], Symbol(value,Decl(genericClassPropertyInheritanceSpecialization.ts,32,8))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,32,5))
+>KnockoutObservableArray : KnockoutObservableArray<T>, Symbol(KnockoutObservableArray,Decl(genericClassPropertyInheritanceSpecialization.ts,10,1))
+>T : T, Symbol(T,Decl(genericClassPropertyInheritanceSpecialization.ts,32,5))
 }
 
 declare module ko {
->ko : typeof ko
+>ko : typeof ko, Symbol(ko,Decl(genericClassPropertyInheritanceSpecialization.ts,33,1))
 
     export var observableArray: KnockoutObservableArrayStatic;
->observableArray : KnockoutObservableArrayStatic
->KnockoutObservableArrayStatic : KnockoutObservableArrayStatic
+>observableArray : KnockoutObservableArrayStatic, Symbol(observableArray,Decl(genericClassPropertyInheritanceSpecialization.ts,36,14))
+>KnockoutObservableArrayStatic : KnockoutObservableArrayStatic, Symbol(KnockoutObservableArrayStatic,Decl(genericClassPropertyInheritanceSpecialization.ts,27,1))
 }
 
 module Portal.Controls.Validators {
->Portal : typeof Portal
->Controls : typeof Controls
->Validators : typeof Validators
+>Portal : typeof Portal, Symbol(Portal,Decl(genericClassPropertyInheritanceSpecialization.ts,37,1))
+>Controls : typeof Controls, Symbol(Controls,Decl(genericClassPropertyInheritanceSpecialization.ts,39,14))
+>Validators : typeof Validators, Symbol(Validators,Decl(genericClassPropertyInheritanceSpecialization.ts,39,23))
 
     export class Validator<TValue> {
->Validator : Validator<TValue>
->TValue : TValue
+>Validator : Validator<TValue>, Symbol(Validator,Decl(genericClassPropertyInheritanceSpecialization.ts,39,35))
+>TValue : TValue, Symbol(TValue,Decl(genericClassPropertyInheritanceSpecialization.ts,41,27))
 
         private _subscription;
->_subscription : any
+>_subscription : any, Symbol(_subscription,Decl(genericClassPropertyInheritanceSpecialization.ts,41,36))
 
         public message: KnockoutObservable<string>;
->message : KnockoutObservable<string>
->KnockoutObservable : KnockoutObservable<T>
+>message : KnockoutObservable<string>, Symbol(message,Decl(genericClassPropertyInheritanceSpecialization.ts,42,30))
+>KnockoutObservable : KnockoutObservable<T>, Symbol(KnockoutObservable,Decl(genericClassPropertyInheritanceSpecialization.ts,4,1))
 
         public validationState: KnockoutObservable<number>;
->validationState : KnockoutObservable<number>
->KnockoutObservable : KnockoutObservable<T>
+>validationState : KnockoutObservable<number>, Symbol(validationState,Decl(genericClassPropertyInheritanceSpecialization.ts,43,51))
+>KnockoutObservable : KnockoutObservable<T>, Symbol(KnockoutObservable,Decl(genericClassPropertyInheritanceSpecialization.ts,4,1))
 
         public validate: KnockoutObservable<TValue>;
->validate : KnockoutObservable<TValue>
->KnockoutObservable : KnockoutObservable<T>
->TValue : TValue
+>validate : KnockoutObservable<TValue>, Symbol(validate,Decl(genericClassPropertyInheritanceSpecialization.ts,44,59))
+>KnockoutObservable : KnockoutObservable<T>, Symbol(KnockoutObservable,Decl(genericClassPropertyInheritanceSpecialization.ts,4,1))
+>TValue : TValue, Symbol(TValue,Decl(genericClassPropertyInheritanceSpecialization.ts,41,27))
 
         constructor(message?: string) { }
->message : string
+>message : string, Symbol(message,Decl(genericClassPropertyInheritanceSpecialization.ts,46,20))
 
         public destroy(): void { }
->destroy : () => void
+>destroy : () => void, Symbol(destroy,Decl(genericClassPropertyInheritanceSpecialization.ts,46,41))
 
         public _validate(value: TValue): number {return 0 }
->_validate : (value: TValue) => number
->value : TValue
->TValue : TValue
+>_validate : (value: TValue) => number, Symbol(_validate,Decl(genericClassPropertyInheritanceSpecialization.ts,47,34))
+>value : TValue, Symbol(value,Decl(genericClassPropertyInheritanceSpecialization.ts,48,25))
+>TValue : TValue, Symbol(TValue,Decl(genericClassPropertyInheritanceSpecialization.ts,41,27))
 >0 : number
     }
 }
 
 module PortalFx.ViewModels.Controls.Validators {
->PortalFx : typeof PortalFx
->ViewModels : typeof ViewModels
->Controls : typeof Controls
->Validators : typeof Validators
+>PortalFx : typeof PortalFx, Symbol(PortalFx,Decl(genericClassPropertyInheritanceSpecialization.ts,50,1))
+>ViewModels : typeof ViewModels, Symbol(ViewModels,Decl(genericClassPropertyInheritanceSpecialization.ts,52,16))
+>Controls : typeof Controls, Symbol(Controls,Decl(genericClassPropertyInheritanceSpecialization.ts,52,27))
+>Validators : typeof Validators, Symbol(Validators,Decl(genericClassPropertyInheritanceSpecialization.ts,52,36))
 
     export class Validator<TValue> extends Portal.Controls.Validators.Validator<TValue> {
->Validator : Validator<TValue>
->TValue : TValue
->Portal.Controls.Validators.Validator : unknown
->Portal.Controls.Validators : typeof Portal.Controls.Validators
->Portal.Controls : typeof Portal.Controls
->Portal : typeof Portal
->Controls : typeof Portal.Controls
->Validators : typeof Portal.Controls.Validators
->Validator : Portal.Controls.Validators.Validator<TValue>
->TValue : TValue
+>Validator : Validator<TValue>, Symbol(Validator,Decl(genericClassPropertyInheritanceSpecialization.ts,52,48))
+>TValue : TValue, Symbol(TValue,Decl(genericClassPropertyInheritanceSpecialization.ts,54,27))
+>Portal.Controls.Validators.Validator : any, Symbol(Portal.Controls.Validators.Validator,Decl(genericClassPropertyInheritanceSpecialization.ts,39,35))
+>Portal.Controls.Validators : typeof Portal.Controls.Validators, Symbol(Portal.Controls.Validators,Decl(genericClassPropertyInheritanceSpecialization.ts,39,23))
+>Portal.Controls : typeof Portal.Controls, Symbol(Portal.Controls,Decl(genericClassPropertyInheritanceSpecialization.ts,39,14))
+>Portal : typeof Portal, Symbol(Portal,Decl(genericClassPropertyInheritanceSpecialization.ts,37,1))
+>Controls : typeof Portal.Controls, Symbol(Portal.Controls,Decl(genericClassPropertyInheritanceSpecialization.ts,39,14))
+>Validators : typeof Portal.Controls.Validators, Symbol(Portal.Controls.Validators,Decl(genericClassPropertyInheritanceSpecialization.ts,39,23))
+>Validator : Portal.Controls.Validators.Validator<TValue>, Symbol(Portal.Controls.Validators.Validator,Decl(genericClassPropertyInheritanceSpecialization.ts,39,35))
+>TValue : TValue, Symbol(TValue,Decl(genericClassPropertyInheritanceSpecialization.ts,54,27))
 
         constructor(message?: string) {
->message : string
+>message : string, Symbol(message,Decl(genericClassPropertyInheritanceSpecialization.ts,56,20))
 
             super(message);
 >super(message) : void
->super : typeof Portal.Controls.Validators.Validator
->message : string
+>super : typeof Portal.Controls.Validators.Validator, Symbol(Portal.Controls.Validators.Validator,Decl(genericClassPropertyInheritanceSpecialization.ts,39,35))
+>message : string, Symbol(message,Decl(genericClassPropertyInheritanceSpecialization.ts,56,20))
         }
     }
 
 }
 
 interface Contract<TValue> {
->Contract : Contract<TValue>
->TValue : TValue
+>Contract : Contract<TValue>, Symbol(Contract,Decl(genericClassPropertyInheritanceSpecialization.ts,61,1))
+>TValue : TValue, Symbol(TValue,Decl(genericClassPropertyInheritanceSpecialization.ts,63,19))
 
     validators: KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>;
->validators : KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>
->KnockoutObservableArray : KnockoutObservableArray<T>
->PortalFx : unknown
->ViewModels : unknown
->Controls : unknown
->Validators : unknown
->Validator : PortalFx.ViewModels.Controls.Validators.Validator<TValue>
->TValue : TValue
+>validators : KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>, Symbol(validators,Decl(genericClassPropertyInheritanceSpecialization.ts,63,28))
+>KnockoutObservableArray : KnockoutObservableArray<T>, Symbol(KnockoutObservableArray,Decl(genericClassPropertyInheritanceSpecialization.ts,10,1))
+>PortalFx : any, Symbol(PortalFx,Decl(genericClassPropertyInheritanceSpecialization.ts,50,1))
+>ViewModels : any, Symbol(PortalFx.ViewModels,Decl(genericClassPropertyInheritanceSpecialization.ts,52,16))
+>Controls : any, Symbol(PortalFx.ViewModels.Controls,Decl(genericClassPropertyInheritanceSpecialization.ts,52,27))
+>Validators : any, Symbol(PortalFx.ViewModels.Controls.Validators,Decl(genericClassPropertyInheritanceSpecialization.ts,52,36))
+>Validator : PortalFx.ViewModels.Controls.Validators.Validator<TValue>, Symbol(PortalFx.ViewModels.Controls.Validators.Validator,Decl(genericClassPropertyInheritanceSpecialization.ts,52,48))
+>TValue : TValue, Symbol(TValue,Decl(genericClassPropertyInheritanceSpecialization.ts,63,19))
 }
 
 
 class ViewModel<TValue> implements Contract<TValue> {
->ViewModel : ViewModel<TValue>
->TValue : TValue
->Contract : Contract<TValue>
->TValue : TValue
+>ViewModel : ViewModel<TValue>, Symbol(ViewModel,Decl(genericClassPropertyInheritanceSpecialization.ts,66,1))
+>TValue : TValue, Symbol(TValue,Decl(genericClassPropertyInheritanceSpecialization.ts,69,16))
+>Contract : Contract<TValue>, Symbol(Contract,Decl(genericClassPropertyInheritanceSpecialization.ts,61,1))
+>TValue : TValue, Symbol(TValue,Decl(genericClassPropertyInheritanceSpecialization.ts,69,16))
 
     public validators: KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>> = ko.observableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>();
->validators : KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>
->KnockoutObservableArray : KnockoutObservableArray<T>
->PortalFx : unknown
->ViewModels : unknown
->Controls : unknown
->Validators : unknown
->Validator : PortalFx.ViewModels.Controls.Validators.Validator<TValue>
->TValue : TValue
+>validators : KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>, Symbol(validators,Decl(genericClassPropertyInheritanceSpecialization.ts,69,53))
+>KnockoutObservableArray : KnockoutObservableArray<T>, Symbol(KnockoutObservableArray,Decl(genericClassPropertyInheritanceSpecialization.ts,10,1))
+>PortalFx : any, Symbol(PortalFx,Decl(genericClassPropertyInheritanceSpecialization.ts,50,1))
+>ViewModels : any, Symbol(PortalFx.ViewModels,Decl(genericClassPropertyInheritanceSpecialization.ts,52,16))
+>Controls : any, Symbol(PortalFx.ViewModels.Controls,Decl(genericClassPropertyInheritanceSpecialization.ts,52,27))
+>Validators : any, Symbol(PortalFx.ViewModels.Controls.Validators,Decl(genericClassPropertyInheritanceSpecialization.ts,52,36))
+>Validator : PortalFx.ViewModels.Controls.Validators.Validator<TValue>, Symbol(PortalFx.ViewModels.Controls.Validators.Validator,Decl(genericClassPropertyInheritanceSpecialization.ts,52,48))
+>TValue : TValue, Symbol(TValue,Decl(genericClassPropertyInheritanceSpecialization.ts,69,16))
 >ko.observableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>() : KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>
->ko.observableArray : KnockoutObservableArrayStatic
->ko : typeof ko
->observableArray : KnockoutObservableArrayStatic
->PortalFx : unknown
->ViewModels : unknown
->Controls : unknown
->Validators : unknown
->Validator : PortalFx.ViewModels.Controls.Validators.Validator<TValue>
->TValue : TValue
+>ko.observableArray : KnockoutObservableArrayStatic, Symbol(ko.observableArray,Decl(genericClassPropertyInheritanceSpecialization.ts,36,14))
+>ko : typeof ko, Symbol(ko,Decl(genericClassPropertyInheritanceSpecialization.ts,33,1))
+>observableArray : KnockoutObservableArrayStatic, Symbol(ko.observableArray,Decl(genericClassPropertyInheritanceSpecialization.ts,36,14))
+>PortalFx : any, Symbol(PortalFx,Decl(genericClassPropertyInheritanceSpecialization.ts,50,1))
+>ViewModels : any, Symbol(PortalFx.ViewModels,Decl(genericClassPropertyInheritanceSpecialization.ts,52,16))
+>Controls : any, Symbol(PortalFx.ViewModels.Controls,Decl(genericClassPropertyInheritanceSpecialization.ts,52,27))
+>Validators : any, Symbol(PortalFx.ViewModels.Controls.Validators,Decl(genericClassPropertyInheritanceSpecialization.ts,52,36))
+>Validator : PortalFx.ViewModels.Controls.Validators.Validator<TValue>, Symbol(PortalFx.ViewModels.Controls.Validators.Validator,Decl(genericClassPropertyInheritanceSpecialization.ts,52,48))
+>TValue : TValue, Symbol(TValue,Decl(genericClassPropertyInheritanceSpecialization.ts,69,16))
 }
 
 

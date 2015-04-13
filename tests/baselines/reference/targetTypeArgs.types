@@ -1,92 +1,92 @@
 === tests/cases/compiler/targetTypeArgs.ts ===
 function foo(callback: (x: string) => void) {
->foo : (callback: (x: string) => void) => void
->callback : (x: string) => void
->x : string
+>foo : (callback: (x: string) => void) => void, Symbol(foo,Decl(targetTypeArgs.ts,0,0))
+>callback : (x: string) => void, Symbol(callback,Decl(targetTypeArgs.ts,0,13))
+>x : string, Symbol(x,Decl(targetTypeArgs.ts,0,24))
 
     callback("hello");   
 >callback("hello") : void
->callback : (x: string) => void
+>callback : (x: string) => void, Symbol(callback,Decl(targetTypeArgs.ts,0,13))
 >"hello" : string
 }
 
 foo(function(x) { x });
 >foo(function(x) { x }) : void
->foo : (callback: (x: string) => void) => void
+>foo : (callback: (x: string) => void) => void, Symbol(foo,Decl(targetTypeArgs.ts,0,0))
 >function(x) { x } : (x: string) => void
->x : string
->x : string
+>x : string, Symbol(x,Decl(targetTypeArgs.ts,4,13))
+>x : string, Symbol(x,Decl(targetTypeArgs.ts,4,13))
 
 [1].forEach(function(v,i,a) { v });
 >[1].forEach(function(v,i,a) { v }) : void
->[1].forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>[1].forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void, Symbol(Array.forEach,Decl(lib.d.ts,1108,95))
 >[1] : number[]
 >1 : number
->forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void, Symbol(Array.forEach,Decl(lib.d.ts,1108,95))
 >function(v,i,a) { v } : (v: number, i: number, a: number[]) => void
->v : number
->i : number
->a : number[]
->v : number
+>v : number, Symbol(v,Decl(targetTypeArgs.ts,6,21))
+>i : number, Symbol(i,Decl(targetTypeArgs.ts,6,23))
+>a : number[], Symbol(a,Decl(targetTypeArgs.ts,6,25))
+>v : number, Symbol(v,Decl(targetTypeArgs.ts,6,21))
 
 ["hello"].every(function(v,i,a) {return true;});
 >["hello"].every(function(v,i,a) {return true;}) : boolean
->["hello"].every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
+>["hello"].every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean, Symbol(Array.every,Decl(lib.d.ts,1094,62))
 >["hello"] : string[]
 >"hello" : string
->every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
+>every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean, Symbol(Array.every,Decl(lib.d.ts,1094,62))
 >function(v,i,a) {return true;} : (v: string, i: number, a: string[]) => boolean
->v : string
->i : number
->a : string[]
+>v : string, Symbol(v,Decl(targetTypeArgs.ts,7,25))
+>i : number, Symbol(i,Decl(targetTypeArgs.ts,7,27))
+>a : string[], Symbol(a,Decl(targetTypeArgs.ts,7,29))
 >true : boolean
 
 [1].every(function(v,i,a) {return true;});
 >[1].every(function(v,i,a) {return true;}) : boolean
->[1].every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean
+>[1].every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean, Symbol(Array.every,Decl(lib.d.ts,1094,62))
 >[1] : number[]
 >1 : number
->every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean
+>every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean, Symbol(Array.every,Decl(lib.d.ts,1094,62))
 >function(v,i,a) {return true;} : (v: number, i: number, a: number[]) => boolean
->v : number
->i : number
->a : number[]
+>v : number, Symbol(v,Decl(targetTypeArgs.ts,8,19))
+>i : number, Symbol(i,Decl(targetTypeArgs.ts,8,21))
+>a : number[], Symbol(a,Decl(targetTypeArgs.ts,8,23))
 >true : boolean
 
 [1].every(function(v,i,a) {return true;});
 >[1].every(function(v,i,a) {return true;}) : boolean
->[1].every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean
+>[1].every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean, Symbol(Array.every,Decl(lib.d.ts,1094,62))
 >[1] : number[]
 >1 : number
->every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean
+>every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean, Symbol(Array.every,Decl(lib.d.ts,1094,62))
 >function(v,i,a) {return true;} : (v: number, i: number, a: number[]) => boolean
->v : number
->i : number
->a : number[]
+>v : number, Symbol(v,Decl(targetTypeArgs.ts,9,19))
+>i : number, Symbol(i,Decl(targetTypeArgs.ts,9,21))
+>a : number[], Symbol(a,Decl(targetTypeArgs.ts,9,23))
 >true : boolean
 
 ["s"].every(function(v,i,a) {return true;});
 >["s"].every(function(v,i,a) {return true;}) : boolean
->["s"].every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
+>["s"].every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean, Symbol(Array.every,Decl(lib.d.ts,1094,62))
 >["s"] : string[]
 >"s" : string
->every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
+>every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean, Symbol(Array.every,Decl(lib.d.ts,1094,62))
 >function(v,i,a) {return true;} : (v: string, i: number, a: string[]) => boolean
->v : string
->i : number
->a : string[]
+>v : string, Symbol(v,Decl(targetTypeArgs.ts,10,21))
+>i : number, Symbol(i,Decl(targetTypeArgs.ts,10,23))
+>a : string[], Symbol(a,Decl(targetTypeArgs.ts,10,25))
 >true : boolean
 
 ["s"].forEach(function(v,i,a) { v });
 >["s"].forEach(function(v,i,a) { v }) : void
->["s"].forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>["s"].forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void, Symbol(Array.forEach,Decl(lib.d.ts,1108,95))
 >["s"] : string[]
 >"s" : string
->forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void, Symbol(Array.forEach,Decl(lib.d.ts,1108,95))
 >function(v,i,a) { v } : (v: string, i: number, a: string[]) => void
->v : string
->i : number
->a : string[]
->v : string
+>v : string, Symbol(v,Decl(targetTypeArgs.ts,11,23))
+>i : number, Symbol(i,Decl(targetTypeArgs.ts,11,25))
+>a : string[], Symbol(a,Decl(targetTypeArgs.ts,11,27))
+>v : string, Symbol(v,Decl(targetTypeArgs.ts,11,23))
 
 

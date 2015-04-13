@@ -1,53 +1,53 @@
 === tests/cases/conformance/es6/defaultParameters/emitDefaultParametersMethod.ts ===
 class C {
->C : C
+>C : C, Symbol(C,Decl(emitDefaultParametersMethod.ts,0,0))
 
     constructor(t: boolean, z: string, x: number, y = "hello") { }
->t : boolean
->z : string
->x : number
->y : string
+>t : boolean, Symbol(t,Decl(emitDefaultParametersMethod.ts,1,16))
+>z : string, Symbol(z,Decl(emitDefaultParametersMethod.ts,1,27))
+>x : number, Symbol(x,Decl(emitDefaultParametersMethod.ts,1,38))
+>y : string, Symbol(y,Decl(emitDefaultParametersMethod.ts,1,49))
 >"hello" : string
 
     public foo(x: string, t = false) { }
->foo : (x: string, t?: boolean) => void
->x : string
->t : boolean
+>foo : (x: string, t?: boolean) => void, Symbol(foo,Decl(emitDefaultParametersMethod.ts,1,66))
+>x : string, Symbol(x,Decl(emitDefaultParametersMethod.ts,3,15))
+>t : boolean, Symbol(t,Decl(emitDefaultParametersMethod.ts,3,25))
 >false : boolean
 
     public foo1(x: string, t = false, ...rest) { }
->foo1 : (x: string, t?: boolean, ...rest: any[]) => void
->x : string
->t : boolean
+>foo1 : (x: string, t?: boolean, ...rest: any[]) => void, Symbol(foo1,Decl(emitDefaultParametersMethod.ts,3,40))
+>x : string, Symbol(x,Decl(emitDefaultParametersMethod.ts,4,16))
+>t : boolean, Symbol(t,Decl(emitDefaultParametersMethod.ts,4,26))
 >false : boolean
->rest : any[]
+>rest : any[], Symbol(rest,Decl(emitDefaultParametersMethod.ts,4,37))
 
     public bar(t = false) { }
->bar : (t?: boolean) => void
->t : boolean
+>bar : (t?: boolean) => void, Symbol(bar,Decl(emitDefaultParametersMethod.ts,4,50))
+>t : boolean, Symbol(t,Decl(emitDefaultParametersMethod.ts,5,15))
 >false : boolean
 
     public boo(t = false, ...rest) { }
->boo : (t?: boolean, ...rest: any[]) => void
->t : boolean
+>boo : (t?: boolean, ...rest: any[]) => void, Symbol(boo,Decl(emitDefaultParametersMethod.ts,5,29))
+>t : boolean, Symbol(t,Decl(emitDefaultParametersMethod.ts,6,15))
 >false : boolean
->rest : any[]
+>rest : any[], Symbol(rest,Decl(emitDefaultParametersMethod.ts,6,25))
 }
 
 class D {
->D : D
+>D : D, Symbol(D,Decl(emitDefaultParametersMethod.ts,7,1))
 
     constructor(y = "hello") { }
->y : string
+>y : string, Symbol(y,Decl(emitDefaultParametersMethod.ts,10,16))
 >"hello" : string
 }
 
 class E {
->E : E
+>E : E, Symbol(E,Decl(emitDefaultParametersMethod.ts,11,1))
 
     constructor(y = "hello", ...rest) { }
->y : string
+>y : string, Symbol(y,Decl(emitDefaultParametersMethod.ts,14,16))
 >"hello" : string
->rest : any[]
+>rest : any[], Symbol(rest,Decl(emitDefaultParametersMethod.ts,14,28))
 }
 

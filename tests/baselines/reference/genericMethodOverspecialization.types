@@ -1,6 +1,6 @@
 === tests/cases/compiler/genericMethodOverspecialization.ts ===
 var names = ["list", "table1", "table2", "table3", "summary"];
->names : string[]
+>names : string[], Symbol(names,Decl(genericMethodOverspecialization.ts,0,3))
 >["list", "table1", "table2", "table3", "summary"] : string[]
 >"list" : string
 >"table1" : string
@@ -9,77 +9,77 @@ var names = ["list", "table1", "table2", "table3", "summary"];
 >"summary" : string
 
 interface HTMLElement {
->HTMLElement : HTMLElement
+>HTMLElement : HTMLElement, Symbol(HTMLElement,Decl(genericMethodOverspecialization.ts,0,62))
 
     clientWidth: number;
->clientWidth : number
+>clientWidth : number, Symbol(clientWidth,Decl(genericMethodOverspecialization.ts,2,23))
 
     isDisabled: boolean;
->isDisabled : boolean
+>isDisabled : boolean, Symbol(isDisabled,Decl(genericMethodOverspecialization.ts,3,24))
 }
 
 declare var document: Document;
->document : Document
->Document : Document
+>document : Document, Symbol(document,Decl(genericMethodOverspecialization.ts,7,11))
+>Document : Document, Symbol(Document,Decl(genericMethodOverspecialization.ts,7,31))
 
 interface Document {
->Document : Document
+>Document : Document, Symbol(Document,Decl(genericMethodOverspecialization.ts,7,31))
 
     getElementById(elementId: string): HTMLElement;
->getElementById : (elementId: string) => HTMLElement
->elementId : string
->HTMLElement : HTMLElement
+>getElementById : (elementId: string) => HTMLElement, Symbol(getElementById,Decl(genericMethodOverspecialization.ts,8,20))
+>elementId : string, Symbol(elementId,Decl(genericMethodOverspecialization.ts,9,19))
+>HTMLElement : HTMLElement, Symbol(HTMLElement,Decl(genericMethodOverspecialization.ts,0,62))
 }
 
 var elements = names.map(function (name) {
->elements : HTMLElement[]
+>elements : HTMLElement[], Symbol(elements,Decl(genericMethodOverspecialization.ts,12,3))
 >names.map(function (name) {    return document.getElementById(name);}) : HTMLElement[]
->names.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->names : string[]
->map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>names.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
+>names : string[], Symbol(names,Decl(genericMethodOverspecialization.ts,0,3))
+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
 >function (name) {    return document.getElementById(name);} : (name: string) => HTMLElement
->name : string
+>name : string, Symbol(name,Decl(genericMethodOverspecialization.ts,12,35))
 
     return document.getElementById(name);
 >document.getElementById(name) : HTMLElement
->document.getElementById : (elementId: string) => HTMLElement
->document : Document
->getElementById : (elementId: string) => HTMLElement
->name : string
+>document.getElementById : (elementId: string) => HTMLElement, Symbol(Document.getElementById,Decl(genericMethodOverspecialization.ts,8,20))
+>document : Document, Symbol(document,Decl(genericMethodOverspecialization.ts,7,11))
+>getElementById : (elementId: string) => HTMLElement, Symbol(Document.getElementById,Decl(genericMethodOverspecialization.ts,8,20))
+>name : string, Symbol(name,Decl(genericMethodOverspecialization.ts,12,35))
 
 });
 
 
 var xxx = elements.filter(function (e) {
->xxx : HTMLElement[]
+>xxx : HTMLElement[], Symbol(xxx,Decl(genericMethodOverspecialization.ts,17,3))
 >elements.filter(function (e) {    return !e.isDisabled;}) : HTMLElement[]
->elements.filter : (callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => boolean, thisArg?: any) => HTMLElement[]
->elements : HTMLElement[]
->filter : (callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => boolean, thisArg?: any) => HTMLElement[]
+>elements.filter : (callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => boolean, thisArg?: any) => HTMLElement[], Symbol(Array.filter,Decl(lib.d.ts,1122,87))
+>elements : HTMLElement[], Symbol(elements,Decl(genericMethodOverspecialization.ts,12,3))
+>filter : (callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => boolean, thisArg?: any) => HTMLElement[], Symbol(Array.filter,Decl(lib.d.ts,1122,87))
 >function (e) {    return !e.isDisabled;} : (e: HTMLElement) => boolean
->e : HTMLElement
+>e : HTMLElement, Symbol(e,Decl(genericMethodOverspecialization.ts,17,36))
 
     return !e.isDisabled;
 >!e.isDisabled : boolean
->e.isDisabled : boolean
->e : HTMLElement
->isDisabled : boolean
+>e.isDisabled : boolean, Symbol(HTMLElement.isDisabled,Decl(genericMethodOverspecialization.ts,3,24))
+>e : HTMLElement, Symbol(e,Decl(genericMethodOverspecialization.ts,17,36))
+>isDisabled : boolean, Symbol(HTMLElement.isDisabled,Decl(genericMethodOverspecialization.ts,3,24))
 
 });
 
 var widths:number[] = elements.map(function (e) { // should not error
->widths : number[]
+>widths : number[], Symbol(widths,Decl(genericMethodOverspecialization.ts,21,3))
 >elements.map(function (e) { // should not error    return e.clientWidth;}) : number[]
->elements.map : <U>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => U, thisArg?: any) => U[]
->elements : HTMLElement[]
->map : <U>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => U, thisArg?: any) => U[]
+>elements.map : <U>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
+>elements : HTMLElement[], Symbol(elements,Decl(genericMethodOverspecialization.ts,12,3))
+>map : <U>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
 >function (e) { // should not error    return e.clientWidth;} : (e: HTMLElement) => number
->e : HTMLElement
+>e : HTMLElement, Symbol(e,Decl(genericMethodOverspecialization.ts,21,45))
 
     return e.clientWidth;
->e.clientWidth : number
->e : HTMLElement
->clientWidth : number
+>e.clientWidth : number, Symbol(HTMLElement.clientWidth,Decl(genericMethodOverspecialization.ts,2,23))
+>e : HTMLElement, Symbol(e,Decl(genericMethodOverspecialization.ts,21,45))
+>clientWidth : number, Symbol(HTMLElement.clientWidth,Decl(genericMethodOverspecialization.ts,2,23))
 
 });
 

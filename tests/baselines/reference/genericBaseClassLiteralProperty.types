@@ -1,36 +1,36 @@
 === tests/cases/compiler/genericBaseClassLiteralProperty.ts ===
 class BaseClass<T> {
->BaseClass : BaseClass<T>
->T : T
+>BaseClass : BaseClass<T>, Symbol(BaseClass,Decl(genericBaseClassLiteralProperty.ts,0,0))
+>T : T, Symbol(T,Decl(genericBaseClassLiteralProperty.ts,0,16))
 
     public _getValue1: { (): T; };
->_getValue1 : () => T
->T : T
+>_getValue1 : () => T, Symbol(_getValue1,Decl(genericBaseClassLiteralProperty.ts,0,20))
+>T : T, Symbol(T,Decl(genericBaseClassLiteralProperty.ts,0,16))
 
     public _getValue2: () => T;
->_getValue2 : () => T
->T : T
+>_getValue2 : () => T, Symbol(_getValue2,Decl(genericBaseClassLiteralProperty.ts,1,34))
+>T : T, Symbol(T,Decl(genericBaseClassLiteralProperty.ts,0,16))
 }
 
 class SubClass extends BaseClass<number> {
->SubClass : SubClass
->BaseClass : BaseClass<T>
+>SubClass : SubClass, Symbol(SubClass,Decl(genericBaseClassLiteralProperty.ts,3,1))
+>BaseClass : BaseClass<T>, Symbol(BaseClass,Decl(genericBaseClassLiteralProperty.ts,0,0))
 
     public Error(): void {
->Error : () => void
+>Error : () => void, Symbol(Error,Decl(genericBaseClassLiteralProperty.ts,5,42))
 
         var x : number = this._getValue1();
->x : number
+>x : number, Symbol(x,Decl(genericBaseClassLiteralProperty.ts,8,11))
 >this._getValue1() : number
->this._getValue1 : () => number
->this : SubClass
->_getValue1 : () => number
+>this._getValue1 : () => number, Symbol(BaseClass._getValue1,Decl(genericBaseClassLiteralProperty.ts,0,20))
+>this : SubClass, Symbol(SubClass,Decl(genericBaseClassLiteralProperty.ts,3,1))
+>_getValue1 : () => number, Symbol(BaseClass._getValue1,Decl(genericBaseClassLiteralProperty.ts,0,20))
 
         var y : number = this._getValue2();
->y : number
+>y : number, Symbol(y,Decl(genericBaseClassLiteralProperty.ts,9,11))
 >this._getValue2() : number
->this._getValue2 : () => number
->this : SubClass
->_getValue2 : () => number
+>this._getValue2 : () => number, Symbol(BaseClass._getValue2,Decl(genericBaseClassLiteralProperty.ts,1,34))
+>this : SubClass, Symbol(SubClass,Decl(genericBaseClassLiteralProperty.ts,3,1))
+>_getValue2 : () => number, Symbol(BaseClass._getValue2,Decl(genericBaseClassLiteralProperty.ts,1,34))
     }
 }

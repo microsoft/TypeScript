@@ -1,50 +1,50 @@
 === tests/cases/compiler/sourceMapValidationWithComments.ts ===
 class DebugClass {
->DebugClass : DebugClass
+>DebugClass : DebugClass, Symbol(DebugClass,Decl(sourceMapValidationWithComments.ts,0,0))
 
     public static debugFunc() {
->debugFunc : () => boolean
+>debugFunc : () => boolean, Symbol(DebugClass.debugFunc,Decl(sourceMapValidationWithComments.ts,0,18))
 
         // Start Debugger Test Code
         var i = 0;
->i : number
+>i : number, Symbol(i,Decl(sourceMapValidationWithComments.ts,5,11))
 >0 : number
 
         i++;
 >i++ : number
->i : number
+>i : number, Symbol(i,Decl(sourceMapValidationWithComments.ts,5,11))
 
         i++;
 >i++ : number
->i : number
+>i : number, Symbol(i,Decl(sourceMapValidationWithComments.ts,5,11))
 
         i++;
 >i++ : number
->i : number
+>i : number, Symbol(i,Decl(sourceMapValidationWithComments.ts,5,11))
 
         i++;
 >i++ : number
->i : number
+>i : number, Symbol(i,Decl(sourceMapValidationWithComments.ts,5,11))
 
         i++;
 >i++ : number
->i : number
+>i : number, Symbol(i,Decl(sourceMapValidationWithComments.ts,5,11))
 
         i++;
 >i++ : number
->i : number
+>i : number, Symbol(i,Decl(sourceMapValidationWithComments.ts,5,11))
 
         i++;
 >i++ : number
->i : number
+>i : number, Symbol(i,Decl(sourceMapValidationWithComments.ts,5,11))
 
         i++;
 >i++ : number
->i : number
+>i : number, Symbol(i,Decl(sourceMapValidationWithComments.ts,5,11))
 
         i++;
 >i++ : number
->i : number
+>i : number, Symbol(i,Decl(sourceMapValidationWithComments.ts,5,11))
 
         // End Debugger Test Code
 

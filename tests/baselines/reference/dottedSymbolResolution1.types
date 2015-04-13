@@ -1,89 +1,89 @@
 === tests/cases/compiler/dottedSymbolResolution1.ts ===
 interface JQuery {
->JQuery : JQuery
+>JQuery : JQuery, Symbol(JQuery,Decl(dottedSymbolResolution1.ts,0,0))
 
     find(selector: string): JQuery;
->find : (selector: string) => JQuery
->selector : string
->JQuery : JQuery
+>find : (selector: string) => JQuery, Symbol(find,Decl(dottedSymbolResolution1.ts,0,18))
+>selector : string, Symbol(selector,Decl(dottedSymbolResolution1.ts,1,9))
+>JQuery : JQuery, Symbol(JQuery,Decl(dottedSymbolResolution1.ts,0,0))
 }
 
 interface JQueryStatic {
->JQueryStatic : JQueryStatic
+>JQueryStatic : JQueryStatic, Symbol(JQueryStatic,Decl(dottedSymbolResolution1.ts,2,1))
     
     (selector: string): JQuery;
->selector : string
->JQuery : JQuery
+>selector : string, Symbol(selector,Decl(dottedSymbolResolution1.ts,6,5))
+>JQuery : JQuery, Symbol(JQuery,Decl(dottedSymbolResolution1.ts,0,0))
 
     (object: JQuery): JQuery;
->object : JQuery
->JQuery : JQuery
->JQuery : JQuery
+>object : JQuery, Symbol(object,Decl(dottedSymbolResolution1.ts,7,5))
+>JQuery : JQuery, Symbol(JQuery,Decl(dottedSymbolResolution1.ts,0,0))
+>JQuery : JQuery, Symbol(JQuery,Decl(dottedSymbolResolution1.ts,0,0))
 }
 
 class Base { foo() { } }
->Base : Base
->foo : () => void
+>Base : Base, Symbol(Base,Decl(dottedSymbolResolution1.ts,8,1))
+>foo : () => void, Symbol(foo,Decl(dottedSymbolResolution1.ts,10,12))
 
 function each(collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any;
->each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
->collection : string
->callback : (indexInArray: any, valueOfElement: any) => any
->indexInArray : any
->valueOfElement : any
+>each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }, Symbol(each,Decl(dottedSymbolResolution1.ts,10,24),Decl(dottedSymbolResolution1.ts,12,98),Decl(dottedSymbolResolution1.ts,13,102))
+>collection : string, Symbol(collection,Decl(dottedSymbolResolution1.ts,12,14))
+>callback : (indexInArray: any, valueOfElement: any) => any, Symbol(callback,Decl(dottedSymbolResolution1.ts,12,33))
+>indexInArray : any, Symbol(indexInArray,Decl(dottedSymbolResolution1.ts,12,45))
+>valueOfElement : any, Symbol(valueOfElement,Decl(dottedSymbolResolution1.ts,12,63))
 
 function each(collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any;
->each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
->collection : JQuery
->JQuery : JQuery
->callback : (indexInArray: number, valueOfElement: Base) => any
->indexInArray : number
->valueOfElement : Base
->Base : Base
+>each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }, Symbol(each,Decl(dottedSymbolResolution1.ts,10,24),Decl(dottedSymbolResolution1.ts,12,98),Decl(dottedSymbolResolution1.ts,13,102))
+>collection : JQuery, Symbol(collection,Decl(dottedSymbolResolution1.ts,13,14))
+>JQuery : JQuery, Symbol(JQuery,Decl(dottedSymbolResolution1.ts,0,0))
+>callback : (indexInArray: number, valueOfElement: Base) => any, Symbol(callback,Decl(dottedSymbolResolution1.ts,13,33))
+>indexInArray : number, Symbol(indexInArray,Decl(dottedSymbolResolution1.ts,13,45))
+>valueOfElement : Base, Symbol(valueOfElement,Decl(dottedSymbolResolution1.ts,13,66))
+>Base : Base, Symbol(Base,Decl(dottedSymbolResolution1.ts,8,1))
 
 function each(collection: any, callback: (indexInArray: any, valueOfElement: any) => any): any {
->each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
->collection : any
->callback : (indexInArray: any, valueOfElement: any) => any
->indexInArray : any
->valueOfElement : any
+>each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }, Symbol(each,Decl(dottedSymbolResolution1.ts,10,24),Decl(dottedSymbolResolution1.ts,12,98),Decl(dottedSymbolResolution1.ts,13,102))
+>collection : any, Symbol(collection,Decl(dottedSymbolResolution1.ts,14,14))
+>callback : (indexInArray: any, valueOfElement: any) => any, Symbol(callback,Decl(dottedSymbolResolution1.ts,14,30))
+>indexInArray : any, Symbol(indexInArray,Decl(dottedSymbolResolution1.ts,14,42))
+>valueOfElement : any, Symbol(valueOfElement,Decl(dottedSymbolResolution1.ts,14,60))
 
     return null;
 >null : null
 }
 
 function _setBarAndText(): void {
->_setBarAndText : () => void
+>_setBarAndText : () => void, Symbol(_setBarAndText,Decl(dottedSymbolResolution1.ts,16,1))
 
     var x: JQuery, $: JQueryStatic
->x : JQuery
->JQuery : JQuery
->$ : JQueryStatic
->JQueryStatic : JQueryStatic
+>x : JQuery, Symbol(x,Decl(dottedSymbolResolution1.ts,19,7))
+>JQuery : JQuery, Symbol(JQuery,Decl(dottedSymbolResolution1.ts,0,0))
+>$ : JQueryStatic, Symbol($,Decl(dottedSymbolResolution1.ts,19,18))
+>JQueryStatic : JQueryStatic, Symbol(JQueryStatic,Decl(dottedSymbolResolution1.ts,2,1))
 
     each(x.find(" "), function () {
 >each(x.find(" "), function () {        var $this: JQuery = $(''),            thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here    } ) : any
->each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
+>each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }, Symbol(each,Decl(dottedSymbolResolution1.ts,10,24),Decl(dottedSymbolResolution1.ts,12,98),Decl(dottedSymbolResolution1.ts,13,102))
 >x.find(" ") : JQuery
->x.find : (selector: string) => JQuery
->x : JQuery
->find : (selector: string) => JQuery
+>x.find : (selector: string) => JQuery, Symbol(JQuery.find,Decl(dottedSymbolResolution1.ts,0,18))
+>x : JQuery, Symbol(x,Decl(dottedSymbolResolution1.ts,19,7))
+>find : (selector: string) => JQuery, Symbol(JQuery.find,Decl(dottedSymbolResolution1.ts,0,18))
 >" " : string
 >function () {        var $this: JQuery = $(''),            thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here    } : () => void
 
         var $this: JQuery = $(''),
->$this : JQuery
->JQuery : JQuery
+>$this : JQuery, Symbol($this,Decl(dottedSymbolResolution1.ts,21,11))
+>JQuery : JQuery, Symbol(JQuery,Decl(dottedSymbolResolution1.ts,0,0))
 >$('') : JQuery
->$ : JQueryStatic
+>$ : JQueryStatic, Symbol($,Decl(dottedSymbolResolution1.ts,19,18))
 >'' : string
 
             thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here
->thisBar : JQuery
+>thisBar : JQuery, Symbol(thisBar,Decl(dottedSymbolResolution1.ts,21,34))
 >$this.find(".fx-usagebars-calloutbar-this") : JQuery
->$this.find : (selector: string) => JQuery
->$this : JQuery
->find : (selector: string) => JQuery
+>$this.find : (selector: string) => JQuery, Symbol(JQuery.find,Decl(dottedSymbolResolution1.ts,0,18))
+>$this : JQuery, Symbol($this,Decl(dottedSymbolResolution1.ts,21,11))
+>find : (selector: string) => JQuery, Symbol(JQuery.find,Decl(dottedSymbolResolution1.ts,0,18))
 >".fx-usagebars-calloutbar-this" : string
 
     } );

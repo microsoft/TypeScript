@@ -2,62 +2,62 @@
 // + operator on enum type
 
 enum ENUM { };
->ENUM : ENUM
+>ENUM : ENUM, Symbol(ENUM,Decl(plusOperatorWithEnumType.ts,0,0))
 
 enum ENUM1 { A, B, "" };
->ENUM1 : ENUM1
->A : ENUM1
->B : ENUM1
+>ENUM1 : ENUM1, Symbol(ENUM1,Decl(plusOperatorWithEnumType.ts,2,14))
+>A : ENUM1, Symbol(ENUM1.A,Decl(plusOperatorWithEnumType.ts,3,12))
+>B : ENUM1, Symbol(ENUM1.B,Decl(plusOperatorWithEnumType.ts,3,15))
 
 // enum type var
 var ResultIsNumber1 = +ENUM;
->ResultIsNumber1 : number
+>ResultIsNumber1 : number, Symbol(ResultIsNumber1,Decl(plusOperatorWithEnumType.ts,6,3))
 >+ENUM : number
->ENUM : typeof ENUM
+>ENUM : typeof ENUM, Symbol(ENUM,Decl(plusOperatorWithEnumType.ts,0,0))
 
 var ResultIsNumber2 = +ENUM1;
->ResultIsNumber2 : number
+>ResultIsNumber2 : number, Symbol(ResultIsNumber2,Decl(plusOperatorWithEnumType.ts,7,3))
 >+ENUM1 : number
->ENUM1 : typeof ENUM1
+>ENUM1 : typeof ENUM1, Symbol(ENUM1,Decl(plusOperatorWithEnumType.ts,2,14))
 
 // enum type expressions
 var ResultIsNumber3 = +ENUM1["A"];
->ResultIsNumber3 : number
+>ResultIsNumber3 : number, Symbol(ResultIsNumber3,Decl(plusOperatorWithEnumType.ts,10,3))
 >+ENUM1["A"] : number
 >ENUM1["A"] : ENUM1
->ENUM1 : typeof ENUM1
->"A" : string
+>ENUM1 : typeof ENUM1, Symbol(ENUM1,Decl(plusOperatorWithEnumType.ts,2,14))
+>"A" : string, Symbol(ENUM1.A,Decl(plusOperatorWithEnumType.ts,3,12))
 
 var ResultIsNumber4 = +(ENUM[0] + ENUM1["B"]);
->ResultIsNumber4 : number
+>ResultIsNumber4 : number, Symbol(ResultIsNumber4,Decl(plusOperatorWithEnumType.ts,11,3))
 >+(ENUM[0] + ENUM1["B"]) : number
 >(ENUM[0] + ENUM1["B"]) : string
 >ENUM[0] + ENUM1["B"] : string
 >ENUM[0] : string
->ENUM : typeof ENUM
+>ENUM : typeof ENUM, Symbol(ENUM,Decl(plusOperatorWithEnumType.ts,0,0))
 >0 : number
 >ENUM1["B"] : ENUM1
->ENUM1 : typeof ENUM1
->"B" : string
+>ENUM1 : typeof ENUM1, Symbol(ENUM1,Decl(plusOperatorWithEnumType.ts,2,14))
+>"B" : string, Symbol(ENUM1.B,Decl(plusOperatorWithEnumType.ts,3,15))
 
 // miss assignment operators
 +ENUM;
 >+ENUM : number
->ENUM : typeof ENUM
+>ENUM : typeof ENUM, Symbol(ENUM,Decl(plusOperatorWithEnumType.ts,0,0))
 
 +ENUM1;
 >+ENUM1 : number
->ENUM1 : typeof ENUM1
+>ENUM1 : typeof ENUM1, Symbol(ENUM1,Decl(plusOperatorWithEnumType.ts,2,14))
 
 +ENUM1.B;
 >+ENUM1.B : number
->ENUM1.B : ENUM1
->ENUM1 : typeof ENUM1
->B : ENUM1
+>ENUM1.B : ENUM1, Symbol(ENUM1.B,Decl(plusOperatorWithEnumType.ts,3,15))
+>ENUM1 : typeof ENUM1, Symbol(ENUM1,Decl(plusOperatorWithEnumType.ts,2,14))
+>B : ENUM1, Symbol(ENUM1.B,Decl(plusOperatorWithEnumType.ts,3,15))
 
 +ENUM, ENUM1;
 >+ENUM, ENUM1 : typeof ENUM1
 >+ENUM : number
->ENUM : typeof ENUM
->ENUM1 : typeof ENUM1
+>ENUM : typeof ENUM, Symbol(ENUM,Decl(plusOperatorWithEnumType.ts,0,0))
+>ENUM1 : typeof ENUM1, Symbol(ENUM1,Decl(plusOperatorWithEnumType.ts,2,14))
 

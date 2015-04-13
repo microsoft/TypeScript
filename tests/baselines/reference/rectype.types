@@ -1,44 +1,44 @@
 === tests/cases/compiler/rectype.ts ===
 module M {
->M : typeof M
+>M : typeof M, Symbol(M,Decl(rectype.ts,0,0))
 
     interface I { (i:I):I; }
->I : I
->i : I
->I : I
->I : I
+>I : I, Symbol(I,Decl(rectype.ts,0,10))
+>i : I, Symbol(i,Decl(rectype.ts,1,19))
+>I : I, Symbol(I,Decl(rectype.ts,0,10))
+>I : I, Symbol(I,Decl(rectype.ts,0,10))
 
     export function f(p: I) { return f };
->f : (p: I) => typeof f
->p : I
->I : I
->f : (p: I) => typeof f
+>f : (p: I) => typeof f, Symbol(f,Decl(rectype.ts,1,28))
+>p : I, Symbol(p,Decl(rectype.ts,3,22))
+>I : I, Symbol(I,Decl(rectype.ts,0,10))
+>f : (p: I) => typeof f, Symbol(f,Decl(rectype.ts,1,28))
 
     var i:I;
->i : I
->I : I
+>i : I, Symbol(i,Decl(rectype.ts,5,7))
+>I : I, Symbol(I,Decl(rectype.ts,0,10))
 
     f(i);
 >f(i) : (p: I) => typeof f
->f : (p: I) => typeof f
->i : I
+>f : (p: I) => typeof f, Symbol(f,Decl(rectype.ts,1,28))
+>i : I, Symbol(i,Decl(rectype.ts,5,7))
 
     f(f(i));
 >f(f(i)) : (p: I) => typeof f
->f : (p: I) => typeof f
+>f : (p: I) => typeof f, Symbol(f,Decl(rectype.ts,1,28))
 >f(i) : (p: I) => typeof f
->f : (p: I) => typeof f
->i : I
+>f : (p: I) => typeof f, Symbol(f,Decl(rectype.ts,1,28))
+>i : I, Symbol(i,Decl(rectype.ts,5,7))
 
     f((f(f(i))));
 >f((f(f(i)))) : (p: I) => typeof f
->f : (p: I) => typeof f
+>f : (p: I) => typeof f, Symbol(f,Decl(rectype.ts,1,28))
 >(f(f(i))) : (p: I) => typeof f
 >f(f(i)) : (p: I) => typeof f
->f : (p: I) => typeof f
+>f : (p: I) => typeof f, Symbol(f,Decl(rectype.ts,1,28))
 >f(i) : (p: I) => typeof f
->f : (p: I) => typeof f
->i : I
+>f : (p: I) => typeof f, Symbol(f,Decl(rectype.ts,1,28))
+>i : I, Symbol(i,Decl(rectype.ts,5,7))
 }
 
 

@@ -1,14 +1,14 @@
 === tests/cases/conformance/decorators/class/decorated.ts ===
 function decorate() { }
->decorate : () => void
+>decorate : () => void, Symbol(decorate,Decl(decorated.ts,0,0))
 
 @decorate
->decorate : () => void
+>decorate : () => void, Symbol(decorate,Decl(decorated.ts,0,0))
 
 export default class Decorated { }
->Decorated : Decorated
+>Decorated : Decorated, Symbol(Decorated,Decl(decorated.ts,0,23))
 
 === tests/cases/conformance/decorators/class/undecorated.ts ===
 import Decorated from 'decorated';
->Decorated : typeof Decorated
+>Decorated : typeof Decorated, Symbol(Decorated,Decl(undecorated.ts,0,6))
 

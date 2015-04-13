@@ -1,25 +1,25 @@
 === tests/cases/compiler/moduleAndInterfaceSharingName.ts ===
 module X {
->X : unknown
+>X : any, Symbol(X,Decl(moduleAndInterfaceSharingName.ts,0,0))
 
     export module Y {
->Y : unknown
+>Y : any, Symbol(Y,Decl(moduleAndInterfaceSharingName.ts,0,10),Decl(moduleAndInterfaceSharingName.ts,3,5))
 
         export interface Z { }
->Z : Z
+>Z : Z, Symbol(Z,Decl(moduleAndInterfaceSharingName.ts,1,21))
     }
     export interface Y { }
->Y : Y
+>Y : Y, Symbol(Y,Decl(moduleAndInterfaceSharingName.ts,0,10),Decl(moduleAndInterfaceSharingName.ts,3,5))
 }
 var z: X.Y.Z = null;
->z : X.Y.Z
->X : unknown
->Y : unknown
->Z : X.Y.Z
+>z : X.Y.Z, Symbol(z,Decl(moduleAndInterfaceSharingName.ts,6,3))
+>X : any, Symbol(X,Decl(moduleAndInterfaceSharingName.ts,0,0))
+>Y : any, Symbol(X.Y,Decl(moduleAndInterfaceSharingName.ts,0,10),Decl(moduleAndInterfaceSharingName.ts,3,5))
+>Z : X.Y.Z, Symbol(X.Y.Z,Decl(moduleAndInterfaceSharingName.ts,1,21))
 >null : null
 
 var z2: X.Y;
->z2 : X.Y
->X : unknown
->Y : X.Y
+>z2 : X.Y, Symbol(z2,Decl(moduleAndInterfaceSharingName.ts,7,3))
+>X : any, Symbol(X,Decl(moduleAndInterfaceSharingName.ts,0,0))
+>Y : X.Y, Symbol(X.Y,Decl(moduleAndInterfaceSharingName.ts,0,10),Decl(moduleAndInterfaceSharingName.ts,3,5))
 

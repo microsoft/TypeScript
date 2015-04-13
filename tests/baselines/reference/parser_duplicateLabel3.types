@@ -1,15 +1,15 @@
 === tests/cases/conformance/parser/ecmascript5/Statements/LabeledStatements/parser_duplicateLabel3.ts ===
 target:
->target : unknown
+>target : any
 
 while (true) {
 >true : boolean
 
   function f() {
->f : () => void
+>f : () => void, Symbol(f,Decl(parser_duplicateLabel3.ts,1,14))
 
     target:
->target : unknown
+>target : any
 
     while (true) {
 >true : boolean

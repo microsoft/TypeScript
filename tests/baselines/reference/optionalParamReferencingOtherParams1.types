@@ -1,16 +1,16 @@
 === tests/cases/compiler/optionalParamReferencingOtherParams1.ts ===
 function strange(x: number, y = x * 1, z = x + y) {
->strange : (x: number, y?: number, z?: number) => number
->x : number
->y : number
+>strange : (x: number, y?: number, z?: number) => number, Symbol(strange,Decl(optionalParamReferencingOtherParams1.ts,0,0))
+>x : number, Symbol(x,Decl(optionalParamReferencingOtherParams1.ts,0,17))
+>y : number, Symbol(y,Decl(optionalParamReferencingOtherParams1.ts,0,27))
 >x * 1 : number
->x : number
+>x : number, Symbol(x,Decl(optionalParamReferencingOtherParams1.ts,0,17))
 >1 : number
->z : number
+>z : number, Symbol(z,Decl(optionalParamReferencingOtherParams1.ts,0,38))
 >x + y : number
->x : number
->y : number
+>x : number, Symbol(x,Decl(optionalParamReferencingOtherParams1.ts,0,17))
+>y : number, Symbol(y,Decl(optionalParamReferencingOtherParams1.ts,0,27))
 
     return z;
->z : number
+>z : number, Symbol(z,Decl(optionalParamReferencingOtherParams1.ts,0,38))
 }

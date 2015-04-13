@@ -1,55 +1,55 @@
 === tests/cases/compiler/sourceMapValidationClass.ts ===
 class Greeter {
->Greeter : Greeter
+>Greeter : Greeter, Symbol(Greeter,Decl(sourceMapValidationClass.ts,0,0))
 
     constructor(public greeting: string, ...b: string[]) {
->greeting : string
->b : string[]
+>greeting : string, Symbol(greeting,Decl(sourceMapValidationClass.ts,1,16))
+>b : string[], Symbol(b,Decl(sourceMapValidationClass.ts,1,40))
     }
     greet() {
->greet : () => string
+>greet : () => string, Symbol(greet,Decl(sourceMapValidationClass.ts,2,5))
 
         return "<h1>" + this.greeting + "</h1>";
 >"<h1>" + this.greeting + "</h1>" : string
 >"<h1>" + this.greeting : string
 >"<h1>" : string
->this.greeting : string
->this : Greeter
->greeting : string
+>this.greeting : string, Symbol(greeting,Decl(sourceMapValidationClass.ts,1,16))
+>this : Greeter, Symbol(Greeter,Decl(sourceMapValidationClass.ts,0,0))
+>greeting : string, Symbol(greeting,Decl(sourceMapValidationClass.ts,1,16))
 >"</h1>" : string
     }
     private x: string;
->x : string
+>x : string, Symbol(x,Decl(sourceMapValidationClass.ts,5,5))
 
     private x1: number = 10;
->x1 : number
+>x1 : number, Symbol(x1,Decl(sourceMapValidationClass.ts,6,22))
 >10 : number
 
     private fn() {
->fn : () => string
+>fn : () => string, Symbol(fn,Decl(sourceMapValidationClass.ts,7,28))
 
         return this.greeting;
->this.greeting : string
->this : Greeter
->greeting : string
+>this.greeting : string, Symbol(greeting,Decl(sourceMapValidationClass.ts,1,16))
+>this : Greeter, Symbol(Greeter,Decl(sourceMapValidationClass.ts,0,0))
+>greeting : string, Symbol(greeting,Decl(sourceMapValidationClass.ts,1,16))
     }
     get greetings() {
->greetings : string
+>greetings : string, Symbol(greetings,Decl(sourceMapValidationClass.ts,10,5),Decl(sourceMapValidationClass.ts,13,5))
 
         return this.greeting;
->this.greeting : string
->this : Greeter
->greeting : string
+>this.greeting : string, Symbol(greeting,Decl(sourceMapValidationClass.ts,1,16))
+>this : Greeter, Symbol(Greeter,Decl(sourceMapValidationClass.ts,0,0))
+>greeting : string, Symbol(greeting,Decl(sourceMapValidationClass.ts,1,16))
     }
     set greetings(greetings: string) {
->greetings : string
->greetings : string
+>greetings : string, Symbol(greetings,Decl(sourceMapValidationClass.ts,10,5),Decl(sourceMapValidationClass.ts,13,5))
+>greetings : string, Symbol(greetings,Decl(sourceMapValidationClass.ts,14,18))
 
         this.greeting = greetings;
 >this.greeting = greetings : string
->this.greeting : string
->this : Greeter
->greeting : string
->greetings : string
+>this.greeting : string, Symbol(greeting,Decl(sourceMapValidationClass.ts,1,16))
+>this : Greeter, Symbol(Greeter,Decl(sourceMapValidationClass.ts,0,0))
+>greeting : string, Symbol(greeting,Decl(sourceMapValidationClass.ts,1,16))
+>greetings : string, Symbol(greetings,Decl(sourceMapValidationClass.ts,14,18))
     }
 }

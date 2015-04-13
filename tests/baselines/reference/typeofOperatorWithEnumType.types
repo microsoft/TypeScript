@@ -2,97 +2,97 @@
 // typeof  operator on enum type
 
 enum ENUM { };
->ENUM : ENUM
+>ENUM : ENUM, Symbol(ENUM,Decl(typeofOperatorWithEnumType.ts,0,0))
 
 enum ENUM1 { A, B, "" };
->ENUM1 : ENUM1
->A : ENUM1
->B : ENUM1
+>ENUM1 : ENUM1, Symbol(ENUM1,Decl(typeofOperatorWithEnumType.ts,2,14))
+>A : ENUM1, Symbol(ENUM1.A,Decl(typeofOperatorWithEnumType.ts,3,12))
+>B : ENUM1, Symbol(ENUM1.B,Decl(typeofOperatorWithEnumType.ts,3,15))
 
 // enum type var
 var ResultIsString1 = typeof ENUM;
->ResultIsString1 : string
+>ResultIsString1 : string, Symbol(ResultIsString1,Decl(typeofOperatorWithEnumType.ts,6,3))
 >typeof ENUM : string
->ENUM : typeof ENUM
+>ENUM : typeof ENUM, Symbol(ENUM,Decl(typeofOperatorWithEnumType.ts,0,0))
 
 var ResultIsString2 = typeof ENUM1;
->ResultIsString2 : string
+>ResultIsString2 : string, Symbol(ResultIsString2,Decl(typeofOperatorWithEnumType.ts,7,3))
 >typeof ENUM1 : string
->ENUM1 : typeof ENUM1
+>ENUM1 : typeof ENUM1, Symbol(ENUM1,Decl(typeofOperatorWithEnumType.ts,2,14))
 
 // enum type expressions
 var ResultIsString3 = typeof ENUM1["A"];
->ResultIsString3 : string
+>ResultIsString3 : string, Symbol(ResultIsString3,Decl(typeofOperatorWithEnumType.ts,10,3))
 >typeof ENUM1["A"] : string
 >ENUM1["A"] : ENUM1
->ENUM1 : typeof ENUM1
->"A" : string
+>ENUM1 : typeof ENUM1, Symbol(ENUM1,Decl(typeofOperatorWithEnumType.ts,2,14))
+>"A" : string, Symbol(ENUM1.A,Decl(typeofOperatorWithEnumType.ts,3,12))
 
 var ResultIsString4 = typeof (ENUM[0] + ENUM1["B"]);
->ResultIsString4 : string
+>ResultIsString4 : string, Symbol(ResultIsString4,Decl(typeofOperatorWithEnumType.ts,11,3))
 >typeof (ENUM[0] + ENUM1["B"]) : string
 >(ENUM[0] + ENUM1["B"]) : string
 >ENUM[0] + ENUM1["B"] : string
 >ENUM[0] : string
->ENUM : typeof ENUM
+>ENUM : typeof ENUM, Symbol(ENUM,Decl(typeofOperatorWithEnumType.ts,0,0))
 >0 : number
 >ENUM1["B"] : ENUM1
->ENUM1 : typeof ENUM1
->"B" : string
+>ENUM1 : typeof ENUM1, Symbol(ENUM1,Decl(typeofOperatorWithEnumType.ts,2,14))
+>"B" : string, Symbol(ENUM1.B,Decl(typeofOperatorWithEnumType.ts,3,15))
 
 // multiple typeof  operators
 var ResultIsString5 = typeof typeof ENUM;
->ResultIsString5 : string
+>ResultIsString5 : string, Symbol(ResultIsString5,Decl(typeofOperatorWithEnumType.ts,14,3))
 >typeof typeof ENUM : string
 >typeof ENUM : string
->ENUM : typeof ENUM
+>ENUM : typeof ENUM, Symbol(ENUM,Decl(typeofOperatorWithEnumType.ts,0,0))
 
 var ResultIsString6 = typeof typeof typeof (ENUM[0] + ENUM1.B);
->ResultIsString6 : string
+>ResultIsString6 : string, Symbol(ResultIsString6,Decl(typeofOperatorWithEnumType.ts,15,3))
 >typeof typeof typeof (ENUM[0] + ENUM1.B) : string
 >typeof typeof (ENUM[0] + ENUM1.B) : string
 >typeof (ENUM[0] + ENUM1.B) : string
 >(ENUM[0] + ENUM1.B) : string
 >ENUM[0] + ENUM1.B : string
 >ENUM[0] : string
->ENUM : typeof ENUM
+>ENUM : typeof ENUM, Symbol(ENUM,Decl(typeofOperatorWithEnumType.ts,0,0))
 >0 : number
->ENUM1.B : ENUM1
->ENUM1 : typeof ENUM1
->B : ENUM1
+>ENUM1.B : ENUM1, Symbol(ENUM1.B,Decl(typeofOperatorWithEnumType.ts,3,15))
+>ENUM1 : typeof ENUM1, Symbol(ENUM1,Decl(typeofOperatorWithEnumType.ts,2,14))
+>B : ENUM1, Symbol(ENUM1.B,Decl(typeofOperatorWithEnumType.ts,3,15))
 
 // miss assignment operators
 typeof ENUM;
 >typeof ENUM : string
->ENUM : typeof ENUM
+>ENUM : typeof ENUM, Symbol(ENUM,Decl(typeofOperatorWithEnumType.ts,0,0))
 
 typeof ENUM1;
 >typeof ENUM1 : string
->ENUM1 : typeof ENUM1
+>ENUM1 : typeof ENUM1, Symbol(ENUM1,Decl(typeofOperatorWithEnumType.ts,2,14))
 
 typeof ENUM1["B"];
 >typeof ENUM1["B"] : string
 >ENUM1["B"] : ENUM1
->ENUM1 : typeof ENUM1
->"B" : string
+>ENUM1 : typeof ENUM1, Symbol(ENUM1,Decl(typeofOperatorWithEnumType.ts,2,14))
+>"B" : string, Symbol(ENUM1.B,Decl(typeofOperatorWithEnumType.ts,3,15))
 
 typeof ENUM, ENUM1;
 >typeof ENUM, ENUM1 : typeof ENUM1
 >typeof ENUM : string
->ENUM : typeof ENUM
->ENUM1 : typeof ENUM1
+>ENUM : typeof ENUM, Symbol(ENUM,Decl(typeofOperatorWithEnumType.ts,0,0))
+>ENUM1 : typeof ENUM1, Symbol(ENUM1,Decl(typeofOperatorWithEnumType.ts,2,14))
 
 // use typeof in type query
 enum z { };
->z : z
+>z : z, Symbol(z,Decl(typeofOperatorWithEnumType.ts,21,19))
 
 z: typeof ENUM;
->z : unknown
+>z : any
 >typeof ENUM : string
->ENUM : typeof ENUM
+>ENUM : typeof ENUM, Symbol(ENUM,Decl(typeofOperatorWithEnumType.ts,0,0))
 
 z: typeof ENUM1;
->z : unknown
+>z : any
 >typeof ENUM1 : string
->ENUM1 : typeof ENUM1
+>ENUM1 : typeof ENUM1, Symbol(ENUM1,Decl(typeofOperatorWithEnumType.ts,2,14))
 

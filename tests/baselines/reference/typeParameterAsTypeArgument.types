@@ -2,49 +2,49 @@
 // These are all errors because type parameters cannot reference other type parameters from the same list
 
 function foo<T, U>(x: T, y: U) {
->foo : <T, U>(x: T, y: U) => C<U, T>
->T : T
->U : U
->x : T
->T : T
->y : U
->U : U
+>foo : <T, U>(x: T, y: U) => C<U, T>, Symbol(foo,Decl(typeParameterAsTypeArgument.ts,0,0))
+>T : T, Symbol(T,Decl(typeParameterAsTypeArgument.ts,2,13))
+>U : U, Symbol(U,Decl(typeParameterAsTypeArgument.ts,2,15))
+>x : T, Symbol(x,Decl(typeParameterAsTypeArgument.ts,2,19))
+>T : T, Symbol(T,Decl(typeParameterAsTypeArgument.ts,2,13))
+>y : U, Symbol(y,Decl(typeParameterAsTypeArgument.ts,2,24))
+>U : U, Symbol(U,Decl(typeParameterAsTypeArgument.ts,2,15))
 
     foo<U, U>(y, y);
 >foo<U, U>(y, y) : C<U, U>
->foo : <T, U>(x: T, y: U) => C<U, T>
->U : U
->U : U
->y : U
->y : U
+>foo : <T, U>(x: T, y: U) => C<U, T>, Symbol(foo,Decl(typeParameterAsTypeArgument.ts,0,0))
+>U : U, Symbol(U,Decl(typeParameterAsTypeArgument.ts,2,15))
+>U : U, Symbol(U,Decl(typeParameterAsTypeArgument.ts,2,15))
+>y : U, Symbol(y,Decl(typeParameterAsTypeArgument.ts,2,24))
+>y : U, Symbol(y,Decl(typeParameterAsTypeArgument.ts,2,24))
 
     return new C<U,T>();
 >new C<U,T>() : C<U, T>
->C : typeof C
->U : U
->T : T
+>C : typeof C, Symbol(C,Decl(typeParameterAsTypeArgument.ts,5,1))
+>U : U, Symbol(U,Decl(typeParameterAsTypeArgument.ts,2,15))
+>T : T, Symbol(T,Decl(typeParameterAsTypeArgument.ts,2,13))
 }
 
 class C<T, U> {
->C : C<T, U>
->T : T
->U : U
+>C : C<T, U>, Symbol(C,Decl(typeParameterAsTypeArgument.ts,5,1))
+>T : T, Symbol(T,Decl(typeParameterAsTypeArgument.ts,7,8))
+>U : U, Symbol(U,Decl(typeParameterAsTypeArgument.ts,7,10))
 
     x: T;
->x : T
->T : T
+>x : T, Symbol(x,Decl(typeParameterAsTypeArgument.ts,7,15))
+>T : T, Symbol(T,Decl(typeParameterAsTypeArgument.ts,7,8))
 }
 
 interface I<T, U> {
->I : I<T, U>
->T : T
->U : U
+>I : I<T, U>, Symbol(I,Decl(typeParameterAsTypeArgument.ts,9,1))
+>T : T, Symbol(T,Decl(typeParameterAsTypeArgument.ts,11,12))
+>U : U, Symbol(U,Decl(typeParameterAsTypeArgument.ts,11,14))
 
     x: C<U, T>;
->x : C<U, T>
->C : C<T, U>
->U : U
->T : T
+>x : C<U, T>, Symbol(x,Decl(typeParameterAsTypeArgument.ts,11,19))
+>C : C<T, U>, Symbol(C,Decl(typeParameterAsTypeArgument.ts,5,1))
+>U : U, Symbol(U,Decl(typeParameterAsTypeArgument.ts,11,14))
+>T : T, Symbol(T,Decl(typeParameterAsTypeArgument.ts,11,12))
 }
 
 //function foo<T, U extends T>(x: T, y: U) {

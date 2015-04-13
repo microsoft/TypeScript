@@ -1,23 +1,23 @@
 === tests/cases/conformance/types/primitives/boolean/validBooleanAssignments.ts ===
 var x = true;
->x : boolean
+>x : boolean, Symbol(x,Decl(validBooleanAssignments.ts,0,3))
 >true : boolean
 
 var a: any = x;
->a : any
->x : boolean
+>a : any, Symbol(a,Decl(validBooleanAssignments.ts,2,3))
+>x : boolean, Symbol(x,Decl(validBooleanAssignments.ts,0,3))
 
 var b: Object = x;
->b : Object
->Object : Object
->x : boolean
+>b : Object, Symbol(b,Decl(validBooleanAssignments.ts,3,3))
+>Object : Object, Symbol(Object,Decl(lib.d.ts,92,1),Decl(lib.d.ts,223,11))
+>x : boolean, Symbol(x,Decl(validBooleanAssignments.ts,0,3))
 
 var c: Boolean = x;
->c : Boolean
->Boolean : Boolean
->x : boolean
+>c : Boolean, Symbol(c,Decl(validBooleanAssignments.ts,4,3))
+>Boolean : Boolean, Symbol(Boolean,Decl(lib.d.ts,443,38),Decl(lib.d.ts,456,11))
+>x : boolean, Symbol(x,Decl(validBooleanAssignments.ts,0,3))
 
 var d: boolean = x;
->d : boolean
->x : boolean
+>d : boolean, Symbol(d,Decl(validBooleanAssignments.ts,5,3))
+>x : boolean, Symbol(x,Decl(validBooleanAssignments.ts,0,3))
 

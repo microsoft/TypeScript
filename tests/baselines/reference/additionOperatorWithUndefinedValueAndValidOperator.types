@@ -2,128 +2,128 @@
 // If one operand is the null or undefined value, it is treated as having the type of the other operand.
 
 enum E { a, b, c }
->E : E
->a : E
->b : E
->c : E
+>E : E, Symbol(E,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,0,0))
+>a : E, Symbol(E.a,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,2,8))
+>b : E, Symbol(E.b,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,2,11))
+>c : E, Symbol(E.c,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,2,14))
 
 var a: any;
->a : any
+>a : any, Symbol(a,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,4,3))
 
 var b: number;
->b : number
+>b : number, Symbol(b,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,5,3))
 
 var c: E;
->c : E
->E : E
+>c : E, Symbol(c,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,6,3))
+>E : E, Symbol(E,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,0,0))
 
 var d: string;
->d : string
+>d : string, Symbol(d,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,7,3))
 
 // undefined + any
 var r1: any = undefined + a;
->r1 : any
+>r1 : any, Symbol(r1,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,10,3))
 >undefined + a : any
->undefined : undefined
->a : any
+>undefined : undefined, Symbol(undefined)
+>a : any, Symbol(a,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,4,3))
 
 var r2: any = a + undefined;
->r2 : any
+>r2 : any, Symbol(r2,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,11,3))
 >a + undefined : any
->a : any
->undefined : undefined
+>a : any, Symbol(a,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,4,3))
+>undefined : undefined, Symbol(undefined)
 
 // undefined + number/enum
 var r3 = undefined + b;
->r3 : number
+>r3 : number, Symbol(r3,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,14,3))
 >undefined + b : number
->undefined : undefined
->b : number
+>undefined : undefined, Symbol(undefined)
+>b : number, Symbol(b,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,5,3))
 
 var r4 = undefined + 1;
->r4 : number
+>r4 : number, Symbol(r4,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,15,3))
 >undefined + 1 : number
->undefined : undefined
+>undefined : undefined, Symbol(undefined)
 >1 : number
 
 var r5 = undefined + c;
->r5 : number
+>r5 : number, Symbol(r5,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,16,3))
 >undefined + c : number
->undefined : undefined
->c : E
+>undefined : undefined, Symbol(undefined)
+>c : E, Symbol(c,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,6,3))
 
 var r6 = undefined + E.a;
->r6 : number
+>r6 : number, Symbol(r6,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,17,3))
 >undefined + E.a : number
->undefined : undefined
->E.a : E
->E : typeof E
->a : E
+>undefined : undefined, Symbol(undefined)
+>E.a : E, Symbol(E.a,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,2,8))
+>E : typeof E, Symbol(E,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,0,0))
+>a : E, Symbol(E.a,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,2,8))
 
 var r7 = undefined + E['a'];
->r7 : number
+>r7 : number, Symbol(r7,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,18,3))
 >undefined + E['a'] : number
->undefined : undefined
+>undefined : undefined, Symbol(undefined)
 >E['a'] : E
->E : typeof E
->'a' : string
+>E : typeof E, Symbol(E,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,0,0))
+>'a' : string, Symbol(E.a,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,2,8))
 
 var r8 = b + undefined;
->r8 : number
+>r8 : number, Symbol(r8,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,19,3))
 >b + undefined : number
->b : number
->undefined : undefined
+>b : number, Symbol(b,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,5,3))
+>undefined : undefined, Symbol(undefined)
 
 var r9 = 1 + undefined;
->r9 : number
+>r9 : number, Symbol(r9,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,20,3))
 >1 + undefined : number
 >1 : number
->undefined : undefined
+>undefined : undefined, Symbol(undefined)
 
 var r10 = c + undefined
->r10 : number
+>r10 : number, Symbol(r10,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,21,3))
 >c + undefined : number
->c : E
->undefined : undefined
+>c : E, Symbol(c,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,6,3))
+>undefined : undefined, Symbol(undefined)
 
 var r11 = E.a + undefined;
->r11 : number
+>r11 : number, Symbol(r11,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,22,3))
 >E.a + undefined : number
->E.a : E
->E : typeof E
->a : E
->undefined : undefined
+>E.a : E, Symbol(E.a,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,2,8))
+>E : typeof E, Symbol(E,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,0,0))
+>a : E, Symbol(E.a,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,2,8))
+>undefined : undefined, Symbol(undefined)
 
 var r12 = E['a'] + undefined;
->r12 : number
+>r12 : number, Symbol(r12,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,23,3))
 >E['a'] + undefined : number
 >E['a'] : E
->E : typeof E
->'a' : string
->undefined : undefined
+>E : typeof E, Symbol(E,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,0,0))
+>'a' : string, Symbol(E.a,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,2,8))
+>undefined : undefined, Symbol(undefined)
 
 // undefined + string
 var r13 = undefined + d;
->r13 : string
+>r13 : string, Symbol(r13,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,26,3))
 >undefined + d : string
->undefined : undefined
->d : string
+>undefined : undefined, Symbol(undefined)
+>d : string, Symbol(d,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,7,3))
 
 var r14 = undefined + '';
->r14 : string
+>r14 : string, Symbol(r14,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,27,3))
 >undefined + '' : string
->undefined : undefined
+>undefined : undefined, Symbol(undefined)
 >'' : string
 
 var r15 = d + undefined;
->r15 : string
+>r15 : string, Symbol(r15,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,28,3))
 >d + undefined : string
->d : string
->undefined : undefined
+>d : string, Symbol(d,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,7,3))
+>undefined : undefined, Symbol(undefined)
 
 var r16 = '' + undefined;
->r16 : string
+>r16 : string, Symbol(r16,Decl(additionOperatorWithUndefinedValueAndValidOperator.ts,29,3))
 >'' + undefined : string
 >'' : string
->undefined : undefined
+>undefined : undefined, Symbol(undefined)
 

@@ -1,29 +1,29 @@
 === tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesWithModuleES6.ts ===
 
 module m {
->m : typeof m
+>m : typeof m, Symbol(m,Decl(objectLiteralShorthandPropertiesWithModuleES6.ts,0,0),Decl(objectLiteralShorthandPropertiesWithModuleES6.ts,3,1))
 
     export var x;
->x : any
+>x : any, Symbol(x,Decl(objectLiteralShorthandPropertiesWithModuleES6.ts,2,14))
 }
 
 module m {
->m : typeof m
+>m : typeof m, Symbol(m,Decl(objectLiteralShorthandPropertiesWithModuleES6.ts,0,0),Decl(objectLiteralShorthandPropertiesWithModuleES6.ts,3,1))
 
     var z = x;
->z : any
->x : any
+>z : any, Symbol(z,Decl(objectLiteralShorthandPropertiesWithModuleES6.ts,6,7))
+>x : any, Symbol(x,Decl(objectLiteralShorthandPropertiesWithModuleES6.ts,2,14))
 
     var y = {
->y : { a: any; x: any; }
+>y : { a: any; x: any; }, Symbol(y,Decl(objectLiteralShorthandPropertiesWithModuleES6.ts,7,7))
 >{        a: x,        x    } : { a: any; x: any; }
 
         a: x,
->a : any
->x : any
+>a : any, Symbol(a,Decl(objectLiteralShorthandPropertiesWithModuleES6.ts,7,13))
+>x : any, Symbol(x,Decl(objectLiteralShorthandPropertiesWithModuleES6.ts,2,14))
 
         x
->x : any
+>x : any, Symbol(x,Decl(objectLiteralShorthandPropertiesWithModuleES6.ts,8,13))
 
     };
 }

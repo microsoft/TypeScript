@@ -1,8 +1,8 @@
 === tests/cases/compiler/forInStatement1.ts ===
 var expr: any;
->expr : any
+>expr : any, Symbol(expr,Decl(forInStatement1.ts,0,3))
 
 for (var a in expr) {
->a : any
->expr : any
+>a : any, Symbol(a,Decl(forInStatement1.ts,1,8))
+>expr : any, Symbol(expr,Decl(forInStatement1.ts,0,3))
 }

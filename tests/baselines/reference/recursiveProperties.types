@@ -1,23 +1,23 @@
 === tests/cases/compiler/recursiveProperties.ts ===
 class A {
->A : A
+>A : A, Symbol(A,Decl(recursiveProperties.ts,0,0))
 
     get testProp() { return this.testProp; }
->testProp : any
->this.testProp : any
->this : A
->testProp : any
+>testProp : any, Symbol(testProp,Decl(recursiveProperties.ts,0,9))
+>this.testProp : any, Symbol(testProp,Decl(recursiveProperties.ts,0,9))
+>this : A, Symbol(A,Decl(recursiveProperties.ts,0,0))
+>testProp : any, Symbol(testProp,Decl(recursiveProperties.ts,0,9))
 }
 
 class B {
->B : B
+>B : B, Symbol(B,Decl(recursiveProperties.ts,2,1))
 
     set testProp(value:string) { this.testProp = value; }
->testProp : string
->value : string
+>testProp : string, Symbol(testProp,Decl(recursiveProperties.ts,4,9))
+>value : string, Symbol(value,Decl(recursiveProperties.ts,5,17))
 >this.testProp = value : string
->this.testProp : string
->this : B
->testProp : string
->value : string
+>this.testProp : string, Symbol(testProp,Decl(recursiveProperties.ts,4,9))
+>this : B, Symbol(B,Decl(recursiveProperties.ts,2,1))
+>testProp : string, Symbol(testProp,Decl(recursiveProperties.ts,4,9))
+>value : string, Symbol(value,Decl(recursiveProperties.ts,5,17))
 }

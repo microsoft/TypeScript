@@ -1,49 +1,49 @@
 === tests/cases/compiler/thisInLambda.ts ===
 class Foo {
->Foo : Foo
+>Foo : Foo, Symbol(Foo,Decl(thisInLambda.ts,0,0))
 
     x = "hello";
->x : string
+>x : string, Symbol(x,Decl(thisInLambda.ts,0,11))
 >"hello" : string
 
     bar() {
->bar : () => void
+>bar : () => void, Symbol(bar,Decl(thisInLambda.ts,1,16))
 
         this.x; // 'this' is type 'Foo'
->this.x : string
->this : Foo
->x : string
+>this.x : string, Symbol(x,Decl(thisInLambda.ts,0,11))
+>this : Foo, Symbol(Foo,Decl(thisInLambda.ts,0,0))
+>x : string, Symbol(x,Decl(thisInLambda.ts,0,11))
 
         var f = () => this.x; // 'this' should be type 'Foo' as well
->f : () => string
+>f : () => string, Symbol(f,Decl(thisInLambda.ts,4,11))
 >() => this.x : () => string
->this.x : string
->this : Foo
->x : string
+>this.x : string, Symbol(x,Decl(thisInLambda.ts,0,11))
+>this : Foo, Symbol(Foo,Decl(thisInLambda.ts,0,0))
+>x : string, Symbol(x,Decl(thisInLambda.ts,0,11))
     }
 }
 
 function myFn(a:any) { }
->myFn : (a: any) => void
->a : any
+>myFn : (a: any) => void, Symbol(myFn,Decl(thisInLambda.ts,6,1))
+>a : any, Symbol(a,Decl(thisInLambda.ts,8,14))
 
 class myCls {
->myCls : myCls
+>myCls : myCls, Symbol(myCls,Decl(thisInLambda.ts,8,24))
 
     constructor () {
         myFn(() => {
 >myFn(() => {            myFn(() => {                var x = this;            });        }) : void
->myFn : (a: any) => void
+>myFn : (a: any) => void, Symbol(myFn,Decl(thisInLambda.ts,6,1))
 >() => {            myFn(() => {                var x = this;            });        } : () => void
 
             myFn(() => {
 >myFn(() => {                var x = this;            }) : void
->myFn : (a: any) => void
+>myFn : (a: any) => void, Symbol(myFn,Decl(thisInLambda.ts,6,1))
 >() => {                var x = this;            } : () => void
 
                 var x = this;
->x : myCls
->this : myCls
+>x : myCls, Symbol(x,Decl(thisInLambda.ts,13,19))
+>this : myCls, Symbol(myCls,Decl(thisInLambda.ts,8,24))
 
             });
         });

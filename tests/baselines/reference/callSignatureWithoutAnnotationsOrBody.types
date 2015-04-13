@@ -2,55 +2,55 @@
 // Call signatures without a return type annotation and function body return 'any'
 
 function foo(x) { }
->foo : (x: any) => void
->x : any
+>foo : (x: any) => void, Symbol(foo,Decl(callSignatureWithoutAnnotationsOrBody.ts,0,0))
+>x : any, Symbol(x,Decl(callSignatureWithoutAnnotationsOrBody.ts,2,13))
 
 var r = foo(1); // void since there's a body
->r : void
+>r : void, Symbol(r,Decl(callSignatureWithoutAnnotationsOrBody.ts,3,3))
 >foo(1) : void
->foo : (x: any) => void
+>foo : (x: any) => void, Symbol(foo,Decl(callSignatureWithoutAnnotationsOrBody.ts,0,0))
 >1 : number
 
 interface I {
->I : I
+>I : I, Symbol(I,Decl(callSignatureWithoutAnnotationsOrBody.ts,3,15))
 
     ();
     f();
->f : () => any
+>f : () => any, Symbol(f,Decl(callSignatureWithoutAnnotationsOrBody.ts,6,7))
 }
 var i: I;
->i : I
->I : I
+>i : I, Symbol(i,Decl(callSignatureWithoutAnnotationsOrBody.ts,9,3))
+>I : I, Symbol(I,Decl(callSignatureWithoutAnnotationsOrBody.ts,3,15))
 
 var r2 = i();
->r2 : any
+>r2 : any, Symbol(r2,Decl(callSignatureWithoutAnnotationsOrBody.ts,10,3))
 >i() : any
->i : I
+>i : I, Symbol(i,Decl(callSignatureWithoutAnnotationsOrBody.ts,9,3))
 
 var r3 = i.f();
->r3 : any
+>r3 : any, Symbol(r3,Decl(callSignatureWithoutAnnotationsOrBody.ts,11,3))
 >i.f() : any
->i.f : () => any
->i : I
->f : () => any
+>i.f : () => any, Symbol(I.f,Decl(callSignatureWithoutAnnotationsOrBody.ts,6,7))
+>i : I, Symbol(i,Decl(callSignatureWithoutAnnotationsOrBody.ts,9,3))
+>f : () => any, Symbol(I.f,Decl(callSignatureWithoutAnnotationsOrBody.ts,6,7))
 
 var a: {
->a : { (): any; f(): any; }
+>a : { (): any; f(): any; }, Symbol(a,Decl(callSignatureWithoutAnnotationsOrBody.ts,13,3))
 
     ();
     f();
->f : () => any
+>f : () => any, Symbol(f,Decl(callSignatureWithoutAnnotationsOrBody.ts,14,7))
 
 };
 var r4 = a();
->r4 : any
+>r4 : any, Symbol(r4,Decl(callSignatureWithoutAnnotationsOrBody.ts,17,3))
 >a() : any
->a : { (): any; f(): any; }
+>a : { (): any; f(): any; }, Symbol(a,Decl(callSignatureWithoutAnnotationsOrBody.ts,13,3))
 
 var r5 = a.f();
->r5 : any
+>r5 : any, Symbol(r5,Decl(callSignatureWithoutAnnotationsOrBody.ts,18,3))
 >a.f() : any
->a.f : () => any
->a : { (): any; f(): any; }
->f : () => any
+>a.f : () => any, Symbol(f,Decl(callSignatureWithoutAnnotationsOrBody.ts,14,7))
+>a : { (): any; f(): any; }, Symbol(a,Decl(callSignatureWithoutAnnotationsOrBody.ts,13,3))
+>f : () => any, Symbol(f,Decl(callSignatureWithoutAnnotationsOrBody.ts,14,7))
 

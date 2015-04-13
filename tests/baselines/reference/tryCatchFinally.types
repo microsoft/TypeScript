@@ -1,8 +1,8 @@
 === tests/cases/compiler/tryCatchFinally.ts ===
 try { } catch(e) { } finally { } 
->e : any
+>e : any, Symbol(e,Decl(tryCatchFinally.ts,0,14))
 
 try {} catch(e) {}
->e : any
+>e : any, Symbol(e,Decl(tryCatchFinally.ts,2,13))
 
 try {} finally {}

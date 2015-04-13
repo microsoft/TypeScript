@@ -1,67 +1,67 @@
 === tests/cases/compiler/declarationEmitDestructuringArrayPattern4.ts ===
 var [...a5] = [1, 2, 3];
->a5 : number[]
+>a5 : number[], Symbol(a5,Decl(declarationEmitDestructuringArrayPattern4.ts,0,5))
 >[1, 2, 3] : number[]
 >1 : number
 >2 : number
 >3 : number
 
 var [x14, ...a6] = [1, 2, 3];
->x14 : number
->a6 : number[]
+>x14 : number, Symbol(x14,Decl(declarationEmitDestructuringArrayPattern4.ts,1,5))
+>a6 : number[], Symbol(a6,Decl(declarationEmitDestructuringArrayPattern4.ts,1,9))
 >[1, 2, 3] : number[]
 >1 : number
 >2 : number
 >3 : number
 
 var [x15, y15, ...a7] = [1, 2, 3];
->x15 : number
->y15 : number
->a7 : number[]
+>x15 : number, Symbol(x15,Decl(declarationEmitDestructuringArrayPattern4.ts,2,5))
+>y15 : number, Symbol(y15,Decl(declarationEmitDestructuringArrayPattern4.ts,2,9))
+>a7 : number[], Symbol(a7,Decl(declarationEmitDestructuringArrayPattern4.ts,2,14))
 >[1, 2, 3] : number[]
 >1 : number
 >2 : number
 >3 : number
 
 var [x16, y16, z16, ...a8] = [1, 2, 3];
->x16 : number
->y16 : number
->z16 : number
->a8 : number[]
+>x16 : number, Symbol(x16,Decl(declarationEmitDestructuringArrayPattern4.ts,3,5))
+>y16 : number, Symbol(y16,Decl(declarationEmitDestructuringArrayPattern4.ts,3,9))
+>z16 : number, Symbol(z16,Decl(declarationEmitDestructuringArrayPattern4.ts,3,14))
+>a8 : number[], Symbol(a8,Decl(declarationEmitDestructuringArrayPattern4.ts,3,19))
 >[1, 2, 3] : number[]
 >1 : number
 >2 : number
 >3 : number
 
 var [...a9] = [1, "hello", true];
->a9 : (string | number | boolean)[]
+>a9 : (string | number | boolean)[], Symbol(a9,Decl(declarationEmitDestructuringArrayPattern4.ts,5,5))
 >[1, "hello", true] : (string | number | boolean)[]
 >1 : number
 >"hello" : string
 >true : boolean
 
 var [x17, ...a10] = [1, "hello", true];
->x17 : string | number | boolean
->a10 : (string | number | boolean)[]
+>x17 : string | number | boolean, Symbol(x17,Decl(declarationEmitDestructuringArrayPattern4.ts,6,5))
+>a10 : (string | number | boolean)[], Symbol(a10,Decl(declarationEmitDestructuringArrayPattern4.ts,6,9))
 >[1, "hello", true] : (string | number | boolean)[]
 >1 : number
 >"hello" : string
 >true : boolean
 
 var [x18, y18, ...a12] = [1, "hello", true];
->x18 : string | number | boolean
->y18 : string | number | boolean
->a12 : (string | number | boolean)[]
+>x18 : string | number | boolean, Symbol(x18,Decl(declarationEmitDestructuringArrayPattern4.ts,7,5))
+>y18 : string | number | boolean, Symbol(y18,Decl(declarationEmitDestructuringArrayPattern4.ts,7,9))
+>a12 : (string | number | boolean)[], Symbol(a12,Decl(declarationEmitDestructuringArrayPattern4.ts,7,14))
 >[1, "hello", true] : (string | number | boolean)[]
 >1 : number
 >"hello" : string
 >true : boolean
 
 var [x19, y19, z19, ...a13] = [1, "hello", true];
->x19 : string | number | boolean
->y19 : string | number | boolean
->z19 : string | number | boolean
->a13 : (string | number | boolean)[]
+>x19 : string | number | boolean, Symbol(x19,Decl(declarationEmitDestructuringArrayPattern4.ts,8,5))
+>y19 : string | number | boolean, Symbol(y19,Decl(declarationEmitDestructuringArrayPattern4.ts,8,9))
+>z19 : string | number | boolean, Symbol(z19,Decl(declarationEmitDestructuringArrayPattern4.ts,8,14))
+>a13 : (string | number | boolean)[], Symbol(a13,Decl(declarationEmitDestructuringArrayPattern4.ts,8,19))
 >[1, "hello", true] : (string | number | boolean)[]
 >1 : number
 >"hello" : string

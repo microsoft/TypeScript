@@ -2,22 +2,22 @@
 
 // No error
 module M {
->M : typeof M
+>M : typeof M, Symbol(M,Decl(constDeclarations2.ts,0,0))
 
     export const c1 = false;
->c1 : boolean
+>c1 : boolean, Symbol(c1,Decl(constDeclarations2.ts,3,16))
 >false : boolean
 
     export const c2: number = 23;
->c2 : number
+>c2 : number, Symbol(c2,Decl(constDeclarations2.ts,4,16))
 >23 : number
 
     export const c3 = 0, c4 :string = "", c5 = null;
->c3 : number
+>c3 : number, Symbol(c3,Decl(constDeclarations2.ts,5,16))
 >0 : number
->c4 : string
+>c4 : string, Symbol(c4,Decl(constDeclarations2.ts,5,24))
 >"" : string
->c5 : any
+>c5 : any, Symbol(c5,Decl(constDeclarations2.ts,5,41))
 >null : null
 }
 

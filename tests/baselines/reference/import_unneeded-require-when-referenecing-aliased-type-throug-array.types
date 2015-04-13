@@ -1,29 +1,29 @@
 === tests/cases/compiler/a.ts ===
 /// <reference path="b.ts" />
 import ITest = require('ITest');
->ITest : unknown
+>ITest : any, Symbol(ITest,Decl(a.ts,0,0))
 
 var testData: ITest[];
->testData : ITest[]
->ITest : ITest
+>testData : ITest[], Symbol(testData,Decl(a.ts,2,3))
+>ITest : ITest, Symbol(ITest,Decl(a.ts,0,0))
 
 var p = testData[0].name;
->p : string
->testData[0].name : string
+>p : string, Symbol(p,Decl(a.ts,3,3))
+>testData[0].name : string, Symbol(ITest.name,Decl(b.ts,1,20))
 >testData[0] : ITest
->testData : ITest[]
+>testData : ITest[], Symbol(testData,Decl(a.ts,2,3))
 >0 : number
->name : string
+>name : string, Symbol(ITest.name,Decl(b.ts,1,20))
  
 === tests/cases/compiler/b.ts ===
 declare module "ITest" {
     interface Name {
->Name : Name
+>Name : Name, Symbol(Name,Decl(b.ts,0,24))
 
         name: string;
->name : string
+>name : string, Symbol(name,Decl(b.ts,1,20))
     }
     export = Name;
->Name : Name
+>Name : Name, Symbol(Name,Decl(b.ts,0,24))
 }
 

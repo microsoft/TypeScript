@@ -1,47 +1,47 @@
 === tests/cases/compiler/constantOverloadFunction.ts ===
 class Base { foo() { } }
->Base : Base
->foo : () => void
+>Base : Base, Symbol(Base,Decl(constantOverloadFunction.ts,0,0))
+>foo : () => void, Symbol(foo,Decl(constantOverloadFunction.ts,0,12))
 
 class Derived1 extends Base { bar() { } }
->Derived1 : Derived1
->Base : Base
->bar : () => void
+>Derived1 : Derived1, Symbol(Derived1,Decl(constantOverloadFunction.ts,0,24))
+>Base : Base, Symbol(Base,Decl(constantOverloadFunction.ts,0,0))
+>bar : () => void, Symbol(bar,Decl(constantOverloadFunction.ts,1,29))
 
 class Derived2 extends Base { baz() { } }
->Derived2 : Derived2
->Base : Base
->baz : () => void
+>Derived2 : Derived2, Symbol(Derived2,Decl(constantOverloadFunction.ts,1,41))
+>Base : Base, Symbol(Base,Decl(constantOverloadFunction.ts,0,0))
+>baz : () => void, Symbol(baz,Decl(constantOverloadFunction.ts,2,29))
 
 class Derived3 extends Base { biz() { } }
->Derived3 : Derived3
->Base : Base
->biz : () => void
+>Derived3 : Derived3, Symbol(Derived3,Decl(constantOverloadFunction.ts,2,41))
+>Base : Base, Symbol(Base,Decl(constantOverloadFunction.ts,0,0))
+>biz : () => void, Symbol(biz,Decl(constantOverloadFunction.ts,3,29))
 
 function foo(tagName: 'canvas'): Derived1;
->foo : { (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; (tagName: string): Base; }
->tagName : 'canvas'
->Derived1 : Derived1
+>foo : { (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; (tagName: string): Base; }, Symbol(foo,Decl(constantOverloadFunction.ts,3,41),Decl(constantOverloadFunction.ts,5,42),Decl(constantOverloadFunction.ts,6,40),Decl(constantOverloadFunction.ts,7,40),Decl(constantOverloadFunction.ts,8,36))
+>tagName : 'canvas', Symbol(tagName,Decl(constantOverloadFunction.ts,5,13))
+>Derived1 : Derived1, Symbol(Derived1,Decl(constantOverloadFunction.ts,0,24))
 
 function foo(tagName:  'div'): Derived2;
->foo : { (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; (tagName: string): Base; }
->tagName : 'div'
->Derived2 : Derived2
+>foo : { (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; (tagName: string): Base; }, Symbol(foo,Decl(constantOverloadFunction.ts,3,41),Decl(constantOverloadFunction.ts,5,42),Decl(constantOverloadFunction.ts,6,40),Decl(constantOverloadFunction.ts,7,40),Decl(constantOverloadFunction.ts,8,36))
+>tagName : 'div', Symbol(tagName,Decl(constantOverloadFunction.ts,6,13))
+>Derived2 : Derived2, Symbol(Derived2,Decl(constantOverloadFunction.ts,1,41))
 
 function foo(tagName: 'span'): Derived3;
->foo : { (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; (tagName: string): Base; }
->tagName : 'span'
->Derived3 : Derived3
+>foo : { (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; (tagName: string): Base; }, Symbol(foo,Decl(constantOverloadFunction.ts,3,41),Decl(constantOverloadFunction.ts,5,42),Decl(constantOverloadFunction.ts,6,40),Decl(constantOverloadFunction.ts,7,40),Decl(constantOverloadFunction.ts,8,36))
+>tagName : 'span', Symbol(tagName,Decl(constantOverloadFunction.ts,7,13))
+>Derived3 : Derived3, Symbol(Derived3,Decl(constantOverloadFunction.ts,2,41))
 
 function foo(tagName: string): Base;
->foo : { (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; (tagName: string): Base; }
->tagName : string
->Base : Base
+>foo : { (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; (tagName: string): Base; }, Symbol(foo,Decl(constantOverloadFunction.ts,3,41),Decl(constantOverloadFunction.ts,5,42),Decl(constantOverloadFunction.ts,6,40),Decl(constantOverloadFunction.ts,7,40),Decl(constantOverloadFunction.ts,8,36))
+>tagName : string, Symbol(tagName,Decl(constantOverloadFunction.ts,8,13))
+>Base : Base, Symbol(Base,Decl(constantOverloadFunction.ts,0,0))
 
 function foo(tagName: any): Base {
->foo : { (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; (tagName: string): Base; }
->tagName : any
->Base : Base
+>foo : { (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; (tagName: string): Base; }, Symbol(foo,Decl(constantOverloadFunction.ts,3,41),Decl(constantOverloadFunction.ts,5,42),Decl(constantOverloadFunction.ts,6,40),Decl(constantOverloadFunction.ts,7,40),Decl(constantOverloadFunction.ts,8,36))
+>tagName : any, Symbol(tagName,Decl(constantOverloadFunction.ts,9,13))
+>Base : Base, Symbol(Base,Decl(constantOverloadFunction.ts,0,0))
 
     return null;
 >null : null
