@@ -1594,25 +1594,12 @@ module ts {
             /** write emitted output to disk*/
             let writeEmittedFiles = writeJavaScriptFile;
 
-            /** Emit leading comments of the node */
-            let emitLeadingComments = compilerOptions.removeComments ? (node: Node) => { } : emitLeadingDeclarationComments;
-
-            /** Emit Trailing comments of the node */
-            let emitTrailingComments = compilerOptions.removeComments ? (node: Node) => { } : emitTrailingDeclarationComments;
-
-            let emitLeadingCommentsOfPosition = compilerOptions.removeComments ? (pos: number) => { } : emitLeadingCommentsOfLocalPosition;
-
             let detachedCommentsInfo: { nodePos: number; detachedCommentEndPos: number }[];
-
-            /** Emit detached comments of the node */
-            let emitDetachedComments = compilerOptions.removeComments ? (pos: number) => { } : emitDetachedCommentsAtPosition;
 
             let writeComment = writeCommentSpan;
 
             /** Emit a node */
-            let emitNodeWithoutSourceMap = compilerOptions.removeComments ? emitNodeWithoutSourceMapWithoutComments : emitNodeWithoutSourceMapWithComments;
             let emit = emitNodeWithoutSourceMap;
-            let emitWithoutComments = emitNodeWithoutSourceMapWithoutComments;
 
             /** Called just before starting emit of a node */
             let emitStart = function (node: Node) { };
@@ -2091,17 +2078,8 @@ module ts {
                     }
                 }
 
-                function emitNodeWithSourceMapWithoutComments(node: Node) {
-                    if (node) {
-                        recordEmitNodeStartSpan(node);
-                        emitNodeWithoutSourceMapWithoutComments(node);
-                        recordEmitNodeEndSpan(node);
-                    }
-                }
-
                 writeEmittedFiles = writeJavaScriptAndSourceMapFile;
                 emit = emitNodeWithSourceMap;
-                emitWithoutComments = emitNodeWithSourceMapWithoutComments;
                 emitStart = recordEmitNodeStartSpan;
                 emitEnd = recordEmitNodeEndSpan;
                 emitToken = writeTextWithSpanRecord;
@@ -4364,7 +4342,7 @@ module ts {
 
             function emitFunctionDeclaration(node: FunctionLikeDeclaration) {
                 if (nodeIsMissing(node.body)) {
-                    return emitPinnedOrTripleSlashComments(node);
+                    return emitOnlyPinnedOrTripleSlashComments(node);
                 }
 
                 if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
@@ -4520,10 +4498,7 @@ module ts {
                     write(" ");
                     emitStart(body);
                     write("return ");
-
-                    // Don't emit comments on this body.  We'll have already taken care of it above 
-                    // when we called emitDetachedComments.
-                    emitWithoutComments(body);
+                    emit(body);
                     emitEnd(body);
                     write(";");
                     emitTempDeclarations(/*newLine*/ false);
@@ -4534,10 +4509,7 @@ module ts {
                     writeLine();
                     emitLeadingComments(node.body);
                     write("return ");
-
-                    // Don't emit comments on this body.  We'll have already taken care of it above 
-                    // when we called emitDetachedComments.
-                    emitWithoutComments(node.body);
+                    emit(body);
                     write(";");
                     emitTrailingComments(node.body);
 
@@ -4669,7 +4641,7 @@ module ts {
                 forEach(node.members, member => {
                     if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) {
                         if (!(<MethodDeclaration>member).body) {
-                            return emitPinnedOrTripleSlashComments(member);
+                            return emitOnlyPinnedOrTripleSlashComments(member);
                         }
 
                         writeLine();
@@ -4744,7 +4716,7 @@ module ts {
             function emitMemberFunctionsForES6AndHigher(node: ClassDeclaration) {
                 for (let member of node.members) {
                     if ((member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) && !(<MethodDeclaration>member).body) {
-                        emitPinnedOrTripleSlashComments(member);
+                        emitOnlyPinnedOrTripleSlashComments(member);
                     }
                     else if (member.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature || member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor) {
                         writeLine();
@@ -4785,7 +4757,7 @@ module ts {
                 // Emit the constructor overload pinned comments
                 forEach(node.members, member => {
                     if (member.kind === SyntaxKind.Constructor && !(<ConstructorDeclaration>member).body) {
-                        emitPinnedOrTripleSlashComments(member);
+                        emitOnlyPinnedOrTripleSlashComments(member);
                     }
                     // Check if there is any non-static property assignment
                     if (member.kind === SyntaxKind.PropertyDeclaration && (<PropertyDeclaration>member).initializer && (member.flags & NodeFlags.Static) === 0) {
@@ -5000,7 +4972,7 @@ module ts {
             }
 
             function emitInterfaceDeclaration(node: InterfaceDeclaration) {
-                emitPinnedOrTripleSlashComments(node);
+                emitOnlyPinnedOrTripleSlashComments(node);
             }
 
             function shouldEmitEnumDeclaration(node: EnumDeclaration) {
@@ -5108,7 +5080,7 @@ module ts {
                 let shouldEmit = shouldEmitModuleDeclaration(node);
 
                 if (!shouldEmit) {
-                    return emitPinnedOrTripleSlashComments(node);
+                    return emitOnlyPinnedOrTripleSlashComments(node);
                 }
 
                 emitStart(node);
@@ -5595,12 +5567,12 @@ module ts {
                 emitLinesStartingAt(node.statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
                 // Emit exportDefault if it exists will happen as part 
-                // or normal statment emit.
+                // or normal statement emit.
             }
 
             function emitExportAssignment(node: ExportAssignment) {
                 // Only emit exportAssignment/export default if we are in ES6
-                // Other modules will handel it diffrentlly
+                // Other modules will handle it differently
                 if (languageVersion >= ScriptTarget.ES6) {
                     writeLine();
                     emitStart(node);
@@ -5702,13 +5674,13 @@ module ts {
                 emitLeadingComments(node.endOfFileToken);
             }
 
-            function emitNodeWithoutSourceMapWithComments(node: Node, allowGeneratedIdentifiers?: boolean): void {
+            function emitNodeWithoutSourceMap(node: Node, allowGeneratedIdentifiers?: boolean): void {
                 if (!node) {
                     return;
                 }
 
                 if (node.flags & NodeFlags.Ambient) {
-                    return emitPinnedOrTripleSlashComments(node);
+                    return emitOnlyPinnedOrTripleSlashComments(node);
                 }
 
                 let emitComments = shouldEmitLeadingAndTrailingComments(node);
@@ -5723,22 +5695,10 @@ module ts {
                 }
             }
 
-            function emitNodeWithoutSourceMapWithoutComments(node: Node, allowGeneratedIdentifiers?: boolean): void {
-                if (!node) {
-                    return;
-                }
-
-                if (node.flags & NodeFlags.Ambient) {
-                    return emitPinnedOrTripleSlashComments(node);
-                }
-
-                emitJavaScriptWorker(node, allowGeneratedIdentifiers);
-            }
-
             function shouldEmitLeadingAndTrailingComments(node: Node) {
                 switch (node.kind) {
                     // All of these entities are emitted in a specialized fashion.  As such, we allow
-                    // the specilized methods for each to handle the comments on the nodes.
+                    // the specialized methods for each to handle the comments on the nodes.
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.ImportDeclaration:
@@ -5756,6 +5716,19 @@ module ts {
                         // Only emit the leading/trailing comments for an enum if we're actually
                         // emitting the module as well.
                         return shouldEmitEnumDeclaration(<EnumDeclaration>node);
+                }
+
+                // If this is the expression body of an arrow function that we're down-leveling, 
+                // then we don't want to emit comments when we emit the body.  It will have already
+                // been taken care of when we emitted the 'return' statement for the function
+                // expression body.
+                if (node.kind !== SyntaxKind.Block &&
+                    node.parent &&
+                    node.parent.kind === SyntaxKind.ArrowFunction &&
+                    (<ArrowFunction>node.parent).body === node && 
+                    compilerOptions.target <= ScriptTarget.ES5) {
+
+                    return false;
                 }
 
                 // Emit comments for everything else.
@@ -5927,7 +5900,8 @@ module ts {
 
             function getLeadingCommentsWithoutDetachedComments() {
                 // get the leading comments from detachedPos
-                let leadingComments = getLeadingCommentSpans(currentSourceFile.text, detachedCommentsInfo[detachedCommentsInfo.length - 1].detachedCommentEndPos);
+                let leadingComments = getLeadingCommentSpans(currentSourceFile.text,
+                    detachedCommentsInfo[detachedCommentsInfo.length - 1].detachedCommentEndPos);
                 if (detachedCommentsInfo.length - 1) {
                     detachedCommentsInfo.pop();
                 }
@@ -5938,43 +5912,72 @@ module ts {
                 return leadingComments;
             }
 
+            function filterComments(ranges: CommentSpan[], onlyPinnedOrTripleSlashComments: boolean): CommentSpan[] {
+                // If we're removing comments, then we want to strip out all but the pinned or
+                // triple slash comments.
+                if (ranges && onlyPinnedOrTripleSlashComments) {
+                    ranges = filter(ranges, isPinnedOrTripleSlashComment);
+                    if (ranges.length === 0) {
+                        return undefined;
+                    }
+                }
+
+                return ranges;
+            }
+
             function getLeadingCommentsToEmit(node: Node) {
                 // Emit the leading comments only if the parent's pos doesn't match because parent should take care of emitting these comments
                 if (node.parent) {
                     if (node.parent.kind === SyntaxKind.SourceFile || node.start !== node.parent.start) {
-                        let leadingComments: CommentSpan[];
                         if (hasDetachedComments(node.start)) {
                             // get comments without detached comments
-                            leadingComments = getLeadingCommentsWithoutDetachedComments();
+                            return getLeadingCommentsWithoutDetachedComments();
                         }
                         else {
                             // get the leading comments from the node
-                            leadingComments = getLeadingCommentRangesOfNode(node, currentSourceFile);
+                            return getLeadingCommentRangesOfNode(node, currentSourceFile);
                         }
-                        return leadingComments;
                     }
                 }
             }
 
-            function emitLeadingDeclarationComments(node: Node) {
-                let leadingComments = getLeadingCommentsToEmit(node);
+            function getTrailingCommentsToEmit(node: Node) {
+                // Emit the trailing comments only if the parent's pos doesn't match because parent should take care of emitting these comments
+                if (node.parent) {
+                    if (node.parent.kind === SyntaxKind.SourceFile || spanEnd(node) !== spanEnd(node.parent)) {
+                        return getTrailingCommentSpans(currentSourceFile.text, spanEnd(node));
+                    }
+                }
+            }
+
+            function emitOnlyPinnedOrTripleSlashComments(node: Node) {
+                emitLeadingCommentsWorker(node, /*onlyPinnedOrTripleSlashComments:*/ true);
+            }
+
+            function emitLeadingComments(node: Node) {
+                return emitLeadingCommentsWorker(node, /*onlyPinnedOrTripleSlashComments:*/ compilerOptions.removeComments);
+            }
+
+            function emitLeadingCommentsWorker(node: Node, onlyPinnedOrTripleSlashComments: boolean) {
+                // If the caller only wants pinned or triple slash comments, then always filter
+                // down to that set.  Otherwise, filter based on the current compiler options.
+                let leadingComments = filterComments(getLeadingCommentsToEmit(node), onlyPinnedOrTripleSlashComments);
+
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, node.start, leadingComments);
+
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
                 emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
-            function emitTrailingDeclarationComments(node: Node) {
+            function emitTrailingComments(node: Node) {
                 // Emit the trailing comments only if the parent's end doesn't match
-                if (node.parent) {
-                    if (node.parent.kind === SyntaxKind.SourceFile || spanEnd(node) !== spanEnd(node.parent)) {
-                        let trailingComments = getTrailingCommentSpans(currentSourceFile.text, spanEnd(node));
-                        // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
-                        emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);
-                    }
-                }
+                var trailingComments = filterComments(getTrailingCommentsToEmit(node), /*onlyPinnedOrTripleSlashComments:*/ compilerOptions.removeComments);
+
+                // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
+                emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);
             }
 
-            function emitLeadingCommentsOfLocalPosition(pos: number) {
+            function emitLeadingCommentsOfPosition(pos: number) {
                 let leadingComments: CommentSpan[];
                 if (hasDetachedComments(pos)) {
                     // get comments without detached comments
@@ -5984,12 +5987,15 @@ module ts {
                     // get the leading comments from the node
                     leadingComments = getLeadingCommentSpans(currentSourceFile.text, pos);
                 }
+
+                leadingComments = filterComments(leadingComments, compilerOptions.removeComments);
                 emitNewLineBeforeLeadingComments(currentSourceFile, writer, pos, leadingComments);
+
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
                 emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
-            function emitDetachedCommentsAtPosition(pos: number) {
+            function emitDetachedComments(pos: number) {
                 let leadingComments = getLeadingCommentSpans(currentSourceFile.text, pos);
                 if (leadingComments) {
                     var detachedComments: CommentSpan[] = [];
@@ -6034,27 +6040,18 @@ module ts {
                 }
             }
 
-            /** Emits /// or pinned which is comment starting with /*! comments */
-            function emitPinnedOrTripleSlashComments(node: Node) {
-                let pinnedComments = ts.filter(getLeadingCommentsToEmit(node), isPinnedOrTripleSlashComment);
-
-                function isPinnedOrTripleSlashComment(comment: CommentSpan) {
-                    if (currentSourceFile.text.charCodeAt(comment.start + 1) === CharacterCodes.asterisk) {
-                        return currentSourceFile.text.charCodeAt(comment.start + 2) === CharacterCodes.exclamation;
-                    }
-                    // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
-                    // so that we don't end up computing comment string and doing match for all // comments
-                    else if (currentSourceFile.text.charCodeAt(comment.start + 1) === CharacterCodes.slash &&
-                        comment.start + 2 < spanEnd(comment) &&
-                        currentSourceFile.text.charCodeAt(comment.start + 2) === CharacterCodes.slash &&
-                        currentSourceFile.text.substring(comment.start, spanEnd(comment)).match(fullTripleSlashReferencePathRegEx)) {
-                        return true;
-                    }
+            function isPinnedOrTripleSlashComment(comment: CommentSpan) {
+                if (currentSourceFile.text.charCodeAt(comment.start + 1) === CharacterCodes.asterisk) {
+                    return currentSourceFile.text.charCodeAt(comment.start + 2) === CharacterCodes.exclamation;
                 }
-
-                emitNewLineBeforeLeadingComments(currentSourceFile, writer, node.start, pinnedComments);
-                // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentSourceFile, writer, pinnedComments, /*trailingSeparator*/ true, newLine, writeComment);
+                // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
+                // so that we don't end up computing comment string and doing match for all // comments
+                else if (currentSourceFile.text.charCodeAt(comment.start + 1) === CharacterCodes.slash &&
+                    comment.start + 2 < spanEnd(comment) &&
+                    currentSourceFile.text.charCodeAt(comment.start + 2) === CharacterCodes.slash &&
+                    currentSourceFile.text.substring(comment.start, spanEnd(comment)).match(fullTripleSlashReferencePathRegEx)) {
+                    return true;
+                }
             }
         }
 

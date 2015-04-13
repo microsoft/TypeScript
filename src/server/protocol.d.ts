@@ -312,6 +312,10 @@ declare module ts.server.protocol {
           * 'Sublime Text version 3075'
           */
         hostInfo: string;
+        /**
+          * If present, tab settings apply only to this file.
+          */
+        file?: string;
     }
 
     /**
@@ -330,6 +334,14 @@ declare module ts.server.protocol {
     }
 
     /**
+      *  Information found in an "open" request.
+      */
+    export interface OpenRequestArgs extends FileRequestArgs {
+        /** Initial tab size of file. */
+        tabSize?: number;
+    }
+
+    /**
       * Open request; value of command field is "open". Notify the
       * server that the client has file open.  The server will not
       * monitor the filesystem for changes in this file and will assume
@@ -337,7 +349,8 @@ declare module ts.server.protocol {
       * reload messages) when the file changes. Server does not currently
       * send a response to an open request.
       */
-    export interface OpenRequest extends FileRequest {
+    export interface OpenRequest extends Request {
+        arguments: OpenRequestArgs;
     }
 
     /**
