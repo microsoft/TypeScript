@@ -5026,6 +5026,30 @@ var __param = this.__param || function(index, decorator) { return function (targ
                             writeLocalNameForExternalImport(importNode);
                             write(` = ${setterParameterName}`);
                             writeLine();
+
+                            let defaultName =
+                                importNode.kind === SyntaxKind.ImportDeclaration
+                                    ? (<ImportDeclaration>importNode).importClause.name
+                                    : (<ImportEqualsDeclaration>importNode).name;
+                            if (defaultName) {
+                                emitExportMemberAssignments(defaultName);
+                                writeLine();
+                            }
+
+                            if (importNode.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>importNode).importClause.namedBindings) {
+                                if ((<ImportDeclaration>importNode).importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                                    emitExportMemberAssignments((<NamespaceImport>(<ImportDeclaration>importNode).importClause.namedBindings).name);
+                                    writeLine();
+                                }
+                                else {
+                                    for (let element of (<NamedImports>(<ImportDeclaration>importNode).importClause.namedBindings).elements) {
+                                        emitExportMemberAssignments(element.name || element.propertyName);
+                                        writeLine()
+                                    }
+                                }
+                            }
+
+
                             decreaseIndent();
                             break;
                         case SyntaxKind.ExportDeclaration:
