@@ -60,9 +60,7 @@ var D = (function () {
     }
     return D;
 })();
-function F(x) {
-    return 42;
-}
+function F(x) { return 42; }
 var M;
 (function (M) {
     var A = (function () {
@@ -71,9 +69,7 @@ var M;
         return A;
     })();
     M.A = A;
-    function F2(x) {
-        return x.toString();
-    }
+    function F2(x) { return x.toString(); }
     M.F2 = F2;
 })(M || (M = {}));
 var aNumber = 9.9;
@@ -85,13 +81,9 @@ var anOtherAny = new C();
 var anUndefined = undefined;
 var aClass = new C();
 var aGenericClass = new D();
-var anObjectLiteral = {
-    id: 12
-};
+var anObjectLiteral = { id: 12 };
 var aFunction = F;
-var aLambda = function (x) {
-    return 2;
-};
+var aLambda = function (x) { return 2; };
 var aModule = M;
 var aClassInModule = new M.A();
 var aFunctionInModule = M.F2;

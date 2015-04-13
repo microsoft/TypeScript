@@ -41,9 +41,7 @@ interface Array<T> {
 }
 */
 var fa;
-fa = fa.concat([
-    0
-]);
+fa = fa.concat([0]);
 fa = fa.concat(0);
 /*
 

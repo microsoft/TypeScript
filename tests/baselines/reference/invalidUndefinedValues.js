@@ -54,10 +54,7 @@ var M;
     M.x = 1;
 })(M || (M = {}));
 x = M;
-x = {
-    f: function () {
-    }
-};
+x = { f: function () { } };
 function f(a) {
     x = a;
 }

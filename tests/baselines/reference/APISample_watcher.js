@@ -2078,33 +2078,21 @@ function watch(rootFileNames, options) {
     var files = {};
     // initialize the list of files
     rootFileNames.forEach(function (fileName) {
-        files[fileName] = {
-            version: 0
-        };
+        files[fileName] = { version: 0 };
     });
     // Create the language service host to allow the LS to communicate with the host
     var servicesHost = {
-        getScriptFileNames: function () {
-            return rootFileNames;
-        },
-        getScriptVersion: function (fileName) {
-            return files[fileName] && files[fileName].version.toString();
-        },
+        getScriptFileNames: function () { return rootFileNames; },
+        getScriptVersion: function (fileName) { return files[fileName] && files[fileName].version.toString(); },
         getScriptSnapshot: function (fileName) {
             if (!fs.existsSync(fileName)) {
                 return undefined;
             }
             return ts.ScriptSnapshot.fromString(fs.readFileSync(fileName).toString());
         },
-        getCurrentDirectory: function () {
-            return process.cwd();
-        },
-        getCompilationSettings: function () {
-            return options;
-        },
-        getDefaultLibFileName: function (options) {
-            return ts.getDefaultLibFilePath(options);
-        }
+        getCurrentDirectory: function () { return process.cwd(); },
+        getCompilationSettings: function () { return options; },
+        getDefaultLibFileName: function (options) { return ts.getDefaultLibFilePath(options); }
     };
     // Create the language service files
     var services = ts.createLanguageService(servicesHost, ts.createDocumentRegistry());
@@ -2113,10 +2101,7 @@ function watch(rootFileNames, options) {
         // First time around, emit all files
         emitFile(fileName);
         // Add a watch on the file to handle next change
-        fs.watchFile(fileName, {
-            persistent: true,
-            interval: 250
-        }, function (curr, prev) {
+        fs.watchFile(fileName, { persistent: true, interval: 250 }, function (curr, prev) {
             // Check timestamp
             if (+curr.mtime <= +prev.mtime) {
                 return;
@@ -2141,7 +2126,9 @@ function watch(rootFileNames, options) {
         });
     }
     function logErrors(fileName) {
-        var allDiagnostics = services.getCompilerOptionsDiagnostics().concat(services.getSyntacticDiagnostics(fileName)).concat(services.getSemanticDiagnostics(fileName));
+        var allDiagnostics = services.getCompilerOptionsDiagnostics()
+            .concat(services.getSyntacticDiagnostics(fileName))
+            .concat(services.getSemanticDiagnostics(fileName));
         allDiagnostics.forEach(function (diagnostic) {
             if (diagnostic.file) {
                 var lineChar = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
@@ -2154,10 +2141,7 @@ function watch(rootFileNames, options) {
     }
 }
 // Initialize files constituting the program as all .ts files in the current directory
-var currentDirectoryFiles = fs.readdirSync(process.cwd()).filter(function (fileName) {
-    return fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts";
-});
+var currentDirectoryFiles = fs.readdirSync(process.cwd()).
+    filter(function (fileName) { return fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts"; });
 // Start the watcher
-watch(currentDirectoryFiles, {
-    module: 1 /* CommonJS */
-});
+watch(currentDirectoryFiles, { module: 1 /* CommonJS */ });

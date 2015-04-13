@@ -150,8 +150,7 @@ var E2;
 (function (E2) {
     E2[E2["A"] = 0] = "A";
 })(E2 || (E2 = {}));
-function f() {
-}
+function f() { }
 var f;
 (function (f) {
     f.bar = 1;

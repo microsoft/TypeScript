@@ -23,14 +23,11 @@ var Foo = (function () {
     }
     return Foo;
 })();
-function bar() {
-}
+function bar() { }
 var Foo2 = (function () {
     function Foo2() {
     }
-    Foo2.prototype.method = function () {
-    };
+    Foo2.prototype.method = function () { };
     return Foo2;
 })();
-(function (a) {
-});
+(function (a) { });

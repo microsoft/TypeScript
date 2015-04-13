@@ -2,5 +2,4 @@
 for (var of of) { }
 
 //// [parserForOfStatement21.js]
-for ( of of) {
-}
+for ( of of) { }

@@ -15,8 +15,7 @@ class StringIterator {
 }
 
 //// [for-of35.js]
-for (var v of new StringIterator) {
-}
+for (var v of new StringIterator) { }
 class StringIterator {
     next() {
         return {

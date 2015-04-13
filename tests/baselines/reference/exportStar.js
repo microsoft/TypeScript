@@ -34,8 +34,7 @@ exports.x = 1;
 exports.y = 2;
 //// [t2.js]
 exports.default = "hello";
-function foo() {
-}
+function foo() { }
 exports.foo = foo;
 //// [t3.js]
 var x = "x";

@@ -60,29 +60,17 @@ var C;
         return B;
     })();
     C.B = B;
-    function F(x) {
-        return null;
-    }
+    function F(x) { return null; }
     C.F = F;
-    function F2(x) {
-        return null;
-    }
+    function F2(x) { return null; }
     C.F2 = F2;
-    function F3(x) {
-        return null;
-    }
+    function F3(x) { return null; }
     C.F3 = F3;
-    function F4(x) {
-        return null;
-    }
+    function F4(x) { return null; }
     C.F4 = F4;
-    function F5() {
-        return null;
-    }
+    function F5() { return null; }
     C.F5 = F5;
-    function F6(x) {
-        return null;
-    }
+    function F6(x) { return null; }
     C.F6 = F6;
     var D = (function () {
         function D(val) {
@@ -98,8 +86,7 @@ exports.c = C.F2;
 exports.d = C.F3;
 exports.e = C.F4;
 exports.x = (new C.D(new C.A())).val;
-function f() {
-}
+function f() { }
 exports.f = f;
 exports.g = C.F5();
 var h = (function (_super) {

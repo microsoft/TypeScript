@@ -18,9 +18,7 @@ var m1;
     })();
     m1.c1 = c1;
 })(m1 || (m1 = {}));
-function foo(a) {
-    a.a = 1;
-}
+function foo(a) { a.a = 1; }
 ;
 var myC = new m1.c1();
 foo(myC);

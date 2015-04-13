@@ -11,7 +11,6 @@ module M {
 var M;
 (function (M) {
     class C {
-        [Symbol.iterator]() {
-        }
+        [Symbol.iterator]() { }
     }
 })(M || (M = {}));

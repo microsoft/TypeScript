@@ -15,12 +15,8 @@ point./*3*/x = 30;
 function makePoint(x) {
     return {
         b: 10,
-        get x() {
-            return x;
-        },
-        set x(a) {
-            this.b = a;
-        }
+        get x() { return x; },
+        set x(a) { this.b = a; }
     };
 }
 ;

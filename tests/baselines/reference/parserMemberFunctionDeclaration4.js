@@ -7,8 +7,7 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.prototype.Foo = function () {
-    }
+    C.prototype.Foo = function () { }
     exports.Foo = Foo;;
     return C;
 })();

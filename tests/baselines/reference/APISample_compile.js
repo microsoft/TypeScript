@@ -2019,8 +2019,6 @@ function compile(fileNames, options) {
 }
 exports.compile = compile;
 compile(process.argv.slice(2), {
-    noEmitOnError: true,
-    noImplicitAny: true,
-    target: 1 /* ES5 */,
-    module: 1 /* CommonJS */
+    noEmitOnError: true, noImplicitAny: true,
+    target: 1 /* ES5 */, module: 1 /* CommonJS */
 });

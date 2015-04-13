@@ -65,52 +65,16 @@ var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a };
 // Let S be the set of types in U that has a string index signature.
 // If S is not empty, U has a string index signature of a union type of 
 // the types of the string index signatures from each type in S.
-var x = {
-    z: function (a) {
-        return a;
-    }
-}; // a should be number
-var x = {
-    foo: function (a) {
-        return a;
-    }
-}; // a should be any
-var x = {
-    foo: "hello"
-};
-var x2 = {
-    z: function (a) {
-        return a.toString();
-    }
-}; // a should be number
-var x2 = {
-    z: function (a) {
-        return a;
-    }
-}; // a should be number
+var x = { z: function (a) { return a; } }; // a should be number
+var x = { foo: function (a) { return a; } }; // a should be any
+var x = { foo: "hello" };
+var x2 = { z: function (a) { return a.toString(); } }; // a should be number
+var x2 = { z: function (a) { return a; } }; // a should be number
 // Let S be the set of types in U that has a numeric index signature.
 // If S is not empty, U has a numeric index signature of a union type of 
 // the types of the numeric index signatures from each type in S.
-var x3 = {
-    1: function (a) {
-        return a;
-    }
-}; // a should be number
-var x3 = {
-    0: function (a) {
-        return a;
-    }
-}; // a should be any
-var x3 = {
-    0: "hello"
-};
-var x4 = {
-    1: function (a) {
-        return a.toString();
-    }
-}; // a should be number
-var x4 = {
-    1: function (a) {
-        return a;
-    }
-}; // a should be number
+var x3 = { 1: function (a) { return a; } }; // a should be number
+var x3 = { 0: function (a) { return a; } }; // a should be any
+var x3 = { 0: "hello" };
+var x4 = { 1: function (a) { return a.toString(); } }; // a should be number
+var x4 = { 1: function (a) { return a; } }; // a should be number

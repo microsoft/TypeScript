@@ -3,5 +3,4 @@ function A<X, X>() { }
 
 
 //// [duplicateTypeParameters1.js]
-function A() {
-}
+function A() { }

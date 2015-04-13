@@ -34,6 +34,4 @@ function Point(x, y) {
     this.y = y;
     return this;
 }
-function EF1(a, b) {
-    return a + b;
-}
+function EF1(a, b) { return a + b; }

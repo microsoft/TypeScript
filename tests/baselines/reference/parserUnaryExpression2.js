@@ -2,5 +2,4 @@
 ++function(e) { }
 
 //// [parserUnaryExpression2.js]
-++function (e) {
-};
+++function (e) { };

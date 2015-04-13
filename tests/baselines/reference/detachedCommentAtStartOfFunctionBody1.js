@@ -17,9 +17,7 @@ var TestFile = (function () {
         /// <summary>Test summary</summary>
         /// <param name="message" type="String" />
         /// <returns type="Function" />
-        return function () {
-            return message + _this.name;
-        };
+        return function () { return message + _this.name; };
     };
     return TestFile;
 })();

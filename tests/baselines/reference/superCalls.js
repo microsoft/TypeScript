@@ -43,8 +43,7 @@ var Base = (function () {
     }
     return Base;
 })();
-function v() {
-}
+function v() { }
 var Derived = (function (_super) {
     __extends(Derived, _super);
     //super call in class constructor of derived type

@@ -12,11 +12,8 @@ i[Symbol.toPrimitive] = false;
 //// [symbolProperty18.js]
 var i = {
     [Symbol.iterator]: 0,
-    [Symbol.toStringTag]() {
-        return "";
-    },
-    set [Symbol.toPrimitive](p) {
-    }
+    [Symbol.toStringTag]() { return ""; },
+    set [Symbol.toPrimitive](p) { }
 };
 var it = i[Symbol.iterator];
 var str = i[Symbol.toStringTag]();

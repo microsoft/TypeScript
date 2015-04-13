@@ -59,11 +59,7 @@ var r = c.x;
 var ra = c.x.x.x;
 var r2 = c.y;
 var r3 = c.foo();
-var rs = [
-    r,
-    r2,
-    r3
-];
+var rs = [r, r2, r3];
 rs.forEach(function (x) {
     x.foo;
     x.x;
