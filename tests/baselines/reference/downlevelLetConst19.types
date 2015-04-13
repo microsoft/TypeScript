@@ -1,47 +1,49 @@
 === tests/cases/compiler/downlevelLetConst19.ts ===
 'use strict'
+>'use strict' : string
+
 declare function use(a: any);
->use : (a: any) => any
->a : any
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst19.ts, 0, 12))
+>a : any, Symbol(a, Decl(downlevelLetConst19.ts, 1, 21))
 
 var x;
->x : any
+>x : any, Symbol(x, Decl(downlevelLetConst19.ts, 2, 3))
 
 function a() {
->a : () => void
+>a : () => void, Symbol(a, Decl(downlevelLetConst19.ts, 2, 6))
   {
     let x;
->x : any
+>x : any, Symbol(x, Decl(downlevelLetConst19.ts, 5, 7))
 
     use(x);
 >use(x) : any
->use : (a: any) => any
->x : any
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst19.ts, 0, 12))
+>x : any, Symbol(x, Decl(downlevelLetConst19.ts, 5, 7))
 
     function b() {
->b : () => void
+>b : () => void, Symbol(b, Decl(downlevelLetConst19.ts, 6, 11))
         {
             let x;
->x : any
+>x : any, Symbol(x, Decl(downlevelLetConst19.ts, 10, 15))
 
             use(x);
 >use(x) : any
->use : (a: any) => any
->x : any
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst19.ts, 0, 12))
+>x : any, Symbol(x, Decl(downlevelLetConst19.ts, 10, 15))
         }
         use(x);
 >use(x) : any
->use : (a: any) => any
->x : any
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst19.ts, 0, 12))
+>x : any, Symbol(x, Decl(downlevelLetConst19.ts, 5, 7))
     }
   }
   use(x)
 >use(x) : any
->use : (a: any) => any
->x : any
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst19.ts, 0, 12))
+>x : any, Symbol(x, Decl(downlevelLetConst19.ts, 2, 3))
 }
 use(x)
 >use(x) : any
->use : (a: any) => any
->x : any
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst19.ts, 0, 12))
+>x : any, Symbol(x, Decl(downlevelLetConst19.ts, 2, 3))
 

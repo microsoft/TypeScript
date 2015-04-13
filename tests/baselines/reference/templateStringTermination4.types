@@ -1,4 +1,5 @@
 === tests/cases/conformance/es6/templates/templateStringTermination4.ts ===
 
-No type information for this code.`\\\\`
-No type information for this code.
+`\\\\`
+>`\\\\` : string
+

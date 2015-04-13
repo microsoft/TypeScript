@@ -1,5 +1,6 @@
 === tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck2.ts ===
 for (var v of [true]) { }
->v : boolean
+>v : boolean, Symbol(v, Decl(ES5For-ofTypeCheck2.ts, 0, 8))
 >[true] : boolean[]
+>true : boolean
 

@@ -1,60 +1,72 @@
 === tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithArrayLiteralArgs.ts ===
 function foo<T>(t: T) {
->foo : <T>(t: T) => T
->T : T
->t : T
->T : T
+>foo : <T>(t: T) => T, Symbol(foo, Decl(genericCallWithArrayLiteralArgs.ts, 0, 0))
+>T : T, Symbol(T, Decl(genericCallWithArrayLiteralArgs.ts, 0, 13))
+>t : T, Symbol(t, Decl(genericCallWithArrayLiteralArgs.ts, 0, 16))
+>T : T, Symbol(T, Decl(genericCallWithArrayLiteralArgs.ts, 0, 13))
 
     return t;
->t : T
+>t : T, Symbol(t, Decl(genericCallWithArrayLiteralArgs.ts, 0, 16))
 }
 
 var r = foo([1, 2]); // number[]
->r : number[]
+>r : number[], Symbol(r, Decl(genericCallWithArrayLiteralArgs.ts, 4, 3), Decl(genericCallWithArrayLiteralArgs.ts, 5, 3))
 >foo([1, 2]) : number[]
->foo : <T>(t: T) => T
+>foo : <T>(t: T) => T, Symbol(foo, Decl(genericCallWithArrayLiteralArgs.ts, 0, 0))
 >[1, 2] : number[]
+>1 : number
+>2 : number
 
 var r = foo<number[]>([1, 2]); // number[]
->r : number[]
+>r : number[], Symbol(r, Decl(genericCallWithArrayLiteralArgs.ts, 4, 3), Decl(genericCallWithArrayLiteralArgs.ts, 5, 3))
 >foo<number[]>([1, 2]) : number[]
->foo : <T>(t: T) => T
+>foo : <T>(t: T) => T, Symbol(foo, Decl(genericCallWithArrayLiteralArgs.ts, 0, 0))
 >[1, 2] : number[]
+>1 : number
+>2 : number
 
 var ra = foo<any[]>([1, 2]); // any[]
->ra : any[]
+>ra : any[], Symbol(ra, Decl(genericCallWithArrayLiteralArgs.ts, 6, 3))
 >foo<any[]>([1, 2]) : any[]
->foo : <T>(t: T) => T
+>foo : <T>(t: T) => T, Symbol(foo, Decl(genericCallWithArrayLiteralArgs.ts, 0, 0))
 >[1, 2] : number[]
+>1 : number
+>2 : number
 
 var r2 = foo([]); // any[]
->r2 : any[]
+>r2 : any[], Symbol(r2, Decl(genericCallWithArrayLiteralArgs.ts, 7, 3))
 >foo([]) : any[]
->foo : <T>(t: T) => T
+>foo : <T>(t: T) => T, Symbol(foo, Decl(genericCallWithArrayLiteralArgs.ts, 0, 0))
 >[] : undefined[]
 
 var r3 = foo<number[]>([]); // number[]
->r3 : number[]
+>r3 : number[], Symbol(r3, Decl(genericCallWithArrayLiteralArgs.ts, 8, 3))
 >foo<number[]>([]) : number[]
->foo : <T>(t: T) => T
+>foo : <T>(t: T) => T, Symbol(foo, Decl(genericCallWithArrayLiteralArgs.ts, 0, 0))
 >[] : undefined[]
 
 var r4 = foo([1, '']); // {}[]
->r4 : (string | number)[]
+>r4 : (string | number)[], Symbol(r4, Decl(genericCallWithArrayLiteralArgs.ts, 9, 3))
 >foo([1, '']) : (string | number)[]
->foo : <T>(t: T) => T
+>foo : <T>(t: T) => T, Symbol(foo, Decl(genericCallWithArrayLiteralArgs.ts, 0, 0))
 >[1, ''] : (string | number)[]
+>1 : number
+>'' : string
 
 var r5 = foo<any[]>([1, '']); // any[]
->r5 : any[]
+>r5 : any[], Symbol(r5, Decl(genericCallWithArrayLiteralArgs.ts, 10, 3))
 >foo<any[]>([1, '']) : any[]
->foo : <T>(t: T) => T
+>foo : <T>(t: T) => T, Symbol(foo, Decl(genericCallWithArrayLiteralArgs.ts, 0, 0))
 >[1, ''] : (string | number)[]
+>1 : number
+>'' : string
 
 var r6 = foo<Object[]>([1, '']); // Object[]
->r6 : Object[]
+>r6 : Object[], Symbol(r6, Decl(genericCallWithArrayLiteralArgs.ts, 11, 3))
 >foo<Object[]>([1, '']) : Object[]
->foo : <T>(t: T) => T
->Object : Object
+>foo : <T>(t: T) => T, Symbol(foo, Decl(genericCallWithArrayLiteralArgs.ts, 0, 0))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 >[1, ''] : (string | number)[]
+>1 : number
+>'' : string
 

@@ -1,40 +1,42 @@
 === tests/cases/compiler/server.ts ===
 
 export class c {
->c : c
+>c : c, Symbol(c, Decl(server.ts, 0, 0))
 }
 export interface i {
->i : i
+>i : i, Symbol(i, Decl(server.ts, 2, 1))
 }
 export module m {
->m : typeof m
+>m : typeof m, Symbol(m, Decl(server.ts, 4, 1))
 
     export var x = 10;
->x : number
+>x : number, Symbol(x, Decl(server.ts, 6, 14))
+>10 : number
 }
 export var x = 10;
->x : number
+>x : number, Symbol(x, Decl(server.ts, 8, 10))
+>10 : number
 
 export module uninstantiated {
->uninstantiated : unknown
+>uninstantiated : any, Symbol(uninstantiated, Decl(server.ts, 8, 18))
 }
 
 === tests/cases/compiler/client.ts ===
 export { c } from "server";
->c : typeof c
+>c : typeof c, Symbol(c, Decl(client.ts, 0, 8))
 
 export { c as c2 } from "server";
->c : typeof c
->c2 : typeof c
+>c : typeof c, Symbol(c2, Decl(client.ts, 1, 8))
+>c2 : typeof c, Symbol(c2, Decl(client.ts, 1, 8))
 
 export { i, m as instantiatedModule } from "server";
->i : unknown
->m : typeof instantiatedModule
->instantiatedModule : typeof instantiatedModule
+>i : any, Symbol(i, Decl(client.ts, 2, 8))
+>m : typeof instantiatedModule, Symbol(instantiatedModule, Decl(client.ts, 2, 11))
+>instantiatedModule : typeof instantiatedModule, Symbol(instantiatedModule, Decl(client.ts, 2, 11))
 
 export { uninstantiated } from "server";
->uninstantiated : unknown
+>uninstantiated : any, Symbol(uninstantiated, Decl(client.ts, 3, 8))
 
 export { x } from "server";
->x : number
+>x : number, Symbol(x, Decl(client.ts, 4, 8))
 

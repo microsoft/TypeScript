@@ -1,36 +1,39 @@
 === tests/cases/compiler/unusedImportDeclaration_testerA.ts ===
 import B = require("unusedImportDeclaration_testerB");
->B : typeof B
+>B : typeof B, Symbol(B, Decl(unusedImportDeclaration_testerA.ts, 0, 0))
 
 var thingy: B = {
->thingy : B
->B : B
+>thingy : B, Symbol(thingy, Decl(unusedImportDeclaration_testerA.ts, 1, 3))
+>B : B, Symbol(B, Decl(unusedImportDeclaration_testerA.ts, 0, 0))
 >{    me: "A"} : { me: string; }
 
     me: "A"
->me : string
+>me : string, Symbol(me, Decl(unusedImportDeclaration_testerA.ts, 1, 17))
+>"A" : string
 
 };
 declare function foo(a: string): void;
->foo : (a: string) => void
->a : string
+>foo : (a: string) => void, Symbol(foo, Decl(unusedImportDeclaration_testerA.ts, 3, 2))
+>a : string, Symbol(a, Decl(unusedImportDeclaration_testerA.ts, 4, 21))
 
 foo("IN " + thingy.me + "!");
 >foo("IN " + thingy.me + "!") : void
->foo : (a: string) => void
+>foo : (a: string) => void, Symbol(foo, Decl(unusedImportDeclaration_testerA.ts, 3, 2))
 >"IN " + thingy.me + "!" : string
 >"IN " + thingy.me : string
->thingy.me : string
->thingy : B
->me : string
+>"IN " : string
+>thingy.me : string, Symbol(B.me, Decl(unusedImportDeclaration_testerB.ts, 0, 15))
+>thingy : B, Symbol(thingy, Decl(unusedImportDeclaration_testerA.ts, 1, 3))
+>me : string, Symbol(B.me, Decl(unusedImportDeclaration_testerB.ts, 0, 15))
+>"!" : string
 
 === tests/cases/compiler/unusedImportDeclaration_testerB.ts ===
 class TesterB {
->TesterB : TesterB
+>TesterB : TesterB, Symbol(TesterB, Decl(unusedImportDeclaration_testerB.ts, 0, 0))
 
     me: string;
->me : string
+>me : string, Symbol(me, Decl(unusedImportDeclaration_testerB.ts, 0, 15))
 }
 export = TesterB;
->TesterB : TesterB
+>TesterB : TesterB, Symbol(TesterB, Decl(unusedImportDeclaration_testerB.ts, 0, 0))
 

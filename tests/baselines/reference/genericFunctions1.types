@@ -1,13 +1,14 @@
 === tests/cases/compiler/genericFunctions1.ts ===
 function foo<T > (x: T) { return x; }
->foo : <T>(x: T) => T
->T : T
->x : T
->T : T
->x : T
+>foo : <T>(x: T) => T, Symbol(foo, Decl(genericFunctions1.ts, 0, 0))
+>T : T, Symbol(T, Decl(genericFunctions1.ts, 0, 13))
+>x : T, Symbol(x, Decl(genericFunctions1.ts, 0, 18))
+>T : T, Symbol(T, Decl(genericFunctions1.ts, 0, 13))
+>x : T, Symbol(x, Decl(genericFunctions1.ts, 0, 18))
 
 var x = foo(5); // 'x' should be number
->x : number
+>x : number, Symbol(x, Decl(genericFunctions1.ts, 2, 3))
 >foo(5) : number
->foo : <T>(x: T) => T
+>foo : <T>(x: T) => T, Symbol(foo, Decl(genericFunctions1.ts, 0, 0))
+>5 : number
 

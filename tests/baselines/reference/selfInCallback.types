@@ -1,28 +1,30 @@
 === tests/cases/compiler/selfInCallback.ts ===
 class C {
->C : C
+>C : C, Symbol(C, Decl(selfInCallback.ts, 0, 0))
 
 	public p1 = 0;
->p1 : number
+>p1 : number, Symbol(p1, Decl(selfInCallback.ts, 0, 9))
+>0 : number
 
 	public callback(cb:()=>void) {cb();}
->callback : (cb: () => void) => void
->cb : () => void
+>callback : (cb: () => void) => void, Symbol(callback, Decl(selfInCallback.ts, 1, 15))
+>cb : () => void, Symbol(cb, Decl(selfInCallback.ts, 2, 17))
 >cb() : void
->cb : () => void
+>cb : () => void, Symbol(cb, Decl(selfInCallback.ts, 2, 17))
 
 	public doit() {
->doit : () => void
+>doit : () => void, Symbol(doit, Decl(selfInCallback.ts, 2, 37))
 
 		this.callback(()=>{this.p1+1});
 >this.callback(()=>{this.p1+1}) : void
->this.callback : (cb: () => void) => void
->this : C
->callback : (cb: () => void) => void
+>this.callback : (cb: () => void) => void, Symbol(callback, Decl(selfInCallback.ts, 1, 15))
+>this : C, Symbol(C, Decl(selfInCallback.ts, 0, 0))
+>callback : (cb: () => void) => void, Symbol(callback, Decl(selfInCallback.ts, 1, 15))
 >()=>{this.p1+1} : () => void
 >this.p1+1 : number
->this.p1 : number
->this : C
->p1 : number
+>this.p1 : number, Symbol(p1, Decl(selfInCallback.ts, 0, 9))
+>this : C, Symbol(C, Decl(selfInCallback.ts, 0, 0))
+>p1 : number, Symbol(p1, Decl(selfInCallback.ts, 0, 9))
+>1 : number
 	}
 }

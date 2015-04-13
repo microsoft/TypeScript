@@ -1,14 +1,14 @@
 === tests/cases/compiler/commentsOnObjectLiteral4.ts ===
 
 var v = {
->v : { bar: number; }
+>v : { bar: number; }, Symbol(v, Decl(commentsOnObjectLiteral4.ts, 1, 3))
 >{ /**  * @type {number}  */ get bar(): number {  return this._bar; }} : { bar: number; }
 
  /**
   * @type {number}
   */
  get bar(): number {
->bar : number
+>bar : number, Symbol(bar, Decl(commentsOnObjectLiteral4.ts, 1, 9))
 
   return this._bar;
 >this._bar : any

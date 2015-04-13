@@ -1,23 +1,24 @@
 === tests/cases/compiler/exportAssignmentClass_B.ts ===
 import D = require("exportAssignmentClass_A");
->D : typeof D
+>D : typeof D, Symbol(D, Decl(exportAssignmentClass_B.ts, 0, 0))
 
 var d = new D();
->d : D
+>d : D, Symbol(d, Decl(exportAssignmentClass_B.ts, 2, 3))
 >new D() : D
->D : typeof D
+>D : typeof D, Symbol(D, Decl(exportAssignmentClass_B.ts, 0, 0))
 
 var x = d.p;
->x : number
->d.p : number
->d : D
->p : number
+>x : number, Symbol(x, Decl(exportAssignmentClass_B.ts, 3, 3))
+>d.p : number, Symbol(D.p, Decl(exportAssignmentClass_A.ts, 0, 9))
+>d : D, Symbol(d, Decl(exportAssignmentClass_B.ts, 2, 3))
+>p : number, Symbol(D.p, Decl(exportAssignmentClass_A.ts, 0, 9))
 
 === tests/cases/compiler/exportAssignmentClass_A.ts ===
 class C { public p = 0; }
->C : C
->p : number
+>C : C, Symbol(C, Decl(exportAssignmentClass_A.ts, 0, 0))
+>p : number, Symbol(p, Decl(exportAssignmentClass_A.ts, 0, 9))
+>0 : number
 
 export = C;
->C : C
+>C : C, Symbol(C, Decl(exportAssignmentClass_A.ts, 0, 0))
 

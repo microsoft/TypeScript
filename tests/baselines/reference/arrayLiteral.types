@@ -2,46 +2,54 @@
 // valid uses of array literals
 
 var x = [];
->x : any[]
+>x : any[], Symbol(x, Decl(arrayLiteral.ts, 2, 3), Decl(arrayLiteral.ts, 3, 3))
 >[] : undefined[]
 
 var x = new Array(1);
->x : any[]
+>x : any[], Symbol(x, Decl(arrayLiteral.ts, 2, 3), Decl(arrayLiteral.ts, 3, 3))
 >new Array(1) : any[]
->Array : ArrayConstructor
+>Array : ArrayConstructor, Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>1 : number
 
 var y = [1];
->y : number[]
+>y : number[], Symbol(y, Decl(arrayLiteral.ts, 5, 3), Decl(arrayLiteral.ts, 6, 3), Decl(arrayLiteral.ts, 7, 3))
 >[1] : number[]
+>1 : number
 
 var y = [1, 2];
->y : number[]
+>y : number[], Symbol(y, Decl(arrayLiteral.ts, 5, 3), Decl(arrayLiteral.ts, 6, 3), Decl(arrayLiteral.ts, 7, 3))
 >[1, 2] : number[]
+>1 : number
+>2 : number
 
 var y = new Array<number>();
->y : number[]
+>y : number[], Symbol(y, Decl(arrayLiteral.ts, 5, 3), Decl(arrayLiteral.ts, 6, 3), Decl(arrayLiteral.ts, 7, 3))
 >new Array<number>() : number[]
->Array : ArrayConstructor
+>Array : ArrayConstructor, Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
 
 var x2: number[] = [];
->x2 : number[]
+>x2 : number[], Symbol(x2, Decl(arrayLiteral.ts, 9, 3), Decl(arrayLiteral.ts, 10, 3))
 >[] : undefined[]
 
 var x2: number[] = new Array(1);
->x2 : number[]
+>x2 : number[], Symbol(x2, Decl(arrayLiteral.ts, 9, 3), Decl(arrayLiteral.ts, 10, 3))
 >new Array(1) : any[]
->Array : ArrayConstructor
+>Array : ArrayConstructor, Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>1 : number
 
 var y2: number[] = [1];
->y2 : number[]
+>y2 : number[], Symbol(y2, Decl(arrayLiteral.ts, 12, 3), Decl(arrayLiteral.ts, 13, 3), Decl(arrayLiteral.ts, 14, 3))
 >[1] : number[]
+>1 : number
 
 var y2: number[] = [1, 2];
->y2 : number[]
+>y2 : number[], Symbol(y2, Decl(arrayLiteral.ts, 12, 3), Decl(arrayLiteral.ts, 13, 3), Decl(arrayLiteral.ts, 14, 3))
 >[1, 2] : number[]
+>1 : number
+>2 : number
 
 var y2: number[] = new Array<number>();
->y2 : number[]
+>y2 : number[], Symbol(y2, Decl(arrayLiteral.ts, 12, 3), Decl(arrayLiteral.ts, 13, 3), Decl(arrayLiteral.ts, 14, 3))
 >new Array<number>() : number[]
->Array : ArrayConstructor
+>Array : ArrayConstructor, Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
 

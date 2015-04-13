@@ -1,96 +1,106 @@
 === tests/cases/conformance/statements/throwStatements/throwInEnclosingStatements.ts ===
 function fn(x) {
->fn : (x: any) => void
->x : any
+>fn : (x: any) => void, Symbol(fn, Decl(throwInEnclosingStatements.ts, 0, 0))
+>x : any, Symbol(x, Decl(throwInEnclosingStatements.ts, 0, 12))
 
     throw x;
->x : any
+>x : any, Symbol(x, Decl(throwInEnclosingStatements.ts, 0, 12))
 }
 
 <T>(x: T) => { throw x; }
 ><T>(x: T) => { throw x; } : <T>(x: T) => void
->T : T
->x : T
->T : T
->x : T
+>T : T, Symbol(T, Decl(throwInEnclosingStatements.ts, 4, 1))
+>x : T, Symbol(x, Decl(throwInEnclosingStatements.ts, 4, 4))
+>T : T, Symbol(T, Decl(throwInEnclosingStatements.ts, 4, 1))
+>x : T, Symbol(x, Decl(throwInEnclosingStatements.ts, 4, 4))
 
 var y: string;
->y : string
+>y : string, Symbol(y, Decl(throwInEnclosingStatements.ts, 6, 3))
 
 switch (y) {
->y : string
+>y : string, Symbol(y, Decl(throwInEnclosingStatements.ts, 6, 3))
 
     case 'a':
+>'a' : string
+
         throw y;
->y : string
+>y : string, Symbol(y, Decl(throwInEnclosingStatements.ts, 6, 3))
 
     default:
         throw y;
->y : string
+>y : string, Symbol(y, Decl(throwInEnclosingStatements.ts, 6, 3))
 }
 
 var z = 0;
->z : number
+>z : number, Symbol(z, Decl(throwInEnclosingStatements.ts, 14, 3))
+>0 : number
 
 while (z < 10) {
 >z < 10 : boolean
->z : number
+>z : number, Symbol(z, Decl(throwInEnclosingStatements.ts, 14, 3))
+>10 : number
 
     throw z;
->z : number
+>z : number, Symbol(z, Decl(throwInEnclosingStatements.ts, 14, 3))
 }
 
 for (var i = 0; ;) { throw i; }
->i : number
->i : number
+>i : number, Symbol(i, Decl(throwInEnclosingStatements.ts, 19, 8))
+>0 : number
+>i : number, Symbol(i, Decl(throwInEnclosingStatements.ts, 19, 8))
 
 for (var idx in {}) { throw idx; }
->idx : any
+>idx : any, Symbol(idx, Decl(throwInEnclosingStatements.ts, 21, 8))
 >{} : {}
->idx : any
+>idx : any, Symbol(idx, Decl(throwInEnclosingStatements.ts, 21, 8))
 
 do { throw null; }while(true)
+>null : null
+>true : boolean
 
 var j = 0;
->j : number
+>j : number, Symbol(j, Decl(throwInEnclosingStatements.ts, 25, 3))
+>0 : number
 
 while (j < 0) { throw j; }
 >j < 0 : boolean
->j : number
->j : number
+>j : number, Symbol(j, Decl(throwInEnclosingStatements.ts, 25, 3))
+>0 : number
+>j : number, Symbol(j, Decl(throwInEnclosingStatements.ts, 25, 3))
 
 class C<T> {
->C : C<T>
->T : T
+>C : C<T>, Symbol(C, Decl(throwInEnclosingStatements.ts, 26, 26))
+>T : T, Symbol(T, Decl(throwInEnclosingStatements.ts, 28, 8))
 
     private value: T;
->value : T
->T : T
+>value : T, Symbol(value, Decl(throwInEnclosingStatements.ts, 28, 12))
+>T : T, Symbol(T, Decl(throwInEnclosingStatements.ts, 28, 8))
 
     biz() {
->biz : () => void
+>biz : () => void, Symbol(biz, Decl(throwInEnclosingStatements.ts, 29, 21))
 
         throw this.value;
->this.value : T
->this : C<T>
->value : T
+>this.value : T, Symbol(value, Decl(throwInEnclosingStatements.ts, 28, 12))
+>this : C<T>, Symbol(C, Decl(throwInEnclosingStatements.ts, 26, 26))
+>value : T, Symbol(value, Decl(throwInEnclosingStatements.ts, 28, 12))
     }
 
     constructor() {
         throw this;
->this : C<T>
+>this : C<T>, Symbol(C, Decl(throwInEnclosingStatements.ts, 26, 26))
     }
 }
 
 var aa = {
->aa : { id: number; biz(): void; }
+>aa : { id: number; biz(): void; }, Symbol(aa, Decl(throwInEnclosingStatements.ts, 39, 3))
 >{    id:12,    biz() {        throw this;    }} : { id: number; biz(): void; }
 
     id:12,
->id : number
+>id : number, Symbol(id, Decl(throwInEnclosingStatements.ts, 39, 10))
+>12 : number
 
     biz() {
->biz : () => void
+>biz : () => void, Symbol(biz, Decl(throwInEnclosingStatements.ts, 40, 10))
 
         throw this;
 >this : any

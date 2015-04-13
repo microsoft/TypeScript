@@ -1,43 +1,44 @@
 === tests/cases/compiler/selfInLambdas.ts ===
 interface MouseEvent {
->MouseEvent : MouseEvent
+>MouseEvent : MouseEvent, Symbol(MouseEvent, Decl(selfInLambdas.ts, 0, 0))
 
     x: number;
->x : number
+>x : number, Symbol(x, Decl(selfInLambdas.ts, 0, 22))
 
     y: number;
->y : number
+>y : number, Symbol(y, Decl(selfInLambdas.ts, 1, 14))
 }
 
 declare var window: Window;
->window : Window
->Window : Window
+>window : Window, Symbol(window, Decl(selfInLambdas.ts, 5, 11))
+>Window : Window, Symbol(Window, Decl(selfInLambdas.ts, 5, 27))
 
 interface Window {
->Window : Window
+>Window : Window, Symbol(Window, Decl(selfInLambdas.ts, 5, 27))
 
     onmousemove: (ev: MouseEvent) => any;
->onmousemove : (ev: MouseEvent) => any
->ev : MouseEvent
->MouseEvent : MouseEvent
+>onmousemove : (ev: MouseEvent) => any, Symbol(onmousemove, Decl(selfInLambdas.ts, 6, 18))
+>ev : MouseEvent, Symbol(ev, Decl(selfInLambdas.ts, 7, 18))
+>MouseEvent : MouseEvent, Symbol(MouseEvent, Decl(selfInLambdas.ts, 0, 0))
     
 }
 var o = {
->o : { counter: number; start: () => void; }
+>o : { counter: number; start: () => void; }, Symbol(o, Decl(selfInLambdas.ts, 10, 3))
 >{    counter: 0,    start: function() {        window.onmousemove = () => {            this.counter++            var f = () => this.counter;        }    }} : { counter: number; start: () => void; }
 
     counter: 0,
->counter : number
+>counter : number, Symbol(counter, Decl(selfInLambdas.ts, 10, 9))
+>0 : number
 
     start: function() {
->start : () => void
+>start : () => void, Symbol(start, Decl(selfInLambdas.ts, 12, 15))
 >function() {        window.onmousemove = () => {            this.counter++            var f = () => this.counter;        }    } : () => void
 
         window.onmousemove = () => {
 >window.onmousemove = () => {            this.counter++            var f = () => this.counter;        } : () => void
->window.onmousemove : (ev: MouseEvent) => any
->window : Window
->onmousemove : (ev: MouseEvent) => any
+>window.onmousemove : (ev: MouseEvent) => any, Symbol(Window.onmousemove, Decl(selfInLambdas.ts, 6, 18))
+>window : Window, Symbol(window, Decl(selfInLambdas.ts, 5, 11))
+>onmousemove : (ev: MouseEvent) => any, Symbol(Window.onmousemove, Decl(selfInLambdas.ts, 6, 18))
 >() => {            this.counter++            var f = () => this.counter;        } : () => void
 
             this.counter++
@@ -47,7 +48,7 @@ var o = {
 >counter : any
 
             var f = () => this.counter;
->f : () => any
+>f : () => any, Symbol(f, Decl(selfInLambdas.ts, 18, 15))
 >() => this.counter : () => any
 >this.counter : any
 >this : any
@@ -62,43 +63,44 @@ var o = {
 
 
 class X {
->X : X
+>X : X, Symbol(X, Decl(selfInLambdas.ts, 24, 1))
 
 	private value = "value";
->value : string
+>value : string, Symbol(value, Decl(selfInLambdas.ts, 28, 9))
+>"value" : string
 
 	public foo() {
->foo : () => void
+>foo : () => void, Symbol(foo, Decl(selfInLambdas.ts, 29, 25))
 
 		var outer= () => {
->outer : () => void
+>outer : () => void, Symbol(outer, Decl(selfInLambdas.ts, 32, 5))
 >() => {            var x = this.value;            var inner = () => {                var y = this.value;			}			inner();		} : () => void
 
             var x = this.value;
->x : string
->this.value : string
->this : X
->value : string
+>x : string, Symbol(x, Decl(selfInLambdas.ts, 33, 15))
+>this.value : string, Symbol(value, Decl(selfInLambdas.ts, 28, 9))
+>this : X, Symbol(X, Decl(selfInLambdas.ts, 24, 1))
+>value : string, Symbol(value, Decl(selfInLambdas.ts, 28, 9))
 
             var inner = () => {
->inner : () => void
+>inner : () => void, Symbol(inner, Decl(selfInLambdas.ts, 34, 15))
 >() => {                var y = this.value;			} : () => void
 
                 var y = this.value;
->y : string
->this.value : string
->this : X
->value : string
+>y : string, Symbol(y, Decl(selfInLambdas.ts, 35, 19))
+>this.value : string, Symbol(value, Decl(selfInLambdas.ts, 28, 9))
+>this : X, Symbol(X, Decl(selfInLambdas.ts, 24, 1))
+>value : string, Symbol(value, Decl(selfInLambdas.ts, 28, 9))
 			}
 
 			inner();
 >inner() : void
->inner : () => void
+>inner : () => void, Symbol(inner, Decl(selfInLambdas.ts, 34, 15))
 
 		};
 		outer();
 >outer() : void
->outer : () => void
+>outer : () => void, Symbol(outer, Decl(selfInLambdas.ts, 32, 5))
 	}
 
 }

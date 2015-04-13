@@ -1,30 +1,40 @@
 === tests/cases/compiler/sourceMap-LineBreaks.ts ===
 var endsWithlineSeparator = 10;  var endsWithParagraphSeparator = 10;  var endsWithNextLine = 1;var endsWithLineFeed = 1;
->endsWithlineSeparator : number
+>endsWithlineSeparator : number, Symbol(endsWithlineSeparator, Decl(sourceMap-LineBreaks.ts, 0, 3))
+>10 : number
 
 var endsWithCarriageReturnLineFeed = 1;
->endsWithParagraphSeparator : number
+>endsWithParagraphSeparator : number, Symbol(endsWithParagraphSeparator, Decl(sourceMap-LineBreaks.ts, 1, 3))
+>10 : number
 
 var endsWithCarriageReturn = 1;var endsWithLineFeedCarriageReturn = 1;
->endsWithNextLine : number
->endsWithLineFeed : number
+>endsWithNextLine : number, Symbol(endsWithNextLine, Decl(sourceMap-LineBreaks.ts, 2, 3))
+>1 : number
+>endsWithLineFeed : number, Symbol(endsWithLineFeed, Decl(sourceMap-LineBreaks.ts, 2, 29))
+>1 : number
 
 var endsWithLineFeedCarriageReturnLineFeed = 1;
->endsWithCarriageReturnLineFeed : number
+>endsWithCarriageReturnLineFeed : number, Symbol(endsWithCarriageReturnLineFeed, Decl(sourceMap-LineBreaks.ts, 3, 3))
+>1 : number
 
->endsWithCarriageReturn : number
+>endsWithCarriageReturn : number, Symbol(endsWithCarriageReturn, Decl(sourceMap-LineBreaks.ts, 4, 3))
+>1 : number
 
 var stringLiteralWithLineFeed = "line 1\
->endsWithLineFeedCarriageReturn : number
+>endsWithLineFeedCarriageReturn : number, Symbol(endsWithLineFeedCarriageReturn, Decl(sourceMap-LineBreaks.ts, 5, 3))
+>1 : number
 
 line 2";
 var stringLiteralWithCarriageReturnLineFeed = "line 1\
->endsWithLineFeedCarriageReturnLineFeed : number
+>endsWithLineFeedCarriageReturnLineFeed : number, Symbol(endsWithLineFeedCarriageReturnLineFeed, Decl(sourceMap-LineBreaks.ts, 7, 3))
+>1 : number
 
 line 2";
 var stringLiteralWithCarriageReturn = "line 1\line 2";
->stringLiteralWithLineFeed : string
+>stringLiteralWithLineFeed : string, Symbol(stringLiteralWithLineFeed, Decl(sourceMap-LineBreaks.ts, 9, 3))
+>"line 1\line 2" : string
 
 var stringLiteralWithLineSeparator = "line 1\ line 2"; var stringLiteralWithParagraphSeparator = "line 1\ line 2"; var stringLiteralWithNextLine = "line 1\line 2";
->stringLiteralWithCarriageReturnLineFeed : string
+>stringLiteralWithCarriageReturnLineFeed : string, Symbol(stringLiteralWithCarriageReturnLineFeed, Decl(sourceMap-LineBreaks.ts, 11, 3))
+>"line 1\line 2" : string
 

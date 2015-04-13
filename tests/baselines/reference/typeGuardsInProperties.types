@@ -4,117 +4,123 @@
 // have no effect on members of objects such as properties. 
 
 var num: number;
->num : number
+>num : number, Symbol(num, Decl(typeGuardsInProperties.ts, 4, 3))
 
 var strOrNum: string | number;
->strOrNum : string | number
+>strOrNum : string | number, Symbol(strOrNum, Decl(typeGuardsInProperties.ts, 5, 3))
 
 class C1 {
->C1 : C1
+>C1 : C1, Symbol(C1, Decl(typeGuardsInProperties.ts, 5, 30))
 
     private pp1: string | number;
->pp1 : string | number
+>pp1 : string | number, Symbol(pp1, Decl(typeGuardsInProperties.ts, 6, 10))
 
     pp2: string | number;
->pp2 : string | number
+>pp2 : string | number, Symbol(pp2, Decl(typeGuardsInProperties.ts, 7, 33))
 
     // Inside public accessor getter
     get pp3() {
->pp3 : string | number
+>pp3 : string | number, Symbol(pp3, Decl(typeGuardsInProperties.ts, 8, 25))
 
         return strOrNum;
->strOrNum : string | number
+>strOrNum : string | number, Symbol(strOrNum, Decl(typeGuardsInProperties.ts, 5, 3))
     }
     method() {
->method : () => void
+>method : () => void, Symbol(method, Decl(typeGuardsInProperties.ts, 12, 5))
 
         strOrNum = typeof this.pp1 === "string" && this.pp1; // string | number
 >strOrNum = typeof this.pp1 === "string" && this.pp1 : string | number
->strOrNum : string | number
+>strOrNum : string | number, Symbol(strOrNum, Decl(typeGuardsInProperties.ts, 5, 3))
 >typeof this.pp1 === "string" && this.pp1 : string | number
 >typeof this.pp1 === "string" : boolean
 >typeof this.pp1 : string
->this.pp1 : string | number
->this : C1
->pp1 : string | number
->this.pp1 : string | number
->this : C1
->pp1 : string | number
+>this.pp1 : string | number, Symbol(pp1, Decl(typeGuardsInProperties.ts, 6, 10))
+>this : C1, Symbol(C1, Decl(typeGuardsInProperties.ts, 5, 30))
+>pp1 : string | number, Symbol(pp1, Decl(typeGuardsInProperties.ts, 6, 10))
+>"string" : string
+>this.pp1 : string | number, Symbol(pp1, Decl(typeGuardsInProperties.ts, 6, 10))
+>this : C1, Symbol(C1, Decl(typeGuardsInProperties.ts, 5, 30))
+>pp1 : string | number, Symbol(pp1, Decl(typeGuardsInProperties.ts, 6, 10))
 
         strOrNum = typeof this.pp2 === "string" && this.pp2; // string | number
 >strOrNum = typeof this.pp2 === "string" && this.pp2 : string | number
->strOrNum : string | number
+>strOrNum : string | number, Symbol(strOrNum, Decl(typeGuardsInProperties.ts, 5, 3))
 >typeof this.pp2 === "string" && this.pp2 : string | number
 >typeof this.pp2 === "string" : boolean
 >typeof this.pp2 : string
->this.pp2 : string | number
->this : C1
->pp2 : string | number
->this.pp2 : string | number
->this : C1
->pp2 : string | number
+>this.pp2 : string | number, Symbol(pp2, Decl(typeGuardsInProperties.ts, 7, 33))
+>this : C1, Symbol(C1, Decl(typeGuardsInProperties.ts, 5, 30))
+>pp2 : string | number, Symbol(pp2, Decl(typeGuardsInProperties.ts, 7, 33))
+>"string" : string
+>this.pp2 : string | number, Symbol(pp2, Decl(typeGuardsInProperties.ts, 7, 33))
+>this : C1, Symbol(C1, Decl(typeGuardsInProperties.ts, 5, 30))
+>pp2 : string | number, Symbol(pp2, Decl(typeGuardsInProperties.ts, 7, 33))
 
         strOrNum = typeof this.pp3 === "string" && this.pp3; // string | number
 >strOrNum = typeof this.pp3 === "string" && this.pp3 : string | number
->strOrNum : string | number
+>strOrNum : string | number, Symbol(strOrNum, Decl(typeGuardsInProperties.ts, 5, 3))
 >typeof this.pp3 === "string" && this.pp3 : string | number
 >typeof this.pp3 === "string" : boolean
 >typeof this.pp3 : string
->this.pp3 : string | number
->this : C1
->pp3 : string | number
->this.pp3 : string | number
->this : C1
->pp3 : string | number
+>this.pp3 : string | number, Symbol(pp3, Decl(typeGuardsInProperties.ts, 8, 25))
+>this : C1, Symbol(C1, Decl(typeGuardsInProperties.ts, 5, 30))
+>pp3 : string | number, Symbol(pp3, Decl(typeGuardsInProperties.ts, 8, 25))
+>"string" : string
+>this.pp3 : string | number, Symbol(pp3, Decl(typeGuardsInProperties.ts, 8, 25))
+>this : C1, Symbol(C1, Decl(typeGuardsInProperties.ts, 5, 30))
+>pp3 : string | number, Symbol(pp3, Decl(typeGuardsInProperties.ts, 8, 25))
     }
 }
 var c1: C1;
->c1 : C1
->C1 : C1
+>c1 : C1, Symbol(c1, Decl(typeGuardsInProperties.ts, 19, 3))
+>C1 : C1, Symbol(C1, Decl(typeGuardsInProperties.ts, 5, 30))
 
 strOrNum = typeof c1.pp2 === "string" && c1.pp2; // string | number
 >strOrNum = typeof c1.pp2 === "string" && c1.pp2 : string | number
->strOrNum : string | number
+>strOrNum : string | number, Symbol(strOrNum, Decl(typeGuardsInProperties.ts, 5, 3))
 >typeof c1.pp2 === "string" && c1.pp2 : string | number
 >typeof c1.pp2 === "string" : boolean
 >typeof c1.pp2 : string
->c1.pp2 : string | number
->c1 : C1
->pp2 : string | number
->c1.pp2 : string | number
->c1 : C1
->pp2 : string | number
+>c1.pp2 : string | number, Symbol(C1.pp2, Decl(typeGuardsInProperties.ts, 7, 33))
+>c1 : C1, Symbol(c1, Decl(typeGuardsInProperties.ts, 19, 3))
+>pp2 : string | number, Symbol(C1.pp2, Decl(typeGuardsInProperties.ts, 7, 33))
+>"string" : string
+>c1.pp2 : string | number, Symbol(C1.pp2, Decl(typeGuardsInProperties.ts, 7, 33))
+>c1 : C1, Symbol(c1, Decl(typeGuardsInProperties.ts, 19, 3))
+>pp2 : string | number, Symbol(C1.pp2, Decl(typeGuardsInProperties.ts, 7, 33))
 
 strOrNum = typeof c1.pp3 === "string" && c1.pp3; // string | number
 >strOrNum = typeof c1.pp3 === "string" && c1.pp3 : string | number
->strOrNum : string | number
+>strOrNum : string | number, Symbol(strOrNum, Decl(typeGuardsInProperties.ts, 5, 3))
 >typeof c1.pp3 === "string" && c1.pp3 : string | number
 >typeof c1.pp3 === "string" : boolean
 >typeof c1.pp3 : string
->c1.pp3 : string | number
->c1 : C1
->pp3 : string | number
->c1.pp3 : string | number
->c1 : C1
->pp3 : string | number
+>c1.pp3 : string | number, Symbol(C1.pp3, Decl(typeGuardsInProperties.ts, 8, 25))
+>c1 : C1, Symbol(c1, Decl(typeGuardsInProperties.ts, 19, 3))
+>pp3 : string | number, Symbol(C1.pp3, Decl(typeGuardsInProperties.ts, 8, 25))
+>"string" : string
+>c1.pp3 : string | number, Symbol(C1.pp3, Decl(typeGuardsInProperties.ts, 8, 25))
+>c1 : C1, Symbol(c1, Decl(typeGuardsInProperties.ts, 19, 3))
+>pp3 : string | number, Symbol(C1.pp3, Decl(typeGuardsInProperties.ts, 8, 25))
 
 var obj1: {
->obj1 : { x: string | number; }
+>obj1 : { x: string | number; }, Symbol(obj1, Decl(typeGuardsInProperties.ts, 22, 3))
 
     x: string | number;
->x : string | number
+>x : string | number, Symbol(x, Decl(typeGuardsInProperties.ts, 22, 11))
 
 };
 strOrNum = typeof obj1.x === "string" && obj1.x;  // string | number
 >strOrNum = typeof obj1.x === "string" && obj1.x : string | number
->strOrNum : string | number
+>strOrNum : string | number, Symbol(strOrNum, Decl(typeGuardsInProperties.ts, 5, 3))
 >typeof obj1.x === "string" && obj1.x : string | number
 >typeof obj1.x === "string" : boolean
 >typeof obj1.x : string
->obj1.x : string | number
->obj1 : { x: string | number; }
->x : string | number
->obj1.x : string | number
->obj1 : { x: string | number; }
->x : string | number
+>obj1.x : string | number, Symbol(x, Decl(typeGuardsInProperties.ts, 22, 11))
+>obj1 : { x: string | number; }, Symbol(obj1, Decl(typeGuardsInProperties.ts, 22, 3))
+>x : string | number, Symbol(x, Decl(typeGuardsInProperties.ts, 22, 11))
+>"string" : string
+>obj1.x : string | number, Symbol(x, Decl(typeGuardsInProperties.ts, 22, 11))
+>obj1 : { x: string | number; }, Symbol(obj1, Decl(typeGuardsInProperties.ts, 22, 3))
+>x : string | number, Symbol(x, Decl(typeGuardsInProperties.ts, 22, 11))
 

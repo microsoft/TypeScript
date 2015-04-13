@@ -1,47 +1,49 @@
 === tests/cases/compiler/aliasUsageInArray_main.ts ===
 import Backbone = require("aliasUsageInArray_backbone");
->Backbone : typeof Backbone
+>Backbone : typeof Backbone, Symbol(Backbone, Decl(aliasUsageInArray_main.ts, 0, 0))
 
 import moduleA = require("aliasUsageInArray_moduleA");
->moduleA : typeof moduleA
+>moduleA : typeof moduleA, Symbol(moduleA, Decl(aliasUsageInArray_main.ts, 0, 56))
 
 interface IHasVisualizationModel {
->IHasVisualizationModel : IHasVisualizationModel
+>IHasVisualizationModel : IHasVisualizationModel, Symbol(IHasVisualizationModel, Decl(aliasUsageInArray_main.ts, 1, 54))
 
     VisualizationModel: typeof Backbone.Model;
->VisualizationModel : typeof Backbone.Model
->Backbone : typeof Backbone
->Model : typeof Backbone.Model
+>VisualizationModel : typeof Backbone.Model, Symbol(VisualizationModel, Decl(aliasUsageInArray_main.ts, 2, 34))
+>Backbone.Model : typeof Backbone.Model, Symbol(Backbone.Model, Decl(aliasUsageInArray_backbone.ts, 0, 0))
+>Backbone : typeof Backbone, Symbol(Backbone, Decl(aliasUsageInArray_main.ts, 0, 0))
+>Model : typeof Backbone.Model, Symbol(Backbone.Model, Decl(aliasUsageInArray_backbone.ts, 0, 0))
 }
 
 var xs: IHasVisualizationModel[] = [moduleA];
->xs : IHasVisualizationModel[]
->IHasVisualizationModel : IHasVisualizationModel
+>xs : IHasVisualizationModel[], Symbol(xs, Decl(aliasUsageInArray_main.ts, 6, 3))
+>IHasVisualizationModel : IHasVisualizationModel, Symbol(IHasVisualizationModel, Decl(aliasUsageInArray_main.ts, 1, 54))
 >[moduleA] : typeof moduleA[]
->moduleA : typeof moduleA
+>moduleA : typeof moduleA, Symbol(moduleA, Decl(aliasUsageInArray_main.ts, 0, 56))
 
 var xs2: typeof moduleA[] = [moduleA];
->xs2 : typeof moduleA[]
->moduleA : typeof moduleA
+>xs2 : typeof moduleA[], Symbol(xs2, Decl(aliasUsageInArray_main.ts, 7, 3))
+>moduleA : typeof moduleA, Symbol(moduleA, Decl(aliasUsageInArray_main.ts, 0, 56))
 >[moduleA] : typeof moduleA[]
->moduleA : typeof moduleA
+>moduleA : typeof moduleA, Symbol(moduleA, Decl(aliasUsageInArray_main.ts, 0, 56))
 
 === tests/cases/compiler/aliasUsageInArray_backbone.ts ===
 export class Model {
->Model : Model
+>Model : Model, Symbol(Model, Decl(aliasUsageInArray_backbone.ts, 0, 0))
 
     public someData: string;
->someData : string
+>someData : string, Symbol(someData, Decl(aliasUsageInArray_backbone.ts, 0, 20))
 }
 
 === tests/cases/compiler/aliasUsageInArray_moduleA.ts ===
 import Backbone = require("aliasUsageInArray_backbone");
->Backbone : typeof Backbone
+>Backbone : typeof Backbone, Symbol(Backbone, Decl(aliasUsageInArray_moduleA.ts, 0, 0))
 
 export class VisualizationModel extends Backbone.Model {
->VisualizationModel : VisualizationModel
->Backbone : typeof Backbone
->Model : Backbone.Model
+>VisualizationModel : VisualizationModel, Symbol(VisualizationModel, Decl(aliasUsageInArray_moduleA.ts, 0, 56))
+>Backbone.Model : any, Symbol(Backbone.Model, Decl(aliasUsageInArray_backbone.ts, 0, 0))
+>Backbone : typeof Backbone, Symbol(Backbone, Decl(aliasUsageInArray_moduleA.ts, 0, 0))
+>Model : Backbone.Model, Symbol(Backbone.Model, Decl(aliasUsageInArray_backbone.ts, 0, 0))
 
     // interesting stuff here
 }

@@ -1,12 +1,16 @@
 === tests/cases/compiler/declFileForVarList.ts ===
 
 var x, y, z = 1;
->x : any
->y : any
->z : number
+>x : any, Symbol(x, Decl(declFileForVarList.ts, 1, 3))
+>y : any, Symbol(y, Decl(declFileForVarList.ts, 1, 6))
+>z : number, Symbol(z, Decl(declFileForVarList.ts, 1, 9))
+>1 : number
 
 var x1 = 1, y2 = 2, z2 = 3;
->x1 : number
->y2 : number
->z2 : number
+>x1 : number, Symbol(x1, Decl(declFileForVarList.ts, 2, 3))
+>1 : number
+>y2 : number, Symbol(y2, Decl(declFileForVarList.ts, 2, 11))
+>2 : number
+>z2 : number, Symbol(z2, Decl(declFileForVarList.ts, 2, 19))
+>3 : number
 

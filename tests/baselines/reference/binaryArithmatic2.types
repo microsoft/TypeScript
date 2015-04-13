@@ -1,6 +1,7 @@
 === tests/cases/compiler/binaryArithmatic2.ts ===
 var v = 4 | undefined;
->v : number
+>v : number, Symbol(v, Decl(binaryArithmatic2.ts, 0, 3))
 >4 | undefined : number
->undefined : undefined
+>4 : number
+>undefined : undefined, Symbol(undefined)
 

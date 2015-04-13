@@ -1,16 +1,17 @@
 === tests/cases/compiler/reboundBaseClassSymbol.ts ===
 interface A { a: number; }
->A : A
->a : number
+>A : A, Symbol(A, Decl(reboundBaseClassSymbol.ts, 0, 0))
+>a : number, Symbol(a, Decl(reboundBaseClassSymbol.ts, 0, 13))
 
 module Foo {
->Foo : typeof Foo
+>Foo : typeof Foo, Symbol(Foo, Decl(reboundBaseClassSymbol.ts, 0, 26))
 
     var A = 1;
->A : number
+>A : number, Symbol(A, Decl(reboundBaseClassSymbol.ts, 2, 7))
+>1 : number
 
     interface B extends A { b: string; } 
->B : B
->A : A
->b : string
+>B : B, Symbol(B, Decl(reboundBaseClassSymbol.ts, 2, 14))
+>A : A, Symbol(A, Decl(reboundBaseClassSymbol.ts, 0, 0))
+>b : string, Symbol(b, Decl(reboundBaseClassSymbol.ts, 3, 27))
 }
