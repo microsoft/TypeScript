@@ -3793,15 +3793,15 @@ module ts {
                 return undefined;
             }
 
+            if (isLabelName(node)) {
+                return undefined;
+            }
+
             let symbol = typeInfoResolver.getSymbolAtLocation(node);
             if (!symbol) {
                 // Try getting just type at this position and show
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
-                        if(isLabelName(node)){
-                            return undefined;
-                        }
-                    // Fall through.
                     case SyntaxKind.PropertyAccessExpression:
                     case SyntaxKind.QualifiedName:
                     case SyntaxKind.ThisKeyword:
