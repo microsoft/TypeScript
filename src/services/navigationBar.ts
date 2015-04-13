@@ -418,10 +418,10 @@ module ts.NavigationBar {
             }
 
             function createFunctionItem(node: FunctionDeclaration) {
-                if (node.name && node.body && node.body.kind === SyntaxKind.Block) {
+                if ((node.name || node.flags & NodeFlags.Default) && node.body && node.body.kind === SyntaxKind.Block) {
                     let childItems = getItemsWorker(sortNodes((<Block>node.body).statements), createChildItem);
 
-                    return getNavigationBarItem(node.name.text,
+                    return getNavigationBarItem((!node.name && node.flags & NodeFlags.Default) ? "default": node.name.text ,
                         ts.ScriptElementKind.functionElement,
                         getNodeModifiers(node),
                         [getNodeSpan(node)],
@@ -452,11 +452,6 @@ module ts.NavigationBar {
             }
 
             function createClassItem(node: ClassDeclaration): ts.NavigationBarItem {
-                if (!node.name) {
-                    // An export default class may be nameless
-                    return undefined;
-                }
-
                 let childItems: NavigationBarItem[];
 
                 if (node.members) {
@@ -475,8 +470,10 @@ module ts.NavigationBar {
                     childItems = getItemsWorker(sortNodes(nodes), createChildItem);
                 }
 
+                var nodeName = !node.name && (node.flags & NodeFlags.Default) ? "default" : node.name.text;
+
                 return getNavigationBarItem(
-                    node.name.text,
+                    nodeName,
                     ts.ScriptElementKind.classElement,
                     getNodeModifiers(node),
                     [getNodeSpan(node)],
