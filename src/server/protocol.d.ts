@@ -96,7 +96,7 @@ declare module ts.server.protocol {
 
     /**
       * Instances of this interface specify a location in a source file:
-      * (file, line, col), where line and column are 1-based.
+      * (file, line, character offset), where line and character offset are 1-based.
       */
     export interface FileLocationRequestArgs extends FileRequestArgs {
         /** 
@@ -105,9 +105,9 @@ declare module ts.server.protocol {
         line: number;
 
         /** 
-          * The column for the request (1-based).
+          * The character offset (on the line) for the request (1-based).
           */
-        col: number;
+        offset: number;
     }
 
     /**
@@ -126,11 +126,11 @@ declare module ts.server.protocol {
     }
 
     /**
-      * Location in source code expressed as (one-based) line and column.
+      * Location in source code expressed as (one-based) line and character offset.
       */
     export interface Location {
         line: number;
-        col: number;
+        offset: number;
     }
 
     /**
@@ -202,9 +202,9 @@ declare module ts.server.protocol {
         symbolName: string;
 
         /**
-          * The start column of the symbol (on the line provided by the references request).
+          * The start character offset of the symbol (on the line provided by the references request).
           */
-        symbolStartCol: number;
+        symbolStartOffset: number;
 
         /** 
           * The full display name of the symbol.
@@ -339,6 +339,8 @@ declare module ts.server.protocol {
     export interface OpenRequestArgs extends FileRequestArgs {
         /** Initial tab size of file. */
         tabSize?: number;
+        /** Number of spaces to indent during formatting */
+        indentSize?: number;
     }
 
     /**
@@ -424,9 +426,9 @@ declare module ts.server.protocol {
         endLine: number;
         
         /**
-          * Last column of range for which to format text in file.
+          * Character offset on last line of range for which to format text in file.
           */
-        endCol: number;
+        endOffset: number;
     }
 
     /**
@@ -805,7 +807,7 @@ declare module ts.server.protocol {
       */
     export interface ChangeRequestArgs extends FormatRequestArgs {
         /**
-          * Optional string to insert at location (file, line, col).
+          * Optional string to insert at location (file, line, offset).
           */
         insertString?: string;
     }
@@ -829,7 +831,7 @@ declare module ts.server.protocol {
     /**
       * Brace matching request; value of command field is "brace".
       * Return response giving the file locations of matching braces
-      * found in file at location line, col.
+      * found in file at location line, offset.
       */
     export interface BraceRequest extends FileLocationRequest {
     }
