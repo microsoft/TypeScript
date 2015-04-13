@@ -28,7 +28,7 @@ module ts {
     function visitEachNode<T>(cbNode: (node: Node) => T, nodes: Node[]) {
         if (nodes) {
             for (let node of nodes) {
-                var result = cbNode(node);
+                let result = cbNode(node);
                 if (result) {
                     return result;
                 }
@@ -2997,8 +2997,8 @@ module ts {
             Debug.assert(token === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
 
             let node = <FunctionExpression>createNode(SyntaxKind.ArrowFunction, identifier.start);
-
             let parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter, identifier.start);
+
             parameter.name = identifier;
             finishNode(parameter);
 

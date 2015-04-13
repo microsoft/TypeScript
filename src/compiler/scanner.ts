@@ -261,7 +261,7 @@ module ts {
         let pos = 0;
         let lineStart = 0;
         while (pos < text.length) {
-            let ch = text.charCodeAt(pos++);
+           let ch = text.charCodeAt(pos++);
            switch (ch) {
                 case CharacterCodes.carriageReturn:
                     if (text.charCodeAt(pos) === CharacterCodes.lineFeed) {
