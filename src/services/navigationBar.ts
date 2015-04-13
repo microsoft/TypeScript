@@ -150,8 +150,7 @@ module ts.NavigationBar {
         function addTopLevelNodes(nodes: Node[], topLevelNodes: Node[]): void {
             nodes = sortNodes(nodes);
 
-            for (var i = 0, n = nodes.length; i < n; i++) {
-                var node = nodes[i];
+            for (let node of nodes) {
                 switch (node.kind) {
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.EnumDeclaration:
@@ -204,8 +203,7 @@ module ts.NavigationBar {
 
             var keyToItem: Map<NavigationBarItem> = {};
 
-            for (var i = 0, n = nodes.length; i < n; i++) {
-                var child = nodes[i];
+            for (let child of nodes) {
                 var item = createItem(child);
                 if (item !== undefined) {
                     if (item.text.length > 0) {
@@ -238,12 +236,8 @@ module ts.NavigationBar {
 
                 // Next, recursively merge or add any children in the source as appropriate.
                 outer:
-                for (var i = 0, n = source.childItems.length; i < n; i++) {
-                    var sourceChild = source.childItems[i];
-
-                    for (var j = 0, m = target.childItems.length; j < m; j++) {
-                        var targetChild = target.childItems[j];
-
+                for (let sourceChild of source.childItems) {
+                    for (let targetChild of target.childItems) {
                         if (targetChild.text === sourceChild.text && targetChild.kind === sourceChild.kind) {
                             // Found a match.  merge them.
                             merge(targetChild, sourceChild);

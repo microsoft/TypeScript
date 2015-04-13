@@ -608,8 +608,8 @@ module ts.formatting {
                 }
 
                 var inheritedIndentation = Constants.Unknown;
-                for (var i = 0, len = nodes.length; i < len; ++i) {
-                    inheritedIndentation = processChildNode(nodes[i], inheritedIndentation, node, listDynamicIndentation, startLine, /*isListElement*/ true)
+                for (let child of nodes) {
+                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, /*isListElement*/ true)
                 }
 
                 if (listEndToken !== SyntaxKind.Unknown) {
@@ -667,8 +667,7 @@ module ts.formatting {
                 if (indentToken) {
                     var indentNextTokenOrTrivia = true;
                     if (currentTokenInfo.leadingTrivia) {
-                        for (var i = 0, len = currentTokenInfo.leadingTrivia.length; i < len; ++i) {
-                            var triviaItem = currentTokenInfo.leadingTrivia[i];
+                        for (let triviaItem of currentTokenInfo.leadingTrivia) {
                             if (!spanContainsSpan(originalSpan, triviaItem)) {
                                 continue;
                             }
@@ -709,8 +708,7 @@ module ts.formatting {
         }
 
         function processTrivia(trivia: SpanWithKind[], parent: Node, contextNode: Node, dynamicIndentation: DynamicIndentation): void {
-            for (var i = 0, len = trivia.length; i < len; ++i) {
-                var triviaItem = trivia[i];
+            for (let triviaItem of trivia) {
                 if (isComment(triviaItem.kind) && spanContainsSpan(originalSpan, triviaItem)) {
                     var triviaItemStart = sourceFile.getLineAndCharacterOfPosition(triviaItem.start);
                     processSpan(triviaItem, triviaItemStart, parent, contextNode, dynamicIndentation);

@@ -2433,7 +2433,7 @@ module ts {
                     headEmitted = true;
                 }
 
-                for (var i = 0; i < node.templateSpans.length; i++) {
+                for (let i = 0, n = node.templateSpans.length; i < n; i++) {
                     var templateSpan = node.templateSpans[i];
 
                     // Check if the expression has operands and binds its operands less closely than binary '+'.
@@ -3951,8 +3951,7 @@ module ts {
                         // to ensure value is evaluated exactly once.
                         value = ensureIdentifier(value);
                     }
-                    for (var i = 0; i < properties.length; i++) {
-                        var p = properties[i];
+                    for (let p of properties) {
                         if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                             // TODO(andersh): Computed property support
                             var propName = <Identifier>((<PropertyAssignment>p).name);
@@ -5147,8 +5146,7 @@ module ts {
 
             function getExternalImportInfo(node: ImportDeclaration | ImportEqualsDeclaration): ExternalImportInfo {
                 if (externalImports) {
-                    for (var i = 0; i < externalImports.length; i++) {
-                        var info = externalImports[i];
+                    for (let info of externalImports) {
                         if (info.rootNode === node) {
                             return info;
                         }
