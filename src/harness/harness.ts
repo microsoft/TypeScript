@@ -1035,17 +1035,7 @@ module Harness {
                             useCaseSensitiveFileNames = setting.value === 'true';
                             break;
 
-                        case 'mapsourcefiles':
-                        case 'maproot':
-                        case 'generatedeclarationfiles':
-                        case 'gatherDiagnostics':
-                        case 'codepage':
-                        case 'createFileLog':
                         case 'filename':
-                        case 'removecomments':
-                        case 'watch':
-                        case 'allowautomaticsemicoloninsertion':
-                        case 'locale':
                             // Not supported yet
                             break;
 

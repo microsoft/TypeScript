@@ -12173,9 +12173,6 @@ module ts {
         function checkGrammarVariableDeclaration(node: VariableDeclaration) {
             if (node.parent.parent.kind !== SyntaxKind.ForInStatement && node.parent.parent.kind !== SyntaxKind.ForOfStatement) {
                 if (isInAmbientContext(node)) {
-                    if (isBindingPattern(node.name)) {
-                        return grammarErrorOnNode(node, Diagnostics.Destructuring_declarations_are_not_allowed_in_ambient_contexts);
-                    }
                     if (node.initializer) {
                         // Error on equals token which immediate precedes the initializer
                         let equalsTokenLength = "=".length;

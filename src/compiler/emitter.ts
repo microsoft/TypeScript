@@ -2423,11 +2423,11 @@ module ts {
                 if (node.flags & NodeFlags.Export) {
                     writeLine();
                     emitStart(node);
-                    if (node.name) {
-                        emitModuleMemberName(node);
+                    if (node.flags & NodeFlags.Default) {
+                        write("exports.default");
                     }
                     else {
-                        write("exports.default");
+                        emitModuleMemberName(node);
                     }
                     write(" = ");
                     emitDeclarationName(node);
@@ -2918,16 +2918,14 @@ module ts {
                 }
             }
 
-            function shouldEmitFunctionName(node: Declaration): boolean {
-                // Emit a declaration name for the function iff:
-                //    it is a function expression with a name provided
-                //    it is a function declaration with a name provided
-                //    it is a function declaration is not the default export, and is missing a name (emit a generated name for it)
+            function shouldEmitFunctionName(node: FunctionLikeDeclaration) {
                 if (node.kind === SyntaxKind.FunctionExpression) {
+                    // Emit name if one is present
                     return !!node.name;
                 }
-                else if (node.kind === SyntaxKind.FunctionDeclaration) {
-                    return !!node.name || (languageVersion >= ScriptTarget.ES6 && !(node.flags & NodeFlags.Default));
+                if (node.kind === SyntaxKind.FunctionDeclaration) {
+                    // Emit name if one is present, or emit generated name in down-level case (for export default case)
+                    return !!node.name || languageVersion < ScriptTarget.ES6;
                 }
             }
 

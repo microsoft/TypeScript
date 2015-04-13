@@ -25,8 +25,8 @@ function foo2() {
 
 
 //// [declarationEmitDestructuringOptionalBindingParametersInOverloads.d.ts]
-declare function foo(_0?: [string, number, boolean]): any;
-declare function foo2(_0?: {
+declare function foo([x, y, z]?: [string, number, boolean]): any;
+declare function foo2({x, y, z}?: {
     x: string;
     y: number;
     z: boolean;

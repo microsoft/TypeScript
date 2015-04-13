@@ -10,10 +10,6 @@ module ts {
             type: "string",
         },
         {
-            name: "codepage",
-            type: "number",
-        },
-        {
             name: "declaration",
             shortName: "d",
             type: "boolean",
@@ -76,10 +72,6 @@ module ts {
         },
         {
             name: "noLib",
-            type: "boolean",
-        },
-        {
-            name: "noLibCheck",
             type: "boolean",
         },
         {

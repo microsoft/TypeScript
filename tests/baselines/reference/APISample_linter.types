@@ -4052,9 +4052,6 @@ declare module "typescript" {
         charset?: string;
 >charset : string
 
-        codepage?: number;
->codepage : number
-
         declaration?: boolean;
 >declaration : boolean
 
@@ -4094,9 +4091,6 @@ declare module "typescript" {
 
         noLib?: boolean;
 >noLib : boolean
-
-        noLibCheck?: boolean;
->noLibCheck : boolean
 
         noResolve?: boolean;
 >noResolve : boolean
