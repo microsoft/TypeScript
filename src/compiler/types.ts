@@ -1446,7 +1446,7 @@ module ts {
         /* @internal */ 
         ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
         /* @internal */ 
-        ContainsObjectLiteral = 0x00080000,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 0x00080000,  // Type is or contains object literal type
         ESSymbol                = 0x00100000,  // Type of symbol primitive introduced in ES6
         Subset                  = 0x00200000,  // Type that has a subset of valid values
 
@@ -1524,8 +1524,9 @@ module ts {
     }
 
     export interface IndexType {
-        typeOfIndex?: Type              // string|number|enum
+        kind: IndexKind                 // Kind of index
         typeOfValue: Type               // any
+        typeOfIndex?: Type              // string|number|enum
         declaredNode?: Declaration,     // Declaration of [x: typeOfIndex]: typeOfValue
         inherited?: Symbol              // Symbol of baseType where inherited
     }

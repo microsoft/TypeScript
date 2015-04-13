@@ -803,7 +803,7 @@
         "category": "Error",
         "code": 2329
     },
-    "Index signatures are incompatible.": {
+    "Index signatures '{0}' and '{1}' are incompatible.": {
         "category": "Error",
         "code": 2330
     },

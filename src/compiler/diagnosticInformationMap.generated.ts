@@ -204,7 +204,7 @@ module ts {
         Property_0_is_optional_in_type_1_but_required_in_type_2: { code: 2327, category: DiagnosticCategory.Error, key: "Property '{0}' is optional in type '{1}' but required in type '{2}'." },
         Types_of_parameters_0_and_1_are_incompatible: { code: 2328, category: DiagnosticCategory.Error, key: "Types of parameters '{0}' and '{1}' are incompatible." },
         Index_signature_is_missing_in_type_0: { code: 2329, category: DiagnosticCategory.Error, key: "Index signature is missing in type '{0}'." },
-        Index_signatures_are_incompatible: { code: 2330, category: DiagnosticCategory.Error, key: "Index signatures are incompatible." },
+        Index_signatures_0_and_1_are_incompatible: { code: 2330, category: DiagnosticCategory.Error, key: "Index signatures '{0}' and '{1}' are incompatible." },
         this_cannot_be_referenced_in_a_module_body: { code: 2331, category: DiagnosticCategory.Error, key: "'this' cannot be referenced in a module body." },
         this_cannot_be_referenced_in_current_location: { code: 2332, category: DiagnosticCategory.Error, key: "'this' cannot be referenced in current location." },
         this_cannot_be_referenced_in_constructor_arguments: { code: 2333, category: DiagnosticCategory.Error, key: "'this' cannot be referenced in constructor arguments." },

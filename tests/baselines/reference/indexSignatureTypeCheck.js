@@ -45,6 +45,13 @@ enum E {
     A, B, C
 }
 
+enum E2 {
+    A, B, C
+}
+
+enum F {
+    H, I, J
+}
 
 interface DuplicateAccess {
     [index: Values]: Values;
@@ -70,14 +77,22 @@ y = x;
 y = y;
 y = z;
 
-z = x;
-z = y;
+z = x; // error
+z = y; // error
 z = z;
-z = yn;
+z = yn; // should error?
+        // var x: E = 5; // allowed to a assign a wider type (number) to an enum value (number.subset)
 z = xn;
 
-// TODO: Should fail
 yn = z;
+
+var e: E;
+var e2: E2;s
+var f: F;
+
+e = f; // error
+e2 = e;
+e = e2;
 
 type foo = string
 var s: { [x: foo]: string }
@@ -105,6 +120,18 @@ var E;
     E[E["B"] = 1] = "B";
     E[E["C"] = 2] = "C";
 })(E || (E = {}));
+var E2;
+(function (E2) {
+    E2[E2["A"] = 0] = "A";
+    E2[E2["B"] = 1] = "B";
+    E2[E2["C"] = 2] = "C";
+})(E2 || (E2 = {}));
+var F;
+(function (F) {
+    F[F["H"] = 0] = "H";
+    F[F["I"] = 1] = "I";
+    F[F["J"] = 2] = "J";
+})(F || (F = {}));
 var x;
 var xn;
 var y;
@@ -116,13 +143,20 @@ x = z;
 y = x;
 y = y;
 y = z;
-z = x;
-z = y;
+z = x; // error
+z = y; // error
 z = z;
-z = yn;
+z = yn; // should error?
+// var x: E = 5; // allowed to a assign a wider type (number) to an enum value (number.subset)
 z = xn;
-// TODO: Should fail
 yn = z;
+var e;
+var e2;
+s;
+var f;
+e = f; // error
+e2 = e;
+e = e2;
 var s;
 x = s;
 s = x;

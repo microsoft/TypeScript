@@ -1382,8 +1382,8 @@ module ts {
             return result;
         }
 
-        function indexTypeToString(type: IndexType, kind: IndexKind): string {
-            let index = type.typeOfIndex || ((kind === IndexKind.String) ? stringType : numberType);
+        function indexTypeToString(type: IndexType): string {
+            let index = type.typeOfIndex || ((type.kind === IndexKind.String) ? stringType : numberType);
             return '[' + typeToString(index) + ']: ' + typeToString(type.typeOfValue);
         }
 
@@ -2699,6 +2699,17 @@ module ts {
             }
         }
 
+        function createIndexType(value: Type, index?: Type): IndexType {
+            let indexType: IndexType = {
+                kind: (value && (value.flags & TypeFlags.NumberLike)) ? IndexKind.Number: IndexKind.String,
+                typeOfValue: value,
+            }
+            if (index) {
+                indexType.typeOfIndex = index;
+            }
+            return indexType;
+        }
+
         function getInheritedIndexFrom(baseType: Type): IndexTypeMap {
             let resolved = resolveObjectOrUnionType(baseType);
             var index : IndexTypeMap = {
@@ -2744,8 +2755,8 @@ module ts {
             let callSignatures = instantiateList(target.declaredCallSignatures, mapper, instantiateSignature);
             let constructSignatures = instantiateList(target.declaredConstructSignatures, mapper, instantiateSignature);
 
-            let stringIndex = target.declaredStringIndex ? { typeOfValue: instantiateType(target.declaredStringIndex.typeOfValue, mapper) } : undefined;
-            let numberIndex = target.declaredNumberIndex ? { typeOfValue: instantiateType(target.declaredNumberIndex.typeOfValue, mapper) } : undefined;
+            let stringIndex = target.declaredStringIndex ? instantiateIndexType(target.declaredStringIndex, mapper) : undefined;
+            let numberIndex = target.declaredNumberIndex ? instantiateIndexType(target.declaredNumberIndex, mapper) : undefined;
             forEach(target.baseTypes, baseType => {
                 let instantiatedBaseType = instantiateType(baseType, mapper);
                 addInheritedMembers(members, getPropertiesOfObjectType(instantiatedBaseType));
@@ -2867,7 +2878,7 @@ module ts {
             let constructSignatures = getUnionSignatures(type.types, SignatureKind.Construct);
             let stringIndexType = getUnionIndexType(type.types, IndexKind.String);
             let numberIndexType = getUnionIndexType(type.types, IndexKind.Number);
-            setObjectTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexType ? { typeOfValue: stringIndexType } : undefined, numberIndexType ? { typeOfValue: numberIndexType }: undefined);
+            setObjectTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexType ? createIndexType(stringIndexType) : undefined, numberIndexType ? createIndexType(numberIndexType) : undefined);
         }
 
         function resolveAnonymousTypeMembers(type: ObjectType) {
@@ -2908,7 +2919,8 @@ module ts {
                     }
                 }
                 stringIndex = undefined;
-                numberIndex = (symbol.flags & SymbolFlags.Enum) ? { typeOfValue: stringType } : undefined;
+                // { kind: SymbolDisplayPartKind[kind] }, ideally typed to SetOf_Names
+                numberIndex = (symbol.flags & SymbolFlags.Enum) ? createIndexType(stringType) : undefined;
             }
             setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndex, numberIndex);
         }
@@ -3364,6 +3376,7 @@ module ts {
                         let kind = (type.flags & TypeFlags.NumberLike) ? IndexKind.Number : (type.flags & TypeFlags.String) ? IndexKind.String: null;
                         if(kind !== null) {
                             indexMap[kind] = {
+                                kind: kind,
                                 typeOfIndex: type,
                                 typeOfValue: decl.type ? getTypeFromTypeNodeOrHeritageClauseElement(decl.type) : anyType,
                                 declaredNode: decl
@@ -3955,7 +3968,7 @@ module ts {
         }
 
         function instantiateIndexType(typeIndex: IndexType, mapper: TypeMapper): IndexType {
-            return { typeOfValue: instantiateType(typeIndex.typeOfValue, mapper), typeOfIndex: typeIndex.typeOfIndex }
+            return createIndexType(instantiateType(typeIndex.typeOfValue, mapper), typeIndex.typeOfIndex)
         }
 
         function instantiateType(type: Type, mapper: TypeMapper): Type {
@@ -4168,6 +4181,17 @@ module ts {
                     }
                 }
                 else {
+                    if ((source.flags & TypeFlags.Subset) && (target.flags & TypeFlags.Subset)) {
+                        /*
+                        if (target.flags & TypeFlags.Enum) {
+                            // if const/immutable, only check index signature
+                            if (target.symbol.flags & SymbolFlags.ConstEnum) {
+                                if (result = indexRelatedTo(<ObjectType>source, <ObjectType>target, reportErrors)) {
+                                    return result;
+                                }
+                            }
+                        }*/
+                    }
                     let saveErrorInfo = errorInfo;
                     if (source.flags & TypeFlags.Reference && target.flags & TypeFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                         // We have type references to same target type, see if relationship holds for all type arguments
@@ -4329,10 +4353,7 @@ module ts {
                         if (result) {
                             result &= signaturesRelatedTo(source, target, SignatureKind.Construct, reportErrors);
                             if (result) {
-                                result &= stringIndexTypesRelatedTo(source, target, reportErrors);
-                                if (result) {
-                                    result &= numberIndexTypesRelatedTo(source, target, reportErrors);
-                                }
+                                result &= indexRelatedTo(source, target, reportErrors);
                             }
                         }
                     }
@@ -4582,75 +4603,90 @@ module ts {
                 return result;
             }
 
-            function stringIndexTypesRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): Ternary {
-                if (relation === identityRelation) {
-                    return indexTypesIdenticalTo(IndexKind.String, source, target);
-                }
-                // TODO: string > number > number.subset
-                let targetType = getIndexValueOfType(target, IndexKind.String);
-                if (targetType) {
-                    let sourceType = getIndexValueOfType(source, IndexKind.String);
-                    if (!sourceType) {
-                        if (reportErrors) {
-                            reportError(Diagnostics.Index_signature_is_missing_in_type_0, typeToString(source));
-                        }
-                        return Ternary.False;
-                    }
-                    let related = isRelatedTo(sourceType, targetType, reportErrors);
-                    if (!related) {
-                        if (reportErrors) {
-                            reportError(Diagnostics.Index_signatures_are_incompatible);
-                        }
-                        return Ternary.False;
-                    }
-                    return related;
-                }
-                return Ternary.True;
-            }
+            function indexRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): Ternary {
+                let sourceIndex = getIndexOfObjectOrUnionType(source);
+                let targetIndex = getIndexOfObjectOrUnionType(target);
 
-            function numberIndexTypesRelatedTo(source: ObjectType, target: ObjectType, reportErrors: boolean): Ternary {
-                if (relation === identityRelation) {
-                    return indexTypesIdenticalTo(IndexKind.Number, source, target);
-                }
-                let targetType = getIndexValueOfType(target, IndexKind.Number);
-                if (targetType) {
-                    let sourceStringType = getIndexValueOfType(source, IndexKind.String);
-                    let sourceNumberType = getIndexValueOfType(source, IndexKind.Number);
-                    if (!(sourceStringType || sourceNumberType)) {
-                        if (reportErrors) {
-                            reportError(Diagnostics.Index_signature_is_missing_in_type_0, typeToString(source));
-                        }
-                        return Ternary.False;
-                    }
-                    let related: Ternary;
-                    if (sourceStringType && sourceNumberType) {
-                        // If we know for sure we're testing both string and numeric index types then only report errors from the second one
-                        related = isRelatedTo(sourceStringType, targetType, false) || isRelatedTo(sourceNumberType, targetType, reportErrors);
-                    }
-                    else {
-                        related = isRelatedTo(sourceStringType || sourceNumberType, targetType, reportErrors);
-                    }
-                    if (!related) {
-                        if (reportErrors) {
-                            reportError(Diagnostics.Index_signatures_are_incompatible);
-                        }
-                        return Ternary.False;
-                    }
-                    return related;
-                }
-                return Ternary.True;
-            }
+                const sourceType = source;
+                const targetType = target;
 
-            function indexTypesIdenticalTo(indexKind: IndexKind, source: ObjectType, target: ObjectType): Ternary {
-                let targetType = getIndexValueOfType(target, indexKind);
-                let sourceType = getIndexValueOfType(source, indexKind);
-                if (!sourceType && !targetType) {
+                return stringIndexRelatedTo(sourceIndex[IndexKind.String], targetIndex[IndexKind.String]) &&
+                    numberIndexRelatedTo(sourceIndex,targetIndex[IndexKind.Number]);
+
+                function stringIndexRelatedTo(source: IndexType, target: IndexType): Ternary {
+                    if (relation === identityRelation) {
+                        return indexTypesIdenticalTo(source, target, stringType);
+                    }
+
+                    if (target) {
+                        if (!source) {
+                            if (reportErrors) {
+                                reportError(Diagnostics.Index_signature_is_missing_in_type_0, typeToString(sourceType));
+                            }
+                            return Ternary.False;
+                        }
+                        let related = indexTypesRelatedTo(source, target, stringType);
+                        if (!related) {
+                            if (reportErrors) {
+                                reportError(Diagnostics.Index_signatures_0_and_1_are_incompatible, indexTypeToString(source), indexTypeToString(target));
+                            }
+                            return Ternary.False;
+                        }
+                        return related;
+                    }
                     return Ternary.True;
                 }
-                if (sourceType && targetType) {
-                    return isRelatedTo(sourceType, targetType);
+
+                function numberIndexRelatedTo(source: IndexTypeMap, targetNumberIndex: IndexType): Ternary {
+                    let sourceNumberIndex = source[IndexKind.Number];
+                    if (relation === identityRelation) {
+                        return indexTypesIdenticalTo(sourceNumberIndex, targetNumberIndex, numberType);
+                    }
+
+                    if (targetNumberIndex) {
+                        let sourceStringIndex = source[IndexKind.String];
+                        if (!sourceStringIndex && !sourceNumberIndex) {
+                            if (reportErrors) {
+                                reportError(Diagnostics.Index_signature_is_missing_in_type_0, typeToString(sourceType));
+                            }
+                            return Ternary.False;
+                        }
+                        let related: Ternary;
+                        let sourceError = sourceNumberIndex;
+                        if (sourceStringIndex && sourceNumberIndex) {
+                            // If we know for sure we're testing both string and numeric index types then only report errors from the second one
+                            related = isRelatedTo(sourceStringIndex.typeOfValue, targetNumberIndex.typeOfValue, false) || indexTypesRelatedTo(sourceNumberIndex, targetNumberIndex, numberType);
+                        }
+                        else if (sourceStringIndex) {
+                            related = isRelatedTo(sourceStringIndex.typeOfValue, targetNumberIndex.typeOfValue);
+                            sourceError = sourceStringIndex;
+                        } else if (sourceNumberIndex) {
+                            related = indexTypesRelatedTo(sourceNumberIndex, targetNumberIndex, numberType);
+                        }
+                        if (!related) {
+                            if (reportErrors) {
+                                reportError(Diagnostics.Index_signatures_0_and_1_are_incompatible, indexTypeToString(sourceError), indexTypeToString(targetNumberIndex));
+                            }
+                            return Ternary.False;
+                        }
+                        return related;
+                    }
+                    return Ternary.True;
                 }
-                return Ternary.False;
+
+                function indexTypesRelatedTo(sourceIndex: IndexType, targetIndex: IndexType, defaultIndex: Type): Ternary {
+                    return isRelatedTo(sourceIndex.typeOfIndex || defaultIndex, targetIndex.typeOfIndex || defaultIndex, reportErrors) && isRelatedTo(sourceIndex.typeOfValue, targetIndex.typeOfValue, reportErrors);
+                }
+
+                function indexTypesIdenticalTo(sourceIndex: IndexType, targetIndex: IndexType, defaultIndex: Type): Ternary {
+                    if (!sourceIndex && !targetIndex) {
+                        return Ternary.True;
+                    }
+                    if (sourceIndex && targetIndex) {
+                        return indexTypesRelatedTo(sourceIndex, targetIndex, defaultIndex);
+                    }
+                    return Ternary.False;
+                }
             }
         }
 
@@ -4819,8 +4855,8 @@ module ts {
             });
             let stringIndex = getIndexOfType(type, IndexKind.String);
             let numberIndex = getIndexOfType(type, IndexKind.Number);
-            if (stringIndex) stringIndex = {typeOfValue: getWidenedType(stringIndex.typeOfValue) };
-            if (numberIndex) numberIndex = {typeOfValue: getWidenedType(numberIndex.typeOfValue) };
+            if (stringIndex) stringIndex = createIndexType(getWidenedType(stringIndex.typeOfValue));
+            if (numberIndex) numberIndex = createIndexType(getWidenedType(numberIndex.typeOfValue));
             return createAnonymousType(type.symbol, members, emptyArray, emptyArray, stringIndex, numberIndex);
         }
 
@@ -6263,7 +6299,7 @@ module ts {
 
             let stringIndexType = getIndexType(IndexKind.String);
             let numberIndexType = getIndexType(IndexKind.Number);
-            let result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexType ? { typeOfValue: stringIndexType } : undefined, numberIndexType ? { typeOfValue: numberIndexType } : undefined);
+            let result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexType ? createIndexType(stringIndexType) : undefined, numberIndexType ? createIndexType(numberIndexType) : undefined);
             result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | (typeFlags & TypeFlags.ContainsUndefinedOrNull);
             return result;
 
@@ -9891,8 +9927,8 @@ module ts {
                 return;
             }
 
-            let stringIndex = resolved.stringIndex || {typeOfValue: undefined};
-            let numberIndex = resolved.numberIndex || {typeOfValue: undefined};
+            let stringIndex = resolved.stringIndex || createIndexType(null);
+            let numberIndex = resolved.numberIndex || createIndexType(null)
             let alphaNumeric = resolved.alphaNumericIndex;
             if (!stringIndex.typeOfValue && !numberIndex.typeOfValue) {
                 return;
@@ -9913,7 +9949,7 @@ module ts {
             let checkNumberIndex = numberIndex;
             if (alphaNumeric === IndexAlphaNumeric.YES && !isTypeAssignableTo(numberIndex.typeOfValue, stringIndex.typeOfValue)) {
                 error(errorNode, Diagnostics.Numeric_index_type_0_is_not_assignable_to_string_index_type_1,
-                    indexTypeToString(numberIndex, IndexKind.Number), indexTypeToString(stringIndex, IndexKind.String));
+                    indexTypeToString(numberIndex), indexTypeToString(stringIndex));
 
                 checkNumberIndex = null;
             }
