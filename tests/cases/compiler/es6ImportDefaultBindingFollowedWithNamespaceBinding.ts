@@ -1,5 +1,6 @@
 // @target: es6
 // @declaration: true
+// @declaration: true
 
 // @filename: es6ImportDefaultBindingFollowedWithNamespaceBinding_0.ts
 export var a = 10;

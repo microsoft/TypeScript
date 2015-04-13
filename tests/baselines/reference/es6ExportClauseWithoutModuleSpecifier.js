@@ -49,3 +49,8 @@ export declare var x: number;
 export declare module uninstantiated {
 }
 //// [client.d.ts]
+export { c } from "server";
+export { c as c2 } from "server";
+export { i, m as instantiatedModule } from "server";
+export { uninstantiated } from "server";
+export { x } from "server";

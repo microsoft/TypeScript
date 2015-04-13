@@ -17,6 +17,6 @@ module.exports = C;
 
 
 //// [es5ExportDefaultClassDeclaration.d.ts]
-export declare class C {
+export default class C {
     method(): void;
 }

@@ -45,3 +45,4 @@ export declare var x: number;
 export declare module uninstantiated {
 }
 //// [client.d.ts]
+export * from "server";

@@ -32,3 +32,18 @@ export { x };
 
 
 //// [es6ExportClause.d.ts]
+declare class c {
+}
+interface i {
+}
+declare module m {
+    var x: number;
+}
+declare var x: number;
+declare module uninstantiated {
+}
+export { c };
+export { c as c2 };
+export { i, m as instantiatedModule };
+export { uninstantiated };
+export { x };

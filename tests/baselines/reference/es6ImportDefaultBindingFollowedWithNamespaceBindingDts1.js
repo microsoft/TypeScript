@@ -28,3 +28,6 @@ define(["require", "exports", "server"], function (require, exports, defaultBind
 declare class a {
 }
 export = a;
+//// [client.d.ts]
+import defaultBinding from "server";
+export declare var x: defaultBinding;

@@ -10,7 +10,7 @@ module ts {
     /** The version of the TypeScript compiler release */
     export let version = "1.5.0.0";
 
-    export function createCompilerHost(options: CompilerOptions): CompilerHost {
+    export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
         let currentDirectory: string;
         let existingDirectories: Map<boolean> = {};
 
@@ -38,7 +38,7 @@ module ts {
                 }
                 text = "";
             }
-            return text !== undefined ? createSourceFile(fileName, text, languageVersion) : undefined;
+            return text !== undefined ? createSourceFile(fileName, text, languageVersion, setParentNodes) : undefined;
         }
 
         function directoryExists(directoryPath: string): boolean {
