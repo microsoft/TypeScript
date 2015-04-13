@@ -14,7 +14,7 @@ module ts {
     }
 
     export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
-        var declarations = symbol.declarations;
+        let declarations = symbol.declarations;
         for (let declaration of declarations) {
             if (declaration.kind === kind) {
                 return declaration;
@@ -39,12 +39,12 @@ module ts {
     }
 
     // Pool writers to avoid needing to allocate them for every symbol we write.
-    var stringWriters: StringSymbolWriter[] = [];
+    let stringWriters: StringSymbolWriter[] = [];
     export function getSingleLineStringWriter(): StringSymbolWriter {
         if (stringWriters.length == 0) {
-            var str = "";
+            let str = "";
 
-            var writeText: (text: string) => void = text => str += text;
+            let writeText: (text: string) => void = text => str += text;
             return {
                 string: () => str,
                 writeKeyword: writeText,
@@ -88,7 +88,7 @@ module ts {
             // A node is considered to contain a parse error if:
             //  a) the parser explicitly marked that it had an error
             //  b) any of it's children reported that it had an error.
-            var thisNodeOrAnySubNodesHasError = ((node.parserContextFlags & ParserContextFlags.ThisNodeHasError) !== 0) ||
+            let thisNodeOrAnySubNodesHasError = ((node.parserContextFlags & ParserContextFlags.ThisNodeHasError) !== 0) ||
                 forEachChild(node, containsParseError);
 
             // If so, mark ourselves accordingly. 
@@ -117,8 +117,8 @@ module ts {
 
     // This is a useful function for debugging purposes.
     export function nodePosToString(node: Node): string {
-        var file = getSourceFileOfNode(node);
-        var loc = getLineAndCharacterOfPosition(file, node.start);
+        let file = getSourceFileOfNode(node);
+        let loc = getLineAndCharacterOfPosition(file, node.start);
         return `${ file.fileName }(${ loc.line + 1 },${ loc.character + 1 })`;
     }
 
@@ -132,7 +132,7 @@ module ts {
     // missing.  This happens whenever the parser knows it needs to parse something, but can't
     // get anything in the source code that it expects at that location.  For example:
     //
-    //          var a: ;
+    //          let a: ;
     //
     // Here, the Type in the Type-Annotation is not-optional (as there is a colon in the source 
     // code).  So the parser will attempt to parse out a type, and will create an actual node.
@@ -165,7 +165,7 @@ module ts {
             return "";
         }
 
-        var text = sourceFile.text;
+        let text = sourceFile.text;
         return text.substring(skipTrivia(text, node.start), spanEnd(node));
     }
 
@@ -203,7 +203,7 @@ module ts {
     }
 
     export function getEnclosingBlockScopeContainer(node: Node): Node {
-        var current = node;
+        let current = node;
         while (current) {
             if (isFunctionLike(current)) {
                 return current;
@@ -244,14 +244,14 @@ module ts {
     }
 
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
-        var sourceFile = getSourceFileOfNode(node);
-        var span = getErrorSpanForNode(sourceFile, node);
+        let sourceFile = getSourceFileOfNode(node);
+        let span = getErrorSpanForNode(sourceFile, node);
         return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2);
     }
 
     export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic {
-        var sourceFile = getSourceFileOfNode(node);
-        var span = getErrorSpanForNode(sourceFile, node);
+        let sourceFile = getSourceFileOfNode(node);
+        let span = getErrorSpanForNode(sourceFile, node);
         return {
             file: sourceFile,
             start: span.start,
@@ -264,10 +264,10 @@ module ts {
 
     /* @internal */
     export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): Span {
-        var scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.text);
+        let scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.text);
         scanner.setTextPos(pos);
         scanner.scan();
-        var start = scanner.getTokenPos();
+        let start = scanner.getTokenPos();
         return createSpanFromBounds(start, scanner.getTextPos());
     }
 
@@ -295,7 +295,7 @@ module ts {
             return getSpanOfTokenAtPosition(sourceFile, node.start);
         }
 
-        var pos = nodeIsMissing(errorNode)
+        let pos = nodeIsMissing(errorNode)
             ? errorNode.start
             : skipTrivia(sourceFile.text, errorNode.start);
 
@@ -332,7 +332,7 @@ module ts {
     export function getCombinedNodeFlags(node: Node): NodeFlags {
         node = walkUpBindingElementsAndPatterns(node);
 
-        var flags = node.flags;
+        let flags = node.flags;
         if (node.kind === SyntaxKind.VariableDeclaration) {
             node = node.parent;
         }
@@ -389,7 +389,7 @@ module ts {
         }
     }
 
-    export var fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/
+    export let fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/
 
 
     // Warning: This has the same semantics as the forEach family of functions,
@@ -619,7 +619,7 @@ module ts {
             // fall through
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.StringLiteral:
-                var parent = node.parent;
+                let parent = node.parent;
                 switch (parent.kind) {
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.Parameter:
@@ -641,13 +641,13 @@ module ts {
                     case SyntaxKind.SwitchStatement:
                         return (<ExpressionStatement>parent).expression === node;
                     case SyntaxKind.ForStatement:
-                        var forStatement = <ForStatement>parent;
+                        let forStatement = <ForStatement>parent;
                         return (forStatement.initializer === node && forStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
                             forStatement.condition === node ||
                             forStatement.iterator === node;
                     case SyntaxKind.ForInStatement:
                     case SyntaxKind.ForOfStatement:
-                        var forInStatement = <ForInStatement | ForOfStatement>parent;
+                        let forInStatement = <ForInStatement | ForOfStatement>parent;
                         return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
                             forInStatement.expression === node;
                     case SyntaxKind.TypeAssertionExpression:
@@ -666,7 +666,7 @@ module ts {
     }
 
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
-        var moduleState = getModuleInstanceState(node)
+        let moduleState = getModuleInstanceState(node)
         return moduleState === ModuleInstanceState.Instantiated ||
                (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
     }
@@ -689,7 +689,7 @@ module ts {
             return (<ImportDeclaration>node).moduleSpecifier;
         }
         if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
-            var reference = (<ImportEqualsDeclaration>node).moduleReference;
+            let reference = (<ImportEqualsDeclaration>node).moduleReference;
             if (reference.kind === SyntaxKind.ExternalModuleReference) {
                 return (<ExternalModuleReference>reference).expression;
             }
@@ -820,7 +820,7 @@ module ts {
             return false;
         }
 
-        var parent = name.parent;
+        let parent = name.parent;
         if (parent.kind === SyntaxKind.ImportSpecifier || parent.kind === SyntaxKind.ExportSpecifier) {
             if ((<ImportOrExportSpecifier>parent).propertyName) {
                 return true;
@@ -835,17 +835,17 @@ module ts {
     }
 
     export function getClassBaseTypeNode(node: ClassDeclaration) {
-        var heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
+        let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
         return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
     }
 
     export function getClassImplementedTypeNodes(node: ClassDeclaration) {
-        var heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ImplementsKeyword);
+        let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ImplementsKeyword);
         return heritageClause ? heritageClause.types : undefined;
     }
 
     export function getInterfaceBaseTypeNodes(node: InterfaceDeclaration) {
-        var heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
+        let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
         return heritageClause ? heritageClause.types : undefined;
     }
 
@@ -863,7 +863,7 @@ module ts {
 
     export function tryResolveScriptReference(host: ScriptReferenceHost, sourceFile: SourceFile, reference: FileReference) {
         if (!host.getCompilerOptions().noResolve) {
-            var referenceFileName = isRootedDiskPath(reference.fileName) ? reference.fileName : combinePaths(getDirectoryPath(sourceFile.fileName), reference.fileName);
+            let referenceFileName = isRootedDiskPath(reference.fileName) ? reference.fileName : combinePaths(getDirectoryPath(sourceFile.fileName), reference.fileName);
             referenceFileName = getNormalizedAbsolutePath(referenceFileName, host.getCurrentDirectory());
             return host.getSourceFile(referenceFileName);
         }
@@ -880,8 +880,8 @@ module ts {
     }
 
     export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentSpan): ReferencePathMatchResult {
-        var simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
-        var isNoDefaultLibRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/gim;
+        let simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
+        let isNoDefaultLibRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/gim;
         if (simpleReferenceRegEx.exec(comment)) {
             if (isNoDefaultLibRegEx.exec(comment)) {
                 return {
@@ -889,7 +889,7 @@ module ts {
                 }
             }
             else {
-                var matchResult = fullTripleSlashReferencePathRegEx.exec(comment);
+                let matchResult = fullTripleSlashReferencePathRegEx.exec(comment);
                 if (matchResult) {
                     return {
                         fileReference: {
@@ -947,9 +947,9 @@ module ts {
             return (<Identifier | LiteralExpression>name).text;
         }
         if (name.kind === SyntaxKind.ComputedPropertyName) {
-            var nameExpression = (<ComputedPropertyName>name).expression;
+            let nameExpression = (<ComputedPropertyName>name).expression;
             if (isWellKnownSymbolSyntactically(nameExpression)) {
-                var rightHandSideName = (<PropertyAccessExpression>nameExpression).name.text;
+                let rightHandSideName = (<PropertyAccessExpression>nameExpression).name.text;
                 return getPropertyNameForKnownSymbolName(rightHandSideName);
             }
         }
@@ -1001,14 +1001,14 @@ module ts {
     }
 
     export function spanOverlapsWith(span: Span, other: Span) {
-        var overlapStart = Math.max(span.start, other.start);
-        var overlapEnd = Math.min(spanEnd(span), spanEnd(other));
+        let overlapStart = Math.max(span.start, other.start);
+        let overlapEnd = Math.min(spanEnd(span), spanEnd(other));
         return overlapStart < overlapEnd;
     }
 
     export function spanOverlap(span1: Span, span2: Span) {
-        var overlapStart = Math.max(span1.start, span2.start);
-        var overlapEnd = Math.min(spanEnd(span1), spanEnd(span2));
+        let overlapStart = Math.max(span1.start, span2.start);
+        let overlapEnd = Math.min(spanEnd(span1), spanEnd(span2));
         if (overlapStart < overlapEnd) {
             return createSpanFromBounds(overlapStart, overlapEnd);
         }
@@ -1020,7 +1020,7 @@ module ts {
     }
 
     export function spanIntersectsWith(span: Span, start: number, length: number) {
-        var end = start + length;
+        let end = start + length;
         return start <= spanEnd(span) && end >= span.start;
     }
 
@@ -1029,8 +1029,8 @@ module ts {
     }
 
     export function spanIntersection(span1: Span, span2: Span) {
-        var intersectStart = Math.max(span1.start, span2.start);
-        var intersectEnd = Math.min(spanEnd(span1), spanEnd(span2));
+        let intersectStart = Math.max(span1.start, span2.start);
+        let intersectEnd = Math.min(spanEnd(span1), spanEnd(span2));
         if (intersectStart <= intersectEnd) {
             return createSpanFromBounds(intersectStart, intersectEnd);
         }
@@ -1068,7 +1068,7 @@ module ts {
         return { span, newLength };
     }
 
-    export var unchangedTextChangeRange = createTextChangeRange(createSpan(0, 0), 0);
+    export let unchangedTextChangeRange = createTextChangeRange(createSpan(0, 0), 0);
 
     /**
      * Called to merge all the changes that occurred across several versions of a script snapshot 
@@ -1089,14 +1089,14 @@ module ts {
 
         // We change from talking about { { oldStart, oldLength }, newLength } to { oldStart, oldEnd, newEnd }
         // as it makes things much easier to reason about.
-        var change0 = changes[0];
+        let change0 = changes[0];
 
-        var oldStartN = change0.span.start;
-        var oldEndN = spanEnd(change0.span);
-        var newEndN = oldStartN + change0.newLength;
+        let oldStartN = change0.span.start;
+        let oldEndN = spanEnd(change0.span);
+        let newEndN = oldStartN + change0.newLength;
 
-        for (var i = 1; i < changes.length; i++) {
-            var nextChange = changes[i];
+        for (let i = 1; i < changes.length; i++) {
+            let nextChange = changes[i];
 
             // Consider the following case:
             // i.e. two edits.  The first represents the text change range { { 10, 50 }, 30 }.  i.e. The span starting
@@ -1178,13 +1178,13 @@ module ts {
             //      newEnd3  : Max(newEnd2, newEnd2 + (newEnd1 - oldEnd2))
             // }
 
-            var oldStart1 = oldStartN;
-            var oldEnd1 = oldEndN;
-            var newEnd1 = newEndN;
+            let oldStart1 = oldStartN;
+            let oldEnd1 = oldEndN;
+            let newEnd1 = newEndN;
 
-            var oldStart2 = nextChange.span.start;
-            var oldEnd2 = spanEnd(nextChange.span);
-            var newEnd2 = oldStart2 + nextChange.newLength;
+            let oldStart2 = nextChange.span.start;
+            let oldEnd2 = spanEnd(nextChange.span);
+            let newEnd2 = oldStart2 + nextChange.newLength;
 
             oldStartN = Math.min(oldStart1, oldStart2);
             oldEndN = Math.max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1));
@@ -1227,7 +1227,7 @@ module ts {
     export function generateUniqueName(baseName: string, isExistingName: (name: string) => boolean): string {
         // First try '_name'
         if (baseName.charCodeAt(0) !== CharacterCodes._) {
-            var baseName = "_" + baseName;
+            baseName = "_" + baseName;
             if (!isExistingName(baseName)) {
                 return baseName;
             }
@@ -1236,9 +1236,9 @@ module ts {
         if (baseName.charCodeAt(baseName.length - 1) !== CharacterCodes._) {
             baseName += "_";
         }
-        var i = 1;
+        let i = 1;
         while (true) {
-            var name = baseName + i;
+            let name = baseName + i;
             if (!isExistingName(name)) {
                 return name;
             }
@@ -1248,11 +1248,11 @@ module ts {
 
     // @internal
     export function createDiagnosticCollection(): DiagnosticCollection {
-        var nonFileDiagnostics: Diagnostic[] = [];
-        var fileDiagnostics: Map<Diagnostic[]> = {};
+        let nonFileDiagnostics: Diagnostic[] = [];
+        let fileDiagnostics: Map<Diagnostic[]> = {};
 
-        var diagnosticsModified = false;
-        var modificationCount = 0;
+        let diagnosticsModified = false;
+        let modificationCount = 0;
 
         return {
             add,
@@ -1266,7 +1266,7 @@ module ts {
         }
 
         function add(diagnostic: Diagnostic): void {
-            var diagnostics: Diagnostic[];
+            let diagnostics: Diagnostic[];
             if (diagnostic.file) {
                 diagnostics = fileDiagnostics[diagnostic.file.fileName];
                 if (!diagnostics) {
@@ -1294,14 +1294,14 @@ module ts {
                 return fileDiagnostics[fileName] || [];
             }
 
-            var allDiagnostics: Diagnostic[] = [];
+            let allDiagnostics: Diagnostic[] = [];
             function pushDiagnostic(d: Diagnostic) {
                 allDiagnostics.push(d);
             }
 
             forEach(nonFileDiagnostics, pushDiagnostic);
 
-            for (var key in fileDiagnostics) {
+            for (let key in fileDiagnostics) {
                 if (hasProperty(fileDiagnostics, key)) {
                     forEach(fileDiagnostics[key], pushDiagnostic);
                 }
@@ -1318,7 +1318,7 @@ module ts {
             diagnosticsModified = false;
             nonFileDiagnostics = sortAndDeduplicateDiagnostics(nonFileDiagnostics);
 
-            for (var key in fileDiagnostics) {
+            for (let key in fileDiagnostics) {
                 if (hasProperty(fileDiagnostics, key)) {
                     fileDiagnostics[key] = sortAndDeduplicateDiagnostics(fileDiagnostics[key]);
                 }
@@ -1331,8 +1331,8 @@ module ts {
     // the language service. These characters should be escaped when printing, and if any characters are added,
     // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
     // There is no reason for this other than that JSON.stringify does not handle it either.
-    var escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    var escapedCharsMap: Map<string> = {
+    let escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+    let escapedCharsMap: Map<string> = {
         "\0": "\\0",
         "\t": "\\t",
         "\v": "\\v",
@@ -1363,12 +1363,12 @@ module ts {
     }
     
     function get16BitUnicodeEscapeSequence(charCode: number): string {
-        var hexCharCode = charCode.toString(16).toUpperCase();
-        var paddedHexCode = ("0000" + hexCharCode).slice(-4);
+        let hexCharCode = charCode.toString(16).toUpperCase();
+        let paddedHexCode = ("0000" + hexCharCode).slice(-4);
         return "\\u" + paddedHexCode;
     }
     
-    var nonAsciiCharacters = /[^\u0000-\u007F]/g;
+    let nonAsciiCharacters = /[^\u0000-\u007F]/g;
     export function escapeNonAsciiCharacters(s: string): string {
         // Replace non-ASCII characters with '\uNNNN' escapes if any exist.
         // Otherwise just return the original string.

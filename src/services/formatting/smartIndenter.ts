@@ -12,13 +12,13 @@ module ts.formatting {
                 return 0; // past EOF
             }
 
-            var precedingToken = findPrecedingToken(position, sourceFile);
+            let precedingToken = findPrecedingToken(position, sourceFile);
             if (!precedingToken) {
                 return 0;
             }
 
             // no indentation in string \regex\template literals
-            var precedingTokenIsLiteral =
+            let precedingTokenIsLiteral =
                 precedingToken.kind === SyntaxKind.StringLiteral ||
                 precedingToken.kind === SyntaxKind.RegularExpressionLiteral ||
                 precedingToken.kind === SyntaxKind.NoSubstitutionTemplateLiteral ||
@@ -29,11 +29,11 @@ module ts.formatting {
                 return 0;
             }
 
-            var lineAtPosition = sourceFile.getLineAndCharacterOfPosition(position).line;
+            let lineAtPosition = sourceFile.getLineAndCharacterOfPosition(position).line;
 
             if (precedingToken.kind === SyntaxKind.CommaToken && precedingToken.parent.kind !== SyntaxKind.BinaryExpression) {
                 // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
-                var actualIndentation = getActualIndentationForListItemBeforeComma(precedingToken, sourceFile, options);
+                let actualIndentation = getActualIndentationForListItemBeforeComma(precedingToken, sourceFile, options);
                 if (actualIndentation !== Value.Unknown) {
                     return actualIndentation;
                 }
@@ -41,10 +41,10 @@ module ts.formatting {
 
             // try to find node that can contribute to indentation and includes 'position' starting from 'precedingToken'
             // if such node is found - compute initial indentation for 'position' inside this node
-            var previous: Node;
-            var current = precedingToken;
-            var currentStart: LineAndCharacter;
-            var indentationDelta: number;
+            let previous: Node;
+            let current = precedingToken;
+            let currentStart: LineAndCharacter;
+            let indentationDelta: number;
 
             while (current) {
                 if (positionBelongsToNode(current, position, sourceFile) && shouldIndentChildNode(current.kind, previous ? previous.kind : SyntaxKind.Unknown)) {
@@ -61,7 +61,7 @@ module ts.formatting {
                 }
 
                 // check if current node is a list item - if yes, take indentation from it
-                var actualIndentation = getActualIndentationForListItem(current, sourceFile, options);
+                let actualIndentation = getActualIndentationForListItem(current, sourceFile, options);
                 if (actualIndentation !== Value.Unknown) {
                     return actualIndentation;
                 }
@@ -79,7 +79,7 @@ module ts.formatting {
         }
 
         export function getIndentationForNode(n: Node, ignoreActualIndentationSpan: Span, sourceFile: SourceFile, options: FormatCodeOptions): number {
-            var start = sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
+            let start = sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
             return getIndentationForNodeWorker(n, start, ignoreActualIndentationSpan, /*indentationDelta*/ 0, sourceFile, options);
         }
 
@@ -91,33 +91,33 @@ module ts.formatting {
             sourceFile: SourceFile,
             options: EditorOptions): number {
 
-            var parent: Node = current.parent;
-            var parentStart: LineAndCharacter;
+            let parent: Node = current.parent;
+            let parentStart: LineAndCharacter;
 
             // walk upwards and collect indentations for pairs of parent-child nodes
             // indentation is not added if parent and child nodes start on the same line or if parent is IfStatement and child starts on the same line with 'else clause'
             while (parent) {
-                var useActualIndentation = true;
+                let useActualIndentation = true;
                 if (ignoreActualIndentationSpan) {
-                    var start = current.getStart(sourceFile);
+                    let start = current.getStart(sourceFile);
                     useActualIndentation = start < ignoreActualIndentationSpan.start || start > spanEnd(ignoreActualIndentationSpan);
                 }
 
                 if (useActualIndentation) {
                     // check if current node is a list item - if yes, take indentation from it
-                    var actualIndentation = getActualIndentationForListItem(current, sourceFile, options);
+                    let actualIndentation = getActualIndentationForListItem(current, sourceFile, options);
                     if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
                     }
                 }
                 parentStart = getParentStart(parent, current, sourceFile);
-                var parentAndChildShareLine =
+                let parentAndChildShareLine =
                     parentStart.line === currentStart.line ||
                     childStartsOnTheSameLineWithElseInIfStatement(parent, current, currentStart.line, sourceFile);
 
                 if (useActualIndentation) {
                     // try to fetch actual indentation for current node from source text
-                    var actualIndentation = getActualIndentationForNode(current, parent, currentStart, parentAndChildShareLine, sourceFile, options);
+                    let actualIndentation = getActualIndentationForNode(current, parent, currentStart, parentAndChildShareLine, sourceFile, options);
                     if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
                     }
@@ -138,7 +138,7 @@ module ts.formatting {
 
 
         function getParentStart(parent: Node, child: Node, sourceFile: SourceFile): LineAndCharacter {
-            var containingList = getContainingList(child, sourceFile);
+            let containingList = getContainingList(child, sourceFile);
             if (containingList) {
                 return sourceFile.getLineAndCharacterOfPosition(containingList.start);
             }
@@ -151,7 +151,7 @@ module ts.formatting {
          */
         function getActualIndentationForListItemBeforeComma(commaToken: Node, sourceFile: SourceFile, options: EditorOptions): number {
             // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
-            var commaItemInfo = findListItemInfo(commaToken);
+            let commaItemInfo = findListItemInfo(commaToken);
             if (commaItemInfo && commaItemInfo.listItemIndex > 0) {
                 return deriveActualIndentationFromList(commaItemInfo.list.getChildren(), commaItemInfo.listItemIndex - 1, sourceFile, options);
             }
@@ -174,7 +174,7 @@ module ts.formatting {
             // actual indentation is used for statements\declarations if one of cases below is true:
             // - parent is SourceFile - by default immediate children of SourceFile are not indented except when user indents them manually
             // - parent and child are not on the same line
-            var useActualIndentation =
+            let useActualIndentation =
                 (isDeclaration(current) || isStatement(current)) &&
                 (parent.kind === SyntaxKind.SourceFile || !parentAndChildShareLine);
 
@@ -186,7 +186,7 @@ module ts.formatting {
         }
 
         function nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken: Node, current: Node, lineAtPosition: number, sourceFile: SourceFile): boolean {
-            var nextToken = findNextToken(precedingToken, current);
+            let nextToken = findNextToken(precedingToken, current);
             if (!nextToken) {
                 return false;
             }
@@ -205,7 +205,7 @@ module ts.formatting {
                 // class A {
                 // $}
 
-                var nextTokenStartLine = getStartLineAndCharacterForNode(nextToken, sourceFile).line;
+                let nextTokenStartLine = getStartLineAndCharacterForNode(nextToken, sourceFile).line;
                 return lineAtPosition === nextTokenStartLine;
             }
 
@@ -222,10 +222,10 @@ module ts.formatting {
 
         export function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: SpanWithKind, childStartLine: number, sourceFile: SourceFile): boolean {
             if (parent.kind === SyntaxKind.IfStatement && (<IfStatement>parent).elseStatement === child) {
-                var elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile);
+                let elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile);
                 Debug.assert(elseKeyword !== undefined);
 
-                var elseKeywordStartLine = getStartLineAndCharacterForNode(elseKeyword, sourceFile).line;
+                let elseKeywordStartLine = getStartLineAndCharacterForNode(elseKeyword, sourceFile).line;
                 return elseKeywordStartLine === childStartLine;
             }
 
@@ -251,8 +251,8 @@ module ts.formatting {
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
                     case SyntaxKind.CallSignature:
-                    case SyntaxKind.ConstructSignature:
-                        var start = node.getStart(sourceFile);
+                    case SyntaxKind.ConstructSignature: {
+                        let start = node.getStart(sourceFile);
                         if ((<SignatureDeclaration>node.parent).typeParameters &&
                             nodeArrayContainsStartEnd((<SignatureDeclaration>node.parent).typeParameters, start, node.getEnd())) {
                             return (<SignatureDeclaration>node.parent).typeParameters;
@@ -261,9 +261,10 @@ module ts.formatting {
                             return (<SignatureDeclaration>node.parent).parameters;
                         }
                         break;
+                    }
                     case SyntaxKind.NewExpression:
-                    case SyntaxKind.CallExpression:
-                        var start = node.getStart(sourceFile);
+                    case SyntaxKind.CallExpression: {
+                        let start = node.getStart(sourceFile);
                         if ((<CallExpression>node.parent).typeArguments &&
                             nodeArrayContainsStartEnd((<CallExpression>node.parent).typeArguments, start, node.getEnd())) {
                             return (<CallExpression>node.parent).typeArguments;
@@ -273,34 +274,35 @@ module ts.formatting {
                             return (<CallExpression>node.parent).arguments;
                         }
                         break;
+                    }
                 }
             }
             return undefined;
         }
 
         function getActualIndentationForListItem(node: Node, sourceFile: SourceFile, options: EditorOptions): number {
-            var containingList = getContainingList(node, sourceFile);
+            let containingList = getContainingList(node, sourceFile);
             return containingList ? getActualIndentationFromList(containingList) : Value.Unknown;
 
             function getActualIndentationFromList(list: Node[]): number {
-                var index = indexOf(list, node);
+                let index = indexOf(list, node);
                 return index !== -1 ? deriveActualIndentationFromList(list, index, sourceFile, options) : Value.Unknown;
             }
         }
 
         function deriveActualIndentationFromList(list: Node[], index: number, sourceFile: SourceFile, options: EditorOptions): number {
             Debug.assert(index >= 0 && index < list.length);
-            var node = list[index];
+            let node = list[index];
 
             // walk toward the start of the list starting from current node and check if the line is the same for all items.
             // if end line for item [i - 1] differs from the start line for item [i] - find column of the first non-whitespace character on the line of item [i]
-            var lineAndCharacter = getStartLineAndCharacterForNode(node, sourceFile);
-            for (var i = index - 1; i >= 0; --i) {
+            let lineAndCharacter = getStartLineAndCharacterForNode(node, sourceFile);
+            for (let i = index - 1; i >= 0; --i) {
                 if (list[i].kind === SyntaxKind.CommaToken) {
                     continue;
                 }
                 // skip list items that ends on the same line with the current list element
-                var prevEndLine = sourceFile.getLineAndCharacterOfPosition(spanEnd(list[i])).line;
+                let prevEndLine = sourceFile.getLineAndCharacterOfPosition(spanEnd(list[i])).line;
                 if (prevEndLine !== lineAndCharacter.line) {
                     return findColumnForFirstNonWhitespaceCharacterInLine(lineAndCharacter, sourceFile, options);
                 }
@@ -311,7 +313,7 @@ module ts.formatting {
         }
 
         function findColumnForFirstNonWhitespaceCharacterInLine(lineAndCharacter: LineAndCharacter, sourceFile: SourceFile, options: EditorOptions): number {
-            var lineStart = sourceFile.getPositionOfLineAndCharacter(lineAndCharacter.line, 0);
+            let lineStart = sourceFile.getPositionOfLineAndCharacter(lineAndCharacter.line, 0);
             return findFirstNonWhitespaceColumn(lineStart, lineStart + lineAndCharacter.character, sourceFile, options);
         }
 
@@ -323,10 +325,10 @@ module ts.formatting {
             value of 'column' for '$' is 6 (assuming that tab size is 4)
         */
         export function findFirstNonWhitespaceCharacterAndColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorOptions) {
-            var character = 0;
-            var column = 0;
-            for (var pos = startPos; pos < endPos; ++pos) {
-                var ch = sourceFile.text.charCodeAt(pos);
+            let character = 0;
+            let column = 0;
+            for (let pos = startPos; pos < endPos; ++pos) {
+                let ch = sourceFile.text.charCodeAt(pos);
                 if (!isWhiteSpace(ch)) {
                     break;
                 }
@@ -403,9 +405,9 @@ module ts.formatting {
          * If child at position 'length - 1' is 'SemicolonToken' it is skipped and 'expectedLastToken' is compared with child at position 'length - 2'.
          */
         function nodeEndsWith(n: Node, expectedLastToken: SyntaxKind, sourceFile: SourceFile): boolean {
-            var children = n.getChildren(sourceFile);
+            let children = n.getChildren(sourceFile);
             if (children.length) {
-                var last = children[children.length - 1];
+                let last = children[children.length - 1];
                 if (last.kind === expectedLastToken) {
                     return true;
                 }
@@ -471,7 +473,7 @@ module ts.formatting {
                     return isCompletedNode((<WhileStatement>n).statement, sourceFile);
                 case SyntaxKind.DoStatement:
                     // rough approximation: if DoStatement has While keyword - then if node is completed is checking the presence of ')';
-                    var hasWhileKeyword = findChildOfKind(n, SyntaxKind.WhileKeyword, sourceFile);
+                    let hasWhileKeyword = findChildOfKind(n, SyntaxKind.WhileKeyword, sourceFile);
                     if (hasWhileKeyword) {
                         return nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile);
                     }

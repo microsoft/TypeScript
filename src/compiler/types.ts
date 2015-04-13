@@ -1560,8 +1560,9 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
-        stripInternal?: boolean;
-        preserveNewLines?: boolean;
+        /* @internal */ stripInternal?: boolean;
+        /* @internal */ preserveNewLines?: boolean;
+        /* @internal */ cacheDownlevelForOfLength?: boolean;
         [option: string]: string | number | boolean;
     }
 

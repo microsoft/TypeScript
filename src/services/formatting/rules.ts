@@ -18,8 +18,8 @@
 module ts.formatting {
     export class Rules {
         public getRuleName(rule: Rule) {
-            var o: ts.Map<any> = <any>this;
-            for (var name in o) {
+            let o: ts.Map<any> = <any>this;
+            for (let name in o) {
                 if (o[name] === rule) {
                     return name;
                 }
@@ -139,7 +139,7 @@ module ts.formatting {
         // Lambda expressions
         public SpaceAfterArrow: Rule;
 
-        // Optional parameters and var args
+        // Optional parameters and let args
         public NoSpaceAfterEllipsis: Rule;
         public NoSpaceAfterOptionalParameters: Rule;
 
@@ -330,7 +330,7 @@ module ts.formatting {
             // Lambda expressions
             this.SpaceAfterArrow = new Rule(RuleDescriptor.create3(SyntaxKind.EqualsGreaterThanToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
 
-            // Optional parameters and var args
+            // Optional parameters and let args
             this.NoSpaceAfterEllipsis = new Rule(RuleDescriptor.create1(SyntaxKind.DotDotDotToken, SyntaxKind.Identifier), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
             this.NoSpaceAfterOptionalParameters = new Rule(RuleDescriptor.create3(SyntaxKind.QuestionToken, Shared.TokenRange.FromTokens([SyntaxKind.CloseParenToken, SyntaxKind.CommaToken])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBinaryOpContext), RuleAction.Delete));
 
@@ -462,7 +462,7 @@ module ts.formatting {
 
                 // equal in import a = module('a');
                 case SyntaxKind.ImportEqualsDeclaration:
-                // equal in var a = 0;
+                // equal in let a = 0;
                 case SyntaxKind.VariableDeclaration:
                 // equal in p = 0;
                 case SyntaxKind.Parameter:
@@ -470,7 +470,7 @@ module ts.formatting {
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                     return context.currentTokenSpan.kind === SyntaxKind.EqualsToken || context.nextTokenSpan.kind === SyntaxKind.EqualsToken;
-                // "in" keyword in for (var x in []) { }
+                // "in" keyword in for (let x in []) { }
                 case SyntaxKind.ForInStatement:
                     return context.currentTokenSpan.kind === SyntaxKind.InKeyword || context.nextTokenSpan.kind === SyntaxKind.InKeyword;
                 // Technically, "of" is not a binary operator, but format it the same way as "in"

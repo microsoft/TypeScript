@@ -145,23 +145,16 @@ function someGenerics4(strs, n, f) {
 // 2 parameter generic tag with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
 function someGenerics5(strs, n, f) {
 }
-(_n = ["", " ", ""], _n.raw = ["", " ", ""], someGenerics5(_n, 4, function () {
+(_o = ["", " ", ""], _o.raw = ["", " ", ""], someGenerics5(_o, 4, function () {
     return null;
 }));
-(_o = ["", "", ""], _o.raw = ["", "", ""], someGenerics5(_o, '', function () {
+(_p = ["", "", ""], _p.raw = ["", "", ""], someGenerics5(_p, '', function () {
     return 3;
 }));
-(_p = ["", "", ""], _p.raw = ["", "", ""], someGenerics5(_p, null, null));
+(_q = ["", "", ""], _q.raw = ["", "", ""], someGenerics5(_q, null, null));
 // Generic tag with multiple arguments of function types that each have parameters of the same generic type
 function someGenerics6(strs, a, b, c) {
 }
-(_q = ["", "", "", ""], _q.raw = ["", "", "", ""], someGenerics6(_q, function (n) {
-    return n;
-}, function (n) {
-    return n;
-}, function (n) {
-    return n;
-}));
 (_r = ["", "", "", ""], _r.raw = ["", "", "", ""], someGenerics6(_r, function (n) {
     return n;
 }, function (n) {
@@ -176,16 +169,16 @@ function someGenerics6(strs, a, b, c) {
 }, function (n) {
     return n;
 }));
-// Generic tag with multiple arguments of function types that each have parameters of different generic type
-function someGenerics7(strs, a, b, c) {
-}
-(_t = ["", "", "", ""], _t.raw = ["", "", "", ""], someGenerics7(_t, function (n) {
+(_t = ["", "", "", ""], _t.raw = ["", "", "", ""], someGenerics6(_t, function (n) {
     return n;
 }, function (n) {
     return n;
 }, function (n) {
     return n;
 }));
+// Generic tag with multiple arguments of function types that each have parameters of different generic type
+function someGenerics7(strs, a, b, c) {
+}
 (_u = ["", "", "", ""], _u.raw = ["", "", "", ""], someGenerics7(_u, function (n) {
     return n;
 }, function (n) {
@@ -200,19 +193,26 @@ function someGenerics7(strs, a, b, c) {
 }, function (n) {
     return n;
 }));
+(_w = ["", "", "", ""], _w.raw = ["", "", "", ""], someGenerics7(_w, function (n) {
+    return n;
+}, function (n) {
+    return n;
+}, function (n) {
+    return n;
+}));
 // Generic tag with argument of generic function type
 function someGenerics8(strs, n) {
     return n;
 }
-var x = (_w = ["", ""], _w.raw = ["", ""], someGenerics8(_w, someGenerics7));
-(_x = ["", "", "", ""], _x.raw = ["", "", "", ""], x(_x, null, null, null));
+var x = (_x = ["", ""], _x.raw = ["", ""], someGenerics8(_x, someGenerics7));
+(_y = ["", "", "", ""], _y.raw = ["", "", "", ""], x(_y, null, null, null));
 // Generic tag with multiple parameters of generic type passed arguments with no best common type
 function someGenerics9(strs, a, b, c) {
     return null;
 }
-var a9a = (_y = ["", "", "", ""], _y.raw = ["", "", "", ""], someGenerics9(_y, '', 0, []));
+var a9a = (_z = ["", "", "", ""], _z.raw = ["", "", "", ""], someGenerics9(_z, '', 0, []));
 var a9a;
-var a9e = (_z = ["", "", "", ""], _z.raw = ["", "", "", ""], someGenerics9(_z, undefined, {
+var a9e = (_0 = ["", "", "", ""], _0.raw = ["", "", "", ""], someGenerics9(_0, undefined, {
     x: 6,
     z: new Date()
 }, {
@@ -221,7 +221,7 @@ var a9e = (_z = ["", "", "", ""], _z.raw = ["", "", "", ""], someGenerics9(_z, u
 }));
 var a9e;
 // Generic tag with multiple parameters of generic type passed arguments with a single best common type
-var a9d = (_0 = ["", "", "", ""], _0.raw = ["", "", "", ""], someGenerics9(_0, {
+var a9d = (_1 = ["", "", "", ""], _1.raw = ["", "", "", ""], someGenerics9(_1, {
     x: 3
 }, {
     x: 6
@@ -231,9 +231,9 @@ var a9d = (_0 = ["", "", "", ""], _0.raw = ["", "", "", ""], someGenerics9(_0, {
 var a9d;
 // Generic tag with multiple parameters of generic type where one argument is of type 'any'
 var anyVar;
-var a = (_1 = ["", "", "", ""], _1.raw = ["", "", "", ""], someGenerics9(_1, 7, anyVar, 4));
+var a = (_2 = ["", "", "", ""], _2.raw = ["", "", "", ""], someGenerics9(_2, 7, anyVar, 4));
 var a;
 // Generic tag with multiple parameters of generic type where one argument is [] and the other is not 'any'
-var arr = (_2 = ["", "", "", ""], _2.raw = ["", "", "", ""], someGenerics9(_2, [], null, undefined));
+var arr = (_3 = ["", "", "", ""], _3.raw = ["", "", "", ""], someGenerics9(_3, [], null, undefined));
 var arr;
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3;

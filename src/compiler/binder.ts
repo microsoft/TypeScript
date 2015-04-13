@@ -58,7 +58,7 @@ module ts {
     }
 
     function bindSourceFileWorker(file: SourceFile): void {
-        var parent: Node;
+        let parent: Node;
         let container: Node;
         let blockScopeContainer: Node;
         let lastContainer: Node;

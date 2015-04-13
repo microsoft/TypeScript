@@ -35,7 +35,7 @@ module ts.formatting {
         }
 
         static create2(context: RuleOperationContext, action: RuleAction) {
-            var result = new RuleOperation();
+            let result = new RuleOperation();
             result.Context = context;
             result.Action = action;
             return result;
