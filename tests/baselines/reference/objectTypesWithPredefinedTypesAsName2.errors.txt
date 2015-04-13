@@ -1,4 +1,4 @@
-tests/cases/conformance/types/specifyingTypes/predefinedTypes/objectTypesWithPredefinedTypesAsName2.ts(3,7): error TS1003: Identifier expected.
+tests/cases/conformance/types/specifyingTypes/predefinedTypes/objectTypesWithPredefinedTypesAsName2.ts(3,7): error TS1005: '{' expected.
 
 
 ==== tests/cases/conformance/types/specifyingTypes/predefinedTypes/objectTypesWithPredefinedTypesAsName2.ts (1 errors) ====
@@ -6,4 +6,4 @@ tests/cases/conformance/types/specifyingTypes/predefinedTypes/objectTypesWithPre
     
     class void {} // parse error unlike the others
           ~~~~
-!!! error TS1003: Identifier expected.
+!!! error TS1005: '{' expected.

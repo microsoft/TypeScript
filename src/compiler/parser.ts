@@ -4757,7 +4757,7 @@ module ts {
             node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ClassKeyword);
-            node.name = node.flags & NodeFlags.Default ? parseOptionalIdentifier() : parseIdentifier();
+            node.name = parseOptionalIdentifier();
             node.typeParameters = parseTypeParameters();
             node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause:*/ true);
 
