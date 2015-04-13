@@ -1012,8 +1012,8 @@ module ts {
 
     // Share a single scanner across all calls to parse a source file.  This helps speed things
     // up by avoiding the cost of creating/compiling scanners over and over again.
-    let scanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ true);
-    let parser = createParser(ScriptTarget.Latest);
+    const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ true);
+    const parser = createParser(ScriptTarget.Latest);
 
     function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: SyntaxCursor, setParentNodes = false): SourceFile {
         return parser.parse(fileName, sourceText, languageVersion, syntaxCursor, setParentNodes);
