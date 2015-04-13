@@ -1909,18 +1909,23 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 emit(node.expression);
             }
 
-            function shouldEmitPublishOfExportedValueForUnaryExpressions(node: PrefixUnaryExpression | PostfixUnaryExpression): boolean {
-                if (!currentFileIsEmittedAsSystemModule() || node.operand.kind !== SyntaxKind.Identifier) {
+            function isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node: Node): boolean {
+                if (!isCurrentFileSystemExternalModule() || node.kind !== SyntaxKind.Identifier || nodeIsSynthesized(node)) {
                     return false;
                 }
 
-                return isExportedSourceLevelDeclaration(resolver.getReferencedValueDeclaration(<Identifier>node.operand));
+                const isVariableDeclarationOrBindingElement =
+                    node.parent && (node.parent.kind === SyntaxKind.VariableDeclaration || node.parent.kind === SyntaxKind.BindingElement);
+
+                const targetDeclaration = isVariableDeclarationOrBindingElement ? <Declaration>node.parent : resolver.getReferencedValueDeclaration(<Identifier>node);
+
+                return isSourceFileLevelDeclarationInSystemExternalModule(targetDeclaration, /*isExported*/ true);
             }
 
             function emitPrefixUnaryExpression(node: PrefixUnaryExpression) {
-                const emitPublishOfExportedValue = shouldEmitPublishOfExportedValueForUnaryExpressions(node);
+                const exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.operand);
 
-                if (emitPublishOfExportedValue) {
+                if (exportChanged) {
                     write(`${exportFunctionForFile}("`);
                     emitNodeWithoutSourceMap(node.operand);
                     write(`", `);
@@ -1950,14 +1955,14 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
                 emit(node.operand);
 
-                if (emitPublishOfExportedValue) {
+                if (exportChanged) {
                     write(")");
                 }
             }
 
             function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
-                const emitPublishOfExportedValue = shouldEmitPublishOfExportedValueForUnaryExpressions(node);
-                if (emitPublishOfExportedValue) {
+                const exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.operand);
+                if (exportChanged) {
                     write(`${exportFunctionForFile}("`);
                     emitNodeWithoutSourceMap(node.operand);
                     write(`", `);
@@ -1966,18 +1971,30 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 emit(node.operand);
                 write(tokenToString(node.operator));
 
-                if (emitPublishOfExportedValue) {
+                if (exportChanged) {
                     write("), ");
                     emitNodeWithoutSourceMap(node.operand);
                     write(node.operator === SyntaxKind.PlusPlusToken ? " - 1" : " + 1");
                 }
             }
 
-            function isExportedSourceLevelDeclaration(decl: Declaration): boolean {
-                if (!decl) {
+            function isSourceFileLevelDeclarationInSystemExternalModule(node: Node, isExported: boolean): boolean {
+                if (!node || languageVersion >= ScriptTarget.ES6 || !isCurrentFileSystemExternalModule()) {
                     return false;
                 }
-                return (getCombinedNodeFlags(decl) & NodeFlags.Export) && isSourceFileLevelDeclaration(decl);
+
+                let current: Node = node;
+                while (current) {
+                    if (current.kind === SyntaxKind.SourceFile) {
+                        return !isExported || ((getCombinedNodeFlags(node) & NodeFlags.Export) !== 0)
+                    }
+                    else if (isFunctionLike(current) || current.kind === SyntaxKind.ModuleBlock) {
+                        return false;
+                    }
+                    else {
+                        current = current.parent;
+                    }
+                }
             }
 
             function emitBinaryExpression(node: BinaryExpression) {
@@ -1986,14 +2003,10 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     emitDestructuring(node, node.parent.kind === SyntaxKind.ExpressionStatement);
                 }
                 else {
-                    let emitPublishOfExportedValue = false;
-
-                    if (currentFileIsEmittedAsSystemModule() &&
-                        node.left.kind === SyntaxKind.Identifier &&
-                        node.operatorToken.kind >= SyntaxKind.FirstAssignment &&
-                        node.operatorToken.kind <= SyntaxKind.LastAssignment) {
-                        emitPublishOfExportedValue = isExportedSourceLevelDeclaration(resolver.getReferencedValueDeclaration(<Identifier>node.left));
-                    }
+                    const emitPublishOfExportedValue =
+                        node.operatorToken.kind <= SyntaxKind.LastAssignment &&
+                        node.operatorToken.kind <= SyntaxKind.LastAssignment &&
+                        isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.left);
 
                     if (emitPublishOfExportedValue) {
                         write(`${exportFunctionForFile}("`);
@@ -2135,10 +2148,10 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function emitStartOfVariableDeclarationList(decl: Node, startPos?: number): boolean {
-                if (currentFileIsEmittedAsSystemModule() && isSourceFileLevelDeclaration(decl)) {
-                    Debug.assert(compilerOptions.module === ModuleKind.System);
+                if (isSourceFileLevelDeclarationInSystemExternalModule(decl, /*isExported*/ false)) {
                     return false;
                 }
+
                 let tokenKind = SyntaxKind.VarKeyword;
                 if (decl && languageVersion >= ScriptTarget.ES6) {
                     if (isLet(decl)) {
@@ -2606,6 +2619,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 value?: Expression,
                 lowestNonSynthesizedAncestor?: Node) {
                 let emitCount = 0;
+
                 // An exported declaration is actually emitted as an assignment (to a property on the module object), so
                 // temporary variables in an exported declaration need to have real declarations elsewhere
                 // Also temporary variables should be explicitly allocated for source level declarations when module target is system
@@ -2613,7 +2627,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 let canDefineTempVariablesInplace = false;
                 if (root.kind === SyntaxKind.VariableDeclaration) {
                     let isExported = getCombinedNodeFlags(root) & NodeFlags.Export;
-                    let isSourceLevelForSystemModuleKind = currentFileIsEmittedAsSystemModule() && isSourceFileLevelDeclaration(root);
+                    let isSourceLevelForSystemModuleKind = isSourceFileLevelDeclarationInSystemExternalModule(root, /*isExported*/ false);
                     canDefineTempVariablesInplace = !isExported && !isSourceLevelForSystemModuleKind;
                 }
                 else if (root.kind === SyntaxKind.Parameter) {
@@ -2638,13 +2652,9 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     const isVariableDeclarationOrBindingElement =
                         name.parent && (name.parent.kind === SyntaxKind.VariableDeclaration || name.parent.kind === SyntaxKind.BindingElement);
 
-                    let emitPublishOfExportedValue = false;
-                    if (currentFileIsEmittedAsSystemModule() && !nodeIsSynthesized(name)) {
-                        let nodeToCheck = isVariableDeclarationOrBindingElement ? name.parent : resolver.getReferencedValueDeclaration(name);
-                        emitPublishOfExportedValue = nodeToCheck && (getCombinedNodeFlags(nodeToCheck) & NodeFlags.Export) && isSourceFileLevelDeclaration(nodeToCheck);
-                    }
+                    let exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(name);
 
-                    if (emitPublishOfExportedValue) {
+                    if (exportChanged) {
                         write(`${exportFunctionForFile}("`);
                         emitNodeWithoutSourceMap(name);
                         write(`", `);
@@ -2660,7 +2670,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     write(" = ");
                     emit(value);
 
-                    if (emitPublishOfExportedValue) {
+                    if (exportChanged) {
                         write(")");
                     }
                 }
@@ -2886,10 +2896,9 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         }
                     }
 
-                    let publishExportedValue =
-                        currentFileIsEmittedAsSystemModule() && (getCombinedNodeFlags(node) & NodeFlags.Export) && isSourceFileLevelDeclaration(node);
+                    let exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.name);
 
-                    if (publishExportedValue) {
+                    if (exportChanged) {
                         write(`${exportFunctionForFile}("`);
                         emitNodeWithoutSourceMap(node.name);
                         write(`", `);
@@ -2898,7 +2907,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     emitModuleMemberName(node);
                     emitOptional(" = ", initializer);
 
-                    if (publishExportedValue) {
+                    if (exportChanged) {
                         write(")")
                     }
                 }
@@ -3881,7 +3890,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
             function emitClassLikeDeclarationBelowES6(node: ClassLikeDeclaration) {
                 if (node.kind === SyntaxKind.ClassDeclaration) {
-                    if (!currentFileIsEmittedAsSystemModule() || !isSourceFileLevelDeclaration(node)) {
+                    if (!isSourceFileLevelDeclarationInSystemExternalModule(node, /*isExported*/ false)) {
                         write("var ");
                     }
                     emitDeclarationName(node);
@@ -4390,7 +4399,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     return emitOnlyPinnedOrTripleSlashComments(node);
                 }
 
-                let hoistedInDeclarationScope = currentFileIsEmittedAsSystemModule() && isSourceFileLevelDeclaration(node)
+                let hoistedInDeclarationScope = isSourceFileLevelDeclarationInSystemExternalModule(node, /*isExported*/ false);
                 if (!hoistedInDeclarationScope) {
                     emitStart(node);
                     if (isES6ExportedDeclaration(node)) {
@@ -4444,7 +4453,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 write(" = {}));");
                 emitEnd(node);
                 if (!isES6ExportedDeclaration(node) && node.name.kind === SyntaxKind.Identifier && node.parent === currentSourceFile) {
-                    if (currentFileIsEmittedAsSystemModule() && node.flags & NodeFlags.Export) {
+                    if (compilerOptions.module === ModuleKind.System && (node.flags & NodeFlags.Export)) {
                         writeLine();
                         write(`${exportFunctionForFile}("`);
                         emitDeclarationName(node);
@@ -4972,8 +4981,8 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
             }
 
-            function currentFileIsEmittedAsSystemModule(): boolean {
-                return exportFunctionForFile !== undefined;
+            function isCurrentFileSystemExternalModule() {
+                return compilerOptions.module === ModuleKind.System && isExternalModule(currentSourceFile);
             }
 
             function emitSystemModuleBody(node: SourceFile, startIndex: number): void {

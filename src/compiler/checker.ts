@@ -11792,10 +11792,7 @@ module ts {
                 getNodeLinks(reference).resolvedSymbol ||
                 resolveName(reference, reference.text, SymbolFlags.Value | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
 
-            if (!symbol) {
-                return undefined;
-            }
-            return symbol.flags & SymbolFlags.Export ? symbol.exportSymbol.valueDeclaration : symbol.valueDeclaration
+            return symbol && getExportSymbolOfValueSymbolIfExported(symbol).valueDeclaration;
         }
 
         function getBlockScopedVariableId(n: Identifier): number {
