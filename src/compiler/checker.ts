@@ -1290,8 +1290,8 @@ module ts {
                         }
 
                         if (accessibleSymbolChain) {
-                            for (var i = 0, n = accessibleSymbolChain.length; i < n; i++) {
-                                appendParentTypeArgumentsAndSymbolName(accessibleSymbolChain[i]);
+                            for (let accessibleSymbol of accessibleSymbolChain) {
+                                appendParentTypeArgumentsAndSymbolName(accessibleSymbol);
                             }
                         }
                         else {
@@ -3278,14 +3278,14 @@ module ts {
         }
 
         function addTypesToSortedSet(sortedTypes: Type[], types: Type[]) {
-            for (var i = 0, len = types.length; i < len; i++) {
-                addTypeToSortedSet(sortedTypes, types[i]);
+            for (let type of types) {
+                addTypeToSortedSet(sortedTypes, type);
             }
         }
 
         function isSubtypeOfAny(candidate: Type, types: Type[]): boolean {
-            for (var i = 0, len = types.length; i < len; i++) {
-                if (candidate !== types[i] && isTypeSubtypeOf(candidate, types[i])) {
+            for (let type of types) {
+                if (candidate !== type && isTypeSubtypeOf(candidate, type)) {
                     return true;
                 }
             }
@@ -3805,8 +3805,8 @@ module ts {
             function unionTypeRelatedToUnionType(source: UnionType, target: UnionType): Ternary {
                 var result = Ternary.True;
                 var sourceTypes = source.types;
-                for (var i = 0, len = sourceTypes.length; i < len; i++) {
-                    var related = typeRelatedToUnionType(sourceTypes[i], target, false);
+                for (let sourceType of sourceTypes) {
+                    var related = typeRelatedToUnionType(sourceType, target, false);
                     if (!related) {
                         return Ternary.False;
                     }
@@ -3829,8 +3829,8 @@ module ts {
             function unionTypeRelatedToType(source: UnionType, target: Type, reportErrors: boolean): Ternary {
                 var result = Ternary.True;
                 var sourceTypes = source.types;
-                for (var i = 0, len = sourceTypes.length; i < len; i++) {
-                    var related = isRelatedTo(sourceTypes[i], target, reportErrors);
+                for (let sourceType of sourceTypes) {
+                    var related = isRelatedTo(sourceType, target, reportErrors);
                     if (!related) {
                         return Ternary.False;
                     }
@@ -4066,8 +4066,7 @@ module ts {
                     return Ternary.False;
                 }
                 var result = Ternary.True;
-                for (var i = 0, len = sourceProperties.length; i < len; ++i) {
-                    var sourceProp = sourceProperties[i];
+                for (let sourceProp of sourceProperties) {
                     var targetProp = getPropertyOfObjectType(target, sourceProp.name);
                     if (!targetProp) {
                         return Ternary.False;
@@ -4332,8 +4331,8 @@ module ts {
         }
 
         function isSupertypeOfEach(candidate: Type, types: Type[]): boolean {
-            for (var i = 0, len = types.length; i < len; i++) {
-                if (candidate !== types[i] && !isTypeSubtypeOf(types[i], candidate)) return false;
+            for (let type of types) {
+                if (candidate !== type && !isTypeSubtypeOf(type, candidate)) return false;
             }
             return true;
         }
@@ -6584,9 +6583,9 @@ module ts {
             //  declare function f(a: { xa: number; xb: number; });
             //  f({ |
             if (!produceDiagnostics) {
-                for (var i = 0, n = candidates.length; i < n; i++) {
-                    if (hasCorrectArity(node, args, candidates[i])) {
-                        return candidates[i];
+                for (let candidate of candidates) {
+                    if (hasCorrectArity(node, args, candidate)) {
+                        return candidate;
                     }
                 }
             }
@@ -7844,8 +7843,8 @@ module ts {
             if (indexSymbol) {
                 var seenNumericIndexer = false;
                 var seenStringIndexer = false;
-                for (var i = 0, len = indexSymbol.declarations.length; i < len; ++i) {
-                    var declaration = <SignatureDeclaration>indexSymbol.declarations[i];
+                for (let decl of indexSymbol.declarations) {
+                    var declaration = <SignatureDeclaration>decl;
                     if (declaration.parameters.length === 1 && declaration.parameters[0].type) {
                         switch (declaration.parameters[0].type.kind) {
                             case SyntaxKind.StringKeyword:
@@ -8320,9 +8319,9 @@ module ts {
                         // function g(x: string, y: string) { }
                         //
                         // The implementation is completely unrelated to the specialized signature, yet we do not check this.
-                        for (var i = 0, len = signatures.length; i < len; ++i) {
-                            if (!signatures[i].hasStringLiterals && !isSignatureAssignableTo(bodySignature, signatures[i])) {
-                                error(signatures[i].declaration, Diagnostics.Overload_signature_is_not_compatible_with_function_implementation);
+                        for (let signature of signatures) {
+                            if (!signature.hasStringLiterals && !isSignatureAssignableTo(bodySignature, signature)) {
+                                error(signature.declaration, Diagnostics.Overload_signature_is_not_compatible_with_function_implementation);
                                 break;
                             }
                         }
@@ -9474,8 +9473,8 @@ module ts {
 
             // NOTE: assignability is checked in checkClassDeclaration
             var baseProperties = getPropertiesOfObjectType(baseType);
-            for (var i = 0, len = baseProperties.length; i < len; ++i) {
-                var base = getTargetSymbol(baseProperties[i]);
+            for (let baseProperty of baseProperties) {
+                var base = getTargetSymbol(baseProperty);
 
                 if (base.flags & SymbolFlags.Prototype) {
                     continue;
@@ -9567,11 +9566,9 @@ module ts {
             forEach(type.declaredProperties, p => { seen[p.name] = { prop: p, containingType: type }; });
             var ok = true;
 
-            for (var i = 0, len = type.baseTypes.length; i < len; ++i) {
-                var base = type.baseTypes[i];
+            for (let base of type.baseTypes) {
                 var properties = getPropertiesOfObjectType(base);
-                for (var j = 0, proplen = properties.length; j < proplen; ++j) {
-                    var prop = properties[j];
+                for (let prop of properties) {
                     if (!hasProperty(seen, prop.name)) {
                         seen[prop.name] = { prop: prop, containingType: base };
                     }
@@ -11192,9 +11189,7 @@ module ts {
 
             var lastStatic: Node, lastPrivate: Node, lastProtected: Node, lastDeclare: Node;
             var flags = 0;
-            for (var i = 0, n = node.modifiers.length; i < n; i++) {
-                var modifier = node.modifiers[i];
-
+            for (let modifier of node.modifiers) {
                 switch (modifier.kind) {
                     case SyntaxKind.PublicKeyword:
                     case SyntaxKind.ProtectedKeyword:
@@ -11421,8 +11416,7 @@ module ts {
         function checkGrammarForOmittedArgument(node: CallExpression, arguments: NodeArray<Expression>): boolean {
             if (arguments) {
                 var sourceFile = getSourceFileOfNode(node);
-                for (var i = 0, n = arguments.length; i < n; i++) {
-                    var arg = arguments[i];
+                for (let arg of arguments) {
                     if (arg.kind === SyntaxKind.OmittedExpression) {
                         return grammarErrorAtPos(sourceFile, arg.start, 0, Diagnostics.Argument_expression_expected);
                     }
@@ -11452,10 +11446,7 @@ module ts {
             var seenImplementsClause = false;
 
             if (!checkGrammarModifiers(node) && node.heritageClauses) {
-                for (var i = 0, n = node.heritageClauses.length; i < n; i++) {
-                    Debug.assert(i <= 2);
-                    var heritageClause = node.heritageClauses[i];
-
+                for (let heritageClause of node.heritageClauses) {
                     if (heritageClause.token === SyntaxKind.ExtendsKeyword) {
                         if (seenExtendsClause) {
                             return grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_already_seen)
@@ -11490,10 +11481,7 @@ module ts {
             var seenExtendsClause = false;
 
             if (node.heritageClauses) {
-                for (var i = 0, n = node.heritageClauses.length; i < n; i++) {
-                    Debug.assert(i <= 1);
-                    var heritageClause = node.heritageClauses[i];
-
+                for (let heritageClause of node.heritageClauses) {
                     if (heritageClause.token === SyntaxKind.ExtendsKeyword) {
                         if (seenExtendsClause) {
                             return grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_already_seen);
@@ -11551,8 +11539,7 @@ module ts {
             var GetOrSetAccessor = GetAccessor | SetAccesor;
             var inStrictMode = (node.parserContextFlags & ParserContextFlags.StrictMode) !== 0;
 
-            for (var i = 0, n = node.properties.length; i < n; i++) {
-                var prop = node.properties[i];
+            for (let prop of node.properties) {
                 var name = prop.name;
                 if (prop.kind === SyntaxKind.OmittedExpression ||
                     name.kind === SyntaxKind.ComputedPropertyName) {
@@ -11940,8 +11927,7 @@ module ts {
             if (!enumIsConst) {
                 var inConstantEnumMemberSection = true;
                 var inAmbientContext = isInAmbientContext(enumDecl);
-                for (var i = 0, n = enumDecl.members.length; i < n; i++) {
-                    var node = enumDecl.members[i];
+                for (let node of enumDecl.members) {
                     // Do not use hasDynamicName here, because that returns false for well known symbols.
                     // We want to perform checkComputedPropertyName for all computed properties, including
                     // well known symbols.
@@ -12063,8 +12049,7 @@ module ts {
         }
 
         function checkGrammarTopLevelElementsForRequiredDeclareModifier(file: SourceFile): boolean {
-            for (var i = 0, n = file.statements.length; i < n; i++) {
-                var decl = file.statements[i];
+            for (let decl of file.statements) {
                 if (isDeclaration(decl) || decl.kind === SyntaxKind.VariableStatement) {
                     if (checkGrammarTopLevelElementForRequiredDeclareModifier(decl)) {
                         return true;
