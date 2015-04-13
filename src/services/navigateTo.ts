@@ -22,7 +22,7 @@ module ts.NavigateTo {
                         continue;
                     }
 
-                    // It was a match!  If the pattern has dots in it, then also see if hte 
+                    // It was a match!  If the pattern has dots in it, then also see if the 
                     // declaration container matches as well.
                     if (patternMatcher.patternContainsDots) {
                         let containers = getContainers(declaration);

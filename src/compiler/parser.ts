@@ -829,7 +829,7 @@ module ts {
         // to reuse are already at the appropriate position in the new text.  That way when we
         // reuse them, we don't have to figure out if they need to be adjusted.  Second, it makes
         // it very easy to determine if we can reuse a node.  If the node's position is at where
-        // we are in the text, then we can reuse it.  Otherwise we can't.  If hte node's position
+        // we are in the text, then we can reuse it.  Otherwise we can't.  If the node's position
         // is ahead of us, then we'll need to rescan tokens.  If the node's position is behind
         // us, then we'll need to skip it or crumble it as appropriate
         //
@@ -1034,7 +1034,7 @@ module ts {
         // that some tokens that would be considered identifiers may be considered keywords.
         //
         // When adding more parser context flags, consider which is the more common case that the
-        // flag will be in.  This should be hte 'false' state for that flag.  The reason for this is
+        // flag will be in.  This should be the 'false' state for that flag.  The reason for this is
         // that we don't store data in our nodes unless the value is in the *non-default* state.  So,
         // for example, more often than code 'allows-in' (or doesn't 'disallow-in').  We opt for
         // 'disallow-in' set to 'false'.  Otherwise, if we had 'allowsIn' set to 'true', then almost
@@ -1045,7 +1045,7 @@ module ts {
         //
         // An important thing about these context concepts.  By default they are effectively inherited
         // while parsing through every grammar production.  i.e. if you don't change them, then when
-        // you parse a sub-production, it will have the same context values as hte parent production.
+        // you parse a sub-production, it will have the same context values as the parent production.
         // This is great most of the time.  After all, consider all the 'expression' grammar productions
         // and how nearly all of them pass along the 'in' and 'yield' context values:
         //
@@ -1836,7 +1836,7 @@ module ts {
             // some node, then we cannot get a node from the old source tree.  This is because we
             // want to mark the next node we encounter as being unusable.
             //
-            // Note: This may be too conservative.  Perhaps we could reuse hte node and set the bit
+            // Note: This may be too conservative.  Perhaps we could reuse the node and set the bit
             // on it (or its leftmost child) as having the error.  For now though, being conservative
             // is nice and likely won't ever affect perf.
             if (parseErrorBeforeNextFinishedNode) {

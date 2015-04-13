@@ -1831,6 +1831,7 @@ declare module "typescript" {
         name: string;
         kind: string;
         kindModifiers: string;
+        sortText: string;
     }
     interface CompletionEntryDetails {
         name: string;
@@ -1973,6 +1974,7 @@ declare module "typescript" {
     }
     class ScriptElementKind {
         static unknown: string;
+        static warning: string;
         static keyword: string;
         static scriptElement: string;
         static moduleElement: string;
