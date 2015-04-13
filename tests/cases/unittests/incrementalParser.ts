@@ -686,7 +686,6 @@ module m3 { }\
         });
 
         it('Surrounding function declarations with block',() => {
-            debugger;
             var source = "declare function F1() { } export function F2() { } declare export function F3() { }"
 
             var oldText = ScriptSnapshot.fromString(source);
@@ -719,6 +718,15 @@ module m3 { }\
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withChange(oldText, 0, "var v =".length, "class C");
 
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);  // As specified in ES6 specification, all parts of a ClassDeclaration or a ClassExpression are strict mode code.
+        });
+
+        it('Moving methods from object literal to class in strict mode', () => {
+            var source = "\"use strict\"; var v = { public A() { } public B() { } public C() { } }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 14, "var v =".length, "class C");
+
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
         });
 
@@ -728,6 +736,15 @@ module m3 { }\
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withChange(oldText, 0, "class".length, "interface");
 
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);   // As specified in ES6 specification, all parts of a ClassDeclaration or a ClassExpression are strict mode code.
+        });
+
+        it('Moving index signatures from class to interface in strict mode', () => {
+            var source = "\"use strict\"; class C { public [a: number]: string; public [a: number]: string; public [a: number]: string }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 14, "class".length, "interface");
+
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 18);
         });
 
@@ -736,6 +753,16 @@ module m3 { }\
 
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withChange(oldText, 0, "interface".length, "class");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);   // As specified in ES6 specification, all parts of a ClassDeclaration or a ClassExpression are strict mode code.
+        });
+
+
+        it('Moving index signatures from interface to class in strict mode', () => {
+            var source = "\"use strict\"; interface C { public [a: number]: string; public [a: number]: string; public [a: number]: string }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 14, "interface".length, "class");
 
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 18);
         });
@@ -754,6 +781,16 @@ module m3 { }\
 
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withChange(oldText, 0, "var v =".length, "class C");
+
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);  // As specified in ES6 specification, all parts of a ClassDeclaration or a ClassExpression are strict mode code.
+        });
+
+
+        it('Moving accessors from object literal to class in strict mode', () => {
+            var source = "\"use strict\"; var v = { public get A() { } public get B() { } public get C() { } }"
+
+            var oldText = ScriptSnapshot.fromString(source);
+            var newTextAndChange = withChange(oldText, 14, "var v =".length, "class C");
 
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
         });

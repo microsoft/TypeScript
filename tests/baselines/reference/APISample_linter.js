@@ -798,7 +798,8 @@ declare module "typescript" {
     type ExportSpecifier = ImportOrExportSpecifier;
     interface ExportAssignment extends Declaration, ModuleElement {
         isExportEquals?: boolean;
-        expression: Expression;
+        expression?: Expression;
+        type?: TypeNode;
     }
     interface FileReference extends Span {
         fileName: string;

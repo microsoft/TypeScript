@@ -83,6 +83,10 @@ module ts {
         };
     }
 
+    export function hasChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): boolean {
+        return !!findChildOfKind(n, kind, sourceFile);
+    }
+
     export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node {
         return forEach(n.getChildren(sourceFile), c => c.kind === kind && c);
     }
