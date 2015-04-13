@@ -1,26 +1,11 @@
-tests/cases/conformance/decorators/class/property/decoratorOnClassProperty3.ts(4,5): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/conformance/decorators/class/property/decoratorOnClassProperty3.ts(4,5): error TS2304: Cannot find name 'public'.
 tests/cases/conformance/decorators/class/property/decoratorOnClassProperty3.ts(4,12): error TS1005: ';' expected.
-tests/cases/conformance/decorators/class/property/decoratorOnClassProperty3.ts(4,16): error TS1146: Declaration expected.
-tests/cases/conformance/decorators/class/property/decoratorOnClassProperty3.ts(4,17): error TS2304: Cannot find name 'prop'.
-tests/cases/conformance/decorators/class/property/decoratorOnClassProperty3.ts(5,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/conformance/decorators/class/property/decoratorOnClassProperty3.ts (6 errors) ====
+==== tests/cases/conformance/decorators/class/property/decoratorOnClassProperty3.ts (1 errors) ====
     declare function dec(target: any, propertyKey: string): void;
     
     class C {
         public @dec prop;
-        ~~~~~~
-!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-        ~~~~~~
-!!! error TS2304: Cannot find name 'public'.
                ~
 !!! error TS1005: ';' expected.
-                   
-!!! error TS1146: Declaration expected.
-                    ~~~~
-!!! error TS2304: Cannot find name 'prop'.
     }
-    ~
-!!! error TS1128: Declaration or statement expected.

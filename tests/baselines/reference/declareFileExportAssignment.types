@@ -27,24 +27,24 @@ module m2 {
 }
 
 var m2: {
->m2 : { (): export=.connectExport; test1: export=.connectModule; test2(): export=.connectModule; }
+>m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
 
     (): m2.connectExport;
 >m2 : unknown
->connectExport : export=.connectExport
+>connectExport : m2.connectExport
 
     test1: m2.connectModule;
->test1 : export=.connectModule
+>test1 : m2.connectModule
 >m2 : unknown
->connectModule : export=.connectModule
+>connectModule : m2.connectModule
 
     test2(): m2.connectModule;
->test2 : () => export=.connectModule
+>test2 : () => m2.connectModule
 >m2 : unknown
->connectModule : export=.connectModule
+>connectModule : m2.connectModule
 
 };
 
 export = m2;
->m2 : { (): export=.connectExport; test1: export=.connectModule; test2(): export=.connectModule; }
+>m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
 

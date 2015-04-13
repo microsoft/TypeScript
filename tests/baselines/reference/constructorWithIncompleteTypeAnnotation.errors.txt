@@ -40,8 +40,6 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(180,40): error T
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(205,28): error TS1109: Expression expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(213,16): error TS2304: Cannot find name 'bool'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(218,10): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(218,29): error TS2304: Cannot find name 'yield'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(218,36): error TS1005: ';' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(223,23): error TS2304: Cannot find name 'bool'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(227,13): error TS1109: Expression expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(234,14): error TS1005: '{' expected.
@@ -84,7 +82,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,55): error T
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts (84 errors) ====
+==== tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts (82 errors) ====
     declare module "fs" {
         export class File {
             constructor(filename: string);
@@ -390,10 +388,6 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
              case  d = () => {  yield  0; };
              ~~~~
 !!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-                                ~~~~~
-!!! error TS2304: Cannot find name 'yield'.
-                                       ~
-!!! error TS1005: ';' expected.
             public get Property() { return 0; }
             public Member() {
                 return 0;

@@ -5,9 +5,9 @@ class void {}
 
 //// [classWithPredefinedTypesAsNames2.js]
 // classes cannot use predefined types as names
-var  = (function () {
-    function () {
+var default_1 = (function () {
+    function default_1() {
     }
-    return ;
+    return default_1;
 })();
 void {};

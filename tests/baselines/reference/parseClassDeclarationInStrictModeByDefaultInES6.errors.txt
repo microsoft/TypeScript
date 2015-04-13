@@ -1,6 +1,6 @@
-tests/cases/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeByDefaultInES6.ts(4,16): error TS1100: Invalid use of 'arguments' in strict mode.
-tests/cases/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeByDefaultInES6.ts(5,17): error TS1100: Invalid use of 'eval' in strict mode.
-tests/cases/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeByDefaultInES6.ts(6,9): error TS1100: Invalid use of 'arguments' in strict mode.
+tests/cases/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeByDefaultInES6.ts(4,16): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
+tests/cases/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeByDefaultInES6.ts(5,17): error TS1210: Invalid use of 'eval'. Class definitions are automatically in strict mode.
+tests/cases/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeByDefaultInES6.ts(6,9): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
 tests/cases/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeByDefaultInES6.ts(6,9): error TS2322: Type 'string' is not assignable to type 'IArguments'.
   Property 'callee' is missing in type 'String'.
 
@@ -11,13 +11,13 @@ tests/cases/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeBy
         public implements() { }
         public foo(arguments: any) { }
                    ~~~~~~~~~
-!!! error TS1100: Invalid use of 'arguments' in strict mode.
+!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
         private bar(eval:any) {
                     ~~~~
-!!! error TS1100: Invalid use of 'eval' in strict mode.
+!!! error TS1210: Invalid use of 'eval'. Class definitions are automatically in strict mode.
             arguments = "hello";
             ~~~~~~~~~
-!!! error TS1100: Invalid use of 'arguments' in strict mode.
+!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
             ~~~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'IArguments'.
 !!! error TS2322:   Property 'callee' is missing in type 'String'.

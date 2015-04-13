@@ -1,44 +1,11 @@
-tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts(4,5): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts(4,5): error TS2304: Cannot find name 'public'.
 tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts(4,12): error TS1005: ';' expected.
-tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts(4,16): error TS1146: Declaration expected.
-tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts(4,17): error TS2304: Cannot find name 'set'.
-tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts(4,21): error TS1005: ';' expected.
-tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts(4,21): error TS2304: Cannot find name 'accessor'.
-tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts(4,30): error TS2304: Cannot find name 'value'.
-tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts(4,35): error TS1005: ',' expected.
-tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts(4,37): error TS2304: Cannot find name 'number'.
-tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts(4,45): error TS1005: ';' expected.
-tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts(5,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts (12 errors) ====
+==== tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts (1 errors) ====
     declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
     
     class C {
         public @dec set accessor(value: number) { }
-        ~~~~~~
-!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-        ~~~~~~
-!!! error TS2304: Cannot find name 'public'.
                ~
 !!! error TS1005: ';' expected.
-                   
-!!! error TS1146: Declaration expected.
-                    ~~~
-!!! error TS2304: Cannot find name 'set'.
-                        ~~~~~~~~
-!!! error TS1005: ';' expected.
-                        ~~~~~~~~
-!!! error TS2304: Cannot find name 'accessor'.
-                                 ~~~~~
-!!! error TS2304: Cannot find name 'value'.
-                                      ~
-!!! error TS1005: ',' expected.
-                                        ~~~~~~
-!!! error TS2304: Cannot find name 'number'.
-                                                ~
-!!! error TS1005: ';' expected.
     }
-    ~
-!!! error TS1128: Declaration or statement expected.
