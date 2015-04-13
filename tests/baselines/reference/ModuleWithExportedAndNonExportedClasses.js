@@ -35,19 +35,19 @@ var ag2 = new A.A2<string, number>();
 
 //// [ModuleWithExportedAndNonExportedClasses.js]
 var A;
-(function (_A) {
+(function (A_1) {
     var A = (function () {
         function A() {
         }
         return A;
     })();
-    _A.A = A;
+    A_1.A = A;
     var AG = (function () {
         function AG() {
         }
         return AG;
     })();
-    _A.AG = AG;
+    A_1.AG = AG;
     var A2 = (function () {
         function A2() {
         }

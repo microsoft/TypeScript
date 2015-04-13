@@ -6,10 +6,10 @@
 ////ba/*4*/r = b/*5*/ar + 1;
 
 goTo.marker("1");
-verify.referencesCountIs(1);
+verify.referencesCountIs(0);
 
 goTo.marker("2");
-verify.referencesCountIs(1);
+verify.referencesCountIs(0);
 
 goTo.marker("3");
 verify.referencesCountIs(3);

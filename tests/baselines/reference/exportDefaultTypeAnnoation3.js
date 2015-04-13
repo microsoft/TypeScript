@@ -18,5 +18,5 @@ var s: string = d; // Error
 var d = require("mod");
 var s = d; // Error
 //// [reference2.js]
-var _mod = require("mod");
-var s = _mod.default; // Error
+var mod_1 = require("mod");
+var s = mod_1.default; // Error

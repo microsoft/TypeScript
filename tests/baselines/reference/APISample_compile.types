@@ -3008,15 +3008,17 @@ declare module "typescript" {
     interface EmitResolver {
 >EmitResolver : EmitResolver
 
-        getGeneratedNameForNode(node: Node): string;
+        hasGlobalName(name: string): boolean;
+>hasGlobalName : (name: string) => boolean
+>name : string
+
+        getExpressionNameSubstitution(node: Identifier, getGeneratedNameForNode: (node: Node) => string): string;
+>getExpressionNameSubstitution : (node: Identifier, getGeneratedNameForNode: (node: Node) => string) => string
+>node : Identifier
+>Identifier : Identifier
 >getGeneratedNameForNode : (node: Node) => string
 >node : Node
 >Node : Node
-
-        getExpressionNameSubstitution(node: Identifier): string;
->getExpressionNameSubstitution : (node: Identifier) => string
->node : Identifier
->Identifier : Identifier
 
         hasExportDefaultValue(node: SourceFile): boolean;
 >hasExportDefaultValue : (node: SourceFile) => boolean
@@ -3114,8 +3116,8 @@ declare module "typescript" {
 >PropertyAccessExpression : PropertyAccessExpression
 >ElementAccessExpression : ElementAccessExpression
 
-        isUnknownIdentifier(location: Node, name: string): boolean;
->isUnknownIdentifier : (location: Node, name: string) => boolean
+        resolvesToSomeValue(location: Node, name: string): boolean;
+>resolvesToSomeValue : (location: Node, name: string) => boolean
 >location : Node
 >Node : Node
 >name : string
@@ -4732,6 +4734,10 @@ declare module "typescript" {
     let version: string;
 >version : string
 
+    function findConfigFile(searchPath: string): string;
+>findConfigFile : (searchPath: string) => string
+>searchPath : string
+
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
 >createCompilerHost : (options: CompilerOptions, setParentNodes?: boolean) => CompilerHost
 >options : CompilerOptions
@@ -5150,6 +5156,12 @@ declare module "typescript" {
 >position : number
 >ReferenceEntry : ReferenceEntry
 
+        findReferences(fileName: string, position: number): ReferencedSymbol[];
+>findReferences : (fileName: string, position: number) => ReferencedSymbol[]
+>fileName : string
+>position : number
+>ReferencedSymbol : ReferencedSymbol
+
         getNavigateToItems(searchValue: string, maxResultCount?: number): NavigateToItem[];
 >getNavigateToItems : (searchValue: string, maxResultCount?: number) => NavigateToItem[]
 >searchValue : string
@@ -5420,6 +5432,17 @@ declare module "typescript" {
 
         containerName: string;
 >containerName : string
+    }
+    interface ReferencedSymbol {
+>ReferencedSymbol : ReferencedSymbol
+
+        definition: DefinitionInfo;
+>definition : DefinitionInfo
+>DefinitionInfo : DefinitionInfo
+
+        references: ReferenceEntry[];
+>references : ReferenceEntry[]
+>ReferenceEntry : ReferenceEntry
     }
     enum SymbolDisplayPartKind {
 >SymbolDisplayPartKind : SymbolDisplayPartKind

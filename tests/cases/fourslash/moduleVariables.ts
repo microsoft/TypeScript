@@ -14,10 +14,10 @@
 ////}
 
 goTo.marker('1');
-verify.quickInfoIs("(var) M.x: number", undefined);
+verify.quickInfoIs("var M.x: number", undefined);
 
 goTo.marker('2');
-verify.quickInfoIs("(var) M.x: number", undefined);
+verify.quickInfoIs("var M.x: number", undefined);
 
 goTo.marker('3');
-verify.quickInfoIs("(var) x: number", undefined);
+verify.quickInfoIs("var x: number", undefined);

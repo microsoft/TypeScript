@@ -31,19 +31,19 @@
 verify.not.errorExistsBetweenMarkers('1', '6');
 
 goTo.marker('1');
-verify.quickInfoIs('(var) x: any[]');
+verify.quickInfoIs('var x: any[]');
 
 goTo.marker('2');
-verify.quickInfoIs('(var) r: C');
+verify.quickInfoIs('var r: C');
 
 goTo.marker('3');
-verify.quickInfoIs('(var) r3: C');
+verify.quickInfoIs('var r3: C');
 
 goTo.marker('4');
-verify.quickInfoIs('(var) r4: C');
+verify.quickInfoIs('var r4: C');
 
 goTo.marker('5');
-verify.quickInfoIs('(var) x5: C[]');
+verify.quickInfoIs('var x5: C[]');
 
 goTo.marker('6');
-verify.quickInfoIs('(var) r5: C');
+verify.quickInfoIs('var r5: C');

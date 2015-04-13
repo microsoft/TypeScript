@@ -5,4 +5,4 @@
 
 goTo.marker();
 verify.quickInfoExists();
-verify.quickInfoIs('(var) t: number');
+verify.quickInfoIs('var t: number');

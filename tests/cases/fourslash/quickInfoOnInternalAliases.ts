@@ -29,13 +29,13 @@ goTo.marker('3');
 verify.quickInfoIs("class m1.m2.c", "class comment;");
 
 goTo.marker('4');
-verify.quickInfoIs("(var) newVar: internalAlias", "");
+verify.quickInfoIs("var newVar: internalAlias", "");
 
 goTo.marker('5');
 verify.quickInfoIs("(alias) new internalAlias(): internalAlias\nimport internalAlias = m1.m2.c", "");
 
 goTo.marker('6');
-verify.quickInfoIs("(var) anotherAliasVar: typeof internalAlias", "");
+verify.quickInfoIs("var anotherAliasVar: typeof internalAlias", "");
 
 goTo.marker('7');
 verify.quickInfoIs("import internalAlias = m1.m2.c", "This is on import declaration");
@@ -44,16 +44,16 @@ goTo.marker('8');
 verify.quickInfoIs('import internalFoo = m1.foo', "");
 
 goTo.marker('9');
-verify.quickInfoIs("(function) m1.foo(): void", "");
+verify.quickInfoIs("function m1.foo(): void", "");
 
 goTo.marker('10');
-verify.quickInfoIs("(var) callVar: void", "");
+verify.quickInfoIs("var callVar: void", "");
 
 goTo.marker('11');
 verify.quickInfoIs("(alias) internalFoo(): void\nimport internalFoo = m1.foo", "");
 
 goTo.marker('12');
-verify.quickInfoIs("(var) anotherAliasFoo: () => void", "");
+verify.quickInfoIs("var anotherAliasFoo: () => void", "");
 
 goTo.marker('13');
 verify.quickInfoIs("import internalFoo = m1.foo", "");

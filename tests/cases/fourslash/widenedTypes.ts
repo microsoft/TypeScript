@@ -6,13 +6,13 @@
 ////var /*4*/d = [null, undefined];      // var d: any[]
 
 goTo.marker('1');
-verify.quickInfoIs('(var) a: any');
+verify.quickInfoIs('var a: any');
 
 goTo.marker('2');
-verify.quickInfoIs('(var) b: any');
+verify.quickInfoIs('var b: any');
 
 goTo.marker('3');
-verify.quickInfoIs('(var) c: {\n    x: number;\n    y: any;\n}');
+verify.quickInfoIs('var c: {\n    x: number;\n    y: any;\n}');
 
 goTo.marker('4');
-verify.quickInfoIs('(var) d: any[]');
+verify.quickInfoIs('var d: any[]');

@@ -13,4 +13,4 @@
 ////var /**/b = _(a);  // WrappedArray<any>, should be WrappedArray<number>
 
 goTo.marker();
-verify.quickInfoIs('(var) b: WrappedArray<number>');
+verify.quickInfoIs('var b: WrappedArray<number>');

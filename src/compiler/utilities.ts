@@ -1224,28 +1224,6 @@ module ts {
         return node;
     }
 
-    export function generateUniqueName(baseName: string, isExistingName: (name: string) => boolean): string {
-        // First try '_name'
-        if (baseName.charCodeAt(0) !== CharacterCodes._) {
-            baseName = "_" + baseName;
-            if (!isExistingName(baseName)) {
-                return baseName;
-            }
-        }
-        // Find the first unique '_name_n', where n is a positive number
-        if (baseName.charCodeAt(baseName.length - 1) !== CharacterCodes._) {
-            baseName += "_";
-        }
-        let i = 1;
-        while (true) {
-            let name = baseName + i;
-            if (!isExistingName(name)) {
-                return name;
-            }
-            i++;
-        }
-    }
-
     // @internal
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];

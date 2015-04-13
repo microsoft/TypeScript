@@ -27,7 +27,7 @@ function verifyVar(name: string, typeDisplay: ts.SymbolDisplayPart[], optionalNa
     marker++;
     goTo.marker(marker.toString());
     verify.verifyQuickInfoDisplayParts("let", optionalKindModifiers || "", { start: test.markerByName(marker.toString()).position, length: name.length },
-        [{ text: "(", kind: "punctuation" }, { text: "let", kind: "text" }, { text: ")", kind: "punctuation" },
+        [{ text: "let", kind: "keyword" },
             { text: " ", kind: "space" }].concat(optionalNameDisplay || [{ text: name, kind: "localName" }]).concat(
             { text: ":", kind: "punctuation" }, { text: " ", kind: "space" }).concat(typeDisplay),
         []);

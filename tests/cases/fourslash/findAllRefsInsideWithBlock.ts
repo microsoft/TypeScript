@@ -13,4 +13,4 @@ goTo.marker('1');
 verify.referencesCountIs(3);
 
 goTo.marker('2');
-verify.referencesCountIs(1);
+verify.referencesCountIs(0);

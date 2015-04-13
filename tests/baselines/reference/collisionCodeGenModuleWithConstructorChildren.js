@@ -25,31 +25,31 @@ module M {
 
 //// [collisionCodeGenModuleWithConstructorChildren.js]
 var M;
-(function (_M) {
-    _M.x = 3;
+(function (M_1) {
+    M_1.x = 3;
     var c = (function () {
         function c(M, p) {
-            if (p === void 0) { p = _M.x; }
+            if (p === void 0) { p = M_1.x; }
         }
         return c;
     })();
 })(M || (M = {}));
 var M;
-(function (_M_1) {
+(function (M_2) {
     var d = (function () {
         function d(M, p) {
-            if (p === void 0) { p = _M_1.x; }
+            if (p === void 0) { p = M_2.x; }
             this.M = M;
         }
         return d;
     })();
 })(M || (M = {}));
 var M;
-(function (_M_2) {
+(function (M_3) {
     var d2 = (function () {
         function d2() {
             var M = 10;
-            var p = _M_2.x;
+            var p = M_3.x;
         }
         return d2;
     })();

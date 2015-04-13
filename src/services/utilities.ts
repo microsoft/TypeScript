@@ -615,6 +615,13 @@ module ts {
         return displayPart(tokenToString(kind), SymbolDisplayPartKind.operator);
     }
 
+    export function textOrKeywordPart(text: string) {
+        var kind = stringToToken(text);
+        return kind === undefined
+            ? textPart(text)
+            : keywordPart(kind);
+    }
+
     export function textPart(text: string) {
         return displayPart(text, SymbolDisplayPartKind.text);
     }

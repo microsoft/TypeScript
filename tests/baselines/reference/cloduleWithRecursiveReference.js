@@ -17,7 +17,7 @@ var M;
     })();
     M.C = C;
     var C;
-    (function (_C) {
-        _C.C = M.C;
+    (function (C_1) {
+        C_1.C = M.C;
     })(C = M.C || (M.C = {}));
 })(M || (M = {}));

@@ -47,14 +47,14 @@ module M { // Shouldnt be _M
 
 //// [collisionCodeGenModuleWithAccessorChildren.js]
 var M;
-(function (_M) {
-    _M.x = 3;
+(function (M_1) {
+    M_1.x = 3;
     var c = (function () {
         function c() {
         }
         Object.defineProperty(c.prototype, "Z", {
             set: function (M) {
-                this.y = _M.x;
+                this.y = M_1.x;
             },
             enumerable: true,
             configurable: true
@@ -63,14 +63,14 @@ var M;
     })();
 })(M || (M = {}));
 var M;
-(function (_M_1) {
+(function (M_2) {
     var d = (function () {
         function d() {
         }
         Object.defineProperty(d.prototype, "Z", {
             set: function (p) {
                 var M = 10;
-                this.y = _M_1.x;
+                this.y = M_2.x;
             },
             enumerable: true,
             configurable: true
@@ -94,14 +94,14 @@ var M;
     })();
 })(M || (M = {}));
 var M;
-(function (_M_2) {
+(function (M_3) {
     var f = (function () {
         function f() {
         }
         Object.defineProperty(f.prototype, "Z", {
             get: function () {
                 var M = 10;
-                return _M_2.x;
+                return M_3.x;
             },
             enumerable: true,
             configurable: true

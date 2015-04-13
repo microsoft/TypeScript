@@ -9,4 +9,4 @@
 
 goTo.marker('');
 verify.completionListContains("__proto__", '(local var) __proto__: string');
-verify.completionListContains("___proto__", '(var) ___proto__: number');
+verify.completionListContains("___proto__", 'var ___proto__: number');

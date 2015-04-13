@@ -19,28 +19,28 @@ if (true) {
 //// [initializePropertiesWithRenamedLet.js]
 var x0;
 if (true) {
-    var _x0;
+    var x0_1;
     var obj1 = {
-        x0: _x0
+        x0: x0_1
     };
     var obj2 = {
-        x0: _x0
+        x0: x0_1
     };
 }
 var x, y, z;
 if (true) {
-    var _x = ({
+    var x_1 = ({
         x: 0
     }).x;
-    var _y = ({
+    var y_1 = ({
         y: 0
     }).y;
-    var _z;
+    var z_1;
     (_a = {
         z: 0
-    }, _z = _a.z, _a);
+    }, z_1 = _a.z, _a);
     (_b = {
         z: 0
-    }, _z = _b.z, _b);
+    }, z_1 = _b.z, _b);
 }
 var _a, _b;

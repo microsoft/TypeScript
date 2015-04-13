@@ -251,7 +251,7 @@ goTo.marker('l5');
 verify.currentSignatureHelpDocCommentIs("");
 
 goTo.marker('1iq');
-verify.quickInfoIs("(var) i1_i: i1", "");
+verify.quickInfoIs("var i1_i: i1", "");
 goTo.marker('2q');
 verify.quickInfoIs("(method) i1.i1_f1(): void", "i1_f1");
 goTo.marker('3q');
@@ -300,7 +300,7 @@ goTo.marker('l10');
 verify.currentSignatureHelpDocCommentIs("");
 
 goTo.marker('6iq');
-verify.quickInfoIs("(var) c1_i: c1", "");
+verify.quickInfoIs("var c1_i: c1", "");
 goTo.marker('7q');
 verify.quickInfoIs("(method) c1.i1_f1(): void", "");
 goTo.marker('8q');
@@ -366,17 +366,17 @@ verify.quickInfoIs("(property) i1.nc_l1: () => void", "");
 
 goTo.marker('16');
 verify.completionListContains("i1", "interface i1", "i1 is interface with properties");
-verify.completionListContains("i1_i", "(var) i1_i: i1", "");
+verify.completionListContains("i1_i", "var i1_i: i1", "");
 verify.completionListContains("c1", "class c1", "");
-verify.completionListContains("c1_i", "(var) c1_i: c1", "");
+verify.completionListContains("c1_i", "var c1_i: c1", "");
 
 goTo.marker('16i');
 verify.completionListContains("i1", "interface i1", "i1 is interface with properties");
 
 goTo.marker('17iq');
-verify.quickInfoIs("(var) c2_i: c2", "");
+verify.quickInfoIs("var c2_i: c2", "");
 goTo.marker('18iq');
-verify.quickInfoIs("(var) c3_i: c3", "");
+verify.quickInfoIs("var c3_i: c3", "");
 
 goTo.marker('17');
 verify.currentSignatureHelpDocCommentIs("c2 constructor");
@@ -385,7 +385,7 @@ goTo.marker('18');
 verify.currentSignatureHelpDocCommentIs("");
 
 goTo.marker('18sq');
-verify.quickInfoIs("(constructor) c2(a: number): c2", "c2 constructor");
+verify.quickInfoIs("constructor c2(a: number): c2", "c2 constructor");
 
 goTo.marker('18spropq');
 verify.quickInfoIs("class c2", "");
@@ -393,9 +393,9 @@ goTo.marker('18spropProp');
 verify.quickInfoIs("(property) c2.c2_p1: number", "c2 c2_p1");
 
 goTo.marker('17q');
-verify.quickInfoIs("(constructor) c2(a: number): c2", "c2 constructor");
+verify.quickInfoIs("constructor c2(a: number): c2", "c2 constructor");
 goTo.marker('18q');
-verify.quickInfoIs("(constructor) c3(): c3", "");
+verify.quickInfoIs("constructor c3(): c3", "");
 
 goTo.marker('19');
 verify.memberListContains("c2_p1", "(property) c2.c2_p1: number", "c2 c2_p1");
@@ -493,17 +493,17 @@ verify.quickInfoIs("(method) c2.nc_f1(): void", "");
 goTo.marker('34');
 verify.currentSignatureHelpDocCommentIs("c2 constructor");
 goTo.marker('34iq');
-verify.quickInfoIs("(var) c4_i: c4", "");
+verify.quickInfoIs("var c4_i: c4", "");
 goTo.marker('34q');
-verify.quickInfoIs("(constructor) c4(a: number): c4", "c2 constructor");
+verify.quickInfoIs("constructor c4(a: number): c4", "c2 constructor");
 
 goTo.marker('35');
 verify.completionListContains("c2", "class c2", "");
-verify.completionListContains("c2_i", "(var) c2_i: c2", "");
+verify.completionListContains("c2_i", "var c2_i: c2", "");
 verify.completionListContains("c3", "class c3", "");
-verify.completionListContains("c3_i", "(var) c3_i: c3", "");
+verify.completionListContains("c3_i", "var c3_i: c3", "");
 verify.completionListContains("c4", "class c4", "");
-verify.completionListContains("c4_i", "(var) c4_i: c4", "");
+verify.completionListContains("c4_i", "var c4_i: c4", "");
 
 goTo.marker('36');
 verify.memberListContains("i2_p1", "(property) i2.i2_p1: number", "i2_p1");
@@ -536,9 +536,9 @@ goTo.marker('l40');
 verify.currentSignatureHelpDocCommentIs("");
 
 goTo.marker('36iq');
-verify.quickInfoIs("(var) i2_i: i2", "");
+verify.quickInfoIs("var i2_i: i2", "");
 goTo.marker('37iq');
-verify.quickInfoIs("(var) i3_i: i3", "");
+verify.quickInfoIs("var i3_i: i3", "");
 goTo.marker('37q');
 verify.quickInfoIs("(method) i2.i2_f1(): void", "i2_f1");
 goTo.marker('38q');
@@ -652,16 +652,16 @@ verify.quickInfoIs("(property) i2.nc_l1: () => void", "");
 
 goTo.marker('51');
 verify.completionListContains("i2", "interface i2", "");
-verify.completionListContains("i2_i", "(var) i2_i: i2", "");
+verify.completionListContains("i2_i", "var i2_i: i2", "");
 verify.completionListContains("i3", "interface i3", "");
-verify.completionListContains("i3_i", "(var) i3_i: i3", "");
+verify.completionListContains("i3_i", "var i3_i: i3", "");
 
 goTo.marker('51i');
 verify.completionListContains("i2", "interface i2", "");
 verify.completionListContains("i3", "interface i3", "");
 
 goTo.marker('52');
-verify.quickInfoIs("(constructor) c5(): c5", "");
+verify.quickInfoIs("constructor c5(): c5", "");
 
 goTo.marker('53');
 verify.quickInfoIs("class c5", "c5 class");
@@ -670,10 +670,10 @@ goTo.marker('54');
 verify.quickInfoIs("(property) c5.b: number", "");
 
 goTo.marker('55');
-verify.quickInfoIs("(constructor) c2(a: number): c2", "c2 constructor");
+verify.quickInfoIs("constructor c2(a: number): c2", "c2 constructor");
 
 goTo.marker('56');
-verify.quickInfoIs("(constructor) c3(): c3", "");
+verify.quickInfoIs("constructor c3(): c3", "");
 
 goTo.marker('57');
-verify.quickInfoIs("(constructor) c6(): c6", "");
+verify.quickInfoIs("constructor c6(): c6", "");

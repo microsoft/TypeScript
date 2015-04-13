@@ -35,7 +35,7 @@ function verifyInterfaceMethod(markerName: string) {
 function verifyInterfaceInstanceVar(markerName: string, instanceName: string) {
     goTo.marker(markerName);
     verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName(markerName).position, length: instanceName.length },
-        [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
+        [{ text: "var", kind: "keyword" },
             { text: " ", kind: "space" }, { text: instanceName, kind: "localName" }, { text: ":", kind: "punctuation" },
             { text: " ", kind: "space" }, { text: "I", kind: "interfaceName" }],
         []);
@@ -52,7 +52,7 @@ verifyInterfaceMethod("6");
 // Call signature
 goTo.marker("7");
 verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName("7").position, length: "iInstance".length },
-    [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
+    [{ text: "var", kind: "keyword" },
         { text: " ", kind: "space" }, { text: "iInstance", kind: "localName" },
         { text: ":", kind: "punctuation" }, { text: " ", kind: "space" }, { text: "I", kind: "interfaceName" },
         { text: "(", kind: "punctuation" }, { text: ")", kind: "punctuation" },
@@ -65,7 +65,7 @@ verifyInterfaceInstanceVar("8", "anotherInstance");
 // Cosntruct signature
 goTo.marker("9");
 verify.verifyQuickInfoDisplayParts("var", "", { start: test.markerByName("9").position, length: "iInstance".length },
-    [{ text: "(", kind: "punctuation" }, { text: "var", kind: "text" }, { text: ")", kind: "punctuation" },
+    [{ text: "var", kind: "keyword" },
         { text: " ", kind: "space" }, { text: "iInstance", kind: "localName" },
         { text: ":", kind: "punctuation" }, { text: " ", kind: "space" },
         { text: "new", kind: "keyword" }, { text: " ", kind: "space" }, { text: "I", kind: "interfaceName" },

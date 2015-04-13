@@ -28,32 +28,32 @@
 ////var e = a.map(x => x./*13*/
 
 goTo.marker('1');
-verify.quickInfoIs('(var) b: number[]');
+verify.quickInfoIs('var b: number[]');
 goTo.marker('2');
 verify.quickInfoIs('(parameter) x: string');
 
 goTo.marker('3');
-verify.quickInfoIs('(var) c: number[]');
+verify.quickInfoIs('var c: number[]');
 goTo.marker('4');
 verify.quickInfoIs('(parameter) x: string');
 
 goTo.marker('5');
-verify.quickInfoIs('(var) d: number[]');
+verify.quickInfoIs('var d: number[]');
 goTo.marker('6');
 verify.quickInfoIs('(parameter) x: string');
 
 goTo.marker('7');
-verify.quickInfoIs('(var) bb: any[]');
+verify.quickInfoIs('var bb: any[]');
 goTo.marker('8');
 verify.quickInfoIs('(parameter) x: any');
 
 goTo.marker('9');
-verify.quickInfoIs('(var) cc: any[]');
+verify.quickInfoIs('var cc: any[]');
 goTo.marker('10');
 verify.quickInfoIs('(parameter) x: any');
 
 goTo.marker('11');
-verify.quickInfoIs('(var) dd: any[]');
+verify.quickInfoIs('var dd: any[]');
 goTo.marker('12');
 verify.quickInfoIs('(parameter) x: any');
 

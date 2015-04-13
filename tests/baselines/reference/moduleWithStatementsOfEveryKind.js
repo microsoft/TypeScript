@@ -66,7 +66,7 @@ var __extends = this.__extends || function (d, b) {
     d.prototype = new __();
 };
 var A;
-(function (_A) {
+(function (A_1) {
     var A = (function () {
         function A() {
         }

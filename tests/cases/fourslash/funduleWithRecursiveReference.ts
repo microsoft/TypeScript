@@ -11,5 +11,5 @@
 edit.insert('');
 
 goTo.marker();
-verify.quickInfoIs('(var) M.C.C: typeof M.C');
+verify.quickInfoIs('var M.C.C: typeof M.C');
 verify.numberOfErrorsInCurrentFile(0);
