@@ -1,5 +1,4 @@
 // @target: es6
-// @module: commonjs
 
 import { yield } from "somemodule"; // Allowed
 import { default } from "somemodule"; // Error - as this is keyword that is not allowed as identifier

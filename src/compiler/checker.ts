@@ -783,7 +783,7 @@ module ts {
         }
 
         function getExportsForModule(moduleSymbol: Symbol): SymbolTable {
-            if (compilerOptions.target < ScriptTarget.ES6) {
+            if (languageVersion < ScriptTarget.ES6) {
                 // A default export hides all other exports in CommonJS and AMD modules
                 let defaultSymbol = getExportAssignmentSymbol(moduleSymbol);
                 if (defaultSymbol) {
@@ -1811,6 +1811,11 @@ module ts {
                     case SyntaxKind.UnionType:
                     case SyntaxKind.ParenthesizedType:
                         return isDeclarationVisible(<Declaration>node.parent);
+
+                    case SyntaxKind.ImportClause:
+                    case SyntaxKind.NamespaceImport:
+                    case SyntaxKind.ImportSpecifier:
+                        return false;
 
                     // Type parameters are always visible
                     case SyntaxKind.TypeParameter:
@@ -10093,6 +10098,12 @@ module ts {
                         }
                     }
                 }
+                else {
+                    if (languageVersion >= ScriptTarget.ES6) {
+                        // Import equals declaration is deprecated in es6 or above
+                        grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_or_import_d_from_mod_instead);
+                    }
+                }
             }
         }
 
@@ -10140,6 +10151,11 @@ module ts {
             }
 
             checkExternalModuleExports(container);
+
+            if (node.isExportEquals && languageVersion >= ScriptTarget.ES6) {
+                // export assignment is deprecated in es6 or above
+                grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_export_default_instead);
+            }
         }
 
         function getModuleStatements(node: Declaration): ModuleElement[] {
@@ -10182,7 +10198,7 @@ module ts {
             if (!links.exportsChecked) {
                 let defaultSymbol = getExportAssignmentSymbol(moduleSymbol);
                 if (defaultSymbol) {
-                    if (hasExportedMembers(moduleSymbol)) {
+                    if (languageVersion < ScriptTarget.ES6 && hasExportedMembers(moduleSymbol)) {
                         let declaration = getDeclarationOfAliasSymbol(defaultSymbol) || defaultSymbol.valueDeclaration;
                         error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
                     }
@@ -11005,7 +11021,15 @@ module ts {
 
         function getExportNameSubstitution(symbol: Symbol, location: Node): string {
             if (isExternalModuleSymbol(symbol.parent)) {
-                return "exports." + unescapeIdentifier(symbol.name);
+                var symbolName = unescapeIdentifier(symbol.name);
+                // If this is es6 or higher, just use the name of the export
+                // no need to qualify it.
+                if (languageVersion >= ScriptTarget.ES6) {
+                    return symbolName;
+                }
+                else {
+                    return "exports." + symbolName;
+                }
             }
             let node = location;
             let containerSymbol = getParentOfSymbol(symbol);
@@ -11033,7 +11057,7 @@ module ts {
                     return getExportNameSubstitution(exportSymbol, node.parent);
                 }
                 // Named imports from ES6 import declarations are rewritten
-                if (symbol.flags & SymbolFlags.Alias) {
+                if (symbol.flags & SymbolFlags.Alias && languageVersion < ScriptTarget.ES6) {
                     return getAliasNameSubstitution(symbol);
                 }
             }
@@ -11069,7 +11093,6 @@ module ts {
                     return true;
                 }
             }
-            return forEachChild(node, isReferencedAliasDeclaration);
         }
 
         function isImplementationOfOverload(node: FunctionLikeDeclaration) {

@@ -14,8 +14,16 @@ import defaultBinding, { x, a as y } from "es6ImportDefaultBindingFollowedWithNa
 import defaultBinding, { x as z,  } from "es6ImportDefaultBindingFollowedWithNamedImport_0";
 import defaultBinding, { m,  } from "es6ImportDefaultBindingFollowedWithNamedImport_0";
 
+
 //// [es6ImportDefaultBindingFollowedWithNamedImport_0.js]
-exports.a = 10;
-exports.x = exports.a;
-exports.m = exports.a;
+export var a = 10;
+export var x = a;
+export var m = a;
 //// [es6ImportDefaultBindingFollowedWithNamedImport_1.js]
+
+
+//// [es6ImportDefaultBindingFollowedWithNamedImport_0.d.ts]
+export declare var a: number;
+export declare var x: number;
+export declare var m: number;
+//// [es6ImportDefaultBindingFollowedWithNamedImport_1.d.ts]

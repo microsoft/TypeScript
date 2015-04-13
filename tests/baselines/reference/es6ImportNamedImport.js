@@ -18,10 +18,20 @@ import { m,  } from "es6ImportNamedImport_0";
 import { a1, x1 } from "es6ImportNamedImport_0";
 import { a1 as a11, x1 as x11 } from "es6ImportNamedImport_0";
 
+
 //// [es6ImportNamedImport_0.js]
-exports.a = 10;
-exports.x = exports.a;
-exports.m = exports.a;
-exports.a1 = 10;
-exports.x1 = 10;
+export var a = 10;
+export var x = a;
+export var m = a;
+export var a1 = 10;
+export var x1 = 10;
 //// [es6ImportNamedImport_1.js]
+
+
+//// [es6ImportNamedImport_0.d.ts]
+export declare var a: number;
+export declare var x: number;
+export declare var m: number;
+export declare var a1: number;
+export declare var x1: number;
+//// [es6ImportNamedImport_1.d.ts]

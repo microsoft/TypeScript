@@ -1,5 +1,4 @@
 // @target: es6
-// @module: commonjs
 
 // @filename: es6ImportNamedImportParsingError_0.ts
 export var a = 10;

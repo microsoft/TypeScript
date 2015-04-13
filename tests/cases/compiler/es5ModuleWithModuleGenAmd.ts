@@ -1,15 +1,12 @@
-=== tests/cases/compiler/es6-amd.ts ===
-
-class A
->A : A
+// @target: ES5
+// @module: amd
+export class A
 {
     constructor ()
     {
-
     }
 
     public B()
->B : () => number
     {
         return 42;
     }

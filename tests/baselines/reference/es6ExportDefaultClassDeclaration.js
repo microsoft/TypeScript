@@ -1,0 +1,18 @@
+//// [es6ExportDefaultClassDeclaration.ts]
+
+export default class C {
+    method() { }
+}
+
+
+//// [es6ExportDefaultClassDeclaration.js]
+export default class C {
+    method() {
+    }
+}
+
+
+//// [es6ExportDefaultClassDeclaration.d.ts]
+export declare class C {
+    method(): void;
+}
