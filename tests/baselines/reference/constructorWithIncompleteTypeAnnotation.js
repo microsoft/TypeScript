@@ -369,7 +369,7 @@ var BasicFeatures = (function () {
                 return 'objLit{42}';
             }
         };
-        var weekday = 0 /* Monday */;
+        var weekday = Weekdays.Monday;
         var con = char + f + hexchar + float.toString() + float2.toString() + reg.toString() + objLit + weekday;
         //
         var any = 0 ^= ;

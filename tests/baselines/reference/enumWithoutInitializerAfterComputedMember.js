@@ -9,6 +9,6 @@ enum E {
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";
-    E[E["b"] = E.a] = "b";
-    E[E["c"] = undefined] = "c";
+    E[E["b"] = 0] = "b";
+    E[E["c"] = 1] = "c";
 })(E || (E = {}));

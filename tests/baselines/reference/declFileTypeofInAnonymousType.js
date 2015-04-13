@@ -56,7 +56,7 @@ var d = {
     me: {
         en: m1.e
     },
-    mh: 2 /* holiday */
+    mh: m1.e.holiday
 };
 
 
