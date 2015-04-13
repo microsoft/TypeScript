@@ -1,15 +1,15 @@
 === tests/cases/compiler/collisionCodeGenModuleWithEnumMemberConflict.ts ===
 module m1 {
->m1 : typeof m1, Symbol(m1,Decl(collisionCodeGenModuleWithEnumMemberConflict.ts,0,0))
+>m1 : typeof m1, Symbol(m1, Decl(collisionCodeGenModuleWithEnumMemberConflict.ts, 0, 0))
 
     enum e {
->e : e, Symbol(e,Decl(collisionCodeGenModuleWithEnumMemberConflict.ts,0,11))
+>e : e, Symbol(e, Decl(collisionCodeGenModuleWithEnumMemberConflict.ts, 0, 11))
 
         m1, 
->m1 : e, Symbol(e.m1,Decl(collisionCodeGenModuleWithEnumMemberConflict.ts,1,12))
+>m1 : e, Symbol(e.m1, Decl(collisionCodeGenModuleWithEnumMemberConflict.ts, 1, 12))
 
         m2 = m1
->m2 : e, Symbol(e.m2,Decl(collisionCodeGenModuleWithEnumMemberConflict.ts,2,11))
->m1 : e, Symbol(e.m1,Decl(collisionCodeGenModuleWithEnumMemberConflict.ts,1,12))
+>m2 : e, Symbol(e.m2, Decl(collisionCodeGenModuleWithEnumMemberConflict.ts, 2, 11))
+>m1 : e, Symbol(e.m1, Decl(collisionCodeGenModuleWithEnumMemberConflict.ts, 1, 12))
     }
 }

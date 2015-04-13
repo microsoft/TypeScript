@@ -1,12 +1,12 @@
 === tests/cases/compiler/constraintsUsedInPrototypeProperty.ts ===
 class Foo<T extends number, U, V extends string> { }
->Foo : Foo<T, U, V>, Symbol(Foo,Decl(constraintsUsedInPrototypeProperty.ts,0,0))
->T : T, Symbol(T,Decl(constraintsUsedInPrototypeProperty.ts,0,10))
->U : U, Symbol(U,Decl(constraintsUsedInPrototypeProperty.ts,0,27))
->V : V, Symbol(V,Decl(constraintsUsedInPrototypeProperty.ts,0,30))
+>Foo : Foo<T, U, V>, Symbol(Foo, Decl(constraintsUsedInPrototypeProperty.ts, 0, 0))
+>T : T, Symbol(T, Decl(constraintsUsedInPrototypeProperty.ts, 0, 10))
+>U : U, Symbol(U, Decl(constraintsUsedInPrototypeProperty.ts, 0, 27))
+>V : V, Symbol(V, Decl(constraintsUsedInPrototypeProperty.ts, 0, 30))
 
 Foo.prototype; // Foo<any, any, any>
 >Foo.prototype : Foo<any, any, any>, Symbol(Foo.prototype)
->Foo : typeof Foo, Symbol(Foo,Decl(constraintsUsedInPrototypeProperty.ts,0,0))
+>Foo : typeof Foo, Symbol(Foo, Decl(constraintsUsedInPrototypeProperty.ts, 0, 0))
 >prototype : Foo<any, any, any>, Symbol(Foo.prototype)
 

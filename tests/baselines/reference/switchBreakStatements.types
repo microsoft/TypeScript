@@ -114,7 +114,7 @@ switch ('') {
 >'a' : string
 
                                 var fn = function () { }
->fn : () => void, Symbol(fn,Decl(switchBreakStatements.ts,48,35))
+>fn : () => void, Symbol(fn, Decl(switchBreakStatements.ts, 48, 35))
 >function () { } : () => void
 
                                 break EIGHT;

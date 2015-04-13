@@ -1,13 +1,13 @@
 === tests/cases/compiler/prespecializedGenericMembers1.ts ===
 export interface IKitty {
->IKitty : IKitty, Symbol(IKitty,Decl(prespecializedGenericMembers1.ts,0,0))
+>IKitty : IKitty, Symbol(IKitty, Decl(prespecializedGenericMembers1.ts, 0, 0))
 
     }
 
 export class Cat<CatType extends IKitty> {
->Cat : Cat<CatType>, Symbol(Cat,Decl(prespecializedGenericMembers1.ts,2,5))
->CatType : CatType, Symbol(CatType,Decl(prespecializedGenericMembers1.ts,4,17))
->IKitty : IKitty, Symbol(IKitty,Decl(prespecializedGenericMembers1.ts,0,0))
+>Cat : Cat<CatType>, Symbol(Cat, Decl(prespecializedGenericMembers1.ts, 2, 5))
+>CatType : CatType, Symbol(CatType, Decl(prespecializedGenericMembers1.ts, 4, 17))
+>IKitty : IKitty, Symbol(IKitty, Decl(prespecializedGenericMembers1.ts, 0, 0))
 
     constructor() {
     
@@ -15,34 +15,34 @@ export class Cat<CatType extends IKitty> {
 }
 
 export class CatBag {
->CatBag : CatBag, Symbol(CatBag,Decl(prespecializedGenericMembers1.ts,8,1))
+>CatBag : CatBag, Symbol(CatBag, Decl(prespecializedGenericMembers1.ts, 8, 1))
 
     constructor(cats: { barry: Cat<IKitty>; }) {
->cats : { barry: Cat<IKitty>; }, Symbol(cats,Decl(prespecializedGenericMembers1.ts,11,16))
->barry : Cat<IKitty>, Symbol(barry,Decl(prespecializedGenericMembers1.ts,11,23))
->Cat : Cat<CatType>, Symbol(Cat,Decl(prespecializedGenericMembers1.ts,2,5))
->IKitty : IKitty, Symbol(IKitty,Decl(prespecializedGenericMembers1.ts,0,0))
+>cats : { barry: Cat<IKitty>; }, Symbol(cats, Decl(prespecializedGenericMembers1.ts, 11, 16))
+>barry : Cat<IKitty>, Symbol(barry, Decl(prespecializedGenericMembers1.ts, 11, 23))
+>Cat : Cat<CatType>, Symbol(Cat, Decl(prespecializedGenericMembers1.ts, 2, 5))
+>IKitty : IKitty, Symbol(IKitty, Decl(prespecializedGenericMembers1.ts, 0, 0))
         
     }
 }
 var cat = new Cat<IKitty>();
->cat : Cat<IKitty>, Symbol(cat,Decl(prespecializedGenericMembers1.ts,15,3))
+>cat : Cat<IKitty>, Symbol(cat, Decl(prespecializedGenericMembers1.ts, 15, 3))
 >new Cat<IKitty>() : Cat<IKitty>
->Cat : typeof Cat, Symbol(Cat,Decl(prespecializedGenericMembers1.ts,2,5))
->IKitty : IKitty, Symbol(IKitty,Decl(prespecializedGenericMembers1.ts,0,0))
+>Cat : typeof Cat, Symbol(Cat, Decl(prespecializedGenericMembers1.ts, 2, 5))
+>IKitty : IKitty, Symbol(IKitty, Decl(prespecializedGenericMembers1.ts, 0, 0))
 
 var catThing = {
->catThing : { barry: Cat<IKitty>; }, Symbol(catThing,Decl(prespecializedGenericMembers1.ts,16,3))
+>catThing : { barry: Cat<IKitty>; }, Symbol(catThing, Decl(prespecializedGenericMembers1.ts, 16, 3))
 >{    barry: cat} : { barry: Cat<IKitty>; }
 
     barry: cat
->barry : Cat<IKitty>, Symbol(barry,Decl(prespecializedGenericMembers1.ts,16,16))
->cat : Cat<IKitty>, Symbol(cat,Decl(prespecializedGenericMembers1.ts,15,3))
+>barry : Cat<IKitty>, Symbol(barry, Decl(prespecializedGenericMembers1.ts, 16, 16))
+>cat : Cat<IKitty>, Symbol(cat, Decl(prespecializedGenericMembers1.ts, 15, 3))
 
 };
 var catBag = new CatBag(catThing);
->catBag : CatBag, Symbol(catBag,Decl(prespecializedGenericMembers1.ts,19,3))
+>catBag : CatBag, Symbol(catBag, Decl(prespecializedGenericMembers1.ts, 19, 3))
 >new CatBag(catThing) : CatBag
->CatBag : typeof CatBag, Symbol(CatBag,Decl(prespecializedGenericMembers1.ts,8,1))
->catThing : { barry: Cat<IKitty>; }, Symbol(catThing,Decl(prespecializedGenericMembers1.ts,16,3))
+>CatBag : typeof CatBag, Symbol(CatBag, Decl(prespecializedGenericMembers1.ts, 8, 1))
+>catThing : { barry: Cat<IKitty>; }, Symbol(catThing, Decl(prespecializedGenericMembers1.ts, 16, 3))
 

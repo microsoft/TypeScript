@@ -1,35 +1,35 @@
 === tests/cases/compiler/genericObjectLitReturnType.ts ===
 class X<T>
->X : X<T>, Symbol(X,Decl(genericObjectLitReturnType.ts,0,0))
->T : T, Symbol(T,Decl(genericObjectLitReturnType.ts,0,8))
+>X : X<T>, Symbol(X, Decl(genericObjectLitReturnType.ts, 0, 0))
+>T : T, Symbol(T, Decl(genericObjectLitReturnType.ts, 0, 8))
 {
     f(t: T) { return { a: t }; }
->f : (t: T) => { a: T; }, Symbol(f,Decl(genericObjectLitReturnType.ts,1,1))
->t : T, Symbol(t,Decl(genericObjectLitReturnType.ts,2,6))
->T : T, Symbol(T,Decl(genericObjectLitReturnType.ts,0,8))
+>f : (t: T) => { a: T; }, Symbol(f, Decl(genericObjectLitReturnType.ts, 1, 1))
+>t : T, Symbol(t, Decl(genericObjectLitReturnType.ts, 2, 6))
+>T : T, Symbol(T, Decl(genericObjectLitReturnType.ts, 0, 8))
 >{ a: t } : { a: T; }
->a : T, Symbol(a,Decl(genericObjectLitReturnType.ts,2,22))
->t : T, Symbol(t,Decl(genericObjectLitReturnType.ts,2,6))
+>a : T, Symbol(a, Decl(genericObjectLitReturnType.ts, 2, 22))
+>t : T, Symbol(t, Decl(genericObjectLitReturnType.ts, 2, 6))
 }
 
  
 var x: X<number>;
->x : X<number>, Symbol(x,Decl(genericObjectLitReturnType.ts,6,3))
->X : X<T>, Symbol(X,Decl(genericObjectLitReturnType.ts,0,0))
+>x : X<number>, Symbol(x, Decl(genericObjectLitReturnType.ts, 6, 3))
+>X : X<T>, Symbol(X, Decl(genericObjectLitReturnType.ts, 0, 0))
 
 var t1 = x.f(5);
->t1 : { a: number; }, Symbol(t1,Decl(genericObjectLitReturnType.ts,7,3))
+>t1 : { a: number; }, Symbol(t1, Decl(genericObjectLitReturnType.ts, 7, 3))
 >x.f(5) : { a: number; }
->x.f : (t: number) => { a: number; }, Symbol(X.f,Decl(genericObjectLitReturnType.ts,1,1))
->x : X<number>, Symbol(x,Decl(genericObjectLitReturnType.ts,6,3))
->f : (t: number) => { a: number; }, Symbol(X.f,Decl(genericObjectLitReturnType.ts,1,1))
+>x.f : (t: number) => { a: number; }, Symbol(X.f, Decl(genericObjectLitReturnType.ts, 1, 1))
+>x : X<number>, Symbol(x, Decl(genericObjectLitReturnType.ts, 6, 3))
+>f : (t: number) => { a: number; }, Symbol(X.f, Decl(genericObjectLitReturnType.ts, 1, 1))
 >5 : number
 
 t1.a = 5; // Should not error: t1 should have type {a: number}, instead has type {a: T}
 >t1.a = 5 : number
->t1.a : number, Symbol(a,Decl(genericObjectLitReturnType.ts,2,22))
->t1 : { a: number; }, Symbol(t1,Decl(genericObjectLitReturnType.ts,7,3))
->a : number, Symbol(a,Decl(genericObjectLitReturnType.ts,2,22))
+>t1.a : number, Symbol(a, Decl(genericObjectLitReturnType.ts, 2, 22))
+>t1 : { a: number; }, Symbol(t1, Decl(genericObjectLitReturnType.ts, 7, 3))
+>a : number, Symbol(a, Decl(genericObjectLitReturnType.ts, 2, 22))
 >5 : number
  
 

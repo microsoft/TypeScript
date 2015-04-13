@@ -1,17 +1,17 @@
 === tests/cases/compiler/interface0.ts ===
 interface Generic<T> {
->Generic : Generic<T>, Symbol(Generic,Decl(interface0.ts,0,0))
->T : T, Symbol(T,Decl(interface0.ts,0,18))
+>Generic : Generic<T>, Symbol(Generic, Decl(interface0.ts, 0, 0))
+>T : T, Symbol(T, Decl(interface0.ts, 0, 18))
 
     x: T;
->x : T, Symbol(x,Decl(interface0.ts,0,22))
->T : T, Symbol(T,Decl(interface0.ts,0,18))
+>x : T, Symbol(x, Decl(interface0.ts, 0, 22))
+>T : T, Symbol(T, Decl(interface0.ts, 0, 18))
 }
 
 var y: Generic<number> = { x: 3 };
->y : Generic<number>, Symbol(y,Decl(interface0.ts,4,3))
->Generic : Generic<T>, Symbol(Generic,Decl(interface0.ts,0,0))
+>y : Generic<number>, Symbol(y, Decl(interface0.ts, 4, 3))
+>Generic : Generic<T>, Symbol(Generic, Decl(interface0.ts, 0, 0))
 >{ x: 3 } : { x: number; }
->x : number, Symbol(x,Decl(interface0.ts,4,26))
+>x : number, Symbol(x, Decl(interface0.ts, 4, 26))
 >3 : number
 

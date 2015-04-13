@@ -1,30 +1,30 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNames25_ES6.ts ===
 class Base {
->Base : Base, Symbol(Base,Decl(computedPropertyNames25_ES6.ts,0,0))
+>Base : Base, Symbol(Base, Decl(computedPropertyNames25_ES6.ts, 0, 0))
 
     bar() {
->bar : () => number, Symbol(bar,Decl(computedPropertyNames25_ES6.ts,0,12))
+>bar : () => number, Symbol(bar, Decl(computedPropertyNames25_ES6.ts, 0, 12))
 
         return 0;
 >0 : number
     }
 }
 class C extends Base {
->C : C, Symbol(C,Decl(computedPropertyNames25_ES6.ts,4,1))
->Base : Base, Symbol(Base,Decl(computedPropertyNames25_ES6.ts,0,0))
+>C : C, Symbol(C, Decl(computedPropertyNames25_ES6.ts, 4, 1))
+>Base : Base, Symbol(Base, Decl(computedPropertyNames25_ES6.ts, 0, 0))
 
     foo() {
->foo : () => number, Symbol(foo,Decl(computedPropertyNames25_ES6.ts,5,22))
+>foo : () => number, Symbol(foo, Decl(computedPropertyNames25_ES6.ts, 5, 22))
 
         var obj = {
->obj : {}, Symbol(obj,Decl(computedPropertyNames25_ES6.ts,7,11))
+>obj : {}, Symbol(obj, Decl(computedPropertyNames25_ES6.ts, 7, 11))
 >{            [super.bar()]() { }        } : {}
 
             [super.bar()]() { }
 >super.bar() : number
->super.bar : () => number, Symbol(Base.bar,Decl(computedPropertyNames25_ES6.ts,0,12))
->super : Base, Symbol(Base,Decl(computedPropertyNames25_ES6.ts,0,0))
->bar : () => number, Symbol(Base.bar,Decl(computedPropertyNames25_ES6.ts,0,12))
+>super.bar : () => number, Symbol(Base.bar, Decl(computedPropertyNames25_ES6.ts, 0, 12))
+>super : Base, Symbol(Base, Decl(computedPropertyNames25_ES6.ts, 0, 0))
+>bar : () => number, Symbol(Base.bar, Decl(computedPropertyNames25_ES6.ts, 0, 12))
 
         };
         return 0;

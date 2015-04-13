@@ -2,45 +2,45 @@
 // type of an array is the best common type of its elements (plus its contextual type if it exists)
 
 var a = [1, '']; // {}[]
->a : (string | number)[], Symbol(a,Decl(heterogeneousArrayLiterals.ts,2,3))
+>a : (string | number)[], Symbol(a, Decl(heterogeneousArrayLiterals.ts, 2, 3))
 >[1, ''] : (string | number)[]
 >1 : number
 >'' : string
 
 var b = [1, null]; // number[]
->b : number[], Symbol(b,Decl(heterogeneousArrayLiterals.ts,3,3))
+>b : number[], Symbol(b, Decl(heterogeneousArrayLiterals.ts, 3, 3))
 >[1, null] : number[]
 >1 : number
 >null : null
 
 var c = [1, '', null]; // {}[]
->c : (string | number)[], Symbol(c,Decl(heterogeneousArrayLiterals.ts,4,3))
+>c : (string | number)[], Symbol(c, Decl(heterogeneousArrayLiterals.ts, 4, 3))
 >[1, '', null] : (string | number)[]
 >1 : number
 >'' : string
 >null : null
 
 var d = [{}, 1]; // {}[]
->d : {}[], Symbol(d,Decl(heterogeneousArrayLiterals.ts,5,3))
+>d : {}[], Symbol(d, Decl(heterogeneousArrayLiterals.ts, 5, 3))
 >[{}, 1] : {}[]
 >{} : {}
 >1 : number
 
 var e = [{}, Object]; // {}[]
->e : {}[], Symbol(e,Decl(heterogeneousArrayLiterals.ts,6,3))
+>e : {}[], Symbol(e, Decl(heterogeneousArrayLiterals.ts, 6, 3))
 >[{}, Object] : {}[]
 >{} : {}
->Object : ObjectConstructor, Symbol(Object,Decl(lib.d.ts,92,1),Decl(lib.d.ts,223,11))
+>Object : ObjectConstructor, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
 var f = [[], [1]]; // number[][]
->f : number[][], Symbol(f,Decl(heterogeneousArrayLiterals.ts,8,3))
+>f : number[][], Symbol(f, Decl(heterogeneousArrayLiterals.ts, 8, 3))
 >[[], [1]] : number[][]
 >[] : undefined[]
 >[1] : number[]
 >1 : number
 
 var g = [[1], ['']]; // {}[]
->g : (string[] | number[])[], Symbol(g,Decl(heterogeneousArrayLiterals.ts,9,3))
+>g : (string[] | number[])[], Symbol(g, Decl(heterogeneousArrayLiterals.ts, 9, 3))
 >[[1], ['']] : (string[] | number[])[]
 >[1] : number[]
 >1 : number
@@ -48,31 +48,31 @@ var g = [[1], ['']]; // {}[]
 >'' : string
 
 var h = [{ foo: 1, bar: '' }, { foo: 2 }]; // {foo: number}[]
->h : { foo: number; }[], Symbol(h,Decl(heterogeneousArrayLiterals.ts,11,3))
+>h : { foo: number; }[], Symbol(h, Decl(heterogeneousArrayLiterals.ts, 11, 3))
 >[{ foo: 1, bar: '' }, { foo: 2 }] : { foo: number; }[]
 >{ foo: 1, bar: '' } : { foo: number; bar: string; }
->foo : number, Symbol(foo,Decl(heterogeneousArrayLiterals.ts,11,10))
+>foo : number, Symbol(foo, Decl(heterogeneousArrayLiterals.ts, 11, 10))
 >1 : number
->bar : string, Symbol(bar,Decl(heterogeneousArrayLiterals.ts,11,18))
+>bar : string, Symbol(bar, Decl(heterogeneousArrayLiterals.ts, 11, 18))
 >'' : string
 >{ foo: 2 } : { foo: number; }
->foo : number, Symbol(foo,Decl(heterogeneousArrayLiterals.ts,11,31))
+>foo : number, Symbol(foo, Decl(heterogeneousArrayLiterals.ts, 11, 31))
 >2 : number
 
 var i = [{ foo: 1, bar: '' }, { foo: '' }]; // {}[]
->i : ({ foo: number; bar: string; } | { foo: string; })[], Symbol(i,Decl(heterogeneousArrayLiterals.ts,12,3))
+>i : ({ foo: number; bar: string; } | { foo: string; })[], Symbol(i, Decl(heterogeneousArrayLiterals.ts, 12, 3))
 >[{ foo: 1, bar: '' }, { foo: '' }] : ({ foo: number; bar: string; } | { foo: string; })[]
 >{ foo: 1, bar: '' } : { foo: number; bar: string; }
->foo : number, Symbol(foo,Decl(heterogeneousArrayLiterals.ts,12,10))
+>foo : number, Symbol(foo, Decl(heterogeneousArrayLiterals.ts, 12, 10))
 >1 : number
->bar : string, Symbol(bar,Decl(heterogeneousArrayLiterals.ts,12,18))
+>bar : string, Symbol(bar, Decl(heterogeneousArrayLiterals.ts, 12, 18))
 >'' : string
 >{ foo: '' } : { foo: string; }
->foo : string, Symbol(foo,Decl(heterogeneousArrayLiterals.ts,12,31))
+>foo : string, Symbol(foo, Decl(heterogeneousArrayLiterals.ts, 12, 31))
 >'' : string
 
 var j = [() => 1, () => '']; // {}[]
->j : ((() => number) | (() => string))[], Symbol(j,Decl(heterogeneousArrayLiterals.ts,14,3))
+>j : ((() => number) | (() => string))[], Symbol(j, Decl(heterogeneousArrayLiterals.ts, 14, 3))
 >[() => 1, () => ''] : ((() => number) | (() => string))[]
 >() => 1 : () => number
 >1 : number
@@ -80,7 +80,7 @@ var j = [() => 1, () => '']; // {}[]
 >'' : string
 
 var k = [() => 1, () => 1]; // { (): number }[]
->k : (() => number)[], Symbol(k,Decl(heterogeneousArrayLiterals.ts,15,3))
+>k : (() => number)[], Symbol(k, Decl(heterogeneousArrayLiterals.ts, 15, 3))
 >[() => 1, () => 1] : (() => number)[]
 >() => 1 : () => number
 >1 : number
@@ -88,7 +88,7 @@ var k = [() => 1, () => 1]; // { (): number }[]
 >1 : number
 
 var l = [() => 1, () => null]; // { (): any }[]
->l : (() => any)[], Symbol(l,Decl(heterogeneousArrayLiterals.ts,16,3))
+>l : (() => any)[], Symbol(l, Decl(heterogeneousArrayLiterals.ts, 16, 3))
 >[() => 1, () => null] : (() => any)[]
 >() => 1 : () => number
 >1 : number
@@ -96,7 +96,7 @@ var l = [() => 1, () => null]; // { (): any }[]
 >null : null
 
 var m = [() => 1, () => '', () => null]; // { (): any }[]
->m : (() => any)[], Symbol(m,Decl(heterogeneousArrayLiterals.ts,17,3))
+>m : (() => any)[], Symbol(m, Decl(heterogeneousArrayLiterals.ts, 17, 3))
 >[() => 1, () => '', () => null] : (() => any)[]
 >() => 1 : () => number
 >1 : number
@@ -106,7 +106,7 @@ var m = [() => 1, () => '', () => null]; // { (): any }[]
 >null : null
 
 var n = [[() => 1], [() => '']]; // {}[]
->n : ((() => number)[] | (() => string)[])[], Symbol(n,Decl(heterogeneousArrayLiterals.ts,18,3))
+>n : ((() => number)[] | (() => string)[])[], Symbol(n, Decl(heterogeneousArrayLiterals.ts, 18, 3))
 >[[() => 1], [() => '']] : ((() => number)[] | (() => string)[])[]
 >[() => 1] : (() => number)[]
 >() => 1 : () => number
@@ -116,449 +116,449 @@ var n = [[() => 1], [() => '']]; // {}[]
 >'' : string
 
 class Base { foo: string; }
->Base : Base, Symbol(Base,Decl(heterogeneousArrayLiterals.ts,18,32))
->foo : string, Symbol(foo,Decl(heterogeneousArrayLiterals.ts,20,12))
+>Base : Base, Symbol(Base, Decl(heterogeneousArrayLiterals.ts, 18, 32))
+>foo : string, Symbol(foo, Decl(heterogeneousArrayLiterals.ts, 20, 12))
 
 class Derived extends Base { bar: string; }
->Derived : Derived, Symbol(Derived,Decl(heterogeneousArrayLiterals.ts,20,27),Decl(heterogeneousArrayLiterals.ts,25,23))
->Base : Base, Symbol(Base,Decl(heterogeneousArrayLiterals.ts,18,32))
->bar : string, Symbol(bar,Decl(heterogeneousArrayLiterals.ts,21,28))
+>Derived : Derived, Symbol(Derived, Decl(heterogeneousArrayLiterals.ts, 20, 27), Decl(heterogeneousArrayLiterals.ts, 25, 23))
+>Base : Base, Symbol(Base, Decl(heterogeneousArrayLiterals.ts, 18, 32))
+>bar : string, Symbol(bar, Decl(heterogeneousArrayLiterals.ts, 21, 28))
 
 class Derived2 extends Base { baz: string; }
->Derived2 : Derived2, Symbol(Derived2,Decl(heterogeneousArrayLiterals.ts,21,43))
->Base : Base, Symbol(Base,Decl(heterogeneousArrayLiterals.ts,18,32))
->baz : string, Symbol(baz,Decl(heterogeneousArrayLiterals.ts,22,29))
+>Derived2 : Derived2, Symbol(Derived2, Decl(heterogeneousArrayLiterals.ts, 21, 43))
+>Base : Base, Symbol(Base, Decl(heterogeneousArrayLiterals.ts, 18, 32))
+>baz : string, Symbol(baz, Decl(heterogeneousArrayLiterals.ts, 22, 29))
 
 var base: Base;
->base : Base, Symbol(base,Decl(heterogeneousArrayLiterals.ts,23,3))
->Base : Base, Symbol(Base,Decl(heterogeneousArrayLiterals.ts,18,32))
+>base : Base, Symbol(base, Decl(heterogeneousArrayLiterals.ts, 23, 3))
+>Base : Base, Symbol(Base, Decl(heterogeneousArrayLiterals.ts, 18, 32))
 
 var derived: Derived;
->derived : Derived, Symbol(derived,Decl(heterogeneousArrayLiterals.ts,24,3))
->Derived : Derived, Symbol(Derived,Decl(heterogeneousArrayLiterals.ts,20,27),Decl(heterogeneousArrayLiterals.ts,25,23))
+>derived : Derived, Symbol(derived, Decl(heterogeneousArrayLiterals.ts, 24, 3))
+>Derived : Derived, Symbol(Derived, Decl(heterogeneousArrayLiterals.ts, 20, 27), Decl(heterogeneousArrayLiterals.ts, 25, 23))
 
 var derived2: Derived2;
->derived2 : Derived2, Symbol(derived2,Decl(heterogeneousArrayLiterals.ts,25,3))
->Derived2 : Derived2, Symbol(Derived2,Decl(heterogeneousArrayLiterals.ts,21,43))
+>derived2 : Derived2, Symbol(derived2, Decl(heterogeneousArrayLiterals.ts, 25, 3))
+>Derived2 : Derived2, Symbol(Derived2, Decl(heterogeneousArrayLiterals.ts, 21, 43))
 
 module Derived {
->Derived : typeof Derived, Symbol(Derived,Decl(heterogeneousArrayLiterals.ts,20,27),Decl(heterogeneousArrayLiterals.ts,25,23))
+>Derived : typeof Derived, Symbol(Derived, Decl(heterogeneousArrayLiterals.ts, 20, 27), Decl(heterogeneousArrayLiterals.ts, 25, 23))
 
     var h = [{ foo: base, basear: derived }, { foo: base }]; // {foo: Base}[]
->h : { foo: Base; }[], Symbol(h,Decl(heterogeneousArrayLiterals.ts,28,7))
+>h : { foo: Base; }[], Symbol(h, Decl(heterogeneousArrayLiterals.ts, 28, 7))
 >[{ foo: base, basear: derived }, { foo: base }] : { foo: Base; }[]
 >{ foo: base, basear: derived } : { foo: Base; basear: Derived; }
->foo : Base, Symbol(foo,Decl(heterogeneousArrayLiterals.ts,28,14))
->base : Base, Symbol(base,Decl(heterogeneousArrayLiterals.ts,23,3))
->basear : Derived, Symbol(basear,Decl(heterogeneousArrayLiterals.ts,28,25))
->derived : Derived, Symbol(derived,Decl(heterogeneousArrayLiterals.ts,24,3))
+>foo : Base, Symbol(foo, Decl(heterogeneousArrayLiterals.ts, 28, 14))
+>base : Base, Symbol(base, Decl(heterogeneousArrayLiterals.ts, 23, 3))
+>basear : Derived, Symbol(basear, Decl(heterogeneousArrayLiterals.ts, 28, 25))
+>derived : Derived, Symbol(derived, Decl(heterogeneousArrayLiterals.ts, 24, 3))
 >{ foo: base } : { foo: Base; }
->foo : Base, Symbol(foo,Decl(heterogeneousArrayLiterals.ts,28,46))
->base : Base, Symbol(base,Decl(heterogeneousArrayLiterals.ts,23,3))
+>foo : Base, Symbol(foo, Decl(heterogeneousArrayLiterals.ts, 28, 46))
+>base : Base, Symbol(base, Decl(heterogeneousArrayLiterals.ts, 23, 3))
 
     var i = [{ foo: base, basear: derived }, { foo: derived }]; // {foo: Derived}[]
->i : ({ foo: Base; basear: Derived; } | { foo: Derived; })[], Symbol(i,Decl(heterogeneousArrayLiterals.ts,29,7))
+>i : ({ foo: Base; basear: Derived; } | { foo: Derived; })[], Symbol(i, Decl(heterogeneousArrayLiterals.ts, 29, 7))
 >[{ foo: base, basear: derived }, { foo: derived }] : ({ foo: Base; basear: Derived; } | { foo: Derived; })[]
 >{ foo: base, basear: derived } : { foo: Base; basear: Derived; }
->foo : Base, Symbol(foo,Decl(heterogeneousArrayLiterals.ts,29,14))
->base : Base, Symbol(base,Decl(heterogeneousArrayLiterals.ts,23,3))
->basear : Derived, Symbol(basear,Decl(heterogeneousArrayLiterals.ts,29,25))
->derived : Derived, Symbol(derived,Decl(heterogeneousArrayLiterals.ts,24,3))
+>foo : Base, Symbol(foo, Decl(heterogeneousArrayLiterals.ts, 29, 14))
+>base : Base, Symbol(base, Decl(heterogeneousArrayLiterals.ts, 23, 3))
+>basear : Derived, Symbol(basear, Decl(heterogeneousArrayLiterals.ts, 29, 25))
+>derived : Derived, Symbol(derived, Decl(heterogeneousArrayLiterals.ts, 24, 3))
 >{ foo: derived } : { foo: Derived; }
->foo : Derived, Symbol(foo,Decl(heterogeneousArrayLiterals.ts,29,46))
->derived : Derived, Symbol(derived,Decl(heterogeneousArrayLiterals.ts,24,3))
+>foo : Derived, Symbol(foo, Decl(heterogeneousArrayLiterals.ts, 29, 46))
+>derived : Derived, Symbol(derived, Decl(heterogeneousArrayLiterals.ts, 24, 3))
 
     var j = [() => base, () => derived]; // { {}: Base }
->j : (() => Base)[], Symbol(j,Decl(heterogeneousArrayLiterals.ts,31,7))
+>j : (() => Base)[], Symbol(j, Decl(heterogeneousArrayLiterals.ts, 31, 7))
 >[() => base, () => derived] : (() => Base)[]
 >() => base : () => Base
->base : Base, Symbol(base,Decl(heterogeneousArrayLiterals.ts,23,3))
+>base : Base, Symbol(base, Decl(heterogeneousArrayLiterals.ts, 23, 3))
 >() => derived : () => Derived
->derived : Derived, Symbol(derived,Decl(heterogeneousArrayLiterals.ts,24,3))
+>derived : Derived, Symbol(derived, Decl(heterogeneousArrayLiterals.ts, 24, 3))
 
     var k = [() => base, () => 1]; // {}[]~
->k : ((() => Base) | (() => number))[], Symbol(k,Decl(heterogeneousArrayLiterals.ts,32,7))
+>k : ((() => Base) | (() => number))[], Symbol(k, Decl(heterogeneousArrayLiterals.ts, 32, 7))
 >[() => base, () => 1] : ((() => Base) | (() => number))[]
 >() => base : () => Base
->base : Base, Symbol(base,Decl(heterogeneousArrayLiterals.ts,23,3))
+>base : Base, Symbol(base, Decl(heterogeneousArrayLiterals.ts, 23, 3))
 >() => 1 : () => number
 >1 : number
 
     var l = [() => base, () => null]; // { (): any }[]
->l : (() => any)[], Symbol(l,Decl(heterogeneousArrayLiterals.ts,33,7))
+>l : (() => any)[], Symbol(l, Decl(heterogeneousArrayLiterals.ts, 33, 7))
 >[() => base, () => null] : (() => any)[]
 >() => base : () => Base
->base : Base, Symbol(base,Decl(heterogeneousArrayLiterals.ts,23,3))
+>base : Base, Symbol(base, Decl(heterogeneousArrayLiterals.ts, 23, 3))
 >() => null : () => any
 >null : null
 
     var m = [() => base, () => derived, () => null]; // { (): any }[]
->m : (() => any)[], Symbol(m,Decl(heterogeneousArrayLiterals.ts,34,7))
+>m : (() => any)[], Symbol(m, Decl(heterogeneousArrayLiterals.ts, 34, 7))
 >[() => base, () => derived, () => null] : (() => any)[]
 >() => base : () => Base
->base : Base, Symbol(base,Decl(heterogeneousArrayLiterals.ts,23,3))
+>base : Base, Symbol(base, Decl(heterogeneousArrayLiterals.ts, 23, 3))
 >() => derived : () => Derived
->derived : Derived, Symbol(derived,Decl(heterogeneousArrayLiterals.ts,24,3))
+>derived : Derived, Symbol(derived, Decl(heterogeneousArrayLiterals.ts, 24, 3))
 >() => null : () => any
 >null : null
 
     var n = [[() => base], [() => derived]]; // { (): Base }[]
->n : (() => Base)[][], Symbol(n,Decl(heterogeneousArrayLiterals.ts,35,7))
+>n : (() => Base)[][], Symbol(n, Decl(heterogeneousArrayLiterals.ts, 35, 7))
 >[[() => base], [() => derived]] : (() => Base)[][]
 >[() => base] : (() => Base)[]
 >() => base : () => Base
->base : Base, Symbol(base,Decl(heterogeneousArrayLiterals.ts,23,3))
+>base : Base, Symbol(base, Decl(heterogeneousArrayLiterals.ts, 23, 3))
 >[() => derived] : (() => Derived)[]
 >() => derived : () => Derived
->derived : Derived, Symbol(derived,Decl(heterogeneousArrayLiterals.ts,24,3))
+>derived : Derived, Symbol(derived, Decl(heterogeneousArrayLiterals.ts, 24, 3))
 
     var o = [derived, derived2]; // {}[]
->o : (Derived | Derived2)[], Symbol(o,Decl(heterogeneousArrayLiterals.ts,36,7))
+>o : (Derived | Derived2)[], Symbol(o, Decl(heterogeneousArrayLiterals.ts, 36, 7))
 >[derived, derived2] : (Derived | Derived2)[]
->derived : Derived, Symbol(derived,Decl(heterogeneousArrayLiterals.ts,24,3))
->derived2 : Derived2, Symbol(derived2,Decl(heterogeneousArrayLiterals.ts,25,3))
+>derived : Derived, Symbol(derived, Decl(heterogeneousArrayLiterals.ts, 24, 3))
+>derived2 : Derived2, Symbol(derived2, Decl(heterogeneousArrayLiterals.ts, 25, 3))
 
     var p = [derived, derived2, base]; // Base[]
->p : Base[], Symbol(p,Decl(heterogeneousArrayLiterals.ts,37,7))
+>p : Base[], Symbol(p, Decl(heterogeneousArrayLiterals.ts, 37, 7))
 >[derived, derived2, base] : Base[]
->derived : Derived, Symbol(derived,Decl(heterogeneousArrayLiterals.ts,24,3))
->derived2 : Derived2, Symbol(derived2,Decl(heterogeneousArrayLiterals.ts,25,3))
->base : Base, Symbol(base,Decl(heterogeneousArrayLiterals.ts,23,3))
+>derived : Derived, Symbol(derived, Decl(heterogeneousArrayLiterals.ts, 24, 3))
+>derived2 : Derived2, Symbol(derived2, Decl(heterogeneousArrayLiterals.ts, 25, 3))
+>base : Base, Symbol(base, Decl(heterogeneousArrayLiterals.ts, 23, 3))
 
     var q = [[() => derived2], [() => derived]]; // {}[]
->q : ((() => Derived2)[] | (() => Derived)[])[], Symbol(q,Decl(heterogeneousArrayLiterals.ts,38,7))
+>q : ((() => Derived2)[] | (() => Derived)[])[], Symbol(q, Decl(heterogeneousArrayLiterals.ts, 38, 7))
 >[[() => derived2], [() => derived]] : ((() => Derived2)[] | (() => Derived)[])[]
 >[() => derived2] : (() => Derived2)[]
 >() => derived2 : () => Derived2
->derived2 : Derived2, Symbol(derived2,Decl(heterogeneousArrayLiterals.ts,25,3))
+>derived2 : Derived2, Symbol(derived2, Decl(heterogeneousArrayLiterals.ts, 25, 3))
 >[() => derived] : (() => Derived)[]
 >() => derived : () => Derived
->derived : Derived, Symbol(derived,Decl(heterogeneousArrayLiterals.ts,24,3))
+>derived : Derived, Symbol(derived, Decl(heterogeneousArrayLiterals.ts, 24, 3))
 }
 
 module WithContextualType {
->WithContextualType : typeof WithContextualType, Symbol(WithContextualType,Decl(heterogeneousArrayLiterals.ts,39,1))
+>WithContextualType : typeof WithContextualType, Symbol(WithContextualType, Decl(heterogeneousArrayLiterals.ts, 39, 1))
 
     // no errors
     var a: Base[] = [derived, derived2];
->a : Base[], Symbol(a,Decl(heterogeneousArrayLiterals.ts,43,7))
->Base : Base, Symbol(Base,Decl(heterogeneousArrayLiterals.ts,18,32))
+>a : Base[], Symbol(a, Decl(heterogeneousArrayLiterals.ts, 43, 7))
+>Base : Base, Symbol(Base, Decl(heterogeneousArrayLiterals.ts, 18, 32))
 >[derived, derived2] : (Derived | Derived2)[]
->derived : Derived, Symbol(derived,Decl(heterogeneousArrayLiterals.ts,24,3))
->derived2 : Derived2, Symbol(derived2,Decl(heterogeneousArrayLiterals.ts,25,3))
+>derived : Derived, Symbol(derived, Decl(heterogeneousArrayLiterals.ts, 24, 3))
+>derived2 : Derived2, Symbol(derived2, Decl(heterogeneousArrayLiterals.ts, 25, 3))
 
     var b: Derived[] = [null];
->b : Derived[], Symbol(b,Decl(heterogeneousArrayLiterals.ts,44,7))
->Derived : Derived, Symbol(Derived,Decl(heterogeneousArrayLiterals.ts,20,27),Decl(heterogeneousArrayLiterals.ts,25,23))
+>b : Derived[], Symbol(b, Decl(heterogeneousArrayLiterals.ts, 44, 7))
+>Derived : Derived, Symbol(Derived, Decl(heterogeneousArrayLiterals.ts, 20, 27), Decl(heterogeneousArrayLiterals.ts, 25, 23))
 >[null] : null[]
 >null : null
 
     var c: Derived[] = [];
->c : Derived[], Symbol(c,Decl(heterogeneousArrayLiterals.ts,45,7))
->Derived : Derived, Symbol(Derived,Decl(heterogeneousArrayLiterals.ts,20,27),Decl(heterogeneousArrayLiterals.ts,25,23))
+>c : Derived[], Symbol(c, Decl(heterogeneousArrayLiterals.ts, 45, 7))
+>Derived : Derived, Symbol(Derived, Decl(heterogeneousArrayLiterals.ts, 20, 27), Decl(heterogeneousArrayLiterals.ts, 25, 23))
 >[] : undefined[]
 
     var d: { (): Base }[] = [() => derived, () => derived2];
->d : (() => Base)[], Symbol(d,Decl(heterogeneousArrayLiterals.ts,46,7))
->Base : Base, Symbol(Base,Decl(heterogeneousArrayLiterals.ts,18,32))
+>d : (() => Base)[], Symbol(d, Decl(heterogeneousArrayLiterals.ts, 46, 7))
+>Base : Base, Symbol(Base, Decl(heterogeneousArrayLiterals.ts, 18, 32))
 >[() => derived, () => derived2] : ((() => Derived) | (() => Derived2))[]
 >() => derived : () => Derived
->derived : Derived, Symbol(derived,Decl(heterogeneousArrayLiterals.ts,24,3))
+>derived : Derived, Symbol(derived, Decl(heterogeneousArrayLiterals.ts, 24, 3))
 >() => derived2 : () => Derived2
->derived2 : Derived2, Symbol(derived2,Decl(heterogeneousArrayLiterals.ts,25,3))
+>derived2 : Derived2, Symbol(derived2, Decl(heterogeneousArrayLiterals.ts, 25, 3))
 }
 
 function foo<T, U>(t: T, u: U) {
->foo : <T, U>(t: T, u: U) => void, Symbol(foo,Decl(heterogeneousArrayLiterals.ts,47,1))
->T : T, Symbol(T,Decl(heterogeneousArrayLiterals.ts,49,13))
->U : U, Symbol(U,Decl(heterogeneousArrayLiterals.ts,49,15))
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,49,19))
->T : T, Symbol(T,Decl(heterogeneousArrayLiterals.ts,49,13))
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,49,24))
->U : U, Symbol(U,Decl(heterogeneousArrayLiterals.ts,49,15))
+>foo : <T, U>(t: T, u: U) => void, Symbol(foo, Decl(heterogeneousArrayLiterals.ts, 47, 1))
+>T : T, Symbol(T, Decl(heterogeneousArrayLiterals.ts, 49, 13))
+>U : U, Symbol(U, Decl(heterogeneousArrayLiterals.ts, 49, 15))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 49, 19))
+>T : T, Symbol(T, Decl(heterogeneousArrayLiterals.ts, 49, 13))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 49, 24))
+>U : U, Symbol(U, Decl(heterogeneousArrayLiterals.ts, 49, 15))
 
     var a = [t, t]; // T[]
->a : T[], Symbol(a,Decl(heterogeneousArrayLiterals.ts,50,7))
+>a : T[], Symbol(a, Decl(heterogeneousArrayLiterals.ts, 50, 7))
 >[t, t] : T[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,49,19))
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,49,19))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 49, 19))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 49, 19))
 
     var b = [t, null]; // T[]
->b : T[], Symbol(b,Decl(heterogeneousArrayLiterals.ts,51,7))
+>b : T[], Symbol(b, Decl(heterogeneousArrayLiterals.ts, 51, 7))
 >[t, null] : T[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,49,19))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 49, 19))
 >null : null
 
     var c = [t, u]; // {}[]
->c : (T | U)[], Symbol(c,Decl(heterogeneousArrayLiterals.ts,52,7))
+>c : (T | U)[], Symbol(c, Decl(heterogeneousArrayLiterals.ts, 52, 7))
 >[t, u] : (T | U)[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,49,19))
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,49,24))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 49, 19))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 49, 24))
 
     var d = [t, 1]; // {}[]
->d : (number | T)[], Symbol(d,Decl(heterogeneousArrayLiterals.ts,53,7))
+>d : (number | T)[], Symbol(d, Decl(heterogeneousArrayLiterals.ts, 53, 7))
 >[t, 1] : (number | T)[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,49,19))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 49, 19))
 >1 : number
 
     var e = [() => t, () => u]; // {}[]
->e : ((() => T) | (() => U))[], Symbol(e,Decl(heterogeneousArrayLiterals.ts,54,7))
+>e : ((() => T) | (() => U))[], Symbol(e, Decl(heterogeneousArrayLiterals.ts, 54, 7))
 >[() => t, () => u] : ((() => T) | (() => U))[]
 >() => t : () => T
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,49,19))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 49, 19))
 >() => u : () => U
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,49,24))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 49, 24))
 
     var f = [() => t, () => u, () => null]; // { (): any }[]
->f : (() => any)[], Symbol(f,Decl(heterogeneousArrayLiterals.ts,55,7))
+>f : (() => any)[], Symbol(f, Decl(heterogeneousArrayLiterals.ts, 55, 7))
 >[() => t, () => u, () => null] : (() => any)[]
 >() => t : () => T
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,49,19))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 49, 19))
 >() => u : () => U
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,49,24))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 49, 24))
 >() => null : () => any
 >null : null
 }
 
 function foo2<T extends Base, U extends Derived>(t: T, u: U) {
->foo2 : <T extends Base, U extends Derived>(t: T, u: U) => void, Symbol(foo2,Decl(heterogeneousArrayLiterals.ts,56,1))
->T : T, Symbol(T,Decl(heterogeneousArrayLiterals.ts,58,14))
->Base : Base, Symbol(Base,Decl(heterogeneousArrayLiterals.ts,18,32))
->U : U, Symbol(U,Decl(heterogeneousArrayLiterals.ts,58,29))
->Derived : Derived, Symbol(Derived,Decl(heterogeneousArrayLiterals.ts,20,27),Decl(heterogeneousArrayLiterals.ts,25,23))
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,58,49))
->T : T, Symbol(T,Decl(heterogeneousArrayLiterals.ts,58,14))
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,58,54))
->U : U, Symbol(U,Decl(heterogeneousArrayLiterals.ts,58,29))
+>foo2 : <T extends Base, U extends Derived>(t: T, u: U) => void, Symbol(foo2, Decl(heterogeneousArrayLiterals.ts, 56, 1))
+>T : T, Symbol(T, Decl(heterogeneousArrayLiterals.ts, 58, 14))
+>Base : Base, Symbol(Base, Decl(heterogeneousArrayLiterals.ts, 18, 32))
+>U : U, Symbol(U, Decl(heterogeneousArrayLiterals.ts, 58, 29))
+>Derived : Derived, Symbol(Derived, Decl(heterogeneousArrayLiterals.ts, 20, 27), Decl(heterogeneousArrayLiterals.ts, 25, 23))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 58, 49))
+>T : T, Symbol(T, Decl(heterogeneousArrayLiterals.ts, 58, 14))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 58, 54))
+>U : U, Symbol(U, Decl(heterogeneousArrayLiterals.ts, 58, 29))
 
     var a = [t, t]; // T[]
->a : T[], Symbol(a,Decl(heterogeneousArrayLiterals.ts,59,7))
+>a : T[], Symbol(a, Decl(heterogeneousArrayLiterals.ts, 59, 7))
 >[t, t] : T[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,58,49))
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,58,49))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 58, 49))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 58, 49))
 
     var b = [t, null]; // T[]
->b : T[], Symbol(b,Decl(heterogeneousArrayLiterals.ts,60,7))
+>b : T[], Symbol(b, Decl(heterogeneousArrayLiterals.ts, 60, 7))
 >[t, null] : T[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,58,49))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 58, 49))
 >null : null
 
     var c = [t, u]; // {}[]
->c : (T | U)[], Symbol(c,Decl(heterogeneousArrayLiterals.ts,61,7))
+>c : (T | U)[], Symbol(c, Decl(heterogeneousArrayLiterals.ts, 61, 7))
 >[t, u] : (T | U)[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,58,49))
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,58,54))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 58, 49))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 58, 54))
 
     var d = [t, 1]; // {}[]
->d : (number | T)[], Symbol(d,Decl(heterogeneousArrayLiterals.ts,62,7))
+>d : (number | T)[], Symbol(d, Decl(heterogeneousArrayLiterals.ts, 62, 7))
 >[t, 1] : (number | T)[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,58,49))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 58, 49))
 >1 : number
 
     var e = [() => t, () => u]; // {}[]
->e : ((() => T) | (() => U))[], Symbol(e,Decl(heterogeneousArrayLiterals.ts,63,7))
+>e : ((() => T) | (() => U))[], Symbol(e, Decl(heterogeneousArrayLiterals.ts, 63, 7))
 >[() => t, () => u] : ((() => T) | (() => U))[]
 >() => t : () => T
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,58,49))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 58, 49))
 >() => u : () => U
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,58,54))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 58, 54))
 
     var f = [() => t, () => u, () => null]; // { (): any }[]
->f : (() => any)[], Symbol(f,Decl(heterogeneousArrayLiterals.ts,64,7))
+>f : (() => any)[], Symbol(f, Decl(heterogeneousArrayLiterals.ts, 64, 7))
 >[() => t, () => u, () => null] : (() => any)[]
 >() => t : () => T
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,58,49))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 58, 49))
 >() => u : () => U
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,58,54))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 58, 54))
 >() => null : () => any
 >null : null
 
     var g = [t, base]; // Base[]
->g : Base[], Symbol(g,Decl(heterogeneousArrayLiterals.ts,66,7))
+>g : Base[], Symbol(g, Decl(heterogeneousArrayLiterals.ts, 66, 7))
 >[t, base] : Base[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,58,49))
->base : Base, Symbol(base,Decl(heterogeneousArrayLiterals.ts,23,3))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 58, 49))
+>base : Base, Symbol(base, Decl(heterogeneousArrayLiterals.ts, 23, 3))
 
     var h = [t, derived]; // Derived[]
->h : (Derived | T)[], Symbol(h,Decl(heterogeneousArrayLiterals.ts,67,7))
+>h : (Derived | T)[], Symbol(h, Decl(heterogeneousArrayLiterals.ts, 67, 7))
 >[t, derived] : (Derived | T)[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,58,49))
->derived : Derived, Symbol(derived,Decl(heterogeneousArrayLiterals.ts,24,3))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 58, 49))
+>derived : Derived, Symbol(derived, Decl(heterogeneousArrayLiterals.ts, 24, 3))
 
     var i = [u, base]; // Base[]
->i : Base[], Symbol(i,Decl(heterogeneousArrayLiterals.ts,68,7))
+>i : Base[], Symbol(i, Decl(heterogeneousArrayLiterals.ts, 68, 7))
 >[u, base] : Base[]
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,58,54))
->base : Base, Symbol(base,Decl(heterogeneousArrayLiterals.ts,23,3))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 58, 54))
+>base : Base, Symbol(base, Decl(heterogeneousArrayLiterals.ts, 23, 3))
 
     var j = [u, derived]; // Derived[]
->j : Derived[], Symbol(j,Decl(heterogeneousArrayLiterals.ts,69,7))
+>j : Derived[], Symbol(j, Decl(heterogeneousArrayLiterals.ts, 69, 7))
 >[u, derived] : Derived[]
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,58,54))
->derived : Derived, Symbol(derived,Decl(heterogeneousArrayLiterals.ts,24,3))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 58, 54))
+>derived : Derived, Symbol(derived, Decl(heterogeneousArrayLiterals.ts, 24, 3))
 }
 
 function foo3<T extends Derived, U extends Derived>(t: T, u: U) {
->foo3 : <T extends Derived, U extends Derived>(t: T, u: U) => void, Symbol(foo3,Decl(heterogeneousArrayLiterals.ts,70,1))
->T : T, Symbol(T,Decl(heterogeneousArrayLiterals.ts,72,14))
->Derived : Derived, Symbol(Derived,Decl(heterogeneousArrayLiterals.ts,20,27),Decl(heterogeneousArrayLiterals.ts,25,23))
->U : U, Symbol(U,Decl(heterogeneousArrayLiterals.ts,72,32))
->Derived : Derived, Symbol(Derived,Decl(heterogeneousArrayLiterals.ts,20,27),Decl(heterogeneousArrayLiterals.ts,25,23))
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,72,52))
->T : T, Symbol(T,Decl(heterogeneousArrayLiterals.ts,72,14))
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,72,57))
->U : U, Symbol(U,Decl(heterogeneousArrayLiterals.ts,72,32))
+>foo3 : <T extends Derived, U extends Derived>(t: T, u: U) => void, Symbol(foo3, Decl(heterogeneousArrayLiterals.ts, 70, 1))
+>T : T, Symbol(T, Decl(heterogeneousArrayLiterals.ts, 72, 14))
+>Derived : Derived, Symbol(Derived, Decl(heterogeneousArrayLiterals.ts, 20, 27), Decl(heterogeneousArrayLiterals.ts, 25, 23))
+>U : U, Symbol(U, Decl(heterogeneousArrayLiterals.ts, 72, 32))
+>Derived : Derived, Symbol(Derived, Decl(heterogeneousArrayLiterals.ts, 20, 27), Decl(heterogeneousArrayLiterals.ts, 25, 23))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 72, 52))
+>T : T, Symbol(T, Decl(heterogeneousArrayLiterals.ts, 72, 14))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 72, 57))
+>U : U, Symbol(U, Decl(heterogeneousArrayLiterals.ts, 72, 32))
 
     var a = [t, t]; // T[]
->a : T[], Symbol(a,Decl(heterogeneousArrayLiterals.ts,73,7))
+>a : T[], Symbol(a, Decl(heterogeneousArrayLiterals.ts, 73, 7))
 >[t, t] : T[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,72,52))
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,72,52))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 72, 52))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 72, 52))
 
     var b = [t, null]; // T[]
->b : T[], Symbol(b,Decl(heterogeneousArrayLiterals.ts,74,7))
+>b : T[], Symbol(b, Decl(heterogeneousArrayLiterals.ts, 74, 7))
 >[t, null] : T[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,72,52))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 72, 52))
 >null : null
 
     var c = [t, u]; // {}[]
->c : (T | U)[], Symbol(c,Decl(heterogeneousArrayLiterals.ts,75,7))
+>c : (T | U)[], Symbol(c, Decl(heterogeneousArrayLiterals.ts, 75, 7))
 >[t, u] : (T | U)[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,72,52))
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,72,57))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 72, 52))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 72, 57))
 
     var d = [t, 1]; // {}[]
->d : (number | T)[], Symbol(d,Decl(heterogeneousArrayLiterals.ts,76,7))
+>d : (number | T)[], Symbol(d, Decl(heterogeneousArrayLiterals.ts, 76, 7))
 >[t, 1] : (number | T)[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,72,52))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 72, 52))
 >1 : number
 
     var e = [() => t, () => u]; // {}[]
->e : ((() => T) | (() => U))[], Symbol(e,Decl(heterogeneousArrayLiterals.ts,77,7))
+>e : ((() => T) | (() => U))[], Symbol(e, Decl(heterogeneousArrayLiterals.ts, 77, 7))
 >[() => t, () => u] : ((() => T) | (() => U))[]
 >() => t : () => T
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,72,52))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 72, 52))
 >() => u : () => U
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,72,57))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 72, 57))
 
     var f = [() => t, () => u, () => null]; // { (): any }[]
->f : (() => any)[], Symbol(f,Decl(heterogeneousArrayLiterals.ts,78,7))
+>f : (() => any)[], Symbol(f, Decl(heterogeneousArrayLiterals.ts, 78, 7))
 >[() => t, () => u, () => null] : (() => any)[]
 >() => t : () => T
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,72,52))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 72, 52))
 >() => u : () => U
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,72,57))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 72, 57))
 >() => null : () => any
 >null : null
 
     var g = [t, base]; // Base[]
->g : Base[], Symbol(g,Decl(heterogeneousArrayLiterals.ts,80,7))
+>g : Base[], Symbol(g, Decl(heterogeneousArrayLiterals.ts, 80, 7))
 >[t, base] : Base[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,72,52))
->base : Base, Symbol(base,Decl(heterogeneousArrayLiterals.ts,23,3))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 72, 52))
+>base : Base, Symbol(base, Decl(heterogeneousArrayLiterals.ts, 23, 3))
 
     var h = [t, derived]; // Derived[]
->h : Derived[], Symbol(h,Decl(heterogeneousArrayLiterals.ts,81,7))
+>h : Derived[], Symbol(h, Decl(heterogeneousArrayLiterals.ts, 81, 7))
 >[t, derived] : Derived[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,72,52))
->derived : Derived, Symbol(derived,Decl(heterogeneousArrayLiterals.ts,24,3))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 72, 52))
+>derived : Derived, Symbol(derived, Decl(heterogeneousArrayLiterals.ts, 24, 3))
 
     var i = [u, base]; // Base[]
->i : Base[], Symbol(i,Decl(heterogeneousArrayLiterals.ts,82,7))
+>i : Base[], Symbol(i, Decl(heterogeneousArrayLiterals.ts, 82, 7))
 >[u, base] : Base[]
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,72,57))
->base : Base, Symbol(base,Decl(heterogeneousArrayLiterals.ts,23,3))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 72, 57))
+>base : Base, Symbol(base, Decl(heterogeneousArrayLiterals.ts, 23, 3))
 
     var j = [u, derived]; // Derived[]
->j : Derived[], Symbol(j,Decl(heterogeneousArrayLiterals.ts,83,7))
+>j : Derived[], Symbol(j, Decl(heterogeneousArrayLiterals.ts, 83, 7))
 >[u, derived] : Derived[]
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,72,57))
->derived : Derived, Symbol(derived,Decl(heterogeneousArrayLiterals.ts,24,3))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 72, 57))
+>derived : Derived, Symbol(derived, Decl(heterogeneousArrayLiterals.ts, 24, 3))
 }
 
 function foo4<T extends Base, U extends Base>(t: T, u: U) {
->foo4 : <T extends Base, U extends Base>(t: T, u: U) => void, Symbol(foo4,Decl(heterogeneousArrayLiterals.ts,84,1))
->T : T, Symbol(T,Decl(heterogeneousArrayLiterals.ts,86,14))
->Base : Base, Symbol(Base,Decl(heterogeneousArrayLiterals.ts,18,32))
->U : U, Symbol(U,Decl(heterogeneousArrayLiterals.ts,86,29))
->Base : Base, Symbol(Base,Decl(heterogeneousArrayLiterals.ts,18,32))
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,86,46))
->T : T, Symbol(T,Decl(heterogeneousArrayLiterals.ts,86,14))
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,86,51))
->U : U, Symbol(U,Decl(heterogeneousArrayLiterals.ts,86,29))
+>foo4 : <T extends Base, U extends Base>(t: T, u: U) => void, Symbol(foo4, Decl(heterogeneousArrayLiterals.ts, 84, 1))
+>T : T, Symbol(T, Decl(heterogeneousArrayLiterals.ts, 86, 14))
+>Base : Base, Symbol(Base, Decl(heterogeneousArrayLiterals.ts, 18, 32))
+>U : U, Symbol(U, Decl(heterogeneousArrayLiterals.ts, 86, 29))
+>Base : Base, Symbol(Base, Decl(heterogeneousArrayLiterals.ts, 18, 32))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 86, 46))
+>T : T, Symbol(T, Decl(heterogeneousArrayLiterals.ts, 86, 14))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 86, 51))
+>U : U, Symbol(U, Decl(heterogeneousArrayLiterals.ts, 86, 29))
 
     var a = [t, t]; // T[]
->a : T[], Symbol(a,Decl(heterogeneousArrayLiterals.ts,87,7))
+>a : T[], Symbol(a, Decl(heterogeneousArrayLiterals.ts, 87, 7))
 >[t, t] : T[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,86,46))
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,86,46))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 86, 46))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 86, 46))
 
     var b = [t, null]; // T[]
->b : T[], Symbol(b,Decl(heterogeneousArrayLiterals.ts,88,7))
+>b : T[], Symbol(b, Decl(heterogeneousArrayLiterals.ts, 88, 7))
 >[t, null] : T[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,86,46))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 86, 46))
 >null : null
 
     var c = [t, u]; // BUG 821629
->c : (T | U)[], Symbol(c,Decl(heterogeneousArrayLiterals.ts,89,7))
+>c : (T | U)[], Symbol(c, Decl(heterogeneousArrayLiterals.ts, 89, 7))
 >[t, u] : (T | U)[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,86,46))
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,86,51))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 86, 46))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 86, 51))
 
     var d = [t, 1]; // {}[]
->d : (number | T)[], Symbol(d,Decl(heterogeneousArrayLiterals.ts,90,7))
+>d : (number | T)[], Symbol(d, Decl(heterogeneousArrayLiterals.ts, 90, 7))
 >[t, 1] : (number | T)[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,86,46))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 86, 46))
 >1 : number
 
     var e = [() => t, () => u]; // {}[]
->e : ((() => T) | (() => U))[], Symbol(e,Decl(heterogeneousArrayLiterals.ts,91,7))
+>e : ((() => T) | (() => U))[], Symbol(e, Decl(heterogeneousArrayLiterals.ts, 91, 7))
 >[() => t, () => u] : ((() => T) | (() => U))[]
 >() => t : () => T
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,86,46))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 86, 46))
 >() => u : () => U
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,86,51))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 86, 51))
 
     var f = [() => t, () => u, () => null]; // { (): any }[]
->f : (() => any)[], Symbol(f,Decl(heterogeneousArrayLiterals.ts,92,7))
+>f : (() => any)[], Symbol(f, Decl(heterogeneousArrayLiterals.ts, 92, 7))
 >[() => t, () => u, () => null] : (() => any)[]
 >() => t : () => T
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,86,46))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 86, 46))
 >() => u : () => U
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,86,51))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 86, 51))
 >() => null : () => any
 >null : null
 
     var g = [t, base]; // Base[]
->g : Base[], Symbol(g,Decl(heterogeneousArrayLiterals.ts,94,7))
+>g : Base[], Symbol(g, Decl(heterogeneousArrayLiterals.ts, 94, 7))
 >[t, base] : Base[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,86,46))
->base : Base, Symbol(base,Decl(heterogeneousArrayLiterals.ts,23,3))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 86, 46))
+>base : Base, Symbol(base, Decl(heterogeneousArrayLiterals.ts, 23, 3))
 
     var h = [t, derived]; // Derived[]
->h : (Derived | T)[], Symbol(h,Decl(heterogeneousArrayLiterals.ts,95,7))
+>h : (Derived | T)[], Symbol(h, Decl(heterogeneousArrayLiterals.ts, 95, 7))
 >[t, derived] : (Derived | T)[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,86,46))
->derived : Derived, Symbol(derived,Decl(heterogeneousArrayLiterals.ts,24,3))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 86, 46))
+>derived : Derived, Symbol(derived, Decl(heterogeneousArrayLiterals.ts, 24, 3))
 
     var i = [u, base]; // Base[]
->i : Base[], Symbol(i,Decl(heterogeneousArrayLiterals.ts,96,7))
+>i : Base[], Symbol(i, Decl(heterogeneousArrayLiterals.ts, 96, 7))
 >[u, base] : Base[]
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,86,51))
->base : Base, Symbol(base,Decl(heterogeneousArrayLiterals.ts,23,3))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 86, 51))
+>base : Base, Symbol(base, Decl(heterogeneousArrayLiterals.ts, 23, 3))
 
     var j = [u, derived]; // Derived[]
->j : (Derived | U)[], Symbol(j,Decl(heterogeneousArrayLiterals.ts,97,7))
+>j : (Derived | U)[], Symbol(j, Decl(heterogeneousArrayLiterals.ts, 97, 7))
 >[u, derived] : (Derived | U)[]
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,86,51))
->derived : Derived, Symbol(derived,Decl(heterogeneousArrayLiterals.ts,24,3))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 86, 51))
+>derived : Derived, Symbol(derived, Decl(heterogeneousArrayLiterals.ts, 24, 3))
 
     var k: Base[] = [t, u];
->k : Base[], Symbol(k,Decl(heterogeneousArrayLiterals.ts,99,7))
->Base : Base, Symbol(Base,Decl(heterogeneousArrayLiterals.ts,18,32))
+>k : Base[], Symbol(k, Decl(heterogeneousArrayLiterals.ts, 99, 7))
+>Base : Base, Symbol(Base, Decl(heterogeneousArrayLiterals.ts, 18, 32))
 >[t, u] : (T | U)[]
->t : T, Symbol(t,Decl(heterogeneousArrayLiterals.ts,86,46))
->u : U, Symbol(u,Decl(heterogeneousArrayLiterals.ts,86,51))
+>t : T, Symbol(t, Decl(heterogeneousArrayLiterals.ts, 86, 46))
+>u : U, Symbol(u, Decl(heterogeneousArrayLiterals.ts, 86, 51))
 }
 
 //function foo3<T extends U, U extends Derived>(t: T, u: U) {

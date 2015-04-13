@@ -1,14 +1,14 @@
 === tests/cases/compiler/moduleMemberWithoutTypeAnnotation1.ts ===
 module TypeScript.Parser {
->TypeScript : typeof TypeScript, Symbol(TypeScript,Decl(moduleMemberWithoutTypeAnnotation1.ts,0,0),Decl(moduleMemberWithoutTypeAnnotation1.ts,6,1),Decl(moduleMemberWithoutTypeAnnotation1.ts,22,1),Decl(moduleMemberWithoutTypeAnnotation1.ts,34,1))
->Parser : typeof Parser, Symbol(Parser,Decl(moduleMemberWithoutTypeAnnotation1.ts,0,18))
+>TypeScript : typeof TypeScript, Symbol(TypeScript, Decl(moduleMemberWithoutTypeAnnotation1.ts, 0, 0), Decl(moduleMemberWithoutTypeAnnotation1.ts, 6, 1), Decl(moduleMemberWithoutTypeAnnotation1.ts, 22, 1), Decl(moduleMemberWithoutTypeAnnotation1.ts, 34, 1))
+>Parser : typeof Parser, Symbol(Parser, Decl(moduleMemberWithoutTypeAnnotation1.ts, 0, 18))
 
     class SyntaxCursor {
->SyntaxCursor : SyntaxCursor, Symbol(SyntaxCursor,Decl(moduleMemberWithoutTypeAnnotation1.ts,0,26))
+>SyntaxCursor : SyntaxCursor, Symbol(SyntaxCursor, Decl(moduleMemberWithoutTypeAnnotation1.ts, 0, 26))
 
         public currentNode(): SyntaxNode {
->currentNode : () => SyntaxNode, Symbol(currentNode,Decl(moduleMemberWithoutTypeAnnotation1.ts,1,24))
->SyntaxNode : SyntaxNode, Symbol(SyntaxNode,Decl(moduleMemberWithoutTypeAnnotation1.ts,24,19))
+>currentNode : () => SyntaxNode, Symbol(currentNode, Decl(moduleMemberWithoutTypeAnnotation1.ts, 1, 24))
+>SyntaxNode : SyntaxNode, Symbol(SyntaxNode, Decl(moduleMemberWithoutTypeAnnotation1.ts, 24, 19))
 
             return null;
 >null : null
@@ -17,74 +17,74 @@ module TypeScript.Parser {
 }
 
 module TypeScript {
->TypeScript : typeof TypeScript, Symbol(TypeScript,Decl(moduleMemberWithoutTypeAnnotation1.ts,0,0),Decl(moduleMemberWithoutTypeAnnotation1.ts,6,1),Decl(moduleMemberWithoutTypeAnnotation1.ts,22,1),Decl(moduleMemberWithoutTypeAnnotation1.ts,34,1))
+>TypeScript : typeof TypeScript, Symbol(TypeScript, Decl(moduleMemberWithoutTypeAnnotation1.ts, 0, 0), Decl(moduleMemberWithoutTypeAnnotation1.ts, 6, 1), Decl(moduleMemberWithoutTypeAnnotation1.ts, 22, 1), Decl(moduleMemberWithoutTypeAnnotation1.ts, 34, 1))
 
     export interface ISyntaxElement { };
->ISyntaxElement : ISyntaxElement, Symbol(ISyntaxElement,Decl(moduleMemberWithoutTypeAnnotation1.ts,8,19))
+>ISyntaxElement : ISyntaxElement, Symbol(ISyntaxElement, Decl(moduleMemberWithoutTypeAnnotation1.ts, 8, 19))
 
     export interface ISyntaxToken { };
->ISyntaxToken : ISyntaxToken, Symbol(ISyntaxToken,Decl(moduleMemberWithoutTypeAnnotation1.ts,9,40))
+>ISyntaxToken : ISyntaxToken, Symbol(ISyntaxToken, Decl(moduleMemberWithoutTypeAnnotation1.ts, 9, 40))
 
     export class PositionedElement {
->PositionedElement : PositionedElement, Symbol(PositionedElement,Decl(moduleMemberWithoutTypeAnnotation1.ts,10,38))
+>PositionedElement : PositionedElement, Symbol(PositionedElement, Decl(moduleMemberWithoutTypeAnnotation1.ts, 10, 38))
 
         public childIndex(child: ISyntaxElement) {
->childIndex : (child: ISyntaxElement) => void, Symbol(childIndex,Decl(moduleMemberWithoutTypeAnnotation1.ts,12,36))
->child : ISyntaxElement, Symbol(child,Decl(moduleMemberWithoutTypeAnnotation1.ts,13,26))
->ISyntaxElement : ISyntaxElement, Symbol(ISyntaxElement,Decl(moduleMemberWithoutTypeAnnotation1.ts,8,19))
+>childIndex : (child: ISyntaxElement) => void, Symbol(childIndex, Decl(moduleMemberWithoutTypeAnnotation1.ts, 12, 36))
+>child : ISyntaxElement, Symbol(child, Decl(moduleMemberWithoutTypeAnnotation1.ts, 13, 26))
+>ISyntaxElement : ISyntaxElement, Symbol(ISyntaxElement, Decl(moduleMemberWithoutTypeAnnotation1.ts, 8, 19))
 
             return Syntax.childIndex();
 >Syntax.childIndex() : void
->Syntax.childIndex : () => void, Symbol(Syntax.childIndex,Decl(moduleMemberWithoutTypeAnnotation1.ts,36,26))
->Syntax : typeof Syntax, Symbol(Syntax,Decl(moduleMemberWithoutTypeAnnotation1.ts,36,18))
->childIndex : () => void, Symbol(Syntax.childIndex,Decl(moduleMemberWithoutTypeAnnotation1.ts,36,26))
+>Syntax.childIndex : () => void, Symbol(Syntax.childIndex, Decl(moduleMemberWithoutTypeAnnotation1.ts, 36, 26))
+>Syntax : typeof Syntax, Symbol(Syntax, Decl(moduleMemberWithoutTypeAnnotation1.ts, 36, 18))
+>childIndex : () => void, Symbol(Syntax.childIndex, Decl(moduleMemberWithoutTypeAnnotation1.ts, 36, 26))
         }
     }
 
     export class PositionedToken {
->PositionedToken : PositionedToken, Symbol(PositionedToken,Decl(moduleMemberWithoutTypeAnnotation1.ts,16,5))
+>PositionedToken : PositionedToken, Symbol(PositionedToken, Decl(moduleMemberWithoutTypeAnnotation1.ts, 16, 5))
 
         constructor(parent: PositionedElement, token: ISyntaxToken, fullStart: number) {
->parent : PositionedElement, Symbol(parent,Decl(moduleMemberWithoutTypeAnnotation1.ts,19,20))
->PositionedElement : PositionedElement, Symbol(PositionedElement,Decl(moduleMemberWithoutTypeAnnotation1.ts,10,38))
->token : ISyntaxToken, Symbol(token,Decl(moduleMemberWithoutTypeAnnotation1.ts,19,46))
->ISyntaxToken : ISyntaxToken, Symbol(ISyntaxToken,Decl(moduleMemberWithoutTypeAnnotation1.ts,9,40))
->fullStart : number, Symbol(fullStart,Decl(moduleMemberWithoutTypeAnnotation1.ts,19,67))
+>parent : PositionedElement, Symbol(parent, Decl(moduleMemberWithoutTypeAnnotation1.ts, 19, 20))
+>PositionedElement : PositionedElement, Symbol(PositionedElement, Decl(moduleMemberWithoutTypeAnnotation1.ts, 10, 38))
+>token : ISyntaxToken, Symbol(token, Decl(moduleMemberWithoutTypeAnnotation1.ts, 19, 46))
+>ISyntaxToken : ISyntaxToken, Symbol(ISyntaxToken, Decl(moduleMemberWithoutTypeAnnotation1.ts, 9, 40))
+>fullStart : number, Symbol(fullStart, Decl(moduleMemberWithoutTypeAnnotation1.ts, 19, 67))
         }
     }
 }
 
 module TypeScript {
->TypeScript : typeof TypeScript, Symbol(TypeScript,Decl(moduleMemberWithoutTypeAnnotation1.ts,0,0),Decl(moduleMemberWithoutTypeAnnotation1.ts,6,1),Decl(moduleMemberWithoutTypeAnnotation1.ts,22,1),Decl(moduleMemberWithoutTypeAnnotation1.ts,34,1))
+>TypeScript : typeof TypeScript, Symbol(TypeScript, Decl(moduleMemberWithoutTypeAnnotation1.ts, 0, 0), Decl(moduleMemberWithoutTypeAnnotation1.ts, 6, 1), Decl(moduleMemberWithoutTypeAnnotation1.ts, 22, 1), Decl(moduleMemberWithoutTypeAnnotation1.ts, 34, 1))
 
     export class SyntaxNode {
->SyntaxNode : SyntaxNode, Symbol(SyntaxNode,Decl(moduleMemberWithoutTypeAnnotation1.ts,24,19))
+>SyntaxNode : SyntaxNode, Symbol(SyntaxNode, Decl(moduleMemberWithoutTypeAnnotation1.ts, 24, 19))
 
         public findToken(position: number, includeSkippedTokens: boolean = false): PositionedToken {
->findToken : (position: number, includeSkippedTokens?: boolean) => PositionedToken, Symbol(findToken,Decl(moduleMemberWithoutTypeAnnotation1.ts,25,29))
->position : number, Symbol(position,Decl(moduleMemberWithoutTypeAnnotation1.ts,26,25))
->includeSkippedTokens : boolean, Symbol(includeSkippedTokens,Decl(moduleMemberWithoutTypeAnnotation1.ts,26,42))
+>findToken : (position: number, includeSkippedTokens?: boolean) => PositionedToken, Symbol(findToken, Decl(moduleMemberWithoutTypeAnnotation1.ts, 25, 29))
+>position : number, Symbol(position, Decl(moduleMemberWithoutTypeAnnotation1.ts, 26, 25))
+>includeSkippedTokens : boolean, Symbol(includeSkippedTokens, Decl(moduleMemberWithoutTypeAnnotation1.ts, 26, 42))
 >false : boolean
->PositionedToken : PositionedToken, Symbol(PositionedToken,Decl(moduleMemberWithoutTypeAnnotation1.ts,16,5))
+>PositionedToken : PositionedToken, Symbol(PositionedToken, Decl(moduleMemberWithoutTypeAnnotation1.ts, 16, 5))
 
             var positionedToken = this.findTokenInternal(null, position, 0);
->positionedToken : any, Symbol(positionedToken,Decl(moduleMemberWithoutTypeAnnotation1.ts,27,15))
+>positionedToken : any, Symbol(positionedToken, Decl(moduleMemberWithoutTypeAnnotation1.ts, 27, 15))
 >this.findTokenInternal(null, position, 0) : any
->this.findTokenInternal : (x: any, y: any, z: any) => any, Symbol(findTokenInternal,Decl(moduleMemberWithoutTypeAnnotation1.ts,29,9))
->this : SyntaxNode, Symbol(SyntaxNode,Decl(moduleMemberWithoutTypeAnnotation1.ts,24,19))
->findTokenInternal : (x: any, y: any, z: any) => any, Symbol(findTokenInternal,Decl(moduleMemberWithoutTypeAnnotation1.ts,29,9))
+>this.findTokenInternal : (x: any, y: any, z: any) => any, Symbol(findTokenInternal, Decl(moduleMemberWithoutTypeAnnotation1.ts, 29, 9))
+>this : SyntaxNode, Symbol(SyntaxNode, Decl(moduleMemberWithoutTypeAnnotation1.ts, 24, 19))
+>findTokenInternal : (x: any, y: any, z: any) => any, Symbol(findTokenInternal, Decl(moduleMemberWithoutTypeAnnotation1.ts, 29, 9))
 >null : null
->position : number, Symbol(position,Decl(moduleMemberWithoutTypeAnnotation1.ts,26,25))
+>position : number, Symbol(position, Decl(moduleMemberWithoutTypeAnnotation1.ts, 26, 25))
 >0 : number
 
             return null;
 >null : null
         }
         findTokenInternal(x, y, z) {
->findTokenInternal : (x: any, y: any, z: any) => any, Symbol(findTokenInternal,Decl(moduleMemberWithoutTypeAnnotation1.ts,29,9))
->x : any, Symbol(x,Decl(moduleMemberWithoutTypeAnnotation1.ts,30,26))
->y : any, Symbol(y,Decl(moduleMemberWithoutTypeAnnotation1.ts,30,28))
->z : any, Symbol(z,Decl(moduleMemberWithoutTypeAnnotation1.ts,30,31))
+>findTokenInternal : (x: any, y: any, z: any) => any, Symbol(findTokenInternal, Decl(moduleMemberWithoutTypeAnnotation1.ts, 29, 9))
+>x : any, Symbol(x, Decl(moduleMemberWithoutTypeAnnotation1.ts, 30, 26))
+>y : any, Symbol(y, Decl(moduleMemberWithoutTypeAnnotation1.ts, 30, 28))
+>z : any, Symbol(z, Decl(moduleMemberWithoutTypeAnnotation1.ts, 30, 31))
 
             return null;
 >null : null
@@ -93,29 +93,29 @@ module TypeScript {
 }
 
 module TypeScript.Syntax {
->TypeScript : typeof TypeScript, Symbol(TypeScript,Decl(moduleMemberWithoutTypeAnnotation1.ts,0,0),Decl(moduleMemberWithoutTypeAnnotation1.ts,6,1),Decl(moduleMemberWithoutTypeAnnotation1.ts,22,1),Decl(moduleMemberWithoutTypeAnnotation1.ts,34,1))
->Syntax : typeof Syntax, Symbol(Syntax,Decl(moduleMemberWithoutTypeAnnotation1.ts,36,18))
+>TypeScript : typeof TypeScript, Symbol(TypeScript, Decl(moduleMemberWithoutTypeAnnotation1.ts, 0, 0), Decl(moduleMemberWithoutTypeAnnotation1.ts, 6, 1), Decl(moduleMemberWithoutTypeAnnotation1.ts, 22, 1), Decl(moduleMemberWithoutTypeAnnotation1.ts, 34, 1))
+>Syntax : typeof Syntax, Symbol(Syntax, Decl(moduleMemberWithoutTypeAnnotation1.ts, 36, 18))
 
     export function childIndex() { }
->childIndex : () => void, Symbol(childIndex,Decl(moduleMemberWithoutTypeAnnotation1.ts,36,26))
+>childIndex : () => void, Symbol(childIndex, Decl(moduleMemberWithoutTypeAnnotation1.ts, 36, 26))
 
     export class VariableWidthTokenWithTrailingTrivia implements ISyntaxToken {
->VariableWidthTokenWithTrailingTrivia : VariableWidthTokenWithTrailingTrivia, Symbol(VariableWidthTokenWithTrailingTrivia,Decl(moduleMemberWithoutTypeAnnotation1.ts,37,36))
->ISyntaxToken : ISyntaxToken, Symbol(ISyntaxToken,Decl(moduleMemberWithoutTypeAnnotation1.ts,9,40))
+>VariableWidthTokenWithTrailingTrivia : VariableWidthTokenWithTrailingTrivia, Symbol(VariableWidthTokenWithTrailingTrivia, Decl(moduleMemberWithoutTypeAnnotation1.ts, 37, 36))
+>ISyntaxToken : ISyntaxToken, Symbol(ISyntaxToken, Decl(moduleMemberWithoutTypeAnnotation1.ts, 9, 40))
 
         private findTokenInternal(parent: PositionedElement, position: number, fullStart: number) {
->findTokenInternal : (parent: PositionedElement, position: number, fullStart: number) => PositionedToken, Symbol(findTokenInternal,Decl(moduleMemberWithoutTypeAnnotation1.ts,39,79))
->parent : PositionedElement, Symbol(parent,Decl(moduleMemberWithoutTypeAnnotation1.ts,40,34))
->PositionedElement : PositionedElement, Symbol(PositionedElement,Decl(moduleMemberWithoutTypeAnnotation1.ts,10,38))
->position : number, Symbol(position,Decl(moduleMemberWithoutTypeAnnotation1.ts,40,60))
->fullStart : number, Symbol(fullStart,Decl(moduleMemberWithoutTypeAnnotation1.ts,40,78))
+>findTokenInternal : (parent: PositionedElement, position: number, fullStart: number) => PositionedToken, Symbol(findTokenInternal, Decl(moduleMemberWithoutTypeAnnotation1.ts, 39, 79))
+>parent : PositionedElement, Symbol(parent, Decl(moduleMemberWithoutTypeAnnotation1.ts, 40, 34))
+>PositionedElement : PositionedElement, Symbol(PositionedElement, Decl(moduleMemberWithoutTypeAnnotation1.ts, 10, 38))
+>position : number, Symbol(position, Decl(moduleMemberWithoutTypeAnnotation1.ts, 40, 60))
+>fullStart : number, Symbol(fullStart, Decl(moduleMemberWithoutTypeAnnotation1.ts, 40, 78))
 
             return new PositionedToken(parent, this, fullStart);
 >new PositionedToken(parent, this, fullStart) : PositionedToken
->PositionedToken : typeof PositionedToken, Symbol(PositionedToken,Decl(moduleMemberWithoutTypeAnnotation1.ts,16,5))
->parent : PositionedElement, Symbol(parent,Decl(moduleMemberWithoutTypeAnnotation1.ts,40,34))
->this : VariableWidthTokenWithTrailingTrivia, Symbol(VariableWidthTokenWithTrailingTrivia,Decl(moduleMemberWithoutTypeAnnotation1.ts,37,36))
->fullStart : number, Symbol(fullStart,Decl(moduleMemberWithoutTypeAnnotation1.ts,40,78))
+>PositionedToken : typeof PositionedToken, Symbol(PositionedToken, Decl(moduleMemberWithoutTypeAnnotation1.ts, 16, 5))
+>parent : PositionedElement, Symbol(parent, Decl(moduleMemberWithoutTypeAnnotation1.ts, 40, 34))
+>this : VariableWidthTokenWithTrailingTrivia, Symbol(VariableWidthTokenWithTrailingTrivia, Decl(moduleMemberWithoutTypeAnnotation1.ts, 37, 36))
+>fullStart : number, Symbol(fullStart, Decl(moduleMemberWithoutTypeAnnotation1.ts, 40, 78))
         }
     }
 }

@@ -1,13 +1,13 @@
 === tests/cases/compiler/letInNonStrictMode.ts ===
 let [x] = [1];
->x : number, Symbol(x,Decl(letInNonStrictMode.ts,0,5))
+>x : number, Symbol(x, Decl(letInNonStrictMode.ts, 0, 5))
 >[1] : [number]
 >1 : number
 
 let {a: y} = {a: 1};
 >a : any
->y : number, Symbol(y,Decl(letInNonStrictMode.ts,1,5))
+>y : number, Symbol(y, Decl(letInNonStrictMode.ts, 1, 5))
 >{a: 1} : { a: number; }
->a : number, Symbol(a,Decl(letInNonStrictMode.ts,1,14))
+>a : number, Symbol(a, Decl(letInNonStrictMode.ts, 1, 14))
 >1 : number
 

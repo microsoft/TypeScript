@@ -2,15 +2,15 @@
 /// <reference path="emitMemberAccessExpression_file2.ts" />
 /// <reference path="emitMemberAccessExpression_file1.ts" />
 declare var OData: any;
->OData : any, Symbol(OData,Decl(emitMemberAccessExpression_file3.ts,2,11))
+>OData : any, Symbol(OData, Decl(emitMemberAccessExpression_file3.ts, 2, 11))
 
 module Microsoft.PeopleAtWork.Model {
->Microsoft : typeof Microsoft, Symbol(Microsoft,Decl(emitMemberAccessExpression_file2.ts,1,13),Decl(emitMemberAccessExpression_file3.ts,2,23))
->PeopleAtWork : typeof PeopleAtWork, Symbol(PeopleAtWork,Decl(emitMemberAccessExpression_file2.ts,2,17),Decl(emitMemberAccessExpression_file3.ts,3,17))
->Model : typeof Model, Symbol(Model,Decl(emitMemberAccessExpression_file2.ts,2,30),Decl(emitMemberAccessExpression_file3.ts,3,30))
+>Microsoft : typeof Microsoft, Symbol(Microsoft, Decl(emitMemberAccessExpression_file2.ts, 1, 13), Decl(emitMemberAccessExpression_file3.ts, 2, 23))
+>PeopleAtWork : typeof PeopleAtWork, Symbol(PeopleAtWork, Decl(emitMemberAccessExpression_file2.ts, 2, 17), Decl(emitMemberAccessExpression_file3.ts, 3, 17))
+>Model : typeof Model, Symbol(Model, Decl(emitMemberAccessExpression_file2.ts, 2, 30), Decl(emitMemberAccessExpression_file3.ts, 3, 30))
 
     export class KnockoutExtentions {
->KnockoutExtentions : KnockoutExtentions, Symbol(KnockoutExtentions,Decl(emitMemberAccessExpression_file3.ts,3,37))
+>KnockoutExtentions : KnockoutExtentions, Symbol(KnockoutExtentions, Decl(emitMemberAccessExpression_file3.ts, 3, 37))
     }
 }
 === tests/cases/compiler/emitMemberAccessExpression_file1.ts ===
@@ -24,22 +24,22 @@ module Microsoft.PeopleAtWork.Model {
 >"use strict" : string
 
 module Microsoft.PeopleAtWork.Model {
->Microsoft : typeof Microsoft, Symbol(Microsoft,Decl(emitMemberAccessExpression_file2.ts,1,13),Decl(emitMemberAccessExpression_file3.ts,2,23))
->PeopleAtWork : typeof PeopleAtWork, Symbol(PeopleAtWork,Decl(emitMemberAccessExpression_file2.ts,2,17),Decl(emitMemberAccessExpression_file3.ts,3,17))
->Model : typeof Model, Symbol(Model,Decl(emitMemberAccessExpression_file2.ts,2,30),Decl(emitMemberAccessExpression_file3.ts,3,30))
+>Microsoft : typeof Microsoft, Symbol(Microsoft, Decl(emitMemberAccessExpression_file2.ts, 1, 13), Decl(emitMemberAccessExpression_file3.ts, 2, 23))
+>PeopleAtWork : typeof PeopleAtWork, Symbol(PeopleAtWork, Decl(emitMemberAccessExpression_file2.ts, 2, 17), Decl(emitMemberAccessExpression_file3.ts, 3, 17))
+>Model : typeof Model, Symbol(Model, Decl(emitMemberAccessExpression_file2.ts, 2, 30), Decl(emitMemberAccessExpression_file3.ts, 3, 30))
 
     export class _Person {
->_Person : _Person, Symbol(_Person,Decl(emitMemberAccessExpression_file2.ts,2,37))
+>_Person : _Person, Symbol(_Person, Decl(emitMemberAccessExpression_file2.ts, 2, 37))
 
         public populate(raw: any) {
->populate : (raw: any) => void, Symbol(populate,Decl(emitMemberAccessExpression_file2.ts,3,26))
->raw : any, Symbol(raw,Decl(emitMemberAccessExpression_file2.ts,4,24))
+>populate : (raw: any) => void, Symbol(populate, Decl(emitMemberAccessExpression_file2.ts, 3, 26))
+>raw : any, Symbol(raw, Decl(emitMemberAccessExpression_file2.ts, 4, 24))
 
             var res = Model.KnockoutExtentions;
->res : typeof KnockoutExtentions, Symbol(res,Decl(emitMemberAccessExpression_file2.ts,5,15))
->Model.KnockoutExtentions : typeof KnockoutExtentions, Symbol(KnockoutExtentions,Decl(emitMemberAccessExpression_file3.ts,3,37))
->Model : typeof Model, Symbol(Model,Decl(emitMemberAccessExpression_file2.ts,2,30),Decl(emitMemberAccessExpression_file3.ts,3,30))
->KnockoutExtentions : typeof KnockoutExtentions, Symbol(KnockoutExtentions,Decl(emitMemberAccessExpression_file3.ts,3,37))
+>res : typeof KnockoutExtentions, Symbol(res, Decl(emitMemberAccessExpression_file2.ts, 5, 15))
+>Model.KnockoutExtentions : typeof KnockoutExtentions, Symbol(KnockoutExtentions, Decl(emitMemberAccessExpression_file3.ts, 3, 37))
+>Model : typeof Model, Symbol(Model, Decl(emitMemberAccessExpression_file2.ts, 2, 30), Decl(emitMemberAccessExpression_file3.ts, 3, 30))
+>KnockoutExtentions : typeof KnockoutExtentions, Symbol(KnockoutExtentions, Decl(emitMemberAccessExpression_file3.ts, 3, 37))
         }
     }
 }

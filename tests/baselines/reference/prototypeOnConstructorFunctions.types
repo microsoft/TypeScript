@@ -1,27 +1,27 @@
 === tests/cases/compiler/prototypeOnConstructorFunctions.ts ===
 interface I1 {
->I1 : I1, Symbol(I1,Decl(prototypeOnConstructorFunctions.ts,0,0))
+>I1 : I1, Symbol(I1, Decl(prototypeOnConstructorFunctions.ts, 0, 0))
 
     const: new (options?, element?) => any;
->const : new (options?: any, element?: any) => any, Symbol(const,Decl(prototypeOnConstructorFunctions.ts,0,14))
->options : any, Symbol(options,Decl(prototypeOnConstructorFunctions.ts,1,16))
->element : any, Symbol(element,Decl(prototypeOnConstructorFunctions.ts,1,25))
+>const : new (options?: any, element?: any) => any, Symbol(const, Decl(prototypeOnConstructorFunctions.ts, 0, 14))
+>options : any, Symbol(options, Decl(prototypeOnConstructorFunctions.ts, 1, 16))
+>element : any, Symbol(element, Decl(prototypeOnConstructorFunctions.ts, 1, 25))
 }
 
 
 var i: I1;
->i : I1, Symbol(i,Decl(prototypeOnConstructorFunctions.ts,5,3))
->I1 : I1, Symbol(I1,Decl(prototypeOnConstructorFunctions.ts,0,0))
+>i : I1, Symbol(i, Decl(prototypeOnConstructorFunctions.ts, 5, 3))
+>I1 : I1, Symbol(I1, Decl(prototypeOnConstructorFunctions.ts, 0, 0))
 
 
 i.const.prototype.prop = "yo";
 >i.const.prototype.prop = "yo" : string
 >i.const.prototype.prop : any
->i.const.prototype : any, Symbol(Function.prototype,Decl(lib.d.ts,249,48))
->i.const : new (options?: any, element?: any) => any, Symbol(I1.const,Decl(prototypeOnConstructorFunctions.ts,0,14))
->i : I1, Symbol(i,Decl(prototypeOnConstructorFunctions.ts,5,3))
->const : new (options?: any, element?: any) => any, Symbol(I1.const,Decl(prototypeOnConstructorFunctions.ts,0,14))
->prototype : any, Symbol(Function.prototype,Decl(lib.d.ts,249,48))
+>i.const.prototype : any, Symbol(Function.prototype, Decl(lib.d.ts, 249, 48))
+>i.const : new (options?: any, element?: any) => any, Symbol(I1.const, Decl(prototypeOnConstructorFunctions.ts, 0, 14))
+>i : I1, Symbol(i, Decl(prototypeOnConstructorFunctions.ts, 5, 3))
+>const : new (options?: any, element?: any) => any, Symbol(I1.const, Decl(prototypeOnConstructorFunctions.ts, 0, 14))
+>prototype : any, Symbol(Function.prototype, Decl(lib.d.ts, 249, 48))
 >prop : any
 >"yo" : string
 

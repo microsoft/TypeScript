@@ -69,7 +69,7 @@ EIGHT:
 
 do{
     var fn = function () { }
->fn : () => void, Symbol(fn,Decl(doWhileBreakStatements.ts,34,7))
+>fn : () => void, Symbol(fn, Decl(doWhileBreakStatements.ts, 34, 7))
 >function () { } : () => void
 
     break EIGHT;

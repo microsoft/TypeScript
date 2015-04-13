@@ -1,11 +1,11 @@
 === tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserVariableStatement4.ts ===
 var
     a
->a : any, Symbol(a,Decl(parserVariableStatement4.ts,0,3))
+>a : any, Symbol(a, Decl(parserVariableStatement4.ts, 0, 3))
 
   , b
->b : any, Symbol(b,Decl(parserVariableStatement4.ts,2,3))
+>b : any, Symbol(b, Decl(parserVariableStatement4.ts, 2, 3))
 
   , c
->c : any, Symbol(c,Decl(parserVariableStatement4.ts,3,3))
+>c : any, Symbol(c, Decl(parserVariableStatement4.ts, 3, 3))
 

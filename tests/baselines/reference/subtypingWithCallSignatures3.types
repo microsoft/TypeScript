@@ -3,653 +3,653 @@
 // error cases, so function calls will all result in 'any'
 
 module Errors {
->Errors : typeof Errors, Symbol(Errors,Decl(subtypingWithCallSignatures3.ts,0,0))
+>Errors : typeof Errors, Symbol(Errors, Decl(subtypingWithCallSignatures3.ts, 0, 0))
 
     class Base { foo: string; }
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->foo : string, Symbol(foo,Decl(subtypingWithCallSignatures3.ts,4,16))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>foo : string, Symbol(foo, Decl(subtypingWithCallSignatures3.ts, 4, 16))
 
     class Derived extends Base { bar: string; }
->Derived : Derived, Symbol(Derived,Decl(subtypingWithCallSignatures3.ts,4,31))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->bar : string, Symbol(bar,Decl(subtypingWithCallSignatures3.ts,5,32))
+>Derived : Derived, Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>bar : string, Symbol(bar, Decl(subtypingWithCallSignatures3.ts, 5, 32))
 
     class Derived2 extends Derived { baz: string; }
->Derived2 : Derived2, Symbol(Derived2,Decl(subtypingWithCallSignatures3.ts,5,47))
->Derived : Derived, Symbol(Derived,Decl(subtypingWithCallSignatures3.ts,4,31))
->baz : string, Symbol(baz,Decl(subtypingWithCallSignatures3.ts,6,36))
+>Derived2 : Derived2, Symbol(Derived2, Decl(subtypingWithCallSignatures3.ts, 5, 47))
+>Derived : Derived, Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
+>baz : string, Symbol(baz, Decl(subtypingWithCallSignatures3.ts, 6, 36))
 
     class OtherDerived extends Base { bing: string; }
->OtherDerived : OtherDerived, Symbol(OtherDerived,Decl(subtypingWithCallSignatures3.ts,6,51))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->bing : string, Symbol(bing,Decl(subtypingWithCallSignatures3.ts,7,37))
+>OtherDerived : OtherDerived, Symbol(OtherDerived, Decl(subtypingWithCallSignatures3.ts, 6, 51))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>bing : string, Symbol(bing, Decl(subtypingWithCallSignatures3.ts, 7, 37))
 
     declare function foo2(a2: (x: number) => string[]): typeof a2;
->foo2 : { (a2: (x: number) => string[]): (x: number) => string[]; (a2: any): any; }, Symbol(foo2,Decl(subtypingWithCallSignatures3.ts,7,53),Decl(subtypingWithCallSignatures3.ts,9,66))
->a2 : (x: number) => string[], Symbol(a2,Decl(subtypingWithCallSignatures3.ts,9,26))
->x : number, Symbol(x,Decl(subtypingWithCallSignatures3.ts,9,31))
->a2 : (x: number) => string[], Symbol(a2,Decl(subtypingWithCallSignatures3.ts,9,26))
+>foo2 : { (a2: (x: number) => string[]): (x: number) => string[]; (a2: any): any; }, Symbol(foo2, Decl(subtypingWithCallSignatures3.ts, 7, 53), Decl(subtypingWithCallSignatures3.ts, 9, 66))
+>a2 : (x: number) => string[], Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 9, 26))
+>x : number, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 9, 31))
+>a2 : (x: number) => string[], Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 9, 26))
 
     declare function foo2(a2: any): any;
->foo2 : { (a2: (x: number) => string[]): (x: number) => string[]; (a2: any): any; }, Symbol(foo2,Decl(subtypingWithCallSignatures3.ts,7,53),Decl(subtypingWithCallSignatures3.ts,9,66))
->a2 : any, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,10,26))
+>foo2 : { (a2: (x: number) => string[]): (x: number) => string[]; (a2: any): any; }, Symbol(foo2, Decl(subtypingWithCallSignatures3.ts, 7, 53), Decl(subtypingWithCallSignatures3.ts, 9, 66))
+>a2 : any, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 10, 26))
 
     declare function foo7(a2: (x: (arg: Base) => Derived) => (r: Base) => Derived2): typeof a2;
->foo7 : { (a2: (x: (arg: Base) => Derived) => (r: Base) => Derived2): (x: (arg: Base) => Derived) => (r: Base) => Derived2; (a2: any): any; }, Symbol(foo7,Decl(subtypingWithCallSignatures3.ts,10,40),Decl(subtypingWithCallSignatures3.ts,12,95))
->a2 : (x: (arg: Base) => Derived) => (r: Base) => Derived2, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,12,26))
->x : (arg: Base) => Derived, Symbol(x,Decl(subtypingWithCallSignatures3.ts,12,31))
->arg : Base, Symbol(arg,Decl(subtypingWithCallSignatures3.ts,12,35))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->Derived : Derived, Symbol(Derived,Decl(subtypingWithCallSignatures3.ts,4,31))
->r : Base, Symbol(r,Decl(subtypingWithCallSignatures3.ts,12,62))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->Derived2 : Derived2, Symbol(Derived2,Decl(subtypingWithCallSignatures3.ts,5,47))
->a2 : (x: (arg: Base) => Derived) => (r: Base) => Derived2, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,12,26))
+>foo7 : { (a2: (x: (arg: Base) => Derived) => (r: Base) => Derived2): (x: (arg: Base) => Derived) => (r: Base) => Derived2; (a2: any): any; }, Symbol(foo7, Decl(subtypingWithCallSignatures3.ts, 10, 40), Decl(subtypingWithCallSignatures3.ts, 12, 95))
+>a2 : (x: (arg: Base) => Derived) => (r: Base) => Derived2, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 12, 26))
+>x : (arg: Base) => Derived, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 12, 31))
+>arg : Base, Symbol(arg, Decl(subtypingWithCallSignatures3.ts, 12, 35))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Derived : Derived, Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
+>r : Base, Symbol(r, Decl(subtypingWithCallSignatures3.ts, 12, 62))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Derived2 : Derived2, Symbol(Derived2, Decl(subtypingWithCallSignatures3.ts, 5, 47))
+>a2 : (x: (arg: Base) => Derived) => (r: Base) => Derived2, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 12, 26))
 
     declare function foo7(a2: any): any;
->foo7 : { (a2: (x: (arg: Base) => Derived) => (r: Base) => Derived2): (x: (arg: Base) => Derived) => (r: Base) => Derived2; (a2: any): any; }, Symbol(foo7,Decl(subtypingWithCallSignatures3.ts,10,40),Decl(subtypingWithCallSignatures3.ts,12,95))
->a2 : any, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,13,26))
+>foo7 : { (a2: (x: (arg: Base) => Derived) => (r: Base) => Derived2): (x: (arg: Base) => Derived) => (r: Base) => Derived2; (a2: any): any; }, Symbol(foo7, Decl(subtypingWithCallSignatures3.ts, 10, 40), Decl(subtypingWithCallSignatures3.ts, 12, 95))
+>a2 : any, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 13, 26))
 
     declare function foo8(a2: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived): typeof a2;
->foo8 : { (a2: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived): (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived; (a2: any): any; }, Symbol(foo8,Decl(subtypingWithCallSignatures3.ts,13,40),Decl(subtypingWithCallSignatures3.ts,15,122))
->a2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,15,26))
->x : (arg: Base) => Derived, Symbol(x,Decl(subtypingWithCallSignatures3.ts,15,31))
->arg : Base, Symbol(arg,Decl(subtypingWithCallSignatures3.ts,15,35))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->Derived : Derived, Symbol(Derived,Decl(subtypingWithCallSignatures3.ts,4,31))
->y : (arg2: Base) => Derived, Symbol(y,Decl(subtypingWithCallSignatures3.ts,15,57))
->arg2 : Base, Symbol(arg2,Decl(subtypingWithCallSignatures3.ts,15,62))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->Derived : Derived, Symbol(Derived,Decl(subtypingWithCallSignatures3.ts,4,31))
->r : Base, Symbol(r,Decl(subtypingWithCallSignatures3.ts,15,90))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->Derived : Derived, Symbol(Derived,Decl(subtypingWithCallSignatures3.ts,4,31))
->a2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,15,26))
+>foo8 : { (a2: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived): (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived; (a2: any): any; }, Symbol(foo8, Decl(subtypingWithCallSignatures3.ts, 13, 40), Decl(subtypingWithCallSignatures3.ts, 15, 122))
+>a2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 15, 26))
+>x : (arg: Base) => Derived, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 15, 31))
+>arg : Base, Symbol(arg, Decl(subtypingWithCallSignatures3.ts, 15, 35))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Derived : Derived, Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
+>y : (arg2: Base) => Derived, Symbol(y, Decl(subtypingWithCallSignatures3.ts, 15, 57))
+>arg2 : Base, Symbol(arg2, Decl(subtypingWithCallSignatures3.ts, 15, 62))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Derived : Derived, Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
+>r : Base, Symbol(r, Decl(subtypingWithCallSignatures3.ts, 15, 90))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Derived : Derived, Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
+>a2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 15, 26))
 
     declare function foo8(a2: any): any;
->foo8 : { (a2: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived): (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived; (a2: any): any; }, Symbol(foo8,Decl(subtypingWithCallSignatures3.ts,13,40),Decl(subtypingWithCallSignatures3.ts,15,122))
->a2 : any, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,16,26))
+>foo8 : { (a2: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived): (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived; (a2: any): any; }, Symbol(foo8, Decl(subtypingWithCallSignatures3.ts, 13, 40), Decl(subtypingWithCallSignatures3.ts, 15, 122))
+>a2 : any, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 16, 26))
 
     declare function foo10(a2: (...x: Base[]) => Base): typeof a2;
->foo10 : { (a2: (...x: Base[]) => Base): (...x: Base[]) => Base; (a2: any): any; }, Symbol(foo10,Decl(subtypingWithCallSignatures3.ts,16,40),Decl(subtypingWithCallSignatures3.ts,18,66))
->a2 : (...x: Base[]) => Base, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,18,27))
->x : Base[], Symbol(x,Decl(subtypingWithCallSignatures3.ts,18,32))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->a2 : (...x: Base[]) => Base, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,18,27))
+>foo10 : { (a2: (...x: Base[]) => Base): (...x: Base[]) => Base; (a2: any): any; }, Symbol(foo10, Decl(subtypingWithCallSignatures3.ts, 16, 40), Decl(subtypingWithCallSignatures3.ts, 18, 66))
+>a2 : (...x: Base[]) => Base, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 18, 27))
+>x : Base[], Symbol(x, Decl(subtypingWithCallSignatures3.ts, 18, 32))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>a2 : (...x: Base[]) => Base, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 18, 27))
 
     declare function foo10(a2: any): any;
->foo10 : { (a2: (...x: Base[]) => Base): (...x: Base[]) => Base; (a2: any): any; }, Symbol(foo10,Decl(subtypingWithCallSignatures3.ts,16,40),Decl(subtypingWithCallSignatures3.ts,18,66))
->a2 : any, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,19,27))
+>foo10 : { (a2: (...x: Base[]) => Base): (...x: Base[]) => Base; (a2: any): any; }, Symbol(foo10, Decl(subtypingWithCallSignatures3.ts, 16, 40), Decl(subtypingWithCallSignatures3.ts, 18, 66))
+>a2 : any, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 19, 27))
 
     declare function foo11(a2: (x: { foo: string }, y: { foo: string; bar: string }) => Base): typeof a2;
->foo11 : { (a2: (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): (x: { foo: string; }, y: { foo: string; bar: string; }) => Base; (a2: any): any; }, Symbol(foo11,Decl(subtypingWithCallSignatures3.ts,19,41),Decl(subtypingWithCallSignatures3.ts,21,105))
->a2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,21,27))
->x : { foo: string; }, Symbol(x,Decl(subtypingWithCallSignatures3.ts,21,32))
->foo : string, Symbol(foo,Decl(subtypingWithCallSignatures3.ts,21,36))
->y : { foo: string; bar: string; }, Symbol(y,Decl(subtypingWithCallSignatures3.ts,21,51))
->foo : string, Symbol(foo,Decl(subtypingWithCallSignatures3.ts,21,56))
->bar : string, Symbol(bar,Decl(subtypingWithCallSignatures3.ts,21,69))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->a2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,21,27))
+>foo11 : { (a2: (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): (x: { foo: string; }, y: { foo: string; bar: string; }) => Base; (a2: any): any; }, Symbol(foo11, Decl(subtypingWithCallSignatures3.ts, 19, 41), Decl(subtypingWithCallSignatures3.ts, 21, 105))
+>a2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 21, 27))
+>x : { foo: string; }, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 21, 32))
+>foo : string, Symbol(foo, Decl(subtypingWithCallSignatures3.ts, 21, 36))
+>y : { foo: string; bar: string; }, Symbol(y, Decl(subtypingWithCallSignatures3.ts, 21, 51))
+>foo : string, Symbol(foo, Decl(subtypingWithCallSignatures3.ts, 21, 56))
+>bar : string, Symbol(bar, Decl(subtypingWithCallSignatures3.ts, 21, 69))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>a2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 21, 27))
 
     declare function foo11(a2: any): any;
->foo11 : { (a2: (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): (x: { foo: string; }, y: { foo: string; bar: string; }) => Base; (a2: any): any; }, Symbol(foo11,Decl(subtypingWithCallSignatures3.ts,19,41),Decl(subtypingWithCallSignatures3.ts,21,105))
->a2 : any, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,22,27))
+>foo11 : { (a2: (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): (x: { foo: string; }, y: { foo: string; bar: string; }) => Base; (a2: any): any; }, Symbol(foo11, Decl(subtypingWithCallSignatures3.ts, 19, 41), Decl(subtypingWithCallSignatures3.ts, 21, 105))
+>a2 : any, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 22, 27))
 
     declare function foo12(a2: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>): typeof a2;
->foo12 : { (a2: (x: Base[], y: Derived2[]) => Derived[]): (x: Base[], y: Derived2[]) => Derived[]; (a2: any): any; }, Symbol(foo12,Decl(subtypingWithCallSignatures3.ts,22,41),Decl(subtypingWithCallSignatures3.ts,24,98))
->a2 : (x: Base[], y: Derived2[]) => Derived[], Symbol(a2,Decl(subtypingWithCallSignatures3.ts,24,27))
->x : Base[], Symbol(x,Decl(subtypingWithCallSignatures3.ts,24,32))
->Array : T[], Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->y : Derived2[], Symbol(y,Decl(subtypingWithCallSignatures3.ts,24,47))
->Array : T[], Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
->Derived2 : Derived2, Symbol(Derived2,Decl(subtypingWithCallSignatures3.ts,5,47))
->Array : T[], Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
->Derived : Derived, Symbol(Derived,Decl(subtypingWithCallSignatures3.ts,4,31))
->a2 : (x: Base[], y: Derived2[]) => Derived[], Symbol(a2,Decl(subtypingWithCallSignatures3.ts,24,27))
+>foo12 : { (a2: (x: Base[], y: Derived2[]) => Derived[]): (x: Base[], y: Derived2[]) => Derived[]; (a2: any): any; }, Symbol(foo12, Decl(subtypingWithCallSignatures3.ts, 22, 41), Decl(subtypingWithCallSignatures3.ts, 24, 98))
+>a2 : (x: Base[], y: Derived2[]) => Derived[], Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 24, 27))
+>x : Base[], Symbol(x, Decl(subtypingWithCallSignatures3.ts, 24, 32))
+>Array : T[], Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>y : Derived2[], Symbol(y, Decl(subtypingWithCallSignatures3.ts, 24, 47))
+>Array : T[], Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Derived2 : Derived2, Symbol(Derived2, Decl(subtypingWithCallSignatures3.ts, 5, 47))
+>Array : T[], Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Derived : Derived, Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
+>a2 : (x: Base[], y: Derived2[]) => Derived[], Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 24, 27))
 
     declare function foo12(a2: any): any;
->foo12 : { (a2: (x: Base[], y: Derived2[]) => Derived[]): (x: Base[], y: Derived2[]) => Derived[]; (a2: any): any; }, Symbol(foo12,Decl(subtypingWithCallSignatures3.ts,22,41),Decl(subtypingWithCallSignatures3.ts,24,98))
->a2 : any, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,25,27))
+>foo12 : { (a2: (x: Base[], y: Derived2[]) => Derived[]): (x: Base[], y: Derived2[]) => Derived[]; (a2: any): any; }, Symbol(foo12, Decl(subtypingWithCallSignatures3.ts, 22, 41), Decl(subtypingWithCallSignatures3.ts, 24, 98))
+>a2 : any, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 25, 27))
 
     declare function foo15(a2: (x: { a: string; b: number }) => number): typeof a2;
->foo15 : { (a2: (x: { a: string; b: number; }) => number): (x: { a: string; b: number; }) => number; (a2: any): any; }, Symbol(foo15,Decl(subtypingWithCallSignatures3.ts,25,41),Decl(subtypingWithCallSignatures3.ts,27,83))
->a2 : (x: { a: string; b: number; }) => number, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,27,27))
->x : { a: string; b: number; }, Symbol(x,Decl(subtypingWithCallSignatures3.ts,27,32))
->a : string, Symbol(a,Decl(subtypingWithCallSignatures3.ts,27,36))
->b : number, Symbol(b,Decl(subtypingWithCallSignatures3.ts,27,47))
->a2 : (x: { a: string; b: number; }) => number, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,27,27))
+>foo15 : { (a2: (x: { a: string; b: number; }) => number): (x: { a: string; b: number; }) => number; (a2: any): any; }, Symbol(foo15, Decl(subtypingWithCallSignatures3.ts, 25, 41), Decl(subtypingWithCallSignatures3.ts, 27, 83))
+>a2 : (x: { a: string; b: number; }) => number, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 27, 27))
+>x : { a: string; b: number; }, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 27, 32))
+>a : string, Symbol(a, Decl(subtypingWithCallSignatures3.ts, 27, 36))
+>b : number, Symbol(b, Decl(subtypingWithCallSignatures3.ts, 27, 47))
+>a2 : (x: { a: string; b: number; }) => number, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 27, 27))
 
     declare function foo15(a2: any): any;
->foo15 : { (a2: (x: { a: string; b: number; }) => number): (x: { a: string; b: number; }) => number; (a2: any): any; }, Symbol(foo15,Decl(subtypingWithCallSignatures3.ts,25,41),Decl(subtypingWithCallSignatures3.ts,27,83))
->a2 : any, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,28,27))
+>foo15 : { (a2: (x: { a: string; b: number; }) => number): (x: { a: string; b: number; }) => number; (a2: any): any; }, Symbol(foo15, Decl(subtypingWithCallSignatures3.ts, 25, 41), Decl(subtypingWithCallSignatures3.ts, 27, 83))
+>a2 : any, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 28, 27))
 
     declare function foo16(a2: {
->foo16 : { (a2: { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }): { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }, Symbol(foo16,Decl(subtypingWithCallSignatures3.ts,28,41),Decl(subtypingWithCallSignatures3.ts,40,18))
->a2 : { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,30,27))
+>foo16 : { (a2: { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }): { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }, Symbol(foo16, Decl(subtypingWithCallSignatures3.ts, 28, 41), Decl(subtypingWithCallSignatures3.ts, 40, 18))
+>a2 : { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 30, 27))
 
         // type of parameter is overload set which means we can't do inference based on this type
         (x: {
->x : { (a: number): number; (a?: number): number; }, Symbol(x,Decl(subtypingWithCallSignatures3.ts,32,9))
+>x : { (a: number): number; (a?: number): number; }, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 32, 9))
 
             (a: number): number;
->a : number, Symbol(a,Decl(subtypingWithCallSignatures3.ts,33,13))
+>a : number, Symbol(a, Decl(subtypingWithCallSignatures3.ts, 33, 13))
 
             (a?: number): number;
->a : number, Symbol(a,Decl(subtypingWithCallSignatures3.ts,34,13))
+>a : number, Symbol(a, Decl(subtypingWithCallSignatures3.ts, 34, 13))
 
         }): number[];
         (x: {
->x : { (a: boolean): boolean; (a?: boolean): boolean; }, Symbol(x,Decl(subtypingWithCallSignatures3.ts,36,9))
+>x : { (a: boolean): boolean; (a?: boolean): boolean; }, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 36, 9))
 
             (a: boolean): boolean;
->a : boolean, Symbol(a,Decl(subtypingWithCallSignatures3.ts,37,13))
+>a : boolean, Symbol(a, Decl(subtypingWithCallSignatures3.ts, 37, 13))
 
             (a?: boolean): boolean;
->a : boolean, Symbol(a,Decl(subtypingWithCallSignatures3.ts,38,13))
+>a : boolean, Symbol(a, Decl(subtypingWithCallSignatures3.ts, 38, 13))
 
         }): boolean[];
     }): typeof a2;
->a2 : { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,30,27))
+>a2 : { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 30, 27))
 
     declare function foo16(a2: any): any;
->foo16 : { (a2: { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }): { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }, Symbol(foo16,Decl(subtypingWithCallSignatures3.ts,28,41),Decl(subtypingWithCallSignatures3.ts,40,18))
->a2 : any, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,41,27))
+>foo16 : { (a2: { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }): { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }, Symbol(foo16, Decl(subtypingWithCallSignatures3.ts, 28, 41), Decl(subtypingWithCallSignatures3.ts, 40, 18))
+>a2 : any, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 41, 27))
 
     declare function foo17(a2: {
->foo17 : { (a2: { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }): { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }; (a2: any): any; }, Symbol(foo17,Decl(subtypingWithCallSignatures3.ts,41,41),Decl(subtypingWithCallSignatures3.ts,52,18))
->a2 : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,43,27))
+>foo17 : { (a2: { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }): { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }; (a2: any): any; }, Symbol(foo17, Decl(subtypingWithCallSignatures3.ts, 41, 41), Decl(subtypingWithCallSignatures3.ts, 52, 18))
+>a2 : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 43, 27))
 
         (x: {
->x : { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }, Symbol(x,Decl(subtypingWithCallSignatures3.ts,44,9))
+>x : { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 44, 9))
 
             <T extends Derived>(a: T): T;
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,45,13))
->Derived : Derived, Symbol(Derived,Decl(subtypingWithCallSignatures3.ts,4,31))
->a : T, Symbol(a,Decl(subtypingWithCallSignatures3.ts,45,32))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,45,13))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,45,13))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 45, 13))
+>Derived : Derived, Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
+>a : T, Symbol(a, Decl(subtypingWithCallSignatures3.ts, 45, 32))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 45, 13))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 45, 13))
 
             <T extends Base>(a: T): T;
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,46,13))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->a : T, Symbol(a,Decl(subtypingWithCallSignatures3.ts,46,29))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,46,13))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,46,13))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 46, 13))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>a : T, Symbol(a, Decl(subtypingWithCallSignatures3.ts, 46, 29))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 46, 13))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 46, 13))
 
         }): any[];
         (x: {
->x : { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }, Symbol(x,Decl(subtypingWithCallSignatures3.ts,48,9))
+>x : { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 48, 9))
 
             <T extends Derived2>(a: T): T;
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,49,13))
->Derived2 : Derived2, Symbol(Derived2,Decl(subtypingWithCallSignatures3.ts,5,47))
->a : T, Symbol(a,Decl(subtypingWithCallSignatures3.ts,49,33))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,49,13))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,49,13))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 49, 13))
+>Derived2 : Derived2, Symbol(Derived2, Decl(subtypingWithCallSignatures3.ts, 5, 47))
+>a : T, Symbol(a, Decl(subtypingWithCallSignatures3.ts, 49, 33))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 49, 13))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 49, 13))
 
             <T extends Base>(a: T): T;
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,50,13))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->a : T, Symbol(a,Decl(subtypingWithCallSignatures3.ts,50,29))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,50,13))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,50,13))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 50, 13))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>a : T, Symbol(a, Decl(subtypingWithCallSignatures3.ts, 50, 29))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 50, 13))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 50, 13))
 
         }): any[];
     }): typeof a2;
->a2 : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,43,27))
+>a2 : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 43, 27))
 
     declare function foo17(a2: any): any;
->foo17 : { (a2: { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }): { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }; (a2: any): any; }, Symbol(foo17,Decl(subtypingWithCallSignatures3.ts,41,41),Decl(subtypingWithCallSignatures3.ts,52,18))
->a2 : any, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,53,27))
+>foo17 : { (a2: { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }): { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }; (a2: any): any; }, Symbol(foo17, Decl(subtypingWithCallSignatures3.ts, 41, 41), Decl(subtypingWithCallSignatures3.ts, 52, 18))
+>a2 : any, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 53, 27))
 
     var r1 = foo2(<T, U>(x: T) => <U[]>null); // any
->r1 : any, Symbol(r1,Decl(subtypingWithCallSignatures3.ts,55,7))
+>r1 : any, Symbol(r1, Decl(subtypingWithCallSignatures3.ts, 55, 7))
 >foo2(<T, U>(x: T) => <U[]>null) : any
->foo2 : { (a2: (x: number) => string[]): (x: number) => string[]; (a2: any): any; }, Symbol(foo2,Decl(subtypingWithCallSignatures3.ts,7,53),Decl(subtypingWithCallSignatures3.ts,9,66))
+>foo2 : { (a2: (x: number) => string[]): (x: number) => string[]; (a2: any): any; }, Symbol(foo2, Decl(subtypingWithCallSignatures3.ts, 7, 53), Decl(subtypingWithCallSignatures3.ts, 9, 66))
 ><T, U>(x: T) => <U[]>null : <T, U>(x: T) => U[]
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,55,19))
->U : U, Symbol(U,Decl(subtypingWithCallSignatures3.ts,55,21))
->x : T, Symbol(x,Decl(subtypingWithCallSignatures3.ts,55,25))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,55,19))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 55, 19))
+>U : U, Symbol(U, Decl(subtypingWithCallSignatures3.ts, 55, 21))
+>x : T, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 55, 25))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 55, 19))
 ><U[]>null : U[]
->U : U, Symbol(U,Decl(subtypingWithCallSignatures3.ts,55,21))
+>U : U, Symbol(U, Decl(subtypingWithCallSignatures3.ts, 55, 21))
 >null : null
 
     var r1a = [(x: number) => [''], <T, U>(x: T) => <U[]>null];
->r1a : (<T, U>(x: T) => U[])[], Symbol(r1a,Decl(subtypingWithCallSignatures3.ts,56,7))
+>r1a : (<T, U>(x: T) => U[])[], Symbol(r1a, Decl(subtypingWithCallSignatures3.ts, 56, 7))
 >[(x: number) => [''], <T, U>(x: T) => <U[]>null] : (<T, U>(x: T) => U[])[]
 >(x: number) => [''] : (x: number) => string[]
->x : number, Symbol(x,Decl(subtypingWithCallSignatures3.ts,56,16))
+>x : number, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 56, 16))
 >[''] : string[]
 >'' : string
 ><T, U>(x: T) => <U[]>null : <T, U>(x: T) => U[]
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,56,37))
->U : U, Symbol(U,Decl(subtypingWithCallSignatures3.ts,56,39))
->x : T, Symbol(x,Decl(subtypingWithCallSignatures3.ts,56,43))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,56,37))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 56, 37))
+>U : U, Symbol(U, Decl(subtypingWithCallSignatures3.ts, 56, 39))
+>x : T, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 56, 43))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 56, 37))
 ><U[]>null : U[]
->U : U, Symbol(U,Decl(subtypingWithCallSignatures3.ts,56,39))
+>U : U, Symbol(U, Decl(subtypingWithCallSignatures3.ts, 56, 39))
 >null : null
 
     var r1b = [<T, U>(x: T) => <U[]>null, (x: number) => ['']];
->r1b : (<T, U>(x: T) => U[])[], Symbol(r1b,Decl(subtypingWithCallSignatures3.ts,57,7))
+>r1b : (<T, U>(x: T) => U[])[], Symbol(r1b, Decl(subtypingWithCallSignatures3.ts, 57, 7))
 >[<T, U>(x: T) => <U[]>null, (x: number) => ['']] : (<T, U>(x: T) => U[])[]
 ><T, U>(x: T) => <U[]>null : <T, U>(x: T) => U[]
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,57,16))
->U : U, Symbol(U,Decl(subtypingWithCallSignatures3.ts,57,18))
->x : T, Symbol(x,Decl(subtypingWithCallSignatures3.ts,57,22))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,57,16))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 57, 16))
+>U : U, Symbol(U, Decl(subtypingWithCallSignatures3.ts, 57, 18))
+>x : T, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 57, 22))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 57, 16))
 ><U[]>null : U[]
->U : U, Symbol(U,Decl(subtypingWithCallSignatures3.ts,57,18))
+>U : U, Symbol(U, Decl(subtypingWithCallSignatures3.ts, 57, 18))
 >null : null
 >(x: number) => [''] : (x: number) => string[]
->x : number, Symbol(x,Decl(subtypingWithCallSignatures3.ts,57,43))
+>x : number, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 57, 43))
 >[''] : string[]
 >'' : string
 
     var r2arg = <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => <V>null;
->r2arg : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V, Symbol(r2arg,Decl(subtypingWithCallSignatures3.ts,59,7))
+>r2arg : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V, Symbol(r2arg, Decl(subtypingWithCallSignatures3.ts, 59, 7))
 ><T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => <V>null : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,59,17))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->U : U, Symbol(U,Decl(subtypingWithCallSignatures3.ts,59,32))
->Derived : Derived, Symbol(Derived,Decl(subtypingWithCallSignatures3.ts,4,31))
->V : V, Symbol(V,Decl(subtypingWithCallSignatures3.ts,59,51))
->Derived2 : Derived2, Symbol(Derived2,Decl(subtypingWithCallSignatures3.ts,5,47))
->x : (arg: T) => U, Symbol(x,Decl(subtypingWithCallSignatures3.ts,59,72))
->arg : T, Symbol(arg,Decl(subtypingWithCallSignatures3.ts,59,76))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,59,17))
->U : U, Symbol(U,Decl(subtypingWithCallSignatures3.ts,59,32))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 59, 17))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>U : U, Symbol(U, Decl(subtypingWithCallSignatures3.ts, 59, 32))
+>Derived : Derived, Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
+>V : V, Symbol(V, Decl(subtypingWithCallSignatures3.ts, 59, 51))
+>Derived2 : Derived2, Symbol(Derived2, Decl(subtypingWithCallSignatures3.ts, 5, 47))
+>x : (arg: T) => U, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 59, 72))
+>arg : T, Symbol(arg, Decl(subtypingWithCallSignatures3.ts, 59, 76))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 59, 17))
+>U : U, Symbol(U, Decl(subtypingWithCallSignatures3.ts, 59, 32))
 >(r: T) => <V>null : (r: T) => V
->r : T, Symbol(r,Decl(subtypingWithCallSignatures3.ts,59,94))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,59,17))
+>r : T, Symbol(r, Decl(subtypingWithCallSignatures3.ts, 59, 94))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 59, 17))
 ><V>null : V
->V : V, Symbol(V,Decl(subtypingWithCallSignatures3.ts,59,51))
+>V : V, Symbol(V, Decl(subtypingWithCallSignatures3.ts, 59, 51))
 >null : null
 
     var r2arg2 = (x: (arg: Base) => Derived) => (r: Base) => <Derived2>null;
->r2arg2 : (x: (arg: Base) => Derived) => (r: Base) => Derived2, Symbol(r2arg2,Decl(subtypingWithCallSignatures3.ts,60,7))
+>r2arg2 : (x: (arg: Base) => Derived) => (r: Base) => Derived2, Symbol(r2arg2, Decl(subtypingWithCallSignatures3.ts, 60, 7))
 >(x: (arg: Base) => Derived) => (r: Base) => <Derived2>null : (x: (arg: Base) => Derived) => (r: Base) => Derived2
->x : (arg: Base) => Derived, Symbol(x,Decl(subtypingWithCallSignatures3.ts,60,18))
->arg : Base, Symbol(arg,Decl(subtypingWithCallSignatures3.ts,60,22))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->Derived : Derived, Symbol(Derived,Decl(subtypingWithCallSignatures3.ts,4,31))
+>x : (arg: Base) => Derived, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 60, 18))
+>arg : Base, Symbol(arg, Decl(subtypingWithCallSignatures3.ts, 60, 22))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Derived : Derived, Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
 >(r: Base) => <Derived2>null : (r: Base) => Derived2
->r : Base, Symbol(r,Decl(subtypingWithCallSignatures3.ts,60,49))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
+>r : Base, Symbol(r, Decl(subtypingWithCallSignatures3.ts, 60, 49))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
 ><Derived2>null : Derived2
->Derived2 : Derived2, Symbol(Derived2,Decl(subtypingWithCallSignatures3.ts,5,47))
+>Derived2 : Derived2, Symbol(Derived2, Decl(subtypingWithCallSignatures3.ts, 5, 47))
 >null : null
 
     var r2 = foo7(r2arg); // any
->r2 : any, Symbol(r2,Decl(subtypingWithCallSignatures3.ts,61,7))
+>r2 : any, Symbol(r2, Decl(subtypingWithCallSignatures3.ts, 61, 7))
 >foo7(r2arg) : any
->foo7 : { (a2: (x: (arg: Base) => Derived) => (r: Base) => Derived2): (x: (arg: Base) => Derived) => (r: Base) => Derived2; (a2: any): any; }, Symbol(foo7,Decl(subtypingWithCallSignatures3.ts,10,40),Decl(subtypingWithCallSignatures3.ts,12,95))
->r2arg : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V, Symbol(r2arg,Decl(subtypingWithCallSignatures3.ts,59,7))
+>foo7 : { (a2: (x: (arg: Base) => Derived) => (r: Base) => Derived2): (x: (arg: Base) => Derived) => (r: Base) => Derived2; (a2: any): any; }, Symbol(foo7, Decl(subtypingWithCallSignatures3.ts, 10, 40), Decl(subtypingWithCallSignatures3.ts, 12, 95))
+>r2arg : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V, Symbol(r2arg, Decl(subtypingWithCallSignatures3.ts, 59, 7))
 
     var r2a = [r2arg2, r2arg];
->r2a : (<T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V)[], Symbol(r2a,Decl(subtypingWithCallSignatures3.ts,62,7))
+>r2a : (<T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V)[], Symbol(r2a, Decl(subtypingWithCallSignatures3.ts, 62, 7))
 >[r2arg2, r2arg] : (<T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V)[]
->r2arg2 : (x: (arg: Base) => Derived) => (r: Base) => Derived2, Symbol(r2arg2,Decl(subtypingWithCallSignatures3.ts,60,7))
->r2arg : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V, Symbol(r2arg,Decl(subtypingWithCallSignatures3.ts,59,7))
+>r2arg2 : (x: (arg: Base) => Derived) => (r: Base) => Derived2, Symbol(r2arg2, Decl(subtypingWithCallSignatures3.ts, 60, 7))
+>r2arg : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V, Symbol(r2arg, Decl(subtypingWithCallSignatures3.ts, 59, 7))
 
     var r2b = [r2arg, r2arg2];
->r2b : (<T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V)[], Symbol(r2b,Decl(subtypingWithCallSignatures3.ts,63,7))
+>r2b : (<T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V)[], Symbol(r2b, Decl(subtypingWithCallSignatures3.ts, 63, 7))
 >[r2arg, r2arg2] : (<T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V)[]
->r2arg : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V, Symbol(r2arg,Decl(subtypingWithCallSignatures3.ts,59,7))
->r2arg2 : (x: (arg: Base) => Derived) => (r: Base) => Derived2, Symbol(r2arg2,Decl(subtypingWithCallSignatures3.ts,60,7))
+>r2arg : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V, Symbol(r2arg, Decl(subtypingWithCallSignatures3.ts, 59, 7))
+>r2arg2 : (x: (arg: Base) => Derived) => (r: Base) => Derived2, Symbol(r2arg2, Decl(subtypingWithCallSignatures3.ts, 60, 7))
 
     var r3arg = <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => <U>null;
->r3arg : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U, Symbol(r3arg,Decl(subtypingWithCallSignatures3.ts,65,7))
+>r3arg : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U, Symbol(r3arg, Decl(subtypingWithCallSignatures3.ts, 65, 7))
 ><T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => <U>null : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,65,17))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->U : U, Symbol(U,Decl(subtypingWithCallSignatures3.ts,65,32))
->Derived : Derived, Symbol(Derived,Decl(subtypingWithCallSignatures3.ts,4,31))
->x : (arg: T) => U, Symbol(x,Decl(subtypingWithCallSignatures3.ts,65,52))
->arg : T, Symbol(arg,Decl(subtypingWithCallSignatures3.ts,65,56))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,65,17))
->U : U, Symbol(U,Decl(subtypingWithCallSignatures3.ts,65,32))
->y : (arg2: { foo: number; }) => U, Symbol(y,Decl(subtypingWithCallSignatures3.ts,65,69))
->arg2 : { foo: number; }, Symbol(arg2,Decl(subtypingWithCallSignatures3.ts,65,74))
->foo : number, Symbol(foo,Decl(subtypingWithCallSignatures3.ts,65,81))
->U : U, Symbol(U,Decl(subtypingWithCallSignatures3.ts,65,32))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 65, 17))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>U : U, Symbol(U, Decl(subtypingWithCallSignatures3.ts, 65, 32))
+>Derived : Derived, Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
+>x : (arg: T) => U, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 65, 52))
+>arg : T, Symbol(arg, Decl(subtypingWithCallSignatures3.ts, 65, 56))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 65, 17))
+>U : U, Symbol(U, Decl(subtypingWithCallSignatures3.ts, 65, 32))
+>y : (arg2: { foo: number; }) => U, Symbol(y, Decl(subtypingWithCallSignatures3.ts, 65, 69))
+>arg2 : { foo: number; }, Symbol(arg2, Decl(subtypingWithCallSignatures3.ts, 65, 74))
+>foo : number, Symbol(foo, Decl(subtypingWithCallSignatures3.ts, 65, 81))
+>U : U, Symbol(U, Decl(subtypingWithCallSignatures3.ts, 65, 32))
 >(r: T) => <U>null : (r: T) => U
->r : T, Symbol(r,Decl(subtypingWithCallSignatures3.ts,65,108))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,65,17))
+>r : T, Symbol(r, Decl(subtypingWithCallSignatures3.ts, 65, 108))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 65, 17))
 ><U>null : U
->U : U, Symbol(U,Decl(subtypingWithCallSignatures3.ts,65,32))
+>U : U, Symbol(U, Decl(subtypingWithCallSignatures3.ts, 65, 32))
 >null : null
 
     var r3arg2 = (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => <Derived>null;
->r3arg2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived, Symbol(r3arg2,Decl(subtypingWithCallSignatures3.ts,66,7))
+>r3arg2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived, Symbol(r3arg2, Decl(subtypingWithCallSignatures3.ts, 66, 7))
 >(x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => <Derived>null : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
->x : (arg: Base) => Derived, Symbol(x,Decl(subtypingWithCallSignatures3.ts,66,18))
->arg : Base, Symbol(arg,Decl(subtypingWithCallSignatures3.ts,66,22))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->Derived : Derived, Symbol(Derived,Decl(subtypingWithCallSignatures3.ts,4,31))
->y : (arg2: Base) => Derived, Symbol(y,Decl(subtypingWithCallSignatures3.ts,66,44))
->arg2 : Base, Symbol(arg2,Decl(subtypingWithCallSignatures3.ts,66,49))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->Derived : Derived, Symbol(Derived,Decl(subtypingWithCallSignatures3.ts,4,31))
+>x : (arg: Base) => Derived, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 66, 18))
+>arg : Base, Symbol(arg, Decl(subtypingWithCallSignatures3.ts, 66, 22))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Derived : Derived, Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
+>y : (arg2: Base) => Derived, Symbol(y, Decl(subtypingWithCallSignatures3.ts, 66, 44))
+>arg2 : Base, Symbol(arg2, Decl(subtypingWithCallSignatures3.ts, 66, 49))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>Derived : Derived, Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
 >(r: Base) => <Derived>null : (r: Base) => Derived
->r : Base, Symbol(r,Decl(subtypingWithCallSignatures3.ts,66,77))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
+>r : Base, Symbol(r, Decl(subtypingWithCallSignatures3.ts, 66, 77))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
 ><Derived>null : Derived
->Derived : Derived, Symbol(Derived,Decl(subtypingWithCallSignatures3.ts,4,31))
+>Derived : Derived, Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
 >null : null
 
     var r3 = foo8(r3arg); // any
->r3 : any, Symbol(r3,Decl(subtypingWithCallSignatures3.ts,67,7))
+>r3 : any, Symbol(r3, Decl(subtypingWithCallSignatures3.ts, 67, 7))
 >foo8(r3arg) : any
->foo8 : { (a2: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived): (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived; (a2: any): any; }, Symbol(foo8,Decl(subtypingWithCallSignatures3.ts,13,40),Decl(subtypingWithCallSignatures3.ts,15,122))
->r3arg : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U, Symbol(r3arg,Decl(subtypingWithCallSignatures3.ts,65,7))
+>foo8 : { (a2: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived): (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived; (a2: any): any; }, Symbol(foo8, Decl(subtypingWithCallSignatures3.ts, 13, 40), Decl(subtypingWithCallSignatures3.ts, 15, 122))
+>r3arg : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U, Symbol(r3arg, Decl(subtypingWithCallSignatures3.ts, 65, 7))
 
     var r3a = [r3arg2, r3arg];
->r3a : ((<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U) | ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived))[], Symbol(r3a,Decl(subtypingWithCallSignatures3.ts,68,7))
+>r3a : ((<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U) | ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived))[], Symbol(r3a, Decl(subtypingWithCallSignatures3.ts, 68, 7))
 >[r3arg2, r3arg] : ((<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U) | ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived))[]
->r3arg2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived, Symbol(r3arg2,Decl(subtypingWithCallSignatures3.ts,66,7))
->r3arg : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U, Symbol(r3arg,Decl(subtypingWithCallSignatures3.ts,65,7))
+>r3arg2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived, Symbol(r3arg2, Decl(subtypingWithCallSignatures3.ts, 66, 7))
+>r3arg : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U, Symbol(r3arg, Decl(subtypingWithCallSignatures3.ts, 65, 7))
 
     var r3b = [r3arg, r3arg2];
->r3b : ((<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U) | ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived))[], Symbol(r3b,Decl(subtypingWithCallSignatures3.ts,69,7))
+>r3b : ((<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U) | ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived))[], Symbol(r3b, Decl(subtypingWithCallSignatures3.ts, 69, 7))
 >[r3arg, r3arg2] : ((<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U) | ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived))[]
->r3arg : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U, Symbol(r3arg,Decl(subtypingWithCallSignatures3.ts,65,7))
->r3arg2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived, Symbol(r3arg2,Decl(subtypingWithCallSignatures3.ts,66,7))
+>r3arg : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U, Symbol(r3arg, Decl(subtypingWithCallSignatures3.ts, 65, 7))
+>r3arg2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived, Symbol(r3arg2, Decl(subtypingWithCallSignatures3.ts, 66, 7))
 
     var r4arg = <T extends Derived>(...x: T[]) => <T>null;
->r4arg : <T extends Derived>(...x: T[]) => T, Symbol(r4arg,Decl(subtypingWithCallSignatures3.ts,71,7))
+>r4arg : <T extends Derived>(...x: T[]) => T, Symbol(r4arg, Decl(subtypingWithCallSignatures3.ts, 71, 7))
 ><T extends Derived>(...x: T[]) => <T>null : <T extends Derived>(...x: T[]) => T
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,71,17))
->Derived : Derived, Symbol(Derived,Decl(subtypingWithCallSignatures3.ts,4,31))
->x : T[], Symbol(x,Decl(subtypingWithCallSignatures3.ts,71,36))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,71,17))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 71, 17))
+>Derived : Derived, Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
+>x : T[], Symbol(x, Decl(subtypingWithCallSignatures3.ts, 71, 36))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 71, 17))
 ><T>null : T
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,71,17))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 71, 17))
 >null : null
 
     var r4arg2 = (...x: Base[]) => <Base>null;
->r4arg2 : (...x: Base[]) => Base, Symbol(r4arg2,Decl(subtypingWithCallSignatures3.ts,72,7))
+>r4arg2 : (...x: Base[]) => Base, Symbol(r4arg2, Decl(subtypingWithCallSignatures3.ts, 72, 7))
 >(...x: Base[]) => <Base>null : (...x: Base[]) => Base
->x : Base[], Symbol(x,Decl(subtypingWithCallSignatures3.ts,72,18))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
+>x : Base[], Symbol(x, Decl(subtypingWithCallSignatures3.ts, 72, 18))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
 ><Base>null : Base
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
 >null : null
 
     var r4 = foo10(r4arg); // any
->r4 : any, Symbol(r4,Decl(subtypingWithCallSignatures3.ts,73,7))
+>r4 : any, Symbol(r4, Decl(subtypingWithCallSignatures3.ts, 73, 7))
 >foo10(r4arg) : any
->foo10 : { (a2: (...x: Base[]) => Base): (...x: Base[]) => Base; (a2: any): any; }, Symbol(foo10,Decl(subtypingWithCallSignatures3.ts,16,40),Decl(subtypingWithCallSignatures3.ts,18,66))
->r4arg : <T extends Derived>(...x: T[]) => T, Symbol(r4arg,Decl(subtypingWithCallSignatures3.ts,71,7))
+>foo10 : { (a2: (...x: Base[]) => Base): (...x: Base[]) => Base; (a2: any): any; }, Symbol(foo10, Decl(subtypingWithCallSignatures3.ts, 16, 40), Decl(subtypingWithCallSignatures3.ts, 18, 66))
+>r4arg : <T extends Derived>(...x: T[]) => T, Symbol(r4arg, Decl(subtypingWithCallSignatures3.ts, 71, 7))
 
     var r4a = [r4arg2, r4arg];
->r4a : (<T extends Derived>(...x: T[]) => T)[], Symbol(r4a,Decl(subtypingWithCallSignatures3.ts,74,7))
+>r4a : (<T extends Derived>(...x: T[]) => T)[], Symbol(r4a, Decl(subtypingWithCallSignatures3.ts, 74, 7))
 >[r4arg2, r4arg] : (<T extends Derived>(...x: T[]) => T)[]
->r4arg2 : (...x: Base[]) => Base, Symbol(r4arg2,Decl(subtypingWithCallSignatures3.ts,72,7))
->r4arg : <T extends Derived>(...x: T[]) => T, Symbol(r4arg,Decl(subtypingWithCallSignatures3.ts,71,7))
+>r4arg2 : (...x: Base[]) => Base, Symbol(r4arg2, Decl(subtypingWithCallSignatures3.ts, 72, 7))
+>r4arg : <T extends Derived>(...x: T[]) => T, Symbol(r4arg, Decl(subtypingWithCallSignatures3.ts, 71, 7))
 
     var r4b = [r4arg, r4arg2];
->r4b : (<T extends Derived>(...x: T[]) => T)[], Symbol(r4b,Decl(subtypingWithCallSignatures3.ts,75,7))
+>r4b : (<T extends Derived>(...x: T[]) => T)[], Symbol(r4b, Decl(subtypingWithCallSignatures3.ts, 75, 7))
 >[r4arg, r4arg2] : (<T extends Derived>(...x: T[]) => T)[]
->r4arg : <T extends Derived>(...x: T[]) => T, Symbol(r4arg,Decl(subtypingWithCallSignatures3.ts,71,7))
->r4arg2 : (...x: Base[]) => Base, Symbol(r4arg2,Decl(subtypingWithCallSignatures3.ts,72,7))
+>r4arg : <T extends Derived>(...x: T[]) => T, Symbol(r4arg, Decl(subtypingWithCallSignatures3.ts, 71, 7))
+>r4arg2 : (...x: Base[]) => Base, Symbol(r4arg2, Decl(subtypingWithCallSignatures3.ts, 72, 7))
 
     var r5arg = <T extends Derived>(x: T, y: T) => <T>null;
->r5arg : <T extends Derived>(x: T, y: T) => T, Symbol(r5arg,Decl(subtypingWithCallSignatures3.ts,77,7))
+>r5arg : <T extends Derived>(x: T, y: T) => T, Symbol(r5arg, Decl(subtypingWithCallSignatures3.ts, 77, 7))
 ><T extends Derived>(x: T, y: T) => <T>null : <T extends Derived>(x: T, y: T) => T
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,77,17))
->Derived : Derived, Symbol(Derived,Decl(subtypingWithCallSignatures3.ts,4,31))
->x : T, Symbol(x,Decl(subtypingWithCallSignatures3.ts,77,36))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,77,17))
->y : T, Symbol(y,Decl(subtypingWithCallSignatures3.ts,77,41))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,77,17))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 77, 17))
+>Derived : Derived, Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
+>x : T, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 77, 36))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 77, 17))
+>y : T, Symbol(y, Decl(subtypingWithCallSignatures3.ts, 77, 41))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 77, 17))
 ><T>null : T
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,77,17))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 77, 17))
 >null : null
 
     var r5arg2 = (x: { foo: string }, y: { foo: string; bar: string }) => <Base>null;
->r5arg2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base, Symbol(r5arg2,Decl(subtypingWithCallSignatures3.ts,78,7))
+>r5arg2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base, Symbol(r5arg2, Decl(subtypingWithCallSignatures3.ts, 78, 7))
 >(x: { foo: string }, y: { foo: string; bar: string }) => <Base>null : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
->x : { foo: string; }, Symbol(x,Decl(subtypingWithCallSignatures3.ts,78,18))
->foo : string, Symbol(foo,Decl(subtypingWithCallSignatures3.ts,78,22))
->y : { foo: string; bar: string; }, Symbol(y,Decl(subtypingWithCallSignatures3.ts,78,37))
->foo : string, Symbol(foo,Decl(subtypingWithCallSignatures3.ts,78,42))
->bar : string, Symbol(bar,Decl(subtypingWithCallSignatures3.ts,78,55))
+>x : { foo: string; }, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 78, 18))
+>foo : string, Symbol(foo, Decl(subtypingWithCallSignatures3.ts, 78, 22))
+>y : { foo: string; bar: string; }, Symbol(y, Decl(subtypingWithCallSignatures3.ts, 78, 37))
+>foo : string, Symbol(foo, Decl(subtypingWithCallSignatures3.ts, 78, 42))
+>bar : string, Symbol(bar, Decl(subtypingWithCallSignatures3.ts, 78, 55))
 ><Base>null : Base
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
 >null : null
 
     var r5 = foo11(r5arg); // any
->r5 : any, Symbol(r5,Decl(subtypingWithCallSignatures3.ts,79,7))
+>r5 : any, Symbol(r5, Decl(subtypingWithCallSignatures3.ts, 79, 7))
 >foo11(r5arg) : any
->foo11 : { (a2: (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): (x: { foo: string; }, y: { foo: string; bar: string; }) => Base; (a2: any): any; }, Symbol(foo11,Decl(subtypingWithCallSignatures3.ts,19,41),Decl(subtypingWithCallSignatures3.ts,21,105))
->r5arg : <T extends Derived>(x: T, y: T) => T, Symbol(r5arg,Decl(subtypingWithCallSignatures3.ts,77,7))
+>foo11 : { (a2: (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): (x: { foo: string; }, y: { foo: string; bar: string; }) => Base; (a2: any): any; }, Symbol(foo11, Decl(subtypingWithCallSignatures3.ts, 19, 41), Decl(subtypingWithCallSignatures3.ts, 21, 105))
+>r5arg : <T extends Derived>(x: T, y: T) => T, Symbol(r5arg, Decl(subtypingWithCallSignatures3.ts, 77, 7))
 
     var r5a = [r5arg2, r5arg];
->r5a : (<T extends Derived>(x: T, y: T) => T)[], Symbol(r5a,Decl(subtypingWithCallSignatures3.ts,80,7))
+>r5a : (<T extends Derived>(x: T, y: T) => T)[], Symbol(r5a, Decl(subtypingWithCallSignatures3.ts, 80, 7))
 >[r5arg2, r5arg] : (<T extends Derived>(x: T, y: T) => T)[]
->r5arg2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base, Symbol(r5arg2,Decl(subtypingWithCallSignatures3.ts,78,7))
->r5arg : <T extends Derived>(x: T, y: T) => T, Symbol(r5arg,Decl(subtypingWithCallSignatures3.ts,77,7))
+>r5arg2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base, Symbol(r5arg2, Decl(subtypingWithCallSignatures3.ts, 78, 7))
+>r5arg : <T extends Derived>(x: T, y: T) => T, Symbol(r5arg, Decl(subtypingWithCallSignatures3.ts, 77, 7))
 
     var r5b = [r5arg, r5arg2];
->r5b : (<T extends Derived>(x: T, y: T) => T)[], Symbol(r5b,Decl(subtypingWithCallSignatures3.ts,81,7))
+>r5b : (<T extends Derived>(x: T, y: T) => T)[], Symbol(r5b, Decl(subtypingWithCallSignatures3.ts, 81, 7))
 >[r5arg, r5arg2] : (<T extends Derived>(x: T, y: T) => T)[]
->r5arg : <T extends Derived>(x: T, y: T) => T, Symbol(r5arg,Decl(subtypingWithCallSignatures3.ts,77,7))
->r5arg2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base, Symbol(r5arg2,Decl(subtypingWithCallSignatures3.ts,78,7))
+>r5arg : <T extends Derived>(x: T, y: T) => T, Symbol(r5arg, Decl(subtypingWithCallSignatures3.ts, 77, 7))
+>r5arg2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base, Symbol(r5arg2, Decl(subtypingWithCallSignatures3.ts, 78, 7))
 
     var r6arg = (x: Array<Base>, y: Array<Derived2>) => <Array<Derived>>null;
->r6arg : (x: Base[], y: Derived2[]) => Derived[], Symbol(r6arg,Decl(subtypingWithCallSignatures3.ts,83,7))
+>r6arg : (x: Base[], y: Derived2[]) => Derived[], Symbol(r6arg, Decl(subtypingWithCallSignatures3.ts, 83, 7))
 >(x: Array<Base>, y: Array<Derived2>) => <Array<Derived>>null : (x: Base[], y: Derived2[]) => Derived[]
->x : Base[], Symbol(x,Decl(subtypingWithCallSignatures3.ts,83,17))
->Array : T[], Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->y : Derived2[], Symbol(y,Decl(subtypingWithCallSignatures3.ts,83,32))
->Array : T[], Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
->Derived2 : Derived2, Symbol(Derived2,Decl(subtypingWithCallSignatures3.ts,5,47))
+>x : Base[], Symbol(x, Decl(subtypingWithCallSignatures3.ts, 83, 17))
+>Array : T[], Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>y : Derived2[], Symbol(y, Decl(subtypingWithCallSignatures3.ts, 83, 32))
+>Array : T[], Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Derived2 : Derived2, Symbol(Derived2, Decl(subtypingWithCallSignatures3.ts, 5, 47))
 ><Array<Derived>>null : Derived[]
->Array : T[], Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
->Derived : Derived, Symbol(Derived,Decl(subtypingWithCallSignatures3.ts,4,31))
+>Array : T[], Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Derived : Derived, Symbol(Derived, Decl(subtypingWithCallSignatures3.ts, 4, 31))
 >null : null
 
     var r6arg2 = <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => <T>null;
->r6arg2 : <T extends Derived2[]>(x: Base[], y: Base[]) => T, Symbol(r6arg2,Decl(subtypingWithCallSignatures3.ts,84,7))
+>r6arg2 : <T extends Derived2[]>(x: Base[], y: Base[]) => T, Symbol(r6arg2, Decl(subtypingWithCallSignatures3.ts, 84, 7))
 ><T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => <T>null : <T extends Derived2[]>(x: Base[], y: Base[]) => T
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,84,18))
->Array : T[], Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
->Derived2 : Derived2, Symbol(Derived2,Decl(subtypingWithCallSignatures3.ts,5,47))
->x : Base[], Symbol(x,Decl(subtypingWithCallSignatures3.ts,84,45))
->Array : T[], Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->y : Base[], Symbol(y,Decl(subtypingWithCallSignatures3.ts,84,60))
->Array : T[], Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 84, 18))
+>Array : T[], Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Derived2 : Derived2, Symbol(Derived2, Decl(subtypingWithCallSignatures3.ts, 5, 47))
+>x : Base[], Symbol(x, Decl(subtypingWithCallSignatures3.ts, 84, 45))
+>Array : T[], Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>y : Base[], Symbol(y, Decl(subtypingWithCallSignatures3.ts, 84, 60))
+>Array : T[], Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
 ><T>null : T
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,84,18))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 84, 18))
 >null : null
 
     var r6 = foo12(r6arg); // (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
->r6 : (x: Base[], y: Derived2[]) => Derived[], Symbol(r6,Decl(subtypingWithCallSignatures3.ts,85,7))
+>r6 : (x: Base[], y: Derived2[]) => Derived[], Symbol(r6, Decl(subtypingWithCallSignatures3.ts, 85, 7))
 >foo12(r6arg) : (x: Base[], y: Derived2[]) => Derived[]
->foo12 : { (a2: (x: Base[], y: Derived2[]) => Derived[]): (x: Base[], y: Derived2[]) => Derived[]; (a2: any): any; }, Symbol(foo12,Decl(subtypingWithCallSignatures3.ts,22,41),Decl(subtypingWithCallSignatures3.ts,24,98))
->r6arg : (x: Base[], y: Derived2[]) => Derived[], Symbol(r6arg,Decl(subtypingWithCallSignatures3.ts,83,7))
+>foo12 : { (a2: (x: Base[], y: Derived2[]) => Derived[]): (x: Base[], y: Derived2[]) => Derived[]; (a2: any): any; }, Symbol(foo12, Decl(subtypingWithCallSignatures3.ts, 22, 41), Decl(subtypingWithCallSignatures3.ts, 24, 98))
+>r6arg : (x: Base[], y: Derived2[]) => Derived[], Symbol(r6arg, Decl(subtypingWithCallSignatures3.ts, 83, 7))
 
     var r6a = [r6arg2, r6arg];
->r6a : (<T extends Derived2[]>(x: Base[], y: Base[]) => T)[], Symbol(r6a,Decl(subtypingWithCallSignatures3.ts,86,7))
+>r6a : (<T extends Derived2[]>(x: Base[], y: Base[]) => T)[], Symbol(r6a, Decl(subtypingWithCallSignatures3.ts, 86, 7))
 >[r6arg2, r6arg] : (<T extends Derived2[]>(x: Base[], y: Base[]) => T)[]
->r6arg2 : <T extends Derived2[]>(x: Base[], y: Base[]) => T, Symbol(r6arg2,Decl(subtypingWithCallSignatures3.ts,84,7))
->r6arg : (x: Base[], y: Derived2[]) => Derived[], Symbol(r6arg,Decl(subtypingWithCallSignatures3.ts,83,7))
+>r6arg2 : <T extends Derived2[]>(x: Base[], y: Base[]) => T, Symbol(r6arg2, Decl(subtypingWithCallSignatures3.ts, 84, 7))
+>r6arg : (x: Base[], y: Derived2[]) => Derived[], Symbol(r6arg, Decl(subtypingWithCallSignatures3.ts, 83, 7))
 
     var r6b = [r6arg, r6arg2];
->r6b : (<T extends Derived2[]>(x: Base[], y: Base[]) => T)[], Symbol(r6b,Decl(subtypingWithCallSignatures3.ts,87,7))
+>r6b : (<T extends Derived2[]>(x: Base[], y: Base[]) => T)[], Symbol(r6b, Decl(subtypingWithCallSignatures3.ts, 87, 7))
 >[r6arg, r6arg2] : (<T extends Derived2[]>(x: Base[], y: Base[]) => T)[]
->r6arg : (x: Base[], y: Derived2[]) => Derived[], Symbol(r6arg,Decl(subtypingWithCallSignatures3.ts,83,7))
->r6arg2 : <T extends Derived2[]>(x: Base[], y: Base[]) => T, Symbol(r6arg2,Decl(subtypingWithCallSignatures3.ts,84,7))
+>r6arg : (x: Base[], y: Derived2[]) => Derived[], Symbol(r6arg, Decl(subtypingWithCallSignatures3.ts, 83, 7))
+>r6arg2 : <T extends Derived2[]>(x: Base[], y: Base[]) => T, Symbol(r6arg2, Decl(subtypingWithCallSignatures3.ts, 84, 7))
 
     var r7arg = <T>(x: { a: T; b: T }) => <T>null;
->r7arg : <T>(x: { a: T; b: T; }) => T, Symbol(r7arg,Decl(subtypingWithCallSignatures3.ts,89,7))
+>r7arg : <T>(x: { a: T; b: T; }) => T, Symbol(r7arg, Decl(subtypingWithCallSignatures3.ts, 89, 7))
 ><T>(x: { a: T; b: T }) => <T>null : <T>(x: { a: T; b: T; }) => T
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,89,17))
->x : { a: T; b: T; }, Symbol(x,Decl(subtypingWithCallSignatures3.ts,89,20))
->a : T, Symbol(a,Decl(subtypingWithCallSignatures3.ts,89,24))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,89,17))
->b : T, Symbol(b,Decl(subtypingWithCallSignatures3.ts,89,30))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,89,17))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 89, 17))
+>x : { a: T; b: T; }, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 89, 20))
+>a : T, Symbol(a, Decl(subtypingWithCallSignatures3.ts, 89, 24))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 89, 17))
+>b : T, Symbol(b, Decl(subtypingWithCallSignatures3.ts, 89, 30))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 89, 17))
 ><T>null : T
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,89,17))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 89, 17))
 >null : null
 
     var r7arg2 = (x: { a: string; b: number }) => 1;
->r7arg2 : (x: { a: string; b: number; }) => number, Symbol(r7arg2,Decl(subtypingWithCallSignatures3.ts,90,7))
+>r7arg2 : (x: { a: string; b: number; }) => number, Symbol(r7arg2, Decl(subtypingWithCallSignatures3.ts, 90, 7))
 >(x: { a: string; b: number }) => 1 : (x: { a: string; b: number; }) => number
->x : { a: string; b: number; }, Symbol(x,Decl(subtypingWithCallSignatures3.ts,90,18))
->a : string, Symbol(a,Decl(subtypingWithCallSignatures3.ts,90,22))
->b : number, Symbol(b,Decl(subtypingWithCallSignatures3.ts,90,33))
+>x : { a: string; b: number; }, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 90, 18))
+>a : string, Symbol(a, Decl(subtypingWithCallSignatures3.ts, 90, 22))
+>b : number, Symbol(b, Decl(subtypingWithCallSignatures3.ts, 90, 33))
 >1 : number
 
     var r7 = foo15(r7arg); // any
->r7 : any, Symbol(r7,Decl(subtypingWithCallSignatures3.ts,91,7))
+>r7 : any, Symbol(r7, Decl(subtypingWithCallSignatures3.ts, 91, 7))
 >foo15(r7arg) : any
->foo15 : { (a2: (x: { a: string; b: number; }) => number): (x: { a: string; b: number; }) => number; (a2: any): any; }, Symbol(foo15,Decl(subtypingWithCallSignatures3.ts,25,41),Decl(subtypingWithCallSignatures3.ts,27,83))
->r7arg : <T>(x: { a: T; b: T; }) => T, Symbol(r7arg,Decl(subtypingWithCallSignatures3.ts,89,7))
+>foo15 : { (a2: (x: { a: string; b: number; }) => number): (x: { a: string; b: number; }) => number; (a2: any): any; }, Symbol(foo15, Decl(subtypingWithCallSignatures3.ts, 25, 41), Decl(subtypingWithCallSignatures3.ts, 27, 83))
+>r7arg : <T>(x: { a: T; b: T; }) => T, Symbol(r7arg, Decl(subtypingWithCallSignatures3.ts, 89, 7))
 
     var r7a = [r7arg2, r7arg];
->r7a : (<T>(x: { a: T; b: T; }) => T)[], Symbol(r7a,Decl(subtypingWithCallSignatures3.ts,92,7))
+>r7a : (<T>(x: { a: T; b: T; }) => T)[], Symbol(r7a, Decl(subtypingWithCallSignatures3.ts, 92, 7))
 >[r7arg2, r7arg] : (<T>(x: { a: T; b: T; }) => T)[]
->r7arg2 : (x: { a: string; b: number; }) => number, Symbol(r7arg2,Decl(subtypingWithCallSignatures3.ts,90,7))
->r7arg : <T>(x: { a: T; b: T; }) => T, Symbol(r7arg,Decl(subtypingWithCallSignatures3.ts,89,7))
+>r7arg2 : (x: { a: string; b: number; }) => number, Symbol(r7arg2, Decl(subtypingWithCallSignatures3.ts, 90, 7))
+>r7arg : <T>(x: { a: T; b: T; }) => T, Symbol(r7arg, Decl(subtypingWithCallSignatures3.ts, 89, 7))
 
     var r7b = [r7arg, r7arg2];
->r7b : (<T>(x: { a: T; b: T; }) => T)[], Symbol(r7b,Decl(subtypingWithCallSignatures3.ts,93,7))
+>r7b : (<T>(x: { a: T; b: T; }) => T)[], Symbol(r7b, Decl(subtypingWithCallSignatures3.ts, 93, 7))
 >[r7arg, r7arg2] : (<T>(x: { a: T; b: T; }) => T)[]
->r7arg : <T>(x: { a: T; b: T; }) => T, Symbol(r7arg,Decl(subtypingWithCallSignatures3.ts,89,7))
->r7arg2 : (x: { a: string; b: number; }) => number, Symbol(r7arg2,Decl(subtypingWithCallSignatures3.ts,90,7))
+>r7arg : <T>(x: { a: T; b: T; }) => T, Symbol(r7arg, Decl(subtypingWithCallSignatures3.ts, 89, 7))
+>r7arg2 : (x: { a: string; b: number; }) => number, Symbol(r7arg2, Decl(subtypingWithCallSignatures3.ts, 90, 7))
 
     var r7arg3 = <T extends Base>(x: { a: T; b: T }) => 1;
->r7arg3 : <T extends Base>(x: { a: T; b: T; }) => number, Symbol(r7arg3,Decl(subtypingWithCallSignatures3.ts,95,7))
+>r7arg3 : <T extends Base>(x: { a: T; b: T; }) => number, Symbol(r7arg3, Decl(subtypingWithCallSignatures3.ts, 95, 7))
 ><T extends Base>(x: { a: T; b: T }) => 1 : <T extends Base>(x: { a: T; b: T; }) => number
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,95,18))
->Base : Base, Symbol(Base,Decl(subtypingWithCallSignatures3.ts,3,15))
->x : { a: T; b: T; }, Symbol(x,Decl(subtypingWithCallSignatures3.ts,95,34))
->a : T, Symbol(a,Decl(subtypingWithCallSignatures3.ts,95,38))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,95,18))
->b : T, Symbol(b,Decl(subtypingWithCallSignatures3.ts,95,44))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,95,18))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 95, 18))
+>Base : Base, Symbol(Base, Decl(subtypingWithCallSignatures3.ts, 3, 15))
+>x : { a: T; b: T; }, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 95, 34))
+>a : T, Symbol(a, Decl(subtypingWithCallSignatures3.ts, 95, 38))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 95, 18))
+>b : T, Symbol(b, Decl(subtypingWithCallSignatures3.ts, 95, 44))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 95, 18))
 >1 : number
 
     var r7c = foo15(r7arg3); // (x: { a: string; b: number }) => number): number;
->r7c : (x: { a: string; b: number; }) => number, Symbol(r7c,Decl(subtypingWithCallSignatures3.ts,96,7))
+>r7c : (x: { a: string; b: number; }) => number, Symbol(r7c, Decl(subtypingWithCallSignatures3.ts, 96, 7))
 >foo15(r7arg3) : (x: { a: string; b: number; }) => number
->foo15 : { (a2: (x: { a: string; b: number; }) => number): (x: { a: string; b: number; }) => number; (a2: any): any; }, Symbol(foo15,Decl(subtypingWithCallSignatures3.ts,25,41),Decl(subtypingWithCallSignatures3.ts,27,83))
->r7arg3 : <T extends Base>(x: { a: T; b: T; }) => number, Symbol(r7arg3,Decl(subtypingWithCallSignatures3.ts,95,7))
+>foo15 : { (a2: (x: { a: string; b: number; }) => number): (x: { a: string; b: number; }) => number; (a2: any): any; }, Symbol(foo15, Decl(subtypingWithCallSignatures3.ts, 25, 41), Decl(subtypingWithCallSignatures3.ts, 27, 83))
+>r7arg3 : <T extends Base>(x: { a: T; b: T; }) => number, Symbol(r7arg3, Decl(subtypingWithCallSignatures3.ts, 95, 7))
 
     var r7d = [r7arg2, r7arg3];
->r7d : ((x: { a: string; b: number; }) => number)[], Symbol(r7d,Decl(subtypingWithCallSignatures3.ts,97,7))
+>r7d : ((x: { a: string; b: number; }) => number)[], Symbol(r7d, Decl(subtypingWithCallSignatures3.ts, 97, 7))
 >[r7arg2, r7arg3] : ((x: { a: string; b: number; }) => number)[]
->r7arg2 : (x: { a: string; b: number; }) => number, Symbol(r7arg2,Decl(subtypingWithCallSignatures3.ts,90,7))
->r7arg3 : <T extends Base>(x: { a: T; b: T; }) => number, Symbol(r7arg3,Decl(subtypingWithCallSignatures3.ts,95,7))
+>r7arg2 : (x: { a: string; b: number; }) => number, Symbol(r7arg2, Decl(subtypingWithCallSignatures3.ts, 90, 7))
+>r7arg3 : <T extends Base>(x: { a: T; b: T; }) => number, Symbol(r7arg3, Decl(subtypingWithCallSignatures3.ts, 95, 7))
 
     var r7e = [r7arg3, r7arg2];
->r7e : ((x: { a: string; b: number; }) => number)[], Symbol(r7e,Decl(subtypingWithCallSignatures3.ts,98,7))
+>r7e : ((x: { a: string; b: number; }) => number)[], Symbol(r7e, Decl(subtypingWithCallSignatures3.ts, 98, 7))
 >[r7arg3, r7arg2] : ((x: { a: string; b: number; }) => number)[]
->r7arg3 : <T extends Base>(x: { a: T; b: T; }) => number, Symbol(r7arg3,Decl(subtypingWithCallSignatures3.ts,95,7))
->r7arg2 : (x: { a: string; b: number; }) => number, Symbol(r7arg2,Decl(subtypingWithCallSignatures3.ts,90,7))
+>r7arg3 : <T extends Base>(x: { a: T; b: T; }) => number, Symbol(r7arg3, Decl(subtypingWithCallSignatures3.ts, 95, 7))
+>r7arg2 : (x: { a: string; b: number; }) => number, Symbol(r7arg2, Decl(subtypingWithCallSignatures3.ts, 90, 7))
 
     var r8arg = <T>(x: (a: T) => T) => <T[]>null;
->r8arg : <T>(x: (a: T) => T) => T[], Symbol(r8arg,Decl(subtypingWithCallSignatures3.ts,100,7))
+>r8arg : <T>(x: (a: T) => T) => T[], Symbol(r8arg, Decl(subtypingWithCallSignatures3.ts, 100, 7))
 ><T>(x: (a: T) => T) => <T[]>null : <T>(x: (a: T) => T) => T[]
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,100,17))
->x : (a: T) => T, Symbol(x,Decl(subtypingWithCallSignatures3.ts,100,20))
->a : T, Symbol(a,Decl(subtypingWithCallSignatures3.ts,100,24))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,100,17))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,100,17))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 100, 17))
+>x : (a: T) => T, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 100, 20))
+>a : T, Symbol(a, Decl(subtypingWithCallSignatures3.ts, 100, 24))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 100, 17))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 100, 17))
 ><T[]>null : T[]
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,100,17))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 100, 17))
 >null : null
 
     var r8 = foo16(r8arg); // any
->r8 : any, Symbol(r8,Decl(subtypingWithCallSignatures3.ts,101,7))
+>r8 : any, Symbol(r8, Decl(subtypingWithCallSignatures3.ts, 101, 7))
 >foo16(r8arg) : any
->foo16 : { (a2: { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }): { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }, Symbol(foo16,Decl(subtypingWithCallSignatures3.ts,28,41),Decl(subtypingWithCallSignatures3.ts,40,18))
->r8arg : <T>(x: (a: T) => T) => T[], Symbol(r8arg,Decl(subtypingWithCallSignatures3.ts,100,7))
+>foo16 : { (a2: { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }): { (x: { (a: number): number; (a?: number): number; }): number[]; (x: { (a: boolean): boolean; (a?: boolean): boolean; }): boolean[]; }; (a2: any): any; }, Symbol(foo16, Decl(subtypingWithCallSignatures3.ts, 28, 41), Decl(subtypingWithCallSignatures3.ts, 40, 18))
+>r8arg : <T>(x: (a: T) => T) => T[], Symbol(r8arg, Decl(subtypingWithCallSignatures3.ts, 100, 7))
 
     var r9arg = <T>(x: (a: T) => T) => <any[]>null;
->r9arg : <T>(x: (a: T) => T) => any[], Symbol(r9arg,Decl(subtypingWithCallSignatures3.ts,103,7))
+>r9arg : <T>(x: (a: T) => T) => any[], Symbol(r9arg, Decl(subtypingWithCallSignatures3.ts, 103, 7))
 ><T>(x: (a: T) => T) => <any[]>null : <T>(x: (a: T) => T) => any[]
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,103,17))
->x : (a: T) => T, Symbol(x,Decl(subtypingWithCallSignatures3.ts,103,20))
->a : T, Symbol(a,Decl(subtypingWithCallSignatures3.ts,103,24))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,103,17))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,103,17))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 103, 17))
+>x : (a: T) => T, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 103, 20))
+>a : T, Symbol(a, Decl(subtypingWithCallSignatures3.ts, 103, 24))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 103, 17))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 103, 17))
 ><any[]>null : any[]
 >null : null
 
     var r9 = foo17(r9arg); // (x: { <T extends Derived >(a: T): T; <T extends Base >(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[];
->r9 : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }, Symbol(r9,Decl(subtypingWithCallSignatures3.ts,104,7))
+>r9 : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }, Symbol(r9, Decl(subtypingWithCallSignatures3.ts, 104, 7))
 >foo17(r9arg) : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }
->foo17 : { (a2: { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }): { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }; (a2: any): any; }, Symbol(foo17,Decl(subtypingWithCallSignatures3.ts,41,41),Decl(subtypingWithCallSignatures3.ts,52,18))
->r9arg : <T>(x: (a: T) => T) => any[], Symbol(r9arg,Decl(subtypingWithCallSignatures3.ts,103,7))
+>foo17 : { (a2: { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }): { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }; (a2: any): any; }, Symbol(foo17, Decl(subtypingWithCallSignatures3.ts, 41, 41), Decl(subtypingWithCallSignatures3.ts, 52, 18))
+>r9arg : <T>(x: (a: T) => T) => any[], Symbol(r9arg, Decl(subtypingWithCallSignatures3.ts, 103, 7))
 }
 
 module WithGenericSignaturesInBaseType {
->WithGenericSignaturesInBaseType : typeof WithGenericSignaturesInBaseType, Symbol(WithGenericSignaturesInBaseType,Decl(subtypingWithCallSignatures3.ts,105,1))
+>WithGenericSignaturesInBaseType : typeof WithGenericSignaturesInBaseType, Symbol(WithGenericSignaturesInBaseType, Decl(subtypingWithCallSignatures3.ts, 105, 1))
 
     declare function foo2(a2: <T>(x: T) => T[]): typeof a2;
->foo2 : { (a2: <T>(x: T) => T[]): <T>(x: T) => T[]; (a2: any): any; }, Symbol(foo2,Decl(subtypingWithCallSignatures3.ts,107,40),Decl(subtypingWithCallSignatures3.ts,108,59))
->a2 : <T>(x: T) => T[], Symbol(a2,Decl(subtypingWithCallSignatures3.ts,108,26))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,108,31))
->x : T, Symbol(x,Decl(subtypingWithCallSignatures3.ts,108,34))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,108,31))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,108,31))
->a2 : <T>(x: T) => T[], Symbol(a2,Decl(subtypingWithCallSignatures3.ts,108,26))
+>foo2 : { (a2: <T>(x: T) => T[]): <T>(x: T) => T[]; (a2: any): any; }, Symbol(foo2, Decl(subtypingWithCallSignatures3.ts, 107, 40), Decl(subtypingWithCallSignatures3.ts, 108, 59))
+>a2 : <T>(x: T) => T[], Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 108, 26))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 108, 31))
+>x : T, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 108, 34))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 108, 31))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 108, 31))
+>a2 : <T>(x: T) => T[], Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 108, 26))
 
     declare function foo2(a2: any): any;
->foo2 : { (a2: <T>(x: T) => T[]): <T>(x: T) => T[]; (a2: any): any; }, Symbol(foo2,Decl(subtypingWithCallSignatures3.ts,107,40),Decl(subtypingWithCallSignatures3.ts,108,59))
->a2 : any, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,109,26))
+>foo2 : { (a2: <T>(x: T) => T[]): <T>(x: T) => T[]; (a2: any): any; }, Symbol(foo2, Decl(subtypingWithCallSignatures3.ts, 107, 40), Decl(subtypingWithCallSignatures3.ts, 108, 59))
+>a2 : any, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 109, 26))
 
     var r2arg2 = <T>(x: T) => [''];
->r2arg2 : <T>(x: T) => string[], Symbol(r2arg2,Decl(subtypingWithCallSignatures3.ts,110,7))
+>r2arg2 : <T>(x: T) => string[], Symbol(r2arg2, Decl(subtypingWithCallSignatures3.ts, 110, 7))
 ><T>(x: T) => [''] : <T>(x: T) => string[]
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,110,18))
->x : T, Symbol(x,Decl(subtypingWithCallSignatures3.ts,110,21))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,110,18))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 110, 18))
+>x : T, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 110, 21))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 110, 18))
 >[''] : string[]
 >'' : string
 
     var r2 = foo2(r2arg2); // <T>(x:T) => T[] since we can infer from generic signatures now
->r2 : <T>(x: T) => T[], Symbol(r2,Decl(subtypingWithCallSignatures3.ts,111,7))
+>r2 : <T>(x: T) => T[], Symbol(r2, Decl(subtypingWithCallSignatures3.ts, 111, 7))
 >foo2(r2arg2) : <T>(x: T) => T[]
->foo2 : { (a2: <T>(x: T) => T[]): <T>(x: T) => T[]; (a2: any): any; }, Symbol(foo2,Decl(subtypingWithCallSignatures3.ts,107,40),Decl(subtypingWithCallSignatures3.ts,108,59))
->r2arg2 : <T>(x: T) => string[], Symbol(r2arg2,Decl(subtypingWithCallSignatures3.ts,110,7))
+>foo2 : { (a2: <T>(x: T) => T[]): <T>(x: T) => T[]; (a2: any): any; }, Symbol(foo2, Decl(subtypingWithCallSignatures3.ts, 107, 40), Decl(subtypingWithCallSignatures3.ts, 108, 59))
+>r2arg2 : <T>(x: T) => string[], Symbol(r2arg2, Decl(subtypingWithCallSignatures3.ts, 110, 7))
 
     declare function foo3(a2: <T>(x: T) => string[]): typeof a2;
->foo3 : { (a2: <T>(x: T) => string[]): <T>(x: T) => string[]; (a2: any): any; }, Symbol(foo3,Decl(subtypingWithCallSignatures3.ts,111,26),Decl(subtypingWithCallSignatures3.ts,113,64))
->a2 : <T>(x: T) => string[], Symbol(a2,Decl(subtypingWithCallSignatures3.ts,113,26))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,113,31))
->x : T, Symbol(x,Decl(subtypingWithCallSignatures3.ts,113,34))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,113,31))
->a2 : <T>(x: T) => string[], Symbol(a2,Decl(subtypingWithCallSignatures3.ts,113,26))
+>foo3 : { (a2: <T>(x: T) => string[]): <T>(x: T) => string[]; (a2: any): any; }, Symbol(foo3, Decl(subtypingWithCallSignatures3.ts, 111, 26), Decl(subtypingWithCallSignatures3.ts, 113, 64))
+>a2 : <T>(x: T) => string[], Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 113, 26))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 113, 31))
+>x : T, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 113, 34))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 113, 31))
+>a2 : <T>(x: T) => string[], Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 113, 26))
 
     declare function foo3(a2: any): any;
->foo3 : { (a2: <T>(x: T) => string[]): <T>(x: T) => string[]; (a2: any): any; }, Symbol(foo3,Decl(subtypingWithCallSignatures3.ts,111,26),Decl(subtypingWithCallSignatures3.ts,113,64))
->a2 : any, Symbol(a2,Decl(subtypingWithCallSignatures3.ts,114,26))
+>foo3 : { (a2: <T>(x: T) => string[]): <T>(x: T) => string[]; (a2: any): any; }, Symbol(foo3, Decl(subtypingWithCallSignatures3.ts, 111, 26), Decl(subtypingWithCallSignatures3.ts, 113, 64))
+>a2 : any, Symbol(a2, Decl(subtypingWithCallSignatures3.ts, 114, 26))
 
     var r3arg2 = <T>(x: T) => <T[]>null;
->r3arg2 : <T>(x: T) => T[], Symbol(r3arg2,Decl(subtypingWithCallSignatures3.ts,115,7))
+>r3arg2 : <T>(x: T) => T[], Symbol(r3arg2, Decl(subtypingWithCallSignatures3.ts, 115, 7))
 ><T>(x: T) => <T[]>null : <T>(x: T) => T[]
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,115,18))
->x : T, Symbol(x,Decl(subtypingWithCallSignatures3.ts,115,21))
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,115,18))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 115, 18))
+>x : T, Symbol(x, Decl(subtypingWithCallSignatures3.ts, 115, 21))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 115, 18))
 ><T[]>null : T[]
->T : T, Symbol(T,Decl(subtypingWithCallSignatures3.ts,115,18))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures3.ts, 115, 18))
 >null : null
 
     var r3 = foo3(r3arg2); // any
->r3 : any, Symbol(r3,Decl(subtypingWithCallSignatures3.ts,116,7))
+>r3 : any, Symbol(r3, Decl(subtypingWithCallSignatures3.ts, 116, 7))
 >foo3(r3arg2) : any
->foo3 : { (a2: <T>(x: T) => string[]): <T>(x: T) => string[]; (a2: any): any; }, Symbol(foo3,Decl(subtypingWithCallSignatures3.ts,111,26),Decl(subtypingWithCallSignatures3.ts,113,64))
->r3arg2 : <T>(x: T) => T[], Symbol(r3arg2,Decl(subtypingWithCallSignatures3.ts,115,7))
+>foo3 : { (a2: <T>(x: T) => string[]): <T>(x: T) => string[]; (a2: any): any; }, Symbol(foo3, Decl(subtypingWithCallSignatures3.ts, 111, 26), Decl(subtypingWithCallSignatures3.ts, 113, 64))
+>r3arg2 : <T>(x: T) => T[], Symbol(r3arg2, Decl(subtypingWithCallSignatures3.ts, 115, 7))
 }

@@ -1,20 +1,20 @@
 === tests/cases/compiler/contextualTyping20.ts ===
 var foo:{id:number;}[] = [{id:1}]; foo = [{id:1}, {id:2, name:"foo"}];
->foo : { id: number; }[], Symbol(foo,Decl(contextualTyping20.ts,0,3))
->id : number, Symbol(id,Decl(contextualTyping20.ts,0,9))
+>foo : { id: number; }[], Symbol(foo, Decl(contextualTyping20.ts, 0, 3))
+>id : number, Symbol(id, Decl(contextualTyping20.ts, 0, 9))
 >[{id:1}] : { id: number; }[]
 >{id:1} : { id: number; }
->id : number, Symbol(id,Decl(contextualTyping20.ts,0,27))
+>id : number, Symbol(id, Decl(contextualTyping20.ts, 0, 27))
 >1 : number
 >foo = [{id:1}, {id:2, name:"foo"}] : { id: number; }[]
->foo : { id: number; }[], Symbol(foo,Decl(contextualTyping20.ts,0,3))
+>foo : { id: number; }[], Symbol(foo, Decl(contextualTyping20.ts, 0, 3))
 >[{id:1}, {id:2, name:"foo"}] : { id: number; }[]
 >{id:1} : { id: number; }
->id : number, Symbol(id,Decl(contextualTyping20.ts,0,43))
+>id : number, Symbol(id, Decl(contextualTyping20.ts, 0, 43))
 >1 : number
 >{id:2, name:"foo"} : { id: number; name: string; }
->id : number, Symbol(id,Decl(contextualTyping20.ts,0,51))
+>id : number, Symbol(id, Decl(contextualTyping20.ts, 0, 51))
 >2 : number
->name : string, Symbol(name,Decl(contextualTyping20.ts,0,56))
+>name : string, Symbol(name, Decl(contextualTyping20.ts, 0, 56))
 >"foo" : string
 

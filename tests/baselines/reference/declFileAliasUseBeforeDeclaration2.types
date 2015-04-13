@@ -2,18 +2,18 @@
 
 declare module "test" {
     module A {
->A : typeof A, Symbol(A,Decl(declFileAliasUseBeforeDeclaration2.ts,1,23))
+>A : typeof A, Symbol(A, Decl(declFileAliasUseBeforeDeclaration2.ts, 1, 23))
 
         class C {
->C : C, Symbol(C,Decl(declFileAliasUseBeforeDeclaration2.ts,2,14))
+>C : C, Symbol(C, Decl(declFileAliasUseBeforeDeclaration2.ts, 2, 14))
         }
     }
     class B extends E {
->B : B, Symbol(B,Decl(declFileAliasUseBeforeDeclaration2.ts,5,5))
->E : E, Symbol(E,Decl(declFileAliasUseBeforeDeclaration2.ts,7,5))
+>B : B, Symbol(B, Decl(declFileAliasUseBeforeDeclaration2.ts, 5, 5))
+>E : E, Symbol(E, Decl(declFileAliasUseBeforeDeclaration2.ts, 7, 5))
     }
     import E = A.C;
->E : typeof E, Symbol(E,Decl(declFileAliasUseBeforeDeclaration2.ts,7,5))
->A : typeof A, Symbol(A,Decl(declFileAliasUseBeforeDeclaration2.ts,1,23))
->C : E, Symbol(E,Decl(declFileAliasUseBeforeDeclaration2.ts,2,14))
+>E : typeof E, Symbol(E, Decl(declFileAliasUseBeforeDeclaration2.ts, 7, 5))
+>A : typeof A, Symbol(A, Decl(declFileAliasUseBeforeDeclaration2.ts, 1, 23))
+>C : E, Symbol(E, Decl(declFileAliasUseBeforeDeclaration2.ts, 2, 14))
 }

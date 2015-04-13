@@ -1,25 +1,25 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNames28_ES6.ts ===
 class Base {
->Base : Base, Symbol(Base,Decl(computedPropertyNames28_ES6.ts,0,0))
+>Base : Base, Symbol(Base, Decl(computedPropertyNames28_ES6.ts, 0, 0))
 }
 class C extends Base {
->C : C, Symbol(C,Decl(computedPropertyNames28_ES6.ts,1,1))
->Base : Base, Symbol(Base,Decl(computedPropertyNames28_ES6.ts,0,0))
+>C : C, Symbol(C, Decl(computedPropertyNames28_ES6.ts, 1, 1))
+>Base : Base, Symbol(Base, Decl(computedPropertyNames28_ES6.ts, 0, 0))
 
     constructor() {
         super();
 >super() : void
->super : typeof Base, Symbol(Base,Decl(computedPropertyNames28_ES6.ts,0,0))
+>super : typeof Base, Symbol(Base, Decl(computedPropertyNames28_ES6.ts, 0, 0))
 
         var obj = {
->obj : {}, Symbol(obj,Decl(computedPropertyNames28_ES6.ts,5,11))
+>obj : {}, Symbol(obj, Decl(computedPropertyNames28_ES6.ts, 5, 11))
 >{            [(super(), "prop")]() { }        } : {}
 
             [(super(), "prop")]() { }
 >(super(), "prop") : string
 >super(), "prop" : string
 >super() : void
->super : typeof Base, Symbol(Base,Decl(computedPropertyNames28_ES6.ts,0,0))
+>super : typeof Base, Symbol(Base, Decl(computedPropertyNames28_ES6.ts, 0, 0))
 >"prop" : string
 
         };

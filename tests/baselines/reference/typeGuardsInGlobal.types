@@ -4,28 +4,28 @@
 
 // variables in global
 var num: number;
->num : number, Symbol(num,Decl(typeGuardsInGlobal.ts,4,3))
+>num : number, Symbol(num, Decl(typeGuardsInGlobal.ts, 4, 3))
 
 var var1: string | number;
->var1 : string | number, Symbol(var1,Decl(typeGuardsInGlobal.ts,5,3))
+>var1 : string | number, Symbol(var1, Decl(typeGuardsInGlobal.ts, 5, 3))
 
 if (typeof var1 === "string") {
 >typeof var1 === "string" : boolean
 >typeof var1 : string
->var1 : string | number, Symbol(var1,Decl(typeGuardsInGlobal.ts,5,3))
+>var1 : string | number, Symbol(var1, Decl(typeGuardsInGlobal.ts, 5, 3))
 >"string" : string
 
     num = var1.length; // string
 >num = var1.length : number
->num : number, Symbol(num,Decl(typeGuardsInGlobal.ts,4,3))
->var1.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
->var1 : string, Symbol(var1,Decl(typeGuardsInGlobal.ts,5,3))
->length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>num : number, Symbol(num, Decl(typeGuardsInGlobal.ts, 4, 3))
+>var1.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var1 : string, Symbol(var1, Decl(typeGuardsInGlobal.ts, 5, 3))
+>length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
 }
 else {
     num = var1; // number
 >num = var1 : number
->num : number, Symbol(num,Decl(typeGuardsInGlobal.ts,4,3))
->var1 : number, Symbol(var1,Decl(typeGuardsInGlobal.ts,5,3))
+>num : number, Symbol(num, Decl(typeGuardsInGlobal.ts, 4, 3))
+>var1 : number, Symbol(var1, Decl(typeGuardsInGlobal.ts, 5, 3))
 }
 

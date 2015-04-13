@@ -2,28 +2,28 @@
 // Array.prototype.slice can have zero, one, or two arguments
 Array.prototype.slice();
 >Array.prototype.slice() : any[]
->Array.prototype.slice : (start?: number, end?: number) => any[], Symbol(Array.slice,Decl(lib.d.ts,1048,15))
->Array.prototype : any[], Symbol(ArrayConstructor.prototype,Decl(lib.d.ts,1167,31))
->Array : ArrayConstructor, Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
->prototype : any[], Symbol(ArrayConstructor.prototype,Decl(lib.d.ts,1167,31))
->slice : (start?: number, end?: number) => any[], Symbol(Array.slice,Decl(lib.d.ts,1048,15))
+>Array.prototype.slice : (start?: number, end?: number) => any[], Symbol(Array.slice, Decl(lib.d.ts, 1048, 15))
+>Array.prototype : any[], Symbol(ArrayConstructor.prototype, Decl(lib.d.ts, 1167, 31))
+>Array : ArrayConstructor, Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>prototype : any[], Symbol(ArrayConstructor.prototype, Decl(lib.d.ts, 1167, 31))
+>slice : (start?: number, end?: number) => any[], Symbol(Array.slice, Decl(lib.d.ts, 1048, 15))
 
 Array.prototype.slice(0);
 >Array.prototype.slice(0) : any[]
->Array.prototype.slice : (start?: number, end?: number) => any[], Symbol(Array.slice,Decl(lib.d.ts,1048,15))
->Array.prototype : any[], Symbol(ArrayConstructor.prototype,Decl(lib.d.ts,1167,31))
->Array : ArrayConstructor, Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
->prototype : any[], Symbol(ArrayConstructor.prototype,Decl(lib.d.ts,1167,31))
->slice : (start?: number, end?: number) => any[], Symbol(Array.slice,Decl(lib.d.ts,1048,15))
+>Array.prototype.slice : (start?: number, end?: number) => any[], Symbol(Array.slice, Decl(lib.d.ts, 1048, 15))
+>Array.prototype : any[], Symbol(ArrayConstructor.prototype, Decl(lib.d.ts, 1167, 31))
+>Array : ArrayConstructor, Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>prototype : any[], Symbol(ArrayConstructor.prototype, Decl(lib.d.ts, 1167, 31))
+>slice : (start?: number, end?: number) => any[], Symbol(Array.slice, Decl(lib.d.ts, 1048, 15))
 >0 : number
 
 Array.prototype.slice(0, 1);
 >Array.prototype.slice(0, 1) : any[]
->Array.prototype.slice : (start?: number, end?: number) => any[], Symbol(Array.slice,Decl(lib.d.ts,1048,15))
->Array.prototype : any[], Symbol(ArrayConstructor.prototype,Decl(lib.d.ts,1167,31))
->Array : ArrayConstructor, Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
->prototype : any[], Symbol(ArrayConstructor.prototype,Decl(lib.d.ts,1167,31))
->slice : (start?: number, end?: number) => any[], Symbol(Array.slice,Decl(lib.d.ts,1048,15))
+>Array.prototype.slice : (start?: number, end?: number) => any[], Symbol(Array.slice, Decl(lib.d.ts, 1048, 15))
+>Array.prototype : any[], Symbol(ArrayConstructor.prototype, Decl(lib.d.ts, 1167, 31))
+>Array : ArrayConstructor, Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>prototype : any[], Symbol(ArrayConstructor.prototype, Decl(lib.d.ts, 1167, 31))
+>slice : (start?: number, end?: number) => any[], Symbol(Array.slice, Decl(lib.d.ts, 1048, 15))
 >0 : number
 >1 : number
 

@@ -1,40 +1,40 @@
 === tests/cases/conformance/es6/Symbols/symbolType11.ts ===
 var s = Symbol.for("logical");
->s : symbol, Symbol(s,Decl(symbolType11.ts,0,3))
+>s : symbol, Symbol(s, Decl(symbolType11.ts, 0, 3))
 >Symbol.for("logical") : symbol
->Symbol.for : (key: string) => symbol, Symbol(SymbolConstructor.for,Decl(lib.d.ts,1208,42))
->Symbol : SymbolConstructor, Symbol(Symbol,Decl(lib.d.ts,1186,52),Decl(lib.d.ts,1262,11))
->for : (key: string) => symbol, Symbol(SymbolConstructor.for,Decl(lib.d.ts,1208,42))
+>Symbol.for : (key: string) => symbol, Symbol(SymbolConstructor.for, Decl(lib.d.ts, 1208, 42))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>for : (key: string) => symbol, Symbol(SymbolConstructor.for, Decl(lib.d.ts, 1208, 42))
 >"logical" : string
 
 s && s;
 >s && s : symbol
->s : symbol, Symbol(s,Decl(symbolType11.ts,0,3))
->s : symbol, Symbol(s,Decl(symbolType11.ts,0,3))
+>s : symbol, Symbol(s, Decl(symbolType11.ts, 0, 3))
+>s : symbol, Symbol(s, Decl(symbolType11.ts, 0, 3))
 
 s && [];
 >s && [] : undefined[]
->s : symbol, Symbol(s,Decl(symbolType11.ts,0,3))
+>s : symbol, Symbol(s, Decl(symbolType11.ts, 0, 3))
 >[] : undefined[]
 
 0 && s;
 >0 && s : symbol
 >0 : number
->s : symbol, Symbol(s,Decl(symbolType11.ts,0,3))
+>s : symbol, Symbol(s, Decl(symbolType11.ts, 0, 3))
 
 s || s;
 >s || s : symbol
->s : symbol, Symbol(s,Decl(symbolType11.ts,0,3))
->s : symbol, Symbol(s,Decl(symbolType11.ts,0,3))
+>s : symbol, Symbol(s, Decl(symbolType11.ts, 0, 3))
+>s : symbol, Symbol(s, Decl(symbolType11.ts, 0, 3))
 
 s || 1;
 >s || 1 : number | symbol
->s : symbol, Symbol(s,Decl(symbolType11.ts,0,3))
+>s : symbol, Symbol(s, Decl(symbolType11.ts, 0, 3))
 >1 : number
 
 ({}) || s;
 >({}) || s : {}
 >({}) : {}
 >{} : {}
->s : symbol, Symbol(s,Decl(symbolType11.ts,0,3))
+>s : symbol, Symbol(s, Decl(symbolType11.ts, 0, 3))
 

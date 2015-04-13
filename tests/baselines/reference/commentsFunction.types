@@ -2,30 +2,30 @@
 
 /** This comment should appear for foo*/
 function foo() {
->foo : () => void, Symbol(foo,Decl(commentsFunction.ts,0,0))
+>foo : () => void, Symbol(foo, Decl(commentsFunction.ts, 0, 0))
 
 } /* trailing comment of function */
 foo();
 >foo() : void
->foo : () => void, Symbol(foo,Decl(commentsFunction.ts,0,0))
+>foo : () => void, Symbol(foo, Decl(commentsFunction.ts, 0, 0))
 
 /** This is comment for function signature*/
 function fooWithParameters(/** this is comment about a*/a: string,
->fooWithParameters : (a: string, b: number) => void, Symbol(fooWithParameters,Decl(commentsFunction.ts,4,6))
->a : string, Symbol(a,Decl(commentsFunction.ts,6,27))
+>fooWithParameters : (a: string, b: number) => void, Symbol(fooWithParameters, Decl(commentsFunction.ts, 4, 6))
+>a : string, Symbol(a, Decl(commentsFunction.ts, 6, 27))
 
     /** this is comment for b*/
     b: number) {
->b : number, Symbol(b,Decl(commentsFunction.ts,6,66))
+>b : number, Symbol(b, Decl(commentsFunction.ts, 6, 66))
 
     var d = a;
->d : string, Symbol(d,Decl(commentsFunction.ts,9,7))
->a : string, Symbol(a,Decl(commentsFunction.ts,6,27))
+>d : string, Symbol(d, Decl(commentsFunction.ts, 9, 7))
+>a : string, Symbol(a, Decl(commentsFunction.ts, 6, 27))
 
 } // trailing comment of function
 fooWithParameters("a", 10);
 >fooWithParameters("a", 10) : void
->fooWithParameters : (a: string, b: number) => void, Symbol(fooWithParameters,Decl(commentsFunction.ts,4,6))
+>fooWithParameters : (a: string, b: number) => void, Symbol(fooWithParameters, Decl(commentsFunction.ts, 4, 6))
 >"a" : string
 >10 : number
 
@@ -33,74 +33,74 @@ fooWithParameters("a", 10);
  * comment
  */
 var fooFunc = function FooFunctionValue(/** fooFunctionValue param */ b: string) {
->fooFunc : (b: string) => string, Symbol(fooFunc,Decl(commentsFunction.ts,15,3))
+>fooFunc : (b: string) => string, Symbol(fooFunc, Decl(commentsFunction.ts, 15, 3))
 >function FooFunctionValue(/** fooFunctionValue param */ b: string) {    return b;} : (b: string) => string
->FooFunctionValue : (b: string) => string, Symbol(FooFunctionValue,Decl(commentsFunction.ts,15,13))
->b : string, Symbol(b,Decl(commentsFunction.ts,15,40))
+>FooFunctionValue : (b: string) => string, Symbol(FooFunctionValue, Decl(commentsFunction.ts, 15, 13))
+>b : string, Symbol(b, Decl(commentsFunction.ts, 15, 40))
 
     return b;
->b : string, Symbol(b,Decl(commentsFunction.ts,15,40))
+>b : string, Symbol(b, Decl(commentsFunction.ts, 15, 40))
 }
 
 /// lamdaFoo var comment
 var lambdaFoo = /** this is lambda comment*/ (/**param a*/a: number, /**param b*/b: number) => a + b;
->lambdaFoo : (a: number, b: number) => number, Symbol(lambdaFoo,Decl(commentsFunction.ts,20,3))
+>lambdaFoo : (a: number, b: number) => number, Symbol(lambdaFoo, Decl(commentsFunction.ts, 20, 3))
 >(/**param a*/a: number, /**param b*/b: number) => a + b : (a: number, b: number) => number
->a : number, Symbol(a,Decl(commentsFunction.ts,20,46))
->b : number, Symbol(b,Decl(commentsFunction.ts,20,68))
+>a : number, Symbol(a, Decl(commentsFunction.ts, 20, 46))
+>b : number, Symbol(b, Decl(commentsFunction.ts, 20, 68))
 >a + b : number
->a : number, Symbol(a,Decl(commentsFunction.ts,20,46))
->b : number, Symbol(b,Decl(commentsFunction.ts,20,68))
+>a : number, Symbol(a, Decl(commentsFunction.ts, 20, 46))
+>b : number, Symbol(b, Decl(commentsFunction.ts, 20, 68))
 
 var lambddaNoVarComment = /** this is lambda multiplication*/ (/**param a*/a: number, /**param b*/b: number) => a * b;
->lambddaNoVarComment : (a: number, b: number) => number, Symbol(lambddaNoVarComment,Decl(commentsFunction.ts,21,3))
+>lambddaNoVarComment : (a: number, b: number) => number, Symbol(lambddaNoVarComment, Decl(commentsFunction.ts, 21, 3))
 >(/**param a*/a: number, /**param b*/b: number) => a * b : (a: number, b: number) => number
->a : number, Symbol(a,Decl(commentsFunction.ts,21,63))
->b : number, Symbol(b,Decl(commentsFunction.ts,21,85))
+>a : number, Symbol(a, Decl(commentsFunction.ts, 21, 63))
+>b : number, Symbol(b, Decl(commentsFunction.ts, 21, 85))
 >a * b : number
->a : number, Symbol(a,Decl(commentsFunction.ts,21,63))
->b : number, Symbol(b,Decl(commentsFunction.ts,21,85))
+>a : number, Symbol(a, Decl(commentsFunction.ts, 21, 63))
+>b : number, Symbol(b, Decl(commentsFunction.ts, 21, 85))
 
 lambdaFoo(10, 20);
 >lambdaFoo(10, 20) : number
->lambdaFoo : (a: number, b: number) => number, Symbol(lambdaFoo,Decl(commentsFunction.ts,20,3))
+>lambdaFoo : (a: number, b: number) => number, Symbol(lambdaFoo, Decl(commentsFunction.ts, 20, 3))
 >10 : number
 >20 : number
 
 lambddaNoVarComment(10, 20);
 >lambddaNoVarComment(10, 20) : number
->lambddaNoVarComment : (a: number, b: number) => number, Symbol(lambddaNoVarComment,Decl(commentsFunction.ts,21,3))
+>lambddaNoVarComment : (a: number, b: number) => number, Symbol(lambddaNoVarComment, Decl(commentsFunction.ts, 21, 3))
 >10 : number
 >20 : number
 
 function blah(a: string /* multiline trailing comment 
->blah : (a: string) => void, Symbol(blah,Decl(commentsFunction.ts,23,28))
->a : string, Symbol(a,Decl(commentsFunction.ts,25,14))
+>blah : (a: string) => void, Symbol(blah, Decl(commentsFunction.ts, 23, 28))
+>a : string, Symbol(a, Decl(commentsFunction.ts, 25, 14))
 
 multiline */) {
 }
 
 function blah2(a: string /* single line multiple trailing comments */ /* second */) {
->blah2 : (a: string) => void, Symbol(blah2,Decl(commentsFunction.ts,27,1))
->a : string, Symbol(a,Decl(commentsFunction.ts,29,15))
+>blah2 : (a: string) => void, Symbol(blah2, Decl(commentsFunction.ts, 27, 1))
+>a : string, Symbol(a, Decl(commentsFunction.ts, 29, 15))
 }
 
 function blah3(a: string // trailing commen single line
->blah3 : (a: string) => void, Symbol(blah3,Decl(commentsFunction.ts,30,1))
->a : string, Symbol(a,Decl(commentsFunction.ts,32,15))
+>blah3 : (a: string) => void, Symbol(blah3, Decl(commentsFunction.ts, 30, 1))
+>a : string, Symbol(a, Decl(commentsFunction.ts, 32, 15))
 
     ) {
 }
 
 lambdaFoo = (a, b) => a * b; // This is trailing comment
 >lambdaFoo = (a, b) => a * b : (a: number, b: number) => number
->lambdaFoo : (a: number, b: number) => number, Symbol(lambdaFoo,Decl(commentsFunction.ts,20,3))
+>lambdaFoo : (a: number, b: number) => number, Symbol(lambdaFoo, Decl(commentsFunction.ts, 20, 3))
 >(a, b) => a * b : (a: number, b: number) => number
->a : number, Symbol(a,Decl(commentsFunction.ts,36,13))
->b : number, Symbol(b,Decl(commentsFunction.ts,36,15))
+>a : number, Symbol(a, Decl(commentsFunction.ts, 36, 13))
+>b : number, Symbol(b, Decl(commentsFunction.ts, 36, 15))
 >a * b : number
->a : number, Symbol(a,Decl(commentsFunction.ts,36,13))
->b : number, Symbol(b,Decl(commentsFunction.ts,36,15))
+>a : number, Symbol(a, Decl(commentsFunction.ts, 36, 13))
+>b : number, Symbol(b, Decl(commentsFunction.ts, 36, 15))
 
 /*leading comment*/() => 0; // Needs to be wrapped in parens to be a valid expression (not declaration)
 >() => 0 : () => number
@@ -112,19 +112,19 @@ lambdaFoo = (a, b) => a * b; // This is trailing comment
 >0 : number
 
 function blah4(/*1*/a: string/*2*/,/*3*/b: string/*4*/) {
->blah4 : (a: string, b: string) => void, Symbol(blah4,Decl(commentsFunction.ts,39,29))
->a : string, Symbol(a,Decl(commentsFunction.ts,41,15))
->b : string, Symbol(b,Decl(commentsFunction.ts,41,35))
+>blah4 : (a: string, b: string) => void, Symbol(blah4, Decl(commentsFunction.ts, 39, 29))
+>a : string, Symbol(a, Decl(commentsFunction.ts, 41, 15))
+>b : string, Symbol(b, Decl(commentsFunction.ts, 41, 35))
 }
 
 function foo1() {
->foo1 : () => void, Symbol(foo1,Decl(commentsFunction.ts,42,1))
+>foo1 : () => void, Symbol(foo1, Decl(commentsFunction.ts, 42, 1))
 
     // should emit this
 }
 
 function foo2() {
->foo2 : () => void, Symbol(foo2,Decl(commentsFunction.ts,47,1))
+>foo2 : () => void, Symbol(foo2, Decl(commentsFunction.ts, 47, 1))
 
     /// This is some detached comment
 

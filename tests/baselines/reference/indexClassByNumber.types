@@ -2,17 +2,17 @@
 // Shouldn't be able to index a class instance by a number (unless it has declared a number index signature)
 
 class foo { }
->foo : foo, Symbol(foo,Decl(indexClassByNumber.ts,0,0))
+>foo : foo, Symbol(foo, Decl(indexClassByNumber.ts, 0, 0))
 
 var f = new foo();
->f : foo, Symbol(f,Decl(indexClassByNumber.ts,4,3))
+>f : foo, Symbol(f, Decl(indexClassByNumber.ts, 4, 3))
 >new foo() : foo
->foo : typeof foo, Symbol(foo,Decl(indexClassByNumber.ts,0,0))
+>foo : typeof foo, Symbol(foo, Decl(indexClassByNumber.ts, 0, 0))
 
 f[0] = 4; // Shouldn't be allowed
 >f[0] = 4 : number
 >f[0] : any
->f : foo, Symbol(f,Decl(indexClassByNumber.ts,4,3))
+>f : foo, Symbol(f, Decl(indexClassByNumber.ts, 4, 3))
 >0 : number
 >4 : number
 

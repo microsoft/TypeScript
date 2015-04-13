@@ -1,13 +1,13 @@
 === tests/cases/compiler/recursiveGenericSignatureInstantiation.ts ===
 function f6<T>(x: T) {
->f6 : <T>(x: T) => any, Symbol(f6,Decl(recursiveGenericSignatureInstantiation.ts,0,0))
->T : T, Symbol(T,Decl(recursiveGenericSignatureInstantiation.ts,0,12))
->x : T, Symbol(x,Decl(recursiveGenericSignatureInstantiation.ts,0,15))
->T : T, Symbol(T,Decl(recursiveGenericSignatureInstantiation.ts,0,12))
+>f6 : <T>(x: T) => any, Symbol(f6, Decl(recursiveGenericSignatureInstantiation.ts, 0, 0))
+>T : T, Symbol(T, Decl(recursiveGenericSignatureInstantiation.ts, 0, 12))
+>x : T, Symbol(x, Decl(recursiveGenericSignatureInstantiation.ts, 0, 15))
+>T : T, Symbol(T, Decl(recursiveGenericSignatureInstantiation.ts, 0, 12))
 
     return f6(x);
 >f6(x) : any
->f6 : <T>(x: T) => any, Symbol(f6,Decl(recursiveGenericSignatureInstantiation.ts,0,0))
->x : T, Symbol(x,Decl(recursiveGenericSignatureInstantiation.ts,0,15))
+>f6 : <T>(x: T) => any, Symbol(f6, Decl(recursiveGenericSignatureInstantiation.ts, 0, 0))
+>x : T, Symbol(x, Decl(recursiveGenericSignatureInstantiation.ts, 0, 15))
 }
 

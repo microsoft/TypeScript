@@ -1,23 +1,23 @@
 === tests/cases/compiler/sourceMapValidationWhile.ts ===
 var a = 10;
->a : number, Symbol(a,Decl(sourceMapValidationWhile.ts,0,3))
+>a : number, Symbol(a, Decl(sourceMapValidationWhile.ts, 0, 3))
 >10 : number
 
 while (a == 10) {
 >a == 10 : boolean
->a : number, Symbol(a,Decl(sourceMapValidationWhile.ts,0,3))
+>a : number, Symbol(a, Decl(sourceMapValidationWhile.ts, 0, 3))
 >10 : number
 
     a++;
 >a++ : number
->a : number, Symbol(a,Decl(sourceMapValidationWhile.ts,0,3))
+>a : number, Symbol(a, Decl(sourceMapValidationWhile.ts, 0, 3))
 }
 while (a == 10)
 >a == 10 : boolean
->a : number, Symbol(a,Decl(sourceMapValidationWhile.ts,0,3))
+>a : number, Symbol(a, Decl(sourceMapValidationWhile.ts, 0, 3))
 >10 : number
 {
     a++;
 >a++ : number
->a : number, Symbol(a,Decl(sourceMapValidationWhile.ts,0,3))
+>a : number, Symbol(a, Decl(sourceMapValidationWhile.ts, 0, 3))
 }

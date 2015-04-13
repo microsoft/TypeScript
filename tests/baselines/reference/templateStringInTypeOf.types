@@ -1,6 +1,6 @@
 === tests/cases/conformance/es6/templates/templateStringInTypeOf.ts ===
 var x = typeof `abc${ 123 }def`;
->x : string, Symbol(x,Decl(templateStringInTypeOf.ts,0,3))
+>x : string, Symbol(x, Decl(templateStringInTypeOf.ts, 0, 3))
 >typeof `abc${ 123 }def` : string
 >`abc${ 123 }def` : string
 >123 : number

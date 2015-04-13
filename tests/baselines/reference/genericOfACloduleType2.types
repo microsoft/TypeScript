@@ -1,51 +1,51 @@
 === tests/cases/compiler/genericOfACloduleType2.ts ===
 class G<T>{ bar(x: T) { return x; } }
->G : G<T>, Symbol(G,Decl(genericOfACloduleType2.ts,0,0))
->T : T, Symbol(T,Decl(genericOfACloduleType2.ts,0,8))
->bar : (x: T) => T, Symbol(bar,Decl(genericOfACloduleType2.ts,0,11))
->x : T, Symbol(x,Decl(genericOfACloduleType2.ts,0,16))
->T : T, Symbol(T,Decl(genericOfACloduleType2.ts,0,8))
->x : T, Symbol(x,Decl(genericOfACloduleType2.ts,0,16))
+>G : G<T>, Symbol(G, Decl(genericOfACloduleType2.ts, 0, 0))
+>T : T, Symbol(T, Decl(genericOfACloduleType2.ts, 0, 8))
+>bar : (x: T) => T, Symbol(bar, Decl(genericOfACloduleType2.ts, 0, 11))
+>x : T, Symbol(x, Decl(genericOfACloduleType2.ts, 0, 16))
+>T : T, Symbol(T, Decl(genericOfACloduleType2.ts, 0, 8))
+>x : T, Symbol(x, Decl(genericOfACloduleType2.ts, 0, 16))
 
 module M {
->M : typeof M, Symbol(M,Decl(genericOfACloduleType2.ts,0,37))
+>M : typeof M, Symbol(M, Decl(genericOfACloduleType2.ts, 0, 37))
 
     export class C { foo() { } }
->C : C, Symbol(C,Decl(genericOfACloduleType2.ts,1,10),Decl(genericOfACloduleType2.ts,2,32))
->foo : () => void, Symbol(foo,Decl(genericOfACloduleType2.ts,2,20))
+>C : C, Symbol(C, Decl(genericOfACloduleType2.ts, 1, 10), Decl(genericOfACloduleType2.ts, 2, 32))
+>foo : () => void, Symbol(foo, Decl(genericOfACloduleType2.ts, 2, 20))
 
     export module C {
->C : typeof C, Symbol(C,Decl(genericOfACloduleType2.ts,1,10),Decl(genericOfACloduleType2.ts,2,32))
+>C : typeof C, Symbol(C, Decl(genericOfACloduleType2.ts, 1, 10), Decl(genericOfACloduleType2.ts, 2, 32))
 
         export class X {
->X : X, Symbol(X,Decl(genericOfACloduleType2.ts,3,21))
+>X : X, Symbol(X, Decl(genericOfACloduleType2.ts, 3, 21))
         }
     }
 
     var g1 = new G<C>();
->g1 : G<C>, Symbol(g1,Decl(genericOfACloduleType2.ts,8,7))
+>g1 : G<C>, Symbol(g1, Decl(genericOfACloduleType2.ts, 8, 7))
 >new G<C>() : G<C>
->G : typeof G, Symbol(G,Decl(genericOfACloduleType2.ts,0,0))
->C : C, Symbol(C,Decl(genericOfACloduleType2.ts,1,10),Decl(genericOfACloduleType2.ts,2,32))
+>G : typeof G, Symbol(G, Decl(genericOfACloduleType2.ts, 0, 0))
+>C : C, Symbol(C, Decl(genericOfACloduleType2.ts, 1, 10), Decl(genericOfACloduleType2.ts, 2, 32))
 
     g1.bar(null).foo(); // no error
 >g1.bar(null).foo() : void
->g1.bar(null).foo : () => void, Symbol(C.foo,Decl(genericOfACloduleType2.ts,2,20))
+>g1.bar(null).foo : () => void, Symbol(C.foo, Decl(genericOfACloduleType2.ts, 2, 20))
 >g1.bar(null) : C
->g1.bar : (x: C) => C, Symbol(G.bar,Decl(genericOfACloduleType2.ts,0,11))
->g1 : G<C>, Symbol(g1,Decl(genericOfACloduleType2.ts,8,7))
->bar : (x: C) => C, Symbol(G.bar,Decl(genericOfACloduleType2.ts,0,11))
+>g1.bar : (x: C) => C, Symbol(G.bar, Decl(genericOfACloduleType2.ts, 0, 11))
+>g1 : G<C>, Symbol(g1, Decl(genericOfACloduleType2.ts, 8, 7))
+>bar : (x: C) => C, Symbol(G.bar, Decl(genericOfACloduleType2.ts, 0, 11))
 >null : null
->foo : () => void, Symbol(C.foo,Decl(genericOfACloduleType2.ts,2,20))
+>foo : () => void, Symbol(C.foo, Decl(genericOfACloduleType2.ts, 2, 20))
 }
 
 module N {
->N : typeof N, Symbol(N,Decl(genericOfACloduleType2.ts,10,1))
+>N : typeof N, Symbol(N, Decl(genericOfACloduleType2.ts, 10, 1))
 
     var g2 = new G<M.C>()
->g2 : G<M.C>, Symbol(g2,Decl(genericOfACloduleType2.ts,13,7))
+>g2 : G<M.C>, Symbol(g2, Decl(genericOfACloduleType2.ts, 13, 7))
 >new G<M.C>() : G<M.C>
->G : typeof G, Symbol(G,Decl(genericOfACloduleType2.ts,0,0))
->M : any, Symbol(M,Decl(genericOfACloduleType2.ts,0,37))
->C : M.C, Symbol(M.C,Decl(genericOfACloduleType2.ts,1,10),Decl(genericOfACloduleType2.ts,2,32))
+>G : typeof G, Symbol(G, Decl(genericOfACloduleType2.ts, 0, 0))
+>M : any, Symbol(M, Decl(genericOfACloduleType2.ts, 0, 37))
+>C : M.C, Symbol(M.C, Decl(genericOfACloduleType2.ts, 1, 10), Decl(genericOfACloduleType2.ts, 2, 32))
 }

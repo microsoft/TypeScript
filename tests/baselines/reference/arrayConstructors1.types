@@ -1,53 +1,53 @@
 === tests/cases/compiler/arrayConstructors1.ts ===
 var x: string[];
->x : string[], Symbol(x,Decl(arrayConstructors1.ts,0,3))
+>x : string[], Symbol(x, Decl(arrayConstructors1.ts, 0, 3))
 
 x = new Array(1);
 >x = new Array(1) : any[]
->x : string[], Symbol(x,Decl(arrayConstructors1.ts,0,3))
+>x : string[], Symbol(x, Decl(arrayConstructors1.ts, 0, 3))
 >new Array(1) : any[]
->Array : ArrayConstructor, Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
+>Array : ArrayConstructor, Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
 >1 : number
 
 x = new Array('hi', 'bye'); 
 >x = new Array('hi', 'bye') : string[]
->x : string[], Symbol(x,Decl(arrayConstructors1.ts,0,3))
+>x : string[], Symbol(x, Decl(arrayConstructors1.ts, 0, 3))
 >new Array('hi', 'bye') : string[]
->Array : ArrayConstructor, Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
+>Array : ArrayConstructor, Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
 >'hi' : string
 >'bye' : string
 
 x = new Array<string>('hi', 'bye');
 >x = new Array<string>('hi', 'bye') : string[]
->x : string[], Symbol(x,Decl(arrayConstructors1.ts,0,3))
+>x : string[], Symbol(x, Decl(arrayConstructors1.ts, 0, 3))
 >new Array<string>('hi', 'bye') : string[]
->Array : ArrayConstructor, Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
+>Array : ArrayConstructor, Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
 >'hi' : string
 >'bye' : string
 
 var y: number[];
->y : number[], Symbol(y,Decl(arrayConstructors1.ts,5,3))
+>y : number[], Symbol(y, Decl(arrayConstructors1.ts, 5, 3))
 
 y = new Array(1);
 >y = new Array(1) : any[]
->y : number[], Symbol(y,Decl(arrayConstructors1.ts,5,3))
+>y : number[], Symbol(y, Decl(arrayConstructors1.ts, 5, 3))
 >new Array(1) : any[]
->Array : ArrayConstructor, Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
+>Array : ArrayConstructor, Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
 >1 : number
 
 y = new Array(1,2);
 >y = new Array(1,2) : number[]
->y : number[], Symbol(y,Decl(arrayConstructors1.ts,5,3))
+>y : number[], Symbol(y, Decl(arrayConstructors1.ts, 5, 3))
 >new Array(1,2) : number[]
->Array : ArrayConstructor, Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
+>Array : ArrayConstructor, Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
 >1 : number
 >2 : number
 
 y = new Array<number>(1, 2);
 >y = new Array<number>(1, 2) : number[]
->y : number[], Symbol(y,Decl(arrayConstructors1.ts,5,3))
+>y : number[], Symbol(y, Decl(arrayConstructors1.ts, 5, 3))
 >new Array<number>(1, 2) : number[]
->Array : ArrayConstructor, Symbol(Array,Decl(lib.d.ts,1000,23),Decl(lib.d.ts,1171,11))
+>Array : ArrayConstructor, Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
 >1 : number
 >2 : number
 

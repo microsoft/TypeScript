@@ -1,22 +1,22 @@
 === tests/cases/compiler/declarationEmitDestructuring2.ts ===
 function f({x = 10, y: [a, b, c, d] = [1, 2, 3, 4]} = { x: 10, y: [2, 4, 6, 8] }) { }
->f : ({x = 10, y: [a, b, c, d] = [1, 2, 3, 4]}?: { x: number; y: [number, number, number, number]; }) => void, Symbol(f,Decl(declarationEmitDestructuring2.ts,0,0))
->x : number, Symbol(x,Decl(declarationEmitDestructuring2.ts,0,12))
+>f : ({x = 10, y: [a, b, c, d] = [1, 2, 3, 4]}?: { x: number; y: [number, number, number, number]; }) => void, Symbol(f, Decl(declarationEmitDestructuring2.ts, 0, 0))
+>x : number, Symbol(x, Decl(declarationEmitDestructuring2.ts, 0, 12))
 >10 : number
 >y : any
->a : number, Symbol(a,Decl(declarationEmitDestructuring2.ts,0,24))
->b : number, Symbol(b,Decl(declarationEmitDestructuring2.ts,0,26))
->c : number, Symbol(c,Decl(declarationEmitDestructuring2.ts,0,29))
->d : number, Symbol(d,Decl(declarationEmitDestructuring2.ts,0,32))
+>a : number, Symbol(a, Decl(declarationEmitDestructuring2.ts, 0, 24))
+>b : number, Symbol(b, Decl(declarationEmitDestructuring2.ts, 0, 26))
+>c : number, Symbol(c, Decl(declarationEmitDestructuring2.ts, 0, 29))
+>d : number, Symbol(d, Decl(declarationEmitDestructuring2.ts, 0, 32))
 >[1, 2, 3, 4] : [number, number, number, number]
 >1 : number
 >2 : number
 >3 : number
 >4 : number
 >{ x: 10, y: [2, 4, 6, 8] } : { x: number; y: [number, number, number, number]; }
->x : number, Symbol(x,Decl(declarationEmitDestructuring2.ts,0,55))
+>x : number, Symbol(x, Decl(declarationEmitDestructuring2.ts, 0, 55))
 >10 : number
->y : [number, number, number, number], Symbol(y,Decl(declarationEmitDestructuring2.ts,0,62))
+>y : [number, number, number, number], Symbol(y, Decl(declarationEmitDestructuring2.ts, 0, 62))
 >[2, 4, 6, 8] : [number, number, number, number]
 >2 : number
 >4 : number
@@ -24,11 +24,11 @@ function f({x = 10, y: [a, b, c, d] = [1, 2, 3, 4]} = { x: 10, y: [2, 4, 6, 8] }
 >8 : number
 
 function g([a, b, c, d] = [1, 2, 3, 4]) { }
->g : ([a, b, c, d]?: [number, number, number, number]) => void, Symbol(g,Decl(declarationEmitDestructuring2.ts,0,85))
->a : number, Symbol(a,Decl(declarationEmitDestructuring2.ts,1,12))
->b : number, Symbol(b,Decl(declarationEmitDestructuring2.ts,1,14))
->c : number, Symbol(c,Decl(declarationEmitDestructuring2.ts,1,17))
->d : number, Symbol(d,Decl(declarationEmitDestructuring2.ts,1,20))
+>g : ([a, b, c, d]?: [number, number, number, number]) => void, Symbol(g, Decl(declarationEmitDestructuring2.ts, 0, 85))
+>a : number, Symbol(a, Decl(declarationEmitDestructuring2.ts, 1, 12))
+>b : number, Symbol(b, Decl(declarationEmitDestructuring2.ts, 1, 14))
+>c : number, Symbol(c, Decl(declarationEmitDestructuring2.ts, 1, 17))
+>d : number, Symbol(d, Decl(declarationEmitDestructuring2.ts, 1, 20))
 >[1, 2, 3, 4] : [number, number, number, number]
 >1 : number
 >2 : number
@@ -36,33 +36,33 @@ function g([a, b, c, d] = [1, 2, 3, 4]) { }
 >4 : number
 
 function h([a, [b], [[c]], {x = 10, y: [a, b, c], z: {a1, b1}}]){ }
->h : ([a, [b], [[c]], {x = 10, y: [a, b, c], z: {a1, b1}}]: [any, [any], [[any]], { x?: number; y: [any, any, any]; z: { a1: any; b1: any; }; }]) => void, Symbol(h,Decl(declarationEmitDestructuring2.ts,1,43))
->a : any, Symbol(a,Decl(declarationEmitDestructuring2.ts,2,12),Decl(declarationEmitDestructuring2.ts,2,40))
->b : any, Symbol(b,Decl(declarationEmitDestructuring2.ts,2,16),Decl(declarationEmitDestructuring2.ts,2,42))
->c : any, Symbol(c,Decl(declarationEmitDestructuring2.ts,2,22),Decl(declarationEmitDestructuring2.ts,2,45))
->x : number, Symbol(x,Decl(declarationEmitDestructuring2.ts,2,28))
+>h : ([a, [b], [[c]], {x = 10, y: [a, b, c], z: {a1, b1}}]: [any, [any], [[any]], { x?: number; y: [any, any, any]; z: { a1: any; b1: any; }; }]) => void, Symbol(h, Decl(declarationEmitDestructuring2.ts, 1, 43))
+>a : any, Symbol(a, Decl(declarationEmitDestructuring2.ts, 2, 12), Decl(declarationEmitDestructuring2.ts, 2, 40))
+>b : any, Symbol(b, Decl(declarationEmitDestructuring2.ts, 2, 16), Decl(declarationEmitDestructuring2.ts, 2, 42))
+>c : any, Symbol(c, Decl(declarationEmitDestructuring2.ts, 2, 22), Decl(declarationEmitDestructuring2.ts, 2, 45))
+>x : number, Symbol(x, Decl(declarationEmitDestructuring2.ts, 2, 28))
 >10 : number
 >y : any
->a : any, Symbol(a,Decl(declarationEmitDestructuring2.ts,2,12),Decl(declarationEmitDestructuring2.ts,2,40))
->b : any, Symbol(b,Decl(declarationEmitDestructuring2.ts,2,16),Decl(declarationEmitDestructuring2.ts,2,42))
->c : any, Symbol(c,Decl(declarationEmitDestructuring2.ts,2,22),Decl(declarationEmitDestructuring2.ts,2,45))
+>a : any, Symbol(a, Decl(declarationEmitDestructuring2.ts, 2, 12), Decl(declarationEmitDestructuring2.ts, 2, 40))
+>b : any, Symbol(b, Decl(declarationEmitDestructuring2.ts, 2, 16), Decl(declarationEmitDestructuring2.ts, 2, 42))
+>c : any, Symbol(c, Decl(declarationEmitDestructuring2.ts, 2, 22), Decl(declarationEmitDestructuring2.ts, 2, 45))
 >z : any
->a1 : any, Symbol(a1,Decl(declarationEmitDestructuring2.ts,2,54))
->b1 : any, Symbol(b1,Decl(declarationEmitDestructuring2.ts,2,57))
+>a1 : any, Symbol(a1, Decl(declarationEmitDestructuring2.ts, 2, 54))
+>b1 : any, Symbol(b1, Decl(declarationEmitDestructuring2.ts, 2, 57))
 
 function h1([a, [b], [[c]], {x = 10, y = [1, 2, 3], z: {a1, b1}}]){ }
->h1 : ([a, [b], [[c]], {x = 10, y = [1, 2, 3], z: {a1, b1}}]: [any, [any], [[any]], { x?: number; y?: number[]; z: { a1: any; b1: any; }; }]) => void, Symbol(h1,Decl(declarationEmitDestructuring2.ts,2,67))
->a : any, Symbol(a,Decl(declarationEmitDestructuring2.ts,3,13))
->b : any, Symbol(b,Decl(declarationEmitDestructuring2.ts,3,17))
->c : any, Symbol(c,Decl(declarationEmitDestructuring2.ts,3,23))
->x : number, Symbol(x,Decl(declarationEmitDestructuring2.ts,3,29))
+>h1 : ([a, [b], [[c]], {x = 10, y = [1, 2, 3], z: {a1, b1}}]: [any, [any], [[any]], { x?: number; y?: number[]; z: { a1: any; b1: any; }; }]) => void, Symbol(h1, Decl(declarationEmitDestructuring2.ts, 2, 67))
+>a : any, Symbol(a, Decl(declarationEmitDestructuring2.ts, 3, 13))
+>b : any, Symbol(b, Decl(declarationEmitDestructuring2.ts, 3, 17))
+>c : any, Symbol(c, Decl(declarationEmitDestructuring2.ts, 3, 23))
+>x : number, Symbol(x, Decl(declarationEmitDestructuring2.ts, 3, 29))
 >10 : number
->y : number[], Symbol(y,Decl(declarationEmitDestructuring2.ts,3,36))
+>y : number[], Symbol(y, Decl(declarationEmitDestructuring2.ts, 3, 36))
 >[1, 2, 3] : number[]
 >1 : number
 >2 : number
 >3 : number
 >z : any
->a1 : any, Symbol(a1,Decl(declarationEmitDestructuring2.ts,3,56))
->b1 : any, Symbol(b1,Decl(declarationEmitDestructuring2.ts,3,59))
+>a1 : any, Symbol(a1, Decl(declarationEmitDestructuring2.ts, 3, 56))
+>b1 : any, Symbol(b1, Decl(declarationEmitDestructuring2.ts, 3, 59))
 

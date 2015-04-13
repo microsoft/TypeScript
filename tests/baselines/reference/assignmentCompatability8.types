@@ -1,48 +1,48 @@
 === tests/cases/compiler/assignmentCompatability8.ts ===
 module __test1__ {
->__test1__ : typeof __test1__, Symbol(__test1__,Decl(assignmentCompatability8.ts,0,0))
+>__test1__ : typeof __test1__, Symbol(__test1__, Decl(assignmentCompatability8.ts, 0, 0))
 
     export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
->interfaceWithPublicAndOptional : interfaceWithPublicAndOptional<T, U>, Symbol(interfaceWithPublicAndOptional,Decl(assignmentCompatability8.ts,0,18))
->T : T, Symbol(T,Decl(assignmentCompatability8.ts,1,52))
->U : U, Symbol(U,Decl(assignmentCompatability8.ts,1,54))
->one : T, Symbol(one,Decl(assignmentCompatability8.ts,1,58))
->T : T, Symbol(T,Decl(assignmentCompatability8.ts,1,52))
->two : U, Symbol(two,Decl(assignmentCompatability8.ts,1,66))
->U : U, Symbol(U,Decl(assignmentCompatability8.ts,1,54))
->obj4 : interfaceWithPublicAndOptional<number, string>, Symbol(obj4,Decl(assignmentCompatability8.ts,1,83))
->interfaceWithPublicAndOptional : interfaceWithPublicAndOptional<T, U>, Symbol(interfaceWithPublicAndOptional,Decl(assignmentCompatability8.ts,0,18))
+>interfaceWithPublicAndOptional : interfaceWithPublicAndOptional<T, U>, Symbol(interfaceWithPublicAndOptional, Decl(assignmentCompatability8.ts, 0, 18))
+>T : T, Symbol(T, Decl(assignmentCompatability8.ts, 1, 52))
+>U : U, Symbol(U, Decl(assignmentCompatability8.ts, 1, 54))
+>one : T, Symbol(one, Decl(assignmentCompatability8.ts, 1, 58))
+>T : T, Symbol(T, Decl(assignmentCompatability8.ts, 1, 52))
+>two : U, Symbol(two, Decl(assignmentCompatability8.ts, 1, 66))
+>U : U, Symbol(U, Decl(assignmentCompatability8.ts, 1, 54))
+>obj4 : interfaceWithPublicAndOptional<number, string>, Symbol(obj4, Decl(assignmentCompatability8.ts, 1, 83))
+>interfaceWithPublicAndOptional : interfaceWithPublicAndOptional<T, U>, Symbol(interfaceWithPublicAndOptional, Decl(assignmentCompatability8.ts, 0, 18))
 >{ one: 1 } : { one: number; }
->one : number, Symbol(one,Decl(assignmentCompatability8.ts,1,139))
+>one : number, Symbol(one, Decl(assignmentCompatability8.ts, 1, 139))
 >1 : number
 
     export var __val__obj4 = obj4;
->__val__obj4 : interfaceWithPublicAndOptional<number, string>, Symbol(__val__obj4,Decl(assignmentCompatability8.ts,2,14))
->obj4 : interfaceWithPublicAndOptional<number, string>, Symbol(obj4,Decl(assignmentCompatability8.ts,1,83))
+>__val__obj4 : interfaceWithPublicAndOptional<number, string>, Symbol(__val__obj4, Decl(assignmentCompatability8.ts, 2, 14))
+>obj4 : interfaceWithPublicAndOptional<number, string>, Symbol(obj4, Decl(assignmentCompatability8.ts, 1, 83))
 }
 module __test2__ {
->__test2__ : typeof __test2__, Symbol(__test2__,Decl(assignmentCompatability8.ts,3,1))
+>__test2__ : typeof __test2__, Symbol(__test2__, Decl(assignmentCompatability8.ts, 3, 1))
 
     export            class classWithPublic<T> { constructor(public one: T) {} }                        var x1 = new classWithPublic(1);;
->classWithPublic : classWithPublic<T>, Symbol(classWithPublic,Decl(assignmentCompatability8.ts,4,18))
->T : T, Symbol(T,Decl(assignmentCompatability8.ts,5,44))
->one : T, Symbol(one,Decl(assignmentCompatability8.ts,5,61))
->T : T, Symbol(T,Decl(assignmentCompatability8.ts,5,44))
->x1 : classWithPublic<number>, Symbol(x1,Decl(assignmentCompatability8.ts,5,107))
+>classWithPublic : classWithPublic<T>, Symbol(classWithPublic, Decl(assignmentCompatability8.ts, 4, 18))
+>T : T, Symbol(T, Decl(assignmentCompatability8.ts, 5, 44))
+>one : T, Symbol(one, Decl(assignmentCompatability8.ts, 5, 61))
+>T : T, Symbol(T, Decl(assignmentCompatability8.ts, 5, 44))
+>x1 : classWithPublic<number>, Symbol(x1, Decl(assignmentCompatability8.ts, 5, 107))
 >new classWithPublic(1) : classWithPublic<number>
->classWithPublic : typeof classWithPublic, Symbol(classWithPublic,Decl(assignmentCompatability8.ts,4,18))
+>classWithPublic : typeof classWithPublic, Symbol(classWithPublic, Decl(assignmentCompatability8.ts, 4, 18))
 >1 : number
 
     export var __val__x1 = x1;
->__val__x1 : classWithPublic<number>, Symbol(__val__x1,Decl(assignmentCompatability8.ts,6,14))
->x1 : classWithPublic<number>, Symbol(x1,Decl(assignmentCompatability8.ts,5,107))
+>__val__x1 : classWithPublic<number>, Symbol(__val__x1, Decl(assignmentCompatability8.ts, 6, 14))
+>x1 : classWithPublic<number>, Symbol(x1, Decl(assignmentCompatability8.ts, 5, 107))
 }
 __test2__.__val__x1 = __test1__.__val__obj4
 >__test2__.__val__x1 = __test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
->__test2__.__val__x1 : __test2__.classWithPublic<number>, Symbol(__test2__.__val__x1,Decl(assignmentCompatability8.ts,6,14))
->__test2__ : typeof __test2__, Symbol(__test2__,Decl(assignmentCompatability8.ts,3,1))
->__val__x1 : __test2__.classWithPublic<number>, Symbol(__test2__.__val__x1,Decl(assignmentCompatability8.ts,6,14))
->__test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>, Symbol(__test1__.__val__obj4,Decl(assignmentCompatability8.ts,2,14))
->__test1__ : typeof __test1__, Symbol(__test1__,Decl(assignmentCompatability8.ts,0,0))
->__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>, Symbol(__test1__.__val__obj4,Decl(assignmentCompatability8.ts,2,14))
+>__test2__.__val__x1 : __test2__.classWithPublic<number>, Symbol(__test2__.__val__x1, Decl(assignmentCompatability8.ts, 6, 14))
+>__test2__ : typeof __test2__, Symbol(__test2__, Decl(assignmentCompatability8.ts, 3, 1))
+>__val__x1 : __test2__.classWithPublic<number>, Symbol(__test2__.__val__x1, Decl(assignmentCompatability8.ts, 6, 14))
+>__test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>, Symbol(__test1__.__val__obj4, Decl(assignmentCompatability8.ts, 2, 14))
+>__test1__ : typeof __test1__, Symbol(__test1__, Decl(assignmentCompatability8.ts, 0, 0))
+>__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>, Symbol(__test1__.__val__obj4, Decl(assignmentCompatability8.ts, 2, 14))
 

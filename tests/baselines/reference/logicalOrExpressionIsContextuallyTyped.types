@@ -5,17 +5,17 @@
 // operand types.
 
 var r: { a: string } = { a: '', b: 123 } || { a: '', b: true };
->r : { a: string; }, Symbol(r,Decl(logicalOrExpressionIsContextuallyTyped.ts,5,3))
->a : string, Symbol(a,Decl(logicalOrExpressionIsContextuallyTyped.ts,5,8))
+>r : { a: string; }, Symbol(r, Decl(logicalOrExpressionIsContextuallyTyped.ts, 5, 3))
+>a : string, Symbol(a, Decl(logicalOrExpressionIsContextuallyTyped.ts, 5, 8))
 >{ a: '', b: 123 } || { a: '', b: true } : { a: string; b: number; } | { a: string; b: boolean; }
 >{ a: '', b: 123 } : { a: string; b: number; }
->a : string, Symbol(a,Decl(logicalOrExpressionIsContextuallyTyped.ts,5,24))
+>a : string, Symbol(a, Decl(logicalOrExpressionIsContextuallyTyped.ts, 5, 24))
 >'' : string
->b : number, Symbol(b,Decl(logicalOrExpressionIsContextuallyTyped.ts,5,31))
+>b : number, Symbol(b, Decl(logicalOrExpressionIsContextuallyTyped.ts, 5, 31))
 >123 : number
 >{ a: '', b: true } : { a: string; b: boolean; }
->a : string, Symbol(a,Decl(logicalOrExpressionIsContextuallyTyped.ts,5,45))
+>a : string, Symbol(a, Decl(logicalOrExpressionIsContextuallyTyped.ts, 5, 45))
 >'' : string
->b : boolean, Symbol(b,Decl(logicalOrExpressionIsContextuallyTyped.ts,5,52))
+>b : boolean, Symbol(b, Decl(logicalOrExpressionIsContextuallyTyped.ts, 5, 52))
 >true : boolean
 

@@ -2,244 +2,244 @@
 // Writing a reference to a type alias has exactly the same effect as writing the aliased type itself.
 
 type T1 = number;
->T1 : number, Symbol(T1,Decl(typeAliases.ts,0,0))
+>T1 : number, Symbol(T1, Decl(typeAliases.ts, 0, 0))
 
 var x1: number;
->x1 : number, Symbol(x1,Decl(typeAliases.ts,3,3),Decl(typeAliases.ts,4,3))
+>x1 : number, Symbol(x1, Decl(typeAliases.ts, 3, 3), Decl(typeAliases.ts, 4, 3))
 
 var x1: T1;
->x1 : number, Symbol(x1,Decl(typeAliases.ts,3,3),Decl(typeAliases.ts,4,3))
->T1 : number, Symbol(T1,Decl(typeAliases.ts,0,0))
+>x1 : number, Symbol(x1, Decl(typeAliases.ts, 3, 3), Decl(typeAliases.ts, 4, 3))
+>T1 : number, Symbol(T1, Decl(typeAliases.ts, 0, 0))
 
 type T2 = string;
->T2 : string, Symbol(T2,Decl(typeAliases.ts,4,11))
+>T2 : string, Symbol(T2, Decl(typeAliases.ts, 4, 11))
 
 var x2: string;
->x2 : string, Symbol(x2,Decl(typeAliases.ts,7,3),Decl(typeAliases.ts,8,3))
+>x2 : string, Symbol(x2, Decl(typeAliases.ts, 7, 3), Decl(typeAliases.ts, 8, 3))
 
 var x2: T2;
->x2 : string, Symbol(x2,Decl(typeAliases.ts,7,3),Decl(typeAliases.ts,8,3))
->T2 : string, Symbol(T2,Decl(typeAliases.ts,4,11))
+>x2 : string, Symbol(x2, Decl(typeAliases.ts, 7, 3), Decl(typeAliases.ts, 8, 3))
+>T2 : string, Symbol(T2, Decl(typeAliases.ts, 4, 11))
 
 type T3 = boolean;
->T3 : boolean, Symbol(T3,Decl(typeAliases.ts,8,11))
+>T3 : boolean, Symbol(T3, Decl(typeAliases.ts, 8, 11))
 
 var x3: boolean;
->x3 : boolean, Symbol(x3,Decl(typeAliases.ts,11,3),Decl(typeAliases.ts,12,3))
+>x3 : boolean, Symbol(x3, Decl(typeAliases.ts, 11, 3), Decl(typeAliases.ts, 12, 3))
 
 var x3: T3;
->x3 : boolean, Symbol(x3,Decl(typeAliases.ts,11,3),Decl(typeAliases.ts,12,3))
->T3 : boolean, Symbol(T3,Decl(typeAliases.ts,8,11))
+>x3 : boolean, Symbol(x3, Decl(typeAliases.ts, 11, 3), Decl(typeAliases.ts, 12, 3))
+>T3 : boolean, Symbol(T3, Decl(typeAliases.ts, 8, 11))
 
 type T4 = void;
->T4 : void, Symbol(T4,Decl(typeAliases.ts,12,11))
+>T4 : void, Symbol(T4, Decl(typeAliases.ts, 12, 11))
 
 var x4: void;
->x4 : void, Symbol(x4,Decl(typeAliases.ts,15,3),Decl(typeAliases.ts,16,3))
+>x4 : void, Symbol(x4, Decl(typeAliases.ts, 15, 3), Decl(typeAliases.ts, 16, 3))
 
 var x4: T4;
->x4 : void, Symbol(x4,Decl(typeAliases.ts,15,3),Decl(typeAliases.ts,16,3))
->T4 : void, Symbol(T4,Decl(typeAliases.ts,12,11))
+>x4 : void, Symbol(x4, Decl(typeAliases.ts, 15, 3), Decl(typeAliases.ts, 16, 3))
+>T4 : void, Symbol(T4, Decl(typeAliases.ts, 12, 11))
 
 type T5 = any;
->T5 : any, Symbol(T5,Decl(typeAliases.ts,16,11))
+>T5 : any, Symbol(T5, Decl(typeAliases.ts, 16, 11))
 
 var x5: any;
->x5 : any, Symbol(x5,Decl(typeAliases.ts,19,3),Decl(typeAliases.ts,20,3))
+>x5 : any, Symbol(x5, Decl(typeAliases.ts, 19, 3), Decl(typeAliases.ts, 20, 3))
 
 var x5: T5;
->x5 : any, Symbol(x5,Decl(typeAliases.ts,19,3),Decl(typeAliases.ts,20,3))
->T5 : any, Symbol(T5,Decl(typeAliases.ts,16,11))
+>x5 : any, Symbol(x5, Decl(typeAliases.ts, 19, 3), Decl(typeAliases.ts, 20, 3))
+>T5 : any, Symbol(T5, Decl(typeAliases.ts, 16, 11))
 
 interface I6 { x : string }
->I6 : I6, Symbol(I6,Decl(typeAliases.ts,20,11))
->x : string, Symbol(x,Decl(typeAliases.ts,22,14))
+>I6 : I6, Symbol(I6, Decl(typeAliases.ts, 20, 11))
+>x : string, Symbol(x, Decl(typeAliases.ts, 22, 14))
 
 type T6 = I6;
->T6 : I6, Symbol(T6,Decl(typeAliases.ts,22,27))
->I6 : I6, Symbol(I6,Decl(typeAliases.ts,20,11))
+>T6 : I6, Symbol(T6, Decl(typeAliases.ts, 22, 27))
+>I6 : I6, Symbol(I6, Decl(typeAliases.ts, 20, 11))
 
 var x6: I6;
->x6 : I6, Symbol(x6,Decl(typeAliases.ts,24,3),Decl(typeAliases.ts,25,3))
->I6 : I6, Symbol(I6,Decl(typeAliases.ts,20,11))
+>x6 : I6, Symbol(x6, Decl(typeAliases.ts, 24, 3), Decl(typeAliases.ts, 25, 3))
+>I6 : I6, Symbol(I6, Decl(typeAliases.ts, 20, 11))
 
 var x6: T6;
->x6 : I6, Symbol(x6,Decl(typeAliases.ts,24,3),Decl(typeAliases.ts,25,3))
->T6 : I6, Symbol(T6,Decl(typeAliases.ts,22,27))
+>x6 : I6, Symbol(x6, Decl(typeAliases.ts, 24, 3), Decl(typeAliases.ts, 25, 3))
+>T6 : I6, Symbol(T6, Decl(typeAliases.ts, 22, 27))
 
 class C7 { x: boolean }
->C7 : C7, Symbol(C7,Decl(typeAliases.ts,25,11))
->x : boolean, Symbol(x,Decl(typeAliases.ts,27,10))
+>C7 : C7, Symbol(C7, Decl(typeAliases.ts, 25, 11))
+>x : boolean, Symbol(x, Decl(typeAliases.ts, 27, 10))
 
 type T7 = C7;
->T7 : C7, Symbol(T7,Decl(typeAliases.ts,27,23))
->C7 : C7, Symbol(C7,Decl(typeAliases.ts,25,11))
+>T7 : C7, Symbol(T7, Decl(typeAliases.ts, 27, 23))
+>C7 : C7, Symbol(C7, Decl(typeAliases.ts, 25, 11))
 
 var x7: C7;
->x7 : C7, Symbol(x7,Decl(typeAliases.ts,29,3),Decl(typeAliases.ts,30,3))
->C7 : C7, Symbol(C7,Decl(typeAliases.ts,25,11))
+>x7 : C7, Symbol(x7, Decl(typeAliases.ts, 29, 3), Decl(typeAliases.ts, 30, 3))
+>C7 : C7, Symbol(C7, Decl(typeAliases.ts, 25, 11))
 
 var x7: T7;
->x7 : C7, Symbol(x7,Decl(typeAliases.ts,29,3),Decl(typeAliases.ts,30,3))
->T7 : C7, Symbol(T7,Decl(typeAliases.ts,27,23))
+>x7 : C7, Symbol(x7, Decl(typeAliases.ts, 29, 3), Decl(typeAliases.ts, 30, 3))
+>T7 : C7, Symbol(T7, Decl(typeAliases.ts, 27, 23))
 
 type T8 = string | boolean;
->T8 : string | boolean, Symbol(T8,Decl(typeAliases.ts,30,11))
+>T8 : string | boolean, Symbol(T8, Decl(typeAliases.ts, 30, 11))
 
 var x8: string | boolean;
->x8 : string | boolean, Symbol(x8,Decl(typeAliases.ts,33,3),Decl(typeAliases.ts,34,3))
+>x8 : string | boolean, Symbol(x8, Decl(typeAliases.ts, 33, 3), Decl(typeAliases.ts, 34, 3))
 
 var x8: T8;
->x8 : string | boolean, Symbol(x8,Decl(typeAliases.ts,33,3),Decl(typeAliases.ts,34,3))
->T8 : string | boolean, Symbol(T8,Decl(typeAliases.ts,30,11))
+>x8 : string | boolean, Symbol(x8, Decl(typeAliases.ts, 33, 3), Decl(typeAliases.ts, 34, 3))
+>T8 : string | boolean, Symbol(T8, Decl(typeAliases.ts, 30, 11))
 
 type T9 = () => string;
->T9 : () => string, Symbol(T9,Decl(typeAliases.ts,34,11))
+>T9 : () => string, Symbol(T9, Decl(typeAliases.ts, 34, 11))
 
 var x9: () => string;
->x9 : () => string, Symbol(x9,Decl(typeAliases.ts,37,3),Decl(typeAliases.ts,38,3))
+>x9 : () => string, Symbol(x9, Decl(typeAliases.ts, 37, 3), Decl(typeAliases.ts, 38, 3))
 
 var x9: T9;
->x9 : () => string, Symbol(x9,Decl(typeAliases.ts,37,3),Decl(typeAliases.ts,38,3))
->T9 : () => string, Symbol(T9,Decl(typeAliases.ts,34,11))
+>x9 : () => string, Symbol(x9, Decl(typeAliases.ts, 37, 3), Decl(typeAliases.ts, 38, 3))
+>T9 : () => string, Symbol(T9, Decl(typeAliases.ts, 34, 11))
 
 type T10 = { x: number };
->T10 : { x: number; }, Symbol(T10,Decl(typeAliases.ts,38,11))
->x : number, Symbol(x,Decl(typeAliases.ts,40,12))
+>T10 : { x: number; }, Symbol(T10, Decl(typeAliases.ts, 38, 11))
+>x : number, Symbol(x, Decl(typeAliases.ts, 40, 12))
 
 var x10: { x: number };
->x10 : { x: number; }, Symbol(x10,Decl(typeAliases.ts,41,3),Decl(typeAliases.ts,42,3))
->x : number, Symbol(x,Decl(typeAliases.ts,41,10))
+>x10 : { x: number; }, Symbol(x10, Decl(typeAliases.ts, 41, 3), Decl(typeAliases.ts, 42, 3))
+>x : number, Symbol(x, Decl(typeAliases.ts, 41, 10))
 
 var x10: T10;
->x10 : { x: number; }, Symbol(x10,Decl(typeAliases.ts,41,3),Decl(typeAliases.ts,42,3))
->T10 : { x: number; }, Symbol(T10,Decl(typeAliases.ts,38,11))
+>x10 : { x: number; }, Symbol(x10, Decl(typeAliases.ts, 41, 3), Decl(typeAliases.ts, 42, 3))
+>T10 : { x: number; }, Symbol(T10, Decl(typeAliases.ts, 38, 11))
 
 type T11 = { new(): boolean };
->T11 : new () => boolean, Symbol(T11,Decl(typeAliases.ts,42,13))
+>T11 : new () => boolean, Symbol(T11, Decl(typeAliases.ts, 42, 13))
 
 var x11: { new(): boolean };
->x11 : new () => boolean, Symbol(x11,Decl(typeAliases.ts,45,3),Decl(typeAliases.ts,46,3))
+>x11 : new () => boolean, Symbol(x11, Decl(typeAliases.ts, 45, 3), Decl(typeAliases.ts, 46, 3))
 
 var x11: T11;
->x11 : new () => boolean, Symbol(x11,Decl(typeAliases.ts,45,3),Decl(typeAliases.ts,46,3))
->T11 : new () => boolean, Symbol(T11,Decl(typeAliases.ts,42,13))
+>x11 : new () => boolean, Symbol(x11, Decl(typeAliases.ts, 45, 3), Decl(typeAliases.ts, 46, 3))
+>T11 : new () => boolean, Symbol(T11, Decl(typeAliases.ts, 42, 13))
 
 interface I13 { x: string };
->I13 : I13, Symbol(I13,Decl(typeAliases.ts,46,13))
->x : string, Symbol(x,Decl(typeAliases.ts,48,15))
+>I13 : I13, Symbol(I13, Decl(typeAliases.ts, 46, 13))
+>x : string, Symbol(x, Decl(typeAliases.ts, 48, 15))
 
 type T13 = I13;
->T13 : I13, Symbol(T13,Decl(typeAliases.ts,48,28))
->I13 : I13, Symbol(I13,Decl(typeAliases.ts,46,13))
+>T13 : I13, Symbol(T13, Decl(typeAliases.ts, 48, 28))
+>I13 : I13, Symbol(I13, Decl(typeAliases.ts, 46, 13))
 
 var x13_1: I13;
->x13_1 : I13, Symbol(x13_1,Decl(typeAliases.ts,50,3))
->I13 : I13, Symbol(I13,Decl(typeAliases.ts,46,13))
+>x13_1 : I13, Symbol(x13_1, Decl(typeAliases.ts, 50, 3))
+>I13 : I13, Symbol(I13, Decl(typeAliases.ts, 46, 13))
 
 var x13_2: T13
->x13_2 : I13, Symbol(x13_2,Decl(typeAliases.ts,51,3))
->T13 : I13, Symbol(T13,Decl(typeAliases.ts,48,28))
+>x13_2 : I13, Symbol(x13_2, Decl(typeAliases.ts, 51, 3))
+>T13 : I13, Symbol(T13, Decl(typeAliases.ts, 48, 28))
 
 declare function foo13<T1 extends I13, T2 extends T13>(t1: T1, t2: T13): void;
->foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: I13) => void, Symbol(foo13,Decl(typeAliases.ts,51,14))
->T1 : T1, Symbol(T1,Decl(typeAliases.ts,53,23))
->I13 : I13, Symbol(I13,Decl(typeAliases.ts,46,13))
->T2 : T2, Symbol(T2,Decl(typeAliases.ts,53,38))
->T13 : I13, Symbol(T13,Decl(typeAliases.ts,48,28))
->t1 : T1, Symbol(t1,Decl(typeAliases.ts,53,55))
->T1 : T1, Symbol(T1,Decl(typeAliases.ts,53,23))
->t2 : I13, Symbol(t2,Decl(typeAliases.ts,53,62))
->T13 : I13, Symbol(T13,Decl(typeAliases.ts,48,28))
+>foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: I13) => void, Symbol(foo13, Decl(typeAliases.ts, 51, 14))
+>T1 : T1, Symbol(T1, Decl(typeAliases.ts, 53, 23))
+>I13 : I13, Symbol(I13, Decl(typeAliases.ts, 46, 13))
+>T2 : T2, Symbol(T2, Decl(typeAliases.ts, 53, 38))
+>T13 : I13, Symbol(T13, Decl(typeAliases.ts, 48, 28))
+>t1 : T1, Symbol(t1, Decl(typeAliases.ts, 53, 55))
+>T1 : T1, Symbol(T1, Decl(typeAliases.ts, 53, 23))
+>t2 : I13, Symbol(t2, Decl(typeAliases.ts, 53, 62))
+>T13 : I13, Symbol(T13, Decl(typeAliases.ts, 48, 28))
 
 foo13(x13_1, x13_2);
 >foo13(x13_1, x13_2) : void
->foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: I13) => void, Symbol(foo13,Decl(typeAliases.ts,51,14))
->x13_1 : I13, Symbol(x13_1,Decl(typeAliases.ts,50,3))
->x13_2 : I13, Symbol(x13_2,Decl(typeAliases.ts,51,3))
+>foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: I13) => void, Symbol(foo13, Decl(typeAliases.ts, 51, 14))
+>x13_1 : I13, Symbol(x13_1, Decl(typeAliases.ts, 50, 3))
+>x13_2 : I13, Symbol(x13_2, Decl(typeAliases.ts, 51, 3))
 
 foo13(x13_2, x13_1);
 >foo13(x13_2, x13_1) : void
->foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: I13) => void, Symbol(foo13,Decl(typeAliases.ts,51,14))
->x13_2 : I13, Symbol(x13_2,Decl(typeAliases.ts,51,3))
->x13_1 : I13, Symbol(x13_1,Decl(typeAliases.ts,50,3))
+>foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: I13) => void, Symbol(foo13, Decl(typeAliases.ts, 51, 14))
+>x13_2 : I13, Symbol(x13_2, Decl(typeAliases.ts, 51, 3))
+>x13_1 : I13, Symbol(x13_1, Decl(typeAliases.ts, 50, 3))
 
 type T14 = string;
->T14 : string, Symbol(T14,Decl(typeAliases.ts,55,20))
+>T14 : string, Symbol(T14, Decl(typeAliases.ts, 55, 20))
 
 var x14: T14;
->x14 : string, Symbol(x14,Decl(typeAliases.ts,58,3))
->T14 : string, Symbol(T14,Decl(typeAliases.ts,55,20))
+>x14 : string, Symbol(x14, Decl(typeAliases.ts, 58, 3))
+>T14 : string, Symbol(T14, Decl(typeAliases.ts, 55, 20))
 
 declare function foo14_1(x: T14): void;
->foo14_1 : (x: string) => void, Symbol(foo14_1,Decl(typeAliases.ts,58,13))
->x : string, Symbol(x,Decl(typeAliases.ts,60,25))
->T14 : string, Symbol(T14,Decl(typeAliases.ts,55,20))
+>foo14_1 : (x: string) => void, Symbol(foo14_1, Decl(typeAliases.ts, 58, 13))
+>x : string, Symbol(x, Decl(typeAliases.ts, 60, 25))
+>T14 : string, Symbol(T14, Decl(typeAliases.ts, 55, 20))
 
 declare function foo14_2(x: "click"): void;
->foo14_2 : { (x: "click"): void; (x: string): void; }, Symbol(foo14_2,Decl(typeAliases.ts,60,39),Decl(typeAliases.ts,62,43))
->x : "click", Symbol(x,Decl(typeAliases.ts,62,25))
+>foo14_2 : { (x: "click"): void; (x: string): void; }, Symbol(foo14_2, Decl(typeAliases.ts, 60, 39), Decl(typeAliases.ts, 62, 43))
+>x : "click", Symbol(x, Decl(typeAliases.ts, 62, 25))
 
 declare function foo14_2(x: T14): void;
->foo14_2 : { (x: "click"): void; (x: string): void; }, Symbol(foo14_2,Decl(typeAliases.ts,60,39),Decl(typeAliases.ts,62,43))
->x : string, Symbol(x,Decl(typeAliases.ts,63,25))
->T14 : string, Symbol(T14,Decl(typeAliases.ts,55,20))
+>foo14_2 : { (x: "click"): void; (x: string): void; }, Symbol(foo14_2, Decl(typeAliases.ts, 60, 39), Decl(typeAliases.ts, 62, 43))
+>x : string, Symbol(x, Decl(typeAliases.ts, 63, 25))
+>T14 : string, Symbol(T14, Decl(typeAliases.ts, 55, 20))
 
 type Meters = number
->Meters : number, Symbol(Meters,Decl(typeAliases.ts,63,39))
+>Meters : number, Symbol(Meters, Decl(typeAliases.ts, 63, 39))
 
 enum E { x = 10 }
->E : E, Symbol(E,Decl(typeAliases.ts,65,20))
->x : E, Symbol(E.x,Decl(typeAliases.ts,67,8))
+>E : E, Symbol(E, Decl(typeAliases.ts, 65, 20))
+>x : E, Symbol(E.x, Decl(typeAliases.ts, 67, 8))
 >10 : number
 
 declare function f15(a: string): boolean;
->f15 : { (a: string): boolean; (a: number): string; }, Symbol(f15,Decl(typeAliases.ts,67,17),Decl(typeAliases.ts,69,41))
->a : string, Symbol(a,Decl(typeAliases.ts,69,21))
+>f15 : { (a: string): boolean; (a: number): string; }, Symbol(f15, Decl(typeAliases.ts, 67, 17), Decl(typeAliases.ts, 69, 41))
+>a : string, Symbol(a, Decl(typeAliases.ts, 69, 21))
 
 declare function f15(a: Meters): string;
->f15 : { (a: string): boolean; (a: number): string; }, Symbol(f15,Decl(typeAliases.ts,67,17),Decl(typeAliases.ts,69,41))
->a : number, Symbol(a,Decl(typeAliases.ts,70,21))
->Meters : number, Symbol(Meters,Decl(typeAliases.ts,63,39))
+>f15 : { (a: string): boolean; (a: number): string; }, Symbol(f15, Decl(typeAliases.ts, 67, 17), Decl(typeAliases.ts, 69, 41))
+>a : number, Symbol(a, Decl(typeAliases.ts, 70, 21))
+>Meters : number, Symbol(Meters, Decl(typeAliases.ts, 63, 39))
 
 f15(E.x).toLowerCase();
 >f15(E.x).toLowerCase() : string
->f15(E.x).toLowerCase : () => string, Symbol(String.toLowerCase,Decl(lib.d.ts,399,51))
+>f15(E.x).toLowerCase : () => string, Symbol(String.toLowerCase, Decl(lib.d.ts, 399, 51))
 >f15(E.x) : string
->f15 : { (a: string): boolean; (a: number): string; }, Symbol(f15,Decl(typeAliases.ts,67,17),Decl(typeAliases.ts,69,41))
->E.x : E, Symbol(E.x,Decl(typeAliases.ts,67,8))
->E : typeof E, Symbol(E,Decl(typeAliases.ts,65,20))
->x : E, Symbol(E.x,Decl(typeAliases.ts,67,8))
->toLowerCase : () => string, Symbol(String.toLowerCase,Decl(lib.d.ts,399,51))
+>f15 : { (a: string): boolean; (a: number): string; }, Symbol(f15, Decl(typeAliases.ts, 67, 17), Decl(typeAliases.ts, 69, 41))
+>E.x : E, Symbol(E.x, Decl(typeAliases.ts, 67, 8))
+>E : typeof E, Symbol(E, Decl(typeAliases.ts, 65, 20))
+>x : E, Symbol(E.x, Decl(typeAliases.ts, 67, 8))
+>toLowerCase : () => string, Symbol(String.toLowerCase, Decl(lib.d.ts, 399, 51))
 
 type StringAndBoolean = [string, boolean]
->StringAndBoolean : [string, boolean], Symbol(StringAndBoolean,Decl(typeAliases.ts,71,23))
+>StringAndBoolean : [string, boolean], Symbol(StringAndBoolean, Decl(typeAliases.ts, 71, 23))
 
 declare function f16(s: StringAndBoolean): string;
->f16 : (s: [string, boolean]) => string, Symbol(f16,Decl(typeAliases.ts,73,41))
->s : [string, boolean], Symbol(s,Decl(typeAliases.ts,74,21))
->StringAndBoolean : [string, boolean], Symbol(StringAndBoolean,Decl(typeAliases.ts,71,23))
+>f16 : (s: [string, boolean]) => string, Symbol(f16, Decl(typeAliases.ts, 73, 41))
+>s : [string, boolean], Symbol(s, Decl(typeAliases.ts, 74, 21))
+>StringAndBoolean : [string, boolean], Symbol(StringAndBoolean, Decl(typeAliases.ts, 71, 23))
 
 var x: [string, boolean];
->x : [string, boolean], Symbol(x,Decl(typeAliases.ts,75,3))
+>x : [string, boolean], Symbol(x, Decl(typeAliases.ts, 75, 3))
 
 f16(x);
 >f16(x) : string
->f16 : (s: [string, boolean]) => string, Symbol(f16,Decl(typeAliases.ts,73,41))
->x : [string, boolean], Symbol(x,Decl(typeAliases.ts,75,3))
+>f16 : (s: [string, boolean]) => string, Symbol(f16, Decl(typeAliases.ts, 73, 41))
+>x : [string, boolean], Symbol(x, Decl(typeAliases.ts, 75, 3))
 
 var y: StringAndBoolean = ["1", false];
->y : [string, boolean], Symbol(y,Decl(typeAliases.ts,78,3))
->StringAndBoolean : [string, boolean], Symbol(StringAndBoolean,Decl(typeAliases.ts,71,23))
+>y : [string, boolean], Symbol(y, Decl(typeAliases.ts, 78, 3))
+>StringAndBoolean : [string, boolean], Symbol(StringAndBoolean, Decl(typeAliases.ts, 71, 23))
 >["1", false] : [string, boolean]
 >"1" : string
 >false : boolean
 
 y[0].toLowerCase();
 >y[0].toLowerCase() : string
->y[0].toLowerCase : () => string, Symbol(String.toLowerCase,Decl(lib.d.ts,399,51))
+>y[0].toLowerCase : () => string, Symbol(String.toLowerCase, Decl(lib.d.ts, 399, 51))
 >y[0] : string
->y : [string, boolean], Symbol(y,Decl(typeAliases.ts,78,3))
+>y : [string, boolean], Symbol(y, Decl(typeAliases.ts, 78, 3))
 >0 : number, Symbol(0)
->toLowerCase : () => string, Symbol(String.toLowerCase,Decl(lib.d.ts,399,51))
+>toLowerCase : () => string, Symbol(String.toLowerCase, Decl(lib.d.ts, 399, 51))
 

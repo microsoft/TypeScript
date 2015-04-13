@@ -2,7 +2,7 @@
 var [, , z] = [1, 2, 4];
 > : undefined
 > : undefined
->z : number, Symbol(z,Decl(declarationEmitDestructuringArrayPattern5.ts,0,8))
+>z : number, Symbol(z, Decl(declarationEmitDestructuringArrayPattern5.ts, 0, 8))
 >[1, 2, 4] : [number, number, number]
 >1 : number
 >2 : number
@@ -10,7 +10,7 @@ var [, , z] = [1, 2, 4];
 
 var [, a, , ] = [3, 4, 5];
 > : undefined
->a : number, Symbol(a,Decl(declarationEmitDestructuringArrayPattern5.ts,1,6))
+>a : number, Symbol(a, Decl(declarationEmitDestructuringArrayPattern5.ts, 1, 6))
 > : undefined
 >[3, 4, 5] : [number, number, number]
 >3 : number
@@ -21,7 +21,7 @@ var [, , [, b, ]] = [3,5,[0, 1]];
 > : undefined
 > : undefined
 > : undefined
->b : number, Symbol(b,Decl(declarationEmitDestructuringArrayPattern5.ts,2,11))
+>b : number, Symbol(b, Decl(declarationEmitDestructuringArrayPattern5.ts, 2, 11))
 >[3,5,[0, 1]] : [number, number, [number, number]]
 >3 : number
 >5 : number

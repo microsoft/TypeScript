@@ -4,364 +4,364 @@
 // optional or rest) and types, and identical return types.
 
 class A {
->A : A, Symbol(A,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,0,0))
+>A : A, Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 0, 0))
 
     foo<T, U>(x: T, y?: U): T { return null; }
->foo : <T, U>(x: T, y?: U) => T, Symbol(foo,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,4,9))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,5,8))
->U : U, Symbol(U,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,5,10))
->x : T, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,5,14))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,5,8))
->y : U, Symbol(y,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,5,19))
->U : U, Symbol(U,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,5,10))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,5,8))
+>foo : <T, U>(x: T, y?: U) => T, Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 4, 9))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 5, 8))
+>U : U, Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 5, 10))
+>x : T, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 5, 14))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 5, 8))
+>y : U, Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 5, 19))
+>U : U, Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 5, 10))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 5, 8))
 >null : null
 }
 
 class B<T, U> {
->B : B<T, U>, Symbol(B,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,6,1))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,8,8))
->U : U, Symbol(U,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,8,10))
+>B : B<T, U>, Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 6, 1))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 8, 8))
+>U : U, Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 8, 10))
 
     foo(x: T, y: U): T { return null; }
->foo : (x: T, y: U) => T, Symbol(foo,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,8,15))
->x : T, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,9,8))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,8,8))
->y : U, Symbol(y,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,9,13))
->U : U, Symbol(U,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,8,10))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,8,8))
+>foo : (x: T, y: U) => T, Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 8, 15))
+>x : T, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 9, 8))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 8, 8))
+>y : U, Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 9, 13))
+>U : U, Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 8, 10))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 8, 8))
 >null : null
 }
 
 class C<T, U> {
->C : C<T, U>, Symbol(C,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,10,1))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,12,8))
->U : U, Symbol(U,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,12,10))
+>C : C<T, U>, Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 10, 1))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 12, 8))
+>U : U, Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 12, 10))
 
     foo(x: T, y?: U): T { return null; }
->foo : (x: T, y?: U) => T, Symbol(foo,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,12,15))
->x : T, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,13,8))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,12,8))
->y : U, Symbol(y,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,13,13))
->U : U, Symbol(U,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,12,10))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,12,8))
+>foo : (x: T, y?: U) => T, Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 12, 15))
+>x : T, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 13, 8))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 12, 8))
+>y : U, Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 13, 13))
+>U : U, Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 12, 10))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 12, 8))
 >null : null
 }
 
 interface I<T, U> {
->I : I<T, U>, Symbol(I,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,14,1))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,16,12))
->U : U, Symbol(U,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,16,14))
+>I : I<T, U>, Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 14, 1))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 16, 12))
+>U : U, Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 16, 14))
 
     foo(x: T, y?: U): T;
->foo : (x: T, y?: U) => T, Symbol(foo,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,16,19))
->x : T, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,17,8))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,16,12))
->y : U, Symbol(y,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,17,13))
->U : U, Symbol(U,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,16,14))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,16,12))
+>foo : (x: T, y?: U) => T, Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 16, 19))
+>x : T, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 17, 8))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 16, 12))
+>y : U, Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 17, 13))
+>U : U, Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 16, 14))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 16, 12))
 }
 
 interface I2 {
->I2 : I2, Symbol(I2,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,18,1))
+>I2 : I2, Symbol(I2, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 18, 1))
 
     foo<T, U>(x: T, y: U): T;
->foo : <T, U>(x: T, y: U) => T, Symbol(foo,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,20,14))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,21,8))
->U : U, Symbol(U,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,21,10))
->x : T, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,21,14))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,21,8))
->y : U, Symbol(y,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,21,19))
->U : U, Symbol(U,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,21,10))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,21,8))
+>foo : <T, U>(x: T, y: U) => T, Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 20, 14))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 21, 8))
+>U : U, Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 21, 10))
+>x : T, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 21, 14))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 21, 8))
+>y : U, Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 21, 19))
+>U : U, Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 21, 10))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 21, 8))
 }
 
 var a: { foo<T, U>(x: T, y?: U): T }
->a : { foo<T, U>(x: T, y?: U): T; }, Symbol(a,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,24,3))
->foo : <T, U>(x: T, y?: U) => T, Symbol(foo,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,24,8))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,24,13))
->U : U, Symbol(U,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,24,15))
->x : T, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,24,19))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,24,13))
->y : U, Symbol(y,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,24,24))
->U : U, Symbol(U,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,24,15))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,24,13))
+>a : { foo<T, U>(x: T, y?: U): T; }, Symbol(a, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 24, 3))
+>foo : <T, U>(x: T, y?: U) => T, Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 24, 8))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 24, 13))
+>U : U, Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 24, 15))
+>x : T, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 24, 19))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 24, 13))
+>y : U, Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 24, 24))
+>U : U, Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 24, 15))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 24, 13))
 
 var b = { foo<T, U>(x: T, y: U) { return x; } };
->b : { foo<T, U>(x: T, y: U): T; }, Symbol(b,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,25,3))
+>b : { foo<T, U>(x: T, y: U): T; }, Symbol(b, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 3))
 >{ foo<T, U>(x: T, y: U) { return x; } } : { foo<T, U>(x: T, y: U): T; }
->foo : <T, U>(x: T, y: U) => T, Symbol(foo,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,25,9))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,25,14))
->U : U, Symbol(U,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,25,16))
->x : T, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,25,20))
->T : T, Symbol(T,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,25,14))
->y : U, Symbol(y,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,25,25))
->U : U, Symbol(U,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,25,16))
->x : T, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,25,20))
+>foo : <T, U>(x: T, y: U) => T, Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 9))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 14))
+>U : U, Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 16))
+>x : T, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 20))
+>T : T, Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 14))
+>y : U, Symbol(y, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 25))
+>U : U, Symbol(U, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 16))
+>x : T, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 20))
 
 function foo1(x: A);
->foo1 : { (x: A): any; (x: A): any; }, Symbol(foo1,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,25,48),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,27,20),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,28,20))
->x : A, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,27,14))
->A : A, Symbol(A,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,0,0))
+>foo1 : { (x: A): any; (x: A): any; }, Symbol(foo1, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 48), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 27, 20), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 28, 20))
+>x : A, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 27, 14))
+>A : A, Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 0, 0))
 
 function foo1(x: A); // error
->foo1 : { (x: A): any; (x: A): any; }, Symbol(foo1,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,25,48),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,27,20),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,28,20))
->x : A, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,28,14))
->A : A, Symbol(A,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,0,0))
+>foo1 : { (x: A): any; (x: A): any; }, Symbol(foo1, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 48), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 27, 20), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 28, 20))
+>x : A, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 28, 14))
+>A : A, Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 0, 0))
 
 function foo1(x: any) { }
->foo1 : { (x: A): any; (x: A): any; }, Symbol(foo1,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,25,48),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,27,20),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,28,20))
->x : any, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,29,14))
+>foo1 : { (x: A): any; (x: A): any; }, Symbol(foo1, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 48), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 27, 20), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 28, 20))
+>x : any, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 29, 14))
 
 function foo1b(x: B<string, number>);
->foo1b : { (x: B<string, number>): any; (x: B<string, number>): any; }, Symbol(foo1b,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,29,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,31,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,32,37))
->x : B<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,31,15))
->B : B<T, U>, Symbol(B,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,6,1))
+>foo1b : { (x: B<string, number>): any; (x: B<string, number>): any; }, Symbol(foo1b, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 29, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 31, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 32, 37))
+>x : B<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 31, 15))
+>B : B<T, U>, Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 6, 1))
 
 function foo1b(x: B<string, number>); // error
->foo1b : { (x: B<string, number>): any; (x: B<string, number>): any; }, Symbol(foo1b,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,29,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,31,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,32,37))
->x : B<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,32,15))
->B : B<T, U>, Symbol(B,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,6,1))
+>foo1b : { (x: B<string, number>): any; (x: B<string, number>): any; }, Symbol(foo1b, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 29, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 31, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 32, 37))
+>x : B<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 32, 15))
+>B : B<T, U>, Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 6, 1))
 
 function foo1b(x: any) { }
->foo1b : { (x: B<string, number>): any; (x: B<string, number>): any; }, Symbol(foo1b,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,29,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,31,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,32,37))
->x : any, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,33,15))
+>foo1b : { (x: B<string, number>): any; (x: B<string, number>): any; }, Symbol(foo1b, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 29, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 31, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 32, 37))
+>x : any, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 33, 15))
 
 function foo1c(x: C<string, number>);
->foo1c : { (x: C<string, number>): any; (x: C<string, number>): any; }, Symbol(foo1c,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,33,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,35,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,36,37))
->x : C<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,35,15))
->C : C<T, U>, Symbol(C,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,10,1))
+>foo1c : { (x: C<string, number>): any; (x: C<string, number>): any; }, Symbol(foo1c, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 33, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 35, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 36, 37))
+>x : C<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 35, 15))
+>C : C<T, U>, Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 10, 1))
 
 function foo1c(x: C<string, number>); // error
->foo1c : { (x: C<string, number>): any; (x: C<string, number>): any; }, Symbol(foo1c,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,33,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,35,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,36,37))
->x : C<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,36,15))
->C : C<T, U>, Symbol(C,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,10,1))
+>foo1c : { (x: C<string, number>): any; (x: C<string, number>): any; }, Symbol(foo1c, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 33, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 35, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 36, 37))
+>x : C<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 36, 15))
+>C : C<T, U>, Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 10, 1))
 
 function foo1c(x: any) { }
->foo1c : { (x: C<string, number>): any; (x: C<string, number>): any; }, Symbol(foo1c,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,33,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,35,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,36,37))
->x : any, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,37,15))
+>foo1c : { (x: C<string, number>): any; (x: C<string, number>): any; }, Symbol(foo1c, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 33, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 35, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 36, 37))
+>x : any, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 37, 15))
 
 function foo2(x: I<string, number>);
->foo2 : { (x: I<string, number>): any; (x: I<string, number>): any; }, Symbol(foo2,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,37,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,39,36),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,40,36))
->x : I<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,39,14))
->I : I<T, U>, Symbol(I,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,14,1))
+>foo2 : { (x: I<string, number>): any; (x: I<string, number>): any; }, Symbol(foo2, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 37, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 39, 36), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 40, 36))
+>x : I<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 39, 14))
+>I : I<T, U>, Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 14, 1))
 
 function foo2(x: I<string, number>); // error
->foo2 : { (x: I<string, number>): any; (x: I<string, number>): any; }, Symbol(foo2,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,37,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,39,36),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,40,36))
->x : I<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,40,14))
->I : I<T, U>, Symbol(I,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,14,1))
+>foo2 : { (x: I<string, number>): any; (x: I<string, number>): any; }, Symbol(foo2, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 37, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 39, 36), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 40, 36))
+>x : I<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 40, 14))
+>I : I<T, U>, Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 14, 1))
 
 function foo2(x: any) { }
->foo2 : { (x: I<string, number>): any; (x: I<string, number>): any; }, Symbol(foo2,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,37,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,39,36),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,40,36))
->x : any, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,41,14))
+>foo2 : { (x: I<string, number>): any; (x: I<string, number>): any; }, Symbol(foo2, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 37, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 39, 36), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 40, 36))
+>x : any, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 41, 14))
 
 function foo3(x: typeof a);
->foo3 : { (x: { foo<T, U>(x: T, y?: U): T; }): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo3,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,41,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,43,27),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,44,27))
->x : { foo<T, U>(x: T, y?: U): T; }, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,43,14))
->a : { foo<T, U>(x: T, y?: U): T; }, Symbol(a,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,24,3))
+>foo3 : { (x: { foo<T, U>(x: T, y?: U): T; }): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo3, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 41, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 43, 27), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 44, 27))
+>x : { foo<T, U>(x: T, y?: U): T; }, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 43, 14))
+>a : { foo<T, U>(x: T, y?: U): T; }, Symbol(a, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 24, 3))
 
 function foo3(x: typeof a); // error
->foo3 : { (x: { foo<T, U>(x: T, y?: U): T; }): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo3,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,41,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,43,27),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,44,27))
->x : { foo<T, U>(x: T, y?: U): T; }, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,44,14))
->a : { foo<T, U>(x: T, y?: U): T; }, Symbol(a,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,24,3))
+>foo3 : { (x: { foo<T, U>(x: T, y?: U): T; }): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo3, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 41, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 43, 27), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 44, 27))
+>x : { foo<T, U>(x: T, y?: U): T; }, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 44, 14))
+>a : { foo<T, U>(x: T, y?: U): T; }, Symbol(a, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 24, 3))
 
 function foo3(x: any) { }
->foo3 : { (x: { foo<T, U>(x: T, y?: U): T; }): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo3,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,41,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,43,27),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,44,27))
->x : any, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,45,14))
+>foo3 : { (x: { foo<T, U>(x: T, y?: U): T; }): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo3, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 41, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 43, 27), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 44, 27))
+>x : any, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 45, 14))
 
 function foo4(x: typeof b);
->foo4 : { (x: { foo<T, U>(x: T, y: U): T; }): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }, Symbol(foo4,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,45,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,47,27),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,48,27))
->x : { foo<T, U>(x: T, y: U): T; }, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,47,14))
->b : { foo<T, U>(x: T, y: U): T; }, Symbol(b,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,25,3))
+>foo4 : { (x: { foo<T, U>(x: T, y: U): T; }): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }, Symbol(foo4, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 45, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 47, 27), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 48, 27))
+>x : { foo<T, U>(x: T, y: U): T; }, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 47, 14))
+>b : { foo<T, U>(x: T, y: U): T; }, Symbol(b, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 3))
 
 function foo4(x: typeof b); // error
->foo4 : { (x: { foo<T, U>(x: T, y: U): T; }): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }, Symbol(foo4,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,45,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,47,27),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,48,27))
->x : { foo<T, U>(x: T, y: U): T; }, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,48,14))
->b : { foo<T, U>(x: T, y: U): T; }, Symbol(b,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,25,3))
+>foo4 : { (x: { foo<T, U>(x: T, y: U): T; }): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }, Symbol(foo4, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 45, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 47, 27), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 48, 27))
+>x : { foo<T, U>(x: T, y: U): T; }, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 48, 14))
+>b : { foo<T, U>(x: T, y: U): T; }, Symbol(b, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 3))
 
 function foo4(x: any) { }
->foo4 : { (x: { foo<T, U>(x: T, y: U): T; }): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }, Symbol(foo4,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,45,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,47,27),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,48,27))
->x : any, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,49,14))
+>foo4 : { (x: { foo<T, U>(x: T, y: U): T; }): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }, Symbol(foo4, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 45, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 47, 27), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 48, 27))
+>x : any, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 49, 14))
 
 function foo5(x: A);
->foo5 : { (x: A): any; (x: B<string, number>): any; }, Symbol(foo5,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,49,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,51,20),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,52,36))
->x : A, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,51,14))
->A : A, Symbol(A,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,0,0))
+>foo5 : { (x: A): any; (x: B<string, number>): any; }, Symbol(foo5, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 49, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 51, 20), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 52, 36))
+>x : A, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 51, 14))
+>A : A, Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 0, 0))
 
 function foo5(x: B<string, number>); // ok
->foo5 : { (x: A): any; (x: B<string, number>): any; }, Symbol(foo5,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,49,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,51,20),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,52,36))
->x : B<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,52,14))
->B : B<T, U>, Symbol(B,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,6,1))
+>foo5 : { (x: A): any; (x: B<string, number>): any; }, Symbol(foo5, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 49, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 51, 20), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 52, 36))
+>x : B<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 52, 14))
+>B : B<T, U>, Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 6, 1))
 
 function foo5(x: any) { }
->foo5 : { (x: A): any; (x: B<string, number>): any; }, Symbol(foo5,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,49,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,51,20),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,52,36))
->x : any, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,53,14))
+>foo5 : { (x: A): any; (x: B<string, number>): any; }, Symbol(foo5, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 49, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 51, 20), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 52, 36))
+>x : any, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 53, 14))
 
 function foo5b(x: A);
->foo5b : { (x: A): any; (x: C<string, number>): any; }, Symbol(foo5b,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,53,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,55,21),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,56,37))
->x : A, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,55,15))
->A : A, Symbol(A,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,0,0))
+>foo5b : { (x: A): any; (x: C<string, number>): any; }, Symbol(foo5b, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 53, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 55, 21), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 56, 37))
+>x : A, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 55, 15))
+>A : A, Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 0, 0))
 
 function foo5b(x: C<string, number>); // ok
->foo5b : { (x: A): any; (x: C<string, number>): any; }, Symbol(foo5b,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,53,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,55,21),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,56,37))
->x : C<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,56,15))
->C : C<T, U>, Symbol(C,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,10,1))
+>foo5b : { (x: A): any; (x: C<string, number>): any; }, Symbol(foo5b, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 53, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 55, 21), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 56, 37))
+>x : C<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 56, 15))
+>C : C<T, U>, Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 10, 1))
 
 function foo5b(x: any) { }
->foo5b : { (x: A): any; (x: C<string, number>): any; }, Symbol(foo5b,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,53,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,55,21),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,56,37))
->x : any, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,57,15))
+>foo5b : { (x: A): any; (x: C<string, number>): any; }, Symbol(foo5b, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 53, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 55, 21), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 56, 37))
+>x : any, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 57, 15))
 
 function foo6(x: A);
->foo6 : { (x: A): any; (x: I<string, number>): any; }, Symbol(foo6,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,57,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,59,20),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,60,36))
->x : A, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,59,14))
->A : A, Symbol(A,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,0,0))
+>foo6 : { (x: A): any; (x: I<string, number>): any; }, Symbol(foo6, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 57, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 59, 20), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 60, 36))
+>x : A, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 59, 14))
+>A : A, Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 0, 0))
 
 function foo6(x: I<string, number>); // ok
->foo6 : { (x: A): any; (x: I<string, number>): any; }, Symbol(foo6,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,57,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,59,20),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,60,36))
->x : I<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,60,14))
->I : I<T, U>, Symbol(I,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,14,1))
+>foo6 : { (x: A): any; (x: I<string, number>): any; }, Symbol(foo6, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 57, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 59, 20), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 60, 36))
+>x : I<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 60, 14))
+>I : I<T, U>, Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 14, 1))
 
 function foo6(x: any) { }
->foo6 : { (x: A): any; (x: I<string, number>): any; }, Symbol(foo6,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,57,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,59,20),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,60,36))
->x : any, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,61,14))
+>foo6 : { (x: A): any; (x: I<string, number>): any; }, Symbol(foo6, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 57, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 59, 20), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 60, 36))
+>x : any, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 61, 14))
 
 function foo7(x: A);
->foo7 : { (x: A): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo7,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,61,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,63,20),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,64,27))
->x : A, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,63,14))
->A : A, Symbol(A,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,0,0))
+>foo7 : { (x: A): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo7, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 61, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 63, 20), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 64, 27))
+>x : A, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 63, 14))
+>A : A, Symbol(A, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 0, 0))
 
 function foo7(x: typeof a); // no error, bug?
->foo7 : { (x: A): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo7,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,61,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,63,20),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,64,27))
->x : { foo<T, U>(x: T, y?: U): T; }, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,64,14))
->a : { foo<T, U>(x: T, y?: U): T; }, Symbol(a,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,24,3))
+>foo7 : { (x: A): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo7, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 61, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 63, 20), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 64, 27))
+>x : { foo<T, U>(x: T, y?: U): T; }, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 64, 14))
+>a : { foo<T, U>(x: T, y?: U): T; }, Symbol(a, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 24, 3))
 
 function foo7(x: any) { }
->foo7 : { (x: A): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo7,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,61,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,63,20),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,64,27))
->x : any, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,65,14))
+>foo7 : { (x: A): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo7, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 61, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 63, 20), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 64, 27))
+>x : any, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 65, 14))
 
 function foo8(x: B<string, number>);
->foo8 : { (x: B<string, number>): any; (x: I<string, number>): any; }, Symbol(foo8,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,65,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,67,36),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,68,36))
->x : B<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,67,14))
->B : B<T, U>, Symbol(B,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,6,1))
+>foo8 : { (x: B<string, number>): any; (x: I<string, number>): any; }, Symbol(foo8, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 65, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 67, 36), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 68, 36))
+>x : B<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 67, 14))
+>B : B<T, U>, Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 6, 1))
 
 function foo8(x: I<string, number>); // ok
->foo8 : { (x: B<string, number>): any; (x: I<string, number>): any; }, Symbol(foo8,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,65,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,67,36),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,68,36))
->x : I<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,68,14))
->I : I<T, U>, Symbol(I,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,14,1))
+>foo8 : { (x: B<string, number>): any; (x: I<string, number>): any; }, Symbol(foo8, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 65, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 67, 36), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 68, 36))
+>x : I<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 68, 14))
+>I : I<T, U>, Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 14, 1))
 
 function foo8(x: any) { }
->foo8 : { (x: B<string, number>): any; (x: I<string, number>): any; }, Symbol(foo8,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,65,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,67,36),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,68,36))
->x : any, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,69,14))
+>foo8 : { (x: B<string, number>): any; (x: I<string, number>): any; }, Symbol(foo8, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 65, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 67, 36), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 68, 36))
+>x : any, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 69, 14))
 
 function foo9(x: B<string, number>);
->foo9 : { (x: B<string, number>): any; (x: C<string, number>): any; }, Symbol(foo9,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,69,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,71,36),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,72,36))
->x : B<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,71,14))
->B : B<T, U>, Symbol(B,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,6,1))
+>foo9 : { (x: B<string, number>): any; (x: C<string, number>): any; }, Symbol(foo9, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 69, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 71, 36), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 72, 36))
+>x : B<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 71, 14))
+>B : B<T, U>, Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 6, 1))
 
 function foo9(x: C<string, number>); // ok
->foo9 : { (x: B<string, number>): any; (x: C<string, number>): any; }, Symbol(foo9,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,69,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,71,36),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,72,36))
->x : C<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,72,14))
->C : C<T, U>, Symbol(C,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,10,1))
+>foo9 : { (x: B<string, number>): any; (x: C<string, number>): any; }, Symbol(foo9, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 69, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 71, 36), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 72, 36))
+>x : C<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 72, 14))
+>C : C<T, U>, Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 10, 1))
 
 function foo9(x: any) { }
->foo9 : { (x: B<string, number>): any; (x: C<string, number>): any; }, Symbol(foo9,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,69,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,71,36),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,72,36))
->x : any, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,73,14))
+>foo9 : { (x: B<string, number>): any; (x: C<string, number>): any; }, Symbol(foo9, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 69, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 71, 36), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 72, 36))
+>x : any, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 73, 14))
 
 function foo10(x: B<string, number>);
->foo10 : { (x: B<string, number>): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo10,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,73,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,75,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,76,28))
->x : B<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,75,15))
->B : B<T, U>, Symbol(B,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,6,1))
+>foo10 : { (x: B<string, number>): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo10, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 73, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 75, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 76, 28))
+>x : B<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 75, 15))
+>B : B<T, U>, Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 6, 1))
 
 function foo10(x: typeof a); // ok
->foo10 : { (x: B<string, number>): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo10,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,73,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,75,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,76,28))
->x : { foo<T, U>(x: T, y?: U): T; }, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,76,15))
->a : { foo<T, U>(x: T, y?: U): T; }, Symbol(a,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,24,3))
+>foo10 : { (x: B<string, number>): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo10, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 73, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 75, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 76, 28))
+>x : { foo<T, U>(x: T, y?: U): T; }, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 76, 15))
+>a : { foo<T, U>(x: T, y?: U): T; }, Symbol(a, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 24, 3))
 
 function foo10(x: any) { }
->foo10 : { (x: B<string, number>): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo10,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,73,25),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,75,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,76,28))
->x : any, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,77,15))
+>foo10 : { (x: B<string, number>): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo10, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 73, 25), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 75, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 76, 28))
+>x : any, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 77, 15))
 
 function foo11(x: B<string, number>);
->foo11 : { (x: B<string, number>): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }, Symbol(foo11,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,77,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,79,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,80,28))
->x : B<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,79,15))
->B : B<T, U>, Symbol(B,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,6,1))
+>foo11 : { (x: B<string, number>): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }, Symbol(foo11, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 77, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 79, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 80, 28))
+>x : B<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 79, 15))
+>B : B<T, U>, Symbol(B, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 6, 1))
 
 function foo11(x: typeof b); // ok
->foo11 : { (x: B<string, number>): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }, Symbol(foo11,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,77,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,79,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,80,28))
->x : { foo<T, U>(x: T, y: U): T; }, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,80,15))
->b : { foo<T, U>(x: T, y: U): T; }, Symbol(b,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,25,3))
+>foo11 : { (x: B<string, number>): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }, Symbol(foo11, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 77, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 79, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 80, 28))
+>x : { foo<T, U>(x: T, y: U): T; }, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 80, 15))
+>b : { foo<T, U>(x: T, y: U): T; }, Symbol(b, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 3))
 
 function foo11(x: any) { }
->foo11 : { (x: B<string, number>): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }, Symbol(foo11,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,77,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,79,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,80,28))
->x : any, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,81,15))
+>foo11 : { (x: B<string, number>): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }, Symbol(foo11, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 77, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 79, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 80, 28))
+>x : any, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 81, 15))
 
 function foo12(x: I<string, number>);
->foo12 : { (x: I<string, number>): any; (x: C<string, number>): any; }, Symbol(foo12,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,81,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,83,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,84,37))
->x : I<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,83,15))
->I : I<T, U>, Symbol(I,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,14,1))
+>foo12 : { (x: I<string, number>): any; (x: C<string, number>): any; }, Symbol(foo12, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 81, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 83, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 84, 37))
+>x : I<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 83, 15))
+>I : I<T, U>, Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 14, 1))
 
 function foo12(x: C<string, number>); // error
->foo12 : { (x: I<string, number>): any; (x: C<string, number>): any; }, Symbol(foo12,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,81,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,83,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,84,37))
->x : C<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,84,15))
->C : C<T, U>, Symbol(C,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,10,1))
+>foo12 : { (x: I<string, number>): any; (x: C<string, number>): any; }, Symbol(foo12, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 81, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 83, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 84, 37))
+>x : C<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 84, 15))
+>C : C<T, U>, Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 10, 1))
 
 function foo12(x: any) { }
->foo12 : { (x: I<string, number>): any; (x: C<string, number>): any; }, Symbol(foo12,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,81,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,83,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,84,37))
->x : any, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,85,15))
+>foo12 : { (x: I<string, number>): any; (x: C<string, number>): any; }, Symbol(foo12, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 81, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 83, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 84, 37))
+>x : any, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 85, 15))
 
 function foo12b(x: I2);
->foo12b : { (x: I2): any; (x: C<string, number>): any; }, Symbol(foo12b,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,85,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,87,23),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,88,38))
->x : I2, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,87,16))
->I2 : I2, Symbol(I2,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,18,1))
+>foo12b : { (x: I2): any; (x: C<string, number>): any; }, Symbol(foo12b, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 85, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 87, 23), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 88, 38))
+>x : I2, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 87, 16))
+>I2 : I2, Symbol(I2, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 18, 1))
 
 function foo12b(x: C<string, number>); // ok
->foo12b : { (x: I2): any; (x: C<string, number>): any; }, Symbol(foo12b,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,85,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,87,23),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,88,38))
->x : C<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,88,16))
->C : C<T, U>, Symbol(C,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,10,1))
+>foo12b : { (x: I2): any; (x: C<string, number>): any; }, Symbol(foo12b, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 85, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 87, 23), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 88, 38))
+>x : C<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 88, 16))
+>C : C<T, U>, Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 10, 1))
 
 function foo12b(x: any) { }
->foo12b : { (x: I2): any; (x: C<string, number>): any; }, Symbol(foo12b,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,85,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,87,23),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,88,38))
->x : any, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,89,16))
+>foo12b : { (x: I2): any; (x: C<string, number>): any; }, Symbol(foo12b, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 85, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 87, 23), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 88, 38))
+>x : any, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 89, 16))
 
 function foo13(x: I<string, number>);
->foo13 : { (x: I<string, number>): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo13,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,89,27),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,91,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,92,28))
->x : I<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,91,15))
->I : I<T, U>, Symbol(I,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,14,1))
+>foo13 : { (x: I<string, number>): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo13, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 89, 27), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 91, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 92, 28))
+>x : I<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 91, 15))
+>I : I<T, U>, Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 14, 1))
 
 function foo13(x: typeof a); // ok
->foo13 : { (x: I<string, number>): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo13,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,89,27),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,91,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,92,28))
->x : { foo<T, U>(x: T, y?: U): T; }, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,92,15))
->a : { foo<T, U>(x: T, y?: U): T; }, Symbol(a,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,24,3))
+>foo13 : { (x: I<string, number>): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo13, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 89, 27), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 91, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 92, 28))
+>x : { foo<T, U>(x: T, y?: U): T; }, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 92, 15))
+>a : { foo<T, U>(x: T, y?: U): T; }, Symbol(a, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 24, 3))
 
 function foo13(x: any) { }
->foo13 : { (x: I<string, number>): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo13,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,89,27),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,91,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,92,28))
->x : any, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,93,15))
+>foo13 : { (x: I<string, number>): any; (x: { foo<T, U>(x: T, y?: U): T; }): any; }, Symbol(foo13, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 89, 27), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 91, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 92, 28))
+>x : any, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 93, 15))
 
 function foo14(x: I<string, number>);
->foo14 : { (x: I<string, number>): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }, Symbol(foo14,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,93,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,95,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,96,28))
->x : I<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,95,15))
->I : I<T, U>, Symbol(I,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,14,1))
+>foo14 : { (x: I<string, number>): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }, Symbol(foo14, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 93, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 95, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 96, 28))
+>x : I<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 95, 15))
+>I : I<T, U>, Symbol(I, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 14, 1))
 
 function foo14(x: typeof b); // ok
->foo14 : { (x: I<string, number>): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }, Symbol(foo14,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,93,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,95,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,96,28))
->x : { foo<T, U>(x: T, y: U): T; }, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,96,15))
->b : { foo<T, U>(x: T, y: U): T; }, Symbol(b,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,25,3))
+>foo14 : { (x: I<string, number>): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }, Symbol(foo14, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 93, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 95, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 96, 28))
+>x : { foo<T, U>(x: T, y: U): T; }, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 96, 15))
+>b : { foo<T, U>(x: T, y: U): T; }, Symbol(b, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 25, 3))
 
 function foo14(x: any) { }
->foo14 : { (x: I<string, number>): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }, Symbol(foo14,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,93,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,95,37),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,96,28))
->x : any, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,97,15))
+>foo14 : { (x: I<string, number>): any; (x: { foo<T, U>(x: T, y: U): T; }): any; }, Symbol(foo14, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 93, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 95, 37), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 96, 28))
+>x : any, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 97, 15))
 
 function foo15(x: I2);
->foo15 : { (x: I2): any; (x: C<string, number>): any; }, Symbol(foo15,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,97,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,99,22),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,100,37))
->x : I2, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,99,15))
->I2 : I2, Symbol(I2,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,18,1))
+>foo15 : { (x: I2): any; (x: C<string, number>): any; }, Symbol(foo15, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 97, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 99, 22), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 100, 37))
+>x : I2, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 99, 15))
+>I2 : I2, Symbol(I2, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 18, 1))
 
 function foo15(x: C<string, number>); // ok
->foo15 : { (x: I2): any; (x: C<string, number>): any; }, Symbol(foo15,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,97,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,99,22),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,100,37))
->x : C<string, number>, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,100,15))
->C : C<T, U>, Symbol(C,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,10,1))
+>foo15 : { (x: I2): any; (x: C<string, number>): any; }, Symbol(foo15, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 97, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 99, 22), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 100, 37))
+>x : C<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 100, 15))
+>C : C<T, U>, Symbol(C, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 10, 1))
 
 function foo15(x: any) { }
->foo15 : { (x: I2): any; (x: C<string, number>): any; }, Symbol(foo15,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,97,26),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,99,22),Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,100,37))
->x : any, Symbol(x,Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts,101,15))
+>foo15 : { (x: I2): any; (x: C<string, number>): any; }, Symbol(foo15, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 97, 26), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 99, 22), Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 100, 37))
+>x : any, Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesOptionalParams3.ts, 101, 15))
 

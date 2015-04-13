@@ -1,58 +1,58 @@
 === tests/cases/conformance/es6/defaultParameters/emitDefaultParametersFunctionExpressionES6.ts ===
 var lambda1 = (y = "hello") => { }
->lambda1 : (y?: string) => void, Symbol(lambda1,Decl(emitDefaultParametersFunctionExpressionES6.ts,0,3))
+>lambda1 : (y?: string) => void, Symbol(lambda1, Decl(emitDefaultParametersFunctionExpressionES6.ts, 0, 3))
 >(y = "hello") => { } : (y?: string) => void
->y : string, Symbol(y,Decl(emitDefaultParametersFunctionExpressionES6.ts,0,15))
+>y : string, Symbol(y, Decl(emitDefaultParametersFunctionExpressionES6.ts, 0, 15))
 >"hello" : string
 
 var lambda2 = (x: number, y = "hello") => { }
->lambda2 : (x: number, y?: string) => void, Symbol(lambda2,Decl(emitDefaultParametersFunctionExpressionES6.ts,1,3))
+>lambda2 : (x: number, y?: string) => void, Symbol(lambda2, Decl(emitDefaultParametersFunctionExpressionES6.ts, 1, 3))
 >(x: number, y = "hello") => { } : (x: number, y?: string) => void
->x : number, Symbol(x,Decl(emitDefaultParametersFunctionExpressionES6.ts,1,15))
->y : string, Symbol(y,Decl(emitDefaultParametersFunctionExpressionES6.ts,1,25))
+>x : number, Symbol(x, Decl(emitDefaultParametersFunctionExpressionES6.ts, 1, 15))
+>y : string, Symbol(y, Decl(emitDefaultParametersFunctionExpressionES6.ts, 1, 25))
 >"hello" : string
 
 var lambda3 = (x: number, y = "hello", ...rest) => { }
->lambda3 : (x: number, y?: string, ...rest: any[]) => void, Symbol(lambda3,Decl(emitDefaultParametersFunctionExpressionES6.ts,2,3))
+>lambda3 : (x: number, y?: string, ...rest: any[]) => void, Symbol(lambda3, Decl(emitDefaultParametersFunctionExpressionES6.ts, 2, 3))
 >(x: number, y = "hello", ...rest) => { } : (x: number, y?: string, ...rest: any[]) => void
->x : number, Symbol(x,Decl(emitDefaultParametersFunctionExpressionES6.ts,2,15))
->y : string, Symbol(y,Decl(emitDefaultParametersFunctionExpressionES6.ts,2,25))
+>x : number, Symbol(x, Decl(emitDefaultParametersFunctionExpressionES6.ts, 2, 15))
+>y : string, Symbol(y, Decl(emitDefaultParametersFunctionExpressionES6.ts, 2, 25))
 >"hello" : string
->rest : any[], Symbol(rest,Decl(emitDefaultParametersFunctionExpressionES6.ts,2,38))
+>rest : any[], Symbol(rest, Decl(emitDefaultParametersFunctionExpressionES6.ts, 2, 38))
 
 var lambda4 = (y = "hello", ...rest) => { }
->lambda4 : (y?: string, ...rest: any[]) => void, Symbol(lambda4,Decl(emitDefaultParametersFunctionExpressionES6.ts,3,3))
+>lambda4 : (y?: string, ...rest: any[]) => void, Symbol(lambda4, Decl(emitDefaultParametersFunctionExpressionES6.ts, 3, 3))
 >(y = "hello", ...rest) => { } : (y?: string, ...rest: any[]) => void
->y : string, Symbol(y,Decl(emitDefaultParametersFunctionExpressionES6.ts,3,15))
+>y : string, Symbol(y, Decl(emitDefaultParametersFunctionExpressionES6.ts, 3, 15))
 >"hello" : string
->rest : any[], Symbol(rest,Decl(emitDefaultParametersFunctionExpressionES6.ts,3,27))
+>rest : any[], Symbol(rest, Decl(emitDefaultParametersFunctionExpressionES6.ts, 3, 27))
 
 var x = function (str = "hello", ...rest) { }
->x : (str?: string, ...rest: any[]) => void, Symbol(x,Decl(emitDefaultParametersFunctionExpressionES6.ts,5,3))
+>x : (str?: string, ...rest: any[]) => void, Symbol(x, Decl(emitDefaultParametersFunctionExpressionES6.ts, 5, 3))
 >function (str = "hello", ...rest) { } : (str?: string, ...rest: any[]) => void
->str : string, Symbol(str,Decl(emitDefaultParametersFunctionExpressionES6.ts,5,18))
+>str : string, Symbol(str, Decl(emitDefaultParametersFunctionExpressionES6.ts, 5, 18))
 >"hello" : string
->rest : any[], Symbol(rest,Decl(emitDefaultParametersFunctionExpressionES6.ts,5,32))
+>rest : any[], Symbol(rest, Decl(emitDefaultParametersFunctionExpressionES6.ts, 5, 32))
 
 var y = (function (num = 10, boo = false, ...rest) { })()
->y : void, Symbol(y,Decl(emitDefaultParametersFunctionExpressionES6.ts,6,3))
+>y : void, Symbol(y, Decl(emitDefaultParametersFunctionExpressionES6.ts, 6, 3))
 >(function (num = 10, boo = false, ...rest) { })() : void
 >(function (num = 10, boo = false, ...rest) { }) : (num?: number, boo?: boolean, ...rest: any[]) => void
 >function (num = 10, boo = false, ...rest) { } : (num?: number, boo?: boolean, ...rest: any[]) => void
->num : number, Symbol(num,Decl(emitDefaultParametersFunctionExpressionES6.ts,6,19))
+>num : number, Symbol(num, Decl(emitDefaultParametersFunctionExpressionES6.ts, 6, 19))
 >10 : number
->boo : boolean, Symbol(boo,Decl(emitDefaultParametersFunctionExpressionES6.ts,6,28))
+>boo : boolean, Symbol(boo, Decl(emitDefaultParametersFunctionExpressionES6.ts, 6, 28))
 >false : boolean
->rest : any[], Symbol(rest,Decl(emitDefaultParametersFunctionExpressionES6.ts,6,41))
+>rest : any[], Symbol(rest, Decl(emitDefaultParametersFunctionExpressionES6.ts, 6, 41))
 
 var z = (function (num: number, boo = false, ...rest) { })(10)
->z : void, Symbol(z,Decl(emitDefaultParametersFunctionExpressionES6.ts,7,3))
+>z : void, Symbol(z, Decl(emitDefaultParametersFunctionExpressionES6.ts, 7, 3))
 >(function (num: number, boo = false, ...rest) { })(10) : void
 >(function (num: number, boo = false, ...rest) { }) : (num: number, boo?: boolean, ...rest: any[]) => void
 >function (num: number, boo = false, ...rest) { } : (num: number, boo?: boolean, ...rest: any[]) => void
->num : number, Symbol(num,Decl(emitDefaultParametersFunctionExpressionES6.ts,7,19))
->boo : boolean, Symbol(boo,Decl(emitDefaultParametersFunctionExpressionES6.ts,7,31))
+>num : number, Symbol(num, Decl(emitDefaultParametersFunctionExpressionES6.ts, 7, 19))
+>boo : boolean, Symbol(boo, Decl(emitDefaultParametersFunctionExpressionES6.ts, 7, 31))
 >false : boolean
->rest : any[], Symbol(rest,Decl(emitDefaultParametersFunctionExpressionES6.ts,7,44))
+>rest : any[], Symbol(rest, Decl(emitDefaultParametersFunctionExpressionES6.ts, 7, 44))
 >10 : number
 

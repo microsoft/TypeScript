@@ -1,20 +1,20 @@
 === tests/cases/conformance/decorators/class/method/decoratorOnClassMethod5.ts ===
 declare function dec(): <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>;
->dec : () => <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>, Symbol(dec,Decl(decoratorOnClassMethod5.ts,0,0))
->T : T, Symbol(T,Decl(decoratorOnClassMethod5.ts,0,25))
->target : any, Symbol(target,Decl(decoratorOnClassMethod5.ts,0,28))
->propertyKey : string, Symbol(propertyKey,Decl(decoratorOnClassMethod5.ts,0,40))
->descriptor : TypedPropertyDescriptor<T>, Symbol(descriptor,Decl(decoratorOnClassMethod5.ts,0,61))
->TypedPropertyDescriptor : TypedPropertyDescriptor<T>, Symbol(TypedPropertyDescriptor,Decl(lib.d.ts,1171,36))
->T : T, Symbol(T,Decl(decoratorOnClassMethod5.ts,0,25))
->TypedPropertyDescriptor : TypedPropertyDescriptor<T>, Symbol(TypedPropertyDescriptor,Decl(lib.d.ts,1171,36))
->T : T, Symbol(T,Decl(decoratorOnClassMethod5.ts,0,25))
+>dec : () => <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>, Symbol(dec, Decl(decoratorOnClassMethod5.ts, 0, 0))
+>T : T, Symbol(T, Decl(decoratorOnClassMethod5.ts, 0, 25))
+>target : any, Symbol(target, Decl(decoratorOnClassMethod5.ts, 0, 28))
+>propertyKey : string, Symbol(propertyKey, Decl(decoratorOnClassMethod5.ts, 0, 40))
+>descriptor : TypedPropertyDescriptor<T>, Symbol(descriptor, Decl(decoratorOnClassMethod5.ts, 0, 61))
+>TypedPropertyDescriptor : TypedPropertyDescriptor<T>, Symbol(TypedPropertyDescriptor, Decl(lib.d.ts, 1171, 36))
+>T : T, Symbol(T, Decl(decoratorOnClassMethod5.ts, 0, 25))
+>TypedPropertyDescriptor : TypedPropertyDescriptor<T>, Symbol(TypedPropertyDescriptor, Decl(lib.d.ts, 1171, 36))
+>T : T, Symbol(T, Decl(decoratorOnClassMethod5.ts, 0, 25))
 
 class C {
->C : C, Symbol(C,Decl(decoratorOnClassMethod5.ts,0,132))
+>C : C, Symbol(C, Decl(decoratorOnClassMethod5.ts, 0, 132))
 
     @dec() ["method"]() {}
 >dec() : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
->dec : () => <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>, Symbol(dec,Decl(decoratorOnClassMethod5.ts,0,0))
+>dec : () => <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>, Symbol(dec, Decl(decoratorOnClassMethod5.ts, 0, 0))
 >"method" : string
 }

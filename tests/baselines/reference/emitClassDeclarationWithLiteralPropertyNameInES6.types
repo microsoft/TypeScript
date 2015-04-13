@@ -1,6 +1,6 @@
 === tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithLiteralPropertyNameInES6.ts ===
 class B {
->B : B, Symbol(B,Decl(emitClassDeclarationWithLiteralPropertyNameInES6.ts,0,0))
+>B : B, Symbol(B, Decl(emitClassDeclarationWithLiteralPropertyNameInES6.ts, 0, 0))
 
     "hello" = 10;
 >10 : number
@@ -18,7 +18,7 @@ class B {
     0b1110() {}
     11() { }
     interface() { }
->interface : () => void, Symbol(interface,Decl(emitClassDeclarationWithLiteralPropertyNameInES6.ts,7,12))
+>interface : () => void, Symbol(interface, Decl(emitClassDeclarationWithLiteralPropertyNameInES6.ts, 7, 12))
 
     static "hi" = 10000;
 >10000 : number

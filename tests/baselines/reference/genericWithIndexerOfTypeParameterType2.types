@@ -1,32 +1,32 @@
 === tests/cases/compiler/genericWithIndexerOfTypeParameterType2.ts ===
 export class Collection<TItem extends CollectionItem> {
->Collection : Collection<TItem>, Symbol(Collection,Decl(genericWithIndexerOfTypeParameterType2.ts,0,0))
->TItem : TItem, Symbol(TItem,Decl(genericWithIndexerOfTypeParameterType2.ts,0,24))
->CollectionItem : CollectionItem, Symbol(CollectionItem,Decl(genericWithIndexerOfTypeParameterType2.ts,6,1))
+>Collection : Collection<TItem>, Symbol(Collection, Decl(genericWithIndexerOfTypeParameterType2.ts, 0, 0))
+>TItem : TItem, Symbol(TItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 0, 24))
+>CollectionItem : CollectionItem, Symbol(CollectionItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 6, 1))
 
     _itemsByKey: { [key: string]: TItem; };
->_itemsByKey : { [key: string]: TItem; }, Symbol(_itemsByKey,Decl(genericWithIndexerOfTypeParameterType2.ts,0,55))
->key : string, Symbol(key,Decl(genericWithIndexerOfTypeParameterType2.ts,1,20))
->TItem : TItem, Symbol(TItem,Decl(genericWithIndexerOfTypeParameterType2.ts,0,24))
+>_itemsByKey : { [key: string]: TItem; }, Symbol(_itemsByKey, Decl(genericWithIndexerOfTypeParameterType2.ts, 0, 55))
+>key : string, Symbol(key, Decl(genericWithIndexerOfTypeParameterType2.ts, 1, 20))
+>TItem : TItem, Symbol(TItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 0, 24))
 }
 
 export class List extends Collection<ListItem>{
->List : List, Symbol(List,Decl(genericWithIndexerOfTypeParameterType2.ts,2,1))
->Collection : Collection<TItem>, Symbol(Collection,Decl(genericWithIndexerOfTypeParameterType2.ts,0,0))
->ListItem : ListItem, Symbol(ListItem,Decl(genericWithIndexerOfTypeParameterType2.ts,8,30))
+>List : List, Symbol(List, Decl(genericWithIndexerOfTypeParameterType2.ts, 2, 1))
+>Collection : Collection<TItem>, Symbol(Collection, Decl(genericWithIndexerOfTypeParameterType2.ts, 0, 0))
+>ListItem : ListItem, Symbol(ListItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 8, 30))
 
     Bar() {}
->Bar : () => void, Symbol(Bar,Decl(genericWithIndexerOfTypeParameterType2.ts,4,47))
+>Bar : () => void, Symbol(Bar, Decl(genericWithIndexerOfTypeParameterType2.ts, 4, 47))
 }
 
 export class CollectionItem {}
->CollectionItem : CollectionItem, Symbol(CollectionItem,Decl(genericWithIndexerOfTypeParameterType2.ts,6,1))
+>CollectionItem : CollectionItem, Symbol(CollectionItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 6, 1))
 
 export class ListItem extends CollectionItem {
->ListItem : ListItem, Symbol(ListItem,Decl(genericWithIndexerOfTypeParameterType2.ts,8,30))
->CollectionItem : CollectionItem, Symbol(CollectionItem,Decl(genericWithIndexerOfTypeParameterType2.ts,6,1))
+>ListItem : ListItem, Symbol(ListItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 8, 30))
+>CollectionItem : CollectionItem, Symbol(CollectionItem, Decl(genericWithIndexerOfTypeParameterType2.ts, 6, 1))
 
     __isNew: boolean;
->__isNew : boolean, Symbol(__isNew,Decl(genericWithIndexerOfTypeParameterType2.ts,10,46))
+>__isNew : boolean, Symbol(__isNew, Decl(genericWithIndexerOfTypeParameterType2.ts, 10, 46))
 }
 

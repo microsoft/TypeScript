@@ -1,35 +1,35 @@
 === tests/cases/compiler/exportImportMultipleFiles_userCode.ts ===
 import lib = require('./exportImportMultipleFiles_library');
->lib : typeof lib, Symbol(lib,Decl(exportImportMultipleFiles_userCode.ts,0,0))
+>lib : typeof lib, Symbol(lib, Decl(exportImportMultipleFiles_userCode.ts, 0, 0))
 
 lib.math.add(3, 4); // Shouldnt be error
 >lib.math.add(3, 4) : any
->lib.math.add : (a: any, b: any) => any, Symbol(lib.math.add,Decl(exportImportMultipleFiles_math.ts,0,0))
->lib.math : typeof lib.math, Symbol(lib.math,Decl(exportImportMultipleFiles_library.ts,0,0))
->lib : typeof lib, Symbol(lib,Decl(exportImportMultipleFiles_userCode.ts,0,0))
->math : typeof lib.math, Symbol(lib.math,Decl(exportImportMultipleFiles_library.ts,0,0))
->add : (a: any, b: any) => any, Symbol(lib.math.add,Decl(exportImportMultipleFiles_math.ts,0,0))
+>lib.math.add : (a: any, b: any) => any, Symbol(lib.math.add, Decl(exportImportMultipleFiles_math.ts, 0, 0))
+>lib.math : typeof lib.math, Symbol(lib.math, Decl(exportImportMultipleFiles_library.ts, 0, 0))
+>lib : typeof lib, Symbol(lib, Decl(exportImportMultipleFiles_userCode.ts, 0, 0))
+>math : typeof lib.math, Symbol(lib.math, Decl(exportImportMultipleFiles_library.ts, 0, 0))
+>add : (a: any, b: any) => any, Symbol(lib.math.add, Decl(exportImportMultipleFiles_math.ts, 0, 0))
 >3 : number
 >4 : number
 
 === tests/cases/compiler/exportImportMultipleFiles_math.ts ===
 export function add(a, b) { return a + b; }
->add : (a: any, b: any) => any, Symbol(add,Decl(exportImportMultipleFiles_math.ts,0,0))
->a : any, Symbol(a,Decl(exportImportMultipleFiles_math.ts,0,20))
->b : any, Symbol(b,Decl(exportImportMultipleFiles_math.ts,0,22))
+>add : (a: any, b: any) => any, Symbol(add, Decl(exportImportMultipleFiles_math.ts, 0, 0))
+>a : any, Symbol(a, Decl(exportImportMultipleFiles_math.ts, 0, 20))
+>b : any, Symbol(b, Decl(exportImportMultipleFiles_math.ts, 0, 22))
 >a + b : any
->a : any, Symbol(a,Decl(exportImportMultipleFiles_math.ts,0,20))
->b : any, Symbol(b,Decl(exportImportMultipleFiles_math.ts,0,22))
+>a : any, Symbol(a, Decl(exportImportMultipleFiles_math.ts, 0, 20))
+>b : any, Symbol(b, Decl(exportImportMultipleFiles_math.ts, 0, 22))
 
 === tests/cases/compiler/exportImportMultipleFiles_library.ts ===
 export import math = require("exportImportMultipleFiles_math");
->math : typeof math, Symbol(math,Decl(exportImportMultipleFiles_library.ts,0,0))
+>math : typeof math, Symbol(math, Decl(exportImportMultipleFiles_library.ts, 0, 0))
 
 math.add(3, 4); // OK
 >math.add(3, 4) : any
->math.add : (a: any, b: any) => any, Symbol(math.add,Decl(exportImportMultipleFiles_math.ts,0,0))
->math : typeof math, Symbol(math,Decl(exportImportMultipleFiles_library.ts,0,0))
->add : (a: any, b: any) => any, Symbol(math.add,Decl(exportImportMultipleFiles_math.ts,0,0))
+>math.add : (a: any, b: any) => any, Symbol(math.add, Decl(exportImportMultipleFiles_math.ts, 0, 0))
+>math : typeof math, Symbol(math, Decl(exportImportMultipleFiles_library.ts, 0, 0))
+>add : (a: any, b: any) => any, Symbol(math.add, Decl(exportImportMultipleFiles_math.ts, 0, 0))
 >3 : number
 >4 : number
 

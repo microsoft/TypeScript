@@ -1,8 +1,8 @@
 === tests/cases/conformance/parser/ecmascript5/MethodSignatures/parserMethodSignature3.ts ===
 interface I {
->I : I, Symbol(I,Decl(parserMethodSignature3.ts,0,0))
+>I : I, Symbol(I, Decl(parserMethodSignature3.ts, 0, 0))
 
   C<T>();
->C : <T>() => any, Symbol(C,Decl(parserMethodSignature3.ts,0,13))
->T : T, Symbol(T,Decl(parserMethodSignature3.ts,1,4))
+>C : <T>() => any, Symbol(C, Decl(parserMethodSignature3.ts, 0, 13))
+>T : T, Symbol(T, Decl(parserMethodSignature3.ts, 1, 4))
 }

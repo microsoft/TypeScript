@@ -1,35 +1,35 @@
 === tests/cases/compiler/internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts ===
 export module a {
->a : any, Symbol(a,Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts,0,0))
+>a : any, Symbol(a, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts, 0, 0))
 
     export module b {
->b : any, Symbol(b,Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts,0,17))
+>b : any, Symbol(b, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts, 0, 17))
 
         export interface I {
->I : I, Symbol(I,Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts,1,21))
+>I : I, Symbol(I, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts, 1, 21))
 
             foo();
->foo : () => any, Symbol(foo,Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts,2,28))
+>foo : () => any, Symbol(foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts, 2, 28))
         }
     }
 }
 
 export module c {
->c : typeof c, Symbol(c,Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts,6,1))
+>c : typeof c, Symbol(c, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts, 6, 1))
 
     import b = a.b;
->b : any, Symbol(b,Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts,8,17))
->a : any, Symbol(a,Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts,0,0))
->b : any, Symbol(b,Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts,0,17))
+>b : any, Symbol(b, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts, 8, 17))
+>a : any, Symbol(a, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts, 0, 0))
+>b : any, Symbol(b, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts, 0, 17))
 
     export var x: b.I;
->x : b.I, Symbol(x,Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts,10,14))
->b : any, Symbol(b,Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts,8,17))
->I : b.I, Symbol(b.I,Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts,1,21))
+>x : b.I, Symbol(x, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts, 10, 14))
+>b : any, Symbol(b, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts, 8, 17))
+>I : b.I, Symbol(b.I, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts, 1, 21))
 
     x.foo();
 >x.foo() : any
->x.foo : () => any, Symbol(b.I.foo,Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts,2,28))
->x : b.I, Symbol(x,Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts,10,14))
->foo : () => any, Symbol(b.I.foo,Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts,2,28))
+>x.foo : () => any, Symbol(b.I.foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts, 2, 28))
+>x : b.I, Symbol(x, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts, 10, 14))
+>foo : () => any, Symbol(b.I.foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExport.ts, 2, 28))
 }

@@ -1,7 +1,7 @@
 === tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration5.ts ===
 function foo();
->foo : () => any, Symbol(foo,Decl(parserFunctionDeclaration5.ts,0,0),Decl(parserFunctionDeclaration5.ts,0,15))
+>foo : () => any, Symbol(foo, Decl(parserFunctionDeclaration5.ts, 0, 0), Decl(parserFunctionDeclaration5.ts, 0, 15))
 
 function foo() { }
->foo : () => any, Symbol(foo,Decl(parserFunctionDeclaration5.ts,0,0),Decl(parserFunctionDeclaration5.ts,0,15))
+>foo : () => any, Symbol(foo, Decl(parserFunctionDeclaration5.ts, 0, 0), Decl(parserFunctionDeclaration5.ts, 0, 15))
 

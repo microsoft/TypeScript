@@ -1,11 +1,11 @@
 === tests/cases/compiler/functionWithDefaultParameterWithNoStatements7.ts ===
 function foo(a = false) { }
->foo : (a?: boolean) => void, Symbol(foo,Decl(functionWithDefaultParameterWithNoStatements7.ts,0,0))
->a : boolean, Symbol(a,Decl(functionWithDefaultParameterWithNoStatements7.ts,0,13))
+>foo : (a?: boolean) => void, Symbol(foo, Decl(functionWithDefaultParameterWithNoStatements7.ts, 0, 0))
+>a : boolean, Symbol(a, Decl(functionWithDefaultParameterWithNoStatements7.ts, 0, 13))
 >false : boolean
 
 function bar(a = false) {
->bar : (a?: boolean) => void, Symbol(bar,Decl(functionWithDefaultParameterWithNoStatements7.ts,0,27))
->a : boolean, Symbol(a,Decl(functionWithDefaultParameterWithNoStatements7.ts,2,13))
+>bar : (a?: boolean) => void, Symbol(bar, Decl(functionWithDefaultParameterWithNoStatements7.ts, 0, 27))
+>a : boolean, Symbol(a, Decl(functionWithDefaultParameterWithNoStatements7.ts, 2, 13))
 >false : boolean
 }

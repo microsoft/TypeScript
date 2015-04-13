@@ -1,47 +1,47 @@
 === tests/cases/compiler/contextualSignatureInstantiation3.ts ===
 function map<T, U>(items: T[], f: (x: T) => U): U[]{
->map : <T, U>(items: T[], f: (x: T) => U) => U[], Symbol(map,Decl(contextualSignatureInstantiation3.ts,0,0))
->T : T, Symbol(T,Decl(contextualSignatureInstantiation3.ts,0,13))
->U : U, Symbol(U,Decl(contextualSignatureInstantiation3.ts,0,15))
->items : T[], Symbol(items,Decl(contextualSignatureInstantiation3.ts,0,19))
->T : T, Symbol(T,Decl(contextualSignatureInstantiation3.ts,0,13))
->f : (x: T) => U, Symbol(f,Decl(contextualSignatureInstantiation3.ts,0,30))
->x : T, Symbol(x,Decl(contextualSignatureInstantiation3.ts,0,35))
->T : T, Symbol(T,Decl(contextualSignatureInstantiation3.ts,0,13))
->U : U, Symbol(U,Decl(contextualSignatureInstantiation3.ts,0,15))
->U : U, Symbol(U,Decl(contextualSignatureInstantiation3.ts,0,15))
+>map : <T, U>(items: T[], f: (x: T) => U) => U[], Symbol(map, Decl(contextualSignatureInstantiation3.ts, 0, 0))
+>T : T, Symbol(T, Decl(contextualSignatureInstantiation3.ts, 0, 13))
+>U : U, Symbol(U, Decl(contextualSignatureInstantiation3.ts, 0, 15))
+>items : T[], Symbol(items, Decl(contextualSignatureInstantiation3.ts, 0, 19))
+>T : T, Symbol(T, Decl(contextualSignatureInstantiation3.ts, 0, 13))
+>f : (x: T) => U, Symbol(f, Decl(contextualSignatureInstantiation3.ts, 0, 30))
+>x : T, Symbol(x, Decl(contextualSignatureInstantiation3.ts, 0, 35))
+>T : T, Symbol(T, Decl(contextualSignatureInstantiation3.ts, 0, 13))
+>U : U, Symbol(U, Decl(contextualSignatureInstantiation3.ts, 0, 15))
+>U : U, Symbol(U, Decl(contextualSignatureInstantiation3.ts, 0, 15))
 
     return items.map(f);
 >items.map(f) : U[]
->items.map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
->items : T[], Symbol(items,Decl(contextualSignatureInstantiation3.ts,0,19))
->map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
->f : (x: T) => U, Symbol(f,Decl(contextualSignatureInstantiation3.ts,0,30))
+>items.map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
+>items : T[], Symbol(items, Decl(contextualSignatureInstantiation3.ts, 0, 19))
+>map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
+>f : (x: T) => U, Symbol(f, Decl(contextualSignatureInstantiation3.ts, 0, 30))
 }
 
 function identity<T>(x: T) {
->identity : <T>(x: T) => T, Symbol(identity,Decl(contextualSignatureInstantiation3.ts,2,1))
->T : T, Symbol(T,Decl(contextualSignatureInstantiation3.ts,4,18))
->x : T, Symbol(x,Decl(contextualSignatureInstantiation3.ts,4,21))
->T : T, Symbol(T,Decl(contextualSignatureInstantiation3.ts,4,18))
+>identity : <T>(x: T) => T, Symbol(identity, Decl(contextualSignatureInstantiation3.ts, 2, 1))
+>T : T, Symbol(T, Decl(contextualSignatureInstantiation3.ts, 4, 18))
+>x : T, Symbol(x, Decl(contextualSignatureInstantiation3.ts, 4, 21))
+>T : T, Symbol(T, Decl(contextualSignatureInstantiation3.ts, 4, 18))
 
     return x;
->x : T, Symbol(x,Decl(contextualSignatureInstantiation3.ts,4,21))
+>x : T, Symbol(x, Decl(contextualSignatureInstantiation3.ts, 4, 21))
 }
 
 function singleton<T>(x: T) {
->singleton : <T>(x: T) => T[], Symbol(singleton,Decl(contextualSignatureInstantiation3.ts,6,1))
->T : T, Symbol(T,Decl(contextualSignatureInstantiation3.ts,8,19))
->x : T, Symbol(x,Decl(contextualSignatureInstantiation3.ts,8,22))
->T : T, Symbol(T,Decl(contextualSignatureInstantiation3.ts,8,19))
+>singleton : <T>(x: T) => T[], Symbol(singleton, Decl(contextualSignatureInstantiation3.ts, 6, 1))
+>T : T, Symbol(T, Decl(contextualSignatureInstantiation3.ts, 8, 19))
+>x : T, Symbol(x, Decl(contextualSignatureInstantiation3.ts, 8, 22))
+>T : T, Symbol(T, Decl(contextualSignatureInstantiation3.ts, 8, 19))
 
     return [x];
 >[x] : T[]
->x : T, Symbol(x,Decl(contextualSignatureInstantiation3.ts,8,22))
+>x : T, Symbol(x, Decl(contextualSignatureInstantiation3.ts, 8, 22))
 }
 
 var xs = [1, 2, 3];
->xs : number[], Symbol(xs,Decl(contextualSignatureInstantiation3.ts,12,3))
+>xs : number[], Symbol(xs, Decl(contextualSignatureInstantiation3.ts, 12, 3))
 >[1, 2, 3] : number[]
 >1 : number
 >2 : number
@@ -49,38 +49,38 @@ var xs = [1, 2, 3];
 
 // Have compiler check that we get the correct types
 var v1: number[];
->v1 : number[], Symbol(v1,Decl(contextualSignatureInstantiation3.ts,15,3),Decl(contextualSignatureInstantiation3.ts,16,3),Decl(contextualSignatureInstantiation3.ts,17,3))
+>v1 : number[], Symbol(v1, Decl(contextualSignatureInstantiation3.ts, 15, 3), Decl(contextualSignatureInstantiation3.ts, 16, 3), Decl(contextualSignatureInstantiation3.ts, 17, 3))
 
 var v1 = xs.map(identity);      // Error if not number[]
->v1 : number[], Symbol(v1,Decl(contextualSignatureInstantiation3.ts,15,3),Decl(contextualSignatureInstantiation3.ts,16,3),Decl(contextualSignatureInstantiation3.ts,17,3))
+>v1 : number[], Symbol(v1, Decl(contextualSignatureInstantiation3.ts, 15, 3), Decl(contextualSignatureInstantiation3.ts, 16, 3), Decl(contextualSignatureInstantiation3.ts, 17, 3))
 >xs.map(identity) : number[]
->xs.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
->xs : number[], Symbol(xs,Decl(contextualSignatureInstantiation3.ts,12,3))
->map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
->identity : <T>(x: T) => T, Symbol(identity,Decl(contextualSignatureInstantiation3.ts,2,1))
+>xs.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
+>xs : number[], Symbol(xs, Decl(contextualSignatureInstantiation3.ts, 12, 3))
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
+>identity : <T>(x: T) => T, Symbol(identity, Decl(contextualSignatureInstantiation3.ts, 2, 1))
 
 var v1 = map(xs, identity);     // Error if not number[]
->v1 : number[], Symbol(v1,Decl(contextualSignatureInstantiation3.ts,15,3),Decl(contextualSignatureInstantiation3.ts,16,3),Decl(contextualSignatureInstantiation3.ts,17,3))
+>v1 : number[], Symbol(v1, Decl(contextualSignatureInstantiation3.ts, 15, 3), Decl(contextualSignatureInstantiation3.ts, 16, 3), Decl(contextualSignatureInstantiation3.ts, 17, 3))
 >map(xs, identity) : number[]
->map : <T, U>(items: T[], f: (x: T) => U) => U[], Symbol(map,Decl(contextualSignatureInstantiation3.ts,0,0))
->xs : number[], Symbol(xs,Decl(contextualSignatureInstantiation3.ts,12,3))
->identity : <T>(x: T) => T, Symbol(identity,Decl(contextualSignatureInstantiation3.ts,2,1))
+>map : <T, U>(items: T[], f: (x: T) => U) => U[], Symbol(map, Decl(contextualSignatureInstantiation3.ts, 0, 0))
+>xs : number[], Symbol(xs, Decl(contextualSignatureInstantiation3.ts, 12, 3))
+>identity : <T>(x: T) => T, Symbol(identity, Decl(contextualSignatureInstantiation3.ts, 2, 1))
 
 var v2: number[][];         
->v2 : number[][], Symbol(v2,Decl(contextualSignatureInstantiation3.ts,19,3),Decl(contextualSignatureInstantiation3.ts,20,3),Decl(contextualSignatureInstantiation3.ts,21,3))
+>v2 : number[][], Symbol(v2, Decl(contextualSignatureInstantiation3.ts, 19, 3), Decl(contextualSignatureInstantiation3.ts, 20, 3), Decl(contextualSignatureInstantiation3.ts, 21, 3))
 
 var v2 = xs.map(singleton);     // Error if not number[][]
->v2 : number[][], Symbol(v2,Decl(contextualSignatureInstantiation3.ts,19,3),Decl(contextualSignatureInstantiation3.ts,20,3),Decl(contextualSignatureInstantiation3.ts,21,3))
+>v2 : number[][], Symbol(v2, Decl(contextualSignatureInstantiation3.ts, 19, 3), Decl(contextualSignatureInstantiation3.ts, 20, 3), Decl(contextualSignatureInstantiation3.ts, 21, 3))
 >xs.map(singleton) : number[][]
->xs.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
->xs : number[], Symbol(xs,Decl(contextualSignatureInstantiation3.ts,12,3))
->map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
->singleton : <T>(x: T) => T[], Symbol(singleton,Decl(contextualSignatureInstantiation3.ts,6,1))
+>xs.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
+>xs : number[], Symbol(xs, Decl(contextualSignatureInstantiation3.ts, 12, 3))
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
+>singleton : <T>(x: T) => T[], Symbol(singleton, Decl(contextualSignatureInstantiation3.ts, 6, 1))
 
 var v2 = map(xs, singleton);    // Error if not number[][]
->v2 : number[][], Symbol(v2,Decl(contextualSignatureInstantiation3.ts,19,3),Decl(contextualSignatureInstantiation3.ts,20,3),Decl(contextualSignatureInstantiation3.ts,21,3))
+>v2 : number[][], Symbol(v2, Decl(contextualSignatureInstantiation3.ts, 19, 3), Decl(contextualSignatureInstantiation3.ts, 20, 3), Decl(contextualSignatureInstantiation3.ts, 21, 3))
 >map(xs, singleton) : number[][]
->map : <T, U>(items: T[], f: (x: T) => U) => U[], Symbol(map,Decl(contextualSignatureInstantiation3.ts,0,0))
->xs : number[], Symbol(xs,Decl(contextualSignatureInstantiation3.ts,12,3))
->singleton : <T>(x: T) => T[], Symbol(singleton,Decl(contextualSignatureInstantiation3.ts,6,1))
+>map : <T, U>(items: T[], f: (x: T) => U) => U[], Symbol(map, Decl(contextualSignatureInstantiation3.ts, 0, 0))
+>xs : number[], Symbol(xs, Decl(contextualSignatureInstantiation3.ts, 12, 3))
+>singleton : <T>(x: T) => T[], Symbol(singleton, Decl(contextualSignatureInstantiation3.ts, 6, 1))
 

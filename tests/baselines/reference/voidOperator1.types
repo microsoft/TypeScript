@@ -1,16 +1,16 @@
 === tests/cases/compiler/voidOperator1.ts ===
 var x: any = void 1;
->x : any, Symbol(x,Decl(voidOperator1.ts,0,3))
+>x : any, Symbol(x, Decl(voidOperator1.ts, 0, 3))
 >void 1 : undefined
 >1 : number
 
 var y: void = void 1;
->y : void, Symbol(y,Decl(voidOperator1.ts,1,3))
+>y : void, Symbol(y, Decl(voidOperator1.ts, 1, 3))
 >void 1 : undefined
 >1 : number
 
 var z = void 1;
->z : any, Symbol(z,Decl(voidOperator1.ts,2,3))
+>z : any, Symbol(z, Decl(voidOperator1.ts, 2, 3))
 >void 1 : undefined
 >1 : number
 

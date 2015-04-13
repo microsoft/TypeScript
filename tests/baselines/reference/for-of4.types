@@ -1,9 +1,9 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of4.ts ===
 for (var v of [0]) {
->v : number, Symbol(v,Decl(for-of4.ts,0,8))
+>v : number, Symbol(v, Decl(for-of4.ts, 0, 8))
 >[0] : number[]
 >0 : number
 
     v;
->v : number, Symbol(v,Decl(for-of4.ts,0,8))
+>v : number, Symbol(v, Decl(for-of4.ts, 0, 8))
 }

@@ -1,20 +1,20 @@
 === tests/cases/compiler/anyInferenceAnonymousFunctions.ts ===
 var paired: any[];
->paired : any[], Symbol(paired,Decl(anyInferenceAnonymousFunctions.ts,0,3))
+>paired : any[], Symbol(paired, Decl(anyInferenceAnonymousFunctions.ts, 0, 3))
 
 paired.reduce(function (a1, a2) {
 >paired.reduce(function (a1, a2) {    return a1.concat({});} , []) : any
->paired.reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }, Symbol(Array.reduce,Decl(lib.d.ts,1129,93),Decl(lib.d.ts,1136,120))
->paired : any[], Symbol(paired,Decl(anyInferenceAnonymousFunctions.ts,0,3))
->reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }, Symbol(Array.reduce,Decl(lib.d.ts,1129,93),Decl(lib.d.ts,1136,120))
+>paired.reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }, Symbol(Array.reduce, Decl(lib.d.ts, 1129, 93), Decl(lib.d.ts, 1136, 120))
+>paired : any[], Symbol(paired, Decl(anyInferenceAnonymousFunctions.ts, 0, 3))
+>reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }, Symbol(Array.reduce, Decl(lib.d.ts, 1129, 93), Decl(lib.d.ts, 1136, 120))
 >function (a1, a2) {    return a1.concat({});} : (a1: any, a2: any) => any
->a1 : any, Symbol(a1,Decl(anyInferenceAnonymousFunctions.ts,2,24))
->a2 : any, Symbol(a2,Decl(anyInferenceAnonymousFunctions.ts,2,27))
+>a1 : any, Symbol(a1, Decl(anyInferenceAnonymousFunctions.ts, 2, 24))
+>a2 : any, Symbol(a2, Decl(anyInferenceAnonymousFunctions.ts, 2, 27))
 
     return a1.concat({});
 >a1.concat({}) : any
 >a1.concat : any
->a1 : any, Symbol(a1,Decl(anyInferenceAnonymousFunctions.ts,2,24))
+>a1 : any, Symbol(a1, Decl(anyInferenceAnonymousFunctions.ts, 2, 24))
 >concat : any
 >{} : {}
 
@@ -23,17 +23,17 @@ paired.reduce(function (a1, a2) {
 
 paired.reduce((b1, b2) => {
 >paired.reduce((b1, b2) => {    return b1.concat({});} , []) : any
->paired.reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }, Symbol(Array.reduce,Decl(lib.d.ts,1129,93),Decl(lib.d.ts,1136,120))
->paired : any[], Symbol(paired,Decl(anyInferenceAnonymousFunctions.ts,0,3))
->reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }, Symbol(Array.reduce,Decl(lib.d.ts,1129,93),Decl(lib.d.ts,1136,120))
+>paired.reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }, Symbol(Array.reduce, Decl(lib.d.ts, 1129, 93), Decl(lib.d.ts, 1136, 120))
+>paired : any[], Symbol(paired, Decl(anyInferenceAnonymousFunctions.ts, 0, 3))
+>reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }, Symbol(Array.reduce, Decl(lib.d.ts, 1129, 93), Decl(lib.d.ts, 1136, 120))
 >(b1, b2) => {    return b1.concat({});} : (b1: any, b2: any) => any
->b1 : any, Symbol(b1,Decl(anyInferenceAnonymousFunctions.ts,8,15))
->b2 : any, Symbol(b2,Decl(anyInferenceAnonymousFunctions.ts,8,18))
+>b1 : any, Symbol(b1, Decl(anyInferenceAnonymousFunctions.ts, 8, 15))
+>b2 : any, Symbol(b2, Decl(anyInferenceAnonymousFunctions.ts, 8, 18))
 
     return b1.concat({});
 >b1.concat({}) : any
 >b1.concat : any
->b1 : any, Symbol(b1,Decl(anyInferenceAnonymousFunctions.ts,8,15))
+>b1 : any, Symbol(b1, Decl(anyInferenceAnonymousFunctions.ts, 8, 15))
 >concat : any
 >{} : {}
 
@@ -42,38 +42,38 @@ paired.reduce((b1, b2) => {
 
 paired.reduce((b3, b4) => b3.concat({}), []);
 >paired.reduce((b3, b4) => b3.concat({}), []) : any
->paired.reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }, Symbol(Array.reduce,Decl(lib.d.ts,1129,93),Decl(lib.d.ts,1136,120))
->paired : any[], Symbol(paired,Decl(anyInferenceAnonymousFunctions.ts,0,3))
->reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }, Symbol(Array.reduce,Decl(lib.d.ts,1129,93),Decl(lib.d.ts,1136,120))
+>paired.reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }, Symbol(Array.reduce, Decl(lib.d.ts, 1129, 93), Decl(lib.d.ts, 1136, 120))
+>paired : any[], Symbol(paired, Decl(anyInferenceAnonymousFunctions.ts, 0, 3))
+>reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }, Symbol(Array.reduce, Decl(lib.d.ts, 1129, 93), Decl(lib.d.ts, 1136, 120))
 >(b3, b4) => b3.concat({}) : (b3: any, b4: any) => any
->b3 : any, Symbol(b3,Decl(anyInferenceAnonymousFunctions.ts,13,15))
->b4 : any, Symbol(b4,Decl(anyInferenceAnonymousFunctions.ts,13,18))
+>b3 : any, Symbol(b3, Decl(anyInferenceAnonymousFunctions.ts, 13, 15))
+>b4 : any, Symbol(b4, Decl(anyInferenceAnonymousFunctions.ts, 13, 18))
 >b3.concat({}) : any
 >b3.concat : any
->b3 : any, Symbol(b3,Decl(anyInferenceAnonymousFunctions.ts,13,15))
+>b3 : any, Symbol(b3, Decl(anyInferenceAnonymousFunctions.ts, 13, 15))
 >concat : any
 >{} : {}
 >[] : undefined[]
 
 paired.map((c1) => c1.count);
 >paired.map((c1) => c1.count) : any[]
->paired.map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
->paired : any[], Symbol(paired,Decl(anyInferenceAnonymousFunctions.ts,0,3))
->map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
+>paired.map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
+>paired : any[], Symbol(paired, Decl(anyInferenceAnonymousFunctions.ts, 0, 3))
+>map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
 >(c1) => c1.count : (c1: any) => any
->c1 : any, Symbol(c1,Decl(anyInferenceAnonymousFunctions.ts,15,12))
+>c1 : any, Symbol(c1, Decl(anyInferenceAnonymousFunctions.ts, 15, 12))
 >c1.count : any
->c1 : any, Symbol(c1,Decl(anyInferenceAnonymousFunctions.ts,15,12))
+>c1 : any, Symbol(c1, Decl(anyInferenceAnonymousFunctions.ts, 15, 12))
 >count : any
 
 paired.map(function (c2) { return c2.count; });
 >paired.map(function (c2) { return c2.count; }) : any[]
->paired.map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
->paired : any[], Symbol(paired,Decl(anyInferenceAnonymousFunctions.ts,0,3))
->map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
+>paired.map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
+>paired : any[], Symbol(paired, Decl(anyInferenceAnonymousFunctions.ts, 0, 3))
+>map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
 >function (c2) { return c2.count; } : (c2: any) => any
->c2 : any, Symbol(c2,Decl(anyInferenceAnonymousFunctions.ts,16,21))
+>c2 : any, Symbol(c2, Decl(anyInferenceAnonymousFunctions.ts, 16, 21))
 >c2.count : any
->c2 : any, Symbol(c2,Decl(anyInferenceAnonymousFunctions.ts,16,21))
+>c2 : any, Symbol(c2, Decl(anyInferenceAnonymousFunctions.ts, 16, 21))
 >count : any
 

@@ -1,17 +1,17 @@
 === tests/cases/compiler/anyPlusAny1.ts ===
 var x;
->x : any, Symbol(x,Decl(anyPlusAny1.ts,0,3))
+>x : any, Symbol(x, Decl(anyPlusAny1.ts, 0, 3))
 
 x.name = "hello";
 >x.name = "hello" : string
 >x.name : any
->x : any, Symbol(x,Decl(anyPlusAny1.ts,0,3))
+>x : any, Symbol(x, Decl(anyPlusAny1.ts, 0, 3))
 >name : any
 >"hello" : string
 
 var z = x + x;
->z : any, Symbol(z,Decl(anyPlusAny1.ts,2,3))
+>z : any, Symbol(z, Decl(anyPlusAny1.ts, 2, 3))
 >x + x : any
->x : any, Symbol(x,Decl(anyPlusAny1.ts,0,3))
->x : any, Symbol(x,Decl(anyPlusAny1.ts,0,3))
+>x : any, Symbol(x, Decl(anyPlusAny1.ts, 0, 3))
+>x : any, Symbol(x, Decl(anyPlusAny1.ts, 0, 3))
 

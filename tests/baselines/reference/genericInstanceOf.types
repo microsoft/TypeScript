@@ -1,31 +1,31 @@
 === tests/cases/compiler/genericInstanceOf.ts ===
 interface F {
->F : F, Symbol(F,Decl(genericInstanceOf.ts,0,0))
+>F : F, Symbol(F, Decl(genericInstanceOf.ts, 0, 0))
 
     (): number;
 }
 
 class C<T> {
->C : C<T>, Symbol(C,Decl(genericInstanceOf.ts,2,1))
->T : T, Symbol(T,Decl(genericInstanceOf.ts,4,8))
+>C : C<T>, Symbol(C, Decl(genericInstanceOf.ts, 2, 1))
+>T : T, Symbol(T, Decl(genericInstanceOf.ts, 4, 8))
 
     constructor(public a: T, public b: F) {}
->a : T, Symbol(a,Decl(genericInstanceOf.ts,5,16))
->T : T, Symbol(T,Decl(genericInstanceOf.ts,4,8))
->b : F, Symbol(b,Decl(genericInstanceOf.ts,5,28))
->F : F, Symbol(F,Decl(genericInstanceOf.ts,0,0))
+>a : T, Symbol(a, Decl(genericInstanceOf.ts, 5, 16))
+>T : T, Symbol(T, Decl(genericInstanceOf.ts, 4, 8))
+>b : F, Symbol(b, Decl(genericInstanceOf.ts, 5, 28))
+>F : F, Symbol(F, Decl(genericInstanceOf.ts, 0, 0))
 
     foo() {
->foo : () => void, Symbol(foo,Decl(genericInstanceOf.ts,5,44))
+>foo : () => void, Symbol(foo, Decl(genericInstanceOf.ts, 5, 44))
 
         if (this.a instanceof this.b) {
 >this.a instanceof this.b : boolean
->this.a : T, Symbol(a,Decl(genericInstanceOf.ts,5,16))
->this : C<T>, Symbol(C,Decl(genericInstanceOf.ts,2,1))
->a : T, Symbol(a,Decl(genericInstanceOf.ts,5,16))
->this.b : F, Symbol(b,Decl(genericInstanceOf.ts,5,28))
->this : C<T>, Symbol(C,Decl(genericInstanceOf.ts,2,1))
->b : F, Symbol(b,Decl(genericInstanceOf.ts,5,28))
+>this.a : T, Symbol(a, Decl(genericInstanceOf.ts, 5, 16))
+>this : C<T>, Symbol(C, Decl(genericInstanceOf.ts, 2, 1))
+>a : T, Symbol(a, Decl(genericInstanceOf.ts, 5, 16))
+>this.b : F, Symbol(b, Decl(genericInstanceOf.ts, 5, 28))
+>this : C<T>, Symbol(C, Decl(genericInstanceOf.ts, 2, 1))
+>b : F, Symbol(b, Decl(genericInstanceOf.ts, 5, 28))
         }
     }
 }

@@ -1,94 +1,94 @@
 === tests/cases/conformance/expressions/commaOperator/commaOperatorWithSecondOperandBooleanType.ts ===
 var ANY: any;
->ANY : any, Symbol(ANY,Decl(commaOperatorWithSecondOperandBooleanType.ts,0,3))
+>ANY : any, Symbol(ANY, Decl(commaOperatorWithSecondOperandBooleanType.ts, 0, 3))
 
 var BOOLEAN: boolean;
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
 
 var NUMBER: number;
->NUMBER : number, Symbol(NUMBER,Decl(commaOperatorWithSecondOperandBooleanType.ts,2,3))
+>NUMBER : number, Symbol(NUMBER, Decl(commaOperatorWithSecondOperandBooleanType.ts, 2, 3))
 
 var STRING: string;
->STRING : string, Symbol(STRING,Decl(commaOperatorWithSecondOperandBooleanType.ts,3,3))
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandBooleanType.ts, 3, 3))
 
 var OBJECT: Object;
->OBJECT : Object, Symbol(OBJECT,Decl(commaOperatorWithSecondOperandBooleanType.ts,4,3))
->Object : Object, Symbol(Object,Decl(lib.d.ts,92,1),Decl(lib.d.ts,223,11))
+>OBJECT : Object, Symbol(OBJECT, Decl(commaOperatorWithSecondOperandBooleanType.ts, 4, 3))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
 //The second operand type is boolean
 ANY, BOOLEAN;
 >ANY, BOOLEAN : boolean
->ANY : any, Symbol(ANY,Decl(commaOperatorWithSecondOperandBooleanType.ts,0,3))
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
+>ANY : any, Symbol(ANY, Decl(commaOperatorWithSecondOperandBooleanType.ts, 0, 3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
 
 BOOLEAN, BOOLEAN;
 >BOOLEAN, BOOLEAN : boolean
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
 
 NUMBER, BOOLEAN;
 >NUMBER, BOOLEAN : boolean
->NUMBER : number, Symbol(NUMBER,Decl(commaOperatorWithSecondOperandBooleanType.ts,2,3))
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
+>NUMBER : number, Symbol(NUMBER, Decl(commaOperatorWithSecondOperandBooleanType.ts, 2, 3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
 
 STRING, BOOLEAN;
 >STRING, BOOLEAN : boolean
->STRING : string, Symbol(STRING,Decl(commaOperatorWithSecondOperandBooleanType.ts,3,3))
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandBooleanType.ts, 3, 3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
 
 OBJECT, BOOLEAN;
 >OBJECT, BOOLEAN : boolean
->OBJECT : Object, Symbol(OBJECT,Decl(commaOperatorWithSecondOperandBooleanType.ts,4,3))
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
+>OBJECT : Object, Symbol(OBJECT, Decl(commaOperatorWithSecondOperandBooleanType.ts, 4, 3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
 
 //Return type is boolean
 var resultIsBoolean1 = (ANY, BOOLEAN);
->resultIsBoolean1 : boolean, Symbol(resultIsBoolean1,Decl(commaOperatorWithSecondOperandBooleanType.ts,14,3))
+>resultIsBoolean1 : boolean, Symbol(resultIsBoolean1, Decl(commaOperatorWithSecondOperandBooleanType.ts, 14, 3))
 >(ANY, BOOLEAN) : boolean
 >ANY, BOOLEAN : boolean
->ANY : any, Symbol(ANY,Decl(commaOperatorWithSecondOperandBooleanType.ts,0,3))
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
+>ANY : any, Symbol(ANY, Decl(commaOperatorWithSecondOperandBooleanType.ts, 0, 3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
 
 var resultIsBoolean2 = (BOOLEAN, BOOLEAN);
->resultIsBoolean2 : boolean, Symbol(resultIsBoolean2,Decl(commaOperatorWithSecondOperandBooleanType.ts,15,3))
+>resultIsBoolean2 : boolean, Symbol(resultIsBoolean2, Decl(commaOperatorWithSecondOperandBooleanType.ts, 15, 3))
 >(BOOLEAN, BOOLEAN) : boolean
 >BOOLEAN, BOOLEAN : boolean
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
 
 var resultIsBoolean3 = (NUMBER, BOOLEAN);
->resultIsBoolean3 : boolean, Symbol(resultIsBoolean3,Decl(commaOperatorWithSecondOperandBooleanType.ts,16,3))
+>resultIsBoolean3 : boolean, Symbol(resultIsBoolean3, Decl(commaOperatorWithSecondOperandBooleanType.ts, 16, 3))
 >(NUMBER, BOOLEAN) : boolean
 >NUMBER, BOOLEAN : boolean
->NUMBER : number, Symbol(NUMBER,Decl(commaOperatorWithSecondOperandBooleanType.ts,2,3))
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
+>NUMBER : number, Symbol(NUMBER, Decl(commaOperatorWithSecondOperandBooleanType.ts, 2, 3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
 
 var resultIsBoolean4 = (STRING, BOOLEAN);
->resultIsBoolean4 : boolean, Symbol(resultIsBoolean4,Decl(commaOperatorWithSecondOperandBooleanType.ts,17,3))
+>resultIsBoolean4 : boolean, Symbol(resultIsBoolean4, Decl(commaOperatorWithSecondOperandBooleanType.ts, 17, 3))
 >(STRING, BOOLEAN) : boolean
 >STRING, BOOLEAN : boolean
->STRING : string, Symbol(STRING,Decl(commaOperatorWithSecondOperandBooleanType.ts,3,3))
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandBooleanType.ts, 3, 3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
 
 var resultIsBoolean5 = (OBJECT, BOOLEAN);
->resultIsBoolean5 : boolean, Symbol(resultIsBoolean5,Decl(commaOperatorWithSecondOperandBooleanType.ts,18,3))
+>resultIsBoolean5 : boolean, Symbol(resultIsBoolean5, Decl(commaOperatorWithSecondOperandBooleanType.ts, 18, 3))
 >(OBJECT, BOOLEAN) : boolean
 >OBJECT, BOOLEAN : boolean
->OBJECT : Object, Symbol(OBJECT,Decl(commaOperatorWithSecondOperandBooleanType.ts,4,3))
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
+>OBJECT : Object, Symbol(OBJECT, Decl(commaOperatorWithSecondOperandBooleanType.ts, 4, 3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
 
 //Literal and expression
 null, BOOLEAN;
 >null, BOOLEAN : boolean
 >null : null
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
 
 ANY = undefined, BOOLEAN;
 >ANY = undefined, BOOLEAN : boolean
 >ANY = undefined : undefined
->ANY : any, Symbol(ANY,Decl(commaOperatorWithSecondOperandBooleanType.ts,0,3))
+>ANY : any, Symbol(ANY, Decl(commaOperatorWithSecondOperandBooleanType.ts, 0, 3))
 >undefined : undefined, Symbol(undefined)
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
 
 1, true;
 >1, true : boolean
@@ -98,7 +98,7 @@ ANY = undefined, BOOLEAN;
 ++NUMBER, true;
 >++NUMBER, true : boolean
 >++NUMBER : number
->NUMBER : number, Symbol(NUMBER,Decl(commaOperatorWithSecondOperandBooleanType.ts,2,3))
+>NUMBER : number, Symbol(NUMBER, Decl(commaOperatorWithSecondOperandBooleanType.ts, 2, 3))
 >true : boolean
 
 [1, 2, 3], !BOOLEAN;
@@ -108,53 +108,53 @@ ANY = undefined, BOOLEAN;
 >2 : number
 >3 : number
 >!BOOLEAN : boolean
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
 
 OBJECT = [1, 2, 3], BOOLEAN = false;
 >OBJECT = [1, 2, 3], BOOLEAN = false : boolean
 >OBJECT = [1, 2, 3] : number[]
->OBJECT : Object, Symbol(OBJECT,Decl(commaOperatorWithSecondOperandBooleanType.ts,4,3))
+>OBJECT : Object, Symbol(OBJECT, Decl(commaOperatorWithSecondOperandBooleanType.ts, 4, 3))
 >[1, 2, 3] : number[]
 >1 : number
 >2 : number
 >3 : number
 >BOOLEAN = false : boolean
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
 >false : boolean
 
 var resultIsBoolean6 = (null, BOOLEAN);
->resultIsBoolean6 : boolean, Symbol(resultIsBoolean6,Decl(commaOperatorWithSecondOperandBooleanType.ts,28,3))
+>resultIsBoolean6 : boolean, Symbol(resultIsBoolean6, Decl(commaOperatorWithSecondOperandBooleanType.ts, 28, 3))
 >(null, BOOLEAN) : boolean
 >null, BOOLEAN : boolean
 >null : null
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
 
 var resultIsBoolean7 = (ANY = undefined, BOOLEAN);
->resultIsBoolean7 : boolean, Symbol(resultIsBoolean7,Decl(commaOperatorWithSecondOperandBooleanType.ts,29,3))
+>resultIsBoolean7 : boolean, Symbol(resultIsBoolean7, Decl(commaOperatorWithSecondOperandBooleanType.ts, 29, 3))
 >(ANY = undefined, BOOLEAN) : boolean
 >ANY = undefined, BOOLEAN : boolean
 >ANY = undefined : undefined
->ANY : any, Symbol(ANY,Decl(commaOperatorWithSecondOperandBooleanType.ts,0,3))
+>ANY : any, Symbol(ANY, Decl(commaOperatorWithSecondOperandBooleanType.ts, 0, 3))
 >undefined : undefined, Symbol(undefined)
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
 
 var resultIsBoolean8 = (1, true);
->resultIsBoolean8 : boolean, Symbol(resultIsBoolean8,Decl(commaOperatorWithSecondOperandBooleanType.ts,30,3))
+>resultIsBoolean8 : boolean, Symbol(resultIsBoolean8, Decl(commaOperatorWithSecondOperandBooleanType.ts, 30, 3))
 >(1, true) : boolean
 >1, true : boolean
 >1 : number
 >true : boolean
 
 var resultIsBoolean9 = (++NUMBER, true);
->resultIsBoolean9 : boolean, Symbol(resultIsBoolean9,Decl(commaOperatorWithSecondOperandBooleanType.ts,31,3))
+>resultIsBoolean9 : boolean, Symbol(resultIsBoolean9, Decl(commaOperatorWithSecondOperandBooleanType.ts, 31, 3))
 >(++NUMBER, true) : boolean
 >++NUMBER, true : boolean
 >++NUMBER : number
->NUMBER : number, Symbol(NUMBER,Decl(commaOperatorWithSecondOperandBooleanType.ts,2,3))
+>NUMBER : number, Symbol(NUMBER, Decl(commaOperatorWithSecondOperandBooleanType.ts, 2, 3))
 >true : boolean
 
 var resultIsBoolean10 = ([1, 2, 3], !BOOLEAN);
->resultIsBoolean10 : boolean, Symbol(resultIsBoolean10,Decl(commaOperatorWithSecondOperandBooleanType.ts,32,3))
+>resultIsBoolean10 : boolean, Symbol(resultIsBoolean10, Decl(commaOperatorWithSecondOperandBooleanType.ts, 32, 3))
 >([1, 2, 3], !BOOLEAN) : boolean
 >[1, 2, 3], !BOOLEAN : boolean
 >[1, 2, 3] : number[]
@@ -162,19 +162,19 @@ var resultIsBoolean10 = ([1, 2, 3], !BOOLEAN);
 >2 : number
 >3 : number
 >!BOOLEAN : boolean
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
 
 var resultIsBoolean11 = (OBJECT = [1, 2, 3], BOOLEAN = false);
->resultIsBoolean11 : boolean, Symbol(resultIsBoolean11,Decl(commaOperatorWithSecondOperandBooleanType.ts,33,3))
+>resultIsBoolean11 : boolean, Symbol(resultIsBoolean11, Decl(commaOperatorWithSecondOperandBooleanType.ts, 33, 3))
 >(OBJECT = [1, 2, 3], BOOLEAN = false) : boolean
 >OBJECT = [1, 2, 3], BOOLEAN = false : boolean
 >OBJECT = [1, 2, 3] : number[]
->OBJECT : Object, Symbol(OBJECT,Decl(commaOperatorWithSecondOperandBooleanType.ts,4,3))
+>OBJECT : Object, Symbol(OBJECT, Decl(commaOperatorWithSecondOperandBooleanType.ts, 4, 3))
 >[1, 2, 3] : number[]
 >1 : number
 >2 : number
 >3 : number
 >BOOLEAN = false : boolean
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(commaOperatorWithSecondOperandBooleanType.ts,1,3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandBooleanType.ts, 1, 3))
 >false : boolean
 

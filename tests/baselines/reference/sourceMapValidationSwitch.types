@@ -1,17 +1,17 @@
 === tests/cases/compiler/sourceMapValidationSwitch.ts ===
 var x = 10;
->x : number, Symbol(x,Decl(sourceMapValidationSwitch.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
 >10 : number
 
 switch (x) {
->x : number, Symbol(x,Decl(sourceMapValidationSwitch.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
 
     case 5:
 >5 : number
 
         x++;
 >x++ : number
->x : number, Symbol(x,Decl(sourceMapValidationSwitch.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
 
         break;
     case 10:
@@ -19,27 +19,27 @@ switch (x) {
         {
             x--;
 >x-- : number
->x : number, Symbol(x,Decl(sourceMapValidationSwitch.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
 
             break;
         }
     default:
         x = x *10;
 >x = x *10 : number
->x : number, Symbol(x,Decl(sourceMapValidationSwitch.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
 >x *10 : number
->x : number, Symbol(x,Decl(sourceMapValidationSwitch.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
 >10 : number
 }
 switch (x)
->x : number, Symbol(x,Decl(sourceMapValidationSwitch.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
 {
     case 5:
 >5 : number
 
         x++;
 >x++ : number
->x : number, Symbol(x,Decl(sourceMapValidationSwitch.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
 
         break;
     case 10:
@@ -47,7 +47,7 @@ switch (x)
         {
             x--;
 >x-- : number
->x : number, Symbol(x,Decl(sourceMapValidationSwitch.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
 
             break;
         }
@@ -55,9 +55,9 @@ switch (x)
         {
             x = x * 10;
 >x = x * 10 : number
->x : number, Symbol(x,Decl(sourceMapValidationSwitch.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
 >x * 10 : number
->x : number, Symbol(x,Decl(sourceMapValidationSwitch.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationSwitch.ts, 0, 3))
 >10 : number
         }
 }

@@ -1,15 +1,15 @@
 === tests/cases/compiler/anyIsAssignableToVoid.ts ===
 interface P {
->P : P, Symbol(P,Decl(anyIsAssignableToVoid.ts,0,0))
+>P : P, Symbol(P, Decl(anyIsAssignableToVoid.ts, 0, 0))
 
     p: void;
->p : void, Symbol(p,Decl(anyIsAssignableToVoid.ts,0,13))
+>p : void, Symbol(p, Decl(anyIsAssignableToVoid.ts, 0, 13))
 }
 
 interface Q extends P { // check assignability here. any is assignable to void.
->Q : Q, Symbol(Q,Decl(anyIsAssignableToVoid.ts,2,1))
->P : P, Symbol(P,Decl(anyIsAssignableToVoid.ts,0,0))
+>Q : Q, Symbol(Q, Decl(anyIsAssignableToVoid.ts, 2, 1))
+>P : P, Symbol(P, Decl(anyIsAssignableToVoid.ts, 0, 0))
 
     p: any;
->p : any, Symbol(p,Decl(anyIsAssignableToVoid.ts,4,23))
+>p : any, Symbol(p, Decl(anyIsAssignableToVoid.ts, 4, 23))
 }

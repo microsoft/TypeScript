@@ -5,6 +5,6 @@
 // Although we should just get back a single code point value of 0xDC00,
 // this is a useful edge-case test.
 var x = `\u{DC00}`;
->x : string, Symbol(x,Decl(unicodeExtendedEscapesInTemplates11_ES6.ts,5,3))
+>x : string, Symbol(x, Decl(unicodeExtendedEscapesInTemplates11_ES6.ts, 5, 3))
 >`\u{DC00}` : string
 

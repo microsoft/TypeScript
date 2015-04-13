@@ -1,37 +1,37 @@
 === tests/cases/conformance/types/primitives/string/stringPropertyAccess.ts ===
 var x = '';
->x : string, Symbol(x,Decl(stringPropertyAccess.ts,0,3))
+>x : string, Symbol(x, Decl(stringPropertyAccess.ts, 0, 3))
 >'' : string
 
 var a = x.charAt(0);
->a : string, Symbol(a,Decl(stringPropertyAccess.ts,1,3))
+>a : string, Symbol(a, Decl(stringPropertyAccess.ts, 1, 3))
 >x.charAt(0) : string
->x.charAt : (pos: number) => string, Symbol(String.charAt,Decl(lib.d.ts,279,23))
->x : string, Symbol(x,Decl(stringPropertyAccess.ts,0,3))
->charAt : (pos: number) => string, Symbol(String.charAt,Decl(lib.d.ts,279,23))
+>x.charAt : (pos: number) => string, Symbol(String.charAt, Decl(lib.d.ts, 279, 23))
+>x : string, Symbol(x, Decl(stringPropertyAccess.ts, 0, 3))
+>charAt : (pos: number) => string, Symbol(String.charAt, Decl(lib.d.ts, 279, 23))
 >0 : number
 
 var b = x.hasOwnProperty('charAt');
->b : boolean, Symbol(b,Decl(stringPropertyAccess.ts,2,3))
+>b : boolean, Symbol(b, Decl(stringPropertyAccess.ts, 2, 3))
 >x.hasOwnProperty('charAt') : boolean
->x.hasOwnProperty : (v: string) => boolean, Symbol(Object.hasOwnProperty,Decl(lib.d.ts,105,22))
->x : string, Symbol(x,Decl(stringPropertyAccess.ts,0,3))
->hasOwnProperty : (v: string) => boolean, Symbol(Object.hasOwnProperty,Decl(lib.d.ts,105,22))
+>x.hasOwnProperty : (v: string) => boolean, Symbol(Object.hasOwnProperty, Decl(lib.d.ts, 105, 22))
+>x : string, Symbol(x, Decl(stringPropertyAccess.ts, 0, 3))
+>hasOwnProperty : (v: string) => boolean, Symbol(Object.hasOwnProperty, Decl(lib.d.ts, 105, 22))
 >'charAt' : string
 
 var c = x['charAt'](0);
->c : string, Symbol(c,Decl(stringPropertyAccess.ts,4,3))
+>c : string, Symbol(c, Decl(stringPropertyAccess.ts, 4, 3))
 >x['charAt'](0) : string
 >x['charAt'] : (pos: number) => string
->x : string, Symbol(x,Decl(stringPropertyAccess.ts,0,3))
->'charAt' : string, Symbol(String.charAt,Decl(lib.d.ts,279,23))
+>x : string, Symbol(x, Decl(stringPropertyAccess.ts, 0, 3))
+>'charAt' : string, Symbol(String.charAt, Decl(lib.d.ts, 279, 23))
 >0 : number
 
 var e = x['hasOwnProperty']('toFixed');
->e : boolean, Symbol(e,Decl(stringPropertyAccess.ts,5,3))
+>e : boolean, Symbol(e, Decl(stringPropertyAccess.ts, 5, 3))
 >x['hasOwnProperty']('toFixed') : boolean
 >x['hasOwnProperty'] : (v: string) => boolean
->x : string, Symbol(x,Decl(stringPropertyAccess.ts,0,3))
->'hasOwnProperty' : string, Symbol(Object.hasOwnProperty,Decl(lib.d.ts,105,22))
+>x : string, Symbol(x, Decl(stringPropertyAccess.ts, 0, 3))
+>'hasOwnProperty' : string, Symbol(Object.hasOwnProperty, Decl(lib.d.ts, 105, 22))
 >'toFixed' : string
 

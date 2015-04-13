@@ -1,23 +1,23 @@
 === tests/cases/compiler/toStringOnPrimitives.ts ===
 true.toString()
 >true.toString() : string
->true.toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
+>true.toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
 >true : boolean
->toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
+>toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
 
 var aBool = false;
->aBool : boolean, Symbol(aBool,Decl(toStringOnPrimitives.ts,1,3))
+>aBool : boolean, Symbol(aBool, Decl(toStringOnPrimitives.ts, 1, 3))
 >false : boolean
 
 aBool.toString();
 >aBool.toString() : string
->aBool.toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
->aBool : boolean, Symbol(aBool,Decl(toStringOnPrimitives.ts,1,3))
->toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
+>aBool.toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>aBool : boolean, Symbol(aBool, Decl(toStringOnPrimitives.ts, 1, 3))
+>toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
 
 1..toString();
 >1..toString() : string
->1..toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
+>1..toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
 >1. : number
->toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
+>toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
 

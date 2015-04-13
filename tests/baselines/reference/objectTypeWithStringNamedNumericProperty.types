@@ -5,396 +5,396 @@
 // no errors expected below
 
 class C {
->C : C, Symbol(C,Decl(objectTypeWithStringNamedNumericProperty.ts,0,0))
+>C : C, Symbol(C, Decl(objectTypeWithStringNamedNumericProperty.ts, 0, 0))
 
     "0.1": void;
     ".1": Object;
->Object : Object, Symbol(Object,Decl(lib.d.ts,92,1),Decl(lib.d.ts,223,11))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
     "1": number;
     "1.": string;
     "1..": boolean;
     "1.0": Date;
->Date : Date, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
+>Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
 
     "-1.0": RegExp;
->RegExp : RegExp, Symbol(RegExp,Decl(lib.d.ts,825,1),Decl(lib.d.ts,876,11))
+>RegExp : RegExp, Symbol(RegExp, Decl(lib.d.ts, 825, 1), Decl(lib.d.ts, 876, 11))
 
     "-1": Date;
->Date : Date, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
+>Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
 }
 
 var c: C;
->c : C, Symbol(c,Decl(objectTypeWithStringNamedNumericProperty.ts,16,3))
->C : C, Symbol(C,Decl(objectTypeWithStringNamedNumericProperty.ts,0,0))
+>c : C, Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3))
+>C : C, Symbol(C, Decl(objectTypeWithStringNamedNumericProperty.ts, 0, 0))
 
 var r1 = c['0.1'];
->r1 : void, Symbol(r1,Decl(objectTypeWithStringNamedNumericProperty.ts,17,3),Decl(objectTypeWithStringNamedNumericProperty.ts,48,3),Decl(objectTypeWithStringNamedNumericProperty.ts,78,3),Decl(objectTypeWithStringNamedNumericProperty.ts,108,3))
+>r1 : void, Symbol(r1, Decl(objectTypeWithStringNamedNumericProperty.ts, 17, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 48, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 78, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 108, 3))
 >c['0.1'] : void
->c : C, Symbol(c,Decl(objectTypeWithStringNamedNumericProperty.ts,16,3))
->'0.1' : string, Symbol(C."0.1",Decl(objectTypeWithStringNamedNumericProperty.ts,5,9))
+>c : C, Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3))
+>'0.1' : string, Symbol(C."0.1", Decl(objectTypeWithStringNamedNumericProperty.ts, 5, 9))
 
 var r2 = c['.1'];
->r2 : Object, Symbol(r2,Decl(objectTypeWithStringNamedNumericProperty.ts,18,3),Decl(objectTypeWithStringNamedNumericProperty.ts,49,3),Decl(objectTypeWithStringNamedNumericProperty.ts,79,3),Decl(objectTypeWithStringNamedNumericProperty.ts,109,3))
+>r2 : Object, Symbol(r2, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 79, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 109, 3))
 >c['.1'] : Object
->c : C, Symbol(c,Decl(objectTypeWithStringNamedNumericProperty.ts,16,3))
->'.1' : string, Symbol(C.".1",Decl(objectTypeWithStringNamedNumericProperty.ts,6,16))
+>c : C, Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3))
+>'.1' : string, Symbol(C.".1", Decl(objectTypeWithStringNamedNumericProperty.ts, 6, 16))
 
 var r3 = c['1'];
->r3 : number, Symbol(r3,Decl(objectTypeWithStringNamedNumericProperty.ts,19,3),Decl(objectTypeWithStringNamedNumericProperty.ts,20,3),Decl(objectTypeWithStringNamedNumericProperty.ts,22,3),Decl(objectTypeWithStringNamedNumericProperty.ts,25,3),Decl(objectTypeWithStringNamedNumericProperty.ts,50,3),Decl(objectTypeWithStringNamedNumericProperty.ts,51,3),Decl(objectTypeWithStringNamedNumericProperty.ts,53,3),Decl(objectTypeWithStringNamedNumericProperty.ts,56,3),Decl(objectTypeWithStringNamedNumericProperty.ts,80,3),Decl(objectTypeWithStringNamedNumericProperty.ts,81,3),Decl(objectTypeWithStringNamedNumericProperty.ts,83,3),Decl(objectTypeWithStringNamedNumericProperty.ts,86,3),Decl(objectTypeWithStringNamedNumericProperty.ts,110,3),Decl(objectTypeWithStringNamedNumericProperty.ts,111,3),Decl(objectTypeWithStringNamedNumericProperty.ts,113,3),Decl(objectTypeWithStringNamedNumericProperty.ts,116,3))
+>r3 : number, Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 25, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 50, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 56, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 80, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 86, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 110, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 116, 3))
 >c['1'] : number
->c : C, Symbol(c,Decl(objectTypeWithStringNamedNumericProperty.ts,16,3))
->'1' : string, Symbol(C."1",Decl(objectTypeWithStringNamedNumericProperty.ts,7,17))
+>c : C, Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3))
+>'1' : string, Symbol(C."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 7, 17))
 
 var r3 = c[1];
->r3 : number, Symbol(r3,Decl(objectTypeWithStringNamedNumericProperty.ts,19,3),Decl(objectTypeWithStringNamedNumericProperty.ts,20,3),Decl(objectTypeWithStringNamedNumericProperty.ts,22,3),Decl(objectTypeWithStringNamedNumericProperty.ts,25,3),Decl(objectTypeWithStringNamedNumericProperty.ts,50,3),Decl(objectTypeWithStringNamedNumericProperty.ts,51,3),Decl(objectTypeWithStringNamedNumericProperty.ts,53,3),Decl(objectTypeWithStringNamedNumericProperty.ts,56,3),Decl(objectTypeWithStringNamedNumericProperty.ts,80,3),Decl(objectTypeWithStringNamedNumericProperty.ts,81,3),Decl(objectTypeWithStringNamedNumericProperty.ts,83,3),Decl(objectTypeWithStringNamedNumericProperty.ts,86,3),Decl(objectTypeWithStringNamedNumericProperty.ts,110,3),Decl(objectTypeWithStringNamedNumericProperty.ts,111,3),Decl(objectTypeWithStringNamedNumericProperty.ts,113,3),Decl(objectTypeWithStringNamedNumericProperty.ts,116,3))
+>r3 : number, Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 25, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 50, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 56, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 80, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 86, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 110, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 116, 3))
 >c[1] : number
->c : C, Symbol(c,Decl(objectTypeWithStringNamedNumericProperty.ts,16,3))
->1 : number, Symbol(C."1",Decl(objectTypeWithStringNamedNumericProperty.ts,7,17))
+>c : C, Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3))
+>1 : number, Symbol(C."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 7, 17))
 
 var r4 = c['1.'];
->r4 : string, Symbol(r4,Decl(objectTypeWithStringNamedNumericProperty.ts,21,3),Decl(objectTypeWithStringNamedNumericProperty.ts,52,3),Decl(objectTypeWithStringNamedNumericProperty.ts,82,3),Decl(objectTypeWithStringNamedNumericProperty.ts,112,3))
+>r4 : string, Symbol(r4, Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 52, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 82, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 112, 3))
 >c['1.'] : string
->c : C, Symbol(c,Decl(objectTypeWithStringNamedNumericProperty.ts,16,3))
->'1.' : string, Symbol(C."1.",Decl(objectTypeWithStringNamedNumericProperty.ts,8,16))
+>c : C, Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3))
+>'1.' : string, Symbol(C."1.", Decl(objectTypeWithStringNamedNumericProperty.ts, 8, 16))
 
 var r3 = c[1.]; // same as indexing by 1 when done numerically
->r3 : number, Symbol(r3,Decl(objectTypeWithStringNamedNumericProperty.ts,19,3),Decl(objectTypeWithStringNamedNumericProperty.ts,20,3),Decl(objectTypeWithStringNamedNumericProperty.ts,22,3),Decl(objectTypeWithStringNamedNumericProperty.ts,25,3),Decl(objectTypeWithStringNamedNumericProperty.ts,50,3),Decl(objectTypeWithStringNamedNumericProperty.ts,51,3),Decl(objectTypeWithStringNamedNumericProperty.ts,53,3),Decl(objectTypeWithStringNamedNumericProperty.ts,56,3),Decl(objectTypeWithStringNamedNumericProperty.ts,80,3),Decl(objectTypeWithStringNamedNumericProperty.ts,81,3),Decl(objectTypeWithStringNamedNumericProperty.ts,83,3),Decl(objectTypeWithStringNamedNumericProperty.ts,86,3),Decl(objectTypeWithStringNamedNumericProperty.ts,110,3),Decl(objectTypeWithStringNamedNumericProperty.ts,111,3),Decl(objectTypeWithStringNamedNumericProperty.ts,113,3),Decl(objectTypeWithStringNamedNumericProperty.ts,116,3))
+>r3 : number, Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 25, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 50, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 56, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 80, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 86, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 110, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 116, 3))
 >c[1.] : number
->c : C, Symbol(c,Decl(objectTypeWithStringNamedNumericProperty.ts,16,3))
->1. : number, Symbol(C."1",Decl(objectTypeWithStringNamedNumericProperty.ts,7,17))
+>c : C, Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3))
+>1. : number, Symbol(C."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 7, 17))
 
 var r5 = c['1..'];
->r5 : boolean, Symbol(r5,Decl(objectTypeWithStringNamedNumericProperty.ts,23,3),Decl(objectTypeWithStringNamedNumericProperty.ts,54,3),Decl(objectTypeWithStringNamedNumericProperty.ts,84,3),Decl(objectTypeWithStringNamedNumericProperty.ts,114,3))
+>r5 : boolean, Symbol(r5, Decl(objectTypeWithStringNamedNumericProperty.ts, 23, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 54, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 84, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 114, 3))
 >c['1..'] : boolean
->c : C, Symbol(c,Decl(objectTypeWithStringNamedNumericProperty.ts,16,3))
->'1..' : string, Symbol(C."1..",Decl(objectTypeWithStringNamedNumericProperty.ts,9,17))
+>c : C, Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3))
+>'1..' : string, Symbol(C."1..", Decl(objectTypeWithStringNamedNumericProperty.ts, 9, 17))
 
 var r6 = c['1.0'];
->r6 : Date, Symbol(r6,Decl(objectTypeWithStringNamedNumericProperty.ts,24,3),Decl(objectTypeWithStringNamedNumericProperty.ts,55,3),Decl(objectTypeWithStringNamedNumericProperty.ts,85,3),Decl(objectTypeWithStringNamedNumericProperty.ts,115,3))
+>r6 : Date, Symbol(r6, Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 55, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 85, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 115, 3))
 >c['1.0'] : Date
->c : C, Symbol(c,Decl(objectTypeWithStringNamedNumericProperty.ts,16,3))
->'1.0' : string, Symbol(C."1.0",Decl(objectTypeWithStringNamedNumericProperty.ts,10,19))
+>c : C, Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3))
+>'1.0' : string, Symbol(C."1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 10, 19))
 
 var r3 = c[1.0]; // same as indexing by 1 when done numerically
->r3 : number, Symbol(r3,Decl(objectTypeWithStringNamedNumericProperty.ts,19,3),Decl(objectTypeWithStringNamedNumericProperty.ts,20,3),Decl(objectTypeWithStringNamedNumericProperty.ts,22,3),Decl(objectTypeWithStringNamedNumericProperty.ts,25,3),Decl(objectTypeWithStringNamedNumericProperty.ts,50,3),Decl(objectTypeWithStringNamedNumericProperty.ts,51,3),Decl(objectTypeWithStringNamedNumericProperty.ts,53,3),Decl(objectTypeWithStringNamedNumericProperty.ts,56,3),Decl(objectTypeWithStringNamedNumericProperty.ts,80,3),Decl(objectTypeWithStringNamedNumericProperty.ts,81,3),Decl(objectTypeWithStringNamedNumericProperty.ts,83,3),Decl(objectTypeWithStringNamedNumericProperty.ts,86,3),Decl(objectTypeWithStringNamedNumericProperty.ts,110,3),Decl(objectTypeWithStringNamedNumericProperty.ts,111,3),Decl(objectTypeWithStringNamedNumericProperty.ts,113,3),Decl(objectTypeWithStringNamedNumericProperty.ts,116,3))
+>r3 : number, Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 25, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 50, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 56, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 80, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 86, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 110, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 116, 3))
 >c[1.0] : number
->c : C, Symbol(c,Decl(objectTypeWithStringNamedNumericProperty.ts,16,3))
->1.0 : number, Symbol(C."1",Decl(objectTypeWithStringNamedNumericProperty.ts,7,17))
+>c : C, Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3))
+>1.0 : number, Symbol(C."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 7, 17))
 
 // BUG 823822
 var r7 = i[-1];
->r7 : any, Symbol(r7,Decl(objectTypeWithStringNamedNumericProperty.ts,27,3),Decl(objectTypeWithStringNamedNumericProperty.ts,28,3),Decl(objectTypeWithStringNamedNumericProperty.ts,58,3),Decl(objectTypeWithStringNamedNumericProperty.ts,59,3),Decl(objectTypeWithStringNamedNumericProperty.ts,88,3),Decl(objectTypeWithStringNamedNumericProperty.ts,89,3),Decl(objectTypeWithStringNamedNumericProperty.ts,118,3),Decl(objectTypeWithStringNamedNumericProperty.ts,119,3))
+>r7 : any, Symbol(r7, Decl(objectTypeWithStringNamedNumericProperty.ts, 27, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 28, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 58, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 59, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 88, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 89, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 118, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 119, 3))
 >i[-1] : any
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
 >-1 : number
 >1 : number
 
 var r7 = i[-1.0];
->r7 : any, Symbol(r7,Decl(objectTypeWithStringNamedNumericProperty.ts,27,3),Decl(objectTypeWithStringNamedNumericProperty.ts,28,3),Decl(objectTypeWithStringNamedNumericProperty.ts,58,3),Decl(objectTypeWithStringNamedNumericProperty.ts,59,3),Decl(objectTypeWithStringNamedNumericProperty.ts,88,3),Decl(objectTypeWithStringNamedNumericProperty.ts,89,3),Decl(objectTypeWithStringNamedNumericProperty.ts,118,3),Decl(objectTypeWithStringNamedNumericProperty.ts,119,3))
+>r7 : any, Symbol(r7, Decl(objectTypeWithStringNamedNumericProperty.ts, 27, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 28, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 58, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 59, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 88, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 89, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 118, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 119, 3))
 >i[-1.0] : any
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
 >-1.0 : number
 >1.0 : number
 
 var r8 = i["-1.0"];
->r8 : RegExp, Symbol(r8,Decl(objectTypeWithStringNamedNumericProperty.ts,29,3),Decl(objectTypeWithStringNamedNumericProperty.ts,60,3),Decl(objectTypeWithStringNamedNumericProperty.ts,90,3),Decl(objectTypeWithStringNamedNumericProperty.ts,120,3))
+>r8 : RegExp, Symbol(r8, Decl(objectTypeWithStringNamedNumericProperty.ts, 29, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 60, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 90, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 120, 3))
 >i["-1.0"] : RegExp
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->"-1.0" : string, Symbol(I."-1.0",Decl(objectTypeWithStringNamedNumericProperty.ts,42,16))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>"-1.0" : string, Symbol(I."-1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 42, 16))
 
 var r9 = i["-1"];
->r9 : Date, Symbol(r9,Decl(objectTypeWithStringNamedNumericProperty.ts,30,3),Decl(objectTypeWithStringNamedNumericProperty.ts,61,3),Decl(objectTypeWithStringNamedNumericProperty.ts,91,3),Decl(objectTypeWithStringNamedNumericProperty.ts,121,3))
+>r9 : Date, Symbol(r9, Decl(objectTypeWithStringNamedNumericProperty.ts, 30, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 61, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 91, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 121, 3))
 >i["-1"] : Date
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->"-1" : string, Symbol(I."-1",Decl(objectTypeWithStringNamedNumericProperty.ts,43,19))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>"-1" : string, Symbol(I."-1", Decl(objectTypeWithStringNamedNumericProperty.ts, 43, 19))
 
 var r10 = i[0x1]
->r10 : number, Symbol(r10,Decl(objectTypeWithStringNamedNumericProperty.ts,31,3),Decl(objectTypeWithStringNamedNumericProperty.ts,62,3),Decl(objectTypeWithStringNamedNumericProperty.ts,92,3),Decl(objectTypeWithStringNamedNumericProperty.ts,122,3))
+>r10 : number, Symbol(r10, Decl(objectTypeWithStringNamedNumericProperty.ts, 31, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 62, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 92, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 122, 3))
 >i[0x1] : number
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->0x1 : number, Symbol(I."1",Decl(objectTypeWithStringNamedNumericProperty.ts,38,17))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>0x1 : number, Symbol(I."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 38, 17))
 
 var r11 = i[-0x1]
->r11 : any, Symbol(r11,Decl(objectTypeWithStringNamedNumericProperty.ts,32,3),Decl(objectTypeWithStringNamedNumericProperty.ts,63,3),Decl(objectTypeWithStringNamedNumericProperty.ts,93,3),Decl(objectTypeWithStringNamedNumericProperty.ts,123,3))
+>r11 : any, Symbol(r11, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
 >i[-0x1] : any
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
 >-0x1 : number
 >0x1 : number
 
 var r12 = i[01]
->r12 : number, Symbol(r12,Decl(objectTypeWithStringNamedNumericProperty.ts,33,3),Decl(objectTypeWithStringNamedNumericProperty.ts,64,3),Decl(objectTypeWithStringNamedNumericProperty.ts,94,3),Decl(objectTypeWithStringNamedNumericProperty.ts,124,3))
+>r12 : number, Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 64, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 94, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 124, 3))
 >i[01] : number
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->01 : number, Symbol(I."1",Decl(objectTypeWithStringNamedNumericProperty.ts,38,17))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>01 : number, Symbol(I."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 38, 17))
 
 var r13 = i[-01]
->r13 : any, Symbol(r13,Decl(objectTypeWithStringNamedNumericProperty.ts,34,3),Decl(objectTypeWithStringNamedNumericProperty.ts,65,3),Decl(objectTypeWithStringNamedNumericProperty.ts,95,3),Decl(objectTypeWithStringNamedNumericProperty.ts,125,3))
+>r13 : any, Symbol(r13, Decl(objectTypeWithStringNamedNumericProperty.ts, 34, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 65, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 95, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 125, 3))
 >i[-01] : any
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
 >-01 : number
 >01 : number
 
 interface I {
->I : I, Symbol(I,Decl(objectTypeWithStringNamedNumericProperty.ts,34,16))
+>I : I, Symbol(I, Decl(objectTypeWithStringNamedNumericProperty.ts, 34, 16))
 
     "0.1": void;
     ".1": Object;
->Object : Object, Symbol(Object,Decl(lib.d.ts,92,1),Decl(lib.d.ts,223,11))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
     "1": number;
     "1.": string;
     "1..": boolean;
     "1.0": Date;
->Date : Date, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
+>Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
 
     "-1.0": RegExp;
->RegExp : RegExp, Symbol(RegExp,Decl(lib.d.ts,825,1),Decl(lib.d.ts,876,11))
+>RegExp : RegExp, Symbol(RegExp, Decl(lib.d.ts, 825, 1), Decl(lib.d.ts, 876, 11))
 
     "-1": Date;
->Date : Date, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
+>Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
 }
 
 var i: I;
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->I : I, Symbol(I,Decl(objectTypeWithStringNamedNumericProperty.ts,34,16))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>I : I, Symbol(I, Decl(objectTypeWithStringNamedNumericProperty.ts, 34, 16))
 
 var r1 = i['0.1'];
->r1 : void, Symbol(r1,Decl(objectTypeWithStringNamedNumericProperty.ts,17,3),Decl(objectTypeWithStringNamedNumericProperty.ts,48,3),Decl(objectTypeWithStringNamedNumericProperty.ts,78,3),Decl(objectTypeWithStringNamedNumericProperty.ts,108,3))
+>r1 : void, Symbol(r1, Decl(objectTypeWithStringNamedNumericProperty.ts, 17, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 48, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 78, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 108, 3))
 >i['0.1'] : void
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->'0.1' : string, Symbol(I."0.1",Decl(objectTypeWithStringNamedNumericProperty.ts,36,13))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>'0.1' : string, Symbol(I."0.1", Decl(objectTypeWithStringNamedNumericProperty.ts, 36, 13))
 
 var r2 = i['.1'];
->r2 : Object, Symbol(r2,Decl(objectTypeWithStringNamedNumericProperty.ts,18,3),Decl(objectTypeWithStringNamedNumericProperty.ts,49,3),Decl(objectTypeWithStringNamedNumericProperty.ts,79,3),Decl(objectTypeWithStringNamedNumericProperty.ts,109,3))
+>r2 : Object, Symbol(r2, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 79, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 109, 3))
 >i['.1'] : Object
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->'.1' : string, Symbol(I.".1",Decl(objectTypeWithStringNamedNumericProperty.ts,37,16))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>'.1' : string, Symbol(I.".1", Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 16))
 
 var r3 = i['1'];
->r3 : number, Symbol(r3,Decl(objectTypeWithStringNamedNumericProperty.ts,19,3),Decl(objectTypeWithStringNamedNumericProperty.ts,20,3),Decl(objectTypeWithStringNamedNumericProperty.ts,22,3),Decl(objectTypeWithStringNamedNumericProperty.ts,25,3),Decl(objectTypeWithStringNamedNumericProperty.ts,50,3),Decl(objectTypeWithStringNamedNumericProperty.ts,51,3),Decl(objectTypeWithStringNamedNumericProperty.ts,53,3),Decl(objectTypeWithStringNamedNumericProperty.ts,56,3),Decl(objectTypeWithStringNamedNumericProperty.ts,80,3),Decl(objectTypeWithStringNamedNumericProperty.ts,81,3),Decl(objectTypeWithStringNamedNumericProperty.ts,83,3),Decl(objectTypeWithStringNamedNumericProperty.ts,86,3),Decl(objectTypeWithStringNamedNumericProperty.ts,110,3),Decl(objectTypeWithStringNamedNumericProperty.ts,111,3),Decl(objectTypeWithStringNamedNumericProperty.ts,113,3),Decl(objectTypeWithStringNamedNumericProperty.ts,116,3))
+>r3 : number, Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 25, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 50, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 56, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 80, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 86, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 110, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 116, 3))
 >i['1'] : number
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->'1' : string, Symbol(I."1",Decl(objectTypeWithStringNamedNumericProperty.ts,38,17))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>'1' : string, Symbol(I."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 38, 17))
 
 var r3 = c[1];
->r3 : number, Symbol(r3,Decl(objectTypeWithStringNamedNumericProperty.ts,19,3),Decl(objectTypeWithStringNamedNumericProperty.ts,20,3),Decl(objectTypeWithStringNamedNumericProperty.ts,22,3),Decl(objectTypeWithStringNamedNumericProperty.ts,25,3),Decl(objectTypeWithStringNamedNumericProperty.ts,50,3),Decl(objectTypeWithStringNamedNumericProperty.ts,51,3),Decl(objectTypeWithStringNamedNumericProperty.ts,53,3),Decl(objectTypeWithStringNamedNumericProperty.ts,56,3),Decl(objectTypeWithStringNamedNumericProperty.ts,80,3),Decl(objectTypeWithStringNamedNumericProperty.ts,81,3),Decl(objectTypeWithStringNamedNumericProperty.ts,83,3),Decl(objectTypeWithStringNamedNumericProperty.ts,86,3),Decl(objectTypeWithStringNamedNumericProperty.ts,110,3),Decl(objectTypeWithStringNamedNumericProperty.ts,111,3),Decl(objectTypeWithStringNamedNumericProperty.ts,113,3),Decl(objectTypeWithStringNamedNumericProperty.ts,116,3))
+>r3 : number, Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 25, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 50, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 56, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 80, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 86, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 110, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 116, 3))
 >c[1] : number
->c : C, Symbol(c,Decl(objectTypeWithStringNamedNumericProperty.ts,16,3))
->1 : number, Symbol(C."1",Decl(objectTypeWithStringNamedNumericProperty.ts,7,17))
+>c : C, Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3))
+>1 : number, Symbol(C."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 7, 17))
 
 var r4 = i['1.'];
->r4 : string, Symbol(r4,Decl(objectTypeWithStringNamedNumericProperty.ts,21,3),Decl(objectTypeWithStringNamedNumericProperty.ts,52,3),Decl(objectTypeWithStringNamedNumericProperty.ts,82,3),Decl(objectTypeWithStringNamedNumericProperty.ts,112,3))
+>r4 : string, Symbol(r4, Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 52, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 82, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 112, 3))
 >i['1.'] : string
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->'1.' : string, Symbol(I."1.",Decl(objectTypeWithStringNamedNumericProperty.ts,39,16))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>'1.' : string, Symbol(I."1.", Decl(objectTypeWithStringNamedNumericProperty.ts, 39, 16))
 
 var r3 = c[1.]; // same as indexing by 1 when done numerically
->r3 : number, Symbol(r3,Decl(objectTypeWithStringNamedNumericProperty.ts,19,3),Decl(objectTypeWithStringNamedNumericProperty.ts,20,3),Decl(objectTypeWithStringNamedNumericProperty.ts,22,3),Decl(objectTypeWithStringNamedNumericProperty.ts,25,3),Decl(objectTypeWithStringNamedNumericProperty.ts,50,3),Decl(objectTypeWithStringNamedNumericProperty.ts,51,3),Decl(objectTypeWithStringNamedNumericProperty.ts,53,3),Decl(objectTypeWithStringNamedNumericProperty.ts,56,3),Decl(objectTypeWithStringNamedNumericProperty.ts,80,3),Decl(objectTypeWithStringNamedNumericProperty.ts,81,3),Decl(objectTypeWithStringNamedNumericProperty.ts,83,3),Decl(objectTypeWithStringNamedNumericProperty.ts,86,3),Decl(objectTypeWithStringNamedNumericProperty.ts,110,3),Decl(objectTypeWithStringNamedNumericProperty.ts,111,3),Decl(objectTypeWithStringNamedNumericProperty.ts,113,3),Decl(objectTypeWithStringNamedNumericProperty.ts,116,3))
+>r3 : number, Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 25, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 50, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 56, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 80, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 86, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 110, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 116, 3))
 >c[1.] : number
->c : C, Symbol(c,Decl(objectTypeWithStringNamedNumericProperty.ts,16,3))
->1. : number, Symbol(C."1",Decl(objectTypeWithStringNamedNumericProperty.ts,7,17))
+>c : C, Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3))
+>1. : number, Symbol(C."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 7, 17))
 
 var r5 = i['1..'];
->r5 : boolean, Symbol(r5,Decl(objectTypeWithStringNamedNumericProperty.ts,23,3),Decl(objectTypeWithStringNamedNumericProperty.ts,54,3),Decl(objectTypeWithStringNamedNumericProperty.ts,84,3),Decl(objectTypeWithStringNamedNumericProperty.ts,114,3))
+>r5 : boolean, Symbol(r5, Decl(objectTypeWithStringNamedNumericProperty.ts, 23, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 54, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 84, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 114, 3))
 >i['1..'] : boolean
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->'1..' : string, Symbol(I."1..",Decl(objectTypeWithStringNamedNumericProperty.ts,40,17))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>'1..' : string, Symbol(I."1..", Decl(objectTypeWithStringNamedNumericProperty.ts, 40, 17))
 
 var r6 = i['1.0'];
->r6 : Date, Symbol(r6,Decl(objectTypeWithStringNamedNumericProperty.ts,24,3),Decl(objectTypeWithStringNamedNumericProperty.ts,55,3),Decl(objectTypeWithStringNamedNumericProperty.ts,85,3),Decl(objectTypeWithStringNamedNumericProperty.ts,115,3))
+>r6 : Date, Symbol(r6, Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 55, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 85, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 115, 3))
 >i['1.0'] : Date
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->'1.0' : string, Symbol(I."1.0",Decl(objectTypeWithStringNamedNumericProperty.ts,41,19))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>'1.0' : string, Symbol(I."1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 41, 19))
 
 var r3 = c[1.0]; // same as indexing by 1 when done numerically
->r3 : number, Symbol(r3,Decl(objectTypeWithStringNamedNumericProperty.ts,19,3),Decl(objectTypeWithStringNamedNumericProperty.ts,20,3),Decl(objectTypeWithStringNamedNumericProperty.ts,22,3),Decl(objectTypeWithStringNamedNumericProperty.ts,25,3),Decl(objectTypeWithStringNamedNumericProperty.ts,50,3),Decl(objectTypeWithStringNamedNumericProperty.ts,51,3),Decl(objectTypeWithStringNamedNumericProperty.ts,53,3),Decl(objectTypeWithStringNamedNumericProperty.ts,56,3),Decl(objectTypeWithStringNamedNumericProperty.ts,80,3),Decl(objectTypeWithStringNamedNumericProperty.ts,81,3),Decl(objectTypeWithStringNamedNumericProperty.ts,83,3),Decl(objectTypeWithStringNamedNumericProperty.ts,86,3),Decl(objectTypeWithStringNamedNumericProperty.ts,110,3),Decl(objectTypeWithStringNamedNumericProperty.ts,111,3),Decl(objectTypeWithStringNamedNumericProperty.ts,113,3),Decl(objectTypeWithStringNamedNumericProperty.ts,116,3))
+>r3 : number, Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 25, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 50, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 56, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 80, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 86, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 110, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 116, 3))
 >c[1.0] : number
->c : C, Symbol(c,Decl(objectTypeWithStringNamedNumericProperty.ts,16,3))
->1.0 : number, Symbol(C."1",Decl(objectTypeWithStringNamedNumericProperty.ts,7,17))
+>c : C, Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3))
+>1.0 : number, Symbol(C."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 7, 17))
 
 // BUG 823822
 var r7 = i[-1]; 
->r7 : any, Symbol(r7,Decl(objectTypeWithStringNamedNumericProperty.ts,27,3),Decl(objectTypeWithStringNamedNumericProperty.ts,28,3),Decl(objectTypeWithStringNamedNumericProperty.ts,58,3),Decl(objectTypeWithStringNamedNumericProperty.ts,59,3),Decl(objectTypeWithStringNamedNumericProperty.ts,88,3),Decl(objectTypeWithStringNamedNumericProperty.ts,89,3),Decl(objectTypeWithStringNamedNumericProperty.ts,118,3),Decl(objectTypeWithStringNamedNumericProperty.ts,119,3))
+>r7 : any, Symbol(r7, Decl(objectTypeWithStringNamedNumericProperty.ts, 27, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 28, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 58, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 59, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 88, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 89, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 118, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 119, 3))
 >i[-1] : any
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
 >-1 : number
 >1 : number
 
 var r7 = i[-1.0]; 
->r7 : any, Symbol(r7,Decl(objectTypeWithStringNamedNumericProperty.ts,27,3),Decl(objectTypeWithStringNamedNumericProperty.ts,28,3),Decl(objectTypeWithStringNamedNumericProperty.ts,58,3),Decl(objectTypeWithStringNamedNumericProperty.ts,59,3),Decl(objectTypeWithStringNamedNumericProperty.ts,88,3),Decl(objectTypeWithStringNamedNumericProperty.ts,89,3),Decl(objectTypeWithStringNamedNumericProperty.ts,118,3),Decl(objectTypeWithStringNamedNumericProperty.ts,119,3))
+>r7 : any, Symbol(r7, Decl(objectTypeWithStringNamedNumericProperty.ts, 27, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 28, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 58, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 59, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 88, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 89, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 118, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 119, 3))
 >i[-1.0] : any
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
 >-1.0 : number
 >1.0 : number
 
 var r8 = i["-1.0"];
->r8 : RegExp, Symbol(r8,Decl(objectTypeWithStringNamedNumericProperty.ts,29,3),Decl(objectTypeWithStringNamedNumericProperty.ts,60,3),Decl(objectTypeWithStringNamedNumericProperty.ts,90,3),Decl(objectTypeWithStringNamedNumericProperty.ts,120,3))
+>r8 : RegExp, Symbol(r8, Decl(objectTypeWithStringNamedNumericProperty.ts, 29, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 60, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 90, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 120, 3))
 >i["-1.0"] : RegExp
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->"-1.0" : string, Symbol(I."-1.0",Decl(objectTypeWithStringNamedNumericProperty.ts,42,16))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>"-1.0" : string, Symbol(I."-1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 42, 16))
 
 var r9 = i["-1"];
->r9 : Date, Symbol(r9,Decl(objectTypeWithStringNamedNumericProperty.ts,30,3),Decl(objectTypeWithStringNamedNumericProperty.ts,61,3),Decl(objectTypeWithStringNamedNumericProperty.ts,91,3),Decl(objectTypeWithStringNamedNumericProperty.ts,121,3))
+>r9 : Date, Symbol(r9, Decl(objectTypeWithStringNamedNumericProperty.ts, 30, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 61, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 91, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 121, 3))
 >i["-1"] : Date
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->"-1" : string, Symbol(I."-1",Decl(objectTypeWithStringNamedNumericProperty.ts,43,19))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>"-1" : string, Symbol(I."-1", Decl(objectTypeWithStringNamedNumericProperty.ts, 43, 19))
 
 var r10 = i[0x1]
->r10 : number, Symbol(r10,Decl(objectTypeWithStringNamedNumericProperty.ts,31,3),Decl(objectTypeWithStringNamedNumericProperty.ts,62,3),Decl(objectTypeWithStringNamedNumericProperty.ts,92,3),Decl(objectTypeWithStringNamedNumericProperty.ts,122,3))
+>r10 : number, Symbol(r10, Decl(objectTypeWithStringNamedNumericProperty.ts, 31, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 62, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 92, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 122, 3))
 >i[0x1] : number
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->0x1 : number, Symbol(I."1",Decl(objectTypeWithStringNamedNumericProperty.ts,38,17))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>0x1 : number, Symbol(I."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 38, 17))
 
 var r11 = i[-0x1]
->r11 : any, Symbol(r11,Decl(objectTypeWithStringNamedNumericProperty.ts,32,3),Decl(objectTypeWithStringNamedNumericProperty.ts,63,3),Decl(objectTypeWithStringNamedNumericProperty.ts,93,3),Decl(objectTypeWithStringNamedNumericProperty.ts,123,3))
+>r11 : any, Symbol(r11, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
 >i[-0x1] : any
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
 >-0x1 : number
 >0x1 : number
 
 var r12 = i[01]
->r12 : number, Symbol(r12,Decl(objectTypeWithStringNamedNumericProperty.ts,33,3),Decl(objectTypeWithStringNamedNumericProperty.ts,64,3),Decl(objectTypeWithStringNamedNumericProperty.ts,94,3),Decl(objectTypeWithStringNamedNumericProperty.ts,124,3))
+>r12 : number, Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 64, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 94, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 124, 3))
 >i[01] : number
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->01 : number, Symbol(I."1",Decl(objectTypeWithStringNamedNumericProperty.ts,38,17))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>01 : number, Symbol(I."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 38, 17))
 
 var r13 = i[-01]
->r13 : any, Symbol(r13,Decl(objectTypeWithStringNamedNumericProperty.ts,34,3),Decl(objectTypeWithStringNamedNumericProperty.ts,65,3),Decl(objectTypeWithStringNamedNumericProperty.ts,95,3),Decl(objectTypeWithStringNamedNumericProperty.ts,125,3))
+>r13 : any, Symbol(r13, Decl(objectTypeWithStringNamedNumericProperty.ts, 34, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 65, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 95, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 125, 3))
 >i[-01] : any
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
 >-01 : number
 >01 : number
 
 var a: {
->a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }, Symbol(a,Decl(objectTypeWithStringNamedNumericProperty.ts,67,3))
+>a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }, Symbol(a, Decl(objectTypeWithStringNamedNumericProperty.ts, 67, 3))
 
     "0.1": void;
     ".1": Object;
->Object : Object, Symbol(Object,Decl(lib.d.ts,92,1),Decl(lib.d.ts,223,11))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
     "1": number;
     "1.": string;
     "1..": boolean;
     "1.0": Date;
->Date : Date, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
+>Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
 
     "-1.0": RegExp;
->RegExp : RegExp, Symbol(RegExp,Decl(lib.d.ts,825,1),Decl(lib.d.ts,876,11))
+>RegExp : RegExp, Symbol(RegExp, Decl(lib.d.ts, 825, 1), Decl(lib.d.ts, 876, 11))
 
     "-1": Date;
->Date : Date, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
+>Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
 }
 
 var r1 = a['0.1'];
->r1 : void, Symbol(r1,Decl(objectTypeWithStringNamedNumericProperty.ts,17,3),Decl(objectTypeWithStringNamedNumericProperty.ts,48,3),Decl(objectTypeWithStringNamedNumericProperty.ts,78,3),Decl(objectTypeWithStringNamedNumericProperty.ts,108,3))
+>r1 : void, Symbol(r1, Decl(objectTypeWithStringNamedNumericProperty.ts, 17, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 48, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 78, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 108, 3))
 >a['0.1'] : void
->a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }, Symbol(a,Decl(objectTypeWithStringNamedNumericProperty.ts,67,3))
->'0.1' : string, Symbol("0.1",Decl(objectTypeWithStringNamedNumericProperty.ts,67,8))
+>a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }, Symbol(a, Decl(objectTypeWithStringNamedNumericProperty.ts, 67, 3))
+>'0.1' : string, Symbol("0.1", Decl(objectTypeWithStringNamedNumericProperty.ts, 67, 8))
 
 var r2 = a['.1'];
->r2 : Object, Symbol(r2,Decl(objectTypeWithStringNamedNumericProperty.ts,18,3),Decl(objectTypeWithStringNamedNumericProperty.ts,49,3),Decl(objectTypeWithStringNamedNumericProperty.ts,79,3),Decl(objectTypeWithStringNamedNumericProperty.ts,109,3))
+>r2 : Object, Symbol(r2, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 79, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 109, 3))
 >a['.1'] : Object
->a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }, Symbol(a,Decl(objectTypeWithStringNamedNumericProperty.ts,67,3))
->'.1' : string, Symbol(".1",Decl(objectTypeWithStringNamedNumericProperty.ts,68,16))
+>a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }, Symbol(a, Decl(objectTypeWithStringNamedNumericProperty.ts, 67, 3))
+>'.1' : string, Symbol(".1", Decl(objectTypeWithStringNamedNumericProperty.ts, 68, 16))
 
 var r3 = a['1'];
->r3 : number, Symbol(r3,Decl(objectTypeWithStringNamedNumericProperty.ts,19,3),Decl(objectTypeWithStringNamedNumericProperty.ts,20,3),Decl(objectTypeWithStringNamedNumericProperty.ts,22,3),Decl(objectTypeWithStringNamedNumericProperty.ts,25,3),Decl(objectTypeWithStringNamedNumericProperty.ts,50,3),Decl(objectTypeWithStringNamedNumericProperty.ts,51,3),Decl(objectTypeWithStringNamedNumericProperty.ts,53,3),Decl(objectTypeWithStringNamedNumericProperty.ts,56,3),Decl(objectTypeWithStringNamedNumericProperty.ts,80,3),Decl(objectTypeWithStringNamedNumericProperty.ts,81,3),Decl(objectTypeWithStringNamedNumericProperty.ts,83,3),Decl(objectTypeWithStringNamedNumericProperty.ts,86,3),Decl(objectTypeWithStringNamedNumericProperty.ts,110,3),Decl(objectTypeWithStringNamedNumericProperty.ts,111,3),Decl(objectTypeWithStringNamedNumericProperty.ts,113,3),Decl(objectTypeWithStringNamedNumericProperty.ts,116,3))
+>r3 : number, Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 25, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 50, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 56, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 80, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 86, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 110, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 116, 3))
 >a['1'] : number
->a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }, Symbol(a,Decl(objectTypeWithStringNamedNumericProperty.ts,67,3))
->'1' : string, Symbol("1",Decl(objectTypeWithStringNamedNumericProperty.ts,69,17))
+>a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }, Symbol(a, Decl(objectTypeWithStringNamedNumericProperty.ts, 67, 3))
+>'1' : string, Symbol("1", Decl(objectTypeWithStringNamedNumericProperty.ts, 69, 17))
 
 var r3 = c[1];
->r3 : number, Symbol(r3,Decl(objectTypeWithStringNamedNumericProperty.ts,19,3),Decl(objectTypeWithStringNamedNumericProperty.ts,20,3),Decl(objectTypeWithStringNamedNumericProperty.ts,22,3),Decl(objectTypeWithStringNamedNumericProperty.ts,25,3),Decl(objectTypeWithStringNamedNumericProperty.ts,50,3),Decl(objectTypeWithStringNamedNumericProperty.ts,51,3),Decl(objectTypeWithStringNamedNumericProperty.ts,53,3),Decl(objectTypeWithStringNamedNumericProperty.ts,56,3),Decl(objectTypeWithStringNamedNumericProperty.ts,80,3),Decl(objectTypeWithStringNamedNumericProperty.ts,81,3),Decl(objectTypeWithStringNamedNumericProperty.ts,83,3),Decl(objectTypeWithStringNamedNumericProperty.ts,86,3),Decl(objectTypeWithStringNamedNumericProperty.ts,110,3),Decl(objectTypeWithStringNamedNumericProperty.ts,111,3),Decl(objectTypeWithStringNamedNumericProperty.ts,113,3),Decl(objectTypeWithStringNamedNumericProperty.ts,116,3))
+>r3 : number, Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 25, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 50, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 56, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 80, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 86, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 110, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 116, 3))
 >c[1] : number
->c : C, Symbol(c,Decl(objectTypeWithStringNamedNumericProperty.ts,16,3))
->1 : number, Symbol(C."1",Decl(objectTypeWithStringNamedNumericProperty.ts,7,17))
+>c : C, Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3))
+>1 : number, Symbol(C."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 7, 17))
 
 var r4 = a['1.'];
->r4 : string, Symbol(r4,Decl(objectTypeWithStringNamedNumericProperty.ts,21,3),Decl(objectTypeWithStringNamedNumericProperty.ts,52,3),Decl(objectTypeWithStringNamedNumericProperty.ts,82,3),Decl(objectTypeWithStringNamedNumericProperty.ts,112,3))
+>r4 : string, Symbol(r4, Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 52, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 82, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 112, 3))
 >a['1.'] : string
->a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }, Symbol(a,Decl(objectTypeWithStringNamedNumericProperty.ts,67,3))
->'1.' : string, Symbol("1.",Decl(objectTypeWithStringNamedNumericProperty.ts,70,16))
+>a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }, Symbol(a, Decl(objectTypeWithStringNamedNumericProperty.ts, 67, 3))
+>'1.' : string, Symbol("1.", Decl(objectTypeWithStringNamedNumericProperty.ts, 70, 16))
 
 var r3 = c[1.]; // same as indexing by 1 when done numerically
->r3 : number, Symbol(r3,Decl(objectTypeWithStringNamedNumericProperty.ts,19,3),Decl(objectTypeWithStringNamedNumericProperty.ts,20,3),Decl(objectTypeWithStringNamedNumericProperty.ts,22,3),Decl(objectTypeWithStringNamedNumericProperty.ts,25,3),Decl(objectTypeWithStringNamedNumericProperty.ts,50,3),Decl(objectTypeWithStringNamedNumericProperty.ts,51,3),Decl(objectTypeWithStringNamedNumericProperty.ts,53,3),Decl(objectTypeWithStringNamedNumericProperty.ts,56,3),Decl(objectTypeWithStringNamedNumericProperty.ts,80,3),Decl(objectTypeWithStringNamedNumericProperty.ts,81,3),Decl(objectTypeWithStringNamedNumericProperty.ts,83,3),Decl(objectTypeWithStringNamedNumericProperty.ts,86,3),Decl(objectTypeWithStringNamedNumericProperty.ts,110,3),Decl(objectTypeWithStringNamedNumericProperty.ts,111,3),Decl(objectTypeWithStringNamedNumericProperty.ts,113,3),Decl(objectTypeWithStringNamedNumericProperty.ts,116,3))
+>r3 : number, Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 25, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 50, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 56, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 80, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 86, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 110, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 116, 3))
 >c[1.] : number
->c : C, Symbol(c,Decl(objectTypeWithStringNamedNumericProperty.ts,16,3))
->1. : number, Symbol(C."1",Decl(objectTypeWithStringNamedNumericProperty.ts,7,17))
+>c : C, Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3))
+>1. : number, Symbol(C."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 7, 17))
 
 var r5 = a['1..'];
->r5 : boolean, Symbol(r5,Decl(objectTypeWithStringNamedNumericProperty.ts,23,3),Decl(objectTypeWithStringNamedNumericProperty.ts,54,3),Decl(objectTypeWithStringNamedNumericProperty.ts,84,3),Decl(objectTypeWithStringNamedNumericProperty.ts,114,3))
+>r5 : boolean, Symbol(r5, Decl(objectTypeWithStringNamedNumericProperty.ts, 23, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 54, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 84, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 114, 3))
 >a['1..'] : boolean
->a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }, Symbol(a,Decl(objectTypeWithStringNamedNumericProperty.ts,67,3))
->'1..' : string, Symbol("1..",Decl(objectTypeWithStringNamedNumericProperty.ts,71,17))
+>a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }, Symbol(a, Decl(objectTypeWithStringNamedNumericProperty.ts, 67, 3))
+>'1..' : string, Symbol("1..", Decl(objectTypeWithStringNamedNumericProperty.ts, 71, 17))
 
 var r6 = a['1.0'];
->r6 : Date, Symbol(r6,Decl(objectTypeWithStringNamedNumericProperty.ts,24,3),Decl(objectTypeWithStringNamedNumericProperty.ts,55,3),Decl(objectTypeWithStringNamedNumericProperty.ts,85,3),Decl(objectTypeWithStringNamedNumericProperty.ts,115,3))
+>r6 : Date, Symbol(r6, Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 55, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 85, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 115, 3))
 >a['1.0'] : Date
->a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }, Symbol(a,Decl(objectTypeWithStringNamedNumericProperty.ts,67,3))
->'1.0' : string, Symbol("1.0",Decl(objectTypeWithStringNamedNumericProperty.ts,72,19))
+>a : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": Date; }, Symbol(a, Decl(objectTypeWithStringNamedNumericProperty.ts, 67, 3))
+>'1.0' : string, Symbol("1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 72, 19))
 
 var r3 = c[1.0]; // same as indexing by 1 when done numerically
->r3 : number, Symbol(r3,Decl(objectTypeWithStringNamedNumericProperty.ts,19,3),Decl(objectTypeWithStringNamedNumericProperty.ts,20,3),Decl(objectTypeWithStringNamedNumericProperty.ts,22,3),Decl(objectTypeWithStringNamedNumericProperty.ts,25,3),Decl(objectTypeWithStringNamedNumericProperty.ts,50,3),Decl(objectTypeWithStringNamedNumericProperty.ts,51,3),Decl(objectTypeWithStringNamedNumericProperty.ts,53,3),Decl(objectTypeWithStringNamedNumericProperty.ts,56,3),Decl(objectTypeWithStringNamedNumericProperty.ts,80,3),Decl(objectTypeWithStringNamedNumericProperty.ts,81,3),Decl(objectTypeWithStringNamedNumericProperty.ts,83,3),Decl(objectTypeWithStringNamedNumericProperty.ts,86,3),Decl(objectTypeWithStringNamedNumericProperty.ts,110,3),Decl(objectTypeWithStringNamedNumericProperty.ts,111,3),Decl(objectTypeWithStringNamedNumericProperty.ts,113,3),Decl(objectTypeWithStringNamedNumericProperty.ts,116,3))
+>r3 : number, Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 25, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 50, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 56, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 80, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 86, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 110, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 116, 3))
 >c[1.0] : number
->c : C, Symbol(c,Decl(objectTypeWithStringNamedNumericProperty.ts,16,3))
->1.0 : number, Symbol(C."1",Decl(objectTypeWithStringNamedNumericProperty.ts,7,17))
+>c : C, Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3))
+>1.0 : number, Symbol(C."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 7, 17))
 
 // BUG 823822
 var r7 = i[-1];
->r7 : any, Symbol(r7,Decl(objectTypeWithStringNamedNumericProperty.ts,27,3),Decl(objectTypeWithStringNamedNumericProperty.ts,28,3),Decl(objectTypeWithStringNamedNumericProperty.ts,58,3),Decl(objectTypeWithStringNamedNumericProperty.ts,59,3),Decl(objectTypeWithStringNamedNumericProperty.ts,88,3),Decl(objectTypeWithStringNamedNumericProperty.ts,89,3),Decl(objectTypeWithStringNamedNumericProperty.ts,118,3),Decl(objectTypeWithStringNamedNumericProperty.ts,119,3))
+>r7 : any, Symbol(r7, Decl(objectTypeWithStringNamedNumericProperty.ts, 27, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 28, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 58, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 59, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 88, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 89, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 118, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 119, 3))
 >i[-1] : any
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
 >-1 : number
 >1 : number
 
 var r7 = i[-1.0];
->r7 : any, Symbol(r7,Decl(objectTypeWithStringNamedNumericProperty.ts,27,3),Decl(objectTypeWithStringNamedNumericProperty.ts,28,3),Decl(objectTypeWithStringNamedNumericProperty.ts,58,3),Decl(objectTypeWithStringNamedNumericProperty.ts,59,3),Decl(objectTypeWithStringNamedNumericProperty.ts,88,3),Decl(objectTypeWithStringNamedNumericProperty.ts,89,3),Decl(objectTypeWithStringNamedNumericProperty.ts,118,3),Decl(objectTypeWithStringNamedNumericProperty.ts,119,3))
+>r7 : any, Symbol(r7, Decl(objectTypeWithStringNamedNumericProperty.ts, 27, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 28, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 58, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 59, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 88, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 89, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 118, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 119, 3))
 >i[-1.0] : any
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
 >-1.0 : number
 >1.0 : number
 
 var r8 = i["-1.0"];
->r8 : RegExp, Symbol(r8,Decl(objectTypeWithStringNamedNumericProperty.ts,29,3),Decl(objectTypeWithStringNamedNumericProperty.ts,60,3),Decl(objectTypeWithStringNamedNumericProperty.ts,90,3),Decl(objectTypeWithStringNamedNumericProperty.ts,120,3))
+>r8 : RegExp, Symbol(r8, Decl(objectTypeWithStringNamedNumericProperty.ts, 29, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 60, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 90, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 120, 3))
 >i["-1.0"] : RegExp
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->"-1.0" : string, Symbol(I."-1.0",Decl(objectTypeWithStringNamedNumericProperty.ts,42,16))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>"-1.0" : string, Symbol(I."-1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 42, 16))
 
 var r9 = i["-1"];
->r9 : Date, Symbol(r9,Decl(objectTypeWithStringNamedNumericProperty.ts,30,3),Decl(objectTypeWithStringNamedNumericProperty.ts,61,3),Decl(objectTypeWithStringNamedNumericProperty.ts,91,3),Decl(objectTypeWithStringNamedNumericProperty.ts,121,3))
+>r9 : Date, Symbol(r9, Decl(objectTypeWithStringNamedNumericProperty.ts, 30, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 61, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 91, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 121, 3))
 >i["-1"] : Date
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->"-1" : string, Symbol(I."-1",Decl(objectTypeWithStringNamedNumericProperty.ts,43,19))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>"-1" : string, Symbol(I."-1", Decl(objectTypeWithStringNamedNumericProperty.ts, 43, 19))
 
 var r10 = i[0x1]
->r10 : number, Symbol(r10,Decl(objectTypeWithStringNamedNumericProperty.ts,31,3),Decl(objectTypeWithStringNamedNumericProperty.ts,62,3),Decl(objectTypeWithStringNamedNumericProperty.ts,92,3),Decl(objectTypeWithStringNamedNumericProperty.ts,122,3))
+>r10 : number, Symbol(r10, Decl(objectTypeWithStringNamedNumericProperty.ts, 31, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 62, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 92, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 122, 3))
 >i[0x1] : number
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->0x1 : number, Symbol(I."1",Decl(objectTypeWithStringNamedNumericProperty.ts,38,17))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>0x1 : number, Symbol(I."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 38, 17))
 
 var r11 = i[-0x1]
->r11 : any, Symbol(r11,Decl(objectTypeWithStringNamedNumericProperty.ts,32,3),Decl(objectTypeWithStringNamedNumericProperty.ts,63,3),Decl(objectTypeWithStringNamedNumericProperty.ts,93,3),Decl(objectTypeWithStringNamedNumericProperty.ts,123,3))
+>r11 : any, Symbol(r11, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
 >i[-0x1] : any
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
 >-0x1 : number
 >0x1 : number
 
 var r12 = i[01]
->r12 : number, Symbol(r12,Decl(objectTypeWithStringNamedNumericProperty.ts,33,3),Decl(objectTypeWithStringNamedNumericProperty.ts,64,3),Decl(objectTypeWithStringNamedNumericProperty.ts,94,3),Decl(objectTypeWithStringNamedNumericProperty.ts,124,3))
+>r12 : number, Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 64, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 94, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 124, 3))
 >i[01] : number
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->01 : number, Symbol(I."1",Decl(objectTypeWithStringNamedNumericProperty.ts,38,17))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>01 : number, Symbol(I."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 38, 17))
 
 var r13 = i[-01]
->r13 : any, Symbol(r13,Decl(objectTypeWithStringNamedNumericProperty.ts,34,3),Decl(objectTypeWithStringNamedNumericProperty.ts,65,3),Decl(objectTypeWithStringNamedNumericProperty.ts,95,3),Decl(objectTypeWithStringNamedNumericProperty.ts,125,3))
+>r13 : any, Symbol(r13, Decl(objectTypeWithStringNamedNumericProperty.ts, 34, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 65, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 95, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 125, 3))
 >i[-01] : any
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
 >-01 : number
 >01 : number
 
 var b = {
->b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }, Symbol(b,Decl(objectTypeWithStringNamedNumericProperty.ts,97,3))
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }, Symbol(b, Decl(objectTypeWithStringNamedNumericProperty.ts, 97, 3))
 >{    "0.1": <void>null,    ".1": new Object(),    "1": 1,    "1.": "",    "1..": true,    "1.0": new Date(),    "-1.0": /123/,    "-1": Date} : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }
 
     "0.1": <void>null,
@@ -403,7 +403,7 @@ var b = {
 
     ".1": new Object(),
 >new Object() : Object
->Object : ObjectConstructor, Symbol(Object,Decl(lib.d.ts,92,1),Decl(lib.d.ts,223,11))
+>Object : ObjectConstructor, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
     "1": 1,
 >1 : number
@@ -416,120 +416,120 @@ var b = {
 
     "1.0": new Date(),
 >new Date() : Date
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
 
     "-1.0": /123/,
 >/123/ : RegExp
 
     "-1": Date
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
 
 };
 
 var r1 = b['0.1'];
->r1 : void, Symbol(r1,Decl(objectTypeWithStringNamedNumericProperty.ts,17,3),Decl(objectTypeWithStringNamedNumericProperty.ts,48,3),Decl(objectTypeWithStringNamedNumericProperty.ts,78,3),Decl(objectTypeWithStringNamedNumericProperty.ts,108,3))
+>r1 : void, Symbol(r1, Decl(objectTypeWithStringNamedNumericProperty.ts, 17, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 48, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 78, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 108, 3))
 >b['0.1'] : void
->b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }, Symbol(b,Decl(objectTypeWithStringNamedNumericProperty.ts,97,3))
->'0.1' : string, Symbol("0.1",Decl(objectTypeWithStringNamedNumericProperty.ts,97,9))
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }, Symbol(b, Decl(objectTypeWithStringNamedNumericProperty.ts, 97, 3))
+>'0.1' : string, Symbol("0.1", Decl(objectTypeWithStringNamedNumericProperty.ts, 97, 9))
 
 var r2 = b['.1'];
->r2 : Object, Symbol(r2,Decl(objectTypeWithStringNamedNumericProperty.ts,18,3),Decl(objectTypeWithStringNamedNumericProperty.ts,49,3),Decl(objectTypeWithStringNamedNumericProperty.ts,79,3),Decl(objectTypeWithStringNamedNumericProperty.ts,109,3))
+>r2 : Object, Symbol(r2, Decl(objectTypeWithStringNamedNumericProperty.ts, 18, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 49, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 79, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 109, 3))
 >b['.1'] : Object
->b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }, Symbol(b,Decl(objectTypeWithStringNamedNumericProperty.ts,97,3))
->'.1' : string, Symbol(".1",Decl(objectTypeWithStringNamedNumericProperty.ts,98,22))
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }, Symbol(b, Decl(objectTypeWithStringNamedNumericProperty.ts, 97, 3))
+>'.1' : string, Symbol(".1", Decl(objectTypeWithStringNamedNumericProperty.ts, 98, 22))
 
 var r3 = b['1'];
->r3 : number, Symbol(r3,Decl(objectTypeWithStringNamedNumericProperty.ts,19,3),Decl(objectTypeWithStringNamedNumericProperty.ts,20,3),Decl(objectTypeWithStringNamedNumericProperty.ts,22,3),Decl(objectTypeWithStringNamedNumericProperty.ts,25,3),Decl(objectTypeWithStringNamedNumericProperty.ts,50,3),Decl(objectTypeWithStringNamedNumericProperty.ts,51,3),Decl(objectTypeWithStringNamedNumericProperty.ts,53,3),Decl(objectTypeWithStringNamedNumericProperty.ts,56,3),Decl(objectTypeWithStringNamedNumericProperty.ts,80,3),Decl(objectTypeWithStringNamedNumericProperty.ts,81,3),Decl(objectTypeWithStringNamedNumericProperty.ts,83,3),Decl(objectTypeWithStringNamedNumericProperty.ts,86,3),Decl(objectTypeWithStringNamedNumericProperty.ts,110,3),Decl(objectTypeWithStringNamedNumericProperty.ts,111,3),Decl(objectTypeWithStringNamedNumericProperty.ts,113,3),Decl(objectTypeWithStringNamedNumericProperty.ts,116,3))
+>r3 : number, Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 25, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 50, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 56, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 80, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 86, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 110, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 116, 3))
 >b['1'] : number
->b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }, Symbol(b,Decl(objectTypeWithStringNamedNumericProperty.ts,97,3))
->'1' : string, Symbol("1",Decl(objectTypeWithStringNamedNumericProperty.ts,99,23))
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }, Symbol(b, Decl(objectTypeWithStringNamedNumericProperty.ts, 97, 3))
+>'1' : string, Symbol("1", Decl(objectTypeWithStringNamedNumericProperty.ts, 99, 23))
 
 var r3 = c[1];
->r3 : number, Symbol(r3,Decl(objectTypeWithStringNamedNumericProperty.ts,19,3),Decl(objectTypeWithStringNamedNumericProperty.ts,20,3),Decl(objectTypeWithStringNamedNumericProperty.ts,22,3),Decl(objectTypeWithStringNamedNumericProperty.ts,25,3),Decl(objectTypeWithStringNamedNumericProperty.ts,50,3),Decl(objectTypeWithStringNamedNumericProperty.ts,51,3),Decl(objectTypeWithStringNamedNumericProperty.ts,53,3),Decl(objectTypeWithStringNamedNumericProperty.ts,56,3),Decl(objectTypeWithStringNamedNumericProperty.ts,80,3),Decl(objectTypeWithStringNamedNumericProperty.ts,81,3),Decl(objectTypeWithStringNamedNumericProperty.ts,83,3),Decl(objectTypeWithStringNamedNumericProperty.ts,86,3),Decl(objectTypeWithStringNamedNumericProperty.ts,110,3),Decl(objectTypeWithStringNamedNumericProperty.ts,111,3),Decl(objectTypeWithStringNamedNumericProperty.ts,113,3),Decl(objectTypeWithStringNamedNumericProperty.ts,116,3))
+>r3 : number, Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 25, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 50, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 56, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 80, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 86, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 110, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 116, 3))
 >c[1] : number
->c : C, Symbol(c,Decl(objectTypeWithStringNamedNumericProperty.ts,16,3))
->1 : number, Symbol(C."1",Decl(objectTypeWithStringNamedNumericProperty.ts,7,17))
+>c : C, Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3))
+>1 : number, Symbol(C."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 7, 17))
 
 var r4 = b['1.'];
->r4 : string, Symbol(r4,Decl(objectTypeWithStringNamedNumericProperty.ts,21,3),Decl(objectTypeWithStringNamedNumericProperty.ts,52,3),Decl(objectTypeWithStringNamedNumericProperty.ts,82,3),Decl(objectTypeWithStringNamedNumericProperty.ts,112,3))
+>r4 : string, Symbol(r4, Decl(objectTypeWithStringNamedNumericProperty.ts, 21, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 52, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 82, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 112, 3))
 >b['1.'] : string
->b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }, Symbol(b,Decl(objectTypeWithStringNamedNumericProperty.ts,97,3))
->'1.' : string, Symbol("1.",Decl(objectTypeWithStringNamedNumericProperty.ts,100,11))
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }, Symbol(b, Decl(objectTypeWithStringNamedNumericProperty.ts, 97, 3))
+>'1.' : string, Symbol("1.", Decl(objectTypeWithStringNamedNumericProperty.ts, 100, 11))
 
 var r3 = c[1.]; // same as indexing by 1 when done numerically
->r3 : number, Symbol(r3,Decl(objectTypeWithStringNamedNumericProperty.ts,19,3),Decl(objectTypeWithStringNamedNumericProperty.ts,20,3),Decl(objectTypeWithStringNamedNumericProperty.ts,22,3),Decl(objectTypeWithStringNamedNumericProperty.ts,25,3),Decl(objectTypeWithStringNamedNumericProperty.ts,50,3),Decl(objectTypeWithStringNamedNumericProperty.ts,51,3),Decl(objectTypeWithStringNamedNumericProperty.ts,53,3),Decl(objectTypeWithStringNamedNumericProperty.ts,56,3),Decl(objectTypeWithStringNamedNumericProperty.ts,80,3),Decl(objectTypeWithStringNamedNumericProperty.ts,81,3),Decl(objectTypeWithStringNamedNumericProperty.ts,83,3),Decl(objectTypeWithStringNamedNumericProperty.ts,86,3),Decl(objectTypeWithStringNamedNumericProperty.ts,110,3),Decl(objectTypeWithStringNamedNumericProperty.ts,111,3),Decl(objectTypeWithStringNamedNumericProperty.ts,113,3),Decl(objectTypeWithStringNamedNumericProperty.ts,116,3))
+>r3 : number, Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 25, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 50, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 56, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 80, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 86, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 110, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 116, 3))
 >c[1.] : number
->c : C, Symbol(c,Decl(objectTypeWithStringNamedNumericProperty.ts,16,3))
->1. : number, Symbol(C."1",Decl(objectTypeWithStringNamedNumericProperty.ts,7,17))
+>c : C, Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3))
+>1. : number, Symbol(C."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 7, 17))
 
 var r5 = b['1..'];
->r5 : boolean, Symbol(r5,Decl(objectTypeWithStringNamedNumericProperty.ts,23,3),Decl(objectTypeWithStringNamedNumericProperty.ts,54,3),Decl(objectTypeWithStringNamedNumericProperty.ts,84,3),Decl(objectTypeWithStringNamedNumericProperty.ts,114,3))
+>r5 : boolean, Symbol(r5, Decl(objectTypeWithStringNamedNumericProperty.ts, 23, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 54, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 84, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 114, 3))
 >b['1..'] : boolean
->b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }, Symbol(b,Decl(objectTypeWithStringNamedNumericProperty.ts,97,3))
->'1..' : string, Symbol("1..",Decl(objectTypeWithStringNamedNumericProperty.ts,101,13))
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }, Symbol(b, Decl(objectTypeWithStringNamedNumericProperty.ts, 97, 3))
+>'1..' : string, Symbol("1..", Decl(objectTypeWithStringNamedNumericProperty.ts, 101, 13))
 
 var r6 = b['1.0'];
->r6 : Date, Symbol(r6,Decl(objectTypeWithStringNamedNumericProperty.ts,24,3),Decl(objectTypeWithStringNamedNumericProperty.ts,55,3),Decl(objectTypeWithStringNamedNumericProperty.ts,85,3),Decl(objectTypeWithStringNamedNumericProperty.ts,115,3))
+>r6 : Date, Symbol(r6, Decl(objectTypeWithStringNamedNumericProperty.ts, 24, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 55, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 85, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 115, 3))
 >b['1.0'] : Date
->b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }, Symbol(b,Decl(objectTypeWithStringNamedNumericProperty.ts,97,3))
->'1.0' : string, Symbol("1.0",Decl(objectTypeWithStringNamedNumericProperty.ts,102,16))
+>b : { "1": number; "0.1": void; ".1": Object; "1.": string; "1..": boolean; "1.0": Date; "-1.0": RegExp; "-1": DateConstructor; }, Symbol(b, Decl(objectTypeWithStringNamedNumericProperty.ts, 97, 3))
+>'1.0' : string, Symbol("1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 102, 16))
 
 var r3 = c[1.0]; // same as indexing by 1 when done numerically
->r3 : number, Symbol(r3,Decl(objectTypeWithStringNamedNumericProperty.ts,19,3),Decl(objectTypeWithStringNamedNumericProperty.ts,20,3),Decl(objectTypeWithStringNamedNumericProperty.ts,22,3),Decl(objectTypeWithStringNamedNumericProperty.ts,25,3),Decl(objectTypeWithStringNamedNumericProperty.ts,50,3),Decl(objectTypeWithStringNamedNumericProperty.ts,51,3),Decl(objectTypeWithStringNamedNumericProperty.ts,53,3),Decl(objectTypeWithStringNamedNumericProperty.ts,56,3),Decl(objectTypeWithStringNamedNumericProperty.ts,80,3),Decl(objectTypeWithStringNamedNumericProperty.ts,81,3),Decl(objectTypeWithStringNamedNumericProperty.ts,83,3),Decl(objectTypeWithStringNamedNumericProperty.ts,86,3),Decl(objectTypeWithStringNamedNumericProperty.ts,110,3),Decl(objectTypeWithStringNamedNumericProperty.ts,111,3),Decl(objectTypeWithStringNamedNumericProperty.ts,113,3),Decl(objectTypeWithStringNamedNumericProperty.ts,116,3))
+>r3 : number, Symbol(r3, Decl(objectTypeWithStringNamedNumericProperty.ts, 19, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 20, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 22, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 25, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 50, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 51, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 53, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 56, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 80, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 81, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 83, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 86, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 110, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 111, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 113, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 116, 3))
 >c[1.0] : number
->c : C, Symbol(c,Decl(objectTypeWithStringNamedNumericProperty.ts,16,3))
->1.0 : number, Symbol(C."1",Decl(objectTypeWithStringNamedNumericProperty.ts,7,17))
+>c : C, Symbol(c, Decl(objectTypeWithStringNamedNumericProperty.ts, 16, 3))
+>1.0 : number, Symbol(C."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 7, 17))
 
 // BUG 823822
 var r7 = i[-1];
->r7 : any, Symbol(r7,Decl(objectTypeWithStringNamedNumericProperty.ts,27,3),Decl(objectTypeWithStringNamedNumericProperty.ts,28,3),Decl(objectTypeWithStringNamedNumericProperty.ts,58,3),Decl(objectTypeWithStringNamedNumericProperty.ts,59,3),Decl(objectTypeWithStringNamedNumericProperty.ts,88,3),Decl(objectTypeWithStringNamedNumericProperty.ts,89,3),Decl(objectTypeWithStringNamedNumericProperty.ts,118,3),Decl(objectTypeWithStringNamedNumericProperty.ts,119,3))
+>r7 : any, Symbol(r7, Decl(objectTypeWithStringNamedNumericProperty.ts, 27, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 28, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 58, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 59, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 88, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 89, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 118, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 119, 3))
 >i[-1] : any
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
 >-1 : number
 >1 : number
 
 var r7 = i[-1.0];
->r7 : any, Symbol(r7,Decl(objectTypeWithStringNamedNumericProperty.ts,27,3),Decl(objectTypeWithStringNamedNumericProperty.ts,28,3),Decl(objectTypeWithStringNamedNumericProperty.ts,58,3),Decl(objectTypeWithStringNamedNumericProperty.ts,59,3),Decl(objectTypeWithStringNamedNumericProperty.ts,88,3),Decl(objectTypeWithStringNamedNumericProperty.ts,89,3),Decl(objectTypeWithStringNamedNumericProperty.ts,118,3),Decl(objectTypeWithStringNamedNumericProperty.ts,119,3))
+>r7 : any, Symbol(r7, Decl(objectTypeWithStringNamedNumericProperty.ts, 27, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 28, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 58, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 59, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 88, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 89, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 118, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 119, 3))
 >i[-1.0] : any
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
 >-1.0 : number
 >1.0 : number
 
 var r8 = i["-1.0"];
->r8 : RegExp, Symbol(r8,Decl(objectTypeWithStringNamedNumericProperty.ts,29,3),Decl(objectTypeWithStringNamedNumericProperty.ts,60,3),Decl(objectTypeWithStringNamedNumericProperty.ts,90,3),Decl(objectTypeWithStringNamedNumericProperty.ts,120,3))
+>r8 : RegExp, Symbol(r8, Decl(objectTypeWithStringNamedNumericProperty.ts, 29, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 60, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 90, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 120, 3))
 >i["-1.0"] : RegExp
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->"-1.0" : string, Symbol(I."-1.0",Decl(objectTypeWithStringNamedNumericProperty.ts,42,16))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>"-1.0" : string, Symbol(I."-1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 42, 16))
 
 var r9 = i["-1"];
->r9 : Date, Symbol(r9,Decl(objectTypeWithStringNamedNumericProperty.ts,30,3),Decl(objectTypeWithStringNamedNumericProperty.ts,61,3),Decl(objectTypeWithStringNamedNumericProperty.ts,91,3),Decl(objectTypeWithStringNamedNumericProperty.ts,121,3))
+>r9 : Date, Symbol(r9, Decl(objectTypeWithStringNamedNumericProperty.ts, 30, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 61, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 91, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 121, 3))
 >i["-1"] : Date
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->"-1" : string, Symbol(I."-1",Decl(objectTypeWithStringNamedNumericProperty.ts,43,19))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>"-1" : string, Symbol(I."-1", Decl(objectTypeWithStringNamedNumericProperty.ts, 43, 19))
 
 var r10 = i[0x1]
->r10 : number, Symbol(r10,Decl(objectTypeWithStringNamedNumericProperty.ts,31,3),Decl(objectTypeWithStringNamedNumericProperty.ts,62,3),Decl(objectTypeWithStringNamedNumericProperty.ts,92,3),Decl(objectTypeWithStringNamedNumericProperty.ts,122,3))
+>r10 : number, Symbol(r10, Decl(objectTypeWithStringNamedNumericProperty.ts, 31, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 62, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 92, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 122, 3))
 >i[0x1] : number
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->0x1 : number, Symbol(I."1",Decl(objectTypeWithStringNamedNumericProperty.ts,38,17))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>0x1 : number, Symbol(I."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 38, 17))
 
 var r11 = i[-0x1]
->r11 : any, Symbol(r11,Decl(objectTypeWithStringNamedNumericProperty.ts,32,3),Decl(objectTypeWithStringNamedNumericProperty.ts,63,3),Decl(objectTypeWithStringNamedNumericProperty.ts,93,3),Decl(objectTypeWithStringNamedNumericProperty.ts,123,3))
+>r11 : any, Symbol(r11, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
 >i[-0x1] : any
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
 >-0x1 : number
 >0x1 : number
 
 var r12 = i[01]
->r12 : number, Symbol(r12,Decl(objectTypeWithStringNamedNumericProperty.ts,33,3),Decl(objectTypeWithStringNamedNumericProperty.ts,64,3),Decl(objectTypeWithStringNamedNumericProperty.ts,94,3),Decl(objectTypeWithStringNamedNumericProperty.ts,124,3))
+>r12 : number, Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 64, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 94, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 124, 3))
 >i[01] : number
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
->01 : number, Symbol(I."1",Decl(objectTypeWithStringNamedNumericProperty.ts,38,17))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
+>01 : number, Symbol(I."1", Decl(objectTypeWithStringNamedNumericProperty.ts, 38, 17))
 
 var r13 = i[-01]
->r13 : any, Symbol(r13,Decl(objectTypeWithStringNamedNumericProperty.ts,34,3),Decl(objectTypeWithStringNamedNumericProperty.ts,65,3),Decl(objectTypeWithStringNamedNumericProperty.ts,95,3),Decl(objectTypeWithStringNamedNumericProperty.ts,125,3))
+>r13 : any, Symbol(r13, Decl(objectTypeWithStringNamedNumericProperty.ts, 34, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 65, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 95, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 125, 3))
 >i[-01] : any
->i : I, Symbol(i,Decl(objectTypeWithStringNamedNumericProperty.ts,47,3))
+>i : I, Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 47, 3))
 >-01 : number
 >01 : number
 

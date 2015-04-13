@@ -1,40 +1,40 @@
 === tests/cases/compiler/es6ExportClauseInEs5.ts ===
 
 class c {
->c : c, Symbol(c,Decl(es6ExportClauseInEs5.ts,0,0))
+>c : c, Symbol(c, Decl(es6ExportClauseInEs5.ts, 0, 0))
 }
 interface i {
->i : i, Symbol(i,Decl(es6ExportClauseInEs5.ts,2,1))
+>i : i, Symbol(i, Decl(es6ExportClauseInEs5.ts, 2, 1))
 }
 module m {
->m : typeof m, Symbol(m,Decl(es6ExportClauseInEs5.ts,4,1))
+>m : typeof m, Symbol(m, Decl(es6ExportClauseInEs5.ts, 4, 1))
 
     export var x = 10;
->x : number, Symbol(x,Decl(es6ExportClauseInEs5.ts,6,14))
+>x : number, Symbol(x, Decl(es6ExportClauseInEs5.ts, 6, 14))
 >10 : number
 }
 var x = 10;
->x : number, Symbol(x,Decl(es6ExportClauseInEs5.ts,8,3))
+>x : number, Symbol(x, Decl(es6ExportClauseInEs5.ts, 8, 3))
 >10 : number
 
 module uninstantiated {
->uninstantiated : any, Symbol(uninstantiated,Decl(es6ExportClauseInEs5.ts,8,11))
+>uninstantiated : any, Symbol(uninstantiated, Decl(es6ExportClauseInEs5.ts, 8, 11))
 }
 export { c };
->c : typeof c, Symbol(c,Decl(es6ExportClauseInEs5.ts,11,8))
+>c : typeof c, Symbol(c, Decl(es6ExportClauseInEs5.ts, 11, 8))
 
 export { c as c2 };
->c : typeof c, Symbol(c2,Decl(es6ExportClauseInEs5.ts,12,8))
->c2 : typeof c, Symbol(c2,Decl(es6ExportClauseInEs5.ts,12,8))
+>c : typeof c, Symbol(c2, Decl(es6ExportClauseInEs5.ts, 12, 8))
+>c2 : typeof c, Symbol(c2, Decl(es6ExportClauseInEs5.ts, 12, 8))
 
 export { i, m as instantiatedModule };
->i : any, Symbol(i,Decl(es6ExportClauseInEs5.ts,13,8))
->m : typeof m, Symbol(instantiatedModule,Decl(es6ExportClauseInEs5.ts,13,11))
->instantiatedModule : typeof m, Symbol(instantiatedModule,Decl(es6ExportClauseInEs5.ts,13,11))
+>i : any, Symbol(i, Decl(es6ExportClauseInEs5.ts, 13, 8))
+>m : typeof m, Symbol(instantiatedModule, Decl(es6ExportClauseInEs5.ts, 13, 11))
+>instantiatedModule : typeof m, Symbol(instantiatedModule, Decl(es6ExportClauseInEs5.ts, 13, 11))
 
 export { uninstantiated };
->uninstantiated : any, Symbol(uninstantiated,Decl(es6ExportClauseInEs5.ts,14,8))
+>uninstantiated : any, Symbol(uninstantiated, Decl(es6ExportClauseInEs5.ts, 14, 8))
 
 export { x };
->x : number, Symbol(x,Decl(es6ExportClauseInEs5.ts,15,8))
+>x : number, Symbol(x, Decl(es6ExportClauseInEs5.ts, 15, 8))
 

@@ -1,6 +1,6 @@
 === tests/cases/conformance/classes/constructorDeclarations/constructorWithExpressionLessReturn.ts ===
 class C {
->C : C, Symbol(C,Decl(constructorWithExpressionLessReturn.ts,0,0))
+>C : C, Symbol(C, Decl(constructorWithExpressionLessReturn.ts, 0, 0))
 
     constructor() {
         return;
@@ -8,10 +8,10 @@ class C {
 }
 
 class D {
->D : D, Symbol(D,Decl(constructorWithExpressionLessReturn.ts,4,1))
+>D : D, Symbol(D, Decl(constructorWithExpressionLessReturn.ts, 4, 1))
 
     x: number;
->x : number, Symbol(x,Decl(constructorWithExpressionLessReturn.ts,6,9))
+>x : number, Symbol(x, Decl(constructorWithExpressionLessReturn.ts, 6, 9))
 
     constructor() {
         return;
@@ -19,22 +19,22 @@ class D {
 }
 
 class E {
->E : E, Symbol(E,Decl(constructorWithExpressionLessReturn.ts,11,1))
+>E : E, Symbol(E, Decl(constructorWithExpressionLessReturn.ts, 11, 1))
 
     constructor(public x: number) {
->x : number, Symbol(x,Decl(constructorWithExpressionLessReturn.ts,14,16))
+>x : number, Symbol(x, Decl(constructorWithExpressionLessReturn.ts, 14, 16))
 
         return;
     }
 }
 
 class F<T> {
->F : F<T>, Symbol(F,Decl(constructorWithExpressionLessReturn.ts,17,1))
->T : T, Symbol(T,Decl(constructorWithExpressionLessReturn.ts,19,8))
+>F : F<T>, Symbol(F, Decl(constructorWithExpressionLessReturn.ts, 17, 1))
+>T : T, Symbol(T, Decl(constructorWithExpressionLessReturn.ts, 19, 8))
 
     constructor(public x: T) {
->x : T, Symbol(x,Decl(constructorWithExpressionLessReturn.ts,20,16))
->T : T, Symbol(T,Decl(constructorWithExpressionLessReturn.ts,19,8))
+>x : T, Symbol(x, Decl(constructorWithExpressionLessReturn.ts, 20, 16))
+>T : T, Symbol(T, Decl(constructorWithExpressionLessReturn.ts, 19, 8))
 
         return;
     }

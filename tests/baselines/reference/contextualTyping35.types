@@ -1,11 +1,11 @@
 === tests/cases/compiler/contextualTyping35.ts ===
 var foo = <{ id: number;}> {id:4, name: "as"};
->foo : { id: number; }, Symbol(foo,Decl(contextualTyping35.ts,0,3))
+>foo : { id: number; }, Symbol(foo, Decl(contextualTyping35.ts, 0, 3))
 ><{ id: number;}> {id:4, name: "as"} : { id: number; }
->id : number, Symbol(id,Decl(contextualTyping35.ts,0,12))
+>id : number, Symbol(id, Decl(contextualTyping35.ts, 0, 12))
 >{id:4, name: "as"} : { id: number; name: string; }
->id : number, Symbol(id,Decl(contextualTyping35.ts,0,28))
+>id : number, Symbol(id, Decl(contextualTyping35.ts, 0, 28))
 >4 : number
->name : string, Symbol(name,Decl(contextualTyping35.ts,0,33))
+>name : string, Symbol(name, Decl(contextualTyping35.ts, 0, 33))
 >"as" : string
 

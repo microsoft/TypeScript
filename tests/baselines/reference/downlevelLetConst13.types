@@ -6,69 +6,69 @@
 // exported let\const bindings should not be renamed
 
 export let foo = 10;
->foo : number, Symbol(foo,Decl(downlevelLetConst13.ts,4,10))
+>foo : number, Symbol(foo, Decl(downlevelLetConst13.ts, 4, 10))
 >10 : number
 
 export const bar = "123"
->bar : string, Symbol(bar,Decl(downlevelLetConst13.ts,5,12))
+>bar : string, Symbol(bar, Decl(downlevelLetConst13.ts, 5, 12))
 >"123" : string
 
 export let [bar1] = [1];
->bar1 : number, Symbol(bar1,Decl(downlevelLetConst13.ts,6,12))
+>bar1 : number, Symbol(bar1, Decl(downlevelLetConst13.ts, 6, 12))
 >[1] : [number]
 >1 : number
 
 export const [bar2] = [2];
->bar2 : number, Symbol(bar2,Decl(downlevelLetConst13.ts,7,14))
+>bar2 : number, Symbol(bar2, Decl(downlevelLetConst13.ts, 7, 14))
 >[2] : [number]
 >2 : number
 
 export let {a: bar3} = { a: 1 };
 >a : any
->bar3 : number, Symbol(bar3,Decl(downlevelLetConst13.ts,8,12))
+>bar3 : number, Symbol(bar3, Decl(downlevelLetConst13.ts, 8, 12))
 >{ a: 1 } : { a: number; }
->a : number, Symbol(a,Decl(downlevelLetConst13.ts,8,24))
+>a : number, Symbol(a, Decl(downlevelLetConst13.ts, 8, 24))
 >1 : number
 
 export const {a: bar4} = { a: 1 };
 >a : any
->bar4 : number, Symbol(bar4,Decl(downlevelLetConst13.ts,9,14))
+>bar4 : number, Symbol(bar4, Decl(downlevelLetConst13.ts, 9, 14))
 >{ a: 1 } : { a: number; }
->a : number, Symbol(a,Decl(downlevelLetConst13.ts,9,26))
+>a : number, Symbol(a, Decl(downlevelLetConst13.ts, 9, 26))
 >1 : number
 
 export module M {
->M : typeof M, Symbol(M,Decl(downlevelLetConst13.ts,9,34))
+>M : typeof M, Symbol(M, Decl(downlevelLetConst13.ts, 9, 34))
 
     export let baz = 100;
->baz : number, Symbol(baz,Decl(downlevelLetConst13.ts,12,14))
+>baz : number, Symbol(baz, Decl(downlevelLetConst13.ts, 12, 14))
 >100 : number
 
     export const baz2 = true;
->baz2 : boolean, Symbol(baz2,Decl(downlevelLetConst13.ts,13,16))
+>baz2 : boolean, Symbol(baz2, Decl(downlevelLetConst13.ts, 13, 16))
 >true : boolean
 
     export let [bar5] = [1];
->bar5 : number, Symbol(bar5,Decl(downlevelLetConst13.ts,14,16))
+>bar5 : number, Symbol(bar5, Decl(downlevelLetConst13.ts, 14, 16))
 >[1] : [number]
 >1 : number
 
     export const [bar6] = [2];
->bar6 : number, Symbol(bar6,Decl(downlevelLetConst13.ts,15,18))
+>bar6 : number, Symbol(bar6, Decl(downlevelLetConst13.ts, 15, 18))
 >[2] : [number]
 >2 : number
 
     export let {a: bar7} = { a: 1 };
 >a : any
->bar7 : number, Symbol(bar7,Decl(downlevelLetConst13.ts,16,16))
+>bar7 : number, Symbol(bar7, Decl(downlevelLetConst13.ts, 16, 16))
 >{ a: 1 } : { a: number; }
->a : number, Symbol(a,Decl(downlevelLetConst13.ts,16,28))
+>a : number, Symbol(a, Decl(downlevelLetConst13.ts, 16, 28))
 >1 : number
 
     export const {a: bar8} = { a: 1 };
 >a : any
->bar8 : number, Symbol(bar8,Decl(downlevelLetConst13.ts,17,18))
+>bar8 : number, Symbol(bar8, Decl(downlevelLetConst13.ts, 17, 18))
 >{ a: 1 } : { a: number; }
->a : number, Symbol(a,Decl(downlevelLetConst13.ts,17,30))
+>a : number, Symbol(a, Decl(downlevelLetConst13.ts, 17, 30))
 >1 : number
 }

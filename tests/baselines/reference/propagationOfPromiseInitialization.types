@@ -1,50 +1,50 @@
 === tests/cases/compiler/propagationOfPromiseInitialization.ts ===
 interface IPromise<T> {
->IPromise : IPromise<T>, Symbol(IPromise,Decl(propagationOfPromiseInitialization.ts,0,0))
->T : T, Symbol(T,Decl(propagationOfPromiseInitialization.ts,0,19))
+>IPromise : IPromise<T>, Symbol(IPromise, Decl(propagationOfPromiseInitialization.ts, 0, 0))
+>T : T, Symbol(T, Decl(propagationOfPromiseInitialization.ts, 0, 19))
 
     then<TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: (reason: any) => TResult): IPromise<TResult>;
->then : <TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>, Symbol(then,Decl(propagationOfPromiseInitialization.ts,0,23))
->TResult : TResult, Symbol(TResult,Decl(propagationOfPromiseInitialization.ts,1,9))
->successCallback : (promiseValue: T) => TResult, Symbol(successCallback,Decl(propagationOfPromiseInitialization.ts,1,18))
->promiseValue : T, Symbol(promiseValue,Decl(propagationOfPromiseInitialization.ts,1,36))
->T : T, Symbol(T,Decl(propagationOfPromiseInitialization.ts,0,19))
->TResult : TResult, Symbol(TResult,Decl(propagationOfPromiseInitialization.ts,1,9))
->errorCallback : (reason: any) => TResult, Symbol(errorCallback,Decl(propagationOfPromiseInitialization.ts,1,64))
->reason : any, Symbol(reason,Decl(propagationOfPromiseInitialization.ts,1,82))
->TResult : TResult, Symbol(TResult,Decl(propagationOfPromiseInitialization.ts,1,9))
->IPromise : IPromise<T>, Symbol(IPromise,Decl(propagationOfPromiseInitialization.ts,0,0))
->TResult : TResult, Symbol(TResult,Decl(propagationOfPromiseInitialization.ts,1,9))
+>then : <TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>, Symbol(then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
+>TResult : TResult, Symbol(TResult, Decl(propagationOfPromiseInitialization.ts, 1, 9))
+>successCallback : (promiseValue: T) => TResult, Symbol(successCallback, Decl(propagationOfPromiseInitialization.ts, 1, 18))
+>promiseValue : T, Symbol(promiseValue, Decl(propagationOfPromiseInitialization.ts, 1, 36))
+>T : T, Symbol(T, Decl(propagationOfPromiseInitialization.ts, 0, 19))
+>TResult : TResult, Symbol(TResult, Decl(propagationOfPromiseInitialization.ts, 1, 9))
+>errorCallback : (reason: any) => TResult, Symbol(errorCallback, Decl(propagationOfPromiseInitialization.ts, 1, 64))
+>reason : any, Symbol(reason, Decl(propagationOfPromiseInitialization.ts, 1, 82))
+>TResult : TResult, Symbol(TResult, Decl(propagationOfPromiseInitialization.ts, 1, 9))
+>IPromise : IPromise<T>, Symbol(IPromise, Decl(propagationOfPromiseInitialization.ts, 0, 0))
+>TResult : TResult, Symbol(TResult, Decl(propagationOfPromiseInitialization.ts, 1, 9))
 }
 
 var foo: IPromise<number>;
->foo : IPromise<number>, Symbol(foo,Decl(propagationOfPromiseInitialization.ts,4,3))
->IPromise : IPromise<T>, Symbol(IPromise,Decl(propagationOfPromiseInitialization.ts,0,0))
+>foo : IPromise<number>, Symbol(foo, Decl(propagationOfPromiseInitialization.ts, 4, 3))
+>IPromise : IPromise<T>, Symbol(IPromise, Decl(propagationOfPromiseInitialization.ts, 0, 0))
 
 foo.then((x) => {
 >foo.then((x) => {    // x is inferred to be a number    return "asdf";}).then((x) => {    // x is inferred to be string    x.length;    return 123;}) : IPromise<number>
->foo.then((x) => {    // x is inferred to be a number    return "asdf";}).then : <TResult>(successCallback: (promiseValue: string) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>, Symbol(IPromise.then,Decl(propagationOfPromiseInitialization.ts,0,23))
+>foo.then((x) => {    // x is inferred to be a number    return "asdf";}).then : <TResult>(successCallback: (promiseValue: string) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>, Symbol(IPromise.then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
 >foo.then((x) => {    // x is inferred to be a number    return "asdf";}) : IPromise<string>
->foo.then : <TResult>(successCallback: (promiseValue: number) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>, Symbol(IPromise.then,Decl(propagationOfPromiseInitialization.ts,0,23))
->foo : IPromise<number>, Symbol(foo,Decl(propagationOfPromiseInitialization.ts,4,3))
->then : <TResult>(successCallback: (promiseValue: number) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>, Symbol(IPromise.then,Decl(propagationOfPromiseInitialization.ts,0,23))
+>foo.then : <TResult>(successCallback: (promiseValue: number) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>, Symbol(IPromise.then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
+>foo : IPromise<number>, Symbol(foo, Decl(propagationOfPromiseInitialization.ts, 4, 3))
+>then : <TResult>(successCallback: (promiseValue: number) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>, Symbol(IPromise.then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
 >(x) => {    // x is inferred to be a number    return "asdf";} : (x: number) => string
->x : number, Symbol(x,Decl(propagationOfPromiseInitialization.ts,5,10))
+>x : number, Symbol(x, Decl(propagationOfPromiseInitialization.ts, 5, 10))
 
     // x is inferred to be a number
     return "asdf";
 >"asdf" : string
 
 }).then((x) => {
->then : <TResult>(successCallback: (promiseValue: string) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>, Symbol(IPromise.then,Decl(propagationOfPromiseInitialization.ts,0,23))
+>then : <TResult>(successCallback: (promiseValue: string) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>, Symbol(IPromise.then, Decl(propagationOfPromiseInitialization.ts, 0, 23))
 >(x) => {    // x is inferred to be string    x.length;    return 123;} : (x: string) => number
->x : string, Symbol(x,Decl(propagationOfPromiseInitialization.ts,8,9))
+>x : string, Symbol(x, Decl(propagationOfPromiseInitialization.ts, 8, 9))
 
     // x is inferred to be string
     x.length;
->x.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
->x : string, Symbol(x,Decl(propagationOfPromiseInitialization.ts,8,9))
->length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>x.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>x : string, Symbol(x, Decl(propagationOfPromiseInitialization.ts, 8, 9))
+>length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
 
     return 123;
 >123 : number

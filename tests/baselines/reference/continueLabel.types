@@ -1,13 +1,13 @@
 === tests/cases/compiler/continueLabel.ts ===
 label1: for(var i = 0; i < 1; i++) {
 >label1 : any
->i : number, Symbol(i,Decl(continueLabel.ts,0,15))
+>i : number, Symbol(i, Decl(continueLabel.ts, 0, 15))
 >0 : number
 >i < 1 : boolean
->i : number, Symbol(i,Decl(continueLabel.ts,0,15))
+>i : number, Symbol(i, Decl(continueLabel.ts, 0, 15))
 >1 : number
 >i++ : number
->i : number, Symbol(i,Decl(continueLabel.ts,0,15))
+>i : number, Symbol(i, Decl(continueLabel.ts, 0, 15))
 
     continue label1;
 >label1 : any

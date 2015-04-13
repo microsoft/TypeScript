@@ -2,43 +2,43 @@
 // some complex cases of assignment compat of generic signatures. No contextual signature instantiation
 
 interface A {
->A : A, Symbol(A,Decl(assignmentCompatWithGenericCallSignatures2.ts,0,0))
+>A : A, Symbol(A, Decl(assignmentCompatWithGenericCallSignatures2.ts, 0, 0))
 
     <T>(x: T, ...y: T[][]): void
->T : T, Symbol(T,Decl(assignmentCompatWithGenericCallSignatures2.ts,3,5))
->x : T, Symbol(x,Decl(assignmentCompatWithGenericCallSignatures2.ts,3,8))
->T : T, Symbol(T,Decl(assignmentCompatWithGenericCallSignatures2.ts,3,5))
->y : T[][], Symbol(y,Decl(assignmentCompatWithGenericCallSignatures2.ts,3,13))
->T : T, Symbol(T,Decl(assignmentCompatWithGenericCallSignatures2.ts,3,5))
+>T : T, Symbol(T, Decl(assignmentCompatWithGenericCallSignatures2.ts, 3, 5))
+>x : T, Symbol(x, Decl(assignmentCompatWithGenericCallSignatures2.ts, 3, 8))
+>T : T, Symbol(T, Decl(assignmentCompatWithGenericCallSignatures2.ts, 3, 5))
+>y : T[][], Symbol(y, Decl(assignmentCompatWithGenericCallSignatures2.ts, 3, 13))
+>T : T, Symbol(T, Decl(assignmentCompatWithGenericCallSignatures2.ts, 3, 5))
 }
 
 interface B {
->B : B, Symbol(B,Decl(assignmentCompatWithGenericCallSignatures2.ts,4,1))
+>B : B, Symbol(B, Decl(assignmentCompatWithGenericCallSignatures2.ts, 4, 1))
 
     <S>(x: S, ...y: S[]): void
->S : S, Symbol(S,Decl(assignmentCompatWithGenericCallSignatures2.ts,7,5))
->x : S, Symbol(x,Decl(assignmentCompatWithGenericCallSignatures2.ts,7,8))
->S : S, Symbol(S,Decl(assignmentCompatWithGenericCallSignatures2.ts,7,5))
->y : S[], Symbol(y,Decl(assignmentCompatWithGenericCallSignatures2.ts,7,13))
->S : S, Symbol(S,Decl(assignmentCompatWithGenericCallSignatures2.ts,7,5))
+>S : S, Symbol(S, Decl(assignmentCompatWithGenericCallSignatures2.ts, 7, 5))
+>x : S, Symbol(x, Decl(assignmentCompatWithGenericCallSignatures2.ts, 7, 8))
+>S : S, Symbol(S, Decl(assignmentCompatWithGenericCallSignatures2.ts, 7, 5))
+>y : S[], Symbol(y, Decl(assignmentCompatWithGenericCallSignatures2.ts, 7, 13))
+>S : S, Symbol(S, Decl(assignmentCompatWithGenericCallSignatures2.ts, 7, 5))
 }
 
 var a: A;
->a : A, Symbol(a,Decl(assignmentCompatWithGenericCallSignatures2.ts,10,3))
->A : A, Symbol(A,Decl(assignmentCompatWithGenericCallSignatures2.ts,0,0))
+>a : A, Symbol(a, Decl(assignmentCompatWithGenericCallSignatures2.ts, 10, 3))
+>A : A, Symbol(A, Decl(assignmentCompatWithGenericCallSignatures2.ts, 0, 0))
 
 var b: B;
->b : B, Symbol(b,Decl(assignmentCompatWithGenericCallSignatures2.ts,11,3))
->B : B, Symbol(B,Decl(assignmentCompatWithGenericCallSignatures2.ts,4,1))
+>b : B, Symbol(b, Decl(assignmentCompatWithGenericCallSignatures2.ts, 11, 3))
+>B : B, Symbol(B, Decl(assignmentCompatWithGenericCallSignatures2.ts, 4, 1))
 
 // Both ok
 a = b;
 >a = b : B
->a : A, Symbol(a,Decl(assignmentCompatWithGenericCallSignatures2.ts,10,3))
->b : B, Symbol(b,Decl(assignmentCompatWithGenericCallSignatures2.ts,11,3))
+>a : A, Symbol(a, Decl(assignmentCompatWithGenericCallSignatures2.ts, 10, 3))
+>b : B, Symbol(b, Decl(assignmentCompatWithGenericCallSignatures2.ts, 11, 3))
 
 b = a;
 >b = a : A
->b : B, Symbol(b,Decl(assignmentCompatWithGenericCallSignatures2.ts,11,3))
->a : A, Symbol(a,Decl(assignmentCompatWithGenericCallSignatures2.ts,10,3))
+>b : B, Symbol(b, Decl(assignmentCompatWithGenericCallSignatures2.ts, 11, 3))
+>a : A, Symbol(a, Decl(assignmentCompatWithGenericCallSignatures2.ts, 10, 3))
 

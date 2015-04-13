@@ -2,43 +2,43 @@
 declare module 'connect' {
 
     interface connectModule {
->connectModule : connectModule, Symbol(connectModule,Decl(declaredExternalModule.ts,0,26))
+>connectModule : connectModule, Symbol(connectModule, Decl(declaredExternalModule.ts, 0, 26))
 
         (res, req, next): void;
->res : any, Symbol(res,Decl(declaredExternalModule.ts,4,9))
->req : any, Symbol(req,Decl(declaredExternalModule.ts,4,13))
->next : any, Symbol(next,Decl(declaredExternalModule.ts,4,18))
+>res : any, Symbol(res, Decl(declaredExternalModule.ts, 4, 9))
+>req : any, Symbol(req, Decl(declaredExternalModule.ts, 4, 13))
+>next : any, Symbol(next, Decl(declaredExternalModule.ts, 4, 18))
 
     }
 
     interface connectExport {
->connectExport : connectExport, Symbol(connectExport,Decl(declaredExternalModule.ts,6,5))
+>connectExport : connectExport, Symbol(connectExport, Decl(declaredExternalModule.ts, 6, 5))
 
         use: (mod: connectModule) => connectExport;
->use : (mod: connectModule) => connectExport, Symbol(use,Decl(declaredExternalModule.ts,8,29))
->mod : connectModule, Symbol(mod,Decl(declaredExternalModule.ts,10,14))
->connectModule : connectModule, Symbol(connectModule,Decl(declaredExternalModule.ts,0,26))
->connectExport : connectExport, Symbol(connectExport,Decl(declaredExternalModule.ts,6,5))
+>use : (mod: connectModule) => connectExport, Symbol(use, Decl(declaredExternalModule.ts, 8, 29))
+>mod : connectModule, Symbol(mod, Decl(declaredExternalModule.ts, 10, 14))
+>connectModule : connectModule, Symbol(connectModule, Decl(declaredExternalModule.ts, 0, 26))
+>connectExport : connectExport, Symbol(connectExport, Decl(declaredExternalModule.ts, 6, 5))
 
         listen: (port: number) => void;
->listen : (port: number) => void, Symbol(listen,Decl(declaredExternalModule.ts,10,51))
->port : number, Symbol(port,Decl(declaredExternalModule.ts,12,17))
+>listen : (port: number) => void, Symbol(listen, Decl(declaredExternalModule.ts, 10, 51))
+>port : number, Symbol(port, Decl(declaredExternalModule.ts, 12, 17))
 
     }
 
     var server: {
->server : { (): connectExport; test1: connectModule; test2(): connectModule; }, Symbol(server,Decl(declaredExternalModule.ts,16,7))
+>server : { (): connectExport; test1: connectModule; test2(): connectModule; }, Symbol(server, Decl(declaredExternalModule.ts, 16, 7))
 
         (): connectExport;
->connectExport : connectExport, Symbol(connectExport,Decl(declaredExternalModule.ts,6,5))
+>connectExport : connectExport, Symbol(connectExport, Decl(declaredExternalModule.ts, 6, 5))
 
         test1: connectModule;   // No error
->test1 : connectModule, Symbol(test1,Decl(declaredExternalModule.ts,18,26))
->connectModule : connectModule, Symbol(connectModule,Decl(declaredExternalModule.ts,0,26))
+>test1 : connectModule, Symbol(test1, Decl(declaredExternalModule.ts, 18, 26))
+>connectModule : connectModule, Symbol(connectModule, Decl(declaredExternalModule.ts, 0, 26))
 
         test2(): connectModule; // ERROR: Return type of method from exported interface has or is using private type ''connect'.connectModule'.
->test2 : () => connectModule, Symbol(test2,Decl(declaredExternalModule.ts,20,29))
->connectModule : connectModule, Symbol(connectModule,Decl(declaredExternalModule.ts,0,26))
+>test2 : () => connectModule, Symbol(test2, Decl(declaredExternalModule.ts, 20, 29))
+>connectModule : connectModule, Symbol(connectModule, Decl(declaredExternalModule.ts, 0, 26))
 
     };
 }

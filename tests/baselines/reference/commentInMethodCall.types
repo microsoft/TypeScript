@@ -1,13 +1,13 @@
 === tests/cases/compiler/commentInMethodCall.ts ===
 //commment here
 var s: string[];
->s : string[], Symbol(s,Decl(commentInMethodCall.ts,1,3))
+>s : string[], Symbol(s, Decl(commentInMethodCall.ts, 1, 3))
 
 s.map(// do something
 >s.map(// do something    function () { }) : void[]
->s.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
->s : string[], Symbol(s,Decl(commentInMethodCall.ts,1,3))
->map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
+>s.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
+>s : string[], Symbol(s, Decl(commentInMethodCall.ts, 1, 3))
+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
 
     function () { });
 >function () { } : () => void

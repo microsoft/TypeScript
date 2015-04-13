@@ -1,24 +1,24 @@
 === tests/cases/compiler/file2.ts ===
 import f = require('file1');
->f : typeof f, Symbol(f,Decl(file2.ts,0,0))
+>f : typeof f, Symbol(f, Decl(file2.ts, 0, 0))
 
 f.foo();
 >f.foo() : any
->f.foo : () => any, Symbol(f.foo,Decl(file1.ts,0,0))
->f : typeof f, Symbol(f,Decl(file2.ts,0,0))
->foo : () => any, Symbol(f.foo,Decl(file1.ts,0,0))
+>f.foo : () => any, Symbol(f.foo, Decl(file1.ts, 0, 0))
+>f : typeof f, Symbol(f, Decl(file2.ts, 0, 0))
+>foo : () => any, Symbol(f.foo, Decl(file1.ts, 0, 0))
 
 === tests/cases/compiler/file1.ts ===
 export function foo() {
->foo : () => any, Symbol(foo,Decl(file1.ts,0,0))
+>foo : () => any, Symbol(foo, Decl(file1.ts, 0, 0))
 
 var classes = undefined;
->classes : any, Symbol(classes,Decl(file1.ts,1,3))
+>classes : any, Symbol(classes, Decl(file1.ts, 1, 3))
 >undefined : undefined, Symbol(undefined)
 
     return new classes(null);
 >new classes(null) : any
->classes : any, Symbol(classes,Decl(file1.ts,1,3))
+>classes : any, Symbol(classes, Decl(file1.ts, 1, 3))
 >null : null
 }
 

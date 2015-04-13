@@ -1,22 +1,22 @@
 === tests/cases/compiler/es6ImportWithoutFromClauseAmd_0.ts ===
 
 export var a = 10;
->a : number, Symbol(a,Decl(es6ImportWithoutFromClauseAmd_0.ts,1,10))
+>a : number, Symbol(a, Decl(es6ImportWithoutFromClauseAmd_0.ts, 1, 10))
 >10 : number
 
 === tests/cases/compiler/es6ImportWithoutFromClauseAmd_1.ts ===
 export var b = 10;
->b : number, Symbol(b,Decl(es6ImportWithoutFromClauseAmd_1.ts,0,10))
+>b : number, Symbol(b, Decl(es6ImportWithoutFromClauseAmd_1.ts, 0, 10))
 >10 : number
 
 === tests/cases/compiler/es6ImportWithoutFromClauseAmd_2.ts ===
 import "es6ImportWithoutFromClauseAmd_0"; 
 import "es6ImportWithoutFromClauseAmd_2";
 var _a = 10;
->_a : number, Symbol(_a,Decl(es6ImportWithoutFromClauseAmd_2.ts,2,3))
+>_a : number, Symbol(_a, Decl(es6ImportWithoutFromClauseAmd_2.ts, 2, 3))
 >10 : number
 
 var _b = 10;
->_b : number, Symbol(_b,Decl(es6ImportWithoutFromClauseAmd_2.ts,3,3))
+>_b : number, Symbol(_b, Decl(es6ImportWithoutFromClauseAmd_2.ts, 3, 3))
 >10 : number
 

@@ -1,46 +1,46 @@
 === tests/cases/compiler/extendAndImplementTheSameBaseType.ts ===
 class C {
->C : C, Symbol(C,Decl(extendAndImplementTheSameBaseType.ts,0,0))
+>C : C, Symbol(C, Decl(extendAndImplementTheSameBaseType.ts, 0, 0))
 
     foo: number
->foo : number, Symbol(foo,Decl(extendAndImplementTheSameBaseType.ts,0,9))
+>foo : number, Symbol(foo, Decl(extendAndImplementTheSameBaseType.ts, 0, 9))
 
     bar() {}
->bar : () => void, Symbol(bar,Decl(extendAndImplementTheSameBaseType.ts,1,15))
+>bar : () => void, Symbol(bar, Decl(extendAndImplementTheSameBaseType.ts, 1, 15))
 }
 class D extends C implements C {
->D : D, Symbol(D,Decl(extendAndImplementTheSameBaseType.ts,3,1))
->C : C, Symbol(C,Decl(extendAndImplementTheSameBaseType.ts,0,0))
->C : C, Symbol(C,Decl(extendAndImplementTheSameBaseType.ts,0,0))
+>D : D, Symbol(D, Decl(extendAndImplementTheSameBaseType.ts, 3, 1))
+>C : C, Symbol(C, Decl(extendAndImplementTheSameBaseType.ts, 0, 0))
+>C : C, Symbol(C, Decl(extendAndImplementTheSameBaseType.ts, 0, 0))
 
     baz() { }
->baz : () => void, Symbol(baz,Decl(extendAndImplementTheSameBaseType.ts,4,32))
+>baz : () => void, Symbol(baz, Decl(extendAndImplementTheSameBaseType.ts, 4, 32))
 }
 
 var c: C;
->c : C, Symbol(c,Decl(extendAndImplementTheSameBaseType.ts,8,3))
->C : C, Symbol(C,Decl(extendAndImplementTheSameBaseType.ts,0,0))
+>c : C, Symbol(c, Decl(extendAndImplementTheSameBaseType.ts, 8, 3))
+>C : C, Symbol(C, Decl(extendAndImplementTheSameBaseType.ts, 0, 0))
 
 var d: D = new D();
->d : D, Symbol(d,Decl(extendAndImplementTheSameBaseType.ts,9,3))
->D : D, Symbol(D,Decl(extendAndImplementTheSameBaseType.ts,3,1))
+>d : D, Symbol(d, Decl(extendAndImplementTheSameBaseType.ts, 9, 3))
+>D : D, Symbol(D, Decl(extendAndImplementTheSameBaseType.ts, 3, 1))
 >new D() : D
->D : typeof D, Symbol(D,Decl(extendAndImplementTheSameBaseType.ts,3,1))
+>D : typeof D, Symbol(D, Decl(extendAndImplementTheSameBaseType.ts, 3, 1))
 
 d.bar();
 >d.bar() : void
->d.bar : () => void, Symbol(C.bar,Decl(extendAndImplementTheSameBaseType.ts,1,15))
->d : D, Symbol(d,Decl(extendAndImplementTheSameBaseType.ts,9,3))
->bar : () => void, Symbol(C.bar,Decl(extendAndImplementTheSameBaseType.ts,1,15))
+>d.bar : () => void, Symbol(C.bar, Decl(extendAndImplementTheSameBaseType.ts, 1, 15))
+>d : D, Symbol(d, Decl(extendAndImplementTheSameBaseType.ts, 9, 3))
+>bar : () => void, Symbol(C.bar, Decl(extendAndImplementTheSameBaseType.ts, 1, 15))
 
 d.baz();
 >d.baz() : void
->d.baz : () => void, Symbol(D.baz,Decl(extendAndImplementTheSameBaseType.ts,4,32))
->d : D, Symbol(d,Decl(extendAndImplementTheSameBaseType.ts,9,3))
->baz : () => void, Symbol(D.baz,Decl(extendAndImplementTheSameBaseType.ts,4,32))
+>d.baz : () => void, Symbol(D.baz, Decl(extendAndImplementTheSameBaseType.ts, 4, 32))
+>d : D, Symbol(d, Decl(extendAndImplementTheSameBaseType.ts, 9, 3))
+>baz : () => void, Symbol(D.baz, Decl(extendAndImplementTheSameBaseType.ts, 4, 32))
 
 d.foo;
->d.foo : number, Symbol(C.foo,Decl(extendAndImplementTheSameBaseType.ts,0,9))
->d : D, Symbol(d,Decl(extendAndImplementTheSameBaseType.ts,9,3))
->foo : number, Symbol(C.foo,Decl(extendAndImplementTheSameBaseType.ts,0,9))
+>d.foo : number, Symbol(C.foo, Decl(extendAndImplementTheSameBaseType.ts, 0, 9))
+>d : D, Symbol(d, Decl(extendAndImplementTheSameBaseType.ts, 9, 3))
+>foo : number, Symbol(C.foo, Decl(extendAndImplementTheSameBaseType.ts, 0, 9))
 

@@ -1,21 +1,21 @@
 === tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithStaticPropertyAssignmentInES6.ts ===
 class C {
->C : C, Symbol(C,Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts,0,0))
+>C : C, Symbol(C, Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts, 0, 0))
 
     static z: string = "Foo";
->z : string, Symbol(C.z,Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts,0,9))
+>z : string, Symbol(C.z, Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts, 0, 9))
 >"Foo" : string
 }
 
 class D {
->D : D, Symbol(D,Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts,2,1))
+>D : D, Symbol(D, Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts, 2, 1))
 
     x = 20000;
->x : number, Symbol(x,Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts,4,9))
+>x : number, Symbol(x, Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts, 4, 9))
 >20000 : number
 
     static b = true;
->b : boolean, Symbol(D.b,Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts,5,14))
+>b : boolean, Symbol(D.b, Decl(emitClassDeclarationWithStaticPropertyAssignmentInES6.ts, 5, 14))
 >true : boolean
 }
 

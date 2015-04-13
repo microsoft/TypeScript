@@ -1,101 +1,101 @@
 === tests/cases/compiler/genericOverloadSignatures.ts ===
 interface A {
->A : A, Symbol(A,Decl(genericOverloadSignatures.ts,0,0))
+>A : A, Symbol(A, Decl(genericOverloadSignatures.ts, 0, 0))
 
     <T>(x: T): void;
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,1,5))
->x : T, Symbol(x,Decl(genericOverloadSignatures.ts,1,8))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,1,5))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 1, 5))
+>x : T, Symbol(x, Decl(genericOverloadSignatures.ts, 1, 8))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 1, 5))
 
     <T>(x: T): void;
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,2,5))
->x : T, Symbol(x,Decl(genericOverloadSignatures.ts,2,8))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,2,5))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 2, 5))
+>x : T, Symbol(x, Decl(genericOverloadSignatures.ts, 2, 8))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 2, 5))
 }
 
 function f<T>(a: T);
->f : { <T>(a: T): any; <T>(a: T): any; }, Symbol(f,Decl(genericOverloadSignatures.ts,3,1),Decl(genericOverloadSignatures.ts,5,20),Decl(genericOverloadSignatures.ts,6,20))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,5,11))
->a : T, Symbol(a,Decl(genericOverloadSignatures.ts,5,14))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,5,11))
+>f : { <T>(a: T): any; <T>(a: T): any; }, Symbol(f, Decl(genericOverloadSignatures.ts, 3, 1), Decl(genericOverloadSignatures.ts, 5, 20), Decl(genericOverloadSignatures.ts, 6, 20))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 5, 11))
+>a : T, Symbol(a, Decl(genericOverloadSignatures.ts, 5, 14))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 5, 11))
 
 function f<T>(a: T);
->f : { <T>(a: T): any; <T>(a: T): any; }, Symbol(f,Decl(genericOverloadSignatures.ts,3,1),Decl(genericOverloadSignatures.ts,5,20),Decl(genericOverloadSignatures.ts,6,20))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,6,11))
->a : T, Symbol(a,Decl(genericOverloadSignatures.ts,6,14))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,6,11))
+>f : { <T>(a: T): any; <T>(a: T): any; }, Symbol(f, Decl(genericOverloadSignatures.ts, 3, 1), Decl(genericOverloadSignatures.ts, 5, 20), Decl(genericOverloadSignatures.ts, 6, 20))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 6, 11))
+>a : T, Symbol(a, Decl(genericOverloadSignatures.ts, 6, 14))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 6, 11))
 
 function f(a) { }
->f : { <T>(a: T): any; <T>(a: T): any; }, Symbol(f,Decl(genericOverloadSignatures.ts,3,1),Decl(genericOverloadSignatures.ts,5,20),Decl(genericOverloadSignatures.ts,6,20))
->a : any, Symbol(a,Decl(genericOverloadSignatures.ts,7,11))
+>f : { <T>(a: T): any; <T>(a: T): any; }, Symbol(f, Decl(genericOverloadSignatures.ts, 3, 1), Decl(genericOverloadSignatures.ts, 5, 20), Decl(genericOverloadSignatures.ts, 6, 20))
+>a : any, Symbol(a, Decl(genericOverloadSignatures.ts, 7, 11))
 
 interface I2 {
->I2 : I2, Symbol(I2,Decl(genericOverloadSignatures.ts,7,17))
+>I2 : I2, Symbol(I2, Decl(genericOverloadSignatures.ts, 7, 17))
 
     f<T>(x: T): number;
->f : { <T>(x: T): number; <T>(x: T): string; }, Symbol(f,Decl(genericOverloadSignatures.ts,9,14),Decl(genericOverloadSignatures.ts,10,23))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,10,6))
->x : T, Symbol(x,Decl(genericOverloadSignatures.ts,10,9))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,10,6))
+>f : { <T>(x: T): number; <T>(x: T): string; }, Symbol(f, Decl(genericOverloadSignatures.ts, 9, 14), Decl(genericOverloadSignatures.ts, 10, 23))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 10, 6))
+>x : T, Symbol(x, Decl(genericOverloadSignatures.ts, 10, 9))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 10, 6))
 
     f<T>(x: T): string;
->f : { <T>(x: T): number; <T>(x: T): string; }, Symbol(f,Decl(genericOverloadSignatures.ts,9,14),Decl(genericOverloadSignatures.ts,10,23))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,11,6))
->x : T, Symbol(x,Decl(genericOverloadSignatures.ts,11,9))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,11,6))
+>f : { <T>(x: T): number; <T>(x: T): string; }, Symbol(f, Decl(genericOverloadSignatures.ts, 9, 14), Decl(genericOverloadSignatures.ts, 10, 23))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 11, 6))
+>x : T, Symbol(x, Decl(genericOverloadSignatures.ts, 11, 9))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 11, 6))
 }
 
 interface I3<T> {
->I3 : I3<T>, Symbol(I3,Decl(genericOverloadSignatures.ts,12,1))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,14,13))
+>I3 : I3<T>, Symbol(I3, Decl(genericOverloadSignatures.ts, 12, 1))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 14, 13))
 
     f(x: T): number;
->f : { (x: T): number; (x: T): string; }, Symbol(f,Decl(genericOverloadSignatures.ts,14,17),Decl(genericOverloadSignatures.ts,15,20))
->x : T, Symbol(x,Decl(genericOverloadSignatures.ts,15,6))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,14,13))
+>f : { (x: T): number; (x: T): string; }, Symbol(f, Decl(genericOverloadSignatures.ts, 14, 17), Decl(genericOverloadSignatures.ts, 15, 20))
+>x : T, Symbol(x, Decl(genericOverloadSignatures.ts, 15, 6))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 14, 13))
 
     f(x: T): string;
->f : { (x: T): number; (x: T): string; }, Symbol(f,Decl(genericOverloadSignatures.ts,14,17),Decl(genericOverloadSignatures.ts,15,20))
->x : T, Symbol(x,Decl(genericOverloadSignatures.ts,16,6))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,14,13))
+>f : { (x: T): number; (x: T): string; }, Symbol(f, Decl(genericOverloadSignatures.ts, 14, 17), Decl(genericOverloadSignatures.ts, 15, 20))
+>x : T, Symbol(x, Decl(genericOverloadSignatures.ts, 16, 6))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 14, 13))
 }
 
 class C2<T> {
->C2 : C2<T>, Symbol(C2,Decl(genericOverloadSignatures.ts,17,1))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,19,9))
+>C2 : C2<T>, Symbol(C2, Decl(genericOverloadSignatures.ts, 17, 1))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 19, 9))
 }
 var b: {
->b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C2<T>; }, Symbol(b,Decl(genericOverloadSignatures.ts,21,3))
+>b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C2<T>; }, Symbol(b, Decl(genericOverloadSignatures.ts, 21, 3))
 
     new <T>(x: T, y: string): C2<T>;
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,22,9))
->x : T, Symbol(x,Decl(genericOverloadSignatures.ts,22,12))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,22,9))
->y : string, Symbol(y,Decl(genericOverloadSignatures.ts,22,17))
->C2 : C2<T>, Symbol(C2,Decl(genericOverloadSignatures.ts,17,1))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,22,9))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 22, 9))
+>x : T, Symbol(x, Decl(genericOverloadSignatures.ts, 22, 12))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 22, 9))
+>y : string, Symbol(y, Decl(genericOverloadSignatures.ts, 22, 17))
+>C2 : C2<T>, Symbol(C2, Decl(genericOverloadSignatures.ts, 17, 1))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 22, 9))
 
     new <T>(x: T, y: string): C2<T>;
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,23,9))
->x : T, Symbol(x,Decl(genericOverloadSignatures.ts,23,12))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,23,9))
->y : string, Symbol(y,Decl(genericOverloadSignatures.ts,23,17))
->C2 : C2<T>, Symbol(C2,Decl(genericOverloadSignatures.ts,17,1))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,23,9))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 23, 9))
+>x : T, Symbol(x, Decl(genericOverloadSignatures.ts, 23, 12))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 23, 9))
+>y : string, Symbol(y, Decl(genericOverloadSignatures.ts, 23, 17))
+>C2 : C2<T>, Symbol(C2, Decl(genericOverloadSignatures.ts, 17, 1))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 23, 9))
 }
 
 interface D {
->D : D, Symbol(D,Decl(genericOverloadSignatures.ts,24,1))
+>D : D, Symbol(D, Decl(genericOverloadSignatures.ts, 24, 1))
 
     <T>(x: T): T;
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,27,5))
->x : T, Symbol(x,Decl(genericOverloadSignatures.ts,27,8))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,27,5))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,27,5))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 27, 5))
+>x : T, Symbol(x, Decl(genericOverloadSignatures.ts, 27, 8))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 27, 5))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 27, 5))
 
     <T>(x: T): T;
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,28,5))
->x : T, Symbol(x,Decl(genericOverloadSignatures.ts,28,8))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,28,5))
->T : T, Symbol(T,Decl(genericOverloadSignatures.ts,28,5))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 28, 5))
+>x : T, Symbol(x, Decl(genericOverloadSignatures.ts, 28, 8))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 28, 5))
+>T : T, Symbol(T, Decl(genericOverloadSignatures.ts, 28, 5))
 }

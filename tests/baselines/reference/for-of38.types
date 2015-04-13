@@ -1,21 +1,21 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of38.ts ===
 var map = new Map([["", true]]);
->map : Map<string, boolean>, Symbol(map,Decl(for-of38.ts,0,3))
+>map : Map<string, boolean>, Symbol(map, Decl(for-of38.ts, 0, 3))
 >new Map([["", true]]) : Map<string, boolean>
->Map : MapConstructor, Symbol(Map,Decl(lib.d.ts,1837,1),Decl(lib.d.ts,1859,11))
+>Map : MapConstructor, Symbol(Map, Decl(lib.d.ts, 1837, 1), Decl(lib.d.ts, 1859, 11))
 >[["", true]] : [string, boolean][]
 >["", true] : [string, boolean]
 >"" : string
 >true : boolean
 
 for (var [k, v] of map) {
->k : string, Symbol(k,Decl(for-of38.ts,1,10))
->v : boolean, Symbol(v,Decl(for-of38.ts,1,12))
->map : Map<string, boolean>, Symbol(map,Decl(for-of38.ts,0,3))
+>k : string, Symbol(k, Decl(for-of38.ts, 1, 10))
+>v : boolean, Symbol(v, Decl(for-of38.ts, 1, 12))
+>map : Map<string, boolean>, Symbol(map, Decl(for-of38.ts, 0, 3))
 
     k;
->k : string, Symbol(k,Decl(for-of38.ts,1,10))
+>k : string, Symbol(k, Decl(for-of38.ts, 1, 10))
 
     v;
->v : boolean, Symbol(v,Decl(for-of38.ts,1,12))
+>v : boolean, Symbol(v, Decl(for-of38.ts, 1, 12))
 }

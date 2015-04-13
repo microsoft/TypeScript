@@ -1,23 +1,23 @@
 === tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration11.ts ===
 declare module string {
->string : typeof string, Symbol(string,Decl(parserModuleDeclaration11.ts,0,0))
+>string : typeof string, Symbol(string, Decl(parserModuleDeclaration11.ts, 0, 0))
 
     interface X { }
->X : X, Symbol(X,Decl(parserModuleDeclaration11.ts,0,23))
+>X : X, Symbol(X, Decl(parserModuleDeclaration11.ts, 0, 23))
 
     export function foo(s: string);
->foo : (s: string) => any, Symbol(foo,Decl(parserModuleDeclaration11.ts,1,19))
->s : string, Symbol(s,Decl(parserModuleDeclaration11.ts,2,24))
+>foo : (s: string) => any, Symbol(foo, Decl(parserModuleDeclaration11.ts, 1, 19))
+>s : string, Symbol(s, Decl(parserModuleDeclaration11.ts, 2, 24))
 }
 string.foo("abc");
 >string.foo("abc") : any
->string.foo : (s: string) => any, Symbol(string.foo,Decl(parserModuleDeclaration11.ts,1,19))
->string : typeof string, Symbol(string,Decl(parserModuleDeclaration11.ts,0,0))
->foo : (s: string) => any, Symbol(string.foo,Decl(parserModuleDeclaration11.ts,1,19))
+>string.foo : (s: string) => any, Symbol(string.foo, Decl(parserModuleDeclaration11.ts, 1, 19))
+>string : typeof string, Symbol(string, Decl(parserModuleDeclaration11.ts, 0, 0))
+>foo : (s: string) => any, Symbol(string.foo, Decl(parserModuleDeclaration11.ts, 1, 19))
 >"abc" : string
 
 var x: string.X;
->x : string.X, Symbol(x,Decl(parserModuleDeclaration11.ts,5,3))
->string : any, Symbol(string,Decl(parserModuleDeclaration11.ts,0,0))
->X : string.X, Symbol(string.X,Decl(parserModuleDeclaration11.ts,0,23))
+>x : string.X, Symbol(x, Decl(parserModuleDeclaration11.ts, 5, 3))
+>string : any, Symbol(string, Decl(parserModuleDeclaration11.ts, 0, 0))
+>X : string.X, Symbol(string.X, Decl(parserModuleDeclaration11.ts, 0, 23))
 

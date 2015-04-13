@@ -1,40 +1,40 @@
 === tests/cases/compiler/enumIndexer.ts ===
 enum MyEnumType {
->MyEnumType : MyEnumType, Symbol(MyEnumType,Decl(enumIndexer.ts,0,0))
+>MyEnumType : MyEnumType, Symbol(MyEnumType, Decl(enumIndexer.ts, 0, 0))
 
     foo, bar
->foo : MyEnumType, Symbol(MyEnumType.foo,Decl(enumIndexer.ts,0,17))
->bar : MyEnumType, Symbol(MyEnumType.bar,Decl(enumIndexer.ts,1,8))
+>foo : MyEnumType, Symbol(MyEnumType.foo, Decl(enumIndexer.ts, 0, 17))
+>bar : MyEnumType, Symbol(MyEnumType.bar, Decl(enumIndexer.ts, 1, 8))
 }
 var _arr = [{ key: 'foo' }, { key: 'bar' }]
->_arr : { key: string; }[], Symbol(_arr,Decl(enumIndexer.ts,3,3))
+>_arr : { key: string; }[], Symbol(_arr, Decl(enumIndexer.ts, 3, 3))
 >[{ key: 'foo' }, { key: 'bar' }] : { key: string; }[]
 >{ key: 'foo' } : { key: string; }
->key : string, Symbol(key,Decl(enumIndexer.ts,3,13))
+>key : string, Symbol(key, Decl(enumIndexer.ts, 3, 13))
 >'foo' : string
 >{ key: 'bar' } : { key: string; }
->key : string, Symbol(key,Decl(enumIndexer.ts,3,29))
+>key : string, Symbol(key, Decl(enumIndexer.ts, 3, 29))
 >'bar' : string
 
 var enumValue = MyEnumType.foo;
->enumValue : MyEnumType, Symbol(enumValue,Decl(enumIndexer.ts,4,3))
->MyEnumType.foo : MyEnumType, Symbol(MyEnumType.foo,Decl(enumIndexer.ts,0,17))
->MyEnumType : typeof MyEnumType, Symbol(MyEnumType,Decl(enumIndexer.ts,0,0))
->foo : MyEnumType, Symbol(MyEnumType.foo,Decl(enumIndexer.ts,0,17))
+>enumValue : MyEnumType, Symbol(enumValue, Decl(enumIndexer.ts, 4, 3))
+>MyEnumType.foo : MyEnumType, Symbol(MyEnumType.foo, Decl(enumIndexer.ts, 0, 17))
+>MyEnumType : typeof MyEnumType, Symbol(MyEnumType, Decl(enumIndexer.ts, 0, 0))
+>foo : MyEnumType, Symbol(MyEnumType.foo, Decl(enumIndexer.ts, 0, 17))
 
 var x = _arr.map(o => MyEnumType[o.key] === enumValue); // these are not same type
->x : boolean[], Symbol(x,Decl(enumIndexer.ts,5,3))
+>x : boolean[], Symbol(x, Decl(enumIndexer.ts, 5, 3))
 >_arr.map(o => MyEnumType[o.key] === enumValue) : boolean[]
->_arr.map : <U>(callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
->_arr : { key: string; }[], Symbol(_arr,Decl(enumIndexer.ts,3,3))
->map : <U>(callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any) => U[], Symbol(Array.map,Decl(lib.d.ts,1115,92))
+>_arr.map : <U>(callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
+>_arr : { key: string; }[], Symbol(_arr, Decl(enumIndexer.ts, 3, 3))
+>map : <U>(callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
 >o => MyEnumType[o.key] === enumValue : (o: { key: string; }) => boolean
->o : { key: string; }, Symbol(o,Decl(enumIndexer.ts,5,17))
+>o : { key: string; }, Symbol(o, Decl(enumIndexer.ts, 5, 17))
 >MyEnumType[o.key] === enumValue : boolean
 >MyEnumType[o.key] : any
->MyEnumType : typeof MyEnumType, Symbol(MyEnumType,Decl(enumIndexer.ts,0,0))
->o.key : string, Symbol(key,Decl(enumIndexer.ts,3,13))
->o : { key: string; }, Symbol(o,Decl(enumIndexer.ts,5,17))
->key : string, Symbol(key,Decl(enumIndexer.ts,3,13))
->enumValue : MyEnumType, Symbol(enumValue,Decl(enumIndexer.ts,4,3))
+>MyEnumType : typeof MyEnumType, Symbol(MyEnumType, Decl(enumIndexer.ts, 0, 0))
+>o.key : string, Symbol(key, Decl(enumIndexer.ts, 3, 13))
+>o : { key: string; }, Symbol(o, Decl(enumIndexer.ts, 5, 17))
+>key : string, Symbol(key, Decl(enumIndexer.ts, 3, 13))
+>enumValue : MyEnumType, Symbol(enumValue, Decl(enumIndexer.ts, 4, 3))
 

@@ -1,44 +1,44 @@
 === tests/cases/compiler/functionSubtypingOfVarArgs2.ts ===
 class EventBase {
->EventBase : EventBase, Symbol(EventBase,Decl(functionSubtypingOfVarArgs2.ts,0,0))
+>EventBase : EventBase, Symbol(EventBase, Decl(functionSubtypingOfVarArgs2.ts, 0, 0))
 
     private _listeners: { (...args: any[]): void; }[] = [];
->_listeners : ((...args: any[]) => void)[], Symbol(_listeners,Decl(functionSubtypingOfVarArgs2.ts,0,17))
->args : any[], Symbol(args,Decl(functionSubtypingOfVarArgs2.ts,1,27))
+>_listeners : ((...args: any[]) => void)[], Symbol(_listeners, Decl(functionSubtypingOfVarArgs2.ts, 0, 17))
+>args : any[], Symbol(args, Decl(functionSubtypingOfVarArgs2.ts, 1, 27))
 >[] : undefined[]
 
     add(listener: (...args: any[]) => void): void {
->add : (listener: (...args: any[]) => void) => void, Symbol(add,Decl(functionSubtypingOfVarArgs2.ts,1,59))
->listener : (...args: any[]) => void, Symbol(listener,Decl(functionSubtypingOfVarArgs2.ts,3,8))
->args : any[], Symbol(args,Decl(functionSubtypingOfVarArgs2.ts,3,19))
+>add : (listener: (...args: any[]) => void) => void, Symbol(add, Decl(functionSubtypingOfVarArgs2.ts, 1, 59))
+>listener : (...args: any[]) => void, Symbol(listener, Decl(functionSubtypingOfVarArgs2.ts, 3, 8))
+>args : any[], Symbol(args, Decl(functionSubtypingOfVarArgs2.ts, 3, 19))
 
         this._listeners.push(listener);
 >this._listeners.push(listener) : number
->this._listeners.push : (...items: ((...args: any[]) => void)[]) => number, Symbol(Array.push,Decl(lib.d.ts,1016,29))
->this._listeners : ((...args: any[]) => void)[], Symbol(_listeners,Decl(functionSubtypingOfVarArgs2.ts,0,17))
->this : EventBase, Symbol(EventBase,Decl(functionSubtypingOfVarArgs2.ts,0,0))
->_listeners : ((...args: any[]) => void)[], Symbol(_listeners,Decl(functionSubtypingOfVarArgs2.ts,0,17))
->push : (...items: ((...args: any[]) => void)[]) => number, Symbol(Array.push,Decl(lib.d.ts,1016,29))
->listener : (...args: any[]) => void, Symbol(listener,Decl(functionSubtypingOfVarArgs2.ts,3,8))
+>this._listeners.push : (...items: ((...args: any[]) => void)[]) => number, Symbol(Array.push, Decl(lib.d.ts, 1016, 29))
+>this._listeners : ((...args: any[]) => void)[], Symbol(_listeners, Decl(functionSubtypingOfVarArgs2.ts, 0, 17))
+>this : EventBase, Symbol(EventBase, Decl(functionSubtypingOfVarArgs2.ts, 0, 0))
+>_listeners : ((...args: any[]) => void)[], Symbol(_listeners, Decl(functionSubtypingOfVarArgs2.ts, 0, 17))
+>push : (...items: ((...args: any[]) => void)[]) => number, Symbol(Array.push, Decl(lib.d.ts, 1016, 29))
+>listener : (...args: any[]) => void, Symbol(listener, Decl(functionSubtypingOfVarArgs2.ts, 3, 8))
     }
 }
 
 class StringEvent extends EventBase {
->StringEvent : StringEvent, Symbol(StringEvent,Decl(functionSubtypingOfVarArgs2.ts,6,1))
->EventBase : EventBase, Symbol(EventBase,Decl(functionSubtypingOfVarArgs2.ts,0,0))
+>StringEvent : StringEvent, Symbol(StringEvent, Decl(functionSubtypingOfVarArgs2.ts, 6, 1))
+>EventBase : EventBase, Symbol(EventBase, Decl(functionSubtypingOfVarArgs2.ts, 0, 0))
 
     add(listener: (items: string, moreitems: number) => void ) {
->add : (listener: (items: string, moreitems: number) => void) => void, Symbol(add,Decl(functionSubtypingOfVarArgs2.ts,8,37))
->listener : (items: string, moreitems: number) => void, Symbol(listener,Decl(functionSubtypingOfVarArgs2.ts,9,8))
->items : string, Symbol(items,Decl(functionSubtypingOfVarArgs2.ts,9,19))
->moreitems : number, Symbol(moreitems,Decl(functionSubtypingOfVarArgs2.ts,9,33))
+>add : (listener: (items: string, moreitems: number) => void) => void, Symbol(add, Decl(functionSubtypingOfVarArgs2.ts, 8, 37))
+>listener : (items: string, moreitems: number) => void, Symbol(listener, Decl(functionSubtypingOfVarArgs2.ts, 9, 8))
+>items : string, Symbol(items, Decl(functionSubtypingOfVarArgs2.ts, 9, 19))
+>moreitems : number, Symbol(moreitems, Decl(functionSubtypingOfVarArgs2.ts, 9, 33))
 
         super.add(listener);
 >super.add(listener) : void
->super.add : (listener: (...args: any[]) => void) => void, Symbol(EventBase.add,Decl(functionSubtypingOfVarArgs2.ts,1,59))
->super : EventBase, Symbol(EventBase,Decl(functionSubtypingOfVarArgs2.ts,0,0))
->add : (listener: (...args: any[]) => void) => void, Symbol(EventBase.add,Decl(functionSubtypingOfVarArgs2.ts,1,59))
->listener : (items: string, moreitems: number) => void, Symbol(listener,Decl(functionSubtypingOfVarArgs2.ts,9,8))
+>super.add : (listener: (...args: any[]) => void) => void, Symbol(EventBase.add, Decl(functionSubtypingOfVarArgs2.ts, 1, 59))
+>super : EventBase, Symbol(EventBase, Decl(functionSubtypingOfVarArgs2.ts, 0, 0))
+>add : (listener: (...args: any[]) => void) => void, Symbol(EventBase.add, Decl(functionSubtypingOfVarArgs2.ts, 1, 59))
+>listener : (items: string, moreitems: number) => void, Symbol(listener, Decl(functionSubtypingOfVarArgs2.ts, 9, 8))
     }
 }
 

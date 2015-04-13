@@ -1,7 +1,7 @@
 === tests/cases/conformance/parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration8.ts ===
 declare module M {
->M : typeof M, Symbol(M,Decl(parserFunctionDeclaration8.ts,0,0))
+>M : typeof M, Symbol(M, Decl(parserFunctionDeclaration8.ts, 0, 0))
 
    function foo();
->foo : () => any, Symbol(foo,Decl(parserFunctionDeclaration8.ts,0,18))
+>foo : () => any, Symbol(foo, Decl(parserFunctionDeclaration8.ts, 0, 18))
 }

@@ -1,36 +1,36 @@
 === tests/cases/compiler/functionOverloads7.ts ===
 class foo { 
->foo : foo, Symbol(foo,Decl(functionOverloads7.ts,0,0))
+>foo : foo, Symbol(foo, Decl(functionOverloads7.ts, 0, 0))
 
    private bar();
->bar : { (): any; (foo: string): any; }, Symbol(bar,Decl(functionOverloads7.ts,0,11),Decl(functionOverloads7.ts,1,17),Decl(functionOverloads7.ts,2,28))
+>bar : { (): any; (foo: string): any; }, Symbol(bar, Decl(functionOverloads7.ts, 0, 11), Decl(functionOverloads7.ts, 1, 17), Decl(functionOverloads7.ts, 2, 28))
 
    private bar(foo: string);
->bar : { (): any; (foo: string): any; }, Symbol(bar,Decl(functionOverloads7.ts,0,11),Decl(functionOverloads7.ts,1,17),Decl(functionOverloads7.ts,2,28))
->foo : string, Symbol(foo,Decl(functionOverloads7.ts,2,15))
+>bar : { (): any; (foo: string): any; }, Symbol(bar, Decl(functionOverloads7.ts, 0, 11), Decl(functionOverloads7.ts, 1, 17), Decl(functionOverloads7.ts, 2, 28))
+>foo : string, Symbol(foo, Decl(functionOverloads7.ts, 2, 15))
 
    private bar(foo?: any){ return "foo" }
->bar : { (): any; (foo: string): any; }, Symbol(bar,Decl(functionOverloads7.ts,0,11),Decl(functionOverloads7.ts,1,17),Decl(functionOverloads7.ts,2,28))
->foo : any, Symbol(foo,Decl(functionOverloads7.ts,3,15))
+>bar : { (): any; (foo: string): any; }, Symbol(bar, Decl(functionOverloads7.ts, 0, 11), Decl(functionOverloads7.ts, 1, 17), Decl(functionOverloads7.ts, 2, 28))
+>foo : any, Symbol(foo, Decl(functionOverloads7.ts, 3, 15))
 >"foo" : string
 
    public n() {
->n : () => void, Symbol(n,Decl(functionOverloads7.ts,3,41))
+>n : () => void, Symbol(n, Decl(functionOverloads7.ts, 3, 41))
 
      var foo = this.bar();
->foo : any, Symbol(foo,Decl(functionOverloads7.ts,5,8))
+>foo : any, Symbol(foo, Decl(functionOverloads7.ts, 5, 8))
 >this.bar() : any
->this.bar : { (): any; (foo: string): any; }, Symbol(bar,Decl(functionOverloads7.ts,0,11),Decl(functionOverloads7.ts,1,17),Decl(functionOverloads7.ts,2,28))
->this : foo, Symbol(foo,Decl(functionOverloads7.ts,0,0))
->bar : { (): any; (foo: string): any; }, Symbol(bar,Decl(functionOverloads7.ts,0,11),Decl(functionOverloads7.ts,1,17),Decl(functionOverloads7.ts,2,28))
+>this.bar : { (): any; (foo: string): any; }, Symbol(bar, Decl(functionOverloads7.ts, 0, 11), Decl(functionOverloads7.ts, 1, 17), Decl(functionOverloads7.ts, 2, 28))
+>this : foo, Symbol(foo, Decl(functionOverloads7.ts, 0, 0))
+>bar : { (): any; (foo: string): any; }, Symbol(bar, Decl(functionOverloads7.ts, 0, 11), Decl(functionOverloads7.ts, 1, 17), Decl(functionOverloads7.ts, 2, 28))
 
      foo = this.bar("test");
 >foo = this.bar("test") : any
->foo : any, Symbol(foo,Decl(functionOverloads7.ts,5,8))
+>foo : any, Symbol(foo, Decl(functionOverloads7.ts, 5, 8))
 >this.bar("test") : any
->this.bar : { (): any; (foo: string): any; }, Symbol(bar,Decl(functionOverloads7.ts,0,11),Decl(functionOverloads7.ts,1,17),Decl(functionOverloads7.ts,2,28))
->this : foo, Symbol(foo,Decl(functionOverloads7.ts,0,0))
->bar : { (): any; (foo: string): any; }, Symbol(bar,Decl(functionOverloads7.ts,0,11),Decl(functionOverloads7.ts,1,17),Decl(functionOverloads7.ts,2,28))
+>this.bar : { (): any; (foo: string): any; }, Symbol(bar, Decl(functionOverloads7.ts, 0, 11), Decl(functionOverloads7.ts, 1, 17), Decl(functionOverloads7.ts, 2, 28))
+>this : foo, Symbol(foo, Decl(functionOverloads7.ts, 0, 0))
+>bar : { (): any; (foo: string): any; }, Symbol(bar, Decl(functionOverloads7.ts, 0, 11), Decl(functionOverloads7.ts, 1, 17), Decl(functionOverloads7.ts, 2, 28))
 >"test" : string
    }
 }

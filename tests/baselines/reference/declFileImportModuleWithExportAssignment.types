@@ -1,17 +1,17 @@
 === tests/cases/compiler/declFileImportModuleWithExportAssignment_1.ts ===
 /**This is on import declaration*/
 import a1 = require("declFileImportModuleWithExportAssignment_0");
->a1 : { (): a1.connectExport; test1: a1.connectModule; test2(): a1.connectModule; }, Symbol(a1,Decl(declFileImportModuleWithExportAssignment_1.ts,0,0))
+>a1 : { (): a1.connectExport; test1: a1.connectModule; test2(): a1.connectModule; }, Symbol(a1, Decl(declFileImportModuleWithExportAssignment_1.ts, 0, 0))
 
 export var a = a1;
->a : { (): a1.connectExport; test1: a1.connectModule; test2(): a1.connectModule; }, Symbol(a,Decl(declFileImportModuleWithExportAssignment_1.ts,2,10))
->a1 : { (): a1.connectExport; test1: a1.connectModule; test2(): a1.connectModule; }, Symbol(a1,Decl(declFileImportModuleWithExportAssignment_1.ts,0,0))
+>a : { (): a1.connectExport; test1: a1.connectModule; test2(): a1.connectModule; }, Symbol(a, Decl(declFileImportModuleWithExportAssignment_1.ts, 2, 10))
+>a1 : { (): a1.connectExport; test1: a1.connectModule; test2(): a1.connectModule; }, Symbol(a1, Decl(declFileImportModuleWithExportAssignment_1.ts, 0, 0))
 
 a.test1(null, null, null);
 >a.test1(null, null, null) : void
->a.test1 : a1.connectModule, Symbol(test1,Decl(declFileImportModuleWithExportAssignment_0.ts,12,25))
->a : { (): a1.connectExport; test1: a1.connectModule; test2(): a1.connectModule; }, Symbol(a,Decl(declFileImportModuleWithExportAssignment_1.ts,2,10))
->test1 : a1.connectModule, Symbol(test1,Decl(declFileImportModuleWithExportAssignment_0.ts,12,25))
+>a.test1 : a1.connectModule, Symbol(test1, Decl(declFileImportModuleWithExportAssignment_0.ts, 12, 25))
+>a : { (): a1.connectExport; test1: a1.connectModule; test2(): a1.connectModule; }, Symbol(a, Decl(declFileImportModuleWithExportAssignment_1.ts, 2, 10))
+>test1 : a1.connectModule, Symbol(test1, Decl(declFileImportModuleWithExportAssignment_0.ts, 12, 25))
 >null : null
 >null : null
 >null : null
@@ -19,49 +19,49 @@ a.test1(null, null, null);
 === tests/cases/compiler/declFileImportModuleWithExportAssignment_0.ts ===
 
 module m2 {
->m2 : { (): connectExport; test1: connectModule; test2(): connectModule; }, Symbol(m2,Decl(declFileImportModuleWithExportAssignment_0.ts,0,0),Decl(declFileImportModuleWithExportAssignment_0.ts,11,3))
+>m2 : { (): connectExport; test1: connectModule; test2(): connectModule; }, Symbol(m2, Decl(declFileImportModuleWithExportAssignment_0.ts, 0, 0), Decl(declFileImportModuleWithExportAssignment_0.ts, 11, 3))
 
     export interface connectModule {
->connectModule : connectModule, Symbol(connectModule,Decl(declFileImportModuleWithExportAssignment_0.ts,1,11))
+>connectModule : connectModule, Symbol(connectModule, Decl(declFileImportModuleWithExportAssignment_0.ts, 1, 11))
 
         (res, req, next): void;
->res : any, Symbol(res,Decl(declFileImportModuleWithExportAssignment_0.ts,3,9))
->req : any, Symbol(req,Decl(declFileImportModuleWithExportAssignment_0.ts,3,13))
->next : any, Symbol(next,Decl(declFileImportModuleWithExportAssignment_0.ts,3,18))
+>res : any, Symbol(res, Decl(declFileImportModuleWithExportAssignment_0.ts, 3, 9))
+>req : any, Symbol(req, Decl(declFileImportModuleWithExportAssignment_0.ts, 3, 13))
+>next : any, Symbol(next, Decl(declFileImportModuleWithExportAssignment_0.ts, 3, 18))
     }
     export interface connectExport {
->connectExport : connectExport, Symbol(connectExport,Decl(declFileImportModuleWithExportAssignment_0.ts,4,5))
+>connectExport : connectExport, Symbol(connectExport, Decl(declFileImportModuleWithExportAssignment_0.ts, 4, 5))
 
         use: (mod: connectModule) => connectExport;
->use : (mod: connectModule) => connectExport, Symbol(use,Decl(declFileImportModuleWithExportAssignment_0.ts,5,36))
->mod : connectModule, Symbol(mod,Decl(declFileImportModuleWithExportAssignment_0.ts,6,14))
->connectModule : connectModule, Symbol(connectModule,Decl(declFileImportModuleWithExportAssignment_0.ts,1,11))
->connectExport : connectExport, Symbol(connectExport,Decl(declFileImportModuleWithExportAssignment_0.ts,4,5))
+>use : (mod: connectModule) => connectExport, Symbol(use, Decl(declFileImportModuleWithExportAssignment_0.ts, 5, 36))
+>mod : connectModule, Symbol(mod, Decl(declFileImportModuleWithExportAssignment_0.ts, 6, 14))
+>connectModule : connectModule, Symbol(connectModule, Decl(declFileImportModuleWithExportAssignment_0.ts, 1, 11))
+>connectExport : connectExport, Symbol(connectExport, Decl(declFileImportModuleWithExportAssignment_0.ts, 4, 5))
 
         listen: (port: number) => void;
->listen : (port: number) => void, Symbol(listen,Decl(declFileImportModuleWithExportAssignment_0.ts,6,51))
->port : number, Symbol(port,Decl(declFileImportModuleWithExportAssignment_0.ts,7,17))
+>listen : (port: number) => void, Symbol(listen, Decl(declFileImportModuleWithExportAssignment_0.ts, 6, 51))
+>port : number, Symbol(port, Decl(declFileImportModuleWithExportAssignment_0.ts, 7, 17))
     }
 
 }
 var m2: {
->m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }, Symbol(m2,Decl(declFileImportModuleWithExportAssignment_0.ts,0,0),Decl(declFileImportModuleWithExportAssignment_0.ts,11,3))
+>m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }, Symbol(m2, Decl(declFileImportModuleWithExportAssignment_0.ts, 0, 0), Decl(declFileImportModuleWithExportAssignment_0.ts, 11, 3))
 
     (): m2.connectExport;
->m2 : any, Symbol(m2,Decl(declFileImportModuleWithExportAssignment_0.ts,0,0),Decl(declFileImportModuleWithExportAssignment_0.ts,11,3))
->connectExport : m2.connectExport, Symbol(m2.connectExport,Decl(declFileImportModuleWithExportAssignment_0.ts,4,5))
+>m2 : any, Symbol(m2, Decl(declFileImportModuleWithExportAssignment_0.ts, 0, 0), Decl(declFileImportModuleWithExportAssignment_0.ts, 11, 3))
+>connectExport : m2.connectExport, Symbol(m2.connectExport, Decl(declFileImportModuleWithExportAssignment_0.ts, 4, 5))
 
     test1: m2.connectModule;
->test1 : m2.connectModule, Symbol(test1,Decl(declFileImportModuleWithExportAssignment_0.ts,12,25))
->m2 : any, Symbol(m2,Decl(declFileImportModuleWithExportAssignment_0.ts,0,0),Decl(declFileImportModuleWithExportAssignment_0.ts,11,3))
->connectModule : m2.connectModule, Symbol(m2.connectModule,Decl(declFileImportModuleWithExportAssignment_0.ts,1,11))
+>test1 : m2.connectModule, Symbol(test1, Decl(declFileImportModuleWithExportAssignment_0.ts, 12, 25))
+>m2 : any, Symbol(m2, Decl(declFileImportModuleWithExportAssignment_0.ts, 0, 0), Decl(declFileImportModuleWithExportAssignment_0.ts, 11, 3))
+>connectModule : m2.connectModule, Symbol(m2.connectModule, Decl(declFileImportModuleWithExportAssignment_0.ts, 1, 11))
 
     test2(): m2.connectModule;
->test2 : () => m2.connectModule, Symbol(test2,Decl(declFileImportModuleWithExportAssignment_0.ts,13,28))
->m2 : any, Symbol(m2,Decl(declFileImportModuleWithExportAssignment_0.ts,0,0),Decl(declFileImportModuleWithExportAssignment_0.ts,11,3))
->connectModule : m2.connectModule, Symbol(m2.connectModule,Decl(declFileImportModuleWithExportAssignment_0.ts,1,11))
+>test2 : () => m2.connectModule, Symbol(test2, Decl(declFileImportModuleWithExportAssignment_0.ts, 13, 28))
+>m2 : any, Symbol(m2, Decl(declFileImportModuleWithExportAssignment_0.ts, 0, 0), Decl(declFileImportModuleWithExportAssignment_0.ts, 11, 3))
+>connectModule : m2.connectModule, Symbol(m2.connectModule, Decl(declFileImportModuleWithExportAssignment_0.ts, 1, 11))
 
 };
 export = m2;
->m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }, Symbol(m2,Decl(declFileImportModuleWithExportAssignment_0.ts,0,0),Decl(declFileImportModuleWithExportAssignment_0.ts,11,3))
+>m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }, Symbol(m2, Decl(declFileImportModuleWithExportAssignment_0.ts, 0, 0), Decl(declFileImportModuleWithExportAssignment_0.ts, 11, 3))
 

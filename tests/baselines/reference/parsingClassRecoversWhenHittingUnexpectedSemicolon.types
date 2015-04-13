@@ -1,11 +1,11 @@
 === tests/cases/compiler/parsingClassRecoversWhenHittingUnexpectedSemicolon.ts ===
 class C {
->C : C, Symbol(C,Decl(parsingClassRecoversWhenHittingUnexpectedSemicolon.ts,0,0))
+>C : C, Symbol(C, Decl(parsingClassRecoversWhenHittingUnexpectedSemicolon.ts, 0, 0))
 
     public f() { };
->f : () => void, Symbol(f,Decl(parsingClassRecoversWhenHittingUnexpectedSemicolon.ts,0,9))
+>f : () => void, Symbol(f, Decl(parsingClassRecoversWhenHittingUnexpectedSemicolon.ts, 0, 9))
 
     private m;
->m : any, Symbol(m,Decl(parsingClassRecoversWhenHittingUnexpectedSemicolon.ts,1,19))
+>m : any, Symbol(m, Decl(parsingClassRecoversWhenHittingUnexpectedSemicolon.ts, 1, 19))
 }
 

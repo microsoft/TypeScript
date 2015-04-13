@@ -1,90 +1,90 @@
 === tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithBooleanType.ts ===
 // typeof  operator on boolean type
 var BOOLEAN: boolean;
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(typeofOperatorWithBooleanType.ts,1,3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(typeofOperatorWithBooleanType.ts, 1, 3))
 
 function foo(): boolean { return true; }
->foo : () => boolean, Symbol(foo,Decl(typeofOperatorWithBooleanType.ts,1,21))
+>foo : () => boolean, Symbol(foo, Decl(typeofOperatorWithBooleanType.ts, 1, 21))
 >true : boolean
 
 class A {
->A : A, Symbol(A,Decl(typeofOperatorWithBooleanType.ts,3,40))
+>A : A, Symbol(A, Decl(typeofOperatorWithBooleanType.ts, 3, 40))
 
     public a: boolean;
->a : boolean, Symbol(a,Decl(typeofOperatorWithBooleanType.ts,5,9))
+>a : boolean, Symbol(a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
 
     static foo() { return false; }
->foo : () => boolean, Symbol(A.foo,Decl(typeofOperatorWithBooleanType.ts,6,22))
+>foo : () => boolean, Symbol(A.foo, Decl(typeofOperatorWithBooleanType.ts, 6, 22))
 >false : boolean
 }
 module M {
->M : typeof M, Symbol(M,Decl(typeofOperatorWithBooleanType.ts,8,1))
+>M : typeof M, Symbol(M, Decl(typeofOperatorWithBooleanType.ts, 8, 1))
 
     export var n: boolean;
->n : boolean, Symbol(n,Decl(typeofOperatorWithBooleanType.ts,10,14))
+>n : boolean, Symbol(n, Decl(typeofOperatorWithBooleanType.ts, 10, 14))
 }
 
 var objA = new A();
->objA : A, Symbol(objA,Decl(typeofOperatorWithBooleanType.ts,13,3))
+>objA : A, Symbol(objA, Decl(typeofOperatorWithBooleanType.ts, 13, 3))
 >new A() : A
->A : typeof A, Symbol(A,Decl(typeofOperatorWithBooleanType.ts,3,40))
+>A : typeof A, Symbol(A, Decl(typeofOperatorWithBooleanType.ts, 3, 40))
 
 // boolean type var
 var ResultIsString1 = typeof BOOLEAN;
->ResultIsString1 : string, Symbol(ResultIsString1,Decl(typeofOperatorWithBooleanType.ts,16,3))
+>ResultIsString1 : string, Symbol(ResultIsString1, Decl(typeofOperatorWithBooleanType.ts, 16, 3))
 >typeof BOOLEAN : string
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(typeofOperatorWithBooleanType.ts,1,3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(typeofOperatorWithBooleanType.ts, 1, 3))
 
 // boolean type literal
 var ResultIsString2 = typeof true;
->ResultIsString2 : string, Symbol(ResultIsString2,Decl(typeofOperatorWithBooleanType.ts,19,3))
+>ResultIsString2 : string, Symbol(ResultIsString2, Decl(typeofOperatorWithBooleanType.ts, 19, 3))
 >typeof true : string
 >true : boolean
 
 var ResultIsString3 = typeof { x: true, y: false };
->ResultIsString3 : string, Symbol(ResultIsString3,Decl(typeofOperatorWithBooleanType.ts,20,3))
+>ResultIsString3 : string, Symbol(ResultIsString3, Decl(typeofOperatorWithBooleanType.ts, 20, 3))
 >typeof { x: true, y: false } : string
 >{ x: true, y: false } : { x: boolean; y: boolean; }
->x : boolean, Symbol(x,Decl(typeofOperatorWithBooleanType.ts,20,30))
+>x : boolean, Symbol(x, Decl(typeofOperatorWithBooleanType.ts, 20, 30))
 >true : boolean
->y : boolean, Symbol(y,Decl(typeofOperatorWithBooleanType.ts,20,39))
+>y : boolean, Symbol(y, Decl(typeofOperatorWithBooleanType.ts, 20, 39))
 >false : boolean
 
 // boolean type expressions
 var ResultIsString4 = typeof objA.a;
->ResultIsString4 : string, Symbol(ResultIsString4,Decl(typeofOperatorWithBooleanType.ts,23,3))
+>ResultIsString4 : string, Symbol(ResultIsString4, Decl(typeofOperatorWithBooleanType.ts, 23, 3))
 >typeof objA.a : string
->objA.a : boolean, Symbol(A.a,Decl(typeofOperatorWithBooleanType.ts,5,9))
->objA : A, Symbol(objA,Decl(typeofOperatorWithBooleanType.ts,13,3))
->a : boolean, Symbol(A.a,Decl(typeofOperatorWithBooleanType.ts,5,9))
+>objA.a : boolean, Symbol(A.a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
+>objA : A, Symbol(objA, Decl(typeofOperatorWithBooleanType.ts, 13, 3))
+>a : boolean, Symbol(A.a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
 
 var ResultIsString5 = typeof M.n;
->ResultIsString5 : string, Symbol(ResultIsString5,Decl(typeofOperatorWithBooleanType.ts,24,3))
+>ResultIsString5 : string, Symbol(ResultIsString5, Decl(typeofOperatorWithBooleanType.ts, 24, 3))
 >typeof M.n : string
->M.n : boolean, Symbol(M.n,Decl(typeofOperatorWithBooleanType.ts,10,14))
->M : typeof M, Symbol(M,Decl(typeofOperatorWithBooleanType.ts,8,1))
->n : boolean, Symbol(M.n,Decl(typeofOperatorWithBooleanType.ts,10,14))
+>M.n : boolean, Symbol(M.n, Decl(typeofOperatorWithBooleanType.ts, 10, 14))
+>M : typeof M, Symbol(M, Decl(typeofOperatorWithBooleanType.ts, 8, 1))
+>n : boolean, Symbol(M.n, Decl(typeofOperatorWithBooleanType.ts, 10, 14))
 
 var ResultIsString6 = typeof foo();
->ResultIsString6 : string, Symbol(ResultIsString6,Decl(typeofOperatorWithBooleanType.ts,25,3))
+>ResultIsString6 : string, Symbol(ResultIsString6, Decl(typeofOperatorWithBooleanType.ts, 25, 3))
 >typeof foo() : string
 >foo() : boolean
->foo : () => boolean, Symbol(foo,Decl(typeofOperatorWithBooleanType.ts,1,21))
+>foo : () => boolean, Symbol(foo, Decl(typeofOperatorWithBooleanType.ts, 1, 21))
 
 var ResultIsString7 = typeof A.foo();
->ResultIsString7 : string, Symbol(ResultIsString7,Decl(typeofOperatorWithBooleanType.ts,26,3))
+>ResultIsString7 : string, Symbol(ResultIsString7, Decl(typeofOperatorWithBooleanType.ts, 26, 3))
 >typeof A.foo() : string
 >A.foo() : boolean
->A.foo : () => boolean, Symbol(A.foo,Decl(typeofOperatorWithBooleanType.ts,6,22))
->A : typeof A, Symbol(A,Decl(typeofOperatorWithBooleanType.ts,3,40))
->foo : () => boolean, Symbol(A.foo,Decl(typeofOperatorWithBooleanType.ts,6,22))
+>A.foo : () => boolean, Symbol(A.foo, Decl(typeofOperatorWithBooleanType.ts, 6, 22))
+>A : typeof A, Symbol(A, Decl(typeofOperatorWithBooleanType.ts, 3, 40))
+>foo : () => boolean, Symbol(A.foo, Decl(typeofOperatorWithBooleanType.ts, 6, 22))
 
 // multiple typeof  operator
 var ResultIsString8 = typeof typeof BOOLEAN;
->ResultIsString8 : string, Symbol(ResultIsString8,Decl(typeofOperatorWithBooleanType.ts,29,3))
+>ResultIsString8 : string, Symbol(ResultIsString8, Decl(typeofOperatorWithBooleanType.ts, 29, 3))
 >typeof typeof BOOLEAN : string
 >typeof BOOLEAN : string
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(typeofOperatorWithBooleanType.ts,1,3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(typeofOperatorWithBooleanType.ts, 1, 3))
 
 // miss assignment operators
 typeof true;
@@ -93,12 +93,12 @@ typeof true;
 
 typeof BOOLEAN;
 >typeof BOOLEAN : string
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(typeofOperatorWithBooleanType.ts,1,3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(typeofOperatorWithBooleanType.ts, 1, 3))
 
 typeof foo();
 >typeof foo() : string
 >foo() : boolean
->foo : () => boolean, Symbol(foo,Decl(typeofOperatorWithBooleanType.ts,1,21))
+>foo : () => boolean, Symbol(foo, Decl(typeofOperatorWithBooleanType.ts, 1, 21))
 
 typeof true, false;
 >typeof true, false : boolean
@@ -108,69 +108,69 @@ typeof true, false;
 
 typeof objA.a;
 >typeof objA.a : string
->objA.a : boolean, Symbol(A.a,Decl(typeofOperatorWithBooleanType.ts,5,9))
->objA : A, Symbol(objA,Decl(typeofOperatorWithBooleanType.ts,13,3))
->a : boolean, Symbol(A.a,Decl(typeofOperatorWithBooleanType.ts,5,9))
+>objA.a : boolean, Symbol(A.a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
+>objA : A, Symbol(objA, Decl(typeofOperatorWithBooleanType.ts, 13, 3))
+>a : boolean, Symbol(A.a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
 
 typeof M.n;
 >typeof M.n : string
->M.n : boolean, Symbol(M.n,Decl(typeofOperatorWithBooleanType.ts,10,14))
->M : typeof M, Symbol(M,Decl(typeofOperatorWithBooleanType.ts,8,1))
->n : boolean, Symbol(M.n,Decl(typeofOperatorWithBooleanType.ts,10,14))
+>M.n : boolean, Symbol(M.n, Decl(typeofOperatorWithBooleanType.ts, 10, 14))
+>M : typeof M, Symbol(M, Decl(typeofOperatorWithBooleanType.ts, 8, 1))
+>n : boolean, Symbol(M.n, Decl(typeofOperatorWithBooleanType.ts, 10, 14))
 
 // use typeof in type query
 var z: boolean;
->z : boolean, Symbol(z,Decl(typeofOperatorWithBooleanType.ts,40,3))
+>z : boolean, Symbol(z, Decl(typeofOperatorWithBooleanType.ts, 40, 3))
 
 var x: boolean[];
->x : boolean[], Symbol(x,Decl(typeofOperatorWithBooleanType.ts,41,3))
+>x : boolean[], Symbol(x, Decl(typeofOperatorWithBooleanType.ts, 41, 3))
 
 var r: () => boolean;
->r : () => boolean, Symbol(r,Decl(typeofOperatorWithBooleanType.ts,42,3))
+>r : () => boolean, Symbol(r, Decl(typeofOperatorWithBooleanType.ts, 42, 3))
 
 z: typeof BOOLEAN;
 >z : any
 >typeof BOOLEAN : string
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(typeofOperatorWithBooleanType.ts,1,3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(typeofOperatorWithBooleanType.ts, 1, 3))
 
 r: typeof foo;
 >r : any
 >typeof foo : string
->foo : () => boolean, Symbol(foo,Decl(typeofOperatorWithBooleanType.ts,1,21))
+>foo : () => boolean, Symbol(foo, Decl(typeofOperatorWithBooleanType.ts, 1, 21))
 
 var y = { a: true, b: false};
->y : { a: boolean; b: boolean; }, Symbol(y,Decl(typeofOperatorWithBooleanType.ts,45,3))
+>y : { a: boolean; b: boolean; }, Symbol(y, Decl(typeofOperatorWithBooleanType.ts, 45, 3))
 >{ a: true, b: false} : { a: boolean; b: boolean; }
->a : boolean, Symbol(a,Decl(typeofOperatorWithBooleanType.ts,45,9))
+>a : boolean, Symbol(a, Decl(typeofOperatorWithBooleanType.ts, 45, 9))
 >true : boolean
->b : boolean, Symbol(b,Decl(typeofOperatorWithBooleanType.ts,45,18))
+>b : boolean, Symbol(b, Decl(typeofOperatorWithBooleanType.ts, 45, 18))
 >false : boolean
 
 z: typeof y.a;
 >z : any
 >typeof y.a : string
->y.a : boolean, Symbol(a,Decl(typeofOperatorWithBooleanType.ts,45,9))
->y : { a: boolean; b: boolean; }, Symbol(y,Decl(typeofOperatorWithBooleanType.ts,45,3))
->a : boolean, Symbol(a,Decl(typeofOperatorWithBooleanType.ts,45,9))
+>y.a : boolean, Symbol(a, Decl(typeofOperatorWithBooleanType.ts, 45, 9))
+>y : { a: boolean; b: boolean; }, Symbol(y, Decl(typeofOperatorWithBooleanType.ts, 45, 3))
+>a : boolean, Symbol(a, Decl(typeofOperatorWithBooleanType.ts, 45, 9))
 
 z: typeof objA.a;
 >z : any
 >typeof objA.a : string
->objA.a : boolean, Symbol(A.a,Decl(typeofOperatorWithBooleanType.ts,5,9))
->objA : A, Symbol(objA,Decl(typeofOperatorWithBooleanType.ts,13,3))
->a : boolean, Symbol(A.a,Decl(typeofOperatorWithBooleanType.ts,5,9))
+>objA.a : boolean, Symbol(A.a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
+>objA : A, Symbol(objA, Decl(typeofOperatorWithBooleanType.ts, 13, 3))
+>a : boolean, Symbol(A.a, Decl(typeofOperatorWithBooleanType.ts, 5, 9))
 
 z: typeof A.foo;
 >z : any
 >typeof A.foo : string
->A.foo : () => boolean, Symbol(A.foo,Decl(typeofOperatorWithBooleanType.ts,6,22))
->A : typeof A, Symbol(A,Decl(typeofOperatorWithBooleanType.ts,3,40))
->foo : () => boolean, Symbol(A.foo,Decl(typeofOperatorWithBooleanType.ts,6,22))
+>A.foo : () => boolean, Symbol(A.foo, Decl(typeofOperatorWithBooleanType.ts, 6, 22))
+>A : typeof A, Symbol(A, Decl(typeofOperatorWithBooleanType.ts, 3, 40))
+>foo : () => boolean, Symbol(A.foo, Decl(typeofOperatorWithBooleanType.ts, 6, 22))
 
 z: typeof M.n;
 >z : any
 >typeof M.n : string
->M.n : boolean, Symbol(M.n,Decl(typeofOperatorWithBooleanType.ts,10,14))
->M : typeof M, Symbol(M,Decl(typeofOperatorWithBooleanType.ts,8,1))
->n : boolean, Symbol(M.n,Decl(typeofOperatorWithBooleanType.ts,10,14))
+>M.n : boolean, Symbol(M.n, Decl(typeofOperatorWithBooleanType.ts, 10, 14))
+>M : typeof M, Symbol(M, Decl(typeofOperatorWithBooleanType.ts, 8, 1))
+>n : boolean, Symbol(M.n, Decl(typeofOperatorWithBooleanType.ts, 10, 14))
 

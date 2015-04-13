@@ -2,169 +2,169 @@
 // Duplicate overloads of construct signatures should generate errors
 
 class C {
->C : C, Symbol(C,Decl(constructSignaturesWithIdenticalOverloads.ts,0,0))
+>C : C, Symbol(C, Decl(constructSignaturesWithIdenticalOverloads.ts, 0, 0))
 
     constructor(x: number, y: string);
->x : number, Symbol(x,Decl(constructSignaturesWithIdenticalOverloads.ts,3,16))
->y : string, Symbol(y,Decl(constructSignaturesWithIdenticalOverloads.ts,3,26))
+>x : number, Symbol(x, Decl(constructSignaturesWithIdenticalOverloads.ts, 3, 16))
+>y : string, Symbol(y, Decl(constructSignaturesWithIdenticalOverloads.ts, 3, 26))
 
     constructor(x: number, y: string); // error
->x : number, Symbol(x,Decl(constructSignaturesWithIdenticalOverloads.ts,4,16))
->y : string, Symbol(y,Decl(constructSignaturesWithIdenticalOverloads.ts,4,26))
+>x : number, Symbol(x, Decl(constructSignaturesWithIdenticalOverloads.ts, 4, 16))
+>y : string, Symbol(y, Decl(constructSignaturesWithIdenticalOverloads.ts, 4, 26))
 
     constructor(x: number) { }
->x : number, Symbol(x,Decl(constructSignaturesWithIdenticalOverloads.ts,5,16))
+>x : number, Symbol(x, Decl(constructSignaturesWithIdenticalOverloads.ts, 5, 16))
 }
 
 var r1 = new C(1, '');
->r1 : C, Symbol(r1,Decl(constructSignaturesWithIdenticalOverloads.ts,8,3))
+>r1 : C, Symbol(r1, Decl(constructSignaturesWithIdenticalOverloads.ts, 8, 3))
 >new C(1, '') : C
->C : typeof C, Symbol(C,Decl(constructSignaturesWithIdenticalOverloads.ts,0,0))
+>C : typeof C, Symbol(C, Decl(constructSignaturesWithIdenticalOverloads.ts, 0, 0))
 >1 : number
 >'' : string
 
 class C2<T> {
->C2 : C2<T>, Symbol(C2,Decl(constructSignaturesWithIdenticalOverloads.ts,8,22))
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,10,9))
+>C2 : C2<T>, Symbol(C2, Decl(constructSignaturesWithIdenticalOverloads.ts, 8, 22))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 10, 9))
 
     constructor(x: T, y: string);
->x : T, Symbol(x,Decl(constructSignaturesWithIdenticalOverloads.ts,11,16))
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,10,9))
->y : string, Symbol(y,Decl(constructSignaturesWithIdenticalOverloads.ts,11,21))
+>x : T, Symbol(x, Decl(constructSignaturesWithIdenticalOverloads.ts, 11, 16))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 10, 9))
+>y : string, Symbol(y, Decl(constructSignaturesWithIdenticalOverloads.ts, 11, 21))
 
     constructor(x: T, y: string); // error
->x : T, Symbol(x,Decl(constructSignaturesWithIdenticalOverloads.ts,12,16))
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,10,9))
->y : string, Symbol(y,Decl(constructSignaturesWithIdenticalOverloads.ts,12,21))
+>x : T, Symbol(x, Decl(constructSignaturesWithIdenticalOverloads.ts, 12, 16))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 10, 9))
+>y : string, Symbol(y, Decl(constructSignaturesWithIdenticalOverloads.ts, 12, 21))
 
     constructor(x: T) { }
->x : T, Symbol(x,Decl(constructSignaturesWithIdenticalOverloads.ts,13,16))
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,10,9))
+>x : T, Symbol(x, Decl(constructSignaturesWithIdenticalOverloads.ts, 13, 16))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 10, 9))
 }
 
 var r2 = new C2(1, '');
->r2 : C2<number>, Symbol(r2,Decl(constructSignaturesWithIdenticalOverloads.ts,16,3))
+>r2 : C2<number>, Symbol(r2, Decl(constructSignaturesWithIdenticalOverloads.ts, 16, 3))
 >new C2(1, '') : C2<number>
->C2 : typeof C2, Symbol(C2,Decl(constructSignaturesWithIdenticalOverloads.ts,8,22))
+>C2 : typeof C2, Symbol(C2, Decl(constructSignaturesWithIdenticalOverloads.ts, 8, 22))
 >1 : number
 >'' : string
 
 interface I {
->I : I, Symbol(I,Decl(constructSignaturesWithIdenticalOverloads.ts,16,23))
+>I : I, Symbol(I, Decl(constructSignaturesWithIdenticalOverloads.ts, 16, 23))
 
     new (x: number, y: string): C;
->x : number, Symbol(x,Decl(constructSignaturesWithIdenticalOverloads.ts,19,9))
->y : string, Symbol(y,Decl(constructSignaturesWithIdenticalOverloads.ts,19,19))
->C : C, Symbol(C,Decl(constructSignaturesWithIdenticalOverloads.ts,0,0))
+>x : number, Symbol(x, Decl(constructSignaturesWithIdenticalOverloads.ts, 19, 9))
+>y : string, Symbol(y, Decl(constructSignaturesWithIdenticalOverloads.ts, 19, 19))
+>C : C, Symbol(C, Decl(constructSignaturesWithIdenticalOverloads.ts, 0, 0))
 
     new (x: number, y: string): C; // error
->x : number, Symbol(x,Decl(constructSignaturesWithIdenticalOverloads.ts,20,9))
->y : string, Symbol(y,Decl(constructSignaturesWithIdenticalOverloads.ts,20,19))
->C : C, Symbol(C,Decl(constructSignaturesWithIdenticalOverloads.ts,0,0))
+>x : number, Symbol(x, Decl(constructSignaturesWithIdenticalOverloads.ts, 20, 9))
+>y : string, Symbol(y, Decl(constructSignaturesWithIdenticalOverloads.ts, 20, 19))
+>C : C, Symbol(C, Decl(constructSignaturesWithIdenticalOverloads.ts, 0, 0))
 }
 
 var i: I;
->i : I, Symbol(i,Decl(constructSignaturesWithIdenticalOverloads.ts,23,3))
->I : I, Symbol(I,Decl(constructSignaturesWithIdenticalOverloads.ts,16,23))
+>i : I, Symbol(i, Decl(constructSignaturesWithIdenticalOverloads.ts, 23, 3))
+>I : I, Symbol(I, Decl(constructSignaturesWithIdenticalOverloads.ts, 16, 23))
 
 var r3 = new i(1, '');
->r3 : C, Symbol(r3,Decl(constructSignaturesWithIdenticalOverloads.ts,24,3))
+>r3 : C, Symbol(r3, Decl(constructSignaturesWithIdenticalOverloads.ts, 24, 3))
 >new i(1, '') : C
->i : I, Symbol(i,Decl(constructSignaturesWithIdenticalOverloads.ts,23,3))
+>i : I, Symbol(i, Decl(constructSignaturesWithIdenticalOverloads.ts, 23, 3))
 >1 : number
 >'' : string
 
 interface I2<T> {
->I2 : I2<T>, Symbol(I2,Decl(constructSignaturesWithIdenticalOverloads.ts,24,22))
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,26,13))
+>I2 : I2<T>, Symbol(I2, Decl(constructSignaturesWithIdenticalOverloads.ts, 24, 22))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 26, 13))
 
     new (x: T, y: string): C2<T>;
->x : T, Symbol(x,Decl(constructSignaturesWithIdenticalOverloads.ts,27,9))
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,26,13))
->y : string, Symbol(y,Decl(constructSignaturesWithIdenticalOverloads.ts,27,14))
->C2 : C2<T>, Symbol(C2,Decl(constructSignaturesWithIdenticalOverloads.ts,8,22))
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,26,13))
+>x : T, Symbol(x, Decl(constructSignaturesWithIdenticalOverloads.ts, 27, 9))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 26, 13))
+>y : string, Symbol(y, Decl(constructSignaturesWithIdenticalOverloads.ts, 27, 14))
+>C2 : C2<T>, Symbol(C2, Decl(constructSignaturesWithIdenticalOverloads.ts, 8, 22))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 26, 13))
 
     new (x: T, y: string): C2<T>; // error
->x : T, Symbol(x,Decl(constructSignaturesWithIdenticalOverloads.ts,28,9))
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,26,13))
->y : string, Symbol(y,Decl(constructSignaturesWithIdenticalOverloads.ts,28,14))
->C2 : C2<T>, Symbol(C2,Decl(constructSignaturesWithIdenticalOverloads.ts,8,22))
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,26,13))
+>x : T, Symbol(x, Decl(constructSignaturesWithIdenticalOverloads.ts, 28, 9))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 26, 13))
+>y : string, Symbol(y, Decl(constructSignaturesWithIdenticalOverloads.ts, 28, 14))
+>C2 : C2<T>, Symbol(C2, Decl(constructSignaturesWithIdenticalOverloads.ts, 8, 22))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 26, 13))
 
     new <T>(x: T, y: string): C2<T>;
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,29,9))
->x : T, Symbol(x,Decl(constructSignaturesWithIdenticalOverloads.ts,29,12))
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,29,9))
->y : string, Symbol(y,Decl(constructSignaturesWithIdenticalOverloads.ts,29,17))
->C2 : C2<T>, Symbol(C2,Decl(constructSignaturesWithIdenticalOverloads.ts,8,22))
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,29,9))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 29, 9))
+>x : T, Symbol(x, Decl(constructSignaturesWithIdenticalOverloads.ts, 29, 12))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 29, 9))
+>y : string, Symbol(y, Decl(constructSignaturesWithIdenticalOverloads.ts, 29, 17))
+>C2 : C2<T>, Symbol(C2, Decl(constructSignaturesWithIdenticalOverloads.ts, 8, 22))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 29, 9))
 
     new <T>(x: T, y: string): C2<T>; // error
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,30,9))
->x : T, Symbol(x,Decl(constructSignaturesWithIdenticalOverloads.ts,30,12))
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,30,9))
->y : string, Symbol(y,Decl(constructSignaturesWithIdenticalOverloads.ts,30,17))
->C2 : C2<T>, Symbol(C2,Decl(constructSignaturesWithIdenticalOverloads.ts,8,22))
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,30,9))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 30, 9))
+>x : T, Symbol(x, Decl(constructSignaturesWithIdenticalOverloads.ts, 30, 12))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 30, 9))
+>y : string, Symbol(y, Decl(constructSignaturesWithIdenticalOverloads.ts, 30, 17))
+>C2 : C2<T>, Symbol(C2, Decl(constructSignaturesWithIdenticalOverloads.ts, 8, 22))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 30, 9))
 }
 
 var i2: I2<number>;
->i2 : I2<number>, Symbol(i2,Decl(constructSignaturesWithIdenticalOverloads.ts,33,3))
->I2 : I2<T>, Symbol(I2,Decl(constructSignaturesWithIdenticalOverloads.ts,24,22))
+>i2 : I2<number>, Symbol(i2, Decl(constructSignaturesWithIdenticalOverloads.ts, 33, 3))
+>I2 : I2<T>, Symbol(I2, Decl(constructSignaturesWithIdenticalOverloads.ts, 24, 22))
 
 var r4 = new i2(1, '');
->r4 : C2<number>, Symbol(r4,Decl(constructSignaturesWithIdenticalOverloads.ts,34,3))
+>r4 : C2<number>, Symbol(r4, Decl(constructSignaturesWithIdenticalOverloads.ts, 34, 3))
 >new i2(1, '') : C2<number>
->i2 : I2<number>, Symbol(i2,Decl(constructSignaturesWithIdenticalOverloads.ts,33,3))
+>i2 : I2<number>, Symbol(i2, Decl(constructSignaturesWithIdenticalOverloads.ts, 33, 3))
 >1 : number
 >'' : string
 
 var a: {
->a : { new (x: number, y: string): C; new (x: number, y: string): C; }, Symbol(a,Decl(constructSignaturesWithIdenticalOverloads.ts,36,3))
+>a : { new (x: number, y: string): C; new (x: number, y: string): C; }, Symbol(a, Decl(constructSignaturesWithIdenticalOverloads.ts, 36, 3))
 
     new (x: number, y: string): C;
->x : number, Symbol(x,Decl(constructSignaturesWithIdenticalOverloads.ts,37,9))
->y : string, Symbol(y,Decl(constructSignaturesWithIdenticalOverloads.ts,37,19))
->C : C, Symbol(C,Decl(constructSignaturesWithIdenticalOverloads.ts,0,0))
+>x : number, Symbol(x, Decl(constructSignaturesWithIdenticalOverloads.ts, 37, 9))
+>y : string, Symbol(y, Decl(constructSignaturesWithIdenticalOverloads.ts, 37, 19))
+>C : C, Symbol(C, Decl(constructSignaturesWithIdenticalOverloads.ts, 0, 0))
 
     new (x: number, y: string): C; // error
->x : number, Symbol(x,Decl(constructSignaturesWithIdenticalOverloads.ts,38,9))
->y : string, Symbol(y,Decl(constructSignaturesWithIdenticalOverloads.ts,38,19))
->C : C, Symbol(C,Decl(constructSignaturesWithIdenticalOverloads.ts,0,0))
+>x : number, Symbol(x, Decl(constructSignaturesWithIdenticalOverloads.ts, 38, 9))
+>y : string, Symbol(y, Decl(constructSignaturesWithIdenticalOverloads.ts, 38, 19))
+>C : C, Symbol(C, Decl(constructSignaturesWithIdenticalOverloads.ts, 0, 0))
 }
 
 var r5 = new a(1, '');
->r5 : C, Symbol(r5,Decl(constructSignaturesWithIdenticalOverloads.ts,41,3))
+>r5 : C, Symbol(r5, Decl(constructSignaturesWithIdenticalOverloads.ts, 41, 3))
 >new a(1, '') : C
->a : { new (x: number, y: string): C; new (x: number, y: string): C; }, Symbol(a,Decl(constructSignaturesWithIdenticalOverloads.ts,36,3))
+>a : { new (x: number, y: string): C; new (x: number, y: string): C; }, Symbol(a, Decl(constructSignaturesWithIdenticalOverloads.ts, 36, 3))
 >1 : number
 >'' : string
 
 var b: {
->b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C2<T>; }, Symbol(b,Decl(constructSignaturesWithIdenticalOverloads.ts,43,3))
+>b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C2<T>; }, Symbol(b, Decl(constructSignaturesWithIdenticalOverloads.ts, 43, 3))
 
     new <T>(x: T, y: string): C2<T>;
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,44,9))
->x : T, Symbol(x,Decl(constructSignaturesWithIdenticalOverloads.ts,44,12))
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,44,9))
->y : string, Symbol(y,Decl(constructSignaturesWithIdenticalOverloads.ts,44,17))
->C2 : C2<T>, Symbol(C2,Decl(constructSignaturesWithIdenticalOverloads.ts,8,22))
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,44,9))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 44, 9))
+>x : T, Symbol(x, Decl(constructSignaturesWithIdenticalOverloads.ts, 44, 12))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 44, 9))
+>y : string, Symbol(y, Decl(constructSignaturesWithIdenticalOverloads.ts, 44, 17))
+>C2 : C2<T>, Symbol(C2, Decl(constructSignaturesWithIdenticalOverloads.ts, 8, 22))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 44, 9))
 
     new <T>(x: T, y: string): C2<T>; // error
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,45,9))
->x : T, Symbol(x,Decl(constructSignaturesWithIdenticalOverloads.ts,45,12))
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,45,9))
->y : string, Symbol(y,Decl(constructSignaturesWithIdenticalOverloads.ts,45,17))
->C2 : C2<T>, Symbol(C2,Decl(constructSignaturesWithIdenticalOverloads.ts,8,22))
->T : T, Symbol(T,Decl(constructSignaturesWithIdenticalOverloads.ts,45,9))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 45, 9))
+>x : T, Symbol(x, Decl(constructSignaturesWithIdenticalOverloads.ts, 45, 12))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 45, 9))
+>y : string, Symbol(y, Decl(constructSignaturesWithIdenticalOverloads.ts, 45, 17))
+>C2 : C2<T>, Symbol(C2, Decl(constructSignaturesWithIdenticalOverloads.ts, 8, 22))
+>T : T, Symbol(T, Decl(constructSignaturesWithIdenticalOverloads.ts, 45, 9))
 }
 
 var r6 = new b(1, '');
->r6 : C2<number>, Symbol(r6,Decl(constructSignaturesWithIdenticalOverloads.ts,48,3))
+>r6 : C2<number>, Symbol(r6, Decl(constructSignaturesWithIdenticalOverloads.ts, 48, 3))
 >new b(1, '') : C2<number>
->b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C2<T>; }, Symbol(b,Decl(constructSignaturesWithIdenticalOverloads.ts,43,3))
+>b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C2<T>; }, Symbol(b, Decl(constructSignaturesWithIdenticalOverloads.ts, 43, 3))
 >1 : number
 >'' : string
 

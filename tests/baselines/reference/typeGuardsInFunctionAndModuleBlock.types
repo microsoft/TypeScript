@@ -2,108 +2,108 @@
 // typeguards are scoped in function/module block
 
 function foo(x: number | string | boolean) {
->foo : (x: string | number | boolean) => string, Symbol(foo,Decl(typeGuardsInFunctionAndModuleBlock.ts,0,0))
->x : string | number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,2,13))
+>foo : (x: string | number | boolean) => string, Symbol(foo, Decl(typeGuardsInFunctionAndModuleBlock.ts, 0, 0))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
 
     return typeof x === "string"
 >typeof x === "string"        ? x        : function f() {            var b = x; // number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        } () : string
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,2,13))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
 >"string" : string
 
         ? x
->x : string, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,2,13))
+>x : string, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
 
         : function f() {
 >function f() {            var b = x; // number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        } () : string
 >function f() {            var b = x; // number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        } : () => string
->f : () => string, Symbol(f,Decl(typeGuardsInFunctionAndModuleBlock.ts,5,9))
+>f : () => string, Symbol(f, Decl(typeGuardsInFunctionAndModuleBlock.ts, 5, 9))
 
             var b = x; // number | boolean
->b : number | boolean, Symbol(b,Decl(typeGuardsInFunctionAndModuleBlock.ts,6,15))
->x : number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,2,13))
+>b : number | boolean, Symbol(b, Decl(typeGuardsInFunctionAndModuleBlock.ts, 6, 15))
+>x : number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
 
             return typeof x === "boolean"
 >typeof x === "boolean"                ? x.toString() // boolean                : x.toString() : string
 >typeof x === "boolean" : boolean
 >typeof x : string
->x : number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,2,13))
+>x : number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
 >"boolean" : string
 
                 ? x.toString() // boolean
 >x.toString() : string
->x.toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
->x : boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,2,13))
->toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
+>x.toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>x : boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
+>toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
 
                 : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
->x : number, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,2,13))
->toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
+>x.toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>x : number, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 2, 13))
+>toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
 
         } ();
 }
 function foo2(x: number | string | boolean) {
->foo2 : (x: string | number | boolean) => string, Symbol(foo2,Decl(typeGuardsInFunctionAndModuleBlock.ts,11,1))
->x : string | number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,12,14))
+>foo2 : (x: string | number | boolean) => string, Symbol(foo2, Decl(typeGuardsInFunctionAndModuleBlock.ts, 11, 1))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
 
     return typeof x === "string"
 >typeof x === "string"        ? x        : function f(a: number | boolean) {            var b = x; // new scope - number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        } (x) : string
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,12,14))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
 >"string" : string
 
         ? x
->x : string, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,12,14))
+>x : string, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
 
         : function f(a: number | boolean) {
 >function f(a: number | boolean) {            var b = x; // new scope - number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        } (x) : string
 >function f(a: number | boolean) {            var b = x; // new scope - number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        } : (a: number | boolean) => string
->f : (a: number | boolean) => string, Symbol(f,Decl(typeGuardsInFunctionAndModuleBlock.ts,15,9))
->a : number | boolean, Symbol(a,Decl(typeGuardsInFunctionAndModuleBlock.ts,15,21))
+>f : (a: number | boolean) => string, Symbol(f, Decl(typeGuardsInFunctionAndModuleBlock.ts, 15, 9))
+>a : number | boolean, Symbol(a, Decl(typeGuardsInFunctionAndModuleBlock.ts, 15, 21))
 
             var b = x; // new scope - number | boolean
->b : number | boolean, Symbol(b,Decl(typeGuardsInFunctionAndModuleBlock.ts,16,15))
->x : number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,12,14))
+>b : number | boolean, Symbol(b, Decl(typeGuardsInFunctionAndModuleBlock.ts, 16, 15))
+>x : number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
 
             return typeof x === "boolean"
 >typeof x === "boolean"                ? x.toString() // boolean                : x.toString() : string
 >typeof x === "boolean" : boolean
 >typeof x : string
->x : number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,12,14))
+>x : number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
 >"boolean" : string
 
                 ? x.toString() // boolean
 >x.toString() : string
->x.toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
->x : boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,12,14))
->toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
+>x.toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>x : boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
+>toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
 
                 : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
->x : number, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,12,14))
->toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
+>x.toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>x : number, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
+>toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
 
         } (x); // x here is narrowed to number | boolean
->x : number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,12,14))
+>x : number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 12, 14))
 }
 function foo3(x: number | string | boolean) {
->foo3 : (x: string | number | boolean) => string, Symbol(foo3,Decl(typeGuardsInFunctionAndModuleBlock.ts,21,1))
->x : string | number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,22,14))
+>foo3 : (x: string | number | boolean) => string, Symbol(foo3, Decl(typeGuardsInFunctionAndModuleBlock.ts, 21, 1))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
 
     return typeof x === "string"
 >typeof x === "string"        ? x        : (() => {            var b = x; // new scope - number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        })() : string
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,22,14))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
 >"string" : string
 
         ? x
->x : string, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,22,14))
+>x : string, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
 
         : (() => {
 >(() => {            var b = x; // new scope - number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        })() : string
@@ -111,200 +111,200 @@ function foo3(x: number | string | boolean) {
 >() => {            var b = x; // new scope - number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        } : () => string
 
             var b = x; // new scope - number | boolean
->b : number | boolean, Symbol(b,Decl(typeGuardsInFunctionAndModuleBlock.ts,26,15))
->x : number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,22,14))
+>b : number | boolean, Symbol(b, Decl(typeGuardsInFunctionAndModuleBlock.ts, 26, 15))
+>x : number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
 
             return typeof x === "boolean"
 >typeof x === "boolean"                ? x.toString() // boolean                : x.toString() : string
 >typeof x === "boolean" : boolean
 >typeof x : string
->x : number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,22,14))
+>x : number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
 >"boolean" : string
 
                 ? x.toString() // boolean
 >x.toString() : string
->x.toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
->x : boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,22,14))
->toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
+>x.toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>x : boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
+>toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
 
                 : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
->x : number, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,22,14))
->toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
+>x.toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>x : number, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 22, 14))
+>toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
 
         })();
 }
 function foo4(x: number | string | boolean) {
->foo4 : (x: string | number | boolean) => string, Symbol(foo4,Decl(typeGuardsInFunctionAndModuleBlock.ts,31,1))
->x : string | number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,32,14))
+>foo4 : (x: string | number | boolean) => string, Symbol(foo4, Decl(typeGuardsInFunctionAndModuleBlock.ts, 31, 1))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
 
     return typeof x === "string"
 >typeof x === "string"        ? x        : ((a: number | boolean) => {            var b = x; // new scope - number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        })(x) : string
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,32,14))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
 >"string" : string
 
         ? x
->x : string, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,32,14))
+>x : string, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
 
         : ((a: number | boolean) => {
 >((a: number | boolean) => {            var b = x; // new scope - number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        })(x) : string
 >((a: number | boolean) => {            var b = x; // new scope - number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        }) : (a: number | boolean) => string
 >(a: number | boolean) => {            var b = x; // new scope - number | boolean            return typeof x === "boolean"                ? x.toString() // boolean                : x.toString(); // number        } : (a: number | boolean) => string
->a : number | boolean, Symbol(a,Decl(typeGuardsInFunctionAndModuleBlock.ts,35,12))
+>a : number | boolean, Symbol(a, Decl(typeGuardsInFunctionAndModuleBlock.ts, 35, 12))
 
             var b = x; // new scope - number | boolean
->b : number | boolean, Symbol(b,Decl(typeGuardsInFunctionAndModuleBlock.ts,36,15))
->x : number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,32,14))
+>b : number | boolean, Symbol(b, Decl(typeGuardsInFunctionAndModuleBlock.ts, 36, 15))
+>x : number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
 
             return typeof x === "boolean"
 >typeof x === "boolean"                ? x.toString() // boolean                : x.toString() : string
 >typeof x === "boolean" : boolean
 >typeof x : string
->x : number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,32,14))
+>x : number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
 >"boolean" : string
 
                 ? x.toString() // boolean
 >x.toString() : string
->x.toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
->x : boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,32,14))
->toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
+>x.toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>x : boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
+>toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
 
                 : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
->x : number, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,32,14))
->toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
+>x.toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>x : number, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
+>toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
 
         })(x); // x here is narrowed to number | boolean
->x : number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,32,14))
+>x : number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
 }
 // Type guards affect nested function expressions, but not nested function declarations
 function foo5(x: number | string | boolean) {
->foo5 : (x: string | number | boolean) => void, Symbol(foo5,Decl(typeGuardsInFunctionAndModuleBlock.ts,41,1))
->x : string | number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,43,14))
+>foo5 : (x: string | number | boolean) => void, Symbol(foo5, Decl(typeGuardsInFunctionAndModuleBlock.ts, 41, 1))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 43, 14))
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,43,14))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 43, 14))
 >"string" : string
 
         var y = x; // string;
->y : string, Symbol(y,Decl(typeGuardsInFunctionAndModuleBlock.ts,45,11))
->x : string, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,43,14))
+>y : string, Symbol(y, Decl(typeGuardsInFunctionAndModuleBlock.ts, 45, 11))
+>x : string, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 43, 14))
 
         function foo() {
->foo : () => void, Symbol(foo,Decl(typeGuardsInFunctionAndModuleBlock.ts,45,18))
+>foo : () => void, Symbol(foo, Decl(typeGuardsInFunctionAndModuleBlock.ts, 45, 18))
 
             var z = x; // number | string | boolean, type guard has no effect
->z : string | number | boolean, Symbol(z,Decl(typeGuardsInFunctionAndModuleBlock.ts,47,15))
->x : string | number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,43,14))
+>z : string | number | boolean, Symbol(z, Decl(typeGuardsInFunctionAndModuleBlock.ts, 47, 15))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 43, 14))
         }
     }
 }
 module m {
->m : typeof m, Symbol(m,Decl(typeGuardsInFunctionAndModuleBlock.ts,50,1))
+>m : typeof m, Symbol(m, Decl(typeGuardsInFunctionAndModuleBlock.ts, 50, 1))
 
     var x: number | string | boolean;
->x : string | number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,52,7))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
 
     module m2 {
->m2 : typeof m2, Symbol(m2,Decl(typeGuardsInFunctionAndModuleBlock.ts,52,37))
+>m2 : typeof m2, Symbol(m2, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 37))
 
         var b = x; // new scope - number | boolean | string
->b : string | number | boolean, Symbol(b,Decl(typeGuardsInFunctionAndModuleBlock.ts,54,11))
->x : string | number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,52,7))
+>b : string | number | boolean, Symbol(b, Decl(typeGuardsInFunctionAndModuleBlock.ts, 54, 11))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
 
         var y: string;
->y : string, Symbol(y,Decl(typeGuardsInFunctionAndModuleBlock.ts,55,11))
+>y : string, Symbol(y, Decl(typeGuardsInFunctionAndModuleBlock.ts, 55, 11))
 
         if (typeof x === "string") {
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,52,7))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
 >"string" : string
 
             y = x // string;
 >y = x : string
->y : string, Symbol(y,Decl(typeGuardsInFunctionAndModuleBlock.ts,55,11))
->x : string, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,52,7))
+>y : string, Symbol(y, Decl(typeGuardsInFunctionAndModuleBlock.ts, 55, 11))
+>x : string, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
 
         } else {
             y = typeof x === "boolean"
 >y = typeof x === "boolean"            ? x.toString() // boolean            : x.toString() : string
->y : string, Symbol(y,Decl(typeGuardsInFunctionAndModuleBlock.ts,55,11))
+>y : string, Symbol(y, Decl(typeGuardsInFunctionAndModuleBlock.ts, 55, 11))
 >typeof x === "boolean"            ? x.toString() // boolean            : x.toString() : string
 >typeof x === "boolean" : boolean
 >typeof x : string
->x : number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,52,7))
+>x : number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
 >"boolean" : string
 
             ? x.toString() // boolean
 >x.toString() : string
->x.toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
->x : boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,52,7))
->toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
+>x.toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>x : boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
+>toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
 
             : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
->x : number, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,52,7))
->toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
+>x.toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>x : number, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 52, 7))
+>toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
         }
     }
 }
 module m1 {
->m1 : typeof m1, Symbol(m1,Decl(typeGuardsInFunctionAndModuleBlock.ts,64,1))
+>m1 : typeof m1, Symbol(m1, Decl(typeGuardsInFunctionAndModuleBlock.ts, 64, 1))
 
     var x: number | string | boolean;
->x : string | number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,66,7))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
 
     module m2.m3 {
->m2 : typeof m2, Symbol(m2,Decl(typeGuardsInFunctionAndModuleBlock.ts,66,37))
->m3 : typeof m3, Symbol(m3,Decl(typeGuardsInFunctionAndModuleBlock.ts,67,14))
+>m2 : typeof m2, Symbol(m2, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 37))
+>m3 : typeof m3, Symbol(m3, Decl(typeGuardsInFunctionAndModuleBlock.ts, 67, 14))
 
         var b = x; // new scope - number | boolean | string
->b : string | number | boolean, Symbol(b,Decl(typeGuardsInFunctionAndModuleBlock.ts,68,11))
->x : string | number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,66,7))
+>b : string | number | boolean, Symbol(b, Decl(typeGuardsInFunctionAndModuleBlock.ts, 68, 11))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
 
         var y: string;
->y : string, Symbol(y,Decl(typeGuardsInFunctionAndModuleBlock.ts,69,11))
+>y : string, Symbol(y, Decl(typeGuardsInFunctionAndModuleBlock.ts, 69, 11))
 
         if (typeof x === "string") {
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,66,7))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
 >"string" : string
 
             y = x // string;
 >y = x : string
->y : string, Symbol(y,Decl(typeGuardsInFunctionAndModuleBlock.ts,69,11))
->x : string, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,66,7))
+>y : string, Symbol(y, Decl(typeGuardsInFunctionAndModuleBlock.ts, 69, 11))
+>x : string, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
 
         } else {
             y = typeof x === "boolean"
 >y = typeof x === "boolean"            ? x.toString() // boolean            : x.toString() : string
->y : string, Symbol(y,Decl(typeGuardsInFunctionAndModuleBlock.ts,69,11))
+>y : string, Symbol(y, Decl(typeGuardsInFunctionAndModuleBlock.ts, 69, 11))
 >typeof x === "boolean"            ? x.toString() // boolean            : x.toString() : string
 >typeof x === "boolean" : boolean
 >typeof x : string
->x : number | boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,66,7))
+>x : number | boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
 >"boolean" : string
 
             ? x.toString() // boolean
 >x.toString() : string
->x.toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
->x : boolean, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,66,7))
->toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
+>x.toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>x : boolean, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
+>toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
 
             : x.toString(); // number
 >x.toString() : string
->x.toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
->x : number, Symbol(x,Decl(typeGuardsInFunctionAndModuleBlock.ts,66,7))
->toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
+>x.toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>x : number, Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 66, 7))
+>toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
         }
     }
 }

@@ -1,11 +1,11 @@
 === tests/cases/conformance/parser/ecmascript5/RegressionTests/parser643728.ts ===
 interface C {
->C : C, Symbol(C,Decl(parser643728.ts,0,0))
+>C : C, Symbol(C, Decl(parser643728.ts, 0, 0))
 
     foo;
->foo : any, Symbol(foo,Decl(parser643728.ts,0,13))
+>foo : any, Symbol(foo, Decl(parser643728.ts, 0, 13))
 
     new;
->new : any, Symbol(new,Decl(parser643728.ts,1,8))
+>new : any, Symbol(new, Decl(parser643728.ts, 1, 8))
 }
 

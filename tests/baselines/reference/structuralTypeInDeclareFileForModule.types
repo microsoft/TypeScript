@@ -1,10 +1,10 @@
 === tests/cases/compiler/structuralTypeInDeclareFileForModule.ts ===
 
 module M { export var x; }
->M : typeof M, Symbol(M,Decl(structuralTypeInDeclareFileForModule.ts,0,0))
->x : any, Symbol(x,Decl(structuralTypeInDeclareFileForModule.ts,1,21))
+>M : typeof M, Symbol(M, Decl(structuralTypeInDeclareFileForModule.ts, 0, 0))
+>x : any, Symbol(x, Decl(structuralTypeInDeclareFileForModule.ts, 1, 21))
 
 var m = M;
->m : typeof M, Symbol(m,Decl(structuralTypeInDeclareFileForModule.ts,2,3))
->M : typeof M, Symbol(M,Decl(structuralTypeInDeclareFileForModule.ts,0,0))
+>m : typeof M, Symbol(m, Decl(structuralTypeInDeclareFileForModule.ts, 2, 3))
+>M : typeof M, Symbol(M, Decl(structuralTypeInDeclareFileForModule.ts, 0, 0))
 

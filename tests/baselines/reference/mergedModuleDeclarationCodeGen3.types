@@ -1,23 +1,23 @@
 === tests/cases/compiler/mergedModuleDeclarationCodeGen3.ts ===
 module my.data {
->my : typeof my, Symbol(my,Decl(mergedModuleDeclarationCodeGen3.ts,0,0),Decl(mergedModuleDeclarationCodeGen3.ts,2,1))
->data : typeof data, Symbol(data,Decl(mergedModuleDeclarationCodeGen3.ts,0,10),Decl(mergedModuleDeclarationCodeGen3.ts,3,10))
+>my : typeof my, Symbol(my, Decl(mergedModuleDeclarationCodeGen3.ts, 0, 0), Decl(mergedModuleDeclarationCodeGen3.ts, 2, 1))
+>data : typeof data, Symbol(data, Decl(mergedModuleDeclarationCodeGen3.ts, 0, 10), Decl(mergedModuleDeclarationCodeGen3.ts, 3, 10))
 
     export function buz() { }
->buz : () => void, Symbol(buz,Decl(mergedModuleDeclarationCodeGen3.ts,0,16))
+>buz : () => void, Symbol(buz, Decl(mergedModuleDeclarationCodeGen3.ts, 0, 16))
 }
 module my.data.foo {
->my : typeof my, Symbol(my,Decl(mergedModuleDeclarationCodeGen3.ts,0,0),Decl(mergedModuleDeclarationCodeGen3.ts,2,1))
->data : typeof data, Symbol(data,Decl(mergedModuleDeclarationCodeGen3.ts,0,10),Decl(mergedModuleDeclarationCodeGen3.ts,3,10))
->foo : typeof foo, Symbol(foo,Decl(mergedModuleDeclarationCodeGen3.ts,3,15))
+>my : typeof my, Symbol(my, Decl(mergedModuleDeclarationCodeGen3.ts, 0, 0), Decl(mergedModuleDeclarationCodeGen3.ts, 2, 1))
+>data : typeof data, Symbol(data, Decl(mergedModuleDeclarationCodeGen3.ts, 0, 10), Decl(mergedModuleDeclarationCodeGen3.ts, 3, 10))
+>foo : typeof foo, Symbol(foo, Decl(mergedModuleDeclarationCodeGen3.ts, 3, 15))
 
     function data(my, foo) {
->data : (my: any, foo: any) => void, Symbol(data,Decl(mergedModuleDeclarationCodeGen3.ts,3,20))
->my : any, Symbol(my,Decl(mergedModuleDeclarationCodeGen3.ts,4,18))
->foo : any, Symbol(foo,Decl(mergedModuleDeclarationCodeGen3.ts,4,21))
+>data : (my: any, foo: any) => void, Symbol(data, Decl(mergedModuleDeclarationCodeGen3.ts, 3, 20))
+>my : any, Symbol(my, Decl(mergedModuleDeclarationCodeGen3.ts, 4, 18))
+>foo : any, Symbol(foo, Decl(mergedModuleDeclarationCodeGen3.ts, 4, 21))
 
         buz();
 >buz() : void
->buz : () => void, Symbol(buz,Decl(mergedModuleDeclarationCodeGen3.ts,0,16))
+>buz : () => void, Symbol(buz, Decl(mergedModuleDeclarationCodeGen3.ts, 0, 16))
     }
 }

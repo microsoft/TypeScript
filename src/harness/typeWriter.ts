@@ -49,10 +49,10 @@ class TypeWriterWalker {
             var symbolString = "Symbol(" + this.checker.symbolToString(symbol, node.parent);
             if (symbol.declarations) {
                 for (let declaration of symbol.declarations) {
-                    symbolString += ",";
+                    symbolString += ", ";
                     let declSourceFile = declaration.getSourceFile();
                     let declLineAndCharacter = declSourceFile.getLineAndCharacterOfPosition(declaration.pos);
-                    symbolString += `Decl(${ ts.getBaseFileName(declSourceFile.fileName) },${ declLineAndCharacter.line },${ declLineAndCharacter.character })`
+                    symbolString += `Decl(${ ts.getBaseFileName(declSourceFile.fileName) }, ${ declLineAndCharacter.line }, ${ declLineAndCharacter.character })`
                 }
             }
             symbolString += ")";

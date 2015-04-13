@@ -1,33 +1,33 @@
 === tests/cases/compiler/es5ExportDefaultClassDeclaration3.ts ===
 
 var before: C = new C();
->before : C, Symbol(before,Decl(es5ExportDefaultClassDeclaration3.ts,1,3))
->C : C, Symbol(C,Decl(es5ExportDefaultClassDeclaration3.ts,1,24))
+>before : C, Symbol(before, Decl(es5ExportDefaultClassDeclaration3.ts, 1, 3))
+>C : C, Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 1, 24))
 >new C() : C
->C : typeof C, Symbol(C,Decl(es5ExportDefaultClassDeclaration3.ts,1,24))
+>C : typeof C, Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 1, 24))
 
 export default class C {
->C : C, Symbol(C,Decl(es5ExportDefaultClassDeclaration3.ts,1,24))
+>C : C, Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 1, 24))
 
     method(): C {
->method : () => C, Symbol(method,Decl(es5ExportDefaultClassDeclaration3.ts,3,24))
->C : C, Symbol(C,Decl(es5ExportDefaultClassDeclaration3.ts,1,24))
+>method : () => C, Symbol(method, Decl(es5ExportDefaultClassDeclaration3.ts, 3, 24))
+>C : C, Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 1, 24))
 
         return new C();
 >new C() : C
->C : typeof C, Symbol(C,Decl(es5ExportDefaultClassDeclaration3.ts,1,24))
+>C : typeof C, Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 1, 24))
     }
 }
 
 var after: C = new C();
->after : C, Symbol(after,Decl(es5ExportDefaultClassDeclaration3.ts,9,3))
->C : C, Symbol(C,Decl(es5ExportDefaultClassDeclaration3.ts,1,24))
+>after : C, Symbol(after, Decl(es5ExportDefaultClassDeclaration3.ts, 9, 3))
+>C : C, Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 1, 24))
 >new C() : C
->C : typeof C, Symbol(C,Decl(es5ExportDefaultClassDeclaration3.ts,1,24))
+>C : typeof C, Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 1, 24))
 
 var t: typeof C = C;
->t : typeof C, Symbol(t,Decl(es5ExportDefaultClassDeclaration3.ts,11,3))
->C : typeof C, Symbol(C,Decl(es5ExportDefaultClassDeclaration3.ts,1,24))
->C : typeof C, Symbol(C,Decl(es5ExportDefaultClassDeclaration3.ts,1,24))
+>t : typeof C, Symbol(t, Decl(es5ExportDefaultClassDeclaration3.ts, 11, 3))
+>C : typeof C, Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 1, 24))
+>C : typeof C, Symbol(C, Decl(es5ExportDefaultClassDeclaration3.ts, 1, 24))
 
 

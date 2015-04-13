@@ -1,55 +1,55 @@
 === tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalTypeParameter.ts ===
 function foo<T>(t: T) {
->foo : <T>(t: T) => void, Symbol(foo,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,0))
->T : T, Symbol(T,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,13))
->t : T, Symbol(t,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,16))
->T : T, Symbol(T,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,13))
+>foo : <T>(t: T) => void, Symbol(foo, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 0))
+>T : T, Symbol(T, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 13))
+>t : T, Symbol(t, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 16))
+>T : T, Symbol(T, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 13))
 
     var r1 = t < t;
->r1 : boolean, Symbol(r1,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,1,7))
+>r1 : boolean, Symbol(r1, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 1, 7))
 >t < t : boolean
->t : T, Symbol(t,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,16))
->t : T, Symbol(t,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,16))
+>t : T, Symbol(t, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 16))
+>t : T, Symbol(t, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 16))
 
     var r2 = t > t;
->r2 : boolean, Symbol(r2,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,2,7))
+>r2 : boolean, Symbol(r2, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 2, 7))
 >t > t : boolean
->t : T, Symbol(t,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,16))
->t : T, Symbol(t,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,16))
+>t : T, Symbol(t, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 16))
+>t : T, Symbol(t, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 16))
 
     var r3 = t <= t;
->r3 : boolean, Symbol(r3,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,3,7))
+>r3 : boolean, Symbol(r3, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 3, 7))
 >t <= t : boolean
->t : T, Symbol(t,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,16))
->t : T, Symbol(t,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,16))
+>t : T, Symbol(t, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 16))
+>t : T, Symbol(t, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 16))
 
     var r4 = t >= t;
->r4 : boolean, Symbol(r4,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,4,7))
+>r4 : boolean, Symbol(r4, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 4, 7))
 >t >= t : boolean
->t : T, Symbol(t,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,16))
->t : T, Symbol(t,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,16))
+>t : T, Symbol(t, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 16))
+>t : T, Symbol(t, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 16))
 
     var r5 = t == t;
->r5 : boolean, Symbol(r5,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,5,7))
+>r5 : boolean, Symbol(r5, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 5, 7))
 >t == t : boolean
->t : T, Symbol(t,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,16))
->t : T, Symbol(t,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,16))
+>t : T, Symbol(t, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 16))
+>t : T, Symbol(t, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 16))
 
     var r6 = t != t;
->r6 : boolean, Symbol(r6,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,6,7))
+>r6 : boolean, Symbol(r6, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 6, 7))
 >t != t : boolean
->t : T, Symbol(t,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,16))
->t : T, Symbol(t,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,16))
+>t : T, Symbol(t, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 16))
+>t : T, Symbol(t, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 16))
 
     var r7 = t === t;
->r7 : boolean, Symbol(r7,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,7,7))
+>r7 : boolean, Symbol(r7, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 7, 7))
 >t === t : boolean
->t : T, Symbol(t,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,16))
->t : T, Symbol(t,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,16))
+>t : T, Symbol(t, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 16))
+>t : T, Symbol(t, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 16))
 
     var r8 = t !== t;
->r8 : boolean, Symbol(r8,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,8,7))
+>r8 : boolean, Symbol(r8, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 8, 7))
 >t !== t : boolean
->t : T, Symbol(t,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,16))
->t : T, Symbol(t,Decl(comparisonOperatorWithIdenticalTypeParameter.ts,0,16))
+>t : T, Symbol(t, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 16))
+>t : T, Symbol(t, Decl(comparisonOperatorWithIdenticalTypeParameter.ts, 0, 16))
 }

@@ -1,28 +1,28 @@
 === tests/cases/compiler/sourceMapValidationImport.ts ===
 export module m {
->m : typeof m, Symbol(m,Decl(sourceMapValidationImport.ts,0,0))
+>m : typeof m, Symbol(m, Decl(sourceMapValidationImport.ts, 0, 0))
 
     export class c {
->c : c, Symbol(c,Decl(sourceMapValidationImport.ts,0,17))
+>c : c, Symbol(c, Decl(sourceMapValidationImport.ts, 0, 17))
     }
 }
 import a = m.c;
->a : typeof a, Symbol(a,Decl(sourceMapValidationImport.ts,3,1))
->m : typeof m, Symbol(m,Decl(sourceMapValidationImport.ts,0,0))
->c : a, Symbol(a,Decl(sourceMapValidationImport.ts,0,17))
+>a : typeof a, Symbol(a, Decl(sourceMapValidationImport.ts, 3, 1))
+>m : typeof m, Symbol(m, Decl(sourceMapValidationImport.ts, 0, 0))
+>c : a, Symbol(a, Decl(sourceMapValidationImport.ts, 0, 17))
 
 export import b = m.c;
->b : typeof a, Symbol(b,Decl(sourceMapValidationImport.ts,4,15))
->m : typeof m, Symbol(m,Decl(sourceMapValidationImport.ts,0,0))
->c : a, Symbol(a,Decl(sourceMapValidationImport.ts,0,17))
+>b : typeof a, Symbol(b, Decl(sourceMapValidationImport.ts, 4, 15))
+>m : typeof m, Symbol(m, Decl(sourceMapValidationImport.ts, 0, 0))
+>c : a, Symbol(a, Decl(sourceMapValidationImport.ts, 0, 17))
 
 var x = new a();
->x : a, Symbol(x,Decl(sourceMapValidationImport.ts,6,3))
+>x : a, Symbol(x, Decl(sourceMapValidationImport.ts, 6, 3))
 >new a() : a
->a : typeof a, Symbol(a,Decl(sourceMapValidationImport.ts,3,1))
+>a : typeof a, Symbol(a, Decl(sourceMapValidationImport.ts, 3, 1))
 
 var y = new b();
->y : a, Symbol(y,Decl(sourceMapValidationImport.ts,7,3))
+>y : a, Symbol(y, Decl(sourceMapValidationImport.ts, 7, 3))
 >new b() : a
->b : typeof a, Symbol(b,Decl(sourceMapValidationImport.ts,4,15))
+>b : typeof a, Symbol(b, Decl(sourceMapValidationImport.ts, 4, 15))
 

@@ -1,35 +1,35 @@
 === tests/cases/compiler/internalAliasClassInsideTopLevelModuleWithoutExport.ts ===
 export module x {
->x : typeof x, Symbol(x,Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts,0,0))
+>x : typeof x, Symbol(x, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 0, 0))
 
     export class c {
->c : c, Symbol(c,Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts,0,17))
+>c : c, Symbol(c, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 0, 17))
 
         foo(a: number) {
->foo : (a: number) => number, Symbol(foo,Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts,1,20))
->a : number, Symbol(a,Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts,2,12))
+>foo : (a: number) => number, Symbol(foo, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 1, 20))
+>a : number, Symbol(a, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 2, 12))
 
             return a;
->a : number, Symbol(a,Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts,2,12))
+>a : number, Symbol(a, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 2, 12))
         }
     }
 }
 
 import xc = x.c;
->xc : typeof xc, Symbol(xc,Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts,6,1))
->x : typeof x, Symbol(x,Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts,0,0))
->c : xc, Symbol(xc,Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts,0,17))
+>xc : typeof xc, Symbol(xc, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 6, 1))
+>x : typeof x, Symbol(x, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 0, 0))
+>c : xc, Symbol(xc, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 0, 17))
 
 export var cProp = new xc();
->cProp : xc, Symbol(cProp,Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts,9,10))
+>cProp : xc, Symbol(cProp, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 9, 10))
 >new xc() : xc
->xc : typeof xc, Symbol(xc,Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts,6,1))
+>xc : typeof xc, Symbol(xc, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 6, 1))
 
 var cReturnVal = cProp.foo(10);
->cReturnVal : number, Symbol(cReturnVal,Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts,10,3))
+>cReturnVal : number, Symbol(cReturnVal, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 10, 3))
 >cProp.foo(10) : number
->cProp.foo : (a: number) => number, Symbol(xc.foo,Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts,1,20))
->cProp : xc, Symbol(cProp,Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts,9,10))
->foo : (a: number) => number, Symbol(xc.foo,Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts,1,20))
+>cProp.foo : (a: number) => number, Symbol(xc.foo, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 1, 20))
+>cProp : xc, Symbol(cProp, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 9, 10))
+>foo : (a: number) => number, Symbol(xc.foo, Decl(internalAliasClassInsideTopLevelModuleWithoutExport.ts, 1, 20))
 >10 : number
 

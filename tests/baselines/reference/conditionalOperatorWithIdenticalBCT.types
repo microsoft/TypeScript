@@ -1,47 +1,47 @@
 === tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithIdenticalBCT.ts ===
 //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have identical best common type
 class X { propertyX: any; propertyX1: number; propertyX2: string };
->X : X, Symbol(X,Decl(conditionalOperatorWithIdenticalBCT.ts,0,0))
->propertyX : any, Symbol(propertyX,Decl(conditionalOperatorWithIdenticalBCT.ts,1,9))
->propertyX1 : number, Symbol(propertyX1,Decl(conditionalOperatorWithIdenticalBCT.ts,1,25))
->propertyX2 : string, Symbol(propertyX2,Decl(conditionalOperatorWithIdenticalBCT.ts,1,45))
+>X : X, Symbol(X, Decl(conditionalOperatorWithIdenticalBCT.ts, 0, 0))
+>propertyX : any, Symbol(propertyX, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 9))
+>propertyX1 : number, Symbol(propertyX1, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 25))
+>propertyX2 : string, Symbol(propertyX2, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 45))
 
 class A extends X { propertyA: number };
->A : A, Symbol(A,Decl(conditionalOperatorWithIdenticalBCT.ts,1,67))
->X : X, Symbol(X,Decl(conditionalOperatorWithIdenticalBCT.ts,0,0))
->propertyA : number, Symbol(propertyA,Decl(conditionalOperatorWithIdenticalBCT.ts,2,19))
+>A : A, Symbol(A, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 67))
+>X : X, Symbol(X, Decl(conditionalOperatorWithIdenticalBCT.ts, 0, 0))
+>propertyA : number, Symbol(propertyA, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 19))
 
 class B extends X { propertyB: string };
->B : B, Symbol(B,Decl(conditionalOperatorWithIdenticalBCT.ts,2,40))
->X : X, Symbol(X,Decl(conditionalOperatorWithIdenticalBCT.ts,0,0))
->propertyB : string, Symbol(propertyB,Decl(conditionalOperatorWithIdenticalBCT.ts,3,19))
+>B : B, Symbol(B, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 40))
+>X : X, Symbol(X, Decl(conditionalOperatorWithIdenticalBCT.ts, 0, 0))
+>propertyB : string, Symbol(propertyB, Decl(conditionalOperatorWithIdenticalBCT.ts, 3, 19))
 
 var x: X;
->x : X, Symbol(x,Decl(conditionalOperatorWithIdenticalBCT.ts,5,3))
->X : X, Symbol(X,Decl(conditionalOperatorWithIdenticalBCT.ts,0,0))
+>x : X, Symbol(x, Decl(conditionalOperatorWithIdenticalBCT.ts, 5, 3))
+>X : X, Symbol(X, Decl(conditionalOperatorWithIdenticalBCT.ts, 0, 0))
 
 var a: A;
->a : A, Symbol(a,Decl(conditionalOperatorWithIdenticalBCT.ts,6,3))
->A : A, Symbol(A,Decl(conditionalOperatorWithIdenticalBCT.ts,1,67))
+>a : A, Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 6, 3))
+>A : A, Symbol(A, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 67))
 
 var b: B;
->b : B, Symbol(b,Decl(conditionalOperatorWithIdenticalBCT.ts,7,3))
->B : B, Symbol(B,Decl(conditionalOperatorWithIdenticalBCT.ts,2,40))
+>b : B, Symbol(b, Decl(conditionalOperatorWithIdenticalBCT.ts, 7, 3))
+>B : B, Symbol(B, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 40))
 
 //Cond ? Expr1 : Expr2,  Expr1 is supertype
 //Be Not contextually typed
 true ? x : a;
 >true ? x : a : X
 >true : boolean
->x : X, Symbol(x,Decl(conditionalOperatorWithIdenticalBCT.ts,5,3))
->a : A, Symbol(a,Decl(conditionalOperatorWithIdenticalBCT.ts,6,3))
+>x : X, Symbol(x, Decl(conditionalOperatorWithIdenticalBCT.ts, 5, 3))
+>a : A, Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 6, 3))
 
 var result1 = true ? x : a;
->result1 : X, Symbol(result1,Decl(conditionalOperatorWithIdenticalBCT.ts,12,3))
+>result1 : X, Symbol(result1, Decl(conditionalOperatorWithIdenticalBCT.ts, 12, 3))
 >true ? x : a : X
 >true : boolean
->x : X, Symbol(x,Decl(conditionalOperatorWithIdenticalBCT.ts,5,3))
->a : A, Symbol(a,Decl(conditionalOperatorWithIdenticalBCT.ts,6,3))
+>x : X, Symbol(x, Decl(conditionalOperatorWithIdenticalBCT.ts, 5, 3))
+>a : A, Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 6, 3))
 
 //Expr1 and Expr2 are literals
 true ? {} : 1;
@@ -54,74 +54,74 @@ true ? { a: 1 } : { a: 2, b: 'string' };
 >true ? { a: 1 } : { a: 2, b: 'string' } : { a: number; }
 >true : boolean
 >{ a: 1 } : { a: number; }
->a : number, Symbol(a,Decl(conditionalOperatorWithIdenticalBCT.ts,16,8))
+>a : number, Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 16, 8))
 >1 : number
 >{ a: 2, b: 'string' } : { a: number; b: string; }
->a : number, Symbol(a,Decl(conditionalOperatorWithIdenticalBCT.ts,16,19))
+>a : number, Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 16, 19))
 >2 : number
->b : string, Symbol(b,Decl(conditionalOperatorWithIdenticalBCT.ts,16,25))
+>b : string, Symbol(b, Decl(conditionalOperatorWithIdenticalBCT.ts, 16, 25))
 >'string' : string
 
 var result2 = true ? {} : 1;
->result2 : {}, Symbol(result2,Decl(conditionalOperatorWithIdenticalBCT.ts,17,3))
+>result2 : {}, Symbol(result2, Decl(conditionalOperatorWithIdenticalBCT.ts, 17, 3))
 >true ? {} : 1 : {}
 >true : boolean
 >{} : {}
 >1 : number
 
 var result3 = true ? { a: 1 } : { a: 2, b: 'string' };
->result3 : { a: number; }, Symbol(result3,Decl(conditionalOperatorWithIdenticalBCT.ts,18,3))
+>result3 : { a: number; }, Symbol(result3, Decl(conditionalOperatorWithIdenticalBCT.ts, 18, 3))
 >true ? { a: 1 } : { a: 2, b: 'string' } : { a: number; }
 >true : boolean
 >{ a: 1 } : { a: number; }
->a : number, Symbol(a,Decl(conditionalOperatorWithIdenticalBCT.ts,18,22))
+>a : number, Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 18, 22))
 >1 : number
 >{ a: 2, b: 'string' } : { a: number; b: string; }
->a : number, Symbol(a,Decl(conditionalOperatorWithIdenticalBCT.ts,18,33))
+>a : number, Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 18, 33))
 >2 : number
->b : string, Symbol(b,Decl(conditionalOperatorWithIdenticalBCT.ts,18,39))
+>b : string, Symbol(b, Decl(conditionalOperatorWithIdenticalBCT.ts, 18, 39))
 >'string' : string
 
 //Contextually typed
 var resultIsX1: X = true ? x : a;
->resultIsX1 : X, Symbol(resultIsX1,Decl(conditionalOperatorWithIdenticalBCT.ts,21,3))
->X : X, Symbol(X,Decl(conditionalOperatorWithIdenticalBCT.ts,0,0))
+>resultIsX1 : X, Symbol(resultIsX1, Decl(conditionalOperatorWithIdenticalBCT.ts, 21, 3))
+>X : X, Symbol(X, Decl(conditionalOperatorWithIdenticalBCT.ts, 0, 0))
 >true ? x : a : X
 >true : boolean
->x : X, Symbol(x,Decl(conditionalOperatorWithIdenticalBCT.ts,5,3))
->a : A, Symbol(a,Decl(conditionalOperatorWithIdenticalBCT.ts,6,3))
+>x : X, Symbol(x, Decl(conditionalOperatorWithIdenticalBCT.ts, 5, 3))
+>a : A, Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 6, 3))
 
 var result4: (t: A) => any = true ? (m) => m.propertyX : (n) => n.propertyA;
->result4 : (t: A) => any, Symbol(result4,Decl(conditionalOperatorWithIdenticalBCT.ts,22,3))
->t : A, Symbol(t,Decl(conditionalOperatorWithIdenticalBCT.ts,22,14))
->A : A, Symbol(A,Decl(conditionalOperatorWithIdenticalBCT.ts,1,67))
+>result4 : (t: A) => any, Symbol(result4, Decl(conditionalOperatorWithIdenticalBCT.ts, 22, 3))
+>t : A, Symbol(t, Decl(conditionalOperatorWithIdenticalBCT.ts, 22, 14))
+>A : A, Symbol(A, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 67))
 >true ? (m) => m.propertyX : (n) => n.propertyA : (m: A) => any
 >true : boolean
 >(m) => m.propertyX : (m: A) => any
->m : A, Symbol(m,Decl(conditionalOperatorWithIdenticalBCT.ts,22,37))
->m.propertyX : any, Symbol(X.propertyX,Decl(conditionalOperatorWithIdenticalBCT.ts,1,9))
->m : A, Symbol(m,Decl(conditionalOperatorWithIdenticalBCT.ts,22,37))
->propertyX : any, Symbol(X.propertyX,Decl(conditionalOperatorWithIdenticalBCT.ts,1,9))
+>m : A, Symbol(m, Decl(conditionalOperatorWithIdenticalBCT.ts, 22, 37))
+>m.propertyX : any, Symbol(X.propertyX, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 9))
+>m : A, Symbol(m, Decl(conditionalOperatorWithIdenticalBCT.ts, 22, 37))
+>propertyX : any, Symbol(X.propertyX, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 9))
 >(n) => n.propertyA : (n: A) => number
->n : A, Symbol(n,Decl(conditionalOperatorWithIdenticalBCT.ts,22,58))
->n.propertyA : number, Symbol(A.propertyA,Decl(conditionalOperatorWithIdenticalBCT.ts,2,19))
->n : A, Symbol(n,Decl(conditionalOperatorWithIdenticalBCT.ts,22,58))
->propertyA : number, Symbol(A.propertyA,Decl(conditionalOperatorWithIdenticalBCT.ts,2,19))
+>n : A, Symbol(n, Decl(conditionalOperatorWithIdenticalBCT.ts, 22, 58))
+>n.propertyA : number, Symbol(A.propertyA, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 19))
+>n : A, Symbol(n, Decl(conditionalOperatorWithIdenticalBCT.ts, 22, 58))
+>propertyA : number, Symbol(A.propertyA, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 19))
 
 //Cond ? Expr1 : Expr2,  Expr2 is supertype
 //Be Not contextually typed
 true ? a : x;
 >true ? a : x : X
 >true : boolean
->a : A, Symbol(a,Decl(conditionalOperatorWithIdenticalBCT.ts,6,3))
->x : X, Symbol(x,Decl(conditionalOperatorWithIdenticalBCT.ts,5,3))
+>a : A, Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 6, 3))
+>x : X, Symbol(x, Decl(conditionalOperatorWithIdenticalBCT.ts, 5, 3))
 
 var result5 = true ? a : x;
->result5 : X, Symbol(result5,Decl(conditionalOperatorWithIdenticalBCT.ts,27,3))
+>result5 : X, Symbol(result5, Decl(conditionalOperatorWithIdenticalBCT.ts, 27, 3))
 >true ? a : x : X
 >true : boolean
->a : A, Symbol(a,Decl(conditionalOperatorWithIdenticalBCT.ts,6,3))
->x : X, Symbol(x,Decl(conditionalOperatorWithIdenticalBCT.ts,5,3))
+>a : A, Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 6, 3))
+>x : X, Symbol(x, Decl(conditionalOperatorWithIdenticalBCT.ts, 5, 3))
 
 //Expr1 and Expr2 are literals
 true ? 1 : {};
@@ -134,90 +134,90 @@ true ? { a: 2, b: 'string' } : { a: 1 };
 >true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; }
 >true : boolean
 >{ a: 2, b: 'string' } : { a: number; b: string; }
->a : number, Symbol(a,Decl(conditionalOperatorWithIdenticalBCT.ts,31,8))
+>a : number, Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 31, 8))
 >2 : number
->b : string, Symbol(b,Decl(conditionalOperatorWithIdenticalBCT.ts,31,14))
+>b : string, Symbol(b, Decl(conditionalOperatorWithIdenticalBCT.ts, 31, 14))
 >'string' : string
 >{ a: 1 } : { a: number; }
->a : number, Symbol(a,Decl(conditionalOperatorWithIdenticalBCT.ts,31,32))
+>a : number, Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 31, 32))
 >1 : number
 
 var result6 = true ? 1 : {};
->result6 : {}, Symbol(result6,Decl(conditionalOperatorWithIdenticalBCT.ts,32,3))
+>result6 : {}, Symbol(result6, Decl(conditionalOperatorWithIdenticalBCT.ts, 32, 3))
 >true ? 1 : {} : {}
 >true : boolean
 >1 : number
 >{} : {}
 
 var result7 = true ? { a: 2, b: 'string' } : { a: 1 };
->result7 : { a: number; }, Symbol(result7,Decl(conditionalOperatorWithIdenticalBCT.ts,33,3))
+>result7 : { a: number; }, Symbol(result7, Decl(conditionalOperatorWithIdenticalBCT.ts, 33, 3))
 >true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; }
 >true : boolean
 >{ a: 2, b: 'string' } : { a: number; b: string; }
->a : number, Symbol(a,Decl(conditionalOperatorWithIdenticalBCT.ts,33,22))
+>a : number, Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 33, 22))
 >2 : number
->b : string, Symbol(b,Decl(conditionalOperatorWithIdenticalBCT.ts,33,28))
+>b : string, Symbol(b, Decl(conditionalOperatorWithIdenticalBCT.ts, 33, 28))
 >'string' : string
 >{ a: 1 } : { a: number; }
->a : number, Symbol(a,Decl(conditionalOperatorWithIdenticalBCT.ts,33,46))
+>a : number, Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 33, 46))
 >1 : number
 
 //Contextually typed
 var resultIsX2: X = true ? x : a;
->resultIsX2 : X, Symbol(resultIsX2,Decl(conditionalOperatorWithIdenticalBCT.ts,36,3))
->X : X, Symbol(X,Decl(conditionalOperatorWithIdenticalBCT.ts,0,0))
+>resultIsX2 : X, Symbol(resultIsX2, Decl(conditionalOperatorWithIdenticalBCT.ts, 36, 3))
+>X : X, Symbol(X, Decl(conditionalOperatorWithIdenticalBCT.ts, 0, 0))
 >true ? x : a : X
 >true : boolean
->x : X, Symbol(x,Decl(conditionalOperatorWithIdenticalBCT.ts,5,3))
->a : A, Symbol(a,Decl(conditionalOperatorWithIdenticalBCT.ts,6,3))
+>x : X, Symbol(x, Decl(conditionalOperatorWithIdenticalBCT.ts, 5, 3))
+>a : A, Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 6, 3))
 
 var result8: (t: A) => any = true ? (m) => m.propertyA : (n) => n.propertyX;
->result8 : (t: A) => any, Symbol(result8,Decl(conditionalOperatorWithIdenticalBCT.ts,37,3))
->t : A, Symbol(t,Decl(conditionalOperatorWithIdenticalBCT.ts,37,14))
->A : A, Symbol(A,Decl(conditionalOperatorWithIdenticalBCT.ts,1,67))
+>result8 : (t: A) => any, Symbol(result8, Decl(conditionalOperatorWithIdenticalBCT.ts, 37, 3))
+>t : A, Symbol(t, Decl(conditionalOperatorWithIdenticalBCT.ts, 37, 14))
+>A : A, Symbol(A, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 67))
 >true ? (m) => m.propertyA : (n) => n.propertyX : (n: A) => any
 >true : boolean
 >(m) => m.propertyA : (m: A) => number
->m : A, Symbol(m,Decl(conditionalOperatorWithIdenticalBCT.ts,37,37))
->m.propertyA : number, Symbol(A.propertyA,Decl(conditionalOperatorWithIdenticalBCT.ts,2,19))
->m : A, Symbol(m,Decl(conditionalOperatorWithIdenticalBCT.ts,37,37))
->propertyA : number, Symbol(A.propertyA,Decl(conditionalOperatorWithIdenticalBCT.ts,2,19))
+>m : A, Symbol(m, Decl(conditionalOperatorWithIdenticalBCT.ts, 37, 37))
+>m.propertyA : number, Symbol(A.propertyA, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 19))
+>m : A, Symbol(m, Decl(conditionalOperatorWithIdenticalBCT.ts, 37, 37))
+>propertyA : number, Symbol(A.propertyA, Decl(conditionalOperatorWithIdenticalBCT.ts, 2, 19))
 >(n) => n.propertyX : (n: A) => any
->n : A, Symbol(n,Decl(conditionalOperatorWithIdenticalBCT.ts,37,58))
->n.propertyX : any, Symbol(X.propertyX,Decl(conditionalOperatorWithIdenticalBCT.ts,1,9))
->n : A, Symbol(n,Decl(conditionalOperatorWithIdenticalBCT.ts,37,58))
->propertyX : any, Symbol(X.propertyX,Decl(conditionalOperatorWithIdenticalBCT.ts,1,9))
+>n : A, Symbol(n, Decl(conditionalOperatorWithIdenticalBCT.ts, 37, 58))
+>n.propertyX : any, Symbol(X.propertyX, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 9))
+>n : A, Symbol(n, Decl(conditionalOperatorWithIdenticalBCT.ts, 37, 58))
+>propertyX : any, Symbol(X.propertyX, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 9))
 
 //Result = Cond ? Expr1 : Expr2,  Result is supertype
 //Contextually typed
 var resultIsX3: X = true ? a : b;
->resultIsX3 : X, Symbol(resultIsX3,Decl(conditionalOperatorWithIdenticalBCT.ts,41,3))
->X : X, Symbol(X,Decl(conditionalOperatorWithIdenticalBCT.ts,0,0))
+>resultIsX3 : X, Symbol(resultIsX3, Decl(conditionalOperatorWithIdenticalBCT.ts, 41, 3))
+>X : X, Symbol(X, Decl(conditionalOperatorWithIdenticalBCT.ts, 0, 0))
 >true ? a : b : A | B
 >true : boolean
->a : A, Symbol(a,Decl(conditionalOperatorWithIdenticalBCT.ts,6,3))
->b : B, Symbol(b,Decl(conditionalOperatorWithIdenticalBCT.ts,7,3))
+>a : A, Symbol(a, Decl(conditionalOperatorWithIdenticalBCT.ts, 6, 3))
+>b : B, Symbol(b, Decl(conditionalOperatorWithIdenticalBCT.ts, 7, 3))
 
 var result10: (t: X) => any = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
->result10 : (t: X) => any, Symbol(result10,Decl(conditionalOperatorWithIdenticalBCT.ts,42,3))
->t : X, Symbol(t,Decl(conditionalOperatorWithIdenticalBCT.ts,42,15))
->X : X, Symbol(X,Decl(conditionalOperatorWithIdenticalBCT.ts,0,0))
+>result10 : (t: X) => any, Symbol(result10, Decl(conditionalOperatorWithIdenticalBCT.ts, 42, 3))
+>t : X, Symbol(t, Decl(conditionalOperatorWithIdenticalBCT.ts, 42, 15))
+>X : X, Symbol(X, Decl(conditionalOperatorWithIdenticalBCT.ts, 0, 0))
 >true ? (m) => m.propertyX1 : (n) => n.propertyX2 : ((m: X) => number) | ((n: X) => string)
 >true : boolean
 >(m) => m.propertyX1 : (m: X) => number
->m : X, Symbol(m,Decl(conditionalOperatorWithIdenticalBCT.ts,42,38))
->m.propertyX1 : number, Symbol(X.propertyX1,Decl(conditionalOperatorWithIdenticalBCT.ts,1,25))
->m : X, Symbol(m,Decl(conditionalOperatorWithIdenticalBCT.ts,42,38))
->propertyX1 : number, Symbol(X.propertyX1,Decl(conditionalOperatorWithIdenticalBCT.ts,1,25))
+>m : X, Symbol(m, Decl(conditionalOperatorWithIdenticalBCT.ts, 42, 38))
+>m.propertyX1 : number, Symbol(X.propertyX1, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 25))
+>m : X, Symbol(m, Decl(conditionalOperatorWithIdenticalBCT.ts, 42, 38))
+>propertyX1 : number, Symbol(X.propertyX1, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 25))
 >(n) => n.propertyX2 : (n: X) => string
->n : X, Symbol(n,Decl(conditionalOperatorWithIdenticalBCT.ts,42,60))
->n.propertyX2 : string, Symbol(X.propertyX2,Decl(conditionalOperatorWithIdenticalBCT.ts,1,45))
->n : X, Symbol(n,Decl(conditionalOperatorWithIdenticalBCT.ts,42,60))
->propertyX2 : string, Symbol(X.propertyX2,Decl(conditionalOperatorWithIdenticalBCT.ts,1,45))
+>n : X, Symbol(n, Decl(conditionalOperatorWithIdenticalBCT.ts, 42, 60))
+>n.propertyX2 : string, Symbol(X.propertyX2, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 45))
+>n : X, Symbol(n, Decl(conditionalOperatorWithIdenticalBCT.ts, 42, 60))
+>propertyX2 : string, Symbol(X.propertyX2, Decl(conditionalOperatorWithIdenticalBCT.ts, 1, 45))
 
 //Expr1 and Expr2 are literals
 var result11: any = true ? 1 : 'string';
->result11 : any, Symbol(result11,Decl(conditionalOperatorWithIdenticalBCT.ts,45,3))
+>result11 : any, Symbol(result11, Decl(conditionalOperatorWithIdenticalBCT.ts, 45, 3))
 >true ? 1 : 'string' : string | number
 >true : boolean
 >1 : number

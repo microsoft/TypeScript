@@ -1,20 +1,20 @@
 === tests/cases/compiler/amdModuleName1.ts ===
 ///<amd-module name='NamedModule'/>
 class Foo {
->Foo : Foo, Symbol(Foo,Decl(amdModuleName1.ts,0,0))
+>Foo : Foo, Symbol(Foo, Decl(amdModuleName1.ts, 0, 0))
 
     x: number;
->x : number, Symbol(x,Decl(amdModuleName1.ts,1,11))
+>x : number, Symbol(x, Decl(amdModuleName1.ts, 1, 11))
 
     constructor() {
         this.x = 5;
 >this.x = 5 : number
->this.x : number, Symbol(x,Decl(amdModuleName1.ts,1,11))
->this : Foo, Symbol(Foo,Decl(amdModuleName1.ts,0,0))
->x : number, Symbol(x,Decl(amdModuleName1.ts,1,11))
+>this.x : number, Symbol(x, Decl(amdModuleName1.ts, 1, 11))
+>this : Foo, Symbol(Foo, Decl(amdModuleName1.ts, 0, 0))
+>x : number, Symbol(x, Decl(amdModuleName1.ts, 1, 11))
 >5 : number
     }
 }
 export = Foo;
->Foo : Foo, Symbol(Foo,Decl(amdModuleName1.ts,0,0))
+>Foo : Foo, Symbol(Foo, Decl(amdModuleName1.ts, 0, 0))
 

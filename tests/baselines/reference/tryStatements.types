@@ -1,18 +1,18 @@
 === tests/cases/conformance/statements/tryStatements/tryStatements.ts ===
 function fn() {
->fn : () => void, Symbol(fn,Decl(tryStatements.ts,0,0))
+>fn : () => void, Symbol(fn, Decl(tryStatements.ts, 0, 0))
 
     try {
 
     } catch (x) {
->x : any, Symbol(x,Decl(tryStatements.ts,3,13))
+>x : any, Symbol(x, Decl(tryStatements.ts, 3, 13))
 
         var x: any;
->x : any, Symbol(x,Decl(tryStatements.ts,4,11))
+>x : any, Symbol(x, Decl(tryStatements.ts, 4, 11))
     }
 
     try { } finally { }
 
     try { }catch(z){ } finally { }
->z : any, Symbol(z,Decl(tryStatements.ts,9,17))
+>z : any, Symbol(z, Decl(tryStatements.ts, 9, 17))
 }

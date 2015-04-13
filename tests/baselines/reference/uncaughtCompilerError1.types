@@ -1,12 +1,12 @@
 === tests/cases/compiler/uncaughtCompilerError1.ts ===
 declare var index, lineTokens, token, tokens;
->index : any, Symbol(index,Decl(uncaughtCompilerError1.ts,0,11))
->lineTokens : any, Symbol(lineTokens,Decl(uncaughtCompilerError1.ts,0,18))
->token : any, Symbol(token,Decl(uncaughtCompilerError1.ts,0,30))
->tokens : any, Symbol(tokens,Decl(uncaughtCompilerError1.ts,0,37))
+>index : any, Symbol(index, Decl(uncaughtCompilerError1.ts, 0, 11))
+>lineTokens : any, Symbol(lineTokens, Decl(uncaughtCompilerError1.ts, 0, 18))
+>token : any, Symbol(token, Decl(uncaughtCompilerError1.ts, 0, 30))
+>tokens : any, Symbol(tokens, Decl(uncaughtCompilerError1.ts, 0, 37))
 
 function f() {
->f : () => { appendText: string; advanceCount: number; }, Symbol(f,Decl(uncaughtCompilerError1.ts,0,45))
+>f : () => { appendText: string; advanceCount: number; }, Symbol(f, Decl(uncaughtCompilerError1.ts, 0, 45))
 
     if (lineTokens[index].trim() === '=' && index > 0 && token.type === '' && tokens[index - 1].type === 'attribute.name.html') {
 >lineTokens[index].trim() === '=' && index > 0 && token.type === '' && tokens[index - 1].type === 'attribute.name.html' : boolean
@@ -16,43 +16,43 @@ function f() {
 >lineTokens[index].trim() : any
 >lineTokens[index].trim : any
 >lineTokens[index] : any
->lineTokens : any, Symbol(lineTokens,Decl(uncaughtCompilerError1.ts,0,18))
->index : any, Symbol(index,Decl(uncaughtCompilerError1.ts,0,11))
+>lineTokens : any, Symbol(lineTokens, Decl(uncaughtCompilerError1.ts, 0, 18))
+>index : any, Symbol(index, Decl(uncaughtCompilerError1.ts, 0, 11))
 >trim : any
 >'=' : string
 >index > 0 : boolean
->index : any, Symbol(index,Decl(uncaughtCompilerError1.ts,0,11))
+>index : any, Symbol(index, Decl(uncaughtCompilerError1.ts, 0, 11))
 >0 : number
 >token.type === '' : boolean
 >token.type : any
->token : any, Symbol(token,Decl(uncaughtCompilerError1.ts,0,30))
+>token : any, Symbol(token, Decl(uncaughtCompilerError1.ts, 0, 30))
 >type : any
 >'' : string
 >tokens[index - 1].type === 'attribute.name.html' : boolean
 >tokens[index - 1].type : any
 >tokens[index - 1] : any
->tokens : any, Symbol(tokens,Decl(uncaughtCompilerError1.ts,0,37))
+>tokens : any, Symbol(tokens, Decl(uncaughtCompilerError1.ts, 0, 37))
 >index - 1 : number
->index : any, Symbol(index,Decl(uncaughtCompilerError1.ts,0,11))
+>index : any, Symbol(index, Decl(uncaughtCompilerError1.ts, 0, 11))
 >1 : number
 >type : any
 >'attribute.name.html' : string
 
         if (index === (tokens.length - 1)) {
 >index === (tokens.length - 1) : boolean
->index : any, Symbol(index,Decl(uncaughtCompilerError1.ts,0,11))
+>index : any, Symbol(index, Decl(uncaughtCompilerError1.ts, 0, 11))
 >(tokens.length - 1) : number
 >tokens.length - 1 : number
 >tokens.length : any
->tokens : any, Symbol(tokens,Decl(uncaughtCompilerError1.ts,0,37))
+>tokens : any, Symbol(tokens, Decl(uncaughtCompilerError1.ts, 0, 37))
 >length : any
 >1 : number
 
             return { appendText: '\"\"', advanceCount: 1 };
 >{ appendText: '\"\"', advanceCount: 1 } : { appendText: string; advanceCount: number; }
->appendText : string, Symbol(appendText,Decl(uncaughtCompilerError1.ts,5,20))
+>appendText : string, Symbol(appendText, Decl(uncaughtCompilerError1.ts, 5, 20))
 >'\"\"' : string
->advanceCount : number, Symbol(advanceCount,Decl(uncaughtCompilerError1.ts,5,40))
+>advanceCount : number, Symbol(advanceCount, Decl(uncaughtCompilerError1.ts, 5, 40))
 >1 : number
         }
         else if (tokens[index + 1].type !== 'attribute.value.html' && tokens[index + 1].type !== '') {
@@ -60,27 +60,27 @@ function f() {
 >tokens[index + 1].type !== 'attribute.value.html' : boolean
 >tokens[index + 1].type : any
 >tokens[index + 1] : any
->tokens : any, Symbol(tokens,Decl(uncaughtCompilerError1.ts,0,37))
+>tokens : any, Symbol(tokens, Decl(uncaughtCompilerError1.ts, 0, 37))
 >index + 1 : any
->index : any, Symbol(index,Decl(uncaughtCompilerError1.ts,0,11))
+>index : any, Symbol(index, Decl(uncaughtCompilerError1.ts, 0, 11))
 >1 : number
 >type : any
 >'attribute.value.html' : string
 >tokens[index + 1].type !== '' : boolean
 >tokens[index + 1].type : any
 >tokens[index + 1] : any
->tokens : any, Symbol(tokens,Decl(uncaughtCompilerError1.ts,0,37))
+>tokens : any, Symbol(tokens, Decl(uncaughtCompilerError1.ts, 0, 37))
 >index + 1 : any
->index : any, Symbol(index,Decl(uncaughtCompilerError1.ts,0,11))
+>index : any, Symbol(index, Decl(uncaughtCompilerError1.ts, 0, 11))
 >1 : number
 >type : any
 >'' : string
 
             return { appendText: '\"\"', advanceCount: 1 };
 >{ appendText: '\"\"', advanceCount: 1 } : { appendText: string; advanceCount: number; }
->appendText : string, Symbol(appendText,Decl(uncaughtCompilerError1.ts,8,20))
+>appendText : string, Symbol(appendText, Decl(uncaughtCompilerError1.ts, 8, 20))
 >'\"\"' : string
->advanceCount : number, Symbol(advanceCount,Decl(uncaughtCompilerError1.ts,8,40))
+>advanceCount : number, Symbol(advanceCount, Decl(uncaughtCompilerError1.ts, 8, 40))
 >1 : number
         }
         return null;

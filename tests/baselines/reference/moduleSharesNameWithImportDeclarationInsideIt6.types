@@ -1,25 +1,25 @@
 === tests/cases/compiler/moduleSharesNameWithImportDeclarationInsideIt6.ts ===
 module Z.M {
->Z : typeof Z, Symbol(Z,Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts,0,0))
->M : typeof M, Symbol(M,Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts,0,9))
+>Z : typeof Z, Symbol(Z, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 0, 0))
+>M : typeof M, Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 0, 9))
 
     export function bar() {
->bar : () => string, Symbol(bar,Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts,0,12))
+>bar : () => string, Symbol(bar, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 0, 12))
 
         return "";
 >"" : string
     }
 }
 module A.M {
->A : typeof A, Symbol(A,Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts,4,1))
->M : typeof A.M, Symbol(M,Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts,5,9))
+>A : typeof A, Symbol(A, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 4, 1))
+>M : typeof A.M, Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 5, 9))
 
     import M = Z.M;
->M : typeof M, Symbol(M,Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts,5,12))
->Z : typeof Z, Symbol(Z,Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts,0,0))
->M : typeof M, Symbol(M,Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts,0,9))
+>M : typeof M, Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 5, 12))
+>Z : typeof Z, Symbol(Z, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 0, 0))
+>M : typeof M, Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 0, 9))
 
     export function bar() {
->bar : () => void, Symbol(bar,Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts,6,19))
+>bar : () => void, Symbol(bar, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 6, 19))
     }
 }

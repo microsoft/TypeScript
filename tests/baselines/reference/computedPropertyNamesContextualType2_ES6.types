@@ -1,35 +1,35 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType2_ES6.ts ===
 interface I {
->I : I, Symbol(I,Decl(computedPropertyNamesContextualType2_ES6.ts,0,0))
+>I : I, Symbol(I, Decl(computedPropertyNamesContextualType2_ES6.ts, 0, 0))
 
     [s: string]: (x: any) => number; // Doesn't get hit
->s : string, Symbol(s,Decl(computedPropertyNamesContextualType2_ES6.ts,1,5))
->x : any, Symbol(x,Decl(computedPropertyNamesContextualType2_ES6.ts,1,18))
+>s : string, Symbol(s, Decl(computedPropertyNamesContextualType2_ES6.ts, 1, 5))
+>x : any, Symbol(x, Decl(computedPropertyNamesContextualType2_ES6.ts, 1, 18))
 
     [s: number]: (x: string) => number;
->s : number, Symbol(s,Decl(computedPropertyNamesContextualType2_ES6.ts,2,5))
->x : string, Symbol(x,Decl(computedPropertyNamesContextualType2_ES6.ts,2,18))
+>s : number, Symbol(s, Decl(computedPropertyNamesContextualType2_ES6.ts, 2, 5))
+>x : string, Symbol(x, Decl(computedPropertyNamesContextualType2_ES6.ts, 2, 18))
 }
 
 var o: I = {
->o : I, Symbol(o,Decl(computedPropertyNamesContextualType2_ES6.ts,5,3))
->I : I, Symbol(I,Decl(computedPropertyNamesContextualType2_ES6.ts,0,0))
+>o : I, Symbol(o, Decl(computedPropertyNamesContextualType2_ES6.ts, 5, 3))
+>I : I, Symbol(I, Decl(computedPropertyNamesContextualType2_ES6.ts, 0, 0))
 >{    [+"foo"](y) { return y.length; },    [+"bar"]: y => y.length} : { [x: string]: (y: string) => number; [x: number]: (y: string) => number; }
 
     [+"foo"](y) { return y.length; },
 >+"foo" : number
 >"foo" : string
->y : string, Symbol(y,Decl(computedPropertyNamesContextualType2_ES6.ts,6,13))
->y.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
->y : string, Symbol(y,Decl(computedPropertyNamesContextualType2_ES6.ts,6,13))
->length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>y : string, Symbol(y, Decl(computedPropertyNamesContextualType2_ES6.ts, 6, 13))
+>y.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>y : string, Symbol(y, Decl(computedPropertyNamesContextualType2_ES6.ts, 6, 13))
+>length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
 
     [+"bar"]: y => y.length
 >+"bar" : number
 >"bar" : string
 >y => y.length : (y: string) => number
->y : string, Symbol(y,Decl(computedPropertyNamesContextualType2_ES6.ts,7,13))
->y.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
->y : string, Symbol(y,Decl(computedPropertyNamesContextualType2_ES6.ts,7,13))
->length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>y : string, Symbol(y, Decl(computedPropertyNamesContextualType2_ES6.ts, 7, 13))
+>y.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>y : string, Symbol(y, Decl(computedPropertyNamesContextualType2_ES6.ts, 7, 13))
+>length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
 }

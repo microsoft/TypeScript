@@ -1,45 +1,45 @@
 === tests/cases/compiler/specializeVarArgs1.ts ===
 interface Observable<T>{ }
->Observable : Observable<T>, Symbol(Observable,Decl(specializeVarArgs1.ts,0,0))
->T : T, Symbol(T,Decl(specializeVarArgs1.ts,0,21))
+>Observable : Observable<T>, Symbol(Observable, Decl(specializeVarArgs1.ts, 0, 0))
+>T : T, Symbol(T, Decl(specializeVarArgs1.ts, 0, 21))
 
  
 
 interface ObservableArray<T> extends Observable<T[]>
->ObservableArray : ObservableArray<T>, Symbol(ObservableArray,Decl(specializeVarArgs1.ts,0,26))
->T : T, Symbol(T,Decl(specializeVarArgs1.ts,4,26))
->Observable : Observable<T>, Symbol(Observable,Decl(specializeVarArgs1.ts,0,0))
->T : T, Symbol(T,Decl(specializeVarArgs1.ts,4,26))
+>ObservableArray : ObservableArray<T>, Symbol(ObservableArray, Decl(specializeVarArgs1.ts, 0, 26))
+>T : T, Symbol(T, Decl(specializeVarArgs1.ts, 4, 26))
+>Observable : Observable<T>, Symbol(Observable, Decl(specializeVarArgs1.ts, 0, 0))
+>T : T, Symbol(T, Decl(specializeVarArgs1.ts, 4, 26))
 
 {
 
     push(...values: T[]);
->push : (...values: T[]) => any, Symbol(push,Decl(specializeVarArgs1.ts,6,1))
->values : T[], Symbol(values,Decl(specializeVarArgs1.ts,8,9))
->T : T, Symbol(T,Decl(specializeVarArgs1.ts,4,26))
+>push : (...values: T[]) => any, Symbol(push, Decl(specializeVarArgs1.ts, 6, 1))
+>values : T[], Symbol(values, Decl(specializeVarArgs1.ts, 8, 9))
+>T : T, Symbol(T, Decl(specializeVarArgs1.ts, 4, 26))
 
 }
 
  
 
 function observableArray<T>(): ObservableArray<T> { return null;}
->observableArray : <T>() => ObservableArray<T>, Symbol(observableArray,Decl(specializeVarArgs1.ts,10,1))
->T : T, Symbol(T,Decl(specializeVarArgs1.ts,14,25))
->ObservableArray : ObservableArray<T>, Symbol(ObservableArray,Decl(specializeVarArgs1.ts,0,26))
->T : T, Symbol(T,Decl(specializeVarArgs1.ts,14,25))
+>observableArray : <T>() => ObservableArray<T>, Symbol(observableArray, Decl(specializeVarArgs1.ts, 10, 1))
+>T : T, Symbol(T, Decl(specializeVarArgs1.ts, 14, 25))
+>ObservableArray : ObservableArray<T>, Symbol(ObservableArray, Decl(specializeVarArgs1.ts, 0, 26))
+>T : T, Symbol(T, Decl(specializeVarArgs1.ts, 14, 25))
 >null : null
 
  
 
 var a =  observableArray<string>();
->a : ObservableArray<string>, Symbol(a,Decl(specializeVarArgs1.ts,18,3))
+>a : ObservableArray<string>, Symbol(a, Decl(specializeVarArgs1.ts, 18, 3))
 >observableArray<string>() : ObservableArray<string>
->observableArray : <T>() => ObservableArray<T>, Symbol(observableArray,Decl(specializeVarArgs1.ts,10,1))
+>observableArray : <T>() => ObservableArray<T>, Symbol(observableArray, Decl(specializeVarArgs1.ts, 10, 1))
 
 a.push('Some Value');
 >a.push('Some Value') : any
->a.push : (...values: string[]) => any, Symbol(ObservableArray.push,Decl(specializeVarArgs1.ts,6,1))
->a : ObservableArray<string>, Symbol(a,Decl(specializeVarArgs1.ts,18,3))
->push : (...values: string[]) => any, Symbol(ObservableArray.push,Decl(specializeVarArgs1.ts,6,1))
+>a.push : (...values: string[]) => any, Symbol(ObservableArray.push, Decl(specializeVarArgs1.ts, 6, 1))
+>a : ObservableArray<string>, Symbol(a, Decl(specializeVarArgs1.ts, 18, 3))
+>push : (...values: string[]) => any, Symbol(ObservableArray.push, Decl(specializeVarArgs1.ts, 6, 1))
 >'Some Value' : string
 

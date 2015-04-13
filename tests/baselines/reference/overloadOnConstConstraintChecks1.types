@@ -1,77 +1,77 @@
 === tests/cases/compiler/overloadOnConstConstraintChecks1.ts ===
 class Base { foo() { } }
->Base : Base, Symbol(Base,Decl(overloadOnConstConstraintChecks1.ts,0,0))
->foo : () => void, Symbol(foo,Decl(overloadOnConstConstraintChecks1.ts,0,12))
+>Base : Base, Symbol(Base, Decl(overloadOnConstConstraintChecks1.ts, 0, 0))
+>foo : () => void, Symbol(foo, Decl(overloadOnConstConstraintChecks1.ts, 0, 12))
 
 class Derived1 extends Base { bar() { } }
->Derived1 : Derived1, Symbol(Derived1,Decl(overloadOnConstConstraintChecks1.ts,0,24))
->Base : Base, Symbol(Base,Decl(overloadOnConstConstraintChecks1.ts,0,0))
->bar : () => void, Symbol(bar,Decl(overloadOnConstConstraintChecks1.ts,1,29))
+>Derived1 : Derived1, Symbol(Derived1, Decl(overloadOnConstConstraintChecks1.ts, 0, 24))
+>Base : Base, Symbol(Base, Decl(overloadOnConstConstraintChecks1.ts, 0, 0))
+>bar : () => void, Symbol(bar, Decl(overloadOnConstConstraintChecks1.ts, 1, 29))
 
 class Derived2 extends Base { baz() { } }
->Derived2 : Derived2, Symbol(Derived2,Decl(overloadOnConstConstraintChecks1.ts,1,41))
->Base : Base, Symbol(Base,Decl(overloadOnConstConstraintChecks1.ts,0,0))
->baz : () => void, Symbol(baz,Decl(overloadOnConstConstraintChecks1.ts,2,29))
+>Derived2 : Derived2, Symbol(Derived2, Decl(overloadOnConstConstraintChecks1.ts, 1, 41))
+>Base : Base, Symbol(Base, Decl(overloadOnConstConstraintChecks1.ts, 0, 0))
+>baz : () => void, Symbol(baz, Decl(overloadOnConstConstraintChecks1.ts, 2, 29))
 
 class Derived3 extends Base { biz() { } }
->Derived3 : Derived3, Symbol(Derived3,Decl(overloadOnConstConstraintChecks1.ts,2,41))
->Base : Base, Symbol(Base,Decl(overloadOnConstConstraintChecks1.ts,0,0))
->biz : () => void, Symbol(biz,Decl(overloadOnConstConstraintChecks1.ts,3,29))
+>Derived3 : Derived3, Symbol(Derived3, Decl(overloadOnConstConstraintChecks1.ts, 2, 41))
+>Base : Base, Symbol(Base, Decl(overloadOnConstConstraintChecks1.ts, 0, 0))
+>biz : () => void, Symbol(biz, Decl(overloadOnConstConstraintChecks1.ts, 3, 29))
 
 interface MyDoc { // Document
->MyDoc : MyDoc, Symbol(MyDoc,Decl(overloadOnConstConstraintChecks1.ts,3,41))
+>MyDoc : MyDoc, Symbol(MyDoc, Decl(overloadOnConstConstraintChecks1.ts, 3, 41))
 
     createElement(tagName: string): Base;
->createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }, Symbol(createElement,Decl(overloadOnConstConstraintChecks1.ts,5,17),Decl(overloadOnConstConstraintChecks1.ts,6,41),Decl(overloadOnConstConstraintChecks1.ts,7,47),Decl(overloadOnConstConstraintChecks1.ts,8,44))
->tagName : string, Symbol(tagName,Decl(overloadOnConstConstraintChecks1.ts,6,18))
->Base : Base, Symbol(Base,Decl(overloadOnConstConstraintChecks1.ts,0,0))
+>createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }, Symbol(createElement, Decl(overloadOnConstConstraintChecks1.ts, 5, 17), Decl(overloadOnConstConstraintChecks1.ts, 6, 41), Decl(overloadOnConstConstraintChecks1.ts, 7, 47), Decl(overloadOnConstConstraintChecks1.ts, 8, 44))
+>tagName : string, Symbol(tagName, Decl(overloadOnConstConstraintChecks1.ts, 6, 18))
+>Base : Base, Symbol(Base, Decl(overloadOnConstConstraintChecks1.ts, 0, 0))
 
     createElement(tagName: 'canvas'): Derived1;
->createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }, Symbol(createElement,Decl(overloadOnConstConstraintChecks1.ts,5,17),Decl(overloadOnConstConstraintChecks1.ts,6,41),Decl(overloadOnConstConstraintChecks1.ts,7,47),Decl(overloadOnConstConstraintChecks1.ts,8,44))
->tagName : 'canvas', Symbol(tagName,Decl(overloadOnConstConstraintChecks1.ts,7,18))
->Derived1 : Derived1, Symbol(Derived1,Decl(overloadOnConstConstraintChecks1.ts,0,24))
+>createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }, Symbol(createElement, Decl(overloadOnConstConstraintChecks1.ts, 5, 17), Decl(overloadOnConstConstraintChecks1.ts, 6, 41), Decl(overloadOnConstConstraintChecks1.ts, 7, 47), Decl(overloadOnConstConstraintChecks1.ts, 8, 44))
+>tagName : 'canvas', Symbol(tagName, Decl(overloadOnConstConstraintChecks1.ts, 7, 18))
+>Derived1 : Derived1, Symbol(Derived1, Decl(overloadOnConstConstraintChecks1.ts, 0, 24))
 
     createElement(tagName: 'div'): Derived2;
->createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }, Symbol(createElement,Decl(overloadOnConstConstraintChecks1.ts,5,17),Decl(overloadOnConstConstraintChecks1.ts,6,41),Decl(overloadOnConstConstraintChecks1.ts,7,47),Decl(overloadOnConstConstraintChecks1.ts,8,44))
->tagName : 'div', Symbol(tagName,Decl(overloadOnConstConstraintChecks1.ts,8,18))
->Derived2 : Derived2, Symbol(Derived2,Decl(overloadOnConstConstraintChecks1.ts,1,41))
+>createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }, Symbol(createElement, Decl(overloadOnConstConstraintChecks1.ts, 5, 17), Decl(overloadOnConstConstraintChecks1.ts, 6, 41), Decl(overloadOnConstConstraintChecks1.ts, 7, 47), Decl(overloadOnConstConstraintChecks1.ts, 8, 44))
+>tagName : 'div', Symbol(tagName, Decl(overloadOnConstConstraintChecks1.ts, 8, 18))
+>Derived2 : Derived2, Symbol(Derived2, Decl(overloadOnConstConstraintChecks1.ts, 1, 41))
 
     createElement(tagName: 'span'): Derived3;
->createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }, Symbol(createElement,Decl(overloadOnConstConstraintChecks1.ts,5,17),Decl(overloadOnConstConstraintChecks1.ts,6,41),Decl(overloadOnConstConstraintChecks1.ts,7,47),Decl(overloadOnConstConstraintChecks1.ts,8,44))
->tagName : 'span', Symbol(tagName,Decl(overloadOnConstConstraintChecks1.ts,9,18))
->Derived3 : Derived3, Symbol(Derived3,Decl(overloadOnConstConstraintChecks1.ts,2,41))
+>createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }, Symbol(createElement, Decl(overloadOnConstConstraintChecks1.ts, 5, 17), Decl(overloadOnConstConstraintChecks1.ts, 6, 41), Decl(overloadOnConstConstraintChecks1.ts, 7, 47), Decl(overloadOnConstConstraintChecks1.ts, 8, 44))
+>tagName : 'span', Symbol(tagName, Decl(overloadOnConstConstraintChecks1.ts, 9, 18))
+>Derived3 : Derived3, Symbol(Derived3, Decl(overloadOnConstConstraintChecks1.ts, 2, 41))
 
     // + 100 more
 }
 
 class D implements MyDoc {
->D : D, Symbol(D,Decl(overloadOnConstConstraintChecks1.ts,11,1))
->MyDoc : MyDoc, Symbol(MyDoc,Decl(overloadOnConstConstraintChecks1.ts,3,41))
+>D : D, Symbol(D, Decl(overloadOnConstConstraintChecks1.ts, 11, 1))
+>MyDoc : MyDoc, Symbol(MyDoc, Decl(overloadOnConstConstraintChecks1.ts, 3, 41))
 
     createElement(tagName:string): Base;
->createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }, Symbol(createElement,Decl(overloadOnConstConstraintChecks1.ts,13,26),Decl(overloadOnConstConstraintChecks1.ts,14,40),Decl(overloadOnConstConstraintChecks1.ts,15,47),Decl(overloadOnConstConstraintChecks1.ts,16,44),Decl(overloadOnConstConstraintChecks1.ts,17,45))
->tagName : string, Symbol(tagName,Decl(overloadOnConstConstraintChecks1.ts,14,18))
->Base : Base, Symbol(Base,Decl(overloadOnConstConstraintChecks1.ts,0,0))
+>createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }, Symbol(createElement, Decl(overloadOnConstConstraintChecks1.ts, 13, 26), Decl(overloadOnConstConstraintChecks1.ts, 14, 40), Decl(overloadOnConstConstraintChecks1.ts, 15, 47), Decl(overloadOnConstConstraintChecks1.ts, 16, 44), Decl(overloadOnConstConstraintChecks1.ts, 17, 45))
+>tagName : string, Symbol(tagName, Decl(overloadOnConstConstraintChecks1.ts, 14, 18))
+>Base : Base, Symbol(Base, Decl(overloadOnConstConstraintChecks1.ts, 0, 0))
 
     createElement(tagName: 'canvas'): Derived1;
->createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }, Symbol(createElement,Decl(overloadOnConstConstraintChecks1.ts,13,26),Decl(overloadOnConstConstraintChecks1.ts,14,40),Decl(overloadOnConstConstraintChecks1.ts,15,47),Decl(overloadOnConstConstraintChecks1.ts,16,44),Decl(overloadOnConstConstraintChecks1.ts,17,45))
->tagName : 'canvas', Symbol(tagName,Decl(overloadOnConstConstraintChecks1.ts,15,18))
->Derived1 : Derived1, Symbol(Derived1,Decl(overloadOnConstConstraintChecks1.ts,0,24))
+>createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }, Symbol(createElement, Decl(overloadOnConstConstraintChecks1.ts, 13, 26), Decl(overloadOnConstConstraintChecks1.ts, 14, 40), Decl(overloadOnConstConstraintChecks1.ts, 15, 47), Decl(overloadOnConstConstraintChecks1.ts, 16, 44), Decl(overloadOnConstConstraintChecks1.ts, 17, 45))
+>tagName : 'canvas', Symbol(tagName, Decl(overloadOnConstConstraintChecks1.ts, 15, 18))
+>Derived1 : Derived1, Symbol(Derived1, Decl(overloadOnConstConstraintChecks1.ts, 0, 24))
 
     createElement(tagName: 'div'): Derived2;
->createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }, Symbol(createElement,Decl(overloadOnConstConstraintChecks1.ts,13,26),Decl(overloadOnConstConstraintChecks1.ts,14,40),Decl(overloadOnConstConstraintChecks1.ts,15,47),Decl(overloadOnConstConstraintChecks1.ts,16,44),Decl(overloadOnConstConstraintChecks1.ts,17,45))
->tagName : 'div', Symbol(tagName,Decl(overloadOnConstConstraintChecks1.ts,16,18))
->Derived2 : Derived2, Symbol(Derived2,Decl(overloadOnConstConstraintChecks1.ts,1,41))
+>createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }, Symbol(createElement, Decl(overloadOnConstConstraintChecks1.ts, 13, 26), Decl(overloadOnConstConstraintChecks1.ts, 14, 40), Decl(overloadOnConstConstraintChecks1.ts, 15, 47), Decl(overloadOnConstConstraintChecks1.ts, 16, 44), Decl(overloadOnConstConstraintChecks1.ts, 17, 45))
+>tagName : 'div', Symbol(tagName, Decl(overloadOnConstConstraintChecks1.ts, 16, 18))
+>Derived2 : Derived2, Symbol(Derived2, Decl(overloadOnConstConstraintChecks1.ts, 1, 41))
 
     createElement(tagName: 'span'): Derived3;
->createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }, Symbol(createElement,Decl(overloadOnConstConstraintChecks1.ts,13,26),Decl(overloadOnConstConstraintChecks1.ts,14,40),Decl(overloadOnConstConstraintChecks1.ts,15,47),Decl(overloadOnConstConstraintChecks1.ts,16,44),Decl(overloadOnConstConstraintChecks1.ts,17,45))
->tagName : 'span', Symbol(tagName,Decl(overloadOnConstConstraintChecks1.ts,17,18))
->Derived3 : Derived3, Symbol(Derived3,Decl(overloadOnConstConstraintChecks1.ts,2,41))
+>createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }, Symbol(createElement, Decl(overloadOnConstConstraintChecks1.ts, 13, 26), Decl(overloadOnConstConstraintChecks1.ts, 14, 40), Decl(overloadOnConstConstraintChecks1.ts, 15, 47), Decl(overloadOnConstConstraintChecks1.ts, 16, 44), Decl(overloadOnConstConstraintChecks1.ts, 17, 45))
+>tagName : 'span', Symbol(tagName, Decl(overloadOnConstConstraintChecks1.ts, 17, 18))
+>Derived3 : Derived3, Symbol(Derived3, Decl(overloadOnConstConstraintChecks1.ts, 2, 41))
 
     createElement(tagName:any): Base {
->createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }, Symbol(createElement,Decl(overloadOnConstConstraintChecks1.ts,13,26),Decl(overloadOnConstConstraintChecks1.ts,14,40),Decl(overloadOnConstConstraintChecks1.ts,15,47),Decl(overloadOnConstConstraintChecks1.ts,16,44),Decl(overloadOnConstConstraintChecks1.ts,17,45))
->tagName : any, Symbol(tagName,Decl(overloadOnConstConstraintChecks1.ts,18,18))
->Base : Base, Symbol(Base,Decl(overloadOnConstConstraintChecks1.ts,0,0))
+>createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }, Symbol(createElement, Decl(overloadOnConstConstraintChecks1.ts, 13, 26), Decl(overloadOnConstConstraintChecks1.ts, 14, 40), Decl(overloadOnConstConstraintChecks1.ts, 15, 47), Decl(overloadOnConstConstraintChecks1.ts, 16, 44), Decl(overloadOnConstConstraintChecks1.ts, 17, 45))
+>tagName : any, Symbol(tagName, Decl(overloadOnConstConstraintChecks1.ts, 18, 18))
+>Base : Base, Symbol(Base, Decl(overloadOnConstConstraintChecks1.ts, 0, 0))
 
         return null;
 >null : null

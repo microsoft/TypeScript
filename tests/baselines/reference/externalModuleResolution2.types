@@ -1,20 +1,20 @@
 === tests/cases/compiler/consumer.ts ===
 import x = require('./foo');
->x : typeof x, Symbol(x,Decl(consumer.ts,0,0))
+>x : typeof x, Symbol(x, Decl(consumer.ts, 0, 0))
 
 x.X // .ts should be picked
->x.X : number, Symbol(x.X,Decl(foo.ts,1,14))
->x : typeof x, Symbol(x,Decl(consumer.ts,0,0))
->X : number, Symbol(x.X,Decl(foo.ts,1,14))
+>x.X : number, Symbol(x.X, Decl(foo.ts, 1, 14))
+>x : typeof x, Symbol(x, Decl(consumer.ts, 0, 0))
+>X : number, Symbol(x.X, Decl(foo.ts, 1, 14))
 
 === tests/cases/compiler/foo.ts ===
 module M2 {
->M2 : typeof M2, Symbol(M2,Decl(foo.ts,0,0))
+>M2 : typeof M2, Symbol(M2, Decl(foo.ts, 0, 0))
 
     export var X = 1;
->X : number, Symbol(X,Decl(foo.ts,1,14))
+>X : number, Symbol(X, Decl(foo.ts, 1, 14))
 >1 : number
 }
 export = M2
->M2 : typeof M2, Symbol(M2,Decl(foo.ts,0,0))
+>M2 : typeof M2, Symbol(M2, Decl(foo.ts, 0, 0))
 

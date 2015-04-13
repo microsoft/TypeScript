@@ -1,32 +1,32 @@
 === tests/cases/compiler/b.ts ===
 ///<reference path="a.ts"/>
 declare module E {
->E : typeof E, Symbol(E,Decl(b.ts,0,0))
+>E : typeof E, Symbol(E, Decl(b.ts, 0, 0))
 
     class foobar extends D.bar {
->foobar : foobar, Symbol(foobar,Decl(b.ts,1,18))
->D.bar : any, Symbol(D.bar,Decl(a.ts,6,18))
->D : typeof D, Symbol(D,Decl(a.ts,3,1))
->bar : D.bar, Symbol(D.bar,Decl(a.ts,6,18))
+>foobar : foobar, Symbol(foobar, Decl(b.ts, 1, 18))
+>D.bar : any, Symbol(D.bar, Decl(a.ts, 6, 18))
+>D : typeof D, Symbol(D, Decl(a.ts, 3, 1))
+>bar : D.bar, Symbol(D.bar, Decl(a.ts, 6, 18))
 
         foo();
->foo : () => any, Symbol(foo,Decl(b.ts,2,32))
+>foo : () => any, Symbol(foo, Decl(b.ts, 2, 32))
     }
 }
 === tests/cases/compiler/a.ts ===
 /*! Keep this pinned comment */
 declare module C {
->C : typeof C, Symbol(C,Decl(a.ts,0,0))
+>C : typeof C, Symbol(C, Decl(a.ts, 0, 0))
 
     function foo();
->foo : () => any, Symbol(foo,Decl(a.ts,1,18))
+>foo : () => any, Symbol(foo, Decl(a.ts, 1, 18))
 }
 
 // Don't keep this comment.
 declare module D {
->D : typeof D, Symbol(D,Decl(a.ts,3,1))
+>D : typeof D, Symbol(D, Decl(a.ts, 3, 1))
 
     class bar { }
->bar : bar, Symbol(bar,Decl(a.ts,6,18))
+>bar : bar, Symbol(bar, Decl(a.ts, 6, 18))
 }
 

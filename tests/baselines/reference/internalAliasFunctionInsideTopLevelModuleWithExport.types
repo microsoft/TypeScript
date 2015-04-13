@@ -1,28 +1,28 @@
 === tests/cases/compiler/internalAliasFunctionInsideTopLevelModuleWithExport.ts ===
 export module a {
->a : typeof a, Symbol(a,Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts,0,0))
+>a : typeof a, Symbol(a, Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts, 0, 0))
 
     export function foo(x: number) {
->foo : (x: number) => number, Symbol(foo,Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts,0,17))
->x : number, Symbol(x,Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts,1,24))
+>foo : (x: number) => number, Symbol(foo, Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts, 0, 17))
+>x : number, Symbol(x, Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts, 1, 24))
 
         return x;
->x : number, Symbol(x,Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts,1,24))
+>x : number, Symbol(x, Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts, 1, 24))
     }
 }
 
 export import b = a.foo;
->b : (x: number) => number, Symbol(b,Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts,4,1))
->a : typeof a, Symbol(a,Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts,0,0))
->foo : (x: number) => number, Symbol(b,Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts,0,17))
+>b : (x: number) => number, Symbol(b, Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts, 4, 1))
+>a : typeof a, Symbol(a, Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts, 0, 0))
+>foo : (x: number) => number, Symbol(b, Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts, 0, 17))
 
 export var bVal = b(10);
->bVal : number, Symbol(bVal,Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts,7,10))
+>bVal : number, Symbol(bVal, Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts, 7, 10))
 >b(10) : number
->b : (x: number) => number, Symbol(b,Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts,4,1))
+>b : (x: number) => number, Symbol(b, Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts, 4, 1))
 >10 : number
 
 export var bVal2 = b;
->bVal2 : (x: number) => number, Symbol(bVal2,Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts,8,10))
->b : (x: number) => number, Symbol(b,Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts,4,1))
+>bVal2 : (x: number) => number, Symbol(bVal2, Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts, 8, 10))
+>b : (x: number) => number, Symbol(b, Decl(internalAliasFunctionInsideTopLevelModuleWithExport.ts, 4, 1))
 

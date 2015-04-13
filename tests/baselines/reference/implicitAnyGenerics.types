@@ -1,89 +1,89 @@
 === tests/cases/compiler/implicitAnyGenerics.ts ===
 
 class C<T> {
->C : C<T>, Symbol(C,Decl(implicitAnyGenerics.ts,0,0))
->T : T, Symbol(T,Decl(implicitAnyGenerics.ts,1,8))
+>C : C<T>, Symbol(C, Decl(implicitAnyGenerics.ts, 0, 0))
+>T : T, Symbol(T, Decl(implicitAnyGenerics.ts, 1, 8))
 
     x: T;
->x : T, Symbol(x,Decl(implicitAnyGenerics.ts,1,12))
->T : T, Symbol(T,Decl(implicitAnyGenerics.ts,1,8))
+>x : T, Symbol(x, Decl(implicitAnyGenerics.ts, 1, 12))
+>T : T, Symbol(T, Decl(implicitAnyGenerics.ts, 1, 8))
 }
 
 var c = new C();
->c : C<{}>, Symbol(c,Decl(implicitAnyGenerics.ts,5,3))
+>c : C<{}>, Symbol(c, Decl(implicitAnyGenerics.ts, 5, 3))
 >new C() : C<{}>
->C : typeof C, Symbol(C,Decl(implicitAnyGenerics.ts,0,0))
+>C : typeof C, Symbol(C, Decl(implicitAnyGenerics.ts, 0, 0))
 
 var c2 = new C<any>();
->c2 : C<any>, Symbol(c2,Decl(implicitAnyGenerics.ts,6,3))
+>c2 : C<any>, Symbol(c2, Decl(implicitAnyGenerics.ts, 6, 3))
 >new C<any>() : C<any>
->C : typeof C, Symbol(C,Decl(implicitAnyGenerics.ts,0,0))
+>C : typeof C, Symbol(C, Decl(implicitAnyGenerics.ts, 0, 0))
 
 var c3 = new C<number>();
->c3 : C<number>, Symbol(c3,Decl(implicitAnyGenerics.ts,7,3))
+>c3 : C<number>, Symbol(c3, Decl(implicitAnyGenerics.ts, 7, 3))
 >new C<number>() : C<number>
->C : typeof C, Symbol(C,Decl(implicitAnyGenerics.ts,0,0))
+>C : typeof C, Symbol(C, Decl(implicitAnyGenerics.ts, 0, 0))
 
 var c4: C<any> = new C();
->c4 : C<any>, Symbol(c4,Decl(implicitAnyGenerics.ts,8,3))
->C : C<T>, Symbol(C,Decl(implicitAnyGenerics.ts,0,0))
+>c4 : C<any>, Symbol(c4, Decl(implicitAnyGenerics.ts, 8, 3))
+>C : C<T>, Symbol(C, Decl(implicitAnyGenerics.ts, 0, 0))
 >new C() : C<{}>
->C : typeof C, Symbol(C,Decl(implicitAnyGenerics.ts,0,0))
+>C : typeof C, Symbol(C, Decl(implicitAnyGenerics.ts, 0, 0))
 
 class D<T> {
->D : D<T>, Symbol(D,Decl(implicitAnyGenerics.ts,8,25))
->T : T, Symbol(T,Decl(implicitAnyGenerics.ts,10,8))
+>D : D<T>, Symbol(D, Decl(implicitAnyGenerics.ts, 8, 25))
+>T : T, Symbol(T, Decl(implicitAnyGenerics.ts, 10, 8))
 
     constructor(x: T) { }
->x : T, Symbol(x,Decl(implicitAnyGenerics.ts,11,16))
->T : T, Symbol(T,Decl(implicitAnyGenerics.ts,10,8))
+>x : T, Symbol(x, Decl(implicitAnyGenerics.ts, 11, 16))
+>T : T, Symbol(T, Decl(implicitAnyGenerics.ts, 10, 8))
 }
 
 var d = new D(null);
->d : D<any>, Symbol(d,Decl(implicitAnyGenerics.ts,14,3))
+>d : D<any>, Symbol(d, Decl(implicitAnyGenerics.ts, 14, 3))
 >new D(null) : D<any>
->D : typeof D, Symbol(D,Decl(implicitAnyGenerics.ts,8,25))
+>D : typeof D, Symbol(D, Decl(implicitAnyGenerics.ts, 8, 25))
 >null : null
 
 var d2 = new D(1);
->d2 : D<number>, Symbol(d2,Decl(implicitAnyGenerics.ts,15,3))
+>d2 : D<number>, Symbol(d2, Decl(implicitAnyGenerics.ts, 15, 3))
 >new D(1) : D<number>
->D : typeof D, Symbol(D,Decl(implicitAnyGenerics.ts,8,25))
+>D : typeof D, Symbol(D, Decl(implicitAnyGenerics.ts, 8, 25))
 >1 : number
 
 var d3 = new D<any>(1);
->d3 : D<any>, Symbol(d3,Decl(implicitAnyGenerics.ts,16,3))
+>d3 : D<any>, Symbol(d3, Decl(implicitAnyGenerics.ts, 16, 3))
 >new D<any>(1) : D<any>
->D : typeof D, Symbol(D,Decl(implicitAnyGenerics.ts,8,25))
+>D : typeof D, Symbol(D, Decl(implicitAnyGenerics.ts, 8, 25))
 >1 : number
 
 var d4 = new D(<any>1);
->d4 : D<any>, Symbol(d4,Decl(implicitAnyGenerics.ts,17,3))
+>d4 : D<any>, Symbol(d4, Decl(implicitAnyGenerics.ts, 17, 3))
 >new D(<any>1) : D<any>
->D : typeof D, Symbol(D,Decl(implicitAnyGenerics.ts,8,25))
+>D : typeof D, Symbol(D, Decl(implicitAnyGenerics.ts, 8, 25))
 ><any>1 : any
 >1 : number
 
 var d5: D<any> = new D(null);
->d5 : D<any>, Symbol(d5,Decl(implicitAnyGenerics.ts,18,3))
->D : D<T>, Symbol(D,Decl(implicitAnyGenerics.ts,8,25))
+>d5 : D<any>, Symbol(d5, Decl(implicitAnyGenerics.ts, 18, 3))
+>D : D<T>, Symbol(D, Decl(implicitAnyGenerics.ts, 8, 25))
 >new D(null) : D<any>
->D : typeof D, Symbol(D,Decl(implicitAnyGenerics.ts,8,25))
+>D : typeof D, Symbol(D, Decl(implicitAnyGenerics.ts, 8, 25))
 >null : null
 
 function foo<T>(): T { return null; };
->foo : <T>() => T, Symbol(foo,Decl(implicitAnyGenerics.ts,18,29))
->T : T, Symbol(T,Decl(implicitAnyGenerics.ts,20,13))
->T : T, Symbol(T,Decl(implicitAnyGenerics.ts,20,13))
+>foo : <T>() => T, Symbol(foo, Decl(implicitAnyGenerics.ts, 18, 29))
+>T : T, Symbol(T, Decl(implicitAnyGenerics.ts, 20, 13))
+>T : T, Symbol(T, Decl(implicitAnyGenerics.ts, 20, 13))
 >null : null
 
 foo() 
 >foo() : {}
->foo : <T>() => T, Symbol(foo,Decl(implicitAnyGenerics.ts,18,29))
+>foo : <T>() => T, Symbol(foo, Decl(implicitAnyGenerics.ts, 18, 29))
 
 foo<any>();
 >foo<any>() : any
->foo : <T>() => T, Symbol(foo,Decl(implicitAnyGenerics.ts,18,29))
+>foo : <T>() => T, Symbol(foo, Decl(implicitAnyGenerics.ts, 18, 29))
 
 
     

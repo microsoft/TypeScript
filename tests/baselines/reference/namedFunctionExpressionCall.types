@@ -1,18 +1,18 @@
 === tests/cases/compiler/namedFunctionExpressionCall.ts ===
 var recurser = function foo() {
->recurser : () => void, Symbol(recurser,Decl(namedFunctionExpressionCall.ts,0,3))
+>recurser : () => void, Symbol(recurser, Decl(namedFunctionExpressionCall.ts, 0, 3))
 >function foo() {    // using the local name    foo();    // using the globally visible name    recurser();} : () => void
->foo : () => void, Symbol(foo,Decl(namedFunctionExpressionCall.ts,0,14))
+>foo : () => void, Symbol(foo, Decl(namedFunctionExpressionCall.ts, 0, 14))
 
     // using the local name
     foo();
 >foo() : void
->foo : () => void, Symbol(foo,Decl(namedFunctionExpressionCall.ts,0,14))
+>foo : () => void, Symbol(foo, Decl(namedFunctionExpressionCall.ts, 0, 14))
 
     // using the globally visible name
     recurser();
 >recurser() : void
->recurser : () => void, Symbol(recurser,Decl(namedFunctionExpressionCall.ts,0,3))
+>recurser : () => void, Symbol(recurser, Decl(namedFunctionExpressionCall.ts, 0, 3))
 
 };
 
@@ -20,10 +20,10 @@ var recurser = function foo() {
 (function bar() {
 >(function bar() {    bar();}) : () => void
 >function bar() {    bar();} : () => void
->bar : () => void, Symbol(bar,Decl(namedFunctionExpressionCall.ts,9,1))
+>bar : () => void, Symbol(bar, Decl(namedFunctionExpressionCall.ts, 9, 1))
 
     bar();
 >bar() : void
->bar : () => void, Symbol(bar,Decl(namedFunctionExpressionCall.ts,9,1))
+>bar : () => void, Symbol(bar, Decl(namedFunctionExpressionCall.ts, 9, 1))
 
 });

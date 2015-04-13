@@ -1,31 +1,31 @@
 === tests/cases/compiler/cf.ts ===
 function f() {
->f : () => void, Symbol(f,Decl(cf.ts,0,0))
+>f : () => void, Symbol(f, Decl(cf.ts, 0, 0))
 
     var z;
->z : any, Symbol(z,Decl(cf.ts,1,7))
+>z : any, Symbol(z, Decl(cf.ts, 1, 7))
 
     var x=10;
->x : number, Symbol(x,Decl(cf.ts,2,7))
+>x : number, Symbol(x, Decl(cf.ts, 2, 7))
 >10 : number
 
     var y=3;
->y : number, Symbol(y,Decl(cf.ts,3,7))
+>y : number, Symbol(y, Decl(cf.ts, 3, 7))
 >3 : number
 
     L1: for (var i=0;i<19;i++) {
 >L1 : any
->i : number, Symbol(i,Decl(cf.ts,5,16))
+>i : number, Symbol(i, Decl(cf.ts, 5, 16))
 >0 : number
 >i<19 : boolean
->i : number, Symbol(i,Decl(cf.ts,5,16))
+>i : number, Symbol(i, Decl(cf.ts, 5, 16))
 >19 : number
 >i++ : number
->i : number, Symbol(i,Decl(cf.ts,5,16))
+>i : number, Symbol(i, Decl(cf.ts, 5, 16))
 
         if (y==7) {
 >y==7 : boolean
->y : number, Symbol(y,Decl(cf.ts,3,7))
+>y : number, Symbol(y, Decl(cf.ts, 3, 7))
 >7 : number
 
             continue L1;
@@ -33,59 +33,59 @@ function f() {
 
             x=11;
 >x=11 : number
->x : number, Symbol(x,Decl(cf.ts,2,7))
+>x : number, Symbol(x, Decl(cf.ts, 2, 7))
 >11 : number
         }
         if (y==3) {
 >y==3 : boolean
->y : number, Symbol(y,Decl(cf.ts,3,7))
+>y : number, Symbol(y, Decl(cf.ts, 3, 7))
 >3 : number
 
             y++;
 >y++ : number
->y : number, Symbol(y,Decl(cf.ts,3,7))
+>y : number, Symbol(y, Decl(cf.ts, 3, 7))
         }
         else {
             y--;
 >y-- : number
->y : number, Symbol(y,Decl(cf.ts,3,7))
+>y : number, Symbol(y, Decl(cf.ts, 3, 7))
         }
         do {
             y+=2;
 >y+=2 : number
->y : number, Symbol(y,Decl(cf.ts,3,7))
+>y : number, Symbol(y, Decl(cf.ts, 3, 7))
 >2 : number
 
             if (y==20) {
 >y==20 : boolean
->y : number, Symbol(y,Decl(cf.ts,3,7))
+>y : number, Symbol(y, Decl(cf.ts, 3, 7))
 >20 : number
 
                 break;
                 x=12;
 >x=12 : number
->x : number, Symbol(x,Decl(cf.ts,2,7))
+>x : number, Symbol(x, Decl(cf.ts, 2, 7))
 >12 : number
             }
         } while (y<41);
 >y<41 : boolean
->y : number, Symbol(y,Decl(cf.ts,3,7))
+>y : number, Symbol(y, Decl(cf.ts, 3, 7))
 >41 : number
 
         y++;
 >y++ : number
->y : number, Symbol(y,Decl(cf.ts,3,7))
+>y : number, Symbol(y, Decl(cf.ts, 3, 7))
     }
     while (y>2) {
 >y>2 : boolean
->y : number, Symbol(y,Decl(cf.ts,3,7))
+>y : number, Symbol(y, Decl(cf.ts, 3, 7))
 >2 : number
 
         y=y>>1;
 >y=y>>1 : number
->y : number, Symbol(y,Decl(cf.ts,3,7))
+>y : number, Symbol(y, Decl(cf.ts, 3, 7))
 >y>>1 : number
->y : number, Symbol(y,Decl(cf.ts,3,7))
+>y : number, Symbol(y, Decl(cf.ts, 3, 7))
 >1 : number
     }
     L2: try {
@@ -94,15 +94,15 @@ function f() {
         L3: if (x<y) {
 >L3 : any
 >x<y : boolean
->x : number, Symbol(x,Decl(cf.ts,2,7))
->y : number, Symbol(y,Decl(cf.ts,3,7))
+>x : number, Symbol(x, Decl(cf.ts, 2, 7))
+>y : number, Symbol(y, Decl(cf.ts, 3, 7))
 
             break L2;
 >L2 : any
 
             x=13;
 >x=13 : number
->x : number, Symbol(x,Decl(cf.ts,2,7))
+>x : number, Symbol(x, Decl(cf.ts, 2, 7))
 >13 : number
         }
         else {
@@ -111,54 +111,54 @@ function f() {
 
             x=14;
 >x=14 : number
->x : number, Symbol(x,Decl(cf.ts,2,7))
+>x : number, Symbol(x, Decl(cf.ts, 2, 7))
 >14 : number
         }
     }
     catch (e) {
->e : any, Symbol(e,Decl(cf.ts,38,11))
+>e : any, Symbol(e, Decl(cf.ts, 38, 11))
 
         x++;
 >x++ : number
->x : number, Symbol(x,Decl(cf.ts,2,7))
+>x : number, Symbol(x, Decl(cf.ts, 2, 7))
     }    
     finally {
         x+=3;
 >x+=3 : number
->x : number, Symbol(x,Decl(cf.ts,2,7))
+>x : number, Symbol(x, Decl(cf.ts, 2, 7))
 >3 : number
     }
     y++;
 >y++ : number
->y : number, Symbol(y,Decl(cf.ts,3,7))
+>y : number, Symbol(y, Decl(cf.ts, 3, 7))
 
     for (var k=0;k<10;k++) {
->k : number, Symbol(k,Decl(cf.ts,45,12))
+>k : number, Symbol(k, Decl(cf.ts, 45, 12))
 >0 : number
 >k<10 : boolean
->k : number, Symbol(k,Decl(cf.ts,45,12))
+>k : number, Symbol(k, Decl(cf.ts, 45, 12))
 >10 : number
 >k++ : number
->k : number, Symbol(k,Decl(cf.ts,45,12))
+>k : number, Symbol(k, Decl(cf.ts, 45, 12))
 
         z;
->z : any, Symbol(z,Decl(cf.ts,1,7))
+>z : any, Symbol(z, Decl(cf.ts, 1, 7))
 
         break;
     }
     for (k=0;k<10;k++) {
 >k=0 : number
->k : number, Symbol(k,Decl(cf.ts,45,12))
+>k : number, Symbol(k, Decl(cf.ts, 45, 12))
 >0 : number
 >k<10 : boolean
->k : number, Symbol(k,Decl(cf.ts,45,12))
+>k : number, Symbol(k, Decl(cf.ts, 45, 12))
 >10 : number
 >k++ : number
->k : number, Symbol(k,Decl(cf.ts,45,12))
+>k : number, Symbol(k, Decl(cf.ts, 45, 12))
 
         if (k==6) {
 >k==6 : boolean
->k : number, Symbol(k,Decl(cf.ts,45,12))
+>k : number, Symbol(k, Decl(cf.ts, 45, 12))
 >6 : number
 
             continue;

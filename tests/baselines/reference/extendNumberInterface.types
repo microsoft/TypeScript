@@ -1,49 +1,49 @@
 === tests/cases/conformance/types/primitives/number/extendNumberInterface.ts ===
 interface Number {
->Number : Number, Symbol(Number,Decl(lib.d.ts,456,40),Decl(lib.d.ts,518,11),Decl(extendNumberInterface.ts,0,0))
+>Number : Number, Symbol(Number, Decl(lib.d.ts, 456, 40), Decl(lib.d.ts, 518, 11), Decl(extendNumberInterface.ts, 0, 0))
 
     doStuff(): string;
->doStuff : () => string, Symbol(doStuff,Decl(extendNumberInterface.ts,0,18))
+>doStuff : () => string, Symbol(doStuff, Decl(extendNumberInterface.ts, 0, 18))
 
     doOtherStuff<T>(x:T): T;
->doOtherStuff : <T>(x: T) => T, Symbol(doOtherStuff,Decl(extendNumberInterface.ts,1,22))
->T : T, Symbol(T,Decl(extendNumberInterface.ts,2,17))
->x : T, Symbol(x,Decl(extendNumberInterface.ts,2,20))
->T : T, Symbol(T,Decl(extendNumberInterface.ts,2,17))
->T : T, Symbol(T,Decl(extendNumberInterface.ts,2,17))
+>doOtherStuff : <T>(x: T) => T, Symbol(doOtherStuff, Decl(extendNumberInterface.ts, 1, 22))
+>T : T, Symbol(T, Decl(extendNumberInterface.ts, 2, 17))
+>x : T, Symbol(x, Decl(extendNumberInterface.ts, 2, 20))
+>T : T, Symbol(T, Decl(extendNumberInterface.ts, 2, 17))
+>T : T, Symbol(T, Decl(extendNumberInterface.ts, 2, 17))
 }
 
 var x = 1;
->x : number, Symbol(x,Decl(extendNumberInterface.ts,5,3))
+>x : number, Symbol(x, Decl(extendNumberInterface.ts, 5, 3))
 >1 : number
 
 var a: string = x.doStuff();
->a : string, Symbol(a,Decl(extendNumberInterface.ts,6,3))
+>a : string, Symbol(a, Decl(extendNumberInterface.ts, 6, 3))
 >x.doStuff() : string
->x.doStuff : () => string, Symbol(Number.doStuff,Decl(extendNumberInterface.ts,0,18))
->x : number, Symbol(x,Decl(extendNumberInterface.ts,5,3))
->doStuff : () => string, Symbol(Number.doStuff,Decl(extendNumberInterface.ts,0,18))
+>x.doStuff : () => string, Symbol(Number.doStuff, Decl(extendNumberInterface.ts, 0, 18))
+>x : number, Symbol(x, Decl(extendNumberInterface.ts, 5, 3))
+>doStuff : () => string, Symbol(Number.doStuff, Decl(extendNumberInterface.ts, 0, 18))
 
 var b: string = x.doOtherStuff('hm');
->b : string, Symbol(b,Decl(extendNumberInterface.ts,7,3))
+>b : string, Symbol(b, Decl(extendNumberInterface.ts, 7, 3))
 >x.doOtherStuff('hm') : string
->x.doOtherStuff : <T>(x: T) => T, Symbol(Number.doOtherStuff,Decl(extendNumberInterface.ts,1,22))
->x : number, Symbol(x,Decl(extendNumberInterface.ts,5,3))
->doOtherStuff : <T>(x: T) => T, Symbol(Number.doOtherStuff,Decl(extendNumberInterface.ts,1,22))
+>x.doOtherStuff : <T>(x: T) => T, Symbol(Number.doOtherStuff, Decl(extendNumberInterface.ts, 1, 22))
+>x : number, Symbol(x, Decl(extendNumberInterface.ts, 5, 3))
+>doOtherStuff : <T>(x: T) => T, Symbol(Number.doOtherStuff, Decl(extendNumberInterface.ts, 1, 22))
 >'hm' : string
 
 var c: string = x['doStuff']();
->c : string, Symbol(c,Decl(extendNumberInterface.ts,8,3))
+>c : string, Symbol(c, Decl(extendNumberInterface.ts, 8, 3))
 >x['doStuff']() : string
 >x['doStuff'] : () => string
->x : number, Symbol(x,Decl(extendNumberInterface.ts,5,3))
->'doStuff' : string, Symbol(Number.doStuff,Decl(extendNumberInterface.ts,0,18))
+>x : number, Symbol(x, Decl(extendNumberInterface.ts, 5, 3))
+>'doStuff' : string, Symbol(Number.doStuff, Decl(extendNumberInterface.ts, 0, 18))
 
 var d: string = x['doOtherStuff']('hm');
->d : string, Symbol(d,Decl(extendNumberInterface.ts,9,3))
+>d : string, Symbol(d, Decl(extendNumberInterface.ts, 9, 3))
 >x['doOtherStuff']('hm') : string
 >x['doOtherStuff'] : <T>(x: T) => T
->x : number, Symbol(x,Decl(extendNumberInterface.ts,5,3))
->'doOtherStuff' : string, Symbol(Number.doOtherStuff,Decl(extendNumberInterface.ts,1,22))
+>x : number, Symbol(x, Decl(extendNumberInterface.ts, 5, 3))
+>'doOtherStuff' : string, Symbol(Number.doOtherStuff, Decl(extendNumberInterface.ts, 1, 22))
 >'hm' : string
 

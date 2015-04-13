@@ -1,39 +1,39 @@
 === tests/cases/compiler/interfaceExtendsClass1.ts ===
 class Control {
->Control : Control, Symbol(Control,Decl(interfaceExtendsClass1.ts,0,0))
+>Control : Control, Symbol(Control, Decl(interfaceExtendsClass1.ts, 0, 0))
 
     private state: any;
->state : any, Symbol(state,Decl(interfaceExtendsClass1.ts,0,15))
+>state : any, Symbol(state, Decl(interfaceExtendsClass1.ts, 0, 15))
 }
 interface SelectableControl extends Control {
->SelectableControl : SelectableControl, Symbol(SelectableControl,Decl(interfaceExtendsClass1.ts,2,1))
->Control : Control, Symbol(Control,Decl(interfaceExtendsClass1.ts,0,0))
+>SelectableControl : SelectableControl, Symbol(SelectableControl, Decl(interfaceExtendsClass1.ts, 2, 1))
+>Control : Control, Symbol(Control, Decl(interfaceExtendsClass1.ts, 0, 0))
 
     select(): void;
->select : () => void, Symbol(select,Decl(interfaceExtendsClass1.ts,3,45))
+>select : () => void, Symbol(select, Decl(interfaceExtendsClass1.ts, 3, 45))
 }
 class Button extends Control {
->Button : Button, Symbol(Button,Decl(interfaceExtendsClass1.ts,5,1))
->Control : Control, Symbol(Control,Decl(interfaceExtendsClass1.ts,0,0))
+>Button : Button, Symbol(Button, Decl(interfaceExtendsClass1.ts, 5, 1))
+>Control : Control, Symbol(Control, Decl(interfaceExtendsClass1.ts, 0, 0))
 
     select() { }
->select : () => void, Symbol(select,Decl(interfaceExtendsClass1.ts,6,30))
+>select : () => void, Symbol(select, Decl(interfaceExtendsClass1.ts, 6, 30))
 }
 class TextBox extends Control {
->TextBox : TextBox, Symbol(TextBox,Decl(interfaceExtendsClass1.ts,8,1))
->Control : Control, Symbol(Control,Decl(interfaceExtendsClass1.ts,0,0))
+>TextBox : TextBox, Symbol(TextBox, Decl(interfaceExtendsClass1.ts, 8, 1))
+>Control : Control, Symbol(Control, Decl(interfaceExtendsClass1.ts, 0, 0))
 
     select() { }
->select : () => void, Symbol(select,Decl(interfaceExtendsClass1.ts,9,31))
+>select : () => void, Symbol(select, Decl(interfaceExtendsClass1.ts, 9, 31))
 }
 class Image extends Control {
->Image : Image, Symbol(Image,Decl(interfaceExtendsClass1.ts,11,1))
->Control : Control, Symbol(Control,Decl(interfaceExtendsClass1.ts,0,0))
+>Image : Image, Symbol(Image, Decl(interfaceExtendsClass1.ts, 11, 1))
+>Control : Control, Symbol(Control, Decl(interfaceExtendsClass1.ts, 0, 0))
 }
 class Location {
->Location : Location, Symbol(Location,Decl(interfaceExtendsClass1.ts,13,1))
+>Location : Location, Symbol(Location, Decl(interfaceExtendsClass1.ts, 13, 1))
 
     select() { }
->select : () => void, Symbol(select,Decl(interfaceExtendsClass1.ts,14,16))
+>select : () => void, Symbol(select, Decl(interfaceExtendsClass1.ts, 14, 16))
 }
 

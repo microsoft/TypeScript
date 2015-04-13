@@ -1,6 +1,6 @@
 === tests/cases/compiler/wrappedIncovations1.ts ===
 var v = this
->v : any, Symbol(v,Decl(wrappedIncovations1.ts,0,3))
+>v : any, Symbol(v, Decl(wrappedIncovations1.ts, 0, 3))
 >this  .foo()  .bar()  .baz() : any
 >this  .foo()  .bar()  .baz : any
 >this  .foo()  .bar() : any

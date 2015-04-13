@@ -1,129 +1,129 @@
 === tests/cases/conformance/internalModules/importDeclarations/importAliasIdentifiers.ts ===
 module moduleA {
->moduleA : typeof moduleA, Symbol(moduleA,Decl(importAliasIdentifiers.ts,0,0))
+>moduleA : typeof moduleA, Symbol(moduleA, Decl(importAliasIdentifiers.ts, 0, 0))
 
     export class Point {
->Point : Point, Symbol(Point,Decl(importAliasIdentifiers.ts,0,16))
+>Point : Point, Symbol(Point, Decl(importAliasIdentifiers.ts, 0, 16))
 
         constructor(public x: number, public y: number) { }
->x : number, Symbol(x,Decl(importAliasIdentifiers.ts,2,20))
->y : number, Symbol(y,Decl(importAliasIdentifiers.ts,2,37))
+>x : number, Symbol(x, Decl(importAliasIdentifiers.ts, 2, 20))
+>y : number, Symbol(y, Decl(importAliasIdentifiers.ts, 2, 37))
     }
 }
 
 import alias = moduleA;
->alias : typeof moduleA, Symbol(alias,Decl(importAliasIdentifiers.ts,4,1))
->moduleA : typeof moduleA, Symbol(moduleA,Decl(importAliasIdentifiers.ts,0,0))
+>alias : typeof moduleA, Symbol(alias, Decl(importAliasIdentifiers.ts, 4, 1))
+>moduleA : typeof moduleA, Symbol(moduleA, Decl(importAliasIdentifiers.ts, 0, 0))
 
 var p: alias.Point;
->p : alias.Point, Symbol(p,Decl(importAliasIdentifiers.ts,8,3),Decl(importAliasIdentifiers.ts,9,3),Decl(importAliasIdentifiers.ts,10,3),Decl(importAliasIdentifiers.ts,25,3),Decl(importAliasIdentifiers.ts,26,3),Decl(importAliasIdentifiers.ts,27,3),Decl(importAliasIdentifiers.ts,43,3),Decl(importAliasIdentifiers.ts,44,3),Decl(importAliasIdentifiers.ts,45,3))
->alias : any, Symbol(alias,Decl(importAliasIdentifiers.ts,4,1))
->Point : alias.Point, Symbol(alias.Point,Decl(importAliasIdentifiers.ts,0,16))
+>p : alias.Point, Symbol(p, Decl(importAliasIdentifiers.ts, 8, 3), Decl(importAliasIdentifiers.ts, 9, 3), Decl(importAliasIdentifiers.ts, 10, 3), Decl(importAliasIdentifiers.ts, 25, 3), Decl(importAliasIdentifiers.ts, 26, 3), Decl(importAliasIdentifiers.ts, 27, 3), Decl(importAliasIdentifiers.ts, 43, 3), Decl(importAliasIdentifiers.ts, 44, 3), Decl(importAliasIdentifiers.ts, 45, 3))
+>alias : any, Symbol(alias, Decl(importAliasIdentifiers.ts, 4, 1))
+>Point : alias.Point, Symbol(alias.Point, Decl(importAliasIdentifiers.ts, 0, 16))
 
 var p: moduleA.Point;
->p : alias.Point, Symbol(p,Decl(importAliasIdentifiers.ts,8,3),Decl(importAliasIdentifiers.ts,9,3),Decl(importAliasIdentifiers.ts,10,3),Decl(importAliasIdentifiers.ts,25,3),Decl(importAliasIdentifiers.ts,26,3),Decl(importAliasIdentifiers.ts,27,3),Decl(importAliasIdentifiers.ts,43,3),Decl(importAliasIdentifiers.ts,44,3),Decl(importAliasIdentifiers.ts,45,3))
->moduleA : any, Symbol(moduleA,Decl(importAliasIdentifiers.ts,0,0))
->Point : alias.Point, Symbol(alias.Point,Decl(importAliasIdentifiers.ts,0,16))
+>p : alias.Point, Symbol(p, Decl(importAliasIdentifiers.ts, 8, 3), Decl(importAliasIdentifiers.ts, 9, 3), Decl(importAliasIdentifiers.ts, 10, 3), Decl(importAliasIdentifiers.ts, 25, 3), Decl(importAliasIdentifiers.ts, 26, 3), Decl(importAliasIdentifiers.ts, 27, 3), Decl(importAliasIdentifiers.ts, 43, 3), Decl(importAliasIdentifiers.ts, 44, 3), Decl(importAliasIdentifiers.ts, 45, 3))
+>moduleA : any, Symbol(moduleA, Decl(importAliasIdentifiers.ts, 0, 0))
+>Point : alias.Point, Symbol(alias.Point, Decl(importAliasIdentifiers.ts, 0, 16))
 
 var p: { x: number; y: number; };
->p : alias.Point, Symbol(p,Decl(importAliasIdentifiers.ts,8,3),Decl(importAliasIdentifiers.ts,9,3),Decl(importAliasIdentifiers.ts,10,3),Decl(importAliasIdentifiers.ts,25,3),Decl(importAliasIdentifiers.ts,26,3),Decl(importAliasIdentifiers.ts,27,3),Decl(importAliasIdentifiers.ts,43,3),Decl(importAliasIdentifiers.ts,44,3),Decl(importAliasIdentifiers.ts,45,3))
->x : number, Symbol(x,Decl(importAliasIdentifiers.ts,10,8))
->y : number, Symbol(y,Decl(importAliasIdentifiers.ts,10,19))
+>p : alias.Point, Symbol(p, Decl(importAliasIdentifiers.ts, 8, 3), Decl(importAliasIdentifiers.ts, 9, 3), Decl(importAliasIdentifiers.ts, 10, 3), Decl(importAliasIdentifiers.ts, 25, 3), Decl(importAliasIdentifiers.ts, 26, 3), Decl(importAliasIdentifiers.ts, 27, 3), Decl(importAliasIdentifiers.ts, 43, 3), Decl(importAliasIdentifiers.ts, 44, 3), Decl(importAliasIdentifiers.ts, 45, 3))
+>x : number, Symbol(x, Decl(importAliasIdentifiers.ts, 10, 8))
+>y : number, Symbol(y, Decl(importAliasIdentifiers.ts, 10, 19))
 
 class clodule {
->clodule : clodule, Symbol(clodule,Decl(importAliasIdentifiers.ts,10,33),Decl(importAliasIdentifiers.ts,14,1))
+>clodule : clodule, Symbol(clodule, Decl(importAliasIdentifiers.ts, 10, 33), Decl(importAliasIdentifiers.ts, 14, 1))
 
     name: string;
->name : string, Symbol(name,Decl(importAliasIdentifiers.ts,12,15))
+>name : string, Symbol(name, Decl(importAliasIdentifiers.ts, 12, 15))
 }
 
 module clodule {
->clodule : typeof clodule, Symbol(clodule,Decl(importAliasIdentifiers.ts,10,33),Decl(importAliasIdentifiers.ts,14,1))
+>clodule : typeof clodule, Symbol(clodule, Decl(importAliasIdentifiers.ts, 10, 33), Decl(importAliasIdentifiers.ts, 14, 1))
 
     export interface Point {
->Point : Point, Symbol(Point,Decl(importAliasIdentifiers.ts,16,16))
+>Point : Point, Symbol(Point, Decl(importAliasIdentifiers.ts, 16, 16))
 
         x: number; y: number;
->x : number, Symbol(x,Decl(importAliasIdentifiers.ts,17,28))
->y : number, Symbol(y,Decl(importAliasIdentifiers.ts,18,18))
+>x : number, Symbol(x, Decl(importAliasIdentifiers.ts, 17, 28))
+>y : number, Symbol(y, Decl(importAliasIdentifiers.ts, 18, 18))
     }
     var Point: Point = { x: 0, y: 0 };
->Point : Point, Symbol(Point,Decl(importAliasIdentifiers.ts,16,16),Decl(importAliasIdentifiers.ts,20,7))
->Point : Point, Symbol(Point,Decl(importAliasIdentifiers.ts,16,16))
+>Point : Point, Symbol(Point, Decl(importAliasIdentifiers.ts, 16, 16), Decl(importAliasIdentifiers.ts, 20, 7))
+>Point : Point, Symbol(Point, Decl(importAliasIdentifiers.ts, 16, 16))
 >{ x: 0, y: 0 } : { x: number; y: number; }
->x : number, Symbol(x,Decl(importAliasIdentifiers.ts,20,24))
+>x : number, Symbol(x, Decl(importAliasIdentifiers.ts, 20, 24))
 >0 : number
->y : number, Symbol(y,Decl(importAliasIdentifiers.ts,20,30))
+>y : number, Symbol(y, Decl(importAliasIdentifiers.ts, 20, 30))
 >0 : number
 }
 
 import clolias = clodule;
->clolias : typeof clodule, Symbol(clolias,Decl(importAliasIdentifiers.ts,21,1))
->clodule : clodule, Symbol(clodule,Decl(importAliasIdentifiers.ts,10,33),Decl(importAliasIdentifiers.ts,14,1))
+>clolias : typeof clodule, Symbol(clolias, Decl(importAliasIdentifiers.ts, 21, 1))
+>clodule : clodule, Symbol(clodule, Decl(importAliasIdentifiers.ts, 10, 33), Decl(importAliasIdentifiers.ts, 14, 1))
 
 var p: clolias.Point;
->p : alias.Point, Symbol(p,Decl(importAliasIdentifiers.ts,8,3),Decl(importAliasIdentifiers.ts,9,3),Decl(importAliasIdentifiers.ts,10,3),Decl(importAliasIdentifiers.ts,25,3),Decl(importAliasIdentifiers.ts,26,3),Decl(importAliasIdentifiers.ts,27,3),Decl(importAliasIdentifiers.ts,43,3),Decl(importAliasIdentifiers.ts,44,3),Decl(importAliasIdentifiers.ts,45,3))
->clolias : any, Symbol(clolias,Decl(importAliasIdentifiers.ts,21,1))
->Point : clolias.Point, Symbol(clolias.Point,Decl(importAliasIdentifiers.ts,16,16))
+>p : alias.Point, Symbol(p, Decl(importAliasIdentifiers.ts, 8, 3), Decl(importAliasIdentifiers.ts, 9, 3), Decl(importAliasIdentifiers.ts, 10, 3), Decl(importAliasIdentifiers.ts, 25, 3), Decl(importAliasIdentifiers.ts, 26, 3), Decl(importAliasIdentifiers.ts, 27, 3), Decl(importAliasIdentifiers.ts, 43, 3), Decl(importAliasIdentifiers.ts, 44, 3), Decl(importAliasIdentifiers.ts, 45, 3))
+>clolias : any, Symbol(clolias, Decl(importAliasIdentifiers.ts, 21, 1))
+>Point : clolias.Point, Symbol(clolias.Point, Decl(importAliasIdentifiers.ts, 16, 16))
 
 var p: clodule.Point;
->p : alias.Point, Symbol(p,Decl(importAliasIdentifiers.ts,8,3),Decl(importAliasIdentifiers.ts,9,3),Decl(importAliasIdentifiers.ts,10,3),Decl(importAliasIdentifiers.ts,25,3),Decl(importAliasIdentifiers.ts,26,3),Decl(importAliasIdentifiers.ts,27,3),Decl(importAliasIdentifiers.ts,43,3),Decl(importAliasIdentifiers.ts,44,3),Decl(importAliasIdentifiers.ts,45,3))
->clodule : any, Symbol(clodule,Decl(importAliasIdentifiers.ts,10,33),Decl(importAliasIdentifiers.ts,14,1))
->Point : clolias.Point, Symbol(clolias.Point,Decl(importAliasIdentifiers.ts,16,16))
+>p : alias.Point, Symbol(p, Decl(importAliasIdentifiers.ts, 8, 3), Decl(importAliasIdentifiers.ts, 9, 3), Decl(importAliasIdentifiers.ts, 10, 3), Decl(importAliasIdentifiers.ts, 25, 3), Decl(importAliasIdentifiers.ts, 26, 3), Decl(importAliasIdentifiers.ts, 27, 3), Decl(importAliasIdentifiers.ts, 43, 3), Decl(importAliasIdentifiers.ts, 44, 3), Decl(importAliasIdentifiers.ts, 45, 3))
+>clodule : any, Symbol(clodule, Decl(importAliasIdentifiers.ts, 10, 33), Decl(importAliasIdentifiers.ts, 14, 1))
+>Point : clolias.Point, Symbol(clolias.Point, Decl(importAliasIdentifiers.ts, 16, 16))
 
 var p: { x: number; y: number; };
->p : alias.Point, Symbol(p,Decl(importAliasIdentifiers.ts,8,3),Decl(importAliasIdentifiers.ts,9,3),Decl(importAliasIdentifiers.ts,10,3),Decl(importAliasIdentifiers.ts,25,3),Decl(importAliasIdentifiers.ts,26,3),Decl(importAliasIdentifiers.ts,27,3),Decl(importAliasIdentifiers.ts,43,3),Decl(importAliasIdentifiers.ts,44,3),Decl(importAliasIdentifiers.ts,45,3))
->x : number, Symbol(x,Decl(importAliasIdentifiers.ts,27,8))
->y : number, Symbol(y,Decl(importAliasIdentifiers.ts,27,19))
+>p : alias.Point, Symbol(p, Decl(importAliasIdentifiers.ts, 8, 3), Decl(importAliasIdentifiers.ts, 9, 3), Decl(importAliasIdentifiers.ts, 10, 3), Decl(importAliasIdentifiers.ts, 25, 3), Decl(importAliasIdentifiers.ts, 26, 3), Decl(importAliasIdentifiers.ts, 27, 3), Decl(importAliasIdentifiers.ts, 43, 3), Decl(importAliasIdentifiers.ts, 44, 3), Decl(importAliasIdentifiers.ts, 45, 3))
+>x : number, Symbol(x, Decl(importAliasIdentifiers.ts, 27, 8))
+>y : number, Symbol(y, Decl(importAliasIdentifiers.ts, 27, 19))
 
 
 function fundule() {
->fundule : typeof fundule, Symbol(fundule,Decl(importAliasIdentifiers.ts,27,33),Decl(importAliasIdentifiers.ts,32,1))
+>fundule : typeof fundule, Symbol(fundule, Decl(importAliasIdentifiers.ts, 27, 33), Decl(importAliasIdentifiers.ts, 32, 1))
 
     return { x: 0, y: 0 };
 >{ x: 0, y: 0 } : { x: number; y: number; }
->x : number, Symbol(x,Decl(importAliasIdentifiers.ts,31,12))
+>x : number, Symbol(x, Decl(importAliasIdentifiers.ts, 31, 12))
 >0 : number
->y : number, Symbol(y,Decl(importAliasIdentifiers.ts,31,18))
+>y : number, Symbol(y, Decl(importAliasIdentifiers.ts, 31, 18))
 >0 : number
 }
 
 module fundule {
->fundule : typeof fundule, Symbol(fundule,Decl(importAliasIdentifiers.ts,27,33),Decl(importAliasIdentifiers.ts,32,1))
+>fundule : typeof fundule, Symbol(fundule, Decl(importAliasIdentifiers.ts, 27, 33), Decl(importAliasIdentifiers.ts, 32, 1))
 
     export interface Point {
->Point : Point, Symbol(Point,Decl(importAliasIdentifiers.ts,34,16))
+>Point : Point, Symbol(Point, Decl(importAliasIdentifiers.ts, 34, 16))
 
         x: number; y: number;
->x : number, Symbol(x,Decl(importAliasIdentifiers.ts,35,28))
->y : number, Symbol(y,Decl(importAliasIdentifiers.ts,36,18))
+>x : number, Symbol(x, Decl(importAliasIdentifiers.ts, 35, 28))
+>y : number, Symbol(y, Decl(importAliasIdentifiers.ts, 36, 18))
     }
     var Point: Point = { x: 0, y: 0 };
->Point : Point, Symbol(Point,Decl(importAliasIdentifiers.ts,34,16),Decl(importAliasIdentifiers.ts,38,7))
->Point : Point, Symbol(Point,Decl(importAliasIdentifiers.ts,34,16))
+>Point : Point, Symbol(Point, Decl(importAliasIdentifiers.ts, 34, 16), Decl(importAliasIdentifiers.ts, 38, 7))
+>Point : Point, Symbol(Point, Decl(importAliasIdentifiers.ts, 34, 16))
 >{ x: 0, y: 0 } : { x: number; y: number; }
->x : number, Symbol(x,Decl(importAliasIdentifiers.ts,38,24))
+>x : number, Symbol(x, Decl(importAliasIdentifiers.ts, 38, 24))
 >0 : number
->y : number, Symbol(y,Decl(importAliasIdentifiers.ts,38,30))
+>y : number, Symbol(y, Decl(importAliasIdentifiers.ts, 38, 30))
 >0 : number
 }
 
 import funlias = fundule;
->funlias : typeof fundule, Symbol(funlias,Decl(importAliasIdentifiers.ts,39,1))
->fundule : typeof fundule, Symbol(fundule,Decl(importAliasIdentifiers.ts,27,33),Decl(importAliasIdentifiers.ts,32,1))
+>funlias : typeof fundule, Symbol(funlias, Decl(importAliasIdentifiers.ts, 39, 1))
+>fundule : typeof fundule, Symbol(fundule, Decl(importAliasIdentifiers.ts, 27, 33), Decl(importAliasIdentifiers.ts, 32, 1))
 
 var p: funlias.Point;
->p : alias.Point, Symbol(p,Decl(importAliasIdentifiers.ts,8,3),Decl(importAliasIdentifiers.ts,9,3),Decl(importAliasIdentifiers.ts,10,3),Decl(importAliasIdentifiers.ts,25,3),Decl(importAliasIdentifiers.ts,26,3),Decl(importAliasIdentifiers.ts,27,3),Decl(importAliasIdentifiers.ts,43,3),Decl(importAliasIdentifiers.ts,44,3),Decl(importAliasIdentifiers.ts,45,3))
->funlias : any, Symbol(funlias,Decl(importAliasIdentifiers.ts,39,1))
->Point : funlias.Point, Symbol(funlias.Point,Decl(importAliasIdentifiers.ts,34,16))
+>p : alias.Point, Symbol(p, Decl(importAliasIdentifiers.ts, 8, 3), Decl(importAliasIdentifiers.ts, 9, 3), Decl(importAliasIdentifiers.ts, 10, 3), Decl(importAliasIdentifiers.ts, 25, 3), Decl(importAliasIdentifiers.ts, 26, 3), Decl(importAliasIdentifiers.ts, 27, 3), Decl(importAliasIdentifiers.ts, 43, 3), Decl(importAliasIdentifiers.ts, 44, 3), Decl(importAliasIdentifiers.ts, 45, 3))
+>funlias : any, Symbol(funlias, Decl(importAliasIdentifiers.ts, 39, 1))
+>Point : funlias.Point, Symbol(funlias.Point, Decl(importAliasIdentifiers.ts, 34, 16))
 
 var p: fundule.Point;
->p : alias.Point, Symbol(p,Decl(importAliasIdentifiers.ts,8,3),Decl(importAliasIdentifiers.ts,9,3),Decl(importAliasIdentifiers.ts,10,3),Decl(importAliasIdentifiers.ts,25,3),Decl(importAliasIdentifiers.ts,26,3),Decl(importAliasIdentifiers.ts,27,3),Decl(importAliasIdentifiers.ts,43,3),Decl(importAliasIdentifiers.ts,44,3),Decl(importAliasIdentifiers.ts,45,3))
->fundule : any, Symbol(fundule,Decl(importAliasIdentifiers.ts,27,33),Decl(importAliasIdentifiers.ts,32,1))
->Point : funlias.Point, Symbol(funlias.Point,Decl(importAliasIdentifiers.ts,34,16))
+>p : alias.Point, Symbol(p, Decl(importAliasIdentifiers.ts, 8, 3), Decl(importAliasIdentifiers.ts, 9, 3), Decl(importAliasIdentifiers.ts, 10, 3), Decl(importAliasIdentifiers.ts, 25, 3), Decl(importAliasIdentifiers.ts, 26, 3), Decl(importAliasIdentifiers.ts, 27, 3), Decl(importAliasIdentifiers.ts, 43, 3), Decl(importAliasIdentifiers.ts, 44, 3), Decl(importAliasIdentifiers.ts, 45, 3))
+>fundule : any, Symbol(fundule, Decl(importAliasIdentifiers.ts, 27, 33), Decl(importAliasIdentifiers.ts, 32, 1))
+>Point : funlias.Point, Symbol(funlias.Point, Decl(importAliasIdentifiers.ts, 34, 16))
 
 var p: { x: number; y: number; };
->p : alias.Point, Symbol(p,Decl(importAliasIdentifiers.ts,8,3),Decl(importAliasIdentifiers.ts,9,3),Decl(importAliasIdentifiers.ts,10,3),Decl(importAliasIdentifiers.ts,25,3),Decl(importAliasIdentifiers.ts,26,3),Decl(importAliasIdentifiers.ts,27,3),Decl(importAliasIdentifiers.ts,43,3),Decl(importAliasIdentifiers.ts,44,3),Decl(importAliasIdentifiers.ts,45,3))
->x : number, Symbol(x,Decl(importAliasIdentifiers.ts,45,8))
->y : number, Symbol(y,Decl(importAliasIdentifiers.ts,45,19))
+>p : alias.Point, Symbol(p, Decl(importAliasIdentifiers.ts, 8, 3), Decl(importAliasIdentifiers.ts, 9, 3), Decl(importAliasIdentifiers.ts, 10, 3), Decl(importAliasIdentifiers.ts, 25, 3), Decl(importAliasIdentifiers.ts, 26, 3), Decl(importAliasIdentifiers.ts, 27, 3), Decl(importAliasIdentifiers.ts, 43, 3), Decl(importAliasIdentifiers.ts, 44, 3), Decl(importAliasIdentifiers.ts, 45, 3))
+>x : number, Symbol(x, Decl(importAliasIdentifiers.ts, 45, 8))
+>y : number, Symbol(y, Decl(importAliasIdentifiers.ts, 45, 19))
 

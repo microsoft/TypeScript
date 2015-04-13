@@ -1,127 +1,127 @@
 === tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithoutConstraints.ts ===
 class C<T> {
->C : C<T>, Symbol(C,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,0,0))
->T : T, Symbol(T,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,0,8))
+>C : C<T>, Symbol(C, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 0, 0))
+>T : T, Symbol(T, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 0, 8))
 
     f() {
->f : () => string, Symbol(f,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,0,12))
+>f : () => string, Symbol(f, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 0, 12))
 
         var x: T;
->x : T, Symbol(x,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,2,11))
->T : T, Symbol(T,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,0,8))
+>x : T, Symbol(x, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 2, 11))
+>T : T, Symbol(T, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 0, 8))
 
         var a = x['toString'](); // should be string
->a : string, Symbol(a,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,3,11))
+>a : string, Symbol(a, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 3, 11))
 >x['toString']() : string
 >x['toString'] : () => string
->x : T, Symbol(x,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,2,11))
->'toString' : string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
+>x : T, Symbol(x, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 2, 11))
+>'toString' : string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
 
         return a + x.toString();
 >a + x.toString() : string
->a : string, Symbol(a,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,3,11))
+>a : string, Symbol(a, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 3, 11))
 >x.toString() : string
->x.toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
->x : T, Symbol(x,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,2,11))
->toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
+>x.toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>x : T, Symbol(x, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 2, 11))
+>toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
     }
 }
 
 var r = (new C<number>()).f();
->r : string, Symbol(r,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,8,3))
+>r : string, Symbol(r, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 8, 3))
 >(new C<number>()).f() : string
->(new C<number>()).f : () => string, Symbol(C.f,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,0,12))
+>(new C<number>()).f : () => string, Symbol(C.f, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 0, 12))
 >(new C<number>()) : C<number>
 >new C<number>() : C<number>
->C : typeof C, Symbol(C,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,0,0))
->f : () => string, Symbol(C.f,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,0,12))
+>C : typeof C, Symbol(C, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 0, 0))
+>f : () => string, Symbol(C.f, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 0, 12))
 
 interface I<T> {
->I : I<T>, Symbol(I,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,8,30))
->T : T, Symbol(T,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,10,12))
+>I : I<T>, Symbol(I, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 8, 30))
+>T : T, Symbol(T, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 10, 12))
 
     foo: T;
->foo : T, Symbol(foo,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,10,16))
->T : T, Symbol(T,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,10,12))
+>foo : T, Symbol(foo, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 10, 16))
+>T : T, Symbol(T, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 10, 12))
 }
 var i: I<number>;
->i : I<number>, Symbol(i,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,13,3))
->I : I<T>, Symbol(I,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,8,30))
+>i : I<number>, Symbol(i, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 13, 3))
+>I : I<T>, Symbol(I, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 8, 30))
 
 var r2 = i.foo.toString();
->r2 : string, Symbol(r2,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,14,3))
+>r2 : string, Symbol(r2, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 14, 3))
 >i.foo.toString() : string
->i.foo.toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
->i.foo : number, Symbol(I.foo,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,10,16))
->i : I<number>, Symbol(i,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,13,3))
->foo : number, Symbol(I.foo,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,10,16))
->toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
+>i.foo.toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>i.foo : number, Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 10, 16))
+>i : I<number>, Symbol(i, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 13, 3))
+>foo : number, Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 10, 16))
+>toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
 
 var r2b = i.foo['toString']();
->r2b : string, Symbol(r2b,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,15,3))
+>r2b : string, Symbol(r2b, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 15, 3))
 >i.foo['toString']() : string
 >i.foo['toString'] : (radix?: number) => string
->i.foo : number, Symbol(I.foo,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,10,16))
->i : I<number>, Symbol(i,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,13,3))
->foo : number, Symbol(I.foo,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,10,16))
->'toString' : string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
+>i.foo : number, Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 10, 16))
+>i : I<number>, Symbol(i, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 13, 3))
+>foo : number, Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 10, 16))
+>'toString' : string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
 
 var a: {
->a : <T>() => T, Symbol(a,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,17,3))
+>a : <T>() => T, Symbol(a, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 17, 3))
 
     <T>(): T;
->T : T, Symbol(T,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,18,5))
->T : T, Symbol(T,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,18,5))
+>T : T, Symbol(T, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 18, 5))
+>T : T, Symbol(T, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 18, 5))
 }
 var r3: string = a().toString();
->r3 : string, Symbol(r3,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,20,3))
+>r3 : string, Symbol(r3, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 20, 3))
 >a().toString() : string
->a().toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
+>a().toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
 >a() : {}
->a : <T>() => T, Symbol(a,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,17,3))
->toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
+>a : <T>() => T, Symbol(a, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 17, 3))
+>toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
 
 var r3b: string = a()['toString']();
->r3b : string, Symbol(r3b,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,21,3))
+>r3b : string, Symbol(r3b, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 21, 3))
 >a()['toString']() : string
 >a()['toString'] : () => string
 >a() : {}
->a : <T>() => T, Symbol(a,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,17,3))
->'toString' : string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
+>a : <T>() => T, Symbol(a, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 17, 3))
+>'toString' : string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
 
 var b = {
->b : { foo: <T>(x: T) => string; }, Symbol(b,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,23,3))
+>b : { foo: <T>(x: T) => string; }, Symbol(b, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 23, 3))
 >{    foo: <T>(x: T) => {        var a = x['toString'](); // should be string        return a + x.toString();    }} : { foo: <T>(x: T) => string; }
 
     foo: <T>(x: T) => {
->foo : <T>(x: T) => string, Symbol(foo,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,23,9))
+>foo : <T>(x: T) => string, Symbol(foo, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 23, 9))
 ><T>(x: T) => {        var a = x['toString'](); // should be string        return a + x.toString();    } : <T>(x: T) => string
->T : T, Symbol(T,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,24,10))
->x : T, Symbol(x,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,24,13))
->T : T, Symbol(T,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,24,10))
+>T : T, Symbol(T, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 24, 10))
+>x : T, Symbol(x, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 24, 13))
+>T : T, Symbol(T, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 24, 10))
 
         var a = x['toString'](); // should be string
->a : string, Symbol(a,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,25,11))
+>a : string, Symbol(a, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 25, 11))
 >x['toString']() : string
 >x['toString'] : () => string
->x : T, Symbol(x,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,24,13))
->'toString' : string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
+>x : T, Symbol(x, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 24, 13))
+>'toString' : string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
 
         return a + x.toString();
 >a + x.toString() : string
->a : string, Symbol(a,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,25,11))
+>a : string, Symbol(a, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 25, 11))
 >x.toString() : string
->x.toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
->x : T, Symbol(x,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,24,13))
->toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
+>x.toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>x : T, Symbol(x, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 24, 13))
+>toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
     }
 }
 
 var r4 = b.foo(1);
->r4 : string, Symbol(r4,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,30,3))
+>r4 : string, Symbol(r4, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 30, 3))
 >b.foo(1) : string
->b.foo : <T>(x: T) => string, Symbol(foo,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,23,9))
->b : { foo: <T>(x: T) => string; }, Symbol(b,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,23,3))
->foo : <T>(x: T) => string, Symbol(foo,Decl(propertyAccessOnTypeParameterWithoutConstraints.ts,23,9))
+>b.foo : <T>(x: T) => string, Symbol(foo, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 23, 9))
+>b : { foo: <T>(x: T) => string; }, Symbol(b, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 23, 3))
+>foo : <T>(x: T) => string, Symbol(foo, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 23, 9))
 >1 : number
 

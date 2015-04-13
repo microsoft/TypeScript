@@ -1,29 +1,29 @@
 === tests/cases/compiler/badThisBinding.ts ===
 declare function foo(a:any): any;
->foo : (a: any) => any, Symbol(foo,Decl(badThisBinding.ts,0,0))
->a : any, Symbol(a,Decl(badThisBinding.ts,0,21))
+>foo : (a: any) => any, Symbol(foo, Decl(badThisBinding.ts, 0, 0))
+>a : any, Symbol(a, Decl(badThisBinding.ts, 0, 21))
 
 declare function bar(a:any): any;
->bar : (a: any) => any, Symbol(bar,Decl(badThisBinding.ts,0,33))
->a : any, Symbol(a,Decl(badThisBinding.ts,1,21))
+>bar : (a: any) => any, Symbol(bar, Decl(badThisBinding.ts, 0, 33))
+>a : any, Symbol(a, Decl(badThisBinding.ts, 1, 21))
 
 class Greeter {
->Greeter : Greeter, Symbol(Greeter,Decl(badThisBinding.ts,1,33))
+>Greeter : Greeter, Symbol(Greeter, Decl(badThisBinding.ts, 1, 33))
 
     constructor() {
 		foo(() => {
 >foo(() => {            bar(() => {                var x = this;			});		}) : any
->foo : (a: any) => any, Symbol(foo,Decl(badThisBinding.ts,0,0))
+>foo : (a: any) => any, Symbol(foo, Decl(badThisBinding.ts, 0, 0))
 >() => {            bar(() => {                var x = this;			});		} : () => void
 
             bar(() => {
 >bar(() => {                var x = this;			}) : any
->bar : (a: any) => any, Symbol(bar,Decl(badThisBinding.ts,0,33))
+>bar : (a: any) => any, Symbol(bar, Decl(badThisBinding.ts, 0, 33))
 >() => {                var x = this;			} : () => void
 
                 var x = this;
->x : Greeter, Symbol(x,Decl(badThisBinding.ts,7,19))
->this : Greeter, Symbol(Greeter,Decl(badThisBinding.ts,1,33))
+>x : Greeter, Symbol(x, Decl(badThisBinding.ts, 7, 19))
+>this : Greeter, Symbol(Greeter, Decl(badThisBinding.ts, 1, 33))
 
 			});
 		});

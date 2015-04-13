@@ -1,100 +1,100 @@
 === tests/cases/conformance/expressions/typeGuards/TypeGuardWithEnumUnion.ts ===
 enum Color { R, G, B }
->Color : Color, Symbol(Color,Decl(TypeGuardWithEnumUnion.ts,0,0))
->R : Color, Symbol(Color.R,Decl(TypeGuardWithEnumUnion.ts,0,12))
->G : Color, Symbol(Color.G,Decl(TypeGuardWithEnumUnion.ts,0,15))
->B : Color, Symbol(Color.B,Decl(TypeGuardWithEnumUnion.ts,0,18))
+>Color : Color, Symbol(Color, Decl(TypeGuardWithEnumUnion.ts, 0, 0))
+>R : Color, Symbol(Color.R, Decl(TypeGuardWithEnumUnion.ts, 0, 12))
+>G : Color, Symbol(Color.G, Decl(TypeGuardWithEnumUnion.ts, 0, 15))
+>B : Color, Symbol(Color.B, Decl(TypeGuardWithEnumUnion.ts, 0, 18))
 
 function f1(x: Color | string) {
->f1 : (x: string | Color) => void, Symbol(f1,Decl(TypeGuardWithEnumUnion.ts,0,22))
->x : string | Color, Symbol(x,Decl(TypeGuardWithEnumUnion.ts,2,12))
->Color : Color, Symbol(Color,Decl(TypeGuardWithEnumUnion.ts,0,0))
+>f1 : (x: string | Color) => void, Symbol(f1, Decl(TypeGuardWithEnumUnion.ts, 0, 22))
+>x : string | Color, Symbol(x, Decl(TypeGuardWithEnumUnion.ts, 2, 12))
+>Color : Color, Symbol(Color, Decl(TypeGuardWithEnumUnion.ts, 0, 0))
 
     if (typeof x === "number") {
 >typeof x === "number" : boolean
 >typeof x : string
->x : string | Color, Symbol(x,Decl(TypeGuardWithEnumUnion.ts,2,12))
+>x : string | Color, Symbol(x, Decl(TypeGuardWithEnumUnion.ts, 2, 12))
 >"number" : string
 
         var y = x;
->y : Color, Symbol(y,Decl(TypeGuardWithEnumUnion.ts,4,11),Decl(TypeGuardWithEnumUnion.ts,5,11))
->x : Color, Symbol(x,Decl(TypeGuardWithEnumUnion.ts,2,12))
+>y : Color, Symbol(y, Decl(TypeGuardWithEnumUnion.ts, 4, 11), Decl(TypeGuardWithEnumUnion.ts, 5, 11))
+>x : Color, Symbol(x, Decl(TypeGuardWithEnumUnion.ts, 2, 12))
 
         var y: Color;
->y : Color, Symbol(y,Decl(TypeGuardWithEnumUnion.ts,4,11),Decl(TypeGuardWithEnumUnion.ts,5,11))
->Color : Color, Symbol(Color,Decl(TypeGuardWithEnumUnion.ts,0,0))
+>y : Color, Symbol(y, Decl(TypeGuardWithEnumUnion.ts, 4, 11), Decl(TypeGuardWithEnumUnion.ts, 5, 11))
+>Color : Color, Symbol(Color, Decl(TypeGuardWithEnumUnion.ts, 0, 0))
     }
     else {
         var z = x;
->z : string, Symbol(z,Decl(TypeGuardWithEnumUnion.ts,8,11),Decl(TypeGuardWithEnumUnion.ts,9,11))
->x : string, Symbol(x,Decl(TypeGuardWithEnumUnion.ts,2,12))
+>z : string, Symbol(z, Decl(TypeGuardWithEnumUnion.ts, 8, 11), Decl(TypeGuardWithEnumUnion.ts, 9, 11))
+>x : string, Symbol(x, Decl(TypeGuardWithEnumUnion.ts, 2, 12))
 
         var z: string;
->z : string, Symbol(z,Decl(TypeGuardWithEnumUnion.ts,8,11),Decl(TypeGuardWithEnumUnion.ts,9,11))
+>z : string, Symbol(z, Decl(TypeGuardWithEnumUnion.ts, 8, 11), Decl(TypeGuardWithEnumUnion.ts, 9, 11))
     }
 }
 
 function f2(x: Color | string | string[]) {
->f2 : (x: string | string[] | Color) => void, Symbol(f2,Decl(TypeGuardWithEnumUnion.ts,11,1))
->x : string | string[] | Color, Symbol(x,Decl(TypeGuardWithEnumUnion.ts,13,12))
->Color : Color, Symbol(Color,Decl(TypeGuardWithEnumUnion.ts,0,0))
+>f2 : (x: string | string[] | Color) => void, Symbol(f2, Decl(TypeGuardWithEnumUnion.ts, 11, 1))
+>x : string | string[] | Color, Symbol(x, Decl(TypeGuardWithEnumUnion.ts, 13, 12))
+>Color : Color, Symbol(Color, Decl(TypeGuardWithEnumUnion.ts, 0, 0))
 
     if (typeof x === "object") {
 >typeof x === "object" : boolean
 >typeof x : string
->x : string | string[] | Color, Symbol(x,Decl(TypeGuardWithEnumUnion.ts,13,12))
+>x : string | string[] | Color, Symbol(x, Decl(TypeGuardWithEnumUnion.ts, 13, 12))
 >"object" : string
 
         var y = x;
->y : string[], Symbol(y,Decl(TypeGuardWithEnumUnion.ts,15,11),Decl(TypeGuardWithEnumUnion.ts,16,11))
->x : string[], Symbol(x,Decl(TypeGuardWithEnumUnion.ts,13,12))
+>y : string[], Symbol(y, Decl(TypeGuardWithEnumUnion.ts, 15, 11), Decl(TypeGuardWithEnumUnion.ts, 16, 11))
+>x : string[], Symbol(x, Decl(TypeGuardWithEnumUnion.ts, 13, 12))
 
         var y: string[];
->y : string[], Symbol(y,Decl(TypeGuardWithEnumUnion.ts,15,11),Decl(TypeGuardWithEnumUnion.ts,16,11))
+>y : string[], Symbol(y, Decl(TypeGuardWithEnumUnion.ts, 15, 11), Decl(TypeGuardWithEnumUnion.ts, 16, 11))
     }
     if (typeof x === "number") {
 >typeof x === "number" : boolean
 >typeof x : string
->x : string | string[] | Color, Symbol(x,Decl(TypeGuardWithEnumUnion.ts,13,12))
+>x : string | string[] | Color, Symbol(x, Decl(TypeGuardWithEnumUnion.ts, 13, 12))
 >"number" : string
 
         var z = x;
->z : Color, Symbol(z,Decl(TypeGuardWithEnumUnion.ts,19,11),Decl(TypeGuardWithEnumUnion.ts,20,11))
->x : Color, Symbol(x,Decl(TypeGuardWithEnumUnion.ts,13,12))
+>z : Color, Symbol(z, Decl(TypeGuardWithEnumUnion.ts, 19, 11), Decl(TypeGuardWithEnumUnion.ts, 20, 11))
+>x : Color, Symbol(x, Decl(TypeGuardWithEnumUnion.ts, 13, 12))
 
         var z: Color;
->z : Color, Symbol(z,Decl(TypeGuardWithEnumUnion.ts,19,11),Decl(TypeGuardWithEnumUnion.ts,20,11))
->Color : Color, Symbol(Color,Decl(TypeGuardWithEnumUnion.ts,0,0))
+>z : Color, Symbol(z, Decl(TypeGuardWithEnumUnion.ts, 19, 11), Decl(TypeGuardWithEnumUnion.ts, 20, 11))
+>Color : Color, Symbol(Color, Decl(TypeGuardWithEnumUnion.ts, 0, 0))
     }
     else {
         var w = x;
->w : string | string[], Symbol(w,Decl(TypeGuardWithEnumUnion.ts,23,11),Decl(TypeGuardWithEnumUnion.ts,24,11))
->x : string | string[], Symbol(x,Decl(TypeGuardWithEnumUnion.ts,13,12))
+>w : string | string[], Symbol(w, Decl(TypeGuardWithEnumUnion.ts, 23, 11), Decl(TypeGuardWithEnumUnion.ts, 24, 11))
+>x : string | string[], Symbol(x, Decl(TypeGuardWithEnumUnion.ts, 13, 12))
 
         var w: string | string[];
->w : string | string[], Symbol(w,Decl(TypeGuardWithEnumUnion.ts,23,11),Decl(TypeGuardWithEnumUnion.ts,24,11))
+>w : string | string[], Symbol(w, Decl(TypeGuardWithEnumUnion.ts, 23, 11), Decl(TypeGuardWithEnumUnion.ts, 24, 11))
     }
     if (typeof x === "string") {
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | string[] | Color, Symbol(x,Decl(TypeGuardWithEnumUnion.ts,13,12))
+>x : string | string[] | Color, Symbol(x, Decl(TypeGuardWithEnumUnion.ts, 13, 12))
 >"string" : string
 
         var a = x;
->a : string, Symbol(a,Decl(TypeGuardWithEnumUnion.ts,27,11),Decl(TypeGuardWithEnumUnion.ts,28,11))
->x : string, Symbol(x,Decl(TypeGuardWithEnumUnion.ts,13,12))
+>a : string, Symbol(a, Decl(TypeGuardWithEnumUnion.ts, 27, 11), Decl(TypeGuardWithEnumUnion.ts, 28, 11))
+>x : string, Symbol(x, Decl(TypeGuardWithEnumUnion.ts, 13, 12))
 
         var a: string;
->a : string, Symbol(a,Decl(TypeGuardWithEnumUnion.ts,27,11),Decl(TypeGuardWithEnumUnion.ts,28,11))
+>a : string, Symbol(a, Decl(TypeGuardWithEnumUnion.ts, 27, 11), Decl(TypeGuardWithEnumUnion.ts, 28, 11))
     }
     else {
         var b = x;
->b : string[] | Color, Symbol(b,Decl(TypeGuardWithEnumUnion.ts,31,11),Decl(TypeGuardWithEnumUnion.ts,32,11))
->x : string[] | Color, Symbol(x,Decl(TypeGuardWithEnumUnion.ts,13,12))
+>b : string[] | Color, Symbol(b, Decl(TypeGuardWithEnumUnion.ts, 31, 11), Decl(TypeGuardWithEnumUnion.ts, 32, 11))
+>x : string[] | Color, Symbol(x, Decl(TypeGuardWithEnumUnion.ts, 13, 12))
 
         var b: Color | string[];
->b : string[] | Color, Symbol(b,Decl(TypeGuardWithEnumUnion.ts,31,11),Decl(TypeGuardWithEnumUnion.ts,32,11))
->Color : Color, Symbol(Color,Decl(TypeGuardWithEnumUnion.ts,0,0))
+>b : string[] | Color, Symbol(b, Decl(TypeGuardWithEnumUnion.ts, 31, 11), Decl(TypeGuardWithEnumUnion.ts, 32, 11))
+>Color : Color, Symbol(Color, Decl(TypeGuardWithEnumUnion.ts, 0, 0))
     }
 }
 

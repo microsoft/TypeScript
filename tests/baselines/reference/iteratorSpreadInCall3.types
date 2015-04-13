@@ -1,42 +1,42 @@
 === tests/cases/conformance/es6/spread/iteratorSpreadInCall3.ts ===
 foo(...new SymbolIterator);
 >foo(...new SymbolIterator) : void
->foo : (...s: symbol[]) => void, Symbol(foo,Decl(iteratorSpreadInCall3.ts,0,27))
+>foo : (...s: symbol[]) => void, Symbol(foo, Decl(iteratorSpreadInCall3.ts, 0, 27))
 >...new SymbolIterator : symbol
 >new SymbolIterator : SymbolIterator
->SymbolIterator : typeof SymbolIterator, Symbol(SymbolIterator,Decl(iteratorSpreadInCall3.ts,2,32))
+>SymbolIterator : typeof SymbolIterator, Symbol(SymbolIterator, Decl(iteratorSpreadInCall3.ts, 2, 32))
 
 function foo(...s: symbol[]) { }
->foo : (...s: symbol[]) => void, Symbol(foo,Decl(iteratorSpreadInCall3.ts,0,27))
->s : symbol[], Symbol(s,Decl(iteratorSpreadInCall3.ts,2,13))
+>foo : (...s: symbol[]) => void, Symbol(foo, Decl(iteratorSpreadInCall3.ts, 0, 27))
+>s : symbol[], Symbol(s, Decl(iteratorSpreadInCall3.ts, 2, 13))
 
 class SymbolIterator {
->SymbolIterator : SymbolIterator, Symbol(SymbolIterator,Decl(iteratorSpreadInCall3.ts,2,32))
+>SymbolIterator : SymbolIterator, Symbol(SymbolIterator, Decl(iteratorSpreadInCall3.ts, 2, 32))
 
     next() {
->next : () => { value: symbol; done: boolean; }, Symbol(next,Decl(iteratorSpreadInCall3.ts,3,22))
+>next : () => { value: symbol; done: boolean; }, Symbol(next, Decl(iteratorSpreadInCall3.ts, 3, 22))
 
         return {
 >{            value: Symbol(),            done: false        } : { value: symbol; done: boolean; }
 
             value: Symbol(),
->value : symbol, Symbol(value,Decl(iteratorSpreadInCall3.ts,5,16))
+>value : symbol, Symbol(value, Decl(iteratorSpreadInCall3.ts, 5, 16))
 >Symbol() : symbol
->Symbol : SymbolConstructor, Symbol(Symbol,Decl(lib.d.ts,1186,52),Decl(lib.d.ts,1262,11))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
 
             done: false
->done : boolean, Symbol(done,Decl(iteratorSpreadInCall3.ts,6,28))
+>done : boolean, Symbol(done, Decl(iteratorSpreadInCall3.ts, 6, 28))
 >false : boolean
 
         };
     }
 
     [Symbol.iterator]() {
->Symbol.iterator : symbol, Symbol(SymbolConstructor.iterator,Decl(lib.d.ts,1236,31))
->Symbol : SymbolConstructor, Symbol(Symbol,Decl(lib.d.ts,1186,52),Decl(lib.d.ts,1262,11))
->iterator : symbol, Symbol(SymbolConstructor.iterator,Decl(lib.d.ts,1236,31))
+>Symbol.iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
 
         return this;
->this : SymbolIterator, Symbol(SymbolIterator,Decl(iteratorSpreadInCall3.ts,2,32))
+>this : SymbolIterator, Symbol(SymbolIterator, Decl(iteratorSpreadInCall3.ts, 2, 32))
     }
 }

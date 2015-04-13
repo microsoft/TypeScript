@@ -1,23 +1,23 @@
 === tests/cases/compiler/argsInScope.ts ===
 class C {
->C : C, Symbol(C,Decl(argsInScope.ts,0,0))
+>C : C, Symbol(C, Decl(argsInScope.ts, 0, 0))
 
     P(ii:number, j:number, k:number) {
->P : (ii: number, j: number, k: number) => void, Symbol(P,Decl(argsInScope.ts,0,9))
->ii : number, Symbol(ii,Decl(argsInScope.ts,1,6))
->j : number, Symbol(j,Decl(argsInScope.ts,1,16))
->k : number, Symbol(k,Decl(argsInScope.ts,1,26))
+>P : (ii: number, j: number, k: number) => void, Symbol(P, Decl(argsInScope.ts, 0, 9))
+>ii : number, Symbol(ii, Decl(argsInScope.ts, 1, 6))
+>j : number, Symbol(j, Decl(argsInScope.ts, 1, 16))
+>k : number, Symbol(k, Decl(argsInScope.ts, 1, 26))
 
        for (var i = 0; i < arguments.length; i++) {
->i : number, Symbol(i,Decl(argsInScope.ts,2,15))
+>i : number, Symbol(i, Decl(argsInScope.ts, 2, 15))
 >0 : number
 >i < arguments.length : boolean
->i : number, Symbol(i,Decl(argsInScope.ts,2,15))
->arguments.length : number, Symbol(IArguments.length,Decl(lib.d.ts,272,25))
+>i : number, Symbol(i, Decl(argsInScope.ts, 2, 15))
+>arguments.length : number, Symbol(IArguments.length, Decl(lib.d.ts, 272, 25))
 >arguments : IArguments, Symbol(arguments)
->length : number, Symbol(IArguments.length,Decl(lib.d.ts,272,25))
+>length : number, Symbol(IArguments.length, Decl(lib.d.ts, 272, 25))
 >i++ : number
->i : number, Symbol(i,Decl(argsInScope.ts,2,15))
+>i : number, Symbol(i, Decl(argsInScope.ts, 2, 15))
 
            // WScript.Echo("param: " + arguments[i]);
        }
@@ -25,15 +25,15 @@ class C {
 }
 
 var c = new C();
->c : C, Symbol(c,Decl(argsInScope.ts,8,3))
+>c : C, Symbol(c, Decl(argsInScope.ts, 8, 3))
 >new C() : C
->C : typeof C, Symbol(C,Decl(argsInScope.ts,0,0))
+>C : typeof C, Symbol(C, Decl(argsInScope.ts, 0, 0))
 
 c.P(1,2,3);
 >c.P(1,2,3) : void
->c.P : (ii: number, j: number, k: number) => void, Symbol(C.P,Decl(argsInScope.ts,0,9))
->c : C, Symbol(c,Decl(argsInScope.ts,8,3))
->P : (ii: number, j: number, k: number) => void, Symbol(C.P,Decl(argsInScope.ts,0,9))
+>c.P : (ii: number, j: number, k: number) => void, Symbol(C.P, Decl(argsInScope.ts, 0, 9))
+>c : C, Symbol(c, Decl(argsInScope.ts, 8, 3))
+>P : (ii: number, j: number, k: number) => void, Symbol(C.P, Decl(argsInScope.ts, 0, 9))
 >1 : number
 >2 : number
 >3 : number

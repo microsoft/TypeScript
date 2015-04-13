@@ -1,17 +1,17 @@
 === tests/cases/compiler/exportVisibility.ts ===
 export class Foo {
->Foo : Foo, Symbol(Foo,Decl(exportVisibility.ts,0,0))
+>Foo : Foo, Symbol(Foo, Decl(exportVisibility.ts, 0, 0))
 }
 
 export var foo = new Foo();
->foo : Foo, Symbol(foo,Decl(exportVisibility.ts,3,10))
+>foo : Foo, Symbol(foo, Decl(exportVisibility.ts, 3, 10))
 >new Foo() : Foo
->Foo : typeof Foo, Symbol(Foo,Decl(exportVisibility.ts,0,0))
+>Foo : typeof Foo, Symbol(Foo, Decl(exportVisibility.ts, 0, 0))
 
 export function test(foo: Foo) {
->test : (foo: Foo) => boolean, Symbol(test,Decl(exportVisibility.ts,3,27))
->foo : Foo, Symbol(foo,Decl(exportVisibility.ts,5,21))
->Foo : Foo, Symbol(Foo,Decl(exportVisibility.ts,0,0))
+>test : (foo: Foo) => boolean, Symbol(test, Decl(exportVisibility.ts, 3, 27))
+>foo : Foo, Symbol(foo, Decl(exportVisibility.ts, 5, 21))
+>Foo : Foo, Symbol(Foo, Decl(exportVisibility.ts, 0, 0))
 
     return true;
 >true : boolean

@@ -1,34 +1,34 @@
 === tests/cases/conformance/es6/restParameters/emitRestParametersMethodES6.ts ===
 class C {
->C : C, Symbol(C,Decl(emitRestParametersMethodES6.ts,0,0))
+>C : C, Symbol(C, Decl(emitRestParametersMethodES6.ts, 0, 0))
 
     constructor(name: string, ...rest) { }
->name : string, Symbol(name,Decl(emitRestParametersMethodES6.ts,1,16))
->rest : any[], Symbol(rest,Decl(emitRestParametersMethodES6.ts,1,29))
+>name : string, Symbol(name, Decl(emitRestParametersMethodES6.ts, 1, 16))
+>rest : any[], Symbol(rest, Decl(emitRestParametersMethodES6.ts, 1, 29))
 
     public bar(...rest) { }
->bar : (...rest: any[]) => void, Symbol(bar,Decl(emitRestParametersMethodES6.ts,1,42))
->rest : any[], Symbol(rest,Decl(emitRestParametersMethodES6.ts,3,15))
+>bar : (...rest: any[]) => void, Symbol(bar, Decl(emitRestParametersMethodES6.ts, 1, 42))
+>rest : any[], Symbol(rest, Decl(emitRestParametersMethodES6.ts, 3, 15))
 
     public foo(x: number, ...rest) { }
->foo : (x: number, ...rest: any[]) => void, Symbol(foo,Decl(emitRestParametersMethodES6.ts,3,27))
->x : number, Symbol(x,Decl(emitRestParametersMethodES6.ts,4,15))
->rest : any[], Symbol(rest,Decl(emitRestParametersMethodES6.ts,4,25))
+>foo : (x: number, ...rest: any[]) => void, Symbol(foo, Decl(emitRestParametersMethodES6.ts, 3, 27))
+>x : number, Symbol(x, Decl(emitRestParametersMethodES6.ts, 4, 15))
+>rest : any[], Symbol(rest, Decl(emitRestParametersMethodES6.ts, 4, 25))
 }
 
 class D {
->D : D, Symbol(D,Decl(emitRestParametersMethodES6.ts,5,1))
+>D : D, Symbol(D, Decl(emitRestParametersMethodES6.ts, 5, 1))
 
     constructor(...rest) { }
->rest : any[], Symbol(rest,Decl(emitRestParametersMethodES6.ts,8,16))
+>rest : any[], Symbol(rest, Decl(emitRestParametersMethodES6.ts, 8, 16))
 
     public bar(...rest) { }
->bar : (...rest: any[]) => void, Symbol(bar,Decl(emitRestParametersMethodES6.ts,8,28))
->rest : any[], Symbol(rest,Decl(emitRestParametersMethodES6.ts,10,15))
+>bar : (...rest: any[]) => void, Symbol(bar, Decl(emitRestParametersMethodES6.ts, 8, 28))
+>rest : any[], Symbol(rest, Decl(emitRestParametersMethodES6.ts, 10, 15))
 
     public foo(x: number, ...rest) { }
->foo : (x: number, ...rest: any[]) => void, Symbol(foo,Decl(emitRestParametersMethodES6.ts,10,27))
->x : number, Symbol(x,Decl(emitRestParametersMethodES6.ts,11,15))
->rest : any[], Symbol(rest,Decl(emitRestParametersMethodES6.ts,11,25))
+>foo : (x: number, ...rest: any[]) => void, Symbol(foo, Decl(emitRestParametersMethodES6.ts, 10, 27))
+>x : number, Symbol(x, Decl(emitRestParametersMethodES6.ts, 11, 15))
+>rest : any[], Symbol(rest, Decl(emitRestParametersMethodES6.ts, 11, 25))
 }
 

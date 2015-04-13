@@ -1,50 +1,50 @@
 === tests/cases/compiler/collisionCodeGenModuleWithConstructorChildren.ts ===
 module M {
->M : typeof M, Symbol(M,Decl(collisionCodeGenModuleWithConstructorChildren.ts,0,0),Decl(collisionCodeGenModuleWithConstructorChildren.ts,6,1),Decl(collisionCodeGenModuleWithConstructorChildren.ts,13,1))
+>M : typeof M, Symbol(M, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 0, 0), Decl(collisionCodeGenModuleWithConstructorChildren.ts, 6, 1), Decl(collisionCodeGenModuleWithConstructorChildren.ts, 13, 1))
 
     export var x = 3;
->x : number, Symbol(x,Decl(collisionCodeGenModuleWithConstructorChildren.ts,1,14))
+>x : number, Symbol(x, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 1, 14))
 >3 : number
 
     class c {
->c : c, Symbol(c,Decl(collisionCodeGenModuleWithConstructorChildren.ts,1,21))
+>c : c, Symbol(c, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 1, 21))
 
         constructor(M, p = x) {
->M : any, Symbol(M,Decl(collisionCodeGenModuleWithConstructorChildren.ts,3,20))
->p : number, Symbol(p,Decl(collisionCodeGenModuleWithConstructorChildren.ts,3,22))
->x : number, Symbol(x,Decl(collisionCodeGenModuleWithConstructorChildren.ts,1,14))
+>M : any, Symbol(M, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 3, 20))
+>p : number, Symbol(p, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 3, 22))
+>x : number, Symbol(x, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 1, 14))
         }
     }
 }
 
 module M {
->M : typeof M, Symbol(M,Decl(collisionCodeGenModuleWithConstructorChildren.ts,0,0),Decl(collisionCodeGenModuleWithConstructorChildren.ts,6,1),Decl(collisionCodeGenModuleWithConstructorChildren.ts,13,1))
+>M : typeof M, Symbol(M, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 0, 0), Decl(collisionCodeGenModuleWithConstructorChildren.ts, 6, 1), Decl(collisionCodeGenModuleWithConstructorChildren.ts, 13, 1))
 
     class d {
->d : d, Symbol(d,Decl(collisionCodeGenModuleWithConstructorChildren.ts,8,10))
+>d : d, Symbol(d, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 8, 10))
 
         constructor(private M, p = x) {
->M : any, Symbol(M,Decl(collisionCodeGenModuleWithConstructorChildren.ts,10,20))
->p : number, Symbol(p,Decl(collisionCodeGenModuleWithConstructorChildren.ts,10,30))
->x : number, Symbol(x,Decl(collisionCodeGenModuleWithConstructorChildren.ts,1,14))
+>M : any, Symbol(M, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 10, 20))
+>p : number, Symbol(p, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 10, 30))
+>x : number, Symbol(x, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 1, 14))
         }
     }
 }
 
 module M {
->M : typeof M, Symbol(M,Decl(collisionCodeGenModuleWithConstructorChildren.ts,0,0),Decl(collisionCodeGenModuleWithConstructorChildren.ts,6,1),Decl(collisionCodeGenModuleWithConstructorChildren.ts,13,1))
+>M : typeof M, Symbol(M, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 0, 0), Decl(collisionCodeGenModuleWithConstructorChildren.ts, 6, 1), Decl(collisionCodeGenModuleWithConstructorChildren.ts, 13, 1))
 
     class d2 {
->d2 : d2, Symbol(d2,Decl(collisionCodeGenModuleWithConstructorChildren.ts,15,10))
+>d2 : d2, Symbol(d2, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 15, 10))
 
         constructor() {
             var M = 10;
->M : number, Symbol(M,Decl(collisionCodeGenModuleWithConstructorChildren.ts,18,15))
+>M : number, Symbol(M, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 18, 15))
 >10 : number
 
             var p = x;
->p : number, Symbol(p,Decl(collisionCodeGenModuleWithConstructorChildren.ts,19,15))
->x : number, Symbol(x,Decl(collisionCodeGenModuleWithConstructorChildren.ts,1,14))
+>p : number, Symbol(p, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 19, 15))
+>x : number, Symbol(x, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 1, 14))
         }
     }
 }

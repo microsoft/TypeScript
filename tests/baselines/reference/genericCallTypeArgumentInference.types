@@ -2,393 +2,393 @@
 // Basic type inference with generic calls, no errors expected
 
 function foo<T>(t: T) {
->foo : <T>(t: T) => T, Symbol(foo,Decl(genericCallTypeArgumentInference.ts,0,0))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,2,13))
->t : T, Symbol(t,Decl(genericCallTypeArgumentInference.ts,2,16))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,2,13))
+>foo : <T>(t: T) => T, Symbol(foo, Decl(genericCallTypeArgumentInference.ts, 0, 0))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 2, 13))
+>t : T, Symbol(t, Decl(genericCallTypeArgumentInference.ts, 2, 16))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 2, 13))
 
     return t;
->t : T, Symbol(t,Decl(genericCallTypeArgumentInference.ts,2,16))
+>t : T, Symbol(t, Decl(genericCallTypeArgumentInference.ts, 2, 16))
 }
 
 var r = foo(''); // string
->r : string, Symbol(r,Decl(genericCallTypeArgumentInference.ts,6,3))
+>r : string, Symbol(r, Decl(genericCallTypeArgumentInference.ts, 6, 3))
 >foo('') : string
->foo : <T>(t: T) => T, Symbol(foo,Decl(genericCallTypeArgumentInference.ts,0,0))
+>foo : <T>(t: T) => T, Symbol(foo, Decl(genericCallTypeArgumentInference.ts, 0, 0))
 >'' : string
 
 function foo2<T, U>(t: T, u: U) {
->foo2 : <T, U>(t: T, u: U) => U, Symbol(foo2,Decl(genericCallTypeArgumentInference.ts,6,16))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,8,14))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,8,16))
->t : T, Symbol(t,Decl(genericCallTypeArgumentInference.ts,8,20))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,8,14))
->u : U, Symbol(u,Decl(genericCallTypeArgumentInference.ts,8,25))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,8,16))
+>foo2 : <T, U>(t: T, u: U) => U, Symbol(foo2, Decl(genericCallTypeArgumentInference.ts, 6, 16))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 8, 14))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 8, 16))
+>t : T, Symbol(t, Decl(genericCallTypeArgumentInference.ts, 8, 20))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 8, 14))
+>u : U, Symbol(u, Decl(genericCallTypeArgumentInference.ts, 8, 25))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 8, 16))
 
     return u;
->u : U, Symbol(u,Decl(genericCallTypeArgumentInference.ts,8,25))
+>u : U, Symbol(u, Decl(genericCallTypeArgumentInference.ts, 8, 25))
 }
 
 function foo2b<T, U>(u: U) {
->foo2b : <T, U>(u: U) => T, Symbol(foo2b,Decl(genericCallTypeArgumentInference.ts,10,1))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,12,15))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,12,17))
->u : U, Symbol(u,Decl(genericCallTypeArgumentInference.ts,12,21))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,12,17))
+>foo2b : <T, U>(u: U) => T, Symbol(foo2b, Decl(genericCallTypeArgumentInference.ts, 10, 1))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 12, 15))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 12, 17))
+>u : U, Symbol(u, Decl(genericCallTypeArgumentInference.ts, 12, 21))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 12, 17))
 
     var x: T;
->x : T, Symbol(x,Decl(genericCallTypeArgumentInference.ts,13,7))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,12,15))
+>x : T, Symbol(x, Decl(genericCallTypeArgumentInference.ts, 13, 7))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 12, 15))
 
     return x;
->x : T, Symbol(x,Decl(genericCallTypeArgumentInference.ts,13,7))
+>x : T, Symbol(x, Decl(genericCallTypeArgumentInference.ts, 13, 7))
 }
 
 var r2 = foo2('', 1); // number
->r2 : number, Symbol(r2,Decl(genericCallTypeArgumentInference.ts,17,3))
+>r2 : number, Symbol(r2, Decl(genericCallTypeArgumentInference.ts, 17, 3))
 >foo2('', 1) : number
->foo2 : <T, U>(t: T, u: U) => U, Symbol(foo2,Decl(genericCallTypeArgumentInference.ts,6,16))
+>foo2 : <T, U>(t: T, u: U) => U, Symbol(foo2, Decl(genericCallTypeArgumentInference.ts, 6, 16))
 >'' : string
 >1 : number
 
 var r3 = foo2b(1); // {}
->r3 : {}, Symbol(r3,Decl(genericCallTypeArgumentInference.ts,18,3))
+>r3 : {}, Symbol(r3, Decl(genericCallTypeArgumentInference.ts, 18, 3))
 >foo2b(1) : {}
->foo2b : <T, U>(u: U) => T, Symbol(foo2b,Decl(genericCallTypeArgumentInference.ts,10,1))
+>foo2b : <T, U>(u: U) => T, Symbol(foo2b, Decl(genericCallTypeArgumentInference.ts, 10, 1))
 >1 : number
 
 class C<T, U> {
->C : C<T, U>, Symbol(C,Decl(genericCallTypeArgumentInference.ts,18,18))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,20,8))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,20,10))
+>C : C<T, U>, Symbol(C, Decl(genericCallTypeArgumentInference.ts, 18, 18))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 20, 8))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 20, 10))
 
     constructor(public t: T, public u: U) {
->t : T, Symbol(t,Decl(genericCallTypeArgumentInference.ts,21,16))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,20,8))
->u : U, Symbol(u,Decl(genericCallTypeArgumentInference.ts,21,28))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,20,10))
+>t : T, Symbol(t, Decl(genericCallTypeArgumentInference.ts, 21, 16))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 20, 8))
+>u : U, Symbol(u, Decl(genericCallTypeArgumentInference.ts, 21, 28))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 20, 10))
     }
 
     foo(t: T, u: U) {
->foo : (t: T, u: U) => T, Symbol(foo,Decl(genericCallTypeArgumentInference.ts,22,5))
->t : T, Symbol(t,Decl(genericCallTypeArgumentInference.ts,24,8))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,20,8))
->u : U, Symbol(u,Decl(genericCallTypeArgumentInference.ts,24,13))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,20,10))
+>foo : (t: T, u: U) => T, Symbol(foo, Decl(genericCallTypeArgumentInference.ts, 22, 5))
+>t : T, Symbol(t, Decl(genericCallTypeArgumentInference.ts, 24, 8))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 20, 8))
+>u : U, Symbol(u, Decl(genericCallTypeArgumentInference.ts, 24, 13))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 20, 10))
 
         return t;
->t : T, Symbol(t,Decl(genericCallTypeArgumentInference.ts,24,8))
+>t : T, Symbol(t, Decl(genericCallTypeArgumentInference.ts, 24, 8))
     }
 
     foo2(t: T, u: U) {
->foo2 : (t: T, u: U) => U, Symbol(foo2,Decl(genericCallTypeArgumentInference.ts,26,5))
->t : T, Symbol(t,Decl(genericCallTypeArgumentInference.ts,28,9))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,20,8))
->u : U, Symbol(u,Decl(genericCallTypeArgumentInference.ts,28,14))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,20,10))
+>foo2 : (t: T, u: U) => U, Symbol(foo2, Decl(genericCallTypeArgumentInference.ts, 26, 5))
+>t : T, Symbol(t, Decl(genericCallTypeArgumentInference.ts, 28, 9))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 20, 8))
+>u : U, Symbol(u, Decl(genericCallTypeArgumentInference.ts, 28, 14))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 20, 10))
 
         return u;
->u : U, Symbol(u,Decl(genericCallTypeArgumentInference.ts,28,14))
+>u : U, Symbol(u, Decl(genericCallTypeArgumentInference.ts, 28, 14))
     }
 
     foo3<T>(t: T, u: U) {
->foo3 : <T>(t: T, u: U) => T, Symbol(foo3,Decl(genericCallTypeArgumentInference.ts,30,5))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,32,9))
->t : T, Symbol(t,Decl(genericCallTypeArgumentInference.ts,32,12))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,32,9))
->u : U, Symbol(u,Decl(genericCallTypeArgumentInference.ts,32,17))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,20,10))
+>foo3 : <T>(t: T, u: U) => T, Symbol(foo3, Decl(genericCallTypeArgumentInference.ts, 30, 5))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 32, 9))
+>t : T, Symbol(t, Decl(genericCallTypeArgumentInference.ts, 32, 12))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 32, 9))
+>u : U, Symbol(u, Decl(genericCallTypeArgumentInference.ts, 32, 17))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 20, 10))
 
         return t;
->t : T, Symbol(t,Decl(genericCallTypeArgumentInference.ts,32,12))
+>t : T, Symbol(t, Decl(genericCallTypeArgumentInference.ts, 32, 12))
     }
 
     foo4<U>(t: T, u: U) {
->foo4 : <U>(t: T, u: U) => T, Symbol(foo4,Decl(genericCallTypeArgumentInference.ts,34,5))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,36,9))
->t : T, Symbol(t,Decl(genericCallTypeArgumentInference.ts,36,12))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,20,8))
->u : U, Symbol(u,Decl(genericCallTypeArgumentInference.ts,36,17))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,36,9))
+>foo4 : <U>(t: T, u: U) => T, Symbol(foo4, Decl(genericCallTypeArgumentInference.ts, 34, 5))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 36, 9))
+>t : T, Symbol(t, Decl(genericCallTypeArgumentInference.ts, 36, 12))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 20, 8))
+>u : U, Symbol(u, Decl(genericCallTypeArgumentInference.ts, 36, 17))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 36, 9))
 
         return t;
->t : T, Symbol(t,Decl(genericCallTypeArgumentInference.ts,36,12))
+>t : T, Symbol(t, Decl(genericCallTypeArgumentInference.ts, 36, 12))
     }
 
     foo5<T,U>(t: T, u: U) {
->foo5 : <T, U>(t: T, u: U) => T, Symbol(foo5,Decl(genericCallTypeArgumentInference.ts,38,5))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,40,9))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,40,11))
->t : T, Symbol(t,Decl(genericCallTypeArgumentInference.ts,40,14))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,40,9))
->u : U, Symbol(u,Decl(genericCallTypeArgumentInference.ts,40,19))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,40,11))
+>foo5 : <T, U>(t: T, u: U) => T, Symbol(foo5, Decl(genericCallTypeArgumentInference.ts, 38, 5))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 40, 9))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 40, 11))
+>t : T, Symbol(t, Decl(genericCallTypeArgumentInference.ts, 40, 14))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 40, 9))
+>u : U, Symbol(u, Decl(genericCallTypeArgumentInference.ts, 40, 19))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 40, 11))
 
         return t;
->t : T, Symbol(t,Decl(genericCallTypeArgumentInference.ts,40,14))
+>t : T, Symbol(t, Decl(genericCallTypeArgumentInference.ts, 40, 14))
     }
 
     foo6<T, U>() {
->foo6 : <T, U>() => T, Symbol(foo6,Decl(genericCallTypeArgumentInference.ts,42,5))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,44,9))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,44,11))
+>foo6 : <T, U>() => T, Symbol(foo6, Decl(genericCallTypeArgumentInference.ts, 42, 5))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 44, 9))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 44, 11))
 
         var x: T;
->x : T, Symbol(x,Decl(genericCallTypeArgumentInference.ts,45,11))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,44,9))
+>x : T, Symbol(x, Decl(genericCallTypeArgumentInference.ts, 45, 11))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 44, 9))
 
         return x;
->x : T, Symbol(x,Decl(genericCallTypeArgumentInference.ts,45,11))
+>x : T, Symbol(x, Decl(genericCallTypeArgumentInference.ts, 45, 11))
     }
 
     foo7<T, U>(u: U) {
->foo7 : <T, U>(u: U) => T, Symbol(foo7,Decl(genericCallTypeArgumentInference.ts,47,5))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,49,9))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,49,11))
->u : U, Symbol(u,Decl(genericCallTypeArgumentInference.ts,49,15))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,49,11))
+>foo7 : <T, U>(u: U) => T, Symbol(foo7, Decl(genericCallTypeArgumentInference.ts, 47, 5))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 49, 9))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 49, 11))
+>u : U, Symbol(u, Decl(genericCallTypeArgumentInference.ts, 49, 15))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 49, 11))
 
         var x: T;
->x : T, Symbol(x,Decl(genericCallTypeArgumentInference.ts,50,11))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,49,9))
+>x : T, Symbol(x, Decl(genericCallTypeArgumentInference.ts, 50, 11))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 49, 9))
 
         return x;
->x : T, Symbol(x,Decl(genericCallTypeArgumentInference.ts,50,11))
+>x : T, Symbol(x, Decl(genericCallTypeArgumentInference.ts, 50, 11))
     }
 
     foo8<T, U>() {
->foo8 : <T, U>() => T, Symbol(foo8,Decl(genericCallTypeArgumentInference.ts,52,5))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,54,9))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,54,11))
+>foo8 : <T, U>() => T, Symbol(foo8, Decl(genericCallTypeArgumentInference.ts, 52, 5))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 54, 9))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 54, 11))
 
         var x: T;
->x : T, Symbol(x,Decl(genericCallTypeArgumentInference.ts,55,11))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,54,9))
+>x : T, Symbol(x, Decl(genericCallTypeArgumentInference.ts, 55, 11))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 54, 9))
 
         return x;
->x : T, Symbol(x,Decl(genericCallTypeArgumentInference.ts,55,11))
+>x : T, Symbol(x, Decl(genericCallTypeArgumentInference.ts, 55, 11))
     }
 }
 
 var c = new C('', 1);
->c : C<string, number>, Symbol(c,Decl(genericCallTypeArgumentInference.ts,60,3))
+>c : C<string, number>, Symbol(c, Decl(genericCallTypeArgumentInference.ts, 60, 3))
 >new C('', 1) : C<string, number>
->C : typeof C, Symbol(C,Decl(genericCallTypeArgumentInference.ts,18,18))
+>C : typeof C, Symbol(C, Decl(genericCallTypeArgumentInference.ts, 18, 18))
 >'' : string
 >1 : number
 
 var r4 = c.foo('', 1); // string
->r4 : string, Symbol(r4,Decl(genericCallTypeArgumentInference.ts,61,3),Decl(genericCallTypeArgumentInference.ts,83,3))
+>r4 : string, Symbol(r4, Decl(genericCallTypeArgumentInference.ts, 61, 3), Decl(genericCallTypeArgumentInference.ts, 83, 3))
 >c.foo('', 1) : string
->c.foo : (t: string, u: number) => string, Symbol(C.foo,Decl(genericCallTypeArgumentInference.ts,22,5))
->c : C<string, number>, Symbol(c,Decl(genericCallTypeArgumentInference.ts,60,3))
->foo : (t: string, u: number) => string, Symbol(C.foo,Decl(genericCallTypeArgumentInference.ts,22,5))
+>c.foo : (t: string, u: number) => string, Symbol(C.foo, Decl(genericCallTypeArgumentInference.ts, 22, 5))
+>c : C<string, number>, Symbol(c, Decl(genericCallTypeArgumentInference.ts, 60, 3))
+>foo : (t: string, u: number) => string, Symbol(C.foo, Decl(genericCallTypeArgumentInference.ts, 22, 5))
 >'' : string
 >1 : number
 
 var r5 = c.foo2('', 1); // number
->r5 : number, Symbol(r5,Decl(genericCallTypeArgumentInference.ts,62,3),Decl(genericCallTypeArgumentInference.ts,84,3))
+>r5 : number, Symbol(r5, Decl(genericCallTypeArgumentInference.ts, 62, 3), Decl(genericCallTypeArgumentInference.ts, 84, 3))
 >c.foo2('', 1) : number
->c.foo2 : (t: string, u: number) => number, Symbol(C.foo2,Decl(genericCallTypeArgumentInference.ts,26,5))
->c : C<string, number>, Symbol(c,Decl(genericCallTypeArgumentInference.ts,60,3))
->foo2 : (t: string, u: number) => number, Symbol(C.foo2,Decl(genericCallTypeArgumentInference.ts,26,5))
+>c.foo2 : (t: string, u: number) => number, Symbol(C.foo2, Decl(genericCallTypeArgumentInference.ts, 26, 5))
+>c : C<string, number>, Symbol(c, Decl(genericCallTypeArgumentInference.ts, 60, 3))
+>foo2 : (t: string, u: number) => number, Symbol(C.foo2, Decl(genericCallTypeArgumentInference.ts, 26, 5))
 >'' : string
 >1 : number
 
 var r6 = c.foo3(true, 1); // boolean
->r6 : boolean, Symbol(r6,Decl(genericCallTypeArgumentInference.ts,63,3),Decl(genericCallTypeArgumentInference.ts,85,3))
+>r6 : boolean, Symbol(r6, Decl(genericCallTypeArgumentInference.ts, 63, 3), Decl(genericCallTypeArgumentInference.ts, 85, 3))
 >c.foo3(true, 1) : boolean
->c.foo3 : <T>(t: T, u: number) => T, Symbol(C.foo3,Decl(genericCallTypeArgumentInference.ts,30,5))
->c : C<string, number>, Symbol(c,Decl(genericCallTypeArgumentInference.ts,60,3))
->foo3 : <T>(t: T, u: number) => T, Symbol(C.foo3,Decl(genericCallTypeArgumentInference.ts,30,5))
+>c.foo3 : <T>(t: T, u: number) => T, Symbol(C.foo3, Decl(genericCallTypeArgumentInference.ts, 30, 5))
+>c : C<string, number>, Symbol(c, Decl(genericCallTypeArgumentInference.ts, 60, 3))
+>foo3 : <T>(t: T, u: number) => T, Symbol(C.foo3, Decl(genericCallTypeArgumentInference.ts, 30, 5))
 >true : boolean
 >1 : number
 
 var r7 = c.foo4('', true); // string
->r7 : string, Symbol(r7,Decl(genericCallTypeArgumentInference.ts,64,3),Decl(genericCallTypeArgumentInference.ts,86,3))
+>r7 : string, Symbol(r7, Decl(genericCallTypeArgumentInference.ts, 64, 3), Decl(genericCallTypeArgumentInference.ts, 86, 3))
 >c.foo4('', true) : string
->c.foo4 : <U>(t: string, u: U) => string, Symbol(C.foo4,Decl(genericCallTypeArgumentInference.ts,34,5))
->c : C<string, number>, Symbol(c,Decl(genericCallTypeArgumentInference.ts,60,3))
->foo4 : <U>(t: string, u: U) => string, Symbol(C.foo4,Decl(genericCallTypeArgumentInference.ts,34,5))
+>c.foo4 : <U>(t: string, u: U) => string, Symbol(C.foo4, Decl(genericCallTypeArgumentInference.ts, 34, 5))
+>c : C<string, number>, Symbol(c, Decl(genericCallTypeArgumentInference.ts, 60, 3))
+>foo4 : <U>(t: string, u: U) => string, Symbol(C.foo4, Decl(genericCallTypeArgumentInference.ts, 34, 5))
 >'' : string
 >true : boolean
 
 var r8 = c.foo5(true, 1); // boolean
->r8 : boolean, Symbol(r8,Decl(genericCallTypeArgumentInference.ts,65,3),Decl(genericCallTypeArgumentInference.ts,87,3))
+>r8 : boolean, Symbol(r8, Decl(genericCallTypeArgumentInference.ts, 65, 3), Decl(genericCallTypeArgumentInference.ts, 87, 3))
 >c.foo5(true, 1) : boolean
->c.foo5 : <T, U>(t: T, u: U) => T, Symbol(C.foo5,Decl(genericCallTypeArgumentInference.ts,38,5))
->c : C<string, number>, Symbol(c,Decl(genericCallTypeArgumentInference.ts,60,3))
->foo5 : <T, U>(t: T, u: U) => T, Symbol(C.foo5,Decl(genericCallTypeArgumentInference.ts,38,5))
+>c.foo5 : <T, U>(t: T, u: U) => T, Symbol(C.foo5, Decl(genericCallTypeArgumentInference.ts, 38, 5))
+>c : C<string, number>, Symbol(c, Decl(genericCallTypeArgumentInference.ts, 60, 3))
+>foo5 : <T, U>(t: T, u: U) => T, Symbol(C.foo5, Decl(genericCallTypeArgumentInference.ts, 38, 5))
 >true : boolean
 >1 : number
 
 var r9 = c.foo6(); // {}
->r9 : {}, Symbol(r9,Decl(genericCallTypeArgumentInference.ts,66,3),Decl(genericCallTypeArgumentInference.ts,88,3))
+>r9 : {}, Symbol(r9, Decl(genericCallTypeArgumentInference.ts, 66, 3), Decl(genericCallTypeArgumentInference.ts, 88, 3))
 >c.foo6() : {}
->c.foo6 : <T, U>() => T, Symbol(C.foo6,Decl(genericCallTypeArgumentInference.ts,42,5))
->c : C<string, number>, Symbol(c,Decl(genericCallTypeArgumentInference.ts,60,3))
->foo6 : <T, U>() => T, Symbol(C.foo6,Decl(genericCallTypeArgumentInference.ts,42,5))
+>c.foo6 : <T, U>() => T, Symbol(C.foo6, Decl(genericCallTypeArgumentInference.ts, 42, 5))
+>c : C<string, number>, Symbol(c, Decl(genericCallTypeArgumentInference.ts, 60, 3))
+>foo6 : <T, U>() => T, Symbol(C.foo6, Decl(genericCallTypeArgumentInference.ts, 42, 5))
 
 var r10 = c.foo7(''); // {}
->r10 : {}, Symbol(r10,Decl(genericCallTypeArgumentInference.ts,67,3),Decl(genericCallTypeArgumentInference.ts,89,3))
+>r10 : {}, Symbol(r10, Decl(genericCallTypeArgumentInference.ts, 67, 3), Decl(genericCallTypeArgumentInference.ts, 89, 3))
 >c.foo7('') : {}
->c.foo7 : <T, U>(u: U) => T, Symbol(C.foo7,Decl(genericCallTypeArgumentInference.ts,47,5))
->c : C<string, number>, Symbol(c,Decl(genericCallTypeArgumentInference.ts,60,3))
->foo7 : <T, U>(u: U) => T, Symbol(C.foo7,Decl(genericCallTypeArgumentInference.ts,47,5))
+>c.foo7 : <T, U>(u: U) => T, Symbol(C.foo7, Decl(genericCallTypeArgumentInference.ts, 47, 5))
+>c : C<string, number>, Symbol(c, Decl(genericCallTypeArgumentInference.ts, 60, 3))
+>foo7 : <T, U>(u: U) => T, Symbol(C.foo7, Decl(genericCallTypeArgumentInference.ts, 47, 5))
 >'' : string
 
 var r11 = c.foo8(); // {}
->r11 : {}, Symbol(r11,Decl(genericCallTypeArgumentInference.ts,68,3),Decl(genericCallTypeArgumentInference.ts,90,3))
+>r11 : {}, Symbol(r11, Decl(genericCallTypeArgumentInference.ts, 68, 3), Decl(genericCallTypeArgumentInference.ts, 90, 3))
 >c.foo8() : {}
->c.foo8 : <T, U>() => T, Symbol(C.foo8,Decl(genericCallTypeArgumentInference.ts,52,5))
->c : C<string, number>, Symbol(c,Decl(genericCallTypeArgumentInference.ts,60,3))
->foo8 : <T, U>() => T, Symbol(C.foo8,Decl(genericCallTypeArgumentInference.ts,52,5))
+>c.foo8 : <T, U>() => T, Symbol(C.foo8, Decl(genericCallTypeArgumentInference.ts, 52, 5))
+>c : C<string, number>, Symbol(c, Decl(genericCallTypeArgumentInference.ts, 60, 3))
+>foo8 : <T, U>() => T, Symbol(C.foo8, Decl(genericCallTypeArgumentInference.ts, 52, 5))
 
 interface I<T, U> {
->I : I<T, U>, Symbol(I,Decl(genericCallTypeArgumentInference.ts,68,19))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,70,12))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,70,14))
+>I : I<T, U>, Symbol(I, Decl(genericCallTypeArgumentInference.ts, 68, 19))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 70, 12))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 70, 14))
 
     new (t: T, u: U);
->t : T, Symbol(t,Decl(genericCallTypeArgumentInference.ts,71,9))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,70,12))
->u : U, Symbol(u,Decl(genericCallTypeArgumentInference.ts,71,14))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,70,14))
+>t : T, Symbol(t, Decl(genericCallTypeArgumentInference.ts, 71, 9))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 70, 12))
+>u : U, Symbol(u, Decl(genericCallTypeArgumentInference.ts, 71, 14))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 70, 14))
 
     foo(t: T, u: U): T;
->foo : (t: T, u: U) => T, Symbol(foo,Decl(genericCallTypeArgumentInference.ts,71,21))
->t : T, Symbol(t,Decl(genericCallTypeArgumentInference.ts,72,8))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,70,12))
->u : U, Symbol(u,Decl(genericCallTypeArgumentInference.ts,72,13))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,70,14))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,70,12))
+>foo : (t: T, u: U) => T, Symbol(foo, Decl(genericCallTypeArgumentInference.ts, 71, 21))
+>t : T, Symbol(t, Decl(genericCallTypeArgumentInference.ts, 72, 8))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 70, 12))
+>u : U, Symbol(u, Decl(genericCallTypeArgumentInference.ts, 72, 13))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 70, 14))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 70, 12))
 
     foo2(t: T, u: U): U;
->foo2 : (t: T, u: U) => U, Symbol(foo2,Decl(genericCallTypeArgumentInference.ts,72,23))
->t : T, Symbol(t,Decl(genericCallTypeArgumentInference.ts,73,9))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,70,12))
->u : U, Symbol(u,Decl(genericCallTypeArgumentInference.ts,73,14))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,70,14))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,70,14))
+>foo2 : (t: T, u: U) => U, Symbol(foo2, Decl(genericCallTypeArgumentInference.ts, 72, 23))
+>t : T, Symbol(t, Decl(genericCallTypeArgumentInference.ts, 73, 9))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 70, 12))
+>u : U, Symbol(u, Decl(genericCallTypeArgumentInference.ts, 73, 14))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 70, 14))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 70, 14))
 
     foo3<T>(t: T, u: U): T;
->foo3 : <T>(t: T, u: U) => T, Symbol(foo3,Decl(genericCallTypeArgumentInference.ts,73,24))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,74,9))
->t : T, Symbol(t,Decl(genericCallTypeArgumentInference.ts,74,12))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,74,9))
->u : U, Symbol(u,Decl(genericCallTypeArgumentInference.ts,74,17))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,70,14))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,74,9))
+>foo3 : <T>(t: T, u: U) => T, Symbol(foo3, Decl(genericCallTypeArgumentInference.ts, 73, 24))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 74, 9))
+>t : T, Symbol(t, Decl(genericCallTypeArgumentInference.ts, 74, 12))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 74, 9))
+>u : U, Symbol(u, Decl(genericCallTypeArgumentInference.ts, 74, 17))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 70, 14))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 74, 9))
 
     foo4<U>(t: T, u: U): T;
->foo4 : <U>(t: T, u: U) => T, Symbol(foo4,Decl(genericCallTypeArgumentInference.ts,74,27))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,75,9))
->t : T, Symbol(t,Decl(genericCallTypeArgumentInference.ts,75,12))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,70,12))
->u : U, Symbol(u,Decl(genericCallTypeArgumentInference.ts,75,17))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,75,9))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,70,12))
+>foo4 : <U>(t: T, u: U) => T, Symbol(foo4, Decl(genericCallTypeArgumentInference.ts, 74, 27))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 75, 9))
+>t : T, Symbol(t, Decl(genericCallTypeArgumentInference.ts, 75, 12))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 70, 12))
+>u : U, Symbol(u, Decl(genericCallTypeArgumentInference.ts, 75, 17))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 75, 9))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 70, 12))
 
     foo5<T, U>(t: T, u: U): T;
->foo5 : <T, U>(t: T, u: U) => T, Symbol(foo5,Decl(genericCallTypeArgumentInference.ts,75,27))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,76,9))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,76,11))
->t : T, Symbol(t,Decl(genericCallTypeArgumentInference.ts,76,15))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,76,9))
->u : U, Symbol(u,Decl(genericCallTypeArgumentInference.ts,76,20))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,76,11))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,76,9))
+>foo5 : <T, U>(t: T, u: U) => T, Symbol(foo5, Decl(genericCallTypeArgumentInference.ts, 75, 27))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 76, 9))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 76, 11))
+>t : T, Symbol(t, Decl(genericCallTypeArgumentInference.ts, 76, 15))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 76, 9))
+>u : U, Symbol(u, Decl(genericCallTypeArgumentInference.ts, 76, 20))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 76, 11))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 76, 9))
 
     foo6<T, U>(): T;
->foo6 : <T, U>() => T, Symbol(foo6,Decl(genericCallTypeArgumentInference.ts,76,30))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,77,9))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,77,11))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,77,9))
+>foo6 : <T, U>() => T, Symbol(foo6, Decl(genericCallTypeArgumentInference.ts, 76, 30))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 77, 9))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 77, 11))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 77, 9))
 
     foo7<T, U>(u: U): T;
->foo7 : <T, U>(u: U) => T, Symbol(foo7,Decl(genericCallTypeArgumentInference.ts,77,20))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,78,9))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,78,11))
->u : U, Symbol(u,Decl(genericCallTypeArgumentInference.ts,78,15))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,78,11))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,78,9))
+>foo7 : <T, U>(u: U) => T, Symbol(foo7, Decl(genericCallTypeArgumentInference.ts, 77, 20))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 78, 9))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 78, 11))
+>u : U, Symbol(u, Decl(genericCallTypeArgumentInference.ts, 78, 15))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 78, 11))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 78, 9))
 
     foo8<T, U>(): T;    
->foo8 : <T, U>() => T, Symbol(foo8,Decl(genericCallTypeArgumentInference.ts,78,24))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,79,9))
->U : U, Symbol(U,Decl(genericCallTypeArgumentInference.ts,79,11))
->T : T, Symbol(T,Decl(genericCallTypeArgumentInference.ts,79,9))
+>foo8 : <T, U>() => T, Symbol(foo8, Decl(genericCallTypeArgumentInference.ts, 78, 24))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 79, 9))
+>U : U, Symbol(U, Decl(genericCallTypeArgumentInference.ts, 79, 11))
+>T : T, Symbol(T, Decl(genericCallTypeArgumentInference.ts, 79, 9))
 }
 
 var i: I<string, number>;
->i : I<string, number>, Symbol(i,Decl(genericCallTypeArgumentInference.ts,82,3))
->I : I<T, U>, Symbol(I,Decl(genericCallTypeArgumentInference.ts,68,19))
+>i : I<string, number>, Symbol(i, Decl(genericCallTypeArgumentInference.ts, 82, 3))
+>I : I<T, U>, Symbol(I, Decl(genericCallTypeArgumentInference.ts, 68, 19))
 
 var r4 = i.foo('', 1); // string
->r4 : string, Symbol(r4,Decl(genericCallTypeArgumentInference.ts,61,3),Decl(genericCallTypeArgumentInference.ts,83,3))
+>r4 : string, Symbol(r4, Decl(genericCallTypeArgumentInference.ts, 61, 3), Decl(genericCallTypeArgumentInference.ts, 83, 3))
 >i.foo('', 1) : string
->i.foo : (t: string, u: number) => string, Symbol(I.foo,Decl(genericCallTypeArgumentInference.ts,71,21))
->i : I<string, number>, Symbol(i,Decl(genericCallTypeArgumentInference.ts,82,3))
->foo : (t: string, u: number) => string, Symbol(I.foo,Decl(genericCallTypeArgumentInference.ts,71,21))
+>i.foo : (t: string, u: number) => string, Symbol(I.foo, Decl(genericCallTypeArgumentInference.ts, 71, 21))
+>i : I<string, number>, Symbol(i, Decl(genericCallTypeArgumentInference.ts, 82, 3))
+>foo : (t: string, u: number) => string, Symbol(I.foo, Decl(genericCallTypeArgumentInference.ts, 71, 21))
 >'' : string
 >1 : number
 
 var r5 = i.foo2('', 1); // number
->r5 : number, Symbol(r5,Decl(genericCallTypeArgumentInference.ts,62,3),Decl(genericCallTypeArgumentInference.ts,84,3))
+>r5 : number, Symbol(r5, Decl(genericCallTypeArgumentInference.ts, 62, 3), Decl(genericCallTypeArgumentInference.ts, 84, 3))
 >i.foo2('', 1) : number
->i.foo2 : (t: string, u: number) => number, Symbol(I.foo2,Decl(genericCallTypeArgumentInference.ts,72,23))
->i : I<string, number>, Symbol(i,Decl(genericCallTypeArgumentInference.ts,82,3))
->foo2 : (t: string, u: number) => number, Symbol(I.foo2,Decl(genericCallTypeArgumentInference.ts,72,23))
+>i.foo2 : (t: string, u: number) => number, Symbol(I.foo2, Decl(genericCallTypeArgumentInference.ts, 72, 23))
+>i : I<string, number>, Symbol(i, Decl(genericCallTypeArgumentInference.ts, 82, 3))
+>foo2 : (t: string, u: number) => number, Symbol(I.foo2, Decl(genericCallTypeArgumentInference.ts, 72, 23))
 >'' : string
 >1 : number
 
 var r6 = i.foo3(true, 1); // boolean
->r6 : boolean, Symbol(r6,Decl(genericCallTypeArgumentInference.ts,63,3),Decl(genericCallTypeArgumentInference.ts,85,3))
+>r6 : boolean, Symbol(r6, Decl(genericCallTypeArgumentInference.ts, 63, 3), Decl(genericCallTypeArgumentInference.ts, 85, 3))
 >i.foo3(true, 1) : boolean
->i.foo3 : <T>(t: T, u: number) => T, Symbol(I.foo3,Decl(genericCallTypeArgumentInference.ts,73,24))
->i : I<string, number>, Symbol(i,Decl(genericCallTypeArgumentInference.ts,82,3))
->foo3 : <T>(t: T, u: number) => T, Symbol(I.foo3,Decl(genericCallTypeArgumentInference.ts,73,24))
+>i.foo3 : <T>(t: T, u: number) => T, Symbol(I.foo3, Decl(genericCallTypeArgumentInference.ts, 73, 24))
+>i : I<string, number>, Symbol(i, Decl(genericCallTypeArgumentInference.ts, 82, 3))
+>foo3 : <T>(t: T, u: number) => T, Symbol(I.foo3, Decl(genericCallTypeArgumentInference.ts, 73, 24))
 >true : boolean
 >1 : number
 
 var r7 = i.foo4('', true); // string
->r7 : string, Symbol(r7,Decl(genericCallTypeArgumentInference.ts,64,3),Decl(genericCallTypeArgumentInference.ts,86,3))
+>r7 : string, Symbol(r7, Decl(genericCallTypeArgumentInference.ts, 64, 3), Decl(genericCallTypeArgumentInference.ts, 86, 3))
 >i.foo4('', true) : string
->i.foo4 : <U>(t: string, u: U) => string, Symbol(I.foo4,Decl(genericCallTypeArgumentInference.ts,74,27))
->i : I<string, number>, Symbol(i,Decl(genericCallTypeArgumentInference.ts,82,3))
->foo4 : <U>(t: string, u: U) => string, Symbol(I.foo4,Decl(genericCallTypeArgumentInference.ts,74,27))
+>i.foo4 : <U>(t: string, u: U) => string, Symbol(I.foo4, Decl(genericCallTypeArgumentInference.ts, 74, 27))
+>i : I<string, number>, Symbol(i, Decl(genericCallTypeArgumentInference.ts, 82, 3))
+>foo4 : <U>(t: string, u: U) => string, Symbol(I.foo4, Decl(genericCallTypeArgumentInference.ts, 74, 27))
 >'' : string
 >true : boolean
 
 var r8 = i.foo5(true, 1); // boolean
->r8 : boolean, Symbol(r8,Decl(genericCallTypeArgumentInference.ts,65,3),Decl(genericCallTypeArgumentInference.ts,87,3))
+>r8 : boolean, Symbol(r8, Decl(genericCallTypeArgumentInference.ts, 65, 3), Decl(genericCallTypeArgumentInference.ts, 87, 3))
 >i.foo5(true, 1) : boolean
->i.foo5 : <T, U>(t: T, u: U) => T, Symbol(I.foo5,Decl(genericCallTypeArgumentInference.ts,75,27))
->i : I<string, number>, Symbol(i,Decl(genericCallTypeArgumentInference.ts,82,3))
->foo5 : <T, U>(t: T, u: U) => T, Symbol(I.foo5,Decl(genericCallTypeArgumentInference.ts,75,27))
+>i.foo5 : <T, U>(t: T, u: U) => T, Symbol(I.foo5, Decl(genericCallTypeArgumentInference.ts, 75, 27))
+>i : I<string, number>, Symbol(i, Decl(genericCallTypeArgumentInference.ts, 82, 3))
+>foo5 : <T, U>(t: T, u: U) => T, Symbol(I.foo5, Decl(genericCallTypeArgumentInference.ts, 75, 27))
 >true : boolean
 >1 : number
 
 var r9 = i.foo6(); // {}
->r9 : {}, Symbol(r9,Decl(genericCallTypeArgumentInference.ts,66,3),Decl(genericCallTypeArgumentInference.ts,88,3))
+>r9 : {}, Symbol(r9, Decl(genericCallTypeArgumentInference.ts, 66, 3), Decl(genericCallTypeArgumentInference.ts, 88, 3))
 >i.foo6() : {}
->i.foo6 : <T, U>() => T, Symbol(I.foo6,Decl(genericCallTypeArgumentInference.ts,76,30))
->i : I<string, number>, Symbol(i,Decl(genericCallTypeArgumentInference.ts,82,3))
->foo6 : <T, U>() => T, Symbol(I.foo6,Decl(genericCallTypeArgumentInference.ts,76,30))
+>i.foo6 : <T, U>() => T, Symbol(I.foo6, Decl(genericCallTypeArgumentInference.ts, 76, 30))
+>i : I<string, number>, Symbol(i, Decl(genericCallTypeArgumentInference.ts, 82, 3))
+>foo6 : <T, U>() => T, Symbol(I.foo6, Decl(genericCallTypeArgumentInference.ts, 76, 30))
 
 var r10 = i.foo7(''); // {}
->r10 : {}, Symbol(r10,Decl(genericCallTypeArgumentInference.ts,67,3),Decl(genericCallTypeArgumentInference.ts,89,3))
+>r10 : {}, Symbol(r10, Decl(genericCallTypeArgumentInference.ts, 67, 3), Decl(genericCallTypeArgumentInference.ts, 89, 3))
 >i.foo7('') : {}
->i.foo7 : <T, U>(u: U) => T, Symbol(I.foo7,Decl(genericCallTypeArgumentInference.ts,77,20))
->i : I<string, number>, Symbol(i,Decl(genericCallTypeArgumentInference.ts,82,3))
->foo7 : <T, U>(u: U) => T, Symbol(I.foo7,Decl(genericCallTypeArgumentInference.ts,77,20))
+>i.foo7 : <T, U>(u: U) => T, Symbol(I.foo7, Decl(genericCallTypeArgumentInference.ts, 77, 20))
+>i : I<string, number>, Symbol(i, Decl(genericCallTypeArgumentInference.ts, 82, 3))
+>foo7 : <T, U>(u: U) => T, Symbol(I.foo7, Decl(genericCallTypeArgumentInference.ts, 77, 20))
 >'' : string
 
 var r11 = i.foo8(); // {}
->r11 : {}, Symbol(r11,Decl(genericCallTypeArgumentInference.ts,68,3),Decl(genericCallTypeArgumentInference.ts,90,3))
+>r11 : {}, Symbol(r11, Decl(genericCallTypeArgumentInference.ts, 68, 3), Decl(genericCallTypeArgumentInference.ts, 90, 3))
 >i.foo8() : {}
->i.foo8 : <T, U>() => T, Symbol(I.foo8,Decl(genericCallTypeArgumentInference.ts,78,24))
->i : I<string, number>, Symbol(i,Decl(genericCallTypeArgumentInference.ts,82,3))
->foo8 : <T, U>() => T, Symbol(I.foo8,Decl(genericCallTypeArgumentInference.ts,78,24))
+>i.foo8 : <T, U>() => T, Symbol(I.foo8, Decl(genericCallTypeArgumentInference.ts, 78, 24))
+>i : I<string, number>, Symbol(i, Decl(genericCallTypeArgumentInference.ts, 82, 3))
+>foo8 : <T, U>() => T, Symbol(I.foo8, Decl(genericCallTypeArgumentInference.ts, 78, 24))
 

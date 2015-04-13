@@ -1,129 +1,129 @@
 === tests/cases/compiler/listFailure.ts ===
 module Editor {
->Editor : typeof Editor, Symbol(Editor,Decl(listFailure.ts,0,0))
+>Editor : typeof Editor, Symbol(Editor, Decl(listFailure.ts, 0, 0))
 
     export class Buffer {
->Buffer : Buffer, Symbol(Buffer,Decl(listFailure.ts,0,15))
+>Buffer : Buffer, Symbol(Buffer, Decl(listFailure.ts, 0, 15))
 
     	lines: List<Line> = ListMakeHead<Line>();
->lines : List<Line>, Symbol(lines,Decl(listFailure.ts,2,25))
->List : List<T>, Symbol(List,Decl(listFailure.ts,24,5))
->Line : Line, Symbol(Line,Decl(listFailure.ts,37,5))
+>lines : List<Line>, Symbol(lines, Decl(listFailure.ts, 2, 25))
+>List : List<T>, Symbol(List, Decl(listFailure.ts, 24, 5))
+>Line : Line, Symbol(Line, Decl(listFailure.ts, 37, 5))
 >ListMakeHead<Line>() : List<Line>
->ListMakeHead : <U>() => List<U>, Symbol(ListMakeHead,Decl(listFailure.ts,16,5))
->Line : Line, Symbol(Line,Decl(listFailure.ts,37,5))
+>ListMakeHead : <U>() => List<U>, Symbol(ListMakeHead, Decl(listFailure.ts, 16, 5))
+>Line : Line, Symbol(Line, Decl(listFailure.ts, 37, 5))
         
         addLine(lineText: string): List<Line> {
->addLine : (lineText: string) => List<Line>, Symbol(addLine,Decl(listFailure.ts,3,46))
->lineText : string, Symbol(lineText,Decl(listFailure.ts,5,16))
->List : List<T>, Symbol(List,Decl(listFailure.ts,24,5))
->Line : Line, Symbol(Line,Decl(listFailure.ts,37,5))
+>addLine : (lineText: string) => List<Line>, Symbol(addLine, Decl(listFailure.ts, 3, 46))
+>lineText : string, Symbol(lineText, Decl(listFailure.ts, 5, 16))
+>List : List<T>, Symbol(List, Decl(listFailure.ts, 24, 5))
+>Line : Line, Symbol(Line, Decl(listFailure.ts, 37, 5))
             
             var line: Line = new Line();
->line : Line, Symbol(line,Decl(listFailure.ts,7,15))
->Line : Line, Symbol(Line,Decl(listFailure.ts,37,5))
+>line : Line, Symbol(line, Decl(listFailure.ts, 7, 15))
+>Line : Line, Symbol(Line, Decl(listFailure.ts, 37, 5))
 >new Line() : Line
->Line : typeof Line, Symbol(Line,Decl(listFailure.ts,37,5))
+>Line : typeof Line, Symbol(Line, Decl(listFailure.ts, 37, 5))
 
             var lineEntry = this.lines.add(line);
->lineEntry : List<Line>, Symbol(lineEntry,Decl(listFailure.ts,8,15))
+>lineEntry : List<Line>, Symbol(lineEntry, Decl(listFailure.ts, 8, 15))
 >this.lines.add(line) : List<Line>
->this.lines.add : (data: Line) => List<Line>, Symbol(List.add,Decl(listFailure.ts,27,29))
->this.lines : List<Line>, Symbol(lines,Decl(listFailure.ts,2,25))
->this : Buffer, Symbol(Buffer,Decl(listFailure.ts,0,15))
->lines : List<Line>, Symbol(lines,Decl(listFailure.ts,2,25))
->add : (data: Line) => List<Line>, Symbol(List.add,Decl(listFailure.ts,27,29))
->line : Line, Symbol(line,Decl(listFailure.ts,7,15))
+>this.lines.add : (data: Line) => List<Line>, Symbol(List.add, Decl(listFailure.ts, 27, 29))
+>this.lines : List<Line>, Symbol(lines, Decl(listFailure.ts, 2, 25))
+>this : Buffer, Symbol(Buffer, Decl(listFailure.ts, 0, 15))
+>lines : List<Line>, Symbol(lines, Decl(listFailure.ts, 2, 25))
+>add : (data: Line) => List<Line>, Symbol(List.add, Decl(listFailure.ts, 27, 29))
+>line : Line, Symbol(line, Decl(listFailure.ts, 7, 15))
 
             return lineEntry;
->lineEntry : List<Line>, Symbol(lineEntry,Decl(listFailure.ts,8,15))
+>lineEntry : List<Line>, Symbol(lineEntry, Decl(listFailure.ts, 8, 15))
         }    
     }
     
     export function ListRemoveEntry<U>(entry: List<U>): List<U> { 
->ListRemoveEntry : <U>(entry: List<U>) => List<U>, Symbol(ListRemoveEntry,Decl(listFailure.ts,12,5))
->U : U, Symbol(U,Decl(listFailure.ts,14,36))
->entry : List<U>, Symbol(entry,Decl(listFailure.ts,14,39))
->List : List<T>, Symbol(List,Decl(listFailure.ts,24,5))
->U : U, Symbol(U,Decl(listFailure.ts,14,36))
->List : List<T>, Symbol(List,Decl(listFailure.ts,24,5))
->U : U, Symbol(U,Decl(listFailure.ts,14,36))
+>ListRemoveEntry : <U>(entry: List<U>) => List<U>, Symbol(ListRemoveEntry, Decl(listFailure.ts, 12, 5))
+>U : U, Symbol(U, Decl(listFailure.ts, 14, 36))
+>entry : List<U>, Symbol(entry, Decl(listFailure.ts, 14, 39))
+>List : List<T>, Symbol(List, Decl(listFailure.ts, 24, 5))
+>U : U, Symbol(U, Decl(listFailure.ts, 14, 36))
+>List : List<T>, Symbol(List, Decl(listFailure.ts, 24, 5))
+>U : U, Symbol(U, Decl(listFailure.ts, 14, 36))
 
     	return entry;
->entry : List<U>, Symbol(entry,Decl(listFailure.ts,14,39))
+>entry : List<U>, Symbol(entry, Decl(listFailure.ts, 14, 39))
     }
 
     export function ListMakeHead<U>(): List<U> {
->ListMakeHead : <U>() => List<U>, Symbol(ListMakeHead,Decl(listFailure.ts,16,5))
->U : U, Symbol(U,Decl(listFailure.ts,18,33))
->List : List<T>, Symbol(List,Decl(listFailure.ts,24,5))
->U : U, Symbol(U,Decl(listFailure.ts,18,33))
+>ListMakeHead : <U>() => List<U>, Symbol(ListMakeHead, Decl(listFailure.ts, 16, 5))
+>U : U, Symbol(U, Decl(listFailure.ts, 18, 33))
+>List : List<T>, Symbol(List, Decl(listFailure.ts, 24, 5))
+>U : U, Symbol(U, Decl(listFailure.ts, 18, 33))
 
 		return null;
 >null : null
     }
 
     export function ListMakeEntry<U>(data: U): List<U> {
->ListMakeEntry : <U>(data: U) => List<U>, Symbol(ListMakeEntry,Decl(listFailure.ts,20,5))
->U : U, Symbol(U,Decl(listFailure.ts,22,34))
->data : U, Symbol(data,Decl(listFailure.ts,22,37))
->U : U, Symbol(U,Decl(listFailure.ts,22,34))
->List : List<T>, Symbol(List,Decl(listFailure.ts,24,5))
->U : U, Symbol(U,Decl(listFailure.ts,22,34))
+>ListMakeEntry : <U>(data: U) => List<U>, Symbol(ListMakeEntry, Decl(listFailure.ts, 20, 5))
+>U : U, Symbol(U, Decl(listFailure.ts, 22, 34))
+>data : U, Symbol(data, Decl(listFailure.ts, 22, 37))
+>U : U, Symbol(U, Decl(listFailure.ts, 22, 34))
+>List : List<T>, Symbol(List, Decl(listFailure.ts, 24, 5))
+>U : U, Symbol(U, Decl(listFailure.ts, 22, 34))
 
 		return null;
 >null : null
     }    
 
     class List<T> { 
->List : List<T>, Symbol(List,Decl(listFailure.ts,24,5))
->T : T, Symbol(T,Decl(listFailure.ts,26,15))
+>List : List<T>, Symbol(List, Decl(listFailure.ts, 24, 5))
+>T : T, Symbol(T, Decl(listFailure.ts, 26, 15))
 
         public next: List<T>; 
->next : List<T>, Symbol(next,Decl(listFailure.ts,26,19))
->List : List<T>, Symbol(List,Decl(listFailure.ts,24,5))
->T : T, Symbol(T,Decl(listFailure.ts,26,15))
+>next : List<T>, Symbol(next, Decl(listFailure.ts, 26, 19))
+>List : List<T>, Symbol(List, Decl(listFailure.ts, 24, 5))
+>T : T, Symbol(T, Decl(listFailure.ts, 26, 15))
 
         add(data: T): List<T> {
->add : (data: T) => List<T>, Symbol(add,Decl(listFailure.ts,27,29))
->data : T, Symbol(data,Decl(listFailure.ts,29,12))
->T : T, Symbol(T,Decl(listFailure.ts,26,15))
->List : List<T>, Symbol(List,Decl(listFailure.ts,24,5))
->T : T, Symbol(T,Decl(listFailure.ts,26,15))
+>add : (data: T) => List<T>, Symbol(add, Decl(listFailure.ts, 27, 29))
+>data : T, Symbol(data, Decl(listFailure.ts, 29, 12))
+>T : T, Symbol(T, Decl(listFailure.ts, 26, 15))
+>List : List<T>, Symbol(List, Decl(listFailure.ts, 24, 5))
+>T : T, Symbol(T, Decl(listFailure.ts, 26, 15))
 
             this.next = ListMakeEntry(data);
 >this.next = ListMakeEntry(data) : List<T>
->this.next : List<T>, Symbol(next,Decl(listFailure.ts,26,19))
->this : List<T>, Symbol(List,Decl(listFailure.ts,24,5))
->next : List<T>, Symbol(next,Decl(listFailure.ts,26,19))
+>this.next : List<T>, Symbol(next, Decl(listFailure.ts, 26, 19))
+>this : List<T>, Symbol(List, Decl(listFailure.ts, 24, 5))
+>next : List<T>, Symbol(next, Decl(listFailure.ts, 26, 19))
 >ListMakeEntry(data) : List<T>
->ListMakeEntry : <U>(data: U) => List<U>, Symbol(ListMakeEntry,Decl(listFailure.ts,20,5))
->data : T, Symbol(data,Decl(listFailure.ts,29,12))
+>ListMakeEntry : <U>(data: U) => List<U>, Symbol(ListMakeEntry, Decl(listFailure.ts, 20, 5))
+>data : T, Symbol(data, Decl(listFailure.ts, 29, 12))
 
             return this.next;
->this.next : List<T>, Symbol(next,Decl(listFailure.ts,26,19))
->this : List<T>, Symbol(List,Decl(listFailure.ts,24,5))
->next : List<T>, Symbol(next,Decl(listFailure.ts,26,19))
+>this.next : List<T>, Symbol(next, Decl(listFailure.ts, 26, 19))
+>this : List<T>, Symbol(List, Decl(listFailure.ts, 24, 5))
+>next : List<T>, Symbol(next, Decl(listFailure.ts, 26, 19))
         }
 
         popEntry(head: List<T>): List<T> {
->popEntry : (head: List<T>) => List<T>, Symbol(popEntry,Decl(listFailure.ts,32,9))
->head : List<T>, Symbol(head,Decl(listFailure.ts,34,17))
->List : List<T>, Symbol(List,Decl(listFailure.ts,24,5))
->T : T, Symbol(T,Decl(listFailure.ts,26,15))
->List : List<T>, Symbol(List,Decl(listFailure.ts,24,5))
->T : T, Symbol(T,Decl(listFailure.ts,26,15))
+>popEntry : (head: List<T>) => List<T>, Symbol(popEntry, Decl(listFailure.ts, 32, 9))
+>head : List<T>, Symbol(head, Decl(listFailure.ts, 34, 17))
+>List : List<T>, Symbol(List, Decl(listFailure.ts, 24, 5))
+>T : T, Symbol(T, Decl(listFailure.ts, 26, 15))
+>List : List<T>, Symbol(List, Decl(listFailure.ts, 24, 5))
+>T : T, Symbol(T, Decl(listFailure.ts, 26, 15))
 
             return (ListRemoveEntry(this.next));
 >(ListRemoveEntry(this.next)) : List<T>
 >ListRemoveEntry(this.next) : List<T>
->ListRemoveEntry : <U>(entry: List<U>) => List<U>, Symbol(ListRemoveEntry,Decl(listFailure.ts,12,5))
->this.next : List<T>, Symbol(next,Decl(listFailure.ts,26,19))
->this : List<T>, Symbol(List,Decl(listFailure.ts,24,5))
->next : List<T>, Symbol(next,Decl(listFailure.ts,26,19))
+>ListRemoveEntry : <U>(entry: List<U>) => List<U>, Symbol(ListRemoveEntry, Decl(listFailure.ts, 12, 5))
+>this.next : List<T>, Symbol(next, Decl(listFailure.ts, 26, 19))
+>this : List<T>, Symbol(List, Decl(listFailure.ts, 24, 5))
+>next : List<T>, Symbol(next, Decl(listFailure.ts, 26, 19))
         }      
     }
 
 	export class Line {}
->Line : Line, Symbol(Line,Decl(listFailure.ts,37,5))
+>Line : Line, Symbol(Line, Decl(listFailure.ts, 37, 5))
 }

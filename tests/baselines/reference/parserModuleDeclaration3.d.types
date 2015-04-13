@@ -1,4 +1,4 @@
 === tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration3.d.ts ===
 declare module M {
->M : any, Symbol(M,Decl(parserModuleDeclaration3.d.ts,0,0))
+>M : any, Symbol(M, Decl(parserModuleDeclaration3.d.ts, 0, 0))
 }

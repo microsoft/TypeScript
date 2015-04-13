@@ -1,11 +1,11 @@
 === tests/cases/compiler/thisExpressionInIndexExpression.ts ===
 function f() {
->f : () => (r: any) => any, Symbol(f,Decl(thisExpressionInIndexExpression.ts,0,0))
+>f : () => (r: any) => any, Symbol(f, Decl(thisExpressionInIndexExpression.ts, 0, 0))
 
     return r => r[this];
 >r => r[this] : (r: any) => any
->r : any, Symbol(r,Decl(thisExpressionInIndexExpression.ts,1,10))
+>r : any, Symbol(r, Decl(thisExpressionInIndexExpression.ts, 1, 10))
 >r[this] : any
->r : any, Symbol(r,Decl(thisExpressionInIndexExpression.ts,1,10))
+>r : any, Symbol(r, Decl(thisExpressionInIndexExpression.ts, 1, 10))
 >this : any
 }

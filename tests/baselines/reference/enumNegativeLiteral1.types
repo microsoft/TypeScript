@@ -1,12 +1,12 @@
 === tests/cases/compiler/enumNegativeLiteral1.ts ===
 enum E {
->E : E, Symbol(E,Decl(enumNegativeLiteral1.ts,0,0))
+>E : E, Symbol(E, Decl(enumNegativeLiteral1.ts, 0, 0))
 
     a = -5, b, c
->a : E, Symbol(E.a,Decl(enumNegativeLiteral1.ts,0,8))
+>a : E, Symbol(E.a, Decl(enumNegativeLiteral1.ts, 0, 8))
 >-5 : number
 >5 : number
->b : E, Symbol(E.b,Decl(enumNegativeLiteral1.ts,1,11))
->c : E, Symbol(E.c,Decl(enumNegativeLiteral1.ts,1,14))
+>b : E, Symbol(E.b, Decl(enumNegativeLiteral1.ts, 1, 11))
+>c : E, Symbol(E.c, Decl(enumNegativeLiteral1.ts, 1, 14))
 }
 

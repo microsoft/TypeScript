@@ -1,62 +1,62 @@
 === tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts ===
 module A.B {
->A : typeof A, Symbol(A,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,0,0),Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,2,1))
->B : typeof B, Symbol(B,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,0,9))
+>A : typeof A, Symbol(A, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 0, 0), Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 2, 1))
+>B : typeof B, Symbol(B, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 0, 9))
 
     export var x: number;
->x : number, Symbol(x,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,1,14))
+>x : number, Symbol(x, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 1, 14))
 }
 
 module A{ 
->A : typeof A, Symbol(A,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,0,0),Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,2,1))
+>A : typeof A, Symbol(A, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 0, 0), Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 2, 1))
 
     module B {
->B : typeof B, Symbol(B,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,4,9))
+>B : typeof B, Symbol(B, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 4, 9))
 
         export var x: string;
->x : string, Symbol(x,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,6,18))
+>x : string, Symbol(x, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 6, 18))
     }
 }
 
 // ensure the right var decl is exported
 var x: number;
->x : number, Symbol(x,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,11,3),Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,12,3))
+>x : number, Symbol(x, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 11, 3), Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 12, 3))
 
 var x = A.B.x;
->x : number, Symbol(x,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,11,3),Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,12,3))
->A.B.x : number, Symbol(A.B.x,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,1,14))
->A.B : typeof A.B, Symbol(A.B,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,0,9))
->A : typeof A, Symbol(A,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,0,0),Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,2,1))
->B : typeof A.B, Symbol(A.B,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,0,9))
->x : number, Symbol(A.B.x,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,1,14))
+>x : number, Symbol(x, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 11, 3), Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 12, 3))
+>A.B.x : number, Symbol(A.B.x, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 1, 14))
+>A.B : typeof A.B, Symbol(A.B, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 0, 9))
+>A : typeof A, Symbol(A, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 0, 0), Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 2, 1))
+>B : typeof A.B, Symbol(A.B, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 0, 9))
+>x : number, Symbol(A.B.x, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 1, 14))
 
 module X.Y.Z {
->X : typeof X, Symbol(X,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,12,14),Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,18,1))
->Y : typeof Y, Symbol(Y,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,14,9),Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,20,10))
->Z : typeof Z, Symbol(Z,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,14,11))
+>X : typeof X, Symbol(X, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 12, 14), Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 18, 1))
+>Y : typeof Y, Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 14, 9), Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 20, 10))
+>Z : typeof Z, Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 14, 11))
 
     export class Line {
->Line : Line, Symbol(Line,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,14,14))
+>Line : Line, Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 14, 14))
 
         length: number;
->length : number, Symbol(length,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,15,23))
+>length : number, Symbol(length, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 15, 23))
     }
 }
 
 module X {
->X : typeof X, Symbol(X,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,12,14),Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,18,1))
+>X : typeof X, Symbol(X, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 12, 14), Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 18, 1))
 
     export module Y {
->Y : typeof Y, Symbol(Y,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,14,9),Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,20,10))
+>Y : typeof Y, Symbol(Y, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 14, 9), Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 20, 10))
 
         module Z {
->Z : typeof Z, Symbol(Z,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,21,21))
+>Z : typeof Z, Symbol(Z, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 21, 21))
 
             export class Line {
->Line : Line, Symbol(Line,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,22,18))
+>Line : Line, Symbol(Line, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 22, 18))
 
                 name: string;
->name : string, Symbol(name,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,23,31))
+>name : string, Symbol(name, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 23, 31))
             }
         }
     }
@@ -64,13 +64,13 @@ module X {
 
 // make sure merging works as expected
 var l: { length: number };
->l : { length: number; }, Symbol(l,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,31,3),Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,32,3))
->length : number, Symbol(length,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,31,8))
+>l : { length: number; }, Symbol(l, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 31, 3), Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 32, 3))
+>length : number, Symbol(length, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 31, 8))
 
 var l: X.Y.Z.Line;
->l : { length: number; }, Symbol(l,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,31,3),Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,32,3))
->X : any, Symbol(X,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,12,14),Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,18,1))
->Y : any, Symbol(X.Y,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,14,9),Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,20,10))
->Z : any, Symbol(X.Y.Z,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,14,11))
->Line : X.Y.Z.Line, Symbol(X.Y.Z.Line,Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts,14,14))
+>l : { length: number; }, Symbol(l, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 31, 3), Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 32, 3))
+>X : any, Symbol(X, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 12, 14), Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 18, 1))
+>Y : any, Symbol(X.Y, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 14, 9), Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 20, 10))
+>Z : any, Symbol(X.Y.Z, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 14, 11))
+>Line : X.Y.Z.Line, Symbol(X.Y.Z.Line, Decl(TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.ts, 14, 14))
 

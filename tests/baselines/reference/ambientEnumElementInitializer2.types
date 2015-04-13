@@ -1,9 +1,9 @@
 === tests/cases/compiler/ambientEnumElementInitializer2.ts ===
 declare enum E {
->E : E, Symbol(E,Decl(ambientEnumElementInitializer2.ts,0,0))
+>E : E, Symbol(E, Decl(ambientEnumElementInitializer2.ts, 0, 0))
 
  e = -3 // Negative
->e : E, Symbol(E.e,Decl(ambientEnumElementInitializer2.ts,0,16))
+>e : E, Symbol(E.e, Decl(ambientEnumElementInitializer2.ts, 0, 16))
 >-3 : number
 >3 : number
 }

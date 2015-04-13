@@ -1,8 +1,8 @@
 === tests/cases/compiler/contextualTyping1.ts ===
 var foo: {id:number;} = {id:4};
->foo : { id: number; }, Symbol(foo,Decl(contextualTyping1.ts,0,3))
->id : number, Symbol(id,Decl(contextualTyping1.ts,0,10))
+>foo : { id: number; }, Symbol(foo, Decl(contextualTyping1.ts, 0, 3))
+>id : number, Symbol(id, Decl(contextualTyping1.ts, 0, 10))
 >{id:4} : { id: number; }
->id : number, Symbol(id,Decl(contextualTyping1.ts,0,25))
+>id : number, Symbol(id, Decl(contextualTyping1.ts, 0, 25))
 >4 : number
 

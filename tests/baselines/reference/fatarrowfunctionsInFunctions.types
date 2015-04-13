@@ -1,36 +1,36 @@
 === tests/cases/compiler/fatarrowfunctionsInFunctions.ts ===
 declare function setTimeout(expression: any, msec?: number, language?: any): number;
->setTimeout : (expression: any, msec?: number, language?: any) => number, Symbol(setTimeout,Decl(fatarrowfunctionsInFunctions.ts,0,0))
->expression : any, Symbol(expression,Decl(fatarrowfunctionsInFunctions.ts,0,28))
->msec : number, Symbol(msec,Decl(fatarrowfunctionsInFunctions.ts,0,44))
->language : any, Symbol(language,Decl(fatarrowfunctionsInFunctions.ts,0,59))
+>setTimeout : (expression: any, msec?: number, language?: any) => number, Symbol(setTimeout, Decl(fatarrowfunctionsInFunctions.ts, 0, 0))
+>expression : any, Symbol(expression, Decl(fatarrowfunctionsInFunctions.ts, 0, 28))
+>msec : number, Symbol(msec, Decl(fatarrowfunctionsInFunctions.ts, 0, 44))
+>language : any, Symbol(language, Decl(fatarrowfunctionsInFunctions.ts, 0, 59))
 
 var messenger = {
->messenger : { message: string; start: () => void; }, Symbol(messenger,Decl(fatarrowfunctionsInFunctions.ts,2,3))
+>messenger : { message: string; start: () => void; }, Symbol(messenger, Decl(fatarrowfunctionsInFunctions.ts, 2, 3))
 >{    message: "Hello World",    start: function() {        var _self = this;        setTimeout(function() {            _self.message.toString();         }, 3000);     }} : { message: string; start: () => void; }
 
     message: "Hello World",
->message : string, Symbol(message,Decl(fatarrowfunctionsInFunctions.ts,2,17))
+>message : string, Symbol(message, Decl(fatarrowfunctionsInFunctions.ts, 2, 17))
 >"Hello World" : string
 
     start: function() {
->start : () => void, Symbol(start,Decl(fatarrowfunctionsInFunctions.ts,3,27))
+>start : () => void, Symbol(start, Decl(fatarrowfunctionsInFunctions.ts, 3, 27))
 >function() {        var _self = this;        setTimeout(function() {            _self.message.toString();         }, 3000);     } : () => void
 
         var _self = this;
->_self : any, Symbol(_self,Decl(fatarrowfunctionsInFunctions.ts,5,11))
+>_self : any, Symbol(_self, Decl(fatarrowfunctionsInFunctions.ts, 5, 11))
 >this : any
 
         setTimeout(function() {
 >setTimeout(function() {            _self.message.toString();         }, 3000) : number
->setTimeout : (expression: any, msec?: number, language?: any) => number, Symbol(setTimeout,Decl(fatarrowfunctionsInFunctions.ts,0,0))
+>setTimeout : (expression: any, msec?: number, language?: any) => number, Symbol(setTimeout, Decl(fatarrowfunctionsInFunctions.ts, 0, 0))
 >function() {            _self.message.toString();         } : () => void
 
             _self.message.toString(); 
 >_self.message.toString() : any
 >_self.message.toString : any
 >_self.message : any
->_self : any, Symbol(_self,Decl(fatarrowfunctionsInFunctions.ts,5,11))
+>_self : any, Symbol(_self, Decl(fatarrowfunctionsInFunctions.ts, 5, 11))
 >message : any
 >toString : any
 
@@ -40,7 +40,7 @@ var messenger = {
 }; 
 messenger.start(); 
 >messenger.start() : void
->messenger.start : () => void, Symbol(start,Decl(fatarrowfunctionsInFunctions.ts,3,27))
->messenger : { message: string; start: () => void; }, Symbol(messenger,Decl(fatarrowfunctionsInFunctions.ts,2,3))
->start : () => void, Symbol(start,Decl(fatarrowfunctionsInFunctions.ts,3,27))
+>messenger.start : () => void, Symbol(start, Decl(fatarrowfunctionsInFunctions.ts, 3, 27))
+>messenger : { message: string; start: () => void; }, Symbol(messenger, Decl(fatarrowfunctionsInFunctions.ts, 2, 3))
+>start : () => void, Symbol(start, Decl(fatarrowfunctionsInFunctions.ts, 3, 27))
 

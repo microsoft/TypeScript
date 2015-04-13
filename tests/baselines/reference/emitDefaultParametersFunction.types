@@ -1,25 +1,25 @@
 === tests/cases/conformance/es6/defaultParameters/emitDefaultParametersFunction.ts ===
 function foo(x: string, y = 10) { }
->foo : (x: string, y?: number) => void, Symbol(foo,Decl(emitDefaultParametersFunction.ts,0,0))
->x : string, Symbol(x,Decl(emitDefaultParametersFunction.ts,0,13))
->y : number, Symbol(y,Decl(emitDefaultParametersFunction.ts,0,23))
+>foo : (x: string, y?: number) => void, Symbol(foo, Decl(emitDefaultParametersFunction.ts, 0, 0))
+>x : string, Symbol(x, Decl(emitDefaultParametersFunction.ts, 0, 13))
+>y : number, Symbol(y, Decl(emitDefaultParametersFunction.ts, 0, 23))
 >10 : number
 
 function baz(x: string, y = 5, ...rest) { }
->baz : (x: string, y?: number, ...rest: any[]) => void, Symbol(baz,Decl(emitDefaultParametersFunction.ts,0,35))
->x : string, Symbol(x,Decl(emitDefaultParametersFunction.ts,1,13))
->y : number, Symbol(y,Decl(emitDefaultParametersFunction.ts,1,23))
+>baz : (x: string, y?: number, ...rest: any[]) => void, Symbol(baz, Decl(emitDefaultParametersFunction.ts, 0, 35))
+>x : string, Symbol(x, Decl(emitDefaultParametersFunction.ts, 1, 13))
+>y : number, Symbol(y, Decl(emitDefaultParametersFunction.ts, 1, 23))
 >5 : number
->rest : any[], Symbol(rest,Decl(emitDefaultParametersFunction.ts,1,30))
+>rest : any[], Symbol(rest, Decl(emitDefaultParametersFunction.ts, 1, 30))
 
 function bar(y = 10) { }
->bar : (y?: number) => void, Symbol(bar,Decl(emitDefaultParametersFunction.ts,1,43))
->y : number, Symbol(y,Decl(emitDefaultParametersFunction.ts,2,13))
+>bar : (y?: number) => void, Symbol(bar, Decl(emitDefaultParametersFunction.ts, 1, 43))
+>y : number, Symbol(y, Decl(emitDefaultParametersFunction.ts, 2, 13))
 >10 : number
 
 function bar1(y = 10, ...rest) { }
->bar1 : (y?: number, ...rest: any[]) => void, Symbol(bar1,Decl(emitDefaultParametersFunction.ts,2,24))
->y : number, Symbol(y,Decl(emitDefaultParametersFunction.ts,3,14))
+>bar1 : (y?: number, ...rest: any[]) => void, Symbol(bar1, Decl(emitDefaultParametersFunction.ts, 2, 24))
+>y : number, Symbol(y, Decl(emitDefaultParametersFunction.ts, 3, 14))
 >10 : number
->rest : any[], Symbol(rest,Decl(emitDefaultParametersFunction.ts,3,21))
+>rest : any[], Symbol(rest, Decl(emitDefaultParametersFunction.ts, 3, 21))
 

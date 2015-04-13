@@ -1,25 +1,25 @@
 === tests/cases/compiler/b.ts ===
 ///<reference path="a.ts"/>
 declare enum E {
->E : E, Symbol(E,Decl(b.ts,0,0))
+>E : E, Symbol(E, Decl(b.ts, 0, 0))
 }
 === tests/cases/compiler/a.ts ===
 /*! Keep this pinned comment */
 declare enum C {
->C : C, Symbol(C,Decl(a.ts,0,0))
+>C : C, Symbol(C, Decl(a.ts, 0, 0))
 
     a,
->a : C, Symbol(C.a,Decl(a.ts,1,16))
+>a : C, Symbol(C.a, Decl(a.ts, 1, 16))
 
     b,
->b : C, Symbol(C.b,Decl(a.ts,2,6))
+>b : C, Symbol(C.b, Decl(a.ts, 2, 6))
 
     c
->c : C, Symbol(C.c,Decl(a.ts,3,6))
+>c : C, Symbol(C.c, Decl(a.ts, 3, 6))
 }
 
 // Don't keep this comment.
 declare enum D {
->D : D, Symbol(D,Decl(a.ts,5,1))
+>D : D, Symbol(D, Decl(a.ts, 5, 1))
 }
 

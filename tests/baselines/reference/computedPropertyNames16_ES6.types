@@ -1,52 +1,52 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNames16_ES6.ts ===
 var s: string;
->s : string, Symbol(s,Decl(computedPropertyNames16_ES6.ts,0,3))
+>s : string, Symbol(s, Decl(computedPropertyNames16_ES6.ts, 0, 3))
 
 var n: number;
->n : number, Symbol(n,Decl(computedPropertyNames16_ES6.ts,1,3))
+>n : number, Symbol(n, Decl(computedPropertyNames16_ES6.ts, 1, 3))
 
 var a: any;
->a : any, Symbol(a,Decl(computedPropertyNames16_ES6.ts,2,3))
+>a : any, Symbol(a, Decl(computedPropertyNames16_ES6.ts, 2, 3))
 
 class C {
->C : C, Symbol(C,Decl(computedPropertyNames16_ES6.ts,2,11))
+>C : C, Symbol(C, Decl(computedPropertyNames16_ES6.ts, 2, 11))
 
     get [s]() { return 0;}
->s : string, Symbol(s,Decl(computedPropertyNames16_ES6.ts,0,3))
+>s : string, Symbol(s, Decl(computedPropertyNames16_ES6.ts, 0, 3))
 >0 : number
 
     set [n](v) { }
->n : number, Symbol(n,Decl(computedPropertyNames16_ES6.ts,1,3))
->v : any, Symbol(v,Decl(computedPropertyNames16_ES6.ts,5,12))
+>n : number, Symbol(n, Decl(computedPropertyNames16_ES6.ts, 1, 3))
+>v : any, Symbol(v, Decl(computedPropertyNames16_ES6.ts, 5, 12))
 
     static get [s + s]() { return 0; }
 >s + s : string
->s : string, Symbol(s,Decl(computedPropertyNames16_ES6.ts,0,3))
->s : string, Symbol(s,Decl(computedPropertyNames16_ES6.ts,0,3))
+>s : string, Symbol(s, Decl(computedPropertyNames16_ES6.ts, 0, 3))
+>s : string, Symbol(s, Decl(computedPropertyNames16_ES6.ts, 0, 3))
 >0 : number
 
     set [s + n](v) { }
 >s + n : string
->s : string, Symbol(s,Decl(computedPropertyNames16_ES6.ts,0,3))
->n : number, Symbol(n,Decl(computedPropertyNames16_ES6.ts,1,3))
->v : any, Symbol(v,Decl(computedPropertyNames16_ES6.ts,7,16))
+>s : string, Symbol(s, Decl(computedPropertyNames16_ES6.ts, 0, 3))
+>n : number, Symbol(n, Decl(computedPropertyNames16_ES6.ts, 1, 3))
+>v : any, Symbol(v, Decl(computedPropertyNames16_ES6.ts, 7, 16))
 
     get [+s]() { return 0; }
 >+s : number
->s : string, Symbol(s,Decl(computedPropertyNames16_ES6.ts,0,3))
+>s : string, Symbol(s, Decl(computedPropertyNames16_ES6.ts, 0, 3))
 >0 : number
 
     static set [""](v) { }
 >"" : string
->v : any, Symbol(v,Decl(computedPropertyNames16_ES6.ts,9,20))
+>v : any, Symbol(v, Decl(computedPropertyNames16_ES6.ts, 9, 20))
 
     get [0]() { return 0; }
 >0 : number
 >0 : number
 
     set [a](v) { }
->a : any, Symbol(a,Decl(computedPropertyNames16_ES6.ts,2,3))
->v : any, Symbol(v,Decl(computedPropertyNames16_ES6.ts,11,12))
+>a : any, Symbol(a, Decl(computedPropertyNames16_ES6.ts, 2, 3))
+>v : any, Symbol(v, Decl(computedPropertyNames16_ES6.ts, 11, 12))
 
     static get [<any>true]() { return 0; }
 ><any>true : any
@@ -55,10 +55,10 @@ class C {
 
     set [`hello bye`](v) { }
 >`hello bye` : string
->v : any, Symbol(v,Decl(computedPropertyNames16_ES6.ts,13,22))
+>v : any, Symbol(v, Decl(computedPropertyNames16_ES6.ts, 13, 22))
 
     get [`hello ${a} bye`]() { return 0; }
 >`hello ${a} bye` : string
->a : any, Symbol(a,Decl(computedPropertyNames16_ES6.ts,2,3))
+>a : any, Symbol(a, Decl(computedPropertyNames16_ES6.ts, 2, 3))
 >0 : number
 }

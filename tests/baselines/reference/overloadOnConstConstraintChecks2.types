@@ -1,37 +1,37 @@
 === tests/cases/compiler/overloadOnConstConstraintChecks2.ts ===
 class A {} 
->A : A, Symbol(A,Decl(overloadOnConstConstraintChecks2.ts,0,0))
+>A : A, Symbol(A, Decl(overloadOnConstConstraintChecks2.ts, 0, 0))
 
 class B extends A {}
->B : B, Symbol(B,Decl(overloadOnConstConstraintChecks2.ts,0,10))
->A : A, Symbol(A,Decl(overloadOnConstConstraintChecks2.ts,0,0))
+>B : B, Symbol(B, Decl(overloadOnConstConstraintChecks2.ts, 0, 10))
+>A : A, Symbol(A, Decl(overloadOnConstConstraintChecks2.ts, 0, 0))
 
 class C extends A {
->C : C, Symbol(C,Decl(overloadOnConstConstraintChecks2.ts,1,20))
->A : A, Symbol(A,Decl(overloadOnConstConstraintChecks2.ts,0,0))
+>C : C, Symbol(C, Decl(overloadOnConstConstraintChecks2.ts, 1, 20))
+>A : A, Symbol(A, Decl(overloadOnConstConstraintChecks2.ts, 0, 0))
 
     public foo() { }
->foo : () => void, Symbol(foo,Decl(overloadOnConstConstraintChecks2.ts,2,19))
+>foo : () => void, Symbol(foo, Decl(overloadOnConstConstraintChecks2.ts, 2, 19))
 }
 function foo(name: 'hi'): B;
->foo : { (name: 'hi'): B; (name: 'bye'): C; (name: string): A; }, Symbol(foo,Decl(overloadOnConstConstraintChecks2.ts,4,1),Decl(overloadOnConstConstraintChecks2.ts,5,28),Decl(overloadOnConstConstraintChecks2.ts,6,29),Decl(overloadOnConstConstraintChecks2.ts,7,30))
->name : 'hi', Symbol(name,Decl(overloadOnConstConstraintChecks2.ts,5,13))
->B : B, Symbol(B,Decl(overloadOnConstConstraintChecks2.ts,0,10))
+>foo : { (name: 'hi'): B; (name: 'bye'): C; (name: string): A; }, Symbol(foo, Decl(overloadOnConstConstraintChecks2.ts, 4, 1), Decl(overloadOnConstConstraintChecks2.ts, 5, 28), Decl(overloadOnConstConstraintChecks2.ts, 6, 29), Decl(overloadOnConstConstraintChecks2.ts, 7, 30))
+>name : 'hi', Symbol(name, Decl(overloadOnConstConstraintChecks2.ts, 5, 13))
+>B : B, Symbol(B, Decl(overloadOnConstConstraintChecks2.ts, 0, 10))
 
 function foo(name: 'bye'): C;
->foo : { (name: 'hi'): B; (name: 'bye'): C; (name: string): A; }, Symbol(foo,Decl(overloadOnConstConstraintChecks2.ts,4,1),Decl(overloadOnConstConstraintChecks2.ts,5,28),Decl(overloadOnConstConstraintChecks2.ts,6,29),Decl(overloadOnConstConstraintChecks2.ts,7,30))
->name : 'bye', Symbol(name,Decl(overloadOnConstConstraintChecks2.ts,6,13))
->C : C, Symbol(C,Decl(overloadOnConstConstraintChecks2.ts,1,20))
+>foo : { (name: 'hi'): B; (name: 'bye'): C; (name: string): A; }, Symbol(foo, Decl(overloadOnConstConstraintChecks2.ts, 4, 1), Decl(overloadOnConstConstraintChecks2.ts, 5, 28), Decl(overloadOnConstConstraintChecks2.ts, 6, 29), Decl(overloadOnConstConstraintChecks2.ts, 7, 30))
+>name : 'bye', Symbol(name, Decl(overloadOnConstConstraintChecks2.ts, 6, 13))
+>C : C, Symbol(C, Decl(overloadOnConstConstraintChecks2.ts, 1, 20))
 
 function foo(name: string): A;
->foo : { (name: 'hi'): B; (name: 'bye'): C; (name: string): A; }, Symbol(foo,Decl(overloadOnConstConstraintChecks2.ts,4,1),Decl(overloadOnConstConstraintChecks2.ts,5,28),Decl(overloadOnConstConstraintChecks2.ts,6,29),Decl(overloadOnConstConstraintChecks2.ts,7,30))
->name : string, Symbol(name,Decl(overloadOnConstConstraintChecks2.ts,7,13))
->A : A, Symbol(A,Decl(overloadOnConstConstraintChecks2.ts,0,0))
+>foo : { (name: 'hi'): B; (name: 'bye'): C; (name: string): A; }, Symbol(foo, Decl(overloadOnConstConstraintChecks2.ts, 4, 1), Decl(overloadOnConstConstraintChecks2.ts, 5, 28), Decl(overloadOnConstConstraintChecks2.ts, 6, 29), Decl(overloadOnConstConstraintChecks2.ts, 7, 30))
+>name : string, Symbol(name, Decl(overloadOnConstConstraintChecks2.ts, 7, 13))
+>A : A, Symbol(A, Decl(overloadOnConstConstraintChecks2.ts, 0, 0))
 
 function foo(name: any): A {
->foo : { (name: 'hi'): B; (name: 'bye'): C; (name: string): A; }, Symbol(foo,Decl(overloadOnConstConstraintChecks2.ts,4,1),Decl(overloadOnConstConstraintChecks2.ts,5,28),Decl(overloadOnConstConstraintChecks2.ts,6,29),Decl(overloadOnConstConstraintChecks2.ts,7,30))
->name : any, Symbol(name,Decl(overloadOnConstConstraintChecks2.ts,8,13))
->A : A, Symbol(A,Decl(overloadOnConstConstraintChecks2.ts,0,0))
+>foo : { (name: 'hi'): B; (name: 'bye'): C; (name: string): A; }, Symbol(foo, Decl(overloadOnConstConstraintChecks2.ts, 4, 1), Decl(overloadOnConstConstraintChecks2.ts, 5, 28), Decl(overloadOnConstConstraintChecks2.ts, 6, 29), Decl(overloadOnConstConstraintChecks2.ts, 7, 30))
+>name : any, Symbol(name, Decl(overloadOnConstConstraintChecks2.ts, 8, 13))
+>A : A, Symbol(A, Decl(overloadOnConstConstraintChecks2.ts, 0, 0))
 
     return null;
 >null : null

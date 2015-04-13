@@ -2,198 +2,198 @@
 // ++ operator on any type
 
 var ANY: any;
->ANY : any, Symbol(ANY,Decl(incrementOperatorWithAnyOtherType.ts,2,3))
+>ANY : any, Symbol(ANY, Decl(incrementOperatorWithAnyOtherType.ts, 2, 3))
 
 var ANY1;
->ANY1 : any, Symbol(ANY1,Decl(incrementOperatorWithAnyOtherType.ts,3,3))
+>ANY1 : any, Symbol(ANY1, Decl(incrementOperatorWithAnyOtherType.ts, 3, 3))
 
 var ANY2: any[] = ["", ""];
->ANY2 : any[], Symbol(ANY2,Decl(incrementOperatorWithAnyOtherType.ts,4,3))
+>ANY2 : any[], Symbol(ANY2, Decl(incrementOperatorWithAnyOtherType.ts, 4, 3))
 >["", ""] : string[]
 >"" : string
 >"" : string
 
 var obj = {x:1,y:null};
->obj : { x: number; y: any; }, Symbol(obj,Decl(incrementOperatorWithAnyOtherType.ts,5,3))
+>obj : { x: number; y: any; }, Symbol(obj, Decl(incrementOperatorWithAnyOtherType.ts, 5, 3))
 >{x:1,y:null} : { x: number; y: null; }
->x : number, Symbol(x,Decl(incrementOperatorWithAnyOtherType.ts,5,11))
+>x : number, Symbol(x, Decl(incrementOperatorWithAnyOtherType.ts, 5, 11))
 >1 : number
->y : null, Symbol(y,Decl(incrementOperatorWithAnyOtherType.ts,5,15))
+>y : null, Symbol(y, Decl(incrementOperatorWithAnyOtherType.ts, 5, 15))
 >null : null
 
 class A {
->A : A, Symbol(A,Decl(incrementOperatorWithAnyOtherType.ts,5,23))
+>A : A, Symbol(A, Decl(incrementOperatorWithAnyOtherType.ts, 5, 23))
 
     public a: any;
->a : any, Symbol(a,Decl(incrementOperatorWithAnyOtherType.ts,6,9))
+>a : any, Symbol(a, Decl(incrementOperatorWithAnyOtherType.ts, 6, 9))
 }
 module M {
->M : typeof M, Symbol(M,Decl(incrementOperatorWithAnyOtherType.ts,8,1))
+>M : typeof M, Symbol(M, Decl(incrementOperatorWithAnyOtherType.ts, 8, 1))
 
     export var n: any;
->n : any, Symbol(n,Decl(incrementOperatorWithAnyOtherType.ts,10,14))
+>n : any, Symbol(n, Decl(incrementOperatorWithAnyOtherType.ts, 10, 14))
 }
 var objA = new A();
->objA : A, Symbol(objA,Decl(incrementOperatorWithAnyOtherType.ts,12,3))
+>objA : A, Symbol(objA, Decl(incrementOperatorWithAnyOtherType.ts, 12, 3))
 >new A() : A
->A : typeof A, Symbol(A,Decl(incrementOperatorWithAnyOtherType.ts,5,23))
+>A : typeof A, Symbol(A, Decl(incrementOperatorWithAnyOtherType.ts, 5, 23))
 
 // any type var
 var ResultIsNumber1 = ++ANY;
->ResultIsNumber1 : number, Symbol(ResultIsNumber1,Decl(incrementOperatorWithAnyOtherType.ts,15,3))
+>ResultIsNumber1 : number, Symbol(ResultIsNumber1, Decl(incrementOperatorWithAnyOtherType.ts, 15, 3))
 >++ANY : number
->ANY : any, Symbol(ANY,Decl(incrementOperatorWithAnyOtherType.ts,2,3))
+>ANY : any, Symbol(ANY, Decl(incrementOperatorWithAnyOtherType.ts, 2, 3))
 
 var ResultIsNumber2 = ++ANY1;
->ResultIsNumber2 : number, Symbol(ResultIsNumber2,Decl(incrementOperatorWithAnyOtherType.ts,16,3))
+>ResultIsNumber2 : number, Symbol(ResultIsNumber2, Decl(incrementOperatorWithAnyOtherType.ts, 16, 3))
 >++ANY1 : number
->ANY1 : any, Symbol(ANY1,Decl(incrementOperatorWithAnyOtherType.ts,3,3))
+>ANY1 : any, Symbol(ANY1, Decl(incrementOperatorWithAnyOtherType.ts, 3, 3))
 
 var ResultIsNumber3 = ANY1++;
->ResultIsNumber3 : number, Symbol(ResultIsNumber3,Decl(incrementOperatorWithAnyOtherType.ts,18,3))
+>ResultIsNumber3 : number, Symbol(ResultIsNumber3, Decl(incrementOperatorWithAnyOtherType.ts, 18, 3))
 >ANY1++ : number
->ANY1 : any, Symbol(ANY1,Decl(incrementOperatorWithAnyOtherType.ts,3,3))
+>ANY1 : any, Symbol(ANY1, Decl(incrementOperatorWithAnyOtherType.ts, 3, 3))
 
 var ResultIsNumber4 = ANY1++;
->ResultIsNumber4 : number, Symbol(ResultIsNumber4,Decl(incrementOperatorWithAnyOtherType.ts,19,3))
+>ResultIsNumber4 : number, Symbol(ResultIsNumber4, Decl(incrementOperatorWithAnyOtherType.ts, 19, 3))
 >ANY1++ : number
->ANY1 : any, Symbol(ANY1,Decl(incrementOperatorWithAnyOtherType.ts,3,3))
+>ANY1 : any, Symbol(ANY1, Decl(incrementOperatorWithAnyOtherType.ts, 3, 3))
 
 // expressions
 var ResultIsNumber5 = ++ANY2[0];
->ResultIsNumber5 : number, Symbol(ResultIsNumber5,Decl(incrementOperatorWithAnyOtherType.ts,22,3))
+>ResultIsNumber5 : number, Symbol(ResultIsNumber5, Decl(incrementOperatorWithAnyOtherType.ts, 22, 3))
 >++ANY2[0] : number
 >ANY2[0] : any
->ANY2 : any[], Symbol(ANY2,Decl(incrementOperatorWithAnyOtherType.ts,4,3))
+>ANY2 : any[], Symbol(ANY2, Decl(incrementOperatorWithAnyOtherType.ts, 4, 3))
 >0 : number
 
 var ResultIsNumber6 = ++obj.x;
->ResultIsNumber6 : number, Symbol(ResultIsNumber6,Decl(incrementOperatorWithAnyOtherType.ts,23,3))
+>ResultIsNumber6 : number, Symbol(ResultIsNumber6, Decl(incrementOperatorWithAnyOtherType.ts, 23, 3))
 >++obj.x : number
->obj.x : number, Symbol(x,Decl(incrementOperatorWithAnyOtherType.ts,5,11))
->obj : { x: number; y: any; }, Symbol(obj,Decl(incrementOperatorWithAnyOtherType.ts,5,3))
->x : number, Symbol(x,Decl(incrementOperatorWithAnyOtherType.ts,5,11))
+>obj.x : number, Symbol(x, Decl(incrementOperatorWithAnyOtherType.ts, 5, 11))
+>obj : { x: number; y: any; }, Symbol(obj, Decl(incrementOperatorWithAnyOtherType.ts, 5, 3))
+>x : number, Symbol(x, Decl(incrementOperatorWithAnyOtherType.ts, 5, 11))
 
 var ResultIsNumber7 = ++obj.y;
->ResultIsNumber7 : number, Symbol(ResultIsNumber7,Decl(incrementOperatorWithAnyOtherType.ts,24,3))
+>ResultIsNumber7 : number, Symbol(ResultIsNumber7, Decl(incrementOperatorWithAnyOtherType.ts, 24, 3))
 >++obj.y : number
->obj.y : any, Symbol(y,Decl(incrementOperatorWithAnyOtherType.ts,5,15))
->obj : { x: number; y: any; }, Symbol(obj,Decl(incrementOperatorWithAnyOtherType.ts,5,3))
->y : any, Symbol(y,Decl(incrementOperatorWithAnyOtherType.ts,5,15))
+>obj.y : any, Symbol(y, Decl(incrementOperatorWithAnyOtherType.ts, 5, 15))
+>obj : { x: number; y: any; }, Symbol(obj, Decl(incrementOperatorWithAnyOtherType.ts, 5, 3))
+>y : any, Symbol(y, Decl(incrementOperatorWithAnyOtherType.ts, 5, 15))
 
 var ResultIsNumber8 = ++objA.a;
->ResultIsNumber8 : number, Symbol(ResultIsNumber8,Decl(incrementOperatorWithAnyOtherType.ts,25,3))
+>ResultIsNumber8 : number, Symbol(ResultIsNumber8, Decl(incrementOperatorWithAnyOtherType.ts, 25, 3))
 >++objA.a : number
->objA.a : any, Symbol(A.a,Decl(incrementOperatorWithAnyOtherType.ts,6,9))
->objA : A, Symbol(objA,Decl(incrementOperatorWithAnyOtherType.ts,12,3))
->a : any, Symbol(A.a,Decl(incrementOperatorWithAnyOtherType.ts,6,9))
+>objA.a : any, Symbol(A.a, Decl(incrementOperatorWithAnyOtherType.ts, 6, 9))
+>objA : A, Symbol(objA, Decl(incrementOperatorWithAnyOtherType.ts, 12, 3))
+>a : any, Symbol(A.a, Decl(incrementOperatorWithAnyOtherType.ts, 6, 9))
 
 var ResultIsNumber = ++M.n;
->ResultIsNumber : number, Symbol(ResultIsNumber,Decl(incrementOperatorWithAnyOtherType.ts,26,3))
+>ResultIsNumber : number, Symbol(ResultIsNumber, Decl(incrementOperatorWithAnyOtherType.ts, 26, 3))
 >++M.n : number
->M.n : any, Symbol(M.n,Decl(incrementOperatorWithAnyOtherType.ts,10,14))
->M : typeof M, Symbol(M,Decl(incrementOperatorWithAnyOtherType.ts,8,1))
->n : any, Symbol(M.n,Decl(incrementOperatorWithAnyOtherType.ts,10,14))
+>M.n : any, Symbol(M.n, Decl(incrementOperatorWithAnyOtherType.ts, 10, 14))
+>M : typeof M, Symbol(M, Decl(incrementOperatorWithAnyOtherType.ts, 8, 1))
+>n : any, Symbol(M.n, Decl(incrementOperatorWithAnyOtherType.ts, 10, 14))
 
 var ResultIsNumber9 = ANY2[0]++;
->ResultIsNumber9 : number, Symbol(ResultIsNumber9,Decl(incrementOperatorWithAnyOtherType.ts,28,3))
+>ResultIsNumber9 : number, Symbol(ResultIsNumber9, Decl(incrementOperatorWithAnyOtherType.ts, 28, 3))
 >ANY2[0]++ : number
 >ANY2[0] : any
->ANY2 : any[], Symbol(ANY2,Decl(incrementOperatorWithAnyOtherType.ts,4,3))
+>ANY2 : any[], Symbol(ANY2, Decl(incrementOperatorWithAnyOtherType.ts, 4, 3))
 >0 : number
 
 var ResultIsNumber10 = obj.x++;
->ResultIsNumber10 : number, Symbol(ResultIsNumber10,Decl(incrementOperatorWithAnyOtherType.ts,29,3))
+>ResultIsNumber10 : number, Symbol(ResultIsNumber10, Decl(incrementOperatorWithAnyOtherType.ts, 29, 3))
 >obj.x++ : number
->obj.x : number, Symbol(x,Decl(incrementOperatorWithAnyOtherType.ts,5,11))
->obj : { x: number; y: any; }, Symbol(obj,Decl(incrementOperatorWithAnyOtherType.ts,5,3))
->x : number, Symbol(x,Decl(incrementOperatorWithAnyOtherType.ts,5,11))
+>obj.x : number, Symbol(x, Decl(incrementOperatorWithAnyOtherType.ts, 5, 11))
+>obj : { x: number; y: any; }, Symbol(obj, Decl(incrementOperatorWithAnyOtherType.ts, 5, 3))
+>x : number, Symbol(x, Decl(incrementOperatorWithAnyOtherType.ts, 5, 11))
 
 var ResultIsNumber11 = obj.y++;
->ResultIsNumber11 : number, Symbol(ResultIsNumber11,Decl(incrementOperatorWithAnyOtherType.ts,30,3))
+>ResultIsNumber11 : number, Symbol(ResultIsNumber11, Decl(incrementOperatorWithAnyOtherType.ts, 30, 3))
 >obj.y++ : number
->obj.y : any, Symbol(y,Decl(incrementOperatorWithAnyOtherType.ts,5,15))
->obj : { x: number; y: any; }, Symbol(obj,Decl(incrementOperatorWithAnyOtherType.ts,5,3))
->y : any, Symbol(y,Decl(incrementOperatorWithAnyOtherType.ts,5,15))
+>obj.y : any, Symbol(y, Decl(incrementOperatorWithAnyOtherType.ts, 5, 15))
+>obj : { x: number; y: any; }, Symbol(obj, Decl(incrementOperatorWithAnyOtherType.ts, 5, 3))
+>y : any, Symbol(y, Decl(incrementOperatorWithAnyOtherType.ts, 5, 15))
 
 var ResultIsNumber12 = objA.a++;
->ResultIsNumber12 : number, Symbol(ResultIsNumber12,Decl(incrementOperatorWithAnyOtherType.ts,31,3))
+>ResultIsNumber12 : number, Symbol(ResultIsNumber12, Decl(incrementOperatorWithAnyOtherType.ts, 31, 3))
 >objA.a++ : number
->objA.a : any, Symbol(A.a,Decl(incrementOperatorWithAnyOtherType.ts,6,9))
->objA : A, Symbol(objA,Decl(incrementOperatorWithAnyOtherType.ts,12,3))
->a : any, Symbol(A.a,Decl(incrementOperatorWithAnyOtherType.ts,6,9))
+>objA.a : any, Symbol(A.a, Decl(incrementOperatorWithAnyOtherType.ts, 6, 9))
+>objA : A, Symbol(objA, Decl(incrementOperatorWithAnyOtherType.ts, 12, 3))
+>a : any, Symbol(A.a, Decl(incrementOperatorWithAnyOtherType.ts, 6, 9))
 
 var ResultIsNumber13 = M.n++;
->ResultIsNumber13 : number, Symbol(ResultIsNumber13,Decl(incrementOperatorWithAnyOtherType.ts,32,3))
+>ResultIsNumber13 : number, Symbol(ResultIsNumber13, Decl(incrementOperatorWithAnyOtherType.ts, 32, 3))
 >M.n++ : number
->M.n : any, Symbol(M.n,Decl(incrementOperatorWithAnyOtherType.ts,10,14))
->M : typeof M, Symbol(M,Decl(incrementOperatorWithAnyOtherType.ts,8,1))
->n : any, Symbol(M.n,Decl(incrementOperatorWithAnyOtherType.ts,10,14))
+>M.n : any, Symbol(M.n, Decl(incrementOperatorWithAnyOtherType.ts, 10, 14))
+>M : typeof M, Symbol(M, Decl(incrementOperatorWithAnyOtherType.ts, 8, 1))
+>n : any, Symbol(M.n, Decl(incrementOperatorWithAnyOtherType.ts, 10, 14))
 
 // miss assignment opertors
 ++ANY;
 >++ANY : number
->ANY : any, Symbol(ANY,Decl(incrementOperatorWithAnyOtherType.ts,2,3))
+>ANY : any, Symbol(ANY, Decl(incrementOperatorWithAnyOtherType.ts, 2, 3))
 
 ++ANY1;
 >++ANY1 : number
->ANY1 : any, Symbol(ANY1,Decl(incrementOperatorWithAnyOtherType.ts,3,3))
+>ANY1 : any, Symbol(ANY1, Decl(incrementOperatorWithAnyOtherType.ts, 3, 3))
 
 ++ANY2[0];
 >++ANY2[0] : number
 >ANY2[0] : any
->ANY2 : any[], Symbol(ANY2,Decl(incrementOperatorWithAnyOtherType.ts,4,3))
+>ANY2 : any[], Symbol(ANY2, Decl(incrementOperatorWithAnyOtherType.ts, 4, 3))
 >0 : number
 
 ++ANY, ++ANY1;
 >++ANY, ++ANY1 : number
 >++ANY : number
->ANY : any, Symbol(ANY,Decl(incrementOperatorWithAnyOtherType.ts,2,3))
+>ANY : any, Symbol(ANY, Decl(incrementOperatorWithAnyOtherType.ts, 2, 3))
 >++ANY1 : number
->ANY1 : any, Symbol(ANY1,Decl(incrementOperatorWithAnyOtherType.ts,3,3))
+>ANY1 : any, Symbol(ANY1, Decl(incrementOperatorWithAnyOtherType.ts, 3, 3))
 
 ++objA.a;
 >++objA.a : number
->objA.a : any, Symbol(A.a,Decl(incrementOperatorWithAnyOtherType.ts,6,9))
->objA : A, Symbol(objA,Decl(incrementOperatorWithAnyOtherType.ts,12,3))
->a : any, Symbol(A.a,Decl(incrementOperatorWithAnyOtherType.ts,6,9))
+>objA.a : any, Symbol(A.a, Decl(incrementOperatorWithAnyOtherType.ts, 6, 9))
+>objA : A, Symbol(objA, Decl(incrementOperatorWithAnyOtherType.ts, 12, 3))
+>a : any, Symbol(A.a, Decl(incrementOperatorWithAnyOtherType.ts, 6, 9))
 
 ++M.n;
 >++M.n : number
->M.n : any, Symbol(M.n,Decl(incrementOperatorWithAnyOtherType.ts,10,14))
->M : typeof M, Symbol(M,Decl(incrementOperatorWithAnyOtherType.ts,8,1))
->n : any, Symbol(M.n,Decl(incrementOperatorWithAnyOtherType.ts,10,14))
+>M.n : any, Symbol(M.n, Decl(incrementOperatorWithAnyOtherType.ts, 10, 14))
+>M : typeof M, Symbol(M, Decl(incrementOperatorWithAnyOtherType.ts, 8, 1))
+>n : any, Symbol(M.n, Decl(incrementOperatorWithAnyOtherType.ts, 10, 14))
 
 ANY++;
 >ANY++ : number
->ANY : any, Symbol(ANY,Decl(incrementOperatorWithAnyOtherType.ts,2,3))
+>ANY : any, Symbol(ANY, Decl(incrementOperatorWithAnyOtherType.ts, 2, 3))
 
 ANY1++;
 >ANY1++ : number
->ANY1 : any, Symbol(ANY1,Decl(incrementOperatorWithAnyOtherType.ts,3,3))
+>ANY1 : any, Symbol(ANY1, Decl(incrementOperatorWithAnyOtherType.ts, 3, 3))
 
 ANY2[0]++;
 >ANY2[0]++ : number
 >ANY2[0] : any
->ANY2 : any[], Symbol(ANY2,Decl(incrementOperatorWithAnyOtherType.ts,4,3))
+>ANY2 : any[], Symbol(ANY2, Decl(incrementOperatorWithAnyOtherType.ts, 4, 3))
 >0 : number
 
 ANY++, ANY1++;
 >ANY++, ANY1++ : number
 >ANY++ : number
->ANY : any, Symbol(ANY,Decl(incrementOperatorWithAnyOtherType.ts,2,3))
+>ANY : any, Symbol(ANY, Decl(incrementOperatorWithAnyOtherType.ts, 2, 3))
 >ANY1++ : number
->ANY1 : any, Symbol(ANY1,Decl(incrementOperatorWithAnyOtherType.ts,3,3))
+>ANY1 : any, Symbol(ANY1, Decl(incrementOperatorWithAnyOtherType.ts, 3, 3))
 
 objA.a++;
 >objA.a++ : number
->objA.a : any, Symbol(A.a,Decl(incrementOperatorWithAnyOtherType.ts,6,9))
->objA : A, Symbol(objA,Decl(incrementOperatorWithAnyOtherType.ts,12,3))
->a : any, Symbol(A.a,Decl(incrementOperatorWithAnyOtherType.ts,6,9))
+>objA.a : any, Symbol(A.a, Decl(incrementOperatorWithAnyOtherType.ts, 6, 9))
+>objA : A, Symbol(objA, Decl(incrementOperatorWithAnyOtherType.ts, 12, 3))
+>a : any, Symbol(A.a, Decl(incrementOperatorWithAnyOtherType.ts, 6, 9))
 
 M.n++;
 >M.n++ : number
->M.n : any, Symbol(M.n,Decl(incrementOperatorWithAnyOtherType.ts,10,14))
->M : typeof M, Symbol(M,Decl(incrementOperatorWithAnyOtherType.ts,8,1))
->n : any, Symbol(M.n,Decl(incrementOperatorWithAnyOtherType.ts,10,14))
+>M.n : any, Symbol(M.n, Decl(incrementOperatorWithAnyOtherType.ts, 10, 14))
+>M : typeof M, Symbol(M, Decl(incrementOperatorWithAnyOtherType.ts, 8, 1))
+>n : any, Symbol(M.n, Decl(incrementOperatorWithAnyOtherType.ts, 10, 14))
 

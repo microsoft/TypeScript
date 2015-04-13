@@ -1,25 +1,25 @@
 === tests/cases/compiler/overloadOnConstInheritance1.ts ===
 interface Base {
->Base : Base, Symbol(Base,Decl(overloadOnConstInheritance1.ts,0,0))
+>Base : Base, Symbol(Base, Decl(overloadOnConstInheritance1.ts, 0, 0))
 
     addEventListener(x: string): any;
->addEventListener : { (x: string): any; (x: 'foo'): string; }, Symbol(addEventListener,Decl(overloadOnConstInheritance1.ts,0,16),Decl(overloadOnConstInheritance1.ts,1,37))
->x : string, Symbol(x,Decl(overloadOnConstInheritance1.ts,1,21))
+>addEventListener : { (x: string): any; (x: 'foo'): string; }, Symbol(addEventListener, Decl(overloadOnConstInheritance1.ts, 0, 16), Decl(overloadOnConstInheritance1.ts, 1, 37))
+>x : string, Symbol(x, Decl(overloadOnConstInheritance1.ts, 1, 21))
 
     addEventListener(x: 'foo'): string;
->addEventListener : { (x: string): any; (x: 'foo'): string; }, Symbol(addEventListener,Decl(overloadOnConstInheritance1.ts,0,16),Decl(overloadOnConstInheritance1.ts,1,37))
->x : 'foo', Symbol(x,Decl(overloadOnConstInheritance1.ts,2,21))
+>addEventListener : { (x: string): any; (x: 'foo'): string; }, Symbol(addEventListener, Decl(overloadOnConstInheritance1.ts, 0, 16), Decl(overloadOnConstInheritance1.ts, 1, 37))
+>x : 'foo', Symbol(x, Decl(overloadOnConstInheritance1.ts, 2, 21))
 }
 interface Deriver extends Base {
->Deriver : Deriver, Symbol(Deriver,Decl(overloadOnConstInheritance1.ts,3,1))
->Base : Base, Symbol(Base,Decl(overloadOnConstInheritance1.ts,0,0))
+>Deriver : Deriver, Symbol(Deriver, Decl(overloadOnConstInheritance1.ts, 3, 1))
+>Base : Base, Symbol(Base, Decl(overloadOnConstInheritance1.ts, 0, 0))
 
     addEventListener(x: string): any;
->addEventListener : { (x: string): any; (x: 'bar'): string; }, Symbol(addEventListener,Decl(overloadOnConstInheritance1.ts,4,32),Decl(overloadOnConstInheritance1.ts,5,37))
->x : string, Symbol(x,Decl(overloadOnConstInheritance1.ts,5,21))
+>addEventListener : { (x: string): any; (x: 'bar'): string; }, Symbol(addEventListener, Decl(overloadOnConstInheritance1.ts, 4, 32), Decl(overloadOnConstInheritance1.ts, 5, 37))
+>x : string, Symbol(x, Decl(overloadOnConstInheritance1.ts, 5, 21))
 
     addEventListener(x: 'bar'): string;
->addEventListener : { (x: string): any; (x: 'bar'): string; }, Symbol(addEventListener,Decl(overloadOnConstInheritance1.ts,4,32),Decl(overloadOnConstInheritance1.ts,5,37))
->x : 'bar', Symbol(x,Decl(overloadOnConstInheritance1.ts,6,21))
+>addEventListener : { (x: string): any; (x: 'bar'): string; }, Symbol(addEventListener, Decl(overloadOnConstInheritance1.ts, 4, 32), Decl(overloadOnConstInheritance1.ts, 5, 37))
+>x : 'bar', Symbol(x, Decl(overloadOnConstInheritance1.ts, 6, 21))
 }
 

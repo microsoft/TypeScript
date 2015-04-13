@@ -1,119 +1,119 @@
 === tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexingResults.ts ===
 class C {
->C : C, Symbol(C,Decl(stringIndexingResults.ts,0,0))
+>C : C, Symbol(C, Decl(stringIndexingResults.ts, 0, 0))
 
     [x: string]: string;
->x : string, Symbol(x,Decl(stringIndexingResults.ts,1,5))
+>x : string, Symbol(x, Decl(stringIndexingResults.ts, 1, 5))
 
     y = '';
->y : string, Symbol(y,Decl(stringIndexingResults.ts,1,24))
+>y : string, Symbol(y, Decl(stringIndexingResults.ts, 1, 24))
 >'' : string
 }
 
 var c: C;
->c : C, Symbol(c,Decl(stringIndexingResults.ts,5,3))
->C : C, Symbol(C,Decl(stringIndexingResults.ts,0,0))
+>c : C, Symbol(c, Decl(stringIndexingResults.ts, 5, 3))
+>C : C, Symbol(C, Decl(stringIndexingResults.ts, 0, 0))
 
 var r1 = c['y']; 
->r1 : string, Symbol(r1,Decl(stringIndexingResults.ts,6,3))
+>r1 : string, Symbol(r1, Decl(stringIndexingResults.ts, 6, 3))
 >c['y'] : string
->c : C, Symbol(c,Decl(stringIndexingResults.ts,5,3))
->'y' : string, Symbol(C.y,Decl(stringIndexingResults.ts,1,24))
+>c : C, Symbol(c, Decl(stringIndexingResults.ts, 5, 3))
+>'y' : string, Symbol(C.y, Decl(stringIndexingResults.ts, 1, 24))
 
 var r2 = c['a'];
->r2 : string, Symbol(r2,Decl(stringIndexingResults.ts,7,3))
+>r2 : string, Symbol(r2, Decl(stringIndexingResults.ts, 7, 3))
 >c['a'] : string
->c : C, Symbol(c,Decl(stringIndexingResults.ts,5,3))
+>c : C, Symbol(c, Decl(stringIndexingResults.ts, 5, 3))
 >'a' : string
 
 var r3 = c[1]; 
->r3 : string, Symbol(r3,Decl(stringIndexingResults.ts,8,3))
+>r3 : string, Symbol(r3, Decl(stringIndexingResults.ts, 8, 3))
 >c[1] : string
->c : C, Symbol(c,Decl(stringIndexingResults.ts,5,3))
+>c : C, Symbol(c, Decl(stringIndexingResults.ts, 5, 3))
 >1 : number
 
 interface I {
->I : I, Symbol(I,Decl(stringIndexingResults.ts,8,14))
+>I : I, Symbol(I, Decl(stringIndexingResults.ts, 8, 14))
 
     [x: string]: string;
->x : string, Symbol(x,Decl(stringIndexingResults.ts,11,5))
+>x : string, Symbol(x, Decl(stringIndexingResults.ts, 11, 5))
 
     y: string;
->y : string, Symbol(y,Decl(stringIndexingResults.ts,11,24))
+>y : string, Symbol(y, Decl(stringIndexingResults.ts, 11, 24))
 }
 
 var i: I
->i : I, Symbol(i,Decl(stringIndexingResults.ts,15,3))
->I : I, Symbol(I,Decl(stringIndexingResults.ts,8,14))
+>i : I, Symbol(i, Decl(stringIndexingResults.ts, 15, 3))
+>I : I, Symbol(I, Decl(stringIndexingResults.ts, 8, 14))
 
 var r4 = i['y'];
->r4 : string, Symbol(r4,Decl(stringIndexingResults.ts,16,3))
+>r4 : string, Symbol(r4, Decl(stringIndexingResults.ts, 16, 3))
 >i['y'] : string
->i : I, Symbol(i,Decl(stringIndexingResults.ts,15,3))
->'y' : string, Symbol(I.y,Decl(stringIndexingResults.ts,11,24))
+>i : I, Symbol(i, Decl(stringIndexingResults.ts, 15, 3))
+>'y' : string, Symbol(I.y, Decl(stringIndexingResults.ts, 11, 24))
 
 var r5 = i['a'];
->r5 : string, Symbol(r5,Decl(stringIndexingResults.ts,17,3))
+>r5 : string, Symbol(r5, Decl(stringIndexingResults.ts, 17, 3))
 >i['a'] : string
->i : I, Symbol(i,Decl(stringIndexingResults.ts,15,3))
+>i : I, Symbol(i, Decl(stringIndexingResults.ts, 15, 3))
 >'a' : string
 
 var r6 = i[1]; 
->r6 : string, Symbol(r6,Decl(stringIndexingResults.ts,18,3))
+>r6 : string, Symbol(r6, Decl(stringIndexingResults.ts, 18, 3))
 >i[1] : string
->i : I, Symbol(i,Decl(stringIndexingResults.ts,15,3))
+>i : I, Symbol(i, Decl(stringIndexingResults.ts, 15, 3))
 >1 : number
 
 var a: {
->a : { [x: string]: string; y: string; }, Symbol(a,Decl(stringIndexingResults.ts,20,3))
+>a : { [x: string]: string; y: string; }, Symbol(a, Decl(stringIndexingResults.ts, 20, 3))
 
     [x: string]: string;
->x : string, Symbol(x,Decl(stringIndexingResults.ts,21,5))
+>x : string, Symbol(x, Decl(stringIndexingResults.ts, 21, 5))
 
     y: string;
->y : string, Symbol(y,Decl(stringIndexingResults.ts,21,24))
+>y : string, Symbol(y, Decl(stringIndexingResults.ts, 21, 24))
 }
 
 var r7 = a['y'];
->r7 : string, Symbol(r7,Decl(stringIndexingResults.ts,25,3))
+>r7 : string, Symbol(r7, Decl(stringIndexingResults.ts, 25, 3))
 >a['y'] : string
->a : { [x: string]: string; y: string; }, Symbol(a,Decl(stringIndexingResults.ts,20,3))
->'y' : string, Symbol(y,Decl(stringIndexingResults.ts,21,24))
+>a : { [x: string]: string; y: string; }, Symbol(a, Decl(stringIndexingResults.ts, 20, 3))
+>'y' : string, Symbol(y, Decl(stringIndexingResults.ts, 21, 24))
 
 var r8 = a['a'];
->r8 : string, Symbol(r8,Decl(stringIndexingResults.ts,26,3))
+>r8 : string, Symbol(r8, Decl(stringIndexingResults.ts, 26, 3))
 >a['a'] : string
->a : { [x: string]: string; y: string; }, Symbol(a,Decl(stringIndexingResults.ts,20,3))
+>a : { [x: string]: string; y: string; }, Symbol(a, Decl(stringIndexingResults.ts, 20, 3))
 >'a' : string
 
 var r9 = a[1];
->r9 : string, Symbol(r9,Decl(stringIndexingResults.ts,27,3))
+>r9 : string, Symbol(r9, Decl(stringIndexingResults.ts, 27, 3))
 >a[1] : string
->a : { [x: string]: string; y: string; }, Symbol(a,Decl(stringIndexingResults.ts,20,3))
+>a : { [x: string]: string; y: string; }, Symbol(a, Decl(stringIndexingResults.ts, 20, 3))
 >1 : number
 
 var b: { [x: string]: string } = { y: '' }
->b : { [x: string]: string; }, Symbol(b,Decl(stringIndexingResults.ts,29,3))
->x : string, Symbol(x,Decl(stringIndexingResults.ts,29,10))
+>b : { [x: string]: string; }, Symbol(b, Decl(stringIndexingResults.ts, 29, 3))
+>x : string, Symbol(x, Decl(stringIndexingResults.ts, 29, 10))
 >{ y: '' } : { [x: string]: string; y: string; }
->y : string, Symbol(y,Decl(stringIndexingResults.ts,29,34))
+>y : string, Symbol(y, Decl(stringIndexingResults.ts, 29, 34))
 >'' : string
 
 var r10 = b['y'];
->r10 : string, Symbol(r10,Decl(stringIndexingResults.ts,31,3))
+>r10 : string, Symbol(r10, Decl(stringIndexingResults.ts, 31, 3))
 >b['y'] : string
->b : { [x: string]: string; }, Symbol(b,Decl(stringIndexingResults.ts,29,3))
+>b : { [x: string]: string; }, Symbol(b, Decl(stringIndexingResults.ts, 29, 3))
 >'y' : string
 
 var r11 = b['a'];
->r11 : string, Symbol(r11,Decl(stringIndexingResults.ts,32,3))
+>r11 : string, Symbol(r11, Decl(stringIndexingResults.ts, 32, 3))
 >b['a'] : string
->b : { [x: string]: string; }, Symbol(b,Decl(stringIndexingResults.ts,29,3))
+>b : { [x: string]: string; }, Symbol(b, Decl(stringIndexingResults.ts, 29, 3))
 >'a' : string
 
 var r12 = b[1];
->r12 : string, Symbol(r12,Decl(stringIndexingResults.ts,33,3))
+>r12 : string, Symbol(r12, Decl(stringIndexingResults.ts, 33, 3))
 >b[1] : string
->b : { [x: string]: string; }, Symbol(b,Decl(stringIndexingResults.ts,29,3))
+>b : { [x: string]: string; }, Symbol(b, Decl(stringIndexingResults.ts, 29, 3))
 >1 : number
 

@@ -1,54 +1,54 @@
 === tests/cases/compiler/arrayBindingPatternOmittedExpressions.ts ===
 
 var results: string[];
->results : string[], Symbol(results,Decl(arrayBindingPatternOmittedExpressions.ts,1,3))
+>results : string[], Symbol(results, Decl(arrayBindingPatternOmittedExpressions.ts, 1, 3))
 
 {
     let [, b, , a] = results;
 > : undefined
->b : string, Symbol(b,Decl(arrayBindingPatternOmittedExpressions.ts,4,10))
+>b : string, Symbol(b, Decl(arrayBindingPatternOmittedExpressions.ts, 4, 10))
 > : undefined
->a : string, Symbol(a,Decl(arrayBindingPatternOmittedExpressions.ts,4,15))
->results : string[], Symbol(results,Decl(arrayBindingPatternOmittedExpressions.ts,1,3))
+>a : string, Symbol(a, Decl(arrayBindingPatternOmittedExpressions.ts, 4, 15))
+>results : string[], Symbol(results, Decl(arrayBindingPatternOmittedExpressions.ts, 1, 3))
 
     let x = {
->x : { a: string; b: string; }, Symbol(x,Decl(arrayBindingPatternOmittedExpressions.ts,5,7))
+>x : { a: string; b: string; }, Symbol(x, Decl(arrayBindingPatternOmittedExpressions.ts, 5, 7))
 >{        a,        b    } : { a: string; b: string; }
 
         a,
->a : string, Symbol(a,Decl(arrayBindingPatternOmittedExpressions.ts,5,13))
+>a : string, Symbol(a, Decl(arrayBindingPatternOmittedExpressions.ts, 5, 13))
 
         b
->b : string, Symbol(b,Decl(arrayBindingPatternOmittedExpressions.ts,6,10))
+>b : string, Symbol(b, Decl(arrayBindingPatternOmittedExpressions.ts, 6, 10))
     }
 }
 
 
 function f([, a, , b, , , , s, , , ] = results) {
->f : ([, a, , b, , , , s, , , ]?: string[]) => void, Symbol(f,Decl(arrayBindingPatternOmittedExpressions.ts,9,1))
+>f : ([, a, , b, , , , s, , , ]?: string[]) => void, Symbol(f, Decl(arrayBindingPatternOmittedExpressions.ts, 9, 1))
 > : undefined
->a : string, Symbol(a,Decl(arrayBindingPatternOmittedExpressions.ts,12,13))
+>a : string, Symbol(a, Decl(arrayBindingPatternOmittedExpressions.ts, 12, 13))
 > : undefined
->b : string, Symbol(b,Decl(arrayBindingPatternOmittedExpressions.ts,12,18))
-> : undefined
-> : undefined
-> : undefined
->s : string, Symbol(s,Decl(arrayBindingPatternOmittedExpressions.ts,12,27))
+>b : string, Symbol(b, Decl(arrayBindingPatternOmittedExpressions.ts, 12, 18))
 > : undefined
 > : undefined
->results : string[], Symbol(results,Decl(arrayBindingPatternOmittedExpressions.ts,1,3))
+> : undefined
+>s : string, Symbol(s, Decl(arrayBindingPatternOmittedExpressions.ts, 12, 27))
+> : undefined
+> : undefined
+>results : string[], Symbol(results, Decl(arrayBindingPatternOmittedExpressions.ts, 1, 3))
 
     a = s[1];
 >a = s[1] : string
->a : string, Symbol(a,Decl(arrayBindingPatternOmittedExpressions.ts,12,13))
+>a : string, Symbol(a, Decl(arrayBindingPatternOmittedExpressions.ts, 12, 13))
 >s[1] : string
->s : string, Symbol(s,Decl(arrayBindingPatternOmittedExpressions.ts,12,27))
+>s : string, Symbol(s, Decl(arrayBindingPatternOmittedExpressions.ts, 12, 27))
 >1 : number
 
     b = s[2];
 >b = s[2] : string
->b : string, Symbol(b,Decl(arrayBindingPatternOmittedExpressions.ts,12,18))
+>b : string, Symbol(b, Decl(arrayBindingPatternOmittedExpressions.ts, 12, 18))
 >s[2] : string
->s : string, Symbol(s,Decl(arrayBindingPatternOmittedExpressions.ts,12,27))
+>s : string, Symbol(s, Decl(arrayBindingPatternOmittedExpressions.ts, 12, 27))
 >2 : number
 }

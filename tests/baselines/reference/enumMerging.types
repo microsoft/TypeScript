@@ -2,218 +2,218 @@
 // Enum with only constant members across 2 declarations with the same root module
 // Enum with initializer in all declarations with constant members with the same root module
 module M1 {
->M1 : typeof M1, Symbol(M1,Decl(enumMerging.ts,0,0))
+>M1 : typeof M1, Symbol(M1, Decl(enumMerging.ts, 0, 0))
 
     enum EImpl1 {
->EImpl1 : EImpl1, Symbol(EImpl1,Decl(enumMerging.ts,2,11),Decl(enumMerging.ts,5,5))
+>EImpl1 : EImpl1, Symbol(EImpl1, Decl(enumMerging.ts, 2, 11), Decl(enumMerging.ts, 5, 5))
 
         A, B, C
->A : EImpl1, Symbol(EImpl1.A,Decl(enumMerging.ts,3,17))
->B : EImpl1, Symbol(EImpl1.B,Decl(enumMerging.ts,4,10))
->C : EImpl1, Symbol(EImpl1.C,Decl(enumMerging.ts,4,13))
+>A : EImpl1, Symbol(EImpl1.A, Decl(enumMerging.ts, 3, 17))
+>B : EImpl1, Symbol(EImpl1.B, Decl(enumMerging.ts, 4, 10))
+>C : EImpl1, Symbol(EImpl1.C, Decl(enumMerging.ts, 4, 13))
     }
 
     enum EImpl1 {
->EImpl1 : EImpl1, Symbol(EImpl1,Decl(enumMerging.ts,2,11),Decl(enumMerging.ts,5,5))
+>EImpl1 : EImpl1, Symbol(EImpl1, Decl(enumMerging.ts, 2, 11), Decl(enumMerging.ts, 5, 5))
 
         D = 1, E, F
->D : EImpl1, Symbol(EImpl1.D,Decl(enumMerging.ts,7,17))
+>D : EImpl1, Symbol(EImpl1.D, Decl(enumMerging.ts, 7, 17))
 >1 : number
->E : EImpl1, Symbol(EImpl1.E,Decl(enumMerging.ts,8,14))
->F : EImpl1, Symbol(EImpl1.F,Decl(enumMerging.ts,8,17))
+>E : EImpl1, Symbol(EImpl1.E, Decl(enumMerging.ts, 8, 14))
+>F : EImpl1, Symbol(EImpl1.F, Decl(enumMerging.ts, 8, 17))
     }
 
     export enum EConst1 {
->EConst1 : EConst1, Symbol(EConst1,Decl(enumMerging.ts,9,5),Decl(enumMerging.ts,13,5))
+>EConst1 : EConst1, Symbol(EConst1, Decl(enumMerging.ts, 9, 5), Decl(enumMerging.ts, 13, 5))
 
         A = 3, B = 2, C = 1
->A : EConst1, Symbol(EConst1.A,Decl(enumMerging.ts,11,25))
+>A : EConst1, Symbol(EConst1.A, Decl(enumMerging.ts, 11, 25))
 >3 : number
->B : EConst1, Symbol(EConst1.B,Decl(enumMerging.ts,12,14))
+>B : EConst1, Symbol(EConst1.B, Decl(enumMerging.ts, 12, 14))
 >2 : number
->C : EConst1, Symbol(EConst1.C,Decl(enumMerging.ts,12,21))
+>C : EConst1, Symbol(EConst1.C, Decl(enumMerging.ts, 12, 21))
 >1 : number
     }
 
     export enum EConst1 {
->EConst1 : EConst1, Symbol(EConst1,Decl(enumMerging.ts,9,5),Decl(enumMerging.ts,13,5))
+>EConst1 : EConst1, Symbol(EConst1, Decl(enumMerging.ts, 9, 5), Decl(enumMerging.ts, 13, 5))
 
         D = 7, E = 9, F = 8
->D : EConst1, Symbol(EConst1.D,Decl(enumMerging.ts,15,25))
+>D : EConst1, Symbol(EConst1.D, Decl(enumMerging.ts, 15, 25))
 >7 : number
->E : EConst1, Symbol(EConst1.E,Decl(enumMerging.ts,16,14))
+>E : EConst1, Symbol(EConst1.E, Decl(enumMerging.ts, 16, 14))
 >9 : number
->F : EConst1, Symbol(EConst1.F,Decl(enumMerging.ts,16,21))
+>F : EConst1, Symbol(EConst1.F, Decl(enumMerging.ts, 16, 21))
 >8 : number
     }
 
     var x = [EConst1.A, EConst1.B, EConst1.C, EConst1.D, EConst1.E, EConst1.F];
->x : EConst1[], Symbol(x,Decl(enumMerging.ts,19,7))
+>x : EConst1[], Symbol(x, Decl(enumMerging.ts, 19, 7))
 >[EConst1.A, EConst1.B, EConst1.C, EConst1.D, EConst1.E, EConst1.F] : EConst1[]
->EConst1.A : EConst1, Symbol(EConst1.A,Decl(enumMerging.ts,11,25))
->EConst1 : typeof EConst1, Symbol(EConst1,Decl(enumMerging.ts,9,5),Decl(enumMerging.ts,13,5))
->A : EConst1, Symbol(EConst1.A,Decl(enumMerging.ts,11,25))
->EConst1.B : EConst1, Symbol(EConst1.B,Decl(enumMerging.ts,12,14))
->EConst1 : typeof EConst1, Symbol(EConst1,Decl(enumMerging.ts,9,5),Decl(enumMerging.ts,13,5))
->B : EConst1, Symbol(EConst1.B,Decl(enumMerging.ts,12,14))
->EConst1.C : EConst1, Symbol(EConst1.C,Decl(enumMerging.ts,12,21))
->EConst1 : typeof EConst1, Symbol(EConst1,Decl(enumMerging.ts,9,5),Decl(enumMerging.ts,13,5))
->C : EConst1, Symbol(EConst1.C,Decl(enumMerging.ts,12,21))
->EConst1.D : EConst1, Symbol(EConst1.D,Decl(enumMerging.ts,15,25))
->EConst1 : typeof EConst1, Symbol(EConst1,Decl(enumMerging.ts,9,5),Decl(enumMerging.ts,13,5))
->D : EConst1, Symbol(EConst1.D,Decl(enumMerging.ts,15,25))
->EConst1.E : EConst1, Symbol(EConst1.E,Decl(enumMerging.ts,16,14))
->EConst1 : typeof EConst1, Symbol(EConst1,Decl(enumMerging.ts,9,5),Decl(enumMerging.ts,13,5))
->E : EConst1, Symbol(EConst1.E,Decl(enumMerging.ts,16,14))
->EConst1.F : EConst1, Symbol(EConst1.F,Decl(enumMerging.ts,16,21))
->EConst1 : typeof EConst1, Symbol(EConst1,Decl(enumMerging.ts,9,5),Decl(enumMerging.ts,13,5))
->F : EConst1, Symbol(EConst1.F,Decl(enumMerging.ts,16,21))
+>EConst1.A : EConst1, Symbol(EConst1.A, Decl(enumMerging.ts, 11, 25))
+>EConst1 : typeof EConst1, Symbol(EConst1, Decl(enumMerging.ts, 9, 5), Decl(enumMerging.ts, 13, 5))
+>A : EConst1, Symbol(EConst1.A, Decl(enumMerging.ts, 11, 25))
+>EConst1.B : EConst1, Symbol(EConst1.B, Decl(enumMerging.ts, 12, 14))
+>EConst1 : typeof EConst1, Symbol(EConst1, Decl(enumMerging.ts, 9, 5), Decl(enumMerging.ts, 13, 5))
+>B : EConst1, Symbol(EConst1.B, Decl(enumMerging.ts, 12, 14))
+>EConst1.C : EConst1, Symbol(EConst1.C, Decl(enumMerging.ts, 12, 21))
+>EConst1 : typeof EConst1, Symbol(EConst1, Decl(enumMerging.ts, 9, 5), Decl(enumMerging.ts, 13, 5))
+>C : EConst1, Symbol(EConst1.C, Decl(enumMerging.ts, 12, 21))
+>EConst1.D : EConst1, Symbol(EConst1.D, Decl(enumMerging.ts, 15, 25))
+>EConst1 : typeof EConst1, Symbol(EConst1, Decl(enumMerging.ts, 9, 5), Decl(enumMerging.ts, 13, 5))
+>D : EConst1, Symbol(EConst1.D, Decl(enumMerging.ts, 15, 25))
+>EConst1.E : EConst1, Symbol(EConst1.E, Decl(enumMerging.ts, 16, 14))
+>EConst1 : typeof EConst1, Symbol(EConst1, Decl(enumMerging.ts, 9, 5), Decl(enumMerging.ts, 13, 5))
+>E : EConst1, Symbol(EConst1.E, Decl(enumMerging.ts, 16, 14))
+>EConst1.F : EConst1, Symbol(EConst1.F, Decl(enumMerging.ts, 16, 21))
+>EConst1 : typeof EConst1, Symbol(EConst1, Decl(enumMerging.ts, 9, 5), Decl(enumMerging.ts, 13, 5))
+>F : EConst1, Symbol(EConst1.F, Decl(enumMerging.ts, 16, 21))
 }
 
 // Enum with only computed members across 2 declarations with the same root module 
 module M2 {
->M2 : typeof M2, Symbol(M2,Decl(enumMerging.ts,20,1))
+>M2 : typeof M2, Symbol(M2, Decl(enumMerging.ts, 20, 1))
 
     export enum EComp2 {
->EComp2 : EComp2, Symbol(EComp2,Decl(enumMerging.ts,23,11),Decl(enumMerging.ts,26,5))
+>EComp2 : EComp2, Symbol(EComp2, Decl(enumMerging.ts, 23, 11), Decl(enumMerging.ts, 26, 5))
 
         A = 'foo'.length, B = 'foo'.length, C = 'foo'.length
->A : EComp2, Symbol(EComp2.A,Decl(enumMerging.ts,24,24))
->'foo'.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>A : EComp2, Symbol(EComp2.A, Decl(enumMerging.ts, 24, 24))
+>'foo'.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
 >'foo' : string
->length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
->B : EComp2, Symbol(EComp2.B,Decl(enumMerging.ts,25,25))
->'foo'.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>B : EComp2, Symbol(EComp2.B, Decl(enumMerging.ts, 25, 25))
+>'foo'.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
 >'foo' : string
->length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
->C : EComp2, Symbol(EComp2.C,Decl(enumMerging.ts,25,43))
->'foo'.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>C : EComp2, Symbol(EComp2.C, Decl(enumMerging.ts, 25, 43))
+>'foo'.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
 >'foo' : string
->length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
     }
 
     export enum EComp2 {
->EComp2 : EComp2, Symbol(EComp2,Decl(enumMerging.ts,23,11),Decl(enumMerging.ts,26,5))
+>EComp2 : EComp2, Symbol(EComp2, Decl(enumMerging.ts, 23, 11), Decl(enumMerging.ts, 26, 5))
 
         D = 'foo'.length, E = 'foo'.length, F = 'foo'.length
->D : EComp2, Symbol(EComp2.D,Decl(enumMerging.ts,28,24))
->'foo'.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>D : EComp2, Symbol(EComp2.D, Decl(enumMerging.ts, 28, 24))
+>'foo'.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
 >'foo' : string
->length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
->E : EComp2, Symbol(EComp2.E,Decl(enumMerging.ts,29,25))
->'foo'.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>E : EComp2, Symbol(EComp2.E, Decl(enumMerging.ts, 29, 25))
+>'foo'.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
 >'foo' : string
->length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
->F : EComp2, Symbol(EComp2.F,Decl(enumMerging.ts,29,43))
->'foo'.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>F : EComp2, Symbol(EComp2.F, Decl(enumMerging.ts, 29, 43))
+>'foo'.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
 >'foo' : string
->length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
     }
 
     var x = [EComp2.A, EComp2.B, EComp2.C, EComp2.D, EComp2.E, EComp2.F];
->x : EComp2[], Symbol(x,Decl(enumMerging.ts,32,7))
+>x : EComp2[], Symbol(x, Decl(enumMerging.ts, 32, 7))
 >[EComp2.A, EComp2.B, EComp2.C, EComp2.D, EComp2.E, EComp2.F] : EComp2[]
->EComp2.A : EComp2, Symbol(EComp2.A,Decl(enumMerging.ts,24,24))
->EComp2 : typeof EComp2, Symbol(EComp2,Decl(enumMerging.ts,23,11),Decl(enumMerging.ts,26,5))
->A : EComp2, Symbol(EComp2.A,Decl(enumMerging.ts,24,24))
->EComp2.B : EComp2, Symbol(EComp2.B,Decl(enumMerging.ts,25,25))
->EComp2 : typeof EComp2, Symbol(EComp2,Decl(enumMerging.ts,23,11),Decl(enumMerging.ts,26,5))
->B : EComp2, Symbol(EComp2.B,Decl(enumMerging.ts,25,25))
->EComp2.C : EComp2, Symbol(EComp2.C,Decl(enumMerging.ts,25,43))
->EComp2 : typeof EComp2, Symbol(EComp2,Decl(enumMerging.ts,23,11),Decl(enumMerging.ts,26,5))
->C : EComp2, Symbol(EComp2.C,Decl(enumMerging.ts,25,43))
->EComp2.D : EComp2, Symbol(EComp2.D,Decl(enumMerging.ts,28,24))
->EComp2 : typeof EComp2, Symbol(EComp2,Decl(enumMerging.ts,23,11),Decl(enumMerging.ts,26,5))
->D : EComp2, Symbol(EComp2.D,Decl(enumMerging.ts,28,24))
->EComp2.E : EComp2, Symbol(EComp2.E,Decl(enumMerging.ts,29,25))
->EComp2 : typeof EComp2, Symbol(EComp2,Decl(enumMerging.ts,23,11),Decl(enumMerging.ts,26,5))
->E : EComp2, Symbol(EComp2.E,Decl(enumMerging.ts,29,25))
->EComp2.F : EComp2, Symbol(EComp2.F,Decl(enumMerging.ts,29,43))
->EComp2 : typeof EComp2, Symbol(EComp2,Decl(enumMerging.ts,23,11),Decl(enumMerging.ts,26,5))
->F : EComp2, Symbol(EComp2.F,Decl(enumMerging.ts,29,43))
+>EComp2.A : EComp2, Symbol(EComp2.A, Decl(enumMerging.ts, 24, 24))
+>EComp2 : typeof EComp2, Symbol(EComp2, Decl(enumMerging.ts, 23, 11), Decl(enumMerging.ts, 26, 5))
+>A : EComp2, Symbol(EComp2.A, Decl(enumMerging.ts, 24, 24))
+>EComp2.B : EComp2, Symbol(EComp2.B, Decl(enumMerging.ts, 25, 25))
+>EComp2 : typeof EComp2, Symbol(EComp2, Decl(enumMerging.ts, 23, 11), Decl(enumMerging.ts, 26, 5))
+>B : EComp2, Symbol(EComp2.B, Decl(enumMerging.ts, 25, 25))
+>EComp2.C : EComp2, Symbol(EComp2.C, Decl(enumMerging.ts, 25, 43))
+>EComp2 : typeof EComp2, Symbol(EComp2, Decl(enumMerging.ts, 23, 11), Decl(enumMerging.ts, 26, 5))
+>C : EComp2, Symbol(EComp2.C, Decl(enumMerging.ts, 25, 43))
+>EComp2.D : EComp2, Symbol(EComp2.D, Decl(enumMerging.ts, 28, 24))
+>EComp2 : typeof EComp2, Symbol(EComp2, Decl(enumMerging.ts, 23, 11), Decl(enumMerging.ts, 26, 5))
+>D : EComp2, Symbol(EComp2.D, Decl(enumMerging.ts, 28, 24))
+>EComp2.E : EComp2, Symbol(EComp2.E, Decl(enumMerging.ts, 29, 25))
+>EComp2 : typeof EComp2, Symbol(EComp2, Decl(enumMerging.ts, 23, 11), Decl(enumMerging.ts, 26, 5))
+>E : EComp2, Symbol(EComp2.E, Decl(enumMerging.ts, 29, 25))
+>EComp2.F : EComp2, Symbol(EComp2.F, Decl(enumMerging.ts, 29, 43))
+>EComp2 : typeof EComp2, Symbol(EComp2, Decl(enumMerging.ts, 23, 11), Decl(enumMerging.ts, 26, 5))
+>F : EComp2, Symbol(EComp2.F, Decl(enumMerging.ts, 29, 43))
 }
 
 // Enum with initializer in only one of two declarations with constant members with the same root module
 module M3 {
->M3 : typeof M3, Symbol(M3,Decl(enumMerging.ts,33,1))
+>M3 : typeof M3, Symbol(M3, Decl(enumMerging.ts, 33, 1))
 
     enum EInit {
->EInit : EInit, Symbol(EInit,Decl(enumMerging.ts,36,11),Decl(enumMerging.ts,40,5))
+>EInit : EInit, Symbol(EInit, Decl(enumMerging.ts, 36, 11), Decl(enumMerging.ts, 40, 5))
 
         A,
->A : EInit, Symbol(EInit.A,Decl(enumMerging.ts,37,16))
+>A : EInit, Symbol(EInit.A, Decl(enumMerging.ts, 37, 16))
 
         B
->B : EInit, Symbol(EInit.B,Decl(enumMerging.ts,38,10))
+>B : EInit, Symbol(EInit.B, Decl(enumMerging.ts, 38, 10))
     }
 
     enum EInit {
->EInit : EInit, Symbol(EInit,Decl(enumMerging.ts,36,11),Decl(enumMerging.ts,40,5))
+>EInit : EInit, Symbol(EInit, Decl(enumMerging.ts, 36, 11), Decl(enumMerging.ts, 40, 5))
 
         C = 1, D, E
->C : EInit, Symbol(EInit.C,Decl(enumMerging.ts,42,16))
+>C : EInit, Symbol(EInit.C, Decl(enumMerging.ts, 42, 16))
 >1 : number
->D : EInit, Symbol(EInit.D,Decl(enumMerging.ts,43,14))
->E : EInit, Symbol(EInit.E,Decl(enumMerging.ts,43,17))
+>D : EInit, Symbol(EInit.D, Decl(enumMerging.ts, 43, 14))
+>E : EInit, Symbol(EInit.E, Decl(enumMerging.ts, 43, 17))
     }
 }
 
 // Enums with same name but different root module
 module M4 {
->M4 : typeof M4, Symbol(M4,Decl(enumMerging.ts,45,1))
+>M4 : typeof M4, Symbol(M4, Decl(enumMerging.ts, 45, 1))
 
     export enum Color { Red, Green, Blue }
->Color : Color, Symbol(Color,Decl(enumMerging.ts,48,11))
->Red : Color, Symbol(Color.Red,Decl(enumMerging.ts,49,23))
->Green : Color, Symbol(Color.Green,Decl(enumMerging.ts,49,28))
->Blue : Color, Symbol(Color.Blue,Decl(enumMerging.ts,49,35))
+>Color : Color, Symbol(Color, Decl(enumMerging.ts, 48, 11))
+>Red : Color, Symbol(Color.Red, Decl(enumMerging.ts, 49, 23))
+>Green : Color, Symbol(Color.Green, Decl(enumMerging.ts, 49, 28))
+>Blue : Color, Symbol(Color.Blue, Decl(enumMerging.ts, 49, 35))
 }
 module M5 {
->M5 : typeof M5, Symbol(M5,Decl(enumMerging.ts,50,1))
+>M5 : typeof M5, Symbol(M5, Decl(enumMerging.ts, 50, 1))
 
     export enum Color { Red, Green, Blue }
->Color : Color, Symbol(Color,Decl(enumMerging.ts,51,11))
->Red : Color, Symbol(Color.Red,Decl(enumMerging.ts,52,23))
->Green : Color, Symbol(Color.Green,Decl(enumMerging.ts,52,28))
->Blue : Color, Symbol(Color.Blue,Decl(enumMerging.ts,52,35))
+>Color : Color, Symbol(Color, Decl(enumMerging.ts, 51, 11))
+>Red : Color, Symbol(Color.Red, Decl(enumMerging.ts, 52, 23))
+>Green : Color, Symbol(Color.Green, Decl(enumMerging.ts, 52, 28))
+>Blue : Color, Symbol(Color.Blue, Decl(enumMerging.ts, 52, 35))
 }
 
 module M6.A {
->M6 : typeof M6, Symbol(M6,Decl(enumMerging.ts,53,1),Decl(enumMerging.ts,57,1))
->A : typeof A, Symbol(A,Decl(enumMerging.ts,55,10),Decl(enumMerging.ts,58,11))
+>M6 : typeof M6, Symbol(M6, Decl(enumMerging.ts, 53, 1), Decl(enumMerging.ts, 57, 1))
+>A : typeof A, Symbol(A, Decl(enumMerging.ts, 55, 10), Decl(enumMerging.ts, 58, 11))
 
     export enum Color { Red, Green, Blue }
->Color : Color, Symbol(Color,Decl(enumMerging.ts,55,13),Decl(enumMerging.ts,59,21))
->Red : Color, Symbol(Color.Red,Decl(enumMerging.ts,56,23))
->Green : Color, Symbol(Color.Green,Decl(enumMerging.ts,56,28))
->Blue : Color, Symbol(Color.Blue,Decl(enumMerging.ts,56,35))
+>Color : Color, Symbol(Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
+>Red : Color, Symbol(Color.Red, Decl(enumMerging.ts, 56, 23))
+>Green : Color, Symbol(Color.Green, Decl(enumMerging.ts, 56, 28))
+>Blue : Color, Symbol(Color.Blue, Decl(enumMerging.ts, 56, 35))
 }
 module M6 {
->M6 : typeof M6, Symbol(M6,Decl(enumMerging.ts,53,1),Decl(enumMerging.ts,57,1))
+>M6 : typeof M6, Symbol(M6, Decl(enumMerging.ts, 53, 1), Decl(enumMerging.ts, 57, 1))
 
     export module A {
->A : typeof A, Symbol(A,Decl(enumMerging.ts,55,10),Decl(enumMerging.ts,58,11))
+>A : typeof A, Symbol(A, Decl(enumMerging.ts, 55, 10), Decl(enumMerging.ts, 58, 11))
 
         export enum Color { Yellow = 1 }
->Color : Color, Symbol(Color,Decl(enumMerging.ts,55,13),Decl(enumMerging.ts,59,21))
->Yellow : Color, Symbol(Color.Yellow,Decl(enumMerging.ts,60,27))
+>Color : Color, Symbol(Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
+>Yellow : Color, Symbol(Color.Yellow, Decl(enumMerging.ts, 60, 27))
 >1 : number
     }
     var t = A.Color.Yellow;
->t : A.Color, Symbol(t,Decl(enumMerging.ts,62,7))
->A.Color.Yellow : A.Color, Symbol(A.Color.Yellow,Decl(enumMerging.ts,60,27))
->A.Color : typeof A.Color, Symbol(A.Color,Decl(enumMerging.ts,55,13),Decl(enumMerging.ts,59,21))
->A : typeof A, Symbol(A,Decl(enumMerging.ts,55,10),Decl(enumMerging.ts,58,11))
->Color : typeof A.Color, Symbol(A.Color,Decl(enumMerging.ts,55,13),Decl(enumMerging.ts,59,21))
->Yellow : A.Color, Symbol(A.Color.Yellow,Decl(enumMerging.ts,60,27))
+>t : A.Color, Symbol(t, Decl(enumMerging.ts, 62, 7))
+>A.Color.Yellow : A.Color, Symbol(A.Color.Yellow, Decl(enumMerging.ts, 60, 27))
+>A.Color : typeof A.Color, Symbol(A.Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
+>A : typeof A, Symbol(A, Decl(enumMerging.ts, 55, 10), Decl(enumMerging.ts, 58, 11))
+>Color : typeof A.Color, Symbol(A.Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
+>Yellow : A.Color, Symbol(A.Color.Yellow, Decl(enumMerging.ts, 60, 27))
 
     t = A.Color.Red;
 >t = A.Color.Red : A.Color
->t : A.Color, Symbol(t,Decl(enumMerging.ts,62,7))
->A.Color.Red : A.Color, Symbol(A.Color.Red,Decl(enumMerging.ts,56,23))
->A.Color : typeof A.Color, Symbol(A.Color,Decl(enumMerging.ts,55,13),Decl(enumMerging.ts,59,21))
->A : typeof A, Symbol(A,Decl(enumMerging.ts,55,10),Decl(enumMerging.ts,58,11))
->Color : typeof A.Color, Symbol(A.Color,Decl(enumMerging.ts,55,13),Decl(enumMerging.ts,59,21))
->Red : A.Color, Symbol(A.Color.Red,Decl(enumMerging.ts,56,23))
+>t : A.Color, Symbol(t, Decl(enumMerging.ts, 62, 7))
+>A.Color.Red : A.Color, Symbol(A.Color.Red, Decl(enumMerging.ts, 56, 23))
+>A.Color : typeof A.Color, Symbol(A.Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
+>A : typeof A, Symbol(A, Decl(enumMerging.ts, 55, 10), Decl(enumMerging.ts, 58, 11))
+>Color : typeof A.Color, Symbol(A.Color, Decl(enumMerging.ts, 55, 13), Decl(enumMerging.ts, 59, 21))
+>Red : A.Color, Symbol(A.Color.Red, Decl(enumMerging.ts, 56, 23))
 }
 

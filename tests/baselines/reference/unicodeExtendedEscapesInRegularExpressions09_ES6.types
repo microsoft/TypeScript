@@ -4,6 +4,6 @@
 //  2. If cp ≤ 65535, return cp.
 // (10000 == 65536)
 var x = /\u{10000}/g;
->x : RegExp, Symbol(x,Decl(unicodeExtendedEscapesInRegularExpressions09_ES6.ts,4,3))
+>x : RegExp, Symbol(x, Decl(unicodeExtendedEscapesInRegularExpressions09_ES6.ts, 4, 3))
 >/\u{10000}/g : RegExp
 

@@ -1,43 +1,43 @@
 === tests/cases/compiler/letDeclarations.ts ===
 
 let l1;
->l1 : any, Symbol(l1,Decl(letDeclarations.ts,1,3))
+>l1 : any, Symbol(l1, Decl(letDeclarations.ts, 1, 3))
 
 let l2: number;
->l2 : number, Symbol(l2,Decl(letDeclarations.ts,2,3))
+>l2 : number, Symbol(l2, Decl(letDeclarations.ts, 2, 3))
 
 let l3, l4, l5 :string, l6;
->l3 : any, Symbol(l3,Decl(letDeclarations.ts,3,3))
->l4 : any, Symbol(l4,Decl(letDeclarations.ts,3,7))
->l5 : string, Symbol(l5,Decl(letDeclarations.ts,3,11))
->l6 : any, Symbol(l6,Decl(letDeclarations.ts,3,23))
+>l3 : any, Symbol(l3, Decl(letDeclarations.ts, 3, 3))
+>l4 : any, Symbol(l4, Decl(letDeclarations.ts, 3, 7))
+>l5 : string, Symbol(l5, Decl(letDeclarations.ts, 3, 11))
+>l6 : any, Symbol(l6, Decl(letDeclarations.ts, 3, 23))
 
 let l7 = false;
->l7 : boolean, Symbol(l7,Decl(letDeclarations.ts,5,3))
+>l7 : boolean, Symbol(l7, Decl(letDeclarations.ts, 5, 3))
 >false : boolean
 
 let l8: number = 23;
->l8 : number, Symbol(l8,Decl(letDeclarations.ts,6,3))
+>l8 : number, Symbol(l8, Decl(letDeclarations.ts, 6, 3))
 >23 : number
 
 let l9 = 0, l10 :string = "", l11 = null;
->l9 : number, Symbol(l9,Decl(letDeclarations.ts,7,3))
+>l9 : number, Symbol(l9, Decl(letDeclarations.ts, 7, 3))
 >0 : number
->l10 : string, Symbol(l10,Decl(letDeclarations.ts,7,11))
+>l10 : string, Symbol(l10, Decl(letDeclarations.ts, 7, 11))
 >"" : string
->l11 : any, Symbol(l11,Decl(letDeclarations.ts,7,29))
+>l11 : any, Symbol(l11, Decl(letDeclarations.ts, 7, 29))
 >null : null
 
 for(let l11 in {}) { }
->l11 : any, Symbol(l11,Decl(letDeclarations.ts,9,7))
+>l11 : any, Symbol(l11, Decl(letDeclarations.ts, 9, 7))
 >{} : {}
 
 for(let l12 = 0; l12 < 9; l12++) { }
->l12 : number, Symbol(l12,Decl(letDeclarations.ts,11,7))
+>l12 : number, Symbol(l12, Decl(letDeclarations.ts, 11, 7))
 >0 : number
 >l12 < 9 : boolean
->l12 : number, Symbol(l12,Decl(letDeclarations.ts,11,7))
+>l12 : number, Symbol(l12, Decl(letDeclarations.ts, 11, 7))
 >9 : number
 >l12++ : number
->l12 : number, Symbol(l12,Decl(letDeclarations.ts,11,7))
+>l12 : number, Symbol(l12, Decl(letDeclarations.ts, 11, 7))
 

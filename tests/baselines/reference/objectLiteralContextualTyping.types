@@ -2,86 +2,86 @@
 // Tests related to #1774
 
 interface Item {
->Item : Item, Symbol(Item,Decl(objectLiteralContextualTyping.ts,0,0))
+>Item : Item, Symbol(Item, Decl(objectLiteralContextualTyping.ts, 0, 0))
 
     name: string;
->name : string, Symbol(name,Decl(objectLiteralContextualTyping.ts,2,16))
+>name : string, Symbol(name, Decl(objectLiteralContextualTyping.ts, 2, 16))
 
     description?: string;
->description : string, Symbol(description,Decl(objectLiteralContextualTyping.ts,3,17))
+>description : string, Symbol(description, Decl(objectLiteralContextualTyping.ts, 3, 17))
 }
 
 declare function foo(item: Item): string;
->foo : { (item: Item): string; (item: any): number; }, Symbol(foo,Decl(objectLiteralContextualTyping.ts,5,1),Decl(objectLiteralContextualTyping.ts,7,41))
->item : Item, Symbol(item,Decl(objectLiteralContextualTyping.ts,7,21))
->Item : Item, Symbol(Item,Decl(objectLiteralContextualTyping.ts,0,0))
+>foo : { (item: Item): string; (item: any): number; }, Symbol(foo, Decl(objectLiteralContextualTyping.ts, 5, 1), Decl(objectLiteralContextualTyping.ts, 7, 41))
+>item : Item, Symbol(item, Decl(objectLiteralContextualTyping.ts, 7, 21))
+>Item : Item, Symbol(Item, Decl(objectLiteralContextualTyping.ts, 0, 0))
 
 declare function foo(item: any): number;
->foo : { (item: Item): string; (item: any): number; }, Symbol(foo,Decl(objectLiteralContextualTyping.ts,5,1),Decl(objectLiteralContextualTyping.ts,7,41))
->item : any, Symbol(item,Decl(objectLiteralContextualTyping.ts,8,21))
+>foo : { (item: Item): string; (item: any): number; }, Symbol(foo, Decl(objectLiteralContextualTyping.ts, 5, 1), Decl(objectLiteralContextualTyping.ts, 7, 41))
+>item : any, Symbol(item, Decl(objectLiteralContextualTyping.ts, 8, 21))
 
 var x = foo({ name: "Sprocket" });
->x : string, Symbol(x,Decl(objectLiteralContextualTyping.ts,10,3),Decl(objectLiteralContextualTyping.ts,11,3))
+>x : string, Symbol(x, Decl(objectLiteralContextualTyping.ts, 10, 3), Decl(objectLiteralContextualTyping.ts, 11, 3))
 >foo({ name: "Sprocket" }) : string
->foo : { (item: Item): string; (item: any): number; }, Symbol(foo,Decl(objectLiteralContextualTyping.ts,5,1),Decl(objectLiteralContextualTyping.ts,7,41))
+>foo : { (item: Item): string; (item: any): number; }, Symbol(foo, Decl(objectLiteralContextualTyping.ts, 5, 1), Decl(objectLiteralContextualTyping.ts, 7, 41))
 >{ name: "Sprocket" } : { name: string; }
->name : string, Symbol(name,Decl(objectLiteralContextualTyping.ts,10,13))
+>name : string, Symbol(name, Decl(objectLiteralContextualTyping.ts, 10, 13))
 >"Sprocket" : string
 
 var x: string;
->x : string, Symbol(x,Decl(objectLiteralContextualTyping.ts,10,3),Decl(objectLiteralContextualTyping.ts,11,3))
+>x : string, Symbol(x, Decl(objectLiteralContextualTyping.ts, 10, 3), Decl(objectLiteralContextualTyping.ts, 11, 3))
 
 var y = foo({ name: "Sprocket", description: "Bumpy wheel" });
->y : string, Symbol(y,Decl(objectLiteralContextualTyping.ts,13,3),Decl(objectLiteralContextualTyping.ts,14,3))
+>y : string, Symbol(y, Decl(objectLiteralContextualTyping.ts, 13, 3), Decl(objectLiteralContextualTyping.ts, 14, 3))
 >foo({ name: "Sprocket", description: "Bumpy wheel" }) : string
->foo : { (item: Item): string; (item: any): number; }, Symbol(foo,Decl(objectLiteralContextualTyping.ts,5,1),Decl(objectLiteralContextualTyping.ts,7,41))
+>foo : { (item: Item): string; (item: any): number; }, Symbol(foo, Decl(objectLiteralContextualTyping.ts, 5, 1), Decl(objectLiteralContextualTyping.ts, 7, 41))
 >{ name: "Sprocket", description: "Bumpy wheel" } : { name: string; description: string; }
->name : string, Symbol(name,Decl(objectLiteralContextualTyping.ts,13,13))
+>name : string, Symbol(name, Decl(objectLiteralContextualTyping.ts, 13, 13))
 >"Sprocket" : string
->description : string, Symbol(description,Decl(objectLiteralContextualTyping.ts,13,31))
+>description : string, Symbol(description, Decl(objectLiteralContextualTyping.ts, 13, 31))
 >"Bumpy wheel" : string
 
 var y: string;
->y : string, Symbol(y,Decl(objectLiteralContextualTyping.ts,13,3),Decl(objectLiteralContextualTyping.ts,14,3))
+>y : string, Symbol(y, Decl(objectLiteralContextualTyping.ts, 13, 3), Decl(objectLiteralContextualTyping.ts, 14, 3))
 
 var z = foo({ name: "Sprocket", description: false });
->z : number, Symbol(z,Decl(objectLiteralContextualTyping.ts,16,3),Decl(objectLiteralContextualTyping.ts,17,3))
+>z : number, Symbol(z, Decl(objectLiteralContextualTyping.ts, 16, 3), Decl(objectLiteralContextualTyping.ts, 17, 3))
 >foo({ name: "Sprocket", description: false }) : number
->foo : { (item: Item): string; (item: any): number; }, Symbol(foo,Decl(objectLiteralContextualTyping.ts,5,1),Decl(objectLiteralContextualTyping.ts,7,41))
+>foo : { (item: Item): string; (item: any): number; }, Symbol(foo, Decl(objectLiteralContextualTyping.ts, 5, 1), Decl(objectLiteralContextualTyping.ts, 7, 41))
 >{ name: "Sprocket", description: false } : { name: string; description: boolean; }
->name : string, Symbol(name,Decl(objectLiteralContextualTyping.ts,16,13))
+>name : string, Symbol(name, Decl(objectLiteralContextualTyping.ts, 16, 13))
 >"Sprocket" : string
->description : boolean, Symbol(description,Decl(objectLiteralContextualTyping.ts,16,31))
+>description : boolean, Symbol(description, Decl(objectLiteralContextualTyping.ts, 16, 31))
 >false : boolean
 
 var z: number;
->z : number, Symbol(z,Decl(objectLiteralContextualTyping.ts,16,3),Decl(objectLiteralContextualTyping.ts,17,3))
+>z : number, Symbol(z, Decl(objectLiteralContextualTyping.ts, 16, 3), Decl(objectLiteralContextualTyping.ts, 17, 3))
 
 var w = foo({ a: 10 });
->w : number, Symbol(w,Decl(objectLiteralContextualTyping.ts,19,3),Decl(objectLiteralContextualTyping.ts,20,3))
+>w : number, Symbol(w, Decl(objectLiteralContextualTyping.ts, 19, 3), Decl(objectLiteralContextualTyping.ts, 20, 3))
 >foo({ a: 10 }) : number
->foo : { (item: Item): string; (item: any): number; }, Symbol(foo,Decl(objectLiteralContextualTyping.ts,5,1),Decl(objectLiteralContextualTyping.ts,7,41))
+>foo : { (item: Item): string; (item: any): number; }, Symbol(foo, Decl(objectLiteralContextualTyping.ts, 5, 1), Decl(objectLiteralContextualTyping.ts, 7, 41))
 >{ a: 10 } : { a: number; }
->a : number, Symbol(a,Decl(objectLiteralContextualTyping.ts,19,13))
+>a : number, Symbol(a, Decl(objectLiteralContextualTyping.ts, 19, 13))
 >10 : number
 
 var w: number;
->w : number, Symbol(w,Decl(objectLiteralContextualTyping.ts,19,3),Decl(objectLiteralContextualTyping.ts,20,3))
+>w : number, Symbol(w, Decl(objectLiteralContextualTyping.ts, 19, 3), Decl(objectLiteralContextualTyping.ts, 20, 3))
 
 declare function bar<T>(param: { x?: T }): T;
->bar : <T>(param: { x?: T; }) => T, Symbol(bar,Decl(objectLiteralContextualTyping.ts,20,14))
->T : T, Symbol(T,Decl(objectLiteralContextualTyping.ts,22,21))
->param : { x?: T; }, Symbol(param,Decl(objectLiteralContextualTyping.ts,22,24))
->x : T, Symbol(x,Decl(objectLiteralContextualTyping.ts,22,32))
->T : T, Symbol(T,Decl(objectLiteralContextualTyping.ts,22,21))
->T : T, Symbol(T,Decl(objectLiteralContextualTyping.ts,22,21))
+>bar : <T>(param: { x?: T; }) => T, Symbol(bar, Decl(objectLiteralContextualTyping.ts, 20, 14))
+>T : T, Symbol(T, Decl(objectLiteralContextualTyping.ts, 22, 21))
+>param : { x?: T; }, Symbol(param, Decl(objectLiteralContextualTyping.ts, 22, 24))
+>x : T, Symbol(x, Decl(objectLiteralContextualTyping.ts, 22, 32))
+>T : T, Symbol(T, Decl(objectLiteralContextualTyping.ts, 22, 21))
+>T : T, Symbol(T, Decl(objectLiteralContextualTyping.ts, 22, 21))
 
 var b = bar({});
->b : {}, Symbol(b,Decl(objectLiteralContextualTyping.ts,24,3),Decl(objectLiteralContextualTyping.ts,25,3))
+>b : {}, Symbol(b, Decl(objectLiteralContextualTyping.ts, 24, 3), Decl(objectLiteralContextualTyping.ts, 25, 3))
 >bar({}) : {}
->bar : <T>(param: { x?: T; }) => T, Symbol(bar,Decl(objectLiteralContextualTyping.ts,20,14))
+>bar : <T>(param: { x?: T; }) => T, Symbol(bar, Decl(objectLiteralContextualTyping.ts, 20, 14))
 >{} : {}
 
 var b: {};
->b : {}, Symbol(b,Decl(objectLiteralContextualTyping.ts,24,3),Decl(objectLiteralContextualTyping.ts,25,3))
+>b : {}, Symbol(b, Decl(objectLiteralContextualTyping.ts, 24, 3), Decl(objectLiteralContextualTyping.ts, 25, 3))
 

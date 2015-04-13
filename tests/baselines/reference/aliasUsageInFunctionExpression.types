@@ -1,50 +1,50 @@
 === tests/cases/compiler/aliasUsageInFunctionExpression_main.ts ===
 import Backbone = require("aliasUsageInFunctionExpression_backbone");
->Backbone : typeof Backbone, Symbol(Backbone,Decl(aliasUsageInFunctionExpression_main.ts,0,0))
+>Backbone : typeof Backbone, Symbol(Backbone, Decl(aliasUsageInFunctionExpression_main.ts, 0, 0))
 
 import moduleA = require("aliasUsageInFunctionExpression_moduleA");
->moduleA : typeof moduleA, Symbol(moduleA,Decl(aliasUsageInFunctionExpression_main.ts,0,69))
+>moduleA : typeof moduleA, Symbol(moduleA, Decl(aliasUsageInFunctionExpression_main.ts, 0, 69))
 
 interface IHasVisualizationModel {
->IHasVisualizationModel : IHasVisualizationModel, Symbol(IHasVisualizationModel,Decl(aliasUsageInFunctionExpression_main.ts,1,67))
+>IHasVisualizationModel : IHasVisualizationModel, Symbol(IHasVisualizationModel, Decl(aliasUsageInFunctionExpression_main.ts, 1, 67))
 
     VisualizationModel: typeof Backbone.Model;
->VisualizationModel : typeof Backbone.Model, Symbol(VisualizationModel,Decl(aliasUsageInFunctionExpression_main.ts,2,34))
->Backbone.Model : typeof Backbone.Model, Symbol(Backbone.Model,Decl(aliasUsageInFunctionExpression_backbone.ts,0,0))
->Backbone : typeof Backbone, Symbol(Backbone,Decl(aliasUsageInFunctionExpression_main.ts,0,0))
->Model : typeof Backbone.Model, Symbol(Backbone.Model,Decl(aliasUsageInFunctionExpression_backbone.ts,0,0))
+>VisualizationModel : typeof Backbone.Model, Symbol(VisualizationModel, Decl(aliasUsageInFunctionExpression_main.ts, 2, 34))
+>Backbone.Model : typeof Backbone.Model, Symbol(Backbone.Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
+>Backbone : typeof Backbone, Symbol(Backbone, Decl(aliasUsageInFunctionExpression_main.ts, 0, 0))
+>Model : typeof Backbone.Model, Symbol(Backbone.Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
 }
 var f = (x: IHasVisualizationModel) => x;
->f : (x: IHasVisualizationModel) => IHasVisualizationModel, Symbol(f,Decl(aliasUsageInFunctionExpression_main.ts,5,3))
+>f : (x: IHasVisualizationModel) => IHasVisualizationModel, Symbol(f, Decl(aliasUsageInFunctionExpression_main.ts, 5, 3))
 >(x: IHasVisualizationModel) => x : (x: IHasVisualizationModel) => IHasVisualizationModel
->x : IHasVisualizationModel, Symbol(x,Decl(aliasUsageInFunctionExpression_main.ts,5,9))
->IHasVisualizationModel : IHasVisualizationModel, Symbol(IHasVisualizationModel,Decl(aliasUsageInFunctionExpression_main.ts,1,67))
->x : IHasVisualizationModel, Symbol(x,Decl(aliasUsageInFunctionExpression_main.ts,5,9))
+>x : IHasVisualizationModel, Symbol(x, Decl(aliasUsageInFunctionExpression_main.ts, 5, 9))
+>IHasVisualizationModel : IHasVisualizationModel, Symbol(IHasVisualizationModel, Decl(aliasUsageInFunctionExpression_main.ts, 1, 67))
+>x : IHasVisualizationModel, Symbol(x, Decl(aliasUsageInFunctionExpression_main.ts, 5, 9))
 
 f = (x) => moduleA;
 >f = (x) => moduleA : (x: IHasVisualizationModel) => typeof moduleA
->f : (x: IHasVisualizationModel) => IHasVisualizationModel, Symbol(f,Decl(aliasUsageInFunctionExpression_main.ts,5,3))
+>f : (x: IHasVisualizationModel) => IHasVisualizationModel, Symbol(f, Decl(aliasUsageInFunctionExpression_main.ts, 5, 3))
 >(x) => moduleA : (x: IHasVisualizationModel) => typeof moduleA
->x : IHasVisualizationModel, Symbol(x,Decl(aliasUsageInFunctionExpression_main.ts,6,5))
->moduleA : typeof moduleA, Symbol(moduleA,Decl(aliasUsageInFunctionExpression_main.ts,0,69))
+>x : IHasVisualizationModel, Symbol(x, Decl(aliasUsageInFunctionExpression_main.ts, 6, 5))
+>moduleA : typeof moduleA, Symbol(moduleA, Decl(aliasUsageInFunctionExpression_main.ts, 0, 69))
 
 === tests/cases/compiler/aliasUsageInFunctionExpression_backbone.ts ===
 export class Model {
->Model : Model, Symbol(Model,Decl(aliasUsageInFunctionExpression_backbone.ts,0,0))
+>Model : Model, Symbol(Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
 
     public someData: string;
->someData : string, Symbol(someData,Decl(aliasUsageInFunctionExpression_backbone.ts,0,20))
+>someData : string, Symbol(someData, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 20))
 }
 
 === tests/cases/compiler/aliasUsageInFunctionExpression_moduleA.ts ===
 import Backbone = require("aliasUsageInFunctionExpression_backbone");
->Backbone : typeof Backbone, Symbol(Backbone,Decl(aliasUsageInFunctionExpression_moduleA.ts,0,0))
+>Backbone : typeof Backbone, Symbol(Backbone, Decl(aliasUsageInFunctionExpression_moduleA.ts, 0, 0))
 
 export class VisualizationModel extends Backbone.Model {
->VisualizationModel : VisualizationModel, Symbol(VisualizationModel,Decl(aliasUsageInFunctionExpression_moduleA.ts,0,69))
->Backbone.Model : any, Symbol(Backbone.Model,Decl(aliasUsageInFunctionExpression_backbone.ts,0,0))
->Backbone : typeof Backbone, Symbol(Backbone,Decl(aliasUsageInFunctionExpression_moduleA.ts,0,0))
->Model : Backbone.Model, Symbol(Backbone.Model,Decl(aliasUsageInFunctionExpression_backbone.ts,0,0))
+>VisualizationModel : VisualizationModel, Symbol(VisualizationModel, Decl(aliasUsageInFunctionExpression_moduleA.ts, 0, 69))
+>Backbone.Model : any, Symbol(Backbone.Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
+>Backbone : typeof Backbone, Symbol(Backbone, Decl(aliasUsageInFunctionExpression_moduleA.ts, 0, 0))
+>Model : Backbone.Model, Symbol(Backbone.Model, Decl(aliasUsageInFunctionExpression_backbone.ts, 0, 0))
 
     // interesting stuff here
 }

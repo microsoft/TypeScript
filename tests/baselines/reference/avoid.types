@@ -1,51 +1,51 @@
 === tests/cases/compiler/avoid.ts ===
 function f() {
->f : () => void, Symbol(f,Decl(avoid.ts,0,0))
+>f : () => void, Symbol(f, Decl(avoid.ts, 0, 0))
 
     var x=1;
->x : number, Symbol(x,Decl(avoid.ts,1,7))
+>x : number, Symbol(x, Decl(avoid.ts, 1, 7))
 >1 : number
 }
 
 var y=f();  // error void fn
->y : void, Symbol(y,Decl(avoid.ts,4,3))
+>y : void, Symbol(y, Decl(avoid.ts, 4, 3))
 >f() : void
->f : () => void, Symbol(f,Decl(avoid.ts,0,0))
+>f : () => void, Symbol(f, Decl(avoid.ts, 0, 0))
 
 var why:any=f(); // error void fn
->why : any, Symbol(why,Decl(avoid.ts,5,3))
+>why : any, Symbol(why, Decl(avoid.ts, 5, 3))
 >f() : void
->f : () => void, Symbol(f,Decl(avoid.ts,0,0))
+>f : () => void, Symbol(f, Decl(avoid.ts, 0, 0))
 
 var w:any;
->w : any, Symbol(w,Decl(avoid.ts,6,3))
+>w : any, Symbol(w, Decl(avoid.ts, 6, 3))
 
 w=f(); // error void fn
 >w=f() : void
->w : any, Symbol(w,Decl(avoid.ts,6,3))
+>w : any, Symbol(w, Decl(avoid.ts, 6, 3))
 >f() : void
->f : () => void, Symbol(f,Decl(avoid.ts,0,0))
+>f : () => void, Symbol(f, Decl(avoid.ts, 0, 0))
 
 class C {
->C : C, Symbol(C,Decl(avoid.ts,7,6))
+>C : C, Symbol(C, Decl(avoid.ts, 7, 6))
 
     g() {
->g : () => void, Symbol(g,Decl(avoid.ts,9,9))
+>g : () => void, Symbol(g, Decl(avoid.ts, 9, 9))
         
     }
 }
 
 var z=new C().g(); // error void fn
->z : void, Symbol(z,Decl(avoid.ts,15,3))
+>z : void, Symbol(z, Decl(avoid.ts, 15, 3))
 >new C().g() : void
->new C().g : () => void, Symbol(C.g,Decl(avoid.ts,9,9))
+>new C().g : () => void, Symbol(C.g, Decl(avoid.ts, 9, 9))
 >new C() : C
->C : typeof C, Symbol(C,Decl(avoid.ts,7,6))
->g : () => void, Symbol(C.g,Decl(avoid.ts,9,9))
+>C : typeof C, Symbol(C, Decl(avoid.ts, 7, 6))
+>g : () => void, Symbol(C.g, Decl(avoid.ts, 9, 9))
 
 var N=new f();  // ok with void fn
->N : any, Symbol(N,Decl(avoid.ts,16,3))
+>N : any, Symbol(N, Decl(avoid.ts, 16, 3))
 >new f() : any
->f : () => void, Symbol(f,Decl(avoid.ts,0,0))
+>f : () => void, Symbol(f, Decl(avoid.ts, 0, 0))
 
 

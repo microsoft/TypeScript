@@ -1,163 +1,163 @@
 === tests/cases/compiler/collisionExportsRequireAndAmbientModule_externalmodule.ts ===
 export declare module require {
->require : typeof require, Symbol(require,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,0,0))
+>require : typeof require, Symbol(require, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 0, 0))
 
     export interface I {
->I : I, Symbol(I,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,0,31))
+>I : I, Symbol(I, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 0, 31))
     }
     export class C {
->C : C, Symbol(C,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,2,5))
+>C : C, Symbol(C, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 2, 5))
     }
 }
 export function foo(): require.I {
->foo : () => require.I, Symbol(foo,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,5,1))
->require : any, Symbol(require,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,0,0))
->I : require.I, Symbol(require.I,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,0,31))
+>foo : () => require.I, Symbol(foo, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 5, 1))
+>require : any, Symbol(require, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 0, 0))
+>I : require.I, Symbol(require.I, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 0, 31))
 
     return null;
 >null : null
 }
 export declare module exports {
->exports : typeof exports, Symbol(exports,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,8,1))
+>exports : typeof exports, Symbol(exports, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 8, 1))
 
     export interface I {
->I : I, Symbol(I,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,9,31))
+>I : I, Symbol(I, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 9, 31))
     }
     export class C {
->C : C, Symbol(C,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,11,5))
+>C : C, Symbol(C, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 11, 5))
     }
 }
 export function foo2(): exports.I {
->foo2 : () => exports.I, Symbol(foo2,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,14,1))
->exports : any, Symbol(exports,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,8,1))
->I : exports.I, Symbol(exports.I,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,9,31))
+>foo2 : () => exports.I, Symbol(foo2, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 14, 1))
+>exports : any, Symbol(exports, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 8, 1))
+>I : exports.I, Symbol(exports.I, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 9, 31))
 
     return null;
 >null : null
 }
 declare module m1 {
->m1 : typeof m1, Symbol(m1,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,17,1))
+>m1 : typeof m1, Symbol(m1, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 17, 1))
 
     module require {
->require : typeof require, Symbol(require,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,18,19))
+>require : typeof require, Symbol(require, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 18, 19))
 
         export interface I {
->I : I, Symbol(I,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,19,20))
+>I : I, Symbol(I, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 19, 20))
         }
         export class C {
->C : C, Symbol(C,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,21,9))
+>C : C, Symbol(C, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 21, 9))
         }
     }
     module exports {
->exports : typeof exports, Symbol(exports,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,24,5))
+>exports : typeof exports, Symbol(exports, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 24, 5))
 
         export interface I {
->I : I, Symbol(I,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,25,20))
+>I : I, Symbol(I, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 25, 20))
         }
         export class C {
->C : C, Symbol(C,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,27,9))
+>C : C, Symbol(C, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 27, 9))
         }
     }
 }
 module m2 {
->m2 : typeof m2, Symbol(m2,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,31,1))
+>m2 : typeof m2, Symbol(m2, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 31, 1))
 
     export declare module require {
->require : typeof require, Symbol(require,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,32,11))
+>require : typeof require, Symbol(require, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 32, 11))
 
         export interface I {
->I : I, Symbol(I,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,33,35))
+>I : I, Symbol(I, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 33, 35))
         }
         export class C {
->C : C, Symbol(C,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,35,9))
+>C : C, Symbol(C, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 35, 9))
         }
     }
     export declare module exports {
->exports : typeof exports, Symbol(exports,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,38,5))
+>exports : typeof exports, Symbol(exports, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 38, 5))
 
         export interface I {
->I : I, Symbol(I,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,39,35))
+>I : I, Symbol(I, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 39, 35))
         }
         export class C {
->C : C, Symbol(C,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,41,9))
+>C : C, Symbol(C, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 41, 9))
         }
     }
     var a = 10;
->a : number, Symbol(a,Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts,45,7))
+>a : number, Symbol(a, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 45, 7))
 >10 : number
 }
 
 === tests/cases/compiler/collisionExportsRequireAndAmbientModule_globalFile.ts ===
 declare module require {
->require : typeof require, Symbol(require,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,0,0))
+>require : typeof require, Symbol(require, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 0, 0))
 
     export interface I {
->I : I, Symbol(I,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,0,24))
+>I : I, Symbol(I, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 0, 24))
     }
     export class C {
->C : C, Symbol(C,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,2,5))
+>C : C, Symbol(C, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 2, 5))
     }
 }
 declare module exports {
->exports : typeof exports, Symbol(exports,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,5,1))
+>exports : typeof exports, Symbol(exports, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 5, 1))
 
     export interface I {
->I : I, Symbol(I,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,6,24))
+>I : I, Symbol(I, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 6, 24))
     }
     export class C {
->C : C, Symbol(C,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,8,5))
+>C : C, Symbol(C, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 8, 5))
     }
 }
 declare module m3 {
->m3 : typeof m3, Symbol(m3,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,11,1))
+>m3 : typeof m3, Symbol(m3, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 11, 1))
 
     module require {
->require : typeof require, Symbol(require,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,12,19))
+>require : typeof require, Symbol(require, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 12, 19))
 
         export interface I {
->I : I, Symbol(I,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,13,20))
+>I : I, Symbol(I, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 13, 20))
         }
         export class C {
->C : C, Symbol(C,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,15,9))
+>C : C, Symbol(C, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 15, 9))
         }
     }
     module exports {
->exports : typeof exports, Symbol(exports,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,18,5))
+>exports : typeof exports, Symbol(exports, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 18, 5))
 
         export interface I {
->I : I, Symbol(I,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,19,20))
+>I : I, Symbol(I, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 19, 20))
         }
         export class C {
->C : C, Symbol(C,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,21,9))
+>C : C, Symbol(C, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 21, 9))
         }
     }
 }
 module m4 {
->m4 : typeof m4, Symbol(m4,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,25,1))
+>m4 : typeof m4, Symbol(m4, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 25, 1))
 
     export declare module require {
->require : typeof require, Symbol(require,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,26,11))
+>require : typeof require, Symbol(require, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 26, 11))
 
         export interface I {
->I : I, Symbol(I,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,27,35))
+>I : I, Symbol(I, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 27, 35))
         }
         export class C {
->C : C, Symbol(C,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,29,9))
+>C : C, Symbol(C, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 29, 9))
         }
     }
     export declare module exports {
->exports : typeof exports, Symbol(exports,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,32,5))
+>exports : typeof exports, Symbol(exports, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 32, 5))
 
         export interface I {
->I : I, Symbol(I,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,33,35))
+>I : I, Symbol(I, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 33, 35))
         }
         export class C {
->C : C, Symbol(C,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,35,9))
+>C : C, Symbol(C, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 35, 9))
         }
     }
 
     var a = 10;
->a : number, Symbol(a,Decl(collisionExportsRequireAndAmbientModule_globalFile.ts,40,7))
+>a : number, Symbol(a, Decl(collisionExportsRequireAndAmbientModule_globalFile.ts, 40, 7))
 >10 : number
 }
 

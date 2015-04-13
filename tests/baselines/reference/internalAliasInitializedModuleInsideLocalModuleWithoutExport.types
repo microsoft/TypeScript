@@ -1,30 +1,30 @@
 === tests/cases/compiler/internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts ===
 export module a {
->a : typeof a, Symbol(a,Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts,0,0))
+>a : typeof a, Symbol(a, Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts, 0, 0))
 
     export module b {
->b : typeof b, Symbol(b,Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts,0,17))
+>b : typeof b, Symbol(b, Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts, 0, 17))
 
         export class c {
->c : c, Symbol(c,Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts,1,21))
+>c : c, Symbol(c, Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts, 1, 21))
         }
     }
 }
 
 export module c {
->c : typeof c, Symbol(c,Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts,5,1))
+>c : typeof c, Symbol(c, Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts, 5, 1))
 
     import b = a.b;
->b : typeof b, Symbol(b,Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts,7,17))
->a : typeof a, Symbol(a,Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts,0,0))
->b : typeof b, Symbol(b,Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts,0,17))
+>b : typeof b, Symbol(b, Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts, 7, 17))
+>a : typeof a, Symbol(a, Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts, 0, 0))
+>b : typeof b, Symbol(b, Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts, 0, 17))
 
     export var x: b.c = new b.c();
->x : b.c, Symbol(x,Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts,9,14))
->b : any, Symbol(b,Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts,7,17))
->c : b.c, Symbol(b.c,Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts,1,21))
+>x : b.c, Symbol(x, Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts, 9, 14))
+>b : any, Symbol(b, Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts, 7, 17))
+>c : b.c, Symbol(b.c, Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts, 1, 21))
 >new b.c() : b.c
->b.c : typeof b.c, Symbol(b.c,Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts,1,21))
->b : typeof b, Symbol(b,Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts,7,17))
->c : typeof b.c, Symbol(b.c,Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts,1,21))
+>b.c : typeof b.c, Symbol(b.c, Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts, 1, 21))
+>b : typeof b, Symbol(b, Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts, 7, 17))
+>c : typeof b.c, Symbol(b.c, Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts, 1, 21))
 }

@@ -1,100 +1,100 @@
 === tests/cases/conformance/classes/members/constructorFunctionTypes/constructorHasPrototypeProperty.ts ===
 module NonGeneric {
->NonGeneric : typeof NonGeneric, Symbol(NonGeneric,Decl(constructorHasPrototypeProperty.ts,0,0))
+>NonGeneric : typeof NonGeneric, Symbol(NonGeneric, Decl(constructorHasPrototypeProperty.ts, 0, 0))
 
     class C {
->C : C, Symbol(C,Decl(constructorHasPrototypeProperty.ts,0,19))
+>C : C, Symbol(C, Decl(constructorHasPrototypeProperty.ts, 0, 19))
 
         foo: string;
->foo : string, Symbol(foo,Decl(constructorHasPrototypeProperty.ts,1,13))
+>foo : string, Symbol(foo, Decl(constructorHasPrototypeProperty.ts, 1, 13))
     }
 
     class D extends C {
->D : D, Symbol(D,Decl(constructorHasPrototypeProperty.ts,3,5))
->C : C, Symbol(C,Decl(constructorHasPrototypeProperty.ts,0,19))
+>D : D, Symbol(D, Decl(constructorHasPrototypeProperty.ts, 3, 5))
+>C : C, Symbol(C, Decl(constructorHasPrototypeProperty.ts, 0, 19))
 
         bar: string;
->bar : string, Symbol(bar,Decl(constructorHasPrototypeProperty.ts,5,23))
+>bar : string, Symbol(bar, Decl(constructorHasPrototypeProperty.ts, 5, 23))
     }
 
     var r = C.prototype;
->r : C, Symbol(r,Decl(constructorHasPrototypeProperty.ts,9,7))
+>r : C, Symbol(r, Decl(constructorHasPrototypeProperty.ts, 9, 7))
 >C.prototype : C, Symbol(C.prototype)
->C : typeof C, Symbol(C,Decl(constructorHasPrototypeProperty.ts,0,19))
+>C : typeof C, Symbol(C, Decl(constructorHasPrototypeProperty.ts, 0, 19))
 >prototype : C, Symbol(C.prototype)
 
     r.foo;
->r.foo : string, Symbol(C.foo,Decl(constructorHasPrototypeProperty.ts,1,13))
->r : C, Symbol(r,Decl(constructorHasPrototypeProperty.ts,9,7))
->foo : string, Symbol(C.foo,Decl(constructorHasPrototypeProperty.ts,1,13))
+>r.foo : string, Symbol(C.foo, Decl(constructorHasPrototypeProperty.ts, 1, 13))
+>r : C, Symbol(r, Decl(constructorHasPrototypeProperty.ts, 9, 7))
+>foo : string, Symbol(C.foo, Decl(constructorHasPrototypeProperty.ts, 1, 13))
 
     var r2 = D.prototype;
->r2 : D, Symbol(r2,Decl(constructorHasPrototypeProperty.ts,11,7))
+>r2 : D, Symbol(r2, Decl(constructorHasPrototypeProperty.ts, 11, 7))
 >D.prototype : D, Symbol(D.prototype)
->D : typeof D, Symbol(D,Decl(constructorHasPrototypeProperty.ts,3,5))
+>D : typeof D, Symbol(D, Decl(constructorHasPrototypeProperty.ts, 3, 5))
 >prototype : D, Symbol(D.prototype)
 
     r2.bar;
->r2.bar : string, Symbol(D.bar,Decl(constructorHasPrototypeProperty.ts,5,23))
->r2 : D, Symbol(r2,Decl(constructorHasPrototypeProperty.ts,11,7))
->bar : string, Symbol(D.bar,Decl(constructorHasPrototypeProperty.ts,5,23))
+>r2.bar : string, Symbol(D.bar, Decl(constructorHasPrototypeProperty.ts, 5, 23))
+>r2 : D, Symbol(r2, Decl(constructorHasPrototypeProperty.ts, 11, 7))
+>bar : string, Symbol(D.bar, Decl(constructorHasPrototypeProperty.ts, 5, 23))
 }
 
 module Generic {
->Generic : typeof Generic, Symbol(Generic,Decl(constructorHasPrototypeProperty.ts,13,1))
+>Generic : typeof Generic, Symbol(Generic, Decl(constructorHasPrototypeProperty.ts, 13, 1))
 
     class C<T,U> {
->C : C<T, U>, Symbol(C,Decl(constructorHasPrototypeProperty.ts,15,16))
->T : T, Symbol(T,Decl(constructorHasPrototypeProperty.ts,16,12))
->U : U, Symbol(U,Decl(constructorHasPrototypeProperty.ts,16,14))
+>C : C<T, U>, Symbol(C, Decl(constructorHasPrototypeProperty.ts, 15, 16))
+>T : T, Symbol(T, Decl(constructorHasPrototypeProperty.ts, 16, 12))
+>U : U, Symbol(U, Decl(constructorHasPrototypeProperty.ts, 16, 14))
 
         foo: T;
->foo : T, Symbol(foo,Decl(constructorHasPrototypeProperty.ts,16,18))
->T : T, Symbol(T,Decl(constructorHasPrototypeProperty.ts,16,12))
+>foo : T, Symbol(foo, Decl(constructorHasPrototypeProperty.ts, 16, 18))
+>T : T, Symbol(T, Decl(constructorHasPrototypeProperty.ts, 16, 12))
 
         bar: U;
->bar : U, Symbol(bar,Decl(constructorHasPrototypeProperty.ts,17,15))
->U : U, Symbol(U,Decl(constructorHasPrototypeProperty.ts,16,14))
+>bar : U, Symbol(bar, Decl(constructorHasPrototypeProperty.ts, 17, 15))
+>U : U, Symbol(U, Decl(constructorHasPrototypeProperty.ts, 16, 14))
     }
 
     class D<T,U> extends C<T,U> {
->D : D<T, U>, Symbol(D,Decl(constructorHasPrototypeProperty.ts,19,5))
->T : T, Symbol(T,Decl(constructorHasPrototypeProperty.ts,21,12))
->U : U, Symbol(U,Decl(constructorHasPrototypeProperty.ts,21,14))
->C : C<T, U>, Symbol(C,Decl(constructorHasPrototypeProperty.ts,15,16))
->T : T, Symbol(T,Decl(constructorHasPrototypeProperty.ts,21,12))
->U : U, Symbol(U,Decl(constructorHasPrototypeProperty.ts,21,14))
+>D : D<T, U>, Symbol(D, Decl(constructorHasPrototypeProperty.ts, 19, 5))
+>T : T, Symbol(T, Decl(constructorHasPrototypeProperty.ts, 21, 12))
+>U : U, Symbol(U, Decl(constructorHasPrototypeProperty.ts, 21, 14))
+>C : C<T, U>, Symbol(C, Decl(constructorHasPrototypeProperty.ts, 15, 16))
+>T : T, Symbol(T, Decl(constructorHasPrototypeProperty.ts, 21, 12))
+>U : U, Symbol(U, Decl(constructorHasPrototypeProperty.ts, 21, 14))
 
         baz: T;
->baz : T, Symbol(baz,Decl(constructorHasPrototypeProperty.ts,21,33))
->T : T, Symbol(T,Decl(constructorHasPrototypeProperty.ts,21,12))
+>baz : T, Symbol(baz, Decl(constructorHasPrototypeProperty.ts, 21, 33))
+>T : T, Symbol(T, Decl(constructorHasPrototypeProperty.ts, 21, 12))
 
         bing: U;
->bing : U, Symbol(bing,Decl(constructorHasPrototypeProperty.ts,22,15))
->U : U, Symbol(U,Decl(constructorHasPrototypeProperty.ts,21,14))
+>bing : U, Symbol(bing, Decl(constructorHasPrototypeProperty.ts, 22, 15))
+>U : U, Symbol(U, Decl(constructorHasPrototypeProperty.ts, 21, 14))
     }
 
     var r = C.prototype; // C<any, any>
->r : C<any, any>, Symbol(r,Decl(constructorHasPrototypeProperty.ts,26,7))
+>r : C<any, any>, Symbol(r, Decl(constructorHasPrototypeProperty.ts, 26, 7))
 >C.prototype : C<any, any>, Symbol(C.prototype)
->C : typeof C, Symbol(C,Decl(constructorHasPrototypeProperty.ts,15,16))
+>C : typeof C, Symbol(C, Decl(constructorHasPrototypeProperty.ts, 15, 16))
 >prototype : C<any, any>, Symbol(C.prototype)
 
     var ra = r.foo; // any
->ra : any, Symbol(ra,Decl(constructorHasPrototypeProperty.ts,27,7))
->r.foo : any, Symbol(C.foo,Decl(constructorHasPrototypeProperty.ts,16,18))
->r : C<any, any>, Symbol(r,Decl(constructorHasPrototypeProperty.ts,26,7))
->foo : any, Symbol(C.foo,Decl(constructorHasPrototypeProperty.ts,16,18))
+>ra : any, Symbol(ra, Decl(constructorHasPrototypeProperty.ts, 27, 7))
+>r.foo : any, Symbol(C.foo, Decl(constructorHasPrototypeProperty.ts, 16, 18))
+>r : C<any, any>, Symbol(r, Decl(constructorHasPrototypeProperty.ts, 26, 7))
+>foo : any, Symbol(C.foo, Decl(constructorHasPrototypeProperty.ts, 16, 18))
 
     var r2 = D.prototype; // D<any, any>
->r2 : D<any, any>, Symbol(r2,Decl(constructorHasPrototypeProperty.ts,28,7))
+>r2 : D<any, any>, Symbol(r2, Decl(constructorHasPrototypeProperty.ts, 28, 7))
 >D.prototype : D<any, any>, Symbol(D.prototype)
->D : typeof D, Symbol(D,Decl(constructorHasPrototypeProperty.ts,19,5))
+>D : typeof D, Symbol(D, Decl(constructorHasPrototypeProperty.ts, 19, 5))
 >prototype : D<any, any>, Symbol(D.prototype)
 
     var rb = r2.baz; // any
->rb : any, Symbol(rb,Decl(constructorHasPrototypeProperty.ts,29,7))
->r2.baz : any, Symbol(D.baz,Decl(constructorHasPrototypeProperty.ts,21,33))
->r2 : D<any, any>, Symbol(r2,Decl(constructorHasPrototypeProperty.ts,28,7))
->baz : any, Symbol(D.baz,Decl(constructorHasPrototypeProperty.ts,21,33))
+>rb : any, Symbol(rb, Decl(constructorHasPrototypeProperty.ts, 29, 7))
+>r2.baz : any, Symbol(D.baz, Decl(constructorHasPrototypeProperty.ts, 21, 33))
+>r2 : D<any, any>, Symbol(r2, Decl(constructorHasPrototypeProperty.ts, 28, 7))
+>baz : any, Symbol(D.baz, Decl(constructorHasPrototypeProperty.ts, 21, 33))
 }

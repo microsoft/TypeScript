@@ -1,40 +1,40 @@
 === tests/cases/compiler/cyclicModuleImport.ts ===
 declare module "SubModule" {
     import MainModule = require('MainModule');
->MainModule : typeof MainModule, Symbol(MainModule,Decl(cyclicModuleImport.ts,0,28))
+>MainModule : typeof MainModule, Symbol(MainModule, Decl(cyclicModuleImport.ts, 0, 28))
 
     class SubModule {
->SubModule : SubModule, Symbol(SubModule,Decl(cyclicModuleImport.ts,1,46))
+>SubModule : SubModule, Symbol(SubModule, Decl(cyclicModuleImport.ts, 1, 46))
 
         public static StaticVar: number;
->StaticVar : number, Symbol(SubModule.StaticVar,Decl(cyclicModuleImport.ts,2,21))
+>StaticVar : number, Symbol(SubModule.StaticVar, Decl(cyclicModuleImport.ts, 2, 21))
 
         public InstanceVar: number;
->InstanceVar : number, Symbol(InstanceVar,Decl(cyclicModuleImport.ts,3,40))
+>InstanceVar : number, Symbol(InstanceVar, Decl(cyclicModuleImport.ts, 3, 40))
 
         public main: MainModule;
->main : MainModule, Symbol(main,Decl(cyclicModuleImport.ts,4,35))
->MainModule : MainModule, Symbol(MainModule,Decl(cyclicModuleImport.ts,0,28))
+>main : MainModule, Symbol(main, Decl(cyclicModuleImport.ts, 4, 35))
+>MainModule : MainModule, Symbol(MainModule, Decl(cyclicModuleImport.ts, 0, 28))
 
         constructor();
     }
     export = SubModule;
->SubModule : SubModule, Symbol(SubModule,Decl(cyclicModuleImport.ts,1,46))
+>SubModule : SubModule, Symbol(SubModule, Decl(cyclicModuleImport.ts, 1, 46))
 }
 declare module "MainModule" {
     import SubModule = require('SubModule');
->SubModule : typeof SubModule, Symbol(SubModule,Decl(cyclicModuleImport.ts,10,29))
+>SubModule : typeof SubModule, Symbol(SubModule, Decl(cyclicModuleImport.ts, 10, 29))
 
     class MainModule {
->MainModule : MainModule, Symbol(MainModule,Decl(cyclicModuleImport.ts,11,44))
+>MainModule : MainModule, Symbol(MainModule, Decl(cyclicModuleImport.ts, 11, 44))
 
         public SubModule: SubModule;
->SubModule : SubModule, Symbol(SubModule,Decl(cyclicModuleImport.ts,12,22))
->SubModule : SubModule, Symbol(SubModule,Decl(cyclicModuleImport.ts,10,29))
+>SubModule : SubModule, Symbol(SubModule, Decl(cyclicModuleImport.ts, 12, 22))
+>SubModule : SubModule, Symbol(SubModule, Decl(cyclicModuleImport.ts, 10, 29))
 
         constructor();
     }
     export = MainModule;
->MainModule : MainModule, Symbol(MainModule,Decl(cyclicModuleImport.ts,11,44))
+>MainModule : MainModule, Symbol(MainModule, Decl(cyclicModuleImport.ts, 11, 44))
 }
 

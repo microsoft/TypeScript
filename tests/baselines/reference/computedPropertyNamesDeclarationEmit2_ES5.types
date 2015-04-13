@@ -1,6 +1,6 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit2_ES5.ts ===
 class C {
->C : C, Symbol(C,Decl(computedPropertyNamesDeclarationEmit2_ES5.ts,0,0))
+>C : C, Symbol(C, Decl(computedPropertyNamesDeclarationEmit2_ES5.ts, 0, 0))
 
     static ["" + ""]() { }
 >"" + "" : string
@@ -17,5 +17,5 @@ class C {
 >"" + "" : string
 >"" : string
 >"" : string
->x : any, Symbol(x,Decl(computedPropertyNamesDeclarationEmit2_ES5.ts,3,25))
+>x : any, Symbol(x, Decl(computedPropertyNamesDeclarationEmit2_ES5.ts, 3, 25))
 }

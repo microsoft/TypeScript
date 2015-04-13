@@ -1,39 +1,39 @@
 === tests/cases/compiler/importAliasWithDottedName.ts ===
 module M {
->M : typeof M, Symbol(M,Decl(importAliasWithDottedName.ts,0,0))
+>M : typeof M, Symbol(M, Decl(importAliasWithDottedName.ts, 0, 0))
 
     export var x = 1;
->x : number, Symbol(x,Decl(importAliasWithDottedName.ts,1,14))
+>x : number, Symbol(x, Decl(importAliasWithDottedName.ts, 1, 14))
 >1 : number
 
     export module N {
->N : typeof N, Symbol(N,Decl(importAliasWithDottedName.ts,1,21))
+>N : typeof N, Symbol(N, Decl(importAliasWithDottedName.ts, 1, 21))
 
         export var y = 2;
->y : number, Symbol(y,Decl(importAliasWithDottedName.ts,3,18))
+>y : number, Symbol(y, Decl(importAliasWithDottedName.ts, 3, 18))
 >2 : number
     }
 }
 
 module A {
->A : typeof A, Symbol(A,Decl(importAliasWithDottedName.ts,5,1))
+>A : typeof A, Symbol(A, Decl(importAliasWithDottedName.ts, 5, 1))
 
     import N = M.N;
->N : typeof N, Symbol(N,Decl(importAliasWithDottedName.ts,7,10))
->M : typeof M, Symbol(M,Decl(importAliasWithDottedName.ts,0,0))
->N : typeof N, Symbol(N,Decl(importAliasWithDottedName.ts,1,21))
+>N : typeof N, Symbol(N, Decl(importAliasWithDottedName.ts, 7, 10))
+>M : typeof M, Symbol(M, Decl(importAliasWithDottedName.ts, 0, 0))
+>N : typeof N, Symbol(N, Decl(importAliasWithDottedName.ts, 1, 21))
 
     var r = N.y;
->r : number, Symbol(r,Decl(importAliasWithDottedName.ts,9,7))
->N.y : number, Symbol(N.y,Decl(importAliasWithDottedName.ts,3,18))
->N : typeof N, Symbol(N,Decl(importAliasWithDottedName.ts,7,10))
->y : number, Symbol(N.y,Decl(importAliasWithDottedName.ts,3,18))
+>r : number, Symbol(r, Decl(importAliasWithDottedName.ts, 9, 7))
+>N.y : number, Symbol(N.y, Decl(importAliasWithDottedName.ts, 3, 18))
+>N : typeof N, Symbol(N, Decl(importAliasWithDottedName.ts, 7, 10))
+>y : number, Symbol(N.y, Decl(importAliasWithDottedName.ts, 3, 18))
 
     var r2 = M.N.y;
->r2 : number, Symbol(r2,Decl(importAliasWithDottedName.ts,10,7))
->M.N.y : number, Symbol(N.y,Decl(importAliasWithDottedName.ts,3,18))
->M.N : typeof N, Symbol(N,Decl(importAliasWithDottedName.ts,1,21))
->M : typeof M, Symbol(M,Decl(importAliasWithDottedName.ts,0,0))
->N : typeof N, Symbol(N,Decl(importAliasWithDottedName.ts,1,21))
->y : number, Symbol(N.y,Decl(importAliasWithDottedName.ts,3,18))
+>r2 : number, Symbol(r2, Decl(importAliasWithDottedName.ts, 10, 7))
+>M.N.y : number, Symbol(N.y, Decl(importAliasWithDottedName.ts, 3, 18))
+>M.N : typeof N, Symbol(N, Decl(importAliasWithDottedName.ts, 1, 21))
+>M : typeof M, Symbol(M, Decl(importAliasWithDottedName.ts, 0, 0))
+>N : typeof N, Symbol(N, Decl(importAliasWithDottedName.ts, 1, 21))
+>y : number, Symbol(N.y, Decl(importAliasWithDottedName.ts, 3, 18))
 }

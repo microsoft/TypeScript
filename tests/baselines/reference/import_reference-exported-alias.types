@@ -1,37 +1,37 @@
 === tests/cases/compiler/file2.ts ===
 import appJs = require("file1");
->appJs : typeof appJs, Symbol(appJs,Decl(file2.ts,0,0))
+>appJs : typeof appJs, Symbol(appJs, Decl(file2.ts, 0, 0))
 
 import Services = appJs.Services;
->Services : typeof appJs.Services, Symbol(Services,Decl(file2.ts,0,32))
->appJs : typeof appJs, Symbol(appJs,Decl(file1.ts,0,0))
->Services : typeof appJs.Services, Symbol(appJs.Services,Decl(file1.ts,0,12))
+>Services : typeof appJs.Services, Symbol(Services, Decl(file2.ts, 0, 32))
+>appJs : typeof appJs, Symbol(appJs, Decl(file1.ts, 0, 0))
+>Services : typeof appJs.Services, Symbol(appJs.Services, Decl(file1.ts, 0, 12))
 
 import UserServices = Services.UserServices;
->UserServices : typeof Services.UserServices, Symbol(UserServices,Decl(file2.ts,1,33))
->Services : typeof appJs.Services, Symbol(appJs.Services,Decl(file1.ts,0,12))
->UserServices : Services.UserServices, Symbol(Services.UserServices,Decl(file1.ts,1,28))
+>UserServices : typeof Services.UserServices, Symbol(UserServices, Decl(file2.ts, 1, 33))
+>Services : typeof appJs.Services, Symbol(appJs.Services, Decl(file1.ts, 0, 12))
+>UserServices : Services.UserServices, Symbol(Services.UserServices, Decl(file1.ts, 1, 28))
 
 var x = new UserServices().getUserName();
->x : string, Symbol(x,Decl(file2.ts,3,3))
+>x : string, Symbol(x, Decl(file2.ts, 3, 3))
 >new UserServices().getUserName() : string
->new UserServices().getUserName : () => string, Symbol(Services.UserServices.getUserName,Decl(file1.ts,2,35))
+>new UserServices().getUserName : () => string, Symbol(Services.UserServices.getUserName, Decl(file1.ts, 2, 35))
 >new UserServices() : Services.UserServices
->UserServices : typeof Services.UserServices, Symbol(UserServices,Decl(file2.ts,1,33))
->getUserName : () => string, Symbol(Services.UserServices.getUserName,Decl(file1.ts,2,35))
+>UserServices : typeof Services.UserServices, Symbol(UserServices, Decl(file2.ts, 1, 33))
+>getUserName : () => string, Symbol(Services.UserServices.getUserName, Decl(file1.ts, 2, 35))
 
 === tests/cases/compiler/file1.ts ===
 module App {
->App : typeof App, Symbol(App,Decl(file1.ts,0,0))
+>App : typeof App, Symbol(App, Decl(file1.ts, 0, 0))
 
     export module Services {
->Services : typeof Services, Symbol(Services,Decl(file1.ts,0,12))
+>Services : typeof Services, Symbol(Services, Decl(file1.ts, 0, 12))
 
         export class UserServices {
->UserServices : UserServices, Symbol(UserServices,Decl(file1.ts,1,28))
+>UserServices : UserServices, Symbol(UserServices, Decl(file1.ts, 1, 28))
 
             public getUserName(): string {
->getUserName : () => string, Symbol(getUserName,Decl(file1.ts,2,35))
+>getUserName : () => string, Symbol(getUserName, Decl(file1.ts, 2, 35))
 
                 return "Bill Gates";
 >"Bill Gates" : string
@@ -41,9 +41,9 @@ module App {
 }
 
 import Mod = App;
->Mod : typeof App, Symbol(Mod,Decl(file1.ts,8,1))
->App : typeof App, Symbol(App,Decl(file1.ts,0,0))
+>Mod : typeof App, Symbol(Mod, Decl(file1.ts, 8, 1))
+>App : typeof App, Symbol(App, Decl(file1.ts, 0, 0))
 
 export = Mod;
->Mod : typeof App, Symbol(Mod,Decl(file1.ts,8,1))
+>Mod : typeof App, Symbol(Mod, Decl(file1.ts, 8, 1))
 

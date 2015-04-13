@@ -1,67 +1,67 @@
 === tests/cases/compiler/genericConstraintOnExtendedBuiltinTypes2.ts ===
 module EndGate {
->EndGate : typeof EndGate, Symbol(EndGate,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,0,0),Decl(genericConstraintOnExtendedBuiltinTypes2.ts,6,47),Decl(genericConstraintOnExtendedBuiltinTypes2.ts,16,1))
+>EndGate : typeof EndGate, Symbol(EndGate, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 0, 0), Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 6, 47), Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 16, 1))
 
     export interface ICloneable {
->ICloneable : ICloneable, Symbol(ICloneable,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,0,16))
+>ICloneable : ICloneable, Symbol(ICloneable, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 0, 16))
 
         Clone(): any;
->Clone : () => any, Symbol(Clone,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,1,33))
+>Clone : () => any, Symbol(Clone, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 1, 33))
     }
 }
 
 interface Number extends EndGate.ICloneable { }
->Number : Number, Symbol(Number,Decl(lib.d.ts,456,40),Decl(lib.d.ts,518,11),Decl(genericConstraintOnExtendedBuiltinTypes2.ts,4,1))
->EndGate.ICloneable : any, Symbol(EndGate.ICloneable,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,0,16))
->EndGate : typeof EndGate, Symbol(EndGate,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,0,0),Decl(genericConstraintOnExtendedBuiltinTypes2.ts,6,47),Decl(genericConstraintOnExtendedBuiltinTypes2.ts,16,1))
->ICloneable : EndGate.ICloneable, Symbol(EndGate.ICloneable,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,0,16))
+>Number : Number, Symbol(Number, Decl(lib.d.ts, 456, 40), Decl(lib.d.ts, 518, 11), Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 4, 1))
+>EndGate.ICloneable : any, Symbol(EndGate.ICloneable, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 0, 16))
+>EndGate : typeof EndGate, Symbol(EndGate, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 0, 0), Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 6, 47), Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 16, 1))
+>ICloneable : EndGate.ICloneable, Symbol(EndGate.ICloneable, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 0, 16))
 
 module EndGate.Tweening {
->EndGate : typeof EndGate, Symbol(EndGate,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,0,0),Decl(genericConstraintOnExtendedBuiltinTypes2.ts,6,47),Decl(genericConstraintOnExtendedBuiltinTypes2.ts,16,1))
->Tweening : typeof Tweening, Symbol(Tweening,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,8,15),Decl(genericConstraintOnExtendedBuiltinTypes2.ts,18,15))
+>EndGate : typeof EndGate, Symbol(EndGate, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 0, 0), Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 6, 47), Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 16, 1))
+>Tweening : typeof Tweening, Symbol(Tweening, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 8, 15), Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 18, 15))
 
     export class Tween<T extends ICloneable>{
->Tween : Tween<T>, Symbol(Tween,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,8,25))
->T : T, Symbol(T,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,9,23))
->ICloneable : ICloneable, Symbol(ICloneable,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,0,16))
+>Tween : Tween<T>, Symbol(Tween, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 8, 25))
+>T : T, Symbol(T, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 9, 23))
+>ICloneable : ICloneable, Symbol(ICloneable, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 0, 16))
 
         private _from: T;
->_from : T, Symbol(_from,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,9,45))
->T : T, Symbol(T,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,9,23))
+>_from : T, Symbol(_from, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 9, 45))
+>T : T, Symbol(T, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 9, 23))
 
         constructor(from: T) {
->from : T, Symbol(from,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,12,20))
->T : T, Symbol(T,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,9,23))
+>from : T, Symbol(from, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 12, 20))
+>T : T, Symbol(T, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 9, 23))
 
             this._from = from.Clone();
 >this._from = from.Clone() : any
->this._from : T, Symbol(_from,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,9,45))
->this : Tween<T>, Symbol(Tween,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,8,25))
->_from : T, Symbol(_from,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,9,45))
+>this._from : T, Symbol(_from, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 9, 45))
+>this : Tween<T>, Symbol(Tween, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 8, 25))
+>_from : T, Symbol(_from, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 9, 45))
 >from.Clone() : any
->from.Clone : () => any, Symbol(ICloneable.Clone,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,1,33))
->from : T, Symbol(from,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,12,20))
->Clone : () => any, Symbol(ICloneable.Clone,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,1,33))
+>from.Clone : () => any, Symbol(ICloneable.Clone, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 1, 33))
+>from : T, Symbol(from, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 12, 20))
+>Clone : () => any, Symbol(ICloneable.Clone, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 1, 33))
         }
     }
 }
 
 module EndGate.Tweening {
->EndGate : typeof EndGate, Symbol(EndGate,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,0,0),Decl(genericConstraintOnExtendedBuiltinTypes2.ts,6,47),Decl(genericConstraintOnExtendedBuiltinTypes2.ts,16,1))
->Tweening : typeof Tweening, Symbol(Tweening,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,8,15),Decl(genericConstraintOnExtendedBuiltinTypes2.ts,18,15))
+>EndGate : typeof EndGate, Symbol(EndGate, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 0, 0), Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 6, 47), Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 16, 1))
+>Tweening : typeof Tweening, Symbol(Tweening, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 8, 15), Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 18, 15))
 
     export class NumberTween extends Tween<Number>{
->NumberTween : NumberTween, Symbol(NumberTween,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,18,25))
->Tween : Tween<T>, Symbol(Tween,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,8,25))
->Number : Number, Symbol(Number,Decl(lib.d.ts,456,40),Decl(lib.d.ts,518,11),Decl(genericConstraintOnExtendedBuiltinTypes2.ts,4,1))
+>NumberTween : NumberTween, Symbol(NumberTween, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 18, 25))
+>Tween : Tween<T>, Symbol(Tween, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 8, 25))
+>Number : Number, Symbol(Number, Decl(lib.d.ts, 456, 40), Decl(lib.d.ts, 518, 11), Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 4, 1))
 
         constructor(from: number) {
->from : number, Symbol(from,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,20,20))
+>from : number, Symbol(from, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 20, 20))
 
             super(from);
 >super(from) : void
->super : typeof Tween, Symbol(Tween,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,8,25))
->from : number, Symbol(from,Decl(genericConstraintOnExtendedBuiltinTypes2.ts,20,20))
+>super : typeof Tween, Symbol(Tween, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 8, 25))
+>from : number, Symbol(from, Decl(genericConstraintOnExtendedBuiltinTypes2.ts, 20, 20))
         }
     }
 }

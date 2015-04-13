@@ -2,369 +2,369 @@
 // Properties of the Date prototype object as per ES5 spec
 // http://www.ecma-international.org/ecma-262/5.1/#sec-15.9.5
 Date.prototype.constructor;
->Date.prototype.constructor : Function, Symbol(Object.constructor,Decl(lib.d.ts,94,18))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->constructor : Function, Symbol(Object.constructor,Decl(lib.d.ts,94,18))
+>Date.prototype.constructor : Function, Symbol(Object.constructor, Decl(lib.d.ts, 94, 18))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>constructor : Function, Symbol(Object.constructor, Decl(lib.d.ts, 94, 18))
 
 Date.prototype.toString();
 >Date.prototype.toString() : string
->Date.prototype.toString : () => string, Symbol(Date.toString,Decl(lib.d.ts,636,16))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->toString : () => string, Symbol(Date.toString,Decl(lib.d.ts,636,16))
+>Date.prototype.toString : () => string, Symbol(Date.toString, Decl(lib.d.ts, 636, 16))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>toString : () => string, Symbol(Date.toString, Decl(lib.d.ts, 636, 16))
 
 Date.prototype.toDateString();
 >Date.prototype.toDateString() : string
->Date.prototype.toDateString : () => string, Symbol(Date.toDateString,Decl(lib.d.ts,638,23))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->toDateString : () => string, Symbol(Date.toDateString,Decl(lib.d.ts,638,23))
+>Date.prototype.toDateString : () => string, Symbol(Date.toDateString, Decl(lib.d.ts, 638, 23))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>toDateString : () => string, Symbol(Date.toDateString, Decl(lib.d.ts, 638, 23))
 
 Date.prototype.toTimeString();
 >Date.prototype.toTimeString() : string
->Date.prototype.toTimeString : () => string, Symbol(Date.toTimeString,Decl(lib.d.ts,640,27))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->toTimeString : () => string, Symbol(Date.toTimeString,Decl(lib.d.ts,640,27))
+>Date.prototype.toTimeString : () => string, Symbol(Date.toTimeString, Decl(lib.d.ts, 640, 27))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>toTimeString : () => string, Symbol(Date.toTimeString, Decl(lib.d.ts, 640, 27))
 
 Date.prototype.toLocaleString();
 >Date.prototype.toLocaleString() : string
->Date.prototype.toLocaleString : () => string, Symbol(Date.toLocaleString,Decl(lib.d.ts,642,27))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->toLocaleString : () => string, Symbol(Date.toLocaleString,Decl(lib.d.ts,642,27))
+>Date.prototype.toLocaleString : () => string, Symbol(Date.toLocaleString, Decl(lib.d.ts, 642, 27))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>toLocaleString : () => string, Symbol(Date.toLocaleString, Decl(lib.d.ts, 642, 27))
 
 Date.prototype.toLocaleDateString();
 >Date.prototype.toLocaleDateString() : string
->Date.prototype.toLocaleDateString : () => string, Symbol(Date.toLocaleDateString,Decl(lib.d.ts,644,29))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->toLocaleDateString : () => string, Symbol(Date.toLocaleDateString,Decl(lib.d.ts,644,29))
+>Date.prototype.toLocaleDateString : () => string, Symbol(Date.toLocaleDateString, Decl(lib.d.ts, 644, 29))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>toLocaleDateString : () => string, Symbol(Date.toLocaleDateString, Decl(lib.d.ts, 644, 29))
 
 Date.prototype.toLocaleTimeString();
 >Date.prototype.toLocaleTimeString() : string
->Date.prototype.toLocaleTimeString : () => string, Symbol(Date.toLocaleTimeString,Decl(lib.d.ts,646,33))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->toLocaleTimeString : () => string, Symbol(Date.toLocaleTimeString,Decl(lib.d.ts,646,33))
+>Date.prototype.toLocaleTimeString : () => string, Symbol(Date.toLocaleTimeString, Decl(lib.d.ts, 646, 33))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>toLocaleTimeString : () => string, Symbol(Date.toLocaleTimeString, Decl(lib.d.ts, 646, 33))
 
 Date.prototype.valueOf();
 >Date.prototype.valueOf() : number
->Date.prototype.valueOf : () => number, Symbol(Date.valueOf,Decl(lib.d.ts,648,33))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->valueOf : () => number, Symbol(Date.valueOf,Decl(lib.d.ts,648,33))
+>Date.prototype.valueOf : () => number, Symbol(Date.valueOf, Decl(lib.d.ts, 648, 33))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>valueOf : () => number, Symbol(Date.valueOf, Decl(lib.d.ts, 648, 33))
 
 Date.prototype.getTime();
 >Date.prototype.getTime() : number
->Date.prototype.getTime : () => number, Symbol(Date.getTime,Decl(lib.d.ts,650,22))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->getTime : () => number, Symbol(Date.getTime,Decl(lib.d.ts,650,22))
+>Date.prototype.getTime : () => number, Symbol(Date.getTime, Decl(lib.d.ts, 650, 22))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>getTime : () => number, Symbol(Date.getTime, Decl(lib.d.ts, 650, 22))
 
 Date.prototype.getFullYear();
 >Date.prototype.getFullYear() : number
->Date.prototype.getFullYear : () => number, Symbol(Date.getFullYear,Decl(lib.d.ts,652,22))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->getFullYear : () => number, Symbol(Date.getFullYear,Decl(lib.d.ts,652,22))
+>Date.prototype.getFullYear : () => number, Symbol(Date.getFullYear, Decl(lib.d.ts, 652, 22))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>getFullYear : () => number, Symbol(Date.getFullYear, Decl(lib.d.ts, 652, 22))
 
 Date.prototype.getUTCFullYear();
 >Date.prototype.getUTCFullYear() : number
->Date.prototype.getUTCFullYear : () => number, Symbol(Date.getUTCFullYear,Decl(lib.d.ts,654,26))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->getUTCFullYear : () => number, Symbol(Date.getUTCFullYear,Decl(lib.d.ts,654,26))
+>Date.prototype.getUTCFullYear : () => number, Symbol(Date.getUTCFullYear, Decl(lib.d.ts, 654, 26))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>getUTCFullYear : () => number, Symbol(Date.getUTCFullYear, Decl(lib.d.ts, 654, 26))
 
 Date.prototype.getMonth();
 >Date.prototype.getMonth() : number
->Date.prototype.getMonth : () => number, Symbol(Date.getMonth,Decl(lib.d.ts,656,29))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->getMonth : () => number, Symbol(Date.getMonth,Decl(lib.d.ts,656,29))
+>Date.prototype.getMonth : () => number, Symbol(Date.getMonth, Decl(lib.d.ts, 656, 29))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>getMonth : () => number, Symbol(Date.getMonth, Decl(lib.d.ts, 656, 29))
 
 Date.prototype.getUTCMonth();
 >Date.prototype.getUTCMonth() : number
->Date.prototype.getUTCMonth : () => number, Symbol(Date.getUTCMonth,Decl(lib.d.ts,658,23))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->getUTCMonth : () => number, Symbol(Date.getUTCMonth,Decl(lib.d.ts,658,23))
+>Date.prototype.getUTCMonth : () => number, Symbol(Date.getUTCMonth, Decl(lib.d.ts, 658, 23))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>getUTCMonth : () => number, Symbol(Date.getUTCMonth, Decl(lib.d.ts, 658, 23))
 
 Date.prototype.getDate();
 >Date.prototype.getDate() : number
->Date.prototype.getDate : () => number, Symbol(Date.getDate,Decl(lib.d.ts,660,26))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->getDate : () => number, Symbol(Date.getDate,Decl(lib.d.ts,660,26))
+>Date.prototype.getDate : () => number, Symbol(Date.getDate, Decl(lib.d.ts, 660, 26))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>getDate : () => number, Symbol(Date.getDate, Decl(lib.d.ts, 660, 26))
 
 Date.prototype.getUTCDate();
 >Date.prototype.getUTCDate() : number
->Date.prototype.getUTCDate : () => number, Symbol(Date.getUTCDate,Decl(lib.d.ts,662,22))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->getUTCDate : () => number, Symbol(Date.getUTCDate,Decl(lib.d.ts,662,22))
+>Date.prototype.getUTCDate : () => number, Symbol(Date.getUTCDate, Decl(lib.d.ts, 662, 22))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>getUTCDate : () => number, Symbol(Date.getUTCDate, Decl(lib.d.ts, 662, 22))
 
 Date.prototype.getDay();
 >Date.prototype.getDay() : number
->Date.prototype.getDay : () => number, Symbol(Date.getDay,Decl(lib.d.ts,664,25))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->getDay : () => number, Symbol(Date.getDay,Decl(lib.d.ts,664,25))
+>Date.prototype.getDay : () => number, Symbol(Date.getDay, Decl(lib.d.ts, 664, 25))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>getDay : () => number, Symbol(Date.getDay, Decl(lib.d.ts, 664, 25))
 
 Date.prototype.getUTCDay();
 >Date.prototype.getUTCDay() : number
->Date.prototype.getUTCDay : () => number, Symbol(Date.getUTCDay,Decl(lib.d.ts,666,21))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->getUTCDay : () => number, Symbol(Date.getUTCDay,Decl(lib.d.ts,666,21))
+>Date.prototype.getUTCDay : () => number, Symbol(Date.getUTCDay, Decl(lib.d.ts, 666, 21))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>getUTCDay : () => number, Symbol(Date.getUTCDay, Decl(lib.d.ts, 666, 21))
 
 Date.prototype.getHours();
 >Date.prototype.getHours() : number
->Date.prototype.getHours : () => number, Symbol(Date.getHours,Decl(lib.d.ts,668,24))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->getHours : () => number, Symbol(Date.getHours,Decl(lib.d.ts,668,24))
+>Date.prototype.getHours : () => number, Symbol(Date.getHours, Decl(lib.d.ts, 668, 24))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>getHours : () => number, Symbol(Date.getHours, Decl(lib.d.ts, 668, 24))
 
 Date.prototype.getUTCHours();
 >Date.prototype.getUTCHours() : number
->Date.prototype.getUTCHours : () => number, Symbol(Date.getUTCHours,Decl(lib.d.ts,670,23))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->getUTCHours : () => number, Symbol(Date.getUTCHours,Decl(lib.d.ts,670,23))
+>Date.prototype.getUTCHours : () => number, Symbol(Date.getUTCHours, Decl(lib.d.ts, 670, 23))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>getUTCHours : () => number, Symbol(Date.getUTCHours, Decl(lib.d.ts, 670, 23))
 
 Date.prototype.getMinutes();
 >Date.prototype.getMinutes() : number
->Date.prototype.getMinutes : () => number, Symbol(Date.getMinutes,Decl(lib.d.ts,672,26))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->getMinutes : () => number, Symbol(Date.getMinutes,Decl(lib.d.ts,672,26))
+>Date.prototype.getMinutes : () => number, Symbol(Date.getMinutes, Decl(lib.d.ts, 672, 26))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>getMinutes : () => number, Symbol(Date.getMinutes, Decl(lib.d.ts, 672, 26))
 
 Date.prototype.getUTCMinutes();
 >Date.prototype.getUTCMinutes() : number
->Date.prototype.getUTCMinutes : () => number, Symbol(Date.getUTCMinutes,Decl(lib.d.ts,674,25))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->getUTCMinutes : () => number, Symbol(Date.getUTCMinutes,Decl(lib.d.ts,674,25))
+>Date.prototype.getUTCMinutes : () => number, Symbol(Date.getUTCMinutes, Decl(lib.d.ts, 674, 25))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>getUTCMinutes : () => number, Symbol(Date.getUTCMinutes, Decl(lib.d.ts, 674, 25))
 
 Date.prototype.getSeconds();
 >Date.prototype.getSeconds() : number
->Date.prototype.getSeconds : () => number, Symbol(Date.getSeconds,Decl(lib.d.ts,676,28))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->getSeconds : () => number, Symbol(Date.getSeconds,Decl(lib.d.ts,676,28))
+>Date.prototype.getSeconds : () => number, Symbol(Date.getSeconds, Decl(lib.d.ts, 676, 28))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>getSeconds : () => number, Symbol(Date.getSeconds, Decl(lib.d.ts, 676, 28))
 
 Date.prototype.getUTCSeconds();
 >Date.prototype.getUTCSeconds() : number
->Date.prototype.getUTCSeconds : () => number, Symbol(Date.getUTCSeconds,Decl(lib.d.ts,678,25))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->getUTCSeconds : () => number, Symbol(Date.getUTCSeconds,Decl(lib.d.ts,678,25))
+>Date.prototype.getUTCSeconds : () => number, Symbol(Date.getUTCSeconds, Decl(lib.d.ts, 678, 25))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>getUTCSeconds : () => number, Symbol(Date.getUTCSeconds, Decl(lib.d.ts, 678, 25))
 
 Date.prototype.getMilliseconds();
 >Date.prototype.getMilliseconds() : number
->Date.prototype.getMilliseconds : () => number, Symbol(Date.getMilliseconds,Decl(lib.d.ts,680,28))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->getMilliseconds : () => number, Symbol(Date.getMilliseconds,Decl(lib.d.ts,680,28))
+>Date.prototype.getMilliseconds : () => number, Symbol(Date.getMilliseconds, Decl(lib.d.ts, 680, 28))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>getMilliseconds : () => number, Symbol(Date.getMilliseconds, Decl(lib.d.ts, 680, 28))
 
 Date.prototype.getUTCMilliseconds();
 >Date.prototype.getUTCMilliseconds() : number
->Date.prototype.getUTCMilliseconds : () => number, Symbol(Date.getUTCMilliseconds,Decl(lib.d.ts,682,30))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->getUTCMilliseconds : () => number, Symbol(Date.getUTCMilliseconds,Decl(lib.d.ts,682,30))
+>Date.prototype.getUTCMilliseconds : () => number, Symbol(Date.getUTCMilliseconds, Decl(lib.d.ts, 682, 30))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>getUTCMilliseconds : () => number, Symbol(Date.getUTCMilliseconds, Decl(lib.d.ts, 682, 30))
 
 Date.prototype.getTimezoneOffset();
 >Date.prototype.getTimezoneOffset() : number
->Date.prototype.getTimezoneOffset : () => number, Symbol(Date.getTimezoneOffset,Decl(lib.d.ts,684,33))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->getTimezoneOffset : () => number, Symbol(Date.getTimezoneOffset,Decl(lib.d.ts,684,33))
+>Date.prototype.getTimezoneOffset : () => number, Symbol(Date.getTimezoneOffset, Decl(lib.d.ts, 684, 33))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>getTimezoneOffset : () => number, Symbol(Date.getTimezoneOffset, Decl(lib.d.ts, 684, 33))
 
 Date.prototype.setTime(0);
 >Date.prototype.setTime(0) : number
->Date.prototype.setTime : (time: number) => number, Symbol(Date.setTime,Decl(lib.d.ts,686,32))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->setTime : (time: number) => number, Symbol(Date.setTime,Decl(lib.d.ts,686,32))
+>Date.prototype.setTime : (time: number) => number, Symbol(Date.setTime, Decl(lib.d.ts, 686, 32))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>setTime : (time: number) => number, Symbol(Date.setTime, Decl(lib.d.ts, 686, 32))
 >0 : number
 
 Date.prototype.setMilliseconds(0);
 >Date.prototype.setMilliseconds(0) : number
->Date.prototype.setMilliseconds : (ms: number) => number, Symbol(Date.setMilliseconds,Decl(lib.d.ts,691,34))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->setMilliseconds : (ms: number) => number, Symbol(Date.setMilliseconds,Decl(lib.d.ts,691,34))
+>Date.prototype.setMilliseconds : (ms: number) => number, Symbol(Date.setMilliseconds, Decl(lib.d.ts, 691, 34))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>setMilliseconds : (ms: number) => number, Symbol(Date.setMilliseconds, Decl(lib.d.ts, 691, 34))
 >0 : number
 
 Date.prototype.setUTCMilliseconds(0);
 >Date.prototype.setUTCMilliseconds(0) : number
->Date.prototype.setUTCMilliseconds : (ms: number) => number, Symbol(Date.setUTCMilliseconds,Decl(lib.d.ts,696,40))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->setUTCMilliseconds : (ms: number) => number, Symbol(Date.setUTCMilliseconds,Decl(lib.d.ts,696,40))
+>Date.prototype.setUTCMilliseconds : (ms: number) => number, Symbol(Date.setUTCMilliseconds, Decl(lib.d.ts, 696, 40))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>setUTCMilliseconds : (ms: number) => number, Symbol(Date.setUTCMilliseconds, Decl(lib.d.ts, 696, 40))
 >0 : number
 
 Date.prototype.setSeconds(0);
 >Date.prototype.setSeconds(0) : number
->Date.prototype.setSeconds : (sec: number, ms?: number) => number, Symbol(Date.setSeconds,Decl(lib.d.ts,701,43))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->setSeconds : (sec: number, ms?: number) => number, Symbol(Date.setSeconds,Decl(lib.d.ts,701,43))
+>Date.prototype.setSeconds : (sec: number, ms?: number) => number, Symbol(Date.setSeconds, Decl(lib.d.ts, 701, 43))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>setSeconds : (sec: number, ms?: number) => number, Symbol(Date.setSeconds, Decl(lib.d.ts, 701, 43))
 >0 : number
 
 Date.prototype.setUTCSeconds(0);
 >Date.prototype.setUTCSeconds(0) : number
->Date.prototype.setUTCSeconds : (sec: number, ms?: number) => number, Symbol(Date.setUTCSeconds,Decl(lib.d.ts,708,49))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->setUTCSeconds : (sec: number, ms?: number) => number, Symbol(Date.setUTCSeconds,Decl(lib.d.ts,708,49))
+>Date.prototype.setUTCSeconds : (sec: number, ms?: number) => number, Symbol(Date.setUTCSeconds, Decl(lib.d.ts, 708, 49))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>setUTCSeconds : (sec: number, ms?: number) => number, Symbol(Date.setUTCSeconds, Decl(lib.d.ts, 708, 49))
 >0 : number
 
 Date.prototype.setMinutes(0);
 >Date.prototype.setMinutes(0) : number
->Date.prototype.setMinutes : (min: number, sec?: number, ms?: number) => number, Symbol(Date.setMinutes,Decl(lib.d.ts,714,52))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->setMinutes : (min: number, sec?: number, ms?: number) => number, Symbol(Date.setMinutes,Decl(lib.d.ts,714,52))
+>Date.prototype.setMinutes : (min: number, sec?: number, ms?: number) => number, Symbol(Date.setMinutes, Decl(lib.d.ts, 714, 52))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>setMinutes : (min: number, sec?: number, ms?: number) => number, Symbol(Date.setMinutes, Decl(lib.d.ts, 714, 52))
 >0 : number
 
 Date.prototype.setUTCMinutes(0);
 >Date.prototype.setUTCMinutes(0) : number
->Date.prototype.setUTCMinutes : (min: number, sec?: number, ms?: number) => number, Symbol(Date.setUTCMinutes,Decl(lib.d.ts,721,63))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->setUTCMinutes : (min: number, sec?: number, ms?: number) => number, Symbol(Date.setUTCMinutes,Decl(lib.d.ts,721,63))
+>Date.prototype.setUTCMinutes : (min: number, sec?: number, ms?: number) => number, Symbol(Date.setUTCMinutes, Decl(lib.d.ts, 721, 63))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>setUTCMinutes : (min: number, sec?: number, ms?: number) => number, Symbol(Date.setUTCMinutes, Decl(lib.d.ts, 721, 63))
 >0 : number
 
 Date.prototype.setHours(0);
 >Date.prototype.setHours(0) : number
->Date.prototype.setHours : (hours: number, min?: number, sec?: number, ms?: number) => number, Symbol(Date.setHours,Decl(lib.d.ts,728,66))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->setHours : (hours: number, min?: number, sec?: number, ms?: number) => number, Symbol(Date.setHours,Decl(lib.d.ts,728,66))
+>Date.prototype.setHours : (hours: number, min?: number, sec?: number, ms?: number) => number, Symbol(Date.setHours, Decl(lib.d.ts, 728, 66))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>setHours : (hours: number, min?: number, sec?: number, ms?: number) => number, Symbol(Date.setHours, Decl(lib.d.ts, 728, 66))
 >0 : number
 
 Date.prototype.setUTCHours(0);
 >Date.prototype.setUTCHours(0) : number
->Date.prototype.setUTCHours : (hours: number, min?: number, sec?: number, ms?: number) => number, Symbol(Date.setUTCHours,Decl(lib.d.ts,736,77))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->setUTCHours : (hours: number, min?: number, sec?: number, ms?: number) => number, Symbol(Date.setUTCHours,Decl(lib.d.ts,736,77))
+>Date.prototype.setUTCHours : (hours: number, min?: number, sec?: number, ms?: number) => number, Symbol(Date.setUTCHours, Decl(lib.d.ts, 736, 77))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>setUTCHours : (hours: number, min?: number, sec?: number, ms?: number) => number, Symbol(Date.setUTCHours, Decl(lib.d.ts, 736, 77))
 >0 : number
 
 Date.prototype.setDate(0);
 >Date.prototype.setDate(0) : number
->Date.prototype.setDate : (date: number) => number, Symbol(Date.setDate,Decl(lib.d.ts,744,80))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->setDate : (date: number) => number, Symbol(Date.setDate,Decl(lib.d.ts,744,80))
+>Date.prototype.setDate : (date: number) => number, Symbol(Date.setDate, Decl(lib.d.ts, 744, 80))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>setDate : (date: number) => number, Symbol(Date.setDate, Decl(lib.d.ts, 744, 80))
 >0 : number
 
 Date.prototype.setUTCDate(0);
 >Date.prototype.setUTCDate(0) : number
->Date.prototype.setUTCDate : (date: number) => number, Symbol(Date.setUTCDate,Decl(lib.d.ts,749,34))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->setUTCDate : (date: number) => number, Symbol(Date.setUTCDate,Decl(lib.d.ts,749,34))
+>Date.prototype.setUTCDate : (date: number) => number, Symbol(Date.setUTCDate, Decl(lib.d.ts, 749, 34))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>setUTCDate : (date: number) => number, Symbol(Date.setUTCDate, Decl(lib.d.ts, 749, 34))
 >0 : number
 
 Date.prototype.setMonth(0);
 >Date.prototype.setMonth(0) : number
->Date.prototype.setMonth : (month: number, date?: number) => number, Symbol(Date.setMonth,Decl(lib.d.ts,754,37))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->setMonth : (month: number, date?: number) => number, Symbol(Date.setMonth,Decl(lib.d.ts,754,37))
+>Date.prototype.setMonth : (month: number, date?: number) => number, Symbol(Date.setMonth, Decl(lib.d.ts, 754, 37))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>setMonth : (month: number, date?: number) => number, Symbol(Date.setMonth, Decl(lib.d.ts, 754, 37))
 >0 : number
 
 Date.prototype.setUTCMonth(0);
 >Date.prototype.setUTCMonth(0) : number
->Date.prototype.setUTCMonth : (month: number, date?: number) => number, Symbol(Date.setUTCMonth,Decl(lib.d.ts,760,51))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->setUTCMonth : (month: number, date?: number) => number, Symbol(Date.setUTCMonth,Decl(lib.d.ts,760,51))
+>Date.prototype.setUTCMonth : (month: number, date?: number) => number, Symbol(Date.setUTCMonth, Decl(lib.d.ts, 760, 51))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>setUTCMonth : (month: number, date?: number) => number, Symbol(Date.setUTCMonth, Decl(lib.d.ts, 760, 51))
 >0 : number
 
 Date.prototype.setFullYear(0);
 >Date.prototype.setFullYear(0) : number
->Date.prototype.setFullYear : (year: number, month?: number, date?: number) => number, Symbol(Date.setFullYear,Decl(lib.d.ts,766,54))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->setFullYear : (year: number, month?: number, date?: number) => number, Symbol(Date.setFullYear,Decl(lib.d.ts,766,54))
+>Date.prototype.setFullYear : (year: number, month?: number, date?: number) => number, Symbol(Date.setFullYear, Decl(lib.d.ts, 766, 54))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>setFullYear : (year: number, month?: number, date?: number) => number, Symbol(Date.setFullYear, Decl(lib.d.ts, 766, 54))
 >0 : number
 
 Date.prototype.setUTCFullYear(0);
 >Date.prototype.setUTCFullYear(0) : number
->Date.prototype.setUTCFullYear : (year: number, month?: number, date?: number) => number, Symbol(Date.setUTCFullYear,Decl(lib.d.ts,773,69))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->setUTCFullYear : (year: number, month?: number, date?: number) => number, Symbol(Date.setUTCFullYear,Decl(lib.d.ts,773,69))
+>Date.prototype.setUTCFullYear : (year: number, month?: number, date?: number) => number, Symbol(Date.setUTCFullYear, Decl(lib.d.ts, 773, 69))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>setUTCFullYear : (year: number, month?: number, date?: number) => number, Symbol(Date.setUTCFullYear, Decl(lib.d.ts, 773, 69))
 >0 : number
 
 Date.prototype.toUTCString();
 >Date.prototype.toUTCString() : string
->Date.prototype.toUTCString : () => string, Symbol(Date.toUTCString,Decl(lib.d.ts,780,72))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->toUTCString : () => string, Symbol(Date.toUTCString,Decl(lib.d.ts,780,72))
+>Date.prototype.toUTCString : () => string, Symbol(Date.toUTCString, Decl(lib.d.ts, 780, 72))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>toUTCString : () => string, Symbol(Date.toUTCString, Decl(lib.d.ts, 780, 72))
 
 Date.prototype.toISOString();
 >Date.prototype.toISOString() : string
->Date.prototype.toISOString : () => string, Symbol(Date.toISOString,Decl(lib.d.ts,782,26))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->toISOString : () => string, Symbol(Date.toISOString,Decl(lib.d.ts,782,26))
+>Date.prototype.toISOString : () => string, Symbol(Date.toISOString, Decl(lib.d.ts, 782, 26))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>toISOString : () => string, Symbol(Date.toISOString, Decl(lib.d.ts, 782, 26))
 
 Date.prototype.toJSON(null);
 >Date.prototype.toJSON(null) : string
->Date.prototype.toJSON : (key?: any) => string, Symbol(Date.toJSON,Decl(lib.d.ts,784,26))
->Date.prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
->prototype : Date, Symbol(DateConstructor.prototype,Decl(lib.d.ts,794,15))
->toJSON : (key?: any) => string, Symbol(Date.toJSON,Decl(lib.d.ts,784,26))
+>Date.prototype.toJSON : (key?: any) => string, Symbol(Date.toJSON, Decl(lib.d.ts, 784, 26))
+>Date.prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>prototype : Date, Symbol(DateConstructor.prototype, Decl(lib.d.ts, 794, 15))
+>toJSON : (key?: any) => string, Symbol(Date.toJSON, Decl(lib.d.ts, 784, 26))
 >null : null
 

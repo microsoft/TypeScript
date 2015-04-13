@@ -1,39 +1,39 @@
 === tests/cases/compiler/staticInheritance.ts ===
 function doThing(x: { n: string }) { }
->doThing : (x: { n: string; }) => void, Symbol(doThing,Decl(staticInheritance.ts,0,0))
->x : { n: string; }, Symbol(x,Decl(staticInheritance.ts,0,17))
->n : string, Symbol(n,Decl(staticInheritance.ts,0,21))
+>doThing : (x: { n: string; }) => void, Symbol(doThing, Decl(staticInheritance.ts, 0, 0))
+>x : { n: string; }, Symbol(x, Decl(staticInheritance.ts, 0, 17))
+>n : string, Symbol(n, Decl(staticInheritance.ts, 0, 21))
 
 class A {
->A : A, Symbol(A,Decl(staticInheritance.ts,0,38))
+>A : A, Symbol(A, Decl(staticInheritance.ts, 0, 38))
 
     static n: string;
->n : string, Symbol(A.n,Decl(staticInheritance.ts,1,9))
+>n : string, Symbol(A.n, Decl(staticInheritance.ts, 1, 9))
 
     p = doThing(A); // OK
->p : void, Symbol(p,Decl(staticInheritance.ts,2,21))
+>p : void, Symbol(p, Decl(staticInheritance.ts, 2, 21))
 >doThing(A) : void
->doThing : (x: { n: string; }) => void, Symbol(doThing,Decl(staticInheritance.ts,0,0))
->A : typeof A, Symbol(A,Decl(staticInheritance.ts,0,38))
+>doThing : (x: { n: string; }) => void, Symbol(doThing, Decl(staticInheritance.ts, 0, 0))
+>A : typeof A, Symbol(A, Decl(staticInheritance.ts, 0, 38))
 }
 class B extends A {
->B : B, Symbol(B,Decl(staticInheritance.ts,4,1))
->A : A, Symbol(A,Decl(staticInheritance.ts,0,38))
+>B : B, Symbol(B, Decl(staticInheritance.ts, 4, 1))
+>A : A, Symbol(A, Decl(staticInheritance.ts, 0, 38))
 
     p1 = doThing(A); // OK
->p1 : void, Symbol(p1,Decl(staticInheritance.ts,5,19))
+>p1 : void, Symbol(p1, Decl(staticInheritance.ts, 5, 19))
 >doThing(A) : void
->doThing : (x: { n: string; }) => void, Symbol(doThing,Decl(staticInheritance.ts,0,0))
->A : typeof A, Symbol(A,Decl(staticInheritance.ts,0,38))
+>doThing : (x: { n: string; }) => void, Symbol(doThing, Decl(staticInheritance.ts, 0, 0))
+>A : typeof A, Symbol(A, Decl(staticInheritance.ts, 0, 38))
 
     p2 = doThing(B); // OK
->p2 : void, Symbol(p2,Decl(staticInheritance.ts,6,20))
+>p2 : void, Symbol(p2, Decl(staticInheritance.ts, 6, 20))
 >doThing(B) : void
->doThing : (x: { n: string; }) => void, Symbol(doThing,Decl(staticInheritance.ts,0,0))
->B : typeof B, Symbol(B,Decl(staticInheritance.ts,4,1))
+>doThing : (x: { n: string; }) => void, Symbol(doThing, Decl(staticInheritance.ts, 0, 0))
+>B : typeof B, Symbol(B, Decl(staticInheritance.ts, 4, 1))
 }
 doThing(B); //OK
 >doThing(B) : void
->doThing : (x: { n: string; }) => void, Symbol(doThing,Decl(staticInheritance.ts,0,0))
->B : typeof B, Symbol(B,Decl(staticInheritance.ts,4,1))
+>doThing : (x: { n: string; }) => void, Symbol(doThing, Decl(staticInheritance.ts, 0, 0))
+>B : typeof B, Symbol(B, Decl(staticInheritance.ts, 4, 1))
 

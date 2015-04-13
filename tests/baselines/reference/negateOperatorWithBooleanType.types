@@ -1,83 +1,83 @@
 === tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithBooleanType.ts ===
 // - operator on boolean type
 var BOOLEAN: boolean;
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(negateOperatorWithBooleanType.ts,1,3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(negateOperatorWithBooleanType.ts, 1, 3))
 
 function foo(): boolean { return true; }
->foo : () => boolean, Symbol(foo,Decl(negateOperatorWithBooleanType.ts,1,21))
+>foo : () => boolean, Symbol(foo, Decl(negateOperatorWithBooleanType.ts, 1, 21))
 >true : boolean
 
 class A {
->A : A, Symbol(A,Decl(negateOperatorWithBooleanType.ts,3,40))
+>A : A, Symbol(A, Decl(negateOperatorWithBooleanType.ts, 3, 40))
 
     public a: boolean;
->a : boolean, Symbol(a,Decl(negateOperatorWithBooleanType.ts,5,9))
+>a : boolean, Symbol(a, Decl(negateOperatorWithBooleanType.ts, 5, 9))
 
     static foo() { return false; }
->foo : () => boolean, Symbol(A.foo,Decl(negateOperatorWithBooleanType.ts,6,22))
+>foo : () => boolean, Symbol(A.foo, Decl(negateOperatorWithBooleanType.ts, 6, 22))
 >false : boolean
 }
 module M {
->M : typeof M, Symbol(M,Decl(negateOperatorWithBooleanType.ts,8,1))
+>M : typeof M, Symbol(M, Decl(negateOperatorWithBooleanType.ts, 8, 1))
 
     export var n: boolean;
->n : boolean, Symbol(n,Decl(negateOperatorWithBooleanType.ts,10,14))
+>n : boolean, Symbol(n, Decl(negateOperatorWithBooleanType.ts, 10, 14))
 }
 
 var objA = new A();
->objA : A, Symbol(objA,Decl(negateOperatorWithBooleanType.ts,13,3))
+>objA : A, Symbol(objA, Decl(negateOperatorWithBooleanType.ts, 13, 3))
 >new A() : A
->A : typeof A, Symbol(A,Decl(negateOperatorWithBooleanType.ts,3,40))
+>A : typeof A, Symbol(A, Decl(negateOperatorWithBooleanType.ts, 3, 40))
 
 // boolean type var
 var ResultIsNumber1 = -BOOLEAN;
->ResultIsNumber1 : number, Symbol(ResultIsNumber1,Decl(negateOperatorWithBooleanType.ts,16,3))
+>ResultIsNumber1 : number, Symbol(ResultIsNumber1, Decl(negateOperatorWithBooleanType.ts, 16, 3))
 >-BOOLEAN : number
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(negateOperatorWithBooleanType.ts,1,3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(negateOperatorWithBooleanType.ts, 1, 3))
 
 // boolean type literal
 var ResultIsNumber2 = -true;
->ResultIsNumber2 : number, Symbol(ResultIsNumber2,Decl(negateOperatorWithBooleanType.ts,19,3))
+>ResultIsNumber2 : number, Symbol(ResultIsNumber2, Decl(negateOperatorWithBooleanType.ts, 19, 3))
 >-true : number
 >true : boolean
 
 var ResultIsNumber3 = -{ x: true, y: false };
->ResultIsNumber3 : number, Symbol(ResultIsNumber3,Decl(negateOperatorWithBooleanType.ts,20,3))
+>ResultIsNumber3 : number, Symbol(ResultIsNumber3, Decl(negateOperatorWithBooleanType.ts, 20, 3))
 >-{ x: true, y: false } : number
 >{ x: true, y: false } : { x: boolean; y: boolean; }
->x : boolean, Symbol(x,Decl(negateOperatorWithBooleanType.ts,20,24))
+>x : boolean, Symbol(x, Decl(negateOperatorWithBooleanType.ts, 20, 24))
 >true : boolean
->y : boolean, Symbol(y,Decl(negateOperatorWithBooleanType.ts,20,33))
+>y : boolean, Symbol(y, Decl(negateOperatorWithBooleanType.ts, 20, 33))
 >false : boolean
 
 // boolean type expressions
 var ResultIsNumber4 = -objA.a;
->ResultIsNumber4 : number, Symbol(ResultIsNumber4,Decl(negateOperatorWithBooleanType.ts,23,3))
+>ResultIsNumber4 : number, Symbol(ResultIsNumber4, Decl(negateOperatorWithBooleanType.ts, 23, 3))
 >-objA.a : number
->objA.a : boolean, Symbol(A.a,Decl(negateOperatorWithBooleanType.ts,5,9))
->objA : A, Symbol(objA,Decl(negateOperatorWithBooleanType.ts,13,3))
->a : boolean, Symbol(A.a,Decl(negateOperatorWithBooleanType.ts,5,9))
+>objA.a : boolean, Symbol(A.a, Decl(negateOperatorWithBooleanType.ts, 5, 9))
+>objA : A, Symbol(objA, Decl(negateOperatorWithBooleanType.ts, 13, 3))
+>a : boolean, Symbol(A.a, Decl(negateOperatorWithBooleanType.ts, 5, 9))
 
 var ResultIsNumber5 = -M.n;
->ResultIsNumber5 : number, Symbol(ResultIsNumber5,Decl(negateOperatorWithBooleanType.ts,24,3))
+>ResultIsNumber5 : number, Symbol(ResultIsNumber5, Decl(negateOperatorWithBooleanType.ts, 24, 3))
 >-M.n : number
->M.n : boolean, Symbol(M.n,Decl(negateOperatorWithBooleanType.ts,10,14))
->M : typeof M, Symbol(M,Decl(negateOperatorWithBooleanType.ts,8,1))
->n : boolean, Symbol(M.n,Decl(negateOperatorWithBooleanType.ts,10,14))
+>M.n : boolean, Symbol(M.n, Decl(negateOperatorWithBooleanType.ts, 10, 14))
+>M : typeof M, Symbol(M, Decl(negateOperatorWithBooleanType.ts, 8, 1))
+>n : boolean, Symbol(M.n, Decl(negateOperatorWithBooleanType.ts, 10, 14))
 
 var ResultIsNumber6 = -foo();
->ResultIsNumber6 : number, Symbol(ResultIsNumber6,Decl(negateOperatorWithBooleanType.ts,25,3))
+>ResultIsNumber6 : number, Symbol(ResultIsNumber6, Decl(negateOperatorWithBooleanType.ts, 25, 3))
 >-foo() : number
 >foo() : boolean
->foo : () => boolean, Symbol(foo,Decl(negateOperatorWithBooleanType.ts,1,21))
+>foo : () => boolean, Symbol(foo, Decl(negateOperatorWithBooleanType.ts, 1, 21))
 
 var ResultIsNumber7 = -A.foo();
->ResultIsNumber7 : number, Symbol(ResultIsNumber7,Decl(negateOperatorWithBooleanType.ts,26,3))
+>ResultIsNumber7 : number, Symbol(ResultIsNumber7, Decl(negateOperatorWithBooleanType.ts, 26, 3))
 >-A.foo() : number
 >A.foo() : boolean
->A.foo : () => boolean, Symbol(A.foo,Decl(negateOperatorWithBooleanType.ts,6,22))
->A : typeof A, Symbol(A,Decl(negateOperatorWithBooleanType.ts,3,40))
->foo : () => boolean, Symbol(A.foo,Decl(negateOperatorWithBooleanType.ts,6,22))
+>A.foo : () => boolean, Symbol(A.foo, Decl(negateOperatorWithBooleanType.ts, 6, 22))
+>A : typeof A, Symbol(A, Decl(negateOperatorWithBooleanType.ts, 3, 40))
+>foo : () => boolean, Symbol(A.foo, Decl(negateOperatorWithBooleanType.ts, 6, 22))
 
 // miss assignment operators
 -true;
@@ -86,12 +86,12 @@ var ResultIsNumber7 = -A.foo();
 
 -BOOLEAN;
 >-BOOLEAN : number
->BOOLEAN : boolean, Symbol(BOOLEAN,Decl(negateOperatorWithBooleanType.ts,1,3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(negateOperatorWithBooleanType.ts, 1, 3))
 
 -foo();
 >-foo() : number
 >foo() : boolean
->foo : () => boolean, Symbol(foo,Decl(negateOperatorWithBooleanType.ts,1,21))
+>foo : () => boolean, Symbol(foo, Decl(negateOperatorWithBooleanType.ts, 1, 21))
 
 -true, false;
 >-true, false : boolean
@@ -101,13 +101,13 @@ var ResultIsNumber7 = -A.foo();
 
 -objA.a;
 >-objA.a : number
->objA.a : boolean, Symbol(A.a,Decl(negateOperatorWithBooleanType.ts,5,9))
->objA : A, Symbol(objA,Decl(negateOperatorWithBooleanType.ts,13,3))
->a : boolean, Symbol(A.a,Decl(negateOperatorWithBooleanType.ts,5,9))
+>objA.a : boolean, Symbol(A.a, Decl(negateOperatorWithBooleanType.ts, 5, 9))
+>objA : A, Symbol(objA, Decl(negateOperatorWithBooleanType.ts, 13, 3))
+>a : boolean, Symbol(A.a, Decl(negateOperatorWithBooleanType.ts, 5, 9))
 
 -M.n;
 >-M.n : number
->M.n : boolean, Symbol(M.n,Decl(negateOperatorWithBooleanType.ts,10,14))
->M : typeof M, Symbol(M,Decl(negateOperatorWithBooleanType.ts,8,1))
->n : boolean, Symbol(M.n,Decl(negateOperatorWithBooleanType.ts,10,14))
+>M.n : boolean, Symbol(M.n, Decl(negateOperatorWithBooleanType.ts, 10, 14))
+>M : typeof M, Symbol(M, Decl(negateOperatorWithBooleanType.ts, 8, 1))
+>n : boolean, Symbol(M.n, Decl(negateOperatorWithBooleanType.ts, 10, 14))
 

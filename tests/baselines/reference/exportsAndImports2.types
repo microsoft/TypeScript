@@ -1,28 +1,28 @@
 === tests/cases/conformance/es6/modules/t1.ts ===
 
 export var x = "x";
->x : string, Symbol(x,Decl(t1.ts,1,10))
+>x : string, Symbol(x, Decl(t1.ts, 1, 10))
 >"x" : string
 
 export var y = "y";
->y : string, Symbol(y,Decl(t1.ts,2,10))
+>y : string, Symbol(y, Decl(t1.ts, 2, 10))
 >"y" : string
 
 === tests/cases/conformance/es6/modules/t2.ts ===
 export { x as y, y as x } from "./t1";
->x : string, Symbol(y,Decl(t2.ts,0,8))
->y : string, Symbol(y,Decl(t2.ts,0,8))
->y : string, Symbol(x,Decl(t2.ts,0,16))
->x : string, Symbol(x,Decl(t2.ts,0,16))
+>x : string, Symbol(y, Decl(t2.ts, 0, 8))
+>y : string, Symbol(y, Decl(t2.ts, 0, 8))
+>y : string, Symbol(x, Decl(t2.ts, 0, 16))
+>x : string, Symbol(x, Decl(t2.ts, 0, 16))
 
 === tests/cases/conformance/es6/modules/t3.ts ===
 import { x, y } from "./t1";
->x : string, Symbol(x,Decl(t3.ts,0,8))
->y : string, Symbol(y,Decl(t3.ts,0,11))
+>x : string, Symbol(x, Decl(t3.ts, 0, 8))
+>y : string, Symbol(y, Decl(t3.ts, 0, 11))
 
 export { x as y, y as x };
->x : string, Symbol(y,Decl(t3.ts,1,8))
->y : string, Symbol(y,Decl(t3.ts,1,8))
->y : string, Symbol(x,Decl(t3.ts,1,16))
->x : string, Symbol(x,Decl(t3.ts,1,16))
+>x : string, Symbol(y, Decl(t3.ts, 1, 8))
+>y : string, Symbol(y, Decl(t3.ts, 1, 8))
+>y : string, Symbol(x, Decl(t3.ts, 1, 16))
+>x : string, Symbol(x, Decl(t3.ts, 1, 16))
 

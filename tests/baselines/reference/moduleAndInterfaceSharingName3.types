@@ -1,26 +1,26 @@
 === tests/cases/compiler/moduleAndInterfaceSharingName3.ts ===
 module X {
->X : any, Symbol(X,Decl(moduleAndInterfaceSharingName3.ts,0,0))
+>X : any, Symbol(X, Decl(moduleAndInterfaceSharingName3.ts, 0, 0))
 
     export module Y {
->Y : any, Symbol(Y,Decl(moduleAndInterfaceSharingName3.ts,0,10),Decl(moduleAndInterfaceSharingName3.ts,3,5))
+>Y : any, Symbol(Y, Decl(moduleAndInterfaceSharingName3.ts, 0, 10), Decl(moduleAndInterfaceSharingName3.ts, 3, 5))
 
         export interface Z { }
->Z : Z, Symbol(Z,Decl(moduleAndInterfaceSharingName3.ts,1,21))
+>Z : Z, Symbol(Z, Decl(moduleAndInterfaceSharingName3.ts, 1, 21))
     }
     export interface Y<T> { }
->Y : Y<T>, Symbol(Y,Decl(moduleAndInterfaceSharingName3.ts,0,10),Decl(moduleAndInterfaceSharingName3.ts,3,5))
->T : T, Symbol(T,Decl(moduleAndInterfaceSharingName3.ts,4,23))
+>Y : Y<T>, Symbol(Y, Decl(moduleAndInterfaceSharingName3.ts, 0, 10), Decl(moduleAndInterfaceSharingName3.ts, 3, 5))
+>T : T, Symbol(T, Decl(moduleAndInterfaceSharingName3.ts, 4, 23))
 }
 var z: X.Y.Z = null;
->z : X.Y.Z, Symbol(z,Decl(moduleAndInterfaceSharingName3.ts,6,3))
->X : any, Symbol(X,Decl(moduleAndInterfaceSharingName3.ts,0,0))
->Y : any, Symbol(X.Y,Decl(moduleAndInterfaceSharingName3.ts,0,10),Decl(moduleAndInterfaceSharingName3.ts,3,5))
->Z : X.Y.Z, Symbol(X.Y.Z,Decl(moduleAndInterfaceSharingName3.ts,1,21))
+>z : X.Y.Z, Symbol(z, Decl(moduleAndInterfaceSharingName3.ts, 6, 3))
+>X : any, Symbol(X, Decl(moduleAndInterfaceSharingName3.ts, 0, 0))
+>Y : any, Symbol(X.Y, Decl(moduleAndInterfaceSharingName3.ts, 0, 10), Decl(moduleAndInterfaceSharingName3.ts, 3, 5))
+>Z : X.Y.Z, Symbol(X.Y.Z, Decl(moduleAndInterfaceSharingName3.ts, 1, 21))
 >null : null
 
 var z2: X.Y<string>;
->z2 : X.Y<string>, Symbol(z2,Decl(moduleAndInterfaceSharingName3.ts,7,3))
->X : any, Symbol(X,Decl(moduleAndInterfaceSharingName3.ts,0,0))
->Y : X.Y<T>, Symbol(X.Y,Decl(moduleAndInterfaceSharingName3.ts,0,10),Decl(moduleAndInterfaceSharingName3.ts,3,5))
+>z2 : X.Y<string>, Symbol(z2, Decl(moduleAndInterfaceSharingName3.ts, 7, 3))
+>X : any, Symbol(X, Decl(moduleAndInterfaceSharingName3.ts, 0, 0))
+>Y : X.Y<T>, Symbol(X.Y, Decl(moduleAndInterfaceSharingName3.ts, 0, 10), Decl(moduleAndInterfaceSharingName3.ts, 3, 5))
 

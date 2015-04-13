@@ -2,365 +2,365 @@
 // null is a subtype of any other types except undefined
 
 var r0 = true ? null : null;
->r0 : any, Symbol(r0,Decl(nullIsSubtypeOfEverythingButUndefined.ts,2,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,3,3))
+>r0 : any, Symbol(r0, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 2, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 3, 3))
 >true ? null : null : null
 >true : boolean
 >null : null
 >null : null
 
 var r0 = true ? null : null;
->r0 : any, Symbol(r0,Decl(nullIsSubtypeOfEverythingButUndefined.ts,2,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,3,3))
+>r0 : any, Symbol(r0, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 2, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 3, 3))
 >true ? null : null : null
 >true : boolean
 >null : null
 >null : null
 
 var u: typeof undefined;
->u : any, Symbol(u,Decl(nullIsSubtypeOfEverythingButUndefined.ts,5,3))
+>u : any, Symbol(u, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 5, 3))
 >undefined : undefined, Symbol(undefined)
 
 var r0b = true ? u : null;
->r0b : any, Symbol(r0b,Decl(nullIsSubtypeOfEverythingButUndefined.ts,6,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,7,3))
+>r0b : any, Symbol(r0b, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 6, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 7, 3))
 >true ? u : null : any
 >true : boolean
->u : any, Symbol(u,Decl(nullIsSubtypeOfEverythingButUndefined.ts,5,3))
+>u : any, Symbol(u, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 5, 3))
 >null : null
 
 var r0b = true ? null : u;
->r0b : any, Symbol(r0b,Decl(nullIsSubtypeOfEverythingButUndefined.ts,6,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,7,3))
+>r0b : any, Symbol(r0b, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 6, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 7, 3))
 >true ? null : u : any
 >true : boolean
 >null : null
->u : any, Symbol(u,Decl(nullIsSubtypeOfEverythingButUndefined.ts,5,3))
+>u : any, Symbol(u, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 5, 3))
 
 var r1 = true ? 1 : null;
->r1 : number, Symbol(r1,Decl(nullIsSubtypeOfEverythingButUndefined.ts,9,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,10,3))
+>r1 : number, Symbol(r1, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 9, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 10, 3))
 >true ? 1 : null : number
 >true : boolean
 >1 : number
 >null : null
 
 var r1 = true ? null : 1;
->r1 : number, Symbol(r1,Decl(nullIsSubtypeOfEverythingButUndefined.ts,9,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,10,3))
+>r1 : number, Symbol(r1, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 9, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 10, 3))
 >true ? null : 1 : number
 >true : boolean
 >null : null
 >1 : number
 
 var r2 = true ? '' : null;
->r2 : string, Symbol(r2,Decl(nullIsSubtypeOfEverythingButUndefined.ts,12,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,13,3))
+>r2 : string, Symbol(r2, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 12, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 13, 3))
 >true ? '' : null : string
 >true : boolean
 >'' : string
 >null : null
 
 var r2 = true ? null : '';
->r2 : string, Symbol(r2,Decl(nullIsSubtypeOfEverythingButUndefined.ts,12,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,13,3))
+>r2 : string, Symbol(r2, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 12, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 13, 3))
 >true ? null : '' : string
 >true : boolean
 >null : null
 >'' : string
 
 var r3 = true ? true : null;
->r3 : boolean, Symbol(r3,Decl(nullIsSubtypeOfEverythingButUndefined.ts,15,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,16,3))
+>r3 : boolean, Symbol(r3, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 15, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 16, 3))
 >true ? true : null : boolean
 >true : boolean
 >true : boolean
 >null : null
 
 var r3 = true ? null : true;
->r3 : boolean, Symbol(r3,Decl(nullIsSubtypeOfEverythingButUndefined.ts,15,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,16,3))
+>r3 : boolean, Symbol(r3, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 15, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 16, 3))
 >true ? null : true : boolean
 >true : boolean
 >null : null
 >true : boolean
 
 var r4 = true ? new Date() : null;
->r4 : Date, Symbol(r4,Decl(nullIsSubtypeOfEverythingButUndefined.ts,18,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,19,3))
+>r4 : Date, Symbol(r4, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 18, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 19, 3))
 >true ? new Date() : null : Date
 >true : boolean
 >new Date() : Date
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
 >null : null
 
 var r4 = true ? null : new Date();
->r4 : Date, Symbol(r4,Decl(nullIsSubtypeOfEverythingButUndefined.ts,18,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,19,3))
+>r4 : Date, Symbol(r4, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 18, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 19, 3))
 >true ? null : new Date() : Date
 >true : boolean
 >null : null
 >new Date() : Date
->Date : DateConstructor, Symbol(Date,Decl(lib.d.ts,633,23),Decl(lib.d.ts,815,11))
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
 
 var r5 = true ? /1/ : null;
->r5 : RegExp, Symbol(r5,Decl(nullIsSubtypeOfEverythingButUndefined.ts,21,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,22,3))
+>r5 : RegExp, Symbol(r5, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 21, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 22, 3))
 >true ? /1/ : null : RegExp
 >true : boolean
 >/1/ : RegExp
 >null : null
 
 var r5 = true ? null : /1/;
->r5 : RegExp, Symbol(r5,Decl(nullIsSubtypeOfEverythingButUndefined.ts,21,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,22,3))
+>r5 : RegExp, Symbol(r5, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 21, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 22, 3))
 >true ? null : /1/ : RegExp
 >true : boolean
 >null : null
 >/1/ : RegExp
 
 var r6 = true ? { foo: 1 } : null;
->r6 : { foo: number; }, Symbol(r6,Decl(nullIsSubtypeOfEverythingButUndefined.ts,24,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,25,3))
+>r6 : { foo: number; }, Symbol(r6, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 24, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 25, 3))
 >true ? { foo: 1 } : null : { foo: number; }
 >true : boolean
 >{ foo: 1 } : { foo: number; }
->foo : number, Symbol(foo,Decl(nullIsSubtypeOfEverythingButUndefined.ts,24,17))
+>foo : number, Symbol(foo, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 24, 17))
 >1 : number
 >null : null
 
 var r6 = true ? null : { foo: 1 };
->r6 : { foo: number; }, Symbol(r6,Decl(nullIsSubtypeOfEverythingButUndefined.ts,24,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,25,3))
+>r6 : { foo: number; }, Symbol(r6, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 24, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 25, 3))
 >true ? null : { foo: 1 } : { foo: number; }
 >true : boolean
 >null : null
 >{ foo: 1 } : { foo: number; }
->foo : number, Symbol(foo,Decl(nullIsSubtypeOfEverythingButUndefined.ts,25,24))
+>foo : number, Symbol(foo, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 25, 24))
 >1 : number
 
 var r7 = true ? () => { } : null;
->r7 : () => void, Symbol(r7,Decl(nullIsSubtypeOfEverythingButUndefined.ts,27,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,28,3))
+>r7 : () => void, Symbol(r7, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 27, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 28, 3))
 >true ? () => { } : null : () => void
 >true : boolean
 >() => { } : () => void
 >null : null
 
 var r7 = true ? null : () => { };
->r7 : () => void, Symbol(r7,Decl(nullIsSubtypeOfEverythingButUndefined.ts,27,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,28,3))
+>r7 : () => void, Symbol(r7, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 27, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 28, 3))
 >true ? null : () => { } : () => void
 >true : boolean
 >null : null
 >() => { } : () => void
 
 var r8 = true ? <T>(x: T) => { return x } : null;
->r8 : <T>(x: T) => T, Symbol(r8,Decl(nullIsSubtypeOfEverythingButUndefined.ts,30,3))
+>r8 : <T>(x: T) => T, Symbol(r8, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 30, 3))
 >true ? <T>(x: T) => { return x } : null : <T>(x: T) => T
 >true : boolean
 ><T>(x: T) => { return x } : <T>(x: T) => T
->T : T, Symbol(T,Decl(nullIsSubtypeOfEverythingButUndefined.ts,30,17))
->x : T, Symbol(x,Decl(nullIsSubtypeOfEverythingButUndefined.ts,30,20))
->T : T, Symbol(T,Decl(nullIsSubtypeOfEverythingButUndefined.ts,30,17))
->x : T, Symbol(x,Decl(nullIsSubtypeOfEverythingButUndefined.ts,30,20))
+>T : T, Symbol(T, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 30, 17))
+>x : T, Symbol(x, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 30, 20))
+>T : T, Symbol(T, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 30, 17))
+>x : T, Symbol(x, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 30, 20))
 >null : null
 
 var r8b = true ? null : <T>(x: T) => { return x }; // type parameters not identical across declarations
->r8b : <T>(x: T) => T, Symbol(r8b,Decl(nullIsSubtypeOfEverythingButUndefined.ts,31,3))
+>r8b : <T>(x: T) => T, Symbol(r8b, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 31, 3))
 >true ? null : <T>(x: T) => { return x } : <T>(x: T) => T
 >true : boolean
 >null : null
 ><T>(x: T) => { return x } : <T>(x: T) => T
->T : T, Symbol(T,Decl(nullIsSubtypeOfEverythingButUndefined.ts,31,25))
->x : T, Symbol(x,Decl(nullIsSubtypeOfEverythingButUndefined.ts,31,28))
->T : T, Symbol(T,Decl(nullIsSubtypeOfEverythingButUndefined.ts,31,25))
->x : T, Symbol(x,Decl(nullIsSubtypeOfEverythingButUndefined.ts,31,28))
+>T : T, Symbol(T, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 31, 25))
+>x : T, Symbol(x, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 31, 28))
+>T : T, Symbol(T, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 31, 25))
+>x : T, Symbol(x, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 31, 28))
 
 interface I1 { foo: number; }
->I1 : I1, Symbol(I1,Decl(nullIsSubtypeOfEverythingButUndefined.ts,31,50))
->foo : number, Symbol(foo,Decl(nullIsSubtypeOfEverythingButUndefined.ts,33,14))
+>I1 : I1, Symbol(I1, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 31, 50))
+>foo : number, Symbol(foo, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 33, 14))
 
 var i1: I1;
->i1 : I1, Symbol(i1,Decl(nullIsSubtypeOfEverythingButUndefined.ts,34,3))
->I1 : I1, Symbol(I1,Decl(nullIsSubtypeOfEverythingButUndefined.ts,31,50))
+>i1 : I1, Symbol(i1, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 34, 3))
+>I1 : I1, Symbol(I1, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 31, 50))
 
 var r9 = true ? i1 : null;
->r9 : I1, Symbol(r9,Decl(nullIsSubtypeOfEverythingButUndefined.ts,35,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,36,3))
+>r9 : I1, Symbol(r9, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 35, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 36, 3))
 >true ? i1 : null : I1
 >true : boolean
->i1 : I1, Symbol(i1,Decl(nullIsSubtypeOfEverythingButUndefined.ts,34,3))
+>i1 : I1, Symbol(i1, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 34, 3))
 >null : null
 
 var r9 = true ? null : i1;
->r9 : I1, Symbol(r9,Decl(nullIsSubtypeOfEverythingButUndefined.ts,35,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,36,3))
+>r9 : I1, Symbol(r9, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 35, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 36, 3))
 >true ? null : i1 : I1
 >true : boolean
 >null : null
->i1 : I1, Symbol(i1,Decl(nullIsSubtypeOfEverythingButUndefined.ts,34,3))
+>i1 : I1, Symbol(i1, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 34, 3))
 
 class C1 { foo: number; }
->C1 : C1, Symbol(C1,Decl(nullIsSubtypeOfEverythingButUndefined.ts,36,26))
->foo : number, Symbol(foo,Decl(nullIsSubtypeOfEverythingButUndefined.ts,38,10))
+>C1 : C1, Symbol(C1, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 36, 26))
+>foo : number, Symbol(foo, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 38, 10))
 
 var c1: C1;
->c1 : C1, Symbol(c1,Decl(nullIsSubtypeOfEverythingButUndefined.ts,39,3))
->C1 : C1, Symbol(C1,Decl(nullIsSubtypeOfEverythingButUndefined.ts,36,26))
+>c1 : C1, Symbol(c1, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 39, 3))
+>C1 : C1, Symbol(C1, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 36, 26))
 
 var r10 = true ? c1 : null;
->r10 : C1, Symbol(r10,Decl(nullIsSubtypeOfEverythingButUndefined.ts,40,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,41,3))
+>r10 : C1, Symbol(r10, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 40, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 41, 3))
 >true ? c1 : null : C1
 >true : boolean
->c1 : C1, Symbol(c1,Decl(nullIsSubtypeOfEverythingButUndefined.ts,39,3))
+>c1 : C1, Symbol(c1, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 39, 3))
 >null : null
 
 var r10 = true ? null : c1;
->r10 : C1, Symbol(r10,Decl(nullIsSubtypeOfEverythingButUndefined.ts,40,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,41,3))
+>r10 : C1, Symbol(r10, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 40, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 41, 3))
 >true ? null : c1 : C1
 >true : boolean
 >null : null
->c1 : C1, Symbol(c1,Decl(nullIsSubtypeOfEverythingButUndefined.ts,39,3))
+>c1 : C1, Symbol(c1, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 39, 3))
 
 class C2<T> { foo: T; }
->C2 : C2<T>, Symbol(C2,Decl(nullIsSubtypeOfEverythingButUndefined.ts,41,27))
->T : T, Symbol(T,Decl(nullIsSubtypeOfEverythingButUndefined.ts,43,9))
->foo : T, Symbol(foo,Decl(nullIsSubtypeOfEverythingButUndefined.ts,43,13))
->T : T, Symbol(T,Decl(nullIsSubtypeOfEverythingButUndefined.ts,43,9))
+>C2 : C2<T>, Symbol(C2, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 41, 27))
+>T : T, Symbol(T, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 43, 9))
+>foo : T, Symbol(foo, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 43, 13))
+>T : T, Symbol(T, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 43, 9))
 
 var c2: C2<number>;
->c2 : C2<number>, Symbol(c2,Decl(nullIsSubtypeOfEverythingButUndefined.ts,44,3))
->C2 : C2<T>, Symbol(C2,Decl(nullIsSubtypeOfEverythingButUndefined.ts,41,27))
+>c2 : C2<number>, Symbol(c2, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 44, 3))
+>C2 : C2<T>, Symbol(C2, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 41, 27))
 
 var r12 = true ? c2 : null;
->r12 : C2<number>, Symbol(r12,Decl(nullIsSubtypeOfEverythingButUndefined.ts,45,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,46,3))
+>r12 : C2<number>, Symbol(r12, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 45, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 46, 3))
 >true ? c2 : null : C2<number>
 >true : boolean
->c2 : C2<number>, Symbol(c2,Decl(nullIsSubtypeOfEverythingButUndefined.ts,44,3))
+>c2 : C2<number>, Symbol(c2, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 44, 3))
 >null : null
 
 var r12 = true ? null : c2;
->r12 : C2<number>, Symbol(r12,Decl(nullIsSubtypeOfEverythingButUndefined.ts,45,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,46,3))
+>r12 : C2<number>, Symbol(r12, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 45, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 46, 3))
 >true ? null : c2 : C2<number>
 >true : boolean
 >null : null
->c2 : C2<number>, Symbol(c2,Decl(nullIsSubtypeOfEverythingButUndefined.ts,44,3))
+>c2 : C2<number>, Symbol(c2, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 44, 3))
 
 enum E { A }
->E : E, Symbol(E,Decl(nullIsSubtypeOfEverythingButUndefined.ts,46,27))
->A : E, Symbol(E.A,Decl(nullIsSubtypeOfEverythingButUndefined.ts,48,8))
+>E : E, Symbol(E, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 46, 27))
+>A : E, Symbol(E.A, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 48, 8))
 
 var r13 = true ? E : null;
->r13 : typeof E, Symbol(r13,Decl(nullIsSubtypeOfEverythingButUndefined.ts,49,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,50,3))
+>r13 : typeof E, Symbol(r13, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 49, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 50, 3))
 >true ? E : null : typeof E
 >true : boolean
->E : typeof E, Symbol(E,Decl(nullIsSubtypeOfEverythingButUndefined.ts,46,27))
+>E : typeof E, Symbol(E, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 46, 27))
 >null : null
 
 var r13 = true ? null : E;
->r13 : typeof E, Symbol(r13,Decl(nullIsSubtypeOfEverythingButUndefined.ts,49,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,50,3))
+>r13 : typeof E, Symbol(r13, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 49, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 50, 3))
 >true ? null : E : typeof E
 >true : boolean
 >null : null
->E : typeof E, Symbol(E,Decl(nullIsSubtypeOfEverythingButUndefined.ts,46,27))
+>E : typeof E, Symbol(E, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 46, 27))
 
 var r14 = true ? E.A : null;
->r14 : E, Symbol(r14,Decl(nullIsSubtypeOfEverythingButUndefined.ts,52,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,53,3))
+>r14 : E, Symbol(r14, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 52, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 53, 3))
 >true ? E.A : null : E
 >true : boolean
->E.A : E, Symbol(E.A,Decl(nullIsSubtypeOfEverythingButUndefined.ts,48,8))
->E : typeof E, Symbol(E,Decl(nullIsSubtypeOfEverythingButUndefined.ts,46,27))
->A : E, Symbol(E.A,Decl(nullIsSubtypeOfEverythingButUndefined.ts,48,8))
+>E.A : E, Symbol(E.A, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 48, 8))
+>E : typeof E, Symbol(E, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 46, 27))
+>A : E, Symbol(E.A, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 48, 8))
 >null : null
 
 var r14 = true ? null : E.A;
->r14 : E, Symbol(r14,Decl(nullIsSubtypeOfEverythingButUndefined.ts,52,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,53,3))
+>r14 : E, Symbol(r14, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 52, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 53, 3))
 >true ? null : E.A : E
 >true : boolean
 >null : null
->E.A : E, Symbol(E.A,Decl(nullIsSubtypeOfEverythingButUndefined.ts,48,8))
->E : typeof E, Symbol(E,Decl(nullIsSubtypeOfEverythingButUndefined.ts,46,27))
->A : E, Symbol(E.A,Decl(nullIsSubtypeOfEverythingButUndefined.ts,48,8))
+>E.A : E, Symbol(E.A, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 48, 8))
+>E : typeof E, Symbol(E, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 46, 27))
+>A : E, Symbol(E.A, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 48, 8))
 
 function f() { }
->f : typeof f, Symbol(f,Decl(nullIsSubtypeOfEverythingButUndefined.ts,53,28),Decl(nullIsSubtypeOfEverythingButUndefined.ts,55,16))
+>f : typeof f, Symbol(f, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 53, 28), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 55, 16))
 
 module f {
->f : typeof f, Symbol(f,Decl(nullIsSubtypeOfEverythingButUndefined.ts,53,28),Decl(nullIsSubtypeOfEverythingButUndefined.ts,55,16))
+>f : typeof f, Symbol(f, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 53, 28), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 55, 16))
 
     export var bar = 1;
->bar : number, Symbol(bar,Decl(nullIsSubtypeOfEverythingButUndefined.ts,57,14))
+>bar : number, Symbol(bar, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 57, 14))
 >1 : number
 }
 var af: typeof f;
->af : typeof f, Symbol(af,Decl(nullIsSubtypeOfEverythingButUndefined.ts,59,3))
->f : typeof f, Symbol(f,Decl(nullIsSubtypeOfEverythingButUndefined.ts,53,28),Decl(nullIsSubtypeOfEverythingButUndefined.ts,55,16))
+>af : typeof f, Symbol(af, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 59, 3))
+>f : typeof f, Symbol(f, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 53, 28), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 55, 16))
 
 var r15 = true ? af : null;
->r15 : typeof f, Symbol(r15,Decl(nullIsSubtypeOfEverythingButUndefined.ts,60,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,61,3))
+>r15 : typeof f, Symbol(r15, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 60, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 61, 3))
 >true ? af : null : typeof f
 >true : boolean
->af : typeof f, Symbol(af,Decl(nullIsSubtypeOfEverythingButUndefined.ts,59,3))
+>af : typeof f, Symbol(af, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 59, 3))
 >null : null
 
 var r15 = true ? null : af;
->r15 : typeof f, Symbol(r15,Decl(nullIsSubtypeOfEverythingButUndefined.ts,60,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,61,3))
+>r15 : typeof f, Symbol(r15, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 60, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 61, 3))
 >true ? null : af : typeof f
 >true : boolean
 >null : null
->af : typeof f, Symbol(af,Decl(nullIsSubtypeOfEverythingButUndefined.ts,59,3))
+>af : typeof f, Symbol(af, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 59, 3))
 
 class c { baz: string }
->c : c, Symbol(c,Decl(nullIsSubtypeOfEverythingButUndefined.ts,61,27),Decl(nullIsSubtypeOfEverythingButUndefined.ts,63,23))
->baz : string, Symbol(baz,Decl(nullIsSubtypeOfEverythingButUndefined.ts,63,9))
+>c : c, Symbol(c, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 61, 27), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 63, 23))
+>baz : string, Symbol(baz, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 63, 9))
 
 module c {
->c : typeof c, Symbol(c,Decl(nullIsSubtypeOfEverythingButUndefined.ts,61,27),Decl(nullIsSubtypeOfEverythingButUndefined.ts,63,23))
+>c : typeof c, Symbol(c, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 61, 27), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 63, 23))
 
     export var bar = 1;
->bar : number, Symbol(bar,Decl(nullIsSubtypeOfEverythingButUndefined.ts,65,14))
+>bar : number, Symbol(bar, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 65, 14))
 >1 : number
 }
 var ac: typeof c;
->ac : typeof c, Symbol(ac,Decl(nullIsSubtypeOfEverythingButUndefined.ts,67,3))
->c : typeof c, Symbol(c,Decl(nullIsSubtypeOfEverythingButUndefined.ts,61,27),Decl(nullIsSubtypeOfEverythingButUndefined.ts,63,23))
+>ac : typeof c, Symbol(ac, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 67, 3))
+>c : typeof c, Symbol(c, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 61, 27), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 63, 23))
 
 var r16 = true ? ac : null;
->r16 : typeof c, Symbol(r16,Decl(nullIsSubtypeOfEverythingButUndefined.ts,68,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,69,3))
+>r16 : typeof c, Symbol(r16, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 68, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 69, 3))
 >true ? ac : null : typeof c
 >true : boolean
->ac : typeof c, Symbol(ac,Decl(nullIsSubtypeOfEverythingButUndefined.ts,67,3))
+>ac : typeof c, Symbol(ac, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 67, 3))
 >null : null
 
 var r16 = true ? null : ac;
->r16 : typeof c, Symbol(r16,Decl(nullIsSubtypeOfEverythingButUndefined.ts,68,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,69,3))
+>r16 : typeof c, Symbol(r16, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 68, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 69, 3))
 >true ? null : ac : typeof c
 >true : boolean
 >null : null
->ac : typeof c, Symbol(ac,Decl(nullIsSubtypeOfEverythingButUndefined.ts,67,3))
+>ac : typeof c, Symbol(ac, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 67, 3))
 
 function f17<T>(x: T) {
->f17 : <T>(x: T) => void, Symbol(f17,Decl(nullIsSubtypeOfEverythingButUndefined.ts,69,27))
->T : T, Symbol(T,Decl(nullIsSubtypeOfEverythingButUndefined.ts,71,13))
->x : T, Symbol(x,Decl(nullIsSubtypeOfEverythingButUndefined.ts,71,16))
->T : T, Symbol(T,Decl(nullIsSubtypeOfEverythingButUndefined.ts,71,13))
+>f17 : <T>(x: T) => void, Symbol(f17, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 69, 27))
+>T : T, Symbol(T, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 71, 13))
+>x : T, Symbol(x, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 71, 16))
+>T : T, Symbol(T, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 71, 13))
 
     var r17 = true ? x : null;
->r17 : T, Symbol(r17,Decl(nullIsSubtypeOfEverythingButUndefined.ts,72,7),Decl(nullIsSubtypeOfEverythingButUndefined.ts,73,7))
+>r17 : T, Symbol(r17, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 72, 7), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 73, 7))
 >true ? x : null : T
 >true : boolean
->x : T, Symbol(x,Decl(nullIsSubtypeOfEverythingButUndefined.ts,71,16))
+>x : T, Symbol(x, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 71, 16))
 >null : null
 
     var r17 = true ? null : x;
->r17 : T, Symbol(r17,Decl(nullIsSubtypeOfEverythingButUndefined.ts,72,7),Decl(nullIsSubtypeOfEverythingButUndefined.ts,73,7))
+>r17 : T, Symbol(r17, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 72, 7), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 73, 7))
 >true ? null : x : T
 >true : boolean
 >null : null
->x : T, Symbol(x,Decl(nullIsSubtypeOfEverythingButUndefined.ts,71,16))
+>x : T, Symbol(x, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 71, 16))
 }
 
 function f18<T, U>(x: U) {
->f18 : <T, U>(x: U) => void, Symbol(f18,Decl(nullIsSubtypeOfEverythingButUndefined.ts,74,1))
->T : T, Symbol(T,Decl(nullIsSubtypeOfEverythingButUndefined.ts,76,13))
->U : U, Symbol(U,Decl(nullIsSubtypeOfEverythingButUndefined.ts,76,15))
->x : U, Symbol(x,Decl(nullIsSubtypeOfEverythingButUndefined.ts,76,19))
->U : U, Symbol(U,Decl(nullIsSubtypeOfEverythingButUndefined.ts,76,15))
+>f18 : <T, U>(x: U) => void, Symbol(f18, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 74, 1))
+>T : T, Symbol(T, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 76, 13))
+>U : U, Symbol(U, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 76, 15))
+>x : U, Symbol(x, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 76, 19))
+>U : U, Symbol(U, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 76, 15))
 
     var r18 = true ? x : null;
->r18 : U, Symbol(r18,Decl(nullIsSubtypeOfEverythingButUndefined.ts,77,7),Decl(nullIsSubtypeOfEverythingButUndefined.ts,78,7))
+>r18 : U, Symbol(r18, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 77, 7), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 78, 7))
 >true ? x : null : U
 >true : boolean
->x : U, Symbol(x,Decl(nullIsSubtypeOfEverythingButUndefined.ts,76,19))
+>x : U, Symbol(x, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 76, 19))
 >null : null
 
     var r18 = true ? null : x;
->r18 : U, Symbol(r18,Decl(nullIsSubtypeOfEverythingButUndefined.ts,77,7),Decl(nullIsSubtypeOfEverythingButUndefined.ts,78,7))
+>r18 : U, Symbol(r18, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 77, 7), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 78, 7))
 >true ? null : x : U
 >true : boolean
 >null : null
->x : U, Symbol(x,Decl(nullIsSubtypeOfEverythingButUndefined.ts,76,19))
+>x : U, Symbol(x, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 76, 19))
 }
 //function f18<T, U extends T>(x: U) {
 //    var r18 = true ? x : null;
@@ -368,30 +368,30 @@ function f18<T, U>(x: U) {
 //}
 
 var r19 = true ? new Object() : null;
->r19 : Object, Symbol(r19,Decl(nullIsSubtypeOfEverythingButUndefined.ts,85,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,86,3))
+>r19 : Object, Symbol(r19, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 85, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 86, 3))
 >true ? new Object() : null : Object
 >true : boolean
 >new Object() : Object
->Object : ObjectConstructor, Symbol(Object,Decl(lib.d.ts,92,1),Decl(lib.d.ts,223,11))
+>Object : ObjectConstructor, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 >null : null
 
 var r19 = true ? null : new Object();
->r19 : Object, Symbol(r19,Decl(nullIsSubtypeOfEverythingButUndefined.ts,85,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,86,3))
+>r19 : Object, Symbol(r19, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 85, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 86, 3))
 >true ? null : new Object() : Object
 >true : boolean
 >null : null
 >new Object() : Object
->Object : ObjectConstructor, Symbol(Object,Decl(lib.d.ts,92,1),Decl(lib.d.ts,223,11))
+>Object : ObjectConstructor, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
 var r20 = true ? {} : null;
->r20 : {}, Symbol(r20,Decl(nullIsSubtypeOfEverythingButUndefined.ts,88,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,89,3))
+>r20 : {}, Symbol(r20, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 88, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 89, 3))
 >true ? {} : null : {}
 >true : boolean
 >{} : {}
 >null : null
 
 var r20 = true ? null : {};
->r20 : {}, Symbol(r20,Decl(nullIsSubtypeOfEverythingButUndefined.ts,88,3),Decl(nullIsSubtypeOfEverythingButUndefined.ts,89,3))
+>r20 : {}, Symbol(r20, Decl(nullIsSubtypeOfEverythingButUndefined.ts, 88, 3), Decl(nullIsSubtypeOfEverythingButUndefined.ts, 89, 3))
 >true ? null : {} : {}
 >true : boolean
 >null : null

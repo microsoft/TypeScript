@@ -1,38 +1,38 @@
 === tests/cases/compiler/noCollisionThisExpressionAndLocalVarInLambda.ts ===
 declare function alert(message?: any): void;
->alert : (message?: any) => void, Symbol(alert,Decl(noCollisionThisExpressionAndLocalVarInLambda.ts,0,0))
->message : any, Symbol(message,Decl(noCollisionThisExpressionAndLocalVarInLambda.ts,0,23))
+>alert : (message?: any) => void, Symbol(alert, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 0, 0))
+>message : any, Symbol(message, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 0, 23))
 
 var x = {
->x : { doStuff: (callback: any) => () => any; }, Symbol(x,Decl(noCollisionThisExpressionAndLocalVarInLambda.ts,1,3))
+>x : { doStuff: (callback: any) => () => any; }, Symbol(x, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 1, 3))
 >{    doStuff: (callback) => () => {        var _this = 2;        return callback(_this);    }} : { doStuff: (callback: any) => () => any; }
 
     doStuff: (callback) => () => {
->doStuff : (callback: any) => () => any, Symbol(doStuff,Decl(noCollisionThisExpressionAndLocalVarInLambda.ts,1,9))
+>doStuff : (callback: any) => () => any, Symbol(doStuff, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 1, 9))
 >(callback) => () => {        var _this = 2;        return callback(_this);    } : (callback: any) => () => any
->callback : any, Symbol(callback,Decl(noCollisionThisExpressionAndLocalVarInLambda.ts,2,14))
+>callback : any, Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 2, 14))
 >() => {        var _this = 2;        return callback(_this);    } : () => any
 
         var _this = 2;
->_this : number, Symbol(_this,Decl(noCollisionThisExpressionAndLocalVarInLambda.ts,3,11))
+>_this : number, Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 3, 11))
 >2 : number
 
         return callback(_this);
 >callback(_this) : any
->callback : any, Symbol(callback,Decl(noCollisionThisExpressionAndLocalVarInLambda.ts,2,14))
->_this : number, Symbol(_this,Decl(noCollisionThisExpressionAndLocalVarInLambda.ts,3,11))
+>callback : any, Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 2, 14))
+>_this : number, Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 3, 11))
     }
 }
 alert(x.doStuff(x => alert(x)));
 >alert(x.doStuff(x => alert(x))) : void
->alert : (message?: any) => void, Symbol(alert,Decl(noCollisionThisExpressionAndLocalVarInLambda.ts,0,0))
+>alert : (message?: any) => void, Symbol(alert, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 0, 0))
 >x.doStuff(x => alert(x)) : () => any
->x.doStuff : (callback: any) => () => any, Symbol(doStuff,Decl(noCollisionThisExpressionAndLocalVarInLambda.ts,1,9))
->x : { doStuff: (callback: any) => () => any; }, Symbol(x,Decl(noCollisionThisExpressionAndLocalVarInLambda.ts,1,3))
->doStuff : (callback: any) => () => any, Symbol(doStuff,Decl(noCollisionThisExpressionAndLocalVarInLambda.ts,1,9))
+>x.doStuff : (callback: any) => () => any, Symbol(doStuff, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 1, 9))
+>x : { doStuff: (callback: any) => () => any; }, Symbol(x, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 1, 3))
+>doStuff : (callback: any) => () => any, Symbol(doStuff, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 1, 9))
 >x => alert(x) : (x: any) => void
->x : any, Symbol(x,Decl(noCollisionThisExpressionAndLocalVarInLambda.ts,7,16))
+>x : any, Symbol(x, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 7, 16))
 >alert(x) : void
->alert : (message?: any) => void, Symbol(alert,Decl(noCollisionThisExpressionAndLocalVarInLambda.ts,0,0))
->x : any, Symbol(x,Decl(noCollisionThisExpressionAndLocalVarInLambda.ts,7,16))
+>alert : (message?: any) => void, Symbol(alert, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 0, 0))
+>x : any, Symbol(x, Decl(noCollisionThisExpressionAndLocalVarInLambda.ts, 7, 16))
 

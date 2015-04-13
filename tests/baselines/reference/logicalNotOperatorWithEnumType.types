@@ -2,79 +2,79 @@
 // ! operator on enum type
 
 enum ENUM { A, B, C };
->ENUM : ENUM, Symbol(ENUM,Decl(logicalNotOperatorWithEnumType.ts,0,0))
->A : ENUM, Symbol(ENUM.A,Decl(logicalNotOperatorWithEnumType.ts,2,11))
->B : ENUM, Symbol(ENUM.B,Decl(logicalNotOperatorWithEnumType.ts,2,14))
->C : ENUM, Symbol(ENUM.C,Decl(logicalNotOperatorWithEnumType.ts,2,17))
+>ENUM : ENUM, Symbol(ENUM, Decl(logicalNotOperatorWithEnumType.ts, 0, 0))
+>A : ENUM, Symbol(ENUM.A, Decl(logicalNotOperatorWithEnumType.ts, 2, 11))
+>B : ENUM, Symbol(ENUM.B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
+>C : ENUM, Symbol(ENUM.C, Decl(logicalNotOperatorWithEnumType.ts, 2, 17))
 
 enum ENUM1 { };
->ENUM1 : ENUM1, Symbol(ENUM1,Decl(logicalNotOperatorWithEnumType.ts,2,22))
+>ENUM1 : ENUM1, Symbol(ENUM1, Decl(logicalNotOperatorWithEnumType.ts, 2, 22))
 
 // enum type var
 var ResultIsBoolean1 = !ENUM;
->ResultIsBoolean1 : boolean, Symbol(ResultIsBoolean1,Decl(logicalNotOperatorWithEnumType.ts,6,3))
+>ResultIsBoolean1 : boolean, Symbol(ResultIsBoolean1, Decl(logicalNotOperatorWithEnumType.ts, 6, 3))
 >!ENUM : boolean
->ENUM : typeof ENUM, Symbol(ENUM,Decl(logicalNotOperatorWithEnumType.ts,0,0))
+>ENUM : typeof ENUM, Symbol(ENUM, Decl(logicalNotOperatorWithEnumType.ts, 0, 0))
 
 // enum type expressions
 var ResultIsBoolean2 = !ENUM["B"];
->ResultIsBoolean2 : boolean, Symbol(ResultIsBoolean2,Decl(logicalNotOperatorWithEnumType.ts,9,3))
+>ResultIsBoolean2 : boolean, Symbol(ResultIsBoolean2, Decl(logicalNotOperatorWithEnumType.ts, 9, 3))
 >!ENUM["B"] : boolean
 >ENUM["B"] : ENUM
->ENUM : typeof ENUM, Symbol(ENUM,Decl(logicalNotOperatorWithEnumType.ts,0,0))
->"B" : string, Symbol(ENUM.B,Decl(logicalNotOperatorWithEnumType.ts,2,14))
+>ENUM : typeof ENUM, Symbol(ENUM, Decl(logicalNotOperatorWithEnumType.ts, 0, 0))
+>"B" : string, Symbol(ENUM.B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
 
 var ResultIsBoolean3 = !(ENUM.B + ENUM["C"]);
->ResultIsBoolean3 : boolean, Symbol(ResultIsBoolean3,Decl(logicalNotOperatorWithEnumType.ts,10,3))
+>ResultIsBoolean3 : boolean, Symbol(ResultIsBoolean3, Decl(logicalNotOperatorWithEnumType.ts, 10, 3))
 >!(ENUM.B + ENUM["C"]) : boolean
 >(ENUM.B + ENUM["C"]) : number
 >ENUM.B + ENUM["C"] : number
->ENUM.B : ENUM, Symbol(ENUM.B,Decl(logicalNotOperatorWithEnumType.ts,2,14))
->ENUM : typeof ENUM, Symbol(ENUM,Decl(logicalNotOperatorWithEnumType.ts,0,0))
->B : ENUM, Symbol(ENUM.B,Decl(logicalNotOperatorWithEnumType.ts,2,14))
+>ENUM.B : ENUM, Symbol(ENUM.B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
+>ENUM : typeof ENUM, Symbol(ENUM, Decl(logicalNotOperatorWithEnumType.ts, 0, 0))
+>B : ENUM, Symbol(ENUM.B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
 >ENUM["C"] : ENUM
->ENUM : typeof ENUM, Symbol(ENUM,Decl(logicalNotOperatorWithEnumType.ts,0,0))
->"C" : string, Symbol(ENUM.C,Decl(logicalNotOperatorWithEnumType.ts,2,17))
+>ENUM : typeof ENUM, Symbol(ENUM, Decl(logicalNotOperatorWithEnumType.ts, 0, 0))
+>"C" : string, Symbol(ENUM.C, Decl(logicalNotOperatorWithEnumType.ts, 2, 17))
 
 // multiple ! operators
 var ResultIsBoolean4 = !!ENUM;
->ResultIsBoolean4 : boolean, Symbol(ResultIsBoolean4,Decl(logicalNotOperatorWithEnumType.ts,13,3))
+>ResultIsBoolean4 : boolean, Symbol(ResultIsBoolean4, Decl(logicalNotOperatorWithEnumType.ts, 13, 3))
 >!!ENUM : boolean
 >!ENUM : boolean
->ENUM : typeof ENUM, Symbol(ENUM,Decl(logicalNotOperatorWithEnumType.ts,0,0))
+>ENUM : typeof ENUM, Symbol(ENUM, Decl(logicalNotOperatorWithEnumType.ts, 0, 0))
 
 var ResultIsBoolean5 = !!!(ENUM["B"] + ENUM.C);
->ResultIsBoolean5 : boolean, Symbol(ResultIsBoolean5,Decl(logicalNotOperatorWithEnumType.ts,14,3))
+>ResultIsBoolean5 : boolean, Symbol(ResultIsBoolean5, Decl(logicalNotOperatorWithEnumType.ts, 14, 3))
 >!!!(ENUM["B"] + ENUM.C) : boolean
 >!!(ENUM["B"] + ENUM.C) : boolean
 >!(ENUM["B"] + ENUM.C) : boolean
 >(ENUM["B"] + ENUM.C) : number
 >ENUM["B"] + ENUM.C : number
 >ENUM["B"] : ENUM
->ENUM : typeof ENUM, Symbol(ENUM,Decl(logicalNotOperatorWithEnumType.ts,0,0))
->"B" : string, Symbol(ENUM.B,Decl(logicalNotOperatorWithEnumType.ts,2,14))
->ENUM.C : ENUM, Symbol(ENUM.C,Decl(logicalNotOperatorWithEnumType.ts,2,17))
->ENUM : typeof ENUM, Symbol(ENUM,Decl(logicalNotOperatorWithEnumType.ts,0,0))
->C : ENUM, Symbol(ENUM.C,Decl(logicalNotOperatorWithEnumType.ts,2,17))
+>ENUM : typeof ENUM, Symbol(ENUM, Decl(logicalNotOperatorWithEnumType.ts, 0, 0))
+>"B" : string, Symbol(ENUM.B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
+>ENUM.C : ENUM, Symbol(ENUM.C, Decl(logicalNotOperatorWithEnumType.ts, 2, 17))
+>ENUM : typeof ENUM, Symbol(ENUM, Decl(logicalNotOperatorWithEnumType.ts, 0, 0))
+>C : ENUM, Symbol(ENUM.C, Decl(logicalNotOperatorWithEnumType.ts, 2, 17))
 
 // miss assignment operators
 !ENUM;
 >!ENUM : boolean
->ENUM : typeof ENUM, Symbol(ENUM,Decl(logicalNotOperatorWithEnumType.ts,0,0))
+>ENUM : typeof ENUM, Symbol(ENUM, Decl(logicalNotOperatorWithEnumType.ts, 0, 0))
 
 !ENUM1;
 >!ENUM1 : boolean
->ENUM1 : typeof ENUM1, Symbol(ENUM1,Decl(logicalNotOperatorWithEnumType.ts,2,22))
+>ENUM1 : typeof ENUM1, Symbol(ENUM1, Decl(logicalNotOperatorWithEnumType.ts, 2, 22))
 
 !ENUM.B;
 >!ENUM.B : boolean
->ENUM.B : ENUM, Symbol(ENUM.B,Decl(logicalNotOperatorWithEnumType.ts,2,14))
->ENUM : typeof ENUM, Symbol(ENUM,Decl(logicalNotOperatorWithEnumType.ts,0,0))
->B : ENUM, Symbol(ENUM.B,Decl(logicalNotOperatorWithEnumType.ts,2,14))
+>ENUM.B : ENUM, Symbol(ENUM.B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
+>ENUM : typeof ENUM, Symbol(ENUM, Decl(logicalNotOperatorWithEnumType.ts, 0, 0))
+>B : ENUM, Symbol(ENUM.B, Decl(logicalNotOperatorWithEnumType.ts, 2, 14))
 
 !ENUM, ENUM1;
 >!ENUM, ENUM1 : typeof ENUM1
 >!ENUM : boolean
->ENUM : typeof ENUM, Symbol(ENUM,Decl(logicalNotOperatorWithEnumType.ts,0,0))
->ENUM1 : typeof ENUM1, Symbol(ENUM1,Decl(logicalNotOperatorWithEnumType.ts,2,22))
+>ENUM : typeof ENUM, Symbol(ENUM, Decl(logicalNotOperatorWithEnumType.ts, 0, 0))
+>ENUM1 : typeof ENUM1, Symbol(ENUM1, Decl(logicalNotOperatorWithEnumType.ts, 2, 22))
 

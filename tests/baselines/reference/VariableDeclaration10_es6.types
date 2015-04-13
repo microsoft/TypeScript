@@ -1,5 +1,5 @@
 === tests/cases/conformance/es6/variableDeclarations/VariableDeclaration10_es6.ts ===
 let a: number = 1
->a : number, Symbol(a,Decl(VariableDeclaration10_es6.ts,0,3))
+>a : number, Symbol(a, Decl(VariableDeclaration10_es6.ts, 0, 3))
 >1 : number
 

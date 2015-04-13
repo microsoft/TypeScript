@@ -1,129 +1,129 @@
 === tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs2.ts ===
 class Base {
->Base : Base, Symbol(Base,Decl(genericCallWithObjectTypeArgs2.ts,0,0))
+>Base : Base, Symbol(Base, Decl(genericCallWithObjectTypeArgs2.ts, 0, 0))
 
     x: string;
->x : string, Symbol(x,Decl(genericCallWithObjectTypeArgs2.ts,0,12))
+>x : string, Symbol(x, Decl(genericCallWithObjectTypeArgs2.ts, 0, 12))
 }
 class Derived extends Base {
->Derived : Derived, Symbol(Derived,Decl(genericCallWithObjectTypeArgs2.ts,2,1))
->Base : Base, Symbol(Base,Decl(genericCallWithObjectTypeArgs2.ts,0,0))
+>Derived : Derived, Symbol(Derived, Decl(genericCallWithObjectTypeArgs2.ts, 2, 1))
+>Base : Base, Symbol(Base, Decl(genericCallWithObjectTypeArgs2.ts, 0, 0))
 
     y: string;
->y : string, Symbol(y,Decl(genericCallWithObjectTypeArgs2.ts,3,28))
+>y : string, Symbol(y, Decl(genericCallWithObjectTypeArgs2.ts, 3, 28))
 }
 class Derived2 extends Base {
->Derived2 : Derived2, Symbol(Derived2,Decl(genericCallWithObjectTypeArgs2.ts,5,1))
->Base : Base, Symbol(Base,Decl(genericCallWithObjectTypeArgs2.ts,0,0))
+>Derived2 : Derived2, Symbol(Derived2, Decl(genericCallWithObjectTypeArgs2.ts, 5, 1))
+>Base : Base, Symbol(Base, Decl(genericCallWithObjectTypeArgs2.ts, 0, 0))
 
     z: string;
->z : string, Symbol(z,Decl(genericCallWithObjectTypeArgs2.ts,6,29))
+>z : string, Symbol(z, Decl(genericCallWithObjectTypeArgs2.ts, 6, 29))
 }
 
 // returns {}[]
 function f<T extends Base, U extends Base>(a: { x: T; y: U }) {
->f : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (T | U)[], Symbol(f,Decl(genericCallWithObjectTypeArgs2.ts,8,1))
->T : T, Symbol(T,Decl(genericCallWithObjectTypeArgs2.ts,11,11))
->Base : Base, Symbol(Base,Decl(genericCallWithObjectTypeArgs2.ts,0,0))
->U : U, Symbol(U,Decl(genericCallWithObjectTypeArgs2.ts,11,26))
->Base : Base, Symbol(Base,Decl(genericCallWithObjectTypeArgs2.ts,0,0))
->a : { x: T; y: U; }, Symbol(a,Decl(genericCallWithObjectTypeArgs2.ts,11,43))
->x : T, Symbol(x,Decl(genericCallWithObjectTypeArgs2.ts,11,47))
->T : T, Symbol(T,Decl(genericCallWithObjectTypeArgs2.ts,11,11))
->y : U, Symbol(y,Decl(genericCallWithObjectTypeArgs2.ts,11,53))
->U : U, Symbol(U,Decl(genericCallWithObjectTypeArgs2.ts,11,26))
+>f : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (T | U)[], Symbol(f, Decl(genericCallWithObjectTypeArgs2.ts, 8, 1))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgs2.ts, 11, 11))
+>Base : Base, Symbol(Base, Decl(genericCallWithObjectTypeArgs2.ts, 0, 0))
+>U : U, Symbol(U, Decl(genericCallWithObjectTypeArgs2.ts, 11, 26))
+>Base : Base, Symbol(Base, Decl(genericCallWithObjectTypeArgs2.ts, 0, 0))
+>a : { x: T; y: U; }, Symbol(a, Decl(genericCallWithObjectTypeArgs2.ts, 11, 43))
+>x : T, Symbol(x, Decl(genericCallWithObjectTypeArgs2.ts, 11, 47))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgs2.ts, 11, 11))
+>y : U, Symbol(y, Decl(genericCallWithObjectTypeArgs2.ts, 11, 53))
+>U : U, Symbol(U, Decl(genericCallWithObjectTypeArgs2.ts, 11, 26))
 
     return [a.x, a.y];
 >[a.x, a.y] : (T | U)[]
->a.x : T, Symbol(x,Decl(genericCallWithObjectTypeArgs2.ts,11,47))
->a : { x: T; y: U; }, Symbol(a,Decl(genericCallWithObjectTypeArgs2.ts,11,43))
->x : T, Symbol(x,Decl(genericCallWithObjectTypeArgs2.ts,11,47))
->a.y : U, Symbol(y,Decl(genericCallWithObjectTypeArgs2.ts,11,53))
->a : { x: T; y: U; }, Symbol(a,Decl(genericCallWithObjectTypeArgs2.ts,11,43))
->y : U, Symbol(y,Decl(genericCallWithObjectTypeArgs2.ts,11,53))
+>a.x : T, Symbol(x, Decl(genericCallWithObjectTypeArgs2.ts, 11, 47))
+>a : { x: T; y: U; }, Symbol(a, Decl(genericCallWithObjectTypeArgs2.ts, 11, 43))
+>x : T, Symbol(x, Decl(genericCallWithObjectTypeArgs2.ts, 11, 47))
+>a.y : U, Symbol(y, Decl(genericCallWithObjectTypeArgs2.ts, 11, 53))
+>a : { x: T; y: U; }, Symbol(a, Decl(genericCallWithObjectTypeArgs2.ts, 11, 43))
+>y : U, Symbol(y, Decl(genericCallWithObjectTypeArgs2.ts, 11, 53))
 }
 
 var r = f({ x: new Derived(), y: new Derived2() }); // {}[]
->r : (Derived | Derived2)[], Symbol(r,Decl(genericCallWithObjectTypeArgs2.ts,15,3))
+>r : (Derived | Derived2)[], Symbol(r, Decl(genericCallWithObjectTypeArgs2.ts, 15, 3))
 >f({ x: new Derived(), y: new Derived2() }) : (Derived | Derived2)[]
->f : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (T | U)[], Symbol(f,Decl(genericCallWithObjectTypeArgs2.ts,8,1))
+>f : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (T | U)[], Symbol(f, Decl(genericCallWithObjectTypeArgs2.ts, 8, 1))
 >{ x: new Derived(), y: new Derived2() } : { x: Derived; y: Derived2; }
->x : Derived, Symbol(x,Decl(genericCallWithObjectTypeArgs2.ts,15,11))
+>x : Derived, Symbol(x, Decl(genericCallWithObjectTypeArgs2.ts, 15, 11))
 >new Derived() : Derived
->Derived : typeof Derived, Symbol(Derived,Decl(genericCallWithObjectTypeArgs2.ts,2,1))
->y : Derived2, Symbol(y,Decl(genericCallWithObjectTypeArgs2.ts,15,29))
+>Derived : typeof Derived, Symbol(Derived, Decl(genericCallWithObjectTypeArgs2.ts, 2, 1))
+>y : Derived2, Symbol(y, Decl(genericCallWithObjectTypeArgs2.ts, 15, 29))
 >new Derived2() : Derived2
->Derived2 : typeof Derived2, Symbol(Derived2,Decl(genericCallWithObjectTypeArgs2.ts,5,1))
+>Derived2 : typeof Derived2, Symbol(Derived2, Decl(genericCallWithObjectTypeArgs2.ts, 5, 1))
 
 var r2 = f({ x: new Base(), y: new Derived2() }); // {}[]
->r2 : (Base | Derived2)[], Symbol(r2,Decl(genericCallWithObjectTypeArgs2.ts,16,3))
+>r2 : (Base | Derived2)[], Symbol(r2, Decl(genericCallWithObjectTypeArgs2.ts, 16, 3))
 >f({ x: new Base(), y: new Derived2() }) : (Base | Derived2)[]
->f : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (T | U)[], Symbol(f,Decl(genericCallWithObjectTypeArgs2.ts,8,1))
+>f : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (T | U)[], Symbol(f, Decl(genericCallWithObjectTypeArgs2.ts, 8, 1))
 >{ x: new Base(), y: new Derived2() } : { x: Base; y: Derived2; }
->x : Base, Symbol(x,Decl(genericCallWithObjectTypeArgs2.ts,16,12))
+>x : Base, Symbol(x, Decl(genericCallWithObjectTypeArgs2.ts, 16, 12))
 >new Base() : Base
->Base : typeof Base, Symbol(Base,Decl(genericCallWithObjectTypeArgs2.ts,0,0))
->y : Derived2, Symbol(y,Decl(genericCallWithObjectTypeArgs2.ts,16,27))
+>Base : typeof Base, Symbol(Base, Decl(genericCallWithObjectTypeArgs2.ts, 0, 0))
+>y : Derived2, Symbol(y, Decl(genericCallWithObjectTypeArgs2.ts, 16, 27))
 >new Derived2() : Derived2
->Derived2 : typeof Derived2, Symbol(Derived2,Decl(genericCallWithObjectTypeArgs2.ts,5,1))
+>Derived2 : typeof Derived2, Symbol(Derived2, Decl(genericCallWithObjectTypeArgs2.ts, 5, 1))
 
 
 function f2<T extends Base, U extends Base>(a: { x: T; y: U }) {
->f2 : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (x: T) => U, Symbol(f2,Decl(genericCallWithObjectTypeArgs2.ts,16,49))
->T : T, Symbol(T,Decl(genericCallWithObjectTypeArgs2.ts,19,12))
->Base : Base, Symbol(Base,Decl(genericCallWithObjectTypeArgs2.ts,0,0))
->U : U, Symbol(U,Decl(genericCallWithObjectTypeArgs2.ts,19,27))
->Base : Base, Symbol(Base,Decl(genericCallWithObjectTypeArgs2.ts,0,0))
->a : { x: T; y: U; }, Symbol(a,Decl(genericCallWithObjectTypeArgs2.ts,19,44))
->x : T, Symbol(x,Decl(genericCallWithObjectTypeArgs2.ts,19,48))
->T : T, Symbol(T,Decl(genericCallWithObjectTypeArgs2.ts,19,12))
->y : U, Symbol(y,Decl(genericCallWithObjectTypeArgs2.ts,19,54))
->U : U, Symbol(U,Decl(genericCallWithObjectTypeArgs2.ts,19,27))
+>f2 : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (x: T) => U, Symbol(f2, Decl(genericCallWithObjectTypeArgs2.ts, 16, 49))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgs2.ts, 19, 12))
+>Base : Base, Symbol(Base, Decl(genericCallWithObjectTypeArgs2.ts, 0, 0))
+>U : U, Symbol(U, Decl(genericCallWithObjectTypeArgs2.ts, 19, 27))
+>Base : Base, Symbol(Base, Decl(genericCallWithObjectTypeArgs2.ts, 0, 0))
+>a : { x: T; y: U; }, Symbol(a, Decl(genericCallWithObjectTypeArgs2.ts, 19, 44))
+>x : T, Symbol(x, Decl(genericCallWithObjectTypeArgs2.ts, 19, 48))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgs2.ts, 19, 12))
+>y : U, Symbol(y, Decl(genericCallWithObjectTypeArgs2.ts, 19, 54))
+>U : U, Symbol(U, Decl(genericCallWithObjectTypeArgs2.ts, 19, 27))
 
     return (x: T) => a.y;
 >(x: T) => a.y : (x: T) => U
->x : T, Symbol(x,Decl(genericCallWithObjectTypeArgs2.ts,20,12))
->T : T, Symbol(T,Decl(genericCallWithObjectTypeArgs2.ts,19,12))
->a.y : U, Symbol(y,Decl(genericCallWithObjectTypeArgs2.ts,19,54))
->a : { x: T; y: U; }, Symbol(a,Decl(genericCallWithObjectTypeArgs2.ts,19,44))
->y : U, Symbol(y,Decl(genericCallWithObjectTypeArgs2.ts,19,54))
+>x : T, Symbol(x, Decl(genericCallWithObjectTypeArgs2.ts, 20, 12))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgs2.ts, 19, 12))
+>a.y : U, Symbol(y, Decl(genericCallWithObjectTypeArgs2.ts, 19, 54))
+>a : { x: T; y: U; }, Symbol(a, Decl(genericCallWithObjectTypeArgs2.ts, 19, 44))
+>y : U, Symbol(y, Decl(genericCallWithObjectTypeArgs2.ts, 19, 54))
 }
 
 var r3 = f2({ x: new Derived(), y: new Derived2() }); // Derived => Derived2
->r3 : (x: Derived) => Derived2, Symbol(r3,Decl(genericCallWithObjectTypeArgs2.ts,23,3))
+>r3 : (x: Derived) => Derived2, Symbol(r3, Decl(genericCallWithObjectTypeArgs2.ts, 23, 3))
 >f2({ x: new Derived(), y: new Derived2() }) : (x: Derived) => Derived2
->f2 : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (x: T) => U, Symbol(f2,Decl(genericCallWithObjectTypeArgs2.ts,16,49))
+>f2 : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (x: T) => U, Symbol(f2, Decl(genericCallWithObjectTypeArgs2.ts, 16, 49))
 >{ x: new Derived(), y: new Derived2() } : { x: Derived; y: Derived2; }
->x : Derived, Symbol(x,Decl(genericCallWithObjectTypeArgs2.ts,23,13))
+>x : Derived, Symbol(x, Decl(genericCallWithObjectTypeArgs2.ts, 23, 13))
 >new Derived() : Derived
->Derived : typeof Derived, Symbol(Derived,Decl(genericCallWithObjectTypeArgs2.ts,2,1))
->y : Derived2, Symbol(y,Decl(genericCallWithObjectTypeArgs2.ts,23,31))
+>Derived : typeof Derived, Symbol(Derived, Decl(genericCallWithObjectTypeArgs2.ts, 2, 1))
+>y : Derived2, Symbol(y, Decl(genericCallWithObjectTypeArgs2.ts, 23, 31))
 >new Derived2() : Derived2
->Derived2 : typeof Derived2, Symbol(Derived2,Decl(genericCallWithObjectTypeArgs2.ts,5,1))
+>Derived2 : typeof Derived2, Symbol(Derived2, Decl(genericCallWithObjectTypeArgs2.ts, 5, 1))
 
 interface I<T, U> {
->I : I<T, U>, Symbol(I,Decl(genericCallWithObjectTypeArgs2.ts,23,53))
->T : T, Symbol(T,Decl(genericCallWithObjectTypeArgs2.ts,25,12))
->U : U, Symbol(U,Decl(genericCallWithObjectTypeArgs2.ts,25,14))
+>I : I<T, U>, Symbol(I, Decl(genericCallWithObjectTypeArgs2.ts, 23, 53))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgs2.ts, 25, 12))
+>U : U, Symbol(U, Decl(genericCallWithObjectTypeArgs2.ts, 25, 14))
 
     x: T;
->x : T, Symbol(x,Decl(genericCallWithObjectTypeArgs2.ts,25,19))
->T : T, Symbol(T,Decl(genericCallWithObjectTypeArgs2.ts,25,12))
+>x : T, Symbol(x, Decl(genericCallWithObjectTypeArgs2.ts, 25, 19))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgs2.ts, 25, 12))
 
     y: U;
->y : U, Symbol(y,Decl(genericCallWithObjectTypeArgs2.ts,26,9))
->U : U, Symbol(U,Decl(genericCallWithObjectTypeArgs2.ts,25,14))
+>y : U, Symbol(y, Decl(genericCallWithObjectTypeArgs2.ts, 26, 9))
+>U : U, Symbol(U, Decl(genericCallWithObjectTypeArgs2.ts, 25, 14))
 }
 
 var i: I<Base, Derived>;
->i : I<Base, Derived>, Symbol(i,Decl(genericCallWithObjectTypeArgs2.ts,30,3))
->I : I<T, U>, Symbol(I,Decl(genericCallWithObjectTypeArgs2.ts,23,53))
->Base : Base, Symbol(Base,Decl(genericCallWithObjectTypeArgs2.ts,0,0))
->Derived : Derived, Symbol(Derived,Decl(genericCallWithObjectTypeArgs2.ts,2,1))
+>i : I<Base, Derived>, Symbol(i, Decl(genericCallWithObjectTypeArgs2.ts, 30, 3))
+>I : I<T, U>, Symbol(I, Decl(genericCallWithObjectTypeArgs2.ts, 23, 53))
+>Base : Base, Symbol(Base, Decl(genericCallWithObjectTypeArgs2.ts, 0, 0))
+>Derived : Derived, Symbol(Derived, Decl(genericCallWithObjectTypeArgs2.ts, 2, 1))
 
 var r4 = f2(i); // Base => Derived
->r4 : (x: Base) => Derived, Symbol(r4,Decl(genericCallWithObjectTypeArgs2.ts,31,3))
+>r4 : (x: Base) => Derived, Symbol(r4, Decl(genericCallWithObjectTypeArgs2.ts, 31, 3))
 >f2(i) : (x: Base) => Derived
->f2 : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (x: T) => U, Symbol(f2,Decl(genericCallWithObjectTypeArgs2.ts,16,49))
->i : I<Base, Derived>, Symbol(i,Decl(genericCallWithObjectTypeArgs2.ts,30,3))
+>f2 : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (x: T) => U, Symbol(f2, Decl(genericCallWithObjectTypeArgs2.ts, 16, 49))
+>i : I<Base, Derived>, Symbol(i, Decl(genericCallWithObjectTypeArgs2.ts, 30, 3))
 

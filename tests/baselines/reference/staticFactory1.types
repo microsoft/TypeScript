@@ -1,38 +1,38 @@
 === tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/staticFactory1.ts ===
 class Base {
->Base : Base, Symbol(Base,Decl(staticFactory1.ts,0,0))
+>Base : Base, Symbol(Base, Decl(staticFactory1.ts, 0, 0))
 
     foo() { return 1; }
->foo : () => number, Symbol(foo,Decl(staticFactory1.ts,0,12))
+>foo : () => number, Symbol(foo, Decl(staticFactory1.ts, 0, 12))
 >1 : number
 
     static create() {
->create : () => Base, Symbol(Base.create,Decl(staticFactory1.ts,1,23))
+>create : () => Base, Symbol(Base.create, Decl(staticFactory1.ts, 1, 23))
 
         return new this();
 >new this() : Base
->this : typeof Base, Symbol(Base,Decl(staticFactory1.ts,0,0))
+>this : typeof Base, Symbol(Base, Decl(staticFactory1.ts, 0, 0))
     }
 }
 
 class Derived extends Base {
->Derived : Derived, Symbol(Derived,Decl(staticFactory1.ts,5,1))
->Base : Base, Symbol(Base,Decl(staticFactory1.ts,0,0))
+>Derived : Derived, Symbol(Derived, Decl(staticFactory1.ts, 5, 1))
+>Base : Base, Symbol(Base, Decl(staticFactory1.ts, 0, 0))
 
     foo() { return 2; }
->foo : () => number, Symbol(foo,Decl(staticFactory1.ts,7,28))
+>foo : () => number, Symbol(foo, Decl(staticFactory1.ts, 7, 28))
 >2 : number
 }
 var d = Derived.create(); 
->d : Base, Symbol(d,Decl(staticFactory1.ts,10,3))
+>d : Base, Symbol(d, Decl(staticFactory1.ts, 10, 3))
 >Derived.create() : Base
->Derived.create : () => Base, Symbol(Base.create,Decl(staticFactory1.ts,1,23))
->Derived : typeof Derived, Symbol(Derived,Decl(staticFactory1.ts,5,1))
->create : () => Base, Symbol(Base.create,Decl(staticFactory1.ts,1,23))
+>Derived.create : () => Base, Symbol(Base.create, Decl(staticFactory1.ts, 1, 23))
+>Derived : typeof Derived, Symbol(Derived, Decl(staticFactory1.ts, 5, 1))
+>create : () => Base, Symbol(Base.create, Decl(staticFactory1.ts, 1, 23))
 
 d.foo();  
 >d.foo() : number
->d.foo : () => number, Symbol(Base.foo,Decl(staticFactory1.ts,0,12))
->d : Base, Symbol(d,Decl(staticFactory1.ts,10,3))
->foo : () => number, Symbol(Base.foo,Decl(staticFactory1.ts,0,12))
+>d.foo : () => number, Symbol(Base.foo, Decl(staticFactory1.ts, 0, 12))
+>d : Base, Symbol(d, Decl(staticFactory1.ts, 10, 3))
+>foo : () => number, Symbol(Base.foo, Decl(staticFactory1.ts, 0, 12))
 

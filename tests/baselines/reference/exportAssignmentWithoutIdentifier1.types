@@ -1,15 +1,15 @@
 === tests/cases/compiler/exportAssignmentWithoutIdentifier1.ts ===
 function Greeter() {
->Greeter : () => void, Symbol(Greeter,Decl(exportAssignmentWithoutIdentifier1.ts,0,0))
+>Greeter : () => void, Symbol(Greeter, Decl(exportAssignmentWithoutIdentifier1.ts, 0, 0))
 
     //...
 }
 Greeter.prototype.greet = function () {
 >Greeter.prototype.greet = function () {    //...} : () => void
 >Greeter.prototype.greet : any
->Greeter.prototype : any, Symbol(Function.prototype,Decl(lib.d.ts,249,48))
->Greeter : () => void, Symbol(Greeter,Decl(exportAssignmentWithoutIdentifier1.ts,0,0))
->prototype : any, Symbol(Function.prototype,Decl(lib.d.ts,249,48))
+>Greeter.prototype : any, Symbol(Function.prototype, Decl(lib.d.ts, 249, 48))
+>Greeter : () => void, Symbol(Greeter, Decl(exportAssignmentWithoutIdentifier1.ts, 0, 0))
+>prototype : any, Symbol(Function.prototype, Decl(lib.d.ts, 249, 48))
 >greet : any
 >function () {    //...} : () => void
 
@@ -17,5 +17,5 @@ Greeter.prototype.greet = function () {
 }
 export = new Greeter();
 >new Greeter() : any
->Greeter : () => void, Symbol(Greeter,Decl(exportAssignmentWithoutIdentifier1.ts,0,0))
+>Greeter : () => void, Symbol(Greeter, Decl(exportAssignmentWithoutIdentifier1.ts, 0, 0))
 

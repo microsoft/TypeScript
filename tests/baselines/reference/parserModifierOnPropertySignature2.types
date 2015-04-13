@@ -1,11 +1,11 @@
 === tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnPropertySignature2.ts ===
 interface Foo{
->Foo : Foo, Symbol(Foo,Decl(parserModifierOnPropertySignature2.ts,0,0))
+>Foo : Foo, Symbol(Foo, Decl(parserModifierOnPropertySignature2.ts, 0, 0))
 
     public
->public : any, Symbol(public,Decl(parserModifierOnPropertySignature2.ts,0,14))
+>public : any, Symbol(public, Decl(parserModifierOnPropertySignature2.ts, 0, 14))
 
     biz;
->biz : any, Symbol(biz,Decl(parserModifierOnPropertySignature2.ts,1,10))
+>biz : any, Symbol(biz, Decl(parserModifierOnPropertySignature2.ts, 1, 10))
 }
 

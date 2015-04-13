@@ -1,16 +1,16 @@
 === tests/cases/compiler/functionWithDefaultParameterWithNoStatements12.ts ===
 var v: any[];
->v : any[], Symbol(v,Decl(functionWithDefaultParameterWithNoStatements12.ts,0,3))
+>v : any[], Symbol(v, Decl(functionWithDefaultParameterWithNoStatements12.ts, 0, 3))
 
 function foo(a = (v)) { }
->foo : (a?: any[]) => void, Symbol(foo,Decl(functionWithDefaultParameterWithNoStatements12.ts,0,13))
->a : any[], Symbol(a,Decl(functionWithDefaultParameterWithNoStatements12.ts,2,13))
+>foo : (a?: any[]) => void, Symbol(foo, Decl(functionWithDefaultParameterWithNoStatements12.ts, 0, 13))
+>a : any[], Symbol(a, Decl(functionWithDefaultParameterWithNoStatements12.ts, 2, 13))
 >(v) : any[]
->v : any[], Symbol(v,Decl(functionWithDefaultParameterWithNoStatements12.ts,0,3))
+>v : any[], Symbol(v, Decl(functionWithDefaultParameterWithNoStatements12.ts, 0, 3))
 
 function bar(a = (v)) {
->bar : (a?: any[]) => void, Symbol(bar,Decl(functionWithDefaultParameterWithNoStatements12.ts,2,25))
->a : any[], Symbol(a,Decl(functionWithDefaultParameterWithNoStatements12.ts,4,13))
+>bar : (a?: any[]) => void, Symbol(bar, Decl(functionWithDefaultParameterWithNoStatements12.ts, 2, 25))
+>a : any[], Symbol(a, Decl(functionWithDefaultParameterWithNoStatements12.ts, 4, 13))
 >(v) : any[]
->v : any[], Symbol(v,Decl(functionWithDefaultParameterWithNoStatements12.ts,0,3))
+>v : any[], Symbol(v, Decl(functionWithDefaultParameterWithNoStatements12.ts, 0, 3))
 }

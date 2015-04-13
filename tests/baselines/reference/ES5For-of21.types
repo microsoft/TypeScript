@@ -1,9 +1,9 @@
 === tests/cases/conformance/statements/for-ofStatements/ES5For-of21.ts ===
 for (let v of []) {
->v : any, Symbol(v,Decl(ES5For-of21.ts,0,8))
+>v : any, Symbol(v, Decl(ES5For-of21.ts, 0, 8))
 >[] : undefined[]
 
     for (let _i of []) { }
->_i : any, Symbol(_i,Decl(ES5For-of21.ts,1,12))
+>_i : any, Symbol(_i, Decl(ES5For-of21.ts, 1, 12))
 >[] : undefined[]
 }

@@ -1,40 +1,40 @@
 === tests/cases/compiler/targetTypeCalls.ts ===
 var fra1: (v:any)=>string = function() { return function (v:string) {return v;}; }() // should work
->fra1 : (v: any) => string, Symbol(fra1,Decl(targetTypeCalls.ts,0,3))
->v : any, Symbol(v,Decl(targetTypeCalls.ts,0,11))
+>fra1 : (v: any) => string, Symbol(fra1, Decl(targetTypeCalls.ts, 0, 3))
+>v : any, Symbol(v, Decl(targetTypeCalls.ts, 0, 11))
 >function() { return function (v:string) {return v;}; }() : (v: string) => string
 >function() { return function (v:string) {return v;}; } : () => (v: string) => string
 >function (v:string) {return v;} : (v: string) => string
->v : string, Symbol(v,Decl(targetTypeCalls.ts,0,58))
->v : string, Symbol(v,Decl(targetTypeCalls.ts,0,58))
+>v : string, Symbol(v, Decl(targetTypeCalls.ts, 0, 58))
+>v : string, Symbol(v, Decl(targetTypeCalls.ts, 0, 58))
 
 var fra2: (v:any)=>number = function() { return function () { return 0; } }() // should work
->fra2 : (v: any) => number, Symbol(fra2,Decl(targetTypeCalls.ts,1,3))
->v : any, Symbol(v,Decl(targetTypeCalls.ts,1,11))
+>fra2 : (v: any) => number, Symbol(fra2, Decl(targetTypeCalls.ts, 1, 3))
+>v : any, Symbol(v, Decl(targetTypeCalls.ts, 1, 11))
 >function() { return function () { return 0; } }() : () => number
 >function() { return function () { return 0; } } : () => () => number
 >function () { return 0; } : () => number
 >0 : number
 
 var fra3: (v:any)=>string = function() { return function() { return function(v) {return v;};}(); }() // should work
->fra3 : (v: any) => string, Symbol(fra3,Decl(targetTypeCalls.ts,3,3))
->v : any, Symbol(v,Decl(targetTypeCalls.ts,3,11))
+>fra3 : (v: any) => string, Symbol(fra3, Decl(targetTypeCalls.ts, 3, 3))
+>v : any, Symbol(v, Decl(targetTypeCalls.ts, 3, 11))
 >function() { return function() { return function(v) {return v;};}(); }() : (v: any) => any
 >function() { return function() { return function(v) {return v;};}(); } : () => (v: any) => any
 >function() { return function(v) {return v;};}() : (v: any) => any
 >function() { return function(v) {return v;};} : () => (v: any) => any
 >function(v) {return v;} : (v: any) => any
->v : any, Symbol(v,Decl(targetTypeCalls.ts,3,77))
->v : any, Symbol(v,Decl(targetTypeCalls.ts,3,77))
+>v : any, Symbol(v, Decl(targetTypeCalls.ts, 3, 77))
+>v : any, Symbol(v, Decl(targetTypeCalls.ts, 3, 77))
 
 var fra4: (v:any)=>void = function() { return function() { return function(v) {return v;};}(); }() // should work
->fra4 : (v: any) => void, Symbol(fra4,Decl(targetTypeCalls.ts,4,3))
->v : any, Symbol(v,Decl(targetTypeCalls.ts,4,11))
+>fra4 : (v: any) => void, Symbol(fra4, Decl(targetTypeCalls.ts, 4, 3))
+>v : any, Symbol(v, Decl(targetTypeCalls.ts, 4, 11))
 >function() { return function() { return function(v) {return v;};}(); }() : (v: any) => any
 >function() { return function() { return function(v) {return v;};}(); } : () => (v: any) => any
 >function() { return function(v) {return v;};}() : (v: any) => any
 >function() { return function(v) {return v;};} : () => (v: any) => any
 >function(v) {return v;} : (v: any) => any
->v : any, Symbol(v,Decl(targetTypeCalls.ts,4,75))
->v : any, Symbol(v,Decl(targetTypeCalls.ts,4,75))
+>v : any, Symbol(v, Decl(targetTypeCalls.ts, 4, 75))
+>v : any, Symbol(v, Decl(targetTypeCalls.ts, 4, 75))
 

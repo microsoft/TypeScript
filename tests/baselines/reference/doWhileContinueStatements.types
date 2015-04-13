@@ -69,7 +69,7 @@ EIGHT:
 
 do{
     var fn = function () { }
->fn : () => void, Symbol(fn,Decl(doWhileContinueStatements.ts,34,7))
+>fn : () => void, Symbol(fn, Decl(doWhileContinueStatements.ts, 34, 7))
 >function () { } : () => void
 
     continue EIGHT;

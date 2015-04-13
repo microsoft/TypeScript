@@ -1,9 +1,9 @@
 === tests/cases/conformance/parser/ecmascript5/ObjectLiterals/parserObjectLiterals1.ts ===
 var v = { a: 1, b: 2 };
->v : { a: number; b: number; }, Symbol(v,Decl(parserObjectLiterals1.ts,0,3))
+>v : { a: number; b: number; }, Symbol(v, Decl(parserObjectLiterals1.ts, 0, 3))
 >{ a: 1, b: 2 } : { a: number; b: number; }
->a : number, Symbol(a,Decl(parserObjectLiterals1.ts,0,9))
+>a : number, Symbol(a, Decl(parserObjectLiterals1.ts, 0, 9))
 >1 : number
->b : number, Symbol(b,Decl(parserObjectLiterals1.ts,0,15))
+>b : number, Symbol(b, Decl(parserObjectLiterals1.ts, 0, 15))
 >2 : number
 

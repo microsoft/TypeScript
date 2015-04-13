@@ -80,7 +80,7 @@ while (true) {
 >true : boolean
 
     var fn = function () { }
->fn : () => void, Symbol(fn,Decl(whileBreakStatements.ts,38,7))
+>fn : () => void, Symbol(fn, Decl(whileBreakStatements.ts, 38, 7))
 >function () { } : () => void
 
     break EIGHT;

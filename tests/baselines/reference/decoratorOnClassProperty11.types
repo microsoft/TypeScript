@@ -1,14 +1,14 @@
 === tests/cases/conformance/decorators/class/property/decoratorOnClassProperty11.ts ===
 declare function dec(): <T>(target: any, propertyKey: string) => void;
->dec : () => <T>(target: any, propertyKey: string) => void, Symbol(dec,Decl(decoratorOnClassProperty11.ts,0,0))
->T : T, Symbol(T,Decl(decoratorOnClassProperty11.ts,0,25))
->target : any, Symbol(target,Decl(decoratorOnClassProperty11.ts,0,28))
->propertyKey : string, Symbol(propertyKey,Decl(decoratorOnClassProperty11.ts,0,40))
+>dec : () => <T>(target: any, propertyKey: string) => void, Symbol(dec, Decl(decoratorOnClassProperty11.ts, 0, 0))
+>T : T, Symbol(T, Decl(decoratorOnClassProperty11.ts, 0, 25))
+>target : any, Symbol(target, Decl(decoratorOnClassProperty11.ts, 0, 28))
+>propertyKey : string, Symbol(propertyKey, Decl(decoratorOnClassProperty11.ts, 0, 40))
 
 class C {
->C : C, Symbol(C,Decl(decoratorOnClassProperty11.ts,0,70))
+>C : C, Symbol(C, Decl(decoratorOnClassProperty11.ts, 0, 70))
 
     @dec prop;
->dec : () => <T>(target: any, propertyKey: string) => void, Symbol(dec,Decl(decoratorOnClassProperty11.ts,0,0))
->prop : any, Symbol(prop,Decl(decoratorOnClassProperty11.ts,2,9))
+>dec : () => <T>(target: any, propertyKey: string) => void, Symbol(dec, Decl(decoratorOnClassProperty11.ts, 0, 0))
+>prop : any, Symbol(prop, Decl(decoratorOnClassProperty11.ts, 2, 9))
 }

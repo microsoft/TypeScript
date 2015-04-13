@@ -1,8 +1,8 @@
 === tests/cases/conformance/statements/for-ofStatements/ES5For-of11.ts ===
 var v;
->v : any, Symbol(v,Decl(ES5For-of11.ts,0,3))
+>v : any, Symbol(v, Decl(ES5For-of11.ts, 0, 3))
 
 for (v of []) { }
->v : any, Symbol(v,Decl(ES5For-of11.ts,0,3))
+>v : any, Symbol(v, Decl(ES5For-of11.ts, 0, 3))
 >[] : undefined[]
 

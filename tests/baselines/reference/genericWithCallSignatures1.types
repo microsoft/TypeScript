@@ -1,40 +1,40 @@
 === tests/cases/compiler/genericWithCallSignatures_1.ts ===
 ///<reference path="genericWithCallSignatures_0.ts"/>
 class MyClass {
->MyClass : MyClass, Symbol(MyClass,Decl(genericWithCallSignatures_1.ts,0,0))
+>MyClass : MyClass, Symbol(MyClass, Decl(genericWithCallSignatures_1.ts, 0, 0))
 
     public callableThing: CallableExtention<string>;
->callableThing : CallableExtention<string>, Symbol(callableThing,Decl(genericWithCallSignatures_1.ts,1,15))
->CallableExtention : CallableExtention<T>, Symbol(CallableExtention,Decl(genericWithCallSignatures_0.ts,3,1))
+>callableThing : CallableExtention<string>, Symbol(callableThing, Decl(genericWithCallSignatures_1.ts, 1, 15))
+>CallableExtention : CallableExtention<T>, Symbol(CallableExtention, Decl(genericWithCallSignatures_0.ts, 3, 1))
 
     public myMethod() {
->myMethod : () => void, Symbol(myMethod,Decl(genericWithCallSignatures_1.ts,2,52))
+>myMethod : () => void, Symbol(myMethod, Decl(genericWithCallSignatures_1.ts, 2, 52))
 
         var x = <string> this.callableThing();
->x : string, Symbol(x,Decl(genericWithCallSignatures_1.ts,5,11))
+>x : string, Symbol(x, Decl(genericWithCallSignatures_1.ts, 5, 11))
 ><string> this.callableThing() : string
 >this.callableThing() : string
->this.callableThing : CallableExtention<string>, Symbol(callableThing,Decl(genericWithCallSignatures_1.ts,1,15))
->this : MyClass, Symbol(MyClass,Decl(genericWithCallSignatures_1.ts,0,0))
->callableThing : CallableExtention<string>, Symbol(callableThing,Decl(genericWithCallSignatures_1.ts,1,15))
+>this.callableThing : CallableExtention<string>, Symbol(callableThing, Decl(genericWithCallSignatures_1.ts, 1, 15))
+>this : MyClass, Symbol(MyClass, Decl(genericWithCallSignatures_1.ts, 0, 0))
+>callableThing : CallableExtention<string>, Symbol(callableThing, Decl(genericWithCallSignatures_1.ts, 1, 15))
     }
 }
 === tests/cases/compiler/genericWithCallSignatures_0.ts ===
 interface Callable<T> {
->Callable : Callable<T>, Symbol(Callable,Decl(genericWithCallSignatures_0.ts,0,0))
->T : T, Symbol(T,Decl(genericWithCallSignatures_0.ts,0,19))
+>Callable : Callable<T>, Symbol(Callable, Decl(genericWithCallSignatures_0.ts, 0, 0))
+>T : T, Symbol(T, Decl(genericWithCallSignatures_0.ts, 0, 19))
 
     (): T;
->T : T, Symbol(T,Decl(genericWithCallSignatures_0.ts,0,19))
+>T : T, Symbol(T, Decl(genericWithCallSignatures_0.ts, 0, 19))
 
     (value: T): void;
->value : T, Symbol(value,Decl(genericWithCallSignatures_0.ts,2,5))
->T : T, Symbol(T,Decl(genericWithCallSignatures_0.ts,0,19))
+>value : T, Symbol(value, Decl(genericWithCallSignatures_0.ts, 2, 5))
+>T : T, Symbol(T, Decl(genericWithCallSignatures_0.ts, 0, 19))
 }
 
 interface CallableExtention<T> extends Callable<T> { }
->CallableExtention : CallableExtention<T>, Symbol(CallableExtention,Decl(genericWithCallSignatures_0.ts,3,1))
->T : T, Symbol(T,Decl(genericWithCallSignatures_0.ts,5,28))
->Callable : Callable<T>, Symbol(Callable,Decl(genericWithCallSignatures_0.ts,0,0))
->T : T, Symbol(T,Decl(genericWithCallSignatures_0.ts,5,28))
+>CallableExtention : CallableExtention<T>, Symbol(CallableExtention, Decl(genericWithCallSignatures_0.ts, 3, 1))
+>T : T, Symbol(T, Decl(genericWithCallSignatures_0.ts, 5, 28))
+>Callable : Callable<T>, Symbol(Callable, Decl(genericWithCallSignatures_0.ts, 0, 0))
+>T : T, Symbol(T, Decl(genericWithCallSignatures_0.ts, 5, 28))
 

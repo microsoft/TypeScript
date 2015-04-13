@@ -1,10 +1,10 @@
 === tests/cases/conformance/Symbols/ES5SymbolType1.ts ===
 var s: symbol;
->s : symbol, Symbol(s,Decl(ES5SymbolType1.ts,0,3))
+>s : symbol, Symbol(s, Decl(ES5SymbolType1.ts, 0, 3))
 
 s.toString();
 >s.toString() : string
->s.toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
->s : symbol, Symbol(s,Decl(ES5SymbolType1.ts,0,3))
->toString : () => string, Symbol(Object.toString,Decl(lib.d.ts,96,26))
+>s.toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>s : symbol, Symbol(s, Decl(ES5SymbolType1.ts, 0, 3))
+>toString : () => string, Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
 

@@ -1,69 +1,69 @@
 === tests/cases/compiler/es6ModuleModuleDeclaration.ts ===
 export module m1 {
->m1 : typeof m1, Symbol(m1,Decl(es6ModuleModuleDeclaration.ts,0,0))
+>m1 : typeof m1, Symbol(m1, Decl(es6ModuleModuleDeclaration.ts, 0, 0))
 
     export var a = 10;
->a : number, Symbol(a,Decl(es6ModuleModuleDeclaration.ts,1,14))
+>a : number, Symbol(a, Decl(es6ModuleModuleDeclaration.ts, 1, 14))
 >10 : number
 
     var b = 10;
->b : number, Symbol(b,Decl(es6ModuleModuleDeclaration.ts,2,7))
+>b : number, Symbol(b, Decl(es6ModuleModuleDeclaration.ts, 2, 7))
 >10 : number
 
     export module innerExportedModule {
->innerExportedModule : typeof innerExportedModule, Symbol(innerExportedModule,Decl(es6ModuleModuleDeclaration.ts,2,15))
+>innerExportedModule : typeof innerExportedModule, Symbol(innerExportedModule, Decl(es6ModuleModuleDeclaration.ts, 2, 15))
 
         export var k = 10;
->k : number, Symbol(k,Decl(es6ModuleModuleDeclaration.ts,4,18))
+>k : number, Symbol(k, Decl(es6ModuleModuleDeclaration.ts, 4, 18))
 >10 : number
 
         var l = 10;
->l : number, Symbol(l,Decl(es6ModuleModuleDeclaration.ts,5,11))
+>l : number, Symbol(l, Decl(es6ModuleModuleDeclaration.ts, 5, 11))
 >10 : number
     }
     export module innerNonExportedModule {
->innerNonExportedModule : typeof innerNonExportedModule, Symbol(innerNonExportedModule,Decl(es6ModuleModuleDeclaration.ts,6,5))
+>innerNonExportedModule : typeof innerNonExportedModule, Symbol(innerNonExportedModule, Decl(es6ModuleModuleDeclaration.ts, 6, 5))
 
         export var x = 10;
->x : number, Symbol(x,Decl(es6ModuleModuleDeclaration.ts,8,18))
+>x : number, Symbol(x, Decl(es6ModuleModuleDeclaration.ts, 8, 18))
 >10 : number
 
         var y = 10;
->y : number, Symbol(y,Decl(es6ModuleModuleDeclaration.ts,9,11))
+>y : number, Symbol(y, Decl(es6ModuleModuleDeclaration.ts, 9, 11))
 >10 : number
     }
 }
 module m2 {
->m2 : typeof m2, Symbol(m2,Decl(es6ModuleModuleDeclaration.ts,11,1))
+>m2 : typeof m2, Symbol(m2, Decl(es6ModuleModuleDeclaration.ts, 11, 1))
 
     export var a = 10;
->a : number, Symbol(a,Decl(es6ModuleModuleDeclaration.ts,13,14))
+>a : number, Symbol(a, Decl(es6ModuleModuleDeclaration.ts, 13, 14))
 >10 : number
 
     var b = 10;
->b : number, Symbol(b,Decl(es6ModuleModuleDeclaration.ts,14,7))
+>b : number, Symbol(b, Decl(es6ModuleModuleDeclaration.ts, 14, 7))
 >10 : number
 
     export module innerExportedModule {
->innerExportedModule : typeof innerExportedModule, Symbol(innerExportedModule,Decl(es6ModuleModuleDeclaration.ts,14,15))
+>innerExportedModule : typeof innerExportedModule, Symbol(innerExportedModule, Decl(es6ModuleModuleDeclaration.ts, 14, 15))
 
         export var k = 10;
->k : number, Symbol(k,Decl(es6ModuleModuleDeclaration.ts,16,18))
+>k : number, Symbol(k, Decl(es6ModuleModuleDeclaration.ts, 16, 18))
 >10 : number
 
         var l = 10;
->l : number, Symbol(l,Decl(es6ModuleModuleDeclaration.ts,17,11))
+>l : number, Symbol(l, Decl(es6ModuleModuleDeclaration.ts, 17, 11))
 >10 : number
     }
     export module innerNonExportedModule {
->innerNonExportedModule : typeof innerNonExportedModule, Symbol(innerNonExportedModule,Decl(es6ModuleModuleDeclaration.ts,18,5))
+>innerNonExportedModule : typeof innerNonExportedModule, Symbol(innerNonExportedModule, Decl(es6ModuleModuleDeclaration.ts, 18, 5))
 
         export var x = 10;
->x : number, Symbol(x,Decl(es6ModuleModuleDeclaration.ts,20,18))
+>x : number, Symbol(x, Decl(es6ModuleModuleDeclaration.ts, 20, 18))
 >10 : number
 
         var y = 10;
->y : number, Symbol(y,Decl(es6ModuleModuleDeclaration.ts,21,11))
+>y : number, Symbol(y, Decl(es6ModuleModuleDeclaration.ts, 21, 11))
 >10 : number
     }
 }

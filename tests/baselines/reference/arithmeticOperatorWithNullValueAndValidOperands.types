@@ -3,548 +3,548 @@
 // other operand.
 
 enum E {
->E : E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
+>E : E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
 
     a,
->a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
+>a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
 
     b
->b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
+>b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
 }
 
 var a: any;
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 
 var b: number;
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 
 // operator *
 var ra1 = null * a;
->ra1 : number, Symbol(ra1,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,12,3))
+>ra1 : number, Symbol(ra1, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 12, 3))
 >null * a : number
 >null : null
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 
 var ra2 = null * b;
->ra2 : number, Symbol(ra2,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,13,3))
+>ra2 : number, Symbol(ra2, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 13, 3))
 >null * b : number
 >null : null
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 
 var ra3 = null * 1;
->ra3 : number, Symbol(ra3,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,14,3))
+>ra3 : number, Symbol(ra3, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 14, 3))
 >null * 1 : number
 >null : null
 >1 : number
 
 var ra4 = null * E.a;
->ra4 : number, Symbol(ra4,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,15,3))
+>ra4 : number, Symbol(ra4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 15, 3))
 >null * E.a : number
 >null : null
->E.a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
+>E.a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
 
 var ra5 = a * null;
->ra5 : number, Symbol(ra5,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,16,3))
+>ra5 : number, Symbol(ra5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 16, 3))
 >a * null : number
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 >null : null
 
 var ra6 = b * null;
->ra6 : number, Symbol(ra6,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,17,3))
+>ra6 : number, Symbol(ra6, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 17, 3))
 >b * null : number
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 >null : null
 
 var ra7 = 0 * null;
->ra7 : number, Symbol(ra7,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,18,3))
+>ra7 : number, Symbol(ra7, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 18, 3))
 >0 * null : number
 >0 : number
 >null : null
 
 var ra8 = E.b * null;
->ra8 : number, Symbol(ra8,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,19,3))
+>ra8 : number, Symbol(ra8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 19, 3))
 >E.b * null : number
->E.b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
+>E.b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
 >null : null
 
 // operator /
 var rb1 = null / a;
->rb1 : number, Symbol(rb1,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,22,3))
+>rb1 : number, Symbol(rb1, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 22, 3))
 >null / a : number
 >null : null
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 
 var rb2 = null / b;
->rb2 : number, Symbol(rb2,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,23,3))
+>rb2 : number, Symbol(rb2, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 23, 3))
 >null / b : number
 >null : null
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 
 var rb3 = null / 1;
->rb3 : number, Symbol(rb3,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,24,3))
+>rb3 : number, Symbol(rb3, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 24, 3))
 >null / 1 : number
 >null : null
 >1 : number
 
 var rb4 = null / E.a;
->rb4 : number, Symbol(rb4,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,25,3))
+>rb4 : number, Symbol(rb4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 25, 3))
 >null / E.a : number
 >null : null
->E.a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
+>E.a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
 
 var rb5 = a / null;
->rb5 : number, Symbol(rb5,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,26,3))
+>rb5 : number, Symbol(rb5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 26, 3))
 >a / null : number
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 >null : null
 
 var rb6 = b / null;
->rb6 : number, Symbol(rb6,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,27,3))
+>rb6 : number, Symbol(rb6, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 27, 3))
 >b / null : number
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 >null : null
 
 var rb7 = 0 / null;
->rb7 : number, Symbol(rb7,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,28,3))
+>rb7 : number, Symbol(rb7, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 28, 3))
 >0 / null : number
 >0 : number
 >null : null
 
 var rb8 = E.b / null;
->rb8 : number, Symbol(rb8,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,29,3))
+>rb8 : number, Symbol(rb8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 29, 3))
 >E.b / null : number
->E.b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
+>E.b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
 >null : null
 
 // operator %
 var rc1 = null % a;
->rc1 : number, Symbol(rc1,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,32,3))
+>rc1 : number, Symbol(rc1, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 32, 3))
 >null % a : number
 >null : null
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 
 var rc2 = null % b;
->rc2 : number, Symbol(rc2,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,33,3))
+>rc2 : number, Symbol(rc2, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 33, 3))
 >null % b : number
 >null : null
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 
 var rc3 = null % 1;
->rc3 : number, Symbol(rc3,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,34,3))
+>rc3 : number, Symbol(rc3, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 34, 3))
 >null % 1 : number
 >null : null
 >1 : number
 
 var rc4 = null % E.a;
->rc4 : number, Symbol(rc4,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,35,3))
+>rc4 : number, Symbol(rc4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 35, 3))
 >null % E.a : number
 >null : null
->E.a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
+>E.a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
 
 var rc5 = a % null;
->rc5 : number, Symbol(rc5,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,36,3))
+>rc5 : number, Symbol(rc5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 36, 3))
 >a % null : number
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 >null : null
 
 var rc6 = b % null;
->rc6 : number, Symbol(rc6,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,37,3))
+>rc6 : number, Symbol(rc6, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 37, 3))
 >b % null : number
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 >null : null
 
 var rc7 = 0 % null;
->rc7 : number, Symbol(rc7,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,38,3))
+>rc7 : number, Symbol(rc7, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 38, 3))
 >0 % null : number
 >0 : number
 >null : null
 
 var rc8 = E.b % null;
->rc8 : number, Symbol(rc8,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,39,3))
+>rc8 : number, Symbol(rc8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 39, 3))
 >E.b % null : number
->E.b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
+>E.b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
 >null : null
 
 // operator -
 var rd1 = null - a;
->rd1 : number, Symbol(rd1,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,42,3))
+>rd1 : number, Symbol(rd1, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 42, 3))
 >null - a : number
 >null : null
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 
 var rd2 = null - b;
->rd2 : number, Symbol(rd2,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,43,3))
+>rd2 : number, Symbol(rd2, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 43, 3))
 >null - b : number
 >null : null
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 
 var rd3 = null - 1;
->rd3 : number, Symbol(rd3,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,44,3))
+>rd3 : number, Symbol(rd3, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 44, 3))
 >null - 1 : number
 >null : null
 >1 : number
 
 var rd4 = null - E.a;
->rd4 : number, Symbol(rd4,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,45,3))
+>rd4 : number, Symbol(rd4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 45, 3))
 >null - E.a : number
 >null : null
->E.a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
+>E.a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
 
 var rd5 = a - null;
->rd5 : number, Symbol(rd5,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,46,3))
+>rd5 : number, Symbol(rd5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 46, 3))
 >a - null : number
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 >null : null
 
 var rd6 = b - null;
->rd6 : number, Symbol(rd6,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,47,3))
+>rd6 : number, Symbol(rd6, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 47, 3))
 >b - null : number
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 >null : null
 
 var rd7 = 0 - null;
->rd7 : number, Symbol(rd7,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,48,3))
+>rd7 : number, Symbol(rd7, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 48, 3))
 >0 - null : number
 >0 : number
 >null : null
 
 var rd8 = E.b - null;
->rd8 : number, Symbol(rd8,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,49,3))
+>rd8 : number, Symbol(rd8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 49, 3))
 >E.b - null : number
->E.b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
+>E.b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
 >null : null
 
 // operator <<
 var re1 = null << a;
->re1 : number, Symbol(re1,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,52,3))
+>re1 : number, Symbol(re1, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 52, 3))
 >null << a : number
 >null : null
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 
 var re2 = null << b;
->re2 : number, Symbol(re2,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,53,3))
+>re2 : number, Symbol(re2, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 53, 3))
 >null << b : number
 >null : null
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 
 var re3 = null << 1;
->re3 : number, Symbol(re3,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,54,3))
+>re3 : number, Symbol(re3, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 54, 3))
 >null << 1 : number
 >null : null
 >1 : number
 
 var re4 = null << E.a;
->re4 : number, Symbol(re4,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,55,3))
+>re4 : number, Symbol(re4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 55, 3))
 >null << E.a : number
 >null : null
->E.a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
+>E.a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
 
 var re5 = a << null;
->re5 : number, Symbol(re5,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,56,3))
+>re5 : number, Symbol(re5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 56, 3))
 >a << null : number
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 >null : null
 
 var re6 = b << null;
->re6 : number, Symbol(re6,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,57,3))
+>re6 : number, Symbol(re6, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 57, 3))
 >b << null : number
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 >null : null
 
 var re7 = 0 << null;
->re7 : number, Symbol(re7,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,58,3))
+>re7 : number, Symbol(re7, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 58, 3))
 >0 << null : number
 >0 : number
 >null : null
 
 var re8 = E.b << null;
->re8 : number, Symbol(re8,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,59,3))
+>re8 : number, Symbol(re8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 59, 3))
 >E.b << null : number
->E.b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
+>E.b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
 >null : null
 
 // operator >>
 var rf1 = null >> a;
->rf1 : number, Symbol(rf1,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,62,3))
+>rf1 : number, Symbol(rf1, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 62, 3))
 >null >> a : number
 >null : null
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 
 var rf2 = null >> b;
->rf2 : number, Symbol(rf2,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,63,3))
+>rf2 : number, Symbol(rf2, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 63, 3))
 >null >> b : number
 >null : null
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 
 var rf3 = null >> 1;
->rf3 : number, Symbol(rf3,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,64,3))
+>rf3 : number, Symbol(rf3, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 64, 3))
 >null >> 1 : number
 >null : null
 >1 : number
 
 var rf4 = null >> E.a;
->rf4 : number, Symbol(rf4,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,65,3))
+>rf4 : number, Symbol(rf4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 65, 3))
 >null >> E.a : number
 >null : null
->E.a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
+>E.a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
 
 var rf5 = a >> null;
->rf5 : number, Symbol(rf5,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,66,3))
+>rf5 : number, Symbol(rf5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 66, 3))
 >a >> null : number
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 >null : null
 
 var rf6 = b >> null;
->rf6 : number, Symbol(rf6,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,67,3))
+>rf6 : number, Symbol(rf6, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 67, 3))
 >b >> null : number
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 >null : null
 
 var rf7 = 0 >> null;
->rf7 : number, Symbol(rf7,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,68,3))
+>rf7 : number, Symbol(rf7, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 68, 3))
 >0 >> null : number
 >0 : number
 >null : null
 
 var rf8 = E.b >> null;
->rf8 : number, Symbol(rf8,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,69,3))
+>rf8 : number, Symbol(rf8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 69, 3))
 >E.b >> null : number
->E.b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
+>E.b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
 >null : null
 
 // operator >>>
 var rg1 = null >>> a;
->rg1 : number, Symbol(rg1,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,72,3))
+>rg1 : number, Symbol(rg1, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 72, 3))
 >null >>> a : number
 >null : null
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 
 var rg2 = null >>> b;
->rg2 : number, Symbol(rg2,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,73,3))
+>rg2 : number, Symbol(rg2, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 73, 3))
 >null >>> b : number
 >null : null
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 
 var rg3 = null >>> 1;
->rg3 : number, Symbol(rg3,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,74,3))
+>rg3 : number, Symbol(rg3, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 74, 3))
 >null >>> 1 : number
 >null : null
 >1 : number
 
 var rg4 = null >>> E.a;
->rg4 : number, Symbol(rg4,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,75,3))
+>rg4 : number, Symbol(rg4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 75, 3))
 >null >>> E.a : number
 >null : null
->E.a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
+>E.a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
 
 var rg5 = a >>> null;
->rg5 : number, Symbol(rg5,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,76,3))
+>rg5 : number, Symbol(rg5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 76, 3))
 >a >>> null : number
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 >null : null
 
 var rg6 = b >>> null;
->rg6 : number, Symbol(rg6,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,77,3))
+>rg6 : number, Symbol(rg6, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 77, 3))
 >b >>> null : number
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 >null : null
 
 var rg7 = 0 >>> null;
->rg7 : number, Symbol(rg7,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,78,3))
+>rg7 : number, Symbol(rg7, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 78, 3))
 >0 >>> null : number
 >0 : number
 >null : null
 
 var rg8 = E.b >>> null;
->rg8 : number, Symbol(rg8,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,79,3))
+>rg8 : number, Symbol(rg8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 79, 3))
 >E.b >>> null : number
->E.b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
+>E.b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
 >null : null
 
 // operator &
 var rh1 = null & a;
->rh1 : number, Symbol(rh1,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,82,3))
+>rh1 : number, Symbol(rh1, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 82, 3))
 >null & a : number
 >null : null
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 
 var rh2 = null & b;
->rh2 : number, Symbol(rh2,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,83,3))
+>rh2 : number, Symbol(rh2, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 83, 3))
 >null & b : number
 >null : null
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 
 var rh3 = null & 1;
->rh3 : number, Symbol(rh3,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,84,3))
+>rh3 : number, Symbol(rh3, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 84, 3))
 >null & 1 : number
 >null : null
 >1 : number
 
 var rh4 = null & E.a;
->rh4 : number, Symbol(rh4,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,85,3))
+>rh4 : number, Symbol(rh4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 85, 3))
 >null & E.a : number
 >null : null
->E.a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
+>E.a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
 
 var rh5 = a & null;
->rh5 : number, Symbol(rh5,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,86,3))
+>rh5 : number, Symbol(rh5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 86, 3))
 >a & null : number
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 >null : null
 
 var rh6 = b & null;
->rh6 : number, Symbol(rh6,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,87,3))
+>rh6 : number, Symbol(rh6, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 87, 3))
 >b & null : number
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 >null : null
 
 var rh7 = 0 & null;
->rh7 : number, Symbol(rh7,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,88,3))
+>rh7 : number, Symbol(rh7, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 88, 3))
 >0 & null : number
 >0 : number
 >null : null
 
 var rh8 = E.b & null;
->rh8 : number, Symbol(rh8,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,89,3))
+>rh8 : number, Symbol(rh8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 89, 3))
 >E.b & null : number
->E.b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
+>E.b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
 >null : null
 
 // operator ^
 var ri1 = null ^ a;
->ri1 : number, Symbol(ri1,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,92,3))
+>ri1 : number, Symbol(ri1, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 92, 3))
 >null ^ a : number
 >null : null
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 
 var ri2 = null ^ b;
->ri2 : number, Symbol(ri2,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,93,3))
+>ri2 : number, Symbol(ri2, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 93, 3))
 >null ^ b : number
 >null : null
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 
 var ri3 = null ^ 1;
->ri3 : number, Symbol(ri3,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,94,3))
+>ri3 : number, Symbol(ri3, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 94, 3))
 >null ^ 1 : number
 >null : null
 >1 : number
 
 var ri4 = null ^ E.a;
->ri4 : number, Symbol(ri4,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,95,3))
+>ri4 : number, Symbol(ri4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 95, 3))
 >null ^ E.a : number
 >null : null
->E.a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
+>E.a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
 
 var ri5 = a ^ null;
->ri5 : number, Symbol(ri5,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,96,3))
+>ri5 : number, Symbol(ri5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 96, 3))
 >a ^ null : number
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 >null : null
 
 var ri6 = b ^ null;
->ri6 : number, Symbol(ri6,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,97,3))
+>ri6 : number, Symbol(ri6, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 97, 3))
 >b ^ null : number
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 >null : null
 
 var ri7 = 0 ^ null;
->ri7 : number, Symbol(ri7,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,98,3))
+>ri7 : number, Symbol(ri7, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 98, 3))
 >0 ^ null : number
 >0 : number
 >null : null
 
 var ri8 = E.b ^ null;
->ri8 : number, Symbol(ri8,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,99,3))
+>ri8 : number, Symbol(ri8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 99, 3))
 >E.b ^ null : number
->E.b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
+>E.b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
 >null : null
 
 // operator |
 var rj1 = null | a;
->rj1 : number, Symbol(rj1,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,102,3))
+>rj1 : number, Symbol(rj1, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 102, 3))
 >null | a : number
 >null : null
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 
 var rj2 = null | b;
->rj2 : number, Symbol(rj2,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,103,3))
+>rj2 : number, Symbol(rj2, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 103, 3))
 >null | b : number
 >null : null
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 
 var rj3 = null | 1;
->rj3 : number, Symbol(rj3,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,104,3))
+>rj3 : number, Symbol(rj3, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 104, 3))
 >null | 1 : number
 >null : null
 >1 : number
 
 var rj4 = null | E.a;
->rj4 : number, Symbol(rj4,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,105,3))
+>rj4 : number, Symbol(rj4, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 105, 3))
 >null | E.a : number
 >null : null
->E.a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->a : E, Symbol(E.a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,3,8))
+>E.a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>a : E, Symbol(E.a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 3, 8))
 
 var rj5 = a | null;
->rj5 : number, Symbol(rj5,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,106,3))
+>rj5 : number, Symbol(rj5, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 106, 3))
 >a | null : number
->a : any, Symbol(a,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,8,3))
+>a : any, Symbol(a, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 8, 3))
 >null : null
 
 var rj6 = b | null;
->rj6 : number, Symbol(rj6,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,107,3))
+>rj6 : number, Symbol(rj6, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 107, 3))
 >b | null : number
->b : number, Symbol(b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,9,3))
+>b : number, Symbol(b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 9, 3))
 >null : null
 
 var rj7 = 0 | null;
->rj7 : number, Symbol(rj7,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,108,3))
+>rj7 : number, Symbol(rj7, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 108, 3))
 >0 | null : number
 >0 : number
 >null : null
 
 var rj8 = E.b | null;
->rj8 : number, Symbol(rj8,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,109,3))
+>rj8 : number, Symbol(rj8, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 109, 3))
 >E.b | null : number
->E.b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
->E : typeof E, Symbol(E,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,0,0))
->b : E, Symbol(E.b,Decl(arithmeticOperatorWithNullValueAndValidOperands.ts,4,6))
+>E.b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
+>E : typeof E, Symbol(E, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 0, 0))
+>b : E, Symbol(E.b, Decl(arithmeticOperatorWithNullValueAndValidOperands.ts, 4, 6))
 >null : null
 

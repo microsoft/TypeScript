@@ -1,11 +1,11 @@
 === tests/cases/compiler/contextualTyping23.ts ===
 var foo:(a:{():number; (i:number):number; })=>number; foo = function(a){return 5};
->foo : (a: { (): number; (i: number): number; }) => number, Symbol(foo,Decl(contextualTyping23.ts,0,3))
->a : { (): number; (i: number): number; }, Symbol(a,Decl(contextualTyping23.ts,0,9))
->i : number, Symbol(i,Decl(contextualTyping23.ts,0,24))
+>foo : (a: { (): number; (i: number): number; }) => number, Symbol(foo, Decl(contextualTyping23.ts, 0, 3))
+>a : { (): number; (i: number): number; }, Symbol(a, Decl(contextualTyping23.ts, 0, 9))
+>i : number, Symbol(i, Decl(contextualTyping23.ts, 0, 24))
 >foo = function(a){return 5} : (a: { (): number; (i: number): number; }) => number
->foo : (a: { (): number; (i: number): number; }) => number, Symbol(foo,Decl(contextualTyping23.ts,0,3))
+>foo : (a: { (): number; (i: number): number; }) => number, Symbol(foo, Decl(contextualTyping23.ts, 0, 3))
 >function(a){return 5} : (a: { (): number; (i: number): number; }) => number
->a : { (): number; (i: number): number; }, Symbol(a,Decl(contextualTyping23.ts,0,69))
+>a : { (): number; (i: number): number; }, Symbol(a, Decl(contextualTyping23.ts, 0, 69))
 >5 : number
 

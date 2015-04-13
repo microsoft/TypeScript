@@ -1,11 +1,11 @@
 === tests/cases/conformance/es6/Symbols/symbolDeclarationEmit8.ts ===
 var obj = {
->obj : { [Symbol.isConcatSpreadable]: number; }, Symbol(obj,Decl(symbolDeclarationEmit8.ts,0,3))
+>obj : { [Symbol.isConcatSpreadable]: number; }, Symbol(obj, Decl(symbolDeclarationEmit8.ts, 0, 3))
 >{    [Symbol.isConcatSpreadable]: 0} : { [Symbol.isConcatSpreadable]: number; }
 
     [Symbol.isConcatSpreadable]: 0
->Symbol.isConcatSpreadable : symbol, Symbol(SymbolConstructor.isConcatSpreadable,Decl(lib.d.ts,1230,24))
->Symbol : SymbolConstructor, Symbol(Symbol,Decl(lib.d.ts,1186,52),Decl(lib.d.ts,1262,11))
->isConcatSpreadable : symbol, Symbol(SymbolConstructor.isConcatSpreadable,Decl(lib.d.ts,1230,24))
+>Symbol.isConcatSpreadable : symbol, Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1230, 24))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>isConcatSpreadable : symbol, Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1230, 24))
 >0 : number
 }

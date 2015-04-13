@@ -1,9 +1,9 @@
 === tests/cases/conformance/statements/for-ofStatements/ES5For-of14.ts ===
 for (const v of []) {
->v : any, Symbol(v,Decl(ES5For-of14.ts,0,10))
+>v : any, Symbol(v, Decl(ES5For-of14.ts, 0, 10))
 >[] : undefined[]
 
     var x = v;
->x : any, Symbol(x,Decl(ES5For-of14.ts,1,7))
->v : any, Symbol(v,Decl(ES5For-of14.ts,0,10))
+>x : any, Symbol(x, Decl(ES5For-of14.ts, 1, 7))
+>v : any, Symbol(v, Decl(ES5For-of14.ts, 0, 10))
 }

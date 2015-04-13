@@ -1,17 +1,17 @@
 === tests/cases/compiler/b.ts ===
 ///<reference path="a.ts"/>
 declare function foobar(a: typeof foo): typeof bar;
->foobar : (a: () => any) => () => any, Symbol(foobar,Decl(b.ts,0,0))
->a : () => any, Symbol(a,Decl(b.ts,1,24))
->foo : () => any, Symbol(foo,Decl(a.ts,0,0))
->bar : () => any, Symbol(bar,Decl(a.ts,1,23))
+>foobar : (a: () => any) => () => any, Symbol(foobar, Decl(b.ts, 0, 0))
+>a : () => any, Symbol(a, Decl(b.ts, 1, 24))
+>foo : () => any, Symbol(foo, Decl(a.ts, 0, 0))
+>bar : () => any, Symbol(bar, Decl(a.ts, 1, 23))
 
 === tests/cases/compiler/a.ts ===
 /*! Keep this pinned comment */
 declare function foo();
->foo : () => any, Symbol(foo,Decl(a.ts,0,0))
+>foo : () => any, Symbol(foo, Decl(a.ts, 0, 0))
 
 // Don't keep this comment.
 declare function bar();
->bar : () => any, Symbol(bar,Decl(a.ts,1,23))
+>bar : () => any, Symbol(bar, Decl(a.ts, 1, 23))
 

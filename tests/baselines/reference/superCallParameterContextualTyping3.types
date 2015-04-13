@@ -1,52 +1,52 @@
 === tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping3.ts ===
 interface ContextualType<T> {
->ContextualType : ContextualType<T>, Symbol(ContextualType,Decl(superCallParameterContextualTyping3.ts,0,0))
->T : T, Symbol(T,Decl(superCallParameterContextualTyping3.ts,0,25))
+>ContextualType : ContextualType<T>, Symbol(ContextualType, Decl(superCallParameterContextualTyping3.ts, 0, 0))
+>T : T, Symbol(T, Decl(superCallParameterContextualTyping3.ts, 0, 25))
 
     method(parameter: T): void;
->method : (parameter: T) => void, Symbol(method,Decl(superCallParameterContextualTyping3.ts,0,29))
->parameter : T, Symbol(parameter,Decl(superCallParameterContextualTyping3.ts,1,11))
->T : T, Symbol(T,Decl(superCallParameterContextualTyping3.ts,0,25))
+>method : (parameter: T) => void, Symbol(method, Decl(superCallParameterContextualTyping3.ts, 0, 29))
+>parameter : T, Symbol(parameter, Decl(superCallParameterContextualTyping3.ts, 1, 11))
+>T : T, Symbol(T, Decl(superCallParameterContextualTyping3.ts, 0, 25))
 }
 
 class CBase<T>  {
->CBase : CBase<T>, Symbol(CBase,Decl(superCallParameterContextualTyping3.ts,2,1))
->T : T, Symbol(T,Decl(superCallParameterContextualTyping3.ts,4,12))
+>CBase : CBase<T>, Symbol(CBase, Decl(superCallParameterContextualTyping3.ts, 2, 1))
+>T : T, Symbol(T, Decl(superCallParameterContextualTyping3.ts, 4, 12))
 
     constructor(param: ContextualType<T>) {
->param : ContextualType<T>, Symbol(param,Decl(superCallParameterContextualTyping3.ts,5,16))
->ContextualType : ContextualType<T>, Symbol(ContextualType,Decl(superCallParameterContextualTyping3.ts,0,0))
->T : T, Symbol(T,Decl(superCallParameterContextualTyping3.ts,4,12))
+>param : ContextualType<T>, Symbol(param, Decl(superCallParameterContextualTyping3.ts, 5, 16))
+>ContextualType : ContextualType<T>, Symbol(ContextualType, Decl(superCallParameterContextualTyping3.ts, 0, 0))
+>T : T, Symbol(T, Decl(superCallParameterContextualTyping3.ts, 4, 12))
     }
 
     foo(param: ContextualType<T>) {
->foo : (param: ContextualType<T>) => void, Symbol(foo,Decl(superCallParameterContextualTyping3.ts,6,5))
->param : ContextualType<T>, Symbol(param,Decl(superCallParameterContextualTyping3.ts,8,8))
->ContextualType : ContextualType<T>, Symbol(ContextualType,Decl(superCallParameterContextualTyping3.ts,0,0))
->T : T, Symbol(T,Decl(superCallParameterContextualTyping3.ts,4,12))
+>foo : (param: ContextualType<T>) => void, Symbol(foo, Decl(superCallParameterContextualTyping3.ts, 6, 5))
+>param : ContextualType<T>, Symbol(param, Decl(superCallParameterContextualTyping3.ts, 8, 8))
+>ContextualType : ContextualType<T>, Symbol(ContextualType, Decl(superCallParameterContextualTyping3.ts, 0, 0))
+>T : T, Symbol(T, Decl(superCallParameterContextualTyping3.ts, 4, 12))
     }
 }
 
 class C extends CBase<string> {
->C : C, Symbol(C,Decl(superCallParameterContextualTyping3.ts,10,1))
->CBase : CBase<T>, Symbol(CBase,Decl(superCallParameterContextualTyping3.ts,2,1))
+>C : C, Symbol(C, Decl(superCallParameterContextualTyping3.ts, 10, 1))
+>CBase : CBase<T>, Symbol(CBase, Decl(superCallParameterContextualTyping3.ts, 2, 1))
 
     constructor() {
         // Should be okay.
         // 'p' should have type 'string'.
         super({
 >super({            method(p) {                p.length;            }        }) : void
->super : typeof CBase, Symbol(CBase,Decl(superCallParameterContextualTyping3.ts,2,1))
+>super : typeof CBase, Symbol(CBase, Decl(superCallParameterContextualTyping3.ts, 2, 1))
 >{            method(p) {                p.length;            }        } : { method(p: string): void; }
 
             method(p) {
->method : (p: string) => void, Symbol(method,Decl(superCallParameterContextualTyping3.ts,16,15))
->p : string, Symbol(p,Decl(superCallParameterContextualTyping3.ts,17,19))
+>method : (p: string) => void, Symbol(method, Decl(superCallParameterContextualTyping3.ts, 16, 15))
+>p : string, Symbol(p, Decl(superCallParameterContextualTyping3.ts, 17, 19))
 
                 p.length;
->p.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
->p : string, Symbol(p,Decl(superCallParameterContextualTyping3.ts,17,19))
->length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>p.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>p : string, Symbol(p, Decl(superCallParameterContextualTyping3.ts, 17, 19))
+>length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
             }
         });
 
@@ -54,19 +54,19 @@ class C extends CBase<string> {
         // 'p' should have type 'string'.
         super.foo({
 >super.foo({            method(p) {                p.length;            }        }) : void
->super.foo : (param: ContextualType<string>) => void, Symbol(CBase.foo,Decl(superCallParameterContextualTyping3.ts,6,5))
->super : CBase<string>, Symbol(CBase,Decl(superCallParameterContextualTyping3.ts,2,1))
->foo : (param: ContextualType<string>) => void, Symbol(CBase.foo,Decl(superCallParameterContextualTyping3.ts,6,5))
+>super.foo : (param: ContextualType<string>) => void, Symbol(CBase.foo, Decl(superCallParameterContextualTyping3.ts, 6, 5))
+>super : CBase<string>, Symbol(CBase, Decl(superCallParameterContextualTyping3.ts, 2, 1))
+>foo : (param: ContextualType<string>) => void, Symbol(CBase.foo, Decl(superCallParameterContextualTyping3.ts, 6, 5))
 >{            method(p) {                p.length;            }        } : { method(p: string): void; }
 
             method(p) {
->method : (p: string) => void, Symbol(method,Decl(superCallParameterContextualTyping3.ts,24,19))
->p : string, Symbol(p,Decl(superCallParameterContextualTyping3.ts,25,19))
+>method : (p: string) => void, Symbol(method, Decl(superCallParameterContextualTyping3.ts, 24, 19))
+>p : string, Symbol(p, Decl(superCallParameterContextualTyping3.ts, 25, 19))
 
                 p.length;
->p.length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
->p : string, Symbol(p,Decl(superCallParameterContextualTyping3.ts,25,19))
->length : number, Symbol(String.length,Decl(lib.d.ts,414,19))
+>p.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>p : string, Symbol(p, Decl(superCallParameterContextualTyping3.ts, 25, 19))
+>length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
             }
         });
     }

@@ -1,30 +1,30 @@
 === tests/cases/conformance/statements/for-ofStatements/ES5For-of10.ts ===
 function foo() {
->foo : () => { x: number; }, Symbol(foo,Decl(ES5For-of10.ts,0,0))
+>foo : () => { x: number; }, Symbol(foo, Decl(ES5For-of10.ts, 0, 0))
 
     return { x: 0 };
 >{ x: 0 } : { x: number; }
->x : number, Symbol(x,Decl(ES5For-of10.ts,1,12))
+>x : number, Symbol(x, Decl(ES5For-of10.ts, 1, 12))
 >0 : number
 }
 for (foo().x of []) {
->foo().x : number, Symbol(x,Decl(ES5For-of10.ts,1,12))
+>foo().x : number, Symbol(x, Decl(ES5For-of10.ts, 1, 12))
 >foo() : { x: number; }
->foo : () => { x: number; }, Symbol(foo,Decl(ES5For-of10.ts,0,0))
->x : number, Symbol(x,Decl(ES5For-of10.ts,1,12))
+>foo : () => { x: number; }, Symbol(foo, Decl(ES5For-of10.ts, 0, 0))
+>x : number, Symbol(x, Decl(ES5For-of10.ts, 1, 12))
 >[] : undefined[]
 
     for (foo().x of [])
->foo().x : number, Symbol(x,Decl(ES5For-of10.ts,1,12))
+>foo().x : number, Symbol(x, Decl(ES5For-of10.ts, 1, 12))
 >foo() : { x: number; }
->foo : () => { x: number; }, Symbol(foo,Decl(ES5For-of10.ts,0,0))
->x : number, Symbol(x,Decl(ES5For-of10.ts,1,12))
+>foo : () => { x: number; }, Symbol(foo, Decl(ES5For-of10.ts, 0, 0))
+>x : number, Symbol(x, Decl(ES5For-of10.ts, 1, 12))
 >[] : undefined[]
 
         var p = foo().x;
->p : number, Symbol(p,Decl(ES5For-of10.ts,5,11))
->foo().x : number, Symbol(x,Decl(ES5For-of10.ts,1,12))
+>p : number, Symbol(p, Decl(ES5For-of10.ts, 5, 11))
+>foo().x : number, Symbol(x, Decl(ES5For-of10.ts, 1, 12))
 >foo() : { x: number; }
->foo : () => { x: number; }, Symbol(foo,Decl(ES5For-of10.ts,0,0))
->x : number, Symbol(x,Decl(ES5For-of10.ts,1,12))
+>foo : () => { x: number; }, Symbol(foo, Decl(ES5For-of10.ts, 0, 0))
+>x : number, Symbol(x, Decl(ES5For-of10.ts, 1, 12))
 }

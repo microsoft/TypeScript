@@ -1,25 +1,25 @@
 === tests/cases/compiler/namespaces1.ts ===
 module X {
->X : any, Symbol(X,Decl(namespaces1.ts,0,0))
+>X : any, Symbol(X, Decl(namespaces1.ts, 0, 0))
 
     export module Y {
->Y : any, Symbol(Y,Decl(namespaces1.ts,0,10),Decl(namespaces1.ts,3,5))
+>Y : any, Symbol(Y, Decl(namespaces1.ts, 0, 10), Decl(namespaces1.ts, 3, 5))
 
         export interface Z { }
->Z : Z, Symbol(Z,Decl(namespaces1.ts,1,21))
+>Z : Z, Symbol(Z, Decl(namespaces1.ts, 1, 21))
     }
     export interface Y { }
->Y : Y, Symbol(Y,Decl(namespaces1.ts,0,10),Decl(namespaces1.ts,3,5))
+>Y : Y, Symbol(Y, Decl(namespaces1.ts, 0, 10), Decl(namespaces1.ts, 3, 5))
 }
 
 var x: X.Y.Z;
->x : X.Y.Z, Symbol(x,Decl(namespaces1.ts,7,3))
->X : any, Symbol(X,Decl(namespaces1.ts,0,0))
->Y : any, Symbol(X.Y,Decl(namespaces1.ts,0,10),Decl(namespaces1.ts,3,5))
->Z : X.Y.Z, Symbol(X.Y.Z,Decl(namespaces1.ts,1,21))
+>x : X.Y.Z, Symbol(x, Decl(namespaces1.ts, 7, 3))
+>X : any, Symbol(X, Decl(namespaces1.ts, 0, 0))
+>Y : any, Symbol(X.Y, Decl(namespaces1.ts, 0, 10), Decl(namespaces1.ts, 3, 5))
+>Z : X.Y.Z, Symbol(X.Y.Z, Decl(namespaces1.ts, 1, 21))
 
 var x2: X.Y;
->x2 : X.Y, Symbol(x2,Decl(namespaces1.ts,8,3))
->X : any, Symbol(X,Decl(namespaces1.ts,0,0))
->Y : X.Y, Symbol(X.Y,Decl(namespaces1.ts,0,10),Decl(namespaces1.ts,3,5))
+>x2 : X.Y, Symbol(x2, Decl(namespaces1.ts, 8, 3))
+>X : any, Symbol(X, Decl(namespaces1.ts, 0, 0))
+>Y : X.Y, Symbol(X.Y, Decl(namespaces1.ts, 0, 10), Decl(namespaces1.ts, 3, 5))
 

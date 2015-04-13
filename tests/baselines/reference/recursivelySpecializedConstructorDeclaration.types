@@ -1,36 +1,36 @@
 === tests/cases/compiler/recursivelySpecializedConstructorDeclaration.ts ===
 module MsPortal.Controls.Base.ItemList {
->MsPortal : typeof MsPortal, Symbol(MsPortal,Decl(recursivelySpecializedConstructorDeclaration.ts,0,0))
->Controls : typeof Controls, Symbol(Controls,Decl(recursivelySpecializedConstructorDeclaration.ts,0,16))
->Base : typeof Base, Symbol(Base,Decl(recursivelySpecializedConstructorDeclaration.ts,0,25))
->ItemList : typeof ItemList, Symbol(ItemList,Decl(recursivelySpecializedConstructorDeclaration.ts,0,30))
+>MsPortal : typeof MsPortal, Symbol(MsPortal, Decl(recursivelySpecializedConstructorDeclaration.ts, 0, 0))
+>Controls : typeof Controls, Symbol(Controls, Decl(recursivelySpecializedConstructorDeclaration.ts, 0, 16))
+>Base : typeof Base, Symbol(Base, Decl(recursivelySpecializedConstructorDeclaration.ts, 0, 25))
+>ItemList : typeof ItemList, Symbol(ItemList, Decl(recursivelySpecializedConstructorDeclaration.ts, 0, 30))
 
     export interface Interface<TValue> {
->Interface : Interface<TValue>, Symbol(Interface,Decl(recursivelySpecializedConstructorDeclaration.ts,0,40))
->TValue : TValue, Symbol(TValue,Decl(recursivelySpecializedConstructorDeclaration.ts,2,31))
+>Interface : Interface<TValue>, Symbol(Interface, Decl(recursivelySpecializedConstructorDeclaration.ts, 0, 40))
+>TValue : TValue, Symbol(TValue, Decl(recursivelySpecializedConstructorDeclaration.ts, 2, 31))
 
         // Removing this line fixes the constructor of ItemValue
         options: ViewModel<TValue>;
->options : ViewModel<TValue>, Symbol(options,Decl(recursivelySpecializedConstructorDeclaration.ts,2,40))
->ViewModel : ViewModel<TValue>, Symbol(ViewModel,Decl(recursivelySpecializedConstructorDeclaration.ts,10,5))
->TValue : TValue, Symbol(TValue,Decl(recursivelySpecializedConstructorDeclaration.ts,2,31))
+>options : ViewModel<TValue>, Symbol(options, Decl(recursivelySpecializedConstructorDeclaration.ts, 2, 40))
+>ViewModel : ViewModel<TValue>, Symbol(ViewModel, Decl(recursivelySpecializedConstructorDeclaration.ts, 10, 5))
+>TValue : TValue, Symbol(TValue, Decl(recursivelySpecializedConstructorDeclaration.ts, 2, 31))
     }    
 
     export class ItemValue<T> {
->ItemValue : ItemValue<T>, Symbol(ItemValue,Decl(recursivelySpecializedConstructorDeclaration.ts,5,5))
->T : T, Symbol(T,Decl(recursivelySpecializedConstructorDeclaration.ts,7,27))
+>ItemValue : ItemValue<T>, Symbol(ItemValue, Decl(recursivelySpecializedConstructorDeclaration.ts, 5, 5))
+>T : T, Symbol(T, Decl(recursivelySpecializedConstructorDeclaration.ts, 7, 27))
 
         constructor(value: T) {
->value : T, Symbol(value,Decl(recursivelySpecializedConstructorDeclaration.ts,8,20))
->T : T, Symbol(T,Decl(recursivelySpecializedConstructorDeclaration.ts,7,27))
+>value : T, Symbol(value, Decl(recursivelySpecializedConstructorDeclaration.ts, 8, 20))
+>T : T, Symbol(T, Decl(recursivelySpecializedConstructorDeclaration.ts, 7, 27))
         }
     }    
  
     export class ViewModel<TValue> extends ItemValue<TValue> {
->ViewModel : ViewModel<TValue>, Symbol(ViewModel,Decl(recursivelySpecializedConstructorDeclaration.ts,10,5))
->TValue : TValue, Symbol(TValue,Decl(recursivelySpecializedConstructorDeclaration.ts,12,27))
->ItemValue : ItemValue<T>, Symbol(ItemValue,Decl(recursivelySpecializedConstructorDeclaration.ts,5,5))
->TValue : TValue, Symbol(TValue,Decl(recursivelySpecializedConstructorDeclaration.ts,12,27))
+>ViewModel : ViewModel<TValue>, Symbol(ViewModel, Decl(recursivelySpecializedConstructorDeclaration.ts, 10, 5))
+>TValue : TValue, Symbol(TValue, Decl(recursivelySpecializedConstructorDeclaration.ts, 12, 27))
+>ItemValue : ItemValue<T>, Symbol(ItemValue, Decl(recursivelySpecializedConstructorDeclaration.ts, 5, 5))
+>TValue : TValue, Symbol(TValue, Decl(recursivelySpecializedConstructorDeclaration.ts, 12, 27))
     }
 }
 

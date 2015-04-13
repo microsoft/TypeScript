@@ -1,7 +1,7 @@
 === tests/cases/conformance/parser/ecmascript5/MethodSignatures/parserMethodSignature2.ts ===
 interface I {
->I : I, Symbol(I,Decl(parserMethodSignature2.ts,0,0))
+>I : I, Symbol(I, Decl(parserMethodSignature2.ts, 0, 0))
 
   B?();
->B : () => any, Symbol(B,Decl(parserMethodSignature2.ts,0,13))
+>B : () => any, Symbol(B, Decl(parserMethodSignature2.ts, 0, 13))
 }

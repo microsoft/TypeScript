@@ -1,45 +1,45 @@
 === tests/cases/compiler/recursiveInheritance2.ts ===
 interface A { (): B; };
->A : A, Symbol(A,Decl(recursiveInheritance2.ts,0,0))
->B : B, Symbol(B,Decl(recursiveInheritance2.ts,2,12))
+>A : A, Symbol(A, Decl(recursiveInheritance2.ts, 0, 0))
+>B : B, Symbol(B, Decl(recursiveInheritance2.ts, 2, 12))
 
 declare var a: A;
->a : A, Symbol(a,Decl(recursiveInheritance2.ts,1,11))
->A : A, Symbol(A,Decl(recursiveInheritance2.ts,0,0))
+>a : A, Symbol(a, Decl(recursiveInheritance2.ts, 1, 11))
+>A : A, Symbol(A, Decl(recursiveInheritance2.ts, 0, 0))
 
 var x = a();
->x : B, Symbol(x,Decl(recursiveInheritance2.ts,2,3))
+>x : B, Symbol(x, Decl(recursiveInheritance2.ts, 2, 3))
 >a() : B
->a : A, Symbol(a,Decl(recursiveInheritance2.ts,1,11))
+>a : A, Symbol(a, Decl(recursiveInheritance2.ts, 1, 11))
 
 interface B { (): C; };
->B : B, Symbol(B,Decl(recursiveInheritance2.ts,2,12))
->C : C, Symbol(C,Decl(recursiveInheritance2.ts,6,12))
+>B : B, Symbol(B, Decl(recursiveInheritance2.ts, 2, 12))
+>C : C, Symbol(C, Decl(recursiveInheritance2.ts, 6, 12))
 
 declare var b: B;
->b : B, Symbol(b,Decl(recursiveInheritance2.ts,5,11))
->B : B, Symbol(B,Decl(recursiveInheritance2.ts,2,12))
+>b : B, Symbol(b, Decl(recursiveInheritance2.ts, 5, 11))
+>B : B, Symbol(B, Decl(recursiveInheritance2.ts, 2, 12))
 
 var y = b();
->y : C, Symbol(y,Decl(recursiveInheritance2.ts,6,3))
+>y : C, Symbol(y, Decl(recursiveInheritance2.ts, 6, 3))
 >b() : C
->b : B, Symbol(b,Decl(recursiveInheritance2.ts,5,11))
+>b : B, Symbol(b, Decl(recursiveInheritance2.ts, 5, 11))
 
 interface C { (): A; };
->C : C, Symbol(C,Decl(recursiveInheritance2.ts,6,12))
->A : A, Symbol(A,Decl(recursiveInheritance2.ts,0,0))
+>C : C, Symbol(C, Decl(recursiveInheritance2.ts, 6, 12))
+>A : A, Symbol(A, Decl(recursiveInheritance2.ts, 0, 0))
 
 declare var c: C;
->c : C, Symbol(c,Decl(recursiveInheritance2.ts,9,11))
->C : C, Symbol(C,Decl(recursiveInheritance2.ts,6,12))
+>c : C, Symbol(c, Decl(recursiveInheritance2.ts, 9, 11))
+>C : C, Symbol(C, Decl(recursiveInheritance2.ts, 6, 12))
 
 var z = c();
->z : A, Symbol(z,Decl(recursiveInheritance2.ts,10,3))
+>z : A, Symbol(z, Decl(recursiveInheritance2.ts, 10, 3))
 >c() : A
->c : C, Symbol(c,Decl(recursiveInheritance2.ts,9,11))
+>c : C, Symbol(c, Decl(recursiveInheritance2.ts, 9, 11))
 
 x = y;
 >x = y : C
->x : B, Symbol(x,Decl(recursiveInheritance2.ts,2,3))
->y : C, Symbol(y,Decl(recursiveInheritance2.ts,6,3))
+>x : B, Symbol(x, Decl(recursiveInheritance2.ts, 2, 3))
+>y : C, Symbol(y, Decl(recursiveInheritance2.ts, 6, 3))
 

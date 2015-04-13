@@ -1,38 +1,38 @@
 === tests/cases/compiler/extBaseClass1.ts ===
 module M {
->M : typeof M, Symbol(M,Decl(extBaseClass1.ts,0,0),Decl(extBaseClass1.ts,7,1))
+>M : typeof M, Symbol(M, Decl(extBaseClass1.ts, 0, 0), Decl(extBaseClass1.ts, 7, 1))
 
     export class B {
->B : B, Symbol(B,Decl(extBaseClass1.ts,0,10))
+>B : B, Symbol(B, Decl(extBaseClass1.ts, 0, 10))
 
 	    public x=10;
->x : number, Symbol(x,Decl(extBaseClass1.ts,1,20))
+>x : number, Symbol(x, Decl(extBaseClass1.ts, 1, 20))
 >10 : number
     }
 
     export class C extends B {
->C : C, Symbol(C,Decl(extBaseClass1.ts,3,5))
->B : B, Symbol(B,Decl(extBaseClass1.ts,0,10))
+>C : C, Symbol(C, Decl(extBaseClass1.ts, 3, 5))
+>B : B, Symbol(B, Decl(extBaseClass1.ts, 0, 10))
     }
 }
 
 module M {
->M : typeof M, Symbol(M,Decl(extBaseClass1.ts,0,0),Decl(extBaseClass1.ts,7,1))
+>M : typeof M, Symbol(M, Decl(extBaseClass1.ts, 0, 0), Decl(extBaseClass1.ts, 7, 1))
 
     export class C2 extends B {
->C2 : C2, Symbol(C2,Decl(extBaseClass1.ts,9,10))
->B : B, Symbol(B,Decl(extBaseClass1.ts,0,10))
+>C2 : C2, Symbol(C2, Decl(extBaseClass1.ts, 9, 10))
+>B : B, Symbol(B, Decl(extBaseClass1.ts, 0, 10))
     }
 }
 
 module N {
->N : typeof N, Symbol(N,Decl(extBaseClass1.ts,12,1))
+>N : typeof N, Symbol(N, Decl(extBaseClass1.ts, 12, 1))
 
     export class C3 extends M.B {
->C3 : C3, Symbol(C3,Decl(extBaseClass1.ts,14,10))
->M.B : any, Symbol(M.B,Decl(extBaseClass1.ts,0,10))
->M : typeof M, Symbol(M,Decl(extBaseClass1.ts,0,0),Decl(extBaseClass1.ts,7,1))
->B : M.B, Symbol(M.B,Decl(extBaseClass1.ts,0,10))
+>C3 : C3, Symbol(C3, Decl(extBaseClass1.ts, 14, 10))
+>M.B : any, Symbol(M.B, Decl(extBaseClass1.ts, 0, 10))
+>M : typeof M, Symbol(M, Decl(extBaseClass1.ts, 0, 0), Decl(extBaseClass1.ts, 7, 1))
+>B : M.B, Symbol(M.B, Decl(extBaseClass1.ts, 0, 10))
     }
 }
 

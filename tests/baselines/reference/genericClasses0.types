@@ -1,20 +1,20 @@
 === tests/cases/compiler/genericClasses0.ts ===
 class C<T> {
->C : C<T>, Symbol(C,Decl(genericClasses0.ts,0,0))
->T : T, Symbol(T,Decl(genericClasses0.ts,0,8))
+>C : C<T>, Symbol(C, Decl(genericClasses0.ts, 0, 0))
+>T : T, Symbol(T, Decl(genericClasses0.ts, 0, 8))
 
 	public x: T;
->x : T, Symbol(x,Decl(genericClasses0.ts,0,12))
->T : T, Symbol(T,Decl(genericClasses0.ts,0,8))
+>x : T, Symbol(x, Decl(genericClasses0.ts, 0, 12))
+>T : T, Symbol(T, Decl(genericClasses0.ts, 0, 8))
 }
 
 var v1 : C<string>;
->v1 : C<string>, Symbol(v1,Decl(genericClasses0.ts,4,3))
->C : C<T>, Symbol(C,Decl(genericClasses0.ts,0,0))
+>v1 : C<string>, Symbol(v1, Decl(genericClasses0.ts, 4, 3))
+>C : C<T>, Symbol(C, Decl(genericClasses0.ts, 0, 0))
 
 var y = v1.x; // should be 'string'
->y : string, Symbol(y,Decl(genericClasses0.ts,6,3))
->v1.x : string, Symbol(C.x,Decl(genericClasses0.ts,0,12))
->v1 : C<string>, Symbol(v1,Decl(genericClasses0.ts,4,3))
->x : string, Symbol(C.x,Decl(genericClasses0.ts,0,12))
+>y : string, Symbol(y, Decl(genericClasses0.ts, 6, 3))
+>v1.x : string, Symbol(C.x, Decl(genericClasses0.ts, 0, 12))
+>v1 : C<string>, Symbol(v1, Decl(genericClasses0.ts, 4, 3))
+>x : string, Symbol(C.x, Decl(genericClasses0.ts, 0, 12))
 

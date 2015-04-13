@@ -1,61 +1,61 @@
 === tests/cases/compiler/fatArrowSelf.ts ===
 module Events {
->Events : typeof Events, Symbol(Events,Decl(fatArrowSelf.ts,0,0))
+>Events : typeof Events, Symbol(Events, Decl(fatArrowSelf.ts, 0, 0))
 
     export interface ListenerCallback {
->ListenerCallback : ListenerCallback, Symbol(ListenerCallback,Decl(fatArrowSelf.ts,0,15))
+>ListenerCallback : ListenerCallback, Symbol(ListenerCallback, Decl(fatArrowSelf.ts, 0, 15))
 
         (value:any):void;
->value : any, Symbol(value,Decl(fatArrowSelf.ts,2,9))
+>value : any, Symbol(value, Decl(fatArrowSelf.ts, 2, 9))
     }
     export class EventEmitter {
->EventEmitter : EventEmitter, Symbol(EventEmitter,Decl(fatArrowSelf.ts,3,5))
+>EventEmitter : EventEmitter, Symbol(EventEmitter, Decl(fatArrowSelf.ts, 3, 5))
 
          public addListener(type:string, listener:ListenerCallback) {
->addListener : (type: string, listener: ListenerCallback) => void, Symbol(addListener,Decl(fatArrowSelf.ts,4,31))
->type : string, Symbol(type,Decl(fatArrowSelf.ts,5,28))
->listener : ListenerCallback, Symbol(listener,Decl(fatArrowSelf.ts,5,40))
->ListenerCallback : ListenerCallback, Symbol(ListenerCallback,Decl(fatArrowSelf.ts,0,15))
+>addListener : (type: string, listener: ListenerCallback) => void, Symbol(addListener, Decl(fatArrowSelf.ts, 4, 31))
+>type : string, Symbol(type, Decl(fatArrowSelf.ts, 5, 28))
+>listener : ListenerCallback, Symbol(listener, Decl(fatArrowSelf.ts, 5, 40))
+>ListenerCallback : ListenerCallback, Symbol(ListenerCallback, Decl(fatArrowSelf.ts, 0, 15))
          }
     }
 }
 
 module Consumer {
->Consumer : typeof Consumer, Symbol(Consumer,Decl(fatArrowSelf.ts,8,1))
+>Consumer : typeof Consumer, Symbol(Consumer, Decl(fatArrowSelf.ts, 8, 1))
 
     class EventEmitterConsummer {
->EventEmitterConsummer : EventEmitterConsummer, Symbol(EventEmitterConsummer,Decl(fatArrowSelf.ts,10,17))
+>EventEmitterConsummer : EventEmitterConsummer, Symbol(EventEmitterConsummer, Decl(fatArrowSelf.ts, 10, 17))
 
         constructor (private emitter: Events.EventEmitter) { }
->emitter : Events.EventEmitter, Symbol(emitter,Decl(fatArrowSelf.ts,12,21))
->Events : any, Symbol(Events,Decl(fatArrowSelf.ts,0,0))
->EventEmitter : Events.EventEmitter, Symbol(Events.EventEmitter,Decl(fatArrowSelf.ts,3,5))
+>emitter : Events.EventEmitter, Symbol(emitter, Decl(fatArrowSelf.ts, 12, 21))
+>Events : any, Symbol(Events, Decl(fatArrowSelf.ts, 0, 0))
+>EventEmitter : Events.EventEmitter, Symbol(Events.EventEmitter, Decl(fatArrowSelf.ts, 3, 5))
 
         private register() {
->register : () => void, Symbol(register,Decl(fatArrowSelf.ts,12,62))
+>register : () => void, Symbol(register, Decl(fatArrowSelf.ts, 12, 62))
 
             this.emitter.addListener('change', (e) => {
 >this.emitter.addListener('change', (e) => {                this.changed();            }) : void
->this.emitter.addListener : (type: string, listener: Events.ListenerCallback) => void, Symbol(Events.EventEmitter.addListener,Decl(fatArrowSelf.ts,4,31))
->this.emitter : Events.EventEmitter, Symbol(emitter,Decl(fatArrowSelf.ts,12,21))
->this : EventEmitterConsummer, Symbol(EventEmitterConsummer,Decl(fatArrowSelf.ts,10,17))
->emitter : Events.EventEmitter, Symbol(emitter,Decl(fatArrowSelf.ts,12,21))
->addListener : (type: string, listener: Events.ListenerCallback) => void, Symbol(Events.EventEmitter.addListener,Decl(fatArrowSelf.ts,4,31))
+>this.emitter.addListener : (type: string, listener: Events.ListenerCallback) => void, Symbol(Events.EventEmitter.addListener, Decl(fatArrowSelf.ts, 4, 31))
+>this.emitter : Events.EventEmitter, Symbol(emitter, Decl(fatArrowSelf.ts, 12, 21))
+>this : EventEmitterConsummer, Symbol(EventEmitterConsummer, Decl(fatArrowSelf.ts, 10, 17))
+>emitter : Events.EventEmitter, Symbol(emitter, Decl(fatArrowSelf.ts, 12, 21))
+>addListener : (type: string, listener: Events.ListenerCallback) => void, Symbol(Events.EventEmitter.addListener, Decl(fatArrowSelf.ts, 4, 31))
 >'change' : string
 >(e) => {                this.changed();            } : (e: any) => void
->e : any, Symbol(e,Decl(fatArrowSelf.ts,15,48))
+>e : any, Symbol(e, Decl(fatArrowSelf.ts, 15, 48))
 
                 this.changed();
 >this.changed() : void
->this.changed : () => void, Symbol(changed,Decl(fatArrowSelf.ts,18,9))
->this : EventEmitterConsummer, Symbol(EventEmitterConsummer,Decl(fatArrowSelf.ts,10,17))
->changed : () => void, Symbol(changed,Decl(fatArrowSelf.ts,18,9))
+>this.changed : () => void, Symbol(changed, Decl(fatArrowSelf.ts, 18, 9))
+>this : EventEmitterConsummer, Symbol(EventEmitterConsummer, Decl(fatArrowSelf.ts, 10, 17))
+>changed : () => void, Symbol(changed, Decl(fatArrowSelf.ts, 18, 9))
 
             });
         }      
 
         private changed() {
->changed : () => void, Symbol(changed,Decl(fatArrowSelf.ts,18,9))
+>changed : () => void, Symbol(changed, Decl(fatArrowSelf.ts, 18, 9))
         }
     }
 }

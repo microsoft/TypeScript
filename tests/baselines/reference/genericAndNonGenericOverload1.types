@@ -1,25 +1,25 @@
 === tests/cases/compiler/genericAndNonGenericOverload1.ts ===
 interface callable2<T> {
->callable2 : callable2<T>, Symbol(callable2,Decl(genericAndNonGenericOverload1.ts,0,0))
->T : T, Symbol(T,Decl(genericAndNonGenericOverload1.ts,0,20))
+>callable2 : callable2<T>, Symbol(callable2, Decl(genericAndNonGenericOverload1.ts, 0, 0))
+>T : T, Symbol(T, Decl(genericAndNonGenericOverload1.ts, 0, 20))
 
     (a: T): T;
->a : T, Symbol(a,Decl(genericAndNonGenericOverload1.ts,1,5))
->T : T, Symbol(T,Decl(genericAndNonGenericOverload1.ts,0,20))
->T : T, Symbol(T,Decl(genericAndNonGenericOverload1.ts,0,20))
+>a : T, Symbol(a, Decl(genericAndNonGenericOverload1.ts, 1, 5))
+>T : T, Symbol(T, Decl(genericAndNonGenericOverload1.ts, 0, 20))
+>T : T, Symbol(T, Decl(genericAndNonGenericOverload1.ts, 0, 20))
 
     <Z>(a: T): Z;
->Z : Z, Symbol(Z,Decl(genericAndNonGenericOverload1.ts,2,5))
->a : T, Symbol(a,Decl(genericAndNonGenericOverload1.ts,2,8))
->T : T, Symbol(T,Decl(genericAndNonGenericOverload1.ts,0,20))
->Z : Z, Symbol(Z,Decl(genericAndNonGenericOverload1.ts,2,5))
+>Z : Z, Symbol(Z, Decl(genericAndNonGenericOverload1.ts, 2, 5))
+>a : T, Symbol(a, Decl(genericAndNonGenericOverload1.ts, 2, 8))
+>T : T, Symbol(T, Decl(genericAndNonGenericOverload1.ts, 0, 20))
+>Z : Z, Symbol(Z, Decl(genericAndNonGenericOverload1.ts, 2, 5))
 }
 var c2: callable2<number>;
->c2 : callable2<number>, Symbol(c2,Decl(genericAndNonGenericOverload1.ts,4,3))
->callable2 : callable2<T>, Symbol(callable2,Decl(genericAndNonGenericOverload1.ts,0,0))
+>c2 : callable2<number>, Symbol(c2, Decl(genericAndNonGenericOverload1.ts, 4, 3))
+>callable2 : callable2<T>, Symbol(callable2, Decl(genericAndNonGenericOverload1.ts, 0, 0))
 
 c2<string>(1);
 >c2<string>(1) : string
->c2 : callable2<number>, Symbol(c2,Decl(genericAndNonGenericOverload1.ts,4,3))
+>c2 : callable2<number>, Symbol(c2, Decl(genericAndNonGenericOverload1.ts, 4, 3))
 >1 : number
 

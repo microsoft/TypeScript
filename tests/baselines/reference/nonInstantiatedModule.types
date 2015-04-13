@@ -1,115 +1,115 @@
 === tests/cases/conformance/internalModules/moduleDeclarations/nonInstantiatedModule.ts ===
 module M {
->M : typeof M, Symbol(M,Decl(nonInstantiatedModule.ts,0,0))
+>M : typeof M, Symbol(M, Decl(nonInstantiatedModule.ts, 0, 0))
 
     export interface Point { x: number; y: number }
->Point : Point, Symbol(Point,Decl(nonInstantiatedModule.ts,0,10))
->x : number, Symbol(x,Decl(nonInstantiatedModule.ts,1,28))
->y : number, Symbol(y,Decl(nonInstantiatedModule.ts,1,39))
+>Point : Point, Symbol(Point, Decl(nonInstantiatedModule.ts, 0, 10))
+>x : number, Symbol(x, Decl(nonInstantiatedModule.ts, 1, 28))
+>y : number, Symbol(y, Decl(nonInstantiatedModule.ts, 1, 39))
 
     export var a = 1;
->a : number, Symbol(a,Decl(nonInstantiatedModule.ts,2,14))
+>a : number, Symbol(a, Decl(nonInstantiatedModule.ts, 2, 14))
 >1 : number
 }
 
 // primary expression
 var m : typeof M;
->m : typeof M, Symbol(m,Decl(nonInstantiatedModule.ts,6,3),Decl(nonInstantiatedModule.ts,7,3))
->M : typeof M, Symbol(M,Decl(nonInstantiatedModule.ts,0,0))
+>m : typeof M, Symbol(m, Decl(nonInstantiatedModule.ts, 6, 3), Decl(nonInstantiatedModule.ts, 7, 3))
+>M : typeof M, Symbol(M, Decl(nonInstantiatedModule.ts, 0, 0))
 
 var m = M;
->m : typeof M, Symbol(m,Decl(nonInstantiatedModule.ts,6,3),Decl(nonInstantiatedModule.ts,7,3))
->M : typeof M, Symbol(M,Decl(nonInstantiatedModule.ts,0,0))
+>m : typeof M, Symbol(m, Decl(nonInstantiatedModule.ts, 6, 3), Decl(nonInstantiatedModule.ts, 7, 3))
+>M : typeof M, Symbol(M, Decl(nonInstantiatedModule.ts, 0, 0))
 
 var a1: number;
->a1 : number, Symbol(a1,Decl(nonInstantiatedModule.ts,9,3),Decl(nonInstantiatedModule.ts,10,3))
+>a1 : number, Symbol(a1, Decl(nonInstantiatedModule.ts, 9, 3), Decl(nonInstantiatedModule.ts, 10, 3))
 
 var a1 = M.a;
->a1 : number, Symbol(a1,Decl(nonInstantiatedModule.ts,9,3),Decl(nonInstantiatedModule.ts,10,3))
->M.a : number, Symbol(M.a,Decl(nonInstantiatedModule.ts,2,14))
->M : typeof M, Symbol(M,Decl(nonInstantiatedModule.ts,0,0))
->a : number, Symbol(M.a,Decl(nonInstantiatedModule.ts,2,14))
+>a1 : number, Symbol(a1, Decl(nonInstantiatedModule.ts, 9, 3), Decl(nonInstantiatedModule.ts, 10, 3))
+>M.a : number, Symbol(M.a, Decl(nonInstantiatedModule.ts, 2, 14))
+>M : typeof M, Symbol(M, Decl(nonInstantiatedModule.ts, 0, 0))
+>a : number, Symbol(M.a, Decl(nonInstantiatedModule.ts, 2, 14))
 
 var a2: number;
->a2 : number, Symbol(a2,Decl(nonInstantiatedModule.ts,12,3),Decl(nonInstantiatedModule.ts,13,3))
+>a2 : number, Symbol(a2, Decl(nonInstantiatedModule.ts, 12, 3), Decl(nonInstantiatedModule.ts, 13, 3))
 
 var a2 = m.a;
->a2 : number, Symbol(a2,Decl(nonInstantiatedModule.ts,12,3),Decl(nonInstantiatedModule.ts,13,3))
->m.a : number, Symbol(M.a,Decl(nonInstantiatedModule.ts,2,14))
->m : typeof M, Symbol(m,Decl(nonInstantiatedModule.ts,6,3),Decl(nonInstantiatedModule.ts,7,3))
->a : number, Symbol(M.a,Decl(nonInstantiatedModule.ts,2,14))
+>a2 : number, Symbol(a2, Decl(nonInstantiatedModule.ts, 12, 3), Decl(nonInstantiatedModule.ts, 13, 3))
+>m.a : number, Symbol(M.a, Decl(nonInstantiatedModule.ts, 2, 14))
+>m : typeof M, Symbol(m, Decl(nonInstantiatedModule.ts, 6, 3), Decl(nonInstantiatedModule.ts, 7, 3))
+>a : number, Symbol(M.a, Decl(nonInstantiatedModule.ts, 2, 14))
 
 module M2 {
->M2 : typeof M2, Symbol(M2,Decl(nonInstantiatedModule.ts,13,13))
+>M2 : typeof M2, Symbol(M2, Decl(nonInstantiatedModule.ts, 13, 13))
 
     export module Point {
->Point : typeof Point, Symbol(Point,Decl(nonInstantiatedModule.ts,15,11),Decl(nonInstantiatedModule.ts,20,5))
+>Point : typeof Point, Symbol(Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
 
         export function Origin(): Point {
->Origin : () => Point, Symbol(Origin,Decl(nonInstantiatedModule.ts,16,25))
->Point : Point, Symbol(Point,Decl(nonInstantiatedModule.ts,15,11),Decl(nonInstantiatedModule.ts,20,5))
+>Origin : () => Point, Symbol(Origin, Decl(nonInstantiatedModule.ts, 16, 25))
+>Point : Point, Symbol(Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
 
             return { x: 0, y: 0 };
 >{ x: 0, y: 0 } : { x: number; y: number; }
->x : number, Symbol(x,Decl(nonInstantiatedModule.ts,18,20))
+>x : number, Symbol(x, Decl(nonInstantiatedModule.ts, 18, 20))
 >0 : number
->y : number, Symbol(y,Decl(nonInstantiatedModule.ts,18,26))
+>y : number, Symbol(y, Decl(nonInstantiatedModule.ts, 18, 26))
 >0 : number
         }
     }
 
     export interface Point {
->Point : Point, Symbol(Point,Decl(nonInstantiatedModule.ts,15,11),Decl(nonInstantiatedModule.ts,20,5))
+>Point : Point, Symbol(Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
 
         x: number;
->x : number, Symbol(x,Decl(nonInstantiatedModule.ts,22,28))
+>x : number, Symbol(x, Decl(nonInstantiatedModule.ts, 22, 28))
 
         y: number;
->y : number, Symbol(y,Decl(nonInstantiatedModule.ts,23,18))
+>y : number, Symbol(y, Decl(nonInstantiatedModule.ts, 23, 18))
     }
 }
 
 var p: { x: number; y: number; };
->p : { x: number; y: number; }, Symbol(p,Decl(nonInstantiatedModule.ts,28,3),Decl(nonInstantiatedModule.ts,29,3))
->x : number, Symbol(x,Decl(nonInstantiatedModule.ts,28,8))
->y : number, Symbol(y,Decl(nonInstantiatedModule.ts,28,19))
+>p : { x: number; y: number; }, Symbol(p, Decl(nonInstantiatedModule.ts, 28, 3), Decl(nonInstantiatedModule.ts, 29, 3))
+>x : number, Symbol(x, Decl(nonInstantiatedModule.ts, 28, 8))
+>y : number, Symbol(y, Decl(nonInstantiatedModule.ts, 28, 19))
 
 var p: M2.Point;
->p : { x: number; y: number; }, Symbol(p,Decl(nonInstantiatedModule.ts,28,3),Decl(nonInstantiatedModule.ts,29,3))
->M2 : any, Symbol(M2,Decl(nonInstantiatedModule.ts,13,13))
->Point : M2.Point, Symbol(M2.Point,Decl(nonInstantiatedModule.ts,15,11),Decl(nonInstantiatedModule.ts,20,5))
+>p : { x: number; y: number; }, Symbol(p, Decl(nonInstantiatedModule.ts, 28, 3), Decl(nonInstantiatedModule.ts, 29, 3))
+>M2 : any, Symbol(M2, Decl(nonInstantiatedModule.ts, 13, 13))
+>Point : M2.Point, Symbol(M2.Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
 
 var p2: { Origin() : { x: number; y: number; } };
->p2 : { Origin(): { x: number; y: number; }; }, Symbol(p2,Decl(nonInstantiatedModule.ts,31,3),Decl(nonInstantiatedModule.ts,32,3))
->Origin : () => { x: number; y: number; }, Symbol(Origin,Decl(nonInstantiatedModule.ts,31,9))
->x : number, Symbol(x,Decl(nonInstantiatedModule.ts,31,22))
->y : number, Symbol(y,Decl(nonInstantiatedModule.ts,31,33))
+>p2 : { Origin(): { x: number; y: number; }; }, Symbol(p2, Decl(nonInstantiatedModule.ts, 31, 3), Decl(nonInstantiatedModule.ts, 32, 3))
+>Origin : () => { x: number; y: number; }, Symbol(Origin, Decl(nonInstantiatedModule.ts, 31, 9))
+>x : number, Symbol(x, Decl(nonInstantiatedModule.ts, 31, 22))
+>y : number, Symbol(y, Decl(nonInstantiatedModule.ts, 31, 33))
 
 var p2: typeof M2.Point;
->p2 : { Origin(): { x: number; y: number; }; }, Symbol(p2,Decl(nonInstantiatedModule.ts,31,3),Decl(nonInstantiatedModule.ts,32,3))
->M2.Point : typeof M2.Point, Symbol(M2.Point,Decl(nonInstantiatedModule.ts,15,11),Decl(nonInstantiatedModule.ts,20,5))
->M2 : typeof M2, Symbol(M2,Decl(nonInstantiatedModule.ts,13,13))
->Point : typeof M2.Point, Symbol(M2.Point,Decl(nonInstantiatedModule.ts,15,11),Decl(nonInstantiatedModule.ts,20,5))
+>p2 : { Origin(): { x: number; y: number; }; }, Symbol(p2, Decl(nonInstantiatedModule.ts, 31, 3), Decl(nonInstantiatedModule.ts, 32, 3))
+>M2.Point : typeof M2.Point, Symbol(M2.Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
+>M2 : typeof M2, Symbol(M2, Decl(nonInstantiatedModule.ts, 13, 13))
+>Point : typeof M2.Point, Symbol(M2.Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
 
 module M3 {
->M3 : typeof M3, Symbol(M3,Decl(nonInstantiatedModule.ts,32,24))
+>M3 : typeof M3, Symbol(M3, Decl(nonInstantiatedModule.ts, 32, 24))
 
     export module Utils {
->Utils : typeof Utils, Symbol(Utils,Decl(nonInstantiatedModule.ts,34,11),Decl(nonInstantiatedModule.ts,39,5))
+>Utils : typeof Utils, Symbol(Utils, Decl(nonInstantiatedModule.ts, 34, 11), Decl(nonInstantiatedModule.ts, 39, 5))
 
         export interface Point {
->Point : Point, Symbol(Point,Decl(nonInstantiatedModule.ts,35,25))
+>Point : Point, Symbol(Point, Decl(nonInstantiatedModule.ts, 35, 25))
 
             x: number; y: number;
->x : number, Symbol(x,Decl(nonInstantiatedModule.ts,36,32))
->y : number, Symbol(y,Decl(nonInstantiatedModule.ts,37,22))
+>x : number, Symbol(x, Decl(nonInstantiatedModule.ts, 36, 32))
+>y : number, Symbol(y, Decl(nonInstantiatedModule.ts, 37, 22))
         }
     }
 
     export class Utils {
->Utils : Utils, Symbol(Utils,Decl(nonInstantiatedModule.ts,34,11),Decl(nonInstantiatedModule.ts,39,5))
+>Utils : Utils, Symbol(Utils, Decl(nonInstantiatedModule.ts, 34, 11), Decl(nonInstantiatedModule.ts, 39, 5))
 
         name: string;
->name : string, Symbol(name,Decl(nonInstantiatedModule.ts,41,24))
+>name : string, Symbol(name, Decl(nonInstantiatedModule.ts, 41, 24))
     }
 }

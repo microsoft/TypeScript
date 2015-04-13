@@ -1,40 +1,40 @@
 === tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithOverloadedCallAndConstructSignatures.ts ===
 interface Foo {
->Foo : Foo, Symbol(Foo,Decl(interfaceWithOverloadedCallAndConstructSignatures.ts,0,0))
+>Foo : Foo, Symbol(Foo, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 0, 0))
 
     (): number;
     (x: string): number;
->x : string, Symbol(x,Decl(interfaceWithOverloadedCallAndConstructSignatures.ts,2,5))
+>x : string, Symbol(x, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 2, 5))
 
     new (): any;
     new (x: string): Object;
->x : string, Symbol(x,Decl(interfaceWithOverloadedCallAndConstructSignatures.ts,5,9))
->Object : Object, Symbol(Object,Decl(lib.d.ts,92,1),Decl(lib.d.ts,223,11))
+>x : string, Symbol(x, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 5, 9))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 }
 
 var f: Foo;
->f : Foo, Symbol(f,Decl(interfaceWithOverloadedCallAndConstructSignatures.ts,8,3))
->Foo : Foo, Symbol(Foo,Decl(interfaceWithOverloadedCallAndConstructSignatures.ts,0,0))
+>f : Foo, Symbol(f, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 8, 3))
+>Foo : Foo, Symbol(Foo, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 0, 0))
 
 var r1 = f();
->r1 : number, Symbol(r1,Decl(interfaceWithOverloadedCallAndConstructSignatures.ts,9,3))
+>r1 : number, Symbol(r1, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 9, 3))
 >f() : number
->f : Foo, Symbol(f,Decl(interfaceWithOverloadedCallAndConstructSignatures.ts,8,3))
+>f : Foo, Symbol(f, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 8, 3))
 
 var r2 = f('');
->r2 : number, Symbol(r2,Decl(interfaceWithOverloadedCallAndConstructSignatures.ts,10,3))
+>r2 : number, Symbol(r2, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 10, 3))
 >f('') : number
->f : Foo, Symbol(f,Decl(interfaceWithOverloadedCallAndConstructSignatures.ts,8,3))
+>f : Foo, Symbol(f, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 8, 3))
 >'' : string
 
 var r3 = new f();
->r3 : any, Symbol(r3,Decl(interfaceWithOverloadedCallAndConstructSignatures.ts,11,3))
+>r3 : any, Symbol(r3, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 11, 3))
 >new f() : any
->f : Foo, Symbol(f,Decl(interfaceWithOverloadedCallAndConstructSignatures.ts,8,3))
+>f : Foo, Symbol(f, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 8, 3))
 
 var r4 = new f('');
->r4 : Object, Symbol(r4,Decl(interfaceWithOverloadedCallAndConstructSignatures.ts,12,3))
+>r4 : Object, Symbol(r4, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 12, 3))
 >new f('') : Object
->f : Foo, Symbol(f,Decl(interfaceWithOverloadedCallAndConstructSignatures.ts,8,3))
+>f : Foo, Symbol(f, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 8, 3))
 >'' : string
 

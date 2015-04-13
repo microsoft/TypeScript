@@ -1,6 +1,6 @@
 === tests/cases/conformance/statements/breakStatements/forInBreakStatements.ts ===
 for(var x in {}) {
->x : any, Symbol(x,Decl(forInBreakStatements.ts,0,7),Decl(forInBreakStatements.ts,5,7),Decl(forInBreakStatements.ts,11,7),Decl(forInBreakStatements.ts,16,7),Decl(forInBreakStatements.ts,18,11),Decl(forInBreakStatements.ts,23,7),Decl(forInBreakStatements.ts,25,11),Decl(forInBreakStatements.ts,29,8),Decl(forInBreakStatements.ts,29,26),Decl(forInBreakStatements.ts,29,44),Decl(forInBreakStatements.ts,32,8))
+>x : any, Symbol(x, Decl(forInBreakStatements.ts, 0, 7), Decl(forInBreakStatements.ts, 5, 7), Decl(forInBreakStatements.ts, 11, 7), Decl(forInBreakStatements.ts, 16, 7), Decl(forInBreakStatements.ts, 18, 11), Decl(forInBreakStatements.ts, 23, 7), Decl(forInBreakStatements.ts, 25, 11), Decl(forInBreakStatements.ts, 29, 8), Decl(forInBreakStatements.ts, 29, 26), Decl(forInBreakStatements.ts, 29, 44), Decl(forInBreakStatements.ts, 32, 8))
 >{} : {}
 
     break;
@@ -10,7 +10,7 @@ ONE:
 >ONE : any
 
 for(var x in {}) {
->x : any, Symbol(x,Decl(forInBreakStatements.ts,0,7),Decl(forInBreakStatements.ts,5,7),Decl(forInBreakStatements.ts,11,7),Decl(forInBreakStatements.ts,16,7),Decl(forInBreakStatements.ts,18,11),Decl(forInBreakStatements.ts,23,7),Decl(forInBreakStatements.ts,25,11),Decl(forInBreakStatements.ts,29,8),Decl(forInBreakStatements.ts,29,26),Decl(forInBreakStatements.ts,29,44),Decl(forInBreakStatements.ts,32,8))
+>x : any, Symbol(x, Decl(forInBreakStatements.ts, 0, 7), Decl(forInBreakStatements.ts, 5, 7), Decl(forInBreakStatements.ts, 11, 7), Decl(forInBreakStatements.ts, 16, 7), Decl(forInBreakStatements.ts, 18, 11), Decl(forInBreakStatements.ts, 23, 7), Decl(forInBreakStatements.ts, 25, 11), Decl(forInBreakStatements.ts, 29, 8), Decl(forInBreakStatements.ts, 29, 26), Decl(forInBreakStatements.ts, 29, 44), Decl(forInBreakStatements.ts, 32, 8))
 >{} : {}
 
     break ONE;
@@ -24,7 +24,7 @@ THREE:
 >THREE : any
 
 for(var x in {}) {
->x : any, Symbol(x,Decl(forInBreakStatements.ts,0,7),Decl(forInBreakStatements.ts,5,7),Decl(forInBreakStatements.ts,11,7),Decl(forInBreakStatements.ts,16,7),Decl(forInBreakStatements.ts,18,11),Decl(forInBreakStatements.ts,23,7),Decl(forInBreakStatements.ts,25,11),Decl(forInBreakStatements.ts,29,8),Decl(forInBreakStatements.ts,29,26),Decl(forInBreakStatements.ts,29,44),Decl(forInBreakStatements.ts,32,8))
+>x : any, Symbol(x, Decl(forInBreakStatements.ts, 0, 7), Decl(forInBreakStatements.ts, 5, 7), Decl(forInBreakStatements.ts, 11, 7), Decl(forInBreakStatements.ts, 16, 7), Decl(forInBreakStatements.ts, 18, 11), Decl(forInBreakStatements.ts, 23, 7), Decl(forInBreakStatements.ts, 25, 11), Decl(forInBreakStatements.ts, 29, 8), Decl(forInBreakStatements.ts, 29, 26), Decl(forInBreakStatements.ts, 29, 44), Decl(forInBreakStatements.ts, 32, 8))
 >{} : {}
 
     break THREE;
@@ -35,14 +35,14 @@ FOUR:
 >FOUR : any
 
 for(var x in {}) {
->x : any, Symbol(x,Decl(forInBreakStatements.ts,0,7),Decl(forInBreakStatements.ts,5,7),Decl(forInBreakStatements.ts,11,7),Decl(forInBreakStatements.ts,16,7),Decl(forInBreakStatements.ts,18,11),Decl(forInBreakStatements.ts,23,7),Decl(forInBreakStatements.ts,25,11),Decl(forInBreakStatements.ts,29,8),Decl(forInBreakStatements.ts,29,26),Decl(forInBreakStatements.ts,29,44),Decl(forInBreakStatements.ts,32,8))
+>x : any, Symbol(x, Decl(forInBreakStatements.ts, 0, 7), Decl(forInBreakStatements.ts, 5, 7), Decl(forInBreakStatements.ts, 11, 7), Decl(forInBreakStatements.ts, 16, 7), Decl(forInBreakStatements.ts, 18, 11), Decl(forInBreakStatements.ts, 23, 7), Decl(forInBreakStatements.ts, 25, 11), Decl(forInBreakStatements.ts, 29, 8), Decl(forInBreakStatements.ts, 29, 26), Decl(forInBreakStatements.ts, 29, 44), Decl(forInBreakStatements.ts, 32, 8))
 >{} : {}
 
     FIVE:
 >FIVE : any
 
     for(var x in {}) {
->x : any, Symbol(x,Decl(forInBreakStatements.ts,0,7),Decl(forInBreakStatements.ts,5,7),Decl(forInBreakStatements.ts,11,7),Decl(forInBreakStatements.ts,16,7),Decl(forInBreakStatements.ts,18,11),Decl(forInBreakStatements.ts,23,7),Decl(forInBreakStatements.ts,25,11),Decl(forInBreakStatements.ts,29,8),Decl(forInBreakStatements.ts,29,26),Decl(forInBreakStatements.ts,29,44),Decl(forInBreakStatements.ts,32,8))
+>x : any, Symbol(x, Decl(forInBreakStatements.ts, 0, 7), Decl(forInBreakStatements.ts, 5, 7), Decl(forInBreakStatements.ts, 11, 7), Decl(forInBreakStatements.ts, 16, 7), Decl(forInBreakStatements.ts, 18, 11), Decl(forInBreakStatements.ts, 23, 7), Decl(forInBreakStatements.ts, 25, 11), Decl(forInBreakStatements.ts, 29, 8), Decl(forInBreakStatements.ts, 29, 26), Decl(forInBreakStatements.ts, 29, 44), Decl(forInBreakStatements.ts, 32, 8))
 >{} : {}
 
         break FOUR;
@@ -51,14 +51,14 @@ for(var x in {}) {
 }
 
 for(var x in {}) {
->x : any, Symbol(x,Decl(forInBreakStatements.ts,0,7),Decl(forInBreakStatements.ts,5,7),Decl(forInBreakStatements.ts,11,7),Decl(forInBreakStatements.ts,16,7),Decl(forInBreakStatements.ts,18,11),Decl(forInBreakStatements.ts,23,7),Decl(forInBreakStatements.ts,25,11),Decl(forInBreakStatements.ts,29,8),Decl(forInBreakStatements.ts,29,26),Decl(forInBreakStatements.ts,29,44),Decl(forInBreakStatements.ts,32,8))
+>x : any, Symbol(x, Decl(forInBreakStatements.ts, 0, 7), Decl(forInBreakStatements.ts, 5, 7), Decl(forInBreakStatements.ts, 11, 7), Decl(forInBreakStatements.ts, 16, 7), Decl(forInBreakStatements.ts, 18, 11), Decl(forInBreakStatements.ts, 23, 7), Decl(forInBreakStatements.ts, 25, 11), Decl(forInBreakStatements.ts, 29, 8), Decl(forInBreakStatements.ts, 29, 26), Decl(forInBreakStatements.ts, 29, 44), Decl(forInBreakStatements.ts, 32, 8))
 >{} : {}
 
     SIX:
 >SIX : any
 
     for(var x in {}) break SIX;
->x : any, Symbol(x,Decl(forInBreakStatements.ts,0,7),Decl(forInBreakStatements.ts,5,7),Decl(forInBreakStatements.ts,11,7),Decl(forInBreakStatements.ts,16,7),Decl(forInBreakStatements.ts,18,11),Decl(forInBreakStatements.ts,23,7),Decl(forInBreakStatements.ts,25,11),Decl(forInBreakStatements.ts,29,8),Decl(forInBreakStatements.ts,29,26),Decl(forInBreakStatements.ts,29,44),Decl(forInBreakStatements.ts,32,8))
+>x : any, Symbol(x, Decl(forInBreakStatements.ts, 0, 7), Decl(forInBreakStatements.ts, 5, 7), Decl(forInBreakStatements.ts, 11, 7), Decl(forInBreakStatements.ts, 16, 7), Decl(forInBreakStatements.ts, 18, 11), Decl(forInBreakStatements.ts, 23, 7), Decl(forInBreakStatements.ts, 25, 11), Decl(forInBreakStatements.ts, 29, 8), Decl(forInBreakStatements.ts, 29, 26), Decl(forInBreakStatements.ts, 29, 44), Decl(forInBreakStatements.ts, 32, 8))
 >{} : {}
 >SIX : any
 }
@@ -67,11 +67,11 @@ SEVEN:
 >SEVEN : any
 
 for (var x in {}) for (var x in {}) for (var x in {}) break SEVEN;
->x : any, Symbol(x,Decl(forInBreakStatements.ts,0,7),Decl(forInBreakStatements.ts,5,7),Decl(forInBreakStatements.ts,11,7),Decl(forInBreakStatements.ts,16,7),Decl(forInBreakStatements.ts,18,11),Decl(forInBreakStatements.ts,23,7),Decl(forInBreakStatements.ts,25,11),Decl(forInBreakStatements.ts,29,8),Decl(forInBreakStatements.ts,29,26),Decl(forInBreakStatements.ts,29,44),Decl(forInBreakStatements.ts,32,8))
+>x : any, Symbol(x, Decl(forInBreakStatements.ts, 0, 7), Decl(forInBreakStatements.ts, 5, 7), Decl(forInBreakStatements.ts, 11, 7), Decl(forInBreakStatements.ts, 16, 7), Decl(forInBreakStatements.ts, 18, 11), Decl(forInBreakStatements.ts, 23, 7), Decl(forInBreakStatements.ts, 25, 11), Decl(forInBreakStatements.ts, 29, 8), Decl(forInBreakStatements.ts, 29, 26), Decl(forInBreakStatements.ts, 29, 44), Decl(forInBreakStatements.ts, 32, 8))
 >{} : {}
->x : any, Symbol(x,Decl(forInBreakStatements.ts,0,7),Decl(forInBreakStatements.ts,5,7),Decl(forInBreakStatements.ts,11,7),Decl(forInBreakStatements.ts,16,7),Decl(forInBreakStatements.ts,18,11),Decl(forInBreakStatements.ts,23,7),Decl(forInBreakStatements.ts,25,11),Decl(forInBreakStatements.ts,29,8),Decl(forInBreakStatements.ts,29,26),Decl(forInBreakStatements.ts,29,44),Decl(forInBreakStatements.ts,32,8))
+>x : any, Symbol(x, Decl(forInBreakStatements.ts, 0, 7), Decl(forInBreakStatements.ts, 5, 7), Decl(forInBreakStatements.ts, 11, 7), Decl(forInBreakStatements.ts, 16, 7), Decl(forInBreakStatements.ts, 18, 11), Decl(forInBreakStatements.ts, 23, 7), Decl(forInBreakStatements.ts, 25, 11), Decl(forInBreakStatements.ts, 29, 8), Decl(forInBreakStatements.ts, 29, 26), Decl(forInBreakStatements.ts, 29, 44), Decl(forInBreakStatements.ts, 32, 8))
 >{} : {}
->x : any, Symbol(x,Decl(forInBreakStatements.ts,0,7),Decl(forInBreakStatements.ts,5,7),Decl(forInBreakStatements.ts,11,7),Decl(forInBreakStatements.ts,16,7),Decl(forInBreakStatements.ts,18,11),Decl(forInBreakStatements.ts,23,7),Decl(forInBreakStatements.ts,25,11),Decl(forInBreakStatements.ts,29,8),Decl(forInBreakStatements.ts,29,26),Decl(forInBreakStatements.ts,29,44),Decl(forInBreakStatements.ts,32,8))
+>x : any, Symbol(x, Decl(forInBreakStatements.ts, 0, 7), Decl(forInBreakStatements.ts, 5, 7), Decl(forInBreakStatements.ts, 11, 7), Decl(forInBreakStatements.ts, 16, 7), Decl(forInBreakStatements.ts, 18, 11), Decl(forInBreakStatements.ts, 23, 7), Decl(forInBreakStatements.ts, 25, 11), Decl(forInBreakStatements.ts, 29, 8), Decl(forInBreakStatements.ts, 29, 26), Decl(forInBreakStatements.ts, 29, 44), Decl(forInBreakStatements.ts, 32, 8))
 >{} : {}
 >SEVEN : any
 
@@ -79,11 +79,11 @@ EIGHT:
 >EIGHT : any
 
 for (var x in {}){
->x : any, Symbol(x,Decl(forInBreakStatements.ts,0,7),Decl(forInBreakStatements.ts,5,7),Decl(forInBreakStatements.ts,11,7),Decl(forInBreakStatements.ts,16,7),Decl(forInBreakStatements.ts,18,11),Decl(forInBreakStatements.ts,23,7),Decl(forInBreakStatements.ts,25,11),Decl(forInBreakStatements.ts,29,8),Decl(forInBreakStatements.ts,29,26),Decl(forInBreakStatements.ts,29,44),Decl(forInBreakStatements.ts,32,8))
+>x : any, Symbol(x, Decl(forInBreakStatements.ts, 0, 7), Decl(forInBreakStatements.ts, 5, 7), Decl(forInBreakStatements.ts, 11, 7), Decl(forInBreakStatements.ts, 16, 7), Decl(forInBreakStatements.ts, 18, 11), Decl(forInBreakStatements.ts, 23, 7), Decl(forInBreakStatements.ts, 25, 11), Decl(forInBreakStatements.ts, 29, 8), Decl(forInBreakStatements.ts, 29, 26), Decl(forInBreakStatements.ts, 29, 44), Decl(forInBreakStatements.ts, 32, 8))
 >{} : {}
 
     var fn = function () { }
->fn : () => void, Symbol(fn,Decl(forInBreakStatements.ts,33,7))
+>fn : () => void, Symbol(fn, Decl(forInBreakStatements.ts, 33, 7))
 >function () { } : () => void
 
     break EIGHT;

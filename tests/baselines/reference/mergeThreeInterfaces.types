@@ -3,195 +3,195 @@
 
 // basic case
 interface A {
->A : A, Symbol(A,Decl(mergeThreeInterfaces.ts,0,0),Decl(mergeThreeInterfaces.ts,5,1),Decl(mergeThreeInterfaces.ts,9,1))
+>A : A, Symbol(A, Decl(mergeThreeInterfaces.ts, 0, 0), Decl(mergeThreeInterfaces.ts, 5, 1), Decl(mergeThreeInterfaces.ts, 9, 1))
 
     foo: string;
->foo : string, Symbol(foo,Decl(mergeThreeInterfaces.ts,3,13))
+>foo : string, Symbol(foo, Decl(mergeThreeInterfaces.ts, 3, 13))
 }
 
 interface A {
->A : A, Symbol(A,Decl(mergeThreeInterfaces.ts,0,0),Decl(mergeThreeInterfaces.ts,5,1),Decl(mergeThreeInterfaces.ts,9,1))
+>A : A, Symbol(A, Decl(mergeThreeInterfaces.ts, 0, 0), Decl(mergeThreeInterfaces.ts, 5, 1), Decl(mergeThreeInterfaces.ts, 9, 1))
 
     bar: number;
->bar : number, Symbol(bar,Decl(mergeThreeInterfaces.ts,7,13))
+>bar : number, Symbol(bar, Decl(mergeThreeInterfaces.ts, 7, 13))
 }
 
 interface A {
->A : A, Symbol(A,Decl(mergeThreeInterfaces.ts,0,0),Decl(mergeThreeInterfaces.ts,5,1),Decl(mergeThreeInterfaces.ts,9,1))
+>A : A, Symbol(A, Decl(mergeThreeInterfaces.ts, 0, 0), Decl(mergeThreeInterfaces.ts, 5, 1), Decl(mergeThreeInterfaces.ts, 9, 1))
 
     baz: boolean;
->baz : boolean, Symbol(baz,Decl(mergeThreeInterfaces.ts,11,13))
+>baz : boolean, Symbol(baz, Decl(mergeThreeInterfaces.ts, 11, 13))
 }
 
 var a: A;
->a : A, Symbol(a,Decl(mergeThreeInterfaces.ts,15,3))
->A : A, Symbol(A,Decl(mergeThreeInterfaces.ts,0,0),Decl(mergeThreeInterfaces.ts,5,1),Decl(mergeThreeInterfaces.ts,9,1))
+>a : A, Symbol(a, Decl(mergeThreeInterfaces.ts, 15, 3))
+>A : A, Symbol(A, Decl(mergeThreeInterfaces.ts, 0, 0), Decl(mergeThreeInterfaces.ts, 5, 1), Decl(mergeThreeInterfaces.ts, 9, 1))
 
 var r1 = a.foo
->r1 : string, Symbol(r1,Decl(mergeThreeInterfaces.ts,16,3))
->a.foo : string, Symbol(A.foo,Decl(mergeThreeInterfaces.ts,3,13))
->a : A, Symbol(a,Decl(mergeThreeInterfaces.ts,15,3))
->foo : string, Symbol(A.foo,Decl(mergeThreeInterfaces.ts,3,13))
+>r1 : string, Symbol(r1, Decl(mergeThreeInterfaces.ts, 16, 3))
+>a.foo : string, Symbol(A.foo, Decl(mergeThreeInterfaces.ts, 3, 13))
+>a : A, Symbol(a, Decl(mergeThreeInterfaces.ts, 15, 3))
+>foo : string, Symbol(A.foo, Decl(mergeThreeInterfaces.ts, 3, 13))
 
 var r2 = a.bar;
->r2 : number, Symbol(r2,Decl(mergeThreeInterfaces.ts,17,3))
->a.bar : number, Symbol(A.bar,Decl(mergeThreeInterfaces.ts,7,13))
->a : A, Symbol(a,Decl(mergeThreeInterfaces.ts,15,3))
->bar : number, Symbol(A.bar,Decl(mergeThreeInterfaces.ts,7,13))
+>r2 : number, Symbol(r2, Decl(mergeThreeInterfaces.ts, 17, 3))
+>a.bar : number, Symbol(A.bar, Decl(mergeThreeInterfaces.ts, 7, 13))
+>a : A, Symbol(a, Decl(mergeThreeInterfaces.ts, 15, 3))
+>bar : number, Symbol(A.bar, Decl(mergeThreeInterfaces.ts, 7, 13))
 
 var r3 = a.baz;
->r3 : boolean, Symbol(r3,Decl(mergeThreeInterfaces.ts,18,3))
->a.baz : boolean, Symbol(A.baz,Decl(mergeThreeInterfaces.ts,11,13))
->a : A, Symbol(a,Decl(mergeThreeInterfaces.ts,15,3))
->baz : boolean, Symbol(A.baz,Decl(mergeThreeInterfaces.ts,11,13))
+>r3 : boolean, Symbol(r3, Decl(mergeThreeInterfaces.ts, 18, 3))
+>a.baz : boolean, Symbol(A.baz, Decl(mergeThreeInterfaces.ts, 11, 13))
+>a : A, Symbol(a, Decl(mergeThreeInterfaces.ts, 15, 3))
+>baz : boolean, Symbol(A.baz, Decl(mergeThreeInterfaces.ts, 11, 13))
 
 // basic generic case
 interface B<T> {
->B : B<T>, Symbol(B,Decl(mergeThreeInterfaces.ts,18,15),Decl(mergeThreeInterfaces.ts,23,1),Decl(mergeThreeInterfaces.ts,27,1))
->T : T, Symbol(T,Decl(mergeThreeInterfaces.ts,21,12),Decl(mergeThreeInterfaces.ts,25,12),Decl(mergeThreeInterfaces.ts,29,12))
+>B : B<T>, Symbol(B, Decl(mergeThreeInterfaces.ts, 18, 15), Decl(mergeThreeInterfaces.ts, 23, 1), Decl(mergeThreeInterfaces.ts, 27, 1))
+>T : T, Symbol(T, Decl(mergeThreeInterfaces.ts, 21, 12), Decl(mergeThreeInterfaces.ts, 25, 12), Decl(mergeThreeInterfaces.ts, 29, 12))
 
     foo: T;
->foo : T, Symbol(foo,Decl(mergeThreeInterfaces.ts,21,16))
->T : T, Symbol(T,Decl(mergeThreeInterfaces.ts,21,12),Decl(mergeThreeInterfaces.ts,25,12),Decl(mergeThreeInterfaces.ts,29,12))
+>foo : T, Symbol(foo, Decl(mergeThreeInterfaces.ts, 21, 16))
+>T : T, Symbol(T, Decl(mergeThreeInterfaces.ts, 21, 12), Decl(mergeThreeInterfaces.ts, 25, 12), Decl(mergeThreeInterfaces.ts, 29, 12))
 }
 
 interface B<T> {
->B : B<T>, Symbol(B,Decl(mergeThreeInterfaces.ts,18,15),Decl(mergeThreeInterfaces.ts,23,1),Decl(mergeThreeInterfaces.ts,27,1))
->T : T, Symbol(T,Decl(mergeThreeInterfaces.ts,21,12),Decl(mergeThreeInterfaces.ts,25,12),Decl(mergeThreeInterfaces.ts,29,12))
+>B : B<T>, Symbol(B, Decl(mergeThreeInterfaces.ts, 18, 15), Decl(mergeThreeInterfaces.ts, 23, 1), Decl(mergeThreeInterfaces.ts, 27, 1))
+>T : T, Symbol(T, Decl(mergeThreeInterfaces.ts, 21, 12), Decl(mergeThreeInterfaces.ts, 25, 12), Decl(mergeThreeInterfaces.ts, 29, 12))
 
     bar: T;
->bar : T, Symbol(bar,Decl(mergeThreeInterfaces.ts,25,16))
->T : T, Symbol(T,Decl(mergeThreeInterfaces.ts,21,12),Decl(mergeThreeInterfaces.ts,25,12),Decl(mergeThreeInterfaces.ts,29,12))
+>bar : T, Symbol(bar, Decl(mergeThreeInterfaces.ts, 25, 16))
+>T : T, Symbol(T, Decl(mergeThreeInterfaces.ts, 21, 12), Decl(mergeThreeInterfaces.ts, 25, 12), Decl(mergeThreeInterfaces.ts, 29, 12))
 }
 
 interface B<T> {
->B : B<T>, Symbol(B,Decl(mergeThreeInterfaces.ts,18,15),Decl(mergeThreeInterfaces.ts,23,1),Decl(mergeThreeInterfaces.ts,27,1))
->T : T, Symbol(T,Decl(mergeThreeInterfaces.ts,21,12),Decl(mergeThreeInterfaces.ts,25,12),Decl(mergeThreeInterfaces.ts,29,12))
+>B : B<T>, Symbol(B, Decl(mergeThreeInterfaces.ts, 18, 15), Decl(mergeThreeInterfaces.ts, 23, 1), Decl(mergeThreeInterfaces.ts, 27, 1))
+>T : T, Symbol(T, Decl(mergeThreeInterfaces.ts, 21, 12), Decl(mergeThreeInterfaces.ts, 25, 12), Decl(mergeThreeInterfaces.ts, 29, 12))
 
     baz: T;
->baz : T, Symbol(baz,Decl(mergeThreeInterfaces.ts,29,16))
->T : T, Symbol(T,Decl(mergeThreeInterfaces.ts,21,12),Decl(mergeThreeInterfaces.ts,25,12),Decl(mergeThreeInterfaces.ts,29,12))
+>baz : T, Symbol(baz, Decl(mergeThreeInterfaces.ts, 29, 16))
+>T : T, Symbol(T, Decl(mergeThreeInterfaces.ts, 21, 12), Decl(mergeThreeInterfaces.ts, 25, 12), Decl(mergeThreeInterfaces.ts, 29, 12))
 }
 
 var b: B<string>;
->b : B<string>, Symbol(b,Decl(mergeThreeInterfaces.ts,33,3))
->B : B<T>, Symbol(B,Decl(mergeThreeInterfaces.ts,18,15),Decl(mergeThreeInterfaces.ts,23,1),Decl(mergeThreeInterfaces.ts,27,1))
+>b : B<string>, Symbol(b, Decl(mergeThreeInterfaces.ts, 33, 3))
+>B : B<T>, Symbol(B, Decl(mergeThreeInterfaces.ts, 18, 15), Decl(mergeThreeInterfaces.ts, 23, 1), Decl(mergeThreeInterfaces.ts, 27, 1))
 
 var r4 = b.foo
->r4 : string, Symbol(r4,Decl(mergeThreeInterfaces.ts,34,3))
->b.foo : string, Symbol(B.foo,Decl(mergeThreeInterfaces.ts,21,16))
->b : B<string>, Symbol(b,Decl(mergeThreeInterfaces.ts,33,3))
->foo : string, Symbol(B.foo,Decl(mergeThreeInterfaces.ts,21,16))
+>r4 : string, Symbol(r4, Decl(mergeThreeInterfaces.ts, 34, 3))
+>b.foo : string, Symbol(B.foo, Decl(mergeThreeInterfaces.ts, 21, 16))
+>b : B<string>, Symbol(b, Decl(mergeThreeInterfaces.ts, 33, 3))
+>foo : string, Symbol(B.foo, Decl(mergeThreeInterfaces.ts, 21, 16))
 
 var r5 = b.bar;
->r5 : string, Symbol(r5,Decl(mergeThreeInterfaces.ts,35,3))
->b.bar : string, Symbol(B.bar,Decl(mergeThreeInterfaces.ts,25,16))
->b : B<string>, Symbol(b,Decl(mergeThreeInterfaces.ts,33,3))
->bar : string, Symbol(B.bar,Decl(mergeThreeInterfaces.ts,25,16))
+>r5 : string, Symbol(r5, Decl(mergeThreeInterfaces.ts, 35, 3))
+>b.bar : string, Symbol(B.bar, Decl(mergeThreeInterfaces.ts, 25, 16))
+>b : B<string>, Symbol(b, Decl(mergeThreeInterfaces.ts, 33, 3))
+>bar : string, Symbol(B.bar, Decl(mergeThreeInterfaces.ts, 25, 16))
 
 var r6 = b.baz;
->r6 : string, Symbol(r6,Decl(mergeThreeInterfaces.ts,36,3))
->b.baz : string, Symbol(B.baz,Decl(mergeThreeInterfaces.ts,29,16))
->b : B<string>, Symbol(b,Decl(mergeThreeInterfaces.ts,33,3))
->baz : string, Symbol(B.baz,Decl(mergeThreeInterfaces.ts,29,16))
+>r6 : string, Symbol(r6, Decl(mergeThreeInterfaces.ts, 36, 3))
+>b.baz : string, Symbol(B.baz, Decl(mergeThreeInterfaces.ts, 29, 16))
+>b : B<string>, Symbol(b, Decl(mergeThreeInterfaces.ts, 33, 3))
+>baz : string, Symbol(B.baz, Decl(mergeThreeInterfaces.ts, 29, 16))
 
 // basic non-generic and generic case inside a module
 module M {
->M : typeof M, Symbol(M,Decl(mergeThreeInterfaces.ts,36,15))
+>M : typeof M, Symbol(M, Decl(mergeThreeInterfaces.ts, 36, 15))
 
     interface A {
->A : A, Symbol(A,Decl(mergeThreeInterfaces.ts,39,10),Decl(mergeThreeInterfaces.ts,42,5),Decl(mergeThreeInterfaces.ts,46,5))
+>A : A, Symbol(A, Decl(mergeThreeInterfaces.ts, 39, 10), Decl(mergeThreeInterfaces.ts, 42, 5), Decl(mergeThreeInterfaces.ts, 46, 5))
 
         foo: string;
->foo : string, Symbol(foo,Decl(mergeThreeInterfaces.ts,40,17))
+>foo : string, Symbol(foo, Decl(mergeThreeInterfaces.ts, 40, 17))
     }
 
     interface A {
->A : A, Symbol(A,Decl(mergeThreeInterfaces.ts,39,10),Decl(mergeThreeInterfaces.ts,42,5),Decl(mergeThreeInterfaces.ts,46,5))
+>A : A, Symbol(A, Decl(mergeThreeInterfaces.ts, 39, 10), Decl(mergeThreeInterfaces.ts, 42, 5), Decl(mergeThreeInterfaces.ts, 46, 5))
 
         bar: number;
->bar : number, Symbol(bar,Decl(mergeThreeInterfaces.ts,44,17))
+>bar : number, Symbol(bar, Decl(mergeThreeInterfaces.ts, 44, 17))
     }
 
     interface A {
->A : A, Symbol(A,Decl(mergeThreeInterfaces.ts,39,10),Decl(mergeThreeInterfaces.ts,42,5),Decl(mergeThreeInterfaces.ts,46,5))
+>A : A, Symbol(A, Decl(mergeThreeInterfaces.ts, 39, 10), Decl(mergeThreeInterfaces.ts, 42, 5), Decl(mergeThreeInterfaces.ts, 46, 5))
 
         baz: boolean;
->baz : boolean, Symbol(baz,Decl(mergeThreeInterfaces.ts,48,17))
+>baz : boolean, Symbol(baz, Decl(mergeThreeInterfaces.ts, 48, 17))
     }
 
     var a: A;
->a : A, Symbol(a,Decl(mergeThreeInterfaces.ts,52,7))
->A : A, Symbol(A,Decl(mergeThreeInterfaces.ts,39,10),Decl(mergeThreeInterfaces.ts,42,5),Decl(mergeThreeInterfaces.ts,46,5))
+>a : A, Symbol(a, Decl(mergeThreeInterfaces.ts, 52, 7))
+>A : A, Symbol(A, Decl(mergeThreeInterfaces.ts, 39, 10), Decl(mergeThreeInterfaces.ts, 42, 5), Decl(mergeThreeInterfaces.ts, 46, 5))
 
     var r1 = a.foo;
->r1 : string, Symbol(r1,Decl(mergeThreeInterfaces.ts,53,7))
->a.foo : string, Symbol(A.foo,Decl(mergeThreeInterfaces.ts,40,17))
->a : A, Symbol(a,Decl(mergeThreeInterfaces.ts,52,7))
->foo : string, Symbol(A.foo,Decl(mergeThreeInterfaces.ts,40,17))
+>r1 : string, Symbol(r1, Decl(mergeThreeInterfaces.ts, 53, 7))
+>a.foo : string, Symbol(A.foo, Decl(mergeThreeInterfaces.ts, 40, 17))
+>a : A, Symbol(a, Decl(mergeThreeInterfaces.ts, 52, 7))
+>foo : string, Symbol(A.foo, Decl(mergeThreeInterfaces.ts, 40, 17))
 
     // BUG 856491
     var r2 = a.bar; // any, should be number
->r2 : number, Symbol(r2,Decl(mergeThreeInterfaces.ts,55,7))
->a.bar : number, Symbol(A.bar,Decl(mergeThreeInterfaces.ts,44,17))
->a : A, Symbol(a,Decl(mergeThreeInterfaces.ts,52,7))
->bar : number, Symbol(A.bar,Decl(mergeThreeInterfaces.ts,44,17))
+>r2 : number, Symbol(r2, Decl(mergeThreeInterfaces.ts, 55, 7))
+>a.bar : number, Symbol(A.bar, Decl(mergeThreeInterfaces.ts, 44, 17))
+>a : A, Symbol(a, Decl(mergeThreeInterfaces.ts, 52, 7))
+>bar : number, Symbol(A.bar, Decl(mergeThreeInterfaces.ts, 44, 17))
 
     // BUG 856491
     var r3 = a.baz; // any, should be boolean
->r3 : boolean, Symbol(r3,Decl(mergeThreeInterfaces.ts,57,7))
->a.baz : boolean, Symbol(A.baz,Decl(mergeThreeInterfaces.ts,48,17))
->a : A, Symbol(a,Decl(mergeThreeInterfaces.ts,52,7))
->baz : boolean, Symbol(A.baz,Decl(mergeThreeInterfaces.ts,48,17))
+>r3 : boolean, Symbol(r3, Decl(mergeThreeInterfaces.ts, 57, 7))
+>a.baz : boolean, Symbol(A.baz, Decl(mergeThreeInterfaces.ts, 48, 17))
+>a : A, Symbol(a, Decl(mergeThreeInterfaces.ts, 52, 7))
+>baz : boolean, Symbol(A.baz, Decl(mergeThreeInterfaces.ts, 48, 17))
 
     interface B<T> {
->B : B<T>, Symbol(B,Decl(mergeThreeInterfaces.ts,57,19),Decl(mergeThreeInterfaces.ts,61,5),Decl(mergeThreeInterfaces.ts,65,5))
->T : T, Symbol(T,Decl(mergeThreeInterfaces.ts,59,16),Decl(mergeThreeInterfaces.ts,63,16),Decl(mergeThreeInterfaces.ts,67,16))
+>B : B<T>, Symbol(B, Decl(mergeThreeInterfaces.ts, 57, 19), Decl(mergeThreeInterfaces.ts, 61, 5), Decl(mergeThreeInterfaces.ts, 65, 5))
+>T : T, Symbol(T, Decl(mergeThreeInterfaces.ts, 59, 16), Decl(mergeThreeInterfaces.ts, 63, 16), Decl(mergeThreeInterfaces.ts, 67, 16))
 
         foo: T;
->foo : T, Symbol(foo,Decl(mergeThreeInterfaces.ts,59,20))
->T : T, Symbol(T,Decl(mergeThreeInterfaces.ts,59,16),Decl(mergeThreeInterfaces.ts,63,16),Decl(mergeThreeInterfaces.ts,67,16))
+>foo : T, Symbol(foo, Decl(mergeThreeInterfaces.ts, 59, 20))
+>T : T, Symbol(T, Decl(mergeThreeInterfaces.ts, 59, 16), Decl(mergeThreeInterfaces.ts, 63, 16), Decl(mergeThreeInterfaces.ts, 67, 16))
     }
 
     interface B<T> {
->B : B<T>, Symbol(B,Decl(mergeThreeInterfaces.ts,57,19),Decl(mergeThreeInterfaces.ts,61,5),Decl(mergeThreeInterfaces.ts,65,5))
->T : T, Symbol(T,Decl(mergeThreeInterfaces.ts,59,16),Decl(mergeThreeInterfaces.ts,63,16),Decl(mergeThreeInterfaces.ts,67,16))
+>B : B<T>, Symbol(B, Decl(mergeThreeInterfaces.ts, 57, 19), Decl(mergeThreeInterfaces.ts, 61, 5), Decl(mergeThreeInterfaces.ts, 65, 5))
+>T : T, Symbol(T, Decl(mergeThreeInterfaces.ts, 59, 16), Decl(mergeThreeInterfaces.ts, 63, 16), Decl(mergeThreeInterfaces.ts, 67, 16))
 
         bar: T;
->bar : T, Symbol(bar,Decl(mergeThreeInterfaces.ts,63,20))
->T : T, Symbol(T,Decl(mergeThreeInterfaces.ts,59,16),Decl(mergeThreeInterfaces.ts,63,16),Decl(mergeThreeInterfaces.ts,67,16))
+>bar : T, Symbol(bar, Decl(mergeThreeInterfaces.ts, 63, 20))
+>T : T, Symbol(T, Decl(mergeThreeInterfaces.ts, 59, 16), Decl(mergeThreeInterfaces.ts, 63, 16), Decl(mergeThreeInterfaces.ts, 67, 16))
     }
 
     interface B<T> {
->B : B<T>, Symbol(B,Decl(mergeThreeInterfaces.ts,57,19),Decl(mergeThreeInterfaces.ts,61,5),Decl(mergeThreeInterfaces.ts,65,5))
->T : T, Symbol(T,Decl(mergeThreeInterfaces.ts,59,16),Decl(mergeThreeInterfaces.ts,63,16),Decl(mergeThreeInterfaces.ts,67,16))
+>B : B<T>, Symbol(B, Decl(mergeThreeInterfaces.ts, 57, 19), Decl(mergeThreeInterfaces.ts, 61, 5), Decl(mergeThreeInterfaces.ts, 65, 5))
+>T : T, Symbol(T, Decl(mergeThreeInterfaces.ts, 59, 16), Decl(mergeThreeInterfaces.ts, 63, 16), Decl(mergeThreeInterfaces.ts, 67, 16))
 
         baz: T;
->baz : T, Symbol(baz,Decl(mergeThreeInterfaces.ts,67,20))
->T : T, Symbol(T,Decl(mergeThreeInterfaces.ts,59,16),Decl(mergeThreeInterfaces.ts,63,16),Decl(mergeThreeInterfaces.ts,67,16))
+>baz : T, Symbol(baz, Decl(mergeThreeInterfaces.ts, 67, 20))
+>T : T, Symbol(T, Decl(mergeThreeInterfaces.ts, 59, 16), Decl(mergeThreeInterfaces.ts, 63, 16), Decl(mergeThreeInterfaces.ts, 67, 16))
     }
 
     var b: B<string>;
->b : B<string>, Symbol(b,Decl(mergeThreeInterfaces.ts,71,7))
->B : B<T>, Symbol(B,Decl(mergeThreeInterfaces.ts,57,19),Decl(mergeThreeInterfaces.ts,61,5),Decl(mergeThreeInterfaces.ts,65,5))
+>b : B<string>, Symbol(b, Decl(mergeThreeInterfaces.ts, 71, 7))
+>B : B<T>, Symbol(B, Decl(mergeThreeInterfaces.ts, 57, 19), Decl(mergeThreeInterfaces.ts, 61, 5), Decl(mergeThreeInterfaces.ts, 65, 5))
 
     var r4 = b.foo
->r4 : string, Symbol(r4,Decl(mergeThreeInterfaces.ts,72,7))
->b.foo : string, Symbol(B.foo,Decl(mergeThreeInterfaces.ts,59,20))
->b : B<string>, Symbol(b,Decl(mergeThreeInterfaces.ts,71,7))
->foo : string, Symbol(B.foo,Decl(mergeThreeInterfaces.ts,59,20))
+>r4 : string, Symbol(r4, Decl(mergeThreeInterfaces.ts, 72, 7))
+>b.foo : string, Symbol(B.foo, Decl(mergeThreeInterfaces.ts, 59, 20))
+>b : B<string>, Symbol(b, Decl(mergeThreeInterfaces.ts, 71, 7))
+>foo : string, Symbol(B.foo, Decl(mergeThreeInterfaces.ts, 59, 20))
 
     // BUG 856491
     var r5 = b.bar; // any, should be number
->r5 : string, Symbol(r5,Decl(mergeThreeInterfaces.ts,74,7))
->b.bar : string, Symbol(B.bar,Decl(mergeThreeInterfaces.ts,63,20))
->b : B<string>, Symbol(b,Decl(mergeThreeInterfaces.ts,71,7))
->bar : string, Symbol(B.bar,Decl(mergeThreeInterfaces.ts,63,20))
+>r5 : string, Symbol(r5, Decl(mergeThreeInterfaces.ts, 74, 7))
+>b.bar : string, Symbol(B.bar, Decl(mergeThreeInterfaces.ts, 63, 20))
+>b : B<string>, Symbol(b, Decl(mergeThreeInterfaces.ts, 71, 7))
+>bar : string, Symbol(B.bar, Decl(mergeThreeInterfaces.ts, 63, 20))
 
     // BUG 856491
     var r6 = b.baz; // any, should be boolean
->r6 : string, Symbol(r6,Decl(mergeThreeInterfaces.ts,76,7))
->b.baz : string, Symbol(B.baz,Decl(mergeThreeInterfaces.ts,67,20))
->b : B<string>, Symbol(b,Decl(mergeThreeInterfaces.ts,71,7))
->baz : string, Symbol(B.baz,Decl(mergeThreeInterfaces.ts,67,20))
+>r6 : string, Symbol(r6, Decl(mergeThreeInterfaces.ts, 76, 7))
+>b.baz : string, Symbol(B.baz, Decl(mergeThreeInterfaces.ts, 67, 20))
+>b : B<string>, Symbol(b, Decl(mergeThreeInterfaces.ts, 71, 7))
+>baz : string, Symbol(B.baz, Decl(mergeThreeInterfaces.ts, 67, 20))
 }

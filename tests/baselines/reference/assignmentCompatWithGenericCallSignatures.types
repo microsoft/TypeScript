@@ -2,26 +2,26 @@
 // some complex cases of assignment compat of generic signatures that stress contextual signature instantiation
 
 var f: <S extends { p: string }[]>(x: S) => void
->f : <S extends { p: string; }[]>(x: S) => void, Symbol(f,Decl(assignmentCompatWithGenericCallSignatures.ts,2,3))
->S : S, Symbol(S,Decl(assignmentCompatWithGenericCallSignatures.ts,2,8))
->p : string, Symbol(p,Decl(assignmentCompatWithGenericCallSignatures.ts,2,19))
->x : S, Symbol(x,Decl(assignmentCompatWithGenericCallSignatures.ts,2,35))
->S : S, Symbol(S,Decl(assignmentCompatWithGenericCallSignatures.ts,2,8))
+>f : <S extends { p: string; }[]>(x: S) => void, Symbol(f, Decl(assignmentCompatWithGenericCallSignatures.ts, 2, 3))
+>S : S, Symbol(S, Decl(assignmentCompatWithGenericCallSignatures.ts, 2, 8))
+>p : string, Symbol(p, Decl(assignmentCompatWithGenericCallSignatures.ts, 2, 19))
+>x : S, Symbol(x, Decl(assignmentCompatWithGenericCallSignatures.ts, 2, 35))
+>S : S, Symbol(S, Decl(assignmentCompatWithGenericCallSignatures.ts, 2, 8))
 
 var g: <T extends { p: string }>(x: T[]) => void
->g : <T extends { p: string; }>(x: T[]) => void, Symbol(g,Decl(assignmentCompatWithGenericCallSignatures.ts,3,3))
->T : T, Symbol(T,Decl(assignmentCompatWithGenericCallSignatures.ts,3,8))
->p : string, Symbol(p,Decl(assignmentCompatWithGenericCallSignatures.ts,3,19))
->x : T[], Symbol(x,Decl(assignmentCompatWithGenericCallSignatures.ts,3,33))
->T : T, Symbol(T,Decl(assignmentCompatWithGenericCallSignatures.ts,3,8))
+>g : <T extends { p: string; }>(x: T[]) => void, Symbol(g, Decl(assignmentCompatWithGenericCallSignatures.ts, 3, 3))
+>T : T, Symbol(T, Decl(assignmentCompatWithGenericCallSignatures.ts, 3, 8))
+>p : string, Symbol(p, Decl(assignmentCompatWithGenericCallSignatures.ts, 3, 19))
+>x : T[], Symbol(x, Decl(assignmentCompatWithGenericCallSignatures.ts, 3, 33))
+>T : T, Symbol(T, Decl(assignmentCompatWithGenericCallSignatures.ts, 3, 8))
 
 f = g; // ok
 >f = g : <T extends { p: string; }>(x: T[]) => void
->f : <S extends { p: string; }[]>(x: S) => void, Symbol(f,Decl(assignmentCompatWithGenericCallSignatures.ts,2,3))
->g : <T extends { p: string; }>(x: T[]) => void, Symbol(g,Decl(assignmentCompatWithGenericCallSignatures.ts,3,3))
+>f : <S extends { p: string; }[]>(x: S) => void, Symbol(f, Decl(assignmentCompatWithGenericCallSignatures.ts, 2, 3))
+>g : <T extends { p: string; }>(x: T[]) => void, Symbol(g, Decl(assignmentCompatWithGenericCallSignatures.ts, 3, 3))
 
 g = f; // ok
 >g = f : <S extends { p: string; }[]>(x: S) => void
->g : <T extends { p: string; }>(x: T[]) => void, Symbol(g,Decl(assignmentCompatWithGenericCallSignatures.ts,3,3))
->f : <S extends { p: string; }[]>(x: S) => void, Symbol(f,Decl(assignmentCompatWithGenericCallSignatures.ts,2,3))
+>g : <T extends { p: string; }>(x: T[]) => void, Symbol(g, Decl(assignmentCompatWithGenericCallSignatures.ts, 3, 3))
+>f : <S extends { p: string; }[]>(x: S) => void, Symbol(f, Decl(assignmentCompatWithGenericCallSignatures.ts, 2, 3))
 

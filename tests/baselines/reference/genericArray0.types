@@ -2,20 +2,20 @@
 
 
 var x:number[];
->x : number[], Symbol(x,Decl(genericArray0.ts,2,3))
+>x : number[], Symbol(x, Decl(genericArray0.ts, 2, 3))
 
 
 var y = x; 
->y : number[], Symbol(y,Decl(genericArray0.ts,5,3))
->x : number[], Symbol(x,Decl(genericArray0.ts,2,3))
+>y : number[], Symbol(y, Decl(genericArray0.ts, 5, 3))
+>x : number[], Symbol(x, Decl(genericArray0.ts, 2, 3))
 
 function map<U>() {
->map : <U>() => void, Symbol(map,Decl(genericArray0.ts,5,10))
->U : U, Symbol(U,Decl(genericArray0.ts,7,13))
+>map : <U>() => void, Symbol(map, Decl(genericArray0.ts, 5, 10))
+>U : U, Symbol(U, Decl(genericArray0.ts, 7, 13))
 
     var ys: U[] = [];
->ys : U[], Symbol(ys,Decl(genericArray0.ts,8,7))
->U : U, Symbol(U,Decl(genericArray0.ts,7,13))
+>ys : U[], Symbol(ys, Decl(genericArray0.ts, 8, 7))
+>U : U, Symbol(U, Decl(genericArray0.ts, 7, 13))
 >[] : undefined[]
 }
 

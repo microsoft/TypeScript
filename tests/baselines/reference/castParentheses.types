@@ -1,68 +1,68 @@
 === tests/cases/compiler/castParentheses.ts ===
 class a {
->a : a, Symbol(a,Decl(castParentheses.ts,0,0))
+>a : a, Symbol(a, Decl(castParentheses.ts, 0, 0))
 
     static b: any;
->b : any, Symbol(a.b,Decl(castParentheses.ts,0,9))
+>b : any, Symbol(a.b, Decl(castParentheses.ts, 0, 9))
 }
 
 var b = (<any>a);
->b : any, Symbol(b,Decl(castParentheses.ts,4,3),Decl(castParentheses.ts,5,3),Decl(castParentheses.ts,6,3),Decl(castParentheses.ts,7,3),Decl(castParentheses.ts,8,3),Decl(castParentheses.ts,9,3),Decl(castParentheses.ts,10,3))
+>b : any, Symbol(b, Decl(castParentheses.ts, 4, 3), Decl(castParentheses.ts, 5, 3), Decl(castParentheses.ts, 6, 3), Decl(castParentheses.ts, 7, 3), Decl(castParentheses.ts, 8, 3), Decl(castParentheses.ts, 9, 3), Decl(castParentheses.ts, 10, 3))
 >(<any>a) : any
 ><any>a : any
->a : typeof a, Symbol(a,Decl(castParentheses.ts,0,0))
+>a : typeof a, Symbol(a, Decl(castParentheses.ts, 0, 0))
 
 var b = (<any>a).b;
->b : any, Symbol(b,Decl(castParentheses.ts,4,3),Decl(castParentheses.ts,5,3),Decl(castParentheses.ts,6,3),Decl(castParentheses.ts,7,3),Decl(castParentheses.ts,8,3),Decl(castParentheses.ts,9,3),Decl(castParentheses.ts,10,3))
+>b : any, Symbol(b, Decl(castParentheses.ts, 4, 3), Decl(castParentheses.ts, 5, 3), Decl(castParentheses.ts, 6, 3), Decl(castParentheses.ts, 7, 3), Decl(castParentheses.ts, 8, 3), Decl(castParentheses.ts, 9, 3), Decl(castParentheses.ts, 10, 3))
 >(<any>a).b : any
 >(<any>a) : any
 ><any>a : any
->a : typeof a, Symbol(a,Decl(castParentheses.ts,0,0))
+>a : typeof a, Symbol(a, Decl(castParentheses.ts, 0, 0))
 >b : any
 
 var b = (<any>a.b).c;
->b : any, Symbol(b,Decl(castParentheses.ts,4,3),Decl(castParentheses.ts,5,3),Decl(castParentheses.ts,6,3),Decl(castParentheses.ts,7,3),Decl(castParentheses.ts,8,3),Decl(castParentheses.ts,9,3),Decl(castParentheses.ts,10,3))
+>b : any, Symbol(b, Decl(castParentheses.ts, 4, 3), Decl(castParentheses.ts, 5, 3), Decl(castParentheses.ts, 6, 3), Decl(castParentheses.ts, 7, 3), Decl(castParentheses.ts, 8, 3), Decl(castParentheses.ts, 9, 3), Decl(castParentheses.ts, 10, 3))
 >(<any>a.b).c : any
 >(<any>a.b) : any
 ><any>a.b : any
->a.b : any, Symbol(a.b,Decl(castParentheses.ts,0,9))
->a : typeof a, Symbol(a,Decl(castParentheses.ts,0,0))
->b : any, Symbol(a.b,Decl(castParentheses.ts,0,9))
+>a.b : any, Symbol(a.b, Decl(castParentheses.ts, 0, 9))
+>a : typeof a, Symbol(a, Decl(castParentheses.ts, 0, 0))
+>b : any, Symbol(a.b, Decl(castParentheses.ts, 0, 9))
 >c : any
 
 var b = (<any>a.b()).c;
->b : any, Symbol(b,Decl(castParentheses.ts,4,3),Decl(castParentheses.ts,5,3),Decl(castParentheses.ts,6,3),Decl(castParentheses.ts,7,3),Decl(castParentheses.ts,8,3),Decl(castParentheses.ts,9,3),Decl(castParentheses.ts,10,3))
+>b : any, Symbol(b, Decl(castParentheses.ts, 4, 3), Decl(castParentheses.ts, 5, 3), Decl(castParentheses.ts, 6, 3), Decl(castParentheses.ts, 7, 3), Decl(castParentheses.ts, 8, 3), Decl(castParentheses.ts, 9, 3), Decl(castParentheses.ts, 10, 3))
 >(<any>a.b()).c : any
 >(<any>a.b()) : any
 ><any>a.b() : any
 >a.b() : any
->a.b : any, Symbol(a.b,Decl(castParentheses.ts,0,9))
->a : typeof a, Symbol(a,Decl(castParentheses.ts,0,0))
->b : any, Symbol(a.b,Decl(castParentheses.ts,0,9))
+>a.b : any, Symbol(a.b, Decl(castParentheses.ts, 0, 9))
+>a : typeof a, Symbol(a, Decl(castParentheses.ts, 0, 0))
+>b : any, Symbol(a.b, Decl(castParentheses.ts, 0, 9))
 >c : any
 
 var b = (<any>new a);
->b : any, Symbol(b,Decl(castParentheses.ts,4,3),Decl(castParentheses.ts,5,3),Decl(castParentheses.ts,6,3),Decl(castParentheses.ts,7,3),Decl(castParentheses.ts,8,3),Decl(castParentheses.ts,9,3),Decl(castParentheses.ts,10,3))
+>b : any, Symbol(b, Decl(castParentheses.ts, 4, 3), Decl(castParentheses.ts, 5, 3), Decl(castParentheses.ts, 6, 3), Decl(castParentheses.ts, 7, 3), Decl(castParentheses.ts, 8, 3), Decl(castParentheses.ts, 9, 3), Decl(castParentheses.ts, 10, 3))
 >(<any>new a) : any
 ><any>new a : any
 >new a : a
->a : typeof a, Symbol(a,Decl(castParentheses.ts,0,0))
+>a : typeof a, Symbol(a, Decl(castParentheses.ts, 0, 0))
 
 var b = (<any>new a.b);
->b : any, Symbol(b,Decl(castParentheses.ts,4,3),Decl(castParentheses.ts,5,3),Decl(castParentheses.ts,6,3),Decl(castParentheses.ts,7,3),Decl(castParentheses.ts,8,3),Decl(castParentheses.ts,9,3),Decl(castParentheses.ts,10,3))
+>b : any, Symbol(b, Decl(castParentheses.ts, 4, 3), Decl(castParentheses.ts, 5, 3), Decl(castParentheses.ts, 6, 3), Decl(castParentheses.ts, 7, 3), Decl(castParentheses.ts, 8, 3), Decl(castParentheses.ts, 9, 3), Decl(castParentheses.ts, 10, 3))
 >(<any>new a.b) : any
 ><any>new a.b : any
 >new a.b : any
->a.b : any, Symbol(a.b,Decl(castParentheses.ts,0,9))
->a : typeof a, Symbol(a,Decl(castParentheses.ts,0,0))
->b : any, Symbol(a.b,Decl(castParentheses.ts,0,9))
+>a.b : any, Symbol(a.b, Decl(castParentheses.ts, 0, 9))
+>a : typeof a, Symbol(a, Decl(castParentheses.ts, 0, 0))
+>b : any, Symbol(a.b, Decl(castParentheses.ts, 0, 9))
 
 var b = (<any>new a).b 
->b : any, Symbol(b,Decl(castParentheses.ts,4,3),Decl(castParentheses.ts,5,3),Decl(castParentheses.ts,6,3),Decl(castParentheses.ts,7,3),Decl(castParentheses.ts,8,3),Decl(castParentheses.ts,9,3),Decl(castParentheses.ts,10,3))
+>b : any, Symbol(b, Decl(castParentheses.ts, 4, 3), Decl(castParentheses.ts, 5, 3), Decl(castParentheses.ts, 6, 3), Decl(castParentheses.ts, 7, 3), Decl(castParentheses.ts, 8, 3), Decl(castParentheses.ts, 9, 3), Decl(castParentheses.ts, 10, 3))
 >(<any>new a).b : any
 >(<any>new a) : any
 ><any>new a : any
 >new a : a
->a : typeof a, Symbol(a,Decl(castParentheses.ts,0,0))
+>a : typeof a, Symbol(a, Decl(castParentheses.ts, 0, 0))
 >b : any
 

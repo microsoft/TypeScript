@@ -1,28 +1,28 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType7_ES6.ts ===
 interface I<T> {
->I : I<T>, Symbol(I,Decl(computedPropertyNamesContextualType7_ES6.ts,0,0))
->T : T, Symbol(T,Decl(computedPropertyNamesContextualType7_ES6.ts,0,12))
+>I : I<T>, Symbol(I, Decl(computedPropertyNamesContextualType7_ES6.ts, 0, 0))
+>T : T, Symbol(T, Decl(computedPropertyNamesContextualType7_ES6.ts, 0, 12))
 
     [s: number]: T;
->s : number, Symbol(s,Decl(computedPropertyNamesContextualType7_ES6.ts,1,5))
->T : T, Symbol(T,Decl(computedPropertyNamesContextualType7_ES6.ts,0,12))
+>s : number, Symbol(s, Decl(computedPropertyNamesContextualType7_ES6.ts, 1, 5))
+>T : T, Symbol(T, Decl(computedPropertyNamesContextualType7_ES6.ts, 0, 12))
 }
 
 declare function foo<T>(obj: I<T>): T
->foo : <T>(obj: I<T>) => T, Symbol(foo,Decl(computedPropertyNamesContextualType7_ES6.ts,2,1))
->T : T, Symbol(T,Decl(computedPropertyNamesContextualType7_ES6.ts,4,21))
->obj : I<T>, Symbol(obj,Decl(computedPropertyNamesContextualType7_ES6.ts,4,24))
->I : I<T>, Symbol(I,Decl(computedPropertyNamesContextualType7_ES6.ts,0,0))
->T : T, Symbol(T,Decl(computedPropertyNamesContextualType7_ES6.ts,4,21))
->T : T, Symbol(T,Decl(computedPropertyNamesContextualType7_ES6.ts,4,21))
+>foo : <T>(obj: I<T>) => T, Symbol(foo, Decl(computedPropertyNamesContextualType7_ES6.ts, 2, 1))
+>T : T, Symbol(T, Decl(computedPropertyNamesContextualType7_ES6.ts, 4, 21))
+>obj : I<T>, Symbol(obj, Decl(computedPropertyNamesContextualType7_ES6.ts, 4, 24))
+>I : I<T>, Symbol(I, Decl(computedPropertyNamesContextualType7_ES6.ts, 0, 0))
+>T : T, Symbol(T, Decl(computedPropertyNamesContextualType7_ES6.ts, 4, 21))
+>T : T, Symbol(T, Decl(computedPropertyNamesContextualType7_ES6.ts, 4, 21))
 
 foo({
 >foo({    p: "",    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]}) : number | number[] | (() => void)
->foo : <T>(obj: I<T>) => T, Symbol(foo,Decl(computedPropertyNamesContextualType7_ES6.ts,2,1))
+>foo : <T>(obj: I<T>) => T, Symbol(foo, Decl(computedPropertyNamesContextualType7_ES6.ts, 2, 1))
 >{    p: "",    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]} : { [x: number]: number | number[] | (() => void); 0: () => void; p: string; }
 
     p: "",
->p : string, Symbol(p,Decl(computedPropertyNamesContextualType7_ES6.ts,6,5))
+>p : string, Symbol(p, Decl(computedPropertyNamesContextualType7_ES6.ts, 6, 5))
 >"" : string
 
     0: () => { },

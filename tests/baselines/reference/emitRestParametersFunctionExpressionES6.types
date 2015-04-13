@@ -1,24 +1,24 @@
 === tests/cases/conformance/es6/restParameters/emitRestParametersFunctionExpressionES6.ts ===
 var funcExp = (...rest) => { }
->funcExp : (...rest: any[]) => void, Symbol(funcExp,Decl(emitRestParametersFunctionExpressionES6.ts,0,3))
+>funcExp : (...rest: any[]) => void, Symbol(funcExp, Decl(emitRestParametersFunctionExpressionES6.ts, 0, 3))
 >(...rest) => { } : (...rest: any[]) => void
->rest : any[], Symbol(rest,Decl(emitRestParametersFunctionExpressionES6.ts,0,15))
+>rest : any[], Symbol(rest, Decl(emitRestParametersFunctionExpressionES6.ts, 0, 15))
 
 var funcExp1 = (X: number, ...rest) => { }
->funcExp1 : (X: number, ...rest: any[]) => void, Symbol(funcExp1,Decl(emitRestParametersFunctionExpressionES6.ts,1,3))
+>funcExp1 : (X: number, ...rest: any[]) => void, Symbol(funcExp1, Decl(emitRestParametersFunctionExpressionES6.ts, 1, 3))
 >(X: number, ...rest) => { } : (X: number, ...rest: any[]) => void
->X : number, Symbol(X,Decl(emitRestParametersFunctionExpressionES6.ts,1,16))
->rest : any[], Symbol(rest,Decl(emitRestParametersFunctionExpressionES6.ts,1,26))
+>X : number, Symbol(X, Decl(emitRestParametersFunctionExpressionES6.ts, 1, 16))
+>rest : any[], Symbol(rest, Decl(emitRestParametersFunctionExpressionES6.ts, 1, 26))
 
 var funcExp2 = function (...rest) { }
->funcExp2 : (...rest: any[]) => void, Symbol(funcExp2,Decl(emitRestParametersFunctionExpressionES6.ts,2,3))
+>funcExp2 : (...rest: any[]) => void, Symbol(funcExp2, Decl(emitRestParametersFunctionExpressionES6.ts, 2, 3))
 >function (...rest) { } : (...rest: any[]) => void
->rest : any[], Symbol(rest,Decl(emitRestParametersFunctionExpressionES6.ts,2,25))
+>rest : any[], Symbol(rest, Decl(emitRestParametersFunctionExpressionES6.ts, 2, 25))
 
 var funcExp3 = (function (...rest) { })()
->funcExp3 : void, Symbol(funcExp3,Decl(emitRestParametersFunctionExpressionES6.ts,3,3))
+>funcExp3 : void, Symbol(funcExp3, Decl(emitRestParametersFunctionExpressionES6.ts, 3, 3))
 >(function (...rest) { })() : void
 >(function (...rest) { }) : (...rest: any[]) => void
 >function (...rest) { } : (...rest: any[]) => void
->rest : any[], Symbol(rest,Decl(emitRestParametersFunctionExpressionES6.ts,3,26))
+>rest : any[], Symbol(rest, Decl(emitRestParametersFunctionExpressionES6.ts, 3, 26))
 

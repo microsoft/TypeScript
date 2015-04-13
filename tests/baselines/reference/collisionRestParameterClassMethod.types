@@ -1,107 +1,107 @@
 === tests/cases/compiler/collisionRestParameterClassMethod.ts ===
 class c1 {
->c1 : c1, Symbol(c1,Decl(collisionRestParameterClassMethod.ts,0,0))
+>c1 : c1, Symbol(c1, Decl(collisionRestParameterClassMethod.ts, 0, 0))
 
     public foo(_i: number, ...restParameters) { //_i is error
->foo : (_i: number, ...restParameters: any[]) => void, Symbol(foo,Decl(collisionRestParameterClassMethod.ts,0,10))
->_i : number, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,1,15),Decl(collisionRestParameterClassMethod.ts,2,11))
->restParameters : any[], Symbol(restParameters,Decl(collisionRestParameterClassMethod.ts,1,26))
+>foo : (_i: number, ...restParameters: any[]) => void, Symbol(foo, Decl(collisionRestParameterClassMethod.ts, 0, 10))
+>_i : number, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 1, 15), Decl(collisionRestParameterClassMethod.ts, 2, 11))
+>restParameters : any[], Symbol(restParameters, Decl(collisionRestParameterClassMethod.ts, 1, 26))
 
         var _i = 10; // no error
->_i : number, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,1,15),Decl(collisionRestParameterClassMethod.ts,2,11))
+>_i : number, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 1, 15), Decl(collisionRestParameterClassMethod.ts, 2, 11))
 >10 : number
     }
     public fooNoError(_i: number) { // no error
->fooNoError : (_i: number) => void, Symbol(fooNoError,Decl(collisionRestParameterClassMethod.ts,3,5))
->_i : number, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,4,22),Decl(collisionRestParameterClassMethod.ts,5,11))
+>fooNoError : (_i: number) => void, Symbol(fooNoError, Decl(collisionRestParameterClassMethod.ts, 3, 5))
+>_i : number, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 4, 22), Decl(collisionRestParameterClassMethod.ts, 5, 11))
 
         var _i = 10; // no error
->_i : number, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,4,22),Decl(collisionRestParameterClassMethod.ts,5,11))
+>_i : number, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 4, 22), Decl(collisionRestParameterClassMethod.ts, 5, 11))
 >10 : number
     }
     public f4(_i: number, ...rest); // no codegen no error
->f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }, Symbol(f4,Decl(collisionRestParameterClassMethod.ts,6,5),Decl(collisionRestParameterClassMethod.ts,7,35),Decl(collisionRestParameterClassMethod.ts,8,35))
->_i : number, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,7,14))
->rest : any[], Symbol(rest,Decl(collisionRestParameterClassMethod.ts,7,25))
+>f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }, Symbol(f4, Decl(collisionRestParameterClassMethod.ts, 6, 5), Decl(collisionRestParameterClassMethod.ts, 7, 35), Decl(collisionRestParameterClassMethod.ts, 8, 35))
+>_i : number, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 7, 14))
+>rest : any[], Symbol(rest, Decl(collisionRestParameterClassMethod.ts, 7, 25))
 
     public f4(_i: string, ...rest); // no codegen no error
->f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }, Symbol(f4,Decl(collisionRestParameterClassMethod.ts,6,5),Decl(collisionRestParameterClassMethod.ts,7,35),Decl(collisionRestParameterClassMethod.ts,8,35))
->_i : string, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,8,14))
->rest : any[], Symbol(rest,Decl(collisionRestParameterClassMethod.ts,8,25))
+>f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }, Symbol(f4, Decl(collisionRestParameterClassMethod.ts, 6, 5), Decl(collisionRestParameterClassMethod.ts, 7, 35), Decl(collisionRestParameterClassMethod.ts, 8, 35))
+>_i : string, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 8, 14))
+>rest : any[], Symbol(rest, Decl(collisionRestParameterClassMethod.ts, 8, 25))
 
     public f4(_i: any, ...rest) { // error
->f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }, Symbol(f4,Decl(collisionRestParameterClassMethod.ts,6,5),Decl(collisionRestParameterClassMethod.ts,7,35),Decl(collisionRestParameterClassMethod.ts,8,35))
->_i : any, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,9,14),Decl(collisionRestParameterClassMethod.ts,10,11))
->rest : any[], Symbol(rest,Decl(collisionRestParameterClassMethod.ts,9,22))
+>f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }, Symbol(f4, Decl(collisionRestParameterClassMethod.ts, 6, 5), Decl(collisionRestParameterClassMethod.ts, 7, 35), Decl(collisionRestParameterClassMethod.ts, 8, 35))
+>_i : any, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 9, 14), Decl(collisionRestParameterClassMethod.ts, 10, 11))
+>rest : any[], Symbol(rest, Decl(collisionRestParameterClassMethod.ts, 9, 22))
 
         var _i: any; // no error
->_i : any, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,9,14),Decl(collisionRestParameterClassMethod.ts,10,11))
+>_i : any, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 9, 14), Decl(collisionRestParameterClassMethod.ts, 10, 11))
     }
 
     public f4NoError(_i: number); // no error
->f4NoError : { (_i: number): any; (_i: string): any; }, Symbol(f4NoError,Decl(collisionRestParameterClassMethod.ts,11,5),Decl(collisionRestParameterClassMethod.ts,13,33),Decl(collisionRestParameterClassMethod.ts,14,33))
->_i : number, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,13,21))
+>f4NoError : { (_i: number): any; (_i: string): any; }, Symbol(f4NoError, Decl(collisionRestParameterClassMethod.ts, 11, 5), Decl(collisionRestParameterClassMethod.ts, 13, 33), Decl(collisionRestParameterClassMethod.ts, 14, 33))
+>_i : number, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 13, 21))
 
     public f4NoError(_i: string); // no error
->f4NoError : { (_i: number): any; (_i: string): any; }, Symbol(f4NoError,Decl(collisionRestParameterClassMethod.ts,11,5),Decl(collisionRestParameterClassMethod.ts,13,33),Decl(collisionRestParameterClassMethod.ts,14,33))
->_i : string, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,14,21))
+>f4NoError : { (_i: number): any; (_i: string): any; }, Symbol(f4NoError, Decl(collisionRestParameterClassMethod.ts, 11, 5), Decl(collisionRestParameterClassMethod.ts, 13, 33), Decl(collisionRestParameterClassMethod.ts, 14, 33))
+>_i : string, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 14, 21))
 
     public f4NoError(_i: any) { // no error
->f4NoError : { (_i: number): any; (_i: string): any; }, Symbol(f4NoError,Decl(collisionRestParameterClassMethod.ts,11,5),Decl(collisionRestParameterClassMethod.ts,13,33),Decl(collisionRestParameterClassMethod.ts,14,33))
->_i : any, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,15,21),Decl(collisionRestParameterClassMethod.ts,16,11))
+>f4NoError : { (_i: number): any; (_i: string): any; }, Symbol(f4NoError, Decl(collisionRestParameterClassMethod.ts, 11, 5), Decl(collisionRestParameterClassMethod.ts, 13, 33), Decl(collisionRestParameterClassMethod.ts, 14, 33))
+>_i : any, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 15, 21), Decl(collisionRestParameterClassMethod.ts, 16, 11))
 
         var _i: any; // no error
->_i : any, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,15,21),Decl(collisionRestParameterClassMethod.ts,16,11))
+>_i : any, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 15, 21), Decl(collisionRestParameterClassMethod.ts, 16, 11))
     }
 }
 
 declare class c2 {
->c2 : c2, Symbol(c2,Decl(collisionRestParameterClassMethod.ts,18,1))
+>c2 : c2, Symbol(c2, Decl(collisionRestParameterClassMethod.ts, 18, 1))
 
     public foo(_i: number, ...restParameters); // No error - no code gen
->foo : (_i: number, ...restParameters: any[]) => any, Symbol(foo,Decl(collisionRestParameterClassMethod.ts,20,18))
->_i : number, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,21,15))
->restParameters : any[], Symbol(restParameters,Decl(collisionRestParameterClassMethod.ts,21,26))
+>foo : (_i: number, ...restParameters: any[]) => any, Symbol(foo, Decl(collisionRestParameterClassMethod.ts, 20, 18))
+>_i : number, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 21, 15))
+>restParameters : any[], Symbol(restParameters, Decl(collisionRestParameterClassMethod.ts, 21, 26))
 
     public fooNoError(_i: number); // no error
->fooNoError : (_i: number) => any, Symbol(fooNoError,Decl(collisionRestParameterClassMethod.ts,21,46))
->_i : number, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,22,22))
+>fooNoError : (_i: number) => any, Symbol(fooNoError, Decl(collisionRestParameterClassMethod.ts, 21, 46))
+>_i : number, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 22, 22))
 
     public f4(_i: number, ...rest); // no codegen no error
->f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }, Symbol(f4,Decl(collisionRestParameterClassMethod.ts,22,34),Decl(collisionRestParameterClassMethod.ts,24,35))
->_i : number, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,24,14))
->rest : any[], Symbol(rest,Decl(collisionRestParameterClassMethod.ts,24,25))
+>f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }, Symbol(f4, Decl(collisionRestParameterClassMethod.ts, 22, 34), Decl(collisionRestParameterClassMethod.ts, 24, 35))
+>_i : number, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 24, 14))
+>rest : any[], Symbol(rest, Decl(collisionRestParameterClassMethod.ts, 24, 25))
 
     public f4(_i: string, ...rest); // no codegen no error
->f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }, Symbol(f4,Decl(collisionRestParameterClassMethod.ts,22,34),Decl(collisionRestParameterClassMethod.ts,24,35))
->_i : string, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,25,14))
->rest : any[], Symbol(rest,Decl(collisionRestParameterClassMethod.ts,25,25))
+>f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }, Symbol(f4, Decl(collisionRestParameterClassMethod.ts, 22, 34), Decl(collisionRestParameterClassMethod.ts, 24, 35))
+>_i : string, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 25, 14))
+>rest : any[], Symbol(rest, Decl(collisionRestParameterClassMethod.ts, 25, 25))
 
     public f4NoError(_i: number); // no error
->f4NoError : { (_i: number): any; (_i: string): any; }, Symbol(f4NoError,Decl(collisionRestParameterClassMethod.ts,25,35),Decl(collisionRestParameterClassMethod.ts,26,33))
->_i : number, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,26,21))
+>f4NoError : { (_i: number): any; (_i: string): any; }, Symbol(f4NoError, Decl(collisionRestParameterClassMethod.ts, 25, 35), Decl(collisionRestParameterClassMethod.ts, 26, 33))
+>_i : number, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 26, 21))
 
     public f4NoError(_i: string); // no error
->f4NoError : { (_i: number): any; (_i: string): any; }, Symbol(f4NoError,Decl(collisionRestParameterClassMethod.ts,25,35),Decl(collisionRestParameterClassMethod.ts,26,33))
->_i : string, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,27,21))
+>f4NoError : { (_i: number): any; (_i: string): any; }, Symbol(f4NoError, Decl(collisionRestParameterClassMethod.ts, 25, 35), Decl(collisionRestParameterClassMethod.ts, 26, 33))
+>_i : string, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 27, 21))
 }
 
 class c3 {
->c3 : c3, Symbol(c3,Decl(collisionRestParameterClassMethod.ts,28,1))
+>c3 : c3, Symbol(c3, Decl(collisionRestParameterClassMethod.ts, 28, 1))
 
     public foo(...restParameters) {
->foo : (...restParameters: any[]) => void, Symbol(foo,Decl(collisionRestParameterClassMethod.ts,30,10))
->restParameters : any[], Symbol(restParameters,Decl(collisionRestParameterClassMethod.ts,31,15))
+>foo : (...restParameters: any[]) => void, Symbol(foo, Decl(collisionRestParameterClassMethod.ts, 30, 10))
+>restParameters : any[], Symbol(restParameters, Decl(collisionRestParameterClassMethod.ts, 31, 15))
 
         var _i = 10; // no error
->_i : number, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,32,11))
+>_i : number, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 32, 11))
 >10 : number
     }
     public fooNoError() {
->fooNoError : () => void, Symbol(fooNoError,Decl(collisionRestParameterClassMethod.ts,33,5))
+>fooNoError : () => void, Symbol(fooNoError, Decl(collisionRestParameterClassMethod.ts, 33, 5))
 
         var _i = 10; // no error
->_i : number, Symbol(_i,Decl(collisionRestParameterClassMethod.ts,35,11))
+>_i : number, Symbol(_i, Decl(collisionRestParameterClassMethod.ts, 35, 11))
 >10 : number
     }
 }

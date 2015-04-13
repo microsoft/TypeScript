@@ -1,20 +1,20 @@
 === tests/cases/conformance/types/specifyingTypes/typeQueries/typeofModuleWithoutExports.ts ===
 module M {
->M : typeof M, Symbol(M,Decl(typeofModuleWithoutExports.ts,0,0))
+>M : typeof M, Symbol(M, Decl(typeofModuleWithoutExports.ts, 0, 0))
 
     var x = 1;
->x : number, Symbol(x,Decl(typeofModuleWithoutExports.ts,1,7))
+>x : number, Symbol(x, Decl(typeofModuleWithoutExports.ts, 1, 7))
 >1 : number
 
     class C {
->C : C, Symbol(C,Decl(typeofModuleWithoutExports.ts,1,14))
+>C : C, Symbol(C, Decl(typeofModuleWithoutExports.ts, 1, 14))
 
         foo: number;
->foo : number, Symbol(foo,Decl(typeofModuleWithoutExports.ts,2,13))
+>foo : number, Symbol(foo, Decl(typeofModuleWithoutExports.ts, 2, 13))
     }
 }
 
 var r: typeof M;
->r : typeof M, Symbol(r,Decl(typeofModuleWithoutExports.ts,7,3))
->M : typeof M, Symbol(M,Decl(typeofModuleWithoutExports.ts,0,0))
+>r : typeof M, Symbol(r, Decl(typeofModuleWithoutExports.ts, 7, 3))
+>M : typeof M, Symbol(M, Decl(typeofModuleWithoutExports.ts, 0, 0))
 

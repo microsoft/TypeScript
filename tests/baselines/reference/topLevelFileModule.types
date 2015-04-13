@@ -1,25 +1,25 @@
 === tests/cases/conformance/externalModules/foo_1.ts ===
 import foo = require("vs/foo_0");
->foo : typeof foo, Symbol(foo,Decl(foo_1.ts,0,0))
+>foo : typeof foo, Symbol(foo, Decl(foo_1.ts, 0, 0))
 
 import fum = require("vs/fum");
->fum : typeof fum, Symbol(fum,Decl(foo_1.ts,0,33))
+>fum : typeof fum, Symbol(fum, Decl(foo_1.ts, 0, 33))
 
 var z = foo.x + fum.y;
->z : number, Symbol(z,Decl(foo_1.ts,2,3))
+>z : number, Symbol(z, Decl(foo_1.ts, 2, 3))
 >foo.x + fum.y : number
->foo.x : number, Symbol(foo.x,Decl(foo_0.ts,0,10))
->foo : typeof foo, Symbol(foo,Decl(foo_1.ts,0,0))
->x : number, Symbol(foo.x,Decl(foo_0.ts,0,10))
->fum.y : number, Symbol(fum.y,Decl(fum.d.ts,0,18))
->fum : typeof fum, Symbol(fum,Decl(foo_1.ts,0,33))
->y : number, Symbol(fum.y,Decl(fum.d.ts,0,18))
+>foo.x : number, Symbol(foo.x, Decl(foo_0.ts, 0, 10))
+>foo : typeof foo, Symbol(foo, Decl(foo_1.ts, 0, 0))
+>x : number, Symbol(foo.x, Decl(foo_0.ts, 0, 10))
+>fum.y : number, Symbol(fum.y, Decl(fum.d.ts, 0, 18))
+>fum : typeof fum, Symbol(fum, Decl(foo_1.ts, 0, 33))
+>y : number, Symbol(fum.y, Decl(fum.d.ts, 0, 18))
 
 === tests/cases/conformance/externalModules/vs/foo_0.ts ===
 export var x: number;
->x : number, Symbol(x,Decl(foo_0.ts,0,10))
+>x : number, Symbol(x, Decl(foo_0.ts, 0, 10))
 
 === tests/cases/conformance/externalModules/vs/fum.d.ts ===
 export declare var y: number;
->y : number, Symbol(y,Decl(fum.d.ts,0,18))
+>y : number, Symbol(y, Decl(fum.d.ts, 0, 18))
 

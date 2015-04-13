@@ -1,56 +1,56 @@
 === tests/cases/compiler/reorderProperties.ts ===
 interface A<T> {
->A : A<T>, Symbol(A,Decl(reorderProperties.ts,0,0))
->T : T, Symbol(T,Decl(reorderProperties.ts,0,12))
+>A : A<T>, Symbol(A, Decl(reorderProperties.ts, 0, 0))
+>T : T, Symbol(T, Decl(reorderProperties.ts, 0, 12))
 
     x: T
->x : T, Symbol(x,Decl(reorderProperties.ts,0,16))
->T : T, Symbol(T,Decl(reorderProperties.ts,0,12))
+>x : T, Symbol(x, Decl(reorderProperties.ts, 0, 16))
+>T : T, Symbol(T, Decl(reorderProperties.ts, 0, 12))
 }
 
 interface B<T> {
->B : B<T>, Symbol(B,Decl(reorderProperties.ts,2,1))
->T : T, Symbol(T,Decl(reorderProperties.ts,4,12))
+>B : B<T>, Symbol(B, Decl(reorderProperties.ts, 2, 1))
+>T : T, Symbol(T, Decl(reorderProperties.ts, 4, 12))
 
     x: T
->x : T, Symbol(x,Decl(reorderProperties.ts,4,16))
->T : T, Symbol(T,Decl(reorderProperties.ts,4,12))
+>x : T, Symbol(x, Decl(reorderProperties.ts, 4, 16))
+>T : T, Symbol(T, Decl(reorderProperties.ts, 4, 12))
 }
 
 interface C<S> extends A<D<S>> {
->C : C<S>, Symbol(C,Decl(reorderProperties.ts,6,1))
->S : S, Symbol(S,Decl(reorderProperties.ts,8,12))
->A : A<T>, Symbol(A,Decl(reorderProperties.ts,0,0))
->D : D<S>, Symbol(D,Decl(reorderProperties.ts,10,1))
->S : S, Symbol(S,Decl(reorderProperties.ts,8,12))
+>C : C<S>, Symbol(C, Decl(reorderProperties.ts, 6, 1))
+>S : S, Symbol(S, Decl(reorderProperties.ts, 8, 12))
+>A : A<T>, Symbol(A, Decl(reorderProperties.ts, 0, 0))
+>D : D<S>, Symbol(D, Decl(reorderProperties.ts, 10, 1))
+>S : S, Symbol(S, Decl(reorderProperties.ts, 8, 12))
 
     y: S
->y : S, Symbol(y,Decl(reorderProperties.ts,8,32))
->S : S, Symbol(S,Decl(reorderProperties.ts,8,12))
+>y : S, Symbol(y, Decl(reorderProperties.ts, 8, 32))
+>S : S, Symbol(S, Decl(reorderProperties.ts, 8, 12))
 }
 
 interface D<S> extends B<C<S>> {
->D : D<S>, Symbol(D,Decl(reorderProperties.ts,10,1))
->S : S, Symbol(S,Decl(reorderProperties.ts,12,12))
->B : B<T>, Symbol(B,Decl(reorderProperties.ts,2,1))
->C : C<S>, Symbol(C,Decl(reorderProperties.ts,6,1))
->S : S, Symbol(S,Decl(reorderProperties.ts,12,12))
+>D : D<S>, Symbol(D, Decl(reorderProperties.ts, 10, 1))
+>S : S, Symbol(S, Decl(reorderProperties.ts, 12, 12))
+>B : B<T>, Symbol(B, Decl(reorderProperties.ts, 2, 1))
+>C : C<S>, Symbol(C, Decl(reorderProperties.ts, 6, 1))
+>S : S, Symbol(S, Decl(reorderProperties.ts, 12, 12))
 
     y: S
->y : S, Symbol(y,Decl(reorderProperties.ts,12,32))
->S : S, Symbol(S,Decl(reorderProperties.ts,12,12))
+>y : S, Symbol(y, Decl(reorderProperties.ts, 12, 32))
+>S : S, Symbol(S, Decl(reorderProperties.ts, 12, 12))
 }
 
 var c: C<{ s: string; n: number }>
->c : C<{ s: string; n: number; }>, Symbol(c,Decl(reorderProperties.ts,16,3))
->C : C<S>, Symbol(C,Decl(reorderProperties.ts,6,1))
->s : string, Symbol(s,Decl(reorderProperties.ts,16,10))
->n : number, Symbol(n,Decl(reorderProperties.ts,16,21))
+>c : C<{ s: string; n: number; }>, Symbol(c, Decl(reorderProperties.ts, 16, 3))
+>C : C<S>, Symbol(C, Decl(reorderProperties.ts, 6, 1))
+>s : string, Symbol(s, Decl(reorderProperties.ts, 16, 10))
+>n : number, Symbol(n, Decl(reorderProperties.ts, 16, 21))
 
 var d: D<{ n: number; s: string }> = c
->d : D<{ n: number; s: string; }>, Symbol(d,Decl(reorderProperties.ts,17,3))
->D : D<S>, Symbol(D,Decl(reorderProperties.ts,10,1))
->n : number, Symbol(n,Decl(reorderProperties.ts,17,10))
->s : string, Symbol(s,Decl(reorderProperties.ts,17,21))
->c : C<{ s: string; n: number; }>, Symbol(c,Decl(reorderProperties.ts,16,3))
+>d : D<{ n: number; s: string; }>, Symbol(d, Decl(reorderProperties.ts, 17, 3))
+>D : D<S>, Symbol(D, Decl(reorderProperties.ts, 10, 1))
+>n : number, Symbol(n, Decl(reorderProperties.ts, 17, 10))
+>s : string, Symbol(s, Decl(reorderProperties.ts, 17, 21))
+>c : C<{ s: string; n: number; }>, Symbol(c, Decl(reorderProperties.ts, 16, 3))
 

@@ -6,7 +6,7 @@ while (true) {
 >true : boolean
 
   function f() {
->f : () => void, Symbol(f,Decl(parser_duplicateLabel3.ts,1,14))
+>f : () => void, Symbol(f, Decl(parser_duplicateLabel3.ts, 1, 14))
 
     target:
 >target : any

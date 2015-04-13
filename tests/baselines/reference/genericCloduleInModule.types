@@ -1,34 +1,34 @@
 === tests/cases/compiler/genericCloduleInModule.ts ===
 module A {
->A : typeof A, Symbol(A,Decl(genericCloduleInModule.ts,0,0))
+>A : typeof A, Symbol(A, Decl(genericCloduleInModule.ts, 0, 0))
 
     export class B<T> {
->B : B<T>, Symbol(B,Decl(genericCloduleInModule.ts,0,10),Decl(genericCloduleInModule.ts,4,5))
->T : T, Symbol(T,Decl(genericCloduleInModule.ts,1,19))
+>B : B<T>, Symbol(B, Decl(genericCloduleInModule.ts, 0, 10), Decl(genericCloduleInModule.ts, 4, 5))
+>T : T, Symbol(T, Decl(genericCloduleInModule.ts, 1, 19))
 
         foo() { }
->foo : () => void, Symbol(foo,Decl(genericCloduleInModule.ts,1,23))
+>foo : () => void, Symbol(foo, Decl(genericCloduleInModule.ts, 1, 23))
 
         static bar() { }
->bar : () => void, Symbol(B.bar,Decl(genericCloduleInModule.ts,2,17))
+>bar : () => void, Symbol(B.bar, Decl(genericCloduleInModule.ts, 2, 17))
     }
     export module B {
->B : typeof B, Symbol(B,Decl(genericCloduleInModule.ts,0,10),Decl(genericCloduleInModule.ts,4,5))
+>B : typeof B, Symbol(B, Decl(genericCloduleInModule.ts, 0, 10), Decl(genericCloduleInModule.ts, 4, 5))
 
         export var x = 1;
->x : number, Symbol(x,Decl(genericCloduleInModule.ts,6,18))
+>x : number, Symbol(x, Decl(genericCloduleInModule.ts, 6, 18))
 >1 : number
     }
 }
 
 var b: A.B<number>;
->b : A.B<number>, Symbol(b,Decl(genericCloduleInModule.ts,10,3))
->A : any, Symbol(A,Decl(genericCloduleInModule.ts,0,0))
->B : A.B<T>, Symbol(A.B,Decl(genericCloduleInModule.ts,0,10),Decl(genericCloduleInModule.ts,4,5))
+>b : A.B<number>, Symbol(b, Decl(genericCloduleInModule.ts, 10, 3))
+>A : any, Symbol(A, Decl(genericCloduleInModule.ts, 0, 0))
+>B : A.B<T>, Symbol(A.B, Decl(genericCloduleInModule.ts, 0, 10), Decl(genericCloduleInModule.ts, 4, 5))
 
 b.foo();
 >b.foo() : void
->b.foo : () => void, Symbol(A.B.foo,Decl(genericCloduleInModule.ts,1,23))
->b : A.B<number>, Symbol(b,Decl(genericCloduleInModule.ts,10,3))
->foo : () => void, Symbol(A.B.foo,Decl(genericCloduleInModule.ts,1,23))
+>b.foo : () => void, Symbol(A.B.foo, Decl(genericCloduleInModule.ts, 1, 23))
+>b : A.B<number>, Symbol(b, Decl(genericCloduleInModule.ts, 10, 3))
+>foo : () => void, Symbol(A.B.foo, Decl(genericCloduleInModule.ts, 1, 23))
 

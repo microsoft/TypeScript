@@ -1,32 +1,32 @@
 === tests/cases/compiler/assignmentCompatForEnums.ts ===
 enum TokenType { One, Two };
->TokenType : TokenType, Symbol(TokenType,Decl(assignmentCompatForEnums.ts,0,0))
->One : TokenType, Symbol(TokenType.One,Decl(assignmentCompatForEnums.ts,0,16))
->Two : TokenType, Symbol(TokenType.Two,Decl(assignmentCompatForEnums.ts,0,21))
+>TokenType : TokenType, Symbol(TokenType, Decl(assignmentCompatForEnums.ts, 0, 0))
+>One : TokenType, Symbol(TokenType.One, Decl(assignmentCompatForEnums.ts, 0, 16))
+>Two : TokenType, Symbol(TokenType.Two, Decl(assignmentCompatForEnums.ts, 0, 21))
 
 var list = {};
->list : {}, Symbol(list,Decl(assignmentCompatForEnums.ts,2,3))
+>list : {}, Symbol(list, Decl(assignmentCompatForEnums.ts, 2, 3))
 >{} : {}
 
 
 function returnType(): TokenType { return null; }
->returnType : () => TokenType, Symbol(returnType,Decl(assignmentCompatForEnums.ts,2,14))
->TokenType : TokenType, Symbol(TokenType,Decl(assignmentCompatForEnums.ts,0,0))
+>returnType : () => TokenType, Symbol(returnType, Decl(assignmentCompatForEnums.ts, 2, 14))
+>TokenType : TokenType, Symbol(TokenType, Decl(assignmentCompatForEnums.ts, 0, 0))
 >null : null
 
 function foo() {
->foo : () => void, Symbol(foo,Decl(assignmentCompatForEnums.ts,5,49))
+>foo : () => void, Symbol(foo, Decl(assignmentCompatForEnums.ts, 5, 49))
 
     var x = returnType();
->x : TokenType, Symbol(x,Decl(assignmentCompatForEnums.ts,8,7),Decl(assignmentCompatForEnums.ts,10,7))
+>x : TokenType, Symbol(x, Decl(assignmentCompatForEnums.ts, 8, 7), Decl(assignmentCompatForEnums.ts, 10, 7))
 >returnType() : TokenType
->returnType : () => TokenType, Symbol(returnType,Decl(assignmentCompatForEnums.ts,2,14))
+>returnType : () => TokenType, Symbol(returnType, Decl(assignmentCompatForEnums.ts, 2, 14))
 
     var x: TokenType = list['one'];
->x : TokenType, Symbol(x,Decl(assignmentCompatForEnums.ts,8,7),Decl(assignmentCompatForEnums.ts,10,7))
->TokenType : TokenType, Symbol(TokenType,Decl(assignmentCompatForEnums.ts,0,0))
+>x : TokenType, Symbol(x, Decl(assignmentCompatForEnums.ts, 8, 7), Decl(assignmentCompatForEnums.ts, 10, 7))
+>TokenType : TokenType, Symbol(TokenType, Decl(assignmentCompatForEnums.ts, 0, 0))
 >list['one'] : any
->list : {}, Symbol(list,Decl(assignmentCompatForEnums.ts,2,3))
+>list : {}, Symbol(list, Decl(assignmentCompatForEnums.ts, 2, 3))
 >'one' : string
 }
 

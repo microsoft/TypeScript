@@ -1,18 +1,18 @@
 === tests/cases/compiler/constDeclarations-es5.ts ===
 
 const z7 = false;
->z7 : boolean, Symbol(z7,Decl(constDeclarations-es5.ts,1,5))
+>z7 : boolean, Symbol(z7, Decl(constDeclarations-es5.ts, 1, 5))
 >false : boolean
 
 const z8: number = 23;
->z8 : number, Symbol(z8,Decl(constDeclarations-es5.ts,2,5))
+>z8 : number, Symbol(z8, Decl(constDeclarations-es5.ts, 2, 5))
 >23 : number
 
 const z9 = 0, z10 :string = "", z11 = null;
->z9 : number, Symbol(z9,Decl(constDeclarations-es5.ts,3,5))
+>z9 : number, Symbol(z9, Decl(constDeclarations-es5.ts, 3, 5))
 >0 : number
->z10 : string, Symbol(z10,Decl(constDeclarations-es5.ts,3,13))
+>z10 : string, Symbol(z10, Decl(constDeclarations-es5.ts, 3, 13))
 >"" : string
->z11 : any, Symbol(z11,Decl(constDeclarations-es5.ts,3,31))
+>z11 : any, Symbol(z11, Decl(constDeclarations-es5.ts, 3, 31))
 >null : null
 

@@ -1,48 +1,48 @@
 === tests/cases/compiler/arrowFunctionWithObjectLiteralBody6.ts ===
 var a = () => <Error>{ name: "foo", message: "bar" };      
->a : () => Error, Symbol(a,Decl(arrowFunctionWithObjectLiteralBody6.ts,0,3))
+>a : () => Error, Symbol(a, Decl(arrowFunctionWithObjectLiteralBody6.ts, 0, 3))
 >() => <Error>{ name: "foo", message: "bar" } : () => Error
 ><Error>{ name: "foo", message: "bar" } : Error
->Error : Error, Symbol(Error,Decl(lib.d.ts,876,38),Decl(lib.d.ts,889,11))
+>Error : Error, Symbol(Error, Decl(lib.d.ts, 876, 38), Decl(lib.d.ts, 889, 11))
 >{ name: "foo", message: "bar" } : { name: string; message: string; }
->name : string, Symbol(name,Decl(arrowFunctionWithObjectLiteralBody6.ts,0,22))
+>name : string, Symbol(name, Decl(arrowFunctionWithObjectLiteralBody6.ts, 0, 22))
 >"foo" : string
->message : string, Symbol(message,Decl(arrowFunctionWithObjectLiteralBody6.ts,0,35))
+>message : string, Symbol(message, Decl(arrowFunctionWithObjectLiteralBody6.ts, 0, 35))
 >"bar" : string
 
 var b = () => (<Error>{ name: "foo", message: "bar" });    
->b : () => Error, Symbol(b,Decl(arrowFunctionWithObjectLiteralBody6.ts,2,3))
+>b : () => Error, Symbol(b, Decl(arrowFunctionWithObjectLiteralBody6.ts, 2, 3))
 >() => (<Error>{ name: "foo", message: "bar" }) : () => Error
 >(<Error>{ name: "foo", message: "bar" }) : Error
 ><Error>{ name: "foo", message: "bar" } : Error
->Error : Error, Symbol(Error,Decl(lib.d.ts,876,38),Decl(lib.d.ts,889,11))
+>Error : Error, Symbol(Error, Decl(lib.d.ts, 876, 38), Decl(lib.d.ts, 889, 11))
 >{ name: "foo", message: "bar" } : { name: string; message: string; }
->name : string, Symbol(name,Decl(arrowFunctionWithObjectLiteralBody6.ts,2,23))
+>name : string, Symbol(name, Decl(arrowFunctionWithObjectLiteralBody6.ts, 2, 23))
 >"foo" : string
->message : string, Symbol(message,Decl(arrowFunctionWithObjectLiteralBody6.ts,2,36))
+>message : string, Symbol(message, Decl(arrowFunctionWithObjectLiteralBody6.ts, 2, 36))
 >"bar" : string
 
 var c = () => ({ name: "foo", message: "bar" });           
->c : () => { name: string; message: string; }, Symbol(c,Decl(arrowFunctionWithObjectLiteralBody6.ts,4,3))
+>c : () => { name: string; message: string; }, Symbol(c, Decl(arrowFunctionWithObjectLiteralBody6.ts, 4, 3))
 >() => ({ name: "foo", message: "bar" }) : () => { name: string; message: string; }
 >({ name: "foo", message: "bar" }) : { name: string; message: string; }
 >{ name: "foo", message: "bar" } : { name: string; message: string; }
->name : string, Symbol(name,Decl(arrowFunctionWithObjectLiteralBody6.ts,4,16))
+>name : string, Symbol(name, Decl(arrowFunctionWithObjectLiteralBody6.ts, 4, 16))
 >"foo" : string
->message : string, Symbol(message,Decl(arrowFunctionWithObjectLiteralBody6.ts,4,29))
+>message : string, Symbol(message, Decl(arrowFunctionWithObjectLiteralBody6.ts, 4, 29))
 >"bar" : string
 
 var d = () => ((<Error>({ name: "foo", message: "bar" })));
->d : () => Error, Symbol(d,Decl(arrowFunctionWithObjectLiteralBody6.ts,6,3))
+>d : () => Error, Symbol(d, Decl(arrowFunctionWithObjectLiteralBody6.ts, 6, 3))
 >() => ((<Error>({ name: "foo", message: "bar" }))) : () => Error
 >((<Error>({ name: "foo", message: "bar" }))) : Error
 >(<Error>({ name: "foo", message: "bar" })) : Error
 ><Error>({ name: "foo", message: "bar" }) : Error
->Error : Error, Symbol(Error,Decl(lib.d.ts,876,38),Decl(lib.d.ts,889,11))
+>Error : Error, Symbol(Error, Decl(lib.d.ts, 876, 38), Decl(lib.d.ts, 889, 11))
 >({ name: "foo", message: "bar" }) : { name: string; message: string; }
 >{ name: "foo", message: "bar" } : { name: string; message: string; }
->name : string, Symbol(name,Decl(arrowFunctionWithObjectLiteralBody6.ts,6,25))
+>name : string, Symbol(name, Decl(arrowFunctionWithObjectLiteralBody6.ts, 6, 25))
 >"foo" : string
->message : string, Symbol(message,Decl(arrowFunctionWithObjectLiteralBody6.ts,6,38))
+>message : string, Symbol(message, Decl(arrowFunctionWithObjectLiteralBody6.ts, 6, 38))
 >"bar" : string
 

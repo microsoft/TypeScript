@@ -1,14 +1,14 @@
 === tests/cases/compiler/moduleWithTryStatement1.ts ===
 module M {
->M : typeof M, Symbol(M,Decl(moduleWithTryStatement1.ts,0,0))
+>M : typeof M, Symbol(M, Decl(moduleWithTryStatement1.ts, 0, 0))
 
   try {
   }
   catch (e) {
->e : any, Symbol(e,Decl(moduleWithTryStatement1.ts,3,9))
+>e : any, Symbol(e, Decl(moduleWithTryStatement1.ts, 3, 9))
   }
 }
 var v = M;
->v : typeof M, Symbol(v,Decl(moduleWithTryStatement1.ts,6,3))
->M : typeof M, Symbol(M,Decl(moduleWithTryStatement1.ts,0,0))
+>v : typeof M, Symbol(v, Decl(moduleWithTryStatement1.ts, 6, 3))
+>M : typeof M, Symbol(M, Decl(moduleWithTryStatement1.ts, 0, 0))
 

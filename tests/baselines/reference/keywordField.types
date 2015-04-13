@@ -1,30 +1,30 @@
 === tests/cases/compiler/keywordField.ts ===
 var obj:any = {};
->obj : any, Symbol(obj,Decl(keywordField.ts,0,3))
+>obj : any, Symbol(obj, Decl(keywordField.ts, 0, 3))
 >{} : {}
 
 obj.if = 1;
 >obj.if = 1 : number
 >obj.if : any
->obj : any, Symbol(obj,Decl(keywordField.ts,0,3))
+>obj : any, Symbol(obj, Decl(keywordField.ts, 0, 3))
 >if : any
 >1 : number
 
 var a = { if: "test" }
->a : { if: string; }, Symbol(a,Decl(keywordField.ts,4,3))
+>a : { if: string; }, Symbol(a, Decl(keywordField.ts, 4, 3))
 >{ if: "test" } : { if: string; }
->if : string, Symbol(if,Decl(keywordField.ts,4,9))
+>if : string, Symbol(if, Decl(keywordField.ts, 4, 9))
 >"test" : string
 
 var n = a.if
->n : string, Symbol(n,Decl(keywordField.ts,6,3))
->a.if : string, Symbol(if,Decl(keywordField.ts,4,9))
->a : { if: string; }, Symbol(a,Decl(keywordField.ts,4,3))
->if : string, Symbol(if,Decl(keywordField.ts,4,9))
+>n : string, Symbol(n, Decl(keywordField.ts, 6, 3))
+>a.if : string, Symbol(if, Decl(keywordField.ts, 4, 9))
+>a : { if: string; }, Symbol(a, Decl(keywordField.ts, 4, 3))
+>if : string, Symbol(if, Decl(keywordField.ts, 4, 9))
 
 var q = a["if"];
->q : string, Symbol(q,Decl(keywordField.ts,8,3))
+>q : string, Symbol(q, Decl(keywordField.ts, 8, 3))
 >a["if"] : string
->a : { if: string; }, Symbol(a,Decl(keywordField.ts,4,3))
->"if" : string, Symbol(if,Decl(keywordField.ts,4,9))
+>a : { if: string; }, Symbol(a, Decl(keywordField.ts, 4, 3))
+>"if" : string, Symbol(if, Decl(keywordField.ts, 4, 9))
 

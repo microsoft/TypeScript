@@ -7,162 +7,162 @@
  */
 
 declare var process: any;
->process : any, Symbol(process,Decl(APISample_compile.ts,7,11))
+>process : any, Symbol(process, Decl(APISample_compile.ts, 7, 11))
 
 declare var console: any;
->console : any, Symbol(console,Decl(APISample_compile.ts,8,11))
+>console : any, Symbol(console, Decl(APISample_compile.ts, 8, 11))
 
 declare var os: any;
->os : any, Symbol(os,Decl(APISample_compile.ts,9,11))
+>os : any, Symbol(os, Decl(APISample_compile.ts, 9, 11))
 
 import ts = require("typescript");
->ts : typeof ts, Symbol(ts,Decl(APISample_compile.ts,9,20))
+>ts : typeof ts, Symbol(ts, Decl(APISample_compile.ts, 9, 20))
 
 export function compile(fileNames: string[], options: ts.CompilerOptions): void {
->compile : (fileNames: string[], options: ts.CompilerOptions) => void, Symbol(compile,Decl(APISample_compile.ts,11,34))
->fileNames : string[], Symbol(fileNames,Decl(APISample_compile.ts,13,24))
->options : ts.CompilerOptions, Symbol(options,Decl(APISample_compile.ts,13,44))
->ts : any, Symbol(ts,Decl(APISample_compile.ts,9,20))
->CompilerOptions : ts.CompilerOptions, Symbol(ts.CompilerOptions,Decl(typescript.d.ts,1074,5))
+>compile : (fileNames: string[], options: ts.CompilerOptions) => void, Symbol(compile, Decl(APISample_compile.ts, 11, 34))
+>fileNames : string[], Symbol(fileNames, Decl(APISample_compile.ts, 13, 24))
+>options : ts.CompilerOptions, Symbol(options, Decl(APISample_compile.ts, 13, 44))
+>ts : any, Symbol(ts, Decl(APISample_compile.ts, 9, 20))
+>CompilerOptions : ts.CompilerOptions, Symbol(ts.CompilerOptions, Decl(typescript.d.ts, 1074, 5))
 
     var program = ts.createProgram(fileNames, options);
->program : ts.Program, Symbol(program,Decl(APISample_compile.ts,14,7))
+>program : ts.Program, Symbol(program, Decl(APISample_compile.ts, 14, 7))
 >ts.createProgram(fileNames, options) : ts.Program
->ts.createProgram : (rootNames: string[], options: ts.CompilerOptions, host?: ts.CompilerHost) => ts.Program, Symbol(ts.createProgram,Decl(typescript.d.ts,1201,113))
->ts : typeof ts, Symbol(ts,Decl(APISample_compile.ts,9,20))
->createProgram : (rootNames: string[], options: ts.CompilerOptions, host?: ts.CompilerHost) => ts.Program, Symbol(ts.createProgram,Decl(typescript.d.ts,1201,113))
->fileNames : string[], Symbol(fileNames,Decl(APISample_compile.ts,13,24))
->options : ts.CompilerOptions, Symbol(options,Decl(APISample_compile.ts,13,44))
+>ts.createProgram : (rootNames: string[], options: ts.CompilerOptions, host?: ts.CompilerHost) => ts.Program, Symbol(ts.createProgram, Decl(typescript.d.ts, 1201, 113))
+>ts : typeof ts, Symbol(ts, Decl(APISample_compile.ts, 9, 20))
+>createProgram : (rootNames: string[], options: ts.CompilerOptions, host?: ts.CompilerHost) => ts.Program, Symbol(ts.createProgram, Decl(typescript.d.ts, 1201, 113))
+>fileNames : string[], Symbol(fileNames, Decl(APISample_compile.ts, 13, 24))
+>options : ts.CompilerOptions, Symbol(options, Decl(APISample_compile.ts, 13, 44))
 
     var emitResult = program.emit();
->emitResult : ts.EmitResult, Symbol(emitResult,Decl(APISample_compile.ts,15,7))
+>emitResult : ts.EmitResult, Symbol(emitResult, Decl(APISample_compile.ts, 15, 7))
 >program.emit() : ts.EmitResult
->program.emit : (targetSourceFile?: ts.SourceFile, writeFile?: ts.WriteFileCallback) => ts.EmitResult, Symbol(ts.Program.emit,Decl(typescript.d.ts,767,39))
->program : ts.Program, Symbol(program,Decl(APISample_compile.ts,14,7))
->emit : (targetSourceFile?: ts.SourceFile, writeFile?: ts.WriteFileCallback) => ts.EmitResult, Symbol(ts.Program.emit,Decl(typescript.d.ts,767,39))
+>program.emit : (targetSourceFile?: ts.SourceFile, writeFile?: ts.WriteFileCallback) => ts.EmitResult, Symbol(ts.Program.emit, Decl(typescript.d.ts, 767, 39))
+>program : ts.Program, Symbol(program, Decl(APISample_compile.ts, 14, 7))
+>emit : (targetSourceFile?: ts.SourceFile, writeFile?: ts.WriteFileCallback) => ts.EmitResult, Symbol(ts.Program.emit, Decl(typescript.d.ts, 767, 39))
 
     var allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
->allDiagnostics : ts.Diagnostic[], Symbol(allDiagnostics,Decl(APISample_compile.ts,17,7))
+>allDiagnostics : ts.Diagnostic[], Symbol(allDiagnostics, Decl(APISample_compile.ts, 17, 7))
 >ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics) : ts.Diagnostic[]
->ts.getPreEmitDiagnostics(program).concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }, Symbol(Array.concat,Decl(lib.d.ts,1025,13),Decl(lib.d.ts,1030,46))
+>ts.getPreEmitDiagnostics(program).concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }, Symbol(Array.concat, Decl(lib.d.ts, 1025, 13), Decl(lib.d.ts, 1030, 46))
 >ts.getPreEmitDiagnostics(program) : ts.Diagnostic[]
->ts.getPreEmitDiagnostics : (program: ts.Program) => ts.Diagnostic[], Symbol(ts.getPreEmitDiagnostics,Decl(typescript.d.ts,1199,98))
->ts : typeof ts, Symbol(ts,Decl(APISample_compile.ts,9,20))
->getPreEmitDiagnostics : (program: ts.Program) => ts.Diagnostic[], Symbol(ts.getPreEmitDiagnostics,Decl(typescript.d.ts,1199,98))
->program : ts.Program, Symbol(program,Decl(APISample_compile.ts,14,7))
->concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }, Symbol(Array.concat,Decl(lib.d.ts,1025,13),Decl(lib.d.ts,1030,46))
->emitResult.diagnostics : ts.Diagnostic[], Symbol(ts.EmitResult.diagnostics,Decl(typescript.d.ts,820,29))
->emitResult : ts.EmitResult, Symbol(emitResult,Decl(APISample_compile.ts,15,7))
->diagnostics : ts.Diagnostic[], Symbol(ts.EmitResult.diagnostics,Decl(typescript.d.ts,820,29))
+>ts.getPreEmitDiagnostics : (program: ts.Program) => ts.Diagnostic[], Symbol(ts.getPreEmitDiagnostics, Decl(typescript.d.ts, 1199, 98))
+>ts : typeof ts, Symbol(ts, Decl(APISample_compile.ts, 9, 20))
+>getPreEmitDiagnostics : (program: ts.Program) => ts.Diagnostic[], Symbol(ts.getPreEmitDiagnostics, Decl(typescript.d.ts, 1199, 98))
+>program : ts.Program, Symbol(program, Decl(APISample_compile.ts, 14, 7))
+>concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }, Symbol(Array.concat, Decl(lib.d.ts, 1025, 13), Decl(lib.d.ts, 1030, 46))
+>emitResult.diagnostics : ts.Diagnostic[], Symbol(ts.EmitResult.diagnostics, Decl(typescript.d.ts, 820, 29))
+>emitResult : ts.EmitResult, Symbol(emitResult, Decl(APISample_compile.ts, 15, 7))
+>diagnostics : ts.Diagnostic[], Symbol(ts.EmitResult.diagnostics, Decl(typescript.d.ts, 820, 29))
 
     allDiagnostics.forEach(diagnostic => {
 >allDiagnostics.forEach(diagnostic => {        var { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);        var message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');        console.log(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);    }) : void
->allDiagnostics.forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void, Symbol(Array.forEach,Decl(lib.d.ts,1108,95))
->allDiagnostics : ts.Diagnostic[], Symbol(allDiagnostics,Decl(APISample_compile.ts,17,7))
->forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void, Symbol(Array.forEach,Decl(lib.d.ts,1108,95))
+>allDiagnostics.forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void, Symbol(Array.forEach, Decl(lib.d.ts, 1108, 95))
+>allDiagnostics : ts.Diagnostic[], Symbol(allDiagnostics, Decl(APISample_compile.ts, 17, 7))
+>forEach : (callbackfn: (value: ts.Diagnostic, index: number, array: ts.Diagnostic[]) => void, thisArg?: any) => void, Symbol(Array.forEach, Decl(lib.d.ts, 1108, 95))
 >diagnostic => {        var { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);        var message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');        console.log(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);    } : (diagnostic: ts.Diagnostic) => void
->diagnostic : ts.Diagnostic, Symbol(diagnostic,Decl(APISample_compile.ts,19,27))
+>diagnostic : ts.Diagnostic, Symbol(diagnostic, Decl(APISample_compile.ts, 19, 27))
 
         var { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
->line : number, Symbol(line,Decl(APISample_compile.ts,20,13))
->character : number, Symbol(character,Decl(APISample_compile.ts,20,19))
+>line : number, Symbol(line, Decl(APISample_compile.ts, 20, 13))
+>character : number, Symbol(character, Decl(APISample_compile.ts, 20, 19))
 >diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start) : ts.LineAndCharacter
->diagnostic.file.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition,Decl(typescript.d.ts,1263,46))
->diagnostic.file : ts.SourceFile, Symbol(ts.Diagnostic.file,Decl(typescript.d.ts,1062,26))
->diagnostic : ts.Diagnostic, Symbol(diagnostic,Decl(APISample_compile.ts,19,27))
->file : ts.SourceFile, Symbol(ts.Diagnostic.file,Decl(typescript.d.ts,1062,26))
->getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition,Decl(typescript.d.ts,1263,46))
->diagnostic.start : number, Symbol(ts.Diagnostic.start,Decl(typescript.d.ts,1063,25))
->diagnostic : ts.Diagnostic, Symbol(diagnostic,Decl(APISample_compile.ts,19,27))
->start : number, Symbol(ts.Diagnostic.start,Decl(typescript.d.ts,1063,25))
+>diagnostic.file.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1263, 46))
+>diagnostic.file : ts.SourceFile, Symbol(ts.Diagnostic.file, Decl(typescript.d.ts, 1062, 26))
+>diagnostic : ts.Diagnostic, Symbol(diagnostic, Decl(APISample_compile.ts, 19, 27))
+>file : ts.SourceFile, Symbol(ts.Diagnostic.file, Decl(typescript.d.ts, 1062, 26))
+>getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1263, 46))
+>diagnostic.start : number, Symbol(ts.Diagnostic.start, Decl(typescript.d.ts, 1063, 25))
+>diagnostic : ts.Diagnostic, Symbol(diagnostic, Decl(APISample_compile.ts, 19, 27))
+>start : number, Symbol(ts.Diagnostic.start, Decl(typescript.d.ts, 1063, 25))
 
         var message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
->message : string, Symbol(message,Decl(APISample_compile.ts,21,11))
+>message : string, Symbol(message, Decl(APISample_compile.ts, 21, 11))
 >ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n') : string
->ts.flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string, Symbol(ts.flattenDiagnosticMessageText,Decl(typescript.d.ts,1200,67))
->ts : typeof ts, Symbol(ts,Decl(APISample_compile.ts,9,20))
->flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string, Symbol(ts.flattenDiagnosticMessageText,Decl(typescript.d.ts,1200,67))
->diagnostic.messageText : string | ts.DiagnosticMessageChain, Symbol(ts.Diagnostic.messageText,Decl(typescript.d.ts,1065,23))
->diagnostic : ts.Diagnostic, Symbol(diagnostic,Decl(APISample_compile.ts,19,27))
->messageText : string | ts.DiagnosticMessageChain, Symbol(ts.Diagnostic.messageText,Decl(typescript.d.ts,1065,23))
+>ts.flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string, Symbol(ts.flattenDiagnosticMessageText, Decl(typescript.d.ts, 1200, 67))
+>ts : typeof ts, Symbol(ts, Decl(APISample_compile.ts, 9, 20))
+>flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string, Symbol(ts.flattenDiagnosticMessageText, Decl(typescript.d.ts, 1200, 67))
+>diagnostic.messageText : string | ts.DiagnosticMessageChain, Symbol(ts.Diagnostic.messageText, Decl(typescript.d.ts, 1065, 23))
+>diagnostic : ts.Diagnostic, Symbol(diagnostic, Decl(APISample_compile.ts, 19, 27))
+>messageText : string | ts.DiagnosticMessageChain, Symbol(ts.Diagnostic.messageText, Decl(typescript.d.ts, 1065, 23))
 >'\n' : string
 
         console.log(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);
 >console.log(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`) : any
 >console.log : any
->console : any, Symbol(console,Decl(APISample_compile.ts,8,11))
+>console : any, Symbol(console, Decl(APISample_compile.ts, 8, 11))
 >log : any
 >`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}` : string
->diagnostic.file.fileName : string, Symbol(ts.SourceFile.fileName,Decl(typescript.d.ts,743,29))
->diagnostic.file : ts.SourceFile, Symbol(ts.Diagnostic.file,Decl(typescript.d.ts,1062,26))
->diagnostic : ts.Diagnostic, Symbol(diagnostic,Decl(APISample_compile.ts,19,27))
->file : ts.SourceFile, Symbol(ts.Diagnostic.file,Decl(typescript.d.ts,1062,26))
->fileName : string, Symbol(ts.SourceFile.fileName,Decl(typescript.d.ts,743,29))
+>diagnostic.file.fileName : string, Symbol(ts.SourceFile.fileName, Decl(typescript.d.ts, 743, 29))
+>diagnostic.file : ts.SourceFile, Symbol(ts.Diagnostic.file, Decl(typescript.d.ts, 1062, 26))
+>diagnostic : ts.Diagnostic, Symbol(diagnostic, Decl(APISample_compile.ts, 19, 27))
+>file : ts.SourceFile, Symbol(ts.Diagnostic.file, Decl(typescript.d.ts, 1062, 26))
+>fileName : string, Symbol(ts.SourceFile.fileName, Decl(typescript.d.ts, 743, 29))
 >line + 1 : number
->line : number, Symbol(line,Decl(APISample_compile.ts,20,13))
+>line : number, Symbol(line, Decl(APISample_compile.ts, 20, 13))
 >1 : number
 >character + 1 : number
->character : number, Symbol(character,Decl(APISample_compile.ts,20,19))
+>character : number, Symbol(character, Decl(APISample_compile.ts, 20, 19))
 >1 : number
->message : string, Symbol(message,Decl(APISample_compile.ts,21,11))
+>message : string, Symbol(message, Decl(APISample_compile.ts, 21, 11))
 
     });
 
     var exitCode = emitResult.emitSkipped ? 1 : 0;
->exitCode : number, Symbol(exitCode,Decl(APISample_compile.ts,25,7))
+>exitCode : number, Symbol(exitCode, Decl(APISample_compile.ts, 25, 7))
 >emitResult.emitSkipped ? 1 : 0 : number
->emitResult.emitSkipped : boolean, Symbol(ts.EmitResult.emitSkipped,Decl(typescript.d.ts,819,26))
->emitResult : ts.EmitResult, Symbol(emitResult,Decl(APISample_compile.ts,15,7))
->emitSkipped : boolean, Symbol(ts.EmitResult.emitSkipped,Decl(typescript.d.ts,819,26))
+>emitResult.emitSkipped : boolean, Symbol(ts.EmitResult.emitSkipped, Decl(typescript.d.ts, 819, 26))
+>emitResult : ts.EmitResult, Symbol(emitResult, Decl(APISample_compile.ts, 15, 7))
+>emitSkipped : boolean, Symbol(ts.EmitResult.emitSkipped, Decl(typescript.d.ts, 819, 26))
 >1 : number
 >0 : number
 
     console.log(`Process exiting with code '${exitCode}'.`);
 >console.log(`Process exiting with code '${exitCode}'.`) : any
 >console.log : any
->console : any, Symbol(console,Decl(APISample_compile.ts,8,11))
+>console : any, Symbol(console, Decl(APISample_compile.ts, 8, 11))
 >log : any
 >`Process exiting with code '${exitCode}'.` : string
->exitCode : number, Symbol(exitCode,Decl(APISample_compile.ts,25,7))
+>exitCode : number, Symbol(exitCode, Decl(APISample_compile.ts, 25, 7))
 
     process.exit(exitCode);
 >process.exit(exitCode) : any
 >process.exit : any
->process : any, Symbol(process,Decl(APISample_compile.ts,7,11))
+>process : any, Symbol(process, Decl(APISample_compile.ts, 7, 11))
 >exit : any
->exitCode : number, Symbol(exitCode,Decl(APISample_compile.ts,25,7))
+>exitCode : number, Symbol(exitCode, Decl(APISample_compile.ts, 25, 7))
 }
 
 compile(process.argv.slice(2), {
 >compile(process.argv.slice(2), {    noEmitOnError: true, noImplicitAny: true,    target: ts.ScriptTarget.ES5, module: ts.ModuleKind.CommonJS}) : void
->compile : (fileNames: string[], options: ts.CompilerOptions) => void, Symbol(compile,Decl(APISample_compile.ts,11,34))
+>compile : (fileNames: string[], options: ts.CompilerOptions) => void, Symbol(compile, Decl(APISample_compile.ts, 11, 34))
 >process.argv.slice(2) : any
 >process.argv.slice : any
 >process.argv : any
->process : any, Symbol(process,Decl(APISample_compile.ts,7,11))
+>process : any, Symbol(process, Decl(APISample_compile.ts, 7, 11))
 >argv : any
 >slice : any
 >2 : number
 >{    noEmitOnError: true, noImplicitAny: true,    target: ts.ScriptTarget.ES5, module: ts.ModuleKind.CommonJS} : { [x: string]: boolean | ts.ScriptTarget | ts.ModuleKind; noEmitOnError: boolean; noImplicitAny: boolean; target: ts.ScriptTarget; module: ts.ModuleKind; }
 
     noEmitOnError: true, noImplicitAny: true,
->noEmitOnError : boolean, Symbol(noEmitOnError,Decl(APISample_compile.ts,30,32))
+>noEmitOnError : boolean, Symbol(noEmitOnError, Decl(APISample_compile.ts, 30, 32))
 >true : boolean
->noImplicitAny : boolean, Symbol(noImplicitAny,Decl(APISample_compile.ts,31,24))
+>noImplicitAny : boolean, Symbol(noImplicitAny, Decl(APISample_compile.ts, 31, 24))
 >true : boolean
 
     target: ts.ScriptTarget.ES5, module: ts.ModuleKind.CommonJS
->target : ts.ScriptTarget, Symbol(target,Decl(APISample_compile.ts,31,45))
->ts.ScriptTarget.ES5 : ts.ScriptTarget, Symbol(ts.ScriptTarget.ES5,Decl(typescript.d.ts,1117,16))
->ts.ScriptTarget : typeof ts.ScriptTarget, Symbol(ts.ScriptTarget,Decl(typescript.d.ts,1115,5))
->ts : typeof ts, Symbol(ts,Decl(APISample_compile.ts,9,20))
->ScriptTarget : typeof ts.ScriptTarget, Symbol(ts.ScriptTarget,Decl(typescript.d.ts,1115,5))
->ES5 : ts.ScriptTarget, Symbol(ts.ScriptTarget.ES5,Decl(typescript.d.ts,1117,16))
->module : ts.ModuleKind, Symbol(module,Decl(APISample_compile.ts,32,32))
->ts.ModuleKind.CommonJS : ts.ModuleKind, Symbol(ts.ModuleKind.CommonJS,Decl(typescript.d.ts,1108,17))
->ts.ModuleKind : typeof ts.ModuleKind, Symbol(ts.ModuleKind,Decl(typescript.d.ts,1106,5))
->ts : typeof ts, Symbol(ts,Decl(APISample_compile.ts,9,20))
->ModuleKind : typeof ts.ModuleKind, Symbol(ts.ModuleKind,Decl(typescript.d.ts,1106,5))
->CommonJS : ts.ModuleKind, Symbol(ts.ModuleKind.CommonJS,Decl(typescript.d.ts,1108,17))
+>target : ts.ScriptTarget, Symbol(target, Decl(APISample_compile.ts, 31, 45))
+>ts.ScriptTarget.ES5 : ts.ScriptTarget, Symbol(ts.ScriptTarget.ES5, Decl(typescript.d.ts, 1117, 16))
+>ts.ScriptTarget : typeof ts.ScriptTarget, Symbol(ts.ScriptTarget, Decl(typescript.d.ts, 1115, 5))
+>ts : typeof ts, Symbol(ts, Decl(APISample_compile.ts, 9, 20))
+>ScriptTarget : typeof ts.ScriptTarget, Symbol(ts.ScriptTarget, Decl(typescript.d.ts, 1115, 5))
+>ES5 : ts.ScriptTarget, Symbol(ts.ScriptTarget.ES5, Decl(typescript.d.ts, 1117, 16))
+>module : ts.ModuleKind, Symbol(module, Decl(APISample_compile.ts, 32, 32))
+>ts.ModuleKind.CommonJS : ts.ModuleKind, Symbol(ts.ModuleKind.CommonJS, Decl(typescript.d.ts, 1108, 17))
+>ts.ModuleKind : typeof ts.ModuleKind, Symbol(ts.ModuleKind, Decl(typescript.d.ts, 1106, 5))
+>ts : typeof ts, Symbol(ts, Decl(APISample_compile.ts, 9, 20))
+>ModuleKind : typeof ts.ModuleKind, Symbol(ts.ModuleKind, Decl(typescript.d.ts, 1106, 5))
+>CommonJS : ts.ModuleKind, Symbol(ts.ModuleKind.CommonJS, Decl(typescript.d.ts, 1108, 17))
 
 });

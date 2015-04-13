@@ -1,9 +1,9 @@
 === tests/cases/compiler/extendBaseClassBeforeItsDeclared.ts ===
 class derived extends base { }
->derived : derived, Symbol(derived,Decl(extendBaseClassBeforeItsDeclared.ts,0,0))
->base : base, Symbol(base,Decl(extendBaseClassBeforeItsDeclared.ts,0,30))
+>derived : derived, Symbol(derived, Decl(extendBaseClassBeforeItsDeclared.ts, 0, 0))
+>base : base, Symbol(base, Decl(extendBaseClassBeforeItsDeclared.ts, 0, 30))
  
 class base { constructor (public n: number) { } }
->base : base, Symbol(base,Decl(extendBaseClassBeforeItsDeclared.ts,0,30))
->n : number, Symbol(n,Decl(extendBaseClassBeforeItsDeclared.ts,2,26))
+>base : base, Symbol(base, Decl(extendBaseClassBeforeItsDeclared.ts, 0, 30))
+>n : number, Symbol(n, Decl(extendBaseClassBeforeItsDeclared.ts, 2, 26))
 

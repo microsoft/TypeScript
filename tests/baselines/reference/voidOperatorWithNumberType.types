@@ -1,137 +1,137 @@
 === tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWithNumberType.ts ===
 // void  operator on number type
 var NUMBER: number;
->NUMBER : number, Symbol(NUMBER,Decl(voidOperatorWithNumberType.ts,1,3))
+>NUMBER : number, Symbol(NUMBER, Decl(voidOperatorWithNumberType.ts, 1, 3))
 
 var NUMBER1: number[] = [1, 2];
->NUMBER1 : number[], Symbol(NUMBER1,Decl(voidOperatorWithNumberType.ts,2,3))
+>NUMBER1 : number[], Symbol(NUMBER1, Decl(voidOperatorWithNumberType.ts, 2, 3))
 >[1, 2] : number[]
 >1 : number
 >2 : number
 
 function foo(): number { return 1; }
->foo : () => number, Symbol(foo,Decl(voidOperatorWithNumberType.ts,2,31))
+>foo : () => number, Symbol(foo, Decl(voidOperatorWithNumberType.ts, 2, 31))
 >1 : number
 
 class A {
->A : A, Symbol(A,Decl(voidOperatorWithNumberType.ts,4,36))
+>A : A, Symbol(A, Decl(voidOperatorWithNumberType.ts, 4, 36))
 
     public a: number;
->a : number, Symbol(a,Decl(voidOperatorWithNumberType.ts,6,9))
+>a : number, Symbol(a, Decl(voidOperatorWithNumberType.ts, 6, 9))
 
     static foo() { return 1; }
->foo : () => number, Symbol(A.foo,Decl(voidOperatorWithNumberType.ts,7,21))
+>foo : () => number, Symbol(A.foo, Decl(voidOperatorWithNumberType.ts, 7, 21))
 >1 : number
 }
 module M {
->M : typeof M, Symbol(M,Decl(voidOperatorWithNumberType.ts,9,1))
+>M : typeof M, Symbol(M, Decl(voidOperatorWithNumberType.ts, 9, 1))
 
     export var n: number;
->n : number, Symbol(n,Decl(voidOperatorWithNumberType.ts,11,14))
+>n : number, Symbol(n, Decl(voidOperatorWithNumberType.ts, 11, 14))
 }
 
 var objA = new A();
->objA : A, Symbol(objA,Decl(voidOperatorWithNumberType.ts,14,3))
+>objA : A, Symbol(objA, Decl(voidOperatorWithNumberType.ts, 14, 3))
 >new A() : A
->A : typeof A, Symbol(A,Decl(voidOperatorWithNumberType.ts,4,36))
+>A : typeof A, Symbol(A, Decl(voidOperatorWithNumberType.ts, 4, 36))
 
 // number type var
 var ResultIsAny1 = void NUMBER;
->ResultIsAny1 : any, Symbol(ResultIsAny1,Decl(voidOperatorWithNumberType.ts,17,3))
+>ResultIsAny1 : any, Symbol(ResultIsAny1, Decl(voidOperatorWithNumberType.ts, 17, 3))
 >void NUMBER : undefined
->NUMBER : number, Symbol(NUMBER,Decl(voidOperatorWithNumberType.ts,1,3))
+>NUMBER : number, Symbol(NUMBER, Decl(voidOperatorWithNumberType.ts, 1, 3))
 
 var ResultIsAny2 = void NUMBER1;
->ResultIsAny2 : any, Symbol(ResultIsAny2,Decl(voidOperatorWithNumberType.ts,18,3))
+>ResultIsAny2 : any, Symbol(ResultIsAny2, Decl(voidOperatorWithNumberType.ts, 18, 3))
 >void NUMBER1 : undefined
->NUMBER1 : number[], Symbol(NUMBER1,Decl(voidOperatorWithNumberType.ts,2,3))
+>NUMBER1 : number[], Symbol(NUMBER1, Decl(voidOperatorWithNumberType.ts, 2, 3))
 
 // number type literal
 var ResultIsAny3 = void 1;
->ResultIsAny3 : any, Symbol(ResultIsAny3,Decl(voidOperatorWithNumberType.ts,21,3))
+>ResultIsAny3 : any, Symbol(ResultIsAny3, Decl(voidOperatorWithNumberType.ts, 21, 3))
 >void 1 : undefined
 >1 : number
 
 var ResultIsAny4 = void { x: 1, y: 2};
->ResultIsAny4 : any, Symbol(ResultIsAny4,Decl(voidOperatorWithNumberType.ts,22,3))
+>ResultIsAny4 : any, Symbol(ResultIsAny4, Decl(voidOperatorWithNumberType.ts, 22, 3))
 >void { x: 1, y: 2} : undefined
 >{ x: 1, y: 2} : { x: number; y: number; }
->x : number, Symbol(x,Decl(voidOperatorWithNumberType.ts,22,25))
+>x : number, Symbol(x, Decl(voidOperatorWithNumberType.ts, 22, 25))
 >1 : number
->y : number, Symbol(y,Decl(voidOperatorWithNumberType.ts,22,31))
+>y : number, Symbol(y, Decl(voidOperatorWithNumberType.ts, 22, 31))
 >2 : number
 
 var ResultIsAny5 = void { x: 1, y: (n: number) => { return n; } };
->ResultIsAny5 : any, Symbol(ResultIsAny5,Decl(voidOperatorWithNumberType.ts,23,3))
+>ResultIsAny5 : any, Symbol(ResultIsAny5, Decl(voidOperatorWithNumberType.ts, 23, 3))
 >void { x: 1, y: (n: number) => { return n; } } : undefined
 >{ x: 1, y: (n: number) => { return n; } } : { x: number; y: (n: number) => number; }
->x : number, Symbol(x,Decl(voidOperatorWithNumberType.ts,23,25))
+>x : number, Symbol(x, Decl(voidOperatorWithNumberType.ts, 23, 25))
 >1 : number
->y : (n: number) => number, Symbol(y,Decl(voidOperatorWithNumberType.ts,23,31))
+>y : (n: number) => number, Symbol(y, Decl(voidOperatorWithNumberType.ts, 23, 31))
 >(n: number) => { return n; } : (n: number) => number
->n : number, Symbol(n,Decl(voidOperatorWithNumberType.ts,23,36))
->n : number, Symbol(n,Decl(voidOperatorWithNumberType.ts,23,36))
+>n : number, Symbol(n, Decl(voidOperatorWithNumberType.ts, 23, 36))
+>n : number, Symbol(n, Decl(voidOperatorWithNumberType.ts, 23, 36))
 
 // number type expressions
 var ResultIsAny6 = void objA.a;
->ResultIsAny6 : any, Symbol(ResultIsAny6,Decl(voidOperatorWithNumberType.ts,26,3))
+>ResultIsAny6 : any, Symbol(ResultIsAny6, Decl(voidOperatorWithNumberType.ts, 26, 3))
 >void objA.a : undefined
->objA.a : number, Symbol(A.a,Decl(voidOperatorWithNumberType.ts,6,9))
->objA : A, Symbol(objA,Decl(voidOperatorWithNumberType.ts,14,3))
->a : number, Symbol(A.a,Decl(voidOperatorWithNumberType.ts,6,9))
+>objA.a : number, Symbol(A.a, Decl(voidOperatorWithNumberType.ts, 6, 9))
+>objA : A, Symbol(objA, Decl(voidOperatorWithNumberType.ts, 14, 3))
+>a : number, Symbol(A.a, Decl(voidOperatorWithNumberType.ts, 6, 9))
 
 var ResultIsAny7 = void M.n;
->ResultIsAny7 : any, Symbol(ResultIsAny7,Decl(voidOperatorWithNumberType.ts,27,3))
+>ResultIsAny7 : any, Symbol(ResultIsAny7, Decl(voidOperatorWithNumberType.ts, 27, 3))
 >void M.n : undefined
->M.n : number, Symbol(M.n,Decl(voidOperatorWithNumberType.ts,11,14))
->M : typeof M, Symbol(M,Decl(voidOperatorWithNumberType.ts,9,1))
->n : number, Symbol(M.n,Decl(voidOperatorWithNumberType.ts,11,14))
+>M.n : number, Symbol(M.n, Decl(voidOperatorWithNumberType.ts, 11, 14))
+>M : typeof M, Symbol(M, Decl(voidOperatorWithNumberType.ts, 9, 1))
+>n : number, Symbol(M.n, Decl(voidOperatorWithNumberType.ts, 11, 14))
 
 var ResultIsAny8 = void NUMBER1[0];
->ResultIsAny8 : any, Symbol(ResultIsAny8,Decl(voidOperatorWithNumberType.ts,28,3))
+>ResultIsAny8 : any, Symbol(ResultIsAny8, Decl(voidOperatorWithNumberType.ts, 28, 3))
 >void NUMBER1[0] : undefined
 >NUMBER1[0] : number
->NUMBER1 : number[], Symbol(NUMBER1,Decl(voidOperatorWithNumberType.ts,2,3))
+>NUMBER1 : number[], Symbol(NUMBER1, Decl(voidOperatorWithNumberType.ts, 2, 3))
 >0 : number
 
 var ResultIsAny9 = void foo();
->ResultIsAny9 : any, Symbol(ResultIsAny9,Decl(voidOperatorWithNumberType.ts,29,3))
+>ResultIsAny9 : any, Symbol(ResultIsAny9, Decl(voidOperatorWithNumberType.ts, 29, 3))
 >void foo() : undefined
 >foo() : number
->foo : () => number, Symbol(foo,Decl(voidOperatorWithNumberType.ts,2,31))
+>foo : () => number, Symbol(foo, Decl(voidOperatorWithNumberType.ts, 2, 31))
 
 var ResultIsAny10 = void A.foo();
->ResultIsAny10 : any, Symbol(ResultIsAny10,Decl(voidOperatorWithNumberType.ts,30,3))
+>ResultIsAny10 : any, Symbol(ResultIsAny10, Decl(voidOperatorWithNumberType.ts, 30, 3))
 >void A.foo() : undefined
 >A.foo() : number
->A.foo : () => number, Symbol(A.foo,Decl(voidOperatorWithNumberType.ts,7,21))
->A : typeof A, Symbol(A,Decl(voidOperatorWithNumberType.ts,4,36))
->foo : () => number, Symbol(A.foo,Decl(voidOperatorWithNumberType.ts,7,21))
+>A.foo : () => number, Symbol(A.foo, Decl(voidOperatorWithNumberType.ts, 7, 21))
+>A : typeof A, Symbol(A, Decl(voidOperatorWithNumberType.ts, 4, 36))
+>foo : () => number, Symbol(A.foo, Decl(voidOperatorWithNumberType.ts, 7, 21))
 
 var ResultIsAny11 = void (NUMBER + NUMBER);
->ResultIsAny11 : any, Symbol(ResultIsAny11,Decl(voidOperatorWithNumberType.ts,31,3))
+>ResultIsAny11 : any, Symbol(ResultIsAny11, Decl(voidOperatorWithNumberType.ts, 31, 3))
 >void (NUMBER + NUMBER) : undefined
 >(NUMBER + NUMBER) : number
 >NUMBER + NUMBER : number
->NUMBER : number, Symbol(NUMBER,Decl(voidOperatorWithNumberType.ts,1,3))
->NUMBER : number, Symbol(NUMBER,Decl(voidOperatorWithNumberType.ts,1,3))
+>NUMBER : number, Symbol(NUMBER, Decl(voidOperatorWithNumberType.ts, 1, 3))
+>NUMBER : number, Symbol(NUMBER, Decl(voidOperatorWithNumberType.ts, 1, 3))
 
 // multiple void  operators
 var ResultIsAny12 = void void NUMBER;
->ResultIsAny12 : any, Symbol(ResultIsAny12,Decl(voidOperatorWithNumberType.ts,34,3))
+>ResultIsAny12 : any, Symbol(ResultIsAny12, Decl(voidOperatorWithNumberType.ts, 34, 3))
 >void void NUMBER : undefined
 >void NUMBER : undefined
->NUMBER : number, Symbol(NUMBER,Decl(voidOperatorWithNumberType.ts,1,3))
+>NUMBER : number, Symbol(NUMBER, Decl(voidOperatorWithNumberType.ts, 1, 3))
 
 var ResultIsAny13 = void void void (NUMBER + NUMBER);
->ResultIsAny13 : any, Symbol(ResultIsAny13,Decl(voidOperatorWithNumberType.ts,35,3))
+>ResultIsAny13 : any, Symbol(ResultIsAny13, Decl(voidOperatorWithNumberType.ts, 35, 3))
 >void void void (NUMBER + NUMBER) : undefined
 >void void (NUMBER + NUMBER) : undefined
 >void (NUMBER + NUMBER) : undefined
 >(NUMBER + NUMBER) : number
 >NUMBER + NUMBER : number
->NUMBER : number, Symbol(NUMBER,Decl(voidOperatorWithNumberType.ts,1,3))
->NUMBER : number, Symbol(NUMBER,Decl(voidOperatorWithNumberType.ts,1,3))
+>NUMBER : number, Symbol(NUMBER, Decl(voidOperatorWithNumberType.ts, 1, 3))
+>NUMBER : number, Symbol(NUMBER, Decl(voidOperatorWithNumberType.ts, 1, 3))
 
 // miss assignment operators
 void 1;
@@ -140,36 +140,36 @@ void 1;
 
 void NUMBER;
 >void NUMBER : undefined
->NUMBER : number, Symbol(NUMBER,Decl(voidOperatorWithNumberType.ts,1,3))
+>NUMBER : number, Symbol(NUMBER, Decl(voidOperatorWithNumberType.ts, 1, 3))
 
 void NUMBER1;
 >void NUMBER1 : undefined
->NUMBER1 : number[], Symbol(NUMBER1,Decl(voidOperatorWithNumberType.ts,2,3))
+>NUMBER1 : number[], Symbol(NUMBER1, Decl(voidOperatorWithNumberType.ts, 2, 3))
 
 void foo();
 >void foo() : undefined
 >foo() : number
->foo : () => number, Symbol(foo,Decl(voidOperatorWithNumberType.ts,2,31))
+>foo : () => number, Symbol(foo, Decl(voidOperatorWithNumberType.ts, 2, 31))
 
 void objA.a;
 >void objA.a : undefined
->objA.a : number, Symbol(A.a,Decl(voidOperatorWithNumberType.ts,6,9))
->objA : A, Symbol(objA,Decl(voidOperatorWithNumberType.ts,14,3))
->a : number, Symbol(A.a,Decl(voidOperatorWithNumberType.ts,6,9))
+>objA.a : number, Symbol(A.a, Decl(voidOperatorWithNumberType.ts, 6, 9))
+>objA : A, Symbol(objA, Decl(voidOperatorWithNumberType.ts, 14, 3))
+>a : number, Symbol(A.a, Decl(voidOperatorWithNumberType.ts, 6, 9))
 
 void M.n;
 >void M.n : undefined
->M.n : number, Symbol(M.n,Decl(voidOperatorWithNumberType.ts,11,14))
->M : typeof M, Symbol(M,Decl(voidOperatorWithNumberType.ts,9,1))
->n : number, Symbol(M.n,Decl(voidOperatorWithNumberType.ts,11,14))
+>M.n : number, Symbol(M.n, Decl(voidOperatorWithNumberType.ts, 11, 14))
+>M : typeof M, Symbol(M, Decl(voidOperatorWithNumberType.ts, 9, 1))
+>n : number, Symbol(M.n, Decl(voidOperatorWithNumberType.ts, 11, 14))
 
 void objA.a, M.n;
 >void objA.a, M.n : number
 >void objA.a : undefined
->objA.a : number, Symbol(A.a,Decl(voidOperatorWithNumberType.ts,6,9))
->objA : A, Symbol(objA,Decl(voidOperatorWithNumberType.ts,14,3))
->a : number, Symbol(A.a,Decl(voidOperatorWithNumberType.ts,6,9))
->M.n : number, Symbol(M.n,Decl(voidOperatorWithNumberType.ts,11,14))
->M : typeof M, Symbol(M,Decl(voidOperatorWithNumberType.ts,9,1))
->n : number, Symbol(M.n,Decl(voidOperatorWithNumberType.ts,11,14))
+>objA.a : number, Symbol(A.a, Decl(voidOperatorWithNumberType.ts, 6, 9))
+>objA : A, Symbol(objA, Decl(voidOperatorWithNumberType.ts, 14, 3))
+>a : number, Symbol(A.a, Decl(voidOperatorWithNumberType.ts, 6, 9))
+>M.n : number, Symbol(M.n, Decl(voidOperatorWithNumberType.ts, 11, 14))
+>M : typeof M, Symbol(M, Decl(voidOperatorWithNumberType.ts, 9, 1))
+>n : number, Symbol(M.n, Decl(voidOperatorWithNumberType.ts, 11, 14))
 

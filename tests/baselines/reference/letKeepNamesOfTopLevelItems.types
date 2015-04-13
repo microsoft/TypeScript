@@ -1,17 +1,17 @@
 === tests/cases/compiler/letKeepNamesOfTopLevelItems.ts ===
 let x;
->x : any, Symbol(x,Decl(letKeepNamesOfTopLevelItems.ts,0,3))
+>x : any, Symbol(x, Decl(letKeepNamesOfTopLevelItems.ts, 0, 3))
 
 function foo() {
->foo : () => void, Symbol(foo,Decl(letKeepNamesOfTopLevelItems.ts,0,6))
+>foo : () => void, Symbol(foo, Decl(letKeepNamesOfTopLevelItems.ts, 0, 6))
 
     let x;
->x : any, Symbol(x,Decl(letKeepNamesOfTopLevelItems.ts,2,7))
+>x : any, Symbol(x, Decl(letKeepNamesOfTopLevelItems.ts, 2, 7))
 }
 
 module A {
->A : typeof A, Symbol(A,Decl(letKeepNamesOfTopLevelItems.ts,3,1))
+>A : typeof A, Symbol(A, Decl(letKeepNamesOfTopLevelItems.ts, 3, 1))
 
     let x;
->x : any, Symbol(x,Decl(letKeepNamesOfTopLevelItems.ts,6,7))
+>x : any, Symbol(x, Decl(letKeepNamesOfTopLevelItems.ts, 6, 7))
 }

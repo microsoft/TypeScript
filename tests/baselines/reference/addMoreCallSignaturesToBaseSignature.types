@@ -1,24 +1,24 @@
 === tests/cases/compiler/addMoreCallSignaturesToBaseSignature.ts ===
 interface Foo {
->Foo : Foo, Symbol(Foo,Decl(addMoreCallSignaturesToBaseSignature.ts,0,0))
+>Foo : Foo, Symbol(Foo, Decl(addMoreCallSignaturesToBaseSignature.ts, 0, 0))
 
     (): string;
 }
 
 interface Bar extends Foo {
->Bar : Bar, Symbol(Bar,Decl(addMoreCallSignaturesToBaseSignature.ts,2,1))
->Foo : Foo, Symbol(Foo,Decl(addMoreCallSignaturesToBaseSignature.ts,0,0))
+>Bar : Bar, Symbol(Bar, Decl(addMoreCallSignaturesToBaseSignature.ts, 2, 1))
+>Foo : Foo, Symbol(Foo, Decl(addMoreCallSignaturesToBaseSignature.ts, 0, 0))
 
     (key: string): string;
->key : string, Symbol(key,Decl(addMoreCallSignaturesToBaseSignature.ts,5,5))
+>key : string, Symbol(key, Decl(addMoreCallSignaturesToBaseSignature.ts, 5, 5))
 }
 
 var a: Bar;
->a : Bar, Symbol(a,Decl(addMoreCallSignaturesToBaseSignature.ts,8,3))
->Bar : Bar, Symbol(Bar,Decl(addMoreCallSignaturesToBaseSignature.ts,2,1))
+>a : Bar, Symbol(a, Decl(addMoreCallSignaturesToBaseSignature.ts, 8, 3))
+>Bar : Bar, Symbol(Bar, Decl(addMoreCallSignaturesToBaseSignature.ts, 2, 1))
 
 var kitty = a();
->kitty : string, Symbol(kitty,Decl(addMoreCallSignaturesToBaseSignature.ts,9,3))
+>kitty : string, Symbol(kitty, Decl(addMoreCallSignaturesToBaseSignature.ts, 9, 3))
 >a() : string
->a : Bar, Symbol(a,Decl(addMoreCallSignaturesToBaseSignature.ts,8,3))
+>a : Bar, Symbol(a, Decl(addMoreCallSignaturesToBaseSignature.ts, 8, 3))
 

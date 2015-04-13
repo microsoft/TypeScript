@@ -1,45 +1,45 @@
 === tests/cases/conformance/internalModules/DeclarationMerging/EnumAndModuleWithSameNameAndCommonRoot.ts ===
 enum enumdule {
->enumdule : enumdule, Symbol(enumdule,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,0,0),Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,2,1))
+>enumdule : enumdule, Symbol(enumdule, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 0, 0), Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 2, 1))
 
     Red, Blue
->Red : enumdule, Symbol(enumdule.Red,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,0,15))
->Blue : enumdule, Symbol(enumdule.Blue,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,1,8))
+>Red : enumdule, Symbol(enumdule.Red, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 0, 15))
+>Blue : enumdule, Symbol(enumdule.Blue, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 1, 8))
 }
 
 module enumdule {
->enumdule : typeof enumdule, Symbol(enumdule,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,0,0),Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,2,1))
+>enumdule : typeof enumdule, Symbol(enumdule, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 0, 0), Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 2, 1))
 
     export class Point {
->Point : Point, Symbol(Point,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,4,17))
+>Point : Point, Symbol(Point, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 4, 17))
 
         constructor(public x: number, public y: number) { }
->x : number, Symbol(x,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,7,20))
->y : number, Symbol(y,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,7,37))
+>x : number, Symbol(x, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 7, 20))
+>y : number, Symbol(y, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 7, 37))
     }
 }
 
 var x: enumdule;
->x : enumdule, Symbol(x,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,11,3),Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,12,3))
->enumdule : enumdule, Symbol(enumdule,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,0,0),Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,2,1))
+>x : enumdule, Symbol(x, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 11, 3), Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 12, 3))
+>enumdule : enumdule, Symbol(enumdule, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 0, 0), Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 2, 1))
 
 var x = enumdule.Red;
->x : enumdule, Symbol(x,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,11,3),Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,12,3))
->enumdule.Red : enumdule, Symbol(enumdule.Red,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,0,15))
->enumdule : typeof enumdule, Symbol(enumdule,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,0,0),Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,2,1))
->Red : enumdule, Symbol(enumdule.Red,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,0,15))
+>x : enumdule, Symbol(x, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 11, 3), Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 12, 3))
+>enumdule.Red : enumdule, Symbol(enumdule.Red, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 0, 15))
+>enumdule : typeof enumdule, Symbol(enumdule, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 0, 0), Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 2, 1))
+>Red : enumdule, Symbol(enumdule.Red, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 0, 15))
 
 var y: { x: number; y: number };
->y : { x: number; y: number; }, Symbol(y,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,14,3),Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,15,3))
->x : number, Symbol(x,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,14,8))
->y : number, Symbol(y,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,14,19))
+>y : { x: number; y: number; }, Symbol(y, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 14, 3), Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 15, 3))
+>x : number, Symbol(x, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 14, 8))
+>y : number, Symbol(y, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 14, 19))
 
 var y = new enumdule.Point(0, 0);
->y : { x: number; y: number; }, Symbol(y,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,14,3),Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,15,3))
+>y : { x: number; y: number; }, Symbol(y, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 14, 3), Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 15, 3))
 >new enumdule.Point(0, 0) : enumdule.Point
->enumdule.Point : typeof enumdule.Point, Symbol(enumdule.Point,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,4,17))
->enumdule : typeof enumdule, Symbol(enumdule,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,0,0),Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,2,1))
->Point : typeof enumdule.Point, Symbol(enumdule.Point,Decl(EnumAndModuleWithSameNameAndCommonRoot.ts,4,17))
+>enumdule.Point : typeof enumdule.Point, Symbol(enumdule.Point, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 4, 17))
+>enumdule : typeof enumdule, Symbol(enumdule, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 0, 0), Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 2, 1))
+>Point : typeof enumdule.Point, Symbol(enumdule.Point, Decl(EnumAndModuleWithSameNameAndCommonRoot.ts, 4, 17))
 >0 : number
 >0 : number
 

@@ -1,6 +1,6 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of44.ts ===
 var array: [number, string | boolean | symbol][] = [[0, ""], [0, true], [1, Symbol()]]
->array : [number, string | boolean | symbol][], Symbol(array,Decl(for-of44.ts,0,3))
+>array : [number, string | boolean | symbol][], Symbol(array, Decl(for-of44.ts, 0, 3))
 >[[0, ""], [0, true], [1, Symbol()]] : ([number, string] | [number, boolean] | [number, symbol])[]
 >[0, ""] : [number, string]
 >0 : number
@@ -11,16 +11,16 @@ var array: [number, string | boolean | symbol][] = [[0, ""], [0, true], [1, Symb
 >[1, Symbol()] : [number, symbol]
 >1 : number
 >Symbol() : symbol
->Symbol : SymbolConstructor, Symbol(Symbol,Decl(lib.d.ts,1186,52),Decl(lib.d.ts,1262,11))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
 
 for (var [num, strBoolSym] of array) {
->num : number, Symbol(num,Decl(for-of44.ts,1,10))
->strBoolSym : string | boolean | symbol, Symbol(strBoolSym,Decl(for-of44.ts,1,14))
->array : [number, string | boolean | symbol][], Symbol(array,Decl(for-of44.ts,0,3))
+>num : number, Symbol(num, Decl(for-of44.ts, 1, 10))
+>strBoolSym : string | boolean | symbol, Symbol(strBoolSym, Decl(for-of44.ts, 1, 14))
+>array : [number, string | boolean | symbol][], Symbol(array, Decl(for-of44.ts, 0, 3))
 
     num;
->num : number, Symbol(num,Decl(for-of44.ts,1,10))
+>num : number, Symbol(num, Decl(for-of44.ts, 1, 10))
 
     strBoolSym;
->strBoolSym : string | boolean | symbol, Symbol(strBoolSym,Decl(for-of44.ts,1,14))
+>strBoolSym : string | boolean | symbol, Symbol(strBoolSym, Decl(for-of44.ts, 1, 14))
 }

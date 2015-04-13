@@ -1,63 +1,63 @@
 === tests/cases/compiler/sourceMapValidationTryCatchFinally.ts ===
 var x = 10;
->x : number, Symbol(x,Decl(sourceMapValidationTryCatchFinally.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationTryCatchFinally.ts, 0, 3))
 >10 : number
 
 try {
     x = x + 1;
 >x = x + 1 : number
->x : number, Symbol(x,Decl(sourceMapValidationTryCatchFinally.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationTryCatchFinally.ts, 0, 3))
 >x + 1 : number
->x : number, Symbol(x,Decl(sourceMapValidationTryCatchFinally.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationTryCatchFinally.ts, 0, 3))
 >1 : number
 
 } catch (e) {
->e : any, Symbol(e,Decl(sourceMapValidationTryCatchFinally.ts,3,9))
+>e : any, Symbol(e, Decl(sourceMapValidationTryCatchFinally.ts, 3, 9))
 
     x = x - 1;
 >x = x - 1 : number
->x : number, Symbol(x,Decl(sourceMapValidationTryCatchFinally.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationTryCatchFinally.ts, 0, 3))
 >x - 1 : number
->x : number, Symbol(x,Decl(sourceMapValidationTryCatchFinally.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationTryCatchFinally.ts, 0, 3))
 >1 : number
 
 } finally {
     x = x * 10;
 >x = x * 10 : number
->x : number, Symbol(x,Decl(sourceMapValidationTryCatchFinally.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationTryCatchFinally.ts, 0, 3))
 >x * 10 : number
->x : number, Symbol(x,Decl(sourceMapValidationTryCatchFinally.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationTryCatchFinally.ts, 0, 3))
 >10 : number
 }
 try
 {
     x = x + 1;
 >x = x + 1 : number
->x : number, Symbol(x,Decl(sourceMapValidationTryCatchFinally.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationTryCatchFinally.ts, 0, 3))
 >x + 1 : number
->x : number, Symbol(x,Decl(sourceMapValidationTryCatchFinally.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationTryCatchFinally.ts, 0, 3))
 >1 : number
 
     throw new Error();
 >new Error() : Error
->Error : ErrorConstructor, Symbol(Error,Decl(lib.d.ts,876,38),Decl(lib.d.ts,889,11))
+>Error : ErrorConstructor, Symbol(Error, Decl(lib.d.ts, 876, 38), Decl(lib.d.ts, 889, 11))
 }
 catch (e)
->e : any, Symbol(e,Decl(sourceMapValidationTryCatchFinally.ts,13,7))
+>e : any, Symbol(e, Decl(sourceMapValidationTryCatchFinally.ts, 13, 7))
 {
     x = x - 1;
 >x = x - 1 : number
->x : number, Symbol(x,Decl(sourceMapValidationTryCatchFinally.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationTryCatchFinally.ts, 0, 3))
 >x - 1 : number
->x : number, Symbol(x,Decl(sourceMapValidationTryCatchFinally.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationTryCatchFinally.ts, 0, 3))
 >1 : number
 }
 finally
 {
     x = x * 10;
 >x = x * 10 : number
->x : number, Symbol(x,Decl(sourceMapValidationTryCatchFinally.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationTryCatchFinally.ts, 0, 3))
 >x * 10 : number
->x : number, Symbol(x,Decl(sourceMapValidationTryCatchFinally.ts,0,3))
+>x : number, Symbol(x, Decl(sourceMapValidationTryCatchFinally.ts, 0, 3))
 >10 : number
 }

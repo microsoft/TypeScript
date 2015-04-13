@@ -1,4 +1,4 @@
 === tests/cases/compiler/asiAmbientFunctionDeclaration.ts ===
 declare function foo()
->foo : () => any, Symbol(foo,Decl(asiAmbientFunctionDeclaration.ts,0,0))
+>foo : () => any, Symbol(foo, Decl(asiAmbientFunctionDeclaration.ts, 0, 0))
 

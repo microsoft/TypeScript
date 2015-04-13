@@ -1,22 +1,22 @@
 === tests/cases/compiler/genericWithCallSignatureReturningSpecialization.ts ===
 interface B<T> {
->B : B<T>, Symbol(B,Decl(genericWithCallSignatureReturningSpecialization.ts,0,0))
->T : T, Symbol(T,Decl(genericWithCallSignatureReturningSpecialization.ts,0,12))
+>B : B<T>, Symbol(B, Decl(genericWithCallSignatureReturningSpecialization.ts, 0, 0))
+>T : T, Symbol(T, Decl(genericWithCallSignatureReturningSpecialization.ts, 0, 12))
 
     f(): B<number>;
->f : () => B<number>, Symbol(f,Decl(genericWithCallSignatureReturningSpecialization.ts,0,16))
->B : B<T>, Symbol(B,Decl(genericWithCallSignatureReturningSpecialization.ts,0,0))
+>f : () => B<number>, Symbol(f, Decl(genericWithCallSignatureReturningSpecialization.ts, 0, 16))
+>B : B<T>, Symbol(B, Decl(genericWithCallSignatureReturningSpecialization.ts, 0, 0))
 
     (value: T): void;
->value : T, Symbol(value,Decl(genericWithCallSignatureReturningSpecialization.ts,2,5))
->T : T, Symbol(T,Decl(genericWithCallSignatureReturningSpecialization.ts,0,12))
+>value : T, Symbol(value, Decl(genericWithCallSignatureReturningSpecialization.ts, 2, 5))
+>T : T, Symbol(T, Decl(genericWithCallSignatureReturningSpecialization.ts, 0, 12))
 }
 var x: B<boolean>;
->x : B<boolean>, Symbol(x,Decl(genericWithCallSignatureReturningSpecialization.ts,4,3))
->B : B<T>, Symbol(B,Decl(genericWithCallSignatureReturningSpecialization.ts,0,0))
+>x : B<boolean>, Symbol(x, Decl(genericWithCallSignatureReturningSpecialization.ts, 4, 3))
+>B : B<T>, Symbol(B, Decl(genericWithCallSignatureReturningSpecialization.ts, 0, 0))
 
 x(true); // was error
 >x(true) : void
->x : B<boolean>, Symbol(x,Decl(genericWithCallSignatureReturningSpecialization.ts,4,3))
+>x : B<boolean>, Symbol(x, Decl(genericWithCallSignatureReturningSpecialization.ts, 4, 3))
 >true : boolean
 

@@ -1,14 +1,14 @@
 === tests/cases/compiler/contextualTyping18.ts ===
 var foo: {id:number;} = <{id:number;}>({ }); foo = {id: 5};
->foo : { id: number; }, Symbol(foo,Decl(contextualTyping18.ts,0,3))
->id : number, Symbol(id,Decl(contextualTyping18.ts,0,10))
+>foo : { id: number; }, Symbol(foo, Decl(contextualTyping18.ts, 0, 3))
+>id : number, Symbol(id, Decl(contextualTyping18.ts, 0, 10))
 ><{id:number;}>({ }) : { id: number; }
->id : number, Symbol(id,Decl(contextualTyping18.ts,0,26))
+>id : number, Symbol(id, Decl(contextualTyping18.ts, 0, 26))
 >({ }) : {}
 >{ } : {}
 >foo = {id: 5} : { id: number; }
->foo : { id: number; }, Symbol(foo,Decl(contextualTyping18.ts,0,3))
+>foo : { id: number; }, Symbol(foo, Decl(contextualTyping18.ts, 0, 3))
 >{id: 5} : { id: number; }
->id : number, Symbol(id,Decl(contextualTyping18.ts,0,52))
+>id : number, Symbol(id, Decl(contextualTyping18.ts, 0, 52))
 >5 : number
 

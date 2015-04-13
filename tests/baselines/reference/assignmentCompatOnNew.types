@@ -1,14 +1,14 @@
 === tests/cases/compiler/assignmentCompatOnNew.ts ===
 class Foo{};
->Foo : Foo, Symbol(Foo,Decl(assignmentCompatOnNew.ts,0,0))
+>Foo : Foo, Symbol(Foo, Decl(assignmentCompatOnNew.ts, 0, 0))
 
 function bar(x: {new(): Foo;}){}
->bar : (x: new () => Foo) => void, Symbol(bar,Decl(assignmentCompatOnNew.ts,0,12))
->x : new () => Foo, Symbol(x,Decl(assignmentCompatOnNew.ts,2,13))
->Foo : Foo, Symbol(Foo,Decl(assignmentCompatOnNew.ts,0,0))
+>bar : (x: new () => Foo) => void, Symbol(bar, Decl(assignmentCompatOnNew.ts, 0, 12))
+>x : new () => Foo, Symbol(x, Decl(assignmentCompatOnNew.ts, 2, 13))
+>Foo : Foo, Symbol(Foo, Decl(assignmentCompatOnNew.ts, 0, 0))
 
 bar(Foo); // Error, but should be allowed
 >bar(Foo) : void
->bar : (x: new () => Foo) => void, Symbol(bar,Decl(assignmentCompatOnNew.ts,0,12))
->Foo : typeof Foo, Symbol(Foo,Decl(assignmentCompatOnNew.ts,0,0))
+>bar : (x: new () => Foo) => void, Symbol(bar, Decl(assignmentCompatOnNew.ts, 0, 12))
+>Foo : typeof Foo, Symbol(Foo, Decl(assignmentCompatOnNew.ts, 0, 0))
 

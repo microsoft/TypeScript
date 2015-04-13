@@ -1,38 +1,38 @@
 === tests/cases/conformance/ambient/ambientInsideNonAmbient.ts ===
 module M {
->M : typeof M, Symbol(M,Decl(ambientInsideNonAmbient.ts,0,0))
+>M : typeof M, Symbol(M, Decl(ambientInsideNonAmbient.ts, 0, 0))
 
     export declare var x;
->x : any, Symbol(x,Decl(ambientInsideNonAmbient.ts,1,22))
+>x : any, Symbol(x, Decl(ambientInsideNonAmbient.ts, 1, 22))
 
     export declare function f();
->f : () => any, Symbol(f,Decl(ambientInsideNonAmbient.ts,1,25))
+>f : () => any, Symbol(f, Decl(ambientInsideNonAmbient.ts, 1, 25))
 
     export declare class C { }
->C : C, Symbol(C,Decl(ambientInsideNonAmbient.ts,2,32))
+>C : C, Symbol(C, Decl(ambientInsideNonAmbient.ts, 2, 32))
 
     export declare enum E { }
->E : E, Symbol(E,Decl(ambientInsideNonAmbient.ts,3,30))
+>E : E, Symbol(E, Decl(ambientInsideNonAmbient.ts, 3, 30))
 
     export declare module M { }
->M : any, Symbol(M,Decl(ambientInsideNonAmbient.ts,4,29))
+>M : any, Symbol(M, Decl(ambientInsideNonAmbient.ts, 4, 29))
 }
 
 module M2 {
->M2 : typeof M2, Symbol(M2,Decl(ambientInsideNonAmbient.ts,6,1))
+>M2 : typeof M2, Symbol(M2, Decl(ambientInsideNonAmbient.ts, 6, 1))
 
     declare var x;
->x : any, Symbol(x,Decl(ambientInsideNonAmbient.ts,9,15))
+>x : any, Symbol(x, Decl(ambientInsideNonAmbient.ts, 9, 15))
 
     declare function f();
->f : () => any, Symbol(f,Decl(ambientInsideNonAmbient.ts,9,18))
+>f : () => any, Symbol(f, Decl(ambientInsideNonAmbient.ts, 9, 18))
 
     declare class C { }
->C : C, Symbol(C,Decl(ambientInsideNonAmbient.ts,10,25))
+>C : C, Symbol(C, Decl(ambientInsideNonAmbient.ts, 10, 25))
 
     declare enum E { }
->E : E, Symbol(E,Decl(ambientInsideNonAmbient.ts,11,23))
+>E : E, Symbol(E, Decl(ambientInsideNonAmbient.ts, 11, 23))
 
     declare module M { }
->M : any, Symbol(M,Decl(ambientInsideNonAmbient.ts,12,22))
+>M : any, Symbol(M, Decl(ambientInsideNonAmbient.ts, 12, 22))
 }

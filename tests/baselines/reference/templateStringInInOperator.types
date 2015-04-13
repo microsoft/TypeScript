@@ -1,12 +1,12 @@
 === tests/cases/conformance/es6/templates/templateStringInInOperator.ts ===
 var x = `${ "hi" }` in { hi: 10, hello: 20};
->x : boolean, Symbol(x,Decl(templateStringInInOperator.ts,0,3))
+>x : boolean, Symbol(x, Decl(templateStringInInOperator.ts, 0, 3))
 >`${ "hi" }` in { hi: 10, hello: 20} : boolean
 >`${ "hi" }` : string
 >"hi" : string
 >{ hi: 10, hello: 20} : { hi: number; hello: number; }
->hi : number, Symbol(hi,Decl(templateStringInInOperator.ts,0,24))
+>hi : number, Symbol(hi, Decl(templateStringInInOperator.ts, 0, 24))
 >10 : number
->hello : number, Symbol(hello,Decl(templateStringInInOperator.ts,0,32))
+>hello : number, Symbol(hello, Decl(templateStringInInOperator.ts, 0, 32))
 >20 : number
 

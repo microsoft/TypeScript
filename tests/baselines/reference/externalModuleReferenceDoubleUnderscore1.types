@@ -1,44 +1,44 @@
 === tests/cases/compiler/externalModuleReferenceDoubleUnderscore1.ts ===
 declare module 'timezonecomplete' {
     import basics = require("__timezonecomplete/basics");
->basics : typeof basics, Symbol(basics,Decl(externalModuleReferenceDoubleUnderscore1.ts,0,35))
+>basics : typeof basics, Symbol(basics, Decl(externalModuleReferenceDoubleUnderscore1.ts, 0, 35))
 
     export import TimeUnit = basics.TimeUnit;
->TimeUnit : typeof basics.TimeUnit, Symbol(TimeUnit,Decl(externalModuleReferenceDoubleUnderscore1.ts,1,57))
->basics : typeof basics, Symbol(basics,Decl(externalModuleReferenceDoubleUnderscore1.ts,3,1))
->TimeUnit : basics.TimeUnit, Symbol(basics.TimeUnit,Decl(externalModuleReferenceDoubleUnderscore1.ts,5,44))
+>TimeUnit : typeof basics.TimeUnit, Symbol(TimeUnit, Decl(externalModuleReferenceDoubleUnderscore1.ts, 1, 57))
+>basics : typeof basics, Symbol(basics, Decl(externalModuleReferenceDoubleUnderscore1.ts, 3, 1))
+>TimeUnit : basics.TimeUnit, Symbol(basics.TimeUnit, Decl(externalModuleReferenceDoubleUnderscore1.ts, 5, 44))
 }
 
 declare module '__timezonecomplete/basics' {
     export enum TimeUnit {
->TimeUnit : TimeUnit, Symbol(TimeUnit,Decl(externalModuleReferenceDoubleUnderscore1.ts,5,44))
+>TimeUnit : TimeUnit, Symbol(TimeUnit, Decl(externalModuleReferenceDoubleUnderscore1.ts, 5, 44))
 
         Second = 0,
->Second : TimeUnit, Symbol(TimeUnit.Second,Decl(externalModuleReferenceDoubleUnderscore1.ts,6,26))
+>Second : TimeUnit, Symbol(TimeUnit.Second, Decl(externalModuleReferenceDoubleUnderscore1.ts, 6, 26))
 >0 : number
 
         Minute = 1,
->Minute : TimeUnit, Symbol(TimeUnit.Minute,Decl(externalModuleReferenceDoubleUnderscore1.ts,7,19))
+>Minute : TimeUnit, Symbol(TimeUnit.Minute, Decl(externalModuleReferenceDoubleUnderscore1.ts, 7, 19))
 >1 : number
 
         Hour = 2,
->Hour : TimeUnit, Symbol(TimeUnit.Hour,Decl(externalModuleReferenceDoubleUnderscore1.ts,8,19))
+>Hour : TimeUnit, Symbol(TimeUnit.Hour, Decl(externalModuleReferenceDoubleUnderscore1.ts, 8, 19))
 >2 : number
 
         Day = 3,
->Day : TimeUnit, Symbol(TimeUnit.Day,Decl(externalModuleReferenceDoubleUnderscore1.ts,9,17))
+>Day : TimeUnit, Symbol(TimeUnit.Day, Decl(externalModuleReferenceDoubleUnderscore1.ts, 9, 17))
 >3 : number
 
         Week = 4,
->Week : TimeUnit, Symbol(TimeUnit.Week,Decl(externalModuleReferenceDoubleUnderscore1.ts,10,16))
+>Week : TimeUnit, Symbol(TimeUnit.Week, Decl(externalModuleReferenceDoubleUnderscore1.ts, 10, 16))
 >4 : number
 
         Month = 5,
->Month : TimeUnit, Symbol(TimeUnit.Month,Decl(externalModuleReferenceDoubleUnderscore1.ts,11,17))
+>Month : TimeUnit, Symbol(TimeUnit.Month, Decl(externalModuleReferenceDoubleUnderscore1.ts, 11, 17))
 >5 : number
 
         Year = 6,
->Year : TimeUnit, Symbol(TimeUnit.Year,Decl(externalModuleReferenceDoubleUnderscore1.ts,12,18))
+>Year : TimeUnit, Symbol(TimeUnit.Year, Decl(externalModuleReferenceDoubleUnderscore1.ts, 12, 18))
 >6 : number
     }
 }

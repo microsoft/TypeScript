@@ -1,17 +1,17 @@
 === tests/cases/compiler/detachedCommentAtStartOfLambdaFunction2.ts ===
 class TestFile {
->TestFile : TestFile, Symbol(TestFile,Decl(detachedCommentAtStartOfLambdaFunction2.ts,0,0))
+>TestFile : TestFile, Symbol(TestFile, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 0, 0))
 
     name: string;
->name : string, Symbol(name,Decl(detachedCommentAtStartOfLambdaFunction2.ts,0,16))
+>name : string, Symbol(name, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 0, 16))
 
     foo(message: string): () => string {
->foo : (message: string) => () => string, Symbol(foo,Decl(detachedCommentAtStartOfLambdaFunction2.ts,1,17))
->message : string, Symbol(message,Decl(detachedCommentAtStartOfLambdaFunction2.ts,2,8))
+>foo : (message: string) => () => string, Symbol(foo, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 1, 17))
+>message : string, Symbol(message, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 2, 8))
 
         return (...x: string[]) =>
 >(...x: string[]) =>            /// <summary>Test summary</summary>            /// <param name="message" type="String" />            /// <returns type="Function" />            message + this.name : (...x: string[]) => string
->x : string[], Symbol(x,Decl(detachedCommentAtStartOfLambdaFunction2.ts,3,16))
+>x : string[], Symbol(x, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 3, 16))
 
             /// <summary>Test summary</summary>
             /// <param name="message" type="String" />
@@ -19,9 +19,9 @@ class TestFile {
 
             message + this.name;
 >message + this.name : string
->message : string, Symbol(message,Decl(detachedCommentAtStartOfLambdaFunction2.ts,2,8))
->this.name : string, Symbol(name,Decl(detachedCommentAtStartOfLambdaFunction2.ts,0,16))
->this : TestFile, Symbol(TestFile,Decl(detachedCommentAtStartOfLambdaFunction2.ts,0,0))
->name : string, Symbol(name,Decl(detachedCommentAtStartOfLambdaFunction2.ts,0,16))
+>message : string, Symbol(message, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 2, 8))
+>this.name : string, Symbol(name, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 0, 16))
+>this : TestFile, Symbol(TestFile, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 0, 0))
+>name : string, Symbol(name, Decl(detachedCommentAtStartOfLambdaFunction2.ts, 0, 16))
     }
 }

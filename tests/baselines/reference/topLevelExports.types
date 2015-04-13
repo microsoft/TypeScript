@@ -1,19 +1,19 @@
 === tests/cases/compiler/topLevelExports.ts ===
 export var foo = 3;
->foo : number, Symbol(foo,Decl(topLevelExports.ts,0,10))
+>foo : number, Symbol(foo, Decl(topLevelExports.ts, 0, 10))
 >3 : number
 
 function log(n:number) { return n;}
->log : (n: number) => number, Symbol(log,Decl(topLevelExports.ts,0,19))
->n : number, Symbol(n,Decl(topLevelExports.ts,2,13))
->n : number, Symbol(n,Decl(topLevelExports.ts,2,13))
+>log : (n: number) => number, Symbol(log, Decl(topLevelExports.ts, 0, 19))
+>n : number, Symbol(n, Decl(topLevelExports.ts, 2, 13))
+>n : number, Symbol(n, Decl(topLevelExports.ts, 2, 13))
 
 void log(foo).toString();
 >void log(foo).toString() : undefined
 >log(foo).toString() : string
->log(foo).toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
+>log(foo).toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
 >log(foo) : number
->log : (n: number) => number, Symbol(log,Decl(topLevelExports.ts,0,19))
->foo : number, Symbol(foo,Decl(topLevelExports.ts,0,10))
->toString : (radix?: number) => string, Symbol(Number.toString,Decl(lib.d.ts,458,18))
+>log : (n: number) => number, Symbol(log, Decl(topLevelExports.ts, 0, 19))
+>foo : number, Symbol(foo, Decl(topLevelExports.ts, 0, 10))
+>toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
 
