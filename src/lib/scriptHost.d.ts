@@ -100,7 +100,7 @@ interface TextStreamReader extends TextStreamBase {
 declare var WScript: {
     /**
     * Outputs text to either a message box (under WScript.exe) or the command console window followed by
-    * a newline (under CScript.ext).
+    * a newline (under CScript.exe).
     */
     Echo(s: any): void;
 
@@ -188,7 +188,7 @@ declare var WScript: {
     /**
      * Retrieves an existing object with the specified ProgID from memory, or creates a new one from a file.
      * @param strPathname Fully qualified path to the file containing the object persisted to disk.
-     * For objects in memory, pass a zero-length string.
+     *                       For objects in memory, pass a zero-length string.
      * @param strProgID
      * @param strPrefix Function names in the form prefix_event will be bound to this object's COM events.
      */
