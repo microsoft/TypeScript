@@ -2541,8 +2541,8 @@ module ts {
                     case SyntaxKind.NewExpression:
                         let expression = <CallExpression>node;
                         if (expression.typeArguments && expression.typeArguments.length > 0) {
-                            let start = expression.typeArguments.pos;
-                            diagnostics.push(createFileDiagnostic(sourceFile, start, expression.typeArguments.end - start,
+                            let start = expression.typeArguments.start;
+                            diagnostics.push(createFileDiagnostic(sourceFile, start, nodeArrayEnd(expression.typeArguments) - start,
                                 Diagnostics.type_arguments_can_only_be_used_in_a_ts_file));
                             return true;
                         }
@@ -2550,8 +2550,8 @@ module ts {
                     case SyntaxKind.Parameter:
                         let parameter = <ParameterDeclaration>node;
                         if (parameter.modifiers) {
-                            let start = parameter.modifiers.pos;
-                            diagnostics.push(createFileDiagnostic(sourceFile, start, parameter.modifiers.end - start,
+                            let start = parameter.modifiers.start;
+                            diagnostics.push(createFileDiagnostic(sourceFile, start, nodeArrayEnd(parameter.modifiers) - start,
                                 Diagnostics.parameter_modifiers_can_only_be_used_in_a_ts_file));
                             return true;
                         }
@@ -2584,8 +2584,8 @@ module ts {
 
             function checkTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
                 if (typeParameters) {
-                    let start = typeParameters.pos;
-                    diagnostics.push(createFileDiagnostic(sourceFile, start, typeParameters.end - start, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
+                    let start = typeParameters.start;
+                    diagnostics.push(createFileDiagnostic(sourceFile, start, nodeArrayEnd(typeParameters) - start, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
                     return true;
                 }
                 return false;

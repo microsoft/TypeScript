@@ -278,7 +278,7 @@ module ts {
                 let pos = skipTrivia(sourceFile.text, 0, /*stopAfterLineBreak*/ false);
                 if (pos === sourceFile.text.length) {
                     // file is empty - return span for the beginning of the file
-                    return createTextSpan(0, 0);
+                    return createSpan(0, 0);
                 }
                 return getSpanOfTokenAtPosition(sourceFile, pos);
             // This list is a work in progress. Add missing node kinds to improve their error
@@ -442,6 +442,18 @@ module ts {
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.VariableDeclaration:
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    export function isAccessor(node: Node): boolean {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
                     return true;
             }
         }

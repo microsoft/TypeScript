@@ -68,12 +68,12 @@ module ts.server {
             };
         }
 
-        private processRequest<T extends protocol.Request>(command: string, arguments?: any): T {
+        private processRequest<T extends protocol.Request>(command: string, args?: any): T {
             var request: protocol.Request = {
                 seq: this.sequence++,
                 type: "request",
-                command: command,
-                arguments: arguments
+                arguments: args,
+                command
             };
 
             this.writeMessage(JSON.stringify(request));
