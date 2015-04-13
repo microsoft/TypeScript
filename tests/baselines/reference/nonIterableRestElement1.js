@@ -4,5 +4,4 @@ var c = {};
 
 //// [nonIterableRestElement1.js]
 var c = {};
-_a = ["", 0], c = _a.slice(0);
-var _a;
+c = (["", 0]).slice(0);

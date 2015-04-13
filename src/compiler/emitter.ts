@@ -2558,12 +2558,22 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     return node;
                 }
 
-                function createPropertyAccessForDestructuringProperty(object: Expression, propName: Identifier): Expression {
+                function createPropertyAccessForDestructuringProperty(object: Expression, propName: Identifier | LiteralExpression): Expression {
                     if (propName.kind !== SyntaxKind.Identifier) {
                         return createElementAccessExpression(object, propName);
                     }
 
                     return createPropertyAccessExpression(object, propName);
+                }
+
+                function createSliceCall(value: Expression, sliceIndex: number): CallExpression {
+                    let call = <CallExpression>createSynthesizedNode(SyntaxKind.CallExpression);
+                    let sliceIdentifier = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+                    sliceIdentifier.text = "slice";
+                    call.expression = createPropertyAccessExpression(value, sliceIdentifier);
+                    call.arguments = <NodeArray<LiteralExpression>>createSynthesizedNodeArray();
+                    call.arguments[0] = createNumericLiteral(sliceIndex);
+                    return call;
                 }
 
                 function emitObjectLiteralAssignment(target: ObjectLiteralExpression, value: Expression) {
@@ -2576,7 +2586,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     for (let p of properties) {
                         if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                             // TODO(andersh): Computed property support
-                            let propName = <Identifier>((<PropertyAssignment>p).name);
+                            let propName = <Identifier | LiteralExpression>((<PropertyAssignment>p).name);
                             emitDestructuringAssignment((<PropertyAssignment>p).initializer || propName, createPropertyAccessForDestructuringProperty(value, propName));
                         }
                     }
@@ -2596,9 +2606,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                                 emitDestructuringAssignment(e, createElementAccessExpression(value, createNumericLiteral(i)));
                             }
                             else if (i === elements.length - 1) {
-                                value = ensureIdentifier(value);
-                                emitAssignment(<Identifier>(<SpreadElementExpression>e).expression, value);
-                                write(".slice(" + i + ")");
+                                emitDestructuringAssignment((<SpreadElementExpression>e).expression, createSliceCall(value, i));
                             }
                         }
                     }
@@ -2670,9 +2678,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                                     emitBindingElement(element, createElementAccessExpression(value, createNumericLiteral(i)));
                                 }
                                 else if (i === elements.length - 1) {
-                                    value = ensureIdentifier(value);
-                                    emitAssignment(<Identifier>element.name, value);
-                                    write(".slice(" + i + ")");
+                                    emitBindingElement(element, createSliceCall(value, i));
                                 }
                             }
                         }

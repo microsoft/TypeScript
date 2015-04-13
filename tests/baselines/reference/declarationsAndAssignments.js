@@ -321,28 +321,28 @@ function f20() {
     var x;
     var y;
     var z;
-    var _a = [1, 2, 3], a = _a.slice(0);
-    var _b = [1, 2, 3], x = _b[0], a = _b.slice(1);
-    var _c = [1, 2, 3], x = _c[0], y = _c[1], a = _c.slice(2);
-    var _d = [1, 2, 3], x = _d[0], y = _d[1], z = _d[2], a = _d.slice(3);
-    _e = [1, 2, 3], a = _e.slice(0);
-    _f = [1, 2, 3], x = _f[0], a = _f.slice(1);
-    _g = [1, 2, 3], x = _g[0], y = _g[1], a = _g.slice(2);
-    _h = [1, 2, 3], x = _h[0], y = _h[1], z = _h[2], a = _h.slice(3);
-    var _e, _f, _g, _h;
+    var a = ([1, 2, 3]).slice(0);
+    var _a = [1, 2, 3], x = _a[0], a = _a.slice(1);
+    var _b = [1, 2, 3], x = _b[0], y = _b[1], a = _b.slice(2);
+    var _c = [1, 2, 3], x = _c[0], y = _c[1], z = _c[2], a = _c.slice(3);
+    a = ([1, 2, 3]).slice(0);
+    _d = [1, 2, 3], x = _d[0], a = _d.slice(1);
+    _e = [1, 2, 3], x = _e[0], y = _e[1], a = _e.slice(2);
+    _f = [1, 2, 3], x = _f[0], y = _f[1], z = _f[2], a = _f.slice(3);
+    var _d, _e, _f;
 }
 function f21() {
     var a;
     var x;
     var y;
     var z;
-    var _a = [1, "hello", true], a = _a.slice(0);
-    var _b = [1, "hello", true], x = _b[0], a = _b.slice(1);
-    var _c = [1, "hello", true], x = _c[0], y = _c[1], a = _c.slice(2);
-    var _d = [1, "hello", true], x = _d[0], y = _d[1], z = _d[2], a = _d.slice(3);
-    _e = [1, "hello", true], a = _e.slice(0);
-    _f = [1, "hello", true], x = _f[0], a = _f.slice(1);
-    _g = [1, "hello", true], x = _g[0], y = _g[1], a = _g.slice(2);
-    _h = [1, "hello", true], x = _h[0], y = _h[1], z = _h[2], a = _h.slice(3);
-    var _e, _f, _g, _h;
+    var a = ([1, "hello", true]).slice(0);
+    var _a = [1, "hello", true], x = _a[0], a = _a.slice(1);
+    var _b = [1, "hello", true], x = _b[0], y = _b[1], a = _b.slice(2);
+    var _c = [1, "hello", true], x = _c[0], y = _c[1], z = _c[2], a = _c.slice(3);
+    a = ([1, "hello", true]).slice(0);
+    _d = [1, "hello", true], x = _d[0], a = _d.slice(1);
+    _e = [1, "hello", true], x = _e[0], y = _e[1], a = _e.slice(2);
+    _f = [1, "hello", true], x = _f[0], y = _f[1], z = _f[2], a = _f.slice(3);
+    var _d, _e, _f;
 }

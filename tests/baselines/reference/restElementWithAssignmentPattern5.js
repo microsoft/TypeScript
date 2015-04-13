@@ -4,5 +4,5 @@ var s: string, s2: string;
 
 //// [restElementWithAssignmentPattern5.js]
 var s, s2;
-_a = ["", ""], [s, s2] = _a.slice(0);
+_a = (["", ""]).slice(0), s = _a[0], s2 = _a[1];
 var _a;

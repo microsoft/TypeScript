@@ -1379,6 +1379,13 @@ module ts {
         return node;
     }
 
+    export function createSynthesizedNodeArray(): NodeArray<any> {
+        var array = <NodeArray<any>>[];
+        array.pos = -1;
+        array.end = -1;
+        return array;
+    }
+
     /* @internal */
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
