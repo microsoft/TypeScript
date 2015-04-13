@@ -7,18 +7,18 @@ module ts {
 
     export function getEndLinePosition(line: number, sourceFile: SourceFile): number {
         Debug.assert(line >= 0);
-        var lineStarts = sourceFile.getLineStarts();
+        let lineStarts = sourceFile.getLineStarts();
         
-        var lineIndex = line;
+        let lineIndex = line;
         if (lineIndex + 1 === lineStarts.length) {
             // last line - return EOF
             return sourceFile.text.length - 1;
         }
         else {
             // current line start
-            var start = lineStarts[lineIndex];
+            let start = lineStarts[lineIndex];
             // take the start position of the next line -1 = it should be some line break
-            var pos = lineStarts[lineIndex + 1] - 1;
+            let pos = lineStarts[lineIndex + 1] - 1;
             Debug.assert(isLineBreak(sourceFile.text.charCodeAt(pos)));
             // walk backwards skipping line breaks, stop the the beginning of current line.
             // i.e:
@@ -32,8 +32,8 @@ module ts {
     }
 
     export function getLineStartPositionForPosition(position: number, sourceFile: SourceFile): number {
-        var lineStarts = sourceFile.getLineStarts();
-        var line = sourceFile.getLineAndCharacterOfPosition(position).line;
+        let lineStarts = sourceFile.getLineStarts();
+        let line = sourceFile.getLineAndCharacterOfPosition(position).line;
         return lineStarts[line];
     }
 
@@ -58,13 +58,13 @@ module ts {
     }
 
     export function startEndOverlapsWithStartEnd(start1: number, end1: number, start2: number, end2: number) {
-        var start = Math.max(start1, start2);
-        var end = Math.min(end1, end2);
+        let start = Math.max(start1, start2);
+        let end = Math.min(end1, end2);
         return start < end;
     }
 
     export function findListItemInfo(node: Node): ListItemInfo {
-        var list = findContainingList(node);
+        let list = findContainingList(node);
 
         // It is possible at this point for syntaxList to be undefined, either if
         // node.parent had no list child, or if none of its list children contained
@@ -74,8 +74,8 @@ module ts {
             return undefined;
         }
 
-        var children = list.getChildren();
-        var listItemIndex = indexOf(children, node);
+        let children = list.getChildren();
+        let listItemIndex = indexOf(children, node);
 
         return {
             listItemIndex,
@@ -92,7 +92,7 @@ module ts {
         // be parented by the container of the SyntaxList, not the SyntaxList itself.
         // In order to find the list item index, we first need to locate SyntaxList itself and then search
         // for the position of the relevant node (or comma).
-        var syntaxList = forEach(node.parent.getChildren(), c => {
+        let syntaxList = forEach(node.parent.getChildren(), c => {
             // find syntax list that covers the span of the node
             if (c.kind === SyntaxKind.SyntaxList && c.start <= node.start && spanEnd(c) >= spanEnd(node)) {
                 return c;
@@ -130,7 +130,7 @@ module ts {
 
     /** Get the token whose text contains the position */
     function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includeItemAtEndPosition: (n: Node) => boolean): Node {
-        var current: Node = sourceFile;
+        let current: Node = sourceFile;
         outer: while (true) {
             if (isToken(current)) {
                 // exit early
@@ -138,17 +138,17 @@ module ts {
             }
 
             // find the child that contains 'position'
-            for (var i = 0, n = current.getChildCount(sourceFile); i < n; i++) {
-                var child = current.getChildAt(i);
-                var start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile);
+            for (let i = 0, n = current.getChildCount(sourceFile); i < n; i++) {
+                let child = current.getChildAt(i);
+                let start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile);
                 if (start <= position) {
-                    var end = child.getEnd();
+                    let end = child.getEnd();
                     if (position < end || (position === end && child.kind === SyntaxKind.EndOfFileToken)) {
                         current = child;
                         continue outer;
                     }
                     else if (includeItemAtEndPosition && end === position) {
-                        var previousToken = findPrecedingToken(position, sourceFile, child);
+                        let previousToken = findPrecedingToken(position, sourceFile, child);
                         if (previousToken && includeItemAtEndPosition(previousToken)) {
                             return previousToken;
                         }
@@ -170,7 +170,7 @@ module ts {
     export function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node {
         // Ideally, getTokenAtPosition should return a token. However, it is currently
         // broken, so we do a check to make sure the result was indeed a token.
-        var tokenAtPosition = getTokenAtPosition(file, position);
+        let tokenAtPosition = getTokenAtPosition(file, position);
         if (isToken(tokenAtPosition) && position > tokenAtPosition.getStart(file) && position < tokenAtPosition.getEnd()) {
             return tokenAtPosition;
         }
@@ -187,9 +187,9 @@ module ts {
                 return n;
             }
 
-            var children = n.getChildren();
+            let children = n.getChildren();
             for (let child of children) {
-                var shouldDiveInChildNode =
+                let shouldDiveInChildNode =
                     // previous token is enclosed somewhere in the child
                     (child.start <= previousToken.start && spanEnd(child) > spanEnd(previousToken)) ||
                     // previous token ends exactly at the beginning of child
@@ -212,8 +212,8 @@ module ts {
                 return n;
             }
 
-            var children = n.getChildren();
-            var candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
+            let children = n.getChildren();
+            let candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
             return candidate && findRightmostToken(candidate);
 
         }
@@ -223,14 +223,14 @@ module ts {
                 return n;
             }
 
-            var children = n.getChildren();
-            for (var i = 0, len = children.length; i < len; i++) {
+            let children = n.getChildren();
+            for (let i = 0, len = children.length; i < len; i++) {
                 let child = children[i];
                 if (nodeHasTokens(child)) {
                     if (position <= spanEnd(child)) {
                         if (child.getStart(sourceFile) >= position) {
                             // actual start of the node is past the position - previous token should be at the end of previous child
-                            var candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
+                            let candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
                             return candidate && findRightmostToken(candidate)
                         }
                         else {
@@ -248,14 +248,14 @@ module ts {
             // Try to find the rightmost token in the file without filtering.
             // Namely we are skipping the check: 'position < node.end'
             if (children.length) {
-                var candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
+                let candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
                 return candidate && findRightmostToken(candidate);
             }
         }
 
         /// finds last node that is considered as candidate for search (isCandidate(node) === true) starting from 'exclusiveStartPosition'
         function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number): Node {
-            for (var i = exclusiveStartPosition - 1; i >= 0; --i) {
+            for (let i = exclusiveStartPosition - 1; i >= 0; --i) {
                 if (nodeHasTokens(children[i])) {
                     return children[i];
                 }
@@ -270,8 +270,8 @@ module ts {
     }
 
     export function getNodeModifiers(node: Node): string {
-        var flags = getCombinedNodeFlags(node);
-        var result: string[] = [];
+        let flags = getCombinedNodeFlags(node);
+        let result: string[] = [];
 
         if (flags & NodeFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
         if (flags & NodeFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
@@ -321,7 +321,7 @@ module ts {
     }
 
     export function compareDataObjects(dst: any, src: any): boolean {
-        for (var e in dst) {
+        for (let e in dst) {
             if (typeof dst[e] === "object") {
                 if (!compareDataObjects(dst[e], src[e])) {
                     return false;
@@ -343,11 +343,11 @@ module ts {
         return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter;
     }
 
-    var displayPartWriter = getDisplayPartWriter();
+    let displayPartWriter = getDisplayPartWriter();
     function getDisplayPartWriter(): DisplayPartsSymbolWriter {
-        var displayParts: SymbolDisplayPart[];
-        var lineStart: boolean;
-        var indent: number;
+        let displayParts: SymbolDisplayPart[];
+        let lineStart: boolean;
+        let indent: number;
 
         resetWriter();
         return {
@@ -368,7 +368,7 @@ module ts {
 
         function writeIndent() {
             if (lineStart) {
-                var indentString = getIndentString(indent);
+                let indentString = getIndentString(indent);
                 if (indentString) {
                     displayParts.push(displayPart(indentString, SymbolDisplayPartKind.space));
                 }
@@ -402,7 +402,7 @@ module ts {
         return displayPart(text, displayPartKind(symbol), symbol);
 
         function displayPartKind(symbol: Symbol): SymbolDisplayPartKind {
-            var flags = symbol.flags;
+            let flags = symbol.flags;
 
             if (flags & SymbolFlags.Variable) {
                 return isFirstDeclarationOfSymbolParameter(symbol) ? SymbolDisplayPartKind.parameterName : SymbolDisplayPartKind.localName;
@@ -459,7 +459,7 @@ module ts {
 
     export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
         writeDisplayParts(displayPartWriter);
-        var result = displayPartWriter.displayParts();
+        let result = displayPartWriter.displayParts();
         displayPartWriter.clear();
         return result;
     }

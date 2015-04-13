@@ -2971,6 +2971,12 @@ module ts {
             return !scanner.hasPrecedingLineBreak() && isIdentifier()
         }
 
+        function nextTokenIsIdentifierOrStartOfDestructuringOnTheSameLine() {
+            nextToken();
+            return !scanner.hasPrecedingLineBreak() &&
+                (isIdentifier() || token === SyntaxKind.OpenBraceToken || token === SyntaxKind.OpenBracketToken);
+        }
+
         function parseYieldExpression(): YieldExpression {
             let node = <YieldExpression>createNode(SyntaxKind.YieldExpression);
 
@@ -4869,9 +4875,9 @@ module ts {
         }
 
         function isLetDeclaration() {
-            // It is let declaration if in strict mode or next token is identifier on same line.
+            // It is let declaration if in strict mode or next token is identifier\open bracket\open curly on same line.
             // otherwise it needs to be treated like identifier
-            return inStrictModeContext() || lookAhead(nextTokenIsIdentifierOnSameLine);
+            return inStrictModeContext() || lookAhead(nextTokenIsIdentifierOrStartOfDestructuringOnTheSameLine);
         }
 
         function isDeclarationStart(): boolean {
