@@ -45,7 +45,9 @@ module A {
 >Point : Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
+>0 : number
 >y : number
+>0 : number
 
     export module Utils {
 >Utils : typeof Utils
@@ -117,6 +119,8 @@ var p = new A.Utils.Plane(o, { x: 1, y: 1 });
 >o : { x: number; y: number; }
 >{ x: 1, y: 1 } : { x: number; y: number; }
 >x : number
+>1 : number
 >y : number
+>1 : number
 
 

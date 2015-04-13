@@ -3,6 +3,8 @@ var v30 = {a:1, b:2}, v31;
 >v30 : { a: number; b: number; }
 >{a:1, b:2} : { a: number; b: number; }
 >a : number
+>1 : number
 >b : number
+>2 : number
 >v31 : any
 

@@ -4,6 +4,7 @@ module A {
 
 export var x = 'hello world'
 >x : string
+>'hello world' : string
 
 export class Point {
 >Point : Point
@@ -49,6 +50,8 @@ var b: { x: number; y: number; } = new C.a.Point(0, 0);
 >C : typeof C
 >a : typeof A
 >Point : typeof A.Point
+>0 : number
+>0 : number
 
 var c: { name: string };
 >c : { name: string; }

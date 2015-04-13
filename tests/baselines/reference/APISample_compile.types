@@ -85,12 +85,14 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
 >diagnostic.messageText : string | ts.DiagnosticMessageChain
 >diagnostic : ts.Diagnostic
 >messageText : string | ts.DiagnosticMessageChain
+>'\n' : string
 
         console.log(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);
 >console.log(`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`) : any
 >console.log : any
 >console : any
 >log : any
+>`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}` : string
 >diagnostic.file.fileName : string
 >diagnostic.file : ts.SourceFile
 >diagnostic : ts.Diagnostic
@@ -98,8 +100,10 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
 >fileName : string
 >line + 1 : number
 >line : number
+>1 : number
 >character + 1 : number
 >character : number
+>1 : number
 >message : string
 
     });
@@ -110,12 +114,15 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
 >emitResult.emitSkipped : boolean
 >emitResult : ts.EmitResult
 >emitSkipped : boolean
+>1 : number
+>0 : number
 
     console.log(`Process exiting with code '${exitCode}'.`);
 >console.log(`Process exiting with code '${exitCode}'.`) : any
 >console.log : any
 >console : any
 >log : any
+>`Process exiting with code '${exitCode}'.` : string
 >exitCode : number
 
     process.exit(exitCode);
@@ -135,11 +142,14 @@ compile(process.argv.slice(2), {
 >process : any
 >argv : any
 >slice : any
+>2 : number
 >{    noEmitOnError: true, noImplicitAny: true,    target: ts.ScriptTarget.ES5, module: ts.ModuleKind.CommonJS} : { [x: string]: boolean | ts.ScriptTarget | ts.ModuleKind; noEmitOnError: boolean; noImplicitAny: boolean; target: ts.ScriptTarget; module: ts.ModuleKind; }
 
     noEmitOnError: true, noImplicitAny: true,
 >noEmitOnError : boolean
+>true : boolean
 >noImplicitAny : boolean
+>true : boolean
 
     target: ts.ScriptTarget.ES5, module: ts.ModuleKind.CommonJS
 >target : ts.ScriptTarget

@@ -1,46 +1,89 @@
 === tests/cases/conformance/statements/breakStatements/whileBreakStatements.ts ===
 while(true) {
+>true : boolean
+
     break;
 } 
 
 ONE:
+>ONE : unknown
 
 while (true) {
+>true : boolean
+
     break ONE;
+>ONE : unknown
 }
 
 TWO:
+>TWO : unknown
+
 THREE:
+>THREE : unknown
+
 while (true) {
+>true : boolean
+
     break THREE;
+>THREE : unknown
 }
 
 FOUR:
+>FOUR : unknown
+
 while (true) {
+>true : boolean
+
     FIVE:
+>FIVE : unknown
+
     while (true) {
+>true : boolean
+
         break FOUR;
+>FOUR : unknown
     }
 }
 
 while (true) {
+>true : boolean
+
     SIX:
+>SIX : unknown
+
     while (true)
+>true : boolean
+
         break SIX;
+>SIX : unknown
 }
 
 SEVEN:
+>SEVEN : unknown
+
 while (true)
+>true : boolean
+
     while (true)
+>true : boolean
+
         while (true)
+>true : boolean
+
             break SEVEN;
+>SEVEN : unknown
 
 EIGHT:
+>EIGHT : unknown
+
 while (true) {
+>true : boolean
+
     var fn = function () { }
 >fn : () => void
 >function () { } : () => void
 
     break EIGHT;
+>EIGHT : unknown
 }
 

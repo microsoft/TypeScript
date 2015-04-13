@@ -27,7 +27,9 @@ module A {
 >Point : C.Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
+>0 : number
 >y : number
+>0 : number
     }
 }
 

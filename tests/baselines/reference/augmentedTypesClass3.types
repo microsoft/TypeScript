@@ -14,6 +14,7 @@ class c5a { public foo() { } }
 module c5a { var y = 2; } // should be ok
 >c5a : typeof c5a
 >y : number
+>2 : number
 
 class c5b { public foo() { } }
 >c5b : c5b
@@ -22,6 +23,7 @@ class c5b { public foo() { } }
 module c5b { export var y = 2; } // should be ok
 >c5b : typeof c5b
 >y : number
+>2 : number
 
 //// class then import
 class c5c { public foo() { } }

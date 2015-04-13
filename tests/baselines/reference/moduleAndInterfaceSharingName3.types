@@ -17,6 +17,7 @@ var z: X.Y.Z = null;
 >X : unknown
 >Y : unknown
 >Z : X.Y.Z
+>null : null
 
 var z2: X.Y<string>;
 >z2 : X.Y<string>

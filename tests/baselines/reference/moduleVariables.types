@@ -4,12 +4,14 @@ declare var console: any;
  
 var x = 1;
 >x : number
+>1 : number
 
 module M {
 >M : typeof M
 
     export var x = 2;
 >x : number
+>2 : number
 
     console.log(x); // 2
 >console.log(x) : any
@@ -35,6 +37,7 @@ module M {
 
     var x = 3;
 >x : number
+>3 : number
 
     console.log(x); // 3
 >console.log(x) : any

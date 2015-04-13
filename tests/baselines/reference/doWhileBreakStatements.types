@@ -2,41 +2,79 @@
 do {
     break;
 } while(true)
+>true : boolean
 
 ONE:
+>ONE : unknown
+
 do {
     break ONE;
+>ONE : unknown
 }
 while (true)
+>true : boolean
 
 TWO:
+>TWO : unknown
+
 THREE:
+>THREE : unknown
+
 do {
     break THREE;
+>THREE : unknown
+
 }while (true)
+>true : boolean
 
 FOUR:
+>FOUR : unknown
+
 do {
     FIVE:
+>FIVE : unknown
+
     do {
         break FOUR;
+>FOUR : unknown
+
     }while (true)
+>true : boolean
+
 }while (true)
+>true : boolean
 
 do {
     SIX:
+>SIX : unknown
+
     do break SIX; while(true)
+>SIX : unknown
+>true : boolean
+
 }while (true)
+>true : boolean
 
 SEVEN:
+>SEVEN : unknown
+
 do do do break SEVEN; while (true) while (true)  while (true)
+>SEVEN : unknown
+>true : boolean
+>true : boolean
+>true : boolean
 
 EIGHT:
+>EIGHT : unknown
+
 do{
     var fn = function () { }
 >fn : () => void
 >function () { } : () => void
 
     break EIGHT;
+>EIGHT : unknown
+
 }while(true)
+>true : boolean
 

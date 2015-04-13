@@ -11,9 +11,11 @@ module m {
 
     export var x = 10;
 >x : number
+>10 : number
 }
 var x = 10;
 >x : number
+>10 : number
 
 module uninstantiated {
 >uninstantiated : unknown

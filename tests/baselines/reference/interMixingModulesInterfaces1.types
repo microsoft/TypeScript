@@ -20,6 +20,7 @@ module A {
 >B : B
 
             return null;
+>null : null
         }
     }
 }

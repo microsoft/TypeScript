@@ -7,4 +7,5 @@ f.arguments == 0;
 >f.arguments : any
 >f : new () => void
 >arguments : any
+>0 : number
 

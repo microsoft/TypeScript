@@ -2,6 +2,7 @@
 
 var v = 1;
 >v : number
+>1 : number
 
 function f() { }
 >f : () => void

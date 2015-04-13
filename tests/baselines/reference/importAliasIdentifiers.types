@@ -52,7 +52,9 @@ module clodule {
 >Point : Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
+>0 : number
 >y : number
+>0 : number
 }
 
 import clolias = clodule;
@@ -81,7 +83,9 @@ function fundule() {
     return { x: 0, y: 0 };
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
+>0 : number
 >y : number
+>0 : number
 }
 
 module fundule {
@@ -99,7 +103,9 @@ module fundule {
 >Point : Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
+>0 : number
 >y : number
+>0 : number
 }
 
 import funlias = fundule;

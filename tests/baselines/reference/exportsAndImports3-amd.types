@@ -2,6 +2,7 @@
 
 export var v = 1;
 >v : number
+>1 : number
 
 export function f() { }
 >f : () => void

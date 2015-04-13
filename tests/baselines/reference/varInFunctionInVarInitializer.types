@@ -5,6 +5,7 @@ var a = function () {
 
     var c = 1;
 >c : number
+>1 : number
 
     return c;
 >c : number
@@ -12,4 +13,5 @@ var a = function () {
 },
     b = 1;
 >b : number
+>1 : number
 

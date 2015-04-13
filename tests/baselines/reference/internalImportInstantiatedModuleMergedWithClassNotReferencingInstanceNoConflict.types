@@ -14,6 +14,7 @@ module A {
 
     export var a = 10;
 >a : number
+>10 : number
 }
 
 module B {

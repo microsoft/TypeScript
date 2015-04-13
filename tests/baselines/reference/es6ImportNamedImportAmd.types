@@ -2,6 +2,7 @@
 
 export var a = 10;
 >a : number
+>10 : number
 
 export var x = a;
 >x : number
@@ -13,18 +14,23 @@ export var m = a;
 
 export var a1 = 10;
 >a1 : number
+>10 : number
 
 export var x1 = 10;
 >x1 : number
+>10 : number
 
 export var z1 = 10;
 >z1 : number
+>10 : number
 
 export var z2 = 10;
 >z2 : number
+>10 : number
 
 export var aaaa = 10;
 >aaaa : number
+>10 : number
 
 === tests/cases/compiler/es6ImportNamedImportAmd_1.ts ===
 import { } from "es6ImportNamedImportAmd_0";

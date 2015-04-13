@@ -18,14 +18,17 @@ enum e2 {
 
     a = 10,
 >a : e2
+>10 : number
 
     b = a + 2,
 >b : e2
 >a + 2 : number
 >a : e2
+>2 : number
 
     c = 10,
 >c : e2
+>10 : number
 }
 
 enum e3 {
@@ -33,6 +36,7 @@ enum e3 {
 
     a = 10,
 >a : e3
+>10 : number
 
     b = Math.PI,
 >b : e3
@@ -44,6 +48,7 @@ enum e3 {
 >c : e3
 >a + 3 : number
 >a : e3
+>3 : number
 }
 
 enum e4 {
@@ -60,6 +65,7 @@ enum e4 {
 
     d = 10,
 >d : e4
+>10 : number
 
     e
 >e : e4

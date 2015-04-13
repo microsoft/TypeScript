@@ -12,6 +12,7 @@ module bar {
     export class Foo<T> implements foo.IFoo<T> { }
 >Foo : Foo<T>
 >T : T
+>foo.IFoo : unknown
 >foo : unknown
 >IFoo : foo.IFoo<T>
 >T : T

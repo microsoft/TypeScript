@@ -1,12 +1,15 @@
 === tests/cases/compiler/downlevelLetConst12.ts ===
 
 'use strict'
+>'use strict' : string
+
 // top level let\const should not be renamed
 let foo;
 >foo : any
 
 const bar = 1;
 >bar : number
+>1 : number
 
 let [baz] = [];
 >baz : any
@@ -17,6 +20,7 @@ let {a: baz2} = { a: 1 };
 >baz2 : number
 >{ a: 1 } : { a: number; }
 >a : number
+>1 : number
 
 const [baz3] = []
 >baz3 : any
@@ -27,4 +31,5 @@ const {a: baz4} = { a: 1 };
 >baz4 : number
 >{ a: 1 } : { a: number; }
 >a : number
+>1 : number
 

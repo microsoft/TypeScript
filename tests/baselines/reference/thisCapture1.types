@@ -4,6 +4,7 @@ class X {
 
     private y = 0;
 >y : number
+>0 : number
 
     public getSettings(keys: string[]): any {
 >getSettings : (keys: string[]) => any
@@ -26,6 +27,7 @@ class X {
 >this.y : number
 >this : X
 >y : number
+>0 : number
 
         }).promise();
 >promise : any

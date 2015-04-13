@@ -8,6 +8,7 @@ var f1 = () => {
 >this.age : any
 >this : any
 >age : any
+>10 : number
 
 };
 
@@ -38,7 +39,10 @@ foo(() => {
 >this.age : any
 >this : any
 >age : any
+>100 : number
 
     return true;
+>true : boolean
+
 });
 

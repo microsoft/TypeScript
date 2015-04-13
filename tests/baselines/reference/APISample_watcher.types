@@ -51,6 +51,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >fileName : string
 >{ version: 0 } : { version: number; }
 >version : number
+>0 : number
 
     });
 
@@ -181,7 +182,9 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
             { persistent: true, interval: 250 },
 >{ persistent: true, interval: 250 } : { persistent: boolean; interval: number; }
 >persistent : boolean
+>true : boolean
 >interval : number
+>250 : number
 
             (curr, prev) => {
 >(curr, prev) => {                // Check timestamp                if (+curr.mtime <= +prev.mtime) {                    return;                }                // Update the version to signal a change in the file                files[fileName].version++;                // write the changes to disk                emitFile(fileName);            } : (curr: any, prev: any) => void
@@ -244,6 +247,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >console.log : any
 >console : any
 >log : any
+>`Emitting ${fileName}` : string
 >fileName : string
         }
         else {
@@ -252,6 +256,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >console.log : any
 >console : any
 >log : any
+>`Emitting ${fileName} failed` : string
 >fileName : string
 
             logErrors(fileName);
@@ -281,6 +286,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >o.text : string
 >o : ts.OutputFile
 >text : string
+>"utf8" : string
 
         });
     }
@@ -333,6 +339,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >diagnostic.messageText : string | ts.DiagnosticMessageChain
 >diagnostic : ts.Diagnostic
 >messageText : string | ts.DiagnosticMessageChain
+>"\n" : string
 
             if (diagnostic.file) {
 >diagnostic.file : ts.SourceFile
@@ -357,6 +364,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >console.log : any
 >console : any
 >log : any
+>`  Error ${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}` : string
 >diagnostic.file.fileName : string
 >diagnostic.file : ts.SourceFile
 >diagnostic : ts.Diagnostic
@@ -364,8 +372,10 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >fileName : string
 >line + 1 : number
 >line : number
+>1 : number
 >character + 1 : number
 >character : number
+>1 : number
 >message : string
             }
             else {
@@ -374,6 +384,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >console.log : any
 >console : any
 >log : any
+>`  Error: ${message}` : string
 >message : string
             }
         });
@@ -403,6 +414,7 @@ const currentDirectoryFiles = fs.readdirSync(process.cwd()).
 >fileName.length : any
 >fileName : any
 >length : any
+>3 : number
 >fileName.substr(fileName.length - 3, 3) === ".ts" : boolean
 >fileName.substr(fileName.length - 3, 3) : any
 >fileName.substr : any
@@ -412,6 +424,9 @@ const currentDirectoryFiles = fs.readdirSync(process.cwd()).
 >fileName.length : any
 >fileName : any
 >length : any
+>3 : number
+>3 : number
+>".ts" : string
 
 // Start the watcher
 watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });

@@ -10,6 +10,7 @@ export function w(): e.w { // Should be OK
     return {name: 'value' };
 >{name: 'value' } : { name: string; }
 >name : string
+>'value' : string
 }
 === tests/cases/compiler/w1.ts ===
 

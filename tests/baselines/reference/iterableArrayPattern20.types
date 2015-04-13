@@ -43,6 +43,7 @@ class FooArrayIterator {
 
             done: false
 >done : boolean
+>false : boolean
 
         };
     }

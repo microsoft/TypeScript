@@ -4,7 +4,9 @@ var array = [{ x: "", y: 0 }]
 >[{ x: "", y: 0 }] : { x: string; y: number; }[]
 >{ x: "", y: 0 } : { x: string; y: number; }
 >x : string
+>"" : string
 >y : number
+>0 : number
 
 for (var {x: a, y: b} of array) {
 >x : unknown

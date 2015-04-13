@@ -3,9 +3,17 @@ class B {
 >B : B
 
     "hello" = 10;
+>10 : number
+
     0b110 = "world";
+>"world" : string
+
     0o23534 = "WORLD";
+>"WORLD" : string
+
     20 = "twenty";
+>"twenty" : string
+
     "foo"() { }
     0b1110() {}
     11() { }
@@ -13,7 +21,14 @@ class B {
 >interface : () => void
 
     static "hi" = 10000;
+>10000 : number
+
     static 22 = "twenty-two";
+>"twenty-two" : string
+
     static 0b101 = "binary";
+>"binary" : string
+
     static 0o3235 = "octal";
+>"octal" : string
 }

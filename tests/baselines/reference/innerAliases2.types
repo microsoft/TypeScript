@@ -22,6 +22,7 @@ module consumer {
 >g : provider.UsefulClass
 >provider : unknown
 >UsefulClass : provider.UsefulClass
+>null : null
                 
                 function use():provider.UsefulClass { 
 >use : () => provider.UsefulClass

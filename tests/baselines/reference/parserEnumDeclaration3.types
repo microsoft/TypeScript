@@ -4,4 +4,5 @@ declare enum E {
 
   A = 1
 >A : E
+>1 : number
 }

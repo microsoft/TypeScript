@@ -16,6 +16,7 @@ export module C {
 >T : T
 >A : A<T>
 >B : B
+>null : null
 
     export function F2<T>(x: T): C.A<C.B> { return null; }
 >F2 : <T>(x: T) => A<B>
@@ -26,6 +27,7 @@ export module C {
 >A : A<T>
 >C : unknown
 >B : B
+>null : null
 
     export function F3<T>(x: T): C.A<C.B>[] { return null; }
 >F3 : <T>(x: T) => A<B>[]
@@ -36,6 +38,7 @@ export module C {
 >A : A<T>
 >C : unknown
 >B : B
+>null : null
 
     export function F4<T extends A<B>>(x: T): Array<C.A<C.B>> { return null; }
 >F4 : <T extends A<B>>(x: T) => A<B>[]
@@ -49,11 +52,13 @@ export module C {
 >A : A<T>
 >C : unknown
 >B : B
+>null : null
 
     export function F5<T>(): T { return null; }
 >F5 : <T>() => T
 >T : T
 >T : T
+>null : null
 
     export function F6<T extends A<B>>(x: T): T { return null; }
 >F6 : <T extends A<B>>(x: T) => T
@@ -63,6 +68,7 @@ export module C {
 >x : T
 >T : T
 >T : T
+>null : null
 
     export class D<T>{
 >D : D<T>
@@ -147,6 +153,7 @@ export var g = C.F5<C.A<C.B>>();
 
 export class h extends C.A<C.B>{ }
 >h : h
+>C.A : unknown
 >C : typeof C
 >A : C.A<T>
 >C : unknown
@@ -154,6 +161,7 @@ export class h extends C.A<C.B>{ }
 
 export interface i extends C.A<C.B> { }
 >i : i
+>C.A : unknown
 >C : typeof C
 >A : C.A<T>
 >C : unknown

@@ -4,38 +4,60 @@ for (; ;) {
 }
 
 ONE:
+>ONE : unknown
+
 for (; ;) {
     break ONE;
+>ONE : unknown
 }
 
 TWO:
+>TWO : unknown
+
 THREE:
+>THREE : unknown
+
 for (; ;) {
     break THREE;
+>THREE : unknown
 }
 
 FOUR:
+>FOUR : unknown
+
 for (; ;) {
     FIVE:
+>FIVE : unknown
+
     for (; ;) {
         break FOUR;
+>FOUR : unknown
     }
 }
 
 for (; ;) {
     SIX:
+>SIX : unknown
+
     for (; ;) break SIX;
+>SIX : unknown
 }
 
 SEVEN:
+>SEVEN : unknown
+
 for (; ;) for (; ;) for (; ;) break SEVEN;
+>SEVEN : unknown
 
 EIGHT:
+>EIGHT : unknown
+
 for (; ;) {
     var fn = function () { }
 >fn : () => void
 >function () { } : () => void
 
     break EIGHT;
+>EIGHT : unknown
 }
 

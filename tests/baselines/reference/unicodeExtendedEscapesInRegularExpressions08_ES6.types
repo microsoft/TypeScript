@@ -5,4 +5,5 @@
 // (FFFF == 65535)
 var x = /\u{FFFF}/g;
 >x : RegExp
+>/\u{FFFF}/g : RegExp
 

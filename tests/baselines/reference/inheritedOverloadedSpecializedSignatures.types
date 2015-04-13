@@ -24,7 +24,9 @@ b('foo').charAt(0);
 >b('foo').charAt : (pos: number) => string
 >b('foo') : string
 >b : B
+>'foo' : string
 >charAt : (pos: number) => string
+>0 : number
 
 interface A {
 >A : A
@@ -92,44 +94,53 @@ var x1: string[] = c('B2');
 >x1 : string[]
 >c('B2') : string[]
 >c : C
+>'B2' : string
 
 var x2: number = c('B1');
 >x2 : number
 >c('B1') : number
 >c : C
+>'B1' : string
 
 var x3: boolean = c('A2');
 >x3 : boolean
 >c('A2') : boolean
 >c : C
+>'A2' : string
 
 var x4: string = c('A1');
 >x4 : string
 >c('A1') : string
 >c : C
+>'A1' : string
 
 var x5: void = c('A0');
 >x5 : void
 >c('A0') : void
 >c : C
+>'A0' : string
 
 var x6: number[] = c('C1');
 >x6 : number[]
 >c('C1') : number[]
 >c : C
+>'C1' : string
 
 var x7: boolean[] = c('C2');
 >x7 : boolean[]
 >c('C2') : boolean[]
 >c : C
+>'C2' : string
 
 var x8: string = c('C');
 >x8 : string
 >c('C') : string
 >c : C
+>'C' : string
 
 var x9: void = c('generic');
 >x9 : void
 >c('generic') : void
 >c : C
+>'generic' : string
 

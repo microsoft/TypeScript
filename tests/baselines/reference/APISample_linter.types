@@ -89,6 +89,7 @@ export function delint(sourceFile: ts.SourceFile) {
 >report(node, "A looping statement's contents should be wrapped in a block body.") : void
 >report : (node: ts.Node, message: string) => void
 >node : ts.Node
+>"A looping statement's contents should be wrapped in a block body." : string
                 }
                 break;
 
@@ -126,6 +127,7 @@ export function delint(sourceFile: ts.SourceFile) {
 >ifStatement.thenStatement : ts.Statement
 >ifStatement : ts.IfStatement
 >thenStatement : ts.Statement
+>"An if statement's contents should be wrapped in a block body." : string
                 }
                 if (ifStatement.elseStatement &&
 >ifStatement.elseStatement &&                    ifStatement.elseStatement.kind !== ts.SyntaxKind.Block &&                    ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement : boolean
@@ -166,6 +168,7 @@ export function delint(sourceFile: ts.SourceFile) {
 >ifStatement.elseStatement : ts.Statement
 >ifStatement : ts.IfStatement
 >elseStatement : ts.Statement
+>"An else statement's contents should be wrapped in a block body." : string
                 }
                 break;
 
@@ -209,6 +212,7 @@ export function delint(sourceFile: ts.SourceFile) {
 >report(node, "Use '===' and '!=='.") : void
 >report : (node: ts.Node, message: string) => void
 >node : ts.Node
+>"Use '===' and '!=='." : string
                 }
                 break;
         }
@@ -246,13 +250,16 @@ export function delint(sourceFile: ts.SourceFile) {
 >console.log : any
 >console : any
 >log : any
+>`${sourceFile.fileName} (${line + 1},${character + 1}): ${message}` : string
 >sourceFile.fileName : string
 >sourceFile : ts.SourceFile
 >fileName : string
 >line + 1 : number
 >line : number
+>1 : number
 >character + 1 : number
 >character : number
+>1 : number
 >message : string
     }
 }
@@ -265,6 +272,7 @@ const fileNames = process.argv.slice(2);
 >process : any
 >argv : any
 >slice : any
+>2 : number
 
 fileNames.forEach(fileName => {
 >fileNames.forEach(fileName => {    // Parse a file    let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);    // delint it    delint(sourceFile);}) : any
@@ -293,6 +301,7 @@ fileNames.forEach(fileName => {
 >ts : typeof ts
 >ScriptTarget : typeof ts.ScriptTarget
 >ES6 : ts.ScriptTarget
+>true : boolean
 
     // delint it
     delint(sourceFile);

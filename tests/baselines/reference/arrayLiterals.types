@@ -6,14 +6,19 @@ var arr1= [[], [1], ['']];
 >[[], [1], ['']] : (string[] | number[])[]
 >[] : undefined[]
 >[1] : number[]
+>1 : number
 >[''] : string[]
+>'' : string
 
 var arr2 = [[null], [1], ['']];
 >arr2 : (string[] | number[])[]
 >[[null], [1], ['']] : (string[] | number[])[]
 >[null] : null[]
+>null : null
 >[1] : number[]
+>1 : number
 >[''] : string[]
+>'' : string
 
 
 // Array literal with elements of only EveryType E has type E[]
@@ -21,19 +26,31 @@ var stringArrArr = [[''], [""]];
 >stringArrArr : string[][]
 >[[''], [""]] : string[][]
 >[''] : string[]
+>'' : string
 >[""] : string[]
+>"" : string
 
 var stringArr = ['', ""];
 >stringArr : string[]
 >['', ""] : string[]
+>'' : string
+>"" : string
 
 var numberArr = [0, 0.0, 0x00, 1e1];
 >numberArr : number[]
 >[0, 0.0, 0x00, 1e1] : number[]
+>0 : number
+>0.0 : number
+>0x00 : number
+>1e1 : number
 
 var boolArr = [false, true, false, true];
 >boolArr : boolean[]
 >[false, true, false, true] : boolean[]
+>false : boolean
+>true : boolean
+>false : boolean
+>true : boolean
 
 class C { private p; }
 >C : C
@@ -68,24 +85,36 @@ var context1: { [n: number]: { a: string; b: number; }; } = [{ a: '', b: 0, c: '
 >[{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }] : ({ a: string; b: number; c: string; } | { a: string; b: number; c: number; })[]
 >{ a: '', b: 0, c: '' } : { a: string; b: number; c: string; }
 >a : string
+>'' : string
 >b : number
+>0 : number
 >c : string
+>'' : string
 >{ a: "", b: 3, c: 0 } : { a: string; b: number; c: number; }
 >a : string
+>"" : string
 >b : number
+>3 : number
 >c : number
+>0 : number
 
 var context2 = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
 >context2 : ({ a: string; b: number; c: string; } | { a: string; b: number; c: number; })[]
 >[{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }] : ({ a: string; b: number; c: string; } | { a: string; b: number; c: number; })[]
 >{ a: '', b: 0, c: '' } : { a: string; b: number; c: string; }
 >a : string
+>'' : string
 >b : number
+>0 : number
 >c : string
+>'' : string
 >{ a: "", b: 3, c: 0 } : { a: string; b: number; c: number; }
 >a : string
+>"" : string
 >b : number
+>3 : number
 >c : number
+>0 : number
 
 // Contextual type C with numeric index signature of type Base makes array literal of Derived have type Base[]
 class Base { private p; }

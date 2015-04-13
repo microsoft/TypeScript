@@ -39,7 +39,9 @@ module A {
 >Point : Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
+>0 : number
 >y : number
+>0 : number
 }
 
 === tests/cases/conformance/internalModules/DeclarationMerging/part2.ts ===
@@ -49,6 +51,7 @@ module A {
     // not a collision, since we don't export
     var Origin: string = "0,0";
 >Origin : string
+>"0,0" : string
 
     export module Utils {
 >Utils : typeof Utils
@@ -120,6 +123,8 @@ var p = new A.Utils.Plane(o, { x: 1, y: 1 });
 >o : { x: number; y: number; }
 >{ x: 1, y: 1 } : { x: number; y: number; }
 >x : number
+>1 : number
 >y : number
+>1 : number
 
 

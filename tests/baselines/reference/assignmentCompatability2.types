@@ -14,6 +14,7 @@ module __test1__ {
 >interfaceWithPublicAndOptional : interfaceWithPublicAndOptional<T, U>
 >{ one: 1 } : { one: number; }
 >one : number
+>1 : number
 
     export var __val__obj4 = obj4;
 >__val__obj4 : interfaceWithPublicAndOptional<number, string>

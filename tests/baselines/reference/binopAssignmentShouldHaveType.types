@@ -3,6 +3,8 @@ declare var console;
 >console : any
 
 "use strict";
+>"use strict" : string
+
 module Test {
 >Test : typeof Test
 
@@ -13,12 +15,14 @@ module Test {
 >getName : () => string
 
    return "name";
+>"name" : string
   }
   bug() {
 >bug : () => void
 
    var name:string= null;
 >name : string
+>null : null
 
    if ((name= this.getName()).length > 0) {
 >(name= this.getName()).length > 0 : boolean
@@ -31,6 +35,7 @@ module Test {
 >this : Bug
 >getName : () => string
 >length : number
+>0 : number
 
     console.log(name);
 >console.log(name) : any

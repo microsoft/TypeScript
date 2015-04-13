@@ -42,6 +42,7 @@ class Chain<T> {
 >then : <S>(cb: (x: S) => S) => Chain<S>
 >x => "abc" : (x: S) => string
 >x : S
+>"abc" : string
 >then : <S>(cb: (x: string) => S) => Chain<S>
 >x => x.length : (x: string) => number
 >x : string

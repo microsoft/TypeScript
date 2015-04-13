@@ -48,6 +48,7 @@ var r4 = b + b;
 var r5 = 0 + a;
 >r5 : number
 >0 + a : number
+>0 : number
 >a : number
 
 var r6 = E.a + 0;
@@ -56,6 +57,7 @@ var r6 = E.a + 0;
 >E.a : E
 >E : typeof E
 >a : E
+>0 : number
 
 var r7 = E.a + E.b;
 >r7 : number
@@ -72,16 +74,20 @@ var r8 = E['a'] + E['b'];
 >E['a'] + E['b'] : number
 >E['a'] : E
 >E : typeof E
+>'a' : string
 >E['b'] : E
 >E : typeof E
+>'b' : string
 
 var r9 = E['a'] + F['c'];
 >r9 : number
 >E['a'] + F['c'] : number
 >E['a'] : E
 >E : typeof E
+>'a' : string
 >F['c'] : F
 >F : typeof F
+>'c' : string
 
 var r10 = a + c;
 >r10 : number

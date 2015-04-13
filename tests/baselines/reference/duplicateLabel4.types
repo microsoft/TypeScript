@@ -1,9 +1,14 @@
 === tests/cases/compiler/duplicateLabel4.ts ===
 target:
-No type information for this code.while (true) {
-No type information for this code.}
-No type information for this code.
-No type information for this code.target: 
-No type information for this code.while (true) {
-No type information for this code.}
-No type information for this code.
+>target : unknown
+
+while (true) {
+>true : boolean
+}
+
+target: 
+>target : unknown
+
+while (true) {
+>true : boolean
+}

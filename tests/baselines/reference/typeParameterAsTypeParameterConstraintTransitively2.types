@@ -47,19 +47,28 @@ function foo<T, U, V>(x: T, y: U, z: V): V { return z; }
 foo(1, 2, '');
 >foo(1, 2, '') : string
 >foo : <T, U, V>(x: T, y: U, z: V) => V
+>1 : number
+>2 : number
+>'' : string
 
 foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: 2, z: true });
 >foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: 2, z: true }) : { x: number; y: number; z: boolean; }
 >foo : <T, U, V>(x: T, y: U, z: V) => V
 >{ x: 1 } : { x: number; }
 >x : number
+>1 : number
 >{ x: 1, y: '' } : { x: number; y: string; }
 >x : number
+>1 : number
 >y : string
+>'' : string
 >{ x: 2, y: 2, z: true } : { x: number; y: number; z: boolean; }
 >x : number
+>2 : number
 >y : number
+>2 : number
 >z : boolean
+>true : boolean
 
 foo(a, b, a);
 >foo(a, b, a) : A
@@ -74,8 +83,11 @@ foo(a, { foo: 1, bar: '', hm: true }, b);
 >a : A
 >{ foo: 1, bar: '', hm: true } : { foo: number; bar: string; hm: boolean; }
 >foo : number
+>1 : number
 >bar : string
+>'' : string
 >hm : boolean
+>true : boolean
 >b : B
 
 foo((x: number, y: string) => { }, (x, y: boolean) => { }, () => { });

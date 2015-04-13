@@ -5,5 +5,11 @@ var x = function y() {
 >y : () => string
 
     `abc${ 0 }def`
+>`abc${ 0 }def` : string
+>0 : number
+
     return `abc${ 0 }def`;
+>`abc${ 0 }def` : string
+>0 : number
+
 };

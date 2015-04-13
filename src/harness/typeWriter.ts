@@ -29,66 +29,11 @@ class TypeWriterWalker {
     }
 
     private visitNode(node: ts.Node): void {
-        switch (node.kind) {
-            // Should always log expressions that are not tokens
-            // Also, always log the "this" keyword
-            // TODO: Ideally we should log all expressions, but to compare to the
-            // old typeWriter baselines, suppress tokens
-            case ts.SyntaxKind.ThisKeyword:
-            case ts.SyntaxKind.SuperKeyword:
-            case ts.SyntaxKind.ArrayLiteralExpression:
-            case ts.SyntaxKind.ObjectLiteralExpression:
-            case ts.SyntaxKind.ElementAccessExpression:
-            case ts.SyntaxKind.CallExpression:
-            case ts.SyntaxKind.NewExpression:
-            case ts.SyntaxKind.TypeAssertionExpression:
-            case ts.SyntaxKind.ParenthesizedExpression:
-            case ts.SyntaxKind.FunctionExpression:
-            case ts.SyntaxKind.ArrowFunction:
-            case ts.SyntaxKind.TypeOfExpression:
-            case ts.SyntaxKind.VoidExpression:
-            case ts.SyntaxKind.DeleteExpression:
-            case ts.SyntaxKind.PrefixUnaryExpression:
-            case ts.SyntaxKind.PostfixUnaryExpression:
-            case ts.SyntaxKind.BinaryExpression:
-            case ts.SyntaxKind.ConditionalExpression:
-            case ts.SyntaxKind.SpreadElementExpression:
-                this.log(node, this.getTypeOfNode(node));
-                break;
-
-            case ts.SyntaxKind.PropertyAccessExpression:
-                for (var current = node; current.kind === ts.SyntaxKind.PropertyAccessExpression; current = current.parent) {
-                }
-                if (current.kind !== ts.SyntaxKind.HeritageClauseElement) {
-                    this.log(node, this.getTypeOfNode(node));
-                }
-                break;
-
-            // Should not change expression status (maybe expressions)
-            // TODO: Again, ideally should log number and string literals too,
-            // but to be consistent with the old typeWriter, just log identifiers
-            case ts.SyntaxKind.Identifier:
-                var identifier = <ts.Identifier>node;
-                if (!this.isLabel(identifier)) {
-                    var type = this.getTypeOfNode(identifier);
-                    this.log(node, type);
-                }
-                break;
+        if (ts.isExpression(node) || node.kind === ts.SyntaxKind.Identifier) {
+            this.log(node, this.getTypeOfNode(node));
         }
 
         ts.forEachChild(node, child => this.visitNode(child));
-    }
-
-    private isLabel(identifier: ts.Identifier): boolean {
-        var parent = identifier.parent;
-        switch (parent.kind) {
-            case ts.SyntaxKind.ContinueStatement:
-            case ts.SyntaxKind.BreakStatement:
-                return (<ts.BreakOrContinueStatement>parent).label === identifier;
-            case ts.SyntaxKind.LabeledStatement:
-                return (<ts.LabeledStatement>parent).label === identifier;
-        }
-        return false;
     }
 
     private log(node: ts.Node, type: ts.Type): void {

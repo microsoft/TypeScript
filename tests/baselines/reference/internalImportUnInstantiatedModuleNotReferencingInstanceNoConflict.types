@@ -12,6 +12,7 @@ module B {
 
     var A = 1;
 >A : number
+>1 : number
 
     import Y = A;
 >Y : unknown

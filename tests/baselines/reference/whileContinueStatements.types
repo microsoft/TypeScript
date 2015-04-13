@@ -1,57 +1,110 @@
 === tests/cases/conformance/statements/continueStatements/whileContinueStatements.ts ===
 while(true) {
+>true : boolean
+
     continue;
 } 
 
 while (true) {
+>true : boolean
+
     if (true) {
+>true : boolean
+
         continue;
     }
 }
 
 ONE:
+>ONE : unknown
 
 while (true) {
+>true : boolean
+
     continue ONE;
+>ONE : unknown
 }
 
 TWO:
+>TWO : unknown
+
 THREE:
+>THREE : unknown
+
 while (true) {
+>true : boolean
+
     continue THREE;
+>THREE : unknown
 }
 
 FOUR:
+>FOUR : unknown
+
 while (true) {
+>true : boolean
+
     FIVE:
+>FIVE : unknown
+
     while (true) {
+>true : boolean
+
         continue FOUR;
+>FOUR : unknown
     }
 }
 
 while (true) {
+>true : boolean
+
     SIX:
+>SIX : unknown
+
     while (true)
+>true : boolean
+
         continue SIX;
+>SIX : unknown
 }
 
 SEVEN:
+>SEVEN : unknown
+
 while (true)
+>true : boolean
+
     while (true)
+>true : boolean
+
         while (true)
+>true : boolean
+
             continue SEVEN;
+>SEVEN : unknown
 
 EIGHT:
+>EIGHT : unknown
+
 while (true) {
+>true : boolean
+
     var fn = function () { }
 >fn : () => void
 >function () { } : () => void
 
     continue EIGHT;
+>EIGHT : unknown
 }
 
 NINE:
+>NINE : unknown
+
 while (true) {
+>true : boolean
+
     if (true) { continue NINE; }
+>true : boolean
+>NINE : unknown
 }
 

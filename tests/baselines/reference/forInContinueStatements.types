@@ -7,33 +7,46 @@ for(var x in {}) {
 }
 
 ONE:
+>ONE : unknown
+
 for(var x in {}) {
 >x : any
 >{} : {}
 
     continue ONE;
+>ONE : unknown
 }
 
 TWO:
+>TWO : unknown
+
 THREE:
+>THREE : unknown
+
 for(var x in {}) {
 >x : any
 >{} : {}
 
     continue THREE;
+>THREE : unknown
 }
 
 FOUR:
+>FOUR : unknown
+
 for(var x in {}) {
 >x : any
 >{} : {}
 
     FIVE:
+>FIVE : unknown
+
     for(var x in {}) {
 >x : any
 >{} : {}
 
         continue FOUR;
+>FOUR : unknown
     }
 }
 
@@ -42,12 +55,17 @@ for(var x in {}) {
 >{} : {}
 
     SIX:
+>SIX : unknown
+
     for(var x in {}) continue SIX;
 >x : any
 >{} : {}
+>SIX : unknown
 }
 
 SEVEN:
+>SEVEN : unknown
+
 for (var x in {}) for (var x in {}) for (var x in {}) continue SEVEN;
 >x : any
 >{} : {}
@@ -55,8 +73,11 @@ for (var x in {}) for (var x in {}) for (var x in {}) continue SEVEN;
 >{} : {}
 >x : any
 >{} : {}
+>SEVEN : unknown
 
 EIGHT:
+>EIGHT : unknown
+
 for (var x in {}){
 >x : any
 >{} : {}
@@ -66,5 +87,6 @@ for (var x in {}){
 >function () { } : () => void
 
     continue EIGHT;
+>EIGHT : unknown
 }
 

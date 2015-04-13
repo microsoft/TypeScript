@@ -1,11 +1,18 @@
 === tests/cases/compiler/duplicateLabel3.ts ===
 target:
+>target : unknown
+
 while (true) {
+>true : boolean
+
   function f() {
 >f : () => void
 
     target:
+>target : unknown
+
     while (true) {
+>true : boolean
     }
   }
 }

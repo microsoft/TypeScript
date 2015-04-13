@@ -87,6 +87,7 @@ var ra8 = a8 || a1;         // array     || any is any
 var ra9 = null || a1;       // null      || any is any
 >ra9 : any
 >null || a1 : any
+>null : null
 >a1 : any
 
 var ra10 = undefined || a1; // undefined || any is any
@@ -146,6 +147,7 @@ var rb8 = a8 || a2;         // array     || boolean is array | boolean
 var rb9 = null || a2;       // null      || boolean is boolean
 >rb9 : boolean
 >null || a2 : boolean
+>null : null
 >a2 : boolean
 
 var rb10= undefined || a2;  // undefined || boolean is boolean
@@ -205,6 +207,7 @@ var rc8 = a8 || a3;         // array     || number is array | number
 var rc9 = null || a3;       // null      || number is number
 >rc9 : number
 >null || a3 : number
+>null : null
 >a3 : number
 
 var rc10 = undefined || a3; // undefined || number is number
@@ -264,6 +267,7 @@ var rd8 = a8 || a4;         // array     || string is array | string
 var rd9 = null || a4;       // null      || string is string
 >rd9 : string
 >null || a4 : string
+>null : null
 >a4 : string
 
 var rd10 = undefined || a4; // undefined || string is string
@@ -323,6 +327,7 @@ var re8 = a8 || a5;         // array     || void is array | void
 var re9 = null || a5;       // null      || void is void
 >re9 : void
 >null || a5 : void
+>null : null
 >a5 : void
 
 var re10 = undefined || a5; // undefined || void is void
@@ -382,6 +387,7 @@ var rg8 = a8 || a6;         // array     || enum is array | enum
 var rg9 = null || a6;       // null      || enum is E
 >rg9 : E
 >null || a6 : E
+>null : null
 >a6 : E
 
 var rg10 = undefined || a6; // undefined || enum is E
@@ -441,6 +447,7 @@ var rh8 = a8 || a7;         // array     || object is array | object
 var rh9 = null || a7;       // null      || object is object
 >rh9 : { a: string; }
 >null || a7 : { a: string; }
+>null : null
 >a7 : { a: string; }
 
 var rh10 = undefined || a7; // undefined || object is object
@@ -500,6 +507,7 @@ var ri8 = a8 || a8;         // array     || array is array
 var ri9 = null || a8;       // null      || array is array
 >ri9 : string[]
 >null || a8 : string[]
+>null : null
 >a8 : string[]
 
 var ri10 = undefined || a8; // undefined || array is array
@@ -512,50 +520,61 @@ var rj1 = a1 || null;         // any       || null is any
 >rj1 : any
 >a1 || null : any
 >a1 : any
+>null : null
 
 var rj2 = a2 || null;         // boolean   || null is boolean
 >rj2 : boolean
 >a2 || null : boolean
 >a2 : boolean
+>null : null
 
 var rj3 = a3 || null;         // number    || null is number
 >rj3 : number
 >a3 || null : number
 >a3 : number
+>null : null
 
 var rj4 = a4 || null;         // string    || null is string
 >rj4 : string
 >a4 || null : string
 >a4 : string
+>null : null
 
 var rj5 = a5 || null;         // void      || null is void
 >rj5 : void
 >a5 || null : void
 >a5 : void
+>null : null
 
 var rj6 = a6 || null;         // enum      || null is E
 >rj6 : E
 >a6 || null : E
 >a6 : E
+>null : null
 
 var rj7 = a7 || null;         // object    || null is object
 >rj7 : { a: string; }
 >a7 || null : { a: string; }
 >a7 : { a: string; }
+>null : null
 
 var rj8 = a8 || null;         // array     || null is array
 >rj8 : string[]
 >a8 || null : string[]
 >a8 : string[]
+>null : null
 
 var rj9 = null || null;       // null      || null is any
 >rj9 : any
 >null || null : null
+>null : null
+>null : null
 
 var rj10 = undefined || null; // undefined || null is any
 >rj10 : any
 >undefined || null : null
 >undefined : undefined
+>null : null
 
 var rf1 = a1 || undefined;         // any       || undefined is any
 >rf1 : any
@@ -608,6 +627,7 @@ var rf8 = a8 || undefined;         // array     || undefined is array
 var rf9 = null || undefined;       // null      || undefined is any
 >rf9 : any
 >null || undefined : null
+>null : null
 >undefined : undefined
 
 var rf10 = undefined || undefined; // undefined || undefined is any

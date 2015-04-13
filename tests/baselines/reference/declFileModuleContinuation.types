@@ -15,6 +15,8 @@ module A.B.C {
 
     export class W implements A.C.Z {
 >W : W
+>A.C.Z : unknown
+>A.C : unknown
 >A : typeof A
 >C : unknown
 >Z : A.C.Z

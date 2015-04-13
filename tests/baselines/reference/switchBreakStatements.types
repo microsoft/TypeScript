@@ -1,57 +1,124 @@
 === tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts ===
 switch ('') {
+>'' : string
+
     case 'a':
+>'a' : string
+
         break;
 }
 
 ONE:
+>ONE : unknown
+
 switch ('') {
+>'' : string
+
     case 'a':
+>'a' : string
+
         break ONE;
+>ONE : unknown
 }
 
 TWO:
+>TWO : unknown
+
 THREE:
+>THREE : unknown
+
 switch ('') {
+>'' : string
+
     case 'a':
+>'a' : string
+
         break THREE;
+>THREE : unknown
 }
 
 FOUR:
+>FOUR : unknown
+
 switch ('') {
+>'' : string
+
     case 'a':
+>'a' : string
+
         FIVE:
+>FIVE : unknown
+
         switch ('') {
+>'' : string
+
             case 'a':
+>'a' : string
+
                 break FOUR;
+>FOUR : unknown
         }
 }
 
 switch ('') {
+>'' : string
+
     case 'a':
+>'a' : string
+
         SIX:
+>SIX : unknown
+
         switch ('') {
+>'' : string
+
             case 'a':
+>'a' : string
+
                 break SIX;
+>SIX : unknown
         }
 }
 
 SEVEN:
+>SEVEN : unknown
+
 switch ('') {
+>'' : string
+
     case 'a':
+>'a' : string
+
         switch ('') {
+>'' : string
+
             case 'a':
+>'a' : string
+
                 switch ('') {
+>'' : string
+
                     case 'a':
+>'a' : string
+
                         break SEVEN;
+>SEVEN : unknown
+
                         EIGHT:
+>EIGHT : unknown
+
                         switch ('') {
+>'' : string
+
                             case 'a':
+>'a' : string
+
                                 var fn = function () { }
 >fn : () => void
 >function () { } : () => void
 
                                 break EIGHT;
+>EIGHT : unknown
                         }
                 }
         }

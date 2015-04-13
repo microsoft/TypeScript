@@ -21,13 +21,17 @@ function foo1(...stuff: any[]): any {
 
 var a = foo1 `${1}`;          // string
 >a : string
+>foo1 `${1}` : string
 >foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
+>`${1}` : string
+>1 : number
 
 var b = foo1([], 1);          // number
 >b : number
 >foo1([], 1) : number
 >foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
 >[] : undefined[]
+>1 : number
 
 function foo2(strs: string[], x: number): number;
 >foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
@@ -50,11 +54,15 @@ function foo2(...stuff: any[]): any {
 
 var c = foo2 `${1}`;          // number
 >c : number
+>foo2 `${1}` : number
 >foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
+>`${1}` : string
+>1 : number
 
 var d = foo2([], 1);          // number
 >d : number
 >foo2([], 1) : number
 >foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
 >[] : undefined[]
+>1 : number
 

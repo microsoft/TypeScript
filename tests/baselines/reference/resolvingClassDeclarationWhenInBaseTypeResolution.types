@@ -4,6 +4,7 @@ module rionegrensis {
 
   export class caniventer extends Lanthanum.nitidus<petrophilus.minutilla, julianae.sumatrana> {
 >caniventer : caniventer
+>Lanthanum.nitidus : unknown
 >Lanthanum : typeof Lanthanum
 >nitidus : Lanthanum.nitidus<T0, T1>
 >petrophilus : unknown
@@ -89,6 +90,7 @@ module rionegrensis {
 >veraecrucis : veraecrucis<T0, T1>
 >T0 : T0
 >T1 : T1
+>trivirgatus.mixtus : unknown
 >trivirgatus : typeof trivirgatus
 >mixtus : trivirgatus.mixtus<T0, T1>
 >gabriellae : unknown
@@ -514,6 +516,7 @@ module julianae {
 >oralis : oralis<T0, T1>
 >T0 : T0
 >T1 : T1
+>caurinus.psilurus : unknown
 >caurinus : typeof caurinus
 >psilurus : caurinus.psilurus
 
@@ -751,6 +754,7 @@ module julianae {
   }
   export class sumatrana extends Lanthanum.jugularis {
 >sumatrana : sumatrana
+>Lanthanum.jugularis : unknown
 >Lanthanum : typeof Lanthanum
 >jugularis : Lanthanum.jugularis
 
@@ -1276,6 +1280,7 @@ module julianae {
   }
   export class durangae extends dogramacii.aurata {
 >durangae : durangae
+>dogramacii.aurata : unknown
 >dogramacii : typeof dogramacii
 >aurata : dogramacii.aurata
 
@@ -1429,6 +1434,7 @@ module Lanthanum {
 >nitidus : nitidus<T0, T1>
 >T0 : T0
 >T1 : T1
+>argurus.gilbertii : unknown
 >argurus : typeof argurus
 >gilbertii : argurus.gilbertii<T0, T1>
 >lavali : unknown
@@ -1598,6 +1604,7 @@ module Lanthanum {
   }
   export class megalonyx extends caurinus.johorensis<caurinus.megaphyllus, julianae.steerii> {
 >megalonyx : megalonyx
+>caurinus.johorensis : unknown
 >caurinus : typeof caurinus
 >johorensis : caurinus.johorensis<T0, T1>
 >caurinus : unknown
@@ -1984,6 +1991,7 @@ module rendalli {
 
   export class zuluensis extends julianae.steerii {
 >zuluensis : zuluensis
+>julianae.steerii : unknown
 >julianae : typeof julianae
 >steerii : julianae.steerii
 
@@ -2418,6 +2426,7 @@ module rendalli {
 >crenulata : crenulata<T0, T1>
 >T0 : T0
 >T1 : T1
+>trivirgatus.falconeri : unknown
 >trivirgatus : typeof trivirgatus
 >falconeri : trivirgatus.falconeri
 
@@ -2612,6 +2621,7 @@ module trivirgatus {
 >mixtus : mixtus<T0, T1>
 >T0 : T0
 >T1 : T1
+>argurus.pygmaea : unknown
 >argurus : typeof argurus
 >pygmaea : argurus.pygmaea<T0, T1>
 >argurus : unknown
@@ -3349,6 +3359,7 @@ module ruatanica {
 
   export class americanus extends imperfecta.ciliolabrum<argurus.germaini, lutreolus.foina> {
 >americanus : americanus
+>imperfecta.ciliolabrum : unknown
 >imperfecta : typeof imperfecta
 >ciliolabrum : imperfecta.ciliolabrum<T0, T1>
 >argurus : unknown
@@ -3418,6 +3429,7 @@ module lavali {
 
   export class wilsoni extends Lanthanum.nitidus<rionegrensis.caniventer, Lanthanum.jugularis> {
 >wilsoni : wilsoni
+>Lanthanum.nitidus : unknown
 >Lanthanum : typeof Lanthanum
 >nitidus : Lanthanum.nitidus<T0, T1>
 >rionegrensis : unknown
@@ -3638,6 +3650,7 @@ module lavali {
   }
   export class otion extends howi.coludo<argurus.oreas, howi.marcanoi> {
 >otion : otion
+>howi.coludo : unknown
 >howi : typeof howi
 >coludo : howi.coludo<T0, T1>
 >argurus : unknown
@@ -4112,6 +4125,7 @@ module lavali {
   }
   export class thaeleri extends argurus.oreas {
 >thaeleri : thaeleri
+>argurus.oreas : unknown
 >argurus : typeof argurus
 >oreas : argurus.oreas
 
@@ -4275,6 +4289,7 @@ module lavali {
   }
   export class lepturus extends Lanthanum.suillus<dammermani.melanops, quasiater.carolinensis> {
 >lepturus : lepturus
+>Lanthanum.suillus : unknown
 >Lanthanum : typeof Lanthanum
 >suillus : Lanthanum.suillus<T0, T1>
 >dammermani : unknown
@@ -4350,6 +4365,7 @@ module dogramacii {
 
   export class robustulus extends lavali.wilsoni {
 >robustulus : robustulus
+>lavali.wilsoni : unknown
 >lavali : typeof lavali
 >wilsoni : lavali.wilsoni
 
@@ -4924,6 +4940,7 @@ module lutreolus {
 
   export class schlegeli extends lavali.beisa {
 >schlegeli : schlegeli
+>lavali.beisa : unknown
 >lavali : typeof lavali
 >beisa : lavali.beisa
 
@@ -5661,6 +5678,7 @@ module panglima {
 >amphibius : amphibius<T0, T1>
 >T0 : T0
 >T1 : T1
+>caurinus.johorensis : unknown
 >caurinus : typeof caurinus
 >johorensis : caurinus.johorensis<T0, T1>
 >Lanthanum : unknown
@@ -5794,6 +5812,7 @@ module panglima {
 >fundatus : fundatus<T0, T1>
 >T0 : T0
 >T1 : T1
+>lutreolus.schlegeli : unknown
 >lutreolus : typeof lutreolus
 >schlegeli : lutreolus.schlegeli
 
@@ -5899,6 +5918,7 @@ module panglima {
 >abidi : abidi<T0, T1>
 >T0 : T0
 >T1 : T1
+>argurus.dauricus : unknown
 >argurus : typeof argurus
 >dauricus : argurus.dauricus<T0, T1>
 >argurus : unknown
@@ -6113,6 +6133,7 @@ module minutus {
 >himalayana : himalayana<T0, T1>
 >T0 : T0
 >T1 : T1
+>lutreolus.punicus : unknown
 >lutreolus : typeof lutreolus
 >punicus : lutreolus.punicus
 
@@ -6356,6 +6377,7 @@ module caurinus {
 >mahaganus : mahaganus<T0, T1>
 >T0 : T0
 >T1 : T1
+>panglima.fundatus : unknown
 >panglima : typeof panglima
 >fundatus : panglima.fundatus<T0, T1>
 >quasiater : unknown
@@ -6584,6 +6606,7 @@ module howi {
 >angulatus : angulatus<T0, T1>
 >T0 : T0
 >T1 : T1
+>sagitta.stolzmanni : unknown
 >sagitta : typeof sagitta
 >stolzmanni : sagitta.stolzmanni
 
@@ -6791,6 +6814,7 @@ module sagitta {
 
     export class walkeri extends minutus.portoricensis {
 >walkeri : walkeri
+>minutus.portoricensis : unknown
 >minutus : typeof minutus
 >portoricensis : minutus.portoricensis
 
@@ -6822,6 +6846,7 @@ module minutus {
 >inez : inez<T0, T1>
 >T0 : T0
 >T1 : T1
+>samarensis.pelurus : unknown
 >samarensis : typeof samarensis
 >pelurus : samarensis.pelurus<T0, T1>
 >argurus : unknown
@@ -6855,6 +6880,7 @@ module macrorhinos {
 
     export class konganensis extends imperfecta.lasiurus<caurinus.psilurus, caurinus.psilurus> {
 >konganensis : konganensis
+>imperfecta.lasiurus : unknown
 >imperfecta : typeof imperfecta
 >lasiurus : imperfecta.lasiurus<T0, T1>
 >caurinus : unknown
@@ -6870,6 +6896,7 @@ module panamensis {
 >linulus : linulus<T0, T1>
 >T0 : T0
 >T1 : T1
+>ruatanica.hector : unknown
 >ruatanica : typeof ruatanica
 >hector : ruatanica.hector<T0, T1>
 >julianae : unknown
@@ -7330,6 +7357,7 @@ module samarensis {
 >pelurus : pelurus<T0, T1>
 >T0 : T0
 >T1 : T1
+>sagitta.stolzmanni : unknown
 >sagitta : typeof sagitta
 >stolzmanni : sagitta.stolzmanni
 
@@ -7587,6 +7615,7 @@ module samarensis {
 >fuscus : fuscus<T0, T1>
 >T0 : T0
 >T1 : T1
+>macrorhinos.daphaenodon : unknown
 >macrorhinos : typeof macrorhinos
 >daphaenodon : macrorhinos.daphaenodon
 
@@ -8064,6 +8093,7 @@ module sagitta {
 >leptoceros : leptoceros<T0, T1>
 >T0 : T0
 >T1 : T1
+>caurinus.johorensis : unknown
 >caurinus : typeof caurinus
 >johorensis : caurinus.johorensis<T0, T1>
 >argurus : unknown
@@ -8175,6 +8205,7 @@ module daubentonii {
 >nigricans : nigricans<T0, T1>
 >T0 : T0
 >T1 : T1
+>sagitta.stolzmanni : unknown
 >sagitta : typeof sagitta
 >stolzmanni : sagitta.stolzmanni
 
@@ -8207,6 +8238,7 @@ module argurus {
 >pygmaea : pygmaea<T0, T1>
 >T0 : T0
 >T1 : T1
+>rendalli.moojeni : unknown
 >rendalli : typeof rendalli
 >moojeni : rendalli.moojeni<T0, T1>
 >macrorhinos : unknown
@@ -8258,6 +8290,7 @@ module chrysaeolus {
 >sarasinorum : sarasinorum<T0, T1>
 >T0 : T0
 >T1 : T1
+>caurinus.psilurus : unknown
 >caurinus : typeof caurinus
 >psilurus : caurinus.psilurus
 
@@ -8500,6 +8533,7 @@ module argurus {
 
     export class oreas extends lavali.wilsoni {
 >oreas : oreas
+>lavali.wilsoni : unknown
 >lavali : typeof lavali
 >wilsoni : lavali.wilsoni
 
@@ -9129,6 +9163,7 @@ module provocax {
 
     export class melanoleuca extends lavali.wilsoni {
 >melanoleuca : melanoleuca
+>lavali.wilsoni : unknown
 >lavali : typeof lavali
 >wilsoni : lavali.wilsoni
 
@@ -9275,6 +9310,7 @@ module howi {
 
     export class marcanoi extends Lanthanum.megalonyx {
 >marcanoi : marcanoi
+>Lanthanum.megalonyx : unknown
 >Lanthanum : typeof Lanthanum
 >megalonyx : Lanthanum.megalonyx
 
@@ -10362,6 +10398,7 @@ module gabriellae {
 >klossii : klossii<T0, T1>
 >T0 : T0
 >T1 : T1
+>imperfecta.lasiurus : unknown
 >imperfecta : typeof imperfecta
 >lasiurus : imperfecta.lasiurus<T0, T1>
 >dogramacii : unknown
@@ -10871,6 +10908,7 @@ module imperfecta {
 >ciliolabrum : ciliolabrum<T0, T1>
 >T0 : T0
 >T1 : T1
+>dogramacii.robustulus : unknown
 >dogramacii : typeof dogramacii
 >robustulus : dogramacii.robustulus
 
@@ -11034,6 +11072,7 @@ module petrophilus {
 >sodyi : sodyi<T0, T1>
 >T0 : T0
 >T1 : T1
+>quasiater.bobrinskoi : unknown
 >quasiater : typeof quasiater
 >bobrinskoi : quasiater.bobrinskoi
 
@@ -11167,6 +11206,7 @@ module caurinus {
 
     export class megaphyllus extends imperfecta.lasiurus<julianae.acariensis, howi.coludo<argurus.oreas, howi.marcanoi>> {
 >megaphyllus : megaphyllus
+>imperfecta.lasiurus : unknown
 >imperfecta : typeof imperfecta
 >lasiurus : imperfecta.lasiurus<T0, T1>
 >julianae : unknown
@@ -11600,6 +11640,7 @@ module lutreolus {
 >cor : cor<T0, T1>
 >T0 : T0
 >T1 : T1
+>panglima.fundatus : unknown
 >panglima : typeof panglima
 >fundatus : panglima.fundatus<T0, T1>
 >panamensis : unknown
@@ -11846,6 +11887,7 @@ module argurus {
 
     export class germaini extends gabriellae.amicus {
 >germaini : germaini
+>gabriellae.amicus : unknown
 >gabriellae : typeof gabriellae
 >amicus : gabriellae.amicus
 
@@ -12058,6 +12100,7 @@ module dammermani {
 
     export class melanops extends minutus.inez<sagitta.stolzmanni, dammermani.melanops> {
 >melanops : melanops
+>minutus.inez : unknown
 >minutus : typeof minutus
 >inez : minutus.inez<T0, T1>
 >sagitta : unknown
@@ -12307,6 +12350,7 @@ module argurus {
 
     export class peninsulae extends patas.uralensis {
 >peninsulae : peninsulae
+>patas.uralensis : unknown
 >patas : typeof patas
 >uralensis : patas.uralensis
 
@@ -12771,6 +12815,7 @@ module ruatanica {
 >Praseodymium : Praseodymium<T0, T1>
 >T0 : T0
 >T1 : T1
+>ruatanica.hector : unknown
 >ruatanica : typeof ruatanica
 >hector : hector<T0, T1>
 >lutreolus : unknown
@@ -13118,6 +13163,7 @@ module caurinus {
 >johorensis : johorensis<T0, T1>
 >T0 : T0
 >T1 : T1
+>lutreolus.punicus : unknown
 >lutreolus : typeof lutreolus
 >punicus : lutreolus.punicus
 
@@ -13564,6 +13610,7 @@ module caurinus {
 
     export class psilurus extends lutreolus.punicus {
 >psilurus : psilurus
+>lutreolus.punicus : unknown
 >lutreolus : typeof lutreolus
 >punicus : lutreolus.punicus
 
