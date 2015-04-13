@@ -9,4 +9,10 @@ var bar;
 var ;
 var foo;
 var ;
+var  = (function () {
+    function () {
+    }
+    return ;
+})();
+;
 var bar;

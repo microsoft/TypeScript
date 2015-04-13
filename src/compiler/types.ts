@@ -203,9 +203,12 @@ module ts {
         TemplateExpression,
         YieldExpression,
         SpreadElementExpression,
+        ClassExpression,
         OmittedExpression,
         // Misc
         TemplateSpan,
+        HeritageClauseElement,
+        SemicolonClassElement,
         // Element
         Block,
         VariableStatement,
@@ -538,6 +541,11 @@ module ts {
         body?: Block;
     }
 
+    // For when we encounter a semicolon in a class declaration.  ES6 allows these as class elements.
+    export interface SemicolonClassElement extends ClassElement {
+        _semicolonClassElementBrand: any;
+    }
+
     // See the comment on MethodDeclaration for the intuition behind AccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
     export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
@@ -730,6 +738,11 @@ module ts {
         arguments: NodeArray<Expression>;
     }
 
+    export interface HeritageClauseElement extends Node {
+        expression: LeftHandSideExpression;
+        typeArguments?: NodeArray<TypeNode>;
+    }
+
     export interface NewExpression extends CallExpression, PrimaryExpression { }
 
     export interface TaggedTemplateExpression extends MemberExpression {
@@ -851,11 +864,17 @@ module ts {
         _moduleElementBrand: any;
     }
 
-    export interface ClassDeclaration extends Declaration, ModuleElement {
+    export interface ClassLikeDeclaration extends Declaration {
         name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
         members: NodeArray<ClassElement>;
+    }
+
+    export interface ClassDeclaration extends ClassLikeDeclaration, Statement {
+    }
+
+    export interface ClassExpression extends ClassLikeDeclaration, PrimaryExpression {
     }
 
     export interface ClassElement extends Declaration {
@@ -871,7 +890,7 @@ module ts {
 
     export interface HeritageClause extends Node {
         token: SyntaxKind;
-        types?: NodeArray<TypeReferenceNode>;
+        types?: NodeArray<HeritageClauseElement>;
     }
 
     export interface TypeAliasDeclaration extends Declaration, ModuleElement {
@@ -916,7 +935,7 @@ module ts {
     // import "mod"  => importClause = undefined, moduleSpecifier = "mod"
     // In rest of the cases, module specifier is string literal corresponding to module
     // ImportClause information is shown at its declaration below.
-    export interface ImportDeclaration extends Statement, ModuleElement {
+    export interface ImportDeclaration extends ModuleElement {
         importClause?: ImportClause;
         moduleSpecifier: Expression;
     }
@@ -1129,7 +1148,7 @@ module ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
-        getExportsOfExternalModule(node: ImportDeclaration): Symbol[];
+        getExportsOfModule(moduleSymbol: Symbol): Symbol[];
 
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
@@ -1233,7 +1252,7 @@ module ts {
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
-        isEntityNameVisible(entityName: EntityName, enclosingDeclaration: Node): SymbolVisibilityResult;
+        isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         resolvesToSomeValue(location: Node, name: string): boolean;
@@ -1587,6 +1606,7 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
+        separateCompilation?: boolean;
         /* @internal */ stripInternal?: boolean;
         [option: string]: string | number | boolean;
     }

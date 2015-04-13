@@ -237,12 +237,13 @@ module ts {
             case SyntaxKind.Decorator:
                 return visitNode(cbNode, (<Decorator>node).expression);
             case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ClassDeclaration>node).name) ||
-                    visitNodes(cbNodes, (<ClassDeclaration>node).typeParameters) ||
-                    visitNodes(cbNodes, (<ClassDeclaration>node).heritageClauses) ||
-                    visitNodes(cbNodes, (<ClassDeclaration>node).members);
+                    visitNode(cbNode, (<ClassLikeDeclaration>node).name) ||
+                    visitNodes(cbNodes, (<ClassLikeDeclaration>node).typeParameters) ||
+                    visitNodes(cbNodes, (<ClassLikeDeclaration>node).heritageClauses) ||
+                    visitNodes(cbNodes, (<ClassLikeDeclaration>node).members);
             case SyntaxKind.InterfaceDeclaration:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
@@ -308,6 +309,9 @@ module ts {
                 return visitNode(cbNode, (<ComputedPropertyName>node).expression);
             case SyntaxKind.HeritageClause:
                 return visitNodes(cbNodes, (<HeritageClause>node).types);
+            case SyntaxKind.HeritageClauseElement:
+                return visitNode(cbNode, (<HeritageClauseElement>node).expression) ||
+                    visitNodes(cbNodes, (<HeritageClauseElement>node).typeArguments);
             case SyntaxKind.ExternalModuleReference:
                 return visitNode(cbNode, (<ExternalModuleReference>node).expression);
             case SyntaxKind.MissingDeclaration:
@@ -324,7 +328,7 @@ module ts {
         TypeMembers,               // Members in interface or type literal
         ClassMembers,              // Members in class declaration
         EnumMembers,               // Members in enum declaration
-        TypeReferences,            // Type references in extends or implements clause
+        HeritageClauseElement,     // Elements in a heritage clause
         VariableDeclarations,      // Variable declarations in variable statement
         ObjectBindingElements,     // Binding elements in object binding list
         ArrayBindingElements,      // Binding elements in array binding list
@@ -356,7 +360,7 @@ module ts {
             case ParsingContext.TypeMembers:              return Diagnostics.Property_or_signature_expected;
             case ParsingContext.ClassMembers:             return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
             case ParsingContext.EnumMembers:              return Diagnostics.Enum_member_expected;
-            case ParsingContext.TypeReferences:           return Diagnostics.Type_reference_expected;
+            case ParsingContext.HeritageClauseElement:    return Diagnostics.Expression_expected;
             case ParsingContext.VariableDeclarations:     return Diagnostics.Variable_declaration_expected;
             case ParsingContext.ObjectBindingElements:    return Diagnostics.Property_destructuring_pattern_expected;
             case ParsingContext.ArrayBindingElements:     return Diagnostics.Array_element_destructuring_pattern_expected;
@@ -1606,7 +1610,11 @@ module ts {
                 case ParsingContext.TypeMembers:
                     return isStartOfTypeMember();
                 case ParsingContext.ClassMembers:
-                    return lookAhead(isClassMemberStart);
+                    // We allow semicolons as class elements (as specified by ES6) as long as we're
+                    // not in error recovery.  If we're in error recovery, we don't want an errant
+                    // semicolon to be treated as a class member (since they're almost always used
+                    // for statements.
+                    return lookAhead(isClassMemberStart) || (token === SyntaxKind.SemicolonToken && !inErrorRecovery);
                 case ParsingContext.EnumMembers:
                     // Include open bracket computed properties. This technically also lets in indexers,
                     // which would be a candidate for improved error reporting.
@@ -1615,10 +1623,22 @@ module ts {
                     return token === SyntaxKind.OpenBracketToken || token === SyntaxKind.AsteriskToken || isLiteralPropertyName();
                 case ParsingContext.ObjectBindingElements:
                     return isLiteralPropertyName();
-                case ParsingContext.TypeReferences:
-                    // We want to make sure that the "extends" in "extends foo" or the "implements" in
-                    // "implements foo" is not considered a type name.
-                    return isIdentifier() && !isNotHeritageClauseTypeName();
+                case ParsingContext.HeritageClauseElement:
+                    // If we see { } then only consume it as an expression if it is followed by , or {
+                    // That way we won't consume the body of a class in its heritage clause.
+                    if (token === SyntaxKind.OpenBraceToken) {
+                        return lookAhead(isValidHeritageClauseObjectLiteral);
+                    }
+
+                    if (!inErrorRecovery) {
+                        return isStartOfLeftHandSideExpression() && !isHeritageClauseExtendsOrImplementsKeyword();
+                    }
+                    else {
+                        // If we're in error recovery we tighten up what we're willing to match.
+                        // That way we don't treat something like "this" as a valid heritage clause
+                        // element during recovery.
+                        return isIdentifier() && !isHeritageClauseExtendsOrImplementsKeyword();
+                    }
                 case ParsingContext.VariableDeclarations:
                     return isIdentifierOrPattern();
                 case ParsingContext.ArrayBindingElements:
@@ -1642,19 +1662,42 @@ module ts {
             Debug.fail("Non-exhaustive case in 'isListElement'.");
         }
 
+        function isValidHeritageClauseObjectLiteral() {
+            Debug.assert(token === SyntaxKind.OpenBraceToken);
+            if (nextToken() === SyntaxKind.CloseBraceToken) {
+                // if we see  "extends {}" then only treat the {} as what we're extending (and not
+                // the class body) if we have:
+                //
+                //      extends {} { 
+                //      extends {},
+                //      extends {} extends
+                //      extends {} implements
+
+                let next = nextToken();
+                return next === SyntaxKind.CommaToken || next === SyntaxKind.OpenBraceToken || next === SyntaxKind.ExtendsKeyword || next === SyntaxKind.ImplementsKeyword;
+            }
+
+            return true;
+        }
+
         function nextTokenIsIdentifier() {
             nextToken();
             return isIdentifier();
         }
 
-        function isNotHeritageClauseTypeName(): boolean {
+        function isHeritageClauseExtendsOrImplementsKeyword(): boolean {
             if (token === SyntaxKind.ImplementsKeyword ||
                 token === SyntaxKind.ExtendsKeyword) {
 
-                return lookAhead(nextTokenIsIdentifier);
+                return lookAhead(nextTokenIsStartOfExpression);
             }
 
             return false;
+        }
+
+        function nextTokenIsStartOfExpression() {
+            nextToken();
+            return isStartOfExpression();
         }
 
         // True if positioned at a list terminator
@@ -1677,7 +1720,7 @@ module ts {
                     return token === SyntaxKind.CloseBraceToken;
                 case ParsingContext.SwitchClauseStatements:
                     return token === SyntaxKind.CloseBraceToken || token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
-                case ParsingContext.TypeReferences:
+                case ParsingContext.HeritageClauseElement:
                     return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.ExtendsKeyword || token === SyntaxKind.ImplementsKeyword;
                 case ParsingContext.VariableDeclarations:
                     return isVariableDeclaratorListTerminator();
@@ -1891,12 +1934,6 @@ module ts {
                 // This would probably be safe to reuse.  There is no speculative parsing with
                 // heritage clauses.
 
-                case ParsingContext.TypeReferences:
-                // This would probably be safe to reuse.  There is no speculative parsing with
-                // type names in a heritage clause.  There can be generic names in the type
-                // name list.  But because it is a type context, we never use speculative
-                // parsing on the type argument list.
-
                 case ParsingContext.TypeParameters:
                 // This would probably be safe to reuse.  There is no speculative parsing with
                 // type parameters.  Note that that's because type *parameters* only occur in
@@ -1923,6 +1960,12 @@ module ts {
                 // cases.  i.e. a property assignment may end with an expression, and thus might
                 // have lookahead far beyond it's old node.
                 case ParsingContext.ObjectLiteralMembers:
+
+                // This is probably not safe to reuse.  There can be speculative parsing with
+                // type names in a heritage clause.  There can be generic names in the type
+                // name list, and there can be left hand side expressions (which can have type
+                // arguments.)
+                case ParsingContext.HeritageClauseElement:
             }
 
             return false;
@@ -1957,6 +2000,7 @@ module ts {
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.SemicolonClassElement:
                         return true;
                 }
             }
@@ -2842,8 +2886,7 @@ module ts {
         }
 
         // EXPRESSIONS
-
-        function isStartOfExpression(): boolean {
+        function isStartOfLeftHandSideExpression(): boolean {
             switch (token) {
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.SuperKeyword:
@@ -2858,9 +2901,23 @@ module ts {
                 case SyntaxKind.OpenBracketToken:
                 case SyntaxKind.OpenBraceToken:
                 case SyntaxKind.FunctionKeyword:
+                case SyntaxKind.ClassKeyword:
                 case SyntaxKind.NewKeyword:
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.SlashEqualsToken:
+                case SyntaxKind.Identifier:
+                    return true;
+                default:
+                    return isIdentifier();
+            }
+        }
+
+        function isStartOfExpression(): boolean {
+            if (isStartOfLeftHandSideExpression()) {
+                return true;
+            }
+
+            switch (token) {
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.TildeToken:
@@ -2871,7 +2928,6 @@ module ts {
                 case SyntaxKind.PlusPlusToken:
                 case SyntaxKind.MinusMinusToken:
                 case SyntaxKind.LessThanToken:
-                case SyntaxKind.Identifier:
                 case SyntaxKind.YieldKeyword:
                     // Yield always starts an expression.  Either it is an identifier (in which case
                     // it is definitely an expression).  Or it's a keyword (either because we're in
@@ -2891,8 +2947,12 @@ module ts {
         }
 
         function isStartOfExpressionStatement(): boolean {
-            // As per the grammar, neither '{' nor 'function' can start an expression statement.
-            return token !== SyntaxKind.OpenBraceToken && token !== SyntaxKind.FunctionKeyword && token !== SyntaxKind.AtToken && isStartOfExpression();
+            // As per the grammar, none of '{' or 'function' or 'class' can start an expression statement.
+            return token !== SyntaxKind.OpenBraceToken &&
+                token !== SyntaxKind.FunctionKeyword &&
+                token !== SyntaxKind.ClassKeyword &&
+                token !== SyntaxKind.AtToken &&
+                isStartOfExpression();
         }
 
         function parseExpression(): Expression {
@@ -3236,8 +3296,12 @@ module ts {
                 return parseFunctionBlock(/*allowYield:*/ false, /* ignoreMissingOpenBrace */ false);
             }
 
-            if (isStartOfStatement(/*inErrorRecovery:*/ true) && !isStartOfExpressionStatement() && token !== SyntaxKind.FunctionKeyword) {
-                // Check if we got a plain statement (i.e. no expression-statements, no functions expressions/declarations)
+            if (isStartOfStatement(/*inErrorRecovery:*/ true) &&
+                !isStartOfExpressionStatement() &&
+                token !== SyntaxKind.FunctionKeyword &&
+                token !== SyntaxKind.ClassKeyword) {
+
+                // Check if we got a plain statement (i.e. no expression-statements, no function/class expressions/declarations)
                 //
                 // Here we try to recover from a potential error situation in the case where the
                 // user meant to supply a block. For example, if the user wrote:
@@ -3664,7 +3728,6 @@ module ts {
                 case SyntaxKind.CloseBracketToken:              // foo<x>]
                 case SyntaxKind.ColonToken:                     // foo<x>:
                 case SyntaxKind.SemicolonToken:                 // foo<x>;
-                case SyntaxKind.CommaToken:                     // foo<x>,
                 case SyntaxKind.QuestionToken:                  // foo<x>?
                 case SyntaxKind.EqualsEqualsToken:              // foo<x> ==
                 case SyntaxKind.EqualsEqualsEqualsToken:        // foo<x> ===
@@ -3681,6 +3744,12 @@ module ts {
                     // expressions either.  The user is probably in the middle of a generic type. So
                     // treat it as such.
                     return true;
+
+                case SyntaxKind.CommaToken:                     // foo<x>,
+                case SyntaxKind.OpenBraceToken:                 // foo<x> {
+                    // We don't want to treat these as type arguments.  Otherwise we'll parse this
+                    // as an invocation expression.  Instead, we want to parse out the expression 
+                    // in isolation from the type arguments.
 
                 default:
                     // Anything else treat as an expression.
@@ -3706,6 +3775,8 @@ module ts {
                     return parseArrayLiteralExpression();
                 case SyntaxKind.OpenBraceToken:
                     return parseObjectLiteralExpression();
+                case SyntaxKind.ClassKeyword:
+                    return parseClassExpression();
                 case SyntaxKind.FunctionKeyword:
                     return parseFunctionExpression();
                 case SyntaxKind.NewKeyword:
@@ -4126,13 +4197,14 @@ module ts {
         }
 
         function isStartOfStatement(inErrorRecovery: boolean): boolean {
-            // Functions and variable statements are allowed as a statement.  But as per the grammar,
-            // they also allow modifiers.  So we have to check for those statements that might be
-            // following modifiers.This ensures that things work properly when incrementally parsing
-            // as the parser will produce the same FunctionDeclaraiton or VariableStatement if it has
-            // the same text regardless of whether it is inside a block or not.
+            // Functions, variable statements and classes are allowed as a statement.  But as per
+            // the grammar, they also allow modifiers.  So we have to check for those statements 
+            // that might be following modifiers.This ensures that things work properly when
+            // incrementally parsing as the parser will produce the same FunctionDeclaraiton, 
+            // VariableStatement or ClassDeclaration, if it has the same text regardless of whether 
+            // it is inside a block or not.
             if (isModifier(token)) {
-                let result = lookAhead(parseVariableStatementOrFunctionDeclarationWithDecoratorsOrModifiers);
+                let result = lookAhead(parseVariableStatementOrFunctionDeclarationOrClassDeclarationWithDecoratorsOrModifiers);
                 if (result) {
                     return true;
                 }
@@ -4151,6 +4223,7 @@ module ts {
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.FunctionKeyword:
+                case SyntaxKind.ClassKeyword:
                 case SyntaxKind.IfKeyword:
                 case SyntaxKind.DoKeyword:
                 case SyntaxKind.WhileKeyword:
@@ -4175,7 +4248,6 @@ module ts {
                     let isConstEnum = lookAhead(nextTokenIsEnumKeyword);
                     return !isConstEnum;
                 case SyntaxKind.InterfaceKeyword:
-                case SyntaxKind.ClassKeyword:
                 case SyntaxKind.ModuleKeyword:
                 case SyntaxKind.EnumKeyword:
                 case SyntaxKind.TypeKeyword:
@@ -4219,6 +4291,8 @@ module ts {
                     return parseVariableStatement(scanner.getStartPos(), /*decorators*/ undefined, /*modifiers:*/ undefined);
                 case SyntaxKind.FunctionKeyword:
                     return parseFunctionDeclaration(scanner.getStartPos(), /*decorators*/ undefined, /*modifiers:*/ undefined);
+                case SyntaxKind.ClassKeyword:
+                    return parseClassDeclaration(scanner.getStartPos(), /*decorators*/ undefined, /*modifiers:*/ undefined);
                 case SyntaxKind.SemicolonToken:
                     return parseEmptyStatement();
                 case SyntaxKind.IfKeyword:
@@ -4264,7 +4338,7 @@ module ts {
                     // Even though variable statements and function declarations cannot have decorators, 
                     // we parse them here to provide better error recovery.
                     if (isModifier(token) || token === SyntaxKind.AtToken) {
-                        let result = tryParse(parseVariableStatementOrFunctionDeclarationWithDecoratorsOrModifiers);
+                        let result = tryParse(parseVariableStatementOrFunctionDeclarationOrClassDeclarationWithDecoratorsOrModifiers);
                         if (result) {
                             return result;
                         }
@@ -4274,7 +4348,7 @@ module ts {
             }
         }
 
-        function parseVariableStatementOrFunctionDeclarationWithDecoratorsOrModifiers(): FunctionDeclaration | VariableStatement {
+        function parseVariableStatementOrFunctionDeclarationOrClassDeclarationWithDecoratorsOrModifiers(): FunctionDeclaration | VariableStatement | ClassDeclaration {
             let start = scanner.getStartPos();
             let decorators = parseDecorators();
             let modifiers = parseModifiers();
@@ -4294,8 +4368,12 @@ module ts {
 
                 case SyntaxKind.VarKeyword:
                     return parseVariableStatement(start, decorators, modifiers);
+
                 case SyntaxKind.FunctionKeyword:
                     return parseFunctionDeclaration(start, decorators, modifiers);
+
+                case SyntaxKind.ClassKeyword:
+                    return parseClassDeclaration(start, decorators, modifiers);
             }
 
             return undefined;
@@ -4612,6 +4690,12 @@ module ts {
         }
 
         function parseClassElement(): ClassElement {
+            if (token === SyntaxKind.SemicolonToken) {
+                let result = <SemicolonClassElement>createNode(SyntaxKind.SemicolonClassElement);
+                nextToken();
+                return finishNode(result);
+            }
+
             let fullStart = getNodePos();
             let decorators = parseDecorators();
             let modifiers = parseModifiers();
@@ -4650,14 +4734,26 @@ module ts {
             Debug.fail("Should not have attempted to parse class member declaration.");
         }
 
+        function parseClassExpression(): ClassExpression {
+            return <ClassExpression>parseClassDeclarationOrExpression(
+                /*fullStart:*/ scanner.getStartPos(),
+                /*decorators:*/ undefined,
+                /*modifiers:*/ undefined,
+                SyntaxKind.ClassExpression);
+        }
+
         function parseClassDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ClassDeclaration {
+            return <ClassDeclaration>parseClassDeclarationOrExpression(fullStart, decorators, modifiers, SyntaxKind.ClassDeclaration);
+        }
+
+        function parseClassDeclarationOrExpression(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, kind: SyntaxKind): ClassLikeDeclaration {
             // In ES6 specification, All parts of a ClassDeclaration or a ClassExpression are strict mode code
             let savedStrictModeContext = inStrictModeContext();
             if (languageVersion >= ScriptTarget.ES6) {
                 setStrictModeContext(true);
             }
 
-            var node = <ClassDeclaration>createNode(SyntaxKind.ClassDeclaration, fullStart);
+            var node = <ClassLikeDeclaration>createNode(kind, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ClassKeyword);
@@ -4707,11 +4803,21 @@ module ts {
                 let node = <HeritageClause>createNode(SyntaxKind.HeritageClause);
                 node.token = token;
                 nextToken();
-                node.types = parseDelimitedList(ParsingContext.TypeReferences, parseTypeReference);
+                node.types = parseDelimitedList(ParsingContext.HeritageClauseElement, parseHeritageClauseElement);
                 return finishNode(node);
             }
 
             return undefined;
+        }
+
+        function parseHeritageClauseElement(): HeritageClauseElement {
+            let node = <HeritageClauseElement>createNode(SyntaxKind.HeritageClauseElement);
+            node.expression = parseLeftHandSideExpressionOrHigher();
+            if (token === SyntaxKind.LessThanToken) {
+                node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
+            }
+
+            return finishNode(node);
         }
 
         function isHeritageClause(): boolean {
@@ -5256,6 +5362,7 @@ module ts {
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.ClassExpression:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.Identifier:
                 case SyntaxKind.RegularExpressionLiteral:
