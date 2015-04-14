@@ -1607,7 +1607,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function parenthesizeForAccess(expr: Expression): LeftHandSideExpression {
-                if (expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) {
+                if (isLeftHandSideExpression(expr)) {
                     return <LeftHandSideExpression>expr;
                 }
                 let node = <ParenthesizedExpression>createSynthesizedNode(SyntaxKind.ParenthesizedExpression);
