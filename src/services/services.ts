@@ -3109,6 +3109,7 @@ module ts {
 
                         case SyntaxKind.SemicolonToken:
                             return containingNodeKind === SyntaxKind.PropertySignature &&
+                                previousToken.parent && previousToken.parent.parent &&
                                 (previousToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration ||    // interface a { f; |
                                     previousToken.parent.parent.kind === SyntaxKind.TypeLiteral);           //  let x : { a; |
 
@@ -3124,7 +3125,8 @@ module ts {
                         case SyntaxKind.DotDotDotToken:
                             return containingNodeKind === SyntaxKind.Parameter ||
                                 containingNodeKind === SyntaxKind.Constructor ||
-                                (previousToken.parent.parent.kind === SyntaxKind.ArrayBindingPattern);  // var [ ...z|
+                                (previousToken.parent && previousToken.parent.parent &&
+                                    previousToken.parent.parent.kind === SyntaxKind.ArrayBindingPattern);  // var [ ...z|
 
                         case SyntaxKind.PublicKeyword:
                         case SyntaxKind.PrivateKeyword:
