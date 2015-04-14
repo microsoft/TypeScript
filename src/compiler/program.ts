@@ -453,6 +453,51 @@ module ts {
             }
         }
 
+        function computecommonSourceDirectory(sourceFiles: SourceFile[]): string {
+            let commonPathComponents: string[];
+            forEach(files, sourceFile => {
+                // Each file contributes into common source file path
+                if (!(sourceFile.flags & NodeFlags.DeclarationFile)
+                    && !fileExtensionIs(sourceFile.fileName, ".js")) {
+                    let sourcePathComponents = getNormalizedPathComponents(sourceFile.fileName, host.getCurrentDirectory());
+                    sourcePathComponents.pop(); // FileName is not part of directory
+                    if (commonPathComponents) {
+                        for (let i = 0; i < Math.min(commonPathComponents.length, sourcePathComponents.length); i++) {
+                            if (commonPathComponents[i] !== sourcePathComponents[i]) {
+                                if (i === 0) {
+                                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
+                                    return;
+                                }
+
+                                // New common path found that is 0 -> i-1
+                                commonPathComponents.length = i;
+                                break;
+                            }
+                        }
+
+                        // If the fileComponent path completely matched and less than already found update the length
+                        if (sourcePathComponents.length < commonPathComponents.length) {
+                            commonPathComponents.length = sourcePathComponents.length;
+                        }
+                    }
+                    else {
+                        // first file
+                        commonPathComponents = sourcePathComponents;
+                    }
+                }
+            });
+
+            let commonSourceDirectory = getNormalizedPathFromPathComponents(commonPathComponents);
+            if (commonSourceDirectory) {
+                // Make sure directory path ends with directory separator so this string can directly 
+                // used to replace with "" to get the relative path of the source file and the relative path doesn't
+                // start with / making it rooted path
+                commonSourceDirectory += directorySeparator;
+            }
+
+            return commonSourceDirectory;
+        }
+
         function verifyCompilerOptions() {
             if (options.separateCompilation) {
                 if (options.sourceMap) {
@@ -515,46 +560,7 @@ module ts {
                 (options.mapRoot &&  // there is --mapRoot specified and there would be multiple js files generated
                     (!options.out || firstExternalModuleSourceFile !== undefined))) {
 
-                let commonPathComponents: string[];
-                forEach(files, sourceFile => {
-                    // Each file contributes into common source file path
-                    if (!(sourceFile.flags & NodeFlags.DeclarationFile)
-                        && !fileExtensionIs(sourceFile.fileName, ".js")) {
-                        let sourcePathComponents = getNormalizedPathComponents(sourceFile.fileName, host.getCurrentDirectory());
-                        sourcePathComponents.pop(); // FileName is not part of directory
-                        if (commonPathComponents) {
-                            for (let i = 0; i < Math.min(commonPathComponents.length, sourcePathComponents.length); i++) {
-                                if (commonPathComponents[i] !== sourcePathComponents[i]) {
-                                    if (i === 0) {
-                                        diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
-                                        return;
-                                    }
-
-                                    // New common path found that is 0 -> i-1
-                                    commonPathComponents.length = i;
-                                    break;
-                                }
-                            }
-
-                            // If the fileComponent path completely matched and less than already found update the length
-                            if (sourcePathComponents.length < commonPathComponents.length) {
-                                commonPathComponents.length = sourcePathComponents.length;
-                            }
-                        }
-                        else {
-                            // first file
-                            commonPathComponents = sourcePathComponents;
-                        }
-                    }
-                });
-
-                commonSourceDirectory = getNormalizedPathFromPathComponents(commonPathComponents);
-                if (commonSourceDirectory) {
-                    // Make sure directory path ends with directory separator so this string can directly 
-                    // used to replace with "" to get the relative path of the source file and the relative path doesn't
-                    // start with / making it rooted path
-                    commonSourceDirectory += directorySeparator;
-                }
+                commonSourceDirectory = computecommonSourceDirectory(files);
             }
 
             if (options.noEmit) {
