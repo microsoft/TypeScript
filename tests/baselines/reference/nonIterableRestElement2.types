@@ -1,12 +1,14 @@
 === tests/cases/conformance/es6/destructuring/nonIterableRestElement2.ts ===
 var c = {};
->c : {}
+>c : {}, Symbol(c, Decl(nonIterableRestElement2.ts, 0, 3))
 >{} : {}
 
 [...c] = ["", 0];
 >[...c] = ["", 0] : (string | number)[]
 >[...c] : {}[]
 >...c : any
->c : {}
+>c : {}, Symbol(c, Decl(nonIterableRestElement2.ts, 0, 3))
 >["", 0] : (string | number)[]
+>"" : string
+>0 : number
 

@@ -1,14 +1,16 @@
 === tests/cases/conformance/es6/destructuring/restElementWithAssignmentPattern5.ts ===
 var s: string, s2: string;
->s : string
->s2 : string
+>s : string, Symbol(s, Decl(restElementWithAssignmentPattern5.ts, 0, 3))
+>s2 : string, Symbol(s2, Decl(restElementWithAssignmentPattern5.ts, 0, 14))
 
 [...[s, s2]] = ["", ""];
 >[...[s, s2]] = ["", ""] : string[]
 >[...[s, s2]] : string[]
 >...[s, s2] : string
 >[s, s2] : string[]
->s : string
->s2 : string
+>s : string, Symbol(s, Decl(restElementWithAssignmentPattern5.ts, 0, 3))
+>s2 : string, Symbol(s2, Decl(restElementWithAssignmentPattern5.ts, 0, 14))
 >["", ""] : string[]
+>"" : string
+>"" : string
 
