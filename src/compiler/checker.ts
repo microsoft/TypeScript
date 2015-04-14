@@ -2998,7 +2998,9 @@ module ts {
                 }
                 if (resolved === anyFunctionType || resolved.callSignatures.length || resolved.constructSignatures.length) {
                     let symbol = getPropertyOfObjectType(globalFunctionType, name);
-                    if (symbol) return symbol;
+                    if (symbol) {
+                        return symbol;
+                    }
                 }
                 return getPropertyOfObjectType(globalObjectType, name);
             }
@@ -3580,6 +3582,9 @@ module ts {
             }
         }
 
+        // The noSubtypeReduction flag is there because it isn't possible to always do subtype reduction. The flag
+        // is true when creating a union type from a type node and when instantiating a union type. In both of those
+        // cases subtype reduction has to be deferred to properly support recursive union types.
         function getUnionType(types: Type[], noSubtypeReduction?: boolean): Type {
             if (types.length === 0) {
                 return emptyObjectType;
