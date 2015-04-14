@@ -3584,7 +3584,8 @@ module ts {
 
         // The noSubtypeReduction flag is there because it isn't possible to always do subtype reduction. The flag
         // is true when creating a union type from a type node and when instantiating a union type. In both of those
-        // cases subtype reduction has to be deferred to properly support recursive union types.
+        // cases subtype reduction has to be deferred to properly support recursive union types. For example, a
+        // type alias of the form "type Item = string | (() => Item)" cannot be reduced during its declaration.
         function getUnionType(types: Type[], noSubtypeReduction?: boolean): Type {
             if (types.length === 0) {
                 return emptyObjectType;
@@ -3615,8 +3616,9 @@ module ts {
         }
 
         function getReducedTypeOfUnionType(type: UnionType): Type {
+            // If union type was created without subtype reduction, perform the deferred reduction now
             if (!type.reducedType) {
-                type.reducedType = getUnionType(type.types);
+                type.reducedType = getUnionType(type.types, /*noSubtypeReduction*/ false);
             }
             return type.reducedType;
         }
