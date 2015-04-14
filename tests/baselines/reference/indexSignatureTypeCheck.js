@@ -83,22 +83,42 @@ z = z;
 z = yn; // should error?
         // var x: E = 5; // allowed to a assign a wider type (number) to an enum value (number.subset)
 z = xn;
-
 yn = z;
-
-var e: E;
-var e2: E2;s
-var f: F;
-
-e = f; // error
-e2 = e;
-e = e2;
 
 type foo = string
 var s: { [x: foo]: string }
-x = s
-s = x
+var ss: { [x: string]: string }
+var sn: { [x: number]: string }
 
+s = ss;
+ss = s;
+
+sn = s;
+s = sn;
+
+enum setOf_number1 { a, b, c }
+enum setOf_number2 { d, e, f }
+
+type setOf_numbers = setOf_number1 | setOf_number2;
+
+var ssubset: { [x: setOf_numbers ]: string }
+
+/*
+ Subset types
+type stringSet = "a" | "b" | "c";
+type numberSet = 1 | 2 | 3;
+
+// Union must flatten subset types into number.subset & string.subset 
+type mixedSet = stringSubset | numberSet | "d";
+
+enum stringSubset { [x: stringSet]: string }
+enum numberSubset { [x: numberSet]: string }
+
+// Special case, mixedSet creates numberIndex = [x: numberSubset]
+//                                stringIndex = [x: stringSubset | "d"]
+enum mixedSubset { [x: mixedSet]: string }
+
+*/
 
 //// [indexSignatureTypeCheck.js]
 var ps = null;
@@ -150,13 +170,39 @@ z = yn; // should error?
 // var x: E = 5; // allowed to a assign a wider type (number) to an enum value (number.subset)
 z = xn;
 yn = z;
-var e;
-var e2;
-s;
-var f;
-e = f; // error
-e2 = e;
-e = e2;
 var s;
-x = s;
-s = x;
+var ss;
+var sn;
+s = ss;
+ss = s;
+sn = s;
+s = sn;
+var setOf_number1;
+(function (setOf_number1) {
+    setOf_number1[setOf_number1["a"] = 0] = "a";
+    setOf_number1[setOf_number1["b"] = 1] = "b";
+    setOf_number1[setOf_number1["c"] = 2] = "c";
+})(setOf_number1 || (setOf_number1 = {}));
+var setOf_number2;
+(function (setOf_number2) {
+    setOf_number2[setOf_number2["d"] = 0] = "d";
+    setOf_number2[setOf_number2["e"] = 1] = "e";
+    setOf_number2[setOf_number2["f"] = 2] = "f";
+})(setOf_number2 || (setOf_number2 = {}));
+var ssubset;
+/*
+ Subset types
+type stringSet = "a" | "b" | "c";
+type numberSet = 1 | 2 | 3;
+
+// Union must flatten subset types into number.subset & string.subset
+type mixedSet = stringSubset | numberSet | "d";
+
+enum stringSubset { [x: stringSet]: string }
+enum numberSubset { [x: numberSet]: string }
+
+// Special case, mixedSet creates numberIndex = [x: numberSubset]
+//                                stringIndex = [x: stringSubset | "d"]
+enum mixedSubset { [x: mixedSet]: string }
+
+*/ 

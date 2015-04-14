@@ -7,9 +7,8 @@ module ts {
     let nextMergeId = 1;
 
     interface IndexTypeMap {
-        [x: number]: IndexType
+        [x: IndexKind]: IndexType
     }
-    // TODO: LKG and replace [x: IndexKind]
 
     // @internal    
     export function getNodeId(node: Node): number {
@@ -1637,7 +1636,8 @@ module ts {
                 }
 
                 function getIndexerParameterName(type: ObjectType, indexKind: IndexKind, fallbackName: string): string {
-                    let declaration = <SignatureDeclaration>getIndexDeclarationOfSymbol(type.symbol, indexKind);
+                    let indexMap = getDeclaredIndexTypesOfSymbol(type.symbol);
+                    let declaration = indexMap[indexKind] ? indexMap[indexKind].declaredNode : null;
                     if (!declaration) {
                         // declaration might not be found if indexer was added from the contextual type.
                         // in this case use fallback name
@@ -1696,21 +1696,21 @@ module ts {
                         writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
-                    function writeIndexType(indexType: IndexType, kind: IndexKind) {
+                    function writeIndexType(indexType: IndexType) {
                         if (!indexType) {
                             return;
                         }
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
-                        writer.writeParameter(getIndexerParameterName(resolved, kind, /*fallbackName*/"x"));
+                        writer.writeParameter(getIndexerParameterName(resolved, indexType.kind, /*fallbackName*/"x"));
                         writePunctuation(writer, SyntaxKind.ColonToken);
                         writeSpace(writer);
 
-                        if (indexType.typeOfIndex && (indexType.typeOfIndex.flags & TypeFlags.Enum)) {
+                        if (indexType.typeOfIndex && (indexType.typeOfIndex.flags & TypeFlags.Subset)) {
                             writeType(indexType.typeOfIndex, TypeFormatFlags.None);
-                            writer.writeStringLiteral(kind === IndexKind.String ? "<string>" : "<number>");
+                            writer.writeStringLiteral(indexType.kind === IndexKind.String ? " < string" : " < number");
                         }
                         else {
-                            writeKeyword(writer, kind === IndexKind.String ? SyntaxKind.StringKeyword : SyntaxKind.NumberKeyword);
+                            writeKeyword(writer, indexType.kind === IndexKind.String ? SyntaxKind.StringKeyword : SyntaxKind.NumberKeyword);
                         }
 
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
@@ -1720,8 +1720,8 @@ module ts {
                         writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
-                    writeIndexType(resolved.stringIndex, IndexKind.String)
-                    writeIndexType(resolved.numberIndex, IndexKind.Number)
+                    writeIndexType(resolved.stringIndex)
+                    writeIndexType(resolved.numberIndex)
 
                     for (let p of resolved.properties) {
                         let t = getTypeOfSymbol(p);
@@ -3352,25 +3352,6 @@ module ts {
             return symbol.members["__index"];
         }
 
-        function getIndexDeclarationOfSymbol(symbol: Symbol, kind: IndexKind): SignatureDeclaration {
-            let flagCheck = kind === IndexKind.Number ? TypeFlags.NumberLike : TypeFlags.String;
-            let indexSymbol = getIndexSymbol(symbol);
-            if (indexSymbol) {
-                let len = indexSymbol.declarations.length;
-                for (let decl of indexSymbol.declarations) {
-                    let node = <SignatureDeclaration>decl;
-                    if (node.parameters.length === 1) {
-                        let type = getTypeFromIndexSignatureParameter(node.parameters[0]);
-                        if(type && (type.flags & flagCheck)) {
-                            return node;
-                        }
-                    }
-                }
-            }
-
-            return undefined;
-        }
-
         function getDeclaredIndexTypesOfSymbol(symbol: Symbol): IndexTypeMap {
             let indexMap: IndexTypeMap = []
             let indexSymbol = getIndexSymbol(symbol);
@@ -3382,12 +3363,17 @@ module ts {
                             continue;
                         }
                         let kind = (type.flags & TypeFlags.NumberLike) ? IndexKind.Number : (type.flags & TypeFlags.String) ? IndexKind.String: null;
-                        if(kind !== null) {
-                            indexMap[kind] = {
-                                kind: kind,
-                                typeOfIndex: type,
-                                typeOfValue: decl.type ? getTypeFromTypeNodeOrHeritageClauseElement(decl.type) : anyType,
-                                declaredNode: decl
+                        if (kind !== null) {
+                            if (indexMap[kind]) {
+                                indexMap[kind].declaredCount++;
+                            } else {
+                                indexMap[kind] = {
+                                    kind: kind,
+                                    typeOfIndex: type,
+                                    typeOfValue: decl.type ? getTypeFromTypeNodeOrHeritageClauseElement(decl.type) : anyType,
+                                    declaredNode: decl,
+                                    declaredCount: 1
+                                }
                             }
                         }
                     }
@@ -8326,34 +8312,31 @@ module ts {
             // TypeScript 1.0 spec (April 2014)
             // 3.7.4: An object type can contain at most one string index signature and one numeric index signature.
             // 8.5: A class declaration can have at most one string index member declaration and one numeric index member declaration
-            let indexSymbol = getIndexSymbol(getSymbolOfNode(node));
-            if (indexSymbol) {
-                let seenNumericIndexer = false;
-                let seenStringIndexer = false;
+            let symbol = getSymbolOfNode(node);
+            let indexMap = getDeclaredIndexTypesOfSymbol(symbol);
+            let stringIndex = indexMap[IndexKind.String];
+            let numberIndex = indexMap[IndexKind.Number];
+
+            if (stringIndex && stringIndex.declaredCount > 1) {
+                errorDuplicateIndex(getIndexSymbol(symbol), stringIndex);
+            }
+
+            if (numberIndex && numberIndex.declaredCount > 1) {
+                errorDuplicateIndex(getIndexSymbol(symbol), numberIndex);
+            }
+
+            function errorDuplicateIndex(indexSymbol: Symbol, indexType: IndexType) {
                 for (let decl of indexSymbol.declarations) {
                     let declaration = <SignatureDeclaration>decl;
-                    if (declaration.parameters.length === 1) {
-                        let type = getTypeFromIndexSignatureParameter(declaration.parameters[0])
-                        if (!type) {
-                            continue;
-                        }
-
-                        if (type.flags & TypeFlags.String) {
-                            if (!seenStringIndexer) {
-                                seenStringIndexer = true;
-                            }
-                            else {
-                                error(declaration, Diagnostics.Duplicate_string_index_signature);
-                            }
-                        }
-                        else if (type.flags & TypeFlags.NumberLike) {
-                            if (!seenNumericIndexer) {
-                                seenNumericIndexer = true;
-                            }
-                            else {
-                                error(declaration, Diagnostics.Duplicate_number_index_signature);
-                            }
-                        }
+                    if (declaration.parameters.length !== 1 || declaration === indexType.declaredNode) {
+                        continue;
+                    }
+                    let type = getTypeFromIndexSignatureParameter(declaration.parameters[0])
+                    if (type.flags & TypeFlags.String && indexType.kind === IndexKind.String) {
+                        error(declaration, Diagnostics.Duplicate_string_index_signature);
+                    }
+                    else if (type.flags & TypeFlags.NumberLike && indexType.kind === IndexKind.Number) {
+                        error(declaration, Diagnostics.Duplicate_number_index_signature);
                     }
                 }
             }

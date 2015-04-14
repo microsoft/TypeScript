@@ -1527,8 +1527,11 @@ module ts {
         kind: IndexKind                 // Kind of index
         typeOfValue: Type               // any
         typeOfIndex?: Type              // string|number|enum
-        declaredNode?: Declaration,     // Declaration of [x: typeOfIndex]: typeOfValue
-        inherited?: Symbol              // Symbol of baseType where inherited
+
+        // Useful for error reporting
+        declaredNode?: SignatureDeclaration,  // Declaration of [x: typeOfIndex]: typeOfValue
+        declaredCount?: number                // Number of declarations
+        inherited?: Symbol                    // Symbol of baseType where inherited
     }
 
     /* @internal */    // Resolved object or union type
