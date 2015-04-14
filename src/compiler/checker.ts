@@ -4629,7 +4629,7 @@ module ts {
                     if (target) {
                         if (!source) {
                             if (reportErrors) {
-                                reportError(Diagnostics.Missing_0_index_signature_in_type_1, "[string] or [number]", typeToString(sourceType));
+                                reportError(Diagnostics.Missing_0_index_signature_in_type_1, "[string]", typeToString(sourceType));
                             }
                             return Ternary.False;
                         }

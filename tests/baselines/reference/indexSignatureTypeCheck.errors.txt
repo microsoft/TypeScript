@@ -6,9 +6,9 @@ tests/cases/compiler/indexSignatureTypeCheck.ts(40,6): error TS1096: An index si
 tests/cases/compiler/indexSignatureTypeCheck.ts(57,5): error TS2375: Duplicate number index signature.
 tests/cases/compiler/indexSignatureTypeCheck.ts(62,5): error TS2375: Duplicate number index signature.
 tests/cases/compiler/indexSignatureTypeCheck.ts(72,1): error TS2322: Type '{ [x: number]: string; }' is not assignable to type '{ [x: string]: string; }'.
-  Missing [string] or [number] index signature in type '{ [x: number]: string; }'.
+  Missing [string] index signature in type '{ [x: number]: string; }'.
 tests/cases/compiler/indexSignatureTypeCheck.ts(73,1): error TS2322: Type '{ [x: E<number>]: number; }' is not assignable to type '{ [x: string]: string; }'.
-  Missing [string] or [number] index signature in type '{ [x: E<number>]: number; }'.
+  Missing [string] index signature in type '{ [x: E<number>]: number; }'.
 tests/cases/compiler/indexSignatureTypeCheck.ts(77,1): error TS2322: Type '{ [x: E<number>]: number; }' is not assignable to type '{ [x: number]: string; }'.
   Index signatures '[E]: number' and '[number]: string' are incompatible.
     Type 'number' is not assignable to type 'string'.
@@ -111,11 +111,11 @@ tests/cases/compiler/indexSignatureTypeCheck.ts(94,1): error TS2322: Type 'E2' i
     x = y;
     ~
 !!! error TS2322: Type '{ [x: number]: string; }' is not assignable to type '{ [x: string]: string; }'.
-!!! error TS2322:   Missing [string] or [number] index signature in type '{ [x: number]: string; }'.
+!!! error TS2322:   Missing [string] index signature in type '{ [x: number]: string; }'.
     x = z;
     ~
 !!! error TS2322: Type '{ [x: E<number>]: number; }' is not assignable to type '{ [x: string]: string; }'.
-!!! error TS2322:   Missing [string] or [number] index signature in type '{ [x: E<number>]: number; }'.
+!!! error TS2322:   Missing [string] index signature in type '{ [x: E<number>]: number; }'.
     
     y = x;
     y = y;
