@@ -2,6 +2,8 @@
 /// <reference path="utilities.ts"/>
 
 module ts {
+    export var throwOnJSDocErrors = false;
+
     let nodeConstructors = new Array<new () => Node>(SyntaxKind.Count);
     /* @internal */ export let parseTime = 0;
 
@@ -5464,8 +5466,12 @@ module ts {
 
         let result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression);
 
-        parseExpected(SyntaxKind.OpenBraceToken);
-        result.type = parseJSDocType();
+        parseExpected(SyntaxKind.OpenBraceToken, /*noThrow:*/ true);
+        if (error) {
+            return undefined;
+        }
+
+        result.type = parseJSDocTopLevelType();
         parseExpected(SyntaxKind.CloseBraceToken);
 
         if (error) {
@@ -5475,6 +5481,13 @@ module ts {
         fixupParentReferences(result);
         return finishNode(result);
 
+        function setError(noThrow?: boolean, message?: string) {
+            error = true;
+            if (!noThrow && throwOnJSDocErrors) {
+                throw new Error(message);
+            }
+        }
+
         function nextToken(): SyntaxKind {
             return token = scanner.scan();
         }
@@ -5483,12 +5496,12 @@ module ts {
             return createNodeAtPosition(scanner, kind, pos);
         }
 
-        function parseExpected(kind: SyntaxKind): void {
+        function parseExpected(kind: SyntaxKind, noThrow?: boolean): void {
             if (token === kind) {
                 nextToken();
             }
             else {
-                error = true;
+                setError(noThrow, "Expected " + (<any>ts).SyntaxKind[kind] + ", actual: " + (<any>ts).SyntaxKind[token])
             }
         }
 
@@ -5506,6 +5519,17 @@ module ts {
             }
 
             return token >= SyntaxKind.FirstKeyword && token <= SyntaxKind.LastKeyword;
+        }
+
+        function parseJSDocTopLevelType(): JSDocType {
+            var firstType = parseJSDocType();
+            if (!error && token === SyntaxKind.BarToken) {
+                var unionType = <JSDocUnionType>createNode(SyntaxKind.JSDocUnionType, firstType.pos);
+                unionType.types = parseJSDocTypeList(firstType);
+                return finishNode(unionType);
+            }
+
+            return firstType;
         }
 
         function parseJSDocType(): JSDocType {
@@ -5545,7 +5569,7 @@ module ts {
                 return parseJSDocTypeReference();
             }
 
-            error = true;
+            setError();
             return undefined;
         }
 
@@ -5632,7 +5656,7 @@ module ts {
                     break;
                 }
                 else {
-                    error = true;
+                    setError();
                     return undefined;
                 }
             }
@@ -5684,7 +5708,7 @@ module ts {
                 return finishNode(result);
             }
             else {
-                error = true;
+                setError();
                 return undefined;
             }
         }
@@ -5731,7 +5755,7 @@ module ts {
                 return finishNode(result);
             }
             else {
-                error = true;
+                setError();
                 return undefined;
             }
         }
@@ -5746,22 +5770,30 @@ module ts {
         function parseJSDocUnionType(): JSDocUnionType {
             let result = <JSDocUnionType>createNode(SyntaxKind.JSDocUnionType);
             nextToken();
+            
+            result.types = parseJSDocTypeList(parseJSDocType());
+
+            parseExpected(SyntaxKind.CloseParenToken);
+
+            return finishNode(result);
+        }
+
+        function parseJSDocTypeList(firstType: JSDocType) {
+            if (!firstType) {
+                return undefined;
+            }
 
             let types = <NodeArray<JSDocType>>[];
-            types.pos = scanner.getStartPos();
+            types.pos = firstType.pos;
 
-            types.push(parseJSDocType());
+            types.push(firstType);
             while (!error && token === SyntaxKind.BarToken) {
                 nextToken();
                 types.push(parseJSDocType());
             }
 
             types.end = scanner.getStartPos();
-            result.types = types;
-
-            parseExpected(SyntaxKind.CloseParenToken);
-
-            return finishNode(result);
+            return types;
         }
 
         function parseJSDocAllType(): JSDocAllType {
@@ -5904,6 +5936,13 @@ module ts {
 
         return error ? undefined : createJSDocComment();
 
+        function setError() {
+            error = true;
+            //if (throwOnJSDocErrors) {
+            //    throw new Error();
+            //}
+        }
+
         function createJSDocComment(): JSDocComment {
             if (!returnType && !type && !parameters && !typeParameters/* && !tagCounts*/) {
                 return undefined;
@@ -5947,7 +5986,7 @@ module ts {
         function parseType(): JSDocType {
             let typeExpression = parseJSDocTypeExpression(content, pos, end - pos);
             if (!typeExpression) {
-                error = true;
+                setError();
                 return undefined;
             }
 
@@ -5977,7 +6016,7 @@ module ts {
                 }
             }
 
-            error = true;
+            setError();
         }
 
         function handleTypeTag(): void {
@@ -5988,7 +6027,7 @@ module ts {
                 }
             }
 
-            error = true;
+            setError();
         }
 
         function handleTemplateTag(): void {
@@ -6023,7 +6062,7 @@ module ts {
                 }
             }
 
-            error = true;
+            setError();
         }
 
         function scanIdentifier(): string {
@@ -6041,7 +6080,7 @@ module ts {
             }
 
             if (startPos === pos) {
-                error = true;
+                setError();
                 return;
             }
 

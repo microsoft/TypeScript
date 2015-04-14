@@ -401,6 +401,42 @@ module ts {
 }`);
                 });
 
+                it("topLevelNoParenUnionType", () => {
+                    parsesCorrectly("{number|string}",
+                        `{
+    "kind": "JSDocUnionType",
+    "pos": 1,
+    "end": 14,
+    "types": {
+        "0": {
+            "kind": "JSDocTypeReference",
+            "pos": 1,
+            "end": 7,
+            "name": {
+                "kind": "Identifier",
+                "pos": 1,
+                "end": 7,
+                "text": "number"
+            }
+        },
+        "1": {
+            "kind": "JSDocTypeReference",
+            "pos": 8,
+            "end": 14,
+            "name": {
+                "kind": "Identifier",
+                "pos": 8,
+                "end": 14,
+                "text": "string"
+            }
+        },
+        "length": 2,
+        "pos": 1,
+        "end": 14
+    }
+}`);
+                });
+
                 it("functionType1", () => {
                     parsesCorrectly("{function()}",
                         `{
