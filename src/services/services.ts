@@ -3793,6 +3793,10 @@ module ts {
                 return undefined;
             }
 
+            if (isLabelName(node)) {
+                return undefined;
+            }
+
             let symbol = typeInfoResolver.getSymbolAtLocation(node);
             if (!symbol) {
                 // Try getting just type at this position and show
