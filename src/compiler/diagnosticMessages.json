@@ -799,7 +799,7 @@
         "category": "Error",
         "code": 2328
     },
-    "Index signature is missing in type '{0}'.": {
+    "Missing {0} index signature in type '{1}'.": {
         "category": "Error",
         "code": 2329
     },
@@ -1103,15 +1103,15 @@
         "category": "Error",
         "code": 2410
     },
-    "Property '{0}' of type '{1}' is not assignable to string index type '{2}'.": {
+    "Property '{0}' of type '{1}' is not assignable to string index '{2}'.": {
         "category": "Error",
         "code": 2411
     },
-    "Property '{0}' of type '{1}' is not assignable to numeric index type '{2}'.": {
+    "Property '{0}' of type '{1}' is not assignable to numeric index '{2}'.": {
         "category": "Error",
         "code": 2412
     },
-    "Numeric index type '{0}' is not assignable to string index type '{1}'.": {
+    "Numeric index '{0}' is not assignable to string index '{1}'.": {
         "category": "Error",
         "code": 2413
     },
