@@ -9570,7 +9570,7 @@ module ts {
             }
             
             if (isArrayLikeType(inputType)) {
-                let indexType = getIndexTypeOfType(inputType, IndexKind.Number);
+                let indexType = getIndexValueOfType(inputType, IndexKind.Number);
                 if (indexType) {
                     return indexType;
                 }
