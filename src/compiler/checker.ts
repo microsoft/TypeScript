@@ -2197,25 +2197,7 @@ module ts {
             }
             else if (hasSpreadElement) {
                 let unionOfElements = getUnionType(elementTypes);
-                if (languageVersion >= ScriptTarget.ES6) {
-                    // If the user has something like:
-                    //
-                    //     function fun(...[a, ...b]) { }
-                    //
-                    // Normally, in ES6, the implied type of an array binding pattern with a rest element is
-                    // an iterable. However, there is a requirement in our type system that all rest
-                    // parameters be array types. To satisfy this, we have an exception to the rule that
-                    // says the type of an array binding pattern with a rest element is an array type
-                    // if it is *itself* in a rest parameter. It will still be compatible with a spreaded
-                    // iterable argument, but within the function it will be an array.
-                    let parent = pattern.parent;
-                    let isRestParameter = parent.kind === SyntaxKind.Parameter &&
-                        pattern === (<ParameterDeclaration>parent).name &&
-                        (<ParameterDeclaration>parent).dotDotDotToken !== undefined;
-                    return isRestParameter ? createArrayType(unionOfElements) : createIterableType(unionOfElements);
-                }
-
-                return createArrayType(unionOfElements);
+                return languageVersion >= ScriptTarget.ES6 ? createIterableType(unionOfElements) : createArrayType(unionOfElements);
             }
 
             // If the pattern has at least one element, and no rest element, then it should imply a tuple type.
@@ -8127,10 +8109,11 @@ module ts {
             if (node.questionToken && isBindingPattern(node.name) && func.body) {
                 error(node, Diagnostics.A_binding_pattern_parameter_cannot_be_optional_in_an_implementation_signature);
             }
-            if (node.dotDotDotToken) {
-                if (!isArrayType(getTypeOfSymbol(node.symbol))) {
-                    error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
-                }
+            
+            // Only check rest parameter type if it's not a binding pattern. Since binding patterns are
+            // not allowed in a rest parameter, we already have an error from checkGrammarParameterList.
+            if (node.dotDotDotToken && !isBindingPattern(node.name) && !isArrayType(getTypeOfSymbol(node.symbol))) {
+                error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
             }
         }
 
@@ -12273,7 +12256,7 @@ module ts {
                         return grammarErrorOnNode(parameter.dotDotDotToken, Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list);
                     }
 
-                    if (parameter.name.kind === SyntaxKind.ArrayBindingPattern || parameter.name.kind === SyntaxKind.ObjectBindingPattern) {
+                    if (isBindingPattern(parameter.name)) {
                         return grammarErrorOnNode(parameter.name, Diagnostics.A_rest_element_cannot_contain_a_binding_pattern);
                     }
 
