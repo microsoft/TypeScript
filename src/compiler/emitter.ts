@@ -2846,6 +2846,12 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 if (languageVersion < ScriptTarget.ES6) {
                     let tempIndex = 0;
                     forEach(node.parameters, p => {
+                        // A rest parameter cannot have a binding pattern or an initializer,
+                        // so let's just ignore it.
+                        if (p.dotDotDotToken) {
+                            return;
+                        }
+
                         if (isBindingPattern(p.name)) {
                             writeLine();
                             write("var ");
@@ -2876,6 +2882,12 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 if (languageVersion < ScriptTarget.ES6 && hasRestParameters(node)) {
                     let restIndex = node.parameters.length - 1;
                     let restParam = node.parameters[restIndex];
+
+                    // A rest parameter cannot have a binding pattern, so let's just ignore it if it does.
+                    if (isBindingPattern(restParam.name)) {
+                        return;
+                    }
+
                     let tempName = createTempVariable(TempFlags._i).text;
                     writeLine();
                     emitLeadingComments(restParam);
