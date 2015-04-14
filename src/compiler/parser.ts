@@ -5466,7 +5466,7 @@ module ts {
 
         let result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression);
 
-        parseExpected(SyntaxKind.OpenBraceToken, /*noThrow:*/ true);
+        parseExpected(SyntaxKind.OpenBraceToken);
         if (error) {
             return undefined;
         }
@@ -5481,9 +5481,9 @@ module ts {
         fixupParentReferences(result);
         return finishNode(result);
 
-        function setError(noThrow?: boolean, message?: string) {
+        function setError(message?: string) {
             error = true;
-            if (!noThrow && throwOnJSDocErrors) {
+            if (throwOnJSDocErrors) {
                 throw new Error(message);
             }
         }
@@ -5496,12 +5496,12 @@ module ts {
             return createNodeAtPosition(scanner, kind, pos);
         }
 
-        function parseExpected(kind: SyntaxKind, noThrow?: boolean): void {
+        function parseExpected(kind: SyntaxKind): void {
             if (token === kind) {
                 nextToken();
             }
             else {
-                setError(noThrow, "Expected " + (<any>ts).SyntaxKind[kind] + ", actual: " + (<any>ts).SyntaxKind[token])
+                setError("Expected " + (<any>ts).SyntaxKind[kind] + ", actual: " + (<any>ts).SyntaxKind[token])
             }
         }
 
@@ -5985,6 +5985,11 @@ module ts {
 
         function parseType(): JSDocType {
             skipWhitespace();
+
+            if (content.charCodeAt(pos) !== CharacterCodes.openBrace) {
+                return undefined;
+            }
+
             let typeExpression = parseJSDocTypeExpression(content, pos, end - pos);
             if (!typeExpression) {
                 setError();
@@ -5997,14 +6002,26 @@ module ts {
         }
 
         function handleParamTag() {
-            let type = parseType();
-            if (!type) {
-                return;
+            skipWhitespace();
+
+            let type: JSDocType;
+            if (content.charCodeAt(pos) === CharacterCodes.openBrace) {
+                type = parseType();
+                if (!type) {
+                    return;
+                }
             }
 
             skipWhitespace();
-
             let name = scanIdentifier();
+
+            if (!type) {
+                type = parseType();
+                if (!type) {
+                    return;
+                }
+            }
+
             parameters = parameters || [];
             parameters.push({ name, type });
         }

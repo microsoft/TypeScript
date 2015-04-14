@@ -1185,6 +1185,56 @@ module ts {
 }`);
                 });
 
+                it("paramTagNameThenType1", () => {
+                    parsesCorrectly(
+                        `/**
+  * @param name1 {number}
+  */`,
+                        `{
+    "parameters": [
+        {
+            "name": "name1",
+            "type": {
+                "kind": "JSDocTypeReference",
+                "pos": 22,
+                "end": 28,
+                "name": {
+                    "kind": 65,
+                    "pos": 22,
+                    "end": 28,
+                    "text": "number"
+                }
+            }
+        }
+    ]
+}`);
+                });
+
+                it("paramTagNameThenType2", () => {
+                    parsesCorrectly(
+                        `/**
+  * @param name1 {number} Description
+  */`,
+                        `{
+    "parameters": [
+        {
+            "name": "name1",
+            "type": {
+                "kind": "JSDocTypeReference",
+                "pos": 22,
+                "end": 28,
+                "name": {
+                    "kind": 65,
+                    "pos": 22,
+                    "end": 28,
+                    "text": "number"
+                }
+            }
+        }
+    ]
+}`);
+                });
+
                 it("templateTag", () => {
                     parsesCorrectly(
 `/**
