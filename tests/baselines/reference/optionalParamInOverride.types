@@ -1,16 +1,16 @@
 === tests/cases/compiler/optionalParamInOverride.ts ===
 class Z {
->Z : Z
+>Z : Z, Symbol(Z, Decl(optionalParamInOverride.ts, 0, 0))
 
     public func(): void { }
->func : () => void
+>func : () => void, Symbol(func, Decl(optionalParamInOverride.ts, 0, 9))
 }
 class Y extends Z {
->Y : Y
->Z : Z
+>Y : Y, Symbol(Y, Decl(optionalParamInOverride.ts, 2, 1))
+>Z : Z, Symbol(Z, Decl(optionalParamInOverride.ts, 0, 0))
 
     public func(value?: any): void { }
->func : (value?: any) => void
->value : any
+>func : (value?: any) => void, Symbol(func, Decl(optionalParamInOverride.ts, 3, 19))
+>value : any, Symbol(value, Decl(optionalParamInOverride.ts, 4, 16))
 }
 

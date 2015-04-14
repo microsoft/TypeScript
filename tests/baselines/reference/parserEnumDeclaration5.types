@@ -1,16 +1,18 @@
 === tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnumDeclaration5.ts ===
 enum E {
->E : E
+>E : E, Symbol(E, Decl(parserEnumDeclaration5.ts, 0, 0))
 
     A = 1,
->A : E
+>A : E, Symbol(E.A, Decl(parserEnumDeclaration5.ts, 0, 8))
+>1 : number
 
     B,
->B : E
+>B : E, Symbol(E.B, Decl(parserEnumDeclaration5.ts, 1, 10))
 
     C = 2,
->C : E
+>C : E, Symbol(E.C, Decl(parserEnumDeclaration5.ts, 2, 6))
+>2 : number
 
     D
->D : E
+>D : E, Symbol(E.D, Decl(parserEnumDeclaration5.ts, 3, 10))
 }

@@ -1,7 +1,8 @@
 === tests/cases/conformance/es6/templates/templateStringInArrowFunction.ts ===
 var x = x => `abc${ x }def`;
->x : (x: any) => string
+>x : (x: any) => string, Symbol(x, Decl(templateStringInArrowFunction.ts, 0, 3))
 >x => `abc${ x }def` : (x: any) => string
->x : any
->x : any
+>x : any, Symbol(x, Decl(templateStringInArrowFunction.ts, 0, 7))
+>`abc${ x }def` : string
+>x : any, Symbol(x, Decl(templateStringInArrowFunction.ts, 0, 7))
 

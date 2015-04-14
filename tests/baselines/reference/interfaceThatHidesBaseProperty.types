@@ -1,22 +1,22 @@
 === tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatHidesBaseProperty.ts ===
 interface Base {
->Base : Base
+>Base : Base, Symbol(Base, Decl(interfaceThatHidesBaseProperty.ts, 0, 0))
 
     x: { a: number };
->x : { a: number; }
->a : number
+>x : { a: number; }, Symbol(x, Decl(interfaceThatHidesBaseProperty.ts, 0, 16))
+>a : number, Symbol(a, Decl(interfaceThatHidesBaseProperty.ts, 1, 8))
 }
 
 interface Derived extends Base {
->Derived : Derived
->Base : Base
+>Derived : Derived, Symbol(Derived, Decl(interfaceThatHidesBaseProperty.ts, 2, 1))
+>Base : Base, Symbol(Base, Decl(interfaceThatHidesBaseProperty.ts, 0, 0))
 
     x: {
->x : { a: number; b: number; }
+>x : { a: number; b: number; }, Symbol(x, Decl(interfaceThatHidesBaseProperty.ts, 4, 32))
 
         a: number; b: number;
->a : number
->b : number
+>a : number, Symbol(a, Decl(interfaceThatHidesBaseProperty.ts, 5, 8))
+>b : number, Symbol(b, Decl(interfaceThatHidesBaseProperty.ts, 6, 18))
 
     };
 }

@@ -2,27 +2,36 @@
 
 // No error
 const c1 = false;
->c1 : boolean
+>c1 : boolean, Symbol(c1, Decl(constDeclarations.ts, 2, 5))
+>false : boolean
 
 const c2: number = 23;
->c2 : number
+>c2 : number, Symbol(c2, Decl(constDeclarations.ts, 3, 5))
+>23 : number
 
 const c3 = 0, c4 :string = "", c5 = null;
->c3 : number
->c4 : string
->c5 : any
+>c3 : number, Symbol(c3, Decl(constDeclarations.ts, 4, 5))
+>0 : number
+>c4 : string, Symbol(c4, Decl(constDeclarations.ts, 4, 13))
+>"" : string
+>c5 : any, Symbol(c5, Decl(constDeclarations.ts, 4, 30))
+>null : null
 
 
 for(const c4 = 0; c4 < 9; ) { break; }
->c4 : number
+>c4 : number, Symbol(c4, Decl(constDeclarations.ts, 7, 9))
+>0 : number
 >c4 < 9 : boolean
->c4 : number
+>c4 : number, Symbol(c4, Decl(constDeclarations.ts, 7, 9))
+>9 : number
 
 
 for(const c5 = 0, c6 = 0; c5 < c6; ) { break; }
->c5 : number
->c6 : number
+>c5 : number, Symbol(c5, Decl(constDeclarations.ts, 10, 9))
+>0 : number
+>c6 : number, Symbol(c6, Decl(constDeclarations.ts, 10, 17))
+>0 : number
 >c5 < c6 : boolean
->c5 : number
->c6 : number
+>c5 : number, Symbol(c5, Decl(constDeclarations.ts, 10, 9))
+>c6 : number, Symbol(c6, Decl(constDeclarations.ts, 10, 17))
 

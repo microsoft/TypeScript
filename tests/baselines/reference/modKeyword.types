@@ -1,15 +1,15 @@
 === tests/cases/compiler/modKeyword.ts ===
 var module:any;
->module : any
+>module : any, Symbol(module, Decl(modKeyword.ts, 0, 3))
 
 var foo:any;
->foo : any
+>foo : any, Symbol(foo, Decl(modKeyword.ts, 1, 3))
 
 var _ = module.exports = foo
->_ : any
+>_ : any, Symbol(_, Decl(modKeyword.ts, 3, 3))
 >module.exports = foo : any
 >module.exports : any
->module : any
+>module : any, Symbol(module, Decl(modKeyword.ts, 0, 3))
 >exports : any
->foo : any
+>foo : any, Symbol(foo, Decl(modKeyword.ts, 1, 3))
 

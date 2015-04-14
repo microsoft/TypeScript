@@ -1,38 +1,38 @@
 === tests/cases/conformance/ambient/ambientInsideNonAmbient.ts ===
 module M {
->M : typeof M
+>M : typeof M, Symbol(M, Decl(ambientInsideNonAmbient.ts, 0, 0))
 
     export declare var x;
->x : any
+>x : any, Symbol(x, Decl(ambientInsideNonAmbient.ts, 1, 22))
 
     export declare function f();
->f : () => any
+>f : () => any, Symbol(f, Decl(ambientInsideNonAmbient.ts, 1, 25))
 
     export declare class C { }
->C : C
+>C : C, Symbol(C, Decl(ambientInsideNonAmbient.ts, 2, 32))
 
     export declare enum E { }
->E : E
+>E : E, Symbol(E, Decl(ambientInsideNonAmbient.ts, 3, 30))
 
     export declare module M { }
->M : unknown
+>M : any, Symbol(M, Decl(ambientInsideNonAmbient.ts, 4, 29))
 }
 
 module M2 {
->M2 : typeof M2
+>M2 : typeof M2, Symbol(M2, Decl(ambientInsideNonAmbient.ts, 6, 1))
 
     declare var x;
->x : any
+>x : any, Symbol(x, Decl(ambientInsideNonAmbient.ts, 9, 15))
 
     declare function f();
->f : () => any
+>f : () => any, Symbol(f, Decl(ambientInsideNonAmbient.ts, 9, 18))
 
     declare class C { }
->C : C
+>C : C, Symbol(C, Decl(ambientInsideNonAmbient.ts, 10, 25))
 
     declare enum E { }
->E : E
+>E : E, Symbol(E, Decl(ambientInsideNonAmbient.ts, 11, 23))
 
     declare module M { }
->M : unknown
+>M : any, Symbol(M, Decl(ambientInsideNonAmbient.ts, 12, 22))
 }

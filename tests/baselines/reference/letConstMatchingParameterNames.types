@@ -1,37 +1,41 @@
 === tests/cases/compiler/letConstMatchingParameterNames.ts ===
 let parent = true;
->parent : boolean
+>parent : boolean, Symbol(parent, Decl(letConstMatchingParameterNames.ts, 0, 3))
+>true : boolean
 
 const parent2 = true;
->parent2 : boolean
+>parent2 : boolean, Symbol(parent2, Decl(letConstMatchingParameterNames.ts, 1, 5))
+>true : boolean
 
 declare function use(a: any);
->use : (a: any) => any
->a : any
+>use : (a: any) => any, Symbol(use, Decl(letConstMatchingParameterNames.ts, 1, 21))
+>a : any, Symbol(a, Decl(letConstMatchingParameterNames.ts, 2, 21))
 
 function a() {
->a : () => void
+>a : () => void, Symbol(a, Decl(letConstMatchingParameterNames.ts, 2, 29))
     
     let parent = 1;
->parent : number
+>parent : number, Symbol(parent, Decl(letConstMatchingParameterNames.ts, 6, 7))
+>1 : number
 
     const parent2 = 2;
->parent2 : number
+>parent2 : number, Symbol(parent2, Decl(letConstMatchingParameterNames.ts, 7, 9))
+>2 : number
 
     function b(parent: string, parent2: number) {
->b : (parent: string, parent2: number) => void
->parent : string
->parent2 : number
+>b : (parent: string, parent2: number) => void, Symbol(b, Decl(letConstMatchingParameterNames.ts, 7, 22))
+>parent : string, Symbol(parent, Decl(letConstMatchingParameterNames.ts, 9, 15))
+>parent2 : number, Symbol(parent2, Decl(letConstMatchingParameterNames.ts, 9, 30))
 
         use(parent);
 >use(parent) : any
->use : (a: any) => any
->parent : string
+>use : (a: any) => any, Symbol(use, Decl(letConstMatchingParameterNames.ts, 1, 21))
+>parent : string, Symbol(parent, Decl(letConstMatchingParameterNames.ts, 9, 15))
 
         use(parent2);
 >use(parent2) : any
->use : (a: any) => any
->parent2 : number
+>use : (a: any) => any, Symbol(use, Decl(letConstMatchingParameterNames.ts, 1, 21))
+>parent2 : number, Symbol(parent2, Decl(letConstMatchingParameterNames.ts, 9, 30))
     }
 }
 

@@ -1,67 +1,72 @@
 === tests/cases/compiler/genericArgumentCallSigAssignmentCompat.ts ===
 module Underscore {
->Underscore : unknown
+>Underscore : any, Symbol(Underscore, Decl(genericArgumentCallSigAssignmentCompat.ts, 0, 0))
 
     export interface Iterator<T, U> {
->Iterator : Iterator<T, U>
->T : T
->U : U
+>Iterator : Iterator<T, U>, Symbol(Iterator, Decl(genericArgumentCallSigAssignmentCompat.ts, 0, 19))
+>T : T, Symbol(T, Decl(genericArgumentCallSigAssignmentCompat.ts, 1, 30))
+>U : U, Symbol(U, Decl(genericArgumentCallSigAssignmentCompat.ts, 1, 32))
 
         (value: T, index: any, list: any): U;
->value : T
->T : T
->index : any
->list : any
->U : U
+>value : T, Symbol(value, Decl(genericArgumentCallSigAssignmentCompat.ts, 2, 9))
+>T : T, Symbol(T, Decl(genericArgumentCallSigAssignmentCompat.ts, 1, 30))
+>index : any, Symbol(index, Decl(genericArgumentCallSigAssignmentCompat.ts, 2, 18))
+>list : any, Symbol(list, Decl(genericArgumentCallSigAssignmentCompat.ts, 2, 30))
+>U : U, Symbol(U, Decl(genericArgumentCallSigAssignmentCompat.ts, 1, 32))
     }
  
     export interface Static {
->Static : Static
+>Static : Static, Symbol(Static, Decl(genericArgumentCallSigAssignmentCompat.ts, 3, 5))
 
         all<T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean;
->all : <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any) => boolean
->T : T
->list : T[]
->T : T
->iterator : Iterator<T, boolean>
->Iterator : Iterator<T, U>
->T : T
->context : any
+>all : <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any) => boolean, Symbol(all, Decl(genericArgumentCallSigAssignmentCompat.ts, 5, 29))
+>T : T, Symbol(T, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 12))
+>list : T[], Symbol(list, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 15))
+>T : T, Symbol(T, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 12))
+>iterator : Iterator<T, boolean>, Symbol(iterator, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 25))
+>Iterator : Iterator<T, U>, Symbol(Iterator, Decl(genericArgumentCallSigAssignmentCompat.ts, 0, 19))
+>T : T, Symbol(T, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 12))
+>context : any, Symbol(context, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 58))
 
         identity<T>(value: T): T;
->identity : <T>(value: T) => T
->T : T
->value : T
->T : T
->T : T
+>identity : <T>(value: T) => T, Symbol(identity, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 83))
+>T : T, Symbol(T, Decl(genericArgumentCallSigAssignmentCompat.ts, 7, 17))
+>value : T, Symbol(value, Decl(genericArgumentCallSigAssignmentCompat.ts, 7, 20))
+>T : T, Symbol(T, Decl(genericArgumentCallSigAssignmentCompat.ts, 7, 17))
+>T : T, Symbol(T, Decl(genericArgumentCallSigAssignmentCompat.ts, 7, 17))
     }
 }
  
 declare var _: Underscore.Static;
->_ : Underscore.Static
->Underscore : unknown
->Static : Underscore.Static
+>_ : Underscore.Static, Symbol(_, Decl(genericArgumentCallSigAssignmentCompat.ts, 11, 11))
+>Underscore : any, Symbol(Underscore, Decl(genericArgumentCallSigAssignmentCompat.ts, 0, 0))
+>Static : Underscore.Static, Symbol(Underscore.Static, Decl(genericArgumentCallSigAssignmentCompat.ts, 3, 5))
  
 // No error, Call signatures of types '<T>(value: T) => T' and 'Underscore.Iterator<{}, boolean>' are compatible when instantiated with any.
 // Ideally, we would not have a generic signature here, because it should be instantiated with {} during inferential typing
 _.all([true, 1, null, 'yes'], _.identity);
 >_.all([true, 1, null, 'yes'], _.identity) : boolean
->_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => boolean
->_ : Underscore.Static
->all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => boolean
+>_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => boolean, Symbol(Underscore.Static.all, Decl(genericArgumentCallSigAssignmentCompat.ts, 5, 29))
+>_ : Underscore.Static, Symbol(_, Decl(genericArgumentCallSigAssignmentCompat.ts, 11, 11))
+>all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => boolean, Symbol(Underscore.Static.all, Decl(genericArgumentCallSigAssignmentCompat.ts, 5, 29))
 >[true, 1, null, 'yes'] : (string | number | boolean)[]
->_.identity : <T>(value: T) => T
->_ : Underscore.Static
->identity : <T>(value: T) => T
+>true : boolean
+>1 : number
+>null : null
+>'yes' : string
+>_.identity : <T>(value: T) => T, Symbol(Underscore.Static.identity, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 83))
+>_ : Underscore.Static, Symbol(_, Decl(genericArgumentCallSigAssignmentCompat.ts, 11, 11))
+>identity : <T>(value: T) => T, Symbol(Underscore.Static.identity, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 83))
  
 // Ok, because fixing makes us infer boolean for T
 _.all([true], _.identity);
 >_.all([true], _.identity) : boolean
->_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => boolean
->_ : Underscore.Static
->all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => boolean
+>_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => boolean, Symbol(Underscore.Static.all, Decl(genericArgumentCallSigAssignmentCompat.ts, 5, 29))
+>_ : Underscore.Static, Symbol(_, Decl(genericArgumentCallSigAssignmentCompat.ts, 11, 11))
+>all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => boolean, Symbol(Underscore.Static.all, Decl(genericArgumentCallSigAssignmentCompat.ts, 5, 29))
 >[true] : boolean[]
->_.identity : <T>(value: T) => T
->_ : Underscore.Static
->identity : <T>(value: T) => T
+>true : boolean
+>_.identity : <T>(value: T) => T, Symbol(Underscore.Static.identity, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 83))
+>_ : Underscore.Static, Symbol(_, Decl(genericArgumentCallSigAssignmentCompat.ts, 11, 11))
+>identity : <T>(value: T) => T, Symbol(Underscore.Static.identity, Decl(genericArgumentCallSigAssignmentCompat.ts, 6, 83))
 

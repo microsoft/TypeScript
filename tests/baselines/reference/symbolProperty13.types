@@ -1,56 +1,56 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty13.ts ===
 class C {
->C : C
+>C : C, Symbol(C, Decl(symbolProperty13.ts, 0, 0))
 
     [Symbol.iterator]: { x; y };
->Symbol.iterator : symbol
->Symbol : SymbolConstructor
->iterator : symbol
->x : any
->y : any
+>Symbol.iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>x : any, Symbol(x, Decl(symbolProperty13.ts, 1, 24))
+>y : any, Symbol(y, Decl(symbolProperty13.ts, 1, 27))
 }
 interface I {
->I : I
+>I : I, Symbol(I, Decl(symbolProperty13.ts, 2, 1))
 
     [Symbol.iterator]: { x };
->Symbol.iterator : symbol
->Symbol : SymbolConstructor
->iterator : symbol
->x : any
+>Symbol.iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>x : any, Symbol(x, Decl(symbolProperty13.ts, 4, 24))
 }
 
 declare function foo(i: I): I;
->foo : { (i: I): I; (a: any): any; }
->i : I
->I : I
->I : I
+>foo : { (i: I): I; (a: any): any; }, Symbol(foo, Decl(symbolProperty13.ts, 5, 1), Decl(symbolProperty13.ts, 7, 30))
+>i : I, Symbol(i, Decl(symbolProperty13.ts, 7, 21))
+>I : I, Symbol(I, Decl(symbolProperty13.ts, 2, 1))
+>I : I, Symbol(I, Decl(symbolProperty13.ts, 2, 1))
 
 declare function foo(a: any): any;
->foo : { (i: I): I; (a: any): any; }
->a : any
+>foo : { (i: I): I; (a: any): any; }, Symbol(foo, Decl(symbolProperty13.ts, 5, 1), Decl(symbolProperty13.ts, 7, 30))
+>a : any, Symbol(a, Decl(symbolProperty13.ts, 8, 21))
 
 declare function bar(i: C): C;
->bar : { (i: C): C; (a: any): any; }
->i : C
->C : C
->C : C
+>bar : { (i: C): C; (a: any): any; }, Symbol(bar, Decl(symbolProperty13.ts, 8, 34), Decl(symbolProperty13.ts, 10, 30))
+>i : C, Symbol(i, Decl(symbolProperty13.ts, 10, 21))
+>C : C, Symbol(C, Decl(symbolProperty13.ts, 0, 0))
+>C : C, Symbol(C, Decl(symbolProperty13.ts, 0, 0))
 
 declare function bar(a: any): any;
->bar : { (i: C): C; (a: any): any; }
->a : any
+>bar : { (i: C): C; (a: any): any; }, Symbol(bar, Decl(symbolProperty13.ts, 8, 34), Decl(symbolProperty13.ts, 10, 30))
+>a : any, Symbol(a, Decl(symbolProperty13.ts, 11, 21))
 
 foo(new C);
 >foo(new C) : I
->foo : { (i: I): I; (a: any): any; }
+>foo : { (i: I): I; (a: any): any; }, Symbol(foo, Decl(symbolProperty13.ts, 5, 1), Decl(symbolProperty13.ts, 7, 30))
 >new C : C
->C : typeof C
+>C : typeof C, Symbol(C, Decl(symbolProperty13.ts, 0, 0))
 
 var i: I;
->i : I
->I : I
+>i : I, Symbol(i, Decl(symbolProperty13.ts, 14, 3))
+>I : I, Symbol(I, Decl(symbolProperty13.ts, 2, 1))
 
 bar(i);
 >bar(i) : any
->bar : { (i: C): C; (a: any): any; }
->i : I
+>bar : { (i: C): C; (a: any): any; }, Symbol(bar, Decl(symbolProperty13.ts, 8, 34), Decl(symbolProperty13.ts, 10, 30))
+>i : I, Symbol(i, Decl(symbolProperty13.ts, 14, 3))
 

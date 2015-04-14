@@ -2,78 +2,83 @@
 // delete  operator on enum type
 
 enum ENUM { };
->ENUM : ENUM
+>ENUM : ENUM, Symbol(ENUM, Decl(deleteOperatorWithEnumType.ts, 0, 0))
 
 enum ENUM1 { A, B, "" };
->ENUM1 : ENUM1
->A : ENUM1
->B : ENUM1
+>ENUM1 : ENUM1, Symbol(ENUM1, Decl(deleteOperatorWithEnumType.ts, 2, 14))
+>A : ENUM1, Symbol(ENUM1.A, Decl(deleteOperatorWithEnumType.ts, 3, 12))
+>B : ENUM1, Symbol(ENUM1.B, Decl(deleteOperatorWithEnumType.ts, 3, 15))
 
 // enum type var
 var ResultIsBoolean1 = delete ENUM;
->ResultIsBoolean1 : boolean
+>ResultIsBoolean1 : boolean, Symbol(ResultIsBoolean1, Decl(deleteOperatorWithEnumType.ts, 6, 3))
 >delete ENUM : boolean
->ENUM : typeof ENUM
+>ENUM : typeof ENUM, Symbol(ENUM, Decl(deleteOperatorWithEnumType.ts, 0, 0))
 
 var ResultIsBoolean2 = delete ENUM1;
->ResultIsBoolean2 : boolean
+>ResultIsBoolean2 : boolean, Symbol(ResultIsBoolean2, Decl(deleteOperatorWithEnumType.ts, 7, 3))
 >delete ENUM1 : boolean
->ENUM1 : typeof ENUM1
+>ENUM1 : typeof ENUM1, Symbol(ENUM1, Decl(deleteOperatorWithEnumType.ts, 2, 14))
 
 // enum type expressions
 var ResultIsBoolean3 = delete ENUM1["A"];
->ResultIsBoolean3 : boolean
+>ResultIsBoolean3 : boolean, Symbol(ResultIsBoolean3, Decl(deleteOperatorWithEnumType.ts, 10, 3))
 >delete ENUM1["A"] : boolean
 >ENUM1["A"] : ENUM1
->ENUM1 : typeof ENUM1
+>ENUM1 : typeof ENUM1, Symbol(ENUM1, Decl(deleteOperatorWithEnumType.ts, 2, 14))
+>"A" : string, Symbol(ENUM1.A, Decl(deleteOperatorWithEnumType.ts, 3, 12))
 
 var ResultIsBoolean4 = delete (ENUM[0] + ENUM1["B"]);
->ResultIsBoolean4 : boolean
+>ResultIsBoolean4 : boolean, Symbol(ResultIsBoolean4, Decl(deleteOperatorWithEnumType.ts, 11, 3))
 >delete (ENUM[0] + ENUM1["B"]) : boolean
 >(ENUM[0] + ENUM1["B"]) : string
 >ENUM[0] + ENUM1["B"] : string
 >ENUM[0] : string
->ENUM : typeof ENUM
+>ENUM : typeof ENUM, Symbol(ENUM, Decl(deleteOperatorWithEnumType.ts, 0, 0))
+>0 : number
 >ENUM1["B"] : ENUM1
->ENUM1 : typeof ENUM1
+>ENUM1 : typeof ENUM1, Symbol(ENUM1, Decl(deleteOperatorWithEnumType.ts, 2, 14))
+>"B" : string, Symbol(ENUM1.B, Decl(deleteOperatorWithEnumType.ts, 3, 15))
 
 // multiple delete  operators
 var ResultIsBoolean5 = delete delete ENUM;
->ResultIsBoolean5 : boolean
+>ResultIsBoolean5 : boolean, Symbol(ResultIsBoolean5, Decl(deleteOperatorWithEnumType.ts, 14, 3))
 >delete delete ENUM : boolean
 >delete ENUM : boolean
->ENUM : typeof ENUM
+>ENUM : typeof ENUM, Symbol(ENUM, Decl(deleteOperatorWithEnumType.ts, 0, 0))
 
 var ResultIsBoolean6 = delete delete delete (ENUM[0] + ENUM1["B"]);
->ResultIsBoolean6 : boolean
+>ResultIsBoolean6 : boolean, Symbol(ResultIsBoolean6, Decl(deleteOperatorWithEnumType.ts, 15, 3))
 >delete delete delete (ENUM[0] + ENUM1["B"]) : boolean
 >delete delete (ENUM[0] + ENUM1["B"]) : boolean
 >delete (ENUM[0] + ENUM1["B"]) : boolean
 >(ENUM[0] + ENUM1["B"]) : string
 >ENUM[0] + ENUM1["B"] : string
 >ENUM[0] : string
->ENUM : typeof ENUM
+>ENUM : typeof ENUM, Symbol(ENUM, Decl(deleteOperatorWithEnumType.ts, 0, 0))
+>0 : number
 >ENUM1["B"] : ENUM1
->ENUM1 : typeof ENUM1
+>ENUM1 : typeof ENUM1, Symbol(ENUM1, Decl(deleteOperatorWithEnumType.ts, 2, 14))
+>"B" : string, Symbol(ENUM1.B, Decl(deleteOperatorWithEnumType.ts, 3, 15))
 
 // miss assignment operators
 delete ENUM;
 >delete ENUM : boolean
->ENUM : typeof ENUM
+>ENUM : typeof ENUM, Symbol(ENUM, Decl(deleteOperatorWithEnumType.ts, 0, 0))
 
 delete ENUM1;
 >delete ENUM1 : boolean
->ENUM1 : typeof ENUM1
+>ENUM1 : typeof ENUM1, Symbol(ENUM1, Decl(deleteOperatorWithEnumType.ts, 2, 14))
 
 delete ENUM1.B;
 >delete ENUM1.B : boolean
->ENUM1.B : ENUM1
->ENUM1 : typeof ENUM1
->B : ENUM1
+>ENUM1.B : ENUM1, Symbol(ENUM1.B, Decl(deleteOperatorWithEnumType.ts, 3, 15))
+>ENUM1 : typeof ENUM1, Symbol(ENUM1, Decl(deleteOperatorWithEnumType.ts, 2, 14))
+>B : ENUM1, Symbol(ENUM1.B, Decl(deleteOperatorWithEnumType.ts, 3, 15))
 
 delete ENUM, ENUM1;
 >delete ENUM, ENUM1 : typeof ENUM1
 >delete ENUM : boolean
->ENUM : typeof ENUM
->ENUM1 : typeof ENUM1
+>ENUM : typeof ENUM, Symbol(ENUM, Decl(deleteOperatorWithEnumType.ts, 0, 0))
+>ENUM1 : typeof ENUM1, Symbol(ENUM1, Decl(deleteOperatorWithEnumType.ts, 2, 14))
 

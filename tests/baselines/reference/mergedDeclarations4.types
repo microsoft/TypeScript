@@ -1,63 +1,64 @@
 === tests/cases/compiler/mergedDeclarations4.ts ===
 module M {
->M : typeof M
+>M : typeof M, Symbol(M, Decl(mergedDeclarations4.ts, 0, 0), Decl(mergedDeclarations4.ts, 5, 1))
 
     export function f() { }
->f : typeof f
+>f : typeof f, Symbol(f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
 
     f();
 >f() : void
->f : typeof f
+>f : typeof f, Symbol(f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
 
     M.f();    
 >M.f() : void
->M.f : typeof f
->M : typeof M
->f : typeof f
+>M.f : typeof f, Symbol(f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
+>M : typeof M, Symbol(M, Decl(mergedDeclarations4.ts, 0, 0), Decl(mergedDeclarations4.ts, 5, 1))
+>f : typeof f, Symbol(f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
 
     var r = f.hello;
->r : number
->f.hello : number
->f : typeof f
->hello : number
+>r : number, Symbol(r, Decl(mergedDeclarations4.ts, 4, 7))
+>f.hello : number, Symbol(f.hello, Decl(mergedDeclarations4.ts, 9, 18))
+>f : typeof f, Symbol(f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
+>hello : number, Symbol(f.hello, Decl(mergedDeclarations4.ts, 9, 18))
 }
  
 module M {
->M : typeof M
+>M : typeof M, Symbol(M, Decl(mergedDeclarations4.ts, 0, 0), Decl(mergedDeclarations4.ts, 5, 1))
 
     export module f {
->f : typeof f
+>f : typeof f, Symbol(f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
 
         export var hello = 1;
->hello : number
+>hello : number, Symbol(hello, Decl(mergedDeclarations4.ts, 9, 18))
+>1 : number
     }
     f();
 >f() : void
->f : typeof f
+>f : typeof f, Symbol(f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
 
     M.f();
 >M.f() : void
->M.f : typeof f
->M : typeof M
->f : typeof f
+>M.f : typeof f, Symbol(f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
+>M : typeof M, Symbol(M, Decl(mergedDeclarations4.ts, 0, 0), Decl(mergedDeclarations4.ts, 5, 1))
+>f : typeof f, Symbol(f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
 
     var r = f.hello;
->r : number
->f.hello : number
->f : typeof f
->hello : number
+>r : number, Symbol(r, Decl(mergedDeclarations4.ts, 13, 7))
+>f.hello : number, Symbol(f.hello, Decl(mergedDeclarations4.ts, 9, 18))
+>f : typeof f, Symbol(f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
+>hello : number, Symbol(f.hello, Decl(mergedDeclarations4.ts, 9, 18))
 }
  
 M.f();
 >M.f() : void
->M.f : typeof M.f
->M : typeof M
->f : typeof M.f
+>M.f : typeof M.f, Symbol(M.f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
+>M : typeof M, Symbol(M, Decl(mergedDeclarations4.ts, 0, 0), Decl(mergedDeclarations4.ts, 5, 1))
+>f : typeof M.f, Symbol(M.f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
 
 M.f.hello;
->M.f.hello : number
->M.f : typeof M.f
->M : typeof M
->f : typeof M.f
->hello : number
+>M.f.hello : number, Symbol(M.f.hello, Decl(mergedDeclarations4.ts, 9, 18))
+>M.f : typeof M.f, Symbol(M.f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
+>M : typeof M, Symbol(M, Decl(mergedDeclarations4.ts, 0, 0), Decl(mergedDeclarations4.ts, 5, 1))
+>f : typeof M.f, Symbol(M.f, Decl(mergedDeclarations4.ts, 0, 10), Decl(mergedDeclarations4.ts, 7, 10))
+>hello : number, Symbol(M.f.hello, Decl(mergedDeclarations4.ts, 9, 18))
 

@@ -1,23 +1,24 @@
 === tests/cases/compiler/noCollisionThisExpressionAndLocalVarInFunction.ts ===
 var console: {
->console : { log(val: any): any; }
+>console : { log(val: any): any; }, Symbol(console, Decl(noCollisionThisExpressionAndLocalVarInFunction.ts, 0, 3))
 
     log(val: any);
->log : (val: any) => any
->val : any
+>log : (val: any) => any, Symbol(log, Decl(noCollisionThisExpressionAndLocalVarInFunction.ts, 0, 14))
+>val : any, Symbol(val, Decl(noCollisionThisExpressionAndLocalVarInFunction.ts, 1, 8))
 }
 function x() {
->x : () => void
+>x : () => void, Symbol(x, Decl(noCollisionThisExpressionAndLocalVarInFunction.ts, 2, 1))
 
     var _this = 5;
->_this : number
+>_this : number, Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInFunction.ts, 4, 7))
+>5 : number
 
     x => { console.log(_this); };
 >x => { console.log(_this); } : (x: any) => void
->x : any
+>x : any, Symbol(x, Decl(noCollisionThisExpressionAndLocalVarInFunction.ts, 4, 18))
 >console.log(_this) : any
->console.log : (val: any) => any
->console : { log(val: any): any; }
->log : (val: any) => any
->_this : number
+>console.log : (val: any) => any, Symbol(log, Decl(noCollisionThisExpressionAndLocalVarInFunction.ts, 0, 14))
+>console : { log(val: any): any; }, Symbol(console, Decl(noCollisionThisExpressionAndLocalVarInFunction.ts, 0, 3))
+>log : (val: any) => any, Symbol(log, Decl(noCollisionThisExpressionAndLocalVarInFunction.ts, 0, 14))
+>_this : number, Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInFunction.ts, 4, 7))
 }

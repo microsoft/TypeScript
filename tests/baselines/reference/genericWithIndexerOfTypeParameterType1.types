@@ -1,34 +1,35 @@
 === tests/cases/compiler/genericWithIndexerOfTypeParameterType1.ts ===
 class LazyArray<T> {
->LazyArray : LazyArray<T>
->T : T
+>LazyArray : LazyArray<T>, Symbol(LazyArray, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 0))
+>T : T, Symbol(T, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 16))
 
     private objects = <{ [objectId: string]: T; }>{};
->objects : { [objectId: string]: T; }
+>objects : { [objectId: string]: T; }, Symbol(objects, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 20))
 ><{ [objectId: string]: T; }>{} : { [objectId: string]: T; }
->objectId : string
->T : T
+>objectId : string, Symbol(objectId, Decl(genericWithIndexerOfTypeParameterType1.ts, 1, 26))
+>T : T, Symbol(T, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 16))
 >{} : { [x: string]: undefined; }
 
     array() {
->array : () => { [objectId: string]: T; }
+>array : () => { [objectId: string]: T; }, Symbol(array, Decl(genericWithIndexerOfTypeParameterType1.ts, 1, 53))
 
         return this.objects;
->this.objects : { [objectId: string]: T; }
->this : LazyArray<T>
->objects : { [objectId: string]: T; }
+>this.objects : { [objectId: string]: T; }, Symbol(objects, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 20))
+>this : LazyArray<T>, Symbol(LazyArray, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 0))
+>objects : { [objectId: string]: T; }, Symbol(objects, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 20))
     }
 }
 var lazyArray = new LazyArray<string>();
->lazyArray : LazyArray<string>
+>lazyArray : LazyArray<string>, Symbol(lazyArray, Decl(genericWithIndexerOfTypeParameterType1.ts, 6, 3))
 >new LazyArray<string>() : LazyArray<string>
->LazyArray : typeof LazyArray
+>LazyArray : typeof LazyArray, Symbol(LazyArray, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 0))
 
 var value: string = lazyArray.array()["test"]; // used to be an error
->value : string
+>value : string, Symbol(value, Decl(genericWithIndexerOfTypeParameterType1.ts, 7, 3))
 >lazyArray.array()["test"] : string
 >lazyArray.array() : { [objectId: string]: string; }
->lazyArray.array : () => { [objectId: string]: string; }
->lazyArray : LazyArray<string>
->array : () => { [objectId: string]: string; }
+>lazyArray.array : () => { [objectId: string]: string; }, Symbol(LazyArray.array, Decl(genericWithIndexerOfTypeParameterType1.ts, 1, 53))
+>lazyArray : LazyArray<string>, Symbol(lazyArray, Decl(genericWithIndexerOfTypeParameterType1.ts, 6, 3))
+>array : () => { [objectId: string]: string; }, Symbol(LazyArray.array, Decl(genericWithIndexerOfTypeParameterType1.ts, 1, 53))
+>"test" : string
 

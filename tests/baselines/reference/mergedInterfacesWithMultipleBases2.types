@@ -3,169 +3,169 @@
 // no errors expected
 
 class C {
->C : C
+>C : C, Symbol(C, Decl(mergedInterfacesWithMultipleBases2.ts, 0, 0))
 
     a: number;
->a : number
+>a : number, Symbol(a, Decl(mergedInterfacesWithMultipleBases2.ts, 3, 9))
 }
 
 class C2 {
->C2 : C2
+>C2 : C2, Symbol(C2, Decl(mergedInterfacesWithMultipleBases2.ts, 5, 1))
 
     b: number;
->b : number
+>b : number, Symbol(b, Decl(mergedInterfacesWithMultipleBases2.ts, 7, 10))
 }
 
 class C3 {
->C3 : C3
+>C3 : C3, Symbol(C3, Decl(mergedInterfacesWithMultipleBases2.ts, 9, 1))
 
     c: string;
->c : string
+>c : string, Symbol(c, Decl(mergedInterfacesWithMultipleBases2.ts, 11, 10))
 }
 
 class C4 {
->C4 : C4
+>C4 : C4, Symbol(C4, Decl(mergedInterfacesWithMultipleBases2.ts, 13, 1))
 
     d: string;
->d : string
+>d : string, Symbol(d, Decl(mergedInterfacesWithMultipleBases2.ts, 15, 10))
 }
 
 
 interface A extends C, C3 {
->A : A
->C : C
->C3 : C3
+>A : A, Symbol(A, Decl(mergedInterfacesWithMultipleBases2.ts, 17, 1), Decl(mergedInterfacesWithMultipleBases2.ts, 22, 1))
+>C : C, Symbol(C, Decl(mergedInterfacesWithMultipleBases2.ts, 0, 0))
+>C3 : C3, Symbol(C3, Decl(mergedInterfacesWithMultipleBases2.ts, 9, 1))
 
     y: string;
->y : string
+>y : string, Symbol(y, Decl(mergedInterfacesWithMultipleBases2.ts, 20, 27))
 }
 
 interface A extends C2, C4 {
->A : A
->C2 : C2
->C4 : C4
+>A : A, Symbol(A, Decl(mergedInterfacesWithMultipleBases2.ts, 17, 1), Decl(mergedInterfacesWithMultipleBases2.ts, 22, 1))
+>C2 : C2, Symbol(C2, Decl(mergedInterfacesWithMultipleBases2.ts, 5, 1))
+>C4 : C4, Symbol(C4, Decl(mergedInterfacesWithMultipleBases2.ts, 13, 1))
 
     z: string;
->z : string
+>z : string, Symbol(z, Decl(mergedInterfacesWithMultipleBases2.ts, 24, 28))
 }
 
 class D implements A {
->D : D
->A : A
+>D : D, Symbol(D, Decl(mergedInterfacesWithMultipleBases2.ts, 26, 1))
+>A : A, Symbol(A, Decl(mergedInterfacesWithMultipleBases2.ts, 17, 1), Decl(mergedInterfacesWithMultipleBases2.ts, 22, 1))
 
     a: number;
->a : number
+>a : number, Symbol(a, Decl(mergedInterfacesWithMultipleBases2.ts, 28, 22))
 
     b: number;
->b : number
+>b : number, Symbol(b, Decl(mergedInterfacesWithMultipleBases2.ts, 29, 14))
 
     c: string;
->c : string
+>c : string, Symbol(c, Decl(mergedInterfacesWithMultipleBases2.ts, 30, 14))
 
     d: string;
->d : string
+>d : string, Symbol(d, Decl(mergedInterfacesWithMultipleBases2.ts, 31, 14))
 
     y: string;
->y : string
+>y : string, Symbol(y, Decl(mergedInterfacesWithMultipleBases2.ts, 32, 14))
 
     z: string;
->z : string
+>z : string, Symbol(z, Decl(mergedInterfacesWithMultipleBases2.ts, 33, 14))
 }
 
 var a: A;
->a : A
->A : A
+>a : A, Symbol(a, Decl(mergedInterfacesWithMultipleBases2.ts, 37, 3))
+>A : A, Symbol(A, Decl(mergedInterfacesWithMultipleBases2.ts, 17, 1), Decl(mergedInterfacesWithMultipleBases2.ts, 22, 1))
 
 var r = a.a;
->r : number
->a.a : number
->a : A
->a : number
+>r : number, Symbol(r, Decl(mergedInterfacesWithMultipleBases2.ts, 38, 3))
+>a.a : number, Symbol(C.a, Decl(mergedInterfacesWithMultipleBases2.ts, 3, 9))
+>a : A, Symbol(a, Decl(mergedInterfacesWithMultipleBases2.ts, 37, 3))
+>a : number, Symbol(C.a, Decl(mergedInterfacesWithMultipleBases2.ts, 3, 9))
 
 // generic interfaces in a module
 module M {
->M : typeof M
+>M : typeof M, Symbol(M, Decl(mergedInterfacesWithMultipleBases2.ts, 38, 12))
 
     class C<T> {
->C : C<T>
->T : T
+>C : C<T>, Symbol(C, Decl(mergedInterfacesWithMultipleBases2.ts, 41, 10))
+>T : T, Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 42, 12))
 
         a: T;
->a : T
->T : T
+>a : T, Symbol(a, Decl(mergedInterfacesWithMultipleBases2.ts, 42, 16))
+>T : T, Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 42, 12))
     }
 
     class C2<T> {
->C2 : C2<T>
->T : T
+>C2 : C2<T>, Symbol(C2, Decl(mergedInterfacesWithMultipleBases2.ts, 44, 5))
+>T : T, Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 46, 13))
 
         b: T;
->b : T
->T : T
+>b : T, Symbol(b, Decl(mergedInterfacesWithMultipleBases2.ts, 46, 17))
+>T : T, Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 46, 13))
     }
 
     class C3<T> {
->C3 : C3<T>
->T : T
+>C3 : C3<T>, Symbol(C3, Decl(mergedInterfacesWithMultipleBases2.ts, 48, 5))
+>T : T, Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 50, 13))
 
         c: T;
->c : T
->T : T
+>c : T, Symbol(c, Decl(mergedInterfacesWithMultipleBases2.ts, 50, 17))
+>T : T, Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 50, 13))
     }
 
     class C4<T> {
->C4 : C4<T>
->T : T
+>C4 : C4<T>, Symbol(C4, Decl(mergedInterfacesWithMultipleBases2.ts, 52, 5))
+>T : T, Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 54, 13))
 
         d: T;
->d : T
->T : T
+>d : T, Symbol(d, Decl(mergedInterfacesWithMultipleBases2.ts, 54, 17))
+>T : T, Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 54, 13))
     }
 
     interface A<T> extends C<T>, C3<T> {
->A : A<T>
->T : T
->C : C<T>
->T : T
->C3 : C3<T>
->T : T
+>A : A<T>, Symbol(A, Decl(mergedInterfacesWithMultipleBases2.ts, 56, 5), Decl(mergedInterfacesWithMultipleBases2.ts, 60, 5))
+>T : T, Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 58, 16), Decl(mergedInterfacesWithMultipleBases2.ts, 62, 16))
+>C : C<T>, Symbol(C, Decl(mergedInterfacesWithMultipleBases2.ts, 41, 10))
+>T : T, Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 58, 16), Decl(mergedInterfacesWithMultipleBases2.ts, 62, 16))
+>C3 : C3<T>, Symbol(C3, Decl(mergedInterfacesWithMultipleBases2.ts, 48, 5))
+>T : T, Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 58, 16), Decl(mergedInterfacesWithMultipleBases2.ts, 62, 16))
 
         y: T;
->y : T
->T : T
+>y : T, Symbol(y, Decl(mergedInterfacesWithMultipleBases2.ts, 58, 40))
+>T : T, Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 58, 16), Decl(mergedInterfacesWithMultipleBases2.ts, 62, 16))
     }
 
     interface A<T> extends C2<string>, C4<string> {
->A : A<T>
->T : T
->C2 : C2<T>
->C4 : C4<T>
+>A : A<T>, Symbol(A, Decl(mergedInterfacesWithMultipleBases2.ts, 56, 5), Decl(mergedInterfacesWithMultipleBases2.ts, 60, 5))
+>T : T, Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 58, 16), Decl(mergedInterfacesWithMultipleBases2.ts, 62, 16))
+>C2 : C2<T>, Symbol(C2, Decl(mergedInterfacesWithMultipleBases2.ts, 44, 5))
+>C4 : C4<T>, Symbol(C4, Decl(mergedInterfacesWithMultipleBases2.ts, 52, 5))
 
         z: T;
->z : T
->T : T
+>z : T, Symbol(z, Decl(mergedInterfacesWithMultipleBases2.ts, 62, 51))
+>T : T, Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 58, 16), Decl(mergedInterfacesWithMultipleBases2.ts, 62, 16))
     }
 
     class D implements A<boolean> {
->D : D
->A : A<T>
+>D : D, Symbol(D, Decl(mergedInterfacesWithMultipleBases2.ts, 64, 5))
+>A : A<T>, Symbol(A, Decl(mergedInterfacesWithMultipleBases2.ts, 56, 5), Decl(mergedInterfacesWithMultipleBases2.ts, 60, 5))
 
         a: boolean;
->a : boolean
+>a : boolean, Symbol(a, Decl(mergedInterfacesWithMultipleBases2.ts, 66, 35))
 
         b: string;
->b : string
+>b : string, Symbol(b, Decl(mergedInterfacesWithMultipleBases2.ts, 67, 19))
 
         c: boolean;
->c : boolean
+>c : boolean, Symbol(c, Decl(mergedInterfacesWithMultipleBases2.ts, 68, 18))
 
         d: string;
->d : string
+>d : string, Symbol(d, Decl(mergedInterfacesWithMultipleBases2.ts, 69, 19))
 
         y: boolean;
->y : boolean
+>y : boolean, Symbol(y, Decl(mergedInterfacesWithMultipleBases2.ts, 70, 18))
 
         z: boolean;
->z : boolean
+>z : boolean, Symbol(z, Decl(mergedInterfacesWithMultipleBases2.ts, 71, 19))
     }
 }

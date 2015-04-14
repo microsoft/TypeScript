@@ -1,48 +1,50 @@
 === tests/cases/compiler/specializationsShouldNotAffectEachOther.ts ===
 
 interface Series  {
->Series : Series
+>Series : Series, Symbol(Series, Decl(specializationsShouldNotAffectEachOther.ts, 0, 0))
 
     data: string[];
->data : string[]
+>data : string[], Symbol(data, Decl(specializationsShouldNotAffectEachOther.ts, 1, 19))
 }
 
 var series: Series;
->series : Series
->Series : Series
+>series : Series, Symbol(series, Decl(specializationsShouldNotAffectEachOther.ts, 5, 3))
+>Series : Series, Symbol(Series, Decl(specializationsShouldNotAffectEachOther.ts, 0, 0))
 
 
 function foo() {
->foo : () => any
+>foo : () => any, Symbol(foo, Decl(specializationsShouldNotAffectEachOther.ts, 5, 19))
 
     var seriesExtent = (series) => null;
->seriesExtent : (series: any) => any
+>seriesExtent : (series: any) => any, Symbol(seriesExtent, Decl(specializationsShouldNotAffectEachOther.ts, 10, 7))
 >(series) => null : (series: any) => any
->series : any
+>series : any, Symbol(series, Decl(specializationsShouldNotAffectEachOther.ts, 10, 24))
+>null : null
 
     var series2: number[];
->series2 : number[]
+>series2 : number[], Symbol(series2, Decl(specializationsShouldNotAffectEachOther.ts, 12, 7))
 
     series2.map(seriesExtent);
 >series2.map(seriesExtent) : any[]
->series2.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->series2 : number[]
->map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->seriesExtent : (series: any) => any
+>series2.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
+>series2 : number[], Symbol(series2, Decl(specializationsShouldNotAffectEachOther.ts, 12, 7))
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
+>seriesExtent : (series: any) => any, Symbol(seriesExtent, Decl(specializationsShouldNotAffectEachOther.ts, 10, 7))
 
     return null;
+>null : null
 }
 
 
 var keyExtent2: any[] = series.data.map(function (d: string) { return d; });
->keyExtent2 : any[]
+>keyExtent2 : any[], Symbol(keyExtent2, Decl(specializationsShouldNotAffectEachOther.ts, 19, 3))
 >series.data.map(function (d: string) { return d; }) : string[]
->series.data.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->series.data : string[]
->series : Series
->data : string[]
->map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>series.data.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
+>series.data : string[], Symbol(Series.data, Decl(specializationsShouldNotAffectEachOther.ts, 1, 19))
+>series : Series, Symbol(series, Decl(specializationsShouldNotAffectEachOther.ts, 5, 3))
+>data : string[], Symbol(Series.data, Decl(specializationsShouldNotAffectEachOther.ts, 1, 19))
+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
 >function (d: string) { return d; } : (d: string) => string
->d : string
->d : string
+>d : string, Symbol(d, Decl(specializationsShouldNotAffectEachOther.ts, 19, 50))
+>d : string, Symbol(d, Decl(specializationsShouldNotAffectEachOther.ts, 19, 50))
 

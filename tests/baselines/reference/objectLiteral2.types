@@ -1,8 +1,10 @@
 === tests/cases/compiler/objectLiteral2.ts ===
 var v30 = {a:1, b:2}, v31;
->v30 : { a: number; b: number; }
+>v30 : { a: number; b: number; }, Symbol(v30, Decl(objectLiteral2.ts, 0, 3))
 >{a:1, b:2} : { a: number; b: number; }
->a : number
->b : number
->v31 : any
+>a : number, Symbol(a, Decl(objectLiteral2.ts, 0, 11))
+>1 : number
+>b : number, Symbol(b, Decl(objectLiteral2.ts, 0, 15))
+>2 : number
+>v31 : any, Symbol(v31, Decl(objectLiteral2.ts, 0, 21))
 

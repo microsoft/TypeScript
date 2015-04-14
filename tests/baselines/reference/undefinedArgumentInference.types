@@ -1,26 +1,26 @@
 === tests/cases/compiler/undefinedArgumentInference.ts ===
 function foo1<T>(f1: { x: T; y: T }): T {
->foo1 : <T>(f1: { x: T; y: T; }) => T
->T : T
->f1 : { x: T; y: T; }
->x : T
->T : T
->y : T
->T : T
->T : T
+>foo1 : <T>(f1: { x: T; y: T; }) => T, Symbol(foo1, Decl(undefinedArgumentInference.ts, 0, 0))
+>T : T, Symbol(T, Decl(undefinedArgumentInference.ts, 0, 14))
+>f1 : { x: T; y: T; }, Symbol(f1, Decl(undefinedArgumentInference.ts, 0, 17))
+>x : T, Symbol(x, Decl(undefinedArgumentInference.ts, 0, 22))
+>T : T, Symbol(T, Decl(undefinedArgumentInference.ts, 0, 14))
+>y : T, Symbol(y, Decl(undefinedArgumentInference.ts, 0, 28))
+>T : T, Symbol(T, Decl(undefinedArgumentInference.ts, 0, 14))
+>T : T, Symbol(T, Decl(undefinedArgumentInference.ts, 0, 14))
 
    return undefined;
->undefined : undefined
+>undefined : undefined, Symbol(undefined)
 
 }
 
 var z1 = foo1({ x: undefined, y: undefined }); 
->z1 : any
+>z1 : any, Symbol(z1, Decl(undefinedArgumentInference.ts, 6, 3))
 >foo1({ x: undefined, y: undefined }) : any
->foo1 : <T>(f1: { x: T; y: T; }) => T
+>foo1 : <T>(f1: { x: T; y: T; }) => T, Symbol(foo1, Decl(undefinedArgumentInference.ts, 0, 0))
 >{ x: undefined, y: undefined } : { x: undefined; y: undefined; }
->x : undefined
->undefined : undefined
->y : undefined
->undefined : undefined
+>x : undefined, Symbol(x, Decl(undefinedArgumentInference.ts, 6, 15))
+>undefined : undefined, Symbol(undefined)
+>y : undefined, Symbol(y, Decl(undefinedArgumentInference.ts, 6, 29))
+>undefined : undefined, Symbol(undefined)
 

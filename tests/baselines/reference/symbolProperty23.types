@@ -1,22 +1,23 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty23.ts ===
 interface I {
->I : I
+>I : I, Symbol(I, Decl(symbolProperty23.ts, 0, 0))
 
     [Symbol.toPrimitive]: () => boolean;
->Symbol.toPrimitive : symbol
->Symbol : SymbolConstructor
->toPrimitive : symbol
+>Symbol.toPrimitive : symbol, Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 1242, 21))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>toPrimitive : symbol, Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 1242, 21))
 }
 
 class C implements I {
->C : C
->I : I
+>C : C, Symbol(C, Decl(symbolProperty23.ts, 2, 1))
+>I : I, Symbol(I, Decl(symbolProperty23.ts, 0, 0))
 
     [Symbol.toPrimitive]() {
->Symbol.toPrimitive : symbol
->Symbol : SymbolConstructor
->toPrimitive : symbol
+>Symbol.toPrimitive : symbol, Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 1242, 21))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>toPrimitive : symbol, Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 1242, 21))
 
         return true;
+>true : boolean
     }
 }

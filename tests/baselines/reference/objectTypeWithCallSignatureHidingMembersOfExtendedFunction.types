@@ -3,113 +3,115 @@
 // no errors expected below 
 
 interface Function {
->Function : Function
+>Function : Function, Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11), Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 0, 0))
 
     data: number;
->data : number
+>data : number, Symbol(data, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 3, 20))
 
     [x: string]: Object;
->x : string
->Object : Object
+>x : string, Symbol(x, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 5, 5))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 }
 
 interface I {
->I : I
+>I : I, Symbol(I, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 6, 1))
 
     (): void;
     apply(a: any, b?: any): void;
->apply : (a: any, b?: any) => void
->a : any
->b : any
+>apply : (a: any, b?: any) => void, Symbol(apply, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 9, 13))
+>a : any, Symbol(a, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 10, 10))
+>b : any, Symbol(b, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 10, 17))
 
     call(thisArg: number, ...argArray: number[]): any;
->call : (thisArg: number, ...argArray: number[]) => any
->thisArg : number
->argArray : number[]
+>call : (thisArg: number, ...argArray: number[]) => any, Symbol(call, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 10, 33))
+>thisArg : number, Symbol(thisArg, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 11, 9))
+>argArray : number[], Symbol(argArray, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 11, 25))
 }
 
 var i: I;
->i : I
->I : I
+>i : I, Symbol(i, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 14, 3))
+>I : I, Symbol(I, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 6, 1))
 
 var r1: (a: any, b?: any) => void = i.apply;
->r1 : (a: any, b?: any) => void
->a : any
->b : any
->i.apply : (a: any, b?: any) => void
->i : I
->apply : (a: any, b?: any) => void
+>r1 : (a: any, b?: any) => void, Symbol(r1, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 15, 3))
+>a : any, Symbol(a, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 15, 9))
+>b : any, Symbol(b, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 15, 16))
+>i.apply : (a: any, b?: any) => void, Symbol(I.apply, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 9, 13))
+>i : I, Symbol(i, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 14, 3))
+>apply : (a: any, b?: any) => void, Symbol(I.apply, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 9, 13))
 
 var r1b: (thisArg: number, ...argArray: number[]) => void = i.call;
->r1b : (thisArg: number, ...argArray: number[]) => void
->thisArg : number
->argArray : number[]
->i.call : (thisArg: number, ...argArray: number[]) => any
->i : I
->call : (thisArg: number, ...argArray: number[]) => any
+>r1b : (thisArg: number, ...argArray: number[]) => void, Symbol(r1b, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 16, 3))
+>thisArg : number, Symbol(thisArg, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 16, 10))
+>argArray : number[], Symbol(argArray, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 16, 26))
+>i.call : (thisArg: number, ...argArray: number[]) => any, Symbol(I.call, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 10, 33))
+>i : I, Symbol(i, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 14, 3))
+>call : (thisArg: number, ...argArray: number[]) => any, Symbol(I.call, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 10, 33))
 
 var r1c = i.arguments;
->r1c : any
->i.arguments : any
->i : I
->arguments : any
+>r1c : any, Symbol(r1c, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 17, 3))
+>i.arguments : any, Symbol(Function.arguments, Decl(lib.d.ts, 252, 19))
+>i : I, Symbol(i, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 14, 3))
+>arguments : any, Symbol(Function.arguments, Decl(lib.d.ts, 252, 19))
 
 var r1d = i.data;
->r1d : number
->i.data : number
->i : I
->data : number
+>r1d : number, Symbol(r1d, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 18, 3))
+>i.data : number, Symbol(Function.data, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 3, 20))
+>i : I, Symbol(i, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 14, 3))
+>data : number, Symbol(Function.data, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 3, 20))
 
 var r1e = i['hm']; // should be Object
->r1e : any
+>r1e : any, Symbol(r1e, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 19, 3))
 >i['hm'] : any
->i : I
+>i : I, Symbol(i, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 14, 3))
+>'hm' : string
 
 var x: {
->x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
+>x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }, Symbol(x, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 21, 3))
 
     (): void;
     apply(a: any, b?: any): void;
->apply : (a: any, b?: any) => void
->a : any
->b : any
+>apply : (a: any, b?: any) => void, Symbol(apply, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 22, 13))
+>a : any, Symbol(a, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 23, 10))
+>b : any, Symbol(b, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 23, 17))
 
     call(thisArg: number, ...argArray: number[]): any;
->call : (thisArg: number, ...argArray: number[]) => any
->thisArg : number
->argArray : number[]
+>call : (thisArg: number, ...argArray: number[]) => any, Symbol(call, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 23, 33))
+>thisArg : number, Symbol(thisArg, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 24, 9))
+>argArray : number[], Symbol(argArray, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 24, 25))
 }
 
 var r2: (a: any, b?: any) => void = x.apply;
->r2 : (a: any, b?: any) => void
->a : any
->b : any
->x.apply : (a: any, b?: any) => void
->x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
->apply : (a: any, b?: any) => void
+>r2 : (a: any, b?: any) => void, Symbol(r2, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 27, 3))
+>a : any, Symbol(a, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 27, 9))
+>b : any, Symbol(b, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 27, 16))
+>x.apply : (a: any, b?: any) => void, Symbol(apply, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 22, 13))
+>x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }, Symbol(x, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 21, 3))
+>apply : (a: any, b?: any) => void, Symbol(apply, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 22, 13))
 
 var r2b: (thisArg: number, ...argArray: number[]) => void = x.call;
->r2b : (thisArg: number, ...argArray: number[]) => void
->thisArg : number
->argArray : number[]
->x.call : (thisArg: number, ...argArray: number[]) => any
->x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
->call : (thisArg: number, ...argArray: number[]) => any
+>r2b : (thisArg: number, ...argArray: number[]) => void, Symbol(r2b, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 28, 3))
+>thisArg : number, Symbol(thisArg, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 28, 10))
+>argArray : number[], Symbol(argArray, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 28, 26))
+>x.call : (thisArg: number, ...argArray: number[]) => any, Symbol(call, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 23, 33))
+>x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }, Symbol(x, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 21, 3))
+>call : (thisArg: number, ...argArray: number[]) => any, Symbol(call, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 23, 33))
 
 var r2c = x.arguments;
->r2c : any
->x.arguments : any
->x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
->arguments : any
+>r2c : any, Symbol(r2c, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 29, 3))
+>x.arguments : any, Symbol(Function.arguments, Decl(lib.d.ts, 252, 19))
+>x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }, Symbol(x, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 21, 3))
+>arguments : any, Symbol(Function.arguments, Decl(lib.d.ts, 252, 19))
 
 var r2d = x.data;
->r2d : number
->x.data : number
->x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
->data : number
+>r2d : number, Symbol(r2d, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 30, 3))
+>x.data : number, Symbol(Function.data, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 3, 20))
+>x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }, Symbol(x, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 21, 3))
+>data : number, Symbol(Function.data, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 3, 20))
 
 var r2e = x['hm']; // should be Object
->r2e : any
+>r2e : any, Symbol(r2e, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 31, 3))
 >x['hm'] : any
->x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
+>x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }, Symbol(x, Decl(objectTypeWithCallSignatureHidingMembersOfExtendedFunction.ts, 21, 3))
+>'hm' : string
 

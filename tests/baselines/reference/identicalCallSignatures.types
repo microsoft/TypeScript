@@ -2,60 +2,60 @@
 // Each pair of call signatures in these types have a duplicate signature error.
 // Identical call signatures should generate an error.
 interface I {
->I : I
+>I : I, Symbol(I, Decl(identicalCallSignatures.ts, 0, 0))
 
     (x): number;
->x : any
+>x : any, Symbol(x, Decl(identicalCallSignatures.ts, 3, 5))
 
     (x: any): number;
->x : any
+>x : any, Symbol(x, Decl(identicalCallSignatures.ts, 4, 5))
 
     <T>(x: T): T;
->T : T
->x : T
->T : T
->T : T
+>T : T, Symbol(T, Decl(identicalCallSignatures.ts, 5, 5))
+>x : T, Symbol(x, Decl(identicalCallSignatures.ts, 5, 8))
+>T : T, Symbol(T, Decl(identicalCallSignatures.ts, 5, 5))
+>T : T, Symbol(T, Decl(identicalCallSignatures.ts, 5, 5))
 
     <U>(x: U): U; // error
->U : U
->x : U
->U : U
->U : U
+>U : U, Symbol(U, Decl(identicalCallSignatures.ts, 6, 5))
+>x : U, Symbol(x, Decl(identicalCallSignatures.ts, 6, 8))
+>U : U, Symbol(U, Decl(identicalCallSignatures.ts, 6, 5))
+>U : U, Symbol(U, Decl(identicalCallSignatures.ts, 6, 5))
 }
 
 interface I2<T> {
->I2 : I2<T>
->T : T
+>I2 : I2<T>, Symbol(I2, Decl(identicalCallSignatures.ts, 7, 1))
+>T : T, Symbol(T, Decl(identicalCallSignatures.ts, 9, 13))
 
     (x: T): T;
->x : T
->T : T
->T : T
+>x : T, Symbol(x, Decl(identicalCallSignatures.ts, 10, 5))
+>T : T, Symbol(T, Decl(identicalCallSignatures.ts, 9, 13))
+>T : T, Symbol(T, Decl(identicalCallSignatures.ts, 9, 13))
 
     (x: T): T; // error
->x : T
->T : T
->T : T
+>x : T, Symbol(x, Decl(identicalCallSignatures.ts, 11, 5))
+>T : T, Symbol(T, Decl(identicalCallSignatures.ts, 9, 13))
+>T : T, Symbol(T, Decl(identicalCallSignatures.ts, 9, 13))
 }
 
 var a: {
->a : { (x: any): number; (x: any): number; <T>(x: T): T; <T>(x: T): T; }
+>a : { (x: any): number; (x: any): number; <T>(x: T): T; <T>(x: T): T; }, Symbol(a, Decl(identicalCallSignatures.ts, 14, 3))
 
     (x): number;
->x : any
+>x : any, Symbol(x, Decl(identicalCallSignatures.ts, 15, 5))
 
     (x: any): number;
->x : any
+>x : any, Symbol(x, Decl(identicalCallSignatures.ts, 16, 5))
 
     <T>(x: T): T;
->T : T
->x : T
->T : T
->T : T
+>T : T, Symbol(T, Decl(identicalCallSignatures.ts, 17, 5))
+>x : T, Symbol(x, Decl(identicalCallSignatures.ts, 17, 8))
+>T : T, Symbol(T, Decl(identicalCallSignatures.ts, 17, 5))
+>T : T, Symbol(T, Decl(identicalCallSignatures.ts, 17, 5))
 
     <T>(x: T): T; // error
->T : T
->x : T
->T : T
->T : T
+>T : T, Symbol(T, Decl(identicalCallSignatures.ts, 18, 5))
+>x : T, Symbol(x, Decl(identicalCallSignatures.ts, 18, 8))
+>T : T, Symbol(T, Decl(identicalCallSignatures.ts, 18, 5))
+>T : T, Symbol(T, Decl(identicalCallSignatures.ts, 18, 5))
 }

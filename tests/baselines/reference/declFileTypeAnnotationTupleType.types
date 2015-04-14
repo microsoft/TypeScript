@@ -1,60 +1,60 @@
 === tests/cases/compiler/declFileTypeAnnotationTupleType.ts ===
 
 class c {
->c : c
+>c : c, Symbol(c, Decl(declFileTypeAnnotationTupleType.ts, 0, 0))
 }
 module m {
->m : typeof m
+>m : typeof m, Symbol(m, Decl(declFileTypeAnnotationTupleType.ts, 2, 1))
 
     export class c {
->c : c
+>c : c, Symbol(c, Decl(declFileTypeAnnotationTupleType.ts, 3, 10))
     }
     export class g<T> {
->g : g<T>
->T : T
+>g : g<T>, Symbol(g, Decl(declFileTypeAnnotationTupleType.ts, 5, 5))
+>T : T, Symbol(T, Decl(declFileTypeAnnotationTupleType.ts, 6, 19))
     }
 }
 class g<T> {
->g : g<T>
->T : T
+>g : g<T>, Symbol(g, Decl(declFileTypeAnnotationTupleType.ts, 8, 1))
+>T : T, Symbol(T, Decl(declFileTypeAnnotationTupleType.ts, 9, 8))
 }
 
 // Just the name
 var k: [c, m.c] = [new c(), new m.c()];
->k : [c, m.c]
->c : c
->m : unknown
->c : m.c
+>k : [c, m.c], Symbol(k, Decl(declFileTypeAnnotationTupleType.ts, 13, 3))
+>c : c, Symbol(c, Decl(declFileTypeAnnotationTupleType.ts, 0, 0))
+>m : any, Symbol(m, Decl(declFileTypeAnnotationTupleType.ts, 2, 1))
+>c : m.c, Symbol(m.c, Decl(declFileTypeAnnotationTupleType.ts, 3, 10))
 >[new c(), new m.c()] : [c, m.c]
 >new c() : c
->c : typeof c
+>c : typeof c, Symbol(c, Decl(declFileTypeAnnotationTupleType.ts, 0, 0))
 >new m.c() : m.c
->m.c : typeof m.c
->m : typeof m
->c : typeof m.c
+>m.c : typeof m.c, Symbol(m.c, Decl(declFileTypeAnnotationTupleType.ts, 3, 10))
+>m : typeof m, Symbol(m, Decl(declFileTypeAnnotationTupleType.ts, 2, 1))
+>c : typeof m.c, Symbol(m.c, Decl(declFileTypeAnnotationTupleType.ts, 3, 10))
 
 var l = k;
->l : [c, m.c]
->k : [c, m.c]
+>l : [c, m.c], Symbol(l, Decl(declFileTypeAnnotationTupleType.ts, 14, 3))
+>k : [c, m.c], Symbol(k, Decl(declFileTypeAnnotationTupleType.ts, 13, 3))
 
 var x: [g<string>, m.g<number>, () => c] = [new g<string>(), new m.g<number>(), () => new c()];
->x : [g<string>, m.g<number>, () => c]
->g : g<T>
->m : unknown
->g : m.g<T>
->c : c
+>x : [g<string>, m.g<number>, () => c], Symbol(x, Decl(declFileTypeAnnotationTupleType.ts, 16, 3))
+>g : g<T>, Symbol(g, Decl(declFileTypeAnnotationTupleType.ts, 8, 1))
+>m : any, Symbol(m, Decl(declFileTypeAnnotationTupleType.ts, 2, 1))
+>g : m.g<T>, Symbol(m.g, Decl(declFileTypeAnnotationTupleType.ts, 5, 5))
+>c : c, Symbol(c, Decl(declFileTypeAnnotationTupleType.ts, 0, 0))
 >[new g<string>(), new m.g<number>(), () => new c()] : [g<string>, m.g<number>, () => c]
 >new g<string>() : g<string>
->g : typeof g
+>g : typeof g, Symbol(g, Decl(declFileTypeAnnotationTupleType.ts, 8, 1))
 >new m.g<number>() : m.g<number>
->m.g : typeof m.g
->m : typeof m
->g : typeof m.g
+>m.g : typeof m.g, Symbol(m.g, Decl(declFileTypeAnnotationTupleType.ts, 5, 5))
+>m : typeof m, Symbol(m, Decl(declFileTypeAnnotationTupleType.ts, 2, 1))
+>g : typeof m.g, Symbol(m.g, Decl(declFileTypeAnnotationTupleType.ts, 5, 5))
 >() => new c() : () => c
 >new c() : c
->c : typeof c
+>c : typeof c, Symbol(c, Decl(declFileTypeAnnotationTupleType.ts, 0, 0))
 
 var y = x;
->y : [g<string>, m.g<number>, () => c]
->x : [g<string>, m.g<number>, () => c]
+>y : [g<string>, m.g<number>, () => c], Symbol(y, Decl(declFileTypeAnnotationTupleType.ts, 17, 3))
+>x : [g<string>, m.g<number>, () => c], Symbol(x, Decl(declFileTypeAnnotationTupleType.ts, 16, 3))
 

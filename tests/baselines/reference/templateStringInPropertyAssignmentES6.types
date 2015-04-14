@@ -1,8 +1,11 @@
 === tests/cases/conformance/es6/templates/templateStringInPropertyAssignmentES6.ts ===
 var x = {
->x : { a: string; }
+>x : { a: string; }, Symbol(x, Decl(templateStringInPropertyAssignmentES6.ts, 0, 3))
 >{    a: `abc${ 123 }def${ 456 }ghi`} : { a: string; }
 
     a: `abc${ 123 }def${ 456 }ghi`
->a : string
+>a : string, Symbol(a, Decl(templateStringInPropertyAssignmentES6.ts, 0, 9))
+>`abc${ 123 }def${ 456 }ghi` : string
+>123 : number
+>456 : number
 }

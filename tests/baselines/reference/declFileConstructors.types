@@ -1,176 +1,180 @@
 === tests/cases/compiler/declFileConstructors_0.ts ===
 
 export class SimpleConstructor {
->SimpleConstructor : SimpleConstructor
+>SimpleConstructor : SimpleConstructor, Symbol(SimpleConstructor, Decl(declFileConstructors_0.ts, 0, 0))
 
     /** This comment should appear for foo*/
     constructor() {
     }
 }
 export class ConstructorWithParameters {
->ConstructorWithParameters : ConstructorWithParameters
+>ConstructorWithParameters : ConstructorWithParameters, Symbol(ConstructorWithParameters, Decl(declFileConstructors_0.ts, 5, 1))
 
     /** This is comment for function signature*/
     constructor(/** this is comment about a*/a: string,
->a : string
+>a : string, Symbol(a, Decl(declFileConstructors_0.ts, 8, 16))
 
         /** this is comment for b*/
         b: number) {
->b : number
+>b : number, Symbol(b, Decl(declFileConstructors_0.ts, 8, 55))
 
         var d = a;
->d : string
->a : string
+>d : string, Symbol(d, Decl(declFileConstructors_0.ts, 11, 11))
+>a : string, Symbol(a, Decl(declFileConstructors_0.ts, 8, 16))
     }
 }
 
 export class ConstructorWithRestParamters {
->ConstructorWithRestParamters : ConstructorWithRestParamters
+>ConstructorWithRestParamters : ConstructorWithRestParamters, Symbol(ConstructorWithRestParamters, Decl(declFileConstructors_0.ts, 13, 1))
 
     constructor(a: string, ...rests: string[]) {
->a : string
->rests : string[]
+>a : string, Symbol(a, Decl(declFileConstructors_0.ts, 16, 16))
+>rests : string[], Symbol(rests, Decl(declFileConstructors_0.ts, 16, 26))
 
         return a + rests.join("");
 >a + rests.join("") : string
->a : string
+>a : string, Symbol(a, Decl(declFileConstructors_0.ts, 16, 16))
 >rests.join("") : string
->rests.join : (separator?: string) => string
->rests : string[]
->join : (separator?: string) => string
+>rests.join : (separator?: string) => string, Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>rests : string[], Symbol(rests, Decl(declFileConstructors_0.ts, 16, 26))
+>join : (separator?: string) => string, Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>"" : string
     }
 }
 
 export class ConstructorWithOverloads {
->ConstructorWithOverloads : ConstructorWithOverloads
+>ConstructorWithOverloads : ConstructorWithOverloads, Symbol(ConstructorWithOverloads, Decl(declFileConstructors_0.ts, 19, 1))
 
     constructor(a: string);
->a : string
+>a : string, Symbol(a, Decl(declFileConstructors_0.ts, 22, 16))
 
     constructor(a: number);
->a : number
+>a : number, Symbol(a, Decl(declFileConstructors_0.ts, 23, 16))
 
     constructor(a: any) {
->a : any
+>a : any, Symbol(a, Decl(declFileConstructors_0.ts, 24, 16))
     }
 }
 
 export class ConstructorWithPublicParameterProperty {
->ConstructorWithPublicParameterProperty : ConstructorWithPublicParameterProperty
+>ConstructorWithPublicParameterProperty : ConstructorWithPublicParameterProperty, Symbol(ConstructorWithPublicParameterProperty, Decl(declFileConstructors_0.ts, 26, 1))
 
     constructor(public x: string) {
->x : string
+>x : string, Symbol(x, Decl(declFileConstructors_0.ts, 29, 16))
     }
 }
 
 export class ConstructorWithPrivateParameterProperty {
->ConstructorWithPrivateParameterProperty : ConstructorWithPrivateParameterProperty
+>ConstructorWithPrivateParameterProperty : ConstructorWithPrivateParameterProperty, Symbol(ConstructorWithPrivateParameterProperty, Decl(declFileConstructors_0.ts, 31, 1))
 
     constructor(private x: string) {
->x : string
+>x : string, Symbol(x, Decl(declFileConstructors_0.ts, 34, 16))
     }
 }
 
 export class ConstructorWithOptionalParameterProperty {
->ConstructorWithOptionalParameterProperty : ConstructorWithOptionalParameterProperty
+>ConstructorWithOptionalParameterProperty : ConstructorWithOptionalParameterProperty, Symbol(ConstructorWithOptionalParameterProperty, Decl(declFileConstructors_0.ts, 36, 1))
 
     constructor(public x?: string) {
->x : string
+>x : string, Symbol(x, Decl(declFileConstructors_0.ts, 39, 16))
     }
 }
 
 export class ConstructorWithParameterInitializer {
->ConstructorWithParameterInitializer : ConstructorWithParameterInitializer
+>ConstructorWithParameterInitializer : ConstructorWithParameterInitializer, Symbol(ConstructorWithParameterInitializer, Decl(declFileConstructors_0.ts, 41, 1))
 
     constructor(public x = "hello") {
->x : string
+>x : string, Symbol(x, Decl(declFileConstructors_0.ts, 44, 16))
+>"hello" : string
     }
 }
 
 === tests/cases/compiler/declFileConstructors_1.ts ===
 class GlobalSimpleConstructor {
->GlobalSimpleConstructor : GlobalSimpleConstructor
+>GlobalSimpleConstructor : GlobalSimpleConstructor, Symbol(GlobalSimpleConstructor, Decl(declFileConstructors_1.ts, 0, 0))
 
     /** This comment should appear for foo*/
     constructor() {
     }
 }
 class GlobalConstructorWithParameters {
->GlobalConstructorWithParameters : GlobalConstructorWithParameters
+>GlobalConstructorWithParameters : GlobalConstructorWithParameters, Symbol(GlobalConstructorWithParameters, Decl(declFileConstructors_1.ts, 4, 1))
 
     /** This is comment for function signature*/
     constructor(/** this is comment about a*/a: string,
->a : string
+>a : string, Symbol(a, Decl(declFileConstructors_1.ts, 7, 16))
 
         /** this is comment for b*/
         b: number) {
->b : number
+>b : number, Symbol(b, Decl(declFileConstructors_1.ts, 7, 55))
 
         var d = a;
->d : string
->a : string
+>d : string, Symbol(d, Decl(declFileConstructors_1.ts, 10, 11))
+>a : string, Symbol(a, Decl(declFileConstructors_1.ts, 7, 16))
     }
 }
 
 class GlobalConstructorWithRestParamters {
->GlobalConstructorWithRestParamters : GlobalConstructorWithRestParamters
+>GlobalConstructorWithRestParamters : GlobalConstructorWithRestParamters, Symbol(GlobalConstructorWithRestParamters, Decl(declFileConstructors_1.ts, 12, 1))
 
     constructor(a: string, ...rests: string[]) {
->a : string
->rests : string[]
+>a : string, Symbol(a, Decl(declFileConstructors_1.ts, 15, 16))
+>rests : string[], Symbol(rests, Decl(declFileConstructors_1.ts, 15, 26))
 
         return a + rests.join("");
 >a + rests.join("") : string
->a : string
+>a : string, Symbol(a, Decl(declFileConstructors_1.ts, 15, 16))
 >rests.join("") : string
->rests.join : (separator?: string) => string
->rests : string[]
->join : (separator?: string) => string
+>rests.join : (separator?: string) => string, Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>rests : string[], Symbol(rests, Decl(declFileConstructors_1.ts, 15, 26))
+>join : (separator?: string) => string, Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>"" : string
     }
 }
 
 class GlobalConstructorWithOverloads {
->GlobalConstructorWithOverloads : GlobalConstructorWithOverloads
+>GlobalConstructorWithOverloads : GlobalConstructorWithOverloads, Symbol(GlobalConstructorWithOverloads, Decl(declFileConstructors_1.ts, 18, 1))
 
     constructor(a: string);
->a : string
+>a : string, Symbol(a, Decl(declFileConstructors_1.ts, 21, 16))
 
     constructor(a: number);
->a : number
+>a : number, Symbol(a, Decl(declFileConstructors_1.ts, 22, 16))
 
     constructor(a: any) {
->a : any
+>a : any, Symbol(a, Decl(declFileConstructors_1.ts, 23, 16))
     }
 }
 
 class GlobalConstructorWithPublicParameterProperty {
->GlobalConstructorWithPublicParameterProperty : GlobalConstructorWithPublicParameterProperty
+>GlobalConstructorWithPublicParameterProperty : GlobalConstructorWithPublicParameterProperty, Symbol(GlobalConstructorWithPublicParameterProperty, Decl(declFileConstructors_1.ts, 25, 1))
 
     constructor(public x: string) {
->x : string
+>x : string, Symbol(x, Decl(declFileConstructors_1.ts, 28, 16))
     }
 }
 
 class GlobalConstructorWithPrivateParameterProperty {
->GlobalConstructorWithPrivateParameterProperty : GlobalConstructorWithPrivateParameterProperty
+>GlobalConstructorWithPrivateParameterProperty : GlobalConstructorWithPrivateParameterProperty, Symbol(GlobalConstructorWithPrivateParameterProperty, Decl(declFileConstructors_1.ts, 30, 1))
 
     constructor(private x: string) {
->x : string
+>x : string, Symbol(x, Decl(declFileConstructors_1.ts, 33, 16))
     }
 }
 
 class GlobalConstructorWithOptionalParameterProperty {
->GlobalConstructorWithOptionalParameterProperty : GlobalConstructorWithOptionalParameterProperty
+>GlobalConstructorWithOptionalParameterProperty : GlobalConstructorWithOptionalParameterProperty, Symbol(GlobalConstructorWithOptionalParameterProperty, Decl(declFileConstructors_1.ts, 35, 1))
 
     constructor(public x?: string) {
->x : string
+>x : string, Symbol(x, Decl(declFileConstructors_1.ts, 38, 16))
     }
 }
 
 class GlobalConstructorWithParameterInitializer {
->GlobalConstructorWithParameterInitializer : GlobalConstructorWithParameterInitializer
+>GlobalConstructorWithParameterInitializer : GlobalConstructorWithParameterInitializer, Symbol(GlobalConstructorWithParameterInitializer, Decl(declFileConstructors_1.ts, 40, 1))
 
     constructor(public x = "hello") {
->x : string
+>x : string, Symbol(x, Decl(declFileConstructors_1.ts, 43, 16))
+>"hello" : string
     }
 }

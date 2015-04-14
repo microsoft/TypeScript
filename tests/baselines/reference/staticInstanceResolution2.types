@@ -1,23 +1,25 @@
 === tests/cases/compiler/staticInstanceResolution2.ts ===
 class A { }
->A : A
+>A : A, Symbol(A, Decl(staticInstanceResolution2.ts, 0, 0))
 
 A.hasOwnProperty('foo');
 >A.hasOwnProperty('foo') : boolean
->A.hasOwnProperty : (v: string) => boolean
->A : typeof A
->hasOwnProperty : (v: string) => boolean
+>A.hasOwnProperty : (v: string) => boolean, Symbol(Object.hasOwnProperty, Decl(lib.d.ts, 105, 22))
+>A : typeof A, Symbol(A, Decl(staticInstanceResolution2.ts, 0, 0))
+>hasOwnProperty : (v: string) => boolean, Symbol(Object.hasOwnProperty, Decl(lib.d.ts, 105, 22))
+>'foo' : string
 
 class B {
->B : B
+>B : B, Symbol(B, Decl(staticInstanceResolution2.ts, 1, 24))
 
     constructor() { }
 }
 B.hasOwnProperty('foo');
 >B.hasOwnProperty('foo') : boolean
->B.hasOwnProperty : (v: string) => boolean
->B : typeof B
->hasOwnProperty : (v: string) => boolean
+>B.hasOwnProperty : (v: string) => boolean, Symbol(Object.hasOwnProperty, Decl(lib.d.ts, 105, 22))
+>B : typeof B, Symbol(B, Decl(staticInstanceResolution2.ts, 1, 24))
+>hasOwnProperty : (v: string) => boolean, Symbol(Object.hasOwnProperty, Decl(lib.d.ts, 105, 22))
+>'foo' : string
 
 
 

@@ -2,7 +2,8 @@
 
 // This is pre comment
 var y = 10;
->y : number
+>y : number, Symbol(y, Decl(emitPreComments.ts, 2, 3))
+>10 : number
 
 /**
 * @name Foo

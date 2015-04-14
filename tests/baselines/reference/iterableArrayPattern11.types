@@ -1,52 +1,53 @@
 === tests/cases/conformance/es6/destructuring/iterableArrayPattern11.ts ===
 function fun([a, b] = new FooIterator) { }
->fun : ([a, b]?: FooIterator) => void
->a : Foo
->b : Foo
+>fun : ([a, b]?: FooIterator) => void, Symbol(fun, Decl(iterableArrayPattern11.ts, 0, 0))
+>a : Foo, Symbol(a, Decl(iterableArrayPattern11.ts, 0, 14))
+>b : Foo, Symbol(b, Decl(iterableArrayPattern11.ts, 0, 16))
 >new FooIterator : FooIterator
->FooIterator : typeof FooIterator
+>FooIterator : typeof FooIterator, Symbol(FooIterator, Decl(iterableArrayPattern11.ts, 3, 27))
 
 fun(new FooIterator);
 >fun(new FooIterator) : void
->fun : ([a, b]?: FooIterator) => void
+>fun : ([a, b]?: FooIterator) => void, Symbol(fun, Decl(iterableArrayPattern11.ts, 0, 0))
 >new FooIterator : FooIterator
->FooIterator : typeof FooIterator
+>FooIterator : typeof FooIterator, Symbol(FooIterator, Decl(iterableArrayPattern11.ts, 3, 27))
 
 class Bar { x }
->Bar : Bar
->x : any
+>Bar : Bar, Symbol(Bar, Decl(iterableArrayPattern11.ts, 1, 21))
+>x : any, Symbol(x, Decl(iterableArrayPattern11.ts, 2, 11))
 
 class Foo extends Bar { y }
->Foo : Foo
->Bar : Bar
->y : any
+>Foo : Foo, Symbol(Foo, Decl(iterableArrayPattern11.ts, 2, 15))
+>Bar : Bar, Symbol(Bar, Decl(iterableArrayPattern11.ts, 1, 21))
+>y : any, Symbol(y, Decl(iterableArrayPattern11.ts, 3, 23))
 
 class FooIterator {
->FooIterator : FooIterator
+>FooIterator : FooIterator, Symbol(FooIterator, Decl(iterableArrayPattern11.ts, 3, 27))
 
     next() {
->next : () => { value: Foo; done: boolean; }
+>next : () => { value: Foo; done: boolean; }, Symbol(next, Decl(iterableArrayPattern11.ts, 4, 19))
 
         return {
 >{            value: new Foo,            done: false        } : { value: Foo; done: boolean; }
 
             value: new Foo,
->value : Foo
+>value : Foo, Symbol(value, Decl(iterableArrayPattern11.ts, 6, 16))
 >new Foo : Foo
->Foo : typeof Foo
+>Foo : typeof Foo, Symbol(Foo, Decl(iterableArrayPattern11.ts, 2, 15))
 
             done: false
->done : boolean
+>done : boolean, Symbol(done, Decl(iterableArrayPattern11.ts, 7, 27))
+>false : boolean
 
         };
     }
 
     [Symbol.iterator]() {
->Symbol.iterator : symbol
->Symbol : SymbolConstructor
->iterator : symbol
+>Symbol.iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
 
         return this;
->this : FooIterator
+>this : FooIterator, Symbol(FooIterator, Decl(iterableArrayPattern11.ts, 3, 27))
     }
 }

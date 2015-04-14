@@ -1,17 +1,17 @@
 === tests/cases/conformance/es6/restParameters/emitRestParametersFunctionPropertyES6.ts ===
 var obj: {
->obj : { func1: (...rest: any[]) => void; }
+>obj : { func1: (...rest: any[]) => void; }, Symbol(obj, Decl(emitRestParametersFunctionPropertyES6.ts, 0, 3))
 
     func1: (...rest) => void
->func1 : (...rest: any[]) => void
->rest : any[]
+>func1 : (...rest: any[]) => void, Symbol(func1, Decl(emitRestParametersFunctionPropertyES6.ts, 0, 10))
+>rest : any[], Symbol(rest, Decl(emitRestParametersFunctionPropertyES6.ts, 1, 12))
 }
 
 var obj2 = {
->obj2 : { func(...rest: any[]): void; }
+>obj2 : { func(...rest: any[]): void; }, Symbol(obj2, Decl(emitRestParametersFunctionPropertyES6.ts, 4, 3))
 >{    func(...rest) { }} : { func(...rest: any[]): void; }
 
     func(...rest) { }
->func : (...rest: any[]) => void
->rest : any[]
+>func : (...rest: any[]) => void, Symbol(func, Decl(emitRestParametersFunctionPropertyES6.ts, 4, 12))
+>rest : any[], Symbol(rest, Decl(emitRestParametersFunctionPropertyES6.ts, 5, 9))
 }

@@ -1,13 +1,13 @@
 === tests/cases/conformance/decorators/class/property/decoratorOnClassProperty6.ts ===
 declare function dec(target: Function): void;
->dec : (target: Function) => void
->target : Function
->Function : Function
+>dec : (target: Function) => void, Symbol(dec, Decl(decoratorOnClassProperty6.ts, 0, 0))
+>target : Function, Symbol(target, Decl(decoratorOnClassProperty6.ts, 0, 21))
+>Function : Function, Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11))
 
 class C {
->C : C
+>C : C, Symbol(C, Decl(decoratorOnClassProperty6.ts, 0, 45))
 
     @dec prop;
->dec : (target: Function) => void
->prop : any
+>dec : (target: Function) => void, Symbol(dec, Decl(decoratorOnClassProperty6.ts, 0, 0))
+>prop : any, Symbol(prop, Decl(decoratorOnClassProperty6.ts, 2, 9))
 }

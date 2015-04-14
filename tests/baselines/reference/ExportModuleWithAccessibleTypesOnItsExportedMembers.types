@@ -1,47 +1,51 @@
 === tests/cases/conformance/internalModules/exportDeclarations/ExportModuleWithAccessibleTypesOnItsExportedMembers.ts ===
 module A {
->A : typeof A
+>A : typeof A, Symbol(A, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 0, 0))
 
     export class Point {
->Point : Point
+>Point : Point, Symbol(Point, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 0, 10))
 
         constructor(public x: number, public y: number) { }
->x : number
->y : number
+>x : number, Symbol(x, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 3, 20))
+>y : number, Symbol(y, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 3, 37))
     }
 
     export module B {
->B : typeof B
+>B : typeof B, Symbol(B, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 4, 5))
 
         export var Origin: Point = new Point(0, 0);
->Origin : Point
->Point : Point
+>Origin : Point, Symbol(Origin, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 7, 18))
+>Point : Point, Symbol(Point, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 0, 10))
 >new Point(0, 0) : Point
->Point : typeof Point
+>Point : typeof Point, Symbol(Point, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 0, 10))
+>0 : number
+>0 : number
 
         export class Line {
->Line : Line
+>Line : Line, Symbol(Line, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 7, 51))
 
             constructor(start: Point, end: Point) {
->start : Point
->Point : Point
->end : Point
->Point : Point
+>start : Point, Symbol(start, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 10, 24))
+>Point : Point, Symbol(Point, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 0, 10))
+>end : Point, Symbol(end, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 10, 37))
+>Point : Point, Symbol(Point, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 0, 10))
 
             }
 
             static fromOrigin(p: Point) {
->fromOrigin : (p: Point) => Line
->p : Point
->Point : Point
+>fromOrigin : (p: Point) => Line, Symbol(Line.fromOrigin, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 12, 13))
+>p : Point, Symbol(p, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 14, 30))
+>Point : Point, Symbol(Point, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 0, 10))
 
                 return new Line({ x: 0, y: 0 }, p);
 >new Line({ x: 0, y: 0 }, p) : Line
->Line : typeof Line
+>Line : typeof Line, Symbol(Line, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 7, 51))
 >{ x: 0, y: 0 } : { x: number; y: number; }
->x : number
->y : number
->p : Point
+>x : number, Symbol(x, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 15, 33))
+>0 : number
+>y : number, Symbol(y, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 15, 39))
+>0 : number
+>p : Point, Symbol(p, Decl(ExportModuleWithAccessibleTypesOnItsExportedMembers.ts, 14, 30))
             }
         }
     }

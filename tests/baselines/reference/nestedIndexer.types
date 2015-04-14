@@ -1,11 +1,11 @@
 === tests/cases/compiler/nestedIndexer.ts ===
 function then(x) {
->then : (x: any) => void
->x : any
+>then : (x: any) => void, Symbol(then, Decl(nestedIndexer.ts, 0, 0))
+>x : any, Symbol(x, Decl(nestedIndexer.ts, 0, 14))
 
 var match: { [index: number]: string; }
->match : { [index: number]: string; }
->index : number
+>match : { [index: number]: string; }, Symbol(match, Decl(nestedIndexer.ts, 2, 3))
+>index : number, Symbol(index, Decl(nestedIndexer.ts, 2, 14))
 
 }
 

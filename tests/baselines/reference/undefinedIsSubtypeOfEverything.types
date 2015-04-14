@@ -2,226 +2,228 @@
 // undefined is a subtype of every other types, no errors expected below
 
 class Base {
->Base : Base
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: typeof undefined;
->foo : any
->undefined : undefined
+>foo : any, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 2, 12))
+>undefined : undefined, Symbol(undefined)
 } 
 
 class D0 extends Base {
->D0 : D0
->Base : Base
+>D0 : D0, Symbol(D0, Decl(undefinedIsSubtypeOfEverything.ts, 4, 1))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: any;
->foo : any
+>foo : any, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 6, 23))
 }
 
 class DA extends Base {
->DA : DA
->Base : Base
+>DA : DA, Symbol(DA, Decl(undefinedIsSubtypeOfEverything.ts, 8, 1))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: typeof undefined; 
->foo : any
->undefined : undefined
+>foo : any, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 10, 23))
+>undefined : undefined, Symbol(undefined)
 }
 
 class D1 extends Base {
->D1 : D1
->Base : Base
+>D1 : D1, Symbol(D1, Decl(undefinedIsSubtypeOfEverything.ts, 12, 1))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: string;
->foo : string
+>foo : string, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 14, 23))
 }
 
 class D1A extends Base {
->D1A : D1A
->Base : Base
+>D1A : D1A, Symbol(D1A, Decl(undefinedIsSubtypeOfEverything.ts, 16, 1))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: String;
->foo : String
->String : String
+>foo : String, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 18, 24))
+>String : String, Symbol(String, Decl(lib.d.ts, 275, 1), Decl(lib.d.ts, 443, 11))
 }
 
 
 class D2 extends Base {
->D2 : D2
->Base : Base
+>D2 : D2, Symbol(D2, Decl(undefinedIsSubtypeOfEverything.ts, 20, 1))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: number;
->foo : number
+>foo : number, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 23, 23))
 }
 
 class D2A extends Base {
->D2A : D2A
->Base : Base
+>D2A : D2A, Symbol(D2A, Decl(undefinedIsSubtypeOfEverything.ts, 25, 1))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: Number;
->foo : Number
->Number : Number
+>foo : Number, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 27, 24))
+>Number : Number, Symbol(Number, Decl(lib.d.ts, 456, 40), Decl(lib.d.ts, 518, 11))
 }
 
 
 class D3 extends Base {
->D3 : D3
->Base : Base
+>D3 : D3, Symbol(D3, Decl(undefinedIsSubtypeOfEverything.ts, 29, 1))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: boolean;
->foo : boolean
+>foo : boolean, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 32, 23))
 }
 
 class D3A extends Base {
->D3A : D3A
->Base : Base
+>D3A : D3A, Symbol(D3A, Decl(undefinedIsSubtypeOfEverything.ts, 34, 1))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: Boolean;
->foo : Boolean
->Boolean : Boolean
+>foo : Boolean, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 36, 24))
+>Boolean : Boolean, Symbol(Boolean, Decl(lib.d.ts, 443, 38), Decl(lib.d.ts, 456, 11))
 }
 
 
 class D4 extends Base {
->D4 : D4
->Base : Base
+>D4 : D4, Symbol(D4, Decl(undefinedIsSubtypeOfEverything.ts, 38, 1))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: RegExp;
->foo : RegExp
->RegExp : RegExp
+>foo : RegExp, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 41, 23))
+>RegExp : RegExp, Symbol(RegExp, Decl(lib.d.ts, 825, 1), Decl(lib.d.ts, 876, 11))
 }
 
 class D5 extends Base {
->D5 : D5
->Base : Base
+>D5 : D5, Symbol(D5, Decl(undefinedIsSubtypeOfEverything.ts, 43, 1))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: Date;
->foo : Date
->Date : Date
+>foo : Date, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 45, 23))
+>Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
 }
 
 
 class D6 extends Base {
->D6 : D6
->Base : Base
+>D6 : D6, Symbol(D6, Decl(undefinedIsSubtypeOfEverything.ts, 47, 1))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: number[];
->foo : number[]
+>foo : number[], Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 50, 23))
 }
 
 class D7 extends Base {
->D7 : D7
->Base : Base
+>D7 : D7, Symbol(D7, Decl(undefinedIsSubtypeOfEverything.ts, 52, 1))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: { bar: number };
->foo : { bar: number; }
->bar : number
+>foo : { bar: number; }, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 54, 23))
+>bar : number, Symbol(bar, Decl(undefinedIsSubtypeOfEverything.ts, 55, 10))
 }
 
 
 class D8 extends Base {
->D8 : D8
->Base : Base
+>D8 : D8, Symbol(D8, Decl(undefinedIsSubtypeOfEverything.ts, 56, 1))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: D7;
->foo : D7
->D7 : D7
+>foo : D7, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 59, 23))
+>D7 : D7, Symbol(D7, Decl(undefinedIsSubtypeOfEverything.ts, 52, 1))
 }
 
 interface I1 {
->I1 : I1
+>I1 : I1, Symbol(I1, Decl(undefinedIsSubtypeOfEverything.ts, 61, 1))
 
     bar: string;
->bar : string
+>bar : string, Symbol(bar, Decl(undefinedIsSubtypeOfEverything.ts, 63, 14))
 }
 class D9 extends Base {
->D9 : D9
->Base : Base
+>D9 : D9, Symbol(D9, Decl(undefinedIsSubtypeOfEverything.ts, 65, 1))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: I1;
->foo : I1
->I1 : I1
+>foo : I1, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 66, 23))
+>I1 : I1, Symbol(I1, Decl(undefinedIsSubtypeOfEverything.ts, 61, 1))
 }
 
 
 class D10 extends Base {
->D10 : D10
->Base : Base
+>D10 : D10, Symbol(D10, Decl(undefinedIsSubtypeOfEverything.ts, 68, 1))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: () => number;
->foo : () => number
+>foo : () => number, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 71, 24))
 }
 
 enum E { A }
->E : E
->A : E
+>E : E, Symbol(E, Decl(undefinedIsSubtypeOfEverything.ts, 73, 1))
+>A : E, Symbol(E.A, Decl(undefinedIsSubtypeOfEverything.ts, 75, 8))
 
 class D11 extends Base {
->D11 : D11
->Base : Base
+>D11 : D11, Symbol(D11, Decl(undefinedIsSubtypeOfEverything.ts, 75, 12))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: E;
->foo : E
->E : E
+>foo : E, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 76, 24))
+>E : E, Symbol(E, Decl(undefinedIsSubtypeOfEverything.ts, 73, 1))
 }
 
 function f() { }
->f : typeof f
+>f : typeof f, Symbol(f, Decl(undefinedIsSubtypeOfEverything.ts, 78, 1), Decl(undefinedIsSubtypeOfEverything.ts, 80, 16))
 
 module f {
->f : typeof f
+>f : typeof f, Symbol(f, Decl(undefinedIsSubtypeOfEverything.ts, 78, 1), Decl(undefinedIsSubtypeOfEverything.ts, 80, 16))
 
     export var bar = 1;
->bar : number
+>bar : number, Symbol(bar, Decl(undefinedIsSubtypeOfEverything.ts, 82, 14))
+>1 : number
 }
 class D12 extends Base {
->D12 : D12
->Base : Base
+>D12 : D12, Symbol(D12, Decl(undefinedIsSubtypeOfEverything.ts, 83, 1))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: typeof f;
->foo : typeof f
->f : typeof f
+>foo : typeof f, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 84, 24))
+>f : typeof f, Symbol(f, Decl(undefinedIsSubtypeOfEverything.ts, 78, 1), Decl(undefinedIsSubtypeOfEverything.ts, 80, 16))
 }
 
 
 class c { baz: string }
->c : c
->baz : string
+>c : c, Symbol(c, Decl(undefinedIsSubtypeOfEverything.ts, 86, 1), Decl(undefinedIsSubtypeOfEverything.ts, 89, 23))
+>baz : string, Symbol(baz, Decl(undefinedIsSubtypeOfEverything.ts, 89, 9))
 
 module c {
->c : typeof c
+>c : typeof c, Symbol(c, Decl(undefinedIsSubtypeOfEverything.ts, 86, 1), Decl(undefinedIsSubtypeOfEverything.ts, 89, 23))
 
     export var bar = 1;
->bar : number
+>bar : number, Symbol(bar, Decl(undefinedIsSubtypeOfEverything.ts, 91, 14))
+>1 : number
 }
 class D13 extends Base {
->D13 : D13
->Base : Base
+>D13 : D13, Symbol(D13, Decl(undefinedIsSubtypeOfEverything.ts, 92, 1))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: typeof c;
->foo : typeof c
->c : typeof c
+>foo : typeof c, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 93, 24))
+>c : typeof c, Symbol(c, Decl(undefinedIsSubtypeOfEverything.ts, 86, 1), Decl(undefinedIsSubtypeOfEverything.ts, 89, 23))
 }
 
 
 class D14<T> extends Base {
->D14 : D14<T>
->T : T
->Base : Base
+>D14 : D14<T>, Symbol(D14, Decl(undefinedIsSubtypeOfEverything.ts, 95, 1))
+>T : T, Symbol(T, Decl(undefinedIsSubtypeOfEverything.ts, 98, 10))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: T;
->foo : T
->T : T
+>foo : T, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 98, 27))
+>T : T, Symbol(T, Decl(undefinedIsSubtypeOfEverything.ts, 98, 10))
 }
 
 
 class D15<T, U> extends Base {
->D15 : D15<T, U>
->T : T
->U : U
->Base : Base
+>D15 : D15<T, U>, Symbol(D15, Decl(undefinedIsSubtypeOfEverything.ts, 100, 1))
+>T : T, Symbol(T, Decl(undefinedIsSubtypeOfEverything.ts, 103, 10))
+>U : U, Symbol(U, Decl(undefinedIsSubtypeOfEverything.ts, 103, 12))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: U;
->foo : U
->U : U
+>foo : U, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 103, 30))
+>U : U, Symbol(U, Decl(undefinedIsSubtypeOfEverything.ts, 103, 12))
 }
 
 //class D15<T, U extends T> extends Base {
@@ -230,20 +232,20 @@ class D15<T, U> extends Base {
 
 
 class D16 extends Base {
->D16 : D16
->Base : Base
+>D16 : D16, Symbol(D16, Decl(undefinedIsSubtypeOfEverything.ts, 105, 1))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: Object;
->foo : Object
->Object : Object
+>foo : Object, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 112, 24))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 }
 
 
 class D17 extends Base {
->D17 : D17
->Base : Base
+>D17 : D17, Symbol(D17, Decl(undefinedIsSubtypeOfEverything.ts, 114, 1))
+>Base : Base, Symbol(Base, Decl(undefinedIsSubtypeOfEverything.ts, 0, 0))
 
     foo: {};
->foo : {}
+>foo : {}, Symbol(foo, Decl(undefinedIsSubtypeOfEverything.ts, 117, 24))
 }
 

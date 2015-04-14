@@ -1,142 +1,142 @@
 === tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPublicOverloads.ts ===
 class C {
->C : C
+>C : C, Symbol(C, Decl(memberFunctionsWithPublicOverloads.ts, 0, 0))
 
     public foo(x: number);
->foo : { (x: number): any; (x: number, y: string): any; }
->x : number
+>foo : { (x: number): any; (x: number, y: string): any; }, Symbol(foo, Decl(memberFunctionsWithPublicOverloads.ts, 0, 9), Decl(memberFunctionsWithPublicOverloads.ts, 1, 26), Decl(memberFunctionsWithPublicOverloads.ts, 2, 37))
+>x : number, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 1, 15))
 
     public foo(x: number, y: string);
->foo : { (x: number): any; (x: number, y: string): any; }
->x : number
->y : string
+>foo : { (x: number): any; (x: number, y: string): any; }, Symbol(foo, Decl(memberFunctionsWithPublicOverloads.ts, 0, 9), Decl(memberFunctionsWithPublicOverloads.ts, 1, 26), Decl(memberFunctionsWithPublicOverloads.ts, 2, 37))
+>x : number, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 2, 15))
+>y : string, Symbol(y, Decl(memberFunctionsWithPublicOverloads.ts, 2, 25))
 
     public foo(x: any, y?: any) { }
->foo : { (x: number): any; (x: number, y: string): any; }
->x : any
->y : any
+>foo : { (x: number): any; (x: number, y: string): any; }, Symbol(foo, Decl(memberFunctionsWithPublicOverloads.ts, 0, 9), Decl(memberFunctionsWithPublicOverloads.ts, 1, 26), Decl(memberFunctionsWithPublicOverloads.ts, 2, 37))
+>x : any, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 3, 15))
+>y : any, Symbol(y, Decl(memberFunctionsWithPublicOverloads.ts, 3, 22))
 
     public bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->x : 'hi'
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }, Symbol(bar, Decl(memberFunctionsWithPublicOverloads.ts, 3, 35), Decl(memberFunctionsWithPublicOverloads.ts, 5, 24), Decl(memberFunctionsWithPublicOverloads.ts, 6, 26), Decl(memberFunctionsWithPublicOverloads.ts, 7, 37))
+>x : 'hi', Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 5, 15))
 
     public bar(x: string);
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->x : string
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }, Symbol(bar, Decl(memberFunctionsWithPublicOverloads.ts, 3, 35), Decl(memberFunctionsWithPublicOverloads.ts, 5, 24), Decl(memberFunctionsWithPublicOverloads.ts, 6, 26), Decl(memberFunctionsWithPublicOverloads.ts, 7, 37))
+>x : string, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 6, 15))
 
     public bar(x: number, y: string);
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->x : number
->y : string
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }, Symbol(bar, Decl(memberFunctionsWithPublicOverloads.ts, 3, 35), Decl(memberFunctionsWithPublicOverloads.ts, 5, 24), Decl(memberFunctionsWithPublicOverloads.ts, 6, 26), Decl(memberFunctionsWithPublicOverloads.ts, 7, 37))
+>x : number, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 7, 15))
+>y : string, Symbol(y, Decl(memberFunctionsWithPublicOverloads.ts, 7, 25))
 
     public bar(x: any, y?: any) { }
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->x : any
->y : any
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }, Symbol(bar, Decl(memberFunctionsWithPublicOverloads.ts, 3, 35), Decl(memberFunctionsWithPublicOverloads.ts, 5, 24), Decl(memberFunctionsWithPublicOverloads.ts, 6, 26), Decl(memberFunctionsWithPublicOverloads.ts, 7, 37))
+>x : any, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 8, 15))
+>y : any, Symbol(y, Decl(memberFunctionsWithPublicOverloads.ts, 8, 22))
 
     public static foo(x: number);
->foo : { (x: number): any; (x: number, y: string): any; }
->x : number
+>foo : { (x: number): any; (x: number, y: string): any; }, Symbol(C.foo, Decl(memberFunctionsWithPublicOverloads.ts, 8, 35), Decl(memberFunctionsWithPublicOverloads.ts, 10, 33), Decl(memberFunctionsWithPublicOverloads.ts, 11, 44))
+>x : number, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 10, 22))
 
     public static foo(x: number, y: string);
->foo : { (x: number): any; (x: number, y: string): any; }
->x : number
->y : string
+>foo : { (x: number): any; (x: number, y: string): any; }, Symbol(C.foo, Decl(memberFunctionsWithPublicOverloads.ts, 8, 35), Decl(memberFunctionsWithPublicOverloads.ts, 10, 33), Decl(memberFunctionsWithPublicOverloads.ts, 11, 44))
+>x : number, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 11, 22))
+>y : string, Symbol(y, Decl(memberFunctionsWithPublicOverloads.ts, 11, 32))
 
     public static foo(x: any, y?: any) { }
->foo : { (x: number): any; (x: number, y: string): any; }
->x : any
->y : any
+>foo : { (x: number): any; (x: number, y: string): any; }, Symbol(C.foo, Decl(memberFunctionsWithPublicOverloads.ts, 8, 35), Decl(memberFunctionsWithPublicOverloads.ts, 10, 33), Decl(memberFunctionsWithPublicOverloads.ts, 11, 44))
+>x : any, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 12, 22))
+>y : any, Symbol(y, Decl(memberFunctionsWithPublicOverloads.ts, 12, 29))
 
     public static bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->x : 'hi'
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }, Symbol(C.bar, Decl(memberFunctionsWithPublicOverloads.ts, 12, 42), Decl(memberFunctionsWithPublicOverloads.ts, 14, 31), Decl(memberFunctionsWithPublicOverloads.ts, 15, 33), Decl(memberFunctionsWithPublicOverloads.ts, 16, 44))
+>x : 'hi', Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 14, 22))
 
     public static bar(x: string);
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->x : string
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }, Symbol(C.bar, Decl(memberFunctionsWithPublicOverloads.ts, 12, 42), Decl(memberFunctionsWithPublicOverloads.ts, 14, 31), Decl(memberFunctionsWithPublicOverloads.ts, 15, 33), Decl(memberFunctionsWithPublicOverloads.ts, 16, 44))
+>x : string, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 15, 22))
 
     public static bar(x: number, y: string);
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->x : number
->y : string
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }, Symbol(C.bar, Decl(memberFunctionsWithPublicOverloads.ts, 12, 42), Decl(memberFunctionsWithPublicOverloads.ts, 14, 31), Decl(memberFunctionsWithPublicOverloads.ts, 15, 33), Decl(memberFunctionsWithPublicOverloads.ts, 16, 44))
+>x : number, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 16, 22))
+>y : string, Symbol(y, Decl(memberFunctionsWithPublicOverloads.ts, 16, 32))
 
     public static bar(x: any, y?: any) { }
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->x : any
->y : any
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }, Symbol(C.bar, Decl(memberFunctionsWithPublicOverloads.ts, 12, 42), Decl(memberFunctionsWithPublicOverloads.ts, 14, 31), Decl(memberFunctionsWithPublicOverloads.ts, 15, 33), Decl(memberFunctionsWithPublicOverloads.ts, 16, 44))
+>x : any, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 17, 22))
+>y : any, Symbol(y, Decl(memberFunctionsWithPublicOverloads.ts, 17, 29))
 }
 
 class D<T> {
->D : D<T>
->T : T
+>D : D<T>, Symbol(D, Decl(memberFunctionsWithPublicOverloads.ts, 18, 1))
+>T : T, Symbol(T, Decl(memberFunctionsWithPublicOverloads.ts, 20, 8))
 
     public foo(x: number);
->foo : { (x: number): any; (x: T, y: T): any; }
->x : number
+>foo : { (x: number): any; (x: T, y: T): any; }, Symbol(foo, Decl(memberFunctionsWithPublicOverloads.ts, 20, 12), Decl(memberFunctionsWithPublicOverloads.ts, 21, 26), Decl(memberFunctionsWithPublicOverloads.ts, 22, 27))
+>x : number, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 21, 15))
 
     public foo(x: T, y: T);
->foo : { (x: number): any; (x: T, y: T): any; }
->x : T
->T : T
->y : T
->T : T
+>foo : { (x: number): any; (x: T, y: T): any; }, Symbol(foo, Decl(memberFunctionsWithPublicOverloads.ts, 20, 12), Decl(memberFunctionsWithPublicOverloads.ts, 21, 26), Decl(memberFunctionsWithPublicOverloads.ts, 22, 27))
+>x : T, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 22, 15))
+>T : T, Symbol(T, Decl(memberFunctionsWithPublicOverloads.ts, 20, 8))
+>y : T, Symbol(y, Decl(memberFunctionsWithPublicOverloads.ts, 22, 20))
+>T : T, Symbol(T, Decl(memberFunctionsWithPublicOverloads.ts, 20, 8))
 
     public foo(x: any, y?: any) { }
->foo : { (x: number): any; (x: T, y: T): any; }
->x : any
->y : any
+>foo : { (x: number): any; (x: T, y: T): any; }, Symbol(foo, Decl(memberFunctionsWithPublicOverloads.ts, 20, 12), Decl(memberFunctionsWithPublicOverloads.ts, 21, 26), Decl(memberFunctionsWithPublicOverloads.ts, 22, 27))
+>x : any, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 23, 15))
+>y : any, Symbol(y, Decl(memberFunctionsWithPublicOverloads.ts, 23, 22))
 
     public bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }
->x : 'hi'
+>bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }, Symbol(bar, Decl(memberFunctionsWithPublicOverloads.ts, 23, 35), Decl(memberFunctionsWithPublicOverloads.ts, 25, 24), Decl(memberFunctionsWithPublicOverloads.ts, 26, 26), Decl(memberFunctionsWithPublicOverloads.ts, 27, 27))
+>x : 'hi', Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 25, 15))
 
     public bar(x: string);
->bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }
->x : string
+>bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }, Symbol(bar, Decl(memberFunctionsWithPublicOverloads.ts, 23, 35), Decl(memberFunctionsWithPublicOverloads.ts, 25, 24), Decl(memberFunctionsWithPublicOverloads.ts, 26, 26), Decl(memberFunctionsWithPublicOverloads.ts, 27, 27))
+>x : string, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 26, 15))
 
     public bar(x: T, y: T);
->bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }
->x : T
->T : T
->y : T
->T : T
+>bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }, Symbol(bar, Decl(memberFunctionsWithPublicOverloads.ts, 23, 35), Decl(memberFunctionsWithPublicOverloads.ts, 25, 24), Decl(memberFunctionsWithPublicOverloads.ts, 26, 26), Decl(memberFunctionsWithPublicOverloads.ts, 27, 27))
+>x : T, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 27, 15))
+>T : T, Symbol(T, Decl(memberFunctionsWithPublicOverloads.ts, 20, 8))
+>y : T, Symbol(y, Decl(memberFunctionsWithPublicOverloads.ts, 27, 20))
+>T : T, Symbol(T, Decl(memberFunctionsWithPublicOverloads.ts, 20, 8))
 
     public bar(x: any, y?: any) { }
->bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }
->x : any
->y : any
+>bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }, Symbol(bar, Decl(memberFunctionsWithPublicOverloads.ts, 23, 35), Decl(memberFunctionsWithPublicOverloads.ts, 25, 24), Decl(memberFunctionsWithPublicOverloads.ts, 26, 26), Decl(memberFunctionsWithPublicOverloads.ts, 27, 27))
+>x : any, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 28, 15))
+>y : any, Symbol(y, Decl(memberFunctionsWithPublicOverloads.ts, 28, 22))
 
     public static foo(x: number);
->foo : { (x: number): any; (x: number, y: string): any; }
->x : number
+>foo : { (x: number): any; (x: number, y: string): any; }, Symbol(D.foo, Decl(memberFunctionsWithPublicOverloads.ts, 28, 35), Decl(memberFunctionsWithPublicOverloads.ts, 30, 33), Decl(memberFunctionsWithPublicOverloads.ts, 31, 44))
+>x : number, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 30, 22))
 
     public static foo(x: number, y: string);
->foo : { (x: number): any; (x: number, y: string): any; }
->x : number
->y : string
+>foo : { (x: number): any; (x: number, y: string): any; }, Symbol(D.foo, Decl(memberFunctionsWithPublicOverloads.ts, 28, 35), Decl(memberFunctionsWithPublicOverloads.ts, 30, 33), Decl(memberFunctionsWithPublicOverloads.ts, 31, 44))
+>x : number, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 31, 22))
+>y : string, Symbol(y, Decl(memberFunctionsWithPublicOverloads.ts, 31, 32))
 
     public static foo(x: any, y?: any) { }
->foo : { (x: number): any; (x: number, y: string): any; }
->x : any
->y : any
+>foo : { (x: number): any; (x: number, y: string): any; }, Symbol(D.foo, Decl(memberFunctionsWithPublicOverloads.ts, 28, 35), Decl(memberFunctionsWithPublicOverloads.ts, 30, 33), Decl(memberFunctionsWithPublicOverloads.ts, 31, 44))
+>x : any, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 32, 22))
+>y : any, Symbol(y, Decl(memberFunctionsWithPublicOverloads.ts, 32, 29))
 
     public static bar(x: 'hi');
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->x : 'hi'
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }, Symbol(D.bar, Decl(memberFunctionsWithPublicOverloads.ts, 32, 42), Decl(memberFunctionsWithPublicOverloads.ts, 34, 31), Decl(memberFunctionsWithPublicOverloads.ts, 35, 33), Decl(memberFunctionsWithPublicOverloads.ts, 36, 44))
+>x : 'hi', Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 34, 22))
 
     public static bar(x: string);
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->x : string
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }, Symbol(D.bar, Decl(memberFunctionsWithPublicOverloads.ts, 32, 42), Decl(memberFunctionsWithPublicOverloads.ts, 34, 31), Decl(memberFunctionsWithPublicOverloads.ts, 35, 33), Decl(memberFunctionsWithPublicOverloads.ts, 36, 44))
+>x : string, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 35, 22))
 
     public static bar(x: number, y: string);
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->x : number
->y : string
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }, Symbol(D.bar, Decl(memberFunctionsWithPublicOverloads.ts, 32, 42), Decl(memberFunctionsWithPublicOverloads.ts, 34, 31), Decl(memberFunctionsWithPublicOverloads.ts, 35, 33), Decl(memberFunctionsWithPublicOverloads.ts, 36, 44))
+>x : number, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 36, 22))
+>y : string, Symbol(y, Decl(memberFunctionsWithPublicOverloads.ts, 36, 32))
 
     public static bar(x: any, y?: any) { }
->bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
->x : any
->y : any
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }, Symbol(D.bar, Decl(memberFunctionsWithPublicOverloads.ts, 32, 42), Decl(memberFunctionsWithPublicOverloads.ts, 34, 31), Decl(memberFunctionsWithPublicOverloads.ts, 35, 33), Decl(memberFunctionsWithPublicOverloads.ts, 36, 44))
+>x : any, Symbol(x, Decl(memberFunctionsWithPublicOverloads.ts, 37, 22))
+>y : any, Symbol(y, Decl(memberFunctionsWithPublicOverloads.ts, 37, 29))
 
 }

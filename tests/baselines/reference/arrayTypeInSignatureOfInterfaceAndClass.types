@@ -1,89 +1,89 @@
 === tests/cases/compiler/arrayTypeInSignatureOfInterfaceAndClass.ts ===
 declare module WinJS {
->WinJS : typeof WinJS
+>WinJS : typeof WinJS, Symbol(WinJS, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 0, 0))
 
     class Promise<T> {
->Promise : Promise<T>
->T : T
+>Promise : Promise<T>, Symbol(Promise, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 0, 22))
+>T : T, Symbol(T, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 1, 18))
 
         then<U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>;
->then : <U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void) => Promise<U>
->U : U
->success : (value: T) => Promise<U>
->value : T
->T : T
->Promise : Promise<T>
->U : U
->error : (error: any) => Promise<U>
->error : any
->Promise : Promise<T>
->U : U
->progress : (progress: any) => void
->progress : any
->Promise : Promise<T>
->U : U
+>then : <U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void) => Promise<U>, Symbol(then, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 1, 22))
+>U : U, Symbol(U, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 2, 13))
+>success : (value: T) => Promise<U>, Symbol(success, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 2, 16))
+>value : T, Symbol(value, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 2, 27))
+>T : T, Symbol(T, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 1, 18))
+>Promise : Promise<T>, Symbol(Promise, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 0, 22))
+>U : U, Symbol(U, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 2, 13))
+>error : (error: any) => Promise<U>, Symbol(error, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 2, 51))
+>error : any, Symbol(error, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 2, 61))
+>Promise : Promise<T>, Symbol(Promise, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 0, 22))
+>U : U, Symbol(U, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 2, 13))
+>progress : (progress: any) => void, Symbol(progress, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 2, 87))
+>progress : any, Symbol(progress, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 2, 100))
+>Promise : Promise<T>, Symbol(Promise, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 0, 22))
+>U : U, Symbol(U, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 2, 13))
     }
 }
 declare module Data {
->Data : typeof Data
+>Data : typeof Data, Symbol(Data, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 4, 1))
 
     export interface IListItem<T> {
->IListItem : IListItem<T>
->T : T
+>IListItem : IListItem<T>, Symbol(IListItem, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 5, 21))
+>T : T, Symbol(T, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 6, 31))
 
         itemIndex: number;
->itemIndex : number
+>itemIndex : number, Symbol(itemIndex, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 6, 35))
 
         key: any;
->key : any
+>key : any, Symbol(key, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 7, 26))
 
         data: T;
->data : T
->T : T
+>data : T, Symbol(data, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 8, 17))
+>T : T, Symbol(T, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 6, 31))
 
         group: any;
->group : any
+>group : any, Symbol(group, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 9, 16))
 
         isHeader: boolean;
->isHeader : boolean
+>isHeader : boolean, Symbol(isHeader, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 10, 19))
 
         cached: boolean;
->cached : boolean
+>cached : boolean, Symbol(cached, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 11, 26))
 
         isNonSourceData: boolean;
->isNonSourceData : boolean
+>isNonSourceData : boolean, Symbol(isNonSourceData, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 12, 24))
 
         preventAugmentation: boolean;
->preventAugmentation : boolean
+>preventAugmentation : boolean, Symbol(preventAugmentation, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 13, 33))
     }
     export interface IVirtualList<T> {
->IVirtualList : IVirtualList<T>
->T : T
+>IVirtualList : IVirtualList<T>, Symbol(IVirtualList, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 15, 5))
+>T : T, Symbol(T, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 16, 34))
 
         //removeIndices: WinJS.Promise<IListItem<T>[]>;
         removeIndices(indices: number[], options?: any): WinJS.Promise<IListItem<T>[]>;
->removeIndices : (indices: number[], options?: any) => WinJS.Promise<IListItem<T>[]>
->indices : number[]
->options : any
->WinJS : unknown
->Promise : WinJS.Promise<T>
->IListItem : IListItem<T>
->T : T
+>removeIndices : (indices: number[], options?: any) => WinJS.Promise<IListItem<T>[]>, Symbol(removeIndices, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 16, 38))
+>indices : number[], Symbol(indices, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 18, 22))
+>options : any, Symbol(options, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 18, 40))
+>WinJS : any, Symbol(WinJS, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 0, 0))
+>Promise : WinJS.Promise<T>, Symbol(WinJS.Promise, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 0, 22))
+>IListItem : IListItem<T>, Symbol(IListItem, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 5, 21))
+>T : T, Symbol(T, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 16, 34))
     }
     export class VirtualList<T> implements IVirtualList<T> {
->VirtualList : VirtualList<T>
->T : T
->IVirtualList : IVirtualList<T>
->T : T
+>VirtualList : VirtualList<T>, Symbol(VirtualList, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 19, 5))
+>T : T, Symbol(T, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 20, 29))
+>IVirtualList : IVirtualList<T>, Symbol(IVirtualList, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 15, 5))
+>T : T, Symbol(T, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 20, 29))
 
         //removeIndices: WinJS.Promise<IListItem<T>[]>;
         public removeIndices(indices: number[], options?: any): WinJS.Promise<IListItem<T>[]>;
->removeIndices : (indices: number[], options?: any) => WinJS.Promise<IListItem<T>[]>
->indices : number[]
->options : any
->WinJS : unknown
->Promise : WinJS.Promise<T>
->IListItem : IListItem<T>
->T : T
+>removeIndices : (indices: number[], options?: any) => WinJS.Promise<IListItem<T>[]>, Symbol(removeIndices, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 20, 60))
+>indices : number[], Symbol(indices, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 22, 29))
+>options : any, Symbol(options, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 22, 47))
+>WinJS : any, Symbol(WinJS, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 0, 0))
+>Promise : WinJS.Promise<T>, Symbol(WinJS.Promise, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 0, 22))
+>IListItem : IListItem<T>, Symbol(IListItem, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 5, 21))
+>T : T, Symbol(T, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 20, 29))
     }
 }

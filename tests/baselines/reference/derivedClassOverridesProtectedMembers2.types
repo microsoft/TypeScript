@@ -1,236 +1,238 @@
 === tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers2.ts ===
 var x: { foo: string; }
->x : { foo: string; }
->foo : string
+>x : { foo: string; }, Symbol(x, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 3))
+>foo : string, Symbol(foo, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 8))
 
 var y: { foo: string; bar: string; }
->y : { foo: string; bar: string; }
->foo : string
->bar : string
+>y : { foo: string; bar: string; }, Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
+>foo : string, Symbol(foo, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 8))
+>bar : string, Symbol(bar, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 21))
 
 class Base {
->Base : Base
+>Base : Base, Symbol(Base, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 36))
 
     protected a: typeof x;
->a : { foo: string; }
->x : { foo: string; }
+>a : { foo: string; }, Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 3, 12))
+>x : { foo: string; }, Symbol(x, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 3))
 
     protected b(a: typeof x) { }
->b : (a: { foo: string; }) => void
->a : { foo: string; }
->x : { foo: string; }
+>b : (a: { foo: string; }) => void, Symbol(b, Decl(derivedClassOverridesProtectedMembers2.ts, 4, 26))
+>a : { foo: string; }, Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 5, 16))
+>x : { foo: string; }, Symbol(x, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 3))
 
     protected get c() { return x; }
->c : { foo: string; }
->x : { foo: string; }
+>c : { foo: string; }, Symbol(c, Decl(derivedClassOverridesProtectedMembers2.ts, 5, 32), Decl(derivedClassOverridesProtectedMembers2.ts, 6, 35))
+>x : { foo: string; }, Symbol(x, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 3))
 
     protected set c(v: typeof x) { }
->c : { foo: string; }
->v : { foo: string; }
->x : { foo: string; }
+>c : { foo: string; }, Symbol(c, Decl(derivedClassOverridesProtectedMembers2.ts, 5, 32), Decl(derivedClassOverridesProtectedMembers2.ts, 6, 35))
+>v : { foo: string; }, Symbol(v, Decl(derivedClassOverridesProtectedMembers2.ts, 7, 20))
+>x : { foo: string; }, Symbol(x, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 3))
 
     protected d: (a: typeof x) => void ;
->d : (a: { foo: string; }) => void
->a : { foo: string; }
->x : { foo: string; }
+>d : (a: { foo: string; }) => void, Symbol(d, Decl(derivedClassOverridesProtectedMembers2.ts, 7, 36))
+>a : { foo: string; }, Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 8, 18))
+>x : { foo: string; }, Symbol(x, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 3))
 
     protected static r: typeof x;
->r : { foo: string; }
->x : { foo: string; }
+>r : { foo: string; }, Symbol(Base.r, Decl(derivedClassOverridesProtectedMembers2.ts, 8, 40))
+>x : { foo: string; }, Symbol(x, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 3))
 
     protected static s(a: typeof x) { }
->s : (a: { foo: string; }) => void
->a : { foo: string; }
->x : { foo: string; }
+>s : (a: { foo: string; }) => void, Symbol(Base.s, Decl(derivedClassOverridesProtectedMembers2.ts, 10, 33))
+>a : { foo: string; }, Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 11, 23))
+>x : { foo: string; }, Symbol(x, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 3))
 
     protected static get t() { return x; }
->t : { foo: string; }
->x : { foo: string; }
+>t : { foo: string; }, Symbol(Base.t, Decl(derivedClassOverridesProtectedMembers2.ts, 11, 39), Decl(derivedClassOverridesProtectedMembers2.ts, 12, 42))
+>x : { foo: string; }, Symbol(x, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 3))
 
     protected static set t(v: typeof x) { }
->t : { foo: string; }
->v : { foo: string; }
->x : { foo: string; }
+>t : { foo: string; }, Symbol(Base.t, Decl(derivedClassOverridesProtectedMembers2.ts, 11, 39), Decl(derivedClassOverridesProtectedMembers2.ts, 12, 42))
+>v : { foo: string; }, Symbol(v, Decl(derivedClassOverridesProtectedMembers2.ts, 13, 27))
+>x : { foo: string; }, Symbol(x, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 3))
 
     protected static u: (a: typeof x) => void ;
->u : (a: { foo: string; }) => void
->a : { foo: string; }
->x : { foo: string; }
+>u : (a: { foo: string; }) => void, Symbol(Base.u, Decl(derivedClassOverridesProtectedMembers2.ts, 13, 43))
+>a : { foo: string; }, Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 14, 25))
+>x : { foo: string; }, Symbol(x, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 3))
 
 constructor(a: typeof x) { }
->a : { foo: string; }
->x : { foo: string; }
+>a : { foo: string; }, Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 16, 12))
+>x : { foo: string; }, Symbol(x, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 3))
 }
 
 // Increase visibility of all protected members to public
 class Derived extends Base {
->Derived : Derived
->Base : Base
+>Derived : Derived, Symbol(Derived, Decl(derivedClassOverridesProtectedMembers2.ts, 17, 1))
+>Base : Base, Symbol(Base, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 36))
 
     a: typeof y;
->a : { foo: string; bar: string; }
->y : { foo: string; bar: string; }
+>a : { foo: string; bar: string; }, Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 20, 28))
+>y : { foo: string; bar: string; }, Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 
     b(a: typeof y) { }
->b : (a: { foo: string; bar: string; }) => void
->a : { foo: string; bar: string; }
->y : { foo: string; bar: string; }
+>b : (a: { foo: string; bar: string; }) => void, Symbol(b, Decl(derivedClassOverridesProtectedMembers2.ts, 21, 16))
+>a : { foo: string; bar: string; }, Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 22, 6))
+>y : { foo: string; bar: string; }, Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 
     get c() { return y; }
->c : { foo: string; bar: string; }
->y : { foo: string; bar: string; }
+>c : { foo: string; bar: string; }, Symbol(c, Decl(derivedClassOverridesProtectedMembers2.ts, 22, 22), Decl(derivedClassOverridesProtectedMembers2.ts, 23, 25))
+>y : { foo: string; bar: string; }, Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 
     set c(v: typeof y) { }
->c : { foo: string; bar: string; }
->v : { foo: string; bar: string; }
->y : { foo: string; bar: string; }
+>c : { foo: string; bar: string; }, Symbol(c, Decl(derivedClassOverridesProtectedMembers2.ts, 22, 22), Decl(derivedClassOverridesProtectedMembers2.ts, 23, 25))
+>v : { foo: string; bar: string; }, Symbol(v, Decl(derivedClassOverridesProtectedMembers2.ts, 24, 10))
+>y : { foo: string; bar: string; }, Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 
     d: (a: typeof y) => void;
->d : (a: { foo: string; bar: string; }) => void
->a : { foo: string; bar: string; }
->y : { foo: string; bar: string; }
+>d : (a: { foo: string; bar: string; }) => void, Symbol(d, Decl(derivedClassOverridesProtectedMembers2.ts, 24, 26))
+>a : { foo: string; bar: string; }, Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 25, 8))
+>y : { foo: string; bar: string; }, Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 
     static r: typeof y;
->r : { foo: string; bar: string; }
->y : { foo: string; bar: string; }
+>r : { foo: string; bar: string; }, Symbol(Derived.r, Decl(derivedClassOverridesProtectedMembers2.ts, 25, 29))
+>y : { foo: string; bar: string; }, Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 
     static s(a: typeof y) { }
->s : (a: { foo: string; bar: string; }) => void
->a : { foo: string; bar: string; }
->y : { foo: string; bar: string; }
+>s : (a: { foo: string; bar: string; }) => void, Symbol(Derived.s, Decl(derivedClassOverridesProtectedMembers2.ts, 27, 23))
+>a : { foo: string; bar: string; }, Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 28, 13))
+>y : { foo: string; bar: string; }, Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 
     static get t() { return y; }
->t : { foo: string; bar: string; }
->y : { foo: string; bar: string; }
+>t : { foo: string; bar: string; }, Symbol(Derived.t, Decl(derivedClassOverridesProtectedMembers2.ts, 28, 29), Decl(derivedClassOverridesProtectedMembers2.ts, 29, 32))
+>y : { foo: string; bar: string; }, Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 
     static set t(a: typeof y) { }
->t : { foo: string; bar: string; }
->a : { foo: string; bar: string; }
->y : { foo: string; bar: string; }
+>t : { foo: string; bar: string; }, Symbol(Derived.t, Decl(derivedClassOverridesProtectedMembers2.ts, 28, 29), Decl(derivedClassOverridesProtectedMembers2.ts, 29, 32))
+>a : { foo: string; bar: string; }, Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 30, 17))
+>y : { foo: string; bar: string; }, Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 
     static u: (a: typeof y) => void;
->u : (a: { foo: string; bar: string; }) => void
->a : { foo: string; bar: string; }
->y : { foo: string; bar: string; }
+>u : (a: { foo: string; bar: string; }) => void, Symbol(Derived.u, Decl(derivedClassOverridesProtectedMembers2.ts, 30, 33))
+>a : { foo: string; bar: string; }, Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 31, 15))
+>y : { foo: string; bar: string; }, Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 
     constructor(a: typeof y) { super(a); }
->a : { foo: string; bar: string; }
->y : { foo: string; bar: string; }
+>a : { foo: string; bar: string; }, Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 33, 16))
+>y : { foo: string; bar: string; }, Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 >super(a) : void
->super : typeof Base
->a : { foo: string; bar: string; }
+>super : typeof Base, Symbol(Base, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 36))
+>a : { foo: string; bar: string; }, Symbol(a, Decl(derivedClassOverridesProtectedMembers2.ts, 33, 16))
 }
 
 var d: Derived = new Derived(y);
->d : Derived
->Derived : Derived
+>d : Derived, Symbol(d, Decl(derivedClassOverridesProtectedMembers2.ts, 36, 3))
+>Derived : Derived, Symbol(Derived, Decl(derivedClassOverridesProtectedMembers2.ts, 17, 1))
 >new Derived(y) : Derived
->Derived : typeof Derived
->y : { foo: string; bar: string; }
+>Derived : typeof Derived, Symbol(Derived, Decl(derivedClassOverridesProtectedMembers2.ts, 17, 1))
+>y : { foo: string; bar: string; }, Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 
 var r1 = d.a;
->r1 : { foo: string; bar: string; }
->d.a : { foo: string; bar: string; }
->d : Derived
->a : { foo: string; bar: string; }
+>r1 : { foo: string; bar: string; }, Symbol(r1, Decl(derivedClassOverridesProtectedMembers2.ts, 37, 3))
+>d.a : { foo: string; bar: string; }, Symbol(Derived.a, Decl(derivedClassOverridesProtectedMembers2.ts, 20, 28))
+>d : Derived, Symbol(d, Decl(derivedClassOverridesProtectedMembers2.ts, 36, 3))
+>a : { foo: string; bar: string; }, Symbol(Derived.a, Decl(derivedClassOverridesProtectedMembers2.ts, 20, 28))
 
 var r2 = d.b(y);
->r2 : void
+>r2 : void, Symbol(r2, Decl(derivedClassOverridesProtectedMembers2.ts, 38, 3))
 >d.b(y) : void
->d.b : (a: { foo: string; bar: string; }) => void
->d : Derived
->b : (a: { foo: string; bar: string; }) => void
->y : { foo: string; bar: string; }
+>d.b : (a: { foo: string; bar: string; }) => void, Symbol(Derived.b, Decl(derivedClassOverridesProtectedMembers2.ts, 21, 16))
+>d : Derived, Symbol(d, Decl(derivedClassOverridesProtectedMembers2.ts, 36, 3))
+>b : (a: { foo: string; bar: string; }) => void, Symbol(Derived.b, Decl(derivedClassOverridesProtectedMembers2.ts, 21, 16))
+>y : { foo: string; bar: string; }, Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 
 var r3 = d.c;
->r3 : { foo: string; bar: string; }
->d.c : { foo: string; bar: string; }
->d : Derived
->c : { foo: string; bar: string; }
+>r3 : { foo: string; bar: string; }, Symbol(r3, Decl(derivedClassOverridesProtectedMembers2.ts, 39, 3))
+>d.c : { foo: string; bar: string; }, Symbol(Derived.c, Decl(derivedClassOverridesProtectedMembers2.ts, 22, 22), Decl(derivedClassOverridesProtectedMembers2.ts, 23, 25))
+>d : Derived, Symbol(d, Decl(derivedClassOverridesProtectedMembers2.ts, 36, 3))
+>c : { foo: string; bar: string; }, Symbol(Derived.c, Decl(derivedClassOverridesProtectedMembers2.ts, 22, 22), Decl(derivedClassOverridesProtectedMembers2.ts, 23, 25))
 
 var r3a = d.d;
->r3a : (a: { foo: string; bar: string; }) => void
->d.d : (a: { foo: string; bar: string; }) => void
->d : Derived
->d : (a: { foo: string; bar: string; }) => void
+>r3a : (a: { foo: string; bar: string; }) => void, Symbol(r3a, Decl(derivedClassOverridesProtectedMembers2.ts, 40, 3))
+>d.d : (a: { foo: string; bar: string; }) => void, Symbol(Derived.d, Decl(derivedClassOverridesProtectedMembers2.ts, 24, 26))
+>d : Derived, Symbol(d, Decl(derivedClassOverridesProtectedMembers2.ts, 36, 3))
+>d : (a: { foo: string; bar: string; }) => void, Symbol(Derived.d, Decl(derivedClassOverridesProtectedMembers2.ts, 24, 26))
 
 d.c = y;
 >d.c = y : { foo: string; bar: string; }
->d.c : { foo: string; bar: string; }
->d : Derived
->c : { foo: string; bar: string; }
->y : { foo: string; bar: string; }
+>d.c : { foo: string; bar: string; }, Symbol(Derived.c, Decl(derivedClassOverridesProtectedMembers2.ts, 22, 22), Decl(derivedClassOverridesProtectedMembers2.ts, 23, 25))
+>d : Derived, Symbol(d, Decl(derivedClassOverridesProtectedMembers2.ts, 36, 3))
+>c : { foo: string; bar: string; }, Symbol(Derived.c, Decl(derivedClassOverridesProtectedMembers2.ts, 22, 22), Decl(derivedClassOverridesProtectedMembers2.ts, 23, 25))
+>y : { foo: string; bar: string; }, Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 
 var r4 = Derived.r;
->r4 : { foo: string; bar: string; }
->Derived.r : { foo: string; bar: string; }
->Derived : typeof Derived
->r : { foo: string; bar: string; }
+>r4 : { foo: string; bar: string; }, Symbol(r4, Decl(derivedClassOverridesProtectedMembers2.ts, 42, 3))
+>Derived.r : { foo: string; bar: string; }, Symbol(Derived.r, Decl(derivedClassOverridesProtectedMembers2.ts, 25, 29))
+>Derived : typeof Derived, Symbol(Derived, Decl(derivedClassOverridesProtectedMembers2.ts, 17, 1))
+>r : { foo: string; bar: string; }, Symbol(Derived.r, Decl(derivedClassOverridesProtectedMembers2.ts, 25, 29))
 
 var r5 = Derived.s(y);
->r5 : void
+>r5 : void, Symbol(r5, Decl(derivedClassOverridesProtectedMembers2.ts, 43, 3))
 >Derived.s(y) : void
->Derived.s : (a: { foo: string; bar: string; }) => void
->Derived : typeof Derived
->s : (a: { foo: string; bar: string; }) => void
->y : { foo: string; bar: string; }
+>Derived.s : (a: { foo: string; bar: string; }) => void, Symbol(Derived.s, Decl(derivedClassOverridesProtectedMembers2.ts, 27, 23))
+>Derived : typeof Derived, Symbol(Derived, Decl(derivedClassOverridesProtectedMembers2.ts, 17, 1))
+>s : (a: { foo: string; bar: string; }) => void, Symbol(Derived.s, Decl(derivedClassOverridesProtectedMembers2.ts, 27, 23))
+>y : { foo: string; bar: string; }, Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 
 var r6 = Derived.t;
->r6 : { foo: string; bar: string; }
->Derived.t : { foo: string; bar: string; }
->Derived : typeof Derived
->t : { foo: string; bar: string; }
+>r6 : { foo: string; bar: string; }, Symbol(r6, Decl(derivedClassOverridesProtectedMembers2.ts, 44, 3))
+>Derived.t : { foo: string; bar: string; }, Symbol(Derived.t, Decl(derivedClassOverridesProtectedMembers2.ts, 28, 29), Decl(derivedClassOverridesProtectedMembers2.ts, 29, 32))
+>Derived : typeof Derived, Symbol(Derived, Decl(derivedClassOverridesProtectedMembers2.ts, 17, 1))
+>t : { foo: string; bar: string; }, Symbol(Derived.t, Decl(derivedClassOverridesProtectedMembers2.ts, 28, 29), Decl(derivedClassOverridesProtectedMembers2.ts, 29, 32))
 
 var r6a = Derived.u;
->r6a : (a: { foo: string; bar: string; }) => void
->Derived.u : (a: { foo: string; bar: string; }) => void
->Derived : typeof Derived
->u : (a: { foo: string; bar: string; }) => void
+>r6a : (a: { foo: string; bar: string; }) => void, Symbol(r6a, Decl(derivedClassOverridesProtectedMembers2.ts, 45, 3))
+>Derived.u : (a: { foo: string; bar: string; }) => void, Symbol(Derived.u, Decl(derivedClassOverridesProtectedMembers2.ts, 30, 33))
+>Derived : typeof Derived, Symbol(Derived, Decl(derivedClassOverridesProtectedMembers2.ts, 17, 1))
+>u : (a: { foo: string; bar: string; }) => void, Symbol(Derived.u, Decl(derivedClassOverridesProtectedMembers2.ts, 30, 33))
 
 Derived.t = y;
 >Derived.t = y : { foo: string; bar: string; }
->Derived.t : { foo: string; bar: string; }
->Derived : typeof Derived
->t : { foo: string; bar: string; }
->y : { foo: string; bar: string; }
+>Derived.t : { foo: string; bar: string; }, Symbol(Derived.t, Decl(derivedClassOverridesProtectedMembers2.ts, 28, 29), Decl(derivedClassOverridesProtectedMembers2.ts, 29, 32))
+>Derived : typeof Derived, Symbol(Derived, Decl(derivedClassOverridesProtectedMembers2.ts, 17, 1))
+>t : { foo: string; bar: string; }, Symbol(Derived.t, Decl(derivedClassOverridesProtectedMembers2.ts, 28, 29), Decl(derivedClassOverridesProtectedMembers2.ts, 29, 32))
+>y : { foo: string; bar: string; }, Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 
 class Base2 {
->Base2 : Base2
+>Base2 : Base2, Symbol(Base2, Decl(derivedClassOverridesProtectedMembers2.ts, 46, 14))
 
     [i: string]: Object;
->i : string
->Object : Object
+>i : string, Symbol(i, Decl(derivedClassOverridesProtectedMembers2.ts, 49, 5))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
     [i: number]: typeof x;
->i : number
->x : { foo: string; }
+>i : number, Symbol(i, Decl(derivedClassOverridesProtectedMembers2.ts, 50, 5))
+>x : { foo: string; }, Symbol(x, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 3))
 }
 
 class Derived2 extends Base2 {
->Derived2 : Derived2
->Base2 : Base2
+>Derived2 : Derived2, Symbol(Derived2, Decl(derivedClassOverridesProtectedMembers2.ts, 51, 1))
+>Base2 : Base2, Symbol(Base2, Decl(derivedClassOverridesProtectedMembers2.ts, 46, 14))
 
     [i: string]: typeof x;
->i : string
->x : { foo: string; }
+>i : string, Symbol(i, Decl(derivedClassOverridesProtectedMembers2.ts, 54, 5))
+>x : { foo: string; }, Symbol(x, Decl(derivedClassOverridesProtectedMembers2.ts, 0, 3))
 
     [i: number]: typeof y;
->i : number
->y : { foo: string; bar: string; }
+>i : number, Symbol(i, Decl(derivedClassOverridesProtectedMembers2.ts, 55, 5))
+>y : { foo: string; bar: string; }, Symbol(y, Decl(derivedClassOverridesProtectedMembers2.ts, 1, 3))
 }
 
 var d2: Derived2;
->d2 : Derived2
->Derived2 : Derived2
+>d2 : Derived2, Symbol(d2, Decl(derivedClassOverridesProtectedMembers2.ts, 58, 3))
+>Derived2 : Derived2, Symbol(Derived2, Decl(derivedClassOverridesProtectedMembers2.ts, 51, 1))
 
 var r7 = d2[''];
->r7 : { foo: string; }
+>r7 : { foo: string; }, Symbol(r7, Decl(derivedClassOverridesProtectedMembers2.ts, 59, 3))
 >d2[''] : { foo: string; }
->d2 : Derived2
+>d2 : Derived2, Symbol(d2, Decl(derivedClassOverridesProtectedMembers2.ts, 58, 3))
+>'' : string
 
 var r8 = d2[1];
->r8 : { foo: string; bar: string; }
+>r8 : { foo: string; bar: string; }, Symbol(r8, Decl(derivedClassOverridesProtectedMembers2.ts, 60, 3))
 >d2[1] : { foo: string; bar: string; }
->d2 : Derived2
+>d2 : Derived2, Symbol(d2, Decl(derivedClassOverridesProtectedMembers2.ts, 58, 3))
+>1 : number
 
 

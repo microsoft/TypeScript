@@ -1,18 +1,19 @@
 === tests/cases/compiler/untypedArgumentInLambdaExpression.ts ===
 declare function f(fn: (a: string) => string);
->f : (fn: (a: string) => string) => any
->fn : (a: string) => string
->a : string
+>f : (fn: (a: string) => string) => any, Symbol(f, Decl(untypedArgumentInLambdaExpression.ts, 0, 0))
+>fn : (a: string) => string, Symbol(fn, Decl(untypedArgumentInLambdaExpression.ts, 0, 19))
+>a : string, Symbol(a, Decl(untypedArgumentInLambdaExpression.ts, 0, 24))
  
 f((input): string => {
 >f((input): string => {    return "." + input;}) : any
->f : (fn: (a: string) => string) => any
+>f : (fn: (a: string) => string) => any, Symbol(f, Decl(untypedArgumentInLambdaExpression.ts, 0, 0))
 >(input): string => {    return "." + input;} : (input: string) => string
->input : string
+>input : string, Symbol(input, Decl(untypedArgumentInLambdaExpression.ts, 2, 3))
 
     return "." + input;
 >"." + input : string
->input : string
+>"." : string
+>input : string, Symbol(input, Decl(untypedArgumentInLambdaExpression.ts, 2, 3))
 
 });
  

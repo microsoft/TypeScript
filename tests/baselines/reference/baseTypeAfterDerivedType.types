@@ -1,35 +1,35 @@
 === tests/cases/compiler/baseTypeAfterDerivedType.ts ===
 interface Derived extends Base {
->Derived : Derived
->Base : Base
+>Derived : Derived, Symbol(Derived, Decl(baseTypeAfterDerivedType.ts, 0, 0))
+>Base : Base, Symbol(Base, Decl(baseTypeAfterDerivedType.ts, 2, 1))
 
     method(...args: any[]): void;
->method : (...args: any[]) => void
->args : any[]
+>method : (...args: any[]) => void, Symbol(method, Decl(baseTypeAfterDerivedType.ts, 0, 32))
+>args : any[], Symbol(args, Decl(baseTypeAfterDerivedType.ts, 1, 11))
 }
 
 interface Base {
->Base : Base
+>Base : Base, Symbol(Base, Decl(baseTypeAfterDerivedType.ts, 2, 1))
 
     method(...args: any[]): void;
->method : (...args: any[]) => void
->args : any[]
+>method : (...args: any[]) => void, Symbol(method, Decl(baseTypeAfterDerivedType.ts, 4, 16))
+>args : any[], Symbol(args, Decl(baseTypeAfterDerivedType.ts, 5, 11))
 }
 
 class Derived2 implements Base2 {
->Derived2 : Derived2
->Base2 : Base2
+>Derived2 : Derived2, Symbol(Derived2, Decl(baseTypeAfterDerivedType.ts, 6, 1))
+>Base2 : Base2, Symbol(Base2, Decl(baseTypeAfterDerivedType.ts, 10, 1))
 
     method(...args: any[]): void { }
->method : (...args: any[]) => void
->args : any[]
+>method : (...args: any[]) => void, Symbol(method, Decl(baseTypeAfterDerivedType.ts, 8, 33))
+>args : any[], Symbol(args, Decl(baseTypeAfterDerivedType.ts, 9, 11))
 }
 
 interface Base2 {
->Base2 : Base2
+>Base2 : Base2, Symbol(Base2, Decl(baseTypeAfterDerivedType.ts, 10, 1))
 
     method(...args: any[]): void;
->method : (...args: any[]) => void
->args : any[]
+>method : (...args: any[]) => void, Symbol(method, Decl(baseTypeAfterDerivedType.ts, 12, 17))
+>args : any[], Symbol(args, Decl(baseTypeAfterDerivedType.ts, 13, 11))
 }
 

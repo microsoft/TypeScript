@@ -1,14 +1,14 @@
 === tests/cases/conformance/decorators/class/decoratorOnClass2.ts ===
 declare function dec<T>(target: T): T;
->dec : <T>(target: T) => T
->T : T
->target : T
->T : T
->T : T
+>dec : <T>(target: T) => T, Symbol(dec, Decl(decoratorOnClass2.ts, 0, 0))
+>T : T, Symbol(T, Decl(decoratorOnClass2.ts, 0, 21))
+>target : T, Symbol(target, Decl(decoratorOnClass2.ts, 0, 24))
+>T : T, Symbol(T, Decl(decoratorOnClass2.ts, 0, 21))
+>T : T, Symbol(T, Decl(decoratorOnClass2.ts, 0, 21))
 
 @dec
->dec : <T>(target: T) => T
+>dec : <T>(target: T) => T, Symbol(dec, Decl(decoratorOnClass2.ts, 0, 0))
 
 export class C {
->C : C
+>C : C, Symbol(C, Decl(decoratorOnClass2.ts, 0, 38))
 }
