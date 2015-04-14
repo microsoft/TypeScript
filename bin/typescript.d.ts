@@ -310,6 +310,7 @@ declare module "typescript" {
     }
     interface Identifier extends PrimaryExpression {
         text: string;
+        originalKeywordKind?: SyntaxKind;
     }
     interface QualifiedName extends Node {
         left: EntityName;
@@ -991,8 +992,10 @@ declare module "typescript" {
         Anonymous = 32768,
         ObjectLiteral = 131072,
         ESSymbol = 1048576,
+        Subset = 2097152,
         StringLike = 258,
         NumberLike = 132,
+        SubsetMaybe = 4224,
         ObjectType = 48128,
     }
     interface Type {
@@ -1010,8 +1013,8 @@ declare module "typescript" {
         declaredProperties: Symbol[];
         declaredCallSignatures: Signature[];
         declaredConstructSignatures: Signature[];
-        declaredStringIndexType: Type;
-        declaredNumberIndexType: Type;
+        declaredStringIndex: IndexType;
+        declaredNumberIndex: IndexType;
     }
     interface TypeReference extends ObjectType {
         target: GenericType;
@@ -1025,6 +1028,19 @@ declare module "typescript" {
     }
     interface UnionType extends Type {
         types: Type[];
+    }
+    enum IndexAlphaNumeric {
+        NO = 0,
+        YES = 1,
+        INHERITED = 2,
+    }
+    interface IndexType {
+        kind: IndexKind;
+        typeOfValue: Type;
+        typeOfIndex?: Type;
+        declaredNode?: SignatureDeclaration;
+        declaredCount?: number;
+        inherited?: Symbol;
     }
     interface TypeParameter extends Type {
         constraint: Type;

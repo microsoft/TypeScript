@@ -1,5 +1,5 @@
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndIndexersErrors.ts(15,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndIndexersErrors.ts(18,9): error TS2413: Numeric index type 'T' is not assignable to string index type 'Object'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndIndexersErrors.ts(18,9): error TS2413: Numeric index '[number]: T' is not assignable to string index '[string]: Object'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndIndexersErrors.ts(23,9): error TS2322: Type 'T' is not assignable to type 'U'.
 
 
@@ -25,7 +25,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObj
             [x: string]: Object;
             [x: number]: T;
             ~~~~~~~~~~~~~~~
-!!! error TS2413: Numeric index type 'T' is not assignable to string index type 'Object'.
+!!! error TS2413: Numeric index '[number]: T' is not assignable to string index '[string]: Object'.
         };
         var r2 = foo(b);
         var d = r2[1];

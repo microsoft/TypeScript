@@ -1446,8 +1446,9 @@ module ts {
         /* @internal */ 
         ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
         /* @internal */ 
-        ContainsObjectLiteral = 0x00080000,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 0x00080000,  // Type is or contains object literal type
         ESSymbol                = 0x00100000,  // Type of symbol primitive introduced in ES6
+        Subset                  = 0x00200000,  // Type that has a subset of valid values
 
         /* @internal */ 
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -1455,6 +1456,7 @@ module ts {
         Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
+        SubsetMaybe = Enum | Reference,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
         /* @internal */ 
         RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral
@@ -1488,8 +1490,8 @@ module ts {
         declaredProperties: Symbol[];              // Declared members
         declaredCallSignatures: Signature[];       // Declared call signatures
         declaredConstructSignatures: Signature[];  // Declared construct signatures
-        declaredStringIndexType: Type;             // Declared string index type
-        declaredNumberIndexType: Type;             // Declared numeric index type
+        declaredStringIndex: IndexType;            // Declared string type
+        declaredNumberIndex: IndexType;            // Declared numeric type
     }
 
     // Type references (TypeFlags.Reference)
@@ -1515,15 +1517,32 @@ module ts {
         resolvedProperties: SymbolTable;  // Cache of resolved properties
     }
 
-    /* @internal */
-    // Resolved object or union type
+    export enum IndexAlphaNumeric {
+        NO,
+        YES,           // string & number indexes come from different types 
+        INHERITED      // string & number indexes are both from an inherited type 
+    }
+
+    export interface IndexType {
+        kind: IndexKind                 // Kind of index
+        typeOfValue: Type               // any
+        typeOfIndex?: Type              // string|number|enum
+
+        // Useful for error reporting
+        declaredNode?: SignatureDeclaration,  // Declaration of [x: typeOfIndex]: typeOfValue
+        declaredCount?: number                // Number of declarations
+        inherited?: Symbol                    // Symbol of baseType where inherited
+    }
+
+    /* @internal */    // Resolved object or union type
     export interface ResolvedType extends ObjectType, UnionType {
-        members: SymbolTable;              // Properties by name
-        properties: Symbol[];              // Properties
-        callSignatures: Signature[];       // Call signatures of type
-        constructSignatures: Signature[];  // Construct signatures of type
-        stringIndexType: Type;             // String index type
-        numberIndexType: Type;             // Numeric index type
+        members: SymbolTable;                 // Properties by name
+        properties: Symbol[];                 // Properties
+        callSignatures: Signature[];          // Call signatures of type
+        constructSignatures: Signature[];     // Construct signatures of type
+        stringIndex: IndexType;               // String index type
+        numberIndex: IndexType;               // Number index type
+        alphaNumericIndex?: IndexAlphaNumeric // Information about alphanumeric index
     }
 
     // Type parameters (TypeFlags.TypeParameter)
