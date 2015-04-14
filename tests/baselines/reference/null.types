@@ -1,48 +1,59 @@
 === tests/cases/compiler/null.ts ===
 var x=null; 
->x : any
+>x : any, Symbol(x, Decl(null.ts, 0, 3))
+>null : null
 
 var y=3+x;  
->y : any
+>y : any, Symbol(y, Decl(null.ts, 1, 3))
 >3+x : any
->x : any
+>3 : number
+>x : any, Symbol(x, Decl(null.ts, 0, 3))
 
 var z=3+null; 
->z : number
+>z : number, Symbol(z, Decl(null.ts, 2, 3))
 >3+null : number
+>3 : number
+>null : null
 
 class C {
->C : C
+>C : C, Symbol(C, Decl(null.ts, 2, 13))
 }
 function f() {
->f : () => C
+>f : () => C, Symbol(f, Decl(null.ts, 4, 1))
 
     return null;
+>null : null
+
     return new C();
 >new C() : C
->C : typeof C
+>C : typeof C, Symbol(C, Decl(null.ts, 2, 13))
 }
 function g() {
->g : () => number
+>g : () => number, Symbol(g, Decl(null.ts, 8, 1))
 
     return null;
+>null : null
+
     return 3;
+>3 : number
 }
 interface I {
->I : I
+>I : I, Symbol(I, Decl(null.ts, 12, 1))
 
     x:any;
->x : any
+>x : any, Symbol(x, Decl(null.ts, 13, 13))
 
     y:number;
->y : number
+>y : number, Symbol(y, Decl(null.ts, 14, 10))
 }
 var w:I={x:null,y:3};
->w : I
->I : I
+>w : I, Symbol(w, Decl(null.ts, 17, 3))
+>I : I, Symbol(I, Decl(null.ts, 12, 1))
 >{x:null,y:3} : { x: null; y: number; }
->x : null
->y : number
+>x : null, Symbol(x, Decl(null.ts, 17, 9))
+>null : null
+>y : number, Symbol(y, Decl(null.ts, 17, 16))
+>3 : number
 
 
 

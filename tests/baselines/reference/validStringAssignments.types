@@ -1,22 +1,23 @@
 === tests/cases/conformance/types/primitives/string/validStringAssignments.ts ===
 var x = '';
->x : string
+>x : string, Symbol(x, Decl(validStringAssignments.ts, 0, 3))
+>'' : string
 
 var a: any = x;
->a : any
->x : string
+>a : any, Symbol(a, Decl(validStringAssignments.ts, 2, 3))
+>x : string, Symbol(x, Decl(validStringAssignments.ts, 0, 3))
 
 var b: Object = x;
->b : Object
->Object : Object
->x : string
+>b : Object, Symbol(b, Decl(validStringAssignments.ts, 3, 3))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>x : string, Symbol(x, Decl(validStringAssignments.ts, 0, 3))
 
 var c: string = x;
->c : string
->x : string
+>c : string, Symbol(c, Decl(validStringAssignments.ts, 4, 3))
+>x : string, Symbol(x, Decl(validStringAssignments.ts, 0, 3))
 
 var d: String = x;
->d : String
->String : String
->x : string
+>d : String, Symbol(d, Decl(validStringAssignments.ts, 5, 3))
+>String : String, Symbol(String, Decl(lib.d.ts, 275, 1), Decl(lib.d.ts, 443, 11))
+>x : string, Symbol(x, Decl(validStringAssignments.ts, 0, 3))
 

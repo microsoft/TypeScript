@@ -2,174 +2,186 @@
 
 
 module OuterMod {
->OuterMod : typeof OuterMod
+>OuterMod : typeof OuterMod, Symbol(OuterMod, Decl(moduleVisibilityTest1.ts, 0, 0))
 
 	export function someExportedOuterFunc() { return -1; }
->someExportedOuterFunc : () => number
+>someExportedOuterFunc : () => number, Symbol(someExportedOuterFunc, Decl(moduleVisibilityTest1.ts, 2, 17))
 >-1 : number
+>1 : number
 
 	export module OuterInnerMod {
->OuterInnerMod : typeof OuterInnerMod
+>OuterInnerMod : typeof OuterInnerMod, Symbol(OuterInnerMod, Decl(moduleVisibilityTest1.ts, 3, 55))
 
 		export function someExportedOuterInnerFunc() { return "foo"; }
->someExportedOuterInnerFunc : () => string
+>someExportedOuterInnerFunc : () => string, Symbol(someExportedOuterInnerFunc, Decl(moduleVisibilityTest1.ts, 5, 30))
+>"foo" : string
 	}
 }
 
 import OuterInnerAlias = OuterMod.OuterInnerMod;
->OuterInnerAlias : typeof OuterInnerAlias
->OuterMod : typeof OuterMod
->OuterInnerMod : typeof OuterInnerAlias
+>OuterInnerAlias : typeof OuterInnerAlias, Symbol(OuterInnerAlias, Decl(moduleVisibilityTest1.ts, 8, 1))
+>OuterMod : typeof OuterMod, Symbol(OuterMod, Decl(moduleVisibilityTest1.ts, 0, 0))
+>OuterInnerMod : typeof OuterInnerAlias, Symbol(OuterInnerAlias, Decl(moduleVisibilityTest1.ts, 3, 55))
 
 module M {
->M : typeof M
+>M : typeof M, Symbol(M, Decl(moduleVisibilityTest1.ts, 10, 48), Decl(moduleVisibilityTest1.ts, 52, 1))
 
 	export module InnerMod {
->InnerMod : typeof InnerMod
+>InnerMod : typeof InnerMod, Symbol(InnerMod, Decl(moduleVisibilityTest1.ts, 12, 10))
 
 		export function someExportedInnerFunc() { return -2; }
->someExportedInnerFunc : () => number
+>someExportedInnerFunc : () => number, Symbol(someExportedInnerFunc, Decl(moduleVisibilityTest1.ts, 14, 25))
 >-2 : number
+>2 : number
 	}
 
 	export enum E {
->E : E
+>E : E, Symbol(E, Decl(moduleVisibilityTest1.ts, 16, 2))
 
 		A,
->A : E
+>A : E, Symbol(E.A, Decl(moduleVisibilityTest1.ts, 18, 16))
 
 		B,
->B : E
+>B : E, Symbol(E.B, Decl(moduleVisibilityTest1.ts, 19, 4))
 
 		C,
->C : E
+>C : E, Symbol(E.C, Decl(moduleVisibilityTest1.ts, 20, 4))
 	}
 
 	export var x = 5;
->x : number
+>x : number, Symbol(x, Decl(moduleVisibilityTest1.ts, 24, 11))
+>5 : number
 
 	export declare var exported_var;
->exported_var : any
+>exported_var : any, Symbol(exported_var, Decl(moduleVisibilityTest1.ts, 25, 19))
 
 	var y = x + x;
->y : number
+>y : number, Symbol(y, Decl(moduleVisibilityTest1.ts, 27, 4))
 >x + x : number
->x : number
->x : number
+>x : number, Symbol(x, Decl(moduleVisibilityTest1.ts, 24, 11))
+>x : number, Symbol(x, Decl(moduleVisibilityTest1.ts, 24, 11))
 
 
 	export interface I {
->I : I
+>I : I, Symbol(I, Decl(moduleVisibilityTest1.ts, 27, 15))
 
 		someMethod():number;
->someMethod : () => number
+>someMethod : () => number, Symbol(someMethod, Decl(moduleVisibilityTest1.ts, 30, 21))
 	}
 
 	 class B {public b = 0;}
->B : B
->b : number
+>B : B, Symbol(B, Decl(moduleVisibilityTest1.ts, 32, 2))
+>b : number, Symbol(b, Decl(moduleVisibilityTest1.ts, 34, 11))
+>0 : number
 
 	 export class C implements I {
->C : C
->I : I
+>C : C, Symbol(C, Decl(moduleVisibilityTest1.ts, 34, 25))
+>I : I, Symbol(I, Decl(moduleVisibilityTest1.ts, 27, 15))
 
 		public someMethodThatCallsAnOuterMethod() {return OuterInnerAlias.someExportedOuterInnerFunc();}
->someMethodThatCallsAnOuterMethod : () => string
+>someMethodThatCallsAnOuterMethod : () => string, Symbol(someMethodThatCallsAnOuterMethod, Decl(moduleVisibilityTest1.ts, 36, 31))
 >OuterInnerAlias.someExportedOuterInnerFunc() : string
->OuterInnerAlias.someExportedOuterInnerFunc : () => string
->OuterInnerAlias : typeof OuterInnerAlias
->someExportedOuterInnerFunc : () => string
+>OuterInnerAlias.someExportedOuterInnerFunc : () => string, Symbol(OuterInnerAlias.someExportedOuterInnerFunc, Decl(moduleVisibilityTest1.ts, 5, 30))
+>OuterInnerAlias : typeof OuterInnerAlias, Symbol(OuterInnerAlias, Decl(moduleVisibilityTest1.ts, 8, 1))
+>someExportedOuterInnerFunc : () => string, Symbol(OuterInnerAlias.someExportedOuterInnerFunc, Decl(moduleVisibilityTest1.ts, 5, 30))
 
 		public someMethodThatCallsAnInnerMethod() {return InnerMod.someExportedInnerFunc();}
->someMethodThatCallsAnInnerMethod : () => number
+>someMethodThatCallsAnInnerMethod : () => number, Symbol(someMethodThatCallsAnInnerMethod, Decl(moduleVisibilityTest1.ts, 37, 98))
 >InnerMod.someExportedInnerFunc() : number
->InnerMod.someExportedInnerFunc : () => number
->InnerMod : typeof InnerMod
->someExportedInnerFunc : () => number
+>InnerMod.someExportedInnerFunc : () => number, Symbol(InnerMod.someExportedInnerFunc, Decl(moduleVisibilityTest1.ts, 14, 25))
+>InnerMod : typeof InnerMod, Symbol(InnerMod, Decl(moduleVisibilityTest1.ts, 12, 10))
+>someExportedInnerFunc : () => number, Symbol(InnerMod.someExportedInnerFunc, Decl(moduleVisibilityTest1.ts, 14, 25))
 
 		public someMethodThatCallsAnOuterInnerMethod() {return OuterMod.someExportedOuterFunc();}
->someMethodThatCallsAnOuterInnerMethod : () => number
+>someMethodThatCallsAnOuterInnerMethod : () => number, Symbol(someMethodThatCallsAnOuterInnerMethod, Decl(moduleVisibilityTest1.ts, 38, 86))
 >OuterMod.someExportedOuterFunc() : number
->OuterMod.someExportedOuterFunc : () => number
->OuterMod : typeof OuterMod
->someExportedOuterFunc : () => number
+>OuterMod.someExportedOuterFunc : () => number, Symbol(OuterMod.someExportedOuterFunc, Decl(moduleVisibilityTest1.ts, 2, 17))
+>OuterMod : typeof OuterMod, Symbol(OuterMod, Decl(moduleVisibilityTest1.ts, 0, 0))
+>someExportedOuterFunc : () => number, Symbol(OuterMod.someExportedOuterFunc, Decl(moduleVisibilityTest1.ts, 2, 17))
 
 		public someMethod() { return 0; }
->someMethod : () => number
+>someMethod : () => number, Symbol(someMethod, Decl(moduleVisibilityTest1.ts, 39, 91))
+>0 : number
 
 		public someProp = 1;
->someProp : number
+>someProp : number, Symbol(someProp, Decl(moduleVisibilityTest1.ts, 40, 35))
+>1 : number
 
 		constructor() {
 		    function someInnerFunc() { return 2; }
->someInnerFunc : () => number
+>someInnerFunc : () => number, Symbol(someInnerFunc, Decl(moduleVisibilityTest1.ts, 43, 17))
+>2 : number
 
             var someInnerVar = 3;
->someInnerVar : number
+>someInnerVar : number, Symbol(someInnerVar, Decl(moduleVisibilityTest1.ts, 45, 15))
+>3 : number
 		}
 	}
 
 	var someModuleVar = 4;
->someModuleVar : number
+>someModuleVar : number, Symbol(someModuleVar, Decl(moduleVisibilityTest1.ts, 49, 4))
+>4 : number
 
 	function someModuleFunction() { return 5;}
->someModuleFunction : () => number
+>someModuleFunction : () => number, Symbol(someModuleFunction, Decl(moduleVisibilityTest1.ts, 49, 23))
+>5 : number
 }
 
 module M {
->M : typeof M
+>M : typeof M, Symbol(M, Decl(moduleVisibilityTest1.ts, 10, 48), Decl(moduleVisibilityTest1.ts, 52, 1))
 
 	export var c = x;
->c : number
->x : number
+>c : number, Symbol(c, Decl(moduleVisibilityTest1.ts, 55, 11))
+>x : number, Symbol(x, Decl(moduleVisibilityTest1.ts, 24, 11))
 
 	export var meb = M.E.B;
->meb : E
->M.E.B : E
->M.E : typeof E
->M : typeof M
->E : typeof E
->B : E
+>meb : E, Symbol(meb, Decl(moduleVisibilityTest1.ts, 56, 11))
+>M.E.B : E, Symbol(E.B, Decl(moduleVisibilityTest1.ts, 19, 4))
+>M.E : typeof E, Symbol(E, Decl(moduleVisibilityTest1.ts, 16, 2))
+>M : typeof M, Symbol(M, Decl(moduleVisibilityTest1.ts, 10, 48), Decl(moduleVisibilityTest1.ts, 52, 1))
+>E : typeof E, Symbol(E, Decl(moduleVisibilityTest1.ts, 16, 2))
+>B : E, Symbol(E.B, Decl(moduleVisibilityTest1.ts, 19, 4))
 }
 
 var cprime : M.I = <M.I>null;
->cprime : M.I
->M : unknown
->I : M.I
+>cprime : M.I, Symbol(cprime, Decl(moduleVisibilityTest1.ts, 59, 3))
+>M : any, Symbol(M, Decl(moduleVisibilityTest1.ts, 10, 48), Decl(moduleVisibilityTest1.ts, 52, 1))
+>I : M.I, Symbol(M.I, Decl(moduleVisibilityTest1.ts, 27, 15))
 ><M.I>null : M.I
->M : unknown
->I : M.I
+>M : any, Symbol(M, Decl(moduleVisibilityTest1.ts, 10, 48), Decl(moduleVisibilityTest1.ts, 52, 1))
+>I : M.I, Symbol(M.I, Decl(moduleVisibilityTest1.ts, 27, 15))
+>null : null
 
 var c = new M.C();
->c : M.C
+>c : M.C, Symbol(c, Decl(moduleVisibilityTest1.ts, 61, 3))
 >new M.C() : M.C
->M.C : typeof M.C
->M : typeof M
->C : typeof M.C
+>M.C : typeof M.C, Symbol(M.C, Decl(moduleVisibilityTest1.ts, 34, 25))
+>M : typeof M, Symbol(M, Decl(moduleVisibilityTest1.ts, 10, 48), Decl(moduleVisibilityTest1.ts, 52, 1))
+>C : typeof M.C, Symbol(M.C, Decl(moduleVisibilityTest1.ts, 34, 25))
 
 var z = M.x;
->z : number
->M.x : number
->M : typeof M
->x : number
+>z : number, Symbol(z, Decl(moduleVisibilityTest1.ts, 62, 3))
+>M.x : number, Symbol(M.x, Decl(moduleVisibilityTest1.ts, 24, 11))
+>M : typeof M, Symbol(M, Decl(moduleVisibilityTest1.ts, 10, 48), Decl(moduleVisibilityTest1.ts, 52, 1))
+>x : number, Symbol(M.x, Decl(moduleVisibilityTest1.ts, 24, 11))
 
 var alpha = M.E.A;
->alpha : M.E
->M.E.A : M.E
->M.E : typeof M.E
->M : typeof M
->E : typeof M.E
->A : M.E
+>alpha : M.E, Symbol(alpha, Decl(moduleVisibilityTest1.ts, 63, 3))
+>M.E.A : M.E, Symbol(M.E.A, Decl(moduleVisibilityTest1.ts, 18, 16))
+>M.E : typeof M.E, Symbol(M.E, Decl(moduleVisibilityTest1.ts, 16, 2))
+>M : typeof M, Symbol(M, Decl(moduleVisibilityTest1.ts, 10, 48), Decl(moduleVisibilityTest1.ts, 52, 1))
+>E : typeof M.E, Symbol(M.E, Decl(moduleVisibilityTest1.ts, 16, 2))
+>A : M.E, Symbol(M.E.A, Decl(moduleVisibilityTest1.ts, 18, 16))
 
 var omega = M.exported_var;
->omega : any
->M.exported_var : any
->M : typeof M
->exported_var : any
+>omega : any, Symbol(omega, Decl(moduleVisibilityTest1.ts, 64, 3))
+>M.exported_var : any, Symbol(M.exported_var, Decl(moduleVisibilityTest1.ts, 25, 19))
+>M : typeof M, Symbol(M, Decl(moduleVisibilityTest1.ts, 10, 48), Decl(moduleVisibilityTest1.ts, 52, 1))
+>exported_var : any, Symbol(M.exported_var, Decl(moduleVisibilityTest1.ts, 25, 19))
 
 c.someMethodThatCallsAnOuterMethod();
 >c.someMethodThatCallsAnOuterMethod() : string
->c.someMethodThatCallsAnOuterMethod : () => string
->c : M.C
->someMethodThatCallsAnOuterMethod : () => string
+>c.someMethodThatCallsAnOuterMethod : () => string, Symbol(M.C.someMethodThatCallsAnOuterMethod, Decl(moduleVisibilityTest1.ts, 36, 31))
+>c : M.C, Symbol(c, Decl(moduleVisibilityTest1.ts, 61, 3))
+>someMethodThatCallsAnOuterMethod : () => string, Symbol(M.C.someMethodThatCallsAnOuterMethod, Decl(moduleVisibilityTest1.ts, 36, 31))
 

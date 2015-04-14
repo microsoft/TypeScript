@@ -1,5 +1,5 @@
 === tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration7.ts ===
 module number.a {
->number : unknown
->a : unknown
+>number : any, Symbol(number, Decl(parserModuleDeclaration7.ts, 0, 0))
+>a : any, Symbol(a, Decl(parserModuleDeclaration7.ts, 0, 14))
 }

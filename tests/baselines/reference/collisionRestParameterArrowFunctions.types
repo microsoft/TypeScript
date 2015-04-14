@@ -1,34 +1,38 @@
 === tests/cases/compiler/collisionRestParameterArrowFunctions.ts ===
 var f1 = (_i: number, ...restParameters) => { //_i is error
->f1 : (_i: number, ...restParameters: any[]) => void
+>f1 : (_i: number, ...restParameters: any[]) => void, Symbol(f1, Decl(collisionRestParameterArrowFunctions.ts, 0, 3))
 >(_i: number, ...restParameters) => { //_i is error    var _i = 10; // no error} : (_i: number, ...restParameters: any[]) => void
->_i : number
->restParameters : any[]
+>_i : number, Symbol(_i, Decl(collisionRestParameterArrowFunctions.ts, 0, 10), Decl(collisionRestParameterArrowFunctions.ts, 1, 7))
+>restParameters : any[], Symbol(restParameters, Decl(collisionRestParameterArrowFunctions.ts, 0, 21))
 
     var _i = 10; // no error
->_i : number
+>_i : number, Symbol(_i, Decl(collisionRestParameterArrowFunctions.ts, 0, 10), Decl(collisionRestParameterArrowFunctions.ts, 1, 7))
+>10 : number
 }
 var f1NoError = (_i: number) => { // no error
->f1NoError : (_i: number) => void
+>f1NoError : (_i: number) => void, Symbol(f1NoError, Decl(collisionRestParameterArrowFunctions.ts, 3, 3))
 >(_i: number) => { // no error    var _i = 10; // no error} : (_i: number) => void
->_i : number
+>_i : number, Symbol(_i, Decl(collisionRestParameterArrowFunctions.ts, 3, 17), Decl(collisionRestParameterArrowFunctions.ts, 4, 7))
 
     var _i = 10; // no error
->_i : number
+>_i : number, Symbol(_i, Decl(collisionRestParameterArrowFunctions.ts, 3, 17), Decl(collisionRestParameterArrowFunctions.ts, 4, 7))
+>10 : number
 }
 
 var f2 = (...restParameters) => {
->f2 : (...restParameters: any[]) => void
+>f2 : (...restParameters: any[]) => void, Symbol(f2, Decl(collisionRestParameterArrowFunctions.ts, 7, 3))
 >(...restParameters) => {    var _i = 10; // No Error} : (...restParameters: any[]) => void
->restParameters : any[]
+>restParameters : any[], Symbol(restParameters, Decl(collisionRestParameterArrowFunctions.ts, 7, 10))
 
     var _i = 10; // No Error
->_i : number
+>_i : number, Symbol(_i, Decl(collisionRestParameterArrowFunctions.ts, 8, 7))
+>10 : number
 }
 var f2NoError = () => {
->f2NoError : () => void
+>f2NoError : () => void, Symbol(f2NoError, Decl(collisionRestParameterArrowFunctions.ts, 10, 3))
 >() => {    var _i = 10; // no error} : () => void
 
     var _i = 10; // no error
->_i : number
+>_i : number, Symbol(_i, Decl(collisionRestParameterArrowFunctions.ts, 11, 7))
+>10 : number
 }

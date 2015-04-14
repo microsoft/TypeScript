@@ -1,83 +1,83 @@
 === tests/cases/compiler/declFileTypeofInAnonymousType.ts ===
 
 module m1 {
->m1 : typeof m1
+>m1 : typeof m1, Symbol(m1, Decl(declFileTypeofInAnonymousType.ts, 0, 0))
 
     export class c {
->c : c
+>c : c, Symbol(c, Decl(declFileTypeofInAnonymousType.ts, 1, 11))
     }
     export enum e {
->e : e
+>e : e, Symbol(e, Decl(declFileTypeofInAnonymousType.ts, 3, 5))
 
         weekday,
->weekday : e
+>weekday : e, Symbol(e.weekday, Decl(declFileTypeofInAnonymousType.ts, 4, 19))
 
         weekend,
->weekend : e
+>weekend : e, Symbol(e.weekend, Decl(declFileTypeofInAnonymousType.ts, 5, 16))
 
         holiday
->holiday : e
+>holiday : e, Symbol(e.holiday, Decl(declFileTypeofInAnonymousType.ts, 6, 16))
     }
 }
 var a: { c: m1.c; };
->a : { c: m1.c; }
->c : m1.c
->m1 : unknown
->c : m1.c
+>a : { c: m1.c; }, Symbol(a, Decl(declFileTypeofInAnonymousType.ts, 10, 3))
+>c : m1.c, Symbol(c, Decl(declFileTypeofInAnonymousType.ts, 10, 8))
+>m1 : any, Symbol(m1, Decl(declFileTypeofInAnonymousType.ts, 0, 0))
+>c : m1.c, Symbol(m1.c, Decl(declFileTypeofInAnonymousType.ts, 1, 11))
 
 var b = {
->b : { c: typeof m1.c; m1: typeof m1; }
+>b : { c: typeof m1.c; m1: typeof m1; }, Symbol(b, Decl(declFileTypeofInAnonymousType.ts, 11, 3))
 >{    c: m1.c,    m1: m1} : { c: typeof m1.c; m1: typeof m1; }
 
     c: m1.c,
->c : typeof m1.c
->m1.c : typeof m1.c
->m1 : typeof m1
->c : typeof m1.c
+>c : typeof m1.c, Symbol(c, Decl(declFileTypeofInAnonymousType.ts, 11, 9))
+>m1.c : typeof m1.c, Symbol(m1.c, Decl(declFileTypeofInAnonymousType.ts, 1, 11))
+>m1 : typeof m1, Symbol(m1, Decl(declFileTypeofInAnonymousType.ts, 0, 0))
+>c : typeof m1.c, Symbol(m1.c, Decl(declFileTypeofInAnonymousType.ts, 1, 11))
 
     m1: m1
->m1 : typeof m1
->m1 : typeof m1
+>m1 : typeof m1, Symbol(m1, Decl(declFileTypeofInAnonymousType.ts, 12, 12))
+>m1 : typeof m1, Symbol(m1, Decl(declFileTypeofInAnonymousType.ts, 0, 0))
 
 };
 var c = { m1: m1 };
->c : { m1: typeof m1; }
+>c : { m1: typeof m1; }, Symbol(c, Decl(declFileTypeofInAnonymousType.ts, 15, 3))
 >{ m1: m1 } : { m1: typeof m1; }
->m1 : typeof m1
->m1 : typeof m1
+>m1 : typeof m1, Symbol(m1, Decl(declFileTypeofInAnonymousType.ts, 15, 9))
+>m1 : typeof m1, Symbol(m1, Decl(declFileTypeofInAnonymousType.ts, 0, 0))
 
 var d = {
->d : { m: { mod: typeof m1; }; mc: { cl: typeof m1.c; }; me: { en: typeof m1.e; }; mh: m1.e; }
+>d : { m: { mod: typeof m1; }; mc: { cl: typeof m1.c; }; me: { en: typeof m1.e; }; mh: m1.e; }, Symbol(d, Decl(declFileTypeofInAnonymousType.ts, 16, 3))
 >{    m: { mod: m1 },    mc: { cl: m1.c },    me: { en: m1.e },    mh: m1.e.holiday} : { m: { mod: typeof m1; }; mc: { cl: typeof m1.c; }; me: { en: typeof m1.e; }; mh: m1.e; }
 
     m: { mod: m1 },
->m : { mod: typeof m1; }
+>m : { mod: typeof m1; }, Symbol(m, Decl(declFileTypeofInAnonymousType.ts, 16, 9))
 >{ mod: m1 } : { mod: typeof m1; }
->mod : typeof m1
->m1 : typeof m1
+>mod : typeof m1, Symbol(mod, Decl(declFileTypeofInAnonymousType.ts, 17, 8))
+>m1 : typeof m1, Symbol(m1, Decl(declFileTypeofInAnonymousType.ts, 0, 0))
 
     mc: { cl: m1.c },
->mc : { cl: typeof m1.c; }
+>mc : { cl: typeof m1.c; }, Symbol(mc, Decl(declFileTypeofInAnonymousType.ts, 17, 19))
 >{ cl: m1.c } : { cl: typeof m1.c; }
->cl : typeof m1.c
->m1.c : typeof m1.c
->m1 : typeof m1
->c : typeof m1.c
+>cl : typeof m1.c, Symbol(cl, Decl(declFileTypeofInAnonymousType.ts, 18, 9))
+>m1.c : typeof m1.c, Symbol(m1.c, Decl(declFileTypeofInAnonymousType.ts, 1, 11))
+>m1 : typeof m1, Symbol(m1, Decl(declFileTypeofInAnonymousType.ts, 0, 0))
+>c : typeof m1.c, Symbol(m1.c, Decl(declFileTypeofInAnonymousType.ts, 1, 11))
 
     me: { en: m1.e },
->me : { en: typeof m1.e; }
+>me : { en: typeof m1.e; }, Symbol(me, Decl(declFileTypeofInAnonymousType.ts, 18, 21))
 >{ en: m1.e } : { en: typeof m1.e; }
->en : typeof m1.e
->m1.e : typeof m1.e
->m1 : typeof m1
->e : typeof m1.e
+>en : typeof m1.e, Symbol(en, Decl(declFileTypeofInAnonymousType.ts, 19, 9))
+>m1.e : typeof m1.e, Symbol(m1.e, Decl(declFileTypeofInAnonymousType.ts, 3, 5))
+>m1 : typeof m1, Symbol(m1, Decl(declFileTypeofInAnonymousType.ts, 0, 0))
+>e : typeof m1.e, Symbol(m1.e, Decl(declFileTypeofInAnonymousType.ts, 3, 5))
 
     mh: m1.e.holiday
->mh : m1.e
->m1.e.holiday : m1.e
->m1.e : typeof m1.e
->m1 : typeof m1
->e : typeof m1.e
->holiday : m1.e
+>mh : m1.e, Symbol(mh, Decl(declFileTypeofInAnonymousType.ts, 19, 21))
+>m1.e.holiday : m1.e, Symbol(m1.e.holiday, Decl(declFileTypeofInAnonymousType.ts, 6, 16))
+>m1.e : typeof m1.e, Symbol(m1.e, Decl(declFileTypeofInAnonymousType.ts, 3, 5))
+>m1 : typeof m1, Symbol(m1, Decl(declFileTypeofInAnonymousType.ts, 0, 0))
+>e : typeof m1.e, Symbol(m1.e, Decl(declFileTypeofInAnonymousType.ts, 3, 5))
+>holiday : m1.e, Symbol(m1.e.holiday, Decl(declFileTypeofInAnonymousType.ts, 6, 16))
 
 };

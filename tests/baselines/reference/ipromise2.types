@@ -1,124 +1,126 @@
 === tests/cases/compiler/ipromise2.ts ===
 declare module Windows.Foundation {
->Windows : unknown
->Foundation : unknown
+>Windows : any, Symbol(Windows, Decl(ipromise2.ts, 0, 0))
+>Foundation : any, Symbol(Foundation, Decl(ipromise2.ts, 0, 23))
 
     export interface IPromise<T> {
->IPromise : IPromise<T>
->T : T
+>IPromise : IPromise<T>, Symbol(IPromise, Decl(ipromise2.ts, 0, 35))
+>T : T, Symbol(T, Decl(ipromise2.ts, 1, 30))
 
         then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
->then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }
->U : U
->success : (value: T) => IPromise<U>
->value : T
->T : T
->IPromise : IPromise<T>
->U : U
->error : (error: any) => IPromise<U>
->error : any
->IPromise : IPromise<T>
->U : U
->progress : (progress: any) => void
->progress : any
->Windows : unknown
->Foundation : unknown
->IPromise : IPromise<T>
->U : U
+>then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }, Symbol(then, Decl(ipromise2.ts, 1, 34), Decl(ipromise2.ts, 2, 159), Decl(ipromise2.ts, 3, 149), Decl(ipromise2.ts, 4, 149))
+>U : U, Symbol(U, Decl(ipromise2.ts, 2, 13))
+>success : (value: T) => IPromise<U>, Symbol(success, Decl(ipromise2.ts, 2, 16))
+>value : T, Symbol(value, Decl(ipromise2.ts, 2, 27))
+>T : T, Symbol(T, Decl(ipromise2.ts, 1, 30))
+>IPromise : IPromise<T>, Symbol(IPromise, Decl(ipromise2.ts, 0, 35))
+>U : U, Symbol(U, Decl(ipromise2.ts, 2, 13))
+>error : (error: any) => IPromise<U>, Symbol(error, Decl(ipromise2.ts, 2, 52))
+>error : any, Symbol(error, Decl(ipromise2.ts, 2, 62))
+>IPromise : IPromise<T>, Symbol(IPromise, Decl(ipromise2.ts, 0, 35))
+>U : U, Symbol(U, Decl(ipromise2.ts, 2, 13))
+>progress : (progress: any) => void, Symbol(progress, Decl(ipromise2.ts, 2, 89))
+>progress : any, Symbol(progress, Decl(ipromise2.ts, 2, 102))
+>Windows : any, Symbol(Windows, Decl(ipromise2.ts, 0, 0))
+>Foundation : any, Symbol(Foundation, Decl(ipromise2.ts, 0, 23))
+>IPromise : IPromise<T>, Symbol(IPromise, Decl(ipromise2.ts, 0, 35))
+>U : U, Symbol(U, Decl(ipromise2.ts, 2, 13))
 
         then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
->then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }
->U : U
->success : (value: T) => IPromise<U>
->value : T
->T : T
->IPromise : IPromise<T>
->U : U
->error : (error: any) => U
->error : any
->U : U
->progress : (progress: any) => void
->progress : any
->Windows : unknown
->Foundation : unknown
->IPromise : IPromise<T>
->U : U
+>then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }, Symbol(then, Decl(ipromise2.ts, 1, 34), Decl(ipromise2.ts, 2, 159), Decl(ipromise2.ts, 3, 149), Decl(ipromise2.ts, 4, 149))
+>U : U, Symbol(U, Decl(ipromise2.ts, 3, 13))
+>success : (value: T) => IPromise<U>, Symbol(success, Decl(ipromise2.ts, 3, 16))
+>value : T, Symbol(value, Decl(ipromise2.ts, 3, 27))
+>T : T, Symbol(T, Decl(ipromise2.ts, 1, 30))
+>IPromise : IPromise<T>, Symbol(IPromise, Decl(ipromise2.ts, 0, 35))
+>U : U, Symbol(U, Decl(ipromise2.ts, 3, 13))
+>error : (error: any) => U, Symbol(error, Decl(ipromise2.ts, 3, 52))
+>error : any, Symbol(error, Decl(ipromise2.ts, 3, 62))
+>U : U, Symbol(U, Decl(ipromise2.ts, 3, 13))
+>progress : (progress: any) => void, Symbol(progress, Decl(ipromise2.ts, 3, 79))
+>progress : any, Symbol(progress, Decl(ipromise2.ts, 3, 92))
+>Windows : any, Symbol(Windows, Decl(ipromise2.ts, 0, 0))
+>Foundation : any, Symbol(Foundation, Decl(ipromise2.ts, 0, 23))
+>IPromise : IPromise<T>, Symbol(IPromise, Decl(ipromise2.ts, 0, 35))
+>U : U, Symbol(U, Decl(ipromise2.ts, 3, 13))
 
         then<U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
->then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }
->U : U
->success : (value: T) => U
->value : T
->T : T
->U : U
->error : (error: any) => IPromise<U>
->error : any
->IPromise : IPromise<T>
->U : U
->progress : (progress: any) => void
->progress : any
->Windows : unknown
->Foundation : unknown
->IPromise : IPromise<T>
->U : U
+>then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }, Symbol(then, Decl(ipromise2.ts, 1, 34), Decl(ipromise2.ts, 2, 159), Decl(ipromise2.ts, 3, 149), Decl(ipromise2.ts, 4, 149))
+>U : U, Symbol(U, Decl(ipromise2.ts, 4, 13))
+>success : (value: T) => U, Symbol(success, Decl(ipromise2.ts, 4, 16))
+>value : T, Symbol(value, Decl(ipromise2.ts, 4, 27))
+>T : T, Symbol(T, Decl(ipromise2.ts, 1, 30))
+>U : U, Symbol(U, Decl(ipromise2.ts, 4, 13))
+>error : (error: any) => IPromise<U>, Symbol(error, Decl(ipromise2.ts, 4, 42))
+>error : any, Symbol(error, Decl(ipromise2.ts, 4, 52))
+>IPromise : IPromise<T>, Symbol(IPromise, Decl(ipromise2.ts, 0, 35))
+>U : U, Symbol(U, Decl(ipromise2.ts, 4, 13))
+>progress : (progress: any) => void, Symbol(progress, Decl(ipromise2.ts, 4, 79))
+>progress : any, Symbol(progress, Decl(ipromise2.ts, 4, 92))
+>Windows : any, Symbol(Windows, Decl(ipromise2.ts, 0, 0))
+>Foundation : any, Symbol(Foundation, Decl(ipromise2.ts, 0, 23))
+>IPromise : IPromise<T>, Symbol(IPromise, Decl(ipromise2.ts, 0, 35))
+>U : U, Symbol(U, Decl(ipromise2.ts, 4, 13))
 
         then<U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
->then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }
->U : U
->success : (value: T) => U
->value : T
->T : T
->U : U
->error : (error: any) => U
->error : any
->U : U
->progress : (progress: any) => void
->progress : any
->Windows : unknown
->Foundation : unknown
->IPromise : IPromise<T>
->U : U
+>then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }, Symbol(then, Decl(ipromise2.ts, 1, 34), Decl(ipromise2.ts, 2, 159), Decl(ipromise2.ts, 3, 149), Decl(ipromise2.ts, 4, 149))
+>U : U, Symbol(U, Decl(ipromise2.ts, 5, 13))
+>success : (value: T) => U, Symbol(success, Decl(ipromise2.ts, 5, 16))
+>value : T, Symbol(value, Decl(ipromise2.ts, 5, 27))
+>T : T, Symbol(T, Decl(ipromise2.ts, 1, 30))
+>U : U, Symbol(U, Decl(ipromise2.ts, 5, 13))
+>error : (error: any) => U, Symbol(error, Decl(ipromise2.ts, 5, 42))
+>error : any, Symbol(error, Decl(ipromise2.ts, 5, 52))
+>U : U, Symbol(U, Decl(ipromise2.ts, 5, 13))
+>progress : (progress: any) => void, Symbol(progress, Decl(ipromise2.ts, 5, 69))
+>progress : any, Symbol(progress, Decl(ipromise2.ts, 5, 82))
+>Windows : any, Symbol(Windows, Decl(ipromise2.ts, 0, 0))
+>Foundation : any, Symbol(Foundation, Decl(ipromise2.ts, 0, 23))
+>IPromise : IPromise<T>, Symbol(IPromise, Decl(ipromise2.ts, 0, 35))
+>U : U, Symbol(U, Decl(ipromise2.ts, 5, 13))
 
         done<U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void ): void;
->done : <U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void) => void
->U : U
->success : (value: T) => any
->value : T
->T : T
->error : (error: any) => any
->error : any
->progress : (progress: any) => void
->progress : any
+>done : <U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void) => void, Symbol(done, Decl(ipromise2.ts, 5, 139))
+>U : U, Symbol(U, Decl(ipromise2.ts, 6, 13))
+>success : (value: T) => any, Symbol(success, Decl(ipromise2.ts, 6, 16))
+>value : T, Symbol(value, Decl(ipromise2.ts, 6, 27))
+>T : T, Symbol(T, Decl(ipromise2.ts, 1, 30))
+>error : (error: any) => any, Symbol(error, Decl(ipromise2.ts, 6, 44))
+>error : any, Symbol(error, Decl(ipromise2.ts, 6, 54))
+>progress : (progress: any) => void, Symbol(progress, Decl(ipromise2.ts, 6, 73))
+>progress : any, Symbol(progress, Decl(ipromise2.ts, 6, 86))
 
         value: T;
->value : T
->T : T
+>value : T, Symbol(value, Decl(ipromise2.ts, 6, 117))
+>T : T, Symbol(T, Decl(ipromise2.ts, 1, 30))
     }
 }
 
 var p: Windows.Foundation.IPromise<string>;
->p : Windows.Foundation.IPromise<string>
->Windows : unknown
->Foundation : unknown
->IPromise : Windows.Foundation.IPromise<T>
+>p : Windows.Foundation.IPromise<string>, Symbol(p, Decl(ipromise2.ts, 11, 3))
+>Windows : any, Symbol(Windows, Decl(ipromise2.ts, 0, 0))
+>Foundation : any, Symbol(Windows.Foundation, Decl(ipromise2.ts, 0, 23))
+>IPromise : Windows.Foundation.IPromise<T>, Symbol(Windows.Foundation.IPromise, Decl(ipromise2.ts, 0, 35))
 
 var p2 = p.then(function (s) {
->p2 : Windows.Foundation.IPromise<number>
+>p2 : Windows.Foundation.IPromise<number>, Symbol(p2, Decl(ipromise2.ts, 13, 3))
 >p.then(function (s) {    return 34;} ) : Windows.Foundation.IPromise<number>
->p.then : { <U>(success?: (value: string) => Windows.Foundation.IPromise<U>, error?: (error: any) => Windows.Foundation.IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => Windows.Foundation.IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => Windows.Foundation.IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; }
->p : Windows.Foundation.IPromise<string>
->then : { <U>(success?: (value: string) => Windows.Foundation.IPromise<U>, error?: (error: any) => Windows.Foundation.IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => Windows.Foundation.IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => Windows.Foundation.IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; }
+>p.then : { <U>(success?: (value: string) => Windows.Foundation.IPromise<U>, error?: (error: any) => Windows.Foundation.IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => Windows.Foundation.IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => Windows.Foundation.IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; }, Symbol(Windows.Foundation.IPromise.then, Decl(ipromise2.ts, 1, 34), Decl(ipromise2.ts, 2, 159), Decl(ipromise2.ts, 3, 149), Decl(ipromise2.ts, 4, 149))
+>p : Windows.Foundation.IPromise<string>, Symbol(p, Decl(ipromise2.ts, 11, 3))
+>then : { <U>(success?: (value: string) => Windows.Foundation.IPromise<U>, error?: (error: any) => Windows.Foundation.IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => Windows.Foundation.IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => Windows.Foundation.IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; }, Symbol(Windows.Foundation.IPromise.then, Decl(ipromise2.ts, 1, 34), Decl(ipromise2.ts, 2, 159), Decl(ipromise2.ts, 3, 149), Decl(ipromise2.ts, 4, 149))
 >function (s) {    return 34;} : (s: string) => number
->s : string
+>s : string, Symbol(s, Decl(ipromise2.ts, 13, 26))
 
     return 34;
+>34 : number
+
 } );
 
 
 var x: number = p2.value;
->x : number
->p2.value : number
->p2 : Windows.Foundation.IPromise<number>
->value : number
+>x : number, Symbol(x, Decl(ipromise2.ts, 18, 3))
+>p2.value : number, Symbol(Windows.Foundation.IPromise.value, Decl(ipromise2.ts, 6, 117))
+>p2 : Windows.Foundation.IPromise<number>, Symbol(p2, Decl(ipromise2.ts, 13, 3))
+>value : number, Symbol(Windows.Foundation.IPromise.value, Decl(ipromise2.ts, 6, 117))
 
 

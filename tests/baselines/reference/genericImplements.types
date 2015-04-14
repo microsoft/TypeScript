@@ -1,60 +1,60 @@
 === tests/cases/compiler/genericImplements.ts ===
 class A { a; };
->A : A
->a : any
+>A : A, Symbol(A, Decl(genericImplements.ts, 0, 0))
+>a : any, Symbol(a, Decl(genericImplements.ts, 0, 9))
 
 class B { b; };
->B : B
->b : any
+>B : B, Symbol(B, Decl(genericImplements.ts, 0, 15))
+>b : any, Symbol(b, Decl(genericImplements.ts, 1, 9))
 
 interface I {
->I : I
+>I : I, Symbol(I, Decl(genericImplements.ts, 1, 15))
 
     f<T extends A>(): T;
->f : <T extends A>() => T
->T : T
->A : A
->T : T
+>f : <T extends A>() => T, Symbol(f, Decl(genericImplements.ts, 2, 13))
+>T : T, Symbol(T, Decl(genericImplements.ts, 3, 6))
+>A : A, Symbol(A, Decl(genericImplements.ts, 0, 0))
+>T : T, Symbol(T, Decl(genericImplements.ts, 3, 6))
 
 } // { f: () => { a; } }
 
 // OK
 class X implements I {  
->X : X
->I : I
+>X : X, Symbol(X, Decl(genericImplements.ts, 4, 1))
+>I : I, Symbol(I, Decl(genericImplements.ts, 1, 15))
 
     f<T extends B>(): T { return undefined; }
->f : <T extends B>() => T
->T : T
->B : B
->T : T
->undefined : undefined
+>f : <T extends B>() => T, Symbol(f, Decl(genericImplements.ts, 7, 22))
+>T : T, Symbol(T, Decl(genericImplements.ts, 8, 6))
+>B : B, Symbol(B, Decl(genericImplements.ts, 0, 15))
+>T : T, Symbol(T, Decl(genericImplements.ts, 8, 6))
+>undefined : undefined, Symbol(undefined)
 
 } // { f: () => { b; } }
 
 // OK
 class Y implements I {
->Y : Y
->I : I
+>Y : Y, Symbol(Y, Decl(genericImplements.ts, 9, 1))
+>I : I, Symbol(I, Decl(genericImplements.ts, 1, 15))
 
     f<T extends A>(): T { return undefined; }
->f : <T extends A>() => T
->T : T
->A : A
->T : T
->undefined : undefined
+>f : <T extends A>() => T, Symbol(f, Decl(genericImplements.ts, 12, 22))
+>T : T, Symbol(T, Decl(genericImplements.ts, 13, 6))
+>A : A, Symbol(A, Decl(genericImplements.ts, 0, 0))
+>T : T, Symbol(T, Decl(genericImplements.ts, 13, 6))
+>undefined : undefined, Symbol(undefined)
 
 } // { f: () => { a; } }
 
 // OK
 class Z implements I {
->Z : Z
->I : I
+>Z : Z, Symbol(Z, Decl(genericImplements.ts, 14, 1))
+>I : I, Symbol(I, Decl(genericImplements.ts, 1, 15))
 
     f<T>(): T { return undefined; }
->f : <T>() => T
->T : T
->T : T
->undefined : undefined
+>f : <T>() => T, Symbol(f, Decl(genericImplements.ts, 17, 22))
+>T : T, Symbol(T, Decl(genericImplements.ts, 18, 6))
+>T : T, Symbol(T, Decl(genericImplements.ts, 18, 6))
+>undefined : undefined, Symbol(undefined)
 
 } // { f: <T>() => T } 

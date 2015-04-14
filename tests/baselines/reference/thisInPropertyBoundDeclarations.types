@@ -1,49 +1,49 @@
 === tests/cases/compiler/thisInPropertyBoundDeclarations.ts ===
 class Bug {
->Bug : Bug
+>Bug : Bug, Symbol(Bug, Decl(thisInPropertyBoundDeclarations.ts, 0, 0))
 
     private name: string;
->name : string
+>name : string, Symbol(name, Decl(thisInPropertyBoundDeclarations.ts, 0, 11))
 
     private static func: Function[] = [
->func : Function[]
->Function : Function
+>func : Function[], Symbol(Bug.func, Decl(thisInPropertyBoundDeclarations.ts, 1, 25))
+>Function : Function, Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11))
 >[     (that: Bug, name: string) => {         that.foo(name);     }    ] : ((that: Bug, name: string) => void)[]
 
      (that: Bug, name: string) => {
 >(that: Bug, name: string) => {         that.foo(name);     } : (that: Bug, name: string) => void
->that : Bug
->Bug : Bug
->name : string
+>that : Bug, Symbol(that, Decl(thisInPropertyBoundDeclarations.ts, 4, 6))
+>Bug : Bug, Symbol(Bug, Decl(thisInPropertyBoundDeclarations.ts, 0, 0))
+>name : string, Symbol(name, Decl(thisInPropertyBoundDeclarations.ts, 4, 16))
 
          that.foo(name);
 >that.foo(name) : void
->that.foo : (name: string) => void
->that : Bug
->foo : (name: string) => void
->name : string
+>that.foo : (name: string) => void, Symbol(foo, Decl(thisInPropertyBoundDeclarations.ts, 7, 6))
+>that : Bug, Symbol(that, Decl(thisInPropertyBoundDeclarations.ts, 4, 6))
+>foo : (name: string) => void, Symbol(foo, Decl(thisInPropertyBoundDeclarations.ts, 7, 6))
+>name : string, Symbol(name, Decl(thisInPropertyBoundDeclarations.ts, 4, 16))
      }
     ];
 
     private foo(name: string) {
->foo : (name: string) => void
->name : string
+>foo : (name: string) => void, Symbol(foo, Decl(thisInPropertyBoundDeclarations.ts, 7, 6))
+>name : string, Symbol(name, Decl(thisInPropertyBoundDeclarations.ts, 9, 16))
 
         this.name = name;
 >this.name = name : string
->this.name : string
->this : Bug
->name : string
->name : string
+>this.name : string, Symbol(name, Decl(thisInPropertyBoundDeclarations.ts, 0, 11))
+>this : Bug, Symbol(Bug, Decl(thisInPropertyBoundDeclarations.ts, 0, 0))
+>name : string, Symbol(name, Decl(thisInPropertyBoundDeclarations.ts, 0, 11))
+>name : string, Symbol(name, Decl(thisInPropertyBoundDeclarations.ts, 9, 16))
     }
 }
 
 // Valid use of this in a property bound decl
 class A {
->A : A
+>A : A, Symbol(A, Decl(thisInPropertyBoundDeclarations.ts, 12, 1))
 
     prop1 = function() {
->prop1 : () => void
+>prop1 : () => void, Symbol(prop1, Decl(thisInPropertyBoundDeclarations.ts, 15, 9))
 >function() {        this;    } : () => void
 
         this;
@@ -52,11 +52,11 @@ class A {
     };
 
     prop2 = function() {
->prop2 : () => void
+>prop2 : () => void, Symbol(prop2, Decl(thisInPropertyBoundDeclarations.ts, 18, 6))
 >function() {        function inner() {            this;        }        () => this;    } : () => void
 
         function inner() {
->inner : () => void
+>inner : () => void, Symbol(inner, Decl(thisInPropertyBoundDeclarations.ts, 20, 24))
 
             this;
 >this : any
@@ -68,11 +68,11 @@ class A {
     };
 
     prop3 = () => {
->prop3 : () => void
+>prop3 : () => void, Symbol(prop3, Decl(thisInPropertyBoundDeclarations.ts, 25, 6))
 >() => {        function inner() {            this;        }    } : () => void
 
         function inner() {
->inner : () => void
+>inner : () => void, Symbol(inner, Decl(thisInPropertyBoundDeclarations.ts, 27, 19))
 
             this;
 >this : any
@@ -80,25 +80,25 @@ class A {
     };
 
     prop4 = {
->prop4 : { a: () => any; }
+>prop4 : { a: () => any; }, Symbol(prop4, Decl(thisInPropertyBoundDeclarations.ts, 31, 6))
 >{        a: function() { return this; },    } : { a: () => any; }
 
         a: function() { return this; },
->a : () => any
+>a : () => any, Symbol(a, Decl(thisInPropertyBoundDeclarations.ts, 33, 13))
 >function() { return this; } : () => any
 >this : any
 
     };
 
     prop5 = () => {
->prop5 : () => { a: () => any; }
+>prop5 : () => { a: () => any; }, Symbol(prop5, Decl(thisInPropertyBoundDeclarations.ts, 35, 6))
 >() => {        return {            a: function() { return this; },        };    } : () => { a: () => any; }
 
         return {
 >{            a: function() { return this; },        } : { a: () => any; }
 
             a: function() { return this; },
->a : () => any
+>a : () => any, Symbol(a, Decl(thisInPropertyBoundDeclarations.ts, 38, 16))
 >function() { return this; } : () => any
 >this : any
 
@@ -107,65 +107,68 @@ class A {
 }
 
 class B {
->B : B
+>B : B, Symbol(B, Decl(thisInPropertyBoundDeclarations.ts, 42, 1))
 
     prop1 = this;
->prop1 : B
->this : B
+>prop1 : B, Symbol(prop1, Decl(thisInPropertyBoundDeclarations.ts, 44, 9))
+>this : B, Symbol(B, Decl(thisInPropertyBoundDeclarations.ts, 42, 1))
 
     prop2 = () => this;
->prop2 : () => B
+>prop2 : () => B, Symbol(prop2, Decl(thisInPropertyBoundDeclarations.ts, 45, 17))
 >() => this : () => B
->this : B
+>this : B, Symbol(B, Decl(thisInPropertyBoundDeclarations.ts, 42, 1))
 
     prop3 = () => () => () => () => this;
->prop3 : () => () => () => () => B
+>prop3 : () => () => () => () => B, Symbol(prop3, Decl(thisInPropertyBoundDeclarations.ts, 47, 23))
 >() => () => () => () => this : () => () => () => () => B
 >() => () => () => this : () => () => () => B
 >() => () => this : () => () => B
 >() => this : () => B
->this : B
+>this : B, Symbol(B, Decl(thisInPropertyBoundDeclarations.ts, 42, 1))
 
     prop4 = '  ' +
->prop4 : string
+>prop4 : string, Symbol(prop4, Decl(thisInPropertyBoundDeclarations.ts, 49, 41))
 >'  ' +    function() {    } +    ' ' +    (() => () => () => this) : string
 >'  ' +    function() {    } +    ' ' : string
 >'  ' +    function() {    } : string
+>'  ' : string
 
     function() {
 >function() {    } : () => void
 
     } +
     ' ' +
+>' ' : string
+
     (() => () => () => this);
 >(() => () => () => this) : () => () => () => B
 >() => () => () => this : () => () => () => B
 >() => () => this : () => () => B
 >() => this : () => B
->this : B
+>this : B, Symbol(B, Decl(thisInPropertyBoundDeclarations.ts, 42, 1))
 
     prop5 = {
->prop5 : { a: () => B; }
+>prop5 : { a: () => B; }, Symbol(prop5, Decl(thisInPropertyBoundDeclarations.ts, 55, 29))
 >{        a: () => { return this; }    } : { a: () => B; }
 
         a: () => { return this; }
->a : () => B
+>a : () => B, Symbol(a, Decl(thisInPropertyBoundDeclarations.ts, 57, 13))
 >() => { return this; } : () => B
->this : B
+>this : B, Symbol(B, Decl(thisInPropertyBoundDeclarations.ts, 42, 1))
 
     };
 
     prop6 = () => {
->prop6 : () => { a: () => B; }
+>prop6 : () => { a: () => B; }, Symbol(prop6, Decl(thisInPropertyBoundDeclarations.ts, 59, 6))
 >() => {        return {            a: () => { return this; }        };    } : () => { a: () => B; }
 
         return {
 >{            a: () => { return this; }        } : { a: () => B; }
 
             a: () => { return this; }
->a : () => B
+>a : () => B, Symbol(a, Decl(thisInPropertyBoundDeclarations.ts, 62, 16))
 >() => { return this; } : () => B
->this : B
+>this : B, Symbol(B, Decl(thisInPropertyBoundDeclarations.ts, 42, 1))
 
         };
     };

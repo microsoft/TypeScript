@@ -1,38 +1,38 @@
 === tests/cases/compiler/mixedExports.ts ===
 declare module M {
->M : typeof M
+>M : typeof M, Symbol(M, Decl(mixedExports.ts, 0, 0))
 
      function foo();
->foo : { (): any; (): any; (): any; }
+>foo : { (): any; (): any; (): any; }, Symbol(foo, Decl(mixedExports.ts, 0, 18), Decl(mixedExports.ts, 1, 20), Decl(mixedExports.ts, 2, 27))
 
      export function foo();
->foo : { (): any; (): any; (): any; }
+>foo : { (): any; (): any; (): any; }, Symbol(foo, Decl(mixedExports.ts, 0, 18), Decl(mixedExports.ts, 1, 20), Decl(mixedExports.ts, 2, 27))
 
      function foo();
->foo : { (): any; (): any; (): any; }
+>foo : { (): any; (): any; (): any; }, Symbol(foo, Decl(mixedExports.ts, 0, 18), Decl(mixedExports.ts, 1, 20), Decl(mixedExports.ts, 2, 27))
 }
 
 declare module M1 {
->M1 : unknown
+>M1 : any, Symbol(M1, Decl(mixedExports.ts, 4, 1))
 
      export interface Foo {}
->Foo : Foo
+>Foo : Foo, Symbol(Foo, Decl(mixedExports.ts, 6, 19), Decl(mixedExports.ts, 7, 28))
 
      interface Foo {}
->Foo : Foo
+>Foo : Foo, Symbol(Foo, Decl(mixedExports.ts, 6, 19), Decl(mixedExports.ts, 7, 28))
 }
 
 module A {
->A : unknown
+>A : any, Symbol(A, Decl(mixedExports.ts, 9, 1))
 
      interface X {x}
->X : X
->x : any
+>X : X, Symbol(X, Decl(mixedExports.ts, 11, 10), Decl(mixedExports.ts, 12, 20), Decl(mixedExports.ts, 13, 23))
+>x : any, Symbol(x, Decl(mixedExports.ts, 12, 18))
 
      export module X {}
->X : unknown
+>X : any, Symbol(X, Decl(mixedExports.ts, 12, 20))
 
      interface X {y}
->X : X
->y : any
+>X : X, Symbol(X, Decl(mixedExports.ts, 11, 10), Decl(mixedExports.ts, 12, 20), Decl(mixedExports.ts, 13, 23))
+>y : any, Symbol(y, Decl(mixedExports.ts, 14, 18))
 }

@@ -1,10 +1,10 @@
 === tests/cases/conformance/es6/Symbols/symbolDeclarationEmit9.ts ===
 var obj = {
->obj : { [Symbol.isConcatSpreadable](): void; }
+>obj : { [Symbol.isConcatSpreadable](): void; }, Symbol(obj, Decl(symbolDeclarationEmit9.ts, 0, 3))
 >{    [Symbol.isConcatSpreadable]() { }} : { [Symbol.isConcatSpreadable](): void; }
 
     [Symbol.isConcatSpreadable]() { }
->Symbol.isConcatSpreadable : symbol
->Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : symbol, Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1230, 24))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>isConcatSpreadable : symbol, Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1230, 24))
 }

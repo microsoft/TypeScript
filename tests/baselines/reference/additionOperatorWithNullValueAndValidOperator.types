@@ -2,106 +2,128 @@
 // If one operand is the null or undefined value, it is treated as having the type of the other operand.
 
 enum E { a, b, c }
->E : E
->a : E
->b : E
->c : E
+>E : E, Symbol(E, Decl(additionOperatorWithNullValueAndValidOperator.ts, 0, 0))
+>a : E, Symbol(E.a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 2, 8))
+>b : E, Symbol(E.b, Decl(additionOperatorWithNullValueAndValidOperator.ts, 2, 11))
+>c : E, Symbol(E.c, Decl(additionOperatorWithNullValueAndValidOperator.ts, 2, 14))
 
 var a: any;
->a : any
+>a : any, Symbol(a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 4, 3))
 
 var b: number;
->b : number
+>b : number, Symbol(b, Decl(additionOperatorWithNullValueAndValidOperator.ts, 5, 3))
 
 var c: E;
->c : E
->E : E
+>c : E, Symbol(c, Decl(additionOperatorWithNullValueAndValidOperator.ts, 6, 3))
+>E : E, Symbol(E, Decl(additionOperatorWithNullValueAndValidOperator.ts, 0, 0))
 
 var d: string;
->d : string
+>d : string, Symbol(d, Decl(additionOperatorWithNullValueAndValidOperator.ts, 7, 3))
 
 // null + any
 var r1: any = null + a;
->r1 : any
+>r1 : any, Symbol(r1, Decl(additionOperatorWithNullValueAndValidOperator.ts, 10, 3))
 >null + a : any
->a : any
+>null : null
+>a : any, Symbol(a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 4, 3))
 
 var r2: any = a + null;
->r2 : any
+>r2 : any, Symbol(r2, Decl(additionOperatorWithNullValueAndValidOperator.ts, 11, 3))
 >a + null : any
->a : any
+>a : any, Symbol(a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 4, 3))
+>null : null
 
 // null + number/enum
 var r3 = null + b;
->r3 : number
+>r3 : number, Symbol(r3, Decl(additionOperatorWithNullValueAndValidOperator.ts, 14, 3))
 >null + b : number
->b : number
+>null : null
+>b : number, Symbol(b, Decl(additionOperatorWithNullValueAndValidOperator.ts, 5, 3))
 
 var r4 = null + 1;
->r4 : number
+>r4 : number, Symbol(r4, Decl(additionOperatorWithNullValueAndValidOperator.ts, 15, 3))
 >null + 1 : number
+>null : null
+>1 : number
 
 var r5 = null + c;
->r5 : number
+>r5 : number, Symbol(r5, Decl(additionOperatorWithNullValueAndValidOperator.ts, 16, 3))
 >null + c : number
->c : E
+>null : null
+>c : E, Symbol(c, Decl(additionOperatorWithNullValueAndValidOperator.ts, 6, 3))
 
 var r6 = null + E.a;
->r6 : number
+>r6 : number, Symbol(r6, Decl(additionOperatorWithNullValueAndValidOperator.ts, 17, 3))
 >null + E.a : number
->E.a : E
->E : typeof E
->a : E
+>null : null
+>E.a : E, Symbol(E.a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 2, 8))
+>E : typeof E, Symbol(E, Decl(additionOperatorWithNullValueAndValidOperator.ts, 0, 0))
+>a : E, Symbol(E.a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 2, 8))
 
 var r7 = null + E['a'];
->r7 : number
+>r7 : number, Symbol(r7, Decl(additionOperatorWithNullValueAndValidOperator.ts, 18, 3))
 >null + E['a'] : number
+>null : null
 >E['a'] : E
->E : typeof E
+>E : typeof E, Symbol(E, Decl(additionOperatorWithNullValueAndValidOperator.ts, 0, 0))
+>'a' : string, Symbol(E.a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 2, 8))
 
 var r8 = b + null;
->r8 : number
+>r8 : number, Symbol(r8, Decl(additionOperatorWithNullValueAndValidOperator.ts, 19, 3))
 >b + null : number
->b : number
+>b : number, Symbol(b, Decl(additionOperatorWithNullValueAndValidOperator.ts, 5, 3))
+>null : null
 
 var r9 = 1 + null;
->r9 : number
+>r9 : number, Symbol(r9, Decl(additionOperatorWithNullValueAndValidOperator.ts, 20, 3))
 >1 + null : number
+>1 : number
+>null : null
 
 var r10 = c + null
->r10 : number
+>r10 : number, Symbol(r10, Decl(additionOperatorWithNullValueAndValidOperator.ts, 21, 3))
 >c + null : number
->c : E
+>c : E, Symbol(c, Decl(additionOperatorWithNullValueAndValidOperator.ts, 6, 3))
+>null : null
 
 var r11 = E.a + null;
->r11 : number
+>r11 : number, Symbol(r11, Decl(additionOperatorWithNullValueAndValidOperator.ts, 22, 3))
 >E.a + null : number
->E.a : E
->E : typeof E
->a : E
+>E.a : E, Symbol(E.a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 2, 8))
+>E : typeof E, Symbol(E, Decl(additionOperatorWithNullValueAndValidOperator.ts, 0, 0))
+>a : E, Symbol(E.a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 2, 8))
+>null : null
 
 var r12 = E['a'] + null;
->r12 : number
+>r12 : number, Symbol(r12, Decl(additionOperatorWithNullValueAndValidOperator.ts, 23, 3))
 >E['a'] + null : number
 >E['a'] : E
->E : typeof E
+>E : typeof E, Symbol(E, Decl(additionOperatorWithNullValueAndValidOperator.ts, 0, 0))
+>'a' : string, Symbol(E.a, Decl(additionOperatorWithNullValueAndValidOperator.ts, 2, 8))
+>null : null
 
 // null + string
 var r13 = null + d;
->r13 : string
+>r13 : string, Symbol(r13, Decl(additionOperatorWithNullValueAndValidOperator.ts, 26, 3))
 >null + d : string
->d : string
+>null : null
+>d : string, Symbol(d, Decl(additionOperatorWithNullValueAndValidOperator.ts, 7, 3))
 
 var r14 = null + '';
->r14 : string
+>r14 : string, Symbol(r14, Decl(additionOperatorWithNullValueAndValidOperator.ts, 27, 3))
 >null + '' : string
+>null : null
+>'' : string
 
 var r15 = d + null;
->r15 : string
+>r15 : string, Symbol(r15, Decl(additionOperatorWithNullValueAndValidOperator.ts, 28, 3))
 >d + null : string
->d : string
+>d : string, Symbol(d, Decl(additionOperatorWithNullValueAndValidOperator.ts, 7, 3))
+>null : null
 
 var r16 = '' + null;
->r16 : string
+>r16 : string, Symbol(r16, Decl(additionOperatorWithNullValueAndValidOperator.ts, 29, 3))
 >'' + null : string
+>'' : string
+>null : null
 

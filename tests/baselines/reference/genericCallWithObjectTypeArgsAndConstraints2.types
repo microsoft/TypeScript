@@ -3,141 +3,145 @@
 // No errors expected
 
 class Base {
->Base : Base
+>Base : Base, Symbol(Base, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 0, 0))
 
     x: string;
->x : string
+>x : string, Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 3, 12))
 }
 class Derived extends Base {
->Derived : Derived
->Base : Base
+>Derived : Derived, Symbol(Derived, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 5, 1))
+>Base : Base, Symbol(Base, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 0, 0))
 
     y: string;
->y : string
+>y : string, Symbol(y, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 6, 28))
 }
 
 function f<T extends Base>(x: { foo: T; bar: T }) {
->f : <T extends Base>(x: { foo: T; bar: T; }) => T
->T : T
->Base : Base
->x : { foo: T; bar: T; }
->foo : T
->T : T
->bar : T
->T : T
+>f : <T extends Base>(x: { foo: T; bar: T; }) => T, Symbol(f, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 8, 1))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 10, 11))
+>Base : Base, Symbol(Base, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 0, 0))
+>x : { foo: T; bar: T; }, Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 10, 27))
+>foo : T, Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 10, 31))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 10, 11))
+>bar : T, Symbol(bar, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 10, 39))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 10, 11))
 
     var r: T;
->r : T
->T : T
+>r : T, Symbol(r, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 11, 7))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 10, 11))
 
     return r;
->r : T
+>r : T, Symbol(r, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 11, 7))
 }
 var r = f({ foo: new Base(), bar: new Derived() });
->r : Base
+>r : Base, Symbol(r, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 14, 3))
 >f({ foo: new Base(), bar: new Derived() }) : Base
->f : <T extends Base>(x: { foo: T; bar: T; }) => T
+>f : <T extends Base>(x: { foo: T; bar: T; }) => T, Symbol(f, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 8, 1))
 >{ foo: new Base(), bar: new Derived() } : { foo: Base; bar: Derived; }
->foo : Base
+>foo : Base, Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 14, 11))
 >new Base() : Base
->Base : typeof Base
->bar : Derived
+>Base : typeof Base, Symbol(Base, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 0, 0))
+>bar : Derived, Symbol(bar, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 14, 28))
 >new Derived() : Derived
->Derived : typeof Derived
+>Derived : typeof Derived, Symbol(Derived, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 5, 1))
 
 var r2 = f({ foo: new Derived(), bar: new Derived() });
->r2 : Derived
+>r2 : Derived, Symbol(r2, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 15, 3))
 >f({ foo: new Derived(), bar: new Derived() }) : Derived
->f : <T extends Base>(x: { foo: T; bar: T; }) => T
+>f : <T extends Base>(x: { foo: T; bar: T; }) => T, Symbol(f, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 8, 1))
 >{ foo: new Derived(), bar: new Derived() } : { foo: Derived; bar: Derived; }
->foo : Derived
+>foo : Derived, Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 15, 12))
 >new Derived() : Derived
->Derived : typeof Derived
->bar : Derived
+>Derived : typeof Derived, Symbol(Derived, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 5, 1))
+>bar : Derived, Symbol(bar, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 15, 32))
 >new Derived() : Derived
->Derived : typeof Derived
+>Derived : typeof Derived, Symbol(Derived, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 5, 1))
 
 
 interface I<T> {
->I : I<T>
->T : T
+>I : I<T>, Symbol(I, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 15, 55))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 18, 12))
 
     a: T;
->a : T
->T : T
+>a : T, Symbol(a, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 18, 16))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 18, 12))
 }
 function f2<T extends Base>(x: I<T>) {
->f2 : <T extends Base>(x: I<T>) => T
->T : T
->Base : Base
->x : I<T>
->I : I<T>
->T : T
+>f2 : <T extends Base>(x: I<T>) => T, Symbol(f2, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 20, 1))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 21, 12))
+>Base : Base, Symbol(Base, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 0, 0))
+>x : I<T>, Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 21, 28))
+>I : I<T>, Symbol(I, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 15, 55))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 21, 12))
 
     var r: T;
->r : T
->T : T
+>r : T, Symbol(r, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 22, 7))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 21, 12))
 
     return r;
->r : T
+>r : T, Symbol(r, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 22, 7))
 }
 var i: I<Derived>;
->i : I<Derived>
->I : I<T>
->Derived : Derived
+>i : I<Derived>, Symbol(i, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 25, 3))
+>I : I<T>, Symbol(I, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 15, 55))
+>Derived : Derived, Symbol(Derived, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 5, 1))
 
 var r3 = f2(i);
->r3 : Derived
+>r3 : Derived, Symbol(r3, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 26, 3))
 >f2(i) : Derived
->f2 : <T extends Base>(x: I<T>) => T
->i : I<Derived>
+>f2 : <T extends Base>(x: I<T>) => T, Symbol(f2, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 20, 1))
+>i : I<Derived>, Symbol(i, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 25, 3))
 
 
 function f3<T extends Base>(x: T, y: (a: T) => T) {
->f3 : <T extends Base>(x: T, y: (a: T) => T) => T
->T : T
->Base : Base
->x : T
->T : T
->y : (a: T) => T
->a : T
->T : T
->T : T
+>f3 : <T extends Base>(x: T, y: (a: T) => T) => T, Symbol(f3, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 26, 15))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 29, 12))
+>Base : Base, Symbol(Base, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 0, 0))
+>x : T, Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 29, 28))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 29, 12))
+>y : (a: T) => T, Symbol(y, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 29, 33))
+>a : T, Symbol(a, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 29, 38))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 29, 12))
+>T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 29, 12))
 
     return y(null);
 >y(null) : T
->y : (a: T) => T
+>y : (a: T) => T, Symbol(y, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 29, 33))
+>null : null
 }
 var r4 = f3(new Base(), x => x);
->r4 : Base
+>r4 : Base, Symbol(r4, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 32, 3))
 >f3(new Base(), x => x) : Base
->f3 : <T extends Base>(x: T, y: (a: T) => T) => T
+>f3 : <T extends Base>(x: T, y: (a: T) => T) => T, Symbol(f3, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 26, 15))
 >new Base() : Base
->Base : typeof Base
+>Base : typeof Base, Symbol(Base, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 0, 0))
 >x => x : (x: Base) => Base
->x : Base
->x : Base
+>x : Base, Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 32, 23))
+>x : Base, Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 32, 23))
 
 var r5 = f3(new Derived(), x => x);
->r5 : Derived
+>r5 : Derived, Symbol(r5, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 33, 3))
 >f3(new Derived(), x => x) : Derived
->f3 : <T extends Base>(x: T, y: (a: T) => T) => T
+>f3 : <T extends Base>(x: T, y: (a: T) => T) => T, Symbol(f3, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 26, 15))
 >new Derived() : Derived
->Derived : typeof Derived
+>Derived : typeof Derived, Symbol(Derived, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 5, 1))
 >x => x : (x: Derived) => Derived
->x : Derived
->x : Derived
+>x : Derived, Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 33, 26))
+>x : Derived, Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 33, 26))
 
 var r6 = f3(null, null); // any
->r6 : any
+>r6 : any, Symbol(r6, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 35, 3))
 >f3(null, null) : any
->f3 : <T extends Base>(x: T, y: (a: T) => T) => T
+>f3 : <T extends Base>(x: T, y: (a: T) => T) => T, Symbol(f3, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 26, 15))
+>null : null
+>null : null
 
 var r7 = f3(null, x => x); // any
->r7 : any
+>r7 : any, Symbol(r7, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 36, 3))
 >f3(null, x => x) : any
->f3 : <T extends Base>(x: T, y: (a: T) => T) => T
+>f3 : <T extends Base>(x: T, y: (a: T) => T) => T, Symbol(f3, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 26, 15))
+>null : null
 >x => x : (x: any) => any
->x : any
->x : any
+>x : any, Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 36, 17))
+>x : any, Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints2.ts, 36, 17))
 

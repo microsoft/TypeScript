@@ -2,6 +2,6 @@
 
 export default class {
     method() { }
->method : () => void
+>method : () => void, Symbol(method, Decl(es6ExportDefaultClassDeclaration2.ts, 1, 22))
 }
 

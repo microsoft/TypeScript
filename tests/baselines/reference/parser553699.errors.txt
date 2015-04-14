@@ -1,12 +1,15 @@
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser553699.ts(3,21): error TS1110: Type expected.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser553699.ts(3,21): error TS1216: Type expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser553699.ts(3,21): error TS2304: Cannot find name 'public'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser553699.ts (1 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser553699.ts (2 errors) ====
     class Foo {
       constructor() { }
       public banana (x: public) { }
                         ~~~~~~
-!!! error TS1110: Type expected.
+!!! error TS1216: Type expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+                        ~~~~~~
+!!! error TS2304: Cannot find name 'public'.
     }
     
     class Bar {

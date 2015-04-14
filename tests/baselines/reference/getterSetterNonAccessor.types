@@ -1,32 +1,35 @@
 === tests/cases/compiler/getterSetterNonAccessor.ts ===
 function getFunc():any{return 0;}
->getFunc : () => any
+>getFunc : () => any, Symbol(getFunc, Decl(getterSetterNonAccessor.ts, 0, 0))
+>0 : number
 
 function setFunc(v){}          
->setFunc : (v: any) => void
->v : any
+>setFunc : (v: any) => void, Symbol(setFunc, Decl(getterSetterNonAccessor.ts, 0, 33))
+>v : any, Symbol(v, Decl(getterSetterNonAccessor.ts, 1, 17))
 
 Object.defineProperty({}, "0", <PropertyDescriptor>({
 >Object.defineProperty({}, "0", <PropertyDescriptor>({          get: getFunc,          set: setFunc,          configurable: true      })) : any
->Object.defineProperty : (o: any, p: string, attributes: PropertyDescriptor) => any
->Object : ObjectConstructor
->defineProperty : (o: any, p: string, attributes: PropertyDescriptor) => any
+>Object.defineProperty : (o: any, p: string, attributes: PropertyDescriptor) => any, Symbol(ObjectConstructor.defineProperty, Decl(lib.d.ts, 160, 60))
+>Object : ObjectConstructor, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>defineProperty : (o: any, p: string, attributes: PropertyDescriptor) => any, Symbol(ObjectConstructor.defineProperty, Decl(lib.d.ts, 160, 60))
 >{} : {}
+>"0" : string
 ><PropertyDescriptor>({          get: getFunc,          set: setFunc,          configurable: true      }) : PropertyDescriptor
->PropertyDescriptor : PropertyDescriptor
+>PropertyDescriptor : PropertyDescriptor, Symbol(PropertyDescriptor, Decl(lib.d.ts, 79, 66))
 >({          get: getFunc,          set: setFunc,          configurable: true      }) : { get: () => any; set: (v: any) => void; configurable: boolean; }
 >{          get: getFunc,          set: setFunc,          configurable: true      } : { get: () => any; set: (v: any) => void; configurable: boolean; }
 
           get: getFunc,
->get : () => any
->getFunc : () => any
+>get : () => any, Symbol(get, Decl(getterSetterNonAccessor.ts, 3, 53))
+>getFunc : () => any, Symbol(getFunc, Decl(getterSetterNonAccessor.ts, 0, 0))
 
           set: setFunc,
->set : (v: any) => void
->setFunc : (v: any) => void
+>set : (v: any) => void, Symbol(set, Decl(getterSetterNonAccessor.ts, 4, 23))
+>setFunc : (v: any) => void, Symbol(setFunc, Decl(getterSetterNonAccessor.ts, 0, 33))
 
           configurable: true
->configurable : boolean
+>configurable : boolean, Symbol(configurable, Decl(getterSetterNonAccessor.ts, 5, 23))
+>true : boolean
 
       }));
 

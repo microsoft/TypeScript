@@ -1,36 +1,36 @@
 === tests/cases/conformance/types/typeParameters/typeParameterLists/typeParametersAvailableInNestedScope2.ts ===
 function foo<T, U>(x: T, y: U) {
->foo : <T, U>(x: T, y: U) => void
->T : T
->U : U
->x : T
->T : T
->y : U
->U : U
+>foo : <T, U>(x: T, y: U) => void, Symbol(foo, Decl(typeParametersAvailableInNestedScope2.ts, 0, 0))
+>T : T, Symbol(T, Decl(typeParametersAvailableInNestedScope2.ts, 0, 13))
+>U : U, Symbol(U, Decl(typeParametersAvailableInNestedScope2.ts, 0, 15))
+>x : T, Symbol(x, Decl(typeParametersAvailableInNestedScope2.ts, 0, 19))
+>T : T, Symbol(T, Decl(typeParametersAvailableInNestedScope2.ts, 0, 13))
+>y : U, Symbol(y, Decl(typeParametersAvailableInNestedScope2.ts, 0, 24))
+>U : U, Symbol(U, Decl(typeParametersAvailableInNestedScope2.ts, 0, 15))
 
     function bar<V>(z: V) {
->bar : <V>(z: V) => void
->V : V
->z : V
->V : V
+>bar : <V>(z: V) => void, Symbol(bar, Decl(typeParametersAvailableInNestedScope2.ts, 0, 32))
+>V : V, Symbol(V, Decl(typeParametersAvailableInNestedScope2.ts, 1, 17))
+>z : V, Symbol(z, Decl(typeParametersAvailableInNestedScope2.ts, 1, 20))
+>V : V, Symbol(V, Decl(typeParametersAvailableInNestedScope2.ts, 1, 17))
 
         function baz<W>(a: W) {
->baz : <W>(a: W) => void
->W : W
->a : W
->W : W
+>baz : <W>(a: W) => void, Symbol(baz, Decl(typeParametersAvailableInNestedScope2.ts, 1, 27))
+>W : W, Symbol(W, Decl(typeParametersAvailableInNestedScope2.ts, 2, 21))
+>a : W, Symbol(a, Decl(typeParametersAvailableInNestedScope2.ts, 2, 24))
+>W : W, Symbol(W, Decl(typeParametersAvailableInNestedScope2.ts, 2, 21))
 
             var c: T;
->c : T
->T : T
+>c : T, Symbol(c, Decl(typeParametersAvailableInNestedScope2.ts, 3, 15))
+>T : T, Symbol(T, Decl(typeParametersAvailableInNestedScope2.ts, 0, 13))
 
             var d: U;
->d : U
->U : U
+>d : U, Symbol(d, Decl(typeParametersAvailableInNestedScope2.ts, 4, 15))
+>U : U, Symbol(U, Decl(typeParametersAvailableInNestedScope2.ts, 0, 15))
 
             var e: V;
->e : V
->V : V
+>e : V, Symbol(e, Decl(typeParametersAvailableInNestedScope2.ts, 5, 15))
+>V : V, Symbol(V, Decl(typeParametersAvailableInNestedScope2.ts, 1, 17))
         }
     }
 }

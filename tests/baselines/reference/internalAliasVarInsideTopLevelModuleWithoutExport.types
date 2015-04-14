@@ -1,18 +1,19 @@
 === tests/cases/compiler/internalAliasVarInsideTopLevelModuleWithoutExport.ts ===
 export module a {
->a : typeof a
+>a : typeof a, Symbol(a, Decl(internalAliasVarInsideTopLevelModuleWithoutExport.ts, 0, 0))
 
     export var x = 10;
->x : number
+>x : number, Symbol(x, Decl(internalAliasVarInsideTopLevelModuleWithoutExport.ts, 1, 14))
+>10 : number
 }
 
 import b = a.x;
->b : number
->a : typeof a
->x : number
+>b : number, Symbol(b, Decl(internalAliasVarInsideTopLevelModuleWithoutExport.ts, 2, 1))
+>a : typeof a, Symbol(a, Decl(internalAliasVarInsideTopLevelModuleWithoutExport.ts, 0, 0))
+>x : number, Symbol(b, Decl(internalAliasVarInsideTopLevelModuleWithoutExport.ts, 1, 14))
 
 export var bVal = b;
->bVal : number
->b : number
+>bVal : number, Symbol(bVal, Decl(internalAliasVarInsideTopLevelModuleWithoutExport.ts, 5, 10))
+>b : number, Symbol(b, Decl(internalAliasVarInsideTopLevelModuleWithoutExport.ts, 2, 1))
 
 

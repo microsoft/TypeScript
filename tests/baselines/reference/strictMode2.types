@@ -1,8 +1,0 @@
-=== tests/cases/compiler/strictMode2.ts ===
-"use strict";
-
-function foo() {
->foo : () => number
-
-    return 30;
-}

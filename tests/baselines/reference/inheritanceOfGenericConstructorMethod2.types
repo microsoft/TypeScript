@@ -1,55 +1,57 @@
 === tests/cases/compiler/inheritanceOfGenericConstructorMethod2.ts ===
 module M {
->M : typeof M
+>M : typeof M, Symbol(M, Decl(inheritanceOfGenericConstructorMethod2.ts, 0, 0))
 
    export class C1 { }
->C1 : C1
+>C1 : C1, Symbol(C1, Decl(inheritanceOfGenericConstructorMethod2.ts, 0, 10))
 
    export class C2<T> { }
->C2 : C2<T>
->T : T
+>C2 : C2<T>, Symbol(C2, Decl(inheritanceOfGenericConstructorMethod2.ts, 1, 22))
+>T : T, Symbol(T, Decl(inheritanceOfGenericConstructorMethod2.ts, 2, 19))
 }
 module N {
->N : typeof N
+>N : typeof N, Symbol(N, Decl(inheritanceOfGenericConstructorMethod2.ts, 3, 1))
 
    export class D1 extends M.C1 { }
->D1 : D1
->M : typeof M
->C1 : M.C1
+>D1 : D1, Symbol(D1, Decl(inheritanceOfGenericConstructorMethod2.ts, 4, 10))
+>M.C1 : any, Symbol(M.C1, Decl(inheritanceOfGenericConstructorMethod2.ts, 0, 10))
+>M : typeof M, Symbol(M, Decl(inheritanceOfGenericConstructorMethod2.ts, 0, 0))
+>C1 : M.C1, Symbol(M.C1, Decl(inheritanceOfGenericConstructorMethod2.ts, 0, 10))
 
    export class D2<T> extends M.C2<T> { }
->D2 : D2<T>
->T : T
->M : typeof M
->C2 : M.C2<T>
->T : T
+>D2 : D2<T>, Symbol(D2, Decl(inheritanceOfGenericConstructorMethod2.ts, 5, 35))
+>T : T, Symbol(T, Decl(inheritanceOfGenericConstructorMethod2.ts, 6, 19))
+>M.C2 : any, Symbol(M.C2, Decl(inheritanceOfGenericConstructorMethod2.ts, 1, 22))
+>M : typeof M, Symbol(M, Decl(inheritanceOfGenericConstructorMethod2.ts, 0, 0))
+>C2 : M.C2<T>, Symbol(M.C2, Decl(inheritanceOfGenericConstructorMethod2.ts, 1, 22))
+>T : T, Symbol(T, Decl(inheritanceOfGenericConstructorMethod2.ts, 6, 19))
 }
 
 var c = new M.C2<number>(); // no error
->c : M.C2<number>
+>c : M.C2<number>, Symbol(c, Decl(inheritanceOfGenericConstructorMethod2.ts, 9, 3))
 >new M.C2<number>() : M.C2<number>
->M.C2 : typeof M.C2
->M : typeof M
->C2 : typeof M.C2
+>M.C2 : typeof M.C2, Symbol(M.C2, Decl(inheritanceOfGenericConstructorMethod2.ts, 1, 22))
+>M : typeof M, Symbol(M, Decl(inheritanceOfGenericConstructorMethod2.ts, 0, 0))
+>C2 : typeof M.C2, Symbol(M.C2, Decl(inheritanceOfGenericConstructorMethod2.ts, 1, 22))
 
 var n = new N.D1(); // no error
->n : N.D1
+>n : N.D1, Symbol(n, Decl(inheritanceOfGenericConstructorMethod2.ts, 10, 3))
 >new N.D1() : N.D1
->N.D1 : typeof N.D1
->N : typeof N
->D1 : typeof N.D1
+>N.D1 : typeof N.D1, Symbol(N.D1, Decl(inheritanceOfGenericConstructorMethod2.ts, 4, 10))
+>N : typeof N, Symbol(N, Decl(inheritanceOfGenericConstructorMethod2.ts, 3, 1))
+>D1 : typeof N.D1, Symbol(N.D1, Decl(inheritanceOfGenericConstructorMethod2.ts, 4, 10))
 
 var n2 = new N.D2<number>(); // error
->n2 : N.D2<number>
+>n2 : N.D2<number>, Symbol(n2, Decl(inheritanceOfGenericConstructorMethod2.ts, 11, 3))
 >new N.D2<number>() : N.D2<number>
->N.D2 : typeof N.D2
->N : typeof N
->D2 : typeof N.D2
+>N.D2 : typeof N.D2, Symbol(N.D2, Decl(inheritanceOfGenericConstructorMethod2.ts, 5, 35))
+>N : typeof N, Symbol(N, Decl(inheritanceOfGenericConstructorMethod2.ts, 3, 1))
+>D2 : typeof N.D2, Symbol(N.D2, Decl(inheritanceOfGenericConstructorMethod2.ts, 5, 35))
 
 var n3 = new N.D2(); // no error, D2<any>
->n3 : N.D2<{}>
+>n3 : N.D2<{}>, Symbol(n3, Decl(inheritanceOfGenericConstructorMethod2.ts, 12, 3))
 >new N.D2() : N.D2<{}>
->N.D2 : typeof N.D2
->N : typeof N
->D2 : typeof N.D2
+>N.D2 : typeof N.D2, Symbol(N.D2, Decl(inheritanceOfGenericConstructorMethod2.ts, 5, 35))
+>N : typeof N, Symbol(N, Decl(inheritanceOfGenericConstructorMethod2.ts, 3, 1))
+>D2 : typeof N.D2, Symbol(N.D2, Decl(inheritanceOfGenericConstructorMethod2.ts, 5, 35))
 

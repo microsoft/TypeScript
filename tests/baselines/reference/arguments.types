@@ -1,9 +1,10 @@
 === tests/cases/compiler/arguments.ts ===
 function f() {
->f : () => void
+>f : () => void, Symbol(f, Decl(arguments.ts, 0, 0))
 
     var x=arguments[12];
->x : any
+>x : any, Symbol(x, Decl(arguments.ts, 1, 7))
 >arguments[12] : any
->arguments : IArguments
+>arguments : IArguments, Symbol(arguments)
+>12 : number
 }

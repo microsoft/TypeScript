@@ -1,20 +1,20 @@
 === tests/cases/compiler/typeofEnum.ts ===
 enum E {
->E : E
+>E : E, Symbol(E, Decl(typeofEnum.ts, 0, 0))
 
     e1,
->e1 : E
+>e1 : E, Symbol(E.e1, Decl(typeofEnum.ts, 0, 8))
 
     e2
->e2 : E
+>e2 : E, Symbol(E.e2, Decl(typeofEnum.ts, 1, 7))
 }
 
 var e1: typeof E;
->e1 : typeof E
->E : typeof E
+>e1 : typeof E, Symbol(e1, Decl(typeofEnum.ts, 5, 3))
+>E : typeof E, Symbol(E, Decl(typeofEnum.ts, 0, 0))
 
 e1.e1;
->e1.e1 : E
->e1 : typeof E
->e1 : E
+>e1.e1 : E, Symbol(E.e1, Decl(typeofEnum.ts, 0, 8))
+>e1 : typeof E, Symbol(e1, Decl(typeofEnum.ts, 5, 3))
+>e1 : E, Symbol(E.e1, Decl(typeofEnum.ts, 0, 8))
 

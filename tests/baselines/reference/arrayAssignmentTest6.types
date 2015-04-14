@@ -1,51 +1,52 @@
 === tests/cases/compiler/arrayAssignmentTest6.ts ===
 module Test {
->Test : typeof Test
+>Test : typeof Test, Symbol(Test, Decl(arrayAssignmentTest6.ts, 0, 0))
 
     interface IState {
->IState : IState
+>IState : IState, Symbol(IState, Decl(arrayAssignmentTest6.ts, 0, 13))
     }
     interface IToken {
->IToken : IToken
+>IToken : IToken, Symbol(IToken, Decl(arrayAssignmentTest6.ts, 2, 5))
 
         startIndex: number;
->startIndex : number
+>startIndex : number, Symbol(startIndex, Decl(arrayAssignmentTest6.ts, 3, 22))
     }
     interface ILineTokens {
->ILineTokens : ILineTokens
+>ILineTokens : ILineTokens, Symbol(ILineTokens, Decl(arrayAssignmentTest6.ts, 5, 5))
 
         tokens: IToken[];
->tokens : IToken[]
->IToken : IToken
+>tokens : IToken[], Symbol(tokens, Decl(arrayAssignmentTest6.ts, 6, 27))
+>IToken : IToken, Symbol(IToken, Decl(arrayAssignmentTest6.ts, 2, 5))
 
         endState: IState;
->endState : IState
->IState : IState
+>endState : IState, Symbol(endState, Decl(arrayAssignmentTest6.ts, 7, 25))
+>IState : IState, Symbol(IState, Decl(arrayAssignmentTest6.ts, 0, 13))
     }
     interface IMode {
->IMode : IMode
+>IMode : IMode, Symbol(IMode, Decl(arrayAssignmentTest6.ts, 9, 5))
 
         tokenize(line:string, state:IState, includeStates:boolean):ILineTokens;
->tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
->line : string
->state : IState
->IState : IState
->includeStates : boolean
->ILineTokens : ILineTokens
+>tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens, Symbol(tokenize, Decl(arrayAssignmentTest6.ts, 10, 21))
+>line : string, Symbol(line, Decl(arrayAssignmentTest6.ts, 11, 17))
+>state : IState, Symbol(state, Decl(arrayAssignmentTest6.ts, 11, 29))
+>IState : IState, Symbol(IState, Decl(arrayAssignmentTest6.ts, 0, 13))
+>includeStates : boolean, Symbol(includeStates, Decl(arrayAssignmentTest6.ts, 11, 43))
+>ILineTokens : ILineTokens, Symbol(ILineTokens, Decl(arrayAssignmentTest6.ts, 5, 5))
     }
     export class Bug implements IMode {
->Bug : Bug
->IMode : IMode
+>Bug : Bug, Symbol(Bug, Decl(arrayAssignmentTest6.ts, 12, 5))
+>IMode : IMode, Symbol(IMode, Decl(arrayAssignmentTest6.ts, 9, 5))
 
         public tokenize(line:string, tokens:IToken[], includeStates:boolean):ILineTokens {
->tokenize : (line: string, tokens: IToken[], includeStates: boolean) => ILineTokens
->line : string
->tokens : IToken[]
->IToken : IToken
->includeStates : boolean
->ILineTokens : ILineTokens
+>tokenize : (line: string, tokens: IToken[], includeStates: boolean) => ILineTokens, Symbol(tokenize, Decl(arrayAssignmentTest6.ts, 13, 39))
+>line : string, Symbol(line, Decl(arrayAssignmentTest6.ts, 14, 24))
+>tokens : IToken[], Symbol(tokens, Decl(arrayAssignmentTest6.ts, 14, 36))
+>IToken : IToken, Symbol(IToken, Decl(arrayAssignmentTest6.ts, 2, 5))
+>includeStates : boolean, Symbol(includeStates, Decl(arrayAssignmentTest6.ts, 14, 53))
+>ILineTokens : ILineTokens, Symbol(ILineTokens, Decl(arrayAssignmentTest6.ts, 5, 5))
 
             return null;
+>null : null
         }
     }    
 }

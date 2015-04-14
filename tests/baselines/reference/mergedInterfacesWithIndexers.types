@@ -2,37 +2,40 @@
 // indexers should behave like other members when merging interface declarations
 
 interface A {
->A : A
+>A : A, Symbol(A, Decl(mergedInterfacesWithIndexers.ts, 0, 0), Decl(mergedInterfacesWithIndexers.ts, 4, 1))
 
     [x: number]: string;
->x : number
+>x : number, Symbol(x, Decl(mergedInterfacesWithIndexers.ts, 3, 5))
 }
 
 
 interface A {
->A : A
+>A : A, Symbol(A, Decl(mergedInterfacesWithIndexers.ts, 0, 0), Decl(mergedInterfacesWithIndexers.ts, 4, 1))
 
     [x: string]: { length: number };
->x : string
->length : number
+>x : string, Symbol(x, Decl(mergedInterfacesWithIndexers.ts, 8, 5))
+>length : number, Symbol(length, Decl(mergedInterfacesWithIndexers.ts, 8, 18))
 }
 
 var a: A;
->a : A
->A : A
+>a : A, Symbol(a, Decl(mergedInterfacesWithIndexers.ts, 11, 3))
+>A : A, Symbol(A, Decl(mergedInterfacesWithIndexers.ts, 0, 0), Decl(mergedInterfacesWithIndexers.ts, 4, 1))
 
 var r = a[1];
->r : string
+>r : string, Symbol(r, Decl(mergedInterfacesWithIndexers.ts, 12, 3))
 >a[1] : string
->a : A
+>a : A, Symbol(a, Decl(mergedInterfacesWithIndexers.ts, 11, 3))
+>1 : number
 
 var r2 = a['1'];
->r2 : { length: number; }
+>r2 : { length: number; }, Symbol(r2, Decl(mergedInterfacesWithIndexers.ts, 13, 3))
 >a['1'] : { length: number; }
->a : A
+>a : A, Symbol(a, Decl(mergedInterfacesWithIndexers.ts, 11, 3))
+>'1' : string
 
 var r3 = a['hi'];
->r3 : { length: number; }
+>r3 : { length: number; }, Symbol(r3, Decl(mergedInterfacesWithIndexers.ts, 14, 3))
 >a['hi'] : { length: number; }
->a : A
+>a : A, Symbol(a, Decl(mergedInterfacesWithIndexers.ts, 11, 3))
+>'hi' : string
 
