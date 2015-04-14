@@ -5984,6 +5984,7 @@ module ts {
         }
 
         function parseType(): JSDocType {
+            skipWhitespace();
             let typeExpression = parseJSDocTypeExpression(content, pos, end - pos);
             if (!typeExpression) {
                 setError();
