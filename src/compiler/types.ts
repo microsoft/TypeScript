@@ -121,7 +121,6 @@ module ts {
         WhileKeyword,
         WithKeyword,
         // Strict mode reserved words
-        AsKeyword,
         ImplementsKeyword,
         InterfaceKeyword,
         LetKeyword,
@@ -132,6 +131,7 @@ module ts {
         StaticKeyword,
         YieldKeyword,
         // Contextual keywords
+        AsKeyword,
         AnyKeyword,
         BooleanKeyword,
         ConstructorKeyword,
