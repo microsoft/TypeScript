@@ -67,11 +67,11 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
 >line : number, Symbol(line, Decl(APISample_compile.ts, 20, 13))
 >character : number, Symbol(character, Decl(APISample_compile.ts, 20, 19))
 >diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start) : ts.LineAndCharacter
->diagnostic.file.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1337, 46))
+>diagnostic.file.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1336, 26))
 >diagnostic.file : ts.SourceFile, Symbol(ts.Diagnostic.file, Decl(typescript.d.ts, 1134, 26))
 >diagnostic : ts.Diagnostic, Symbol(diagnostic, Decl(APISample_compile.ts, 19, 27))
 >file : ts.SourceFile, Symbol(ts.Diagnostic.file, Decl(typescript.d.ts, 1134, 26))
->getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1337, 46))
+>getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1336, 26))
 >diagnostic.start : number, Symbol(ts.Diagnostic.start, Decl(typescript.d.ts, 1135, 25))
 >diagnostic : ts.Diagnostic, Symbol(diagnostic, Decl(APISample_compile.ts, 19, 27))
 >start : number, Symbol(ts.Diagnostic.start, Decl(typescript.d.ts, 1135, 25))

@@ -9651,7 +9651,10 @@ module ts {
             }
             
             if (isArrayLikeType(inputType)) {
-                return getIndexTypeOfType(inputType, IndexKind.Number);
+                let indexType = getIndexTypeOfType(inputType, IndexKind.Number);
+                if (indexType) {
+                    return indexType;
+                }
             }
 
             error(errorNode, Diagnostics.Type_0_is_not_an_array_type, typeToString(inputType));

@@ -237,9 +237,9 @@ export function delint(sourceFile: ts.SourceFile) {
 >line : number, Symbol(line, Decl(APISample_linter.ts, 51, 13))
 >character : number, Symbol(character, Decl(APISample_linter.ts, 51, 19))
 >sourceFile.getLineAndCharacterOfPosition(node.getStart()) : ts.LineAndCharacter
->sourceFile.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1337, 46))
+>sourceFile.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1336, 26))
 >sourceFile : ts.SourceFile, Symbol(sourceFile, Decl(APISample_linter.ts, 13, 23))
->getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1337, 46))
+>getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1336, 26))
 >node.getStart() : number
 >node.getStart : (sourceFile?: ts.SourceFile) => number, Symbol(ts.Node.getStart, Decl(typescript.d.ts, 1300, 53))
 >node : ts.Node, Symbol(node, Decl(APISample_linter.ts, 50, 20))
