@@ -1,42 +1,43 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of22.ts ===
 v;
->v : Foo
+>v : Foo, Symbol(v, Decl(for-of22.ts, 1, 8))
 
 for (var v of new FooIterator) {
->v : Foo
+>v : Foo, Symbol(v, Decl(for-of22.ts, 1, 8))
 >new FooIterator : FooIterator
->FooIterator : typeof FooIterator
+>FooIterator : typeof FooIterator, Symbol(FooIterator, Decl(for-of22.ts, 5, 13))
     
 }
 
 class Foo { }
->Foo : Foo
+>Foo : Foo, Symbol(Foo, Decl(for-of22.ts, 3, 1))
 
 class FooIterator {
->FooIterator : FooIterator
+>FooIterator : FooIterator, Symbol(FooIterator, Decl(for-of22.ts, 5, 13))
 
     next() {
->next : () => { value: Foo; done: boolean; }
+>next : () => { value: Foo; done: boolean; }, Symbol(next, Decl(for-of22.ts, 6, 19))
 
         return {
 >{            value: new Foo,            done: false        } : { value: Foo; done: boolean; }
 
             value: new Foo,
->value : Foo
+>value : Foo, Symbol(value, Decl(for-of22.ts, 8, 16))
 >new Foo : Foo
->Foo : typeof Foo
+>Foo : typeof Foo, Symbol(Foo, Decl(for-of22.ts, 3, 1))
 
             done: false
->done : boolean
+>done : boolean, Symbol(done, Decl(for-of22.ts, 9, 27))
+>false : boolean
 
         };
     }
     [Symbol.iterator]() {
->Symbol.iterator : symbol
->Symbol : SymbolConstructor
->iterator : symbol
+>Symbol.iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
 
         return this;
->this : FooIterator
+>this : FooIterator, Symbol(FooIterator, Decl(for-of22.ts, 5, 13))
     }
 }

@@ -1,24 +1,25 @@
 === tests/cases/compiler/functionOverloads36.ts ===
 function foo(bar:{a:number;}):number;
->foo : { (bar: { a: number; }): number; (bar: { a: string; }): string; }
->bar : { a: number; }
->a : number
+>foo : { (bar: { a: number; }): number; (bar: { a: string; }): string; }, Symbol(foo, Decl(functionOverloads36.ts, 0, 0), Decl(functionOverloads36.ts, 0, 37), Decl(functionOverloads36.ts, 1, 37))
+>bar : { a: number; }, Symbol(bar, Decl(functionOverloads36.ts, 0, 13))
+>a : number, Symbol(a, Decl(functionOverloads36.ts, 0, 18))
 
 function foo(bar:{a:string;}):string;
->foo : { (bar: { a: number; }): number; (bar: { a: string; }): string; }
->bar : { a: string; }
->a : string
+>foo : { (bar: { a: number; }): number; (bar: { a: string; }): string; }, Symbol(foo, Decl(functionOverloads36.ts, 0, 0), Decl(functionOverloads36.ts, 0, 37), Decl(functionOverloads36.ts, 1, 37))
+>bar : { a: string; }, Symbol(bar, Decl(functionOverloads36.ts, 1, 13))
+>a : string, Symbol(a, Decl(functionOverloads36.ts, 1, 18))
 
 function foo(bar:{a:any;}):any{ return bar }
->foo : { (bar: { a: number; }): number; (bar: { a: string; }): string; }
->bar : { a: any; }
->a : any
->bar : { a: any; }
+>foo : { (bar: { a: number; }): number; (bar: { a: string; }): string; }, Symbol(foo, Decl(functionOverloads36.ts, 0, 0), Decl(functionOverloads36.ts, 0, 37), Decl(functionOverloads36.ts, 1, 37))
+>bar : { a: any; }, Symbol(bar, Decl(functionOverloads36.ts, 2, 13))
+>a : any, Symbol(a, Decl(functionOverloads36.ts, 2, 18))
+>bar : { a: any; }, Symbol(bar, Decl(functionOverloads36.ts, 2, 13))
 
 var x = foo({a:'foo'});
->x : string
+>x : string, Symbol(x, Decl(functionOverloads36.ts, 3, 3))
 >foo({a:'foo'}) : string
->foo : { (bar: { a: number; }): number; (bar: { a: string; }): string; }
+>foo : { (bar: { a: number; }): number; (bar: { a: string; }): string; }, Symbol(foo, Decl(functionOverloads36.ts, 0, 0), Decl(functionOverloads36.ts, 0, 37), Decl(functionOverloads36.ts, 1, 37))
 >{a:'foo'} : { a: string; }
->a : string
+>a : string, Symbol(a, Decl(functionOverloads36.ts, 3, 13))
+>'foo' : string
 

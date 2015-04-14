@@ -1,5 +1,9 @@
 === tests/cases/conformance/es6/templates/templateStringInWhile.ts ===
 while (`abc${0}abc`) {
-No type information for this code.    `def${1}def`;
-No type information for this code.}
-No type information for this code.
+>`abc${0}abc` : string
+>0 : number
+
+    `def${1}def`;
+>`def${1}def` : string
+>1 : number
+}

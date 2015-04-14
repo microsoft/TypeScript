@@ -1,44 +1,44 @@
 === tests/cases/compiler/staticMethodWithTypeParameterExtendsClauseDeclFile.ts ===
 class privateClass {
->privateClass : privateClass
+>privateClass : privateClass, Symbol(privateClass, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 0, 0))
 }
 
 export class publicClass {
->publicClass : publicClass
+>publicClass : publicClass, Symbol(publicClass, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 1, 1))
 }
 
 export class publicClassWithWithPrivateTypeParameters {
->publicClassWithWithPrivateTypeParameters : publicClassWithWithPrivateTypeParameters
+>publicClassWithWithPrivateTypeParameters : publicClassWithWithPrivateTypeParameters, Symbol(publicClassWithWithPrivateTypeParameters, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 4, 1))
 
     private static myPrivateStaticMethod1<T extends privateClass>() { // do not emit extends clause
->myPrivateStaticMethod1 : <T extends privateClass>() => void
->T : T
->privateClass : privateClass
+>myPrivateStaticMethod1 : <T extends privateClass>() => void, Symbol(publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod1, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 6, 55))
+>T : T, Symbol(T, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 7, 42))
+>privateClass : privateClass, Symbol(privateClass, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 0, 0))
     }
     private myPrivateMethod1<T extends privateClass>() { // do not emit extends clause
->myPrivateMethod1 : <T extends privateClass>() => void
->T : T
->privateClass : privateClass
+>myPrivateMethod1 : <T extends privateClass>() => void, Symbol(myPrivateMethod1, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 8, 5))
+>T : T, Symbol(T, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 9, 29))
+>privateClass : privateClass, Symbol(privateClass, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 0, 0))
     }
     private static myPrivateStaticMethod2<T extends publicClass>() { // do not emit extends clause
->myPrivateStaticMethod2 : <T extends publicClass>() => void
->T : T
->publicClass : publicClass
+>myPrivateStaticMethod2 : <T extends publicClass>() => void, Symbol(publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod2, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 10, 5))
+>T : T, Symbol(T, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 11, 42))
+>publicClass : publicClass, Symbol(publicClass, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 1, 1))
     }
     private myPrivateMethod2<T extends publicClass>() { // do not emit extends clause
->myPrivateMethod2 : <T extends publicClass>() => void
->T : T
->publicClass : publicClass
+>myPrivateMethod2 : <T extends publicClass>() => void, Symbol(myPrivateMethod2, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 12, 5))
+>T : T, Symbol(T, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 13, 29))
+>publicClass : publicClass, Symbol(publicClass, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 1, 1))
     }
     public static myPublicStaticMethod<T extends publicClass>() {
->myPublicStaticMethod : <T extends publicClass>() => void
->T : T
->publicClass : publicClass
+>myPublicStaticMethod : <T extends publicClass>() => void, Symbol(publicClassWithWithPrivateTypeParameters.myPublicStaticMethod, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 14, 5))
+>T : T, Symbol(T, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 15, 39))
+>publicClass : publicClass, Symbol(publicClass, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 1, 1))
     }
     public myPublicMethod<T extends publicClass>() {
->myPublicMethod : <T extends publicClass>() => void
->T : T
->publicClass : publicClass
+>myPublicMethod : <T extends publicClass>() => void, Symbol(myPublicMethod, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 16, 5))
+>T : T, Symbol(T, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 17, 26))
+>publicClass : publicClass, Symbol(publicClass, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 1, 1))
     }
 }
 

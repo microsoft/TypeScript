@@ -1,46 +1,46 @@
 === tests/cases/compiler/topLevel.ts ===
 interface IPoint {
->IPoint : IPoint
+>IPoint : IPoint, Symbol(IPoint, Decl(topLevel.ts, 0, 0))
 
     x:number;
->x : number
+>x : number, Symbol(x, Decl(topLevel.ts, 0, 18))
 
     y:number;
->y : number
+>y : number, Symbol(y, Decl(topLevel.ts, 1, 13))
 }
 
 class Point implements IPoint {
->Point : Point
->IPoint : IPoint
+>Point : Point, Symbol(Point, Decl(topLevel.ts, 3, 1))
+>IPoint : IPoint, Symbol(IPoint, Decl(topLevel.ts, 0, 0))
 
     constructor(public x,public y){}
->x : any
->y : any
+>x : any, Symbol(x, Decl(topLevel.ts, 6, 16))
+>y : any, Symbol(y, Decl(topLevel.ts, 6, 25))
 
     public move(xo:number,yo:number) {
->move : (xo: number, yo: number) => Point
->xo : number
->yo : number
+>move : (xo: number, yo: number) => Point, Symbol(move, Decl(topLevel.ts, 6, 36))
+>xo : number, Symbol(xo, Decl(topLevel.ts, 7, 16))
+>yo : number, Symbol(yo, Decl(topLevel.ts, 7, 26))
 
 	this.x+=xo;
 >this.x+=xo : any
->this.x : any
->this : Point
->x : any
->xo : number
+>this.x : any, Symbol(x, Decl(topLevel.ts, 6, 16))
+>this : Point, Symbol(Point, Decl(topLevel.ts, 3, 1))
+>x : any, Symbol(x, Decl(topLevel.ts, 6, 16))
+>xo : number, Symbol(xo, Decl(topLevel.ts, 7, 16))
 
 	this.y+=yo;
 >this.y+=yo : any
->this.y : any
->this : Point
->y : any
->yo : number
+>this.y : any, Symbol(y, Decl(topLevel.ts, 6, 25))
+>this : Point, Symbol(Point, Decl(topLevel.ts, 3, 1))
+>y : any, Symbol(y, Decl(topLevel.ts, 6, 25))
+>yo : number, Symbol(yo, Decl(topLevel.ts, 7, 26))
 
 	return this;
->this : Point
+>this : Point, Symbol(Point, Decl(topLevel.ts, 3, 1))
     }
     public toString() {
->toString : () => string
+>toString : () => string, Symbol(toString, Decl(topLevel.ts, 11, 5))
 
 	return ("("+this.x+","+this.y+")");
 >("("+this.x+","+this.y+")") : string
@@ -48,46 +48,58 @@ class Point implements IPoint {
 >"("+this.x+","+this.y : string
 >"("+this.x+"," : string
 >"("+this.x : string
->this.x : any
->this : Point
->x : any
->this.y : any
->this : Point
->y : any
+>"(" : string
+>this.x : any, Symbol(x, Decl(topLevel.ts, 6, 16))
+>this : Point, Symbol(Point, Decl(topLevel.ts, 3, 1))
+>x : any, Symbol(x, Decl(topLevel.ts, 6, 16))
+>"," : string
+>this.y : any, Symbol(y, Decl(topLevel.ts, 6, 25))
+>this : Point, Symbol(Point, Decl(topLevel.ts, 3, 1))
+>y : any, Symbol(y, Decl(topLevel.ts, 6, 25))
+>")" : string
     }
 }
 
 var result="";
->result : string
+>result : string, Symbol(result, Decl(topLevel.ts, 17, 3))
+>"" : string
 
 result+=(new Point(3,4).move(2,2));
 >result+=(new Point(3,4).move(2,2)) : string
->result : string
+>result : string, Symbol(result, Decl(topLevel.ts, 17, 3))
 >(new Point(3,4).move(2,2)) : Point
 >new Point(3,4).move(2,2) : Point
->new Point(3,4).move : (xo: number, yo: number) => Point
+>new Point(3,4).move : (xo: number, yo: number) => Point, Symbol(Point.move, Decl(topLevel.ts, 6, 36))
 >new Point(3,4) : Point
->Point : typeof Point
->move : (xo: number, yo: number) => Point
+>Point : typeof Point, Symbol(Point, Decl(topLevel.ts, 3, 1))
+>3 : number
+>4 : number
+>move : (xo: number, yo: number) => Point, Symbol(Point.move, Decl(topLevel.ts, 6, 36))
+>2 : number
+>2 : number
 
 module M {
->M : typeof M
+>M : typeof M, Symbol(M, Decl(topLevel.ts, 18, 35))
 
     export var origin=new Point(0,0);
->origin : Point
+>origin : Point, Symbol(origin, Decl(topLevel.ts, 21, 14))
 >new Point(0,0) : Point
->Point : typeof Point
+>Point : typeof Point, Symbol(Point, Decl(topLevel.ts, 3, 1))
+>0 : number
+>0 : number
 }
 
 result+=(M.origin.move(1,1));
 >result+=(M.origin.move(1,1)) : string
->result : string
+>result : string, Symbol(result, Decl(topLevel.ts, 17, 3))
 >(M.origin.move(1,1)) : Point
 >M.origin.move(1,1) : Point
->M.origin.move : (xo: number, yo: number) => Point
->M.origin : Point
->M : typeof M
->origin : Point
->move : (xo: number, yo: number) => Point
+>M.origin.move : (xo: number, yo: number) => Point, Symbol(Point.move, Decl(topLevel.ts, 6, 36))
+>M.origin : Point, Symbol(M.origin, Decl(topLevel.ts, 21, 14))
+>M : typeof M, Symbol(M, Decl(topLevel.ts, 18, 35))
+>origin : Point, Symbol(M.origin, Decl(topLevel.ts, 21, 14))
+>move : (xo: number, yo: number) => Point, Symbol(Point.move, Decl(topLevel.ts, 6, 36))
+>1 : number
+>1 : number
 
 

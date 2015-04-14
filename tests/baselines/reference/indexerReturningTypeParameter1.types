@@ -1,44 +1,45 @@
 === tests/cases/compiler/indexerReturningTypeParameter1.ts ===
 interface f {
->f : f
+>f : f, Symbol(f, Decl(indexerReturningTypeParameter1.ts, 0, 0))
 
     groupBy<T>(): { [key: string]: T[]; };
->groupBy : <T>() => { [key: string]: T[]; }
->T : T
->key : string
->T : T
+>groupBy : <T>() => { [key: string]: T[]; }, Symbol(groupBy, Decl(indexerReturningTypeParameter1.ts, 0, 13))
+>T : T, Symbol(T, Decl(indexerReturningTypeParameter1.ts, 1, 12))
+>key : string, Symbol(key, Decl(indexerReturningTypeParameter1.ts, 1, 21))
+>T : T, Symbol(T, Decl(indexerReturningTypeParameter1.ts, 1, 12))
 }
 var a: f;
->a : f
->f : f
+>a : f, Symbol(a, Decl(indexerReturningTypeParameter1.ts, 3, 3))
+>f : f, Symbol(f, Decl(indexerReturningTypeParameter1.ts, 0, 0))
 
 var r = a.groupBy();
->r : { [key: string]: {}[]; }
+>r : { [key: string]: {}[]; }, Symbol(r, Decl(indexerReturningTypeParameter1.ts, 4, 3))
 >a.groupBy() : { [key: string]: {}[]; }
->a.groupBy : <T>() => { [key: string]: T[]; }
->a : f
->groupBy : <T>() => { [key: string]: T[]; }
+>a.groupBy : <T>() => { [key: string]: T[]; }, Symbol(f.groupBy, Decl(indexerReturningTypeParameter1.ts, 0, 13))
+>a : f, Symbol(a, Decl(indexerReturningTypeParameter1.ts, 3, 3))
+>groupBy : <T>() => { [key: string]: T[]; }, Symbol(f.groupBy, Decl(indexerReturningTypeParameter1.ts, 0, 13))
 
 class c {
->c : c
+>c : c, Symbol(c, Decl(indexerReturningTypeParameter1.ts, 4, 20))
 
     groupBy<T>(): { [key: string]: T[]; } {
->groupBy : <T>() => { [key: string]: T[]; }
->T : T
->key : string
->T : T
+>groupBy : <T>() => { [key: string]: T[]; }, Symbol(groupBy, Decl(indexerReturningTypeParameter1.ts, 6, 9))
+>T : T, Symbol(T, Decl(indexerReturningTypeParameter1.ts, 7, 12))
+>key : string, Symbol(key, Decl(indexerReturningTypeParameter1.ts, 7, 21))
+>T : T, Symbol(T, Decl(indexerReturningTypeParameter1.ts, 7, 12))
 
         return null;
+>null : null
     }
 }
 var a2: c;
->a2 : c
->c : c
+>a2 : c, Symbol(a2, Decl(indexerReturningTypeParameter1.ts, 11, 3))
+>c : c, Symbol(c, Decl(indexerReturningTypeParameter1.ts, 4, 20))
 
 var r2 = a2.groupBy();
->r2 : { [key: string]: {}[]; }
+>r2 : { [key: string]: {}[]; }, Symbol(r2, Decl(indexerReturningTypeParameter1.ts, 12, 3))
 >a2.groupBy() : { [key: string]: {}[]; }
->a2.groupBy : <T>() => { [key: string]: T[]; }
->a2 : c
->groupBy : <T>() => { [key: string]: T[]; }
+>a2.groupBy : <T>() => { [key: string]: T[]; }, Symbol(c.groupBy, Decl(indexerReturningTypeParameter1.ts, 6, 9))
+>a2 : c, Symbol(a2, Decl(indexerReturningTypeParameter1.ts, 11, 3))
+>groupBy : <T>() => { [key: string]: T[]; }, Symbol(c.groupBy, Decl(indexerReturningTypeParameter1.ts, 6, 9))
 

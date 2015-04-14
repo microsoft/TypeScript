@@ -1,59 +1,59 @@
 === tests/cases/compiler/multiExtendsSplitInterfaces2.ts ===
 interface A {
->A : A
+>A : A, Symbol(A, Decl(multiExtendsSplitInterfaces2.ts, 0, 0))
 
 	a: number;
->a : number
+>a : number, Symbol(a, Decl(multiExtendsSplitInterfaces2.ts, 0, 13))
 }
 
 interface I extends A {
->I : I
->A : A
+>I : I, Symbol(I, Decl(multiExtendsSplitInterfaces2.ts, 2, 1), Decl(multiExtendsSplitInterfaces2.ts, 10, 1))
+>A : A, Symbol(A, Decl(multiExtendsSplitInterfaces2.ts, 0, 0))
 
 	i1: number;
->i1 : number
+>i1 : number, Symbol(i1, Decl(multiExtendsSplitInterfaces2.ts, 4, 23))
 }
 
 interface B {
->B : B
+>B : B, Symbol(B, Decl(multiExtendsSplitInterfaces2.ts, 6, 1))
 
 	b: number;
->b : number
+>b : number, Symbol(b, Decl(multiExtendsSplitInterfaces2.ts, 8, 13))
 }
 
 interface I extends B {
->I : I
->B : B
+>I : I, Symbol(I, Decl(multiExtendsSplitInterfaces2.ts, 2, 1), Decl(multiExtendsSplitInterfaces2.ts, 10, 1))
+>B : B, Symbol(B, Decl(multiExtendsSplitInterfaces2.ts, 6, 1))
 
 	i2: number;
->i2 : number
+>i2 : number, Symbol(i2, Decl(multiExtendsSplitInterfaces2.ts, 12, 23))
 }
 
 var i: I;
->i : I
->I : I
+>i : I, Symbol(i, Decl(multiExtendsSplitInterfaces2.ts, 16, 3))
+>I : I, Symbol(I, Decl(multiExtendsSplitInterfaces2.ts, 2, 1), Decl(multiExtendsSplitInterfaces2.ts, 10, 1))
 
 var a = i.a;
->a : number
->i.a : number
->i : I
->a : number
+>a : number, Symbol(a, Decl(multiExtendsSplitInterfaces2.ts, 18, 3))
+>i.a : number, Symbol(A.a, Decl(multiExtendsSplitInterfaces2.ts, 0, 13))
+>i : I, Symbol(i, Decl(multiExtendsSplitInterfaces2.ts, 16, 3))
+>a : number, Symbol(A.a, Decl(multiExtendsSplitInterfaces2.ts, 0, 13))
 
 var i1 = i.i1;
->i1 : number
->i.i1 : number
->i : I
->i1 : number
+>i1 : number, Symbol(i1, Decl(multiExtendsSplitInterfaces2.ts, 19, 3))
+>i.i1 : number, Symbol(I.i1, Decl(multiExtendsSplitInterfaces2.ts, 4, 23))
+>i : I, Symbol(i, Decl(multiExtendsSplitInterfaces2.ts, 16, 3))
+>i1 : number, Symbol(I.i1, Decl(multiExtendsSplitInterfaces2.ts, 4, 23))
 
 var b = i.b;
->b : number
->i.b : number
->i : I
->b : number
+>b : number, Symbol(b, Decl(multiExtendsSplitInterfaces2.ts, 20, 3))
+>i.b : number, Symbol(B.b, Decl(multiExtendsSplitInterfaces2.ts, 8, 13))
+>i : I, Symbol(i, Decl(multiExtendsSplitInterfaces2.ts, 16, 3))
+>b : number, Symbol(B.b, Decl(multiExtendsSplitInterfaces2.ts, 8, 13))
 
 var i2 = i.i2;
->i2 : number
->i.i2 : number
->i : I
->i2 : number
+>i2 : number, Symbol(i2, Decl(multiExtendsSplitInterfaces2.ts, 21, 3))
+>i.i2 : number, Symbol(I.i2, Decl(multiExtendsSplitInterfaces2.ts, 12, 23))
+>i : I, Symbol(i, Decl(multiExtendsSplitInterfaces2.ts, 16, 3))
+>i2 : number, Symbol(I.i2, Decl(multiExtendsSplitInterfaces2.ts, 12, 23))
 

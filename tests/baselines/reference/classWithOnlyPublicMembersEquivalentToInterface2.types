@@ -2,75 +2,77 @@
 // no errors expected
 
 class C {
->C : C
+>C : C, Symbol(C, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 0, 0))
 
     public x: string;
->x : string
+>x : string, Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 2, 9))
 
     public y(a: number): number { return null; }
->y : (a: number) => number
->a : number
+>y : (a: number) => number, Symbol(y, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 3, 21))
+>a : number, Symbol(a, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 4, 13))
+>null : null
 
     public get z() { return 1; }
->z : number
+>z : number, Symbol(z, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 4, 48), Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 5, 32))
+>1 : number
 
     public set z(v) { }
->z : number
->v : number
+>z : number, Symbol(z, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 4, 48), Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 5, 32))
+>v : number, Symbol(v, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 6, 17))
 
     [x: string]: Object;
->x : string
->Object : Object
+>x : string, Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 7, 5))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
     [x: number]: Object;
->x : number
->Object : Object
+>x : number, Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 8, 5))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
     0: number;
 
     public static foo: string; // doesn't effect equivalence
->foo : string
+>foo : string, Symbol(C.foo, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 9, 14))
 }
 
 interface I {
->I : I
+>I : I, Symbol(I, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 12, 1))
 
     x: string;
->x : string
+>x : string, Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 14, 13))
 
     y(b: number): number;
->y : (b: number) => number
->b : number
+>y : (b: number) => number, Symbol(y, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 15, 14))
+>b : number, Symbol(b, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 16, 6))
 
     z: number;
->z : number
+>z : number, Symbol(z, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 16, 25))
 
     [x: string]: Object;
->x : string
->Object : Object
+>x : string, Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 18, 5))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
     [x: number]: Object;
->x : number
->Object : Object
+>x : number, Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 19, 5))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
     0: number;
 }
 
 var c: C;
->c : C
->C : C
+>c : C, Symbol(c, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 23, 3))
+>C : C, Symbol(C, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 0, 0))
 
 var i: I;
->i : I
->I : I
+>i : I, Symbol(i, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 24, 3))
+>I : I, Symbol(I, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 12, 1))
 
 c = i;
 >c = i : I
->c : C
->i : I
+>c : C, Symbol(c, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 23, 3))
+>i : I, Symbol(i, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 24, 3))
 
 i = c;
 >i = c : C
->i : I
->c : C
+>i : I, Symbol(i, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 24, 3))
+>c : C, Symbol(c, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 23, 3))
 

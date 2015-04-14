@@ -1,37 +1,37 @@
 === tests/cases/compiler/contextualTypingArrayOfLambdas.ts ===
 class A {
->A : A
+>A : A, Symbol(A, Decl(contextualTypingArrayOfLambdas.ts, 0, 0))
 
     foo: string;
->foo : string
+>foo : string, Symbol(foo, Decl(contextualTypingArrayOfLambdas.ts, 0, 9))
 }
 
 class B extends A {
->B : B
->A : A
+>B : B, Symbol(B, Decl(contextualTypingArrayOfLambdas.ts, 2, 1))
+>A : A, Symbol(A, Decl(contextualTypingArrayOfLambdas.ts, 0, 0))
 
     bar: string;
->bar : string
+>bar : string, Symbol(bar, Decl(contextualTypingArrayOfLambdas.ts, 4, 19))
 }
 
 class C extends A {
->C : C
->A : A
+>C : C, Symbol(C, Decl(contextualTypingArrayOfLambdas.ts, 6, 1))
+>A : A, Symbol(A, Decl(contextualTypingArrayOfLambdas.ts, 0, 0))
 
     baz: string;
->baz : string
+>baz : string, Symbol(baz, Decl(contextualTypingArrayOfLambdas.ts, 8, 19))
 }
 
 var xs = [(x: A) => { }, (x: B) => { }, (x: C) => { }];
->xs : ((x: A) => void)[]
+>xs : ((x: A) => void)[], Symbol(xs, Decl(contextualTypingArrayOfLambdas.ts, 12, 3))
 >[(x: A) => { }, (x: B) => { }, (x: C) => { }] : ((x: A) => void)[]
 >(x: A) => { } : (x: A) => void
->x : A
->A : A
+>x : A, Symbol(x, Decl(contextualTypingArrayOfLambdas.ts, 12, 11))
+>A : A, Symbol(A, Decl(contextualTypingArrayOfLambdas.ts, 0, 0))
 >(x: B) => { } : (x: B) => void
->x : B
->B : B
+>x : B, Symbol(x, Decl(contextualTypingArrayOfLambdas.ts, 12, 26))
+>B : B, Symbol(B, Decl(contextualTypingArrayOfLambdas.ts, 2, 1))
 >(x: C) => { } : (x: C) => void
->x : C
->C : C
+>x : C, Symbol(x, Decl(contextualTypingArrayOfLambdas.ts, 12, 41))
+>C : C, Symbol(C, Decl(contextualTypingArrayOfLambdas.ts, 6, 1))
 

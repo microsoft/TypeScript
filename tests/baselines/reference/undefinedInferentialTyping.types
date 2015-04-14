@@ -1,19 +1,21 @@
 === tests/cases/compiler/undefinedInferentialTyping.ts ===
 function f<T>(arr: T[], elemnt: T): T {
->f : <T>(arr: T[], elemnt: T) => T
->T : T
->arr : T[]
->T : T
->elemnt : T
->T : T
->T : T
+>f : <T>(arr: T[], elemnt: T) => T, Symbol(f, Decl(undefinedInferentialTyping.ts, 0, 0))
+>T : T, Symbol(T, Decl(undefinedInferentialTyping.ts, 0, 11))
+>arr : T[], Symbol(arr, Decl(undefinedInferentialTyping.ts, 0, 14))
+>T : T, Symbol(T, Decl(undefinedInferentialTyping.ts, 0, 11))
+>elemnt : T, Symbol(elemnt, Decl(undefinedInferentialTyping.ts, 0, 23))
+>T : T, Symbol(T, Decl(undefinedInferentialTyping.ts, 0, 11))
+>T : T, Symbol(T, Decl(undefinedInferentialTyping.ts, 0, 11))
 
     return null;
+>null : null
 }
 
 var a = f([], 3); // should be number
->a : number
+>a : number, Symbol(a, Decl(undefinedInferentialTyping.ts, 4, 3))
 >f([], 3) : number
->f : <T>(arr: T[], elemnt: T) => T
+>f : <T>(arr: T[], elemnt: T) => T, Symbol(f, Decl(undefinedInferentialTyping.ts, 0, 0))
 >[] : undefined[]
+>3 : number
 

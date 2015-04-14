@@ -1,58 +1,62 @@
 === tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignatures.ts ===
 module CallSignature {
->CallSignature : typeof CallSignature
+>CallSignature : typeof CallSignature, Symbol(CallSignature, Decl(subtypingWithCallSignatures.ts, 0, 0))
 
     declare function foo1(cb: (x: number) => void): typeof cb;
->foo1 : { (cb: (x: number) => void): (x: number) => void; (cb: any): any; }
->cb : (x: number) => void
->x : number
->cb : (x: number) => void
+>foo1 : { (cb: (x: number) => void): (x: number) => void; (cb: any): any; }, Symbol(foo1, Decl(subtypingWithCallSignatures.ts, 0, 22), Decl(subtypingWithCallSignatures.ts, 1, 62))
+>cb : (x: number) => void, Symbol(cb, Decl(subtypingWithCallSignatures.ts, 1, 26))
+>x : number, Symbol(x, Decl(subtypingWithCallSignatures.ts, 1, 31))
+>cb : (x: number) => void, Symbol(cb, Decl(subtypingWithCallSignatures.ts, 1, 26))
 
     declare function foo1(cb: any): any;
->foo1 : { (cb: (x: number) => void): (x: number) => void; (cb: any): any; }
->cb : any
+>foo1 : { (cb: (x: number) => void): (x: number) => void; (cb: any): any; }, Symbol(foo1, Decl(subtypingWithCallSignatures.ts, 0, 22), Decl(subtypingWithCallSignatures.ts, 1, 62))
+>cb : any, Symbol(cb, Decl(subtypingWithCallSignatures.ts, 2, 26))
 
     var r = foo1((x: number) => 1); // ok because base returns void
->r : (x: number) => void
+>r : (x: number) => void, Symbol(r, Decl(subtypingWithCallSignatures.ts, 3, 7))
 >foo1((x: number) => 1) : (x: number) => void
->foo1 : { (cb: (x: number) => void): (x: number) => void; (cb: any): any; }
+>foo1 : { (cb: (x: number) => void): (x: number) => void; (cb: any): any; }, Symbol(foo1, Decl(subtypingWithCallSignatures.ts, 0, 22), Decl(subtypingWithCallSignatures.ts, 1, 62))
 >(x: number) => 1 : (x: number) => number
->x : number
+>x : number, Symbol(x, Decl(subtypingWithCallSignatures.ts, 3, 18))
+>1 : number
 
     var r2 = foo1(<T>(x: T) => ''); // ok because base returns void
->r2 : (x: number) => void
+>r2 : (x: number) => void, Symbol(r2, Decl(subtypingWithCallSignatures.ts, 4, 7))
 >foo1(<T>(x: T) => '') : (x: number) => void
->foo1 : { (cb: (x: number) => void): (x: number) => void; (cb: any): any; }
+>foo1 : { (cb: (x: number) => void): (x: number) => void; (cb: any): any; }, Symbol(foo1, Decl(subtypingWithCallSignatures.ts, 0, 22), Decl(subtypingWithCallSignatures.ts, 1, 62))
 ><T>(x: T) => '' : <T>(x: T) => string
->T : T
->x : T
->T : T
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures.ts, 4, 19))
+>x : T, Symbol(x, Decl(subtypingWithCallSignatures.ts, 4, 22))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures.ts, 4, 19))
+>'' : string
 
     declare function foo2(cb: (x: number, y: number) => void): typeof cb;
->foo2 : { (cb: (x: number, y: number) => void): (x: number, y: number) => void; (cb: any): any; }
->cb : (x: number, y: number) => void
->x : number
->y : number
->cb : (x: number, y: number) => void
+>foo2 : { (cb: (x: number, y: number) => void): (x: number, y: number) => void; (cb: any): any; }, Symbol(foo2, Decl(subtypingWithCallSignatures.ts, 4, 35), Decl(subtypingWithCallSignatures.ts, 6, 73))
+>cb : (x: number, y: number) => void, Symbol(cb, Decl(subtypingWithCallSignatures.ts, 6, 26))
+>x : number, Symbol(x, Decl(subtypingWithCallSignatures.ts, 6, 31))
+>y : number, Symbol(y, Decl(subtypingWithCallSignatures.ts, 6, 41))
+>cb : (x: number, y: number) => void, Symbol(cb, Decl(subtypingWithCallSignatures.ts, 6, 26))
 
     declare function foo2(cb: any): any;
->foo2 : { (cb: (x: number, y: number) => void): (x: number, y: number) => void; (cb: any): any; }
->cb : any
+>foo2 : { (cb: (x: number, y: number) => void): (x: number, y: number) => void; (cb: any): any; }, Symbol(foo2, Decl(subtypingWithCallSignatures.ts, 4, 35), Decl(subtypingWithCallSignatures.ts, 6, 73))
+>cb : any, Symbol(cb, Decl(subtypingWithCallSignatures.ts, 7, 26))
 
     var r3 = foo2((x: number, y: number) => 1); // ok because base returns void
->r3 : (x: number, y: number) => void
+>r3 : (x: number, y: number) => void, Symbol(r3, Decl(subtypingWithCallSignatures.ts, 8, 7))
 >foo2((x: number, y: number) => 1) : (x: number, y: number) => void
->foo2 : { (cb: (x: number, y: number) => void): (x: number, y: number) => void; (cb: any): any; }
+>foo2 : { (cb: (x: number, y: number) => void): (x: number, y: number) => void; (cb: any): any; }, Symbol(foo2, Decl(subtypingWithCallSignatures.ts, 4, 35), Decl(subtypingWithCallSignatures.ts, 6, 73))
 >(x: number, y: number) => 1 : (x: number, y: number) => number
->x : number
->y : number
+>x : number, Symbol(x, Decl(subtypingWithCallSignatures.ts, 8, 19))
+>y : number, Symbol(y, Decl(subtypingWithCallSignatures.ts, 8, 29))
+>1 : number
 
     var r4 = foo2(<T>(x: T) => ''); // ok because base returns void
->r4 : (x: number, y: number) => void
+>r4 : (x: number, y: number) => void, Symbol(r4, Decl(subtypingWithCallSignatures.ts, 9, 7))
 >foo2(<T>(x: T) => '') : (x: number, y: number) => void
->foo2 : { (cb: (x: number, y: number) => void): (x: number, y: number) => void; (cb: any): any; }
+>foo2 : { (cb: (x: number, y: number) => void): (x: number, y: number) => void; (cb: any): any; }, Symbol(foo2, Decl(subtypingWithCallSignatures.ts, 4, 35), Decl(subtypingWithCallSignatures.ts, 6, 73))
 ><T>(x: T) => '' : <T>(x: T) => string
->T : T
->x : T
->T : T
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures.ts, 9, 19))
+>x : T, Symbol(x, Decl(subtypingWithCallSignatures.ts, 9, 22))
+>T : T, Symbol(T, Decl(subtypingWithCallSignatures.ts, 9, 19))
+>'' : string
 }

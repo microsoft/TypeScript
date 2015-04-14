@@ -1,14 +1,15 @@
 === tests/cases/compiler/typeParameterAsElementType.ts ===
 function fee<T>() {
->fee : <T>() => void
->T : T
+>fee : <T>() => void, Symbol(fee, Decl(typeParameterAsElementType.ts, 0, 0))
+>T : T, Symbol(T, Decl(typeParameterAsElementType.ts, 0, 13))
 
     var t: T;
->t : T
->T : T
+>t : T, Symbol(t, Decl(typeParameterAsElementType.ts, 1, 7))
+>T : T, Symbol(T, Decl(typeParameterAsElementType.ts, 0, 13))
 
     var arr = [t, ""];
->arr : (string | T)[]
+>arr : (string | T)[], Symbol(arr, Decl(typeParameterAsElementType.ts, 2, 7))
 >[t, ""] : (string | T)[]
->t : T
+>t : T, Symbol(t, Decl(typeParameterAsElementType.ts, 1, 7))
+>"" : string
 }

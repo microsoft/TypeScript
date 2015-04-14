@@ -2,15 +2,17 @@
 ///<style eqeqeq="on" strict="on" /> 
 
 var x = 1;
->x : number
+>x : number, Symbol(x, Decl(styleOptions.ts, 2, 3))
+>1 : number
 
 var y = 1;
->y : number
+>y : number, Symbol(y, Decl(styleOptions.ts, 3, 3))
+>1 : number
 
 var t = x == y;
->t : boolean
+>t : boolean, Symbol(t, Decl(styleOptions.ts, 4, 3))
 >x == y : boolean
->x : number
->y : number
+>x : number, Symbol(x, Decl(styleOptions.ts, 2, 3))
+>y : number, Symbol(y, Decl(styleOptions.ts, 3, 3))
 
 

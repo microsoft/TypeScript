@@ -1,31 +1,32 @@
 === tests/cases/conformance/internalModules/exportDeclarations/ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts ===
 module A {
->A : typeof A
+>A : typeof A, Symbol(A, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 0, 0))
 
     class Point {
->Point : Point
+>Point : Point, Symbol(Point, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 0, 10))
 
         constructor(public x: number, public y: number) { }
->x : number
->y : number
+>x : number, Symbol(x, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 3, 20))
+>y : number, Symbol(y, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 3, 37))
     }
 
     export var UnitSquare : {
->UnitSquare : { top: { left: Point; right: Point; }; bottom: { left: Point; right: Point; }; }
+>UnitSquare : { top: { left: Point; right: Point; }; bottom: { left: Point; right: Point; }; }, Symbol(UnitSquare, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 6, 14))
 
         top: { left: Point, right: Point },
->top : { left: Point; right: Point; }
->left : Point
->Point : Point
->right : Point
->Point : Point
+>top : { left: Point; right: Point; }, Symbol(top, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 6, 29))
+>left : Point, Symbol(left, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 7, 14))
+>Point : Point, Symbol(Point, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 0, 10))
+>right : Point, Symbol(right, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 7, 27))
+>Point : Point, Symbol(Point, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 0, 10))
 
         bottom: { left: Point, right: Point }
->bottom : { left: Point; right: Point; }
->left : Point
->Point : Point
->right : Point
->Point : Point
+>bottom : { left: Point; right: Point; }, Symbol(bottom, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 7, 43))
+>left : Point, Symbol(left, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 8, 17))
+>Point : Point, Symbol(Point, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 0, 10))
+>right : Point, Symbol(right, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 8, 30))
+>Point : Point, Symbol(Point, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.ts, 0, 10))
 
     } = null;
+>null : null
 }

@@ -1,23 +1,24 @@
 === tests/cases/compiler/mutuallyRecursiveGenericBaseTypes2.ts ===
 class foo<T>
->foo : foo<T>
->T : T
+>foo : foo<T>, Symbol(foo, Decl(mutuallyRecursiveGenericBaseTypes2.ts, 0, 0))
+>T : T, Symbol(T, Decl(mutuallyRecursiveGenericBaseTypes2.ts, 0, 10))
 {
     bar(): foo2<T[]> { return null; }
->bar : () => foo2<T[]>
->foo2 : foo2<T>
->T : T
+>bar : () => foo2<T[]>, Symbol(bar, Decl(mutuallyRecursiveGenericBaseTypes2.ts, 1, 1))
+>foo2 : foo2<T>, Symbol(foo2, Decl(mutuallyRecursiveGenericBaseTypes2.ts, 3, 1))
+>T : T, Symbol(T, Decl(mutuallyRecursiveGenericBaseTypes2.ts, 0, 10))
+>null : null
 }
  
 class foo2<T> extends foo<T> {
->foo2 : foo2<T>
->T : T
->foo : foo<T>
->T : T
+>foo2 : foo2<T>, Symbol(foo2, Decl(mutuallyRecursiveGenericBaseTypes2.ts, 3, 1))
+>T : T, Symbol(T, Decl(mutuallyRecursiveGenericBaseTypes2.ts, 5, 11))
+>foo : foo<T>, Symbol(foo, Decl(mutuallyRecursiveGenericBaseTypes2.ts, 0, 0))
+>T : T, Symbol(T, Decl(mutuallyRecursiveGenericBaseTypes2.ts, 5, 11))
 }
  
 var test = new foo<string>();
->test : foo<string>
+>test : foo<string>, Symbol(test, Decl(mutuallyRecursiveGenericBaseTypes2.ts, 8, 3))
 >new foo<string>() : foo<string>
->foo : typeof foo
+>foo : typeof foo, Symbol(foo, Decl(mutuallyRecursiveGenericBaseTypes2.ts, 0, 0))
 

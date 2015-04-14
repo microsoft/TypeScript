@@ -1,10 +1,11 @@
 === tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserInterfaceKeywordInEnum1.ts ===
 "use strict";
+>"use strict" : string
 
 enum Bar {
->Bar : Bar
+>Bar : Bar, Symbol(Bar, Decl(parserInterfaceKeywordInEnum1.ts, 0, 13))
 
     interface,
->interface : Bar
+>interface : Bar, Symbol(Bar.interface, Decl(parserInterfaceKeywordInEnum1.ts, 2, 10))
 }
 

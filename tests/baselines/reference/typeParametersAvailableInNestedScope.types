@@ -1,73 +1,75 @@
 === tests/cases/conformance/types/typeParameters/typeParameterLists/typeParametersAvailableInNestedScope.ts ===
 class C<T> {
->C : C<T>
->T : T
+>C : C<T>, Symbol(C, Decl(typeParametersAvailableInNestedScope.ts, 0, 0))
+>T : T, Symbol(T, Decl(typeParametersAvailableInNestedScope.ts, 0, 8))
 
     data: T;
->data : T
->T : T
+>data : T, Symbol(data, Decl(typeParametersAvailableInNestedScope.ts, 0, 12))
+>T : T, Symbol(T, Decl(typeParametersAvailableInNestedScope.ts, 0, 8))
 
     x = <U>(a: U) => {
->x : <U>(a: U) => T
+>x : <U>(a: U) => T, Symbol(x, Decl(typeParametersAvailableInNestedScope.ts, 1, 12))
 ><U>(a: U) => {        var y: T;        return y;    } : <U>(a: U) => T
->U : U
->a : U
->U : U
+>U : U, Symbol(U, Decl(typeParametersAvailableInNestedScope.ts, 3, 9))
+>a : U, Symbol(a, Decl(typeParametersAvailableInNestedScope.ts, 3, 12))
+>U : U, Symbol(U, Decl(typeParametersAvailableInNestedScope.ts, 3, 9))
 
         var y: T;
->y : T
->T : T
+>y : T, Symbol(y, Decl(typeParametersAvailableInNestedScope.ts, 4, 11))
+>T : T, Symbol(T, Decl(typeParametersAvailableInNestedScope.ts, 0, 8))
 
         return y;
->y : T
+>y : T, Symbol(y, Decl(typeParametersAvailableInNestedScope.ts, 4, 11))
     }
 
     foo() {
->foo : () => T
+>foo : () => T, Symbol(foo, Decl(typeParametersAvailableInNestedScope.ts, 6, 5))
 
         function temp<U>(a: U) {
->temp : <U>(a: U) => T
->U : U
->a : U
->U : U
+>temp : <U>(a: U) => T, Symbol(temp, Decl(typeParametersAvailableInNestedScope.ts, 8, 11))
+>U : U, Symbol(U, Decl(typeParametersAvailableInNestedScope.ts, 9, 22))
+>a : U, Symbol(a, Decl(typeParametersAvailableInNestedScope.ts, 9, 25))
+>U : U, Symbol(U, Decl(typeParametersAvailableInNestedScope.ts, 9, 22))
 
             var y: T;
->y : T
->T : T
+>y : T, Symbol(y, Decl(typeParametersAvailableInNestedScope.ts, 10, 15))
+>T : T, Symbol(T, Decl(typeParametersAvailableInNestedScope.ts, 0, 8))
 
             return y;
->y : T
+>y : T, Symbol(y, Decl(typeParametersAvailableInNestedScope.ts, 10, 15))
         }
         return temp(<T>null);
 >temp(<T>null) : T
->temp : <U>(a: U) => T
+>temp : <U>(a: U) => T, Symbol(temp, Decl(typeParametersAvailableInNestedScope.ts, 8, 11))
 ><T>null : T
->T : T
+>T : T, Symbol(T, Decl(typeParametersAvailableInNestedScope.ts, 0, 8))
+>null : null
     }
 }
 
 var c = new C<number>();
->c : C<number>
+>c : C<number>, Symbol(c, Decl(typeParametersAvailableInNestedScope.ts, 17, 3))
 >new C<number>() : C<number>
->C : typeof C
+>C : typeof C, Symbol(C, Decl(typeParametersAvailableInNestedScope.ts, 0, 0))
 
 c.data = c.x(null);
 >c.data = c.x(null) : number
->c.data : number
->c : C<number>
->data : number
+>c.data : number, Symbol(C.data, Decl(typeParametersAvailableInNestedScope.ts, 0, 12))
+>c : C<number>, Symbol(c, Decl(typeParametersAvailableInNestedScope.ts, 17, 3))
+>data : number, Symbol(C.data, Decl(typeParametersAvailableInNestedScope.ts, 0, 12))
 >c.x(null) : number
->c.x : <U>(a: U) => number
->c : C<number>
->x : <U>(a: U) => number
+>c.x : <U>(a: U) => number, Symbol(C.x, Decl(typeParametersAvailableInNestedScope.ts, 1, 12))
+>c : C<number>, Symbol(c, Decl(typeParametersAvailableInNestedScope.ts, 17, 3))
+>x : <U>(a: U) => number, Symbol(C.x, Decl(typeParametersAvailableInNestedScope.ts, 1, 12))
+>null : null
 
 c.data = c.foo();
 >c.data = c.foo() : number
->c.data : number
->c : C<number>
->data : number
+>c.data : number, Symbol(C.data, Decl(typeParametersAvailableInNestedScope.ts, 0, 12))
+>c : C<number>, Symbol(c, Decl(typeParametersAvailableInNestedScope.ts, 17, 3))
+>data : number, Symbol(C.data, Decl(typeParametersAvailableInNestedScope.ts, 0, 12))
 >c.foo() : number
->c.foo : () => number
->c : C<number>
->foo : () => number
+>c.foo : () => number, Symbol(C.foo, Decl(typeParametersAvailableInNestedScope.ts, 6, 5))
+>c : C<number>, Symbol(c, Decl(typeParametersAvailableInNestedScope.ts, 17, 3))
+>foo : () => number, Symbol(C.foo, Decl(typeParametersAvailableInNestedScope.ts, 6, 5))
 

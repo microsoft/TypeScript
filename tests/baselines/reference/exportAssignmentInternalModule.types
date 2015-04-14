@@ -1,21 +1,21 @@
 === tests/cases/compiler/exportAssignmentInternalModule_B.ts ===
 import modM = require("exportAssignmentInternalModule_A");
->modM : typeof modM
+>modM : typeof modM, Symbol(modM, Decl(exportAssignmentInternalModule_B.ts, 0, 0))
 
 var n: number = modM.x;
->n : number
->modM.x : any
->modM : typeof modM
->x : any
+>n : number, Symbol(n, Decl(exportAssignmentInternalModule_B.ts, 2, 3))
+>modM.x : any, Symbol(modM.x, Decl(exportAssignmentInternalModule_A.ts, 1, 11))
+>modM : typeof modM, Symbol(modM, Decl(exportAssignmentInternalModule_B.ts, 0, 0))
+>x : any, Symbol(modM.x, Decl(exportAssignmentInternalModule_A.ts, 1, 11))
 
 === tests/cases/compiler/exportAssignmentInternalModule_A.ts ===
 module M {
->M : typeof M
+>M : typeof M, Symbol(M, Decl(exportAssignmentInternalModule_A.ts, 0, 0))
 
 	export var x;
->x : any
+>x : any, Symbol(x, Decl(exportAssignmentInternalModule_A.ts, 1, 11))
 }
 
 export = M;
->M : typeof M
+>M : typeof M, Symbol(M, Decl(exportAssignmentInternalModule_A.ts, 0, 0))
 

@@ -1,57 +1,59 @@
 === tests/cases/compiler/exportImportAndClodule.ts ===
 module K {
->K : typeof K
+>K : typeof K, Symbol(K, Decl(exportImportAndClodule.ts, 0, 0))
 
     export class L {
->L : L
+>L : L, Symbol(L, Decl(exportImportAndClodule.ts, 0, 10), Decl(exportImportAndClodule.ts, 3, 5))
 
         constructor(public name: string) { }
->name : string
+>name : string, Symbol(name, Decl(exportImportAndClodule.ts, 2, 20))
     }
     export module L {
->L : typeof L
+>L : typeof L, Symbol(L, Decl(exportImportAndClodule.ts, 0, 10), Decl(exportImportAndClodule.ts, 3, 5))
 
         export var y = 12;
->y : number
+>y : number, Symbol(y, Decl(exportImportAndClodule.ts, 5, 18))
+>12 : number
 
         export interface Point {
->Point : Point
+>Point : Point, Symbol(Point, Decl(exportImportAndClodule.ts, 5, 26))
 
             x: number;
->x : number
+>x : number, Symbol(x, Decl(exportImportAndClodule.ts, 6, 32))
 
             y: number;
->y : number
+>y : number, Symbol(y, Decl(exportImportAndClodule.ts, 7, 22))
         }
     }
 }
 module M {
->M : typeof M
+>M : typeof M, Symbol(M, Decl(exportImportAndClodule.ts, 11, 1))
 
     export import D = K.L;
->D : typeof D
->K : typeof K
->L : D
+>D : typeof D, Symbol(D, Decl(exportImportAndClodule.ts, 12, 10))
+>K : typeof K, Symbol(K, Decl(exportImportAndClodule.ts, 0, 0))
+>L : D, Symbol(D, Decl(exportImportAndClodule.ts, 0, 10), Decl(exportImportAndClodule.ts, 3, 5))
 }
 var o: { name: string };
->o : { name: string; }
->name : string
+>o : { name: string; }, Symbol(o, Decl(exportImportAndClodule.ts, 15, 3), Decl(exportImportAndClodule.ts, 16, 3))
+>name : string, Symbol(name, Decl(exportImportAndClodule.ts, 15, 8))
 
 var o = new M.D('Hello');
->o : { name: string; }
+>o : { name: string; }, Symbol(o, Decl(exportImportAndClodule.ts, 15, 3), Decl(exportImportAndClodule.ts, 16, 3))
 >new M.D('Hello') : K.L
->M.D : typeof K.L
->M : typeof M
->D : typeof K.L
+>M.D : typeof K.L, Symbol(M.D, Decl(exportImportAndClodule.ts, 12, 10))
+>M : typeof M, Symbol(M, Decl(exportImportAndClodule.ts, 11, 1))
+>D : typeof K.L, Symbol(M.D, Decl(exportImportAndClodule.ts, 12, 10))
+>'Hello' : string
 
 var p: { x: number; y: number; }
->p : { x: number; y: number; }
->x : number
->y : number
+>p : { x: number; y: number; }, Symbol(p, Decl(exportImportAndClodule.ts, 17, 3), Decl(exportImportAndClodule.ts, 18, 3))
+>x : number, Symbol(x, Decl(exportImportAndClodule.ts, 17, 8))
+>y : number, Symbol(y, Decl(exportImportAndClodule.ts, 17, 19))
 
 var p: M.D.Point;
->p : { x: number; y: number; }
->M : unknown
->D : unknown
->Point : K.L.Point
+>p : { x: number; y: number; }, Symbol(p, Decl(exportImportAndClodule.ts, 17, 3), Decl(exportImportAndClodule.ts, 18, 3))
+>M : any, Symbol(M, Decl(exportImportAndClodule.ts, 11, 1))
+>D : any, Symbol(M.D, Decl(exportImportAndClodule.ts, 12, 10))
+>Point : K.L.Point, Symbol(K.L.Point, Decl(exportImportAndClodule.ts, 5, 26))
 

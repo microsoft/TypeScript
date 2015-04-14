@@ -1,62 +1,62 @@
 === tests/cases/compiler/commentsMultiModuleMultiFile_1.ts ===
 import m = require('commentsMultiModuleMultiFile_0');
->m : typeof m
+>m : typeof m, Symbol(m, Decl(commentsMultiModuleMultiFile_1.ts, 0, 0))
 
 /** this is multi module 3 comment*/
 export module multiM {
->multiM : typeof multiM
+>multiM : typeof multiM, Symbol(multiM, Decl(commentsMultiModuleMultiFile_1.ts, 0, 53))
 
     /** class d comment*/
     export class d {
->d : d
+>d : d, Symbol(d, Decl(commentsMultiModuleMultiFile_1.ts, 2, 22))
     }
 
     /// class f comment
     export class f {
->f : f
+>f : f, Symbol(f, Decl(commentsMultiModuleMultiFile_1.ts, 5, 5))
     }
 }
 new multiM.d();
 >new multiM.d() : multiM.d
->multiM.d : typeof multiM.d
->multiM : typeof multiM
->d : typeof multiM.d
+>multiM.d : typeof multiM.d, Symbol(multiM.d, Decl(commentsMultiModuleMultiFile_1.ts, 2, 22))
+>multiM : typeof multiM, Symbol(multiM, Decl(commentsMultiModuleMultiFile_1.ts, 0, 53))
+>d : typeof multiM.d, Symbol(multiM.d, Decl(commentsMultiModuleMultiFile_1.ts, 2, 22))
 
 === tests/cases/compiler/commentsMultiModuleMultiFile_0.ts ===
 
 /** this is multi declare module*/
 export module multiM {
->multiM : typeof multiM
+>multiM : typeof multiM, Symbol(multiM, Decl(commentsMultiModuleMultiFile_0.ts, 0, 0), Decl(commentsMultiModuleMultiFile_0.ts, 6, 1))
 
     /// class b comment
     export class b {
->b : b
+>b : b, Symbol(b, Decl(commentsMultiModuleMultiFile_0.ts, 2, 22))
     }
 }
 /** thi is multi module 2*/
 export module multiM {
->multiM : typeof multiM
+>multiM : typeof multiM, Symbol(multiM, Decl(commentsMultiModuleMultiFile_0.ts, 0, 0), Decl(commentsMultiModuleMultiFile_0.ts, 6, 1))
 
     /** class c comment*/
     export class c {
->c : c
+>c : c, Symbol(c, Decl(commentsMultiModuleMultiFile_0.ts, 8, 22))
     }
 
     // class e comment
     export class e {
->e : e
+>e : e, Symbol(e, Decl(commentsMultiModuleMultiFile_0.ts, 11, 5))
     }
 }
 
 new multiM.b();
 >new multiM.b() : multiM.b
->multiM.b : typeof multiM.b
->multiM : typeof multiM
->b : typeof multiM.b
+>multiM.b : typeof multiM.b, Symbol(multiM.b, Decl(commentsMultiModuleMultiFile_0.ts, 2, 22))
+>multiM : typeof multiM, Symbol(multiM, Decl(commentsMultiModuleMultiFile_0.ts, 0, 0), Decl(commentsMultiModuleMultiFile_0.ts, 6, 1))
+>b : typeof multiM.b, Symbol(multiM.b, Decl(commentsMultiModuleMultiFile_0.ts, 2, 22))
 
 new multiM.c();
 >new multiM.c() : multiM.c
->multiM.c : typeof multiM.c
->multiM : typeof multiM
->c : typeof multiM.c
+>multiM.c : typeof multiM.c, Symbol(multiM.c, Decl(commentsMultiModuleMultiFile_0.ts, 8, 22))
+>multiM : typeof multiM, Symbol(multiM, Decl(commentsMultiModuleMultiFile_0.ts, 0, 0), Decl(commentsMultiModuleMultiFile_0.ts, 6, 1))
+>c : typeof multiM.c, Symbol(multiM.c, Decl(commentsMultiModuleMultiFile_0.ts, 8, 22))
 

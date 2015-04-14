@@ -1,30 +1,30 @@
 === tests/cases/compiler/generics3.ts ===
 class C<T> { private x: T; }
->C : C<T>
->T : T
->x : T
->T : T
+>C : C<T>, Symbol(C, Decl(generics3.ts, 0, 0))
+>T : T, Symbol(T, Decl(generics3.ts, 0, 8))
+>x : T, Symbol(x, Decl(generics3.ts, 0, 12))
+>T : T, Symbol(T, Decl(generics3.ts, 0, 8))
 
 interface X { f(): string; }
->X : X
->f : () => string
+>X : X, Symbol(X, Decl(generics3.ts, 0, 28))
+>f : () => string, Symbol(f, Decl(generics3.ts, 1, 13))
 
 interface Y { f(): string; }
->Y : Y
->f : () => string
+>Y : Y, Symbol(Y, Decl(generics3.ts, 1, 28))
+>f : () => string, Symbol(f, Decl(generics3.ts, 2, 13))
 
 var a: C<X>;
->a : C<X>
->C : C<T>
->X : X
+>a : C<X>, Symbol(a, Decl(generics3.ts, 3, 3))
+>C : C<T>, Symbol(C, Decl(generics3.ts, 0, 0))
+>X : X, Symbol(X, Decl(generics3.ts, 0, 28))
 
 var b: C<Y>;
->b : C<Y>
->C : C<T>
->Y : Y
+>b : C<Y>, Symbol(b, Decl(generics3.ts, 4, 3))
+>C : C<T>, Symbol(C, Decl(generics3.ts, 0, 0))
+>Y : Y, Symbol(Y, Decl(generics3.ts, 1, 28))
 
 a = b; // Ok - should be identical
 >a = b : C<Y>
->a : C<X>
->b : C<Y>
+>a : C<X>, Symbol(a, Decl(generics3.ts, 3, 3))
+>b : C<Y>, Symbol(b, Decl(generics3.ts, 4, 3))
 

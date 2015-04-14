@@ -1,351 +1,367 @@
 === tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIdenticalPrimitiveType.ts ===
 enum E { a, b, c }
->E : E
->a : E
->b : E
->c : E
+>E : E, Symbol(E, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 0, 0))
+>a : E, Symbol(E.a, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 0, 8))
+>b : E, Symbol(E.b, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 0, 11))
+>c : E, Symbol(E.c, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 0, 14))
 
 var a: number;
->a : number
+>a : number, Symbol(a, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 2, 3))
 
 var b: boolean;
->b : boolean
+>b : boolean, Symbol(b, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 3, 3))
 
 var c: string;
->c : string
+>c : string, Symbol(c, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 4, 3))
 
 var d: void;
->d : void
+>d : void, Symbol(d, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 5, 3))
 
 var e: E;
->e : E
->E : E
+>e : E, Symbol(e, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 6, 3))
+>E : E, Symbol(E, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 0, 0))
 
 // operator <
 var ra1 = a < a;
->ra1 : boolean
+>ra1 : boolean, Symbol(ra1, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 9, 3))
 >a < a : boolean
->a : number
->a : number
+>a : number, Symbol(a, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 2, 3))
+>a : number, Symbol(a, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 2, 3))
 
 var ra2 = b < b;
->ra2 : boolean
+>ra2 : boolean, Symbol(ra2, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 10, 3))
 >b < b : boolean
->b : boolean
->b : boolean
+>b : boolean, Symbol(b, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 3, 3))
+>b : boolean, Symbol(b, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 3, 3))
 
 var ra3 = c < c;
->ra3 : boolean
+>ra3 : boolean, Symbol(ra3, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 11, 3))
 >c < c : boolean
->c : string
->c : string
+>c : string, Symbol(c, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 4, 3))
+>c : string, Symbol(c, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 4, 3))
 
 var ra4 = d < d;
->ra4 : boolean
+>ra4 : boolean, Symbol(ra4, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 12, 3))
 >d < d : boolean
->d : void
->d : void
+>d : void, Symbol(d, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 5, 3))
+>d : void, Symbol(d, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 5, 3))
 
 var ra5 = e < e;
->ra5 : boolean
+>ra5 : boolean, Symbol(ra5, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 13, 3))
 >e < e : boolean
->e : E
->e : E
+>e : E, Symbol(e, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 6, 3))
+>e : E, Symbol(e, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 6, 3))
 
 var ra6 = null < null;
->ra6 : boolean
+>ra6 : boolean, Symbol(ra6, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 14, 3))
 >null < null : boolean
+>null : null
+>null : null
 
 var ra7 = undefined < undefined;
->ra7 : boolean
+>ra7 : boolean, Symbol(ra7, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 15, 3))
 >undefined < undefined : boolean
->undefined : undefined
->undefined : undefined
+>undefined : undefined, Symbol(undefined)
+>undefined : undefined, Symbol(undefined)
 
 // operator >
 var rb1 = a > a;
->rb1 : boolean
+>rb1 : boolean, Symbol(rb1, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 18, 3))
 >a > a : boolean
->a : number
->a : number
+>a : number, Symbol(a, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 2, 3))
+>a : number, Symbol(a, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 2, 3))
 
 var rb2 = b > b;
->rb2 : boolean
+>rb2 : boolean, Symbol(rb2, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 19, 3))
 >b > b : boolean
->b : boolean
->b : boolean
+>b : boolean, Symbol(b, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 3, 3))
+>b : boolean, Symbol(b, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 3, 3))
 
 var rb3 = c > c;
->rb3 : boolean
+>rb3 : boolean, Symbol(rb3, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 20, 3))
 >c > c : boolean
->c : string
->c : string
+>c : string, Symbol(c, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 4, 3))
+>c : string, Symbol(c, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 4, 3))
 
 var rb4 = d > d;
->rb4 : boolean
+>rb4 : boolean, Symbol(rb4, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 21, 3))
 >d > d : boolean
->d : void
->d : void
+>d : void, Symbol(d, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 5, 3))
+>d : void, Symbol(d, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 5, 3))
 
 var rb5 = e > e;
->rb5 : boolean
+>rb5 : boolean, Symbol(rb5, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 22, 3))
 >e > e : boolean
->e : E
->e : E
+>e : E, Symbol(e, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 6, 3))
+>e : E, Symbol(e, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 6, 3))
 
 var rb6 = null > null;
->rb6 : boolean
+>rb6 : boolean, Symbol(rb6, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 23, 3))
 >null > null : boolean
+>null : null
+>null : null
 
 var rb7 = undefined > undefined;
->rb7 : boolean
+>rb7 : boolean, Symbol(rb7, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 24, 3))
 >undefined > undefined : boolean
->undefined : undefined
->undefined : undefined
+>undefined : undefined, Symbol(undefined)
+>undefined : undefined, Symbol(undefined)
 
 // operator <=
 var rc1 = a <= a;
->rc1 : boolean
+>rc1 : boolean, Symbol(rc1, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 27, 3))
 >a <= a : boolean
->a : number
->a : number
+>a : number, Symbol(a, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 2, 3))
+>a : number, Symbol(a, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 2, 3))
 
 var rc2 = b <= b;
->rc2 : boolean
+>rc2 : boolean, Symbol(rc2, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 28, 3))
 >b <= b : boolean
->b : boolean
->b : boolean
+>b : boolean, Symbol(b, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 3, 3))
+>b : boolean, Symbol(b, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 3, 3))
 
 var rc3 = c <= c;
->rc3 : boolean
+>rc3 : boolean, Symbol(rc3, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 29, 3))
 >c <= c : boolean
->c : string
->c : string
+>c : string, Symbol(c, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 4, 3))
+>c : string, Symbol(c, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 4, 3))
 
 var rc4 = d <= d;
->rc4 : boolean
+>rc4 : boolean, Symbol(rc4, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 30, 3))
 >d <= d : boolean
->d : void
->d : void
+>d : void, Symbol(d, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 5, 3))
+>d : void, Symbol(d, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 5, 3))
 
 var rc5 = e <= e;
->rc5 : boolean
+>rc5 : boolean, Symbol(rc5, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 31, 3))
 >e <= e : boolean
->e : E
->e : E
+>e : E, Symbol(e, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 6, 3))
+>e : E, Symbol(e, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 6, 3))
 
 var rc6 = null <= null;
->rc6 : boolean
+>rc6 : boolean, Symbol(rc6, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 32, 3))
 >null <= null : boolean
+>null : null
+>null : null
 
 var rc7 = undefined <= undefined;
->rc7 : boolean
+>rc7 : boolean, Symbol(rc7, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 33, 3))
 >undefined <= undefined : boolean
->undefined : undefined
->undefined : undefined
+>undefined : undefined, Symbol(undefined)
+>undefined : undefined, Symbol(undefined)
 
 // operator >=
 var rd1 = a >= a;
->rd1 : boolean
+>rd1 : boolean, Symbol(rd1, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 36, 3))
 >a >= a : boolean
->a : number
->a : number
+>a : number, Symbol(a, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 2, 3))
+>a : number, Symbol(a, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 2, 3))
 
 var rd2 = b >= b;
->rd2 : boolean
+>rd2 : boolean, Symbol(rd2, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 37, 3))
 >b >= b : boolean
->b : boolean
->b : boolean
+>b : boolean, Symbol(b, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 3, 3))
+>b : boolean, Symbol(b, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 3, 3))
 
 var rd3 = c >= c;
->rd3 : boolean
+>rd3 : boolean, Symbol(rd3, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 38, 3))
 >c >= c : boolean
->c : string
->c : string
+>c : string, Symbol(c, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 4, 3))
+>c : string, Symbol(c, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 4, 3))
 
 var rd4 = d >= d;
->rd4 : boolean
+>rd4 : boolean, Symbol(rd4, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 39, 3))
 >d >= d : boolean
->d : void
->d : void
+>d : void, Symbol(d, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 5, 3))
+>d : void, Symbol(d, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 5, 3))
 
 var rd5 = e >= e;
->rd5 : boolean
+>rd5 : boolean, Symbol(rd5, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 40, 3))
 >e >= e : boolean
->e : E
->e : E
+>e : E, Symbol(e, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 6, 3))
+>e : E, Symbol(e, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 6, 3))
 
 var rd6 = null >= null;
->rd6 : boolean
+>rd6 : boolean, Symbol(rd6, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 41, 3))
 >null >= null : boolean
+>null : null
+>null : null
 
 var rd7 = undefined >= undefined;
->rd7 : boolean
+>rd7 : boolean, Symbol(rd7, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 42, 3))
 >undefined >= undefined : boolean
->undefined : undefined
->undefined : undefined
+>undefined : undefined, Symbol(undefined)
+>undefined : undefined, Symbol(undefined)
 
 // operator ==
 var re1 = a == a;
->re1 : boolean
+>re1 : boolean, Symbol(re1, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 45, 3))
 >a == a : boolean
->a : number
->a : number
+>a : number, Symbol(a, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 2, 3))
+>a : number, Symbol(a, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 2, 3))
 
 var re2 = b == b;
->re2 : boolean
+>re2 : boolean, Symbol(re2, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 46, 3))
 >b == b : boolean
->b : boolean
->b : boolean
+>b : boolean, Symbol(b, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 3, 3))
+>b : boolean, Symbol(b, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 3, 3))
 
 var re3 = c == c;
->re3 : boolean
+>re3 : boolean, Symbol(re3, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 47, 3))
 >c == c : boolean
->c : string
->c : string
+>c : string, Symbol(c, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 4, 3))
+>c : string, Symbol(c, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 4, 3))
 
 var re4 = d == d;
->re4 : boolean
+>re4 : boolean, Symbol(re4, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 48, 3))
 >d == d : boolean
->d : void
->d : void
+>d : void, Symbol(d, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 5, 3))
+>d : void, Symbol(d, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 5, 3))
 
 var re5 = e == e;
->re5 : boolean
+>re5 : boolean, Symbol(re5, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 49, 3))
 >e == e : boolean
->e : E
->e : E
+>e : E, Symbol(e, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 6, 3))
+>e : E, Symbol(e, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 6, 3))
 
 var re6 = null == null;
->re6 : boolean
+>re6 : boolean, Symbol(re6, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 50, 3))
 >null == null : boolean
+>null : null
+>null : null
 
 var re7 = undefined == undefined;
->re7 : boolean
+>re7 : boolean, Symbol(re7, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 51, 3))
 >undefined == undefined : boolean
->undefined : undefined
->undefined : undefined
+>undefined : undefined, Symbol(undefined)
+>undefined : undefined, Symbol(undefined)
 
 // operator !=
 var rf1 = a != a;
->rf1 : boolean
+>rf1 : boolean, Symbol(rf1, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 54, 3))
 >a != a : boolean
->a : number
->a : number
+>a : number, Symbol(a, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 2, 3))
+>a : number, Symbol(a, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 2, 3))
 
 var rf2 = b != b;
->rf2 : boolean
+>rf2 : boolean, Symbol(rf2, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 55, 3))
 >b != b : boolean
->b : boolean
->b : boolean
+>b : boolean, Symbol(b, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 3, 3))
+>b : boolean, Symbol(b, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 3, 3))
 
 var rf3 = c != c;
->rf3 : boolean
+>rf3 : boolean, Symbol(rf3, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 56, 3))
 >c != c : boolean
->c : string
->c : string
+>c : string, Symbol(c, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 4, 3))
+>c : string, Symbol(c, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 4, 3))
 
 var rf4 = d != d;
->rf4 : boolean
+>rf4 : boolean, Symbol(rf4, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 57, 3))
 >d != d : boolean
->d : void
->d : void
+>d : void, Symbol(d, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 5, 3))
+>d : void, Symbol(d, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 5, 3))
 
 var rf5 = e != e;
->rf5 : boolean
+>rf5 : boolean, Symbol(rf5, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 58, 3))
 >e != e : boolean
->e : E
->e : E
+>e : E, Symbol(e, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 6, 3))
+>e : E, Symbol(e, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 6, 3))
 
 var rf6 = null != null;
->rf6 : boolean
+>rf6 : boolean, Symbol(rf6, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 59, 3))
 >null != null : boolean
+>null : null
+>null : null
 
 var rf7 = undefined != undefined;
->rf7 : boolean
+>rf7 : boolean, Symbol(rf7, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 60, 3))
 >undefined != undefined : boolean
->undefined : undefined
->undefined : undefined
+>undefined : undefined, Symbol(undefined)
+>undefined : undefined, Symbol(undefined)
 
 // operator ===
 var rg1 = a === a;
->rg1 : boolean
+>rg1 : boolean, Symbol(rg1, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 63, 3))
 >a === a : boolean
->a : number
->a : number
+>a : number, Symbol(a, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 2, 3))
+>a : number, Symbol(a, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 2, 3))
 
 var rg2 = b === b;
->rg2 : boolean
+>rg2 : boolean, Symbol(rg2, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 64, 3))
 >b === b : boolean
->b : boolean
->b : boolean
+>b : boolean, Symbol(b, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 3, 3))
+>b : boolean, Symbol(b, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 3, 3))
 
 var rg3 = c === c;
->rg3 : boolean
+>rg3 : boolean, Symbol(rg3, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 65, 3))
 >c === c : boolean
->c : string
->c : string
+>c : string, Symbol(c, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 4, 3))
+>c : string, Symbol(c, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 4, 3))
 
 var rg4 = d === d;
->rg4 : boolean
+>rg4 : boolean, Symbol(rg4, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 66, 3))
 >d === d : boolean
->d : void
->d : void
+>d : void, Symbol(d, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 5, 3))
+>d : void, Symbol(d, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 5, 3))
 
 var rg5 = e === e;
->rg5 : boolean
+>rg5 : boolean, Symbol(rg5, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 67, 3))
 >e === e : boolean
->e : E
->e : E
+>e : E, Symbol(e, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 6, 3))
+>e : E, Symbol(e, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 6, 3))
 
 var rg6 = null === null;
->rg6 : boolean
+>rg6 : boolean, Symbol(rg6, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 68, 3))
 >null === null : boolean
+>null : null
+>null : null
 
 var rg7 = undefined === undefined;
->rg7 : boolean
+>rg7 : boolean, Symbol(rg7, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 69, 3))
 >undefined === undefined : boolean
->undefined : undefined
->undefined : undefined
+>undefined : undefined, Symbol(undefined)
+>undefined : undefined, Symbol(undefined)
 
 // operator !==
 var rh1 = a !== a;
->rh1 : boolean
+>rh1 : boolean, Symbol(rh1, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 72, 3))
 >a !== a : boolean
->a : number
->a : number
+>a : number, Symbol(a, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 2, 3))
+>a : number, Symbol(a, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 2, 3))
 
 var rh2 = b !== b;
->rh2 : boolean
+>rh2 : boolean, Symbol(rh2, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 73, 3))
 >b !== b : boolean
->b : boolean
->b : boolean
+>b : boolean, Symbol(b, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 3, 3))
+>b : boolean, Symbol(b, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 3, 3))
 
 var rh3 = c !== c;
->rh3 : boolean
+>rh3 : boolean, Symbol(rh3, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 74, 3))
 >c !== c : boolean
->c : string
->c : string
+>c : string, Symbol(c, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 4, 3))
+>c : string, Symbol(c, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 4, 3))
 
 var rh4 = d !== d;
->rh4 : boolean
+>rh4 : boolean, Symbol(rh4, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 75, 3))
 >d !== d : boolean
->d : void
->d : void
+>d : void, Symbol(d, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 5, 3))
+>d : void, Symbol(d, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 5, 3))
 
 var rh5 = e !== e;
->rh5 : boolean
+>rh5 : boolean, Symbol(rh5, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 76, 3))
 >e !== e : boolean
->e : E
->e : E
+>e : E, Symbol(e, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 6, 3))
+>e : E, Symbol(e, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 6, 3))
 
 var rh6 = null !== null;
->rh6 : boolean
+>rh6 : boolean, Symbol(rh6, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 77, 3))
 >null !== null : boolean
+>null : null
+>null : null
 
 var rh7 = undefined !== undefined;
->rh7 : boolean
+>rh7 : boolean, Symbol(rh7, Decl(comparisonOperatorWithIdenticalPrimitiveType.ts, 78, 3))
 >undefined !== undefined : boolean
->undefined : undefined
->undefined : undefined
+>undefined : undefined, Symbol(undefined)
+>undefined : undefined, Symbol(undefined)
 

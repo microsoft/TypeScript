@@ -1,10 +1,11 @@
 === tests/cases/compiler/recursiveFunctionTypes1.ts ===
 class C {
->C : C
+>C : C, Symbol(C, Decl(recursiveFunctionTypes1.ts, 0, 0))
 
      static g(t: typeof C.g){ }
->g : (t: typeof C.g) => void
->t : (t: typeof C.g) => void
->C : typeof C
->g : (t: typeof C.g) => void
+>g : (t: typeof C.g) => void, Symbol(C.g, Decl(recursiveFunctionTypes1.ts, 0, 9))
+>t : (t: typeof C.g) => void, Symbol(t, Decl(recursiveFunctionTypes1.ts, 1, 14))
+>C.g : (t: typeof C.g) => void, Symbol(C.g, Decl(recursiveFunctionTypes1.ts, 0, 9))
+>C : typeof C, Symbol(C, Decl(recursiveFunctionTypes1.ts, 0, 0))
+>g : (t: typeof C.g) => void, Symbol(C.g, Decl(recursiveFunctionTypes1.ts, 0, 9))
 }

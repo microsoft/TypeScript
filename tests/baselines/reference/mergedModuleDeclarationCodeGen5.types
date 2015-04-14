@@ -1,54 +1,54 @@
 === tests/cases/compiler/mergedModuleDeclarationCodeGen5.ts ===
 module M.buz.plop {
->M : typeof M
->buz : typeof buz
->plop : typeof buz.plop
+>M : typeof M, Symbol(M, Decl(mergedModuleDeclarationCodeGen5.ts, 0, 0), Decl(mergedModuleDeclarationCodeGen5.ts, 3, 1))
+>buz : typeof buz, Symbol(buz, Decl(mergedModuleDeclarationCodeGen5.ts, 0, 9), Decl(mergedModuleDeclarationCodeGen5.ts, 4, 9))
+>plop : typeof buz.plop, Symbol(plop, Decl(mergedModuleDeclarationCodeGen5.ts, 0, 13), Decl(mergedModuleDeclarationCodeGen5.ts, 4, 13))
 
     export function doom() { }
->doom : () => void
+>doom : () => void, Symbol(doom, Decl(mergedModuleDeclarationCodeGen5.ts, 0, 19))
 
     export function M() { }
->M : () => void
+>M : () => void, Symbol(M, Decl(mergedModuleDeclarationCodeGen5.ts, 1, 30))
 }
 module M.buz.plop {
->M : typeof M
->buz : typeof buz
->plop : typeof M.buz.plop
+>M : typeof M, Symbol(M, Decl(mergedModuleDeclarationCodeGen5.ts, 0, 0), Decl(mergedModuleDeclarationCodeGen5.ts, 3, 1))
+>buz : typeof buz, Symbol(buz, Decl(mergedModuleDeclarationCodeGen5.ts, 0, 9), Decl(mergedModuleDeclarationCodeGen5.ts, 4, 9))
+>plop : typeof M.buz.plop, Symbol(plop, Decl(mergedModuleDeclarationCodeGen5.ts, 0, 13), Decl(mergedModuleDeclarationCodeGen5.ts, 4, 13))
 
     function gunk() { }
->gunk : () => void
+>gunk : () => void, Symbol(gunk, Decl(mergedModuleDeclarationCodeGen5.ts, 4, 19))
 
     function buz() { }
->buz : () => void
+>buz : () => void, Symbol(buz, Decl(mergedModuleDeclarationCodeGen5.ts, 5, 23))
 
     export class fudge { }
->fudge : fudge
+>fudge : fudge, Symbol(fudge, Decl(mergedModuleDeclarationCodeGen5.ts, 6, 22))
 
     export enum plop { }
->plop : plop
+>plop : plop, Symbol(plop, Decl(mergedModuleDeclarationCodeGen5.ts, 7, 26))
 
     // Emit these references as follows
     var v1 = gunk; // gunk
->v1 : () => void
->gunk : () => void
+>v1 : () => void, Symbol(v1, Decl(mergedModuleDeclarationCodeGen5.ts, 11, 7))
+>gunk : () => void, Symbol(gunk, Decl(mergedModuleDeclarationCodeGen5.ts, 4, 19))
 
     var v2 = buz; // buz
->v2 : () => void
->buz : () => void
+>v2 : () => void, Symbol(v2, Decl(mergedModuleDeclarationCodeGen5.ts, 12, 7))
+>buz : () => void, Symbol(buz, Decl(mergedModuleDeclarationCodeGen5.ts, 5, 23))
 
     export var v3 = doom; // _plop.doom
->v3 : () => void
->doom : () => void
+>v3 : () => void, Symbol(v3, Decl(mergedModuleDeclarationCodeGen5.ts, 13, 14))
+>doom : () => void, Symbol(doom, Decl(mergedModuleDeclarationCodeGen5.ts, 0, 19))
 
     export var v4 = M; // _plop.M
->v4 : () => void
->M : () => void
+>v4 : () => void, Symbol(v4, Decl(mergedModuleDeclarationCodeGen5.ts, 14, 14))
+>M : () => void, Symbol(M, Decl(mergedModuleDeclarationCodeGen5.ts, 1, 30))
 
     export var v5 = fudge; // fudge
->v5 : typeof fudge
->fudge : typeof fudge
+>v5 : typeof fudge, Symbol(v5, Decl(mergedModuleDeclarationCodeGen5.ts, 15, 14))
+>fudge : typeof fudge, Symbol(fudge, Decl(mergedModuleDeclarationCodeGen5.ts, 6, 22))
 
     export var v6 = plop; // plop
->v6 : typeof plop
->plop : typeof plop
+>v6 : typeof plop, Symbol(v6, Decl(mergedModuleDeclarationCodeGen5.ts, 16, 14))
+>plop : typeof plop, Symbol(plop, Decl(mergedModuleDeclarationCodeGen5.ts, 7, 26))
 }

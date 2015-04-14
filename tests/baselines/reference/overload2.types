@@ -1,42 +1,42 @@
 === tests/cases/compiler/overload2.ts ===
 enum A { }
->A : A
+>A : A, Symbol(A, Decl(overload2.ts, 0, 0))
 
 enum B { }
->B : B
+>B : B, Symbol(B, Decl(overload2.ts, 0, 10))
     
 function foo(a: A);
->foo : { (a: A): any; (b: B): any; }
->a : A
->A : A
+>foo : { (a: A): any; (b: B): any; }, Symbol(foo, Decl(overload2.ts, 1, 10), Decl(overload2.ts, 3, 19), Decl(overload2.ts, 4, 19))
+>a : A, Symbol(a, Decl(overload2.ts, 3, 13))
+>A : A, Symbol(A, Decl(overload2.ts, 0, 0))
 
 function foo(b: B);
->foo : { (a: A): any; (b: B): any; }
->b : B
->B : B
+>foo : { (a: A): any; (b: B): any; }, Symbol(foo, Decl(overload2.ts, 1, 10), Decl(overload2.ts, 3, 19), Decl(overload2.ts, 4, 19))
+>b : B, Symbol(b, Decl(overload2.ts, 4, 13))
+>B : B, Symbol(B, Decl(overload2.ts, 0, 10))
 
 // should be ok
 function foo(x: number) { 
->foo : { (a: A): any; (b: B): any; }
->x : number
+>foo : { (a: A): any; (b: B): any; }, Symbol(foo, Decl(overload2.ts, 1, 10), Decl(overload2.ts, 3, 19), Decl(overload2.ts, 4, 19))
+>x : number, Symbol(x, Decl(overload2.ts, 6, 13))
 }
 
 class C { }
->C : C
+>C : C, Symbol(C, Decl(overload2.ts, 7, 1))
 
 function foo1(a: A);
->foo1 : { (a: A): any; (c: C): any; }
->a : A
->A : A
+>foo1 : { (a: A): any; (c: C): any; }, Symbol(foo1, Decl(overload2.ts, 9, 11), Decl(overload2.ts, 10, 20), Decl(overload2.ts, 11, 20))
+>a : A, Symbol(a, Decl(overload2.ts, 10, 14))
+>A : A, Symbol(A, Decl(overload2.ts, 0, 0))
 
 function foo1(c: C);
->foo1 : { (a: A): any; (c: C): any; }
->c : C
->C : C
+>foo1 : { (a: A): any; (c: C): any; }, Symbol(foo1, Decl(overload2.ts, 9, 11), Decl(overload2.ts, 10, 20), Decl(overload2.ts, 11, 20))
+>c : C, Symbol(c, Decl(overload2.ts, 11, 14))
+>C : C, Symbol(C, Decl(overload2.ts, 7, 1))
 
 // should be ok
 function foo1(x: number) { 
->foo1 : { (a: A): any; (c: C): any; }
->x : number
+>foo1 : { (a: A): any; (c: C): any; }, Symbol(foo1, Decl(overload2.ts, 9, 11), Decl(overload2.ts, 10, 20), Decl(overload2.ts, 11, 20))
+>x : number, Symbol(x, Decl(overload2.ts, 13, 14))
 }
 

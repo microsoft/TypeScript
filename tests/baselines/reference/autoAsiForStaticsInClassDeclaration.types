@@ -1,10 +1,10 @@
 === tests/cases/compiler/autoAsiForStaticsInClassDeclaration.ts ===
 class C {
->C : C
+>C : C, Symbol(C, Decl(autoAsiForStaticsInClassDeclaration.ts, 0, 0))
 
     static x
->x : any
+>x : any, Symbol(C.x, Decl(autoAsiForStaticsInClassDeclaration.ts, 0, 9))
 
     static y
->y : any
+>y : any, Symbol(C.y, Decl(autoAsiForStaticsInClassDeclaration.ts, 1, 12))
 } 

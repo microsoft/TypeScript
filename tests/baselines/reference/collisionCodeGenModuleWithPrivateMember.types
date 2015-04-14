@@ -1,23 +1,23 @@
 === tests/cases/compiler/collisionCodeGenModuleWithPrivateMember.ts ===
 module m1 {
->m1 : typeof m1
+>m1 : typeof m1, Symbol(m1, Decl(collisionCodeGenModuleWithPrivateMember.ts, 0, 0))
 
     class m1 {
->m1 : m1
+>m1 : m1, Symbol(m1, Decl(collisionCodeGenModuleWithPrivateMember.ts, 0, 11))
     }
     var x = new m1();
->x : m1
+>x : m1, Symbol(x, Decl(collisionCodeGenModuleWithPrivateMember.ts, 3, 7))
 >new m1() : m1
->m1 : typeof m1
+>m1 : typeof m1, Symbol(m1, Decl(collisionCodeGenModuleWithPrivateMember.ts, 0, 11))
 
     export class c1 {
->c1 : c1
+>c1 : c1, Symbol(c1, Decl(collisionCodeGenModuleWithPrivateMember.ts, 3, 21))
     }
 }
 var foo = new m1.c1();
->foo : m1.c1
+>foo : m1.c1, Symbol(foo, Decl(collisionCodeGenModuleWithPrivateMember.ts, 7, 3))
 >new m1.c1() : m1.c1
->m1.c1 : typeof m1.c1
->m1 : typeof m1
->c1 : typeof m1.c1
+>m1.c1 : typeof m1.c1, Symbol(m1.c1, Decl(collisionCodeGenModuleWithPrivateMember.ts, 3, 21))
+>m1 : typeof m1, Symbol(m1, Decl(collisionCodeGenModuleWithPrivateMember.ts, 0, 0))
+>c1 : typeof m1.c1, Symbol(m1.c1, Decl(collisionCodeGenModuleWithPrivateMember.ts, 3, 21))
 
