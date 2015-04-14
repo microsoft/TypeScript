@@ -1963,18 +1963,24 @@ var __param = this.__param || function(index, decorator) { return function (targ
             function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
                 const exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.operand);
                 if (exportChanged) {
-                    write(`${exportFunctionForFile}("`);
+                    // emit 'x++' as '(export('x', ++x) - 1)' and 'x--' as '(export('x', --x) + 1)'
+                    write(`(${exportFunctionForFile}("`);
                     emitNodeWithoutSourceMap(node.operand);
                     write(`", `);
+
+                    write(tokenToString(node.operator));
+                    emit(node.operand);
+
+                    if (node.operator === SyntaxKind.PlusPlusToken) {
+                        write(") - 1)");
+                    }
+                    else {
+                        write(") + 1)");
+                    }
                 }
-
-                emit(node.operand);
-                write(tokenToString(node.operator));
-
-                if (exportChanged) {
-                    write("), ");
-                    emitNodeWithoutSourceMap(node.operand);
-                    write(node.operator === SyntaxKind.PlusPlusToken ? " - 1" : " + 1");
+                else {
+                    emit(node.operand);
+                    write(tokenToString(node.operator));
                 }
             }
 

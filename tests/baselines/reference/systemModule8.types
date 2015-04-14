@@ -59,6 +59,18 @@ for (x = 8;;x--) {}
 >x-- : number
 >x : any
 
+for (x = 15;;++x) {}
+>x = 15 : number
+>x : any
+>++x : number
+>x : any
+
+for (x = 18;;--x) {}
+>x = 18 : number
+>x : any
+>--x : number
+>x : any
+
 for (let x = 50;;) {}
 >x : number
 

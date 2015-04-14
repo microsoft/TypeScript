@@ -14,6 +14,8 @@ x |= 1;
 x &= 1;
 for (x = 5;;x++) {}
 for (x = 8;;x--) {}
+for (x = 15;;++x) {}
+for (x = 18;;--x) {}
 
 for (let x = 50;;) {}
 function foo() {
