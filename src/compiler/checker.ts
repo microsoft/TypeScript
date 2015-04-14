@@ -132,6 +132,7 @@ module ts {
         let symbolLinks: SymbolLinks[] = [];
         let nodeLinks: NodeLinks[] = [];
         let potentialThisCollisions: Node[] = [];
+        let potentialArgumentsCollisions: Node[] = [];
 
         let diagnostics = createDiagnosticCollection();
 
@@ -5432,7 +5433,7 @@ module ts {
             }
 
             checkCollisionWithCapturedSuperVariable(node, node);
-            checkCollisionWithCapturedThisVariable(node, node);
+            checkCollisionWithCapturedThisOrArgumentsVariable(node, node);
             checkBlockScopedBindingCapturedInLoop(node, symbol);
 
             return getNarrowedTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol), node);
@@ -7347,7 +7348,7 @@ module ts {
 
             if (produceDiagnostics && node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
                 checkCollisionWithCapturedSuperVariable(node, (<FunctionExpression>node).name);
-                checkCollisionWithCapturedThisVariable(node, (<FunctionExpression>node).name);
+                checkCollisionWithCapturedThisOrArgumentsVariable(node, (<FunctionExpression>node).name);
             }
 
             return type;
@@ -8880,7 +8881,7 @@ module ts {
                 checkGrammarForGenerator(node);
 
                 checkCollisionWithCapturedSuperVariable(node, node.name);
-                checkCollisionWithCapturedThisVariable(node, node.name);
+                checkCollisionWithCapturedThisOrArgumentsVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             }
         }
@@ -8968,7 +8969,7 @@ module ts {
                 node.kind === SyntaxKind.MethodSignature ||
                 node.kind === SyntaxKind.GetAccessor ||
                 node.kind === SyntaxKind.SetAccessor) {
-                // it is ok to have member named '_super' or '_this' - member access is always qualified
+                // it is ok to have member named '_super', '_this', or '_arguments' - member access is always qualified
                 return false;
             }
 
@@ -8986,23 +8987,40 @@ module ts {
             return true;
         }
 
-        function checkCollisionWithCapturedThisVariable(node: Node, name: Identifier): void {
+        function checkCollisionWithCapturedThisOrArgumentsVariable(node: Node, name: Identifier): void {
             if (needCollisionCheckForIdentifier(node, name, "_this")) {
                 potentialThisCollisions.push(node);
+            }
+            else if (needCollisionCheckForIdentifier(node, name, "_arguments")) {
+                potentialArgumentsCollisions.push(node);
             }
         }
 
         // this function will run after checking the source file so 'CaptureThis' is correct for all nodes
         function checkIfThisIsCapturedInEnclosingScope(node: Node): void {
+            let declarationSiteError = Diagnostics.Duplicate_identifier_this_Compiler_uses_variable_declaration_this_to_capture_this_reference;
+            let resolutionSiteError = Diagnostics.Expression_resolves_to_variable_declaration_this_that_compiler_uses_to_capture_this_reference;
+            checkIfEnclosingScopeCaptures(node, NodeCheckFlags.CaptureThis, declarationSiteError, resolutionSiteError);
+        }
+
+        function checkIfArgumentsIsCapturedInEnclosingScope(node: Node): void {
+            let declarationSiteError = Diagnostics.Duplicate_identifier_arguments_Compiler_uses_variable_declaration_arguments_to_capture_arguments_reference;
+            let resolutionSiteError = Diagnostics.Expression_resolves_to_variable_declaration_arguments_that_compiler_uses_to_capture_arguments_reference;
+            checkIfEnclosingScopeCaptures(node, NodeCheckFlags.CaptureArguments, declarationSiteError, resolutionSiteError);
+        }
+
+        function checkIfEnclosingScopeCaptures(node: Node, captureFlag: NodeCheckFlags, declarationSiteError: DiagnosticMessage, resolutionSiteError: DiagnosticMessage): void {
+            Debug.assert(captureFlag === NodeCheckFlags.CaptureThis || captureFlag === NodeCheckFlags.CaptureArguments);
+
             let current = node;
             while (current) {
-                if (getNodeCheckFlags(current) & NodeCheckFlags.CaptureThis) {
-                    let isDeclaration = node.kind !== SyntaxKind.Identifier;
-                    if (isDeclaration) {
-                        error((<Declaration>node).name, Diagnostics.Duplicate_identifier_this_Compiler_uses_variable_declaration_this_to_capture_this_reference);
+                if (getNodeCheckFlags(current) & captureFlag) {
+                    let atDeclarationSite = node.kind !== SyntaxKind.Identifier;
+                    if (atDeclarationSite) {
+                        error((<Declaration>node).name, declarationSiteError);
                     }
                     else {
-                        error(node, Diagnostics.Expression_resolves_to_variable_declaration_this_that_compiler_uses_to_capture_this_reference);
+                        error(node, resolutionSiteError);
                     }
                     return;
                 }
@@ -9225,7 +9243,7 @@ module ts {
                     checkVarDeclaredNamesNotShadowed(<VariableDeclaration | BindingElement>node);
                 }
                 checkCollisionWithCapturedSuperVariable(node, <Identifier>node.name);
-                checkCollisionWithCapturedThisVariable(node, <Identifier>node.name);
+                checkCollisionWithCapturedThisOrArgumentsVariable(node, <Identifier>node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
             }
         }
@@ -9908,7 +9926,7 @@ module ts {
             checkDecorators(node);
             if (node.name) {
                 checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
-                checkCollisionWithCapturedThisVariable(node, node.name);
+                checkCollisionWithCapturedThisOrArgumentsVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             }
             checkTypeParameters(node.typeParameters);
@@ -10349,7 +10367,7 @@ module ts {
             checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarEnumDeclaration(node);
 
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
-            checkCollisionWithCapturedThisVariable(node, node.name);
+            checkCollisionWithCapturedThisOrArgumentsVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
 
@@ -10422,7 +10440,7 @@ module ts {
                     }
                 }
 
-                checkCollisionWithCapturedThisVariable(node, node.name);
+                checkCollisionWithCapturedThisOrArgumentsVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                 checkExportsOnMergedDeclarations(node);
                 let symbol = getSymbolOfNode(node);
@@ -10514,7 +10532,7 @@ module ts {
         }
 
         function checkImportBinding(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
-            checkCollisionWithCapturedThisVariable(node, node.name);
+            checkCollisionWithCapturedThisOrArgumentsVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             checkAliasSymbol(node);
         }
@@ -10894,6 +10912,11 @@ module ts {
                 if (potentialThisCollisions.length) {
                     forEach(potentialThisCollisions, checkIfThisIsCapturedInEnclosingScope);
                     potentialThisCollisions.length = 0;
+                }
+
+                if (potentialArgumentsCollisions) {
+                    forEach(potentialArgumentsCollisions, checkIfArgumentsIsCapturedInEnclosingScope);
+                    potentialArgumentsCollisions.length = 0;
                 }
 
                 if (emitExtends) {
