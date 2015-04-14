@@ -1,27 +1,29 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty6.ts ===
 class C {
->C : C
+>C : C, Symbol(C, Decl(symbolProperty6.ts, 0, 0))
 
     [Symbol.iterator] = 0;
->Symbol.iterator : symbol
->Symbol : SymbolConstructor
->iterator : symbol
+>Symbol.iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>0 : number
 
     [Symbol.unscopables]: number;
->Symbol.unscopables : symbol
->Symbol : SymbolConstructor
->unscopables : symbol
+>Symbol.unscopables : symbol, Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 1254, 24))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>unscopables : symbol, Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 1254, 24))
 
-    [Symbol.isRegExp]() { }
->Symbol.isRegExp : symbol
->Symbol : SymbolConstructor
->isRegExp : symbol
+    [Symbol.toPrimitive]() { }
+>Symbol.toPrimitive : symbol, Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 1242, 21))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>toPrimitive : symbol, Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 1242, 21))
 
     get [Symbol.toStringTag]() {
->Symbol.toStringTag : symbol
->Symbol : SymbolConstructor
->toStringTag : symbol
+>Symbol.toStringTag : symbol, Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1248, 24))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>toStringTag : symbol, Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1248, 24))
 
         return 0;
+>0 : number
     }
 }

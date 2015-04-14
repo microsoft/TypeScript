@@ -1,52 +1,54 @@
 === tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_main.ts ===
 import Backbone = require("aliasUsageInTypeArgumentOfExtendsClause_backbone");
->Backbone : typeof Backbone
+>Backbone : typeof Backbone, Symbol(Backbone, Decl(aliasUsageInTypeArgumentOfExtendsClause_main.ts, 0, 0))
 
 import moduleA = require("aliasUsageInTypeArgumentOfExtendsClause_moduleA");
->moduleA : typeof moduleA
+>moduleA : typeof moduleA, Symbol(moduleA, Decl(aliasUsageInTypeArgumentOfExtendsClause_main.ts, 0, 78))
 
 interface IHasVisualizationModel {
->IHasVisualizationModel : IHasVisualizationModel
+>IHasVisualizationModel : IHasVisualizationModel, Symbol(IHasVisualizationModel, Decl(aliasUsageInTypeArgumentOfExtendsClause_main.ts, 1, 76))
 
     VisualizationModel: typeof Backbone.Model;
->VisualizationModel : typeof Backbone.Model
->Backbone : typeof Backbone
->Model : typeof Backbone.Model
+>VisualizationModel : typeof Backbone.Model, Symbol(VisualizationModel, Decl(aliasUsageInTypeArgumentOfExtendsClause_main.ts, 2, 34))
+>Backbone.Model : typeof Backbone.Model, Symbol(Backbone.Model, Decl(aliasUsageInTypeArgumentOfExtendsClause_backbone.ts, 0, 0))
+>Backbone : typeof Backbone, Symbol(Backbone, Decl(aliasUsageInTypeArgumentOfExtendsClause_main.ts, 0, 0))
+>Model : typeof Backbone.Model, Symbol(Backbone.Model, Decl(aliasUsageInTypeArgumentOfExtendsClause_backbone.ts, 0, 0))
 }
 class C<T extends IHasVisualizationModel> {
->C : C<T>
->T : T
->IHasVisualizationModel : IHasVisualizationModel
+>C : C<T>, Symbol(C, Decl(aliasUsageInTypeArgumentOfExtendsClause_main.ts, 4, 1))
+>T : T, Symbol(T, Decl(aliasUsageInTypeArgumentOfExtendsClause_main.ts, 5, 8))
+>IHasVisualizationModel : IHasVisualizationModel, Symbol(IHasVisualizationModel, Decl(aliasUsageInTypeArgumentOfExtendsClause_main.ts, 1, 76))
 
     x: T;
->x : T
->T : T
+>x : T, Symbol(x, Decl(aliasUsageInTypeArgumentOfExtendsClause_main.ts, 5, 43))
+>T : T, Symbol(T, Decl(aliasUsageInTypeArgumentOfExtendsClause_main.ts, 5, 8))
 }
 class D extends C<IHasVisualizationModel> {
->D : D
->C : C<T>
->IHasVisualizationModel : IHasVisualizationModel
+>D : D, Symbol(D, Decl(aliasUsageInTypeArgumentOfExtendsClause_main.ts, 7, 1))
+>C : C<T>, Symbol(C, Decl(aliasUsageInTypeArgumentOfExtendsClause_main.ts, 4, 1))
+>IHasVisualizationModel : IHasVisualizationModel, Symbol(IHasVisualizationModel, Decl(aliasUsageInTypeArgumentOfExtendsClause_main.ts, 1, 76))
 
     x = moduleA;
->x : typeof moduleA
->moduleA : typeof moduleA
+>x : typeof moduleA, Symbol(x, Decl(aliasUsageInTypeArgumentOfExtendsClause_main.ts, 8, 43))
+>moduleA : typeof moduleA, Symbol(moduleA, Decl(aliasUsageInTypeArgumentOfExtendsClause_main.ts, 0, 78))
 }
 === tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_backbone.ts ===
 export class Model {
->Model : Model
+>Model : Model, Symbol(Model, Decl(aliasUsageInTypeArgumentOfExtendsClause_backbone.ts, 0, 0))
 
     public someData: string;
->someData : string
+>someData : string, Symbol(someData, Decl(aliasUsageInTypeArgumentOfExtendsClause_backbone.ts, 0, 20))
 }
 
 === tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_moduleA.ts ===
 import Backbone = require("aliasUsageInTypeArgumentOfExtendsClause_backbone");
->Backbone : typeof Backbone
+>Backbone : typeof Backbone, Symbol(Backbone, Decl(aliasUsageInTypeArgumentOfExtendsClause_moduleA.ts, 0, 0))
 
 export class VisualizationModel extends Backbone.Model {
->VisualizationModel : VisualizationModel
->Backbone : typeof Backbone
->Model : Backbone.Model
+>VisualizationModel : VisualizationModel, Symbol(VisualizationModel, Decl(aliasUsageInTypeArgumentOfExtendsClause_moduleA.ts, 0, 78))
+>Backbone.Model : any, Symbol(Backbone.Model, Decl(aliasUsageInTypeArgumentOfExtendsClause_backbone.ts, 0, 0))
+>Backbone : typeof Backbone, Symbol(Backbone, Decl(aliasUsageInTypeArgumentOfExtendsClause_moduleA.ts, 0, 0))
+>Model : Backbone.Model, Symbol(Backbone.Model, Decl(aliasUsageInTypeArgumentOfExtendsClause_backbone.ts, 0, 0))
 
     // interesting stuff here
 }

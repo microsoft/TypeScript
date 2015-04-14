@@ -2,12 +2,12 @@
 // no error since module is not instantiated
 
 var a;
->a : any
+>a : any, Symbol(a, Decl(duplicateVarAndImport.ts, 2, 3), Decl(duplicateVarAndImport.ts, 3, 12))
 
 module M { }
->M : unknown
+>M : any, Symbol(M, Decl(duplicateVarAndImport.ts, 2, 6))
 
 import a = M;
->a : any
->M : unknown
+>a : any, Symbol(a, Decl(duplicateVarAndImport.ts, 2, 3), Decl(duplicateVarAndImport.ts, 3, 12))
+>M : any, Symbol(M, Decl(duplicateVarAndImport.ts, 2, 6))
 

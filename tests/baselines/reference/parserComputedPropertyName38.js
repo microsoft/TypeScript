@@ -5,5 +5,5 @@ class C {
 
 //// [parserComputedPropertyName38.js]
 class C {
+    [public]() { }
 }
-(() => { });

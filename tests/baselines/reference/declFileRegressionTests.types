@@ -2,12 +2,15 @@
 // 'null' not converted to 'any' in d.ts
 // function types not piped through correctly
 var n = { w: null, x: '', y: () => { }, z: 32 };
->n : { w: any; x: string; y: () => void; z: number; }
+>n : { w: any; x: string; y: () => void; z: number; }, Symbol(n, Decl(declFileRegressionTests.ts, 2, 3))
 >{ w: null, x: '', y: () => { }, z: 32 } : { w: null; x: string; y: () => void; z: number; }
->w : null
->x : string
->y : () => void
+>w : null, Symbol(w, Decl(declFileRegressionTests.ts, 2, 9))
+>null : null
+>x : string, Symbol(x, Decl(declFileRegressionTests.ts, 2, 18))
+>'' : string
+>y : () => void, Symbol(y, Decl(declFileRegressionTests.ts, 2, 25))
 >() => { } : () => void
->z : number
+>z : number, Symbol(z, Decl(declFileRegressionTests.ts, 2, 39))
+>32 : number
 
 

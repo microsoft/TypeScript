@@ -1,5 +1,7 @@
 === tests/cases/compiler/doWhileLoop.ts ===
 do { } while (false);
+>false : boolean
+
 var n;
->n : any
+>n : any, Symbol(n, Decl(doWhileLoop.ts, 1, 3))
 

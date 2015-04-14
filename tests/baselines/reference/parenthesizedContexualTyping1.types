@@ -1,289 +1,305 @@
 === tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping1.ts ===
 
 function fun<T>(g: (x: T) => T, x: T): T;
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
->T : T
->g : (x: T) => T
->x : T
->T : T
->T : T
->x : T
->T : T
->T : T
+>fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }, Symbol(fun, Decl(parenthesizedContexualTyping1.ts, 0, 0), Decl(parenthesizedContexualTyping1.ts, 1, 41), Decl(parenthesizedContexualTyping1.ts, 2, 57))
+>T : T, Symbol(T, Decl(parenthesizedContexualTyping1.ts, 1, 13))
+>g : (x: T) => T, Symbol(g, Decl(parenthesizedContexualTyping1.ts, 1, 16))
+>x : T, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 1, 20))
+>T : T, Symbol(T, Decl(parenthesizedContexualTyping1.ts, 1, 13))
+>T : T, Symbol(T, Decl(parenthesizedContexualTyping1.ts, 1, 13))
+>x : T, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 1, 31))
+>T : T, Symbol(T, Decl(parenthesizedContexualTyping1.ts, 1, 13))
+>T : T, Symbol(T, Decl(parenthesizedContexualTyping1.ts, 1, 13))
 
 function fun<T>(g: (x: T) => T, h: (y: T) => T, x: T): T;
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
->T : T
->g : (x: T) => T
->x : T
->T : T
->T : T
->h : (y: T) => T
->y : T
->T : T
->T : T
->x : T
->T : T
->T : T
+>fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }, Symbol(fun, Decl(parenthesizedContexualTyping1.ts, 0, 0), Decl(parenthesizedContexualTyping1.ts, 1, 41), Decl(parenthesizedContexualTyping1.ts, 2, 57))
+>T : T, Symbol(T, Decl(parenthesizedContexualTyping1.ts, 2, 13))
+>g : (x: T) => T, Symbol(g, Decl(parenthesizedContexualTyping1.ts, 2, 16))
+>x : T, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 2, 20))
+>T : T, Symbol(T, Decl(parenthesizedContexualTyping1.ts, 2, 13))
+>T : T, Symbol(T, Decl(parenthesizedContexualTyping1.ts, 2, 13))
+>h : (y: T) => T, Symbol(h, Decl(parenthesizedContexualTyping1.ts, 2, 31))
+>y : T, Symbol(y, Decl(parenthesizedContexualTyping1.ts, 2, 36))
+>T : T, Symbol(T, Decl(parenthesizedContexualTyping1.ts, 2, 13))
+>T : T, Symbol(T, Decl(parenthesizedContexualTyping1.ts, 2, 13))
+>x : T, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 2, 47))
+>T : T, Symbol(T, Decl(parenthesizedContexualTyping1.ts, 2, 13))
+>T : T, Symbol(T, Decl(parenthesizedContexualTyping1.ts, 2, 13))
 
 function fun<T>(g: (x: T) => T, x: T): T {
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
->T : T
->g : (x: T) => T
->x : T
->T : T
->T : T
->x : T
->T : T
->T : T
+>fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }, Symbol(fun, Decl(parenthesizedContexualTyping1.ts, 0, 0), Decl(parenthesizedContexualTyping1.ts, 1, 41), Decl(parenthesizedContexualTyping1.ts, 2, 57))
+>T : T, Symbol(T, Decl(parenthesizedContexualTyping1.ts, 3, 13))
+>g : (x: T) => T, Symbol(g, Decl(parenthesizedContexualTyping1.ts, 3, 16))
+>x : T, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 3, 20))
+>T : T, Symbol(T, Decl(parenthesizedContexualTyping1.ts, 3, 13))
+>T : T, Symbol(T, Decl(parenthesizedContexualTyping1.ts, 3, 13))
+>x : T, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 3, 31))
+>T : T, Symbol(T, Decl(parenthesizedContexualTyping1.ts, 3, 13))
+>T : T, Symbol(T, Decl(parenthesizedContexualTyping1.ts, 3, 13))
 
     return g(x);
 >g(x) : T
->g : (x: T) => T
->x : T
+>g : (x: T) => T, Symbol(g, Decl(parenthesizedContexualTyping1.ts, 3, 16))
+>x : T, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 3, 31))
 }
 
 var a = fun(x => x, 10);
->a : number
+>a : number, Symbol(a, Decl(parenthesizedContexualTyping1.ts, 7, 3))
 >fun(x => x, 10) : number
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }, Symbol(fun, Decl(parenthesizedContexualTyping1.ts, 0, 0), Decl(parenthesizedContexualTyping1.ts, 1, 41), Decl(parenthesizedContexualTyping1.ts, 2, 57))
 >x => x : (x: number) => number
->x : number
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 7, 12))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 7, 12))
+>10 : number
 
 var b = fun((x => x), 10);
->b : number
+>b : number, Symbol(b, Decl(parenthesizedContexualTyping1.ts, 8, 3))
 >fun((x => x), 10) : number
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }, Symbol(fun, Decl(parenthesizedContexualTyping1.ts, 0, 0), Decl(parenthesizedContexualTyping1.ts, 1, 41), Decl(parenthesizedContexualTyping1.ts, 2, 57))
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
->x : number
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 8, 13))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 8, 13))
+>10 : number
 
 var c = fun(((x => x)), 10);
->c : number
+>c : number, Symbol(c, Decl(parenthesizedContexualTyping1.ts, 9, 3))
 >fun(((x => x)), 10) : number
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }, Symbol(fun, Decl(parenthesizedContexualTyping1.ts, 0, 0), Decl(parenthesizedContexualTyping1.ts, 1, 41), Decl(parenthesizedContexualTyping1.ts, 2, 57))
 >((x => x)) : (x: number) => number
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
->x : number
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 9, 14))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 9, 14))
+>10 : number
 
 var d = fun((((x => x))), 10);
->d : number
+>d : number, Symbol(d, Decl(parenthesizedContexualTyping1.ts, 10, 3))
 >fun((((x => x))), 10) : number
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }, Symbol(fun, Decl(parenthesizedContexualTyping1.ts, 0, 0), Decl(parenthesizedContexualTyping1.ts, 1, 41), Decl(parenthesizedContexualTyping1.ts, 2, 57))
 >(((x => x))) : (x: number) => number
 >((x => x)) : (x: number) => number
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
->x : number
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 10, 15))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 10, 15))
+>10 : number
 
 var e = fun(x => x, x => x, 10);
->e : number
+>e : number, Symbol(e, Decl(parenthesizedContexualTyping1.ts, 12, 3))
 >fun(x => x, x => x, 10) : number
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }, Symbol(fun, Decl(parenthesizedContexualTyping1.ts, 0, 0), Decl(parenthesizedContexualTyping1.ts, 1, 41), Decl(parenthesizedContexualTyping1.ts, 2, 57))
 >x => x : (x: number) => number
->x : number
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 12, 12))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 12, 12))
 >x => x : (x: number) => number
->x : number
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 12, 19))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 12, 19))
+>10 : number
 
 var f = fun((x => x), (x => x), 10);
->f : number
+>f : number, Symbol(f, Decl(parenthesizedContexualTyping1.ts, 13, 3))
 >fun((x => x), (x => x), 10) : number
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }, Symbol(fun, Decl(parenthesizedContexualTyping1.ts, 0, 0), Decl(parenthesizedContexualTyping1.ts, 1, 41), Decl(parenthesizedContexualTyping1.ts, 2, 57))
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
->x : number
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 13, 13))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 13, 13))
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
->x : number
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 13, 23))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 13, 23))
+>10 : number
 
 var g = fun(((x => x)), ((x => x)), 10);
->g : number
+>g : number, Symbol(g, Decl(parenthesizedContexualTyping1.ts, 14, 3))
 >fun(((x => x)), ((x => x)), 10) : number
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }, Symbol(fun, Decl(parenthesizedContexualTyping1.ts, 0, 0), Decl(parenthesizedContexualTyping1.ts, 1, 41), Decl(parenthesizedContexualTyping1.ts, 2, 57))
 >((x => x)) : (x: number) => number
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
->x : number
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 14, 14))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 14, 14))
 >((x => x)) : (x: number) => number
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
->x : number
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 14, 26))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 14, 26))
+>10 : number
 
 var h = fun((((x => x))), ((x => x)), 10);
->h : number
+>h : number, Symbol(h, Decl(parenthesizedContexualTyping1.ts, 15, 3))
 >fun((((x => x))), ((x => x)), 10) : number
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }, Symbol(fun, Decl(parenthesizedContexualTyping1.ts, 0, 0), Decl(parenthesizedContexualTyping1.ts, 1, 41), Decl(parenthesizedContexualTyping1.ts, 2, 57))
 >(((x => x))) : (x: number) => number
 >((x => x)) : (x: number) => number
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
->x : number
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 15, 15))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 15, 15))
 >((x => x)) : (x: number) => number
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
->x : number
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 15, 28))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 15, 28))
+>10 : number
 
 // Ternaries in parens
 var i = fun((Math.random() < 0.5 ? x => x : x => undefined), 10);
->i : any
+>i : any, Symbol(i, Decl(parenthesizedContexualTyping1.ts, 18, 3))
 >fun((Math.random() < 0.5 ? x => x : x => undefined), 10) : any
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }, Symbol(fun, Decl(parenthesizedContexualTyping1.ts, 0, 0), Decl(parenthesizedContexualTyping1.ts, 1, 41), Decl(parenthesizedContexualTyping1.ts, 2, 57))
 >(Math.random() < 0.5 ? x => x : x => undefined) : (x: number) => any
 >Math.random() < 0.5 ? x => x : x => undefined : (x: number) => any
 >Math.random() < 0.5 : boolean
 >Math.random() : number
->Math.random : () => number
->Math : Math
->random : () => number
+>Math.random : () => number, Symbol(Math.random, Decl(lib.d.ts, 608, 38))
+>Math : Math, Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11))
+>random : () => number, Symbol(Math.random, Decl(lib.d.ts, 608, 38))
+>0.5 : number
 >x => x : (x: number) => number
->x : number
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 18, 34))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 18, 34))
 >x => undefined : (x: number) => any
->x : number
->undefined : undefined
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 18, 43))
+>undefined : undefined, Symbol(undefined)
+>10 : number
 
 var j = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10);
->j : any
+>j : any, Symbol(j, Decl(parenthesizedContexualTyping1.ts, 19, 3))
 >fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10) : any
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }, Symbol(fun, Decl(parenthesizedContexualTyping1.ts, 0, 0), Decl(parenthesizedContexualTyping1.ts, 1, 41), Decl(parenthesizedContexualTyping1.ts, 2, 57))
 >(Math.random() < 0.5 ? (x => x) : (x => undefined)) : (x: number) => any
 >Math.random() < 0.5 ? (x => x) : (x => undefined) : (x: number) => any
 >Math.random() < 0.5 : boolean
 >Math.random() : number
->Math.random : () => number
->Math : Math
->random : () => number
+>Math.random : () => number, Symbol(Math.random, Decl(lib.d.ts, 608, 38))
+>Math : Math, Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11))
+>random : () => number, Symbol(Math.random, Decl(lib.d.ts, 608, 38))
+>0.5 : number
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
->x : number
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 19, 36))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 19, 36))
 >(x => undefined) : (x: number) => any
 >x => undefined : (x: number) => any
->x : number
->undefined : undefined
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 19, 47))
+>undefined : undefined, Symbol(undefined)
+>10 : number
 
 var k = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10);
->k : any
+>k : any, Symbol(k, Decl(parenthesizedContexualTyping1.ts, 20, 3))
 >fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10) : any
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }, Symbol(fun, Decl(parenthesizedContexualTyping1.ts, 0, 0), Decl(parenthesizedContexualTyping1.ts, 1, 41), Decl(parenthesizedContexualTyping1.ts, 2, 57))
 >(Math.random() < 0.5 ? (x => x) : (x => undefined)) : (x: number) => any
 >Math.random() < 0.5 ? (x => x) : (x => undefined) : (x: number) => any
 >Math.random() < 0.5 : boolean
 >Math.random() : number
->Math.random : () => number
->Math : Math
->random : () => number
+>Math.random : () => number, Symbol(Math.random, Decl(lib.d.ts, 608, 38))
+>Math : Math, Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11))
+>random : () => number, Symbol(Math.random, Decl(lib.d.ts, 608, 38))
+>0.5 : number
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
->x : number
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 20, 36))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 20, 36))
 >(x => undefined) : (x: number) => any
 >x => undefined : (x: number) => any
->x : number
->undefined : undefined
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 20, 47))
+>undefined : undefined, Symbol(undefined)
 >x => x : (x: any) => any
->x : any
->x : any
+>x : any, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 20, 64))
+>x : any, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 20, 64))
+>10 : number
 
 var l = fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)), 10);
->l : any
+>l : any, Symbol(l, Decl(parenthesizedContexualTyping1.ts, 21, 3))
 >fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)), 10) : any
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }, Symbol(fun, Decl(parenthesizedContexualTyping1.ts, 0, 0), Decl(parenthesizedContexualTyping1.ts, 1, 41), Decl(parenthesizedContexualTyping1.ts, 2, 57))
 >((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))) : (x: number) => any
 >(Math.random() < 0.5 ? ((x => x)) : ((x => undefined))) : (x: number) => any
 >Math.random() < 0.5 ? ((x => x)) : ((x => undefined)) : (x: number) => any
 >Math.random() < 0.5 : boolean
 >Math.random() : number
->Math.random : () => number
->Math : Math
->random : () => number
+>Math.random : () => number, Symbol(Math.random, Decl(lib.d.ts, 608, 38))
+>Math : Math, Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11))
+>random : () => number, Symbol(Math.random, Decl(lib.d.ts, 608, 38))
+>0.5 : number
 >((x => x)) : (x: number) => number
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
->x : number
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 21, 38))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 21, 38))
 >((x => undefined)) : (x: number) => any
 >(x => undefined) : (x: number) => any
 >x => undefined : (x: number) => any
->x : number
->undefined : undefined
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 21, 51))
+>undefined : undefined, Symbol(undefined)
 >((x => x)) : (x: any) => any
 >(x => x) : (x: any) => any
 >x => x : (x: any) => any
->x : any
->x : any
+>x : any, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 21, 73))
+>x : any, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 21, 73))
+>10 : number
 
 var lambda1: (x: number) => number = x => x;
->lambda1 : (x: number) => number
->x : number
+>lambda1 : (x: number) => number, Symbol(lambda1, Decl(parenthesizedContexualTyping1.ts, 23, 3))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 23, 14))
 >x => x : (x: number) => number
->x : number
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 23, 36))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 23, 36))
 
 var lambda2: (x: number) => number = (x => x);
->lambda2 : (x: number) => number
->x : number
+>lambda2 : (x: number) => number, Symbol(lambda2, Decl(parenthesizedContexualTyping1.ts, 24, 3))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 24, 14))
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
->x : number
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 24, 38))
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 24, 38))
 
 type ObjType = { x: (p: number) => string; y: (p: string) => number };
->ObjType : { x: (p: number) => string; y: (p: string) => number; }
->x : (p: number) => string
->p : number
->y : (p: string) => number
->p : string
+>ObjType : { x: (p: number) => string; y: (p: string) => number; }, Symbol(ObjType, Decl(parenthesizedContexualTyping1.ts, 24, 46))
+>x : (p: number) => string, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 26, 16))
+>p : number, Symbol(p, Decl(parenthesizedContexualTyping1.ts, 26, 21))
+>y : (p: string) => number, Symbol(y, Decl(parenthesizedContexualTyping1.ts, 26, 42))
+>p : string, Symbol(p, Decl(parenthesizedContexualTyping1.ts, 26, 47))
 
 var obj1: ObjType = { x: x => (x, undefined), y: y => (y, undefined) };
->obj1 : { x: (p: number) => string; y: (p: string) => number; }
->ObjType : { x: (p: number) => string; y: (p: string) => number; }
+>obj1 : { x: (p: number) => string; y: (p: string) => number; }, Symbol(obj1, Decl(parenthesizedContexualTyping1.ts, 27, 3))
+>ObjType : { x: (p: number) => string; y: (p: string) => number; }, Symbol(ObjType, Decl(parenthesizedContexualTyping1.ts, 24, 46))
 >{ x: x => (x, undefined), y: y => (y, undefined) } : { x: (x: number) => any; y: (y: string) => any; }
->x : (x: number) => any
+>x : (x: number) => any, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 27, 21))
 >x => (x, undefined) : (x: number) => any
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 27, 24))
 >(x, undefined) : undefined
 >x, undefined : undefined
->x : number
->undefined : undefined
->y : (y: string) => any
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 27, 24))
+>undefined : undefined, Symbol(undefined)
+>y : (y: string) => any, Symbol(y, Decl(parenthesizedContexualTyping1.ts, 27, 45))
 >y => (y, undefined) : (y: string) => any
->y : string
+>y : string, Symbol(y, Decl(parenthesizedContexualTyping1.ts, 27, 48))
 >(y, undefined) : undefined
 >y, undefined : undefined
->y : string
->undefined : undefined
+>y : string, Symbol(y, Decl(parenthesizedContexualTyping1.ts, 27, 48))
+>undefined : undefined, Symbol(undefined)
 
 var obj2: ObjType = ({ x: x => (x, undefined), y: y => (y, undefined) });
->obj2 : { x: (p: number) => string; y: (p: string) => number; }
->ObjType : { x: (p: number) => string; y: (p: string) => number; }
+>obj2 : { x: (p: number) => string; y: (p: string) => number; }, Symbol(obj2, Decl(parenthesizedContexualTyping1.ts, 28, 3))
+>ObjType : { x: (p: number) => string; y: (p: string) => number; }, Symbol(ObjType, Decl(parenthesizedContexualTyping1.ts, 24, 46))
 >({ x: x => (x, undefined), y: y => (y, undefined) }) : { x: (x: number) => any; y: (y: string) => any; }
 >{ x: x => (x, undefined), y: y => (y, undefined) } : { x: (x: number) => any; y: (y: string) => any; }
->x : (x: number) => any
+>x : (x: number) => any, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 28, 22))
 >x => (x, undefined) : (x: number) => any
->x : number
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 28, 25))
 >(x, undefined) : undefined
 >x, undefined : undefined
->x : number
->undefined : undefined
->y : (y: string) => any
+>x : number, Symbol(x, Decl(parenthesizedContexualTyping1.ts, 28, 25))
+>undefined : undefined, Symbol(undefined)
+>y : (y: string) => any, Symbol(y, Decl(parenthesizedContexualTyping1.ts, 28, 46))
 >y => (y, undefined) : (y: string) => any
->y : string
+>y : string, Symbol(y, Decl(parenthesizedContexualTyping1.ts, 28, 49))
 >(y, undefined) : undefined
 >y, undefined : undefined
->y : string
->undefined : undefined
+>y : string, Symbol(y, Decl(parenthesizedContexualTyping1.ts, 28, 49))
+>undefined : undefined, Symbol(undefined)
 

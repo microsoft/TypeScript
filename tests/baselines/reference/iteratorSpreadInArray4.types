@@ -1,0 +1,40 @@
+=== tests/cases/conformance/es6/spread/iteratorSpreadInArray4.ts ===
+var array = [0, 1, ...new SymbolIterator];
+>array : (number | symbol)[], Symbol(array, Decl(iteratorSpreadInArray4.ts, 0, 3))
+>[0, 1, ...new SymbolIterator] : (number | symbol)[]
+>0 : number
+>1 : number
+>...new SymbolIterator : symbol
+>new SymbolIterator : SymbolIterator
+>SymbolIterator : typeof SymbolIterator, Symbol(SymbolIterator, Decl(iteratorSpreadInArray4.ts, 0, 42))
+
+class SymbolIterator {
+>SymbolIterator : SymbolIterator, Symbol(SymbolIterator, Decl(iteratorSpreadInArray4.ts, 0, 42))
+
+    next() {
+>next : () => { value: symbol; done: boolean; }, Symbol(next, Decl(iteratorSpreadInArray4.ts, 2, 22))
+
+        return {
+>{            value: Symbol(),            done: false        } : { value: symbol; done: boolean; }
+
+            value: Symbol(),
+>value : symbol, Symbol(value, Decl(iteratorSpreadInArray4.ts, 4, 16))
+>Symbol() : symbol
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+
+            done: false
+>done : boolean, Symbol(done, Decl(iteratorSpreadInArray4.ts, 5, 28))
+>false : boolean
+
+        };
+    }
+
+    [Symbol.iterator]() {
+>Symbol.iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+
+        return this;
+>this : SymbolIterator, Symbol(SymbolIterator, Decl(iteratorSpreadInArray4.ts, 0, 42))
+    }
+}

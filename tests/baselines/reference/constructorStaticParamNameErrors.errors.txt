@@ -1,4 +1,4 @@
-tests/cases/compiler/constructorStaticParamNameErrors.ts(4,18): error TS1003: Identifier expected.
+tests/cases/compiler/constructorStaticParamNameErrors.ts(4,18): error TS1213: Identifier expected. 'static' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 
 
 ==== tests/cases/compiler/constructorStaticParamNameErrors.ts (1 errors) ====
@@ -7,5 +7,5 @@ tests/cases/compiler/constructorStaticParamNameErrors.ts(4,18): error TS1003: Id
     class test {
         constructor (static) { }
                      ~~~~~~
-!!! error TS1003: Identifier expected.
+!!! error TS1213: Identifier expected. 'static' is a reserved word in strict mode. Class definitions are automatically in strict mode.
     }

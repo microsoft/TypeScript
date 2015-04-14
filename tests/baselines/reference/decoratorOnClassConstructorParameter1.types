@@ -1,15 +1,15 @@
 === tests/cases/conformance/decorators/class/constructor/parameter/decoratorOnClassConstructorParameter1.ts ===
 declare function dec(target: Function, propertyKey: string | symbol, parameterIndex: number): void;
->dec : (target: Function, propertyKey: string | symbol, parameterIndex: number) => void
->target : Function
->Function : Function
->propertyKey : string | symbol
->parameterIndex : number
+>dec : (target: Function, propertyKey: string | symbol, parameterIndex: number) => void, Symbol(dec, Decl(decoratorOnClassConstructorParameter1.ts, 0, 0))
+>target : Function, Symbol(target, Decl(decoratorOnClassConstructorParameter1.ts, 0, 21))
+>Function : Function, Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11))
+>propertyKey : string | symbol, Symbol(propertyKey, Decl(decoratorOnClassConstructorParameter1.ts, 0, 38))
+>parameterIndex : number, Symbol(parameterIndex, Decl(decoratorOnClassConstructorParameter1.ts, 0, 68))
 
 class C {
->C : C
+>C : C, Symbol(C, Decl(decoratorOnClassConstructorParameter1.ts, 0, 99))
 
     constructor(@dec p: number) {}
->dec : unknown
->p : number
+>dec : (target: Function, propertyKey: string | symbol, parameterIndex: number) => void, Symbol(dec, Decl(decoratorOnClassConstructorParameter1.ts, 0, 0))
+>p : number, Symbol(p, Decl(decoratorOnClassConstructorParameter1.ts, 3, 16))
 }

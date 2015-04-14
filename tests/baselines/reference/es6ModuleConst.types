@@ -1,70 +1,71 @@
 === tests/cases/compiler/es6ModuleConst.ts ===
 export const a = "hello";
->a : string
+>a : string, Symbol(a, Decl(es6ModuleConst.ts, 0, 12))
+>"hello" : string
 
 export const x: string = a, y = x;
->x : string
->a : string
->y : string
->x : string
+>x : string, Symbol(x, Decl(es6ModuleConst.ts, 1, 12))
+>a : string, Symbol(a, Decl(es6ModuleConst.ts, 0, 12))
+>y : string, Symbol(y, Decl(es6ModuleConst.ts, 1, 27))
+>x : string, Symbol(x, Decl(es6ModuleConst.ts, 1, 12))
 
 const b = y;
->b : string
->y : string
+>b : string, Symbol(b, Decl(es6ModuleConst.ts, 2, 5))
+>y : string, Symbol(y, Decl(es6ModuleConst.ts, 1, 27))
 
 const c: string = b, d = c;
->c : string
->b : string
->d : string
->c : string
+>c : string, Symbol(c, Decl(es6ModuleConst.ts, 3, 5))
+>b : string, Symbol(b, Decl(es6ModuleConst.ts, 2, 5))
+>d : string, Symbol(d, Decl(es6ModuleConst.ts, 3, 20))
+>c : string, Symbol(c, Decl(es6ModuleConst.ts, 3, 5))
 
 export module m1 {
->m1 : typeof m1
+>m1 : typeof m1, Symbol(m1, Decl(es6ModuleConst.ts, 3, 27))
 
     export const k = a;
->k : string
->a : string
+>k : string, Symbol(k, Decl(es6ModuleConst.ts, 5, 16))
+>a : string, Symbol(a, Decl(es6ModuleConst.ts, 0, 12))
 
     export const l: string = b, m = k;
->l : string
->b : string
->m : string
->k : string
+>l : string, Symbol(l, Decl(es6ModuleConst.ts, 6, 16))
+>b : string, Symbol(b, Decl(es6ModuleConst.ts, 2, 5))
+>m : string, Symbol(m, Decl(es6ModuleConst.ts, 6, 31))
+>k : string, Symbol(k, Decl(es6ModuleConst.ts, 5, 16))
 
     const n = m1.k;
->n : string
->m1.k : string
->m1 : typeof m1
->k : string
+>n : string, Symbol(n, Decl(es6ModuleConst.ts, 7, 9))
+>m1.k : string, Symbol(k, Decl(es6ModuleConst.ts, 5, 16))
+>m1 : typeof m1, Symbol(m1, Decl(es6ModuleConst.ts, 3, 27))
+>k : string, Symbol(k, Decl(es6ModuleConst.ts, 5, 16))
 
     const o: string = n, p = k;
->o : string
->n : string
->p : string
->k : string
+>o : string, Symbol(o, Decl(es6ModuleConst.ts, 8, 9))
+>n : string, Symbol(n, Decl(es6ModuleConst.ts, 7, 9))
+>p : string, Symbol(p, Decl(es6ModuleConst.ts, 8, 24))
+>k : string, Symbol(k, Decl(es6ModuleConst.ts, 5, 16))
 }
 module m2 {
->m2 : typeof m2
+>m2 : typeof m2, Symbol(m2, Decl(es6ModuleConst.ts, 9, 1))
 
     export const k = a;
->k : string
->a : string
+>k : string, Symbol(k, Decl(es6ModuleConst.ts, 11, 16))
+>a : string, Symbol(a, Decl(es6ModuleConst.ts, 0, 12))
 
     export const l: string = b, m = k;
->l : string
->b : string
->m : string
->k : string
+>l : string, Symbol(l, Decl(es6ModuleConst.ts, 12, 16))
+>b : string, Symbol(b, Decl(es6ModuleConst.ts, 2, 5))
+>m : string, Symbol(m, Decl(es6ModuleConst.ts, 12, 31))
+>k : string, Symbol(k, Decl(es6ModuleConst.ts, 11, 16))
 
     const n = m1.k;
->n : string
->m1.k : string
->m1 : typeof m1
->k : string
+>n : string, Symbol(n, Decl(es6ModuleConst.ts, 13, 9))
+>m1.k : string, Symbol(m1.k, Decl(es6ModuleConst.ts, 5, 16))
+>m1 : typeof m1, Symbol(m1, Decl(es6ModuleConst.ts, 3, 27))
+>k : string, Symbol(m1.k, Decl(es6ModuleConst.ts, 5, 16))
 
     const o: string = n, p = k;
->o : string
->n : string
->p : string
->k : string
+>o : string, Symbol(o, Decl(es6ModuleConst.ts, 14, 9))
+>n : string, Symbol(n, Decl(es6ModuleConst.ts, 13, 9))
+>p : string, Symbol(p, Decl(es6ModuleConst.ts, 14, 24))
+>k : string, Symbol(k, Decl(es6ModuleConst.ts, 11, 16))
 }

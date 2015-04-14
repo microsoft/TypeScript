@@ -1,101 +1,101 @@
 === tests/cases/compiler/tooFewArgumentsInGenericFunctionTypedArgument.ts ===
 interface Collection<T, U> {
->Collection : Collection<T, U>
->T : T
->U : U
+>Collection : Collection<T, U>, Symbol(Collection, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 0))
+>T : T, Symbol(T, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 21))
+>U : U, Symbol(U, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 23))
 
     length: number;
->length : number
+>length : number, Symbol(length, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 28))
 
     add(x: T, y: U): void;
->add : (x: T, y: U) => void
->x : T
->T : T
->y : U
->U : U
+>add : (x: T, y: U) => void, Symbol(add, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 1, 19))
+>x : T, Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 2, 8))
+>T : T, Symbol(T, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 21))
+>y : U, Symbol(y, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 2, 13))
+>U : U, Symbol(U, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 23))
 
     remove(x: T, y: U): boolean;
->remove : (x: T, y: U) => boolean
->x : T
->T : T
->y : U
->U : U
+>remove : (x: T, y: U) => boolean, Symbol(remove, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 2, 26))
+>x : T, Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 3, 11))
+>T : T, Symbol(T, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 21))
+>y : U, Symbol(y, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 3, 16))
+>U : U, Symbol(U, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 23))
 }
 interface Combinators {
->Combinators : Combinators
+>Combinators : Combinators, Symbol(Combinators, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 4, 1))
 
     map<T, U, V>(c: Collection<T,U>, f: (x: T, y: U) => V): Collection<T, V>;
->map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; }
->T : T
->U : U
->V : V
->c : Collection<T, U>
->Collection : Collection<T, U>
->T : T
->U : U
->f : (x: T, y: U) => V
->x : T
->T : T
->y : U
->U : U
->V : V
->Collection : Collection<T, U>
->T : T
->V : V
+>map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; }, Symbol(map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
+>T : T, Symbol(T, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 8))
+>U : U, Symbol(U, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 10))
+>V : V, Symbol(V, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 13))
+>c : Collection<T, U>, Symbol(c, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 17))
+>Collection : Collection<T, U>, Symbol(Collection, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 0))
+>T : T, Symbol(T, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 8))
+>U : U, Symbol(U, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 10))
+>f : (x: T, y: U) => V, Symbol(f, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 36))
+>x : T, Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 41))
+>T : T, Symbol(T, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 8))
+>y : U, Symbol(y, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 46))
+>U : U, Symbol(U, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 10))
+>V : V, Symbol(V, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 13))
+>Collection : Collection<T, U>, Symbol(Collection, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 0))
+>T : T, Symbol(T, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 8))
+>V : V, Symbol(V, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 13))
 
     map<T, U>(c: Collection<T,U>, f: (x: T, y: U) => any): Collection<any, any>;
->map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; }
->T : T
->U : U
->c : Collection<T, U>
->Collection : Collection<T, U>
->T : T
->U : U
->f : (x: T, y: U) => any
->x : T
->T : T
->y : U
->U : U
->Collection : Collection<T, U>
+>map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; }, Symbol(map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
+>T : T, Symbol(T, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 7, 8))
+>U : U, Symbol(U, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 7, 10))
+>c : Collection<T, U>, Symbol(c, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 7, 14))
+>Collection : Collection<T, U>, Symbol(Collection, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 0))
+>T : T, Symbol(T, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 7, 8))
+>U : U, Symbol(U, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 7, 10))
+>f : (x: T, y: U) => any, Symbol(f, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 7, 33))
+>x : T, Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 7, 38))
+>T : T, Symbol(T, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 7, 8))
+>y : U, Symbol(y, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 7, 43))
+>U : U, Symbol(U, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 7, 10))
+>Collection : Collection<T, U>, Symbol(Collection, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 0))
 }
 var c2: Collection<number, string>;
->c2 : Collection<number, string>
->Collection : Collection<T, U>
+>c2 : Collection<number, string>, Symbol(c2, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 9, 3))
+>Collection : Collection<T, U>, Symbol(Collection, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 0, 0))
 
 var _: Combinators;
->_ : Combinators
->Combinators : Combinators
+>_ : Combinators, Symbol(_, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 10, 3))
+>Combinators : Combinators, Symbol(Combinators, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 4, 1))
 
 var r1a = _.map(c2, (x) => { return x.toFixed() }); 
->r1a : Collection<number, string>
+>r1a : Collection<number, string>, Symbol(r1a, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 11, 3))
 >_.map(c2, (x) => { return x.toFixed() }) : Collection<number, string>
->_.map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; }
->_ : Combinators
->map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; }
->c2 : Collection<number, string>
+>_.map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; }, Symbol(Combinators.map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
+>_ : Combinators, Symbol(_, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 10, 3))
+>map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; }, Symbol(Combinators.map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
+>c2 : Collection<number, string>, Symbol(c2, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 9, 3))
 >(x) => { return x.toFixed() } : (x: number) => string
->x : number
+>x : number, Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 11, 21))
 >x.toFixed() : string
->x.toFixed : (fractionDigits?: number) => string
->x : number
->toFixed : (fractionDigits?: number) => string
+>x.toFixed : (fractionDigits?: number) => string, Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
+>x : number, Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 11, 21))
+>toFixed : (fractionDigits?: number) => string, Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
 
 var rf1 = (x: number) => { return x.toFixed() };
->rf1 : (x: number) => string
+>rf1 : (x: number) => string, Symbol(rf1, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 12, 3))
 >(x: number) => { return x.toFixed() } : (x: number) => string
->x : number
+>x : number, Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 12, 11))
 >x.toFixed() : string
->x.toFixed : (fractionDigits?: number) => string
->x : number
->toFixed : (fractionDigits?: number) => string
+>x.toFixed : (fractionDigits?: number) => string, Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
+>x : number, Symbol(x, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 12, 11))
+>toFixed : (fractionDigits?: number) => string, Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
 
 var r1b = _.map(c2, rf1); 
->r1b : Collection<number, string>
+>r1b : Collection<number, string>, Symbol(r1b, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 13, 3))
 >_.map(c2, rf1) : Collection<number, string>
->_.map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; }
->_ : Combinators
->map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; }
->c2 : Collection<number, string>
->rf1 : (x: number) => string
+>_.map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; }, Symbol(Combinators.map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
+>_ : Combinators, Symbol(_, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 10, 3))
+>map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; }, Symbol(Combinators.map, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 5, 23), Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 6, 77))
+>c2 : Collection<number, string>, Symbol(c2, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 9, 3))
+>rf1 : (x: number) => string, Symbol(rf1, Decl(tooFewArgumentsInGenericFunctionTypedArgument.ts, 12, 3))
 
 

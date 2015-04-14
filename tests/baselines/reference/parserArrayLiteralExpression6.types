@@ -1,5 +1,7 @@
 === tests/cases/conformance/parser/ecmascript5/ArrayLiteralExpressions/parserArrayLiteralExpression6.ts ===
 var v = [,1];
->v : number[]
+>v : number[], Symbol(v, Decl(parserArrayLiteralExpression6.ts, 0, 3))
 >[,1] : number[]
+> : undefined
+>1 : number
 

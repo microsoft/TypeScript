@@ -1,27 +1,28 @@
 === tests/cases/compiler/es6ClassTest5.ts ===
 class C1T5 {
->C1T5 : C1T5
+>C1T5 : C1T5, Symbol(C1T5, Decl(es6ClassTest5.ts, 0, 0))
 
     foo: (i: number, s: string) => number = 
->foo : (i: number, s: string) => number
->i : number
->s : string
+>foo : (i: number, s: string) => number, Symbol(foo, Decl(es6ClassTest5.ts, 0, 12))
+>i : number, Symbol(i, Decl(es6ClassTest5.ts, 1, 10))
+>s : string, Symbol(s, Decl(es6ClassTest5.ts, 1, 20))
 
 	   	(i) => {
 >(i) => {	        return i;	    } : (i: number) => number
->i : number
+>i : number, Symbol(i, Decl(es6ClassTest5.ts, 2, 6))
 
 	        return i;
->i : number
+>i : number, Symbol(i, Decl(es6ClassTest5.ts, 2, 6))
 	    }
 }
 module C2T5 {}
->C2T5 : unknown
+>C2T5 : any, Symbol(C2T5, Decl(es6ClassTest5.ts, 5, 1))
 
 class  bigClass {
->bigClass : bigClass
+>bigClass : bigClass, Symbol(bigClass, Decl(es6ClassTest5.ts, 6, 14))
 
      public break = 1;
->break : number
+>break : number, Symbol(break, Decl(es6ClassTest5.ts, 8, 17))
+>1 : number
 }
 

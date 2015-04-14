@@ -1,14 +1,31 @@
 === tests/cases/compiler/declarationEmitDestructuringArrayPattern5.ts ===
 var [, , z] = [1, 2, 4];
->z : number
+> : undefined
+> : undefined
+>z : number, Symbol(z, Decl(declarationEmitDestructuringArrayPattern5.ts, 0, 8))
 >[1, 2, 4] : [number, number, number]
+>1 : number
+>2 : number
+>4 : number
 
 var [, a, , ] = [3, 4, 5];
->a : number
+> : undefined
+>a : number, Symbol(a, Decl(declarationEmitDestructuringArrayPattern5.ts, 1, 6))
+> : undefined
 >[3, 4, 5] : [number, number, number]
+>3 : number
+>4 : number
+>5 : number
 
 var [, , [, b, ]] = [3,5,[0, 1]];
->b : number
+> : undefined
+> : undefined
+> : undefined
+>b : number, Symbol(b, Decl(declarationEmitDestructuringArrayPattern5.ts, 2, 11))
 >[3,5,[0, 1]] : [number, number, [number, number]]
+>3 : number
+>5 : number
 >[0, 1] : [number, number]
+>0 : number
+>1 : number
 

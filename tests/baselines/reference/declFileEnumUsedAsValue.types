@@ -1,18 +1,18 @@
 === tests/cases/compiler/declFileEnumUsedAsValue.ts ===
 
 enum e {
->e : e
+>e : e, Symbol(e, Decl(declFileEnumUsedAsValue.ts, 0, 0))
 
     a,
->a : e
+>a : e, Symbol(e.a, Decl(declFileEnumUsedAsValue.ts, 1, 8))
 
     b,
->b : e
+>b : e, Symbol(e.b, Decl(declFileEnumUsedAsValue.ts, 2, 6))
 
     c
->c : e
+>c : e, Symbol(e.c, Decl(declFileEnumUsedAsValue.ts, 3, 6))
 }
 var x = e;
->x : typeof e
->e : typeof e
+>x : typeof e, Symbol(x, Decl(declFileEnumUsedAsValue.ts, 6, 3))
+>e : typeof e, Symbol(e, Decl(declFileEnumUsedAsValue.ts, 0, 0))
 

@@ -1,170 +1,182 @@
 === tests/cases/compiler/sourceMapValidationDecorators.ts ===
 declare function ClassDecorator1(target: Function): void;
->ClassDecorator1 : (target: Function) => void
->target : Function
->Function : Function
+>ClassDecorator1 : (target: Function) => void, Symbol(ClassDecorator1, Decl(sourceMapValidationDecorators.ts, 0, 0))
+>target : Function, Symbol(target, Decl(sourceMapValidationDecorators.ts, 0, 33))
+>Function : Function, Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11))
 
 declare function ClassDecorator2(x: number): (target: Function) => void;
->ClassDecorator2 : (x: number) => (target: Function) => void
->x : number
->target : Function
->Function : Function
+>ClassDecorator2 : (x: number) => (target: Function) => void, Symbol(ClassDecorator2, Decl(sourceMapValidationDecorators.ts, 0, 57))
+>x : number, Symbol(x, Decl(sourceMapValidationDecorators.ts, 1, 33))
+>target : Function, Symbol(target, Decl(sourceMapValidationDecorators.ts, 1, 46))
+>Function : Function, Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11))
 
 declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
->PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->target : Object
->Object : Object
->key : string | symbol
->descriptor : PropertyDescriptor
->PropertyDescriptor : PropertyDescriptor
+>PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void, Symbol(PropertyDecorator1, Decl(sourceMapValidationDecorators.ts, 1, 72))
+>target : Object, Symbol(target, Decl(sourceMapValidationDecorators.ts, 2, 36))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>key : string | symbol, Symbol(key, Decl(sourceMapValidationDecorators.ts, 2, 51))
+>descriptor : PropertyDescriptor, Symbol(descriptor, Decl(sourceMapValidationDecorators.ts, 2, 73))
+>PropertyDescriptor : PropertyDescriptor, Symbol(PropertyDescriptor, Decl(lib.d.ts, 79, 66))
 
 declare function PropertyDecorator2(x: number): (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void;
->PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->x : number
->target : Object
->Object : Object
->key : string | symbol
->descriptor : PropertyDescriptor
->PropertyDescriptor : PropertyDescriptor
+>PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void, Symbol(PropertyDecorator2, Decl(sourceMapValidationDecorators.ts, 2, 113))
+>x : number, Symbol(x, Decl(sourceMapValidationDecorators.ts, 3, 36))
+>target : Object, Symbol(target, Decl(sourceMapValidationDecorators.ts, 3, 49))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>key : string | symbol, Symbol(key, Decl(sourceMapValidationDecorators.ts, 3, 64))
+>descriptor : PropertyDescriptor, Symbol(descriptor, Decl(sourceMapValidationDecorators.ts, 3, 86))
+>PropertyDescriptor : PropertyDescriptor, Symbol(PropertyDescriptor, Decl(lib.d.ts, 79, 66))
 
 declare function ParameterDecorator1(target: Function, key: string | symbol, paramIndex: number): void;
->ParameterDecorator1 : (target: Function, key: string | symbol, paramIndex: number) => void
->target : Function
->Function : Function
->key : string | symbol
->paramIndex : number
+>ParameterDecorator1 : (target: Function, key: string | symbol, paramIndex: number) => void, Symbol(ParameterDecorator1, Decl(sourceMapValidationDecorators.ts, 3, 128))
+>target : Function, Symbol(target, Decl(sourceMapValidationDecorators.ts, 4, 37))
+>Function : Function, Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11))
+>key : string | symbol, Symbol(key, Decl(sourceMapValidationDecorators.ts, 4, 54))
+>paramIndex : number, Symbol(paramIndex, Decl(sourceMapValidationDecorators.ts, 4, 76))
 
 declare function ParameterDecorator2(x: number): (target: Function, key: string | symbol, paramIndex: number) => void;
->ParameterDecorator2 : (x: number) => (target: Function, key: string | symbol, paramIndex: number) => void
->x : number
->target : Function
->Function : Function
->key : string | symbol
->paramIndex : number
+>ParameterDecorator2 : (x: number) => (target: Function, key: string | symbol, paramIndex: number) => void, Symbol(ParameterDecorator2, Decl(sourceMapValidationDecorators.ts, 4, 103))
+>x : number, Symbol(x, Decl(sourceMapValidationDecorators.ts, 5, 37))
+>target : Function, Symbol(target, Decl(sourceMapValidationDecorators.ts, 5, 50))
+>Function : Function, Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11))
+>key : string | symbol, Symbol(key, Decl(sourceMapValidationDecorators.ts, 5, 67))
+>paramIndex : number, Symbol(paramIndex, Decl(sourceMapValidationDecorators.ts, 5, 89))
 
 @ClassDecorator1
->ClassDecorator1 : unknown
+>ClassDecorator1 : (target: Function) => void, Symbol(ClassDecorator1, Decl(sourceMapValidationDecorators.ts, 0, 0))
 
 @ClassDecorator2(10)
 >ClassDecorator2(10) : (target: Function) => void
->ClassDecorator2 : (x: number) => (target: Function) => void
+>ClassDecorator2 : (x: number) => (target: Function) => void, Symbol(ClassDecorator2, Decl(sourceMapValidationDecorators.ts, 0, 57))
+>10 : number
 
 class Greeter {
->Greeter : Greeter
+>Greeter : Greeter, Symbol(Greeter, Decl(sourceMapValidationDecorators.ts, 5, 118))
 
     constructor(
       @ParameterDecorator1 
->ParameterDecorator1 : unknown
+>ParameterDecorator1 : (target: Function, key: string | symbol, paramIndex: number) => void, Symbol(ParameterDecorator1, Decl(sourceMapValidationDecorators.ts, 3, 128))
 
       @ParameterDecorator2(20) 
 >ParameterDecorator2(20) : (target: Function, key: string | symbol, paramIndex: number) => void
->ParameterDecorator2 : (x: number) => (target: Function, key: string | symbol, paramIndex: number) => void
+>ParameterDecorator2 : (x: number) => (target: Function, key: string | symbol, paramIndex: number) => void, Symbol(ParameterDecorator2, Decl(sourceMapValidationDecorators.ts, 4, 103))
+>20 : number
 
       public greeting: string, 
->greeting : string
+>greeting : string, Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
       
       @ParameterDecorator1 
->ParameterDecorator1 : unknown
+>ParameterDecorator1 : (target: Function, key: string | symbol, paramIndex: number) => void, Symbol(ParameterDecorator1, Decl(sourceMapValidationDecorators.ts, 3, 128))
 
       @ParameterDecorator2(30) 
 >ParameterDecorator2(30) : (target: Function, key: string | symbol, paramIndex: number) => void
->ParameterDecorator2 : (x: number) => (target: Function, key: string | symbol, paramIndex: number) => void
+>ParameterDecorator2 : (x: number) => (target: Function, key: string | symbol, paramIndex: number) => void, Symbol(ParameterDecorator2, Decl(sourceMapValidationDecorators.ts, 4, 103))
+>30 : number
 
       ...b: string[]) {
->b : string[]
+>b : string[], Symbol(b, Decl(sourceMapValidationDecorators.ts, 13, 30))
     }
     
     @PropertyDecorator1
->PropertyDecorator1 : unknown
+>PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void, Symbol(PropertyDecorator1, Decl(sourceMapValidationDecorators.ts, 1, 72))
 
     @PropertyDecorator2(40)
 >PropertyDecorator2(40) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void, Symbol(PropertyDecorator2, Decl(sourceMapValidationDecorators.ts, 2, 113))
+>40 : number
 
     greet() {
->greet : () => string
+>greet : () => string, Symbol(greet, Decl(sourceMapValidationDecorators.ts, 18, 5))
 
         return "<h1>" + this.greeting + "</h1>";
 >"<h1>" + this.greeting + "</h1>" : string
 >"<h1>" + this.greeting : string
->this.greeting : string
->this : Greeter
->greeting : string
+>"<h1>" : string
+>this.greeting : string, Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
+>this : Greeter, Symbol(Greeter, Decl(sourceMapValidationDecorators.ts, 5, 118))
+>greeting : string, Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
+>"</h1>" : string
     }
 
     @PropertyDecorator1
->PropertyDecorator1 : unknown
+>PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void, Symbol(PropertyDecorator1, Decl(sourceMapValidationDecorators.ts, 1, 72))
 
     @PropertyDecorator2(50)
 >PropertyDecorator2(50) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void, Symbol(PropertyDecorator2, Decl(sourceMapValidationDecorators.ts, 2, 113))
+>50 : number
 
     private x: string;
->x : string
+>x : string, Symbol(x, Decl(sourceMapValidationDecorators.ts, 24, 5))
 
     @PropertyDecorator1
->PropertyDecorator1 : unknown
+>PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void, Symbol(PropertyDecorator1, Decl(sourceMapValidationDecorators.ts, 1, 72))
 
     @PropertyDecorator2(60)
 >PropertyDecorator2(60) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void, Symbol(PropertyDecorator2, Decl(sourceMapValidationDecorators.ts, 2, 113))
+>60 : number
 
     private static x1: number = 10;
->x1 : number
+>x1 : number, Symbol(Greeter.x1, Decl(sourceMapValidationDecorators.ts, 28, 22))
+>10 : number
     
     private fn(
->fn : (x: number) => string
+>fn : (x: number) => string, Symbol(fn, Decl(sourceMapValidationDecorators.ts, 32, 35))
 
       @ParameterDecorator1 
->ParameterDecorator1 : unknown
+>ParameterDecorator1 : (target: Function, key: string | symbol, paramIndex: number) => void, Symbol(ParameterDecorator1, Decl(sourceMapValidationDecorators.ts, 3, 128))
 
       @ParameterDecorator2(70) 
 >ParameterDecorator2(70) : (target: Function, key: string | symbol, paramIndex: number) => void
->ParameterDecorator2 : (x: number) => (target: Function, key: string | symbol, paramIndex: number) => void
+>ParameterDecorator2 : (x: number) => (target: Function, key: string | symbol, paramIndex: number) => void, Symbol(ParameterDecorator2, Decl(sourceMapValidationDecorators.ts, 4, 103))
+>70 : number
 
       x: number) {
->x : number
+>x : number, Symbol(x, Decl(sourceMapValidationDecorators.ts, 34, 15))
 
         return this.greeting;
->this.greeting : string
->this : Greeter
->greeting : string
+>this.greeting : string, Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
+>this : Greeter, Symbol(Greeter, Decl(sourceMapValidationDecorators.ts, 5, 118))
+>greeting : string, Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
     }
 
     @PropertyDecorator1
->PropertyDecorator1 : unknown
+>PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void, Symbol(PropertyDecorator1, Decl(sourceMapValidationDecorators.ts, 1, 72))
 
     @PropertyDecorator2(80)
 >PropertyDecorator2(80) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
->PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void, Symbol(PropertyDecorator2, Decl(sourceMapValidationDecorators.ts, 2, 113))
+>80 : number
 
     get greetings() {
->greetings : string
+>greetings : string, Symbol(greetings, Decl(sourceMapValidationDecorators.ts, 39, 5), Decl(sourceMapValidationDecorators.ts, 45, 5))
 
         return this.greeting;
->this.greeting : string
->this : Greeter
->greeting : string
+>this.greeting : string, Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
+>this : Greeter, Symbol(Greeter, Decl(sourceMapValidationDecorators.ts, 5, 118))
+>greeting : string, Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
     }
 
     set greetings(
->greetings : string
+>greetings : string, Symbol(greetings, Decl(sourceMapValidationDecorators.ts, 39, 5), Decl(sourceMapValidationDecorators.ts, 45, 5))
 
       @ParameterDecorator1 
->ParameterDecorator1 : unknown
+>ParameterDecorator1 : (target: Function, key: string | symbol, paramIndex: number) => void, Symbol(ParameterDecorator1, Decl(sourceMapValidationDecorators.ts, 3, 128))
 
       @ParameterDecorator2(90) 
 >ParameterDecorator2(90) : (target: Function, key: string | symbol, paramIndex: number) => void
->ParameterDecorator2 : (x: number) => (target: Function, key: string | symbol, paramIndex: number) => void
+>ParameterDecorator2 : (x: number) => (target: Function, key: string | symbol, paramIndex: number) => void, Symbol(ParameterDecorator2, Decl(sourceMapValidationDecorators.ts, 4, 103))
+>90 : number
 
       greetings: string) {
->greetings : string
+>greetings : string, Symbol(greetings, Decl(sourceMapValidationDecorators.ts, 47, 18))
 
         this.greeting = greetings;
 >this.greeting = greetings : string
->this.greeting : string
->this : Greeter
->greeting : string
->greetings : string
+>this.greeting : string, Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
+>this : Greeter, Symbol(Greeter, Decl(sourceMapValidationDecorators.ts, 5, 118))
+>greeting : string, Symbol(greeting, Decl(sourceMapValidationDecorators.ts, 10, 16))
+>greetings : string, Symbol(greetings, Decl(sourceMapValidationDecorators.ts, 47, 18))
     }    
 }

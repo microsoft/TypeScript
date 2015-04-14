@@ -2,77 +2,77 @@
 // no errors
 
 class B {
->B : B
+>B : B, Symbol(B, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 0, 0))
 
     protected x: string;
->x : string
+>x : string, Symbol(x, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 2, 9))
 
     protected static x: string;
->x : string
+>x : string, Symbol(B.x, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 3, 24))
 }
 
 class C extends B {
->C : C
->B : B
+>C : C, Symbol(C, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 5, 1))
+>B : B, Symbol(B, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 0, 0))
 
     protected get y() { return this.x; }
->y : string
->this.x : string
->this : C
->x : string
+>y : string, Symbol(y, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 7, 19), Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 8, 40))
+>this.x : string, Symbol(B.x, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 2, 9))
+>this : C, Symbol(C, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 5, 1))
+>x : string, Symbol(B.x, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 2, 9))
 
     protected set y(x) { this.y = this.x; }
->y : string
->x : string
+>y : string, Symbol(y, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 7, 19), Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 8, 40))
+>x : string, Symbol(x, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 9, 20))
 >this.y = this.x : string
->this.y : string
->this : C
->y : string
->this.x : string
->this : C
->x : string
+>this.y : string, Symbol(y, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 7, 19), Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 8, 40))
+>this : C, Symbol(C, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 5, 1))
+>y : string, Symbol(y, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 7, 19), Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 8, 40))
+>this.x : string, Symbol(B.x, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 2, 9))
+>this : C, Symbol(C, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 5, 1))
+>x : string, Symbol(B.x, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 2, 9))
 
     protected foo() { return this.x; }
->foo : () => string
->this.x : string
->this : C
->x : string
+>foo : () => string, Symbol(foo, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 9, 43))
+>this.x : string, Symbol(B.x, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 2, 9))
+>this : C, Symbol(C, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 5, 1))
+>x : string, Symbol(B.x, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 2, 9))
 
     protected bar() { return this.foo(); }
->bar : () => string
+>bar : () => string, Symbol(bar, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 10, 38))
 >this.foo() : string
->this.foo : () => string
->this : C
->foo : () => string
+>this.foo : () => string, Symbol(foo, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 9, 43))
+>this : C, Symbol(C, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 5, 1))
+>foo : () => string, Symbol(foo, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 9, 43))
 
     protected static get y() { return this.x; }
->y : string
->this.x : string
->this : typeof C
->x : string
+>y : string, Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 11, 42), Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 13, 47))
+>this.x : string, Symbol(B.x, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 3, 24))
+>this : typeof C, Symbol(C, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 5, 1))
+>x : string, Symbol(B.x, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 3, 24))
 
     protected static set y(x) { this.y = this.x; }
->y : string
->x : string
+>y : string, Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 11, 42), Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 13, 47))
+>x : string, Symbol(x, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 14, 27))
 >this.y = this.x : string
->this.y : string
->this : typeof C
->y : string
->this.x : string
->this : typeof C
->x : string
+>this.y : string, Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 11, 42), Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 13, 47))
+>this : typeof C, Symbol(C, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 5, 1))
+>y : string, Symbol(C.y, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 11, 42), Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 13, 47))
+>this.x : string, Symbol(B.x, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 3, 24))
+>this : typeof C, Symbol(C, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 5, 1))
+>x : string, Symbol(B.x, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 3, 24))
 
     protected static foo() { return this.x; }
->foo : () => string
->this.x : string
->this : typeof C
->x : string
+>foo : () => string, Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 14, 50))
+>this.x : string, Symbol(B.x, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 3, 24))
+>this : typeof C, Symbol(C, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 5, 1))
+>x : string, Symbol(B.x, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 3, 24))
 
     protected static bar() { this.foo(); }
->bar : () => void
+>bar : () => void, Symbol(C.bar, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 15, 45))
 >this.foo() : string
->this.foo : () => string
->this : typeof C
->foo : () => string
+>this.foo : () => string, Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 14, 50))
+>this : typeof C, Symbol(C, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 5, 1))
+>foo : () => string, Symbol(C.foo, Decl(protectedClassPropertyAccessibleWithinSubclass.ts, 14, 50))
 }
 

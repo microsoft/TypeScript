@@ -1,49 +1,50 @@
 === tests/cases/conformance/classes/members/classTypes/indexersInClassType.ts ===
 class C {
->C : C
+>C : C, Symbol(C, Decl(indexersInClassType.ts, 0, 0))
 
     [x: number]: Date;
->x : number
->Date : Date
+>x : number, Symbol(x, Decl(indexersInClassType.ts, 1, 5))
+>Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
 
     [x: string]: Object;
->x : string
->Object : Object
+>x : string, Symbol(x, Decl(indexersInClassType.ts, 2, 5))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
     1: Date;
->Date : Date
+>Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
 
     'a': {}
 
     fn() {
->fn : () => C
+>fn : () => C, Symbol(fn, Decl(indexersInClassType.ts, 4, 11))
 
         return this;
->this : C
+>this : C, Symbol(C, Decl(indexersInClassType.ts, 0, 0))
     }
 }
 
 var c = new C();
->c : C
+>c : C, Symbol(c, Decl(indexersInClassType.ts, 11, 3))
 >new C() : C
->C : typeof C
+>C : typeof C, Symbol(C, Decl(indexersInClassType.ts, 0, 0))
 
 var r = c.fn();
->r : C
+>r : C, Symbol(r, Decl(indexersInClassType.ts, 12, 3))
 >c.fn() : C
->c.fn : () => C
->c : C
->fn : () => C
+>c.fn : () => C, Symbol(C.fn, Decl(indexersInClassType.ts, 4, 11))
+>c : C, Symbol(c, Decl(indexersInClassType.ts, 11, 3))
+>fn : () => C, Symbol(C.fn, Decl(indexersInClassType.ts, 4, 11))
 
 var r2 = r[1];
->r2 : Date
+>r2 : Date, Symbol(r2, Decl(indexersInClassType.ts, 13, 3))
 >r[1] : Date
->r : C
+>r : C, Symbol(r, Decl(indexersInClassType.ts, 12, 3))
+>1 : number, Symbol(C.1, Decl(indexersInClassType.ts, 2, 24))
 
 var r3 = r.a
->r3 : {}
->r.a : {}
->r : C
->a : {}
+>r3 : {}, Symbol(r3, Decl(indexersInClassType.ts, 14, 3))
+>r.a : {}, Symbol(C.'a', Decl(indexersInClassType.ts, 3, 12))
+>r : C, Symbol(r, Decl(indexersInClassType.ts, 12, 3))
+>a : {}, Symbol(C.'a', Decl(indexersInClassType.ts, 3, 12))
 
 

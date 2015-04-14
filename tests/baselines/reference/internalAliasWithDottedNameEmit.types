@@ -1,20 +1,20 @@
 === tests/cases/compiler/internalAliasWithDottedNameEmit.ts ===
 module a.b.c {
->a : typeof a
->b : typeof b
->c : typeof c
+>a : typeof a, Symbol(a, Decl(internalAliasWithDottedNameEmit.ts, 0, 0), Decl(internalAliasWithDottedNameEmit.ts, 2, 1))
+>b : typeof b, Symbol(b, Decl(internalAliasWithDottedNameEmit.ts, 0, 9))
+>c : typeof c, Symbol(c, Decl(internalAliasWithDottedNameEmit.ts, 0, 11))
 
       export var d;
->d : any
+>d : any, Symbol(d, Decl(internalAliasWithDottedNameEmit.ts, 1, 16))
 }
 module a.e.f {
->a : typeof a
->e : unknown
->f : unknown
+>a : typeof a, Symbol(a, Decl(internalAliasWithDottedNameEmit.ts, 0, 0), Decl(internalAliasWithDottedNameEmit.ts, 2, 1))
+>e : any, Symbol(e, Decl(internalAliasWithDottedNameEmit.ts, 3, 9))
+>f : any, Symbol(f, Decl(internalAliasWithDottedNameEmit.ts, 3, 11))
 
       import g = b.c;
->g : typeof g
->b : typeof b
->c : typeof g
+>g : typeof g, Symbol(g, Decl(internalAliasWithDottedNameEmit.ts, 3, 14))
+>b : typeof b, Symbol(b, Decl(internalAliasWithDottedNameEmit.ts, 0, 9))
+>c : typeof g, Symbol(g, Decl(internalAliasWithDottedNameEmit.ts, 0, 11))
 }
 

@@ -2,169 +2,169 @@
 // checking subtype relations for function types as it relates to contextual signature instantiation
 
 class Base { foo: string; }
->Base : Base
->foo : string
+>Base : Base, Symbol(Base, Decl(callSignatureAssignabilityInInheritance4.ts, 0, 0))
+>foo : string, Symbol(foo, Decl(callSignatureAssignabilityInInheritance4.ts, 2, 12))
 
 class Derived extends Base { bar: string; }
->Derived : Derived
->Base : Base
->bar : string
+>Derived : Derived, Symbol(Derived, Decl(callSignatureAssignabilityInInheritance4.ts, 2, 27))
+>Base : Base, Symbol(Base, Decl(callSignatureAssignabilityInInheritance4.ts, 0, 0))
+>bar : string, Symbol(bar, Decl(callSignatureAssignabilityInInheritance4.ts, 3, 28))
 
 class Derived2 extends Derived { baz: string; }
->Derived2 : Derived2
->Derived : Derived
->baz : string
+>Derived2 : Derived2, Symbol(Derived2, Decl(callSignatureAssignabilityInInheritance4.ts, 3, 43))
+>Derived : Derived, Symbol(Derived, Decl(callSignatureAssignabilityInInheritance4.ts, 2, 27))
+>baz : string, Symbol(baz, Decl(callSignatureAssignabilityInInheritance4.ts, 4, 32))
 
 class OtherDerived extends Base { bing: string; }
->OtherDerived : OtherDerived
->Base : Base
->bing : string
+>OtherDerived : OtherDerived, Symbol(OtherDerived, Decl(callSignatureAssignabilityInInheritance4.ts, 4, 47))
+>Base : Base, Symbol(Base, Decl(callSignatureAssignabilityInInheritance4.ts, 0, 0))
+>bing : string, Symbol(bing, Decl(callSignatureAssignabilityInInheritance4.ts, 5, 33))
 
 interface A { // T
->A : A
+>A : A, Symbol(A, Decl(callSignatureAssignabilityInInheritance4.ts, 5, 49))
 
     // M's
     a: <T>(x: T) => T[];
->a : <T>(x: T) => T[]
->T : T
->x : T
->T : T
->T : T
+>a : <T>(x: T) => T[], Symbol(a, Decl(callSignatureAssignabilityInInheritance4.ts, 7, 13))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 9, 8))
+>x : T, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 9, 11))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 9, 8))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 9, 8))
 
     a2: <T>(x: T) => string[];
->a2 : <T>(x: T) => string[]
->T : T
->x : T
->T : T
+>a2 : <T>(x: T) => string[], Symbol(a2, Decl(callSignatureAssignabilityInInheritance4.ts, 9, 24))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 10, 9))
+>x : T, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 10, 12))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 10, 9))
 
     a3: <T>(x: T) => void;
->a3 : <T>(x: T) => void
->T : T
->x : T
->T : T
+>a3 : <T>(x: T) => void, Symbol(a3, Decl(callSignatureAssignabilityInInheritance4.ts, 10, 30))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 11, 9))
+>x : T, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 11, 12))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 11, 9))
 
     a4: <T,U>(x: T, y: U) => string;
->a4 : <T, U>(x: T, y: U) => string
->T : T
->U : U
->x : T
->T : T
->y : U
->U : U
+>a4 : <T, U>(x: T, y: U) => string, Symbol(a4, Decl(callSignatureAssignabilityInInheritance4.ts, 11, 26))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 12, 9))
+>U : U, Symbol(U, Decl(callSignatureAssignabilityInInheritance4.ts, 12, 11))
+>x : T, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 12, 14))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 12, 9))
+>y : U, Symbol(y, Decl(callSignatureAssignabilityInInheritance4.ts, 12, 19))
+>U : U, Symbol(U, Decl(callSignatureAssignabilityInInheritance4.ts, 12, 11))
 
     a5: <T,U>(x: (arg: T) => U) => T;
->a5 : <T, U>(x: (arg: T) => U) => T
->T : T
->U : U
->x : (arg: T) => U
->arg : T
->T : T
->U : U
->T : T
+>a5 : <T, U>(x: (arg: T) => U) => T, Symbol(a5, Decl(callSignatureAssignabilityInInheritance4.ts, 12, 36))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 13, 9))
+>U : U, Symbol(U, Decl(callSignatureAssignabilityInInheritance4.ts, 13, 11))
+>x : (arg: T) => U, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 13, 14))
+>arg : T, Symbol(arg, Decl(callSignatureAssignabilityInInheritance4.ts, 13, 18))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 13, 9))
+>U : U, Symbol(U, Decl(callSignatureAssignabilityInInheritance4.ts, 13, 11))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 13, 9))
 
     a6: <T extends Base>(x: (arg: T) => Derived) => T;
->a6 : <T extends Base>(x: (arg: T) => Derived) => T
->T : T
->Base : Base
->x : (arg: T) => Derived
->arg : T
->T : T
->Derived : Derived
->T : T
+>a6 : <T extends Base>(x: (arg: T) => Derived) => T, Symbol(a6, Decl(callSignatureAssignabilityInInheritance4.ts, 13, 37))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 14, 9))
+>Base : Base, Symbol(Base, Decl(callSignatureAssignabilityInInheritance4.ts, 0, 0))
+>x : (arg: T) => Derived, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 14, 25))
+>arg : T, Symbol(arg, Decl(callSignatureAssignabilityInInheritance4.ts, 14, 29))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 14, 9))
+>Derived : Derived, Symbol(Derived, Decl(callSignatureAssignabilityInInheritance4.ts, 2, 27))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 14, 9))
 
     a11: <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
->a11 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
->T : T
->x : { foo: T; }
->foo : T
->T : T
->y : { foo: T; bar: T; }
->foo : T
->T : T
->bar : T
->T : T
->Base : Base
+>a11 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base, Symbol(a11, Decl(callSignatureAssignabilityInInheritance4.ts, 14, 54))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 15, 10))
+>x : { foo: T; }, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 15, 13))
+>foo : T, Symbol(foo, Decl(callSignatureAssignabilityInInheritance4.ts, 15, 17))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 15, 10))
+>y : { foo: T; bar: T; }, Symbol(y, Decl(callSignatureAssignabilityInInheritance4.ts, 15, 27))
+>foo : T, Symbol(foo, Decl(callSignatureAssignabilityInInheritance4.ts, 15, 32))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 15, 10))
+>bar : T, Symbol(bar, Decl(callSignatureAssignabilityInInheritance4.ts, 15, 40))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 15, 10))
+>Base : Base, Symbol(Base, Decl(callSignatureAssignabilityInInheritance4.ts, 0, 0))
 
     a15: <T>(x: { a: T; b: T }) => T[];
->a15 : <T>(x: { a: T; b: T; }) => T[]
->T : T
->x : { a: T; b: T; }
->a : T
->T : T
->b : T
->T : T
->T : T
+>a15 : <T>(x: { a: T; b: T; }) => T[], Symbol(a15, Decl(callSignatureAssignabilityInInheritance4.ts, 15, 59))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 16, 10))
+>x : { a: T; b: T; }, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 16, 13))
+>a : T, Symbol(a, Decl(callSignatureAssignabilityInInheritance4.ts, 16, 17))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 16, 10))
+>b : T, Symbol(b, Decl(callSignatureAssignabilityInInheritance4.ts, 16, 23))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 16, 10))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 16, 10))
 
     a16: <T extends Base>(x: { a: T; b: T }) => T[];
->a16 : <T extends Base>(x: { a: T; b: T; }) => T[]
->T : T
->Base : Base
->x : { a: T; b: T; }
->a : T
->T : T
->b : T
->T : T
->T : T
+>a16 : <T extends Base>(x: { a: T; b: T; }) => T[], Symbol(a16, Decl(callSignatureAssignabilityInInheritance4.ts, 16, 39))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 17, 10))
+>Base : Base, Symbol(Base, Decl(callSignatureAssignabilityInInheritance4.ts, 0, 0))
+>x : { a: T; b: T; }, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 17, 26))
+>a : T, Symbol(a, Decl(callSignatureAssignabilityInInheritance4.ts, 17, 30))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 17, 10))
+>b : T, Symbol(b, Decl(callSignatureAssignabilityInInheritance4.ts, 17, 36))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 17, 10))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 17, 10))
 
     a17: {
->a17 : { <T extends Derived>(x: (a: T) => T): T[]; <T extends Base>(x: (a: T) => T): T[]; }
+>a17 : { <T extends Derived>(x: (a: T) => T): T[]; <T extends Base>(x: (a: T) => T): T[]; }, Symbol(a17, Decl(callSignatureAssignabilityInInheritance4.ts, 17, 52))
 
         <T extends Derived>(x: (a: T) => T): T[];
->T : T
->Derived : Derived
->x : (a: T) => T
->a : T
->T : T
->T : T
->T : T
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 19, 9))
+>Derived : Derived, Symbol(Derived, Decl(callSignatureAssignabilityInInheritance4.ts, 2, 27))
+>x : (a: T) => T, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 19, 28))
+>a : T, Symbol(a, Decl(callSignatureAssignabilityInInheritance4.ts, 19, 32))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 19, 9))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 19, 9))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 19, 9))
 
         <T extends Base>(x: (a: T) => T): T[];        
->T : T
->Base : Base
->x : (a: T) => T
->a : T
->T : T
->T : T
->T : T
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 20, 9))
+>Base : Base, Symbol(Base, Decl(callSignatureAssignabilityInInheritance4.ts, 0, 0))
+>x : (a: T) => T, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 20, 25))
+>a : T, Symbol(a, Decl(callSignatureAssignabilityInInheritance4.ts, 20, 29))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 20, 9))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 20, 9))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 20, 9))
 
     };
     a18: {
->a18 : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }
+>a18 : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }, Symbol(a18, Decl(callSignatureAssignabilityInInheritance4.ts, 21, 6))
 
         (x: {
->x : { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }
+>x : { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 23, 9))
 
             <T extends Derived>(a: T): T;
->T : T
->Derived : Derived
->a : T
->T : T
->T : T
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 24, 13))
+>Derived : Derived, Symbol(Derived, Decl(callSignatureAssignabilityInInheritance4.ts, 2, 27))
+>a : T, Symbol(a, Decl(callSignatureAssignabilityInInheritance4.ts, 24, 32))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 24, 13))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 24, 13))
 
             <T extends Base>(a: T): T;
->T : T
->Base : Base
->a : T
->T : T
->T : T
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 25, 13))
+>Base : Base, Symbol(Base, Decl(callSignatureAssignabilityInInheritance4.ts, 0, 0))
+>a : T, Symbol(a, Decl(callSignatureAssignabilityInInheritance4.ts, 25, 29))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 25, 13))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 25, 13))
 
         }): any[];
         (x: {
->x : { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }
+>x : { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 27, 9))
 
             <T extends Derived2>(a: T): T;
->T : T
->Derived2 : Derived2
->a : T
->T : T
->T : T
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 28, 13))
+>Derived2 : Derived2, Symbol(Derived2, Decl(callSignatureAssignabilityInInheritance4.ts, 3, 43))
+>a : T, Symbol(a, Decl(callSignatureAssignabilityInInheritance4.ts, 28, 33))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 28, 13))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 28, 13))
 
             <T extends Base>(a: T): T;
->T : T
->Base : Base
->a : T
->T : T
->T : T
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 29, 13))
+>Base : Base, Symbol(Base, Decl(callSignatureAssignabilityInInheritance4.ts, 0, 0))
+>a : T, Symbol(a, Decl(callSignatureAssignabilityInInheritance4.ts, 29, 29))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 29, 13))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 29, 13))
 
         }): any[];
     };
@@ -172,110 +172,110 @@ interface A { // T
 
 // S's
 interface I extends A {
->I : I
->A : A
+>I : I, Symbol(I, Decl(callSignatureAssignabilityInInheritance4.ts, 32, 1))
+>A : A, Symbol(A, Decl(callSignatureAssignabilityInInheritance4.ts, 5, 49))
 
     // N's
     a: <T>(x: T) => T[]; // ok, instantiation of N is a subtype of M, T is number
->a : <T>(x: T) => T[]
->T : T
->x : T
->T : T
->T : T
+>a : <T>(x: T) => T[], Symbol(a, Decl(callSignatureAssignabilityInInheritance4.ts, 35, 23))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 37, 8))
+>x : T, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 37, 11))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 37, 8))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 37, 8))
 
     a2: <T>(x: T) => string[]; // ok
->a2 : <T>(x: T) => string[]
->T : T
->x : T
->T : T
+>a2 : <T>(x: T) => string[], Symbol(a2, Decl(callSignatureAssignabilityInInheritance4.ts, 37, 24))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 38, 9))
+>x : T, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 38, 12))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 38, 9))
 
     a3: <T>(x: T) => T; // ok since Base returns void
->a3 : <T>(x: T) => T
->T : T
->x : T
->T : T
->T : T
+>a3 : <T>(x: T) => T, Symbol(a3, Decl(callSignatureAssignabilityInInheritance4.ts, 38, 30))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 39, 9))
+>x : T, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 39, 12))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 39, 9))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 39, 9))
 
     a4: <T, U>(x: T, y: U) => string; // ok, instantiation of N is a subtype of M, T is string, U is number
->a4 : <T, U>(x: T, y: U) => string
->T : T
->U : U
->x : T
->T : T
->y : U
->U : U
+>a4 : <T, U>(x: T, y: U) => string, Symbol(a4, Decl(callSignatureAssignabilityInInheritance4.ts, 39, 23))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 40, 9))
+>U : U, Symbol(U, Decl(callSignatureAssignabilityInInheritance4.ts, 40, 11))
+>x : T, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 40, 15))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 40, 9))
+>y : U, Symbol(y, Decl(callSignatureAssignabilityInInheritance4.ts, 40, 20))
+>U : U, Symbol(U, Decl(callSignatureAssignabilityInInheritance4.ts, 40, 11))
 
     a5: <T, U>(x: (arg: T) => U) => T; // ok, U is in a parameter position so inferences can be made
->a5 : <T, U>(x: (arg: T) => U) => T
->T : T
->U : U
->x : (arg: T) => U
->arg : T
->T : T
->U : U
->T : T
+>a5 : <T, U>(x: (arg: T) => U) => T, Symbol(a5, Decl(callSignatureAssignabilityInInheritance4.ts, 40, 37))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 41, 9))
+>U : U, Symbol(U, Decl(callSignatureAssignabilityInInheritance4.ts, 41, 11))
+>x : (arg: T) => U, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 41, 15))
+>arg : T, Symbol(arg, Decl(callSignatureAssignabilityInInheritance4.ts, 41, 19))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 41, 9))
+>U : U, Symbol(U, Decl(callSignatureAssignabilityInInheritance4.ts, 41, 11))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 41, 9))
 
     a6: <T extends Base, U extends Derived>(x: (arg: T) => U) => T; // ok, same as a5 but with object type hierarchy
->a6 : <T extends Base, U extends Derived>(x: (arg: T) => U) => T
->T : T
->Base : Base
->U : U
->Derived : Derived
->x : (arg: T) => U
->arg : T
->T : T
->U : U
->T : T
+>a6 : <T extends Base, U extends Derived>(x: (arg: T) => U) => T, Symbol(a6, Decl(callSignatureAssignabilityInInheritance4.ts, 41, 38))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 42, 9))
+>Base : Base, Symbol(Base, Decl(callSignatureAssignabilityInInheritance4.ts, 0, 0))
+>U : U, Symbol(U, Decl(callSignatureAssignabilityInInheritance4.ts, 42, 24))
+>Derived : Derived, Symbol(Derived, Decl(callSignatureAssignabilityInInheritance4.ts, 2, 27))
+>x : (arg: T) => U, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 42, 44))
+>arg : T, Symbol(arg, Decl(callSignatureAssignabilityInInheritance4.ts, 42, 48))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 42, 9))
+>U : U, Symbol(U, Decl(callSignatureAssignabilityInInheritance4.ts, 42, 24))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 42, 9))
 
     a11: <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; // ok
->a11 : <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
->T : T
->U : U
->x : { foo: T; }
->foo : T
->T : T
->y : { foo: U; bar: U; }
->foo : U
->U : U
->bar : U
->U : U
->Base : Base
+>a11 : <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base, Symbol(a11, Decl(callSignatureAssignabilityInInheritance4.ts, 42, 67))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 43, 10))
+>U : U, Symbol(U, Decl(callSignatureAssignabilityInInheritance4.ts, 43, 12))
+>x : { foo: T; }, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 43, 16))
+>foo : T, Symbol(foo, Decl(callSignatureAssignabilityInInheritance4.ts, 43, 20))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 43, 10))
+>y : { foo: U; bar: U; }, Symbol(y, Decl(callSignatureAssignabilityInInheritance4.ts, 43, 30))
+>foo : U, Symbol(foo, Decl(callSignatureAssignabilityInInheritance4.ts, 43, 35))
+>U : U, Symbol(U, Decl(callSignatureAssignabilityInInheritance4.ts, 43, 12))
+>bar : U, Symbol(bar, Decl(callSignatureAssignabilityInInheritance4.ts, 43, 43))
+>U : U, Symbol(U, Decl(callSignatureAssignabilityInInheritance4.ts, 43, 12))
+>Base : Base, Symbol(Base, Decl(callSignatureAssignabilityInInheritance4.ts, 0, 0))
 
     a15: <U, V>(x: { a: U; b: V; }) => U[]; // ok, T = U, T = V
->a15 : <U, V>(x: { a: U; b: V; }) => U[]
->U : U
->V : V
->x : { a: U; b: V; }
->a : U
->U : U
->b : V
->V : V
->U : U
+>a15 : <U, V>(x: { a: U; b: V; }) => U[], Symbol(a15, Decl(callSignatureAssignabilityInInheritance4.ts, 43, 62))
+>U : U, Symbol(U, Decl(callSignatureAssignabilityInInheritance4.ts, 44, 10))
+>V : V, Symbol(V, Decl(callSignatureAssignabilityInInheritance4.ts, 44, 12))
+>x : { a: U; b: V; }, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 44, 16))
+>a : U, Symbol(a, Decl(callSignatureAssignabilityInInheritance4.ts, 44, 20))
+>U : U, Symbol(U, Decl(callSignatureAssignabilityInInheritance4.ts, 44, 10))
+>b : V, Symbol(b, Decl(callSignatureAssignabilityInInheritance4.ts, 44, 26))
+>V : V, Symbol(V, Decl(callSignatureAssignabilityInInheritance4.ts, 44, 12))
+>U : U, Symbol(U, Decl(callSignatureAssignabilityInInheritance4.ts, 44, 10))
 
     a16: <T>(x: { a: T; b: T }) => T[]; // ok, more general parameter type
->a16 : <T>(x: { a: T; b: T; }) => T[]
->T : T
->x : { a: T; b: T; }
->a : T
->T : T
->b : T
->T : T
->T : T
+>a16 : <T>(x: { a: T; b: T; }) => T[], Symbol(a16, Decl(callSignatureAssignabilityInInheritance4.ts, 44, 43))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 45, 10))
+>x : { a: T; b: T; }, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 45, 13))
+>a : T, Symbol(a, Decl(callSignatureAssignabilityInInheritance4.ts, 45, 17))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 45, 10))
+>b : T, Symbol(b, Decl(callSignatureAssignabilityInInheritance4.ts, 45, 23))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 45, 10))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 45, 10))
 
     a17: <T>(x: (a: T) => T) => T[]; // ok
->a17 : <T>(x: (a: T) => T) => T[]
->T : T
->x : (a: T) => T
->a : T
->T : T
->T : T
->T : T
+>a17 : <T>(x: (a: T) => T) => T[], Symbol(a17, Decl(callSignatureAssignabilityInInheritance4.ts, 45, 39))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 46, 10))
+>x : (a: T) => T, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 46, 13))
+>a : T, Symbol(a, Decl(callSignatureAssignabilityInInheritance4.ts, 46, 17))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 46, 10))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 46, 10))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 46, 10))
 
     a18: (x: <T>(a: T) => T) => any[]; // ok
->a18 : (x: <T>(a: T) => T) => any[]
->x : <T>(a: T) => T
->T : T
->a : T
->T : T
->T : T
+>a18 : (x: <T>(a: T) => T) => any[], Symbol(a18, Decl(callSignatureAssignabilityInInheritance4.ts, 46, 36))
+>x : <T>(a: T) => T, Symbol(x, Decl(callSignatureAssignabilityInInheritance4.ts, 47, 10))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 47, 14))
+>a : T, Symbol(a, Decl(callSignatureAssignabilityInInheritance4.ts, 47, 17))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 47, 14))
+>T : T, Symbol(T, Decl(callSignatureAssignabilityInInheritance4.ts, 47, 14))
 }

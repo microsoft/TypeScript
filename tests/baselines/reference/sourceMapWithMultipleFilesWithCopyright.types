@@ -5,8 +5,8 @@ Copyright
 
 ///<reference path="a.ts"/>
 var y = x;
->y : { a: number; b: number; }
->x : { a: number; b: number; }
+>y : { a: number; b: number; }, Symbol(y, Decl(b.ts, 5, 3))
+>x : { a: number; b: number; }, Symbol(x, Decl(a.ts, 4, 3))
 
 === tests/cases/compiler/a.ts ===
 /*--------------------------------------------------------------------------
@@ -14,14 +14,16 @@ Copyright
 ---------------------------------------------------------------------------*/
 
 var x = {
->x : { a: number; b: number; }
+>x : { a: number; b: number; }, Symbol(x, Decl(a.ts, 4, 3))
 >{    a: 10,    b: 20} : { a: number; b: number; }
 
     a: 10,
->a : number
+>a : number, Symbol(a, Decl(a.ts, 4, 9))
+>10 : number
 
     b: 20
->b : number
+>b : number, Symbol(b, Decl(a.ts, 5, 10))
+>20 : number
 
 };
 

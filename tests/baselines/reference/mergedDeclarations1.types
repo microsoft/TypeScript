@@ -1,76 +1,80 @@
 === tests/cases/compiler/mergedDeclarations1.ts ===
 interface Point {
->Point : Point
+>Point : Point, Symbol(Point, Decl(mergedDeclarations1.ts, 0, 0))
 
     x: number;
->x : number
+>x : number, Symbol(x, Decl(mergedDeclarations1.ts, 0, 17))
 
     y: number;
->y : number
+>y : number, Symbol(y, Decl(mergedDeclarations1.ts, 1, 14))
 }
 function point(x: number, y: number): Point {
->point : typeof point
->x : number
->y : number
->Point : Point
+>point : typeof point, Symbol(point, Decl(mergedDeclarations1.ts, 3, 1), Decl(mergedDeclarations1.ts, 6, 1))
+>x : number, Symbol(x, Decl(mergedDeclarations1.ts, 4, 15))
+>y : number, Symbol(y, Decl(mergedDeclarations1.ts, 4, 25))
+>Point : Point, Symbol(Point, Decl(mergedDeclarations1.ts, 0, 0))
 
     return { x: x, y: y };
 >{ x: x, y: y } : { x: number; y: number; }
->x : number
->x : number
->y : number
->y : number
+>x : number, Symbol(x, Decl(mergedDeclarations1.ts, 5, 12))
+>x : number, Symbol(x, Decl(mergedDeclarations1.ts, 4, 15))
+>y : number, Symbol(y, Decl(mergedDeclarations1.ts, 5, 18))
+>y : number, Symbol(y, Decl(mergedDeclarations1.ts, 4, 25))
 }
 module point {
->point : typeof point
+>point : typeof point, Symbol(point, Decl(mergedDeclarations1.ts, 3, 1), Decl(mergedDeclarations1.ts, 6, 1))
 
     export var origin = point(0, 0);
->origin : Point
+>origin : Point, Symbol(origin, Decl(mergedDeclarations1.ts, 8, 14))
 >point(0, 0) : Point
->point : typeof point
+>point : typeof point, Symbol(point, Decl(mergedDeclarations1.ts, 3, 1), Decl(mergedDeclarations1.ts, 6, 1))
+>0 : number
+>0 : number
 
     export function equals(p1: Point, p2: Point) {
->equals : (p1: Point, p2: Point) => boolean
->p1 : Point
->Point : Point
->p2 : Point
->Point : Point
+>equals : (p1: Point, p2: Point) => boolean, Symbol(equals, Decl(mergedDeclarations1.ts, 8, 36))
+>p1 : Point, Symbol(p1, Decl(mergedDeclarations1.ts, 9, 27))
+>Point : Point, Symbol(Point, Decl(mergedDeclarations1.ts, 0, 0))
+>p2 : Point, Symbol(p2, Decl(mergedDeclarations1.ts, 9, 37))
+>Point : Point, Symbol(Point, Decl(mergedDeclarations1.ts, 0, 0))
 
         return p1.x == p2.x && p1.y == p2.y;
 >p1.x == p2.x && p1.y == p2.y : boolean
 >p1.x == p2.x : boolean
->p1.x : number
->p1 : Point
->x : number
->p2.x : number
->p2 : Point
->x : number
+>p1.x : number, Symbol(Point.x, Decl(mergedDeclarations1.ts, 0, 17))
+>p1 : Point, Symbol(p1, Decl(mergedDeclarations1.ts, 9, 27))
+>x : number, Symbol(Point.x, Decl(mergedDeclarations1.ts, 0, 17))
+>p2.x : number, Symbol(Point.x, Decl(mergedDeclarations1.ts, 0, 17))
+>p2 : Point, Symbol(p2, Decl(mergedDeclarations1.ts, 9, 37))
+>x : number, Symbol(Point.x, Decl(mergedDeclarations1.ts, 0, 17))
 >p1.y == p2.y : boolean
->p1.y : number
->p1 : Point
->y : number
->p2.y : number
->p2 : Point
->y : number
+>p1.y : number, Symbol(Point.y, Decl(mergedDeclarations1.ts, 1, 14))
+>p1 : Point, Symbol(p1, Decl(mergedDeclarations1.ts, 9, 27))
+>y : number, Symbol(Point.y, Decl(mergedDeclarations1.ts, 1, 14))
+>p2.y : number, Symbol(Point.y, Decl(mergedDeclarations1.ts, 1, 14))
+>p2 : Point, Symbol(p2, Decl(mergedDeclarations1.ts, 9, 37))
+>y : number, Symbol(Point.y, Decl(mergedDeclarations1.ts, 1, 14))
     }
 }
 var p1 = point(0, 0);
->p1 : Point
+>p1 : Point, Symbol(p1, Decl(mergedDeclarations1.ts, 13, 3))
 >point(0, 0) : Point
->point : typeof point
+>point : typeof point, Symbol(point, Decl(mergedDeclarations1.ts, 3, 1), Decl(mergedDeclarations1.ts, 6, 1))
+>0 : number
+>0 : number
 
 var p2 = point.origin;
->p2 : Point
->point.origin : Point
->point : typeof point
->origin : Point
+>p2 : Point, Symbol(p2, Decl(mergedDeclarations1.ts, 14, 3))
+>point.origin : Point, Symbol(point.origin, Decl(mergedDeclarations1.ts, 8, 14))
+>point : typeof point, Symbol(point, Decl(mergedDeclarations1.ts, 3, 1), Decl(mergedDeclarations1.ts, 6, 1))
+>origin : Point, Symbol(point.origin, Decl(mergedDeclarations1.ts, 8, 14))
 
 var b = point.equals(p1, p2);
->b : boolean
+>b : boolean, Symbol(b, Decl(mergedDeclarations1.ts, 15, 3))
 >point.equals(p1, p2) : boolean
->point.equals : (p1: Point, p2: Point) => boolean
->point : typeof point
->equals : (p1: Point, p2: Point) => boolean
->p1 : Point
->p2 : Point
+>point.equals : (p1: Point, p2: Point) => boolean, Symbol(point.equals, Decl(mergedDeclarations1.ts, 8, 36))
+>point : typeof point, Symbol(point, Decl(mergedDeclarations1.ts, 3, 1), Decl(mergedDeclarations1.ts, 6, 1))
+>equals : (p1: Point, p2: Point) => boolean, Symbol(point.equals, Decl(mergedDeclarations1.ts, 8, 36))
+>p1 : Point, Symbol(p1, Decl(mergedDeclarations1.ts, 13, 3))
+>p2 : Point, Symbol(p2, Decl(mergedDeclarations1.ts, 14, 3))
 

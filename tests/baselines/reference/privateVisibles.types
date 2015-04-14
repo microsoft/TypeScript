@@ -1,23 +1,24 @@
 === tests/cases/compiler/privateVisibles.ts ===
 class Foo {
->Foo : Foo
+>Foo : Foo, Symbol(Foo, Decl(privateVisibles.ts, 0, 0))
 
 	private pvar = 0;
->pvar : number
+>pvar : number, Symbol(pvar, Decl(privateVisibles.ts, 0, 11))
+>0 : number
 
 	constructor() {
 	    var n = this.pvar;
->n : number
->this.pvar : number
->this : Foo
->pvar : number
+>n : number, Symbol(n, Decl(privateVisibles.ts, 3, 8))
+>this.pvar : number, Symbol(pvar, Decl(privateVisibles.ts, 0, 11))
+>this : Foo, Symbol(Foo, Decl(privateVisibles.ts, 0, 0))
+>pvar : number, Symbol(pvar, Decl(privateVisibles.ts, 0, 11))
 	}
 
 	public meth() { var q = this.pvar;}
->meth : () => void
->q : number
->this.pvar : number
->this : Foo
->pvar : number
+>meth : () => void, Symbol(meth, Decl(privateVisibles.ts, 4, 2))
+>q : number, Symbol(q, Decl(privateVisibles.ts, 6, 20))
+>this.pvar : number, Symbol(pvar, Decl(privateVisibles.ts, 0, 11))
+>this : Foo, Symbol(Foo, Decl(privateVisibles.ts, 0, 0))
+>pvar : number, Symbol(pvar, Decl(privateVisibles.ts, 0, 11))
 }
 

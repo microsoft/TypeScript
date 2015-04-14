@@ -1,4 +1,5 @@
 // These utilities are common to multiple language service features.
+/* @internal */
 module ts {
     export interface ListItemInfo {
         listItemIndex: number;
@@ -500,6 +501,7 @@ module ts {
 }
 
 // Display-part writer helpers
+/* @internal */
 module ts {
     export function isFirstDeclarationOfSymbolParameter(symbol: Symbol) {
         return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter;

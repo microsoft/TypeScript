@@ -1,32 +1,33 @@
 === tests/cases/compiler/exportEqualNamespaces.ts ===
 declare module server {
->server : Date
+>server : Date, Symbol(server, Decl(exportEqualNamespaces.ts, 0, 0), Decl(exportEqualNamespaces.ts, 2, 1), Decl(exportEqualNamespaces.ts, 10, 3))
 
     interface Server extends Object { }
->Server : Server
->Object : Object
+>Server : Server, Symbol(Server, Decl(exportEqualNamespaces.ts, 0, 23))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 }
 
 interface server {
->server : server
+>server : server, Symbol(server, Decl(exportEqualNamespaces.ts, 0, 0), Decl(exportEqualNamespaces.ts, 2, 1), Decl(exportEqualNamespaces.ts, 10, 3))
 
     (): server.Server;
->server : unknown
->Server : server.Server
+>server : any, Symbol(server, Decl(exportEqualNamespaces.ts, 0, 0), Decl(exportEqualNamespaces.ts, 2, 1), Decl(exportEqualNamespaces.ts, 10, 3))
+>Server : server.Server, Symbol(server.Server, Decl(exportEqualNamespaces.ts, 0, 23))
 
     startTime: Date;
->startTime : Date
->Date : Date
+>startTime : Date, Symbol(startTime, Decl(exportEqualNamespaces.ts, 5, 22))
+>Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
 }
  
 var x = 5;
->x : number
+>x : number, Symbol(x, Decl(exportEqualNamespaces.ts, 9, 3))
+>5 : number
 
 var server = new Date();
->server : Date
+>server : Date, Symbol(server, Decl(exportEqualNamespaces.ts, 0, 0), Decl(exportEqualNamespaces.ts, 2, 1), Decl(exportEqualNamespaces.ts, 10, 3))
 >new Date() : Date
->Date : DateConstructor
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
 
 export = server;
->server : server
+>server : server, Symbol(server, Decl(exportEqualNamespaces.ts, 0, 0), Decl(exportEqualNamespaces.ts, 2, 1), Decl(exportEqualNamespaces.ts, 10, 3))
 

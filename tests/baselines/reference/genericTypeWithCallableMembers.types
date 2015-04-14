@@ -1,38 +1,38 @@
 === tests/cases/compiler/genericTypeWithCallableMembers.ts ===
 interface Constructable {
->Constructable : Constructable
+>Constructable : Constructable, Symbol(Constructable, Decl(genericTypeWithCallableMembers.ts, 0, 0))
 
     new (): Constructable;
->Constructable : Constructable
+>Constructable : Constructable, Symbol(Constructable, Decl(genericTypeWithCallableMembers.ts, 0, 0))
 }
  
 class C<T extends Constructable> {
->C : C<T>
->T : T
->Constructable : Constructable
+>C : C<T>, Symbol(C, Decl(genericTypeWithCallableMembers.ts, 2, 1))
+>T : T, Symbol(T, Decl(genericTypeWithCallableMembers.ts, 4, 8))
+>Constructable : Constructable, Symbol(Constructable, Decl(genericTypeWithCallableMembers.ts, 0, 0))
 
     constructor(public data: T, public data2: Constructable) { }
->data : T
->T : T
->data2 : Constructable
->Constructable : Constructable
+>data : T, Symbol(data, Decl(genericTypeWithCallableMembers.ts, 5, 16))
+>T : T, Symbol(T, Decl(genericTypeWithCallableMembers.ts, 4, 8))
+>data2 : Constructable, Symbol(data2, Decl(genericTypeWithCallableMembers.ts, 5, 31))
+>Constructable : Constructable, Symbol(Constructable, Decl(genericTypeWithCallableMembers.ts, 0, 0))
 
     create() {
->create : () => void
+>create : () => void, Symbol(create, Decl(genericTypeWithCallableMembers.ts, 5, 64))
 
         var x = new this.data(); // no error
->x : Constructable
+>x : Constructable, Symbol(x, Decl(genericTypeWithCallableMembers.ts, 7, 11))
 >new this.data() : Constructable
->this.data : T
->this : C<T>
->data : T
+>this.data : T, Symbol(data, Decl(genericTypeWithCallableMembers.ts, 5, 16))
+>this : C<T>, Symbol(C, Decl(genericTypeWithCallableMembers.ts, 2, 1))
+>data : T, Symbol(data, Decl(genericTypeWithCallableMembers.ts, 5, 16))
 
         var x2 = new this.data2(); // was error, shouldn't be
->x2 : Constructable
+>x2 : Constructable, Symbol(x2, Decl(genericTypeWithCallableMembers.ts, 8, 11))
 >new this.data2() : Constructable
->this.data2 : Constructable
->this : C<T>
->data2 : Constructable
+>this.data2 : Constructable, Symbol(data2, Decl(genericTypeWithCallableMembers.ts, 5, 31))
+>this : C<T>, Symbol(C, Decl(genericTypeWithCallableMembers.ts, 2, 1))
+>data2 : Constructable, Symbol(data2, Decl(genericTypeWithCallableMembers.ts, 5, 31))
     }
 }
 

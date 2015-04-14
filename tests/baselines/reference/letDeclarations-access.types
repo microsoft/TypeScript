@@ -1,109 +1,123 @@
 === tests/cases/compiler/letDeclarations-access.ts ===
 
 let x = 0
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
+>0 : number
 
 // No errors
 
 x = 1;
 >x = 1 : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
+>1 : number
 
 x += 2;
 >x += 2 : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
+>2 : number
 
 x -= 3;
 >x -= 3 : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
+>3 : number
 
 x *= 4;
 >x *= 4 : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
+>4 : number
 
 x /= 5;
 >x /= 5 : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
+>5 : number
 
 x %= 6;
 >x %= 6 : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
+>6 : number
 
 x <<= 7;
 >x <<= 7 : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
+>7 : number
 
 x >>= 8;
 >x >>= 8 : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
+>8 : number
 
 x >>>= 9;
 >x >>>= 9 : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
+>9 : number
 
 x &= 10;
 >x &= 10 : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
+>10 : number
 
 x |= 11;
 >x |= 11 : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
+>11 : number
 
 x ^= 12;
 >x ^= 12 : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
+>12 : number
 
 x++;
 >x++ : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
 
 x--;
 >x-- : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
 
 ++x;
 >++x : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
 
 --x;
 >--x : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
 
 var a = x + 1;
->a : number
+>a : number, Symbol(a, Decl(letDeclarations-access.ts, 23, 3))
 >x + 1 : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
+>1 : number
 
 function f(v: number) { }
->f : (v: number) => void
->v : number
+>f : (v: number) => void, Symbol(f, Decl(letDeclarations-access.ts, 23, 14))
+>v : number, Symbol(v, Decl(letDeclarations-access.ts, 25, 11))
 
 f(x);
 >f(x) : void
->f : (v: number) => void
->x : number
+>f : (v: number) => void, Symbol(f, Decl(letDeclarations-access.ts, 23, 14))
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
 
 if (x) { }
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
 
 x;
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
 
 (x);
 >(x) : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
 
 -x;
 >-x : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
 
 +x;
 >+x : number
->x : number
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
 
 x.toString();
 >x.toString() : string
->x.toString : (radix?: number) => string
->x : number
->toString : (radix?: number) => string
+>x.toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>x : number, Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
+>toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
 

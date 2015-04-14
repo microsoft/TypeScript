@@ -1,36 +1,38 @@
 === tests/cases/compiler/genericPrototypeProperty.ts ===
 class C<T> {
->C : C<T>
->T : T
+>C : C<T>, Symbol(C, Decl(genericPrototypeProperty.ts, 0, 0))
+>T : T, Symbol(T, Decl(genericPrototypeProperty.ts, 0, 8))
 
     x: T;
->x : T
->T : T
+>x : T, Symbol(x, Decl(genericPrototypeProperty.ts, 0, 12))
+>T : T, Symbol(T, Decl(genericPrototypeProperty.ts, 0, 8))
 
     foo(x: T): T { return null; }
->foo : (x: T) => T
->x : T
->T : T
->T : T
+>foo : (x: T) => T, Symbol(foo, Decl(genericPrototypeProperty.ts, 1, 9))
+>x : T, Symbol(x, Decl(genericPrototypeProperty.ts, 2, 8))
+>T : T, Symbol(T, Decl(genericPrototypeProperty.ts, 0, 8))
+>T : T, Symbol(T, Decl(genericPrototypeProperty.ts, 0, 8))
+>null : null
 }
 
 var r = C.prototype;
->r : C<any>
->C.prototype : C<any>
->C : typeof C
->prototype : C<any>
+>r : C<any>, Symbol(r, Decl(genericPrototypeProperty.ts, 5, 3))
+>C.prototype : C<any>, Symbol(C.prototype)
+>C : typeof C, Symbol(C, Decl(genericPrototypeProperty.ts, 0, 0))
+>prototype : C<any>, Symbol(C.prototype)
 
 // should be any
 var r2 = r.x
->r2 : any
->r.x : any
->r : C<any>
->x : any
+>r2 : any, Symbol(r2, Decl(genericPrototypeProperty.ts, 7, 3))
+>r.x : any, Symbol(C.x, Decl(genericPrototypeProperty.ts, 0, 12))
+>r : C<any>, Symbol(r, Decl(genericPrototypeProperty.ts, 5, 3))
+>x : any, Symbol(C.x, Decl(genericPrototypeProperty.ts, 0, 12))
 
 var r3 = r.foo(null);
->r3 : any
+>r3 : any, Symbol(r3, Decl(genericPrototypeProperty.ts, 8, 3))
 >r.foo(null) : any
->r.foo : (x: any) => any
->r : C<any>
->foo : (x: any) => any
+>r.foo : (x: any) => any, Symbol(C.foo, Decl(genericPrototypeProperty.ts, 1, 9))
+>r : C<any>, Symbol(r, Decl(genericPrototypeProperty.ts, 5, 3))
+>foo : (x: any) => any, Symbol(C.foo, Decl(genericPrototypeProperty.ts, 1, 9))
+>null : null
 

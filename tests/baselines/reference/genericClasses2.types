@@ -1,54 +1,54 @@
 === tests/cases/compiler/genericClasses2.ts ===
 interface Foo<T> {
->Foo : Foo<T>
->T : T
+>Foo : Foo<T>, Symbol(Foo, Decl(genericClasses2.ts, 0, 0))
+>T : T, Symbol(T, Decl(genericClasses2.ts, 0, 14))
 
 	a: T;
->a : T
->T : T
+>a : T, Symbol(a, Decl(genericClasses2.ts, 0, 18))
+>T : T, Symbol(T, Decl(genericClasses2.ts, 0, 14))
 }
 
 class C<T> {
->C : C<T>
->T : T
+>C : C<T>, Symbol(C, Decl(genericClasses2.ts, 2, 1))
+>T : T, Symbol(T, Decl(genericClasses2.ts, 4, 8))
 
 	public x: T;
->x : T
->T : T
+>x : T, Symbol(x, Decl(genericClasses2.ts, 4, 12))
+>T : T, Symbol(T, Decl(genericClasses2.ts, 4, 8))
 
 	public y: Foo<T>;
->y : Foo<T>
->Foo : Foo<T>
->T : T
+>y : Foo<T>, Symbol(y, Decl(genericClasses2.ts, 5, 13))
+>Foo : Foo<T>, Symbol(Foo, Decl(genericClasses2.ts, 0, 0))
+>T : T, Symbol(T, Decl(genericClasses2.ts, 4, 8))
 
 	public z: Foo<number>;
->z : Foo<number>
->Foo : Foo<T>
+>z : Foo<number>, Symbol(z, Decl(genericClasses2.ts, 6, 18))
+>Foo : Foo<T>, Symbol(Foo, Decl(genericClasses2.ts, 0, 0))
 }
 
 var v1 : C<string>;
->v1 : C<string>
->C : C<T>
+>v1 : C<string>, Symbol(v1, Decl(genericClasses2.ts, 10, 3))
+>C : C<T>, Symbol(C, Decl(genericClasses2.ts, 2, 1))
 
 var y = v1.x; // should be 'string'
->y : string
->v1.x : string
->v1 : C<string>
->x : string
+>y : string, Symbol(y, Decl(genericClasses2.ts, 12, 3))
+>v1.x : string, Symbol(C.x, Decl(genericClasses2.ts, 4, 12))
+>v1 : C<string>, Symbol(v1, Decl(genericClasses2.ts, 10, 3))
+>x : string, Symbol(C.x, Decl(genericClasses2.ts, 4, 12))
 
 var w = v1.y.a; // should be 'string'
->w : string
->v1.y.a : string
->v1.y : Foo<string>
->v1 : C<string>
->y : Foo<string>
->a : string
+>w : string, Symbol(w, Decl(genericClasses2.ts, 13, 3))
+>v1.y.a : string, Symbol(Foo.a, Decl(genericClasses2.ts, 0, 18))
+>v1.y : Foo<string>, Symbol(C.y, Decl(genericClasses2.ts, 5, 13))
+>v1 : C<string>, Symbol(v1, Decl(genericClasses2.ts, 10, 3))
+>y : Foo<string>, Symbol(C.y, Decl(genericClasses2.ts, 5, 13))
+>a : string, Symbol(Foo.a, Decl(genericClasses2.ts, 0, 18))
 
 var z = v1.z.a; // should be 'number'
->z : number
->v1.z.a : number
->v1.z : Foo<number>
->v1 : C<string>
->z : Foo<number>
->a : number
+>z : number, Symbol(z, Decl(genericClasses2.ts, 14, 3))
+>v1.z.a : number, Symbol(Foo.a, Decl(genericClasses2.ts, 0, 18))
+>v1.z : Foo<number>, Symbol(C.z, Decl(genericClasses2.ts, 6, 18))
+>v1 : C<string>, Symbol(v1, Decl(genericClasses2.ts, 10, 3))
+>z : Foo<number>, Symbol(C.z, Decl(genericClasses2.ts, 6, 18))
+>a : number, Symbol(Foo.a, Decl(genericClasses2.ts, 0, 18))
 

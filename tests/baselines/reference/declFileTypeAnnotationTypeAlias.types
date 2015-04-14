@@ -1,63 +1,63 @@
 === tests/cases/compiler/declFileTypeAnnotationTypeAlias.ts ===
 
 module M {
->M : typeof M
+>M : typeof M, Symbol(M, Decl(declFileTypeAnnotationTypeAlias.ts, 0, 0), Decl(declFileTypeAnnotationTypeAlias.ts, 22, 1))
 
     export type Value = string | number | boolean;
->Value : string | number | boolean
+>Value : string | number | boolean, Symbol(Value, Decl(declFileTypeAnnotationTypeAlias.ts, 1, 10))
 
     export var x: Value;
->x : string | number | boolean
->Value : string | number | boolean
+>x : string | number | boolean, Symbol(x, Decl(declFileTypeAnnotationTypeAlias.ts, 3, 14))
+>Value : string | number | boolean, Symbol(Value, Decl(declFileTypeAnnotationTypeAlias.ts, 1, 10))
 
     export class c {
->c : c
+>c : c, Symbol(c, Decl(declFileTypeAnnotationTypeAlias.ts, 3, 24))
     }
 
     export type C = c;
->C : c
->c : c
+>C : c, Symbol(C, Decl(declFileTypeAnnotationTypeAlias.ts, 6, 5))
+>c : c, Symbol(c, Decl(declFileTypeAnnotationTypeAlias.ts, 3, 24))
 
     export module m {
->m : typeof m
+>m : typeof m, Symbol(m, Decl(declFileTypeAnnotationTypeAlias.ts, 8, 22))
 
         export class c {
->c : c
+>c : c, Symbol(c, Decl(declFileTypeAnnotationTypeAlias.ts, 10, 21))
         }
     }
 
     export type MC = m.c;
->MC : m.c
->m : unknown
->c : m.c
+>MC : m.c, Symbol(MC, Decl(declFileTypeAnnotationTypeAlias.ts, 13, 5))
+>m : any, Symbol(m, Decl(declFileTypeAnnotationTypeAlias.ts, 8, 22))
+>c : m.c, Symbol(m.c, Decl(declFileTypeAnnotationTypeAlias.ts, 10, 21))
 
     export type fc = () => c;
->fc : () => c
->c : c
+>fc : () => c, Symbol(fc, Decl(declFileTypeAnnotationTypeAlias.ts, 15, 25))
+>c : c, Symbol(c, Decl(declFileTypeAnnotationTypeAlias.ts, 3, 24))
 }
 
 interface Window {
->Window : Window
+>Window : Window, Symbol(Window, Decl(declFileTypeAnnotationTypeAlias.ts, 18, 1))
 
     someMethod();
->someMethod : () => any
+>someMethod : () => any, Symbol(someMethod, Decl(declFileTypeAnnotationTypeAlias.ts, 20, 18))
 }
 
 module M {
->M : typeof M
+>M : typeof M, Symbol(M, Decl(declFileTypeAnnotationTypeAlias.ts, 0, 0), Decl(declFileTypeAnnotationTypeAlias.ts, 22, 1))
 
     export type W = Window | string;
->W : string | Window
->Window : Window
+>W : string | Window, Symbol(W, Decl(declFileTypeAnnotationTypeAlias.ts, 24, 10))
+>Window : Window, Symbol(Window, Decl(declFileTypeAnnotationTypeAlias.ts, 18, 1))
 
     export module N {
->N : typeof N
+>N : typeof N, Symbol(N, Decl(declFileTypeAnnotationTypeAlias.ts, 25, 36))
 
         export class Window { }
->Window : Window
+>Window : Window, Symbol(Window, Decl(declFileTypeAnnotationTypeAlias.ts, 26, 21))
 
         export var p: W;
->p : string | Window
->W : string | Window
+>p : string | Window, Symbol(p, Decl(declFileTypeAnnotationTypeAlias.ts, 28, 18))
+>W : string | Window, Symbol(W, Decl(declFileTypeAnnotationTypeAlias.ts, 24, 10))
     }
 }

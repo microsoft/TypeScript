@@ -1,15 +1,15 @@
 === tests/cases/conformance/decorators/class/method/decoratorOnClassMethod8.ts ===
 declare function dec<T>(target: T): T;
->dec : <T>(target: T) => T
->T : T
->target : T
->T : T
->T : T
+>dec : <T>(target: T) => T, Symbol(dec, Decl(decoratorOnClassMethod8.ts, 0, 0))
+>T : T, Symbol(T, Decl(decoratorOnClassMethod8.ts, 0, 21))
+>target : T, Symbol(target, Decl(decoratorOnClassMethod8.ts, 0, 24))
+>T : T, Symbol(T, Decl(decoratorOnClassMethod8.ts, 0, 21))
+>T : T, Symbol(T, Decl(decoratorOnClassMethod8.ts, 0, 21))
 
 class C {
->C : C
+>C : C, Symbol(C, Decl(decoratorOnClassMethod8.ts, 0, 38))
 
     @dec method() {}
->dec : unknown
->method : () => void
+>dec : <T>(target: T) => T, Symbol(dec, Decl(decoratorOnClassMethod8.ts, 0, 0))
+>method : () => void, Symbol(method, Decl(decoratorOnClassMethod8.ts, 2, 9))
 }

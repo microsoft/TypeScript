@@ -1,7 +1,7 @@
 //@target: ES6
 //@declaration: true
 class C {
-    [Symbol.isRegExp](x: number);
-    [Symbol.isRegExp](x: string);
-    [Symbol.isRegExp](x: any) { }
+    [Symbol.toPrimitive](x: number);
+    [Symbol.toPrimitive](x: string);
+    [Symbol.toPrimitive](x: any) { }
 }

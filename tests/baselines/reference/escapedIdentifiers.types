@@ -12,286 +12,340 @@
 
 // var decl
 var \u0061 = 1;
->\u0061 : number
+>\u0061 : number, Symbol(\u0061, Decl(escapedIdentifiers.ts, 12, 3))
+>1 : number
 
 a ++;
 >a ++ : number
->a : number
+>a : number, Symbol(\u0061, Decl(escapedIdentifiers.ts, 12, 3))
 
 \u0061 ++;
 >\u0061 ++ : number
->\u0061 : number
+>\u0061 : number, Symbol(\u0061, Decl(escapedIdentifiers.ts, 12, 3))
 
 var b = 1;
->b : number
+>b : number, Symbol(b, Decl(escapedIdentifiers.ts, 16, 3))
+>1 : number
 
 b ++;
 >b ++ : number
->b : number
+>b : number, Symbol(b, Decl(escapedIdentifiers.ts, 16, 3))
 
 \u0062 ++;
 >\u0062 ++ : number
->\u0062 : number
+>\u0062 : number, Symbol(b, Decl(escapedIdentifiers.ts, 16, 3))
 
 // modules
 module moduleType1 { 
->moduleType1 : typeof moduleType1
+>moduleType1 : typeof moduleType1, Symbol(moduleType1, Decl(escapedIdentifiers.ts, 18, 10))
 
     export var baz1: number;
->baz1 : number
+>baz1 : number, Symbol(baz1, Decl(escapedIdentifiers.ts, 22, 14))
 }
 module moduleType\u0032 { 
->moduleType\u0032 : typeof moduleType\u0032
+>moduleType\u0032 : typeof moduleType\u0032, Symbol(moduleType\u0032, Decl(escapedIdentifiers.ts, 23, 1))
 
     export var baz2: number;
->baz2 : number
+>baz2 : number, Symbol(baz2, Decl(escapedIdentifiers.ts, 25, 14))
 }
 
 moduleType1.baz1 = 3;
 >moduleType1.baz1 = 3 : number
->moduleType1.baz1 : number
->moduleType1 : typeof moduleType1
->baz1 : number
+>moduleType1.baz1 : number, Symbol(moduleType1.baz1, Decl(escapedIdentifiers.ts, 22, 14))
+>moduleType1 : typeof moduleType1, Symbol(moduleType1, Decl(escapedIdentifiers.ts, 18, 10))
+>baz1 : number, Symbol(moduleType1.baz1, Decl(escapedIdentifiers.ts, 22, 14))
+>3 : number
 
 moduleType\u0031.baz1 = 3;
 >moduleType\u0031.baz1 = 3 : number
->moduleType\u0031.baz1 : number
->moduleType\u0031 : typeof moduleType1
->baz1 : number
+>moduleType\u0031.baz1 : number, Symbol(moduleType1.baz1, Decl(escapedIdentifiers.ts, 22, 14))
+>moduleType\u0031 : typeof moduleType1, Symbol(moduleType1, Decl(escapedIdentifiers.ts, 18, 10))
+>baz1 : number, Symbol(moduleType1.baz1, Decl(escapedIdentifiers.ts, 22, 14))
+>3 : number
 
 moduleType2.baz2 = 3;
 >moduleType2.baz2 = 3 : number
->moduleType2.baz2 : number
->moduleType2 : typeof moduleType\u0032
->baz2 : number
+>moduleType2.baz2 : number, Symbol(moduleType\u0032.baz2, Decl(escapedIdentifiers.ts, 25, 14))
+>moduleType2 : typeof moduleType\u0032, Symbol(moduleType\u0032, Decl(escapedIdentifiers.ts, 23, 1))
+>baz2 : number, Symbol(moduleType\u0032.baz2, Decl(escapedIdentifiers.ts, 25, 14))
+>3 : number
 
 moduleType\u0032.baz2 = 3;
 >moduleType\u0032.baz2 = 3 : number
->moduleType\u0032.baz2 : number
->moduleType\u0032 : typeof moduleType\u0032
->baz2 : number
+>moduleType\u0032.baz2 : number, Symbol(moduleType\u0032.baz2, Decl(escapedIdentifiers.ts, 25, 14))
+>moduleType\u0032 : typeof moduleType\u0032, Symbol(moduleType\u0032, Decl(escapedIdentifiers.ts, 23, 1))
+>baz2 : number, Symbol(moduleType\u0032.baz2, Decl(escapedIdentifiers.ts, 25, 14))
+>3 : number
 
 // classes
 
 class classType1 { 
->classType1 : classType1
+>classType1 : classType1, Symbol(classType1, Decl(escapedIdentifiers.ts, 31, 26))
 
     public foo1: number;
->foo1 : number
+>foo1 : number, Symbol(foo1, Decl(escapedIdentifiers.ts, 35, 18))
 }
 class classType\u0032 { 
->classType\u0032 : classType\u0032
+>classType\u0032 : classType\u0032, Symbol(classType\u0032, Decl(escapedIdentifiers.ts, 37, 1))
 
     public foo2: number;
->foo2 : number
+>foo2 : number, Symbol(foo2, Decl(escapedIdentifiers.ts, 38, 23))
 }
 
 var classType1Object1 = new classType1();
->classType1Object1 : classType1
+>classType1Object1 : classType1, Symbol(classType1Object1, Decl(escapedIdentifiers.ts, 42, 3))
 >new classType1() : classType1
->classType1 : typeof classType1
+>classType1 : typeof classType1, Symbol(classType1, Decl(escapedIdentifiers.ts, 31, 26))
 
 classType1Object1.foo1 = 2;
 >classType1Object1.foo1 = 2 : number
->classType1Object1.foo1 : number
->classType1Object1 : classType1
->foo1 : number
+>classType1Object1.foo1 : number, Symbol(classType1.foo1, Decl(escapedIdentifiers.ts, 35, 18))
+>classType1Object1 : classType1, Symbol(classType1Object1, Decl(escapedIdentifiers.ts, 42, 3))
+>foo1 : number, Symbol(classType1.foo1, Decl(escapedIdentifiers.ts, 35, 18))
+>2 : number
 
 var classType1Object2 = new classType\u0031();
->classType1Object2 : classType1
+>classType1Object2 : classType1, Symbol(classType1Object2, Decl(escapedIdentifiers.ts, 44, 3))
 >new classType\u0031() : classType1
->classType\u0031 : typeof classType1
+>classType\u0031 : typeof classType1, Symbol(classType1, Decl(escapedIdentifiers.ts, 31, 26))
 
 classType1Object2.foo1 = 2;
 >classType1Object2.foo1 = 2 : number
->classType1Object2.foo1 : number
->classType1Object2 : classType1
->foo1 : number
+>classType1Object2.foo1 : number, Symbol(classType1.foo1, Decl(escapedIdentifiers.ts, 35, 18))
+>classType1Object2 : classType1, Symbol(classType1Object2, Decl(escapedIdentifiers.ts, 44, 3))
+>foo1 : number, Symbol(classType1.foo1, Decl(escapedIdentifiers.ts, 35, 18))
+>2 : number
 
 var classType2Object1 = new classType2();
->classType2Object1 : classType\u0032
+>classType2Object1 : classType\u0032, Symbol(classType2Object1, Decl(escapedIdentifiers.ts, 46, 3))
 >new classType2() : classType\u0032
->classType2 : typeof classType\u0032
+>classType2 : typeof classType\u0032, Symbol(classType\u0032, Decl(escapedIdentifiers.ts, 37, 1))
 
 classType2Object1.foo2 = 2;
 >classType2Object1.foo2 = 2 : number
->classType2Object1.foo2 : number
->classType2Object1 : classType\u0032
->foo2 : number
+>classType2Object1.foo2 : number, Symbol(classType\u0032.foo2, Decl(escapedIdentifiers.ts, 38, 23))
+>classType2Object1 : classType\u0032, Symbol(classType2Object1, Decl(escapedIdentifiers.ts, 46, 3))
+>foo2 : number, Symbol(classType\u0032.foo2, Decl(escapedIdentifiers.ts, 38, 23))
+>2 : number
 
 var classType2Object2 = new classType\u0032();
->classType2Object2 : classType\u0032
+>classType2Object2 : classType\u0032, Symbol(classType2Object2, Decl(escapedIdentifiers.ts, 48, 3))
 >new classType\u0032() : classType\u0032
->classType\u0032 : typeof classType\u0032
+>classType\u0032 : typeof classType\u0032, Symbol(classType\u0032, Decl(escapedIdentifiers.ts, 37, 1))
 
 classType2Object2.foo2 = 2;
 >classType2Object2.foo2 = 2 : number
->classType2Object2.foo2 : number
->classType2Object2 : classType\u0032
->foo2 : number
+>classType2Object2.foo2 : number, Symbol(classType\u0032.foo2, Decl(escapedIdentifiers.ts, 38, 23))
+>classType2Object2 : classType\u0032, Symbol(classType2Object2, Decl(escapedIdentifiers.ts, 48, 3))
+>foo2 : number, Symbol(classType\u0032.foo2, Decl(escapedIdentifiers.ts, 38, 23))
+>2 : number
 
 // interfaces
 interface interfaceType1 { 
->interfaceType1 : interfaceType1
+>interfaceType1 : interfaceType1, Symbol(interfaceType1, Decl(escapedIdentifiers.ts, 49, 27))
 
     bar1: number;
->bar1 : number
+>bar1 : number, Symbol(bar1, Decl(escapedIdentifiers.ts, 52, 26))
 }
 interface interfaceType\u0032 { 
->interfaceType\u0032 : interfaceType\u0032
+>interfaceType\u0032 : interfaceType\u0032, Symbol(interfaceType\u0032, Decl(escapedIdentifiers.ts, 54, 1))
 
     bar2: number;
->bar2 : number
+>bar2 : number, Symbol(bar2, Decl(escapedIdentifiers.ts, 55, 31))
 }
 
 var interfaceType1Object1 = <interfaceType1>{ bar1: 0 };
->interfaceType1Object1 : interfaceType1
+>interfaceType1Object1 : interfaceType1, Symbol(interfaceType1Object1, Decl(escapedIdentifiers.ts, 59, 3))
 ><interfaceType1>{ bar1: 0 } : interfaceType1
->interfaceType1 : interfaceType1
+>interfaceType1 : interfaceType1, Symbol(interfaceType1, Decl(escapedIdentifiers.ts, 49, 27))
 >{ bar1: 0 } : { bar1: number; }
->bar1 : number
+>bar1 : number, Symbol(bar1, Decl(escapedIdentifiers.ts, 59, 45))
+>0 : number
 
 interfaceType1Object1.bar1 = 2;
 >interfaceType1Object1.bar1 = 2 : number
->interfaceType1Object1.bar1 : number
->interfaceType1Object1 : interfaceType1
->bar1 : number
+>interfaceType1Object1.bar1 : number, Symbol(interfaceType1.bar1, Decl(escapedIdentifiers.ts, 52, 26))
+>interfaceType1Object1 : interfaceType1, Symbol(interfaceType1Object1, Decl(escapedIdentifiers.ts, 59, 3))
+>bar1 : number, Symbol(interfaceType1.bar1, Decl(escapedIdentifiers.ts, 52, 26))
+>2 : number
 
 var interfaceType1Object2 = <interfaceType\u0031>{ bar1: 0 };
->interfaceType1Object2 : interfaceType1
+>interfaceType1Object2 : interfaceType1, Symbol(interfaceType1Object2, Decl(escapedIdentifiers.ts, 61, 3))
 ><interfaceType\u0031>{ bar1: 0 } : interfaceType1
->interfaceType\u0031 : interfaceType1
+>interfaceType\u0031 : interfaceType1, Symbol(interfaceType1, Decl(escapedIdentifiers.ts, 49, 27))
 >{ bar1: 0 } : { bar1: number; }
->bar1 : number
+>bar1 : number, Symbol(bar1, Decl(escapedIdentifiers.ts, 61, 50))
+>0 : number
 
 interfaceType1Object2.bar1 = 2;
 >interfaceType1Object2.bar1 = 2 : number
->interfaceType1Object2.bar1 : number
->interfaceType1Object2 : interfaceType1
->bar1 : number
+>interfaceType1Object2.bar1 : number, Symbol(interfaceType1.bar1, Decl(escapedIdentifiers.ts, 52, 26))
+>interfaceType1Object2 : interfaceType1, Symbol(interfaceType1Object2, Decl(escapedIdentifiers.ts, 61, 3))
+>bar1 : number, Symbol(interfaceType1.bar1, Decl(escapedIdentifiers.ts, 52, 26))
+>2 : number
 
 var interfaceType2Object1 = <interfaceType2>{ bar2: 0 };
->interfaceType2Object1 : interfaceType\u0032
+>interfaceType2Object1 : interfaceType\u0032, Symbol(interfaceType2Object1, Decl(escapedIdentifiers.ts, 63, 3))
 ><interfaceType2>{ bar2: 0 } : interfaceType\u0032
->interfaceType2 : interfaceType\u0032
+>interfaceType2 : interfaceType\u0032, Symbol(interfaceType\u0032, Decl(escapedIdentifiers.ts, 54, 1))
 >{ bar2: 0 } : { bar2: number; }
->bar2 : number
+>bar2 : number, Symbol(bar2, Decl(escapedIdentifiers.ts, 63, 45))
+>0 : number
 
 interfaceType2Object1.bar2 = 2;
 >interfaceType2Object1.bar2 = 2 : number
->interfaceType2Object1.bar2 : number
->interfaceType2Object1 : interfaceType\u0032
->bar2 : number
+>interfaceType2Object1.bar2 : number, Symbol(interfaceType\u0032.bar2, Decl(escapedIdentifiers.ts, 55, 31))
+>interfaceType2Object1 : interfaceType\u0032, Symbol(interfaceType2Object1, Decl(escapedIdentifiers.ts, 63, 3))
+>bar2 : number, Symbol(interfaceType\u0032.bar2, Decl(escapedIdentifiers.ts, 55, 31))
+>2 : number
 
 var interfaceType2Object2 = <interfaceType\u0032>{ bar2: 0 };
->interfaceType2Object2 : interfaceType\u0032
+>interfaceType2Object2 : interfaceType\u0032, Symbol(interfaceType2Object2, Decl(escapedIdentifiers.ts, 65, 3))
 ><interfaceType\u0032>{ bar2: 0 } : interfaceType\u0032
->interfaceType\u0032 : interfaceType\u0032
+>interfaceType\u0032 : interfaceType\u0032, Symbol(interfaceType\u0032, Decl(escapedIdentifiers.ts, 54, 1))
 >{ bar2: 0 } : { bar2: number; }
->bar2 : number
+>bar2 : number, Symbol(bar2, Decl(escapedIdentifiers.ts, 65, 50))
+>0 : number
 
 interfaceType2Object2.bar2 = 2;
 >interfaceType2Object2.bar2 = 2 : number
->interfaceType2Object2.bar2 : number
->interfaceType2Object2 : interfaceType\u0032
->bar2 : number
+>interfaceType2Object2.bar2 : number, Symbol(interfaceType\u0032.bar2, Decl(escapedIdentifiers.ts, 55, 31))
+>interfaceType2Object2 : interfaceType\u0032, Symbol(interfaceType2Object2, Decl(escapedIdentifiers.ts, 65, 3))
+>bar2 : number, Symbol(interfaceType\u0032.bar2, Decl(escapedIdentifiers.ts, 55, 31))
+>2 : number
 
 
 // arguments
 class testClass { 
->testClass : testClass
+>testClass : testClass, Symbol(testClass, Decl(escapedIdentifiers.ts, 66, 31))
 
     public func(arg1: number, arg\u0032: string, arg\u0033: boolean, arg4: number) { 
->func : (arg1: number, arg\u0032: string, arg\u0033: boolean, arg4: number) => void
->arg1 : number
->arg\u0032 : string
->arg\u0033 : boolean
->arg4 : number
+>func : (arg1: number, arg\u0032: string, arg\u0033: boolean, arg4: number) => void, Symbol(func, Decl(escapedIdentifiers.ts, 70, 17))
+>arg1 : number, Symbol(arg1, Decl(escapedIdentifiers.ts, 71, 16))
+>arg\u0032 : string, Symbol(arg\u0032, Decl(escapedIdentifiers.ts, 71, 29))
+>arg\u0033 : boolean, Symbol(arg\u0033, Decl(escapedIdentifiers.ts, 71, 48))
+>arg4 : number, Symbol(arg4, Decl(escapedIdentifiers.ts, 71, 68))
 
         arg\u0031 = 1;
 >arg\u0031 = 1 : number
->arg\u0031 : number
+>arg\u0031 : number, Symbol(arg1, Decl(escapedIdentifiers.ts, 71, 16))
+>1 : number
 
         arg2 = 'string';
 >arg2 = 'string' : string
->arg2 : string
+>arg2 : string, Symbol(arg\u0032, Decl(escapedIdentifiers.ts, 71, 29))
+>'string' : string
 
         arg\u0033 = true;
 >arg\u0033 = true : boolean
->arg\u0033 : boolean
+>arg\u0033 : boolean, Symbol(arg\u0033, Decl(escapedIdentifiers.ts, 71, 48))
+>true : boolean
 
         arg4 = 2;
 >arg4 = 2 : number
->arg4 : number
+>arg4 : number, Symbol(arg4, Decl(escapedIdentifiers.ts, 71, 68))
+>2 : number
     }
 }
 
 // constructors
 class constructorTestClass { 
->constructorTestClass : constructorTestClass
+>constructorTestClass : constructorTestClass, Symbol(constructorTestClass, Decl(escapedIdentifiers.ts, 77, 1))
 
     constructor (public arg1: number,public arg\u0032: string,public arg\u0033: boolean,public arg4: number) { 
->arg1 : number
->arg\u0032 : string
->arg\u0033 : boolean
->arg4 : number
+>arg1 : number, Symbol(arg1, Decl(escapedIdentifiers.ts, 81, 17))
+>arg\u0032 : string, Symbol(arg\u0032, Decl(escapedIdentifiers.ts, 81, 37))
+>arg\u0033 : boolean, Symbol(arg\u0033, Decl(escapedIdentifiers.ts, 81, 62))
+>arg4 : number, Symbol(arg4, Decl(escapedIdentifiers.ts, 81, 88))
     }
 }
 var constructorTestObject = new constructorTestClass(1, 'string', true, 2);
->constructorTestObject : constructorTestClass
+>constructorTestObject : constructorTestClass, Symbol(constructorTestObject, Decl(escapedIdentifiers.ts, 84, 3))
 >new constructorTestClass(1, 'string', true, 2) : constructorTestClass
->constructorTestClass : typeof constructorTestClass
+>constructorTestClass : typeof constructorTestClass, Symbol(constructorTestClass, Decl(escapedIdentifiers.ts, 77, 1))
+>1 : number
+>'string' : string
+>true : boolean
+>2 : number
 
 constructorTestObject.arg\u0031 = 1;
 >constructorTestObject.arg\u0031 = 1 : number
->constructorTestObject.arg\u0031 : number
->constructorTestObject : constructorTestClass
->arg\u0031 : number
+>constructorTestObject.arg\u0031 : number, Symbol(constructorTestClass.arg1, Decl(escapedIdentifiers.ts, 81, 17))
+>constructorTestObject : constructorTestClass, Symbol(constructorTestObject, Decl(escapedIdentifiers.ts, 84, 3))
+>arg\u0031 : number, Symbol(constructorTestClass.arg1, Decl(escapedIdentifiers.ts, 81, 17))
+>1 : number
 
 constructorTestObject.arg2 = 'string';
 >constructorTestObject.arg2 = 'string' : string
->constructorTestObject.arg2 : string
->constructorTestObject : constructorTestClass
->arg2 : string
+>constructorTestObject.arg2 : string, Symbol(constructorTestClass.arg\u0032, Decl(escapedIdentifiers.ts, 81, 37))
+>constructorTestObject : constructorTestClass, Symbol(constructorTestObject, Decl(escapedIdentifiers.ts, 84, 3))
+>arg2 : string, Symbol(constructorTestClass.arg\u0032, Decl(escapedIdentifiers.ts, 81, 37))
+>'string' : string
 
 constructorTestObject.arg\u0033 = true;
 >constructorTestObject.arg\u0033 = true : boolean
->constructorTestObject.arg\u0033 : boolean
->constructorTestObject : constructorTestClass
->arg\u0033 : boolean
+>constructorTestObject.arg\u0033 : boolean, Symbol(constructorTestClass.arg\u0033, Decl(escapedIdentifiers.ts, 81, 62))
+>constructorTestObject : constructorTestClass, Symbol(constructorTestObject, Decl(escapedIdentifiers.ts, 84, 3))
+>arg\u0033 : boolean, Symbol(constructorTestClass.arg\u0033, Decl(escapedIdentifiers.ts, 81, 62))
+>true : boolean
 
 constructorTestObject.arg4 = 2;
 >constructorTestObject.arg4 = 2 : number
->constructorTestObject.arg4 : number
->constructorTestObject : constructorTestClass
->arg4 : number
+>constructorTestObject.arg4 : number, Symbol(constructorTestClass.arg4, Decl(escapedIdentifiers.ts, 81, 88))
+>constructorTestObject : constructorTestClass, Symbol(constructorTestObject, Decl(escapedIdentifiers.ts, 84, 3))
+>arg4 : number, Symbol(constructorTestClass.arg4, Decl(escapedIdentifiers.ts, 81, 88))
+>2 : number
 
 // Lables
 
 l\u0061bel1: 
+>l\u0061bel1 : any
+
     while (false)
+>false : boolean
     {  
        while(false)
+>false : boolean
+
            continue label1;  // it will go to next iteration of outer loop 
+>label1 : any
     } 
 
 label2: 
+>label2 : any
+
     while (false)
+>false : boolean
     {  
        while(false)
+>false : boolean
+
            continue l\u0061bel2;  // it will go to next iteration of outer loop 
+>l\u0061bel2 : any
     } 
 
 label3: 
+>label3 : any
+
     while (false)
+>false : boolean
     {  
        while(false)
+>false : boolean
+
            continue label3;  // it will go to next iteration of outer loop 
+>label3 : any
     } 
 
 l\u0061bel4: 
+>l\u0061bel4 : any
+
     while (false)
+>false : boolean
     {  
        while(false)
+>false : boolean
+
            continue l\u0061bel4;  // it will go to next iteration of outer loop 
+>l\u0061bel4 : any
     } 
