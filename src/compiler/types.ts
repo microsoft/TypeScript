@@ -1088,6 +1088,7 @@ module ts {
         parameters?: JSDocParameter[];
         returnType?: JSDocType;
         typeParameters?: TypeParameterDeclaration[];
+        // tagCounts?: Map<number>
     }
 
     // Source files are declarations when they are external modules.

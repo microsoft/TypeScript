@@ -59,7 +59,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
     const servicesHost: ts.LanguageServiceHost = {
 >servicesHost : ts.LanguageServiceHost, Symbol(servicesHost, Decl(APISample_watcher.ts, 23, 9))
 >ts : any, Symbol(ts, Decl(APISample_watcher.ts, 12, 6))
->LanguageServiceHost : ts.LanguageServiceHost, Symbol(ts.LanguageServiceHost, Decl(typescript.d.ts, 1367, 5))
+>LanguageServiceHost : ts.LanguageServiceHost, Symbol(ts.LanguageServiceHost, Decl(typescript.d.ts, 1368, 5))
 >{        getScriptFileNames: () => rootFileNames,        getScriptVersion: (fileName) => files[fileName] && files[fileName].version.toString(),        getScriptSnapshot: (fileName) => {            if (!fs.existsSync(fileName)) {                return undefined;            }            return ts.ScriptSnapshot.fromString(fs.readFileSync(fileName).toString());        },        getCurrentDirectory: () => process.cwd(),        getCompilationSettings: () => options,        getDefaultLibFileName: (options) => ts.getDefaultLibFilePath(options),    } : { getScriptFileNames: () => string[]; getScriptVersion: (fileName: string) => string; getScriptSnapshot: (fileName: string) => ts.IScriptSnapshot; getCurrentDirectory: () => any; getCompilationSettings: () => ts.CompilerOptions; getDefaultLibFileName: (options: ts.CompilerOptions) => string; }
 
         getScriptFileNames: () => rootFileNames,
@@ -103,11 +103,11 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 
             return ts.ScriptSnapshot.fromString(fs.readFileSync(fileName).toString());
 >ts.ScriptSnapshot.fromString(fs.readFileSync(fileName).toString()) : ts.IScriptSnapshot
->ts.ScriptSnapshot.fromString : (text: string) => ts.IScriptSnapshot, Symbol(ts.ScriptSnapshot.fromString, Decl(typescript.d.ts, 1360, 27))
->ts.ScriptSnapshot : typeof ts.ScriptSnapshot, Symbol(ts.ScriptSnapshot, Decl(typescript.d.ts, 1359, 5))
+>ts.ScriptSnapshot.fromString : (text: string) => ts.IScriptSnapshot, Symbol(ts.ScriptSnapshot.fromString, Decl(typescript.d.ts, 1361, 27))
+>ts.ScriptSnapshot : typeof ts.ScriptSnapshot, Symbol(ts.ScriptSnapshot, Decl(typescript.d.ts, 1360, 5))
 >ts : typeof ts, Symbol(ts, Decl(APISample_watcher.ts, 12, 6))
->ScriptSnapshot : typeof ts.ScriptSnapshot, Symbol(ts.ScriptSnapshot, Decl(typescript.d.ts, 1359, 5))
->fromString : (text: string) => ts.IScriptSnapshot, Symbol(ts.ScriptSnapshot.fromString, Decl(typescript.d.ts, 1360, 27))
+>ScriptSnapshot : typeof ts.ScriptSnapshot, Symbol(ts.ScriptSnapshot, Decl(typescript.d.ts, 1360, 5))
+>fromString : (text: string) => ts.IScriptSnapshot, Symbol(ts.ScriptSnapshot.fromString, Decl(typescript.d.ts, 1361, 27))
 >fs.readFileSync(fileName).toString() : any
 >fs.readFileSync(fileName).toString : any
 >fs.readFileSync(fileName) : any
@@ -136,9 +136,9 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >(options) => ts.getDefaultLibFilePath(options) : (options: ts.CompilerOptions) => string
 >options : ts.CompilerOptions, Symbol(options, Decl(APISample_watcher.ts, 35, 32))
 >ts.getDefaultLibFilePath(options) : string
->ts.getDefaultLibFilePath : (options: ts.CompilerOptions) => string, Symbol(ts.getDefaultLibFilePath, Decl(typescript.d.ts, 1809, 44))
+>ts.getDefaultLibFilePath : (options: ts.CompilerOptions) => string, Symbol(ts.getDefaultLibFilePath, Decl(typescript.d.ts, 1810, 44))
 >ts : typeof ts, Symbol(ts, Decl(APISample_watcher.ts, 12, 6))
->getDefaultLibFilePath : (options: ts.CompilerOptions) => string, Symbol(ts.getDefaultLibFilePath, Decl(typescript.d.ts, 1809, 44))
+>getDefaultLibFilePath : (options: ts.CompilerOptions) => string, Symbol(ts.getDefaultLibFilePath, Decl(typescript.d.ts, 1810, 44))
 >options : ts.CompilerOptions, Symbol(options, Decl(APISample_watcher.ts, 35, 32))
 
     };
@@ -147,14 +147,14 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
     const services = ts.createLanguageService(servicesHost, ts.createDocumentRegistry())
 >services : ts.LanguageService, Symbol(services, Decl(APISample_watcher.ts, 39, 9))
 >ts.createLanguageService(servicesHost, ts.createDocumentRegistry()) : ts.LanguageService
->ts.createLanguageService : (host: ts.LanguageServiceHost, documentRegistry?: ts.DocumentRegistry) => ts.LanguageService, Symbol(ts.createLanguageService, Decl(typescript.d.ts, 1807, 97))
+>ts.createLanguageService : (host: ts.LanguageServiceHost, documentRegistry?: ts.DocumentRegistry) => ts.LanguageService, Symbol(ts.createLanguageService, Decl(typescript.d.ts, 1808, 97))
 >ts : typeof ts, Symbol(ts, Decl(APISample_watcher.ts, 12, 6))
->createLanguageService : (host: ts.LanguageServiceHost, documentRegistry?: ts.DocumentRegistry) => ts.LanguageService, Symbol(ts.createLanguageService, Decl(typescript.d.ts, 1807, 97))
+>createLanguageService : (host: ts.LanguageServiceHost, documentRegistry?: ts.DocumentRegistry) => ts.LanguageService, Symbol(ts.createLanguageService, Decl(typescript.d.ts, 1808, 97))
 >servicesHost : ts.LanguageServiceHost, Symbol(servicesHost, Decl(APISample_watcher.ts, 23, 9))
 >ts.createDocumentRegistry() : ts.DocumentRegistry
->ts.createDocumentRegistry : () => ts.DocumentRegistry, Symbol(ts.createDocumentRegistry, Decl(typescript.d.ts, 1805, 193))
+>ts.createDocumentRegistry : () => ts.DocumentRegistry, Symbol(ts.createDocumentRegistry, Decl(typescript.d.ts, 1806, 193))
 >ts : typeof ts, Symbol(ts, Decl(APISample_watcher.ts, 12, 6))
->createDocumentRegistry : () => ts.DocumentRegistry, Symbol(ts.createDocumentRegistry, Decl(typescript.d.ts, 1805, 193))
+>createDocumentRegistry : () => ts.DocumentRegistry, Symbol(ts.createDocumentRegistry, Decl(typescript.d.ts, 1806, 193))
 
     // Now let's watch the files
     rootFileNames.forEach(fileName => {
@@ -231,16 +231,16 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
         let output = services.getEmitOutput(fileName);
 >output : ts.EmitOutput, Symbol(output, Decl(APISample_watcher.ts, 64, 11))
 >services.getEmitOutput(fileName) : ts.EmitOutput
->services.getEmitOutput : (fileName: string) => ts.EmitOutput, Symbol(ts.LanguageService.getEmitOutput, Decl(typescript.d.ts, 1411, 132))
+>services.getEmitOutput : (fileName: string) => ts.EmitOutput, Symbol(ts.LanguageService.getEmitOutput, Decl(typescript.d.ts, 1412, 132))
 >services : ts.LanguageService, Symbol(services, Decl(APISample_watcher.ts, 39, 9))
->getEmitOutput : (fileName: string) => ts.EmitOutput, Symbol(ts.LanguageService.getEmitOutput, Decl(typescript.d.ts, 1411, 132))
+>getEmitOutput : (fileName: string) => ts.EmitOutput, Symbol(ts.LanguageService.getEmitOutput, Decl(typescript.d.ts, 1412, 132))
 >fileName : string, Symbol(fileName, Decl(APISample_watcher.ts, 63, 22))
 
         if (!output.emitSkipped) {
 >!output.emitSkipped : boolean
->output.emitSkipped : boolean, Symbol(ts.EmitOutput.emitSkipped, Decl(typescript.d.ts, 1614, 34))
+>output.emitSkipped : boolean, Symbol(ts.EmitOutput.emitSkipped, Decl(typescript.d.ts, 1615, 34))
 >output : ts.EmitOutput, Symbol(output, Decl(APISample_watcher.ts, 64, 11))
->emitSkipped : boolean, Symbol(ts.EmitOutput.emitSkipped, Decl(typescript.d.ts, 1614, 34))
+>emitSkipped : boolean, Symbol(ts.EmitOutput.emitSkipped, Decl(typescript.d.ts, 1615, 34))
 
             console.log(`Emitting ${fileName}`);
 >console.log(`Emitting ${fileName}`) : any
@@ -268,9 +268,9 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
         output.outputFiles.forEach(o => {
 >output.outputFiles.forEach(o => {            fs.writeFileSync(o.name, o.text, "utf8");        }) : void
 >output.outputFiles.forEach : (callbackfn: (value: ts.OutputFile, index: number, array: ts.OutputFile[]) => void, thisArg?: any) => void, Symbol(Array.forEach, Decl(lib.d.ts, 1108, 95))
->output.outputFiles : ts.OutputFile[], Symbol(ts.EmitOutput.outputFiles, Decl(typescript.d.ts, 1613, 26))
+>output.outputFiles : ts.OutputFile[], Symbol(ts.EmitOutput.outputFiles, Decl(typescript.d.ts, 1614, 26))
 >output : ts.EmitOutput, Symbol(output, Decl(APISample_watcher.ts, 64, 11))
->outputFiles : ts.OutputFile[], Symbol(ts.EmitOutput.outputFiles, Decl(typescript.d.ts, 1613, 26))
+>outputFiles : ts.OutputFile[], Symbol(ts.EmitOutput.outputFiles, Decl(typescript.d.ts, 1614, 26))
 >forEach : (callbackfn: (value: ts.OutputFile, index: number, array: ts.OutputFile[]) => void, thisArg?: any) => void, Symbol(Array.forEach, Decl(lib.d.ts, 1108, 95))
 >o => {            fs.writeFileSync(o.name, o.text, "utf8");        } : (o: ts.OutputFile) => void
 >o : ts.OutputFile, Symbol(o, Decl(APISample_watcher.ts, 74, 35))
@@ -280,12 +280,12 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >fs.writeFileSync : any
 >fs : any, Symbol(fs, Decl(APISample_watcher.ts, 9, 11))
 >writeFileSync : any
->o.name : string, Symbol(ts.OutputFile.name, Decl(typescript.d.ts, 1622, 26))
+>o.name : string, Symbol(ts.OutputFile.name, Decl(typescript.d.ts, 1623, 26))
 >o : ts.OutputFile, Symbol(o, Decl(APISample_watcher.ts, 74, 35))
->name : string, Symbol(ts.OutputFile.name, Decl(typescript.d.ts, 1622, 26))
->o.text : string, Symbol(ts.OutputFile.text, Decl(typescript.d.ts, 1624, 36))
+>name : string, Symbol(ts.OutputFile.name, Decl(typescript.d.ts, 1623, 26))
+>o.text : string, Symbol(ts.OutputFile.text, Decl(typescript.d.ts, 1625, 36))
 >o : ts.OutputFile, Symbol(o, Decl(APISample_watcher.ts, 74, 35))
->text : string, Symbol(ts.OutputFile.text, Decl(typescript.d.ts, 1624, 36))
+>text : string, Symbol(ts.OutputFile.text, Decl(typescript.d.ts, 1625, 36))
 >"utf8" : string
 
         });
@@ -302,24 +302,24 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >services.getCompilerOptionsDiagnostics()            .concat(services.getSyntacticDiagnostics(fileName)) : ts.Diagnostic[]
 >services.getCompilerOptionsDiagnostics()            .concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }, Symbol(Array.concat, Decl(lib.d.ts, 1025, 13), Decl(lib.d.ts, 1030, 46))
 >services.getCompilerOptionsDiagnostics() : ts.Diagnostic[]
->services.getCompilerOptionsDiagnostics : () => ts.Diagnostic[], Symbol(ts.LanguageService.getCompilerOptionsDiagnostics, Decl(typescript.d.ts, 1385, 63))
+>services.getCompilerOptionsDiagnostics : () => ts.Diagnostic[], Symbol(ts.LanguageService.getCompilerOptionsDiagnostics, Decl(typescript.d.ts, 1386, 63))
 >services : ts.LanguageService, Symbol(services, Decl(APISample_watcher.ts, 39, 9))
->getCompilerOptionsDiagnostics : () => ts.Diagnostic[], Symbol(ts.LanguageService.getCompilerOptionsDiagnostics, Decl(typescript.d.ts, 1385, 63))
+>getCompilerOptionsDiagnostics : () => ts.Diagnostic[], Symbol(ts.LanguageService.getCompilerOptionsDiagnostics, Decl(typescript.d.ts, 1386, 63))
 
             .concat(services.getSyntacticDiagnostics(fileName))
 >concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }, Symbol(Array.concat, Decl(lib.d.ts, 1025, 13), Decl(lib.d.ts, 1030, 46))
 >services.getSyntacticDiagnostics(fileName) : ts.Diagnostic[]
->services.getSyntacticDiagnostics : (fileName: string) => ts.Diagnostic[], Symbol(ts.LanguageService.getSyntacticDiagnostics, Decl(typescript.d.ts, 1383, 37))
+>services.getSyntacticDiagnostics : (fileName: string) => ts.Diagnostic[], Symbol(ts.LanguageService.getSyntacticDiagnostics, Decl(typescript.d.ts, 1384, 37))
 >services : ts.LanguageService, Symbol(services, Decl(APISample_watcher.ts, 39, 9))
->getSyntacticDiagnostics : (fileName: string) => ts.Diagnostic[], Symbol(ts.LanguageService.getSyntacticDiagnostics, Decl(typescript.d.ts, 1383, 37))
+>getSyntacticDiagnostics : (fileName: string) => ts.Diagnostic[], Symbol(ts.LanguageService.getSyntacticDiagnostics, Decl(typescript.d.ts, 1384, 37))
 >fileName : string, Symbol(fileName, Decl(APISample_watcher.ts, 79, 23))
 
             .concat(services.getSemanticDiagnostics(fileName));
 >concat : { <U extends ts.Diagnostic[]>(...items: U[]): ts.Diagnostic[]; (...items: ts.Diagnostic[]): ts.Diagnostic[]; }, Symbol(Array.concat, Decl(lib.d.ts, 1025, 13), Decl(lib.d.ts, 1030, 46))
 >services.getSemanticDiagnostics(fileName) : ts.Diagnostic[]
->services.getSemanticDiagnostics : (fileName: string) => ts.Diagnostic[], Symbol(ts.LanguageService.getSemanticDiagnostics, Decl(typescript.d.ts, 1384, 64))
+>services.getSemanticDiagnostics : (fileName: string) => ts.Diagnostic[], Symbol(ts.LanguageService.getSemanticDiagnostics, Decl(typescript.d.ts, 1385, 64))
 >services : ts.LanguageService, Symbol(services, Decl(APISample_watcher.ts, 39, 9))
->getSemanticDiagnostics : (fileName: string) => ts.Diagnostic[], Symbol(ts.LanguageService.getSemanticDiagnostics, Decl(typescript.d.ts, 1384, 64))
+>getSemanticDiagnostics : (fileName: string) => ts.Diagnostic[], Symbol(ts.LanguageService.getSemanticDiagnostics, Decl(typescript.d.ts, 1385, 64))
 >fileName : string, Symbol(fileName, Decl(APISample_watcher.ts, 79, 23))
 
         allDiagnostics.forEach(diagnostic => {
@@ -333,9 +333,9 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
             let message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
 >message : string, Symbol(message, Decl(APISample_watcher.ts, 85, 15))
 >ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n") : string
->ts.flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string, Symbol(ts.flattenDiagnosticMessageText, Decl(typescript.d.ts, 1272, 67))
+>ts.flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string, Symbol(ts.flattenDiagnosticMessageText, Decl(typescript.d.ts, 1273, 67))
 >ts : typeof ts, Symbol(ts, Decl(APISample_watcher.ts, 12, 6))
->flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string, Symbol(ts.flattenDiagnosticMessageText, Decl(typescript.d.ts, 1272, 67))
+>flattenDiagnosticMessageText : (messageText: string | ts.DiagnosticMessageChain, newLine: string) => string, Symbol(ts.flattenDiagnosticMessageText, Decl(typescript.d.ts, 1273, 67))
 >diagnostic.messageText : string | ts.DiagnosticMessageChain, Symbol(ts.Diagnostic.messageText, Decl(typescript.d.ts, 1137, 23))
 >diagnostic : ts.Diagnostic, Symbol(diagnostic, Decl(APISample_watcher.ts, 84, 31))
 >messageText : string | ts.DiagnosticMessageChain, Symbol(ts.Diagnostic.messageText, Decl(typescript.d.ts, 1137, 23))
@@ -350,11 +350,11 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
 >line : number, Symbol(line, Decl(APISample_watcher.ts, 87, 21))
 >character : number, Symbol(character, Decl(APISample_watcher.ts, 87, 27))
 >diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start) : ts.LineAndCharacter
->diagnostic.file.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1335, 46))
+>diagnostic.file.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1336, 46))
 >diagnostic.file : ts.SourceFile, Symbol(ts.Diagnostic.file, Decl(typescript.d.ts, 1134, 26))
 >diagnostic : ts.Diagnostic, Symbol(diagnostic, Decl(APISample_watcher.ts, 84, 31))
 >file : ts.SourceFile, Symbol(ts.Diagnostic.file, Decl(typescript.d.ts, 1134, 26))
->getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1335, 46))
+>getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1336, 46))
 >diagnostic.start : number, Symbol(ts.Diagnostic.start, Decl(typescript.d.ts, 1135, 25))
 >diagnostic : ts.Diagnostic, Symbol(diagnostic, Decl(APISample_watcher.ts, 84, 31))
 >start : number, Symbol(ts.Diagnostic.start, Decl(typescript.d.ts, 1135, 25))

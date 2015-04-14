@@ -5811,8 +5811,7 @@ module ts {
     interface NodeWithComment extends Node {
         _docComment: JSDocComment;
     }
-
-    /* @internal */
+    
     export function parseJSDocComment(parent: Node, content: string, start?: number, length?: number): JSDocComment {
         let nodeWithComment = <NodeWithComment>parent;
         if (nodeWithComment && nodeWithComment._docComment) {
@@ -5841,6 +5840,7 @@ module ts {
         let parameters: JSDocParameter[];
         let returnType: JSDocType;
         let typeParameters: TypeParameterDeclaration[];
+        // let tagCounts: Map<number>;
 
         let pos: number;
 
@@ -5905,11 +5905,11 @@ module ts {
         return error ? undefined : createJSDocComment();
 
         function createJSDocComment(): JSDocComment {
-            if (!returnType && !type && !parameters && !typeParameters) {
+            if (!returnType && !type && !parameters && !typeParameters/* && !tagCounts*/) {
                 return undefined;
             }
 
-            return { returnType, type, parameters, typeParameters };
+            return { returnType, type, parameters, typeParameters/*, tagCounts */};
         }
 
         function skipWhitespace(): void {
@@ -5925,10 +5925,17 @@ module ts {
             pos++;
 
             let tagName = scanIdentifier();
+            //tagCounts = tagCounts || {};
+            //if (!hasProperty(tagCounts, tagName)) {
+            //    tagCounts[tagName] = 0;
+            //}
+            //tagCounts[tagName]++;
+
             switch (tagName) {
                 case "param":
                     return handleParamTag();
                 case "return":
+                case "returns":
                     return handleReturnTag();
                 case "template":
                     return handleTemplateTag();

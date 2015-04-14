@@ -1014,6 +1014,26 @@ module ts {
 }`);
                 });
 
+                it("returnsTag1", () => {
+                    parsesCorrectly(
+                        `/**
+  * @returns {number}
+  */`,
+                        `{
+    "returnType": {
+        "kind": "JSDocTypeReference",
+        "pos": 18,
+        "end": 24,
+        "name": {
+            "kind": 65,
+            "pos": 18,
+            "end": 24,
+            "text": "number"
+        }
+    }
+}`);
+                });
+
                 it("oneParamTag", () => {
                     parsesCorrectly(
 `/**
