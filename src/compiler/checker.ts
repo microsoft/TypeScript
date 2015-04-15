@@ -4074,8 +4074,8 @@ module ts {
                     }
                 }
                 else if (source.flags & TypeFlags.TypeParameter && sourceOrApparentType.flags & TypeFlags.Union) {
-                    if (result = isRelatedTo(sourceOrApparentType, <ObjectType>target, reportStructuralErrors)) {
-                        errorInfo = saveErrorInfo;
+                    errorInfo = saveErrorInfo;
+                    if (result = isRelatedTo(sourceOrApparentType, target, reportErrors)) {
                         return result;
                     }
                 }
