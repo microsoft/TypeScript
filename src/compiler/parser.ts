@@ -318,452 +318,12 @@ module ts {
         }
     }
 
-    const enum ParsingContext {
-        SourceElements,            // Elements in source file
-        ModuleElements,            // Elements in module declaration
-        BlockStatements,           // Statements in block
-        SwitchClauses,             // Clauses in switch statement
-        SwitchClauseStatements,    // Statements in switch clause
-        TypeMembers,               // Members in interface or type literal
-        ClassMembers,              // Members in class declaration
-        EnumMembers,               // Members in enum declaration
-        HeritageClauseElement,     // Elements in a heritage clause
-        VariableDeclarations,      // Variable declarations in variable statement
-        ObjectBindingElements,     // Binding elements in object binding list
-        ArrayBindingElements,      // Binding elements in array binding list
-        ArgumentExpressions,       // Expressions in argument list
-        ObjectLiteralMembers,      // Members in object literal
-        ArrayLiteralMembers,       // Members in array literal
-        Parameters,                // Parameters in parameter list
-        TypeParameters,            // Type parameters in type parameter list
-        TypeArguments,             // Type arguments in type argument list
-        TupleElementTypes,         // Element types in tuple element type list
-        HeritageClauses,           // Heritage clauses for a class or interface declaration.
-        ImportOrExportSpecifiers,  // Named import clause's import specifier list
-        Count                      // Number of parsing contexts
-    }
+    export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
+        let start = new Date().getTime();
+        let result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes);
 
-    const enum Tristate {
-        False,
-        True,
-        Unknown
-    }
-
-    function parsingContextErrors(context: ParsingContext): DiagnosticMessage {
-        switch (context) {
-            case ParsingContext.SourceElements:           return Diagnostics.Declaration_or_statement_expected;
-            case ParsingContext.ModuleElements:           return Diagnostics.Declaration_or_statement_expected;
-            case ParsingContext.BlockStatements:          return Diagnostics.Statement_expected;
-            case ParsingContext.SwitchClauses:            return Diagnostics.case_or_default_expected;
-            case ParsingContext.SwitchClauseStatements:   return Diagnostics.Statement_expected;
-            case ParsingContext.TypeMembers:              return Diagnostics.Property_or_signature_expected;
-            case ParsingContext.ClassMembers:             return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
-            case ParsingContext.EnumMembers:              return Diagnostics.Enum_member_expected;
-            case ParsingContext.HeritageClauseElement:    return Diagnostics.Expression_expected;
-            case ParsingContext.VariableDeclarations:     return Diagnostics.Variable_declaration_expected;
-            case ParsingContext.ObjectBindingElements:    return Diagnostics.Property_destructuring_pattern_expected;
-            case ParsingContext.ArrayBindingElements:     return Diagnostics.Array_element_destructuring_pattern_expected;
-            case ParsingContext.ArgumentExpressions:      return Diagnostics.Argument_expression_expected;
-            case ParsingContext.ObjectLiteralMembers:     return Diagnostics.Property_assignment_expected;
-            case ParsingContext.ArrayLiteralMembers:      return Diagnostics.Expression_or_comma_expected;
-            case ParsingContext.Parameters:               return Diagnostics.Parameter_declaration_expected;
-            case ParsingContext.TypeParameters:           return Diagnostics.Type_parameter_declaration_expected;
-            case ParsingContext.TypeArguments:            return Diagnostics.Type_argument_expected;
-            case ParsingContext.TupleElementTypes:        return Diagnostics.Type_expected;
-            case ParsingContext.HeritageClauses:          return Diagnostics.Unexpected_token_expected;
-            case ParsingContext.ImportOrExportSpecifiers: return Diagnostics.Identifier_expected;
-        }
-    };
-
-    export function modifierToFlag(token: SyntaxKind): NodeFlags {
-        switch (token) {
-            case SyntaxKind.StaticKeyword: return NodeFlags.Static;
-            case SyntaxKind.PublicKeyword: return NodeFlags.Public;
-            case SyntaxKind.ProtectedKeyword: return NodeFlags.Protected;
-            case SyntaxKind.PrivateKeyword: return NodeFlags.Private;
-            case SyntaxKind.ExportKeyword: return NodeFlags.Export;
-            case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
-            case SyntaxKind.ConstKeyword: return NodeFlags.Const;
-            case SyntaxKind.DefaultKeyword: return NodeFlags.Default;
-        }
-        return 0;
-    }
-
-    function fixupParentReferences(sourceFile: SourceFile) {
-        // normally parent references are set during binding. However, for clients that only need
-        // a syntax tree, and no semantic features, then the binding process is an unnecessary
-        // overhead.  This functions allows us to set all the parents, without all the expense of
-        // binding.
-
-        let parent: Node = sourceFile;
-        forEachChild(sourceFile, visitNode);
-        return;
-
-        function visitNode(n: Node): void {
-            // walk down setting parents that differ from the parent we think it should be.  This
-            // allows us to quickly bail out of setting parents for subtrees during incremental
-            // parsing
-            if (n.parent !== parent) {
-                n.parent = parent;
-
-                let saveParent = parent;
-                parent = n;
-                forEachChild(n, visitNode);
-                parent = saveParent;
-            }
-        }
-    }
-
-    function shouldCheckNode(node: Node) {
-        switch (node.kind) {
-            case SyntaxKind.StringLiteral:
-            case SyntaxKind.NumericLiteral:
-            case SyntaxKind.Identifier:
-                return true;
-        }
-
-        return false;
-    }
-
-    function moveElementEntirelyPastChangeRange(element: IncrementalElement, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
-        if (isArray) {
-            visitArray(<IncrementalNodeArray>element);
-        }
-        else {
-            visitNode(<IncrementalNode>element);
-        }
-        return;
-
-        function visitNode(node: IncrementalNode) {
-            if (aggressiveChecks && shouldCheckNode(node)) {
-                var text = oldText.substring(node.pos, node.end);
-            }
-
-            // Ditch any existing LS children we may have created.  This way we can avoid
-            // moving them forward.
-            node._children = undefined;
-            node.pos += delta;
-            node.end += delta;
-
-            if (aggressiveChecks && shouldCheckNode(node)) {
-                Debug.assert(text === newText.substring(node.pos, node.end));
-            }
-
-            forEachChild(node, visitNode, visitArray);
-            checkNodePositions(node, aggressiveChecks);
-        }
-
-        function visitArray(array: IncrementalNodeArray) {
-            array._children = undefined;
-            array.pos += delta;
-            array.end += delta;
-
-            for (let node of array) {
-                visitNode(node);
-            }
-        }
-    }
-
-    function adjustIntersectingElement(element: IncrementalElement, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number) {
-        Debug.assert(element.end >= changeStart, "Adjusting an element that was entirely before the change range");
-        Debug.assert(element.pos <= changeRangeOldEnd, "Adjusting an element that was entirely after the change range");
-        Debug.assert(element.pos <= element.end);
-
-        // We have an element that intersects the change range in some way.  It may have its
-        // start, or its end (or both) in the changed range.  We want to adjust any part
-        // that intersects such that the final tree is in a consistent state.  i.e. all
-        // chlidren have spans within the span of their parent, and all siblings are ordered
-        // properly.
-
-        // We may need to update both the 'pos' and the 'end' of the element.
-
-        // If the 'pos' is before the start of the change, then we don't need to touch it.
-        // If it isn't, then the 'pos' must be inside the change.  How we update it will
-        // depend if delta is  positive or negative.  If delta is positive then we have
-        // something like:
-        //
-        //  -------------------AAA-----------------
-        //  -------------------BBBCCCCCCC-----------------
-        //
-        // In this case, we consider any node that started in the change range to still be
-        // starting at the same position.
-        //
-        // however, if the delta is negative, then we instead have something like this:
-        //
-        //  -------------------XXXYYYYYYY-----------------
-        //  -------------------ZZZ-----------------
-        //
-        // In this case, any element that started in the 'X' range will keep its position.
-        // However any element htat started after that will have their pos adjusted to be
-        // at the end of the new range.  i.e. any node that started in the 'Y' range will
-        // be adjusted to have their start at the end of the 'Z' range.
-        //
-        // The element will keep its position if possible.  Or Move backward to the new-end
-        // if it's in the 'Y' range.
-        element.pos = Math.min(element.pos, changeRangeNewEnd);
-
-        // If the 'end' is after the change range, then we always adjust it by the delta
-        // amount.  However, if the end is in the change range, then how we adjust it
-        // will depend on if delta is  positive or negative.  If delta is positive then we
-        // have something like:
-        //
-        //  -------------------AAA-----------------
-        //  -------------------BBBCCCCCCC-----------------
-        //
-        // In this case, we consider any node that ended inside the change range to keep its
-        // end position.
-        //
-        // however, if the delta is negative, then we instead have something like this:
-        //
-        //  -------------------XXXYYYYYYY-----------------
-        //  -------------------ZZZ-----------------
-        //
-        // In this case, any element that ended in the 'X' range will keep its position.
-        // However any element htat ended after that will have their pos adjusted to be
-        // at the end of the new range.  i.e. any node that ended in the 'Y' range will
-        // be adjusted to have their end at the end of the 'Z' range.
-        if (element.end >= changeRangeOldEnd) {
-            // Element ends after the change range.  Always adjust the end pos.
-            element.end += delta;
-        }
-        else {
-            // Element ends in the change range.  The element will keep its position if
-            // possible. Or Move backward to the new-end if it's in the 'Y' range.
-            element.end = Math.min(element.end, changeRangeNewEnd);
-        }
-
-        Debug.assert(element.pos <= element.end);
-        if (element.parent) {
-            Debug.assert(element.pos >= element.parent.pos);
-            Debug.assert(element.end <= element.parent.end);
-        }
-    }
-
-    function checkNodePositions(node: Node, aggressiveChecks: boolean) {
-        if (aggressiveChecks) {
-            let pos = node.pos;
-            forEachChild(node, child => {
-                Debug.assert(child.pos >= pos);
-                pos = child.end;
-            });
-            Debug.assert(pos <= node.end);
-        }
-    }
-
-    function updateTokenPositionsAndMarkElements(
-        sourceFile: IncrementalNode,
-        changeStart: number,
-        changeRangeOldEnd: number,
-        changeRangeNewEnd: number,
-        delta: number,
-        oldText: string,
-        newText: string,
-        aggressiveChecks: boolean): void {
-
-        visitNode(sourceFile);
-        return;
-
-        function visitNode(child: IncrementalNode) {
-            Debug.assert(child.pos <= child.end);
-            if (child.pos > changeRangeOldEnd) {
-                // Node is entirely past the change range.  We need to move both its pos and
-                // end, forward or backward appropriately.
-                moveElementEntirelyPastChangeRange(child, /*isArray:*/ false, delta, oldText, newText, aggressiveChecks);
-                return;
-            }
-
-            // Check if the element intersects the change range.  If it does, then it is not
-            // reusable.  Also, we'll need to recurse to see what constituent portions we may
-            // be able to use.
-            let fullEnd = child.end;
-            if (fullEnd >= changeStart) {
-                child.intersectsChange = true;
-                child._children = undefined;
-
-                // Adjust the pos or end (or both) of the intersecting element accordingly.
-                adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                forEachChild(child, visitNode, visitArray);
-
-                checkNodePositions(child, aggressiveChecks);
-                return;
-            }
-
-            // Otherwise, the node is entirely before the change range.  No need to do anything with it.
-            Debug.assert(fullEnd < changeStart);
-        }
-
-        function visitArray(array: IncrementalNodeArray) {
-            Debug.assert(array.pos <= array.end);
-            if (array.pos > changeRangeOldEnd) {
-                // Array is entirely after the change range.  We need to move it, and move any of
-                // its children.
-                moveElementEntirelyPastChangeRange(array, /*isArray:*/ true, delta, oldText, newText, aggressiveChecks);
-                return;
-            }
-
-            // Check if the element intersects the change range.  If it does, then it is not
-            // reusable.  Also, we'll need to recurse to see what constituent portions we may
-            // be able to use.
-            let fullEnd = array.end;
-            if (fullEnd >= changeStart) {
-                array.intersectsChange = true;
-                array._children = undefined;
-
-                // Adjust the pos or end (or both) of the intersecting array accordingly.
-                adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                for (let node of array) {
-                    visitNode(node);
-                }
-                return;
-            }
-
-            // Otherwise, the array is entirely before the change range.  No need to do anything with it.
-            Debug.assert(fullEnd < changeStart);
-        }
-    }
-
-    function extendToAffectedRange(sourceFile: SourceFile, changeRange: TextChangeRange): TextChangeRange {
-        // Consider the following code:
-        //      void foo() { /; }
-        //
-        // If the text changes with an insertion of / just before the semicolon then we end up with:
-        //      void foo() { //; }
-        //
-        // If we were to just use the changeRange a is, then we would not rescan the { token
-        // (as it does not intersect the actual original change range).  Because an edit may
-        // change the token touching it, we actually need to look back *at least* one token so
-        // that the prior token sees that change.
-        let maxLookahead = 1;
-
-        let start = changeRange.span.start;
-
-        // the first iteration aligns us with the change start. subsequent iteration move us to
-        // the left by maxLookahead tokens.  We only need to do this as long as we're not at the
-        // start of the tree.
-        for (let i = 0; start > 0 && i <= maxLookahead; i++) {
-            let nearestNode = findNearestNodeStartingBeforeOrAtPosition(sourceFile, start);
-            Debug.assert(nearestNode.pos <= start);
-            let position = nearestNode.pos;
-
-            start = Math.max(0, position - 1);
-        }
-
-        let finalSpan = createTextSpanFromBounds(start, textSpanEnd(changeRange.span));
-        let finalLength = changeRange.newLength + (changeRange.span.start - start);
-
-        return createTextChangeRange(finalSpan, finalLength);
-    }
-
-    function findNearestNodeStartingBeforeOrAtPosition(sourceFile: SourceFile, position: number): Node {
-        let bestResult: Node = sourceFile;
-        let lastNodeEntirelyBeforePosition: Node;
-
-        forEachChild(sourceFile, visit);
-
-        if (lastNodeEntirelyBeforePosition) {
-            let lastChildOfLastEntireNodeBeforePosition = getLastChild(lastNodeEntirelyBeforePosition);
-            if (lastChildOfLastEntireNodeBeforePosition.pos > bestResult.pos) {
-                bestResult = lastChildOfLastEntireNodeBeforePosition;
-            }
-        }
-
-        return bestResult;
-
-        function getLastChild(node: Node): Node {
-            while (true) {
-                let lastChild = getLastChildWorker(node);
-                if (lastChild) {
-                    node = lastChild;
-                }
-                else {
-                    return node;
-                }
-            }
-        }
-
-        function getLastChildWorker(node: Node): Node {
-            let last: Node = undefined;
-            forEachChild(node, child => {
-                if (nodeIsPresent(child)) {
-                    last = child;
-                }
-            });
-            return last;
-        }
-
-        function visit(child: Node) {
-            if (nodeIsMissing(child)) {
-                // Missing nodes are effectively invisible to us.  We never even consider them
-                // When trying to find the nearest node before us.
-                return;
-            }
-
-            // If the child intersects this position, then this node is currently the nearest
-            // node that starts before the position.
-            if (child.pos <= position) {
-                if (child.pos >= bestResult.pos) {
-                    // This node starts before the position, and is closer to the position than
-                    // the previous best node we found.  It is now the new best node.
-                    bestResult = child;
-                }
-
-                // Now, the node may overlap the position, or it may end entirely before the
-                // position.  If it overlaps with the position, then either it, or one of its
-                // children must be the nearest node before the position.  So we can just
-                // recurse into this child to see if we can find something better.
-                if (position < child.end) {
-                    // The nearest node is either this child, or one of the children inside
-                    // of it.  We've already marked this child as the best so far.  Recurse
-                    // in case one of the children is better.
-                    forEachChild(child, visit);
-
-                    // Once we look at the children of this node, then there's no need to
-                    // continue any further.
-                    return true;
-                }
-                else {
-                    Debug.assert(child.end <= position);
-                    // The child ends entirely before this position.  Say you have the following
-                    // (where $ is the position)
-                    //
-                    //      <complex expr 1> ? <complex expr 2> $ : <...> <...>
-                    //
-                    // We would want to find the nearest preceding node in "complex expr 2".
-                    // To support that, we keep track of this node, and once we're done searching
-                    // for a best node, we recurse down this node to see if we can find a good
-                    // result in it.
-                    //
-                    // This approach allows us to quickly skip over nodes that are entirely
-                    // before the position, while still allowing us to find any nodes in the
-                    // last one that might be what we want.
-                    lastNodeEntirelyBeforePosition = child;
-                }
-            }
-            else {
-                Debug.assert(child.pos > position);
-                // We're now at a node that is entirely past the position we're searching for.
-                // This node (and all following nodes) could never contribute to the result,
-                // so just skip them by returning 'true' here.
-                return true;
-            }
-        }
-    }
-
-    function checkChangeRange(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks: boolean) {
-        let oldText = sourceFile.text;
-        if (textChangeRange) {
-            Debug.assert((oldText.length - textChangeRange.span.length + textChangeRange.newLength) === newText.length);
-
-            if (aggressiveChecks || Debug.shouldAssert(AssertionLevel.VeryAggressive)) {
-                let oldTextPrefix = oldText.substr(0, textChangeRange.span.start);
-                let newTextPrefix = newText.substr(0, textChangeRange.span.start);
-                Debug.assert(oldTextPrefix === newTextPrefix);
-
-                let oldTextSuffix = oldText.substring(textSpanEnd(textChangeRange.span), oldText.length);
-                let newTextSuffix = newText.substring(textSpanEnd(textChangeRangeNewSpan(textChangeRange)), newText.length);
-                Debug.assert(oldTextSuffix === newTextSuffix);
-            }
-        }
+        parseTime += new Date().getTime() - start;
+        return result;
     }
 
     // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter
@@ -776,254 +336,20 @@ module ts {
     // becoming detached from any SourceFile).  It is recommended that this SourceFile not
     // be used once 'update' is called on it.
     export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile {
-        aggressiveChecks = aggressiveChecks || Debug.shouldAssert(AssertionLevel.Aggressive);
-
-        checkChangeRange(sourceFile, newText, textChangeRange, aggressiveChecks);
-        if (textChangeRangeIsUnchanged(textChangeRange)) {
-            // if the text didn't change, then we can just return our current source file as-is.
-            return sourceFile;
-        }
-
-        if (sourceFile.statements.length === 0) {
-            // If we don't have any statements in the current source file, then there's no real
-            // way to incrementally parse.  So just do a full parse instead.
-            return parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setNodeParents*/ true)
-        }
-
-        // Make sure we're not trying to incrementally update a source file more than once.  Once
-        // we do an update the original source file is considered unusbale from that point onwards.
-        //
-        // This is because we do incremental parsing in-place.  i.e. we take nodes from the old
-        // tree and give them new positions and parents.  From that point on, trusting the old
-        // tree at all is not possible as far too much of it may violate invariants.
-        let incrementalSourceFile = <IncrementalNode><Node>sourceFile;
-        Debug.assert(!incrementalSourceFile.hasBeenIncrementallyParsed);
-        incrementalSourceFile.hasBeenIncrementallyParsed = true;
-
-        let oldText = sourceFile.text;
-        let syntaxCursor = createSyntaxCursor(sourceFile);
-
-        // Make the actual change larger so that we know to reparse anything whose lookahead
-        // might have intersected the change.
-        let changeRange = extendToAffectedRange(sourceFile, textChangeRange);
-        checkChangeRange(sourceFile, newText, changeRange, aggressiveChecks);
-
-        // Ensure that extending the affected range only moved the start of the change range
-        // earlier in the file.
-        Debug.assert(changeRange.span.start <= textChangeRange.span.start);
-        Debug.assert(textSpanEnd(changeRange.span) === textSpanEnd(textChangeRange.span));
-        Debug.assert(textSpanEnd(textChangeRangeNewSpan(changeRange)) === textSpanEnd(textChangeRangeNewSpan(textChangeRange)));
-
-        // The is the amount the nodes after the edit range need to be adjusted.  It can be
-        // positive (if the edit added characters), negative (if the edit deleted characters)
-        // or zero (if this was a pure overwrite with nothing added/removed).
-        let delta = textChangeRangeNewSpan(changeRange).length - changeRange.span.length;
-
-        // If we added or removed characters during the edit, then we need to go and adjust all
-        // the nodes after the edit.  Those nodes may move forward (if we inserted chars) or they
-        // may move backward (if we deleted chars).
-        //
-        // Doing this helps us out in two ways.  First, it means that any nodes/tokens we want
-        // to reuse are already at the appropriate position in the new text.  That way when we
-        // reuse them, we don't have to figure out if they need to be adjusted.  Second, it makes
-        // it very easy to determine if we can reuse a node.  If the node's position is at where
-        // we are in the text, then we can reuse it.  Otherwise we can't.  If the node's position
-        // is ahead of us, then we'll need to rescan tokens.  If the node's position is behind
-        // us, then we'll need to skip it or crumble it as appropriate
-        //
-        // We will also adjust the positions of nodes that intersect the change range as well.
-        // By doing this, we ensure that all the positions in the old tree are consistent, not
-        // just the positions of nodes entirely before/after the change range.  By being
-        // consistent, we can then easily map from positions to nodes in the old tree easily.
-        //
-        // Also, mark any syntax elements that intersect the changed span.  We know, up front,
-        // that we cannot reuse these elements.
-        updateTokenPositionsAndMarkElements(incrementalSourceFile,
-            changeRange.span.start, textSpanEnd(changeRange.span), textSpanEnd(textChangeRangeNewSpan(changeRange)), delta, oldText, newText, aggressiveChecks);
-
-        // Now that we've set up our internal incremental state just proceed and parse the
-        // source file in the normal fashion.  When possible the parser will retrieve and
-        // reuse nodes from the old tree.
-        //
-        // Note: passing in 'true' for setNodeParents is very important.  When incrementally
-        // parsing, we will be reusing nodes from the old tree, and placing it into new
-        // parents.  If we don't set the parents now, we'll end up with an observably
-        // inconsistent tree.  Setting the parents on the new tree should be very fast.  We
-        // will immediately bail out of walking any subtrees when we can see that their parents
-        // are already correct.
-        let result = parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /* setParentNode */ true)
-
-        return result;
+        return IncrementalParser.updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
     }
 
-    export function isEvalOrArgumentsIdentifier(node: Node): boolean {
-        return node.kind === SyntaxKind.Identifier &&
-            ((<Identifier>node).text === "eval" || (<Identifier>node).text === "arguments");
-    }
+    // Implement the parser as a singleton module.  We do this for perf reasons because creating
+    // parser instances can actually be expensive enough to impact us on projects with many source
+    // files.
+    module Parser {
+        // Share a single scanner across all calls to parse a source file.  This helps speed things
+        // up by avoiding the cost of creating/compiling scanners over and over again.
+        const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ true);
+        const disallowInAndDecoratorContext = ParserContextFlags.DisallowIn | ParserContextFlags.Decorator;
 
-    /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
-    function isUseStrictPrologueDirective(sourceFile: SourceFile, node: Node): boolean {
-        Debug.assert(isPrologueDirective(node));
-        let nodeText = getSourceTextOfNodeFromSourceFile(sourceFile,(<ExpressionStatement>node).expression);
-
-        // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
-        // string to contain unicode escapes (as per ES5).
-        return nodeText === '"use strict"' || nodeText === "'use strict'";
-    }
-
-    interface IncrementalElement extends TextRange {
-        parent?: Node;
-        intersectsChange: boolean
-        length?: number;
-        _children: Node[];
-    }
-
-    interface IncrementalNode extends Node, IncrementalElement {
-        hasBeenIncrementallyParsed: boolean
-    }
-
-    interface IncrementalNodeArray extends NodeArray<IncrementalNode>, IncrementalElement {
-        length: number
-    }
-
-    // Allows finding nodes in the source file at a certain position in an efficient manner.
-    // The implementation takes advantage of the calling pattern it knows the parser will
-    // make in order to optimize finding nodes as quickly as possible.
-    interface SyntaxCursor {
-        currentNode(position: number): IncrementalNode;
-    }
-
-    const enum InvalidPosition {
-        Value = -1
-    }
-
-    function createSyntaxCursor(sourceFile: SourceFile): SyntaxCursor {
-        let currentArray: NodeArray<Node> = sourceFile.statements;
-        let currentArrayIndex = 0;
-
-        Debug.assert(currentArrayIndex < currentArray.length);
-        let current = currentArray[currentArrayIndex];
-        let lastQueriedPosition = InvalidPosition.Value;
-
-        return {
-            currentNode(position: number) {
-                // Only compute the current node if the position is different than the last time
-                // we were asked.  The parser commonly asks for the node at the same position
-                // twice.  Once to know if can read an appropriate list element at a certain point,
-                // and then to actually read and consume the node.
-                if (position !== lastQueriedPosition) {
-                    // Much of the time the parser will need the very next node in the array that
-                    // we just returned a node from.So just simply check for that case and move
-                    // forward in the array instead of searching for the node again.
-                    if (current && current.end === position && currentArrayIndex < (currentArray.length - 1)) {
-                        currentArrayIndex++;
-                        current = currentArray[currentArrayIndex];
-                    }
-
-                    // If we don't have a node, or the node we have isn't in the right position,
-                    // then try to find a viable node at the position requested.
-                    if (!current || current.pos !== position) {
-                        findHighestListElementThatStartsAtPosition(position);
-                    }
-                }
-
-                // Cache this query so that we don't do any extra work if the parser calls back
-                // into us.  Note: this is very common as the parser will make pairs of calls like
-                // 'isListElement -> parseListElement'.  If we were unable to find a node when
-                // called with 'isListElement', we don't want to redo the work when parseListElement
-                // is called immediately after.
-                lastQueriedPosition = position;
-
-                // Either we don'd have a node, or we have a node at the position being asked for.
-                Debug.assert(!current || current.pos === position);
-                return <IncrementalNode>current;
-            }
-        };
-
-        // Finds the highest element in the tree we can find that starts at the provided position.
-        // The element must be a direct child of some node list in the tree.  This way after we
-        // return it, we can easily return its next sibling in the list.
-        function findHighestListElementThatStartsAtPosition(position: number) {
-            // Clear out any cached state about the last node we found.
-            currentArray = undefined;
-            currentArrayIndex = InvalidPosition.Value;
-            current = undefined;
-
-            // Recurse into the source file to find the highest node at this position.
-            forEachChild(sourceFile, visitNode, visitArray);
-            return;
-
-            function visitNode(node: Node) {
-                if (position >= node.pos && position < node.end) {
-                    // Position was within this node.  Keep searching deeper to find the node.
-                    forEachChild(node, visitNode, visitArray);
-
-                    // don't procede any futher in the search.
-                    return true;
-                }
-
-                // position wasn't in this node, have to keep searching.
-                return false;
-            }
-
-            function visitArray(array: NodeArray<Node>) {
-                if (position >= array.pos && position < array.end) {
-                    // position was in this array.  Search through this array to see if we find a
-                    // viable element.
-                    for (let i = 0, n = array.length; i < n; i++) {
-                        let child = array[i];
-                        if (child) {
-                            if (child.pos === position) {
-                                // Found the right node.  We're done.
-                                currentArray = array;
-                                currentArrayIndex = i;
-                                current = child;
-                                return true;
-                            }
-                            else {
-                                if (child.pos < position && position < child.end) {
-                                    // Position in somewhere within this child.  Search in it and
-                                    // stop searching in this array.
-                                    forEachChild(child, visitNode, visitArray);
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // position wasn't in this array, have to keep searching.
-                return false;
-            }
-        }
-    }
-
-    export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
-        let start = new Date().getTime();
-        let result = parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes);
-
-        parseTime += new Date().getTime() - start;
-        return result;
-    }
-
-    interface Parser {
-        parse(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: SyntaxCursor, setParentNodes?: boolean): SourceFile;
-    }
-
-    // Share a single scanner across all calls to parse a source file.  This helps speed things
-    // up by avoiding the cost of creating/compiling scanners over and over again.
-    const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ true);
-    const parser = createParser(ScriptTarget.Latest);
-
-    function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: SyntaxCursor, setParentNodes = false): SourceFile {
-        return parser.parse(fileName, sourceText, languageVersion, syntaxCursor, setParentNodes);
-    }
-
-    const disallowInAndDecoratorContext = ParserContextFlags.DisallowIn | ParserContextFlags.Decorator;
-
-    function createParser(languageVersion: ScriptTarget): Parser {
         let sourceFile: SourceFile;
-        let syntaxCursor: SyntaxCursor;
+        let syntaxCursor: IncrementalParser.SyntaxCursor;
 
         let token: SyntaxKind;
         let sourceText: string;
@@ -1110,9 +436,7 @@ module ts {
         // attached to the EOF token.
         let parseErrorBeforeNextFinishedNode: boolean = false;
 
-        return { parse };
-
-        function parse(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: SyntaxCursor, setParentNodes?: boolean): SourceFile {
+        export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
             sourceText = _sourceText;
             syntaxCursor = _syntaxCursor;
 
@@ -1124,7 +448,7 @@ module ts {
             contextFlags = 0;
             parseErrorBeforeNextFinishedNode = false;
 
-            createSourceFile(fileName);
+            createSourceFile(fileName, languageVersion);
 
             // Initialize and prime the scanner before parsing the source elements.
             scanner.setText(sourceText);
@@ -1165,7 +489,32 @@ module ts {
             return result;
         }
 
-        function createSourceFile(fileName: string) {
+        function fixupParentReferences(sourceFile: SourceFile) {
+            // normally parent references are set during binding. However, for clients that only need
+            // a syntax tree, and no semantic features, then the binding process is an unnecessary
+            // overhead.  This functions allows us to set all the parents, without all the expense of
+            // binding.
+
+            let parent: Node = sourceFile;
+            forEachChild(sourceFile, visitNode);
+            return;
+
+            function visitNode(n: Node): void {
+                // walk down setting parents that differ from the parent we think it should be.  This
+                // allows us to quickly bail out of setting parents for subtrees during incremental
+                // parsing
+                if (n.parent !== parent) {
+                    n.parent = parent;
+
+                    let saveParent = parent;
+                    parent = n;
+                    forEachChild(n, visitNode);
+                    parent = saveParent;
+                }
+            }
+        }
+
+        function createSourceFile(fileName: string, languageVersion: ScriptTarget) {
             sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, /*pos*/ 0);
 
             sourceFile.pos = 0;
@@ -1511,7 +860,7 @@ module ts {
 
             return node;
         }
-        
+
         function createMissingNode(kind: SyntaxKind, reportAtCurrentPosition: boolean, diagnosticMessage: DiagnosticMessage, arg0?: any): Node {
             if (reportAtCurrentPosition) {
                 parseErrorAtPosition(scanner.getStartPos(), 0, diagnosticMessage, arg0);
@@ -1540,7 +889,7 @@ module ts {
 
                 // Store original token kind if it is not just an Identifier so we can report appropriate error later in type checker
                 if (token !== SyntaxKind.Identifier) {
-                    node.originalKeywordKind  = token;
+                    node.originalKeywordKind = token;
                 }
                 node.text = internIdentifier(scanner.getTokenValue());
                 nextToken();
@@ -1879,6 +1228,16 @@ module ts {
             return result;
         }
 
+        /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
+        function isUseStrictPrologueDirective(sourceFile: SourceFile, node: Node): boolean {
+            Debug.assert(isPrologueDirective(node));
+            let nodeText = getSourceTextOfNodeFromSourceFile(sourceFile, (<ExpressionStatement>node).expression);
+
+            // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
+            // string to contain unicode escapes (as per ES5).
+            return nodeText === '"use strict"' || nodeText === "'use strict'";
+        }
+
         function parseListElement<T extends Node>(parsingContext: ParsingContext, parseElement: () => T): T {
             let node = currentNode(parsingContext);
             if (node) {
@@ -2169,6 +1528,32 @@ module ts {
             nextToken();
             return false;
         }
+
+        function parsingContextErrors(context: ParsingContext): DiagnosticMessage {
+            switch (context) {
+                case ParsingContext.SourceElements: return Diagnostics.Declaration_or_statement_expected;
+                case ParsingContext.ModuleElements: return Diagnostics.Declaration_or_statement_expected;
+                case ParsingContext.BlockStatements: return Diagnostics.Statement_expected;
+                case ParsingContext.SwitchClauses: return Diagnostics.case_or_default_expected;
+                case ParsingContext.SwitchClauseStatements: return Diagnostics.Statement_expected;
+                case ParsingContext.TypeMembers: return Diagnostics.Property_or_signature_expected;
+                case ParsingContext.ClassMembers: return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
+                case ParsingContext.EnumMembers: return Diagnostics.Enum_member_expected;
+                case ParsingContext.HeritageClauseElement: return Diagnostics.Expression_expected;
+                case ParsingContext.VariableDeclarations: return Diagnostics.Variable_declaration_expected;
+                case ParsingContext.ObjectBindingElements: return Diagnostics.Property_destructuring_pattern_expected;
+                case ParsingContext.ArrayBindingElements: return Diagnostics.Array_element_destructuring_pattern_expected;
+                case ParsingContext.ArgumentExpressions: return Diagnostics.Argument_expression_expected;
+                case ParsingContext.ObjectLiteralMembers: return Diagnostics.Property_assignment_expected;
+                case ParsingContext.ArrayLiteralMembers: return Diagnostics.Expression_or_comma_expected;
+                case ParsingContext.Parameters: return Diagnostics.Parameter_declaration_expected;
+                case ParsingContext.TypeParameters: return Diagnostics.Type_parameter_declaration_expected;
+                case ParsingContext.TypeArguments: return Diagnostics.Type_argument_expected;
+                case ParsingContext.TupleElementTypes: return Diagnostics.Type_expected;
+                case ParsingContext.HeritageClauses: return Diagnostics.Unexpected_token_expected;
+                case ParsingContext.ImportOrExportSpecifiers: return Diagnostics.Identifier_expected;
+            }
+        };
 
         // Parses a comma-delimited list of elements
         function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimeter?: boolean): NodeArray<T> {
@@ -2480,10 +1865,10 @@ module ts {
         }
 
         function fillSignature(
-                returnToken: SyntaxKind,
-                yieldAndGeneratorParameterContext: boolean,
-                requireCompleteParameterList: boolean,
-                signature: SignatureDeclaration): void {
+            returnToken: SyntaxKind,
+            yieldAndGeneratorParameterContext: boolean,
+            requireCompleteParameterList: boolean,
+            signature: SignatureDeclaration): void {
             let returnTokenRequired = returnToken === SyntaxKind.EqualsGreaterThanToken;
             signature.typeParameters = parseTypeParameters();
             signature.parameters = parseParameterList(yieldAndGeneratorParameterContext, requireCompleteParameterList);
@@ -3817,9 +3202,9 @@ module ts {
 
                 case SyntaxKind.CommaToken:                     // foo<x>,
                 case SyntaxKind.OpenBraceToken:                 // foo<x> {
-                    // We don't want to treat these as type arguments.  Otherwise we'll parse this
-                    // as an invocation expression.  Instead, we want to parse out the expression 
-                    // in isolation from the type arguments.
+                // We don't want to treat these as type arguments.  Otherwise we'll parse this
+                // as an invocation expression.  Instead, we want to parse out the expression 
+                // in isolation from the type arguments.
 
                 default:
                     // Anything else treat as an expression.
@@ -3882,7 +3267,7 @@ module ts {
         function parseArgumentOrArrayLiteralElement(): Expression {
             return token === SyntaxKind.DotDotDotToken ? parseSpreadElement() :
                 token === SyntaxKind.CommaToken ? <Expression>createNode(SyntaxKind.OmittedExpression) :
-                parseAssignmentExpressionOrHigher();
+                    parseAssignmentExpressionOrHigher();
         }
 
         function parseArgumentExpression(): Expression {
@@ -5367,7 +4752,7 @@ module ts {
         function processReferenceComments(sourceFile: SourceFile): void {
             let triviaScanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/false, sourceText);
             let referencedFiles: FileReference[] = [];
-            let amdDependencies: {path: string; name: string}[] = [];
+            let amdDependencies: { path: string; name: string }[] = [];
             let amdModuleName: string;
 
             // Keep scanning all the leading trivia in the file until we get to something that
@@ -5415,7 +4800,7 @@ module ts {
                         let pathMatchResult = pathRegex.exec(comment);
                         let nameMatchResult = nameRegex.exec(comment);
                         if (pathMatchResult) {
-                            let amdDependency = {path: pathMatchResult[2], name: nameMatchResult ? nameMatchResult[2] : undefined };
+                            let amdDependency = { path: pathMatchResult[2], name: nameMatchResult ? nameMatchResult[2] : undefined };
                             amdDependencies.push(amdDependency);
                         }
                     }
@@ -5430,47 +4815,605 @@ module ts {
         function setExternalModuleIndicator(sourceFile: SourceFile) {
             sourceFile.externalModuleIndicator = forEach(sourceFile.statements, node =>
                 node.flags & NodeFlags.Export
-                || node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
-                || node.kind === SyntaxKind.ImportDeclaration
-                || node.kind === SyntaxKind.ExportAssignment
-                || node.kind === SyntaxKind.ExportDeclaration
+                    || node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
+                    || node.kind === SyntaxKind.ImportDeclaration
+                    || node.kind === SyntaxKind.ExportAssignment
+                    || node.kind === SyntaxKind.ExportDeclaration
                     ? node
                     : undefined);
         }
+
+        const enum ParsingContext {
+            SourceElements,            // Elements in source file
+            ModuleElements,            // Elements in module declaration
+            BlockStatements,           // Statements in block
+            SwitchClauses,             // Clauses in switch statement
+            SwitchClauseStatements,    // Statements in switch clause
+            TypeMembers,               // Members in interface or type literal
+            ClassMembers,              // Members in class declaration
+            EnumMembers,               // Members in enum declaration
+            HeritageClauseElement,     // Elements in a heritage clause
+            VariableDeclarations,      // Variable declarations in variable statement
+            ObjectBindingElements,     // Binding elements in object binding list
+            ArrayBindingElements,      // Binding elements in array binding list
+            ArgumentExpressions,       // Expressions in argument list
+            ObjectLiteralMembers,      // Members in object literal
+            ArrayLiteralMembers,       // Members in array literal
+            Parameters,                // Parameters in parameter list
+            TypeParameters,            // Type parameters in type parameter list
+            TypeArguments,             // Type arguments in type argument list
+            TupleElementTypes,         // Element types in tuple element type list
+            HeritageClauses,           // Heritage clauses for a class or interface declaration.
+            ImportOrExportSpecifiers,  // Named import clause's import specifier list
+            Count                      // Number of parsing contexts
+        }
+
+        const enum Tristate {
+            False,
+            True,
+            Unknown
+        }
     }
 
-    export function isLeftHandSideExpression(expr: Expression): boolean {
-        if (expr) {
-            switch (expr.kind) {
-                case SyntaxKind.PropertyAccessExpression:
-                case SyntaxKind.ElementAccessExpression:
-                case SyntaxKind.NewExpression:
-                case SyntaxKind.CallExpression:
-                case SyntaxKind.TaggedTemplateExpression:
-                case SyntaxKind.ArrayLiteralExpression:
-                case SyntaxKind.ParenthesizedExpression:
-                case SyntaxKind.ObjectLiteralExpression:
-                case SyntaxKind.ClassExpression:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.Identifier:
-                case SyntaxKind.RegularExpressionLiteral:
-                case SyntaxKind.NumericLiteral:
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.NoSubstitutionTemplateLiteral:
-                case SyntaxKind.TemplateExpression:
-                case SyntaxKind.FalseKeyword:
-                case SyntaxKind.NullKeyword:
-                case SyntaxKind.ThisKeyword:
-                case SyntaxKind.TrueKeyword:
-                case SyntaxKind.SuperKeyword:
-                    return true;
+    module IncrementalParser {
+        export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks: boolean): SourceFile {
+            aggressiveChecks = aggressiveChecks || Debug.shouldAssert(AssertionLevel.Aggressive);
+
+            checkChangeRange(sourceFile, newText, textChangeRange, aggressiveChecks);
+            if (textChangeRangeIsUnchanged(textChangeRange)) {
+                // if the text didn't change, then we can just return our current source file as-is.
+                return sourceFile;
+            }
+
+            if (sourceFile.statements.length === 0) {
+                // If we don't have any statements in the current source file, then there's no real
+                // way to incrementally parse.  So just do a full parse instead.
+                return Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setNodeParents*/ true)
+            }
+
+            // Make sure we're not trying to incrementally update a source file more than once.  Once
+            // we do an update the original source file is considered unusbale from that point onwards.
+            //
+            // This is because we do incremental parsing in-place.  i.e. we take nodes from the old
+            // tree and give them new positions and parents.  From that point on, trusting the old
+            // tree at all is not possible as far too much of it may violate invariants.
+            let incrementalSourceFile = <IncrementalNode><Node>sourceFile;
+            Debug.assert(!incrementalSourceFile.hasBeenIncrementallyParsed);
+            incrementalSourceFile.hasBeenIncrementallyParsed = true;
+
+            let oldText = sourceFile.text;
+            let syntaxCursor = createSyntaxCursor(sourceFile);
+
+            // Make the actual change larger so that we know to reparse anything whose lookahead
+            // might have intersected the change.
+            let changeRange = extendToAffectedRange(sourceFile, textChangeRange);
+            checkChangeRange(sourceFile, newText, changeRange, aggressiveChecks);
+
+            // Ensure that extending the affected range only moved the start of the change range
+            // earlier in the file.
+            Debug.assert(changeRange.span.start <= textChangeRange.span.start);
+            Debug.assert(textSpanEnd(changeRange.span) === textSpanEnd(textChangeRange.span));
+            Debug.assert(textSpanEnd(textChangeRangeNewSpan(changeRange)) === textSpanEnd(textChangeRangeNewSpan(textChangeRange)));
+
+            // The is the amount the nodes after the edit range need to be adjusted.  It can be
+            // positive (if the edit added characters), negative (if the edit deleted characters)
+            // or zero (if this was a pure overwrite with nothing added/removed).
+            let delta = textChangeRangeNewSpan(changeRange).length - changeRange.span.length;
+
+            // If we added or removed characters during the edit, then we need to go and adjust all
+            // the nodes after the edit.  Those nodes may move forward (if we inserted chars) or they
+            // may move backward (if we deleted chars).
+            //
+            // Doing this helps us out in two ways.  First, it means that any nodes/tokens we want
+            // to reuse are already at the appropriate position in the new text.  That way when we
+            // reuse them, we don't have to figure out if they need to be adjusted.  Second, it makes
+            // it very easy to determine if we can reuse a node.  If the node's position is at where
+            // we are in the text, then we can reuse it.  Otherwise we can't.  If the node's position
+            // is ahead of us, then we'll need to rescan tokens.  If the node's position is behind
+            // us, then we'll need to skip it or crumble it as appropriate
+            //
+            // We will also adjust the positions of nodes that intersect the change range as well.
+            // By doing this, we ensure that all the positions in the old tree are consistent, not
+            // just the positions of nodes entirely before/after the change range.  By being
+            // consistent, we can then easily map from positions to nodes in the old tree easily.
+            //
+            // Also, mark any syntax elements that intersect the changed span.  We know, up front,
+            // that we cannot reuse these elements.
+            updateTokenPositionsAndMarkElements(incrementalSourceFile,
+                changeRange.span.start, textSpanEnd(changeRange.span), textSpanEnd(textChangeRangeNewSpan(changeRange)), delta, oldText, newText, aggressiveChecks);
+
+            // Now that we've set up our internal incremental state just proceed and parse the
+            // source file in the normal fashion.  When possible the parser will retrieve and
+            // reuse nodes from the old tree.
+            //
+            // Note: passing in 'true' for setNodeParents is very important.  When incrementally
+            // parsing, we will be reusing nodes from the old tree, and placing it into new
+            // parents.  If we don't set the parents now, we'll end up with an observably
+            // inconsistent tree.  Setting the parents on the new tree should be very fast.  We
+            // will immediately bail out of walking any subtrees when we can see that their parents
+            // are already correct.
+            let result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /* setParentNode */ true)
+
+            return result;
+        }
+
+        function moveElementEntirelyPastChangeRange(element: IncrementalElement, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
+            if (isArray) {
+                visitArray(<IncrementalNodeArray>element);
+            }
+            else {
+                visitNode(<IncrementalNode>element);
+            }
+            return;
+
+            function visitNode(node: IncrementalNode) {
+                if (aggressiveChecks && shouldCheckNode(node)) {
+                    var text = oldText.substring(node.pos, node.end);
+                }
+
+                // Ditch any existing LS children we may have created.  This way we can avoid
+                // moving them forward.
+                node._children = undefined;
+                node.pos += delta;
+                node.end += delta;
+
+                if (aggressiveChecks && shouldCheckNode(node)) {
+                    Debug.assert(text === newText.substring(node.pos, node.end));
+                }
+
+                forEachChild(node, visitNode, visitArray);
+                checkNodePositions(node, aggressiveChecks);
+            }
+
+            function visitArray(array: IncrementalNodeArray) {
+                array._children = undefined;
+                array.pos += delta;
+                array.end += delta;
+
+                for (let node of array) {
+                    visitNode(node);
+                }
             }
         }
 
-        return false;
-    }
+        function shouldCheckNode(node: Node) {
+            switch (node.kind) {
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.Identifier:
+                    return true;
+            }
 
-    export function isAssignmentOperator(token: SyntaxKind): boolean {
-        return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
+            return false;
+        }
+
+        function adjustIntersectingElement(element: IncrementalElement, changeStart: number, changeRangeOldEnd: number, changeRangeNewEnd: number, delta: number) {
+            Debug.assert(element.end >= changeStart, "Adjusting an element that was entirely before the change range");
+            Debug.assert(element.pos <= changeRangeOldEnd, "Adjusting an element that was entirely after the change range");
+            Debug.assert(element.pos <= element.end);
+
+            // We have an element that intersects the change range in some way.  It may have its
+            // start, or its end (or both) in the changed range.  We want to adjust any part
+            // that intersects such that the final tree is in a consistent state.  i.e. all
+            // chlidren have spans within the span of their parent, and all siblings are ordered
+            // properly.
+
+            // We may need to update both the 'pos' and the 'end' of the element.
+
+            // If the 'pos' is before the start of the change, then we don't need to touch it.
+            // If it isn't, then the 'pos' must be inside the change.  How we update it will
+            // depend if delta is  positive or negative.  If delta is positive then we have
+            // something like:
+            //
+            //  -------------------AAA-----------------
+            //  -------------------BBBCCCCCCC-----------------
+            //
+            // In this case, we consider any node that started in the change range to still be
+            // starting at the same position.
+            //
+            // however, if the delta is negative, then we instead have something like this:
+            //
+            //  -------------------XXXYYYYYYY-----------------
+            //  -------------------ZZZ-----------------
+            //
+            // In this case, any element that started in the 'X' range will keep its position.
+            // However any element htat started after that will have their pos adjusted to be
+            // at the end of the new range.  i.e. any node that started in the 'Y' range will
+            // be adjusted to have their start at the end of the 'Z' range.
+            //
+            // The element will keep its position if possible.  Or Move backward to the new-end
+            // if it's in the 'Y' range.
+            element.pos = Math.min(element.pos, changeRangeNewEnd);
+
+            // If the 'end' is after the change range, then we always adjust it by the delta
+            // amount.  However, if the end is in the change range, then how we adjust it
+            // will depend on if delta is  positive or negative.  If delta is positive then we
+            // have something like:
+            //
+            //  -------------------AAA-----------------
+            //  -------------------BBBCCCCCCC-----------------
+            //
+            // In this case, we consider any node that ended inside the change range to keep its
+            // end position.
+            //
+            // however, if the delta is negative, then we instead have something like this:
+            //
+            //  -------------------XXXYYYYYYY-----------------
+            //  -------------------ZZZ-----------------
+            //
+            // In this case, any element that ended in the 'X' range will keep its position.
+            // However any element htat ended after that will have their pos adjusted to be
+            // at the end of the new range.  i.e. any node that ended in the 'Y' range will
+            // be adjusted to have their end at the end of the 'Z' range.
+            if (element.end >= changeRangeOldEnd) {
+                // Element ends after the change range.  Always adjust the end pos.
+                element.end += delta;
+            }
+            else {
+                // Element ends in the change range.  The element will keep its position if
+                // possible. Or Move backward to the new-end if it's in the 'Y' range.
+                element.end = Math.min(element.end, changeRangeNewEnd);
+            }
+
+            Debug.assert(element.pos <= element.end);
+            if (element.parent) {
+                Debug.assert(element.pos >= element.parent.pos);
+                Debug.assert(element.end <= element.parent.end);
+            }
+        }
+
+        function checkNodePositions(node: Node, aggressiveChecks: boolean) {
+            if (aggressiveChecks) {
+                let pos = node.pos;
+                forEachChild(node, child => {
+                    Debug.assert(child.pos >= pos);
+                    pos = child.end;
+                });
+                Debug.assert(pos <= node.end);
+            }
+        }
+
+        function updateTokenPositionsAndMarkElements(
+            sourceFile: IncrementalNode,
+            changeStart: number,
+            changeRangeOldEnd: number,
+            changeRangeNewEnd: number,
+            delta: number,
+            oldText: string,
+            newText: string,
+            aggressiveChecks: boolean): void {
+
+            visitNode(sourceFile);
+            return;
+
+            function visitNode(child: IncrementalNode) {
+                Debug.assert(child.pos <= child.end);
+                if (child.pos > changeRangeOldEnd) {
+                    // Node is entirely past the change range.  We need to move both its pos and
+                    // end, forward or backward appropriately.
+                    moveElementEntirelyPastChangeRange(child, /*isArray:*/ false, delta, oldText, newText, aggressiveChecks);
+                    return;
+                }
+
+                // Check if the element intersects the change range.  If it does, then it is not
+                // reusable.  Also, we'll need to recurse to see what constituent portions we may
+                // be able to use.
+                let fullEnd = child.end;
+                if (fullEnd >= changeStart) {
+                    child.intersectsChange = true;
+                    child._children = undefined;
+
+                    // Adjust the pos or end (or both) of the intersecting element accordingly.
+                    adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
+                    forEachChild(child, visitNode, visitArray);
+
+                    checkNodePositions(child, aggressiveChecks);
+                    return;
+                }
+
+                // Otherwise, the node is entirely before the change range.  No need to do anything with it.
+                Debug.assert(fullEnd < changeStart);
+            }
+
+            function visitArray(array: IncrementalNodeArray) {
+                Debug.assert(array.pos <= array.end);
+                if (array.pos > changeRangeOldEnd) {
+                    // Array is entirely after the change range.  We need to move it, and move any of
+                    // its children.
+                    moveElementEntirelyPastChangeRange(array, /*isArray:*/ true, delta, oldText, newText, aggressiveChecks);
+                    return;
+                }
+
+                // Check if the element intersects the change range.  If it does, then it is not
+                // reusable.  Also, we'll need to recurse to see what constituent portions we may
+                // be able to use.
+                let fullEnd = array.end;
+                if (fullEnd >= changeStart) {
+                    array.intersectsChange = true;
+                    array._children = undefined;
+
+                    // Adjust the pos or end (or both) of the intersecting array accordingly.
+                    adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
+                    for (let node of array) {
+                        visitNode(node);
+                    }
+                    return;
+                }
+
+                // Otherwise, the array is entirely before the change range.  No need to do anything with it.
+                Debug.assert(fullEnd < changeStart);
+            }
+        }
+
+        function extendToAffectedRange(sourceFile: SourceFile, changeRange: TextChangeRange): TextChangeRange {
+            // Consider the following code:
+            //      void foo() { /; }
+            //
+            // If the text changes with an insertion of / just before the semicolon then we end up with:
+            //      void foo() { //; }
+            //
+            // If we were to just use the changeRange a is, then we would not rescan the { token
+            // (as it does not intersect the actual original change range).  Because an edit may
+            // change the token touching it, we actually need to look back *at least* one token so
+            // that the prior token sees that change.
+            let maxLookahead = 1;
+
+            let start = changeRange.span.start;
+
+            // the first iteration aligns us with the change start. subsequent iteration move us to
+            // the left by maxLookahead tokens.  We only need to do this as long as we're not at the
+            // start of the tree.
+            for (let i = 0; start > 0 && i <= maxLookahead; i++) {
+                let nearestNode = findNearestNodeStartingBeforeOrAtPosition(sourceFile, start);
+                Debug.assert(nearestNode.pos <= start);
+                let position = nearestNode.pos;
+
+                start = Math.max(0, position - 1);
+            }
+
+            let finalSpan = createTextSpanFromBounds(start, textSpanEnd(changeRange.span));
+            let finalLength = changeRange.newLength + (changeRange.span.start - start);
+
+            return createTextChangeRange(finalSpan, finalLength);
+        }
+
+        function findNearestNodeStartingBeforeOrAtPosition(sourceFile: SourceFile, position: number): Node {
+            let bestResult: Node = sourceFile;
+            let lastNodeEntirelyBeforePosition: Node;
+
+            forEachChild(sourceFile, visit);
+
+            if (lastNodeEntirelyBeforePosition) {
+                let lastChildOfLastEntireNodeBeforePosition = getLastChild(lastNodeEntirelyBeforePosition);
+                if (lastChildOfLastEntireNodeBeforePosition.pos > bestResult.pos) {
+                    bestResult = lastChildOfLastEntireNodeBeforePosition;
+                }
+            }
+
+            return bestResult;
+
+            function getLastChild(node: Node): Node {
+                while (true) {
+                    let lastChild = getLastChildWorker(node);
+                    if (lastChild) {
+                        node = lastChild;
+                    }
+                    else {
+                        return node;
+                    }
+                }
+            }
+
+            function getLastChildWorker(node: Node): Node {
+                let last: Node = undefined;
+                forEachChild(node, child => {
+                    if (nodeIsPresent(child)) {
+                        last = child;
+                    }
+                });
+                return last;
+            }
+
+            function visit(child: Node) {
+                if (nodeIsMissing(child)) {
+                    // Missing nodes are effectively invisible to us.  We never even consider them
+                    // When trying to find the nearest node before us.
+                    return;
+                }
+
+                // If the child intersects this position, then this node is currently the nearest
+                // node that starts before the position.
+                if (child.pos <= position) {
+                    if (child.pos >= bestResult.pos) {
+                        // This node starts before the position, and is closer to the position than
+                        // the previous best node we found.  It is now the new best node.
+                        bestResult = child;
+                    }
+
+                    // Now, the node may overlap the position, or it may end entirely before the
+                    // position.  If it overlaps with the position, then either it, or one of its
+                    // children must be the nearest node before the position.  So we can just
+                    // recurse into this child to see if we can find something better.
+                    if (position < child.end) {
+                        // The nearest node is either this child, or one of the children inside
+                        // of it.  We've already marked this child as the best so far.  Recurse
+                        // in case one of the children is better.
+                        forEachChild(child, visit);
+
+                        // Once we look at the children of this node, then there's no need to
+                        // continue any further.
+                        return true;
+                    }
+                    else {
+                        Debug.assert(child.end <= position);
+                        // The child ends entirely before this position.  Say you have the following
+                        // (where $ is the position)
+                        //
+                        //      <complex expr 1> ? <complex expr 2> $ : <...> <...>
+                        //
+                        // We would want to find the nearest preceding node in "complex expr 2".
+                        // To support that, we keep track of this node, and once we're done searching
+                        // for a best node, we recurse down this node to see if we can find a good
+                        // result in it.
+                        //
+                        // This approach allows us to quickly skip over nodes that are entirely
+                        // before the position, while still allowing us to find any nodes in the
+                        // last one that might be what we want.
+                        lastNodeEntirelyBeforePosition = child;
+                    }
+                }
+                else {
+                    Debug.assert(child.pos > position);
+                    // We're now at a node that is entirely past the position we're searching for.
+                    // This node (and all following nodes) could never contribute to the result,
+                    // so just skip them by returning 'true' here.
+                    return true;
+                }
+            }
+        }
+
+        function checkChangeRange(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks: boolean) {
+            let oldText = sourceFile.text;
+            if (textChangeRange) {
+                Debug.assert((oldText.length - textChangeRange.span.length + textChangeRange.newLength) === newText.length);
+
+                if (aggressiveChecks || Debug.shouldAssert(AssertionLevel.VeryAggressive)) {
+                    let oldTextPrefix = oldText.substr(0, textChangeRange.span.start);
+                    let newTextPrefix = newText.substr(0, textChangeRange.span.start);
+                    Debug.assert(oldTextPrefix === newTextPrefix);
+
+                    let oldTextSuffix = oldText.substring(textSpanEnd(textChangeRange.span), oldText.length);
+                    let newTextSuffix = newText.substring(textSpanEnd(textChangeRangeNewSpan(textChangeRange)), newText.length);
+                    Debug.assert(oldTextSuffix === newTextSuffix);
+                }
+            }
+        }
+
+        interface IncrementalElement extends TextRange {
+            parent?: Node;
+            intersectsChange: boolean
+            length?: number;
+            _children: Node[];
+        }
+
+        export interface IncrementalNode extends Node, IncrementalElement {
+            hasBeenIncrementallyParsed: boolean
+        }
+
+        interface IncrementalNodeArray extends NodeArray<IncrementalNode>, IncrementalElement {
+            length: number
+        }
+
+        // Allows finding nodes in the source file at a certain position in an efficient manner.
+        // The implementation takes advantage of the calling pattern it knows the parser will
+        // make in order to optimize finding nodes as quickly as possible.
+        export interface SyntaxCursor {
+            currentNode(position: number): IncrementalNode;
+        }
+
+        function createSyntaxCursor(sourceFile: SourceFile): SyntaxCursor {
+            let currentArray: NodeArray<Node> = sourceFile.statements;
+            let currentArrayIndex = 0;
+
+            Debug.assert(currentArrayIndex < currentArray.length);
+            let current = currentArray[currentArrayIndex];
+            let lastQueriedPosition = InvalidPosition.Value;
+
+            return {
+                currentNode(position: number) {
+                    // Only compute the current node if the position is different than the last time
+                    // we were asked.  The parser commonly asks for the node at the same position
+                    // twice.  Once to know if can read an appropriate list element at a certain point,
+                    // and then to actually read and consume the node.
+                    if (position !== lastQueriedPosition) {
+                        // Much of the time the parser will need the very next node in the array that
+                        // we just returned a node from.So just simply check for that case and move
+                        // forward in the array instead of searching for the node again.
+                        if (current && current.end === position && currentArrayIndex < (currentArray.length - 1)) {
+                            currentArrayIndex++;
+                            current = currentArray[currentArrayIndex];
+                        }
+
+                        // If we don't have a node, or the node we have isn't in the right position,
+                        // then try to find a viable node at the position requested.
+                        if (!current || current.pos !== position) {
+                            findHighestListElementThatStartsAtPosition(position);
+                        }
+                    }
+
+                    // Cache this query so that we don't do any extra work if the parser calls back
+                    // into us.  Note: this is very common as the parser will make pairs of calls like
+                    // 'isListElement -> parseListElement'.  If we were unable to find a node when
+                    // called with 'isListElement', we don't want to redo the work when parseListElement
+                    // is called immediately after.
+                    lastQueriedPosition = position;
+
+                    // Either we don'd have a node, or we have a node at the position being asked for.
+                    Debug.assert(!current || current.pos === position);
+                    return <IncrementalNode>current;
+                }
+            };
+
+            // Finds the highest element in the tree we can find that starts at the provided position.
+            // The element must be a direct child of some node list in the tree.  This way after we
+            // return it, we can easily return its next sibling in the list.
+            function findHighestListElementThatStartsAtPosition(position: number) {
+                // Clear out any cached state about the last node we found.
+                currentArray = undefined;
+                currentArrayIndex = InvalidPosition.Value;
+                current = undefined;
+
+                // Recurse into the source file to find the highest node at this position.
+                forEachChild(sourceFile, visitNode, visitArray);
+                return;
+
+                function visitNode(node: Node) {
+                    if (position >= node.pos && position < node.end) {
+                        // Position was within this node.  Keep searching deeper to find the node.
+                        forEachChild(node, visitNode, visitArray);
+
+                        // don't procede any futher in the search.
+                        return true;
+                    }
+
+                    // position wasn't in this node, have to keep searching.
+                    return false;
+                }
+
+                function visitArray(array: NodeArray<Node>) {
+                    if (position >= array.pos && position < array.end) {
+                        // position was in this array.  Search through this array to see if we find a
+                        // viable element.
+                        for (let i = 0, n = array.length; i < n; i++) {
+                            let child = array[i];
+                            if (child) {
+                                if (child.pos === position) {
+                                    // Found the right node.  We're done.
+                                    currentArray = array;
+                                    currentArrayIndex = i;
+                                    current = child;
+                                    return true;
+                                }
+                                else {
+                                    if (child.pos < position && position < child.end) {
+                                        // Position in somewhere within this child.  Search in it and
+                                        // stop searching in this array.
+                                        forEachChild(child, visitNode, visitArray);
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // position wasn't in this array, have to keep searching.
+                    return false;
+                }
+            }
+        }
+
+        const enum InvalidPosition {
+            Value = -1
+        }
     }
 }
