@@ -3822,6 +3822,10 @@ module ts {
             return undefined;
         }
 
+        function getTypeFromJSDocArrayType(node: JSDocArrayType): Type {
+            return createArrayType(getTypeFromTypeNode(node.elementType));
+        }
+
         function getTypeFromJSDocUnionType(node: JSDocUnionType): Type {
             let types = map(node.types, getTypeFromTypeNode);
             for (let type of types) {
@@ -3881,12 +3885,12 @@ module ts {
                 case SyntaxKind.QualifiedName:
                     let symbol = getSymbolInfo(node);
                     return symbol && getDeclaredTypeOfSymbol(symbol);
-                default:
-                    return unknownType;
                 case SyntaxKind.JSDocAllType:
                     return anyType;
                 case SyntaxKind.JSDocUnknownType:
                     return unknownType;
+                case SyntaxKind.JSDocArrayType:
+                    return getTypeFromJSDocArrayType(<JSDocArrayType>node);
                 case SyntaxKind.JSDocUnionType:
                     return getTypeFromJSDocUnionType(<JSDocUnionType>node);
                 case SyntaxKind.JSDocNullableType:
@@ -3895,7 +3899,7 @@ module ts {
                     return getTypeFromTypeNode((<JSDocNonNullableType>node).type);
                 case SyntaxKind.JSDocRecordType:
                     // NYI:
-                    break;
+                    return undefined;
                 case SyntaxKind.JSDocTypeReference:
                     return getTypeForJSDocTypeReference(<JSDocTypeReference>node);
                 case SyntaxKind.JSDocOptionalType:
@@ -3908,7 +3912,9 @@ module ts {
                     return getTypeFromTypeNode((<JSDocConstructorType>node).type);
                 case SyntaxKind.JSDocThisType:
                     // NYI:
-                    break;
+                    return undefined;
+                default:
+                    return unknownType;
             }
         }
 
