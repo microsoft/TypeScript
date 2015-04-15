@@ -161,6 +161,13 @@ module ts {
             name: "emitDecoratorMetadata",
             type: "boolean",
             experimental: true
+        },
+        {
+            name: "indentStyle",
+            type: { "spaces4": IndentStyles.SP4, "spaces2": IndentStyles.SP2, "tabs": IndentStyles.TAB },
+            description: Diagnostics.Specify_indentation_style_Colon_spaces4_4_spaces_default_spaces2_2_spaces_or_tabs_tabs,
+            paramType: Diagnostics.KIND,
+            error: Diagnostics.Argument_for_indentStyle_option_must_be_spaces_4_spaces2_or_tabs
         }
     ];
 
@@ -290,7 +297,7 @@ module ts {
       * Parse the contents of a config file (tsconfig.json).
       * @param json The contents of the config file to parse
       * @param basePath A root directory to resolve relative path entries in the config
-      *    file to. e.g. outDir 
+      *    file to. e.g. outDir
       */
     export function parseConfigFile(json: any, basePath?: string): ParsedCommandLine {
         var errors: Diagnostic[] = [];

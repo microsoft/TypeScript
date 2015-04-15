@@ -2125,5 +2125,13 @@
     "'class' declarations are only supported directly inside a module or as a top level declaration.": {
         "category": "Error",
         "code": 9004
+    },
+    "Specify indentation style: 'spaces4' (4 spaces) (default), 'spaces2' (2 spaces), or 'tabs' (tabs)": {
+        "category": "Message",
+        "code": 9005
+    },
+    "Argument for '--indentStyle' option must be 'spaces'4, 'spaces2', or 'tabs'.": {
+        "category": "Error",
+        "code": 9006
     }
 }

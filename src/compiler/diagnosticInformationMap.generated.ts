@@ -534,5 +534,7 @@ module ts {
         Only_identifiers_Slashqualified_names_with_optional_type_arguments_are_currently_supported_in_a_class_extends_clauses: { code: 9002, category: DiagnosticCategory.Error, key: "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses." },
         class_expressions_are_not_currently_supported: { code: 9003, category: DiagnosticCategory.Error, key: "'class' expressions are not currently supported." },
         class_declarations_are_only_supported_directly_inside_a_module_or_as_a_top_level_declaration: { code: 9004, category: DiagnosticCategory.Error, key: "'class' declarations are only supported directly inside a module or as a top level declaration." },
+        Specify_indentation_style_Colon_spaces4_4_spaces_default_spaces2_2_spaces_or_tabs_tabs: { code: 9005, category: DiagnosticCategory.Message, key: "Specify indentation style: 'spaces4' (4 spaces) (default), 'spaces2' (2 spaces), or 'tabs' (tabs)" },
+        Argument_for_indentStyle_option_must_be_spaces_4_spaces2_or_tabs: { code: 9006, category: DiagnosticCategory.Error, key: "Argument for '--indentStyle' option must be 'spaces'4, 'spaces2', or 'tabs'." },
     };
 }

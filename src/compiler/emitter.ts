@@ -109,6 +109,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
         }
 
         function emitJavaScript(jsFilePath: string, root?: SourceFile) {
+            setIndentStyle(host.getCompilerOptions().indentStyle);
             let writer = createTextWriter(newLine);
             let write = writer.write;
             let writeTextOfNode = writer.writeTextOfNode;
@@ -879,13 +880,13 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 if (languageVersion < ScriptTarget.ES6 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
                     return getQuotedEscapedLiteralText('"', node.text, '"');
                 }
-                
+
                 // If we don't need to downlevel and we can reach the original source text using
                 // the node's parent reference, then simply get the text as it was originally written.
                 if (node.parent) {
                     return getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
                 }
-                
+
                 // If we can't reach the original source text, use the canonical form if it's a number,
                 // or an escaped quoted form of the original text if it's string-like.
                 switch (node.kind) {
@@ -915,14 +916,14 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 // The raw strings contain the (escaped) strings of what the user wrote.
                 // Examples: `\n` is converted to "\\n", a template string with a newline to "\n".
                 let text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
-                
+
                 // text contains the original source, it will also contain quotes ("`"), dolar signs and braces ("${" and "}"),
                 // thus we need to remove those characters.
                 // First template piece starts with "`", others with "}"
                 // Last template piece ends with "`", others with "${"
                 let isLast = node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail;
                 text = text.substring(1, text.length - (isLast ? 1 : 2));
-                
+
                 // Newline normalization:
                 // ES6 Spec 11.8.6.1 - Static Semantics of TV's and TRV's
                 // <CR><LF> and <CR> LineTerminatorSequences are normalized to <LF> for both TV and TRV.
@@ -963,7 +964,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 emitParenthesizedIf(node.tag, needsParenthesisForPropertyAccessOrInvocation(node.tag));
                 write("(");
                 emit(tempVariable);
-                
+
                 // Now we emit the expressions
                 if (node.template.kind === SyntaxKind.TemplateExpression) {
                     forEach((<TemplateExpression>node.template).templateSpans, templateSpan => {
@@ -1122,7 +1123,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
                 else if (node.kind === SyntaxKind.ComputedPropertyName) {
                     // if this is a decorated computed property, we will need to capture the result
-                    // of the property expression so that we can apply decorators later. This is to ensure 
+                    // of the property expression so that we can apply decorators later. This is to ensure
                     // we don't introduce unintended side effects:
                     //
                     //   class C {
@@ -1137,7 +1138,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         if (!computedPropertyNamesToGeneratedNames) {
                             computedPropertyNamesToGeneratedNames = [];
                         }
-                        
+
                         let generatedName = computedPropertyNamesToGeneratedNames[getNodeId(node)];
                         if (generatedName) {
                             // we have already generated a variable for this node, write that value instead.
@@ -1680,8 +1681,8 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 return false;
             }
 
-            // Returns 'true' if the code was actually indented, false otherwise. 
-            // If the code is not indented, an optional valueToWriteWhenNotIndenting will be 
+            // Returns 'true' if the code was actually indented, false otherwise.
+            // If the code is not indented, an optional valueToWriteWhenNotIndenting will be
             // emitted instead.
             function indentIfOnDifferentLines(parent: Node, node1: Node, node2: Node, valueToWriteWhenNotIndenting?: string): boolean {
                 let realNodesAreOnDifferentLines = !nodeIsSynthesized(parent) && !nodeEndIsOnSameLineAsNodeStart(node1, node2);
@@ -1971,7 +1972,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 decreaseIndentIf(indentedBeforeColon, indentedAfterColon);
             }
 
-            // Helper function to decrease the indent if we previously indented.  Allows multiple 
+            // Helper function to decrease the indent if we previously indented.  Allows multiple
             // previous indent values to be considered at a time.  This also allows caller to just
             // call this once, passing in all their appropriate indent values, instead of needing
             // to call this helper function multiple times.
@@ -2176,13 +2177,13 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 // all destructuring.
                 // Note also that because an extra statement is needed to assign to the LHS,
                 // for-of bodies are always emitted as blocks.
-                
+
                 let endPos = emitToken(SyntaxKind.ForKeyword, node.pos);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
-                
+
                 // Do not emit the LHS let declaration yet, because it might contain destructuring.
-                
+
                 // Do not call recordTempDeclaration because we are declaring the temps
                 // right here. Recording means they will be declared later.
                 // In the case where the user wrote an identifier as the RHS, like this:
@@ -2198,7 +2199,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 // the LHS will be emitted inside the body.
                 emitStart(node.expression);
                 write("var ");
-                
+
                 // _i = 0
                 emitNodeWithoutSourceMap(counter);
                 write(" = 0");
@@ -2215,7 +2216,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
 
                 write("; ");
-                
+
                 // _i < _a.length;
                 emitStart(node.initializer);
                 emitNodeWithoutSourceMap(counter);
@@ -2226,19 +2227,19 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
                 emitEnd(node.initializer);
                 write("; ");
-                
+
                 // _i++)
                 emitStart(node.initializer);
                 emitNodeWithoutSourceMap(counter);
                 write("++");
                 emitEnd(node.initializer);
                 emitToken(SyntaxKind.CloseParenToken, node.expression.end);
-                
+
                 // Body
                 write(" {");
                 writeLine();
                 increaseIndent();
-                
+
                 // Initialize LHS
                 // let v = _a[_i];
                 let rhsIterationValue = createElementAccessExpression(rhsReference, counter);
@@ -2770,7 +2771,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 // - language version is ES6+
                 // - node is synthesized
                 // - node is not identifier (can happen when tree is malformed)
-                // - node is definitely not name of variable declaration. 
+                // - node is definitely not name of variable declaration.
                 // it still can be part of parameter declaration, this check will be done next
                 if (languageVersion >= ScriptTarget.ES6 ||
                     nodeIsSynthesized(node) ||
@@ -3045,7 +3046,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
 
                 if (!node.body) {
-                    // There can be no body when there are parse errors.  Just emit an empty block 
+                    // There can be no body when there are parse errors.  Just emit an empty block
                     // in that case.
                     write(" { }");
                 }
@@ -3078,7 +3079,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     return;
                 }
 
-                // For es6 and higher we can emit the expression as is.  However, in the case 
+                // For es6 and higher we can emit the expression as is.  However, in the case
                 // where the expression might end up looking like a block when emitted, we'll
                 // also wrap it in parentheses first.  For example if you have: a => <foo>{}
                 // then we need to generate: a => ({})
@@ -3521,7 +3522,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     emitClassLikeDeclarationForES6AndHigher(node);
                 }
             }
-            
+
             function emitClassLikeDeclarationForES6AndHigher(node: ClassLikeDeclaration) {
                 let thisNodeIsDecorated = nodeIsDecorated(node);
                 if (node.kind === SyntaxKind.ClassDeclaration) {
@@ -3595,9 +3596,9 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
 
                 // If the class has static properties, and it's a class expression, then we'll need
-                // to specialize the emit a bit.  for a class expression of the form: 
+                // to specialize the emit a bit.  for a class expression of the form:
                 //
-                //      class C { static a = 1; static b = 2; ... } 
+                //      class C { static a = 1; static b = 2; ... }
                 //
                 // We'll emit:
                 //
@@ -3784,7 +3785,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     write(".prototype");
                 }
             }
-            
+
             function emitDecoratorsOfClass(node: ClassLikeDeclaration) {
                 emitDecoratorsOfMembers(node, /*staticFlag*/ 0);
                 emitDecoratorsOfMembers(node, NodeFlags.Static);
@@ -3892,7 +3893,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     //
                     // The emit for a method is:
                     //
-                    //   Object.defineProperty(C.prototype, "method", 
+                    //   Object.defineProperty(C.prototype, "method",
                     //       __decorate([
                     //           dec,
                     //           __param(0, dec2),
@@ -3900,10 +3901,10 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     //           __metadata("design:paramtypes", [Object]),
                     //           __metadata("design:returntype", void 0)
                     //       ], C.prototype, "method", Object.getOwnPropertyDescriptor(C.prototype, "method")));
-                    // 
+                    //
                     // The emit for an accessor is:
                     //
-                    //   Object.defineProperty(C.prototype, "accessor", 
+                    //   Object.defineProperty(C.prototype, "accessor",
                     //       __decorate([
                     //           dec
                     //       ], C.prototype, "accessor", Object.getOwnPropertyDescriptor(C.prototype, "accessor")));
@@ -3993,7 +3994,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
             function shouldEmitTypeMetadata(node: Declaration): boolean {
                 // This method determines whether to emit the "design:type" metadata based on the node's kind.
-                // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata 
+                // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata
                 // compiler option is set.
                 switch (node.kind) {
                     case SyntaxKind.MethodDeclaration:
@@ -4008,7 +4009,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
             function shouldEmitReturnTypeMetadata(node: Declaration): boolean {
                 // This method determines whether to emit the "design:returntype" metadata based on the node's kind.
-                // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata 
+                // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata
                 // compiler option is set.
                 switch (node.kind) {
                     case SyntaxKind.MethodDeclaration:
@@ -4019,7 +4020,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
             function shouldEmitParamTypesMetadata(node: Declaration): boolean {
                 // This method determines whether to emit the "design:paramtypes" metadata based on the node's kind.
-                // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata 
+                // The caller should have already tested whether the node has decorators and whether the emitDecoratorMetadata
                 // compiler option is set.
                 switch (node.kind) {
                     case SyntaxKind.ClassDeclaration:
@@ -4705,7 +4706,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
-                // Emit exportDefault if it exists will happen as part 
+                // Emit exportDefault if it exists will happen as part
                 // or normal statement emit.
             }
 
@@ -4842,14 +4843,14 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         return shouldEmitEnumDeclaration(<EnumDeclaration>node);
                 }
 
-                // If this is the expression body of an arrow function that we're down-leveling, 
+                // If this is the expression body of an arrow function that we're down-leveling,
                 // then we don't want to emit comments when we emit the body.  It will have already
                 // been taken care of when we emitted the 'return' statement for the function
                 // expression body.
                 if (node.kind !== SyntaxKind.Block &&
                     node.parent &&
                     node.parent.kind === SyntaxKind.ArrowFunction &&
-                    (<ArrowFunction>node.parent).body === node && 
+                    (<ArrowFunction>node.parent).body === node &&
                     compilerOptions.target <= ScriptTarget.ES5) {
 
                     return false;

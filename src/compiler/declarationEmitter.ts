@@ -189,7 +189,7 @@ module ts {
                 if (!moduleElementEmitInfo && asynchronousSubModuleDeclarationEmitInfo) {
                     moduleElementEmitInfo = forEach(asynchronousSubModuleDeclarationEmitInfo, declEmitInfo => declEmitInfo.node === nodeToCheck ? declEmitInfo : undefined);
                 }
-                                
+
                 // If the alias was marked as not visible when we saw its declaration, we would have saved the aliasEmitInfo, but if we haven't yet visited the alias declaration
                 // then we don't need to write it at this point. We will write it when we actually see its declaration
                 // Eg.
@@ -199,7 +199,7 @@ module ts {
                 // we would write alias foo declaration when we visit it since it would now be marked as visible
                 if (moduleElementEmitInfo) {
                     if (moduleElementEmitInfo.node.kind === SyntaxKind.ImportDeclaration) {
-                        // we have to create asynchronous output only after we have collected complete information 
+                        // we have to create asynchronous output only after we have collected complete information
                         // because it is possible to enable multiple bindings as asynchronously visible
                         moduleElementEmitInfo.isVisible = true;
                     }
@@ -592,7 +592,7 @@ module ts {
         }
 
         function writeImportEqualsDeclaration(node: ImportEqualsDeclaration) {
-            // note usage of writer. methods instead of aliases created, just to make sure we are using 
+            // note usage of writer. methods instead of aliases created, just to make sure we are using
             // correct writer especially to handle asynchronous alias writing
             emitJsDocComments(node);
             if (node.flags & NodeFlags.Export) {
@@ -634,7 +634,7 @@ module ts {
 
         function writeImportDeclaration(node: ImportDeclaration) {
             if (!node.importClause && !(node.flags & NodeFlags.Export)) {
-                // do not write non-exported import declarations that don't have import clauses 
+                // do not write non-exported import declarations that don't have import clauses
                 return;
             }
             emitJsDocComments(node);
@@ -1500,7 +1500,7 @@ module ts {
                         }
                     }
                 }
-            } 
+            }
         }
 
         function emitNode(node: Node) {
@@ -1560,7 +1560,7 @@ module ts {
             referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
         }
     }
-    
+
     /* @internal */
     export function writeDeclarationFile(jsFilePath: string, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[]) {
         let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, jsFilePath, sourceFile);
