@@ -25,6 +25,8 @@ module ts {
         reScanTemplateToken(): SyntaxKind;
         scan(): SyntaxKind;
         setText(text: string): void;
+        setOnError(onError: ErrorCallback): void;
+        setScriptTarget(scriptTarget: ScriptTarget): void;
         setTextPos(textPos: number): void;
         // Invokes the provided callback then unconditionally restores the scanner to the state it 
         // was in immediately prior to invoking the callback.  The result of invoking the callback
@@ -599,6 +601,7 @@ module ts {
     export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, text?: string, onError?: ErrorCallback): Scanner {
         let pos: number;       // Current position (end position of text of current token)
         let len: number;       // Length of text
+
         let startPos: number;  // Start position of whitespace before current token
         let tokenPos: number;  // Start position of text of current token
         let token: SyntaxKind;
@@ -606,6 +609,32 @@ module ts {
         let precedingLineBreak: boolean;
         let hasExtendedUnicodeEscape: boolean;
         let tokenIsUnterminated: boolean;
+
+        setText(text);
+
+        return {
+            getStartPos: () => startPos,
+            getTextPos: () => pos,
+            getToken: () => token,
+            getTokenPos: () => tokenPos,
+            getTokenText: () => text.substring(tokenPos, pos),
+            getTokenValue: () => tokenValue,
+            hasExtendedUnicodeEscape: () => hasExtendedUnicodeEscape,
+            hasPrecedingLineBreak: () => precedingLineBreak,
+            isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
+            isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
+            isUnterminated: () => tokenIsUnterminated,
+            reScanGreaterToken,
+            reScanSlashToken,
+            reScanTemplateToken,
+            scan,
+            setText,
+            setScriptTarget,
+            setOnError,
+            setTextPos,
+            tryScan,
+            lookAhead,
+        };
 
         function error(message: DiagnosticMessage, length?: number): void {
             if (onError) {
@@ -1450,37 +1479,24 @@ module ts {
             setTextPos(0);
         }
 
+        function setOnError(errorCallback: ErrorCallback) {
+            onError = errorCallback;
+        }
+
+        function setScriptTarget(scriptTarget: ScriptTarget) {
+            languageVersion = scriptTarget;
+        }
+
         function setTextPos(textPos: number) {
             pos = textPos;
             startPos = textPos;
             tokenPos = textPos;
             token = SyntaxKind.Unknown;
             precedingLineBreak = false;
+
+            tokenValue = undefined;
+            hasExtendedUnicodeEscape = false;
+            tokenIsUnterminated = false;
         }
-
-        setText(text);
-
-
-        return {
-            getStartPos: () => startPos,
-            getTextPos: () => pos,
-            getToken: () => token,
-            getTokenPos: () => tokenPos,
-            getTokenText: () => text.substring(tokenPos, pos),
-            getTokenValue: () => tokenValue,
-            hasExtendedUnicodeEscape: () => hasExtendedUnicodeEscape,
-            hasPrecedingLineBreak: () => precedingLineBreak,
-            isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
-            isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
-            isUnterminated: () => tokenIsUnterminated,
-            reScanGreaterToken,
-            reScanSlashToken,
-            reScanTemplateToken,
-            scan,
-            setText,
-            setTextPos,
-            tryScan,
-            lookAhead,
-        };
     }
 }
