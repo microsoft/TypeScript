@@ -1,0 +1,40 @@
+tests/cases/conformance/expressions/contextualTyping/getSetAccessorContextualTyping.ts(2,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/contextualTyping/getSetAccessorContextualTyping.ts(3,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/contextualTyping/getSetAccessorContextualTyping.ts(4,16): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/contextualTyping/getSetAccessorContextualTyping.ts(7,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/contextualTyping/getSetAccessorContextualTyping.ts(8,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/contextualTyping/getSetAccessorContextualTyping.ts(12,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/contextualTyping/getSetAccessorContextualTyping.ts(13,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
+==== tests/cases/conformance/expressions/contextualTyping/getSetAccessorContextualTyping.ts (7 errors) ====
+    class C {
+        set X(x: number) { }
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        get X() {
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return "string";  // Error; get contextual type by set accessor parameter type annotation
+                   ~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+        }
+    
+        set Y(y) { }
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        get Y() {
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return true;
+        }
+    
+        set W(w) { }
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        get W(): boolean {
+            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            return true;
+        }
+    }
