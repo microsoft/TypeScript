@@ -1,31 +1,33 @@
 === tests/cases/compiler/thisCapture1.ts ===
 class X {
->X : X
+>X : X, Symbol(X, Decl(thisCapture1.ts, 0, 0))
 
     private y = 0;
->y : number
+>y : number, Symbol(y, Decl(thisCapture1.ts, 0, 9))
+>0 : number
 
     public getSettings(keys: string[]): any {
->getSettings : (keys: string[]) => any
->keys : string[]
+>getSettings : (keys: string[]) => any, Symbol(getSettings, Decl(thisCapture1.ts, 1, 18))
+>keys : string[], Symbol(keys, Decl(thisCapture1.ts, 2, 23))
 
         var ret: any;
->ret : any
+>ret : any, Symbol(ret, Decl(thisCapture1.ts, 3, 11))
 
         return ret.always(() => {
 >ret.always(() => {            this.y = 0;        }).promise() : any
 >ret.always(() => {            this.y = 0;        }).promise : any
 >ret.always(() => {            this.y = 0;        }) : any
 >ret.always : any
->ret : any
+>ret : any, Symbol(ret, Decl(thisCapture1.ts, 3, 11))
 >always : any
 >() => {            this.y = 0;        } : () => void
 
             this.y = 0;
 >this.y = 0 : number
->this.y : number
->this : X
->y : number
+>this.y : number, Symbol(y, Decl(thisCapture1.ts, 0, 9))
+>this : X, Symbol(X, Decl(thisCapture1.ts, 0, 0))
+>y : number, Symbol(y, Decl(thisCapture1.ts, 0, 9))
+>0 : number
 
         }).promise();
 >promise : any

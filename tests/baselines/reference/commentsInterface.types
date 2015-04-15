@@ -1,218 +1,228 @@
 === tests/cases/compiler/commentsInterface.ts ===
 /** this is interface 1*/
 interface i1 {
->i1 : i1
+>i1 : i1, Symbol(i1, Decl(commentsInterface.ts, 0, 0))
 }
 var i1_i: i1;
->i1_i : i1
->i1 : i1
+>i1_i : i1, Symbol(i1_i, Decl(commentsInterface.ts, 3, 3))
+>i1 : i1, Symbol(i1, Decl(commentsInterface.ts, 0, 0))
 
 interface nc_i1 {
->nc_i1 : nc_i1
+>nc_i1 : nc_i1, Symbol(nc_i1, Decl(commentsInterface.ts, 3, 13))
 }
 var nc_i1_i: nc_i1;
->nc_i1_i : nc_i1
->nc_i1 : nc_i1
+>nc_i1_i : nc_i1, Symbol(nc_i1_i, Decl(commentsInterface.ts, 6, 3))
+>nc_i1 : nc_i1, Symbol(nc_i1, Decl(commentsInterface.ts, 3, 13))
 
 /** this is interface 2 with memebers*/
 interface i2 {
->i2 : i2
+>i2 : i2, Symbol(i2, Decl(commentsInterface.ts, 6, 19))
 
     /** this is x*/
     x: number;
->x : number
+>x : number, Symbol(x, Decl(commentsInterface.ts, 8, 14))
 
     /** this is foo*/
     foo: (/**param help*/b: number) => string;
->foo : (b: number) => string
->b : number
+>foo : (b: number) => string, Symbol(foo, Decl(commentsInterface.ts, 10, 14))
+>b : number, Symbol(b, Decl(commentsInterface.ts, 12, 10))
 
     /** this is indexer*/
     [/**string param*/i: string]: any;
->i : string
+>i : string, Symbol(i, Decl(commentsInterface.ts, 14, 5))
 
     /**new method*/
     new (/** param*/i: i1);
->i : i1
->i1 : i1
+>i : i1, Symbol(i, Decl(commentsInterface.ts, 16, 9))
+>i1 : i1, Symbol(i1, Decl(commentsInterface.ts, 0, 0))
 
     nc_x: number;
->nc_x : number
+>nc_x : number, Symbol(nc_x, Decl(commentsInterface.ts, 16, 27))
 
     nc_foo: (b: number) => string;
->nc_foo : (b: number) => string
->b : number
+>nc_foo : (b: number) => string, Symbol(nc_foo, Decl(commentsInterface.ts, 17, 17))
+>b : number, Symbol(b, Decl(commentsInterface.ts, 18, 13))
 
     [i: number]: number;
->i : number
+>i : number, Symbol(i, Decl(commentsInterface.ts, 19, 5))
 
     /** this is call signature*/
     (/**paramhelp a*/a: number,/**paramhelp b*/ b: number) : number;
->a : number
->b : number
+>a : number, Symbol(a, Decl(commentsInterface.ts, 21, 5))
+>b : number, Symbol(b, Decl(commentsInterface.ts, 21, 31))
 
     /** this is fnfoo*/
     fnfoo(/**param help*/b: number): string;
->fnfoo : (b: number) => string
->b : number
+>fnfoo : (b: number) => string, Symbol(fnfoo, Decl(commentsInterface.ts, 21, 68))
+>b : number, Symbol(b, Decl(commentsInterface.ts, 23, 10))
 
     nc_fnfoo(b: number): string;
->nc_fnfoo : (b: number) => string
->b : number
+>nc_fnfoo : (b: number) => string, Symbol(nc_fnfoo, Decl(commentsInterface.ts, 23, 44))
+>b : number, Symbol(b, Decl(commentsInterface.ts, 24, 13))
 
     // nc_y
     nc_y: number;
->nc_y : number
+>nc_y : number, Symbol(nc_y, Decl(commentsInterface.ts, 24, 32))
 }
 var i2_i: i2;
->i2_i : i2
->i2 : i2
+>i2_i : i2, Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>i2 : i2, Symbol(i2, Decl(commentsInterface.ts, 6, 19))
 
 var i2_i_x = i2_i.x;
->i2_i_x : number
->i2_i.x : number
->i2_i : i2
->x : number
+>i2_i_x : number, Symbol(i2_i_x, Decl(commentsInterface.ts, 29, 3))
+>i2_i.x : number, Symbol(i2.x, Decl(commentsInterface.ts, 8, 14))
+>i2_i : i2, Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>x : number, Symbol(i2.x, Decl(commentsInterface.ts, 8, 14))
 
 var i2_i_foo = i2_i.foo;
->i2_i_foo : (b: number) => string
->i2_i.foo : (b: number) => string
->i2_i : i2
->foo : (b: number) => string
+>i2_i_foo : (b: number) => string, Symbol(i2_i_foo, Decl(commentsInterface.ts, 30, 3))
+>i2_i.foo : (b: number) => string, Symbol(i2.foo, Decl(commentsInterface.ts, 10, 14))
+>i2_i : i2, Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>foo : (b: number) => string, Symbol(i2.foo, Decl(commentsInterface.ts, 10, 14))
 
 var i2_i_foo_r = i2_i.foo(30);
->i2_i_foo_r : string
+>i2_i_foo_r : string, Symbol(i2_i_foo_r, Decl(commentsInterface.ts, 31, 3))
 >i2_i.foo(30) : string
->i2_i.foo : (b: number) => string
->i2_i : i2
->foo : (b: number) => string
+>i2_i.foo : (b: number) => string, Symbol(i2.foo, Decl(commentsInterface.ts, 10, 14))
+>i2_i : i2, Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>foo : (b: number) => string, Symbol(i2.foo, Decl(commentsInterface.ts, 10, 14))
+>30 : number
 
 var i2_i_i2_si = i2_i["hello"];
->i2_i_i2_si : any
+>i2_i_i2_si : any, Symbol(i2_i_i2_si, Decl(commentsInterface.ts, 32, 3))
 >i2_i["hello"] : any
->i2_i : i2
+>i2_i : i2, Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>"hello" : string
 
 var i2_i_i2_ii = i2_i[30];
->i2_i_i2_ii : number
+>i2_i_i2_ii : number, Symbol(i2_i_i2_ii, Decl(commentsInterface.ts, 33, 3))
 >i2_i[30] : number
->i2_i : i2
+>i2_i : i2, Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>30 : number
 
 var i2_i_n = new i2_i(i1_i);
->i2_i_n : any
+>i2_i_n : any, Symbol(i2_i_n, Decl(commentsInterface.ts, 34, 3))
 >new i2_i(i1_i) : any
->i2_i : i2
->i1_i : i1
+>i2_i : i2, Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>i1_i : i1, Symbol(i1_i, Decl(commentsInterface.ts, 3, 3))
 
 var i2_i_nc_x = i2_i.nc_x;
->i2_i_nc_x : number
->i2_i.nc_x : number
->i2_i : i2
->nc_x : number
+>i2_i_nc_x : number, Symbol(i2_i_nc_x, Decl(commentsInterface.ts, 35, 3))
+>i2_i.nc_x : number, Symbol(i2.nc_x, Decl(commentsInterface.ts, 16, 27))
+>i2_i : i2, Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>nc_x : number, Symbol(i2.nc_x, Decl(commentsInterface.ts, 16, 27))
 
 var i2_i_nc_foo = i2_i.nc_foo;
->i2_i_nc_foo : (b: number) => string
->i2_i.nc_foo : (b: number) => string
->i2_i : i2
->nc_foo : (b: number) => string
+>i2_i_nc_foo : (b: number) => string, Symbol(i2_i_nc_foo, Decl(commentsInterface.ts, 36, 3))
+>i2_i.nc_foo : (b: number) => string, Symbol(i2.nc_foo, Decl(commentsInterface.ts, 17, 17))
+>i2_i : i2, Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>nc_foo : (b: number) => string, Symbol(i2.nc_foo, Decl(commentsInterface.ts, 17, 17))
 
 var i2_i_nc_foo_r = i2_i.nc_foo(30);
->i2_i_nc_foo_r : string
+>i2_i_nc_foo_r : string, Symbol(i2_i_nc_foo_r, Decl(commentsInterface.ts, 37, 3))
 >i2_i.nc_foo(30) : string
->i2_i.nc_foo : (b: number) => string
->i2_i : i2
->nc_foo : (b: number) => string
+>i2_i.nc_foo : (b: number) => string, Symbol(i2.nc_foo, Decl(commentsInterface.ts, 17, 17))
+>i2_i : i2, Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>nc_foo : (b: number) => string, Symbol(i2.nc_foo, Decl(commentsInterface.ts, 17, 17))
+>30 : number
 
 var i2_i_r = i2_i(10, 20);
->i2_i_r : number
+>i2_i_r : number, Symbol(i2_i_r, Decl(commentsInterface.ts, 38, 3))
 >i2_i(10, 20) : number
->i2_i : i2
+>i2_i : i2, Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>10 : number
+>20 : number
 
 var i2_i_fnfoo = i2_i.fnfoo;
->i2_i_fnfoo : (b: number) => string
->i2_i.fnfoo : (b: number) => string
->i2_i : i2
->fnfoo : (b: number) => string
+>i2_i_fnfoo : (b: number) => string, Symbol(i2_i_fnfoo, Decl(commentsInterface.ts, 39, 3))
+>i2_i.fnfoo : (b: number) => string, Symbol(i2.fnfoo, Decl(commentsInterface.ts, 21, 68))
+>i2_i : i2, Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>fnfoo : (b: number) => string, Symbol(i2.fnfoo, Decl(commentsInterface.ts, 21, 68))
 
 var i2_i_fnfoo_r = i2_i.fnfoo(10);
->i2_i_fnfoo_r : string
+>i2_i_fnfoo_r : string, Symbol(i2_i_fnfoo_r, Decl(commentsInterface.ts, 40, 3))
 >i2_i.fnfoo(10) : string
->i2_i.fnfoo : (b: number) => string
->i2_i : i2
->fnfoo : (b: number) => string
+>i2_i.fnfoo : (b: number) => string, Symbol(i2.fnfoo, Decl(commentsInterface.ts, 21, 68))
+>i2_i : i2, Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>fnfoo : (b: number) => string, Symbol(i2.fnfoo, Decl(commentsInterface.ts, 21, 68))
+>10 : number
 
 var i2_i_nc_fnfoo = i2_i.nc_fnfoo;
->i2_i_nc_fnfoo : (b: number) => string
->i2_i.nc_fnfoo : (b: number) => string
->i2_i : i2
->nc_fnfoo : (b: number) => string
+>i2_i_nc_fnfoo : (b: number) => string, Symbol(i2_i_nc_fnfoo, Decl(commentsInterface.ts, 41, 3))
+>i2_i.nc_fnfoo : (b: number) => string, Symbol(i2.nc_fnfoo, Decl(commentsInterface.ts, 23, 44))
+>i2_i : i2, Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>nc_fnfoo : (b: number) => string, Symbol(i2.nc_fnfoo, Decl(commentsInterface.ts, 23, 44))
 
 var i2_i_nc_fnfoo_r = i2_i.nc_fnfoo(10);
->i2_i_nc_fnfoo_r : string
+>i2_i_nc_fnfoo_r : string, Symbol(i2_i_nc_fnfoo_r, Decl(commentsInterface.ts, 42, 3))
 >i2_i.nc_fnfoo(10) : string
->i2_i.nc_fnfoo : (b: number) => string
->i2_i : i2
->nc_fnfoo : (b: number) => string
+>i2_i.nc_fnfoo : (b: number) => string, Symbol(i2.nc_fnfoo, Decl(commentsInterface.ts, 23, 44))
+>i2_i : i2, Symbol(i2_i, Decl(commentsInterface.ts, 28, 3))
+>nc_fnfoo : (b: number) => string, Symbol(i2.nc_fnfoo, Decl(commentsInterface.ts, 23, 44))
+>10 : number
 
 interface i3 {
->i3 : i3
+>i3 : i3, Symbol(i3, Decl(commentsInterface.ts, 42, 40))
 
     /** Comment i3 x*/
     x: number;
->x : number
+>x : number, Symbol(x, Decl(commentsInterface.ts, 43, 14))
 
     /** Function i3 f*/
     f(/**number parameter*/a: number): string;
->f : (a: number) => string
->a : number
+>f : (a: number) => string, Symbol(f, Decl(commentsInterface.ts, 45, 14))
+>a : number, Symbol(a, Decl(commentsInterface.ts, 47, 6))
 
     /** i3 l*/
     l: (/**comment i3 l b*/b: number) => string;
->l : (b: number) => string
->b : number
+>l : (b: number) => string, Symbol(l, Decl(commentsInterface.ts, 47, 46))
+>b : number, Symbol(b, Decl(commentsInterface.ts, 49, 8))
 
     nc_x: number;
->nc_x : number
+>nc_x : number, Symbol(nc_x, Decl(commentsInterface.ts, 49, 48))
 
     nc_f(a: number): string;
->nc_f : (a: number) => string
->a : number
+>nc_f : (a: number) => string, Symbol(nc_f, Decl(commentsInterface.ts, 50, 17))
+>a : number, Symbol(a, Decl(commentsInterface.ts, 51, 9))
 
     nc_l: (b: number) => string;
->nc_l : (b: number) => string
->b : number
+>nc_l : (b: number) => string, Symbol(nc_l, Decl(commentsInterface.ts, 51, 28))
+>b : number, Symbol(b, Decl(commentsInterface.ts, 52, 11))
 }
 var i3_i: i3;
->i3_i : i3
->i3 : i3
+>i3_i : i3, Symbol(i3_i, Decl(commentsInterface.ts, 54, 3))
+>i3 : i3, Symbol(i3, Decl(commentsInterface.ts, 42, 40))
 
 i3_i = {
 >i3_i = {    f: /**own f*/ (/**i3_i a*/a: number) => "Hello" + a,    l: this.f,    /** own x*/    x: this.f(10),    nc_x: this.l(this.x),    nc_f: this.f,    nc_l: this.l} : { f: (a: number) => string; l: any; x: any; nc_x: any; nc_f: any; nc_l: any; }
->i3_i : i3
+>i3_i : i3, Symbol(i3_i, Decl(commentsInterface.ts, 54, 3))
 >{    f: /**own f*/ (/**i3_i a*/a: number) => "Hello" + a,    l: this.f,    /** own x*/    x: this.f(10),    nc_x: this.l(this.x),    nc_f: this.f,    nc_l: this.l} : { f: (a: number) => string; l: any; x: any; nc_x: any; nc_f: any; nc_l: any; }
 
     f: /**own f*/ (/**i3_i a*/a: number) => "Hello" + a,
->f : (a: number) => string
+>f : (a: number) => string, Symbol(f, Decl(commentsInterface.ts, 55, 8))
 >(/**i3_i a*/a: number) => "Hello" + a : (a: number) => string
->a : number
+>a : number, Symbol(a, Decl(commentsInterface.ts, 56, 19))
 >"Hello" + a : string
->a : number
+>"Hello" : string
+>a : number, Symbol(a, Decl(commentsInterface.ts, 56, 19))
 
     l: this.f,
->l : any
+>l : any, Symbol(l, Decl(commentsInterface.ts, 56, 56))
 >this.f : any
 >this : any
 >f : any
 
     /** own x*/
     x: this.f(10),
->x : any
+>x : any, Symbol(x, Decl(commentsInterface.ts, 57, 14))
 >this.f(10) : any
 >this.f : any
 >this : any
 >f : any
+>10 : number
 
     nc_x: this.l(this.x),
->nc_x : any
+>nc_x : any, Symbol(nc_x, Decl(commentsInterface.ts, 59, 18))
 >this.l(this.x) : any
 >this.l : any
 >this : any
@@ -222,13 +232,13 @@ i3_i = {
 >x : any
 
     nc_f: this.f,
->nc_f : any
+>nc_f : any, Symbol(nc_f, Decl(commentsInterface.ts, 60, 25))
 >this.f : any
 >this : any
 >f : any
 
     nc_l: this.l
->nc_l : any
+>nc_l : any, Symbol(nc_l, Decl(commentsInterface.ts, 61, 17))
 >this.l : any
 >this : any
 >l : any
@@ -236,25 +246,29 @@ i3_i = {
 };
 i3_i.f(10);
 >i3_i.f(10) : string
->i3_i.f : (a: number) => string
->i3_i : i3
->f : (a: number) => string
+>i3_i.f : (a: number) => string, Symbol(i3.f, Decl(commentsInterface.ts, 45, 14))
+>i3_i : i3, Symbol(i3_i, Decl(commentsInterface.ts, 54, 3))
+>f : (a: number) => string, Symbol(i3.f, Decl(commentsInterface.ts, 45, 14))
+>10 : number
 
 i3_i.l(10);
 >i3_i.l(10) : string
->i3_i.l : (b: number) => string
->i3_i : i3
->l : (b: number) => string
+>i3_i.l : (b: number) => string, Symbol(i3.l, Decl(commentsInterface.ts, 47, 46))
+>i3_i : i3, Symbol(i3_i, Decl(commentsInterface.ts, 54, 3))
+>l : (b: number) => string, Symbol(i3.l, Decl(commentsInterface.ts, 47, 46))
+>10 : number
 
 i3_i.nc_f(10);
 >i3_i.nc_f(10) : string
->i3_i.nc_f : (a: number) => string
->i3_i : i3
->nc_f : (a: number) => string
+>i3_i.nc_f : (a: number) => string, Symbol(i3.nc_f, Decl(commentsInterface.ts, 50, 17))
+>i3_i : i3, Symbol(i3_i, Decl(commentsInterface.ts, 54, 3))
+>nc_f : (a: number) => string, Symbol(i3.nc_f, Decl(commentsInterface.ts, 50, 17))
+>10 : number
 
 i3_i.nc_l(10);
 >i3_i.nc_l(10) : string
->i3_i.nc_l : (b: number) => string
->i3_i : i3
->nc_l : (b: number) => string
+>i3_i.nc_l : (b: number) => string, Symbol(i3.nc_l, Decl(commentsInterface.ts, 51, 28))
+>i3_i : i3, Symbol(i3_i, Decl(commentsInterface.ts, 54, 3))
+>nc_l : (b: number) => string, Symbol(i3.nc_l, Decl(commentsInterface.ts, 51, 28))
+>10 : number
 

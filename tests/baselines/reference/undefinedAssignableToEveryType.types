@@ -1,149 +1,149 @@
 === tests/cases/conformance/types/typeRelationships/assignmentCompatibility/undefinedAssignableToEveryType.ts ===
 class C {
->C : C
+>C : C, Symbol(C, Decl(undefinedAssignableToEveryType.ts, 0, 0))
 
     foo: string;
->foo : string
+>foo : string, Symbol(foo, Decl(undefinedAssignableToEveryType.ts, 0, 9))
 }
 var ac: C;
->ac : C
->C : C
+>ac : C, Symbol(ac, Decl(undefinedAssignableToEveryType.ts, 3, 3))
+>C : C, Symbol(C, Decl(undefinedAssignableToEveryType.ts, 0, 0))
 
 interface I {
->I : I
+>I : I, Symbol(I, Decl(undefinedAssignableToEveryType.ts, 3, 10))
 
     foo: string;
->foo : string
+>foo : string, Symbol(foo, Decl(undefinedAssignableToEveryType.ts, 4, 13))
 }
 var ai: I;
->ai : I
->I : I
+>ai : I, Symbol(ai, Decl(undefinedAssignableToEveryType.ts, 7, 3))
+>I : I, Symbol(I, Decl(undefinedAssignableToEveryType.ts, 3, 10))
 
 enum E { A }
->E : E
->A : E
+>E : E, Symbol(E, Decl(undefinedAssignableToEveryType.ts, 7, 10))
+>A : E, Symbol(E.A, Decl(undefinedAssignableToEveryType.ts, 9, 8))
 
 var ae: E;
->ae : E
->E : E
+>ae : E, Symbol(ae, Decl(undefinedAssignableToEveryType.ts, 10, 3))
+>E : E, Symbol(E, Decl(undefinedAssignableToEveryType.ts, 7, 10))
 
 var b: number = undefined;
->b : number
->undefined : undefined
+>b : number, Symbol(b, Decl(undefinedAssignableToEveryType.ts, 12, 3))
+>undefined : undefined, Symbol(undefined)
 
 var c: string = undefined;
->c : string
->undefined : undefined
+>c : string, Symbol(c, Decl(undefinedAssignableToEveryType.ts, 13, 3))
+>undefined : undefined, Symbol(undefined)
 
 var d: boolean = undefined;
->d : boolean
->undefined : undefined
+>d : boolean, Symbol(d, Decl(undefinedAssignableToEveryType.ts, 14, 3))
+>undefined : undefined, Symbol(undefined)
 
 var e: Date = undefined;
->e : Date
->Date : Date
->undefined : undefined
+>e : Date, Symbol(e, Decl(undefinedAssignableToEveryType.ts, 15, 3))
+>Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>undefined : undefined, Symbol(undefined)
 
 var f: any = undefined;
->f : any
->undefined : undefined
+>f : any, Symbol(f, Decl(undefinedAssignableToEveryType.ts, 16, 3))
+>undefined : undefined, Symbol(undefined)
 
 var g: void = undefined;
->g : void
->undefined : undefined
+>g : void, Symbol(g, Decl(undefinedAssignableToEveryType.ts, 17, 3))
+>undefined : undefined, Symbol(undefined)
 
 var h: Object = undefined;
->h : Object
->Object : Object
->undefined : undefined
+>h : Object, Symbol(h, Decl(undefinedAssignableToEveryType.ts, 18, 3))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>undefined : undefined, Symbol(undefined)
 
 var i: {} = undefined;
->i : {}
->undefined : undefined
+>i : {}, Symbol(i, Decl(undefinedAssignableToEveryType.ts, 19, 3))
+>undefined : undefined, Symbol(undefined)
 
 var j: () => {} = undefined;
->j : () => {}
->undefined : undefined
+>j : () => {}, Symbol(j, Decl(undefinedAssignableToEveryType.ts, 20, 3))
+>undefined : undefined, Symbol(undefined)
 
 var k: Function = undefined;
->k : Function
->Function : Function
->undefined : undefined
+>k : Function, Symbol(k, Decl(undefinedAssignableToEveryType.ts, 21, 3))
+>Function : Function, Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11))
+>undefined : undefined, Symbol(undefined)
 
 var l: (x: number) => string = undefined;
->l : (x: number) => string
->x : number
->undefined : undefined
+>l : (x: number) => string, Symbol(l, Decl(undefinedAssignableToEveryType.ts, 22, 3))
+>x : number, Symbol(x, Decl(undefinedAssignableToEveryType.ts, 22, 8))
+>undefined : undefined, Symbol(undefined)
 
 ac = undefined;
 >ac = undefined : undefined
->ac : C
->undefined : undefined
+>ac : C, Symbol(ac, Decl(undefinedAssignableToEveryType.ts, 3, 3))
+>undefined : undefined, Symbol(undefined)
 
 ai = undefined;
 >ai = undefined : undefined
->ai : I
->undefined : undefined
+>ai : I, Symbol(ai, Decl(undefinedAssignableToEveryType.ts, 7, 3))
+>undefined : undefined, Symbol(undefined)
 
 ae = undefined;
 >ae = undefined : undefined
->ae : E
->undefined : undefined
+>ae : E, Symbol(ae, Decl(undefinedAssignableToEveryType.ts, 10, 3))
+>undefined : undefined, Symbol(undefined)
 
 var m: number[] = undefined;
->m : number[]
->undefined : undefined
+>m : number[], Symbol(m, Decl(undefinedAssignableToEveryType.ts, 26, 3))
+>undefined : undefined, Symbol(undefined)
 
 var n: { foo: string } = undefined;
->n : { foo: string; }
->foo : string
->undefined : undefined
+>n : { foo: string; }, Symbol(n, Decl(undefinedAssignableToEveryType.ts, 27, 3))
+>foo : string, Symbol(foo, Decl(undefinedAssignableToEveryType.ts, 27, 8))
+>undefined : undefined, Symbol(undefined)
 
 var o: <T>(x: T) => T = undefined;
->o : <T>(x: T) => T
->T : T
->x : T
->T : T
->T : T
->undefined : undefined
+>o : <T>(x: T) => T, Symbol(o, Decl(undefinedAssignableToEveryType.ts, 28, 3))
+>T : T, Symbol(T, Decl(undefinedAssignableToEveryType.ts, 28, 8))
+>x : T, Symbol(x, Decl(undefinedAssignableToEveryType.ts, 28, 11))
+>T : T, Symbol(T, Decl(undefinedAssignableToEveryType.ts, 28, 8))
+>T : T, Symbol(T, Decl(undefinedAssignableToEveryType.ts, 28, 8))
+>undefined : undefined, Symbol(undefined)
 
 var p: Number = undefined;
->p : Number
->Number : Number
->undefined : undefined
+>p : Number, Symbol(p, Decl(undefinedAssignableToEveryType.ts, 29, 3))
+>Number : Number, Symbol(Number, Decl(lib.d.ts, 456, 40), Decl(lib.d.ts, 518, 11))
+>undefined : undefined, Symbol(undefined)
 
 var q: String = undefined;
->q : String
->String : String
->undefined : undefined
+>q : String, Symbol(q, Decl(undefinedAssignableToEveryType.ts, 30, 3))
+>String : String, Symbol(String, Decl(lib.d.ts, 275, 1), Decl(lib.d.ts, 443, 11))
+>undefined : undefined, Symbol(undefined)
 
 function foo<T, U, V extends Date>(x: T, y: U, z: V) {
->foo : <T, U, V extends Date>(x: T, y: U, z: V) => void
->T : T
->U : U
->V : V
->Date : Date
->x : T
->T : T
->y : U
->U : U
->z : V
->V : V
+>foo : <T, U, V extends Date>(x: T, y: U, z: V) => void, Symbol(foo, Decl(undefinedAssignableToEveryType.ts, 30, 26))
+>T : T, Symbol(T, Decl(undefinedAssignableToEveryType.ts, 32, 13))
+>U : U, Symbol(U, Decl(undefinedAssignableToEveryType.ts, 32, 15))
+>V : V, Symbol(V, Decl(undefinedAssignableToEveryType.ts, 32, 18))
+>Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>x : T, Symbol(x, Decl(undefinedAssignableToEveryType.ts, 32, 35))
+>T : T, Symbol(T, Decl(undefinedAssignableToEveryType.ts, 32, 13))
+>y : U, Symbol(y, Decl(undefinedAssignableToEveryType.ts, 32, 40))
+>U : U, Symbol(U, Decl(undefinedAssignableToEveryType.ts, 32, 15))
+>z : V, Symbol(z, Decl(undefinedAssignableToEveryType.ts, 32, 46))
+>V : V, Symbol(V, Decl(undefinedAssignableToEveryType.ts, 32, 18))
 
     x = undefined;
 >x = undefined : undefined
->x : T
->undefined : undefined
+>x : T, Symbol(x, Decl(undefinedAssignableToEveryType.ts, 32, 35))
+>undefined : undefined, Symbol(undefined)
 
     y = undefined;
 >y = undefined : undefined
->y : U
->undefined : undefined
+>y : U, Symbol(y, Decl(undefinedAssignableToEveryType.ts, 32, 40))
+>undefined : undefined, Symbol(undefined)
 
     z = undefined;
 >z = undefined : undefined
->z : V
->undefined : undefined
+>z : V, Symbol(z, Decl(undefinedAssignableToEveryType.ts, 32, 46))
+>undefined : undefined, Symbol(undefined)
 }
 //function foo<T, U extends T, V extends Date>(x: T, y: U, z: V) {
 //    x = undefined;

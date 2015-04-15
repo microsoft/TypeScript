@@ -1,21 +1,12 @@
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName38.ts(2,6): error TS1109: Expression expected.
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName38.ts(2,12): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName38.ts(2,13): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName38.ts(2,16): error TS1005: '=>' expected.
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName38.ts(3,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName38.ts(2,6): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName38.ts(2,6): error TS2304: Cannot find name 'public'.
 
 
-==== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName38.ts (5 errors) ====
+==== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName38.ts (2 errors) ====
     class C {
         [public]() { }
          ~~~~~~
-!!! error TS1109: Expression expected.
-               ~
-!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-                ~
-!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-                   ~
-!!! error TS1005: '=>' expected.
+!!! error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+         ~~~~~~
+!!! error TS2304: Cannot find name 'public'.
     }
-    ~
-!!! error TS1128: Declaration or statement expected.

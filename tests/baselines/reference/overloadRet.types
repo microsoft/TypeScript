@@ -1,38 +1,38 @@
 === tests/cases/compiler/overloadRet.ts ===
 interface I {
->I : I
+>I : I, Symbol(I, Decl(overloadRet.ts, 0, 0))
 
     f(s:string):number;  
->f : { (s: string): number; (n: number): string; }
->s : string
+>f : { (s: string): number; (n: number): string; }, Symbol(f, Decl(overloadRet.ts, 0, 13), Decl(overloadRet.ts, 1, 23))
+>s : string, Symbol(s, Decl(overloadRet.ts, 1, 6))
 
     f(n:number):string;
->f : { (s: string): number; (n: number): string; }
->n : number
+>f : { (s: string): number; (n: number): string; }, Symbol(f, Decl(overloadRet.ts, 0, 13), Decl(overloadRet.ts, 1, 23))
+>n : number, Symbol(n, Decl(overloadRet.ts, 2, 6))
 
     g(n:number):any; 
->g : { (n: number): any; (n: number, m: number): string; }
->n : number
+>g : { (n: number): any; (n: number, m: number): string; }, Symbol(g, Decl(overloadRet.ts, 2, 23), Decl(overloadRet.ts, 3, 20))
+>n : number, Symbol(n, Decl(overloadRet.ts, 3, 6))
 
     g(n:number,m:number):string;
->g : { (n: number): any; (n: number, m: number): string; }
->n : number
->m : number
+>g : { (n: number): any; (n: number, m: number): string; }, Symbol(g, Decl(overloadRet.ts, 2, 23), Decl(overloadRet.ts, 3, 20))
+>n : number, Symbol(n, Decl(overloadRet.ts, 4, 6))
+>m : number, Symbol(m, Decl(overloadRet.ts, 4, 15))
 
     h(n:number):I;  
->h : { (n: number): I; (b: boolean): number; }
->n : number
->I : I
+>h : { (n: number): I; (b: boolean): number; }, Symbol(h, Decl(overloadRet.ts, 4, 32), Decl(overloadRet.ts, 5, 18))
+>n : number, Symbol(n, Decl(overloadRet.ts, 5, 6))
+>I : I, Symbol(I, Decl(overloadRet.ts, 0, 0))
 
     h(b:boolean):number;
->h : { (n: number): I; (b: boolean): number; }
->b : boolean
+>h : { (n: number): I; (b: boolean): number; }, Symbol(h, Decl(overloadRet.ts, 4, 32), Decl(overloadRet.ts, 5, 18))
+>b : boolean, Symbol(b, Decl(overloadRet.ts, 6, 6))
 
     i(b:boolean):number;
->i : { (b: boolean): number; (b: boolean): any; }
->b : boolean
+>i : { (b: boolean): number; (b: boolean): any; }, Symbol(i, Decl(overloadRet.ts, 6, 24), Decl(overloadRet.ts, 7, 24))
+>b : boolean, Symbol(b, Decl(overloadRet.ts, 7, 6))
 
     i(b:boolean):any;
->i : { (b: boolean): number; (b: boolean): any; }
->b : boolean
+>i : { (b: boolean): number; (b: boolean): any; }, Symbol(i, Decl(overloadRet.ts, 6, 24), Decl(overloadRet.ts, 7, 24))
+>b : boolean, Symbol(b, Decl(overloadRet.ts, 8, 6))
 }

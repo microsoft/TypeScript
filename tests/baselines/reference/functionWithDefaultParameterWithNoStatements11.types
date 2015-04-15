@@ -1,16 +1,18 @@
 === tests/cases/compiler/functionWithDefaultParameterWithNoStatements11.ts ===
 var v: any[];
->v : any[]
+>v : any[], Symbol(v, Decl(functionWithDefaultParameterWithNoStatements11.ts, 0, 3))
 
 function foo(a = v[0]) { }
->foo : (a?: any) => void
->a : any
+>foo : (a?: any) => void, Symbol(foo, Decl(functionWithDefaultParameterWithNoStatements11.ts, 0, 13))
+>a : any, Symbol(a, Decl(functionWithDefaultParameterWithNoStatements11.ts, 2, 13))
 >v[0] : any
->v : any[]
+>v : any[], Symbol(v, Decl(functionWithDefaultParameterWithNoStatements11.ts, 0, 3))
+>0 : number
 
 function bar(a = v[0]) {
->bar : (a?: any) => void
->a : any
+>bar : (a?: any) => void, Symbol(bar, Decl(functionWithDefaultParameterWithNoStatements11.ts, 2, 26))
+>a : any, Symbol(a, Decl(functionWithDefaultParameterWithNoStatements11.ts, 4, 13))
 >v[0] : any
->v : any[]
+>v : any[], Symbol(v, Decl(functionWithDefaultParameterWithNoStatements11.ts, 0, 3))
+>0 : number
 }

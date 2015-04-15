@@ -1,15 +1,17 @@
 === tests/cases/compiler/commentsOnReturnStatement1.ts ===
 class DebugClass {
->DebugClass : DebugClass
+>DebugClass : DebugClass, Symbol(DebugClass, Decl(commentsOnReturnStatement1.ts, 0, 0))
 
     public static debugFunc() {
->debugFunc : () => boolean
+>debugFunc : () => boolean, Symbol(DebugClass.debugFunc, Decl(commentsOnReturnStatement1.ts, 0, 18))
 
         // Start Debugger Test Code
         var i = 0;
->i : number
+>i : number, Symbol(i, Decl(commentsOnReturnStatement1.ts, 3, 11))
+>0 : number
 
         // End Debugger Test Code
         return true;
+>true : boolean
     }
 }

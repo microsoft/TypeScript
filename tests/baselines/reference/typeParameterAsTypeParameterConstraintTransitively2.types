@@ -3,121 +3,133 @@
 // these should be errors at the type parameter constraint declarations, and have no downstream errors
 
 interface A { foo: number }
->A : A
->foo : number
+>A : A, Symbol(A, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 0, 0))
+>foo : number, Symbol(foo, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 3, 13))
 
 interface B extends A { bar: string; }
->B : B
->A : A
->bar : string
+>B : B, Symbol(B, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 3, 27))
+>A : A, Symbol(A, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 0, 0))
+>bar : string, Symbol(bar, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 4, 23))
 
 interface C extends B { baz: boolean; }
->C : C
->B : B
->baz : boolean
+>C : C, Symbol(C, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 4, 38))
+>B : B, Symbol(B, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 3, 27))
+>baz : boolean, Symbol(baz, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 5, 23))
 
 var a: A;
->a : A
->A : A
+>a : A, Symbol(a, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 6, 3))
+>A : A, Symbol(A, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 0, 0))
 
 var b: B;
->b : B
->B : B
+>b : B, Symbol(b, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 7, 3))
+>B : B, Symbol(B, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 3, 27))
 
 var c: C;
->c : C
->C : C
+>c : C, Symbol(c, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 8, 3))
+>C : C, Symbol(C, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 4, 38))
 
 function foo<T, U, V>(x: T, y: U, z: V): V { return z; }
->foo : <T, U, V>(x: T, y: U, z: V) => V
->T : T
->U : U
->V : V
->x : T
->T : T
->y : U
->U : U
->z : V
->V : V
->V : V
->z : V
+>foo : <T, U, V>(x: T, y: U, z: V) => V, Symbol(foo, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 8, 9))
+>T : T, Symbol(T, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 10, 13))
+>U : U, Symbol(U, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 10, 15))
+>V : V, Symbol(V, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 10, 18))
+>x : T, Symbol(x, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 10, 22))
+>T : T, Symbol(T, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 10, 13))
+>y : U, Symbol(y, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 10, 27))
+>U : U, Symbol(U, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 10, 15))
+>z : V, Symbol(z, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 10, 33))
+>V : V, Symbol(V, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 10, 18))
+>V : V, Symbol(V, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 10, 18))
+>z : V, Symbol(z, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 10, 33))
 
 //function foo<T, U extends T, V extends U>(x: T, y: U, z: V): V { return z; }
 
 foo(1, 2, '');
 >foo(1, 2, '') : string
->foo : <T, U, V>(x: T, y: U, z: V) => V
+>foo : <T, U, V>(x: T, y: U, z: V) => V, Symbol(foo, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 8, 9))
+>1 : number
+>2 : number
+>'' : string
 
 foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: 2, z: true });
 >foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: 2, z: true }) : { x: number; y: number; z: boolean; }
->foo : <T, U, V>(x: T, y: U, z: V) => V
+>foo : <T, U, V>(x: T, y: U, z: V) => V, Symbol(foo, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 8, 9))
 >{ x: 1 } : { x: number; }
->x : number
+>x : number, Symbol(x, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 14, 5))
+>1 : number
 >{ x: 1, y: '' } : { x: number; y: string; }
->x : number
->y : string
+>x : number, Symbol(x, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 14, 15))
+>1 : number
+>y : string, Symbol(y, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 14, 21))
+>'' : string
 >{ x: 2, y: 2, z: true } : { x: number; y: number; z: boolean; }
->x : number
->y : number
->z : boolean
+>x : number, Symbol(x, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 14, 32))
+>2 : number
+>y : number, Symbol(y, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 14, 38))
+>2 : number
+>z : boolean, Symbol(z, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 14, 44))
+>true : boolean
 
 foo(a, b, a);
 >foo(a, b, a) : A
->foo : <T, U, V>(x: T, y: U, z: V) => V
->a : A
->b : B
->a : A
+>foo : <T, U, V>(x: T, y: U, z: V) => V, Symbol(foo, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 8, 9))
+>a : A, Symbol(a, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 6, 3))
+>b : B, Symbol(b, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 7, 3))
+>a : A, Symbol(a, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 6, 3))
 
 foo(a, { foo: 1, bar: '', hm: true }, b);
 >foo(a, { foo: 1, bar: '', hm: true }, b) : B
->foo : <T, U, V>(x: T, y: U, z: V) => V
->a : A
+>foo : <T, U, V>(x: T, y: U, z: V) => V, Symbol(foo, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 8, 9))
+>a : A, Symbol(a, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 6, 3))
 >{ foo: 1, bar: '', hm: true } : { foo: number; bar: string; hm: boolean; }
->foo : number
->bar : string
->hm : boolean
->b : B
+>foo : number, Symbol(foo, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 16, 8))
+>1 : number
+>bar : string, Symbol(bar, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 16, 16))
+>'' : string
+>hm : boolean, Symbol(hm, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 16, 25))
+>true : boolean
+>b : B, Symbol(b, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 7, 3))
 
 foo((x: number, y: string) => { }, (x, y: boolean) => { }, () => { });
 >foo((x: number, y: string) => { }, (x, y: boolean) => { }, () => { }) : () => void
->foo : <T, U, V>(x: T, y: U, z: V) => V
+>foo : <T, U, V>(x: T, y: U, z: V) => V, Symbol(foo, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 8, 9))
 >(x: number, y: string) => { } : (x: number, y: string) => void
->x : number
->y : string
+>x : number, Symbol(x, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 17, 5))
+>y : string, Symbol(y, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 17, 15))
 >(x, y: boolean) => { } : (x: any, y: boolean) => void
->x : any
->y : boolean
+>x : any, Symbol(x, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 17, 36))
+>y : boolean, Symbol(y, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 17, 38))
 >() => { } : () => void
 
 function foo2<T extends A, U extends A, V extends A>(x: T, y: U, z: V): V { return z; }
->foo2 : <T extends A, U extends A, V extends A>(x: T, y: U, z: V) => V
->T : T
->A : A
->U : U
->A : A
->V : V
->A : A
->x : T
->T : T
->y : U
->U : U
->z : V
->V : V
->V : V
->z : V
+>foo2 : <T extends A, U extends A, V extends A>(x: T, y: U, z: V) => V, Symbol(foo2, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 17, 70))
+>T : T, Symbol(T, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 19, 14))
+>A : A, Symbol(A, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 0, 0))
+>U : U, Symbol(U, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 19, 26))
+>A : A, Symbol(A, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 0, 0))
+>V : V, Symbol(V, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 19, 39))
+>A : A, Symbol(A, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 0, 0))
+>x : T, Symbol(x, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 19, 53))
+>T : T, Symbol(T, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 19, 14))
+>y : U, Symbol(y, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 19, 58))
+>U : U, Symbol(U, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 19, 26))
+>z : V, Symbol(z, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 19, 64))
+>V : V, Symbol(V, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 19, 39))
+>V : V, Symbol(V, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 19, 39))
+>z : V, Symbol(z, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 19, 64))
 
 //function foo2<T extends A, U extends T, V extends U>(x: T, y: U, z: V): V { return z; }
 foo(b, a, c);
 >foo(b, a, c) : C
->foo : <T, U, V>(x: T, y: U, z: V) => V
->b : B
->a : A
->c : C
+>foo : <T, U, V>(x: T, y: U, z: V) => V, Symbol(foo, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 8, 9))
+>b : B, Symbol(b, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 7, 3))
+>a : A, Symbol(a, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 6, 3))
+>c : C, Symbol(c, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 8, 3))
 
 foo(c, c, a);
 >foo(c, c, a) : A
->foo : <T, U, V>(x: T, y: U, z: V) => V
->c : C
->c : C
->a : A
+>foo : <T, U, V>(x: T, y: U, z: V) => V, Symbol(foo, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 8, 9))
+>c : C, Symbol(c, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 8, 3))
+>c : C, Symbol(c, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 8, 3))
+>a : A, Symbol(a, Decl(typeParameterAsTypeParameterConstraintTransitively2.ts, 6, 3))
 

@@ -1,136 +1,144 @@
 === tests/cases/conformance/expressions/commaOperator/commaOperatorsMultipleOperators.ts ===
 var ANY: any;
->ANY : any
+>ANY : any, Symbol(ANY, Decl(commaOperatorsMultipleOperators.ts, 0, 3))
 
 var BOOLEAN: boolean;
->BOOLEAN : boolean
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorsMultipleOperators.ts, 1, 3))
 
 var NUMBER: number;
->NUMBER : number
+>NUMBER : number, Symbol(NUMBER, Decl(commaOperatorsMultipleOperators.ts, 2, 3))
 
 var STRING: string;
->STRING : string
+>STRING : string, Symbol(STRING, Decl(commaOperatorsMultipleOperators.ts, 3, 3))
 
 var OBJECT: Object;
->OBJECT : Object
->Object : Object
+>OBJECT : Object, Symbol(OBJECT, Decl(commaOperatorsMultipleOperators.ts, 4, 3))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
 //Expected: work well
 ANY, BOOLEAN, NUMBER;
 >ANY, BOOLEAN, NUMBER : number
 >ANY, BOOLEAN : boolean
->ANY : any
->BOOLEAN : boolean
->NUMBER : number
+>ANY : any, Symbol(ANY, Decl(commaOperatorsMultipleOperators.ts, 0, 3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorsMultipleOperators.ts, 1, 3))
+>NUMBER : number, Symbol(NUMBER, Decl(commaOperatorsMultipleOperators.ts, 2, 3))
 
 BOOLEAN, NUMBER, STRING;
 >BOOLEAN, NUMBER, STRING : string
 >BOOLEAN, NUMBER : number
->BOOLEAN : boolean
->NUMBER : number
->STRING : string
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorsMultipleOperators.ts, 1, 3))
+>NUMBER : number, Symbol(NUMBER, Decl(commaOperatorsMultipleOperators.ts, 2, 3))
+>STRING : string, Symbol(STRING, Decl(commaOperatorsMultipleOperators.ts, 3, 3))
 
 NUMBER, STRING, OBJECT;
 >NUMBER, STRING, OBJECT : Object
 >NUMBER, STRING : string
->NUMBER : number
->STRING : string
->OBJECT : Object
+>NUMBER : number, Symbol(NUMBER, Decl(commaOperatorsMultipleOperators.ts, 2, 3))
+>STRING : string, Symbol(STRING, Decl(commaOperatorsMultipleOperators.ts, 3, 3))
+>OBJECT : Object, Symbol(OBJECT, Decl(commaOperatorsMultipleOperators.ts, 4, 3))
 
 STRING, OBJECT, ANY;
 >STRING, OBJECT, ANY : any
 >STRING, OBJECT : Object
->STRING : string
->OBJECT : Object
->ANY : any
+>STRING : string, Symbol(STRING, Decl(commaOperatorsMultipleOperators.ts, 3, 3))
+>OBJECT : Object, Symbol(OBJECT, Decl(commaOperatorsMultipleOperators.ts, 4, 3))
+>ANY : any, Symbol(ANY, Decl(commaOperatorsMultipleOperators.ts, 0, 3))
 
 OBJECT, ANY, BOOLEAN;
 >OBJECT, ANY, BOOLEAN : boolean
 >OBJECT, ANY : any
->OBJECT : Object
->ANY : any
->BOOLEAN : boolean
+>OBJECT : Object, Symbol(OBJECT, Decl(commaOperatorsMultipleOperators.ts, 4, 3))
+>ANY : any, Symbol(ANY, Decl(commaOperatorsMultipleOperators.ts, 0, 3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorsMultipleOperators.ts, 1, 3))
 
 //Results should have the same type as the third operand
 var resultIsAny1 = (STRING, OBJECT, ANY);
->resultIsAny1 : any
+>resultIsAny1 : any, Symbol(resultIsAny1, Decl(commaOperatorsMultipleOperators.ts, 14, 3))
 >(STRING, OBJECT, ANY) : any
 >STRING, OBJECT, ANY : any
 >STRING, OBJECT : Object
->STRING : string
->OBJECT : Object
->ANY : any
+>STRING : string, Symbol(STRING, Decl(commaOperatorsMultipleOperators.ts, 3, 3))
+>OBJECT : Object, Symbol(OBJECT, Decl(commaOperatorsMultipleOperators.ts, 4, 3))
+>ANY : any, Symbol(ANY, Decl(commaOperatorsMultipleOperators.ts, 0, 3))
 
 var resultIsBoolean1 = (OBJECT, ANY, BOOLEAN);
->resultIsBoolean1 : boolean
+>resultIsBoolean1 : boolean, Symbol(resultIsBoolean1, Decl(commaOperatorsMultipleOperators.ts, 15, 3))
 >(OBJECT, ANY, BOOLEAN) : boolean
 >OBJECT, ANY, BOOLEAN : boolean
 >OBJECT, ANY : any
->OBJECT : Object
->ANY : any
->BOOLEAN : boolean
+>OBJECT : Object, Symbol(OBJECT, Decl(commaOperatorsMultipleOperators.ts, 4, 3))
+>ANY : any, Symbol(ANY, Decl(commaOperatorsMultipleOperators.ts, 0, 3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorsMultipleOperators.ts, 1, 3))
 
 var resultIsNumber1 = (ANY, BOOLEAN, NUMBER);
->resultIsNumber1 : number
+>resultIsNumber1 : number, Symbol(resultIsNumber1, Decl(commaOperatorsMultipleOperators.ts, 16, 3))
 >(ANY, BOOLEAN, NUMBER) : number
 >ANY, BOOLEAN, NUMBER : number
 >ANY, BOOLEAN : boolean
->ANY : any
->BOOLEAN : boolean
->NUMBER : number
+>ANY : any, Symbol(ANY, Decl(commaOperatorsMultipleOperators.ts, 0, 3))
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorsMultipleOperators.ts, 1, 3))
+>NUMBER : number, Symbol(NUMBER, Decl(commaOperatorsMultipleOperators.ts, 2, 3))
 
 var resultIsString1 = (BOOLEAN, NUMBER, STRING);
->resultIsString1 : string
+>resultIsString1 : string, Symbol(resultIsString1, Decl(commaOperatorsMultipleOperators.ts, 17, 3))
 >(BOOLEAN, NUMBER, STRING) : string
 >BOOLEAN, NUMBER, STRING : string
 >BOOLEAN, NUMBER : number
->BOOLEAN : boolean
->NUMBER : number
->STRING : string
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorsMultipleOperators.ts, 1, 3))
+>NUMBER : number, Symbol(NUMBER, Decl(commaOperatorsMultipleOperators.ts, 2, 3))
+>STRING : string, Symbol(STRING, Decl(commaOperatorsMultipleOperators.ts, 3, 3))
 
 var resultIsObject1 = (NUMBER, STRING, OBJECT);
->resultIsObject1 : Object
+>resultIsObject1 : Object, Symbol(resultIsObject1, Decl(commaOperatorsMultipleOperators.ts, 18, 3))
 >(NUMBER, STRING, OBJECT) : Object
 >NUMBER, STRING, OBJECT : Object
 >NUMBER, STRING : string
->NUMBER : number
->STRING : string
->OBJECT : Object
+>NUMBER : number, Symbol(NUMBER, Decl(commaOperatorsMultipleOperators.ts, 2, 3))
+>STRING : string, Symbol(STRING, Decl(commaOperatorsMultipleOperators.ts, 3, 3))
+>OBJECT : Object, Symbol(OBJECT, Decl(commaOperatorsMultipleOperators.ts, 4, 3))
 
 //Literal and expression
 null, true, 1;
 >null, true, 1 : number
 >null, true : boolean
+>null : null
+>true : boolean
+>1 : number
 
 ++NUMBER, STRING.charAt(0), new Object();
 >++NUMBER, STRING.charAt(0), new Object() : Object
 >++NUMBER, STRING.charAt(0) : string
 >++NUMBER : number
->NUMBER : number
+>NUMBER : number, Symbol(NUMBER, Decl(commaOperatorsMultipleOperators.ts, 2, 3))
 >STRING.charAt(0) : string
->STRING.charAt : (pos: number) => string
->STRING : string
->charAt : (pos: number) => string
+>STRING.charAt : (pos: number) => string, Symbol(String.charAt, Decl(lib.d.ts, 279, 23))
+>STRING : string, Symbol(STRING, Decl(commaOperatorsMultipleOperators.ts, 3, 3))
+>charAt : (pos: number) => string, Symbol(String.charAt, Decl(lib.d.ts, 279, 23))
+>0 : number
 >new Object() : Object
->Object : ObjectConstructor
+>Object : ObjectConstructor, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
 var resultIsNumber2 = (null, true, 1);
->resultIsNumber2 : number
+>resultIsNumber2 : number, Symbol(resultIsNumber2, Decl(commaOperatorsMultipleOperators.ts, 24, 3))
 >(null, true, 1) : number
 >null, true, 1 : number
 >null, true : boolean
+>null : null
+>true : boolean
+>1 : number
 
 var resultIsObject2 = (++NUMBER, STRING.charAt(0), new Object());
->resultIsObject2 : Object
+>resultIsObject2 : Object, Symbol(resultIsObject2, Decl(commaOperatorsMultipleOperators.ts, 25, 3))
 >(++NUMBER, STRING.charAt(0), new Object()) : Object
 >++NUMBER, STRING.charAt(0), new Object() : Object
 >++NUMBER, STRING.charAt(0) : string
 >++NUMBER : number
->NUMBER : number
+>NUMBER : number, Symbol(NUMBER, Decl(commaOperatorsMultipleOperators.ts, 2, 3))
 >STRING.charAt(0) : string
->STRING.charAt : (pos: number) => string
->STRING : string
->charAt : (pos: number) => string
+>STRING.charAt : (pos: number) => string, Symbol(String.charAt, Decl(lib.d.ts, 279, 23))
+>STRING : string, Symbol(STRING, Decl(commaOperatorsMultipleOperators.ts, 3, 3))
+>charAt : (pos: number) => string, Symbol(String.charAt, Decl(lib.d.ts, 279, 23))
+>0 : number
 >new Object() : Object
->Object : ObjectConstructor
+>Object : ObjectConstructor, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 

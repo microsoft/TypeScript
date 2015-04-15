@@ -1,41 +1,43 @@
 === tests/cases/compiler/implicitAnyAnyReturningFunction.ts ===
 function A() {
->A : () => any
+>A : () => any, Symbol(A, Decl(implicitAnyAnyReturningFunction.ts, 0, 0))
 
     return <any>"";
 ><any>"" : any
+>"" : string
 }
 
 function B() {
->B : () => any
+>B : () => any, Symbol(B, Decl(implicitAnyAnyReturningFunction.ts, 2, 1))
 
     var someLocal: any = {};
->someLocal : any
+>someLocal : any, Symbol(someLocal, Decl(implicitAnyAnyReturningFunction.ts, 5, 7))
 >{} : {}
 
     return someLocal;
->someLocal : any
+>someLocal : any, Symbol(someLocal, Decl(implicitAnyAnyReturningFunction.ts, 5, 7))
 }
 
 class C {
->C : C
+>C : C, Symbol(C, Decl(implicitAnyAnyReturningFunction.ts, 7, 1))
 
     public A() {
->A : () => any
+>A : () => any, Symbol(A, Decl(implicitAnyAnyReturningFunction.ts, 9, 9))
 
         return <any>"";
 ><any>"" : any
+>"" : string
     }
 
     public B() {
->B : () => any
+>B : () => any, Symbol(B, Decl(implicitAnyAnyReturningFunction.ts, 12, 5))
 
         var someLocal: any = {};
->someLocal : any
+>someLocal : any, Symbol(someLocal, Decl(implicitAnyAnyReturningFunction.ts, 15, 11))
 >{} : {}
 
         return someLocal;
->someLocal : any
+>someLocal : any, Symbol(someLocal, Decl(implicitAnyAnyReturningFunction.ts, 15, 11))
     }
 }
 

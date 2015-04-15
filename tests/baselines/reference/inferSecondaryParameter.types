@@ -2,32 +2,33 @@
 // type inference on 'bug' should give 'any'
 
 interface Ib { m(test: string, fn: Function); }
->Ib : Ib
->m : (test: string, fn: Function) => any
->test : string
->fn : Function
->Function : Function
+>Ib : Ib, Symbol(Ib, Decl(inferSecondaryParameter.ts, 0, 0))
+>m : (test: string, fn: Function) => any, Symbol(m, Decl(inferSecondaryParameter.ts, 2, 14))
+>test : string, Symbol(test, Decl(inferSecondaryParameter.ts, 2, 17))
+>fn : Function, Symbol(fn, Decl(inferSecondaryParameter.ts, 2, 30))
+>Function : Function, Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11))
 
 var b: Ib = { m: function (test: string, fn: Function) { } };
->b : Ib
->Ib : Ib
+>b : Ib, Symbol(b, Decl(inferSecondaryParameter.ts, 4, 3))
+>Ib : Ib, Symbol(Ib, Decl(inferSecondaryParameter.ts, 0, 0))
 >{ m: function (test: string, fn: Function) { } } : { m: (test: string, fn: Function) => void; }
->m : (test: string, fn: Function) => void
+>m : (test: string, fn: Function) => void, Symbol(m, Decl(inferSecondaryParameter.ts, 4, 13))
 >function (test: string, fn: Function) { } : (test: string, fn: Function) => void
->test : string
->fn : Function
->Function : Function
+>test : string, Symbol(test, Decl(inferSecondaryParameter.ts, 4, 27))
+>fn : Function, Symbol(fn, Decl(inferSecondaryParameter.ts, 4, 40))
+>Function : Function, Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11))
 
 b.m("test", function (bug) {
 >b.m("test", function (bug) {    var a: number = bug;}) : any
->b.m : (test: string, fn: Function) => any
->b : Ib
->m : (test: string, fn: Function) => any
+>b.m : (test: string, fn: Function) => any, Symbol(Ib.m, Decl(inferSecondaryParameter.ts, 2, 14))
+>b : Ib, Symbol(b, Decl(inferSecondaryParameter.ts, 4, 3))
+>m : (test: string, fn: Function) => any, Symbol(Ib.m, Decl(inferSecondaryParameter.ts, 2, 14))
+>"test" : string
 >function (bug) {    var a: number = bug;} : (bug: any) => void
->bug : any
+>bug : any, Symbol(bug, Decl(inferSecondaryParameter.ts, 6, 22))
 
     var a: number = bug;
->a : number
->bug : any
+>a : number, Symbol(a, Decl(inferSecondaryParameter.ts, 7, 7))
+>bug : any, Symbol(bug, Decl(inferSecondaryParameter.ts, 6, 22))
 
 });

@@ -1,7 +1,7 @@
 === tests/cases/compiler/functionExpressionReturningItself.ts ===
 var x = function somefn() { return somefn; };
->x : () => any
+>x : () => any, Symbol(x, Decl(functionExpressionReturningItself.ts, 0, 3))
 >function somefn() { return somefn; } : () => any
->somefn : () => any
->somefn : () => any
+>somefn : () => any, Symbol(somefn, Decl(functionExpressionReturningItself.ts, 0, 7))
+>somefn : () => any, Symbol(somefn, Decl(functionExpressionReturningItself.ts, 0, 7))
 

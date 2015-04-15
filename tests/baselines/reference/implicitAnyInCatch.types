@@ -1,28 +1,29 @@
 === tests/cases/compiler/implicitAnyInCatch.ts ===
 // this should not be an error
 try { } catch (error) {
->error : any
+>error : any, Symbol(error, Decl(implicitAnyInCatch.ts, 1, 15))
 
     if (error.number === -2147024809) { }
 >error.number === -2147024809 : boolean
 >error.number : any
->error : any
+>error : any, Symbol(error, Decl(implicitAnyInCatch.ts, 1, 15))
 >number : any
 >-2147024809 : number
+>2147024809 : number
 }
 for (var key in this) { }
->key : any
+>key : any, Symbol(key, Decl(implicitAnyInCatch.ts, 4, 8))
 >this : any
 
 class C {
->C : C
+>C : C, Symbol(C, Decl(implicitAnyInCatch.ts, 4, 25))
 
     public temp() {
->temp : () => void
+>temp : () => void, Symbol(temp, Decl(implicitAnyInCatch.ts, 6, 9))
 
         for (var x in this) {
->x : any
->this : C
+>x : any, Symbol(x, Decl(implicitAnyInCatch.ts, 8, 16))
+>this : C, Symbol(C, Decl(implicitAnyInCatch.ts, 4, 25))
         }
     }
 }

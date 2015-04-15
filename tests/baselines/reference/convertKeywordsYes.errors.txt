@@ -1,21 +1,15 @@
-tests/cases/compiler/convertKeywordsYes.ts(293,11): error TS1005: '{' expected.
-tests/cases/compiler/convertKeywordsYes.ts(293,21): error TS1005: ';' expected.
-tests/cases/compiler/convertKeywordsYes.ts(294,11): error TS1005: '{' expected.
-tests/cases/compiler/convertKeywordsYes.ts(296,11): error TS1005: '{' expected.
-tests/cases/compiler/convertKeywordsYes.ts(296,19): error TS1005: ';' expected.
-tests/cases/compiler/convertKeywordsYes.ts(297,11): error TS1005: '{' expected.
-tests/cases/compiler/convertKeywordsYes.ts(297,19): error TS1005: ';' expected.
-tests/cases/compiler/convertKeywordsYes.ts(298,11): error TS1005: '{' expected.
-tests/cases/compiler/convertKeywordsYes.ts(298,21): error TS1005: ';' expected.
-tests/cases/compiler/convertKeywordsYes.ts(299,11): error TS1005: '{' expected.
-tests/cases/compiler/convertKeywordsYes.ts(299,18): error TS1005: ';' expected.
-tests/cases/compiler/convertKeywordsYes.ts(301,11): error TS1005: '{' expected.
-tests/cases/compiler/convertKeywordsYes.ts(301,18): error TS1005: ';' expected.
-tests/cases/compiler/convertKeywordsYes.ts(303,11): error TS1005: '{' expected.
-tests/cases/compiler/convertKeywordsYes.ts(303,17): error TS1005: ';' expected.
+tests/cases/compiler/convertKeywordsYes.ts(292,11): error TS1213: Identifier expected. 'implements' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+tests/cases/compiler/convertKeywordsYes.ts(293,11): error TS1213: Identifier expected. 'interface' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+tests/cases/compiler/convertKeywordsYes.ts(294,11): error TS1213: Identifier expected. 'let' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+tests/cases/compiler/convertKeywordsYes.ts(296,11): error TS1213: Identifier expected. 'package' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+tests/cases/compiler/convertKeywordsYes.ts(297,11): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+tests/cases/compiler/convertKeywordsYes.ts(298,11): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+tests/cases/compiler/convertKeywordsYes.ts(299,11): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+tests/cases/compiler/convertKeywordsYes.ts(301,11): error TS1213: Identifier expected. 'static' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+tests/cases/compiler/convertKeywordsYes.ts(303,11): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 
 
-==== tests/cases/compiler/convertKeywordsYes.ts (15 errors) ====
+==== tests/cases/compiler/convertKeywordsYes.ts (9 errors) ====
     // reserved ES5 future in strict mode
     
     var constructor = 0;
@@ -308,46 +302,34 @@ tests/cases/compiler/convertKeywordsYes.ts(303,17): error TS1005: ';' expected.
     module bigModule {
         class constructor { }
         class implements { }
+              ~~~~~~~~~~
+!!! error TS1213: Identifier expected. 'implements' is a reserved word in strict mode. Class definitions are automatically in strict mode.
         class interface { }
               ~~~~~~~~~
-!!! error TS1005: '{' expected.
-                        ~
-!!! error TS1005: ';' expected.
+!!! error TS1213: Identifier expected. 'interface' is a reserved word in strict mode. Class definitions are automatically in strict mode.
         class let { }
               ~~~
-!!! error TS1005: '{' expected.
+!!! error TS1213: Identifier expected. 'let' is a reserved word in strict mode. Class definitions are automatically in strict mode.
         class module { }
         class package { }
               ~~~~~~~
-!!! error TS1005: '{' expected.
-                      ~
-!!! error TS1005: ';' expected.
+!!! error TS1213: Identifier expected. 'package' is a reserved word in strict mode. Class definitions are automatically in strict mode.
         class private { }
               ~~~~~~~
-!!! error TS1005: '{' expected.
-                      ~
-!!! error TS1005: ';' expected.
+!!! error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
         class protected { }
               ~~~~~~~~~
-!!! error TS1005: '{' expected.
-                        ~
-!!! error TS1005: ';' expected.
+!!! error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
         class public { }
               ~~~~~~
-!!! error TS1005: '{' expected.
-                     ~
-!!! error TS1005: ';' expected.
+!!! error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
         class set { }
         class static { }
               ~~~~~~
-!!! error TS1005: '{' expected.
-                     ~
-!!! error TS1005: ';' expected.
+!!! error TS1213: Identifier expected. 'static' is a reserved word in strict mode. Class definitions are automatically in strict mode.
         class get { }
         class yield { }
               ~~~~~
-!!! error TS1005: '{' expected.
-                    ~
-!!! error TS1005: ';' expected.
+!!! error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
         class declare { }
     }

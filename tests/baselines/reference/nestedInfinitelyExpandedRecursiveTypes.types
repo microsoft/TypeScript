@@ -1,40 +1,40 @@
 === tests/cases/compiler/nestedInfinitelyExpandedRecursiveTypes.ts ===
 interface F<T> {
->F : F<T>
->T : T
+>F : F<T>, Symbol(F, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 0, 0))
+>T : T, Symbol(T, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 0, 12))
 
       t: G<F<() => T>>;
->t : G<F<() => T>>
->G : G<U>
->F : F<T>
->T : T
+>t : G<F<() => T>>, Symbol(t, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 0, 16))
+>G : G<U>, Symbol(G, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 2, 1))
+>F : F<T>, Symbol(F, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 0, 0))
+>T : T, Symbol(T, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 0, 12))
 }
 interface G<U> {
->G : G<U>
->U : U
+>G : G<U>, Symbol(G, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 2, 1))
+>U : U, Symbol(U, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 3, 12))
 
       t: G<G<() => U>>;
->t : G<G<() => U>>
->G : G<U>
->G : G<U>
->U : U
+>t : G<G<() => U>>, Symbol(t, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 3, 16))
+>G : G<U>, Symbol(G, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 2, 1))
+>G : G<U>, Symbol(G, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 2, 1))
+>U : U, Symbol(U, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 3, 12))
 }
  
 var f: F<string>;
->f : F<string>
->F : F<T>
+>f : F<string>, Symbol(f, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 7, 3))
+>F : F<T>, Symbol(F, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 0, 0))
 
 var g: G<string>;
->g : G<string>
->G : G<U>
+>g : G<string>, Symbol(g, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 8, 3))
+>G : G<U>, Symbol(G, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 2, 1))
 
 f = g;
 >f = g : G<string>
->f : F<string>
->g : G<string>
+>f : F<string>, Symbol(f, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 7, 3))
+>g : G<string>, Symbol(g, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 8, 3))
 
 g = f;
 >g = f : F<string>
->g : G<string>
->f : F<string>
+>g : G<string>, Symbol(g, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 8, 3))
+>f : F<string>, Symbol(f, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 7, 3))
 

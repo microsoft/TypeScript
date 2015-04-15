@@ -1,41 +1,41 @@
 === tests/cases/compiler/declFileTypeofEnum.ts ===
 
 enum days {
->days : days
+>days : days, Symbol(days, Decl(declFileTypeofEnum.ts, 0, 0))
 
     monday,
->monday : days
+>monday : days, Symbol(days.monday, Decl(declFileTypeofEnum.ts, 1, 11))
 
     tuesday,
->tuesday : days
+>tuesday : days, Symbol(days.tuesday, Decl(declFileTypeofEnum.ts, 2, 11))
 
     wednesday,
->wednesday : days
+>wednesday : days, Symbol(days.wednesday, Decl(declFileTypeofEnum.ts, 3, 12))
 
     thursday,
->thursday : days
+>thursday : days, Symbol(days.thursday, Decl(declFileTypeofEnum.ts, 4, 14))
 
     friday,
->friday : days
+>friday : days, Symbol(days.friday, Decl(declFileTypeofEnum.ts, 5, 13))
 
     saturday,
->saturday : days
+>saturday : days, Symbol(days.saturday, Decl(declFileTypeofEnum.ts, 6, 11))
 
     sunday
->sunday : days
+>sunday : days, Symbol(days.sunday, Decl(declFileTypeofEnum.ts, 7, 13))
 }
 
 var weekendDay = days.saturday;
->weekendDay : days
->days.saturday : days
->days : typeof days
->saturday : days
+>weekendDay : days, Symbol(weekendDay, Decl(declFileTypeofEnum.ts, 11, 3))
+>days.saturday : days, Symbol(days.saturday, Decl(declFileTypeofEnum.ts, 6, 11))
+>days : typeof days, Symbol(days, Decl(declFileTypeofEnum.ts, 0, 0))
+>saturday : days, Symbol(days.saturday, Decl(declFileTypeofEnum.ts, 6, 11))
 
 var daysOfMonth = days;
->daysOfMonth : typeof days
->days : typeof days
+>daysOfMonth : typeof days, Symbol(daysOfMonth, Decl(declFileTypeofEnum.ts, 12, 3))
+>days : typeof days, Symbol(days, Decl(declFileTypeofEnum.ts, 0, 0))
 
 var daysOfYear: typeof days;
->daysOfYear : typeof days
->days : typeof days
+>daysOfYear : typeof days, Symbol(daysOfYear, Decl(declFileTypeofEnum.ts, 13, 3))
+>days : typeof days, Symbol(days, Decl(declFileTypeofEnum.ts, 0, 0))
 

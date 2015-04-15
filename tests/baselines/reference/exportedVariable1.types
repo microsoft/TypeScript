@@ -1,15 +1,16 @@
 === tests/cases/compiler/exportedVariable1.ts ===
 export var foo = {name: "Bill"};
->foo : { name: string; }
+>foo : { name: string; }, Symbol(foo, Decl(exportedVariable1.ts, 0, 10))
 >{name: "Bill"} : { name: string; }
->name : string
+>name : string, Symbol(name, Decl(exportedVariable1.ts, 0, 18))
+>"Bill" : string
 
 var upper = foo.name.toUpperCase();
->upper : string
+>upper : string, Symbol(upper, Decl(exportedVariable1.ts, 1, 3))
 >foo.name.toUpperCase() : string
->foo.name.toUpperCase : () => string
->foo.name : string
->foo : { name: string; }
->name : string
->toUpperCase : () => string
+>foo.name.toUpperCase : () => string, Symbol(String.toUpperCase, Decl(lib.d.ts, 405, 32))
+>foo.name : string, Symbol(name, Decl(exportedVariable1.ts, 0, 18))
+>foo : { name: string; }, Symbol(foo, Decl(exportedVariable1.ts, 0, 10))
+>name : string, Symbol(name, Decl(exportedVariable1.ts, 0, 18))
+>toUpperCase : () => string, Symbol(String.toUpperCase, Decl(lib.d.ts, 405, 32))
 

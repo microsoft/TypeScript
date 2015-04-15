@@ -1,33 +1,33 @@
 === tests/cases/compiler/interfacePropertiesWithSameName1.ts ===
 interface Mover {
->Mover : Mover
+>Mover : Mover, Symbol(Mover, Decl(interfacePropertiesWithSameName1.ts, 0, 0))
 
     move(): void;
->move : () => void
+>move : () => void, Symbol(move, Decl(interfacePropertiesWithSameName1.ts, 0, 17))
 
     getStatus(): { speed: number; };
->getStatus : () => { speed: number; }
->speed : number
+>getStatus : () => { speed: number; }, Symbol(getStatus, Decl(interfacePropertiesWithSameName1.ts, 1, 17))
+>speed : number, Symbol(speed, Decl(interfacePropertiesWithSameName1.ts, 2, 18))
 }
 interface Shaker {
->Shaker : Shaker
+>Shaker : Shaker, Symbol(Shaker, Decl(interfacePropertiesWithSameName1.ts, 3, 1))
 
     shake(): void;
->shake : () => void
+>shake : () => void, Symbol(shake, Decl(interfacePropertiesWithSameName1.ts, 4, 18))
 
     getStatus(): { frequency: number; };
->getStatus : () => { frequency: number; }
->frequency : number
+>getStatus : () => { frequency: number; }, Symbol(getStatus, Decl(interfacePropertiesWithSameName1.ts, 5, 18))
+>frequency : number, Symbol(frequency, Decl(interfacePropertiesWithSameName1.ts, 6, 18))
 }
 
 interface MoverShaker extends Mover, Shaker {
->MoverShaker : MoverShaker
->Mover : Mover
->Shaker : Shaker
+>MoverShaker : MoverShaker, Symbol(MoverShaker, Decl(interfacePropertiesWithSameName1.ts, 7, 1))
+>Mover : Mover, Symbol(Mover, Decl(interfacePropertiesWithSameName1.ts, 0, 0))
+>Shaker : Shaker, Symbol(Shaker, Decl(interfacePropertiesWithSameName1.ts, 3, 1))
 
     getStatus(): { speed: number; frequency: number; };
->getStatus : () => { speed: number; frequency: number; }
->speed : number
->frequency : number
+>getStatus : () => { speed: number; frequency: number; }, Symbol(getStatus, Decl(interfacePropertiesWithSameName1.ts, 9, 45))
+>speed : number, Symbol(speed, Decl(interfacePropertiesWithSameName1.ts, 10, 18))
+>frequency : number, Symbol(frequency, Decl(interfacePropertiesWithSameName1.ts, 10, 33))
 }
 

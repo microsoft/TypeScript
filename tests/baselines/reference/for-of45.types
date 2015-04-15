@@ -1,26 +1,30 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of45.ts ===
 var k: string, v: boolean;
->k : string
->v : boolean
+>k : string, Symbol(k, Decl(for-of45.ts, 0, 3))
+>v : boolean, Symbol(v, Decl(for-of45.ts, 0, 14))
 
 var map = new Map([["", true]]);
->map : Map<string, boolean>
+>map : Map<string, boolean>, Symbol(map, Decl(for-of45.ts, 1, 3))
 >new Map([["", true]]) : Map<string, boolean>
->Map : MapConstructor
+>Map : MapConstructor, Symbol(Map, Decl(lib.d.ts, 1837, 1), Decl(lib.d.ts, 1859, 11))
 >[["", true]] : [string, boolean][]
 >["", true] : [string, boolean]
+>"" : string
+>true : boolean
 
 for ([k = "", v = false] of map) {
 >[k = "", v = false] : (string | boolean)[]
 >k = "" : string
->k : string
+>k : string, Symbol(k, Decl(for-of45.ts, 0, 3))
+>"" : string
 >v = false : boolean
->v : boolean
->map : Map<string, boolean>
+>v : boolean, Symbol(v, Decl(for-of45.ts, 0, 14))
+>false : boolean
+>map : Map<string, boolean>, Symbol(map, Decl(for-of45.ts, 1, 3))
 
     k;
->k : string
+>k : string, Symbol(k, Decl(for-of45.ts, 0, 3))
 
     v;
->v : boolean
+>v : boolean, Symbol(v, Decl(for-of45.ts, 0, 14))
 }

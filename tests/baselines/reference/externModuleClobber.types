@@ -1,39 +1,39 @@
 === tests/cases/compiler/externModuleClobber.ts ===
 declare module EM {
->EM : typeof EM
+>EM : typeof EM, Symbol(EM, Decl(externModuleClobber.ts, 0, 0))
 
 	export class Position { }
->Position : Position
+>Position : Position, Symbol(Position, Decl(externModuleClobber.ts, 0, 19))
 
 	export class EC {
->EC : EC
+>EC : EC, Symbol(EC, Decl(externModuleClobber.ts, 1, 26))
 
 		public getPosition() : EM.Position;
->getPosition : () => Position
->EM : unknown
->Position : Position
+>getPosition : () => Position, Symbol(getPosition, Decl(externModuleClobber.ts, 3, 18))
+>EM : any, Symbol(EM, Decl(externModuleClobber.ts, 0, 0))
+>Position : Position, Symbol(Position, Decl(externModuleClobber.ts, 0, 19))
 	}
 }
 
 var x:EM.Position;
->x : EM.Position
->EM : unknown
->Position : EM.Position
+>x : EM.Position, Symbol(x, Decl(externModuleClobber.ts, 8, 3))
+>EM : any, Symbol(EM, Decl(externModuleClobber.ts, 0, 0))
+>Position : EM.Position, Symbol(EM.Position, Decl(externModuleClobber.ts, 0, 19))
 
 var ec:EM.EC = new EM.EC();
->ec : EM.EC
->EM : unknown
->EC : EM.EC
+>ec : EM.EC, Symbol(ec, Decl(externModuleClobber.ts, 9, 3))
+>EM : any, Symbol(EM, Decl(externModuleClobber.ts, 0, 0))
+>EC : EM.EC, Symbol(EM.EC, Decl(externModuleClobber.ts, 1, 26))
 >new EM.EC() : EM.EC
->EM.EC : typeof EM.EC
->EM : typeof EM
->EC : typeof EM.EC
+>EM.EC : typeof EM.EC, Symbol(EM.EC, Decl(externModuleClobber.ts, 1, 26))
+>EM : typeof EM, Symbol(EM, Decl(externModuleClobber.ts, 0, 0))
+>EC : typeof EM.EC, Symbol(EM.EC, Decl(externModuleClobber.ts, 1, 26))
 
 x = ec.getPosition();
 >x = ec.getPosition() : EM.Position
->x : EM.Position
+>x : EM.Position, Symbol(x, Decl(externModuleClobber.ts, 8, 3))
 >ec.getPosition() : EM.Position
->ec.getPosition : () => EM.Position
->ec : EM.EC
->getPosition : () => EM.Position
+>ec.getPosition : () => EM.Position, Symbol(EM.EC.getPosition, Decl(externModuleClobber.ts, 3, 18))
+>ec : EM.EC, Symbol(ec, Decl(externModuleClobber.ts, 9, 3))
+>getPosition : () => EM.Position, Symbol(EM.EC.getPosition, Decl(externModuleClobber.ts, 3, 18))
 

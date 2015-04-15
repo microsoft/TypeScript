@@ -3,136 +3,149 @@
 // the type of a variable or parameter is narrowed by any type guard in the left operand when false, 
 // provided the right operand contains no assignments to the variable or parameter.
 function foo(x: number | string) {
->foo : (x: string | number) => boolean
->x : string | number
+>foo : (x: string | number) => boolean, Symbol(foo, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 0, 0))
+>x : string | number, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 3, 13))
 
     return typeof x !== "string" || x.length === 10; // string
 >typeof x !== "string" || x.length === 10 : boolean
 >typeof x !== "string" : boolean
 >typeof x : string
->x : string | number
+>x : string | number, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 3, 13))
+>"string" : string
 >x.length === 10 : boolean
->x.length : number
->x : string
->length : number
+>x.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>x : string, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 3, 13))
+>length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>10 : number
 }
 function foo2(x: number | string) {
->foo2 : (x: string | number) => string | number | boolean
->x : string | number
+>foo2 : (x: string | number) => string | number | boolean, Symbol(foo2, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 5, 1))
+>x : string | number, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 6, 14))
 
     // modify x in right hand operand
     return typeof x !== "string" || ((x = 10) || x); // string | number
 >typeof x !== "string" || ((x = 10) || x) : string | number | boolean
 >typeof x !== "string" : boolean
 >typeof x : string
->x : string | number
+>x : string | number, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 6, 14))
+>"string" : string
 >((x = 10) || x) : string | number
 >(x = 10) || x : string | number
 >(x = 10) : number
 >x = 10 : number
->x : string | number
->x : string | number
+>x : string | number, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 6, 14))
+>10 : number
+>x : string | number, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 6, 14))
 }
 function foo3(x: number | string) {
->foo3 : (x: string | number) => string | number | boolean
->x : string | number
+>foo3 : (x: string | number) => string | number | boolean, Symbol(foo3, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 9, 1))
+>x : string | number, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 10, 14))
 
     // modify x in right hand operand with string type itself
     return typeof x !== "string" || ((x = "hello") || x); // string | number
 >typeof x !== "string" || ((x = "hello") || x) : string | number | boolean
 >typeof x !== "string" : boolean
 >typeof x : string
->x : string | number
+>x : string | number, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 10, 14))
+>"string" : string
 >((x = "hello") || x) : string | number
 >(x = "hello") || x : string | number
 >(x = "hello") : string
 >x = "hello" : string
->x : string | number
->x : string | number
+>x : string | number, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 10, 14))
+>"hello" : string
+>x : string | number, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 10, 14))
 }
 function foo4(x: number | string | boolean) {
->foo4 : (x: string | number | boolean) => boolean
->x : string | number | boolean
+>foo4 : (x: string | number | boolean) => boolean, Symbol(foo4, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 13, 1))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 14, 14))
 
     return typeof x === "string" // string | number | boolean
 >typeof x === "string" // string | number | boolean        || typeof x === "number"  // number | boolean        || x : boolean
 >typeof x === "string" // string | number | boolean        || typeof x === "number" : boolean
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | number | boolean
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 14, 14))
+>"string" : string
 
         || typeof x === "number"  // number | boolean
 >typeof x === "number" : boolean
 >typeof x : string
->x : number | boolean
+>x : number | boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 14, 14))
+>"number" : string
 
         || x;   // boolean
->x : boolean
+>x : boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 14, 14))
 }
 function foo5(x: number | string | boolean) {
->foo5 : (x: string | number | boolean) => number | boolean
->x : string | number | boolean
+>foo5 : (x: string | number | boolean) => number | boolean, Symbol(foo5, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 18, 1))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 19, 14))
 
     // usage of x or assignment to separate variable shouldn't cause narrowing of type to stop
     var b: number | boolean;
->b : number | boolean
+>b : number | boolean, Symbol(b, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 21, 7))
 
     return typeof x === "string" // string | number | boolean
 >typeof x === "string" // string | number | boolean        || ((b = x) || (typeof x === "number"  // number | boolean        || x)) : number | boolean
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | number | boolean
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 19, 14))
+>"string" : string
 
         || ((b = x) || (typeof x === "number"  // number | boolean
 >((b = x) || (typeof x === "number"  // number | boolean        || x)) : number | boolean
 >(b = x) || (typeof x === "number"  // number | boolean        || x) : number | boolean
 >(b = x) : number | boolean
 >b = x : number | boolean
->b : number | boolean
->x : number | boolean
+>b : number | boolean, Symbol(b, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 21, 7))
+>x : number | boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 19, 14))
 >(typeof x === "number"  // number | boolean        || x) : boolean
 >typeof x === "number"  // number | boolean        || x : boolean
 >typeof x === "number" : boolean
 >typeof x : string
->x : number | boolean
+>x : number | boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 19, 14))
+>"number" : string
 
         || x));   // boolean
->x : boolean
+>x : boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 19, 14))
 }
 function foo6(x: number | string | boolean) {
->foo6 : (x: string | number | boolean) => boolean
->x : string | number | boolean
+>foo6 : (x: string | number | boolean) => boolean, Symbol(foo6, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 25, 1))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 26, 14))
 
     // Mixing typeguard
     return typeof x === "string" // string | number | boolean
 >typeof x === "string" // string | number | boolean        || (typeof x !== "number" // number | boolean        ? x // boolean        : x === 10) : boolean
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | number | boolean
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 26, 14))
+>"string" : string
 
         || (typeof x !== "number" // number | boolean
 >(typeof x !== "number" // number | boolean        ? x // boolean        : x === 10) : boolean
 >typeof x !== "number" // number | boolean        ? x // boolean        : x === 10 : boolean
 >typeof x !== "number" : boolean
 >typeof x : string
->x : number | boolean
+>x : number | boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 26, 14))
+>"number" : string
 
         ? x // boolean
->x : boolean
+>x : boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 26, 14))
 
         : x === 10) // number 
 >x === 10 : boolean
->x : number
+>x : number, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 26, 14))
+>10 : number
 }
 function foo7(x: number | string | boolean) {
->foo7 : (x: string | number | boolean) => string | number | boolean
->x : string | number | boolean
+>foo7 : (x: string | number | boolean) => string | number | boolean, Symbol(foo7, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 32, 1))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 33, 14))
 
     var y: number| boolean | string;
->y : string | number | boolean
+>y : string | number | boolean, Symbol(y, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 34, 7))
 
     var z: number| boolean | string;
->z : string | number | boolean
+>z : string | number | boolean, Symbol(z, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 35, 7))
 
     // Mixing typeguard narrowing
     // Assigning value to x deep inside another guard stops narrowing of type too
@@ -140,49 +153,52 @@ function foo7(x: number | string | boolean) {
 >typeof x === "string"        || ((z = x) // string | number | boolean - x changed deeper in conditional expression        || (typeof x === "number"        // change value of x        ? (x = 10 && x.toString()) // number | boolean | string        // do not change value        : (y = x && x.toString()))) : string | number | boolean
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | number | boolean
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 33, 14))
+>"string" : string
 
         || ((z = x) // string | number | boolean - x changed deeper in conditional expression
 >((z = x) // string | number | boolean - x changed deeper in conditional expression        || (typeof x === "number"        // change value of x        ? (x = 10 && x.toString()) // number | boolean | string        // do not change value        : (y = x && x.toString()))) : string | number | boolean
 >(z = x) // string | number | boolean - x changed deeper in conditional expression        || (typeof x === "number"        // change value of x        ? (x = 10 && x.toString()) // number | boolean | string        // do not change value        : (y = x && x.toString())) : string | number | boolean
 >(z = x) : string | number | boolean
 >z = x : string | number | boolean
->z : string | number | boolean
->x : string | number | boolean
+>z : string | number | boolean, Symbol(z, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 35, 7))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 33, 14))
 
         || (typeof x === "number"
 >(typeof x === "number"        // change value of x        ? (x = 10 && x.toString()) // number | boolean | string        // do not change value        : (y = x && x.toString())) : string
 >typeof x === "number"        // change value of x        ? (x = 10 && x.toString()) // number | boolean | string        // do not change value        : (y = x && x.toString()) : string
 >typeof x === "number" : boolean
 >typeof x : string
->x : string | number | boolean
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 33, 14))
+>"number" : string
 
         // change value of x
         ? (x = 10 && x.toString()) // number | boolean | string
 >(x = 10 && x.toString()) : string
 >x = 10 && x.toString() : string
->x : string | number | boolean
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 33, 14))
 >10 && x.toString() : string
+>10 : number
 >x.toString() : string
->x.toString : () => string
->x : string | number | boolean
->toString : () => string
+>x.toString : () => string, Symbol(toString, Decl(lib.d.ts, 277, 18), Decl(lib.d.ts, 458, 18), Decl(lib.d.ts, 96, 26))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 33, 14))
+>toString : () => string, Symbol(toString, Decl(lib.d.ts, 277, 18), Decl(lib.d.ts, 458, 18), Decl(lib.d.ts, 96, 26))
 
         // do not change value
         : (y = x && x.toString()))); // number | boolean | string
 >(y = x && x.toString()) : string
 >y = x && x.toString() : string
->y : string | number | boolean
+>y : string | number | boolean, Symbol(y, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 34, 7))
 >x && x.toString() : string
->x : string | number | boolean
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 33, 14))
 >x.toString() : string
->x.toString : () => string
->x : string | number | boolean
->toString : () => string
+>x.toString : () => string, Symbol(toString, Decl(lib.d.ts, 277, 18), Decl(lib.d.ts, 458, 18), Decl(lib.d.ts, 96, 26))
+>x : string | number | boolean, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 33, 14))
+>toString : () => string, Symbol(toString, Decl(lib.d.ts, 277, 18), Decl(lib.d.ts, 458, 18), Decl(lib.d.ts, 96, 26))
 }
 function foo8(x: number | string) {
->foo8 : (x: string | number) => number | boolean
->x : string | number
+>foo8 : (x: string | number) => number | boolean, Symbol(foo8, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 45, 1))
+>x : string | number, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 46, 14))
 
     // Mixing typeguard 
     // Assigning value to x in outer guard shouldn't stop narrowing in the inner expression
@@ -191,25 +207,28 @@ function foo8(x: number | string) {
 >typeof x === "string"        || (x = 10) : number | boolean
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | number
+>x : string | number, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 46, 14))
+>"string" : string
 
         || (x = 10) // change x - number| string
 >(x = 10) : number
 >x = 10 : number
->x : string | number
+>x : string | number, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 46, 14))
+>10 : number
 
         || (typeof x === "number"
 >(typeof x === "number"        ? x // number        : x.length) : number
 >typeof x === "number"        ? x // number        : x.length : number
 >typeof x === "number" : boolean
 >typeof x : string
->x : string | number
+>x : string | number, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 46, 14))
+>"number" : string
 
         ? x // number
->x : number
+>x : number, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 46, 14))
 
         : x.length); // string
->x.length : number
->x : string
->length : number
+>x.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>x : string, Symbol(x, Decl(typeGuardsInRightOperandOfOrOrOperator.ts, 46, 14))
+>length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
 }

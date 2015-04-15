@@ -1,44 +1,47 @@
 === tests/cases/compiler/typeParameterFixingWithConstraints.ts ===
 interface IBar {
->IBar : IBar
+>IBar : IBar, Symbol(IBar, Decl(typeParameterFixingWithConstraints.ts, 0, 0))
 
     [barId: string]: any;
->barId : string
+>barId : string, Symbol(barId, Decl(typeParameterFixingWithConstraints.ts, 1, 5))
 }
 
 interface IFoo {
->IFoo : IFoo
+>IFoo : IFoo, Symbol(IFoo, Decl(typeParameterFixingWithConstraints.ts, 2, 1))
 
     foo<TBar extends IBar>(bar: TBar, bar1: (bar: TBar) => TBar, bar2: (bar: TBar) => TBar): TBar;
->foo : <TBar extends IBar>(bar: TBar, bar1: (bar: TBar) => TBar, bar2: (bar: TBar) => TBar) => TBar
->TBar : TBar
->IBar : IBar
->bar : TBar
->TBar : TBar
->bar1 : (bar: TBar) => TBar
->bar : TBar
->TBar : TBar
->TBar : TBar
->bar2 : (bar: TBar) => TBar
->bar : TBar
->TBar : TBar
->TBar : TBar
->TBar : TBar
+>foo : <TBar extends IBar>(bar: TBar, bar1: (bar: TBar) => TBar, bar2: (bar: TBar) => TBar) => TBar, Symbol(foo, Decl(typeParameterFixingWithConstraints.ts, 4, 16))
+>TBar : TBar, Symbol(TBar, Decl(typeParameterFixingWithConstraints.ts, 5, 8))
+>IBar : IBar, Symbol(IBar, Decl(typeParameterFixingWithConstraints.ts, 0, 0))
+>bar : TBar, Symbol(bar, Decl(typeParameterFixingWithConstraints.ts, 5, 27))
+>TBar : TBar, Symbol(TBar, Decl(typeParameterFixingWithConstraints.ts, 5, 8))
+>bar1 : (bar: TBar) => TBar, Symbol(bar1, Decl(typeParameterFixingWithConstraints.ts, 5, 37))
+>bar : TBar, Symbol(bar, Decl(typeParameterFixingWithConstraints.ts, 5, 45))
+>TBar : TBar, Symbol(TBar, Decl(typeParameterFixingWithConstraints.ts, 5, 8))
+>TBar : TBar, Symbol(TBar, Decl(typeParameterFixingWithConstraints.ts, 5, 8))
+>bar2 : (bar: TBar) => TBar, Symbol(bar2, Decl(typeParameterFixingWithConstraints.ts, 5, 64))
+>bar : TBar, Symbol(bar, Decl(typeParameterFixingWithConstraints.ts, 5, 72))
+>TBar : TBar, Symbol(TBar, Decl(typeParameterFixingWithConstraints.ts, 5, 8))
+>TBar : TBar, Symbol(TBar, Decl(typeParameterFixingWithConstraints.ts, 5, 8))
+>TBar : TBar, Symbol(TBar, Decl(typeParameterFixingWithConstraints.ts, 5, 8))
 }
 
 var foo: IFoo;
->foo : IFoo
->IFoo : IFoo
+>foo : IFoo, Symbol(foo, Decl(typeParameterFixingWithConstraints.ts, 8, 3))
+>IFoo : IFoo, Symbol(IFoo, Decl(typeParameterFixingWithConstraints.ts, 2, 1))
 
 foo.foo({ bar: null }, bar => null, bar => null);
 >foo.foo({ bar: null }, bar => null, bar => null) : IBar
->foo.foo : <TBar extends IBar>(bar: TBar, bar1: (bar: TBar) => TBar, bar2: (bar: TBar) => TBar) => TBar
->foo : IFoo
->foo : <TBar extends IBar>(bar: TBar, bar1: (bar: TBar) => TBar, bar2: (bar: TBar) => TBar) => TBar
+>foo.foo : <TBar extends IBar>(bar: TBar, bar1: (bar: TBar) => TBar, bar2: (bar: TBar) => TBar) => TBar, Symbol(IFoo.foo, Decl(typeParameterFixingWithConstraints.ts, 4, 16))
+>foo : IFoo, Symbol(foo, Decl(typeParameterFixingWithConstraints.ts, 8, 3))
+>foo : <TBar extends IBar>(bar: TBar, bar1: (bar: TBar) => TBar, bar2: (bar: TBar) => TBar) => TBar, Symbol(IFoo.foo, Decl(typeParameterFixingWithConstraints.ts, 4, 16))
 >{ bar: null } : { [x: string]: null; bar: null; }
->bar : null
+>bar : null, Symbol(bar, Decl(typeParameterFixingWithConstraints.ts, 9, 9))
+>null : null
 >bar => null : (bar: IBar) => any
->bar : IBar
+>bar : IBar, Symbol(bar, Decl(typeParameterFixingWithConstraints.ts, 9, 22))
+>null : null
 >bar => null : (bar: IBar) => any
->bar : IBar
+>bar : IBar, Symbol(bar, Decl(typeParameterFixingWithConstraints.ts, 9, 35))
+>null : null
 

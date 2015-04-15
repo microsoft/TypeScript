@@ -2,125 +2,136 @@
 // valid invocations of generic functions with no explicit type arguments provided 
 
 function f<T>(x: T): T { return null; }
->f : <T>(x: T) => T
->T : T
->x : T
->T : T
->T : T
+>f : <T>(x: T) => T, Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 0, 0))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 2, 11))
+>x : T, Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 2, 14))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 2, 11))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 2, 11))
+>null : null
 
 var r = f(1);
->r : number
+>r : number, Symbol(r, Decl(callGenericFunctionWithZeroTypeArguments.ts, 3, 3))
 >f(1) : number
->f : <T>(x: T) => T
+>f : <T>(x: T) => T, Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 0, 0))
+>1 : number
 
 var f2 = <T>(x: T): T => { return null; }
->f2 : <T>(x: T) => T
+>f2 : <T>(x: T) => T, Symbol(f2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 5, 3))
 ><T>(x: T): T => { return null; } : <T>(x: T) => T
->T : T
->x : T
->T : T
->T : T
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 5, 10))
+>x : T, Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 5, 13))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 5, 10))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 5, 10))
+>null : null
 
 var r2 = f2(1);
->r2 : number
+>r2 : number, Symbol(r2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 6, 3))
 >f2(1) : number
->f2 : <T>(x: T) => T
+>f2 : <T>(x: T) => T, Symbol(f2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 5, 3))
+>1 : number
 
 var f3: { <T>(x: T): T; }
->f3 : <T>(x: T) => T
->T : T
->x : T
->T : T
->T : T
+>f3 : <T>(x: T) => T, Symbol(f3, Decl(callGenericFunctionWithZeroTypeArguments.ts, 8, 3))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 8, 11))
+>x : T, Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 8, 14))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 8, 11))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 8, 11))
 
 var r3 = f3(1);
->r3 : number
+>r3 : number, Symbol(r3, Decl(callGenericFunctionWithZeroTypeArguments.ts, 9, 3))
 >f3(1) : number
->f3 : <T>(x: T) => T
+>f3 : <T>(x: T) => T, Symbol(f3, Decl(callGenericFunctionWithZeroTypeArguments.ts, 8, 3))
+>1 : number
 
 class C {
->C : C
+>C : C, Symbol(C, Decl(callGenericFunctionWithZeroTypeArguments.ts, 9, 15))
 
     f<T>(x: T): T {
->f : <T>(x: T) => T
->T : T
->x : T
->T : T
->T : T
+>f : <T>(x: T) => T, Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 11, 9))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 12, 6))
+>x : T, Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 12, 9))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 12, 6))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 12, 6))
 
         return null;
+>null : null
     }
 }
 var r4 = (new C()).f(1);
->r4 : number
+>r4 : number, Symbol(r4, Decl(callGenericFunctionWithZeroTypeArguments.ts, 16, 3))
 >(new C()).f(1) : number
->(new C()).f : <T>(x: T) => T
+>(new C()).f : <T>(x: T) => T, Symbol(C.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 11, 9))
 >(new C()) : C
 >new C() : C
->C : typeof C
->f : <T>(x: T) => T
+>C : typeof C, Symbol(C, Decl(callGenericFunctionWithZeroTypeArguments.ts, 9, 15))
+>f : <T>(x: T) => T, Symbol(C.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 11, 9))
+>1 : number
 
 interface I {
->I : I
+>I : I, Symbol(I, Decl(callGenericFunctionWithZeroTypeArguments.ts, 16, 24))
 
     f<T>(x: T): T;
->f : <T>(x: T) => T
->T : T
->x : T
->T : T
->T : T
+>f : <T>(x: T) => T, Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 18, 13))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 19, 6))
+>x : T, Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 19, 9))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 19, 6))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 19, 6))
 }
 var i: I;
->i : I
->I : I
+>i : I, Symbol(i, Decl(callGenericFunctionWithZeroTypeArguments.ts, 21, 3))
+>I : I, Symbol(I, Decl(callGenericFunctionWithZeroTypeArguments.ts, 16, 24))
 
 var r5 = i.f(1);
->r5 : number
+>r5 : number, Symbol(r5, Decl(callGenericFunctionWithZeroTypeArguments.ts, 22, 3))
 >i.f(1) : number
->i.f : <T>(x: T) => T
->i : I
->f : <T>(x: T) => T
+>i.f : <T>(x: T) => T, Symbol(I.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 18, 13))
+>i : I, Symbol(i, Decl(callGenericFunctionWithZeroTypeArguments.ts, 21, 3))
+>f : <T>(x: T) => T, Symbol(I.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 18, 13))
+>1 : number
 
 class C2<T> {
->C2 : C2<T>
->T : T
+>C2 : C2<T>, Symbol(C2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 22, 16))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 9))
 
     f(x: T): T {
->f : (x: T) => T
->x : T
->T : T
->T : T
+>f : (x: T) => T, Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 13))
+>x : T, Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 25, 6))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 9))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 9))
 
         return null;
+>null : null
     }
 }
 var r6 = (new C2()).f(1);
->r6 : {}
+>r6 : {}, Symbol(r6, Decl(callGenericFunctionWithZeroTypeArguments.ts, 29, 3))
 >(new C2()).f(1) : {}
->(new C2()).f : (x: {}) => {}
+>(new C2()).f : (x: {}) => {}, Symbol(C2.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 13))
 >(new C2()) : C2<{}>
 >new C2() : C2<{}>
->C2 : typeof C2
->f : (x: {}) => {}
+>C2 : typeof C2, Symbol(C2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 22, 16))
+>f : (x: {}) => {}, Symbol(C2.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 13))
+>1 : number
 
 interface I2<T> {
->I2 : I2<T>
->T : T
+>I2 : I2<T>, Symbol(I2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 29, 25))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 13))
 
     f(x: T): T;
->f : (x: T) => T
->x : T
->T : T
->T : T
+>f : (x: T) => T, Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 17))
+>x : T, Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 32, 6))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 13))
+>T : T, Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 13))
 }
 var i2: I2<number>;
->i2 : I2<number>
->I2 : I2<T>
+>i2 : I2<number>, Symbol(i2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 34, 3))
+>I2 : I2<T>, Symbol(I2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 29, 25))
 
 var r7 = i2.f(1);
->r7 : number
+>r7 : number, Symbol(r7, Decl(callGenericFunctionWithZeroTypeArguments.ts, 35, 3))
 >i2.f(1) : number
->i2.f : (x: number) => number
->i2 : I2<number>
->f : (x: number) => number
+>i2.f : (x: number) => number, Symbol(I2.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 17))
+>i2 : I2<number>, Symbol(i2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 34, 3))
+>f : (x: number) => number, Symbol(I2.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 17))
+>1 : number
 

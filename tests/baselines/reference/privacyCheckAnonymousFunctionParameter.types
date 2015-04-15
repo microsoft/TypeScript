@@ -1,38 +1,42 @@
 === tests/cases/compiler/privacyCheckAnonymousFunctionParameter.ts ===
 export var x = 1;  // Makes this an external module
->x : number
+>x : number, Symbol(x, Decl(privacyCheckAnonymousFunctionParameter.ts, 0, 10))
+>1 : number
 
 interface Iterator<T> {
->Iterator : Iterator<T>
->T : T
+>Iterator : Iterator<T>, Symbol(Iterator, Decl(privacyCheckAnonymousFunctionParameter.ts, 0, 17))
+>T : T, Symbol(T, Decl(privacyCheckAnonymousFunctionParameter.ts, 1, 19))
 }
 
 module Query {
->Query : typeof Query
+>Query : typeof Query, Symbol(Query, Decl(privacyCheckAnonymousFunctionParameter.ts, 2, 1))
 
     export function fromDoWhile<T>(doWhile: (test: Iterator<T>) => boolean): Iterator<T> {
->fromDoWhile : <T>(doWhile: (test: Iterator<T>) => boolean) => Iterator<T>
->T : T
->doWhile : (test: Iterator<T>) => boolean
->test : Iterator<T>
->Iterator : Iterator<T>
->T : T
->Iterator : Iterator<T>
->T : T
+>fromDoWhile : <T>(doWhile: (test: Iterator<T>) => boolean) => Iterator<T>, Symbol(fromDoWhile, Decl(privacyCheckAnonymousFunctionParameter.ts, 4, 14))
+>T : T, Symbol(T, Decl(privacyCheckAnonymousFunctionParameter.ts, 5, 32))
+>doWhile : (test: Iterator<T>) => boolean, Symbol(doWhile, Decl(privacyCheckAnonymousFunctionParameter.ts, 5, 35))
+>test : Iterator<T>, Symbol(test, Decl(privacyCheckAnonymousFunctionParameter.ts, 5, 45))
+>Iterator : Iterator<T>, Symbol(Iterator, Decl(privacyCheckAnonymousFunctionParameter.ts, 0, 17))
+>T : T, Symbol(T, Decl(privacyCheckAnonymousFunctionParameter.ts, 5, 32))
+>Iterator : Iterator<T>, Symbol(Iterator, Decl(privacyCheckAnonymousFunctionParameter.ts, 0, 17))
+>T : T, Symbol(T, Decl(privacyCheckAnonymousFunctionParameter.ts, 5, 32))
 
         return null;
+>null : null
     }
 
     function fromOrderBy() {
->fromOrderBy : () => Iterator<{}>
+>fromOrderBy : () => Iterator<{}>, Symbol(fromOrderBy, Decl(privacyCheckAnonymousFunctionParameter.ts, 7, 5))
 
         return fromDoWhile(test => {
 >fromDoWhile(test => {            return true;        }) : Iterator<{}>
->fromDoWhile : <T>(doWhile: (test: Iterator<T>) => boolean) => Iterator<T>
+>fromDoWhile : <T>(doWhile: (test: Iterator<T>) => boolean) => Iterator<T>, Symbol(fromDoWhile, Decl(privacyCheckAnonymousFunctionParameter.ts, 4, 14))
 >test => {            return true;        } : (test: Iterator<{}>) => boolean
->test : Iterator<{}>
+>test : Iterator<{}>, Symbol(test, Decl(privacyCheckAnonymousFunctionParameter.ts, 10, 27))
 
             return true;
+>true : boolean
+
         });
     }
 }

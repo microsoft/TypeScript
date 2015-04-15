@@ -1,35 +1,37 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of18.ts ===
 var v: string;
->v : string
+>v : string, Symbol(v, Decl(for-of18.ts, 0, 3))
 
 for (v of new StringIterator) { } // Should succeed
->v : string
+>v : string, Symbol(v, Decl(for-of18.ts, 0, 3))
 >new StringIterator : StringIterator
->StringIterator : typeof StringIterator
+>StringIterator : typeof StringIterator, Symbol(StringIterator, Decl(for-of18.ts, 1, 33))
 
 class StringIterator {
->StringIterator : StringIterator
+>StringIterator : StringIterator, Symbol(StringIterator, Decl(for-of18.ts, 1, 33))
 
     next() {
->next : () => { value: string; done: boolean; }
+>next : () => { value: string; done: boolean; }, Symbol(next, Decl(for-of18.ts, 3, 22))
 
         return {
 >{            value: "",            done: false        } : { value: string; done: boolean; }
 
             value: "",
->value : string
+>value : string, Symbol(value, Decl(for-of18.ts, 5, 16))
+>"" : string
 
             done: false
->done : boolean
+>done : boolean, Symbol(done, Decl(for-of18.ts, 6, 22))
+>false : boolean
 
         };
     }
     [Symbol.iterator]() {
->Symbol.iterator : symbol
->Symbol : SymbolConstructor
->iterator : symbol
+>Symbol.iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
 
         return this;
->this : StringIterator
+>this : StringIterator, Symbol(StringIterator, Decl(for-of18.ts, 1, 33))
     }
 }

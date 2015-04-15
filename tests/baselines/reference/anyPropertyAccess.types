@@ -1,43 +1,47 @@
 === tests/cases/conformance/types/any/anyPropertyAccess.ts ===
 var x: any;
->x : any
+>x : any, Symbol(x, Decl(anyPropertyAccess.ts, 0, 3))
 
 var a = x.foo;
->a : any
+>a : any, Symbol(a, Decl(anyPropertyAccess.ts, 1, 3))
 >x.foo : any
->x : any
+>x : any, Symbol(x, Decl(anyPropertyAccess.ts, 0, 3))
 >foo : any
 
 var b = x['foo'];
->b : any
+>b : any, Symbol(b, Decl(anyPropertyAccess.ts, 2, 3))
 >x['foo'] : any
->x : any
+>x : any, Symbol(x, Decl(anyPropertyAccess.ts, 0, 3))
+>'foo' : string
 
 var c = x['fn']();
->c : any
+>c : any, Symbol(c, Decl(anyPropertyAccess.ts, 3, 3))
 >x['fn']() : any
 >x['fn'] : any
->x : any
+>x : any, Symbol(x, Decl(anyPropertyAccess.ts, 0, 3))
+>'fn' : string
 
 var d = x.bar.baz;
->d : any
+>d : any, Symbol(d, Decl(anyPropertyAccess.ts, 4, 3))
 >x.bar.baz : any
 >x.bar : any
->x : any
+>x : any, Symbol(x, Decl(anyPropertyAccess.ts, 0, 3))
 >bar : any
 >baz : any
 
 var e = x[0].foo;
->e : any
+>e : any, Symbol(e, Decl(anyPropertyAccess.ts, 5, 3))
 >x[0].foo : any
 >x[0] : any
->x : any
+>x : any, Symbol(x, Decl(anyPropertyAccess.ts, 0, 3))
+>0 : number
 >foo : any
 
 var f = x['0'].bar;
->f : any
+>f : any, Symbol(f, Decl(anyPropertyAccess.ts, 6, 3))
 >x['0'].bar : any
 >x['0'] : any
->x : any
+>x : any, Symbol(x, Decl(anyPropertyAccess.ts, 0, 3))
+>'0' : string
 >bar : any
 

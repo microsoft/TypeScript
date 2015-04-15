@@ -1,6 +1,7 @@
 /// <reference path="checker.ts"/>
 /// <reference path="declarationEmitter.ts"/>
 
+/* @internal */
 module ts {
     // represents one LexicalEnvironment frame to store unique generated names
     interface ScopeFrame {
@@ -20,7 +21,6 @@ module ts {
         _n        = 0x20000000,  // Use/preference flag for '_n'
     }
 
-    // @internal
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
         // emit output for the __extends helper function
@@ -1097,6 +1097,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                                 default:
                                     return Comparison.LessThan;
                             }
+                        case SyntaxKind.YieldExpression:
                         case SyntaxKind.ConditionalExpression:
                             return Comparison.LessThan;
                         default:
@@ -1321,6 +1322,17 @@ var __param = this.__param || function(index, decorator) { return function (targ
             function emitSpreadElementExpression(node: SpreadElementExpression) {
                 write("...");
                 emit((<SpreadElementExpression>node).expression);
+            }
+
+            function emitYieldExpression(node: YieldExpression) {
+                write(tokenToString(SyntaxKind.YieldKeyword));
+                if (node.asteriskToken) {
+                    write("*");
+                }
+                if (node.expression) {
+                    write(" ");
+                    emit(node.expression);
+                }
             }
 
             function needsParenthesisForPropertyAccessOrInvocation(node: Expression) {
@@ -1619,6 +1631,10 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function emitMethod(node: MethodDeclaration) {
+                if (languageVersion >= ScriptTarget.ES6 && node.asteriskToken) {
+                    write("*");
+                }
+
                 emit(node.name, /*allowGeneratedIdentifiers*/ false);
                 if (languageVersion < ScriptTarget.ES6) {
                     write(": function ");
@@ -2978,7 +2994,12 @@ var __param = this.__param || function(index, decorator) { return function (targ
                             write("default ");
                         }
                     }
-                    write("function ");
+
+                    write("function");
+                    if (languageVersion >= ScriptTarget.ES6 && node.asteriskToken) {
+                        write("*");
+                    }
+                    write(" ");
                 }
 
                 if (shouldEmitFunctionName(node)) {
@@ -3371,6 +3392,9 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         }
                         else if (member.kind === SyntaxKind.SetAccessor) {
                             write("set ");
+                        }
+                        if ((<MethodDeclaration>member).asteriskToken) {
+                            write("*");
                         }
                         emit((<MethodDeclaration>member).name);
                         emitSignatureAndBody(<MethodDeclaration>member);
@@ -4950,6 +4974,8 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         return emitConditionalExpression(<ConditionalExpression>node);
                     case SyntaxKind.SpreadElementExpression:
                         return emitSpreadElementExpression(<SpreadElementExpression>node);
+                    case SyntaxKind.YieldExpression:
+                        return emitYieldExpression(<YieldExpression>node);
                     case SyntaxKind.OmittedExpression:
                         return;
                     case SyntaxKind.Block:

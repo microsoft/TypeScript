@@ -1,7 +1,8 @@
 /// <reference path="parser.ts"/>
 
+/* @internal */
 module ts {
-    /* @internal */ export let bindTime = 0;
+    export let bindTime = 0;
 
     export const enum ModuleInstanceState {
         NonInstantiated = 0,
@@ -539,7 +540,7 @@ module ts {
                     bindChildren(node, 0, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.ExportAssignment:
-                    if ((<ExportAssignment>node).expression && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier) {
+                    if ((<ExportAssignment>node).expression.kind === SyntaxKind.Identifier) {
                         // An export default clause with an identifier exports all meanings of that identifier
                         declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
                     }

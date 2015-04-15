@@ -1,29 +1,29 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty11.ts ===
 class C { }
->C : C
+>C : C, Symbol(C, Decl(symbolProperty11.ts, 0, 0))
 
 interface I {
->I : I
+>I : I, Symbol(I, Decl(symbolProperty11.ts, 0, 11))
 
     [Symbol.iterator]?: { x };
->Symbol.iterator : symbol
->Symbol : SymbolConstructor
->iterator : symbol
->x : any
+>Symbol.iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>x : any, Symbol(x, Decl(symbolProperty11.ts, 2, 25))
 }
 
 var i: I;
->i : I
->I : I
+>i : I, Symbol(i, Decl(symbolProperty11.ts, 5, 3))
+>I : I, Symbol(I, Decl(symbolProperty11.ts, 0, 11))
 
 i = new C;
 >i = new C : C
->i : I
+>i : I, Symbol(i, Decl(symbolProperty11.ts, 5, 3))
 >new C : C
->C : typeof C
+>C : typeof C, Symbol(C, Decl(symbolProperty11.ts, 0, 0))
 
 var c: C = i;
->c : C
->C : C
->i : I
+>c : C, Symbol(c, Decl(symbolProperty11.ts, 7, 3))
+>C : C, Symbol(C, Decl(symbolProperty11.ts, 0, 0))
+>i : I, Symbol(i, Decl(symbolProperty11.ts, 5, 3))
 

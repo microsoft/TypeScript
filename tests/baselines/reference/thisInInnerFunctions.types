@@ -1,24 +1,26 @@
 === tests/cases/compiler/thisInInnerFunctions.ts ===
 class Foo {
->Foo : Foo
+>Foo : Foo, Symbol(Foo, Decl(thisInInnerFunctions.ts, 0, 0))
 
     x = "hello";
->x : string
+>x : string, Symbol(x, Decl(thisInInnerFunctions.ts, 0, 11))
+>"hello" : string
 
     bar() {
->bar : () => void
+>bar : () => void, Symbol(bar, Decl(thisInInnerFunctions.ts, 1, 16))
 
         function inner() {
->inner : () => void
+>inner : () => void, Symbol(inner, Decl(thisInInnerFunctions.ts, 2, 11))
 
             this.y = "hi"; // 'this' should be not type to 'Foo' either
 >this.y = "hi" : string
 >this.y : any
 >this : any
 >y : any
+>"hi" : string
 
             var f = () => this.y;  // 'this' should be not type to 'Foo' either
->f : () => any
+>f : () => any, Symbol(f, Decl(thisInInnerFunctions.ts, 5, 15))
 >() => this.y : () => any
 >this.y : any
 >this : any
@@ -28,10 +30,10 @@ class Foo {
 }
 
 function test() {
->test : () => void
+>test : () => void, Symbol(test, Decl(thisInInnerFunctions.ts, 8, 1))
 
     var x = () => {
->x : () => void
+>x : () => void, Symbol(x, Decl(thisInInnerFunctions.ts, 11, 7))
 >() => {        (() => this)();        this;    } : () => void
 
         (() => this)();

@@ -1,27 +1,28 @@
 === tests/cases/compiler/internalAliasFunctionInsideTopLevelModuleWithoutExport.ts ===
 export module a {
->a : typeof a
+>a : typeof a, Symbol(a, Decl(internalAliasFunctionInsideTopLevelModuleWithoutExport.ts, 0, 0))
 
     export function foo(x: number) {
->foo : (x: number) => number
->x : number
+>foo : (x: number) => number, Symbol(foo, Decl(internalAliasFunctionInsideTopLevelModuleWithoutExport.ts, 0, 17))
+>x : number, Symbol(x, Decl(internalAliasFunctionInsideTopLevelModuleWithoutExport.ts, 1, 24))
 
         return x;
->x : number
+>x : number, Symbol(x, Decl(internalAliasFunctionInsideTopLevelModuleWithoutExport.ts, 1, 24))
     }
 }
 
 import b = a.foo;
->b : (x: number) => number
->a : typeof a
->foo : (x: number) => number
+>b : (x: number) => number, Symbol(b, Decl(internalAliasFunctionInsideTopLevelModuleWithoutExport.ts, 4, 1))
+>a : typeof a, Symbol(a, Decl(internalAliasFunctionInsideTopLevelModuleWithoutExport.ts, 0, 0))
+>foo : (x: number) => number, Symbol(b, Decl(internalAliasFunctionInsideTopLevelModuleWithoutExport.ts, 0, 17))
 
 export var bVal = b(10);
->bVal : number
+>bVal : number, Symbol(bVal, Decl(internalAliasFunctionInsideTopLevelModuleWithoutExport.ts, 7, 10))
 >b(10) : number
->b : (x: number) => number
+>b : (x: number) => number, Symbol(b, Decl(internalAliasFunctionInsideTopLevelModuleWithoutExport.ts, 4, 1))
+>10 : number
 
 export var bVal2 = b;
->bVal2 : (x: number) => number
->b : (x: number) => number
+>bVal2 : (x: number) => number, Symbol(bVal2, Decl(internalAliasFunctionInsideTopLevelModuleWithoutExport.ts, 8, 10))
+>b : (x: number) => number, Symbol(b, Decl(internalAliasFunctionInsideTopLevelModuleWithoutExport.ts, 4, 1))
 
