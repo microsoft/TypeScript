@@ -4062,7 +4062,8 @@ module ts {
                     }
                 }
 
-                // Even if relationship doesn't hold for type arguments, it may hold in a structural comparison
+                // Even if relationship doesn't hold for unions, type parameters, or generic type references,
+                // it may hold in a structural comparison.
                 // Report structural errors only if we haven't reported any errors yet
                 let reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
                 // identity relation does not use apparent type
@@ -4074,6 +4075,8 @@ module ts {
                     }
                 }
                 else if (source.flags & TypeFlags.TypeParameter && sourceOrApparentType.flags & TypeFlags.Union) {
+                    // We clear the errors first because the following check often gives a better error than
+                    // the union comparison above if it is applicable.
                     errorInfo = saveErrorInfo;
                     if (result = isRelatedTo(sourceOrApparentType, target, reportErrors)) {
                         return result;
