@@ -1,13 +1,13 @@
 === tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments07_ES6.ts ===
 
 function f(arguments) {
->f : (arguments: any) => void
->arguments : any
+>f : (arguments: any) => void, Symbol(f, Decl(emitArrowFunctionWhenUsingArguments07_ES6.ts, 0, 0))
+>arguments : any, Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments07_ES6.ts, 1, 11))
 
     var a = (arguments) => () => arguments;
->a : (arguments: any) => () => any
+>a : (arguments: any) => () => any, Symbol(a, Decl(emitArrowFunctionWhenUsingArguments07_ES6.ts, 2, 7))
 >(arguments) => () => arguments : (arguments: any) => () => any
->arguments : any
+>arguments : any, Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments07_ES6.ts, 2, 13))
 >() => arguments : () => any
->arguments : any
+>arguments : any, Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments07_ES6.ts, 2, 13))
 }

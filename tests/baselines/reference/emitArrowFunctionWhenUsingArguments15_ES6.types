@@ -1,22 +1,24 @@
 === tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments15_ES6.ts ===
 
 function f() {
->f : () => () => number
+>f : () => () => number, Symbol(f, Decl(emitArrowFunctionWhenUsingArguments15_ES6.ts, 0, 0))
 
     var arguments = "hello";
->arguments : string
+>arguments : string, Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments15_ES6.ts, 2, 7))
+>"hello" : string
 
     if (Math.random()) {
 >Math.random() : number
->Math.random : () => number
->Math : Math
->random : () => number
+>Math.random : () => number, Symbol(Math.random, Decl(lib.d.ts, 608, 38))
+>Math : Math, Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11), Decl(lib.d.ts, 1664, 1))
+>random : () => number, Symbol(Math.random, Decl(lib.d.ts, 608, 38))
 
         const arguments = 100;
->arguments : number
+>arguments : number, Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments15_ES6.ts, 4, 13))
+>100 : number
 
         return () => arguments;
 >() => arguments : () => number
->arguments : number
+>arguments : number, Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments15_ES6.ts, 4, 13))
     }
 }
