@@ -2153,7 +2153,7 @@ module ts {
                 // one as it's type), otherwise fallback to the below standard TS codepaths to 
                 // try to figure it out.
                 let type = getTypeForVariableLikeDeclarationFromJSDocComment(declaration);
-                if (type) {
+                if (type && type !== unknownType) {
                     return type;
                 }
             }
@@ -3806,12 +3806,6 @@ module ts {
                     let typeParameters = (<InterfaceType>type).typeParameters;
                     if (node.typeArguments && node.typeArguments.length === typeParameters.length) {
                         let typeArguments = map(node.typeArguments, getTypeFromTypeNode);
-                        for (let typeArgument in typeArguments) {
-                            if (!typeArgument) {
-                                return undefined;
-                            }
-                        }
-
                         type = createTypeReference(<GenericType>type, typeArguments);
                     }
                 }
@@ -3819,7 +3813,7 @@ module ts {
                 return type;
             }
 
-            return undefined;
+            return unknownType;
         }
 
         function getTypeFromJSDocArrayType(node: JSDocArrayType): Type {
@@ -3828,94 +3822,83 @@ module ts {
 
         function getTypeFromJSDocUnionType(node: JSDocUnionType): Type {
             let types = map(node.types, getTypeFromTypeNode);
-            for (let type of types) {
-                if (!type) {
-                    return undefined;
-                }
-            }
-
             return getUnionType(types, /*noSubtypeReduction*/ true);
         }
 
         function getTypeFromTypeNode(node: TypeNode): Type {
-            if (!node) {
-                return undefined;
-            }
-
             return getTypeFromTypeNodeOrHeritageClauseElement(node);
         }
 
         function getTypeFromTypeNodeOrHeritageClauseElement(node: TypeNode | LiteralExpression | HeritageClauseElement): Type {
-            switch (node.kind) {
-                case SyntaxKind.AnyKeyword:
-                    return anyType;
-                case SyntaxKind.StringKeyword:
-                    return stringType;
-                case SyntaxKind.NumberKeyword:
-                    return numberType;
-                case SyntaxKind.BooleanKeyword:
-                    return booleanType;
-                case SyntaxKind.SymbolKeyword:
-                    return esSymbolType;
-                case SyntaxKind.VoidKeyword:
-                    return voidType;
-                case SyntaxKind.StringLiteral:
-                    return getTypeFromStringLiteral(<LiteralExpression>node);
-                case SyntaxKind.TypeReference:
-                    return getTypeFromTypeReference(<TypeReferenceNode>node);
-                case SyntaxKind.HeritageClauseElement:
-                    return getTypeFromHeritageClauseElement(<HeritageClauseElement>node);
-                case SyntaxKind.TypeQuery:
-                    return getTypeFromTypeQueryNode(<TypeQueryNode>node);
-                case SyntaxKind.ArrayType:
-                    return getTypeFromArrayTypeNode(<ArrayTypeNode>node);
-                case SyntaxKind.TupleType:
-                    return getTypeFromTupleTypeNode(<TupleTypeNode>node);
-                case SyntaxKind.UnionType:
-                    return getTypeFromUnionTypeNode(<UnionTypeNode>node);
-                case SyntaxKind.ParenthesizedType:
-                    return getTypeFromTypeNode((<ParenthesizedTypeNode>node).type);
-                case SyntaxKind.FunctionType:
-                case SyntaxKind.ConstructorType:
-                case SyntaxKind.TypeLiteral:
-                    return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
-                // This function assumes that an identifier or qualified name is a type expression
-                // Callers should first ensure this by calling isTypeNode
-                case SyntaxKind.Identifier:
-                case SyntaxKind.QualifiedName:
-                    let symbol = getSymbolInfo(node);
-                    return symbol && getDeclaredTypeOfSymbol(symbol);
-                case SyntaxKind.JSDocAllType:
-                    return anyType;
-                case SyntaxKind.JSDocUnknownType:
-                    return unknownType;
-                case SyntaxKind.JSDocArrayType:
-                    return getTypeFromJSDocArrayType(<JSDocArrayType>node);
-                case SyntaxKind.JSDocUnionType:
-                    return getTypeFromJSDocUnionType(<JSDocUnionType>node);
-                case SyntaxKind.JSDocNullableType:
-                    return getTypeFromTypeNode((<JSDocNullableType>node).type);
-                case SyntaxKind.JSDocNonNullableType:
-                    return getTypeFromTypeNode((<JSDocNonNullableType>node).type);
-                case SyntaxKind.JSDocRecordType:
-                    // NYI:
-                    return undefined;
-                case SyntaxKind.JSDocTypeReference:
-                    return getTypeForJSDocTypeReference(<JSDocTypeReference>node);
-                case SyntaxKind.JSDocOptionalType:
-                    return getTypeFromTypeNode((<JSDocOptionalType>node).type);
-                case SyntaxKind.JSDocFunctionType:
-                    return getTypeFromJSDocFunctionType(<JSDocFunctionType>node);
-                case SyntaxKind.JSDocVariadicType:
-                    return getTypeFromJSDocVariadicType(<JSDocVariadicType>node);
-                case SyntaxKind.JSDocConstructorType:
-                    return getTypeFromTypeNode((<JSDocConstructorType>node).type);
-                case SyntaxKind.JSDocThisType:
-                    // NYI:
-                    return undefined;
-                default:
-                    return unknownType;
+            if (node) {
+                switch (node.kind) {
+                    case SyntaxKind.AnyKeyword:
+                        return anyType;
+                    case SyntaxKind.StringKeyword:
+                        return stringType;
+                    case SyntaxKind.NumberKeyword:
+                        return numberType;
+                    case SyntaxKind.BooleanKeyword:
+                        return booleanType;
+                    case SyntaxKind.SymbolKeyword:
+                        return esSymbolType;
+                    case SyntaxKind.VoidKeyword:
+                        return voidType;
+                    case SyntaxKind.StringLiteral:
+                        return getTypeFromStringLiteral(<LiteralExpression>node);
+                    case SyntaxKind.TypeReference:
+                        return getTypeFromTypeReference(<TypeReferenceNode>node);
+                    case SyntaxKind.HeritageClauseElement:
+                        return getTypeFromHeritageClauseElement(<HeritageClauseElement>node);
+                    case SyntaxKind.TypeQuery:
+                        return getTypeFromTypeQueryNode(<TypeQueryNode>node);
+                    case SyntaxKind.ArrayType:
+                        return getTypeFromArrayTypeNode(<ArrayTypeNode>node);
+                    case SyntaxKind.TupleType:
+                        return getTypeFromTupleTypeNode(<TupleTypeNode>node);
+                    case SyntaxKind.UnionType:
+                        return getTypeFromUnionTypeNode(<UnionTypeNode>node);
+                    case SyntaxKind.ParenthesizedType:
+                        return getTypeFromTypeNode((<ParenthesizedTypeNode>node).type);
+                    case SyntaxKind.FunctionType:
+                    case SyntaxKind.ConstructorType:
+                    case SyntaxKind.TypeLiteral:
+                        return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
+                    // This function assumes that an identifier or qualified name is a type expression
+                    // Callers should first ensure this by calling isTypeNode
+                    case SyntaxKind.Identifier:
+                    case SyntaxKind.QualifiedName:
+                        let symbol = getSymbolInfo(node);
+                        return symbol && getDeclaredTypeOfSymbol(symbol);
+                    case SyntaxKind.JSDocAllType:
+                        return anyType;
+                    case SyntaxKind.JSDocUnknownType:
+                        return unknownType;
+                    case SyntaxKind.JSDocArrayType:
+                        return getTypeFromJSDocArrayType(<JSDocArrayType>node);
+                    case SyntaxKind.JSDocUnionType:
+                        return getTypeFromJSDocUnionType(<JSDocUnionType>node);
+                    case SyntaxKind.JSDocNullableType:
+                        return getTypeFromTypeNode((<JSDocNullableType>node).type);
+                    case SyntaxKind.JSDocNonNullableType:
+                        return getTypeFromTypeNode((<JSDocNonNullableType>node).type);
+                    case SyntaxKind.JSDocTypeReference:
+                        return getTypeForJSDocTypeReference(<JSDocTypeReference>node);
+                    case SyntaxKind.JSDocOptionalType:
+                        return getTypeFromTypeNode((<JSDocOptionalType>node).type);
+                    case SyntaxKind.JSDocFunctionType:
+                        return getTypeFromJSDocFunctionType(<JSDocFunctionType>node);
+                    case SyntaxKind.JSDocVariadicType:
+                        return getTypeFromJSDocVariadicType(<JSDocVariadicType>node);
+                    case SyntaxKind.JSDocConstructorType:
+                        return getTypeFromTypeNode((<JSDocConstructorType>node).type);
+                    case SyntaxKind.JSDocThisType:
+                    case SyntaxKind.JSDocRecordType:
+                        // NYI:
+                }
             }
+
+            return unknownType;
         }
 
         function instantiateList<T>(items: T[], mapper: TypeMapper, instantiator: (item: T, mapper: TypeMapper) => T): T[] {
@@ -7428,7 +7411,7 @@ module ts {
             let type: Type;
             if (func.parserContextFlags & ParserContextFlags.JavaScriptFile) {
                 type = getReturnTypeFromJSDocComment(func);
-                if (type) {
+                if (type && type !== unknownType) {
                     return type;
                 }
             }
