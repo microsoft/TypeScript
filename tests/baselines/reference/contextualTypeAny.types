@@ -1,17 +1,19 @@
 === tests/cases/compiler/contextualTypeAny.ts ===
 var x: any;
->x : any
+>x : any, Symbol(x, Decl(contextualTypeAny.ts, 0, 3))
 
 var obj: { [s: string]: number } = { p: "", q: x };
->obj : { [s: string]: number; }
->s : string
+>obj : { [s: string]: number; }, Symbol(obj, Decl(contextualTypeAny.ts, 2, 3))
+>s : string, Symbol(s, Decl(contextualTypeAny.ts, 2, 12))
 >{ p: "", q: x } : { [x: string]: any; p: string; q: any; }
->p : string
->q : any
->x : any
+>p : string, Symbol(p, Decl(contextualTypeAny.ts, 2, 36))
+>"" : string
+>q : any, Symbol(q, Decl(contextualTypeAny.ts, 2, 43))
+>x : any, Symbol(x, Decl(contextualTypeAny.ts, 0, 3))
 
 var arr: number[] = ["", x];
->arr : number[]
+>arr : number[], Symbol(arr, Decl(contextualTypeAny.ts, 4, 3))
 >["", x] : any[]
->x : any
+>"" : string
+>x : any, Symbol(x, Decl(contextualTypeAny.ts, 0, 3))
 

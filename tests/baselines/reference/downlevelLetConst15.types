@@ -1,184 +1,203 @@
 === tests/cases/compiler/downlevelLetConst15.ts ===
 'use strict'
+>'use strict' : string
+
 declare function use(a: any);
->use : (a: any) => any
->a : any
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>a : any, Symbol(a, Decl(downlevelLetConst15.ts, 1, 21))
 
 var x = 10;
->x : number
+>x : number, Symbol(x, Decl(downlevelLetConst15.ts, 3, 3))
+>10 : number
 
 var z0, z1, z2, z3;
->z0 : any
->z1 : any
->z2 : any
->z3 : any
+>z0 : any, Symbol(z0, Decl(downlevelLetConst15.ts, 4, 3))
+>z1 : any, Symbol(z1, Decl(downlevelLetConst15.ts, 4, 7))
+>z2 : any, Symbol(z2, Decl(downlevelLetConst15.ts, 4, 11))
+>z3 : any, Symbol(z3, Decl(downlevelLetConst15.ts, 4, 15))
 {
     const x = 20;
->x : number
+>x : number, Symbol(x, Decl(downlevelLetConst15.ts, 6, 9))
+>20 : number
 
     use(x);
 >use(x) : any
->use : (a: any) => any
->x : number
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>x : number, Symbol(x, Decl(downlevelLetConst15.ts, 6, 9))
 
     const [z0] = [1];
->z0 : number
+>z0 : number, Symbol(z0, Decl(downlevelLetConst15.ts, 9, 11))
 >[1] : [number]
+>1 : number
 
     use(z0);
 >use(z0) : any
->use : (a: any) => any
->z0 : number
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>z0 : number, Symbol(z0, Decl(downlevelLetConst15.ts, 9, 11))
 
     const [{a: z1}] = [{a: 1}]
->a : unknown
->z1 : number
+>a : any
+>z1 : number, Symbol(z1, Decl(downlevelLetConst15.ts, 11, 12))
 >[{a: 1}] : [{ a: number; }]
 >{a: 1} : { a: number; }
->a : number
+>a : number, Symbol(a, Decl(downlevelLetConst15.ts, 11, 24))
+>1 : number
 
     use(z1);
 >use(z1) : any
->use : (a: any) => any
->z1 : number
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>z1 : number, Symbol(z1, Decl(downlevelLetConst15.ts, 11, 12))
 
     const {a: z2} = { a: 1 };
->a : unknown
->z2 : number
+>a : any
+>z2 : number, Symbol(z2, Decl(downlevelLetConst15.ts, 13, 11))
 >{ a: 1 } : { a: number; }
->a : number
+>a : number, Symbol(a, Decl(downlevelLetConst15.ts, 13, 21))
+>1 : number
 
     use(z2);
 >use(z2) : any
->use : (a: any) => any
->z2 : number
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>z2 : number, Symbol(z2, Decl(downlevelLetConst15.ts, 13, 11))
 
     const {a: {b: z3}} = { a: {b: 1} };
->a : unknown
->b : unknown
->z3 : number
+>a : any
+>b : any
+>z3 : number, Symbol(z3, Decl(downlevelLetConst15.ts, 15, 15))
 >{ a: {b: 1} } : { a: { b: number; }; }
->a : { b: number; }
+>a : { b: number; }, Symbol(a, Decl(downlevelLetConst15.ts, 15, 26))
 >{b: 1} : { b: number; }
->b : number
+>b : number, Symbol(b, Decl(downlevelLetConst15.ts, 15, 31))
+>1 : number
 
     use(z3);
 >use(z3) : any
->use : (a: any) => any
->z3 : number
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>z3 : number, Symbol(z3, Decl(downlevelLetConst15.ts, 15, 15))
 }
 use(x);
 >use(x) : any
->use : (a: any) => any
->x : number
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>x : number, Symbol(x, Decl(downlevelLetConst15.ts, 3, 3))
 
 use(z0);
 >use(z0) : any
->use : (a: any) => any
->z0 : any
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>z0 : any, Symbol(z0, Decl(downlevelLetConst15.ts, 4, 3))
 
 use(z1);
 >use(z1) : any
->use : (a: any) => any
->z1 : any
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>z1 : any, Symbol(z1, Decl(downlevelLetConst15.ts, 4, 7))
 
 use(z2);
 >use(z2) : any
->use : (a: any) => any
->z2 : any
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>z2 : any, Symbol(z2, Decl(downlevelLetConst15.ts, 4, 11))
 
 use(z3);
 >use(z3) : any
->use : (a: any) => any
->z3 : any
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>z3 : any, Symbol(z3, Decl(downlevelLetConst15.ts, 4, 15))
 
 var z6;
->z6 : any
+>z6 : any, Symbol(z6, Decl(downlevelLetConst15.ts, 23, 3))
 
 var y = true;
->y : boolean
+>y : boolean, Symbol(y, Decl(downlevelLetConst15.ts, 24, 3))
+>true : boolean
 {
     const y = "";
->y : string
+>y : string, Symbol(y, Decl(downlevelLetConst15.ts, 26, 9))
+>"" : string
 
     const [z6] = [true]
->z6 : boolean
+>z6 : boolean, Symbol(z6, Decl(downlevelLetConst15.ts, 27, 11))
 >[true] : [boolean]
+>true : boolean
     {
         const y = 1;
->y : number
+>y : number, Symbol(y, Decl(downlevelLetConst15.ts, 29, 13))
+>1 : number
 
         const {a: z6} = { a: 1 }
->a : unknown
->z6 : number
+>a : any
+>z6 : number, Symbol(z6, Decl(downlevelLetConst15.ts, 30, 15))
 >{ a: 1 } : { a: number; }
->a : number
+>a : number, Symbol(a, Decl(downlevelLetConst15.ts, 30, 25))
+>1 : number
 
         use(y);
 >use(y) : any
->use : (a: any) => any
->y : number
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>y : number, Symbol(y, Decl(downlevelLetConst15.ts, 29, 13))
 
         use(z6);
 >use(z6) : any
->use : (a: any) => any
->z6 : number
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>z6 : number, Symbol(z6, Decl(downlevelLetConst15.ts, 30, 15))
     }
     use(y);
 >use(y) : any
->use : (a: any) => any
->y : string
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>y : string, Symbol(y, Decl(downlevelLetConst15.ts, 26, 9))
 
     use(z6);
 >use(z6) : any
->use : (a: any) => any
->z6 : boolean
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>z6 : boolean, Symbol(z6, Decl(downlevelLetConst15.ts, 27, 11))
 }
 use(y);
 >use(y) : any
->use : (a: any) => any
->y : boolean
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>y : boolean, Symbol(y, Decl(downlevelLetConst15.ts, 24, 3))
 
 use(z6);
 >use(z6) : any
->use : (a: any) => any
->z6 : any
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>z6 : any, Symbol(z6, Decl(downlevelLetConst15.ts, 23, 3))
 
 var z = false;
->z : boolean
+>z : boolean, Symbol(z, Decl(downlevelLetConst15.ts, 40, 3))
+>false : boolean
 
 var z5 = 1;
->z5 : number
+>z5 : number, Symbol(z5, Decl(downlevelLetConst15.ts, 41, 3))
+>1 : number
 {
     const z = "";
->z : string
+>z : string, Symbol(z, Decl(downlevelLetConst15.ts, 43, 9))
+>"" : string
 
     const [z5] = [5];
->z5 : number
+>z5 : number, Symbol(z5, Decl(downlevelLetConst15.ts, 44, 11))
 >[5] : [number]
+>5 : number
     {
         const _z = 1;
->_z : number
+>_z : number, Symbol(_z, Decl(downlevelLetConst15.ts, 46, 13))
+>1 : number
 
         const {a: _z5} = { a: 1 };
->a : unknown
->_z5 : number
+>a : any
+>_z5 : number, Symbol(_z5, Decl(downlevelLetConst15.ts, 47, 15))
 >{ a: 1 } : { a: number; }
->a : number
+>a : number, Symbol(a, Decl(downlevelLetConst15.ts, 47, 26))
+>1 : number
 
         // try to step on generated name
         use(_z);
 >use(_z) : any
->use : (a: any) => any
->_z : number
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>_z : number, Symbol(_z, Decl(downlevelLetConst15.ts, 46, 13))
     }
     use(z);
 >use(z) : any
->use : (a: any) => any
->z : string
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>z : string, Symbol(z, Decl(downlevelLetConst15.ts, 43, 9))
 }
 use(y);
 >use(y) : any
->use : (a: any) => any
->y : boolean
+>use : (a: any) => any, Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))
+>y : boolean, Symbol(y, Decl(downlevelLetConst15.ts, 24, 3))
 

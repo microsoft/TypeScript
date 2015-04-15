@@ -1,21 +1,23 @@
 === tests/cases/conformance/decorators/class/method/decoratorOnClassMethod13.ts ===
 declare function dec(): <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>;
->dec : () => <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
->T : T
->target : any
->propertyKey : string
->descriptor : TypedPropertyDescriptor<T>
->TypedPropertyDescriptor : TypedPropertyDescriptor<T>
->T : T
->TypedPropertyDescriptor : TypedPropertyDescriptor<T>
->T : T
+>dec : () => <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>, Symbol(dec, Decl(decoratorOnClassMethod13.ts, 0, 0))
+>T : T, Symbol(T, Decl(decoratorOnClassMethod13.ts, 0, 25))
+>target : any, Symbol(target, Decl(decoratorOnClassMethod13.ts, 0, 28))
+>propertyKey : string, Symbol(propertyKey, Decl(decoratorOnClassMethod13.ts, 0, 40))
+>descriptor : TypedPropertyDescriptor<T>, Symbol(descriptor, Decl(decoratorOnClassMethod13.ts, 0, 61))
+>TypedPropertyDescriptor : TypedPropertyDescriptor<T>, Symbol(TypedPropertyDescriptor, Decl(lib.d.ts, 1171, 36))
+>T : T, Symbol(T, Decl(decoratorOnClassMethod13.ts, 0, 25))
+>TypedPropertyDescriptor : TypedPropertyDescriptor<T>, Symbol(TypedPropertyDescriptor, Decl(lib.d.ts, 1171, 36))
+>T : T, Symbol(T, Decl(decoratorOnClassMethod13.ts, 0, 25))
 
 class C {
->C : C
+>C : C, Symbol(C, Decl(decoratorOnClassMethod13.ts, 0, 132))
 
     @dec ["1"]() { }
->dec : () => <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>dec : () => <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>, Symbol(dec, Decl(decoratorOnClassMethod13.ts, 0, 0))
+>"1" : string
 
     @dec ["b"]() { }
->dec : () => <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>dec : () => <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>, Symbol(dec, Decl(decoratorOnClassMethod13.ts, 0, 0))
+>"b" : string
 }

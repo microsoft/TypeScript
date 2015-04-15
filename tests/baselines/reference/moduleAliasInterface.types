@@ -1,14 +1,14 @@
 === tests/cases/compiler/moduleAliasInterface.ts ===
 module _modes {
->_modes : typeof _modes
+>_modes : typeof _modes, Symbol(_modes, Decl(moduleAliasInterface.ts, 0, 0))
 
  export interface IMode {
->IMode : IMode
+>IMode : IMode, Symbol(IMode, Decl(moduleAliasInterface.ts, 0, 15))
   
  }
  
  export class Mode {
->Mode : Mode
+>Mode : Mode, Symbol(Mode, Decl(moduleAliasInterface.ts, 3, 2))
   
  }
 }
@@ -16,106 +16,106 @@ module _modes {
 // _modes. // produces an internal error - please implement in derived class
 
 module editor {
->editor : typeof editor
+>editor : typeof editor, Symbol(editor, Decl(moduleAliasInterface.ts, 8, 1))
 
  import modes = _modes;
->modes : typeof modes
->_modes : typeof modes
+>modes : typeof modes, Symbol(modes, Decl(moduleAliasInterface.ts, 12, 15))
+>_modes : typeof modes, Symbol(modes, Decl(moduleAliasInterface.ts, 0, 0))
  
  var i : modes.IMode;
->i : modes.IMode
->modes : unknown
->IMode : modes.IMode
+>i : modes.IMode, Symbol(i, Decl(moduleAliasInterface.ts, 15, 4))
+>modes : any, Symbol(modes, Decl(moduleAliasInterface.ts, 12, 15))
+>IMode : modes.IMode, Symbol(modes.IMode, Decl(moduleAliasInterface.ts, 0, 15))
   
  // If you just use p1:modes, the compiler accepts it - should be an error
  class Bug { 
->Bug : Bug
+>Bug : Bug, Symbol(Bug, Decl(moduleAliasInterface.ts, 15, 21))
 
   constructor(p1: modes.IMode, p2: modes.Mode) { }// should be an error on p2 - it's not exported
->p1 : modes.IMode
->modes : unknown
->IMode : modes.IMode
->p2 : modes.Mode
->modes : unknown
->Mode : modes.Mode
+>p1 : modes.IMode, Symbol(p1, Decl(moduleAliasInterface.ts, 19, 14))
+>modes : any, Symbol(modes, Decl(moduleAliasInterface.ts, 12, 15))
+>IMode : modes.IMode, Symbol(modes.IMode, Decl(moduleAliasInterface.ts, 0, 15))
+>p2 : modes.Mode, Symbol(p2, Decl(moduleAliasInterface.ts, 19, 30))
+>modes : any, Symbol(modes, Decl(moduleAliasInterface.ts, 12, 15))
+>Mode : modes.Mode, Symbol(modes.Mode, Decl(moduleAliasInterface.ts, 3, 2))
 
   public foo(p1:modes.IMode) {
->foo : (p1: modes.IMode) => void
->p1 : modes.IMode
->modes : unknown
->IMode : modes.IMode
+>foo : (p1: modes.IMode) => void, Symbol(foo, Decl(moduleAliasInterface.ts, 19, 50))
+>p1 : modes.IMode, Symbol(p1, Decl(moduleAliasInterface.ts, 20, 13))
+>modes : any, Symbol(modes, Decl(moduleAliasInterface.ts, 12, 15))
+>IMode : modes.IMode, Symbol(modes.IMode, Decl(moduleAliasInterface.ts, 0, 15))
    
   } 
  }
 }
 
 import modesOuter = _modes;
->modesOuter : typeof _modes
->_modes : typeof _modes
+>modesOuter : typeof _modes, Symbol(modesOuter, Decl(moduleAliasInterface.ts, 24, 1))
+>_modes : typeof _modes, Symbol(_modes, Decl(moduleAliasInterface.ts, 0, 0))
 
 module editor2 {
->editor2 : typeof editor2
+>editor2 : typeof editor2, Symbol(editor2, Decl(moduleAliasInterface.ts, 26, 27))
  
  var i : modesOuter.IMode;
->i : modesOuter.IMode
->modesOuter : unknown
->IMode : modesOuter.IMode
+>i : modesOuter.IMode, Symbol(i, Decl(moduleAliasInterface.ts, 29, 4))
+>modesOuter : any, Symbol(modesOuter, Decl(moduleAliasInterface.ts, 24, 1))
+>IMode : modesOuter.IMode, Symbol(modesOuter.IMode, Decl(moduleAliasInterface.ts, 0, 15))
  
  class Bug {
->Bug : Bug
+>Bug : Bug, Symbol(Bug, Decl(moduleAliasInterface.ts, 29, 26))
 
      constructor(p1: modesOuter.IMode, p2: modesOuter.Mode) { }// no error here, since modesOuter is declared externally
->p1 : modesOuter.IMode
->modesOuter : unknown
->IMode : modesOuter.IMode
->p2 : modesOuter.Mode
->modesOuter : unknown
->Mode : modesOuter.Mode
+>p1 : modesOuter.IMode, Symbol(p1, Decl(moduleAliasInterface.ts, 32, 17))
+>modesOuter : any, Symbol(modesOuter, Decl(moduleAliasInterface.ts, 24, 1))
+>IMode : modesOuter.IMode, Symbol(modesOuter.IMode, Decl(moduleAliasInterface.ts, 0, 15))
+>p2 : modesOuter.Mode, Symbol(p2, Decl(moduleAliasInterface.ts, 32, 38))
+>modesOuter : any, Symbol(modesOuter, Decl(moduleAliasInterface.ts, 24, 1))
+>Mode : modesOuter.Mode, Symbol(modesOuter.Mode, Decl(moduleAliasInterface.ts, 3, 2))
   
  }
  
   module Foo { export class Bar{} }
->Foo : typeof Foo
->Bar : Bar
+>Foo : typeof Foo, Symbol(Foo, Decl(moduleAliasInterface.ts, 34, 2))
+>Bar : Bar, Symbol(Bar, Decl(moduleAliasInterface.ts, 36, 14))
  
   class Bug2 {
->Bug2 : Bug2
+>Bug2 : Bug2, Symbol(Bug2, Decl(moduleAliasInterface.ts, 36, 35))
 
       constructor(p1: Foo.Bar, p2: modesOuter.Mode) { }
->p1 : Foo.Bar
->Foo : unknown
->Bar : Foo.Bar
->p2 : modesOuter.Mode
->modesOuter : unknown
->Mode : modesOuter.Mode
+>p1 : Foo.Bar, Symbol(p1, Decl(moduleAliasInterface.ts, 39, 18))
+>Foo : any, Symbol(Foo, Decl(moduleAliasInterface.ts, 34, 2))
+>Bar : Foo.Bar, Symbol(Foo.Bar, Decl(moduleAliasInterface.ts, 36, 14))
+>p2 : modesOuter.Mode, Symbol(p2, Decl(moduleAliasInterface.ts, 39, 30))
+>modesOuter : any, Symbol(modesOuter, Decl(moduleAliasInterface.ts, 24, 1))
+>Mode : modesOuter.Mode, Symbol(modesOuter.Mode, Decl(moduleAliasInterface.ts, 3, 2))
   }
 }
 
 module A1 {
->A1 : typeof A1
+>A1 : typeof A1, Symbol(A1, Decl(moduleAliasInterface.ts, 41, 1))
 
     export interface A1I1 {}
->A1I1 : A1I1
+>A1I1 : A1I1, Symbol(A1I1, Decl(moduleAliasInterface.ts, 43, 11))
 
     export class A1C1 {}
->A1C1 : A1C1
+>A1C1 : A1C1, Symbol(A1C1, Decl(moduleAliasInterface.ts, 44, 28))
 }
 
 module B1 {
->B1 : typeof B1
+>B1 : typeof B1, Symbol(B1, Decl(moduleAliasInterface.ts, 46, 1))
 
     import A1Alias1 = A1;
->A1Alias1 : typeof A1Alias1
->A1 : typeof A1Alias1
+>A1Alias1 : typeof A1Alias1, Symbol(A1Alias1, Decl(moduleAliasInterface.ts, 48, 11))
+>A1 : typeof A1Alias1, Symbol(A1Alias1, Decl(moduleAliasInterface.ts, 41, 1))
     
     var i : A1Alias1.A1I1;   
->i : A1Alias1.A1I1
->A1Alias1 : unknown
->A1I1 : A1Alias1.A1I1
+>i : A1Alias1.A1I1, Symbol(i, Decl(moduleAliasInterface.ts, 51, 7))
+>A1Alias1 : any, Symbol(A1Alias1, Decl(moduleAliasInterface.ts, 48, 11))
+>A1I1 : A1Alias1.A1I1, Symbol(A1Alias1.A1I1, Decl(moduleAliasInterface.ts, 43, 11))
 
     var c : A1Alias1.A1C1;
->c : A1Alias1.A1C1
->A1Alias1 : unknown
->A1C1 : A1Alias1.A1C1
+>c : A1Alias1.A1C1, Symbol(c, Decl(moduleAliasInterface.ts, 52, 7))
+>A1Alias1 : any, Symbol(A1Alias1, Decl(moduleAliasInterface.ts, 48, 11))
+>A1C1 : A1Alias1.A1C1, Symbol(A1Alias1.A1C1, Decl(moduleAliasInterface.ts, 44, 28))
 }
 

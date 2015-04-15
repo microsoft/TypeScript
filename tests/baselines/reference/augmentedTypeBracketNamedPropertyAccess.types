@@ -1,41 +1,45 @@
 === tests/cases/compiler/augmentedTypeBracketNamedPropertyAccess.ts ===
 interface Object {
->Object : Object
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11), Decl(augmentedTypeBracketNamedPropertyAccess.ts, 0, 0))
 
     data: number;
->data : number
+>data : number, Symbol(data, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 0, 18))
 }
 interface Function {
->Function : Function
+>Function : Function, Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11), Decl(augmentedTypeBracketNamedPropertyAccess.ts, 2, 1))
 
     functionData: string;
->functionData : string
+>functionData : string, Symbol(functionData, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 3, 20))
 }
 var o = {};
->o : {}
+>o : {}, Symbol(o, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 6, 3))
 >{} : {}
 
 var f = function () { };
->f : () => void
+>f : () => void, Symbol(f, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 7, 3))
 >function () { } : () => void
 
 var r1 = o['data']; // Should be number
->r1 : number
+>r1 : number, Symbol(r1, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 9, 3))
 >o['data'] : number
->o : {}
+>o : {}, Symbol(o, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 6, 3))
+>'data' : string, Symbol(Object.data, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 0, 18))
 
 var r2 = o['functionData']; // Should be any (no property found)
->r2 : any
+>r2 : any, Symbol(r2, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 10, 3))
 >o['functionData'] : any
->o : {}
+>o : {}, Symbol(o, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 6, 3))
+>'functionData' : string
 
 var r3 = f['functionData']; // Should be string
->r3 : string
+>r3 : string, Symbol(r3, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 11, 3))
 >f['functionData'] : string
->f : () => void
+>f : () => void, Symbol(f, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 7, 3))
+>'functionData' : string, Symbol(Function.functionData, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 3, 20))
 
 var r4 = f['data']; // Should be number
->r4 : number
+>r4 : number, Symbol(r4, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 12, 3))
 >f['data'] : number
->f : () => void
+>f : () => void, Symbol(f, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 7, 3))
+>'data' : string, Symbol(Object.data, Decl(augmentedTypeBracketNamedPropertyAccess.ts, 0, 18))
 

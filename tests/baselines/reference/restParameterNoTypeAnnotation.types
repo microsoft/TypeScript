@@ -1,14 +1,15 @@
 === tests/cases/compiler/restParameterNoTypeAnnotation.ts ===
 function foo(...rest) {   
->foo : (...rest: any[]) => number
->rest : any[]
+>foo : (...rest: any[]) => number, Symbol(foo, Decl(restParameterNoTypeAnnotation.ts, 0, 0))
+>rest : any[], Symbol(rest, Decl(restParameterNoTypeAnnotation.ts, 0, 13))
 
      var x: number = rest[0];
->x : number
+>x : number, Symbol(x, Decl(restParameterNoTypeAnnotation.ts, 1, 8))
 >rest[0] : any
->rest : any[]
+>rest : any[], Symbol(rest, Decl(restParameterNoTypeAnnotation.ts, 0, 13))
+>0 : number
 
      return x;   
->x : number
+>x : number, Symbol(x, Decl(restParameterNoTypeAnnotation.ts, 1, 8))
 }  
 

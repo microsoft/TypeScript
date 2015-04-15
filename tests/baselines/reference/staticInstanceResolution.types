@@ -1,33 +1,34 @@
 === tests/cases/compiler/staticInstanceResolution.ts ===
 class Comment {
->Comment : Comment
+>Comment : Comment, Symbol(Comment, Decl(staticInstanceResolution.ts, 0, 0))
 
     public getDocCommentText()
->getDocCommentText : () => void
+>getDocCommentText : () => void, Symbol(getDocCommentText, Decl(staticInstanceResolution.ts, 0, 15))
     {
 
     }
 
     static getDocCommentText(comments: Comment[])
->getDocCommentText : (comments: Comment[]) => void
->comments : Comment[]
->Comment : Comment
+>getDocCommentText : (comments: Comment[]) => void, Symbol(Comment.getDocCommentText, Decl(staticInstanceResolution.ts, 5, 5))
+>comments : Comment[], Symbol(comments, Decl(staticInstanceResolution.ts, 7, 29))
+>Comment : Comment, Symbol(Comment, Decl(staticInstanceResolution.ts, 0, 0))
     {
         comments[0].getDocCommentText();
 >comments[0].getDocCommentText() : void
->comments[0].getDocCommentText : () => void
+>comments[0].getDocCommentText : () => void, Symbol(getDocCommentText, Decl(staticInstanceResolution.ts, 0, 15))
 >comments[0] : Comment
->comments : Comment[]
->getDocCommentText : () => void
+>comments : Comment[], Symbol(comments, Decl(staticInstanceResolution.ts, 7, 29))
+>0 : number
+>getDocCommentText : () => void, Symbol(getDocCommentText, Decl(staticInstanceResolution.ts, 0, 15))
 
         var c: Comment;
->c : Comment
->Comment : Comment
+>c : Comment, Symbol(c, Decl(staticInstanceResolution.ts, 10, 11))
+>Comment : Comment, Symbol(Comment, Decl(staticInstanceResolution.ts, 0, 0))
 
         c.getDocCommentText();
 >c.getDocCommentText() : void
->c.getDocCommentText : () => void
->c : Comment
->getDocCommentText : () => void
+>c.getDocCommentText : () => void, Symbol(getDocCommentText, Decl(staticInstanceResolution.ts, 0, 15))
+>c : Comment, Symbol(c, Decl(staticInstanceResolution.ts, 10, 11))
+>getDocCommentText : () => void, Symbol(getDocCommentText, Decl(staticInstanceResolution.ts, 0, 15))
     }
 }

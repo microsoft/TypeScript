@@ -1,32 +1,34 @@
 === tests/cases/compiler/sourceMap-StringLiteralWithNewLine.ts ===
 
 interface Document {
->Document : Document
+>Document : Document, Symbol(Document, Decl(sourceMap-StringLiteralWithNewLine.ts, 0, 0))
 }
 interface Window {
->Window : Window
+>Window : Window, Symbol(Window, Decl(sourceMap-StringLiteralWithNewLine.ts, 2, 1))
 
     document: Document;
->document : Document
->Document : Document
+>document : Document, Symbol(document, Decl(sourceMap-StringLiteralWithNewLine.ts, 3, 18))
+>Document : Document, Symbol(Document, Decl(sourceMap-StringLiteralWithNewLine.ts, 0, 0))
 }
 declare var window: Window;
->window : Window
->Window : Window
+>window : Window, Symbol(window, Decl(sourceMap-StringLiteralWithNewLine.ts, 6, 11))
+>Window : Window, Symbol(Window, Decl(sourceMap-StringLiteralWithNewLine.ts, 2, 1))
 
 module Foo {
->Foo : typeof Foo
+>Foo : typeof Foo, Symbol(Foo, Decl(sourceMap-StringLiteralWithNewLine.ts, 6, 27))
 
     var x = "test1";
->x : string
+>x : string, Symbol(x, Decl(sourceMap-StringLiteralWithNewLine.ts, 9, 7))
+>"test1" : string
 
     var y = "test 2\
->y : string
+>y : string, Symbol(y, Decl(sourceMap-StringLiteralWithNewLine.ts, 10, 7))
+>"test 2\isn't this a lot of fun" : string
 
 isn't this a lot of fun";
     var z = window.document;
->z : Document
->window.document : Document
->window : Window
->document : Document
+>z : Document, Symbol(z, Decl(sourceMap-StringLiteralWithNewLine.ts, 12, 7))
+>window.document : Document, Symbol(Window.document, Decl(sourceMap-StringLiteralWithNewLine.ts, 3, 18))
+>window : Window, Symbol(window, Decl(sourceMap-StringLiteralWithNewLine.ts, 6, 11))
+>document : Document, Symbol(Window.document, Decl(sourceMap-StringLiteralWithNewLine.ts, 3, 18))
 }

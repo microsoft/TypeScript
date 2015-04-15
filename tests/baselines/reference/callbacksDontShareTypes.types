@@ -1,110 +1,110 @@
 === tests/cases/compiler/callbacksDontShareTypes.ts ===
 interface Collection<T> {
->Collection : Collection<T>
->T : T
+>Collection : Collection<T>, Symbol(Collection, Decl(callbacksDontShareTypes.ts, 0, 0))
+>T : T, Symbol(T, Decl(callbacksDontShareTypes.ts, 0, 21))
 
     length: number;
->length : number
+>length : number, Symbol(length, Decl(callbacksDontShareTypes.ts, 0, 25))
 
     add(x: T): void;
->add : (x: T) => void
->x : T
->T : T
+>add : (x: T) => void, Symbol(add, Decl(callbacksDontShareTypes.ts, 1, 19))
+>x : T, Symbol(x, Decl(callbacksDontShareTypes.ts, 2, 8))
+>T : T, Symbol(T, Decl(callbacksDontShareTypes.ts, 0, 21))
 
     remove(x: T): boolean;
->remove : (x: T) => boolean
->x : T
->T : T
+>remove : (x: T) => boolean, Symbol(remove, Decl(callbacksDontShareTypes.ts, 2, 20))
+>x : T, Symbol(x, Decl(callbacksDontShareTypes.ts, 3, 11))
+>T : T, Symbol(T, Decl(callbacksDontShareTypes.ts, 0, 21))
 }
 interface Combinators {
->Combinators : Combinators
+>Combinators : Combinators, Symbol(Combinators, Decl(callbacksDontShareTypes.ts, 4, 1))
 
     map<T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>;
->map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
->T : T
->U : U
->c : Collection<T>
->Collection : Collection<T>
->T : T
->f : (x: T) => U
->x : T
->T : T
->U : U
->Collection : Collection<T>
->U : U
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }, Symbol(map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>T : T, Symbol(T, Decl(callbacksDontShareTypes.ts, 6, 8))
+>U : U, Symbol(U, Decl(callbacksDontShareTypes.ts, 6, 10))
+>c : Collection<T>, Symbol(c, Decl(callbacksDontShareTypes.ts, 6, 14))
+>Collection : Collection<T>, Symbol(Collection, Decl(callbacksDontShareTypes.ts, 0, 0))
+>T : T, Symbol(T, Decl(callbacksDontShareTypes.ts, 6, 8))
+>f : (x: T) => U, Symbol(f, Decl(callbacksDontShareTypes.ts, 6, 31))
+>x : T, Symbol(x, Decl(callbacksDontShareTypes.ts, 6, 36))
+>T : T, Symbol(T, Decl(callbacksDontShareTypes.ts, 6, 8))
+>U : U, Symbol(U, Decl(callbacksDontShareTypes.ts, 6, 10))
+>Collection : Collection<T>, Symbol(Collection, Decl(callbacksDontShareTypes.ts, 0, 0))
+>U : U, Symbol(U, Decl(callbacksDontShareTypes.ts, 6, 10))
 
     map<T>(c: Collection<T>, f: (x: T) => any): Collection<any>;
->map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
->T : T
->c : Collection<T>
->Collection : Collection<T>
->T : T
->f : (x: T) => any
->x : T
->T : T
->Collection : Collection<T>
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }, Symbol(map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>T : T, Symbol(T, Decl(callbacksDontShareTypes.ts, 7, 8))
+>c : Collection<T>, Symbol(c, Decl(callbacksDontShareTypes.ts, 7, 11))
+>Collection : Collection<T>, Symbol(Collection, Decl(callbacksDontShareTypes.ts, 0, 0))
+>T : T, Symbol(T, Decl(callbacksDontShareTypes.ts, 7, 8))
+>f : (x: T) => any, Symbol(f, Decl(callbacksDontShareTypes.ts, 7, 28))
+>x : T, Symbol(x, Decl(callbacksDontShareTypes.ts, 7, 33))
+>T : T, Symbol(T, Decl(callbacksDontShareTypes.ts, 7, 8))
+>Collection : Collection<T>, Symbol(Collection, Decl(callbacksDontShareTypes.ts, 0, 0))
 }
 
 var _: Combinators;
->_ : Combinators
->Combinators : Combinators
+>_ : Combinators, Symbol(_, Decl(callbacksDontShareTypes.ts, 10, 3))
+>Combinators : Combinators, Symbol(Combinators, Decl(callbacksDontShareTypes.ts, 4, 1))
 
 var c2: Collection<number>;
->c2 : Collection<number>
->Collection : Collection<T>
+>c2 : Collection<number>, Symbol(c2, Decl(callbacksDontShareTypes.ts, 11, 3))
+>Collection : Collection<T>, Symbol(Collection, Decl(callbacksDontShareTypes.ts, 0, 0))
 
 var rf1 = (x: number) => { return x.toFixed() };
->rf1 : (x: number) => string
+>rf1 : (x: number) => string, Symbol(rf1, Decl(callbacksDontShareTypes.ts, 13, 3))
 >(x: number) => { return x.toFixed() } : (x: number) => string
->x : number
+>x : number, Symbol(x, Decl(callbacksDontShareTypes.ts, 13, 11))
 >x.toFixed() : string
->x.toFixed : (fractionDigits?: number) => string
->x : number
->toFixed : (fractionDigits?: number) => string
+>x.toFixed : (fractionDigits?: number) => string, Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
+>x : number, Symbol(x, Decl(callbacksDontShareTypes.ts, 13, 11))
+>toFixed : (fractionDigits?: number) => string, Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
 
 var r1a = _.map(c2, (x) => { return x.toFixed() });
->r1a : Collection<string>
+>r1a : Collection<string>, Symbol(r1a, Decl(callbacksDontShareTypes.ts, 14, 3))
 >_.map(c2, (x) => { return x.toFixed() }) : Collection<string>
->_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
->_ : Combinators
->map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
->c2 : Collection<number>
+>_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }, Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>_ : Combinators, Symbol(_, Decl(callbacksDontShareTypes.ts, 10, 3))
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }, Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>c2 : Collection<number>, Symbol(c2, Decl(callbacksDontShareTypes.ts, 11, 3))
 >(x) => { return x.toFixed() } : (x: number) => string
->x : number
+>x : number, Symbol(x, Decl(callbacksDontShareTypes.ts, 14, 21))
 >x.toFixed() : string
->x.toFixed : (fractionDigits?: number) => string
->x : number
->toFixed : (fractionDigits?: number) => string
+>x.toFixed : (fractionDigits?: number) => string, Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
+>x : number, Symbol(x, Decl(callbacksDontShareTypes.ts, 14, 21))
+>toFixed : (fractionDigits?: number) => string, Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
 
 var r1b = _.map(c2, rf1); // this line should not cause the following 2 to have errors 
->r1b : Collection<string>
+>r1b : Collection<string>, Symbol(r1b, Decl(callbacksDontShareTypes.ts, 15, 3))
 >_.map(c2, rf1) : Collection<string>
->_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
->_ : Combinators
->map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
->c2 : Collection<number>
->rf1 : (x: number) => string
+>_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }, Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>_ : Combinators, Symbol(_, Decl(callbacksDontShareTypes.ts, 10, 3))
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }, Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>c2 : Collection<number>, Symbol(c2, Decl(callbacksDontShareTypes.ts, 11, 3))
+>rf1 : (x: number) => string, Symbol(rf1, Decl(callbacksDontShareTypes.ts, 13, 3))
 
 var r5a = _.map<number, string>(c2, (x) => { return x.toFixed() });
->r5a : Collection<string>
+>r5a : Collection<string>, Symbol(r5a, Decl(callbacksDontShareTypes.ts, 16, 3))
 >_.map<number, string>(c2, (x) => { return x.toFixed() }) : Collection<string>
->_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
->_ : Combinators
->map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
->c2 : Collection<number>
+>_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }, Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>_ : Combinators, Symbol(_, Decl(callbacksDontShareTypes.ts, 10, 3))
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }, Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>c2 : Collection<number>, Symbol(c2, Decl(callbacksDontShareTypes.ts, 11, 3))
 >(x) => { return x.toFixed() } : (x: number) => string
->x : number
+>x : number, Symbol(x, Decl(callbacksDontShareTypes.ts, 16, 37))
 >x.toFixed() : string
->x.toFixed : (fractionDigits?: number) => string
->x : number
->toFixed : (fractionDigits?: number) => string
+>x.toFixed : (fractionDigits?: number) => string, Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
+>x : number, Symbol(x, Decl(callbacksDontShareTypes.ts, 16, 37))
+>toFixed : (fractionDigits?: number) => string, Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
 
 var r5b = _.map<number, string>(c2, rf1);
->r5b : Collection<string>
+>r5b : Collection<string>, Symbol(r5b, Decl(callbacksDontShareTypes.ts, 17, 3))
 >_.map<number, string>(c2, rf1) : Collection<string>
->_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
->_ : Combinators
->map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
->c2 : Collection<number>
->rf1 : (x: number) => string
+>_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }, Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>_ : Combinators, Symbol(_, Decl(callbacksDontShareTypes.ts, 10, 3))
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }, Symbol(Combinators.map, Decl(callbacksDontShareTypes.ts, 5, 23), Decl(callbacksDontShareTypes.ts, 6, 63))
+>c2 : Collection<number>, Symbol(c2, Decl(callbacksDontShareTypes.ts, 11, 3))
+>rf1 : (x: number) => string, Symbol(rf1, Decl(callbacksDontShareTypes.ts, 13, 3))
 

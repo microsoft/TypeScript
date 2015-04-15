@@ -1,169 +1,183 @@
 === tests/cases/conformance/expressions/commaOperator/commaOperatorWithSecondOperandStringType.ts ===
 var ANY: any;
->ANY : any
+>ANY : any, Symbol(ANY, Decl(commaOperatorWithSecondOperandStringType.ts, 0, 3))
 
 var BOOLEAN: boolean;
->BOOLEAN : boolean
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandStringType.ts, 1, 3))
 
 var NUMBER: number;
->NUMBER : number
+>NUMBER : number, Symbol(NUMBER, Decl(commaOperatorWithSecondOperandStringType.ts, 2, 3))
 
 var STRING: string;
->STRING : string
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 var OBJECT: Object;
->OBJECT : Object
->Object : Object
+>OBJECT : Object, Symbol(OBJECT, Decl(commaOperatorWithSecondOperandStringType.ts, 4, 3))
+>Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
 var resultIsString: string;
->resultIsString : string
+>resultIsString : string, Symbol(resultIsString, Decl(commaOperatorWithSecondOperandStringType.ts, 6, 3))
 
 //The second operand is string
 ANY, STRING;
 >ANY, STRING : string
->ANY : any
->STRING : string
+>ANY : any, Symbol(ANY, Decl(commaOperatorWithSecondOperandStringType.ts, 0, 3))
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 BOOLEAN, STRING;
 >BOOLEAN, STRING : string
->BOOLEAN : boolean
->STRING : string
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandStringType.ts, 1, 3))
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 NUMBER, STRING;
 >NUMBER, STRING : string
->NUMBER : number
->STRING : string
+>NUMBER : number, Symbol(NUMBER, Decl(commaOperatorWithSecondOperandStringType.ts, 2, 3))
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 STRING, STRING;
 >STRING, STRING : string
->STRING : string
->STRING : string
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 OBJECT, STRING;
 >OBJECT, STRING : string
->OBJECT : Object
->STRING : string
+>OBJECT : Object, Symbol(OBJECT, Decl(commaOperatorWithSecondOperandStringType.ts, 4, 3))
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 //Return type is string
 var resultIsString1 = (ANY, STRING);
->resultIsString1 : string
+>resultIsString1 : string, Symbol(resultIsString1, Decl(commaOperatorWithSecondOperandStringType.ts, 16, 3))
 >(ANY, STRING) : string
 >ANY, STRING : string
->ANY : any
->STRING : string
+>ANY : any, Symbol(ANY, Decl(commaOperatorWithSecondOperandStringType.ts, 0, 3))
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 var resultIsString2 = (BOOLEAN, STRING);
->resultIsString2 : string
+>resultIsString2 : string, Symbol(resultIsString2, Decl(commaOperatorWithSecondOperandStringType.ts, 17, 3))
 >(BOOLEAN, STRING) : string
 >BOOLEAN, STRING : string
->BOOLEAN : boolean
->STRING : string
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandStringType.ts, 1, 3))
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 var resultIsString3 = (NUMBER, STRING);
->resultIsString3 : string
+>resultIsString3 : string, Symbol(resultIsString3, Decl(commaOperatorWithSecondOperandStringType.ts, 18, 3))
 >(NUMBER, STRING) : string
 >NUMBER, STRING : string
->NUMBER : number
->STRING : string
+>NUMBER : number, Symbol(NUMBER, Decl(commaOperatorWithSecondOperandStringType.ts, 2, 3))
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 var resultIsString4 = (STRING, STRING);
->resultIsString4 : string
+>resultIsString4 : string, Symbol(resultIsString4, Decl(commaOperatorWithSecondOperandStringType.ts, 19, 3))
 >(STRING, STRING) : string
 >STRING, STRING : string
->STRING : string
->STRING : string
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 var resultIsString5 = (OBJECT, STRING);
->resultIsString5 : string
+>resultIsString5 : string, Symbol(resultIsString5, Decl(commaOperatorWithSecondOperandStringType.ts, 20, 3))
 >(OBJECT, STRING) : string
 >OBJECT, STRING : string
->OBJECT : Object
->STRING : string
+>OBJECT : Object, Symbol(OBJECT, Decl(commaOperatorWithSecondOperandStringType.ts, 4, 3))
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 //Literal and expression
 null, STRING;
 >null, STRING : string
->STRING : string
+>null : null
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 ANY = new Date(), STRING;
 >ANY = new Date(), STRING : string
 >ANY = new Date() : Date
->ANY : any
+>ANY : any, Symbol(ANY, Decl(commaOperatorWithSecondOperandStringType.ts, 0, 3))
 >new Date() : Date
->Date : DateConstructor
->STRING : string
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 true, "";
 >true, "" : string
+>true : boolean
+>"" : string
 
 BOOLEAN == undefined, "";
 >BOOLEAN == undefined, "" : string
 >BOOLEAN == undefined : boolean
->BOOLEAN : boolean
->undefined : undefined
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandStringType.ts, 1, 3))
+>undefined : undefined, Symbol(undefined)
+>"" : string
 
 ["a", "b"], NUMBER.toString();
 >["a", "b"], NUMBER.toString() : string
 >["a", "b"] : string[]
+>"a" : string
+>"b" : string
 >NUMBER.toString() : string
->NUMBER.toString : (radix?: number) => string
->NUMBER : number
->toString : (radix?: number) => string
+>NUMBER.toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>NUMBER : number, Symbol(NUMBER, Decl(commaOperatorWithSecondOperandStringType.ts, 2, 3))
+>toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
 
 OBJECT = new Object, STRING + "string";
 >OBJECT = new Object, STRING + "string" : string
 >OBJECT = new Object : Object
->OBJECT : Object
+>OBJECT : Object, Symbol(OBJECT, Decl(commaOperatorWithSecondOperandStringType.ts, 4, 3))
 >new Object : Object
->Object : ObjectConstructor
+>Object : ObjectConstructor, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 >STRING + "string" : string
->STRING : string
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+>"string" : string
 
 var resultIsString6 = (null, STRING);
->resultIsString6 : string
+>resultIsString6 : string, Symbol(resultIsString6, Decl(commaOperatorWithSecondOperandStringType.ts, 30, 3))
 >(null, STRING) : string
 >null, STRING : string
->STRING : string
+>null : null
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 var resultIsString7 = (ANY = new Date(), STRING);
->resultIsString7 : string
+>resultIsString7 : string, Symbol(resultIsString7, Decl(commaOperatorWithSecondOperandStringType.ts, 31, 3))
 >(ANY = new Date(), STRING) : string
 >ANY = new Date(), STRING : string
 >ANY = new Date() : Date
->ANY : any
+>ANY : any, Symbol(ANY, Decl(commaOperatorWithSecondOperandStringType.ts, 0, 3))
 >new Date() : Date
->Date : DateConstructor
->STRING : string
+>Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 var resultIsString8 = (true, "");
->resultIsString8 : string
+>resultIsString8 : string, Symbol(resultIsString8, Decl(commaOperatorWithSecondOperandStringType.ts, 32, 3))
 >(true, "") : string
 >true, "" : string
+>true : boolean
+>"" : string
 
 var resultIsString9 = (BOOLEAN == undefined, "");
->resultIsString9 : string
+>resultIsString9 : string, Symbol(resultIsString9, Decl(commaOperatorWithSecondOperandStringType.ts, 33, 3))
 >(BOOLEAN == undefined, "") : string
 >BOOLEAN == undefined, "" : string
 >BOOLEAN == undefined : boolean
->BOOLEAN : boolean
->undefined : undefined
+>BOOLEAN : boolean, Symbol(BOOLEAN, Decl(commaOperatorWithSecondOperandStringType.ts, 1, 3))
+>undefined : undefined, Symbol(undefined)
+>"" : string
 
 var resultIsString10 = (["a", "b"], NUMBER.toString());
->resultIsString10 : string
+>resultIsString10 : string, Symbol(resultIsString10, Decl(commaOperatorWithSecondOperandStringType.ts, 34, 3))
 >(["a", "b"], NUMBER.toString()) : string
 >["a", "b"], NUMBER.toString() : string
 >["a", "b"] : string[]
+>"a" : string
+>"b" : string
 >NUMBER.toString() : string
->NUMBER.toString : (radix?: number) => string
->NUMBER : number
->toString : (radix?: number) => string
+>NUMBER.toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>NUMBER : number, Symbol(NUMBER, Decl(commaOperatorWithSecondOperandStringType.ts, 2, 3))
+>toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
 
 var resultIsString11 = (new Object, STRING + "string");
->resultIsString11 : string
+>resultIsString11 : string, Symbol(resultIsString11, Decl(commaOperatorWithSecondOperandStringType.ts, 35, 3))
 >(new Object, STRING + "string") : string
 >new Object, STRING + "string" : string
 >new Object : Object
->Object : ObjectConstructor
+>Object : ObjectConstructor, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 >STRING + "string" : string
->STRING : string
+>STRING : string, Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
+>"string" : string
 

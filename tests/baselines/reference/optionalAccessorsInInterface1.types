@@ -1,53 +1,57 @@
 === tests/cases/compiler/optionalAccessorsInInterface1.ts ===
 interface MyPropertyDescriptor {
->MyPropertyDescriptor : MyPropertyDescriptor
+>MyPropertyDescriptor : MyPropertyDescriptor, Symbol(MyPropertyDescriptor, Decl(optionalAccessorsInInterface1.ts, 0, 0))
 
     get? (): any;
->get : () => any
+>get : () => any, Symbol(get, Decl(optionalAccessorsInInterface1.ts, 0, 32))
 
     set? (v: any): void;
->set : (v: any) => void
->v : any
+>set : (v: any) => void, Symbol(set, Decl(optionalAccessorsInInterface1.ts, 1, 17))
+>v : any, Symbol(v, Decl(optionalAccessorsInInterface1.ts, 2, 10))
 }
 
 declare function defineMyProperty(o: any, p: string, attributes: MyPropertyDescriptor): any;
->defineMyProperty : (o: any, p: string, attributes: MyPropertyDescriptor) => any
->o : any
->p : string
->attributes : MyPropertyDescriptor
->MyPropertyDescriptor : MyPropertyDescriptor
+>defineMyProperty : (o: any, p: string, attributes: MyPropertyDescriptor) => any, Symbol(defineMyProperty, Decl(optionalAccessorsInInterface1.ts, 3, 1))
+>o : any, Symbol(o, Decl(optionalAccessorsInInterface1.ts, 5, 34))
+>p : string, Symbol(p, Decl(optionalAccessorsInInterface1.ts, 5, 41))
+>attributes : MyPropertyDescriptor, Symbol(attributes, Decl(optionalAccessorsInInterface1.ts, 5, 52))
+>MyPropertyDescriptor : MyPropertyDescriptor, Symbol(MyPropertyDescriptor, Decl(optionalAccessorsInInterface1.ts, 0, 0))
 
 defineMyProperty({}, "name", { get: function () { return 5; } });
 >defineMyProperty({}, "name", { get: function () { return 5; } }) : any
->defineMyProperty : (o: any, p: string, attributes: MyPropertyDescriptor) => any
+>defineMyProperty : (o: any, p: string, attributes: MyPropertyDescriptor) => any, Symbol(defineMyProperty, Decl(optionalAccessorsInInterface1.ts, 3, 1))
 >{} : {}
+>"name" : string
 >{ get: function () { return 5; } } : { get: () => number; }
->get : () => number
+>get : () => number, Symbol(get, Decl(optionalAccessorsInInterface1.ts, 6, 30))
 >function () { return 5; } : () => number
+>5 : number
 
 interface MyPropertyDescriptor2 {
->MyPropertyDescriptor2 : MyPropertyDescriptor2
+>MyPropertyDescriptor2 : MyPropertyDescriptor2, Symbol(MyPropertyDescriptor2, Decl(optionalAccessorsInInterface1.ts, 6, 65))
 
     get?: () => any;
->get : () => any
+>get : () => any, Symbol(get, Decl(optionalAccessorsInInterface1.ts, 8, 33))
 
     set?: (v: any) => void;
->set : (v: any) => void
->v : any
+>set : (v: any) => void, Symbol(set, Decl(optionalAccessorsInInterface1.ts, 9, 20))
+>v : any, Symbol(v, Decl(optionalAccessorsInInterface1.ts, 10, 11))
 }
 
 declare function defineMyProperty2(o: any, p: string, attributes: MyPropertyDescriptor2): any;
->defineMyProperty2 : (o: any, p: string, attributes: MyPropertyDescriptor2) => any
->o : any
->p : string
->attributes : MyPropertyDescriptor2
->MyPropertyDescriptor2 : MyPropertyDescriptor2
+>defineMyProperty2 : (o: any, p: string, attributes: MyPropertyDescriptor2) => any, Symbol(defineMyProperty2, Decl(optionalAccessorsInInterface1.ts, 11, 1))
+>o : any, Symbol(o, Decl(optionalAccessorsInInterface1.ts, 13, 35))
+>p : string, Symbol(p, Decl(optionalAccessorsInInterface1.ts, 13, 42))
+>attributes : MyPropertyDescriptor2, Symbol(attributes, Decl(optionalAccessorsInInterface1.ts, 13, 53))
+>MyPropertyDescriptor2 : MyPropertyDescriptor2, Symbol(MyPropertyDescriptor2, Decl(optionalAccessorsInInterface1.ts, 6, 65))
 
 defineMyProperty2({}, "name", { get: function () { return 5; } });
 >defineMyProperty2({}, "name", { get: function () { return 5; } }) : any
->defineMyProperty2 : (o: any, p: string, attributes: MyPropertyDescriptor2) => any
+>defineMyProperty2 : (o: any, p: string, attributes: MyPropertyDescriptor2) => any, Symbol(defineMyProperty2, Decl(optionalAccessorsInInterface1.ts, 11, 1))
 >{} : {}
+>"name" : string
 >{ get: function () { return 5; } } : { get: () => number; }
->get : () => number
+>get : () => number, Symbol(get, Decl(optionalAccessorsInInterface1.ts, 14, 31))
 >function () { return 5; } : () => number
+>5 : number
 

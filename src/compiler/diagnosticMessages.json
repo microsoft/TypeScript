@@ -2043,19 +2043,19 @@
     },
     "'import ... =' can only be used in a .ts file.": {
         "category": "Error",
-        "code":  8002
+        "code": 8002
     },
     "'export=' can only be used in a .ts file.": {
         "category": "Error",
-        "code":  8003
+        "code": 8003
     },
     "'type parameter declarations' can only be used in a .ts file.": {
         "category": "Error",
-        "code":  8004
+        "code": 8004
     },
     "'implements clauses' can only be used in a .ts file.": {
         "category": "Error",
-        "code":  8005
+        "code": 8005
     },
     "'interface declarations' can only be used in a .ts file.": {
         "category": "Error",

@@ -1,5 +1,7 @@
 === tests/cases/conformance/es6/templates/templateStringInTypeAssertion.ts ===
 var x = <any>`abc${ 123 }def`;
->x : any
+>x : any, Symbol(x, Decl(templateStringInTypeAssertion.ts, 0, 3))
 ><any>`abc${ 123 }def` : any
+>`abc${ 123 }def` : string
+>123 : number
 

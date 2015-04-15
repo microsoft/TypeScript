@@ -1,20 +1,20 @@
 === tests/cases/compiler/contextualSigInstantiationRestParams.ts ===
 declare function toInstantiate<A, B>(a?: A, b?: B): B;
->toInstantiate : <A, B>(a?: A, b?: B) => B
->A : A
->B : B
->a : A
->A : A
->b : B
->B : B
->B : B
+>toInstantiate : <A, B>(a?: A, b?: B) => B, Symbol(toInstantiate, Decl(contextualSigInstantiationRestParams.ts, 0, 0))
+>A : A, Symbol(A, Decl(contextualSigInstantiationRestParams.ts, 0, 31))
+>B : B, Symbol(B, Decl(contextualSigInstantiationRestParams.ts, 0, 33))
+>a : A, Symbol(a, Decl(contextualSigInstantiationRestParams.ts, 0, 37))
+>A : A, Symbol(A, Decl(contextualSigInstantiationRestParams.ts, 0, 31))
+>b : B, Symbol(b, Decl(contextualSigInstantiationRestParams.ts, 0, 43))
+>B : B, Symbol(B, Decl(contextualSigInstantiationRestParams.ts, 0, 33))
+>B : B, Symbol(B, Decl(contextualSigInstantiationRestParams.ts, 0, 33))
 
 declare function contextual(...s: string[]): string
->contextual : (...s: string[]) => string
->s : string[]
+>contextual : (...s: string[]) => string, Symbol(contextual, Decl(contextualSigInstantiationRestParams.ts, 0, 54))
+>s : string[], Symbol(s, Decl(contextualSigInstantiationRestParams.ts, 1, 28))
 
 var sig: typeof contextual = toInstantiate;
->sig : (...s: string[]) => string
->contextual : (...s: string[]) => string
->toInstantiate : <A, B>(a?: A, b?: B) => B
+>sig : (...s: string[]) => string, Symbol(sig, Decl(contextualSigInstantiationRestParams.ts, 3, 3))
+>contextual : (...s: string[]) => string, Symbol(contextual, Decl(contextualSigInstantiationRestParams.ts, 0, 54))
+>toInstantiate : <A, B>(a?: A, b?: B) => B, Symbol(toInstantiate, Decl(contextualSigInstantiationRestParams.ts, 0, 0))
 

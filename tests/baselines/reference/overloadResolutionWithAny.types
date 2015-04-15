@@ -1,69 +1,75 @@
 === tests/cases/compiler/overloadResolutionWithAny.ts ===
 var func: {
->func : { (s: string): number; (s: any): string; }
+>func : { (s: string): number; (s: any): string; }, Symbol(func, Decl(overloadResolutionWithAny.ts, 0, 3))
 
     (s: string): number;
->s : string
+>s : string, Symbol(s, Decl(overloadResolutionWithAny.ts, 1, 5))
 
     (s: any): string;
->s : any
+>s : any, Symbol(s, Decl(overloadResolutionWithAny.ts, 2, 5))
 
 };
 
 func(""); // number
 >func("") : number
->func : { (s: string): number; (s: any): string; }
+>func : { (s: string): number; (s: any): string; }, Symbol(func, Decl(overloadResolutionWithAny.ts, 0, 3))
+>"" : string
 
 func(3); // string
 >func(3) : string
->func : { (s: string): number; (s: any): string; }
+>func : { (s: string): number; (s: any): string; }, Symbol(func, Decl(overloadResolutionWithAny.ts, 0, 3))
+>3 : number
 
 var x: any;
->x : any
+>x : any, Symbol(x, Decl(overloadResolutionWithAny.ts, 7, 3))
 
 func(x); // string
 >func(x) : string
->func : { (s: string): number; (s: any): string; }
->x : any
+>func : { (s: string): number; (s: any): string; }, Symbol(func, Decl(overloadResolutionWithAny.ts, 0, 3))
+>x : any, Symbol(x, Decl(overloadResolutionWithAny.ts, 7, 3))
 
 var func2: {
->func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }
+>func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }, Symbol(func2, Decl(overloadResolutionWithAny.ts, 10, 3))
 
     (s: string, t: string): number;
->s : string
->t : string
+>s : string, Symbol(s, Decl(overloadResolutionWithAny.ts, 11, 5))
+>t : string, Symbol(t, Decl(overloadResolutionWithAny.ts, 11, 15))
 
     (s: any, t: string): boolean;
->s : any
->t : string
+>s : any, Symbol(s, Decl(overloadResolutionWithAny.ts, 12, 5))
+>t : string, Symbol(t, Decl(overloadResolutionWithAny.ts, 12, 12))
 
     (s: string, t: any): RegExp;
->s : string
->t : any
->RegExp : RegExp
+>s : string, Symbol(s, Decl(overloadResolutionWithAny.ts, 13, 5))
+>t : any, Symbol(t, Decl(overloadResolutionWithAny.ts, 13, 15))
+>RegExp : RegExp, Symbol(RegExp, Decl(lib.d.ts, 825, 1), Decl(lib.d.ts, 876, 11))
 
     (s: any, t: any): string;
->s : any
->t : any
+>s : any, Symbol(s, Decl(overloadResolutionWithAny.ts, 14, 5))
+>t : any, Symbol(t, Decl(overloadResolutionWithAny.ts, 14, 12))
 }
 
 func2(x, x); // string
 >func2(x, x) : string
->func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }
->x : any
->x : any
+>func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }, Symbol(func2, Decl(overloadResolutionWithAny.ts, 10, 3))
+>x : any, Symbol(x, Decl(overloadResolutionWithAny.ts, 7, 3))
+>x : any, Symbol(x, Decl(overloadResolutionWithAny.ts, 7, 3))
 
 func2("", ""); // number
 >func2("", "") : number
->func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }
+>func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }, Symbol(func2, Decl(overloadResolutionWithAny.ts, 10, 3))
+>"" : string
+>"" : string
 
 func2(x, ""); // boolean
 >func2(x, "") : boolean
->func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }
->x : any
+>func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }, Symbol(func2, Decl(overloadResolutionWithAny.ts, 10, 3))
+>x : any, Symbol(x, Decl(overloadResolutionWithAny.ts, 7, 3))
+>"" : string
 
 func2("", x); // RegExp
 >func2("", x) : RegExp
->func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }
->x : any
+>func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }, Symbol(func2, Decl(overloadResolutionWithAny.ts, 10, 3))
+>"" : string
+>x : any, Symbol(x, Decl(overloadResolutionWithAny.ts, 7, 3))
 

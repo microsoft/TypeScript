@@ -1,24 +1,24 @@
 === tests/cases/compiler/chainedImportAlias_file1.ts ===
 import x = require('chainedImportAlias_file0');
->x : typeof x
+>x : typeof x, Symbol(x, Decl(chainedImportAlias_file1.ts, 0, 0))
 
 import y = x;
->y : typeof x
->x : typeof x
+>y : typeof x, Symbol(y, Decl(chainedImportAlias_file1.ts, 0, 47))
+>x : typeof x, Symbol(x, Decl(chainedImportAlias_file0.ts, 0, 0))
 
 y.m.foo();
 >y.m.foo() : void
->y.m.foo : () => void
->y.m : typeof x.m
->y : typeof x
->m : typeof x.m
->foo : () => void
+>y.m.foo : () => void, Symbol(x.m.foo, Decl(chainedImportAlias_file0.ts, 0, 17))
+>y.m : typeof x.m, Symbol(x.m, Decl(chainedImportAlias_file0.ts, 0, 0))
+>y : typeof x, Symbol(y, Decl(chainedImportAlias_file1.ts, 0, 47))
+>m : typeof x.m, Symbol(x.m, Decl(chainedImportAlias_file0.ts, 0, 0))
+>foo : () => void, Symbol(x.m.foo, Decl(chainedImportAlias_file0.ts, 0, 17))
 
 === tests/cases/compiler/chainedImportAlias_file0.ts ===
 export module m {
->m : typeof m
+>m : typeof m, Symbol(m, Decl(chainedImportAlias_file0.ts, 0, 0))
 
     export function foo() { }
->foo : () => void
+>foo : () => void, Symbol(foo, Decl(chainedImportAlias_file0.ts, 0, 17))
 }
 

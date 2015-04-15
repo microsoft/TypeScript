@@ -1,25 +1,26 @@
 === tests/cases/compiler/addMoreCallSignaturesToBaseSignature2.ts ===
 interface Foo {
->Foo : Foo
+>Foo : Foo, Symbol(Foo, Decl(addMoreCallSignaturesToBaseSignature2.ts, 0, 0))
 
     (bar:number): string;
->bar : number
+>bar : number, Symbol(bar, Decl(addMoreCallSignaturesToBaseSignature2.ts, 1, 5))
 }
 
 interface Bar extends Foo {
->Bar : Bar
->Foo : Foo
+>Bar : Bar, Symbol(Bar, Decl(addMoreCallSignaturesToBaseSignature2.ts, 2, 1))
+>Foo : Foo, Symbol(Foo, Decl(addMoreCallSignaturesToBaseSignature2.ts, 0, 0))
 
     (key: string): string;
->key : string
+>key : string, Symbol(key, Decl(addMoreCallSignaturesToBaseSignature2.ts, 5, 5))
 }
 
 var a: Bar;
->a : Bar
->Bar : Bar
+>a : Bar, Symbol(a, Decl(addMoreCallSignaturesToBaseSignature2.ts, 8, 3))
+>Bar : Bar, Symbol(Bar, Decl(addMoreCallSignaturesToBaseSignature2.ts, 2, 1))
 
 var kitty = a(1);
->kitty : string
+>kitty : string, Symbol(kitty, Decl(addMoreCallSignaturesToBaseSignature2.ts, 9, 3))
 >a(1) : string
->a : Bar
+>a : Bar, Symbol(a, Decl(addMoreCallSignaturesToBaseSignature2.ts, 8, 3))
+>1 : number
 

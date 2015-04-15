@@ -1,19 +1,28 @@
 === tests/cases/compiler/regExpWithSlashInCharClass.ts ===
 var foo1 = "a/".replace(/.[/]/, "");
->foo1 : string
+>foo1 : string, Symbol(foo1, Decl(regExpWithSlashInCharClass.ts, 0, 3))
 >"a/".replace(/.[/]/, "") : string
->"a/".replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
->replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
+>"a/".replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }, Symbol(String.replace, Decl(lib.d.ts, 329, 44), Decl(lib.d.ts, 336, 63), Decl(lib.d.ts, 343, 102), Decl(lib.d.ts, 350, 63))
+>"a/" : string
+>replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }, Symbol(String.replace, Decl(lib.d.ts, 329, 44), Decl(lib.d.ts, 336, 63), Decl(lib.d.ts, 343, 102), Decl(lib.d.ts, 350, 63))
+>/.[/]/ : RegExp
+>"" : string
 
 var foo2 = "a//".replace(/.[//]/g, "");
->foo2 : string
+>foo2 : string, Symbol(foo2, Decl(regExpWithSlashInCharClass.ts, 1, 3))
 >"a//".replace(/.[//]/g, "") : string
->"a//".replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
->replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
+>"a//".replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }, Symbol(String.replace, Decl(lib.d.ts, 329, 44), Decl(lib.d.ts, 336, 63), Decl(lib.d.ts, 343, 102), Decl(lib.d.ts, 350, 63))
+>"a//" : string
+>replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }, Symbol(String.replace, Decl(lib.d.ts, 329, 44), Decl(lib.d.ts, 336, 63), Decl(lib.d.ts, 343, 102), Decl(lib.d.ts, 350, 63))
+>/.[//]/g : RegExp
+>"" : string
 
 var foo3 = "a/".replace(/.[/no sleep /till/]/, "bugfix");
->foo3 : string
+>foo3 : string, Symbol(foo3, Decl(regExpWithSlashInCharClass.ts, 2, 3))
 >"a/".replace(/.[/no sleep /till/]/, "bugfix") : string
->"a/".replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
->replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
+>"a/".replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }, Symbol(String.replace, Decl(lib.d.ts, 329, 44), Decl(lib.d.ts, 336, 63), Decl(lib.d.ts, 343, 102), Decl(lib.d.ts, 350, 63))
+>"a/" : string
+>replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }, Symbol(String.replace, Decl(lib.d.ts, 329, 44), Decl(lib.d.ts, 336, 63), Decl(lib.d.ts, 343, 102), Decl(lib.d.ts, 350, 63))
+>/.[/no sleep /till/]/ : RegExp
+>"bugfix" : string
 

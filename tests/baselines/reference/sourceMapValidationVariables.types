@@ -1,16 +1,19 @@
 === tests/cases/compiler/sourceMapValidationVariables.ts ===
 var a = 10;
->a : number
+>a : number, Symbol(a, Decl(sourceMapValidationVariables.ts, 0, 3))
+>10 : number
 
 var b;
->b : any
+>b : any, Symbol(b, Decl(sourceMapValidationVariables.ts, 1, 3))
 
 var c = 10, d, e;
->c : number
->d : any
->e : any
+>c : number, Symbol(c, Decl(sourceMapValidationVariables.ts, 2, 3))
+>10 : number
+>d : any, Symbol(d, Decl(sourceMapValidationVariables.ts, 2, 11))
+>e : any, Symbol(e, Decl(sourceMapValidationVariables.ts, 2, 14))
 
 var c2, d2 = 10;
->c2 : any
->d2 : number
+>c2 : any, Symbol(c2, Decl(sourceMapValidationVariables.ts, 3, 3))
+>d2 : number, Symbol(d2, Decl(sourceMapValidationVariables.ts, 3, 7))
+>10 : number
 

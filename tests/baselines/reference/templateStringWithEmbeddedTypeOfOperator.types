@@ -1,5 +1,7 @@
 === tests/cases/conformance/es6/templates/templateStringWithEmbeddedTypeOfOperator.ts ===
 var x = `abc${ typeof "hi" }def`;
->x : string
+>x : string, Symbol(x, Decl(templateStringWithEmbeddedTypeOfOperator.ts, 0, 3))
+>`abc${ typeof "hi" }def` : string
 >typeof "hi" : string
+>"hi" : string
 

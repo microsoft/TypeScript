@@ -2,190 +2,207 @@
 // Optional parameters should be valid in all the below casts
 
 function foo(x?: number) { }
->foo : (x?: number) => void
->x : number
+>foo : (x?: number) => void, Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 0, 0))
+>x : number, Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 2, 13))
 
 var f = function foo(x?: number) { }
->f : (x?: number) => void
+>f : (x?: number) => void, Symbol(f, Decl(callSignaturesWithOptionalParameters.ts, 3, 3))
 >function foo(x?: number) { } : (x?: number) => void
->foo : (x?: number) => void
->x : number
+>foo : (x?: number) => void, Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 3, 7))
+>x : number, Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 3, 21))
 
 var f2 = (x: number, y?: number) => { }
->f2 : (x: number, y?: number) => void
+>f2 : (x: number, y?: number) => void, Symbol(f2, Decl(callSignaturesWithOptionalParameters.ts, 4, 3))
 >(x: number, y?: number) => { } : (x: number, y?: number) => void
->x : number
->y : number
+>x : number, Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 4, 10))
+>y : number, Symbol(y, Decl(callSignaturesWithOptionalParameters.ts, 4, 20))
 
 foo(1);
 >foo(1) : void
->foo : (x?: number) => void
+>foo : (x?: number) => void, Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 0, 0))
+>1 : number
 
 foo();
 >foo() : void
->foo : (x?: number) => void
+>foo : (x?: number) => void, Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 0, 0))
 
 f(1);
 >f(1) : void
->f : (x?: number) => void
+>f : (x?: number) => void, Symbol(f, Decl(callSignaturesWithOptionalParameters.ts, 3, 3))
+>1 : number
 
 f();
 >f() : void
->f : (x?: number) => void
+>f : (x?: number) => void, Symbol(f, Decl(callSignaturesWithOptionalParameters.ts, 3, 3))
 
 f2(1);
 >f2(1) : void
->f2 : (x: number, y?: number) => void
+>f2 : (x: number, y?: number) => void, Symbol(f2, Decl(callSignaturesWithOptionalParameters.ts, 4, 3))
+>1 : number
 
 f2(1, 2);
 >f2(1, 2) : void
->f2 : (x: number, y?: number) => void
+>f2 : (x: number, y?: number) => void, Symbol(f2, Decl(callSignaturesWithOptionalParameters.ts, 4, 3))
+>1 : number
+>2 : number
 
 class C {
->C : C
+>C : C, Symbol(C, Decl(callSignaturesWithOptionalParameters.ts, 11, 9))
 
     foo(x?: number) { }
->foo : (x?: number) => void
->x : number
+>foo : (x?: number) => void, Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 13, 9))
+>x : number, Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 14, 8))
 }
 
 var c: C;
->c : C
->C : C
+>c : C, Symbol(c, Decl(callSignaturesWithOptionalParameters.ts, 17, 3))
+>C : C, Symbol(C, Decl(callSignaturesWithOptionalParameters.ts, 11, 9))
 
 c.foo();
 >c.foo() : void
->c.foo : (x?: number) => void
->c : C
->foo : (x?: number) => void
+>c.foo : (x?: number) => void, Symbol(C.foo, Decl(callSignaturesWithOptionalParameters.ts, 13, 9))
+>c : C, Symbol(c, Decl(callSignaturesWithOptionalParameters.ts, 17, 3))
+>foo : (x?: number) => void, Symbol(C.foo, Decl(callSignaturesWithOptionalParameters.ts, 13, 9))
 
 c.foo(1);
 >c.foo(1) : void
->c.foo : (x?: number) => void
->c : C
->foo : (x?: number) => void
+>c.foo : (x?: number) => void, Symbol(C.foo, Decl(callSignaturesWithOptionalParameters.ts, 13, 9))
+>c : C, Symbol(c, Decl(callSignaturesWithOptionalParameters.ts, 17, 3))
+>foo : (x?: number) => void, Symbol(C.foo, Decl(callSignaturesWithOptionalParameters.ts, 13, 9))
+>1 : number
 
 interface I {
->I : I
+>I : I, Symbol(I, Decl(callSignaturesWithOptionalParameters.ts, 19, 9))
 
     (x?: number);
->x : number
+>x : number, Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 22, 5))
 
     foo(x: number, y?: number);
->foo : (x: number, y?: number) => any
->x : number
->y : number
+>foo : (x: number, y?: number) => any, Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 22, 17))
+>x : number, Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 23, 8))
+>y : number, Symbol(y, Decl(callSignaturesWithOptionalParameters.ts, 23, 18))
 }
 
 var i: I;
->i : I
->I : I
+>i : I, Symbol(i, Decl(callSignaturesWithOptionalParameters.ts, 26, 3))
+>I : I, Symbol(I, Decl(callSignaturesWithOptionalParameters.ts, 19, 9))
 
 i();
 >i() : any
->i : I
+>i : I, Symbol(i, Decl(callSignaturesWithOptionalParameters.ts, 26, 3))
 
 i(1);
 >i(1) : any
->i : I
+>i : I, Symbol(i, Decl(callSignaturesWithOptionalParameters.ts, 26, 3))
+>1 : number
 
 i.foo(1);
 >i.foo(1) : any
->i.foo : (x: number, y?: number) => any
->i : I
->foo : (x: number, y?: number) => any
+>i.foo : (x: number, y?: number) => any, Symbol(I.foo, Decl(callSignaturesWithOptionalParameters.ts, 22, 17))
+>i : I, Symbol(i, Decl(callSignaturesWithOptionalParameters.ts, 26, 3))
+>foo : (x: number, y?: number) => any, Symbol(I.foo, Decl(callSignaturesWithOptionalParameters.ts, 22, 17))
+>1 : number
 
 i.foo(1, 2);
 >i.foo(1, 2) : any
->i.foo : (x: number, y?: number) => any
->i : I
->foo : (x: number, y?: number) => any
+>i.foo : (x: number, y?: number) => any, Symbol(I.foo, Decl(callSignaturesWithOptionalParameters.ts, 22, 17))
+>i : I, Symbol(i, Decl(callSignaturesWithOptionalParameters.ts, 26, 3))
+>foo : (x: number, y?: number) => any, Symbol(I.foo, Decl(callSignaturesWithOptionalParameters.ts, 22, 17))
+>1 : number
+>2 : number
 
 var a: {
->a : { (x?: number): any; foo(x?: number): any; }
+>a : { (x?: number): any; foo(x?: number): any; }, Symbol(a, Decl(callSignaturesWithOptionalParameters.ts, 32, 3))
 
     (x?: number);
->x : number
+>x : number, Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 33, 5))
 
     foo(x?: number);
->foo : (x?: number) => any
->x : number
+>foo : (x?: number) => any, Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 33, 17))
+>x : number, Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 34, 8))
 }
 
 a();
 >a() : any
->a : { (x?: number): any; foo(x?: number): any; }
+>a : { (x?: number): any; foo(x?: number): any; }, Symbol(a, Decl(callSignaturesWithOptionalParameters.ts, 32, 3))
 
 a(1);
 >a(1) : any
->a : { (x?: number): any; foo(x?: number): any; }
+>a : { (x?: number): any; foo(x?: number): any; }, Symbol(a, Decl(callSignaturesWithOptionalParameters.ts, 32, 3))
+>1 : number
 
 a.foo();
 >a.foo() : any
->a.foo : (x?: number) => any
->a : { (x?: number): any; foo(x?: number): any; }
->foo : (x?: number) => any
+>a.foo : (x?: number) => any, Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 33, 17))
+>a : { (x?: number): any; foo(x?: number): any; }, Symbol(a, Decl(callSignaturesWithOptionalParameters.ts, 32, 3))
+>foo : (x?: number) => any, Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 33, 17))
 
 a.foo(1);
 >a.foo(1) : any
->a.foo : (x?: number) => any
->a : { (x?: number): any; foo(x?: number): any; }
->foo : (x?: number) => any
+>a.foo : (x?: number) => any, Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 33, 17))
+>a : { (x?: number): any; foo(x?: number): any; }, Symbol(a, Decl(callSignaturesWithOptionalParameters.ts, 32, 3))
+>foo : (x?: number) => any, Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 33, 17))
+>1 : number
 
 var b = {
->b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }
+>b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }, Symbol(b, Decl(callSignaturesWithOptionalParameters.ts, 42, 3))
 >{    foo(x?: number) { },    a: function foo(x: number, y?: number) { },    b: (x?: number) => { }} : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }
 
     foo(x?: number) { },
->foo : (x?: number) => void
->x : number
+>foo : (x?: number) => void, Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 42, 9))
+>x : number, Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 43, 8))
 
     a: function foo(x: number, y?: number) { },
->a : (x: number, y?: number) => void
+>a : (x: number, y?: number) => void, Symbol(a, Decl(callSignaturesWithOptionalParameters.ts, 43, 24))
 >function foo(x: number, y?: number) { } : (x: number, y?: number) => void
->foo : (x: number, y?: number) => void
->x : number
->y : number
+>foo : (x: number, y?: number) => void, Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 44, 6))
+>x : number, Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 44, 20))
+>y : number, Symbol(y, Decl(callSignaturesWithOptionalParameters.ts, 44, 30))
 
     b: (x?: number) => { }
->b : (x?: number) => void
+>b : (x?: number) => void, Symbol(b, Decl(callSignaturesWithOptionalParameters.ts, 44, 47))
 >(x?: number) => { } : (x?: number) => void
->x : number
+>x : number, Symbol(x, Decl(callSignaturesWithOptionalParameters.ts, 45, 8))
 }
 
 b.foo();
 >b.foo() : void
->b.foo : (x?: number) => void
->b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }
->foo : (x?: number) => void
+>b.foo : (x?: number) => void, Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 42, 9))
+>b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }, Symbol(b, Decl(callSignaturesWithOptionalParameters.ts, 42, 3))
+>foo : (x?: number) => void, Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 42, 9))
 
 b.foo(1);
 >b.foo(1) : void
->b.foo : (x?: number) => void
->b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }
->foo : (x?: number) => void
+>b.foo : (x?: number) => void, Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 42, 9))
+>b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }, Symbol(b, Decl(callSignaturesWithOptionalParameters.ts, 42, 3))
+>foo : (x?: number) => void, Symbol(foo, Decl(callSignaturesWithOptionalParameters.ts, 42, 9))
+>1 : number
 
 b.a(1);
 >b.a(1) : void
->b.a : (x: number, y?: number) => void
->b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }
->a : (x: number, y?: number) => void
+>b.a : (x: number, y?: number) => void, Symbol(a, Decl(callSignaturesWithOptionalParameters.ts, 43, 24))
+>b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }, Symbol(b, Decl(callSignaturesWithOptionalParameters.ts, 42, 3))
+>a : (x: number, y?: number) => void, Symbol(a, Decl(callSignaturesWithOptionalParameters.ts, 43, 24))
+>1 : number
 
 b.a(1, 2);
 >b.a(1, 2) : void
->b.a : (x: number, y?: number) => void
->b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }
->a : (x: number, y?: number) => void
+>b.a : (x: number, y?: number) => void, Symbol(a, Decl(callSignaturesWithOptionalParameters.ts, 43, 24))
+>b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }, Symbol(b, Decl(callSignaturesWithOptionalParameters.ts, 42, 3))
+>a : (x: number, y?: number) => void, Symbol(a, Decl(callSignaturesWithOptionalParameters.ts, 43, 24))
+>1 : number
+>2 : number
 
 b.b();
 >b.b() : void
->b.b : (x?: number) => void
->b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }
->b : (x?: number) => void
+>b.b : (x?: number) => void, Symbol(b, Decl(callSignaturesWithOptionalParameters.ts, 44, 47))
+>b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }, Symbol(b, Decl(callSignaturesWithOptionalParameters.ts, 42, 3))
+>b : (x?: number) => void, Symbol(b, Decl(callSignaturesWithOptionalParameters.ts, 44, 47))
 
 b.b(1);
 >b.b(1) : void
->b.b : (x?: number) => void
->b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }
->b : (x?: number) => void
+>b.b : (x?: number) => void, Symbol(b, Decl(callSignaturesWithOptionalParameters.ts, 44, 47))
+>b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }, Symbol(b, Decl(callSignaturesWithOptionalParameters.ts, 42, 3))
+>b : (x?: number) => void, Symbol(b, Decl(callSignaturesWithOptionalParameters.ts, 44, 47))
+>1 : number
 

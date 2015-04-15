@@ -1,38 +1,38 @@
 === tests/cases/compiler/mergedModuleDeclarationCodeGen4.ts ===
 module superContain {
->superContain : typeof superContain
+>superContain : typeof superContain, Symbol(superContain, Decl(mergedModuleDeclarationCodeGen4.ts, 0, 0))
 
     export module contain {
->contain : typeof contain
+>contain : typeof contain, Symbol(contain, Decl(mergedModuleDeclarationCodeGen4.ts, 0, 21))
 
         export module my.buz {
->my : typeof my
->buz : typeof buz
+>my : typeof my, Symbol(my, Decl(mergedModuleDeclarationCodeGen4.ts, 1, 27), Decl(mergedModuleDeclarationCodeGen4.ts, 6, 9))
+>buz : typeof buz, Symbol(buz, Decl(mergedModuleDeclarationCodeGen4.ts, 2, 25), Decl(mergedModuleDeclarationCodeGen4.ts, 7, 25))
 
             export module data {
->data : typeof data
+>data : typeof data, Symbol(data, Decl(mergedModuleDeclarationCodeGen4.ts, 2, 30), Decl(mergedModuleDeclarationCodeGen4.ts, 7, 30))
 
                 export function foo() { }
->foo : () => void
+>foo : () => void, Symbol(foo, Decl(mergedModuleDeclarationCodeGen4.ts, 3, 32))
             }
         }
         export module my.buz {
->my : typeof my
->buz : typeof buz
+>my : typeof my, Symbol(my, Decl(mergedModuleDeclarationCodeGen4.ts, 1, 27), Decl(mergedModuleDeclarationCodeGen4.ts, 6, 9))
+>buz : typeof buz, Symbol(buz, Decl(mergedModuleDeclarationCodeGen4.ts, 2, 25), Decl(mergedModuleDeclarationCodeGen4.ts, 7, 25))
 
             export module data {
->data : typeof data
+>data : typeof data, Symbol(data, Decl(mergedModuleDeclarationCodeGen4.ts, 2, 30), Decl(mergedModuleDeclarationCodeGen4.ts, 7, 30))
 
                 export function bar(contain, my, buz, data) {
->bar : (contain: any, my: any, buz: any, data: any) => void
->contain : any
->my : any
->buz : any
->data : any
+>bar : (contain: any, my: any, buz: any, data: any) => void, Symbol(bar, Decl(mergedModuleDeclarationCodeGen4.ts, 8, 32))
+>contain : any, Symbol(contain, Decl(mergedModuleDeclarationCodeGen4.ts, 9, 36))
+>my : any, Symbol(my, Decl(mergedModuleDeclarationCodeGen4.ts, 9, 44))
+>buz : any, Symbol(buz, Decl(mergedModuleDeclarationCodeGen4.ts, 9, 48))
+>data : any, Symbol(data, Decl(mergedModuleDeclarationCodeGen4.ts, 9, 53))
 
                     foo();
 >foo() : void
->foo : () => void
+>foo : () => void, Symbol(foo, Decl(mergedModuleDeclarationCodeGen4.ts, 3, 32))
                 }
             }
         }

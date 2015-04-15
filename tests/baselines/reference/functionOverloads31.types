@@ -1,19 +1,20 @@
 === tests/cases/compiler/functionOverloads31.ts ===
 function foo(bar:string):string;
->foo : { (bar: string): string; (bar: number): number; }
->bar : string
+>foo : { (bar: string): string; (bar: number): number; }, Symbol(foo, Decl(functionOverloads31.ts, 0, 0), Decl(functionOverloads31.ts, 0, 32), Decl(functionOverloads31.ts, 1, 32))
+>bar : string, Symbol(bar, Decl(functionOverloads31.ts, 0, 13))
 
 function foo(bar:number):number;
->foo : { (bar: string): string; (bar: number): number; }
->bar : number
+>foo : { (bar: string): string; (bar: number): number; }, Symbol(foo, Decl(functionOverloads31.ts, 0, 0), Decl(functionOverloads31.ts, 0, 32), Decl(functionOverloads31.ts, 1, 32))
+>bar : number, Symbol(bar, Decl(functionOverloads31.ts, 1, 13))
 
 function foo(bar:any):any{ return bar }
->foo : { (bar: string): string; (bar: number): number; }
->bar : any
->bar : any
+>foo : { (bar: string): string; (bar: number): number; }, Symbol(foo, Decl(functionOverloads31.ts, 0, 0), Decl(functionOverloads31.ts, 0, 32), Decl(functionOverloads31.ts, 1, 32))
+>bar : any, Symbol(bar, Decl(functionOverloads31.ts, 2, 13))
+>bar : any, Symbol(bar, Decl(functionOverloads31.ts, 2, 13))
 
 var x = foo(5);
->x : number
+>x : number, Symbol(x, Decl(functionOverloads31.ts, 3, 3))
 >foo(5) : number
->foo : { (bar: string): string; (bar: number): number; }
+>foo : { (bar: string): string; (bar: number): number; }, Symbol(foo, Decl(functionOverloads31.ts, 0, 0), Decl(functionOverloads31.ts, 0, 32), Decl(functionOverloads31.ts, 1, 32))
+>5 : number
 

@@ -1,149 +1,150 @@
 === tests/cases/conformance/expressions/newOperator/newOperatorConformance.ts ===
 
 class C0 {
->C0 : C0
+>C0 : C0, Symbol(C0, Decl(newOperatorConformance.ts, 0, 0))
 
 }
 class C1 {
->C1 : C1
+>C1 : C1, Symbol(C1, Decl(newOperatorConformance.ts, 3, 1))
 
     constructor(n: number, s: string) { }
->n : number
->s : string
+>n : number, Symbol(n, Decl(newOperatorConformance.ts, 5, 16))
+>s : string, Symbol(s, Decl(newOperatorConformance.ts, 5, 26))
 }
 
 class T<T> {
->T : T<T>
->T : T
+>T : T<T>, Symbol(T, Decl(newOperatorConformance.ts, 6, 1))
+>T : T, Symbol(T, Decl(newOperatorConformance.ts, 8, 8))
 
     constructor(n?: T) { }
->n : T
->T : T
+>n : T, Symbol(n, Decl(newOperatorConformance.ts, 9, 16))
+>T : T, Symbol(T, Decl(newOperatorConformance.ts, 8, 8))
 }
 
 var anyCtor: {
->anyCtor : new () => any
+>anyCtor : new () => any, Symbol(anyCtor, Decl(newOperatorConformance.ts, 12, 3))
 
     new (): any;
 };
 
 var anyCtor1: {
->anyCtor1 : new (n: any) => any
+>anyCtor1 : new (n: any) => any, Symbol(anyCtor1, Decl(newOperatorConformance.ts, 16, 3))
 
     new (n): any;
->n : any
+>n : any, Symbol(n, Decl(newOperatorConformance.ts, 17, 9))
 
 };
 
 interface nestedCtor {
->nestedCtor : nestedCtor
+>nestedCtor : nestedCtor, Symbol(nestedCtor, Decl(newOperatorConformance.ts, 18, 2), Decl(newOperatorConformance.ts, 23, 3))
 
     new (): nestedCtor;
->nestedCtor : nestedCtor
+>nestedCtor : nestedCtor, Symbol(nestedCtor, Decl(newOperatorConformance.ts, 18, 2), Decl(newOperatorConformance.ts, 23, 3))
 }
 var nestedCtor: nestedCtor;
->nestedCtor : nestedCtor
->nestedCtor : nestedCtor
+>nestedCtor : nestedCtor, Symbol(nestedCtor, Decl(newOperatorConformance.ts, 18, 2), Decl(newOperatorConformance.ts, 23, 3))
+>nestedCtor : nestedCtor, Symbol(nestedCtor, Decl(newOperatorConformance.ts, 18, 2), Decl(newOperatorConformance.ts, 23, 3))
 
 // Construct expression with no parentheses for construct signature with 0 parameters
 var a = new C0;
->a : C0
+>a : C0, Symbol(a, Decl(newOperatorConformance.ts, 26, 3), Decl(newOperatorConformance.ts, 27, 3))
 >new C0 : C0
->C0 : typeof C0
+>C0 : typeof C0, Symbol(C0, Decl(newOperatorConformance.ts, 0, 0))
 
 var a: C0;
->a : C0
->C0 : C0
+>a : C0, Symbol(a, Decl(newOperatorConformance.ts, 26, 3), Decl(newOperatorConformance.ts, 27, 3))
+>C0 : C0, Symbol(C0, Decl(newOperatorConformance.ts, 0, 0))
 
 
 // Generic construct expression with no parentheses
 var c1 = new T;
->c1 : T<{}>
+>c1 : T<{}>, Symbol(c1, Decl(newOperatorConformance.ts, 31, 3), Decl(newOperatorConformance.ts, 32, 3))
 >new T : T<{}>
->T : typeof T
+>T : typeof T, Symbol(T, Decl(newOperatorConformance.ts, 6, 1))
 
 var c1: T<{}>;
->c1 : T<{}>
->T : T<T>
+>c1 : T<{}>, Symbol(c1, Decl(newOperatorConformance.ts, 31, 3), Decl(newOperatorConformance.ts, 32, 3))
+>T : T<T>, Symbol(T, Decl(newOperatorConformance.ts, 6, 1))
 
 // Construct expression where constructor is of type 'any' with no parentheses
 var d = new anyCtor;
->d : any
+>d : any, Symbol(d, Decl(newOperatorConformance.ts, 35, 3), Decl(newOperatorConformance.ts, 36, 3), Decl(newOperatorConformance.ts, 39, 3))
 >new anyCtor : any
->anyCtor : new () => any
+>anyCtor : new () => any, Symbol(anyCtor, Decl(newOperatorConformance.ts, 12, 3))
 
 var d: any;
->d : any
+>d : any, Symbol(d, Decl(newOperatorConformance.ts, 35, 3), Decl(newOperatorConformance.ts, 36, 3), Decl(newOperatorConformance.ts, 39, 3))
 
 // Construct expression where constructor is of type 'any' with > 1 arg
 var d = new anyCtor1(undefined);
->d : any
+>d : any, Symbol(d, Decl(newOperatorConformance.ts, 35, 3), Decl(newOperatorConformance.ts, 36, 3), Decl(newOperatorConformance.ts, 39, 3))
 >new anyCtor1(undefined) : any
->anyCtor1 : new (n: any) => any
->undefined : undefined
+>anyCtor1 : new (n: any) => any, Symbol(anyCtor1, Decl(newOperatorConformance.ts, 16, 3))
+>undefined : undefined, Symbol(undefined)
 
 // Construct expression of type where apparent type has a construct signature with 0 arguments
 function newFn1<T extends { new (): number }>(s: T) {
->newFn1 : <T extends new () => number>(s: T) => void
->T : T
->s : T
->T : T
+>newFn1 : <T extends new () => number>(s: T) => void, Symbol(newFn1, Decl(newOperatorConformance.ts, 39, 32))
+>T : T, Symbol(T, Decl(newOperatorConformance.ts, 42, 16))
+>s : T, Symbol(s, Decl(newOperatorConformance.ts, 42, 46))
+>T : T, Symbol(T, Decl(newOperatorConformance.ts, 42, 16))
 
     var p = new s;
->p : number
+>p : number, Symbol(p, Decl(newOperatorConformance.ts, 43, 7), Decl(newOperatorConformance.ts, 44, 7))
 >new s : number
->s : T
+>s : T, Symbol(s, Decl(newOperatorConformance.ts, 42, 46))
 
     var p: number;
->p : number
+>p : number, Symbol(p, Decl(newOperatorConformance.ts, 43, 7), Decl(newOperatorConformance.ts, 44, 7))
 }
 
 // Construct expression of type where apparent type has a construct signature with 1 arguments
 function newFn2<T extends { new (s: number): string}>(s: T) {
->newFn2 : <T extends new (s: number) => string>(s: T) => void
->T : T
->s : number
->s : T
->T : T
+>newFn2 : <T extends new (s: number) => string>(s: T) => void, Symbol(newFn2, Decl(newOperatorConformance.ts, 45, 1))
+>T : T, Symbol(T, Decl(newOperatorConformance.ts, 48, 16))
+>s : number, Symbol(s, Decl(newOperatorConformance.ts, 48, 33))
+>s : T, Symbol(s, Decl(newOperatorConformance.ts, 48, 54))
+>T : T, Symbol(T, Decl(newOperatorConformance.ts, 48, 16))
 
     var p = new s(32);
->p : string
+>p : string, Symbol(p, Decl(newOperatorConformance.ts, 49, 7), Decl(newOperatorConformance.ts, 50, 7))
 >new s(32) : string
->s : T
+>s : T, Symbol(s, Decl(newOperatorConformance.ts, 48, 54))
+>32 : number
 
     var p: string;
->p : string
+>p : string, Symbol(p, Decl(newOperatorConformance.ts, 49, 7), Decl(newOperatorConformance.ts, 50, 7))
 }
 
 // Construct expression of void returning function
 function fnVoid(): void { }
->fnVoid : () => void
+>fnVoid : () => void, Symbol(fnVoid, Decl(newOperatorConformance.ts, 51, 1))
 
 var t = new fnVoid();
->t : any
+>t : any, Symbol(t, Decl(newOperatorConformance.ts, 55, 3), Decl(newOperatorConformance.ts, 56, 3))
 >new fnVoid() : any
->fnVoid : () => void
+>fnVoid : () => void, Symbol(fnVoid, Decl(newOperatorConformance.ts, 51, 1))
 
 var t: any;
->t : any
+>t : any, Symbol(t, Decl(newOperatorConformance.ts, 55, 3), Decl(newOperatorConformance.ts, 56, 3))
 
 // Chained new expressions
 var nested = new (new (new nestedCtor())())();
->nested : nestedCtor
+>nested : nestedCtor, Symbol(nested, Decl(newOperatorConformance.ts, 59, 3))
 >new (new (new nestedCtor())())() : nestedCtor
 >(new (new nestedCtor())()) : nestedCtor
 >new (new nestedCtor())() : nestedCtor
 >(new nestedCtor()) : nestedCtor
 >new nestedCtor() : nestedCtor
->nestedCtor : nestedCtor
+>nestedCtor : nestedCtor, Symbol(nestedCtor, Decl(newOperatorConformance.ts, 18, 2), Decl(newOperatorConformance.ts, 23, 3))
 
 var n = new nested();
->n : nestedCtor
+>n : nestedCtor, Symbol(n, Decl(newOperatorConformance.ts, 60, 3), Decl(newOperatorConformance.ts, 61, 3))
 >new nested() : nestedCtor
->nested : nestedCtor
+>nested : nestedCtor, Symbol(nested, Decl(newOperatorConformance.ts, 59, 3))
 
 var n = new nested();
->n : nestedCtor
+>n : nestedCtor, Symbol(n, Decl(newOperatorConformance.ts, 60, 3), Decl(newOperatorConformance.ts, 61, 3))
 >new nested() : nestedCtor
->nested : nestedCtor
+>nested : nestedCtor, Symbol(nested, Decl(newOperatorConformance.ts, 59, 3))
 

@@ -1,43 +1,48 @@
 === tests/cases/compiler/binopAssignmentShouldHaveType.ts ===
 declare var console;
->console : any
+>console : any, Symbol(console, Decl(binopAssignmentShouldHaveType.ts, 0, 11))
 
 "use strict";
+>"use strict" : string
+
 module Test {
->Test : typeof Test
+>Test : typeof Test, Symbol(Test, Decl(binopAssignmentShouldHaveType.ts, 1, 13))
 
  export class Bug {
->Bug : Bug
+>Bug : Bug, Symbol(Bug, Decl(binopAssignmentShouldHaveType.ts, 2, 13))
 
   getName():string {
->getName : () => string
+>getName : () => string, Symbol(getName, Decl(binopAssignmentShouldHaveType.ts, 3, 19))
 
    return "name";
+>"name" : string
   }
   bug() {
->bug : () => void
+>bug : () => void, Symbol(bug, Decl(binopAssignmentShouldHaveType.ts, 6, 3))
 
    var name:string= null;
->name : string
+>name : string, Symbol(name, Decl(binopAssignmentShouldHaveType.ts, 8, 6))
+>null : null
 
    if ((name= this.getName()).length > 0) {
 >(name= this.getName()).length > 0 : boolean
->(name= this.getName()).length : number
+>(name= this.getName()).length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
 >(name= this.getName()) : string
 >name= this.getName() : string
->name : string
+>name : string, Symbol(name, Decl(binopAssignmentShouldHaveType.ts, 8, 6))
 >this.getName() : string
->this.getName : () => string
->this : Bug
->getName : () => string
->length : number
+>this.getName : () => string, Symbol(getName, Decl(binopAssignmentShouldHaveType.ts, 3, 19))
+>this : Bug, Symbol(Bug, Decl(binopAssignmentShouldHaveType.ts, 2, 13))
+>getName : () => string, Symbol(getName, Decl(binopAssignmentShouldHaveType.ts, 3, 19))
+>length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>0 : number
 
     console.log(name);
 >console.log(name) : any
 >console.log : any
->console : any
+>console : any, Symbol(console, Decl(binopAssignmentShouldHaveType.ts, 0, 11))
 >log : any
->name : string
+>name : string, Symbol(name, Decl(binopAssignmentShouldHaveType.ts, 8, 6))
    }
   }
  }

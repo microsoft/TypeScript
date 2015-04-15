@@ -1,30 +1,35 @@
 === tests/cases/compiler/downlevelLetConst12.ts ===
 
 'use strict'
+>'use strict' : string
+
 // top level let\const should not be renamed
 let foo;
->foo : any
+>foo : any, Symbol(foo, Decl(downlevelLetConst12.ts, 3, 3))
 
 const bar = 1;
->bar : number
+>bar : number, Symbol(bar, Decl(downlevelLetConst12.ts, 4, 5))
+>1 : number
 
 let [baz] = [];
->baz : any
+>baz : any, Symbol(baz, Decl(downlevelLetConst12.ts, 6, 5))
 >[] : undefined[]
 
 let {a: baz2} = { a: 1 };
->a : unknown
->baz2 : number
+>a : any
+>baz2 : number, Symbol(baz2, Decl(downlevelLetConst12.ts, 7, 5))
 >{ a: 1 } : { a: number; }
->a : number
+>a : number, Symbol(a, Decl(downlevelLetConst12.ts, 7, 17))
+>1 : number
 
 const [baz3] = []
->baz3 : any
+>baz3 : any, Symbol(baz3, Decl(downlevelLetConst12.ts, 9, 7))
 >[] : undefined[]
 
 const {a: baz4} = { a: 1 };
->a : unknown
->baz4 : number
+>a : any
+>baz4 : number, Symbol(baz4, Decl(downlevelLetConst12.ts, 10, 7))
 >{ a: 1 } : { a: number; }
->a : number
+>a : number, Symbol(a, Decl(downlevelLetConst12.ts, 10, 19))
+>1 : number
 

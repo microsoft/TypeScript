@@ -1,38 +1,39 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty19.ts ===
 var i = {
->i : { [Symbol.iterator]: { p: any; }; [Symbol.toStringTag](): { p: any; }; }
+>i : { [Symbol.iterator]: { p: any; }; [Symbol.toStringTag](): { p: any; }; }, Symbol(i, Decl(symbolProperty19.ts, 0, 3))
 >{    [Symbol.iterator]: { p: null },    [Symbol.toStringTag]() { return { p: undefined }; }} : { [Symbol.iterator]: { p: null; }; [Symbol.toStringTag](): { p: any; }; }
 
     [Symbol.iterator]: { p: null },
->Symbol.iterator : symbol
->Symbol : SymbolConstructor
->iterator : symbol
+>Symbol.iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
 >{ p: null } : { p: null; }
->p : null
+>p : null, Symbol(p, Decl(symbolProperty19.ts, 1, 24))
+>null : null
 
     [Symbol.toStringTag]() { return { p: undefined }; }
->Symbol.toStringTag : symbol
->Symbol : SymbolConstructor
->toStringTag : symbol
+>Symbol.toStringTag : symbol, Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1248, 24))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>toStringTag : symbol, Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1248, 24))
 >{ p: undefined } : { p: undefined; }
->p : undefined
->undefined : undefined
+>p : undefined, Symbol(p, Decl(symbolProperty19.ts, 2, 37))
+>undefined : undefined, Symbol(undefined)
 }
 
 var it = i[Symbol.iterator];
->it : { p: any; }
+>it : { p: any; }, Symbol(it, Decl(symbolProperty19.ts, 5, 3))
 >i[Symbol.iterator] : { p: any; }
->i : { [Symbol.iterator]: { p: any; }; [Symbol.toStringTag](): { p: any; }; }
->Symbol.iterator : symbol
->Symbol : SymbolConstructor
->iterator : symbol
+>i : { [Symbol.iterator]: { p: any; }; [Symbol.toStringTag](): { p: any; }; }, Symbol(i, Decl(symbolProperty19.ts, 0, 3))
+>Symbol.iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
 
 var str = i[Symbol.toStringTag]();
->str : { p: any; }
+>str : { p: any; }, Symbol(str, Decl(symbolProperty19.ts, 6, 3))
 >i[Symbol.toStringTag]() : { p: any; }
 >i[Symbol.toStringTag] : () => { p: any; }
->i : { [Symbol.iterator]: { p: any; }; [Symbol.toStringTag](): { p: any; }; }
->Symbol.toStringTag : symbol
->Symbol : SymbolConstructor
->toStringTag : symbol
+>i : { [Symbol.iterator]: { p: any; }; [Symbol.toStringTag](): { p: any; }; }, Symbol(i, Decl(symbolProperty19.ts, 0, 3))
+>Symbol.toStringTag : symbol, Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1248, 24))
+>Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>toStringTag : symbol, Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1248, 24))
 

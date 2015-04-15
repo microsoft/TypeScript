@@ -1,11 +1,14 @@
 === tests/cases/compiler/contextualTyping9.ts ===
 var foo:{id:number;}[] = [{id:1}, {id:2, name:"foo"}];
->foo : { id: number; }[]
->id : number
+>foo : { id: number; }[], Symbol(foo, Decl(contextualTyping9.ts, 0, 3))
+>id : number, Symbol(id, Decl(contextualTyping9.ts, 0, 9))
 >[{id:1}, {id:2, name:"foo"}] : { id: number; }[]
 >{id:1} : { id: number; }
->id : number
+>id : number, Symbol(id, Decl(contextualTyping9.ts, 0, 27))
+>1 : number
 >{id:2, name:"foo"} : { id: number; name: string; }
->id : number
->name : string
+>id : number, Symbol(id, Decl(contextualTyping9.ts, 0, 35))
+>2 : number
+>name : string, Symbol(name, Decl(contextualTyping9.ts, 0, 40))
+>"foo" : string
 
