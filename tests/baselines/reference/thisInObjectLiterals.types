@@ -1,39 +1,39 @@
 === tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts ===
 class MyClass {
->MyClass : MyClass
+>MyClass : MyClass, Symbol(MyClass, Decl(thisInObjectLiterals.ts, 0, 0))
 
     t: number;
->t : number
+>t : number, Symbol(t, Decl(thisInObjectLiterals.ts, 0, 15))
 
     fn() {
->fn : () => void
+>fn : () => void, Symbol(fn, Decl(thisInObjectLiterals.ts, 1, 14))
 
         //type of 'this' in an object literal is the containing scope's this
         var t = { x: this, y: this.t };
->t : { x: MyClass; y: number; }
+>t : { x: MyClass; y: number; }, Symbol(t, Decl(thisInObjectLiterals.ts, 5, 11), Decl(thisInObjectLiterals.ts, 6, 11))
 >{ x: this, y: this.t } : { x: MyClass; y: number; }
->x : MyClass
->this : MyClass
->y : number
->this.t : number
->this : MyClass
->t : number
+>x : MyClass, Symbol(x, Decl(thisInObjectLiterals.ts, 5, 17))
+>this : MyClass, Symbol(MyClass, Decl(thisInObjectLiterals.ts, 0, 0))
+>y : number, Symbol(y, Decl(thisInObjectLiterals.ts, 5, 26))
+>this.t : number, Symbol(t, Decl(thisInObjectLiterals.ts, 0, 15))
+>this : MyClass, Symbol(MyClass, Decl(thisInObjectLiterals.ts, 0, 0))
+>t : number, Symbol(t, Decl(thisInObjectLiterals.ts, 0, 15))
 
         var t: { x: MyClass; y: number };
->t : { x: MyClass; y: number; }
->x : MyClass
->MyClass : MyClass
->y : number
+>t : { x: MyClass; y: number; }, Symbol(t, Decl(thisInObjectLiterals.ts, 5, 11), Decl(thisInObjectLiterals.ts, 6, 11))
+>x : MyClass, Symbol(x, Decl(thisInObjectLiterals.ts, 6, 16))
+>MyClass : MyClass, Symbol(MyClass, Decl(thisInObjectLiterals.ts, 0, 0))
+>y : number, Symbol(y, Decl(thisInObjectLiterals.ts, 6, 28))
     }
 }
 
 //type of 'this' in an object literal property of a function type is Any
 var obj = {
->obj : { f(): any; }
+>obj : { f(): any; }, Symbol(obj, Decl(thisInObjectLiterals.ts, 11, 3), Decl(thisInObjectLiterals.ts, 16, 3))
 >{    f() {        return this.spaaace;    }} : { f(): any; }
 
     f() {
->f : () => any
+>f : () => any, Symbol(f, Decl(thisInObjectLiterals.ts, 11, 11))
 
         return this.spaaace;
 >this.spaaace : any
@@ -42,6 +42,6 @@ var obj = {
     }
 };
 var obj: { f: () => any; };
->obj : { f(): any; }
->f : () => any
+>obj : { f(): any; }, Symbol(obj, Decl(thisInObjectLiterals.ts, 11, 3), Decl(thisInObjectLiterals.ts, 16, 3))
+>f : () => any, Symbol(f, Decl(thisInObjectLiterals.ts, 16, 10))
 

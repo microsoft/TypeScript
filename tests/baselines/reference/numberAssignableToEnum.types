@@ -1,22 +1,22 @@
 === tests/cases/conformance/types/typeRelationships/assignmentCompatibility/numberAssignableToEnum.ts ===
 enum E { A }
->E : E
->A : E
+>E : E, Symbol(E, Decl(numberAssignableToEnum.ts, 0, 0))
+>A : E, Symbol(E.A, Decl(numberAssignableToEnum.ts, 0, 8))
 
 var n: number;
->n : number
+>n : number, Symbol(n, Decl(numberAssignableToEnum.ts, 1, 3))
 
 var e: E;
->e : E
->E : E
+>e : E, Symbol(e, Decl(numberAssignableToEnum.ts, 2, 3))
+>E : E, Symbol(E, Decl(numberAssignableToEnum.ts, 0, 0))
 
 e = n;
 >e = n : number
->e : E
->n : number
+>e : E, Symbol(e, Decl(numberAssignableToEnum.ts, 2, 3))
+>n : number, Symbol(n, Decl(numberAssignableToEnum.ts, 1, 3))
 
 n = e;
 >n = e : E
->n : number
->e : E
+>n : number, Symbol(n, Decl(numberAssignableToEnum.ts, 1, 3))
+>e : E, Symbol(e, Decl(numberAssignableToEnum.ts, 2, 3))
 

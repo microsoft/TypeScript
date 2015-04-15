@@ -1,25 +1,27 @@
 === tests/cases/compiler/arrayAugment.ts ===
 interface Array<T> {
->Array : T[]
->T : T
+>Array : T[], Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11), Decl(arrayAugment.ts, 0, 0))
+>T : T, Symbol(T, Decl(lib.d.ts, 1007, 16), Decl(arrayAugment.ts, 0, 16))
 
     split: (parts: number) => T[][];
->split : (parts: number) => T[][]
->parts : number
->T : T
+>split : (parts: number) => T[][], Symbol(split, Decl(arrayAugment.ts, 0, 20))
+>parts : number, Symbol(parts, Decl(arrayAugment.ts, 1, 12))
+>T : T, Symbol(T, Decl(lib.d.ts, 1007, 16), Decl(arrayAugment.ts, 0, 16))
 }
 
 var x = [''];
->x : string[]
+>x : string[], Symbol(x, Decl(arrayAugment.ts, 4, 3))
 >[''] : string[]
+>'' : string
 
 var y = x.split(4);
->y : string[][]
+>y : string[][], Symbol(y, Decl(arrayAugment.ts, 5, 3), Decl(arrayAugment.ts, 6, 3))
 >x.split(4) : string[][]
->x.split : (parts: number) => string[][]
->x : string[]
->split : (parts: number) => string[][]
+>x.split : (parts: number) => string[][], Symbol(Array.split, Decl(arrayAugment.ts, 0, 20))
+>x : string[], Symbol(x, Decl(arrayAugment.ts, 4, 3))
+>split : (parts: number) => string[][], Symbol(Array.split, Decl(arrayAugment.ts, 0, 20))
+>4 : number
 
 var y: string[][]; // Expect no error here
->y : string[][]
+>y : string[][], Symbol(y, Decl(arrayAugment.ts, 5, 3), Decl(arrayAugment.ts, 6, 3))
 

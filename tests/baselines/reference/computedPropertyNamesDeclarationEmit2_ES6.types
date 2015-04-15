@@ -1,14 +1,21 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit2_ES6.ts ===
 class C {
->C : C
+>C : C, Symbol(C, Decl(computedPropertyNamesDeclarationEmit2_ES6.ts, 0, 0))
 
     static ["" + ""]() { }
 >"" + "" : string
+>"" : string
+>"" : string
 
     static get ["" + ""]() { return 0; }
 >"" + "" : string
+>"" : string
+>"" : string
+>0 : number
 
     static set ["" + ""](x) { }
 >"" + "" : string
->x : any
+>"" : string
+>"" : string
+>x : any, Symbol(x, Decl(computedPropertyNamesDeclarationEmit2_ES6.ts, 3, 25))
 }

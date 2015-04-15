@@ -1,56 +1,56 @@
 === tests/cases/compiler/infinitelyExpandingTypesNonGenericBase.ts ===
 class Functionality<V> {
->Functionality : Functionality<V>
->V : V
+>Functionality : Functionality<V>, Symbol(Functionality, Decl(infinitelyExpandingTypesNonGenericBase.ts, 0, 0))
+>V : V, Symbol(V, Decl(infinitelyExpandingTypesNonGenericBase.ts, 0, 20))
 
     property: Options<V>;
->property : Options<V>
->Options : Options<T>
->V : V
+>property : Options<V>, Symbol(property, Decl(infinitelyExpandingTypesNonGenericBase.ts, 0, 24))
+>Options : Options<T>, Symbol(Options, Decl(infinitelyExpandingTypesNonGenericBase.ts, 13, 1))
+>V : V, Symbol(V, Decl(infinitelyExpandingTypesNonGenericBase.ts, 0, 20))
 }
 
 class Base {
->Base : Base
+>Base : Base, Symbol(Base, Decl(infinitelyExpandingTypesNonGenericBase.ts, 2, 1))
 }
 
 class A<T> extends Base {
->A : A<T>
->T : T
->Base : Base
+>A : A<T>, Symbol(A, Decl(infinitelyExpandingTypesNonGenericBase.ts, 5, 1))
+>T : T, Symbol(T, Decl(infinitelyExpandingTypesNonGenericBase.ts, 7, 8))
+>Base : Base, Symbol(Base, Decl(infinitelyExpandingTypesNonGenericBase.ts, 2, 1))
 
     options: Options<Functionality<T>[]>;
->options : Options<Functionality<T>[]>
->Options : Options<T>
->Functionality : Functionality<V>
->T : T
+>options : Options<Functionality<T>[]>, Symbol(options, Decl(infinitelyExpandingTypesNonGenericBase.ts, 7, 25))
+>Options : Options<T>, Symbol(Options, Decl(infinitelyExpandingTypesNonGenericBase.ts, 13, 1))
+>Functionality : Functionality<V>, Symbol(Functionality, Decl(infinitelyExpandingTypesNonGenericBase.ts, 0, 0))
+>T : T, Symbol(T, Decl(infinitelyExpandingTypesNonGenericBase.ts, 7, 8))
 }
 
 interface OptionsBase<T> {
->OptionsBase : OptionsBase<T>
->T : T
+>OptionsBase : OptionsBase<T>, Symbol(OptionsBase, Decl(infinitelyExpandingTypesNonGenericBase.ts, 9, 1))
+>T : T, Symbol(T, Decl(infinitelyExpandingTypesNonGenericBase.ts, 11, 22))
 
     Options: Options<T>;
->Options : Options<T>
->Options : Options<T>
->T : T
+>Options : Options<T>, Symbol(Options, Decl(infinitelyExpandingTypesNonGenericBase.ts, 11, 26))
+>Options : Options<T>, Symbol(Options, Decl(infinitelyExpandingTypesNonGenericBase.ts, 13, 1))
+>T : T, Symbol(T, Decl(infinitelyExpandingTypesNonGenericBase.ts, 11, 22))
 }
 
 interface Options<T> extends OptionsBase<T> {
->Options : Options<T>
->T : T
->OptionsBase : OptionsBase<T>
->T : T
+>Options : Options<T>, Symbol(Options, Decl(infinitelyExpandingTypesNonGenericBase.ts, 13, 1))
+>T : T, Symbol(T, Decl(infinitelyExpandingTypesNonGenericBase.ts, 15, 18))
+>OptionsBase : OptionsBase<T>, Symbol(OptionsBase, Decl(infinitelyExpandingTypesNonGenericBase.ts, 9, 1))
+>T : T, Symbol(T, Decl(infinitelyExpandingTypesNonGenericBase.ts, 15, 18))
 }
 
 
 function o(type: new () => Base) {
->o : (type: new () => Base) => void
->type : new () => Base
->Base : Base
+>o : (type: new () => Base) => void, Symbol(o, Decl(infinitelyExpandingTypesNonGenericBase.ts, 16, 1))
+>type : new () => Base, Symbol(type, Decl(infinitelyExpandingTypesNonGenericBase.ts, 19, 11))
+>Base : Base, Symbol(Base, Decl(infinitelyExpandingTypesNonGenericBase.ts, 2, 1))
 }
 
 o(A);
 >o(A) : void
->o : (type: new () => Base) => void
->A : typeof A
+>o : (type: new () => Base) => void, Symbol(o, Decl(infinitelyExpandingTypesNonGenericBase.ts, 16, 1))
+>A : typeof A, Symbol(A, Decl(infinitelyExpandingTypesNonGenericBase.ts, 5, 1))
 

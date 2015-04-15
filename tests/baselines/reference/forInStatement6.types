@@ -1,11 +1,11 @@
 === tests/cases/compiler/forInStatement6.ts ===
 var a: any;
->a : any
+>a : any, Symbol(a, Decl(forInStatement6.ts, 0, 3))
 
 var expr: any;
->expr : any
+>expr : any, Symbol(expr, Decl(forInStatement6.ts, 1, 3))
 
 for (a in expr) {
->a : any
->expr : any
+>a : any, Symbol(a, Decl(forInStatement6.ts, 0, 3))
+>expr : any, Symbol(expr, Decl(forInStatement6.ts, 1, 3))
 }

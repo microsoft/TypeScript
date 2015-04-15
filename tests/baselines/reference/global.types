@@ -1,25 +1,27 @@
 === tests/cases/compiler/global.ts ===
 module M {
->M : typeof M
+>M : typeof M, Symbol(M, Decl(global.ts, 0, 0))
 
     export function f(y:number) {
->f : (y: number) => number
->y : number
+>f : (y: number) => number, Symbol(f, Decl(global.ts, 0, 10))
+>y : number, Symbol(y, Decl(global.ts, 1, 22))
 
         return x+y;
 >x+y : number
->x : number
->y : number
+>x : number, Symbol(x, Decl(global.ts, 6, 3))
+>y : number, Symbol(y, Decl(global.ts, 1, 22))
     }
 }
 
 var x=10;
->x : number
+>x : number, Symbol(x, Decl(global.ts, 6, 3))
+>10 : number
 
 M.f(3);
 >M.f(3) : number
->M.f : (y: number) => number
->M : typeof M
->f : (y: number) => number
+>M.f : (y: number) => number, Symbol(M.f, Decl(global.ts, 0, 10))
+>M : typeof M, Symbol(M, Decl(global.ts, 0, 0))
+>f : (y: number) => number, Symbol(M.f, Decl(global.ts, 0, 10))
+>3 : number
 
 

@@ -2,31 +2,44 @@
 
 var [] = [1, "hello"]; // Dont emit anything
 >[1, "hello"] : (string | number)[]
+>1 : number
+>"hello" : string
 
 var [x] = [1, "hello"]; // emit x: number
->x : number
+>x : number, Symbol(x, Decl(declarationEmitDestructuringArrayPattern1.ts, 2, 5))
 >[1, "hello"] : [number, string]
+>1 : number
+>"hello" : string
 
 var [x1, y1] = [1, "hello"]; // emit x1: number, y1: string
->x1 : number
->y1 : string
+>x1 : number, Symbol(x1, Decl(declarationEmitDestructuringArrayPattern1.ts, 3, 5))
+>y1 : string, Symbol(y1, Decl(declarationEmitDestructuringArrayPattern1.ts, 3, 8))
 >[1, "hello"] : [number, string]
+>1 : number
+>"hello" : string
 
 var [, , z1] = [0, 1, 2]; // emit z1: number
->z1 : number
+> : undefined
+> : undefined
+>z1 : number, Symbol(z1, Decl(declarationEmitDestructuringArrayPattern1.ts, 4, 8))
 >[0, 1, 2] : [number, number, number]
+>0 : number
+>1 : number
+>2 : number
 
 var a = [1, "hello"];
->a : (string | number)[]
+>a : (string | number)[], Symbol(a, Decl(declarationEmitDestructuringArrayPattern1.ts, 6, 3))
 >[1, "hello"] : (string | number)[]
+>1 : number
+>"hello" : string
 
 var [x2] = a;          // emit x2: number | string
->x2 : string | number
->a : (string | number)[]
+>x2 : string | number, Symbol(x2, Decl(declarationEmitDestructuringArrayPattern1.ts, 7, 5))
+>a : (string | number)[], Symbol(a, Decl(declarationEmitDestructuringArrayPattern1.ts, 6, 3))
 
 var [x3, y3, z3] = a;  // emit x3, y3, z3 
->x3 : string | number
->y3 : string | number
->z3 : string | number
->a : (string | number)[]
+>x3 : string | number, Symbol(x3, Decl(declarationEmitDestructuringArrayPattern1.ts, 8, 5))
+>y3 : string | number, Symbol(y3, Decl(declarationEmitDestructuringArrayPattern1.ts, 8, 8))
+>z3 : string | number, Symbol(z3, Decl(declarationEmitDestructuringArrayPattern1.ts, 8, 12))
+>a : (string | number)[], Symbol(a, Decl(declarationEmitDestructuringArrayPattern1.ts, 6, 3))
 

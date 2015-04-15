@@ -1,62 +1,66 @@
 === tests/cases/compiler/collisionRestParameterFunctionExpressions.ts ===
 function foo() {
->foo : () => void
+>foo : () => void, Symbol(foo, Decl(collisionRestParameterFunctionExpressions.ts, 0, 0))
 
     function f1(_i: number, ...restParameters) { //_i is error
->f1 : (_i: number, ...restParameters: any[]) => void
->_i : number
->restParameters : any[]
+>f1 : (_i: number, ...restParameters: any[]) => void, Symbol(f1, Decl(collisionRestParameterFunctionExpressions.ts, 0, 16))
+>_i : number, Symbol(_i, Decl(collisionRestParameterFunctionExpressions.ts, 1, 16), Decl(collisionRestParameterFunctionExpressions.ts, 2, 11))
+>restParameters : any[], Symbol(restParameters, Decl(collisionRestParameterFunctionExpressions.ts, 1, 27))
 
         var _i = 10; // no error
->_i : number
+>_i : number, Symbol(_i, Decl(collisionRestParameterFunctionExpressions.ts, 1, 16), Decl(collisionRestParameterFunctionExpressions.ts, 2, 11))
+>10 : number
     }
     function f1NoError(_i: number) { // no error
->f1NoError : (_i: number) => void
->_i : number
+>f1NoError : (_i: number) => void, Symbol(f1NoError, Decl(collisionRestParameterFunctionExpressions.ts, 3, 5))
+>_i : number, Symbol(_i, Decl(collisionRestParameterFunctionExpressions.ts, 4, 23), Decl(collisionRestParameterFunctionExpressions.ts, 5, 11))
 
         var _i = 10; // no error
->_i : number
+>_i : number, Symbol(_i, Decl(collisionRestParameterFunctionExpressions.ts, 4, 23), Decl(collisionRestParameterFunctionExpressions.ts, 5, 11))
+>10 : number
     }
     function f3(...restParameters) {
->f3 : (...restParameters: any[]) => void
->restParameters : any[]
+>f3 : (...restParameters: any[]) => void, Symbol(f3, Decl(collisionRestParameterFunctionExpressions.ts, 6, 5))
+>restParameters : any[], Symbol(restParameters, Decl(collisionRestParameterFunctionExpressions.ts, 7, 16))
 
         var _i = 10; // no error
->_i : number
+>_i : number, Symbol(_i, Decl(collisionRestParameterFunctionExpressions.ts, 8, 11))
+>10 : number
     }
     function f3NoError() {
->f3NoError : () => void
+>f3NoError : () => void, Symbol(f3NoError, Decl(collisionRestParameterFunctionExpressions.ts, 9, 5))
 
         var _i = 10; // no error
->_i : number
+>_i : number, Symbol(_i, Decl(collisionRestParameterFunctionExpressions.ts, 11, 11))
+>10 : number
     }
 
     function f4(_i: number, ...rest); // no codegen no error
->f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }
->_i : number
->rest : any[]
+>f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }, Symbol(f4, Decl(collisionRestParameterFunctionExpressions.ts, 12, 5), Decl(collisionRestParameterFunctionExpressions.ts, 14, 37), Decl(collisionRestParameterFunctionExpressions.ts, 15, 37))
+>_i : number, Symbol(_i, Decl(collisionRestParameterFunctionExpressions.ts, 14, 16))
+>rest : any[], Symbol(rest, Decl(collisionRestParameterFunctionExpressions.ts, 14, 27))
 
     function f4(_i: string, ...rest); // no codegen no error
->f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }
->_i : string
->rest : any[]
+>f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }, Symbol(f4, Decl(collisionRestParameterFunctionExpressions.ts, 12, 5), Decl(collisionRestParameterFunctionExpressions.ts, 14, 37), Decl(collisionRestParameterFunctionExpressions.ts, 15, 37))
+>_i : string, Symbol(_i, Decl(collisionRestParameterFunctionExpressions.ts, 15, 16))
+>rest : any[], Symbol(rest, Decl(collisionRestParameterFunctionExpressions.ts, 15, 27))
 
     function f4(_i: any, ...rest) { // error
->f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }
->_i : any
->rest : any[]
+>f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }, Symbol(f4, Decl(collisionRestParameterFunctionExpressions.ts, 12, 5), Decl(collisionRestParameterFunctionExpressions.ts, 14, 37), Decl(collisionRestParameterFunctionExpressions.ts, 15, 37))
+>_i : any, Symbol(_i, Decl(collisionRestParameterFunctionExpressions.ts, 16, 16))
+>rest : any[], Symbol(rest, Decl(collisionRestParameterFunctionExpressions.ts, 16, 24))
     }
 
     function f4NoError(_i: number); // no error
->f4NoError : { (_i: number): any; (_i: string): any; }
->_i : number
+>f4NoError : { (_i: number): any; (_i: string): any; }, Symbol(f4NoError, Decl(collisionRestParameterFunctionExpressions.ts, 17, 5), Decl(collisionRestParameterFunctionExpressions.ts, 19, 35), Decl(collisionRestParameterFunctionExpressions.ts, 20, 35))
+>_i : number, Symbol(_i, Decl(collisionRestParameterFunctionExpressions.ts, 19, 23))
 
     function f4NoError(_i: string); // no error
->f4NoError : { (_i: number): any; (_i: string): any; }
->_i : string
+>f4NoError : { (_i: number): any; (_i: string): any; }, Symbol(f4NoError, Decl(collisionRestParameterFunctionExpressions.ts, 17, 5), Decl(collisionRestParameterFunctionExpressions.ts, 19, 35), Decl(collisionRestParameterFunctionExpressions.ts, 20, 35))
+>_i : string, Symbol(_i, Decl(collisionRestParameterFunctionExpressions.ts, 20, 23))
 
     function f4NoError(_i: any) { // no error
->f4NoError : { (_i: number): any; (_i: string): any; }
->_i : any
+>f4NoError : { (_i: number): any; (_i: string): any; }, Symbol(f4NoError, Decl(collisionRestParameterFunctionExpressions.ts, 17, 5), Decl(collisionRestParameterFunctionExpressions.ts, 19, 35), Decl(collisionRestParameterFunctionExpressions.ts, 20, 35))
+>_i : any, Symbol(_i, Decl(collisionRestParameterFunctionExpressions.ts, 21, 23))
     }
 }

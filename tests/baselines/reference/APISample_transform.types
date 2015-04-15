@@ -7,37 +7,38 @@
  */
 
 declare var console: any;
->console : any
+>console : any, Symbol(console, Decl(APISample_transform.ts, 7, 11))
 
 import * as ts from "typescript";
->ts : typeof ts
+>ts : typeof ts, Symbol(ts, Decl(APISample_transform.ts, 9, 6))
 
 const source = "let x: string  = 'string'";
->source : string
+>source : string, Symbol(source, Decl(APISample_transform.ts, 11, 5))
+>"let x: string  = 'string'" : string
 
 let result = ts.transpile(source, { module: ts.ModuleKind.CommonJS });
->result : string
+>result : string, Symbol(result, Decl(APISample_transform.ts, 13, 3))
 >ts.transpile(source, { module: ts.ModuleKind.CommonJS }) : string
->ts.transpile : (input: string, compilerOptions?: ts.CompilerOptions, fileName?: string, diagnostics?: ts.Diagnostic[]) => string
->ts : typeof ts
->transpile : (input: string, compilerOptions?: ts.CompilerOptions, fileName?: string, diagnostics?: ts.Diagnostic[]) => string
->source : string
+>ts.transpile : (input: string, compilerOptions?: ts.CompilerOptions, fileName?: string, diagnostics?: ts.Diagnostic[]) => string, Symbol(ts.transpile, Decl(typescript.d.ts, 1756, 5))
+>ts : typeof ts, Symbol(ts, Decl(APISample_transform.ts, 9, 6))
+>transpile : (input: string, compilerOptions?: ts.CompilerOptions, fileName?: string, diagnostics?: ts.Diagnostic[]) => string, Symbol(ts.transpile, Decl(typescript.d.ts, 1756, 5))
+>source : string, Symbol(source, Decl(APISample_transform.ts, 11, 5))
 >{ module: ts.ModuleKind.CommonJS } : { [x: string]: ts.ModuleKind; module: ts.ModuleKind; }
->module : ts.ModuleKind
->ts.ModuleKind.CommonJS : ts.ModuleKind
->ts.ModuleKind : typeof ts.ModuleKind
->ts : typeof ts
->ModuleKind : typeof ts.ModuleKind
->CommonJS : ts.ModuleKind
+>module : ts.ModuleKind, Symbol(module, Decl(APISample_transform.ts, 13, 35))
+>ts.ModuleKind.CommonJS : ts.ModuleKind, Symbol(ts.ModuleKind.CommonJS, Decl(typescript.d.ts, 1108, 17))
+>ts.ModuleKind : typeof ts.ModuleKind, Symbol(ts.ModuleKind, Decl(typescript.d.ts, 1106, 5))
+>ts : typeof ts, Symbol(ts, Decl(APISample_transform.ts, 9, 6))
+>ModuleKind : typeof ts.ModuleKind, Symbol(ts.ModuleKind, Decl(typescript.d.ts, 1106, 5))
+>CommonJS : ts.ModuleKind, Symbol(ts.ModuleKind.CommonJS, Decl(typescript.d.ts, 1108, 17))
 
 console.log(JSON.stringify(result));
 >console.log(JSON.stringify(result)) : any
 >console.log : any
->console : any
+>console : any, Symbol(console, Decl(APISample_transform.ts, 7, 11))
 >log : any
 >JSON.stringify(result) : string
->JSON.stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
->JSON : JSON
->stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
->result : string
+>JSON.stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }, Symbol(JSON.stringify, Decl(lib.d.ts, 964, 70), Decl(lib.d.ts, 969, 34), Decl(lib.d.ts, 975, 78), Decl(lib.d.ts, 981, 51), Decl(lib.d.ts, 988, 90))
+>JSON : JSON, Symbol(JSON, Decl(lib.d.ts, 955, 42), Decl(lib.d.ts, 1000, 11))
+>stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }, Symbol(JSON.stringify, Decl(lib.d.ts, 964, 70), Decl(lib.d.ts, 969, 34), Decl(lib.d.ts, 975, 78), Decl(lib.d.ts, 981, 51), Decl(lib.d.ts, 988, 90))
+>result : string, Symbol(result, Decl(APISample_transform.ts, 13, 3))
 

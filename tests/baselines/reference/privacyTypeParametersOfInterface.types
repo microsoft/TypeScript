@@ -1,199 +1,199 @@
 === tests/cases/compiler/privacyTypeParametersOfInterface.ts ===
 class privateClass {
->privateClass : privateClass
+>privateClass : privateClass, Symbol(privateClass, Decl(privacyTypeParametersOfInterface.ts, 0, 0))
 }
 
 export class publicClass {
->publicClass : publicClass
+>publicClass : publicClass, Symbol(publicClass, Decl(privacyTypeParametersOfInterface.ts, 1, 1))
 }
 
 class privateClassT<T> {
->privateClassT : privateClassT<T>
->T : T
+>privateClassT : privateClassT<T>, Symbol(privateClassT, Decl(privacyTypeParametersOfInterface.ts, 4, 1))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 6, 20))
 }
 
 export class publicClassT<T> {
->publicClassT : publicClassT<T>
->T : T
+>publicClassT : publicClassT<T>, Symbol(publicClassT, Decl(privacyTypeParametersOfInterface.ts, 7, 1))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 9, 26))
 }
 
 // TypeParameter_0_of_exported_interface_1_has_or_is_using_private_type_2
 export interface publicInterfaceWithPrivateTypeParameters<T extends privateClass> {
->publicInterfaceWithPrivateTypeParameters : publicInterfaceWithPrivateTypeParameters<T>
->T : T
->privateClass : privateClass
+>publicInterfaceWithPrivateTypeParameters : publicInterfaceWithPrivateTypeParameters<T>, Symbol(publicInterfaceWithPrivateTypeParameters, Decl(privacyTypeParametersOfInterface.ts, 10, 1))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 13, 58))
+>privateClass : privateClass, Symbol(privateClass, Decl(privacyTypeParametersOfInterface.ts, 0, 0))
 
     myMethod(val: T): T; // Error
->myMethod : (val: T) => T
->val : T
->T : T
->T : T
+>myMethod : (val: T) => T, Symbol(myMethod, Decl(privacyTypeParametersOfInterface.ts, 13, 83))
+>val : T, Symbol(val, Decl(privacyTypeParametersOfInterface.ts, 14, 13))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 13, 58))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 13, 58))
 
     myMethod0(): publicClassT<T>; // error
->myMethod0 : () => publicClassT<T>
->publicClassT : publicClassT<T>
->T : T
+>myMethod0 : () => publicClassT<T>, Symbol(myMethod0, Decl(privacyTypeParametersOfInterface.ts, 14, 24))
+>publicClassT : publicClassT<T>, Symbol(publicClassT, Decl(privacyTypeParametersOfInterface.ts, 7, 1))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 13, 58))
 
     myMethod1(): privateClassT<privateClass>; // error
->myMethod1 : () => privateClassT<privateClass>
->privateClassT : privateClassT<T>
->privateClass : privateClass
+>myMethod1 : () => privateClassT<privateClass>, Symbol(myMethod1, Decl(privacyTypeParametersOfInterface.ts, 15, 33))
+>privateClassT : privateClassT<T>, Symbol(privateClassT, Decl(privacyTypeParametersOfInterface.ts, 4, 1))
+>privateClass : privateClass, Symbol(privateClass, Decl(privacyTypeParametersOfInterface.ts, 0, 0))
 
     myMethod2(): privateClassT<publicClass>; // error
->myMethod2 : () => privateClassT<publicClass>
->privateClassT : privateClassT<T>
->publicClass : publicClass
+>myMethod2 : () => privateClassT<publicClass>, Symbol(myMethod2, Decl(privacyTypeParametersOfInterface.ts, 16, 45))
+>privateClassT : privateClassT<T>, Symbol(privateClassT, Decl(privacyTypeParametersOfInterface.ts, 4, 1))
+>publicClass : publicClass, Symbol(publicClass, Decl(privacyTypeParametersOfInterface.ts, 1, 1))
 
     myMethod3(): publicClassT<privateClass>; //error
->myMethod3 : () => publicClassT<privateClass>
->publicClassT : publicClassT<T>
->privateClass : privateClass
+>myMethod3 : () => publicClassT<privateClass>, Symbol(myMethod3, Decl(privacyTypeParametersOfInterface.ts, 17, 44))
+>publicClassT : publicClassT<T>, Symbol(publicClassT, Decl(privacyTypeParametersOfInterface.ts, 7, 1))
+>privateClass : privateClass, Symbol(privateClass, Decl(privacyTypeParametersOfInterface.ts, 0, 0))
 
     myMethod4(): publicClassT<publicClass>; // no error
->myMethod4 : () => publicClassT<publicClass>
->publicClassT : publicClassT<T>
->publicClass : publicClass
+>myMethod4 : () => publicClassT<publicClass>, Symbol(myMethod4, Decl(privacyTypeParametersOfInterface.ts, 18, 44))
+>publicClassT : publicClassT<T>, Symbol(publicClassT, Decl(privacyTypeParametersOfInterface.ts, 7, 1))
+>publicClass : publicClass, Symbol(publicClass, Decl(privacyTypeParametersOfInterface.ts, 1, 1))
 }
 
 export interface publicInterfaceWithPublicTypeParameters<T extends publicClass> {
->publicInterfaceWithPublicTypeParameters : publicInterfaceWithPublicTypeParameters<T>
->T : T
->publicClass : publicClass
+>publicInterfaceWithPublicTypeParameters : publicInterfaceWithPublicTypeParameters<T>, Symbol(publicInterfaceWithPublicTypeParameters, Decl(privacyTypeParametersOfInterface.ts, 20, 1))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 22, 57))
+>publicClass : publicClass, Symbol(publicClass, Decl(privacyTypeParametersOfInterface.ts, 1, 1))
 
     myMethod(val: T): T; // No Error
->myMethod : (val: T) => T
->val : T
->T : T
->T : T
+>myMethod : (val: T) => T, Symbol(myMethod, Decl(privacyTypeParametersOfInterface.ts, 22, 81))
+>val : T, Symbol(val, Decl(privacyTypeParametersOfInterface.ts, 23, 13))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 22, 57))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 22, 57))
 
     myMethod0(): publicClassT<T>; // No error
->myMethod0 : () => publicClassT<T>
->publicClassT : publicClassT<T>
->T : T
+>myMethod0 : () => publicClassT<T>, Symbol(myMethod0, Decl(privacyTypeParametersOfInterface.ts, 23, 24))
+>publicClassT : publicClassT<T>, Symbol(publicClassT, Decl(privacyTypeParametersOfInterface.ts, 7, 1))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 22, 57))
 
     myMethod1(): privateClassT<privateClass>; // error
->myMethod1 : () => privateClassT<privateClass>
->privateClassT : privateClassT<T>
->privateClass : privateClass
+>myMethod1 : () => privateClassT<privateClass>, Symbol(myMethod1, Decl(privacyTypeParametersOfInterface.ts, 24, 33))
+>privateClassT : privateClassT<T>, Symbol(privateClassT, Decl(privacyTypeParametersOfInterface.ts, 4, 1))
+>privateClass : privateClass, Symbol(privateClass, Decl(privacyTypeParametersOfInterface.ts, 0, 0))
 
     myMethod2(): privateClassT<publicClass>; // error
->myMethod2 : () => privateClassT<publicClass>
->privateClassT : privateClassT<T>
->publicClass : publicClass
+>myMethod2 : () => privateClassT<publicClass>, Symbol(myMethod2, Decl(privacyTypeParametersOfInterface.ts, 25, 45))
+>privateClassT : privateClassT<T>, Symbol(privateClassT, Decl(privacyTypeParametersOfInterface.ts, 4, 1))
+>publicClass : publicClass, Symbol(publicClass, Decl(privacyTypeParametersOfInterface.ts, 1, 1))
 
     myMethod3(): publicClassT<privateClass>; //error
->myMethod3 : () => publicClassT<privateClass>
->publicClassT : publicClassT<T>
->privateClass : privateClass
+>myMethod3 : () => publicClassT<privateClass>, Symbol(myMethod3, Decl(privacyTypeParametersOfInterface.ts, 26, 44))
+>publicClassT : publicClassT<T>, Symbol(publicClassT, Decl(privacyTypeParametersOfInterface.ts, 7, 1))
+>privateClass : privateClass, Symbol(privateClass, Decl(privacyTypeParametersOfInterface.ts, 0, 0))
 
     myMethod4(): publicClassT<publicClass>; // no error
->myMethod4 : () => publicClassT<publicClass>
->publicClassT : publicClassT<T>
->publicClass : publicClass
+>myMethod4 : () => publicClassT<publicClass>, Symbol(myMethod4, Decl(privacyTypeParametersOfInterface.ts, 27, 44))
+>publicClassT : publicClassT<T>, Symbol(publicClassT, Decl(privacyTypeParametersOfInterface.ts, 7, 1))
+>publicClass : publicClass, Symbol(publicClass, Decl(privacyTypeParametersOfInterface.ts, 1, 1))
 }
 
 interface privateInterfaceWithPrivateTypeParameters<T extends privateClass> {
->privateInterfaceWithPrivateTypeParameters : privateInterfaceWithPrivateTypeParameters<T>
->T : T
->privateClass : privateClass
+>privateInterfaceWithPrivateTypeParameters : privateInterfaceWithPrivateTypeParameters<T>, Symbol(privateInterfaceWithPrivateTypeParameters, Decl(privacyTypeParametersOfInterface.ts, 29, 1))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 31, 52))
+>privateClass : privateClass, Symbol(privateClass, Decl(privacyTypeParametersOfInterface.ts, 0, 0))
 
     myMethod(val: T): T; // No Error
->myMethod : (val: T) => T
->val : T
->T : T
->T : T
+>myMethod : (val: T) => T, Symbol(myMethod, Decl(privacyTypeParametersOfInterface.ts, 31, 77))
+>val : T, Symbol(val, Decl(privacyTypeParametersOfInterface.ts, 32, 13))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 31, 52))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 31, 52))
 
     myMethod0(): publicClassT<T>; // No error
->myMethod0 : () => publicClassT<T>
->publicClassT : publicClassT<T>
->T : T
+>myMethod0 : () => publicClassT<T>, Symbol(myMethod0, Decl(privacyTypeParametersOfInterface.ts, 32, 24))
+>publicClassT : publicClassT<T>, Symbol(publicClassT, Decl(privacyTypeParametersOfInterface.ts, 7, 1))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 31, 52))
 
     myMethod1(): privateClassT<privateClass>; // No error
->myMethod1 : () => privateClassT<privateClass>
->privateClassT : privateClassT<T>
->privateClass : privateClass
+>myMethod1 : () => privateClassT<privateClass>, Symbol(myMethod1, Decl(privacyTypeParametersOfInterface.ts, 33, 33))
+>privateClassT : privateClassT<T>, Symbol(privateClassT, Decl(privacyTypeParametersOfInterface.ts, 4, 1))
+>privateClass : privateClass, Symbol(privateClass, Decl(privacyTypeParametersOfInterface.ts, 0, 0))
 
     myMethod2(): privateClassT<publicClass>; // No error
->myMethod2 : () => privateClassT<publicClass>
->privateClassT : privateClassT<T>
->publicClass : publicClass
+>myMethod2 : () => privateClassT<publicClass>, Symbol(myMethod2, Decl(privacyTypeParametersOfInterface.ts, 34, 45))
+>privateClassT : privateClassT<T>, Symbol(privateClassT, Decl(privacyTypeParametersOfInterface.ts, 4, 1))
+>publicClass : publicClass, Symbol(publicClass, Decl(privacyTypeParametersOfInterface.ts, 1, 1))
 
     myMethod3(): publicClassT<privateClass>; //No error
->myMethod3 : () => publicClassT<privateClass>
->publicClassT : publicClassT<T>
->privateClass : privateClass
+>myMethod3 : () => publicClassT<privateClass>, Symbol(myMethod3, Decl(privacyTypeParametersOfInterface.ts, 35, 44))
+>publicClassT : publicClassT<T>, Symbol(publicClassT, Decl(privacyTypeParametersOfInterface.ts, 7, 1))
+>privateClass : privateClass, Symbol(privateClass, Decl(privacyTypeParametersOfInterface.ts, 0, 0))
 
     myMethod4(): publicClassT<publicClass>; // no error
->myMethod4 : () => publicClassT<publicClass>
->publicClassT : publicClassT<T>
->publicClass : publicClass
+>myMethod4 : () => publicClassT<publicClass>, Symbol(myMethod4, Decl(privacyTypeParametersOfInterface.ts, 36, 44))
+>publicClassT : publicClassT<T>, Symbol(publicClassT, Decl(privacyTypeParametersOfInterface.ts, 7, 1))
+>publicClass : publicClass, Symbol(publicClass, Decl(privacyTypeParametersOfInterface.ts, 1, 1))
 }
 
 interface privateInterfaceWithPublicTypeParameters<T extends publicClass> {
->privateInterfaceWithPublicTypeParameters : privateInterfaceWithPublicTypeParameters<T>
->T : T
->publicClass : publicClass
+>privateInterfaceWithPublicTypeParameters : privateInterfaceWithPublicTypeParameters<T>, Symbol(privateInterfaceWithPublicTypeParameters, Decl(privacyTypeParametersOfInterface.ts, 38, 1))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 40, 51))
+>publicClass : publicClass, Symbol(publicClass, Decl(privacyTypeParametersOfInterface.ts, 1, 1))
 
     myMethod(val: T): T; // No Error
->myMethod : (val: T) => T
->val : T
->T : T
->T : T
+>myMethod : (val: T) => T, Symbol(myMethod, Decl(privacyTypeParametersOfInterface.ts, 40, 75))
+>val : T, Symbol(val, Decl(privacyTypeParametersOfInterface.ts, 41, 13))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 40, 51))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 40, 51))
 
     myMethod0(): publicClassT<T>; // No error
->myMethod0 : () => publicClassT<T>
->publicClassT : publicClassT<T>
->T : T
+>myMethod0 : () => publicClassT<T>, Symbol(myMethod0, Decl(privacyTypeParametersOfInterface.ts, 41, 24))
+>publicClassT : publicClassT<T>, Symbol(publicClassT, Decl(privacyTypeParametersOfInterface.ts, 7, 1))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 40, 51))
 
     myMethod1(): privateClassT<privateClass>; // No error
->myMethod1 : () => privateClassT<privateClass>
->privateClassT : privateClassT<T>
->privateClass : privateClass
+>myMethod1 : () => privateClassT<privateClass>, Symbol(myMethod1, Decl(privacyTypeParametersOfInterface.ts, 42, 33))
+>privateClassT : privateClassT<T>, Symbol(privateClassT, Decl(privacyTypeParametersOfInterface.ts, 4, 1))
+>privateClass : privateClass, Symbol(privateClass, Decl(privacyTypeParametersOfInterface.ts, 0, 0))
 
     myMethod2(): privateClassT<publicClass>; // No error
->myMethod2 : () => privateClassT<publicClass>
->privateClassT : privateClassT<T>
->publicClass : publicClass
+>myMethod2 : () => privateClassT<publicClass>, Symbol(myMethod2, Decl(privacyTypeParametersOfInterface.ts, 43, 45))
+>privateClassT : privateClassT<T>, Symbol(privateClassT, Decl(privacyTypeParametersOfInterface.ts, 4, 1))
+>publicClass : publicClass, Symbol(publicClass, Decl(privacyTypeParametersOfInterface.ts, 1, 1))
 
     myMethod3(): publicClassT<privateClass>; //No error
->myMethod3 : () => publicClassT<privateClass>
->publicClassT : publicClassT<T>
->privateClass : privateClass
+>myMethod3 : () => publicClassT<privateClass>, Symbol(myMethod3, Decl(privacyTypeParametersOfInterface.ts, 44, 44))
+>publicClassT : publicClassT<T>, Symbol(publicClassT, Decl(privacyTypeParametersOfInterface.ts, 7, 1))
+>privateClass : privateClass, Symbol(privateClass, Decl(privacyTypeParametersOfInterface.ts, 0, 0))
 
     myMethod4(): publicClassT<publicClass>; // no error
->myMethod4 : () => publicClassT<publicClass>
->publicClassT : publicClassT<T>
->publicClass : publicClass
+>myMethod4 : () => publicClassT<publicClass>, Symbol(myMethod4, Decl(privacyTypeParametersOfInterface.ts, 45, 44))
+>publicClassT : publicClassT<T>, Symbol(publicClassT, Decl(privacyTypeParametersOfInterface.ts, 7, 1))
+>publicClass : publicClass, Symbol(publicClass, Decl(privacyTypeParametersOfInterface.ts, 1, 1))
 }
 
 export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
->publicInterfaceWithPublicTypeParametersWithoutExtends : publicInterfaceWithPublicTypeParametersWithoutExtends<T>
->T : T
+>publicInterfaceWithPublicTypeParametersWithoutExtends : publicInterfaceWithPublicTypeParametersWithoutExtends<T>, Symbol(publicInterfaceWithPublicTypeParametersWithoutExtends, Decl(privacyTypeParametersOfInterface.ts, 47, 1))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 49, 71))
 
     myMethod(val: T): T; // No Error
->myMethod : (val: T) => T
->val : T
->T : T
->T : T
+>myMethod : (val: T) => T, Symbol(myMethod, Decl(privacyTypeParametersOfInterface.ts, 49, 75))
+>val : T, Symbol(val, Decl(privacyTypeParametersOfInterface.ts, 50, 13))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 49, 71))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 49, 71))
 
     myMethod0(): publicClassT<T>; // No error
->myMethod0 : () => publicClassT<T>
->publicClassT : publicClassT<T>
->T : T
+>myMethod0 : () => publicClassT<T>, Symbol(myMethod0, Decl(privacyTypeParametersOfInterface.ts, 50, 24))
+>publicClassT : publicClassT<T>, Symbol(publicClassT, Decl(privacyTypeParametersOfInterface.ts, 7, 1))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 49, 71))
 }
 
 interface privateInterfaceWithPublicTypeParametersWithoutExtends<T> {
->privateInterfaceWithPublicTypeParametersWithoutExtends : privateInterfaceWithPublicTypeParametersWithoutExtends<T>
->T : T
+>privateInterfaceWithPublicTypeParametersWithoutExtends : privateInterfaceWithPublicTypeParametersWithoutExtends<T>, Symbol(privateInterfaceWithPublicTypeParametersWithoutExtends, Decl(privacyTypeParametersOfInterface.ts, 52, 1))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 54, 65))
 
     myMethod(val: T): T; // No Error
->myMethod : (val: T) => T
->val : T
->T : T
->T : T
+>myMethod : (val: T) => T, Symbol(myMethod, Decl(privacyTypeParametersOfInterface.ts, 54, 69))
+>val : T, Symbol(val, Decl(privacyTypeParametersOfInterface.ts, 55, 13))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 54, 65))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 54, 65))
 
     myMethod0(): publicClassT<T>; // No error
->myMethod0 : () => publicClassT<T>
->publicClassT : publicClassT<T>
->T : T
+>myMethod0 : () => publicClassT<T>, Symbol(myMethod0, Decl(privacyTypeParametersOfInterface.ts, 55, 24))
+>publicClassT : publicClassT<T>, Symbol(publicClassT, Decl(privacyTypeParametersOfInterface.ts, 7, 1))
+>T : T, Symbol(T, Decl(privacyTypeParametersOfInterface.ts, 54, 65))
 }

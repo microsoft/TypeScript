@@ -1,83 +1,84 @@
 === tests/cases/compiler/es6ModuleInternalImport.ts ===
 export module m {
->m : typeof m
+>m : typeof m, Symbol(m, Decl(es6ModuleInternalImport.ts, 0, 0))
 
     export var a = 10;
->a : number
+>a : number, Symbol(a, Decl(es6ModuleInternalImport.ts, 1, 14))
+>10 : number
 }
 export import a1 = m.a;
->a1 : number
->m : typeof m
->a : number
+>a1 : number, Symbol(a1, Decl(es6ModuleInternalImport.ts, 2, 1))
+>m : typeof m, Symbol(m, Decl(es6ModuleInternalImport.ts, 0, 0))
+>a : number, Symbol(a2, Decl(es6ModuleInternalImport.ts, 1, 14))
 
 import a2 = m.a;
->a2 : number
->m : typeof m
->a : number
+>a2 : number, Symbol(a2, Decl(es6ModuleInternalImport.ts, 3, 23))
+>m : typeof m, Symbol(m, Decl(es6ModuleInternalImport.ts, 0, 0))
+>a : number, Symbol(a2, Decl(es6ModuleInternalImport.ts, 1, 14))
 
 var x = a1 + a2;
->x : number
+>x : number, Symbol(x, Decl(es6ModuleInternalImport.ts, 5, 3))
 >a1 + a2 : number
->a1 : number
->a2 : number
+>a1 : number, Symbol(a1, Decl(es6ModuleInternalImport.ts, 2, 1))
+>a2 : number, Symbol(a2, Decl(es6ModuleInternalImport.ts, 3, 23))
 
 export module m1 {
->m1 : typeof m1
+>m1 : typeof m1, Symbol(m1, Decl(es6ModuleInternalImport.ts, 5, 16))
 
     export import a3 = m.a;
->a3 : number
->m : typeof m
->a : number
+>a3 : number, Symbol(a3, Decl(es6ModuleInternalImport.ts, 6, 18))
+>m : typeof m, Symbol(m, Decl(es6ModuleInternalImport.ts, 0, 0))
+>a : number, Symbol(a4, Decl(es6ModuleInternalImport.ts, 1, 14))
 
     import a4 = m.a;
->a4 : number
->m : typeof m
->a : number
+>a4 : number, Symbol(a4, Decl(es6ModuleInternalImport.ts, 7, 27))
+>m : typeof m, Symbol(m, Decl(es6ModuleInternalImport.ts, 0, 0))
+>a : number, Symbol(a4, Decl(es6ModuleInternalImport.ts, 1, 14))
 
     var x = a1 + a2;
->x : number
+>x : number, Symbol(x, Decl(es6ModuleInternalImport.ts, 9, 7))
 >a1 + a2 : number
->a1 : number
->a2 : number
+>a1 : number, Symbol(a1, Decl(es6ModuleInternalImport.ts, 2, 1))
+>a2 : number, Symbol(a2, Decl(es6ModuleInternalImport.ts, 3, 23))
 
     var x2 = a3 + a4;
->x2 : number
+>x2 : number, Symbol(x2, Decl(es6ModuleInternalImport.ts, 10, 7))
 >a3 + a4 : number
->a3 : number
->a4 : number
+>a3 : number, Symbol(a3, Decl(es6ModuleInternalImport.ts, 6, 18))
+>a4 : number, Symbol(a4, Decl(es6ModuleInternalImport.ts, 7, 27))
 }
 module m2 {
->m2 : typeof m2
+>m2 : typeof m2, Symbol(m2, Decl(es6ModuleInternalImport.ts, 11, 1))
 
     export import a3 = m.a;
->a3 : number
->m : typeof m
->a : number
+>a3 : number, Symbol(a3, Decl(es6ModuleInternalImport.ts, 12, 11))
+>m : typeof m, Symbol(m, Decl(es6ModuleInternalImport.ts, 0, 0))
+>a : number, Symbol(a4, Decl(es6ModuleInternalImport.ts, 1, 14))
 
     import a4 = m.a;
->a4 : number
->m : typeof m
->a : number
+>a4 : number, Symbol(a4, Decl(es6ModuleInternalImport.ts, 13, 27))
+>m : typeof m, Symbol(m, Decl(es6ModuleInternalImport.ts, 0, 0))
+>a : number, Symbol(a4, Decl(es6ModuleInternalImport.ts, 1, 14))
 
     var x = a1 + a2;
->x : number
+>x : number, Symbol(x, Decl(es6ModuleInternalImport.ts, 15, 7))
 >a1 + a2 : number
->a1 : number
->a2 : number
+>a1 : number, Symbol(a1, Decl(es6ModuleInternalImport.ts, 2, 1))
+>a2 : number, Symbol(a2, Decl(es6ModuleInternalImport.ts, 3, 23))
 
     var x2 = a3 + a4;
->x2 : number
+>x2 : number, Symbol(x2, Decl(es6ModuleInternalImport.ts, 16, 7))
 >a3 + a4 : number
->a3 : number
->a4 : number
+>a3 : number, Symbol(a3, Decl(es6ModuleInternalImport.ts, 12, 11))
+>a4 : number, Symbol(a4, Decl(es6ModuleInternalImport.ts, 13, 27))
 
     var x4 = m1.a3 + m2.a3;
->x4 : number
+>x4 : number, Symbol(x4, Decl(es6ModuleInternalImport.ts, 17, 7))
 >m1.a3 + m2.a3 : number
->m1.a3 : number
->m1 : typeof m1
->a3 : number
->m2.a3 : number
->m2 : typeof m2
->a3 : number
+>m1.a3 : number, Symbol(m1.a3, Decl(es6ModuleInternalImport.ts, 6, 18))
+>m1 : typeof m1, Symbol(m1, Decl(es6ModuleInternalImport.ts, 5, 16))
+>a3 : number, Symbol(m1.a3, Decl(es6ModuleInternalImport.ts, 6, 18))
+>m2.a3 : number, Symbol(a3, Decl(es6ModuleInternalImport.ts, 12, 11))
+>m2 : typeof m2, Symbol(m2, Decl(es6ModuleInternalImport.ts, 11, 1))
+>a3 : number, Symbol(a3, Decl(es6ModuleInternalImport.ts, 12, 11))
 }

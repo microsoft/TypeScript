@@ -1,25 +1,26 @@
 === tests/cases/compiler/functionOverloads39.ts ===
 function foo(bar:{a:number;}[]):string;
->foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
->bar : { a: number; }[]
->a : number
+>foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }, Symbol(foo, Decl(functionOverloads39.ts, 0, 0), Decl(functionOverloads39.ts, 0, 39), Decl(functionOverloads39.ts, 1, 40))
+>bar : { a: number; }[], Symbol(bar, Decl(functionOverloads39.ts, 0, 13))
+>a : number, Symbol(a, Decl(functionOverloads39.ts, 0, 18))
 
 function foo(bar:{a:boolean;}[]):number;
->foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
->bar : { a: boolean; }[]
->a : boolean
+>foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }, Symbol(foo, Decl(functionOverloads39.ts, 0, 0), Decl(functionOverloads39.ts, 0, 39), Decl(functionOverloads39.ts, 1, 40))
+>bar : { a: boolean; }[], Symbol(bar, Decl(functionOverloads39.ts, 1, 13))
+>a : boolean, Symbol(a, Decl(functionOverloads39.ts, 1, 18))
 
 function foo(bar:{a:any;}[]):any{ return bar }
->foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
->bar : { a: any; }[]
->a : any
->bar : { a: any; }[]
+>foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }, Symbol(foo, Decl(functionOverloads39.ts, 0, 0), Decl(functionOverloads39.ts, 0, 39), Decl(functionOverloads39.ts, 1, 40))
+>bar : { a: any; }[], Symbol(bar, Decl(functionOverloads39.ts, 2, 13))
+>a : any, Symbol(a, Decl(functionOverloads39.ts, 2, 18))
+>bar : { a: any; }[], Symbol(bar, Decl(functionOverloads39.ts, 2, 13))
 
 var x = foo([{a:true}]);
->x : number
+>x : number, Symbol(x, Decl(functionOverloads39.ts, 3, 3))
 >foo([{a:true}]) : number
->foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
+>foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }, Symbol(foo, Decl(functionOverloads39.ts, 0, 0), Decl(functionOverloads39.ts, 0, 39), Decl(functionOverloads39.ts, 1, 40))
 >[{a:true}] : { a: boolean; }[]
 >{a:true} : { a: boolean; }
->a : boolean
+>a : boolean, Symbol(a, Decl(functionOverloads39.ts, 3, 14))
+>true : boolean
 

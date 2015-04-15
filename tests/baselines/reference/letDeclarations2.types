@@ -1,11 +1,13 @@
 === tests/cases/compiler/letDeclarations2.ts ===
 
 module M {
->M : typeof M
+>M : typeof M, Symbol(M, Decl(letDeclarations2.ts, 0, 0))
 
     let l1 = "s";
->l1 : string
+>l1 : string, Symbol(l1, Decl(letDeclarations2.ts, 2, 7))
+>"s" : string
 
     export let l2 = 0;
->l2 : number
+>l2 : number, Symbol(l2, Decl(letDeclarations2.ts, 3, 14))
+>0 : number
 }

@@ -1,85 +1,103 @@
 === tests/cases/compiler/escapedReservedCompilerNamedIdentifier.ts ===
 // double underscores
 var __proto__ = 10;
->__proto__ : number
+>__proto__ : number, Symbol(__proto__, Decl(escapedReservedCompilerNamedIdentifier.ts, 1, 3))
+>10 : number
 
 var o = {
->o : { "__proto__": number; }
+>o : { "__proto__": number; }, Symbol(o, Decl(escapedReservedCompilerNamedIdentifier.ts, 2, 3))
 >{    "__proto__": 0} : { "__proto__": number; }
 
     "__proto__": 0
+>0 : number
+
 };
 var b = o["__proto__"];
->b : number
+>b : number, Symbol(b, Decl(escapedReservedCompilerNamedIdentifier.ts, 5, 3))
 >o["__proto__"] : number
->o : { "__proto__": number; }
+>o : { "__proto__": number; }, Symbol(o, Decl(escapedReservedCompilerNamedIdentifier.ts, 2, 3))
+>"__proto__" : string, Symbol("__proto__", Decl(escapedReservedCompilerNamedIdentifier.ts, 2, 9))
 
 var o1 = {
->o1 : { __proto__: number; }
+>o1 : { __proto__: number; }, Symbol(o1, Decl(escapedReservedCompilerNamedIdentifier.ts, 6, 3))
 >{    __proto__: 0} : { __proto__: number; }
 
     __proto__: 0
->__proto__ : number
+>__proto__ : number, Symbol(__proto__, Decl(escapedReservedCompilerNamedIdentifier.ts, 6, 10))
+>0 : number
 
 };
 var b1 = o1["__proto__"];
->b1 : number
+>b1 : number, Symbol(b1, Decl(escapedReservedCompilerNamedIdentifier.ts, 9, 3))
 >o1["__proto__"] : number
->o1 : { __proto__: number; }
+>o1 : { __proto__: number; }, Symbol(o1, Decl(escapedReservedCompilerNamedIdentifier.ts, 6, 3))
+>"__proto__" : string, Symbol(__proto__, Decl(escapedReservedCompilerNamedIdentifier.ts, 6, 10))
 
 // Triple underscores
 var ___proto__ = 10;
->___proto__ : number
+>___proto__ : number, Symbol(___proto__, Decl(escapedReservedCompilerNamedIdentifier.ts, 11, 3))
+>10 : number
 
 var o2 = {
->o2 : { "___proto__": number; }
+>o2 : { "___proto__": number; }, Symbol(o2, Decl(escapedReservedCompilerNamedIdentifier.ts, 12, 3))
 >{    "___proto__": 0} : { "___proto__": number; }
 
     "___proto__": 0
+>0 : number
+
 };
 var b2 = o2["___proto__"];
->b2 : number
+>b2 : number, Symbol(b2, Decl(escapedReservedCompilerNamedIdentifier.ts, 15, 3))
 >o2["___proto__"] : number
->o2 : { "___proto__": number; }
+>o2 : { "___proto__": number; }, Symbol(o2, Decl(escapedReservedCompilerNamedIdentifier.ts, 12, 3))
+>"___proto__" : string, Symbol("___proto__", Decl(escapedReservedCompilerNamedIdentifier.ts, 12, 10))
 
 var o3 = {
->o3 : { ___proto__: number; }
+>o3 : { ___proto__: number; }, Symbol(o3, Decl(escapedReservedCompilerNamedIdentifier.ts, 16, 3))
 >{    ___proto__: 0} : { ___proto__: number; }
 
     ___proto__: 0
->___proto__ : number
+>___proto__ : number, Symbol(___proto__, Decl(escapedReservedCompilerNamedIdentifier.ts, 16, 10))
+>0 : number
 
 };
 var b3 = o3["___proto__"];
->b3 : number
+>b3 : number, Symbol(b3, Decl(escapedReservedCompilerNamedIdentifier.ts, 19, 3))
 >o3["___proto__"] : number
->o3 : { ___proto__: number; }
+>o3 : { ___proto__: number; }, Symbol(o3, Decl(escapedReservedCompilerNamedIdentifier.ts, 16, 3))
+>"___proto__" : string, Symbol(___proto__, Decl(escapedReservedCompilerNamedIdentifier.ts, 16, 10))
 
 // One underscore
 var _proto__ = 10;
->_proto__ : number
+>_proto__ : number, Symbol(_proto__, Decl(escapedReservedCompilerNamedIdentifier.ts, 21, 3))
+>10 : number
 
 var o4 = {
->o4 : { "_proto__": number; }
+>o4 : { "_proto__": number; }, Symbol(o4, Decl(escapedReservedCompilerNamedIdentifier.ts, 22, 3))
 >{    "_proto__": 0} : { "_proto__": number; }
 
     "_proto__": 0
+>0 : number
+
 };
 var b4 = o4["_proto__"];
->b4 : number
+>b4 : number, Symbol(b4, Decl(escapedReservedCompilerNamedIdentifier.ts, 25, 3))
 >o4["_proto__"] : number
->o4 : { "_proto__": number; }
+>o4 : { "_proto__": number; }, Symbol(o4, Decl(escapedReservedCompilerNamedIdentifier.ts, 22, 3))
+>"_proto__" : string, Symbol("_proto__", Decl(escapedReservedCompilerNamedIdentifier.ts, 22, 10))
 
 var o5 = {
->o5 : { _proto__: number; }
+>o5 : { _proto__: number; }, Symbol(o5, Decl(escapedReservedCompilerNamedIdentifier.ts, 26, 3))
 >{    _proto__: 0} : { _proto__: number; }
 
     _proto__: 0
->_proto__ : number
+>_proto__ : number, Symbol(_proto__, Decl(escapedReservedCompilerNamedIdentifier.ts, 26, 10))
+>0 : number
 
 };
 var b5 = o5["_proto__"];
->b5 : number
+>b5 : number, Symbol(b5, Decl(escapedReservedCompilerNamedIdentifier.ts, 29, 3))
 >o5["_proto__"] : number
->o5 : { _proto__: number; }
+>o5 : { _proto__: number; }, Symbol(o5, Decl(escapedReservedCompilerNamedIdentifier.ts, 26, 3))
+>"_proto__" : string, Symbol(_proto__, Decl(escapedReservedCompilerNamedIdentifier.ts, 26, 10))
 

@@ -1,30 +1,30 @@
 === tests/cases/compiler/infinitelyExpandingBaseTypes2.ts ===
 interface A<T>
->A : A<T>
->T : T
+>A : A<T>, Symbol(A, Decl(infinitelyExpandingBaseTypes2.ts, 0, 0))
+>T : T, Symbol(T, Decl(infinitelyExpandingBaseTypes2.ts, 0, 12))
 {
    x : A<()=>T>
->x : A<() => T>
->A : A<T>
->T : T
+>x : A<() => T>, Symbol(x, Decl(infinitelyExpandingBaseTypes2.ts, 1, 1))
+>A : A<T>, Symbol(A, Decl(infinitelyExpandingBaseTypes2.ts, 0, 0))
+>T : T, Symbol(T, Decl(infinitelyExpandingBaseTypes2.ts, 0, 12))
 }
  
 interface B<T>
->B : B<T>
->T : T
+>B : B<T>, Symbol(B, Decl(infinitelyExpandingBaseTypes2.ts, 3, 1))
+>T : T, Symbol(T, Decl(infinitelyExpandingBaseTypes2.ts, 5, 12))
 {
    x : B<()=>T>
->x : B<() => T>
->B : B<T>
->T : T
+>x : B<() => T>, Symbol(x, Decl(infinitelyExpandingBaseTypes2.ts, 6, 1))
+>B : B<T>, Symbol(B, Decl(infinitelyExpandingBaseTypes2.ts, 3, 1))
+>T : T, Symbol(T, Decl(infinitelyExpandingBaseTypes2.ts, 5, 12))
 }
  
 var a: A<string>
->a : A<string>
->A : A<T>
+>a : A<string>, Symbol(a, Decl(infinitelyExpandingBaseTypes2.ts, 10, 3))
+>A : A<T>, Symbol(A, Decl(infinitelyExpandingBaseTypes2.ts, 0, 0))
 
 var b: B<string> = a
->b : B<string>
->B : B<T>
->a : A<string>
+>b : B<string>, Symbol(b, Decl(infinitelyExpandingBaseTypes2.ts, 11, 3))
+>B : B<T>, Symbol(B, Decl(infinitelyExpandingBaseTypes2.ts, 3, 1))
+>a : A<string>, Symbol(a, Decl(infinitelyExpandingBaseTypes2.ts, 10, 3))
 

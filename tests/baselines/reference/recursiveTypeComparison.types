@@ -2,43 +2,43 @@
 // Before fix this would take an exceeding long time to complete (#1170)
 
 interface Observable<T> {
->Observable : Observable<T>
->T : T
+>Observable : Observable<T>, Symbol(Observable, Decl(recursiveTypeComparison.ts, 0, 0))
+>T : T, Symbol(T, Decl(recursiveTypeComparison.ts, 2, 21))
 
     // This member can't be of type T, Property<T>, or Observable<anything but T>
     needThisOne: Observable<T>;
->needThisOne : Observable<T>
->Observable : Observable<T>
->T : T
+>needThisOne : Observable<T>, Symbol(needThisOne, Decl(recursiveTypeComparison.ts, 2, 25))
+>Observable : Observable<T>, Symbol(Observable, Decl(recursiveTypeComparison.ts, 0, 0))
+>T : T, Symbol(T, Decl(recursiveTypeComparison.ts, 2, 21))
 
     // Add more to make it slower
     expo1: Property<T[]>; //  0.31 seconds in check
->expo1 : Property<T[]>
->Property : Property<T>
->T : T
+>expo1 : Property<T[]>, Symbol(expo1, Decl(recursiveTypeComparison.ts, 4, 31))
+>Property : Property<T>, Symbol(Property, Decl(recursiveTypeComparison.ts, 9, 1))
+>T : T, Symbol(T, Decl(recursiveTypeComparison.ts, 2, 21))
 
     expo2: Property<T[]>; //  3.11 seconds
->expo2 : Property<T[]>
->Property : Property<T>
->T : T
+>expo2 : Property<T[]>, Symbol(expo2, Decl(recursiveTypeComparison.ts, 6, 25))
+>Property : Property<T>, Symbol(Property, Decl(recursiveTypeComparison.ts, 9, 1))
+>T : T, Symbol(T, Decl(recursiveTypeComparison.ts, 2, 21))
 
     expo3: Property<T[]>; // 82.28 seconds
->expo3 : Property<T[]>
->Property : Property<T>
->T : T
+>expo3 : Property<T[]>, Symbol(expo3, Decl(recursiveTypeComparison.ts, 7, 25))
+>Property : Property<T>, Symbol(Property, Decl(recursiveTypeComparison.ts, 9, 1))
+>T : T, Symbol(T, Decl(recursiveTypeComparison.ts, 2, 21))
 }
 interface Property<T> extends Observable<T> { }
->Property : Property<T>
->T : T
->Observable : Observable<T>
->T : T
+>Property : Property<T>, Symbol(Property, Decl(recursiveTypeComparison.ts, 9, 1))
+>T : T, Symbol(T, Decl(recursiveTypeComparison.ts, 10, 19))
+>Observable : Observable<T>, Symbol(Observable, Decl(recursiveTypeComparison.ts, 0, 0))
+>T : T, Symbol(T, Decl(recursiveTypeComparison.ts, 10, 19))
 
 var p: Observable<{}>;
->p : Observable<{}>
->Observable : Observable<T>
+>p : Observable<{}>, Symbol(p, Decl(recursiveTypeComparison.ts, 12, 3))
+>Observable : Observable<T>, Symbol(Observable, Decl(recursiveTypeComparison.ts, 0, 0))
 
 var stuck: Property<number> = p;
->stuck : Property<number>
->Property : Property<T>
->p : Observable<{}>
+>stuck : Property<number>, Symbol(stuck, Decl(recursiveTypeComparison.ts, 13, 3))
+>Property : Property<T>, Symbol(Property, Decl(recursiveTypeComparison.ts, 9, 1))
+>p : Observable<{}>, Symbol(p, Decl(recursiveTypeComparison.ts, 12, 3))
 
