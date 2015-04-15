@@ -1,0 +1,13 @@
+=== tests/cases/conformance/es6/destructuring/arrayAssignmentPatternWithAny.ts ===
+var a: any;
+>a : any, Symbol(a, Decl(arrayAssignmentPatternWithAny.ts, 0, 3))
+
+var x: string;
+>x : string, Symbol(x, Decl(arrayAssignmentPatternWithAny.ts, 1, 3))
+
+[x] = a;
+>[x] = a : any
+>[x] : [string]
+>x : string, Symbol(x, Decl(arrayAssignmentPatternWithAny.ts, 1, 3))
+>a : any, Symbol(a, Decl(arrayAssignmentPatternWithAny.ts, 0, 3))
+

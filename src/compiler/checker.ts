@@ -9416,6 +9416,10 @@ module ts {
         }
 
         function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean): Type {
+            if (inputType.flags & TypeFlags.Any) {
+                return inputType;
+            }
+
             if (languageVersion >= ScriptTarget.ES6) {
                 return checkIteratedType(inputType, errorNode) || anyType;
             }
