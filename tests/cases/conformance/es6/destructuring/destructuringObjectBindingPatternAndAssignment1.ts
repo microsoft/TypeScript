@@ -1,0 +1,12 @@
+﻿var c = 0;
+var { a, } = { a:1, };
+var { b: { c }  } = { b: { c } };
+var { b1: { c1 } = { c1: "string" }  } = { b1: { c1: "world" } };
+var { d1 }: any = undefined;
+var { e1 }: any = {};
+var { f: {f1} = { f1: "string" } }: any = {};
+var { f2: {f21} = { f21: "string" } }: any = undefined;
+var { e1: {e2} = { e2: "string" } }: any|{ e1: { e2 } } = undefined;
+var { e2: {e3} = { e3: "string" } }: any|{ e2: { e3 } } = {};
+var {g = 1}: any = { g: 100000 };
+var {1: x} = { 1: "string" };
