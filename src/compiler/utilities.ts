@@ -92,7 +92,7 @@ module ts {
             let thisNodeOrAnySubNodesHasError = ((node.parserContextFlags & ParserContextFlags.ThisNodeHasError) !== 0) ||
                 forEachChild(node, containsParseError);
 
-            // If so, mark ourselves accordingly. 
+            // If so, mark ourselves accordingly.
             if (thisNodeOrAnySubNodesHasError) {
                 node.parserContextFlags |= ParserContextFlags.ThisNodeOrAnySubNodesHasError;
             }
@@ -129,13 +129,13 @@ module ts {
 
     // Returns true if this node is missing from the actual source code.  'missing' is different
     // from 'undefined/defined'.  When a node is undefined (which can happen for optional nodes
-    // in the tree), it is definitel missing.  HOwever, a node may be defined, but still be 
+    // in the tree), it is definitel missing.  HOwever, a node may be defined, but still be
     // missing.  This happens whenever the parser knows it needs to parse something, but can't
     // get anything in the source code that it expects at that location.  For example:
     //
     //          let a: ;
     //
-    // Here, the Type in the Type-Annotation is not-optional (as there is a colon in the source 
+    // Here, the Type in the Type-Annotation is not-optional (as there is a colon in the source
     // code).  So the parser will attempt to parse out a type, and will create an actual node.
     // However, this node will be 'missing' in the sense that no actual source-code/tokens are
     // contained within it.
@@ -166,7 +166,7 @@ module ts {
             return getTokenPosOfNode(node, sourceFile);
         }
 
-        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.decorators.end);        
+        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.decorators.end);
     }
 
     export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node): string {
@@ -307,7 +307,7 @@ module ts {
         }
 
         if (errorNode === undefined) {
-            // If we don't have a better node, then just set the error on the first token of 
+            // If we don't have a better node, then just set the error on the first token of
             // construct.
             return getSpanOfTokenAtPosition(sourceFile, node.pos);
         }
@@ -339,10 +339,10 @@ module ts {
         return node;
     }
 
-    // Returns the node flags for this node and all relevant parent nodes.  This is done so that 
+    // Returns the node flags for this node and all relevant parent nodes.  This is done so that
     // nodes like variable declarations and binding elements can returned a view of their flags
     // that includes the modifiers from their container.  i.e. flags like export/declare aren't
-    // stored on the variable declaration directly, but on the containing variable statement 
+    // stored on the variable declaration directly, but on the containing variable statement
     // (if it has one).  Similarly, flags for let/const are store on the variable declaration
     // list.  By calling this function, all those flags are combined so that the client can treat
     // the node as if it actually had those flags.
@@ -536,7 +536,7 @@ module ts {
                     node = node.parent;
                     break;
                 case SyntaxKind.Decorator:
-                    // Decorators are always applied outside of the body of a class or method. 
+                    // Decorators are always applied outside of the body of a class or method.
                     if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
                         // If the decorator's parent is a Parameter, we resolve the this container from
                         // the grandparent class declaration.
@@ -591,7 +591,7 @@ module ts {
                     node = node.parent;
                     break;
                 case SyntaxKind.Decorator:
-                    // Decorators are always applied outside of the body of a class or method. 
+                    // Decorators are always applied outside of the body of a class or method.
                     if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
                         // If the decorator's parent is a Parameter, we resolve the this container from
                         // the grandparent class declaration.
@@ -625,7 +625,7 @@ module ts {
         if (node.kind === SyntaxKind.TaggedTemplateExpression) {
             return (<TaggedTemplateExpression>node).tag;
         }
-        
+
         // Will either be a CallExpression or NewExpression.
         return (<CallExpression>node).expression;
     }
@@ -1240,10 +1240,10 @@ module ts {
     export let unchangedTextChangeRange = createTextChangeRange(createTextSpan(0, 0), 0);
 
     /**
-     * Called to merge all the changes that occurred across several versions of a script snapshot 
+     * Called to merge all the changes that occurred across several versions of a script snapshot
      * into a single change.  i.e. if a user keeps making successive edits to a script we will
-     * have a text change from V1 to V2, V2 to V3, ..., Vn.  
-     * 
+     * have a text change from V1 to V2, V2 to V3, ..., Vn.
+     *
      * This function will then merge those changes into a single change range valid between V1 and
      * Vn.
      */
@@ -1274,17 +1274,17 @@ module ts {
             //
             //      0         10        20        30        40        50        60        70        80        90        100
             //      -------------------------------------------------------------------------------------------------------
-            //                |                                                 /                                          
-            //                |                                            /----                                           
-            //  T1            |                                       /----                                                
-            //                |                                  /----                                                     
-            //                |                             /----                                                          
+            //                |                                                 /
+            //                |                                            /----
+            //  T1            |                                       /----
+            //                |                                  /----
+            //                |                             /----
             //      -------------------------------------------------------------------------------------------------------
-            //                                     |                            \                                          
-            //                                     |                               \                                       
-            //   T2                                |                                 \                                     
-            //                                     |                                   \                                   
-            //                                     |                                      \                                
+            //                                     |                            \
+            //                                     |                               \
+            //   T2                                |                                 \
+            //                                     |                                   \
+            //                                     |                                      \
             //      -------------------------------------------------------------------------------------------------------
             //
             // Merging these turns out to not be too difficult.  First, determining the new start of the change is trivial
@@ -1292,17 +1292,17 @@ module ts {
             //
             //      0         10        20        30        40        50        60        70        80        90        100
             //      ------------------------------------------------------------*------------------------------------------
-            //                |                                                 /                                          
-            //                |                                            /----                                           
-            //  T1            |                                       /----                                                
-            //                |                                  /----                                                     
-            //                |                             /----                                                          
+            //                |                                                 /
+            //                |                                            /----
+            //  T1            |                                       /----
+            //                |                                  /----
+            //                |                             /----
             //      ----------------------------------------$-------------------$------------------------------------------
-            //                .                    |                            \                                          
-            //                .                    |                               \                                       
-            //   T2           .                    |                                 \                                     
-            //                .                    |                                   \                                   
-            //                .                    |                                      \                                
+            //                .                    |                            \
+            //                .                    |                               \
+            //   T2           .                    |                                 \
+            //                .                    |                                   \
+            //                .                    |                                      \
             //      ----------------------------------------------------------------------*--------------------------------
             //
             // (Note the dots represent the newly inferrred start.
@@ -1313,22 +1313,22 @@ module ts {
             //
             //      0         10        20        30        40        50        60        70        80        90        100
             //      --------------------------------------------------------------------------------*----------------------
-            //                |                                                                     /                      
-            //                |                                                                /----                       
-            //  T1            |                                                           /----                            
-            //                |                                                      /----                                 
-            //                |                                                 /----                                      
+            //                |                                                                     /
+            //                |                                                                /----
+            //  T1            |                                                           /----
+            //                |                                                      /----
+            //                |                                                 /----
             //      ------------------------------------------------------------$------------------------------------------
-            //                .                    |                            \                                          
-            //                .                    |                               \                                       
-            //   T2           .                    |                                 \                                     
-            //                .                    |                                   \                                   
-            //                .                    |                                      \                                
+            //                .                    |                            \
+            //                .                    |                               \
+            //   T2           .                    |                                 \
+            //                .                    |                                   \
+            //                .                    |                                      \
             //      ----------------------------------------------------------------------*--------------------------------
             //
             // In other words (in this case), we're recognizing that the second edit happened after where the first edit
             // ended with a delta of 20 characters (60 - 40).  Thus, if we go back in time to where the first edit started
-            // that's the same as if we started at char 80 instead of 60.  
+            // that's the same as if we started at char 80 instead of 60.
             //
             // As it so happens, the same logic applies if the second edit precedes the first edit.  In that case rahter
             // than pusing the first edit forward to match the second, we'll push the second edit forward to match the
@@ -1338,7 +1338,7 @@ module ts {
             // semantics: { { start: 10, length: 70 }, newLength: 60 }
             //
             // The math then works out as follows.
-            // If we have { oldStart1, oldEnd1, newEnd1 } and { oldStart2, oldEnd2, newEnd2 } then we can compute the 
+            // If we have { oldStart1, oldEnd1, newEnd1 } and { oldStart2, oldEnd2, newEnd2 } then we can compute the
             // final result like so:
             //
             // {
@@ -1458,7 +1458,7 @@ module ts {
             }
         }
     }
-    
+
     // This consists of the first 19 unprintable ASCII characters, canonical escapes, lineSeparator,
     // paragraphSeparator, and nextLine. The latter three are just desirable to suppress new lines in
     // the language service. These characters should be escaped when printing, and if any characters are added,
@@ -1525,7 +1525,18 @@ module ts {
         getIndent(): number;
     }
 
-    let indentStrings: string[] = ["", "    "];
+    let indentStrings: string[] = [""];
+    // Set indent style based on param --indentStyle
+    export function setIndentStyle(indentStyle?: IndentStyles): void {
+        if (indentStrings.length < 2) {
+            switch (indentStyle) {
+                case IndentStyles.SP2: indentStrings.push("  "); break;
+                case IndentStyles.TAB: indentStrings.push("\t"); break;
+                case IndentStyles.SP4: default: indentStrings.push("    "); break;
+            }
+        }
+    }
+
     export function getIndentString(level: number) {
         if (indentStrings[level] === undefined) {
             indentStrings[level] = getIndentString(level - 1) + indentStrings[1];

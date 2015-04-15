@@ -310,6 +310,7 @@ declare module "typescript" {
     }
     interface Identifier extends PrimaryExpression {
         text: string;
+        originalKeywordKind?: SyntaxKind;
     }
     interface QualifiedName extends Node {
         left: EntityName;
@@ -1079,6 +1080,7 @@ declare module "typescript" {
         diagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
+        indentStyle?: IndentStyles;
         listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
@@ -1118,6 +1120,12 @@ declare module "typescript" {
         ES5 = 1,
         ES6 = 2,
         Latest = 2,
+    }
+    const enum IndentStyles {
+        SP4 = 0,
+        SP2 = 1,
+        TAB = 3,
+        Default = 0,
     }
     interface ParsedCommandLine {
         options: CompilerOptions;
@@ -1260,7 +1268,6 @@ declare module "typescript" {
         getDocumentationComment(): SymbolDisplayPart[];
     }
     interface SourceFile {
-        getNamedDeclarations(): Declaration[];
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
         getPositionOfLineAndCharacter(line: number, character: number): number;

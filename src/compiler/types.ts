@@ -1008,7 +1008,7 @@ module ts {
 
         // The first node that causes this file to be an external module
         /* @internal */ externalModuleIndicator: Node;
-        
+
         /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
@@ -1059,7 +1059,7 @@ module ts {
         getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
 
-        /** 
+        /**
          * Gets a type checker that can be used to semantically analyze source fils in the program.
          */
         getTypeChecker(): TypeChecker;
@@ -1078,15 +1078,15 @@ module ts {
 
     export interface SourceMapSpan {
         /** Line number in the .js file. */
-        emittedLine: number; 
+        emittedLine: number;
         /** Column number in the .js file. */
-        emittedColumn: number;  
+        emittedColumn: number;
         /** Line number in the .ts file. */
-        sourceLine: number; 
+        sourceLine: number;
         /** Column number in the .ts file. */
-        sourceColumn: number; 
+        sourceColumn: number;
         /** Optional name (index into names array) associated with this span. */
-        nameIndex?: number; 
+        nameIndex?: number;
         /** .ts file (index into sources array) associated with this span */
         sourceIndex: number;
     }
@@ -1371,7 +1371,7 @@ module ts {
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
     }
 
-    /* @internal */ 
+    /* @internal */
     export interface SymbolLinks {
         target?: Symbol;                    // Resolved (non-alias) target of an alias
         type?: Type;                        // Type of value symbol
@@ -1383,14 +1383,14 @@ module ts {
         exportsChecked?: boolean;           // True if exports of external module have been checked
     }
 
-    /* @internal */ 
+    /* @internal */
     export interface TransientSymbol extends Symbol, SymbolLinks { }
 
     export interface SymbolTable {
         [index: string]: Symbol;
     }
 
-    /* @internal */ 
+    /* @internal */
     export const enum NodeCheckFlags {
         TypeChecked                 = 0x00000001,  // Node has been type checked
         LexicalThis                 = 0x00000002,  // Lexical 'this' reference
@@ -1407,7 +1407,7 @@ module ts {
         EmitParam                   = 0x00000400,  // Emit __param helper for decorators
     }
 
-    /* @internal */ 
+    /* @internal */
     export interface NodeLinks {
         resolvedType?: Type;              // Cached type of type node
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
@@ -1440,23 +1440,23 @@ module ts {
         Tuple                   = 0x00002000,  // Tuple
         Union                   = 0x00004000,  // Union
         Anonymous               = 0x00008000,  // Anonymous
-        /* @internal */ 
+        /* @internal */
         FromSignature           = 0x00010000,  // Created for signature assignment check
         ObjectLiteral           = 0x00020000,  // Originates in an object literal
-        /* @internal */ 
+        /* @internal */
         ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
-        /* @internal */ 
+        /* @internal */
         ContainsObjectLiteral = 0x00080000,  // Type is or contains object literal type
         ESSymbol                = 0x00100000,  // Type of symbol primitive introduced in ES6
 
-        /* @internal */ 
+        /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
-        /* @internal */ 
+        /* @internal */
         Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
-        /* @internal */ 
+        /* @internal */
         RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral
     }
 
@@ -1467,7 +1467,7 @@ module ts {
         symbol?: Symbol;                // Symbol associated with type (if any)
     }
 
-    /* @internal */ 
+    /* @internal */
     // Intrinsic types (TypeFlags.Intrinsic)
     export interface IntrinsicType extends Type {
         intrinsicName: string;  // Name of intrinsic type
@@ -1635,6 +1635,7 @@ module ts {
         diagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
+        indentStyle?: IndentStyles;
         listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
@@ -1681,6 +1682,13 @@ module ts {
         ES5 = 1,
         ES6 = 2,
         Latest = ES6,
+    }
+
+    export const enum IndentStyles {
+        SP4 = 0,
+        SP2 = 1,
+        TAB = 3,
+        Default = SP4
     }
 
     export interface ParsedCommandLine {
