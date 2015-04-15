@@ -18,7 +18,7 @@ function f() {
 >() => arguments : () => IArguments
 >arguments : IArguments, Symbol(arguments)
 
-            foo(_arguments);                // Error as this doesnt not resolve to the user defined '_arguments'
+            foo(_arguments);                // Error as this does not resolve to the user defined '_arguments'
 >foo(_arguments) : number
 >foo : (x: any) => number, Symbol(foo, Decl(emitArrowFunctionWhenUsingArguments19_ES6.ts, 8, 5))
 >_arguments : number, Symbol(_arguments, Decl(emitArrowFunctionWhenUsingArguments19_ES6.ts, 3, 11))
