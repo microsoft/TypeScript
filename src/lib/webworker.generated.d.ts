@@ -3,180 +3,6 @@
 /// IE Worker APIs
 /////////////////////////////
 
-interface Algorithm {
-    name?: string;
-}
-
-interface AriaRequestEventInit extends EventInit {
-    attributeName?: string;
-    attributeValue?: string;
-}
-
-interface ClipboardEventInit extends EventInit {
-    data?: string;
-    dataType?: string;
-}
-
-interface CommandEventInit extends EventInit {
-    commandName?: string;
-    detail?: string;
-}
-
-interface CompositionEventInit extends UIEventInit {
-    data?: string;
-}
-
-interface ConfirmSiteSpecificExceptionsInformation extends ExceptionInformation {
-    arrayOfDomainStrings?: string[];
-}
-
-interface CustomEventInit extends EventInit {
-    detail?: any;
-}
-
-interface DeviceAccelerationDict {
-    x?: number;
-    y?: number;
-    z?: number;
-}
-
-interface DeviceRotationRateDict {
-    alpha?: number;
-    beta?: number;
-    gamma?: number;
-}
-
-interface EventInit {
-    bubbles?: boolean;
-    cancelable?: boolean;
-}
-
-interface ExceptionInformation {
-    domain?: string;
-}
-
-interface FocusEventInit extends UIEventInit {
-    relatedTarget?: EventTarget;
-}
-
-interface HashChangeEventInit extends EventInit {
-    newURL?: string;
-    oldURL?: string;
-}
-
-interface KeyAlgorithm {
-    name?: string;
-}
-
-interface KeyboardEventInit extends SharedKeyboardAndMouseEventInit {
-    key?: string;
-    location?: number;
-    repeat?: boolean;
-}
-
-interface MouseEventInit extends SharedKeyboardAndMouseEventInit {
-    screenX?: number;
-    screenY?: number;
-    clientX?: number;
-    clientY?: number;
-    button?: number;
-    buttons?: number;
-    relatedTarget?: EventTarget;
-}
-
-interface MsZoomToOptions {
-    contentX?: number;
-    contentY?: number;
-    viewportX?: string;
-    viewportY?: string;
-    scaleFactor?: number;
-    animate?: string;
-}
-
-interface MutationObserverInit {
-    childList?: boolean;
-    attributes?: boolean;
-    characterData?: boolean;
-    subtree?: boolean;
-    attributeOldValue?: boolean;
-    characterDataOldValue?: boolean;
-    attributeFilter?: string[];
-}
-
-interface ObjectURLOptions {
-    oneTimeOnly?: boolean;
-}
-
-interface PointerEventInit extends MouseEventInit {
-    pointerId?: number;
-    width?: number;
-    height?: number;
-    pressure?: number;
-    tiltX?: number;
-    tiltY?: number;
-    pointerType?: string;
-    isPrimary?: boolean;
-}
-
-interface PositionOptions {
-    enableHighAccuracy?: boolean;
-    timeout?: number;
-    maximumAge?: number;
-}
-
-interface SharedKeyboardAndMouseEventInit extends UIEventInit {
-    ctrlKey?: boolean;
-    shiftKey?: boolean;
-    altKey?: boolean;
-    metaKey?: boolean;
-    keyModifierStateAltGraph?: boolean;
-    keyModifierStateCapsLock?: boolean;
-    keyModifierStateFn?: boolean;
-    keyModifierStateFnLock?: boolean;
-    keyModifierStateHyper?: boolean;
-    keyModifierStateNumLock?: boolean;
-    keyModifierStateOS?: boolean;
-    keyModifierStateScrollLock?: boolean;
-    keyModifierStateSuper?: boolean;
-    keyModifierStateSymbol?: boolean;
-    keyModifierStateSymbolLock?: boolean;
-}
-
-interface StoreExceptionsInformation extends ExceptionInformation {
-    siteName?: string;
-    explanationString?: string;
-    detailURI?: string;
-}
-
-interface StoreSiteSpecificExceptionsInformation extends StoreExceptionsInformation {
-    arrayOfDomainStrings?: string[];
-}
-
-interface UIEventInit extends EventInit {
-    view?: any;
-    detail?: number;
-}
-
-interface WebGLContextAttributes {
-    alpha?: boolean;
-    depth?: boolean;
-    stencil?: boolean;
-    antialias?: boolean;
-    premultipliedAlpha?: boolean;
-    preserveDrawingBuffer?: boolean;
-}
-
-interface WebGLContextEventInit extends EventInit {
-    statusMessage?: string;
-}
-
-interface WheelEventInit extends MouseEventInit {
-    deltaX?: number;
-    deltaY?: number;
-    deltaZ?: number;
-    deltaMode?: number;
-}
-
 interface EventListener {
     (evt: Event): void;
 }
@@ -207,24 +33,24 @@ declare var CloseEvent: {
 }
 
 interface Console {
-    assert(test?: boolean, message?: any, ...optionalParams: any[]): void;
+    assert(test?: boolean, message?: string, ...optionalParams: any[]): void;
     clear(): void;
-    count(countTitle?: any): void;
-    debug(message?: any, ...optionalParams: any[]): void;
+    count(countTitle?: string): void;
+    debug(message?: string, ...optionalParams: any[]): void;
     dir(value?: any, ...optionalParams: any[]): void;
     dirxml(value: any): void;
     error(message?: any, ...optionalParams: any[]): void;
-    group(groupTitle?: any): void;
-    groupCollapsed(groupTitle?: any): void;
+    group(groupTitle?: string): void;
+    groupCollapsed(groupTitle?: string): void;
     groupEnd(): void;
     info(message?: any, ...optionalParams: any[]): void;
     log(message?: any, ...optionalParams: any[]): void;
     msIsIndependentlyComposed(element: any): boolean;
-    profile(reportName?: any): void;
+    profile(reportName?: string): void;
     profileEnd(): void;
     select(element: any): void;
-    time(timerName?: any): void;
-    timeEnd(timerName?: any): void;
+    time(timerName?: string): void;
+    timeEnd(timerName?: string): void;
     trace(): void;
     warn(message?: any, ...optionalParams: any[]): void;
 }
@@ -498,10 +324,6 @@ interface IDBKeyRange {
     lowerOpen: boolean;
     upper: any;
     upperOpen: boolean;
-    bound(lower: any, upper: any, lowerOpen?: boolean, upperOpen?: boolean): IDBKeyRange;
-    lowerBound(bound: any, open?: boolean): IDBKeyRange;
-    only(value: any): IDBKeyRange;
-    upperBound(bound: any, open?: boolean): IDBKeyRange;
 }
 
 declare var IDBKeyRange: {
@@ -539,9 +361,9 @@ interface IDBOpenDBRequest extends IDBRequest {
     onblocked: (ev: Event) => any;
     onupgradeneeded: (ev: IDBVersionChangeEvent) => any;
     addEventListener(type: "blocked", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "upgradeneeded", listener: (ev: IDBVersionChangeEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "success", listener: (ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "upgradeneeded", listener: (ev: IDBVersionChangeEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -761,8 +583,8 @@ interface Worker extends EventTarget, AbstractWorker {
     onmessage: (ev: MessageEvent) => any;
     postMessage(message: any, ports?: any): void;
     terminate(): void;
-    addEventListener(type: "message", listener: (ev: MessageEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "message", listener: (ev: MessageEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -786,27 +608,26 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     upload: XMLHttpRequestUpload;
     withCredentials: boolean;
     abort(): void;
-    create(): XMLHttpRequest;
     getAllResponseHeaders(): string;
     getResponseHeader(header: string): string;
     msCachingEnabled(): boolean;
     open(method: string, url: string, async?: boolean, user?: string, password?: string): void;
     overrideMimeType(mime: string): void;
-    send(data?: any): void;
     send(data?: string): void;
+    send(data?: any): void;
     setRequestHeader(header: string, value: string): void;
     DONE: number;
     HEADERS_RECEIVED: number;
     LOADING: number;
     OPENED: number;
     UNSENT: number;
-    addEventListener(type: "readystatechange", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "loadstart", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "progress", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "readystatechange", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "timeout", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -939,6 +760,7 @@ declare var WorkerLocation: {
 }
 
 interface WorkerNavigator extends Object, NavigatorID, NavigatorOnLine {
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var WorkerNavigator: {
@@ -1015,9 +837,6 @@ interface DecodeErrorCallback {
 interface FunctionStringCallback {
     (data: string): void;
 }
-declare var Audio: {new(src?: string): HTMLAudioElement; };
-declare var Image: {new(width?: number, height?: number): HTMLImageElement; };
-declare var Option: {new(text?: string, value?: string, defaultSelected?: boolean, selected?: boolean): HTMLOptionElement; };
 declare var location: WorkerLocation;
 declare var onerror: (ev: Event) => any;
 declare var self: WorkerGlobalScope;
