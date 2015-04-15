@@ -455,47 +455,62 @@ module ts {
 
         function computecommonSourceDirectory(sourceFiles: SourceFile[]): string {
             let commonPathComponents: string[];
+            let currentDirectory = host.getCurrentDirectory();
             forEach(files, sourceFile => {
                 // Each file contributes into common source file path
-                if (!(sourceFile.flags & NodeFlags.DeclarationFile)
-                    && !fileExtensionIs(sourceFile.fileName, ".js")) {
-                    let sourcePathComponents = getNormalizedPathComponents(sourceFile.fileName, host.getCurrentDirectory());
-                    sourcePathComponents.pop(); // FileName is not part of directory
-                    if (commonPathComponents) {
-                        for (let i = 0; i < Math.min(commonPathComponents.length, sourcePathComponents.length); i++) {
-                            if (commonPathComponents[i] !== sourcePathComponents[i]) {
-                                if (i === 0) {
-                                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
-                                    return;
-                                }
+                if (isDeclarationFile(sourceFile)) {
+                    return;
+                }
 
-                                // New common path found that is 0 -> i-1
-                                commonPathComponents.length = i;
-                                break;
+                let sourcePathComponents = getNormalizedPathComponents(sourceFile.fileName, currentDirectory);
+                sourcePathComponents.pop(); // FileName is not part of directory
+                if (commonPathComponents) {
+                    for (let i = 0; i < Math.min(commonPathComponents.length, sourcePathComponents.length); i++) {
+                        if (commonPathComponents[i] !== sourcePathComponents[i]) {
+                            if (i === 0) {
+                                diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
+                                return;
                             }
-                        }
 
-                        // If the fileComponent path completely matched and less than already found update the length
-                        if (sourcePathComponents.length < commonPathComponents.length) {
-                            commonPathComponents.length = sourcePathComponents.length;
+                            // New common path found that is 0 -> i-1
+                            commonPathComponents.length = i;
+                            break;
                         }
                     }
-                    else {
-                        // first file
-                        commonPathComponents = sourcePathComponents;
+
+                    // If the fileComponent path completely matched and less than already found update the length
+                    if (sourcePathComponents.length < commonPathComponents.length) {
+                        commonPathComponents.length = sourcePathComponents.length;
                     }
                 }
+                else {
+                    // first file
+                    commonPathComponents = sourcePathComponents;
+                }
+
             });
 
-            let commonSourceDirectory = getNormalizedPathFromPathComponents(commonPathComponents);
-            if (commonSourceDirectory) {
-                // Make sure directory path ends with directory separator so this string can directly 
-                // used to replace with "" to get the relative path of the source file and the relative path doesn't
-                // start with / making it rooted path
-                commonSourceDirectory += directorySeparator;
+            return getNormalizedPathFromPathComponents(commonPathComponents);
+        }
+
+        function checkSourceFilesBelongToPath(soruceFiles: SourceFile[], rootDirectory: string): boolean {
+            let allFilesBelongToPath = true;
+            if (files) {
+                let currentDirectory = host.getCurrentDirectory();
+                let absoluteRootDirectoryPath = host.getCanonicalFileName(getNormalizedAbsolutePath(rootDirectory, currentDirectory));
+
+                for (var sourceFile of files) {
+                    if (!isDeclarationFile(sourceFile)) {
+                        let absoluteSourceFilePath = host.getCanonicalFileName(getNormalizedAbsolutePath(sourceFile.fileName, currentDirectory));
+                        if (absoluteSourceFilePath.indexOf(absoluteRootDirectoryPath) !== 0) {
+                            diagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_under_rootDir_1_RootDir_is_expected_to_contain_all_source_files, sourceFile.fileName, options.rootDir));
+                            allFilesBelongToPath = false;
+                        }
+                    }
+                }
             }
 
-            return commonSourceDirectory;
+            return allFilesBelongToPath;
         }
 
         function verifyCompilerOptions() {
@@ -560,7 +575,21 @@ module ts {
                 (options.mapRoot &&  // there is --mapRoot specified and there would be multiple js files generated
                     (!options.out || firstExternalModuleSourceFile !== undefined))) {
 
-                commonSourceDirectory = computecommonSourceDirectory(files);
+                if (options.rootDir && checkSourceFilesBelongToPath(files, options.rootDir)) {
+                    // If a rootDir is specified and is valid use it as the commonSourceDirectory
+                    commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, host.getCurrentDirectory());
+                }
+                else {
+                    // Compute the commonSourceDirectory from the input files
+                    commonSourceDirectory = computecommonSourceDirectory(files);
+                }
+
+                if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
+                    // Make sure directory path ends with directory separator so this string can directly 
+                    // used to replace with "" to get the relative path of the source file and the relative path doesn't
+                    // start with / making it rooted path
+                    commonSourceDirectory += directorySeparator;
+                }
             }
 
             if (options.noEmit) {

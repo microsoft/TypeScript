@@ -1968,6 +1968,15 @@
         "category": "Message",
         "code": 6057
     },
+    "Specifies the root directory of input files. Use to control the output directory structure with --outDir.": {
+        "category": "Message",
+        "code": 6058
+    },
+    "File '{0}' is not under rootDir '{1}'. RootDir is expected to contain all source files.": {
+        "category": "Error",
+        "code": 6059
+    },
+
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
