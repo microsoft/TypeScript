@@ -1,17 +1,17 @@
 === tests/cases/compiler/acceptableAlias1.ts ===
 module M {
->M : typeof M, Symbol(M, Decl(acceptableAlias1.ts, 0, 0))
+>M : typeof M
 
     export module N {
->N : any, Symbol(N, Decl(acceptableAlias1.ts, 0, 10))
+>N : any
     }
     export import X = N;
->X : any, Symbol(X, Decl(acceptableAlias1.ts, 2, 5))
->N : any, Symbol(N, Decl(acceptableAlias1.ts, 0, 10))
+>X : any
+>N : any
 }
 
 import r = M.X;
->r : any, Symbol(r, Decl(acceptableAlias1.ts, 4, 1))
->M : typeof M, Symbol(M, Decl(acceptableAlias1.ts, 0, 0))
->X : any, Symbol(r, Decl(acceptableAlias1.ts, 0, 10))
+>r : any
+>M : typeof M
+>X : any
 

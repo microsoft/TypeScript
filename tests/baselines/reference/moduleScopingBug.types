@@ -1,38 +1,38 @@
 === tests/cases/compiler/moduleScopingBug.ts ===
 module M
->M : typeof M, Symbol(M, Decl(moduleScopingBug.ts, 0, 0))
+>M : typeof M
 
 {
 
     var outer: number;
->outer : number, Symbol(outer, Decl(moduleScopingBug.ts, 4, 7))
+>outer : number
 
     function f() {
->f : () => void, Symbol(f, Decl(moduleScopingBug.ts, 4, 22))
+>f : () => void
 
         var inner = outer;   // Ok
->inner : number, Symbol(inner, Decl(moduleScopingBug.ts, 8, 11))
->outer : number, Symbol(outer, Decl(moduleScopingBug.ts, 4, 7))
+>inner : number
+>outer : number
 
     }
 
     class C {
->C : C, Symbol(C, Decl(moduleScopingBug.ts, 10, 5))
+>C : C
 
         constructor() {
             var inner = outer;   // Ok
->inner : number, Symbol(inner, Decl(moduleScopingBug.ts, 15, 15))
->outer : number, Symbol(outer, Decl(moduleScopingBug.ts, 4, 7))
+>inner : number
+>outer : number
         }
 
     }
 
     module X {
->X : typeof X, Symbol(X, Decl(moduleScopingBug.ts, 18, 5))
+>X : typeof X
 
         var inner = outer;   // Error: outer not visible
->inner : number, Symbol(inner, Decl(moduleScopingBug.ts, 22, 11))
->outer : number, Symbol(outer, Decl(moduleScopingBug.ts, 4, 7))
+>inner : number
+>outer : number
 
     }
 

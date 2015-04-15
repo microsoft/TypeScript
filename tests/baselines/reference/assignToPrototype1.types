@@ -1,22 +1,22 @@
 === tests/cases/compiler/assignToPrototype1.ts ===
 declare class Point {
->Point : Point, Symbol(Point, Decl(assignToPrototype1.ts, 0, 0))
+>Point : Point
 
   add(dx: number, dy: number): void;
->add : (dx: number, dy: number) => void, Symbol(add, Decl(assignToPrototype1.ts, 0, 21))
->dx : number, Symbol(dx, Decl(assignToPrototype1.ts, 1, 6))
->dy : number, Symbol(dy, Decl(assignToPrototype1.ts, 1, 17))
+>add : (dx: number, dy: number) => void
+>dx : number
+>dy : number
 }
 
 Point.prototype.add = function(dx, dy) {
 >Point.prototype.add = function(dx, dy) {} : (dx: number, dy: number) => void
->Point.prototype.add : (dx: number, dy: number) => void, Symbol(Point.add, Decl(assignToPrototype1.ts, 0, 21))
->Point.prototype : Point, Symbol(Point.prototype)
->Point : typeof Point, Symbol(Point, Decl(assignToPrototype1.ts, 0, 0))
->prototype : Point, Symbol(Point.prototype)
->add : (dx: number, dy: number) => void, Symbol(Point.add, Decl(assignToPrototype1.ts, 0, 21))
+>Point.prototype.add : (dx: number, dy: number) => void
+>Point.prototype : Point
+>Point : typeof Point
+>prototype : Point
+>add : (dx: number, dy: number) => void
 >function(dx, dy) {} : (dx: number, dy: number) => void
->dx : number, Symbol(dx, Decl(assignToPrototype1.ts, 4, 31))
->dy : number, Symbol(dy, Decl(assignToPrototype1.ts, 4, 34))
+>dx : number
+>dy : number
 
 };

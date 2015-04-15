@@ -1,46 +1,46 @@
 === tests/cases/compiler/server.ts ===
 
 export interface I {
->I : I, Symbol(I, Decl(server.ts, 0, 0))
+>I : I
 
     prop: string;
->prop : string, Symbol(prop, Decl(server.ts, 1, 20))
+>prop : string
 }
 export interface I2 {
->I2 : I2, Symbol(I2, Decl(server.ts, 3, 1))
+>I2 : I2
 
     prop2: string;
->prop2 : string, Symbol(prop2, Decl(server.ts, 4, 21))
+>prop2 : string
 }
 export class C implements I {
->C : C, Symbol(C, Decl(server.ts, 6, 1))
->I : I, Symbol(I, Decl(server.ts, 0, 0))
+>C : C
+>I : I
 
     prop = "hello";
->prop : string, Symbol(prop, Decl(server.ts, 7, 29))
+>prop : string
 >"hello" : string
 }
 export class C2 implements I2 {
->C2 : C2, Symbol(C2, Decl(server.ts, 9, 1))
->I2 : I2, Symbol(I2, Decl(server.ts, 3, 1))
+>C2 : C2
+>I2 : I2
 
     prop2 = "world";
->prop2 : string, Symbol(prop2, Decl(server.ts, 10, 31))
+>prop2 : string
 >"world" : string
 }
 
 === tests/cases/compiler/client.ts ===
 import { C, I, C2 } from "server"; // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
->C : typeof C, Symbol(C, Decl(client.ts, 0, 8))
->I : any, Symbol(I, Decl(client.ts, 0, 11))
->C2 : typeof C2, Symbol(C2, Decl(client.ts, 0, 14))
+>C : typeof C
+>I : any
+>C2 : typeof C2
 
 export type cValInterface = I;
->cValInterface : I, Symbol(cValInterface, Decl(client.ts, 0, 34))
->I : I, Symbol(I, Decl(client.ts, 0, 11))
+>cValInterface : I
+>I : I
 
 export var cVal = new C();
->cVal : C, Symbol(cVal, Decl(client.ts, 2, 10))
+>cVal : C
 >new C() : C
->C : typeof C, Symbol(C, Decl(client.ts, 0, 8))
+>C : typeof C
 

@@ -1,28 +1,28 @@
 === tests/cases/compiler/genericFunctions2.ts ===
 declare function map <T, U > (items: T[], f: (x: T) => U): U[];
->map : <T, U>(items: T[], f: (x: T) => U) => U[], Symbol(map, Decl(genericFunctions2.ts, 0, 0))
->T : T, Symbol(T, Decl(genericFunctions2.ts, 0, 22))
->U : U, Symbol(U, Decl(genericFunctions2.ts, 0, 24))
->items : T[], Symbol(items, Decl(genericFunctions2.ts, 0, 30))
->T : T, Symbol(T, Decl(genericFunctions2.ts, 0, 22))
->f : (x: T) => U, Symbol(f, Decl(genericFunctions2.ts, 0, 41))
->x : T, Symbol(x, Decl(genericFunctions2.ts, 0, 46))
->T : T, Symbol(T, Decl(genericFunctions2.ts, 0, 22))
->U : U, Symbol(U, Decl(genericFunctions2.ts, 0, 24))
->U : U, Symbol(U, Decl(genericFunctions2.ts, 0, 24))
+>map : <T, U>(items: T[], f: (x: T) => U) => U[]
+>T : T
+>U : U
+>items : T[]
+>T : T
+>f : (x: T) => U
+>x : T
+>T : T
+>U : U
+>U : U
 
 var myItems: string[];
->myItems : string[], Symbol(myItems, Decl(genericFunctions2.ts, 2, 3))
+>myItems : string[]
 
 var lengths = map(myItems, x => x.length);
->lengths : number[], Symbol(lengths, Decl(genericFunctions2.ts, 3, 3))
+>lengths : number[]
 >map(myItems, x => x.length) : number[]
->map : <T, U>(items: T[], f: (x: T) => U) => U[], Symbol(map, Decl(genericFunctions2.ts, 0, 0))
->myItems : string[], Symbol(myItems, Decl(genericFunctions2.ts, 2, 3))
+>map : <T, U>(items: T[], f: (x: T) => U) => U[]
+>myItems : string[]
 >x => x.length : (x: string) => number
->x : string, Symbol(x, Decl(genericFunctions2.ts, 3, 26))
->x.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->x : string, Symbol(x, Decl(genericFunctions2.ts, 3, 26))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>x : string
+>x.length : number
+>x : string
+>length : number
 
 

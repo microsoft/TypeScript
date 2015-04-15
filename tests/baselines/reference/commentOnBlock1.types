@@ -1,7 +1,7 @@
 === tests/cases/compiler/commentOnBlock1.ts ===
 // asdf
 function f() {
->f : () => void, Symbol(f, Decl(commentOnBlock1.ts, 0, 0))
+>f : () => void
 
  /*asdf*/{}
 }

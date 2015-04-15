@@ -1,24 +1,24 @@
 === tests/cases/compiler/recursiveClassInstantiationsWithDefaultConstructors.ts ===
 var a = new TypeScript2.MemberNameArray()
->a : TypeScript2.MemberNameArray, Symbol(a, Decl(recursiveClassInstantiationsWithDefaultConstructors.ts, 0, 3))
+>a : TypeScript2.MemberNameArray
 >new TypeScript2.MemberNameArray() : TypeScript2.MemberNameArray
->TypeScript2.MemberNameArray : typeof TypeScript2.MemberNameArray, Symbol(TypeScript2.MemberNameArray, Decl(recursiveClassInstantiationsWithDefaultConstructors.ts, 4, 1))
->TypeScript2 : typeof TypeScript2, Symbol(TypeScript2, Decl(recursiveClassInstantiationsWithDefaultConstructors.ts, 0, 41))
->MemberNameArray : typeof TypeScript2.MemberNameArray, Symbol(TypeScript2.MemberNameArray, Decl(recursiveClassInstantiationsWithDefaultConstructors.ts, 4, 1))
+>TypeScript2.MemberNameArray : typeof TypeScript2.MemberNameArray
+>TypeScript2 : typeof TypeScript2
+>MemberNameArray : typeof TypeScript2.MemberNameArray
 
 module TypeScript2 {
->TypeScript2 : typeof TypeScript2, Symbol(TypeScript2, Decl(recursiveClassInstantiationsWithDefaultConstructors.ts, 0, 41))
+>TypeScript2 : typeof TypeScript2
 
 export class MemberName {
->MemberName : MemberName, Symbol(MemberName, Decl(recursiveClassInstantiationsWithDefaultConstructors.ts, 1, 20))
+>MemberName : MemberName
 
 public prefix: string = "";
->prefix : string, Symbol(prefix, Decl(recursiveClassInstantiationsWithDefaultConstructors.ts, 2, 25))
+>prefix : string
 >"" : string
 }
 export class MemberNameArray extends MemberName {
->MemberNameArray : MemberNameArray, Symbol(MemberNameArray, Decl(recursiveClassInstantiationsWithDefaultConstructors.ts, 4, 1))
->MemberName : MemberName, Symbol(MemberName, Decl(recursiveClassInstantiationsWithDefaultConstructors.ts, 1, 20))
+>MemberNameArray : MemberNameArray
+>MemberName : MemberName
 }
 }
 

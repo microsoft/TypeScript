@@ -1,19 +1,19 @@
 === tests/cases/compiler/server.ts ===
 
 export class c { };  
->c : c, Symbol(c, Decl(server.ts, 0, 0))
+>c : c
 
 === tests/cases/compiler/client.ts ===
 import * as nameSpaceBinding from "server";
->nameSpaceBinding : typeof nameSpaceBinding, Symbol(nameSpaceBinding, Decl(client.ts, 0, 6))
+>nameSpaceBinding : typeof nameSpaceBinding
 
 export var x = new nameSpaceBinding.c();
->x : nameSpaceBinding.c, Symbol(x, Decl(client.ts, 1, 10))
+>x : nameSpaceBinding.c
 >new nameSpaceBinding.c() : nameSpaceBinding.c
->nameSpaceBinding.c : typeof nameSpaceBinding.c, Symbol(nameSpaceBinding.c, Decl(server.ts, 0, 0))
->nameSpaceBinding : typeof nameSpaceBinding, Symbol(nameSpaceBinding, Decl(client.ts, 0, 6))
->c : typeof nameSpaceBinding.c, Symbol(nameSpaceBinding.c, Decl(server.ts, 0, 0))
+>nameSpaceBinding.c : typeof nameSpaceBinding.c
+>nameSpaceBinding : typeof nameSpaceBinding
+>c : typeof nameSpaceBinding.c
 
 import * as nameSpaceBinding2 from "server"; // unreferenced
->nameSpaceBinding2 : typeof nameSpaceBinding, Symbol(nameSpaceBinding2, Decl(client.ts, 2, 6))
+>nameSpaceBinding2 : typeof nameSpaceBinding
 

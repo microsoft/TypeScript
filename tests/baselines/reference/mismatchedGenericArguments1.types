@@ -1,24 +1,24 @@
 === tests/cases/compiler/mismatchedGenericArguments1.ts ===
 interface IFoo<T> {
->IFoo : IFoo<T>, Symbol(IFoo, Decl(mismatchedGenericArguments1.ts, 0, 0))
->T : T, Symbol(T, Decl(mismatchedGenericArguments1.ts, 0, 15))
+>IFoo : IFoo<T>
+>T : T
 
    foo<T>(x: T): T;
->foo : <T>(x: T) => T, Symbol(foo, Decl(mismatchedGenericArguments1.ts, 0, 19))
->T : T, Symbol(T, Decl(mismatchedGenericArguments1.ts, 1, 7))
->x : T, Symbol(x, Decl(mismatchedGenericArguments1.ts, 1, 10))
->T : T, Symbol(T, Decl(mismatchedGenericArguments1.ts, 1, 7))
->T : T, Symbol(T, Decl(mismatchedGenericArguments1.ts, 1, 7))
+>foo : <T>(x: T) => T
+>T : T
+>x : T
+>T : T
+>T : T
 }
 class C<T> implements IFoo<T> {
->C : C<T>, Symbol(C, Decl(mismatchedGenericArguments1.ts, 2, 1))
->T : T, Symbol(T, Decl(mismatchedGenericArguments1.ts, 3, 8))
->IFoo : IFoo<T>, Symbol(IFoo, Decl(mismatchedGenericArguments1.ts, 0, 0))
->T : T, Symbol(T, Decl(mismatchedGenericArguments1.ts, 3, 8))
+>C : C<T>
+>T : T
+>IFoo : IFoo<T>
+>T : T
 
    foo(x: string): number {
->foo : (x: string) => number, Symbol(foo, Decl(mismatchedGenericArguments1.ts, 3, 31))
->x : string, Symbol(x, Decl(mismatchedGenericArguments1.ts, 4, 7))
+>foo : (x: string) => number
+>x : string
 
      return null;
 >null : null
@@ -26,15 +26,15 @@ class C<T> implements IFoo<T> {
 }
 
 class C2<T> implements IFoo<T> {
->C2 : C2<T>, Symbol(C2, Decl(mismatchedGenericArguments1.ts, 7, 1))
->T : T, Symbol(T, Decl(mismatchedGenericArguments1.ts, 9, 9))
->IFoo : IFoo<T>, Symbol(IFoo, Decl(mismatchedGenericArguments1.ts, 0, 0))
->T : T, Symbol(T, Decl(mismatchedGenericArguments1.ts, 9, 9))
+>C2 : C2<T>
+>T : T
+>IFoo : IFoo<T>
+>T : T
 
    foo<U>(x: string): number {
->foo : <U>(x: string) => number, Symbol(foo, Decl(mismatchedGenericArguments1.ts, 9, 32))
->U : U, Symbol(U, Decl(mismatchedGenericArguments1.ts, 10, 7))
->x : string, Symbol(x, Decl(mismatchedGenericArguments1.ts, 10, 10))
+>foo : <U>(x: string) => number
+>U : U
+>x : string
 
      return null;
 >null : null

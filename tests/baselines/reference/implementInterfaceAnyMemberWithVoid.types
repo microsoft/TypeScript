@@ -1,19 +1,19 @@
 === tests/cases/compiler/implementInterfaceAnyMemberWithVoid.ts ===
 interface I {
->I : I, Symbol(I, Decl(implementInterfaceAnyMemberWithVoid.ts, 0, 0))
+>I : I
 
     foo(value: number);
->foo : (value: number) => any, Symbol(foo, Decl(implementInterfaceAnyMemberWithVoid.ts, 0, 13))
->value : number, Symbol(value, Decl(implementInterfaceAnyMemberWithVoid.ts, 1, 8))
+>foo : (value: number) => any
+>value : number
 }
 
 class Bug implements I {
->Bug : Bug, Symbol(Bug, Decl(implementInterfaceAnyMemberWithVoid.ts, 2, 1))
->I : I, Symbol(I, Decl(implementInterfaceAnyMemberWithVoid.ts, 0, 0))
+>Bug : Bug
+>I : I
 
     public foo(value: number) {
->foo : (value: number) => void, Symbol(foo, Decl(implementInterfaceAnyMemberWithVoid.ts, 4, 24))
->value : number, Symbol(value, Decl(implementInterfaceAnyMemberWithVoid.ts, 5, 15))
+>foo : (value: number) => void
+>value : number
     }
 }
 

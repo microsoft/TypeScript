@@ -1,54 +1,54 @@
 === tests/cases/compiler/declFileForClassWithMultipleBaseClasses.ts ===
 
 class A {
->A : A, Symbol(A, Decl(declFileForClassWithMultipleBaseClasses.ts, 0, 0))
+>A : A
 
     foo() { }
->foo : () => void, Symbol(foo, Decl(declFileForClassWithMultipleBaseClasses.ts, 1, 9))
+>foo : () => void
 }
 
 class B {
->B : B, Symbol(B, Decl(declFileForClassWithMultipleBaseClasses.ts, 3, 1))
+>B : B
 
     bar() { }
->bar : () => void, Symbol(bar, Decl(declFileForClassWithMultipleBaseClasses.ts, 5, 9))
+>bar : () => void
 }
 
 interface I {
->I : I, Symbol(I, Decl(declFileForClassWithMultipleBaseClasses.ts, 7, 1), Decl(declFileForClassWithMultipleBaseClasses.ts, 23, 1))
+>I : I
 
     baz();
->baz : () => any, Symbol(baz, Decl(declFileForClassWithMultipleBaseClasses.ts, 9, 13))
+>baz : () => any
 }
 
 interface J {
->J : J, Symbol(J, Decl(declFileForClassWithMultipleBaseClasses.ts, 11, 1))
+>J : J
 
     bat();
->bat : () => any, Symbol(bat, Decl(declFileForClassWithMultipleBaseClasses.ts, 13, 13))
+>bat : () => any
 }
 
 
 class D implements I, J {
->D : D, Symbol(D, Decl(declFileForClassWithMultipleBaseClasses.ts, 15, 1))
->I : I, Symbol(I, Decl(declFileForClassWithMultipleBaseClasses.ts, 7, 1), Decl(declFileForClassWithMultipleBaseClasses.ts, 23, 1))
->J : J, Symbol(J, Decl(declFileForClassWithMultipleBaseClasses.ts, 11, 1))
+>D : D
+>I : I
+>J : J
 
     baz() { }
->baz : () => void, Symbol(baz, Decl(declFileForClassWithMultipleBaseClasses.ts, 18, 25))
+>baz : () => void
 
     bat() { }
->bat : () => void, Symbol(bat, Decl(declFileForClassWithMultipleBaseClasses.ts, 19, 13))
+>bat : () => void
 
     foo() { }
->foo : () => void, Symbol(foo, Decl(declFileForClassWithMultipleBaseClasses.ts, 20, 13))
+>foo : () => void
 
     bar() { }
->bar : () => void, Symbol(bar, Decl(declFileForClassWithMultipleBaseClasses.ts, 21, 13))
+>bar : () => void
 }
 
 interface I extends A, B {
->I : I, Symbol(I, Decl(declFileForClassWithMultipleBaseClasses.ts, 7, 1), Decl(declFileForClassWithMultipleBaseClasses.ts, 23, 1))
->A : A, Symbol(A, Decl(declFileForClassWithMultipleBaseClasses.ts, 0, 0))
->B : B, Symbol(B, Decl(declFileForClassWithMultipleBaseClasses.ts, 3, 1))
+>I : I
+>A : A
+>B : B
 }

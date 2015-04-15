@@ -2,6 +2,6 @@
 
 /** Comment */
 var v = 1;
->v : number, Symbol(v, Decl(commentsVariableStatement1.ts, 2, 3))
+>v : number
 >1 : number
 

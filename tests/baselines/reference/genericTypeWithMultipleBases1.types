@@ -1,49 +1,49 @@
 === tests/cases/compiler/genericTypeWithMultipleBases1.ts ===
 export interface I1 {
->I1 : I1, Symbol(I1, Decl(genericTypeWithMultipleBases1.ts, 0, 0))
+>I1 : I1
 
     m1: () => void;
->m1 : () => void, Symbol(m1, Decl(genericTypeWithMultipleBases1.ts, 0, 21))
+>m1 : () => void
 }
  
 export interface I2 {
->I2 : I2, Symbol(I2, Decl(genericTypeWithMultipleBases1.ts, 2, 1))
+>I2 : I2
 
     m2: () => void;
->m2 : () => void, Symbol(m2, Decl(genericTypeWithMultipleBases1.ts, 4, 21))
+>m2 : () => void
 }
  
 export interface I3<T> extends I1, I2 {
->I3 : I3<T>, Symbol(I3, Decl(genericTypeWithMultipleBases1.ts, 6, 1))
->T : T, Symbol(T, Decl(genericTypeWithMultipleBases1.ts, 8, 20))
->I1 : I1, Symbol(I1, Decl(genericTypeWithMultipleBases1.ts, 0, 0))
->I2 : I2, Symbol(I2, Decl(genericTypeWithMultipleBases1.ts, 2, 1))
+>I3 : I3<T>
+>T : T
+>I1 : I1
+>I2 : I2
 
 //export interface I3<T> extends I2, I1 {
     p1: T;
->p1 : T, Symbol(p1, Decl(genericTypeWithMultipleBases1.ts, 8, 39))
->T : T, Symbol(T, Decl(genericTypeWithMultipleBases1.ts, 8, 20))
+>p1 : T
+>T : T
 }
  
 var x: I3<number>;
->x : I3<number>, Symbol(x, Decl(genericTypeWithMultipleBases1.ts, 13, 3))
->I3 : I3<T>, Symbol(I3, Decl(genericTypeWithMultipleBases1.ts, 6, 1))
+>x : I3<number>
+>I3 : I3<T>
 
 x.p1;
->x.p1 : number, Symbol(I3.p1, Decl(genericTypeWithMultipleBases1.ts, 8, 39))
->x : I3<number>, Symbol(x, Decl(genericTypeWithMultipleBases1.ts, 13, 3))
->p1 : number, Symbol(I3.p1, Decl(genericTypeWithMultipleBases1.ts, 8, 39))
+>x.p1 : number
+>x : I3<number>
+>p1 : number
 
 x.m1();
 >x.m1() : void
->x.m1 : () => void, Symbol(I1.m1, Decl(genericTypeWithMultipleBases1.ts, 0, 21))
->x : I3<number>, Symbol(x, Decl(genericTypeWithMultipleBases1.ts, 13, 3))
->m1 : () => void, Symbol(I1.m1, Decl(genericTypeWithMultipleBases1.ts, 0, 21))
+>x.m1 : () => void
+>x : I3<number>
+>m1 : () => void
 
 x.m2();
 >x.m2() : void
->x.m2 : () => void, Symbol(I2.m2, Decl(genericTypeWithMultipleBases1.ts, 4, 21))
->x : I3<number>, Symbol(x, Decl(genericTypeWithMultipleBases1.ts, 13, 3))
->m2 : () => void, Symbol(I2.m2, Decl(genericTypeWithMultipleBases1.ts, 4, 21))
+>x.m2 : () => void
+>x : I3<number>
+>m2 : () => void
 
 

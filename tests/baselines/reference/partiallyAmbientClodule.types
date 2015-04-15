@@ -1,10 +1,10 @@
 === tests/cases/compiler/partiallyAmbientClodule.ts ===
 declare module foo {
->foo : typeof foo, Symbol(foo, Decl(partiallyAmbientClodule.ts, 0, 0), Decl(partiallyAmbientClodule.ts, 2, 1))
+>foo : typeof foo
 
     export function x(): any;
->x : () => any, Symbol(x, Decl(partiallyAmbientClodule.ts, 0, 20))
+>x : () => any
 }
 class foo { } // Legal, because module is ambient
->foo : foo, Symbol(foo, Decl(partiallyAmbientClodule.ts, 0, 0), Decl(partiallyAmbientClodule.ts, 2, 1))
+>foo : foo
 

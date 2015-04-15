@@ -1,22 +1,22 @@
 === tests/cases/compiler/targetTypingOnFunctions.ts ===
 var fu: (s: string) => string = function (s) { return s.toLowerCase() };
->fu : (s: string) => string, Symbol(fu, Decl(targetTypingOnFunctions.ts, 0, 3))
->s : string, Symbol(s, Decl(targetTypingOnFunctions.ts, 0, 9))
+>fu : (s: string) => string
+>s : string
 >function (s) { return s.toLowerCase() } : (s: string) => string
->s : string, Symbol(s, Decl(targetTypingOnFunctions.ts, 0, 42))
+>s : string
 >s.toLowerCase() : string
->s.toLowerCase : () => string, Symbol(String.toLowerCase, Decl(lib.d.ts, 399, 51))
->s : string, Symbol(s, Decl(targetTypingOnFunctions.ts, 0, 42))
->toLowerCase : () => string, Symbol(String.toLowerCase, Decl(lib.d.ts, 399, 51))
+>s.toLowerCase : () => string
+>s : string
+>toLowerCase : () => string
 
 var zu = fu = function (s) { return s.toLowerCase() };
->zu : (s: string) => string, Symbol(zu, Decl(targetTypingOnFunctions.ts, 2, 3))
+>zu : (s: string) => string
 >fu = function (s) { return s.toLowerCase() } : (s: string) => string
->fu : (s: string) => string, Symbol(fu, Decl(targetTypingOnFunctions.ts, 0, 3))
+>fu : (s: string) => string
 >function (s) { return s.toLowerCase() } : (s: string) => string
->s : string, Symbol(s, Decl(targetTypingOnFunctions.ts, 2, 24))
+>s : string
 >s.toLowerCase() : string
->s.toLowerCase : () => string, Symbol(String.toLowerCase, Decl(lib.d.ts, 399, 51))
->s : string, Symbol(s, Decl(targetTypingOnFunctions.ts, 2, 24))
->toLowerCase : () => string, Symbol(String.toLowerCase, Decl(lib.d.ts, 399, 51))
+>s.toLowerCase : () => string
+>s : string
+>toLowerCase : () => string
 

@@ -1,0 +1,17 @@
+=== tests/cases/compiler/commentEmitAtEndOfFile1.ts ===
+// test
+var f = ''
+>f : Symbol(f, Decl(commentEmitAtEndOfFile1.ts, 1, 3))
+
+// test #2
+module foo {
+>foo : Symbol(foo, Decl(commentEmitAtEndOfFile1.ts, 1, 10))
+
+        function bar() { }
+>bar : Symbol(bar, Decl(commentEmitAtEndOfFile1.ts, 3, 12))
+}
+// test #3
+module empty {
+>empty : Symbol(empty, Decl(commentEmitAtEndOfFile1.ts, 5, 1))
+}
+// test #4

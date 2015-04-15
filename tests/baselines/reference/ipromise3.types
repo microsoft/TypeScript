@@ -1,99 +1,99 @@
 === tests/cases/compiler/ipromise3.ts ===
 interface IPromise3<T> {
->IPromise3 : IPromise3<T>, Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
->T : T, Symbol(T, Decl(ipromise3.ts, 0, 20))
+>IPromise3 : IPromise3<T>
+>T : T
 
     then<U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void ): IPromise3<U>;
->then : { <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; }, Symbol(then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
->U : U, Symbol(U, Decl(ipromise3.ts, 1, 9))
->success : (value: T) => IPromise3<U>, Symbol(success, Decl(ipromise3.ts, 1, 12))
->value : T, Symbol(value, Decl(ipromise3.ts, 1, 23))
->T : T, Symbol(T, Decl(ipromise3.ts, 0, 20))
->IPromise3 : IPromise3<T>, Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
->U : U, Symbol(U, Decl(ipromise3.ts, 1, 9))
->error : (error: any) => IPromise3<U>, Symbol(error, Decl(ipromise3.ts, 1, 49))
->error : any, Symbol(error, Decl(ipromise3.ts, 1, 59))
->IPromise3 : IPromise3<T>, Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
->U : U, Symbol(U, Decl(ipromise3.ts, 1, 9))
->progress : (progress: any) => void, Symbol(progress, Decl(ipromise3.ts, 1, 87))
->progress : any, Symbol(progress, Decl(ipromise3.ts, 1, 100))
->IPromise3 : IPromise3<T>, Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
->U : U, Symbol(U, Decl(ipromise3.ts, 1, 9))
+>then : { <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; }
+>U : U
+>success : (value: T) => IPromise3<U>
+>value : T
+>T : T
+>IPromise3 : IPromise3<T>
+>U : U
+>error : (error: any) => IPromise3<U>
+>error : any
+>IPromise3 : IPromise3<T>
+>U : U
+>progress : (progress: any) => void
+>progress : any
+>IPromise3 : IPromise3<T>
+>U : U
 
     then<U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void ): IPromise3<U>;
->then : { <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; }, Symbol(then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
->U : U, Symbol(U, Decl(ipromise3.ts, 2, 9))
->success : (value: T) => IPromise3<U>, Symbol(success, Decl(ipromise3.ts, 2, 12))
->value : T, Symbol(value, Decl(ipromise3.ts, 2, 23))
->T : T, Symbol(T, Decl(ipromise3.ts, 0, 20))
->IPromise3 : IPromise3<T>, Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
->U : U, Symbol(U, Decl(ipromise3.ts, 2, 9))
->error : (error: any) => U, Symbol(error, Decl(ipromise3.ts, 2, 49))
->error : any, Symbol(error, Decl(ipromise3.ts, 2, 59))
->U : U, Symbol(U, Decl(ipromise3.ts, 2, 9))
->progress : (progress: any) => void, Symbol(progress, Decl(ipromise3.ts, 2, 76))
->progress : any, Symbol(progress, Decl(ipromise3.ts, 2, 89))
->IPromise3 : IPromise3<T>, Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
->U : U, Symbol(U, Decl(ipromise3.ts, 2, 9))
+>then : { <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; }
+>U : U
+>success : (value: T) => IPromise3<U>
+>value : T
+>T : T
+>IPromise3 : IPromise3<T>
+>U : U
+>error : (error: any) => U
+>error : any
+>U : U
+>progress : (progress: any) => void
+>progress : any
+>IPromise3 : IPromise3<T>
+>U : U
 
     then<U>(success?: (value: T) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void ): IPromise3<U>;
->then : { <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; }, Symbol(then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
->U : U, Symbol(U, Decl(ipromise3.ts, 3, 9))
->success : (value: T) => U, Symbol(success, Decl(ipromise3.ts, 3, 12))
->value : T, Symbol(value, Decl(ipromise3.ts, 3, 23))
->T : T, Symbol(T, Decl(ipromise3.ts, 0, 20))
->U : U, Symbol(U, Decl(ipromise3.ts, 3, 9))
->error : (error: any) => IPromise3<U>, Symbol(error, Decl(ipromise3.ts, 3, 38))
->error : any, Symbol(error, Decl(ipromise3.ts, 3, 48))
->IPromise3 : IPromise3<T>, Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
->U : U, Symbol(U, Decl(ipromise3.ts, 3, 9))
->progress : (progress: any) => void, Symbol(progress, Decl(ipromise3.ts, 3, 76))
->progress : any, Symbol(progress, Decl(ipromise3.ts, 3, 89))
->IPromise3 : IPromise3<T>, Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
->U : U, Symbol(U, Decl(ipromise3.ts, 3, 9))
+>then : { <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; }
+>U : U
+>success : (value: T) => U
+>value : T
+>T : T
+>U : U
+>error : (error: any) => IPromise3<U>
+>error : any
+>IPromise3 : IPromise3<T>
+>U : U
+>progress : (progress: any) => void
+>progress : any
+>IPromise3 : IPromise3<T>
+>U : U
 
     then<U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void ): IPromise3<U>;
->then : { <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; }, Symbol(then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
->U : U, Symbol(U, Decl(ipromise3.ts, 4, 9))
->success : (value: T) => U, Symbol(success, Decl(ipromise3.ts, 4, 12))
->value : T, Symbol(value, Decl(ipromise3.ts, 4, 23))
->T : T, Symbol(T, Decl(ipromise3.ts, 0, 20))
->U : U, Symbol(U, Decl(ipromise3.ts, 4, 9))
->error : (error: any) => U, Symbol(error, Decl(ipromise3.ts, 4, 38))
->error : any, Symbol(error, Decl(ipromise3.ts, 4, 48))
->U : U, Symbol(U, Decl(ipromise3.ts, 4, 9))
->progress : (progress: any) => void, Symbol(progress, Decl(ipromise3.ts, 4, 65))
->progress : any, Symbol(progress, Decl(ipromise3.ts, 4, 78))
->IPromise3 : IPromise3<T>, Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
->U : U, Symbol(U, Decl(ipromise3.ts, 4, 9))
+>then : { <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; }
+>U : U
+>success : (value: T) => U
+>value : T
+>T : T
+>U : U
+>error : (error: any) => U
+>error : any
+>U : U
+>progress : (progress: any) => void
+>progress : any
+>IPromise3 : IPromise3<T>
+>U : U
 
     done? <U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void ): void;
->done : <U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void) => void, Symbol(done, Decl(ipromise3.ts, 4, 117))
->U : U, Symbol(U, Decl(ipromise3.ts, 5, 11))
->success : (value: T) => any, Symbol(success, Decl(ipromise3.ts, 5, 14))
->value : T, Symbol(value, Decl(ipromise3.ts, 5, 25))
->T : T, Symbol(T, Decl(ipromise3.ts, 0, 20))
->error : (error: any) => any, Symbol(error, Decl(ipromise3.ts, 5, 42))
->error : any, Symbol(error, Decl(ipromise3.ts, 5, 52))
->progress : (progress: any) => void, Symbol(progress, Decl(ipromise3.ts, 5, 71))
->progress : any, Symbol(progress, Decl(ipromise3.ts, 5, 84))
+>done : <U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void) => void
+>U : U
+>success : (value: T) => any
+>value : T
+>T : T
+>error : (error: any) => any
+>error : any
+>progress : (progress: any) => void
+>progress : any
 }
 var p1: IPromise3<string>;
->p1 : IPromise3<string>, Symbol(p1, Decl(ipromise3.ts, 7, 3))
->IPromise3 : IPromise3<T>, Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
+>p1 : IPromise3<string>
+>IPromise3 : IPromise3<T>
 
 var p2: IPromise3<string> = p1.then(function (x) {
->p2 : IPromise3<string>, Symbol(p2, Decl(ipromise3.ts, 8, 3))
->IPromise3 : IPromise3<T>, Symbol(IPromise3, Decl(ipromise3.ts, 0, 0))
+>p2 : IPromise3<string>
+>IPromise3 : IPromise3<T>
 >p1.then(function (x) {    return x;}) : IPromise3<string>
->p1.then : { <U>(success?: (value: string) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: string) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: string) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; }, Symbol(IPromise3.then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
->p1 : IPromise3<string>, Symbol(p1, Decl(ipromise3.ts, 7, 3))
->then : { <U>(success?: (value: string) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: string) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: string) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; }, Symbol(IPromise3.then, Decl(ipromise3.ts, 0, 24), Decl(ipromise3.ts, 1, 139), Decl(ipromise3.ts, 2, 128), Decl(ipromise3.ts, 3, 128))
+>p1.then : { <U>(success?: (value: string) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: string) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: string) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; }
+>p1 : IPromise3<string>
+>then : { <U>(success?: (value: string) => IPromise3<U>, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: string) => IPromise3<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: string) => U, error?: (error: any) => IPromise3<U>, progress?: (progress: any) => void): IPromise3<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise3<U>; }
 >function (x) {    return x;} : (x: string) => string
->x : string, Symbol(x, Decl(ipromise3.ts, 8, 46))
+>x : string
 
     return x;
->x : string, Symbol(x, Decl(ipromise3.ts, 8, 46))
+>x : string
 
 });
 

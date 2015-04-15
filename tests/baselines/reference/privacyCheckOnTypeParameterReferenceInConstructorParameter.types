@@ -1,28 +1,28 @@
 === tests/cases/compiler/privacyCheckOnTypeParameterReferenceInConstructorParameter.ts ===
 export class A<T1>{
->A : A<T1>, Symbol(A, Decl(privacyCheckOnTypeParameterReferenceInConstructorParameter.ts, 0, 0))
->T1 : T1, Symbol(T1, Decl(privacyCheckOnTypeParameterReferenceInConstructorParameter.ts, 0, 15))
+>A : A<T1>
+>T1 : T1
 
     constructor(callback: (self: A<T1>) => void) {
->callback : (self: A<T1>) => void, Symbol(callback, Decl(privacyCheckOnTypeParameterReferenceInConstructorParameter.ts, 1, 16))
->self : A<T1>, Symbol(self, Decl(privacyCheckOnTypeParameterReferenceInConstructorParameter.ts, 1, 27))
->A : A<T1>, Symbol(A, Decl(privacyCheckOnTypeParameterReferenceInConstructorParameter.ts, 0, 0))
->T1 : T1, Symbol(T1, Decl(privacyCheckOnTypeParameterReferenceInConstructorParameter.ts, 0, 15))
+>callback : (self: A<T1>) => void
+>self : A<T1>
+>A : A<T1>
+>T1 : T1
 
         var child = new B(this);
->child : B<A<T1>>, Symbol(child, Decl(privacyCheckOnTypeParameterReferenceInConstructorParameter.ts, 2, 11))
+>child : B<A<T1>>
 >new B(this) : B<A<T1>>
->B : typeof B, Symbol(B, Decl(privacyCheckOnTypeParameterReferenceInConstructorParameter.ts, 4, 1))
->this : A<T1>, Symbol(A, Decl(privacyCheckOnTypeParameterReferenceInConstructorParameter.ts, 0, 0))
+>B : typeof B
+>this : A<T1>
     }
 }
 
 export class B<T2> {
->B : B<T2>, Symbol(B, Decl(privacyCheckOnTypeParameterReferenceInConstructorParameter.ts, 4, 1))
->T2 : T2, Symbol(T2, Decl(privacyCheckOnTypeParameterReferenceInConstructorParameter.ts, 6, 15))
+>B : B<T2>
+>T2 : T2
 
     constructor(parent: T2) { }
->parent : T2, Symbol(parent, Decl(privacyCheckOnTypeParameterReferenceInConstructorParameter.ts, 7, 16))
->T2 : T2, Symbol(T2, Decl(privacyCheckOnTypeParameterReferenceInConstructorParameter.ts, 6, 15))
+>parent : T2
+>T2 : T2
 }
 

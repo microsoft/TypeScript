@@ -1,4 +1,4 @@
 === tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration4.d.ts ===
 declare var v;
->v : any, Symbol(v, Decl(parserVariableDeclaration4.d.ts, 0, 11))
+>v : any
 

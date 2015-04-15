@@ -5,229 +5,229 @@
 ///<reference path='importDecl_require3.ts'/>
 ///<reference path='importDecl_require4.ts'/>
 import m4 = require("importDecl_require"); // Emit used
->m4 : typeof m4, Symbol(m4, Decl(importDecl_1.ts, 0, 0))
+>m4 : typeof m4
 
 export var x4 = m4.x;
->x4 : m4.d, Symbol(x4, Decl(importDecl_1.ts, 6, 10))
->m4.x : m4.d, Symbol(m4.x, Decl(importDecl_require.ts, 3, 10))
->m4 : typeof m4, Symbol(m4, Decl(importDecl_1.ts, 0, 0))
->x : m4.d, Symbol(m4.x, Decl(importDecl_require.ts, 3, 10))
+>x4 : m4.d
+>m4.x : m4.d
+>m4 : typeof m4
+>x : m4.d
 
 export var d4 = m4.d;
->d4 : typeof m4.d, Symbol(d4, Decl(importDecl_1.ts, 7, 10))
->m4.d : typeof m4.d, Symbol(m4.d, Decl(importDecl_require.ts, 0, 0))
->m4 : typeof m4, Symbol(m4, Decl(importDecl_1.ts, 0, 0))
->d : typeof m4.d, Symbol(m4.d, Decl(importDecl_require.ts, 0, 0))
+>d4 : typeof m4.d
+>m4.d : typeof m4.d
+>m4 : typeof m4
+>d : typeof m4.d
 
 export var f4 = m4.foo();
->f4 : m4.d, Symbol(f4, Decl(importDecl_1.ts, 8, 10))
+>f4 : m4.d
 >m4.foo() : m4.d
->m4.foo : () => m4.d, Symbol(m4.foo, Decl(importDecl_require.ts, 3, 16))
->m4 : typeof m4, Symbol(m4, Decl(importDecl_1.ts, 0, 0))
->foo : () => m4.d, Symbol(m4.foo, Decl(importDecl_require.ts, 3, 16))
+>m4.foo : () => m4.d
+>m4 : typeof m4
+>foo : () => m4.d
 
 export module m1 {
->m1 : typeof m1, Symbol(m1, Decl(importDecl_1.ts, 8, 25))
+>m1 : typeof m1
 
     export var x2 = m4.x;
->x2 : m4.d, Symbol(x2, Decl(importDecl_1.ts, 11, 14))
->m4.x : m4.d, Symbol(m4.x, Decl(importDecl_require.ts, 3, 10))
->m4 : typeof m4, Symbol(m4, Decl(importDecl_1.ts, 0, 0))
->x : m4.d, Symbol(m4.x, Decl(importDecl_require.ts, 3, 10))
+>x2 : m4.d
+>m4.x : m4.d
+>m4 : typeof m4
+>x : m4.d
 
     export var d2 = m4.d;
->d2 : typeof m4.d, Symbol(d2, Decl(importDecl_1.ts, 12, 14))
->m4.d : typeof m4.d, Symbol(m4.d, Decl(importDecl_require.ts, 0, 0))
->m4 : typeof m4, Symbol(m4, Decl(importDecl_1.ts, 0, 0))
->d : typeof m4.d, Symbol(m4.d, Decl(importDecl_require.ts, 0, 0))
+>d2 : typeof m4.d
+>m4.d : typeof m4.d
+>m4 : typeof m4
+>d : typeof m4.d
 
     export var f2 = m4.foo();
->f2 : m4.d, Symbol(f2, Decl(importDecl_1.ts, 13, 14))
+>f2 : m4.d
 >m4.foo() : m4.d
->m4.foo : () => m4.d, Symbol(m4.foo, Decl(importDecl_require.ts, 3, 16))
->m4 : typeof m4, Symbol(m4, Decl(importDecl_1.ts, 0, 0))
->foo : () => m4.d, Symbol(m4.foo, Decl(importDecl_require.ts, 3, 16))
+>m4.foo : () => m4.d
+>m4 : typeof m4
+>foo : () => m4.d
 
     var x3 = m4.x;
->x3 : m4.d, Symbol(x3, Decl(importDecl_1.ts, 15, 7))
->m4.x : m4.d, Symbol(m4.x, Decl(importDecl_require.ts, 3, 10))
->m4 : typeof m4, Symbol(m4, Decl(importDecl_1.ts, 0, 0))
->x : m4.d, Symbol(m4.x, Decl(importDecl_require.ts, 3, 10))
+>x3 : m4.d
+>m4.x : m4.d
+>m4 : typeof m4
+>x : m4.d
 
     var d3 = m4.d;
->d3 : typeof m4.d, Symbol(d3, Decl(importDecl_1.ts, 16, 7))
->m4.d : typeof m4.d, Symbol(m4.d, Decl(importDecl_require.ts, 0, 0))
->m4 : typeof m4, Symbol(m4, Decl(importDecl_1.ts, 0, 0))
->d : typeof m4.d, Symbol(m4.d, Decl(importDecl_require.ts, 0, 0))
+>d3 : typeof m4.d
+>m4.d : typeof m4.d
+>m4 : typeof m4
+>d : typeof m4.d
 
     var f3 = m4.foo();
->f3 : m4.d, Symbol(f3, Decl(importDecl_1.ts, 17, 7))
+>f3 : m4.d
 >m4.foo() : m4.d
->m4.foo : () => m4.d, Symbol(m4.foo, Decl(importDecl_require.ts, 3, 16))
->m4 : typeof m4, Symbol(m4, Decl(importDecl_1.ts, 0, 0))
->foo : () => m4.d, Symbol(m4.foo, Decl(importDecl_require.ts, 3, 16))
+>m4.foo : () => m4.d
+>m4 : typeof m4
+>foo : () => m4.d
 }
 
 //Emit global only usage
 import glo_m4 = require("importDecl_require1");
->glo_m4 : typeof glo_m4, Symbol(glo_m4, Decl(importDecl_1.ts, 18, 1))
+>glo_m4 : typeof glo_m4
 
 export var useGlo_m4_d4 = glo_m4.d;
->useGlo_m4_d4 : typeof glo_m4.d, Symbol(useGlo_m4_d4, Decl(importDecl_1.ts, 22, 10))
->glo_m4.d : typeof glo_m4.d, Symbol(glo_m4.d, Decl(importDecl_require1.ts, 0, 0))
->glo_m4 : typeof glo_m4, Symbol(glo_m4, Decl(importDecl_1.ts, 18, 1))
->d : typeof glo_m4.d, Symbol(glo_m4.d, Decl(importDecl_require1.ts, 0, 0))
+>useGlo_m4_d4 : typeof glo_m4.d
+>glo_m4.d : typeof glo_m4.d
+>glo_m4 : typeof glo_m4
+>d : typeof glo_m4.d
 
 export var useGlo_m4_f4 = glo_m4.foo();
->useGlo_m4_f4 : glo_m4.d, Symbol(useGlo_m4_f4, Decl(importDecl_1.ts, 23, 10))
+>useGlo_m4_f4 : glo_m4.d
 >glo_m4.foo() : glo_m4.d
->glo_m4.foo : () => glo_m4.d, Symbol(glo_m4.foo, Decl(importDecl_require1.ts, 3, 9))
->glo_m4 : typeof glo_m4, Symbol(glo_m4, Decl(importDecl_1.ts, 18, 1))
->foo : () => glo_m4.d, Symbol(glo_m4.foo, Decl(importDecl_require1.ts, 3, 9))
+>glo_m4.foo : () => glo_m4.d
+>glo_m4 : typeof glo_m4
+>foo : () => glo_m4.d
 
 //Emit even when used just in function type
 import fncOnly_m4 = require("importDecl_require2");
->fncOnly_m4 : typeof fncOnly_m4, Symbol(fncOnly_m4, Decl(importDecl_1.ts, 23, 39))
+>fncOnly_m4 : typeof fncOnly_m4
 
 export var useFncOnly_m4_f4 = fncOnly_m4.foo();
->useFncOnly_m4_f4 : fncOnly_m4.d, Symbol(useFncOnly_m4_f4, Decl(importDecl_1.ts, 27, 10))
+>useFncOnly_m4_f4 : fncOnly_m4.d
 >fncOnly_m4.foo() : fncOnly_m4.d
->fncOnly_m4.foo : () => fncOnly_m4.d, Symbol(fncOnly_m4.foo, Decl(importDecl_require2.ts, 3, 16))
->fncOnly_m4 : typeof fncOnly_m4, Symbol(fncOnly_m4, Decl(importDecl_1.ts, 23, 39))
->foo : () => fncOnly_m4.d, Symbol(fncOnly_m4.foo, Decl(importDecl_require2.ts, 3, 16))
+>fncOnly_m4.foo : () => fncOnly_m4.d
+>fncOnly_m4 : typeof fncOnly_m4
+>foo : () => fncOnly_m4.d
 
 // only used privately no need to emit
 import private_m4 = require("importDecl_require3");
->private_m4 : typeof private_m4, Symbol(private_m4, Decl(importDecl_1.ts, 27, 47))
+>private_m4 : typeof private_m4
 
 export module usePrivate_m4_m1 {
->usePrivate_m4_m1 : typeof usePrivate_m4_m1, Symbol(usePrivate_m4_m1, Decl(importDecl_1.ts, 30, 51))
+>usePrivate_m4_m1 : typeof usePrivate_m4_m1
 
     var x3 = private_m4.x;
->x3 : private_m4.d, Symbol(x3, Decl(importDecl_1.ts, 32, 7))
->private_m4.x : private_m4.d, Symbol(private_m4.x, Decl(importDecl_require3.ts, 3, 10))
->private_m4 : typeof private_m4, Symbol(private_m4, Decl(importDecl_1.ts, 27, 47))
->x : private_m4.d, Symbol(private_m4.x, Decl(importDecl_require3.ts, 3, 10))
+>x3 : private_m4.d
+>private_m4.x : private_m4.d
+>private_m4 : typeof private_m4
+>x : private_m4.d
 
     var d3 = private_m4.d;
->d3 : typeof private_m4.d, Symbol(d3, Decl(importDecl_1.ts, 33, 7))
->private_m4.d : typeof private_m4.d, Symbol(private_m4.d, Decl(importDecl_require3.ts, 0, 0))
->private_m4 : typeof private_m4, Symbol(private_m4, Decl(importDecl_1.ts, 27, 47))
->d : typeof private_m4.d, Symbol(private_m4.d, Decl(importDecl_require3.ts, 0, 0))
+>d3 : typeof private_m4.d
+>private_m4.d : typeof private_m4.d
+>private_m4 : typeof private_m4
+>d : typeof private_m4.d
 
     var f3 = private_m4.foo();
->f3 : private_m4.d, Symbol(f3, Decl(importDecl_1.ts, 34, 7))
+>f3 : private_m4.d
 >private_m4.foo() : private_m4.d
->private_m4.foo : () => private_m4.d, Symbol(private_m4.foo, Decl(importDecl_require3.ts, 3, 16))
->private_m4 : typeof private_m4, Symbol(private_m4, Decl(importDecl_1.ts, 27, 47))
->foo : () => private_m4.d, Symbol(private_m4.foo, Decl(importDecl_require3.ts, 3, 16))
+>private_m4.foo : () => private_m4.d
+>private_m4 : typeof private_m4
+>foo : () => private_m4.d
 }
 
 // Do not emit unused import
 import m5 = require("importDecl_require4");
->m5 : typeof m5, Symbol(m5, Decl(importDecl_1.ts, 35, 1))
+>m5 : typeof m5
 
 export var d = m5.foo2();
->d : m4.d, Symbol(d, Decl(importDecl_1.ts, 39, 10))
+>d : m4.d
 >m5.foo2() : m4.d
->m5.foo2 : () => m4.d, Symbol(m5.foo2, Decl(importDecl_require4.ts, 0, 42))
->m5 : typeof m5, Symbol(m5, Decl(importDecl_1.ts, 35, 1))
->foo2 : () => m4.d, Symbol(m5.foo2, Decl(importDecl_require4.ts, 0, 42))
+>m5.foo2 : () => m4.d
+>m5 : typeof m5
+>foo2 : () => m4.d
 
 // Do not emit multiple used import statements
 import multiImport_m4 = require("importDecl_require"); // Emit used
->multiImport_m4 : typeof m4, Symbol(multiImport_m4, Decl(importDecl_1.ts, 39, 25))
+>multiImport_m4 : typeof m4
 
 export var useMultiImport_m4_x4 = multiImport_m4.x;
->useMultiImport_m4_x4 : m4.d, Symbol(useMultiImport_m4_x4, Decl(importDecl_1.ts, 43, 10))
->multiImport_m4.x : m4.d, Symbol(m4.x, Decl(importDecl_require.ts, 3, 10))
->multiImport_m4 : typeof m4, Symbol(multiImport_m4, Decl(importDecl_1.ts, 39, 25))
->x : m4.d, Symbol(m4.x, Decl(importDecl_require.ts, 3, 10))
+>useMultiImport_m4_x4 : m4.d
+>multiImport_m4.x : m4.d
+>multiImport_m4 : typeof m4
+>x : m4.d
 
 export var useMultiImport_m4_d4 = multiImport_m4.d;
->useMultiImport_m4_d4 : typeof m4.d, Symbol(useMultiImport_m4_d4, Decl(importDecl_1.ts, 44, 10))
->multiImport_m4.d : typeof m4.d, Symbol(m4.d, Decl(importDecl_require.ts, 0, 0))
->multiImport_m4 : typeof m4, Symbol(multiImport_m4, Decl(importDecl_1.ts, 39, 25))
->d : typeof m4.d, Symbol(m4.d, Decl(importDecl_require.ts, 0, 0))
+>useMultiImport_m4_d4 : typeof m4.d
+>multiImport_m4.d : typeof m4.d
+>multiImport_m4 : typeof m4
+>d : typeof m4.d
 
 export var useMultiImport_m4_f4 = multiImport_m4.foo();
->useMultiImport_m4_f4 : m4.d, Symbol(useMultiImport_m4_f4, Decl(importDecl_1.ts, 45, 10))
+>useMultiImport_m4_f4 : m4.d
 >multiImport_m4.foo() : m4.d
->multiImport_m4.foo : () => m4.d, Symbol(m4.foo, Decl(importDecl_require.ts, 3, 16))
->multiImport_m4 : typeof m4, Symbol(multiImport_m4, Decl(importDecl_1.ts, 39, 25))
->foo : () => m4.d, Symbol(m4.foo, Decl(importDecl_require.ts, 3, 16))
+>multiImport_m4.foo : () => m4.d
+>multiImport_m4 : typeof m4
+>foo : () => m4.d
 
 === tests/cases/compiler/importDecl_require.ts ===
 export class d {
->d : d, Symbol(d, Decl(importDecl_require.ts, 0, 0))
+>d : d
 
     foo: string;
->foo : string, Symbol(foo, Decl(importDecl_require.ts, 0, 16))
+>foo : string
 }
 export var x: d;
->x : d, Symbol(x, Decl(importDecl_require.ts, 3, 10))
->d : d, Symbol(d, Decl(importDecl_require.ts, 0, 0))
+>x : d
+>d : d
 
 export function foo(): d { return null; }
->foo : () => d, Symbol(foo, Decl(importDecl_require.ts, 3, 16))
->d : d, Symbol(d, Decl(importDecl_require.ts, 0, 0))
+>foo : () => d
+>d : d
 >null : null
 
 === tests/cases/compiler/importDecl_require1.ts ===
 export class d {
->d : d, Symbol(d, Decl(importDecl_require1.ts, 0, 0))
+>d : d
 
     bar: string;
->bar : string, Symbol(bar, Decl(importDecl_require1.ts, 0, 16))
+>bar : string
 }
 var x: d;
->x : d, Symbol(x, Decl(importDecl_require1.ts, 3, 3))
->d : d, Symbol(d, Decl(importDecl_require1.ts, 0, 0))
+>x : d
+>d : d
 
 export function foo(): d { return null; }
->foo : () => d, Symbol(foo, Decl(importDecl_require1.ts, 3, 9))
->d : d, Symbol(d, Decl(importDecl_require1.ts, 0, 0))
+>foo : () => d
+>d : d
 >null : null
 
 === tests/cases/compiler/importDecl_require2.ts ===
 export class d {
->d : d, Symbol(d, Decl(importDecl_require2.ts, 0, 0))
+>d : d
 
     baz: string;
->baz : string, Symbol(baz, Decl(importDecl_require2.ts, 0, 16))
+>baz : string
 }
 export var x: d;
->x : d, Symbol(x, Decl(importDecl_require2.ts, 3, 10))
->d : d, Symbol(d, Decl(importDecl_require2.ts, 0, 0))
+>x : d
+>d : d
 
 export function foo(): d { return null; }
->foo : () => d, Symbol(foo, Decl(importDecl_require2.ts, 3, 16))
->d : d, Symbol(d, Decl(importDecl_require2.ts, 0, 0))
+>foo : () => d
+>d : d
 >null : null
 
 === tests/cases/compiler/importDecl_require3.ts ===
 export class d {
->d : d, Symbol(d, Decl(importDecl_require3.ts, 0, 0))
+>d : d
 
     bing: string;
->bing : string, Symbol(bing, Decl(importDecl_require3.ts, 0, 16))
+>bing : string
 }
 export var x: d;
->x : d, Symbol(x, Decl(importDecl_require3.ts, 3, 10))
->d : d, Symbol(d, Decl(importDecl_require3.ts, 0, 0))
+>x : d
+>d : d
 
 export function foo(): d { return null; }
->foo : () => d, Symbol(foo, Decl(importDecl_require3.ts, 3, 16))
->d : d, Symbol(d, Decl(importDecl_require3.ts, 0, 0))
+>foo : () => d
+>d : d
 >null : null
 
 === tests/cases/compiler/importDecl_require4.ts ===
 import m4 = require("importDecl_require");
->m4 : typeof m4, Symbol(m4, Decl(importDecl_require4.ts, 0, 0))
+>m4 : typeof m4
 
 export function foo2(): m4.d { return null; }
->foo2 : () => m4.d, Symbol(foo2, Decl(importDecl_require4.ts, 0, 42))
->m4 : any, Symbol(m4, Decl(importDecl_require4.ts, 0, 0))
->d : m4.d, Symbol(m4.d, Decl(importDecl_require.ts, 0, 0))
+>foo2 : () => m4.d
+>m4 : any
+>d : m4.d
 >null : null
 

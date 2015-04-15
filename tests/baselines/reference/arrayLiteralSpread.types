@@ -1,108 +1,108 @@
 === tests/cases/conformance/es6/spread/arrayLiteralSpread.ts ===
 function f0() {
->f0 : () => void, Symbol(f0, Decl(arrayLiteralSpread.ts, 0, 0))
+>f0 : () => void
 
     var a = [1, 2, 3];
->a : number[], Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+>a : number[]
 >[1, 2, 3] : number[]
 >1 : number
 >2 : number
 >3 : number
 
     var a1 = [...a];
->a1 : number[], Symbol(a1, Decl(arrayLiteralSpread.ts, 2, 7))
+>a1 : number[]
 >[...a] : number[]
 >...a : number
->a : number[], Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+>a : number[]
 
     var a2 = [1, ...a];
->a2 : number[], Symbol(a2, Decl(arrayLiteralSpread.ts, 3, 7))
+>a2 : number[]
 >[1, ...a] : number[]
 >1 : number
 >...a : number
->a : number[], Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+>a : number[]
 
     var a3 = [1, 2, ...a];
->a3 : number[], Symbol(a3, Decl(arrayLiteralSpread.ts, 4, 7))
+>a3 : number[]
 >[1, 2, ...a] : number[]
 >1 : number
 >2 : number
 >...a : number
->a : number[], Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+>a : number[]
 
     var a4 = [...a, 1];
->a4 : number[], Symbol(a4, Decl(arrayLiteralSpread.ts, 5, 7))
+>a4 : number[]
 >[...a, 1] : number[]
 >...a : number
->a : number[], Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+>a : number[]
 >1 : number
 
     var a5 = [...a, 1, 2];
->a5 : number[], Symbol(a5, Decl(arrayLiteralSpread.ts, 6, 7))
+>a5 : number[]
 >[...a, 1, 2] : number[]
 >...a : number
->a : number[], Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+>a : number[]
 >1 : number
 >2 : number
 
     var a6 = [1, 2, ...a, 1, 2];
->a6 : number[], Symbol(a6, Decl(arrayLiteralSpread.ts, 7, 7))
+>a6 : number[]
 >[1, 2, ...a, 1, 2] : number[]
 >1 : number
 >2 : number
 >...a : number
->a : number[], Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+>a : number[]
 >1 : number
 >2 : number
 
     var a7 = [1, ...a, 2, ...a];
->a7 : number[], Symbol(a7, Decl(arrayLiteralSpread.ts, 8, 7))
+>a7 : number[]
 >[1, ...a, 2, ...a] : number[]
 >1 : number
 >...a : number
->a : number[], Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+>a : number[]
 >2 : number
 >...a : number
->a : number[], Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+>a : number[]
 
     var a8 = [...a, ...a, ...a];
->a8 : number[], Symbol(a8, Decl(arrayLiteralSpread.ts, 9, 7))
+>a8 : number[]
 >[...a, ...a, ...a] : number[]
 >...a : number
->a : number[], Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+>a : number[]
 >...a : number
->a : number[], Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+>a : number[]
 >...a : number
->a : number[], Symbol(a, Decl(arrayLiteralSpread.ts, 1, 7))
+>a : number[]
 }
 
 function f1() {
->f1 : () => void, Symbol(f1, Decl(arrayLiteralSpread.ts, 10, 1))
+>f1 : () => void
 
     var a = [1, 2, 3];
->a : number[], Symbol(a, Decl(arrayLiteralSpread.ts, 13, 7))
+>a : number[]
 >[1, 2, 3] : number[]
 >1 : number
 >2 : number
 >3 : number
 
     var b = ["hello", ...a, true];
->b : (string | number | boolean)[], Symbol(b, Decl(arrayLiteralSpread.ts, 14, 7), Decl(arrayLiteralSpread.ts, 15, 7))
+>b : (string | number | boolean)[]
 >["hello", ...a, true] : (string | number | boolean)[]
 >"hello" : string
 >...a : number
->a : number[], Symbol(a, Decl(arrayLiteralSpread.ts, 13, 7))
+>a : number[]
 >true : boolean
 
     var b: (string | number | boolean)[];
->b : (string | number | boolean)[], Symbol(b, Decl(arrayLiteralSpread.ts, 14, 7), Decl(arrayLiteralSpread.ts, 15, 7))
+>b : (string | number | boolean)[]
 }
 
 function f2() {
->f2 : () => void, Symbol(f2, Decl(arrayLiteralSpread.ts, 16, 1))
+>f2 : () => void
 
     var a = [...[...[...[...[...[]]]]]];
->a : any[], Symbol(a, Decl(arrayLiteralSpread.ts, 19, 7))
+>a : any[]
 >[...[...[...[...[...[]]]]]] : undefined[]
 >...[...[...[...[...[]]]]] : undefined
 >[...[...[...[...[]]]]] : undefined[]
@@ -116,7 +116,7 @@ function f2() {
 >[] : undefined[]
 
     var b = [...[...[...[...[...[5]]]]]];
->b : number[], Symbol(b, Decl(arrayLiteralSpread.ts, 20, 7))
+>b : number[]
 >[...[...[...[...[...[5]]]]]] : number[]
 >...[...[...[...[...[5]]]]] : number
 >[...[...[...[...[5]]]]] : number[]

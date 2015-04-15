@@ -1,15 +1,15 @@
 === tests/cases/compiler/thisReferencedInFunctionInsideArrowFunction1.ts ===
 var foo = (dummy) => { };
->foo : (dummy: any) => void, Symbol(foo, Decl(thisReferencedInFunctionInsideArrowFunction1.ts, 0, 3))
+>foo : (dummy: any) => void
 >(dummy) => { } : (dummy: any) => void
->dummy : any, Symbol(dummy, Decl(thisReferencedInFunctionInsideArrowFunction1.ts, 0, 11))
+>dummy : any
 
 function test()
->test : () => void, Symbol(test, Decl(thisReferencedInFunctionInsideArrowFunction1.ts, 0, 25))
+>test : () => void
 {
     foo(() =>
 >foo(() =>        function () { return this; }    ) : void
->foo : (dummy: any) => void, Symbol(foo, Decl(thisReferencedInFunctionInsideArrowFunction1.ts, 0, 3))
+>foo : (dummy: any) => void
 >() =>        function () { return this; } : () => () => any
 
         function () { return this; }

@@ -1,10 +1,10 @@
 === tests/cases/compiler/staticAndMemberFunctions.ts ===
 class T {
->T : T, Symbol(T, Decl(staticAndMemberFunctions.ts, 0, 0))
+>T : T
 
     static x() { }
->x : () => void, Symbol(T.x, Decl(staticAndMemberFunctions.ts, 0, 9))
+>x : () => void
 
     public y() { }
->y : () => void, Symbol(y, Decl(staticAndMemberFunctions.ts, 1, 18))
+>y : () => void
 }

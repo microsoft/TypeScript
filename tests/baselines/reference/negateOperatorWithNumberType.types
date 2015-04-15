@@ -1,120 +1,120 @@
 === tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithNumberType.ts ===
 // - operator on number type
 var NUMBER: number;
->NUMBER : number, Symbol(NUMBER, Decl(negateOperatorWithNumberType.ts, 1, 3))
+>NUMBER : number
 
 var NUMBER1: number[] = [1, 2];
->NUMBER1 : number[], Symbol(NUMBER1, Decl(negateOperatorWithNumberType.ts, 2, 3))
+>NUMBER1 : number[]
 >[1, 2] : number[]
 >1 : number
 >2 : number
 
 function foo(): number { return 1; }
->foo : () => number, Symbol(foo, Decl(negateOperatorWithNumberType.ts, 2, 31))
+>foo : () => number
 >1 : number
 
 class A {
->A : A, Symbol(A, Decl(negateOperatorWithNumberType.ts, 4, 36))
+>A : A
 
     public a: number;
->a : number, Symbol(a, Decl(negateOperatorWithNumberType.ts, 6, 9))
+>a : number
 
     static foo() { return 1; }
->foo : () => number, Symbol(A.foo, Decl(negateOperatorWithNumberType.ts, 7, 21))
+>foo : () => number
 >1 : number
 }
 module M {
->M : typeof M, Symbol(M, Decl(negateOperatorWithNumberType.ts, 9, 1))
+>M : typeof M
 
     export var n: number;
->n : number, Symbol(n, Decl(negateOperatorWithNumberType.ts, 11, 14))
+>n : number
 }
 
 var objA = new A();
->objA : A, Symbol(objA, Decl(negateOperatorWithNumberType.ts, 14, 3))
+>objA : A
 >new A() : A
->A : typeof A, Symbol(A, Decl(negateOperatorWithNumberType.ts, 4, 36))
+>A : typeof A
 
 // number type var
 var ResultIsNumber1 = -NUMBER;
->ResultIsNumber1 : number, Symbol(ResultIsNumber1, Decl(negateOperatorWithNumberType.ts, 17, 3))
+>ResultIsNumber1 : number
 >-NUMBER : number
->NUMBER : number, Symbol(NUMBER, Decl(negateOperatorWithNumberType.ts, 1, 3))
+>NUMBER : number
 
 var ResultIsNumber2 = -NUMBER1;
->ResultIsNumber2 : number, Symbol(ResultIsNumber2, Decl(negateOperatorWithNumberType.ts, 18, 3))
+>ResultIsNumber2 : number
 >-NUMBER1 : number
->NUMBER1 : number[], Symbol(NUMBER1, Decl(negateOperatorWithNumberType.ts, 2, 3))
+>NUMBER1 : number[]
 
 // number type literal
 var ResultIsNumber3 = -1;
->ResultIsNumber3 : number, Symbol(ResultIsNumber3, Decl(negateOperatorWithNumberType.ts, 21, 3))
+>ResultIsNumber3 : number
 >-1 : number
 >1 : number
 
 var ResultIsNumber4 = -{ x: 1, y: 2};
->ResultIsNumber4 : number, Symbol(ResultIsNumber4, Decl(negateOperatorWithNumberType.ts, 22, 3))
+>ResultIsNumber4 : number
 >-{ x: 1, y: 2} : number
 >{ x: 1, y: 2} : { x: number; y: number; }
->x : number, Symbol(x, Decl(negateOperatorWithNumberType.ts, 22, 24))
+>x : number
 >1 : number
->y : number, Symbol(y, Decl(negateOperatorWithNumberType.ts, 22, 30))
+>y : number
 >2 : number
 
 var ResultIsNumber5 = -{ x: 1, y: (n: number) => { return n; } };
->ResultIsNumber5 : number, Symbol(ResultIsNumber5, Decl(negateOperatorWithNumberType.ts, 23, 3))
+>ResultIsNumber5 : number
 >-{ x: 1, y: (n: number) => { return n; } } : number
 >{ x: 1, y: (n: number) => { return n; } } : { x: number; y: (n: number) => number; }
->x : number, Symbol(x, Decl(negateOperatorWithNumberType.ts, 23, 24))
+>x : number
 >1 : number
->y : (n: number) => number, Symbol(y, Decl(negateOperatorWithNumberType.ts, 23, 30))
+>y : (n: number) => number
 >(n: number) => { return n; } : (n: number) => number
->n : number, Symbol(n, Decl(negateOperatorWithNumberType.ts, 23, 35))
->n : number, Symbol(n, Decl(negateOperatorWithNumberType.ts, 23, 35))
+>n : number
+>n : number
 
 // number type expressions
 var ResultIsNumber6 = -objA.a;
->ResultIsNumber6 : number, Symbol(ResultIsNumber6, Decl(negateOperatorWithNumberType.ts, 26, 3))
+>ResultIsNumber6 : number
 >-objA.a : number
->objA.a : number, Symbol(A.a, Decl(negateOperatorWithNumberType.ts, 6, 9))
->objA : A, Symbol(objA, Decl(negateOperatorWithNumberType.ts, 14, 3))
->a : number, Symbol(A.a, Decl(negateOperatorWithNumberType.ts, 6, 9))
+>objA.a : number
+>objA : A
+>a : number
 
 var ResultIsNumber7 = -M.n;
->ResultIsNumber7 : number, Symbol(ResultIsNumber7, Decl(negateOperatorWithNumberType.ts, 27, 3))
+>ResultIsNumber7 : number
 >-M.n : number
->M.n : number, Symbol(M.n, Decl(negateOperatorWithNumberType.ts, 11, 14))
->M : typeof M, Symbol(M, Decl(negateOperatorWithNumberType.ts, 9, 1))
->n : number, Symbol(M.n, Decl(negateOperatorWithNumberType.ts, 11, 14))
+>M.n : number
+>M : typeof M
+>n : number
 
 var ResultIsNumber8 = -NUMBER1[0];
->ResultIsNumber8 : number, Symbol(ResultIsNumber8, Decl(negateOperatorWithNumberType.ts, 28, 3))
+>ResultIsNumber8 : number
 >-NUMBER1[0] : number
 >NUMBER1[0] : number
->NUMBER1 : number[], Symbol(NUMBER1, Decl(negateOperatorWithNumberType.ts, 2, 3))
+>NUMBER1 : number[]
 >0 : number
 
 var ResultIsNumber9 = -foo();
->ResultIsNumber9 : number, Symbol(ResultIsNumber9, Decl(negateOperatorWithNumberType.ts, 29, 3))
+>ResultIsNumber9 : number
 >-foo() : number
 >foo() : number
->foo : () => number, Symbol(foo, Decl(negateOperatorWithNumberType.ts, 2, 31))
+>foo : () => number
 
 var ResultIsNumber10 = -A.foo();
->ResultIsNumber10 : number, Symbol(ResultIsNumber10, Decl(negateOperatorWithNumberType.ts, 30, 3))
+>ResultIsNumber10 : number
 >-A.foo() : number
 >A.foo() : number
->A.foo : () => number, Symbol(A.foo, Decl(negateOperatorWithNumberType.ts, 7, 21))
->A : typeof A, Symbol(A, Decl(negateOperatorWithNumberType.ts, 4, 36))
->foo : () => number, Symbol(A.foo, Decl(negateOperatorWithNumberType.ts, 7, 21))
+>A.foo : () => number
+>A : typeof A
+>foo : () => number
 
 var ResultIsNumber11 = -(NUMBER - NUMBER);
->ResultIsNumber11 : number, Symbol(ResultIsNumber11, Decl(negateOperatorWithNumberType.ts, 31, 3))
+>ResultIsNumber11 : number
 >-(NUMBER - NUMBER) : number
 >(NUMBER - NUMBER) : number
 >NUMBER - NUMBER : number
->NUMBER : number, Symbol(NUMBER, Decl(negateOperatorWithNumberType.ts, 1, 3))
->NUMBER : number, Symbol(NUMBER, Decl(negateOperatorWithNumberType.ts, 1, 3))
+>NUMBER : number
+>NUMBER : number
 
 // miss assignment operators
 -1;
@@ -123,36 +123,36 @@ var ResultIsNumber11 = -(NUMBER - NUMBER);
 
 -NUMBER;
 >-NUMBER : number
->NUMBER : number, Symbol(NUMBER, Decl(negateOperatorWithNumberType.ts, 1, 3))
+>NUMBER : number
 
 -NUMBER1;
 >-NUMBER1 : number
->NUMBER1 : number[], Symbol(NUMBER1, Decl(negateOperatorWithNumberType.ts, 2, 3))
+>NUMBER1 : number[]
 
 -foo();
 >-foo() : number
 >foo() : number
->foo : () => number, Symbol(foo, Decl(negateOperatorWithNumberType.ts, 2, 31))
+>foo : () => number
 
 -objA.a;
 >-objA.a : number
->objA.a : number, Symbol(A.a, Decl(negateOperatorWithNumberType.ts, 6, 9))
->objA : A, Symbol(objA, Decl(negateOperatorWithNumberType.ts, 14, 3))
->a : number, Symbol(A.a, Decl(negateOperatorWithNumberType.ts, 6, 9))
+>objA.a : number
+>objA : A
+>a : number
 
 -M.n;
 >-M.n : number
->M.n : number, Symbol(M.n, Decl(negateOperatorWithNumberType.ts, 11, 14))
->M : typeof M, Symbol(M, Decl(negateOperatorWithNumberType.ts, 9, 1))
->n : number, Symbol(M.n, Decl(negateOperatorWithNumberType.ts, 11, 14))
+>M.n : number
+>M : typeof M
+>n : number
 
 -objA.a, M.n;
 >-objA.a, M.n : number
 >-objA.a : number
->objA.a : number, Symbol(A.a, Decl(negateOperatorWithNumberType.ts, 6, 9))
->objA : A, Symbol(objA, Decl(negateOperatorWithNumberType.ts, 14, 3))
->a : number, Symbol(A.a, Decl(negateOperatorWithNumberType.ts, 6, 9))
->M.n : number, Symbol(M.n, Decl(negateOperatorWithNumberType.ts, 11, 14))
->M : typeof M, Symbol(M, Decl(negateOperatorWithNumberType.ts, 9, 1))
->n : number, Symbol(M.n, Decl(negateOperatorWithNumberType.ts, 11, 14))
+>objA.a : number
+>objA : A
+>a : number
+>M.n : number
+>M : typeof M
+>n : number
 

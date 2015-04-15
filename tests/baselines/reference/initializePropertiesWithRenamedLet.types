@@ -1,66 +1,66 @@
 === tests/cases/compiler/initializePropertiesWithRenamedLet.ts ===
 
 var x0;
->x0 : any, Symbol(x0, Decl(initializePropertiesWithRenamedLet.ts, 1, 3))
+>x0 : any
 
 if (true) {
 >true : boolean
 
     let x0;
->x0 : any, Symbol(x0, Decl(initializePropertiesWithRenamedLet.ts, 3, 7))
+>x0 : any
 
     var obj1 = { x0: x0 };
->obj1 : { x0: any; }, Symbol(obj1, Decl(initializePropertiesWithRenamedLet.ts, 4, 7))
+>obj1 : { x0: any; }
 >{ x0: x0 } : { x0: any; }
->x0 : any, Symbol(x0, Decl(initializePropertiesWithRenamedLet.ts, 4, 16))
->x0 : any, Symbol(x0, Decl(initializePropertiesWithRenamedLet.ts, 3, 7))
+>x0 : any
+>x0 : any
 
     var obj2 = { x0 };
->obj2 : { x0: any; }, Symbol(obj2, Decl(initializePropertiesWithRenamedLet.ts, 5, 7))
+>obj2 : { x0: any; }
 >{ x0 } : { x0: any; }
->x0 : any, Symbol(x0, Decl(initializePropertiesWithRenamedLet.ts, 5, 16))
+>x0 : any
 }
 
 var x, y, z;
->x : any, Symbol(x, Decl(initializePropertiesWithRenamedLet.ts, 8, 3))
->y : any, Symbol(y, Decl(initializePropertiesWithRenamedLet.ts, 8, 6))
->z : any, Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 8, 9))
+>x : any
+>y : any
+>z : any
 
 if (true) {
 >true : boolean
 
     let { x: x } = { x: 0 };
 >x : any
->x : number, Symbol(x, Decl(initializePropertiesWithRenamedLet.ts, 10, 9))
+>x : number
 >{ x: 0 } : { x: number; }
->x : number, Symbol(x, Decl(initializePropertiesWithRenamedLet.ts, 10, 20))
+>x : number
 >0 : number
 
     let { y } = { y: 0 };
->y : number, Symbol(y, Decl(initializePropertiesWithRenamedLet.ts, 11, 9))
+>y : number
 >{ y: 0 } : { y: number; }
->y : number, Symbol(y, Decl(initializePropertiesWithRenamedLet.ts, 11, 17))
+>y : number
 >0 : number
 
     let z;
->z : any, Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 12, 7))
+>z : any
 
     ({ z: z } = { z: 0 });
 >({ z: z } = { z: 0 }) : { z: number; }
 >{ z: z } = { z: 0 } : { z: number; }
 >{ z: z } : { z: any; }
->z : any, Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 13, 6))
->z : any, Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 12, 7))
+>z : any
+>z : any
 >{ z: 0 } : { z: number; }
->z : number, Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 13, 17))
+>z : number
 >0 : number
 
     ({ z } = { z: 0 });
 >({ z } = { z: 0 }) : { z: number; }
 >{ z } = { z: 0 } : { z: number; }
 >{ z } : { z: any; }
->z : any, Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 14, 6))
+>z : any
 >{ z: 0 } : { z: number; }
->z : number, Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 14, 14))
+>z : number
 >0 : number
 }

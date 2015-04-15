@@ -1,33 +1,33 @@
 === tests/cases/compiler/genericPrototypeProperty3.ts ===
 class BaseEvent {
->BaseEvent : BaseEvent, Symbol(BaseEvent, Decl(genericPrototypeProperty3.ts, 0, 0))
+>BaseEvent : BaseEvent
 
     target: {};
->target : {}, Symbol(target, Decl(genericPrototypeProperty3.ts, 0, 17))
+>target : {}
 }
 
 class MyEvent<T> extends BaseEvent { // T is instantiated to any in the prototype, which is assignable to {}
->MyEvent : MyEvent<T>, Symbol(MyEvent, Decl(genericPrototypeProperty3.ts, 2, 1))
->T : T, Symbol(T, Decl(genericPrototypeProperty3.ts, 4, 14))
->BaseEvent : BaseEvent, Symbol(BaseEvent, Decl(genericPrototypeProperty3.ts, 0, 0))
+>MyEvent : MyEvent<T>
+>T : T
+>BaseEvent : BaseEvent
 
     target: T;
->target : T, Symbol(target, Decl(genericPrototypeProperty3.ts, 4, 36))
->T : T, Symbol(T, Decl(genericPrototypeProperty3.ts, 4, 14))
+>target : T
+>T : T
 }
 class BaseEventWrapper {
->BaseEventWrapper : BaseEventWrapper, Symbol(BaseEventWrapper, Decl(genericPrototypeProperty3.ts, 6, 1))
+>BaseEventWrapper : BaseEventWrapper
 
     t: BaseEvent;
->t : BaseEvent, Symbol(t, Decl(genericPrototypeProperty3.ts, 7, 24))
->BaseEvent : BaseEvent, Symbol(BaseEvent, Decl(genericPrototypeProperty3.ts, 0, 0))
+>t : BaseEvent
+>BaseEvent : BaseEvent
 }
 
 class MyEventWrapper extends BaseEventWrapper {
->MyEventWrapper : MyEventWrapper, Symbol(MyEventWrapper, Decl(genericPrototypeProperty3.ts, 9, 1))
->BaseEventWrapper : BaseEventWrapper, Symbol(BaseEventWrapper, Decl(genericPrototypeProperty3.ts, 6, 1))
+>MyEventWrapper : MyEventWrapper
+>BaseEventWrapper : BaseEventWrapper
 
     t: MyEvent<any>;
->t : MyEvent<any>, Symbol(t, Decl(genericPrototypeProperty3.ts, 11, 47))
->MyEvent : MyEvent<T>, Symbol(MyEvent, Decl(genericPrototypeProperty3.ts, 2, 1))
+>t : MyEvent<any>
+>MyEvent : MyEvent<T>
 }

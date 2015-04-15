@@ -2,24 +2,24 @@
 // If e is a FunctionExpression or ArrowFunctionExpression with no type parameters and no parameter or return type annotations, and T is a function type with EXACTLY ONE non - generic call signature, then any inferences made for type parameters referenced by the parameters of T’s call signature are fixed(section 4.12.2) and e is processed with the contextual type T, as described in section 4.9.3.
 
 var f2: {
->f2 : <T, U>(x: T, y: U) => T, Symbol(f2, Decl(contextualTypingWithGenericSignature.ts, 2, 3))
+>f2 : <T, U>(x: T, y: U) => T
 
     <T, U>(x: T, y: U): T
->T : T, Symbol(T, Decl(contextualTypingWithGenericSignature.ts, 3, 5))
->U : U, Symbol(U, Decl(contextualTypingWithGenericSignature.ts, 3, 7))
->x : T, Symbol(x, Decl(contextualTypingWithGenericSignature.ts, 3, 11))
->T : T, Symbol(T, Decl(contextualTypingWithGenericSignature.ts, 3, 5))
->y : U, Symbol(y, Decl(contextualTypingWithGenericSignature.ts, 3, 16))
->U : U, Symbol(U, Decl(contextualTypingWithGenericSignature.ts, 3, 7))
->T : T, Symbol(T, Decl(contextualTypingWithGenericSignature.ts, 3, 5))
+>T : T
+>U : U
+>x : T
+>T : T
+>y : U
+>U : U
+>T : T
 
 };
 
 f2 = (x, y) => { return x }
 >f2 = (x, y) => { return x } : (x: any, y: any) => any
->f2 : <T, U>(x: T, y: U) => T, Symbol(f2, Decl(contextualTypingWithGenericSignature.ts, 2, 3))
+>f2 : <T, U>(x: T, y: U) => T
 >(x, y) => { return x } : (x: any, y: any) => any
->x : any, Symbol(x, Decl(contextualTypingWithGenericSignature.ts, 6, 6))
->y : any, Symbol(y, Decl(contextualTypingWithGenericSignature.ts, 6, 8))
->x : any, Symbol(x, Decl(contextualTypingWithGenericSignature.ts, 6, 6))
+>x : any
+>y : any
+>x : any
 

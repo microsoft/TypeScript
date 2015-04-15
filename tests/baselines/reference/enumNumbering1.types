@@ -1,31 +1,31 @@
 === tests/cases/compiler/enumNumbering1.ts ===
 enum Test {
->Test : Test, Symbol(Test, Decl(enumNumbering1.ts, 0, 0))
+>Test : Test
 
     A,
->A : Test, Symbol(Test.A, Decl(enumNumbering1.ts, 0, 11))
+>A : Test
 
     B,
->B : Test, Symbol(Test.B, Decl(enumNumbering1.ts, 1, 6))
+>B : Test
 
     C = Math.floor(Math.random() * 1000),
->C : Test, Symbol(Test.C, Decl(enumNumbering1.ts, 2, 6))
+>C : Test
 >Math.floor(Math.random() * 1000) : number
->Math.floor : (x: number) => number, Symbol(Math.floor, Decl(lib.d.ts, 582, 27))
->Math : Math, Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11))
->floor : (x: number) => number, Symbol(Math.floor, Decl(lib.d.ts, 582, 27))
+>Math.floor : (x: number) => number
+>Math : Math
+>floor : (x: number) => number
 >Math.random() * 1000 : number
 >Math.random() : number
->Math.random : () => number, Symbol(Math.random, Decl(lib.d.ts, 608, 38))
->Math : Math, Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11))
->random : () => number, Symbol(Math.random, Decl(lib.d.ts, 608, 38))
+>Math.random : () => number
+>Math : Math
+>random : () => number
 >1000 : number
 
     D = 10,
->D : Test, Symbol(Test.D, Decl(enumNumbering1.ts, 3, 41))
+>D : Test
 >10 : number
 
     E // Error but shouldn't be
->E : Test, Symbol(Test.E, Decl(enumNumbering1.ts, 4, 11))
+>E : Test
 }
 

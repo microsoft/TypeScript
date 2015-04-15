@@ -1,16 +1,16 @@
 === tests/cases/conformance/ambient/ambientInsideNonAmbientExternalModule.ts ===
 export declare var x;
->x : any, Symbol(x, Decl(ambientInsideNonAmbientExternalModule.ts, 0, 18))
+>x : any
 
 export declare function f();
->f : () => any, Symbol(f, Decl(ambientInsideNonAmbientExternalModule.ts, 0, 21))
+>f : () => any
 
 export declare class C { }
->C : C, Symbol(C, Decl(ambientInsideNonAmbientExternalModule.ts, 1, 28))
+>C : C
 
 export declare enum E { }
->E : E, Symbol(E, Decl(ambientInsideNonAmbientExternalModule.ts, 2, 26))
+>E : E
 
 export declare module M { }
->M : any, Symbol(M, Decl(ambientInsideNonAmbientExternalModule.ts, 3, 25))
+>M : any
 

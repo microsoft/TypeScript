@@ -1,10 +1,10 @@
 === tests/cases/compiler/switchFallThroughs.ts ===
 function R1(index: number) {
->R1 : (index: number) => string, Symbol(R1, Decl(switchFallThroughs.ts, 0, 0))
->index : number, Symbol(index, Decl(switchFallThroughs.ts, 0, 12))
+>R1 : (index: number) => string
+>index : number
 
     switch (index) {
->index : number, Symbol(index, Decl(switchFallThroughs.ts, 0, 12))
+>index : number
 
         case 0:
 >0 : number
@@ -16,11 +16,11 @@ function R1(index: number) {
 >2 : number
 
             var a = 'a';
->a : string, Symbol(a, Decl(switchFallThroughs.ts, 5, 15))
+>a : string
 >'a' : string
 
             return a;
->a : string, Symbol(a, Decl(switchFallThroughs.ts, 5, 15))
+>a : string
 
         case 3:
 >3 : number

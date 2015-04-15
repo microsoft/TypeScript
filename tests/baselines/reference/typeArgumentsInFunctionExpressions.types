@@ -1,36 +1,36 @@
 === tests/cases/compiler/typeArgumentsInFunctionExpressions.ts ===
 var obj = function f<T>(a: T) { // should not error
->obj : <T>(a: T) => T, Symbol(obj, Decl(typeArgumentsInFunctionExpressions.ts, 0, 3))
+>obj : <T>(a: T) => T
 >function f<T>(a: T) { // should not error    var x: T;    return a;} : <T>(a: T) => T
->f : <T>(a: T) => T, Symbol(f, Decl(typeArgumentsInFunctionExpressions.ts, 0, 9))
->T : T, Symbol(T, Decl(typeArgumentsInFunctionExpressions.ts, 0, 21))
->a : T, Symbol(a, Decl(typeArgumentsInFunctionExpressions.ts, 0, 24))
->T : T, Symbol(T, Decl(typeArgumentsInFunctionExpressions.ts, 0, 21))
+>f : <T>(a: T) => T
+>T : T
+>a : T
+>T : T
 
     var x: T;
->x : T, Symbol(x, Decl(typeArgumentsInFunctionExpressions.ts, 1, 7))
->T : T, Symbol(T, Decl(typeArgumentsInFunctionExpressions.ts, 0, 21))
+>x : T
+>T : T
 
     return a;
->a : T, Symbol(a, Decl(typeArgumentsInFunctionExpressions.ts, 0, 24))
+>a : T
 
 };
  
 var obj2 = function f<T>(a: T): T { // should not error
->obj2 : <T>(a: T) => T, Symbol(obj2, Decl(typeArgumentsInFunctionExpressions.ts, 5, 3))
+>obj2 : <T>(a: T) => T
 >function f<T>(a: T): T { // should not error    var x: T;    return a;} : <T>(a: T) => T
->f : <T>(a: T) => T, Symbol(f, Decl(typeArgumentsInFunctionExpressions.ts, 5, 10))
->T : T, Symbol(T, Decl(typeArgumentsInFunctionExpressions.ts, 5, 22))
->a : T, Symbol(a, Decl(typeArgumentsInFunctionExpressions.ts, 5, 25))
->T : T, Symbol(T, Decl(typeArgumentsInFunctionExpressions.ts, 5, 22))
->T : T, Symbol(T, Decl(typeArgumentsInFunctionExpressions.ts, 5, 22))
+>f : <T>(a: T) => T
+>T : T
+>a : T
+>T : T
+>T : T
 
     var x: T;
->x : T, Symbol(x, Decl(typeArgumentsInFunctionExpressions.ts, 6, 7))
->T : T, Symbol(T, Decl(typeArgumentsInFunctionExpressions.ts, 5, 22))
+>x : T
+>T : T
 
     return a;
->a : T, Symbol(a, Decl(typeArgumentsInFunctionExpressions.ts, 5, 25))
+>a : T
 
 };
 

@@ -1,0 +1,13 @@
+=== tests/cases/compiler/prefixIncrementAsOperandOfPlusExpression.ts ===
+var x = 1;
+>x : Symbol(x, Decl(prefixIncrementAsOperandOfPlusExpression.ts, 0, 3))
+
+var y = 1;
+>y : Symbol(y, Decl(prefixIncrementAsOperandOfPlusExpression.ts, 1, 3))
+
++ ++x;
+>x : Symbol(x, Decl(prefixIncrementAsOperandOfPlusExpression.ts, 0, 3))
+
++ ++y;
+>y : Symbol(y, Decl(prefixIncrementAsOperandOfPlusExpression.ts, 1, 3))
+

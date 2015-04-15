@@ -1,11 +1,11 @@
 === tests/cases/compiler/badOverloadError.ts ===
 function method() {
->method : () => void, Symbol(method, Decl(badOverloadError.ts, 0, 0))
+>method : () => void
 
     var dictionary = <{ [index: string]: string; }>{};
->dictionary : { [index: string]: string; }, Symbol(dictionary, Decl(badOverloadError.ts, 1, 7))
+>dictionary : { [index: string]: string; }
 ><{ [index: string]: string; }>{} : { [index: string]: string; }
->index : string, Symbol(index, Decl(badOverloadError.ts, 1, 25))
+>index : string
 >{} : { [x: string]: undefined; }
 }
 

@@ -1,70 +1,70 @@
 === tests/cases/compiler/typeParameterCompatibilityAccrossDeclarations.ts ===
 var a = {
->a : { x: <T>(y: T) => T; }, Symbol(a, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 0, 3))
+>a : { x: <T>(y: T) => T; }
 >{   x: function <T>(y: T): T { return null; }} : { x: <T>(y: T) => T; }
 
    x: function <T>(y: T): T { return null; }
->x : <T>(y: T) => T, Symbol(x, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 0, 9))
+>x : <T>(y: T) => T
 >function <T>(y: T): T { return null; } : <T>(y: T) => T
->T : T, Symbol(T, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 1, 16))
->y : T, Symbol(y, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 1, 19))
->T : T, Symbol(T, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 1, 16))
->T : T, Symbol(T, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 1, 16))
+>T : T
+>y : T
+>T : T
+>T : T
 >null : null
 }
 var a2 = {
->a2 : { x: (y: any) => any; }, Symbol(a2, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 3, 3))
+>a2 : { x: (y: any) => any; }
 >{   x: function (y: any): any { return null; }} : { x: (y: any) => any; }
 
    x: function (y: any): any { return null; }
->x : (y: any) => any, Symbol(x, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 3, 10))
+>x : (y: any) => any
 >function (y: any): any { return null; } : (y: any) => any
->y : any, Symbol(y, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 4, 16))
+>y : any
 >null : null
 }
 export interface I {
->I : I, Symbol(I, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 5, 1))
+>I : I
 
    x<T>(y: T): T;
->x : <T>(y: T) => T, Symbol(x, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 6, 20))
->T : T, Symbol(T, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 7, 5))
->y : T, Symbol(y, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 7, 8))
->T : T, Symbol(T, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 7, 5))
->T : T, Symbol(T, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 7, 5))
+>x : <T>(y: T) => T
+>T : T
+>y : T
+>T : T
+>T : T
 }
 export interface I2 {
->I2 : I2, Symbol(I2, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 8, 1))
+>I2 : I2
 
    x(y: any): any;
->x : (y: any) => any, Symbol(x, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 9, 21))
->y : any, Symbol(y, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 10, 5))
+>x : (y: any) => any
+>y : any
 }
  
 var i: I;
->i : I, Symbol(i, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 13, 3))
->I : I, Symbol(I, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 5, 1))
+>i : I
+>I : I
 
 var i2: I2;
->i2 : I2, Symbol(i2, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 14, 3))
->I2 : I2, Symbol(I2, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 8, 1))
+>i2 : I2
+>I2 : I2
  
 a = i; // error
 >a = i : I
->a : { x: <T>(y: T) => T; }, Symbol(a, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 0, 3))
->i : I, Symbol(i, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 13, 3))
+>a : { x: <T>(y: T) => T; }
+>i : I
 
 i = a; // error
 >i = a : { x: <T>(y: T) => T; }
->i : I, Symbol(i, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 13, 3))
->a : { x: <T>(y: T) => T; }, Symbol(a, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 0, 3))
+>i : I
+>a : { x: <T>(y: T) => T; }
  
 a2 = i2; // no error
 >a2 = i2 : I2
->a2 : { x: (y: any) => any; }, Symbol(a2, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 3, 3))
->i2 : I2, Symbol(i2, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 14, 3))
+>a2 : { x: (y: any) => any; }
+>i2 : I2
 
 i2 = a2; // no error
 >i2 = a2 : { x: (y: any) => any; }
->i2 : I2, Symbol(i2, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 14, 3))
->a2 : { x: (y: any) => any; }, Symbol(a2, Decl(typeParameterCompatibilityAccrossDeclarations.ts, 3, 3))
+>i2 : I2
+>a2 : { x: (y: any) => any; }
 

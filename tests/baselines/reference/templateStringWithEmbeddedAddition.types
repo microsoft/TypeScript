@@ -1,6 +1,6 @@
 === tests/cases/conformance/es6/templates/templateStringWithEmbeddedAddition.ts ===
 var x = `abc${ 10 + 10 }def`;
->x : string, Symbol(x, Decl(templateStringWithEmbeddedAddition.ts, 0, 3))
+>x : string
 >`abc${ 10 + 10 }def` : string
 >10 + 10 : number
 >10 : number

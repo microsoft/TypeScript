@@ -3,241 +3,241 @@
 // All the below should not be errors
 
 function foo(x: 'a');
->foo : { (x: 'a'): any; (x: string): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 0, 0), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 3, 21), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 4, 24))
->x : 'a', Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 3, 13))
+>foo : { (x: 'a'): any; (x: string): any; }
+>x : 'a'
 
 function foo(x: string);
->foo : { (x: 'a'): any; (x: string): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 0, 0), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 3, 21), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 4, 24))
->x : string, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 4, 13))
+>foo : { (x: 'a'): any; (x: string): any; }
+>x : string
 
 function foo(x: any) { }
->foo : { (x: 'a'): any; (x: string): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 0, 0), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 3, 21), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 4, 24))
->x : any, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 5, 13))
+>foo : { (x: 'a'): any; (x: string): any; }
+>x : any
 
 class C {
->C : C, Symbol(C, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 5, 24))
+>C : C
 
     foo(x: 'a');
->foo : { (x: 'a'): any; (x: string): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 7, 9), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 8, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 9, 19))
->x : 'a', Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 8, 8))
+>foo : { (x: 'a'): any; (x: string): any; }
+>x : 'a'
 
     foo(x: string);
->foo : { (x: 'a'): any; (x: string): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 7, 9), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 8, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 9, 19))
->x : string, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 9, 8))
+>foo : { (x: 'a'): any; (x: string): any; }
+>x : string
 
     foo(x: any) { }
->foo : { (x: 'a'): any; (x: string): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 7, 9), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 8, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 9, 19))
->x : any, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 10, 8))
+>foo : { (x: 'a'): any; (x: string): any; }
+>x : any
 }
 
 class C2<T> {
->C2 : C2<T>, Symbol(C2, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 11, 1))
->T : T, Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 13, 9))
+>C2 : C2<T>
+>T : T
 
     foo(x: 'a');
->foo : { (x: 'a'): any; (x: string): any; (x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 13, 13), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 14, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 15, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 16, 14))
->x : 'a', Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 14, 8))
+>foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
+>x : 'a'
 
     foo(x: string);
->foo : { (x: 'a'): any; (x: string): any; (x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 13, 13), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 14, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 15, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 16, 14))
->x : string, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 15, 8))
+>foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
+>x : string
 
     foo(x: T);
->foo : { (x: 'a'): any; (x: string): any; (x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 13, 13), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 14, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 15, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 16, 14))
->x : T, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 16, 8))
->T : T, Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 13, 9))
+>foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
+>x : T
+>T : T
 
     foo(x: any) { }
->foo : { (x: 'a'): any; (x: string): any; (x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 13, 13), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 14, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 15, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 16, 14))
->x : any, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 17, 8))
+>foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
+>x : any
 }
 
 class C3<T extends String> {
->C3 : C3<T>, Symbol(C3, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 18, 1))
->T : T, Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 20, 9))
->String : String, Symbol(String, Decl(lib.d.ts, 275, 1), Decl(lib.d.ts, 443, 11))
+>C3 : C3<T>
+>T : T
+>String : String
 
     foo(x: 'a');
->foo : { (x: 'a'): any; (x: string): any; (x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 20, 28), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 21, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 22, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 23, 14))
->x : 'a', Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 21, 8))
+>foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
+>x : 'a'
 
     foo(x: string);
->foo : { (x: 'a'): any; (x: string): any; (x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 20, 28), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 21, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 22, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 23, 14))
->x : string, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 22, 8))
+>foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
+>x : string
 
     foo(x: T);
->foo : { (x: 'a'): any; (x: string): any; (x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 20, 28), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 21, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 22, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 23, 14))
->x : T, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 23, 8))
->T : T, Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 20, 9))
+>foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
+>x : T
+>T : T
 
     foo(x: any) { }
->foo : { (x: 'a'): any; (x: string): any; (x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 20, 28), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 21, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 22, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 23, 14))
->x : any, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 24, 8))
+>foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
+>x : any
 }
 
 interface I {
->I : I, Symbol(I, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 25, 1))
+>I : I
 
     (x: 'a');
->x : 'a', Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 28, 5))
+>x : 'a'
 
     (x: number);
->x : number, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 29, 5))
+>x : number
 
     (x: string);
->x : string, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 30, 5))
+>x : string
 
     foo(x: 'a');
->foo : { (x: 'a'): any; (x: string): any; (x: number): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 30, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 31, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 32, 19))
->x : 'a', Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 31, 8))
+>foo : { (x: 'a'): any; (x: string): any; (x: number): any; }
+>x : 'a'
 
     foo(x: string);
->foo : { (x: 'a'): any; (x: string): any; (x: number): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 30, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 31, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 32, 19))
->x : string, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 32, 8))
+>foo : { (x: 'a'): any; (x: string): any; (x: number): any; }
+>x : string
 
     foo(x: number);
->foo : { (x: 'a'): any; (x: string): any; (x: number): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 30, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 31, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 32, 19))
->x : number, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 33, 8))
+>foo : { (x: 'a'): any; (x: string): any; (x: number): any; }
+>x : number
 }
 
 interface I2<T> {
->I2 : I2<T>, Symbol(I2, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 34, 1))
->T : T, Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 36, 13))
+>I2 : I2<T>
+>T : T
 
     (x: 'a');
->x : 'a', Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 37, 5))
+>x : 'a'
 
     (x: T);
->x : T, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 38, 5))
->T : T, Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 36, 13))
+>x : T
+>T : T
 
     (x: string);
->x : string, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 39, 5))
+>x : string
 
     foo(x: 'a');
->foo : { (x: 'a'): any; (x: string): any; (x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 39, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 40, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 41, 19))
->x : 'a', Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 40, 8))
+>foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
+>x : 'a'
 
     foo(x: string);
->foo : { (x: 'a'): any; (x: string): any; (x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 39, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 40, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 41, 19))
->x : string, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 41, 8))
+>foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
+>x : string
 
     foo(x: T);
->foo : { (x: 'a'): any; (x: string): any; (x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 39, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 40, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 41, 19))
->x : T, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 42, 8))
->T : T, Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 36, 13))
+>foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
+>x : T
+>T : T
 }
 
 interface I3<T extends String> {
->I3 : I3<T>, Symbol(I3, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 43, 1))
->T : T, Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 45, 13))
->String : String, Symbol(String, Decl(lib.d.ts, 275, 1), Decl(lib.d.ts, 443, 11))
+>I3 : I3<T>
+>T : T
+>String : String
 
     (x: 'a');
->x : 'a', Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 46, 5))
+>x : 'a'
 
     (x: string);
->x : string, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 47, 5))
+>x : string
 
     (x: T);
->x : T, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 48, 5))
->T : T, Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 45, 13))
+>x : T
+>T : T
 
     foo(x: 'a');
->foo : { (x: 'a'): any; (x: string): any; (x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 48, 11), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 49, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 50, 19))
->x : 'a', Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 49, 8))
+>foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
+>x : 'a'
 
     foo(x: string);
->foo : { (x: 'a'): any; (x: string): any; (x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 48, 11), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 49, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 50, 19))
->x : string, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 50, 8))
+>foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
+>x : string
 
     foo(x: T);
->foo : { (x: 'a'): any; (x: string): any; (x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 48, 11), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 49, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 50, 19))
->x : T, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 51, 8))
->T : T, Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 45, 13))
+>foo : { (x: 'a'): any; (x: string): any; (x: T): any; }
+>x : T
+>T : T
 }
 
 var a: {
->a : { (x: string): any; (x: 'a'): any; (x: number): any; foo(x: string): any; foo(x: 'a'): any; foo(x: number): any; }, Symbol(a, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 54, 3))
+>a : { (x: string): any; (x: 'a'): any; (x: number): any; foo(x: string): any; foo(x: 'a'): any; foo(x: number): any; }
 
     (x: string);
->x : string, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 55, 5))
+>x : string
 
     (x: 'a');
->x : 'a', Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 56, 5))
+>x : 'a'
 
     (x: number);
->x : number, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 57, 5))
+>x : number
 
     foo(x: string);
->foo : { (x: string): any; (x: 'a'): any; (x: number): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 57, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 58, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 59, 16))
->x : string, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 58, 8))
+>foo : { (x: string): any; (x: 'a'): any; (x: number): any; }
+>x : string
 
     foo(x: 'a');
->foo : { (x: string): any; (x: 'a'): any; (x: number): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 57, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 58, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 59, 16))
->x : 'a', Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 59, 8))
+>foo : { (x: string): any; (x: 'a'): any; (x: number): any; }
+>x : 'a'
 
     foo(x: number);
->foo : { (x: string): any; (x: 'a'): any; (x: number): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 57, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 58, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 59, 16))
->x : number, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 60, 8))
+>foo : { (x: string): any; (x: 'a'): any; (x: number): any; }
+>x : number
 }
 
 var a2: {
->a2 : { (x: 'a'): any; (x: string): any; <T>(x: T): any; foo(x: string): any; foo(x: 'a'): any; foo<T>(x: T): any; }, Symbol(a2, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 63, 3))
+>a2 : { (x: 'a'): any; (x: string): any; <T>(x: T): any; foo(x: string): any; foo(x: 'a'): any; foo<T>(x: T): any; }
 
     (x: 'a');
->x : 'a', Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 64, 5))
+>x : 'a'
 
     (x: string);
->x : string, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 65, 5))
+>x : string
 
     <T>(x: T);
->T : T, Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 66, 5))
->x : T, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 66, 8))
->T : T, Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 66, 5))
+>T : T
+>x : T
+>T : T
 
     foo(x: string);
->foo : { (x: string): any; (x: 'a'): any; <T>(x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 66, 14), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 67, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 68, 16))
->x : string, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 67, 8))
+>foo : { (x: string): any; (x: 'a'): any; <T>(x: T): any; }
+>x : string
 
     foo(x: 'a');
->foo : { (x: string): any; (x: 'a'): any; <T>(x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 66, 14), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 67, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 68, 16))
->x : 'a', Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 68, 8))
+>foo : { (x: string): any; (x: 'a'): any; <T>(x: T): any; }
+>x : 'a'
 
     foo<T>(x: T);
->foo : { (x: string): any; (x: 'a'): any; <T>(x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 66, 14), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 67, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 68, 16))
->T : T, Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 69, 8))
->x : T, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 69, 11))
->T : T, Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 69, 8))
+>foo : { (x: string): any; (x: 'a'): any; <T>(x: T): any; }
+>T : T
+>x : T
+>T : T
 }
 
 var a3: {
->a3 : { (x: 'a'): any; <T>(x: T): any; (x: string): any; foo(x: string): any; foo(x: 'a'): any; foo<T extends String>(x: T): any; }, Symbol(a3, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 72, 3))
+>a3 : { (x: 'a'): any; <T>(x: T): any; (x: string): any; foo(x: string): any; foo(x: 'a'): any; foo<T extends String>(x: T): any; }
 
     (x: 'a');
->x : 'a', Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 73, 5))
+>x : 'a'
 
     <T>(x: T);
->T : T, Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 74, 5))
->x : T, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 74, 8))
->T : T, Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 74, 5))
+>T : T
+>x : T
+>T : T
 
     (x: string);
->x : string, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 75, 5))
+>x : string
 
     foo(x: string);
->foo : { (x: string): any; (x: 'a'): any; <T extends String>(x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 75, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 76, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 77, 16))
->x : string, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 76, 8))
+>foo : { (x: string): any; (x: 'a'): any; <T extends String>(x: T): any; }
+>x : string
 
     foo(x: 'a');
->foo : { (x: string): any; (x: 'a'): any; <T extends String>(x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 75, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 76, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 77, 16))
->x : 'a', Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 77, 8))
+>foo : { (x: string): any; (x: 'a'): any; <T extends String>(x: T): any; }
+>x : 'a'
 
     foo<T extends String>(x: T);
->foo : { (x: string): any; (x: 'a'): any; <T extends String>(x: T): any; }, Symbol(foo, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 75, 16), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 76, 19), Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 77, 16))
->T : T, Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 78, 8))
->String : String, Symbol(String, Decl(lib.d.ts, 275, 1), Decl(lib.d.ts, 443, 11))
->x : T, Symbol(x, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 78, 26))
->T : T, Symbol(T, Decl(specializedSignatureIsSubtypeOfNonSpecializedSignature.ts, 78, 8))
+>foo : { (x: string): any; (x: 'a'): any; <T extends String>(x: T): any; }
+>T : T
+>String : String
+>x : T
+>T : T
 }
 

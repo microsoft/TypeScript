@@ -1,46 +1,46 @@
 === tests/cases/compiler/nestedRecursiveLambda.ts ===
 function f(a:any) {
->f : (a: any) => void, Symbol(f, Decl(nestedRecursiveLambda.ts, 0, 0))
->a : any, Symbol(a, Decl(nestedRecursiveLambda.ts, 0, 11))
+>f : (a: any) => void
+>a : any
 
 void (r =>(r => r));
 >void (r =>(r => r)) : undefined
 >(r =>(r => r)) : (r: any) => (r: any) => any
 >r =>(r => r) : (r: any) => (r: any) => any
->r : any, Symbol(r, Decl(nestedRecursiveLambda.ts, 1, 6))
+>r : any
 >(r => r) : (r: any) => any
 >r => r : (r: any) => any
->r : any, Symbol(r, Decl(nestedRecursiveLambda.ts, 1, 11))
->r : any, Symbol(r, Decl(nestedRecursiveLambda.ts, 1, 11))
+>r : any
+>r : any
 }
 f((r =>(r => r)));
 >f((r =>(r => r))) : void
->f : (a: any) => void, Symbol(f, Decl(nestedRecursiveLambda.ts, 0, 0))
+>f : (a: any) => void
 >(r =>(r => r)) : (r: any) => (r: any) => any
 >r =>(r => r) : (r: any) => (r: any) => any
->r : any, Symbol(r, Decl(nestedRecursiveLambda.ts, 3, 3))
+>r : any
 >(r => r) : (r: any) => any
 >r => r : (r: any) => any
->r : any, Symbol(r, Decl(nestedRecursiveLambda.ts, 3, 8))
->r : any, Symbol(r, Decl(nestedRecursiveLambda.ts, 3, 8))
+>r : any
+>r : any
 
 void(r =>(r => r));
 >void(r =>(r => r)) : undefined
 >(r =>(r => r)) : (r: any) => (r: any) => any
 >r =>(r => r) : (r: any) => (r: any) => any
->r : any, Symbol(r, Decl(nestedRecursiveLambda.ts, 4, 5))
+>r : any
 >(r => r) : (r: any) => any
 >r => r : (r: any) => any
->r : any, Symbol(r, Decl(nestedRecursiveLambda.ts, 4, 10))
->r : any, Symbol(r, Decl(nestedRecursiveLambda.ts, 4, 10))
+>r : any
+>r : any
 
 [(r =>(r => r))]
 >[(r =>(r => r))] : ((r: any) => (r: any) => any)[]
 >(r =>(r => r)) : (r: any) => (r: any) => any
 >r =>(r => r) : (r: any) => (r: any) => any
->r : any, Symbol(r, Decl(nestedRecursiveLambda.ts, 5, 2))
+>r : any
 >(r => r) : (r: any) => any
 >r => r : (r: any) => any
->r : any, Symbol(r, Decl(nestedRecursiveLambda.ts, 5, 7))
->r : any, Symbol(r, Decl(nestedRecursiveLambda.ts, 5, 7))
+>r : any
+>r : any
 
