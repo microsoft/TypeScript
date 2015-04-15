@@ -277,6 +277,7 @@ module ts {
         JSDocUnknownType,
         JSDocArrayType,
         JSDocUnionType,
+        JSDocTupleType,
         JSDocNullableType,
         JSDocNonNullableType,
         JSDocRecordType,
@@ -1037,6 +1038,10 @@ module ts {
     }
 
     export interface JSDocUnionType extends JSDocType {
+        types: NodeArray<JSDocType>;
+    }
+
+    export interface JSDocTupleType extends JSDocType {
         types: NodeArray<JSDocType>;
     }
 

@@ -923,6 +923,132 @@ module ts {
     }
 }`);
                 });
+
+                it("tupleType0", () => {
+                    parsesCorrectly(
+                        "{[]}",
+                        `{
+    "kind": "JSDocTupleType",
+    "pos": 1,
+    "end": 3,
+    "types": {
+        "length": 0,
+        "pos": 2,
+        "end": 2
+    }
+}`);
+                });
+
+                it("tupleType1", () => {
+                    parsesCorrectly(
+                        "{[number]}",
+                        `{
+    "kind": "JSDocTupleType",
+    "pos": 1,
+    "end": 9,
+    "types": {
+        "0": {
+            "kind": "JSDocTypeReference",
+            "pos": 2,
+            "end": 8,
+            "name": {
+                "kind": "Identifier",
+                "pos": 2,
+                "end": 8,
+                "text": "number"
+            }
+        },
+        "length": 1,
+        "pos": 2,
+        "end": 8
+    }
+}`);
+                });
+
+                it("tupleType2", () => {
+                    parsesCorrectly(
+                        "{[number,string]}",
+                        `{
+    "kind": "JSDocTupleType",
+    "pos": 1,
+    "end": 16,
+    "types": {
+        "0": {
+            "kind": "JSDocTypeReference",
+            "pos": 2,
+            "end": 8,
+            "name": {
+                "kind": "Identifier",
+                "pos": 2,
+                "end": 8,
+                "text": "number"
+            }
+        },
+        "1": {
+            "kind": "JSDocTypeReference",
+            "pos": 9,
+            "end": 15,
+            "name": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 15,
+                "text": "string"
+            }
+        },
+        "length": 2,
+        "pos": 2,
+        "end": 15
+    }
+}`);
+                });
+
+                it("tupleType3", () => {
+                    parsesCorrectly(
+                        "{[number,string,boolean]}",
+                        `{
+    "kind": "JSDocTupleType",
+    "pos": 1,
+    "end": 24,
+    "types": {
+        "0": {
+            "kind": "JSDocTypeReference",
+            "pos": 2,
+            "end": 8,
+            "name": {
+                "kind": "Identifier",
+                "pos": 2,
+                "end": 8,
+                "text": "number"
+            }
+        },
+        "1": {
+            "kind": "JSDocTypeReference",
+            "pos": 9,
+            "end": 15,
+            "name": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 15,
+                "text": "string"
+            }
+        },
+        "2": {
+            "kind": "JSDocTypeReference",
+            "pos": 16,
+            "end": 23,
+            "name": {
+                "kind": "Identifier",
+                "pos": 16,
+                "end": 23,
+                "text": "boolean"
+            }
+        },
+        "length": 3,
+        "pos": 2,
+        "end": 23
+    }
+}`);
+                });
             });
 
             describe("parsesIncorrectly", () => {
@@ -990,10 +1116,6 @@ module ts {
                     parsesIncorrectly("{new () => string}");
                 });
 
-                it("tupleType", () => {
-                    parsesIncorrectly("{[number,string]}");
-                });
-
                 it("typeOfType", () => {
                     parsesIncorrectly("{typeof M}");
                 });
@@ -1008,6 +1130,18 @@ module ts {
 
                 it("methodInRecordType", () => {
                     parsesIncorrectly("{{foo(): number}}");
+                });
+
+                it("tupleTypeWithComma", () => {
+                    parsesIncorrectly( "{[,]}");
+                });
+
+                it("tupleTypeWithTrailingComma", () => {
+                    parsesIncorrectly("{[number,]}");
+                });
+
+                it("tupleTypeWithLeadingComma", () => {
+                    parsesIncorrectly("{[,number]}");
                 });
             });
         });

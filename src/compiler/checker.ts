@@ -3825,6 +3825,11 @@ module ts {
             return getUnionType(types, /*noSubtypeReduction*/ true);
         }
 
+        function getTypeFromJSDocTupleType(node: JSDocTupleType): Type {
+            let types = map(node.types, getTypeFromTypeNode);
+            return createTupleType(types);
+        }
+
         function getTypeFromTypeNode(node: TypeNode): Type {
             return getTypeFromTypeNodeOrHeritageClauseElement(node);
         }
@@ -3876,6 +3881,8 @@ module ts {
                         return unknownType;
                     case SyntaxKind.JSDocArrayType:
                         return getTypeFromJSDocArrayType(<JSDocArrayType>node);
+                    case SyntaxKind.JSDocTupleType:
+                        return getTypeFromJSDocTupleType(<JSDocTupleType>node);
                     case SyntaxKind.JSDocUnionType:
                         return getTypeFromJSDocUnionType(<JSDocUnionType>node);
                     case SyntaxKind.JSDocNullableType:

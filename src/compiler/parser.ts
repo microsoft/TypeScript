@@ -5576,6 +5576,8 @@ module ts {
                     return parseJSDocUnknownOrNullableType();
                 case SyntaxKind.OpenParenToken:
                     return parseJSDocUnionType();
+                case SyntaxKind.OpenBracketToken:
+                    return parseJSDocTupleType();
                 case SyntaxKind.ExclamationToken:
                     return parseJSDocNonNullableType();
                 case SyntaxKind.OpenBraceToken:
@@ -5785,6 +5787,33 @@ module ts {
             let result = <JSDocNonNullableType>createNode(SyntaxKind.JSDocNonNullableType);
             nextToken();
             result.type = parseJSDocType();
+            return finishNode(result);
+        }
+
+        function parseJSDocTupleType(): JSDocTupleType {
+            let result = <JSDocTupleType>createNode(SyntaxKind.JSDocTupleType);
+            nextToken();
+
+            let types = <NodeArray<JSDocType>>[];
+            types.pos = scanner.getStartPos();
+
+            while (!error) {
+                if (token === SyntaxKind.CloseBracketToken) {
+                    break;
+                }
+
+                if (types.length) {
+                    parseExpected(SyntaxKind.CommaToken);
+                }
+
+                types.push(parseJSDocType());
+            }
+
+            types.end = scanner.getStartPos();
+
+            result.types = types;
+            parseExpected(SyntaxKind.CloseBracketToken);
+
             return finishNode(result);
         }
 
