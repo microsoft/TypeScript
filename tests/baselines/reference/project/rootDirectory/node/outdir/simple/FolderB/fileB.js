@@ -4,3 +4,4 @@ var B = (function () {
     }
     return B;
 })();
+//# sourceMappingURL=fileB.js.map
