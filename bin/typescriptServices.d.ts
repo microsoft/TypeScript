@@ -124,16 +124,16 @@ declare module ts {
         VoidKeyword = 99,
         WhileKeyword = 100,
         WithKeyword = 101,
-        AsKeyword = 102,
-        ImplementsKeyword = 103,
-        InterfaceKeyword = 104,
-        LetKeyword = 105,
-        PackageKeyword = 106,
-        PrivateKeyword = 107,
-        ProtectedKeyword = 108,
-        PublicKeyword = 109,
-        StaticKeyword = 110,
-        YieldKeyword = 111,
+        ImplementsKeyword = 102,
+        InterfaceKeyword = 103,
+        LetKeyword = 104,
+        PackageKeyword = 105,
+        PrivateKeyword = 106,
+        ProtectedKeyword = 107,
+        PublicKeyword = 108,
+        StaticKeyword = 109,
+        YieldKeyword = 110,
+        AsKeyword = 111,
         AnyKeyword = 112,
         BooleanKeyword = 113,
         ConstructorKeyword = 114,
@@ -258,8 +258,8 @@ declare module ts {
         LastReservedWord = 101,
         FirstKeyword = 66,
         LastKeyword = 125,
-        FirstFutureReservedWord = 103,
-        LastFutureReservedWord = 111,
+        FirstFutureReservedWord = 102,
+        LastFutureReservedWord = 110,
         FirstTypeNode = 141,
         LastTypeNode = 149,
         FirstPunctuation = 14,
@@ -1183,6 +1183,7 @@ declare module ts {
     function isIdentifierPart(ch: number, languageVersion: ScriptTarget): boolean;
 }
 declare module ts {
+    function getDefaultLibFileName(options: CompilerOptions): string;
     function textSpanEnd(span: TextSpan): number;
     function textSpanIsEmpty(span: TextSpan): boolean;
     function textSpanContainsPosition(span: TextSpan, position: number): boolean;
@@ -1227,7 +1228,6 @@ declare module ts {
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
     function getPreEmitDiagnostics(program: Program): Diagnostic[];
     function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string;
-    function getDefaultLibFileName(options: CompilerOptions): string;
     function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program;
 }
 declare module ts {
@@ -1289,7 +1289,6 @@ declare module ts {
         getDocumentationComment(): SymbolDisplayPart[];
     }
     interface SourceFile {
-        getNamedDeclarations(): Declaration[];
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
         getPositionOfLineAndCharacter(line: number, character: number): number;

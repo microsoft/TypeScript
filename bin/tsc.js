@@ -1445,7 +1445,7 @@ var ts;
 (function (ts) {
     var textToToken = {
         "any": 112,
-        "as": 102,
+        "as": 111,
         "boolean": 113,
         "break": 66,
         "case": 67,
@@ -1470,24 +1470,24 @@ var ts;
         "function": 83,
         "get": 116,
         "if": 84,
-        "implements": 103,
+        "implements": 102,
         "import": 85,
         "in": 86,
         "instanceof": 87,
-        "interface": 104,
-        "let": 105,
+        "interface": 103,
+        "let": 104,
         "module": 117,
         "new": 88,
         "null": 89,
         "number": 119,
-        "package": 106,
-        "private": 107,
-        "protected": 108,
-        "public": 109,
+        "package": 105,
+        "private": 106,
+        "protected": 107,
+        "public": 108,
         "require": 118,
         "return": 90,
         "set": 120,
-        "static": 110,
+        "static": 109,
         "string": 121,
         "super": 91,
         "switch": 92,
@@ -1502,7 +1502,7 @@ var ts;
         "void": 99,
         "while": 100,
         "with": 101,
-        "yield": 111,
+        "yield": 110,
         "of": 125,
         "{": 14,
         "}": 15,
@@ -4010,7 +4010,7 @@ var ts;
     }
     ts.getClassExtendsHeritageClauseElement = getClassExtendsHeritageClauseElement;
     function getClassImplementsHeritageClauseElements(node) {
-        var heritageClause = getHeritageClause(node.heritageClauses, 103);
+        var heritageClause = getHeritageClause(node.heritageClauses, 102);
         return heritageClause ? heritageClause.types : undefined;
     }
     ts.getClassImplementsHeritageClauseElements = getClassImplementsHeritageClauseElements;
@@ -4125,10 +4125,10 @@ var ts;
     ts.isESSymbolIdentifier = isESSymbolIdentifier;
     function isModifier(token) {
         switch (token) {
-            case 109:
-            case 107:
             case 108:
-            case 110:
+            case 106:
+            case 107:
+            case 109:
             case 78:
             case 115:
             case 70:
@@ -4536,6 +4536,10 @@ var ts;
 })(ts || (ts = {}));
 var ts;
 (function (ts) {
+    function getDefaultLibFileName(options) {
+        return options.target === 2 ? "lib.es6.d.ts" : "lib.d.ts";
+    }
+    ts.getDefaultLibFileName = getDefaultLibFileName;
     function textSpanEnd(span) {
         return span.start + span.length;
     }
@@ -4984,10 +4988,10 @@ var ts;
     ;
     function modifierToFlag(token) {
         switch (token) {
-            case 110: return 128;
-            case 109: return 16;
-            case 108: return 64;
-            case 107: return 32;
+            case 109: return 128;
+            case 108: return 16;
+            case 107: return 64;
+            case 106: return 32;
             case 78: return 1;
             case 115: return 2;
             case 70: return 8192;
@@ -5494,7 +5498,7 @@ var ts;
             if (token === 65) {
                 return true;
             }
-            if (token === 111 && inYieldContext()) {
+            if (token === 110 && inYieldContext()) {
                 return false;
             }
             return token > 101;
@@ -5730,7 +5734,7 @@ var ts;
             ts.Debug.assert(token === 14);
             if (nextToken() === 15) {
                 var next = nextToken();
-                return next === 23 || next === 14 || next === 79 || next === 103;
+                return next === 23 || next === 14 || next === 79 || next === 102;
             }
             return true;
         }
@@ -5739,7 +5743,7 @@ var ts;
             return isIdentifier();
         }
         function isHeritageClauseExtendsOrImplementsKeyword() {
-            if (token === 103 ||
+            if (token === 102 ||
                 token === 79) {
                 return lookAhead(nextTokenIsStartOfExpression);
             }
@@ -5767,11 +5771,11 @@ var ts;
                 case 4:
                     return token === 15 || token === 67 || token === 73;
                 case 8:
-                    return token === 14 || token === 79 || token === 103;
+                    return token === 14 || token === 79 || token === 102;
                 case 9:
                     return isVariableDeclaratorListTerminator();
                 case 16:
-                    return token === 25 || token === 16 || token === 14 || token === 79 || token === 103;
+                    return token === 25 || token === 16 || token === 14 || token === 79 || token === 102;
                 case 12:
                     return token === 17 || token === 22;
                 case 14:
@@ -6575,7 +6579,7 @@ var ts;
                 case 38:
                 case 39:
                 case 24:
-                case 111:
+                case 110:
                     return true;
                 default:
                     if (isBinaryOperator()) {
@@ -6645,7 +6649,7 @@ var ts;
             return parseConditionalExpressionRest(expr);
         }
         function isYieldExpression() {
-            if (token === 111) {
+            if (token === 110) {
                 if (inYieldContext()) {
                     return true;
                 }
@@ -7270,7 +7274,7 @@ var ts;
             parseExpected(16);
             var initializer = undefined;
             if (token !== 22) {
-                if (token === 98 || token === 105 || token === 70) {
+                if (token === 98 || token === 104 || token === 70) {
                     initializer = parseVariableDeclarationList(true);
                 }
                 else {
@@ -7431,7 +7435,7 @@ var ts;
                     return !inErrorRecovery;
                 case 14:
                 case 98:
-                case 105:
+                case 104:
                 case 83:
                 case 69:
                 case 84:
@@ -7452,17 +7456,17 @@ var ts;
                 case 70:
                     var isConstEnum = lookAhead(nextTokenIsEnumKeyword);
                     return !isConstEnum;
-                case 104:
+                case 103:
                 case 117:
                 case 77:
                 case 123:
                     if (isDeclarationStart()) {
                         return false;
                     }
-                case 109:
-                case 107:
                 case 108:
-                case 110:
+                case 106:
+                case 107:
+                case 109:
                     if (lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine)) {
                         return false;
                     }
@@ -7517,7 +7521,7 @@ var ts;
                     return parseTryStatement();
                 case 72:
                     return parseDebuggerStatement();
-                case 105:
+                case 104:
                     if (isLetDeclaration()) {
                         return parseVariableStatement(scanner.getStartPos(), undefined, undefined);
                     }
@@ -7542,7 +7546,7 @@ var ts;
                         return undefined;
                     }
                     return parseVariableStatement(start, decorators, modifiers);
-                case 105:
+                case 104:
                     if (!isLetDeclaration()) {
                         return undefined;
                     }
@@ -7627,7 +7631,7 @@ var ts;
             switch (token) {
                 case 98:
                     break;
-                case 105:
+                case 104:
                     node.flags |= 4096;
                     break;
                 case 70:
@@ -7726,10 +7730,10 @@ var ts;
         }
         function isClassMemberModifier(idToken) {
             switch (idToken) {
-                case 109:
-                case 107:
                 case 108:
-                case 110:
+                case 106:
+                case 107:
+                case 109:
                     return true;
                 default:
                     return false;
@@ -7892,7 +7896,7 @@ var ts;
             return parseList(19, false, parseHeritageClause);
         }
         function parseHeritageClause() {
-            if (token === 79 || token === 103) {
+            if (token === 79 || token === 102) {
                 var node = createNode(222);
                 node.token = token;
                 nextToken();
@@ -7910,7 +7914,7 @@ var ts;
             return finishNode(node);
         }
         function isHeritageClause() {
-            return token === 79 || token === 103;
+            return token === 79 || token === 102;
         }
         function parseClassMembers() {
             return parseList(6, false, parseClassElement);
@@ -7919,7 +7923,7 @@ var ts;
             var node = createNode(202, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
-            parseExpected(104);
+            parseExpected(103);
             node.name = parseIdentifier();
             node.typeParameters = parseTypeParameters();
             node.heritageClauses = parseHeritageClauses(false);
@@ -8076,7 +8080,7 @@ var ts;
         function parseNamespaceImport() {
             var namespaceImport = createNode(211);
             parseExpected(35);
-            parseExpected(102);
+            parseExpected(111);
             namespaceImport.name = parseIdentifier();
             return finishNode(namespaceImport);
         }
@@ -8097,9 +8101,9 @@ var ts;
             var checkIdentifierStart = scanner.getTokenPos();
             var checkIdentifierEnd = scanner.getTextPos();
             var identifierName = parseIdentifierName();
-            if (token === 102) {
+            if (token === 111) {
                 node.propertyName = identifierName;
-                parseExpected(102);
+                parseExpected(111);
                 checkIdentifierIsKeyword = ts.isKeyword(token) && !isIdentifier();
                 checkIdentifierStart = scanner.getTokenPos();
                 checkIdentifierEnd = scanner.getTextPos();
@@ -8153,10 +8157,10 @@ var ts;
                 case 70:
                 case 83:
                     return true;
-                case 105:
+                case 104:
                     return isLetDeclaration();
                 case 69:
-                case 104:
+                case 103:
                 case 77:
                 case 123:
                     return lookAhead(nextTokenIsIdentifierOrKeyword);
@@ -8167,10 +8171,10 @@ var ts;
                 case 78:
                     return lookAhead(nextTokenCanFollowExportKeyword);
                 case 115:
-                case 109:
-                case 107:
                 case 108:
-                case 110:
+                case 106:
+                case 107:
+                case 109:
                     return lookAhead(nextTokenIsDeclarationStart);
                 case 52:
                     return !followsModifier;
@@ -8202,7 +8206,7 @@ var ts;
             return isDeclarationStart(true);
         }
         function nextTokenIsAsKeyword() {
-            return nextToken() === 102;
+            return nextToken() === 111;
         }
         function parseDeclaration() {
             var fullStart = getNodePos();
@@ -8219,14 +8223,14 @@ var ts;
             }
             switch (token) {
                 case 98:
-                case 105:
+                case 104:
                 case 70:
                     return parseVariableStatement(fullStart, decorators, modifiers);
                 case 83:
                     return parseFunctionDeclaration(fullStart, decorators, modifiers);
                 case 69:
                     return parseClassDeclaration(fullStart, decorators, modifiers);
-                case 104:
+                case 103:
                     return parseInterfaceDeclaration(fullStart, decorators, modifiers);
                 case 123:
                     return parseTypeAliasDeclaration(fullStart, decorators, modifiers);
@@ -10732,12 +10736,13 @@ var ts;
             return result;
         }
         function getPropertiesOfType(type) {
-            if (type.flags & 16384) {
-                return getPropertiesOfUnionType(type);
-            }
-            return getPropertiesOfObjectType(getApparentType(type));
+            type = getApparentType(type);
+            return type.flags & 16384 ? getPropertiesOfUnionType(type) : getPropertiesOfObjectType(type);
         }
         function getApparentType(type) {
+            if (type.flags & 16384) {
+                type = getReducedTypeOfUnionType(type);
+            }
             if (type.flags & 512) {
                 do {
                     type = getConstraintOfTypeParameter(type);
@@ -10806,28 +10811,27 @@ var ts;
             return property;
         }
         function getPropertyOfType(type, name) {
+            type = getApparentType(type);
+            if (type.flags & 48128) {
+                var resolved = resolveObjectOrUnionTypeMembers(type);
+                if (ts.hasProperty(resolved.members, name)) {
+                    var symbol = resolved.members[name];
+                    if (symbolIsValue(symbol)) {
+                        return symbol;
+                    }
+                }
+                if (resolved === anyFunctionType || resolved.callSignatures.length || resolved.constructSignatures.length) {
+                    var symbol = getPropertyOfObjectType(globalFunctionType, name);
+                    if (symbol) {
+                        return symbol;
+                    }
+                }
+                return getPropertyOfObjectType(globalObjectType, name);
+            }
             if (type.flags & 16384) {
                 return getPropertyOfUnionType(type, name);
             }
-            if (!(type.flags & 48128)) {
-                type = getApparentType(type);
-                if (!(type.flags & 48128)) {
-                    return undefined;
-                }
-            }
-            var resolved = resolveObjectOrUnionTypeMembers(type);
-            if (ts.hasProperty(resolved.members, name)) {
-                var symbol = resolved.members[name];
-                if (symbolIsValue(symbol)) {
-                    return symbol;
-                }
-            }
-            if (resolved === anyFunctionType || resolved.callSignatures.length || resolved.constructSignatures.length) {
-                var symbol = getPropertyOfObjectType(globalFunctionType, name);
-                if (symbol)
-                    return symbol;
-            }
-            return getPropertyOfObjectType(globalObjectType, name);
+            return undefined;
         }
         function getSignaturesOfObjectOrUnionType(type, kind) {
             if (type.flags & (48128 | 16384)) {
@@ -11333,8 +11337,15 @@ var ts;
             if (!type) {
                 type = unionTypes[id] = createObjectType(16384 | getWideningFlagsOfTypes(sortedTypes));
                 type.types = sortedTypes;
+                type.reducedType = noSubtypeReduction ? undefined : type;
             }
             return type;
+        }
+        function getReducedTypeOfUnionType(type) {
+            if (!type.reducedType) {
+                type.reducedType = getUnionType(type.types, false);
+            }
+            return type.reducedType;
         }
         function getTypeFromUnionTypeNode(node) {
             var links = getNodeLinks(node);
@@ -15776,7 +15787,10 @@ var ts;
                 return checkElementTypeOfArrayOrString(inputType, errorNode);
             }
             if (isArrayLikeType(inputType)) {
-                return getIndexTypeOfType(inputType, 1);
+                var indexType = getIndexTypeOfType(inputType, 1);
+                if (indexType) {
+                    return indexType;
+                }
             }
             error(errorNode, ts.Diagnostics.Type_0_is_not_an_array_type, typeToString(inputType));
             return unknownType;
@@ -17765,7 +17779,7 @@ var ts;
         }
         function isReservedwordInStrictMode(node) {
             return (node.parserContextFlags & 1) &&
-                (node.originalKeywordKind >= 103 && node.originalKeywordKind <= 111);
+                (node.originalKeywordKind >= 102 && node.originalKeywordKind <= 110);
         }
         function reportStrictModeGrammarErrorInClassDeclaration(identifier, message, arg0, arg1, arg2) {
             if (ts.getAncestor(identifier, 201) || ts.getAncestor(identifier, 174)) {
@@ -17914,14 +17928,14 @@ var ts;
             for (var _i = 0, _a = node.modifiers; _i < _a.length; _i++) {
                 var modifier = _a[_i];
                 switch (modifier.kind) {
-                    case 109:
                     case 108:
                     case 107:
+                    case 106:
                         var text = void 0;
-                        if (modifier.kind === 109) {
+                        if (modifier.kind === 108) {
                             text = "public";
                         }
-                        else if (modifier.kind === 108) {
+                        else if (modifier.kind === 107) {
                             text = "protected";
                             lastProtected = modifier;
                         }
@@ -17940,7 +17954,7 @@ var ts;
                         }
                         flags |= ts.modifierToFlag(modifier.kind);
                         break;
-                    case 110:
+                    case 109:
                         if (flags & 128) {
                             return grammarErrorOnNode(modifier, ts.Diagnostics._0_modifier_already_seen, "static");
                         }
@@ -18170,7 +18184,7 @@ var ts;
                         seenExtendsClause = true;
                     }
                     else {
-                        ts.Debug.assert(heritageClause.token === 103);
+                        ts.Debug.assert(heritageClause.token === 102);
                         if (seenImplementsClause) {
                             return grammarErrorOnFirstToken(heritageClause, ts.Diagnostics.implements_clause_already_seen);
                         }
@@ -18192,7 +18206,7 @@ var ts;
                         seenExtendsClause = true;
                     }
                     else {
-                        ts.Debug.assert(heritageClause.token === 103);
+                        ts.Debug.assert(heritageClause.token === 102);
                         return grammarErrorOnFirstToken(heritageClause, ts.Diagnostics.Interface_declaration_cannot_have_implements_clause);
                     }
                     checkGrammarHeritageClause(heritageClause);
@@ -20959,7 +20973,7 @@ var ts;
                 emit(node.expression);
             }
             function emitYieldExpression(node) {
-                write(ts.tokenToString(111));
+                write(ts.tokenToString(110));
                 if (node.asteriskToken) {
                     write("*");
                 }
@@ -21583,7 +21597,7 @@ var ts;
                 var tokenKind = 98;
                 if (decl && languageVersion >= 2) {
                     if (ts.isLet(decl)) {
-                        tokenKind = 105;
+                        tokenKind = 104;
                     }
                     else if (ts.isConst(decl)) {
                         tokenKind = 70;
@@ -21596,7 +21610,7 @@ var ts;
                     switch (tokenKind) {
                         case 98:
                             return write("var ");
-                        case 105:
+                        case 104:
                             return write("let ");
                         case 70:
                             return write("const ");
@@ -24212,7 +24226,7 @@ var ts;
         }
         return {
             getSourceFile: getSourceFile,
-            getDefaultLibFileName: function (options) { return ts.combinePaths(ts.getDirectoryPath(ts.normalizePath(ts.sys.getExecutingFilePath())), getDefaultLibFileName(options)); },
+            getDefaultLibFileName: function (options) { return ts.combinePaths(ts.getDirectoryPath(ts.normalizePath(ts.sys.getExecutingFilePath())), ts.getDefaultLibFileName(options)); },
             writeFile: writeFile,
             getCurrentDirectory: function () { return currentDirectory || (currentDirectory = ts.sys.getCurrentDirectory()); },
             useCaseSensitiveFileNames: function () { return ts.sys.useCaseSensitiveFileNames; },
@@ -24252,10 +24266,6 @@ var ts;
         }
     }
     ts.flattenDiagnosticMessageText = flattenDiagnosticMessageText;
-    function getDefaultLibFileName(options) {
-        return options.target === 2 ? "lib.es6.d.ts" : "lib.d.ts";
-    }
-    ts.getDefaultLibFileName = getDefaultLibFileName;
     function createProgram(rootNames, options, host) {
         var program;
         var files = [];
