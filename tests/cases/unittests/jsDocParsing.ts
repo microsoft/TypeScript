@@ -1186,6 +1186,32 @@ module ts {
 }`);
                 });
 
+                it("paramTagBracketedName2", () => {
+                    parsesCorrectly(
+                        `/**
+  * @param {number} [ name1 = 1] Description text follows
+  */`,
+                        `{
+    "parameters": [
+        {
+            "name": "name1",
+            "type": {
+                "kind": "JSDocTypeReference",
+                "pos": 16,
+                "end": 22,
+                "name": {
+                    "kind": 65,
+                    "pos": 16,
+                    "end": 22,
+                    "text": "number"
+                }
+            },
+            "isBracketed": true
+        }
+    ]
+}`);
+                });
+
                 it("twoParamTagOnSameLine", () => {
                     parsesCorrectly(
 `/**

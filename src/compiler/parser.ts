@@ -6019,14 +6019,6 @@ module ts {
                 pos++;
                 name = scanIdentifier();
                 isBracketed = true;
-
-                skipWhitespace();
-                if (content.charCodeAt(pos) !== CharacterCodes.closeBracket) {
-                    setError();
-                    return;
-                }
-
-                pos++;
             }
             else {
                 name = scanIdentifier();
