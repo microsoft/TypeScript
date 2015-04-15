@@ -22,7 +22,7 @@ export function delint(sourceFile: ts.SourceFile) {
 >delint : (sourceFile: ts.SourceFile) => void, Symbol(delint, Decl(APISample_linter.ts, 11, 33))
 >sourceFile : ts.SourceFile, Symbol(sourceFile, Decl(APISample_linter.ts, 13, 23))
 >ts : any, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->SourceFile : ts.SourceFile, Symbol(ts.SourceFile, Decl(typescript.d.ts, 812, 5), Decl(typescript.d.ts, 1335, 5))
+>SourceFile : ts.SourceFile, Symbol(ts.SourceFile, Decl(typescript.d.ts, 813, 5), Decl(typescript.d.ts, 1336, 5))
 
     delintNode(sourceFile);
 >delintNode(sourceFile) : void
@@ -33,7 +33,7 @@ export function delint(sourceFile: ts.SourceFile) {
 >delintNode : (node: ts.Node) => void, Symbol(delintNode, Decl(APISample_linter.ts, 14, 27))
 >node : ts.Node, Symbol(node, Decl(APISample_linter.ts, 16, 24))
 >ts : any, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->Node : ts.Node, Symbol(ts.Node, Decl(typescript.d.ts, 310, 5), Decl(typescript.d.ts, 1295, 32))
+>Node : ts.Node, Symbol(ts.Node, Decl(typescript.d.ts, 310, 5), Decl(typescript.d.ts, 1296, 32))
 
         switch (node.kind) {
 >node.kind : ts.SyntaxKind, Symbol(ts.Node.kind, Decl(typescript.d.ts, 311, 38))
@@ -219,9 +219,9 @@ export function delint(sourceFile: ts.SourceFile) {
 
         ts.forEachChild(node, delintNode);
 >ts.forEachChild(node, delintNode) : void
->ts.forEachChild : <T>(node: ts.Node, cbNode: (node: ts.Node) => T, cbNodeArray?: (nodes: ts.Node[]) => T) => T, Symbol(ts.forEachChild, Decl(typescript.d.ts, 1259, 48))
+>ts.forEachChild : <T>(node: ts.Node, cbNode: (node: ts.Node) => T, cbNodeArray?: (nodes: ts.Node[]) => T) => T, Symbol(ts.forEachChild, Decl(typescript.d.ts, 1260, 48))
 >ts : typeof ts, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->forEachChild : <T>(node: ts.Node, cbNode: (node: ts.Node) => T, cbNodeArray?: (nodes: ts.Node[]) => T) => T, Symbol(ts.forEachChild, Decl(typescript.d.ts, 1259, 48))
+>forEachChild : <T>(node: ts.Node, cbNode: (node: ts.Node) => T, cbNodeArray?: (nodes: ts.Node[]) => T) => T, Symbol(ts.forEachChild, Decl(typescript.d.ts, 1260, 48))
 >node : ts.Node, Symbol(node, Decl(APISample_linter.ts, 16, 24))
 >delintNode : (node: ts.Node) => void, Symbol(delintNode, Decl(APISample_linter.ts, 14, 27))
     }
@@ -230,20 +230,20 @@ export function delint(sourceFile: ts.SourceFile) {
 >report : (node: ts.Node, message: string) => void, Symbol(report, Decl(APISample_linter.ts, 48, 5))
 >node : ts.Node, Symbol(node, Decl(APISample_linter.ts, 50, 20))
 >ts : any, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->Node : ts.Node, Symbol(ts.Node, Decl(typescript.d.ts, 310, 5), Decl(typescript.d.ts, 1295, 32))
+>Node : ts.Node, Symbol(ts.Node, Decl(typescript.d.ts, 310, 5), Decl(typescript.d.ts, 1296, 32))
 >message : string, Symbol(message, Decl(APISample_linter.ts, 50, 34))
 
         let { line, character } = sourceFile.getLineAndCharacterOfPosition(node.getStart());
 >line : number, Symbol(line, Decl(APISample_linter.ts, 51, 13))
 >character : number, Symbol(character, Decl(APISample_linter.ts, 51, 19))
 >sourceFile.getLineAndCharacterOfPosition(node.getStart()) : ts.LineAndCharacter
->sourceFile.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1336, 26))
+>sourceFile.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1337, 26))
 >sourceFile : ts.SourceFile, Symbol(sourceFile, Decl(APISample_linter.ts, 13, 23))
->getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1336, 26))
+>getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1337, 26))
 >node.getStart() : number
->node.getStart : (sourceFile?: ts.SourceFile) => number, Symbol(ts.Node.getStart, Decl(typescript.d.ts, 1300, 53))
+>node.getStart : (sourceFile?: ts.SourceFile) => number, Symbol(ts.Node.getStart, Decl(typescript.d.ts, 1301, 53))
 >node : ts.Node, Symbol(node, Decl(APISample_linter.ts, 50, 20))
->getStart : (sourceFile?: ts.SourceFile) => number, Symbol(ts.Node.getStart, Decl(typescript.d.ts, 1300, 53))
+>getStart : (sourceFile?: ts.SourceFile) => number, Symbol(ts.Node.getStart, Decl(typescript.d.ts, 1301, 53))
 
         console.log(`${sourceFile.fileName} (${line + 1},${character + 1}): ${message}`);
 >console.log(`${sourceFile.fileName} (${line + 1},${character + 1}): ${message}`) : any
@@ -251,9 +251,9 @@ export function delint(sourceFile: ts.SourceFile) {
 >console : any, Symbol(console, Decl(APISample_linter.ts, 8, 11))
 >log : any
 >`${sourceFile.fileName} (${line + 1},${character + 1}): ${message}` : string
->sourceFile.fileName : string, Symbol(ts.SourceFile.fileName, Decl(typescript.d.ts, 815, 29))
+>sourceFile.fileName : string, Symbol(ts.SourceFile.fileName, Decl(typescript.d.ts, 816, 29))
 >sourceFile : ts.SourceFile, Symbol(sourceFile, Decl(APISample_linter.ts, 13, 23))
->fileName : string, Symbol(ts.SourceFile.fileName, Decl(typescript.d.ts, 815, 29))
+>fileName : string, Symbol(ts.SourceFile.fileName, Decl(typescript.d.ts, 816, 29))
 >line + 1 : number
 >line : number, Symbol(line, Decl(APISample_linter.ts, 51, 13))
 >1 : number
@@ -286,9 +286,9 @@ fileNames.forEach(fileName => {
     let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);
 >sourceFile : ts.SourceFile, Symbol(sourceFile, Decl(APISample_linter.ts, 59, 7))
 >ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true) : ts.SourceFile
->ts.createSourceFile : (fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile, Symbol(ts.createSourceFile, Decl(typescript.d.ts, 1263, 62))
+>ts.createSourceFile : (fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile, Symbol(ts.createSourceFile, Decl(typescript.d.ts, 1264, 62))
 >ts : typeof ts, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->createSourceFile : (fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile, Symbol(ts.createSourceFile, Decl(typescript.d.ts, 1263, 62))
+>createSourceFile : (fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile, Symbol(ts.createSourceFile, Decl(typescript.d.ts, 1264, 62))
 >fileName : any, Symbol(fileName, Decl(APISample_linter.ts, 57, 18))
 >readFileSync(fileName).toString() : any
 >readFileSync(fileName).toString : any
@@ -296,11 +296,11 @@ fileNames.forEach(fileName => {
 >readFileSync : any, Symbol(readFileSync, Decl(APISample_linter.ts, 9, 11))
 >fileName : any, Symbol(fileName, Decl(APISample_linter.ts, 57, 18))
 >toString : any
->ts.ScriptTarget.ES6 : ts.ScriptTarget, Symbol(ts.ScriptTarget.ES6, Decl(typescript.d.ts, 1190, 16))
->ts.ScriptTarget : typeof ts.ScriptTarget, Symbol(ts.ScriptTarget, Decl(typescript.d.ts, 1187, 5))
+>ts.ScriptTarget.ES6 : ts.ScriptTarget, Symbol(ts.ScriptTarget.ES6, Decl(typescript.d.ts, 1191, 16))
+>ts.ScriptTarget : typeof ts.ScriptTarget, Symbol(ts.ScriptTarget, Decl(typescript.d.ts, 1188, 5))
 >ts : typeof ts, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->ScriptTarget : typeof ts.ScriptTarget, Symbol(ts.ScriptTarget, Decl(typescript.d.ts, 1187, 5))
->ES6 : ts.ScriptTarget, Symbol(ts.ScriptTarget.ES6, Decl(typescript.d.ts, 1190, 16))
+>ScriptTarget : typeof ts.ScriptTarget, Symbol(ts.ScriptTarget, Decl(typescript.d.ts, 1188, 5))
+>ES6 : ts.ScriptTarget, Symbol(ts.ScriptTarget.ES6, Decl(typescript.d.ts, 1191, 16))
 >true : boolean
 
     // delint it

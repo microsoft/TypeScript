@@ -1081,6 +1081,7 @@ module ts {
     export interface JSDocParameter {
         name: string;
         type: JSDocType;
+        isBracketed: boolean;
     }
 
     export interface JSDocComment {

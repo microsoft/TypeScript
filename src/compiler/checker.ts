@@ -3160,7 +3160,7 @@ module ts {
 
                 let docParam = getJSDocParameter(node, getSourceFile(node));
                 if (docParam) {
-                    return docParam.type.kind === SyntaxKind.JSDocOptionalType;
+                    return docParam.isBracketed || docParam.type.kind === SyntaxKind.JSDocOptionalType;
                 }
             }
 

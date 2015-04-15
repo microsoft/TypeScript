@@ -6013,7 +6013,24 @@ module ts {
             }
 
             skipWhitespace();
-            let name = scanIdentifier();
+            let name: string;
+            let isBracketed: boolean;
+            if (content.charCodeAt(pos) === CharacterCodes.openBracket) {
+                pos++;
+                name = scanIdentifier();
+                isBracketed = true;
+
+                skipWhitespace();
+                if (content.charCodeAt(pos) !== CharacterCodes.closeBracket) {
+                    setError();
+                    return;
+                }
+
+                pos++;
+            }
+            else {
+                name = scanIdentifier();
+            }
 
             if (!type) {
                 type = parseType();
@@ -6023,7 +6040,7 @@ module ts {
             }
 
             parameters = parameters || [];
-            parameters.push({ name, type });
+            parameters.push({ name, type, isBracketed });
         }
 
         function handleReturnTag(): void {
@@ -6084,6 +6101,8 @@ module ts {
         }
 
         function scanIdentifier(): string {
+            skipWhitespace();
+
             let startPos = pos;
             for (;pos < end; pos++) {
                 let ch = content.charCodeAt(pos);
