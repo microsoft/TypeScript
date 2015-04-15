@@ -875,6 +875,54 @@ module ts {
     }
 }`);
                 });
+
+                it("keyword1", () => {
+                    parsesCorrectly(
+                        "{var}",
+                        `{
+    "kind": "JSDocTypeReference",
+    "pos": 1,
+    "end": 4,
+    "name": {
+        "kind": "Identifier",
+        "pos": 1,
+        "end": 4,
+        "text": "var"
+    }
+}`);
+                });
+
+                it("keyword2", () => {
+                    parsesCorrectly(
+                        "{null}",
+                        `{
+    "kind": "JSDocTypeReference",
+    "pos": 1,
+    "end": 5,
+    "name": {
+        "kind": "Identifier",
+        "pos": 1,
+        "end": 5,
+        "text": "null"
+    }
+}`);
+                });
+
+                it("keyword3", () => {
+                    parsesCorrectly(
+                        "{undefined}",
+                        `{
+    "kind": "JSDocTypeReference",
+    "pos": 1,
+    "end": 10,
+    "name": {
+        "kind": "Identifier",
+        "pos": 1,
+        "end": 10,
+        "text": "undefined"
+    }
+}`);
+                });
             });
 
             describe("parsesIncorrectly", () => {
@@ -900,10 +948,6 @@ module ts {
 
                 it("functionTypeWithTrailingComma", () => {
                     parsesIncorrectly("{function(a,)}");
-                });
-
-                it("keyword", () => {
-                    parsesIncorrectly("{var}");
                 });
 
                 it("thisWithoutType", () => {

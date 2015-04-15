@@ -5505,14 +5505,6 @@ module ts {
             }
         }
 
-        function isIdentifier() {
-            if (token === SyntaxKind.Identifier) {
-                return true;
-            }
-
-            return token > SyntaxKind.LastReservedWord && token <= SyntaxKind.LastKeyword;
-        }
-
         function isIdentifierOrKeyword() {
             if (token === SyntaxKind.Identifier) {
                 return true;
@@ -5598,7 +5590,7 @@ module ts {
                     return parseJSDocThisType();
             }
 
-            if (isIdentifier()) {
+            if (isIdentifierOrKeyword()) {
                 return parseJSDocTypeReference();
             }
 
@@ -5676,7 +5668,7 @@ module ts {
 
         function parseJSDocTypeReference(): JSDocTypeReference {
             let result = <JSDocTypeReference>createNode(SyntaxKind.JSDocTypeReference);
-            result.name = parseIdentifier();
+            result.name = parseIdentifierOrKeyword();
 
             while (!error && token === SyntaxKind.DotToken) {
                 nextToken();
@@ -5727,10 +5719,6 @@ module ts {
 
         function parseIdentifierOrKeyword(): Identifier {
             return parseIdentifierHelper(isIdentifierOrKeyword());
-        }
-
-        function parseIdentifier(): Identifier {
-            return parseIdentifierHelper(isIdentifier());
         }
 
         function parseIdentifierHelper(isIdentifier: boolean): Identifier {
