@@ -11512,7 +11512,7 @@ module ts {
                     //          special 'arguments' object.
                     //
                     // So when dealing with the 'arguments' symbol, we're interested in the 'this' container.
-                    let argumentsContainer = getArgumentsContainer(node, /*includeArrowFunctions*/ false);
+                    let argumentsContainer = getThisContainer(node, /*includeArrowFunctions*/ false);
                     return argumentsContainerRequiresCapturing(argumentsContainer, getNodeCheckFlags(argumentsContainer));
                 }
                 else if (symbol.valueDeclaration) {
@@ -11521,7 +11521,7 @@ module ts {
                     // The 'this' container is still interesting to us because it
                     // includes sourcefiles (where we have globals) and
                     // arrow functions (where we have parameters)
-                    let argumentsContainer = getArgumentsContainer(symbol.valueDeclaration, /*includeArrowFunctions*/ true);
+                    let argumentsContainer = getThisContainer(symbol.valueDeclaration, /*includeArrowFunctions*/ true);
                     return argumentsContainerRequiresCapturing(argumentsContainer, getNodeCheckFlags(argumentsContainer));
                 }
             }
@@ -11529,7 +11529,7 @@ module ts {
             return false;
         }
 
-        function argumentsContainerRequiresCapturing(argumentsContainer: FunctionLikeDeclaration | SourceFile, containerCheckFlags: NodeCheckFlags): boolean {
+        function argumentsContainerRequiresCapturing(argumentsContainer: Node, containerCheckFlags: NodeCheckFlags): boolean {
             return !!(argumentsContainer && (containerCheckFlags & NodeCheckFlags.CaptureArguments))
         }
 

@@ -513,16 +513,6 @@ module ts {
         }
     }
 
-    export function getArgumentsContainer(node: Node, includeArrowFunctions: boolean) {
-        while (true) {
-            node = getThisContainer(node, includeArrowFunctions);
-
-            if (!node || isFunctionLike(node) || node.kind === SyntaxKind.SourceFile) {
-                return <FunctionLikeDeclaration | SourceFile>node;
-            }
-        }
-    }
-
     export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
         while (true) {
             node = node.parent;
