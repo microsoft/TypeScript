@@ -2886,16 +2886,17 @@ module ts {
         }
 
         function getPropertiesOfType(type: Type): Symbol[] {
-            if (type.flags & TypeFlags.Union) {
-                return getPropertiesOfUnionType(<UnionType>type);
-            }
-            return getPropertiesOfObjectType(getApparentType(type));
+            type = getApparentType(type);
+            return type.flags & TypeFlags.Union ? getPropertiesOfUnionType(<UnionType>type) : getPropertiesOfObjectType(type);
         }
 
         // For a type parameter, return the base constraint of the type parameter. For the string, number,
         // boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
         // type itself. Note that the apparent type of a union type is the union type itself.
         function getApparentType(type: Type): Type {
+            if (type.flags & TypeFlags.Union) {
+                type = getReducedTypeOfUnionType(<UnionType>type);
+            }
             if (type.flags & TypeFlags.TypeParameter) {
                 do {
                     type = getConstraintOfTypeParameter(<TypeParameter>type);
@@ -2968,27 +2969,27 @@ module ts {
         // necessary, maps primitive types and type parameters are to their apparent types, and augments with properties from
         // Object and Function as appropriate.
         function getPropertyOfType(type: Type, name: string): Symbol {
+            type = getApparentType(type);
+            if (type.flags & TypeFlags.ObjectType) {
+                let resolved = resolveObjectOrUnionTypeMembers(type);
+                if (hasProperty(resolved.members, name)) {
+                    let symbol = resolved.members[name];
+                    if (symbolIsValue(symbol)) {
+                        return symbol;
+                    }
+                }
+                if (resolved === anyFunctionType || resolved.callSignatures.length || resolved.constructSignatures.length) {
+                    let symbol = getPropertyOfObjectType(globalFunctionType, name);
+                    if (symbol) {
+                        return symbol;
+                    }
+                }
+                return getPropertyOfObjectType(globalObjectType, name);
+            }
             if (type.flags & TypeFlags.Union) {
                 return getPropertyOfUnionType(<UnionType>type, name);
             }
-            if (!(type.flags & TypeFlags.ObjectType)) {
-                type = getApparentType(type);
-                if (!(type.flags & TypeFlags.ObjectType)) {
-                    return undefined;
-                }
-            }
-            let resolved = resolveObjectOrUnionTypeMembers(type);
-            if (hasProperty(resolved.members, name)) {
-                let symbol = resolved.members[name];
-                if (symbolIsValue(symbol)) {
-                    return symbol;
-                }
-            }
-            if (resolved === anyFunctionType || resolved.callSignatures.length || resolved.constructSignatures.length) {
-                let symbol = getPropertyOfObjectType(globalFunctionType, name);
-                if (symbol) return symbol;
-            }
-            return getPropertyOfObjectType(globalObjectType, name);
+            return undefined;
         }
 
         function getSignaturesOfObjectOrUnionType(type: Type, kind: SignatureKind): Signature[] {
@@ -3563,6 +3564,10 @@ module ts {
             }
         }
 
+        // The noSubtypeReduction flag is there because it isn't possible to always do subtype reduction. The flag
+        // is true when creating a union type from a type node and when instantiating a union type. In both of those
+        // cases subtype reduction has to be deferred to properly support recursive union types. For example, a
+        // type alias of the form "type Item = string | (() => Item)" cannot be reduced during its declaration.
         function getUnionType(types: Type[], noSubtypeReduction?: boolean): Type {
             if (types.length === 0) {
                 return emptyObjectType;
@@ -3587,8 +3592,17 @@ module ts {
             if (!type) {
                 type = unionTypes[id] = <UnionType>createObjectType(TypeFlags.Union | getWideningFlagsOfTypes(sortedTypes));
                 type.types = sortedTypes;
+                type.reducedType = noSubtypeReduction ? undefined : type;
             }
             return type;
+        }
+
+        function getReducedTypeOfUnionType(type: UnionType): Type {
+            // If union type was created without subtype reduction, perform the deferred reduction now
+            if (!type.reducedType) {
+                type.reducedType = getUnionType(type.types, /*noSubtypeReduction*/ false);
+            }
+            return type.reducedType;
         }
 
         function getTypeFromUnionTypeNode(node: UnionTypeNode): Type {
