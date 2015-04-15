@@ -137,10 +137,6 @@ module ts {
         }
     }
 
-    export function getDefaultLibFileName(options: CompilerOptions): string {
-        return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
-    }
-
     export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost): Program {
         let program: Program;
         let files: SourceFile[] = [];
