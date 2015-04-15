@@ -19,17 +19,17 @@ const source = "let x: string  = 'string'";
 let result = ts.transpile(source, { module: ts.ModuleKind.CommonJS });
 >result : string, Symbol(result, Decl(APISample_transform.ts, 13, 3))
 >ts.transpile(source, { module: ts.ModuleKind.CommonJS }) : string
->ts.transpile : (input: string, compilerOptions?: ts.CompilerOptions, fileName?: string, diagnostics?: ts.Diagnostic[]) => string, Symbol(ts.transpile, Decl(typescript.d.ts, 1729, 5))
+>ts.transpile : (input: string, compilerOptions?: ts.CompilerOptions, fileName?: string, diagnostics?: ts.Diagnostic[]) => string, Symbol(ts.transpile, Decl(typescript.d.ts, 1730, 5))
 >ts : typeof ts, Symbol(ts, Decl(APISample_transform.ts, 9, 6))
->transpile : (input: string, compilerOptions?: ts.CompilerOptions, fileName?: string, diagnostics?: ts.Diagnostic[]) => string, Symbol(ts.transpile, Decl(typescript.d.ts, 1729, 5))
+>transpile : (input: string, compilerOptions?: ts.CompilerOptions, fileName?: string, diagnostics?: ts.Diagnostic[]) => string, Symbol(ts.transpile, Decl(typescript.d.ts, 1730, 5))
 >source : string, Symbol(source, Decl(APISample_transform.ts, 11, 5))
 >{ module: ts.ModuleKind.CommonJS } : { [x: string]: ts.ModuleKind; module: ts.ModuleKind; }
 >module : ts.ModuleKind, Symbol(module, Decl(APISample_transform.ts, 13, 35))
->ts.ModuleKind.CommonJS : ts.ModuleKind, Symbol(ts.ModuleKind.CommonJS, Decl(typescript.d.ts, 1108, 17))
->ts.ModuleKind : typeof ts.ModuleKind, Symbol(ts.ModuleKind, Decl(typescript.d.ts, 1106, 5))
+>ts.ModuleKind.CommonJS : ts.ModuleKind, Symbol(ts.ModuleKind.CommonJS, Decl(typescript.d.ts, 1109, 17))
+>ts.ModuleKind : typeof ts.ModuleKind, Symbol(ts.ModuleKind, Decl(typescript.d.ts, 1107, 5))
 >ts : typeof ts, Symbol(ts, Decl(APISample_transform.ts, 9, 6))
->ModuleKind : typeof ts.ModuleKind, Symbol(ts.ModuleKind, Decl(typescript.d.ts, 1106, 5))
->CommonJS : ts.ModuleKind, Symbol(ts.ModuleKind.CommonJS, Decl(typescript.d.ts, 1108, 17))
+>ModuleKind : typeof ts.ModuleKind, Symbol(ts.ModuleKind, Decl(typescript.d.ts, 1107, 5))
+>CommonJS : ts.ModuleKind, Symbol(ts.ModuleKind.CommonJS, Decl(typescript.d.ts, 1109, 17))
 
 console.log(JSON.stringify(result));
 >console.log(JSON.stringify(result)) : any
