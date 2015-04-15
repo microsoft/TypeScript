@@ -275,6 +275,7 @@ module ts {
         JSDocAllType,
         // The ? type.
         JSDocUnknownType,
+        JSDocArrayType,
         JSDocUnionType,
         JSDocNullableType,
         JSDocNonNullableType,
@@ -1029,6 +1030,10 @@ module ts {
 
     export interface JSDocUnknownType extends JSDocType {
         _JSDocUnknownTypeBrand: any;
+    }
+
+    export interface JSDocArrayType extends JSDocType {
+        elementType: JSDocType;
     }
 
     export interface JSDocUnionType extends JSDocType {

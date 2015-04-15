@@ -5522,21 +5522,35 @@ module ts {
         }
 
         function parseJSDocTopLevelType(): JSDocType {
-            var firstType = parseJSDocType();
+            var type = parseJSDocType();
             if (!error && token === SyntaxKind.BarToken) {
-                var unionType = <JSDocUnionType>createNode(SyntaxKind.JSDocUnionType, firstType.pos);
-                unionType.types = parseJSDocTypeList(firstType);
-                return finishNode(unionType);
+                var unionType = <JSDocUnionType>createNode(SyntaxKind.JSDocUnionType, type.pos);
+                unionType.types = parseJSDocTypeList(type);
+                type = finishNode(unionType);
             }
 
-            return firstType;
+            if (!error && token === SyntaxKind.EqualsToken) {
+                var optionalType = <JSDocOptionalType>createNode(SyntaxKind.JSDocOptionalType, type.pos);
+                nextToken();
+                optionalType.type = type;
+                type = finishNode(optionalType);
+            }
+
+            return type;
         }
 
         function parseJSDocType(): JSDocType {
             if (!error) {
                 let type = parseJSDocTypeCore();
-                if (type && token === SyntaxKind.EqualsToken) {
-                    return parseJSDocOptionalType(type);
+
+                while (!error && type && token === SyntaxKind.OpenBracketToken) {
+                    let arrayType = <JSDocArrayType>createNode(SyntaxKind.JSDocArrayType, type.pos);
+                    arrayType.elementType = type;
+
+                    nextToken();
+                    parseExpected(SyntaxKind.CloseBracketToken);
+
+                    type = finishNode(arrayType);
                 }
 
                 return type;

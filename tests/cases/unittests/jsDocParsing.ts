@@ -757,6 +757,84 @@ module ts {
     }
 }`);
                 });
+
+                it("arrayType1", () => {
+                    parsesCorrectly(
+                        "{a[]}",
+                        `{
+    "kind": "JSDocArrayType",
+    "pos": 1,
+    "end": 4,
+    "elementType": {
+        "kind": "JSDocTypeReference",
+        "pos": 1,
+        "end": 2,
+        "name": {
+            "kind": "Identifier",
+            "pos": 1,
+            "end": 2,
+            "text": "a"
+        }
+    }
+}`);
+                });
+
+                it("arrayType2", () => {
+                    parsesCorrectly(
+                        "{a[][]}",
+                        `{
+    "kind": "JSDocArrayType",
+    "pos": 1,
+    "end": 6,
+    "elementType": {
+        "kind": "JSDocArrayType",
+        "pos": 1,
+        "end": 4,
+        "elementType": {
+            "kind": "JSDocTypeReference",
+            "pos": 1,
+            "end": 2,
+            "name": {
+                "kind": "Identifier",
+                "pos": 1,
+                "end": 2,
+                "text": "a"
+            }
+        }
+    }
+}`);
+                });
+
+                it("arrayType3", () => {
+                    parsesCorrectly(
+                        "{a[][]=}",
+                        `{
+    "kind": "JSDocOptionalType",
+    "pos": 1,
+    "end": 7,
+    "type": {
+        "kind": "JSDocArrayType",
+        "pos": 1,
+        "end": 6,
+        "elementType": {
+            "kind": "JSDocArrayType",
+            "pos": 1,
+            "end": 4,
+            "elementType": {
+                "kind": "JSDocTypeReference",
+                "pos": 1,
+                "end": 2,
+                "name": {
+                    "kind": "Identifier",
+                    "pos": 1,
+                    "end": 2,
+                    "text": "a"
+                }
+            }
+        }
+    }
+}`);
+                });
             });
 
             describe("parsesIncorrectly", () => {
@@ -818,10 +896,6 @@ module ts {
 
                 it("typeArgumentsWithTrailingComma", () => {
                     parsesIncorrectly("{a.<a,>}");
-                });
-
-                it("arrayType", () => {
-                    parsesIncorrectly("{a[]}");
                 });
 
                 it("tsFunctionType", () => {
