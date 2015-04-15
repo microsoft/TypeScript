@@ -10387,10 +10387,12 @@ module ts {
             }
         }
 
-        function getFirstClassOrFunctionDeclaration(symbol: Symbol, nonAmbientOnly: boolean): Declaration {
+        function getFirstNonAmbientClassOrFunctionDeclaration(symbol: Symbol): Declaration {
             let declarations = symbol.declarations;
             for (let declaration of declarations) {
-                if ((declaration.kind === SyntaxKind.ClassDeclaration || (declaration.kind === SyntaxKind.FunctionDeclaration && nodeIsPresent((<FunctionLikeDeclaration>declaration).body))) && !(nonAmbientOnly && isInAmbientContext(declaration))) {
+                if ((declaration.kind === SyntaxKind.ClassDeclaration ||
+                    (declaration.kind === SyntaxKind.FunctionDeclaration && nodeIsPresent((<FunctionLikeDeclaration>declaration).body))) &&
+                    !isInAmbientContext(declaration)) {
                     return declaration;
                 }
             }
@@ -10430,20 +10432,21 @@ module ts {
                     && symbol.declarations.length > 1
                     && !isInAmbientContext(node)
                     && isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.separateCompilation)) {
-                    let nonAmbientClassOrFunc = getFirstClassOrFunctionDeclaration(symbol, /*nonAmbientOnly*/ true);
-                    if (nonAmbientClassOrFunc) {
-                        if (getSourceFileOfNode(node) !== getSourceFileOfNode(nonAmbientClassOrFunc)) {
+                    let firstNonAmbientClassOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
+                    if (firstNonAmbientClassOrFunc) {
+                        if (getSourceFileOfNode(node) !== getSourceFileOfNode(firstNonAmbientClassOrFunc)) {
                             error(node.name, Diagnostics.A_module_declaration_cannot_be_in_a_different_file_from_a_class_or_function_with_which_it_is_merged);
                         }
-                        else if (node.pos < nonAmbientClassOrFunc.pos) {
+                        else if (node.pos < firstNonAmbientClassOrFunc.pos) {
                             error(node.name, Diagnostics.A_module_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged);
                         }
                     }
 
-                    // if the module merges with a class declaration in the same lexical scope, we need to track this
-                    // to ensure the correct emit.
-                    let anyClassOrFunc = getFirstClassOrFunctionDeclaration(symbol, /*nonAmbientOnly*/ false);
-                    if (anyClassOrFunc && anyClassOrFunc.kind === SyntaxKind.ClassDeclaration && inSameLexicalScope(node, anyClassOrFunc)) {
+                    // if the module merges with a class declaration in the same lexical scope, 
+                    // we need to track this to ensure the correct emit.
+                    let mergedClass = getDeclarationOfKind(symbol, SyntaxKind.ClassDeclaration);                    
+                    if (mergedClass &&
+                        inSameLexicalScope(node, mergedClass)) {
                         getNodeLinks(node).flags |= NodeCheckFlags.LexicalModuleMergesWithClass;
                     }
                 }
