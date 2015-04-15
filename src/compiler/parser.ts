@@ -5541,23 +5541,42 @@ module ts {
 
         function parseJSDocType(): JSDocType {
             if (!error) {
-                let type = parseJSDocTypeCore();
+                let type = parseBasicTypeExpression();
 
-                while (!error && type && token === SyntaxKind.OpenBracketToken) {
-                    let arrayType = <JSDocArrayType>createNode(SyntaxKind.JSDocArrayType, type.pos);
-                    arrayType.elementType = type;
+                while (!error && type) {
+                    if (token === SyntaxKind.OpenBracketToken) {
+                        let arrayType = <JSDocArrayType>createNode(SyntaxKind.JSDocArrayType, type.pos);
+                        arrayType.elementType = type;
 
-                    nextToken();
-                    parseExpected(SyntaxKind.CloseBracketToken);
+                        nextToken();
+                        parseExpected(SyntaxKind.CloseBracketToken);
 
-                    type = finishNode(arrayType);
+                        type = finishNode(arrayType);
+                    }
+                    else if (token === SyntaxKind.QuestionToken) {
+                        let nullableType = <JSDocNullableType>createNode(SyntaxKind.JSDocNullableType, type.pos);
+                        nullableType.type = type;
+
+                        nextToken();
+                        type = finishNode(nullableType);
+                    }
+                    else if (token === SyntaxKind.ExclamationToken) {
+                        let nonNullableType = <JSDocNonNullableType>createNode(SyntaxKind.JSDocNonNullableType, type.pos);
+                        nonNullableType.type = type;
+
+                        nextToken();
+                        type = finishNode(nonNullableType);
+                    }
+                    else {
+                        break;
+                    }
                 }
 
                 return type;
             }
         }
 
-        function parseJSDocTypeCore(): JSDocType {
+        function parseBasicTypeExpression(): JSDocType {
             switch (token) {
                 case SyntaxKind.AsteriskToken:
                     return parseJSDocAllType();

@@ -57,6 +57,26 @@ module ts {
 }`)
                 });
 
+                it("nullableType2", () => {
+                    parsesCorrectly("{number?}",
+                        `{
+    "kind": "JSDocNullableType",
+    "pos": 1,
+    "end": 8,
+    "type": {
+        "kind": "JSDocTypeReference",
+        "pos": 1,
+        "end": 7,
+        "name": {
+            "kind": "Identifier",
+            "pos": 1,
+            "end": 7,
+            "text": "number"
+        }
+    }
+}`)
+                });
+
                 it("nonNullableType", () => {
                     parsesCorrectly("{!number}",
                         `{
@@ -71,6 +91,26 @@ module ts {
             "kind": "Identifier",
             "pos": 2,
             "end": 8,
+            "text": "number"
+        }
+    }
+}`)
+                });
+
+                it("nonNullableType2", () => {
+                    parsesCorrectly("{number!}",
+                        `{
+    "kind": "JSDocNonNullableType",
+    "pos": 1,
+    "end": 8,
+    "type": {
+        "kind": "JSDocTypeReference",
+        "pos": 1,
+        "end": 7,
+        "name": {
+            "kind": "Identifier",
+            "pos": 1,
+            "end": 7,
             "text": "number"
         }
     }
