@@ -1,33 +1,33 @@
 === tests/cases/compiler/constructorArgs.ts ===
 interface Options {
->Options : Options, Symbol(Options, Decl(constructorArgs.ts, 0, 0))
+>Options : Options
 
  value: number;
->value : number, Symbol(value, Decl(constructorArgs.ts, 0, 19))
+>value : number
 }
 
 class Super {
->Super : Super, Symbol(Super, Decl(constructorArgs.ts, 2, 1))
+>Super : Super
 
  constructor(value:number) {
->value : number, Symbol(value, Decl(constructorArgs.ts, 5, 13))
+>value : number
  }
 }
 
 class Sub extends Super {
->Sub : Sub, Symbol(Sub, Decl(constructorArgs.ts, 7, 1))
->Super : Super, Symbol(Super, Decl(constructorArgs.ts, 2, 1))
+>Sub : Sub
+>Super : Super
 
  constructor(public options:Options) {
->options : Options, Symbol(options, Decl(constructorArgs.ts, 10, 13))
->Options : Options, Symbol(Options, Decl(constructorArgs.ts, 0, 0))
+>options : Options
+>Options : Options
 
   super(options.value);
 >super(options.value) : void
->super : typeof Super, Symbol(Super, Decl(constructorArgs.ts, 2, 1))
->options.value : number, Symbol(Options.value, Decl(constructorArgs.ts, 0, 19))
->options : Options, Symbol(options, Decl(constructorArgs.ts, 10, 13))
->value : number, Symbol(Options.value, Decl(constructorArgs.ts, 0, 19))
+>super : typeof Super
+>options.value : number
+>options : Options
+>value : number
  } 
 }
 

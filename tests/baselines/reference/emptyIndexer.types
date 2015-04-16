@@ -1,30 +1,30 @@
 === tests/cases/compiler/emptyIndexer.ts ===
 interface I1 {
->I1 : I1, Symbol(I1, Decl(emptyIndexer.ts, 0, 0))
+>I1 : I1
 
 	m(): number;
->m : () => number, Symbol(m, Decl(emptyIndexer.ts, 0, 14))
+>m : () => number
 }
 
 interface I2 {
->I2 : I2, Symbol(I2, Decl(emptyIndexer.ts, 2, 1))
+>I2 : I2
 
 	[s:string]: I1;
->s : string, Symbol(s, Decl(emptyIndexer.ts, 5, 2))
->I1 : I1, Symbol(I1, Decl(emptyIndexer.ts, 0, 0))
+>s : string
+>I1 : I1
 }
 
 
 var x: I2;
->x : I2, Symbol(x, Decl(emptyIndexer.ts, 9, 3))
->I2 : I2, Symbol(I2, Decl(emptyIndexer.ts, 2, 1))
+>x : I2
+>I2 : I2
 
 var n = x[''].m(); // should not crash compiler
->n : number, Symbol(n, Decl(emptyIndexer.ts, 11, 3))
+>n : number
 >x[''].m() : number
->x[''].m : () => number, Symbol(I1.m, Decl(emptyIndexer.ts, 0, 14))
+>x[''].m : () => number
 >x[''] : I1
->x : I2, Symbol(x, Decl(emptyIndexer.ts, 9, 3))
+>x : I2
 >'' : string
->m : () => number, Symbol(I1.m, Decl(emptyIndexer.ts, 0, 14))
+>m : () => number
 

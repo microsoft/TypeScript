@@ -1,0 +1,10 @@
+=== tests/cases/compiler/idInProp.ts ===
+function f() {
+>f : Symbol(f, Decl(idInProp.ts, 0, 0))
+
+var t: { (f: any) : any; };
+>t : Symbol(t, Decl(idInProp.ts, 2, 3))
+>f : Symbol(f, Decl(idInProp.ts, 2, 10))
+
+}
+

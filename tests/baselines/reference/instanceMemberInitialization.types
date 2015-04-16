@@ -1,36 +1,36 @@
 === tests/cases/conformance/classes/propertyMemberDeclarations/instanceMemberInitialization.ts ===
 class C {
->C : C, Symbol(C, Decl(instanceMemberInitialization.ts, 0, 0))
+>C : C
 
     x = 1;
->x : number, Symbol(x, Decl(instanceMemberInitialization.ts, 0, 9))
+>x : number
 >1 : number
 }
 
 var c = new C();
->c : C, Symbol(c, Decl(instanceMemberInitialization.ts, 4, 3))
+>c : C
 >new C() : C
->C : typeof C, Symbol(C, Decl(instanceMemberInitialization.ts, 0, 0))
+>C : typeof C
 
 c.x = 3;
 >c.x = 3 : number
->c.x : number, Symbol(C.x, Decl(instanceMemberInitialization.ts, 0, 9))
->c : C, Symbol(c, Decl(instanceMemberInitialization.ts, 4, 3))
->x : number, Symbol(C.x, Decl(instanceMemberInitialization.ts, 0, 9))
+>c.x : number
+>c : C
+>x : number
 >3 : number
 
 var c2 = new C();
->c2 : C, Symbol(c2, Decl(instanceMemberInitialization.ts, 6, 3))
+>c2 : C
 >new C() : C
->C : typeof C, Symbol(C, Decl(instanceMemberInitialization.ts, 0, 0))
+>C : typeof C
 
 var r = c.x === c2.x;
->r : boolean, Symbol(r, Decl(instanceMemberInitialization.ts, 7, 3))
+>r : boolean
 >c.x === c2.x : boolean
->c.x : number, Symbol(C.x, Decl(instanceMemberInitialization.ts, 0, 9))
->c : C, Symbol(c, Decl(instanceMemberInitialization.ts, 4, 3))
->x : number, Symbol(C.x, Decl(instanceMemberInitialization.ts, 0, 9))
->c2.x : number, Symbol(C.x, Decl(instanceMemberInitialization.ts, 0, 9))
->c2 : C, Symbol(c2, Decl(instanceMemberInitialization.ts, 6, 3))
->x : number, Symbol(C.x, Decl(instanceMemberInitialization.ts, 0, 9))
+>c.x : number
+>c : C
+>x : number
+>c2.x : number
+>c2 : C
+>x : number
 

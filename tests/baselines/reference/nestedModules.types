@@ -1,85 +1,85 @@
 === tests/cases/conformance/internalModules/moduleDeclarations/nestedModules.ts ===
 module A.B.C {
->A : typeof A, Symbol(A, Decl(nestedModules.ts, 0, 0), Decl(nestedModules.ts, 5, 1))
->B : typeof B, Symbol(B, Decl(nestedModules.ts, 0, 9), Decl(nestedModules.ts, 7, 10))
->C : any, Symbol(C, Decl(nestedModules.ts, 0, 11))
+>A : typeof A
+>B : typeof B
+>C : any
 
     export interface Point {
->Point : Point, Symbol(Point, Decl(nestedModules.ts, 0, 14))
+>Point : Point
 
         x: number;
->x : number, Symbol(x, Decl(nestedModules.ts, 1, 28))
+>x : number
 
         y: number;
->y : number, Symbol(y, Decl(nestedModules.ts, 2, 18))
+>y : number
     }
 }
 
 module A {
->A : typeof A, Symbol(A, Decl(nestedModules.ts, 0, 0), Decl(nestedModules.ts, 5, 1))
+>A : typeof A
 
     export module B {
->B : typeof B, Symbol(B, Decl(nestedModules.ts, 0, 9), Decl(nestedModules.ts, 7, 10))
+>B : typeof B
 
         var Point: C.Point = { x: 0, y: 0 }; // bug 832088: could not find module 'C'
->Point : C.Point, Symbol(Point, Decl(nestedModules.ts, 9, 11))
->C : any, Symbol(C, Decl(nestedModules.ts, 0, 11))
->Point : C.Point, Symbol(C.Point, Decl(nestedModules.ts, 0, 14))
+>Point : C.Point
+>C : any
+>Point : C.Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
->x : number, Symbol(x, Decl(nestedModules.ts, 9, 30))
+>x : number
 >0 : number
->y : number, Symbol(y, Decl(nestedModules.ts, 9, 36))
+>y : number
 >0 : number
     }
 }
 
 module M2.X {
->M2 : typeof M2, Symbol(M2, Decl(nestedModules.ts, 11, 1), Decl(nestedModules.ts, 17, 1))
->X : typeof X, Symbol(X, Decl(nestedModules.ts, 13, 10), Decl(nestedModules.ts, 19, 11))
+>M2 : typeof M2
+>X : typeof X
 
     export interface Point {
->Point : Point, Symbol(Point, Decl(nestedModules.ts, 13, 13), Decl(nestedModules.ts, 21, 18))
+>Point : Point
 
         x: number; y: number;
->x : number, Symbol(x, Decl(nestedModules.ts, 14, 28))
->y : number, Symbol(y, Decl(nestedModules.ts, 15, 18))
+>x : number
+>y : number
     }
 }
 
 module M2 {
->M2 : typeof M2, Symbol(M2, Decl(nestedModules.ts, 11, 1), Decl(nestedModules.ts, 17, 1))
+>M2 : typeof M2
 
     export module X {
->X : typeof X, Symbol(X, Decl(nestedModules.ts, 13, 10), Decl(nestedModules.ts, 19, 11))
+>X : typeof X
 
         export var Point: number;
->Point : number, Symbol(Point, Decl(nestedModules.ts, 13, 13), Decl(nestedModules.ts, 21, 18))
+>Point : number
     }
 }
 
 var m = M2.X;
->m : typeof M2.X, Symbol(m, Decl(nestedModules.ts, 25, 3))
->M2.X : typeof M2.X, Symbol(M2.X, Decl(nestedModules.ts, 13, 10), Decl(nestedModules.ts, 19, 11))
->M2 : typeof M2, Symbol(M2, Decl(nestedModules.ts, 11, 1), Decl(nestedModules.ts, 17, 1))
->X : typeof M2.X, Symbol(M2.X, Decl(nestedModules.ts, 13, 10), Decl(nestedModules.ts, 19, 11))
+>m : typeof M2.X
+>M2.X : typeof M2.X
+>M2 : typeof M2
+>X : typeof M2.X
 
 var point: number;
->point : number, Symbol(point, Decl(nestedModules.ts, 26, 3), Decl(nestedModules.ts, 27, 3))
+>point : number
 
 var point = m.Point;
->point : number, Symbol(point, Decl(nestedModules.ts, 26, 3), Decl(nestedModules.ts, 27, 3))
->m.Point : number, Symbol(M2.X.Point, Decl(nestedModules.ts, 13, 13), Decl(nestedModules.ts, 21, 18))
->m : typeof M2.X, Symbol(m, Decl(nestedModules.ts, 25, 3))
->Point : number, Symbol(M2.X.Point, Decl(nestedModules.ts, 13, 13), Decl(nestedModules.ts, 21, 18))
+>point : number
+>m.Point : number
+>m : typeof M2.X
+>Point : number
 
 var p: { x: number; y: number; }
->p : { x: number; y: number; }, Symbol(p, Decl(nestedModules.ts, 29, 3), Decl(nestedModules.ts, 30, 3))
->x : number, Symbol(x, Decl(nestedModules.ts, 29, 8))
->y : number, Symbol(y, Decl(nestedModules.ts, 29, 19))
+>p : { x: number; y: number; }
+>x : number
+>y : number
 
 var p: M2.X.Point;
->p : { x: number; y: number; }, Symbol(p, Decl(nestedModules.ts, 29, 3), Decl(nestedModules.ts, 30, 3))
->M2 : any, Symbol(M2, Decl(nestedModules.ts, 11, 1), Decl(nestedModules.ts, 17, 1))
->X : any, Symbol(M2.X, Decl(nestedModules.ts, 13, 10), Decl(nestedModules.ts, 19, 11))
->Point : M2.X.Point, Symbol(M2.X.Point, Decl(nestedModules.ts, 13, 13), Decl(nestedModules.ts, 21, 18))
+>p : { x: number; y: number; }
+>M2 : any
+>X : any
+>Point : M2.X.Point
 

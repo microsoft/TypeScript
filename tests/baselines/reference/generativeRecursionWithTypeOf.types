@@ -1,28 +1,28 @@
 === tests/cases/compiler/generativeRecursionWithTypeOf.ts ===
 class C<T> {
->C : C<T>, Symbol(C, Decl(generativeRecursionWithTypeOf.ts, 0, 0))
->T : T, Symbol(T, Decl(generativeRecursionWithTypeOf.ts, 0, 8))
+>C : C<T>
+>T : T
 
     static foo(x: number) { }
->foo : (x: number) => void, Symbol(C.foo, Decl(generativeRecursionWithTypeOf.ts, 0, 12))
->x : number, Symbol(x, Decl(generativeRecursionWithTypeOf.ts, 1, 15))
+>foo : (x: number) => void
+>x : number
 
     type: T;
->type : T, Symbol(type, Decl(generativeRecursionWithTypeOf.ts, 1, 29))
->T : T, Symbol(T, Decl(generativeRecursionWithTypeOf.ts, 0, 8))
+>type : T
+>T : T
 }
 
 module M {
->M : typeof M, Symbol(M, Decl(generativeRecursionWithTypeOf.ts, 3, 1))
+>M : typeof M
 
     export function f(x: typeof C) {   
->f : (x: typeof C) => C<typeof C>, Symbol(f, Decl(generativeRecursionWithTypeOf.ts, 5, 10))
->x : typeof C, Symbol(x, Decl(generativeRecursionWithTypeOf.ts, 6, 22))
->C : typeof C, Symbol(C, Decl(generativeRecursionWithTypeOf.ts, 0, 0))
+>f : (x: typeof C) => C<typeof C>
+>x : typeof C
+>C : typeof C
 
         return new x<typeof x>();     
 >new x<typeof x>() : C<typeof C>
->x : typeof C, Symbol(x, Decl(generativeRecursionWithTypeOf.ts, 6, 22))
->x : typeof C, Symbol(x, Decl(generativeRecursionWithTypeOf.ts, 6, 22))
+>x : typeof C
+>x : typeof C
     }
 }

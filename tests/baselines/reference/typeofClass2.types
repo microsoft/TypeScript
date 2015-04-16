@@ -1,55 +1,55 @@
 === tests/cases/conformance/types/specifyingTypes/typeQueries/typeofClass2.ts ===
 class C {
->C : C, Symbol(C, Decl(typeofClass2.ts, 0, 0))
+>C : C
 
     constructor(x: number);
->x : number, Symbol(x, Decl(typeofClass2.ts, 1, 16))
+>x : number
 
     constructor(x: string);
->x : string, Symbol(x, Decl(typeofClass2.ts, 2, 16))
+>x : string
 
     constructor(x) { }
->x : any, Symbol(x, Decl(typeofClass2.ts, 3, 16))
+>x : any
 
     static foo(x: number);
->foo : { (x: number): any; (x: C): any; }, Symbol(C.foo, Decl(typeofClass2.ts, 3, 22), Decl(typeofClass2.ts, 5, 26), Decl(typeofClass2.ts, 6, 21))
->x : number, Symbol(x, Decl(typeofClass2.ts, 5, 15))
+>foo : { (x: number): any; (x: C): any; }
+>x : number
 
     static foo(x: C);
->foo : { (x: number): any; (x: C): any; }, Symbol(C.foo, Decl(typeofClass2.ts, 3, 22), Decl(typeofClass2.ts, 5, 26), Decl(typeofClass2.ts, 6, 21))
->x : C, Symbol(x, Decl(typeofClass2.ts, 6, 15))
->C : C, Symbol(C, Decl(typeofClass2.ts, 0, 0))
+>foo : { (x: number): any; (x: C): any; }
+>x : C
+>C : C
 
     static foo(x) { }
->foo : { (x: number): any; (x: C): any; }, Symbol(C.foo, Decl(typeofClass2.ts, 3, 22), Decl(typeofClass2.ts, 5, 26), Decl(typeofClass2.ts, 6, 21))
->x : any, Symbol(x, Decl(typeofClass2.ts, 7, 15))
+>foo : { (x: number): any; (x: C): any; }
+>x : any
 
     static bar(x) { }
->bar : (x: any) => void, Symbol(C.bar, Decl(typeofClass2.ts, 7, 21))
->x : any, Symbol(x, Decl(typeofClass2.ts, 9, 15))
+>bar : (x: any) => void
+>x : any
 }
 
 class D extends C {
->D : D, Symbol(D, Decl(typeofClass2.ts, 10, 1))
->C : C, Symbol(C, Decl(typeofClass2.ts, 0, 0))
+>D : D
+>C : C
 
     static baz(x: number) { }
->baz : (x: number) => void, Symbol(D.baz, Decl(typeofClass2.ts, 12, 19))
->x : number, Symbol(x, Decl(typeofClass2.ts, 13, 15))
+>baz : (x: number) => void
+>x : number
 
     foo() { }
->foo : () => void, Symbol(foo, Decl(typeofClass2.ts, 13, 29))
+>foo : () => void
 }
 
 var d: D;
->d : D, Symbol(d, Decl(typeofClass2.ts, 17, 3))
->D : D, Symbol(D, Decl(typeofClass2.ts, 10, 1))
+>d : D
+>D : D
 
 var r1: typeof D;
->r1 : typeof D, Symbol(r1, Decl(typeofClass2.ts, 19, 3))
->D : typeof D, Symbol(D, Decl(typeofClass2.ts, 10, 1))
+>r1 : typeof D
+>D : typeof D
 
 var r2: typeof d;
->r2 : D, Symbol(r2, Decl(typeofClass2.ts, 20, 3))
->d : D, Symbol(d, Decl(typeofClass2.ts, 17, 3))
+>r2 : D
+>d : D
 

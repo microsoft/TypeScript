@@ -2,120 +2,120 @@
 // any is not a valid type argument unless there is no constraint, or the constraint is any
 
 function foo<T extends String>(x: T): T { return null; }
->foo : <T extends String>(x: T) => T, Symbol(foo, Decl(constraintSatisfactionWithAny.ts, 0, 0))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 2, 13))
->String : String, Symbol(String, Decl(lib.d.ts, 275, 1), Decl(lib.d.ts, 443, 11))
->x : T, Symbol(x, Decl(constraintSatisfactionWithAny.ts, 2, 31))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 2, 13))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 2, 13))
+>foo : <T extends String>(x: T) => T
+>T : T
+>String : String
+>x : T
+>T : T
+>T : T
 >null : null
 
 function foo2<T extends { x: number }>(x: T): T { return null; }
->foo2 : <T extends { x: number; }>(x: T) => T, Symbol(foo2, Decl(constraintSatisfactionWithAny.ts, 2, 56))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 3, 14))
->x : number, Symbol(x, Decl(constraintSatisfactionWithAny.ts, 3, 25))
->x : T, Symbol(x, Decl(constraintSatisfactionWithAny.ts, 3, 39))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 3, 14))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 3, 14))
+>foo2 : <T extends { x: number; }>(x: T) => T
+>T : T
+>x : number
+>x : T
+>T : T
+>T : T
 >null : null
 
 //function foo3<T extends T[]>(x: T): T { return null; }
 function foo4<T extends <T>(x: T) => void>(x: T): T { return null; }
->foo4 : <T extends <T>(x: T) => void>(x: T) => T, Symbol(foo4, Decl(constraintSatisfactionWithAny.ts, 3, 64))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 5, 14))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 5, 25))
->x : T, Symbol(x, Decl(constraintSatisfactionWithAny.ts, 5, 28))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 5, 25))
->x : T, Symbol(x, Decl(constraintSatisfactionWithAny.ts, 5, 43))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 5, 14))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 5, 14))
+>foo4 : <T extends <T>(x: T) => void>(x: T) => T
+>T : T
+>T : T
+>x : T
+>T : T
+>x : T
+>T : T
+>T : T
 >null : null
 
 var a;
->a : any, Symbol(a, Decl(constraintSatisfactionWithAny.ts, 6, 3))
+>a : any
 
 foo(a);
 >foo(a) : any
->foo : <T extends String>(x: T) => T, Symbol(foo, Decl(constraintSatisfactionWithAny.ts, 0, 0))
->a : any, Symbol(a, Decl(constraintSatisfactionWithAny.ts, 6, 3))
+>foo : <T extends String>(x: T) => T
+>a : any
 
 foo2(a);
 >foo2(a) : any
->foo2 : <T extends { x: number; }>(x: T) => T, Symbol(foo2, Decl(constraintSatisfactionWithAny.ts, 2, 56))
->a : any, Symbol(a, Decl(constraintSatisfactionWithAny.ts, 6, 3))
+>foo2 : <T extends { x: number; }>(x: T) => T
+>a : any
 
 //foo3(a);
 foo4(a);
 >foo4(a) : any
->foo4 : <T extends <T>(x: T) => void>(x: T) => T, Symbol(foo4, Decl(constraintSatisfactionWithAny.ts, 3, 64))
->a : any, Symbol(a, Decl(constraintSatisfactionWithAny.ts, 6, 3))
+>foo4 : <T extends <T>(x: T) => void>(x: T) => T
+>a : any
 
 var b: number;
->b : number, Symbol(b, Decl(constraintSatisfactionWithAny.ts, 12, 3))
+>b : number
 
 foo<any>(b);
 >foo<any>(b) : any
->foo : <T extends String>(x: T) => T, Symbol(foo, Decl(constraintSatisfactionWithAny.ts, 0, 0))
->b : number, Symbol(b, Decl(constraintSatisfactionWithAny.ts, 12, 3))
+>foo : <T extends String>(x: T) => T
+>b : number
 
 foo2<any>(b);
 >foo2<any>(b) : any
->foo2 : <T extends { x: number; }>(x: T) => T, Symbol(foo2, Decl(constraintSatisfactionWithAny.ts, 2, 56))
->b : number, Symbol(b, Decl(constraintSatisfactionWithAny.ts, 12, 3))
+>foo2 : <T extends { x: number; }>(x: T) => T
+>b : number
 
 //foo3<any>(b);
 foo4<any>(b);
 >foo4<any>(b) : any
->foo4 : <T extends <T>(x: T) => void>(x: T) => T, Symbol(foo4, Decl(constraintSatisfactionWithAny.ts, 3, 64))
->b : number, Symbol(b, Decl(constraintSatisfactionWithAny.ts, 12, 3))
+>foo4 : <T extends <T>(x: T) => void>(x: T) => T
+>b : number
 
 //function foo5<T extends String, U extends T>(x: T, y: U): T { return null; }
 //foo5(a, a);
 //foo5<any, any>(b, b);
 
 class C<T extends String> {
->C : C<T>, Symbol(C, Decl(constraintSatisfactionWithAny.ts, 16, 13))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 22, 8))
->String : String, Symbol(String, Decl(lib.d.ts, 275, 1), Decl(lib.d.ts, 443, 11))
+>C : C<T>
+>T : T
+>String : String
 
     constructor(public x: T) { }
->x : T, Symbol(x, Decl(constraintSatisfactionWithAny.ts, 23, 16))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 22, 8))
+>x : T
+>T : T
 }
 
 var c1 = new C(a);
->c1 : C<any>, Symbol(c1, Decl(constraintSatisfactionWithAny.ts, 26, 3))
+>c1 : C<any>
 >new C(a) : C<any>
->C : typeof C, Symbol(C, Decl(constraintSatisfactionWithAny.ts, 16, 13))
->a : any, Symbol(a, Decl(constraintSatisfactionWithAny.ts, 6, 3))
+>C : typeof C
+>a : any
 
 var c2 = new C<any>(b);
->c2 : C<any>, Symbol(c2, Decl(constraintSatisfactionWithAny.ts, 27, 3))
+>c2 : C<any>
 >new C<any>(b) : C<any>
->C : typeof C, Symbol(C, Decl(constraintSatisfactionWithAny.ts, 16, 13))
->b : number, Symbol(b, Decl(constraintSatisfactionWithAny.ts, 12, 3))
+>C : typeof C
+>b : number
 
 class C2<T extends { x: number }> {
->C2 : C2<T>, Symbol(C2, Decl(constraintSatisfactionWithAny.ts, 27, 23))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 29, 9))
->x : number, Symbol(x, Decl(constraintSatisfactionWithAny.ts, 29, 20))
+>C2 : C2<T>
+>T : T
+>x : number
 
     constructor(public x: T) { }
->x : T, Symbol(x, Decl(constraintSatisfactionWithAny.ts, 30, 16))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 29, 9))
+>x : T
+>T : T
 }
 
 var c3 = new C2(a);
->c3 : C2<any>, Symbol(c3, Decl(constraintSatisfactionWithAny.ts, 33, 3))
+>c3 : C2<any>
 >new C2(a) : C2<any>
->C2 : typeof C2, Symbol(C2, Decl(constraintSatisfactionWithAny.ts, 27, 23))
->a : any, Symbol(a, Decl(constraintSatisfactionWithAny.ts, 6, 3))
+>C2 : typeof C2
+>a : any
 
 var c4 = new C2<any>(b);
->c4 : C2<any>, Symbol(c4, Decl(constraintSatisfactionWithAny.ts, 34, 3))
+>c4 : C2<any>
 >new C2<any>(b) : C2<any>
->C2 : typeof C2, Symbol(C2, Decl(constraintSatisfactionWithAny.ts, 27, 23))
->b : number, Symbol(b, Decl(constraintSatisfactionWithAny.ts, 12, 3))
+>C2 : typeof C2
+>b : number
 
 //class C3<T extends T[]> {
 //    constructor(public x: T) { }
@@ -125,29 +125,29 @@ var c4 = new C2<any>(b);
 //var c6 = new C3<any>(b);
 
 class C4<T extends <T>(x:T) => T> {
->C4 : C4<T>, Symbol(C4, Decl(constraintSatisfactionWithAny.ts, 34, 24))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 43, 9))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 43, 20))
->x : T, Symbol(x, Decl(constraintSatisfactionWithAny.ts, 43, 23))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 43, 20))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 43, 20))
+>C4 : C4<T>
+>T : T
+>T : T
+>x : T
+>T : T
+>T : T
 
     constructor(public x: T) { }
->x : T, Symbol(x, Decl(constraintSatisfactionWithAny.ts, 44, 16))
->T : T, Symbol(T, Decl(constraintSatisfactionWithAny.ts, 43, 9))
+>x : T
+>T : T
 }
 
 var c7 = new C4(a);
->c7 : C4<any>, Symbol(c7, Decl(constraintSatisfactionWithAny.ts, 47, 3))
+>c7 : C4<any>
 >new C4(a) : C4<any>
->C4 : typeof C4, Symbol(C4, Decl(constraintSatisfactionWithAny.ts, 34, 24))
->a : any, Symbol(a, Decl(constraintSatisfactionWithAny.ts, 6, 3))
+>C4 : typeof C4
+>a : any
 
 var c8 = new C4<any>(b);
->c8 : C4<any>, Symbol(c8, Decl(constraintSatisfactionWithAny.ts, 48, 3))
+>c8 : C4<any>
 >new C4<any>(b) : C4<any>
->C4 : typeof C4, Symbol(C4, Decl(constraintSatisfactionWithAny.ts, 34, 24))
->b : number, Symbol(b, Decl(constraintSatisfactionWithAny.ts, 12, 3))
+>C4 : typeof C4
+>b : number
 
 
 

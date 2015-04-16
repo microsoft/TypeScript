@@ -1,6 +1,6 @@
 === tests/cases/compiler/stradac.ts ===
 var x = 10;
->x : number, Symbol(x, Decl(stradac.ts, 0, 3))
+>x : number
 >10 : number
 
 // C++-style comment
@@ -11,9 +11,9 @@ var x = 10;
     
     
 function foo() {
->foo : () => void, Symbol(foo, Decl(stradac.ts, 0, 11))
+>foo : () => void
 
     x++;
 >x++ : number
->x : number, Symbol(x, Decl(stradac.ts, 0, 3))
+>x : number
 }

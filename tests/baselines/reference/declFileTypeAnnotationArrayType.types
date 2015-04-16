@@ -1,125 +1,125 @@
 === tests/cases/compiler/declFileTypeAnnotationArrayType.ts ===
 
 class c {
->c : c, Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 0, 0))
+>c : c
 }
 module m {
->m : typeof m, Symbol(m, Decl(declFileTypeAnnotationArrayType.ts, 2, 1))
+>m : typeof m
 
     export class c {
->c : c, Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 3, 10))
+>c : c
     }
     export class g<T> {
->g : g<T>, Symbol(g, Decl(declFileTypeAnnotationArrayType.ts, 5, 5))
->T : T, Symbol(T, Decl(declFileTypeAnnotationArrayType.ts, 6, 19))
+>g : g<T>
+>T : T
     }
 }
 class g<T> {
->g : g<T>, Symbol(g, Decl(declFileTypeAnnotationArrayType.ts, 8, 1))
->T : T, Symbol(T, Decl(declFileTypeAnnotationArrayType.ts, 9, 8))
+>g : g<T>
+>T : T
 }
 
 // Just the name
 function foo(): c[] {
->foo : () => c[], Symbol(foo, Decl(declFileTypeAnnotationArrayType.ts, 10, 1))
->c : c, Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 0, 0))
+>foo : () => c[]
+>c : c
 
     return [new c()];
 >[new c()] : c[]
 >new c() : c
->c : typeof c, Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 0, 0))
+>c : typeof c
 }
 function foo2() {
->foo2 : () => c[], Symbol(foo2, Decl(declFileTypeAnnotationArrayType.ts, 15, 1))
+>foo2 : () => c[]
 
     return [new c()];
 >[new c()] : c[]
 >new c() : c
->c : typeof c, Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 0, 0))
+>c : typeof c
 }
 
 // Qualified name
 function foo3(): m.c[] {
->foo3 : () => m.c[], Symbol(foo3, Decl(declFileTypeAnnotationArrayType.ts, 18, 1))
->m : any, Symbol(m, Decl(declFileTypeAnnotationArrayType.ts, 2, 1))
->c : m.c, Symbol(m.c, Decl(declFileTypeAnnotationArrayType.ts, 3, 10))
+>foo3 : () => m.c[]
+>m : any
+>c : m.c
 
     return [new m.c()];
 >[new m.c()] : m.c[]
 >new m.c() : m.c
->m.c : typeof m.c, Symbol(m.c, Decl(declFileTypeAnnotationArrayType.ts, 3, 10))
->m : typeof m, Symbol(m, Decl(declFileTypeAnnotationArrayType.ts, 2, 1))
->c : typeof m.c, Symbol(m.c, Decl(declFileTypeAnnotationArrayType.ts, 3, 10))
+>m.c : typeof m.c
+>m : typeof m
+>c : typeof m.c
 }
 function foo4() {
->foo4 : () => typeof m.c, Symbol(foo4, Decl(declFileTypeAnnotationArrayType.ts, 23, 1))
+>foo4 : () => typeof m.c
 
     return m.c;
->m.c : typeof m.c, Symbol(m.c, Decl(declFileTypeAnnotationArrayType.ts, 3, 10))
->m : typeof m, Symbol(m, Decl(declFileTypeAnnotationArrayType.ts, 2, 1))
->c : typeof m.c, Symbol(m.c, Decl(declFileTypeAnnotationArrayType.ts, 3, 10))
+>m.c : typeof m.c
+>m : typeof m
+>c : typeof m.c
 }
 
 // Just the name with type arguments
 function foo5(): g<string>[] {
->foo5 : () => g<string>[], Symbol(foo5, Decl(declFileTypeAnnotationArrayType.ts, 26, 1))
->g : g<T>, Symbol(g, Decl(declFileTypeAnnotationArrayType.ts, 8, 1))
+>foo5 : () => g<string>[]
+>g : g<T>
 
     return [new g<string>()];
 >[new g<string>()] : g<string>[]
 >new g<string>() : g<string>
->g : typeof g, Symbol(g, Decl(declFileTypeAnnotationArrayType.ts, 8, 1))
+>g : typeof g
 }
 function foo6() {
->foo6 : () => g<string>[], Symbol(foo6, Decl(declFileTypeAnnotationArrayType.ts, 31, 1))
+>foo6 : () => g<string>[]
 
     return [new g<string>()];
 >[new g<string>()] : g<string>[]
 >new g<string>() : g<string>
->g : typeof g, Symbol(g, Decl(declFileTypeAnnotationArrayType.ts, 8, 1))
+>g : typeof g
 }
 
 // Qualified name with type arguments
 function foo7(): m.g<number>[] {
->foo7 : () => m.g<number>[], Symbol(foo7, Decl(declFileTypeAnnotationArrayType.ts, 34, 1))
->m : any, Symbol(m, Decl(declFileTypeAnnotationArrayType.ts, 2, 1))
->g : m.g<T>, Symbol(m.g, Decl(declFileTypeAnnotationArrayType.ts, 5, 5))
+>foo7 : () => m.g<number>[]
+>m : any
+>g : m.g<T>
 
     return [new m.g<number>()];
 >[new m.g<number>()] : m.g<number>[]
 >new m.g<number>() : m.g<number>
->m.g : typeof m.g, Symbol(m.g, Decl(declFileTypeAnnotationArrayType.ts, 5, 5))
->m : typeof m, Symbol(m, Decl(declFileTypeAnnotationArrayType.ts, 2, 1))
->g : typeof m.g, Symbol(m.g, Decl(declFileTypeAnnotationArrayType.ts, 5, 5))
+>m.g : typeof m.g
+>m : typeof m
+>g : typeof m.g
 }
 function foo8() {
->foo8 : () => m.g<number>[], Symbol(foo8, Decl(declFileTypeAnnotationArrayType.ts, 39, 1))
+>foo8 : () => m.g<number>[]
 
     return [new m.g<number>()];
 >[new m.g<number>()] : m.g<number>[]
 >new m.g<number>() : m.g<number>
->m.g : typeof m.g, Symbol(m.g, Decl(declFileTypeAnnotationArrayType.ts, 5, 5))
->m : typeof m, Symbol(m, Decl(declFileTypeAnnotationArrayType.ts, 2, 1))
->g : typeof m.g, Symbol(m.g, Decl(declFileTypeAnnotationArrayType.ts, 5, 5))
+>m.g : typeof m.g
+>m : typeof m
+>g : typeof m.g
 }
 
 // Array of function types
 function foo9(): (()=>c)[] {
->foo9 : () => (() => c)[], Symbol(foo9, Decl(declFileTypeAnnotationArrayType.ts, 42, 1))
->c : c, Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 0, 0))
+>foo9 : () => (() => c)[]
+>c : c
 
     return [() => new c()];
 >[() => new c()] : (() => c)[]
 >() => new c() : () => c
 >new c() : c
->c : typeof c, Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 0, 0))
+>c : typeof c
 }
 function foo10() {
->foo10 : () => (() => c)[], Symbol(foo10, Decl(declFileTypeAnnotationArrayType.ts, 47, 1))
+>foo10 : () => (() => c)[]
 
     return [() => new c()];
 >[() => new c()] : (() => c)[]
 >() => new c() : () => c
 >new c() : c
->c : typeof c, Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 0, 0))
+>c : typeof c
 }

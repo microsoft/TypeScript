@@ -2,117 +2,117 @@
 // basic uses of specialized signatures without errors
 
 class Base { foo: string }
->Base : Base, Symbol(Base, Decl(typesWithSpecializedConstructSignatures.ts, 0, 0))
->foo : string, Symbol(foo, Decl(typesWithSpecializedConstructSignatures.ts, 2, 12))
+>Base : Base
+>foo : string
 
 class Derived1 extends Base { bar: string }
->Derived1 : Derived1, Symbol(Derived1, Decl(typesWithSpecializedConstructSignatures.ts, 2, 26))
->Base : Base, Symbol(Base, Decl(typesWithSpecializedConstructSignatures.ts, 0, 0))
->bar : string, Symbol(bar, Decl(typesWithSpecializedConstructSignatures.ts, 3, 29))
+>Derived1 : Derived1
+>Base : Base
+>bar : string
 
 class Derived2 extends Base { baz: string }
->Derived2 : Derived2, Symbol(Derived2, Decl(typesWithSpecializedConstructSignatures.ts, 3, 43))
->Base : Base, Symbol(Base, Decl(typesWithSpecializedConstructSignatures.ts, 0, 0))
->baz : string, Symbol(baz, Decl(typesWithSpecializedConstructSignatures.ts, 4, 29))
+>Derived2 : Derived2
+>Base : Base
+>baz : string
 
 class C {
->C : C, Symbol(C, Decl(typesWithSpecializedConstructSignatures.ts, 4, 43))
+>C : C
 
     constructor(x: 'hi');
->x : 'hi', Symbol(x, Decl(typesWithSpecializedConstructSignatures.ts, 7, 16))
+>x : 'hi'
 
     constructor(x: 'bye');
->x : 'bye', Symbol(x, Decl(typesWithSpecializedConstructSignatures.ts, 8, 16))
+>x : 'bye'
 
     constructor(x: string);
->x : string, Symbol(x, Decl(typesWithSpecializedConstructSignatures.ts, 9, 16))
+>x : string
 
     constructor(x) {
->x : any, Symbol(x, Decl(typesWithSpecializedConstructSignatures.ts, 10, 16))
+>x : any
 
         return x;
->x : any, Symbol(x, Decl(typesWithSpecializedConstructSignatures.ts, 10, 16))
+>x : any
     }
 }
 var c = new C('a');
->c : C, Symbol(c, Decl(typesWithSpecializedConstructSignatures.ts, 14, 3))
+>c : C
 >new C('a') : C
->C : typeof C, Symbol(C, Decl(typesWithSpecializedConstructSignatures.ts, 4, 43))
+>C : typeof C
 >'a' : string
 
 interface I {
->I : I, Symbol(I, Decl(typesWithSpecializedConstructSignatures.ts, 14, 19))
+>I : I
 
     new(x: 'hi'): Derived1;
->x : 'hi', Symbol(x, Decl(typesWithSpecializedConstructSignatures.ts, 17, 8))
->Derived1 : Derived1, Symbol(Derived1, Decl(typesWithSpecializedConstructSignatures.ts, 2, 26))
+>x : 'hi'
+>Derived1 : Derived1
 
     new(x: 'bye'): Derived2;
->x : 'bye', Symbol(x, Decl(typesWithSpecializedConstructSignatures.ts, 18, 8))
->Derived2 : Derived2, Symbol(Derived2, Decl(typesWithSpecializedConstructSignatures.ts, 3, 43))
+>x : 'bye'
+>Derived2 : Derived2
 
     new(x: string): Base;
->x : string, Symbol(x, Decl(typesWithSpecializedConstructSignatures.ts, 19, 8))
->Base : Base, Symbol(Base, Decl(typesWithSpecializedConstructSignatures.ts, 0, 0))
+>x : string
+>Base : Base
 }
 var i: I;
->i : I, Symbol(i, Decl(typesWithSpecializedConstructSignatures.ts, 21, 3))
->I : I, Symbol(I, Decl(typesWithSpecializedConstructSignatures.ts, 14, 19))
+>i : I
+>I : I
 
 var a: {
->a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }, Symbol(a, Decl(typesWithSpecializedConstructSignatures.ts, 23, 3))
+>a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }
 
     new(x: 'hi'): Derived1;
->x : 'hi', Symbol(x, Decl(typesWithSpecializedConstructSignatures.ts, 24, 8))
->Derived1 : Derived1, Symbol(Derived1, Decl(typesWithSpecializedConstructSignatures.ts, 2, 26))
+>x : 'hi'
+>Derived1 : Derived1
 
     new(x: 'bye'): Derived2;
->x : 'bye', Symbol(x, Decl(typesWithSpecializedConstructSignatures.ts, 25, 8))
->Derived2 : Derived2, Symbol(Derived2, Decl(typesWithSpecializedConstructSignatures.ts, 3, 43))
+>x : 'bye'
+>Derived2 : Derived2
 
     new(x: string): Base;
->x : string, Symbol(x, Decl(typesWithSpecializedConstructSignatures.ts, 26, 8))
->Base : Base, Symbol(Base, Decl(typesWithSpecializedConstructSignatures.ts, 0, 0))
+>x : string
+>Base : Base
 
 };
 
 c = i;
 >c = i : I
->c : C, Symbol(c, Decl(typesWithSpecializedConstructSignatures.ts, 14, 3))
->i : I, Symbol(i, Decl(typesWithSpecializedConstructSignatures.ts, 21, 3))
+>c : C
+>i : I
 
 c = a;
 >c = a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }
->c : C, Symbol(c, Decl(typesWithSpecializedConstructSignatures.ts, 14, 3))
->a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }, Symbol(a, Decl(typesWithSpecializedConstructSignatures.ts, 23, 3))
+>c : C
+>a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }
 
 i = a;
 >i = a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }
->i : I, Symbol(i, Decl(typesWithSpecializedConstructSignatures.ts, 21, 3))
->a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }, Symbol(a, Decl(typesWithSpecializedConstructSignatures.ts, 23, 3))
+>i : I
+>a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }
 
 a = i;
 >a = i : I
->a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }, Symbol(a, Decl(typesWithSpecializedConstructSignatures.ts, 23, 3))
->i : I, Symbol(i, Decl(typesWithSpecializedConstructSignatures.ts, 21, 3))
+>a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }
+>i : I
 
 var r1 = new C('hi');
->r1 : C, Symbol(r1, Decl(typesWithSpecializedConstructSignatures.ts, 36, 3))
+>r1 : C
 >new C('hi') : C
->C : typeof C, Symbol(C, Decl(typesWithSpecializedConstructSignatures.ts, 4, 43))
+>C : typeof C
 >'hi' : string
 
 var r2: Derived2 = new i('bye');
->r2 : Derived2, Symbol(r2, Decl(typesWithSpecializedConstructSignatures.ts, 37, 3))
->Derived2 : Derived2, Symbol(Derived2, Decl(typesWithSpecializedConstructSignatures.ts, 3, 43))
+>r2 : Derived2
+>Derived2 : Derived2
 >new i('bye') : Derived2
->i : I, Symbol(i, Decl(typesWithSpecializedConstructSignatures.ts, 21, 3))
+>i : I
 >'bye' : string
 
 var r3: Base = new a('hm');
->r3 : Base, Symbol(r3, Decl(typesWithSpecializedConstructSignatures.ts, 38, 3))
->Base : Base, Symbol(Base, Decl(typesWithSpecializedConstructSignatures.ts, 0, 0))
+>r3 : Base
+>Base : Base
 >new a('hm') : Base
->a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }, Symbol(a, Decl(typesWithSpecializedConstructSignatures.ts, 23, 3))
+>a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }
 >'hm' : string
 

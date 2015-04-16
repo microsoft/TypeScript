@@ -1,35 +1,35 @@
 === tests/cases/compiler/moduleMemberWithoutTypeAnnotation2.ts ===
 module TypeScript {
->TypeScript : typeof TypeScript, Symbol(TypeScript, Decl(moduleMemberWithoutTypeAnnotation2.ts, 0, 0))
+>TypeScript : typeof TypeScript
 
     export module CompilerDiagnostics {
->CompilerDiagnostics : typeof CompilerDiagnostics, Symbol(CompilerDiagnostics, Decl(moduleMemberWithoutTypeAnnotation2.ts, 0, 19))
+>CompilerDiagnostics : typeof CompilerDiagnostics
 
         export interface IDiagnosticWriter {
->IDiagnosticWriter : IDiagnosticWriter, Symbol(IDiagnosticWriter, Decl(moduleMemberWithoutTypeAnnotation2.ts, 1, 39))
+>IDiagnosticWriter : IDiagnosticWriter
 
             Alert(output: string): void;
->Alert : (output: string) => void, Symbol(Alert, Decl(moduleMemberWithoutTypeAnnotation2.ts, 3, 44))
->output : string, Symbol(output, Decl(moduleMemberWithoutTypeAnnotation2.ts, 4, 18))
+>Alert : (output: string) => void
+>output : string
         }
 
         export var diagnosticWriter = null;
->diagnosticWriter : any, Symbol(diagnosticWriter, Decl(moduleMemberWithoutTypeAnnotation2.ts, 7, 18))
+>diagnosticWriter : any
 >null : null
 
         export function Alert(output: string) {
->Alert : (output: string) => void, Symbol(Alert, Decl(moduleMemberWithoutTypeAnnotation2.ts, 7, 43))
->output : string, Symbol(output, Decl(moduleMemberWithoutTypeAnnotation2.ts, 9, 30))
+>Alert : (output: string) => void
+>output : string
 
             if (diagnosticWriter) {
->diagnosticWriter : any, Symbol(diagnosticWriter, Decl(moduleMemberWithoutTypeAnnotation2.ts, 7, 18))
+>diagnosticWriter : any
 
                 diagnosticWriter.Alert(output);
 >diagnosticWriter.Alert(output) : any
 >diagnosticWriter.Alert : any
->diagnosticWriter : any, Symbol(diagnosticWriter, Decl(moduleMemberWithoutTypeAnnotation2.ts, 7, 18))
+>diagnosticWriter : any
 >Alert : any
->output : string, Symbol(output, Decl(moduleMemberWithoutTypeAnnotation2.ts, 9, 30))
+>output : string
             }
         }
     }

@@ -3,7 +3,7 @@
 // functionally only possible when your class is otherwise devoid of members so of little consequence in practice
 
 class A {
->A : A, Symbol(A, Decl(constructorReturningAPrimitive.ts, 0, 0))
+>A : A
 
     constructor() {
         return 1;
@@ -12,26 +12,26 @@ class A {
 }
 
 var a = new A();
->a : A, Symbol(a, Decl(constructorReturningAPrimitive.ts, 9, 3))
+>a : A
 >new A() : A
->A : typeof A, Symbol(A, Decl(constructorReturningAPrimitive.ts, 0, 0))
+>A : typeof A
 
 class B<T> {
->B : B<T>, Symbol(B, Decl(constructorReturningAPrimitive.ts, 9, 16))
->T : T, Symbol(T, Decl(constructorReturningAPrimitive.ts, 11, 8))
+>B : B<T>
+>T : T
 
     constructor() {
         var x: T;
->x : T, Symbol(x, Decl(constructorReturningAPrimitive.ts, 13, 11))
->T : T, Symbol(T, Decl(constructorReturningAPrimitive.ts, 11, 8))
+>x : T
+>T : T
 
         return x;
->x : T, Symbol(x, Decl(constructorReturningAPrimitive.ts, 13, 11))
+>x : T
     }
 }
 
 var b = new B<number>();
->b : B<number>, Symbol(b, Decl(constructorReturningAPrimitive.ts, 18, 3))
+>b : B<number>
 >new B<number>() : B<number>
->B : typeof B, Symbol(B, Decl(constructorReturningAPrimitive.ts, 9, 16))
+>B : typeof B
 

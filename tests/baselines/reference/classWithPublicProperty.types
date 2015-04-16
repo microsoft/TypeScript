@@ -1,95 +1,95 @@
 === tests/cases/conformance/types/members/classWithPublicProperty.ts ===
 class C {
->C : C, Symbol(C, Decl(classWithPublicProperty.ts, 0, 0))
+>C : C
 
     public x;
->x : any, Symbol(x, Decl(classWithPublicProperty.ts, 0, 9))
+>x : any
 
     public a = '';
->a : string, Symbol(a, Decl(classWithPublicProperty.ts, 1, 13))
+>a : string
 >'' : string
 
     public b: string = '';
->b : string, Symbol(b, Decl(classWithPublicProperty.ts, 2, 18))
+>b : string
 >'' : string
 
     public c() { return '' }
->c : () => string, Symbol(c, Decl(classWithPublicProperty.ts, 3, 26))
+>c : () => string
 >'' : string
 
     public d = () => '';
->d : () => string, Symbol(d, Decl(classWithPublicProperty.ts, 4, 28))
+>d : () => string
 >() => '' : () => string
 >'' : string
 
     public static e;
->e : any, Symbol(C.e, Decl(classWithPublicProperty.ts, 5, 24))
+>e : any
 
     public static f() { return '' }
->f : () => string, Symbol(C.f, Decl(classWithPublicProperty.ts, 6, 20))
+>f : () => string
 >'' : string
 
     public static g = () => '';
->g : () => string, Symbol(C.g, Decl(classWithPublicProperty.ts, 7, 35))
+>g : () => string
 >() => '' : () => string
 >'' : string
 }
 
 // all of these are valid
 var c = new C();
->c : C, Symbol(c, Decl(classWithPublicProperty.ts, 12, 3))
+>c : C
 >new C() : C
->C : typeof C, Symbol(C, Decl(classWithPublicProperty.ts, 0, 0))
+>C : typeof C
 
 var r1: string = c.x;
->r1 : string, Symbol(r1, Decl(classWithPublicProperty.ts, 13, 3))
->c.x : any, Symbol(C.x, Decl(classWithPublicProperty.ts, 0, 9))
->c : C, Symbol(c, Decl(classWithPublicProperty.ts, 12, 3))
->x : any, Symbol(C.x, Decl(classWithPublicProperty.ts, 0, 9))
+>r1 : string
+>c.x : any
+>c : C
+>x : any
 
 var r2: string = c.a;
->r2 : string, Symbol(r2, Decl(classWithPublicProperty.ts, 14, 3))
->c.a : string, Symbol(C.a, Decl(classWithPublicProperty.ts, 1, 13))
->c : C, Symbol(c, Decl(classWithPublicProperty.ts, 12, 3))
->a : string, Symbol(C.a, Decl(classWithPublicProperty.ts, 1, 13))
+>r2 : string
+>c.a : string
+>c : C
+>a : string
 
 var r3: string = c.b;
->r3 : string, Symbol(r3, Decl(classWithPublicProperty.ts, 15, 3))
->c.b : string, Symbol(C.b, Decl(classWithPublicProperty.ts, 2, 18))
->c : C, Symbol(c, Decl(classWithPublicProperty.ts, 12, 3))
->b : string, Symbol(C.b, Decl(classWithPublicProperty.ts, 2, 18))
+>r3 : string
+>c.b : string
+>c : C
+>b : string
 
 var r4: string = c.c();
->r4 : string, Symbol(r4, Decl(classWithPublicProperty.ts, 16, 3))
+>r4 : string
 >c.c() : string
->c.c : () => string, Symbol(C.c, Decl(classWithPublicProperty.ts, 3, 26))
->c : C, Symbol(c, Decl(classWithPublicProperty.ts, 12, 3))
->c : () => string, Symbol(C.c, Decl(classWithPublicProperty.ts, 3, 26))
+>c.c : () => string
+>c : C
+>c : () => string
 
 var r5: string = c.d();
->r5 : string, Symbol(r5, Decl(classWithPublicProperty.ts, 17, 3))
+>r5 : string
 >c.d() : string
->c.d : () => string, Symbol(C.d, Decl(classWithPublicProperty.ts, 4, 28))
->c : C, Symbol(c, Decl(classWithPublicProperty.ts, 12, 3))
->d : () => string, Symbol(C.d, Decl(classWithPublicProperty.ts, 4, 28))
+>c.d : () => string
+>c : C
+>d : () => string
 
 var r6: string = C.e;
->r6 : string, Symbol(r6, Decl(classWithPublicProperty.ts, 18, 3))
->C.e : any, Symbol(C.e, Decl(classWithPublicProperty.ts, 5, 24))
->C : typeof C, Symbol(C, Decl(classWithPublicProperty.ts, 0, 0))
->e : any, Symbol(C.e, Decl(classWithPublicProperty.ts, 5, 24))
+>r6 : string
+>C.e : any
+>C : typeof C
+>e : any
 
 var r7: string = C.f();
->r7 : string, Symbol(r7, Decl(classWithPublicProperty.ts, 19, 3))
+>r7 : string
 >C.f() : string
->C.f : () => string, Symbol(C.f, Decl(classWithPublicProperty.ts, 6, 20))
->C : typeof C, Symbol(C, Decl(classWithPublicProperty.ts, 0, 0))
->f : () => string, Symbol(C.f, Decl(classWithPublicProperty.ts, 6, 20))
+>C.f : () => string
+>C : typeof C
+>f : () => string
 
 var r8: string = C.g();
->r8 : string, Symbol(r8, Decl(classWithPublicProperty.ts, 20, 3))
+>r8 : string
 >C.g() : string
->C.g : () => string, Symbol(C.g, Decl(classWithPublicProperty.ts, 7, 35))
->C : typeof C, Symbol(C, Decl(classWithPublicProperty.ts, 0, 0))
->g : () => string, Symbol(C.g, Decl(classWithPublicProperty.ts, 7, 35))
+>C.g : () => string
+>C : typeof C
+>g : () => string
 

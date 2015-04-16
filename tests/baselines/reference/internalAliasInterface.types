@@ -1,22 +1,22 @@
 === tests/cases/compiler/internalAliasInterface.ts ===
 module a {
->a : any, Symbol(a, Decl(internalAliasInterface.ts, 0, 0))
+>a : any
 
     export interface I {
->I : I, Symbol(I, Decl(internalAliasInterface.ts, 0, 10))
+>I : I
     }
 }
 
 module c {
->c : typeof c, Symbol(c, Decl(internalAliasInterface.ts, 3, 1))
+>c : typeof c
 
     import b = a.I;
->b : any, Symbol(b, Decl(internalAliasInterface.ts, 5, 10))
->a : any, Symbol(a, Decl(internalAliasInterface.ts, 0, 0))
->I : b, Symbol(b, Decl(internalAliasInterface.ts, 0, 10))
+>b : any
+>a : any
+>I : b
 
     export var x: b;
->x : b, Symbol(x, Decl(internalAliasInterface.ts, 7, 14))
->b : b, Symbol(b, Decl(internalAliasInterface.ts, 5, 10))
+>x : b
+>b : b
 }
 

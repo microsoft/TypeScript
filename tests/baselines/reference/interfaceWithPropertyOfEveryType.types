@@ -1,156 +1,156 @@
 === tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyOfEveryType.ts ===
 class C { foo: string; }
->C : C, Symbol(C, Decl(interfaceWithPropertyOfEveryType.ts, 0, 0))
->foo : string, Symbol(foo, Decl(interfaceWithPropertyOfEveryType.ts, 0, 9))
+>C : C
+>foo : string
 
 function f1() { }
->f1 : () => void, Symbol(f1, Decl(interfaceWithPropertyOfEveryType.ts, 0, 24))
+>f1 : () => void
 
 module M {
->M : typeof M, Symbol(M, Decl(interfaceWithPropertyOfEveryType.ts, 1, 17))
+>M : typeof M
 
     export var y = 1;
->y : number, Symbol(y, Decl(interfaceWithPropertyOfEveryType.ts, 3, 14))
+>y : number
 >1 : number
 }
 enum E { A }
->E : E, Symbol(E, Decl(interfaceWithPropertyOfEveryType.ts, 4, 1))
->A : E, Symbol(E.A, Decl(interfaceWithPropertyOfEveryType.ts, 5, 8))
+>E : E
+>A : E
 
 interface Foo {
->Foo : Foo, Symbol(Foo, Decl(interfaceWithPropertyOfEveryType.ts, 5, 12))
+>Foo : Foo
 
     a: number;
->a : number, Symbol(a, Decl(interfaceWithPropertyOfEveryType.ts, 7, 15))
+>a : number
 
     b: string;
->b : string, Symbol(b, Decl(interfaceWithPropertyOfEveryType.ts, 8, 14))
+>b : string
 
     c: boolean;
->c : boolean, Symbol(c, Decl(interfaceWithPropertyOfEveryType.ts, 9, 14))
+>c : boolean
 
     d: any;
->d : any, Symbol(d, Decl(interfaceWithPropertyOfEveryType.ts, 10, 15))
+>d : any
 
     e: void;
->e : void, Symbol(e, Decl(interfaceWithPropertyOfEveryType.ts, 11, 11))
+>e : void
 
     f: number[];
->f : number[], Symbol(f, Decl(interfaceWithPropertyOfEveryType.ts, 12, 12))
+>f : number[]
 
     g: Object;
->g : Object, Symbol(g, Decl(interfaceWithPropertyOfEveryType.ts, 13, 16))
->Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>g : Object
+>Object : Object
 
     h: (x: number) => number;
->h : (x: number) => number, Symbol(h, Decl(interfaceWithPropertyOfEveryType.ts, 14, 14))
->x : number, Symbol(x, Decl(interfaceWithPropertyOfEveryType.ts, 15, 8))
+>h : (x: number) => number
+>x : number
 
     i: <T>(x: T) => T;
->i : <T>(x: T) => T, Symbol(i, Decl(interfaceWithPropertyOfEveryType.ts, 15, 29))
->T : T, Symbol(T, Decl(interfaceWithPropertyOfEveryType.ts, 16, 8))
->x : T, Symbol(x, Decl(interfaceWithPropertyOfEveryType.ts, 16, 11))
->T : T, Symbol(T, Decl(interfaceWithPropertyOfEveryType.ts, 16, 8))
->T : T, Symbol(T, Decl(interfaceWithPropertyOfEveryType.ts, 16, 8))
+>i : <T>(x: T) => T
+>T : T
+>x : T
+>T : T
+>T : T
 
     j: Foo;
->j : Foo, Symbol(j, Decl(interfaceWithPropertyOfEveryType.ts, 16, 22))
->Foo : Foo, Symbol(Foo, Decl(interfaceWithPropertyOfEveryType.ts, 5, 12))
+>j : Foo
+>Foo : Foo
 
     k: C;
->k : C, Symbol(k, Decl(interfaceWithPropertyOfEveryType.ts, 17, 11))
->C : C, Symbol(C, Decl(interfaceWithPropertyOfEveryType.ts, 0, 0))
+>k : C
+>C : C
 
     l: typeof f1;
->l : () => void, Symbol(l, Decl(interfaceWithPropertyOfEveryType.ts, 18, 9))
->f1 : () => void, Symbol(f1, Decl(interfaceWithPropertyOfEveryType.ts, 0, 24))
+>l : () => void
+>f1 : () => void
 
     m: typeof M;
->m : typeof M, Symbol(m, Decl(interfaceWithPropertyOfEveryType.ts, 19, 17))
->M : typeof M, Symbol(M, Decl(interfaceWithPropertyOfEveryType.ts, 1, 17))
+>m : typeof M
+>M : typeof M
 
     n: {};
->n : {}, Symbol(n, Decl(interfaceWithPropertyOfEveryType.ts, 20, 16))
+>n : {}
 
     o: E;
->o : E, Symbol(o, Decl(interfaceWithPropertyOfEveryType.ts, 21, 10))
->E : E, Symbol(E, Decl(interfaceWithPropertyOfEveryType.ts, 4, 1))
+>o : E
+>E : E
 }
 
 var a: Foo = {
->a : Foo, Symbol(a, Decl(interfaceWithPropertyOfEveryType.ts, 25, 3))
->Foo : Foo, Symbol(Foo, Decl(interfaceWithPropertyOfEveryType.ts, 5, 12))
+>a : Foo
+>Foo : Foo
 >{    a: 1,    b: '',    c: true,    d: {},    e: null ,    f: [1],    g: {},    h: (x: number) => 1,    i: <T>(x: T) => x,    j: <Foo>null,    k: new C(),    l: f1,    m: M,    n: {},    o: E.A} : { a: number; b: string; c: boolean; d: {}; e: null; f: number[]; g: {}; h: (x: number) => number; i: <T>(x: T) => T; j: Foo; k: C; l: () => void; m: typeof M; n: {}; o: E; }
 
     a: 1,
->a : number, Symbol(a, Decl(interfaceWithPropertyOfEveryType.ts, 25, 14))
+>a : number
 >1 : number
 
     b: '',
->b : string, Symbol(b, Decl(interfaceWithPropertyOfEveryType.ts, 26, 9))
+>b : string
 >'' : string
 
     c: true,
->c : boolean, Symbol(c, Decl(interfaceWithPropertyOfEveryType.ts, 27, 10))
+>c : boolean
 >true : boolean
 
     d: {},
->d : {}, Symbol(d, Decl(interfaceWithPropertyOfEveryType.ts, 28, 12))
+>d : {}
 >{} : {}
 
     e: null ,
->e : null, Symbol(e, Decl(interfaceWithPropertyOfEveryType.ts, 29, 10))
+>e : null
 >null : null
 
     f: [1],
->f : number[], Symbol(f, Decl(interfaceWithPropertyOfEveryType.ts, 30, 13))
+>f : number[]
 >[1] : number[]
 >1 : number
 
     g: {},
->g : {}, Symbol(g, Decl(interfaceWithPropertyOfEveryType.ts, 31, 11))
+>g : {}
 >{} : {}
 
     h: (x: number) => 1,
->h : (x: number) => number, Symbol(h, Decl(interfaceWithPropertyOfEveryType.ts, 32, 10))
+>h : (x: number) => number
 >(x: number) => 1 : (x: number) => number
->x : number, Symbol(x, Decl(interfaceWithPropertyOfEveryType.ts, 33, 8))
+>x : number
 >1 : number
 
     i: <T>(x: T) => x,
->i : <T>(x: T) => T, Symbol(i, Decl(interfaceWithPropertyOfEveryType.ts, 33, 24))
+>i : <T>(x: T) => T
 ><T>(x: T) => x : <T>(x: T) => T
->T : T, Symbol(T, Decl(interfaceWithPropertyOfEveryType.ts, 34, 8))
->x : T, Symbol(x, Decl(interfaceWithPropertyOfEveryType.ts, 34, 11))
->T : T, Symbol(T, Decl(interfaceWithPropertyOfEveryType.ts, 34, 8))
->x : T, Symbol(x, Decl(interfaceWithPropertyOfEveryType.ts, 34, 11))
+>T : T
+>x : T
+>T : T
+>x : T
 
     j: <Foo>null,
->j : Foo, Symbol(j, Decl(interfaceWithPropertyOfEveryType.ts, 34, 22))
+>j : Foo
 ><Foo>null : Foo
->Foo : Foo, Symbol(Foo, Decl(interfaceWithPropertyOfEveryType.ts, 5, 12))
+>Foo : Foo
 >null : null
 
     k: new C(),
->k : C, Symbol(k, Decl(interfaceWithPropertyOfEveryType.ts, 35, 17))
+>k : C
 >new C() : C
->C : typeof C, Symbol(C, Decl(interfaceWithPropertyOfEveryType.ts, 0, 0))
+>C : typeof C
 
     l: f1,
->l : () => void, Symbol(l, Decl(interfaceWithPropertyOfEveryType.ts, 36, 15))
->f1 : () => void, Symbol(f1, Decl(interfaceWithPropertyOfEveryType.ts, 0, 24))
+>l : () => void
+>f1 : () => void
 
     m: M,
->m : typeof M, Symbol(m, Decl(interfaceWithPropertyOfEveryType.ts, 37, 10))
->M : typeof M, Symbol(M, Decl(interfaceWithPropertyOfEveryType.ts, 1, 17))
+>m : typeof M
+>M : typeof M
 
     n: {},
->n : {}, Symbol(n, Decl(interfaceWithPropertyOfEveryType.ts, 38, 9))
+>n : {}
 >{} : {}
 
     o: E.A
->o : E, Symbol(o, Decl(interfaceWithPropertyOfEveryType.ts, 39, 10))
->E.A : E, Symbol(E.A, Decl(interfaceWithPropertyOfEveryType.ts, 5, 8))
->E : typeof E, Symbol(E, Decl(interfaceWithPropertyOfEveryType.ts, 4, 1))
->A : E, Symbol(E.A, Decl(interfaceWithPropertyOfEveryType.ts, 5, 8))
+>o : E
+>E.A : E
+>E : typeof E
+>A : E
 }

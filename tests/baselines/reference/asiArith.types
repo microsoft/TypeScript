@@ -1,18 +1,18 @@
 === tests/cases/compiler/asiArith.ts ===
 var x = 1;
->x : number, Symbol(x, Decl(asiArith.ts, 0, 3))
+>x : number
 >1 : number
 
 var y = 1;
->y : number, Symbol(y, Decl(asiArith.ts, 2, 3))
+>y : number
 >1 : number
 
 var z =
->z : number, Symbol(z, Decl(asiArith.ts, 4, 3))
+>z : number
 
 x
 >x+++y : number
->x : number, Symbol(x, Decl(asiArith.ts, 0, 3))
+>x : number
 
 +
 
@@ -23,23 +23,23 @@ x
 >+y : number
 
 y
->y : number, Symbol(y, Decl(asiArith.ts, 2, 3))
+>y : number
 
 
 var a = 1;
->a : number, Symbol(a, Decl(asiArith.ts, 17, 3))
+>a : number
 >1 : number
 
 var b = 1;
->b : number, Symbol(b, Decl(asiArith.ts, 19, 3))
+>b : number
 >1 : number
 
 var c =
->c : number, Symbol(c, Decl(asiArith.ts, 21, 3))
+>c : number
 
 x
 >x---y : number
->x : number, Symbol(x, Decl(asiArith.ts, 0, 3))
+>x : number
 
 -
 
@@ -50,6 +50,6 @@ x
 >-y : number
 
 y
->y : number, Symbol(y, Decl(asiArith.ts, 2, 3))
+>y : number
 
 

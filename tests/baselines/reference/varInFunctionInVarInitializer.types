@@ -1,17 +1,17 @@
 === tests/cases/compiler/varInFunctionInVarInitializer.ts ===
 var a = function () {
->a : () => number, Symbol(a, Decl(varInFunctionInVarInitializer.ts, 0, 3))
+>a : () => number
 >function () {    var c = 1;    return c;} : () => number
 
     var c = 1;
->c : number, Symbol(c, Decl(varInFunctionInVarInitializer.ts, 1, 7))
+>c : number
 >1 : number
 
     return c;
->c : number, Symbol(c, Decl(varInFunctionInVarInitializer.ts, 1, 7))
+>c : number
 
 },
     b = 1;
->b : number, Symbol(b, Decl(varInFunctionInVarInitializer.ts, 3, 2))
+>b : number
 >1 : number
 

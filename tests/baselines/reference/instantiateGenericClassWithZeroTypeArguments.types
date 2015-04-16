@@ -2,35 +2,35 @@
 // no errors expected when instantiating a generic type with no type arguments provided
 
 class C<T> {
->C : C<T>, Symbol(C, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 0, 0))
->T : T, Symbol(T, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 2, 8))
+>C : C<T>
+>T : T
 
     x: T;
->x : T, Symbol(x, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 2, 12))
->T : T, Symbol(T, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 2, 8))
+>x : T
+>T : T
 }
 
 var c = new C();
->c : C<{}>, Symbol(c, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 6, 3))
+>c : C<{}>
 >new C() : C<{}>
->C : typeof C, Symbol(C, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 0, 0))
+>C : typeof C
 
 class D<T, U> {
->D : D<T, U>, Symbol(D, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 6, 16))
->T : T, Symbol(T, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 8))
->U : U, Symbol(U, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 10))
+>D : D<T, U>
+>T : T
+>U : U
 
     x: T
->x : T, Symbol(x, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 15))
->T : T, Symbol(T, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 8))
+>x : T
+>T : T
 
     y: U
->y : U, Symbol(y, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 9, 8))
->U : U, Symbol(U, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 8, 10))
+>y : U
+>U : U
 }
 
 var d = new D();
->d : D<{}, {}>, Symbol(d, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 13, 3))
+>d : D<{}, {}>
 >new D() : D<{}, {}>
->D : typeof D, Symbol(D, Decl(instantiateGenericClassWithZeroTypeArguments.ts, 6, 16))
+>D : typeof D
 

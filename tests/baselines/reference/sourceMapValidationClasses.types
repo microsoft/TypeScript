@@ -1,129 +1,129 @@
 === tests/cases/compiler/sourceMapValidationClasses.ts ===
 module Foo.Bar {
->Foo : typeof Foo, Symbol(Foo, Decl(sourceMapValidationClasses.ts, 0, 0))
->Bar : typeof Bar, Symbol(Bar, Decl(sourceMapValidationClasses.ts, 0, 11))
+>Foo : typeof Foo
+>Bar : typeof Bar
 
     "use strict";
 >"use strict" : string
 
     class Greeter {
->Greeter : Greeter, Symbol(Greeter, Decl(sourceMapValidationClasses.ts, 1, 17))
+>Greeter : Greeter
 
         constructor(public greeting: string) {
->greeting : string, Symbol(greeting, Decl(sourceMapValidationClasses.ts, 4, 20))
+>greeting : string
         }
 
         greet() {
->greet : () => string, Symbol(greet, Decl(sourceMapValidationClasses.ts, 5, 9))
+>greet : () => string
 
             return "<h1>" + this.greeting + "</h1>";
 >"<h1>" + this.greeting + "</h1>" : string
 >"<h1>" + this.greeting : string
 >"<h1>" : string
->this.greeting : string, Symbol(greeting, Decl(sourceMapValidationClasses.ts, 4, 20))
->this : Greeter, Symbol(Greeter, Decl(sourceMapValidationClasses.ts, 1, 17))
->greeting : string, Symbol(greeting, Decl(sourceMapValidationClasses.ts, 4, 20))
+>this.greeting : string
+>this : Greeter
+>greeting : string
 >"</h1>" : string
         }
     }
 
 
     function foo(greeting: string): Greeter {
->foo : (greeting: string) => Greeter, Symbol(foo, Decl(sourceMapValidationClasses.ts, 10, 5))
->greeting : string, Symbol(greeting, Decl(sourceMapValidationClasses.ts, 13, 17))
->Greeter : Greeter, Symbol(Greeter, Decl(sourceMapValidationClasses.ts, 1, 17))
+>foo : (greeting: string) => Greeter
+>greeting : string
+>Greeter : Greeter
 
         return new Greeter(greeting);
 >new Greeter(greeting) : Greeter
->Greeter : typeof Greeter, Symbol(Greeter, Decl(sourceMapValidationClasses.ts, 1, 17))
->greeting : string, Symbol(greeting, Decl(sourceMapValidationClasses.ts, 13, 17))
+>Greeter : typeof Greeter
+>greeting : string
     }
 
     var greeter = new Greeter("Hello, world!");
->greeter : Greeter, Symbol(greeter, Decl(sourceMapValidationClasses.ts, 17, 7))
+>greeter : Greeter
 >new Greeter("Hello, world!") : Greeter
->Greeter : typeof Greeter, Symbol(Greeter, Decl(sourceMapValidationClasses.ts, 1, 17))
+>Greeter : typeof Greeter
 >"Hello, world!" : string
 
     var str = greeter.greet();
->str : string, Symbol(str, Decl(sourceMapValidationClasses.ts, 18, 7))
+>str : string
 >greeter.greet() : string
->greeter.greet : () => string, Symbol(Greeter.greet, Decl(sourceMapValidationClasses.ts, 5, 9))
->greeter : Greeter, Symbol(greeter, Decl(sourceMapValidationClasses.ts, 17, 7))
->greet : () => string, Symbol(Greeter.greet, Decl(sourceMapValidationClasses.ts, 5, 9))
+>greeter.greet : () => string
+>greeter : Greeter
+>greet : () => string
 
     function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
->foo2 : (greeting: string, ...restGreetings: string[]) => Greeter[], Symbol(foo2, Decl(sourceMapValidationClasses.ts, 18, 30))
->greeting : string, Symbol(greeting, Decl(sourceMapValidationClasses.ts, 20, 18))
->restGreetings : string[], Symbol(restGreetings, Decl(sourceMapValidationClasses.ts, 20, 35))
+>foo2 : (greeting: string, ...restGreetings: string[]) => Greeter[]
+>greeting : string
+>restGreetings : string[]
 
         var greeters: Greeter[] = []; /* inline block comment */
->greeters : Greeter[], Symbol(greeters, Decl(sourceMapValidationClasses.ts, 21, 11))
->Greeter : Greeter, Symbol(Greeter, Decl(sourceMapValidationClasses.ts, 1, 17))
+>greeters : Greeter[]
+>Greeter : Greeter
 >[] : undefined[]
 
         greeters[0] = new Greeter(greeting);
 >greeters[0] = new Greeter(greeting) : Greeter
 >greeters[0] : Greeter
->greeters : Greeter[], Symbol(greeters, Decl(sourceMapValidationClasses.ts, 21, 11))
+>greeters : Greeter[]
 >0 : number
 >new Greeter(greeting) : Greeter
->Greeter : typeof Greeter, Symbol(Greeter, Decl(sourceMapValidationClasses.ts, 1, 17))
->greeting : string, Symbol(greeting, Decl(sourceMapValidationClasses.ts, 20, 18))
+>Greeter : typeof Greeter
+>greeting : string
 
         for (var i = 0; i < restGreetings.length; i++) {
->i : number, Symbol(i, Decl(sourceMapValidationClasses.ts, 23, 16))
+>i : number
 >0 : number
 >i < restGreetings.length : boolean
->i : number, Symbol(i, Decl(sourceMapValidationClasses.ts, 23, 16))
->restGreetings.length : number, Symbol(Array.length, Decl(lib.d.ts, 1007, 20))
->restGreetings : string[], Symbol(restGreetings, Decl(sourceMapValidationClasses.ts, 20, 35))
->length : number, Symbol(Array.length, Decl(lib.d.ts, 1007, 20))
+>i : number
+>restGreetings.length : number
+>restGreetings : string[]
+>length : number
 >i++ : number
->i : number, Symbol(i, Decl(sourceMapValidationClasses.ts, 23, 16))
+>i : number
 
             greeters.push(new Greeter(restGreetings[i]));
 >greeters.push(new Greeter(restGreetings[i])) : number
->greeters.push : (...items: Greeter[]) => number, Symbol(Array.push, Decl(lib.d.ts, 1016, 29))
->greeters : Greeter[], Symbol(greeters, Decl(sourceMapValidationClasses.ts, 21, 11))
->push : (...items: Greeter[]) => number, Symbol(Array.push, Decl(lib.d.ts, 1016, 29))
+>greeters.push : (...items: Greeter[]) => number
+>greeters : Greeter[]
+>push : (...items: Greeter[]) => number
 >new Greeter(restGreetings[i]) : Greeter
->Greeter : typeof Greeter, Symbol(Greeter, Decl(sourceMapValidationClasses.ts, 1, 17))
+>Greeter : typeof Greeter
 >restGreetings[i] : string
->restGreetings : string[], Symbol(restGreetings, Decl(sourceMapValidationClasses.ts, 20, 35))
->i : number, Symbol(i, Decl(sourceMapValidationClasses.ts, 23, 16))
+>restGreetings : string[]
+>i : number
         }
 
         return greeters;
->greeters : Greeter[], Symbol(greeters, Decl(sourceMapValidationClasses.ts, 21, 11))
+>greeters : Greeter[]
     }
 
     var b = foo2("Hello", "World", "!");
->b : Greeter[], Symbol(b, Decl(sourceMapValidationClasses.ts, 30, 7))
+>b : Greeter[]
 >foo2("Hello", "World", "!") : Greeter[]
->foo2 : (greeting: string, ...restGreetings: string[]) => Greeter[], Symbol(foo2, Decl(sourceMapValidationClasses.ts, 18, 30))
+>foo2 : (greeting: string, ...restGreetings: string[]) => Greeter[]
 >"Hello" : string
 >"World" : string
 >"!" : string
 
     // This is simple signle line comment
     for (var j = 0; j < b.length; j++) {
->j : number, Symbol(j, Decl(sourceMapValidationClasses.ts, 32, 12))
+>j : number
 >0 : number
 >j < b.length : boolean
->j : number, Symbol(j, Decl(sourceMapValidationClasses.ts, 32, 12))
->b.length : number, Symbol(Array.length, Decl(lib.d.ts, 1007, 20))
->b : Greeter[], Symbol(b, Decl(sourceMapValidationClasses.ts, 30, 7))
->length : number, Symbol(Array.length, Decl(lib.d.ts, 1007, 20))
+>j : number
+>b.length : number
+>b : Greeter[]
+>length : number
 >j++ : number
->j : number, Symbol(j, Decl(sourceMapValidationClasses.ts, 32, 12))
+>j : number
 
         b[j].greet();
 >b[j].greet() : string
->b[j].greet : () => string, Symbol(Greeter.greet, Decl(sourceMapValidationClasses.ts, 5, 9))
+>b[j].greet : () => string
 >b[j] : Greeter
->b : Greeter[], Symbol(b, Decl(sourceMapValidationClasses.ts, 30, 7))
->j : number, Symbol(j, Decl(sourceMapValidationClasses.ts, 32, 12))
->greet : () => string, Symbol(Greeter.greet, Decl(sourceMapValidationClasses.ts, 5, 9))
+>b : Greeter[]
+>j : number
+>greet : () => string
     }
 }

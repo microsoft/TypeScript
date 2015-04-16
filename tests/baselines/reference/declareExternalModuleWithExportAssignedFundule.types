@@ -2,36 +2,36 @@
 declare module "express" {
 
     export = express;
->express : typeof express, Symbol(express, Decl(declareExternalModuleWithExportAssignedFundule.ts, 2, 21), Decl(declareExternalModuleWithExportAssignedFundule.ts, 4, 46))
+>express : typeof express
 
     function express(): express.ExpressServer;
->express : typeof express, Symbol(express, Decl(declareExternalModuleWithExportAssignedFundule.ts, 2, 21), Decl(declareExternalModuleWithExportAssignedFundule.ts, 4, 46))
->express : any, Symbol(express, Decl(declareExternalModuleWithExportAssignedFundule.ts, 2, 21), Decl(declareExternalModuleWithExportAssignedFundule.ts, 4, 46))
->ExpressServer : express.ExpressServer, Symbol(express.ExpressServer, Decl(declareExternalModuleWithExportAssignedFundule.ts, 6, 20))
+>express : typeof express
+>express : any
+>ExpressServer : express.ExpressServer
 
     module express {
->express : typeof express, Symbol(express, Decl(declareExternalModuleWithExportAssignedFundule.ts, 2, 21), Decl(declareExternalModuleWithExportAssignedFundule.ts, 4, 46))
+>express : typeof express
 
         export interface ExpressServer {
->ExpressServer : ExpressServer, Symbol(ExpressServer, Decl(declareExternalModuleWithExportAssignedFundule.ts, 6, 20))
+>ExpressServer : ExpressServer
 
             enable(name: string): ExpressServer;
->enable : (name: string) => ExpressServer, Symbol(enable, Decl(declareExternalModuleWithExportAssignedFundule.ts, 8, 40))
->name : string, Symbol(name, Decl(declareExternalModuleWithExportAssignedFundule.ts, 10, 19))
->ExpressServer : ExpressServer, Symbol(ExpressServer, Decl(declareExternalModuleWithExportAssignedFundule.ts, 6, 20))
+>enable : (name: string) => ExpressServer
+>name : string
+>ExpressServer : ExpressServer
 
             post(path: RegExp, handler: (req: Function) => void ): void;
->post : (path: RegExp, handler: (req: Function) => void) => void, Symbol(post, Decl(declareExternalModuleWithExportAssignedFundule.ts, 10, 48))
->path : RegExp, Symbol(path, Decl(declareExternalModuleWithExportAssignedFundule.ts, 12, 17))
->RegExp : RegExp, Symbol(RegExp, Decl(lib.d.ts, 825, 1), Decl(lib.d.ts, 876, 11))
->handler : (req: Function) => void, Symbol(handler, Decl(declareExternalModuleWithExportAssignedFundule.ts, 12, 30))
->req : Function, Symbol(req, Decl(declareExternalModuleWithExportAssignedFundule.ts, 12, 41))
->Function : Function, Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11))
+>post : (path: RegExp, handler: (req: Function) => void) => void
+>path : RegExp
+>RegExp : RegExp
+>handler : (req: Function) => void
+>req : Function
+>Function : Function
 
         }
 
         export class ExpressServerRequest {
->ExpressServerRequest : ExpressServerRequest, Symbol(ExpressServerRequest, Decl(declareExternalModuleWithExportAssignedFundule.ts, 14, 9))
+>ExpressServerRequest : ExpressServerRequest
 
         }
 

@@ -1,0 +1,4 @@
+=== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration4_es6.ts ===
+function yield() {
+>yield : Symbol(yield, Decl(FunctionDeclaration4_es6.ts, 0, 0))
+}

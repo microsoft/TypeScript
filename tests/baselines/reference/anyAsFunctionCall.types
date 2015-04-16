@@ -3,22 +3,22 @@
 // can be called except with type arguments which is an error
 
 var x: any;
->x : any, Symbol(x, Decl(anyAsFunctionCall.ts, 3, 3))
+>x : any
 
 var a = x();
->a : any, Symbol(a, Decl(anyAsFunctionCall.ts, 4, 3))
+>a : any
 >x() : any
->x : any, Symbol(x, Decl(anyAsFunctionCall.ts, 3, 3))
+>x : any
 
 var b = x('hello');
->b : any, Symbol(b, Decl(anyAsFunctionCall.ts, 5, 3))
+>b : any
 >x('hello') : any
->x : any, Symbol(x, Decl(anyAsFunctionCall.ts, 3, 3))
+>x : any
 >'hello' : string
 
 var c = x(x);
->c : any, Symbol(c, Decl(anyAsFunctionCall.ts, 6, 3))
+>c : any
 >x(x) : any
->x : any, Symbol(x, Decl(anyAsFunctionCall.ts, 3, 3))
->x : any, Symbol(x, Decl(anyAsFunctionCall.ts, 3, 3))
+>x : any
+>x : any
 

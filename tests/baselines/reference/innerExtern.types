@@ -1,25 +1,25 @@
 === tests/cases/compiler/innerExtern.ts ===
 module A {
->A : typeof A, Symbol(A, Decl(innerExtern.ts, 0, 0))
+>A : typeof A
 
     export declare module BB {
->BB : typeof BB, Symbol(BB, Decl(innerExtern.ts, 0, 10))
+>BB : typeof BB
 
         export var Elephant;
->Elephant : any, Symbol(Elephant, Decl(innerExtern.ts, 2, 18))
+>Elephant : any
     }
     export module B {
->B : typeof B, Symbol(B, Decl(innerExtern.ts, 3, 5))
+>B : typeof B
 
         export class C {
->C : C, Symbol(C, Decl(innerExtern.ts, 4, 21))
+>C : C
 
             x = BB.Elephant.X;
->x : any, Symbol(x, Decl(innerExtern.ts, 5, 24))
+>x : any
 >BB.Elephant.X : any
->BB.Elephant : any, Symbol(BB.Elephant, Decl(innerExtern.ts, 2, 18))
->BB : typeof BB, Symbol(BB, Decl(innerExtern.ts, 0, 10))
->Elephant : any, Symbol(BB.Elephant, Decl(innerExtern.ts, 2, 18))
+>BB.Elephant : any
+>BB : typeof BB
+>Elephant : any
 >X : any
         }
     }

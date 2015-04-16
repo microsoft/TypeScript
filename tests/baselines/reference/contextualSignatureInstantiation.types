@@ -6,149 +6,149 @@
 // to a function type with e's call signature instantiated in the context of T's call signature (section 3.8.5).
 
 declare function foo<T>(cb: (x: number, y: string) => T): T;
->foo : <T>(cb: (x: number, y: string) => T) => T, Symbol(foo, Decl(contextualSignatureInstantiation.ts, 0, 0))
->T : T, Symbol(T, Decl(contextualSignatureInstantiation.ts, 6, 21))
->cb : (x: number, y: string) => T, Symbol(cb, Decl(contextualSignatureInstantiation.ts, 6, 24))
->x : number, Symbol(x, Decl(contextualSignatureInstantiation.ts, 6, 29))
->y : string, Symbol(y, Decl(contextualSignatureInstantiation.ts, 6, 39))
->T : T, Symbol(T, Decl(contextualSignatureInstantiation.ts, 6, 21))
->T : T, Symbol(T, Decl(contextualSignatureInstantiation.ts, 6, 21))
+>foo : <T>(cb: (x: number, y: string) => T) => T
+>T : T
+>cb : (x: number, y: string) => T
+>x : number
+>y : string
+>T : T
+>T : T
 
 declare function bar<T, U, V>(x: T, y: U, cb: (x: T, y: U) => V): V;
->bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V, Symbol(bar, Decl(contextualSignatureInstantiation.ts, 6, 60))
->T : T, Symbol(T, Decl(contextualSignatureInstantiation.ts, 7, 21))
->U : U, Symbol(U, Decl(contextualSignatureInstantiation.ts, 7, 23))
->V : V, Symbol(V, Decl(contextualSignatureInstantiation.ts, 7, 26))
->x : T, Symbol(x, Decl(contextualSignatureInstantiation.ts, 7, 30))
->T : T, Symbol(T, Decl(contextualSignatureInstantiation.ts, 7, 21))
->y : U, Symbol(y, Decl(contextualSignatureInstantiation.ts, 7, 35))
->U : U, Symbol(U, Decl(contextualSignatureInstantiation.ts, 7, 23))
->cb : (x: T, y: U) => V, Symbol(cb, Decl(contextualSignatureInstantiation.ts, 7, 41))
->x : T, Symbol(x, Decl(contextualSignatureInstantiation.ts, 7, 47))
->T : T, Symbol(T, Decl(contextualSignatureInstantiation.ts, 7, 21))
->y : U, Symbol(y, Decl(contextualSignatureInstantiation.ts, 7, 52))
->U : U, Symbol(U, Decl(contextualSignatureInstantiation.ts, 7, 23))
->V : V, Symbol(V, Decl(contextualSignatureInstantiation.ts, 7, 26))
->V : V, Symbol(V, Decl(contextualSignatureInstantiation.ts, 7, 26))
+>bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
+>T : T
+>U : U
+>V : V
+>x : T
+>T : T
+>y : U
+>U : U
+>cb : (x: T, y: U) => V
+>x : T
+>T : T
+>y : U
+>U : U
+>V : V
+>V : V
 
 declare function baz<T, U>(x: T, y: T, cb: (x: T, y: T) => U): U;
->baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U, Symbol(baz, Decl(contextualSignatureInstantiation.ts, 7, 68))
->T : T, Symbol(T, Decl(contextualSignatureInstantiation.ts, 8, 21))
->U : U, Symbol(U, Decl(contextualSignatureInstantiation.ts, 8, 23))
->x : T, Symbol(x, Decl(contextualSignatureInstantiation.ts, 8, 27))
->T : T, Symbol(T, Decl(contextualSignatureInstantiation.ts, 8, 21))
->y : T, Symbol(y, Decl(contextualSignatureInstantiation.ts, 8, 32))
->T : T, Symbol(T, Decl(contextualSignatureInstantiation.ts, 8, 21))
->cb : (x: T, y: T) => U, Symbol(cb, Decl(contextualSignatureInstantiation.ts, 8, 38))
->x : T, Symbol(x, Decl(contextualSignatureInstantiation.ts, 8, 44))
->T : T, Symbol(T, Decl(contextualSignatureInstantiation.ts, 8, 21))
->y : T, Symbol(y, Decl(contextualSignatureInstantiation.ts, 8, 49))
->T : T, Symbol(T, Decl(contextualSignatureInstantiation.ts, 8, 21))
->U : U, Symbol(U, Decl(contextualSignatureInstantiation.ts, 8, 23))
->U : U, Symbol(U, Decl(contextualSignatureInstantiation.ts, 8, 23))
+>baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U
+>T : T
+>U : U
+>x : T
+>T : T
+>y : T
+>T : T
+>cb : (x: T, y: T) => U
+>x : T
+>T : T
+>y : T
+>T : T
+>U : U
+>U : U
 
 declare function g<T>(x: T, y: T): T;
->g : <T>(x: T, y: T) => T, Symbol(g, Decl(contextualSignatureInstantiation.ts, 8, 65))
->T : T, Symbol(T, Decl(contextualSignatureInstantiation.ts, 10, 19))
->x : T, Symbol(x, Decl(contextualSignatureInstantiation.ts, 10, 22))
->T : T, Symbol(T, Decl(contextualSignatureInstantiation.ts, 10, 19))
->y : T, Symbol(y, Decl(contextualSignatureInstantiation.ts, 10, 27))
->T : T, Symbol(T, Decl(contextualSignatureInstantiation.ts, 10, 19))
->T : T, Symbol(T, Decl(contextualSignatureInstantiation.ts, 10, 19))
+>g : <T>(x: T, y: T) => T
+>T : T
+>x : T
+>T : T
+>y : T
+>T : T
+>T : T
 
 declare function h<T, U>(x: T, y: U): T[] | U[];
->h : <T, U>(x: T, y: U) => T[] | U[], Symbol(h, Decl(contextualSignatureInstantiation.ts, 10, 37))
->T : T, Symbol(T, Decl(contextualSignatureInstantiation.ts, 11, 19))
->U : U, Symbol(U, Decl(contextualSignatureInstantiation.ts, 11, 21))
->x : T, Symbol(x, Decl(contextualSignatureInstantiation.ts, 11, 25))
->T : T, Symbol(T, Decl(contextualSignatureInstantiation.ts, 11, 19))
->y : U, Symbol(y, Decl(contextualSignatureInstantiation.ts, 11, 30))
->U : U, Symbol(U, Decl(contextualSignatureInstantiation.ts, 11, 21))
->T : T, Symbol(T, Decl(contextualSignatureInstantiation.ts, 11, 19))
->U : U, Symbol(U, Decl(contextualSignatureInstantiation.ts, 11, 21))
+>h : <T, U>(x: T, y: U) => T[] | U[]
+>T : T
+>U : U
+>x : T
+>T : T
+>y : U
+>U : U
+>T : T
+>U : U
 
 var a: number;
->a : number, Symbol(a, Decl(contextualSignatureInstantiation.ts, 13, 3), Decl(contextualSignatureInstantiation.ts, 14, 3), Decl(contextualSignatureInstantiation.ts, 15, 3))
+>a : number
 
 var a = bar(1, 1, g);      // Should be number
->a : number, Symbol(a, Decl(contextualSignatureInstantiation.ts, 13, 3), Decl(contextualSignatureInstantiation.ts, 14, 3), Decl(contextualSignatureInstantiation.ts, 15, 3))
+>a : number
 >bar(1, 1, g) : number
->bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V, Symbol(bar, Decl(contextualSignatureInstantiation.ts, 6, 60))
+>bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
 >1 : number
 >1 : number
->g : <T>(x: T, y: T) => T, Symbol(g, Decl(contextualSignatureInstantiation.ts, 8, 65))
+>g : <T>(x: T, y: T) => T
 
 var a = baz(1, 1, g);      // Should be number
->a : number, Symbol(a, Decl(contextualSignatureInstantiation.ts, 13, 3), Decl(contextualSignatureInstantiation.ts, 14, 3), Decl(contextualSignatureInstantiation.ts, 15, 3))
+>a : number
 >baz(1, 1, g) : number
->baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U, Symbol(baz, Decl(contextualSignatureInstantiation.ts, 7, 68))
+>baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U
 >1 : number
 >1 : number
->g : <T>(x: T, y: T) => T, Symbol(g, Decl(contextualSignatureInstantiation.ts, 8, 65))
+>g : <T>(x: T, y: T) => T
 
 var b: number | string;
->b : string | number, Symbol(b, Decl(contextualSignatureInstantiation.ts, 17, 3), Decl(contextualSignatureInstantiation.ts, 18, 3), Decl(contextualSignatureInstantiation.ts, 19, 3), Decl(contextualSignatureInstantiation.ts, 20, 3), Decl(contextualSignatureInstantiation.ts, 21, 3))
+>b : string | number
 
 var b = foo(g);            // Should be number | string
->b : string | number, Symbol(b, Decl(contextualSignatureInstantiation.ts, 17, 3), Decl(contextualSignatureInstantiation.ts, 18, 3), Decl(contextualSignatureInstantiation.ts, 19, 3), Decl(contextualSignatureInstantiation.ts, 20, 3), Decl(contextualSignatureInstantiation.ts, 21, 3))
+>b : string | number
 >foo(g) : string | number
->foo : <T>(cb: (x: number, y: string) => T) => T, Symbol(foo, Decl(contextualSignatureInstantiation.ts, 0, 0))
->g : <T>(x: T, y: T) => T, Symbol(g, Decl(contextualSignatureInstantiation.ts, 8, 65))
+>foo : <T>(cb: (x: number, y: string) => T) => T
+>g : <T>(x: T, y: T) => T
 
 var b = bar(1, "one", g);  // Should be number | string
->b : string | number, Symbol(b, Decl(contextualSignatureInstantiation.ts, 17, 3), Decl(contextualSignatureInstantiation.ts, 18, 3), Decl(contextualSignatureInstantiation.ts, 19, 3), Decl(contextualSignatureInstantiation.ts, 20, 3), Decl(contextualSignatureInstantiation.ts, 21, 3))
+>b : string | number
 >bar(1, "one", g) : string | number
->bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V, Symbol(bar, Decl(contextualSignatureInstantiation.ts, 6, 60))
+>bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
 >1 : number
 >"one" : string
->g : <T>(x: T, y: T) => T, Symbol(g, Decl(contextualSignatureInstantiation.ts, 8, 65))
+>g : <T>(x: T, y: T) => T
 
 var b = bar("one", 1, g);  // Should be number | string
->b : string | number, Symbol(b, Decl(contextualSignatureInstantiation.ts, 17, 3), Decl(contextualSignatureInstantiation.ts, 18, 3), Decl(contextualSignatureInstantiation.ts, 19, 3), Decl(contextualSignatureInstantiation.ts, 20, 3), Decl(contextualSignatureInstantiation.ts, 21, 3))
+>b : string | number
 >bar("one", 1, g) : string | number
->bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V, Symbol(bar, Decl(contextualSignatureInstantiation.ts, 6, 60))
+>bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
 >"one" : string
 >1 : number
->g : <T>(x: T, y: T) => T, Symbol(g, Decl(contextualSignatureInstantiation.ts, 8, 65))
+>g : <T>(x: T, y: T) => T
 
 var b = baz(b, b, g);      // Should be number | string
->b : string | number, Symbol(b, Decl(contextualSignatureInstantiation.ts, 17, 3), Decl(contextualSignatureInstantiation.ts, 18, 3), Decl(contextualSignatureInstantiation.ts, 19, 3), Decl(contextualSignatureInstantiation.ts, 20, 3), Decl(contextualSignatureInstantiation.ts, 21, 3))
+>b : string | number
 >baz(b, b, g) : string | number
->baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U, Symbol(baz, Decl(contextualSignatureInstantiation.ts, 7, 68))
->b : string | number, Symbol(b, Decl(contextualSignatureInstantiation.ts, 17, 3), Decl(contextualSignatureInstantiation.ts, 18, 3), Decl(contextualSignatureInstantiation.ts, 19, 3), Decl(contextualSignatureInstantiation.ts, 20, 3), Decl(contextualSignatureInstantiation.ts, 21, 3))
->b : string | number, Symbol(b, Decl(contextualSignatureInstantiation.ts, 17, 3), Decl(contextualSignatureInstantiation.ts, 18, 3), Decl(contextualSignatureInstantiation.ts, 19, 3), Decl(contextualSignatureInstantiation.ts, 20, 3), Decl(contextualSignatureInstantiation.ts, 21, 3))
->g : <T>(x: T, y: T) => T, Symbol(g, Decl(contextualSignatureInstantiation.ts, 8, 65))
+>baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U
+>b : string | number
+>b : string | number
+>g : <T>(x: T, y: T) => T
 
 var d: number[] | string[];
->d : string[] | number[], Symbol(d, Decl(contextualSignatureInstantiation.ts, 23, 3), Decl(contextualSignatureInstantiation.ts, 24, 3), Decl(contextualSignatureInstantiation.ts, 25, 3), Decl(contextualSignatureInstantiation.ts, 26, 3), Decl(contextualSignatureInstantiation.ts, 27, 3))
+>d : string[] | number[]
 
 var d = foo(h);            // Should be number[] | string[]
->d : string[] | number[], Symbol(d, Decl(contextualSignatureInstantiation.ts, 23, 3), Decl(contextualSignatureInstantiation.ts, 24, 3), Decl(contextualSignatureInstantiation.ts, 25, 3), Decl(contextualSignatureInstantiation.ts, 26, 3), Decl(contextualSignatureInstantiation.ts, 27, 3))
+>d : string[] | number[]
 >foo(h) : string[] | number[]
->foo : <T>(cb: (x: number, y: string) => T) => T, Symbol(foo, Decl(contextualSignatureInstantiation.ts, 0, 0))
->h : <T, U>(x: T, y: U) => T[] | U[], Symbol(h, Decl(contextualSignatureInstantiation.ts, 10, 37))
+>foo : <T>(cb: (x: number, y: string) => T) => T
+>h : <T, U>(x: T, y: U) => T[] | U[]
 
 var d = bar(1, "one", h);  // Should be number[] | string[]
->d : string[] | number[], Symbol(d, Decl(contextualSignatureInstantiation.ts, 23, 3), Decl(contextualSignatureInstantiation.ts, 24, 3), Decl(contextualSignatureInstantiation.ts, 25, 3), Decl(contextualSignatureInstantiation.ts, 26, 3), Decl(contextualSignatureInstantiation.ts, 27, 3))
+>d : string[] | number[]
 >bar(1, "one", h) : string[] | number[]
->bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V, Symbol(bar, Decl(contextualSignatureInstantiation.ts, 6, 60))
+>bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
 >1 : number
 >"one" : string
->h : <T, U>(x: T, y: U) => T[] | U[], Symbol(h, Decl(contextualSignatureInstantiation.ts, 10, 37))
+>h : <T, U>(x: T, y: U) => T[] | U[]
 
 var d = bar("one", 1, h);  // Should be number[] | string[]
->d : string[] | number[], Symbol(d, Decl(contextualSignatureInstantiation.ts, 23, 3), Decl(contextualSignatureInstantiation.ts, 24, 3), Decl(contextualSignatureInstantiation.ts, 25, 3), Decl(contextualSignatureInstantiation.ts, 26, 3), Decl(contextualSignatureInstantiation.ts, 27, 3))
+>d : string[] | number[]
 >bar("one", 1, h) : string[] | number[]
->bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V, Symbol(bar, Decl(contextualSignatureInstantiation.ts, 6, 60))
+>bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
 >"one" : string
 >1 : number
->h : <T, U>(x: T, y: U) => T[] | U[], Symbol(h, Decl(contextualSignatureInstantiation.ts, 10, 37))
+>h : <T, U>(x: T, y: U) => T[] | U[]
 
 var d = baz(d, d, g);      // Should be number[] | string[]
->d : string[] | number[], Symbol(d, Decl(contextualSignatureInstantiation.ts, 23, 3), Decl(contextualSignatureInstantiation.ts, 24, 3), Decl(contextualSignatureInstantiation.ts, 25, 3), Decl(contextualSignatureInstantiation.ts, 26, 3), Decl(contextualSignatureInstantiation.ts, 27, 3))
+>d : string[] | number[]
 >baz(d, d, g) : string[] | number[]
->baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U, Symbol(baz, Decl(contextualSignatureInstantiation.ts, 7, 68))
->d : string[] | number[], Symbol(d, Decl(contextualSignatureInstantiation.ts, 23, 3), Decl(contextualSignatureInstantiation.ts, 24, 3), Decl(contextualSignatureInstantiation.ts, 25, 3), Decl(contextualSignatureInstantiation.ts, 26, 3), Decl(contextualSignatureInstantiation.ts, 27, 3))
->d : string[] | number[], Symbol(d, Decl(contextualSignatureInstantiation.ts, 23, 3), Decl(contextualSignatureInstantiation.ts, 24, 3), Decl(contextualSignatureInstantiation.ts, 25, 3), Decl(contextualSignatureInstantiation.ts, 26, 3), Decl(contextualSignatureInstantiation.ts, 27, 3))
->g : <T>(x: T, y: T) => T, Symbol(g, Decl(contextualSignatureInstantiation.ts, 8, 65))
+>baz : <T, U>(x: T, y: T, cb: (x: T, y: T) => U) => U
+>d : string[] | number[]
+>d : string[] | number[]
+>g : <T>(x: T, y: T) => T
 

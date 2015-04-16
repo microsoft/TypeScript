@@ -1,27 +1,27 @@
 === tests/cases/conformance/es6/Symbols/symbolDeclarationEmit11.ts ===
 class C {
->C : C, Symbol(C, Decl(symbolDeclarationEmit11.ts, 0, 0))
+>C : C
 
     static [Symbol.iterator] = 0;
->Symbol.iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
->Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
->iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
 >0 : number
 
     static [Symbol.isConcatSpreadable]() { }
->Symbol.isConcatSpreadable : symbol, Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1230, 24))
->Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
->isConcatSpreadable : symbol, Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1230, 24))
+>Symbol.isConcatSpreadable : symbol
+>Symbol : SymbolConstructor
+>isConcatSpreadable : symbol
 
     static get [Symbol.toPrimitive]() { return ""; }
->Symbol.toPrimitive : symbol, Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 1242, 21))
->Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
->toPrimitive : symbol, Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 1242, 21))
+>Symbol.toPrimitive : symbol
+>Symbol : SymbolConstructor
+>toPrimitive : symbol
 >"" : string
 
     static set [Symbol.toPrimitive](x) { }
->Symbol.toPrimitive : symbol, Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 1242, 21))
->Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
->toPrimitive : symbol, Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 1242, 21))
->x : string, Symbol(x, Decl(symbolDeclarationEmit11.ts, 4, 36))
+>Symbol.toPrimitive : symbol
+>Symbol : SymbolConstructor
+>toPrimitive : symbol
+>x : string
 }

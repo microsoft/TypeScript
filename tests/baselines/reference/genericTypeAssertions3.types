@@ -1,25 +1,25 @@
 === tests/cases/compiler/genericTypeAssertions3.ts ===
 var r = < <T>(x: T) => T > ((x) => { return null; }); // bug was 'could not find dotted symbol T' on x's annotation in the type assertion instead of no error
->r : <T>(x: T) => T, Symbol(r, Decl(genericTypeAssertions3.ts, 0, 3))
+>r : <T>(x: T) => T
 >< <T>(x: T) => T > ((x) => { return null; }) : <T>(x: T) => T
->T : T, Symbol(T, Decl(genericTypeAssertions3.ts, 0, 11))
->x : T, Symbol(x, Decl(genericTypeAssertions3.ts, 0, 14))
->T : T, Symbol(T, Decl(genericTypeAssertions3.ts, 0, 11))
->T : T, Symbol(T, Decl(genericTypeAssertions3.ts, 0, 11))
+>T : T
+>x : T
+>T : T
+>T : T
 >((x) => { return null; }) : (x: any) => any
 >(x) => { return null; } : (x: any) => any
->x : any, Symbol(x, Decl(genericTypeAssertions3.ts, 0, 29))
+>x : any
 >null : null
 
 var s = < <T>(x: T) => T > ((x: any) => { return null; }); // no error
->s : <T>(x: T) => T, Symbol(s, Decl(genericTypeAssertions3.ts, 1, 3))
+>s : <T>(x: T) => T
 >< <T>(x: T) => T > ((x: any) => { return null; }) : <T>(x: T) => T
->T : T, Symbol(T, Decl(genericTypeAssertions3.ts, 1, 11))
->x : T, Symbol(x, Decl(genericTypeAssertions3.ts, 1, 14))
->T : T, Symbol(T, Decl(genericTypeAssertions3.ts, 1, 11))
->T : T, Symbol(T, Decl(genericTypeAssertions3.ts, 1, 11))
+>T : T
+>x : T
+>T : T
+>T : T
 >((x: any) => { return null; }) : (x: any) => any
 >(x: any) => { return null; } : (x: any) => any
->x : any, Symbol(x, Decl(genericTypeAssertions3.ts, 1, 29))
+>x : any
 >null : null
 

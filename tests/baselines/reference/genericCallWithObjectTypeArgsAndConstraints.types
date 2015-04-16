@@ -3,106 +3,106 @@
 // No errors expected
 
 class C {
->C : C, Symbol(C, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 0, 0))
+>C : C
 
     x: string;
->x : string, Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 3, 9))
+>x : string
 }
 
 class D {
->D : D, Symbol(D, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 5, 1))
+>D : D
 
     x: string;
->x : string, Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 7, 9))
+>x : string
 
     y: string;
->y : string, Symbol(y, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 8, 14))
+>y : string
 }
 
 class X<T> {
->X : X<T>, Symbol(X, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 10, 1))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 12, 8))
+>X : X<T>
+>T : T
 
     x: T;
->x : T, Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 12, 12))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 12, 8))
+>x : T
+>T : T
 }
 
 function foo<T extends { x: string }>(t: X<T>, t2: X<T>) {
->foo : <T extends { x: string; }>(t: X<T>, t2: X<T>) => T, Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 14, 1))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 16, 13))
->x : string, Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 16, 24))
->t : X<T>, Symbol(t, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 16, 38))
->X : X<T>, Symbol(X, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 10, 1))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 16, 13))
->t2 : X<T>, Symbol(t2, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 16, 46))
->X : X<T>, Symbol(X, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 10, 1))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 16, 13))
+>foo : <T extends { x: string; }>(t: X<T>, t2: X<T>) => T
+>T : T
+>x : string
+>t : X<T>
+>X : X<T>
+>T : T
+>t2 : X<T>
+>X : X<T>
+>T : T
 
     var x: T;
->x : T, Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 17, 7))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 16, 13))
+>x : T
+>T : T
 
     return x;
->x : T, Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 17, 7))
+>x : T
 }
 
 var c1 = new X<C>();
->c1 : X<C>, Symbol(c1, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 21, 3))
+>c1 : X<C>
 >new X<C>() : X<C>
->X : typeof X, Symbol(X, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 10, 1))
->C : C, Symbol(C, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 0, 0))
+>X : typeof X
+>C : C
 
 var d1 = new X<D>();
->d1 : X<D>, Symbol(d1, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 22, 3))
+>d1 : X<D>
 >new X<D>() : X<D>
->X : typeof X, Symbol(X, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 10, 1))
->D : D, Symbol(D, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 5, 1))
+>X : typeof X
+>D : D
 
 var r = foo(c1, d1); 
->r : C, Symbol(r, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 23, 3), Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 31, 3))
+>r : C
 >foo(c1, d1) : C
->foo : <T extends { x: string; }>(t: X<T>, t2: X<T>) => T, Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 14, 1))
->c1 : X<C>, Symbol(c1, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 21, 3))
->d1 : X<D>, Symbol(d1, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 22, 3))
+>foo : <T extends { x: string; }>(t: X<T>, t2: X<T>) => T
+>c1 : X<C>
+>d1 : X<D>
 
 var r2 = foo(c1, c1);
->r2 : C, Symbol(r2, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 24, 3), Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 32, 3))
+>r2 : C
 >foo(c1, c1) : C
->foo : <T extends { x: string; }>(t: X<T>, t2: X<T>) => T, Symbol(foo, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 14, 1))
->c1 : X<C>, Symbol(c1, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 21, 3))
->c1 : X<C>, Symbol(c1, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 21, 3))
+>foo : <T extends { x: string; }>(t: X<T>, t2: X<T>) => T
+>c1 : X<C>
+>c1 : X<C>
 
 function foo2<T extends C>(t: X<T>, t2: X<T>) {
->foo2 : <T extends C>(t: X<T>, t2: X<T>) => T, Symbol(foo2, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 24, 21))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 26, 14))
->C : C, Symbol(C, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 0, 0))
->t : X<T>, Symbol(t, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 26, 27))
->X : X<T>, Symbol(X, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 10, 1))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 26, 14))
->t2 : X<T>, Symbol(t2, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 26, 35))
->X : X<T>, Symbol(X, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 10, 1))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 26, 14))
+>foo2 : <T extends C>(t: X<T>, t2: X<T>) => T
+>T : T
+>C : C
+>t : X<T>
+>X : X<T>
+>T : T
+>t2 : X<T>
+>X : X<T>
+>T : T
 
     var x: T;
->x : T, Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 27, 7))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 26, 14))
+>x : T
+>T : T
 
     return x;
->x : T, Symbol(x, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 27, 7))
+>x : T
 }
 
 var r = foo2(c1, d1); 
->r : C, Symbol(r, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 23, 3), Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 31, 3))
+>r : C
 >foo2(c1, d1) : C
->foo2 : <T extends C>(t: X<T>, t2: X<T>) => T, Symbol(foo2, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 24, 21))
->c1 : X<C>, Symbol(c1, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 21, 3))
->d1 : X<D>, Symbol(d1, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 22, 3))
+>foo2 : <T extends C>(t: X<T>, t2: X<T>) => T
+>c1 : X<C>
+>d1 : X<D>
 
 var r2 = foo2(c1, c1);
->r2 : C, Symbol(r2, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 24, 3), Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 32, 3))
+>r2 : C
 >foo2(c1, c1) : C
->foo2 : <T extends C>(t: X<T>, t2: X<T>) => T, Symbol(foo2, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 24, 21))
->c1 : X<C>, Symbol(c1, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 21, 3))
->c1 : X<C>, Symbol(c1, Decl(genericCallWithObjectTypeArgsAndConstraints.ts, 21, 3))
+>foo2 : <T extends C>(t: X<T>, t2: X<T>) => T
+>c1 : X<C>
+>c1 : X<C>
 

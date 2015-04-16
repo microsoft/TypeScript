@@ -1,27 +1,27 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of26.ts ===
 var x: any;
->x : any, Symbol(x, Decl(for-of26.ts, 0, 3))
+>x : any
 
 for (var v of new StringIterator) { }
->v : any, Symbol(v, Decl(for-of26.ts, 1, 8))
+>v : any
 >new StringIterator : StringIterator
->StringIterator : typeof StringIterator, Symbol(StringIterator, Decl(for-of26.ts, 1, 37))
+>StringIterator : typeof StringIterator
 
 class StringIterator {
->StringIterator : StringIterator, Symbol(StringIterator, Decl(for-of26.ts, 1, 37))
+>StringIterator : StringIterator
 
     next() {
->next : () => any, Symbol(next, Decl(for-of26.ts, 3, 22))
+>next : () => any
 
         return x;
->x : any, Symbol(x, Decl(for-of26.ts, 0, 3))
+>x : any
     }
     [Symbol.iterator]() {
->Symbol.iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
->Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
->iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
 
         return this;
->this : StringIterator, Symbol(StringIterator, Decl(for-of26.ts, 1, 37))
+>this : StringIterator
     }
 }

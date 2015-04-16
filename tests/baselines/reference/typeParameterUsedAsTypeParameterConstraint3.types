@@ -23,57 +23,57 @@
 //}
 
 interface I<T, U, V> {
->I : I<T, U, V>, Symbol(I, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 0, 0))
->T : T, Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 23, 12))
->U : U, Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 23, 14))
->V : V, Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 23, 17))
+>I : I<T, U, V>
+>T : T
+>U : U
+>V : V
 
     x: T;
->x : T, Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 23, 22))
->T : T, Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 23, 12))
+>x : T
+>T : T
 
     y: U;
->y : U, Symbol(y, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 24, 9))
->U : U, Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 23, 14))
+>y : U
+>U : U
 
     z: V;
->z : V, Symbol(z, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 25, 9))
->V : V, Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 23, 17))
+>z : V
+>V : V
 
     foo<W extends V>(x: W): T;
->foo : <W extends V>(x: W) => T, Symbol(foo, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 26, 9))
->W : W, Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 27, 8))
->V : V, Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 23, 17))
->x : W, Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 27, 21))
->W : W, Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 27, 8))
->T : T, Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 23, 12))
+>foo : <W extends V>(x: W) => T
+>W : W
+>V : V
+>x : W
+>W : W
+>T : T
 }
 
 interface I2<V, T, U> {
->I2 : I2<V, T, U>, Symbol(I2, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 28, 1))
->V : V, Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 30, 13))
->T : T, Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 30, 15))
->U : U, Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 30, 18))
+>I2 : I2<V, T, U>
+>V : V
+>T : T
+>U : U
 
     x: T;
->x : T, Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 30, 23))
->T : T, Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 30, 15))
+>x : T
+>T : T
 
     y: U;
->y : U, Symbol(y, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 31, 9))
->U : U, Symbol(U, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 30, 18))
+>y : U
+>U : U
 
     z: V;
->z : V, Symbol(z, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 32, 9))
->V : V, Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 30, 13))
+>z : V
+>V : V
 
     foo<W extends V>(x: W): T;
->foo : <W extends V>(x: W) => T, Symbol(foo, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 33, 9))
->W : W, Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 34, 8))
->V : V, Symbol(V, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 30, 13))
->x : W, Symbol(x, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 34, 21))
->W : W, Symbol(W, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 34, 8))
->T : T, Symbol(T, Decl(typeParameterUsedAsTypeParameterConstraint3.ts, 30, 15))
+>foo : <W extends V>(x: W) => T
+>W : W
+>V : V
+>x : W
+>W : W
+>T : T
 }
 
 //interface I < T, U extends T, V extends U > {
