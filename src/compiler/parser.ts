@@ -392,6 +392,7 @@ module ts {
         const disallowInAndDecoratorContext = ParserContextFlags.DisallowIn | ParserContextFlags.Decorator;
 
         let sourceFile: SourceFile;
+        let parseDiagnostics: Diagnostic[];
         let syntaxCursor: IncrementalParser.SyntaxCursor;
 
         let token: SyntaxKind;
@@ -480,9 +481,20 @@ module ts {
         let parseErrorBeforeNextFinishedNode: boolean = false;
 
         export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
+            initializeState(fileName, _sourceText, languageVersion, _syntaxCursor);
+
+            let result = parseSourceFileWorker(fileName, languageVersion, setParentNodes);
+
+            clearState();
+
+            return result;
+        }
+
+        function initializeState(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor) {
             sourceText = _sourceText;
             syntaxCursor = _syntaxCursor;
 
+            parseDiagnostics = [];
             parsingContext = 0;
             identifiers = {};
             identifierCount = 0;
@@ -491,14 +503,30 @@ module ts {
             contextFlags = isJavaScript(fileName) ? ParserContextFlags.JavaScriptFile : ParserContextFlags.None;
             parseErrorBeforeNextFinishedNode = false;
 
-            createSourceFile(fileName, languageVersion);
-
             // Initialize and prime the scanner before parsing the source elements.
             scanner.setText(sourceText);
             scanner.setOnError(scanError);
             scanner.setScriptTarget(languageVersion);
-            token = nextToken();
+        }
 
+        function clearState() {
+            // Clear out the text the scanner is pointing at, so it doesn't keep anything alive unnecessarily.
+            scanner.setText("");
+            scanner.setOnError(undefined);
+
+            // Clear any data.  We don't want to accidently hold onto it for too long.
+            parseDiagnostics = undefined;
+            sourceFile = undefined;
+            identifiers = undefined;
+            syntaxCursor = undefined;
+            sourceText = undefined;
+        }
+
+        function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean): SourceFile {
+            sourceFile = createSourceFile(fileName, languageVersion);
+
+            // Prime the scanner.
+            token = nextToken();
             processReferenceComments(sourceFile);
 
             sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
@@ -510,26 +538,13 @@ module ts {
             sourceFile.nodeCount = nodeCount;
             sourceFile.identifierCount = identifierCount;
             sourceFile.identifiers = identifiers;
+            sourceFile.parseDiagnostics = parseDiagnostics;
 
             if (setParentNodes) {
                 fixupParentReferences(sourceFile);
             }
 
-            syntaxCursor = undefined;
-
-            // Clear out the text the scanner is pointing at, so it doesn't keep anything alive unnecessarily.
-            scanner.setText("");
-            scanner.setOnError(undefined);
-
-            let result = sourceFile;
-
-            // Clear any data.  We don't want to accidently hold onto it for too long.
-            sourceFile = undefined;
-            identifiers = undefined;
-            syntaxCursor = undefined;
-            sourceText = undefined;
-
-            return result;
+            return sourceFile;
         }
 
         export function fixupParentReferences(sourceFile: Node) {
@@ -557,18 +572,18 @@ module ts {
             }
         }
 
-        function createSourceFile(fileName: string, languageVersion: ScriptTarget) {
-            sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, /*pos*/ 0);
+        function createSourceFile(fileName: string, languageVersion: ScriptTarget): SourceFile {
+            let sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, /*pos*/ 0);
 
             sourceFile.pos = 0;
             sourceFile.end = sourceText.length;
             sourceFile.text = sourceText;
-
-            sourceFile.parseDiagnostics = [];
             sourceFile.bindDiagnostics = [];
             sourceFile.languageVersion = languageVersion;
             sourceFile.fileName = normalizePath(fileName);
             sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
+
+            return sourceFile;
         }
 
         function setContextFlag(val: Boolean, flag: ParserContextFlags) {
@@ -702,9 +717,9 @@ module ts {
 
         function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any): void {
             // Don't report another error if it would just be at the same position as the last error.
-            let lastError = lastOrUndefined(sourceFile.parseDiagnostics);
+            let lastError = lastOrUndefined(parseDiagnostics);
             if (!lastError || start !== lastError.start) {
-                sourceFile.parseDiagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0));
+                parseDiagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0));
             }
 
             // Mark that we've encountered an error.  We'll set an appropriate bit on the next
@@ -749,7 +764,7 @@ module ts {
             // Keep track of the state we'll need to rollback to if lookahead fails (or if the
             // caller asked us to always reset our state).
             let saveToken = token;
-            let saveParseDiagnosticsLength = sourceFile.parseDiagnostics.length;
+            let saveParseDiagnosticsLength = parseDiagnostics.length;
             let saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
 
             // Note: it is not actually necessary to save/restore the context flags here.  That's
@@ -771,7 +786,7 @@ module ts {
             // then unconditionally restore us to where we were.
             if (!result || isLookAhead) {
                 token = saveToken;
-                sourceFile.parseDiagnostics.length = saveParseDiagnosticsLength;
+                parseDiagnostics.length = saveParseDiagnosticsLength;
                 parseErrorBeforeNextFinishedNode = saveParseErrorBeforeNextFinishedNode;
             }
 
@@ -1240,7 +1255,7 @@ module ts {
                     // test elements only if we are not already in strict mode
                     if (checkForStrictMode && !inStrictModeContext()) {
                         if (isPrologueDirective(element)) {
-                            if (isUseStrictPrologueDirective(sourceFile, element)) {
+                            if (isUseStrictPrologueDirective(element)) {
                                 setStrictModeContext(true);
                                 checkForStrictMode = false;
                             }
@@ -1265,9 +1280,9 @@ module ts {
         }
 
         /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
-        function isUseStrictPrologueDirective(sourceFile: SourceFile, node: Node): boolean {
+        function isUseStrictPrologueDirective(node: Node): boolean {
             Debug.assert(isPrologueDirective(node));
-            let nodeText = getSourceTextOfNodeFromSourceFile(sourceFile, (<ExpressionStatement>node).expression);
+            let nodeText = getTextOfNodeFromSourceText(sourceText, (<ExpressionStatement>node).expression);
 
             // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
             // string to contain unicode escapes (as per ES5).
@@ -4815,7 +4830,7 @@ module ts {
                         referencedFiles.push(fileReference);
                     }
                     if (diagnosticMessage) {
-                        sourceFile.parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
+                        parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
                     }
                 }
                 else {
@@ -4823,7 +4838,7 @@ module ts {
                     let amdModuleNameMatchResult = amdModuleNameRegEx.exec(comment);
                     if (amdModuleNameMatchResult) {
                         if (amdModuleName) {
-                            sourceFile.parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
+                            parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
                         }
                         amdModuleName = amdModuleNameMatchResult[2];
                     }
