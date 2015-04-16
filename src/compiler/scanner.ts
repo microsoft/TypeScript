@@ -24,11 +24,11 @@ module ts {
         reScanSlashToken(): SyntaxKind;
         reScanTemplateToken(): SyntaxKind;
         scan(): SyntaxKind;
-
         // Sets the text for the scanner to scan.  An optional subrange starting point and length
         // can be provided to have the scanner only scan a portion of the text.
         setText(text: string, start?: number, length?: number): void;
-
+        setOnError(onError: ErrorCallback): void;
+        setScriptTarget(scriptTarget: ScriptTarget): void;
         setTextPos(textPos: number): void;
         // Invokes the provided callback then unconditionally restores the scanner to the state it 
         // was in immediately prior to invoking the callback.  The result of invoking the callback
@@ -604,6 +604,7 @@ module ts {
     export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, text?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner {
         let pos: number;       // Current position (end position of text of current token)
         let end: number;       // end of text
+
         let startPos: number;  // Start position of whitespace before current token
         let tokenPos: number;  // Start position of text of current token
         let token: SyntaxKind;
@@ -631,6 +632,8 @@ module ts {
             reScanTemplateToken,
             scan,
             setText,
+            setScriptTarget,
+            setOnError,
             setTextPos,
             tryScan,
             lookAhead,
@@ -1479,6 +1482,14 @@ module ts {
             setTextPos(start || 0);
         }
 
+        function setOnError(errorCallback: ErrorCallback) {
+            onError = errorCallback;
+        }
+
+        function setScriptTarget(scriptTarget: ScriptTarget) {
+            languageVersion = scriptTarget;
+        }
+
         function setTextPos(textPos: number) {
             Debug.assert(textPos >= 0);
             pos = textPos;
@@ -1486,6 +1497,10 @@ module ts {
             tokenPos = textPos;
             token = SyntaxKind.Unknown;
             precedingLineBreak = false;
+
+            tokenValue = undefined;
+            hasExtendedUnicodeEscape = false;
+            tokenIsUnterminated = false;
         }
     }
 }

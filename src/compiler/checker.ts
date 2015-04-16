@@ -2952,16 +2952,17 @@ module ts {
         }
 
         function getPropertiesOfType(type: Type): Symbol[] {
-            if (type.flags & TypeFlags.Union) {
-                return getPropertiesOfUnionType(<UnionType>type);
-            }
-            return getPropertiesOfObjectType(getApparentType(type));
+            type = getApparentType(type);
+            return type.flags & TypeFlags.Union ? getPropertiesOfUnionType(<UnionType>type) : getPropertiesOfObjectType(type);
         }
 
         // For a type parameter, return the base constraint of the type parameter. For the string, number,
         // boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
         // type itself. Note that the apparent type of a union type is the union type itself.
         function getApparentType(type: Type): Type {
+            if (type.flags & TypeFlags.Union) {
+                type = getReducedTypeOfUnionType(<UnionType>type);
+            }
             if (type.flags & TypeFlags.TypeParameter) {
                 do {
                     type = getConstraintOfTypeParameter(<TypeParameter>type);
@@ -3034,27 +3035,27 @@ module ts {
         // necessary, maps primitive types and type parameters are to their apparent types, and augments with properties from
         // Object and Function as appropriate.
         function getPropertyOfType(type: Type, name: string): Symbol {
+            type = getApparentType(type);
+            if (type.flags & TypeFlags.ObjectType) {
+                let resolved = resolveObjectOrUnionTypeMembers(type);
+                if (hasProperty(resolved.members, name)) {
+                    let symbol = resolved.members[name];
+                    if (symbolIsValue(symbol)) {
+                        return symbol;
+                    }
+                }
+                if (resolved === anyFunctionType || resolved.callSignatures.length || resolved.constructSignatures.length) {
+                    let symbol = getPropertyOfObjectType(globalFunctionType, name);
+                    if (symbol) {
+                        return symbol;
+                    }
+                }
+                return getPropertyOfObjectType(globalObjectType, name);
+            }
             if (type.flags & TypeFlags.Union) {
                 return getPropertyOfUnionType(<UnionType>type, name);
             }
-            if (!(type.flags & TypeFlags.ObjectType)) {
-                type = getApparentType(type);
-                if (!(type.flags & TypeFlags.ObjectType)) {
-                    return undefined;
-                }
-            }
-            let resolved = resolveObjectOrUnionTypeMembers(type);
-            if (hasProperty(resolved.members, name)) {
-                let symbol = resolved.members[name];
-                if (symbolIsValue(symbol)) {
-                    return symbol;
-                }
-            }
-            if (resolved === anyFunctionType || resolved.callSignatures.length || resolved.constructSignatures.length) {
-                let symbol = getPropertyOfObjectType(globalFunctionType, name);
-                if (symbol) return symbol;
-            }
-            return getPropertyOfObjectType(globalObjectType, name);
+            return undefined;
         }
 
         function getSignaturesOfObjectOrUnionType(type: Type, kind: SignatureKind): Signature[] {
@@ -3689,6 +3690,10 @@ module ts {
             }
         }
 
+        // The noSubtypeReduction flag is there because it isn't possible to always do subtype reduction. The flag
+        // is true when creating a union type from a type node and when instantiating a union type. In both of those
+        // cases subtype reduction has to be deferred to properly support recursive union types. For example, a
+        // type alias of the form "type Item = string | (() => Item)" cannot be reduced during its declaration.
         function getUnionType(types: Type[], noSubtypeReduction?: boolean): Type {
             if (types.length === 0) {
                 return emptyObjectType;
@@ -3713,8 +3718,17 @@ module ts {
             if (!type) {
                 type = unionTypes[id] = <UnionType>createObjectType(TypeFlags.Union | getWideningFlagsOfTypes(sortedTypes));
                 type.types = sortedTypes;
+                type.reducedType = noSubtypeReduction ? undefined : type;
             }
             return type;
+        }
+
+        function getReducedTypeOfUnionType(type: UnionType): Type {
+            // If union type was created without subtype reduction, perform the deferred reduction now
+            if (!type.reducedType) {
+                type.reducedType = getUnionType(type.types, /*noSubtypeReduction*/ false);
+            }
+            return type.reducedType;
         }
 
         function getTypeFromUnionTypeNode(node: UnionTypeNode): Type {
@@ -4221,6 +4235,7 @@ module ts {
                         if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
                     }
                 }
+                let saveErrorInfo = errorInfo;
                 if (source.flags & TypeFlags.Union || target.flags & TypeFlags.Union) {
                     if (relation === identityRelation) {
                         if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union) {
@@ -4259,25 +4274,34 @@ module ts {
                         return result;
                     }
                 }
-                else {
-                    let saveErrorInfo = errorInfo;
-                    if (source.flags & TypeFlags.Reference && target.flags & TypeFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
-                        // We have type references to same target type, see if relationship holds for all type arguments
-                        if (result = typesRelatedTo((<TypeReference>source).typeArguments, (<TypeReference>target).typeArguments, reportErrors)) {
-                            return result;
-                        }
+                else if (source.flags & TypeFlags.Reference && target.flags & TypeFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
+                    // We have type references to same target type, see if relationship holds for all type arguments
+                    if (result = typesRelatedTo((<TypeReference>source).typeArguments, (<TypeReference>target).typeArguments, reportErrors)) {
+                        return result;
                     }
-                    // Even if relationship doesn't hold for type arguments, it may hold in a structural comparison
-                    // Report structural errors only if we haven't reported any errors yet
-                    let reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
-                    // identity relation does not use apparent type
-                    let sourceOrApparentType = relation === identityRelation ? source : getApparentType(source);
-                    if (sourceOrApparentType.flags & TypeFlags.ObjectType && target.flags & TypeFlags.ObjectType &&
-                        (result = objectTypeRelatedTo(sourceOrApparentType, <ObjectType>target, reportStructuralErrors))) {
+                }
+
+                // Even if relationship doesn't hold for unions, type parameters, or generic type references,
+                // it may hold in a structural comparison.
+                // Report structural errors only if we haven't reported any errors yet
+                let reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
+                // identity relation does not use apparent type
+                let sourceOrApparentType = relation === identityRelation ? source : getApparentType(source);
+                if (sourceOrApparentType.flags & TypeFlags.ObjectType && target.flags & TypeFlags.ObjectType) {
+                    if (result = objectTypeRelatedTo(sourceOrApparentType, <ObjectType>target, reportStructuralErrors)) {
                         errorInfo = saveErrorInfo;
                         return result;
                     }
                 }
+                else if (source.flags & TypeFlags.TypeParameter && sourceOrApparentType.flags & TypeFlags.Union) {
+                    // We clear the errors first because the following check often gives a better error than
+                    // the union comparison above if it is applicable.
+                    errorInfo = saveErrorInfo;
+                    if (result = isRelatedTo(sourceOrApparentType, target, reportErrors)) {
+                        return result;
+                    }
+                }
+
                 if (reportErrors) {
                     headMessage = headMessage || Diagnostics.Type_0_is_not_assignable_to_type_1;
                     let sourceType = typeToString(source);
@@ -13162,6 +13186,11 @@ module ts {
                     return reportErrorInClassDeclaration;
                 }
             }
+        }
+
+        function isEvalOrArgumentsIdentifier(node: Node): boolean {
+            return node.kind === SyntaxKind.Identifier &&
+                ((<Identifier>node).text === "eval" || (<Identifier>node).text === "arguments");
         }
 
         function checkGrammarConstructorTypeParameters(node: ConstructorDeclaration) {

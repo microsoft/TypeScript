@@ -121,7 +121,6 @@ module ts {
         WhileKeyword,
         WithKeyword,
         // Strict mode reserved words
-        AsKeyword,
         ImplementsKeyword,
         InterfaceKeyword,
         LetKeyword,
@@ -132,6 +131,7 @@ module ts {
         StaticKeyword,
         YieldKeyword,
         // Contextual keywords
+        AsKeyword,
         AnyKeyword,
         BooleanKeyword,
         ConstructorKeyword,
@@ -1623,6 +1623,8 @@ module ts {
 
     export interface UnionType extends Type {
         types: Type[];                    // Constituent types
+        /* @internal */
+        reducedType: Type;                // Reduced union type (all subtypes removed)
         /* @internal */
         resolvedProperties: SymbolTable;  // Cache of resolved properties
     }
