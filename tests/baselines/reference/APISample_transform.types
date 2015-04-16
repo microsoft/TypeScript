@@ -19,9 +19,9 @@ const source = "let x: string  = 'string'";
 let result = ts.transpile(source, { module: ts.ModuleKind.CommonJS });
 >result : string, Symbol(result, Decl(APISample_transform.ts, 13, 3))
 >ts.transpile(source, { module: ts.ModuleKind.CommonJS }) : string
->ts.transpile : (input: string, compilerOptions?: ts.CompilerOptions, fileName?: string, diagnostics?: ts.Diagnostic[]) => string, Symbol(ts.transpile, Decl(typescript.d.ts, 1728, 5))
+>ts.transpile : (input: string, compilerOptions?: ts.CompilerOptions, fileName?: string, diagnostics?: ts.Diagnostic[]) => string, Symbol(ts.transpile, Decl(typescript.d.ts, 1752, 5))
 >ts : typeof ts, Symbol(ts, Decl(APISample_transform.ts, 9, 6))
->transpile : (input: string, compilerOptions?: ts.CompilerOptions, fileName?: string, diagnostics?: ts.Diagnostic[]) => string, Symbol(ts.transpile, Decl(typescript.d.ts, 1728, 5))
+>transpile : (input: string, compilerOptions?: ts.CompilerOptions, fileName?: string, diagnostics?: ts.Diagnostic[]) => string, Symbol(ts.transpile, Decl(typescript.d.ts, 1752, 5))
 >source : string, Symbol(source, Decl(APISample_transform.ts, 11, 5))
 >{ module: ts.ModuleKind.CommonJS } : { [x: string]: ts.ModuleKind; module: ts.ModuleKind; }
 >module : ts.ModuleKind, Symbol(module, Decl(APISample_transform.ts, 13, 35))
