@@ -267,8 +267,6 @@ module ts {
             blockScopeContainer = savedBlockScopeContainer;
         }
 
-
-
         function bindJSDocComment(node: Node) {
             let jsDocComment = node.jsDocComment;
 
