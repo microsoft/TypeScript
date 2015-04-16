@@ -4621,19 +4621,6 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
             }
 
-            function sortAMDModules(amdModules: {name: string; path: string}[]) {
-                // AMD modules with declared variable names go first
-                return amdModules.sort((moduleA, moduleB) => {
-                    if (moduleA.name === moduleB.name) {
-                        return 0;
-                    } else if (!moduleA.name) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
-                });
-            }
-
             function emitExportStarHelper() {
                 if (hasExportStars) {
                     writeLine();
@@ -4649,44 +4636,78 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
             function emitAMDModule(node: SourceFile, startIndex: number) {
                 collectExternalModuleInfo(node);
+                
+                /// An AMD define function has the following shape:
+                ///     define(id?, dependencies?, factory);
+                ///
+                /// This has the shape of
+                ///     define(name, ["module1", "module2"], function (module1Alias) {
+                /// The location of the alias in the parameter list in the factory function needs to 
+                /// match the position of the module name in the dependency list.
+                ///
+                /// To ensure this is true in cases of modules with no aliases, e.g.: 
+                /// `import "module"` or `<amd-dependency path= "a.css" \>` we need to add these 
+                /// modules to the end of the dependencies list
+
+                let aliasedModuleNames: string[] = [];
+                let unaliasedModuleNames: string[] = [];
+                let importAliaseNames: string[] = [];
+                for (let importNode of externalImports) {
+                    // Find the name of the external module
+                    let externalModuleName = "";
+                    let moduleName = getExternalModuleName(importNode);
+                    if (moduleName.kind === SyntaxKind.StringLiteral) {
+                        externalModuleName = getLiteralText(<LiteralExpression>moduleName);
+                    }
+
+                    // Find the name of the module alais, if there is one
+                    var importAliasName: string;
+                    let namespaceDeclaration = getNamespaceDeclarationNode(importNode);
+                    if (namespaceDeclaration && !isDefaultImport(importNode)) {
+                        importAliasName = getSourceTextOfNodeFromSourceFile(currentSourceFile, namespaceDeclaration.name);
+                    }
+                    else {
+                        importAliasName = getGeneratedNameForNode(<ImportDeclaration | ExportDeclaration>importNode);
+                    }
+
+                    if (importAliasName) {
+                        aliasedModuleNames.push(externalModuleName);
+                        importAliaseNames.push(importAliasName);
+                    }
+                    else {
+                        unaliasedModuleNames.push(externalModuleName);
+                    }
+                }
+
+                // Fill in amd-dependency tags
+                for (let amdDependency of node.amdDependencies) {
+                    if (amdDependency.name) {
+                        aliasedModuleNames.push("\"" + amdDependency.path + "\"");
+                        importAliaseNames.push(amdDependency.name);
+                    }
+                    else {
+                        unaliasedModuleNames.push("\"" + amdDependency.path + "\"");
+                    }
+                }
+                
                 writeLine();
                 write("define(");
-                sortAMDModules(node.amdDependencies);
                 if (node.amdModuleName) {
                     write("\"" + node.amdModuleName + "\", ");
                 }
                 write("[\"require\", \"exports\"");
-                for (let importNode of externalImports) {
+                if (aliasedModuleNames.length) {
                     write(", ");
-                    let moduleName = getExternalModuleName(importNode);
-                    if (moduleName.kind === SyntaxKind.StringLiteral) {
-                        emitLiteral(<LiteralExpression>moduleName);
-                    }
-                    else {
-                        write("\"\"");
-                    }
+                    write(aliasedModuleNames.join(", "));
                 }
-                for (let amdDependency of node.amdDependencies) {
-                    let text = "\"" + amdDependency.path + "\"";
+                if (unaliasedModuleNames.length) {
                     write(", ");
-                    write(text);
+                    write(unaliasedModuleNames.join(", "));
                 }
                 write("], function (require, exports");
-                for (let importNode of externalImports) {
+                if (importAliaseNames.length) {
                     write(", ");
-                    let namespaceDeclaration = getNamespaceDeclarationNode(importNode);
-                    if (namespaceDeclaration && !isDefaultImport(importNode)) {
-                        emit(namespaceDeclaration.name);
-                    }
-                    else {
-                        write(getGeneratedNameForNode(<ImportDeclaration | ExportDeclaration>importNode));
-                    }
-                }
-                for (let amdDependency of node.amdDependencies) {
-                    if (amdDependency.name) {
-                        write(", ");
-                        write(amdDependency.name);
-                    }
+                    write(importAliaseNames.join(", "));
                 }
                 write(") {");
                 increaseIndent();
