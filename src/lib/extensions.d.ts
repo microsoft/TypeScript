@@ -19,8 +19,6 @@ interface ArrayBuffer {
       * Returns a section of an ArrayBuffer.
       */
     slice(begin:number, end?:number): ArrayBuffer;
-
-    [Symbol.toStringTag]: string;
 }
 
 interface ArrayBufferConstructor {
@@ -82,11 +80,6 @@ interface Int8Array {
       * @param end If not specified, length of the this object is used as its default value. 
       */
     copyWithin(target: number, start: number, end?: number): Int8Array;
-
-    /** 
-      * Returns an array of key, value pairs for every entry in the array
-      */
-    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -162,11 +155,6 @@ interface Int8Array {
       * resulting String. If omitted, the array elements are separated with a comma.
       */
     join(separator?: string): string;
-
-    /** 
-      * Returns an list of keys in the array
-      */
-    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -300,13 +288,7 @@ interface Int8Array {
       */
     toString(): string;
 
-    /** 
-      * Returns an list of values in the array
-      */
-    values(): IterableIterator<number>;
-
     [index: number]: number;
-    [Symbol.iterator](): IterableIterator<number>;
 }
 interface Int8ArrayConstructor {
     prototype: Int8Array;
@@ -325,14 +307,6 @@ interface Int8ArrayConstructor {
       * @param items A set of elements to include in the new array object.
       */
     of(...items: number[]): Int8Array;
-
-    /**
-      * Creates an array from an array-like or iterable object.
-      * @param arrayLike An array-like or iterable object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array;
 }
 declare var Int8Array: Int8ArrayConstructor;
 
@@ -371,11 +345,6 @@ interface Uint8Array {
       * @param end If not specified, length of the this object is used as its default value. 
       */
     copyWithin(target: number, start: number, end?: number): Uint8Array;
-
-    /** 
-      * Returns an array of key, value pairs for every entry in the array
-      */
-    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -451,11 +420,6 @@ interface Uint8Array {
       * resulting String. If omitted, the array elements are separated with a comma.
       */
     join(separator?: string): string;
-
-    /** 
-      * Returns an list of keys in the array
-      */
-    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -589,13 +553,7 @@ interface Uint8Array {
       */
     toString(): string;
 
-    /** 
-      * Returns an list of values in the array
-      */
-    values(): IterableIterator<number>;
-
     [index: number]: number;
-    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Uint8ArrayConstructor {
@@ -615,14 +573,6 @@ interface Uint8ArrayConstructor {
       * @param items A set of elements to include in the new array object.
       */
     of(...items: number[]): Uint8Array;
-
-    /**
-      * Creates an array from an array-like or iterable object.
-      * @param arrayLike An array-like or iterable object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array;
 }
 declare var Uint8Array: Uint8ArrayConstructor;
 
@@ -661,11 +611,6 @@ interface Int16Array {
       * @param end If not specified, length of the this object is used as its default value. 
       */
     copyWithin(target: number, start: number, end?: number): Int16Array;
-
-    /** 
-      * Returns an array of key, value pairs for every entry in the array
-      */
-    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -741,11 +686,6 @@ interface Int16Array {
       * resulting String. If omitted, the array elements are separated with a comma.
       */
     join(separator?: string): string;
-
-    /** 
-      * Returns an list of keys in the array
-      */
-    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -879,13 +819,7 @@ interface Int16Array {
       */
     toString(): string;
 
-    /** 
-      * Returns an list of values in the array
-      */
-    values(): IterableIterator<number>;
-
     [index: number]: number;
-    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Int16ArrayConstructor {
@@ -905,14 +839,6 @@ interface Int16ArrayConstructor {
       * @param items A set of elements to include in the new array object.
       */
     of(...items: number[]): Int16Array;
-
-    /**
-      * Creates an array from an array-like or iterable object.
-      * @param arrayLike An array-like or iterable object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array;
 }
 declare var Int16Array: Int16ArrayConstructor;
 
@@ -951,11 +877,6 @@ interface Uint16Array {
       * @param end If not specified, length of the this object is used as its default value. 
       */
     copyWithin(target: number, start: number, end?: number): Uint16Array;
-
-    /** 
-      * Returns an array of key, value pairs for every entry in the array
-      */
-    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -1031,11 +952,6 @@ interface Uint16Array {
       * resulting String. If omitted, the array elements are separated with a comma.
       */
     join(separator?: string): string;
-
-    /** 
-      * Returns an list of keys in the array
-      */
-    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -1169,13 +1085,7 @@ interface Uint16Array {
       */
     toString(): string;
 
-    /** 
-      * Returns an list of values in the array
-      */
-    values(): IterableIterator<number>;
-
     [index: number]: number;
-    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Uint16ArrayConstructor {
@@ -1195,14 +1105,6 @@ interface Uint16ArrayConstructor {
       * @param items A set of elements to include in the new array object.
       */
     of(...items: number[]): Uint16Array;
-
-    /**
-      * Creates an array from an array-like or iterable object.
-      * @param arrayLike An array-like or iterable object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array;
 }
 declare var Uint16Array: Uint16ArrayConstructor;
 /**
@@ -1240,11 +1142,6 @@ interface Int32Array {
       * @param end If not specified, length of the this object is used as its default value. 
       */
     copyWithin(target: number, start: number, end?: number): Int32Array;
-
-    /** 
-      * Returns an array of key, value pairs for every entry in the array
-      */
-    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -1320,11 +1217,6 @@ interface Int32Array {
       * resulting String. If omitted, the array elements are separated with a comma.
       */
     join(separator?: string): string;
-
-    /** 
-      * Returns an list of keys in the array
-      */
-    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -1458,13 +1350,7 @@ interface Int32Array {
       */
     toString(): string;
 
-    /** 
-      * Returns an list of values in the array
-      */
-    values(): IterableIterator<number>;
-
     [index: number]: number;
-    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Int32ArrayConstructor {
@@ -1484,14 +1370,6 @@ interface Int32ArrayConstructor {
       * @param items A set of elements to include in the new array object.
       */
     of(...items: number[]): Int32Array;
-
-    /**
-      * Creates an array from an array-like or iterable object.
-      * @param arrayLike An array-like or iterable object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array;
 }
 declare var Int32Array: Int32ArrayConstructor;
 
@@ -1530,11 +1408,6 @@ interface Uint32Array {
       * @param end If not specified, length of the this object is used as its default value. 
       */
     copyWithin(target: number, start: number, end?: number): Uint32Array;
-
-    /** 
-      * Returns an array of key, value pairs for every entry in the array
-      */
-    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -1610,11 +1483,6 @@ interface Uint32Array {
       * resulting String. If omitted, the array elements are separated with a comma.
       */
     join(separator?: string): string;
-
-    /** 
-      * Returns an list of keys in the array
-      */
-    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -1748,13 +1616,7 @@ interface Uint32Array {
       */
     toString(): string;
 
-    /** 
-      * Returns an list of values in the array
-      */
-    values(): IterableIterator<number>;
-
     [index: number]: number;
-    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Uint32ArrayConstructor {
@@ -1774,14 +1636,6 @@ interface Uint32ArrayConstructor {
       * @param items A set of elements to include in the new array object.
       */
     of(...items: number[]): Uint32Array;
-
-    /**
-      * Creates an array from an array-like or iterable object.
-      * @param arrayLike An array-like or iterable object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array;
 }
 declare var Uint32Array: Uint32ArrayConstructor;
 
@@ -1820,11 +1674,6 @@ interface Float32Array {
       * @param end If not specified, length of the this object is used as its default value. 
       */
     copyWithin(target: number, start: number, end?: number): Float32Array;
-
-    /** 
-      * Returns an array of key, value pairs for every entry in the array
-      */
-    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -1900,11 +1749,6 @@ interface Float32Array {
       * resulting String. If omitted, the array elements are separated with a comma.
       */
     join(separator?: string): string;
-
-    /** 
-      * Returns an list of keys in the array
-      */
-    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -2038,13 +1882,7 @@ interface Float32Array {
       */
     toString(): string;
 
-    /** 
-      * Returns an list of values in the array
-      */
-    values(): IterableIterator<number>;
-
     [index: number]: number;
-    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Float32ArrayConstructor {
@@ -2064,14 +1902,6 @@ interface Float32ArrayConstructor {
       * @param items A set of elements to include in the new array object.
       */
     of(...items: number[]): Float32Array;
-
-    /**
-      * Creates an array from an array-like or iterable object.
-      * @param arrayLike An array-like or iterable object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array;
 }
 declare var Float32Array: Float32ArrayConstructor;
 
@@ -2110,11 +1940,6 @@ interface Float64Array {
       * @param end If not specified, length of the this object is used as its default value. 
       */
     copyWithin(target: number, start: number, end?: number): Float64Array;
-
-    /** 
-      * Returns an array of key, value pairs for every entry in the array
-      */
-    entries(): IterableIterator<[number, number]>;
 
     /**
       * Determines whether all the members of an array satisfy the specified test.
@@ -2190,11 +2015,6 @@ interface Float64Array {
       * resulting String. If omitted, the array elements are separated with a comma.
       */
     join(separator?: string): string;
-
-    /** 
-      * Returns an list of keys in the array
-      */
-    keys(): IterableIterator<number>;
 
     /**
       * Returns the index of the last occurrence of a value in an array.
@@ -2328,13 +2148,7 @@ interface Float64Array {
       */
     toString(): string;
 
-    /** 
-      * Returns an list of values in the array
-      */
-    values(): IterableIterator<number>;
-
     [index: number]: number;
-    [Symbol.iterator](): IterableIterator<number>;
 }
 
 interface Float64ArrayConstructor {
@@ -2354,13 +2168,5 @@ interface Float64ArrayConstructor {
       * @param items A set of elements to include in the new array object.
       */
     of(...items: number[]): Float64Array;
-
-    /**
-      * Creates an array from an array-like or iterable object.
-      * @param arrayLike An array-like or iterable object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from(arrayLike: ArrayLike<number> | Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array;
 }
 declare var Float64Array: Float64ArrayConstructor;
