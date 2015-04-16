@@ -321,6 +321,10 @@ module ts {
                 return visitNode(cbNode, (<JSDocTypeExpression>node).type);
             case SyntaxKind.JSDocUnionType:
                 return visitNodes(cbNodes, (<JSDocUnionType>node).types);
+            case SyntaxKind.JSDocTupleType:
+                return visitNodes(cbNodes, (<JSDocTupleType>node).types);
+            case SyntaxKind.JSDocArrayType:
+                return visitNode(cbNode, (<JSDocArrayType>node).elementType);
             case SyntaxKind.JSDocNonNullableType:
                 return visitNode(cbNode, (<JSDocNonNullableType>node).type);
             case SyntaxKind.JSDocNullableType:
@@ -367,11 +371,13 @@ module ts {
     export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile {
         return IncrementalParser.updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
     }
-
+    
+    /* @internal */
     export function parseJSDocComment(parent: Node, content: string, start?: number, length?: number): JSDocComment {
         return JSDocParser.parseJSDocComment(parent, content, start, length);
     }
 
+    /* @internal */
     export function parseJSDocTypeExpression(content: string, start?: number, length?: number): JSDocTypeExpression {
         return JSDocParser.parseJSDocTypeExpression(content, start, length);
     }

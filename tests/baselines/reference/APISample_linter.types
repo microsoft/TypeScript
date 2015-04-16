@@ -22,7 +22,7 @@ export function delint(sourceFile: ts.SourceFile) {
 >delint : (sourceFile: ts.SourceFile) => void, Symbol(delint, Decl(APISample_linter.ts, 11, 33))
 >sourceFile : ts.SourceFile, Symbol(sourceFile, Decl(APISample_linter.ts, 13, 23))
 >ts : any, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->SourceFile : ts.SourceFile, Symbol(ts.SourceFile, Decl(typescript.d.ts, 821, 5), Decl(typescript.d.ts, 1369, 5))
+>SourceFile : ts.SourceFile, Symbol(ts.SourceFile, Decl(typescript.d.ts, 821, 5), Decl(typescript.d.ts, 1367, 5))
 
     delintNode(sourceFile);
 >delintNode(sourceFile) : void
@@ -33,7 +33,7 @@ export function delint(sourceFile: ts.SourceFile) {
 >delintNode : (node: ts.Node) => void, Symbol(delintNode, Decl(APISample_linter.ts, 14, 27))
 >node : ts.Node, Symbol(node, Decl(APISample_linter.ts, 16, 24))
 >ts : any, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->Node : ts.Node, Symbol(ts.Node, Decl(typescript.d.ts, 312, 5), Decl(typescript.d.ts, 1329, 32))
+>Node : ts.Node, Symbol(ts.Node, Decl(typescript.d.ts, 312, 5), Decl(typescript.d.ts, 1327, 32))
 
         switch (node.kind) {
 >node.kind : ts.SyntaxKind, Symbol(ts.Node.kind, Decl(typescript.d.ts, 313, 38))
@@ -230,20 +230,20 @@ export function delint(sourceFile: ts.SourceFile) {
 >report : (node: ts.Node, message: string) => void, Symbol(report, Decl(APISample_linter.ts, 48, 5))
 >node : ts.Node, Symbol(node, Decl(APISample_linter.ts, 50, 20))
 >ts : any, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->Node : ts.Node, Symbol(ts.Node, Decl(typescript.d.ts, 312, 5), Decl(typescript.d.ts, 1329, 32))
+>Node : ts.Node, Symbol(ts.Node, Decl(typescript.d.ts, 312, 5), Decl(typescript.d.ts, 1327, 32))
 >message : string, Symbol(message, Decl(APISample_linter.ts, 50, 34))
 
         let { line, character } = sourceFile.getLineAndCharacterOfPosition(node.getStart());
 >line : number, Symbol(line, Decl(APISample_linter.ts, 51, 13))
 >character : number, Symbol(character, Decl(APISample_linter.ts, 51, 19))
 >sourceFile.getLineAndCharacterOfPosition(node.getStart()) : ts.LineAndCharacter
->sourceFile.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1370, 26))
+>sourceFile.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1368, 26))
 >sourceFile : ts.SourceFile, Symbol(sourceFile, Decl(APISample_linter.ts, 13, 23))
->getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1370, 26))
+>getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1368, 26))
 >node.getStart() : number
->node.getStart : (sourceFile?: ts.SourceFile) => number, Symbol(ts.Node.getStart, Decl(typescript.d.ts, 1334, 53))
+>node.getStart : (sourceFile?: ts.SourceFile) => number, Symbol(ts.Node.getStart, Decl(typescript.d.ts, 1332, 53))
 >node : ts.Node, Symbol(node, Decl(APISample_linter.ts, 50, 20))
->getStart : (sourceFile?: ts.SourceFile) => number, Symbol(ts.Node.getStart, Decl(typescript.d.ts, 1334, 53))
+>getStart : (sourceFile?: ts.SourceFile) => number, Symbol(ts.Node.getStart, Decl(typescript.d.ts, 1332, 53))
 
         console.log(`${sourceFile.fileName} (${line + 1},${character + 1}): ${message}`);
 >console.log(`${sourceFile.fileName} (${line + 1},${character + 1}): ${message}`) : any
