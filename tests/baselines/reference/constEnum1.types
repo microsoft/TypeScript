@@ -1,0 +1,54 @@
+=== tests/cases/conformance/constEnums/constEnum1.ts ===
+
+// An enum declaration that specifies a const modifier is a constant enum declaration.
+// In a constant enum declaration, all members must have constant values and
+// it is an error for a member declaration to specify an expression that isn't classified as a constant enum expression.
+
+const enum E {
+>E : E, Symbol(E, Decl(constEnum1.ts, 0, 0))
+
+    a = 10,
+>a : E, Symbol(E.a, Decl(constEnum1.ts, 5, 14))
+>10 : number
+
+    b = a,
+>b : E, Symbol(E.b, Decl(constEnum1.ts, 6, 11))
+>a : E, Symbol(E.a, Decl(constEnum1.ts, 5, 14))
+
+    c = (a+1),
+>c : E, Symbol(E.c, Decl(constEnum1.ts, 7, 10))
+>(a+1) : number
+>a+1 : number
+>a : E, Symbol(E.a, Decl(constEnum1.ts, 5, 14))
+>1 : number
+
+    e,
+>e : E, Symbol(E.e, Decl(constEnum1.ts, 8, 14))
+
+    d = ~e,
+>d : E, Symbol(E.d, Decl(constEnum1.ts, 9, 6))
+>~e : number
+>e : E, Symbol(E.e, Decl(constEnum1.ts, 8, 14))
+
+    f = a << 2 >> 1,
+>f : E, Symbol(E.f, Decl(constEnum1.ts, 10, 11))
+>a << 2 >> 1 : number
+>a << 2 : number
+>a : E, Symbol(E.a, Decl(constEnum1.ts, 5, 14))
+>2 : number
+>1 : number
+
+    g = a << 2 >>> 1,
+>g : E, Symbol(E.g, Decl(constEnum1.ts, 11, 20))
+>a << 2 >>> 1 : number
+>a << 2 : number
+>a : E, Symbol(E.a, Decl(constEnum1.ts, 5, 14))
+>2 : number
+>1 : number
+
+    h = a | b
+>h : E, Symbol(E.h, Decl(constEnum1.ts, 12, 21))
+>a | b : number
+>a : E, Symbol(E.a, Decl(constEnum1.ts, 5, 14))
+>b : E, Symbol(E.b, Decl(constEnum1.ts, 6, 11))
+}
