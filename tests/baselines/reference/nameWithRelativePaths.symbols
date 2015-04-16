@@ -1,0 +1,46 @@
+=== tests/cases/conformance/externalModules/test/foo_3.ts ===
+import foo0 = require('../foo_0');
+>foo0 : Symbol(foo0, Decl(foo_3.ts, 0, 0))
+
+import foo1 = require('./test/foo_1');
+>foo1 : Symbol(foo1, Decl(foo_3.ts, 0, 34))
+
+import foo2 = require('./.././test/foo_2');
+>foo2 : Symbol(foo2, Decl(foo_3.ts, 1, 38))
+
+if(foo2.M2.x){
+>foo2.M2.x : Symbol(foo2.M2.x, Decl(foo_2.ts, 1, 11))
+>foo2.M2 : Symbol(foo2.M2, Decl(foo_2.ts, 0, 0))
+>foo2 : Symbol(foo2, Decl(foo_3.ts, 1, 38))
+>M2 : Symbol(foo2.M2, Decl(foo_2.ts, 0, 0))
+>x : Symbol(foo2.M2.x, Decl(foo_2.ts, 1, 11))
+
+	var x = foo0.foo + foo1.f();
+>x : Symbol(x, Decl(foo_3.ts, 5, 4))
+>foo0.foo : Symbol(foo0.foo, Decl(foo_0.ts, 0, 10))
+>foo0 : Symbol(foo0, Decl(foo_3.ts, 0, 0))
+>foo : Symbol(foo0.foo, Decl(foo_0.ts, 0, 10))
+>foo1.f : Symbol(foo1.f, Decl(foo_1.ts, 0, 0))
+>foo1 : Symbol(foo1, Decl(foo_3.ts, 0, 34))
+>f : Symbol(foo1.f, Decl(foo_1.ts, 0, 0))
+}
+
+=== tests/cases/conformance/externalModules/foo_0.ts ===
+export var foo = 42;
+>foo : Symbol(foo, Decl(foo_0.ts, 0, 10))
+
+=== tests/cases/conformance/externalModules/test/test/foo_1.ts ===
+export function f(){
+>f : Symbol(f, Decl(foo_1.ts, 0, 0))
+
+	return 42;
+}
+
+=== tests/cases/conformance/externalModules/test/foo_2.ts ===
+export module M2 {
+>M2 : Symbol(M2, Decl(foo_2.ts, 0, 0))
+
+	export var x = true;
+>x : Symbol(x, Decl(foo_2.ts, 1, 11))
+}
+

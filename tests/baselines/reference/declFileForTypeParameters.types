@@ -1,22 +1,22 @@
 === tests/cases/compiler/declFileForTypeParameters.ts ===
 
 class C<T> {
->C : C<T>, Symbol(C, Decl(declFileForTypeParameters.ts, 0, 0))
->T : T, Symbol(T, Decl(declFileForTypeParameters.ts, 1, 8))
+>C : C<T>
+>T : T
 
     x: T;
->x : T, Symbol(x, Decl(declFileForTypeParameters.ts, 1, 12))
->T : T, Symbol(T, Decl(declFileForTypeParameters.ts, 1, 8))
+>x : T
+>T : T
 
     foo(a: T): T {
->foo : (a: T) => T, Symbol(foo, Decl(declFileForTypeParameters.ts, 2, 9))
->a : T, Symbol(a, Decl(declFileForTypeParameters.ts, 3, 8))
->T : T, Symbol(T, Decl(declFileForTypeParameters.ts, 1, 8))
->T : T, Symbol(T, Decl(declFileForTypeParameters.ts, 1, 8))
+>foo : (a: T) => T
+>a : T
+>T : T
+>T : T
 
         return this.x;
->this.x : T, Symbol(x, Decl(declFileForTypeParameters.ts, 1, 12))
->this : C<T>, Symbol(C, Decl(declFileForTypeParameters.ts, 0, 0))
->x : T, Symbol(x, Decl(declFileForTypeParameters.ts, 1, 12))
+>this.x : T
+>this : C<T>
+>x : T
     }
 }

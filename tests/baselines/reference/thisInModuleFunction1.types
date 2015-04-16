@@ -1,18 +1,18 @@
 === tests/cases/compiler/thisInModuleFunction1.ts ===
 module bar {
->bar : typeof bar, Symbol(bar, Decl(thisInModuleFunction1.ts, 0, 0))
+>bar : typeof bar
 
  export function bar() {
->bar : () => any, Symbol(bar, Decl(thisInModuleFunction1.ts, 0, 12))
+>bar : () => any
 
   return this;
 >this : any
  } 
 } 
 var z = bar.bar();
->z : any, Symbol(z, Decl(thisInModuleFunction1.ts, 5, 3))
+>z : any
 >bar.bar() : any
->bar.bar : () => any, Symbol(bar.bar, Decl(thisInModuleFunction1.ts, 0, 12))
->bar : typeof bar, Symbol(bar, Decl(thisInModuleFunction1.ts, 0, 0))
->bar : () => any, Symbol(bar.bar, Decl(thisInModuleFunction1.ts, 0, 12))
+>bar.bar : () => any
+>bar : typeof bar
+>bar : () => any
 

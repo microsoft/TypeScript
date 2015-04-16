@@ -3,78 +3,78 @@
 // no errors expected
 
 class C<T extends Date> {
->C : C<T>, Symbol(C, Decl(innerTypeParameterShadowingOuterOne2.ts, 0, 0))
->T : T, Symbol(T, Decl(innerTypeParameterShadowingOuterOne2.ts, 3, 8))
->Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>C : C<T>
+>T : T
+>Date : Date
 
     g<T extends Number>() {
->g : <T extends Number>() => void, Symbol(g, Decl(innerTypeParameterShadowingOuterOne2.ts, 3, 25))
->T : T, Symbol(T, Decl(innerTypeParameterShadowingOuterOne2.ts, 4, 6))
->Number : Number, Symbol(Number, Decl(lib.d.ts, 456, 40), Decl(lib.d.ts, 518, 11))
+>g : <T extends Number>() => void
+>T : T
+>Number : Number
 
         var x: T;
->x : T, Symbol(x, Decl(innerTypeParameterShadowingOuterOne2.ts, 5, 11))
->T : T, Symbol(T, Decl(innerTypeParameterShadowingOuterOne2.ts, 4, 6))
+>x : T
+>T : T
 
         x.toFixed();
 >x.toFixed() : string
->x.toFixed : (fractionDigits?: number) => string, Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
->x : T, Symbol(x, Decl(innerTypeParameterShadowingOuterOne2.ts, 5, 11))
->toFixed : (fractionDigits?: number) => string, Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
+>x.toFixed : (fractionDigits?: number) => string
+>x : T
+>toFixed : (fractionDigits?: number) => string
     }
 
     h() {
->h : () => void, Symbol(h, Decl(innerTypeParameterShadowingOuterOne2.ts, 7, 5))
+>h : () => void
 
         var x: T;
->x : T, Symbol(x, Decl(innerTypeParameterShadowingOuterOne2.ts, 10, 11))
->T : T, Symbol(T, Decl(innerTypeParameterShadowingOuterOne2.ts, 3, 8))
+>x : T
+>T : T
 
         x.getDate();
 >x.getDate() : number
->x.getDate : () => number, Symbol(Date.getDate, Decl(lib.d.ts, 660, 26))
->x : T, Symbol(x, Decl(innerTypeParameterShadowingOuterOne2.ts, 10, 11))
->getDate : () => number, Symbol(Date.getDate, Decl(lib.d.ts, 660, 26))
+>x.getDate : () => number
+>x : T
+>getDate : () => number
     }
 }
 
 class C2<T extends Date, U extends Date> {
->C2 : C2<T, U>, Symbol(C2, Decl(innerTypeParameterShadowingOuterOne2.ts, 13, 1))
->T : T, Symbol(T, Decl(innerTypeParameterShadowingOuterOne2.ts, 15, 9))
->Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
->U : U, Symbol(U, Decl(innerTypeParameterShadowingOuterOne2.ts, 15, 24))
->Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>C2 : C2<T, U>
+>T : T
+>Date : Date
+>U : U
+>Date : Date
 
     g<T extends Number, U extends Number>() {
->g : <T extends Number, U extends Number>() => void, Symbol(g, Decl(innerTypeParameterShadowingOuterOne2.ts, 15, 42))
->T : T, Symbol(T, Decl(innerTypeParameterShadowingOuterOne2.ts, 16, 6))
->Number : Number, Symbol(Number, Decl(lib.d.ts, 456, 40), Decl(lib.d.ts, 518, 11))
->U : U, Symbol(U, Decl(innerTypeParameterShadowingOuterOne2.ts, 16, 23))
->Number : Number, Symbol(Number, Decl(lib.d.ts, 456, 40), Decl(lib.d.ts, 518, 11))
+>g : <T extends Number, U extends Number>() => void
+>T : T
+>Number : Number
+>U : U
+>Number : Number
 
         var x: U;
->x : U, Symbol(x, Decl(innerTypeParameterShadowingOuterOne2.ts, 17, 11))
->U : U, Symbol(U, Decl(innerTypeParameterShadowingOuterOne2.ts, 16, 23))
+>x : U
+>U : U
 
         x.toFixed();
 >x.toFixed() : string
->x.toFixed : (fractionDigits?: number) => string, Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
->x : U, Symbol(x, Decl(innerTypeParameterShadowingOuterOne2.ts, 17, 11))
->toFixed : (fractionDigits?: number) => string, Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
+>x.toFixed : (fractionDigits?: number) => string
+>x : U
+>toFixed : (fractionDigits?: number) => string
     }
 
     h() {
->h : () => void, Symbol(h, Decl(innerTypeParameterShadowingOuterOne2.ts, 19, 5))
+>h : () => void
 
         var x: U;
->x : U, Symbol(x, Decl(innerTypeParameterShadowingOuterOne2.ts, 22, 11))
->U : U, Symbol(U, Decl(innerTypeParameterShadowingOuterOne2.ts, 15, 24))
+>x : U
+>U : U
 
         x.getDate();
 >x.getDate() : number
->x.getDate : () => number, Symbol(Date.getDate, Decl(lib.d.ts, 660, 26))
->x : U, Symbol(x, Decl(innerTypeParameterShadowingOuterOne2.ts, 22, 11))
->getDate : () => number, Symbol(Date.getDate, Decl(lib.d.ts, 660, 26))
+>x.getDate : () => number
+>x : U
+>getDate : () => number
     }
 }
 //class C2<T extends Date, U extends T> {

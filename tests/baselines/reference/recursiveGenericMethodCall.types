@@ -1,20 +1,20 @@
 === tests/cases/compiler/recursiveGenericMethodCall.ts ===
 interface Generator<T> { (): T; }
->Generator : Generator<T>, Symbol(Generator, Decl(recursiveGenericMethodCall.ts, 0, 0))
->T : T, Symbol(T, Decl(recursiveGenericMethodCall.ts, 0, 20))
->T : T, Symbol(T, Decl(recursiveGenericMethodCall.ts, 0, 20))
+>Generator : Generator<T>
+>T : T
+>T : T
 
 function Generate<T>(func: Generator<T>): T {
->Generate : <T>(func: Generator<T>) => T, Symbol(Generate, Decl(recursiveGenericMethodCall.ts, 0, 33))
->T : T, Symbol(T, Decl(recursiveGenericMethodCall.ts, 2, 18))
->func : Generator<T>, Symbol(func, Decl(recursiveGenericMethodCall.ts, 2, 21))
->Generator : Generator<T>, Symbol(Generator, Decl(recursiveGenericMethodCall.ts, 0, 0))
->T : T, Symbol(T, Decl(recursiveGenericMethodCall.ts, 2, 18))
->T : T, Symbol(T, Decl(recursiveGenericMethodCall.ts, 2, 18))
+>Generate : <T>(func: Generator<T>) => T
+>T : T
+>func : Generator<T>
+>Generator : Generator<T>
+>T : T
+>T : T
 
     return Generate(func);
 >Generate(func) : T
->Generate : <T>(func: Generator<T>) => T, Symbol(Generate, Decl(recursiveGenericMethodCall.ts, 0, 33))
->func : Generator<T>, Symbol(func, Decl(recursiveGenericMethodCall.ts, 2, 21))
+>Generate : <T>(func: Generator<T>) => T
+>func : Generator<T>
 }
 

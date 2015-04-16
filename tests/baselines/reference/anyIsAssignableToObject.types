@@ -1,15 +1,15 @@
 === tests/cases/compiler/anyIsAssignableToObject.ts ===
 interface P {
->P : P, Symbol(P, Decl(anyIsAssignableToObject.ts, 0, 0))
+>P : P
 
     p: {};
->p : {}, Symbol(p, Decl(anyIsAssignableToObject.ts, 0, 13))
+>p : {}
 }
 
 interface Q extends P { // Check assignability here. Any is assignable to {}
->Q : Q, Symbol(Q, Decl(anyIsAssignableToObject.ts, 2, 1))
->P : P, Symbol(P, Decl(anyIsAssignableToObject.ts, 0, 0))
+>Q : Q
+>P : P
 
     p: any;
->p : any, Symbol(p, Decl(anyIsAssignableToObject.ts, 4, 23))
+>p : any
 }

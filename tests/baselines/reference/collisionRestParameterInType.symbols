@@ -1,0 +1,27 @@
+=== tests/cases/compiler/collisionRestParameterInType.ts ===
+var v1: (_i: number, ...restParameters) => void; // no error - no code gen
+>v1 : Symbol(v1, Decl(collisionRestParameterInType.ts, 0, 3))
+>_i : Symbol(_i, Decl(collisionRestParameterInType.ts, 0, 9))
+>restParameters : Symbol(restParameters, Decl(collisionRestParameterInType.ts, 0, 20))
+
+var v2: {
+>v2 : Symbol(v2, Decl(collisionRestParameterInType.ts, 1, 3))
+
+    (_i: number, ...restParameters); // no error - no code gen
+>_i : Symbol(_i, Decl(collisionRestParameterInType.ts, 2, 5))
+>restParameters : Symbol(restParameters, Decl(collisionRestParameterInType.ts, 2, 16))
+
+    new (_i: number, ...restParameters); // no error - no code gen
+>_i : Symbol(_i, Decl(collisionRestParameterInType.ts, 3, 9))
+>restParameters : Symbol(restParameters, Decl(collisionRestParameterInType.ts, 3, 20))
+
+    foo(_i: number, ...restParameters); // no error - no code gen
+>foo : Symbol(foo, Decl(collisionRestParameterInType.ts, 3, 40))
+>_i : Symbol(_i, Decl(collisionRestParameterInType.ts, 4, 8))
+>restParameters : Symbol(restParameters, Decl(collisionRestParameterInType.ts, 4, 19))
+
+    prop: (_i: number, ...restParameters) => void; // no error - no code gen
+>prop : Symbol(prop, Decl(collisionRestParameterInType.ts, 4, 39))
+>_i : Symbol(_i, Decl(collisionRestParameterInType.ts, 5, 11))
+>restParameters : Symbol(restParameters, Decl(collisionRestParameterInType.ts, 5, 22))
+}

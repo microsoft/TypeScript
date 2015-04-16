@@ -1,28 +1,28 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNames37_ES5.ts ===
 class Foo { x }
->Foo : Foo, Symbol(Foo, Decl(computedPropertyNames37_ES5.ts, 0, 0))
->x : any, Symbol(x, Decl(computedPropertyNames37_ES5.ts, 0, 11))
+>Foo : Foo
+>x : any
 
 class Foo2 { x; y }
->Foo2 : Foo2, Symbol(Foo2, Decl(computedPropertyNames37_ES5.ts, 0, 15))
->x : any, Symbol(x, Decl(computedPropertyNames37_ES5.ts, 1, 12))
->y : any, Symbol(y, Decl(computedPropertyNames37_ES5.ts, 1, 15))
+>Foo2 : Foo2
+>x : any
+>y : any
 
 class C {
->C : C, Symbol(C, Decl(computedPropertyNames37_ES5.ts, 1, 19))
+>C : C
 
     [s: number]: Foo2;
->s : number, Symbol(s, Decl(computedPropertyNames37_ES5.ts, 4, 5))
->Foo2 : Foo2, Symbol(Foo2, Decl(computedPropertyNames37_ES5.ts, 0, 15))
+>s : number
+>Foo2 : Foo2
 
     // Computed properties
     get ["get1"]() { return new Foo }
 >"get1" : string
 >new Foo : Foo
->Foo : typeof Foo, Symbol(Foo, Decl(computedPropertyNames37_ES5.ts, 0, 0))
+>Foo : typeof Foo
 
     set ["set1"](p: Foo2) { }
 >"set1" : string
->p : Foo2, Symbol(p, Decl(computedPropertyNames37_ES5.ts, 8, 17))
->Foo2 : Foo2, Symbol(Foo2, Decl(computedPropertyNames37_ES5.ts, 0, 15))
+>p : Foo2
+>Foo2 : Foo2
 }

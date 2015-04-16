@@ -1,11 +1,11 @@
 === tests/cases/compiler/namedFunctionExpressionAssignedToClassProperty.ts ===
 class Foo{
->Foo : Foo, Symbol(Foo, Decl(namedFunctionExpressionAssignedToClassProperty.ts, 0, 0))
+>Foo : Foo
 
        a = function bar(){
->a : () => void, Symbol(a, Decl(namedFunctionExpressionAssignedToClassProperty.ts, 0, 10))
+>a : () => void
 >function bar(){       } : () => void
->bar : () => void, Symbol(bar, Decl(namedFunctionExpressionAssignedToClassProperty.ts, 2, 10))
+>bar : () => void
 
        }; // this shouldn't crash the compiler...
 

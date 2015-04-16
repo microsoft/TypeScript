@@ -1,70 +1,70 @@
 === tests/cases/compiler/bestCommonTypeWithOptionalProperties.ts ===
 interface X { foo: string }
->X : X, Symbol(X, Decl(bestCommonTypeWithOptionalProperties.ts, 0, 0))
->foo : string, Symbol(foo, Decl(bestCommonTypeWithOptionalProperties.ts, 0, 13))
+>X : X
+>foo : string
 
 interface Y extends X { bar?: number }
->Y : Y, Symbol(Y, Decl(bestCommonTypeWithOptionalProperties.ts, 0, 27))
->X : X, Symbol(X, Decl(bestCommonTypeWithOptionalProperties.ts, 0, 0))
->bar : number, Symbol(bar, Decl(bestCommonTypeWithOptionalProperties.ts, 1, 23))
+>Y : Y
+>X : X
+>bar : number
 
 interface Z extends X { bar: string }
->Z : Z, Symbol(Z, Decl(bestCommonTypeWithOptionalProperties.ts, 1, 38))
->X : X, Symbol(X, Decl(bestCommonTypeWithOptionalProperties.ts, 0, 0))
->bar : string, Symbol(bar, Decl(bestCommonTypeWithOptionalProperties.ts, 2, 23))
+>Z : Z
+>X : X
+>bar : string
 
 var x: X;
->x : X, Symbol(x, Decl(bestCommonTypeWithOptionalProperties.ts, 4, 3))
->X : X, Symbol(X, Decl(bestCommonTypeWithOptionalProperties.ts, 0, 0))
+>x : X
+>X : X
 
 var y: Y;
->y : Y, Symbol(y, Decl(bestCommonTypeWithOptionalProperties.ts, 5, 3))
->Y : Y, Symbol(Y, Decl(bestCommonTypeWithOptionalProperties.ts, 0, 27))
+>y : Y
+>Y : Y
 
 var z: Z;
->z : Z, Symbol(z, Decl(bestCommonTypeWithOptionalProperties.ts, 6, 3))
->Z : Z, Symbol(Z, Decl(bestCommonTypeWithOptionalProperties.ts, 1, 38))
+>z : Z
+>Z : Z
 
 // All these arrays should be X[]
 var b1 = [x, y, z];
->b1 : X[], Symbol(b1, Decl(bestCommonTypeWithOptionalProperties.ts, 9, 3))
+>b1 : X[]
 >[x, y, z] : X[]
->x : X, Symbol(x, Decl(bestCommonTypeWithOptionalProperties.ts, 4, 3))
->y : Y, Symbol(y, Decl(bestCommonTypeWithOptionalProperties.ts, 5, 3))
->z : Z, Symbol(z, Decl(bestCommonTypeWithOptionalProperties.ts, 6, 3))
+>x : X
+>y : Y
+>z : Z
 
 var b2 = [x, z, y];
->b2 : X[], Symbol(b2, Decl(bestCommonTypeWithOptionalProperties.ts, 10, 3))
+>b2 : X[]
 >[x, z, y] : X[]
->x : X, Symbol(x, Decl(bestCommonTypeWithOptionalProperties.ts, 4, 3))
->z : Z, Symbol(z, Decl(bestCommonTypeWithOptionalProperties.ts, 6, 3))
->y : Y, Symbol(y, Decl(bestCommonTypeWithOptionalProperties.ts, 5, 3))
+>x : X
+>z : Z
+>y : Y
 
 var b3 = [y, x, z];
->b3 : X[], Symbol(b3, Decl(bestCommonTypeWithOptionalProperties.ts, 11, 3))
+>b3 : X[]
 >[y, x, z] : X[]
->y : Y, Symbol(y, Decl(bestCommonTypeWithOptionalProperties.ts, 5, 3))
->x : X, Symbol(x, Decl(bestCommonTypeWithOptionalProperties.ts, 4, 3))
->z : Z, Symbol(z, Decl(bestCommonTypeWithOptionalProperties.ts, 6, 3))
+>y : Y
+>x : X
+>z : Z
 
 var b4 = [y, z, x];
->b4 : X[], Symbol(b4, Decl(bestCommonTypeWithOptionalProperties.ts, 12, 3))
+>b4 : X[]
 >[y, z, x] : X[]
->y : Y, Symbol(y, Decl(bestCommonTypeWithOptionalProperties.ts, 5, 3))
->z : Z, Symbol(z, Decl(bestCommonTypeWithOptionalProperties.ts, 6, 3))
->x : X, Symbol(x, Decl(bestCommonTypeWithOptionalProperties.ts, 4, 3))
+>y : Y
+>z : Z
+>x : X
 
 var b5 = [z, x, y];
->b5 : X[], Symbol(b5, Decl(bestCommonTypeWithOptionalProperties.ts, 13, 3))
+>b5 : X[]
 >[z, x, y] : X[]
->z : Z, Symbol(z, Decl(bestCommonTypeWithOptionalProperties.ts, 6, 3))
->x : X, Symbol(x, Decl(bestCommonTypeWithOptionalProperties.ts, 4, 3))
->y : Y, Symbol(y, Decl(bestCommonTypeWithOptionalProperties.ts, 5, 3))
+>z : Z
+>x : X
+>y : Y
 
 var b6 = [z, y, x];
->b6 : X[], Symbol(b6, Decl(bestCommonTypeWithOptionalProperties.ts, 14, 3))
+>b6 : X[]
 >[z, y, x] : X[]
->z : Z, Symbol(z, Decl(bestCommonTypeWithOptionalProperties.ts, 6, 3))
->y : Y, Symbol(y, Decl(bestCommonTypeWithOptionalProperties.ts, 5, 3))
->x : X, Symbol(x, Decl(bestCommonTypeWithOptionalProperties.ts, 4, 3))
+>z : Z
+>y : Y
+>x : X
 

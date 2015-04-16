@@ -1,5 +1,5 @@
 === tests/cases/compiler/isLiteral1.ts ===
 var x: number = 02343;
->x : number, Symbol(x, Decl(isLiteral1.ts, 0, 3))
+>x : number
 >02343 : number
 

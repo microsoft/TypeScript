@@ -1,0 +1,42 @@
+=== tests/cases/compiler/overload2.ts ===
+enum A { }
+>A : Symbol(A, Decl(overload2.ts, 0, 0))
+
+enum B { }
+>B : Symbol(B, Decl(overload2.ts, 0, 10))
+    
+function foo(a: A);
+>foo : Symbol(foo, Decl(overload2.ts, 1, 10), Decl(overload2.ts, 3, 19), Decl(overload2.ts, 4, 19))
+>a : Symbol(a, Decl(overload2.ts, 3, 13))
+>A : Symbol(A, Decl(overload2.ts, 0, 0))
+
+function foo(b: B);
+>foo : Symbol(foo, Decl(overload2.ts, 1, 10), Decl(overload2.ts, 3, 19), Decl(overload2.ts, 4, 19))
+>b : Symbol(b, Decl(overload2.ts, 4, 13))
+>B : Symbol(B, Decl(overload2.ts, 0, 10))
+
+// should be ok
+function foo(x: number) { 
+>foo : Symbol(foo, Decl(overload2.ts, 1, 10), Decl(overload2.ts, 3, 19), Decl(overload2.ts, 4, 19))
+>x : Symbol(x, Decl(overload2.ts, 6, 13))
+}
+
+class C { }
+>C : Symbol(C, Decl(overload2.ts, 7, 1))
+
+function foo1(a: A);
+>foo1 : Symbol(foo1, Decl(overload2.ts, 9, 11), Decl(overload2.ts, 10, 20), Decl(overload2.ts, 11, 20))
+>a : Symbol(a, Decl(overload2.ts, 10, 14))
+>A : Symbol(A, Decl(overload2.ts, 0, 0))
+
+function foo1(c: C);
+>foo1 : Symbol(foo1, Decl(overload2.ts, 9, 11), Decl(overload2.ts, 10, 20), Decl(overload2.ts, 11, 20))
+>c : Symbol(c, Decl(overload2.ts, 11, 14))
+>C : Symbol(C, Decl(overload2.ts, 7, 1))
+
+// should be ok
+function foo1(x: number) { 
+>foo1 : Symbol(foo1, Decl(overload2.ts, 9, 11), Decl(overload2.ts, 10, 20), Decl(overload2.ts, 11, 20))
+>x : Symbol(x, Decl(overload2.ts, 13, 14))
+}
+

@@ -61,13 +61,13 @@ var z0, z1, z2, z3;
 {
     var x_1 = 20;
     use(x_1);
-    var z0_1 = ([1])[0];
+    var z0_1 = [1][0];
     use(z0_1);
-    var z1_1 = ([1])[0];
+    var z1_1 = [1][0];
     use(z1_1);
-    var z2_1 = ({ a: 1 }).a;
+    var z2_1 = { a: 1 }.a;
     use(z2_1);
-    var z3_1 = ({ a: 1 }).a;
+    var z3_1 = { a: 1 }.a;
     use(z3_1);
 }
 use(x);
@@ -79,10 +79,10 @@ var z6;
 var y = true;
 {
     var y_1 = "";
-    var z6_1 = ([true])[0];
+    var z6_1 = [true][0];
     {
         var y_2 = 1;
-        var z6_2 = ({ a: 1 }).a;
+        var z6_2 = { a: 1 }.a;
         use(y_2);
         use(z6_2);
     }
@@ -95,10 +95,10 @@ var z = false;
 var z5 = 1;
 {
     var z_1 = "";
-    var z5_1 = ([5])[0];
+    var z5_1 = [5][0];
     {
         var _z = 1;
-        var _z5 = ({ a: 1 }).a;
+        var _z5 = { a: 1 }.a;
         // try to step on generated name
         use(_z);
     }

@@ -1,16 +1,16 @@
 === tests/cases/compiler/b.ts ===
 ///<reference path="a.ts"/>
 module ElidedModule3 {
->ElidedModule3 : any, Symbol(ElidedModule3, Decl(b.ts, 0, 0))
+>ElidedModule3 : any
 }
 === tests/cases/compiler/a.ts ===
 /*! Keep this pinned comment */
 module ElidedModule {
->ElidedModule : any, Symbol(ElidedModule, Decl(a.ts, 0, 0))
+>ElidedModule : any
 }
 
 // Don't keep this comment.
 module ElidedModule2 {
->ElidedModule2 : any, Symbol(ElidedModule2, Decl(a.ts, 2, 1))
+>ElidedModule2 : any
 }
 

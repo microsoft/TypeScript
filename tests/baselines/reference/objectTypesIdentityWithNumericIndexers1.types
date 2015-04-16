@@ -2,378 +2,378 @@
 // object types are identical structurally
 
 class A {
->A : A, Symbol(A, Decl(objectTypesIdentityWithNumericIndexers1.ts, 0, 0))
+>A : A
 
     [x: number]: string;
->x : number, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 3, 5))
+>x : number
 }
 
 class B {
->B : B, Symbol(B, Decl(objectTypesIdentityWithNumericIndexers1.ts, 4, 1))
+>B : B
 
     [x: number]: string;
->x : number, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 7, 5))
+>x : number
 }
 
 class C<T> {
->C : C<T>, Symbol(C, Decl(objectTypesIdentityWithNumericIndexers1.ts, 8, 1))
->T : T, Symbol(T, Decl(objectTypesIdentityWithNumericIndexers1.ts, 10, 8))
+>C : C<T>
+>T : T
 
     [x: number]: T;
->x : number, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 11, 5))
->T : T, Symbol(T, Decl(objectTypesIdentityWithNumericIndexers1.ts, 10, 8))
+>x : number
+>T : T
 }
 
 interface I {
->I : I, Symbol(I, Decl(objectTypesIdentityWithNumericIndexers1.ts, 12, 1))
+>I : I
 
     [x: number]: string;
->x : number, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 15, 5))
+>x : number
 }
 
 class PA extends A {
->PA : PA, Symbol(PA, Decl(objectTypesIdentityWithNumericIndexers1.ts, 16, 1))
->A : A, Symbol(A, Decl(objectTypesIdentityWithNumericIndexers1.ts, 0, 0))
+>PA : PA
+>A : A
 }
 
 class PB extends B {
->PB : PB, Symbol(PB, Decl(objectTypesIdentityWithNumericIndexers1.ts, 19, 1))
->B : B, Symbol(B, Decl(objectTypesIdentityWithNumericIndexers1.ts, 4, 1))
+>PB : PB
+>B : B
 }
 
 var a: {
->a : { [x: number]: string; }, Symbol(a, Decl(objectTypesIdentityWithNumericIndexers1.ts, 24, 3))
+>a : { [x: number]: string; }
 
     [x: number]: string;
->x : number, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 25, 5))
+>x : number
 }
 var b: { [x: number]: string; } = { foo: '' };
->b : { [x: number]: string; }, Symbol(b, Decl(objectTypesIdentityWithNumericIndexers1.ts, 27, 3))
->x : number, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 27, 10))
+>b : { [x: number]: string; }
+>x : number
 >{ foo: '' } : { [x: number]: undefined; foo: string; }
->foo : string, Symbol(foo, Decl(objectTypesIdentityWithNumericIndexers1.ts, 27, 35))
+>foo : string
 >'' : string
 
 function foo1(x: A);
->foo1 : { (x: A): any; (x: A): any; }, Symbol(foo1, Decl(objectTypesIdentityWithNumericIndexers1.ts, 27, 46), Decl(objectTypesIdentityWithNumericIndexers1.ts, 29, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 30, 20))
->x : A, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 29, 14))
->A : A, Symbol(A, Decl(objectTypesIdentityWithNumericIndexers1.ts, 0, 0))
+>foo1 : { (x: A): any; (x: A): any; }
+>x : A
+>A : A
 
 function foo1(x: A); // error
->foo1 : { (x: A): any; (x: A): any; }, Symbol(foo1, Decl(objectTypesIdentityWithNumericIndexers1.ts, 27, 46), Decl(objectTypesIdentityWithNumericIndexers1.ts, 29, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 30, 20))
->x : A, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 30, 14))
->A : A, Symbol(A, Decl(objectTypesIdentityWithNumericIndexers1.ts, 0, 0))
+>foo1 : { (x: A): any; (x: A): any; }
+>x : A
+>A : A
 
 function foo1(x: any) { }
->foo1 : { (x: A): any; (x: A): any; }, Symbol(foo1, Decl(objectTypesIdentityWithNumericIndexers1.ts, 27, 46), Decl(objectTypesIdentityWithNumericIndexers1.ts, 29, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 30, 20))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 31, 14))
+>foo1 : { (x: A): any; (x: A): any; }
+>x : any
 
 function foo1b(x: B);
->foo1b : { (x: B): any; (x: B): any; }, Symbol(foo1b, Decl(objectTypesIdentityWithNumericIndexers1.ts, 31, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 33, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 34, 21))
->x : B, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 33, 15))
->B : B, Symbol(B, Decl(objectTypesIdentityWithNumericIndexers1.ts, 4, 1))
+>foo1b : { (x: B): any; (x: B): any; }
+>x : B
+>B : B
 
 function foo1b(x: B); // error
->foo1b : { (x: B): any; (x: B): any; }, Symbol(foo1b, Decl(objectTypesIdentityWithNumericIndexers1.ts, 31, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 33, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 34, 21))
->x : B, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 34, 15))
->B : B, Symbol(B, Decl(objectTypesIdentityWithNumericIndexers1.ts, 4, 1))
+>foo1b : { (x: B): any; (x: B): any; }
+>x : B
+>B : B
 
 function foo1b(x: any) { }
->foo1b : { (x: B): any; (x: B): any; }, Symbol(foo1b, Decl(objectTypesIdentityWithNumericIndexers1.ts, 31, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 33, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 34, 21))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 35, 15))
+>foo1b : { (x: B): any; (x: B): any; }
+>x : any
 
 function foo1c(x: C<string>);
->foo1c : { (x: C<string>): any; (x: C<string>): any; }, Symbol(foo1c, Decl(objectTypesIdentityWithNumericIndexers1.ts, 35, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 37, 29), Decl(objectTypesIdentityWithNumericIndexers1.ts, 38, 29))
->x : C<string>, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 37, 15))
->C : C<T>, Symbol(C, Decl(objectTypesIdentityWithNumericIndexers1.ts, 8, 1))
+>foo1c : { (x: C<string>): any; (x: C<string>): any; }
+>x : C<string>
+>C : C<T>
 
 function foo1c(x: C<string>); // error
->foo1c : { (x: C<string>): any; (x: C<string>): any; }, Symbol(foo1c, Decl(objectTypesIdentityWithNumericIndexers1.ts, 35, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 37, 29), Decl(objectTypesIdentityWithNumericIndexers1.ts, 38, 29))
->x : C<string>, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 38, 15))
->C : C<T>, Symbol(C, Decl(objectTypesIdentityWithNumericIndexers1.ts, 8, 1))
+>foo1c : { (x: C<string>): any; (x: C<string>): any; }
+>x : C<string>
+>C : C<T>
 
 function foo1c(x: any) { }
->foo1c : { (x: C<string>): any; (x: C<string>): any; }, Symbol(foo1c, Decl(objectTypesIdentityWithNumericIndexers1.ts, 35, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 37, 29), Decl(objectTypesIdentityWithNumericIndexers1.ts, 38, 29))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 39, 15))
+>foo1c : { (x: C<string>): any; (x: C<string>): any; }
+>x : any
 
 function foo2(x: I);
->foo2 : { (x: I): any; (x: I): any; }, Symbol(foo2, Decl(objectTypesIdentityWithNumericIndexers1.ts, 39, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 41, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 42, 20))
->x : I, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 41, 14))
->I : I, Symbol(I, Decl(objectTypesIdentityWithNumericIndexers1.ts, 12, 1))
+>foo2 : { (x: I): any; (x: I): any; }
+>x : I
+>I : I
 
 function foo2(x: I); // error
->foo2 : { (x: I): any; (x: I): any; }, Symbol(foo2, Decl(objectTypesIdentityWithNumericIndexers1.ts, 39, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 41, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 42, 20))
->x : I, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 42, 14))
->I : I, Symbol(I, Decl(objectTypesIdentityWithNumericIndexers1.ts, 12, 1))
+>foo2 : { (x: I): any; (x: I): any; }
+>x : I
+>I : I
 
 function foo2(x: any) { }
->foo2 : { (x: I): any; (x: I): any; }, Symbol(foo2, Decl(objectTypesIdentityWithNumericIndexers1.ts, 39, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 41, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 42, 20))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 43, 14))
+>foo2 : { (x: I): any; (x: I): any; }
+>x : any
 
 function foo3(x: typeof a);
->foo3 : { (x: { [x: number]: string; }): any; (x: { [x: number]: string; }): any; }, Symbol(foo3, Decl(objectTypesIdentityWithNumericIndexers1.ts, 43, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 45, 27), Decl(objectTypesIdentityWithNumericIndexers1.ts, 46, 27))
->x : { [x: number]: string; }, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 45, 14))
->a : { [x: number]: string; }, Symbol(a, Decl(objectTypesIdentityWithNumericIndexers1.ts, 24, 3))
+>foo3 : { (x: { [x: number]: string; }): any; (x: { [x: number]: string; }): any; }
+>x : { [x: number]: string; }
+>a : { [x: number]: string; }
 
 function foo3(x: typeof a); // error
->foo3 : { (x: { [x: number]: string; }): any; (x: { [x: number]: string; }): any; }, Symbol(foo3, Decl(objectTypesIdentityWithNumericIndexers1.ts, 43, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 45, 27), Decl(objectTypesIdentityWithNumericIndexers1.ts, 46, 27))
->x : { [x: number]: string; }, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 46, 14))
->a : { [x: number]: string; }, Symbol(a, Decl(objectTypesIdentityWithNumericIndexers1.ts, 24, 3))
+>foo3 : { (x: { [x: number]: string; }): any; (x: { [x: number]: string; }): any; }
+>x : { [x: number]: string; }
+>a : { [x: number]: string; }
 
 function foo3(x: any) { }
->foo3 : { (x: { [x: number]: string; }): any; (x: { [x: number]: string; }): any; }, Symbol(foo3, Decl(objectTypesIdentityWithNumericIndexers1.ts, 43, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 45, 27), Decl(objectTypesIdentityWithNumericIndexers1.ts, 46, 27))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 47, 14))
+>foo3 : { (x: { [x: number]: string; }): any; (x: { [x: number]: string; }): any; }
+>x : any
 
 function foo4(x: typeof b);
->foo4 : { (x: { [x: number]: string; }): any; (x: { [x: number]: string; }): any; }, Symbol(foo4, Decl(objectTypesIdentityWithNumericIndexers1.ts, 47, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 49, 27), Decl(objectTypesIdentityWithNumericIndexers1.ts, 50, 27))
->x : { [x: number]: string; }, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 49, 14))
->b : { [x: number]: string; }, Symbol(b, Decl(objectTypesIdentityWithNumericIndexers1.ts, 27, 3))
+>foo4 : { (x: { [x: number]: string; }): any; (x: { [x: number]: string; }): any; }
+>x : { [x: number]: string; }
+>b : { [x: number]: string; }
 
 function foo4(x: typeof b); // error
->foo4 : { (x: { [x: number]: string; }): any; (x: { [x: number]: string; }): any; }, Symbol(foo4, Decl(objectTypesIdentityWithNumericIndexers1.ts, 47, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 49, 27), Decl(objectTypesIdentityWithNumericIndexers1.ts, 50, 27))
->x : { [x: number]: string; }, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 50, 14))
->b : { [x: number]: string; }, Symbol(b, Decl(objectTypesIdentityWithNumericIndexers1.ts, 27, 3))
+>foo4 : { (x: { [x: number]: string; }): any; (x: { [x: number]: string; }): any; }
+>x : { [x: number]: string; }
+>b : { [x: number]: string; }
 
 function foo4(x: any) { }
->foo4 : { (x: { [x: number]: string; }): any; (x: { [x: number]: string; }): any; }, Symbol(foo4, Decl(objectTypesIdentityWithNumericIndexers1.ts, 47, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 49, 27), Decl(objectTypesIdentityWithNumericIndexers1.ts, 50, 27))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 51, 14))
+>foo4 : { (x: { [x: number]: string; }): any; (x: { [x: number]: string; }): any; }
+>x : any
 
 function foo5(x: A);
->foo5 : { (x: A): any; (x: B): any; }, Symbol(foo5, Decl(objectTypesIdentityWithNumericIndexers1.ts, 51, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 53, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 54, 20))
->x : A, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 53, 14))
->A : A, Symbol(A, Decl(objectTypesIdentityWithNumericIndexers1.ts, 0, 0))
+>foo5 : { (x: A): any; (x: B): any; }
+>x : A
+>A : A
 
 function foo5(x: B); // error
->foo5 : { (x: A): any; (x: B): any; }, Symbol(foo5, Decl(objectTypesIdentityWithNumericIndexers1.ts, 51, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 53, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 54, 20))
->x : B, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 54, 14))
->B : B, Symbol(B, Decl(objectTypesIdentityWithNumericIndexers1.ts, 4, 1))
+>foo5 : { (x: A): any; (x: B): any; }
+>x : B
+>B : B
 
 function foo5(x: any) { }
->foo5 : { (x: A): any; (x: B): any; }, Symbol(foo5, Decl(objectTypesIdentityWithNumericIndexers1.ts, 51, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 53, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 54, 20))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 55, 14))
+>foo5 : { (x: A): any; (x: B): any; }
+>x : any
 
 function foo5b(x: A);
->foo5b : { (x: A): any; (x: C<string>): any; }, Symbol(foo5b, Decl(objectTypesIdentityWithNumericIndexers1.ts, 55, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 57, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 58, 29))
->x : A, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 57, 15))
->A : A, Symbol(A, Decl(objectTypesIdentityWithNumericIndexers1.ts, 0, 0))
+>foo5b : { (x: A): any; (x: C<string>): any; }
+>x : A
+>A : A
 
 function foo5b(x: C<string>); // error
->foo5b : { (x: A): any; (x: C<string>): any; }, Symbol(foo5b, Decl(objectTypesIdentityWithNumericIndexers1.ts, 55, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 57, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 58, 29))
->x : C<string>, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 58, 15))
->C : C<T>, Symbol(C, Decl(objectTypesIdentityWithNumericIndexers1.ts, 8, 1))
+>foo5b : { (x: A): any; (x: C<string>): any; }
+>x : C<string>
+>C : C<T>
 
 function foo5b(x: any) { }
->foo5b : { (x: A): any; (x: C<string>): any; }, Symbol(foo5b, Decl(objectTypesIdentityWithNumericIndexers1.ts, 55, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 57, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 58, 29))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 59, 15))
+>foo5b : { (x: A): any; (x: C<string>): any; }
+>x : any
 
 function foo5c(x: A);
->foo5c : { (x: A): any; (x: PA): any; }, Symbol(foo5c, Decl(objectTypesIdentityWithNumericIndexers1.ts, 59, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 61, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 62, 22))
->x : A, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 61, 15))
->A : A, Symbol(A, Decl(objectTypesIdentityWithNumericIndexers1.ts, 0, 0))
+>foo5c : { (x: A): any; (x: PA): any; }
+>x : A
+>A : A
 
 function foo5c(x: PA); // error
->foo5c : { (x: A): any; (x: PA): any; }, Symbol(foo5c, Decl(objectTypesIdentityWithNumericIndexers1.ts, 59, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 61, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 62, 22))
->x : PA, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 62, 15))
->PA : PA, Symbol(PA, Decl(objectTypesIdentityWithNumericIndexers1.ts, 16, 1))
+>foo5c : { (x: A): any; (x: PA): any; }
+>x : PA
+>PA : PA
 
 function foo5c(x: any) { }
->foo5c : { (x: A): any; (x: PA): any; }, Symbol(foo5c, Decl(objectTypesIdentityWithNumericIndexers1.ts, 59, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 61, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 62, 22))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 63, 15))
+>foo5c : { (x: A): any; (x: PA): any; }
+>x : any
 
 function foo5d(x: A);
->foo5d : { (x: A): any; (x: PB): any; }, Symbol(foo5d, Decl(objectTypesIdentityWithNumericIndexers1.ts, 63, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 65, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 66, 22))
->x : A, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 65, 15))
->A : A, Symbol(A, Decl(objectTypesIdentityWithNumericIndexers1.ts, 0, 0))
+>foo5d : { (x: A): any; (x: PB): any; }
+>x : A
+>A : A
 
 function foo5d(x: PB); // error
->foo5d : { (x: A): any; (x: PB): any; }, Symbol(foo5d, Decl(objectTypesIdentityWithNumericIndexers1.ts, 63, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 65, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 66, 22))
->x : PB, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 66, 15))
->PB : PB, Symbol(PB, Decl(objectTypesIdentityWithNumericIndexers1.ts, 19, 1))
+>foo5d : { (x: A): any; (x: PB): any; }
+>x : PB
+>PB : PB
 
 function foo5d(x: any) { }
->foo5d : { (x: A): any; (x: PB): any; }, Symbol(foo5d, Decl(objectTypesIdentityWithNumericIndexers1.ts, 63, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 65, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 66, 22))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 67, 15))
+>foo5d : { (x: A): any; (x: PB): any; }
+>x : any
 
 function foo6(x: A);
->foo6 : { (x: A): any; (x: I): any; }, Symbol(foo6, Decl(objectTypesIdentityWithNumericIndexers1.ts, 67, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 69, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 70, 20))
->x : A, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 69, 14))
->A : A, Symbol(A, Decl(objectTypesIdentityWithNumericIndexers1.ts, 0, 0))
+>foo6 : { (x: A): any; (x: I): any; }
+>x : A
+>A : A
 
 function foo6(x: I); // error
->foo6 : { (x: A): any; (x: I): any; }, Symbol(foo6, Decl(objectTypesIdentityWithNumericIndexers1.ts, 67, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 69, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 70, 20))
->x : I, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 70, 14))
->I : I, Symbol(I, Decl(objectTypesIdentityWithNumericIndexers1.ts, 12, 1))
+>foo6 : { (x: A): any; (x: I): any; }
+>x : I
+>I : I
 
 function foo6(x: any) { }
->foo6 : { (x: A): any; (x: I): any; }, Symbol(foo6, Decl(objectTypesIdentityWithNumericIndexers1.ts, 67, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 69, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 70, 20))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 71, 14))
+>foo6 : { (x: A): any; (x: I): any; }
+>x : any
 
 function foo7(x: A);
->foo7 : { (x: A): any; (x: { [x: number]: string; }): any; }, Symbol(foo7, Decl(objectTypesIdentityWithNumericIndexers1.ts, 71, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 73, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 74, 27))
->x : A, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 73, 14))
->A : A, Symbol(A, Decl(objectTypesIdentityWithNumericIndexers1.ts, 0, 0))
+>foo7 : { (x: A): any; (x: { [x: number]: string; }): any; }
+>x : A
+>A : A
 
 function foo7(x: typeof a); // error
->foo7 : { (x: A): any; (x: { [x: number]: string; }): any; }, Symbol(foo7, Decl(objectTypesIdentityWithNumericIndexers1.ts, 71, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 73, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 74, 27))
->x : { [x: number]: string; }, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 74, 14))
->a : { [x: number]: string; }, Symbol(a, Decl(objectTypesIdentityWithNumericIndexers1.ts, 24, 3))
+>foo7 : { (x: A): any; (x: { [x: number]: string; }): any; }
+>x : { [x: number]: string; }
+>a : { [x: number]: string; }
 
 function foo7(x: any) { }
->foo7 : { (x: A): any; (x: { [x: number]: string; }): any; }, Symbol(foo7, Decl(objectTypesIdentityWithNumericIndexers1.ts, 71, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 73, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 74, 27))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 75, 14))
+>foo7 : { (x: A): any; (x: { [x: number]: string; }): any; }
+>x : any
 
 function foo8(x: B);
->foo8 : { (x: B): any; (x: I): any; }, Symbol(foo8, Decl(objectTypesIdentityWithNumericIndexers1.ts, 75, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 77, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 78, 20))
->x : B, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 77, 14))
->B : B, Symbol(B, Decl(objectTypesIdentityWithNumericIndexers1.ts, 4, 1))
+>foo8 : { (x: B): any; (x: I): any; }
+>x : B
+>B : B
 
 function foo8(x: I); // error
->foo8 : { (x: B): any; (x: I): any; }, Symbol(foo8, Decl(objectTypesIdentityWithNumericIndexers1.ts, 75, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 77, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 78, 20))
->x : I, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 78, 14))
->I : I, Symbol(I, Decl(objectTypesIdentityWithNumericIndexers1.ts, 12, 1))
+>foo8 : { (x: B): any; (x: I): any; }
+>x : I
+>I : I
 
 function foo8(x: any) { }
->foo8 : { (x: B): any; (x: I): any; }, Symbol(foo8, Decl(objectTypesIdentityWithNumericIndexers1.ts, 75, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 77, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 78, 20))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 79, 14))
+>foo8 : { (x: B): any; (x: I): any; }
+>x : any
 
 function foo9(x: B);
->foo9 : { (x: B): any; (x: C<string>): any; }, Symbol(foo9, Decl(objectTypesIdentityWithNumericIndexers1.ts, 79, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 81, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 82, 28))
->x : B, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 81, 14))
->B : B, Symbol(B, Decl(objectTypesIdentityWithNumericIndexers1.ts, 4, 1))
+>foo9 : { (x: B): any; (x: C<string>): any; }
+>x : B
+>B : B
 
 function foo9(x: C<string>); // error
->foo9 : { (x: B): any; (x: C<string>): any; }, Symbol(foo9, Decl(objectTypesIdentityWithNumericIndexers1.ts, 79, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 81, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 82, 28))
->x : C<string>, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 82, 14))
->C : C<T>, Symbol(C, Decl(objectTypesIdentityWithNumericIndexers1.ts, 8, 1))
+>foo9 : { (x: B): any; (x: C<string>): any; }
+>x : C<string>
+>C : C<T>
 
 function foo9(x: any) { }
->foo9 : { (x: B): any; (x: C<string>): any; }, Symbol(foo9, Decl(objectTypesIdentityWithNumericIndexers1.ts, 79, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 81, 20), Decl(objectTypesIdentityWithNumericIndexers1.ts, 82, 28))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 83, 14))
+>foo9 : { (x: B): any; (x: C<string>): any; }
+>x : any
 
 function foo10(x: B);
->foo10 : { (x: B): any; (x: { [x: number]: string; }): any; }, Symbol(foo10, Decl(objectTypesIdentityWithNumericIndexers1.ts, 83, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 85, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 86, 28))
->x : B, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 85, 15))
->B : B, Symbol(B, Decl(objectTypesIdentityWithNumericIndexers1.ts, 4, 1))
+>foo10 : { (x: B): any; (x: { [x: number]: string; }): any; }
+>x : B
+>B : B
 
 function foo10(x: typeof a); // error
->foo10 : { (x: B): any; (x: { [x: number]: string; }): any; }, Symbol(foo10, Decl(objectTypesIdentityWithNumericIndexers1.ts, 83, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 85, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 86, 28))
->x : { [x: number]: string; }, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 86, 15))
->a : { [x: number]: string; }, Symbol(a, Decl(objectTypesIdentityWithNumericIndexers1.ts, 24, 3))
+>foo10 : { (x: B): any; (x: { [x: number]: string; }): any; }
+>x : { [x: number]: string; }
+>a : { [x: number]: string; }
 
 function foo10(x: any) { }
->foo10 : { (x: B): any; (x: { [x: number]: string; }): any; }, Symbol(foo10, Decl(objectTypesIdentityWithNumericIndexers1.ts, 83, 25), Decl(objectTypesIdentityWithNumericIndexers1.ts, 85, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 86, 28))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 87, 15))
+>foo10 : { (x: B): any; (x: { [x: number]: string; }): any; }
+>x : any
 
 function foo11(x: B);
->foo11 : { (x: B): any; (x: { [x: number]: string; }): any; }, Symbol(foo11, Decl(objectTypesIdentityWithNumericIndexers1.ts, 87, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 89, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 90, 28))
->x : B, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 89, 15))
->B : B, Symbol(B, Decl(objectTypesIdentityWithNumericIndexers1.ts, 4, 1))
+>foo11 : { (x: B): any; (x: { [x: number]: string; }): any; }
+>x : B
+>B : B
 
 function foo11(x: typeof b); // error
->foo11 : { (x: B): any; (x: { [x: number]: string; }): any; }, Symbol(foo11, Decl(objectTypesIdentityWithNumericIndexers1.ts, 87, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 89, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 90, 28))
->x : { [x: number]: string; }, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 90, 15))
->b : { [x: number]: string; }, Symbol(b, Decl(objectTypesIdentityWithNumericIndexers1.ts, 27, 3))
+>foo11 : { (x: B): any; (x: { [x: number]: string; }): any; }
+>x : { [x: number]: string; }
+>b : { [x: number]: string; }
 
 function foo11(x: any) { }
->foo11 : { (x: B): any; (x: { [x: number]: string; }): any; }, Symbol(foo11, Decl(objectTypesIdentityWithNumericIndexers1.ts, 87, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 89, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 90, 28))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 91, 15))
+>foo11 : { (x: B): any; (x: { [x: number]: string; }): any; }
+>x : any
 
 function foo11b(x: B);
->foo11b : { (x: B): any; (x: PA): any; }, Symbol(foo11b, Decl(objectTypesIdentityWithNumericIndexers1.ts, 91, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 93, 22), Decl(objectTypesIdentityWithNumericIndexers1.ts, 94, 23))
->x : B, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 93, 16))
->B : B, Symbol(B, Decl(objectTypesIdentityWithNumericIndexers1.ts, 4, 1))
+>foo11b : { (x: B): any; (x: PA): any; }
+>x : B
+>B : B
 
 function foo11b(x: PA); // error
->foo11b : { (x: B): any; (x: PA): any; }, Symbol(foo11b, Decl(objectTypesIdentityWithNumericIndexers1.ts, 91, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 93, 22), Decl(objectTypesIdentityWithNumericIndexers1.ts, 94, 23))
->x : PA, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 94, 16))
->PA : PA, Symbol(PA, Decl(objectTypesIdentityWithNumericIndexers1.ts, 16, 1))
+>foo11b : { (x: B): any; (x: PA): any; }
+>x : PA
+>PA : PA
 
 function foo11b(x: any) { }
->foo11b : { (x: B): any; (x: PA): any; }, Symbol(foo11b, Decl(objectTypesIdentityWithNumericIndexers1.ts, 91, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 93, 22), Decl(objectTypesIdentityWithNumericIndexers1.ts, 94, 23))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 95, 16))
+>foo11b : { (x: B): any; (x: PA): any; }
+>x : any
 
 function foo11c(x: B);
->foo11c : { (x: B): any; (x: PB): any; }, Symbol(foo11c, Decl(objectTypesIdentityWithNumericIndexers1.ts, 95, 27), Decl(objectTypesIdentityWithNumericIndexers1.ts, 97, 22), Decl(objectTypesIdentityWithNumericIndexers1.ts, 98, 23))
->x : B, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 97, 16))
->B : B, Symbol(B, Decl(objectTypesIdentityWithNumericIndexers1.ts, 4, 1))
+>foo11c : { (x: B): any; (x: PB): any; }
+>x : B
+>B : B
 
 function foo11c(x: PB); // error
->foo11c : { (x: B): any; (x: PB): any; }, Symbol(foo11c, Decl(objectTypesIdentityWithNumericIndexers1.ts, 95, 27), Decl(objectTypesIdentityWithNumericIndexers1.ts, 97, 22), Decl(objectTypesIdentityWithNumericIndexers1.ts, 98, 23))
->x : PB, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 98, 16))
->PB : PB, Symbol(PB, Decl(objectTypesIdentityWithNumericIndexers1.ts, 19, 1))
+>foo11c : { (x: B): any; (x: PB): any; }
+>x : PB
+>PB : PB
 
 function foo11c(x: any) { }
->foo11c : { (x: B): any; (x: PB): any; }, Symbol(foo11c, Decl(objectTypesIdentityWithNumericIndexers1.ts, 95, 27), Decl(objectTypesIdentityWithNumericIndexers1.ts, 97, 22), Decl(objectTypesIdentityWithNumericIndexers1.ts, 98, 23))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 99, 16))
+>foo11c : { (x: B): any; (x: PB): any; }
+>x : any
 
 function foo12(x: I);
->foo12 : { (x: I): any; (x: C<string>): any; }, Symbol(foo12, Decl(objectTypesIdentityWithNumericIndexers1.ts, 99, 27), Decl(objectTypesIdentityWithNumericIndexers1.ts, 101, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 102, 29))
->x : I, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 101, 15))
->I : I, Symbol(I, Decl(objectTypesIdentityWithNumericIndexers1.ts, 12, 1))
+>foo12 : { (x: I): any; (x: C<string>): any; }
+>x : I
+>I : I
 
 function foo12(x: C<string>); // error
->foo12 : { (x: I): any; (x: C<string>): any; }, Symbol(foo12, Decl(objectTypesIdentityWithNumericIndexers1.ts, 99, 27), Decl(objectTypesIdentityWithNumericIndexers1.ts, 101, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 102, 29))
->x : C<string>, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 102, 15))
->C : C<T>, Symbol(C, Decl(objectTypesIdentityWithNumericIndexers1.ts, 8, 1))
+>foo12 : { (x: I): any; (x: C<string>): any; }
+>x : C<string>
+>C : C<T>
 
 function foo12(x: any) { }
->foo12 : { (x: I): any; (x: C<string>): any; }, Symbol(foo12, Decl(objectTypesIdentityWithNumericIndexers1.ts, 99, 27), Decl(objectTypesIdentityWithNumericIndexers1.ts, 101, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 102, 29))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 103, 15))
+>foo12 : { (x: I): any; (x: C<string>): any; }
+>x : any
 
 function foo13(x: I);
->foo13 : { (x: I): any; (x: { [x: number]: string; }): any; }, Symbol(foo13, Decl(objectTypesIdentityWithNumericIndexers1.ts, 103, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 105, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 106, 28))
->x : I, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 105, 15))
->I : I, Symbol(I, Decl(objectTypesIdentityWithNumericIndexers1.ts, 12, 1))
+>foo13 : { (x: I): any; (x: { [x: number]: string; }): any; }
+>x : I
+>I : I
 
 function foo13(x: typeof a); // error
->foo13 : { (x: I): any; (x: { [x: number]: string; }): any; }, Symbol(foo13, Decl(objectTypesIdentityWithNumericIndexers1.ts, 103, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 105, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 106, 28))
->x : { [x: number]: string; }, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 106, 15))
->a : { [x: number]: string; }, Symbol(a, Decl(objectTypesIdentityWithNumericIndexers1.ts, 24, 3))
+>foo13 : { (x: I): any; (x: { [x: number]: string; }): any; }
+>x : { [x: number]: string; }
+>a : { [x: number]: string; }
 
 function foo13(x: any) { }
->foo13 : { (x: I): any; (x: { [x: number]: string; }): any; }, Symbol(foo13, Decl(objectTypesIdentityWithNumericIndexers1.ts, 103, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 105, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 106, 28))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 107, 15))
+>foo13 : { (x: I): any; (x: { [x: number]: string; }): any; }
+>x : any
 
 function foo14(x: I);
->foo14 : { (x: I): any; (x: { [x: number]: string; }): any; }, Symbol(foo14, Decl(objectTypesIdentityWithNumericIndexers1.ts, 107, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 109, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 110, 28))
->x : I, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 109, 15))
->I : I, Symbol(I, Decl(objectTypesIdentityWithNumericIndexers1.ts, 12, 1))
+>foo14 : { (x: I): any; (x: { [x: number]: string; }): any; }
+>x : I
+>I : I
 
 function foo14(x: typeof b); // error
->foo14 : { (x: I): any; (x: { [x: number]: string; }): any; }, Symbol(foo14, Decl(objectTypesIdentityWithNumericIndexers1.ts, 107, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 109, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 110, 28))
->x : { [x: number]: string; }, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 110, 15))
->b : { [x: number]: string; }, Symbol(b, Decl(objectTypesIdentityWithNumericIndexers1.ts, 27, 3))
+>foo14 : { (x: I): any; (x: { [x: number]: string; }): any; }
+>x : { [x: number]: string; }
+>b : { [x: number]: string; }
 
 function foo14(x: any) { }
->foo14 : { (x: I): any; (x: { [x: number]: string; }): any; }, Symbol(foo14, Decl(objectTypesIdentityWithNumericIndexers1.ts, 107, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 109, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 110, 28))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 111, 15))
+>foo14 : { (x: I): any; (x: { [x: number]: string; }): any; }
+>x : any
 
 function foo15(x: I);
->foo15 : { (x: I): any; (x: PA): any; }, Symbol(foo15, Decl(objectTypesIdentityWithNumericIndexers1.ts, 111, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 113, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 114, 22))
->x : I, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 113, 15))
->I : I, Symbol(I, Decl(objectTypesIdentityWithNumericIndexers1.ts, 12, 1))
+>foo15 : { (x: I): any; (x: PA): any; }
+>x : I
+>I : I
 
 function foo15(x: PA); // error
->foo15 : { (x: I): any; (x: PA): any; }, Symbol(foo15, Decl(objectTypesIdentityWithNumericIndexers1.ts, 111, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 113, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 114, 22))
->x : PA, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 114, 15))
->PA : PA, Symbol(PA, Decl(objectTypesIdentityWithNumericIndexers1.ts, 16, 1))
+>foo15 : { (x: I): any; (x: PA): any; }
+>x : PA
+>PA : PA
 
 function foo15(x: any) { }
->foo15 : { (x: I): any; (x: PA): any; }, Symbol(foo15, Decl(objectTypesIdentityWithNumericIndexers1.ts, 111, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 113, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 114, 22))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 115, 15))
+>foo15 : { (x: I): any; (x: PA): any; }
+>x : any
 
 function foo16(x: I);
->foo16 : { (x: I): any; (x: PB): any; }, Symbol(foo16, Decl(objectTypesIdentityWithNumericIndexers1.ts, 115, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 117, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 118, 22))
->x : I, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 117, 15))
->I : I, Symbol(I, Decl(objectTypesIdentityWithNumericIndexers1.ts, 12, 1))
+>foo16 : { (x: I): any; (x: PB): any; }
+>x : I
+>I : I
 
 function foo16(x: PB); // error
->foo16 : { (x: I): any; (x: PB): any; }, Symbol(foo16, Decl(objectTypesIdentityWithNumericIndexers1.ts, 115, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 117, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 118, 22))
->x : PB, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 118, 15))
->PB : PB, Symbol(PB, Decl(objectTypesIdentityWithNumericIndexers1.ts, 19, 1))
+>foo16 : { (x: I): any; (x: PB): any; }
+>x : PB
+>PB : PB
 
 function foo16(x: any) { }
->foo16 : { (x: I): any; (x: PB): any; }, Symbol(foo16, Decl(objectTypesIdentityWithNumericIndexers1.ts, 115, 26), Decl(objectTypesIdentityWithNumericIndexers1.ts, 117, 21), Decl(objectTypesIdentityWithNumericIndexers1.ts, 118, 22))
->x : any, Symbol(x, Decl(objectTypesIdentityWithNumericIndexers1.ts, 119, 15))
+>foo16 : { (x: I): any; (x: PB): any; }
+>x : any
 
 

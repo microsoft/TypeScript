@@ -1,38 +1,38 @@
 === tests/cases/compiler/es6ClassTest3.ts ===
 module M {	
->M : typeof M, Symbol(M, Decl(es6ClassTest3.ts, 0, 0))
+>M : typeof M
 
 	class Visibility {
->Visibility : Visibility, Symbol(Visibility, Decl(es6ClassTest3.ts, 0, 10))
+>Visibility : Visibility
 
 	    public foo() { };
->foo : () => void, Symbol(foo, Decl(es6ClassTest3.ts, 1, 19))
+>foo : () => void
 
 	    private bar() { };
->bar : () => void, Symbol(bar, Decl(es6ClassTest3.ts, 2, 22))
+>bar : () => void
 
         private x: number;
->x : number, Symbol(x, Decl(es6ClassTest3.ts, 3, 23))
+>x : number
 
 	    public y: number;
->y : number, Symbol(y, Decl(es6ClassTest3.ts, 4, 26))
+>y : number
 
 	    public z: number;
->z : number, Symbol(z, Decl(es6ClassTest3.ts, 5, 22))
+>z : number
 
 	    constructor() {
 	        this.x = 1;
 >this.x = 1 : number
->this.x : number, Symbol(x, Decl(es6ClassTest3.ts, 3, 23))
->this : Visibility, Symbol(Visibility, Decl(es6ClassTest3.ts, 0, 10))
->x : number, Symbol(x, Decl(es6ClassTest3.ts, 3, 23))
+>this.x : number
+>this : Visibility
+>x : number
 >1 : number
 
 	        this.y = 2;
 >this.y = 2 : number
->this.y : number, Symbol(y, Decl(es6ClassTest3.ts, 4, 26))
->this : Visibility, Symbol(Visibility, Decl(es6ClassTest3.ts, 0, 10))
->y : number, Symbol(y, Decl(es6ClassTest3.ts, 4, 26))
+>this.y : number
+>this : Visibility
+>y : number
 >2 : number
 	    }
 	}

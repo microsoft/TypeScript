@@ -1,17 +1,17 @@
 === tests/cases/conformance/statements/for-ofStatements/ES5For-of15.ts ===
 for (let v of []) {
->v : any, Symbol(v, Decl(ES5For-of15.ts, 0, 8))
+>v : any
 >[] : undefined[]
 
     v;
->v : any, Symbol(v, Decl(ES5For-of15.ts, 0, 8))
+>v : any
 
     for (const v of []) {
->v : any, Symbol(v, Decl(ES5For-of15.ts, 2, 14))
+>v : any
 >[] : undefined[]
 
         var x = v;
->x : any, Symbol(x, Decl(ES5For-of15.ts, 3, 11))
->v : any, Symbol(v, Decl(ES5For-of15.ts, 2, 14))
+>x : any
+>v : any
     }
 }

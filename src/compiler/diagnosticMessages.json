@@ -1439,6 +1439,10 @@
         "category": "Error",
         "code": 2500
     },
+    "A rest element cannot contain a binding pattern.": {
+        "category": "Error",
+        "code": 2501
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

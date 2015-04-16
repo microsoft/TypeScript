@@ -3,140 +3,140 @@
 
 // basic case
 interface A {
->A : A, Symbol(A, Decl(mergeTwoInterfaces.ts, 0, 0), Decl(mergeTwoInterfaces.ts, 5, 1))
+>A : A
 
     foo: string;
->foo : string, Symbol(foo, Decl(mergeTwoInterfaces.ts, 3, 13))
+>foo : string
 }
 
 interface A {
->A : A, Symbol(A, Decl(mergeTwoInterfaces.ts, 0, 0), Decl(mergeTwoInterfaces.ts, 5, 1))
+>A : A
 
     bar: number;
->bar : number, Symbol(bar, Decl(mergeTwoInterfaces.ts, 7, 13))
+>bar : number
 }
 
 var a: A;
->a : A, Symbol(a, Decl(mergeTwoInterfaces.ts, 11, 3))
->A : A, Symbol(A, Decl(mergeTwoInterfaces.ts, 0, 0), Decl(mergeTwoInterfaces.ts, 5, 1))
+>a : A
+>A : A
 
 var r1 = a.foo
->r1 : string, Symbol(r1, Decl(mergeTwoInterfaces.ts, 12, 3))
->a.foo : string, Symbol(A.foo, Decl(mergeTwoInterfaces.ts, 3, 13))
->a : A, Symbol(a, Decl(mergeTwoInterfaces.ts, 11, 3))
->foo : string, Symbol(A.foo, Decl(mergeTwoInterfaces.ts, 3, 13))
+>r1 : string
+>a.foo : string
+>a : A
+>foo : string
 
 var r2 = a.bar;
->r2 : number, Symbol(r2, Decl(mergeTwoInterfaces.ts, 13, 3))
->a.bar : number, Symbol(A.bar, Decl(mergeTwoInterfaces.ts, 7, 13))
->a : A, Symbol(a, Decl(mergeTwoInterfaces.ts, 11, 3))
->bar : number, Symbol(A.bar, Decl(mergeTwoInterfaces.ts, 7, 13))
+>r2 : number
+>a.bar : number
+>a : A
+>bar : number
 
 // basic generic case
 interface B<T> {
->B : B<T>, Symbol(B, Decl(mergeTwoInterfaces.ts, 13, 15), Decl(mergeTwoInterfaces.ts, 19, 1))
->T : T, Symbol(T, Decl(mergeTwoInterfaces.ts, 16, 12), Decl(mergeTwoInterfaces.ts, 21, 12))
+>B : B<T>
+>T : T
 
     baz: string;
->baz : string, Symbol(baz, Decl(mergeTwoInterfaces.ts, 16, 16))
+>baz : string
 
     foo: T;
->foo : T, Symbol(foo, Decl(mergeTwoInterfaces.ts, 17, 16))
->T : T, Symbol(T, Decl(mergeTwoInterfaces.ts, 16, 12), Decl(mergeTwoInterfaces.ts, 21, 12))
+>foo : T
+>T : T
 }
 
 interface B<T> {
->B : B<T>, Symbol(B, Decl(mergeTwoInterfaces.ts, 13, 15), Decl(mergeTwoInterfaces.ts, 19, 1))
->T : T, Symbol(T, Decl(mergeTwoInterfaces.ts, 16, 12), Decl(mergeTwoInterfaces.ts, 21, 12))
+>B : B<T>
+>T : T
 
     bar: T;
->bar : T, Symbol(bar, Decl(mergeTwoInterfaces.ts, 21, 16))
->T : T, Symbol(T, Decl(mergeTwoInterfaces.ts, 16, 12), Decl(mergeTwoInterfaces.ts, 21, 12))
+>bar : T
+>T : T
 }
 
 var b: B<string>;
->b : B<string>, Symbol(b, Decl(mergeTwoInterfaces.ts, 25, 3))
->B : B<T>, Symbol(B, Decl(mergeTwoInterfaces.ts, 13, 15), Decl(mergeTwoInterfaces.ts, 19, 1))
+>b : B<string>
+>B : B<T>
 
 var r3 = b.foo
->r3 : string, Symbol(r3, Decl(mergeTwoInterfaces.ts, 26, 3))
->b.foo : string, Symbol(B.foo, Decl(mergeTwoInterfaces.ts, 17, 16))
->b : B<string>, Symbol(b, Decl(mergeTwoInterfaces.ts, 25, 3))
->foo : string, Symbol(B.foo, Decl(mergeTwoInterfaces.ts, 17, 16))
+>r3 : string
+>b.foo : string
+>b : B<string>
+>foo : string
 
 var r4 = b.bar;
->r4 : string, Symbol(r4, Decl(mergeTwoInterfaces.ts, 27, 3))
->b.bar : string, Symbol(B.bar, Decl(mergeTwoInterfaces.ts, 21, 16))
->b : B<string>, Symbol(b, Decl(mergeTwoInterfaces.ts, 25, 3))
->bar : string, Symbol(B.bar, Decl(mergeTwoInterfaces.ts, 21, 16))
+>r4 : string
+>b.bar : string
+>b : B<string>
+>bar : string
 
 // basic non-generic and generic case inside a module
 module M {
->M : typeof M, Symbol(M, Decl(mergeTwoInterfaces.ts, 27, 15))
+>M : typeof M
 
     interface A {
->A : A, Symbol(A, Decl(mergeTwoInterfaces.ts, 30, 10), Decl(mergeTwoInterfaces.ts, 33, 5))
+>A : A
 
         foo: string;
->foo : string, Symbol(foo, Decl(mergeTwoInterfaces.ts, 31, 17))
+>foo : string
     }
 
     interface A {
->A : A, Symbol(A, Decl(mergeTwoInterfaces.ts, 30, 10), Decl(mergeTwoInterfaces.ts, 33, 5))
+>A : A
 
         bar: number;
->bar : number, Symbol(bar, Decl(mergeTwoInterfaces.ts, 35, 17))
+>bar : number
     }
 
     var a: A;
->a : A, Symbol(a, Decl(mergeTwoInterfaces.ts, 39, 7))
->A : A, Symbol(A, Decl(mergeTwoInterfaces.ts, 30, 10), Decl(mergeTwoInterfaces.ts, 33, 5))
+>a : A
+>A : A
 
     var r1 = a.foo;
->r1 : string, Symbol(r1, Decl(mergeTwoInterfaces.ts, 40, 7))
->a.foo : string, Symbol(A.foo, Decl(mergeTwoInterfaces.ts, 31, 17))
->a : A, Symbol(a, Decl(mergeTwoInterfaces.ts, 39, 7))
->foo : string, Symbol(A.foo, Decl(mergeTwoInterfaces.ts, 31, 17))
+>r1 : string
+>a.foo : string
+>a : A
+>foo : string
 
     // BUG 856491
     var r2 = a.bar; // any, should be number
->r2 : number, Symbol(r2, Decl(mergeTwoInterfaces.ts, 42, 7))
->a.bar : number, Symbol(A.bar, Decl(mergeTwoInterfaces.ts, 35, 17))
->a : A, Symbol(a, Decl(mergeTwoInterfaces.ts, 39, 7))
->bar : number, Symbol(A.bar, Decl(mergeTwoInterfaces.ts, 35, 17))
+>r2 : number
+>a.bar : number
+>a : A
+>bar : number
 
     interface B<T> {
->B : B<T>, Symbol(B, Decl(mergeTwoInterfaces.ts, 42, 19), Decl(mergeTwoInterfaces.ts, 46, 5))
->T : T, Symbol(T, Decl(mergeTwoInterfaces.ts, 44, 16), Decl(mergeTwoInterfaces.ts, 48, 16))
+>B : B<T>
+>T : T
 
         foo: T;
->foo : T, Symbol(foo, Decl(mergeTwoInterfaces.ts, 44, 20))
->T : T, Symbol(T, Decl(mergeTwoInterfaces.ts, 44, 16), Decl(mergeTwoInterfaces.ts, 48, 16))
+>foo : T
+>T : T
     }
 
     interface B<T> {
->B : B<T>, Symbol(B, Decl(mergeTwoInterfaces.ts, 42, 19), Decl(mergeTwoInterfaces.ts, 46, 5))
->T : T, Symbol(T, Decl(mergeTwoInterfaces.ts, 44, 16), Decl(mergeTwoInterfaces.ts, 48, 16))
+>B : B<T>
+>T : T
 
         bar: T;
->bar : T, Symbol(bar, Decl(mergeTwoInterfaces.ts, 48, 20))
->T : T, Symbol(T, Decl(mergeTwoInterfaces.ts, 44, 16), Decl(mergeTwoInterfaces.ts, 48, 16))
+>bar : T
+>T : T
     }
 
     var b: B<string>;
->b : B<string>, Symbol(b, Decl(mergeTwoInterfaces.ts, 52, 7))
->B : B<T>, Symbol(B, Decl(mergeTwoInterfaces.ts, 42, 19), Decl(mergeTwoInterfaces.ts, 46, 5))
+>b : B<string>
+>B : B<T>
 
     var r3 = b.foo
->r3 : string, Symbol(r3, Decl(mergeTwoInterfaces.ts, 53, 7))
->b.foo : string, Symbol(B.foo, Decl(mergeTwoInterfaces.ts, 44, 20))
->b : B<string>, Symbol(b, Decl(mergeTwoInterfaces.ts, 52, 7))
->foo : string, Symbol(B.foo, Decl(mergeTwoInterfaces.ts, 44, 20))
+>r3 : string
+>b.foo : string
+>b : B<string>
+>foo : string
 
     // BUG 856491
     var r4 = b.bar; // any, should be string
->r4 : string, Symbol(r4, Decl(mergeTwoInterfaces.ts, 55, 7))
->b.bar : string, Symbol(B.bar, Decl(mergeTwoInterfaces.ts, 48, 20))
->b : B<string>, Symbol(b, Decl(mergeTwoInterfaces.ts, 52, 7))
->bar : string, Symbol(B.bar, Decl(mergeTwoInterfaces.ts, 48, 20))
+>r4 : string
+>b.bar : string
+>b : B<string>
+>bar : string
 }

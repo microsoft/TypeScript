@@ -1,0 +1,15 @@
+=== tests/cases/compiler/classExtendingQualifiedName2.ts ===
+module M {
+>M : Symbol(M, Decl(classExtendingQualifiedName2.ts, 0, 0))
+
+    export class C {
+>C : Symbol(C, Decl(classExtendingQualifiedName2.ts, 0, 10))
+    }
+
+    class D extends M.C {
+>D : Symbol(D, Decl(classExtendingQualifiedName2.ts, 2, 5))
+>M.C : Symbol(C, Decl(classExtendingQualifiedName2.ts, 0, 10))
+>M : Symbol(M, Decl(classExtendingQualifiedName2.ts, 0, 0))
+>C : Symbol(C, Decl(classExtendingQualifiedName2.ts, 0, 10))
+    }
+}

@@ -1,53 +1,53 @@
 === tests/cases/compiler/noCollisionThisExpressionAndLocalVarInConstructor.ts ===
 class class1 {
->class1 : class1, Symbol(class1, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 0, 0))
+>class1 : class1
 
     constructor() {
         var x2 = {
->x2 : { doStuff: (callback: any) => () => any; }, Symbol(x2, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 2, 11))
+>x2 : { doStuff: (callback: any) => () => any; }
 >{            doStuff: (callback) => () => {                var _this = 2;                return callback(_this);            }        } : { doStuff: (callback: any) => () => any; }
 
             doStuff: (callback) => () => {
->doStuff : (callback: any) => () => any, Symbol(doStuff, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 2, 18))
+>doStuff : (callback: any) => () => any
 >(callback) => () => {                var _this = 2;                return callback(_this);            } : (callback: any) => () => any
->callback : any, Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 3, 22))
+>callback : any
 >() => {                var _this = 2;                return callback(_this);            } : () => any
 
                 var _this = 2;
->_this : number, Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 4, 19))
+>_this : number
 >2 : number
 
                 return callback(_this);
 >callback(_this) : any
->callback : any, Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 3, 22))
->_this : number, Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 4, 19))
+>callback : any
+>_this : number
             }
         }
     }
 }
 
 class class2 {
->class2 : class2, Symbol(class2, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 9, 1))
+>class2 : class2
 
     constructor() {
         var _this = 2;
->_this : number, Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 13, 11))
+>_this : number
 >2 : number
 
         var x2 = {
->x2 : { doStuff: (callback: any) => () => any; }, Symbol(x2, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 14, 11))
+>x2 : { doStuff: (callback: any) => () => any; }
 >{            doStuff: (callback) => () => {                return callback(_this);            }        } : { doStuff: (callback: any) => () => any; }
 
             doStuff: (callback) => () => {
->doStuff : (callback: any) => () => any, Symbol(doStuff, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 14, 18))
+>doStuff : (callback: any) => () => any
 >(callback) => () => {                return callback(_this);            } : (callback: any) => () => any
->callback : any, Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 15, 22))
+>callback : any
 >() => {                return callback(_this);            } : () => any
 
                 return callback(_this);
 >callback(_this) : any
->callback : any, Symbol(callback, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 15, 22))
->_this : number, Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInConstructor.ts, 13, 11))
+>callback : any
+>_this : number
             }
         }
     }

@@ -1,53 +1,53 @@
 === tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues.ts ===
 class C {
->C : C, Symbol(C, Decl(constructorImplementationWithDefaultValues.ts, 0, 0))
+>C : C
 
     constructor(x);
->x : any, Symbol(x, Decl(constructorImplementationWithDefaultValues.ts, 1, 16))
+>x : any
 
     constructor(x = 1) {
->x : number, Symbol(x, Decl(constructorImplementationWithDefaultValues.ts, 2, 16))
+>x : number
 >1 : number
 
         var y = x;
->y : number, Symbol(y, Decl(constructorImplementationWithDefaultValues.ts, 3, 11))
->x : number, Symbol(x, Decl(constructorImplementationWithDefaultValues.ts, 2, 16))
+>y : number
+>x : number
     }
 }
 
 class D<T> {
->D : D<T>, Symbol(D, Decl(constructorImplementationWithDefaultValues.ts, 5, 1))
->T : T, Symbol(T, Decl(constructorImplementationWithDefaultValues.ts, 7, 8))
+>D : D<T>
+>T : T
 
     constructor(x);
->x : any, Symbol(x, Decl(constructorImplementationWithDefaultValues.ts, 8, 16))
+>x : any
 
     constructor(x:T = null) {
->x : T, Symbol(x, Decl(constructorImplementationWithDefaultValues.ts, 9, 16))
->T : T, Symbol(T, Decl(constructorImplementationWithDefaultValues.ts, 7, 8))
+>x : T
+>T : T
 >null : null
 
         var y = x;
->y : T, Symbol(y, Decl(constructorImplementationWithDefaultValues.ts, 10, 11))
->x : T, Symbol(x, Decl(constructorImplementationWithDefaultValues.ts, 9, 16))
+>y : T
+>x : T
     }
 }
 
 class E<T extends Date> {
->E : E<T>, Symbol(E, Decl(constructorImplementationWithDefaultValues.ts, 12, 1))
->T : T, Symbol(T, Decl(constructorImplementationWithDefaultValues.ts, 14, 8))
->Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>E : E<T>
+>T : T
+>Date : Date
 
     constructor(x);
->x : any, Symbol(x, Decl(constructorImplementationWithDefaultValues.ts, 15, 16))
+>x : any
 
     constructor(x: T = null) {
->x : T, Symbol(x, Decl(constructorImplementationWithDefaultValues.ts, 16, 16))
->T : T, Symbol(T, Decl(constructorImplementationWithDefaultValues.ts, 14, 8))
+>x : T
+>T : T
 >null : null
 
         var y = x;
->y : T, Symbol(y, Decl(constructorImplementationWithDefaultValues.ts, 17, 11))
->x : T, Symbol(x, Decl(constructorImplementationWithDefaultValues.ts, 16, 16))
+>y : T
+>x : T
     }
 }

@@ -1,112 +1,112 @@
 === tests/cases/conformance/types/primitives/undefined/invalidUndefinedValues.ts ===
 var x: typeof undefined;
->x : any, Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
->undefined : undefined, Symbol(undefined)
+>x : any
+>undefined : undefined
 
 x = 1;
 >x = 1 : number
->x : any, Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+>x : any
 >1 : number
 
 x = '';
 >x = '' : string
->x : any, Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+>x : any
 >'' : string
 
 x = true;
 >x = true : boolean
->x : any, Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+>x : any
 >true : boolean
 
 var a: void;
->a : void, Symbol(a, Decl(invalidUndefinedValues.ts, 5, 3))
+>a : void
 
 x = a;
 >x = a : void
->x : any, Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
->a : void, Symbol(a, Decl(invalidUndefinedValues.ts, 5, 3))
+>x : any
+>a : void
 
 x = null;
 >x = null : null
->x : any, Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+>x : any
 >null : null
 
 class C { foo: string }
->C : C, Symbol(C, Decl(invalidUndefinedValues.ts, 7, 9))
->foo : string, Symbol(foo, Decl(invalidUndefinedValues.ts, 9, 9))
+>C : C
+>foo : string
 
 var b: C;
->b : C, Symbol(b, Decl(invalidUndefinedValues.ts, 10, 3))
->C : C, Symbol(C, Decl(invalidUndefinedValues.ts, 7, 9))
+>b : C
+>C : C
 
 x = C;
 >x = C : typeof C
->x : any, Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
->C : typeof C, Symbol(C, Decl(invalidUndefinedValues.ts, 7, 9))
+>x : any
+>C : typeof C
 
 x = b;
 >x = b : C
->x : any, Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
->b : C, Symbol(b, Decl(invalidUndefinedValues.ts, 10, 3))
+>x : any
+>b : C
 
 interface I { foo: string }
->I : I, Symbol(I, Decl(invalidUndefinedValues.ts, 12, 6))
->foo : string, Symbol(foo, Decl(invalidUndefinedValues.ts, 14, 13))
+>I : I
+>foo : string
 
 var c: I;
->c : I, Symbol(c, Decl(invalidUndefinedValues.ts, 15, 3))
->I : I, Symbol(I, Decl(invalidUndefinedValues.ts, 12, 6))
+>c : I
+>I : I
 
 x = c;
 >x = c : I
->x : any, Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
->c : I, Symbol(c, Decl(invalidUndefinedValues.ts, 15, 3))
+>x : any
+>c : I
 
 module M { export var x = 1; }
->M : typeof M, Symbol(M, Decl(invalidUndefinedValues.ts, 16, 6))
->x : number, Symbol(x, Decl(invalidUndefinedValues.ts, 18, 21))
+>M : typeof M
+>x : number
 >1 : number
 
 x = M;
 >x = M : typeof M
->x : any, Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
->M : typeof M, Symbol(M, Decl(invalidUndefinedValues.ts, 16, 6))
+>x : any
+>M : typeof M
 
 x = { f() { } }
 >x = { f() { } } : { f(): void; }
->x : any, Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
+>x : any
 >{ f() { } } : { f(): void; }
->f : () => void, Symbol(f, Decl(invalidUndefinedValues.ts, 21, 5))
+>f : () => void
 
 function f<T>(a: T) {
->f : <T>(a: T) => void, Symbol(f, Decl(invalidUndefinedValues.ts, 21, 15))
->T : T, Symbol(T, Decl(invalidUndefinedValues.ts, 23, 11))
->a : T, Symbol(a, Decl(invalidUndefinedValues.ts, 23, 14))
->T : T, Symbol(T, Decl(invalidUndefinedValues.ts, 23, 11))
+>f : <T>(a: T) => void
+>T : T
+>a : T
+>T : T
 
     x = a;
 >x = a : T
->x : any, Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
->a : T, Symbol(a, Decl(invalidUndefinedValues.ts, 23, 14))
+>x : any
+>a : T
 }
 x = f;
 >x = f : <T>(a: T) => void
->x : any, Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
->f : <T>(a: T) => void, Symbol(f, Decl(invalidUndefinedValues.ts, 21, 15))
+>x : any
+>f : <T>(a: T) => void
 
 enum E { A }
->E : E, Symbol(E, Decl(invalidUndefinedValues.ts, 26, 6))
->A : E, Symbol(E.A, Decl(invalidUndefinedValues.ts, 28, 8))
+>E : E
+>A : E
 
 x = E;
 >x = E : typeof E
->x : any, Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
->E : typeof E, Symbol(E, Decl(invalidUndefinedValues.ts, 26, 6))
+>x : any
+>E : typeof E
 
 x = E.A;
 >x = E.A : E
->x : any, Symbol(x, Decl(invalidUndefinedValues.ts, 0, 3))
->E.A : E, Symbol(E.A, Decl(invalidUndefinedValues.ts, 28, 8))
->E : typeof E, Symbol(E, Decl(invalidUndefinedValues.ts, 26, 6))
->A : E, Symbol(E.A, Decl(invalidUndefinedValues.ts, 28, 8))
+>x : any
+>E.A : E
+>E : typeof E
+>A : E
 

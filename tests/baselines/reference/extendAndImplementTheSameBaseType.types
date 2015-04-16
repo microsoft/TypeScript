@@ -1,46 +1,46 @@
 === tests/cases/compiler/extendAndImplementTheSameBaseType.ts ===
 class C {
->C : C, Symbol(C, Decl(extendAndImplementTheSameBaseType.ts, 0, 0))
+>C : C
 
     foo: number
->foo : number, Symbol(foo, Decl(extendAndImplementTheSameBaseType.ts, 0, 9))
+>foo : number
 
     bar() {}
->bar : () => void, Symbol(bar, Decl(extendAndImplementTheSameBaseType.ts, 1, 15))
+>bar : () => void
 }
 class D extends C implements C {
->D : D, Symbol(D, Decl(extendAndImplementTheSameBaseType.ts, 3, 1))
->C : C, Symbol(C, Decl(extendAndImplementTheSameBaseType.ts, 0, 0))
->C : C, Symbol(C, Decl(extendAndImplementTheSameBaseType.ts, 0, 0))
+>D : D
+>C : C
+>C : C
 
     baz() { }
->baz : () => void, Symbol(baz, Decl(extendAndImplementTheSameBaseType.ts, 4, 32))
+>baz : () => void
 }
 
 var c: C;
->c : C, Symbol(c, Decl(extendAndImplementTheSameBaseType.ts, 8, 3))
->C : C, Symbol(C, Decl(extendAndImplementTheSameBaseType.ts, 0, 0))
+>c : C
+>C : C
 
 var d: D = new D();
->d : D, Symbol(d, Decl(extendAndImplementTheSameBaseType.ts, 9, 3))
->D : D, Symbol(D, Decl(extendAndImplementTheSameBaseType.ts, 3, 1))
+>d : D
+>D : D
 >new D() : D
->D : typeof D, Symbol(D, Decl(extendAndImplementTheSameBaseType.ts, 3, 1))
+>D : typeof D
 
 d.bar();
 >d.bar() : void
->d.bar : () => void, Symbol(C.bar, Decl(extendAndImplementTheSameBaseType.ts, 1, 15))
->d : D, Symbol(d, Decl(extendAndImplementTheSameBaseType.ts, 9, 3))
->bar : () => void, Symbol(C.bar, Decl(extendAndImplementTheSameBaseType.ts, 1, 15))
+>d.bar : () => void
+>d : D
+>bar : () => void
 
 d.baz();
 >d.baz() : void
->d.baz : () => void, Symbol(D.baz, Decl(extendAndImplementTheSameBaseType.ts, 4, 32))
->d : D, Symbol(d, Decl(extendAndImplementTheSameBaseType.ts, 9, 3))
->baz : () => void, Symbol(D.baz, Decl(extendAndImplementTheSameBaseType.ts, 4, 32))
+>d.baz : () => void
+>d : D
+>baz : () => void
 
 d.foo;
->d.foo : number, Symbol(C.foo, Decl(extendAndImplementTheSameBaseType.ts, 0, 9))
->d : D, Symbol(d, Decl(extendAndImplementTheSameBaseType.ts, 9, 3))
->foo : number, Symbol(C.foo, Decl(extendAndImplementTheSameBaseType.ts, 0, 9))
+>d.foo : number
+>d : D
+>foo : number
 

@@ -1,53 +1,53 @@
 === tests/cases/compiler/importInTypePosition.ts ===
 module A {
->A : typeof A, Symbol(A, Decl(importInTypePosition.ts, 0, 0))
+>A : typeof A
 
     export class Point {
->Point : Point, Symbol(Point, Decl(importInTypePosition.ts, 0, 10))
+>Point : Point
 
         constructor(public x: number, public y: number) { }
->x : number, Symbol(x, Decl(importInTypePosition.ts, 2, 20))
->y : number, Symbol(y, Decl(importInTypePosition.ts, 2, 37))
+>x : number
+>y : number
     }
     export var Origin = new Point(0, 0);
->Origin : Point, Symbol(Origin, Decl(importInTypePosition.ts, 4, 14))
+>Origin : Point
 >new Point(0, 0) : Point
->Point : typeof Point, Symbol(Point, Decl(importInTypePosition.ts, 0, 10))
+>Point : typeof Point
 >0 : number
 >0 : number
 }
 
 // no code gen expected
 module B {
->B : any, Symbol(B, Decl(importInTypePosition.ts, 5, 1))
+>B : any
 
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
->a : typeof a, Symbol(a, Decl(importInTypePosition.ts, 8, 10))
->A : typeof a, Symbol(a, Decl(importInTypePosition.ts, 0, 0))
+>a : typeof a
+>A : typeof a
 }
 // no code gen expected
 module C {
->C : typeof C, Symbol(C, Decl(importInTypePosition.ts, 11, 1))
+>C : typeof C
 
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
->a : typeof a, Symbol(a, Decl(importInTypePosition.ts, 13, 10))
->A : typeof a, Symbol(a, Decl(importInTypePosition.ts, 0, 0))
+>a : typeof a
+>A : typeof a
 
     var m: typeof a;
->m : typeof a, Symbol(m, Decl(importInTypePosition.ts, 16, 7))
->a : typeof a, Symbol(a, Decl(importInTypePosition.ts, 13, 10))
+>m : typeof a
+>a : typeof a
 
     var p: a.Point;
->p : a.Point, Symbol(p, Decl(importInTypePosition.ts, 17, 7), Decl(importInTypePosition.ts, 18, 7))
->a : any, Symbol(a, Decl(importInTypePosition.ts, 13, 10))
->Point : a.Point, Symbol(a.Point, Decl(importInTypePosition.ts, 0, 10))
+>p : a.Point
+>a : any
+>Point : a.Point
 
     var p = { x: 0, y: 0 };
->p : a.Point, Symbol(p, Decl(importInTypePosition.ts, 17, 7), Decl(importInTypePosition.ts, 18, 7))
+>p : a.Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
->x : number, Symbol(x, Decl(importInTypePosition.ts, 18, 13))
+>x : number
 >0 : number
->y : number, Symbol(y, Decl(importInTypePosition.ts, 18, 19))
+>y : number
 >0 : number
 }
 

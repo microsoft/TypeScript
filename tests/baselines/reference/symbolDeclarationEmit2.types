@@ -1,10 +1,10 @@
 === tests/cases/conformance/es6/Symbols/symbolDeclarationEmit2.ts ===
 class C {
->C : C, Symbol(C, Decl(symbolDeclarationEmit2.ts, 0, 0))
+>C : C
 
     [Symbol.toPrimitive] = "";
->Symbol.toPrimitive : symbol, Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 1242, 21))
->Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
->toPrimitive : symbol, Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 1242, 21))
+>Symbol.toPrimitive : symbol
+>Symbol : SymbolConstructor
+>toPrimitive : symbol
 >"" : string
 }

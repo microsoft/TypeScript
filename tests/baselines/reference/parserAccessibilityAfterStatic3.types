@@ -1,9 +1,9 @@
 === tests/cases/conformance/parser/ecmascript5/ErrorRecovery/AccessibilityAfterStatic/parserAccessibilityAfterStatic3.ts ===
 class Outer
->Outer : Outer, Symbol(Outer, Decl(parserAccessibilityAfterStatic3.ts, 0, 0))
+>Outer : Outer
 {
 static public = 1;
->public : number, Symbol(Outer.public, Decl(parserAccessibilityAfterStatic3.ts, 1, 1))
+>public : number
 >1 : number
 }
 

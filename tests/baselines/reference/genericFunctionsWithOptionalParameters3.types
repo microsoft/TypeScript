@@ -1,111 +1,111 @@
 === tests/cases/compiler/genericFunctionsWithOptionalParameters3.ts ===
 class Collection<T> {
->Collection : Collection<T>, Symbol(Collection, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 0))
->T : T, Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 17))
+>Collection : Collection<T>
+>T : T
 
     public add(x: T) { }
->add : (x: T) => void, Symbol(add, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 21))
->x : T, Symbol(x, Decl(genericFunctionsWithOptionalParameters3.ts, 1, 15))
->T : T, Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 17))
+>add : (x: T) => void
+>x : T
+>T : T
 }
 interface Utils {
->Utils : Utils, Symbol(Utils, Decl(genericFunctionsWithOptionalParameters3.ts, 2, 1))
+>Utils : Utils
 
     fold<T, S>(c?: Collection<T>, folder?: (s: S, t: T) => T, init?: S): T;
->fold : <T, S>(c?: Collection<T>, folder?: (s: S, t: T) => T, init?: S) => T, Symbol(fold, Decl(genericFunctionsWithOptionalParameters3.ts, 3, 17))
->T : T, Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 9))
->S : S, Symbol(S, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 11))
->c : Collection<T>, Symbol(c, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 15))
->Collection : Collection<T>, Symbol(Collection, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 0))
->T : T, Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 9))
->folder : (s: S, t: T) => T, Symbol(folder, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 33))
->s : S, Symbol(s, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 44))
->S : S, Symbol(S, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 11))
->t : T, Symbol(t, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 49))
->T : T, Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 9))
->T : T, Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 9))
->init : S, Symbol(init, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 61))
->S : S, Symbol(S, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 11))
->T : T, Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 9))
+>fold : <T, S>(c?: Collection<T>, folder?: (s: S, t: T) => T, init?: S) => T
+>T : T
+>S : S
+>c : Collection<T>
+>Collection : Collection<T>
+>T : T
+>folder : (s: S, t: T) => T
+>s : S
+>S : S
+>t : T
+>T : T
+>T : T
+>init : S
+>S : S
+>T : T
 
     mapReduce<T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V): Collection<V>;
->mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>, Symbol(mapReduce, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 75))
->T : T, Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 14))
->U : U, Symbol(U, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 16))
->V : V, Symbol(V, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 19))
->c : Collection<T>, Symbol(c, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 23))
->Collection : Collection<T>, Symbol(Collection, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 0))
->T : T, Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 14))
->mapper : (x: T) => U, Symbol(mapper, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 40))
->x : T, Symbol(x, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 50))
->T : T, Symbol(T, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 14))
->U : U, Symbol(U, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 16))
->reducer : (y: U) => V, Symbol(reducer, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 61))
->y : U, Symbol(y, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 72))
->U : U, Symbol(U, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 16))
->V : V, Symbol(V, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 19))
->Collection : Collection<T>, Symbol(Collection, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 0))
->V : V, Symbol(V, Decl(genericFunctionsWithOptionalParameters3.ts, 5, 19))
+>mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
+>T : T
+>U : U
+>V : V
+>c : Collection<T>
+>Collection : Collection<T>
+>T : T
+>mapper : (x: T) => U
+>x : T
+>T : T
+>U : U
+>reducer : (y: U) => V
+>y : U
+>U : U
+>V : V
+>Collection : Collection<T>
+>V : V
 }
 var utils: Utils;
->utils : Utils, Symbol(utils, Decl(genericFunctionsWithOptionalParameters3.ts, 7, 3))
->Utils : Utils, Symbol(Utils, Decl(genericFunctionsWithOptionalParameters3.ts, 2, 1))
+>utils : Utils
+>Utils : Utils
 
 var c = new Collection<string>();
->c : Collection<string>, Symbol(c, Decl(genericFunctionsWithOptionalParameters3.ts, 8, 3))
+>c : Collection<string>
 >new Collection<string>() : Collection<string>
->Collection : typeof Collection, Symbol(Collection, Decl(genericFunctionsWithOptionalParameters3.ts, 0, 0))
+>Collection : typeof Collection
 
 var r3 = utils.mapReduce(c, (x) => { return 1 }, (y) => { return new Date() });
->r3 : Collection<Date>, Symbol(r3, Decl(genericFunctionsWithOptionalParameters3.ts, 9, 3))
+>r3 : Collection<Date>
 >utils.mapReduce(c, (x) => { return 1 }, (y) => { return new Date() }) : Collection<Date>
->utils.mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>, Symbol(Utils.mapReduce, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 75))
->utils : Utils, Symbol(utils, Decl(genericFunctionsWithOptionalParameters3.ts, 7, 3))
->mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>, Symbol(Utils.mapReduce, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 75))
->c : Collection<string>, Symbol(c, Decl(genericFunctionsWithOptionalParameters3.ts, 8, 3))
+>utils.mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
+>utils : Utils
+>mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
+>c : Collection<string>
 >(x) => { return 1 } : (x: string) => number
->x : string, Symbol(x, Decl(genericFunctionsWithOptionalParameters3.ts, 9, 29))
+>x : string
 >1 : number
 >(y) => { return new Date() } : (y: number) => Date
->y : number, Symbol(y, Decl(genericFunctionsWithOptionalParameters3.ts, 9, 50))
+>y : number
 >new Date() : Date
->Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>Date : DateConstructor
 
 var r4 = utils.mapReduce(c, (x: string) => { return 1 }, (y: number) => { return new Date() });
->r4 : Collection<Date>, Symbol(r4, Decl(genericFunctionsWithOptionalParameters3.ts, 10, 3))
+>r4 : Collection<Date>
 >utils.mapReduce(c, (x: string) => { return 1 }, (y: number) => { return new Date() }) : Collection<Date>
->utils.mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>, Symbol(Utils.mapReduce, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 75))
->utils : Utils, Symbol(utils, Decl(genericFunctionsWithOptionalParameters3.ts, 7, 3))
->mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>, Symbol(Utils.mapReduce, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 75))
->c : Collection<string>, Symbol(c, Decl(genericFunctionsWithOptionalParameters3.ts, 8, 3))
+>utils.mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
+>utils : Utils
+>mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
+>c : Collection<string>
 >(x: string) => { return 1 } : (x: string) => number
->x : string, Symbol(x, Decl(genericFunctionsWithOptionalParameters3.ts, 10, 29))
+>x : string
 >1 : number
 >(y: number) => { return new Date() } : (y: number) => Date
->y : number, Symbol(y, Decl(genericFunctionsWithOptionalParameters3.ts, 10, 58))
+>y : number
 >new Date() : Date
->Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>Date : DateConstructor
 
 var f1 = (x: string) => { return 1 };
->f1 : (x: string) => number, Symbol(f1, Decl(genericFunctionsWithOptionalParameters3.ts, 11, 3))
+>f1 : (x: string) => number
 >(x: string) => { return 1 } : (x: string) => number
->x : string, Symbol(x, Decl(genericFunctionsWithOptionalParameters3.ts, 11, 10))
+>x : string
 >1 : number
 
 var f2 = (y: number) => { return new Date() };
->f2 : (y: number) => Date, Symbol(f2, Decl(genericFunctionsWithOptionalParameters3.ts, 12, 3))
+>f2 : (y: number) => Date
 >(y: number) => { return new Date() } : (y: number) => Date
->y : number, Symbol(y, Decl(genericFunctionsWithOptionalParameters3.ts, 12, 10))
+>y : number
 >new Date() : Date
->Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>Date : DateConstructor
 
 var r5 = utils.mapReduce(c, f1, f2);
->r5 : Collection<Date>, Symbol(r5, Decl(genericFunctionsWithOptionalParameters3.ts, 13, 3))
+>r5 : Collection<Date>
 >utils.mapReduce(c, f1, f2) : Collection<Date>
->utils.mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>, Symbol(Utils.mapReduce, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 75))
->utils : Utils, Symbol(utils, Decl(genericFunctionsWithOptionalParameters3.ts, 7, 3))
->mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>, Symbol(Utils.mapReduce, Decl(genericFunctionsWithOptionalParameters3.ts, 4, 75))
->c : Collection<string>, Symbol(c, Decl(genericFunctionsWithOptionalParameters3.ts, 8, 3))
->f1 : (x: string) => number, Symbol(f1, Decl(genericFunctionsWithOptionalParameters3.ts, 11, 3))
->f2 : (y: number) => Date, Symbol(f2, Decl(genericFunctionsWithOptionalParameters3.ts, 12, 3))
+>utils.mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
+>utils : Utils
+>mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
+>c : Collection<string>
+>f1 : (x: string) => number
+>f2 : (y: number) => Date
 

@@ -1,24 +1,24 @@
 === tests/cases/conformance/es6/Symbols/symbolType19.ts ===
 enum E { }
->E : E, Symbol(E, Decl(symbolType19.ts, 0, 0))
+>E : E
 
 var x: symbol | E;
->x : symbol | E, Symbol(x, Decl(symbolType19.ts, 1, 3))
->E : E, Symbol(E, Decl(symbolType19.ts, 0, 0))
+>x : symbol | E
+>E : E
 
 x;
->x : symbol | E, Symbol(x, Decl(symbolType19.ts, 1, 3))
+>x : symbol | E
 
 if (typeof x === "number") {
 >typeof x === "number" : boolean
 >typeof x : string
->x : symbol | E, Symbol(x, Decl(symbolType19.ts, 1, 3))
+>x : symbol | E
 >"number" : string
 
     x;
->x : E, Symbol(x, Decl(symbolType19.ts, 1, 3))
+>x : E
 }
 else {
     x;
->x : symbol, Symbol(x, Decl(symbolType19.ts, 1, 3))
+>x : symbol
 }

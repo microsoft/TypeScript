@@ -1,44 +1,44 @@
 === tests/cases/compiler/collisionRestParameterInterfaceMembers.ts ===
 // call
 interface i1 {
->i1 : i1, Symbol(i1, Decl(collisionRestParameterInterfaceMembers.ts, 0, 0))
+>i1 : i1
 
     (_i: number, ...restParameters); // no error - no code gen
->_i : number, Symbol(_i, Decl(collisionRestParameterInterfaceMembers.ts, 2, 5))
->restParameters : any[], Symbol(restParameters, Decl(collisionRestParameterInterfaceMembers.ts, 2, 16))
+>_i : number
+>restParameters : any[]
 }
 interface i1NoError {
->i1NoError : i1NoError, Symbol(i1NoError, Decl(collisionRestParameterInterfaceMembers.ts, 3, 1))
+>i1NoError : i1NoError
 
     (_i: number);  // no error
->_i : number, Symbol(_i, Decl(collisionRestParameterInterfaceMembers.ts, 5, 5))
+>_i : number
 }
 
 // new
 interface i2 {
->i2 : i2, Symbol(i2, Decl(collisionRestParameterInterfaceMembers.ts, 6, 1))
+>i2 : i2
 
     new (_i: number, ...restParameters); // no error - no code gen
->_i : number, Symbol(_i, Decl(collisionRestParameterInterfaceMembers.ts, 10, 9))
->restParameters : any[], Symbol(restParameters, Decl(collisionRestParameterInterfaceMembers.ts, 10, 20))
+>_i : number
+>restParameters : any[]
 }
 interface i2NoError {
->i2NoError : i2NoError, Symbol(i2NoError, Decl(collisionRestParameterInterfaceMembers.ts, 11, 1))
+>i2NoError : i2NoError
 
     new (_i: number);  // no error
->_i : number, Symbol(_i, Decl(collisionRestParameterInterfaceMembers.ts, 13, 9))
+>_i : number
 }
 
 // method
 interface i3 {
->i3 : i3, Symbol(i3, Decl(collisionRestParameterInterfaceMembers.ts, 14, 1))
+>i3 : i3
 
     foo (_i: number, ...restParameters); // no error - no code gen
->foo : (_i: number, ...restParameters: any[]) => any, Symbol(foo, Decl(collisionRestParameterInterfaceMembers.ts, 17, 14))
->_i : number, Symbol(_i, Decl(collisionRestParameterInterfaceMembers.ts, 18, 9))
->restParameters : any[], Symbol(restParameters, Decl(collisionRestParameterInterfaceMembers.ts, 18, 20))
+>foo : (_i: number, ...restParameters: any[]) => any
+>_i : number
+>restParameters : any[]
 
     fooNoError (_i: number);  // no error
->fooNoError : (_i: number) => any, Symbol(fooNoError, Decl(collisionRestParameterInterfaceMembers.ts, 18, 40))
->_i : number, Symbol(_i, Decl(collisionRestParameterInterfaceMembers.ts, 19, 16))
+>fooNoError : (_i: number) => any
+>_i : number
 }

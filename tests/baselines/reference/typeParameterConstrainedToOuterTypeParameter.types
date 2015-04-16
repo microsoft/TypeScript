@@ -1,32 +1,32 @@
 === tests/cases/compiler/typeParameterConstrainedToOuterTypeParameter.ts ===
 interface A<T> {
->A : A<T>, Symbol(A, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 0, 0))
->T : T, Symbol(T, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 0, 12))
+>A : A<T>
+>T : T
 
     <U extends T>(x: U[])
->U : U, Symbol(U, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 1, 5))
->T : T, Symbol(T, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 0, 12))
->x : U[], Symbol(x, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 1, 18))
->U : U, Symbol(U, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 1, 5))
+>U : U
+>T : T
+>x : U[]
+>U : U
 }
 
 interface B<T> {
->B : B<T>, Symbol(B, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 2, 1))
->T : T, Symbol(T, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 4, 12))
+>B : B<T>
+>T : T
 
     <U extends T>(x: U)
->U : U, Symbol(U, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 5, 5))
->T : T, Symbol(T, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 4, 12))
->x : U, Symbol(x, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 5, 18))
->U : U, Symbol(U, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 5, 5))
+>U : U
+>T : T
+>x : U
+>U : U
 }
 
 var a: A<string>
->a : A<string>, Symbol(a, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 8, 3))
->A : A<T>, Symbol(A, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 0, 0))
+>a : A<string>
+>A : A<T>
 
 var b: B<string> = a; // assignment should be legal (both U's get instantiated to any for comparison)
->b : B<string>, Symbol(b, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 9, 3))
->B : B<T>, Symbol(B, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 2, 1))
->a : A<string>, Symbol(a, Decl(typeParameterConstrainedToOuterTypeParameter.ts, 8, 3))
+>b : B<string>
+>B : B<T>
+>a : A<string>
 

@@ -1,20 +1,20 @@
 === tests/cases/conformance/es6/templates/taggedTemplateStringsWithManyCallAndMemberExpressions.ts ===
 interface I {
->I : I, Symbol(I, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 0, 0))
+>I : I
 
     (strs: string[], ...subs: number[]): I;
->strs : string[], Symbol(strs, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 1, 5))
->subs : number[], Symbol(subs, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 1, 20))
->I : I, Symbol(I, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 0, 0))
+>strs : string[]
+>subs : number[]
+>I : I
 
     member: {
->member : new (s: string) => new (n: number) => new () => boolean, Symbol(member, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 1, 43))
+>member : new (s: string) => new (n: number) => new () => boolean
 
         new (s: string): {
->s : string, Symbol(s, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 3, 13))
+>s : string
 
             new (n: number): {
->n : number, Symbol(n, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 4, 17))
+>n : number
 
                 new (): boolean;
             }
@@ -22,21 +22,21 @@ interface I {
     };
 }
 var f: I;
->f : I, Symbol(f, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 10, 3))
->I : I, Symbol(I, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 0, 0))
+>f : I
+>I : I
 
 var x = new new new f `abc${ 0 }def`.member("hello")(42) === true;
->x : boolean, Symbol(x, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 12, 3))
+>x : boolean
 >new new new f `abc${ 0 }def`.member("hello")(42) === true : boolean
 >new new new f `abc${ 0 }def`.member("hello")(42) : boolean
 >new new f `abc${ 0 }def`.member("hello")(42) : new () => boolean
 >new f `abc${ 0 }def`.member("hello") : new (n: number) => new () => boolean
->f `abc${ 0 }def`.member : new (s: string) => new (n: number) => new () => boolean, Symbol(I.member, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 1, 43))
+>f `abc${ 0 }def`.member : new (s: string) => new (n: number) => new () => boolean
 >f `abc${ 0 }def` : I
->f : I, Symbol(f, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 10, 3))
+>f : I
 >`abc${ 0 }def` : string
 >0 : number
->member : new (s: string) => new (n: number) => new () => boolean, Symbol(I.member, Decl(taggedTemplateStringsWithManyCallAndMemberExpressions.ts, 1, 43))
+>member : new (s: string) => new (n: number) => new () => boolean
 >"hello" : string
 >42 : number
 >true : boolean

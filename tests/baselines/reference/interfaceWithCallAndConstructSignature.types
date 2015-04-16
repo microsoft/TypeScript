@@ -1,22 +1,22 @@
 === tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithCallAndConstructSignature.ts ===
 interface Foo {
->Foo : Foo, Symbol(Foo, Decl(interfaceWithCallAndConstructSignature.ts, 0, 0))
+>Foo : Foo
 
     (): number;
     new (): any;
 }
 
 var f: Foo;
->f : Foo, Symbol(f, Decl(interfaceWithCallAndConstructSignature.ts, 5, 3))
->Foo : Foo, Symbol(Foo, Decl(interfaceWithCallAndConstructSignature.ts, 0, 0))
+>f : Foo
+>Foo : Foo
 
 var r = f();
->r : number, Symbol(r, Decl(interfaceWithCallAndConstructSignature.ts, 6, 3))
+>r : number
 >f() : number
->f : Foo, Symbol(f, Decl(interfaceWithCallAndConstructSignature.ts, 5, 3))
+>f : Foo
 
 var r2 = new f();
->r2 : any, Symbol(r2, Decl(interfaceWithCallAndConstructSignature.ts, 7, 3))
+>r2 : any
 >new f() : any
->f : Foo, Symbol(f, Decl(interfaceWithCallAndConstructSignature.ts, 5, 3))
+>f : Foo
 

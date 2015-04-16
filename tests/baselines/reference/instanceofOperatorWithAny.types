@@ -1,10 +1,10 @@
 === tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithAny.ts ===
 var a: any;
->a : any, Symbol(a, Decl(instanceofOperatorWithAny.ts, 0, 3))
+>a : any
 
 var r: boolean = a instanceof a;
->r : boolean, Symbol(r, Decl(instanceofOperatorWithAny.ts, 2, 3))
+>r : boolean
 >a instanceof a : boolean
->a : any, Symbol(a, Decl(instanceofOperatorWithAny.ts, 0, 3))
->a : any, Symbol(a, Decl(instanceofOperatorWithAny.ts, 0, 3))
+>a : any
+>a : any
 

@@ -1,17 +1,17 @@
 === tests/cases/compiler/enumCodeGenNewLines1.ts ===
 enum foo {
->foo : foo, Symbol(foo, Decl(enumCodeGenNewLines1.ts, 0, 0))
+>foo : foo
 
   b = 1,
->b : foo, Symbol(foo.b, Decl(enumCodeGenNewLines1.ts, 0, 10))
+>b : foo
 >1 : number
 
   c = 2,
->c : foo, Symbol(foo.c, Decl(enumCodeGenNewLines1.ts, 1, 8))
+>c : foo
 >2 : number
 
   d = 3
->d : foo, Symbol(foo.d, Decl(enumCodeGenNewLines1.ts, 2, 8))
+>d : foo
 >3 : number
 }
 

@@ -5,4 +5,4 @@ var [...x = a] = a;  // Error, rest element cannot have initializer
 
 //// [restElementWithInitializer1.js]
 var a;
-var x = a.slice(0); // Error, rest element cannot have initializer
+var _a = a.slice(0), x = _a === void 0 ? a : _a; // Error, rest element cannot have initializer

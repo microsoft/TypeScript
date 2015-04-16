@@ -1,49 +1,49 @@
 === tests/cases/compiler/reservedWords.ts ===
 var obj = {
->obj : { if: number; debugger: number; break: number; function: number; }, Symbol(obj, Decl(reservedWords.ts, 0, 3))
+>obj : { if: number; debugger: number; break: number; function: number; }
 >{    if: 0,    debugger: 2,    break: 3,    function: 4} : { if: number; debugger: number; break: number; function: number; }
 
     if: 0,
->if : number, Symbol(if, Decl(reservedWords.ts, 0, 11))
+>if : number
 >0 : number
 
     debugger: 2,
->debugger : number, Symbol(debugger, Decl(reservedWords.ts, 1, 10))
+>debugger : number
 >2 : number
 
     break: 3,
->break : number, Symbol(break, Decl(reservedWords.ts, 2, 16))
+>break : number
 >3 : number
 
     function: 4
->function : number, Symbol(function, Decl(reservedWords.ts, 3, 13))
+>function : number
 >4 : number
 }
 
 //This compiles.
 
 var obj2 = {
->obj2 : { if: number; while: number; debugger: number; break: number; function: number; }, Symbol(obj2, Decl(reservedWords.ts, 9, 3))
+>obj2 : { if: number; while: number; debugger: number; break: number; function: number; }
 >{    if: 0,    while: 1,    debugger: 2,    break: 3,    function: 4} : { if: number; while: number; debugger: number; break: number; function: number; }
 
     if: 0,
->if : number, Symbol(if, Decl(reservedWords.ts, 9, 12))
+>if : number
 >0 : number
 
     while: 1,
->while : number, Symbol(while, Decl(reservedWords.ts, 10, 10))
+>while : number
 >1 : number
 
     debugger: 2,
->debugger : number, Symbol(debugger, Decl(reservedWords.ts, 11, 13))
+>debugger : number
 >2 : number
 
     break: 3,
->break : number, Symbol(break, Decl(reservedWords.ts, 12, 16))
+>break : number
 >3 : number
 
     function: 4
->function : number, Symbol(function, Decl(reservedWords.ts, 13, 13))
+>function : number
 >4 : number
 }
 
