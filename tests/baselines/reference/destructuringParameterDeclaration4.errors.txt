@@ -1,27 +1,78 @@
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(15,1): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'number'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(46,4): error TS2345: Argument of type '{ y: Class; }' is not assignable to parameter of type '{ y: D; }'.
+  Types of property 'y' are incompatible.
+    Type 'Class' is not assignable to type 'D'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(47,4): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ y: D; }'.
+  Property 'y' is missing in type '{}'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(48,4): error TS2345: Argument of type '{ y: number; }' is not assignable to parameter of type '{ y: D; }'.
+  Types of property 'y' are incompatible.
+    Type 'number' is not assignable to type 'D'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(49,4): error TS2345: Argument of type '{ y: string; }' is not assignable to parameter of type '{ y: D; }'.
+  Types of property 'y' are incompatible.
+    Type 'string' is not assignable to type 'D'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts (1 errors) ====
+==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts (4 errors) ====
+    // Parameter with generic
     interface F { }
-    class C implements F{
+    class Class implements F {
+        constructor() { }
     }
-    function foo<T>(...a: T[]) { }
-    function foo1<T extends String>(...a: T[]) { }
-    function bar<T extends C>({x} = { x: new C() }) { }
-    function baz<T extends F>({x}: { x: F }) { }
-    function baz1<T extends C>({x}: { x: C }) { }
-    function baz2<T extends C>({x}: { x: C }) { }
     
-    var obj = new C();
-    baz1({ x: obj });
-    baz({ x: new C() });
-    baz({ x: {} });
-    foo("hello", 1, 2);
-    ~~~
-!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-!!! error TS2453:   Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'number'.
-    foo<number|string>("hello", 1, 2);
-    foo("hello", "world");
+    class SubClass extends Class {
+        foo: boolean;
+        constructor() { super(); }
+    }
+    
+    class D implements F {
+        foo: boolean
+        constructor() { }
+    }
+    
+    class SubD extends D {
+        bar: number
+        constructor() {
+            super();
+        }
+    }
     
     
+    function d0<T extends Class>({x} = { x: new Class() }) { }
+    function d1<T extends F>({x}: { x: F }) { }
+    function d2<T extends Class>({x}: { x: Class }) { }
+    function d3<T extends D>({y}: { y: D }) { }
+    function d4<T extends D>({y} = { y: new D() }) { }
+    
+    var obj = new Class();
+    d0({ x: 1 });
+    d0({ x: {} });
+    d0({ x: "string" });
+    
+    d1({ x: new Class() });
+    d1({ x: {} });
+    d1({ x: "string" });
+    
+    d2({ x: new SubClass() });
+    d2({ x: {} });
+    
+    d3({ y: new SubD() });
+    d3({ y: new SubClass() });
+    // Error
+    d3({ y: new Class() });
+       ~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ y: Class; }' is not assignable to parameter of type '{ y: D; }'.
+!!! error TS2345:   Types of property 'y' are incompatible.
+!!! error TS2345:     Type 'Class' is not assignable to type 'D'.
+    d3({});
+       ~~
+!!! error TS2345: Argument of type '{}' is not assignable to parameter of type '{ y: D; }'.
+!!! error TS2345:   Property 'y' is missing in type '{}'.
+    d3({ y: 1 });
+       ~~~~~~~~
+!!! error TS2345: Argument of type '{ y: number; }' is not assignable to parameter of type '{ y: D; }'.
+!!! error TS2345:   Types of property 'y' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type 'D'.
+    d3({ y: "world" });
+       ~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ y: string; }' is not assignable to parameter of type '{ y: D; }'.
+!!! error TS2345:   Types of property 'y' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'D'.

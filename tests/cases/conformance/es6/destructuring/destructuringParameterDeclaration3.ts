@@ -1,23 +1,20 @@
-﻿function a([x, [y, z], [[j]]]) {
-    return [x, y, z, j];
-}
+﻿// A parameter declaration may specify either an identifier or a binding pattern.
 
-function a1([...x]) {
-    return [x];
-}
+// Reserved words are not allowed to be used as an identifier in parameter declaration
+"use strict"
 
-function a2({public} = { "public": "1" }) {
-    return public;
-}
+// Error
+function a({while}) { }
+function a1({public}) { }
+function a4([while, for, public]){ }
+function a5(...while) { }
+function a6(...public) { }
+function a7(...a: string) { }
+a({ while: 1 });
 
-function a3({x: { y, z}, j: {k: {a}} }) {
-    return [y, z, a];
-}
+// No Error
+function b1({public: x}) { }
+function b2({while: y}) { }
+b1({ public: 1 });
+b2({ while: 1 });
 
-function a4({x: { y, z}, j: {k: {a}} } = { x: { y: 1, z: 1 }, j: { k: { a: "hello" } } }): (number| string) [] {
-    return [y, z, a];
-}
-
-function a5({x: { y, z}, j: {k: {a}} }): (number| string) [] {
-    return [y, z, a];
-}

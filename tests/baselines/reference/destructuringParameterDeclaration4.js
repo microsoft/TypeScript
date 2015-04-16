@@ -1,58 +1,113 @@
 //// [destructuringParameterDeclaration4.ts]
+// Parameter with generic
 interface F { }
-class C implements F{
+class Class implements F {
+    constructor() { }
 }
-function foo<T>(...a: T[]) { }
-function foo1<T extends String>(...a: T[]) { }
-function bar<T extends C>({x} = { x: new C() }) { }
-function baz<T extends F>({x}: { x: F }) { }
-function baz1<T extends C>({x}: { x: C }) { }
-function baz2<T extends C>({x}: { x: C }) { }
 
-var obj = new C();
-baz1({ x: obj });
-baz({ x: new C() });
-baz({ x: {} });
-foo("hello", 1, 2);
-foo<number|string>("hello", 1, 2);
-foo("hello", "world");
+class SubClass extends Class {
+    foo: boolean;
+    constructor() { super(); }
+}
+
+class D implements F {
+    foo: boolean
+    constructor() { }
+}
+
+class SubD extends D {
+    bar: number
+    constructor() {
+        super();
+    }
+}
 
 
+function d0<T extends Class>({x} = { x: new Class() }) { }
+function d1<T extends F>({x}: { x: F }) { }
+function d2<T extends Class>({x}: { x: Class }) { }
+function d3<T extends D>({y}: { y: D }) { }
+function d4<T extends D>({y} = { y: new D() }) { }
+
+var obj = new Class();
+d0({ x: 1 });
+d0({ x: {} });
+d0({ x: "string" });
+
+d1({ x: new Class() });
+d1({ x: {} });
+d1({ x: "string" });
+
+d2({ x: new SubClass() });
+d2({ x: {} });
+
+d3({ y: new SubD() });
+d3({ y: new SubClass() });
+// Error
+d3({ y: new Class() });
+d3({});
+d3({ y: 1 });
+d3({ y: "world" });
 
 //// [destructuringParameterDeclaration4.js]
-var C = (function () {
-    function C() {
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var Class = (function () {
+    function Class() {
     }
-    return C;
+    return Class;
 })();
-function foo() {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
+var SubClass = (function (_super) {
+    __extends(SubClass, _super);
+    function SubClass() {
+        _super.call(this);
     }
-}
-function foo1() {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
+    return SubClass;
+})(Class);
+var D = (function () {
+    function D() {
     }
+    return D;
+})();
+var SubD = (function (_super) {
+    __extends(SubD, _super);
+    function SubD() {
+        _super.call(this);
+    }
+    return SubD;
+})(D);
+function d0(_a) {
+    var x = (_a === void 0 ? { x: new Class() } : _a).x;
 }
-function bar(_a) {
-    var x = (_a === void 0 ? { x: new C() } : _a).x;
-}
-function baz(_a) {
+function d1(_a) {
     var x = _a.x;
 }
-function baz1(_a) {
+function d2(_a) {
     var x = _a.x;
 }
-function baz2(_a) {
-    var x = _a.x;
+function d3(_a) {
+    var y = _a.y;
 }
-var obj = new C();
-baz1({ x: obj });
-baz({ x: new C() });
-baz({ x: {} });
-foo("hello", 1, 2);
-foo("hello", 1, 2);
-foo("hello", "world");
+function d4(_a) {
+    var y = (_a === void 0 ? { y: new D() } : _a).y;
+}
+var obj = new Class();
+d0({ x: 1 });
+d0({ x: {} });
+d0({ x: "string" });
+d1({ x: new Class() });
+d1({ x: {} });
+d1({ x: "string" });
+d2({ x: new SubClass() });
+d2({ x: {} });
+d3({ y: new SubD() });
+d3({ y: new SubClass() });
+// Error
+d3({ y: new Class() });
+d3({});
+d3({ y: 1 });
+d3({ y: "world" });
