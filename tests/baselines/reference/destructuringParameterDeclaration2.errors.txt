@@ -89,7 +89,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
     
     
     class C {
-        constructor(public ...a) { }  // Rest parameter can't have accessibilityModifier
+        constructor(public ...a) { }  // Error, rest parameter can't have accessibilityModifier
                            ~~~
 !!! error TS1005: ',' expected.
     }

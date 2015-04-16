@@ -43,7 +43,7 @@ a11([1, 2, "string"]);  // Error, parameter type is number[]
 
 
 class C {
-    constructor(public ...a) { }  // Rest parameter can't have accessibilityModifier
+    constructor(public ...a) { }  // Error, rest parameter can't have accessibilityModifier
 }
 
 // Rest parameter with generic
@@ -149,7 +149,7 @@ var C = (function () {
         for (var _i = 1; _i < arguments.length; _i++) {
             a[_i - 1] = arguments[_i];
         }
-    } // Rest parameter can't have accessibilityModifier
+    } // Error, rest parameter can't have accessibilityModifier
     return C;
 })();
 // Rest parameter with generic
