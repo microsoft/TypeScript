@@ -1,42 +1,34 @@
-﻿interface I0 extends Array<String|Number|Boolean> {
-    0: number;
-    1: number;
-    2: string;
-    3: boolean;
-}
-var [a, b]: [number, number] = [1, 2];
-var [a1, b1]: [number, number] = [1, 2, "string", true];   // error
-var [a2, b2]: (number| string)[] = [1, 2, 3, "string"];
-var [c1, c2, c3]: I0 = [10, 11, "string", true];
-interface I extends Array<String|Number>{
-    0: string|number;
-    1: string|number;
-    2: string|number;
-}
-interface I2 extends Array<String|Number> {
-    0: number;
-    1: number;
-    2: string|number;
-}
-var tup: [number, number, string] = [1, 2, "world"];
-var [c, d, e]: I = tup;
-var [f, g]: I2 = tup;
-var h1: string| number;
-var [f1, g1,h1]: I2 = tup;
-h1 = g1;
+﻿// Each element expression in a non-empty array literal is processed as follows:
+//    - If the array literal contains no spread elements, and if the array literal is contextually typed (section 4.19)
+//      by a type T and T has a property with the numeric name N, where N is the index of the element expression in the array literal,
+//      the element expression is contextually typed by the type of that property.
 
-var arr1 = [1, 2, 3];
-var arr2 = [true, false, true];
-var arr3 = [true]
-var [[foo1, foo2, foo3], [boo1, boo2, boo3]] = [[...arr1], [...arr2]];
-var [bar1, bar2, bar3, bar1, bar2, bar3] = [...arr1, ...arr2];
-var [bar1, bar2, bar3, bar1, bar2] = [...arr1, ...arr3];
-var [[r, s], t] = [[...arr1], "hello"];
-var [[r1, s1], t1] = [[...arr1], ...["hello"]];  // error
-var [x] = [...["word"]];
-var [...y] = [...["word"]];
-var z = [...[...["word"]]];
-function foobar() {
-    return [...arguments];
+// The resulting type an array literal expression is determined as follows:
+//     - If the array literal contains no spread elements and is contextually typed by a tuple-like type,
+//       the resulting type is a tuple type constructed from the types of the element expressions.
+
+var a0: [any, any, any] = [];                             // Error
+var a1: [boolean, string, number] = ["string", 1, true];  // Error
+
+// The resulting type an array literal expression is determined as follows:
+//     - If the array literal contains no spread elements and is an array assignment pattern in a destructuring assignment (section 4.17.1),
+//       the resulting type is a tuple type constructed from the types of the element expressions.
+
+var [b1, b2]: [number, number] = [1, 2, "string", true];
+
+// The resulting type an array literal expression is determined as follows:
+//      - the resulting type is an array type with an element type that is the union of the types of the
+//        non - spread element expressions and the numeric index signature types of the spread element expressions
+var temp = ["s", "t", "r"];
+var temp1 = [1, 2, 3];
+var temp2: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
+
+interface tup {
+    0: number[]|string[];
+    1: number[]|string[];
 }
-var [...as] = [[, , , , ]];
+interface myArray extends Array<Number> { }
+interface myArray2 extends Array<Number|String> { }
+var c0: tup = [...temp2];                         // Error
+var c1: [number, number, number] = [...temp1];    // Error cannot assign number[] to [number, number, number]
+var c2: myArray = [...temp1, ...temp];            // Error cannot assign (number|string)[] to number[]

@@ -1,5 +1,4 @@
-﻿// @target:es6
-// ElementList:  ( Modified )
+﻿// ElementList:  ( Modified )
 //      Elisionopt   AssignmentExpression
 //      Elisionopt   SpreadElement
 //      ElementList, Elisionopt   AssignmentExpression
@@ -8,10 +7,10 @@
 // SpreadElement:
 //      ...   AssignmentExpression
 
-var a0 = [, , 2, 3, 4]
+var a0 = [,, 2, 3, 4]
 var a1 = ["hello", "world"]
 var a2 = [, , , ...a0, "hello"];
-var a3 = [, , ...a0]
+var a3 = [,, ...a0]
 var a4 = [() => 1, ];
 var a5 = [...a0, , ]
 
@@ -40,16 +39,18 @@ var [c2, c3] = [1, 2, true];  // tuple type [number, number, boolean]
 var temp = ["s", "t", "r"];
 var temp1 = [1, 2, 3];
 var temp2: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
+var temp3 = [undefined, null, undefined];
+var temp4 = [];
 
 interface myArray extends Array<Number> { }
 interface myArray2 extends Array<Number|String> { }
-var d0 = [1, true, ...temp, ];  // has type (string|number|boolean)[]
+var d0 = [1, true, ...temp,];  // has type (string|number|boolean)[]
 var d1 = [...temp];            // has type string[]
 var d2: number[] = [...temp1];
 var d3: myArray = [...temp1];
 var d4: myArray2 = [...temp, ...temp1];
-var d5 = [...a2];
-var d6 = [...a3];
-var d7 = [...a4];
+var d5 = [...temp3];
+var d6 = [...temp4];
+var d7 = [...[...temp1]];
 var d8: number[][] = [[...temp1]]
 var d9 = [[...temp1], ...["hello"]];
