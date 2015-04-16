@@ -27,9 +27,9 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
 
     var program = ts.createProgram(fileNames, options);
 >program : Symbol(program, Decl(APISample_compile.ts, 14, 7))
->ts.createProgram : Symbol(ts.createProgram, Decl(typescript.d.ts, 1229, 113))
+>ts.createProgram : Symbol(ts.createProgram, Decl(typescript.d.ts, 1225, 113))
 >ts : Symbol(ts, Decl(APISample_compile.ts, 9, 20))
->createProgram : Symbol(ts.createProgram, Decl(typescript.d.ts, 1229, 113))
+>createProgram : Symbol(ts.createProgram, Decl(typescript.d.ts, 1225, 113))
 >fileNames : Symbol(fileNames, Decl(APISample_compile.ts, 13, 24))
 >options : Symbol(options, Decl(APISample_compile.ts, 13, 44))
 
@@ -42,9 +42,9 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
     var allDiagnostics = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
 >allDiagnostics : Symbol(allDiagnostics, Decl(APISample_compile.ts, 17, 7))
 >ts.getPreEmitDiagnostics(program).concat : Symbol(Array.concat, Decl(lib.d.ts, 1025, 13), Decl(lib.d.ts, 1030, 46))
->ts.getPreEmitDiagnostics : Symbol(ts.getPreEmitDiagnostics, Decl(typescript.d.ts, 1227, 98))
+>ts.getPreEmitDiagnostics : Symbol(ts.getPreEmitDiagnostics, Decl(typescript.d.ts, 1223, 98))
 >ts : Symbol(ts, Decl(APISample_compile.ts, 9, 20))
->getPreEmitDiagnostics : Symbol(ts.getPreEmitDiagnostics, Decl(typescript.d.ts, 1227, 98))
+>getPreEmitDiagnostics : Symbol(ts.getPreEmitDiagnostics, Decl(typescript.d.ts, 1223, 98))
 >program : Symbol(program, Decl(APISample_compile.ts, 14, 7))
 >concat : Symbol(Array.concat, Decl(lib.d.ts, 1025, 13), Decl(lib.d.ts, 1030, 46))
 >emitResult.diagnostics : Symbol(ts.EmitResult.diagnostics, Decl(typescript.d.ts, 820, 29))
@@ -60,20 +60,20 @@ export function compile(fileNames: string[], options: ts.CompilerOptions): void 
         var { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
 >line : Symbol(line, Decl(APISample_compile.ts, 20, 13))
 >character : Symbol(character, Decl(APISample_compile.ts, 20, 19))
->diagnostic.file.getLineAndCharacterOfPosition : Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1290, 26))
+>diagnostic.file.getLineAndCharacterOfPosition : Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1286, 26))
 >diagnostic.file : Symbol(ts.Diagnostic.file, Decl(typescript.d.ts, 1062, 26))
 >diagnostic : Symbol(diagnostic, Decl(APISample_compile.ts, 19, 27))
 >file : Symbol(ts.Diagnostic.file, Decl(typescript.d.ts, 1062, 26))
->getLineAndCharacterOfPosition : Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1290, 26))
+>getLineAndCharacterOfPosition : Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1286, 26))
 >diagnostic.start : Symbol(ts.Diagnostic.start, Decl(typescript.d.ts, 1063, 25))
 >diagnostic : Symbol(diagnostic, Decl(APISample_compile.ts, 19, 27))
 >start : Symbol(ts.Diagnostic.start, Decl(typescript.d.ts, 1063, 25))
 
         var message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
 >message : Symbol(message, Decl(APISample_compile.ts, 21, 11))
->ts.flattenDiagnosticMessageText : Symbol(ts.flattenDiagnosticMessageText, Decl(typescript.d.ts, 1228, 67))
+>ts.flattenDiagnosticMessageText : Symbol(ts.flattenDiagnosticMessageText, Decl(typescript.d.ts, 1224, 67))
 >ts : Symbol(ts, Decl(APISample_compile.ts, 9, 20))
->flattenDiagnosticMessageText : Symbol(ts.flattenDiagnosticMessageText, Decl(typescript.d.ts, 1228, 67))
+>flattenDiagnosticMessageText : Symbol(ts.flattenDiagnosticMessageText, Decl(typescript.d.ts, 1224, 67))
 >diagnostic.messageText : Symbol(ts.Diagnostic.messageText, Decl(typescript.d.ts, 1065, 23))
 >diagnostic : Symbol(diagnostic, Decl(APISample_compile.ts, 19, 27))
 >messageText : Symbol(ts.Diagnostic.messageText, Decl(typescript.d.ts, 1065, 23))

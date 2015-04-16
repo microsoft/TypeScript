@@ -17,9 +17,9 @@ const source = "let x: string  = 'string'";
 
 let result = ts.transpile(source, { module: ts.ModuleKind.CommonJS });
 >result : Symbol(result, Decl(APISample_transform.ts, 13, 3))
->ts.transpile : Symbol(ts.transpile, Decl(typescript.d.ts, 1756, 5))
+>ts.transpile : Symbol(ts.transpile, Decl(typescript.d.ts, 1752, 5))
 >ts : Symbol(ts, Decl(APISample_transform.ts, 9, 6))
->transpile : Symbol(ts.transpile, Decl(typescript.d.ts, 1756, 5))
+>transpile : Symbol(ts.transpile, Decl(typescript.d.ts, 1752, 5))
 >source : Symbol(source, Decl(APISample_transform.ts, 11, 5))
 >module : Symbol(module, Decl(APISample_transform.ts, 13, 35))
 >ts.ModuleKind.CommonJS : Symbol(ts.ModuleKind.CommonJS, Decl(typescript.d.ts, 1108, 17))
