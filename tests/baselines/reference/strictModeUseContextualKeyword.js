@@ -27,5 +27,5 @@ function F() {
     function as() { }
 }
 function H() {
-    var as = ({ as: 1 }).as;
+    var as = { as: 1 }.as;
 }
