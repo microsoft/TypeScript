@@ -1,178 +1,149 @@
 //// [destructuringParameterDeclaration2.ts]
-// If the parameter is a rest parameter, the parameter type is any[]
-// A type annotation for a rest parameter must denote an array type.
+// A parameter declaration may specify either an identifier or a binding pattern.
+// The identifiers specified in parameter declarations and binding patterns
+// in a parameter list must be unique within that parameter list.
 
-// RestParameter:
-//     ...   Identifier   TypeAnnotation(opt)
-
-type arrayString = Array<String>
-type someArray = Array<String> | number[];
-type stringOrNumArray = Array<String|Number>;
-
-function a0(...x: [number, number, string]) { }  // Error, rest parameter must be array type
-function a1(...x: (number|string)[]) { }
-function a2(...a) { }
-function a3(...a: Array<String>) { }
-function a4(...a: arrayString) { }
-function a5(...a: stringOrNumArray) { }
-function a6(...a: someArray) { }  // Error, rest parameter must be array type
-function a7(...b?) { }  // Error, can't be optional
-function a8(...b = [1,2,3]) { }  // Error, can't have initializer
-function a9([a, b, [[c]]]) { }
-function a10([a, b, [[c]], ...x]) { }
-function a11([a, b, c, ...x]: number[]) { }
+// If the declaration includes a type annotation, the parameter is of that type
+function a0([a, b, [[c]]]: [number, number, string[][]]) { }
+a0([1, "string", [["world"]]);      // Error
+a0([1, 2, [["world"]], "string"]);  // Error
 
 
-a1(1, 2, "hello", true);  // Error, parameter type is (number|string)[]
-var array = [1, 2, 3];
-var array2 = [true, false, "hello"];
-a2([...array]);
-a1(...array);
-a1(...array2);  // Error parameter type is (number|string)[]
+// If the declaration includes an initializer expression (which is permitted only
+// when the parameter list occurs in conjunction with a function body),
+// the parameter type is the widened form (section 3.11) of the type of the initializer expression.
 
-a9([1, 2, [["string"]], false, true]);   // Parameter type is [any, any, [[any]]]
-a9([1, 2, "string", false, true]);       // Error, parameter type is [any, any, [[any]]]
-a9([1, 2]);                              // Error, parameter type is [any, any, [[any]]]
-
-a10([1, 2, [["string"]], false, true]);   // Parameter type is any[]
-a10([1, 2, 3, false, true]);              // Parameter type is any[]
-a10([1, 2]);                              // Parameter type is any[]
-
-a11([1, 2]);            // Parameter type is number[]
-a11([1, 2, "string"]);  // Error, parameter type is number[]
-
-
-class C {
-    constructor(public ...a) { }  // Error, rest parameter can't have accessibilityModifier
+interface F1 {
+    b0(z = 10, [[a, b], d, {u}] = [[1, 2], "string", { u: false }]);  // Error, no function body
 }
 
-// Rest parameter with generic
-function foo<T>(...a: T[]) { }
-foo("hello", 1, 2);  // Error 
-foo<number|string>("hello", 1, 2);
-foo("hello", "world");
+function b1(z = null, o = { x: 0, y: undefined }) { }
+function b2([a, z, y] = [undefined, null, undefined]) { }
+function b3([[a], b, [[c, d]]] = [[undefined], undefined, [[undefined, undefined]]]) { }
 
-enum E { a, b }
-const enum E1 { a, b }
-function foo1<T extends Number>(...a: T[]) { }
-foo1(1, 2, 3, E.a);
-foo1(1, 2, 3, E1.a, E.b);
-foo1(1, 2, "string", E1.a, E.b);  // Error
+b1("string", { x: "string", y: true });  // Error
+
+// If the declaration specifies a binding pattern, the parameter type is the implied type of that binding pattern (section 5.1.3)
+function c0({z: {x, y: {j}}}) { }
+function c1({z} = { z: 10 }) { }
+function c2({z = 10}) { }
+function c3({b}: { b: number|string } = { b: "hello" }) { }
+function c4([z], z: number) { }  // Error Duplicate identifier
+function c5([a, b, [[c]]]) { }
+function c6([a, b, [[c = 1]]]) { }
+
+c0({ z: 1 });      // Error, implied type is { z: {x: any, y: {j: any}} }
+c1({});            // Error, implied type is {z:number}?
+c1({ z: true });   // Error, implied type is {z:number}?
+c2({ z: false });  // Error, implied type is {z?: number}
+c3({ b: true });   // Error, implied type is { b: number|string }. 
+c5([1, 2, false, true]);   // Error, implied type is [any, any, [[any]]]
+c6([1, 2, [["string"]]]);  // Error, implied type is [any, any, [[number]]]  // Use initializer
+
+// A parameter can be marked optional by following its name or binding pattern with a question mark (?)
+// or by including an initializer.  Initializers (including binding property or element initializers) are
+// permitted only when the parameter list occurs in conjunction with a function body
+
+function d1([a, b, c]?) { }  // Error, binding pattern can't be optional in implementation signature
+function d2({x, y, z}?) { }  // Error, binding pattern can't be optional in implementation signature
+
+interface F2 {
+    d3([a, b, c]?);
+    d4({x, y, z}?);
+    e0([a, b, c]);
+}
+
+class C4 implements F2 {
+    d3([a, b, c]?) { }  // Error, binding pattern can't be optional in implementation signature
+    d4({x, y, c}) { }
+    e0([a, b, q]) { }
+}
+
+// Destructuring parameter declarations do not permit type annotations on the individual binding patterns,
+// as such annotations would conflict with the already established meaning of colons in object literals.
+// Type annotations must instead be written on the top- level parameter declaration
+
+function e0({x: [number, number, number]}) { }  // should be an error, duplicate identifier;
 
 
 
 
 //// [destructuringParameterDeclaration2.js]
-// If the parameter is a rest parameter, the parameter type is any[]
-// A type annotation for a rest parameter must denote an array type.
-function a0() {
-    var x = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
-    }
-} // Error, rest parameter must be array type
-function a1() {
-    var x = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
-    }
-}
-function a2() {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
-    }
-}
-function a3() {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
-    }
-}
-function a4() {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
-    }
-}
-function a5() {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
-    }
-}
-function a6() {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
-    }
-} // Error, rest parameter must be array type
-function a7() {
-    var b = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        b[_i - 0] = arguments[_i];
-    }
-} // Error, can't be optional
-function a8() {
-    if (b === void 0) { b = [1, 2, 3]; }
-    var b = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        b[_i - 0] = arguments[_i];
-    }
-} // Error, can't have initializer
-function a9(_a) {
+// A parameter declaration may specify either an identifier or a binding pattern.
+// The identifiers specified in parameter declarations and binding patterns
+// in a parameter list must be unique within that parameter list.
+// If the declaration includes a type annotation, the parameter is of that type
+function a0(_a) {
     var a = _a[0], b = _a[1], c = _a[2][0][0];
 }
-function a10(_a) {
-    var a = _a[0], b = _a[1], c = _a[2][0][0], x = _a.slice(3);
+a0([1, "string", [["world"]]]); // Error
+a0([1, 2, [["world"]], "string"]); // Error
+function b1(z, o) {
+    if (z === void 0) { z = null; }
+    if (o === void 0) { o = { x: 0, y: undefined }; }
 }
-function a11(_a) {
-    var a = _a[0], b = _a[1], c = _a[2], x = _a.slice(3);
+function b2(_a) {
+    var _b = _a === void 0 ? [undefined, null, undefined] : _a, a = _b[0], z = _b[1], y = _b[2];
 }
-a1(1, 2, "hello", true); // Error, parameter type is (number|string)[]
-var array = [1, 2, 3];
-var array2 = [true, false, "hello"];
-a2(array);
-a1.apply(void 0, array);
-a1.apply(void 0, array2); // Error parameter type is (number|string)[]
-a9([1, 2, [["string"]], false, true]); // Parameter type is [any, any, [[any]]]
-a9([1, 2, "string", false, true]); // Error, parameter type is [any, any, [[any]]]
-a9([1, 2]); // Error, parameter type is [any, any, [[any]]]
-a10([1, 2, [["string"]], false, true]); // Parameter type is any[]
-a10([1, 2, 3, false, true]); // Parameter type is any[]
-a10([1, 2]); // Parameter type is any[]
-a11([1, 2]); // Parameter type is number[]
-a11([1, 2, "string"]); // Error, parameter type is number[]
-var C = (function () {
-    function C(public) {
-        var a = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            a[_i - 1] = arguments[_i];
-        }
-    } // Error, rest parameter can't have accessibilityModifier
-    return C;
+function b3(_a) {
+    var _b = _a === void 0 ? [[undefined], undefined, [[undefined, undefined]]] : _a, a = _b[0][0], b = _b[1], _c = _b[2][0], c = _c[0], d = _c[1];
+}
+b1("string", { x: "string", y: true }); // Error
+// If the declaration specifies a binding pattern, the parameter type is the implied type of that binding pattern (section 5.1.3)
+function c0(_a) {
+    var _b = _a.z, x = _b.x, j = _b.y.j;
+}
+function c1(_a) {
+    var z = (_a === void 0 ? { z: 10 } : _a).z;
+}
+function c2(_a) {
+    var _b = _a.z, z = _b === void 0 ? 10 : _b;
+}
+function c3(_a) {
+    var b = (_a === void 0 ? { b: "hello" } : _a).b;
+}
+function c4(_a, z) {
+    var z = _a[0];
+} // Error Duplicate identifier
+function c5(_a) {
+    var a = _a[0], b = _a[1], c = _a[2][0][0];
+}
+function c6(_a) {
+    var a = _a[0], b = _a[1], _b = _a[2][0][0], c = _b === void 0 ? 1 : _b;
+}
+c0({ z: 1 }); // Error, implied type is { z: {x: any, y: {j: any}} }
+c1({}); // Error, implied type is {z:number}?
+c1({ z: true }); // Error, implied type is {z:number}?
+c2({ z: false }); // Error, implied type is {z?: number}
+c3({ b: true }); // Error, implied type is { b: number|string }. 
+c5([1, 2, false, true]); // Error, implied type is [any, any, [[any]]]
+c6([1, 2, [["string"]]]); // Error, implied type is [any, any, [[number]]]  // Use initializer
+// A parameter can be marked optional by following its name or binding pattern with a question mark (?)
+// or by including an initializer.  Initializers (including binding property or element initializers) are
+// permitted only when the parameter list occurs in conjunction with a function body
+function d1(_a) {
+    var a = _a[0], b = _a[1], c = _a[2];
+} // Error, binding pattern can't be optional in implementation signature
+function d2(_a) {
+    var x = _a.x, y = _a.y, z = _a.z;
+} // Error, binding pattern can't be optional in implementation signature
+var C4 = (function () {
+    function C4() {
+    }
+    C4.prototype.d3 = function (_a) {
+        var a = _a[0], b = _a[1], c = _a[2];
+    }; // Error, binding pattern can't be optional in implementation signature
+    C4.prototype.d4 = function (_a) {
+        var x = _a.x, y = _a.y, c = _a.c;
+    };
+    C4.prototype.e0 = function (_a) {
+        var a = _a[0], b = _a[1], q = _a[2];
+    };
+    return C4;
 })();
-// Rest parameter with generic
-function foo() {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
-    }
-}
-foo("hello", 1, 2); // Error 
-foo("hello", 1, 2);
-foo("hello", "world");
-var E;
-(function (E) {
-    E[E["a"] = 0] = "a";
-    E[E["b"] = 1] = "b";
-})(E || (E = {}));
-function foo1() {
-    var a = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
-    }
-}
-foo1(1, 2, 3, E.a);
-foo1(1, 2, 3, 0 /* a */, E.b);
-foo1(1, 2, "string", 0 /* a */, E.b); // Error
+// Destructuring parameter declarations do not permit type annotations on the individual binding patterns,
+// as such annotations would conflict with the already established meaning of colons in object literals.
+// Type annotations must instead be written on the top- level parameter declaration
+function e0(_a) {
+    var _b = _a.x, number = _b[0], number = _b[1], number = _b[2];
+} // should be an error, duplicate identifier;

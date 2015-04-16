@@ -1,4 +1,4 @@
-//// [destructuringParameterDeclaration3.ts]
+//// [destructuringParameterDeclaration6.ts]
 // A parameter declaration may specify either an identifier or a binding pattern.
 
 // Reserved words are not allowed to be used as an identifier in parameter declaration
@@ -21,7 +21,7 @@ b2({ while: 1 });
 
 
 
-//// [destructuringParameterDeclaration3.js]
+//// [destructuringParameterDeclaration6.js]
 // A parameter declaration may specify either an identifier or a binding pattern.
 // Reserved words are not allowed to be used as an identifier in parameter declaration
 "use strict";

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2ES6.ts ===
+=== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES5.ts ===
 
 // If the parameter is a rest parameter, the parameter type is any[]
 // A type annotation for a rest parameter must denote an array type.
@@ -70,10 +70,16 @@ function a11([a, b, c, ...x]: number[]) { }
 var array = [1, 2, 3];
 >array : number[]
 >[1, 2, 3] : number[]
+>1 : number
+>2 : number
+>3 : number
 
 var array2 = [true, false, "hello"];
 >array2 : (string | boolean)[]
 >[true, false, "hello"] : (string | boolean)[]
+>true : boolean
+>false : boolean
+>"hello" : string
 
 a2([...array]);
 >a2([...array]) : void
@@ -92,30 +98,49 @@ a9([1, 2, [["string"]], false, true]);   // Parameter type is [any, any, [[any]]
 >a9([1, 2, [["string"]], false, true]) : void
 >a9 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
 >[1, 2, [["string"]], false, true] : [number, number, [[string]], boolean, boolean]
+>1 : number
+>2 : number
 >[["string"]] : [[string]]
 >["string"] : [string]
+>"string" : string
+>false : boolean
+>true : boolean
 
 a10([1, 2, [["string"]], false, true]);   // Parameter type is any[]
 >a10([1, 2, [["string"]], false, true]) : void
 >a10 : ([a, b, [[c]], ...x]: Iterable<any>) => void
 >[1, 2, [["string"]], false, true] : (number | boolean | string[][])[]
+>1 : number
+>2 : number
 >[["string"]] : string[][]
 >["string"] : string[]
+>"string" : string
+>false : boolean
+>true : boolean
 
 a10([1, 2, 3, false, true]);              // Parameter type is any[]
 >a10([1, 2, 3, false, true]) : void
 >a10 : ([a, b, [[c]], ...x]: Iterable<any>) => void
 >[1, 2, 3, false, true] : (number | boolean)[]
+>1 : number
+>2 : number
+>3 : number
+>false : boolean
+>true : boolean
 
 a10([1, 2]);                              // Parameter type is any[]
 >a10([1, 2]) : void
 >a10 : ([a, b, [[c]], ...x]: Iterable<any>) => void
 >[1, 2] : number[]
+>1 : number
+>2 : number
 
-a11([1, 2]);            // Parameter type is number[]
+a11([1, 2]);                              // Parameter type is number[]
 >a11([1, 2]) : void
 >a11 : ([a, b, c, ...x]: number[]) => void
 >[1, 2] : number[]
+>1 : number
+>2 : number
 
 // Rest parameter with generic
 function foo<T>(...a: T[]) { }
@@ -127,10 +152,15 @@ function foo<T>(...a: T[]) { }
 foo<number|string>("hello", 1, 2);
 >foo<number|string>("hello", 1, 2) : void
 >foo : <T>(...a: T[]) => void
+>"hello" : string
+>1 : number
+>2 : number
 
 foo("hello", "world");
 >foo("hello", "world") : void
 >foo : <T>(...a: T[]) => void
+>"hello" : string
+>"world" : string
 
 enum E { a, b }
 >E : E
@@ -152,6 +182,9 @@ function foo1<T extends Number>(...a: T[]) { }
 foo1(1, 2, 3, E.a);
 >foo1(1, 2, 3, E.a) : void
 >foo1 : <T extends Number>(...a: T[]) => void
+>1 : number
+>2 : number
+>3 : number
 >E.a : E
 >E : typeof E
 >a : E
@@ -159,6 +192,9 @@ foo1(1, 2, 3, E.a);
 foo1(1, 2, 3, E1.a, E.b);
 >foo1(1, 2, 3, E1.a, E.b) : void
 >foo1 : <T extends Number>(...a: T[]) => void
+>1 : number
+>2 : number
+>3 : number
 >E1.a : E1
 >E1 : typeof E1
 >a : E1
