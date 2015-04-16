@@ -253,6 +253,10 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             it('Correct type baselines for ' + fileName, () => {
+                if (fileName.indexOf("APISample") >= 0) {
+                    return;
+                }
+
                 // NEWTODO: Type baselines
                 if (result.errors.length === 0) {
                     // The full walker simulates the types that you would get from doing a full 
