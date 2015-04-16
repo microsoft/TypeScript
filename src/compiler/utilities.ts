@@ -849,6 +849,12 @@ module ts {
         return false;
     }
 
+    export function isJSDocConstructSignature(node: SignatureDeclaration) {
+        return node.kind === SyntaxKind.JSDocFunctionType &&
+            node.parameters.length > 0 &&
+            node.parameters[0].type.kind === SyntaxKind.JSDocConstructorType;
+    }
+
     export function getJSDocParameter(parameter: ParameterDeclaration, sourceFile: SourceFile): JSDocParameter {
         if (parameter.name && parameter.name.kind === SyntaxKind.Identifier) {
             // If it's a parameter, see if the parent has a jsdoc comment with an @param 

@@ -3748,33 +3748,9 @@ module ts {
             return links.resolvedType;
         }
 
-        function isJSDocConstructSignature(node: SignatureDeclaration) {
-            return node.kind === SyntaxKind.JSDocFunctionType &&
-                node.parameters.length > 0 &&
-                node.parameters[0].type.kind === SyntaxKind.JSDocConstructorType;
-        }
-
         function getTypeFromJSDocFunctionType(node: JSDocFunctionType): Type {
-            let isConstructSignature = isJSDocConstructSignature(node);
-            let name = isConstructSignature ? "__new" : "__call";
-
-            let symbol = createSymbol(SymbolFlags.Signature, name);
-            addDeclarationToSymbol(symbol, node, SymbolFlags.Signature);
-            node.locals = {};
-            for (let i = isConstructSignature ? 1 : 0; i < node.parameters.length; i++) {
-                let paramName = "p" + i;
-                let paramSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, paramName);
-                addDeclarationToSymbol(paramSymbol, node.parameters[i], SymbolFlags.FunctionScopedVariable);
-
-                node.locals[paramName] = paramSymbol;
-            }
-
-            let typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
-            addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
-            typeLiteralSymbol.members = {};
-            typeLiteralSymbol.members[name] = symbol
-
-            return createObjectType(TypeFlags.Anonymous, typeLiteralSymbol);
+            Debug.assert(!!node.symbol);
+            return createObjectType(TypeFlags.Anonymous, node.symbol);
         }
 
         function getTypeFromJSDocVariadicType(node: JSDocVariadicType): Type {

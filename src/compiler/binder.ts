@@ -52,17 +52,6 @@ module ts {
         }
     }
 
-    /* @internal */
-    export function addDeclarationToSymbol(symbol: Symbol, node: Declaration, symbolKind: SymbolFlags) {
-        symbol.flags |= symbolKind;
-        if (!symbol.declarations) symbol.declarations = [];
-        symbol.declarations.push(node);
-        if (symbolKind & SymbolFlags.HasExports && !symbol.exports) symbol.exports = {};
-        if (symbolKind & SymbolFlags.HasMembers && !symbol.members) symbol.members = {};
-        node.symbol = symbol;
-        if (symbolKind & SymbolFlags.Value && !symbol.valueDeclaration) symbol.valueDeclaration = node;
-    }
-
     export function bindSourceFile(file: SourceFile): void {
         let start = new Date().getTime();
         bindSourceFileWorker(file);
@@ -76,6 +65,7 @@ module ts {
         let lastContainer: Node;
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
+        let isJavaScriptFile = isJavaScript(file.fileName);
 
         if (!file.locals) {
             file.locals = {};
@@ -95,6 +85,16 @@ module ts {
             if (cleanLocals) {
                 blockScopeContainer.locals = undefined;
             }
+        }
+
+        function addDeclarationToSymbol(symbol: Symbol, node: Declaration, symbolKind: SymbolFlags) {
+            symbol.flags |= symbolKind;
+            if (!symbol.declarations) symbol.declarations = [];
+            symbol.declarations.push(node);
+            if (symbolKind & SymbolFlags.HasExports && !symbol.exports) symbol.exports = {};
+            if (symbolKind & SymbolFlags.HasMembers && !symbol.members) symbol.members = {};
+            node.symbol = symbol;
+            if (symbolKind & SymbolFlags.Value && !symbol.valueDeclaration) symbol.valueDeclaration = node;
         }
 
         // Should not be called on a declaration with a computed property name,
@@ -257,10 +257,8 @@ module ts {
                 setBlockScopeContainer(node, /*cleanLocals*/  (symbolKind & SymbolFlags.HasLocals) === 0 && node.kind !== SyntaxKind.SourceFile);
             }
 
-            if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
-                if (node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.FunctionDeclaration) {
-                    bindJSDocTypeParameters(<FunctionLikeDeclaration>node);
-                }
+            if (isJavaScriptFile && node.jsDocComment) {
+                bindJSDocComment(node);
             }
 
             forEachChild(node, bind);
@@ -269,11 +267,55 @@ module ts {
             blockScopeContainer = savedBlockScopeContainer;
         }
 
-        function bindJSDocTypeParameters(node: FunctionLikeDeclaration) {
+
+
+        function bindJSDocComment(node: Node) {
             let jsDocComment = node.jsDocComment;
-            if (jsDocComment) {
+
+            if (jsDocComment.type) {
+                bind(jsDocComment.type);
+            }
+
+            if (jsDocComment.returnType) {
+                bind(jsDocComment.returnType);
+            }
+
+            forEach(jsDocComment.parameters, bindJSDocParameter);
+
+            if (node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.FunctionDeclaration) {
                 forEach(jsDocComment.typeParameters, bind);
-            } 
+            }
+        }
+
+        function bindJSDocParameter(parameter: JSDocParameter) {
+            if (parameter.type) {
+                bind(parameter.type);
+            }
+        }
+
+        function bindJSDocFunctionType(node: JSDocFunctionType) {
+            let isConstructSignature = isJSDocConstructSignature(node);
+            let name = isConstructSignature ? "__new" : "__call";
+
+            let symbol = createSymbol(SymbolFlags.Signature, name);
+            addDeclarationToSymbol(symbol, node, SymbolFlags.Signature);
+            node.locals = {};
+
+            let typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
+            addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
+            typeLiteralSymbol.members = {};
+            typeLiteralSymbol.members[name] = symbol
+
+            node.symbol = typeLiteralSymbol;
+
+            saveParentAndBindChildren(node);
+        }
+
+        function saveParentAndBindChildren(node: Node) {
+            let saveParent = parent;
+            parent = node;
+            forEachChild(node, bind);
+            parent = saveParent;
         }
 
         function bindDeclaration(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags, isBlockScopeContainer: boolean) {
@@ -431,15 +473,18 @@ module ts {
             return "__" + indexOf((<SignatureDeclaration>node.parent).parameters, node);
         }
 
-        function bind(node: Node) {
+        function bind(node: Node): void {
             node.parent = parent;
-            
+
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
                     bindDeclaration(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.Parameter:
                     bindParameter(<ParameterDeclaration>node);
+                    break;
+                case SyntaxKind.VariableStatement:
+                    bindVariableStatement(<VariableStatement>node);
                     break;
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.BindingElement:
@@ -588,17 +633,32 @@ module ts {
                 case SyntaxKind.CaseBlock:
                     bindChildren(node, 0, /*isBlockScopeContainer*/ true);
                     break;
+                case SyntaxKind.JSDocFunctionType:
+                    bindJSDocFunctionType(<JSDocFunctionType>node);
+                    break;
                 default:
-                    let saveParent = parent;
-                    parent = node;
-                    forEachChild(node, bind);
-                    parent = saveParent;
+                    saveParentAndBindChildren(node);
             }
+        }
+
+        function bindVariableStatement(node: VariableStatement) {
+            let saveParent = parent;
+            parent = node;
+
+            if (isJavaScriptFile && node.jsDocComment) {
+                bindJSDocComment(node);
+            }
+
+            forEachChild(node, bind);
+            parent = saveParent;
         }
 
         function bindParameter(node: ParameterDeclaration) {
             if (isBindingPattern(node.name)) {
                 bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, getDestructuringParameterName(node), /*isBlockScopeContainer*/ false);
+            }
+            else if (isJavaScriptFile && node.parent.kind === SyntaxKind.JSDocFunctionType) {
+                bindJSDocFunctionTypeParameter(node);
             }
             else {
                 bindDeclaration(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes, /*isBlockScopeContainer*/ false);
@@ -613,6 +673,22 @@ module ts {
                 let classDeclaration = <ClassLikeDeclaration>node.parent.parent;
                 declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
             }
+        }
+
+        function bindJSDocFunctionTypeParameter(node: ParameterDeclaration) {
+            let functionType = <JSDocFunctionType>node.parent;
+            let isConstructSignature = isJSDocConstructSignature(functionType);
+
+            if (!isConstructSignature || functionType.parameters[0] !== node) {
+                let index = indexOf(functionType.parameters, node);
+                let paramName = "p" + index;
+                let paramSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, paramName);
+                addDeclarationToSymbol(paramSymbol, node, SymbolFlags.FunctionScopedVariable);
+
+                functionType.locals[paramName] = paramSymbol;
+            }
+
+            bindChildren(node, SymbolFlags.FunctionScopedVariable, /*isBlockScopeContainer:*/ false);
         }
 
         function bindPropertyOrMethodOrAccessor(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags, isBlockScopeContainer: boolean) {
