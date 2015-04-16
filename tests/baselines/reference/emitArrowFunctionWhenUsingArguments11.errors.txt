@@ -1,5 +1,5 @@
-tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments11.ts(3,9): error TS2501: Duplicate identifier '_arguments'. Compiler uses variable declaration '_arguments' to capture 'arguments' reference.
-tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments11.ts(4,25): error TS2496: The 'arguments' object cannot be referenced in an arrow function below ES6. Consider using a standard function expression.
+tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments11.ts(3,9): error TS2399: Duplicate identifier '_arguments'. Compiler uses variable declaration '_arguments' to capture 'arguments' reference.
+tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments11.ts(4,25): error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression.
 
 
 ==== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments11.ts (2 errors) ====
@@ -7,8 +7,8 @@ tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments11.
     function f(arguments) {
         var _arguments = 10;
             ~~~~~~~~~~
-!!! error TS2501: Duplicate identifier '_arguments'. Compiler uses variable declaration '_arguments' to capture 'arguments' reference.
+!!! error TS2399: Duplicate identifier '_arguments'. Compiler uses variable declaration '_arguments' to capture 'arguments' reference.
         var a = () => () => arguments;
                             ~~~~~~~~~
-!!! error TS2496: The 'arguments' object cannot be referenced in an arrow function below ES6. Consider using a standard function expression.
+!!! error TS2496: The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression.
     }

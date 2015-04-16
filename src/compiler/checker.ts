@@ -429,7 +429,7 @@ module ts {
                             // at runtime. Rather than simply make a semantic breaking change, we also error
                             // so that users are aware that something is wrong, and may change it.
                             if (nameNotFoundMessage && languageVersion < ScriptTarget.ES6) {
-                                error(errorLocation, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_below_ES6_Consider_using_a_standard_function_expression);
+                                error(errorLocation, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression);
                                 argumentsUsedInArrowFunction = true;
                             }
                         }
@@ -9011,19 +9011,15 @@ module ts {
         }
 
         // this function will run after checking the source file so 'CaptureThis' is correct for all nodes
-        function checkIfThisIsCapturedInEnclosingScope(node: Node): void {
-            let declarationSiteError = Diagnostics.Duplicate_identifier_this_Compiler_uses_variable_declaration_this_to_capture_this_reference;
-            let resolutionSiteError = Diagnostics.Expression_resolves_to_variable_declaration_this_that_compiler_uses_to_capture_this_reference;
-            checkIfEnclosingScopeCaptures(node, NodeCheckFlags.CaptureThis, declarationSiteError, resolutionSiteError);
+        function checkForCapturedThisCollisionInEnclosingScope(node: Node): void {
+            checkIfEnclosingScopeCapturesCollide(node, NodeCheckFlags.CaptureThis, "_this", "this");
         }
 
-        function checkIfArgumentsIsCapturedInEnclosingScope(node: Node): void {
-            let declarationSiteError = Diagnostics.Duplicate_identifier_arguments_Compiler_uses_variable_declaration_arguments_to_capture_arguments_reference;
-            let resolutionSiteError = Diagnostics.Expression_resolves_to_variable_declaration_arguments_that_compiler_uses_to_capture_arguments_reference;
-            checkIfEnclosingScopeCaptures(node, NodeCheckFlags.CaptureArguments, declarationSiteError, resolutionSiteError);
+        function checkForCapturedArgumentsCollisionInEnclosingScope(node: Node): void {
+            checkIfEnclosingScopeCapturesCollide(node, NodeCheckFlags.CaptureArguments, "_arguments", "arguments");
         }
 
-        function checkIfEnclosingScopeCaptures(node: Node, captureFlag: NodeCheckFlags, declarationSiteError: DiagnosticMessage, resolutionSiteError: DiagnosticMessage): void {
+        function checkIfEnclosingScopeCapturesCollide(node: Node, captureFlag: NodeCheckFlags, nameUsedForCapture: string, nameOfCapturedEntity: string): void {
             Debug.assert(captureFlag === NodeCheckFlags.CaptureThis || captureFlag === NodeCheckFlags.CaptureArguments);
 
             let current = node;
@@ -9031,10 +9027,10 @@ module ts {
                 if (getNodeCheckFlags(current) & captureFlag) {
                     let atDeclarationSite = node.kind !== SyntaxKind.Identifier;
                     if (atDeclarationSite) {
-                        error((<Declaration>node).name, declarationSiteError);
+                        error((<Declaration>node).name, Diagnostics.Duplicate_identifier_0_Compiler_uses_variable_declaration_0_to_capture_1_reference, nameUsedForCapture, nameOfCapturedEntity);
                     }
                     else {
-                        error(node, resolutionSiteError);
+                        error(node, Diagnostics.Expression_resolves_to_variable_declaration_0_that_compiler_uses_to_capture_1_reference, nameUsedForCapture, nameOfCapturedEntity);
                     }
                     return;
                 }
@@ -10922,12 +10918,12 @@ module ts {
                 }
 
                 if (potentialThisCollisions.length) {
-                    forEach(potentialThisCollisions, checkIfThisIsCapturedInEnclosingScope);
+                    forEach(potentialThisCollisions, checkForCapturedThisCollisionInEnclosingScope);
                     potentialThisCollisions.length = 0;
                 }
 
                 if (potentialArgumentsCollisions) {
-                    forEach(potentialArgumentsCollisions, checkIfArgumentsIsCapturedInEnclosingScope);
+                    forEach(potentialArgumentsCollisions, checkForCapturedArgumentsCollisionInEnclosingScope);
                     potentialArgumentsCollisions.length = 0;
                 }
 

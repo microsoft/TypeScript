@@ -1055,11 +1055,11 @@
         "category": "Error",
         "code": 2396
     },
-    "Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.": {
+    "Duplicate identifier '{0}'. Compiler uses variable declaration '{0}' to capture '{1}' reference.": {
         "category": "Error",
         "code": 2399
     },
-    "Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.": {
+    "Expression resolves to variable declaration '{0}' that compiler uses to capture '{1}' reference.": {
         "category": "Error",
         "code": 2400
     },
@@ -1419,7 +1419,7 @@
         "category": "Error",
         "code": 2495
     },
-    "The 'arguments' object cannot be referenced in an arrow function below ES6. Consider using a standard function expression.": {
+    "The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression.": {
         "category": "Error",
         "code": 2496
     },
@@ -1438,14 +1438,6 @@
     "A class can only implement an identifier/qualified-name with optional type arguments.": {
         "category": "Error",
         "code": 2500
-    },
-    "Duplicate identifier '_arguments'. Compiler uses variable declaration '_arguments' to capture 'arguments' reference.": {
-        "category": "Error",
-        "code": 2501
-    },
-    "Expression resolves to variable declaration '_arguments' that compiler uses to capture 'arguments' reference.": {
-        "category": "Error",
-        "code": 2502
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
