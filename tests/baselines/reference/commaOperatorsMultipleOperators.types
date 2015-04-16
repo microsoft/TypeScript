@@ -101,6 +101,9 @@ var resultIsObject1 = (NUMBER, STRING, OBJECT);
 null, true, 1;
 >null, true, 1 : number
 >null, true : boolean
+>null : null
+>true : boolean
+>1 : number
 
 ++NUMBER, STRING.charAt(0), new Object();
 >++NUMBER, STRING.charAt(0), new Object() : Object
@@ -111,6 +114,7 @@ null, true, 1;
 >STRING.charAt : (pos: number) => string
 >STRING : string
 >charAt : (pos: number) => string
+>0 : number
 >new Object() : Object
 >Object : ObjectConstructor
 
@@ -119,6 +123,9 @@ var resultIsNumber2 = (null, true, 1);
 >(null, true, 1) : number
 >null, true, 1 : number
 >null, true : boolean
+>null : null
+>true : boolean
+>1 : number
 
 var resultIsObject2 = (++NUMBER, STRING.charAt(0), new Object());
 >resultIsObject2 : Object
@@ -131,6 +138,7 @@ var resultIsObject2 = (++NUMBER, STRING.charAt(0), new Object());
 >STRING.charAt : (pos: number) => string
 >STRING : string
 >charAt : (pos: number) => string
+>0 : number
 >new Object() : Object
 >Object : ObjectConstructor
 

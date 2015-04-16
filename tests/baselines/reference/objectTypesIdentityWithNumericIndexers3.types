@@ -52,6 +52,7 @@ var b: { [x: number]: string; } = { foo: '' };
 >x : number
 >{ foo: '' } : { [x: number]: undefined; foo: string; }
 >foo : string
+>'' : string
 
 function foo1(x: A);
 >foo1 : { (x: A): any; (x: A): any; }

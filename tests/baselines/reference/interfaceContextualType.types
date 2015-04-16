@@ -39,8 +39,10 @@ class Bug {
 >this.values : IMap
 >this : Bug
 >values : IMap
+>'comments' : string
 >{ italic: true } : { italic: boolean; }
 >italic : boolean
+>true : boolean
     }
     shouldBeOK() {
 >shouldBeOK : () => void
@@ -56,6 +58,7 @@ class Bug {
 >comments : { italic: boolean; }
 >{ italic: true } : { italic: boolean; }
 >italic : boolean
+>true : boolean
 
         };
     }

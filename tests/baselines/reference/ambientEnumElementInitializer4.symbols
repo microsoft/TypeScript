@@ -1,0 +1,7 @@
+=== tests/cases/compiler/ambientEnumElementInitializer4.ts ===
+declare enum E {
+>E : Symbol(E, Decl(ambientEnumElementInitializer4.ts, 0, 0))
+
+ e = 0xA
+>e : Symbol(E.e, Decl(ambientEnumElementInitializer4.ts, 0, 16))
+}

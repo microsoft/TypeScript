@@ -2,5 +2,6 @@
 var v = 4 | undefined;
 >v : number
 >4 | undefined : number
+>4 : number
 >undefined : undefined
 

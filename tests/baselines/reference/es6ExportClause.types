@@ -11,12 +11,14 @@ module m {
 
     export var x = 10;
 >x : number
+>10 : number
 }
 var x = 10;
 >x : number
+>10 : number
 
 module uninstantiated {
->uninstantiated : unknown
+>uninstantiated : any
 }
 export { c };
 >c : typeof c
@@ -26,12 +28,12 @@ export { c as c2 };
 >c2 : typeof c
 
 export { i, m as instantiatedModule };
->i : unknown
+>i : any
 >m : typeof m
 >instantiatedModule : typeof m
 
 export { uninstantiated };
->uninstantiated : unknown
+>uninstantiated : any
 
 export { x };
 >x : number

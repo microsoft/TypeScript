@@ -1,0 +1,44 @@
+=== tests/cases/compiler/collisionCodeGenModuleWithFunctionChildren.ts ===
+module M {
+>M : Symbol(M, Decl(collisionCodeGenModuleWithFunctionChildren.ts, 0, 0), Decl(collisionCodeGenModuleWithFunctionChildren.ts, 3, 1), Decl(collisionCodeGenModuleWithFunctionChildren.ts, 10, 1))
+
+    export var x = 3;
+>x : Symbol(x, Decl(collisionCodeGenModuleWithFunctionChildren.ts, 1, 14))
+
+    function fn(M, p = x) { }
+>fn : Symbol(fn, Decl(collisionCodeGenModuleWithFunctionChildren.ts, 1, 21))
+>M : Symbol(M, Decl(collisionCodeGenModuleWithFunctionChildren.ts, 2, 16))
+>p : Symbol(p, Decl(collisionCodeGenModuleWithFunctionChildren.ts, 2, 18))
+>x : Symbol(x, Decl(collisionCodeGenModuleWithFunctionChildren.ts, 1, 14))
+}
+
+module M {
+>M : Symbol(M, Decl(collisionCodeGenModuleWithFunctionChildren.ts, 0, 0), Decl(collisionCodeGenModuleWithFunctionChildren.ts, 3, 1), Decl(collisionCodeGenModuleWithFunctionChildren.ts, 10, 1))
+
+    function fn2() {
+>fn2 : Symbol(fn2, Decl(collisionCodeGenModuleWithFunctionChildren.ts, 5, 10))
+
+        var M;
+>M : Symbol(M, Decl(collisionCodeGenModuleWithFunctionChildren.ts, 7, 11))
+
+        var p = x;
+>p : Symbol(p, Decl(collisionCodeGenModuleWithFunctionChildren.ts, 8, 11))
+>x : Symbol(x, Decl(collisionCodeGenModuleWithFunctionChildren.ts, 1, 14))
+    }
+}
+
+module M {
+>M : Symbol(M, Decl(collisionCodeGenModuleWithFunctionChildren.ts, 0, 0), Decl(collisionCodeGenModuleWithFunctionChildren.ts, 3, 1), Decl(collisionCodeGenModuleWithFunctionChildren.ts, 10, 1))
+
+    function fn3() {
+>fn3 : Symbol(fn3, Decl(collisionCodeGenModuleWithFunctionChildren.ts, 12, 10))
+
+        function M() {
+>M : Symbol(M, Decl(collisionCodeGenModuleWithFunctionChildren.ts, 13, 20))
+
+            var p = x;
+>p : Symbol(p, Decl(collisionCodeGenModuleWithFunctionChildren.ts, 15, 15))
+>x : Symbol(x, Decl(collisionCodeGenModuleWithFunctionChildren.ts, 1, 14))
+        }
+    }
+}

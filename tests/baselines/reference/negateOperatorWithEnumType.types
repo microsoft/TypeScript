@@ -21,6 +21,7 @@ var ResultIsNumber2 = -ENUM1["B"];
 >-ENUM1["B"] : number
 >ENUM1["B"] : ENUM1
 >ENUM1 : typeof ENUM1
+>"B" : string
 
 var ResultIsNumber3 = -(ENUM1.B + ENUM1[""]);
 >ResultIsNumber3 : number
@@ -32,6 +33,7 @@ var ResultIsNumber3 = -(ENUM1.B + ENUM1[""]);
 >B : ENUM1
 >ENUM1[""] : ENUM1
 >ENUM1 : typeof ENUM1
+>"" : string
 
 // miss assignment operators
 -ENUM;
@@ -46,6 +48,7 @@ var ResultIsNumber3 = -(ENUM1.B + ENUM1[""]);
 >-ENUM1["B"] : number
 >ENUM1["B"] : ENUM1
 >ENUM1 : typeof ENUM1
+>"B" : string
 
 -ENUM, ENUM1;
 >-ENUM, ENUM1 : typeof ENUM1

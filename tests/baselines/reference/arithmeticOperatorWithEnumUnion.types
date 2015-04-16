@@ -94,6 +94,7 @@ var ra9 = E.a * 1;
 >E.a : E
 >E : typeof E
 >a : E
+>1 : number
 
 var ra10 = a * E.b;
 >ra10 : number
@@ -114,6 +115,7 @@ var ra11 = b * E.b;
 var ra12 = 1 * E.b;
 >ra12 : number
 >1 * E.b : number
+>1 : number
 >E.b : E
 >E : typeof E
 >b : E
@@ -181,6 +183,7 @@ var rb9 = E.a / 1;
 >E.a : E
 >E : typeof E
 >a : E
+>1 : number
 
 var rb10 = a / E.b;
 >rb10 : number
@@ -201,6 +204,7 @@ var rb11 = b / E.b;
 var rb12 = 1 / E.b;
 >rb12 : number
 >1 / E.b : number
+>1 : number
 >E.b : E
 >E : typeof E
 >b : E
@@ -268,6 +272,7 @@ var rc9 = E.a % 1;
 >E.a : E
 >E : typeof E
 >a : E
+>1 : number
 
 var rc10 = a % E.b;
 >rc10 : number
@@ -288,6 +293,7 @@ var rc11 = b % E.b;
 var rc12 = 1 % E.b;
 >rc12 : number
 >1 % E.b : number
+>1 : number
 >E.b : E
 >E : typeof E
 >b : E
@@ -355,6 +361,7 @@ var rd9 = E.a - 1;
 >E.a : E
 >E : typeof E
 >a : E
+>1 : number
 
 var rd10 = a - E.b;
 >rd10 : number
@@ -375,6 +382,7 @@ var rd11 = b - E.b;
 var rd12 = 1 - E.b;
 >rd12 : number
 >1 - E.b : number
+>1 : number
 >E.b : E
 >E : typeof E
 >b : E
@@ -442,6 +450,7 @@ var re9 = E.a << 1;
 >E.a : E
 >E : typeof E
 >a : E
+>1 : number
 
 var re10 = a << E.b;
 >re10 : number
@@ -462,6 +471,7 @@ var re11 = b << E.b;
 var re12 = 1 << E.b;
 >re12 : number
 >1 << E.b : number
+>1 : number
 >E.b : E
 >E : typeof E
 >b : E
@@ -529,6 +539,7 @@ var rf9 = E.a >> 1;
 >E.a : E
 >E : typeof E
 >a : E
+>1 : number
 
 var rf10 = a >> E.b;
 >rf10 : number
@@ -549,6 +560,7 @@ var rf11 = b >> E.b;
 var rf12 = 1 >> E.b;
 >rf12 : number
 >1 >> E.b : number
+>1 : number
 >E.b : E
 >E : typeof E
 >b : E
@@ -616,6 +628,7 @@ var rg9 = E.a >>> 1;
 >E.a : E
 >E : typeof E
 >a : E
+>1 : number
 
 var rg10 = a >>> E.b;
 >rg10 : number
@@ -636,6 +649,7 @@ var rg11 = b >>> E.b;
 var rg12 = 1 >>> E.b;
 >rg12 : number
 >1 >>> E.b : number
+>1 : number
 >E.b : E
 >E : typeof E
 >b : E
@@ -703,6 +717,7 @@ var rh9 = E.a & 1;
 >E.a : E
 >E : typeof E
 >a : E
+>1 : number
 
 var rh10 = a & E.b;
 >rh10 : number
@@ -723,6 +738,7 @@ var rh11 = b & E.b;
 var rh12 = 1 & E.b;
 >rh12 : number
 >1 & E.b : number
+>1 : number
 >E.b : E
 >E : typeof E
 >b : E
@@ -790,6 +806,7 @@ var ri9 = E.a ^ 1;
 >E.a : E
 >E : typeof E
 >a : E
+>1 : number
 
 var ri10 = a ^ E.b;
 >ri10 : number
@@ -810,6 +827,7 @@ var ri11 = b ^ E.b;
 var ri12 = 1 ^ E.b;
 >ri12 : number
 >1 ^ E.b : number
+>1 : number
 >E.b : E
 >E : typeof E
 >b : E
@@ -877,6 +895,7 @@ var rj9 = E.a | 1;
 >E.a : E
 >E : typeof E
 >a : E
+>1 : number
 
 var rj10 = a | E.b;
 >rj10 : number
@@ -897,6 +916,7 @@ var rj11 = b | E.b;
 var rj12 = 1 | E.b;
 >rj12 : number
 >1 | E.b : number
+>1 : number
 >E.b : E
 >E : typeof E
 >b : E

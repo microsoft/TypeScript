@@ -5,7 +5,7 @@ import commands = require('visibilityOfCrossModuleTypeUsage_commands');
 function run(configuration: commands.IConfiguration) {
 >run : (configuration: commands.IConfiguration) => void
 >configuration : commands.IConfiguration
->commands : unknown
+>commands : any
 >IConfiguration : commands.IConfiguration
 
     var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
@@ -34,12 +34,12 @@ export interface IConfiguration {
 
     workspace: server.IWorkspace;
 >workspace : server.IWorkspace
->server : unknown
+>server : any
 >IWorkspace : server.IWorkspace
 
     server?: server.IServer;
 >server : server.IServer
->server : unknown
+>server : any
 >IServer : server.IServer
 }
 

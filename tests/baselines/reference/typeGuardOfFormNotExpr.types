@@ -28,6 +28,7 @@ if (!(typeof strOrNum === "string")) {
 >typeof strOrNum === "string" : boolean
 >typeof strOrNum : string
 >strOrNum : string | number
+>"string" : string
 
     num === strOrNum; // number
 >num === strOrNum : boolean
@@ -48,9 +49,11 @@ if (!(typeof strOrNumOrBool === "string" || typeof strOrNumOrBool === "number"))
 >typeof strOrNumOrBool === "string" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
+>"string" : string
 >typeof strOrNumOrBool === "number" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : number | boolean
+>"number" : string
 
     bool = strOrNumOrBool; // boolean
 >bool = strOrNumOrBool : boolean
@@ -71,11 +74,13 @@ if (!(typeof strOrNumOrBool !== "string") || !(typeof strOrNumOrBool !== "number
 >typeof strOrNumOrBool !== "string" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
+>"string" : string
 >!(typeof strOrNumOrBool !== "number") : boolean
 >(typeof strOrNumOrBool !== "number") : boolean
 >typeof strOrNumOrBool !== "number" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : number | boolean
+>"number" : string
 
     strOrNum = strOrNumOrBool; // string | number
 >strOrNum = strOrNumOrBool : string | number
@@ -96,9 +101,11 @@ if (!(typeof strOrNumOrBool !== "string" && typeof strOrNumOrBool !== "number"))
 >typeof strOrNumOrBool !== "string" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
+>"string" : string
 >typeof strOrNumOrBool !== "number" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : number | boolean
+>"number" : string
 
     strOrNum = strOrNumOrBool; // string | number
 >strOrNum = strOrNumOrBool : string | number
@@ -119,11 +126,13 @@ if (!(typeof strOrNumOrBool === "string") && !(typeof strOrNumOrBool === "number
 >typeof strOrNumOrBool === "string" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
+>"string" : string
 >!(typeof strOrNumOrBool === "number") : boolean
 >(typeof strOrNumOrBool === "number") : boolean
 >typeof strOrNumOrBool === "number" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : number | boolean
+>"number" : string
 
     bool = strOrNumOrBool; // boolean
 >bool = strOrNumOrBool : boolean
@@ -144,6 +153,7 @@ if (!(typeof strOrNumOrBool === "string") && numOrBool !== strOrNumOrBool) {
 >typeof strOrNumOrBool === "string" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
+>"string" : string
 >numOrBool !== strOrNumOrBool : boolean
 >numOrBool : number | boolean
 >strOrNumOrBool : number | boolean

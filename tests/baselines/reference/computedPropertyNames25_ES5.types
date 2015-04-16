@@ -6,6 +6,7 @@ class Base {
 >bar : () => number
 
         return 0;
+>0 : number
     }
 }
 class C extends Base {
@@ -27,5 +28,6 @@ class C extends Base {
 
         };
         return 0;
+>0 : number
     }
 }

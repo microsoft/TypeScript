@@ -5,6 +5,7 @@ function foo(title: string) {
 
     var x = 10;
 >x : number
+>10 : number
 }
 
 module foo.Bar {

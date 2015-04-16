@@ -6,6 +6,7 @@ for (const v of new FooIterator) {
 
     const v = 0; // new scope
 >v : number
+>0 : number
 }
 
 class Foo { }
@@ -27,6 +28,7 @@ class FooIterator {
 
             done: false
 >done : boolean
+>false : boolean
 
         };
     }

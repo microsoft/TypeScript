@@ -12,6 +12,7 @@ class Foo {
 >this.x : number
 >this : Foo
 >x : number
+>5 : number
     }
 }
 export = Foo;

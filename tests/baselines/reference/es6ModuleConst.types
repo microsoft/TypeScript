@@ -1,6 +1,7 @@
 === tests/cases/compiler/es6ModuleConst.ts ===
 export const a = "hello";
 >a : string
+>"hello" : string
 
 export const x: string = a, y = x;
 >x : string

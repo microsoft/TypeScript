@@ -7,4 +7,5 @@ var obj = {
 >this.bar : any
 >this : any
 >bar : any
+>0 : number
 }

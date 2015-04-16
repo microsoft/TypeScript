@@ -78,11 +78,13 @@ condAny ? exprString1 : exprBoolean1; // union
 //Cond is an any type literal
 null ? exprAny1 : exprAny2;
 >null ? exprAny1 : exprAny2 : any
+>null : null
 >exprAny1 : any
 >exprAny2 : any
 
 null ? exprBoolean1 : exprBoolean2;
 >null ? exprBoolean1 : exprBoolean2 : boolean
+>null : null
 >exprBoolean1 : boolean
 >exprBoolean2 : boolean
 
@@ -95,6 +97,7 @@ undefined ? exprNumber1 : exprNumber2;
 [null, undefined] ? exprString1 : exprString2;
 >[null, undefined] ? exprString1 : exprString2 : string
 >[null, undefined] : null[]
+>null : null
 >undefined : undefined
 >exprString1 : string
 >exprString2 : string
@@ -102,6 +105,7 @@ undefined ? exprNumber1 : exprNumber2;
 [null, undefined] ? exprIsObject1 : exprIsObject2;
 >[null, undefined] ? exprIsObject1 : exprIsObject2 : Object
 >[null, undefined] : null[]
+>null : null
 >undefined : undefined
 >exprIsObject1 : Object
 >exprIsObject2 : Object
@@ -126,6 +130,7 @@ x("x") ? exprBoolean1 : exprBoolean2;
 >x("x") ? exprBoolean1 : exprBoolean2 : boolean
 >x("x") : any
 >x : any
+>"x" : string
 >exprBoolean1 : boolean
 >exprBoolean2 : boolean
 
@@ -141,6 +146,7 @@ x("x") ? exprString1 : exprString2;
 >x("x") ? exprString1 : exprString2 : string
 >x("x") : any
 >x : any
+>"x" : string
 >exprString1 : string
 >exprString2 : string
 
@@ -208,12 +214,14 @@ var resultIsStringOrBoolean1 = condAny ? exprString1 : exprBoolean1; // union
 var resultIsAny2 = null ? exprAny1 : exprAny2;
 >resultIsAny2 : any
 >null ? exprAny1 : exprAny2 : any
+>null : null
 >exprAny1 : any
 >exprAny2 : any
 
 var resultIsBoolean2 = null ? exprBoolean1 : exprBoolean2;
 >resultIsBoolean2 : boolean
 >null ? exprBoolean1 : exprBoolean2 : boolean
+>null : null
 >exprBoolean1 : boolean
 >exprBoolean2 : boolean
 
@@ -228,6 +236,7 @@ var resultIsString2 = [null, undefined] ? exprString1 : exprString2;
 >resultIsString2 : string
 >[null, undefined] ? exprString1 : exprString2 : string
 >[null, undefined] : null[]
+>null : null
 >undefined : undefined
 >exprString1 : string
 >exprString2 : string
@@ -236,6 +245,7 @@ var resultIsObject2 = [null, undefined] ? exprIsObject1 : exprIsObject2;
 >resultIsObject2 : Object
 >[null, undefined] ? exprIsObject1 : exprIsObject2 : Object
 >[null, undefined] : null[]
+>null : null
 >undefined : undefined
 >exprIsObject1 : Object
 >exprIsObject2 : Object
@@ -243,6 +253,7 @@ var resultIsObject2 = [null, undefined] ? exprIsObject1 : exprIsObject2;
 var resultIsStringOrBoolean2 = null ? exprString1 : exprBoolean1; // union
 >resultIsStringOrBoolean2 : string | boolean
 >null ? exprString1 : exprBoolean1 : string | boolean
+>null : null
 >exprString1 : string
 >exprBoolean1 : boolean
 
@@ -257,6 +268,7 @@ var resultIsStringOrBoolean4 = [null, undefined] ? exprString1 : exprBoolean1; /
 >resultIsStringOrBoolean4 : string | boolean
 >[null, undefined] ? exprString1 : exprBoolean1 : string | boolean
 >[null, undefined] : null[]
+>null : null
 >undefined : undefined
 >exprString1 : string
 >exprBoolean1 : boolean
@@ -276,6 +288,7 @@ var resultIsBoolean3 = x("x") ? exprBoolean1 : exprBoolean2;
 >x("x") ? exprBoolean1 : exprBoolean2 : boolean
 >x("x") : any
 >x : any
+>"x" : string
 >exprBoolean1 : boolean
 >exprBoolean2 : boolean
 
@@ -293,6 +306,7 @@ var resultIsString3 = x("x") ? exprString1 : exprString2;
 >x("x") ? exprString1 : exprString2 : string
 >x("x") : any
 >x : any
+>"x" : string
 >exprString1 : string
 >exprString2 : string
 

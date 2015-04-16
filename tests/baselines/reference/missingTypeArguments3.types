@@ -1,6 +1,6 @@
 === tests/cases/compiler/missingTypeArguments3.ts ===
 declare module linq {
->linq : unknown
+>linq : any
 
     interface Enumerable<T> {
 >Enumerable : Enumerable<T>
