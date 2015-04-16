@@ -1,15 +1,15 @@
 === tests/cases/compiler/commentOnParenthesizedExpressionOpenParen1.ts ===
 var j;
->j : any, Symbol(j, Decl(commentOnParenthesizedExpressionOpenParen1.ts, 0, 3))
+>j : any
 
 var f: () => any;
->f : () => any, Symbol(f, Decl(commentOnParenthesizedExpressionOpenParen1.ts, 1, 3))
+>f : () => any
 
 <any>( /* Preserve */ j = f());
 ><any>( /* Preserve */ j = f()) : any
 >( /* Preserve */ j = f()) : any
 >j = f() : any
->j : any, Symbol(j, Decl(commentOnParenthesizedExpressionOpenParen1.ts, 0, 3))
+>j : any
 >f() : any
->f : () => any, Symbol(f, Decl(commentOnParenthesizedExpressionOpenParen1.ts, 1, 3))
+>f : () => any
 

@@ -1,46 +1,46 @@
 === tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithSpecializedCallAndConstructSignatures.ts ===
 interface Foo {
->Foo : Foo, Symbol(Foo, Decl(interfaceWithSpecializedCallAndConstructSignatures.ts, 0, 0))
+>Foo : Foo
 
     (x: 'a'): number;
->x : 'a', Symbol(x, Decl(interfaceWithSpecializedCallAndConstructSignatures.ts, 1, 5))
+>x : 'a'
 
     (x: string): any;
->x : string, Symbol(x, Decl(interfaceWithSpecializedCallAndConstructSignatures.ts, 2, 5))
+>x : string
 
     new (x: 'a'): any;
->x : 'a', Symbol(x, Decl(interfaceWithSpecializedCallAndConstructSignatures.ts, 4, 9))
+>x : 'a'
 
     new (x: string): Object;
->x : string, Symbol(x, Decl(interfaceWithSpecializedCallAndConstructSignatures.ts, 5, 9))
->Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>x : string
+>Object : Object
 }
 
 var f: Foo;
->f : Foo, Symbol(f, Decl(interfaceWithSpecializedCallAndConstructSignatures.ts, 8, 3))
->Foo : Foo, Symbol(Foo, Decl(interfaceWithSpecializedCallAndConstructSignatures.ts, 0, 0))
+>f : Foo
+>Foo : Foo
 
 var r = f('a');
->r : number, Symbol(r, Decl(interfaceWithSpecializedCallAndConstructSignatures.ts, 9, 3))
+>r : number
 >f('a') : number
->f : Foo, Symbol(f, Decl(interfaceWithSpecializedCallAndConstructSignatures.ts, 8, 3))
+>f : Foo
 >'a' : string
 
 var r2 = f('A');
->r2 : any, Symbol(r2, Decl(interfaceWithSpecializedCallAndConstructSignatures.ts, 10, 3))
+>r2 : any
 >f('A') : any
->f : Foo, Symbol(f, Decl(interfaceWithSpecializedCallAndConstructSignatures.ts, 8, 3))
+>f : Foo
 >'A' : string
 
 var r3 = new f('a');
->r3 : any, Symbol(r3, Decl(interfaceWithSpecializedCallAndConstructSignatures.ts, 11, 3))
+>r3 : any
 >new f('a') : any
->f : Foo, Symbol(f, Decl(interfaceWithSpecializedCallAndConstructSignatures.ts, 8, 3))
+>f : Foo
 >'a' : string
 
 var r4 = new f('A');
->r4 : Object, Symbol(r4, Decl(interfaceWithSpecializedCallAndConstructSignatures.ts, 12, 3))
+>r4 : Object
 >new f('A') : Object
->f : Foo, Symbol(f, Decl(interfaceWithSpecializedCallAndConstructSignatures.ts, 8, 3))
+>f : Foo
 >'A' : string
 

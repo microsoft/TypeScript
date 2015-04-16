@@ -1,20 +1,20 @@
 === tests/cases/conformance/types/objectTypeLiteral/objectTypeLiteralSyntax.ts ===
 var x: {
->x : { foo: string; bar: string; }, Symbol(x, Decl(objectTypeLiteralSyntax.ts, 0, 3))
+>x : { foo: string; bar: string; }
 
     foo: string;
->foo : string, Symbol(foo, Decl(objectTypeLiteralSyntax.ts, 0, 8))
+>foo : string
 
     bar: string;
->bar : string, Symbol(bar, Decl(objectTypeLiteralSyntax.ts, 1, 16))
+>bar : string
 }
 
 var y: {
->y : { foo: string; bar: string; }, Symbol(y, Decl(objectTypeLiteralSyntax.ts, 5, 3))
+>y : { foo: string; bar: string; }
 
     foo: string;
->foo : string, Symbol(foo, Decl(objectTypeLiteralSyntax.ts, 5, 8))
+>foo : string
 
     bar: string
->bar : string, Symbol(bar, Decl(objectTypeLiteralSyntax.ts, 6, 16))
+>bar : string
 }

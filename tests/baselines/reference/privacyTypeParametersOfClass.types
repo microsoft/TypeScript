@@ -1,104 +1,104 @@
 === tests/cases/compiler/privacyTypeParametersOfClass.ts ===
 class privateClass {
->privateClass : privateClass, Symbol(privateClass, Decl(privacyTypeParametersOfClass.ts, 0, 0))
+>privateClass : privateClass
 }
 
 export class publicClass {
->publicClass : publicClass, Symbol(publicClass, Decl(privacyTypeParametersOfClass.ts, 1, 1))
+>publicClass : publicClass
 }
 
 // TypeParameter_0_of_exported_class_1_has_or_is_using_private_type_2
 export class publicClassWithPrivateTypeParameters<T extends privateClass> {
->publicClassWithPrivateTypeParameters : publicClassWithPrivateTypeParameters<T>, Symbol(publicClassWithPrivateTypeParameters, Decl(privacyTypeParametersOfClass.ts, 4, 1))
->T : T, Symbol(T, Decl(privacyTypeParametersOfClass.ts, 7, 50))
->privateClass : privateClass, Symbol(privateClass, Decl(privacyTypeParametersOfClass.ts, 0, 0))
+>publicClassWithPrivateTypeParameters : publicClassWithPrivateTypeParameters<T>
+>T : T
+>privateClass : privateClass
 
     myMethod(val: T): T { // Error
->myMethod : (val: T) => T, Symbol(myMethod, Decl(privacyTypeParametersOfClass.ts, 7, 75))
->val : T, Symbol(val, Decl(privacyTypeParametersOfClass.ts, 8, 13))
->T : T, Symbol(T, Decl(privacyTypeParametersOfClass.ts, 7, 50))
->T : T, Symbol(T, Decl(privacyTypeParametersOfClass.ts, 7, 50))
+>myMethod : (val: T) => T
+>val : T
+>T : T
+>T : T
 
         return val;
->val : T, Symbol(val, Decl(privacyTypeParametersOfClass.ts, 8, 13))
+>val : T
     }
 }
 
 export class publicClassWithPublicTypeParameters<T extends publicClass> {
->publicClassWithPublicTypeParameters : publicClassWithPublicTypeParameters<T>, Symbol(publicClassWithPublicTypeParameters, Decl(privacyTypeParametersOfClass.ts, 11, 1))
->T : T, Symbol(T, Decl(privacyTypeParametersOfClass.ts, 13, 49))
->publicClass : publicClass, Symbol(publicClass, Decl(privacyTypeParametersOfClass.ts, 1, 1))
+>publicClassWithPublicTypeParameters : publicClassWithPublicTypeParameters<T>
+>T : T
+>publicClass : publicClass
 
     myMethod(val: T): T { // No Error
->myMethod : (val: T) => T, Symbol(myMethod, Decl(privacyTypeParametersOfClass.ts, 13, 73))
->val : T, Symbol(val, Decl(privacyTypeParametersOfClass.ts, 14, 13))
->T : T, Symbol(T, Decl(privacyTypeParametersOfClass.ts, 13, 49))
->T : T, Symbol(T, Decl(privacyTypeParametersOfClass.ts, 13, 49))
+>myMethod : (val: T) => T
+>val : T
+>T : T
+>T : T
 
         return val;
->val : T, Symbol(val, Decl(privacyTypeParametersOfClass.ts, 14, 13))
+>val : T
     }
 }
 
 class privateClassWithPrivateTypeParameters<T extends privateClass> {
->privateClassWithPrivateTypeParameters : privateClassWithPrivateTypeParameters<T>, Symbol(privateClassWithPrivateTypeParameters, Decl(privacyTypeParametersOfClass.ts, 17, 1))
->T : T, Symbol(T, Decl(privacyTypeParametersOfClass.ts, 19, 44))
->privateClass : privateClass, Symbol(privateClass, Decl(privacyTypeParametersOfClass.ts, 0, 0))
+>privateClassWithPrivateTypeParameters : privateClassWithPrivateTypeParameters<T>
+>T : T
+>privateClass : privateClass
 
     myMethod(val: T): T { // No Error
->myMethod : (val: T) => T, Symbol(myMethod, Decl(privacyTypeParametersOfClass.ts, 19, 69))
->val : T, Symbol(val, Decl(privacyTypeParametersOfClass.ts, 20, 13))
->T : T, Symbol(T, Decl(privacyTypeParametersOfClass.ts, 19, 44))
->T : T, Symbol(T, Decl(privacyTypeParametersOfClass.ts, 19, 44))
+>myMethod : (val: T) => T
+>val : T
+>T : T
+>T : T
 
         return val;
->val : T, Symbol(val, Decl(privacyTypeParametersOfClass.ts, 20, 13))
+>val : T
     }
 }
 
 class privateClassWithPublicTypeParameters<T extends publicClass> {
->privateClassWithPublicTypeParameters : privateClassWithPublicTypeParameters<T>, Symbol(privateClassWithPublicTypeParameters, Decl(privacyTypeParametersOfClass.ts, 23, 1))
->T : T, Symbol(T, Decl(privacyTypeParametersOfClass.ts, 25, 43))
->publicClass : publicClass, Symbol(publicClass, Decl(privacyTypeParametersOfClass.ts, 1, 1))
+>privateClassWithPublicTypeParameters : privateClassWithPublicTypeParameters<T>
+>T : T
+>publicClass : publicClass
 
     myMethod(val: T): T { // No Error
->myMethod : (val: T) => T, Symbol(myMethod, Decl(privacyTypeParametersOfClass.ts, 25, 67))
->val : T, Symbol(val, Decl(privacyTypeParametersOfClass.ts, 26, 13))
->T : T, Symbol(T, Decl(privacyTypeParametersOfClass.ts, 25, 43))
->T : T, Symbol(T, Decl(privacyTypeParametersOfClass.ts, 25, 43))
+>myMethod : (val: T) => T
+>val : T
+>T : T
+>T : T
 
         return val;
->val : T, Symbol(val, Decl(privacyTypeParametersOfClass.ts, 26, 13))
+>val : T
     }
 }
 
 export class publicClassWithPublicTypeParametersWithoutExtends<T> {
->publicClassWithPublicTypeParametersWithoutExtends : publicClassWithPublicTypeParametersWithoutExtends<T>, Symbol(publicClassWithPublicTypeParametersWithoutExtends, Decl(privacyTypeParametersOfClass.ts, 29, 1))
->T : T, Symbol(T, Decl(privacyTypeParametersOfClass.ts, 31, 63))
+>publicClassWithPublicTypeParametersWithoutExtends : publicClassWithPublicTypeParametersWithoutExtends<T>
+>T : T
 
     myMethod(val: T): T { // No Error
->myMethod : (val: T) => T, Symbol(myMethod, Decl(privacyTypeParametersOfClass.ts, 31, 67))
->val : T, Symbol(val, Decl(privacyTypeParametersOfClass.ts, 32, 13))
->T : T, Symbol(T, Decl(privacyTypeParametersOfClass.ts, 31, 63))
->T : T, Symbol(T, Decl(privacyTypeParametersOfClass.ts, 31, 63))
+>myMethod : (val: T) => T
+>val : T
+>T : T
+>T : T
 
         return val;
->val : T, Symbol(val, Decl(privacyTypeParametersOfClass.ts, 32, 13))
+>val : T
     }
 }
 
 class privateClassWithPublicTypeParametersWithoutExtends<T> {
->privateClassWithPublicTypeParametersWithoutExtends : privateClassWithPublicTypeParametersWithoutExtends<T>, Symbol(privateClassWithPublicTypeParametersWithoutExtends, Decl(privacyTypeParametersOfClass.ts, 35, 1))
->T : T, Symbol(T, Decl(privacyTypeParametersOfClass.ts, 37, 57))
+>privateClassWithPublicTypeParametersWithoutExtends : privateClassWithPublicTypeParametersWithoutExtends<T>
+>T : T
 
     myMethod(val: T): T { // No Error
->myMethod : (val: T) => T, Symbol(myMethod, Decl(privacyTypeParametersOfClass.ts, 37, 61))
->val : T, Symbol(val, Decl(privacyTypeParametersOfClass.ts, 38, 13))
->T : T, Symbol(T, Decl(privacyTypeParametersOfClass.ts, 37, 57))
->T : T, Symbol(T, Decl(privacyTypeParametersOfClass.ts, 37, 57))
+>myMethod : (val: T) => T
+>val : T
+>T : T
+>T : T
 
         return val;
->val : T, Symbol(val, Decl(privacyTypeParametersOfClass.ts, 38, 13))
+>val : T
     }
 }
 

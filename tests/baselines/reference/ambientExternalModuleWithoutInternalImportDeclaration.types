@@ -1,29 +1,29 @@
 === tests/cases/compiler/ambientExternalModuleWithoutInternalImportDeclaration_1.ts ===
 ///<reference path='ambientExternalModuleWithoutInternalImportDeclaration_0.ts'/>
 import A = require('M');
->A : typeof A, Symbol(A, Decl(ambientExternalModuleWithoutInternalImportDeclaration_1.ts, 0, 0))
+>A : typeof A
 
 var c = new A();
->c : A, Symbol(c, Decl(ambientExternalModuleWithoutInternalImportDeclaration_1.ts, 2, 3))
+>c : A
 >new A() : A
->A : typeof A, Symbol(A, Decl(ambientExternalModuleWithoutInternalImportDeclaration_1.ts, 0, 0))
+>A : typeof A
 
 === tests/cases/compiler/ambientExternalModuleWithoutInternalImportDeclaration_0.ts ===
 declare module 'M' {
     module C {
->C : typeof C, Symbol(C, Decl(ambientExternalModuleWithoutInternalImportDeclaration_0.ts, 0, 20), Decl(ambientExternalModuleWithoutInternalImportDeclaration_0.ts, 3, 5))
+>C : typeof C
 
         export var f: number;
->f : number, Symbol(f, Decl(ambientExternalModuleWithoutInternalImportDeclaration_0.ts, 2, 18))
+>f : number
     }
     class C {
->C : C, Symbol(C, Decl(ambientExternalModuleWithoutInternalImportDeclaration_0.ts, 0, 20), Decl(ambientExternalModuleWithoutInternalImportDeclaration_0.ts, 3, 5))
+>C : C
 
         foo(): void;
->foo : () => void, Symbol(foo, Decl(ambientExternalModuleWithoutInternalImportDeclaration_0.ts, 4, 13))
+>foo : () => void
     }
     export = C;
->C : C, Symbol(C, Decl(ambientExternalModuleWithoutInternalImportDeclaration_0.ts, 0, 20), Decl(ambientExternalModuleWithoutInternalImportDeclaration_0.ts, 3, 5))
+>C : C
 
 }
 

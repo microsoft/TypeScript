@@ -2,13 +2,13 @@
 
 // string
 function foo(): string {
->foo : () => string, Symbol(foo, Decl(declFileTypeAnnotationBuiltInType.ts, 0, 0))
+>foo : () => string
 
     return "";
 >"" : string
 }
 function foo2() {
->foo2 : () => string, Symbol(foo2, Decl(declFileTypeAnnotationBuiltInType.ts, 4, 1))
+>foo2 : () => string
 
     return "";
 >"" : string
@@ -16,13 +16,13 @@ function foo2() {
 
 // number
 function foo3(): number {
->foo3 : () => number, Symbol(foo3, Decl(declFileTypeAnnotationBuiltInType.ts, 7, 1))
+>foo3 : () => number
 
     return 10;
 >10 : number
 }
 function foo4() {
->foo4 : () => number, Symbol(foo4, Decl(declFileTypeAnnotationBuiltInType.ts, 12, 1))
+>foo4 : () => number
 
     return 10;
 >10 : number
@@ -30,13 +30,13 @@ function foo4() {
 
 // boolean
 function foo5(): boolean {
->foo5 : () => boolean, Symbol(foo5, Decl(declFileTypeAnnotationBuiltInType.ts, 15, 1))
+>foo5 : () => boolean
 
     return true;
 >true : boolean
 }
 function foo6() {
->foo6 : () => boolean, Symbol(foo6, Decl(declFileTypeAnnotationBuiltInType.ts, 20, 1))
+>foo6 : () => boolean
 
     return false;
 >false : boolean
@@ -44,26 +44,26 @@ function foo6() {
 
 // void
 function foo7(): void {
->foo7 : () => void, Symbol(foo7, Decl(declFileTypeAnnotationBuiltInType.ts, 23, 1))
+>foo7 : () => void
 
     return;
 }
 function foo8() {
->foo8 : () => void, Symbol(foo8, Decl(declFileTypeAnnotationBuiltInType.ts, 28, 1))
+>foo8 : () => void
 
     return;
 }
 
 // any
 function foo9(): any {
->foo9 : () => any, Symbol(foo9, Decl(declFileTypeAnnotationBuiltInType.ts, 31, 1))
+>foo9 : () => any
 
     return undefined;
->undefined : undefined, Symbol(undefined)
+>undefined : undefined
 }
 function foo10() {
->foo10 : () => any, Symbol(foo10, Decl(declFileTypeAnnotationBuiltInType.ts, 36, 1))
+>foo10 : () => any
 
     return undefined;
->undefined : undefined, Symbol(undefined)
+>undefined : undefined
 }

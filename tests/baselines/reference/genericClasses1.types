@@ -1,21 +1,21 @@
 === tests/cases/compiler/genericClasses1.ts ===
 class C<T> {
->C : C<T>, Symbol(C, Decl(genericClasses1.ts, 0, 0))
->T : T, Symbol(T, Decl(genericClasses1.ts, 0, 8))
+>C : C<T>
+>T : T
 
 	public x: T;
->x : T, Symbol(x, Decl(genericClasses1.ts, 0, 12))
->T : T, Symbol(T, Decl(genericClasses1.ts, 0, 8))
+>x : T
+>T : T
 }
 
 var v1 = new C<string>();
->v1 : C<string>, Symbol(v1, Decl(genericClasses1.ts, 4, 3))
+>v1 : C<string>
 >new C<string>() : C<string>
->C : typeof C, Symbol(C, Decl(genericClasses1.ts, 0, 0))
+>C : typeof C
 
 var y = v1.x; // should be 'string'
->y : string, Symbol(y, Decl(genericClasses1.ts, 6, 3))
->v1.x : string, Symbol(C.x, Decl(genericClasses1.ts, 0, 12))
->v1 : C<string>, Symbol(v1, Decl(genericClasses1.ts, 4, 3))
->x : string, Symbol(C.x, Decl(genericClasses1.ts, 0, 12))
+>y : string
+>v1.x : string
+>v1 : C<string>
+>x : string
 

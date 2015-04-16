@@ -1,27 +1,27 @@
 === tests/cases/compiler/staticInterfaceAssignmentCompat.ts ===
 class Shape {
->Shape : Shape, Symbol(Shape, Decl(staticInterfaceAssignmentCompat.ts, 0, 0))
+>Shape : Shape
 
     static create(): Shape {
->create : () => Shape, Symbol(Shape.create, Decl(staticInterfaceAssignmentCompat.ts, 0, 13))
->Shape : Shape, Symbol(Shape, Decl(staticInterfaceAssignmentCompat.ts, 0, 0))
+>create : () => Shape
+>Shape : Shape
 
         return new Shape();
 >new Shape() : Shape
->Shape : typeof Shape, Symbol(Shape, Decl(staticInterfaceAssignmentCompat.ts, 0, 0))
+>Shape : typeof Shape
     }
 }
 
 interface ShapeFactory {
->ShapeFactory : ShapeFactory, Symbol(ShapeFactory, Decl(staticInterfaceAssignmentCompat.ts, 4, 1))
+>ShapeFactory : ShapeFactory
 
     create(): Shape;
->create : () => Shape, Symbol(create, Decl(staticInterfaceAssignmentCompat.ts, 6, 24))
->Shape : Shape, Symbol(Shape, Decl(staticInterfaceAssignmentCompat.ts, 0, 0))
+>create : () => Shape
+>Shape : Shape
 }
 
 var x: ShapeFactory = Shape;
->x : ShapeFactory, Symbol(x, Decl(staticInterfaceAssignmentCompat.ts, 10, 3))
->ShapeFactory : ShapeFactory, Symbol(ShapeFactory, Decl(staticInterfaceAssignmentCompat.ts, 4, 1))
->Shape : typeof Shape, Symbol(Shape, Decl(staticInterfaceAssignmentCompat.ts, 0, 0))
+>x : ShapeFactory
+>ShapeFactory : ShapeFactory
+>Shape : typeof Shape
 

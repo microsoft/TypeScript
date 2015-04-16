@@ -1,39 +1,39 @@
 === tests/cases/compiler/declFileWithInternalModuleNameConflictsInExtendsClause3.ts ===
 
 module X.A.C {
->X : typeof X, Symbol(X, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 0), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 4, 1), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 8, 1))
->A : typeof A, Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 1, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 5, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 10, 9))
->C : any, Symbol(C, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 1, 11))
+>X : typeof X
+>A : typeof A
+>C : any
 
     export interface Z {
->Z : Z, Symbol(Z, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 1, 14))
+>Z : Z
     }
 }
 module X.A.B.C {
->X : typeof X, Symbol(X, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 0), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 4, 1), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 8, 1))
->A : typeof A, Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 1, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 5, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 10, 9))
->B : typeof B, Symbol(B, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 5, 11), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 10, 11))
->C : typeof C, Symbol(C, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 5, 13), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 10, 13))
+>X : typeof X
+>A : typeof A
+>B : typeof B
+>C : typeof C
 
     export class W implements X.A.C.Z { // This needs to be refered as X.A.C.Z as A has conflict
->W : W, Symbol(W, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 5, 16))
->X.A.C.Z : any, Symbol(X.A.C.Z, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 1, 14))
->X.A.C : any, Symbol(C, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 1, 11))
->X.A : typeof A, Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 1, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 5, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 10, 9))
->X : typeof X, Symbol(X, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 0), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 4, 1), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 8, 1))
->A : typeof A, Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 1, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 5, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 10, 9))
->C : any, Symbol(C, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 1, 11))
->Z : X.A.C.Z, Symbol(X.A.C.Z, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 1, 14))
+>W : W
+>X.A.C.Z : any
+>X.A.C : any
+>X.A : typeof A
+>X : typeof X
+>A : typeof A
+>C : any
+>Z : X.A.C.Z
     }
 }
 
 module X.A.B.C {
->X : typeof X, Symbol(X, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 0, 0), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 4, 1), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 8, 1))
->A : typeof A, Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 1, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 5, 9), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 10, 9))
->B : typeof B, Symbol(B, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 5, 11), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 10, 11))
->C : typeof C, Symbol(C, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 5, 13), Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 10, 13))
+>X : typeof X
+>A : typeof A
+>B : typeof B
+>C : typeof C
 
     export module A {
->A : any, Symbol(A, Decl(declFileWithInternalModuleNameConflictsInExtendsClause3.ts, 10, 16))
+>A : any
     }
 }

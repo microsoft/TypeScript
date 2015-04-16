@@ -1,37 +1,37 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty20.ts ===
 interface I {
->I : I, Symbol(I, Decl(symbolProperty20.ts, 0, 0))
+>I : I
 
     [Symbol.iterator]: (s: string) => string;
->Symbol.iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
->Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
->iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
->s : string, Symbol(s, Decl(symbolProperty20.ts, 1, 24))
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>s : string
 
     [Symbol.toStringTag](s: number): number;
->Symbol.toStringTag : symbol, Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1248, 24))
->Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
->toStringTag : symbol, Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1248, 24))
->s : number, Symbol(s, Decl(symbolProperty20.ts, 2, 25))
+>Symbol.toStringTag : symbol
+>Symbol : SymbolConstructor
+>toStringTag : symbol
+>s : number
 }
 
 var i: I = {
->i : I, Symbol(i, Decl(symbolProperty20.ts, 5, 3))
->I : I, Symbol(I, Decl(symbolProperty20.ts, 0, 0))
+>i : I
+>I : I
 >{    [Symbol.iterator]: s => s,    [Symbol.toStringTag](n) { return n; }} : { [Symbol.iterator]: (s: string) => string; [Symbol.toStringTag](n: number): number; }
 
     [Symbol.iterator]: s => s,
->Symbol.iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
->Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
->iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
 >s => s : (s: string) => string
->s : string, Symbol(s, Decl(symbolProperty20.ts, 6, 22))
->s : string, Symbol(s, Decl(symbolProperty20.ts, 6, 22))
+>s : string
+>s : string
 
     [Symbol.toStringTag](n) { return n; }
->Symbol.toStringTag : symbol, Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1248, 24))
->Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
->toStringTag : symbol, Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 1248, 24))
->n : number, Symbol(n, Decl(symbolProperty20.ts, 7, 25))
->n : number, Symbol(n, Decl(symbolProperty20.ts, 7, 25))
+>Symbol.toStringTag : symbol
+>Symbol : SymbolConstructor
+>toStringTag : symbol
+>n : number
+>n : number
 }

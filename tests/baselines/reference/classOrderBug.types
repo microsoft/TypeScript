@@ -1,31 +1,31 @@
 === tests/cases/compiler/classOrderBug.ts ===
 class bar {
->bar : bar, Symbol(bar, Decl(classOrderBug.ts, 0, 0))
+>bar : bar
 
     public baz: foo;
->baz : foo, Symbol(baz, Decl(classOrderBug.ts, 0, 11))
->foo : foo, Symbol(foo, Decl(classOrderBug.ts, 10, 12))
+>baz : foo
+>foo : foo
 
     constructor() {
 
         this.baz = new foo();
 >this.baz = new foo() : foo
->this.baz : foo, Symbol(baz, Decl(classOrderBug.ts, 0, 11))
->this : bar, Symbol(bar, Decl(classOrderBug.ts, 0, 0))
->baz : foo, Symbol(baz, Decl(classOrderBug.ts, 0, 11))
+>this.baz : foo
+>this : bar
+>baz : foo
 >new foo() : foo
->foo : typeof foo, Symbol(foo, Decl(classOrderBug.ts, 10, 12))
+>foo : typeof foo
 
     }
 
 }
 
 class baz {}
->baz : baz, Symbol(baz, Decl(classOrderBug.ts, 8, 1))
+>baz : baz
 
 class foo extends baz {}
->foo : foo, Symbol(foo, Decl(classOrderBug.ts, 10, 12))
->baz : baz, Symbol(baz, Decl(classOrderBug.ts, 8, 1))
+>foo : foo
+>baz : baz
 
 
 

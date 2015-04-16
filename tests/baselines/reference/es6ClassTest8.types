@@ -1,116 +1,116 @@
 === tests/cases/compiler/es6ClassTest8.ts ===
 function f1(x:any) {return x;}
->f1 : (x: any) => any, Symbol(f1, Decl(es6ClassTest8.ts, 0, 0))
->x : any, Symbol(x, Decl(es6ClassTest8.ts, 0, 12))
->x : any, Symbol(x, Decl(es6ClassTest8.ts, 0, 12))
+>f1 : (x: any) => any
+>x : any
+>x : any
 
 class C {
->C : C, Symbol(C, Decl(es6ClassTest8.ts, 0, 30))
+>C : C
 
     constructor() {
         var bar:any = (function() {
->bar : any, Symbol(bar, Decl(es6ClassTest8.ts, 4, 11))
+>bar : any
 >(function() {            return bar; // 'bar' should be resolvable        }) : () => any
 >function() {            return bar; // 'bar' should be resolvable        } : () => any
 
             return bar; // 'bar' should be resolvable
->bar : any, Symbol(bar, Decl(es6ClassTest8.ts, 4, 11))
+>bar : any
 
         });
         var b = f1(f1(bar));
->b : any, Symbol(b, Decl(es6ClassTest8.ts, 7, 11))
+>b : any
 >f1(f1(bar)) : any
->f1 : (x: any) => any, Symbol(f1, Decl(es6ClassTest8.ts, 0, 0))
+>f1 : (x: any) => any
 >f1(bar) : any
->f1 : (x: any) => any, Symbol(f1, Decl(es6ClassTest8.ts, 0, 0))
->bar : any, Symbol(bar, Decl(es6ClassTest8.ts, 4, 11))
+>f1 : (x: any) => any
+>bar : any
     }
   
 }
 
 class Vector {
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+>Vector : Vector
 
     static norm(v:Vector):Vector {return null;}
->norm : (v: Vector) => Vector, Symbol(Vector.norm, Decl(es6ClassTest8.ts, 12, 14))
->v : Vector, Symbol(v, Decl(es6ClassTest8.ts, 13, 16))
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+>norm : (v: Vector) => Vector
+>v : Vector
+>Vector : Vector
+>Vector : Vector
 >null : null
 
     static minus(v1:Vector, v2:Vector):Vector {return null;}
->minus : (v1: Vector, v2: Vector) => Vector, Symbol(Vector.minus, Decl(es6ClassTest8.ts, 13, 47))
->v1 : Vector, Symbol(v1, Decl(es6ClassTest8.ts, 14, 17))
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
->v2 : Vector, Symbol(v2, Decl(es6ClassTest8.ts, 14, 27))
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+>minus : (v1: Vector, v2: Vector) => Vector
+>v1 : Vector
+>Vector : Vector
+>v2 : Vector
+>Vector : Vector
+>Vector : Vector
 >null : null
 
     static times(v1:Vector, v2:Vector):Vector {return null;}
->times : (v1: Vector, v2: Vector) => Vector, Symbol(Vector.times, Decl(es6ClassTest8.ts, 14, 60))
->v1 : Vector, Symbol(v1, Decl(es6ClassTest8.ts, 15, 17))
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
->v2 : Vector, Symbol(v2, Decl(es6ClassTest8.ts, 15, 27))
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+>times : (v1: Vector, v2: Vector) => Vector
+>v1 : Vector
+>Vector : Vector
+>v2 : Vector
+>Vector : Vector
+>Vector : Vector
 >null : null
 
     static cross(v1:Vector, v2:Vector):Vector {return null;}
->cross : (v1: Vector, v2: Vector) => Vector, Symbol(Vector.cross, Decl(es6ClassTest8.ts, 15, 60))
->v1 : Vector, Symbol(v1, Decl(es6ClassTest8.ts, 16, 17))
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
->v2 : Vector, Symbol(v2, Decl(es6ClassTest8.ts, 16, 27))
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+>cross : (v1: Vector, v2: Vector) => Vector
+>v1 : Vector
+>Vector : Vector
+>v2 : Vector
+>Vector : Vector
+>Vector : Vector
 >null : null
 
     constructor(public x: number,
->x : number, Symbol(x, Decl(es6ClassTest8.ts, 18, 16))
+>x : number
 
                 public y: number,
->y : number, Symbol(y, Decl(es6ClassTest8.ts, 18, 33))
+>y : number
 
                 public z: number) { 
->z : number, Symbol(z, Decl(es6ClassTest8.ts, 19, 33))
+>z : number
     }
 
     static dot(v1:Vector, v2:Vector):Vector {return null;}    
->dot : (v1: Vector, v2: Vector) => Vector, Symbol(Vector.dot, Decl(es6ClassTest8.ts, 21, 5))
->v1 : Vector, Symbol(v1, Decl(es6ClassTest8.ts, 23, 15))
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
->v2 : Vector, Symbol(v2, Decl(es6ClassTest8.ts, 23, 25))
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+>dot : (v1: Vector, v2: Vector) => Vector
+>v1 : Vector
+>Vector : Vector
+>v2 : Vector
+>Vector : Vector
+>Vector : Vector
 >null : null
 
 }              
 
 class Camera {
->Camera : Camera, Symbol(Camera, Decl(es6ClassTest8.ts, 25, 1))
+>Camera : Camera
 
     public forward: Vector;
->forward : Vector, Symbol(forward, Decl(es6ClassTest8.ts, 27, 14))
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+>forward : Vector
+>Vector : Vector
 
     public right: Vector;
->right : Vector, Symbol(right, Decl(es6ClassTest8.ts, 28, 27))
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+>right : Vector
+>Vector : Vector
 
     public up: Vector;
->up : Vector, Symbol(up, Decl(es6ClassTest8.ts, 29, 25))
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+>up : Vector
+>Vector : Vector
 
     constructor(public pos: Vector, lookAt: Vector) { 
->pos : Vector, Symbol(pos, Decl(es6ClassTest8.ts, 31, 16))
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
->lookAt : Vector, Symbol(lookAt, Decl(es6ClassTest8.ts, 31, 35))
->Vector : Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+>pos : Vector
+>Vector : Vector
+>lookAt : Vector
+>Vector : Vector
 
         var down = new Vector(0.0, -1.0, 0.0);
->down : Vector, Symbol(down, Decl(es6ClassTest8.ts, 32, 11))
+>down : Vector
 >new Vector(0.0, -1.0, 0.0) : Vector
->Vector : typeof Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
+>Vector : typeof Vector
 >0.0 : number
 >-1.0 : number
 >1.0 : number
@@ -118,69 +118,69 @@ class Camera {
 
         this.forward = Vector.norm(Vector.minus(lookAt,this.pos));
 >this.forward = Vector.norm(Vector.minus(lookAt,this.pos)) : Vector
->this.forward : Vector, Symbol(forward, Decl(es6ClassTest8.ts, 27, 14))
->this : Camera, Symbol(Camera, Decl(es6ClassTest8.ts, 25, 1))
->forward : Vector, Symbol(forward, Decl(es6ClassTest8.ts, 27, 14))
+>this.forward : Vector
+>this : Camera
+>forward : Vector
 >Vector.norm(Vector.minus(lookAt,this.pos)) : Vector
->Vector.norm : (v: Vector) => Vector, Symbol(Vector.norm, Decl(es6ClassTest8.ts, 12, 14))
->Vector : typeof Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
->norm : (v: Vector) => Vector, Symbol(Vector.norm, Decl(es6ClassTest8.ts, 12, 14))
+>Vector.norm : (v: Vector) => Vector
+>Vector : typeof Vector
+>norm : (v: Vector) => Vector
 >Vector.minus(lookAt,this.pos) : Vector
->Vector.minus : (v1: Vector, v2: Vector) => Vector, Symbol(Vector.minus, Decl(es6ClassTest8.ts, 13, 47))
->Vector : typeof Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
->minus : (v1: Vector, v2: Vector) => Vector, Symbol(Vector.minus, Decl(es6ClassTest8.ts, 13, 47))
->lookAt : Vector, Symbol(lookAt, Decl(es6ClassTest8.ts, 31, 35))
->this.pos : Vector, Symbol(pos, Decl(es6ClassTest8.ts, 31, 16))
->this : Camera, Symbol(Camera, Decl(es6ClassTest8.ts, 25, 1))
->pos : Vector, Symbol(pos, Decl(es6ClassTest8.ts, 31, 16))
+>Vector.minus : (v1: Vector, v2: Vector) => Vector
+>Vector : typeof Vector
+>minus : (v1: Vector, v2: Vector) => Vector
+>lookAt : Vector
+>this.pos : Vector
+>this : Camera
+>pos : Vector
 
         this.right = Vector.times(down, Vector.norm(Vector.cross(this.forward, down)));
 >this.right = Vector.times(down, Vector.norm(Vector.cross(this.forward, down))) : Vector
->this.right : Vector, Symbol(right, Decl(es6ClassTest8.ts, 28, 27))
->this : Camera, Symbol(Camera, Decl(es6ClassTest8.ts, 25, 1))
->right : Vector, Symbol(right, Decl(es6ClassTest8.ts, 28, 27))
+>this.right : Vector
+>this : Camera
+>right : Vector
 >Vector.times(down, Vector.norm(Vector.cross(this.forward, down))) : Vector
->Vector.times : (v1: Vector, v2: Vector) => Vector, Symbol(Vector.times, Decl(es6ClassTest8.ts, 14, 60))
->Vector : typeof Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
->times : (v1: Vector, v2: Vector) => Vector, Symbol(Vector.times, Decl(es6ClassTest8.ts, 14, 60))
->down : Vector, Symbol(down, Decl(es6ClassTest8.ts, 32, 11))
+>Vector.times : (v1: Vector, v2: Vector) => Vector
+>Vector : typeof Vector
+>times : (v1: Vector, v2: Vector) => Vector
+>down : Vector
 >Vector.norm(Vector.cross(this.forward, down)) : Vector
->Vector.norm : (v: Vector) => Vector, Symbol(Vector.norm, Decl(es6ClassTest8.ts, 12, 14))
->Vector : typeof Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
->norm : (v: Vector) => Vector, Symbol(Vector.norm, Decl(es6ClassTest8.ts, 12, 14))
+>Vector.norm : (v: Vector) => Vector
+>Vector : typeof Vector
+>norm : (v: Vector) => Vector
 >Vector.cross(this.forward, down) : Vector
->Vector.cross : (v1: Vector, v2: Vector) => Vector, Symbol(Vector.cross, Decl(es6ClassTest8.ts, 15, 60))
->Vector : typeof Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
->cross : (v1: Vector, v2: Vector) => Vector, Symbol(Vector.cross, Decl(es6ClassTest8.ts, 15, 60))
->this.forward : Vector, Symbol(forward, Decl(es6ClassTest8.ts, 27, 14))
->this : Camera, Symbol(Camera, Decl(es6ClassTest8.ts, 25, 1))
->forward : Vector, Symbol(forward, Decl(es6ClassTest8.ts, 27, 14))
->down : Vector, Symbol(down, Decl(es6ClassTest8.ts, 32, 11))
+>Vector.cross : (v1: Vector, v2: Vector) => Vector
+>Vector : typeof Vector
+>cross : (v1: Vector, v2: Vector) => Vector
+>this.forward : Vector
+>this : Camera
+>forward : Vector
+>down : Vector
 
         this.up = Vector.times(down, Vector.norm(Vector.cross(this.forward, this.right)));    
 >this.up = Vector.times(down, Vector.norm(Vector.cross(this.forward, this.right))) : Vector
->this.up : Vector, Symbol(up, Decl(es6ClassTest8.ts, 29, 25))
->this : Camera, Symbol(Camera, Decl(es6ClassTest8.ts, 25, 1))
->up : Vector, Symbol(up, Decl(es6ClassTest8.ts, 29, 25))
+>this.up : Vector
+>this : Camera
+>up : Vector
 >Vector.times(down, Vector.norm(Vector.cross(this.forward, this.right))) : Vector
->Vector.times : (v1: Vector, v2: Vector) => Vector, Symbol(Vector.times, Decl(es6ClassTest8.ts, 14, 60))
->Vector : typeof Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
->times : (v1: Vector, v2: Vector) => Vector, Symbol(Vector.times, Decl(es6ClassTest8.ts, 14, 60))
->down : Vector, Symbol(down, Decl(es6ClassTest8.ts, 32, 11))
+>Vector.times : (v1: Vector, v2: Vector) => Vector
+>Vector : typeof Vector
+>times : (v1: Vector, v2: Vector) => Vector
+>down : Vector
 >Vector.norm(Vector.cross(this.forward, this.right)) : Vector
->Vector.norm : (v: Vector) => Vector, Symbol(Vector.norm, Decl(es6ClassTest8.ts, 12, 14))
->Vector : typeof Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
->norm : (v: Vector) => Vector, Symbol(Vector.norm, Decl(es6ClassTest8.ts, 12, 14))
+>Vector.norm : (v: Vector) => Vector
+>Vector : typeof Vector
+>norm : (v: Vector) => Vector
 >Vector.cross(this.forward, this.right) : Vector
->Vector.cross : (v1: Vector, v2: Vector) => Vector, Symbol(Vector.cross, Decl(es6ClassTest8.ts, 15, 60))
->Vector : typeof Vector, Symbol(Vector, Decl(es6ClassTest8.ts, 10, 1))
->cross : (v1: Vector, v2: Vector) => Vector, Symbol(Vector.cross, Decl(es6ClassTest8.ts, 15, 60))
->this.forward : Vector, Symbol(forward, Decl(es6ClassTest8.ts, 27, 14))
->this : Camera, Symbol(Camera, Decl(es6ClassTest8.ts, 25, 1))
->forward : Vector, Symbol(forward, Decl(es6ClassTest8.ts, 27, 14))
->this.right : Vector, Symbol(right, Decl(es6ClassTest8.ts, 28, 27))
->this : Camera, Symbol(Camera, Decl(es6ClassTest8.ts, 25, 1))
->right : Vector, Symbol(right, Decl(es6ClassTest8.ts, 28, 27))
+>Vector.cross : (v1: Vector, v2: Vector) => Vector
+>Vector : typeof Vector
+>cross : (v1: Vector, v2: Vector) => Vector
+>this.forward : Vector
+>this : Camera
+>forward : Vector
+>this.right : Vector
+>this : Camera
+>right : Vector
     }
 }
 

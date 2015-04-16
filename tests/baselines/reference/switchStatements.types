@@ -1,10 +1,10 @@
 === tests/cases/conformance/statements/switchStatements/switchStatements.ts ===
 module M {
->M : typeof M, Symbol(M, Decl(switchStatements.ts, 0, 0))
+>M : typeof M
 
     export function fn(x: number) {
->fn : (x: number) => string, Symbol(fn, Decl(switchStatements.ts, 0, 10))
->x : number, Symbol(x, Decl(switchStatements.ts, 1, 23))
+>fn : (x: number) => string
+>x : number
 
         return '';
 >'' : string
@@ -12,10 +12,10 @@ module M {
 }
 
 var x: any;
->x : any, Symbol(x, Decl(switchStatements.ts, 6, 3))
+>x : any
 
 switch (x) {
->x : any, Symbol(x, Decl(switchStatements.ts, 6, 3))
+>x : any
 
     case '':
 >'' : string
@@ -30,16 +30,16 @@ switch (x) {
 >null : null
 
     case undefined:
->undefined : undefined, Symbol(undefined)
+>undefined : undefined
 
     case new Date(12):
 >new Date(12) : Date
->Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>Date : DateConstructor
 >12 : number
 
     case new Object():
 >new Object() : Object
->Object : ObjectConstructor, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : ObjectConstructor
 
     case /[a-z]/:
 >/[a-z]/ : RegExp
@@ -52,7 +52,7 @@ switch (x) {
 
     case { id: 12 }:
 >{ id: 12 } : { id: number; }
->id : number, Symbol(id, Decl(switchStatements.ts, 18, 10))
+>id : number
 >12 : number
 
     case['a']:
@@ -61,31 +61,31 @@ switch (x) {
 
     case typeof x:
 >typeof x : string
->x : any, Symbol(x, Decl(switchStatements.ts, 6, 3))
+>x : any
 
     case typeof M:
 >typeof M : string
->M : typeof M, Symbol(M, Decl(switchStatements.ts, 0, 0))
+>M : typeof M
 
     case M.fn(1):
 >M.fn(1) : string
->M.fn : (x: number) => string, Symbol(M.fn, Decl(switchStatements.ts, 0, 10))
->M : typeof M, Symbol(M, Decl(switchStatements.ts, 0, 0))
->fn : (x: number) => string, Symbol(M.fn, Decl(switchStatements.ts, 0, 10))
+>M.fn : (x: number) => string
+>M : typeof M
+>fn : (x: number) => string
 >1 : number
 
     case <T>(x: number) => '':
 ><T>(x: number) => '' : <T>(x: number) => string
->T : T, Symbol(T, Decl(switchStatements.ts, 23, 10))
->x : number, Symbol(x, Decl(switchStatements.ts, 23, 13))
+>T : T
+>x : number
 >'' : string
 
     case (<T>(x: number) => '')(2):
 >(<T>(x: number) => '')(2) : string
 >(<T>(x: number) => '') : <T>(x: number) => string
 ><T>(x: number) => '' : <T>(x: number) => string
->T : T, Symbol(T, Decl(switchStatements.ts, 24, 11))
->x : number, Symbol(x, Decl(switchStatements.ts, 24, 14))
+>T : T
+>x : number
 >'' : string
 >2 : number
 
@@ -94,32 +94,32 @@ switch (x) {
 
 // basic assignable check, rest covered in tests for 'assignement compatibility'
 class C { id: number; }
->C : C, Symbol(C, Decl(switchStatements.ts, 26, 1))
->id : number, Symbol(id, Decl(switchStatements.ts, 29, 9))
+>C : C
+>id : number
 
 class D extends C { name: string }
->D : D, Symbol(D, Decl(switchStatements.ts, 29, 23))
->C : C, Symbol(C, Decl(switchStatements.ts, 26, 1))
->name : string, Symbol(name, Decl(switchStatements.ts, 30, 19))
+>D : D
+>C : C
+>name : string
 
 switch (new C()) {
 >new C() : C
->C : typeof C, Symbol(C, Decl(switchStatements.ts, 26, 1))
+>C : typeof C
 
     case new D():
 >new D() : D
->D : typeof D, Symbol(D, Decl(switchStatements.ts, 29, 23))
+>D : typeof D
 
     case { id: 12, name: '' }:
 >{ id: 12, name: '' } : { id: number; name: string; }
->id : number, Symbol(id, Decl(switchStatements.ts, 34, 10))
+>id : number
 >12 : number
->name : string, Symbol(name, Decl(switchStatements.ts, 34, 18))
+>name : string
 >'' : string
 
     case new C():
 >new C() : C
->C : typeof C, Symbol(C, Decl(switchStatements.ts, 26, 1))
+>C : typeof C
 }
 
 switch ('') { }
@@ -135,16 +135,16 @@ switch (null) { }
 >null : null
 
 switch (undefined) { }
->undefined : undefined, Symbol(undefined)
+>undefined : undefined
 
 switch (new Date(12)) { }
 >new Date(12) : Date
->Date : DateConstructor, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>Date : DateConstructor
 >12 : number
 
 switch (new Object()) { }
 >new Object() : Object
->Object : ObjectConstructor, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : ObjectConstructor
 
 switch (/[a-z]/) { }
 >/[a-z]/ : RegExp
@@ -157,7 +157,7 @@ switch ({}) { }
 
 switch ({ id: 12 }) { }
 >{ id: 12 } : { id: number; }
->id : number, Symbol(id, Decl(switchStatements.ts, 48, 9))
+>id : number
 >12 : number
 
 switch (['a']) { }
@@ -166,17 +166,17 @@ switch (['a']) { }
 
 switch (<T>(x: number) => '') { }
 ><T>(x: number) => '' : <T>(x: number) => string
->T : T, Symbol(T, Decl(switchStatements.ts, 50, 9))
->x : number, Symbol(x, Decl(switchStatements.ts, 50, 12))
+>T : T
+>x : number
 >'' : string
 
 switch ((<T>(x: T) => '')(1)) { }
 >(<T>(x: T) => '')(1) : string
 >(<T>(x: T) => '') : <T>(x: T) => string
 ><T>(x: T) => '' : <T>(x: T) => string
->T : T, Symbol(T, Decl(switchStatements.ts, 51, 10))
->x : T, Symbol(x, Decl(switchStatements.ts, 51, 13))
->T : T, Symbol(T, Decl(switchStatements.ts, 51, 10))
+>T : T
+>x : T
+>T : T
 >'' : string
 >1 : number
 

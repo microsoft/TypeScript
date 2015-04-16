@@ -1,32 +1,32 @@
 === tests/cases/compiler/chainedAssignment2.ts ===
 var a: string;
->a : string, Symbol(a, Decl(chainedAssignment2.ts, 0, 3))
+>a : string
 
 var b: number;
->b : number, Symbol(b, Decl(chainedAssignment2.ts, 1, 3))
+>b : number
 
 var c: boolean;
->c : boolean, Symbol(c, Decl(chainedAssignment2.ts, 2, 3))
+>c : boolean
 
 var d: Date;
->d : Date, Symbol(d, Decl(chainedAssignment2.ts, 3, 3))
->Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>d : Date
+>Date : Date
 
 var e: RegExp;
->e : RegExp, Symbol(e, Decl(chainedAssignment2.ts, 4, 3))
->RegExp : RegExp, Symbol(RegExp, Decl(lib.d.ts, 825, 1), Decl(lib.d.ts, 876, 11))
+>e : RegExp
+>RegExp : RegExp
 
 a = b = c = d = e = null;
 >a = b = c = d = e = null : null
->a : string, Symbol(a, Decl(chainedAssignment2.ts, 0, 3))
+>a : string
 >b = c = d = e = null : null
->b : number, Symbol(b, Decl(chainedAssignment2.ts, 1, 3))
+>b : number
 >c = d = e = null : null
->c : boolean, Symbol(c, Decl(chainedAssignment2.ts, 2, 3))
+>c : boolean
 >d = e = null : null
->d : Date, Symbol(d, Decl(chainedAssignment2.ts, 3, 3))
+>d : Date
 >e = null : null
->e : RegExp, Symbol(e, Decl(chainedAssignment2.ts, 4, 3))
+>e : RegExp
 >null : null
 
 

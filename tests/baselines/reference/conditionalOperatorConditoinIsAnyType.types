@@ -1,332 +1,332 @@
 === tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditoinIsAnyType.ts ===
 //Cond ? Expr1 : Expr2,  Cond is of any type, Expr1 and Expr2 have the same type
 var condAny: any;
->condAny : any, Symbol(condAny, Decl(conditionalOperatorConditoinIsAnyType.ts, 1, 3))
+>condAny : any
 
 var x: any;
->x : any, Symbol(x, Decl(conditionalOperatorConditoinIsAnyType.ts, 2, 3))
+>x : any
 
 var exprAny1: any;
->exprAny1 : any, Symbol(exprAny1, Decl(conditionalOperatorConditoinIsAnyType.ts, 4, 3))
+>exprAny1 : any
 
 var exprBoolean1: boolean;
->exprBoolean1 : boolean, Symbol(exprBoolean1, Decl(conditionalOperatorConditoinIsAnyType.ts, 5, 3))
+>exprBoolean1 : boolean
 
 var exprNumber1: number;
->exprNumber1 : number, Symbol(exprNumber1, Decl(conditionalOperatorConditoinIsAnyType.ts, 6, 3))
+>exprNumber1 : number
 
 var exprString1: string;
->exprString1 : string, Symbol(exprString1, Decl(conditionalOperatorConditoinIsAnyType.ts, 7, 3))
+>exprString1 : string
 
 var exprIsObject1: Object;
->exprIsObject1 : Object, Symbol(exprIsObject1, Decl(conditionalOperatorConditoinIsAnyType.ts, 8, 3))
->Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>exprIsObject1 : Object
+>Object : Object
 
 var exprAny2: any;
->exprAny2 : any, Symbol(exprAny2, Decl(conditionalOperatorConditoinIsAnyType.ts, 10, 3))
+>exprAny2 : any
 
 var exprBoolean2: boolean;
->exprBoolean2 : boolean, Symbol(exprBoolean2, Decl(conditionalOperatorConditoinIsAnyType.ts, 11, 3))
+>exprBoolean2 : boolean
 
 var exprNumber2: number;
->exprNumber2 : number, Symbol(exprNumber2, Decl(conditionalOperatorConditoinIsAnyType.ts, 12, 3))
+>exprNumber2 : number
 
 var exprString2: string;
->exprString2 : string, Symbol(exprString2, Decl(conditionalOperatorConditoinIsAnyType.ts, 13, 3))
+>exprString2 : string
 
 var exprIsObject2: Object;
->exprIsObject2 : Object, Symbol(exprIsObject2, Decl(conditionalOperatorConditoinIsAnyType.ts, 14, 3))
->Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>exprIsObject2 : Object
+>Object : Object
 
 //Cond is an any type variable
 condAny ? exprAny1 : exprAny2;
 >condAny ? exprAny1 : exprAny2 : any
->condAny : any, Symbol(condAny, Decl(conditionalOperatorConditoinIsAnyType.ts, 1, 3))
->exprAny1 : any, Symbol(exprAny1, Decl(conditionalOperatorConditoinIsAnyType.ts, 4, 3))
->exprAny2 : any, Symbol(exprAny2, Decl(conditionalOperatorConditoinIsAnyType.ts, 10, 3))
+>condAny : any
+>exprAny1 : any
+>exprAny2 : any
 
 condAny ? exprBoolean1 : exprBoolean2;
 >condAny ? exprBoolean1 : exprBoolean2 : boolean
->condAny : any, Symbol(condAny, Decl(conditionalOperatorConditoinIsAnyType.ts, 1, 3))
->exprBoolean1 : boolean, Symbol(exprBoolean1, Decl(conditionalOperatorConditoinIsAnyType.ts, 5, 3))
->exprBoolean2 : boolean, Symbol(exprBoolean2, Decl(conditionalOperatorConditoinIsAnyType.ts, 11, 3))
+>condAny : any
+>exprBoolean1 : boolean
+>exprBoolean2 : boolean
 
 condAny ? exprNumber1 : exprNumber2;
 >condAny ? exprNumber1 : exprNumber2 : number
->condAny : any, Symbol(condAny, Decl(conditionalOperatorConditoinIsAnyType.ts, 1, 3))
->exprNumber1 : number, Symbol(exprNumber1, Decl(conditionalOperatorConditoinIsAnyType.ts, 6, 3))
->exprNumber2 : number, Symbol(exprNumber2, Decl(conditionalOperatorConditoinIsAnyType.ts, 12, 3))
+>condAny : any
+>exprNumber1 : number
+>exprNumber2 : number
 
 condAny ? exprString1 : exprString2;
 >condAny ? exprString1 : exprString2 : string
->condAny : any, Symbol(condAny, Decl(conditionalOperatorConditoinIsAnyType.ts, 1, 3))
->exprString1 : string, Symbol(exprString1, Decl(conditionalOperatorConditoinIsAnyType.ts, 7, 3))
->exprString2 : string, Symbol(exprString2, Decl(conditionalOperatorConditoinIsAnyType.ts, 13, 3))
+>condAny : any
+>exprString1 : string
+>exprString2 : string
 
 condAny ? exprIsObject1 : exprIsObject2;
 >condAny ? exprIsObject1 : exprIsObject2 : Object
->condAny : any, Symbol(condAny, Decl(conditionalOperatorConditoinIsAnyType.ts, 1, 3))
->exprIsObject1 : Object, Symbol(exprIsObject1, Decl(conditionalOperatorConditoinIsAnyType.ts, 8, 3))
->exprIsObject2 : Object, Symbol(exprIsObject2, Decl(conditionalOperatorConditoinIsAnyType.ts, 14, 3))
+>condAny : any
+>exprIsObject1 : Object
+>exprIsObject2 : Object
 
 condAny ? exprString1 : exprBoolean1; // union
 >condAny ? exprString1 : exprBoolean1 : string | boolean
->condAny : any, Symbol(condAny, Decl(conditionalOperatorConditoinIsAnyType.ts, 1, 3))
->exprString1 : string, Symbol(exprString1, Decl(conditionalOperatorConditoinIsAnyType.ts, 7, 3))
->exprBoolean1 : boolean, Symbol(exprBoolean1, Decl(conditionalOperatorConditoinIsAnyType.ts, 5, 3))
+>condAny : any
+>exprString1 : string
+>exprBoolean1 : boolean
 
 //Cond is an any type literal
 null ? exprAny1 : exprAny2;
 >null ? exprAny1 : exprAny2 : any
 >null : null
->exprAny1 : any, Symbol(exprAny1, Decl(conditionalOperatorConditoinIsAnyType.ts, 4, 3))
->exprAny2 : any, Symbol(exprAny2, Decl(conditionalOperatorConditoinIsAnyType.ts, 10, 3))
+>exprAny1 : any
+>exprAny2 : any
 
 null ? exprBoolean1 : exprBoolean2;
 >null ? exprBoolean1 : exprBoolean2 : boolean
 >null : null
->exprBoolean1 : boolean, Symbol(exprBoolean1, Decl(conditionalOperatorConditoinIsAnyType.ts, 5, 3))
->exprBoolean2 : boolean, Symbol(exprBoolean2, Decl(conditionalOperatorConditoinIsAnyType.ts, 11, 3))
+>exprBoolean1 : boolean
+>exprBoolean2 : boolean
 
 undefined ? exprNumber1 : exprNumber2;
 >undefined ? exprNumber1 : exprNumber2 : number
->undefined : undefined, Symbol(undefined)
->exprNumber1 : number, Symbol(exprNumber1, Decl(conditionalOperatorConditoinIsAnyType.ts, 6, 3))
->exprNumber2 : number, Symbol(exprNumber2, Decl(conditionalOperatorConditoinIsAnyType.ts, 12, 3))
+>undefined : undefined
+>exprNumber1 : number
+>exprNumber2 : number
 
 [null, undefined] ? exprString1 : exprString2;
 >[null, undefined] ? exprString1 : exprString2 : string
 >[null, undefined] : null[]
 >null : null
->undefined : undefined, Symbol(undefined)
->exprString1 : string, Symbol(exprString1, Decl(conditionalOperatorConditoinIsAnyType.ts, 7, 3))
->exprString2 : string, Symbol(exprString2, Decl(conditionalOperatorConditoinIsAnyType.ts, 13, 3))
+>undefined : undefined
+>exprString1 : string
+>exprString2 : string
 
 [null, undefined] ? exprIsObject1 : exprIsObject2;
 >[null, undefined] ? exprIsObject1 : exprIsObject2 : Object
 >[null, undefined] : null[]
 >null : null
->undefined : undefined, Symbol(undefined)
->exprIsObject1 : Object, Symbol(exprIsObject1, Decl(conditionalOperatorConditoinIsAnyType.ts, 8, 3))
->exprIsObject2 : Object, Symbol(exprIsObject2, Decl(conditionalOperatorConditoinIsAnyType.ts, 14, 3))
+>undefined : undefined
+>exprIsObject1 : Object
+>exprIsObject2 : Object
 
 undefined ? exprString1 : exprBoolean1; // union
 >undefined ? exprString1 : exprBoolean1 : string | boolean
->undefined : undefined, Symbol(undefined)
->exprString1 : string, Symbol(exprString1, Decl(conditionalOperatorConditoinIsAnyType.ts, 7, 3))
->exprBoolean1 : boolean, Symbol(exprBoolean1, Decl(conditionalOperatorConditoinIsAnyType.ts, 5, 3))
+>undefined : undefined
+>exprString1 : string
+>exprBoolean1 : boolean
 
 //Cond is an any type expression
 x.doSomeThing() ? exprAny1 : exprAny2;
 >x.doSomeThing() ? exprAny1 : exprAny2 : any
 >x.doSomeThing() : any
 >x.doSomeThing : any
->x : any, Symbol(x, Decl(conditionalOperatorConditoinIsAnyType.ts, 2, 3))
+>x : any
 >doSomeThing : any
->exprAny1 : any, Symbol(exprAny1, Decl(conditionalOperatorConditoinIsAnyType.ts, 4, 3))
->exprAny2 : any, Symbol(exprAny2, Decl(conditionalOperatorConditoinIsAnyType.ts, 10, 3))
+>exprAny1 : any
+>exprAny2 : any
 
 x("x") ? exprBoolean1 : exprBoolean2;
 >x("x") ? exprBoolean1 : exprBoolean2 : boolean
 >x("x") : any
->x : any, Symbol(x, Decl(conditionalOperatorConditoinIsAnyType.ts, 2, 3))
+>x : any
 >"x" : string
->exprBoolean1 : boolean, Symbol(exprBoolean1, Decl(conditionalOperatorConditoinIsAnyType.ts, 5, 3))
->exprBoolean2 : boolean, Symbol(exprBoolean2, Decl(conditionalOperatorConditoinIsAnyType.ts, 11, 3))
+>exprBoolean1 : boolean
+>exprBoolean2 : boolean
 
 x(x) ? exprNumber1 : exprNumber2;
 >x(x) ? exprNumber1 : exprNumber2 : number
 >x(x) : any
->x : any, Symbol(x, Decl(conditionalOperatorConditoinIsAnyType.ts, 2, 3))
->x : any, Symbol(x, Decl(conditionalOperatorConditoinIsAnyType.ts, 2, 3))
->exprNumber1 : number, Symbol(exprNumber1, Decl(conditionalOperatorConditoinIsAnyType.ts, 6, 3))
->exprNumber2 : number, Symbol(exprNumber2, Decl(conditionalOperatorConditoinIsAnyType.ts, 12, 3))
+>x : any
+>x : any
+>exprNumber1 : number
+>exprNumber2 : number
 
 x("x") ? exprString1 : exprString2;
 >x("x") ? exprString1 : exprString2 : string
 >x("x") : any
->x : any, Symbol(x, Decl(conditionalOperatorConditoinIsAnyType.ts, 2, 3))
+>x : any
 >"x" : string
->exprString1 : string, Symbol(exprString1, Decl(conditionalOperatorConditoinIsAnyType.ts, 7, 3))
->exprString2 : string, Symbol(exprString2, Decl(conditionalOperatorConditoinIsAnyType.ts, 13, 3))
+>exprString1 : string
+>exprString2 : string
 
 x.doSomeThing() ? exprIsObject1 : exprIsObject2;
 >x.doSomeThing() ? exprIsObject1 : exprIsObject2 : Object
 >x.doSomeThing() : any
 >x.doSomeThing : any
->x : any, Symbol(x, Decl(conditionalOperatorConditoinIsAnyType.ts, 2, 3))
+>x : any
 >doSomeThing : any
->exprIsObject1 : Object, Symbol(exprIsObject1, Decl(conditionalOperatorConditoinIsAnyType.ts, 8, 3))
->exprIsObject2 : Object, Symbol(exprIsObject2, Decl(conditionalOperatorConditoinIsAnyType.ts, 14, 3))
+>exprIsObject1 : Object
+>exprIsObject2 : Object
 
 x.doSomeThing() ? exprString1 : exprBoolean1; // union
 >x.doSomeThing() ? exprString1 : exprBoolean1 : string | boolean
 >x.doSomeThing() : any
 >x.doSomeThing : any
->x : any, Symbol(x, Decl(conditionalOperatorConditoinIsAnyType.ts, 2, 3))
+>x : any
 >doSomeThing : any
->exprString1 : string, Symbol(exprString1, Decl(conditionalOperatorConditoinIsAnyType.ts, 7, 3))
->exprBoolean1 : boolean, Symbol(exprBoolean1, Decl(conditionalOperatorConditoinIsAnyType.ts, 5, 3))
+>exprString1 : string
+>exprBoolean1 : boolean
 
 //Results shoud be same as Expr1 and Expr2
 var resultIsAny1 = condAny ? exprAny1 : exprAny2;
->resultIsAny1 : any, Symbol(resultIsAny1, Decl(conditionalOperatorConditoinIsAnyType.ts, 41, 3))
+>resultIsAny1 : any
 >condAny ? exprAny1 : exprAny2 : any
->condAny : any, Symbol(condAny, Decl(conditionalOperatorConditoinIsAnyType.ts, 1, 3))
->exprAny1 : any, Symbol(exprAny1, Decl(conditionalOperatorConditoinIsAnyType.ts, 4, 3))
->exprAny2 : any, Symbol(exprAny2, Decl(conditionalOperatorConditoinIsAnyType.ts, 10, 3))
+>condAny : any
+>exprAny1 : any
+>exprAny2 : any
 
 var resultIsBoolean1 = condAny ? exprBoolean1 : exprBoolean2;
->resultIsBoolean1 : boolean, Symbol(resultIsBoolean1, Decl(conditionalOperatorConditoinIsAnyType.ts, 42, 3))
+>resultIsBoolean1 : boolean
 >condAny ? exprBoolean1 : exprBoolean2 : boolean
->condAny : any, Symbol(condAny, Decl(conditionalOperatorConditoinIsAnyType.ts, 1, 3))
->exprBoolean1 : boolean, Symbol(exprBoolean1, Decl(conditionalOperatorConditoinIsAnyType.ts, 5, 3))
->exprBoolean2 : boolean, Symbol(exprBoolean2, Decl(conditionalOperatorConditoinIsAnyType.ts, 11, 3))
+>condAny : any
+>exprBoolean1 : boolean
+>exprBoolean2 : boolean
 
 var resultIsNumber1 = condAny ? exprNumber1 : exprNumber2;
->resultIsNumber1 : number, Symbol(resultIsNumber1, Decl(conditionalOperatorConditoinIsAnyType.ts, 43, 3))
+>resultIsNumber1 : number
 >condAny ? exprNumber1 : exprNumber2 : number
->condAny : any, Symbol(condAny, Decl(conditionalOperatorConditoinIsAnyType.ts, 1, 3))
->exprNumber1 : number, Symbol(exprNumber1, Decl(conditionalOperatorConditoinIsAnyType.ts, 6, 3))
->exprNumber2 : number, Symbol(exprNumber2, Decl(conditionalOperatorConditoinIsAnyType.ts, 12, 3))
+>condAny : any
+>exprNumber1 : number
+>exprNumber2 : number
 
 var resultIsString1 = condAny ? exprString1 : exprString2;
->resultIsString1 : string, Symbol(resultIsString1, Decl(conditionalOperatorConditoinIsAnyType.ts, 44, 3))
+>resultIsString1 : string
 >condAny ? exprString1 : exprString2 : string
->condAny : any, Symbol(condAny, Decl(conditionalOperatorConditoinIsAnyType.ts, 1, 3))
->exprString1 : string, Symbol(exprString1, Decl(conditionalOperatorConditoinIsAnyType.ts, 7, 3))
->exprString2 : string, Symbol(exprString2, Decl(conditionalOperatorConditoinIsAnyType.ts, 13, 3))
+>condAny : any
+>exprString1 : string
+>exprString2 : string
 
 var resultIsObject1 = condAny ? exprIsObject1 : exprIsObject2;
->resultIsObject1 : Object, Symbol(resultIsObject1, Decl(conditionalOperatorConditoinIsAnyType.ts, 45, 3))
+>resultIsObject1 : Object
 >condAny ? exprIsObject1 : exprIsObject2 : Object
->condAny : any, Symbol(condAny, Decl(conditionalOperatorConditoinIsAnyType.ts, 1, 3))
->exprIsObject1 : Object, Symbol(exprIsObject1, Decl(conditionalOperatorConditoinIsAnyType.ts, 8, 3))
->exprIsObject2 : Object, Symbol(exprIsObject2, Decl(conditionalOperatorConditoinIsAnyType.ts, 14, 3))
+>condAny : any
+>exprIsObject1 : Object
+>exprIsObject2 : Object
 
 var resultIsStringOrBoolean1 = condAny ? exprString1 : exprBoolean1; // union
->resultIsStringOrBoolean1 : string | boolean, Symbol(resultIsStringOrBoolean1, Decl(conditionalOperatorConditoinIsAnyType.ts, 46, 3))
+>resultIsStringOrBoolean1 : string | boolean
 >condAny ? exprString1 : exprBoolean1 : string | boolean
->condAny : any, Symbol(condAny, Decl(conditionalOperatorConditoinIsAnyType.ts, 1, 3))
->exprString1 : string, Symbol(exprString1, Decl(conditionalOperatorConditoinIsAnyType.ts, 7, 3))
->exprBoolean1 : boolean, Symbol(exprBoolean1, Decl(conditionalOperatorConditoinIsAnyType.ts, 5, 3))
+>condAny : any
+>exprString1 : string
+>exprBoolean1 : boolean
 
 var resultIsAny2 = null ? exprAny1 : exprAny2;
->resultIsAny2 : any, Symbol(resultIsAny2, Decl(conditionalOperatorConditoinIsAnyType.ts, 48, 3))
+>resultIsAny2 : any
 >null ? exprAny1 : exprAny2 : any
 >null : null
->exprAny1 : any, Symbol(exprAny1, Decl(conditionalOperatorConditoinIsAnyType.ts, 4, 3))
->exprAny2 : any, Symbol(exprAny2, Decl(conditionalOperatorConditoinIsAnyType.ts, 10, 3))
+>exprAny1 : any
+>exprAny2 : any
 
 var resultIsBoolean2 = null ? exprBoolean1 : exprBoolean2;
->resultIsBoolean2 : boolean, Symbol(resultIsBoolean2, Decl(conditionalOperatorConditoinIsAnyType.ts, 49, 3))
+>resultIsBoolean2 : boolean
 >null ? exprBoolean1 : exprBoolean2 : boolean
 >null : null
->exprBoolean1 : boolean, Symbol(exprBoolean1, Decl(conditionalOperatorConditoinIsAnyType.ts, 5, 3))
->exprBoolean2 : boolean, Symbol(exprBoolean2, Decl(conditionalOperatorConditoinIsAnyType.ts, 11, 3))
+>exprBoolean1 : boolean
+>exprBoolean2 : boolean
 
 var resultIsNumber2 = undefined ? exprNumber1 : exprNumber2;
->resultIsNumber2 : number, Symbol(resultIsNumber2, Decl(conditionalOperatorConditoinIsAnyType.ts, 50, 3))
+>resultIsNumber2 : number
 >undefined ? exprNumber1 : exprNumber2 : number
->undefined : undefined, Symbol(undefined)
->exprNumber1 : number, Symbol(exprNumber1, Decl(conditionalOperatorConditoinIsAnyType.ts, 6, 3))
->exprNumber2 : number, Symbol(exprNumber2, Decl(conditionalOperatorConditoinIsAnyType.ts, 12, 3))
+>undefined : undefined
+>exprNumber1 : number
+>exprNumber2 : number
 
 var resultIsString2 = [null, undefined] ? exprString1 : exprString2;
->resultIsString2 : string, Symbol(resultIsString2, Decl(conditionalOperatorConditoinIsAnyType.ts, 51, 3))
+>resultIsString2 : string
 >[null, undefined] ? exprString1 : exprString2 : string
 >[null, undefined] : null[]
 >null : null
->undefined : undefined, Symbol(undefined)
->exprString1 : string, Symbol(exprString1, Decl(conditionalOperatorConditoinIsAnyType.ts, 7, 3))
->exprString2 : string, Symbol(exprString2, Decl(conditionalOperatorConditoinIsAnyType.ts, 13, 3))
+>undefined : undefined
+>exprString1 : string
+>exprString2 : string
 
 var resultIsObject2 = [null, undefined] ? exprIsObject1 : exprIsObject2;
->resultIsObject2 : Object, Symbol(resultIsObject2, Decl(conditionalOperatorConditoinIsAnyType.ts, 52, 3))
+>resultIsObject2 : Object
 >[null, undefined] ? exprIsObject1 : exprIsObject2 : Object
 >[null, undefined] : null[]
 >null : null
->undefined : undefined, Symbol(undefined)
->exprIsObject1 : Object, Symbol(exprIsObject1, Decl(conditionalOperatorConditoinIsAnyType.ts, 8, 3))
->exprIsObject2 : Object, Symbol(exprIsObject2, Decl(conditionalOperatorConditoinIsAnyType.ts, 14, 3))
+>undefined : undefined
+>exprIsObject1 : Object
+>exprIsObject2 : Object
 
 var resultIsStringOrBoolean2 = null ? exprString1 : exprBoolean1; // union
->resultIsStringOrBoolean2 : string | boolean, Symbol(resultIsStringOrBoolean2, Decl(conditionalOperatorConditoinIsAnyType.ts, 53, 3))
+>resultIsStringOrBoolean2 : string | boolean
 >null ? exprString1 : exprBoolean1 : string | boolean
 >null : null
->exprString1 : string, Symbol(exprString1, Decl(conditionalOperatorConditoinIsAnyType.ts, 7, 3))
->exprBoolean1 : boolean, Symbol(exprBoolean1, Decl(conditionalOperatorConditoinIsAnyType.ts, 5, 3))
+>exprString1 : string
+>exprBoolean1 : boolean
 
 var resultIsStringOrBoolean3 = undefined ? exprString1 : exprBoolean1; // union
->resultIsStringOrBoolean3 : string | boolean, Symbol(resultIsStringOrBoolean3, Decl(conditionalOperatorConditoinIsAnyType.ts, 54, 3))
+>resultIsStringOrBoolean3 : string | boolean
 >undefined ? exprString1 : exprBoolean1 : string | boolean
->undefined : undefined, Symbol(undefined)
->exprString1 : string, Symbol(exprString1, Decl(conditionalOperatorConditoinIsAnyType.ts, 7, 3))
->exprBoolean1 : boolean, Symbol(exprBoolean1, Decl(conditionalOperatorConditoinIsAnyType.ts, 5, 3))
+>undefined : undefined
+>exprString1 : string
+>exprBoolean1 : boolean
 
 var resultIsStringOrBoolean4 = [null, undefined] ? exprString1 : exprBoolean1; // union
->resultIsStringOrBoolean4 : string | boolean, Symbol(resultIsStringOrBoolean4, Decl(conditionalOperatorConditoinIsAnyType.ts, 55, 3))
+>resultIsStringOrBoolean4 : string | boolean
 >[null, undefined] ? exprString1 : exprBoolean1 : string | boolean
 >[null, undefined] : null[]
 >null : null
->undefined : undefined, Symbol(undefined)
->exprString1 : string, Symbol(exprString1, Decl(conditionalOperatorConditoinIsAnyType.ts, 7, 3))
->exprBoolean1 : boolean, Symbol(exprBoolean1, Decl(conditionalOperatorConditoinIsAnyType.ts, 5, 3))
+>undefined : undefined
+>exprString1 : string
+>exprBoolean1 : boolean
 
 var resultIsAny3 = x.doSomeThing() ? exprAny1 : exprAny2;
->resultIsAny3 : any, Symbol(resultIsAny3, Decl(conditionalOperatorConditoinIsAnyType.ts, 57, 3))
+>resultIsAny3 : any
 >x.doSomeThing() ? exprAny1 : exprAny2 : any
 >x.doSomeThing() : any
 >x.doSomeThing : any
->x : any, Symbol(x, Decl(conditionalOperatorConditoinIsAnyType.ts, 2, 3))
+>x : any
 >doSomeThing : any
->exprAny1 : any, Symbol(exprAny1, Decl(conditionalOperatorConditoinIsAnyType.ts, 4, 3))
->exprAny2 : any, Symbol(exprAny2, Decl(conditionalOperatorConditoinIsAnyType.ts, 10, 3))
+>exprAny1 : any
+>exprAny2 : any
 
 var resultIsBoolean3 = x("x") ? exprBoolean1 : exprBoolean2;
->resultIsBoolean3 : boolean, Symbol(resultIsBoolean3, Decl(conditionalOperatorConditoinIsAnyType.ts, 58, 3))
+>resultIsBoolean3 : boolean
 >x("x") ? exprBoolean1 : exprBoolean2 : boolean
 >x("x") : any
->x : any, Symbol(x, Decl(conditionalOperatorConditoinIsAnyType.ts, 2, 3))
+>x : any
 >"x" : string
->exprBoolean1 : boolean, Symbol(exprBoolean1, Decl(conditionalOperatorConditoinIsAnyType.ts, 5, 3))
->exprBoolean2 : boolean, Symbol(exprBoolean2, Decl(conditionalOperatorConditoinIsAnyType.ts, 11, 3))
+>exprBoolean1 : boolean
+>exprBoolean2 : boolean
 
 var resultIsNumber3 = x(x) ? exprNumber1 : exprNumber2;
->resultIsNumber3 : number, Symbol(resultIsNumber3, Decl(conditionalOperatorConditoinIsAnyType.ts, 59, 3))
+>resultIsNumber3 : number
 >x(x) ? exprNumber1 : exprNumber2 : number
 >x(x) : any
->x : any, Symbol(x, Decl(conditionalOperatorConditoinIsAnyType.ts, 2, 3))
->x : any, Symbol(x, Decl(conditionalOperatorConditoinIsAnyType.ts, 2, 3))
->exprNumber1 : number, Symbol(exprNumber1, Decl(conditionalOperatorConditoinIsAnyType.ts, 6, 3))
->exprNumber2 : number, Symbol(exprNumber2, Decl(conditionalOperatorConditoinIsAnyType.ts, 12, 3))
+>x : any
+>x : any
+>exprNumber1 : number
+>exprNumber2 : number
 
 var resultIsString3 = x("x") ? exprString1 : exprString2;
->resultIsString3 : string, Symbol(resultIsString3, Decl(conditionalOperatorConditoinIsAnyType.ts, 60, 3))
+>resultIsString3 : string
 >x("x") ? exprString1 : exprString2 : string
 >x("x") : any
->x : any, Symbol(x, Decl(conditionalOperatorConditoinIsAnyType.ts, 2, 3))
+>x : any
 >"x" : string
->exprString1 : string, Symbol(exprString1, Decl(conditionalOperatorConditoinIsAnyType.ts, 7, 3))
->exprString2 : string, Symbol(exprString2, Decl(conditionalOperatorConditoinIsAnyType.ts, 13, 3))
+>exprString1 : string
+>exprString2 : string
 
 var resultIsObject3 = x.doSomeThing() ? exprIsObject1 : exprIsObject2;
->resultIsObject3 : Object, Symbol(resultIsObject3, Decl(conditionalOperatorConditoinIsAnyType.ts, 61, 3))
+>resultIsObject3 : Object
 >x.doSomeThing() ? exprIsObject1 : exprIsObject2 : Object
 >x.doSomeThing() : any
 >x.doSomeThing : any
->x : any, Symbol(x, Decl(conditionalOperatorConditoinIsAnyType.ts, 2, 3))
+>x : any
 >doSomeThing : any
->exprIsObject1 : Object, Symbol(exprIsObject1, Decl(conditionalOperatorConditoinIsAnyType.ts, 8, 3))
->exprIsObject2 : Object, Symbol(exprIsObject2, Decl(conditionalOperatorConditoinIsAnyType.ts, 14, 3))
+>exprIsObject1 : Object
+>exprIsObject2 : Object
 
 var resultIsStringOrBoolean5 = x.doSomeThing() ? exprString1 : exprBoolean1; // union
->resultIsStringOrBoolean5 : string | boolean, Symbol(resultIsStringOrBoolean5, Decl(conditionalOperatorConditoinIsAnyType.ts, 62, 3))
+>resultIsStringOrBoolean5 : string | boolean
 >x.doSomeThing() ? exprString1 : exprBoolean1 : string | boolean
 >x.doSomeThing() : any
 >x.doSomeThing : any
->x : any, Symbol(x, Decl(conditionalOperatorConditoinIsAnyType.ts, 2, 3))
+>x : any
 >doSomeThing : any
->exprString1 : string, Symbol(exprString1, Decl(conditionalOperatorConditoinIsAnyType.ts, 7, 3))
->exprBoolean1 : boolean, Symbol(exprBoolean1, Decl(conditionalOperatorConditoinIsAnyType.ts, 5, 3))
+>exprString1 : string
+>exprBoolean1 : boolean
 

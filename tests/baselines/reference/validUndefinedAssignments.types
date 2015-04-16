@@ -1,73 +1,73 @@
 === tests/cases/conformance/types/primitives/undefined/validUndefinedAssignments.ts ===
 var x: typeof undefined;
->x : any, Symbol(x, Decl(validUndefinedAssignments.ts, 0, 3))
->undefined : undefined, Symbol(undefined)
+>x : any
+>undefined : undefined
 
 var a: number = x;
->a : number, Symbol(a, Decl(validUndefinedAssignments.ts, 2, 3))
->x : any, Symbol(x, Decl(validUndefinedAssignments.ts, 0, 3))
+>a : number
+>x : any
 
 var b: boolean = x;
->b : boolean, Symbol(b, Decl(validUndefinedAssignments.ts, 3, 3))
->x : any, Symbol(x, Decl(validUndefinedAssignments.ts, 0, 3))
+>b : boolean
+>x : any
 
 var c: string = x;
->c : string, Symbol(c, Decl(validUndefinedAssignments.ts, 4, 3))
->x : any, Symbol(x, Decl(validUndefinedAssignments.ts, 0, 3))
+>c : string
+>x : any
 
 var d: void = x;
->d : void, Symbol(d, Decl(validUndefinedAssignments.ts, 5, 3))
->x : any, Symbol(x, Decl(validUndefinedAssignments.ts, 0, 3))
+>d : void
+>x : any
 
 var e: typeof undefined = x;
->e : any, Symbol(e, Decl(validUndefinedAssignments.ts, 7, 3))
->undefined : undefined, Symbol(undefined)
->x : any, Symbol(x, Decl(validUndefinedAssignments.ts, 0, 3))
+>e : any
+>undefined : undefined
+>x : any
 
 e = x; // should work
 >e = x : any
->e : any, Symbol(e, Decl(validUndefinedAssignments.ts, 7, 3))
->x : any, Symbol(x, Decl(validUndefinedAssignments.ts, 0, 3))
+>e : any
+>x : any
 
 class C { foo: string }
->C : C, Symbol(C, Decl(validUndefinedAssignments.ts, 8, 6))
->foo : string, Symbol(foo, Decl(validUndefinedAssignments.ts, 10, 9))
+>C : C
+>foo : string
 
 var f: C;
->f : C, Symbol(f, Decl(validUndefinedAssignments.ts, 11, 3))
->C : C, Symbol(C, Decl(validUndefinedAssignments.ts, 8, 6))
+>f : C
+>C : C
 
 f = x;
 >f = x : any
->f : C, Symbol(f, Decl(validUndefinedAssignments.ts, 11, 3))
->x : any, Symbol(x, Decl(validUndefinedAssignments.ts, 0, 3))
+>f : C
+>x : any
 
 interface I { foo: string }
->I : I, Symbol(I, Decl(validUndefinedAssignments.ts, 12, 6))
->foo : string, Symbol(foo, Decl(validUndefinedAssignments.ts, 14, 13))
+>I : I
+>foo : string
 
 var g: I;
->g : I, Symbol(g, Decl(validUndefinedAssignments.ts, 15, 3))
->I : I, Symbol(I, Decl(validUndefinedAssignments.ts, 12, 6))
+>g : I
+>I : I
 
 g = x;
 >g = x : any
->g : I, Symbol(g, Decl(validUndefinedAssignments.ts, 15, 3))
->x : any, Symbol(x, Decl(validUndefinedAssignments.ts, 0, 3))
+>g : I
+>x : any
 
 var h: { f(): void } = x;
->h : { f(): void; }, Symbol(h, Decl(validUndefinedAssignments.ts, 18, 3))
->f : () => void, Symbol(f, Decl(validUndefinedAssignments.ts, 18, 8))
->x : any, Symbol(x, Decl(validUndefinedAssignments.ts, 0, 3))
+>h : { f(): void; }
+>f : () => void
+>x : any
 
 function i<T>(a: T) {
->i : <T>(a: T) => void, Symbol(i, Decl(validUndefinedAssignments.ts, 18, 25))
->T : T, Symbol(T, Decl(validUndefinedAssignments.ts, 20, 11))
->a : T, Symbol(a, Decl(validUndefinedAssignments.ts, 20, 14))
->T : T, Symbol(T, Decl(validUndefinedAssignments.ts, 20, 11))
+>i : <T>(a: T) => void
+>T : T
+>a : T
+>T : T
 
     a = x;
 >a = x : any
->a : T, Symbol(a, Decl(validUndefinedAssignments.ts, 20, 14))
->x : any, Symbol(x, Decl(validUndefinedAssignments.ts, 0, 3))
+>a : T
+>x : any
 }

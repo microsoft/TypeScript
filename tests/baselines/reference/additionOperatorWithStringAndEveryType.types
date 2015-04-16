@@ -1,161 +1,161 @@
 === tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithStringAndEveryType.ts ===
 enum E { a, b, c }
->E : E, Symbol(E, Decl(additionOperatorWithStringAndEveryType.ts, 0, 0))
->a : E, Symbol(E.a, Decl(additionOperatorWithStringAndEveryType.ts, 0, 8))
->b : E, Symbol(E.b, Decl(additionOperatorWithStringAndEveryType.ts, 0, 11))
->c : E, Symbol(E.c, Decl(additionOperatorWithStringAndEveryType.ts, 0, 14))
+>E : E
+>a : E
+>b : E
+>c : E
 
 var a: any;
->a : any, Symbol(a, Decl(additionOperatorWithStringAndEveryType.ts, 2, 3))
+>a : any
 
 var b: boolean;
->b : boolean, Symbol(b, Decl(additionOperatorWithStringAndEveryType.ts, 3, 3))
+>b : boolean
 
 var c: number;
->c : number, Symbol(c, Decl(additionOperatorWithStringAndEveryType.ts, 4, 3))
+>c : number
 
 var d: string;
->d : string, Symbol(d, Decl(additionOperatorWithStringAndEveryType.ts, 5, 3))
+>d : string
 
 var e: Object;
->e : Object, Symbol(e, Decl(additionOperatorWithStringAndEveryType.ts, 6, 3))
->Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>e : Object
+>Object : Object
 
 var f: void;
->f : void, Symbol(f, Decl(additionOperatorWithStringAndEveryType.ts, 7, 3))
+>f : void
 
 var g: E;
->g : E, Symbol(g, Decl(additionOperatorWithStringAndEveryType.ts, 8, 3))
->E : E, Symbol(E, Decl(additionOperatorWithStringAndEveryType.ts, 0, 0))
+>g : E
+>E : E
 
 var x: string;
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>x : string
 
 // string could plus every type, and the result is always string
 // string as left operand
 var r1 = x + a;
->r1 : string, Symbol(r1, Decl(additionOperatorWithStringAndEveryType.ts, 14, 3))
+>r1 : string
 >x + a : string
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
->a : any, Symbol(a, Decl(additionOperatorWithStringAndEveryType.ts, 2, 3))
+>x : string
+>a : any
 
 var r2 = x + b;
->r2 : string, Symbol(r2, Decl(additionOperatorWithStringAndEveryType.ts, 15, 3))
+>r2 : string
 >x + b : string
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
->b : boolean, Symbol(b, Decl(additionOperatorWithStringAndEveryType.ts, 3, 3))
+>x : string
+>b : boolean
 
 var r3 = x + c;
->r3 : string, Symbol(r3, Decl(additionOperatorWithStringAndEveryType.ts, 16, 3))
+>r3 : string
 >x + c : string
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
->c : number, Symbol(c, Decl(additionOperatorWithStringAndEveryType.ts, 4, 3))
+>x : string
+>c : number
 
 var r4 = x + d;
->r4 : string, Symbol(r4, Decl(additionOperatorWithStringAndEveryType.ts, 17, 3))
+>r4 : string
 >x + d : string
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
->d : string, Symbol(d, Decl(additionOperatorWithStringAndEveryType.ts, 5, 3))
+>x : string
+>d : string
 
 var r5 = x + e;
->r5 : string, Symbol(r5, Decl(additionOperatorWithStringAndEveryType.ts, 18, 3))
+>r5 : string
 >x + e : string
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
->e : Object, Symbol(e, Decl(additionOperatorWithStringAndEveryType.ts, 6, 3))
+>x : string
+>e : Object
 
 var r6 = x + f;
->r6 : string, Symbol(r6, Decl(additionOperatorWithStringAndEveryType.ts, 19, 3))
+>r6 : string
 >x + f : string
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
->f : void, Symbol(f, Decl(additionOperatorWithStringAndEveryType.ts, 7, 3))
+>x : string
+>f : void
 
 var r7 = x + g;
->r7 : string, Symbol(r7, Decl(additionOperatorWithStringAndEveryType.ts, 20, 3))
+>r7 : string
 >x + g : string
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
->g : E, Symbol(g, Decl(additionOperatorWithStringAndEveryType.ts, 8, 3))
+>x : string
+>g : E
 
 // string as right operand
 var r8 = a + x;
->r8 : string, Symbol(r8, Decl(additionOperatorWithStringAndEveryType.ts, 23, 3))
+>r8 : string
 >a + x : string
->a : any, Symbol(a, Decl(additionOperatorWithStringAndEveryType.ts, 2, 3))
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>a : any
+>x : string
 
 var r9 = b + x;
->r9 : string, Symbol(r9, Decl(additionOperatorWithStringAndEveryType.ts, 24, 3))
+>r9 : string
 >b + x : string
->b : boolean, Symbol(b, Decl(additionOperatorWithStringAndEveryType.ts, 3, 3))
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>b : boolean
+>x : string
 
 var r10 = c + x;
->r10 : string, Symbol(r10, Decl(additionOperatorWithStringAndEveryType.ts, 25, 3))
+>r10 : string
 >c + x : string
->c : number, Symbol(c, Decl(additionOperatorWithStringAndEveryType.ts, 4, 3))
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>c : number
+>x : string
 
 var r11 = d + x;
->r11 : string, Symbol(r11, Decl(additionOperatorWithStringAndEveryType.ts, 26, 3))
+>r11 : string
 >d + x : string
->d : string, Symbol(d, Decl(additionOperatorWithStringAndEveryType.ts, 5, 3))
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>d : string
+>x : string
 
 var r12 = e + x;
->r12 : string, Symbol(r12, Decl(additionOperatorWithStringAndEveryType.ts, 27, 3))
+>r12 : string
 >e + x : string
->e : Object, Symbol(e, Decl(additionOperatorWithStringAndEveryType.ts, 6, 3))
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>e : Object
+>x : string
 
 var r13 = f + x;
->r13 : string, Symbol(r13, Decl(additionOperatorWithStringAndEveryType.ts, 28, 3))
+>r13 : string
 >f + x : string
->f : void, Symbol(f, Decl(additionOperatorWithStringAndEveryType.ts, 7, 3))
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>f : void
+>x : string
 
 var r14 = g + x;
->r14 : string, Symbol(r14, Decl(additionOperatorWithStringAndEveryType.ts, 29, 3))
+>r14 : string
 >g + x : string
->g : E, Symbol(g, Decl(additionOperatorWithStringAndEveryType.ts, 8, 3))
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>g : E
+>x : string
 
 // other cases
 var r15 = x + E;
->r15 : string, Symbol(r15, Decl(additionOperatorWithStringAndEveryType.ts, 32, 3))
+>r15 : string
 >x + E : string
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
->E : typeof E, Symbol(E, Decl(additionOperatorWithStringAndEveryType.ts, 0, 0))
+>x : string
+>E : typeof E
 
 var r16 = x + E.a;
->r16 : string, Symbol(r16, Decl(additionOperatorWithStringAndEveryType.ts, 33, 3))
+>r16 : string
 >x + E.a : string
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
->E.a : E, Symbol(E.a, Decl(additionOperatorWithStringAndEveryType.ts, 0, 8))
->E : typeof E, Symbol(E, Decl(additionOperatorWithStringAndEveryType.ts, 0, 0))
->a : E, Symbol(E.a, Decl(additionOperatorWithStringAndEveryType.ts, 0, 8))
+>x : string
+>E.a : E
+>E : typeof E
+>a : E
 
 var r17 = x + '';
->r17 : string, Symbol(r17, Decl(additionOperatorWithStringAndEveryType.ts, 34, 3))
+>r17 : string
 >x + '' : string
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>x : string
 >'' : string
 
 var r18 = x + 0;
->r18 : string, Symbol(r18, Decl(additionOperatorWithStringAndEveryType.ts, 35, 3))
+>r18 : string
 >x + 0 : string
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>x : string
 >0 : number
 
 var r19 = x + { a: '' };
->r19 : string, Symbol(r19, Decl(additionOperatorWithStringAndEveryType.ts, 36, 3))
+>r19 : string
 >x + { a: '' } : string
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>x : string
 >{ a: '' } : { a: string; }
->a : string, Symbol(a, Decl(additionOperatorWithStringAndEveryType.ts, 36, 15))
+>a : string
 >'' : string
 
 var r20 = x + [];
->r20 : string, Symbol(r20, Decl(additionOperatorWithStringAndEveryType.ts, 37, 3))
+>r20 : string
 >x + [] : string
->x : string, Symbol(x, Decl(additionOperatorWithStringAndEveryType.ts, 10, 3))
+>x : string
 >[] : undefined[]
 

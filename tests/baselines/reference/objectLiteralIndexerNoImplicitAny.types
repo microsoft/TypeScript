@@ -1,17 +1,17 @@
 === tests/cases/compiler/objectLiteralIndexerNoImplicitAny.ts ===
 interface I {
->I : I, Symbol(I, Decl(objectLiteralIndexerNoImplicitAny.ts, 0, 0))
+>I : I
 
     [s: string]: any;
->s : string, Symbol(s, Decl(objectLiteralIndexerNoImplicitAny.ts, 1, 5))
+>s : string
 }
 
 var x: I = {
->x : I, Symbol(x, Decl(objectLiteralIndexerNoImplicitAny.ts, 4, 3))
->I : I, Symbol(I, Decl(objectLiteralIndexerNoImplicitAny.ts, 0, 0))
+>x : I
+>I : I
 >{    p: null} : { [x: string]: null; p: null; }
 
     p: null
->p : null, Symbol(p, Decl(objectLiteralIndexerNoImplicitAny.ts, 4, 12))
+>p : null
 >null : null
 }

@@ -1,54 +1,54 @@
 === tests/cases/compiler/arrayBindingPatternOmittedExpressions.ts ===
 
 var results: string[];
->results : string[], Symbol(results, Decl(arrayBindingPatternOmittedExpressions.ts, 1, 3))
+>results : string[]
 
 {
     let [, b, , a] = results;
 > : undefined
->b : string, Symbol(b, Decl(arrayBindingPatternOmittedExpressions.ts, 4, 10))
+>b : string
 > : undefined
->a : string, Symbol(a, Decl(arrayBindingPatternOmittedExpressions.ts, 4, 15))
->results : string[], Symbol(results, Decl(arrayBindingPatternOmittedExpressions.ts, 1, 3))
+>a : string
+>results : string[]
 
     let x = {
->x : { a: string; b: string; }, Symbol(x, Decl(arrayBindingPatternOmittedExpressions.ts, 5, 7))
+>x : { a: string; b: string; }
 >{        a,        b    } : { a: string; b: string; }
 
         a,
->a : string, Symbol(a, Decl(arrayBindingPatternOmittedExpressions.ts, 5, 13))
+>a : string
 
         b
->b : string, Symbol(b, Decl(arrayBindingPatternOmittedExpressions.ts, 6, 10))
+>b : string
     }
 }
 
 
 function f([, a, , b, , , , s, , , ] = results) {
->f : ([, a, , b, , , , s, , , ]?: string[]) => void, Symbol(f, Decl(arrayBindingPatternOmittedExpressions.ts, 9, 1))
+>f : ([, a, , b, , , , s, , , ]?: string[]) => void
 > : undefined
->a : string, Symbol(a, Decl(arrayBindingPatternOmittedExpressions.ts, 12, 13))
+>a : string
 > : undefined
->b : string, Symbol(b, Decl(arrayBindingPatternOmittedExpressions.ts, 12, 18))
-> : undefined
-> : undefined
-> : undefined
->s : string, Symbol(s, Decl(arrayBindingPatternOmittedExpressions.ts, 12, 27))
+>b : string
 > : undefined
 > : undefined
->results : string[], Symbol(results, Decl(arrayBindingPatternOmittedExpressions.ts, 1, 3))
+> : undefined
+>s : string
+> : undefined
+> : undefined
+>results : string[]
 
     a = s[1];
 >a = s[1] : string
->a : string, Symbol(a, Decl(arrayBindingPatternOmittedExpressions.ts, 12, 13))
+>a : string
 >s[1] : string
->s : string, Symbol(s, Decl(arrayBindingPatternOmittedExpressions.ts, 12, 27))
+>s : string
 >1 : number
 
     b = s[2];
 >b = s[2] : string
->b : string, Symbol(b, Decl(arrayBindingPatternOmittedExpressions.ts, 12, 18))
+>b : string
 >s[2] : string
->s : string, Symbol(s, Decl(arrayBindingPatternOmittedExpressions.ts, 12, 27))
+>s : string
 >2 : number
 }

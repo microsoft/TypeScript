@@ -1,20 +1,20 @@
 === tests/cases/compiler/es6ImportDefaultBinding_0.ts ===
 
 var a = 10;
->a : number, Symbol(a, Decl(es6ImportDefaultBinding_0.ts, 1, 3))
+>a : number
 >10 : number
 
 export default a;
->a : number, Symbol(a, Decl(es6ImportDefaultBinding_0.ts, 1, 3))
+>a : number
 
 === tests/cases/compiler/es6ImportDefaultBinding_1.ts ===
 import defaultBinding from "es6ImportDefaultBinding_0";
->defaultBinding : number, Symbol(defaultBinding, Decl(es6ImportDefaultBinding_1.ts, 0, 6))
+>defaultBinding : number
 
 var x = defaultBinding;
->x : number, Symbol(x, Decl(es6ImportDefaultBinding_1.ts, 1, 3))
->defaultBinding : number, Symbol(defaultBinding, Decl(es6ImportDefaultBinding_1.ts, 0, 6))
+>x : number
+>defaultBinding : number
 
 import defaultBinding2 from "es6ImportDefaultBinding_0"; // elide this import since defaultBinding2 is not used
->defaultBinding2 : number, Symbol(defaultBinding2, Decl(es6ImportDefaultBinding_1.ts, 2, 6))
+>defaultBinding2 : number
 

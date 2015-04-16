@@ -1,26 +1,26 @@
 === tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithConstructSignaturesThatHidesBaseSignature.ts ===
 interface Foo {
->Foo : Foo, Symbol(Foo, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature.ts, 0, 0))
+>Foo : Foo
 
     new (): { a: number };
->a : number, Symbol(a, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature.ts, 1, 13))
+>a : number
 }
 
 interface Derived extends Foo {
->Derived : Derived, Symbol(Derived, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature.ts, 2, 1))
->Foo : Foo, Symbol(Foo, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature.ts, 0, 0))
+>Derived : Derived
+>Foo : Foo
 
     new (): { a: number; b: number };
->a : number, Symbol(a, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature.ts, 5, 13))
->b : number, Symbol(b, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature.ts, 5, 24))
+>a : number
+>b : number
 }
 
 var d: Derived;
->d : Derived, Symbol(d, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature.ts, 8, 3))
->Derived : Derived, Symbol(Derived, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature.ts, 2, 1))
+>d : Derived
+>Derived : Derived
 
 var r = new d();
->r : { a: number; b: number; }, Symbol(r, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature.ts, 9, 3))
+>r : { a: number; b: number; }
 >new d() : { a: number; b: number; }
->d : Derived, Symbol(d, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature.ts, 8, 3))
+>d : Derived
 

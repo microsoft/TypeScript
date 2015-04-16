@@ -1,25 +1,25 @@
 === tests/cases/compiler/importAndVariableDeclarationConflict2.ts ===
 module m {
->m : typeof m, Symbol(m, Decl(importAndVariableDeclarationConflict2.ts, 0, 0))
+>m : typeof m
 
   export var m = '';
->m : string, Symbol(m, Decl(importAndVariableDeclarationConflict2.ts, 1, 12))
+>m : string
 >'' : string
 }
 
 import x = m.m;
->x : string, Symbol(x, Decl(importAndVariableDeclarationConflict2.ts, 2, 1))
->m : typeof m, Symbol(m, Decl(importAndVariableDeclarationConflict2.ts, 0, 0))
->m : string, Symbol(x, Decl(importAndVariableDeclarationConflict2.ts, 1, 12))
+>x : string
+>m : typeof m
+>m : string
 
 class C {
->C : C, Symbol(C, Decl(importAndVariableDeclarationConflict2.ts, 4, 15))
+>C : C
 
   public foo() {
->foo : () => void, Symbol(foo, Decl(importAndVariableDeclarationConflict2.ts, 6, 9))
+>foo : () => void
 
     var x = '';
->x : string, Symbol(x, Decl(importAndVariableDeclarationConflict2.ts, 8, 7))
+>x : string
 >'' : string
   }
 }

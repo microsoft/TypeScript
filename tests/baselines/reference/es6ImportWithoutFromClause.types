@@ -1,7 +1,7 @@
 === tests/cases/compiler/es6ImportWithoutFromClause_0.ts ===
 
 export var a = 10;
->a : number, Symbol(a, Decl(es6ImportWithoutFromClause_0.ts, 1, 10))
+>a : number
 >10 : number
 
 === tests/cases/compiler/es6ImportWithoutFromClause_1.ts ===

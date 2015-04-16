@@ -1,54 +1,54 @@
 === tests/cases/compiler/recursiveTypeParameterReferenceError1.ts ===
 class X<T> { }
->X : X<T>, Symbol(X, Decl(recursiveTypeParameterReferenceError1.ts, 0, 0))
->T : T, Symbol(T, Decl(recursiveTypeParameterReferenceError1.ts, 0, 8))
+>X : X<T>
+>T : T
 
 interface Foo<T> {
->Foo : Foo<T>, Symbol(Foo, Decl(recursiveTypeParameterReferenceError1.ts, 0, 14))
->T : T, Symbol(T, Decl(recursiveTypeParameterReferenceError1.ts, 1, 14))
+>Foo : Foo<T>
+>T : T
 
     z: Foo<X<T>>; // error
->z : Foo<X<T>>, Symbol(z, Decl(recursiveTypeParameterReferenceError1.ts, 1, 18))
->Foo : Foo<T>, Symbol(Foo, Decl(recursiveTypeParameterReferenceError1.ts, 0, 14))
->X : X<T>, Symbol(X, Decl(recursiveTypeParameterReferenceError1.ts, 0, 0))
->T : T, Symbol(T, Decl(recursiveTypeParameterReferenceError1.ts, 1, 14))
+>z : Foo<X<T>>
+>Foo : Foo<T>
+>X : X<T>
+>T : T
 }
 var f: Foo<number>;
->f : Foo<number>, Symbol(f, Decl(recursiveTypeParameterReferenceError1.ts, 4, 3))
->Foo : Foo<T>, Symbol(Foo, Decl(recursiveTypeParameterReferenceError1.ts, 0, 14))
+>f : Foo<number>
+>Foo : Foo<T>
 
 var r = f.z; 
->r : Foo<X<number>>, Symbol(r, Decl(recursiveTypeParameterReferenceError1.ts, 5, 3))
->f.z : Foo<X<number>>, Symbol(Foo.z, Decl(recursiveTypeParameterReferenceError1.ts, 1, 18))
->f : Foo<number>, Symbol(f, Decl(recursiveTypeParameterReferenceError1.ts, 4, 3))
->z : Foo<X<number>>, Symbol(Foo.z, Decl(recursiveTypeParameterReferenceError1.ts, 1, 18))
+>r : Foo<X<number>>
+>f.z : Foo<X<number>>
+>f : Foo<number>
+>z : Foo<X<number>>
 
 
 class C2<T> {
->C2 : C2<T>, Symbol(C2, Decl(recursiveTypeParameterReferenceError1.ts, 5, 12))
->T : T, Symbol(T, Decl(recursiveTypeParameterReferenceError1.ts, 8, 9))
+>C2 : C2<T>
+>T : T
 
     x: T;
->x : T, Symbol(x, Decl(recursiveTypeParameterReferenceError1.ts, 8, 13))
->T : T, Symbol(T, Decl(recursiveTypeParameterReferenceError1.ts, 8, 9))
+>x : T
+>T : T
 }
 interface Foo2<T> {
->Foo2 : Foo2<T>, Symbol(Foo2, Decl(recursiveTypeParameterReferenceError1.ts, 10, 1))
->T : T, Symbol(T, Decl(recursiveTypeParameterReferenceError1.ts, 11, 15))
+>Foo2 : Foo2<T>
+>T : T
 
     ofC4: C2<{ x: T }> // ok
->ofC4 : C2<{ x: T; }>, Symbol(ofC4, Decl(recursiveTypeParameterReferenceError1.ts, 11, 19))
->C2 : C2<T>, Symbol(C2, Decl(recursiveTypeParameterReferenceError1.ts, 5, 12))
->x : T, Symbol(x, Decl(recursiveTypeParameterReferenceError1.ts, 12, 14))
->T : T, Symbol(T, Decl(recursiveTypeParameterReferenceError1.ts, 11, 15))
+>ofC4 : C2<{ x: T; }>
+>C2 : C2<T>
+>x : T
+>T : T
 }
 var f2: Foo2<number>;
->f2 : Foo2<number>, Symbol(f2, Decl(recursiveTypeParameterReferenceError1.ts, 14, 3))
->Foo2 : Foo2<T>, Symbol(Foo2, Decl(recursiveTypeParameterReferenceError1.ts, 10, 1))
+>f2 : Foo2<number>
+>Foo2 : Foo2<T>
 
 var r2 = f2.ofC4;
->r2 : C2<{ x: number; }>, Symbol(r2, Decl(recursiveTypeParameterReferenceError1.ts, 15, 3))
->f2.ofC4 : C2<{ x: number; }>, Symbol(Foo2.ofC4, Decl(recursiveTypeParameterReferenceError1.ts, 11, 19))
->f2 : Foo2<number>, Symbol(f2, Decl(recursiveTypeParameterReferenceError1.ts, 14, 3))
->ofC4 : C2<{ x: number; }>, Symbol(Foo2.ofC4, Decl(recursiveTypeParameterReferenceError1.ts, 11, 19))
+>r2 : C2<{ x: number; }>
+>f2.ofC4 : C2<{ x: number; }>
+>f2 : Foo2<number>
+>ofC4 : C2<{ x: number; }>
 

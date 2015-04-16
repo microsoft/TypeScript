@@ -54,6 +54,7 @@ module ts {
                 }
                 text = "";
             }
+
             return text !== undefined ? createSourceFile(fileName, text, languageVersion, setParentNodes) : undefined;
         }
 

@@ -1,0 +1,20 @@
+=== tests/cases/compiler/internalAliasWithDottedNameEmit.ts ===
+module a.b.c {
+>a : Symbol(a, Decl(internalAliasWithDottedNameEmit.ts, 0, 0), Decl(internalAliasWithDottedNameEmit.ts, 2, 1))
+>b : Symbol(b, Decl(internalAliasWithDottedNameEmit.ts, 0, 9))
+>c : Symbol(c, Decl(internalAliasWithDottedNameEmit.ts, 0, 11))
+
+      export var d;
+>d : Symbol(d, Decl(internalAliasWithDottedNameEmit.ts, 1, 16))
+}
+module a.e.f {
+>a : Symbol(a, Decl(internalAliasWithDottedNameEmit.ts, 0, 0), Decl(internalAliasWithDottedNameEmit.ts, 2, 1))
+>e : Symbol(e, Decl(internalAliasWithDottedNameEmit.ts, 3, 9))
+>f : Symbol(f, Decl(internalAliasWithDottedNameEmit.ts, 3, 11))
+
+      import g = b.c;
+>g : Symbol(g, Decl(internalAliasWithDottedNameEmit.ts, 3, 14))
+>b : Symbol(b, Decl(internalAliasWithDottedNameEmit.ts, 0, 9))
+>c : Symbol(g, Decl(internalAliasWithDottedNameEmit.ts, 0, 11))
+}
+

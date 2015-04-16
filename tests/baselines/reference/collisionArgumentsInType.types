@@ -1,53 +1,53 @@
 === tests/cases/compiler/collisionArgumentsInType.ts ===
 var v1: (i: number, ...arguments) => void; // no error - no code gen
->v1 : (i: number, ...arguments: any[]) => void, Symbol(v1, Decl(collisionArgumentsInType.ts, 0, 3))
->i : number, Symbol(i, Decl(collisionArgumentsInType.ts, 0, 9))
->arguments : any[], Symbol(arguments, Decl(collisionArgumentsInType.ts, 0, 19))
+>v1 : (i: number, ...arguments: any[]) => void
+>i : number
+>arguments : any[]
 
 var v12: (arguments: number, ...restParameters) => void; // no error - no code gen
->v12 : (arguments: number, ...restParameters: any[]) => void, Symbol(v12, Decl(collisionArgumentsInType.ts, 1, 3))
->arguments : number, Symbol(arguments, Decl(collisionArgumentsInType.ts, 1, 10))
->restParameters : any[], Symbol(restParameters, Decl(collisionArgumentsInType.ts, 1, 28))
+>v12 : (arguments: number, ...restParameters: any[]) => void
+>arguments : number
+>restParameters : any[]
 
 var v2: {
->v2 : { (arguments: number, ...restParameters: any[]): any; new (arguments: number, ...restParameters: any[]): any; foo(arguments: number, ...restParameters: any[]): any; prop: (arguments: number, ...restParameters: any[]) => void; }, Symbol(v2, Decl(collisionArgumentsInType.ts, 2, 3))
+>v2 : { (arguments: number, ...restParameters: any[]): any; new (arguments: number, ...restParameters: any[]): any; foo(arguments: number, ...restParameters: any[]): any; prop: (arguments: number, ...restParameters: any[]) => void; }
 
     (arguments: number, ...restParameters); // no error - no code gen
->arguments : number, Symbol(arguments, Decl(collisionArgumentsInType.ts, 3, 5))
->restParameters : any[], Symbol(restParameters, Decl(collisionArgumentsInType.ts, 3, 23))
+>arguments : number
+>restParameters : any[]
 
     new (arguments: number, ...restParameters); // no error - no code gen
->arguments : number, Symbol(arguments, Decl(collisionArgumentsInType.ts, 4, 9))
->restParameters : any[], Symbol(restParameters, Decl(collisionArgumentsInType.ts, 4, 27))
+>arguments : number
+>restParameters : any[]
 
     foo(arguments: number, ...restParameters); // no error - no code gen
->foo : (arguments: number, ...restParameters: any[]) => any, Symbol(foo, Decl(collisionArgumentsInType.ts, 4, 47))
->arguments : number, Symbol(arguments, Decl(collisionArgumentsInType.ts, 5, 8))
->restParameters : any[], Symbol(restParameters, Decl(collisionArgumentsInType.ts, 5, 26))
+>foo : (arguments: number, ...restParameters: any[]) => any
+>arguments : number
+>restParameters : any[]
 
     prop: (arguments: number, ...restParameters) => void; // no error - no code gen
->prop : (arguments: number, ...restParameters: any[]) => void, Symbol(prop, Decl(collisionArgumentsInType.ts, 5, 46))
->arguments : number, Symbol(arguments, Decl(collisionArgumentsInType.ts, 6, 11))
->restParameters : any[], Symbol(restParameters, Decl(collisionArgumentsInType.ts, 6, 29))
+>prop : (arguments: number, ...restParameters: any[]) => void
+>arguments : number
+>restParameters : any[]
 }
 var v21: {
->v21 : { (i: number, ...arguments: any[]): any; new (i: number, ...arguments: any[]): any; foo(i: number, ...arguments: any[]): any; prop: (i: number, ...arguments: any[]) => void; }, Symbol(v21, Decl(collisionArgumentsInType.ts, 8, 3))
+>v21 : { (i: number, ...arguments: any[]): any; new (i: number, ...arguments: any[]): any; foo(i: number, ...arguments: any[]): any; prop: (i: number, ...arguments: any[]) => void; }
 
     (i: number, ...arguments); // no error - no code gen
->i : number, Symbol(i, Decl(collisionArgumentsInType.ts, 9, 5))
->arguments : any[], Symbol(arguments, Decl(collisionArgumentsInType.ts, 9, 15))
+>i : number
+>arguments : any[]
 
     new (i: number, ...arguments); // no error - no code gen
->i : number, Symbol(i, Decl(collisionArgumentsInType.ts, 10, 9))
->arguments : any[], Symbol(arguments, Decl(collisionArgumentsInType.ts, 10, 19))
+>i : number
+>arguments : any[]
 
     foo(i: number, ...arguments); // no error - no code gen
->foo : (i: number, ...arguments: any[]) => any, Symbol(foo, Decl(collisionArgumentsInType.ts, 10, 34))
->i : number, Symbol(i, Decl(collisionArgumentsInType.ts, 11, 8))
->arguments : any[], Symbol(arguments, Decl(collisionArgumentsInType.ts, 11, 18))
+>foo : (i: number, ...arguments: any[]) => any
+>i : number
+>arguments : any[]
 
     prop: (i: number, ...arguments) => void; // no error - no code gen
->prop : (i: number, ...arguments: any[]) => void, Symbol(prop, Decl(collisionArgumentsInType.ts, 11, 33))
->i : number, Symbol(i, Decl(collisionArgumentsInType.ts, 12, 11))
->arguments : any[], Symbol(arguments, Decl(collisionArgumentsInType.ts, 12, 21))
+>prop : (i: number, ...arguments: any[]) => void
+>i : number
+>arguments : any[]
 }

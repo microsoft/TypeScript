@@ -1,17 +1,17 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNames7_ES5.ts ===
 enum E {
->E : E, Symbol(E, Decl(computedPropertyNames7_ES5.ts, 0, 0))
+>E : E
 
     member
->member : E, Symbol(E.member, Decl(computedPropertyNames7_ES5.ts, 0, 8))
+>member : E
 }
 var v = {
->v : {}, Symbol(v, Decl(computedPropertyNames7_ES5.ts, 3, 3))
+>v : {}
 >{    [E.member]: 0} : {}
 
     [E.member]: 0
->E.member : E, Symbol(E.member, Decl(computedPropertyNames7_ES5.ts, 0, 8))
->E : typeof E, Symbol(E, Decl(computedPropertyNames7_ES5.ts, 0, 0))
->member : E, Symbol(E.member, Decl(computedPropertyNames7_ES5.ts, 0, 8))
+>E.member : E
+>E : typeof E
+>member : E
 >0 : number
 }

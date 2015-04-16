@@ -1,0 +1,148 @@
+=== tests/cases/compiler/declFileFunctions_0.ts ===
+
+/** This comment should appear for foo*/
+export function foo() {
+>foo : Symbol(foo, Decl(declFileFunctions_0.ts, 0, 0))
+}
+/** This is comment for function signature*/
+export function fooWithParameters(/** this is comment about a*/a: string,
+>fooWithParameters : Symbol(fooWithParameters, Decl(declFileFunctions_0.ts, 3, 1))
+>a : Symbol(a, Decl(declFileFunctions_0.ts, 5, 34))
+
+    /** this is comment for b*/
+    b: number) {
+>b : Symbol(b, Decl(declFileFunctions_0.ts, 5, 73))
+
+    var d = a;
+>d : Symbol(d, Decl(declFileFunctions_0.ts, 8, 7))
+>a : Symbol(a, Decl(declFileFunctions_0.ts, 5, 34))
+}
+export function fooWithRestParameters(a: string, ...rests: string[]) {
+>fooWithRestParameters : Symbol(fooWithRestParameters, Decl(declFileFunctions_0.ts, 9, 1))
+>a : Symbol(a, Decl(declFileFunctions_0.ts, 10, 38))
+>rests : Symbol(rests, Decl(declFileFunctions_0.ts, 10, 48))
+
+    return a + rests.join("");
+>a : Symbol(a, Decl(declFileFunctions_0.ts, 10, 38))
+>rests.join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>rests : Symbol(rests, Decl(declFileFunctions_0.ts, 10, 48))
+>join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+}
+
+export function fooWithOverloads(a: string): string;
+>fooWithOverloads : Symbol(fooWithOverloads, Decl(declFileFunctions_0.ts, 12, 1), Decl(declFileFunctions_0.ts, 14, 52), Decl(declFileFunctions_0.ts, 15, 52))
+>a : Symbol(a, Decl(declFileFunctions_0.ts, 14, 33))
+
+export function fooWithOverloads(a: number): number;
+>fooWithOverloads : Symbol(fooWithOverloads, Decl(declFileFunctions_0.ts, 12, 1), Decl(declFileFunctions_0.ts, 14, 52), Decl(declFileFunctions_0.ts, 15, 52))
+>a : Symbol(a, Decl(declFileFunctions_0.ts, 15, 33))
+
+export function fooWithOverloads(a: any): any {
+>fooWithOverloads : Symbol(fooWithOverloads, Decl(declFileFunctions_0.ts, 12, 1), Decl(declFileFunctions_0.ts, 14, 52), Decl(declFileFunctions_0.ts, 15, 52))
+>a : Symbol(a, Decl(declFileFunctions_0.ts, 16, 33))
+
+    return a;
+>a : Symbol(a, Decl(declFileFunctions_0.ts, 16, 33))
+}
+
+export function fooWithSingleOverload(a: string): string;
+>fooWithSingleOverload : Symbol(fooWithSingleOverload, Decl(declFileFunctions_0.ts, 18, 1), Decl(declFileFunctions_0.ts, 20, 57))
+>a : Symbol(a, Decl(declFileFunctions_0.ts, 20, 38))
+
+export function fooWithSingleOverload(a: any) {
+>fooWithSingleOverload : Symbol(fooWithSingleOverload, Decl(declFileFunctions_0.ts, 18, 1), Decl(declFileFunctions_0.ts, 20, 57))
+>a : Symbol(a, Decl(declFileFunctions_0.ts, 21, 38))
+
+    return a;
+>a : Symbol(a, Decl(declFileFunctions_0.ts, 21, 38))
+}
+
+/** This comment should appear for nonExportedFoo*/
+function nonExportedFoo() {
+>nonExportedFoo : Symbol(nonExportedFoo, Decl(declFileFunctions_0.ts, 23, 1))
+}
+/** This is comment for function signature*/
+function nonExportedFooWithParameters(/** this is comment about a*/a: string,
+>nonExportedFooWithParameters : Symbol(nonExportedFooWithParameters, Decl(declFileFunctions_0.ts, 27, 1))
+>a : Symbol(a, Decl(declFileFunctions_0.ts, 29, 38))
+
+    /** this is comment for b*/
+    b: number) {
+>b : Symbol(b, Decl(declFileFunctions_0.ts, 29, 77))
+
+    var d = a;
+>d : Symbol(d, Decl(declFileFunctions_0.ts, 32, 7))
+>a : Symbol(a, Decl(declFileFunctions_0.ts, 29, 38))
+}
+function nonExportedFooWithRestParameters(a: string, ...rests: string[]) {
+>nonExportedFooWithRestParameters : Symbol(nonExportedFooWithRestParameters, Decl(declFileFunctions_0.ts, 33, 1))
+>a : Symbol(a, Decl(declFileFunctions_0.ts, 34, 42))
+>rests : Symbol(rests, Decl(declFileFunctions_0.ts, 34, 52))
+
+    return a + rests.join("");
+>a : Symbol(a, Decl(declFileFunctions_0.ts, 34, 42))
+>rests.join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>rests : Symbol(rests, Decl(declFileFunctions_0.ts, 34, 52))
+>join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+}
+
+function nonExportedFooWithOverloads(a: string): string;
+>nonExportedFooWithOverloads : Symbol(nonExportedFooWithOverloads, Decl(declFileFunctions_0.ts, 36, 1), Decl(declFileFunctions_0.ts, 38, 56), Decl(declFileFunctions_0.ts, 39, 56))
+>a : Symbol(a, Decl(declFileFunctions_0.ts, 38, 37))
+
+function nonExportedFooWithOverloads(a: number): number;
+>nonExportedFooWithOverloads : Symbol(nonExportedFooWithOverloads, Decl(declFileFunctions_0.ts, 36, 1), Decl(declFileFunctions_0.ts, 38, 56), Decl(declFileFunctions_0.ts, 39, 56))
+>a : Symbol(a, Decl(declFileFunctions_0.ts, 39, 37))
+
+function nonExportedFooWithOverloads(a: any): any {
+>nonExportedFooWithOverloads : Symbol(nonExportedFooWithOverloads, Decl(declFileFunctions_0.ts, 36, 1), Decl(declFileFunctions_0.ts, 38, 56), Decl(declFileFunctions_0.ts, 39, 56))
+>a : Symbol(a, Decl(declFileFunctions_0.ts, 40, 37))
+
+    return a;
+>a : Symbol(a, Decl(declFileFunctions_0.ts, 40, 37))
+}
+
+=== tests/cases/compiler/declFileFunctions_1.ts ===
+/** This comment should appear for foo*/
+function globalfoo() {
+>globalfoo : Symbol(globalfoo, Decl(declFileFunctions_1.ts, 0, 0))
+}
+/** This is comment for function signature*/
+function globalfooWithParameters(/** this is comment about a*/a: string,
+>globalfooWithParameters : Symbol(globalfooWithParameters, Decl(declFileFunctions_1.ts, 2, 1))
+>a : Symbol(a, Decl(declFileFunctions_1.ts, 4, 33))
+
+    /** this is comment for b*/
+    b: number) {
+>b : Symbol(b, Decl(declFileFunctions_1.ts, 4, 72))
+
+    var d = a;
+>d : Symbol(d, Decl(declFileFunctions_1.ts, 7, 7))
+>a : Symbol(a, Decl(declFileFunctions_1.ts, 4, 33))
+}
+function globalfooWithRestParameters(a: string, ...rests: string[]) {
+>globalfooWithRestParameters : Symbol(globalfooWithRestParameters, Decl(declFileFunctions_1.ts, 8, 1))
+>a : Symbol(a, Decl(declFileFunctions_1.ts, 9, 37))
+>rests : Symbol(rests, Decl(declFileFunctions_1.ts, 9, 47))
+
+    return a + rests.join("");
+>a : Symbol(a, Decl(declFileFunctions_1.ts, 9, 37))
+>rests.join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>rests : Symbol(rests, Decl(declFileFunctions_1.ts, 9, 47))
+>join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+}
+function globalfooWithOverloads(a: string): string;
+>globalfooWithOverloads : Symbol(globalfooWithOverloads, Decl(declFileFunctions_1.ts, 11, 1), Decl(declFileFunctions_1.ts, 12, 51), Decl(declFileFunctions_1.ts, 13, 51))
+>a : Symbol(a, Decl(declFileFunctions_1.ts, 12, 32))
+
+function globalfooWithOverloads(a: number): number;
+>globalfooWithOverloads : Symbol(globalfooWithOverloads, Decl(declFileFunctions_1.ts, 11, 1), Decl(declFileFunctions_1.ts, 12, 51), Decl(declFileFunctions_1.ts, 13, 51))
+>a : Symbol(a, Decl(declFileFunctions_1.ts, 13, 32))
+
+function globalfooWithOverloads(a: any): any {
+>globalfooWithOverloads : Symbol(globalfooWithOverloads, Decl(declFileFunctions_1.ts, 11, 1), Decl(declFileFunctions_1.ts, 12, 51), Decl(declFileFunctions_1.ts, 13, 51))
+>a : Symbol(a, Decl(declFileFunctions_1.ts, 14, 32))
+
+    return a;
+>a : Symbol(a, Decl(declFileFunctions_1.ts, 14, 32))
+}

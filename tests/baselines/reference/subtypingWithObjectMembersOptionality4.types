@@ -2,76 +2,76 @@
 // Base has required property, derived adds an optional property, no errors
 
 interface Base { foo: string; }
->Base : Base, Symbol(Base, Decl(subtypingWithObjectMembersOptionality4.ts, 0, 0))
->foo : string, Symbol(foo, Decl(subtypingWithObjectMembersOptionality4.ts, 2, 16))
+>Base : Base
+>foo : string
 
 interface Derived extends Base { bar: string; }
->Derived : Derived, Symbol(Derived, Decl(subtypingWithObjectMembersOptionality4.ts, 2, 31))
->Base : Base, Symbol(Base, Decl(subtypingWithObjectMembersOptionality4.ts, 0, 0))
->bar : string, Symbol(bar, Decl(subtypingWithObjectMembersOptionality4.ts, 3, 32))
+>Derived : Derived
+>Base : Base
+>bar : string
 
 interface T {
->T : T, Symbol(T, Decl(subtypingWithObjectMembersOptionality4.ts, 3, 47))
+>T : T
 
     Foo: Base;
->Foo : Base, Symbol(Foo, Decl(subtypingWithObjectMembersOptionality4.ts, 5, 13))
->Base : Base, Symbol(Base, Decl(subtypingWithObjectMembersOptionality4.ts, 0, 0))
+>Foo : Base
+>Base : Base
 }
 
 interface S extends T {
->S : S, Symbol(S, Decl(subtypingWithObjectMembersOptionality4.ts, 7, 1))
->T : T, Symbol(T, Decl(subtypingWithObjectMembersOptionality4.ts, 3, 47))
+>S : S
+>T : T
 
     Foo2?: Derived // ok
->Foo2 : Derived, Symbol(Foo2, Decl(subtypingWithObjectMembersOptionality4.ts, 9, 23))
->Derived : Derived, Symbol(Derived, Decl(subtypingWithObjectMembersOptionality4.ts, 2, 31))
+>Foo2 : Derived
+>Derived : Derived
 }
 
 interface T2 {
->T2 : T2, Symbol(T2, Decl(subtypingWithObjectMembersOptionality4.ts, 11, 1))
+>T2 : T2
 
     1: Base; 
->Base : Base, Symbol(Base, Decl(subtypingWithObjectMembersOptionality4.ts, 0, 0))
+>Base : Base
 }
 
 interface S2 extends T2 {
->S2 : S2, Symbol(S2, Decl(subtypingWithObjectMembersOptionality4.ts, 15, 1))
->T2 : T2, Symbol(T2, Decl(subtypingWithObjectMembersOptionality4.ts, 11, 1))
+>S2 : S2
+>T2 : T2
 
     2?: Derived; // ok
->Derived : Derived, Symbol(Derived, Decl(subtypingWithObjectMembersOptionality4.ts, 2, 31))
+>Derived : Derived
 }
 
 interface T3 {
->T3 : T3, Symbol(T3, Decl(subtypingWithObjectMembersOptionality4.ts, 19, 1))
+>T3 : T3
 
     '1': Base;
->Base : Base, Symbol(Base, Decl(subtypingWithObjectMembersOptionality4.ts, 0, 0))
+>Base : Base
 }
 
 interface S3 extends T3 {
->S3 : S3, Symbol(S3, Decl(subtypingWithObjectMembersOptionality4.ts, 23, 1))
->T3 : T3, Symbol(T3, Decl(subtypingWithObjectMembersOptionality4.ts, 19, 1))
+>S3 : S3
+>T3 : T3
 
     '1.0'?: Derived; // ok
->Derived : Derived, Symbol(Derived, Decl(subtypingWithObjectMembersOptionality4.ts, 2, 31))
+>Derived : Derived
 }
 
 // object literal case
 var a: { Foo: Base; }
->a : { Foo: Base; }, Symbol(a, Decl(subtypingWithObjectMembersOptionality4.ts, 30, 3))
->Foo : Base, Symbol(Foo, Decl(subtypingWithObjectMembersOptionality4.ts, 30, 8))
->Base : Base, Symbol(Base, Decl(subtypingWithObjectMembersOptionality4.ts, 0, 0))
+>a : { Foo: Base; }
+>Foo : Base
+>Base : Base
 
 var b: { Foo2?: Derived; }
->b : { Foo2?: Derived; }, Symbol(b, Decl(subtypingWithObjectMembersOptionality4.ts, 31, 3))
->Foo2 : Derived, Symbol(Foo2, Decl(subtypingWithObjectMembersOptionality4.ts, 31, 8))
->Derived : Derived, Symbol(Derived, Decl(subtypingWithObjectMembersOptionality4.ts, 2, 31))
+>b : { Foo2?: Derived; }
+>Foo2 : Derived
+>Derived : Derived
 
 var r = true ? a : b; // ok
->r : { Foo: Base; } | { Foo2?: Derived; }, Symbol(r, Decl(subtypingWithObjectMembersOptionality4.ts, 32, 3))
+>r : { Foo: Base; } | { Foo2?: Derived; }
 >true ? a : b : { Foo: Base; } | { Foo2?: Derived; }
 >true : boolean
->a : { Foo: Base; }, Symbol(a, Decl(subtypingWithObjectMembersOptionality4.ts, 30, 3))
->b : { Foo2?: Derived; }, Symbol(b, Decl(subtypingWithObjectMembersOptionality4.ts, 31, 3))
+>a : { Foo: Base; }
+>b : { Foo2?: Derived; }
 

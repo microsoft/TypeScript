@@ -1,22 +1,22 @@
 === tests/cases/compiler/instanceOfInExternalModules_1.ts ===
 ///<reference path='instanceOfInExternalModules_require.ts'/>
 import Bar = require("instanceOfInExternalModules_require");
->Bar : typeof Bar, Symbol(Bar, Decl(instanceOfInExternalModules_1.ts, 0, 0))
+>Bar : typeof Bar
 
 function IsFoo(value: any): boolean {
->IsFoo : (value: any) => boolean, Symbol(IsFoo, Decl(instanceOfInExternalModules_1.ts, 1, 60))
->value : any, Symbol(value, Decl(instanceOfInExternalModules_1.ts, 2, 15))
+>IsFoo : (value: any) => boolean
+>value : any
 
     return value instanceof Bar.Foo;
 >value instanceof Bar.Foo : boolean
->value : any, Symbol(value, Decl(instanceOfInExternalModules_1.ts, 2, 15))
->Bar.Foo : typeof Bar.Foo, Symbol(Bar.Foo, Decl(instanceOfInExternalModules_require.ts, 0, 0))
->Bar : typeof Bar, Symbol(Bar, Decl(instanceOfInExternalModules_1.ts, 0, 0))
->Foo : typeof Bar.Foo, Symbol(Bar.Foo, Decl(instanceOfInExternalModules_require.ts, 0, 0))
+>value : any
+>Bar.Foo : typeof Bar.Foo
+>Bar : typeof Bar
+>Foo : typeof Bar.Foo
 }
 
 === tests/cases/compiler/instanceOfInExternalModules_require.ts ===
 export class Foo { foo: string; }
->Foo : Foo, Symbol(Foo, Decl(instanceOfInExternalModules_require.ts, 0, 0))
->foo : string, Symbol(foo, Decl(instanceOfInExternalModules_require.ts, 0, 18))
+>Foo : Foo
+>foo : string
 

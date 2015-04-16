@@ -1,16 +1,16 @@
 === tests/cases/conformance/statements/for-ofStatements/ES5For-of24.ts ===
 var a = [1, 2, 3];
->a : number[], Symbol(a, Decl(ES5For-of24.ts, 0, 3))
+>a : number[]
 >[1, 2, 3] : number[]
 >1 : number
 >2 : number
 >3 : number
 
 for (var v of a) {
->v : number, Symbol(v, Decl(ES5For-of24.ts, 1, 8))
->a : number[], Symbol(a, Decl(ES5For-of24.ts, 0, 3))
+>v : number
+>a : number[]
 
     let a = 0;
->a : number, Symbol(a, Decl(ES5For-of24.ts, 2, 7))
+>a : number
 >0 : number
 }

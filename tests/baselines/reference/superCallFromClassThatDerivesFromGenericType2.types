@@ -1,23 +1,23 @@
 === tests/cases/compiler/superCallFromClassThatDerivesFromGenericType2.ts ===
 declare class B<T> {
->B : B<T>, Symbol(B, Decl(superCallFromClassThatDerivesFromGenericType2.ts, 0, 0))
->T : T, Symbol(T, Decl(superCallFromClassThatDerivesFromGenericType2.ts, 0, 16))
+>B : B<T>
+>T : T
 
     m<U>(): B<U>;
->m : <U>() => B<U>, Symbol(m, Decl(superCallFromClassThatDerivesFromGenericType2.ts, 0, 20))
->U : U, Symbol(U, Decl(superCallFromClassThatDerivesFromGenericType2.ts, 1, 6))
->B : B<T>, Symbol(B, Decl(superCallFromClassThatDerivesFromGenericType2.ts, 0, 0))
->U : U, Symbol(U, Decl(superCallFromClassThatDerivesFromGenericType2.ts, 1, 6))
+>m : <U>() => B<U>
+>U : U
+>B : B<T>
+>U : U
 }
 
 class D extends B<any> {
->D : D, Symbol(D, Decl(superCallFromClassThatDerivesFromGenericType2.ts, 2, 1))
->B : B<T>, Symbol(B, Decl(superCallFromClassThatDerivesFromGenericType2.ts, 0, 0))
+>D : D
+>B : B<T>
 
     constructor() {
         super();
 >super() : void
->super : typeof B, Symbol(B, Decl(superCallFromClassThatDerivesFromGenericType2.ts, 0, 0))
+>super : typeof B
     }
 }
 

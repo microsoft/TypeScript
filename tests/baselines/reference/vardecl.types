@@ -1,276 +1,276 @@
 === tests/cases/compiler/vardecl.ts ===
 var simpleVar;
->simpleVar : any, Symbol(simpleVar, Decl(vardecl.ts, 0, 3))
+>simpleVar : any
 
 var anotherVar: any;
->anotherVar : any, Symbol(anotherVar, Decl(vardecl.ts, 2, 3))
+>anotherVar : any
 
 var varWithSimpleType: number;
->varWithSimpleType : number, Symbol(varWithSimpleType, Decl(vardecl.ts, 3, 3))
+>varWithSimpleType : number
 
 var varWithArrayType: number[];
->varWithArrayType : number[], Symbol(varWithArrayType, Decl(vardecl.ts, 4, 3))
+>varWithArrayType : number[]
 
 var varWithInitialValue = 30;
->varWithInitialValue : number, Symbol(varWithInitialValue, Decl(vardecl.ts, 6, 3))
+>varWithInitialValue : number
 >30 : number
 
 var withComplicatedValue = { x: 30, y: 70, desc: "position" };
->withComplicatedValue : { x: number; y: number; desc: string; }, Symbol(withComplicatedValue, Decl(vardecl.ts, 8, 3))
+>withComplicatedValue : { x: number; y: number; desc: string; }
 >{ x: 30, y: 70, desc: "position" } : { x: number; y: number; desc: string; }
->x : number, Symbol(x, Decl(vardecl.ts, 8, 28))
+>x : number
 >30 : number
->y : number, Symbol(y, Decl(vardecl.ts, 8, 35))
+>y : number
 >70 : number
->desc : string, Symbol(desc, Decl(vardecl.ts, 8, 42))
+>desc : string
 >"position" : string
 
 declare var declaredVar;
->declaredVar : any, Symbol(declaredVar, Decl(vardecl.ts, 10, 11))
+>declaredVar : any
 
 declare var declareVar2
->declareVar2 : any, Symbol(declareVar2, Decl(vardecl.ts, 11, 11))
+>declareVar2 : any
 
 declare var declaredVar3;
->declaredVar3 : any, Symbol(declaredVar3, Decl(vardecl.ts, 13, 11))
+>declaredVar3 : any
 
 declare var deckareVarWithType: number;
->deckareVarWithType : number, Symbol(deckareVarWithType, Decl(vardecl.ts, 14, 11))
+>deckareVarWithType : number
 
 var arrayVar: string[] = ['a', 'b'];
->arrayVar : string[], Symbol(arrayVar, Decl(vardecl.ts, 16, 3))
+>arrayVar : string[]
 >['a', 'b'] : string[]
 >'a' : string
 >'b' : string
 
 var complicatedArrayVar: { x: number; y: string; }[] ;
->complicatedArrayVar : { x: number; y: string; }[], Symbol(complicatedArrayVar, Decl(vardecl.ts, 18, 3))
->x : number, Symbol(x, Decl(vardecl.ts, 18, 26))
->y : string, Symbol(y, Decl(vardecl.ts, 18, 37))
+>complicatedArrayVar : { x: number; y: string; }[]
+>x : number
+>y : string
 
 complicatedArrayVar.push({ x: 30, y : 'hello world' });
 >complicatedArrayVar.push({ x: 30, y : 'hello world' }) : number
->complicatedArrayVar.push : (...items: { x: number; y: string; }[]) => number, Symbol(Array.push, Decl(lib.d.ts, 1016, 29))
->complicatedArrayVar : { x: number; y: string; }[], Symbol(complicatedArrayVar, Decl(vardecl.ts, 18, 3))
->push : (...items: { x: number; y: string; }[]) => number, Symbol(Array.push, Decl(lib.d.ts, 1016, 29))
+>complicatedArrayVar.push : (...items: { x: number; y: string; }[]) => number
+>complicatedArrayVar : { x: number; y: string; }[]
+>push : (...items: { x: number; y: string; }[]) => number
 >{ x: 30, y : 'hello world' } : { x: number; y: string; }
->x : number, Symbol(x, Decl(vardecl.ts, 19, 26))
+>x : number
 >30 : number
->y : string, Symbol(y, Decl(vardecl.ts, 19, 33))
+>y : string
 >'hello world' : string
 
 var n1: { [s: string]: number; };
->n1 : { [s: string]: number; }, Symbol(n1, Decl(vardecl.ts, 21, 3))
->s : string, Symbol(s, Decl(vardecl.ts, 21, 11))
+>n1 : { [s: string]: number; }
+>s : string
 
 var c : {
->c : { new?(): any; }, Symbol(c, Decl(vardecl.ts, 23, 3))
+>c : { new?(): any; }
 
         new? (): any;
->new : () => any, Symbol(new, Decl(vardecl.ts, 23, 9))
+>new : () => any
     }
 
 var d: {
->d : { foo?(): { x: number; }; }, Symbol(d, Decl(vardecl.ts, 27, 3))
+>d : { foo?(): { x: number; }; }
 
     foo? (): {
->foo : () => { x: number; }, Symbol(foo, Decl(vardecl.ts, 27, 8))
+>foo : () => { x: number; }
 
         x: number;
->x : number, Symbol(x, Decl(vardecl.ts, 28, 14))
+>x : number
 
     };
 }
 
 var d3: {
->d3 : { foo(): { x: number; y: number; }; }, Symbol(d3, Decl(vardecl.ts, 33, 3))
+>d3 : { foo(): { x: number; y: number; }; }
 
     foo(): {
->foo : () => { x: number; y: number; }, Symbol(foo, Decl(vardecl.ts, 33, 9))
+>foo : () => { x: number; y: number; }
 
         x: number;
->x : number, Symbol(x, Decl(vardecl.ts, 34, 12))
+>x : number
 
         y: number;
->y : number, Symbol(y, Decl(vardecl.ts, 35, 18))
+>y : number
 
     };
 }
 
 var d2: {
->d2 : { foo(): { x: number; }; }, Symbol(d2, Decl(vardecl.ts, 40, 3))
+>d2 : { foo(): { x: number; }; }
 
     foo (): {
->foo : () => { x: number; }, Symbol(foo, Decl(vardecl.ts, 40, 9))
+>foo : () => { x: number; }
 
         x: number;
->x : number, Symbol(x, Decl(vardecl.ts, 41, 13))
+>x : number
 
     };
 }
 
 var n2: {
->n2 : () => void, Symbol(n2, Decl(vardecl.ts, 46, 3))
+>n2 : () => void
 
     (): void;
 }
 var n4: {
->n4 : (() => void)[], Symbol(n4, Decl(vardecl.ts, 49, 3))
+>n4 : (() => void)[]
 
     (): void;
 }[];
 
 var d4: {
->d4 : { foo(n: string, x: { x: number; y: number; }): { x: number; y: number; }; }, Symbol(d4, Decl(vardecl.ts, 53, 3))
+>d4 : { foo(n: string, x: { x: number; y: number; }): { x: number; y: number; }; }
 
     foo(n: string, x: { x: number; y: number; }): {
->foo : (n: string, x: { x: number; y: number; }) => { x: number; y: number; }, Symbol(foo, Decl(vardecl.ts, 53, 9))
->n : string, Symbol(n, Decl(vardecl.ts, 54, 8))
->x : { x: number; y: number; }, Symbol(x, Decl(vardecl.ts, 54, 18))
->x : number, Symbol(x, Decl(vardecl.ts, 54, 23))
->y : number, Symbol(y, Decl(vardecl.ts, 54, 34))
+>foo : (n: string, x: { x: number; y: number; }) => { x: number; y: number; }
+>n : string
+>x : { x: number; y: number; }
+>x : number
+>y : number
 
         x: number;
->x : number, Symbol(x, Decl(vardecl.ts, 54, 51))
+>x : number
 
         y: number;
->y : number, Symbol(y, Decl(vardecl.ts, 55, 18))
+>y : number
 
     };
 }
 
 module m2 {
->m2 : typeof m2, Symbol(m2, Decl(vardecl.ts, 58, 1))
+>m2 : typeof m2
 
     export var a, b2: number = 10, b;
->a : any, Symbol(a, Decl(vardecl.ts, 62, 14))
->b2 : number, Symbol(b2, Decl(vardecl.ts, 62, 17))
+>a : any
+>b2 : number
 >10 : number
->b : any, Symbol(b, Decl(vardecl.ts, 62, 34))
+>b : any
 
     var m1;
->m1 : any, Symbol(m1, Decl(vardecl.ts, 63, 7))
+>m1 : any
 
     var a2, b22: number = 10, b222;
->a2 : any, Symbol(a2, Decl(vardecl.ts, 64, 7))
->b22 : number, Symbol(b22, Decl(vardecl.ts, 64, 11))
+>a2 : any
+>b22 : number
 >10 : number
->b222 : any, Symbol(b222, Decl(vardecl.ts, 64, 29))
+>b222 : any
 
     var m3;
->m3 : any, Symbol(m3, Decl(vardecl.ts, 65, 7))
+>m3 : any
 
     class C {
->C : C, Symbol(C, Decl(vardecl.ts, 65, 11))
+>C : C
 
         constructor (public b) {
->b : any, Symbol(b, Decl(vardecl.ts, 68, 21))
+>b : any
         }
     }
 
     export class C2 {
->C2 : C2, Symbol(C2, Decl(vardecl.ts, 70, 5))
+>C2 : C2
 
         constructor (public b) {
->b : any, Symbol(b, Decl(vardecl.ts, 73, 21))
+>b : any
         }
     }
     var m;
->m : any, Symbol(m, Decl(vardecl.ts, 76, 7))
+>m : any
 
     declare var d1, d2;
->d1 : any, Symbol(d1, Decl(vardecl.ts, 77, 15))
->d2 : any, Symbol(d2, Decl(vardecl.ts, 77, 19))
+>d1 : any
+>d2 : any
 
     var b23;
->b23 : any, Symbol(b23, Decl(vardecl.ts, 78, 7))
+>b23 : any
 
     declare var v1;
->v1 : any, Symbol(v1, Decl(vardecl.ts, 79, 15))
+>v1 : any
 
     export var mE;
->mE : any, Symbol(mE, Decl(vardecl.ts, 80, 14))
+>mE : any
 
     export declare var d1E, d2E;
->d1E : any, Symbol(d1E, Decl(vardecl.ts, 81, 22))
->d2E : any, Symbol(d2E, Decl(vardecl.ts, 81, 27))
+>d1E : any
+>d2E : any
 
     export var b2E;
->b2E : any, Symbol(b2E, Decl(vardecl.ts, 82, 14))
+>b2E : any
 
     export declare var v1E;
->v1E : any, Symbol(v1E, Decl(vardecl.ts, 83, 22))
+>v1E : any
 }
 
 var a22, b22 = 10, c22 = 30;
->a22 : any, Symbol(a22, Decl(vardecl.ts, 86, 3))
->b22 : number, Symbol(b22, Decl(vardecl.ts, 86, 8))
+>a22 : any
+>b22 : number
 >10 : number
->c22 : number, Symbol(c22, Decl(vardecl.ts, 86, 18))
+>c22 : number
 >30 : number
 
 var nn;
->nn : any, Symbol(nn, Decl(vardecl.ts, 87, 3))
+>nn : any
 
 declare var da1, da2;
->da1 : any, Symbol(da1, Decl(vardecl.ts, 89, 11))
->da2 : any, Symbol(da2, Decl(vardecl.ts, 89, 16))
+>da1 : any
+>da2 : any
 
 var normalVar;
->normalVar : any, Symbol(normalVar, Decl(vardecl.ts, 90, 3))
+>normalVar : any
 
 declare var dv1;
->dv1 : any, Symbol(dv1, Decl(vardecl.ts, 91, 11))
+>dv1 : any
 
 var xl;
->xl : any, Symbol(xl, Decl(vardecl.ts, 92, 3))
+>xl : any
 
 var x;
->x : any, Symbol(x, Decl(vardecl.ts, 93, 3))
+>x : any
 
 var z;
->z : any, Symbol(z, Decl(vardecl.ts, 94, 3))
+>z : any
 
 function foo(a2) {
->foo : (a2: any) => void, Symbol(foo, Decl(vardecl.ts, 94, 6))
->a2 : any, Symbol(a2, Decl(vardecl.ts, 96, 13))
+>foo : (a2: any) => void
+>a2 : any
 
     var a = 10;
->a : number, Symbol(a, Decl(vardecl.ts, 97, 7))
+>a : number
 >10 : number
 }
 
 for (var i = 0, j = 0; i < 10; i++) {
->i : number, Symbol(i, Decl(vardecl.ts, 100, 8))
+>i : number
 >0 : number
->j : number, Symbol(j, Decl(vardecl.ts, 100, 15))
+>j : number
 >0 : number
 >i < 10 : boolean
->i : number, Symbol(i, Decl(vardecl.ts, 100, 8))
+>i : number
 >10 : number
 >i++ : number
->i : number, Symbol(i, Decl(vardecl.ts, 100, 8))
+>i : number
 
     j++;
 >j++ : number
->j : number, Symbol(j, Decl(vardecl.ts, 100, 15))
+>j : number
 }
 
 
 for (var k = 0; k < 30; k++) {
->k : number, Symbol(k, Decl(vardecl.ts, 105, 8))
+>k : number
 >0 : number
 >k < 30 : boolean
->k : number, Symbol(k, Decl(vardecl.ts, 105, 8))
+>k : number
 >30 : number
 >k++ : number
->k : number, Symbol(k, Decl(vardecl.ts, 105, 8))
+>k : number
 
     k++;
 >k++ : number
->k : number, Symbol(k, Decl(vardecl.ts, 105, 8))
+>k : number
 }
 var b = 10;
->b : number, Symbol(b, Decl(vardecl.ts, 108, 3))
+>b : number
 >10 : number
 
