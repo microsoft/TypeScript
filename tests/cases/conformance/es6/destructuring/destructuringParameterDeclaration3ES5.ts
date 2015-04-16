@@ -30,8 +30,7 @@ a9([1, 2, [["string"]], false, true]);   // Parameter type is [any, any, [[any]]
 a10([1, 2, [["string"]], false, true]);   // Parameter type is any[]
 a10([1, 2, 3, false, true]);              // Parameter type is any[]
 a10([1, 2]);                              // Parameter type is any[]
-
-a11([1, 2]);            // Parameter type is number[]
+a11([1, 2]);                              // Parameter type is number[]
 
 // Rest parameter with generic
 function foo<T>(...a: T[]) { }

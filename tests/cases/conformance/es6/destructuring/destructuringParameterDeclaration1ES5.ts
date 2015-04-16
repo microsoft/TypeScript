@@ -10,9 +10,6 @@ function a4({x, a}: { x: number, a: number }) { }
 
 a1([1, 2, [["world"]]]);
 a1([1, 2, [["world"]], 3]);
-a1([1, "string", [["world"]]);  // Error
-a1([1, 2, [["world"]], "string"]);  // Error
-
 
 // If the declaration includes an initializer expression (which is permitted only
 // when the parameter list occurs in conjunction with a function body),
@@ -23,7 +20,6 @@ function b2(z = null, o = { x: 0, y: undefined }) { }
 function b3({z: {x, y: {j}}} = { z: { x: "hi", y: { j: 1 } } }) { }
 
 interface F1 {
-    b4(z = 10, [[a, b], d, {u}] = [[1, 2], "string", { u: false }]);  // Error, no function body
     b5(z, y, [, a, b], {p, m: { q, r}});
 }
 
@@ -33,7 +29,6 @@ function b7([[a], b, [[c, d]]] = [[undefined], undefined, [[undefined, undefined
 b1([1, 2, 3]);  // z is widen to the type any[]
 b2("string", { x: 200, y: "string" });
 b2("string", { x: 200, y: true });
-b2("string", { x: "string", y: true });  // Error
 b6(["string", 1, 2]);                    // Shouldn't be an error
 b7([["string"], 1, [[true, false]]]);    // Shouldn't be an error
 
@@ -44,39 +39,28 @@ function c0({z: {x, y: {j}}}) { }
 function c1({z} = { z: 10 }) { }
 function c2({z = 10}) { }
 function c3({b}: { b: number|string} = { b: "hello" }) { }
-function c4([z], z: number) { }  // Duplicate identifier
 function c5([a, b, [[c]]]) { }
 function c6([a, b, [[c=1]]]) { }
 
 c0({z : { x: 1, y: { j: "world" } }});      // Implied type is { z: {x: any, y: {j: any}} }
 c0({z : { x: "string", y: { j: true } }});  // Implied type is { z: {x: any, y: {j: any}} }
-c0({z : 1});                                // Error, implied type is { z: {x: any, y: {j: any}} }
 
-c1({});           // Error, implied type is {z:number}?
-c1({ z: true });  // Error, implied type is {z:number}?
 c1();             // Implied type is {z:number}?
 c1({ z: 1 })      // Implied type is {z:number}? 
 
 c2({});         // Implied type is {z?: number}
 c2({z:1});      // Implied type is {z?: number}
-c2({z:false});  // Error, implied type is {z?: number}
 
 c3({ b: 1 });     // Implied type is { b: number|string }.
-c3({ b: true });  // Error, implied type is { b: number|string }. 
 
 c5([1, 2, [["string"]]]);               // Implied type is is [any, any, [[any]]]
 c5([1, 2, [["string"]], false, true]);  // Implied type is is [any, any, [[any]]]
-c5([1, 2, false, true]);                // Error, implied type is [any, any, [[any]]]
-
-c6([1, 2, [["string"]]]);  // Error, implied type is [any, any, [[number]]]  // Use initializer
 
 // A parameter can be marked optional by following its name or binding pattern with a question mark (?)
 // or by including an initializer.
 
 function d0(x?) { }
 function d0(x = 10) { }
-function d1([a, b, c]?) { }  // Error, binding pattern can't be optional in implementation signature
-function d2({x, y, z}?) { }  // Error, binding pattern can't be optional in implementation signature
 
 interface F2 {
     d3([a, b, c]?);
@@ -97,11 +81,6 @@ class C3 implements F2 {
     e0([a, b, c]) { }
 }
 
-class C4 implements F2 {
-    d3([a, b, c]?) { }
-    d4({x, y, c}) { }
-    e0([a, b, q]) { }
-}
 
 function d5({x, y} = { x: 1, y: 2 }) { }
 d5();  // Parameter is optional as its declaration included an initializer
@@ -115,7 +94,3 @@ function e2({x}: { x: number }) { }  // x is type number
 function e3({x}: { x?: number }) { }  // x is an optional with type number
 function e4({x: [number,string,any] }) { }  // x has type [any, any, any]
 function e5({x: [a, b, c]}: { x: [number, number, number] }) { }  // x has type [any, any, any]
-
-function e6({x: [number, number, number]}) { }  // should be an error, duplicate identifier;
-
-

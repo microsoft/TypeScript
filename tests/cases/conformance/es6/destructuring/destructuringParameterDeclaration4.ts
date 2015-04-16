@@ -1,49 +1,36 @@
-﻿// Parameter with generic
-interface F { }
-class Class implements F {
-    constructor() { }
+﻿// If the parameter is a rest parameter, the parameter type is any[]
+// A type annotation for a rest parameter must denote an array type.
+
+// RestParameter:
+//     ...   Identifier   TypeAnnotation(opt)
+
+type arrayString = Array<String>
+type someArray = Array<String> | number[];
+type stringOrNumArray = Array<String|Number>;
+
+function a0(...x: [number, number, string]) { }  // Error, rest parameter must be array type
+function a1(...x: (number|string)[]) { }
+function a2(...a: someArray) { }  // Error, rest parameter must be array type
+function a3(...b?) { }            // Error, can't be optional
+function a4(...b = [1,2,3]) { }   // Error, can't have initializer
+function a5([a, b, [[c]]]) { }
+function a6([a, b, c, ...x]: number[]) { }
+
+
+a1(1, 2, "hello", true);  // Error, parameter type is (number|string)[]
+a1(...array2);            // Error parameter type is (number|string)[]
+a5([1, 2, "string", false, true]);       // Error, parameter type is [any, any, [[any]]]
+a5([1, 2]);                              // Error, parameter type is [any, any, [[any]]]
+a6([1, 2, "string"]);                   // Error, parameter type is number[]
+
+
+var temp = [1, 2, 3];
+class C {
+    constructor(public ...temp) { }  // Error, rest parameter can't have accessibilityModifier
 }
 
-class SubClass extends Class {
-    foo: boolean;
-    constructor() { super(); }
-}
-
-class D implements F {
-    foo: boolean
-    constructor() { }
-}
-
-class SubD extends D {
-    bar: number
-    constructor() {
-        super();
-    }
-}
+// Rest parameter with generic
+function foo1<T extends Number>(...a: T[]) { }
+foo1(1, 2, "string", E1.a, E.b);  // Error
 
 
-function d0<T extends Class>({x} = { x: new Class() }) { }
-function d1<T extends F>({x}: { x: F }) { }
-function d2<T extends Class>({x}: { x: Class }) { }
-function d3<T extends D>({y}: { y: D }) { }
-function d4<T extends D>({y} = { y: new D() }) { }
-
-var obj = new Class();
-d0({ x: 1 });
-d0({ x: {} });
-d0({ x: "string" });
-
-d1({ x: new Class() });
-d1({ x: {} });
-d1({ x: "string" });
-
-d2({ x: new SubClass() });
-d2({ x: {} });
-
-d3({ y: new SubD() });
-d3({ y: new SubClass() });
-// Error
-d3({ y: new Class() });
-d3({});
-d3({ y: 1 });
-d3({ y: "world" });
