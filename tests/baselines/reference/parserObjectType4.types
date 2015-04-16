@@ -1,11 +1,11 @@
 === tests/cases/conformance/parser/ecmascript5/ObjectTypes/parserObjectType4.ts ===
 var v: {
->v : { x: any; y: any; }, Symbol(v, Decl(parserObjectType4.ts, 0, 3))
+>v : { x: any; y: any; }
 
   x
->x : any, Symbol(x, Decl(parserObjectType4.ts, 0, 8))
+>x : any
 
   y
->y : any, Symbol(y, Decl(parserObjectType4.ts, 1, 3))
+>y : any
 
 };

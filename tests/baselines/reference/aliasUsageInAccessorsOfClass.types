@@ -1,61 +1,61 @@
 === tests/cases/compiler/aliasUsage1_main.ts ===
 import Backbone = require("aliasUsage1_backbone");
->Backbone : typeof Backbone, Symbol(Backbone, Decl(aliasUsage1_main.ts, 0, 0))
+>Backbone : typeof Backbone
 
 import moduleA = require("aliasUsage1_moduleA");
->moduleA : typeof moduleA, Symbol(moduleA, Decl(aliasUsage1_main.ts, 0, 50))
+>moduleA : typeof moduleA
 
 interface IHasVisualizationModel {
->IHasVisualizationModel : IHasVisualizationModel, Symbol(IHasVisualizationModel, Decl(aliasUsage1_main.ts, 1, 48))
+>IHasVisualizationModel : IHasVisualizationModel
 
     VisualizationModel: typeof Backbone.Model;
->VisualizationModel : typeof Backbone.Model, Symbol(VisualizationModel, Decl(aliasUsage1_main.ts, 2, 34))
->Backbone.Model : typeof Backbone.Model, Symbol(Backbone.Model, Decl(aliasUsage1_backbone.ts, 0, 0))
->Backbone : typeof Backbone, Symbol(Backbone, Decl(aliasUsage1_main.ts, 0, 0))
->Model : typeof Backbone.Model, Symbol(Backbone.Model, Decl(aliasUsage1_backbone.ts, 0, 0))
+>VisualizationModel : typeof Backbone.Model
+>Backbone.Model : typeof Backbone.Model
+>Backbone : typeof Backbone
+>Model : typeof Backbone.Model
 }
 class C2 {
->C2 : C2, Symbol(C2, Decl(aliasUsage1_main.ts, 4, 1))
+>C2 : C2
 
     x: IHasVisualizationModel;
->x : IHasVisualizationModel, Symbol(x, Decl(aliasUsage1_main.ts, 5, 10))
->IHasVisualizationModel : IHasVisualizationModel, Symbol(IHasVisualizationModel, Decl(aliasUsage1_main.ts, 1, 48))
+>x : IHasVisualizationModel
+>IHasVisualizationModel : IHasVisualizationModel
 
     get A() {
->A : IHasVisualizationModel, Symbol(A, Decl(aliasUsage1_main.ts, 6, 30), Decl(aliasUsage1_main.ts, 9, 5))
+>A : IHasVisualizationModel
 
         return this.x;
->this.x : IHasVisualizationModel, Symbol(x, Decl(aliasUsage1_main.ts, 5, 10))
->this : C2, Symbol(C2, Decl(aliasUsage1_main.ts, 4, 1))
->x : IHasVisualizationModel, Symbol(x, Decl(aliasUsage1_main.ts, 5, 10))
+>this.x : IHasVisualizationModel
+>this : C2
+>x : IHasVisualizationModel
     }
     set A(x) {
->A : IHasVisualizationModel, Symbol(A, Decl(aliasUsage1_main.ts, 6, 30), Decl(aliasUsage1_main.ts, 9, 5))
->x : IHasVisualizationModel, Symbol(x, Decl(aliasUsage1_main.ts, 10, 10))
+>A : IHasVisualizationModel
+>x : IHasVisualizationModel
 
         x = moduleA;
 >x = moduleA : typeof moduleA
->x : IHasVisualizationModel, Symbol(x, Decl(aliasUsage1_main.ts, 10, 10))
->moduleA : typeof moduleA, Symbol(moduleA, Decl(aliasUsage1_main.ts, 0, 50))
+>x : IHasVisualizationModel
+>moduleA : typeof moduleA
     }
 }
 === tests/cases/compiler/aliasUsage1_backbone.ts ===
 export class Model {
->Model : Model, Symbol(Model, Decl(aliasUsage1_backbone.ts, 0, 0))
+>Model : Model
 
     public someData: string;
->someData : string, Symbol(someData, Decl(aliasUsage1_backbone.ts, 0, 20))
+>someData : string
 }
 
 === tests/cases/compiler/aliasUsage1_moduleA.ts ===
 import Backbone = require("aliasUsage1_backbone");
->Backbone : typeof Backbone, Symbol(Backbone, Decl(aliasUsage1_moduleA.ts, 0, 0))
+>Backbone : typeof Backbone
 
 export class VisualizationModel extends Backbone.Model {
->VisualizationModel : VisualizationModel, Symbol(VisualizationModel, Decl(aliasUsage1_moduleA.ts, 0, 50))
->Backbone.Model : any, Symbol(Backbone.Model, Decl(aliasUsage1_backbone.ts, 0, 0))
->Backbone : typeof Backbone, Symbol(Backbone, Decl(aliasUsage1_moduleA.ts, 0, 0))
->Model : Backbone.Model, Symbol(Backbone.Model, Decl(aliasUsage1_backbone.ts, 0, 0))
+>VisualizationModel : VisualizationModel
+>Backbone.Model : any
+>Backbone : typeof Backbone
+>Model : Backbone.Model
 
     // interesting stuff here
 }

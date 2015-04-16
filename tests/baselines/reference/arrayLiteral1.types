@@ -1,6 +1,6 @@
 === tests/cases/compiler/arrayLiteral1.ts ===
 var v30 = [1, 2];
->v30 : number[], Symbol(v30, Decl(arrayLiteral1.ts, 0, 3))
+>v30 : number[]
 >[1, 2] : number[]
 >1 : number
 >2 : number

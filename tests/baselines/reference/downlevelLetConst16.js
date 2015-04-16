@@ -238,18 +238,18 @@ use(z);
 function foo1() {
     var x = 1;
     use(x);
-    var y = ([1])[0];
+    var y = [1][0];
     use(y);
-    var z = ({ a: 1 }).a;
+    var z = { a: 1 }.a;
     use(z);
 }
 function foo2() {
     {
         var x_1 = 1;
         use(x_1);
-        var y_1 = ([1])[0];
+        var y_1 = [1][0];
         use(y_1);
-        var z_1 = ({ a: 1 }).a;
+        var z_1 = { a: 1 }.a;
         use(z_1);
     }
     use(x);
@@ -260,18 +260,18 @@ var A = (function () {
     A.prototype.m1 = function () {
         var x = 1;
         use(x);
-        var y = ([1])[0];
+        var y = [1][0];
         use(y);
-        var z = ({ a: 1 }).a;
+        var z = { a: 1 }.a;
         use(z);
     };
     A.prototype.m2 = function () {
         {
             var x_2 = 1;
             use(x_2);
-            var y_2 = ([1])[0];
+            var y_2 = [1][0];
             use(y_2);
-            var z_2 = ({ a: 1 }).a;
+            var z_2 = { a: 1 }.a;
             use(z_2);
         }
         use(x);
@@ -284,18 +284,18 @@ var B = (function () {
     B.prototype.m1 = function () {
         var x = 1;
         use(x);
-        var y = ([1])[0];
+        var y = [1][0];
         use(y);
-        var z = ({ a: 1 }).a;
+        var z = { a: 1 }.a;
         use(z);
     };
     B.prototype.m2 = function () {
         {
             var x_3 = 1;
             use(x_3);
-            var y_3 = ([1])[0];
+            var y_3 = [1][0];
             use(y_3);
-            var z_3 = ({ a: 1 }).a;
+            var z_3 = { a: 1 }.a;
             use(z_3);
         }
         use(x);
@@ -305,18 +305,18 @@ var B = (function () {
 function bar1() {
     var x = 1;
     use(x);
-    var y = ([1])[0];
+    var y = [1][0];
     use(y);
-    var z = ({ a: 1 }).a;
+    var z = { a: 1 }.a;
     use(z);
 }
 function bar2() {
     {
         var x_4 = 1;
         use(x_4);
-        var y_4 = ([1])[0];
+        var y_4 = [1][0];
         use(y_4);
-        var z_4 = ({ a: 1 }).a;
+        var z_4 = { a: 1 }.a;
         use(z_4);
     }
     use(x);
@@ -325,9 +325,9 @@ var M1;
 (function (M1) {
     var x = 1;
     use(x);
-    var y = ([1])[0];
+    var y = [1][0];
     use(y);
-    var z = ({ a: 1 }).a;
+    var z = { a: 1 }.a;
     use(z);
 })(M1 || (M1 = {}));
 var M2;
@@ -335,9 +335,9 @@ var M2;
     {
         var x_5 = 1;
         use(x_5);
-        var y_5 = ([1])[0];
+        var y_5 = [1][0];
         use(y_5);
-        var z_5 = ({ a: 1 }).a;
+        var z_5 = { a: 1 }.a;
         use(z_5);
     }
     use(x);
@@ -346,9 +346,9 @@ var M3;
 (function (M3) {
     var x = 1;
     use(x);
-    var y = ([1])[0];
+    var y = [1][0];
     use(y);
-    var z = ({ a: 1 }).a;
+    var z = { a: 1 }.a;
     use(z);
 })(M3 || (M3 = {}));
 var M4;
@@ -356,9 +356,9 @@ var M4;
     {
         var x_6 = 1;
         use(x_6);
-        var y_6 = ([1])[0];
+        var y_6 = [1][0];
         use(y_6);
-        var z_6 = ({ a: 1 }).a;
+        var z_6 = { a: 1 }.a;
         use(z_6);
     }
     use(x);
@@ -369,10 +369,10 @@ function foo3() {
     for (var x_7 = void 0;;) {
         use(x_7);
     }
-    for (var y_7 = ([])[0];;) {
+    for (var y_7 = [][0];;) {
         use(y_7);
     }
-    for (var z_7 = ({ a: 1 }).a;;) {
+    for (var z_7 = { a: 1 }.a;;) {
         use(z_7);
     }
     use(x);
@@ -381,10 +381,10 @@ function foo4() {
     for (var x_8 = 1;;) {
         use(x_8);
     }
-    for (var y_8 = ([])[0];;) {
+    for (var y_8 = [][0];;) {
         use(y_8);
     }
-    for (var z_8 = ({ a: 1 }).a;;) {
+    for (var z_8 = { a: 1 }.a;;) {
         use(z_8);
     }
     use(x);

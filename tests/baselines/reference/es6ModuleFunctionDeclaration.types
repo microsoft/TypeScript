@@ -1,71 +1,71 @@
 === tests/cases/compiler/es6ModuleFunctionDeclaration.ts ===
 export function foo() {
->foo : () => void, Symbol(foo, Decl(es6ModuleFunctionDeclaration.ts, 0, 0))
+>foo : () => void
 }
 function foo2() {
->foo2 : () => void, Symbol(foo2, Decl(es6ModuleFunctionDeclaration.ts, 1, 1))
+>foo2 : () => void
 }
 foo();
 >foo() : void
->foo : () => void, Symbol(foo, Decl(es6ModuleFunctionDeclaration.ts, 0, 0))
+>foo : () => void
 
 foo2();
 >foo2() : void
->foo2 : () => void, Symbol(foo2, Decl(es6ModuleFunctionDeclaration.ts, 1, 1))
+>foo2 : () => void
 
 export module m1 {
->m1 : typeof m1, Symbol(m1, Decl(es6ModuleFunctionDeclaration.ts, 5, 7))
+>m1 : typeof m1
 
     export function foo3() {
->foo3 : () => void, Symbol(foo3, Decl(es6ModuleFunctionDeclaration.ts, 7, 18))
+>foo3 : () => void
     }
     function foo4() {
->foo4 : () => void, Symbol(foo4, Decl(es6ModuleFunctionDeclaration.ts, 9, 5))
+>foo4 : () => void
     }
     foo();
 >foo() : void
->foo : () => void, Symbol(foo, Decl(es6ModuleFunctionDeclaration.ts, 0, 0))
+>foo : () => void
 
     foo2();
 >foo2() : void
->foo2 : () => void, Symbol(foo2, Decl(es6ModuleFunctionDeclaration.ts, 1, 1))
+>foo2 : () => void
 
     foo3();
 >foo3() : void
->foo3 : () => void, Symbol(foo3, Decl(es6ModuleFunctionDeclaration.ts, 7, 18))
+>foo3 : () => void
 
     foo4();
 >foo4() : void
->foo4 : () => void, Symbol(foo4, Decl(es6ModuleFunctionDeclaration.ts, 9, 5))
+>foo4 : () => void
 }
 module m2 {
->m2 : typeof m2, Symbol(m2, Decl(es6ModuleFunctionDeclaration.ts, 16, 1))
+>m2 : typeof m2
 
     export function foo3() {
->foo3 : () => void, Symbol(foo3, Decl(es6ModuleFunctionDeclaration.ts, 17, 11))
+>foo3 : () => void
     }
     function foo4() {
->foo4 : () => void, Symbol(foo4, Decl(es6ModuleFunctionDeclaration.ts, 19, 5))
+>foo4 : () => void
     }
     foo();
 >foo() : void
->foo : () => void, Symbol(foo, Decl(es6ModuleFunctionDeclaration.ts, 0, 0))
+>foo : () => void
 
     foo2();
 >foo2() : void
->foo2 : () => void, Symbol(foo2, Decl(es6ModuleFunctionDeclaration.ts, 1, 1))
+>foo2 : () => void
 
     foo3();
 >foo3() : void
->foo3 : () => void, Symbol(foo3, Decl(es6ModuleFunctionDeclaration.ts, 17, 11))
+>foo3 : () => void
 
     foo4();
 >foo4() : void
->foo4 : () => void, Symbol(foo4, Decl(es6ModuleFunctionDeclaration.ts, 19, 5))
+>foo4 : () => void
 
     m1.foo3();
 >m1.foo3() : void
->m1.foo3 : () => void, Symbol(m1.foo3, Decl(es6ModuleFunctionDeclaration.ts, 7, 18))
->m1 : typeof m1, Symbol(m1, Decl(es6ModuleFunctionDeclaration.ts, 5, 7))
->foo3 : () => void, Symbol(m1.foo3, Decl(es6ModuleFunctionDeclaration.ts, 7, 18))
+>m1.foo3 : () => void
+>m1 : typeof m1
+>foo3 : () => void
 }

@@ -1,26 +1,26 @@
 === tests/cases/compiler/arrayConcatMap.ts ===
 var x = [].concat([{ a: 1 }], [{ a: 2 }])
->x : any[], Symbol(x, Decl(arrayConcatMap.ts, 0, 3))
+>x : any[]
 >[].concat([{ a: 1 }], [{ a: 2 }])          .map(b => b.a) : any[]
->[].concat([{ a: 1 }], [{ a: 2 }])          .map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
+>[].concat([{ a: 1 }], [{ a: 2 }])          .map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
 >[].concat([{ a: 1 }], [{ a: 2 }]) : any[]
->[].concat : { <U extends any[]>(...items: U[]): any[]; (...items: any[]): any[]; }, Symbol(Array.concat, Decl(lib.d.ts, 1025, 13), Decl(lib.d.ts, 1030, 46))
+>[].concat : { <U extends any[]>(...items: U[]): any[]; (...items: any[]): any[]; }
 >[] : undefined[]
->concat : { <U extends any[]>(...items: U[]): any[]; (...items: any[]): any[]; }, Symbol(Array.concat, Decl(lib.d.ts, 1025, 13), Decl(lib.d.ts, 1030, 46))
+>concat : { <U extends any[]>(...items: U[]): any[]; (...items: any[]): any[]; }
 >[{ a: 1 }] : { a: number; }[]
 >{ a: 1 } : { a: number; }
->a : number, Symbol(a, Decl(arrayConcatMap.ts, 0, 20))
+>a : number
 >1 : number
 >[{ a: 2 }] : { a: number; }[]
 >{ a: 2 } : { a: number; }
->a : number, Symbol(a, Decl(arrayConcatMap.ts, 0, 32))
+>a : number
 >2 : number
 
           .map(b => b.a);
->map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[], Symbol(Array.map, Decl(lib.d.ts, 1115, 92))
+>map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
 >b => b.a : (b: any) => any
->b : any, Symbol(b, Decl(arrayConcatMap.ts, 1, 15))
+>b : any
 >b.a : any
->b : any, Symbol(b, Decl(arrayConcatMap.ts, 1, 15))
+>b : any
 >a : any
 

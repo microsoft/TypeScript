@@ -1,49 +1,49 @@
 === tests/cases/compiler/thisInLambda.ts ===
 class Foo {
->Foo : Foo, Symbol(Foo, Decl(thisInLambda.ts, 0, 0))
+>Foo : Foo
 
     x = "hello";
->x : string, Symbol(x, Decl(thisInLambda.ts, 0, 11))
+>x : string
 >"hello" : string
 
     bar() {
->bar : () => void, Symbol(bar, Decl(thisInLambda.ts, 1, 16))
+>bar : () => void
 
         this.x; // 'this' is type 'Foo'
->this.x : string, Symbol(x, Decl(thisInLambda.ts, 0, 11))
->this : Foo, Symbol(Foo, Decl(thisInLambda.ts, 0, 0))
->x : string, Symbol(x, Decl(thisInLambda.ts, 0, 11))
+>this.x : string
+>this : Foo
+>x : string
 
         var f = () => this.x; // 'this' should be type 'Foo' as well
->f : () => string, Symbol(f, Decl(thisInLambda.ts, 4, 11))
+>f : () => string
 >() => this.x : () => string
->this.x : string, Symbol(x, Decl(thisInLambda.ts, 0, 11))
->this : Foo, Symbol(Foo, Decl(thisInLambda.ts, 0, 0))
->x : string, Symbol(x, Decl(thisInLambda.ts, 0, 11))
+>this.x : string
+>this : Foo
+>x : string
     }
 }
 
 function myFn(a:any) { }
->myFn : (a: any) => void, Symbol(myFn, Decl(thisInLambda.ts, 6, 1))
->a : any, Symbol(a, Decl(thisInLambda.ts, 8, 14))
+>myFn : (a: any) => void
+>a : any
 
 class myCls {
->myCls : myCls, Symbol(myCls, Decl(thisInLambda.ts, 8, 24))
+>myCls : myCls
 
     constructor () {
         myFn(() => {
 >myFn(() => {            myFn(() => {                var x = this;            });        }) : void
->myFn : (a: any) => void, Symbol(myFn, Decl(thisInLambda.ts, 6, 1))
+>myFn : (a: any) => void
 >() => {            myFn(() => {                var x = this;            });        } : () => void
 
             myFn(() => {
 >myFn(() => {                var x = this;            }) : void
->myFn : (a: any) => void, Symbol(myFn, Decl(thisInLambda.ts, 6, 1))
+>myFn : (a: any) => void
 >() => {                var x = this;            } : () => void
 
                 var x = this;
->x : myCls, Symbol(x, Decl(thisInLambda.ts, 13, 19))
->this : myCls, Symbol(myCls, Decl(thisInLambda.ts, 8, 24))
+>x : myCls
+>this : myCls
 
             });
         });

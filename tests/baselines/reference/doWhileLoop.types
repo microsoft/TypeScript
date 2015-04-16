@@ -3,5 +3,5 @@ do { } while (false);
 >false : boolean
 
 var n;
->n : any, Symbol(n, Decl(doWhileLoop.ts, 1, 3))
+>n : any
 

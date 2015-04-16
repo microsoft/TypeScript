@@ -1,9 +1,9 @@
 === tests/cases/compiler/debuggerEmit.ts ===
 var x = function () { debugger; }
->x : () => void, Symbol(x, Decl(debuggerEmit.ts, 0, 3))
+>x : () => void
 >function () { debugger; } : () => void
 
 x();
 >x() : void
->x : () => void, Symbol(x, Decl(debuggerEmit.ts, 0, 3))
+>x : () => void
 

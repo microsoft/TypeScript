@@ -1,68 +1,68 @@
 === tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution2.ts ===
 
 function foo1(strs: TemplateStringsArray, x: number): string;
->foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }, Symbol(foo1, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 0, 0), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 1, 61), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 2, 49))
->strs : TemplateStringsArray, Symbol(strs, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 1, 14))
->TemplateStringsArray : TemplateStringsArray, Symbol(TemplateStringsArray, Decl(lib.d.ts, 518, 38))
->x : number, Symbol(x, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 1, 41))
+>foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
+>strs : TemplateStringsArray
+>TemplateStringsArray : TemplateStringsArray
+>x : number
 
 function foo1(strs: string[], x: number): number;
->foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }, Symbol(foo1, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 0, 0), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 1, 61), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 2, 49))
->strs : string[], Symbol(strs, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 2, 14))
->x : number, Symbol(x, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 2, 29))
+>foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
+>strs : string[]
+>x : number
 
 function foo1(...stuff: any[]): any {
->foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }, Symbol(foo1, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 0, 0), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 1, 61), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 2, 49))
->stuff : any[], Symbol(stuff, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 3, 14))
+>foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
+>stuff : any[]
 
     return undefined;
->undefined : undefined, Symbol(undefined)
+>undefined : undefined
 }
 
 var a = foo1 `${1}`;          // string
->a : string, Symbol(a, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 7, 3))
+>a : string
 >foo1 `${1}` : string
->foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }, Symbol(foo1, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 0, 0), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 1, 61), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 2, 49))
+>foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
 >`${1}` : string
 >1 : number
 
 var b = foo1([], 1);          // number
->b : number, Symbol(b, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 8, 3))
+>b : number
 >foo1([], 1) : number
->foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }, Symbol(foo1, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 0, 0), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 1, 61), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 2, 49))
+>foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
 >[] : undefined[]
 >1 : number
 
 function foo2(strs: string[], x: number): number;
->foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }, Symbol(foo2, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 8, 20), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 10, 49), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 11, 61))
->strs : string[], Symbol(strs, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 10, 14))
->x : number, Symbol(x, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 10, 29))
+>foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
+>strs : string[]
+>x : number
 
 function foo2(strs: TemplateStringsArray, x: number): string;
->foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }, Symbol(foo2, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 8, 20), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 10, 49), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 11, 61))
->strs : TemplateStringsArray, Symbol(strs, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 11, 14))
->TemplateStringsArray : TemplateStringsArray, Symbol(TemplateStringsArray, Decl(lib.d.ts, 518, 38))
->x : number, Symbol(x, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 11, 41))
+>foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
+>strs : TemplateStringsArray
+>TemplateStringsArray : TemplateStringsArray
+>x : number
 
 function foo2(...stuff: any[]): any {
->foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }, Symbol(foo2, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 8, 20), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 10, 49), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 11, 61))
->stuff : any[], Symbol(stuff, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 12, 14))
+>foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
+>stuff : any[]
 
     return undefined;
->undefined : undefined, Symbol(undefined)
+>undefined : undefined
 }
 
 var c = foo2 `${1}`;          // number
->c : number, Symbol(c, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 16, 3))
+>c : number
 >foo2 `${1}` : number
->foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }, Symbol(foo2, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 8, 20), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 10, 49), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 11, 61))
+>foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
 >`${1}` : string
 >1 : number
 
 var d = foo2([], 1);          // number
->d : number, Symbol(d, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 17, 3))
+>d : number
 >foo2([], 1) : number
->foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }, Symbol(foo2, Decl(taggedTemplateStringsWithOverloadResolution2.ts, 8, 20), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 10, 49), Decl(taggedTemplateStringsWithOverloadResolution2.ts, 11, 61))
+>foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
 >[] : undefined[]
 >1 : number
 

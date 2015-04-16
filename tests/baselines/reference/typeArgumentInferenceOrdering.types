@@ -1,42 +1,42 @@
 === tests/cases/compiler/typeArgumentInferenceOrdering.ts ===
 function foo<T>(f: { y: T }): T { return null }
->foo : <T>(f: { y: T; }) => T, Symbol(foo, Decl(typeArgumentInferenceOrdering.ts, 0, 0))
->T : T, Symbol(T, Decl(typeArgumentInferenceOrdering.ts, 0, 13))
->f : { y: T; }, Symbol(f, Decl(typeArgumentInferenceOrdering.ts, 0, 16))
->y : T, Symbol(y, Decl(typeArgumentInferenceOrdering.ts, 0, 20))
->T : T, Symbol(T, Decl(typeArgumentInferenceOrdering.ts, 0, 13))
->T : T, Symbol(T, Decl(typeArgumentInferenceOrdering.ts, 0, 13))
+>foo : <T>(f: { y: T; }) => T
+>T : T
+>f : { y: T; }
+>y : T
+>T : T
+>T : T
 >null : null
 
 var x = foo(new C()).x; // was Error that property x does not exist on type {}
->x : () => Goo, Symbol(x, Decl(typeArgumentInferenceOrdering.ts, 1, 3))
->foo(new C()).x : () => Goo, Symbol(I.x, Decl(typeArgumentInferenceOrdering.ts, 7, 13))
+>x : () => Goo
+>foo(new C()).x : () => Goo
 >foo(new C()) : I
->foo : <T>(f: { y: T; }) => T, Symbol(foo, Decl(typeArgumentInferenceOrdering.ts, 0, 0))
+>foo : <T>(f: { y: T; }) => T
 >new C() : C
->C : typeof C, Symbol(C, Decl(typeArgumentInferenceOrdering.ts, 1, 23))
->x : () => Goo, Symbol(I.x, Decl(typeArgumentInferenceOrdering.ts, 7, 13))
+>C : typeof C
+>x : () => Goo
 
 class C {
->C : C, Symbol(C, Decl(typeArgumentInferenceOrdering.ts, 1, 23))
+>C : C
 
     y: I;
->y : I, Symbol(y, Decl(typeArgumentInferenceOrdering.ts, 3, 9))
->I : I, Symbol(I, Decl(typeArgumentInferenceOrdering.ts, 5, 1))
+>y : I
+>I : I
 }
 
 interface I {
->I : I, Symbol(I, Decl(typeArgumentInferenceOrdering.ts, 5, 1))
+>I : I
 
     x(): Goo;
->x : () => Goo, Symbol(x, Decl(typeArgumentInferenceOrdering.ts, 7, 13))
->Goo : Goo, Symbol(Goo, Decl(typeArgumentInferenceOrdering.ts, 9, 1))
+>x : () => Goo
+>Goo : Goo
 }
 
 interface Goo {
->Goo : Goo, Symbol(Goo, Decl(typeArgumentInferenceOrdering.ts, 9, 1))
+>Goo : Goo
 
     p: string;
->p : string, Symbol(p, Decl(typeArgumentInferenceOrdering.ts, 11, 15))
+>p : string
 }
 

@@ -1,25 +1,25 @@
 === tests/cases/compiler/generics4NoError.ts ===
 class C<T> { private x: T; }
->C : C<T>, Symbol(C, Decl(generics4NoError.ts, 0, 0))
->T : T, Symbol(T, Decl(generics4NoError.ts, 0, 8))
->x : T, Symbol(x, Decl(generics4NoError.ts, 0, 12))
->T : T, Symbol(T, Decl(generics4NoError.ts, 0, 8))
+>C : C<T>
+>T : T
+>x : T
+>T : T
 
 interface X { f(): string; }
->X : X, Symbol(X, Decl(generics4NoError.ts, 0, 28))
->f : () => string, Symbol(f, Decl(generics4NoError.ts, 1, 13))
+>X : X
+>f : () => string
 
 interface Y { f(): boolean; }
->Y : Y, Symbol(Y, Decl(generics4NoError.ts, 1, 28))
->f : () => boolean, Symbol(f, Decl(generics4NoError.ts, 2, 13))
+>Y : Y
+>f : () => boolean
 
 var a: C<X>;
->a : C<X>, Symbol(a, Decl(generics4NoError.ts, 3, 3))
->C : C<T>, Symbol(C, Decl(generics4NoError.ts, 0, 0))
->X : X, Symbol(X, Decl(generics4NoError.ts, 0, 28))
+>a : C<X>
+>C : C<T>
+>X : X
 
 var b: C<Y>;
->b : C<Y>, Symbol(b, Decl(generics4NoError.ts, 4, 3))
->C : C<T>, Symbol(C, Decl(generics4NoError.ts, 0, 0))
->Y : Y, Symbol(Y, Decl(generics4NoError.ts, 1, 28))
+>b : C<Y>
+>C : C<T>
+>Y : Y
 

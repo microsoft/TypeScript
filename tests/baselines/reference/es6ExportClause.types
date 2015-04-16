@@ -1,40 +1,40 @@
 === tests/cases/compiler/es6ExportClause.ts ===
 
 class c {
->c : c, Symbol(c, Decl(es6ExportClause.ts, 0, 0))
+>c : c
 }
 interface i {
->i : i, Symbol(i, Decl(es6ExportClause.ts, 2, 1))
+>i : i
 }
 module m {
->m : typeof m, Symbol(m, Decl(es6ExportClause.ts, 4, 1))
+>m : typeof m
 
     export var x = 10;
->x : number, Symbol(x, Decl(es6ExportClause.ts, 6, 14))
+>x : number
 >10 : number
 }
 var x = 10;
->x : number, Symbol(x, Decl(es6ExportClause.ts, 8, 3))
+>x : number
 >10 : number
 
 module uninstantiated {
->uninstantiated : any, Symbol(uninstantiated, Decl(es6ExportClause.ts, 8, 11))
+>uninstantiated : any
 }
 export { c };
->c : typeof c, Symbol(c, Decl(es6ExportClause.ts, 11, 8))
+>c : typeof c
 
 export { c as c2 };
->c : typeof c, Symbol(c2, Decl(es6ExportClause.ts, 12, 8))
->c2 : typeof c, Symbol(c2, Decl(es6ExportClause.ts, 12, 8))
+>c : typeof c
+>c2 : typeof c
 
 export { i, m as instantiatedModule };
->i : any, Symbol(i, Decl(es6ExportClause.ts, 13, 8))
->m : typeof m, Symbol(instantiatedModule, Decl(es6ExportClause.ts, 13, 11))
->instantiatedModule : typeof m, Symbol(instantiatedModule, Decl(es6ExportClause.ts, 13, 11))
+>i : any
+>m : typeof m
+>instantiatedModule : typeof m
 
 export { uninstantiated };
->uninstantiated : any, Symbol(uninstantiated, Decl(es6ExportClause.ts, 14, 8))
+>uninstantiated : any
 
 export { x };
->x : number, Symbol(x, Decl(es6ExportClause.ts, 15, 8))
+>x : number
 

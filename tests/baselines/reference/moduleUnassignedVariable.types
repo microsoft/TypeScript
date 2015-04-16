@@ -1,20 +1,20 @@
 === tests/cases/compiler/moduleUnassignedVariable.ts ===
 module Bar {
->Bar : typeof Bar, Symbol(Bar, Decl(moduleUnassignedVariable.ts, 0, 0))
+>Bar : typeof Bar
 
     export var a = 1;
->a : number, Symbol(a, Decl(moduleUnassignedVariable.ts, 1, 14))
+>a : number
 >1 : number
 
     function fooA() { return a; } // Correct: return Bar.a
->fooA : () => number, Symbol(fooA, Decl(moduleUnassignedVariable.ts, 1, 21))
->a : number, Symbol(a, Decl(moduleUnassignedVariable.ts, 1, 14))
+>fooA : () => number
+>a : number
 
     export var b;
->b : any, Symbol(b, Decl(moduleUnassignedVariable.ts, 4, 14))
+>b : any
 
     function fooB() { return b; } // Incorrect: return b
->fooB : () => any, Symbol(fooB, Decl(moduleUnassignedVariable.ts, 4, 17))
->b : any, Symbol(b, Decl(moduleUnassignedVariable.ts, 4, 14))
+>fooB : () => any
+>b : any
 }
 

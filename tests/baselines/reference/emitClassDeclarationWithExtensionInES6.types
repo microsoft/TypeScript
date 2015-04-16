@@ -1,62 +1,62 @@
 === tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithExtensionInES6.ts ===
 class B {
->B : B, Symbol(B, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 0))
+>B : B
 
     baz(a: string, y = 10) { }
->baz : (a: string, y?: number) => void, Symbol(baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 9))
->a : string, Symbol(a, Decl(emitClassDeclarationWithExtensionInES6.ts, 1, 8))
->y : number, Symbol(y, Decl(emitClassDeclarationWithExtensionInES6.ts, 1, 18))
+>baz : (a: string, y?: number) => void
+>a : string
+>y : number
 >10 : number
 }
 class C extends B {
->C : C, Symbol(C, Decl(emitClassDeclarationWithExtensionInES6.ts, 2, 1))
->B : B, Symbol(B, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 0))
+>C : C
+>B : B
 
     foo() { }
->foo : () => void, Symbol(foo, Decl(emitClassDeclarationWithExtensionInES6.ts, 3, 19))
+>foo : () => void
 
     baz(a: string, y:number) {
->baz : (a: string, y: number) => void, Symbol(baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 4, 13))
->a : string, Symbol(a, Decl(emitClassDeclarationWithExtensionInES6.ts, 5, 8))
->y : number, Symbol(y, Decl(emitClassDeclarationWithExtensionInES6.ts, 5, 18))
+>baz : (a: string, y: number) => void
+>a : string
+>y : number
 
         super.baz(a, y);
 >super.baz(a, y) : void
->super.baz : (a: string, y?: number) => void, Symbol(B.baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 9))
->super : B, Symbol(B, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 0))
->baz : (a: string, y?: number) => void, Symbol(B.baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 0, 9))
->a : string, Symbol(a, Decl(emitClassDeclarationWithExtensionInES6.ts, 5, 8))
->y : number, Symbol(y, Decl(emitClassDeclarationWithExtensionInES6.ts, 5, 18))
+>super.baz : (a: string, y?: number) => void
+>super : B
+>baz : (a: string, y?: number) => void
+>a : string
+>y : number
     }
 }
 class D extends C {
->D : D, Symbol(D, Decl(emitClassDeclarationWithExtensionInES6.ts, 8, 1))
->C : C, Symbol(C, Decl(emitClassDeclarationWithExtensionInES6.ts, 2, 1))
+>D : D
+>C : C
 
     constructor() {
         super();
 >super() : void
->super : typeof C, Symbol(C, Decl(emitClassDeclarationWithExtensionInES6.ts, 2, 1))
+>super : typeof C
     }
 
     foo() {
->foo : () => void, Symbol(foo, Decl(emitClassDeclarationWithExtensionInES6.ts, 12, 5))
+>foo : () => void
 
         super.foo();
 >super.foo() : void
->super.foo : () => void, Symbol(C.foo, Decl(emitClassDeclarationWithExtensionInES6.ts, 3, 19))
->super : C, Symbol(C, Decl(emitClassDeclarationWithExtensionInES6.ts, 2, 1))
->foo : () => void, Symbol(C.foo, Decl(emitClassDeclarationWithExtensionInES6.ts, 3, 19))
+>super.foo : () => void
+>super : C
+>foo : () => void
     }
 
     baz() {
->baz : () => void, Symbol(baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 16, 5))
+>baz : () => void
 
         super.baz("hello", 10);
 >super.baz("hello", 10) : void
->super.baz : (a: string, y: number) => void, Symbol(C.baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 4, 13))
->super : C, Symbol(C, Decl(emitClassDeclarationWithExtensionInES6.ts, 2, 1))
->baz : (a: string, y: number) => void, Symbol(C.baz, Decl(emitClassDeclarationWithExtensionInES6.ts, 4, 13))
+>super.baz : (a: string, y: number) => void
+>super : C
+>baz : (a: string, y: number) => void
 >"hello" : string
 >10 : number
     }

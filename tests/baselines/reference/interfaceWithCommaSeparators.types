@@ -1,11 +1,11 @@
 === tests/cases/compiler/interfaceWithCommaSeparators.ts ===
 var v: { bar(): void, baz }
->v : { bar(): void; baz: any; }, Symbol(v, Decl(interfaceWithCommaSeparators.ts, 0, 3))
->bar : () => void, Symbol(bar, Decl(interfaceWithCommaSeparators.ts, 0, 8))
->baz : any, Symbol(baz, Decl(interfaceWithCommaSeparators.ts, 0, 21))
+>v : { bar(): void; baz: any; }
+>bar : () => void
+>baz : any
 
 interface Foo { bar(): void, baz }
->Foo : Foo, Symbol(Foo, Decl(interfaceWithCommaSeparators.ts, 0, 27))
->bar : () => void, Symbol(bar, Decl(interfaceWithCommaSeparators.ts, 1, 15))
->baz : any, Symbol(baz, Decl(interfaceWithCommaSeparators.ts, 1, 28))
+>Foo : Foo
+>bar : () => void
+>baz : any
 

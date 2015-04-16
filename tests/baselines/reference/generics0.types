@@ -1,20 +1,20 @@
 === tests/cases/compiler/generics0.ts ===
 interface G<T> {
->G : G<T>, Symbol(G, Decl(generics0.ts, 0, 0))
->T : T, Symbol(T, Decl(generics0.ts, 0, 12))
+>G : G<T>
+>T : T
 
     x: T;
->x : T, Symbol(x, Decl(generics0.ts, 0, 16))
->T : T, Symbol(T, Decl(generics0.ts, 0, 12))
+>x : T
+>T : T
 }
 
 var v2: G<string>;
->v2 : G<string>, Symbol(v2, Decl(generics0.ts, 4, 3))
->G : G<T>, Symbol(G, Decl(generics0.ts, 0, 0))
+>v2 : G<string>
+>G : G<T>
 
 var z = v2.x; // 'y' should be of type 'string'
->z : string, Symbol(z, Decl(generics0.ts, 6, 3))
->v2.x : string, Symbol(G.x, Decl(generics0.ts, 0, 16))
->v2 : G<string>, Symbol(v2, Decl(generics0.ts, 4, 3))
->x : string, Symbol(G.x, Decl(generics0.ts, 0, 16))
+>z : string
+>v2.x : string
+>v2 : G<string>
+>x : string
 

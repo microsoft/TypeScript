@@ -1,10 +1,10 @@
 === tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration16.ts ===
 class C {
->C : C, Symbol(C, Decl(parserClassDeclaration16.ts, 0, 0))
+>C : C
 
    foo();
->foo : () => any, Symbol(foo, Decl(parserClassDeclaration16.ts, 0, 9), Decl(parserClassDeclaration16.ts, 1, 9))
+>foo : () => any
 
    foo() { }
->foo : () => any, Symbol(foo, Decl(parserClassDeclaration16.ts, 0, 9), Decl(parserClassDeclaration16.ts, 1, 9))
+>foo : () => any
 }

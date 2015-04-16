@@ -1,91 +1,91 @@
 === tests/cases/compiler/declFileTypeAnnotationUnionType.ts ===
 
 class c {
->c : c, Symbol(c, Decl(declFileTypeAnnotationUnionType.ts, 0, 0))
+>c : c
 
     private p: string;
->p : string, Symbol(p, Decl(declFileTypeAnnotationUnionType.ts, 1, 9))
+>p : string
 }
 module m {
->m : typeof m, Symbol(m, Decl(declFileTypeAnnotationUnionType.ts, 3, 1))
+>m : typeof m
 
     export class c {
->c : c, Symbol(c, Decl(declFileTypeAnnotationUnionType.ts, 4, 10))
+>c : c
 
         private q: string;
->q : string, Symbol(q, Decl(declFileTypeAnnotationUnionType.ts, 5, 20))
+>q : string
     }
     export class g<T> {
->g : g<T>, Symbol(g, Decl(declFileTypeAnnotationUnionType.ts, 7, 5))
->T : T, Symbol(T, Decl(declFileTypeAnnotationUnionType.ts, 8, 19))
+>g : g<T>
+>T : T
 
         private r: string;
->r : string, Symbol(r, Decl(declFileTypeAnnotationUnionType.ts, 8, 23))
+>r : string
     }
 }
 class g<T> {
->g : g<T>, Symbol(g, Decl(declFileTypeAnnotationUnionType.ts, 11, 1))
->T : T, Symbol(T, Decl(declFileTypeAnnotationUnionType.ts, 12, 8))
+>g : g<T>
+>T : T
 
     private s: string;
->s : string, Symbol(s, Decl(declFileTypeAnnotationUnionType.ts, 12, 12))
+>s : string
 }
 
 // Just the name
 var k: c | m.c = new c() || new m.c();
->k : c | m.c, Symbol(k, Decl(declFileTypeAnnotationUnionType.ts, 17, 3))
->c : c, Symbol(c, Decl(declFileTypeAnnotationUnionType.ts, 0, 0))
->m : any, Symbol(m, Decl(declFileTypeAnnotationUnionType.ts, 3, 1))
->c : m.c, Symbol(m.c, Decl(declFileTypeAnnotationUnionType.ts, 4, 10))
+>k : c | m.c
+>c : c
+>m : any
+>c : m.c
 >new c() || new m.c() : c | m.c
 >new c() : c
->c : typeof c, Symbol(c, Decl(declFileTypeAnnotationUnionType.ts, 0, 0))
+>c : typeof c
 >new m.c() : m.c
->m.c : typeof m.c, Symbol(m.c, Decl(declFileTypeAnnotationUnionType.ts, 4, 10))
->m : typeof m, Symbol(m, Decl(declFileTypeAnnotationUnionType.ts, 3, 1))
->c : typeof m.c, Symbol(m.c, Decl(declFileTypeAnnotationUnionType.ts, 4, 10))
+>m.c : typeof m.c
+>m : typeof m
+>c : typeof m.c
 
 var l = new c() || new m.c();
->l : c | m.c, Symbol(l, Decl(declFileTypeAnnotationUnionType.ts, 18, 3))
+>l : c | m.c
 >new c() || new m.c() : c | m.c
 >new c() : c
->c : typeof c, Symbol(c, Decl(declFileTypeAnnotationUnionType.ts, 0, 0))
+>c : typeof c
 >new m.c() : m.c
->m.c : typeof m.c, Symbol(m.c, Decl(declFileTypeAnnotationUnionType.ts, 4, 10))
->m : typeof m, Symbol(m, Decl(declFileTypeAnnotationUnionType.ts, 3, 1))
->c : typeof m.c, Symbol(m.c, Decl(declFileTypeAnnotationUnionType.ts, 4, 10))
+>m.c : typeof m.c
+>m : typeof m
+>c : typeof m.c
 
 var x: g<string> | m.g<number> |  (() => c) = new g<string>() ||  new m.g<number>() || (() => new c());
->x : g<string> | m.g<number> | (() => c), Symbol(x, Decl(declFileTypeAnnotationUnionType.ts, 20, 3))
->g : g<T>, Symbol(g, Decl(declFileTypeAnnotationUnionType.ts, 11, 1))
->m : any, Symbol(m, Decl(declFileTypeAnnotationUnionType.ts, 3, 1))
->g : m.g<T>, Symbol(m.g, Decl(declFileTypeAnnotationUnionType.ts, 7, 5))
->c : c, Symbol(c, Decl(declFileTypeAnnotationUnionType.ts, 0, 0))
+>x : g<string> | m.g<number> | (() => c)
+>g : g<T>
+>m : any
+>g : m.g<T>
+>c : c
 >new g<string>() ||  new m.g<number>() || (() => new c()) : g<string> | m.g<number> | (() => c)
 >new g<string>() ||  new m.g<number>() : g<string> | m.g<number>
 >new g<string>() : g<string>
->g : typeof g, Symbol(g, Decl(declFileTypeAnnotationUnionType.ts, 11, 1))
+>g : typeof g
 >new m.g<number>() : m.g<number>
->m.g : typeof m.g, Symbol(m.g, Decl(declFileTypeAnnotationUnionType.ts, 7, 5))
->m : typeof m, Symbol(m, Decl(declFileTypeAnnotationUnionType.ts, 3, 1))
->g : typeof m.g, Symbol(m.g, Decl(declFileTypeAnnotationUnionType.ts, 7, 5))
+>m.g : typeof m.g
+>m : typeof m
+>g : typeof m.g
 >(() => new c()) : () => c
 >() => new c() : () => c
 >new c() : c
->c : typeof c, Symbol(c, Decl(declFileTypeAnnotationUnionType.ts, 0, 0))
+>c : typeof c
 
 var y = new g<string>() || new m.g<number>() || (() => new c());
->y : g<string> | m.g<number> | (() => c), Symbol(y, Decl(declFileTypeAnnotationUnionType.ts, 21, 3))
+>y : g<string> | m.g<number> | (() => c)
 >new g<string>() || new m.g<number>() || (() => new c()) : g<string> | m.g<number> | (() => c)
 >new g<string>() || new m.g<number>() : g<string> | m.g<number>
 >new g<string>() : g<string>
->g : typeof g, Symbol(g, Decl(declFileTypeAnnotationUnionType.ts, 11, 1))
+>g : typeof g
 >new m.g<number>() : m.g<number>
->m.g : typeof m.g, Symbol(m.g, Decl(declFileTypeAnnotationUnionType.ts, 7, 5))
->m : typeof m, Symbol(m, Decl(declFileTypeAnnotationUnionType.ts, 3, 1))
->g : typeof m.g, Symbol(m.g, Decl(declFileTypeAnnotationUnionType.ts, 7, 5))
+>m.g : typeof m.g
+>m : typeof m
+>g : typeof m.g
 >(() => new c()) : () => c
 >() => new c() : () => c
 >new c() : c
->c : typeof c, Symbol(c, Decl(declFileTypeAnnotationUnionType.ts, 0, 0))
+>c : typeof c
 

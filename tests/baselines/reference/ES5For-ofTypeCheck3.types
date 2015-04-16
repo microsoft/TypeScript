@@ -1,11 +1,11 @@
 === tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck3.ts ===
 var tuple: [string, number] = ["", 0];
->tuple : [string, number], Symbol(tuple, Decl(ES5For-ofTypeCheck3.ts, 0, 3))
+>tuple : [string, number]
 >["", 0] : [string, number]
 >"" : string
 >0 : number
 
 for (var v of tuple) { }
->v : string | number, Symbol(v, Decl(ES5For-ofTypeCheck3.ts, 1, 8))
->tuple : [string, number], Symbol(tuple, Decl(ES5For-ofTypeCheck3.ts, 0, 3))
+>v : string | number
+>tuple : [string, number]
 

@@ -1,129 +1,129 @@
 === tests/cases/compiler/es6ImportNamedImportAmd_0.ts ===
 
 export var a = 10;
->a : number, Symbol(a, Decl(es6ImportNamedImportAmd_0.ts, 1, 10))
+>a : number
 >10 : number
 
 export var x = a;
->x : number, Symbol(x, Decl(es6ImportNamedImportAmd_0.ts, 2, 10))
->a : number, Symbol(a, Decl(es6ImportNamedImportAmd_0.ts, 1, 10))
+>x : number
+>a : number
 
 export var m = a;
->m : number, Symbol(m, Decl(es6ImportNamedImportAmd_0.ts, 3, 10))
->a : number, Symbol(a, Decl(es6ImportNamedImportAmd_0.ts, 1, 10))
+>m : number
+>a : number
 
 export var a1 = 10;
->a1 : number, Symbol(a1, Decl(es6ImportNamedImportAmd_0.ts, 4, 10))
+>a1 : number
 >10 : number
 
 export var x1 = 10;
->x1 : number, Symbol(x1, Decl(es6ImportNamedImportAmd_0.ts, 5, 10))
+>x1 : number
 >10 : number
 
 export var z1 = 10;
->z1 : number, Symbol(z1, Decl(es6ImportNamedImportAmd_0.ts, 6, 10))
+>z1 : number
 >10 : number
 
 export var z2 = 10;
->z2 : number, Symbol(z2, Decl(es6ImportNamedImportAmd_0.ts, 7, 10))
+>z2 : number
 >10 : number
 
 export var aaaa = 10;
->aaaa : number, Symbol(aaaa, Decl(es6ImportNamedImportAmd_0.ts, 8, 10))
+>aaaa : number
 >10 : number
 
 === tests/cases/compiler/es6ImportNamedImportAmd_1.ts ===
 import { } from "es6ImportNamedImportAmd_0";
 import { a } from "es6ImportNamedImportAmd_0";
->a : number, Symbol(a, Decl(es6ImportNamedImportAmd_1.ts, 1, 8))
+>a : number
 
 var xxxx = a;
->xxxx : number, Symbol(xxxx, Decl(es6ImportNamedImportAmd_1.ts, 2, 3), Decl(es6ImportNamedImportAmd_1.ts, 4, 3), Decl(es6ImportNamedImportAmd_1.ts, 6, 3), Decl(es6ImportNamedImportAmd_1.ts, 7, 3), Decl(es6ImportNamedImportAmd_1.ts, 9, 3), Decl(es6ImportNamedImportAmd_1.ts, 11, 3), Decl(es6ImportNamedImportAmd_1.ts, 13, 3), Decl(es6ImportNamedImportAmd_1.ts, 14, 3), Decl(es6ImportNamedImportAmd_1.ts, 16, 3), Decl(es6ImportNamedImportAmd_1.ts, 17, 3))
->a : number, Symbol(a, Decl(es6ImportNamedImportAmd_1.ts, 1, 8))
+>xxxx : number
+>a : number
 
 import { a as b } from "es6ImportNamedImportAmd_0";
->a : number, Symbol(b, Decl(es6ImportNamedImportAmd_1.ts, 3, 8))
->b : number, Symbol(b, Decl(es6ImportNamedImportAmd_1.ts, 3, 8))
+>a : number
+>b : number
 
 var xxxx = b;
->xxxx : number, Symbol(xxxx, Decl(es6ImportNamedImportAmd_1.ts, 2, 3), Decl(es6ImportNamedImportAmd_1.ts, 4, 3), Decl(es6ImportNamedImportAmd_1.ts, 6, 3), Decl(es6ImportNamedImportAmd_1.ts, 7, 3), Decl(es6ImportNamedImportAmd_1.ts, 9, 3), Decl(es6ImportNamedImportAmd_1.ts, 11, 3), Decl(es6ImportNamedImportAmd_1.ts, 13, 3), Decl(es6ImportNamedImportAmd_1.ts, 14, 3), Decl(es6ImportNamedImportAmd_1.ts, 16, 3), Decl(es6ImportNamedImportAmd_1.ts, 17, 3))
->b : number, Symbol(b, Decl(es6ImportNamedImportAmd_1.ts, 3, 8))
+>xxxx : number
+>b : number
 
 import { x, a as y } from "es6ImportNamedImportAmd_0";
->x : number, Symbol(x, Decl(es6ImportNamedImportAmd_1.ts, 5, 8))
->a : number, Symbol(y, Decl(es6ImportNamedImportAmd_1.ts, 5, 11))
->y : number, Symbol(y, Decl(es6ImportNamedImportAmd_1.ts, 5, 11))
+>x : number
+>a : number
+>y : number
 
 var xxxx = x;
->xxxx : number, Symbol(xxxx, Decl(es6ImportNamedImportAmd_1.ts, 2, 3), Decl(es6ImportNamedImportAmd_1.ts, 4, 3), Decl(es6ImportNamedImportAmd_1.ts, 6, 3), Decl(es6ImportNamedImportAmd_1.ts, 7, 3), Decl(es6ImportNamedImportAmd_1.ts, 9, 3), Decl(es6ImportNamedImportAmd_1.ts, 11, 3), Decl(es6ImportNamedImportAmd_1.ts, 13, 3), Decl(es6ImportNamedImportAmd_1.ts, 14, 3), Decl(es6ImportNamedImportAmd_1.ts, 16, 3), Decl(es6ImportNamedImportAmd_1.ts, 17, 3))
->x : number, Symbol(x, Decl(es6ImportNamedImportAmd_1.ts, 5, 8))
+>xxxx : number
+>x : number
 
 var xxxx = y;
->xxxx : number, Symbol(xxxx, Decl(es6ImportNamedImportAmd_1.ts, 2, 3), Decl(es6ImportNamedImportAmd_1.ts, 4, 3), Decl(es6ImportNamedImportAmd_1.ts, 6, 3), Decl(es6ImportNamedImportAmd_1.ts, 7, 3), Decl(es6ImportNamedImportAmd_1.ts, 9, 3), Decl(es6ImportNamedImportAmd_1.ts, 11, 3), Decl(es6ImportNamedImportAmd_1.ts, 13, 3), Decl(es6ImportNamedImportAmd_1.ts, 14, 3), Decl(es6ImportNamedImportAmd_1.ts, 16, 3), Decl(es6ImportNamedImportAmd_1.ts, 17, 3))
->y : number, Symbol(y, Decl(es6ImportNamedImportAmd_1.ts, 5, 11))
+>xxxx : number
+>y : number
 
 import { x as z,  } from "es6ImportNamedImportAmd_0";
->x : number, Symbol(z, Decl(es6ImportNamedImportAmd_1.ts, 8, 8))
->z : number, Symbol(z, Decl(es6ImportNamedImportAmd_1.ts, 8, 8))
+>x : number
+>z : number
 
 var xxxx = z;
->xxxx : number, Symbol(xxxx, Decl(es6ImportNamedImportAmd_1.ts, 2, 3), Decl(es6ImportNamedImportAmd_1.ts, 4, 3), Decl(es6ImportNamedImportAmd_1.ts, 6, 3), Decl(es6ImportNamedImportAmd_1.ts, 7, 3), Decl(es6ImportNamedImportAmd_1.ts, 9, 3), Decl(es6ImportNamedImportAmd_1.ts, 11, 3), Decl(es6ImportNamedImportAmd_1.ts, 13, 3), Decl(es6ImportNamedImportAmd_1.ts, 14, 3), Decl(es6ImportNamedImportAmd_1.ts, 16, 3), Decl(es6ImportNamedImportAmd_1.ts, 17, 3))
->z : number, Symbol(z, Decl(es6ImportNamedImportAmd_1.ts, 8, 8))
+>xxxx : number
+>z : number
 
 import { m,  } from "es6ImportNamedImportAmd_0";
->m : number, Symbol(m, Decl(es6ImportNamedImportAmd_1.ts, 10, 8))
+>m : number
 
 var xxxx = m;
->xxxx : number, Symbol(xxxx, Decl(es6ImportNamedImportAmd_1.ts, 2, 3), Decl(es6ImportNamedImportAmd_1.ts, 4, 3), Decl(es6ImportNamedImportAmd_1.ts, 6, 3), Decl(es6ImportNamedImportAmd_1.ts, 7, 3), Decl(es6ImportNamedImportAmd_1.ts, 9, 3), Decl(es6ImportNamedImportAmd_1.ts, 11, 3), Decl(es6ImportNamedImportAmd_1.ts, 13, 3), Decl(es6ImportNamedImportAmd_1.ts, 14, 3), Decl(es6ImportNamedImportAmd_1.ts, 16, 3), Decl(es6ImportNamedImportAmd_1.ts, 17, 3))
->m : number, Symbol(m, Decl(es6ImportNamedImportAmd_1.ts, 10, 8))
+>xxxx : number
+>m : number
 
 import { a1, x1 } from "es6ImportNamedImportAmd_0";
->a1 : number, Symbol(a1, Decl(es6ImportNamedImportAmd_1.ts, 12, 8))
->x1 : number, Symbol(x1, Decl(es6ImportNamedImportAmd_1.ts, 12, 12))
+>a1 : number
+>x1 : number
 
 var xxxx = a1;
->xxxx : number, Symbol(xxxx, Decl(es6ImportNamedImportAmd_1.ts, 2, 3), Decl(es6ImportNamedImportAmd_1.ts, 4, 3), Decl(es6ImportNamedImportAmd_1.ts, 6, 3), Decl(es6ImportNamedImportAmd_1.ts, 7, 3), Decl(es6ImportNamedImportAmd_1.ts, 9, 3), Decl(es6ImportNamedImportAmd_1.ts, 11, 3), Decl(es6ImportNamedImportAmd_1.ts, 13, 3), Decl(es6ImportNamedImportAmd_1.ts, 14, 3), Decl(es6ImportNamedImportAmd_1.ts, 16, 3), Decl(es6ImportNamedImportAmd_1.ts, 17, 3))
->a1 : number, Symbol(a1, Decl(es6ImportNamedImportAmd_1.ts, 12, 8))
+>xxxx : number
+>a1 : number
 
 var xxxx = x1;
->xxxx : number, Symbol(xxxx, Decl(es6ImportNamedImportAmd_1.ts, 2, 3), Decl(es6ImportNamedImportAmd_1.ts, 4, 3), Decl(es6ImportNamedImportAmd_1.ts, 6, 3), Decl(es6ImportNamedImportAmd_1.ts, 7, 3), Decl(es6ImportNamedImportAmd_1.ts, 9, 3), Decl(es6ImportNamedImportAmd_1.ts, 11, 3), Decl(es6ImportNamedImportAmd_1.ts, 13, 3), Decl(es6ImportNamedImportAmd_1.ts, 14, 3), Decl(es6ImportNamedImportAmd_1.ts, 16, 3), Decl(es6ImportNamedImportAmd_1.ts, 17, 3))
->x1 : number, Symbol(x1, Decl(es6ImportNamedImportAmd_1.ts, 12, 12))
+>xxxx : number
+>x1 : number
 
 import { a1 as a11, x1 as x11 } from "es6ImportNamedImportAmd_0";
->a1 : number, Symbol(a11, Decl(es6ImportNamedImportAmd_1.ts, 15, 8))
->a11 : number, Symbol(a11, Decl(es6ImportNamedImportAmd_1.ts, 15, 8))
->x1 : number, Symbol(x11, Decl(es6ImportNamedImportAmd_1.ts, 15, 19))
->x11 : number, Symbol(x11, Decl(es6ImportNamedImportAmd_1.ts, 15, 19))
+>a1 : number
+>a11 : number
+>x1 : number
+>x11 : number
 
 var xxxx = a11;
->xxxx : number, Symbol(xxxx, Decl(es6ImportNamedImportAmd_1.ts, 2, 3), Decl(es6ImportNamedImportAmd_1.ts, 4, 3), Decl(es6ImportNamedImportAmd_1.ts, 6, 3), Decl(es6ImportNamedImportAmd_1.ts, 7, 3), Decl(es6ImportNamedImportAmd_1.ts, 9, 3), Decl(es6ImportNamedImportAmd_1.ts, 11, 3), Decl(es6ImportNamedImportAmd_1.ts, 13, 3), Decl(es6ImportNamedImportAmd_1.ts, 14, 3), Decl(es6ImportNamedImportAmd_1.ts, 16, 3), Decl(es6ImportNamedImportAmd_1.ts, 17, 3))
->a11 : number, Symbol(a11, Decl(es6ImportNamedImportAmd_1.ts, 15, 8))
+>xxxx : number
+>a11 : number
 
 var xxxx = x11;
->xxxx : number, Symbol(xxxx, Decl(es6ImportNamedImportAmd_1.ts, 2, 3), Decl(es6ImportNamedImportAmd_1.ts, 4, 3), Decl(es6ImportNamedImportAmd_1.ts, 6, 3), Decl(es6ImportNamedImportAmd_1.ts, 7, 3), Decl(es6ImportNamedImportAmd_1.ts, 9, 3), Decl(es6ImportNamedImportAmd_1.ts, 11, 3), Decl(es6ImportNamedImportAmd_1.ts, 13, 3), Decl(es6ImportNamedImportAmd_1.ts, 14, 3), Decl(es6ImportNamedImportAmd_1.ts, 16, 3), Decl(es6ImportNamedImportAmd_1.ts, 17, 3))
->x11 : number, Symbol(x11, Decl(es6ImportNamedImportAmd_1.ts, 15, 19))
+>xxxx : number
+>x11 : number
 
 import { z1 } from "es6ImportNamedImportAmd_0";
->z1 : number, Symbol(z1, Decl(es6ImportNamedImportAmd_1.ts, 18, 8))
+>z1 : number
 
 var z111 = z1;
->z111 : number, Symbol(z111, Decl(es6ImportNamedImportAmd_1.ts, 19, 3))
->z1 : number, Symbol(z1, Decl(es6ImportNamedImportAmd_1.ts, 18, 8))
+>z111 : number
+>z1 : number
 
 import { z2 as z3 } from "es6ImportNamedImportAmd_0";
->z2 : number, Symbol(z3, Decl(es6ImportNamedImportAmd_1.ts, 20, 8))
->z3 : number, Symbol(z3, Decl(es6ImportNamedImportAmd_1.ts, 20, 8))
+>z2 : number
+>z3 : number
 
 var z2 = z3; // z2 shouldn't give redeclare error
->z2 : number, Symbol(z2, Decl(es6ImportNamedImportAmd_1.ts, 21, 3))
->z3 : number, Symbol(z3, Decl(es6ImportNamedImportAmd_1.ts, 20, 8))
+>z2 : number
+>z3 : number
 
 // These are elided
 import { aaaa } from "es6ImportNamedImportAmd_0";
->aaaa : number, Symbol(aaaa, Decl(es6ImportNamedImportAmd_1.ts, 24, 8))
+>aaaa : number
 
 // These are elided
 import { aaaa as bbbb } from "es6ImportNamedImportAmd_0";
->aaaa : number, Symbol(bbbb, Decl(es6ImportNamedImportAmd_1.ts, 26, 8))
->bbbb : number, Symbol(bbbb, Decl(es6ImportNamedImportAmd_1.ts, 26, 8))
+>aaaa : number
+>bbbb : number
 

@@ -1,35 +1,35 @@
 === tests/cases/conformance/internalModules/exportDeclarations/ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts ===
 module A {
->A : typeof A, Symbol(A, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 0, 0))
+>A : typeof A
 
     class Point {
->Point : Point, Symbol(Point, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 0, 10))
+>Point : Point
 
         constructor(public x: number, public y: number) { }
->x : number, Symbol(x, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 3, 20))
->y : number, Symbol(y, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 3, 37))
+>x : number
+>y : number
     }
 
     export var Origin: Point = { x: 0, y: 0 };
->Origin : Point, Symbol(Origin, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 6, 14))
->Point : Point, Symbol(Point, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 0, 10))
+>Origin : Point
+>Point : Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
->x : number, Symbol(x, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 6, 32))
+>x : number
 >0 : number
->y : number, Symbol(y, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 6, 38))
+>y : number
 >0 : number
 
     export var Unity = { start: new Point(0, 0), end: new Point(1, 0) };
->Unity : { start: Point; end: Point; }, Symbol(Unity, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 8, 14))
+>Unity : { start: Point; end: Point; }
 >{ start: new Point(0, 0), end: new Point(1, 0) } : { start: Point; end: Point; }
->start : Point, Symbol(start, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 8, 24))
+>start : Point
 >new Point(0, 0) : Point
->Point : typeof Point, Symbol(Point, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 0, 10))
+>Point : typeof Point
 >0 : number
 >0 : number
->end : Point, Symbol(end, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 8, 48))
+>end : Point
 >new Point(1, 0) : Point
->Point : typeof Point, Symbol(Point, Decl(ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.ts, 0, 10))
+>Point : typeof Point
 >1 : number
 >0 : number
 }

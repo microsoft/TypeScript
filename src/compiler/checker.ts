@@ -2197,25 +2197,7 @@ module ts {
             }
             else if (hasSpreadElement) {
                 let unionOfElements = getUnionType(elementTypes);
-                if (languageVersion >= ScriptTarget.ES6) {
-                    // If the user has something like:
-                    //
-                    //     function fun(...[a, ...b]) { }
-                    //
-                    // Normally, in ES6, the implied type of an array binding pattern with a rest element is
-                    // an iterable. However, there is a requirement in our type system that all rest
-                    // parameters be array types. To satisfy this, we have an exception to the rule that
-                    // says the type of an array binding pattern with a rest element is an array type
-                    // if it is *itself* in a rest parameter. It will still be compatible with a spreaded
-                    // iterable argument, but within the function it will be an array.
-                    let parent = pattern.parent;
-                    let isRestParameter = parent.kind === SyntaxKind.Parameter &&
-                        pattern === (<ParameterDeclaration>parent).name &&
-                        (<ParameterDeclaration>parent).dotDotDotToken !== undefined;
-                    return isRestParameter ? createArrayType(unionOfElements) : createIterableType(unionOfElements);
-                }
-
-                return createArrayType(unionOfElements);
+                return languageVersion >= ScriptTarget.ES6 ? createIterableType(unionOfElements) : createArrayType(unionOfElements);
             }
 
             // If the pattern has at least one element, and no rest element, then it should imply a tuple type.
@@ -2904,16 +2886,17 @@ module ts {
         }
 
         function getPropertiesOfType(type: Type): Symbol[] {
-            if (type.flags & TypeFlags.Union) {
-                return getPropertiesOfUnionType(<UnionType>type);
-            }
-            return getPropertiesOfObjectType(getApparentType(type));
+            type = getApparentType(type);
+            return type.flags & TypeFlags.Union ? getPropertiesOfUnionType(<UnionType>type) : getPropertiesOfObjectType(type);
         }
 
         // For a type parameter, return the base constraint of the type parameter. For the string, number,
         // boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
         // type itself. Note that the apparent type of a union type is the union type itself.
         function getApparentType(type: Type): Type {
+            if (type.flags & TypeFlags.Union) {
+                type = getReducedTypeOfUnionType(<UnionType>type);
+            }
             if (type.flags & TypeFlags.TypeParameter) {
                 do {
                     type = getConstraintOfTypeParameter(<TypeParameter>type);
@@ -2986,27 +2969,27 @@ module ts {
         // necessary, maps primitive types and type parameters are to their apparent types, and augments with properties from
         // Object and Function as appropriate.
         function getPropertyOfType(type: Type, name: string): Symbol {
+            type = getApparentType(type);
+            if (type.flags & TypeFlags.ObjectType) {
+                let resolved = resolveObjectOrUnionTypeMembers(type);
+                if (hasProperty(resolved.members, name)) {
+                    let symbol = resolved.members[name];
+                    if (symbolIsValue(symbol)) {
+                        return symbol;
+                    }
+                }
+                if (resolved === anyFunctionType || resolved.callSignatures.length || resolved.constructSignatures.length) {
+                    let symbol = getPropertyOfObjectType(globalFunctionType, name);
+                    if (symbol) {
+                        return symbol;
+                    }
+                }
+                return getPropertyOfObjectType(globalObjectType, name);
+            }
             if (type.flags & TypeFlags.Union) {
                 return getPropertyOfUnionType(<UnionType>type, name);
             }
-            if (!(type.flags & TypeFlags.ObjectType)) {
-                type = getApparentType(type);
-                if (!(type.flags & TypeFlags.ObjectType)) {
-                    return undefined;
-                }
-            }
-            let resolved = resolveObjectOrUnionTypeMembers(type);
-            if (hasProperty(resolved.members, name)) {
-                let symbol = resolved.members[name];
-                if (symbolIsValue(symbol)) {
-                    return symbol;
-                }
-            }
-            if (resolved === anyFunctionType || resolved.callSignatures.length || resolved.constructSignatures.length) {
-                let symbol = getPropertyOfObjectType(globalFunctionType, name);
-                if (symbol) return symbol;
-            }
-            return getPropertyOfObjectType(globalObjectType, name);
+            return undefined;
         }
 
         function getSignaturesOfObjectOrUnionType(type: Type, kind: SignatureKind): Signature[] {
@@ -3581,6 +3564,10 @@ module ts {
             }
         }
 
+        // The noSubtypeReduction flag is there because it isn't possible to always do subtype reduction. The flag
+        // is true when creating a union type from a type node and when instantiating a union type. In both of those
+        // cases subtype reduction has to be deferred to properly support recursive union types. For example, a
+        // type alias of the form "type Item = string | (() => Item)" cannot be reduced during its declaration.
         function getUnionType(types: Type[], noSubtypeReduction?: boolean): Type {
             if (types.length === 0) {
                 return emptyObjectType;
@@ -3605,8 +3592,17 @@ module ts {
             if (!type) {
                 type = unionTypes[id] = <UnionType>createObjectType(TypeFlags.Union | getWideningFlagsOfTypes(sortedTypes));
                 type.types = sortedTypes;
+                type.reducedType = noSubtypeReduction ? undefined : type;
             }
             return type;
+        }
+
+        function getReducedTypeOfUnionType(type: UnionType): Type {
+            // If union type was created without subtype reduction, perform the deferred reduction now
+            if (!type.reducedType) {
+                type.reducedType = getUnionType(type.types, /*noSubtypeReduction*/ false);
+            }
+            return type.reducedType;
         }
 
         function getTypeFromUnionTypeNode(node: UnionTypeNode): Type {
@@ -4002,6 +3998,7 @@ module ts {
                         if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
                     }
                 }
+                let saveErrorInfo = errorInfo;
                 if (source.flags & TypeFlags.Union || target.flags & TypeFlags.Union) {
                     if (relation === identityRelation) {
                         if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union) {
@@ -4040,25 +4037,34 @@ module ts {
                         return result;
                     }
                 }
-                else {
-                    let saveErrorInfo = errorInfo;
-                    if (source.flags & TypeFlags.Reference && target.flags & TypeFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
-                        // We have type references to same target type, see if relationship holds for all type arguments
-                        if (result = typesRelatedTo((<TypeReference>source).typeArguments, (<TypeReference>target).typeArguments, reportErrors)) {
-                            return result;
-                        }
+                else if (source.flags & TypeFlags.Reference && target.flags & TypeFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
+                    // We have type references to same target type, see if relationship holds for all type arguments
+                    if (result = typesRelatedTo((<TypeReference>source).typeArguments, (<TypeReference>target).typeArguments, reportErrors)) {
+                        return result;
                     }
-                    // Even if relationship doesn't hold for type arguments, it may hold in a structural comparison
-                    // Report structural errors only if we haven't reported any errors yet
-                    let reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
-                    // identity relation does not use apparent type
-                    let sourceOrApparentType = relation === identityRelation ? source : getApparentType(source);
-                    if (sourceOrApparentType.flags & TypeFlags.ObjectType && target.flags & TypeFlags.ObjectType &&
-                        (result = objectTypeRelatedTo(sourceOrApparentType, <ObjectType>target, reportStructuralErrors))) {
+                }
+
+                // Even if relationship doesn't hold for unions, type parameters, or generic type references,
+                // it may hold in a structural comparison.
+                // Report structural errors only if we haven't reported any errors yet
+                let reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
+                // identity relation does not use apparent type
+                let sourceOrApparentType = relation === identityRelation ? source : getApparentType(source);
+                if (sourceOrApparentType.flags & TypeFlags.ObjectType && target.flags & TypeFlags.ObjectType) {
+                    if (result = objectTypeRelatedTo(sourceOrApparentType, <ObjectType>target, reportStructuralErrors)) {
                         errorInfo = saveErrorInfo;
                         return result;
                     }
                 }
+                else if (source.flags & TypeFlags.TypeParameter && sourceOrApparentType.flags & TypeFlags.Union) {
+                    // We clear the errors first because the following check often gives a better error than
+                    // the union comparison above if it is applicable.
+                    errorInfo = saveErrorInfo;
+                    if (result = isRelatedTo(sourceOrApparentType, target, reportErrors)) {
+                        return result;
+                    }
+                }
+
                 if (reportErrors) {
                     headMessage = headMessage || Diagnostics.Type_0_is_not_assignable_to_type_1;
                     let sourceType = typeToString(source);
@@ -5398,8 +5404,8 @@ module ts {
             // will be bound to non-arrow function that contain this arrow function. This results in inconsistent behavior.
             // To avoid that we will give an error to users if they use arguments objects in arrow function so that they
             // can explicitly bound arguments objects
-            if (symbol === argumentsSymbol && getContainingFunction(node).kind === SyntaxKind.ArrowFunction) {
-                error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_Consider_using_a_standard_function_expression);
+            if (symbol === argumentsSymbol && getContainingFunction(node).kind === SyntaxKind.ArrowFunction && languageVersion < ScriptTarget.ES6) {
+                error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression);
             }
 
             if (symbol.flags & SymbolFlags.Alias && !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveAlias(symbol))) {
@@ -6011,14 +6017,38 @@ module ts {
             }
             let hasSpreadElement = false;
             let elementTypes: Type[] = [];
+            let inDestructuringPattern = isAssignmentTarget(node);
             for (let e of elements) {
-                let type = checkExpression(e, contextualMapper);
-                elementTypes.push(type);
+                if (inDestructuringPattern && e.kind === SyntaxKind.SpreadElementExpression) {
+                    // Given the following situation:
+                    //    var c: {};
+                    //    [...c] = ["", 0];
+                    //
+                    // c is represented in the tree as a spread element in an array literal.
+                    // But c really functions as a rest element, and its purpose is to provide
+                    // a contextual type for the right hand side of the assignment. Therefore,
+                    // instead of calling checkExpression on "...c", which will give an error 
+                    // if c is not iterable/array-like, we need to act as if we are trying to
+                    // get the contextual element type from it. So we do something similar to
+                    // getContextualTypeForElementExpression, which will crucially not error
+                    // if there is no index type / iterated type.
+                    let restArrayType = checkExpression((<SpreadElementExpression>e).expression, contextualMapper);
+                    let restElementType = getIndexTypeOfType(restArrayType, IndexKind.Number) ||
+                        (languageVersion >= ScriptTarget.ES6 ? checkIteratedType(restArrayType, /*expressionForError*/ undefined) : undefined);
+                    
+                    if (restElementType) {
+                        elementTypes.push(restElementType);
+                    }
+                }
+                else {
+                    let type = checkExpression(e, contextualMapper);
+                    elementTypes.push(type);
+                }
                 hasSpreadElement = hasSpreadElement || e.kind === SyntaxKind.SpreadElementExpression;
             }
             if (!hasSpreadElement) {
                 let contextualType = getContextualType(node);
-                if (contextualType && contextualTypeIsTupleLikeType(contextualType) || isAssignmentTarget(node)) {
+                if (contextualType && contextualTypeIsTupleLikeType(contextualType) || inDestructuringPattern) {
                     return createTupleType(elementTypes);
                 }
             }
@@ -7609,7 +7639,7 @@ module ts {
             // This elementType will be used if the specific property corresponding to this index is not
             // present (aka the tuple element property). This call also checks that the parentType is in
             // fact an iterable or array (depending on target language).
-            let elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false);
+            let elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false) || unknownType;
             let elements = node.elements;
             for (let i = 0; i < elements.length; i++) {
                 let e = elements[i];
@@ -7633,11 +7663,17 @@ module ts {
                         }
                     }
                     else {
-                        if (i === elements.length - 1) {
-                            checkReferenceAssignment((<SpreadElementExpression>e).expression, createArrayType(elementType), contextualMapper);
+                        if (i < elements.length - 1) {
+                            error(e, Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
                         }
                         else {
-                            error(e, Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
+                            let restExpression = (<SpreadElementExpression>e).expression;
+                            if (restExpression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>restExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
+                                error((<BinaryExpression>restExpression).operatorToken, Diagnostics.A_rest_element_cannot_have_an_initializer);
+                            }
+                            else {
+                                checkDestructuringAssignment(restExpression, createArrayType(elementType), contextualMapper);
+                            }
                         }
                     }
                 }
@@ -8097,10 +8133,11 @@ module ts {
             if (node.questionToken && isBindingPattern(node.name) && func.body) {
                 error(node, Diagnostics.A_binding_pattern_parameter_cannot_be_optional_in_an_implementation_signature);
             }
-            if (node.dotDotDotToken) {
-                if (!isArrayType(getTypeOfSymbol(node.symbol))) {
-                    error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
-                }
+            
+            // Only check rest parameter type if it's not a binding pattern. Since binding patterns are
+            // not allowed in a rest parameter, we already have an error from checkGrammarParameterList.
+            if (node.dotDotDotToken && !isBindingPattern(node.name) && !isArrayType(getTypeOfSymbol(node.symbol))) {
+                error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
             }
         }
 
@@ -9403,6 +9440,10 @@ module ts {
         }
 
         function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean): Type {
+            if (inputType.flags & TypeFlags.Any) {
+                return inputType;
+            }
+
             if (languageVersion >= ScriptTarget.ES6) {
                 return checkIteratedType(inputType, errorNode) || anyType;
             }
@@ -9412,7 +9453,10 @@ module ts {
             }
             
             if (isArrayLikeType(inputType)) {
-                return getIndexTypeOfType(inputType, IndexKind.Number);
+                let indexType = getIndexTypeOfType(inputType, IndexKind.Number);
+                if (indexType) {
+                    return indexType;
+                }
             }
 
             error(errorNode, Diagnostics.Type_0_is_not_an_array_type, typeToString(inputType));
@@ -10390,11 +10434,27 @@ module ts {
         function getFirstNonAmbientClassOrFunctionDeclaration(symbol: Symbol): Declaration {
             let declarations = symbol.declarations;
             for (let declaration of declarations) {
-                if ((declaration.kind === SyntaxKind.ClassDeclaration || (declaration.kind === SyntaxKind.FunctionDeclaration && nodeIsPresent((<FunctionLikeDeclaration>declaration).body))) && !isInAmbientContext(declaration)) {
+                if ((declaration.kind === SyntaxKind.ClassDeclaration ||
+                    (declaration.kind === SyntaxKind.FunctionDeclaration && nodeIsPresent((<FunctionLikeDeclaration>declaration).body))) &&
+                    !isInAmbientContext(declaration)) {
                     return declaration;
                 }
             }
             return undefined;
+        }
+
+        function inSameLexicalScope(node1: Node, node2: Node) {
+            let container1 = getEnclosingBlockScopeContainer(node1);
+            let container2 = getEnclosingBlockScopeContainer(node2);
+            if (isGlobalSourceFile(container1)) {
+                return isGlobalSourceFile(container2);
+            }
+            else if (isGlobalSourceFile(container2)) {
+                return false;
+            }
+            else {
+                return container1 === container2;
+            }
         }
 
         function checkModuleDeclaration(node: ModuleDeclaration) {
@@ -10416,14 +10476,22 @@ module ts {
                     && symbol.declarations.length > 1
                     && !isInAmbientContext(node)
                     && isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.separateCompilation)) {
-                    let classOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
-                    if (classOrFunc) {
-                        if (getSourceFileOfNode(node) !== getSourceFileOfNode(classOrFunc)) {
+                    let firstNonAmbientClassOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
+                    if (firstNonAmbientClassOrFunc) {
+                        if (getSourceFileOfNode(node) !== getSourceFileOfNode(firstNonAmbientClassOrFunc)) {
                             error(node.name, Diagnostics.A_module_declaration_cannot_be_in_a_different_file_from_a_class_or_function_with_which_it_is_merged);
                         }
-                        else if (node.pos < classOrFunc.pos) {
+                        else if (node.pos < firstNonAmbientClassOrFunc.pos) {
                             error(node.name, Diagnostics.A_module_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged);
                         }
+                    }
+
+                    // if the module merges with a class declaration in the same lexical scope, 
+                    // we need to track this to ensure the correct emit.
+                    let mergedClass = getDeclarationOfKind(symbol, SyntaxKind.ClassDeclaration);                    
+                    if (mergedClass &&
+                        inSameLexicalScope(node, mergedClass)) {
+                        getNodeLinks(node).flags |= NodeCheckFlags.LexicalModuleMergesWithClass;
                     }
                 }
 
@@ -12243,6 +12311,10 @@ module ts {
                         return grammarErrorOnNode(parameter.dotDotDotToken, Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list);
                     }
 
+                    if (isBindingPattern(parameter.name)) {
+                        return grammarErrorOnNode(parameter.name, Diagnostics.A_rest_element_cannot_contain_a_binding_pattern);
+                    }
+
                     if (parameter.questionToken) {
                         return grammarErrorOnNode(parameter.questionToken, Diagnostics.A_rest_parameter_cannot_be_optional);
                     }
@@ -12729,6 +12801,11 @@ module ts {
                 if (node !== elements[elements.length - 1]) {
                     return grammarErrorOnNode(node, Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
                 }
+
+                if (node.name.kind === SyntaxKind.ArrayBindingPattern || node.name.kind === SyntaxKind.ObjectBindingPattern) {
+                    return grammarErrorOnNode(node.name, Diagnostics.A_rest_element_cannot_contain_a_binding_pattern);
+                }
+
                 if (node.initializer) {
                     // Error on equals token which immediate precedes the initializer
                     return grammarErrorAtPos(getSourceFileOfNode(node), node.initializer.pos - 1, 1, Diagnostics.A_rest_element_cannot_have_an_initializer);
@@ -12924,6 +13001,11 @@ module ts {
                     return reportErrorInClassDeclaration;
                 }
             }
+        }
+
+        function isEvalOrArgumentsIdentifier(node: Node): boolean {
+            return node.kind === SyntaxKind.Identifier &&
+                ((<Identifier>node).text === "eval" || (<Identifier>node).text === "arguments");
         }
 
         function checkGrammarConstructorTypeParameters(node: ConstructorDeclaration) {

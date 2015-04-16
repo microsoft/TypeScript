@@ -1,5 +1,5 @@
 === tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration7.ts ===
 var a,b
->a : any, Symbol(a, Decl(parserVariableDeclaration7.ts, 0, 3))
->b : any, Symbol(b, Decl(parserVariableDeclaration7.ts, 0, 6))
+>a : any
+>b : any
 
