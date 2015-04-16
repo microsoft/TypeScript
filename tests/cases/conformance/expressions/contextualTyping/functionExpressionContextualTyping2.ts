@@ -1,14 +1,11 @@
-﻿var g0: (n: number, s: string) => number
-var i: typeof g0 | ((n: number, s: string) => string);
-i = (foo, bar) => { return true; }
+﻿// A contextual signature S is extracted from a function type T as follows:
+//      If T is a function type with exactly one call signature, and if that call signature is non- generic, S is that signature.
+//      If T is a union type, let U be the set of element types in T that have call signatures.
+//          If each type in U has exactly one call signature and that call signature is non- generic,
+//          and if all of the signatures are identical ignoring return types, then S is a signature
+//          with the same parameters and a union of the return types.
+//      Otherwise, no contextual signature can be extracted from T and S is undefined.
 
-class C<T> { }
-
-var j: (c: C<Number>) => number = (j) => { return 1; }
-class C<T, U> {
-    constructor() {
-        var k: (j: T, k: U) => (T|U)[] = (j = 1, k = 0) => {
-            return [j, k];
-        }
-    }
-}
+var a0: (n: number, s: string) => number
+var a1: typeof a0 | ((n: number, s: string) => string);
+a1 = (foo, bar) => { return true; }  // Error
