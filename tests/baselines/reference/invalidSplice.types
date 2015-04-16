@@ -1,10 +1,10 @@
 === tests/cases/compiler/invalidSplice.ts ===
 var arr = [].splice(0,3,4,5);
->arr : any[], Symbol(arr, Decl(invalidSplice.ts, 0, 3))
+>arr : any[]
 >[].splice(0,3,4,5) : any[]
->[].splice : { (start: number): any[]; (start: number, deleteCount: number, ...items: any[]): any[]; }, Symbol(Array.splice, Decl(lib.d.ts, 1060, 50), Decl(lib.d.ts, 1066, 31))
+>[].splice : { (start: number): any[]; (start: number, deleteCount: number, ...items: any[]): any[]; }
 >[] : undefined[]
->splice : { (start: number): any[]; (start: number, deleteCount: number, ...items: any[]): any[]; }, Symbol(Array.splice, Decl(lib.d.ts, 1060, 50), Decl(lib.d.ts, 1066, 31))
+>splice : { (start: number): any[]; (start: number, deleteCount: number, ...items: any[]): any[]; }
 >0 : number
 >3 : number
 >4 : number

@@ -1,71 +1,71 @@
 === tests/cases/compiler/exportPrivateType.ts ===
 module foo {
->foo : typeof foo, Symbol(foo, Decl(exportPrivateType.ts, 0, 0))
+>foo : typeof foo
 
     class C1 {
->C1 : C1, Symbol(C1, Decl(exportPrivateType.ts, 0, 12))
+>C1 : C1
 
         x: string;
->x : string, Symbol(x, Decl(exportPrivateType.ts, 1, 14))
+>x : string
 
         y: C1;
->y : C1, Symbol(y, Decl(exportPrivateType.ts, 2, 18))
->C1 : C1, Symbol(C1, Decl(exportPrivateType.ts, 0, 12))
+>y : C1
+>C1 : C1
     }
  
     class C2 {
->C2 : C2, Symbol(C2, Decl(exportPrivateType.ts, 4, 5))
+>C2 : C2
 
         test() { return true; }
->test : () => boolean, Symbol(test, Decl(exportPrivateType.ts, 6, 14))
+>test : () => boolean
 >true : boolean
     }
  
     interface I1 {
->I1 : I1, Symbol(I1, Decl(exportPrivateType.ts, 8, 5))
+>I1 : I1
 
         (a: string, b: string): string;
->a : string, Symbol(a, Decl(exportPrivateType.ts, 11, 9))
->b : string, Symbol(b, Decl(exportPrivateType.ts, 11, 19))
+>a : string
+>b : string
 
         (x: number, y: number): I1;
->x : number, Symbol(x, Decl(exportPrivateType.ts, 12, 9))
->y : number, Symbol(y, Decl(exportPrivateType.ts, 12, 19))
->I1 : I1, Symbol(I1, Decl(exportPrivateType.ts, 8, 5))
+>x : number
+>y : number
+>I1 : I1
     }
  
     interface I2 {
->I2 : I2, Symbol(I2, Decl(exportPrivateType.ts, 13, 5))
+>I2 : I2
 
         x: string;
->x : string, Symbol(x, Decl(exportPrivateType.ts, 15, 18))
+>x : string
 
         y: number;
->y : number, Symbol(y, Decl(exportPrivateType.ts, 16, 18))
+>y : number
     }
  
     // None of the types are exported, so per section 10.3, should all be errors
     export var e: C1;
->e : C1, Symbol(e, Decl(exportPrivateType.ts, 21, 14))
->C1 : C1, Symbol(C1, Decl(exportPrivateType.ts, 0, 12))
+>e : C1
+>C1 : C1
 
     export var f: I1;
->f : I1, Symbol(f, Decl(exportPrivateType.ts, 22, 14))
->I1 : I1, Symbol(I1, Decl(exportPrivateType.ts, 8, 5))
+>f : I1
+>I1 : I1
 
     export var g: C2;
->g : C2, Symbol(g, Decl(exportPrivateType.ts, 23, 14))
->C2 : C2, Symbol(C2, Decl(exportPrivateType.ts, 4, 5))
+>g : C2
+>C2 : C2
 
     export var h: I2;
->h : I2, Symbol(h, Decl(exportPrivateType.ts, 24, 14))
->I2 : I2, Symbol(I2, Decl(exportPrivateType.ts, 13, 5))
+>h : I2
+>I2 : I2
 }
  
 var y = foo.g; // Exported variable 'y' has or is using private type 'foo.C2'.
->y : C2, Symbol(y, Decl(exportPrivateType.ts, 27, 3))
->foo.g : C2, Symbol(foo.g, Decl(exportPrivateType.ts, 23, 14))
->foo : typeof foo, Symbol(foo, Decl(exportPrivateType.ts, 0, 0))
->g : C2, Symbol(foo.g, Decl(exportPrivateType.ts, 23, 14))
+>y : C2
+>foo.g : C2
+>foo : typeof foo
+>g : C2
 
 

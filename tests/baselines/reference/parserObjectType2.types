@@ -1,5 +1,5 @@
 === tests/cases/conformance/parser/ecmascript5/ObjectTypes/parserObjectType2.ts ===
 var v: { x: number };
->v : { x: number; }, Symbol(v, Decl(parserObjectType2.ts, 0, 3))
->x : number, Symbol(x, Decl(parserObjectType2.ts, 0, 8))
+>v : { x: number; }
+>x : number
 

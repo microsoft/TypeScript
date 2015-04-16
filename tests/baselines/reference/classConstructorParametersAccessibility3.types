@@ -1,36 +1,36 @@
 === tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility3.ts ===
 class Base {
->Base : Base, Symbol(Base, Decl(classConstructorParametersAccessibility3.ts, 0, 0))
+>Base : Base
 
     constructor(protected p: number) { }
->p : number, Symbol(p, Decl(classConstructorParametersAccessibility3.ts, 1, 16))
+>p : number
 }
 
 class Derived extends Base {
->Derived : Derived, Symbol(Derived, Decl(classConstructorParametersAccessibility3.ts, 2, 1))
->Base : Base, Symbol(Base, Decl(classConstructorParametersAccessibility3.ts, 0, 0))
+>Derived : Derived
+>Base : Base
 
     constructor(public p: number) {
->p : number, Symbol(p, Decl(classConstructorParametersAccessibility3.ts, 5, 16))
+>p : number
 
         super(p);
 >super(p) : void
->super : typeof Base, Symbol(Base, Decl(classConstructorParametersAccessibility3.ts, 0, 0))
->p : number, Symbol(p, Decl(classConstructorParametersAccessibility3.ts, 5, 16))
+>super : typeof Base
+>p : number
 
         this.p; // OK
->this.p : number, Symbol(p, Decl(classConstructorParametersAccessibility3.ts, 5, 16))
->this : Derived, Symbol(Derived, Decl(classConstructorParametersAccessibility3.ts, 2, 1))
->p : number, Symbol(p, Decl(classConstructorParametersAccessibility3.ts, 5, 16))
+>this.p : number
+>this : Derived
+>p : number
     }
 }
 
 var d: Derived;
->d : Derived, Symbol(d, Decl(classConstructorParametersAccessibility3.ts, 11, 3))
->Derived : Derived, Symbol(Derived, Decl(classConstructorParametersAccessibility3.ts, 2, 1))
+>d : Derived
+>Derived : Derived
 
 d.p;  // public, OK
->d.p : number, Symbol(Derived.p, Decl(classConstructorParametersAccessibility3.ts, 5, 16))
->d : Derived, Symbol(d, Decl(classConstructorParametersAccessibility3.ts, 11, 3))
->p : number, Symbol(Derived.p, Decl(classConstructorParametersAccessibility3.ts, 5, 16))
+>d.p : number
+>d : Derived
+>p : number
 

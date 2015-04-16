@@ -1,19 +1,19 @@
 === tests/cases/compiler/privacyCheckCallbackOfInterfaceMethodWithTypeParameter.ts ===
 export interface A<T> {
->A : A<T>, Symbol(A, Decl(privacyCheckCallbackOfInterfaceMethodWithTypeParameter.ts, 0, 0))
->T : T, Symbol(T, Decl(privacyCheckCallbackOfInterfaceMethodWithTypeParameter.ts, 0, 19))
+>A : A<T>
+>T : T
 
     f1(callback: (p: T) => any); 
->f1 : (callback: (p: T) => any) => any, Symbol(f1, Decl(privacyCheckCallbackOfInterfaceMethodWithTypeParameter.ts, 0, 23))
->callback : (p: T) => any, Symbol(callback, Decl(privacyCheckCallbackOfInterfaceMethodWithTypeParameter.ts, 1, 7))
->p : T, Symbol(p, Decl(privacyCheckCallbackOfInterfaceMethodWithTypeParameter.ts, 1, 18))
->T : T, Symbol(T, Decl(privacyCheckCallbackOfInterfaceMethodWithTypeParameter.ts, 0, 19))
+>f1 : (callback: (p: T) => any) => any
+>callback : (p: T) => any
+>p : T
+>T : T
 }
  
 export interface B<T> extends A<T> {
->B : B<T>, Symbol(B, Decl(privacyCheckCallbackOfInterfaceMethodWithTypeParameter.ts, 2, 1))
->T : T, Symbol(T, Decl(privacyCheckCallbackOfInterfaceMethodWithTypeParameter.ts, 4, 19))
->A : A<T>, Symbol(A, Decl(privacyCheckCallbackOfInterfaceMethodWithTypeParameter.ts, 0, 0))
->T : T, Symbol(T, Decl(privacyCheckCallbackOfInterfaceMethodWithTypeParameter.ts, 4, 19))
+>B : B<T>
+>T : T
+>A : A<T>
+>T : T
 }
 

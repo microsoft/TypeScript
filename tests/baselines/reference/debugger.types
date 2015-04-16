@@ -2,7 +2,7 @@
 debugger;
 
 function foo() {
->foo : () => void, Symbol(foo, Decl(debugger.ts, 0, 9))
+>foo : () => void
 
     debugger;
 

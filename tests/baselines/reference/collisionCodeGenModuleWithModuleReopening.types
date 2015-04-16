@@ -1,94 +1,94 @@
 === tests/cases/compiler/collisionCodeGenModuleWithModuleReopening.ts ===
 module m1 {
->m1 : typeof m1, Symbol(m1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleReopening.ts, 4, 22))
+>m1 : typeof m1
 
     export class m1 {
->m1 : m1, Symbol(m1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 0, 11))
+>m1 : m1
     }
 }
 var foo = new m1.m1();
->foo : m1.m1, Symbol(foo, Decl(collisionCodeGenModuleWithModuleReopening.ts, 4, 3))
+>foo : m1.m1
 >new m1.m1() : m1.m1
->m1.m1 : typeof m1.m1, Symbol(m1.m1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 0, 11))
->m1 : typeof m1, Symbol(m1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleReopening.ts, 4, 22))
->m1 : typeof m1.m1, Symbol(m1.m1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 0, 11))
+>m1.m1 : typeof m1.m1
+>m1 : typeof m1
+>m1 : typeof m1.m1
 
 module m1 {
->m1 : typeof m1, Symbol(m1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleReopening.ts, 4, 22))
+>m1 : typeof m1
 
     export class c1 {
->c1 : c1, Symbol(c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 5, 11))
+>c1 : c1
     }
     var b = new c1();
->b : c1, Symbol(b, Decl(collisionCodeGenModuleWithModuleReopening.ts, 8, 7))
+>b : c1
 >new c1() : c1
->c1 : typeof c1, Symbol(c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 5, 11))
+>c1 : typeof c1
 
     var c = new m1();
->c : m1, Symbol(c, Decl(collisionCodeGenModuleWithModuleReopening.ts, 9, 7))
+>c : m1
 >new m1() : m1
->m1 : typeof m1, Symbol(m1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 0, 11))
+>m1 : typeof m1
 }
 var foo2 = new m1.c1();
->foo2 : m1.c1, Symbol(foo2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 11, 3), Decl(collisionCodeGenModuleWithModuleReopening.ts, 28, 3))
+>foo2 : m1.c1
 >new m1.c1() : m1.c1
->m1.c1 : typeof m1.c1, Symbol(m1.c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 5, 11))
->m1 : typeof m1, Symbol(m1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleReopening.ts, 4, 22))
->c1 : typeof m1.c1, Symbol(m1.c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 5, 11))
+>m1.c1 : typeof m1.c1
+>m1 : typeof m1
+>c1 : typeof m1.c1
 
 module m2 {
->m2 : typeof m2, Symbol(m2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 11, 23), Decl(collisionCodeGenModuleWithModuleReopening.ts, 19, 23))
+>m2 : typeof m2
 
     export class c1 {
->c1 : c1, Symbol(c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 13, 11))
+>c1 : c1
     }
     export var b10 = 10;
->b10 : number, Symbol(b10, Decl(collisionCodeGenModuleWithModuleReopening.ts, 16, 14))
+>b10 : number
 >10 : number
 
     var x = new c1();
->x : c1, Symbol(x, Decl(collisionCodeGenModuleWithModuleReopening.ts, 17, 7))
+>x : c1
 >new c1() : c1
->c1 : typeof c1, Symbol(c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 13, 11))
+>c1 : typeof c1
 }
 var foo3 = new m2.c1();
->foo3 : m2.c1, Symbol(foo3, Decl(collisionCodeGenModuleWithModuleReopening.ts, 19, 3), Decl(collisionCodeGenModuleWithModuleReopening.ts, 27, 3))
+>foo3 : m2.c1
 >new m2.c1() : m2.c1
->m2.c1 : typeof m2.c1, Symbol(m2.c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 13, 11))
->m2 : typeof m2, Symbol(m2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 11, 23), Decl(collisionCodeGenModuleWithModuleReopening.ts, 19, 23))
->c1 : typeof m2.c1, Symbol(m2.c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 13, 11))
+>m2.c1 : typeof m2.c1
+>m2 : typeof m2
+>c1 : typeof m2.c1
 
 module m2 {
->m2 : typeof m2, Symbol(m2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 11, 23), Decl(collisionCodeGenModuleWithModuleReopening.ts, 19, 23))
+>m2 : typeof m2
 
     export class m2 {
->m2 : m2, Symbol(m2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 20, 11))
+>m2 : m2
     }
     var b = new m2();
->b : m2, Symbol(b, Decl(collisionCodeGenModuleWithModuleReopening.ts, 23, 7))
+>b : m2
 >new m2() : m2
->m2 : typeof m2, Symbol(m2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 20, 11))
+>m2 : typeof m2
 
     var d = b10;
->d : number, Symbol(d, Decl(collisionCodeGenModuleWithModuleReopening.ts, 24, 7))
->b10 : number, Symbol(b10, Decl(collisionCodeGenModuleWithModuleReopening.ts, 16, 14))
+>d : number
+>b10 : number
 
     var c = new c1();
->c : c1, Symbol(c, Decl(collisionCodeGenModuleWithModuleReopening.ts, 25, 7))
+>c : c1
 >new c1() : c1
->c1 : typeof c1, Symbol(c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 13, 11))
+>c1 : typeof c1
 }
 var foo3 = new m2.c1();
->foo3 : m2.c1, Symbol(foo3, Decl(collisionCodeGenModuleWithModuleReopening.ts, 19, 3), Decl(collisionCodeGenModuleWithModuleReopening.ts, 27, 3))
+>foo3 : m2.c1
 >new m2.c1() : m2.c1
->m2.c1 : typeof m2.c1, Symbol(m2.c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 13, 11))
->m2 : typeof m2, Symbol(m2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 11, 23), Decl(collisionCodeGenModuleWithModuleReopening.ts, 19, 23))
->c1 : typeof m2.c1, Symbol(m2.c1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 13, 11))
+>m2.c1 : typeof m2.c1
+>m2 : typeof m2
+>c1 : typeof m2.c1
 
 var foo2 = new m2.m2();
->foo2 : m1.c1, Symbol(foo2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 11, 3), Decl(collisionCodeGenModuleWithModuleReopening.ts, 28, 3))
+>foo2 : m1.c1
 >new m2.m2() : m2.m2
->m2.m2 : typeof m2.m2, Symbol(m2.m2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 20, 11))
->m2 : typeof m2, Symbol(m2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 11, 23), Decl(collisionCodeGenModuleWithModuleReopening.ts, 19, 23))
->m2 : typeof m2.m2, Symbol(m2.m2, Decl(collisionCodeGenModuleWithModuleReopening.ts, 20, 11))
+>m2.m2 : typeof m2.m2
+>m2 : typeof m2
+>m2 : typeof m2.m2
 

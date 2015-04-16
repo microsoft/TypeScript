@@ -1,29 +1,29 @@
 === tests/cases/compiler/collisionExportsRequireAndAmbientFunction.ts ===
 export declare function exports(): number;
->exports : () => number, Symbol(exports, Decl(collisionExportsRequireAndAmbientFunction.ts, 0, 0))
+>exports : () => number
 
 export declare function require(): string[];
->require : () => string[], Symbol(require, Decl(collisionExportsRequireAndAmbientFunction.ts, 0, 42))
+>require : () => string[]
     
 declare module m1 {
->m1 : typeof m1, Symbol(m1, Decl(collisionExportsRequireAndAmbientFunction.ts, 2, 44))
+>m1 : typeof m1
 
     function exports(): string;
->exports : () => string, Symbol(exports, Decl(collisionExportsRequireAndAmbientFunction.ts, 4, 19))
+>exports : () => string
 
     function require(): number;
->require : () => number, Symbol(require, Decl(collisionExportsRequireAndAmbientFunction.ts, 5, 31))
+>require : () => number
 }
 module m2 {
->m2 : typeof m2, Symbol(m2, Decl(collisionExportsRequireAndAmbientFunction.ts, 7, 1))
+>m2 : typeof m2
 
     export declare function exports(): string;
->exports : () => string, Symbol(exports, Decl(collisionExportsRequireAndAmbientFunction.ts, 8, 11))
+>exports : () => string
 
     export declare function require(): string[];
->require : () => string[], Symbol(require, Decl(collisionExportsRequireAndAmbientFunction.ts, 9, 46))
+>require : () => string[]
 
     var a = 10;
->a : number, Symbol(a, Decl(collisionExportsRequireAndAmbientFunction.ts, 11, 7))
+>a : number
 >10 : number
 }

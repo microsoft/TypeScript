@@ -1,29 +1,29 @@
 === tests/cases/compiler/functionOverloadsOnGenericArity1.ts ===
 // overloading on arity not allowed
 interface C {
->C : C, Symbol(C, Decl(functionOverloadsOnGenericArity1.ts, 0, 0))
+>C : C
 
    f<T>(): string;
->f : { <T>(): string; <T, U>(): string; }, Symbol(f, Decl(functionOverloadsOnGenericArity1.ts, 1, 13), Decl(functionOverloadsOnGenericArity1.ts, 2, 18))
->T : T, Symbol(T, Decl(functionOverloadsOnGenericArity1.ts, 2, 5))
+>f : { <T>(): string; <T, U>(): string; }
+>T : T
 
    f<T, U>(): string; 
->f : { <T>(): string; <T, U>(): string; }, Symbol(f, Decl(functionOverloadsOnGenericArity1.ts, 1, 13), Decl(functionOverloadsOnGenericArity1.ts, 2, 18))
->T : T, Symbol(T, Decl(functionOverloadsOnGenericArity1.ts, 3, 5))
->U : U, Symbol(U, Decl(functionOverloadsOnGenericArity1.ts, 3, 7))
+>f : { <T>(): string; <T, U>(): string; }
+>T : T
+>U : U
  
    <T>(): string;
->T : T, Symbol(T, Decl(functionOverloadsOnGenericArity1.ts, 5, 4))
+>T : T
 
    <T, U>(): string; 
->T : T, Symbol(T, Decl(functionOverloadsOnGenericArity1.ts, 6, 4))
->U : U, Symbol(U, Decl(functionOverloadsOnGenericArity1.ts, 6, 6))
+>T : T
+>U : U
  
   new <T>(): string;
->T : T, Symbol(T, Decl(functionOverloadsOnGenericArity1.ts, 8, 7))
+>T : T
 
   new <T, U>(): string; 
->T : T, Symbol(T, Decl(functionOverloadsOnGenericArity1.ts, 9, 7))
->U : U, Symbol(U, Decl(functionOverloadsOnGenericArity1.ts, 9, 9))
+>T : T
+>U : U
 }
 

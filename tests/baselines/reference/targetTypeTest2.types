@@ -3,7 +3,7 @@
 
 
 var a : any[] = [1,2,"3"];
->a : any[], Symbol(a, Decl(targetTypeTest2.ts, 3, 3))
+>a : any[]
 >[1,2,"3"] : (string | number)[]
 >1 : number
 >2 : number
@@ -11,21 +11,21 @@ var a : any[] = [1,2,"3"];
 
 
 function func1(stuff:any[]) { return stuff; }
->func1 : (stuff: any[]) => any[], Symbol(func1, Decl(targetTypeTest2.ts, 3, 26))
->stuff : any[], Symbol(stuff, Decl(targetTypeTest2.ts, 6, 15))
->stuff : any[], Symbol(stuff, Decl(targetTypeTest2.ts, 6, 15))
+>func1 : (stuff: any[]) => any[]
+>stuff : any[]
+>stuff : any[]
 
 function func2(stuff1:string, stuff2:number, stuff3:number) {
->func2 : (stuff1: string, stuff2: number, stuff3: number) => any[], Symbol(func2, Decl(targetTypeTest2.ts, 6, 45))
->stuff1 : string, Symbol(stuff1, Decl(targetTypeTest2.ts, 8, 15))
->stuff2 : number, Symbol(stuff2, Decl(targetTypeTest2.ts, 8, 29))
->stuff3 : number, Symbol(stuff3, Decl(targetTypeTest2.ts, 8, 44))
+>func2 : (stuff1: string, stuff2: number, stuff3: number) => any[]
+>stuff1 : string
+>stuff2 : number
+>stuff3 : number
 
 	return func1([stuff1, stuff2, stuff3]);
 >func1([stuff1, stuff2, stuff3]) : any[]
->func1 : (stuff: any[]) => any[], Symbol(func1, Decl(targetTypeTest2.ts, 3, 26))
+>func1 : (stuff: any[]) => any[]
 >[stuff1, stuff2, stuff3] : (string | number)[]
->stuff1 : string, Symbol(stuff1, Decl(targetTypeTest2.ts, 8, 15))
->stuff2 : number, Symbol(stuff2, Decl(targetTypeTest2.ts, 8, 29))
->stuff3 : number, Symbol(stuff3, Decl(targetTypeTest2.ts, 8, 44))
+>stuff1 : string
+>stuff2 : number
+>stuff3 : number
 }

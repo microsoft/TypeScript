@@ -3,129 +3,129 @@
 // no errors expected here
 
 var a: { x: number; y?: number };
->a : { x: number; y?: number; }, Symbol(a, Decl(bestCommonTypeOfConditionalExpressions.ts, 3, 3))
->x : number, Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 3, 8))
->y : number, Symbol(y, Decl(bestCommonTypeOfConditionalExpressions.ts, 3, 19))
+>a : { x: number; y?: number; }
+>x : number
+>y : number
 
 var b: { x: number; z?: number };
->b : { x: number; z?: number; }, Symbol(b, Decl(bestCommonTypeOfConditionalExpressions.ts, 4, 3))
->x : number, Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 4, 8))
->z : number, Symbol(z, Decl(bestCommonTypeOfConditionalExpressions.ts, 4, 19))
+>b : { x: number; z?: number; }
+>x : number
+>z : number
 
 class Base { foo: string; }
->Base : Base, Symbol(Base, Decl(bestCommonTypeOfConditionalExpressions.ts, 4, 33))
->foo : string, Symbol(foo, Decl(bestCommonTypeOfConditionalExpressions.ts, 6, 12))
+>Base : Base
+>foo : string
 
 class Derived extends Base { bar: string; }
->Derived : Derived, Symbol(Derived, Decl(bestCommonTypeOfConditionalExpressions.ts, 6, 27))
->Base : Base, Symbol(Base, Decl(bestCommonTypeOfConditionalExpressions.ts, 4, 33))
->bar : string, Symbol(bar, Decl(bestCommonTypeOfConditionalExpressions.ts, 7, 28))
+>Derived : Derived
+>Base : Base
+>bar : string
 
 class Derived2 extends Base { baz: string; }
->Derived2 : Derived2, Symbol(Derived2, Decl(bestCommonTypeOfConditionalExpressions.ts, 7, 43))
->Base : Base, Symbol(Base, Decl(bestCommonTypeOfConditionalExpressions.ts, 4, 33))
->baz : string, Symbol(baz, Decl(bestCommonTypeOfConditionalExpressions.ts, 8, 29))
+>Derived2 : Derived2
+>Base : Base
+>baz : string
 
 var base: Base;
->base : Base, Symbol(base, Decl(bestCommonTypeOfConditionalExpressions.ts, 9, 3))
->Base : Base, Symbol(Base, Decl(bestCommonTypeOfConditionalExpressions.ts, 4, 33))
+>base : Base
+>Base : Base
 
 var derived: Derived;
->derived : Derived, Symbol(derived, Decl(bestCommonTypeOfConditionalExpressions.ts, 10, 3))
->Derived : Derived, Symbol(Derived, Decl(bestCommonTypeOfConditionalExpressions.ts, 6, 27))
+>derived : Derived
+>Derived : Derived
 
 var derived2: Derived2;
->derived2 : Derived2, Symbol(derived2, Decl(bestCommonTypeOfConditionalExpressions.ts, 11, 3))
->Derived2 : Derived2, Symbol(Derived2, Decl(bestCommonTypeOfConditionalExpressions.ts, 7, 43))
+>derived2 : Derived2
+>Derived2 : Derived2
 
 var r = true ? 1 : 2;
->r : number, Symbol(r, Decl(bestCommonTypeOfConditionalExpressions.ts, 13, 3))
+>r : number
 >true ? 1 : 2 : number
 >true : boolean
 >1 : number
 >2 : number
 
 var r3 = true ? 1 : {};
->r3 : {}, Symbol(r3, Decl(bestCommonTypeOfConditionalExpressions.ts, 14, 3))
+>r3 : {}
 >true ? 1 : {} : {}
 >true : boolean
 >1 : number
 >{} : {}
 
 var r4 = true ? a : b; // typeof a
->r4 : { x: number; y?: number; } | { x: number; z?: number; }, Symbol(r4, Decl(bestCommonTypeOfConditionalExpressions.ts, 15, 3))
+>r4 : { x: number; y?: number; } | { x: number; z?: number; }
 >true ? a : b : { x: number; y?: number; } | { x: number; z?: number; }
 >true : boolean
->a : { x: number; y?: number; }, Symbol(a, Decl(bestCommonTypeOfConditionalExpressions.ts, 3, 3))
->b : { x: number; z?: number; }, Symbol(b, Decl(bestCommonTypeOfConditionalExpressions.ts, 4, 3))
+>a : { x: number; y?: number; }
+>b : { x: number; z?: number; }
 
 var r5 = true ? b : a; // typeof b
->r5 : { x: number; y?: number; } | { x: number; z?: number; }, Symbol(r5, Decl(bestCommonTypeOfConditionalExpressions.ts, 16, 3))
+>r5 : { x: number; y?: number; } | { x: number; z?: number; }
 >true ? b : a : { x: number; y?: number; } | { x: number; z?: number; }
 >true : boolean
->b : { x: number; z?: number; }, Symbol(b, Decl(bestCommonTypeOfConditionalExpressions.ts, 4, 3))
->a : { x: number; y?: number; }, Symbol(a, Decl(bestCommonTypeOfConditionalExpressions.ts, 3, 3))
+>b : { x: number; z?: number; }
+>a : { x: number; y?: number; }
 
 var r6 = true ? (x: number) => { } : (x: Object) => { }; // returns number => void
->r6 : (x: number) => void, Symbol(r6, Decl(bestCommonTypeOfConditionalExpressions.ts, 17, 3))
+>r6 : (x: number) => void
 >true ? (x: number) => { } : (x: Object) => { } : (x: number) => void
 >true : boolean
 >(x: number) => { } : (x: number) => void
->x : number, Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 17, 17))
+>x : number
 >(x: Object) => { } : (x: Object) => void
->x : Object, Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 17, 38))
->Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>x : Object
+>Object : Object
 
 var r7: (x: Object) => void = true ? (x: number) => { } : (x: Object) => { }; 
->r7 : (x: Object) => void, Symbol(r7, Decl(bestCommonTypeOfConditionalExpressions.ts, 18, 3))
->x : Object, Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 18, 9))
->Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>r7 : (x: Object) => void
+>x : Object
+>Object : Object
 >true ? (x: number) => { } : (x: Object) => { } : (x: number) => void
 >true : boolean
 >(x: number) => { } : (x: number) => void
->x : number, Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 18, 38))
+>x : number
 >(x: Object) => { } : (x: Object) => void
->x : Object, Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 18, 59))
->Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>x : Object
+>Object : Object
 
 var r8 = true ? (x: Object) => { } : (x: number) => { }; // returns Object => void
->r8 : (x: Object) => void, Symbol(r8, Decl(bestCommonTypeOfConditionalExpressions.ts, 19, 3))
+>r8 : (x: Object) => void
 >true ? (x: Object) => { } : (x: number) => { } : (x: Object) => void
 >true : boolean
 >(x: Object) => { } : (x: Object) => void
->x : Object, Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 19, 17))
->Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>x : Object
+>Object : Object
 >(x: number) => { } : (x: number) => void
->x : number, Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 19, 38))
+>x : number
 
 var r10: Base = true ? derived : derived2; // no error since we use the contextual type in BCT
->r10 : Base, Symbol(r10, Decl(bestCommonTypeOfConditionalExpressions.ts, 20, 3))
->Base : Base, Symbol(Base, Decl(bestCommonTypeOfConditionalExpressions.ts, 4, 33))
+>r10 : Base
+>Base : Base
 >true ? derived : derived2 : Derived | Derived2
 >true : boolean
->derived : Derived, Symbol(derived, Decl(bestCommonTypeOfConditionalExpressions.ts, 10, 3))
->derived2 : Derived2, Symbol(derived2, Decl(bestCommonTypeOfConditionalExpressions.ts, 11, 3))
+>derived : Derived
+>derived2 : Derived2
 
 var r11 = true ? base : derived2;
->r11 : Base, Symbol(r11, Decl(bestCommonTypeOfConditionalExpressions.ts, 21, 3))
+>r11 : Base
 >true ? base : derived2 : Base
 >true : boolean
->base : Base, Symbol(base, Decl(bestCommonTypeOfConditionalExpressions.ts, 9, 3))
->derived2 : Derived2, Symbol(derived2, Decl(bestCommonTypeOfConditionalExpressions.ts, 11, 3))
+>base : Base
+>derived2 : Derived2
 
 function foo5<T, U>(t: T, u: U): Object {
->foo5 : <T, U>(t: T, u: U) => Object, Symbol(foo5, Decl(bestCommonTypeOfConditionalExpressions.ts, 21, 33))
->T : T, Symbol(T, Decl(bestCommonTypeOfConditionalExpressions.ts, 23, 14))
->U : U, Symbol(U, Decl(bestCommonTypeOfConditionalExpressions.ts, 23, 16))
->t : T, Symbol(t, Decl(bestCommonTypeOfConditionalExpressions.ts, 23, 20))
->T : T, Symbol(T, Decl(bestCommonTypeOfConditionalExpressions.ts, 23, 14))
->u : U, Symbol(u, Decl(bestCommonTypeOfConditionalExpressions.ts, 23, 25))
->U : U, Symbol(U, Decl(bestCommonTypeOfConditionalExpressions.ts, 23, 16))
->Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>foo5 : <T, U>(t: T, u: U) => Object
+>T : T
+>U : U
+>t : T
+>T : T
+>u : U
+>U : U
+>Object : Object
 
     return true ? t : u; // BCT is Object
 >true ? t : u : T | U
 >true : boolean
->t : T, Symbol(t, Decl(bestCommonTypeOfConditionalExpressions.ts, 23, 20))
->u : U, Symbol(u, Decl(bestCommonTypeOfConditionalExpressions.ts, 23, 25))
+>t : T
+>u : U
 }

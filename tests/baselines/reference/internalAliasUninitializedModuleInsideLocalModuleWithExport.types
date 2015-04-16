@@ -1,35 +1,35 @@
 === tests/cases/compiler/internalAliasUninitializedModuleInsideLocalModuleWithExport.ts ===
 export module a {
->a : any, Symbol(a, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 0, 0))
+>a : any
 
     export module b {
->b : any, Symbol(b, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 0, 17))
+>b : any
 
         export interface I {
->I : I, Symbol(I, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 1, 21))
+>I : I
 
             foo();
->foo : () => any, Symbol(foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 2, 28))
+>foo : () => any
         }
     }
 }
 
 export module c {
->c : typeof c, Symbol(c, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 6, 1))
+>c : typeof c
 
     export import b = a.b;
->b : any, Symbol(b, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 8, 17))
->a : any, Symbol(a, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 0, 0))
->b : any, Symbol(b, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 0, 17))
+>b : any
+>a : any
+>b : any
 
     export var x: b.I;
->x : b.I, Symbol(x, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 10, 14))
->b : any, Symbol(b, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 8, 17))
->I : b.I, Symbol(b.I, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 1, 21))
+>x : b.I
+>b : any
+>I : b.I
 
     x.foo();
 >x.foo() : any
->x.foo : () => any, Symbol(b.I.foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 2, 28))
->x : b.I, Symbol(x, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 10, 14))
->foo : () => any, Symbol(b.I.foo, Decl(internalAliasUninitializedModuleInsideLocalModuleWithExport.ts, 2, 28))
+>x.foo : () => any
+>x : b.I
+>foo : () => any
 }

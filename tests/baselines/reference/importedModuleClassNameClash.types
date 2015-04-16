@@ -1,11 +1,11 @@
 === tests/cases/compiler/importedModuleClassNameClash.ts ===
 import foo = m1;
->foo : typeof foo, Symbol(foo, Decl(importedModuleClassNameClash.ts, 0, 0), Decl(importedModuleClassNameClash.ts, 2, 20))
->m1 : any, Symbol(foo, Decl(importedModuleClassNameClash.ts, 0, 16))
+>foo : typeof foo
+>m1 : any
  
 export module m1 { }
->m1 : any, Symbol(foo, Decl(importedModuleClassNameClash.ts, 0, 16))
+>m1 : any
  
 class foo { }
->foo : foo, Symbol(foo, Decl(importedModuleClassNameClash.ts, 0, 0), Decl(importedModuleClassNameClash.ts, 2, 20))
+>foo : foo
 

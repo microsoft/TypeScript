@@ -1,0 +1,322 @@
+=== tests/cases/compiler/APISample_watcher.ts ===
+
+/*
+ * Note: This test is a public API sample. The sample sources can be found 
+         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#incremental-build-support-using-the-language-services
+ *       Please log a "breaking change" issue for any API breaking change affecting this issue
+ */
+
+declare var process: any;
+>process : Symbol(process, Decl(APISample_watcher.ts, 7, 11))
+
+declare var console: any;
+>console : Symbol(console, Decl(APISample_watcher.ts, 8, 11))
+
+declare var fs: any;
+>fs : Symbol(fs, Decl(APISample_watcher.ts, 9, 11))
+
+declare var path: any;
+>path : Symbol(path, Decl(APISample_watcher.ts, 10, 11))
+
+import * as ts from "typescript";
+>ts : Symbol(ts, Decl(APISample_watcher.ts, 12, 6))
+
+function watch(rootFileNames: string[], options: ts.CompilerOptions) {
+>watch : Symbol(watch, Decl(APISample_watcher.ts, 12, 33))
+>rootFileNames : Symbol(rootFileNames, Decl(APISample_watcher.ts, 14, 15))
+>options : Symbol(options, Decl(APISample_watcher.ts, 14, 39))
+>ts : Symbol(ts, Decl(APISample_watcher.ts, 12, 6))
+>CompilerOptions : Symbol(ts.CompilerOptions, Decl(typescript.d.ts, 1074, 5))
+
+    const files: ts.Map<{ version: number }> = {};
+>files : Symbol(files, Decl(APISample_watcher.ts, 15, 9))
+>ts : Symbol(ts, Decl(APISample_watcher.ts, 12, 6))
+>Map : Symbol(ts.Map, Decl(typescript.d.ts, 15, 29))
+>version : Symbol(version, Decl(APISample_watcher.ts, 15, 25))
+
+    // initialize the list of files
+    rootFileNames.forEach(fileName => {
+>rootFileNames.forEach : Symbol(Array.forEach, Decl(lib.d.ts, 1108, 95))
+>rootFileNames : Symbol(rootFileNames, Decl(APISample_watcher.ts, 14, 15))
+>forEach : Symbol(Array.forEach, Decl(lib.d.ts, 1108, 95))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 18, 26))
+
+        files[fileName] = { version: 0 };
+>files : Symbol(files, Decl(APISample_watcher.ts, 15, 9))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 18, 26))
+>version : Symbol(version, Decl(APISample_watcher.ts, 19, 27))
+
+    });
+
+    // Create the language service host to allow the LS to communicate with the host
+    const servicesHost: ts.LanguageServiceHost = {
+>servicesHost : Symbol(servicesHost, Decl(APISample_watcher.ts, 23, 9))
+>ts : Symbol(ts, Decl(APISample_watcher.ts, 12, 6))
+>LanguageServiceHost : Symbol(ts.LanguageServiceHost, Decl(typescript.d.ts, 1318, 5))
+
+        getScriptFileNames: () => rootFileNames,
+>getScriptFileNames : Symbol(getScriptFileNames, Decl(APISample_watcher.ts, 23, 50))
+>rootFileNames : Symbol(rootFileNames, Decl(APISample_watcher.ts, 14, 15))
+
+        getScriptVersion: (fileName) => files[fileName] && files[fileName].version.toString(),
+>getScriptVersion : Symbol(getScriptVersion, Decl(APISample_watcher.ts, 24, 48))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 25, 27))
+>files : Symbol(files, Decl(APISample_watcher.ts, 15, 9))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 25, 27))
+>files[fileName].version.toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>files[fileName].version : Symbol(version, Decl(APISample_watcher.ts, 15, 25))
+>files : Symbol(files, Decl(APISample_watcher.ts, 15, 9))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 25, 27))
+>version : Symbol(version, Decl(APISample_watcher.ts, 15, 25))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+
+        getScriptSnapshot: (fileName) => {
+>getScriptSnapshot : Symbol(getScriptSnapshot, Decl(APISample_watcher.ts, 25, 94))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 26, 28))
+
+            if (!fs.existsSync(fileName)) {
+>fs : Symbol(fs, Decl(APISample_watcher.ts, 9, 11))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 26, 28))
+
+                return undefined;
+>undefined : Symbol(undefined)
+            }
+
+            return ts.ScriptSnapshot.fromString(fs.readFileSync(fileName).toString());
+>ts.ScriptSnapshot.fromString : Symbol(ts.ScriptSnapshot.fromString, Decl(typescript.d.ts, 1311, 27))
+>ts.ScriptSnapshot : Symbol(ts.ScriptSnapshot, Decl(typescript.d.ts, 1310, 5))
+>ts : Symbol(ts, Decl(APISample_watcher.ts, 12, 6))
+>ScriptSnapshot : Symbol(ts.ScriptSnapshot, Decl(typescript.d.ts, 1310, 5))
+>fromString : Symbol(ts.ScriptSnapshot.fromString, Decl(typescript.d.ts, 1311, 27))
+>fs : Symbol(fs, Decl(APISample_watcher.ts, 9, 11))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 26, 28))
+
+        },
+        getCurrentDirectory: () => process.cwd(),
+>getCurrentDirectory : Symbol(getCurrentDirectory, Decl(APISample_watcher.ts, 32, 10))
+>process : Symbol(process, Decl(APISample_watcher.ts, 7, 11))
+
+        getCompilationSettings: () => options,
+>getCompilationSettings : Symbol(getCompilationSettings, Decl(APISample_watcher.ts, 33, 49))
+>options : Symbol(options, Decl(APISample_watcher.ts, 14, 39))
+
+        getDefaultLibFileName: (options) => ts.getDefaultLibFilePath(options),
+>getDefaultLibFileName : Symbol(getDefaultLibFileName, Decl(APISample_watcher.ts, 34, 46))
+>options : Symbol(options, Decl(APISample_watcher.ts, 35, 32))
+>ts.getDefaultLibFilePath : Symbol(ts.getDefaultLibFilePath, Decl(typescript.d.ts, 1760, 44))
+>ts : Symbol(ts, Decl(APISample_watcher.ts, 12, 6))
+>getDefaultLibFilePath : Symbol(ts.getDefaultLibFilePath, Decl(typescript.d.ts, 1760, 44))
+>options : Symbol(options, Decl(APISample_watcher.ts, 35, 32))
+
+    };
+
+    // Create the language service files
+    const services = ts.createLanguageService(servicesHost, ts.createDocumentRegistry())
+>services : Symbol(services, Decl(APISample_watcher.ts, 39, 9))
+>ts.createLanguageService : Symbol(ts.createLanguageService, Decl(typescript.d.ts, 1758, 97))
+>ts : Symbol(ts, Decl(APISample_watcher.ts, 12, 6))
+>createLanguageService : Symbol(ts.createLanguageService, Decl(typescript.d.ts, 1758, 97))
+>servicesHost : Symbol(servicesHost, Decl(APISample_watcher.ts, 23, 9))
+>ts.createDocumentRegistry : Symbol(ts.createDocumentRegistry, Decl(typescript.d.ts, 1756, 193))
+>ts : Symbol(ts, Decl(APISample_watcher.ts, 12, 6))
+>createDocumentRegistry : Symbol(ts.createDocumentRegistry, Decl(typescript.d.ts, 1756, 193))
+
+    // Now let's watch the files
+    rootFileNames.forEach(fileName => {
+>rootFileNames.forEach : Symbol(Array.forEach, Decl(lib.d.ts, 1108, 95))
+>rootFileNames : Symbol(rootFileNames, Decl(APISample_watcher.ts, 14, 15))
+>forEach : Symbol(Array.forEach, Decl(lib.d.ts, 1108, 95))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 42, 26))
+
+        // First time around, emit all files
+        emitFile(fileName);
+>emitFile : Symbol(emitFile, Decl(APISample_watcher.ts, 61, 7))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 42, 26))
+
+        // Add a watch on the file to handle next change
+        fs.watchFile(fileName,
+>fs : Symbol(fs, Decl(APISample_watcher.ts, 9, 11))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 42, 26))
+
+            { persistent: true, interval: 250 },
+>persistent : Symbol(persistent, Decl(APISample_watcher.ts, 48, 13))
+>interval : Symbol(interval, Decl(APISample_watcher.ts, 48, 31))
+
+            (curr, prev) => {
+>curr : Symbol(curr, Decl(APISample_watcher.ts, 49, 13))
+>prev : Symbol(prev, Decl(APISample_watcher.ts, 49, 18))
+
+                // Check timestamp
+                if (+curr.mtime <= +prev.mtime) {
+>curr : Symbol(curr, Decl(APISample_watcher.ts, 49, 13))
+>prev : Symbol(prev, Decl(APISample_watcher.ts, 49, 18))
+
+                    return;
+                }
+
+                // Update the version to signal a change in the file
+                files[fileName].version++;
+>files[fileName].version : Symbol(version, Decl(APISample_watcher.ts, 15, 25))
+>files : Symbol(files, Decl(APISample_watcher.ts, 15, 9))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 42, 26))
+>version : Symbol(version, Decl(APISample_watcher.ts, 15, 25))
+
+                // write the changes to disk
+                emitFile(fileName);
+>emitFile : Symbol(emitFile, Decl(APISample_watcher.ts, 61, 7))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 42, 26))
+
+            });
+    });
+
+    function emitFile(fileName: string) {
+>emitFile : Symbol(emitFile, Decl(APISample_watcher.ts, 61, 7))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 63, 22))
+
+        let output = services.getEmitOutput(fileName);
+>output : Symbol(output, Decl(APISample_watcher.ts, 64, 11))
+>services.getEmitOutput : Symbol(ts.LanguageService.getEmitOutput, Decl(typescript.d.ts, 1362, 132))
+>services : Symbol(services, Decl(APISample_watcher.ts, 39, 9))
+>getEmitOutput : Symbol(ts.LanguageService.getEmitOutput, Decl(typescript.d.ts, 1362, 132))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 63, 22))
+
+        if (!output.emitSkipped) {
+>output.emitSkipped : Symbol(ts.EmitOutput.emitSkipped, Decl(typescript.d.ts, 1565, 34))
+>output : Symbol(output, Decl(APISample_watcher.ts, 64, 11))
+>emitSkipped : Symbol(ts.EmitOutput.emitSkipped, Decl(typescript.d.ts, 1565, 34))
+
+            console.log(`Emitting ${fileName}`);
+>console : Symbol(console, Decl(APISample_watcher.ts, 8, 11))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 63, 22))
+        }
+        else {
+            console.log(`Emitting ${fileName} failed`);
+>console : Symbol(console, Decl(APISample_watcher.ts, 8, 11))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 63, 22))
+
+            logErrors(fileName);
+>logErrors : Symbol(logErrors, Decl(APISample_watcher.ts, 77, 5))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 63, 22))
+        }
+
+        output.outputFiles.forEach(o => {
+>output.outputFiles.forEach : Symbol(Array.forEach, Decl(lib.d.ts, 1108, 95))
+>output.outputFiles : Symbol(ts.EmitOutput.outputFiles, Decl(typescript.d.ts, 1564, 26))
+>output : Symbol(output, Decl(APISample_watcher.ts, 64, 11))
+>outputFiles : Symbol(ts.EmitOutput.outputFiles, Decl(typescript.d.ts, 1564, 26))
+>forEach : Symbol(Array.forEach, Decl(lib.d.ts, 1108, 95))
+>o : Symbol(o, Decl(APISample_watcher.ts, 74, 35))
+
+            fs.writeFileSync(o.name, o.text, "utf8");
+>fs : Symbol(fs, Decl(APISample_watcher.ts, 9, 11))
+>o.name : Symbol(ts.OutputFile.name, Decl(typescript.d.ts, 1573, 26))
+>o : Symbol(o, Decl(APISample_watcher.ts, 74, 35))
+>name : Symbol(ts.OutputFile.name, Decl(typescript.d.ts, 1573, 26))
+>o.text : Symbol(ts.OutputFile.text, Decl(typescript.d.ts, 1575, 36))
+>o : Symbol(o, Decl(APISample_watcher.ts, 74, 35))
+>text : Symbol(ts.OutputFile.text, Decl(typescript.d.ts, 1575, 36))
+
+        });
+    }
+
+    function logErrors(fileName: string) {
+>logErrors : Symbol(logErrors, Decl(APISample_watcher.ts, 77, 5))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 79, 23))
+
+        let allDiagnostics = services.getCompilerOptionsDiagnostics()
+>allDiagnostics : Symbol(allDiagnostics, Decl(APISample_watcher.ts, 80, 11))
+>services.getCompilerOptionsDiagnostics()            .concat(services.getSyntacticDiagnostics(fileName))            .concat : Symbol(Array.concat, Decl(lib.d.ts, 1025, 13), Decl(lib.d.ts, 1030, 46))
+>services.getCompilerOptionsDiagnostics()            .concat : Symbol(Array.concat, Decl(lib.d.ts, 1025, 13), Decl(lib.d.ts, 1030, 46))
+>services.getCompilerOptionsDiagnostics : Symbol(ts.LanguageService.getCompilerOptionsDiagnostics, Decl(typescript.d.ts, 1336, 63))
+>services : Symbol(services, Decl(APISample_watcher.ts, 39, 9))
+>getCompilerOptionsDiagnostics : Symbol(ts.LanguageService.getCompilerOptionsDiagnostics, Decl(typescript.d.ts, 1336, 63))
+
+            .concat(services.getSyntacticDiagnostics(fileName))
+>concat : Symbol(Array.concat, Decl(lib.d.ts, 1025, 13), Decl(lib.d.ts, 1030, 46))
+>services.getSyntacticDiagnostics : Symbol(ts.LanguageService.getSyntacticDiagnostics, Decl(typescript.d.ts, 1334, 37))
+>services : Symbol(services, Decl(APISample_watcher.ts, 39, 9))
+>getSyntacticDiagnostics : Symbol(ts.LanguageService.getSyntacticDiagnostics, Decl(typescript.d.ts, 1334, 37))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 79, 23))
+
+            .concat(services.getSemanticDiagnostics(fileName));
+>concat : Symbol(Array.concat, Decl(lib.d.ts, 1025, 13), Decl(lib.d.ts, 1030, 46))
+>services.getSemanticDiagnostics : Symbol(ts.LanguageService.getSemanticDiagnostics, Decl(typescript.d.ts, 1335, 64))
+>services : Symbol(services, Decl(APISample_watcher.ts, 39, 9))
+>getSemanticDiagnostics : Symbol(ts.LanguageService.getSemanticDiagnostics, Decl(typescript.d.ts, 1335, 64))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 79, 23))
+
+        allDiagnostics.forEach(diagnostic => {
+>allDiagnostics.forEach : Symbol(Array.forEach, Decl(lib.d.ts, 1108, 95))
+>allDiagnostics : Symbol(allDiagnostics, Decl(APISample_watcher.ts, 80, 11))
+>forEach : Symbol(Array.forEach, Decl(lib.d.ts, 1108, 95))
+>diagnostic : Symbol(diagnostic, Decl(APISample_watcher.ts, 84, 31))
+
+            let message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
+>message : Symbol(message, Decl(APISample_watcher.ts, 85, 15))
+>ts.flattenDiagnosticMessageText : Symbol(ts.flattenDiagnosticMessageText, Decl(typescript.d.ts, 1224, 67))
+>ts : Symbol(ts, Decl(APISample_watcher.ts, 12, 6))
+>flattenDiagnosticMessageText : Symbol(ts.flattenDiagnosticMessageText, Decl(typescript.d.ts, 1224, 67))
+>diagnostic.messageText : Symbol(ts.Diagnostic.messageText, Decl(typescript.d.ts, 1065, 23))
+>diagnostic : Symbol(diagnostic, Decl(APISample_watcher.ts, 84, 31))
+>messageText : Symbol(ts.Diagnostic.messageText, Decl(typescript.d.ts, 1065, 23))
+
+            if (diagnostic.file) {
+>diagnostic.file : Symbol(ts.Diagnostic.file, Decl(typescript.d.ts, 1062, 26))
+>diagnostic : Symbol(diagnostic, Decl(APISample_watcher.ts, 84, 31))
+>file : Symbol(ts.Diagnostic.file, Decl(typescript.d.ts, 1062, 26))
+
+                let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+>line : Symbol(line, Decl(APISample_watcher.ts, 87, 21))
+>character : Symbol(character, Decl(APISample_watcher.ts, 87, 27))
+>diagnostic.file.getLineAndCharacterOfPosition : Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1286, 26))
+>diagnostic.file : Symbol(ts.Diagnostic.file, Decl(typescript.d.ts, 1062, 26))
+>diagnostic : Symbol(diagnostic, Decl(APISample_watcher.ts, 84, 31))
+>file : Symbol(ts.Diagnostic.file, Decl(typescript.d.ts, 1062, 26))
+>getLineAndCharacterOfPosition : Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1286, 26))
+>diagnostic.start : Symbol(ts.Diagnostic.start, Decl(typescript.d.ts, 1063, 25))
+>diagnostic : Symbol(diagnostic, Decl(APISample_watcher.ts, 84, 31))
+>start : Symbol(ts.Diagnostic.start, Decl(typescript.d.ts, 1063, 25))
+
+                console.log(`  Error ${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);
+>console : Symbol(console, Decl(APISample_watcher.ts, 8, 11))
+>diagnostic.file.fileName : Symbol(ts.SourceFile.fileName, Decl(typescript.d.ts, 743, 29))
+>diagnostic.file : Symbol(ts.Diagnostic.file, Decl(typescript.d.ts, 1062, 26))
+>diagnostic : Symbol(diagnostic, Decl(APISample_watcher.ts, 84, 31))
+>file : Symbol(ts.Diagnostic.file, Decl(typescript.d.ts, 1062, 26))
+>fileName : Symbol(ts.SourceFile.fileName, Decl(typescript.d.ts, 743, 29))
+>line : Symbol(line, Decl(APISample_watcher.ts, 87, 21))
+>character : Symbol(character, Decl(APISample_watcher.ts, 87, 27))
+>message : Symbol(message, Decl(APISample_watcher.ts, 85, 15))
+            }
+            else {
+                console.log(`  Error: ${message}`);
+>console : Symbol(console, Decl(APISample_watcher.ts, 8, 11))
+>message : Symbol(message, Decl(APISample_watcher.ts, 85, 15))
+            }
+        });
+    }
+}
+
+// Initialize files constituting the program as all .ts files in the current directory
+const currentDirectoryFiles = fs.readdirSync(process.cwd()).
+>currentDirectoryFiles : Symbol(currentDirectoryFiles, Decl(APISample_watcher.ts, 98, 5))
+>fs : Symbol(fs, Decl(APISample_watcher.ts, 9, 11))
+>process : Symbol(process, Decl(APISample_watcher.ts, 7, 11))
+
+    filter(fileName=> fileName.length >= 3 && fileName.substr(fileName.length - 3, 3) === ".ts");
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 99, 11))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 99, 11))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 99, 11))
+>fileName : Symbol(fileName, Decl(APISample_watcher.ts, 99, 11))
+
+// Start the watcher
+watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });
+>watch : Symbol(watch, Decl(APISample_watcher.ts, 12, 33))
+>currentDirectoryFiles : Symbol(currentDirectoryFiles, Decl(APISample_watcher.ts, 98, 5))
+>module : Symbol(module, Decl(APISample_watcher.ts, 102, 30))
+>ts.ModuleKind.CommonJS : Symbol(ts.ModuleKind.CommonJS, Decl(typescript.d.ts, 1108, 17))
+>ts.ModuleKind : Symbol(ts.ModuleKind, Decl(typescript.d.ts, 1106, 5))
+>ts : Symbol(ts, Decl(APISample_watcher.ts, 12, 6))
+>ModuleKind : Symbol(ts.ModuleKind, Decl(typescript.d.ts, 1106, 5))
+>CommonJS : Symbol(ts.ModuleKind.CommonJS, Decl(typescript.d.ts, 1108, 17))
+

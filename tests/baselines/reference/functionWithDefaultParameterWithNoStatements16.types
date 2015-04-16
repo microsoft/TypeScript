@@ -1,16 +1,16 @@
 === tests/cases/compiler/functionWithDefaultParameterWithNoStatements16.ts ===
 var v: any[];
->v : any[], Symbol(v, Decl(functionWithDefaultParameterWithNoStatements16.ts, 0, 3))
+>v : any[]
 
 function foo(a = bar()) { }
->foo : (a?: void) => void, Symbol(foo, Decl(functionWithDefaultParameterWithNoStatements16.ts, 0, 13))
->a : void, Symbol(a, Decl(functionWithDefaultParameterWithNoStatements16.ts, 2, 13))
+>foo : (a?: void) => void
+>a : void
 >bar() : void
->bar : (a?: void) => void, Symbol(bar, Decl(functionWithDefaultParameterWithNoStatements16.ts, 2, 27))
+>bar : (a?: void) => void
 
 function bar(a = foo()) {
->bar : (a?: void) => void, Symbol(bar, Decl(functionWithDefaultParameterWithNoStatements16.ts, 2, 27))
->a : void, Symbol(a, Decl(functionWithDefaultParameterWithNoStatements16.ts, 4, 13))
+>bar : (a?: void) => void
+>a : void
 >foo() : void
->foo : (a?: void) => void, Symbol(foo, Decl(functionWithDefaultParameterWithNoStatements16.ts, 0, 13))
+>foo : (a?: void) => void
 }

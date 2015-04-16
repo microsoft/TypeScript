@@ -1,37 +1,37 @@
 === tests/cases/compiler/contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts ===
 function f<T>() {
->f : <T>() => <U extends T>(u: U) => U, Symbol(f, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 0, 0))
->T : T, Symbol(T, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 0, 11))
+>f : <T>() => <U extends T>(u: U) => U
+>T : T
 
     function g<U extends T>(u: U): U { return null }
->g : <U extends T>(u: U) => U, Symbol(g, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 0, 17))
->U : U, Symbol(U, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 1, 15))
->T : T, Symbol(T, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 0, 11))
->u : U, Symbol(u, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 1, 28))
->U : U, Symbol(U, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 1, 15))
->U : U, Symbol(U, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 1, 15))
+>g : <U extends T>(u: U) => U
+>U : U
+>T : T
+>u : U
+>U : U
+>U : U
 >null : null
 
     return g;
->g : <U extends T>(u: U) => U, Symbol(g, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 0, 17))
+>g : <U extends T>(u: U) => U
 }
 var h: <V, W>(v: V, func: (v: V) => W) => W;
->h : <V, W>(v: V, func: (v: V) => W) => W, Symbol(h, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 4, 3))
->V : V, Symbol(V, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 4, 8))
->W : W, Symbol(W, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 4, 10))
->v : V, Symbol(v, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 4, 14))
->V : V, Symbol(V, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 4, 8))
->func : (v: V) => W, Symbol(func, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 4, 19))
->v : V, Symbol(v, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 4, 27))
->V : V, Symbol(V, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 4, 8))
->W : W, Symbol(W, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 4, 10))
->W : W, Symbol(W, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 4, 10))
+>h : <V, W>(v: V, func: (v: V) => W) => W
+>V : V
+>W : W
+>v : V
+>V : V
+>func : (v: V) => W
+>v : V
+>V : V
+>W : W
+>W : W
 
 var x = h("", f<string>()); // Call should succeed and x should be string. All type parameters should be instantiated to string
->x : string, Symbol(x, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 5, 3))
+>x : string
 >h("", f<string>()) : string
->h : <V, W>(v: V, func: (v: V) => W) => W, Symbol(h, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 4, 3))
+>h : <V, W>(v: V, func: (v: V) => W) => W
 >"" : string
 >f<string>() : <U extends string>(u: U) => U
->f : <T>() => <U extends T>(u: U) => U, Symbol(f, Decl(contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts, 0, 0))
+>f : <T>() => <U extends T>(u: U) => U
 

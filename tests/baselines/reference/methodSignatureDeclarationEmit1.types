@@ -1,17 +1,17 @@
 === tests/cases/compiler/methodSignatureDeclarationEmit1.ts ===
 class C {
->C : C, Symbol(C, Decl(methodSignatureDeclarationEmit1.ts, 0, 0))
+>C : C
 
   public foo(n: number): void;
->foo : { (n: number): void; (s: string): void; }, Symbol(foo, Decl(methodSignatureDeclarationEmit1.ts, 0, 9), Decl(methodSignatureDeclarationEmit1.ts, 1, 30), Decl(methodSignatureDeclarationEmit1.ts, 2, 30))
->n : number, Symbol(n, Decl(methodSignatureDeclarationEmit1.ts, 1, 13))
+>foo : { (n: number): void; (s: string): void; }
+>n : number
 
   public foo(s: string): void;
->foo : { (n: number): void; (s: string): void; }, Symbol(foo, Decl(methodSignatureDeclarationEmit1.ts, 0, 9), Decl(methodSignatureDeclarationEmit1.ts, 1, 30), Decl(methodSignatureDeclarationEmit1.ts, 2, 30))
->s : string, Symbol(s, Decl(methodSignatureDeclarationEmit1.ts, 2, 13))
+>foo : { (n: number): void; (s: string): void; }
+>s : string
 
   public foo(a: any): void {
->foo : { (n: number): void; (s: string): void; }, Symbol(foo, Decl(methodSignatureDeclarationEmit1.ts, 0, 9), Decl(methodSignatureDeclarationEmit1.ts, 1, 30), Decl(methodSignatureDeclarationEmit1.ts, 2, 30))
->a : any, Symbol(a, Decl(methodSignatureDeclarationEmit1.ts, 3, 13))
+>foo : { (n: number): void; (s: string): void; }
+>a : any
   }
 }

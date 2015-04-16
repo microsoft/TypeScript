@@ -1,30 +1,30 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNames25_ES6.ts ===
 class Base {
->Base : Base, Symbol(Base, Decl(computedPropertyNames25_ES6.ts, 0, 0))
+>Base : Base
 
     bar() {
->bar : () => number, Symbol(bar, Decl(computedPropertyNames25_ES6.ts, 0, 12))
+>bar : () => number
 
         return 0;
 >0 : number
     }
 }
 class C extends Base {
->C : C, Symbol(C, Decl(computedPropertyNames25_ES6.ts, 4, 1))
->Base : Base, Symbol(Base, Decl(computedPropertyNames25_ES6.ts, 0, 0))
+>C : C
+>Base : Base
 
     foo() {
->foo : () => number, Symbol(foo, Decl(computedPropertyNames25_ES6.ts, 5, 22))
+>foo : () => number
 
         var obj = {
->obj : {}, Symbol(obj, Decl(computedPropertyNames25_ES6.ts, 7, 11))
+>obj : {}
 >{            [super.bar()]() { }        } : {}
 
             [super.bar()]() { }
 >super.bar() : number
->super.bar : () => number, Symbol(Base.bar, Decl(computedPropertyNames25_ES6.ts, 0, 12))
->super : Base, Symbol(Base, Decl(computedPropertyNames25_ES6.ts, 0, 0))
->bar : () => number, Symbol(Base.bar, Decl(computedPropertyNames25_ES6.ts, 0, 12))
+>super.bar : () => number
+>super : Base
+>bar : () => number
 
         };
         return 0;

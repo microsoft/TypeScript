@@ -1,29 +1,29 @@
 === tests/cases/compiler/innerFunc.ts ===
 function salt() {
->salt : () => number, Symbol(salt, Decl(innerFunc.ts, 0, 0))
+>salt : () => number
 
   function pepper() { return 5;}
->pepper : () => number, Symbol(pepper, Decl(innerFunc.ts, 0, 17))
+>pepper : () => number
 >5 : number
 
   return pepper();  
 >pepper() : number
->pepper : () => number, Symbol(pepper, Decl(innerFunc.ts, 0, 17))
+>pepper : () => number
 }
 
 module M {
->M : typeof M, Symbol(M, Decl(innerFunc.ts, 3, 1))
+>M : typeof M
 
     export function tungsten() {
->tungsten : () => number, Symbol(tungsten, Decl(innerFunc.ts, 5, 10))
+>tungsten : () => number
 
         function oxygen() { return 6; };
->oxygen : () => number, Symbol(oxygen, Decl(innerFunc.ts, 6, 32))
+>oxygen : () => number
 >6 : number
 
         return oxygen();
 >oxygen() : number
->oxygen : () => number, Symbol(oxygen, Decl(innerFunc.ts, 6, 32))
+>oxygen : () => number
     }
 }
 

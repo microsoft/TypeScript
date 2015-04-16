@@ -1,146 +1,146 @@
 === tests/cases/compiler/inheritedOverloadedSpecializedSignatures.ts ===
 interface A {
->A : A, Symbol(A, Decl(inheritedOverloadedSpecializedSignatures.ts, 0, 0), Decl(inheritedOverloadedSpecializedSignatures.ts, 10, 19), Decl(inheritedOverloadedSpecializedSignatures.ts, 19, 1))
+>A : A
 
   (key:string):void;
->key : string, Symbol(key, Decl(inheritedOverloadedSpecializedSignatures.ts, 1, 3))
+>key : string
 }
 
 interface B extends A {
->B : B, Symbol(B, Decl(inheritedOverloadedSpecializedSignatures.ts, 2, 1), Decl(inheritedOverloadedSpecializedSignatures.ts, 15, 1), Decl(inheritedOverloadedSpecializedSignatures.ts, 23, 1))
->A : A, Symbol(A, Decl(inheritedOverloadedSpecializedSignatures.ts, 0, 0), Decl(inheritedOverloadedSpecializedSignatures.ts, 10, 19), Decl(inheritedOverloadedSpecializedSignatures.ts, 19, 1))
+>B : B
+>A : A
 
   (key:'foo'):string;
->key : 'foo', Symbol(key, Decl(inheritedOverloadedSpecializedSignatures.ts, 5, 3))
+>key : 'foo'
 }
 
 var b:B;
->b : B, Symbol(b, Decl(inheritedOverloadedSpecializedSignatures.ts, 8, 3))
->B : B, Symbol(B, Decl(inheritedOverloadedSpecializedSignatures.ts, 2, 1), Decl(inheritedOverloadedSpecializedSignatures.ts, 15, 1), Decl(inheritedOverloadedSpecializedSignatures.ts, 23, 1))
+>b : B
+>B : B
 
 // Should not error
 b('foo').charAt(0);
 >b('foo').charAt(0) : string
->b('foo').charAt : (pos: number) => string, Symbol(String.charAt, Decl(lib.d.ts, 279, 23))
+>b('foo').charAt : (pos: number) => string
 >b('foo') : string
->b : B, Symbol(b, Decl(inheritedOverloadedSpecializedSignatures.ts, 8, 3))
+>b : B
 >'foo' : string
->charAt : (pos: number) => string, Symbol(String.charAt, Decl(lib.d.ts, 279, 23))
+>charAt : (pos: number) => string
 >0 : number
 
 interface A {
->A : A, Symbol(A, Decl(inheritedOverloadedSpecializedSignatures.ts, 0, 0), Decl(inheritedOverloadedSpecializedSignatures.ts, 10, 19), Decl(inheritedOverloadedSpecializedSignatures.ts, 19, 1))
+>A : A
 
     (x: 'A1'): string;
->x : 'A1', Symbol(x, Decl(inheritedOverloadedSpecializedSignatures.ts, 13, 5))
+>x : 'A1'
 
     (x: string): void;
->x : string, Symbol(x, Decl(inheritedOverloadedSpecializedSignatures.ts, 14, 5))
+>x : string
 }
 
 interface B extends A {
->B : B, Symbol(B, Decl(inheritedOverloadedSpecializedSignatures.ts, 2, 1), Decl(inheritedOverloadedSpecializedSignatures.ts, 15, 1), Decl(inheritedOverloadedSpecializedSignatures.ts, 23, 1))
->A : A, Symbol(A, Decl(inheritedOverloadedSpecializedSignatures.ts, 0, 0), Decl(inheritedOverloadedSpecializedSignatures.ts, 10, 19), Decl(inheritedOverloadedSpecializedSignatures.ts, 19, 1))
+>B : B
+>A : A
 
     (x: 'B1'): number;
->x : 'B1', Symbol(x, Decl(inheritedOverloadedSpecializedSignatures.ts, 18, 5))
+>x : 'B1'
 }
 
 interface A {
->A : A, Symbol(A, Decl(inheritedOverloadedSpecializedSignatures.ts, 0, 0), Decl(inheritedOverloadedSpecializedSignatures.ts, 10, 19), Decl(inheritedOverloadedSpecializedSignatures.ts, 19, 1))
+>A : A
 
     (x: 'A2'): boolean;
->x : 'A2', Symbol(x, Decl(inheritedOverloadedSpecializedSignatures.ts, 22, 5))
+>x : 'A2'
 }
 
 interface B  {
->B : B, Symbol(B, Decl(inheritedOverloadedSpecializedSignatures.ts, 2, 1), Decl(inheritedOverloadedSpecializedSignatures.ts, 15, 1), Decl(inheritedOverloadedSpecializedSignatures.ts, 23, 1))
+>B : B
 
     (x: 'B2'): string[];
->x : 'B2', Symbol(x, Decl(inheritedOverloadedSpecializedSignatures.ts, 26, 5))
+>x : 'B2'
 }
 
 interface C1 extends B {
->C1 : C1, Symbol(C1, Decl(inheritedOverloadedSpecializedSignatures.ts, 27, 1))
->B : B, Symbol(B, Decl(inheritedOverloadedSpecializedSignatures.ts, 2, 1), Decl(inheritedOverloadedSpecializedSignatures.ts, 15, 1), Decl(inheritedOverloadedSpecializedSignatures.ts, 23, 1))
+>C1 : C1
+>B : B
 
 	(x: 'C1'): number[];
->x : 'C1', Symbol(x, Decl(inheritedOverloadedSpecializedSignatures.ts, 30, 2))
+>x : 'C1'
 }
 
 interface C2 extends B {
->C2 : C2, Symbol(C2, Decl(inheritedOverloadedSpecializedSignatures.ts, 31, 1))
->B : B, Symbol(B, Decl(inheritedOverloadedSpecializedSignatures.ts, 2, 1), Decl(inheritedOverloadedSpecializedSignatures.ts, 15, 1), Decl(inheritedOverloadedSpecializedSignatures.ts, 23, 1))
+>C2 : C2
+>B : B
 
 	(x: 'C2'): boolean[];
->x : 'C2', Symbol(x, Decl(inheritedOverloadedSpecializedSignatures.ts, 34, 2))
+>x : 'C2'
 }
 
 interface C extends C1, C2 {
->C : C, Symbol(C, Decl(inheritedOverloadedSpecializedSignatures.ts, 35, 1))
->C1 : C1, Symbol(C1, Decl(inheritedOverloadedSpecializedSignatures.ts, 27, 1))
->C2 : C2, Symbol(C2, Decl(inheritedOverloadedSpecializedSignatures.ts, 31, 1))
+>C : C
+>C1 : C1
+>C2 : C2
 
 	(x: 'C'): string;
->x : 'C', Symbol(x, Decl(inheritedOverloadedSpecializedSignatures.ts, 38, 2))
+>x : 'C'
 }
 
 var c: C;
->c : C, Symbol(c, Decl(inheritedOverloadedSpecializedSignatures.ts, 41, 3))
->C : C, Symbol(C, Decl(inheritedOverloadedSpecializedSignatures.ts, 35, 1))
+>c : C
+>C : C
 
 // none of these lines should error
 var x1: string[] = c('B2');
->x1 : string[], Symbol(x1, Decl(inheritedOverloadedSpecializedSignatures.ts, 43, 3))
+>x1 : string[]
 >c('B2') : string[]
->c : C, Symbol(c, Decl(inheritedOverloadedSpecializedSignatures.ts, 41, 3))
+>c : C
 >'B2' : string
 
 var x2: number = c('B1');
->x2 : number, Symbol(x2, Decl(inheritedOverloadedSpecializedSignatures.ts, 44, 3))
+>x2 : number
 >c('B1') : number
->c : C, Symbol(c, Decl(inheritedOverloadedSpecializedSignatures.ts, 41, 3))
+>c : C
 >'B1' : string
 
 var x3: boolean = c('A2');
->x3 : boolean, Symbol(x3, Decl(inheritedOverloadedSpecializedSignatures.ts, 45, 3))
+>x3 : boolean
 >c('A2') : boolean
->c : C, Symbol(c, Decl(inheritedOverloadedSpecializedSignatures.ts, 41, 3))
+>c : C
 >'A2' : string
 
 var x4: string = c('A1');
->x4 : string, Symbol(x4, Decl(inheritedOverloadedSpecializedSignatures.ts, 46, 3))
+>x4 : string
 >c('A1') : string
->c : C, Symbol(c, Decl(inheritedOverloadedSpecializedSignatures.ts, 41, 3))
+>c : C
 >'A1' : string
 
 var x5: void = c('A0');
->x5 : void, Symbol(x5, Decl(inheritedOverloadedSpecializedSignatures.ts, 47, 3))
+>x5 : void
 >c('A0') : void
->c : C, Symbol(c, Decl(inheritedOverloadedSpecializedSignatures.ts, 41, 3))
+>c : C
 >'A0' : string
 
 var x6: number[] = c('C1');
->x6 : number[], Symbol(x6, Decl(inheritedOverloadedSpecializedSignatures.ts, 48, 3))
+>x6 : number[]
 >c('C1') : number[]
->c : C, Symbol(c, Decl(inheritedOverloadedSpecializedSignatures.ts, 41, 3))
+>c : C
 >'C1' : string
 
 var x7: boolean[] = c('C2');
->x7 : boolean[], Symbol(x7, Decl(inheritedOverloadedSpecializedSignatures.ts, 49, 3))
+>x7 : boolean[]
 >c('C2') : boolean[]
->c : C, Symbol(c, Decl(inheritedOverloadedSpecializedSignatures.ts, 41, 3))
+>c : C
 >'C2' : string
 
 var x8: string = c('C');
->x8 : string, Symbol(x8, Decl(inheritedOverloadedSpecializedSignatures.ts, 50, 3))
+>x8 : string
 >c('C') : string
->c : C, Symbol(c, Decl(inheritedOverloadedSpecializedSignatures.ts, 41, 3))
+>c : C
 >'C' : string
 
 var x9: void = c('generic');
->x9 : void, Symbol(x9, Decl(inheritedOverloadedSpecializedSignatures.ts, 51, 3))
+>x9 : void
 >c('generic') : void
->c : C, Symbol(c, Decl(inheritedOverloadedSpecializedSignatures.ts, 41, 3))
+>c : C
 >'generic' : string
 

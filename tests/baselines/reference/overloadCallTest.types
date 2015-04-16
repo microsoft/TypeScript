@@ -1,36 +1,36 @@
 === tests/cases/compiler/overloadCallTest.ts ===
 class foo {
->foo : foo, Symbol(foo, Decl(overloadCallTest.ts, 0, 0))
+>foo : foo
 
     constructor() {
         function bar(): string;
->bar : { (): string; (s: string): any; }, Symbol(bar, Decl(overloadCallTest.ts, 1, 19), Decl(overloadCallTest.ts, 2, 31), Decl(overloadCallTest.ts, 3, 31))
+>bar : { (): string; (s: string): any; }
 
         function bar(s:string);
->bar : { (): string; (s: string): any; }, Symbol(bar, Decl(overloadCallTest.ts, 1, 19), Decl(overloadCallTest.ts, 2, 31), Decl(overloadCallTest.ts, 3, 31))
->s : string, Symbol(s, Decl(overloadCallTest.ts, 3, 21))
+>bar : { (): string; (s: string): any; }
+>s : string
 
         function bar(foo?: string) { return "foo" };
->bar : { (): string; (s: string): any; }, Symbol(bar, Decl(overloadCallTest.ts, 1, 19), Decl(overloadCallTest.ts, 2, 31), Decl(overloadCallTest.ts, 3, 31))
->foo : string, Symbol(foo, Decl(overloadCallTest.ts, 4, 21))
+>bar : { (): string; (s: string): any; }
+>foo : string
 >"foo" : string
 
         var test = bar("test");
->test : any, Symbol(test, Decl(overloadCallTest.ts, 6, 11))
+>test : any
 >bar("test") : any
->bar : { (): string; (s: string): any; }, Symbol(bar, Decl(overloadCallTest.ts, 1, 19), Decl(overloadCallTest.ts, 2, 31), Decl(overloadCallTest.ts, 3, 31))
+>bar : { (): string; (s: string): any; }
 >"test" : string
 
         var goo = bar();
->goo : string, Symbol(goo, Decl(overloadCallTest.ts, 7, 11))
+>goo : string
 >bar() : string
->bar : { (): string; (s: string): any; }, Symbol(bar, Decl(overloadCallTest.ts, 1, 19), Decl(overloadCallTest.ts, 2, 31), Decl(overloadCallTest.ts, 3, 31))
+>bar : { (): string; (s: string): any; }
 
         goo = bar("test");
 >goo = bar("test") : any
->goo : string, Symbol(goo, Decl(overloadCallTest.ts, 7, 11))
+>goo : string
 >bar("test") : any
->bar : { (): string; (s: string): any; }, Symbol(bar, Decl(overloadCallTest.ts, 1, 19), Decl(overloadCallTest.ts, 2, 31), Decl(overloadCallTest.ts, 3, 31))
+>bar : { (): string; (s: string): any; }
 >"test" : string
     }
  

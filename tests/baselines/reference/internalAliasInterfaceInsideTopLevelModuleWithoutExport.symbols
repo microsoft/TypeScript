@@ -1,0 +1,18 @@
+=== tests/cases/compiler/internalAliasInterfaceInsideTopLevelModuleWithoutExport.ts ===
+export module a {
+>a : Symbol(a, Decl(internalAliasInterfaceInsideTopLevelModuleWithoutExport.ts, 0, 0))
+
+    export interface I {
+>I : Symbol(I, Decl(internalAliasInterfaceInsideTopLevelModuleWithoutExport.ts, 0, 17))
+    }
+}
+
+import b = a.I;
+>b : Symbol(b, Decl(internalAliasInterfaceInsideTopLevelModuleWithoutExport.ts, 3, 1))
+>a : Symbol(a, Decl(internalAliasInterfaceInsideTopLevelModuleWithoutExport.ts, 0, 0))
+>I : Symbol(b, Decl(internalAliasInterfaceInsideTopLevelModuleWithoutExport.ts, 0, 17))
+
+export var x: b;
+>x : Symbol(x, Decl(internalAliasInterfaceInsideTopLevelModuleWithoutExport.ts, 6, 10))
+>b : Symbol(b, Decl(internalAliasInterfaceInsideTopLevelModuleWithoutExport.ts, 3, 1))
+

@@ -1,29 +1,29 @@
 === tests/cases/compiler/letDeclarations-es5-1.ts ===
     let l1;
->l1 : any, Symbol(l1, Decl(letDeclarations-es5-1.ts, 0, 7))
+>l1 : any
 
     let l2: number;
->l2 : number, Symbol(l2, Decl(letDeclarations-es5-1.ts, 1, 7))
+>l2 : number
 
     let l3, l4, l5 :string, l6;    
->l3 : any, Symbol(l3, Decl(letDeclarations-es5-1.ts, 2, 7))
->l4 : any, Symbol(l4, Decl(letDeclarations-es5-1.ts, 2, 11))
->l5 : string, Symbol(l5, Decl(letDeclarations-es5-1.ts, 2, 15))
->l6 : any, Symbol(l6, Decl(letDeclarations-es5-1.ts, 2, 27))
+>l3 : any
+>l4 : any
+>l5 : string
+>l6 : any
 
     let l7 = false;
->l7 : boolean, Symbol(l7, Decl(letDeclarations-es5-1.ts, 3, 7))
+>l7 : boolean
 >false : boolean
 
     let l8: number = 23;
->l8 : number, Symbol(l8, Decl(letDeclarations-es5-1.ts, 4, 7))
+>l8 : number
 >23 : number
 
     let l9 = 0, l10 :string = "", l11 = null;
->l9 : number, Symbol(l9, Decl(letDeclarations-es5-1.ts, 5, 7))
+>l9 : number
 >0 : number
->l10 : string, Symbol(l10, Decl(letDeclarations-es5-1.ts, 5, 15))
+>l10 : string
 >"" : string
->l11 : any, Symbol(l11, Decl(letDeclarations-es5-1.ts, 5, 33))
+>l11 : any
 >null : null
 

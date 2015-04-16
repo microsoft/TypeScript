@@ -1,12 +1,12 @@
 === tests/cases/compiler/declFileClassWithStaticMethodReturningConstructor.ts ===
 
 export class Enhancement {
->Enhancement : Enhancement, Symbol(Enhancement, Decl(declFileClassWithStaticMethodReturningConstructor.ts, 0, 0))
+>Enhancement : Enhancement
 
     public static getType() {
->getType : () => typeof Enhancement, Symbol(Enhancement.getType, Decl(declFileClassWithStaticMethodReturningConstructor.ts, 1, 26))
+>getType : () => typeof Enhancement
 
         return this;
->this : typeof Enhancement, Symbol(Enhancement, Decl(declFileClassWithStaticMethodReturningConstructor.ts, 0, 0))
+>this : typeof Enhancement
     }
 }

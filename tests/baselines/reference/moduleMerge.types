@@ -2,13 +2,13 @@
 // This should not compile both B classes are in the same module this should be a collission
 
 module A
->A : typeof A, Symbol(A, Decl(moduleMerge.ts, 0, 0), Decl(moduleMerge.ts, 11, 1))
+>A : typeof A
 {
     class B
->B : B, Symbol(B, Decl(moduleMerge.ts, 3, 1))
+>B : B
     {
         public Hello(): string
->Hello : () => string, Symbol(Hello, Decl(moduleMerge.ts, 5, 5))
+>Hello : () => string
         {
             return "from private B";
 >"from private B" : string
@@ -17,13 +17,13 @@ module A
 }
 
 module A
->A : typeof A, Symbol(A, Decl(moduleMerge.ts, 0, 0), Decl(moduleMerge.ts, 11, 1))
+>A : typeof A
 {
     export class B
->B : B, Symbol(B, Decl(moduleMerge.ts, 14, 1))
+>B : B
     {
         public Hello(): string
->Hello : () => string, Symbol(Hello, Decl(moduleMerge.ts, 16, 5))
+>Hello : () => string
         {
             return "from export B";
 >"from export B" : string

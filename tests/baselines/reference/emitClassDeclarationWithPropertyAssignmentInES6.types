@@ -1,62 +1,62 @@
 === tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithPropertyAssignmentInES6.ts ===
 class C {
->C : C, Symbol(C, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 0, 0))
+>C : C
 
     x: string = "Hello world";
->x : string, Symbol(x, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 0, 9))
+>x : string
 >"Hello world" : string
 }
 
 class D {
->D : D, Symbol(D, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 2, 1))
+>D : D
 
     x: string = "Hello world";
->x : string, Symbol(x, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 4, 9))
+>x : string
 >"Hello world" : string
 
     y: number;
->y : number, Symbol(y, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 5, 30))
+>y : number
 
     constructor() {
         this.y = 10;
 >this.y = 10 : number
->this.y : number, Symbol(y, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 5, 30))
->this : D, Symbol(D, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 2, 1))
->y : number, Symbol(y, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 5, 30))
+>this.y : number
+>this : D
+>y : number
 >10 : number
     }
 }
 
 class E extends D{
->E : E, Symbol(E, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 10, 1))
->D : D, Symbol(D, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 2, 1))
+>E : E
+>D : D
 
     z: boolean = true;
->z : boolean, Symbol(z, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 12, 18))
+>z : boolean
 >true : boolean
 }
 
 class F extends D{
->F : F, Symbol(F, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 14, 1))
->D : D, Symbol(D, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 2, 1))
+>F : F
+>D : D
 
     z: boolean = true;
->z : boolean, Symbol(z, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 16, 18))
+>z : boolean
 >true : boolean
 
     j: string;
->j : string, Symbol(j, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 17, 22))
+>j : string
 
     constructor() {
         super();
 >super() : void
->super : typeof D, Symbol(D, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 2, 1))
+>super : typeof D
 
         this.j = "HI";
 >this.j = "HI" : string
->this.j : string, Symbol(j, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 17, 22))
->this : F, Symbol(F, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 14, 1))
->j : string, Symbol(j, Decl(emitClassDeclarationWithPropertyAssignmentInES6.ts, 17, 22))
+>this.j : string
+>this : F
+>j : string
 >"HI" : string
     }
 }

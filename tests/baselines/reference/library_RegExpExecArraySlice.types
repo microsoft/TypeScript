@@ -1,27 +1,27 @@
 === tests/cases/compiler/library_RegExpExecArraySlice.ts ===
 // RegExpExecArray.slice can have zero, one, or two arguments
 var regExpExecArrayValue: RegExpExecArray;
->regExpExecArrayValue : RegExpExecArray, Symbol(regExpExecArrayValue, Decl(library_RegExpExecArraySlice.ts, 1, 3))
->RegExpExecArray : RegExpExecArray, Symbol(RegExpExecArray, Decl(lib.d.ts, 820, 1))
+>regExpExecArrayValue : RegExpExecArray
+>RegExpExecArray : RegExpExecArray
 
 regExpExecArrayValue.slice();
 >regExpExecArrayValue.slice() : string[]
->regExpExecArrayValue.slice : (start?: number, end?: number) => string[], Symbol(Array.slice, Decl(lib.d.ts, 1048, 15))
->regExpExecArrayValue : RegExpExecArray, Symbol(regExpExecArrayValue, Decl(library_RegExpExecArraySlice.ts, 1, 3))
->slice : (start?: number, end?: number) => string[], Symbol(Array.slice, Decl(lib.d.ts, 1048, 15))
+>regExpExecArrayValue.slice : (start?: number, end?: number) => string[]
+>regExpExecArrayValue : RegExpExecArray
+>slice : (start?: number, end?: number) => string[]
 
 regExpExecArrayValue.slice(0);
 >regExpExecArrayValue.slice(0) : string[]
->regExpExecArrayValue.slice : (start?: number, end?: number) => string[], Symbol(Array.slice, Decl(lib.d.ts, 1048, 15))
->regExpExecArrayValue : RegExpExecArray, Symbol(regExpExecArrayValue, Decl(library_RegExpExecArraySlice.ts, 1, 3))
->slice : (start?: number, end?: number) => string[], Symbol(Array.slice, Decl(lib.d.ts, 1048, 15))
+>regExpExecArrayValue.slice : (start?: number, end?: number) => string[]
+>regExpExecArrayValue : RegExpExecArray
+>slice : (start?: number, end?: number) => string[]
 >0 : number
 
 regExpExecArrayValue.slice(0,1);
 >regExpExecArrayValue.slice(0,1) : string[]
->regExpExecArrayValue.slice : (start?: number, end?: number) => string[], Symbol(Array.slice, Decl(lib.d.ts, 1048, 15))
->regExpExecArrayValue : RegExpExecArray, Symbol(regExpExecArrayValue, Decl(library_RegExpExecArraySlice.ts, 1, 3))
->slice : (start?: number, end?: number) => string[], Symbol(Array.slice, Decl(lib.d.ts, 1048, 15))
+>regExpExecArrayValue.slice : (start?: number, end?: number) => string[]
+>regExpExecArrayValue : RegExpExecArray
+>slice : (start?: number, end?: number) => string[]
 >0 : number
 >1 : number
 

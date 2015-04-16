@@ -3,44 +3,44 @@
 // no errors expected below
 
 interface I {
->I : I, Symbol(I, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 0, 0))
+>I : I
 
     (): void;
 }
 
 var i: I;
->i : I, Symbol(i, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 7, 3))
->I : I, Symbol(I, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 0, 0))
+>i : I
+>I : I
 
 var r2: void = i();
->r2 : void, Symbol(r2, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 8, 3))
+>r2 : void
 >i() : void
->i : I, Symbol(i, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 7, 3))
+>i : I
 
 var r2b: (x: any, y?: any) => any = i.apply;
->r2b : (x: any, y?: any) => any, Symbol(r2b, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 9, 3))
->x : any, Symbol(x, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 9, 10))
->y : any, Symbol(y, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 9, 17))
->i.apply : (thisArg: any, argArray?: any) => any, Symbol(Function.apply, Decl(lib.d.ts, 228, 20))
->i : I, Symbol(i, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 7, 3))
->apply : (thisArg: any, argArray?: any) => any, Symbol(Function.apply, Decl(lib.d.ts, 228, 20))
+>r2b : (x: any, y?: any) => any
+>x : any
+>y : any
+>i.apply : (thisArg: any, argArray?: any) => any
+>i : I
+>apply : (thisArg: any, argArray?: any) => any
 
 var b: {
->b : () => void, Symbol(b, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 11, 3))
+>b : () => void
 
     (): void;
 }
 
 var r4: void = b();
->r4 : void, Symbol(r4, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 15, 3))
+>r4 : void
 >b() : void
->b : () => void, Symbol(b, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 11, 3))
+>b : () => void
 
 var rb4: (x: any, y?: any) => any = b.apply;
->rb4 : (x: any, y?: any) => any, Symbol(rb4, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 16, 3))
->x : any, Symbol(x, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 16, 10))
->y : any, Symbol(y, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 16, 17))
->b.apply : (thisArg: any, argArray?: any) => any, Symbol(Function.apply, Decl(lib.d.ts, 228, 20))
->b : () => void, Symbol(b, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 11, 3))
->apply : (thisArg: any, argArray?: any) => any, Symbol(Function.apply, Decl(lib.d.ts, 228, 20))
+>rb4 : (x: any, y?: any) => any
+>x : any
+>y : any
+>b.apply : (thisArg: any, argArray?: any) => any
+>b : () => void
+>apply : (thisArg: any, argArray?: any) => any
 

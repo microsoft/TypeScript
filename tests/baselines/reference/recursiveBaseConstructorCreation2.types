@@ -1,25 +1,25 @@
 === tests/cases/compiler/recursiveBaseConstructorCreation2.ts ===
 declare class base
->base : base, Symbol(base, Decl(recursiveBaseConstructorCreation2.ts, 0, 0))
+>base : base
 {
 }
 declare class abc extends base
->abc : abc, Symbol(abc, Decl(recursiveBaseConstructorCreation2.ts, 2, 1))
->base : base, Symbol(base, Decl(recursiveBaseConstructorCreation2.ts, 0, 0))
+>abc : abc
+>base : base
 {
    foo: xyz;
->foo : xyz, Symbol(foo, Decl(recursiveBaseConstructorCreation2.ts, 4, 1))
->xyz : xyz, Symbol(xyz, Decl(recursiveBaseConstructorCreation2.ts, 6, 1))
+>foo : xyz
+>xyz : xyz
 }
 declare class xyz extends abc
->xyz : xyz, Symbol(xyz, Decl(recursiveBaseConstructorCreation2.ts, 6, 1))
->abc : abc, Symbol(abc, Decl(recursiveBaseConstructorCreation2.ts, 2, 1))
+>xyz : xyz
+>abc : abc
 {
 }
  
 var bar = new xyz(); // Error: Invalid 'new' expression.
->bar : xyz, Symbol(bar, Decl(recursiveBaseConstructorCreation2.ts, 11, 3))
+>bar : xyz
 >new xyz() : xyz
->xyz : typeof xyz, Symbol(xyz, Decl(recursiveBaseConstructorCreation2.ts, 6, 1))
+>xyz : typeof xyz
  
 

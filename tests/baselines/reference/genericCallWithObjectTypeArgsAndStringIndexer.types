@@ -2,95 +2,95 @@
 // Type inference infers from indexers in target type, no errors expected
 
 function foo<T>(x: T) {
->foo : <T>(x: T) => T, Symbol(foo, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 0, 0))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 2, 13))
->x : T, Symbol(x, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 2, 16))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 2, 13))
+>foo : <T>(x: T) => T
+>T : T
+>x : T
+>T : T
 
     return x;
->x : T, Symbol(x, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 2, 16))
+>x : T
 }
 
 var a: { [x: string]: Date };
->a : { [x: string]: Date; }, Symbol(a, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 6, 3))
->x : string, Symbol(x, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 6, 10))
->Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>a : { [x: string]: Date; }
+>x : string
+>Date : Date
 
 var r = foo(a);
->r : { [x: string]: Date; }, Symbol(r, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 7, 3))
+>r : { [x: string]: Date; }
 >foo(a) : { [x: string]: Date; }
->foo : <T>(x: T) => T, Symbol(foo, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 0, 0))
->a : { [x: string]: Date; }, Symbol(a, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 6, 3))
+>foo : <T>(x: T) => T
+>a : { [x: string]: Date; }
 
 function other<T>(arg: T) {
->other : <T>(arg: T) => void, Symbol(other, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 7, 15))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 9, 15))
->arg : T, Symbol(arg, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 9, 18))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 9, 15))
+>other : <T>(arg: T) => void
+>T : T
+>arg : T
+>T : T
 
     var b: { [x: string]: T };
->b : { [x: string]: T; }, Symbol(b, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 10, 7))
->x : string, Symbol(x, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 10, 14))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 9, 15))
+>b : { [x: string]: T; }
+>x : string
+>T : T
 
     var r2 = foo(b); // T
->r2 : { [x: string]: T; }, Symbol(r2, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 11, 7))
+>r2 : { [x: string]: T; }
 >foo(b) : { [x: string]: T; }
->foo : <T>(x: T) => T, Symbol(foo, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 0, 0))
->b : { [x: string]: T; }, Symbol(b, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 10, 7))
+>foo : <T>(x: T) => T
+>b : { [x: string]: T; }
 }
 
 function other2<T extends Date>(arg: T) {
->other2 : <T extends Date>(arg: T) => void, Symbol(other2, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 12, 1))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 14, 16))
->Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
->arg : T, Symbol(arg, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 14, 32))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 14, 16))
+>other2 : <T extends Date>(arg: T) => void
+>T : T
+>Date : Date
+>arg : T
+>T : T
 
     var b: { [x: string]: T };
->b : { [x: string]: T; }, Symbol(b, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 15, 7))
->x : string, Symbol(x, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 15, 14))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 14, 16))
+>b : { [x: string]: T; }
+>x : string
+>T : T
 
     var r2 = foo(b);
->r2 : { [x: string]: T; }, Symbol(r2, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 16, 7))
+>r2 : { [x: string]: T; }
 >foo(b) : { [x: string]: T; }
->foo : <T>(x: T) => T, Symbol(foo, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 0, 0))
->b : { [x: string]: T; }, Symbol(b, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 15, 7))
+>foo : <T>(x: T) => T
+>b : { [x: string]: T; }
 
     var d: Date = r2['hm']; // ok
->d : Date, Symbol(d, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 17, 7))
->Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>d : Date
+>Date : Date
 >r2['hm'] : T
->r2 : { [x: string]: T; }, Symbol(r2, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 16, 7))
+>r2 : { [x: string]: T; }
 >'hm' : string
 }
 
 function other3<T extends Date, U extends Date>(arg: T) {
->other3 : <T extends Date, U extends Date>(arg: T) => void, Symbol(other3, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 18, 1))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 20, 16))
->Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
->U : U, Symbol(U, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 20, 31))
->Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
->arg : T, Symbol(arg, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 20, 48))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 20, 16))
+>other3 : <T extends Date, U extends Date>(arg: T) => void
+>T : T
+>Date : Date
+>U : U
+>Date : Date
+>arg : T
+>T : T
 
     var b: { [x: string]: T };
->b : { [x: string]: T; }, Symbol(b, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 21, 7))
->x : string, Symbol(x, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 21, 14))
->T : T, Symbol(T, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 20, 16))
+>b : { [x: string]: T; }
+>x : string
+>T : T
 
     var r2 = foo(b);
->r2 : { [x: string]: T; }, Symbol(r2, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 22, 7))
+>r2 : { [x: string]: T; }
 >foo(b) : { [x: string]: T; }
->foo : <T>(x: T) => T, Symbol(foo, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 0, 0))
->b : { [x: string]: T; }, Symbol(b, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 21, 7))
+>foo : <T>(x: T) => T
+>b : { [x: string]: T; }
 
     var d: Date = r2['hm']; // ok
->d : Date, Symbol(d, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 23, 7))
->Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>d : Date
+>Date : Date
 >r2['hm'] : T
->r2 : { [x: string]: T; }, Symbol(r2, Decl(genericCallWithObjectTypeArgsAndStringIndexer.ts, 22, 7))
+>r2 : { [x: string]: T; }
 >'hm' : string
 
     // BUG 821629

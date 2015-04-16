@@ -2,51 +2,51 @@
 // All legal
 
 function fn4<T extends string>(n: T) { }
->fn4 : <T extends string>(n: T) => void, Symbol(fn4, Decl(typeArgInferenceWithNull.ts, 0, 0))
->T : T, Symbol(T, Decl(typeArgInferenceWithNull.ts, 2, 13))
->n : T, Symbol(n, Decl(typeArgInferenceWithNull.ts, 2, 31))
->T : T, Symbol(T, Decl(typeArgInferenceWithNull.ts, 2, 13))
+>fn4 : <T extends string>(n: T) => void
+>T : T
+>n : T
+>T : T
 
 fn4(null);
 >fn4(null) : void
->fn4 : <T extends string>(n: T) => void, Symbol(fn4, Decl(typeArgInferenceWithNull.ts, 0, 0))
+>fn4 : <T extends string>(n: T) => void
 >null : null
 
 function fn5<T extends { x: string }>(n: T) { }
->fn5 : <T extends { x: string; }>(n: T) => void, Symbol(fn5, Decl(typeArgInferenceWithNull.ts, 3, 10))
->T : T, Symbol(T, Decl(typeArgInferenceWithNull.ts, 5, 13))
->x : string, Symbol(x, Decl(typeArgInferenceWithNull.ts, 5, 24))
->n : T, Symbol(n, Decl(typeArgInferenceWithNull.ts, 5, 38))
->T : T, Symbol(T, Decl(typeArgInferenceWithNull.ts, 5, 13))
+>fn5 : <T extends { x: string; }>(n: T) => void
+>T : T
+>x : string
+>n : T
+>T : T
 
 fn5({ x: null });
 >fn5({ x: null }) : void
->fn5 : <T extends { x: string; }>(n: T) => void, Symbol(fn5, Decl(typeArgInferenceWithNull.ts, 3, 10))
+>fn5 : <T extends { x: string; }>(n: T) => void
 >{ x: null } : { x: null; }
->x : null, Symbol(x, Decl(typeArgInferenceWithNull.ts, 6, 5))
+>x : null
 >null : null
 
 function fn6<T extends { x: string }>(n: T, fun: (x: T) => void, n2: T) { }
->fn6 : <T extends { x: string; }>(n: T, fun: (x: T) => void, n2: T) => void, Symbol(fn6, Decl(typeArgInferenceWithNull.ts, 6, 17))
->T : T, Symbol(T, Decl(typeArgInferenceWithNull.ts, 8, 13))
->x : string, Symbol(x, Decl(typeArgInferenceWithNull.ts, 8, 24))
->n : T, Symbol(n, Decl(typeArgInferenceWithNull.ts, 8, 38))
->T : T, Symbol(T, Decl(typeArgInferenceWithNull.ts, 8, 13))
->fun : (x: T) => void, Symbol(fun, Decl(typeArgInferenceWithNull.ts, 8, 43))
->x : T, Symbol(x, Decl(typeArgInferenceWithNull.ts, 8, 50))
->T : T, Symbol(T, Decl(typeArgInferenceWithNull.ts, 8, 13))
->n2 : T, Symbol(n2, Decl(typeArgInferenceWithNull.ts, 8, 64))
->T : T, Symbol(T, Decl(typeArgInferenceWithNull.ts, 8, 13))
+>fn6 : <T extends { x: string; }>(n: T, fun: (x: T) => void, n2: T) => void
+>T : T
+>x : string
+>n : T
+>T : T
+>fun : (x: T) => void
+>x : T
+>T : T
+>n2 : T
+>T : T
 
 fn6({ x: null }, y => { }, { x: "" }); // y has type { x: any }, but ideally would have type { x: string }
 >fn6({ x: null }, y => { }, { x: "" }) : void
->fn6 : <T extends { x: string; }>(n: T, fun: (x: T) => void, n2: T) => void, Symbol(fn6, Decl(typeArgInferenceWithNull.ts, 6, 17))
+>fn6 : <T extends { x: string; }>(n: T, fun: (x: T) => void, n2: T) => void
 >{ x: null } : { x: null; }
->x : null, Symbol(x, Decl(typeArgInferenceWithNull.ts, 9, 5))
+>x : null
 >null : null
 >y => { } : (y: { x: string; }) => void
->y : { x: string; }, Symbol(y, Decl(typeArgInferenceWithNull.ts, 9, 16))
+>y : { x: string; }
 >{ x: "" } : { x: string; }
->x : string, Symbol(x, Decl(typeArgInferenceWithNull.ts, 9, 28))
+>x : string
 >"" : string
 

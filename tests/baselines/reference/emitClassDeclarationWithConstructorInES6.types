@@ -1,60 +1,60 @@
 === tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithConstructorInES6.ts ===
 class A {
->A : A, Symbol(A, Decl(emitClassDeclarationWithConstructorInES6.ts, 0, 0))
+>A : A
 
     y: number;
->y : number, Symbol(y, Decl(emitClassDeclarationWithConstructorInES6.ts, 0, 9))
+>y : number
 
     constructor(x: number) {
->x : number, Symbol(x, Decl(emitClassDeclarationWithConstructorInES6.ts, 2, 16))
+>x : number
     }
     foo(a: any);
->foo : (a: any) => any, Symbol(foo, Decl(emitClassDeclarationWithConstructorInES6.ts, 3, 5), Decl(emitClassDeclarationWithConstructorInES6.ts, 4, 16))
->a : any, Symbol(a, Decl(emitClassDeclarationWithConstructorInES6.ts, 4, 8))
+>foo : (a: any) => any
+>a : any
 
     foo() { }
->foo : (a: any) => any, Symbol(foo, Decl(emitClassDeclarationWithConstructorInES6.ts, 3, 5), Decl(emitClassDeclarationWithConstructorInES6.ts, 4, 16))
+>foo : (a: any) => any
 }
 
 class B {
->B : B, Symbol(B, Decl(emitClassDeclarationWithConstructorInES6.ts, 6, 1))
+>B : B
 
     y: number;
->y : number, Symbol(y, Decl(emitClassDeclarationWithConstructorInES6.ts, 8, 9))
+>y : number
 
     x: string = "hello";
->x : string, Symbol(x, Decl(emitClassDeclarationWithConstructorInES6.ts, 9, 14))
+>x : string
 >"hello" : string
 
     _bar: string;
->_bar : string, Symbol(_bar, Decl(emitClassDeclarationWithConstructorInES6.ts, 10, 24))
+>_bar : string
 
     constructor(x: number, z = "hello", ...args) {
->x : number, Symbol(x, Decl(emitClassDeclarationWithConstructorInES6.ts, 13, 16))
->z : string, Symbol(z, Decl(emitClassDeclarationWithConstructorInES6.ts, 13, 26))
+>x : number
+>z : string
 >"hello" : string
->args : any[], Symbol(args, Decl(emitClassDeclarationWithConstructorInES6.ts, 13, 39))
+>args : any[]
 
         this.y = 10;
 >this.y = 10 : number
->this.y : number, Symbol(y, Decl(emitClassDeclarationWithConstructorInES6.ts, 8, 9))
->this : B, Symbol(B, Decl(emitClassDeclarationWithConstructorInES6.ts, 6, 1))
->y : number, Symbol(y, Decl(emitClassDeclarationWithConstructorInES6.ts, 8, 9))
+>this.y : number
+>this : B
+>y : number
 >10 : number
     }
     baz(...args): string;
->baz : (...args: any[]) => string, Symbol(baz, Decl(emitClassDeclarationWithConstructorInES6.ts, 15, 5), Decl(emitClassDeclarationWithConstructorInES6.ts, 16, 25))
->args : any[], Symbol(args, Decl(emitClassDeclarationWithConstructorInES6.ts, 16, 8))
+>baz : (...args: any[]) => string
+>args : any[]
 
     baz(z: string, v: number): string {
->baz : (...args: any[]) => string, Symbol(baz, Decl(emitClassDeclarationWithConstructorInES6.ts, 15, 5), Decl(emitClassDeclarationWithConstructorInES6.ts, 16, 25))
->z : string, Symbol(z, Decl(emitClassDeclarationWithConstructorInES6.ts, 17, 8))
->v : number, Symbol(v, Decl(emitClassDeclarationWithConstructorInES6.ts, 17, 18))
+>baz : (...args: any[]) => string
+>z : string
+>v : number
 
         return this._bar;
->this._bar : string, Symbol(_bar, Decl(emitClassDeclarationWithConstructorInES6.ts, 10, 24))
->this : B, Symbol(B, Decl(emitClassDeclarationWithConstructorInES6.ts, 6, 1))
->_bar : string, Symbol(_bar, Decl(emitClassDeclarationWithConstructorInES6.ts, 10, 24))
+>this._bar : string
+>this : B
+>_bar : string
     } 
 }
 

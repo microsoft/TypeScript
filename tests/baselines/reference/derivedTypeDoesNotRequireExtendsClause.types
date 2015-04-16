@@ -1,55 +1,55 @@
 === tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/derivedTypeDoesNotRequireExtendsClause.ts ===
 class Base {
->Base : Base, Symbol(Base, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 0, 0))
+>Base : Base
 
     foo: string;
->foo : string, Symbol(foo, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 0, 12))
+>foo : string
 }
 
 class Derived {
->Derived : Derived, Symbol(Derived, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 2, 1))
+>Derived : Derived
 
     foo: string;
->foo : string, Symbol(foo, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 4, 15))
+>foo : string
 
     bar: number;
->bar : number, Symbol(bar, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 5, 16))
+>bar : number
 }
 
 class Derived2 extends Base {
->Derived2 : Derived2, Symbol(Derived2, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 7, 1))
->Base : Base, Symbol(Base, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 0, 0))
+>Derived2 : Derived2
+>Base : Base
 
     bar: string;
->bar : string, Symbol(bar, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 9, 29))
+>bar : string
 }
 
 var b: Base;
->b : Base, Symbol(b, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 13, 3))
->Base : Base, Symbol(Base, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 0, 0))
+>b : Base
+>Base : Base
 
 var d1: Derived;
->d1 : Derived, Symbol(d1, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 14, 3))
->Derived : Derived, Symbol(Derived, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 2, 1))
+>d1 : Derived
+>Derived : Derived
 
 var d2: Derived2;
->d2 : Derived2, Symbol(d2, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 15, 3))
->Derived2 : Derived2, Symbol(Derived2, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 7, 1))
+>d2 : Derived2
+>Derived2 : Derived2
 
 b = d1;
 >b = d1 : Derived
->b : Base, Symbol(b, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 13, 3))
->d1 : Derived, Symbol(d1, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 14, 3))
+>b : Base
+>d1 : Derived
 
 b = d2;
 >b = d2 : Derived2
->b : Base, Symbol(b, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 13, 3))
->d2 : Derived2, Symbol(d2, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 15, 3))
+>b : Base
+>d2 : Derived2
 
 var r: Base[] = [d1, d2];
->r : Base[], Symbol(r, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 19, 3))
->Base : Base, Symbol(Base, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 0, 0))
+>r : Base[]
+>Base : Base
 >[d1, d2] : (Derived | Derived2)[]
->d1 : Derived, Symbol(d1, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 14, 3))
->d2 : Derived2, Symbol(d2, Decl(derivedTypeDoesNotRequireExtendsClause.ts, 15, 3))
+>d1 : Derived
+>d2 : Derived2
 

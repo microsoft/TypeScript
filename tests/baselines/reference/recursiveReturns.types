@@ -1,26 +1,26 @@
 === tests/cases/compiler/recursiveReturns.ts ===
 function R1() {
->R1 : () => void, Symbol(R1, Decl(recursiveReturns.ts, 0, 0))
+>R1 : () => void
 
 	R1();
 >R1() : void
->R1 : () => void, Symbol(R1, Decl(recursiveReturns.ts, 0, 0))
+>R1 : () => void
 
 	return;
 }
 
 function R2() { R2(); }
->R2 : () => void, Symbol(R2, Decl(recursiveReturns.ts, 3, 1))
+>R2 : () => void
 >R2() : void
->R2 : () => void, Symbol(R2, Decl(recursiveReturns.ts, 3, 1))
+>R2 : () => void
 
 function R3(n:number) {
->R3 : (n: number) => void, Symbol(R3, Decl(recursiveReturns.ts, 5, 23))
->n : number, Symbol(n, Decl(recursiveReturns.ts, 7, 12))
+>R3 : (n: number) => void
+>n : number
 
 	if (n == 0) {
 >n == 0 : boolean
->n : number, Symbol(n, Decl(recursiveReturns.ts, 7, 12))
+>n : number
 >0 : number
 
 		//return;
@@ -28,8 +28,8 @@ function R3(n:number) {
 	else {
 		R3(n--);
 >R3(n--) : void
->R3 : (n: number) => void, Symbol(R3, Decl(recursiveReturns.ts, 5, 23))
+>R3 : (n: number) => void
 >n-- : number
->n : number, Symbol(n, Decl(recursiveReturns.ts, 7, 12))
+>n : number
 	}
 }

@@ -1,26 +1,26 @@
 === tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithConstructSignaturesThatHidesBaseSignature2.ts ===
 interface Foo {
->Foo : Foo, Symbol(Foo, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature2.ts, 0, 0))
+>Foo : Foo
 
     new (): { a: number; b: number };
->a : number, Symbol(a, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature2.ts, 1, 13))
->b : number, Symbol(b, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature2.ts, 1, 24))
+>a : number
+>b : number
 }
 
 interface Derived extends Foo {
->Derived : Derived, Symbol(Derived, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature2.ts, 2, 1))
->Foo : Foo, Symbol(Foo, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature2.ts, 0, 0))
+>Derived : Derived
+>Foo : Foo
 
     new (): { a: number }; // constructors not checked for conformance like a call signature is
->a : number, Symbol(a, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature2.ts, 5, 13))
+>a : number
 }
 
 var d: Derived;
->d : Derived, Symbol(d, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature2.ts, 8, 3))
->Derived : Derived, Symbol(Derived, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature2.ts, 2, 1))
+>d : Derived
+>Derived : Derived
 
 var r = new d();
->r : { a: number; }, Symbol(r, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature2.ts, 9, 3))
+>r : { a: number; }
 >new d() : { a: number; }
->d : Derived, Symbol(d, Decl(interfaceWithConstructSignaturesThatHidesBaseSignature2.ts, 8, 3))
+>d : Derived
 

@@ -1,15 +1,15 @@
 === tests/cases/compiler/commentOnAmbientVariable2_2.ts ===
 /// <reference path='commentOnAmbientVariable2_1.ts'/>
 declare var x: number;
->x : number, Symbol(x, Decl(commentOnAmbientVariable2_2.ts, 1, 11))
+>x : number
 
 x = 2;
 >x = 2 : number
->x : number, Symbol(x, Decl(commentOnAmbientVariable2_2.ts, 1, 11))
+>x : number
 >2 : number
 
 === tests/cases/compiler/commentOnAmbientVariable2_1.ts ===
 var y = 1;
->y : number, Symbol(y, Decl(commentOnAmbientVariable2_1.ts, 0, 3))
+>y : number
 >1 : number
 

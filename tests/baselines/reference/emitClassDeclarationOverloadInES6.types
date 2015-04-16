@@ -1,23 +1,23 @@
 === tests/cases/conformance/es6/classDeclaration/emitClassDeclarationOverloadInES6.ts ===
 class C {
->C : C, Symbol(C, Decl(emitClassDeclarationOverloadInES6.ts, 0, 0))
+>C : C
 
     constructor(y: any)
->y : any, Symbol(y, Decl(emitClassDeclarationOverloadInES6.ts, 1, 16))
+>y : any
 
     constructor(x: number) {
->x : number, Symbol(x, Decl(emitClassDeclarationOverloadInES6.ts, 2, 16))
+>x : number
     }
 }
 
 class D {
->D : D, Symbol(D, Decl(emitClassDeclarationOverloadInES6.ts, 4, 1))
+>D : D
 
     constructor(y: any)
->y : any, Symbol(y, Decl(emitClassDeclarationOverloadInES6.ts, 7, 16))
+>y : any
 
     constructor(x: number, z="hello") {}
->x : number, Symbol(x, Decl(emitClassDeclarationOverloadInES6.ts, 8, 16))
->z : string, Symbol(z, Decl(emitClassDeclarationOverloadInES6.ts, 8, 26))
+>x : number
+>z : string
 >"hello" : string
 }

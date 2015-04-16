@@ -1,8 +1,8 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of53.ts ===
 for (let v of []) {
->v : any, Symbol(v, Decl(for-of53.ts, 0, 8))
+>v : any
 >[] : undefined[]
 
     var v;
->v : any, Symbol(v, Decl(for-of53.ts, 1, 7))
+>v : any
 }

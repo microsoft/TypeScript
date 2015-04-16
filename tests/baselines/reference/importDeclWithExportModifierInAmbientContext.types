@@ -1,19 +1,19 @@
 === tests/cases/compiler/importDeclWithExportModifierInAmbientContext.ts ===
 declare module "m" {
     module x {
->x : any, Symbol(x, Decl(importDeclWithExportModifierInAmbientContext.ts, 0, 20))
+>x : any
 
         interface c {
->c : c, Symbol(c, Decl(importDeclWithExportModifierInAmbientContext.ts, 1, 14))
+>c : c
         }
     }
     export import a = x.c;
->a : any, Symbol(a, Decl(importDeclWithExportModifierInAmbientContext.ts, 4, 5))
->x : any, Symbol(x, Decl(importDeclWithExportModifierInAmbientContext.ts, 0, 20))
->c : a, Symbol(a, Decl(importDeclWithExportModifierInAmbientContext.ts, 1, 14))
+>a : any
+>x : any
+>c : a
 
     var b: a;
->b : a, Symbol(b, Decl(importDeclWithExportModifierInAmbientContext.ts, 6, 7))
->a : a, Symbol(a, Decl(importDeclWithExportModifierInAmbientContext.ts, 4, 5))
+>b : a
+>a : a
 }
 

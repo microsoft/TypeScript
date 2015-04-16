@@ -1,35 +1,35 @@
 === tests/cases/conformance/classes/classDeclarations/classBody/classWithEmptyBody.ts ===
 class C {
->C : C, Symbol(C, Decl(classWithEmptyBody.ts, 0, 0))
+>C : C
 }
 
 var c: C;
->c : C, Symbol(c, Decl(classWithEmptyBody.ts, 3, 3))
->C : C, Symbol(C, Decl(classWithEmptyBody.ts, 0, 0))
+>c : C
+>C : C
 
 var o: {} = c;
->o : {}, Symbol(o, Decl(classWithEmptyBody.ts, 4, 3), Decl(classWithEmptyBody.ts, 16, 3))
->c : C, Symbol(c, Decl(classWithEmptyBody.ts, 3, 3))
+>o : {}
+>c : C
 
 c = 1;
 >c = 1 : number
->c : C, Symbol(c, Decl(classWithEmptyBody.ts, 3, 3))
+>c : C
 >1 : number
 
 c = { foo: '' }
 >c = { foo: '' } : { foo: string; }
->c : C, Symbol(c, Decl(classWithEmptyBody.ts, 3, 3))
+>c : C
 >{ foo: '' } : { foo: string; }
->foo : string, Symbol(foo, Decl(classWithEmptyBody.ts, 6, 5))
+>foo : string
 >'' : string
 
 c = () => { }
 >c = () => { } : () => void
->c : C, Symbol(c, Decl(classWithEmptyBody.ts, 3, 3))
+>c : C
 >() => { } : () => void
 
 class D {
->D : D, Symbol(D, Decl(classWithEmptyBody.ts, 7, 13))
+>D : D
 
     constructor() {
         return 1;
@@ -38,27 +38,27 @@ class D {
 }
 
 var d: D;
->d : D, Symbol(d, Decl(classWithEmptyBody.ts, 15, 3))
->D : D, Symbol(D, Decl(classWithEmptyBody.ts, 7, 13))
+>d : D
+>D : D
 
 var o: {} = d;
->o : {}, Symbol(o, Decl(classWithEmptyBody.ts, 4, 3), Decl(classWithEmptyBody.ts, 16, 3))
->d : D, Symbol(d, Decl(classWithEmptyBody.ts, 15, 3))
+>o : {}
+>d : D
 
 d = 1;
 >d = 1 : number
->d : D, Symbol(d, Decl(classWithEmptyBody.ts, 15, 3))
+>d : D
 >1 : number
 
 d = { foo: '' }
 >d = { foo: '' } : { foo: string; }
->d : D, Symbol(d, Decl(classWithEmptyBody.ts, 15, 3))
+>d : D
 >{ foo: '' } : { foo: string; }
->foo : string, Symbol(foo, Decl(classWithEmptyBody.ts, 18, 5))
+>foo : string
 >'' : string
 
 d = () => { }
 >d = () => { } : () => void
->d : D, Symbol(d, Decl(classWithEmptyBody.ts, 15, 3))
+>d : D
 >() => { } : () => void
 
