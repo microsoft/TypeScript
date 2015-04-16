@@ -1,44 +1,44 @@
 === tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfString.ts ===
 class C { private p: string };
->C : C, Symbol(C, Decl(typeGuardOfFormTypeOfString.ts, 0, 0))
->p : string, Symbol(p, Decl(typeGuardOfFormTypeOfString.ts, 0, 9))
+>C : C
+>p : string
 
 var str: string;
->str : string, Symbol(str, Decl(typeGuardOfFormTypeOfString.ts, 2, 3))
+>str : string
 
 var bool: boolean;
->bool : boolean, Symbol(bool, Decl(typeGuardOfFormTypeOfString.ts, 3, 3))
+>bool : boolean
 
 var num: number;
->num : number, Symbol(num, Decl(typeGuardOfFormTypeOfString.ts, 4, 3))
+>num : number
 
 var strOrNum: string | number;
->strOrNum : string | number, Symbol(strOrNum, Decl(typeGuardOfFormTypeOfString.ts, 5, 3))
+>strOrNum : string | number
 
 var strOrBool: string | boolean;
->strOrBool : string | boolean, Symbol(strOrBool, Decl(typeGuardOfFormTypeOfString.ts, 6, 3))
+>strOrBool : string | boolean
 
 var numOrBool: number | boolean
->numOrBool : number | boolean, Symbol(numOrBool, Decl(typeGuardOfFormTypeOfString.ts, 7, 3))
+>numOrBool : number | boolean
 
 var strOrNumOrBool: string | number | boolean;
->strOrNumOrBool : string | number | boolean, Symbol(strOrNumOrBool, Decl(typeGuardOfFormTypeOfString.ts, 8, 3))
+>strOrNumOrBool : string | number | boolean
 
 var strOrC: string | C;
->strOrC : string | C, Symbol(strOrC, Decl(typeGuardOfFormTypeOfString.ts, 9, 3))
->C : C, Symbol(C, Decl(typeGuardOfFormTypeOfString.ts, 0, 0))
+>strOrC : string | C
+>C : C
 
 var numOrC: number | C;
->numOrC : number | C, Symbol(numOrC, Decl(typeGuardOfFormTypeOfString.ts, 10, 3))
->C : C, Symbol(C, Decl(typeGuardOfFormTypeOfString.ts, 0, 0))
+>numOrC : number | C
+>C : C
 
 var boolOrC: boolean | C;
->boolOrC : boolean | C, Symbol(boolOrC, Decl(typeGuardOfFormTypeOfString.ts, 11, 3))
->C : C, Symbol(C, Decl(typeGuardOfFormTypeOfString.ts, 0, 0))
+>boolOrC : boolean | C
+>C : C
 
 var c: C;
->c : C, Symbol(c, Decl(typeGuardOfFormTypeOfString.ts, 12, 3))
->C : C, Symbol(C, Decl(typeGuardOfFormTypeOfString.ts, 0, 0))
+>c : C
+>C : C
 
 //	A type guard of the form typeof x === s, 
 //  where s is a string literal with the value 'string', 'number', or 'boolean',
@@ -47,87 +47,87 @@ var c: C;
 if (typeof strOrNum === "string") {
 >typeof strOrNum === "string" : boolean
 >typeof strOrNum : string
->strOrNum : string | number, Symbol(strOrNum, Decl(typeGuardOfFormTypeOfString.ts, 5, 3))
+>strOrNum : string | number
 >"string" : string
 
     str = strOrNum; // string
 >str = strOrNum : string
->str : string, Symbol(str, Decl(typeGuardOfFormTypeOfString.ts, 2, 3))
->strOrNum : string, Symbol(strOrNum, Decl(typeGuardOfFormTypeOfString.ts, 5, 3))
+>str : string
+>strOrNum : string
 }
 else {
     num === strOrNum; // number
 >num === strOrNum : boolean
->num : number, Symbol(num, Decl(typeGuardOfFormTypeOfString.ts, 4, 3))
->strOrNum : number, Symbol(strOrNum, Decl(typeGuardOfFormTypeOfString.ts, 5, 3))
+>num : number
+>strOrNum : number
 }
 if (typeof strOrBool === "string") {
 >typeof strOrBool === "string" : boolean
 >typeof strOrBool : string
->strOrBool : string | boolean, Symbol(strOrBool, Decl(typeGuardOfFormTypeOfString.ts, 6, 3))
+>strOrBool : string | boolean
 >"string" : string
 
     str = strOrBool; // string
 >str = strOrBool : string
->str : string, Symbol(str, Decl(typeGuardOfFormTypeOfString.ts, 2, 3))
->strOrBool : string, Symbol(strOrBool, Decl(typeGuardOfFormTypeOfString.ts, 6, 3))
+>str : string
+>strOrBool : string
 }
 else {
     bool = strOrBool; // boolean
 >bool = strOrBool : boolean
->bool : boolean, Symbol(bool, Decl(typeGuardOfFormTypeOfString.ts, 3, 3))
->strOrBool : boolean, Symbol(strOrBool, Decl(typeGuardOfFormTypeOfString.ts, 6, 3))
+>bool : boolean
+>strOrBool : boolean
 }
 if (typeof strOrNumOrBool === "string") {
 >typeof strOrNumOrBool === "string" : boolean
 >typeof strOrNumOrBool : string
->strOrNumOrBool : string | number | boolean, Symbol(strOrNumOrBool, Decl(typeGuardOfFormTypeOfString.ts, 8, 3))
+>strOrNumOrBool : string | number | boolean
 >"string" : string
 
     str = strOrNumOrBool; // string
 >str = strOrNumOrBool : string
->str : string, Symbol(str, Decl(typeGuardOfFormTypeOfString.ts, 2, 3))
->strOrNumOrBool : string, Symbol(strOrNumOrBool, Decl(typeGuardOfFormTypeOfString.ts, 8, 3))
+>str : string
+>strOrNumOrBool : string
 }
 else {
     numOrBool = strOrNumOrBool; // number | boolean
 >numOrBool = strOrNumOrBool : number | boolean
->numOrBool : number | boolean, Symbol(numOrBool, Decl(typeGuardOfFormTypeOfString.ts, 7, 3))
->strOrNumOrBool : number | boolean, Symbol(strOrNumOrBool, Decl(typeGuardOfFormTypeOfString.ts, 8, 3))
+>numOrBool : number | boolean
+>strOrNumOrBool : number | boolean
 }
 if (typeof strOrC === "string") {
 >typeof strOrC === "string" : boolean
 >typeof strOrC : string
->strOrC : string | C, Symbol(strOrC, Decl(typeGuardOfFormTypeOfString.ts, 9, 3))
+>strOrC : string | C
 >"string" : string
 
     str = strOrC; // string
 >str = strOrC : string
->str : string, Symbol(str, Decl(typeGuardOfFormTypeOfString.ts, 2, 3))
->strOrC : string, Symbol(strOrC, Decl(typeGuardOfFormTypeOfString.ts, 9, 3))
+>str : string
+>strOrC : string
 }
 else {
     c = strOrC; // C
 >c = strOrC : C
->c : C, Symbol(c, Decl(typeGuardOfFormTypeOfString.ts, 12, 3))
->strOrC : C, Symbol(strOrC, Decl(typeGuardOfFormTypeOfString.ts, 9, 3))
+>c : C
+>strOrC : C
 }
 
 // Narrowing occurs only if target type is a subtype of variable type
 if (typeof numOrBool === "string") {
 >typeof numOrBool === "string" : boolean
 >typeof numOrBool : string
->numOrBool : number | boolean, Symbol(numOrBool, Decl(typeGuardOfFormTypeOfString.ts, 7, 3))
+>numOrBool : number | boolean
 >"string" : string
 
     var x1: number | boolean = numOrBool; // number | boolean
->x1 : number | boolean, Symbol(x1, Decl(typeGuardOfFormTypeOfString.ts, 45, 7), Decl(typeGuardOfFormTypeOfString.ts, 81, 7))
->numOrBool : number | boolean, Symbol(numOrBool, Decl(typeGuardOfFormTypeOfString.ts, 7, 3))
+>x1 : number | boolean
+>numOrBool : number | boolean
 }
 else {
     var x2: number | boolean = numOrBool; // number | boolean
->x2 : number | boolean, Symbol(x2, Decl(typeGuardOfFormTypeOfString.ts, 48, 7), Decl(typeGuardOfFormTypeOfString.ts, 84, 7))
->numOrBool : number | boolean, Symbol(numOrBool, Decl(typeGuardOfFormTypeOfString.ts, 7, 3))
+>x2 : number | boolean
+>numOrBool : number | boolean
 }
 
 // A type guard of the form typeof x !== s, where s is a string literal,
@@ -136,86 +136,86 @@ else {
 if (typeof strOrNum !== "string") {
 >typeof strOrNum !== "string" : boolean
 >typeof strOrNum : string
->strOrNum : string | number, Symbol(strOrNum, Decl(typeGuardOfFormTypeOfString.ts, 5, 3))
+>strOrNum : string | number
 >"string" : string
 
     num === strOrNum; // number
 >num === strOrNum : boolean
->num : number, Symbol(num, Decl(typeGuardOfFormTypeOfString.ts, 4, 3))
->strOrNum : number, Symbol(strOrNum, Decl(typeGuardOfFormTypeOfString.ts, 5, 3))
+>num : number
+>strOrNum : number
 }
 else {
     str = strOrNum; // string
 >str = strOrNum : string
->str : string, Symbol(str, Decl(typeGuardOfFormTypeOfString.ts, 2, 3))
->strOrNum : string, Symbol(strOrNum, Decl(typeGuardOfFormTypeOfString.ts, 5, 3))
+>str : string
+>strOrNum : string
 }
 if (typeof strOrBool !== "string") {
 >typeof strOrBool !== "string" : boolean
 >typeof strOrBool : string
->strOrBool : string | boolean, Symbol(strOrBool, Decl(typeGuardOfFormTypeOfString.ts, 6, 3))
+>strOrBool : string | boolean
 >"string" : string
 
     bool = strOrBool; // boolean
 >bool = strOrBool : boolean
->bool : boolean, Symbol(bool, Decl(typeGuardOfFormTypeOfString.ts, 3, 3))
->strOrBool : boolean, Symbol(strOrBool, Decl(typeGuardOfFormTypeOfString.ts, 6, 3))
+>bool : boolean
+>strOrBool : boolean
 }
 else {
     str = strOrBool; // string
 >str = strOrBool : string
->str : string, Symbol(str, Decl(typeGuardOfFormTypeOfString.ts, 2, 3))
->strOrBool : string, Symbol(strOrBool, Decl(typeGuardOfFormTypeOfString.ts, 6, 3))
+>str : string
+>strOrBool : string
 }
 if (typeof strOrNumOrBool !== "string") {
 >typeof strOrNumOrBool !== "string" : boolean
 >typeof strOrNumOrBool : string
->strOrNumOrBool : string | number | boolean, Symbol(strOrNumOrBool, Decl(typeGuardOfFormTypeOfString.ts, 8, 3))
+>strOrNumOrBool : string | number | boolean
 >"string" : string
 
     numOrBool = strOrNumOrBool; // number | boolean
 >numOrBool = strOrNumOrBool : number | boolean
->numOrBool : number | boolean, Symbol(numOrBool, Decl(typeGuardOfFormTypeOfString.ts, 7, 3))
->strOrNumOrBool : number | boolean, Symbol(strOrNumOrBool, Decl(typeGuardOfFormTypeOfString.ts, 8, 3))
+>numOrBool : number | boolean
+>strOrNumOrBool : number | boolean
 }
 else {
     str = strOrNumOrBool; // string
 >str = strOrNumOrBool : string
->str : string, Symbol(str, Decl(typeGuardOfFormTypeOfString.ts, 2, 3))
->strOrNumOrBool : string, Symbol(strOrNumOrBool, Decl(typeGuardOfFormTypeOfString.ts, 8, 3))
+>str : string
+>strOrNumOrBool : string
 }
 if (typeof strOrC !== "string") {
 >typeof strOrC !== "string" : boolean
 >typeof strOrC : string
->strOrC : string | C, Symbol(strOrC, Decl(typeGuardOfFormTypeOfString.ts, 9, 3))
+>strOrC : string | C
 >"string" : string
 
     c = strOrC; // C
 >c = strOrC : C
->c : C, Symbol(c, Decl(typeGuardOfFormTypeOfString.ts, 12, 3))
->strOrC : C, Symbol(strOrC, Decl(typeGuardOfFormTypeOfString.ts, 9, 3))
+>c : C
+>strOrC : C
 }
 else {
     str = strOrC; // string
 >str = strOrC : string
->str : string, Symbol(str, Decl(typeGuardOfFormTypeOfString.ts, 2, 3))
->strOrC : string, Symbol(strOrC, Decl(typeGuardOfFormTypeOfString.ts, 9, 3))
+>str : string
+>strOrC : string
 }
 
 // Narrowing occurs only if target type is a subtype of variable type
 if (typeof numOrBool !== "string") {
 >typeof numOrBool !== "string" : boolean
 >typeof numOrBool : string
->numOrBool : number | boolean, Symbol(numOrBool, Decl(typeGuardOfFormTypeOfString.ts, 7, 3))
+>numOrBool : number | boolean
 >"string" : string
 
     var x1: number | boolean = numOrBool; // number | boolean
->x1 : number | boolean, Symbol(x1, Decl(typeGuardOfFormTypeOfString.ts, 45, 7), Decl(typeGuardOfFormTypeOfString.ts, 81, 7))
->numOrBool : number | boolean, Symbol(numOrBool, Decl(typeGuardOfFormTypeOfString.ts, 7, 3))
+>x1 : number | boolean
+>numOrBool : number | boolean
 }
 else {
     var x2: number | boolean = numOrBool; // number | boolean
->x2 : number | boolean, Symbol(x2, Decl(typeGuardOfFormTypeOfString.ts, 48, 7), Decl(typeGuardOfFormTypeOfString.ts, 84, 7))
->numOrBool : number | boolean, Symbol(numOrBool, Decl(typeGuardOfFormTypeOfString.ts, 7, 3))
+>x2 : number | boolean
+>numOrBool : number | boolean
 }
 

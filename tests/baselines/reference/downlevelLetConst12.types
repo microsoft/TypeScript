@@ -5,31 +5,31 @@
 
 // top level let\const should not be renamed
 let foo;
->foo : any, Symbol(foo, Decl(downlevelLetConst12.ts, 3, 3))
+>foo : any
 
 const bar = 1;
->bar : number, Symbol(bar, Decl(downlevelLetConst12.ts, 4, 5))
+>bar : number
 >1 : number
 
 let [baz] = [];
->baz : any, Symbol(baz, Decl(downlevelLetConst12.ts, 6, 5))
+>baz : any
 >[] : undefined[]
 
 let {a: baz2} = { a: 1 };
 >a : any
->baz2 : number, Symbol(baz2, Decl(downlevelLetConst12.ts, 7, 5))
+>baz2 : number
 >{ a: 1 } : { a: number; }
->a : number, Symbol(a, Decl(downlevelLetConst12.ts, 7, 17))
+>a : number
 >1 : number
 
 const [baz3] = []
->baz3 : any, Symbol(baz3, Decl(downlevelLetConst12.ts, 9, 7))
+>baz3 : any
 >[] : undefined[]
 
 const {a: baz4} = { a: 1 };
 >a : any
->baz4 : number, Symbol(baz4, Decl(downlevelLetConst12.ts, 10, 7))
+>baz4 : number
 >{ a: 1 } : { a: number; }
->a : number, Symbol(a, Decl(downlevelLetConst12.ts, 10, 19))
+>a : number
 >1 : number
 

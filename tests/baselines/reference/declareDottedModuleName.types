@@ -1,21 +1,21 @@
 === tests/cases/compiler/declareDottedModuleName.ts ===
 module M {
->M : any, Symbol(M, Decl(declareDottedModuleName.ts, 0, 0), Decl(declareDottedModuleName.ts, 2, 1))
+>M : any
 
     module P.Q { } // This shouldnt be emitted
->P : any, Symbol(P, Decl(declareDottedModuleName.ts, 0, 10))
->Q : any, Symbol(Q, Decl(declareDottedModuleName.ts, 1, 13))
+>P : any
+>Q : any
 }
 
 module M {
->M : any, Symbol(M, Decl(declareDottedModuleName.ts, 0, 0), Decl(declareDottedModuleName.ts, 2, 1))
+>M : any
 
     export module R.S { }  //This should be emitted
->R : any, Symbol(R, Decl(declareDottedModuleName.ts, 4, 10))
->S : any, Symbol(S, Decl(declareDottedModuleName.ts, 5, 20))
+>R : any
+>S : any
 }
 
 module T.U { // This needs to be emitted
->T : any, Symbol(T, Decl(declareDottedModuleName.ts, 6, 1))
->U : any, Symbol(U, Decl(declareDottedModuleName.ts, 8, 9))
+>T : any
+>U : any
 }

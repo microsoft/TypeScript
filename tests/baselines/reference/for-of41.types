@@ -1,26 +1,26 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of41.ts ===
 var array = [{x: [0], y: {p: ""}}]
->array : { x: number[]; y: { p: string; }; }[], Symbol(array, Decl(for-of41.ts, 0, 3))
+>array : { x: number[]; y: { p: string; }; }[]
 >[{x: [0], y: {p: ""}}] : { x: number[]; y: { p: string; }; }[]
 >{x: [0], y: {p: ""}} : { x: number[]; y: { p: string; }; }
->x : number[], Symbol(x, Decl(for-of41.ts, 0, 14))
+>x : number[]
 >[0] : number[]
 >0 : number
->y : { p: string; }, Symbol(y, Decl(for-of41.ts, 0, 21))
+>y : { p: string; }
 >{p: ""} : { p: string; }
->p : string, Symbol(p, Decl(for-of41.ts, 0, 26))
+>p : string
 >"" : string
 
 for (var {x: [a], y: {p}} of array) {
 >x : any
->a : number, Symbol(a, Decl(for-of41.ts, 1, 14))
+>a : number
 >y : any
->p : string, Symbol(p, Decl(for-of41.ts, 1, 22))
->array : { x: number[]; y: { p: string; }; }[], Symbol(array, Decl(for-of41.ts, 0, 3))
+>p : string
+>array : { x: number[]; y: { p: string; }; }[]
 
     a;
->a : number, Symbol(a, Decl(for-of41.ts, 1, 14))
+>a : number
 
     p;
->p : string, Symbol(p, Decl(for-of41.ts, 1, 22))
+>p : string
 }

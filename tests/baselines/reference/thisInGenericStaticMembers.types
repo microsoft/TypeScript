@@ -2,64 +2,64 @@
 // this.call in static generic method not resolved correctly
 
 class A {
->A : A, Symbol(A, Decl(thisInGenericStaticMembers.ts, 0, 0))
+>A : A
 
     static one<T>(source:T, value: number): T {
->one : <T>(source: T, value: number) => T, Symbol(A.one, Decl(thisInGenericStaticMembers.ts, 2, 9))
->T : T, Symbol(T, Decl(thisInGenericStaticMembers.ts, 4, 15))
->source : T, Symbol(source, Decl(thisInGenericStaticMembers.ts, 4, 18))
->T : T, Symbol(T, Decl(thisInGenericStaticMembers.ts, 4, 15))
->value : number, Symbol(value, Decl(thisInGenericStaticMembers.ts, 4, 27))
->T : T, Symbol(T, Decl(thisInGenericStaticMembers.ts, 4, 15))
+>one : <T>(source: T, value: number) => T
+>T : T
+>source : T
+>T : T
+>value : number
+>T : T
 
         return source;
->source : T, Symbol(source, Decl(thisInGenericStaticMembers.ts, 4, 18))
+>source : T
     }
 
     static two<T>(source: T): T {
->two : <T>(source: T) => T, Symbol(A.two, Decl(thisInGenericStaticMembers.ts, 6, 5))
->T : T, Symbol(T, Decl(thisInGenericStaticMembers.ts, 8, 15))
->source : T, Symbol(source, Decl(thisInGenericStaticMembers.ts, 8, 18))
->T : T, Symbol(T, Decl(thisInGenericStaticMembers.ts, 8, 15))
->T : T, Symbol(T, Decl(thisInGenericStaticMembers.ts, 8, 15))
+>two : <T>(source: T) => T
+>T : T
+>source : T
+>T : T
+>T : T
 
         return this.one<T>(source, 42);
 >this.one<T>(source, 42) : T
->this.one : <T>(source: T, value: number) => T, Symbol(A.one, Decl(thisInGenericStaticMembers.ts, 2, 9))
->this : typeof A, Symbol(A, Decl(thisInGenericStaticMembers.ts, 0, 0))
->one : <T>(source: T, value: number) => T, Symbol(A.one, Decl(thisInGenericStaticMembers.ts, 2, 9))
->T : T, Symbol(T, Decl(thisInGenericStaticMembers.ts, 8, 15))
->source : T, Symbol(source, Decl(thisInGenericStaticMembers.ts, 8, 18))
+>this.one : <T>(source: T, value: number) => T
+>this : typeof A
+>one : <T>(source: T, value: number) => T
+>T : T
+>source : T
 >42 : number
     }
 }
 
 class B {
->B : B, Symbol(B, Decl(thisInGenericStaticMembers.ts, 11, 1))
+>B : B
 
     static one(source: B, value: number): B {
->one : (source: B, value: number) => B, Symbol(B.one, Decl(thisInGenericStaticMembers.ts, 13, 9))
->source : B, Symbol(source, Decl(thisInGenericStaticMembers.ts, 15, 15))
->B : B, Symbol(B, Decl(thisInGenericStaticMembers.ts, 11, 1))
->value : number, Symbol(value, Decl(thisInGenericStaticMembers.ts, 15, 25))
->B : B, Symbol(B, Decl(thisInGenericStaticMembers.ts, 11, 1))
+>one : (source: B, value: number) => B
+>source : B
+>B : B
+>value : number
+>B : B
 
         return source;
->source : B, Symbol(source, Decl(thisInGenericStaticMembers.ts, 15, 15))
+>source : B
     }
 
     static two(source: B): B {
->two : (source: B) => B, Symbol(B.two, Decl(thisInGenericStaticMembers.ts, 17, 5))
->source : B, Symbol(source, Decl(thisInGenericStaticMembers.ts, 19, 15))
->B : B, Symbol(B, Decl(thisInGenericStaticMembers.ts, 11, 1))
->B : B, Symbol(B, Decl(thisInGenericStaticMembers.ts, 11, 1))
+>two : (source: B) => B
+>source : B
+>B : B
+>B : B
 
         return this.one(source, 42);
 >this.one(source, 42) : B
->this.one : (source: B, value: number) => B, Symbol(B.one, Decl(thisInGenericStaticMembers.ts, 13, 9))
->this : typeof B, Symbol(B, Decl(thisInGenericStaticMembers.ts, 11, 1))
->one : (source: B, value: number) => B, Symbol(B.one, Decl(thisInGenericStaticMembers.ts, 13, 9))
->source : B, Symbol(source, Decl(thisInGenericStaticMembers.ts, 19, 15))
+>this.one : (source: B, value: number) => B
+>this : typeof B
+>one : (source: B, value: number) => B
+>source : B
 >42 : number
     }
 }

@@ -8,12 +8,12 @@
 >window : any
 
 var parts = [];
->parts : any[], Symbol(parts, Decl(globalThisCapture.ts, 3, 3))
+>parts : any[]
 >[] : undefined[]
 
 // Ensure that the generated code is correct
 parts[0];
 >parts[0] : any
->parts : any[], Symbol(parts, Decl(globalThisCapture.ts, 3, 3))
+>parts : any[]
 >0 : number
 

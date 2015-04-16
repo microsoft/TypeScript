@@ -7,211 +7,211 @@
  */
 
 declare var process: any;
->process : any, Symbol(process, Decl(APISample_linter.ts, 7, 11))
+>process : any
 
 declare var console: any;
->console : any, Symbol(console, Decl(APISample_linter.ts, 8, 11))
+>console : any
 
 declare var readFileSync: any;
->readFileSync : any, Symbol(readFileSync, Decl(APISample_linter.ts, 9, 11))
+>readFileSync : any
 
 import * as ts from "typescript";
->ts : typeof ts, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
+>ts : typeof ts
 
 export function delint(sourceFile: ts.SourceFile) {
->delint : (sourceFile: ts.SourceFile) => void, Symbol(delint, Decl(APISample_linter.ts, 11, 33))
->sourceFile : ts.SourceFile, Symbol(sourceFile, Decl(APISample_linter.ts, 13, 23))
->ts : any, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->SourceFile : ts.SourceFile, Symbol(ts.SourceFile, Decl(typescript.d.ts, 740, 5), Decl(typescript.d.ts, 1285, 5))
+>delint : (sourceFile: ts.SourceFile) => void
+>sourceFile : ts.SourceFile
+>ts : any
+>SourceFile : ts.SourceFile
 
     delintNode(sourceFile);
 >delintNode(sourceFile) : void
->delintNode : (node: ts.Node) => void, Symbol(delintNode, Decl(APISample_linter.ts, 14, 27))
->sourceFile : ts.SourceFile, Symbol(sourceFile, Decl(APISample_linter.ts, 13, 23))
+>delintNode : (node: ts.Node) => void
+>sourceFile : ts.SourceFile
 
     function delintNode(node: ts.Node) {
->delintNode : (node: ts.Node) => void, Symbol(delintNode, Decl(APISample_linter.ts, 14, 27))
->node : ts.Node, Symbol(node, Decl(APISample_linter.ts, 16, 24))
->ts : any, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->Node : ts.Node, Symbol(ts.Node, Decl(typescript.d.ts, 296, 5), Decl(typescript.d.ts, 1245, 32))
+>delintNode : (node: ts.Node) => void
+>node : ts.Node
+>ts : any
+>Node : ts.Node
 
         switch (node.kind) {
->node.kind : ts.SyntaxKind, Symbol(ts.Node.kind, Decl(typescript.d.ts, 297, 38))
->node : ts.Node, Symbol(node, Decl(APISample_linter.ts, 16, 24))
->kind : ts.SyntaxKind, Symbol(ts.Node.kind, Decl(typescript.d.ts, 297, 38))
+>node.kind : ts.SyntaxKind
+>node : ts.Node
+>kind : ts.SyntaxKind
 
             case ts.SyntaxKind.ForStatement:
->ts.SyntaxKind.ForStatement : ts.SyntaxKind, Symbol(ts.SyntaxKind.ForStatement, Decl(typescript.d.ts, 209, 29))
->ts.SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->ts : typeof ts, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->ForStatement : ts.SyntaxKind, Symbol(ts.SyntaxKind.ForStatement, Decl(typescript.d.ts, 209, 29))
+>ts.SyntaxKind.ForStatement : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>ForStatement : ts.SyntaxKind
 
             case ts.SyntaxKind.ForInStatement:
->ts.SyntaxKind.ForInStatement : ts.SyntaxKind, Symbol(ts.SyntaxKind.ForInStatement, Decl(typescript.d.ts, 210, 27))
->ts.SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->ts : typeof ts, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->ForInStatement : ts.SyntaxKind, Symbol(ts.SyntaxKind.ForInStatement, Decl(typescript.d.ts, 210, 27))
+>ts.SyntaxKind.ForInStatement : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>ForInStatement : ts.SyntaxKind
 
             case ts.SyntaxKind.WhileStatement:
->ts.SyntaxKind.WhileStatement : ts.SyntaxKind, Symbol(ts.SyntaxKind.WhileStatement, Decl(typescript.d.ts, 208, 26))
->ts.SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->ts : typeof ts, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->WhileStatement : ts.SyntaxKind, Symbol(ts.SyntaxKind.WhileStatement, Decl(typescript.d.ts, 208, 26))
+>ts.SyntaxKind.WhileStatement : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>WhileStatement : ts.SyntaxKind
 
             case ts.SyntaxKind.DoStatement:
->ts.SyntaxKind.DoStatement : ts.SyntaxKind, Symbol(ts.SyntaxKind.DoStatement, Decl(typescript.d.ts, 207, 26))
->ts.SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->ts : typeof ts, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->DoStatement : ts.SyntaxKind, Symbol(ts.SyntaxKind.DoStatement, Decl(typescript.d.ts, 207, 26))
+>ts.SyntaxKind.DoStatement : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>DoStatement : ts.SyntaxKind
 
                 if ((<ts.IterationStatement>node).statement.kind !== ts.SyntaxKind.Block) {
 >(<ts.IterationStatement>node).statement.kind !== ts.SyntaxKind.Block : boolean
->(<ts.IterationStatement>node).statement.kind : ts.SyntaxKind, Symbol(ts.Node.kind, Decl(typescript.d.ts, 297, 38))
->(<ts.IterationStatement>node).statement : ts.Statement, Symbol(ts.IterationStatement.statement, Decl(typescript.d.ts, 589, 52))
+>(<ts.IterationStatement>node).statement.kind : ts.SyntaxKind
+>(<ts.IterationStatement>node).statement : ts.Statement
 >(<ts.IterationStatement>node) : ts.IterationStatement
 ><ts.IterationStatement>node : ts.IterationStatement
->ts : any, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->IterationStatement : ts.IterationStatement, Symbol(ts.IterationStatement, Decl(typescript.d.ts, 588, 5))
->node : ts.Node, Symbol(node, Decl(APISample_linter.ts, 16, 24))
->statement : ts.Statement, Symbol(ts.IterationStatement.statement, Decl(typescript.d.ts, 589, 52))
->kind : ts.SyntaxKind, Symbol(ts.Node.kind, Decl(typescript.d.ts, 297, 38))
->ts.SyntaxKind.Block : ts.SyntaxKind, Symbol(ts.SyntaxKind.Block, Decl(typescript.d.ts, 202, 36))
->ts.SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->ts : typeof ts, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->Block : ts.SyntaxKind, Symbol(ts.SyntaxKind.Block, Decl(typescript.d.ts, 202, 36))
+>ts : any
+>IterationStatement : ts.IterationStatement
+>node : ts.Node
+>statement : ts.Statement
+>kind : ts.SyntaxKind
+>ts.SyntaxKind.Block : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>Block : ts.SyntaxKind
 
                     report(node, "A looping statement's contents should be wrapped in a block body.");
 >report(node, "A looping statement's contents should be wrapped in a block body.") : void
->report : (node: ts.Node, message: string) => void, Symbol(report, Decl(APISample_linter.ts, 48, 5))
->node : ts.Node, Symbol(node, Decl(APISample_linter.ts, 16, 24))
+>report : (node: ts.Node, message: string) => void
+>node : ts.Node
 >"A looping statement's contents should be wrapped in a block body." : string
                 }
                 break;
 
             case ts.SyntaxKind.IfStatement:
->ts.SyntaxKind.IfStatement : ts.SyntaxKind, Symbol(ts.SyntaxKind.IfStatement, Decl(typescript.d.ts, 206, 34))
->ts.SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->ts : typeof ts, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->IfStatement : ts.SyntaxKind, Symbol(ts.SyntaxKind.IfStatement, Decl(typescript.d.ts, 206, 34))
+>ts.SyntaxKind.IfStatement : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>IfStatement : ts.SyntaxKind
 
                 let ifStatement = (<ts.IfStatement>node);
->ifStatement : ts.IfStatement, Symbol(ifStatement, Decl(APISample_linter.ts, 28, 19))
+>ifStatement : ts.IfStatement
 >(<ts.IfStatement>node) : ts.IfStatement
 ><ts.IfStatement>node : ts.IfStatement
->ts : any, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->IfStatement : ts.IfStatement, Symbol(ts.IfStatement, Decl(typescript.d.ts, 583, 5))
->node : ts.Node, Symbol(node, Decl(APISample_linter.ts, 16, 24))
+>ts : any
+>IfStatement : ts.IfStatement
+>node : ts.Node
 
                 if (ifStatement.thenStatement.kind !== ts.SyntaxKind.Block) {
 >ifStatement.thenStatement.kind !== ts.SyntaxKind.Block : boolean
->ifStatement.thenStatement.kind : ts.SyntaxKind, Symbol(ts.Node.kind, Decl(typescript.d.ts, 297, 38))
->ifStatement.thenStatement : ts.Statement, Symbol(ts.IfStatement.thenStatement, Decl(typescript.d.ts, 585, 31))
->ifStatement : ts.IfStatement, Symbol(ifStatement, Decl(APISample_linter.ts, 28, 19))
->thenStatement : ts.Statement, Symbol(ts.IfStatement.thenStatement, Decl(typescript.d.ts, 585, 31))
->kind : ts.SyntaxKind, Symbol(ts.Node.kind, Decl(typescript.d.ts, 297, 38))
->ts.SyntaxKind.Block : ts.SyntaxKind, Symbol(ts.SyntaxKind.Block, Decl(typescript.d.ts, 202, 36))
->ts.SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->ts : typeof ts, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->Block : ts.SyntaxKind, Symbol(ts.SyntaxKind.Block, Decl(typescript.d.ts, 202, 36))
+>ifStatement.thenStatement.kind : ts.SyntaxKind
+>ifStatement.thenStatement : ts.Statement
+>ifStatement : ts.IfStatement
+>thenStatement : ts.Statement
+>kind : ts.SyntaxKind
+>ts.SyntaxKind.Block : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>Block : ts.SyntaxKind
 
                     report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
 >report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.") : void
->report : (node: ts.Node, message: string) => void, Symbol(report, Decl(APISample_linter.ts, 48, 5))
->ifStatement.thenStatement : ts.Statement, Symbol(ts.IfStatement.thenStatement, Decl(typescript.d.ts, 585, 31))
->ifStatement : ts.IfStatement, Symbol(ifStatement, Decl(APISample_linter.ts, 28, 19))
->thenStatement : ts.Statement, Symbol(ts.IfStatement.thenStatement, Decl(typescript.d.ts, 585, 31))
+>report : (node: ts.Node, message: string) => void
+>ifStatement.thenStatement : ts.Statement
+>ifStatement : ts.IfStatement
+>thenStatement : ts.Statement
 >"An if statement's contents should be wrapped in a block body." : string
                 }
                 if (ifStatement.elseStatement &&
 >ifStatement.elseStatement &&                    ifStatement.elseStatement.kind !== ts.SyntaxKind.Block &&                    ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement : boolean
 >ifStatement.elseStatement &&                    ifStatement.elseStatement.kind !== ts.SyntaxKind.Block : boolean
->ifStatement.elseStatement : ts.Statement, Symbol(ts.IfStatement.elseStatement, Decl(typescript.d.ts, 586, 33))
->ifStatement : ts.IfStatement, Symbol(ifStatement, Decl(APISample_linter.ts, 28, 19))
->elseStatement : ts.Statement, Symbol(ts.IfStatement.elseStatement, Decl(typescript.d.ts, 586, 33))
+>ifStatement.elseStatement : ts.Statement
+>ifStatement : ts.IfStatement
+>elseStatement : ts.Statement
 
                     ifStatement.elseStatement.kind !== ts.SyntaxKind.Block &&
 >ifStatement.elseStatement.kind !== ts.SyntaxKind.Block : boolean
->ifStatement.elseStatement.kind : ts.SyntaxKind, Symbol(ts.Node.kind, Decl(typescript.d.ts, 297, 38))
->ifStatement.elseStatement : ts.Statement, Symbol(ts.IfStatement.elseStatement, Decl(typescript.d.ts, 586, 33))
->ifStatement : ts.IfStatement, Symbol(ifStatement, Decl(APISample_linter.ts, 28, 19))
->elseStatement : ts.Statement, Symbol(ts.IfStatement.elseStatement, Decl(typescript.d.ts, 586, 33))
->kind : ts.SyntaxKind, Symbol(ts.Node.kind, Decl(typescript.d.ts, 297, 38))
->ts.SyntaxKind.Block : ts.SyntaxKind, Symbol(ts.SyntaxKind.Block, Decl(typescript.d.ts, 202, 36))
->ts.SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->ts : typeof ts, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->Block : ts.SyntaxKind, Symbol(ts.SyntaxKind.Block, Decl(typescript.d.ts, 202, 36))
+>ifStatement.elseStatement.kind : ts.SyntaxKind
+>ifStatement.elseStatement : ts.Statement
+>ifStatement : ts.IfStatement
+>elseStatement : ts.Statement
+>kind : ts.SyntaxKind
+>ts.SyntaxKind.Block : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>Block : ts.SyntaxKind
 
                     ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement) {
 >ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement : boolean
->ifStatement.elseStatement.kind : ts.SyntaxKind, Symbol(ts.Node.kind, Decl(typescript.d.ts, 297, 38))
->ifStatement.elseStatement : ts.Statement, Symbol(ts.IfStatement.elseStatement, Decl(typescript.d.ts, 586, 33))
->ifStatement : ts.IfStatement, Symbol(ifStatement, Decl(APISample_linter.ts, 28, 19))
->elseStatement : ts.Statement, Symbol(ts.IfStatement.elseStatement, Decl(typescript.d.ts, 586, 33))
->kind : ts.SyntaxKind, Symbol(ts.Node.kind, Decl(typescript.d.ts, 297, 38))
->ts.SyntaxKind.IfStatement : ts.SyntaxKind, Symbol(ts.SyntaxKind.IfStatement, Decl(typescript.d.ts, 206, 34))
->ts.SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->ts : typeof ts, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->IfStatement : ts.SyntaxKind, Symbol(ts.SyntaxKind.IfStatement, Decl(typescript.d.ts, 206, 34))
+>ifStatement.elseStatement.kind : ts.SyntaxKind
+>ifStatement.elseStatement : ts.Statement
+>ifStatement : ts.IfStatement
+>elseStatement : ts.Statement
+>kind : ts.SyntaxKind
+>ts.SyntaxKind.IfStatement : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>IfStatement : ts.SyntaxKind
 
                     report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.");
 >report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.") : void
->report : (node: ts.Node, message: string) => void, Symbol(report, Decl(APISample_linter.ts, 48, 5))
->ifStatement.elseStatement : ts.Statement, Symbol(ts.IfStatement.elseStatement, Decl(typescript.d.ts, 586, 33))
->ifStatement : ts.IfStatement, Symbol(ifStatement, Decl(APISample_linter.ts, 28, 19))
->elseStatement : ts.Statement, Symbol(ts.IfStatement.elseStatement, Decl(typescript.d.ts, 586, 33))
+>report : (node: ts.Node, message: string) => void
+>ifStatement.elseStatement : ts.Statement
+>ifStatement : ts.IfStatement
+>elseStatement : ts.Statement
 >"An else statement's contents should be wrapped in a block body." : string
                 }
                 break;
 
             case ts.SyntaxKind.BinaryExpression:
->ts.SyntaxKind.BinaryExpression : ts.SyntaxKind, Symbol(ts.SyntaxKind.BinaryExpression, Decl(typescript.d.ts, 192, 37))
->ts.SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->ts : typeof ts, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->BinaryExpression : ts.SyntaxKind, Symbol(ts.SyntaxKind.BinaryExpression, Decl(typescript.d.ts, 192, 37))
+>ts.SyntaxKind.BinaryExpression : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>BinaryExpression : ts.SyntaxKind
 
                 let op = (<ts.BinaryExpression>node).operatorToken.kind;
->op : ts.SyntaxKind, Symbol(op, Decl(APISample_linter.ts, 40, 19))
->(<ts.BinaryExpression>node).operatorToken.kind : ts.SyntaxKind, Symbol(ts.Node.kind, Decl(typescript.d.ts, 297, 38))
->(<ts.BinaryExpression>node).operatorToken : ts.Node, Symbol(ts.BinaryExpression.operatorToken, Decl(typescript.d.ts, 497, 25))
+>op : ts.SyntaxKind
+>(<ts.BinaryExpression>node).operatorToken.kind : ts.SyntaxKind
+>(<ts.BinaryExpression>node).operatorToken : ts.Node
 >(<ts.BinaryExpression>node) : ts.BinaryExpression
 ><ts.BinaryExpression>node : ts.BinaryExpression
->ts : any, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->BinaryExpression : ts.BinaryExpression, Symbol(ts.BinaryExpression, Decl(typescript.d.ts, 495, 5))
->node : ts.Node, Symbol(node, Decl(APISample_linter.ts, 16, 24))
->operatorToken : ts.Node, Symbol(ts.BinaryExpression.operatorToken, Decl(typescript.d.ts, 497, 25))
->kind : ts.SyntaxKind, Symbol(ts.Node.kind, Decl(typescript.d.ts, 297, 38))
+>ts : any
+>BinaryExpression : ts.BinaryExpression
+>node : ts.Node
+>operatorToken : ts.Node
+>kind : ts.SyntaxKind
 
                 if (op === ts.SyntaxKind.EqualsEqualsToken || op == ts.SyntaxKind.ExclamationEqualsToken) {
 >op === ts.SyntaxKind.EqualsEqualsToken || op == ts.SyntaxKind.ExclamationEqualsToken : boolean
 >op === ts.SyntaxKind.EqualsEqualsToken : boolean
->op : ts.SyntaxKind, Symbol(op, Decl(APISample_linter.ts, 40, 19))
->ts.SyntaxKind.EqualsEqualsToken : ts.SyntaxKind, Symbol(ts.SyntaxKind.EqualsEqualsToken, Decl(typescript.d.ts, 51, 36))
->ts.SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->ts : typeof ts, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->EqualsEqualsToken : ts.SyntaxKind, Symbol(ts.SyntaxKind.EqualsEqualsToken, Decl(typescript.d.ts, 51, 36))
+>op : ts.SyntaxKind
+>ts.SyntaxKind.EqualsEqualsToken : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>EqualsEqualsToken : ts.SyntaxKind
 >op == ts.SyntaxKind.ExclamationEqualsToken : boolean
->op : ts.SyntaxKind, Symbol(op, Decl(APISample_linter.ts, 40, 19))
->ts.SyntaxKind.ExclamationEqualsToken : ts.SyntaxKind, Symbol(ts.SyntaxKind.ExclamationEqualsToken, Decl(typescript.d.ts, 52, 31))
->ts.SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->ts : typeof ts, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->SyntaxKind : typeof ts.SyntaxKind, Symbol(ts.SyntaxKind, Decl(typescript.d.ts, 22, 5))
->ExclamationEqualsToken : ts.SyntaxKind, Symbol(ts.SyntaxKind.ExclamationEqualsToken, Decl(typescript.d.ts, 52, 31))
+>op : ts.SyntaxKind
+>ts.SyntaxKind.ExclamationEqualsToken : ts.SyntaxKind
+>ts.SyntaxKind : typeof ts.SyntaxKind
+>ts : typeof ts
+>SyntaxKind : typeof ts.SyntaxKind
+>ExclamationEqualsToken : ts.SyntaxKind
 
                     report(node, "Use '===' and '!=='.")
 >report(node, "Use '===' and '!=='.") : void
->report : (node: ts.Node, message: string) => void, Symbol(report, Decl(APISample_linter.ts, 48, 5))
->node : ts.Node, Symbol(node, Decl(APISample_linter.ts, 16, 24))
+>report : (node: ts.Node, message: string) => void
+>node : ts.Node
 >"Use '===' and '!=='." : string
                 }
                 break;
@@ -219,57 +219,57 @@ export function delint(sourceFile: ts.SourceFile) {
 
         ts.forEachChild(node, delintNode);
 >ts.forEachChild(node, delintNode) : void
->ts.forEachChild : <T>(node: ts.Node, cbNode: (node: ts.Node) => T, cbNodeArray?: (nodes: ts.Node[]) => T) => T, Symbol(ts.forEachChild, Decl(typescript.d.ts, 1214, 48))
->ts : typeof ts, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->forEachChild : <T>(node: ts.Node, cbNode: (node: ts.Node) => T, cbNodeArray?: (nodes: ts.Node[]) => T) => T, Symbol(ts.forEachChild, Decl(typescript.d.ts, 1214, 48))
->node : ts.Node, Symbol(node, Decl(APISample_linter.ts, 16, 24))
->delintNode : (node: ts.Node) => void, Symbol(delintNode, Decl(APISample_linter.ts, 14, 27))
+>ts.forEachChild : <T>(node: ts.Node, cbNode: (node: ts.Node) => T, cbNodeArray?: (nodes: ts.Node[]) => T) => T
+>ts : typeof ts
+>forEachChild : <T>(node: ts.Node, cbNode: (node: ts.Node) => T, cbNodeArray?: (nodes: ts.Node[]) => T) => T
+>node : ts.Node
+>delintNode : (node: ts.Node) => void
     }
 
     function report(node: ts.Node, message: string) {
->report : (node: ts.Node, message: string) => void, Symbol(report, Decl(APISample_linter.ts, 48, 5))
->node : ts.Node, Symbol(node, Decl(APISample_linter.ts, 50, 20))
->ts : any, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->Node : ts.Node, Symbol(ts.Node, Decl(typescript.d.ts, 296, 5), Decl(typescript.d.ts, 1245, 32))
->message : string, Symbol(message, Decl(APISample_linter.ts, 50, 34))
+>report : (node: ts.Node, message: string) => void
+>node : ts.Node
+>ts : any
+>Node : ts.Node
+>message : string
 
         let { line, character } = sourceFile.getLineAndCharacterOfPosition(node.getStart());
->line : number, Symbol(line, Decl(APISample_linter.ts, 51, 13))
->character : number, Symbol(character, Decl(APISample_linter.ts, 51, 19))
+>line : number
+>character : number
 >sourceFile.getLineAndCharacterOfPosition(node.getStart()) : ts.LineAndCharacter
->sourceFile.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1286, 26))
->sourceFile : ts.SourceFile, Symbol(sourceFile, Decl(APISample_linter.ts, 13, 23))
->getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter, Symbol(ts.SourceFile.getLineAndCharacterOfPosition, Decl(typescript.d.ts, 1286, 26))
+>sourceFile.getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
+>sourceFile : ts.SourceFile
+>getLineAndCharacterOfPosition : (pos: number) => ts.LineAndCharacter
 >node.getStart() : number
->node.getStart : (sourceFile?: ts.SourceFile) => number, Symbol(ts.Node.getStart, Decl(typescript.d.ts, 1250, 53))
->node : ts.Node, Symbol(node, Decl(APISample_linter.ts, 50, 20))
->getStart : (sourceFile?: ts.SourceFile) => number, Symbol(ts.Node.getStart, Decl(typescript.d.ts, 1250, 53))
+>node.getStart : (sourceFile?: ts.SourceFile) => number
+>node : ts.Node
+>getStart : (sourceFile?: ts.SourceFile) => number
 
         console.log(`${sourceFile.fileName} (${line + 1},${character + 1}): ${message}`);
 >console.log(`${sourceFile.fileName} (${line + 1},${character + 1}): ${message}`) : any
 >console.log : any
->console : any, Symbol(console, Decl(APISample_linter.ts, 8, 11))
+>console : any
 >log : any
 >`${sourceFile.fileName} (${line + 1},${character + 1}): ${message}` : string
->sourceFile.fileName : string, Symbol(ts.SourceFile.fileName, Decl(typescript.d.ts, 743, 29))
->sourceFile : ts.SourceFile, Symbol(sourceFile, Decl(APISample_linter.ts, 13, 23))
->fileName : string, Symbol(ts.SourceFile.fileName, Decl(typescript.d.ts, 743, 29))
+>sourceFile.fileName : string
+>sourceFile : ts.SourceFile
+>fileName : string
 >line + 1 : number
->line : number, Symbol(line, Decl(APISample_linter.ts, 51, 13))
+>line : number
 >1 : number
 >character + 1 : number
->character : number, Symbol(character, Decl(APISample_linter.ts, 51, 19))
+>character : number
 >1 : number
->message : string, Symbol(message, Decl(APISample_linter.ts, 50, 34))
+>message : string
     }
 }
 
 const fileNames = process.argv.slice(2);
->fileNames : any, Symbol(fileNames, Decl(APISample_linter.ts, 56, 5))
+>fileNames : any
 >process.argv.slice(2) : any
 >process.argv.slice : any
 >process.argv : any
->process : any, Symbol(process, Decl(APISample_linter.ts, 7, 11))
+>process : any
 >argv : any
 >slice : any
 >2 : number
@@ -277,36 +277,36 @@ const fileNames = process.argv.slice(2);
 fileNames.forEach(fileName => {
 >fileNames.forEach(fileName => {    // Parse a file    let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);    // delint it    delint(sourceFile);}) : any
 >fileNames.forEach : any
->fileNames : any, Symbol(fileNames, Decl(APISample_linter.ts, 56, 5))
+>fileNames : any
 >forEach : any
 >fileName => {    // Parse a file    let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);    // delint it    delint(sourceFile);} : (fileName: any) => void
->fileName : any, Symbol(fileName, Decl(APISample_linter.ts, 57, 18))
+>fileName : any
 
     // Parse a file
     let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);
->sourceFile : ts.SourceFile, Symbol(sourceFile, Decl(APISample_linter.ts, 59, 7))
+>sourceFile : ts.SourceFile
 >ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true) : ts.SourceFile
->ts.createSourceFile : (fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile, Symbol(ts.createSourceFile, Decl(typescript.d.ts, 1215, 107))
->ts : typeof ts, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->createSourceFile : (fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile, Symbol(ts.createSourceFile, Decl(typescript.d.ts, 1215, 107))
->fileName : any, Symbol(fileName, Decl(APISample_linter.ts, 57, 18))
+>ts.createSourceFile : (fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile
+>ts : typeof ts
+>createSourceFile : (fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, setParentNodes?: boolean) => ts.SourceFile
+>fileName : any
 >readFileSync(fileName).toString() : any
 >readFileSync(fileName).toString : any
 >readFileSync(fileName) : any
->readFileSync : any, Symbol(readFileSync, Decl(APISample_linter.ts, 9, 11))
->fileName : any, Symbol(fileName, Decl(APISample_linter.ts, 57, 18))
+>readFileSync : any
+>fileName : any
 >toString : any
->ts.ScriptTarget.ES6 : ts.ScriptTarget, Symbol(ts.ScriptTarget.ES6, Decl(typescript.d.ts, 1118, 16))
->ts.ScriptTarget : typeof ts.ScriptTarget, Symbol(ts.ScriptTarget, Decl(typescript.d.ts, 1115, 5))
->ts : typeof ts, Symbol(ts, Decl(APISample_linter.ts, 11, 6))
->ScriptTarget : typeof ts.ScriptTarget, Symbol(ts.ScriptTarget, Decl(typescript.d.ts, 1115, 5))
->ES6 : ts.ScriptTarget, Symbol(ts.ScriptTarget.ES6, Decl(typescript.d.ts, 1118, 16))
+>ts.ScriptTarget.ES6 : ts.ScriptTarget
+>ts.ScriptTarget : typeof ts.ScriptTarget
+>ts : typeof ts
+>ScriptTarget : typeof ts.ScriptTarget
+>ES6 : ts.ScriptTarget
 >true : boolean
 
     // delint it
     delint(sourceFile);
 >delint(sourceFile) : void
->delint : (sourceFile: ts.SourceFile) => void, Symbol(delint, Decl(APISample_linter.ts, 11, 33))
->sourceFile : ts.SourceFile, Symbol(sourceFile, Decl(APISample_linter.ts, 59, 7))
+>delint : (sourceFile: ts.SourceFile) => void
+>sourceFile : ts.SourceFile
 
 });

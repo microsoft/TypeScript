@@ -1,47 +1,47 @@
 === tests/cases/compiler/commentsTypeParameters.ts ===
 class C</**docComment for type parameter*/ T> {
->C : C<T>, Symbol(C, Decl(commentsTypeParameters.ts, 0, 0))
->T : T, Symbol(T, Decl(commentsTypeParameters.ts, 0, 8))
+>C : C<T>
+>T : T
 
     method</**docComment of method type parameter */ U extends T>(a: U) {
->method : <U extends T>(a: U) => void, Symbol(method, Decl(commentsTypeParameters.ts, 0, 47))
->U : U, Symbol(U, Decl(commentsTypeParameters.ts, 1, 11))
->T : T, Symbol(T, Decl(commentsTypeParameters.ts, 0, 8))
->a : U, Symbol(a, Decl(commentsTypeParameters.ts, 1, 66))
->U : U, Symbol(U, Decl(commentsTypeParameters.ts, 1, 11))
+>method : <U extends T>(a: U) => void
+>U : U
+>T : T
+>a : U
+>U : U
     }
     static staticmethod</**docComment of method type parameter */ U>(a: U) {
->staticmethod : <U>(a: U) => void, Symbol(C.staticmethod, Decl(commentsTypeParameters.ts, 2, 5))
->U : U, Symbol(U, Decl(commentsTypeParameters.ts, 3, 24))
->a : U, Symbol(a, Decl(commentsTypeParameters.ts, 3, 69))
->U : U, Symbol(U, Decl(commentsTypeParameters.ts, 3, 24))
+>staticmethod : <U>(a: U) => void
+>U : U
+>a : U
+>U : U
     }
 
     private privatemethod</**docComment of method type parameter */ U extends T>(a: U) {
->privatemethod : <U extends T>(a: U) => void, Symbol(privatemethod, Decl(commentsTypeParameters.ts, 4, 5))
->U : U, Symbol(U, Decl(commentsTypeParameters.ts, 6, 26))
->T : T, Symbol(T, Decl(commentsTypeParameters.ts, 0, 8))
->a : U, Symbol(a, Decl(commentsTypeParameters.ts, 6, 81))
->U : U, Symbol(U, Decl(commentsTypeParameters.ts, 6, 26))
+>privatemethod : <U extends T>(a: U) => void
+>U : U
+>T : T
+>a : U
+>U : U
     }
     private static privatestaticmethod</**docComment of method type parameter */ U>(a: U) {
->privatestaticmethod : <U>(a: U) => void, Symbol(C.privatestaticmethod, Decl(commentsTypeParameters.ts, 7, 5))
->U : U, Symbol(U, Decl(commentsTypeParameters.ts, 8, 39))
->a : U, Symbol(a, Decl(commentsTypeParameters.ts, 8, 84))
->U : U, Symbol(U, Decl(commentsTypeParameters.ts, 8, 39))
+>privatestaticmethod : <U>(a: U) => void
+>U : U
+>a : U
+>U : U
     }
 }
 
 function compare</**type*/T>(a: T, b: T) {
->compare : <T>(a: T, b: T) => boolean, Symbol(compare, Decl(commentsTypeParameters.ts, 10, 1))
->T : T, Symbol(T, Decl(commentsTypeParameters.ts, 12, 17))
->a : T, Symbol(a, Decl(commentsTypeParameters.ts, 12, 29))
->T : T, Symbol(T, Decl(commentsTypeParameters.ts, 12, 17))
->b : T, Symbol(b, Decl(commentsTypeParameters.ts, 12, 34))
->T : T, Symbol(T, Decl(commentsTypeParameters.ts, 12, 17))
+>compare : <T>(a: T, b: T) => boolean
+>T : T
+>a : T
+>T : T
+>b : T
+>T : T
 
     return a === b;
 >a === b : boolean
->a : T, Symbol(a, Decl(commentsTypeParameters.ts, 12, 29))
->b : T, Symbol(b, Decl(commentsTypeParameters.ts, 12, 34))
+>a : T
+>b : T
 }

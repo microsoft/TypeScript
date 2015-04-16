@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclarationIndexSignature1.ts ===
+class C {
+>C : Symbol(C, Decl(parserClassDeclarationIndexSignature1.ts, 0, 0))
+
+    [index:number]:number
+>index : Symbol(index, Decl(parserClassDeclarationIndexSignature1.ts, 1, 5))
+}

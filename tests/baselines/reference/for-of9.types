@@ -1,13 +1,13 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of9.ts ===
 var v: string;
->v : string, Symbol(v, Decl(for-of9.ts, 0, 3))
+>v : string
 
 for (v of ["hello"]) { }
->v : string, Symbol(v, Decl(for-of9.ts, 0, 3))
+>v : string
 >["hello"] : string[]
 >"hello" : string
 
 for (v of "hello") { }
->v : string, Symbol(v, Decl(for-of9.ts, 0, 3))
+>v : string
 >"hello" : string
 

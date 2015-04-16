@@ -1,17 +1,17 @@
 === tests/cases/compiler/moduleVariableArrayIndexer.ts ===
 module Bar {
->Bar : typeof Bar, Symbol(Bar, Decl(moduleVariableArrayIndexer.ts, 0, 0))
+>Bar : typeof Bar
 
     export var a = 1;
->a : number, Symbol(a, Decl(moduleVariableArrayIndexer.ts, 1, 14))
+>a : number
 >1 : number
 
     var t = undefined[a][a]; // CG: var t = undefined[Bar.a][a];
->t : any, Symbol(t, Decl(moduleVariableArrayIndexer.ts, 2, 7))
+>t : any
 >undefined[a][a] : any
 >undefined[a] : any
->undefined : undefined, Symbol(undefined)
->a : number, Symbol(a, Decl(moduleVariableArrayIndexer.ts, 1, 14))
->a : number, Symbol(a, Decl(moduleVariableArrayIndexer.ts, 1, 14))
+>undefined : undefined
+>a : number
+>a : number
 }
 

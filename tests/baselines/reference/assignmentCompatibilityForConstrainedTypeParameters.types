@@ -1,25 +1,25 @@
 === tests/cases/compiler/assignmentCompatibilityForConstrainedTypeParameters.ts ===
 function foo<T extends { bar: string }>() {
->foo : <T extends { bar: string; }>() => void, Symbol(foo, Decl(assignmentCompatibilityForConstrainedTypeParameters.ts, 0, 0))
->T : T, Symbol(T, Decl(assignmentCompatibilityForConstrainedTypeParameters.ts, 0, 13))
->bar : string, Symbol(bar, Decl(assignmentCompatibilityForConstrainedTypeParameters.ts, 0, 24))
+>foo : <T extends { bar: string; }>() => void
+>T : T
+>bar : string
 
   function bar<S extends T>() {
->bar : <S extends T>() => void, Symbol(bar, Decl(assignmentCompatibilityForConstrainedTypeParameters.ts, 0, 43))
->S : S, Symbol(S, Decl(assignmentCompatibilityForConstrainedTypeParameters.ts, 1, 15))
->T : T, Symbol(T, Decl(assignmentCompatibilityForConstrainedTypeParameters.ts, 0, 13))
+>bar : <S extends T>() => void
+>S : S
+>T : T
 
     var x: S;
->x : S, Symbol(x, Decl(assignmentCompatibilityForConstrainedTypeParameters.ts, 2, 7))
->S : S, Symbol(S, Decl(assignmentCompatibilityForConstrainedTypeParameters.ts, 1, 15))
+>x : S
+>S : S
 
     var y: T;
->y : T, Symbol(y, Decl(assignmentCompatibilityForConstrainedTypeParameters.ts, 3, 7))
->T : T, Symbol(T, Decl(assignmentCompatibilityForConstrainedTypeParameters.ts, 0, 13))
+>y : T
+>T : T
 
        y = x;
 >y = x : S
->y : T, Symbol(y, Decl(assignmentCompatibilityForConstrainedTypeParameters.ts, 3, 7))
->x : S, Symbol(x, Decl(assignmentCompatibilityForConstrainedTypeParameters.ts, 2, 7))
+>y : T
+>x : S
     }
 }

@@ -2,77 +2,77 @@
 // basic uses of function literals with constructor overloads
 
 class C {
->C : C, Symbol(C, Decl(functionLiteralForOverloads2.ts, 0, 0))
+>C : C
 
     constructor(x: string);
->x : string, Symbol(x, Decl(functionLiteralForOverloads2.ts, 3, 16))
+>x : string
 
     constructor(x: number);
->x : number, Symbol(x, Decl(functionLiteralForOverloads2.ts, 4, 16))
+>x : number
 
     constructor(x) { }
->x : any, Symbol(x, Decl(functionLiteralForOverloads2.ts, 5, 16))
+>x : any
 }
 
 class D<T> {
->D : D<T>, Symbol(D, Decl(functionLiteralForOverloads2.ts, 6, 1))
->T : T, Symbol(T, Decl(functionLiteralForOverloads2.ts, 8, 8))
+>D : D<T>
+>T : T
 
     constructor(x: string);
->x : string, Symbol(x, Decl(functionLiteralForOverloads2.ts, 9, 16))
+>x : string
 
     constructor(x: number);
->x : number, Symbol(x, Decl(functionLiteralForOverloads2.ts, 10, 16))
+>x : number
 
     constructor(x) { }
->x : any, Symbol(x, Decl(functionLiteralForOverloads2.ts, 11, 16))
+>x : any
 }
 
 var f: {
->f : { new (x: string): C; new (x: number): C; }, Symbol(f, Decl(functionLiteralForOverloads2.ts, 14, 3))
+>f : { new (x: string): C; new (x: number): C; }
 
     new(x: string): C;
->x : string, Symbol(x, Decl(functionLiteralForOverloads2.ts, 15, 8))
->C : C, Symbol(C, Decl(functionLiteralForOverloads2.ts, 0, 0))
+>x : string
+>C : C
 
     new(x: number): C;
->x : number, Symbol(x, Decl(functionLiteralForOverloads2.ts, 16, 8))
->C : C, Symbol(C, Decl(functionLiteralForOverloads2.ts, 0, 0))
+>x : number
+>C : C
 
 } = C;
->C : typeof C, Symbol(C, Decl(functionLiteralForOverloads2.ts, 0, 0))
+>C : typeof C
 
 var f2: {
->f2 : { new <T>(x: string): C; new <T>(x: number): C; }, Symbol(f2, Decl(functionLiteralForOverloads2.ts, 19, 3))
+>f2 : { new <T>(x: string): C; new <T>(x: number): C; }
 
     new<T>(x: string): C;
->T : T, Symbol(T, Decl(functionLiteralForOverloads2.ts, 20, 8))
->x : string, Symbol(x, Decl(functionLiteralForOverloads2.ts, 20, 11))
->C : C, Symbol(C, Decl(functionLiteralForOverloads2.ts, 0, 0))
+>T : T
+>x : string
+>C : C
 
     new<T>(x: number): C;
->T : T, Symbol(T, Decl(functionLiteralForOverloads2.ts, 21, 8))
->x : number, Symbol(x, Decl(functionLiteralForOverloads2.ts, 21, 11))
->C : C, Symbol(C, Decl(functionLiteralForOverloads2.ts, 0, 0))
+>T : T
+>x : number
+>C : C
 
 } = C;
->C : typeof C, Symbol(C, Decl(functionLiteralForOverloads2.ts, 0, 0))
+>C : typeof C
 
 var f3: {
->f3 : { new <T>(x: string): D<T>; new <T>(x: number): D<T>; }, Symbol(f3, Decl(functionLiteralForOverloads2.ts, 24, 3))
+>f3 : { new <T>(x: string): D<T>; new <T>(x: number): D<T>; }
 
     new<T>(x: string): D<T>;
->T : T, Symbol(T, Decl(functionLiteralForOverloads2.ts, 25, 8))
->x : string, Symbol(x, Decl(functionLiteralForOverloads2.ts, 25, 11))
->D : D<T>, Symbol(D, Decl(functionLiteralForOverloads2.ts, 6, 1))
->T : T, Symbol(T, Decl(functionLiteralForOverloads2.ts, 25, 8))
+>T : T
+>x : string
+>D : D<T>
+>T : T
 
     new<T>(x: number): D<T>;
->T : T, Symbol(T, Decl(functionLiteralForOverloads2.ts, 26, 8))
->x : number, Symbol(x, Decl(functionLiteralForOverloads2.ts, 26, 11))
->D : D<T>, Symbol(D, Decl(functionLiteralForOverloads2.ts, 6, 1))
->T : T, Symbol(T, Decl(functionLiteralForOverloads2.ts, 26, 8))
+>T : T
+>x : number
+>D : D<T>
+>T : T
 
 } = D;
->D : typeof D, Symbol(D, Decl(functionLiteralForOverloads2.ts, 6, 1))
+>D : typeof D
 

@@ -2,98 +2,98 @@
 // Error for construct signature overloads to differ only by return type
 
 class C {
->C : C, Symbol(C, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 0, 0))
+>C : C
 
     constructor(x: number) { }
->x : number, Symbol(x, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 3, 16))
+>x : number
 }
 
 class C2<T> {
->C2 : C2<T>, Symbol(C2, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 4, 1))
->T : T, Symbol(T, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 6, 9))
+>C2 : C2<T>
+>T : T
 
     constructor(x: T, y?: string) { }
->x : T, Symbol(x, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 7, 16))
->T : T, Symbol(T, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 6, 9))
->y : string, Symbol(y, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 7, 21))
+>x : T
+>T : T
+>y : string
 }
 
 interface I {
->I : I, Symbol(I, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 8, 1))
+>I : I
 
     new(x: number, y: string): C;
->x : number, Symbol(x, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 11, 8))
->y : string, Symbol(y, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 11, 18))
->C : C, Symbol(C, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 0, 0))
+>x : number
+>y : string
+>C : C
 
     new(x: number, y: string): C2<number>; // error
->x : number, Symbol(x, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 12, 8))
->y : string, Symbol(y, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 12, 18))
->C2 : C2<T>, Symbol(C2, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 4, 1))
+>x : number
+>y : string
+>C2 : C2<T>
 }
 
 interface I2<T> {
->I2 : I2<T>, Symbol(I2, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 13, 1))
->T : T, Symbol(T, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 15, 13))
+>I2 : I2<T>
+>T : T
 
     new (x: T, y: string): C2<number>;
->x : T, Symbol(x, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 16, 9))
->T : T, Symbol(T, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 15, 13))
->y : string, Symbol(y, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 16, 14))
->C2 : C2<T>, Symbol(C2, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 4, 1))
+>x : T
+>T : T
+>y : string
+>C2 : C2<T>
 
     new (x: T, y: string): C; // error
->x : T, Symbol(x, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 17, 9))
->T : T, Symbol(T, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 15, 13))
->y : string, Symbol(y, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 17, 14))
->C : C, Symbol(C, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 0, 0))
+>x : T
+>T : T
+>y : string
+>C : C
 
     new <T>(x: T, y: string): C2<T>;
->T : T, Symbol(T, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 18, 9))
->x : T, Symbol(x, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 18, 12))
->T : T, Symbol(T, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 18, 9))
->y : string, Symbol(y, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 18, 17))
->C2 : C2<T>, Symbol(C2, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 4, 1))
->T : T, Symbol(T, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 18, 9))
+>T : T
+>x : T
+>T : T
+>y : string
+>C2 : C2<T>
+>T : T
 
     new <T>(x: T, y: string): C; // error
->T : T, Symbol(T, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 19, 9))
->x : T, Symbol(x, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 19, 12))
->T : T, Symbol(T, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 19, 9))
->y : string, Symbol(y, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 19, 17))
->C : C, Symbol(C, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 0, 0))
+>T : T
+>x : T
+>T : T
+>y : string
+>C : C
 
 }
 
 var a: {
->a : { new (x: number, y: string): C2<number>; new (x: number, y: string): C; }, Symbol(a, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 23, 3))
+>a : { new (x: number, y: string): C2<number>; new (x: number, y: string): C; }
 
     new (x: number, y: string): C2<number>;
->x : number, Symbol(x, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 24, 9))
->y : string, Symbol(y, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 24, 19))
->C2 : C2<T>, Symbol(C2, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 4, 1))
+>x : number
+>y : string
+>C2 : C2<T>
 
     new (x: number, y: string): C; // error
->x : number, Symbol(x, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 25, 9))
->y : string, Symbol(y, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 25, 19))
->C : C, Symbol(C, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 0, 0))
+>x : number
+>y : string
+>C : C
 }
 
 var b: {
->b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C; }, Symbol(b, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 28, 3))
+>b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C; }
 
     new <T>(x: T, y: string): C2<T>;
->T : T, Symbol(T, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 29, 9))
->x : T, Symbol(x, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 29, 12))
->T : T, Symbol(T, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 29, 9))
->y : string, Symbol(y, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 29, 17))
->C2 : C2<T>, Symbol(C2, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 4, 1))
->T : T, Symbol(T, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 29, 9))
+>T : T
+>x : T
+>T : T
+>y : string
+>C2 : C2<T>
+>T : T
 
     new <T>(x: T, y: string): C; // error
->T : T, Symbol(T, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 30, 9))
->x : T, Symbol(x, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 30, 12))
->T : T, Symbol(T, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 30, 9))
->y : string, Symbol(y, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 30, 17))
->C : C, Symbol(C, Decl(constructSignaturesWithOverloadsThatDifferOnlyByReturnType.ts, 0, 0))
+>T : T
+>x : T
+>T : T
+>y : string
+>C : C
 }

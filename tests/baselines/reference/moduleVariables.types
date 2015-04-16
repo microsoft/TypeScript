@@ -1,49 +1,49 @@
 === tests/cases/compiler/moduleVariables.ts ===
 declare var console: any;
->console : any, Symbol(console, Decl(moduleVariables.ts, 0, 11))
+>console : any
  
 var x = 1;
->x : number, Symbol(x, Decl(moduleVariables.ts, 2, 3))
+>x : number
 >1 : number
 
 module M {
->M : typeof M, Symbol(M, Decl(moduleVariables.ts, 2, 10), Decl(moduleVariables.ts, 6, 1), Decl(moduleVariables.ts, 10, 1))
+>M : typeof M
 
     export var x = 2;
->x : number, Symbol(x, Decl(moduleVariables.ts, 4, 14))
+>x : number
 >2 : number
 
     console.log(x); // 2
 >console.log(x) : any
 >console.log : any
->console : any, Symbol(console, Decl(moduleVariables.ts, 0, 11))
+>console : any
 >log : any
->x : number, Symbol(x, Decl(moduleVariables.ts, 4, 14))
+>x : number
 }
  
 module M {
->M : typeof M, Symbol(M, Decl(moduleVariables.ts, 2, 10), Decl(moduleVariables.ts, 6, 1), Decl(moduleVariables.ts, 10, 1))
+>M : typeof M
 
     console.log(x); // 2
 >console.log(x) : any
 >console.log : any
->console : any, Symbol(console, Decl(moduleVariables.ts, 0, 11))
+>console : any
 >log : any
->x : number, Symbol(x, Decl(moduleVariables.ts, 4, 14))
+>x : number
 }
  
 module M {
->M : typeof M, Symbol(M, Decl(moduleVariables.ts, 2, 10), Decl(moduleVariables.ts, 6, 1), Decl(moduleVariables.ts, 10, 1))
+>M : typeof M
 
     var x = 3;
->x : number, Symbol(x, Decl(moduleVariables.ts, 13, 7))
+>x : number
 >3 : number
 
     console.log(x); // 3
 >console.log(x) : any
 >console.log : any
->console : any, Symbol(console, Decl(moduleVariables.ts, 0, 11))
+>console : any
 >log : any
->x : number, Symbol(x, Decl(moduleVariables.ts, 13, 7))
+>x : number
 }
 

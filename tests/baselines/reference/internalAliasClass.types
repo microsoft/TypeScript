@@ -1,23 +1,23 @@
 === tests/cases/compiler/internalAliasClass.ts ===
 module a {
->a : typeof a, Symbol(a, Decl(internalAliasClass.ts, 0, 0))
+>a : typeof a
 
     export class c {
->c : c, Symbol(c, Decl(internalAliasClass.ts, 0, 10))
+>c : c
     }
 }
 
 module c {
->c : typeof c, Symbol(c, Decl(internalAliasClass.ts, 3, 1))
+>c : typeof c
 
     import b = a.c;
->b : typeof b, Symbol(b, Decl(internalAliasClass.ts, 5, 10))
->a : typeof a, Symbol(a, Decl(internalAliasClass.ts, 0, 0))
->c : b, Symbol(b, Decl(internalAliasClass.ts, 0, 10))
+>b : typeof b
+>a : typeof a
+>c : b
 
     export var x: b = new b();
->x : b, Symbol(x, Decl(internalAliasClass.ts, 7, 14))
->b : b, Symbol(b, Decl(internalAliasClass.ts, 5, 10))
+>x : b
+>b : b
 >new b() : b
->b : typeof b, Symbol(b, Decl(internalAliasClass.ts, 5, 10))
+>b : typeof b
 }

@@ -1,17 +1,17 @@
 === tests/cases/compiler/typeInferenceFixEarly.ts ===
 declare function f<T>(p: (t: T) => T): T;
->f : <T>(p: (t: T) => T) => T, Symbol(f, Decl(typeInferenceFixEarly.ts, 0, 0))
->T : T, Symbol(T, Decl(typeInferenceFixEarly.ts, 0, 19))
->p : (t: T) => T, Symbol(p, Decl(typeInferenceFixEarly.ts, 0, 22))
->t : T, Symbol(t, Decl(typeInferenceFixEarly.ts, 0, 26))
->T : T, Symbol(T, Decl(typeInferenceFixEarly.ts, 0, 19))
->T : T, Symbol(T, Decl(typeInferenceFixEarly.ts, 0, 19))
->T : T, Symbol(T, Decl(typeInferenceFixEarly.ts, 0, 19))
+>f : <T>(p: (t: T) => T) => T
+>T : T
+>p : (t: T) => T
+>t : T
+>T : T
+>T : T
+>T : T
 
 f(n => 3);
 >f(n => 3) : {}
->f : <T>(p: (t: T) => T) => T, Symbol(f, Decl(typeInferenceFixEarly.ts, 0, 0))
+>f : <T>(p: (t: T) => T) => T
 >n => 3 : (n: {}) => number
->n : {}, Symbol(n, Decl(typeInferenceFixEarly.ts, 2, 2))
+>n : {}
 >3 : number
 

@@ -1,41 +1,41 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNames4_ES5.ts ===
 var s: string;
->s : string, Symbol(s, Decl(computedPropertyNames4_ES5.ts, 0, 3))
+>s : string
 
 var n: number;
->n : number, Symbol(n, Decl(computedPropertyNames4_ES5.ts, 1, 3))
+>n : number
 
 var a: any;
->a : any, Symbol(a, Decl(computedPropertyNames4_ES5.ts, 2, 3))
+>a : any
 
 var v = {
->v : {}, Symbol(v, Decl(computedPropertyNames4_ES5.ts, 3, 3))
+>v : {}
 >{    [s]: 0,    [n]: n,    [s + s]: 1,    [s + n]: 2,    [+s]: s,    [""]: 0,    [0]: 0,    [a]: 1,    [<any>true]: 0,    [`hello bye`]: 0,    [`hello ${a} bye`]: 0} : {}
 
     [s]: 0,
->s : string, Symbol(s, Decl(computedPropertyNames4_ES5.ts, 0, 3))
+>s : string
 >0 : number
 
     [n]: n,
->n : number, Symbol(n, Decl(computedPropertyNames4_ES5.ts, 1, 3))
->n : number, Symbol(n, Decl(computedPropertyNames4_ES5.ts, 1, 3))
+>n : number
+>n : number
 
     [s + s]: 1,
 >s + s : string
->s : string, Symbol(s, Decl(computedPropertyNames4_ES5.ts, 0, 3))
->s : string, Symbol(s, Decl(computedPropertyNames4_ES5.ts, 0, 3))
+>s : string
+>s : string
 >1 : number
 
     [s + n]: 2,
 >s + n : string
->s : string, Symbol(s, Decl(computedPropertyNames4_ES5.ts, 0, 3))
->n : number, Symbol(n, Decl(computedPropertyNames4_ES5.ts, 1, 3))
+>s : string
+>n : number
 >2 : number
 
     [+s]: s,
 >+s : number
->s : string, Symbol(s, Decl(computedPropertyNames4_ES5.ts, 0, 3))
->s : string, Symbol(s, Decl(computedPropertyNames4_ES5.ts, 0, 3))
+>s : string
+>s : string
 
     [""]: 0,
 >"" : string
@@ -46,7 +46,7 @@ var v = {
 >0 : number
 
     [a]: 1,
->a : any, Symbol(a, Decl(computedPropertyNames4_ES5.ts, 2, 3))
+>a : any
 >1 : number
 
     [<any>true]: 0,
@@ -60,6 +60,6 @@ var v = {
 
     [`hello ${a} bye`]: 0
 >`hello ${a} bye` : string
->a : any, Symbol(a, Decl(computedPropertyNames4_ES5.ts, 2, 3))
+>a : any
 >0 : number
 }

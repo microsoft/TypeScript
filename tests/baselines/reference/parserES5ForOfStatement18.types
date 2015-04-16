@@ -1,5 +1,5 @@
 === tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement18.ts ===
 for (var of of of) { }
->of : any, Symbol(of, Decl(parserES5ForOfStatement18.ts, 0, 8))
->of : any, Symbol(of, Decl(parserES5ForOfStatement18.ts, 0, 8))
+>of : any
+>of : any
 

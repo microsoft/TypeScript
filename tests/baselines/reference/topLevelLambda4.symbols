@@ -1,0 +1,4 @@
+=== tests/cases/compiler/topLevelLambda4.ts ===
+export var x = () => this.window;
+>x : Symbol(x, Decl(topLevelLambda4.ts, 0, 10))
+

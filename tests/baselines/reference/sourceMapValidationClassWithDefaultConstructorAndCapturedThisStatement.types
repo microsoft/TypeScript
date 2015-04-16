@@ -1,15 +1,15 @@
 === tests/cases/compiler/sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts ===
 class Greeter {
->Greeter : Greeter, Symbol(Greeter, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 0, 0))
+>Greeter : Greeter
 
     public a = 10;
->a : number, Symbol(a, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 0, 15))
+>a : number
 >10 : number
 
     public returnA = () => this.a;
->returnA : () => number, Symbol(returnA, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 1, 18))
+>returnA : () => number
 >() => this.a : () => number
->this.a : number, Symbol(a, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 0, 15))
->this : Greeter, Symbol(Greeter, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 0, 0))
->a : number, Symbol(a, Decl(sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.ts, 0, 15))
+>this.a : number
+>this : Greeter
+>a : number
 }

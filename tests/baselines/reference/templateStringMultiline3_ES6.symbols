@@ -1,0 +1,7 @@
+=== tests/cases/conformance/es6/templates/templateStringMultiline3_ES6.ts ===
+
+No type information for this code.// newlines are <CR>
+No type information for this code.`
+No type information for this code.\
+No type information for this code.`
+No type information for this code.

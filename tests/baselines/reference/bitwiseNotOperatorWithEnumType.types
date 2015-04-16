@@ -2,70 +2,70 @@
 // ~ operator on enum type
 
 enum ENUM1 { A, B, "" };
->ENUM1 : ENUM1, Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
->A : ENUM1, Symbol(ENUM1.A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
->B : ENUM1, Symbol(ENUM1.B, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 15))
+>ENUM1 : ENUM1
+>A : ENUM1
+>B : ENUM1
 
 // enum type var
 var ResultIsNumber1 = ~ENUM1;
->ResultIsNumber1 : number, Symbol(ResultIsNumber1, Decl(bitwiseNotOperatorWithEnumType.ts, 5, 3))
+>ResultIsNumber1 : number
 >~ENUM1 : number
->ENUM1 : typeof ENUM1, Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
+>ENUM1 : typeof ENUM1
 
 // enum type expressions
 var ResultIsNumber2 = ~ENUM1["A"];
->ResultIsNumber2 : number, Symbol(ResultIsNumber2, Decl(bitwiseNotOperatorWithEnumType.ts, 8, 3))
+>ResultIsNumber2 : number
 >~ENUM1["A"] : number
 >ENUM1["A"] : ENUM1
->ENUM1 : typeof ENUM1, Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
->"A" : string, Symbol(ENUM1.A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
+>ENUM1 : typeof ENUM1
+>"A" : string
 
 var ResultIsNumber3 = ~(ENUM1.A + ENUM1["B"]);
->ResultIsNumber3 : number, Symbol(ResultIsNumber3, Decl(bitwiseNotOperatorWithEnumType.ts, 9, 3))
+>ResultIsNumber3 : number
 >~(ENUM1.A + ENUM1["B"]) : number
 >(ENUM1.A + ENUM1["B"]) : number
 >ENUM1.A + ENUM1["B"] : number
->ENUM1.A : ENUM1, Symbol(ENUM1.A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
->ENUM1 : typeof ENUM1, Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
->A : ENUM1, Symbol(ENUM1.A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
+>ENUM1.A : ENUM1
+>ENUM1 : typeof ENUM1
+>A : ENUM1
 >ENUM1["B"] : ENUM1
->ENUM1 : typeof ENUM1, Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
->"B" : string, Symbol(ENUM1.B, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 15))
+>ENUM1 : typeof ENUM1
+>"B" : string
 
 // multiple ~ operators
 var ResultIsNumber4 = ~~~(ENUM1["A"] + ENUM1.B);
->ResultIsNumber4 : number, Symbol(ResultIsNumber4, Decl(bitwiseNotOperatorWithEnumType.ts, 12, 3))
+>ResultIsNumber4 : number
 >~~~(ENUM1["A"] + ENUM1.B) : number
 >~~(ENUM1["A"] + ENUM1.B) : number
 >~(ENUM1["A"] + ENUM1.B) : number
 >(ENUM1["A"] + ENUM1.B) : number
 >ENUM1["A"] + ENUM1.B : number
 >ENUM1["A"] : ENUM1
->ENUM1 : typeof ENUM1, Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
->"A" : string, Symbol(ENUM1.A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
->ENUM1.B : ENUM1, Symbol(ENUM1.B, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 15))
->ENUM1 : typeof ENUM1, Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
->B : ENUM1, Symbol(ENUM1.B, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 15))
+>ENUM1 : typeof ENUM1
+>"A" : string
+>ENUM1.B : ENUM1
+>ENUM1 : typeof ENUM1
+>B : ENUM1
 
 // miss assignment operators
 ~ENUM1;
 >~ENUM1 : number
->ENUM1 : typeof ENUM1, Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
+>ENUM1 : typeof ENUM1
 
 ~ENUM1["A"];
 >~ENUM1["A"] : number
 >ENUM1["A"] : ENUM1
->ENUM1 : typeof ENUM1, Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
->"A" : string, Symbol(ENUM1.A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
+>ENUM1 : typeof ENUM1
+>"A" : string
 
 ~ENUM1.A, ~ENUM1["B"];
 >~ENUM1.A, ~ENUM1["B"] : number
 >~ENUM1.A : number
->ENUM1.A : ENUM1, Symbol(ENUM1.A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
->ENUM1 : typeof ENUM1, Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
->A : ENUM1, Symbol(ENUM1.A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
+>ENUM1.A : ENUM1
+>ENUM1 : typeof ENUM1
+>A : ENUM1
 >~ENUM1["B"] : number
 >ENUM1["B"] : ENUM1
->ENUM1 : typeof ENUM1, Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
->"B" : string, Symbol(ENUM1.B, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 15))
+>ENUM1 : typeof ENUM1
+>"B" : string
 

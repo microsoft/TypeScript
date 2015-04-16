@@ -1,25 +1,25 @@
 === tests/cases/compiler/contextualTypingOfLambdaWithMultipleSignatures.ts ===
 interface Foo {
->Foo : Foo, Symbol(Foo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 0))
+>Foo : Foo
 
     getFoo(n: number): void;
->getFoo : { (n: number): void; (s: string): void; }, Symbol(getFoo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 15), Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 28))
->n : number, Symbol(n, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 11))
+>getFoo : { (n: number): void; (s: string): void; }
+>n : number
 
     getFoo(s: string): void;
->getFoo : { (n: number): void; (s: string): void; }, Symbol(getFoo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 15), Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 28))
->s : string, Symbol(s, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 2, 11))
+>getFoo : { (n: number): void; (s: string): void; }
+>s : string
 }
 
 var foo: Foo;
->foo : Foo, Symbol(foo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 5, 3))
->Foo : Foo, Symbol(Foo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 0))
+>foo : Foo
+>Foo : Foo
 
 foo.getFoo = bar => { };
 >foo.getFoo = bar => { } : (bar: any) => void
->foo.getFoo : { (n: number): void; (s: string): void; }, Symbol(Foo.getFoo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 15), Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 28))
->foo : Foo, Symbol(foo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 5, 3))
->getFoo : { (n: number): void; (s: string): void; }, Symbol(Foo.getFoo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 15), Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 28))
+>foo.getFoo : { (n: number): void; (s: string): void; }
+>foo : Foo
+>getFoo : { (n: number): void; (s: string): void; }
 >bar => { } : (bar: any) => void
->bar : any, Symbol(bar, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 6, 12))
+>bar : any
 

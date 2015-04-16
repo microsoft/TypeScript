@@ -1,0 +1,14 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES5For-of18.ts ===
+for (let v of []) {
+>v : Symbol(v, Decl(ES5For-of18.ts, 0, 8))
+
+    v;
+>v : Symbol(v, Decl(ES5For-of18.ts, 0, 8))
+}
+for (let v of []) {
+>v : Symbol(v, Decl(ES5For-of18.ts, 3, 8))
+
+    v;
+>v : Symbol(v, Decl(ES5For-of18.ts, 3, 8))
+}
+

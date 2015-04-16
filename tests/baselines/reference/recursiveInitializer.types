@@ -1,80 +1,80 @@
 === tests/cases/conformance/statements/VariableStatements/recursiveInitializer.ts ===
 // number unless otherwise specified
 var n1 = n1++;
->n1 : any, Symbol(n1, Decl(recursiveInitializer.ts, 1, 3))
+>n1 : any
 >n1++ : number
->n1 : any, Symbol(n1, Decl(recursiveInitializer.ts, 1, 3))
+>n1 : any
 
 var n2: number = n2 + n2;
->n2 : number, Symbol(n2, Decl(recursiveInitializer.ts, 2, 3))
+>n2 : number
 >n2 + n2 : number
->n2 : number, Symbol(n2, Decl(recursiveInitializer.ts, 2, 3))
->n2 : number, Symbol(n2, Decl(recursiveInitializer.ts, 2, 3))
+>n2 : number
+>n2 : number
 
 var n3 /* any */ = n3 + n3;
->n3 : any, Symbol(n3, Decl(recursiveInitializer.ts, 3, 3))
+>n3 : any
 >n3 + n3 : any
->n3 : any, Symbol(n3, Decl(recursiveInitializer.ts, 3, 3))
->n3 : any, Symbol(n3, Decl(recursiveInitializer.ts, 3, 3))
+>n3 : any
+>n3 : any
 
 // string unless otherwise specified
 var s1 = s1 + '';
->s1 : any, Symbol(s1, Decl(recursiveInitializer.ts, 6, 3))
+>s1 : any
 >s1 + '' : string
->s1 : any, Symbol(s1, Decl(recursiveInitializer.ts, 6, 3))
+>s1 : any
 >'' : string
 
 var s2 /* any */ = s2 + s2;
->s2 : any, Symbol(s2, Decl(recursiveInitializer.ts, 7, 3))
+>s2 : any
 >s2 + s2 : any
->s2 : any, Symbol(s2, Decl(recursiveInitializer.ts, 7, 3))
->s2 : any, Symbol(s2, Decl(recursiveInitializer.ts, 7, 3))
+>s2 : any
+>s2 : any
 
 var s3 : string = s3 + s3;
->s3 : string, Symbol(s3, Decl(recursiveInitializer.ts, 8, 3))
+>s3 : string
 >s3 + s3 : string
->s3 : string, Symbol(s3, Decl(recursiveInitializer.ts, 8, 3))
->s3 : string, Symbol(s3, Decl(recursiveInitializer.ts, 8, 3))
+>s3 : string
+>s3 : string
 
 var s4 = '' + s4;
->s4 : any, Symbol(s4, Decl(recursiveInitializer.ts, 9, 3))
+>s4 : any
 >'' + s4 : string
 >'' : string
->s4 : any, Symbol(s4, Decl(recursiveInitializer.ts, 9, 3))
+>s4 : any
 
 // boolean unless otherwise specified
 var b1 = !b1;
->b1 : any, Symbol(b1, Decl(recursiveInitializer.ts, 12, 3))
+>b1 : any
 >!b1 : boolean
->b1 : any, Symbol(b1, Decl(recursiveInitializer.ts, 12, 3))
+>b1 : any
 
 var b2 = !!b2;
->b2 : any, Symbol(b2, Decl(recursiveInitializer.ts, 13, 3))
+>b2 : any
 >!!b2 : boolean
 >!b2 : boolean
->b2 : any, Symbol(b2, Decl(recursiveInitializer.ts, 13, 3))
+>b2 : any
 
 var b3 = !b3 || b3; // expected boolean here. actually 'any'
->b3 : any, Symbol(b3, Decl(recursiveInitializer.ts, 14, 3))
+>b3 : any
 >!b3 || b3 : any
 >!b3 : boolean
->b3 : any, Symbol(b3, Decl(recursiveInitializer.ts, 14, 3))
->b3 : any, Symbol(b3, Decl(recursiveInitializer.ts, 14, 3))
+>b3 : any
+>b3 : any
 
 var b4 = (!b4) && b4; // expected boolean here. actually 'any'
->b4 : any, Symbol(b4, Decl(recursiveInitializer.ts, 15, 3))
+>b4 : any
 >(!b4) && b4 : any
 >(!b4) : boolean
 >!b4 : boolean
->b4 : any, Symbol(b4, Decl(recursiveInitializer.ts, 15, 3))
->b4 : any, Symbol(b4, Decl(recursiveInitializer.ts, 15, 3))
+>b4 : any
+>b4 : any
 
 // (x:string) => any
 var f = (x: string) => f(x);
->f : (x: string) => any, Symbol(f, Decl(recursiveInitializer.ts, 18, 3))
+>f : (x: string) => any
 >(x: string) => f(x) : (x: string) => any
->x : string, Symbol(x, Decl(recursiveInitializer.ts, 18, 9))
+>x : string
 >f(x) : any
->f : (x: string) => any, Symbol(f, Decl(recursiveInitializer.ts, 18, 3))
->x : string, Symbol(x, Decl(recursiveInitializer.ts, 18, 9))
+>f : (x: string) => any
+>x : string
 

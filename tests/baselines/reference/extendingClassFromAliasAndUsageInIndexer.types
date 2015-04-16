@@ -1,82 +1,82 @@
 === tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_main.ts ===
 import Backbone = require("extendingClassFromAliasAndUsageInIndexer_backbone");
->Backbone : typeof Backbone, Symbol(Backbone, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 0, 0))
+>Backbone : typeof Backbone
 
 import moduleA = require("extendingClassFromAliasAndUsageInIndexer_moduleA");
->moduleA : typeof moduleA, Symbol(moduleA, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 0, 79))
+>moduleA : typeof moduleA
 
 import moduleB = require("extendingClassFromAliasAndUsageInIndexer_moduleB");
->moduleB : typeof moduleB, Symbol(moduleB, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 1, 77))
+>moduleB : typeof moduleB
 
 interface IHasVisualizationModel {
->IHasVisualizationModel : IHasVisualizationModel, Symbol(IHasVisualizationModel, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 2, 77))
+>IHasVisualizationModel : IHasVisualizationModel
 
     VisualizationModel: typeof Backbone.Model;
->VisualizationModel : typeof Backbone.Model, Symbol(VisualizationModel, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 3, 34))
->Backbone.Model : typeof Backbone.Model, Symbol(Backbone.Model, Decl(extendingClassFromAliasAndUsageInIndexer_backbone.ts, 0, 0))
->Backbone : typeof Backbone, Symbol(Backbone, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 0, 0))
->Model : typeof Backbone.Model, Symbol(Backbone.Model, Decl(extendingClassFromAliasAndUsageInIndexer_backbone.ts, 0, 0))
+>VisualizationModel : typeof Backbone.Model
+>Backbone.Model : typeof Backbone.Model
+>Backbone : typeof Backbone
+>Model : typeof Backbone.Model
 }
 var moduleATyped: IHasVisualizationModel = moduleA;
->moduleATyped : IHasVisualizationModel, Symbol(moduleATyped, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 6, 3))
->IHasVisualizationModel : IHasVisualizationModel, Symbol(IHasVisualizationModel, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 2, 77))
->moduleA : typeof moduleA, Symbol(moduleA, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 0, 79))
+>moduleATyped : IHasVisualizationModel
+>IHasVisualizationModel : IHasVisualizationModel
+>moduleA : typeof moduleA
 
 var moduleMap: { [key: string]: IHasVisualizationModel } = {
->moduleMap : { [key: string]: IHasVisualizationModel; }, Symbol(moduleMap, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 7, 3))
->key : string, Symbol(key, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 7, 18))
->IHasVisualizationModel : IHasVisualizationModel, Symbol(IHasVisualizationModel, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 2, 77))
+>moduleMap : { [key: string]: IHasVisualizationModel; }
+>key : string
+>IHasVisualizationModel : IHasVisualizationModel
 >{    "moduleA": moduleA,    "moduleB": moduleB} : { [x: string]: typeof moduleA; "moduleA": typeof moduleA; "moduleB": typeof moduleB; }
 
     "moduleA": moduleA,
->moduleA : typeof moduleA, Symbol(moduleA, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 0, 79))
+>moduleA : typeof moduleA
 
     "moduleB": moduleB
->moduleB : typeof moduleB, Symbol(moduleB, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 1, 77))
+>moduleB : typeof moduleB
 
 };
 var moduleName: string;
->moduleName : string, Symbol(moduleName, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 11, 3))
+>moduleName : string
 
 var visModel = new moduleMap[moduleName].VisualizationModel();
->visModel : Backbone.Model, Symbol(visModel, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 12, 3))
+>visModel : Backbone.Model
 >new moduleMap[moduleName].VisualizationModel() : Backbone.Model
->moduleMap[moduleName].VisualizationModel : typeof Backbone.Model, Symbol(IHasVisualizationModel.VisualizationModel, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 3, 34))
+>moduleMap[moduleName].VisualizationModel : typeof Backbone.Model
 >moduleMap[moduleName] : IHasVisualizationModel
->moduleMap : { [key: string]: IHasVisualizationModel; }, Symbol(moduleMap, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 7, 3))
->moduleName : string, Symbol(moduleName, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 11, 3))
->VisualizationModel : typeof Backbone.Model, Symbol(IHasVisualizationModel.VisualizationModel, Decl(extendingClassFromAliasAndUsageInIndexer_main.ts, 3, 34))
+>moduleMap : { [key: string]: IHasVisualizationModel; }
+>moduleName : string
+>VisualizationModel : typeof Backbone.Model
 
 === tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_backbone.ts ===
 export class Model {
->Model : Model, Symbol(Model, Decl(extendingClassFromAliasAndUsageInIndexer_backbone.ts, 0, 0))
+>Model : Model
 
     public someData: string;
->someData : string, Symbol(someData, Decl(extendingClassFromAliasAndUsageInIndexer_backbone.ts, 0, 20))
+>someData : string
 }
 
 === tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_moduleA.ts ===
 import Backbone = require("extendingClassFromAliasAndUsageInIndexer_backbone");
->Backbone : typeof Backbone, Symbol(Backbone, Decl(extendingClassFromAliasAndUsageInIndexer_moduleA.ts, 0, 0))
+>Backbone : typeof Backbone
 
 export class VisualizationModel extends Backbone.Model {
->VisualizationModel : VisualizationModel, Symbol(VisualizationModel, Decl(extendingClassFromAliasAndUsageInIndexer_moduleA.ts, 0, 79))
->Backbone.Model : any, Symbol(Backbone.Model, Decl(extendingClassFromAliasAndUsageInIndexer_backbone.ts, 0, 0))
->Backbone : typeof Backbone, Symbol(Backbone, Decl(extendingClassFromAliasAndUsageInIndexer_moduleA.ts, 0, 0))
->Model : Backbone.Model, Symbol(Backbone.Model, Decl(extendingClassFromAliasAndUsageInIndexer_backbone.ts, 0, 0))
+>VisualizationModel : VisualizationModel
+>Backbone.Model : any
+>Backbone : typeof Backbone
+>Model : Backbone.Model
 
     // interesting stuff here
 }
 
 === tests/cases/compiler/extendingClassFromAliasAndUsageInIndexer_moduleB.ts ===
 import Backbone = require("extendingClassFromAliasAndUsageInIndexer_backbone");
->Backbone : typeof Backbone, Symbol(Backbone, Decl(extendingClassFromAliasAndUsageInIndexer_moduleB.ts, 0, 0))
+>Backbone : typeof Backbone
 
 export class VisualizationModel extends Backbone.Model {
->VisualizationModel : VisualizationModel, Symbol(VisualizationModel, Decl(extendingClassFromAliasAndUsageInIndexer_moduleB.ts, 0, 79))
->Backbone.Model : any, Symbol(Backbone.Model, Decl(extendingClassFromAliasAndUsageInIndexer_backbone.ts, 0, 0))
->Backbone : typeof Backbone, Symbol(Backbone, Decl(extendingClassFromAliasAndUsageInIndexer_moduleB.ts, 0, 0))
->Model : Backbone.Model, Symbol(Backbone.Model, Decl(extendingClassFromAliasAndUsageInIndexer_backbone.ts, 0, 0))
+>VisualizationModel : VisualizationModel
+>Backbone.Model : any
+>Backbone : typeof Backbone
+>Model : Backbone.Model
 
     // different interesting stuff here
 }

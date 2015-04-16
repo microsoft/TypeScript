@@ -1,22 +1,22 @@
 === tests/cases/compiler/genericClassesInModule.ts ===
 
 module Foo {
->Foo : typeof Foo, Symbol(Foo, Decl(genericClassesInModule.ts, 0, 0))
+>Foo : typeof Foo
 
     export class B<T>{ }
->B : B<T>, Symbol(B, Decl(genericClassesInModule.ts, 1, 12))
->T : T, Symbol(T, Decl(genericClassesInModule.ts, 3, 19))
+>B : B<T>
+>T : T
 
     export class A { }
->A : A, Symbol(A, Decl(genericClassesInModule.ts, 3, 24))
+>A : A
 }
 
 var a = new Foo.B<Foo.A>();
->a : Foo.B<Foo.A>, Symbol(a, Decl(genericClassesInModule.ts, 8, 3))
+>a : Foo.B<Foo.A>
 >new Foo.B<Foo.A>() : Foo.B<Foo.A>
->Foo.B : typeof Foo.B, Symbol(Foo.B, Decl(genericClassesInModule.ts, 1, 12))
->Foo : typeof Foo, Symbol(Foo, Decl(genericClassesInModule.ts, 0, 0))
->B : typeof Foo.B, Symbol(Foo.B, Decl(genericClassesInModule.ts, 1, 12))
->Foo : any, Symbol(Foo, Decl(genericClassesInModule.ts, 0, 0))
->A : Foo.A, Symbol(Foo.A, Decl(genericClassesInModule.ts, 3, 24))
+>Foo.B : typeof Foo.B
+>Foo : typeof Foo
+>B : typeof Foo.B
+>Foo : any
+>A : Foo.A
 

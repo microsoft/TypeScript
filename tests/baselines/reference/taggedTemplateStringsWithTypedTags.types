@@ -1,121 +1,121 @@
 === tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypedTags.ts ===
 interface I {
->I : I, Symbol(I, Decl(taggedTemplateStringsWithTypedTags.ts, 0, 0))
+>I : I
 
     (stringParts: string[], ...rest: number[]): I;
->stringParts : string[], Symbol(stringParts, Decl(taggedTemplateStringsWithTypedTags.ts, 1, 5))
->rest : number[], Symbol(rest, Decl(taggedTemplateStringsWithTypedTags.ts, 1, 27))
->I : I, Symbol(I, Decl(taggedTemplateStringsWithTypedTags.ts, 0, 0))
+>stringParts : string[]
+>rest : number[]
+>I : I
 
     g: I;
->g : I, Symbol(g, Decl(taggedTemplateStringsWithTypedTags.ts, 1, 50))
->I : I, Symbol(I, Decl(taggedTemplateStringsWithTypedTags.ts, 0, 0))
+>g : I
+>I : I
 
     h: I;
->h : I, Symbol(h, Decl(taggedTemplateStringsWithTypedTags.ts, 2, 9))
->I : I, Symbol(I, Decl(taggedTemplateStringsWithTypedTags.ts, 0, 0))
+>h : I
+>I : I
 
     member: I;
->member : I, Symbol(member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
->I : I, Symbol(I, Decl(taggedTemplateStringsWithTypedTags.ts, 0, 0))
+>member : I
+>I : I
 
     thisIsNotATag(x: string): void
->thisIsNotATag : (x: string) => void, Symbol(thisIsNotATag, Decl(taggedTemplateStringsWithTypedTags.ts, 4, 14))
->x : string, Symbol(x, Decl(taggedTemplateStringsWithTypedTags.ts, 5, 18))
+>thisIsNotATag : (x: string) => void
+>x : string
 
     [x: number]: I;
->x : number, Symbol(x, Decl(taggedTemplateStringsWithTypedTags.ts, 6, 5))
->I : I, Symbol(I, Decl(taggedTemplateStringsWithTypedTags.ts, 0, 0))
+>x : number
+>I : I
 }
 
 var f: I;
->f : I, Symbol(f, Decl(taggedTemplateStringsWithTypedTags.ts, 9, 3))
->I : I, Symbol(I, Decl(taggedTemplateStringsWithTypedTags.ts, 0, 0))
+>f : I
+>I : I
 
 f `abc`
 >f `abc` : I
->f : I, Symbol(f, Decl(taggedTemplateStringsWithTypedTags.ts, 9, 3))
+>f : I
 >`abc` : string
 
 f `abc${1}def${2}ghi`;
 >f `abc${1}def${2}ghi` : I
->f : I, Symbol(f, Decl(taggedTemplateStringsWithTypedTags.ts, 9, 3))
+>f : I
 >`abc${1}def${2}ghi` : string
 >1 : number
 >2 : number
 
 f `abc`.member
->f `abc`.member : I, Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
+>f `abc`.member : I
 >f `abc` : I
->f : I, Symbol(f, Decl(taggedTemplateStringsWithTypedTags.ts, 9, 3))
+>f : I
 >`abc` : string
->member : I, Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
+>member : I
 
 f `abc${1}def${2}ghi`.member;
->f `abc${1}def${2}ghi`.member : I, Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
+>f `abc${1}def${2}ghi`.member : I
 >f `abc${1}def${2}ghi` : I
->f : I, Symbol(f, Decl(taggedTemplateStringsWithTypedTags.ts, 9, 3))
+>f : I
 >`abc${1}def${2}ghi` : string
 >1 : number
 >2 : number
->member : I, Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
+>member : I
 
 f `abc`["member"];
 >f `abc`["member"] : I
 >f `abc` : I
->f : I, Symbol(f, Decl(taggedTemplateStringsWithTypedTags.ts, 9, 3))
+>f : I
 >`abc` : string
->"member" : string, Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
+>"member" : string
 
 f `abc${1}def${2}ghi`["member"];
 >f `abc${1}def${2}ghi`["member"] : I
 >f `abc${1}def${2}ghi` : I
->f : I, Symbol(f, Decl(taggedTemplateStringsWithTypedTags.ts, 9, 3))
+>f : I
 >`abc${1}def${2}ghi` : string
 >1 : number
 >2 : number
->"member" : string, Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
+>"member" : string
 
 f `abc`[0].member `abc${1}def${2}ghi`;
 >f `abc`[0].member `abc${1}def${2}ghi` : I
->f `abc`[0].member : I, Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
+>f `abc`[0].member : I
 >f `abc`[0] : I
 >f `abc` : I
->f : I, Symbol(f, Decl(taggedTemplateStringsWithTypedTags.ts, 9, 3))
+>f : I
 >`abc` : string
 >0 : number
->member : I, Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
+>member : I
 >`abc${1}def${2}ghi` : string
 >1 : number
 >2 : number
 
 f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi`;
 >f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi` : I
->f `abc${1}def${2}ghi`["member"].member : I, Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
+>f `abc${1}def${2}ghi`["member"].member : I
 >f `abc${1}def${2}ghi`["member"] : I
 >f `abc${1}def${2}ghi` : I
->f : I, Symbol(f, Decl(taggedTemplateStringsWithTypedTags.ts, 9, 3))
+>f : I
 >`abc${1}def${2}ghi` : string
 >1 : number
 >2 : number
->"member" : string, Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
->member : I, Symbol(I.member, Decl(taggedTemplateStringsWithTypedTags.ts, 3, 9))
+>"member" : string
+>member : I
 >`abc${1}def${2}ghi` : string
 >1 : number
 >2 : number
 
 f.thisIsNotATag(`abc`);
 >f.thisIsNotATag(`abc`) : void
->f.thisIsNotATag : (x: string) => void, Symbol(I.thisIsNotATag, Decl(taggedTemplateStringsWithTypedTags.ts, 4, 14))
->f : I, Symbol(f, Decl(taggedTemplateStringsWithTypedTags.ts, 9, 3))
->thisIsNotATag : (x: string) => void, Symbol(I.thisIsNotATag, Decl(taggedTemplateStringsWithTypedTags.ts, 4, 14))
+>f.thisIsNotATag : (x: string) => void
+>f : I
+>thisIsNotATag : (x: string) => void
 >`abc` : string
 
 f.thisIsNotATag(`abc${1}def${2}ghi`);
 >f.thisIsNotATag(`abc${1}def${2}ghi`) : void
->f.thisIsNotATag : (x: string) => void, Symbol(I.thisIsNotATag, Decl(taggedTemplateStringsWithTypedTags.ts, 4, 14))
->f : I, Symbol(f, Decl(taggedTemplateStringsWithTypedTags.ts, 9, 3))
->thisIsNotATag : (x: string) => void, Symbol(I.thisIsNotATag, Decl(taggedTemplateStringsWithTypedTags.ts, 4, 14))
+>f.thisIsNotATag : (x: string) => void
+>f : I
+>thisIsNotATag : (x: string) => void
 >`abc${1}def${2}ghi` : string
 >1 : number
 >2 : number

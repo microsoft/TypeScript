@@ -1,76 +1,76 @@
 === tests/cases/compiler/declarationEmit_nameConflicts3.ts ===
 module M {
->M : typeof M, Symbol(M, Decl(declarationEmit_nameConflicts3.ts, 0, 0), Decl(declarationEmit_nameConflicts3.ts, 11, 1))
+>M : typeof M
 
     export interface D { }
->D : D, Symbol(D, Decl(declarationEmit_nameConflicts3.ts, 0, 10), Decl(declarationEmit_nameConflicts3.ts, 1, 26))
+>D : D
 
     export module D {
->D : typeof D, Symbol(D, Decl(declarationEmit_nameConflicts3.ts, 0, 10), Decl(declarationEmit_nameConflicts3.ts, 1, 26))
+>D : typeof D
 
         export function f() { }
->f : () => void, Symbol(f, Decl(declarationEmit_nameConflicts3.ts, 2, 21))
+>f : () => void
     }
     export module C {
->C : typeof C, Symbol(C, Decl(declarationEmit_nameConflicts3.ts, 4, 5))
+>C : typeof C
 
         export function f() { }
->f : () => void, Symbol(f, Decl(declarationEmit_nameConflicts3.ts, 5, 21))
+>f : () => void
     }
     export module E {
->E : typeof E, Symbol(E, Decl(declarationEmit_nameConflicts3.ts, 7, 5))
+>E : typeof E
 
         export function f() { }
->f : () => void, Symbol(f, Decl(declarationEmit_nameConflicts3.ts, 8, 21))
+>f : () => void
     }
 }
 
 module M.P {
->M : typeof M, Symbol(M, Decl(declarationEmit_nameConflicts3.ts, 0, 0), Decl(declarationEmit_nameConflicts3.ts, 11, 1))
->P : typeof P, Symbol(P, Decl(declarationEmit_nameConflicts3.ts, 13, 9))
+>M : typeof M
+>P : typeof P
 
     export class C {
->C : C, Symbol(C, Decl(declarationEmit_nameConflicts3.ts, 13, 12))
+>C : C
 
         static f() { }
->f : () => void, Symbol(C.f, Decl(declarationEmit_nameConflicts3.ts, 14, 20))
+>f : () => void
     }
     export class E extends C { }
->E : E, Symbol(E, Decl(declarationEmit_nameConflicts3.ts, 16, 5))
->C : C, Symbol(C, Decl(declarationEmit_nameConflicts3.ts, 13, 12))
+>E : E
+>C : C
 
     export enum D {
->D : D, Symbol(D, Decl(declarationEmit_nameConflicts3.ts, 17, 32))
+>D : D
 
         f
->f : D, Symbol(D.f, Decl(declarationEmit_nameConflicts3.ts, 18, 19))
+>f : D
     }
     export var v: M.D; // ok
->v : M.D, Symbol(v, Decl(declarationEmit_nameConflicts3.ts, 21, 14))
->M : any, Symbol(M, Decl(declarationEmit_nameConflicts3.ts, 0, 0), Decl(declarationEmit_nameConflicts3.ts, 11, 1))
->D : M.D, Symbol(D, Decl(declarationEmit_nameConflicts3.ts, 0, 10), Decl(declarationEmit_nameConflicts3.ts, 1, 26))
+>v : M.D
+>M : any
+>D : M.D
 
     export var w = M.D.f; // error, should be typeof M.D.f
->w : () => void, Symbol(w, Decl(declarationEmit_nameConflicts3.ts, 22, 14))
->M.D.f : () => void, Symbol(D.f, Decl(declarationEmit_nameConflicts3.ts, 2, 21))
->M.D : typeof M.D, Symbol(D, Decl(declarationEmit_nameConflicts3.ts, 0, 10), Decl(declarationEmit_nameConflicts3.ts, 1, 26))
->M : typeof M, Symbol(M, Decl(declarationEmit_nameConflicts3.ts, 0, 0), Decl(declarationEmit_nameConflicts3.ts, 11, 1))
->D : typeof M.D, Symbol(D, Decl(declarationEmit_nameConflicts3.ts, 0, 10), Decl(declarationEmit_nameConflicts3.ts, 1, 26))
->f : () => void, Symbol(D.f, Decl(declarationEmit_nameConflicts3.ts, 2, 21))
+>w : () => void
+>M.D.f : () => void
+>M.D : typeof M.D
+>M : typeof M
+>D : typeof M.D
+>f : () => void
 
     export var x = M.C.f; // error, should be typeof M.C.f
->x : () => void, Symbol(x, Decl(declarationEmit_nameConflicts3.ts, 23, 14), Decl(declarationEmit_nameConflicts3.ts, 24, 14))
->M.C.f : () => void, Symbol(C.f, Decl(declarationEmit_nameConflicts3.ts, 5, 21))
->M.C : typeof M.C, Symbol(C, Decl(declarationEmit_nameConflicts3.ts, 4, 5))
->M : typeof M, Symbol(M, Decl(declarationEmit_nameConflicts3.ts, 0, 0), Decl(declarationEmit_nameConflicts3.ts, 11, 1))
->C : typeof M.C, Symbol(C, Decl(declarationEmit_nameConflicts3.ts, 4, 5))
->f : () => void, Symbol(C.f, Decl(declarationEmit_nameConflicts3.ts, 5, 21))
+>x : () => void
+>M.C.f : () => void
+>M.C : typeof M.C
+>M : typeof M
+>C : typeof M.C
+>f : () => void
 
     export var x = M.E.f; // error, should be typeof M.E.f
->x : () => void, Symbol(x, Decl(declarationEmit_nameConflicts3.ts, 23, 14), Decl(declarationEmit_nameConflicts3.ts, 24, 14))
->M.E.f : () => void, Symbol(E.f, Decl(declarationEmit_nameConflicts3.ts, 8, 21))
->M.E : typeof M.E, Symbol(E, Decl(declarationEmit_nameConflicts3.ts, 7, 5))
->M : typeof M, Symbol(M, Decl(declarationEmit_nameConflicts3.ts, 0, 0), Decl(declarationEmit_nameConflicts3.ts, 11, 1))
->E : typeof M.E, Symbol(E, Decl(declarationEmit_nameConflicts3.ts, 7, 5))
->f : () => void, Symbol(E.f, Decl(declarationEmit_nameConflicts3.ts, 8, 21))
+>x : () => void
+>M.E.f : () => void
+>M.E : typeof M.E
+>M : typeof M
+>E : typeof M.E
+>f : () => void
 }

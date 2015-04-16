@@ -1,0 +1,19 @@
+=== tests/cases/compiler/declFileAliasUseBeforeDeclaration2.ts ===
+
+declare module "test" {
+    module A {
+>A : Symbol(A, Decl(declFileAliasUseBeforeDeclaration2.ts, 1, 23))
+
+        class C {
+>C : Symbol(C, Decl(declFileAliasUseBeforeDeclaration2.ts, 2, 14))
+        }
+    }
+    class B extends E {
+>B : Symbol(B, Decl(declFileAliasUseBeforeDeclaration2.ts, 5, 5))
+>E : Symbol(E, Decl(declFileAliasUseBeforeDeclaration2.ts, 7, 5))
+    }
+    import E = A.C;
+>E : Symbol(E, Decl(declFileAliasUseBeforeDeclaration2.ts, 7, 5))
+>A : Symbol(A, Decl(declFileAliasUseBeforeDeclaration2.ts, 1, 23))
+>C : Symbol(E, Decl(declFileAliasUseBeforeDeclaration2.ts, 2, 14))
+}

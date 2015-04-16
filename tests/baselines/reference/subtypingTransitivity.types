@@ -1,55 +1,55 @@
 === tests/cases/compiler/subtypingTransitivity.ts ===
 class B {
->B : B, Symbol(B, Decl(subtypingTransitivity.ts, 0, 0))
+>B : B
 
     x: Object;
->x : Object, Symbol(x, Decl(subtypingTransitivity.ts, 0, 9))
->Object : Object, Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>x : Object
+>Object : Object
 }
 
 class D extends B {
->D : D, Symbol(D, Decl(subtypingTransitivity.ts, 2, 1))
->B : B, Symbol(B, Decl(subtypingTransitivity.ts, 0, 0))
+>D : D
+>B : B
 
     public x: string;
->x : string, Symbol(x, Decl(subtypingTransitivity.ts, 4, 19))
+>x : string
 }
 class D2 extends B {
->D2 : D2, Symbol(D2, Decl(subtypingTransitivity.ts, 6, 1))
->B : B, Symbol(B, Decl(subtypingTransitivity.ts, 0, 0))
+>D2 : D2
+>B : B
 
     public x: number;
->x : number, Symbol(x, Decl(subtypingTransitivity.ts, 7, 20))
+>x : number
 }
 
 var b: B;
->b : B, Symbol(b, Decl(subtypingTransitivity.ts, 11, 3))
->B : B, Symbol(B, Decl(subtypingTransitivity.ts, 0, 0))
+>b : B
+>B : B
 
 var d: D;
->d : D, Symbol(d, Decl(subtypingTransitivity.ts, 12, 3))
->D : D, Symbol(D, Decl(subtypingTransitivity.ts, 2, 1))
+>d : D
+>D : D
 
 var d2: D2;
->d2 : D2, Symbol(d2, Decl(subtypingTransitivity.ts, 13, 3))
->D2 : D2, Symbol(D2, Decl(subtypingTransitivity.ts, 6, 1))
+>d2 : D2
+>D2 : D2
 
 d.x = '';
 >d.x = '' : string
->d.x : string, Symbol(D.x, Decl(subtypingTransitivity.ts, 4, 19))
->d : D, Symbol(d, Decl(subtypingTransitivity.ts, 12, 3))
->x : string, Symbol(D.x, Decl(subtypingTransitivity.ts, 4, 19))
+>d.x : string
+>d : D
+>x : string
 >'' : string
 
 b = d;
 >b = d : D
->b : B, Symbol(b, Decl(subtypingTransitivity.ts, 11, 3))
->d : D, Symbol(d, Decl(subtypingTransitivity.ts, 12, 3))
+>b : B
+>d : D
 
 b.x = 1; // assigned number to string
 >b.x = 1 : number
->b.x : Object, Symbol(B.x, Decl(subtypingTransitivity.ts, 0, 9))
->b : B, Symbol(b, Decl(subtypingTransitivity.ts, 11, 3))
->x : Object, Symbol(B.x, Decl(subtypingTransitivity.ts, 0, 9))
+>b.x : Object
+>b : B
+>x : Object
 >1 : number
 
