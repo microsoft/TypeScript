@@ -24,8 +24,8 @@ typeof ;
 10;
 throw function () { };
 void {};
-var _a = { while: 1, return: 2 }, while = _a.while, return = _a.return;
-var _b = { this: 1, switch: { continue: 2 } }, this = _b.this, continue = _b.switch.continue;
+var _a = { while: 1, return: 2 },  = _a.while,  = _a.return;
+var _b = { this: 1, switch: { continue: 2 } },  = _b.this,  = _b.switch.continue;
 var _c = void 0;
 debugger;
 if ()
