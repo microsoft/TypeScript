@@ -131,6 +131,7 @@ module ts {
         let symbolLinks: SymbolLinks[] = [];
         let nodeLinks: NodeLinks[] = [];
         let potentialThisCollisions: Node[] = [];
+        let potentialArgumentsCollisions: Node[] = [];
 
         let diagnostics = createDiagnosticCollection();
 
@@ -330,6 +331,7 @@ module ts {
             let lastLocation: Node;
             let propertyWithInvalidInitializer: Node;
             let errorLocation = location;
+            let argumentsUsedInArrowFunction = false;
             let grandparent: Node;
 
             loop: while (location) {
@@ -341,7 +343,10 @@ module ts {
                 }
                 switch (location.kind) {
                     case SyntaxKind.SourceFile:
-                        if (!isExternalModule(<SourceFile>location)) break;
+                        if (!isExternalModule(<SourceFile>location)) {
+                            break;
+                        }
+                        // fall through
                     case SyntaxKind.ModuleDeclaration:
                         if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & SymbolFlags.ModuleMember)) {
                             if (result.flags & meaning || !(result.flags & SymbolFlags.Alias && getDeclarationOfAliasSymbol(result).kind === SyntaxKind.ExportSpecifier)) {
@@ -377,7 +382,7 @@ module ts {
                                 if (getSymbol(ctor.locals, name, meaning & SymbolFlags.Value)) {
                                     // Remember the property node, it will be used later to report appropriate error
                                     propertyWithInvalidInitializer = location;
-                                }
+                                                                   }
                             }
                         }
                         break;
@@ -388,6 +393,7 @@ module ts {
                                 // TypeScript 1.0 spec (April 2014): 3.4.1
                                 // The scope of a type parameter extends over the entire declaration with which the type
                                 // parameter list is associated, with the exception of static member declarations in classes.
+                                // TODO (jfreeman): Should we be reporting an error even if 'nameNotFoundMessage' was not supplied?
                                 error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
                                 return undefined;
                             }
@@ -408,8 +414,23 @@ module ts {
                         if (grandparent.kind === SyntaxKind.ClassDeclaration || grandparent.kind === SyntaxKind.InterfaceDeclaration) {
                             // A reference to this grandparent's type parameters would be an error
                             if (result = getSymbol(getSymbolOfNode(grandparent).members, name, meaning & SymbolFlags.Type)) {
+                                // TODO (jfreeman): Should we be reporting an error even if 'nameNotFoundMessage' was not supplied?
                                 error(errorLocation, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
                                 return undefined;
+                            }
+                        }
+                        break;
+                    case SyntaxKind.ArrowFunction:
+                        if (name === "arguments") {
+                            // According to the ECMAScript 6 language spec, arrow functions don't introduce
+                            // an 'arguments' object; however, when emitting arrow functions downlevel,
+                            // we use function expressions which *do* introduce an 'arguments' object.
+                            // This means that between ES3/ES5 emit and ES6 emit, there is inconsistent behavior
+                            // at runtime. Rather than simply make a semantic breaking change, we also error
+                            // so that users are aware that something is wrong, and may change it.
+                            if (nameNotFoundMessage && languageVersion < ScriptTarget.ES6) {
+                                error(errorLocation, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression);
+                                argumentsUsedInArrowFunction = true;
                             }
                         }
                         break;
@@ -419,7 +440,6 @@ module ts {
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.ArrowFunction:
                         if (name === "arguments") {
                             result = argumentsSymbol;
                             break loop;
@@ -474,15 +494,24 @@ module ts {
                 result = getSymbol(globals, name, meaning);
             }
 
+            let shouldStillReportError = nameNotFoundMessage && !argumentsUsedInArrowFunction;
+
             if (!result) {
-                if (nameNotFoundMessage) {
+                if (shouldStillReportError) {
                     error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
                 }
                 return undefined;
             }
 
+            if (argumentsUsedInArrowFunction) {
+                // At this point we've resolved the owner of 'arguments' and know it needs to be captured.
+                // Flag the owner to indicate that it will need to capture at emit-time.
+                // If we were resolved in the global scope, use 'lastLocation' as 'location' will be undefined.
+                getNodeLinks(location || lastLocation).flags |= NodeCheckFlags.CaptureArguments;
+            }
+
             // Perform extra checks only if error reporting was requested
-            if (nameNotFoundMessage) {
+            if (shouldStillReportError) {
                 if (propertyWithInvalidInitializer) {
                     // We have a match, but the reference occurred within a property initializer and the identifier also binds
                     // to a local variable in the constructor where the code will be emitted.
@@ -5398,22 +5427,12 @@ module ts {
         function checkIdentifier(node: Identifier): Type {
             let symbol = getResolvedSymbol(node);
 
-            // As noted in ECMAScript 6 language spec, arrow functions never have an arguments objects.
-            // Although in down-level emit of arrow function, we emit it using function expression which means that
-            // arguments objects will be bound to the inner object; emitting arrow function natively in ES6, arguments objects
-            // will be bound to non-arrow function that contain this arrow function. This results in inconsistent behavior.
-            // To avoid that we will give an error to users if they use arguments objects in arrow function so that they
-            // can explicitly bound arguments objects
-            if (symbol === argumentsSymbol && getContainingFunction(node).kind === SyntaxKind.ArrowFunction) {
-                error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_Consider_using_a_standard_function_expression);
-            }
-
             if (symbol.flags & SymbolFlags.Alias && !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveAlias(symbol))) {
                 markAliasSymbolAsReferenced(symbol);
             }
 
             checkCollisionWithCapturedSuperVariable(node, node);
-            checkCollisionWithCapturedThisVariable(node, node);
+            checkCollisionWithCapturedThisOrArgumentsVariable(node, node);
             checkBlockScopedBindingCapturedInLoop(node, symbol);
 
             return getNarrowedTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol), node);
@@ -5492,7 +5511,7 @@ module ts {
             if (container.kind === SyntaxKind.ArrowFunction) {
                 container = getThisContainer(container, /* includeArrowFunctions */ false);
 
-                // When targeting es6, arrow function lexically bind "this" so we do not need to do the work of binding "this" in emitted code
+                // When targeting es6, arrow functions lexically bind "this" so we do not need to do the work of binding "this" in emitted code
                 needToCaptureLexicalThis = (languageVersion < ScriptTarget.ES6);
             }
 
@@ -7352,7 +7371,7 @@ module ts {
 
             if (produceDiagnostics && node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
                 checkCollisionWithCapturedSuperVariable(node, (<FunctionExpression>node).name);
-                checkCollisionWithCapturedThisVariable(node, (<FunctionExpression>node).name);
+                checkCollisionWithCapturedThisOrArgumentsVariable(node, (<FunctionExpression>node).name);
             }
 
             return type;
@@ -8898,7 +8917,7 @@ module ts {
                 checkGrammarForGenerator(node);
 
                 checkCollisionWithCapturedSuperVariable(node, node.name);
-                checkCollisionWithCapturedThisVariable(node, node.name);
+                checkCollisionWithCapturedThisOrArgumentsVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             }
         }
@@ -8987,7 +9006,7 @@ module ts {
                 node.kind === SyntaxKind.MethodSignature ||
                 node.kind === SyntaxKind.GetAccessor ||
                 node.kind === SyntaxKind.SetAccessor) {
-                // it is ok to have member named '_super' or '_this' - member access is always qualified
+                // it is ok to have member named '_super', '_this', or '_arguments' - member access is always qualified
                 return false;
             }
 
@@ -9005,23 +9024,36 @@ module ts {
             return true;
         }
 
-        function checkCollisionWithCapturedThisVariable(node: Node, name: Identifier): void {
+        function checkCollisionWithCapturedThisOrArgumentsVariable(node: Node, name: Identifier): void {
             if (needCollisionCheckForIdentifier(node, name, "_this")) {
                 potentialThisCollisions.push(node);
+            }
+            else if (needCollisionCheckForIdentifier(node, name, "_arguments")) {
+                potentialArgumentsCollisions.push(node);
             }
         }
 
         // this function will run after checking the source file so 'CaptureThis' is correct for all nodes
-        function checkIfThisIsCapturedInEnclosingScope(node: Node): void {
+        function checkForCapturedThisCollisionInEnclosingScope(node: Node): void {
+            checkIfEnclosingScopeCapturesCollide(node, NodeCheckFlags.CaptureThis, "_this", "this");
+        }
+
+        function checkForCapturedArgumentsCollisionInEnclosingScope(node: Node): void {
+            checkIfEnclosingScopeCapturesCollide(node, NodeCheckFlags.CaptureArguments, "_arguments", "arguments");
+        }
+
+        function checkIfEnclosingScopeCapturesCollide(node: Node, captureFlag: NodeCheckFlags, nameUsedForCapture: string, nameOfCapturedEntity: string): void {
+            Debug.assert(captureFlag === NodeCheckFlags.CaptureThis || captureFlag === NodeCheckFlags.CaptureArguments);
+
             let current = node;
             while (current) {
-                if (getNodeCheckFlags(current) & NodeCheckFlags.CaptureThis) {
-                    let isDeclaration = node.kind !== SyntaxKind.Identifier;
-                    if (isDeclaration) {
-                        error((<Declaration>node).name, Diagnostics.Duplicate_identifier_this_Compiler_uses_variable_declaration_this_to_capture_this_reference);
+                if (getNodeCheckFlags(current) & captureFlag) {
+                    let atDeclarationSite = node.kind !== SyntaxKind.Identifier;
+                    if (atDeclarationSite) {
+                        error((<Declaration>node).name, Diagnostics.Duplicate_identifier_0_Compiler_uses_variable_declaration_0_to_capture_1_reference, nameUsedForCapture, nameOfCapturedEntity);
                     }
                     else {
-                        error(node, Diagnostics.Expression_resolves_to_variable_declaration_this_that_compiler_uses_to_capture_this_reference);
+                        error(node, Diagnostics.Expression_resolves_to_variable_declaration_0_that_compiler_uses_to_capture_1_reference, nameUsedForCapture, nameOfCapturedEntity);
                     }
                     return;
                 }
@@ -9123,7 +9155,7 @@ module ts {
                                 : undefined;
 
                         // names of block-scoped and function scoped variables can collide only
-                        // if block scoped variable is defined in the function\module\source file scope (because of variable hoisting)
+                        // if block scoped variable is defined in the function/module/source file scope (because of variable hoisting)
                         let namesShareScope =
                             container &&
                             (container.kind === SyntaxKind.Block && isFunctionLike(container.parent) ||
@@ -9245,7 +9277,7 @@ module ts {
                     checkVarDeclaredNamesNotShadowed(<VariableDeclaration | BindingElement>node);
                 }
                 checkCollisionWithCapturedSuperVariable(node, <Identifier>node.name);
-                checkCollisionWithCapturedThisVariable(node, <Identifier>node.name);
+                checkCollisionWithCapturedThisOrArgumentsVariable(node, <Identifier>node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
             }
         }
@@ -9936,7 +9968,7 @@ module ts {
             checkDecorators(node);
             if (node.name) {
                 checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
-                checkCollisionWithCapturedThisVariable(node, node.name);
+                checkCollisionWithCapturedThisOrArgumentsVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             }
             checkTypeParameters(node.typeParameters);
@@ -10377,7 +10409,7 @@ module ts {
             checkGrammarDeclarationNameInStrictMode(node) || checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarEnumDeclaration(node);
 
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
-            checkCollisionWithCapturedThisVariable(node, node.name);
+            checkCollisionWithCapturedThisOrArgumentsVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
 
@@ -10450,7 +10482,7 @@ module ts {
                     }
                 }
 
-                checkCollisionWithCapturedThisVariable(node, node.name);
+                checkCollisionWithCapturedThisOrArgumentsVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                 checkExportsOnMergedDeclarations(node);
                 let symbol = getSymbolOfNode(node);
@@ -10542,7 +10574,7 @@ module ts {
         }
 
         function checkImportBinding(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
-            checkCollisionWithCapturedThisVariable(node, node.name);
+            checkCollisionWithCapturedThisOrArgumentsVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             checkAliasSymbol(node);
         }
@@ -10913,8 +10945,13 @@ module ts {
                 }
 
                 if (potentialThisCollisions.length) {
-                    forEach(potentialThisCollisions, checkIfThisIsCapturedInEnclosingScope);
+                    forEach(potentialThisCollisions, checkForCapturedThisCollisionInEnclosingScope);
                     potentialThisCollisions.length = 0;
+                }
+
+                if (potentialArgumentsCollisions) {
+                    forEach(potentialArgumentsCollisions, checkForCapturedArgumentsCollisionInEnclosingScope);
+                    potentialArgumentsCollisions.length = 0;
                 }
 
                 if (emitExtends) {
@@ -11485,6 +11522,43 @@ module ts {
             }
         }
 
+        function isCapturedArgumentsIdentifier(node: Identifier): boolean {
+            if (node.text !== "arguments") {
+                return false
+            }
+
+            let symbol = getNodeLinks(node).resolvedSymbol || (isDeclarationName(node) ? getSymbolOfNode(node.parent) : undefined);
+            if (symbol) {
+                if (symbol === argumentsSymbol) {
+                    // According to the ES6 spec, 'arguments' refers to the special 'arguments' object
+                    // when inside a function where
+                    //      - the [[ThisMode]] internal slot is not 'lexical'
+                    //          and there is no parameter named "arguments".
+                    //      - the [[ThisMode]] internal slot is 'lexical' and an outer scope has a
+                    //          special 'arguments' object.
+                    //
+                    // So when dealing with the 'arguments' symbol, we're interested in the 'this' container.
+                    let argumentsContainer = getThisContainer(node, /*includeArrowFunctions*/ false);
+                    return argumentsContainerRequiresCapturing(argumentsContainer, getNodeCheckFlags(argumentsContainer));
+                }
+                else if (symbol.valueDeclaration) {
+                    // Otherwise, we're either looking for a parameter or global.
+                    // Go to the declaration and find the function who owns it.
+                    // The 'this' container is still interesting to us because it
+                    // includes sourcefiles (where we have globals) and
+                    // arrow functions (where we have parameters)
+                    let argumentsContainer = getThisContainer(symbol.valueDeclaration, /*includeArrowFunctions*/ true);
+                    return argumentsContainerRequiresCapturing(argumentsContainer, getNodeCheckFlags(argumentsContainer));
+                }
+            }
+            
+            return false;
+        }
+
+        function argumentsContainerRequiresCapturing(argumentsContainer: Node, containerCheckFlags: NodeCheckFlags): boolean {
+            return !!(argumentsContainer && (containerCheckFlags & NodeCheckFlags.CaptureArguments))
+        }
+
         function getExpressionNameSubstitution(node: Identifier, getGeneratedNameForNode: (Node: Node) => string): string {
             let symbol = getNodeLinks(node).resolvedSymbol || (isDeclarationName(node) ? getSymbolOfNode(node.parent) : undefined);
             if (symbol) {
@@ -11500,6 +11574,7 @@ module ts {
                 if (symbol !== exportSymbol && !(exportSymbol.flags & SymbolFlags.ExportHasLocal)) {
                     return getExportNameSubstitution(exportSymbol, node.parent, getGeneratedNameForNode);
                 }
+
                 // Named imports from ES6 import declarations are rewritten
                 if (symbol.flags & SymbolFlags.Alias) {
                     return getAliasNameSubstitution(symbol, getGeneratedNameForNode);
@@ -11877,6 +11952,7 @@ module ts {
                 hasGlobalName,
                 isReferencedAliasDeclaration,
                 getNodeCheckFlags,
+                isCapturedArgumentsIdentifier,
                 isTopLevelValueImportEqualsWithEntityName,
                 isDeclarationVisible,
                 isImplementationOfOverload,

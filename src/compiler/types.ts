@@ -1267,6 +1267,7 @@ module ts {
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
+        isCapturedArgumentsIdentifier(node: Identifier): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags): SymbolAccessiblityResult;
         isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
@@ -1393,18 +1394,19 @@ module ts {
     /* @internal */ 
     export const enum NodeCheckFlags {
         TypeChecked                 = 0x00000001,  // Node has been type checked
-        LexicalThis                 = 0x00000002,  // Lexical 'this' reference
-        CaptureThis                 = 0x00000004,  // Lexical 'this' used in body
-        EmitExtends                 = 0x00000008,  // Emit __extends
-        SuperInstance               = 0x00000010,  // Instance 'super' reference
-        SuperStatic                 = 0x00000020,  // Static 'super' reference
-        ContextChecked              = 0x00000040,  // Contextual types have been assigned
+        LexicalThis                 = 0x00000002,  // 'this' refers to a lexically captured '_this'.
+        CaptureThis                 = 0x00000004,  // 'this' needs to be captured as '_this'
+        CaptureArguments            = 0x00000008,  // 'arguments' needs to be captured as '_arguments'
+        EmitExtends                 = 0x00000010,  // Emit __extends
+        SuperInstance               = 0x00000020,  // Instance 'super' reference
+        SuperStatic                 = 0x00000040,  // Static 'super' reference
+        ContextChecked              = 0x00000080,  // Contextual types have been assigned
 
         // Values for enum members have been computed, and any errors have been reported for them.
-        EnumValuesComputed          = 0x00000080,
-        BlockScopedBindingInLoop    = 0x00000100,
-        EmitDecorate                = 0x00000200,  // Emit __decorate
-        EmitParam                   = 0x00000400,  // Emit __param helper for decorators
+        EnumValuesComputed          = 0x00000100,
+        BlockScopedBindingInLoop    = 0x00000200,
+        EmitDecorate                = 0x00000400,  // Emit __decorate
+        EmitParam                   = 0x00000800,  // Emit __param helper for decorators
     }
 
     /* @internal */ 

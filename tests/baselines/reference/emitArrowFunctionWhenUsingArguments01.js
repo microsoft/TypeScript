@@ -1,4 +1,4 @@
-//// [emitArrowFunctionWhenUsingArguments.ts]
+//// [emitArrowFunctionWhenUsingArguments01.ts]
 var a = () => {
     var arg = arguments[0];  // error
 }
@@ -31,28 +31,30 @@ function bar() {
 	}
 }
 
-//// [emitArrowFunctionWhenUsingArguments.js]
-var a = () => {
+//// [emitArrowFunctionWhenUsingArguments01.js]
+var a = function () {
     var arg = arguments[0]; // error
 };
 var b = function () {
-    var a = () => {
-        var arg = arguments[0]; // error
+    var _arguments = arguments;
+    var a = function () {
+        var arg = _arguments[0]; // error
     };
 };
 function baz() {
-    (() => {
-        var arg = arguments[0];
+    var _arguments = arguments;
+    (function () {
+        var arg = _arguments[0];
     });
 }
 function foo(inputFunc) { }
-foo(() => {
+foo(function () {
     var arg = arguments[0]; // error
 });
 function bar() {
     var arg = arguments[0]; // no error
 }
-(() => {
+(function () {
     function foo() {
         var arg = arguments[0]; // no error
     }

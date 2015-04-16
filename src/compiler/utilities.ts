@@ -330,7 +330,7 @@ module ts {
         return node.kind === SyntaxKind.EnumDeclaration && isConst(node);
     }
 
-    function walkUpBindingElementsAndPatterns(node: Node): Node {
+    export function walkUpBindingElementsAndPatterns(node: Node): Node {
         while (node && (node.kind === SyntaxKind.BindingElement || isBindingPattern(node))) {
             node = node.parent;
         }
