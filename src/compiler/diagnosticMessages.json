@@ -1972,7 +1972,7 @@
         "category": "Message",
         "code": 6058
     },
-    "File '{0}' is not under rootDir '{1}'. RootDir is expected to contain all source files.": {
+    "File '{0}' is not under 'rootDir' '{1}'. 'rootDir' is expected to contain all source files.": {
         "category": "Error",
         "code": 6059
     },

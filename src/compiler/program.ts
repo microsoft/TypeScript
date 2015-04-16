@@ -453,7 +453,7 @@ module ts {
             }
         }
 
-        function computecommonSourceDirectory(sourceFiles: SourceFile[]): string {
+        function computeCommonSourceDirectory(sourceFiles: SourceFile[]): string {
             let commonPathComponents: string[];
             let currentDirectory = host.getCurrentDirectory();
             forEach(files, sourceFile => {
@@ -465,7 +465,7 @@ module ts {
                 let sourcePathComponents = getNormalizedPathComponents(sourceFile.fileName, currentDirectory);
                 sourcePathComponents.pop(); // FileName is not part of directory
                 if (commonPathComponents) {
-                    for (let i = 0; i < Math.min(commonPathComponents.length, sourcePathComponents.length); i++) {
+                    for (let i = 0, n = Math.min(commonPathComponents.length, sourcePathComponents.length); i < n; i++) {
                         if (commonPathComponents[i] !== sourcePathComponents[i]) {
                             if (i === 0) {
                                 diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
@@ -486,8 +486,8 @@ module ts {
                 else {
                     // first file
                     commonPathComponents = sourcePathComponents;
+                    return;
                 }
-
             });
 
             return getNormalizedPathFromPathComponents(commonPathComponents);
@@ -495,15 +495,15 @@ module ts {
 
         function checkSourceFilesBelongToPath(soruceFiles: SourceFile[], rootDirectory: string): boolean {
             let allFilesBelongToPath = true;
-            if (files) {
+            if (soruceFiles) {
                 let currentDirectory = host.getCurrentDirectory();
                 let absoluteRootDirectoryPath = host.getCanonicalFileName(getNormalizedAbsolutePath(rootDirectory, currentDirectory));
 
-                for (var sourceFile of files) {
+                for (var sourceFile of soruceFiles) {
                     if (!isDeclarationFile(sourceFile)) {
                         let absoluteSourceFilePath = host.getCanonicalFileName(getNormalizedAbsolutePath(sourceFile.fileName, currentDirectory));
                         if (absoluteSourceFilePath.indexOf(absoluteRootDirectoryPath) !== 0) {
-                            diagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_under_rootDir_1_RootDir_is_expected_to_contain_all_source_files, sourceFile.fileName, options.rootDir));
+                            diagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, sourceFile.fileName, options.rootDir));
                             allFilesBelongToPath = false;
                         }
                     }
@@ -581,7 +581,7 @@ module ts {
                 }
                 else {
                     // Compute the commonSourceDirectory from the input files
-                    commonSourceDirectory = computecommonSourceDirectory(files);
+                    commonSourceDirectory = computeCommonSourceDirectory(files);
                 }
 
                 if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
