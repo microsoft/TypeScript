@@ -12,8 +12,8 @@ export module Database {
 	    public findPerson(id: number): P.Models.Person {
 >findPerson : (id: number) => P.Models.Person
 >id : number
->P : unknown
->Models : unknown
+>P : any
+>Models : any
 >Person : P.Models.Person
 
 	        return new P.Models.Person("Rock");
@@ -23,6 +23,7 @@ export module Database {
 >P : typeof P
 >Models : typeof P.Models
 >Person : typeof P.Models.Person
+>"Rock" : string
 	    }
 	}
 } 

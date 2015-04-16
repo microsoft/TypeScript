@@ -8,11 +8,17 @@ function baz([]) { }
 function baz1([] = [1,2,3]) { }
 >baz1 : ([]?: number[]) => void
 >[1,2,3] : number[]
+>1 : number
+>2 : number
+>3 : number
 
 function baz2([[]] = [[1,2,3]]) { }
 >baz2 : ([[]]?: [number[]]) => void
 >[[1,2,3]] : [number[]]
 >[1,2,3] : number[]
+>1 : number
+>2 : number
+>3 : number
 
 function baz3({}) { }
 >baz3 : ({}: {}) => void
@@ -21,5 +27,6 @@ function baz4({} = { x: 10 }) { }
 >baz4 : ({}?: { x: number; }) => void
 >{ x: 10 } : { x: number; }
 >x : number
+>10 : number
 
 

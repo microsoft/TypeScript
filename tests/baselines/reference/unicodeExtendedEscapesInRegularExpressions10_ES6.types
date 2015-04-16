@@ -6,4 +6,5 @@
 // this is a useful edge-case test.
 var x = /\u{D800}/g;
 >x : RegExp
+>/\u{D800}/g : RegExp
 

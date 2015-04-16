@@ -1,5 +1,6 @@
 === tests/cases/compiler/downlevelLetConst17.ts ===
 'use strict'
+>'use strict' : string
 
 declare function use(a: any);
 >use : (a: any) => any
@@ -10,6 +11,7 @@ var x;
 
 for (let x = 10; ;) {
 >x : number
+>10 : number
 
     use(x);
 >use(x) : any
@@ -23,6 +25,7 @@ use(x);
 
 for (const x = 10; ;) {
 >x : number
+>10 : number
 
     use(x);
 >use(x) : any
@@ -33,6 +36,7 @@ for (const x = 10; ;) {
 for (; ;) {
     let x = 10;
 >x : number
+>10 : number
 
     use(x);
 >use(x) : any
@@ -42,11 +46,13 @@ for (; ;) {
     x = 1;
 >x = 1 : number
 >x : number
+>1 : number
 }
 
 for (; ;) {
     const x = 10;
 >x : number
+>10 : number
 
     use(x);
 >use(x) : any
@@ -65,6 +71,7 @@ for (let x; ;) {
     x = 1;
 >x = 1 : number
 >x : any
+>1 : number
 }
 
 for (; ;) {
@@ -79,9 +86,12 @@ for (; ;) {
     x = 1;
 >x = 1 : number
 >x : any
+>1 : number
 }
 
 while (true) {
+>true : boolean
+
     let x;
 >x : any
 
@@ -92,8 +102,11 @@ while (true) {
 }
 
 while (true) {
+>true : boolean
+
     const x = true;
 >x : boolean
+>true : boolean
 
     use(x);
 >use(x) : any
@@ -111,6 +124,7 @@ do {
 >x : any
 
 } while (true);
+>true : boolean
 
 do {
     let x;
@@ -122,6 +136,7 @@ do {
 >x : any
 
 } while (true);
+>true : boolean
 
 for (let x in []) {
 >x : any

@@ -1,0 +1,3 @@
+=== tests/cases/compiler/asiBreak.ts ===
+while (true) break
+No type information for this code.

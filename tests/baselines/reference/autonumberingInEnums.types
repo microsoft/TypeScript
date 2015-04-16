@@ -4,6 +4,7 @@ enum Foo {
 
     a = 1
 >a : Foo
+>1 : number
 }
 
 enum Foo {

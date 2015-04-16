@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser596700.ts ===
+var regex2 = /[a-z/]$/i;
+>regex2 : Symbol(regex2, Decl(parser596700.ts, 0, 3))
+

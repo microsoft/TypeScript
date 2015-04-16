@@ -9,8 +9,8 @@ module a.b.c {
 }
 module a.e.f {
 >a : typeof a
->e : unknown
->f : unknown
+>e : any
+>f : any
 
       import g = b.c;
 >g : typeof g

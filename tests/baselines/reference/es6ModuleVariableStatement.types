@@ -1,6 +1,7 @@
 === tests/cases/compiler/es6ModuleVariableStatement.ts ===
 export var a = "hello";
 >a : string
+>"hello" : string
 
 export var x: string = a, y = x;
 >x : string

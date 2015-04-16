@@ -253,6 +253,10 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             it('Correct type baselines for ' + fileName, () => {
+                if (fileName.indexOf("APISample") >= 0) {
+                    return;
+                }
+
                 // NEWTODO: Type baselines
                 if (result.errors.length === 0) {
                     // The full walker simulates the types that you would get from doing a full 
@@ -270,29 +274,53 @@ class CompilerBaselineRunner extends RunnerBase {
                     // These types are equivalent, but depend on what order the compiler observed 
                     // certain parts of the program.
 
-                    var fullWalker = new TypeWriterWalker(program, /*fullTypeCheck:*/ true);
-                    var pullWalker = new TypeWriterWalker(program, /*fullTypeCheck:*/ false);
+                    let allFiles = toBeCompiled.concat(otherFiles).filter(file => !!program.getSourceFile(file.unitName));
 
-                    var fullTypes = generateTypes(fullWalker);
-                    var pullTypes = generateTypes(pullWalker);
+                    let fullWalker = new TypeWriterWalker(program, /*fullTypeCheck:*/ true);
+                    let pullWalker = new TypeWriterWalker(program, /*fullTypeCheck:*/ false);
 
-                    if (fullTypes !== pullTypes) {
-                        Harness.Baseline.runBaseline('Correct full expression types for ' + fileName, justName.replace(/\.ts/, '.types'), () => fullTypes);
-                        Harness.Baseline.runBaseline('Correct pull expression types for ' + fileName, justName.replace(/\.ts/, '.types.pull'), () => pullTypes);
+                    let fullResults: ts.Map<TypeWriterResult[]> = {};
+                    let pullResults: ts.Map<TypeWriterResult[]> = {};
+
+                    for (let sourceFile of allFiles) {
+                        fullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
+                        pullResults[sourceFile.unitName] = fullWalker.getTypeAndSymbols(sourceFile.unitName);
                     }
-                    else {
-                        Harness.Baseline.runBaseline('Correct expression types for ' + fileName, justName.replace(/\.ts/, '.types'), () => fullTypes);
+
+                    // Produce baselines.  The first gives the types for all expressions.
+                    // The second gives symbols for all identifiers.
+                    checkBaseLines(/*isSymbolBaseLine:*/ false);
+                    checkBaseLines(/*isSymbolBaseLine:*/ true);
+
+                    function checkBaseLines(isSymbolBaseLine: boolean) {
+                        let fullBaseLine = generateBaseLine(fullResults, isSymbolBaseLine);
+                        let pullBaseLine = generateBaseLine(pullResults, isSymbolBaseLine);
+
+                        let fullExtension = isSymbolBaseLine ? '.symbols' : '.types';
+                        let pullExtension = isSymbolBaseLine ? '.symbols.pull' : '.types.pull';
+
+                        if (fullBaseLine !== pullBaseLine) {
+                            Harness.Baseline.runBaseline('Correct full information for ' + fileName, justName.replace(/\.ts/, fullExtension), () => fullBaseLine);
+                            Harness.Baseline.runBaseline('Correct pull information for ' + fileName, justName.replace(/\.ts/, pullExtension), () => pullBaseLine);
+                        }
+                        else {
+                            Harness.Baseline.runBaseline('Correct information for ' + fileName, justName.replace(/\.ts/, fullExtension), () => fullBaseLine);
+                        }
                     }
 
-                    function generateTypes(walker: TypeWriterWalker): string {
-                        var allFiles = toBeCompiled.concat(otherFiles).filter(file => !!program.getSourceFile(file.unitName));
-                        var typeLines: string[] = [];
-                        var typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
+                    function generateBaseLine(typeWriterResults: ts.Map<TypeWriterResult[]>, isSymbolBaseline: boolean): string {
+                        let typeLines: string[] = [];
+                        let typeMap: { [fileName: string]: { [lineNum: number]: string[]; } } = {};
 
                         allFiles.forEach(file => {
                             var codeLines = file.content.split('\n');
-                            walker.getTypes(file.unitName).forEach(result => {
-                                var formattedLine = result.sourceText.replace(/\r?\n/g, "") + " : " + result.type;
+                            typeWriterResults[file.unitName].forEach(result => {
+                                if (isSymbolBaseline && !result.symbol) {
+                                    return;
+                                }
+
+                                var typeOrSymbolString = isSymbolBaseline ? result.symbol : result.type;
+                                var formattedLine = result.sourceText.replace(/\r?\n/g, "") + " : " + typeOrSymbolString;
                                 if (!typeMap[file.unitName]) {
                                     typeMap[file.unitName] = {};
                                 }
@@ -316,11 +344,13 @@ class CompilerBaselineRunner extends RunnerBase {
                                             typeLines.push('>' + ty + '\r\n');
                                         });
                                         if (i + 1 < codeLines.length && (codeLines[i + 1].match(/^\s*[{|}]\s*$/) || codeLines[i + 1].trim() === '')) {
-                                        } else {
+                                        }
+                                        else {
                                             typeLines.push('\r\n');
                                         }
                                     }
-                                } else {
+                                }
+                                else {
                                     typeLines.push('No type information for this code.');
                                 }
                             }

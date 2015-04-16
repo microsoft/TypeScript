@@ -1419,7 +1419,7 @@
         "category": "Error",
         "code": 2495
     },
-    "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.": {
+    "The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression.": {
         "category": "Error",
         "code": 2496
     },
@@ -1438,6 +1438,10 @@
     "A class can only implement an identifier/qualified-name with optional type arguments.": {
         "category": "Error",
         "code": 2500
+    },
+    "A rest element cannot contain a binding pattern.": {
+        "category": "Error",
+        "code": 2501
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2043,19 +2047,19 @@
     },
     "'import ... =' can only be used in a .ts file.": {
         "category": "Error",
-        "code":  8002
+        "code": 8002
     },
     "'export=' can only be used in a .ts file.": {
         "category": "Error",
-        "code":  8003
+        "code": 8003
     },
     "'type parameter declarations' can only be used in a .ts file.": {
         "category": "Error",
-        "code":  8004
+        "code": 8004
     },
     "'implements clauses' can only be used in a .ts file.": {
         "category": "Error",
-        "code":  8005
+        "code": 8005
     },
     "'interface declarations' can only be used in a .ts file.": {
         "category": "Error",

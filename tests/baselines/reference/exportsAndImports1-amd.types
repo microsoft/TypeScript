@@ -2,6 +2,7 @@
 
 var v = 1;
 >v : number
+>1 : number
 
 function f() { }
 >f : () => void
@@ -35,7 +36,7 @@ module M {
 >x : any
 }
 module N {
->N : unknown
+>N : any
 
     export interface I {
 >I : I
@@ -53,12 +54,12 @@ export { v, f, C, I, E, D, M, N, T, a };
 >v : number
 >f : () => void
 >C : typeof C
->I : unknown
+>I : any
 >E : typeof E
 >D : typeof D
 >M : typeof M
->N : unknown
->T : unknown
+>N : any
+>T : any
 >a : any
 
 === tests/cases/conformance/es6/modules/t2.ts ===
@@ -66,12 +67,12 @@ export { v, f, C, I, E, D, M, N, T, a } from "./t1";
 >v : number
 >f : () => void
 >C : typeof C
->I : unknown
+>I : any
 >E : typeof E
 >D : typeof D
 >M : typeof M
->N : unknown
->T : unknown
+>N : any
+>T : any
 >a : any
 
 === tests/cases/conformance/es6/modules/t3.ts ===
@@ -79,23 +80,23 @@ import { v, f, C, I, E, D, M, N, T, a } from "./t1";
 >v : number
 >f : () => void
 >C : typeof C
->I : unknown
+>I : any
 >E : typeof E
 >D : typeof D
 >M : typeof M
->N : unknown
->T : unknown
+>N : any
+>T : any
 >a : any
 
 export { v, f, C, I, E, D, M, N, T, a };
 >v : number
 >f : () => void
 >C : typeof C
->I : unknown
+>I : any
 >E : typeof E
 >D : typeof D
 >M : typeof M
->N : unknown
->T : unknown
+>N : any
+>T : any
 >a : any
 

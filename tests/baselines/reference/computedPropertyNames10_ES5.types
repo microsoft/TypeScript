@@ -33,14 +33,22 @@ var v = {
 >s : string
 
     [""]() { },
+>"" : string
+
     [0]() { },
+>0 : number
+
     [a]() { },
 >a : any
 
     [<any>true]() { },
 ><any>true : any
+>true : boolean
 
     [`hello bye`]() { },
+>`hello bye` : string
+
     [`hello ${a} bye`]() { }
+>`hello ${a} bye` : string
 >a : any
 }

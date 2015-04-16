@@ -10,6 +10,7 @@ module A {
 >B : B
 
             return null;
+>null : null
         }
     }
 
@@ -26,7 +27,7 @@ module A {
 
 var x: A.B = A.B.createB();
 >x : A.B
->A : unknown
+>A : any
 >B : A.B
 >A.B.createB() : A.B
 >A.B.createB : () => A.B

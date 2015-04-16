@@ -31,6 +31,7 @@ class FooIterator {
 
             done: false
 >done : boolean
+>false : boolean
 
         };
     }

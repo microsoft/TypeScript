@@ -15,6 +15,7 @@ var x = {
 
         var _this = 2;
 >_this : number
+>2 : number
 
         return callback(_this);
 >callback(_this) : any

@@ -17,12 +17,12 @@ import alias = moduleA;
 
 var p: alias.Point;
 >p : alias.Point
->alias : unknown
+>alias : any
 >Point : alias.Point
 
 var p: moduleA.Point;
 >p : alias.Point
->moduleA : unknown
+>moduleA : any
 >Point : alias.Point
 
 var p: { x: number; y: number; };
@@ -52,7 +52,9 @@ module clodule {
 >Point : Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
+>0 : number
 >y : number
+>0 : number
 }
 
 import clolias = clodule;
@@ -61,12 +63,12 @@ import clolias = clodule;
 
 var p: clolias.Point;
 >p : alias.Point
->clolias : unknown
+>clolias : any
 >Point : clolias.Point
 
 var p: clodule.Point;
 >p : alias.Point
->clodule : unknown
+>clodule : any
 >Point : clolias.Point
 
 var p: { x: number; y: number; };
@@ -81,7 +83,9 @@ function fundule() {
     return { x: 0, y: 0 };
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
+>0 : number
 >y : number
+>0 : number
 }
 
 module fundule {
@@ -99,7 +103,9 @@ module fundule {
 >Point : Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
+>0 : number
 >y : number
+>0 : number
 }
 
 import funlias = fundule;
@@ -108,12 +114,12 @@ import funlias = fundule;
 
 var p: funlias.Point;
 >p : alias.Point
->funlias : unknown
+>funlias : any
 >Point : funlias.Point
 
 var p: fundule.Point;
 >p : alias.Point
->fundule : unknown
+>fundule : any
 >Point : funlias.Point
 
 var p: { x: number; y: number; };

@@ -6,16 +6,20 @@ module M {
 
     for (var j = 0; j < 10; j++) {
 >j : number
+>0 : number
 >j < 10 : boolean
 >j : number
+>10 : number
 >j++ : number
 >j : number
     }
 
     for (var j = 0; j < 10; j++) {
 >j : number
+>0 : number
 >j < 10 : boolean
 >j : number
+>10 : number
 >j++ : number
 >j : number
     }
@@ -26,17 +30,23 @@ function foo() {
 
     var x = 2;
 >x : number
+>2 : number
 
     var x = 1;
 >x : number
+>1 : number
 
     if (true) {
+>true : boolean
+
         var result = 1;
 >result : number
+>1 : number
     }
     else {
         var result = 2;
 >result : number
+>2 : number
     }
 }
 
@@ -49,12 +59,14 @@ class C {
         try {
             var x = 1;
 >x : number
+>1 : number
         }
         catch (e) {
 >e : any
 
             var x = 2;
 >x : number
+>2 : number
         }
     }
 }

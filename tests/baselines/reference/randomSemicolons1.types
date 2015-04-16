@@ -2,6 +2,7 @@
 ; ;
 var a = 1;
 >a : number
+>1 : number
 
 ; 
 

@@ -18,6 +18,7 @@ class Red extends Color {
 >getHue() + " red" : string
 >getHue() : string
 >getHue : () => string
+>" red" : string
     }
 }
 
@@ -26,9 +27,11 @@ class Color {
 
     public shade() { return "some shade"; }
 >shade : () => string
+>"some shade" : string
 
     public hue() { return "some hue"; }
 >hue : () => string
+>"some hue" : string
 }
 
 class Blue extends Color {
@@ -50,6 +53,7 @@ class Blue extends Color {
 >getHue() + " blue" : string
 >getHue() : string
 >getHue : () => string
+>" blue" : string
     }
 }
 

@@ -39,15 +39,18 @@ foo({
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
+>"" : string
 
     [Symbol.toPrimitive]: 0,
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
+>0 : number
 
     [Symbol.unscopables]: true
 >Symbol.unscopables : symbol
 >Symbol : SymbolConstructor
 >unscopables : symbol
+>true : boolean
 
 });

@@ -23,18 +23,27 @@ foo({
 
     p: "",
 >p : string
+>"" : string
 
     0: () => { },
 >() => { } : () => void
 
     ["hi" + "bye"]: true,
 >"hi" + "bye" : string
+>"hi" : string
+>"bye" : string
+>true : boolean
 
     [0 + 1]: 0,
 >0 + 1 : number
+>0 : number
+>1 : number
+>0 : number
 
     [+"hi"]: [0]
 >+"hi" : number
+>"hi" : string
 >[0] : number[]
+>0 : number
 
 });

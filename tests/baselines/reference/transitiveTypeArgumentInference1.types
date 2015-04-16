@@ -14,6 +14,7 @@ interface I1<T, U> {
 var i: I1<boolean, string> = null;
 >i : I1<boolean, string>
 >I1 : I1<T, U>
+>null : null
 
 class C<T> {
 >C : C<T>

@@ -5,14 +5,16 @@ var array = [{x: [0], y: {p: ""}}]
 >{x: [0], y: {p: ""}} : { x: number[]; y: { p: string; }; }
 >x : number[]
 >[0] : number[]
+>0 : number
 >y : { p: string; }
 >{p: ""} : { p: string; }
 >p : string
+>"" : string
 
 for (var {x: [a], y: {p}} of array) {
->x : unknown
+>x : any
 >a : number
->y : unknown
+>y : any
 >p : string
 >array : { x: number[]; y: { p: string; }; }[]
 

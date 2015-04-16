@@ -26,7 +26,7 @@ module Test {
 }
 var func: Test.MyFunc;
 >func : Test.MyFunc
->Test : unknown
+>Test : any
 >MyFunc : Test.MyFunc
 
 Test.F(func); // OK

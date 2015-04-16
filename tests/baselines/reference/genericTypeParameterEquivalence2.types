@@ -30,6 +30,7 @@ function compose<A, B, C>(f: (b: B) => C, g: (a:A) => B): (a:A) => C {
 >g.apply : (thisArg: any, argArray?: any) => any
 >g : (a: A) => B
 >apply : (thisArg: any, argArray?: any) => any
+>null : null
 >a : A
 
     };
@@ -48,6 +49,7 @@ function forEach<A>(list: A[], f: (a: A, n?: number) => void ): void {
 
     for (var i = 0; i < list.length; ++i) {
 >i : number
+>0 : number
 >i < list.length : boolean
 >i : number
 >list.length : number

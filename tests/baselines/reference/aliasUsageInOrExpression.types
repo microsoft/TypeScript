@@ -10,6 +10,7 @@ interface IHasVisualizationModel {
 
     VisualizationModel: typeof Backbone.Model;
 >VisualizationModel : typeof Backbone.Model
+>Backbone.Model : typeof Backbone.Model
 >Backbone : typeof Backbone
 >Model : typeof Backbone.Model
 }
@@ -45,6 +46,7 @@ var e: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null || { 
 ><{ x: IHasVisualizationModel }>null : { x: IHasVisualizationModel; }
 >x : IHasVisualizationModel
 >IHasVisualizationModel : IHasVisualizationModel
+>null : null
 >{ x: moduleA } : { x: typeof moduleA; }
 >x : typeof moduleA
 >moduleA : typeof moduleA
@@ -57,9 +59,11 @@ var f: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null ? { x
 ><{ x: IHasVisualizationModel }>null : { x: IHasVisualizationModel; }
 >x : IHasVisualizationModel
 >IHasVisualizationModel : IHasVisualizationModel
+>null : null
 >{ x: moduleA } : { x: typeof moduleA; }
 >x : typeof moduleA
 >moduleA : typeof moduleA
+>null : null
 
 === tests/cases/compiler/aliasUsageInOrExpression_backbone.ts ===
 export class Model {
@@ -75,6 +79,7 @@ import Backbone = require("aliasUsageInOrExpression_backbone");
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
+>Backbone.Model : any
 >Backbone : typeof Backbone
 >Model : Backbone.Model
 

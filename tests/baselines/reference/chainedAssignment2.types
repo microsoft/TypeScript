@@ -27,5 +27,6 @@ a = b = c = d = e = null;
 >d : Date
 >e = null : null
 >e : RegExp
+>null : null
 
 

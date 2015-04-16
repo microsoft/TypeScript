@@ -10,6 +10,7 @@ module M {
 
         export var v = 0;
 >v : number
+>0 : number
     }
 }
 
@@ -18,6 +19,7 @@ module M {
 
     export class O extends M.N {
 >O : O
+>M.N : any
 >M : typeof M
 >N : N
     }

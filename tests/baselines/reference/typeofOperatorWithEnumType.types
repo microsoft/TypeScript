@@ -26,6 +26,7 @@ var ResultIsString3 = typeof ENUM1["A"];
 >typeof ENUM1["A"] : string
 >ENUM1["A"] : ENUM1
 >ENUM1 : typeof ENUM1
+>"A" : string
 
 var ResultIsString4 = typeof (ENUM[0] + ENUM1["B"]);
 >ResultIsString4 : string
@@ -34,8 +35,10 @@ var ResultIsString4 = typeof (ENUM[0] + ENUM1["B"]);
 >ENUM[0] + ENUM1["B"] : string
 >ENUM[0] : string
 >ENUM : typeof ENUM
+>0 : number
 >ENUM1["B"] : ENUM1
 >ENUM1 : typeof ENUM1
+>"B" : string
 
 // multiple typeof  operators
 var ResultIsString5 = typeof typeof ENUM;
@@ -53,6 +56,7 @@ var ResultIsString6 = typeof typeof typeof (ENUM[0] + ENUM1.B);
 >ENUM[0] + ENUM1.B : string
 >ENUM[0] : string
 >ENUM : typeof ENUM
+>0 : number
 >ENUM1.B : ENUM1
 >ENUM1 : typeof ENUM1
 >B : ENUM1
@@ -70,6 +74,7 @@ typeof ENUM1["B"];
 >typeof ENUM1["B"] : string
 >ENUM1["B"] : ENUM1
 >ENUM1 : typeof ENUM1
+>"B" : string
 
 typeof ENUM, ENUM1;
 >typeof ENUM, ENUM1 : typeof ENUM1
@@ -82,10 +87,12 @@ enum z { };
 >z : z
 
 z: typeof ENUM;
+>z : any
 >typeof ENUM : string
 >ENUM : typeof ENUM
 
 z: typeof ENUM1;
+>z : any
 >typeof ENUM1 : string
 >ENUM1 : typeof ENUM1
 

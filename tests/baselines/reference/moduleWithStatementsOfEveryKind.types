@@ -45,16 +45,19 @@ module A {
 
     var x = 12;
 >x : number
+>12 : number
 
     function F(s: string): number {
 >F : (s: string) => number
 >s : string
 
         return 2;
+>2 : number
     }
     var array: I[] = null;
 >array : I[]
 >I : I
+>null : null
 
     var fn = (s: string) => {
 >fn : (s: string) => string
@@ -63,14 +66,18 @@ module A {
 
         return 'hello ' + s;
 >'hello ' + s : string
+>'hello ' : string
 >s : string
     }
     var ol = { s: 'hello', id: 2, isvalid: true };
 >ol : { s: string; id: number; isvalid: boolean; }
 >{ s: 'hello', id: 2, isvalid: true } : { s: string; id: number; isvalid: boolean; }
 >s : string
+>'hello' : string
 >id : number
+>2 : number
 >isvalid : boolean
+>true : boolean
 
     declare class DC {
 >DC : DC
@@ -126,16 +133,19 @@ module Y {
 
     export var x = 12;
 >x : number
+>12 : number
 
     export function F(s: string): number {
 >F : (s: string) => number
 >s : string
 
         return 2;
+>2 : number
     }
     export var array: I[] = null;
 >array : I[]
 >I : I
+>null : null
 
     export var fn = (s: string) => {
 >fn : (s: string) => string
@@ -144,14 +154,18 @@ module Y {
 
         return 'hello ' + s;
 >'hello ' + s : string
+>'hello ' : string
 >s : string
     }
     export var ol = { s: 'hello', id: 2, isvalid: true };
 >ol : { s: string; id: number; isvalid: boolean; }
 >{ s: 'hello', id: 2, isvalid: true } : { s: string; id: number; isvalid: boolean; }
 >s : string
+>'hello' : string
 >id : number
+>2 : number
 >isvalid : boolean
+>true : boolean
 
     export declare class DC {
 >DC : DC

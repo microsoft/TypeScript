@@ -44,6 +44,7 @@ var conditional: Contextual = null ? e : e; // Ellement
 >conditional : Contextual
 >Contextual : Contextual
 >null ? e : e : Ellement
+>null : null
 >e : Ellement
 >e : Ellement
 

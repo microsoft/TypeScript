@@ -8,7 +8,9 @@ module A {
         return { x: 0, y: 0 };
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
+>0 : number
 >y : number
+>0 : number
     }
 }
 
@@ -23,7 +25,9 @@ module B {
 >Origin : { x: number; y: number; }
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
+>0 : number
 >y : number
+>0 : number
     }
 }
 

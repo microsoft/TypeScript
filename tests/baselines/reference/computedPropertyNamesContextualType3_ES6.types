@@ -14,6 +14,7 @@ var o: I = {
 
     [+"foo"](y) { return y.length; },
 >+"foo" : number
+>"foo" : string
 >y : string
 >y.length : number
 >y : string
@@ -21,6 +22,7 @@ var o: I = {
 
     [+"bar"]: y => y.length
 >+"bar" : number
+>"bar" : string
 >y => y.length : (y: string) => number
 >y : string
 >y.length : number
