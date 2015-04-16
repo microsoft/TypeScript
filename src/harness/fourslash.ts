@@ -798,6 +798,13 @@ module FourSlash {
             return "\nActual " + name + ":\n\t" + actualValue + "\nExpected value:\n\t" + expectedValue;
         }
 
+        public getSyntacticDiagnostics(expected: string) {
+            var diagnostics = this.languageService.getSyntacticDiagnostics(this.activeFile.fileName);
+            var realized = ts.realizeDiagnostics(diagnostics, "\r\n");
+            var actual = JSON.stringify(realized, null, "  ");
+            assert.equal(actual, expected);
+        }
+
         public getSemanticDiagnostics(expected: string) {
             var diagnostics = this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
             var realized = ts.realizeDiagnostics(diagnostics, "\r\n");
