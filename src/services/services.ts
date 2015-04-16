@@ -3603,9 +3603,26 @@ module ts {
             var sourceFile = getSourceFile(filename);
 
             var result = getOccurrencesAtPositionCore(sourceFile, position);
+            forEach(result, entry => {
+                if (entry.fileName !== filename) {
+                    var message = "getOccurrences for ('" + filename + "'," + position + ") " +
+                        "found result in wrong file ('" + entry.fileName + "'," + entry.textSpan.start() + ")";
 
-            // Only return results that are from the file being asked for.
-            return filter(result, r => r.fileName === filename);
+                    Debug.assert(false, message);
+                }
+
+                var sourceFile = program.getSourceFile(entry.fileName);
+                var sourceText = sourceFile.text;
+
+                if (entry.textSpan.start() < 0 || entry.textSpan.end() > sourceText.length) {
+                    var span = entry.textSpan;
+                    var message = "getOccurrences for ('" + filename + "'," + position + ") " +
+                        "found result out of bounds (FileLength=" + sourceText.length + ",Start=" + span.start() + ",End=" + span.end() + ")";
+                    Debug.assert(false, message);
+                }
+            });
+
+            return result;
         }
 
         function getOccurrencesAtPositionCore(sourceFile: SourceFile, position: number): ReferenceEntry[]{
