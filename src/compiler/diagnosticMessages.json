@@ -687,6 +687,10 @@
         "category": "Error",
         "code": 1217
     },
+    "'{0}' tag already specified.": {
+        "category": "Error",
+        "code": 1218
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300

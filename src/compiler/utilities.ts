@@ -850,7 +850,7 @@ module ts {
     }
 
     export function getJSDocParameter(parameter: ParameterDeclaration, sourceFile: SourceFile): JSDocParameter {
-        if (parameter.name.kind === SyntaxKind.Identifier) {
+        if (parameter.name && parameter.name.kind === SyntaxKind.Identifier) {
             // If it's a parameter, see if the parent has a jsdoc comment with an @param 
             // annotation.
             let parameterName = (<Identifier>parameter.name).text;

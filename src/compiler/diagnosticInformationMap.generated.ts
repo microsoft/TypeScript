@@ -175,6 +175,7 @@ module ts {
         Type_expected_0_is_a_reserved_word_in_strict_mode: { code: 1215, category: DiagnosticCategory.Error, key: "Type expected. '{0}' is a reserved word in strict mode" },
         Type_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode: { code: 1216, category: DiagnosticCategory.Error, key: "Type expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode." },
         Type_expected_0_is_a_reserved_word_in_strict_mode_Module_is_automatically_in_strict_mode: { code: 1217, category: DiagnosticCategory.Error, key: "Type expected. '{0}' is a reserved word in strict mode. Module is automatically in strict mode." },
+        _0_tag_already_specified: { code: 1218, category: DiagnosticCategory.Error, key: "'{0}' tag already specified." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },

@@ -4,18 +4,28 @@
 
 module ts {
     describe("JSDocParsing", () => {
+        //function nodeToJSON(file: ts.Node): string {
+        //    return JSON.stringify(Utils.serializeNode(file), (k, v) => {
+        //        return isNodeOrArray(v) ? Utils.serializeNode(v) : v;
+        //    }, "    ");
+        //}
+
+        //function isNodeOrArray(a: any): boolean {
+        //    return a !== undefined && typeof a.pos === "number";
+        //}
+
         describe("TypeExpressions", () => {
             function parsesCorrectly(content: string, expected: string) {
-                let typeExpression = ts.parseJSDocTypeExpression(content);
-                assert.isNotNull(typeExpression);
+                let typeAndDiagnostics = ts.parseJSDocTypeExpression(content);
+                assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0);
 
-                let result = Utils.sourceFileToJSON(typeExpression.type);
+                let result = Utils.sourceFileToJSON(typeAndDiagnostics.jsDocTypeExpression.type);
                 assert.equal(result, expected);
             }
 
             function parsesIncorrectly(content: string) {
                 let type = ts.parseJSDocTypeExpression(content);
-                assert.equal(type, undefined);
+                assert.isTrue(!type || type.diagnostics.length > 0);
             }
 
             describe("parseCorrectly", () => {
@@ -51,6 +61,7 @@ module ts {
             "kind": "Identifier",
             "pos": 2,
             "end": 8,
+            "originalKeywordKind": "NumberKeyword",
             "text": "number"
         }
     }
@@ -71,6 +82,7 @@ module ts {
             "kind": "Identifier",
             "pos": 1,
             "end": 7,
+            "originalKeywordKind": "NumberKeyword",
             "text": "number"
         }
     }
@@ -91,6 +103,7 @@ module ts {
             "kind": "Identifier",
             "pos": 2,
             "end": 8,
+            "originalKeywordKind": "NumberKeyword",
             "text": "number"
         }
     }
@@ -111,6 +124,7 @@ module ts {
             "kind": "Identifier",
             "pos": 1,
             "end": 7,
+            "originalKeywordKind": "NumberKeyword",
             "text": "number"
         }
     }
@@ -139,7 +153,7 @@ module ts {
     "end": 6,
     "members": {
         "0": {
-            "kind": "JSDocMember",
+            "kind": "JSDocRecordMember",
             "pos": 2,
             "end": 5,
             "name": {
@@ -164,7 +178,7 @@ module ts {
     "end": 14,
     "members": {
         "0": {
-            "kind": "JSDocMember",
+            "kind": "JSDocRecordMember",
             "pos": 2,
             "end": 13,
             "name": {
@@ -181,6 +195,7 @@ module ts {
                     "kind": "Identifier",
                     "pos": 6,
                     "end": 13,
+                    "originalKeywordKind": "NumberKeyword",
                     "text": "number"
                 }
             }
@@ -200,7 +215,7 @@ module ts {
     "end": 11,
     "members": {
         "0": {
-            "kind": "JSDocMember",
+            "kind": "JSDocRecordMember",
             "pos": 2,
             "end": 5,
             "name": {
@@ -211,7 +226,7 @@ module ts {
             }
         },
         "1": {
-            "kind": "JSDocMember",
+            "kind": "JSDocRecordMember",
             "pos": 6,
             "end": 10,
             "name": {
@@ -236,7 +251,7 @@ module ts {
     "end": 19,
     "members": {
         "0": {
-            "kind": "JSDocMember",
+            "kind": "JSDocRecordMember",
             "pos": 2,
             "end": 13,
             "name": {
@@ -253,12 +268,13 @@ module ts {
                     "kind": "Identifier",
                     "pos": 6,
                     "end": 13,
+                    "originalKeywordKind": "NumberKeyword",
                     "text": "number"
                 }
             }
         },
         "1": {
-            "kind": "JSDocMember",
+            "kind": "JSDocRecordMember",
             "pos": 14,
             "end": 18,
             "name": {
@@ -283,7 +299,7 @@ module ts {
     "end": 19,
     "members": {
         "0": {
-            "kind": "JSDocMember",
+            "kind": "JSDocRecordMember",
             "pos": 2,
             "end": 5,
             "name": {
@@ -294,7 +310,7 @@ module ts {
             }
         },
         "1": {
-            "kind": "JSDocMember",
+            "kind": "JSDocRecordMember",
             "pos": 6,
             "end": 18,
             "name": {
@@ -311,6 +327,7 @@ module ts {
                     "kind": "Identifier",
                     "pos": 11,
                     "end": 18,
+                    "originalKeywordKind": "NumberKeyword",
                     "text": "number"
                 }
             }
@@ -330,7 +347,7 @@ module ts {
     "end": 27,
     "members": {
         "0": {
-            "kind": "JSDocMember",
+            "kind": "JSDocRecordMember",
             "pos": 2,
             "end": 13,
             "name": {
@@ -347,12 +364,13 @@ module ts {
                     "kind": "Identifier",
                     "pos": 6,
                     "end": 13,
+                    "originalKeywordKind": "NumberKeyword",
                     "text": "number"
                 }
             }
         },
         "1": {
-            "kind": "JSDocMember",
+            "kind": "JSDocRecordMember",
             "pos": 14,
             "end": 26,
             "name": {
@@ -369,6 +387,7 @@ module ts {
                     "kind": "Identifier",
                     "pos": 19,
                     "end": 26,
+                    "originalKeywordKind": "NumberKeyword",
                     "text": "number"
                 }
             }
@@ -388,13 +407,14 @@ module ts {
     "end": 11,
     "members": {
         "0": {
-            "kind": "JSDocMember",
+            "kind": "JSDocRecordMember",
             "pos": 2,
             "end": 10,
             "name": {
-                "kind": "FunctionKeyword",
+                "kind": "Identifier",
                 "pos": 2,
                 "end": 10,
+                "originalKeywordKind": "FunctionKeyword",
                 "text": "function"
             }
         },
@@ -420,6 +440,7 @@ module ts {
                 "kind": "Identifier",
                 "pos": 2,
                 "end": 8,
+                "originalKeywordKind": "NumberKeyword",
                 "text": "number"
             }
         },
@@ -431,6 +452,7 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 15,
+                "originalKeywordKind": "StringKeyword",
                 "text": "string"
             }
         },
@@ -456,6 +478,7 @@ module ts {
                 "kind": "Identifier",
                 "pos": 1,
                 "end": 7,
+                "originalKeywordKind": "NumberKeyword",
                 "text": "number"
             }
         },
@@ -467,6 +490,7 @@ module ts {
                 "kind": "Identifier",
                 "pos": 8,
                 "end": 14,
+                "originalKeywordKind": "StringKeyword",
                 "text": "string"
             }
         },
@@ -510,6 +534,7 @@ module ts {
                     "kind": "Identifier",
                     "pos": 10,
                     "end": 16,
+                    "originalKeywordKind": "StringKeyword",
                     "text": "string"
                 }
             }
@@ -526,6 +551,7 @@ module ts {
                     "kind": "Identifier",
                     "pos": 17,
                     "end": 25,
+                    "originalKeywordKind": "BooleanKeyword",
                     "text": "boolean"
                 }
             }
@@ -556,6 +582,7 @@ module ts {
                     "kind": "Identifier",
                     "pos": 10,
                     "end": 16,
+                    "originalKeywordKind": "StringKeyword",
                     "text": "string"
                 }
             }
@@ -572,6 +599,7 @@ module ts {
                     "kind": "Identifier",
                     "pos": 17,
                     "end": 25,
+                    "originalKeywordKind": "BooleanKeyword",
                     "text": "boolean"
                 }
             }
@@ -659,6 +687,7 @@ module ts {
             "kind": "Identifier",
             "pos": 4,
             "end": 10,
+            "originalKeywordKind": "NumberKeyword",
             "text": "number"
         }
     }
@@ -679,6 +708,7 @@ module ts {
             "kind": "Identifier",
             "pos": 1,
             "end": 7,
+            "originalKeywordKind": "NumberKeyword",
             "text": "number"
         }
     }
@@ -720,6 +750,7 @@ module ts {
                 "kind": "Identifier",
                 "pos": 4,
                 "end": 10,
+                "originalKeywordKind": "NumberKeyword",
                 "text": "number"
             }
         },
@@ -751,6 +782,7 @@ module ts {
                 "kind": "Identifier",
                 "pos": 4,
                 "end": 10,
+                "originalKeywordKind": "NumberKeyword",
                 "text": "number"
             }
         },
@@ -762,6 +794,7 @@ module ts {
                 "kind": "Identifier",
                 "pos": 11,
                 "end": 17,
+                "originalKeywordKind": "StringKeyword",
                 "text": "string"
             }
         },
@@ -792,6 +825,7 @@ module ts {
             "kind": "Identifier",
             "pos": 3,
             "end": 11,
+            "originalKeywordKind": "FunctionKeyword",
             "text": "function"
         }
     }
@@ -887,6 +921,7 @@ module ts {
         "kind": "Identifier",
         "pos": 1,
         "end": 4,
+        "originalKeywordKind": "VarKeyword",
         "text": "var"
     }
 }`);
@@ -903,6 +938,7 @@ module ts {
         "kind": "Identifier",
         "pos": 1,
         "end": 5,
+        "originalKeywordKind": "NullKeyword",
         "text": "null"
     }
 }`);
@@ -955,6 +991,7 @@ module ts {
                 "kind": "Identifier",
                 "pos": 2,
                 "end": 8,
+                "originalKeywordKind": "NumberKeyword",
                 "text": "number"
             }
         },
@@ -981,6 +1018,7 @@ module ts {
                 "kind": "Identifier",
                 "pos": 2,
                 "end": 8,
+                "originalKeywordKind": "NumberKeyword",
                 "text": "number"
             }
         },
@@ -992,6 +1030,7 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 15,
+                "originalKeywordKind": "StringKeyword",
                 "text": "string"
             }
         },
@@ -1018,6 +1057,7 @@ module ts {
                 "kind": "Identifier",
                 "pos": 2,
                 "end": 8,
+                "originalKeywordKind": "NumberKeyword",
                 "text": "number"
             }
         },
@@ -1029,6 +1069,7 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 15,
+                "originalKeywordKind": "StringKeyword",
                 "text": "string"
             }
         },
@@ -1040,6 +1081,7 @@ module ts {
                 "kind": "Identifier",
                 "pos": 16,
                 "end": 23,
+                "originalKeywordKind": "BooleanKeyword",
                 "text": "boolean"
             }
         },
@@ -1148,8 +1190,10 @@ module ts {
 
         describe("DocComments", () => {
             function parsesCorrectly(content: string, expected: string) {
-                let comment = ts.parseJSDocComment(/*parent:*/ undefined, content);
-                let result = JSON.stringify(comment, (k, v) => {
+                let comment = ts.parseJSDocComment(content);
+                Debug.assert(comment && comment.diagnostics.length === 0);
+
+                let result = JSON.stringify(comment.jsDocComment, (k, v) => {
                     return v && v.pos !== undefined
                         ? JSON.parse(Utils.sourceFileToJSON(v))
                         : v;
@@ -1158,8 +1202,8 @@ module ts {
             }
 
             function parsesIncorrectly(content: string) {
-                let type = ts.parseJSDocComment(/*parent:*/ undefined, content);
-                assert.equal(type, undefined);
+                let type = ts.parseJSDocComment(content);
+                assert.isTrue(!type || type.diagnostics.length > 0);
             }
 
             describe("parsesIncorrectly", () => {
@@ -1175,18 +1219,18 @@ module ts {
                     parsesIncorrectly("/** * @type {number} */");
                 });
 
+                it("noType", () => {
+                    parsesIncorrectly(
+`/**
+  * @type
+  */`);
+                });
+
                 it("multipleTypes", () => {
                     parsesIncorrectly(
 `/**
   * @type {number} 
   * @type {string}
-  */`);
-                });
-
-                it("noType", () => {
-                    parsesIncorrectly(
-`/**
-  * @type
   */`);
                 });
 
@@ -1253,9 +1297,10 @@ module ts {
         "pos": 15,
         "end": 21,
         "name": {
-            "kind": 65,
+            "kind": "Identifier",
             "pos": 15,
             "end": 21,
+            "originalKeywordKind": "NumberKeyword",
             "text": "number"
         }
     }
@@ -1273,9 +1318,10 @@ module ts {
         "pos": 15,
         "end": 21,
         "name": {
-            "kind": 65,
+            "kind": "Identifier",
             "pos": 15,
             "end": 21,
+            "originalKeywordKind": "NumberKeyword",
             "text": "number"
         }
     }
@@ -1293,9 +1339,10 @@ module ts {
         "pos": 15,
         "end": 21,
         "name": {
-            "kind": 65,
+            "kind": "Identifier",
             "pos": 15,
             "end": 21,
+            "originalKeywordKind": "NumberKeyword",
             "text": "number"
         }
     }
@@ -1313,9 +1360,10 @@ module ts {
         "pos": 17,
         "end": 23,
         "name": {
-            "kind": 65,
+            "kind": "Identifier",
             "pos": 17,
             "end": 23,
+            "originalKeywordKind": "NumberKeyword",
             "text": "number"
         }
     }
@@ -1333,9 +1381,10 @@ module ts {
         "pos": 17,
         "end": 23,
         "name": {
-            "kind": 65,
+            "kind": "Identifier",
             "pos": 17,
             "end": 23,
+            "originalKeywordKind": "NumberKeyword",
             "text": "number"
         }
     }
@@ -1353,9 +1402,10 @@ module ts {
         "pos": 18,
         "end": 24,
         "name": {
-            "kind": 65,
+            "kind": "Identifier",
             "pos": 18,
             "end": 24,
+            "originalKeywordKind": "NumberKeyword",
             "text": "number"
         }
     }
@@ -1376,9 +1426,10 @@ module ts {
                 "pos": 16,
                 "end": 22,
                 "name": {
-                    "kind": 65,
+                    "kind": "Identifier",
                     "pos": 16,
                     "end": 22,
+                    "originalKeywordKind": "NumberKeyword",
                     "text": "number"
                 }
             }
@@ -1402,9 +1453,10 @@ module ts {
                 "pos": 16,
                 "end": 22,
                 "name": {
-                    "kind": 65,
+                    "kind": "Identifier",
                     "pos": 16,
                     "end": 22,
+                    "originalKeywordKind": "NumberKeyword",
                     "text": "number"
                 }
             }
@@ -1416,9 +1468,10 @@ module ts {
                 "pos": 42,
                 "end": 48,
                 "name": {
-                    "kind": 65,
+                    "kind": "Identifier",
                     "pos": 42,
                     "end": 48,
+                    "originalKeywordKind": "NumberKeyword",
                     "text": "number"
                 }
             }
@@ -1441,9 +1494,10 @@ module ts {
                 "pos": 16,
                 "end": 22,
                 "name": {
-                    "kind": 65,
+                    "kind": "Identifier",
                     "pos": 16,
                     "end": 22,
+                    "originalKeywordKind": "NumberKeyword",
                     "text": "number"
                 }
             }
@@ -1466,9 +1520,10 @@ module ts {
                 "pos": 16,
                 "end": 22,
                 "name": {
-                    "kind": 65,
+                    "kind": "Identifier",
                     "pos": 16,
                     "end": 22,
+                    "originalKeywordKind": "NumberKeyword",
                     "text": "number"
                 }
             },
@@ -1492,9 +1547,10 @@ module ts {
                 "pos": 16,
                 "end": 22,
                 "name": {
-                    "kind": 65,
+                    "kind": "Identifier",
                     "pos": 16,
                     "end": 22,
+                    "originalKeywordKind": "NumberKeyword",
                     "text": "number"
                 }
             },
@@ -1518,9 +1574,10 @@ module ts {
                 "pos": 16,
                 "end": 22,
                 "name": {
-                    "kind": 65,
+                    "kind": "Identifier",
                     "pos": 16,
                     "end": 22,
+                    "originalKeywordKind": "NumberKeyword",
                     "text": "number"
                 }
             }
@@ -1543,9 +1600,10 @@ module ts {
                 "pos": 22,
                 "end": 28,
                 "name": {
-                    "kind": 65,
+                    "kind": "Identifier",
                     "pos": 22,
                     "end": 28,
+                    "originalKeywordKind": "NumberKeyword",
                     "text": "number"
                 }
             }
@@ -1568,9 +1626,10 @@ module ts {
                 "pos": 22,
                 "end": 28,
                 "name": {
-                    "kind": 65,
+                    "kind": "Identifier",
                     "pos": 22,
                     "end": 28,
+                    "originalKeywordKind": "NumberKeyword",
                     "text": "number"
                 }
             }
@@ -1588,14 +1647,14 @@ module ts {
     "typeParameters": [
         {
             "kind": "TypeParameter",
-            "name": {
-                "kind": 65,
-                "text": "T",
-                "pos": 18,
-                "end": 19
-            },
             "pos": 18,
-            "end": 19
+            "end": 19,
+            "name": {
+                "kind": "Identifier",
+                "pos": 18,
+                "end": 19,
+                "text": "T"
+            }
         }
     ]
 }`);
@@ -1610,25 +1669,25 @@ module ts {
     "typeParameters": [
         {
             "kind": "TypeParameter",
-            "name": {
-                "kind": 65,
-                "text": "K",
-                "pos": 18,
-                "end": 19
-            },
             "pos": 18,
-            "end": 19
+            "end": 19,
+            "name": {
+                "kind": "Identifier",
+                "pos": 18,
+                "end": 19,
+                "text": "K"
+            }
         },
         {
             "kind": "TypeParameter",
-            "name": {
-                "kind": 65,
-                "text": "V",
-                "pos": 20,
-                "end": 21
-            },
             "pos": 20,
-            "end": 21
+            "end": 21,
+            "name": {
+                "kind": "Identifier",
+                "pos": 20,
+                "end": 21,
+                "text": "V"
+            }
         }
     ]
 }`);
@@ -1643,25 +1702,25 @@ module ts {
     "typeParameters": [
         {
             "kind": "TypeParameter",
-            "name": {
-                "kind": 65,
-                "text": "K",
-                "pos": 18,
-                "end": 19
-            },
             "pos": 18,
-            "end": 19
+            "end": 19,
+            "name": {
+                "kind": "Identifier",
+                "pos": 18,
+                "end": 19,
+                "text": "K"
+            }
         },
         {
             "kind": "TypeParameter",
-            "name": {
-                "kind": 65,
-                "text": "V",
-                "pos": 21,
-                "end": 22
-            },
             "pos": 21,
-            "end": 22
+            "end": 22,
+            "name": {
+                "kind": "Identifier",
+                "pos": 21,
+                "end": 22,
+                "text": "V"
+            }
         }
     ]
 }`);
@@ -1676,25 +1735,25 @@ module ts {
     "typeParameters": [
         {
             "kind": "TypeParameter",
-            "name": {
-                "kind": 65,
-                "text": "K",
-                "pos": 18,
-                "end": 19
-            },
             "pos": 18,
-            "end": 19
+            "end": 19,
+            "name": {
+                "kind": "Identifier",
+                "pos": 18,
+                "end": 19,
+                "text": "K"
+            }
         },
         {
             "kind": "TypeParameter",
-            "name": {
-                "kind": 65,
-                "text": "V",
-                "pos": 21,
-                "end": 22
-            },
             "pos": 21,
-            "end": 22
+            "end": 22,
+            "name": {
+                "kind": "Identifier",
+                "pos": 21,
+                "end": 22,
+                "text": "V"
+            }
         }
     ]
 }`);
@@ -1709,25 +1768,25 @@ module ts {
     "typeParameters": [
         {
             "kind": "TypeParameter",
-            "name": {
-                "kind": 65,
-                "text": "K",
-                "pos": 18,
-                "end": 19
-            },
             "pos": 18,
-            "end": 19
+            "end": 19,
+            "name": {
+                "kind": "Identifier",
+                "pos": 18,
+                "end": 19,
+                "text": "K"
+            }
         },
         {
             "kind": "TypeParameter",
-            "name": {
-                "kind": 65,
-                "text": "V",
-                "pos": 22,
-                "end": 23
-            },
             "pos": 22,
-            "end": 23
+            "end": 23,
+            "name": {
+                "kind": "Identifier",
+                "pos": 22,
+                "end": 23,
+                "text": "V"
+            }
         }
     ]
 }`);
@@ -1742,25 +1801,25 @@ module ts {
     "typeParameters": [
         {
             "kind": "TypeParameter",
-            "name": {
-                "kind": 65,
-                "text": "K",
-                "pos": 18,
-                "end": 19
-            },
             "pos": 18,
-            "end": 19
+            "end": 19,
+            "name": {
+                "kind": "Identifier",
+                "pos": 18,
+                "end": 19,
+                "text": "K"
+            }
         },
         {
             "kind": "TypeParameter",
-            "name": {
-                "kind": 65,
-                "text": "V",
-                "pos": 22,
-                "end": 23
-            },
             "pos": 22,
-            "end": 23
+            "end": 23,
+            "name": {
+                "kind": "Identifier",
+                "pos": 22,
+                "end": 23,
+                "text": "V"
+            }
         }
     ]
 }`);

@@ -281,7 +281,7 @@ module ts {
         JSDocNullableType,
         JSDocNonNullableType,
         JSDocRecordType,
-        JSDocMember,
+        JSDocRecordMember,
         JSDocTypeReference,
         JSDocOptionalType,
         JSDocFunctionType,
@@ -1055,7 +1055,7 @@ module ts {
     }
 
     export interface JSDocRecordType extends JSDocType {
-        members: NodeArray<JSDocMember>;
+        members: NodeArray<JSDocRecordMember>;
     }
 
     export interface JSDocTypeReference extends JSDocType {
@@ -1084,7 +1084,7 @@ module ts {
         type: JSDocType;
     }
 
-    export interface JSDocMember extends Node {
+    export interface JSDocRecordMember extends Node {
         name: Identifier | LiteralExpression,
         type?: JSDocType
     }

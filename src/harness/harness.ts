@@ -196,7 +196,11 @@ module Utils {
             return isNodeOrArray(v) ? serializeNode(v) : v;
         }, "    ");
 
-        function getKindName(k: number): string {
+        function getKindName(k: number|string): string {
+            if (typeof k === "string") {
+                return k;
+            }
+
             return (<any>ts).SyntaxKind[k]
         }
 
@@ -247,6 +251,10 @@ module Utils {
                     case "identifierCount":
                     case "scriptSnapshot":
                         // Blacklist of items we never put in the baseline file.
+                        break;
+
+                    case "originalKeywordKind":
+                        o[propertyName] = getKindName((<any>n)[propertyName]);
                         break;
 
                     case "flags":
