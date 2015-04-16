@@ -382,7 +382,7 @@ module ts {
                                 if (getSymbol(ctor.locals, name, meaning & SymbolFlags.Value)) {
                                     // Remember the property node, it will be used later to report appropriate error
                                     propertyWithInvalidInitializer = location;
-                                }
+                                                                   }
                             }
                         }
                         break;
@@ -504,6 +504,9 @@ module ts {
             }
 
             if (argumentsUsedInArrowFunction) {
+                // At this point we've resolved the owner of 'arguments' and know it needs to be captured.
+                // Flag the owner to indicate that it will need to capture at emit-time.
+                // If we were resolved in the global scope, use 'lastLocation' as 'location' will be undefined.
                 getNodeLinks(location || lastLocation).flags |= NodeCheckFlags.CaptureArguments;
             }
 
