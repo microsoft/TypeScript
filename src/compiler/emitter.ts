@@ -1607,7 +1607,15 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function parenthesizeForAccess(expr: Expression): LeftHandSideExpression {
-                if (isLeftHandSideExpression(expr)) {
+                // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
+                // to parenthesize the expression before a dot. The known exceptions are:
+                //
+                //    NewExpression:
+                //       new C.x        -> not the same as (new C).x
+                //    NumberLiteral
+                //       1.x            -> not the same as (1).x
+                //
+                if (isLeftHandSideExpression(expr) && expr.kind !== SyntaxKind.NewExpression && expr.kind !== SyntaxKind.NumericLiteral) {
                     return <LeftHandSideExpression>expr;
                 }
                 let node = <ParenthesizedExpression>createSynthesizedNode(SyntaxKind.ParenthesizedExpression);
