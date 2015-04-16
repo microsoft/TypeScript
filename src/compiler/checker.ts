@@ -2423,7 +2423,7 @@ module ts {
             return check(type);
             function check(type: InterfaceType): boolean {
                 let target = <InterfaceType>getTargetType(type);
-                return target === checkBase || forEach(target.baseTypes, check);
+                return target === checkBase || forEach(getBaseTypes(target), check);
             }
         }
 
@@ -2451,6 +2451,69 @@ module ts {
             return result;
         }
 
+        function getBaseTypes(type: InterfaceType): ObjectType[] {
+            if (!(<InterfaceTypeWithBaseTypes>type).baseTypes) {
+                if (type.symbol.flags & SymbolFlags.Class) {
+                    resolveBaseTypesOfClass(<InterfaceTypeWithBaseTypes>type);
+                }
+                else if (type.symbol.flags & SymbolFlags.Interface) {
+                    resolveBaseTypesOfInterface(<InterfaceTypeWithBaseTypes>type);
+                }
+                else {
+                    Debug.fail("type must be class or interface");
+                }
+            }
+
+            return (<InterfaceTypeWithBaseTypes>type).baseTypes;
+        }
+
+        function resolveBaseTypesOfClass(type: InterfaceTypeWithBaseTypes): void {
+            type.baseTypes = [];
+            let declaration = <ClassDeclaration>getDeclarationOfKind(type.symbol, SyntaxKind.ClassDeclaration);
+            let baseTypeNode = getClassExtendsHeritageClauseElement(declaration);
+            if (baseTypeNode) {
+                let baseType = getTypeFromHeritageClauseElement(baseTypeNode);
+                if (baseType !== unknownType) {
+                    if (getTargetType(baseType).flags & TypeFlags.Class) {
+                        if (type !== baseType && !hasBaseType(<InterfaceType>baseType, type)) {
+                            type.baseTypes.push(baseType);
+                        }
+                        else {
+                            error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
+                        }
+                    }
+                    else {
+                        error(baseTypeNode, Diagnostics.A_class_may_only_extend_another_class);
+                    }
+                }
+            }
+        }
+
+        function resolveBaseTypesOfInterface(type: InterfaceTypeWithBaseTypes): void {
+            type.baseTypes = [];
+            forEach(type.symbol.declarations, declaration => {
+                if (declaration.kind === SyntaxKind.InterfaceDeclaration && getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
+                    forEach(getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration), node => {
+                        let baseType = getTypeFromHeritageClauseElement(node);
+
+                        if (baseType !== unknownType) {
+                            if (getTargetType(baseType).flags & (TypeFlags.Class | TypeFlags.Interface)) {
+                                if (type !== baseType && !hasBaseType(<InterfaceType>baseType, type)) {
+                                    type.baseTypes.push(baseType);
+                                }
+                                else {
+                                    error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
+                                }
+                            }
+                            else {
+                                error(node, Diagnostics.An_interface_may_only_extend_a_class_or_another_interface);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
         function getDeclaredTypeOfClass(symbol: Symbol): InterfaceType {
             let links = getSymbolLinks(symbol);
             if (!links.declaredType) {
@@ -2464,25 +2527,7 @@ module ts {
                     (<GenericType>type).target = <GenericType>type;
                     (<GenericType>type).typeArguments = type.typeParameters;
                 }
-                type.baseTypes = [];
-                let declaration = <ClassDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ClassDeclaration);
-                let baseTypeNode = getClassExtendsHeritageClauseElement(declaration);
-                if (baseTypeNode) {
-                    let baseType = getTypeFromHeritageClauseElement(baseTypeNode);
-                    if (baseType !== unknownType) {
-                        if (getTargetType(baseType).flags & TypeFlags.Class) {
-                            if (type !== baseType && !hasBaseType(<InterfaceType>baseType, type)) {
-                                type.baseTypes.push(baseType);
-                            }
-                            else {
-                                error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
-                            }
-                        }
-                        else {
-                            error(baseTypeNode, Diagnostics.A_class_may_only_extend_another_class);
-                        }
-                    }
-                }
+                
                 type.declaredProperties = getNamedMembers(symbol.members);
                 type.declaredCallSignatures = emptyArray;
                 type.declaredConstructSignatures = emptyArray;
@@ -2505,28 +2550,7 @@ module ts {
                     (<GenericType>type).target = <GenericType>type;
                     (<GenericType>type).typeArguments = type.typeParameters;
                 }
-                type.baseTypes = [];
-                forEach(symbol.declarations, declaration => {
-                    if (declaration.kind === SyntaxKind.InterfaceDeclaration && getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
-                        forEach(getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration), node => {
-                            let baseType = getTypeFromHeritageClauseElement(node);
 
-                            if (baseType !== unknownType) {
-                                if (getTargetType(baseType).flags & (TypeFlags.Class | TypeFlags.Interface)) {
-                                    if (type !== baseType && !hasBaseType(<InterfaceType>baseType, type)) {
-                                        type.baseTypes.push(baseType);
-                                    }
-                                    else {
-                                        error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
-                                    }
-                                }
-                                else {
-                                    error(node, Diagnostics.An_interface_may_only_extend_a_class_or_another_interface);
-                                }
-                            }
-                        });
-                    }
-                });
                 type.declaredProperties = getNamedMembers(symbol.members);
                 type.declaredCallSignatures = getSignaturesOfSymbol(symbol.members["__call"]);
                 type.declaredConstructSignatures = getSignaturesOfSymbol(symbol.members["__new"]);
@@ -2646,9 +2670,9 @@ module ts {
             let constructSignatures = type.declaredConstructSignatures;
             let stringIndexType = type.declaredStringIndexType;
             let numberIndexType = type.declaredNumberIndexType;
-            if (type.baseTypes.length) {
+            if (getBaseTypes(type).length) {
                 members = createSymbolTable(type.declaredProperties);
-                forEach(type.baseTypes, baseType => {
+                forEach(getBaseTypes(type), baseType => {
                     addInheritedMembers(members, getPropertiesOfObjectType(baseType));
                     callSignatures = concatenate(callSignatures, getSignaturesOfType(baseType, SignatureKind.Call));
                     constructSignatures = concatenate(constructSignatures, getSignaturesOfType(baseType, SignatureKind.Construct));
@@ -2667,7 +2691,7 @@ module ts {
             let constructSignatures = instantiateList(target.declaredConstructSignatures, mapper, instantiateSignature);
             let stringIndexType = target.declaredStringIndexType ? instantiateType(target.declaredStringIndexType, mapper) : undefined;
             let numberIndexType = target.declaredNumberIndexType ? instantiateType(target.declaredNumberIndexType, mapper) : undefined;
-            forEach(target.baseTypes, baseType => {
+            forEach(getBaseTypes(target), baseType => {
                 let instantiatedBaseType = instantiateType(baseType, mapper);
                 addInheritedMembers(members, getPropertiesOfObjectType(instantiatedBaseType));
                 callSignatures = concatenate(callSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Call));
@@ -2697,8 +2721,8 @@ module ts {
         }
 
         function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
-            if (classType.baseTypes.length) {
-                let baseType = classType.baseTypes[0];
+            if (getBaseTypes(classType).length) {
+                let baseType = getBaseTypes(classType)[0];
                 let baseSignatures = getSignaturesOfType(getTypeOfSymbol(baseType.symbol), SignatureKind.Construct);
                 return map(baseSignatures, baseSignature => {
                     let signature = baseType.flags & TypeFlags.Reference ?
@@ -2820,9 +2844,9 @@ module ts {
                     if (!constructSignatures.length) {
                         constructSignatures = getDefaultConstructSignatures(classType);
                     }
-                    if (classType.baseTypes.length) {
+                    if (getBaseTypes(classType).length) {
                         members = createSymbolTable(getNamedMembers(members));
-                        addInheritedMembers(members, getPropertiesOfObjectType(getTypeOfSymbol(classType.baseTypes[0].symbol)));
+                        addInheritedMembers(members, getPropertiesOfObjectType(getTypeOfSymbol(getBaseTypes(classType)[0].symbol)));
                     }
                 }
                 stringIndexType = undefined;
@@ -5550,7 +5574,7 @@ module ts {
             let baseClass: Type;
             if (enclosingClass && getClassExtendsHeritageClauseElement(enclosingClass)) {
                 let classType = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClass));
-                baseClass = classType.baseTypes.length && classType.baseTypes[0];
+                baseClass = getBaseTypes(classType).length && getBaseTypes(classType)[0];
             }
 
             if (!baseClass) {
@@ -9829,7 +9853,7 @@ module ts {
                 errorNode = declaredNumberIndexer || declaredStringIndexer;
                 // condition 'errorNode === undefined' may appear if types does not declare nor string neither number indexer
                 if (!errorNode && (type.flags & TypeFlags.Interface)) {
-                    let someBaseTypeHasBothIndexers = forEach((<InterfaceType>type).baseTypes, base => getIndexTypeOfType(base, IndexKind.String) && getIndexTypeOfType(base, IndexKind.Number));
+                    let someBaseTypeHasBothIndexers = forEach(getBaseTypes(<InterfaceType>type), base => getIndexTypeOfType(base, IndexKind.String) && getIndexTypeOfType(base, IndexKind.Number));
                     errorNode = someBaseTypeHasBothIndexers ? undefined : type.symbol.declarations[0];
                 }
             }
@@ -9869,7 +9893,7 @@ module ts {
                     // for interfaces property and indexer might be inherited from different bases
                     // check if any base class already has both property and indexer.
                     // check should be performed only if 'type' is the first type that brings property\indexer together
-                    let someBaseClassHasBothPropertyAndIndexer = forEach((<InterfaceType>containingType).baseTypes, base => getPropertyOfObjectType(base, prop.name) && getIndexTypeOfType(base, indexKind));
+                    let someBaseClassHasBothPropertyAndIndexer = forEach(getBaseTypes(<InterfaceType>containingType), base => getPropertyOfObjectType(base, prop.name) && getIndexTypeOfType(base, indexKind));
                     errorNode = someBaseClassHasBothPropertyAndIndexer ? undefined : containingType.symbol.declarations[0];
                 }
 
@@ -9953,9 +9977,9 @@ module ts {
                 emitExtends = emitExtends || !isInAmbientContext(node);
                 checkHeritageClauseElement(baseTypeNode);
             }
-            if (type.baseTypes.length) {
+            if (getBaseTypes(type).length) {
                 if (produceDiagnostics) {
-                    let baseType = type.baseTypes[0];
+                    let baseType = getBaseTypes(type)[0];
                     checkTypeAssignableTo(type, baseType, node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
                     let staticBaseType = getTypeOfSymbol(baseType.symbol);
                     checkTypeAssignableTo(staticType, getTypeWithoutConstructors(staticBaseType), node.name || node,
@@ -9969,7 +9993,7 @@ module ts {
                 }
             }
 
-            if (type.baseTypes.length || (baseTypeNode && compilerOptions.separateCompilation)) {
+            if (getBaseTypes(type).length || (baseTypeNode && compilerOptions.separateCompilation)) {
                 // Check that base type can be evaluated as expression
                 checkExpressionOrQualifiedName(baseTypeNode.expression);
             }
@@ -10113,7 +10137,7 @@ module ts {
         }
 
         function checkInheritedPropertiesAreIdentical(type: InterfaceType, typeNode: Node): boolean {
-            if (!type.baseTypes.length || type.baseTypes.length === 1) {
+            if (!getBaseTypes(type).length || getBaseTypes(type).length === 1) {
                 return true;
             }
 
@@ -10121,7 +10145,7 @@ module ts {
             forEach(type.declaredProperties, p => { seen[p.name] = { prop: p, containingType: type }; });
             let ok = true;
 
-            for (let base of type.baseTypes) {
+            for (let base of getBaseTypes(type)) {
                 let properties = getPropertiesOfObjectType(base);
                 for (let prop of properties) {
                     if (!hasProperty(seen, prop.name)) {
@@ -10169,7 +10193,7 @@ module ts {
                     let type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
                     // run subsequent checks only if first set succeeded
                     if (checkInheritedPropertiesAreIdentical(type, node.name)) {
-                        forEach(type.baseTypes, baseType => {
+                        forEach(getBaseTypes(type), baseType => {
                             checkTypeAssignableTo(type, baseType, node.name, Diagnostics.Interface_0_incorrectly_extends_interface_1);
                         });
                         checkIndexConstraints(type);
