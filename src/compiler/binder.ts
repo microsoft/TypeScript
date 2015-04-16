@@ -270,7 +270,7 @@ module ts {
         }
 
         function bindJSDocTypeParameters(node: FunctionLikeDeclaration) {
-            let jsDocComment = getJSDocComment(node, file);
+            let jsDocComment = node.jsDocComment;
             if (jsDocComment) {
                 forEach(jsDocComment.typeParameters, bind);
             } 

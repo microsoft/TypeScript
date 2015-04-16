@@ -2118,7 +2118,7 @@ module ts {
         function getJSDocTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration): JSDocType {
             // First, see if this node has an @type annotation on it directly.
             let sourceFile = getSourceFileOfNode(declaration);
-            let docComment = getJSDocComment(declaration, sourceFile);
+            let docComment = declaration.jsDocComment;
 
             if (docComment && docComment.type) {
                 return docComment.type;
@@ -2129,7 +2129,7 @@ module ts {
                 declaration.parent.parent.kind === SyntaxKind.VariableStatement) {
 
                 // @type annotation might have been on the variable statement, try that instead.
-                docComment = getJSDocComment(declaration.parent.parent, sourceFile);
+                docComment = declaration.parent.parent.jsDocComment;
                 if (docComment && docComment.type) {
                     return docComment.type;
                 }
@@ -3089,7 +3089,7 @@ module ts {
 
         function getTypeParametersFromSignatureDeclaration(declaration: SignatureDeclaration): TypeParameter[] {
             if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
-                let jsDocComment = getJSDocComment(declaration, getSourceFile(declaration));
+                let jsDocComment = declaration.jsDocComment;
                 if (jsDocComment && jsDocComment.typeParameters) {
                     return getTypeParametersFromTypeParameterDeclarations(jsDocComment.typeParameters);
                 }
@@ -7438,7 +7438,7 @@ module ts {
         }
 
         function getReturnTypeFromJSDocComment(func: FunctionLikeDeclaration): Type {
-            let jsDocComment = getJSDocComment(func, getSourceFile(func));
+            let jsDocComment = func.jsDocComment;
             if (jsDocComment && jsDocComment.returnType) {
                 return getTypeFromTypeNode(jsDocComment.returnType);
             }

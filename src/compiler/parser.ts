@@ -373,11 +373,13 @@ module ts {
     }
     
     /* @internal */
+    // Exposed only for testing.
     export function parseJSDocComment(parent: Node, content: string, start?: number, length?: number): JSDocComment {
         return JSDocParser.parseJSDocComment(parent, content, start, length);
     }
 
     /* @internal */
+    // Exposed only for testing.
     export function parseJSDocTypeExpression(content: string, start?: number, length?: number): JSDocTypeExpression {
         return JSDocParser.parseJSDocTypeExpression(content, start, length);
     }
@@ -544,7 +546,44 @@ module ts {
                 fixupParentReferences(sourceFile);
             }
 
+            // If this is a javascript file, proactively see if we can get JSDoc comments for 
+            // relevant nodes in the file.  We'll use these to provide typing informaion if they're
+            // available.
+            if (isJavaScript(fileName)) {
+                parseJSDocComments();
+            }
+
             return sourceFile;
+        }
+
+        function parseJSDocComments() {
+            forEachChild(sourceFile, visit);
+            return;
+
+            function visit(node: Node) {
+                // Add additional cases as necessary depending on how we see JSDoc comments used
+                // in the wild.
+                switch (node.kind) {
+                    case SyntaxKind.VariableStatement:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.Parameter:
+                        parseJSDocComment(node);
+                }
+
+                forEachChild(node, visit);
+            }
+        }
+
+        function parseJSDocComment(node: Node) {
+            let comments = getLeadingCommentRangesOfNode(node, sourceFile);
+            if (comments) {
+                for (let comment of comments) {
+                    let jsDocComment = ts.parseJSDocComment(node, sourceText, comment.pos, comment.end - comment.pos);
+                    if (jsDocComment) {
+                        node.jsDocComment = jsDocComment;
+                    }
+                }
+            }
         }
 
         export function fixupParentReferences(sourceFile: Node) {
@@ -5016,6 +5055,7 @@ module ts {
                 // Ditch any existing LS children we may have created.  This way we can avoid
                 // moving them forward.
                 node._children = undefined;
+                node.jsDocComment = undefined;
                 node.pos += delta;
                 node.end += delta;
 
@@ -5916,25 +5956,7 @@ module ts {
             }
         }
 
-        interface NodeWithComment extends Node {
-            _docComment: JSDocComment;
-        }
-
         export function parseJSDocComment(parent: Node, content: string, start: number, length: number): JSDocComment {
-            let nodeWithComment = <NodeWithComment>parent;
-            if (nodeWithComment && nodeWithComment._docComment) {
-                return nodeWithComment._docComment;
-            }
-
-            let result = parseJSDocCommentWorker(parent, content, start, length);
-            if (nodeWithComment && result) {
-                nodeWithComment._docComment = result;
-            }
-
-            return result;
-        }
-
-        function parseJSDocCommentWorker(parent: Node, content: string, start: number, length: number): JSDocComment {
             start = start || 0;
             let end = length === undefined ? content.length : start + length;
             length = end - start;

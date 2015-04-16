@@ -395,14 +395,15 @@ module ts {
         // Specific context the parser was in when this node was created.  Normally undefined.
         // Only set when the parser was in some interesting context (like async/yield).
         /* @internal */ parserContextFlags?: ParserContextFlags;
-        decorators?: NodeArray<Decorator>;    // Array of decorators (in document order)
-        modifiers?: ModifiersArray;           // Array of modifiers
-        /* @internal */ id?: number;          // Unique id (used to look up NodeLinks)
-        parent?: Node;                        // Parent node (initialized by binding)
-        /* @internal */ symbol?: Symbol;      // Symbol declared by node (initialized by binding)
-        /* @internal */ locals?: SymbolTable; // Locals associated with node (initialized by binding)
-        /* @internal */ nextContainer?: Node; // Next container in declaration order (initialized by binding)
-        /* @internal */ localSymbol?: Symbol; // Local symbol declared by node (initialized by binding only for exported nodes)
+        decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
+        modifiers?: ModifiersArray;                     // Array of modifiers
+        /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
+        parent?: Node;                                  // Parent node (initialized by binding
+        /* @internal */ jsDocComment?: JSDocComment;    // JSDoc for the node, if it has any.  Only for .js files.
+        /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
+        /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
+        /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
+        /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange {

@@ -855,7 +855,7 @@ module ts {
             // annotation.
             let parameterName = (<Identifier>parameter.name).text;
 
-            let docComment = getJSDocComment(parameter.parent, sourceFile);
+            let docComment = parameter.parent.jsDocComment;
             if (docComment && docComment.parameters) {
                 for (let parameter of docComment.parameters) {
                     if (parameter.name === parameterName) {
@@ -1725,21 +1725,6 @@ module ts {
 
     export function isJavaScript(fileName: string) {
         return fileExtensionIs(fileName, ".js");
-    }
-
-    /* @internal */
-    export function getJSDocComment(node: Node, sourceFile: SourceFile) {
-        let comments = getLeadingCommentRangesOfNode(node, sourceFile);
-        if (comments) {
-            for (let comment of comments) {
-                let jsDocComment = parseJSDocComment(node, sourceFile.text, comment.pos, comment.end - comment.pos);
-                if (jsDocComment) {
-                    return jsDocComment;
-                }
-            }
-        }
-
-        return undefined;
     }
 }
 
