@@ -9,6 +9,5 @@
 ////    a./**/
 ////}
 
-debugger;
 goTo.marker();
 verify.completionListContains("concat", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
