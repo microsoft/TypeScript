@@ -5,34 +5,34 @@
 // than a property access that selects one of the enum's members
 
 const enum G {
->G : G, Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
+>G : G
 
     A = 1,
->A : G, Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 5, 14))
+>A : G
 >1 : number
 
     B = 2,
->B : G, Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 6, 10))
+>B : G
 >2 : number
 
     C = A + B,
->C : G, Symbol(G.C, Decl(constEnumPropertyAccess1.ts, 7, 10))
+>C : G
 >A + B : number
->A : G, Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 5, 14))
->B : G, Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 6, 10))
+>A : G
+>B : G
 
     D = A * 2
->D : G, Symbol(G.D, Decl(constEnumPropertyAccess1.ts, 8, 14))
+>D : G
 >A * 2 : number
->A : G, Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 5, 14))
+>A : G
 >2 : number
 }
 
 var o: {
->o : { [idx: number]: boolean; }, Symbol(o, Decl(constEnumPropertyAccess1.ts, 12, 3))
+>o : { [idx: number]: boolean; }
 
     [idx: number]: boolean
->idx : number, Symbol(idx, Decl(constEnumPropertyAccess1.ts, 13, 5))
+>idx : number
 
 } = {
 >{        1: true    } : { [x: number]: boolean; 1: boolean; }
@@ -43,46 +43,46 @@ var o: {
     };
 
 var a = G.A;
->a : G, Symbol(a, Decl(constEnumPropertyAccess1.ts, 18, 3))
->G.A : G, Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 5, 14))
->G : typeof G, Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
->A : G, Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 5, 14))
+>a : G
+>G.A : G
+>G : typeof G
+>A : G
 
 var a1 = G["A"];
->a1 : G, Symbol(a1, Decl(constEnumPropertyAccess1.ts, 19, 3))
+>a1 : G
 >G["A"] : G
->G : typeof G, Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
->"A" : string, Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 5, 14))
+>G : typeof G
+>"A" : string
 
 var g = o[G.A];
->g : boolean, Symbol(g, Decl(constEnumPropertyAccess1.ts, 20, 3))
+>g : boolean
 >o[G.A] : boolean
->o : { [idx: number]: boolean; }, Symbol(o, Decl(constEnumPropertyAccess1.ts, 12, 3))
->G.A : G, Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 5, 14))
->G : typeof G, Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
->A : G, Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 5, 14))
+>o : { [idx: number]: boolean; }
+>G.A : G
+>G : typeof G
+>A : G
 
 class C {
->C : C, Symbol(C, Decl(constEnumPropertyAccess1.ts, 20, 15))
+>C : C
 
     [G.A]() { }
->G.A : G, Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 5, 14))
->G : typeof G, Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
->A : G, Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 5, 14))
+>G.A : G
+>G : typeof G
+>A : G
 
     get [G.B]() {
->G.B : G, Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 6, 10))
->G : typeof G, Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
->B : G, Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 6, 10))
+>G.B : G
+>G : typeof G
+>B : G
 
         return true;
 >true : boolean
     }
     set [G.B](x: number) { }
->G.B : G, Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 6, 10))
->G : typeof G, Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
->B : G, Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 6, 10))
->x : number, Symbol(x, Decl(constEnumPropertyAccess1.ts, 27, 14))
+>G.B : G
+>G : typeof G
+>B : G
+>x : number
 }
 
 
