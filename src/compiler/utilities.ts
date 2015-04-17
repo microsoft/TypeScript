@@ -211,8 +211,10 @@ module ts {
             isCatchClauseVariableDeclaration(declaration);
     }
 
+    // Gets the nearest enclosing block scope container that has the provided node 
+    // as a descendant, that is not the provided node.
     export function getEnclosingBlockScopeContainer(node: Node): Node {
-        let current = node;
+        let current = node.parent;
         while (current) {
             if (isFunctionLike(current)) {
                 return current;

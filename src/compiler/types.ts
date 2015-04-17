@@ -1518,6 +1518,7 @@ module ts {
         BlockScopedBindingInLoop    = 0x00000100,
         EmitDecorate                = 0x00000200,  // Emit __decorate
         EmitParam                   = 0x00000400,  // Emit __param helper for decorators
+        LexicalModuleMergesWithClass = 0x00000800,  // Instantiated lexical module declaration is merged with a previous class declaration.
     }
 
     /* @internal */ 
