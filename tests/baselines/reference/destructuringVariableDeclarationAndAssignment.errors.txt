@@ -1,0 +1,15 @@
+tests/cases/conformance/es6/destructuring/destructuringVariableDeclarationAndAssignment.ts(3,23): error TS2459: Type 'number | { b12: number; b42: number; }' has no property 'b12' and no string index signature.
+tests/cases/conformance/es6/destructuring/destructuringVariableDeclarationAndAssignment.ts(3,33): error TS2459: Type 'number | { b12: number; b42: number; }' has no property 'b42' and no string index signature.
+tests/cases/conformance/es6/destructuring/destructuringVariableDeclarationAndAssignment.ts(3,44): error TS2403: Subsequent variable declarations must have the same type.  Variable 'c' must be of type 'number', but here has type '(number | { b12: number; b42: number; })[]'.
+
+
+==== tests/cases/conformance/es6/destructuring/destructuringVariableDeclarationAndAssignment.ts (3 errors) ====
+    var {o: [a1, a2, a3 = { b1: 1000, b4: 200 }]} = { o: [1, 2, { b1: 4, b4: 0 }] }; 
+    var {o0: [c, d, { e: e1, f }, , ]} = { o0: [1, 2, { e: 4, f: 0 }] };
+    var {o1: [a11, a21, { b12: b22, b42 },, ...c]} = { o1: [1, 2, { b12: 4, b42: 0 }] }; 
+                          ~~~
+!!! error TS2459: Type 'number | { b12: number; b42: number; }' has no property 'b12' and no string index signature.
+                                    ~~~
+!!! error TS2459: Type 'number | { b12: number; b42: number; }' has no property 'b42' and no string index signature.
+                                               ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'c' must be of type 'number', but here has type '(number | { b12: number; b42: number; })[]'.

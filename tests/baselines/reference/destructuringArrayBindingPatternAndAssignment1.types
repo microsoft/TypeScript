@@ -1,0 +1,133 @@
+=== tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1.ts ===
+var [p0,p1, p2] : any = [2, 3, 4];
+>p0 : any, Symbol(p0, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 0, 5))
+>p1 : any, Symbol(p1, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 0, 8))
+>p2 : any, Symbol(p2, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 0, 11))
+>[2, 3, 4] : number[]
+>2 : number
+>3 : number
+>4 : number
+
+var [a, b, c]: [number, number, string] = [1, 2, "string"];
+>a : number, Symbol(a, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 1, 5))
+>b : number, Symbol(b, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 1, 7))
+>c : string, Symbol(c, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 1, 10))
+>[1, 2, "string"] : [number, number, string]
+>1 : number
+>2 : number
+>"string" : string
+
+var [d, e]: any = undefined;
+>d : any, Symbol(d, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 2, 5))
+>e : any, Symbol(e, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 2, 7))
+>undefined : undefined, Symbol(undefined)
+
+var [f = false, g = 1]: any = undefined;
+>f : boolean, Symbol(f, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 3, 5))
+>false : boolean
+>g : number, Symbol(g, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 3, 15))
+>1 : number
+>undefined : undefined, Symbol(undefined)
+
+g = 10;
+>g = 10 : number
+>g : number, Symbol(g, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 3, 15))
+>10 : number
+
+f = true;
+>f = true : boolean
+>f : boolean, Symbol(f, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 3, 5))
+>true : boolean
+
+var [x] = []
+>x : any, Symbol(x, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 7, 5))
+>[] : undefined[]
+
+var [[[y]], [[[[z]]]]] = [[[]], [[[[]]]]]
+>y : any, Symbol(y, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 8, 7))
+>z : any, Symbol(z, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 8, 16))
+>[[[]], [[[[]]]]] : [[undefined[]], [[[undefined[]]]]]
+>[[]] : [undefined[]]
+>[] : undefined[]
+>[[[[]]]] : [[[undefined[]]]]
+>[[[]]] : [[undefined[]]]
+>[[]] : [undefined[]]
+>[] : undefined[]
+
+var [[w], m]: [[string|number], boolean] = [[1], true];
+>w : string | number, Symbol(w, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 9, 6))
+>m : boolean, Symbol(m, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 9, 9))
+>[[1], true] : [[number], boolean]
+>[1] : [number]
+>1 : number
+>true : boolean
+
+interface J extends Array<Number> {
+>J : J, Symbol(J, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 9, 55))
+>Array : T[], Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Number : Number, Symbol(Number, Decl(lib.d.ts, 456, 40), Decl(lib.d.ts, 518, 11))
+
+    2: number;
+}
+
+var [, w1] = [1, 2, 3];
+> : undefined
+>w1 : number, Symbol(w1, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 14, 6))
+>[1, 2, 3] : [number, number, number]
+>1 : number
+>2 : number
+>3 : number
+
+var [,,, w2] = [1, 2, 3, 4];
+> : undefined
+> : undefined
+> : undefined
+>w2 : number, Symbol(w2, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 15, 8), Decl(destructuringArrayBindingPatternAndAssignment1.ts, 16, 8))
+>[1, 2, 3, 4] : [number, number, number, number]
+>1 : number
+>2 : number
+>3 : number
+>4 : number
+
+var [,,, w2] = [1, 2, 3, 4];
+> : undefined
+> : undefined
+> : undefined
+>w2 : number, Symbol(w2, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 15, 8), Decl(destructuringArrayBindingPatternAndAssignment1.ts, 16, 8))
+>[1, 2, 3, 4] : [number, number, number, number]
+>1 : number
+>2 : number
+>3 : number
+>4 : number
+
+var [,,,...w3] = [1, 2, 3, 4, "hello"];
+> : undefined
+> : undefined
+> : undefined
+>w3 : (string | number)[], Symbol(w3, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 17, 8))
+>[1, 2, 3, 4, "hello"] : (string | number)[]
+>1 : number
+>2 : number
+>3 : number
+>4 : number
+>"hello" : string
+
+var [r, s, ...t] = [1, 2, "string"];
+>r : string | number, Symbol(r, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 19, 5))
+>s : string | number, Symbol(s, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 19, 7))
+>t : (string | number)[], Symbol(t, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 19, 10))
+>[1, 2, "string"] : (string | number)[]
+>1 : number
+>2 : number
+>"string" : string
+
+var [r1, s1, t1] = [1, 2, "string"];
+>r1 : number, Symbol(r1, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 20, 5))
+>s1 : number, Symbol(s1, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 20, 8))
+>t1 : string, Symbol(t1, Decl(destructuringArrayBindingPatternAndAssignment1.ts, 20, 12))
+>[1, 2, "string"] : [number, number, string]
+>1 : number
+>2 : number
+>"string" : string
+
+
