@@ -5685,8 +5685,14 @@ module ts {
 
                 // Ditch any existing LS children we may have created.  This way we can avoid
                 // moving them forward.
-                node._children = undefined;
-                node.jsDocComment = undefined;
+                if (node._children) {
+                    node._children = undefined;
+                }
+
+                if (node.jsDocComment) {
+                    node.jsDocComment = undefined;
+                }
+
                 node.pos += delta;
                 node.end += delta;
 
