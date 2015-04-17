@@ -3487,23 +3487,9 @@ module ts {
                             type = unknownType;
                         }
                         else {
-                            type = getDeclaredTypeOfSymbol(symbol);
-                            if (type.flags & (TypeFlags.Class | TypeFlags.Interface) && type.flags & TypeFlags.Reference) {
-                                let typeParameters = (<InterfaceType>type).typeParameters;
-                                if (node.typeArguments && node.typeArguments.length === typeParameters.length) {
-                                    type = createTypeReference(<GenericType>type, map(node.typeArguments, getTypeFromTypeNodeOrHeritageClauseElement));
-                                }
-                                else {
-                                    error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), typeParameters.length);
-                                    type = undefined;
-                                }
-                            }
-                            else {
-                                if (node.typeArguments) {
-                                    error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
-                                    type = undefined;
-                                }
-                            }
+                            type = createTypeReferenceIfGeneric(
+                                getDeclaredTypeOfSymbol(symbol),
+                                node, node.typeArguments);
                         }
                     }
                 }
@@ -3511,6 +3497,27 @@ module ts {
                 links.resolvedType = type || unknownType;
             }
             return links.resolvedType;
+        }
+
+        function createTypeReferenceIfGeneric(type: Type, node: Node, typeArguments: NodeArray<TypeNode>): Type {
+            if (type.flags & (TypeFlags.Class | TypeFlags.Interface) && type.flags & TypeFlags.Reference) {
+                let typeParameters = (<InterfaceType>type).typeParameters;
+                if (typeArguments && typeArguments.length === typeParameters.length) {
+                    return createTypeReference(<GenericType>type, map(typeArguments, getTypeFromTypeNodeOrHeritageClauseElement));
+                }
+                else {
+                    error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), typeParameters.length);
+                    return undefined;
+                }
+            }
+            else {
+                if (typeArguments) {
+                    error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
+                    return undefined;
+                }
+            }
+
+            return type;
         }
 
         function getTypeFromTypeQueryNode(node: TypeQueryNode): Type {
@@ -3773,16 +3780,13 @@ module ts {
 
             let symbol = resolveEntityName(node.name, SymbolFlags.Type);
             if (symbol) {
-                let type = getDeclaredTypeOfSymbol(symbol);
-                if (type.flags & (TypeFlags.Class | TypeFlags.Interface) && type.flags & TypeFlags.Reference) {
-                    let typeParameters = (<InterfaceType>type).typeParameters;
-                    if (node.typeArguments && node.typeArguments.length === typeParameters.length) {
-                        let typeArguments = map(node.typeArguments, getTypeFromTypeNode);
-                        type = createTypeReference(<GenericType>type, typeArguments);
-                    }
-                }
+                let type = createTypeReferenceIfGeneric(
+                    getDeclaredTypeOfSymbol(symbol),
+                    node, node.typeArguments);
 
-                return type;
+                if (type) {
+                    return type;
+                }
             }
 
             return unknownType;
