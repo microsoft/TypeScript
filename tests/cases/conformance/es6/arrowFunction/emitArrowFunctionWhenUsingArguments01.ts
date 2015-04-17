@@ -1,4 +1,4 @@
-﻿// @target: es6
+﻿// @target: es5
 var a = () => {
     var arg = arguments[0];  // error
 }

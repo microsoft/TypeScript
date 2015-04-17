@@ -1,0 +1,18 @@
+=== tests/cases/conformance/es6/templates/templateStringWithBackslashEscapes01_ES6.ts ===
+
+var a = `hello\world`;
+>a : string
+>`hello\world` : string
+
+var b = `hello\\world`;
+>b : string
+>`hello\\world` : string
+
+var c = `hello\\\world`;
+>c : string
+>`hello\\\world` : string
+
+var d = `hello\\\\world`;
+>d : string
+>`hello\\\\world` : string
+

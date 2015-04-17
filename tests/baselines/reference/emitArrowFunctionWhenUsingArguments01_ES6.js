@@ -1,4 +1,4 @@
-//// [emitArrowFunctionWhenUsingArguments.ts]
+//// [emitArrowFunctionWhenUsingArguments01_ES6.ts]
 var a = () => {
     var arg = arguments[0];  // error
 }
@@ -31,7 +31,7 @@ function bar() {
 	}
 }
 
-//// [emitArrowFunctionWhenUsingArguments.js]
+//// [emitArrowFunctionWhenUsingArguments01_ES6.js]
 var a = () => {
     var arg = arguments[0]; // error
 };
