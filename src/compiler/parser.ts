@@ -1803,7 +1803,7 @@ module ts {
         function parseParameterType(): TypeNode {
             if (parseOptional(SyntaxKind.ColonToken)) {
                 return token === SyntaxKind.StringLiteral
-                    ? <StringLiteralTypeNode>parseLiteralNode(/*internName:*/ true)
+                    ? <StringLiteral>parseLiteralNode(/*internName:*/ true)
                     : parseType();
             }
 
