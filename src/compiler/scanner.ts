@@ -7,11 +7,6 @@ module ts {
         (message: DiagnosticMessage, length: number): void;
     }
 
-    export enum ScannerType {
-        TypeScript,
-        JSDocComment,
-    }
-
     /* @internal */ 
     export interface Scanner {
         getStartPos(): number;
