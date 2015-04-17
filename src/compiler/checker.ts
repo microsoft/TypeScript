@@ -2119,9 +2119,7 @@ module ts {
 
         function getJSDocTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration): JSDocType {
             // First, see if this node has an @type annotation on it directly.
-            let sourceFile = getSourceFileOfNode(declaration);
             let docComment = declaration.jsDocComment;
-
             if (docComment && docComment.type) {
                 return docComment.type;
             }
@@ -2139,7 +2137,7 @@ module ts {
             else if (declaration.kind === SyntaxKind.Parameter) {
                 // If it's a parameter, see if the parent has a jsdoc comment with an @param 
                 // annotation.
-                let parameter = getJSDocParameter(<ParameterDeclaration>declaration, sourceFile);
+                let parameter = getJSDocParameter(<ParameterDeclaration>declaration);
                 if (parameter) {
                     return parameter.type;
                 }
@@ -3127,7 +3125,7 @@ module ts {
                     return true;
                 }
 
-                let docParam = getJSDocParameter(node, getSourceFile(node));
+                let docParam = getJSDocParameter(node);
                 if (docParam) {
                     return docParam.type.kind === SyntaxKind.JSDocVariadicType;
                 }
@@ -3143,7 +3141,7 @@ module ts {
                     return true;
                 }
 
-                let docParam = getJSDocParameter(node, getSourceFile(node));
+                let docParam = getJSDocParameter(node);
                 if (docParam) {
                     return docParam.isBracketed || docParam.type.kind === SyntaxKind.JSDocOptionalType;
                 }

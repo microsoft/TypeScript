@@ -857,7 +857,7 @@ module ts {
             node.parameters[0].type.kind === SyntaxKind.JSDocConstructorType;
     }
 
-    export function getJSDocParameter(parameter: ParameterDeclaration, sourceFile: SourceFile): JSDocParameter {
+    export function getJSDocParameter(parameter: ParameterDeclaration): JSDocParameter {
         if (parameter.name && parameter.name.kind === SyntaxKind.Identifier) {
             // If it's a parameter, see if the parent has a jsdoc comment with an @param 
             // annotation.
@@ -885,7 +885,7 @@ module ts {
                 return true;
             }
 
-            let parameter = getJSDocParameter(lastParameter, getSourceFileOfNode(lastParameter));
+            let parameter = getJSDocParameter(lastParameter);
             if (parameter) {
                 return parameter.type.kind === SyntaxKind.JSDocVariadicType;
             }
