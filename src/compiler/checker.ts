@@ -3077,16 +3077,6 @@ module ts {
             return getIndexTypeOfObjectOrUnionType(getApparentType(type), kind);
         }
 
-        function symbolsToArray(symbols: SymbolTable): Symbol[] {
-            let result: Symbol[] = [];
-            for (let id in symbols) {
-                if (!isReservedMemberName(id)) {
-                    result.push(symbols[id]);
-                }
-            }
-            return result;
-        }
-
         function getTypeParametersFromSignatureDeclaration(declaration: SignatureDeclaration): TypeParameter[] {
             if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
                 let jsDocComment = declaration.jsDocComment;
@@ -3112,6 +3102,16 @@ module ts {
                     result.push(tp);
                 }
             });
+            return result;
+        }
+
+        function symbolsToArray(symbols: SymbolTable): Symbol[] {
+            let result: Symbol[] = [];
+            for (let id in symbols) {
+                if (!isReservedMemberName(id)) {
+                    result.push(symbols[id]);
+                }
+            }
             return result;
         }
 
