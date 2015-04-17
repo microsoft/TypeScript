@@ -112,12 +112,12 @@ module ts {
                 return (<Identifier | LiteralExpression>node.name).text;
             }
             switch (node.kind) {
-                case SyntaxKind.ConstructorType:
                 case SyntaxKind.Constructor:
                     return "__constructor";
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.CallSignature:
                     return "__call";
+                case SyntaxKind.ConstructorType:
                 case SyntaxKind.ConstructSignature:
                     return "__new";
                 case SyntaxKind.IndexSignature:
@@ -129,6 +129,8 @@ module ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
                     return node.flags & NodeFlags.Default ? "default" : undefined;
+                case SyntaxKind.JSDocFunctionType:
+                    return isJSDocConstructSignature(<SignatureDeclaration>node) ? "__new" : "__call";
             }
         }
 
@@ -291,24 +293,6 @@ module ts {
             }
         }
 
-        function bindJSDocFunctionType(node: JSDocFunctionType) {
-            let isConstructSignature = isJSDocConstructSignature(node);
-            let name = isConstructSignature ? "__new" : "__call";
-
-            let symbol = createSymbol(SymbolFlags.Signature, name);
-            addDeclarationToSymbol(symbol, node, SymbolFlags.Signature);
-            node.locals = {};
-
-            let typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
-            addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
-            typeLiteralSymbol.members = {};
-            typeLiteralSymbol.members[name] = symbol
-
-            node.symbol = typeLiteralSymbol;
-
-            saveParentAndBindChildren(node);
-        }
-
         function saveParentAndBindChildren(node: Node) {
             let saveParent = parent;
             parent = node;
@@ -415,7 +399,7 @@ module ts {
             }
         }
 
-        function bindFunctionOrConstructorType(node: SignatureDeclaration) {
+        function bindFunctionOrConstructorTypeORJSDocFunctionType(node: SignatureDeclaration): void {
             // For a given function symbol "<...>(...) => T" we want to generate a symbol identical
             // to the one we would get for: { <...>(...): T }
             //
@@ -423,14 +407,16 @@ module ts {
             // symbol as its sole member. To the rest of the system, this symbol will be  indistinguishable 
             // from an actual type literal symbol you would have gotten had you used the long form.
 
-            let symbol = createSymbol(SymbolFlags.Signature, getDeclarationName(node));
+            let name = getDeclarationName(node);
+
+            let symbol = createSymbol(SymbolFlags.Signature, name);
             addDeclarationToSymbol(symbol, node, SymbolFlags.Signature);
             bindChildren(node, SymbolFlags.Signature, /*isBlockScopeContainer:*/ false);
 
             let typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
             addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
             typeLiteralSymbol.members = {};
-            typeLiteralSymbol.members[node.kind === SyntaxKind.FunctionType ? "__call" : "__new"] = symbol
+            typeLiteralSymbol.members[name] = symbol
         }
 
         function bindAnonymousDeclaration(node: Declaration, symbolKind: SymbolFlags, name: string, isBlockScopeContainer: boolean) {
@@ -536,7 +522,8 @@ module ts {
 
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
-                    bindFunctionOrConstructorType(<SignatureDeclaration>node);
+                case SyntaxKind.JSDocFunctionType:
+                    bindFunctionOrConstructorTypeORJSDocFunctionType(<SignatureDeclaration>node);
                     break;
 
                 case SyntaxKind.TypeLiteral:
@@ -630,9 +617,6 @@ module ts {
                 case SyntaxKind.ForOfStatement:
                 case SyntaxKind.CaseBlock:
                     bindChildren(node, 0, /*isBlockScopeContainer*/ true);
-                    break;
-                case SyntaxKind.JSDocFunctionType:
-                    bindJSDocFunctionType(<JSDocFunctionType>node);
                     break;
                 default:
                     saveParentAndBindChildren(node);
