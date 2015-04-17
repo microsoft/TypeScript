@@ -2670,9 +2670,10 @@ module ts {
             let constructSignatures = type.declaredConstructSignatures;
             let stringIndexType = type.declaredStringIndexType;
             let numberIndexType = type.declaredNumberIndexType;
-            if (getBaseTypes(type).length) {
+            let baseTypes = getBaseTypes(type);
+            if (baseTypes.length) {
                 members = createSymbolTable(type.declaredProperties);
-                forEach(getBaseTypes(type), baseType => {
+                forEach(baseTypes, baseType => {
                     addInheritedMembers(members, getPropertiesOfObjectType(baseType));
                     callSignatures = concatenate(callSignatures, getSignaturesOfType(baseType, SignatureKind.Call));
                     constructSignatures = concatenate(constructSignatures, getSignaturesOfType(baseType, SignatureKind.Construct));
@@ -2720,9 +2721,10 @@ module ts {
                 sig.minArgumentCount, sig.hasRestParameter, sig.hasStringLiterals);
         }
 
-        function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
-            if (getBaseTypes(classType).length) {
-                let baseType = getBaseTypes(classType)[0];
+        function getDefaultConstructSignatures(classType: InterfaceType): Signature[]{
+            let baseTypes = getBaseTypes(classType);
+            if (baseTypes.length) {
+                let baseType = baseTypes[0];
                 let baseSignatures = getSignaturesOfType(getTypeOfSymbol(baseType.symbol), SignatureKind.Construct);
                 return map(baseSignatures, baseSignature => {
                     let signature = baseType.flags & TypeFlags.Reference ?
@@ -2844,9 +2846,10 @@ module ts {
                     if (!constructSignatures.length) {
                         constructSignatures = getDefaultConstructSignatures(classType);
                     }
-                    if (getBaseTypes(classType).length) {
+                    let baseTypes = getBaseTypes(classType);
+                    if (baseTypes.length) {
                         members = createSymbolTable(getNamedMembers(members));
-                        addInheritedMembers(members, getPropertiesOfObjectType(getTypeOfSymbol(getBaseTypes(classType)[0].symbol)));
+                        addInheritedMembers(members, getPropertiesOfObjectType(getTypeOfSymbol(baseTypes[0].symbol)));
                     }
                 }
                 stringIndexType = undefined;
@@ -5574,7 +5577,8 @@ module ts {
             let baseClass: Type;
             if (enclosingClass && getClassExtendsHeritageClauseElement(enclosingClass)) {
                 let classType = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClass));
-                baseClass = getBaseTypes(classType).length && getBaseTypes(classType)[0];
+                let baseTypes = getBaseTypes(classType);
+                baseClass = baseTypes.length && baseTypes[0];
             }
 
             if (!baseClass) {
@@ -9977,9 +9981,10 @@ module ts {
                 emitExtends = emitExtends || !isInAmbientContext(node);
                 checkHeritageClauseElement(baseTypeNode);
             }
-            if (getBaseTypes(type).length) {
+            let baseTypes = getBaseTypes(type);
+            if (baseTypes.length) {
                 if (produceDiagnostics) {
-                    let baseType = getBaseTypes(type)[0];
+                    let baseType = baseTypes[0];
                     checkTypeAssignableTo(type, baseType, node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
                     let staticBaseType = getTypeOfSymbol(baseType.symbol);
                     checkTypeAssignableTo(staticType, getTypeWithoutConstructors(staticBaseType), node.name || node,
@@ -9993,7 +9998,7 @@ module ts {
                 }
             }
 
-            if (getBaseTypes(type).length || (baseTypeNode && compilerOptions.separateCompilation)) {
+            if (baseTypes.length || (baseTypeNode && compilerOptions.separateCompilation)) {
                 // Check that base type can be evaluated as expression
                 checkExpressionOrQualifiedName(baseTypeNode.expression);
             }
@@ -10137,7 +10142,8 @@ module ts {
         }
 
         function checkInheritedPropertiesAreIdentical(type: InterfaceType, typeNode: Node): boolean {
-            if (!getBaseTypes(type).length || getBaseTypes(type).length === 1) {
+            let baseTypes = getBaseTypes(type);
+            if (!baseTypes.length || baseTypes.length === 1) {
                 return true;
             }
 
@@ -10145,7 +10151,7 @@ module ts {
             forEach(type.declaredProperties, p => { seen[p.name] = { prop: p, containingType: type }; });
             let ok = true;
 
-            for (let base of getBaseTypes(type)) {
+            for (let base of baseTypes) {
                 let properties = getPropertiesOfObjectType(base);
                 for (let prop of properties) {
                     if (!hasProperty(seen, prop.name)) {
