@@ -689,7 +689,7 @@ module ts {
         hasExtendedUnicodeEscape?: boolean;
     }
 
-    export interface StringLiteralExpression extends LiteralExpression {
+    export interface StringLiteralExpression extends LiteralExpression, TypeNode {
         _stringLiteralExpressionBrand: any;
     }
 
@@ -739,7 +739,7 @@ module ts {
         arguments: NodeArray<Expression>;
     }
 
-    export interface HeritageClauseElement extends Node {
+    export interface HeritageClauseElement extends TypeNode {
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
     }
