@@ -2,98 +2,98 @@
 // basic uses of optional properties without errors
 
 interface I {
->I : I, Symbol(I, Decl(typesWithOptionalProperty.ts, 0, 0))
+>I : I
 
     foo: string;
->foo : string, Symbol(foo, Decl(typesWithOptionalProperty.ts, 2, 13))
+>foo : string
 
     bar?: number;
->bar : number, Symbol(bar, Decl(typesWithOptionalProperty.ts, 3, 16))
+>bar : number
 
     baz? (): string;
->baz : () => string, Symbol(baz, Decl(typesWithOptionalProperty.ts, 4, 17))
+>baz : () => string
 }
 
 var a: {
->a : { foo: string; bar?: number; baz?(): string; }, Symbol(a, Decl(typesWithOptionalProperty.ts, 8, 3))
+>a : { foo: string; bar?: number; baz?(): string; }
 
     foo: string;
->foo : string, Symbol(foo, Decl(typesWithOptionalProperty.ts, 8, 8))
+>foo : string
 
     bar?: number;
->bar : number, Symbol(bar, Decl(typesWithOptionalProperty.ts, 9, 16))
+>bar : number
 
     baz? (): string;
->baz : () => string, Symbol(baz, Decl(typesWithOptionalProperty.ts, 10, 17))
+>baz : () => string
 
 };
 
 var b = { foo: '' };
->b : { foo: string; }, Symbol(b, Decl(typesWithOptionalProperty.ts, 14, 3))
+>b : { foo: string; }
 >{ foo: '' } : { foo: string; }
->foo : string, Symbol(foo, Decl(typesWithOptionalProperty.ts, 14, 9))
+>foo : string
 >'' : string
 
 var c = { foo: '', bar: 3 };
->c : { foo: string; bar: number; }, Symbol(c, Decl(typesWithOptionalProperty.ts, 15, 3))
+>c : { foo: string; bar: number; }
 >{ foo: '', bar: 3 } : { foo: string; bar: number; }
->foo : string, Symbol(foo, Decl(typesWithOptionalProperty.ts, 15, 9))
+>foo : string
 >'' : string
->bar : number, Symbol(bar, Decl(typesWithOptionalProperty.ts, 15, 18))
+>bar : number
 >3 : number
 
 var d = { foo: '', bar: 3, baz: () => '' };
->d : { foo: string; bar: number; baz: () => string; }, Symbol(d, Decl(typesWithOptionalProperty.ts, 16, 3))
+>d : { foo: string; bar: number; baz: () => string; }
 >{ foo: '', bar: 3, baz: () => '' } : { foo: string; bar: number; baz: () => string; }
->foo : string, Symbol(foo, Decl(typesWithOptionalProperty.ts, 16, 9))
+>foo : string
 >'' : string
->bar : number, Symbol(bar, Decl(typesWithOptionalProperty.ts, 16, 18))
+>bar : number
 >3 : number
->baz : () => string, Symbol(baz, Decl(typesWithOptionalProperty.ts, 16, 26))
+>baz : () => string
 >() => '' : () => string
 >'' : string
 
 var i: I;
->i : I, Symbol(i, Decl(typesWithOptionalProperty.ts, 18, 3))
->I : I, Symbol(I, Decl(typesWithOptionalProperty.ts, 0, 0))
+>i : I
+>I : I
 
 i = b;
 >i = b : { foo: string; }
->i : I, Symbol(i, Decl(typesWithOptionalProperty.ts, 18, 3))
->b : { foo: string; }, Symbol(b, Decl(typesWithOptionalProperty.ts, 14, 3))
+>i : I
+>b : { foo: string; }
 
 i = c;
 >i = c : { foo: string; bar: number; }
->i : I, Symbol(i, Decl(typesWithOptionalProperty.ts, 18, 3))
->c : { foo: string; bar: number; }, Symbol(c, Decl(typesWithOptionalProperty.ts, 15, 3))
+>i : I
+>c : { foo: string; bar: number; }
 
 i = d;
 >i = d : { foo: string; bar: number; baz: () => string; }
->i : I, Symbol(i, Decl(typesWithOptionalProperty.ts, 18, 3))
->d : { foo: string; bar: number; baz: () => string; }, Symbol(d, Decl(typesWithOptionalProperty.ts, 16, 3))
+>i : I
+>d : { foo: string; bar: number; baz: () => string; }
 
 a = b;
 >a = b : { foo: string; }
->a : { foo: string; bar?: number; baz?(): string; }, Symbol(a, Decl(typesWithOptionalProperty.ts, 8, 3))
->b : { foo: string; }, Symbol(b, Decl(typesWithOptionalProperty.ts, 14, 3))
+>a : { foo: string; bar?: number; baz?(): string; }
+>b : { foo: string; }
 
 a = c;
 >a = c : { foo: string; bar: number; }
->a : { foo: string; bar?: number; baz?(): string; }, Symbol(a, Decl(typesWithOptionalProperty.ts, 8, 3))
->c : { foo: string; bar: number; }, Symbol(c, Decl(typesWithOptionalProperty.ts, 15, 3))
+>a : { foo: string; bar?: number; baz?(): string; }
+>c : { foo: string; bar: number; }
 
 a = d;
 >a = d : { foo: string; bar: number; baz: () => string; }
->a : { foo: string; bar?: number; baz?(): string; }, Symbol(a, Decl(typesWithOptionalProperty.ts, 8, 3))
->d : { foo: string; bar: number; baz: () => string; }, Symbol(d, Decl(typesWithOptionalProperty.ts, 16, 3))
+>a : { foo: string; bar?: number; baz?(): string; }
+>d : { foo: string; bar: number; baz: () => string; }
 
 i = a;
 >i = a : { foo: string; bar?: number; baz?(): string; }
->i : I, Symbol(i, Decl(typesWithOptionalProperty.ts, 18, 3))
->a : { foo: string; bar?: number; baz?(): string; }, Symbol(a, Decl(typesWithOptionalProperty.ts, 8, 3))
+>i : I
+>a : { foo: string; bar?: number; baz?(): string; }
 
 a = i;
 >a = i : I
->a : { foo: string; bar?: number; baz?(): string; }, Symbol(a, Decl(typesWithOptionalProperty.ts, 8, 3))
->i : I, Symbol(i, Decl(typesWithOptionalProperty.ts, 18, 3))
+>a : { foo: string; bar?: number; baz?(): string; }
+>i : I
 

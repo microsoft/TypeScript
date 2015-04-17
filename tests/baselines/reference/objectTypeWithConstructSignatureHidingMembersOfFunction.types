@@ -1,79 +1,79 @@
 === tests/cases/conformance/types/members/objectTypeWithConstructSignatureHidingMembersOfFunction.ts ===
 interface I {
->I : I, Symbol(I, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 0, 0))
+>I : I
 
     new(): number;
     apply(a: any, b?: any): void;
->apply : (a: any, b?: any) => void, Symbol(apply, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 1, 18))
->a : any, Symbol(a, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 2, 10))
->b : any, Symbol(b, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 2, 17))
+>apply : (a: any, b?: any) => void
+>a : any
+>b : any
 
     call(thisArg: number, ...argArray: number[]): any;
->call : (thisArg: number, ...argArray: number[]) => any, Symbol(call, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 2, 33))
->thisArg : number, Symbol(thisArg, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 3, 9))
->argArray : number[], Symbol(argArray, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 3, 25))
+>call : (thisArg: number, ...argArray: number[]) => any
+>thisArg : number
+>argArray : number[]
 }
 
 var i: I;
->i : I, Symbol(i, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 6, 3))
->I : I, Symbol(I, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 0, 0))
+>i : I
+>I : I
 
 var r1: (a: any, b?: any) => void = i.apply;
->r1 : (a: any, b?: any) => void, Symbol(r1, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 7, 3))
->a : any, Symbol(a, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 7, 9))
->b : any, Symbol(b, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 7, 16))
->i.apply : (a: any, b?: any) => void, Symbol(I.apply, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 1, 18))
->i : I, Symbol(i, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 6, 3))
->apply : (a: any, b?: any) => void, Symbol(I.apply, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 1, 18))
+>r1 : (a: any, b?: any) => void
+>a : any
+>b : any
+>i.apply : (a: any, b?: any) => void
+>i : I
+>apply : (a: any, b?: any) => void
 
 var r1b: (thisArg: number, ...argArray: number[]) => void = i.call;
->r1b : (thisArg: number, ...argArray: number[]) => void, Symbol(r1b, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 8, 3))
->thisArg : number, Symbol(thisArg, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 8, 10))
->argArray : number[], Symbol(argArray, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 8, 26))
->i.call : (thisArg: number, ...argArray: number[]) => any, Symbol(I.call, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 2, 33))
->i : I, Symbol(i, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 6, 3))
->call : (thisArg: number, ...argArray: number[]) => any, Symbol(I.call, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 2, 33))
+>r1b : (thisArg: number, ...argArray: number[]) => void
+>thisArg : number
+>argArray : number[]
+>i.call : (thisArg: number, ...argArray: number[]) => any
+>i : I
+>call : (thisArg: number, ...argArray: number[]) => any
 
 var r1c = i.arguments;
->r1c : any, Symbol(r1c, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 9, 3))
->i.arguments : any, Symbol(Function.arguments, Decl(lib.d.ts, 252, 19))
->i : I, Symbol(i, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 6, 3))
->arguments : any, Symbol(Function.arguments, Decl(lib.d.ts, 252, 19))
+>r1c : any
+>i.arguments : any
+>i : I
+>arguments : any
 
 var x: {
->x : { new (): number; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }, Symbol(x, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 11, 3))
+>x : { new (): number; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
 
     new(): number;
     apply(a: any, b?: any): void;
->apply : (a: any, b?: any) => void, Symbol(apply, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 12, 18))
->a : any, Symbol(a, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 13, 10))
->b : any, Symbol(b, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 13, 17))
+>apply : (a: any, b?: any) => void
+>a : any
+>b : any
 
     call(thisArg: number, ...argArray: number[]): any;
->call : (thisArg: number, ...argArray: number[]) => any, Symbol(call, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 13, 33))
->thisArg : number, Symbol(thisArg, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 14, 9))
->argArray : number[], Symbol(argArray, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 14, 25))
+>call : (thisArg: number, ...argArray: number[]) => any
+>thisArg : number
+>argArray : number[]
 }
 
 var r2: (a: any, b?: any) => void = x.apply;
->r2 : (a: any, b?: any) => void, Symbol(r2, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 17, 3))
->a : any, Symbol(a, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 17, 9))
->b : any, Symbol(b, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 17, 16))
->x.apply : (a: any, b?: any) => void, Symbol(apply, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 12, 18))
->x : { new (): number; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }, Symbol(x, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 11, 3))
->apply : (a: any, b?: any) => void, Symbol(apply, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 12, 18))
+>r2 : (a: any, b?: any) => void
+>a : any
+>b : any
+>x.apply : (a: any, b?: any) => void
+>x : { new (): number; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
+>apply : (a: any, b?: any) => void
 
 var r2b: (thisArg: number, ...argArray: number[]) => void = x.call;
->r2b : (thisArg: number, ...argArray: number[]) => void, Symbol(r2b, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 18, 3))
->thisArg : number, Symbol(thisArg, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 18, 10))
->argArray : number[], Symbol(argArray, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 18, 26))
->x.call : (thisArg: number, ...argArray: number[]) => any, Symbol(call, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 13, 33))
->x : { new (): number; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }, Symbol(x, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 11, 3))
->call : (thisArg: number, ...argArray: number[]) => any, Symbol(call, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 13, 33))
+>r2b : (thisArg: number, ...argArray: number[]) => void
+>thisArg : number
+>argArray : number[]
+>x.call : (thisArg: number, ...argArray: number[]) => any
+>x : { new (): number; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
+>call : (thisArg: number, ...argArray: number[]) => any
 
 var r2c = x.arguments;
->r2c : any, Symbol(r2c, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 19, 3))
->x.arguments : any, Symbol(Function.arguments, Decl(lib.d.ts, 252, 19))
->x : { new (): number; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }, Symbol(x, Decl(objectTypeWithConstructSignatureHidingMembersOfFunction.ts, 11, 3))
->arguments : any, Symbol(Function.arguments, Decl(lib.d.ts, 252, 19))
+>r2c : any
+>x.arguments : any
+>x : { new (): number; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
+>arguments : any
 

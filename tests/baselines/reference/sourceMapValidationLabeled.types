@@ -3,6 +3,6 @@ x:
 >x : any
 
 var b = 10;
->b : number, Symbol(b, Decl(sourceMapValidationLabeled.ts, 1, 3))
+>b : number
 >10 : number
 

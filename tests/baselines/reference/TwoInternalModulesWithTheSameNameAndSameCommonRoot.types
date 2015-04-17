@@ -1,65 +1,65 @@
 === tests/cases/conformance/internalModules/DeclarationMerging/part1.ts ===
 module A {
->A : typeof A, Symbol(A, Decl(part1.ts, 0, 0), Decl(part2.ts, 0, 0))
+>A : typeof A
 
     export interface Point {
->Point : Point, Symbol(Point, Decl(part1.ts, 0, 10))
+>Point : Point
 
         x: number;
->x : number, Symbol(x, Decl(part1.ts, 1, 28))
+>x : number
 
         y: number;
->y : number, Symbol(y, Decl(part1.ts, 2, 18))
+>y : number
     }
 
     export module Utils {
->Utils : typeof Utils, Symbol(Utils, Decl(part1.ts, 4, 5), Decl(part2.ts, 1, 46))
+>Utils : typeof Utils
 
         export function mirror<T extends Point>(p: T) {
->mirror : <T extends Point>(p: T) => { x: number; y: number; }, Symbol(mirror, Decl(part1.ts, 6, 25))
->T : T, Symbol(T, Decl(part1.ts, 7, 31))
->Point : Point, Symbol(Point, Decl(part1.ts, 0, 10))
->p : T, Symbol(p, Decl(part1.ts, 7, 48))
->T : T, Symbol(T, Decl(part1.ts, 7, 31))
+>mirror : <T extends Point>(p: T) => { x: number; y: number; }
+>T : T
+>Point : Point
+>p : T
+>T : T
 
             return { x: p.y, y: p.x };
 >{ x: p.y, y: p.x } : { x: number; y: number; }
->x : number, Symbol(x, Decl(part1.ts, 8, 20))
->p.y : number, Symbol(Point.y, Decl(part1.ts, 2, 18))
->p : T, Symbol(p, Decl(part1.ts, 7, 48))
->y : number, Symbol(Point.y, Decl(part1.ts, 2, 18))
->y : number, Symbol(y, Decl(part1.ts, 8, 28))
->p.x : number, Symbol(Point.x, Decl(part1.ts, 1, 28))
->p : T, Symbol(p, Decl(part1.ts, 7, 48))
->x : number, Symbol(Point.x, Decl(part1.ts, 1, 28))
+>x : number
+>p.y : number
+>p : T
+>y : number
+>y : number
+>p.x : number
+>p : T
+>x : number
         }
     }
 }
 
 === tests/cases/conformance/internalModules/DeclarationMerging/part2.ts ===
 module A {
->A : typeof A, Symbol(A, Decl(part1.ts, 0, 0), Decl(part2.ts, 0, 0))
+>A : typeof A
 
     export var Origin: Point = { x: 0, y: 0 };
->Origin : Point, Symbol(Origin, Decl(part2.ts, 1, 14))
->Point : Point, Symbol(Point, Decl(part1.ts, 0, 10))
+>Origin : Point
+>Point : Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
->x : number, Symbol(x, Decl(part2.ts, 1, 32))
+>x : number
 >0 : number
->y : number, Symbol(y, Decl(part2.ts, 1, 38))
+>y : number
 >0 : number
 
     export module Utils {
->Utils : typeof Utils, Symbol(Utils, Decl(part1.ts, 4, 5), Decl(part2.ts, 1, 46))
+>Utils : typeof Utils
 
         export class Plane {
->Plane : Plane, Symbol(Plane, Decl(part2.ts, 3, 25))
+>Plane : Plane
 
             constructor(public tl: Point, public br: Point) { }
->tl : Point, Symbol(tl, Decl(part2.ts, 5, 24))
->Point : Point, Symbol(Point, Decl(part1.ts, 0, 10))
->br : Point, Symbol(br, Decl(part2.ts, 5, 41))
->Point : Point, Symbol(Point, Decl(part1.ts, 0, 10))
+>tl : Point
+>Point : Point
+>br : Point
+>Point : Point
         }
     }
 }
@@ -68,59 +68,59 @@ module A {
 // test the merging actually worked
 
 var o: { x: number; y: number };
->o : { x: number; y: number; }, Symbol(o, Decl(part3.ts, 2, 3), Decl(part3.ts, 3, 3), Decl(part3.ts, 4, 3), Decl(part3.ts, 5, 3))
->x : number, Symbol(x, Decl(part3.ts, 2, 8))
->y : number, Symbol(y, Decl(part3.ts, 2, 19))
+>o : { x: number; y: number; }
+>x : number
+>y : number
 
 var o: A.Point;
->o : { x: number; y: number; }, Symbol(o, Decl(part3.ts, 2, 3), Decl(part3.ts, 3, 3), Decl(part3.ts, 4, 3), Decl(part3.ts, 5, 3))
->A : any, Symbol(A, Decl(part1.ts, 0, 0), Decl(part2.ts, 0, 0))
->Point : A.Point, Symbol(A.Point, Decl(part1.ts, 0, 10))
+>o : { x: number; y: number; }
+>A : any
+>Point : A.Point
 
 var o = A.Origin;
->o : { x: number; y: number; }, Symbol(o, Decl(part3.ts, 2, 3), Decl(part3.ts, 3, 3), Decl(part3.ts, 4, 3), Decl(part3.ts, 5, 3))
->A.Origin : A.Point, Symbol(A.Origin, Decl(part2.ts, 1, 14))
->A : typeof A, Symbol(A, Decl(part1.ts, 0, 0), Decl(part2.ts, 0, 0))
->Origin : A.Point, Symbol(A.Origin, Decl(part2.ts, 1, 14))
+>o : { x: number; y: number; }
+>A.Origin : A.Point
+>A : typeof A
+>Origin : A.Point
 
 var o = A.Utils.mirror(o);
->o : { x: number; y: number; }, Symbol(o, Decl(part3.ts, 2, 3), Decl(part3.ts, 3, 3), Decl(part3.ts, 4, 3), Decl(part3.ts, 5, 3))
+>o : { x: number; y: number; }
 >A.Utils.mirror(o) : { x: number; y: number; }
->A.Utils.mirror : <T extends A.Point>(p: T) => { x: number; y: number; }, Symbol(A.Utils.mirror, Decl(part1.ts, 6, 25))
->A.Utils : typeof A.Utils, Symbol(A.Utils, Decl(part1.ts, 4, 5), Decl(part2.ts, 1, 46))
->A : typeof A, Symbol(A, Decl(part1.ts, 0, 0), Decl(part2.ts, 0, 0))
->Utils : typeof A.Utils, Symbol(A.Utils, Decl(part1.ts, 4, 5), Decl(part2.ts, 1, 46))
->mirror : <T extends A.Point>(p: T) => { x: number; y: number; }, Symbol(A.Utils.mirror, Decl(part1.ts, 6, 25))
->o : { x: number; y: number; }, Symbol(o, Decl(part3.ts, 2, 3), Decl(part3.ts, 3, 3), Decl(part3.ts, 4, 3), Decl(part3.ts, 5, 3))
+>A.Utils.mirror : <T extends A.Point>(p: T) => { x: number; y: number; }
+>A.Utils : typeof A.Utils
+>A : typeof A
+>Utils : typeof A.Utils
+>mirror : <T extends A.Point>(p: T) => { x: number; y: number; }
+>o : { x: number; y: number; }
 
 var p: { tl: A.Point; br: A.Point };
->p : { tl: A.Point; br: A.Point; }, Symbol(p, Decl(part3.ts, 7, 3), Decl(part3.ts, 8, 3), Decl(part3.ts, 9, 3))
->tl : A.Point, Symbol(tl, Decl(part3.ts, 7, 8))
->A : any, Symbol(A, Decl(part1.ts, 0, 0), Decl(part2.ts, 0, 0))
->Point : A.Point, Symbol(A.Point, Decl(part1.ts, 0, 10))
->br : A.Point, Symbol(br, Decl(part3.ts, 7, 21))
->A : any, Symbol(A, Decl(part1.ts, 0, 0), Decl(part2.ts, 0, 0))
->Point : A.Point, Symbol(A.Point, Decl(part1.ts, 0, 10))
+>p : { tl: A.Point; br: A.Point; }
+>tl : A.Point
+>A : any
+>Point : A.Point
+>br : A.Point
+>A : any
+>Point : A.Point
 
 var p: A.Utils.Plane;
->p : { tl: A.Point; br: A.Point; }, Symbol(p, Decl(part3.ts, 7, 3), Decl(part3.ts, 8, 3), Decl(part3.ts, 9, 3))
->A : any, Symbol(A, Decl(part1.ts, 0, 0), Decl(part2.ts, 0, 0))
->Utils : any, Symbol(A.Utils, Decl(part1.ts, 4, 5), Decl(part2.ts, 1, 46))
->Plane : A.Utils.Plane, Symbol(A.Utils.Plane, Decl(part2.ts, 3, 25))
+>p : { tl: A.Point; br: A.Point; }
+>A : any
+>Utils : any
+>Plane : A.Utils.Plane
 
 var p = new A.Utils.Plane(o, { x: 1, y: 1 });
->p : { tl: A.Point; br: A.Point; }, Symbol(p, Decl(part3.ts, 7, 3), Decl(part3.ts, 8, 3), Decl(part3.ts, 9, 3))
+>p : { tl: A.Point; br: A.Point; }
 >new A.Utils.Plane(o, { x: 1, y: 1 }) : A.Utils.Plane
->A.Utils.Plane : typeof A.Utils.Plane, Symbol(A.Utils.Plane, Decl(part2.ts, 3, 25))
->A.Utils : typeof A.Utils, Symbol(A.Utils, Decl(part1.ts, 4, 5), Decl(part2.ts, 1, 46))
->A : typeof A, Symbol(A, Decl(part1.ts, 0, 0), Decl(part2.ts, 0, 0))
->Utils : typeof A.Utils, Symbol(A.Utils, Decl(part1.ts, 4, 5), Decl(part2.ts, 1, 46))
->Plane : typeof A.Utils.Plane, Symbol(A.Utils.Plane, Decl(part2.ts, 3, 25))
->o : { x: number; y: number; }, Symbol(o, Decl(part3.ts, 2, 3), Decl(part3.ts, 3, 3), Decl(part3.ts, 4, 3), Decl(part3.ts, 5, 3))
+>A.Utils.Plane : typeof A.Utils.Plane
+>A.Utils : typeof A.Utils
+>A : typeof A
+>Utils : typeof A.Utils
+>Plane : typeof A.Utils.Plane
+>o : { x: number; y: number; }
 >{ x: 1, y: 1 } : { x: number; y: number; }
->x : number, Symbol(x, Decl(part3.ts, 9, 30))
+>x : number
 >1 : number
->y : number, Symbol(y, Decl(part3.ts, 9, 36))
+>y : number
 >1 : number
 
 

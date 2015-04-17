@@ -1,31 +1,31 @@
 === tests/cases/compiler/es6ClassTest4.ts ===
 declare class Point
->Point : Point, Symbol(Point, Decl(es6ClassTest4.ts, 0, 0))
+>Point : Point
 {
     x: number;
->x : number, Symbol(x, Decl(es6ClassTest4.ts, 1, 1))
+>x : number
 
     y: number;
->y : number, Symbol(y, Decl(es6ClassTest4.ts, 2, 14))
+>y : number
 
     add(dx: number, dy: number): Point;
->add : (dx: number, dy: number) => Point, Symbol(add, Decl(es6ClassTest4.ts, 3, 14))
->dx : number, Symbol(dx, Decl(es6ClassTest4.ts, 4, 8))
->dy : number, Symbol(dy, Decl(es6ClassTest4.ts, 4, 19))
->Point : Point, Symbol(Point, Decl(es6ClassTest4.ts, 0, 0))
+>add : (dx: number, dy: number) => Point
+>dx : number
+>dy : number
+>Point : Point
 
     mult(p: Point): Point;
->mult : (p: Point) => Point, Symbol(mult, Decl(es6ClassTest4.ts, 4, 39))
->p : Point, Symbol(p, Decl(es6ClassTest4.ts, 5, 9))
->Point : Point, Symbol(Point, Decl(es6ClassTest4.ts, 0, 0))
->Point : Point, Symbol(Point, Decl(es6ClassTest4.ts, 0, 0))
+>mult : (p: Point) => Point
+>p : Point
+>Point : Point
+>Point : Point
 
     static origin: Point;
->origin : Point, Symbol(Point.origin, Decl(es6ClassTest4.ts, 5, 26))
->Point : Point, Symbol(Point, Decl(es6ClassTest4.ts, 0, 0))
+>origin : Point
+>Point : Point
 
     constructor(x: number, y: number);
->x : number, Symbol(x, Decl(es6ClassTest4.ts, 7, 16))
->y : number, Symbol(y, Decl(es6ClassTest4.ts, 7, 26))
+>x : number
+>y : number
 }
 

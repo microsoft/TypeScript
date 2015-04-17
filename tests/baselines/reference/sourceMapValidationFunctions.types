@@ -1,41 +1,41 @@
 === tests/cases/compiler/sourceMapValidationFunctions.ts ===
 var greetings = 0;
->greetings : number, Symbol(greetings, Decl(sourceMapValidationFunctions.ts, 0, 3))
+>greetings : number
 >0 : number
 
 function greet(greeting: string): number {
->greet : (greeting: string) => number, Symbol(greet, Decl(sourceMapValidationFunctions.ts, 0, 18))
->greeting : string, Symbol(greeting, Decl(sourceMapValidationFunctions.ts, 1, 15))
+>greet : (greeting: string) => number
+>greeting : string
 
     greetings++;
 >greetings++ : number
->greetings : number, Symbol(greetings, Decl(sourceMapValidationFunctions.ts, 0, 3))
+>greetings : number
 
     return greetings;
->greetings : number, Symbol(greetings, Decl(sourceMapValidationFunctions.ts, 0, 3))
+>greetings : number
 }
 function greet2(greeting: string, n = 10, x?: string, ...restParams: string[]): number {
->greet2 : (greeting: string, n?: number, x?: string, ...restParams: string[]) => number, Symbol(greet2, Decl(sourceMapValidationFunctions.ts, 4, 1))
->greeting : string, Symbol(greeting, Decl(sourceMapValidationFunctions.ts, 5, 16))
->n : number, Symbol(n, Decl(sourceMapValidationFunctions.ts, 5, 33))
+>greet2 : (greeting: string, n?: number, x?: string, ...restParams: string[]) => number
+>greeting : string
+>n : number
 >10 : number
->x : string, Symbol(x, Decl(sourceMapValidationFunctions.ts, 5, 41))
->restParams : string[], Symbol(restParams, Decl(sourceMapValidationFunctions.ts, 5, 53))
+>x : string
+>restParams : string[]
 
     greetings++;
 >greetings++ : number
->greetings : number, Symbol(greetings, Decl(sourceMapValidationFunctions.ts, 0, 3))
+>greetings : number
 
     return greetings;
->greetings : number, Symbol(greetings, Decl(sourceMapValidationFunctions.ts, 0, 3))
+>greetings : number
 }
 function foo(greeting: string, n = 10, x?: string, ...restParams: string[])
->foo : (greeting: string, n?: number, x?: string, ...restParams: string[]) => void, Symbol(foo, Decl(sourceMapValidationFunctions.ts, 8, 1))
->greeting : string, Symbol(greeting, Decl(sourceMapValidationFunctions.ts, 9, 13))
->n : number, Symbol(n, Decl(sourceMapValidationFunctions.ts, 9, 30))
+>foo : (greeting: string, n?: number, x?: string, ...restParams: string[]) => void
+>greeting : string
+>n : number
 >10 : number
->x : string, Symbol(x, Decl(sourceMapValidationFunctions.ts, 9, 38))
->restParams : string[], Symbol(restParams, Decl(sourceMapValidationFunctions.ts, 9, 50))
+>x : string
+>restParams : string[]
 {
     return;
 }

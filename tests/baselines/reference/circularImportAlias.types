@@ -2,47 +2,47 @@
 // expected no error
 
 module B {
->B : typeof a.b, Symbol(a.b, Decl(circularImportAlias.ts, 0, 0))
+>B : typeof a.b
 
     export import a = A;
->a : typeof a, Symbol(a, Decl(circularImportAlias.ts, 2, 10))
->A : typeof a, Symbol(a, Decl(circularImportAlias.ts, 7, 1))
+>a : typeof a
+>A : typeof a
 
     export class D extends a.C {
->D : D, Symbol(D, Decl(circularImportAlias.ts, 3, 24))
->a.C : any, Symbol(a.C, Decl(circularImportAlias.ts, 9, 10))
->a : typeof a, Symbol(a, Decl(circularImportAlias.ts, 2, 10))
->C : a.C, Symbol(a.C, Decl(circularImportAlias.ts, 9, 10))
+>D : D
+>a.C : any
+>a : typeof a
+>C : a.C
 
         id: number;
->id : number, Symbol(id, Decl(circularImportAlias.ts, 4, 32))
+>id : number
     }
 }
 
 module A {
->A : typeof b.a, Symbol(b.a, Decl(circularImportAlias.ts, 7, 1))
+>A : typeof b.a
 
     export class C { name: string }
->C : C, Symbol(C, Decl(circularImportAlias.ts, 9, 10))
->name : string, Symbol(name, Decl(circularImportAlias.ts, 10, 20))
+>C : C
+>name : string
 
     export import b = B;
->b : typeof b, Symbol(b, Decl(circularImportAlias.ts, 10, 35))
->B : typeof b, Symbol(b, Decl(circularImportAlias.ts, 0, 0))
+>b : typeof b
+>B : typeof b
 }
 
 var c: { name: string };
->c : { name: string; }, Symbol(c, Decl(circularImportAlias.ts, 14, 3), Decl(circularImportAlias.ts, 15, 3))
->name : string, Symbol(name, Decl(circularImportAlias.ts, 14, 8))
+>c : { name: string; }
+>name : string
 
 var c = new B.a.C();
->c : { name: string; }, Symbol(c, Decl(circularImportAlias.ts, 14, 3), Decl(circularImportAlias.ts, 15, 3))
+>c : { name: string; }
 >new B.a.C() : A.C
->B.a.C : typeof A.C, Symbol(A.C, Decl(circularImportAlias.ts, 9, 10))
->B.a : typeof A, Symbol(B.a, Decl(circularImportAlias.ts, 2, 10))
->B : typeof B, Symbol(B, Decl(circularImportAlias.ts, 0, 0))
->a : typeof A, Symbol(B.a, Decl(circularImportAlias.ts, 2, 10))
->C : typeof A.C, Symbol(A.C, Decl(circularImportAlias.ts, 9, 10))
+>B.a.C : typeof A.C
+>B.a : typeof A
+>B : typeof B
+>a : typeof A
+>C : typeof A.C
 
 
 

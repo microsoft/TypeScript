@@ -1,20 +1,20 @@
 === tests/cases/compiler/genericClassImplementingGenericInterfaceFromAnotherModule.ts ===
 module foo {
->foo : any, Symbol(foo, Decl(genericClassImplementingGenericInterfaceFromAnotherModule.ts, 0, 0))
+>foo : any
 
     export interface IFoo<T> { }
->IFoo : IFoo<T>, Symbol(IFoo, Decl(genericClassImplementingGenericInterfaceFromAnotherModule.ts, 0, 12))
->T : T, Symbol(T, Decl(genericClassImplementingGenericInterfaceFromAnotherModule.ts, 1, 26))
+>IFoo : IFoo<T>
+>T : T
 }
 module bar {
->bar : typeof bar, Symbol(bar, Decl(genericClassImplementingGenericInterfaceFromAnotherModule.ts, 2, 1))
+>bar : typeof bar
 
     export class Foo<T> implements foo.IFoo<T> { }
->Foo : Foo<T>, Symbol(Foo, Decl(genericClassImplementingGenericInterfaceFromAnotherModule.ts, 3, 12))
->T : T, Symbol(T, Decl(genericClassImplementingGenericInterfaceFromAnotherModule.ts, 4, 21))
->foo.IFoo : any, Symbol(foo.IFoo, Decl(genericClassImplementingGenericInterfaceFromAnotherModule.ts, 0, 12))
->foo : any, Symbol(foo, Decl(genericClassImplementingGenericInterfaceFromAnotherModule.ts, 0, 0))
->IFoo : foo.IFoo<T>, Symbol(foo.IFoo, Decl(genericClassImplementingGenericInterfaceFromAnotherModule.ts, 0, 12))
->T : T, Symbol(T, Decl(genericClassImplementingGenericInterfaceFromAnotherModule.ts, 4, 21))
+>Foo : Foo<T>
+>T : T
+>foo.IFoo : any
+>foo : any
+>IFoo : foo.IFoo<T>
+>T : T
 }
 

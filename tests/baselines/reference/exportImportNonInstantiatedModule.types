@@ -1,27 +1,27 @@
 === tests/cases/compiler/exportImportNonInstantiatedModule.ts ===
 module A {
->A : any, Symbol(A, Decl(exportImportNonInstantiatedModule.ts, 0, 0))
+>A : any
 
     export interface I { x: number }
->I : I, Symbol(I, Decl(exportImportNonInstantiatedModule.ts, 0, 10))
->x : number, Symbol(x, Decl(exportImportNonInstantiatedModule.ts, 1, 24))
+>I : I
+>x : number
 }
 
 module B {
->B : typeof B, Symbol(B, Decl(exportImportNonInstantiatedModule.ts, 2, 1))
+>B : typeof B
 
     export import A1 = A
->A1 : any, Symbol(A1, Decl(exportImportNonInstantiatedModule.ts, 4, 10))
->A : any, Symbol(A1, Decl(exportImportNonInstantiatedModule.ts, 0, 0))
+>A1 : any
+>A : any
     
 }
 
 var x: B.A1.I = { x: 1 };
->x : A.I, Symbol(x, Decl(exportImportNonInstantiatedModule.ts, 9, 3))
->B : any, Symbol(B, Decl(exportImportNonInstantiatedModule.ts, 2, 1))
->A1 : any, Symbol(B.A1, Decl(exportImportNonInstantiatedModule.ts, 4, 10))
->I : A.I, Symbol(A.I, Decl(exportImportNonInstantiatedModule.ts, 0, 10))
+>x : A.I
+>B : any
+>A1 : any
+>I : A.I
 >{ x: 1 } : { x: number; }
->x : number, Symbol(x, Decl(exportImportNonInstantiatedModule.ts, 9, 17))
+>x : number
 >1 : number
 

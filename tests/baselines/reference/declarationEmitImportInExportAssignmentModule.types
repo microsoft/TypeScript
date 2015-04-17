@@ -1,23 +1,23 @@
 === tests/cases/compiler/declarationEmitImportInExportAssignmentModule.ts ===
 
 module m {
->m : typeof m, Symbol(m, Decl(declarationEmitImportInExportAssignmentModule.ts, 0, 0))
+>m : typeof m
 
     export module c {
->c : typeof x, Symbol(x, Decl(declarationEmitImportInExportAssignmentModule.ts, 1, 10))
+>c : typeof x
 
         export class c {
->c : c, Symbol(c, Decl(declarationEmitImportInExportAssignmentModule.ts, 2, 21))
+>c : c
         }
     }
     import x = c;
->x : typeof x, Symbol(x, Decl(declarationEmitImportInExportAssignmentModule.ts, 5, 5))
->c : typeof x, Symbol(x, Decl(declarationEmitImportInExportAssignmentModule.ts, 1, 10))
+>x : typeof x
+>c : typeof x
 
     export var a: typeof x;
->a : typeof x, Symbol(a, Decl(declarationEmitImportInExportAssignmentModule.ts, 7, 14))
->x : typeof x, Symbol(x, Decl(declarationEmitImportInExportAssignmentModule.ts, 5, 5))
+>a : typeof x
+>x : typeof x
 }
 export = m;
->m : typeof m, Symbol(m, Decl(declarationEmitImportInExportAssignmentModule.ts, 0, 0))
+>m : typeof m
 

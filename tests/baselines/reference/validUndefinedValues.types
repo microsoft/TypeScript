@@ -1,10 +1,10 @@
 === tests/cases/conformance/types/primitives/undefined/validUndefinedValues.ts ===
 var x: typeof undefined;
->x : any, Symbol(x, Decl(validUndefinedValues.ts, 0, 3))
->undefined : undefined, Symbol(undefined)
+>x : any
+>undefined : undefined
 
 x = undefined;
 >x = undefined : undefined
->x : any, Symbol(x, Decl(validUndefinedValues.ts, 0, 3))
->undefined : undefined, Symbol(undefined)
+>x : any
+>undefined : undefined
 

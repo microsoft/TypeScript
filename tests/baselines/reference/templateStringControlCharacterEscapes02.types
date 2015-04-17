@@ -2,6 +2,6 @@
 
 
 var x = `\x19\u0019 19`;
->x : string, Symbol(x, Decl(templateStringControlCharacterEscapes02.ts, 2, 3))
+>x : string
 >`\x19\u0019 19` : string
 

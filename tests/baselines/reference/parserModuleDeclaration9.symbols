@@ -1,0 +1,6 @@
+=== tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration9.ts ===
+module a.number.b {
+>a : Symbol(a, Decl(parserModuleDeclaration9.ts, 0, 0))
+>number : Symbol(number, Decl(parserModuleDeclaration9.ts, 0, 9))
+>b : Symbol(b, Decl(parserModuleDeclaration9.ts, 0, 16))
+}

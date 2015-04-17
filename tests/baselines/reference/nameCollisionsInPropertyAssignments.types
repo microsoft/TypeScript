@@ -1,12 +1,12 @@
 === tests/cases/compiler/nameCollisionsInPropertyAssignments.ts ===
 var x = 1
->x : number, Symbol(x, Decl(nameCollisionsInPropertyAssignments.ts, 0, 3))
+>x : number
 >1 : number
 
 var y = { x() { x++; } }; 
->y : { x(): void; }, Symbol(y, Decl(nameCollisionsInPropertyAssignments.ts, 1, 3))
+>y : { x(): void; }
 >{ x() { x++; } } : { x(): void; }
->x : () => void, Symbol(x, Decl(nameCollisionsInPropertyAssignments.ts, 1, 9))
+>x : () => void
 >x++ : number
->x : number, Symbol(x, Decl(nameCollisionsInPropertyAssignments.ts, 0, 3))
+>x : number
 

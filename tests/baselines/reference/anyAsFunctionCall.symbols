@@ -1,0 +1,20 @@
+=== tests/cases/conformance/types/any/anyAsFunctionCall.ts ===
+// any is considered an untyped function call
+// can be called except with type arguments which is an error
+
+var x: any;
+>x : Symbol(x, Decl(anyAsFunctionCall.ts, 3, 3))
+
+var a = x();
+>a : Symbol(a, Decl(anyAsFunctionCall.ts, 4, 3))
+>x : Symbol(x, Decl(anyAsFunctionCall.ts, 3, 3))
+
+var b = x('hello');
+>b : Symbol(b, Decl(anyAsFunctionCall.ts, 5, 3))
+>x : Symbol(x, Decl(anyAsFunctionCall.ts, 3, 3))
+
+var c = x(x);
+>c : Symbol(c, Decl(anyAsFunctionCall.ts, 6, 3))
+>x : Symbol(x, Decl(anyAsFunctionCall.ts, 3, 3))
+>x : Symbol(x, Decl(anyAsFunctionCall.ts, 3, 3))
+

@@ -1,16 +1,16 @@
 === tests/cases/compiler/typeOfSuperCall.ts ===
 class C {
->C : C, Symbol(C, Decl(typeOfSuperCall.ts, 0, 0))
+>C : C
 }
 
 class D extends C {
->D : D, Symbol(D, Decl(typeOfSuperCall.ts, 1, 1))
->C : C, Symbol(C, Decl(typeOfSuperCall.ts, 0, 0))
+>D : D
+>C : C
 
     constructor() {
         var x: void = super();
->x : void, Symbol(x, Decl(typeOfSuperCall.ts, 5, 11))
+>x : void
 >super() : void
->super : typeof C, Symbol(C, Decl(typeOfSuperCall.ts, 0, 0))
+>super : typeof C
     }
 }

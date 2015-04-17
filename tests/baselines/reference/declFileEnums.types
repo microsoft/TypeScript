@@ -1,78 +1,78 @@
 === tests/cases/compiler/declFileEnums.ts ===
 
 enum e1 {
->e1 : e1, Symbol(e1, Decl(declFileEnums.ts, 0, 0))
+>e1 : e1
 
     a,
->a : e1, Symbol(e1.a, Decl(declFileEnums.ts, 1, 9))
+>a : e1
 
     b,
->b : e1, Symbol(e1.b, Decl(declFileEnums.ts, 2, 6))
+>b : e1
 
     c
->c : e1, Symbol(e1.c, Decl(declFileEnums.ts, 3, 6))
+>c : e1
 }
 
 enum e2 {
->e2 : e2, Symbol(e2, Decl(declFileEnums.ts, 5, 1))
+>e2 : e2
 
     a = 10,
->a : e2, Symbol(e2.a, Decl(declFileEnums.ts, 7, 9))
+>a : e2
 >10 : number
 
     b = a + 2,
->b : e2, Symbol(e2.b, Decl(declFileEnums.ts, 8, 11))
+>b : e2
 >a + 2 : number
->a : e2, Symbol(e2.a, Decl(declFileEnums.ts, 7, 9))
+>a : e2
 >2 : number
 
     c = 10,
->c : e2, Symbol(e2.c, Decl(declFileEnums.ts, 9, 14))
+>c : e2
 >10 : number
 }
 
 enum e3 {
->e3 : e3, Symbol(e3, Decl(declFileEnums.ts, 11, 1))
+>e3 : e3
 
     a = 10,
->a : e3, Symbol(e3.a, Decl(declFileEnums.ts, 13, 9))
+>a : e3
 >10 : number
 
     b = Math.PI,
->b : e3, Symbol(e3.b, Decl(declFileEnums.ts, 14, 11))
->Math.PI : number, Symbol(Math.PI, Decl(lib.d.ts, 534, 19))
->Math : Math, Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11))
->PI : number, Symbol(Math.PI, Decl(lib.d.ts, 534, 19))
+>b : e3
+>Math.PI : number
+>Math : Math
+>PI : number
 
     c = a + 3
->c : e3, Symbol(e3.c, Decl(declFileEnums.ts, 15, 16))
+>c : e3
 >a + 3 : number
->a : e3, Symbol(e3.a, Decl(declFileEnums.ts, 13, 9))
+>a : e3
 >3 : number
 }
 
 enum e4 {
->e4 : e4, Symbol(e4, Decl(declFileEnums.ts, 17, 1))
+>e4 : e4
 
     a,
->a : e4, Symbol(e4.a, Decl(declFileEnums.ts, 19, 9))
+>a : e4
 
     b,
->b : e4, Symbol(e4.b, Decl(declFileEnums.ts, 20, 6))
+>b : e4
 
     c,
->c : e4, Symbol(e4.c, Decl(declFileEnums.ts, 21, 6))
+>c : e4
 
     d = 10,
->d : e4, Symbol(e4.d, Decl(declFileEnums.ts, 22, 6))
+>d : e4
 >10 : number
 
     e
->e : e4, Symbol(e4.e, Decl(declFileEnums.ts, 23, 11))
+>e : e4
 }
 
 enum e5 {
->e5 : e5, Symbol(e5, Decl(declFileEnums.ts, 25, 1))
+>e5 : e5
 
     "Friday",
     "Saturday",

@@ -1,62 +1,62 @@
 === tests/cases/compiler/b.ts ===
 ///<reference path='a.ts'/>
 function foo2(n: number): void;
->foo2 : { (n: number): void; (s: string): void; }, Symbol(foo2, Decl(b.ts, 0, 0), Decl(b.ts, 1, 31), Decl(b.ts, 3, 31))
->n : number, Symbol(n, Decl(b.ts, 1, 14))
+>foo2 : { (n: number): void; (s: string): void; }
+>n : number
 
 // Don't keep this comment.
 function foo2(s: string): void;
->foo2 : { (n: number): void; (s: string): void; }, Symbol(foo2, Decl(b.ts, 0, 0), Decl(b.ts, 1, 31), Decl(b.ts, 3, 31))
->s : string, Symbol(s, Decl(b.ts, 3, 14))
+>foo2 : { (n: number): void; (s: string): void; }
+>s : string
 
 function foo2(a: any): void {
->foo2 : { (n: number): void; (s: string): void; }, Symbol(foo2, Decl(b.ts, 0, 0), Decl(b.ts, 1, 31), Decl(b.ts, 3, 31))
->a : any, Symbol(a, Decl(b.ts, 4, 14))
+>foo2 : { (n: number): void; (s: string): void; }
+>a : any
 }
 === tests/cases/compiler/a.ts ===
 /*! Keep this pinned comment */
 function foo(n: number): void;
->foo : { (n: number): void; (s: string): void; }, Symbol(foo, Decl(a.ts, 0, 0), Decl(a.ts, 1, 30), Decl(a.ts, 3, 30))
->n : number, Symbol(n, Decl(a.ts, 1, 13))
+>foo : { (n: number): void; (s: string): void; }
+>n : number
 
 // Don't keep this comment.
 function foo(s: string): void;
->foo : { (n: number): void; (s: string): void; }, Symbol(foo, Decl(a.ts, 0, 0), Decl(a.ts, 1, 30), Decl(a.ts, 3, 30))
->s : string, Symbol(s, Decl(a.ts, 3, 13))
+>foo : { (n: number): void; (s: string): void; }
+>s : string
 
 function foo(a: any): void {
->foo : { (n: number): void; (s: string): void; }, Symbol(foo, Decl(a.ts, 0, 0), Decl(a.ts, 1, 30), Decl(a.ts, 3, 30))
->a : any, Symbol(a, Decl(a.ts, 4, 13))
+>foo : { (n: number): void; (s: string): void; }
+>a : any
 }
 
 class c {
->c : c, Symbol(c, Decl(a.ts, 5, 1))
+>c : c
 
     // dont keep this comment
     constructor(a: string);
->a : string, Symbol(a, Decl(a.ts, 9, 16))
+>a : string
 
     /*! keep this pinned comment */
     constructor(a: number);
->a : number, Symbol(a, Decl(a.ts, 11, 16))
+>a : number
 
     constructor(a: any) {
->a : any, Symbol(a, Decl(a.ts, 12, 16))
+>a : any
     }
 
     // dont keep this comment
     foo(a: string);
->foo : { (a: string): any; (a: number): any; }, Symbol(foo, Decl(a.ts, 13, 5), Decl(a.ts, 16, 19), Decl(a.ts, 18, 19))
->a : string, Symbol(a, Decl(a.ts, 16, 8))
+>foo : { (a: string): any; (a: number): any; }
+>a : string
 
     /*! keep this pinned comment */
     foo(a: number);
->foo : { (a: string): any; (a: number): any; }, Symbol(foo, Decl(a.ts, 13, 5), Decl(a.ts, 16, 19), Decl(a.ts, 18, 19))
->a : number, Symbol(a, Decl(a.ts, 18, 8))
+>foo : { (a: string): any; (a: number): any; }
+>a : number
 
     foo(a: any) {
->foo : { (a: string): any; (a: number): any; }, Symbol(foo, Decl(a.ts, 13, 5), Decl(a.ts, 16, 19), Decl(a.ts, 18, 19))
->a : any, Symbol(a, Decl(a.ts, 19, 8))
+>foo : { (a: string): any; (a: number): any; }
+>a : any
     }
 }
 

@@ -1,24 +1,24 @@
 === tests/cases/compiler/sigantureIsSubTypeIfTheyAreIdentical.ts ===
 interface ICache {
->ICache : ICache, Symbol(ICache, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 0, 0))
+>ICache : ICache
 
     get<T>(key: string): T;
->get : <T>(key: string) => T, Symbol(get, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 0, 18))
->T : T, Symbol(T, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 1, 8))
->key : string, Symbol(key, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 1, 11))
->T : T, Symbol(T, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 1, 8))
+>get : <T>(key: string) => T
+>T : T
+>key : string
+>T : T
 }
 class CacheService implements ICache { // Should not error that property type of get are incomaptible
->CacheService : CacheService, Symbol(CacheService, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 2, 1))
->ICache : ICache, Symbol(ICache, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 0, 0))
+>CacheService : CacheService
+>ICache : ICache
 
     get<T>(key: string): T {
->get : <T>(key: string) => T, Symbol(get, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 3, 38))
->T : T, Symbol(T, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 4, 8))
->key : string, Symbol(key, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 4, 11))
->T : T, Symbol(T, Decl(sigantureIsSubTypeIfTheyAreIdentical.ts, 4, 8))
+>get : <T>(key: string) => T
+>T : T
+>key : string
+>T : T
 
         return undefined;
->undefined : undefined, Symbol(undefined)
+>undefined : undefined
     }
 }

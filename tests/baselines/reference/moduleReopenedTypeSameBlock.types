@@ -1,19 +1,19 @@
 === tests/cases/compiler/moduleReopenedTypeSameBlock.ts ===
 module M { export class C1 { } }
->M : typeof M, Symbol(M, Decl(moduleReopenedTypeSameBlock.ts, 0, 0), Decl(moduleReopenedTypeSameBlock.ts, 0, 32))
->C1 : C1, Symbol(C1, Decl(moduleReopenedTypeSameBlock.ts, 0, 10))
+>M : typeof M
+>C1 : C1
 
 module M {
->M : typeof M, Symbol(M, Decl(moduleReopenedTypeSameBlock.ts, 0, 0), Decl(moduleReopenedTypeSameBlock.ts, 0, 32))
+>M : typeof M
 
     export interface I { n: number; }
->I : I, Symbol(I, Decl(moduleReopenedTypeSameBlock.ts, 1, 10))
->n : number, Symbol(n, Decl(moduleReopenedTypeSameBlock.ts, 2, 24))
+>I : I
+>n : number
 
     export class C2 { f(): I { return null; } }
->C2 : C2, Symbol(C2, Decl(moduleReopenedTypeSameBlock.ts, 2, 37))
->f : () => I, Symbol(f, Decl(moduleReopenedTypeSameBlock.ts, 3, 21))
->I : I, Symbol(I, Decl(moduleReopenedTypeSameBlock.ts, 1, 10))
+>C2 : C2
+>f : () => I
+>I : I
 >null : null
 }
 

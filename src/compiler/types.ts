@@ -121,7 +121,6 @@ module ts {
         WhileKeyword,
         WithKeyword,
         // Strict mode reserved words
-        AsKeyword,
         ImplementsKeyword,
         InterfaceKeyword,
         LetKeyword,
@@ -132,6 +131,7 @@ module ts {
         StaticKeyword,
         YieldKeyword,
         // Contextual keywords
+        AsKeyword,
         AnyKeyword,
         BooleanKeyword,
         ConstructorKeyword,
@@ -1405,6 +1405,7 @@ module ts {
         BlockScopedBindingInLoop    = 0x00000100,
         EmitDecorate                = 0x00000200,  // Emit __decorate
         EmitParam                   = 0x00000400,  // Emit __param helper for decorators
+        LexicalModuleMergesWithClass = 0x00000800,  // Instantiated lexical module declaration is merged with a previous class declaration.
     }
 
     /* @internal */ 
@@ -1511,6 +1512,8 @@ module ts {
 
     export interface UnionType extends Type {
         types: Type[];                    // Constituent types
+        /* @internal */
+        reducedType: Type;                // Reduced union type (all subtypes removed)
         /* @internal */
         resolvedProperties: SymbolTable;  // Cache of resolved properties
     }

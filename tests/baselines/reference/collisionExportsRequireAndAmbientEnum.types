@@ -1,127 +1,127 @@
 === tests/cases/compiler/collisionExportsRequireAndAmbientEnum_externalmodule.ts ===
 export declare enum require {
->require : require, Symbol(require, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 0, 0))
+>require : require
 
     _thisVal1,
->_thisVal1 : require, Symbol(require._thisVal1, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 0, 29))
+>_thisVal1 : require
 
     _thisVal2,
->_thisVal2 : require, Symbol(require._thisVal2, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 1, 14))
+>_thisVal2 : require
 }
 export declare enum exports {
->exports : exports, Symbol(exports, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 3, 1))
+>exports : exports
 
     _thisVal1,
->_thisVal1 : exports, Symbol(exports._thisVal1, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 4, 29))
+>_thisVal1 : exports
 
     _thisVal2,
->_thisVal2 : exports, Symbol(exports._thisVal2, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 5, 14))
+>_thisVal2 : exports
 }
 declare module m1 {
->m1 : typeof m1, Symbol(m1, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 7, 1))
+>m1 : typeof m1
 
     enum require {
->require : require, Symbol(require, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 8, 19))
+>require : require
 
         _thisVal1,
->_thisVal1 : require, Symbol(require._thisVal1, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 9, 18))
+>_thisVal1 : require
 
         _thisVal2,
->_thisVal2 : require, Symbol(require._thisVal2, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 10, 18))
+>_thisVal2 : require
     }
     enum exports {
->exports : exports, Symbol(exports, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 12, 5))
+>exports : exports
 
         _thisVal1,
->_thisVal1 : exports, Symbol(exports._thisVal1, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 13, 18))
+>_thisVal1 : exports
 
         _thisVal2,
->_thisVal2 : exports, Symbol(exports._thisVal2, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 14, 18))
+>_thisVal2 : exports
     }
 }
 module m2 {
->m2 : typeof m2, Symbol(m2, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 17, 1))
+>m2 : typeof m2
 
     export declare enum require { 
->require : require, Symbol(require, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 18, 11))
+>require : require
 
         _thisVal1,
->_thisVal1 : require, Symbol(require._thisVal1, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 19, 33))
+>_thisVal1 : require
 
         _thisVal2,
->_thisVal2 : require, Symbol(require._thisVal2, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 20, 18))
+>_thisVal2 : require
     }
     export declare enum exports {
->exports : exports, Symbol(exports, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 22, 5))
+>exports : exports
 
         _thisVal1,
->_thisVal1 : exports, Symbol(exports._thisVal1, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 23, 33))
+>_thisVal1 : exports
 
         _thisVal2,
->_thisVal2 : exports, Symbol(exports._thisVal2, Decl(collisionExportsRequireAndAmbientEnum_externalmodule.ts, 24, 18))
+>_thisVal2 : exports
     }
 }
 
 === tests/cases/compiler/collisionExportsRequireAndAmbientEnum_globalFile.ts ===
 declare enum require {
->require : require, Symbol(require, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 0, 0))
+>require : require
 
     _thisVal1,
->_thisVal1 : require, Symbol(require._thisVal1, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 0, 22))
+>_thisVal1 : require
 
     _thisVal2,
->_thisVal2 : require, Symbol(require._thisVal2, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 1, 14))
+>_thisVal2 : require
 }
 declare enum exports {
->exports : exports, Symbol(exports, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 3, 1))
+>exports : exports
 
     _thisVal1,
->_thisVal1 : exports, Symbol(exports._thisVal1, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 4, 22))
+>_thisVal1 : exports
 
     _thisVal2,
->_thisVal2 : exports, Symbol(exports._thisVal2, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 5, 14))
+>_thisVal2 : exports
 }
 declare module m3 {
->m3 : typeof m3, Symbol(m3, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 7, 1))
+>m3 : typeof m3
 
     enum require {
->require : require, Symbol(require, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 8, 19))
+>require : require
 
         _thisVal1,
->_thisVal1 : require, Symbol(require._thisVal1, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 9, 18))
+>_thisVal1 : require
 
         _thisVal2,
->_thisVal2 : require, Symbol(require._thisVal2, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 10, 18))
+>_thisVal2 : require
     }
     enum exports {
->exports : exports, Symbol(exports, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 12, 5))
+>exports : exports
 
         _thisVal1,
->_thisVal1 : exports, Symbol(exports._thisVal1, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 13, 18))
+>_thisVal1 : exports
 
         _thisVal2,
->_thisVal2 : exports, Symbol(exports._thisVal2, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 14, 18))
+>_thisVal2 : exports
     }
 }
 module m4 {
->m4 : typeof m4, Symbol(m4, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 17, 1))
+>m4 : typeof m4
 
     export declare enum require {
->require : require, Symbol(require, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 18, 11))
+>require : require
 
         _thisVal1,
->_thisVal1 : require, Symbol(require._thisVal1, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 19, 33))
+>_thisVal1 : require
 
         _thisVal2,
->_thisVal2 : require, Symbol(require._thisVal2, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 20, 18))
+>_thisVal2 : require
     }
     export declare enum exports {
->exports : exports, Symbol(exports, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 22, 5))
+>exports : exports
 
         _thisVal1,
->_thisVal1 : exports, Symbol(exports._thisVal1, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 23, 33))
+>_thisVal1 : exports
 
         _thisVal2,
->_thisVal2 : exports, Symbol(exports._thisVal2, Decl(collisionExportsRequireAndAmbientEnum_globalFile.ts, 24, 18))
+>_thisVal2 : exports
     }
 }

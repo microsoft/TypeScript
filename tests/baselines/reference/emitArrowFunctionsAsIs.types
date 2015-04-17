@@ -1,17 +1,17 @@
 === tests/cases/conformance/es6/arrowFunction/emitArrowFunctionsAsIs.ts ===
 var arrow1 = a => { };
->arrow1 : (a: any) => void, Symbol(arrow1, Decl(emitArrowFunctionsAsIs.ts, 0, 3))
+>arrow1 : (a: any) => void
 >a => { } : (a: any) => void
->a : any, Symbol(a, Decl(emitArrowFunctionsAsIs.ts, 0, 12))
+>a : any
 
 var arrow2 = (a) => { };
->arrow2 : (a: any) => void, Symbol(arrow2, Decl(emitArrowFunctionsAsIs.ts, 1, 3))
+>arrow2 : (a: any) => void
 >(a) => { } : (a: any) => void
->a : any, Symbol(a, Decl(emitArrowFunctionsAsIs.ts, 1, 14))
+>a : any
 
 var arrow3 = (a, b) => { };
->arrow3 : (a: any, b: any) => void, Symbol(arrow3, Decl(emitArrowFunctionsAsIs.ts, 3, 3))
+>arrow3 : (a: any, b: any) => void
 >(a, b) => { } : (a: any, b: any) => void
->a : any, Symbol(a, Decl(emitArrowFunctionsAsIs.ts, 3, 14))
->b : any, Symbol(b, Decl(emitArrowFunctionsAsIs.ts, 3, 16))
+>a : any
+>b : any
 

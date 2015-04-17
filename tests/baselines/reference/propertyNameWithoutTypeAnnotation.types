@@ -1,61 +1,61 @@
 === tests/cases/conformance/types/objectTypeLiteral/propertySignatures/propertyNameWithoutTypeAnnotation.ts ===
 class C {
->C : C, Symbol(C, Decl(propertyNameWithoutTypeAnnotation.ts, 0, 0))
+>C : C
 
     foo;
->foo : any, Symbol(foo, Decl(propertyNameWithoutTypeAnnotation.ts, 0, 9))
+>foo : any
 }
 
 interface I {
->I : I, Symbol(I, Decl(propertyNameWithoutTypeAnnotation.ts, 2, 1))
+>I : I
 
     foo;
->foo : any, Symbol(foo, Decl(propertyNameWithoutTypeAnnotation.ts, 4, 13))
+>foo : any
 }
 
 var a: {
->a : { foo: any; }, Symbol(a, Decl(propertyNameWithoutTypeAnnotation.ts, 8, 3))
+>a : { foo: any; }
 
     foo;
->foo : any, Symbol(foo, Decl(propertyNameWithoutTypeAnnotation.ts, 8, 8))
+>foo : any
 }
 
 var b = {
->b : { foo: any; }, Symbol(b, Decl(propertyNameWithoutTypeAnnotation.ts, 12, 3))
+>b : { foo: any; }
 >{    foo: null} : { foo: null; }
 
     foo: null
->foo : null, Symbol(foo, Decl(propertyNameWithoutTypeAnnotation.ts, 12, 9))
+>foo : null
 >null : null
 }
 
 // These should all be of type 'any'
 var r1 = (new C()).foo;
->r1 : any, Symbol(r1, Decl(propertyNameWithoutTypeAnnotation.ts, 17, 3))
->(new C()).foo : any, Symbol(C.foo, Decl(propertyNameWithoutTypeAnnotation.ts, 0, 9))
+>r1 : any
+>(new C()).foo : any
 >(new C()) : C
 >new C() : C
->C : typeof C, Symbol(C, Decl(propertyNameWithoutTypeAnnotation.ts, 0, 0))
->foo : any, Symbol(C.foo, Decl(propertyNameWithoutTypeAnnotation.ts, 0, 9))
+>C : typeof C
+>foo : any
 
 var r2 = (<I>null).foo;
->r2 : any, Symbol(r2, Decl(propertyNameWithoutTypeAnnotation.ts, 18, 3))
->(<I>null).foo : any, Symbol(I.foo, Decl(propertyNameWithoutTypeAnnotation.ts, 4, 13))
+>r2 : any
+>(<I>null).foo : any
 >(<I>null) : I
 ><I>null : I
->I : I, Symbol(I, Decl(propertyNameWithoutTypeAnnotation.ts, 2, 1))
+>I : I
 >null : null
->foo : any, Symbol(I.foo, Decl(propertyNameWithoutTypeAnnotation.ts, 4, 13))
+>foo : any
 
 var r3 = a.foo;
->r3 : any, Symbol(r3, Decl(propertyNameWithoutTypeAnnotation.ts, 19, 3))
->a.foo : any, Symbol(foo, Decl(propertyNameWithoutTypeAnnotation.ts, 8, 8))
->a : { foo: any; }, Symbol(a, Decl(propertyNameWithoutTypeAnnotation.ts, 8, 3))
->foo : any, Symbol(foo, Decl(propertyNameWithoutTypeAnnotation.ts, 8, 8))
+>r3 : any
+>a.foo : any
+>a : { foo: any; }
+>foo : any
 
 var r4 = b.foo;
->r4 : any, Symbol(r4, Decl(propertyNameWithoutTypeAnnotation.ts, 20, 3))
->b.foo : any, Symbol(foo, Decl(propertyNameWithoutTypeAnnotation.ts, 12, 9))
->b : { foo: any; }, Symbol(b, Decl(propertyNameWithoutTypeAnnotation.ts, 12, 3))
->foo : any, Symbol(foo, Decl(propertyNameWithoutTypeAnnotation.ts, 12, 9))
+>r4 : any
+>b.foo : any
+>b : { foo: any; }
+>foo : any
 

@@ -1,5 +1,5 @@
 === tests/cases/compiler/downlevelLetConst10.ts ===
 let a: number = 1
->a : number, Symbol(a, Decl(downlevelLetConst10.ts, 0, 3))
+>a : number
 >1 : number
 

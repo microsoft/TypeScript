@@ -1,53 +1,53 @@
 === tests/cases/compiler/file2.ts ===
 ///<reference path='file1.ts'/>
 declare var c: C;
->c : C, Symbol(c, Decl(file2.ts, 1, 11))
->C : C, Symbol(C, Decl(file2.ts, 1, 17), Decl(file2.ts, 4, 1))
+>c : C
+>C : C
 
 interface C {
->C : C, Symbol(C, Decl(file2.ts, 1, 17), Decl(file2.ts, 4, 1))
+>C : C
 
     count(countTitle?: string): void;
->count : (countTitle?: string) => void, Symbol(count, Decl(file2.ts, 2, 13))
->countTitle : string, Symbol(countTitle, Decl(file2.ts, 3, 10))
+>count : (countTitle?: string) => void
+>countTitle : string
 }
 interface C {
->C : C, Symbol(C, Decl(file2.ts, 1, 17), Decl(file2.ts, 4, 1))
+>C : C
 
     log(message?: any, ...optionalParams: any[]): void;
->log : (message?: any, ...optionalParams: any[]) => void, Symbol(log, Decl(file2.ts, 5, 13))
->message : any, Symbol(message, Decl(file2.ts, 6, 8))
->optionalParams : any[], Symbol(optionalParams, Decl(file2.ts, 6, 22))
+>log : (message?: any, ...optionalParams: any[]) => void
+>message : any
+>optionalParams : any[]
 }
 
 === tests/cases/compiler/file1.ts ===
 interface Q<T> {
->Q : Q<T>, Symbol(Q, Decl(file1.ts, 0, 0))
->T : T, Symbol(T, Decl(file1.ts, 0, 12))
+>Q : Q<T>
+>T : T
 
     each(action: (item: T, index: number) => void): void;
->each : (action: (item: T, index: number) => void) => void, Symbol(each, Decl(file1.ts, 0, 16))
->action : (item: T, index: number) => void, Symbol(action, Decl(file1.ts, 1, 9))
->item : T, Symbol(item, Decl(file1.ts, 1, 18))
->T : T, Symbol(T, Decl(file1.ts, 0, 12))
->index : number, Symbol(index, Decl(file1.ts, 1, 26))
+>each : (action: (item: T, index: number) => void) => void
+>action : (item: T, index: number) => void
+>item : T
+>T : T
+>index : number
 }
 var q1: Q<{ a: number; }>;
->q1 : Q<{ a: number; }>, Symbol(q1, Decl(file1.ts, 3, 3))
->Q : Q<T>, Symbol(Q, Decl(file1.ts, 0, 0))
->a : number, Symbol(a, Decl(file1.ts, 3, 11))
+>q1 : Q<{ a: number; }>
+>Q : Q<T>
+>a : number
 
 var x = q1.each(x => c.log(x));
->x : void, Symbol(x, Decl(file1.ts, 4, 3))
+>x : void
 >q1.each(x => c.log(x)) : void
->q1.each : (action: (item: { a: number; }, index: number) => void) => void, Symbol(Q.each, Decl(file1.ts, 0, 16))
->q1 : Q<{ a: number; }>, Symbol(q1, Decl(file1.ts, 3, 3))
->each : (action: (item: { a: number; }, index: number) => void) => void, Symbol(Q.each, Decl(file1.ts, 0, 16))
+>q1.each : (action: (item: { a: number; }, index: number) => void) => void
+>q1 : Q<{ a: number; }>
+>each : (action: (item: { a: number; }, index: number) => void) => void
 >x => c.log(x) : (x: { a: number; }) => void
->x : { a: number; }, Symbol(x, Decl(file1.ts, 4, 16))
+>x : { a: number; }
 >c.log(x) : void
->c.log : (message?: any, ...optionalParams: any[]) => void, Symbol(C.log, Decl(file2.ts, 5, 13))
->c : C, Symbol(c, Decl(file2.ts, 1, 11))
->log : (message?: any, ...optionalParams: any[]) => void, Symbol(C.log, Decl(file2.ts, 5, 13))
->x : { a: number; }, Symbol(x, Decl(file1.ts, 4, 16))
+>c.log : (message?: any, ...optionalParams: any[]) => void
+>c : C
+>log : (message?: any, ...optionalParams: any[]) => void
+>x : { a: number; }
 

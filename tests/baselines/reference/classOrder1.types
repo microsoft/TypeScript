@@ -1,24 +1,24 @@
 === tests/cases/compiler/classOrder1.ts ===
 class A {
->A : A, Symbol(A, Decl(classOrder1.ts, 0, 0))
+>A : A
 
     public foo() {
->foo : () => void, Symbol(foo, Decl(classOrder1.ts, 0, 9))
+>foo : () => void
 
         /*WScript.Echo("Here!");*/
     }
 }
 
 var a = new A();
->a : A, Symbol(a, Decl(classOrder1.ts, 6, 3))
+>a : A
 >new A() : A
->A : typeof A, Symbol(A, Decl(classOrder1.ts, 0, 0))
+>A : typeof A
 
 a.foo();
 >a.foo() : void
->a.foo : () => void, Symbol(A.foo, Decl(classOrder1.ts, 0, 9))
->a : A, Symbol(a, Decl(classOrder1.ts, 6, 3))
->foo : () => void, Symbol(A.foo, Decl(classOrder1.ts, 0, 9))
+>a.foo : () => void
+>a : A
+>foo : () => void
 
 
 

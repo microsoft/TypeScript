@@ -1,9 +1,9 @@
 === tests/cases/compiler/contextualTyping14.ts ===
 class foo { public bar:(a:number)=>number = function(a){return a}; }
->foo : foo, Symbol(foo, Decl(contextualTyping14.ts, 0, 0))
->bar : (a: number) => number, Symbol(bar, Decl(contextualTyping14.ts, 0, 11))
->a : number, Symbol(a, Decl(contextualTyping14.ts, 0, 24))
+>foo : foo
+>bar : (a: number) => number
+>a : number
 >function(a){return a} : (a: number) => number
->a : number, Symbol(a, Decl(contextualTyping14.ts, 0, 53))
->a : number, Symbol(a, Decl(contextualTyping14.ts, 0, 53))
+>a : number
+>a : number
 

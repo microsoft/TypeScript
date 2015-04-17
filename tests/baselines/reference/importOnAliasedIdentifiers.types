@@ -1,33 +1,33 @@
 === tests/cases/compiler/importOnAliasedIdentifiers.ts ===
 module A {
->A : typeof A, Symbol(A, Decl(importOnAliasedIdentifiers.ts, 0, 0))
+>A : typeof A
 
     export interface X { s: string }
->X : X, Symbol(X, Decl(importOnAliasedIdentifiers.ts, 0, 10), Decl(importOnAliasedIdentifiers.ts, 2, 14))
->s : string, Symbol(s, Decl(importOnAliasedIdentifiers.ts, 1, 24))
+>X : X
+>s : string
 
     export var X: X;
->X : X, Symbol(X, Decl(importOnAliasedIdentifiers.ts, 0, 10), Decl(importOnAliasedIdentifiers.ts, 2, 14))
->X : X, Symbol(X, Decl(importOnAliasedIdentifiers.ts, 0, 10), Decl(importOnAliasedIdentifiers.ts, 2, 14))
+>X : X
+>X : X
 }
 module B {
->B : typeof B, Symbol(B, Decl(importOnAliasedIdentifiers.ts, 3, 1))
+>B : typeof B
 
     interface A { n: number }
->A : A, Symbol(A, Decl(importOnAliasedIdentifiers.ts, 4, 10))
->n : number, Symbol(n, Decl(importOnAliasedIdentifiers.ts, 5, 17))
+>A : A
+>n : number
 
     import Y = A; // Alias only for module A
->Y : typeof Y, Symbol(Y, Decl(importOnAliasedIdentifiers.ts, 5, 29))
->A : typeof Y, Symbol(Y, Decl(importOnAliasedIdentifiers.ts, 0, 0))
+>Y : typeof Y
+>A : typeof Y
 
     import Z = A.X; // Alias for both type and member A.X
->Z : Y.X, Symbol(Z, Decl(importOnAliasedIdentifiers.ts, 6, 17))
->A : typeof Y, Symbol(Y, Decl(importOnAliasedIdentifiers.ts, 0, 0))
->X : Y.X, Symbol(Y.X, Decl(importOnAliasedIdentifiers.ts, 0, 10), Decl(importOnAliasedIdentifiers.ts, 2, 14))
+>Z : Y.X
+>A : typeof Y
+>X : Y.X
 
     var v: Z = Z;
->v : Y.X, Symbol(v, Decl(importOnAliasedIdentifiers.ts, 8, 7))
->Z : Y.X, Symbol(Z, Decl(importOnAliasedIdentifiers.ts, 6, 17))
->Z : Y.X, Symbol(Z, Decl(importOnAliasedIdentifiers.ts, 6, 17))
+>v : Y.X
+>Z : Y.X
+>Z : Y.X
 }

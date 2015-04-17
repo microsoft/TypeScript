@@ -1,13 +1,13 @@
 === tests/cases/compiler/noConstraintInReturnType1.ts ===
 class List<T extends {}> {
->List : List<T>, Symbol(List, Decl(noConstraintInReturnType1.ts, 0, 0))
->T : T, Symbol(T, Decl(noConstraintInReturnType1.ts, 0, 11))
+>List : List<T>
+>T : T
 
     static empty<T extends {}>(): List<T> { return null; }
->empty : <T extends {}>() => List<T>, Symbol(List.empty, Decl(noConstraintInReturnType1.ts, 0, 26))
->T : T, Symbol(T, Decl(noConstraintInReturnType1.ts, 1, 17))
->List : List<T>, Symbol(List, Decl(noConstraintInReturnType1.ts, 0, 0))
->T : T, Symbol(T, Decl(noConstraintInReturnType1.ts, 1, 17))
+>empty : <T extends {}>() => List<T>
+>T : T
+>List : List<T>
+>T : T
 >null : null
 }
 

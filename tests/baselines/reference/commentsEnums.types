@@ -2,28 +2,28 @@
 
 /** Enum of colors*/
 enum Colors {
->Colors : Colors, Symbol(Colors, Decl(commentsEnums.ts, 0, 0))
+>Colors : Colors
 
     /** Fancy name for 'blue'*/
     Cornflower /* blue */,
->Cornflower : Colors, Symbol(Colors.Cornflower, Decl(commentsEnums.ts, 2, 13))
+>Cornflower : Colors
 
     /** Fancy name for 'pink'*/
     FancyPink
->FancyPink : Colors, Symbol(Colors.FancyPink, Decl(commentsEnums.ts, 4, 26))
+>FancyPink : Colors
 
 } // trailing comment
 var x = Colors.Cornflower;
->x : Colors, Symbol(x, Decl(commentsEnums.ts, 8, 3))
->Colors.Cornflower : Colors, Symbol(Colors.Cornflower, Decl(commentsEnums.ts, 2, 13))
->Colors : typeof Colors, Symbol(Colors, Decl(commentsEnums.ts, 0, 0))
->Cornflower : Colors, Symbol(Colors.Cornflower, Decl(commentsEnums.ts, 2, 13))
+>x : Colors
+>Colors.Cornflower : Colors
+>Colors : typeof Colors
+>Cornflower : Colors
 
 x = Colors.FancyPink;
 >x = Colors.FancyPink : Colors
->x : Colors, Symbol(x, Decl(commentsEnums.ts, 8, 3))
->Colors.FancyPink : Colors, Symbol(Colors.FancyPink, Decl(commentsEnums.ts, 4, 26))
->Colors : typeof Colors, Symbol(Colors, Decl(commentsEnums.ts, 0, 0))
->FancyPink : Colors, Symbol(Colors.FancyPink, Decl(commentsEnums.ts, 4, 26))
+>x : Colors
+>Colors.FancyPink : Colors
+>Colors : typeof Colors
+>FancyPink : Colors
 
 
