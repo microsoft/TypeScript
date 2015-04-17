@@ -3722,7 +3722,7 @@ module ts {
             return links.resolvedType;
         }
 
-        function getStringLiteralType(node: StringLiteralExpression): StringLiteralType {
+        function getStringLiteralType(node: StringLiteral): StringLiteralType {
             if (hasProperty(stringLiteralTypes, node.text)) {
                 return stringLiteralTypes[node.text];
             }
@@ -3732,7 +3732,7 @@ module ts {
             return type;
         }
 
-        function getTypeFromStringLiteral(node: StringLiteralExpression): Type {
+        function getTypeFromStringLiteral(node: StringLiteral): Type {
             let links = getNodeLinks(node);
             if (!links.resolvedType) {
                 links.resolvedType = getStringLiteralType(node);
@@ -3806,7 +3806,7 @@ module ts {
                 case SyntaxKind.VoidKeyword:
                     return voidType;
                 case SyntaxKind.StringLiteral:
-                    return getTypeFromStringLiteral(<StringLiteralExpression>node);
+                    return getTypeFromStringLiteral(<StringLiteral>node);
                 case SyntaxKind.TypeReference:
                     return getTypeFromTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.HeritageClauseElement:
@@ -6908,7 +6908,7 @@ module ts {
                     let argType = i === 0 && node.kind === SyntaxKind.TaggedTemplateExpression
                         ? globalTemplateStringsArrayType
                         : arg.kind === SyntaxKind.StringLiteral && !reportErrors
-                            ? getStringLiteralType(<StringLiteralExpression>arg)
+                            ? getStringLiteralType(<StringLiteral>arg)
                             : checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
 
                     // Use argument expression as error location when reporting errors

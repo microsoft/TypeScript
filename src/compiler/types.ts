@@ -623,7 +623,11 @@ module ts {
         type: TypeNode;
     }
 
-    export interface StringLiteralTypeNode extends LiteralExpression, TypeNode { }
+    // Note that a StringLiteral AST node is both an Expression and a TypeNode.  The latter is
+    // because string literals can appear in the type annotation of a parameter node.
+    export interface StringLiteral extends LiteralExpression, TypeNode {
+        _stringLiteralBrand: any;
+    }
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
     // Consider 'Expression'.  Without the brand, 'Expression' is actually no different
@@ -714,10 +718,6 @@ module ts {
         text: string;
         isUnterminated?: boolean;
         hasExtendedUnicodeEscape?: boolean;
-    }
-
-    export interface StringLiteralExpression extends LiteralExpression, TypeNode {
-        _stringLiteralExpressionBrand: any;
     }
 
     export interface TemplateExpression extends PrimaryExpression {
