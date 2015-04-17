@@ -5370,7 +5370,7 @@ module ts {
                         let canParseTag = true;
                         let seenAsterisk = true;
 
-                        for (pos = start + 3; pos < end;) {
+                        for (pos = start + "/**".length; pos < end;) {
                             let ch = content.charCodeAt(pos);
                             pos++;
 
