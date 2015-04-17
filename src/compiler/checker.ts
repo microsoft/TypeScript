@@ -3146,6 +3146,9 @@ module ts {
                 let typeParameters = classType ? classType.typeParameters : getTypeParametersFromSignatureDeclaration(declaration);
                 let isJSConstructSignature = isJSDocConstructSignature(declaration);
 
+                // If this is a JSDoc construct signature, then skip the first parameter in the 
+                // parameter list.  The first parameter represents the return type of the construct
+                // signature.
                 for (let i = isJSConstructSignature ? 1 : 0, n = declaration.parameters.length; i < n; i++) {
                     let param = declaration.parameters[i];
                     parameters.push(param.symbol);
@@ -3165,13 +3168,10 @@ module ts {
 
                 if (isJSConstructSignature) {
                     minArgumentCount--;
-                }
-
-                if (classType) {
-                    returnType = classType;
-                }
-                else if (isJSConstructSignature) {
                     returnType = getTypeFromTypeNode(declaration.parameters[0].type);
+                }
+                else if (classType) {
+                    returnType = classType;
                 }
                 else if (declaration.type) {
                     returnType = getTypeFromTypeNode(declaration.type);

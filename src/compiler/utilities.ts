@@ -851,10 +851,10 @@ module ts {
         return false;
     }
 
-    export function isJSDocConstructSignature(node: SignatureDeclaration) {
+    export function isJSDocConstructSignature(node: Node) {
         return node.kind === SyntaxKind.JSDocFunctionType &&
-            node.parameters.length > 0 &&
-            node.parameters[0].type.kind === SyntaxKind.JSDocConstructorType;
+            (<JSDocFunctionType>node).parameters.length > 0 &&
+            (<JSDocFunctionType>node).parameters[0].type.kind === SyntaxKind.JSDocConstructorType;
     }
 
     export function getJSDocParameter(parameter: ParameterDeclaration): JSDocParameter {

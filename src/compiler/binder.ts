@@ -130,7 +130,7 @@ module ts {
                 case SyntaxKind.ClassDeclaration:
                     return node.flags & NodeFlags.Default ? "default" : undefined;
                 case SyntaxKind.JSDocFunctionType:
-                    return isJSDocConstructSignature(<SignatureDeclaration>node) ? "__new" : "__call";
+                    return isJSDocConstructSignature(node) ? "__new" : "__call";
                 case SyntaxKind.Parameter:
                     // Parameters with names are handled at the top of this function.  Parameters
                     // without names can only come from JSDocFunctionTypes.
