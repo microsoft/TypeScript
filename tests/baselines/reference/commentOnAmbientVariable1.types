@@ -1,9 +1,9 @@
 === tests/cases/compiler/commentOnAmbientVariable1.ts ===
 /*! Keep this pinned comment */
 declare var v: number;
->v : number, Symbol(v, Decl(commentOnAmbientVariable1.ts, 1, 11))
+>v : number
 
 // Don't keep this comment.
 declare var y: number;
->y : number, Symbol(y, Decl(commentOnAmbientVariable1.ts, 4, 11))
+>y : number
 

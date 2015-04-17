@@ -1,12 +1,12 @@
 === tests/cases/compiler/contextualTyping26.ts ===
 function foo(param:{id:number;}){}; foo(<{id:number;}>({}));
->foo : (param: { id: number; }) => void, Symbol(foo, Decl(contextualTyping26.ts, 0, 0))
->param : { id: number; }, Symbol(param, Decl(contextualTyping26.ts, 0, 13))
->id : number, Symbol(id, Decl(contextualTyping26.ts, 0, 20))
+>foo : (param: { id: number; }) => void
+>param : { id: number; }
+>id : number
 >foo(<{id:number;}>({})) : void
->foo : (param: { id: number; }) => void, Symbol(foo, Decl(contextualTyping26.ts, 0, 0))
+>foo : (param: { id: number; }) => void
 ><{id:number;}>({}) : { id: number; }
->id : number, Symbol(id, Decl(contextualTyping26.ts, 0, 42))
+>id : number
 >({}) : {}
 >{} : {}
 

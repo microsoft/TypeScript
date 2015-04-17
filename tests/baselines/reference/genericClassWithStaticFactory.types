@@ -1,166 +1,166 @@
 === tests/cases/compiler/genericClassWithStaticFactory.ts ===
 module Editor {
->Editor : typeof Editor, Symbol(Editor, Decl(genericClassWithStaticFactory.ts, 0, 0))
+>Editor : typeof Editor
 
     export class List<T> {
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
+>List : List<T>
+>T : T
 
         public next: List<T>;
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
+>next : List<T>
+>List : List<T>
+>T : T
 
         public prev: List<T>;
->prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
+>prev : List<T>
+>List : List<T>
+>T : T
 
         private listFactory: ListFactory<T>;
->listFactory : ListFactory<T>, Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
->ListFactory : ListFactory<T>, Symbol(ListFactory, Decl(genericClassWithStaticFactory.ts, 106, 5))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
+>listFactory : ListFactory<T>
+>ListFactory : ListFactory<T>
+>T : T
 
         constructor(public isHead: boolean, public data: T) {
->isHead : boolean, Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
->data : T, Symbol(data, Decl(genericClassWithStaticFactory.ts, 7, 43))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
+>isHead : boolean
+>data : T
+>T : T
 
             this.listFactory = new ListFactory<T>();
 >this.listFactory = new ListFactory<T>() : ListFactory<T>
->this.listFactory : ListFactory<T>, Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->listFactory : ListFactory<T>, Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
+>this.listFactory : ListFactory<T>
+>this : List<T>
+>listFactory : ListFactory<T>
 >new ListFactory<T>() : ListFactory<T>
->ListFactory : typeof ListFactory, Symbol(ListFactory, Decl(genericClassWithStaticFactory.ts, 106, 5))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
+>ListFactory : typeof ListFactory
+>T : T
            
         }
 
         public add(data: T): List<T> {
->add : (data: T) => List<T>, Symbol(add, Decl(genericClassWithStaticFactory.ts, 10, 9))
->data : T, Symbol(data, Decl(genericClassWithStaticFactory.ts, 12, 19))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
+>add : (data: T) => List<T>
+>data : T
+>T : T
+>List : List<T>
+>T : T
 
             var entry = this.listFactory.MakeEntry(data);
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 13, 15))
+>entry : List<T>
 >this.listFactory.MakeEntry(data) : List<T>
->this.listFactory.MakeEntry : <T>(data: T) => List<T>, Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
->this.listFactory : ListFactory<T>, Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->listFactory : ListFactory<T>, Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
->MakeEntry : <T>(data: T) => List<T>, Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
->data : T, Symbol(data, Decl(genericClassWithStaticFactory.ts, 12, 19))
+>this.listFactory.MakeEntry : <T>(data: T) => List<T>
+>this.listFactory : ListFactory<T>
+>this : List<T>
+>listFactory : ListFactory<T>
+>MakeEntry : <T>(data: T) => List<T>
+>data : T
             
             this.prev.next = entry;
 >this.prev.next = entry : List<T>
->this.prev.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this.prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 13, 15))
+>this.prev.next : List<T>
+>this.prev : List<T>
+>this : List<T>
+>prev : List<T>
+>next : List<T>
+>entry : List<T>
 
             entry.next = this;
 >entry.next = this : List<T>
->entry.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 13, 15))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>this : List<T>
 
             entry.prev = this.prev;
 >entry.prev = this.prev : List<T>
->entry.prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 13, 15))
->prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->this.prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>this.prev : List<T>
+>this : List<T>
+>prev : List<T>
 
             this.prev = entry;
 >this.prev = entry : List<T>
->this.prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 13, 15))
+>this.prev : List<T>
+>this : List<T>
+>prev : List<T>
+>entry : List<T>
 
             return entry;
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 13, 15))
+>entry : List<T>
         }
 
         public count(): number {
->count : () => number, Symbol(count, Decl(genericClassWithStaticFactory.ts, 20, 9))
+>count : () => number
 
             var entry: List<T>;
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 23, 15))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
+>entry : List<T>
+>List : List<T>
+>T : T
 
             var i: number;
->i : number, Symbol(i, Decl(genericClassWithStaticFactory.ts, 24, 15))
+>i : number
 
             entry = this.next;
 >entry = this.next : List<T>
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 23, 15))
->this.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>entry : List<T>
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
 
             for (i = 0; !(entry.isHead); i++) {
 >i = 0 : number
->i : number, Symbol(i, Decl(genericClassWithStaticFactory.ts, 24, 15))
+>i : number
 >0 : number
 >!(entry.isHead) : boolean
 >(entry.isHead) : boolean
->entry.isHead : boolean, Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 23, 15))
->isHead : boolean, Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
+>entry.isHead : boolean
+>entry : List<T>
+>isHead : boolean
 >i++ : number
->i : number, Symbol(i, Decl(genericClassWithStaticFactory.ts, 24, 15))
+>i : number
 
                 entry = entry.next;
 >entry = entry.next : List<T>
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 23, 15))
->entry.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 23, 15))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>entry : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
             }
 
             return (i);
 >(i) : number
->i : number, Symbol(i, Decl(genericClassWithStaticFactory.ts, 24, 15))
+>i : number
         }
 
         public isEmpty(): boolean {
->isEmpty : () => boolean, Symbol(isEmpty, Decl(genericClassWithStaticFactory.ts, 32, 9))
+>isEmpty : () => boolean
 
             return (this.next == this);
 >(this.next == this) : boolean
 >this.next == this : boolean
->this.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
+>this : List<T>
         }
 
         public first(): T {
->first : () => T, Symbol(first, Decl(genericClassWithStaticFactory.ts, 36, 9))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
+>first : () => T
+>T : T
 
             if (this.isEmpty())
 >this.isEmpty() : boolean
->this.isEmpty : () => boolean, Symbol(isEmpty, Decl(genericClassWithStaticFactory.ts, 32, 9))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->isEmpty : () => boolean, Symbol(isEmpty, Decl(genericClassWithStaticFactory.ts, 32, 9))
+>this.isEmpty : () => boolean
+>this : List<T>
+>isEmpty : () => boolean
             {
                 return this.next.data;
->this.next.data : T, Symbol(data, Decl(genericClassWithStaticFactory.ts, 7, 43))
->this.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->data : T, Symbol(data, Decl(genericClassWithStaticFactory.ts, 7, 43))
+>this.next.data : T
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
+>data : T
             }
             else {
                 return null;
@@ -169,127 +169,127 @@ module Editor {
         }
 
         public pushEntry(entry: List<T>): void {
->pushEntry : (entry: List<T>) => void, Symbol(pushEntry, Decl(genericClassWithStaticFactory.ts, 46, 9))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 48, 25))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
+>pushEntry : (entry: List<T>) => void
+>entry : List<T>
+>List : List<T>
+>T : T
 
             entry.isHead = false;
 >entry.isHead = false : boolean
->entry.isHead : boolean, Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 48, 25))
->isHead : boolean, Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
+>entry.isHead : boolean
+>entry : List<T>
+>isHead : boolean
 >false : boolean
 
             entry.next = this.next;
 >entry.next = this.next : List<T>
->entry.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 48, 25))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
 
             entry.prev = this;
 >entry.prev = this : List<T>
->entry.prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 48, 25))
->prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>this : List<T>
 
             this.next = entry;
 >this.next = entry : List<T>
->this.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 48, 25))
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
+>entry : List<T>
 
             entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
 >entry.next.prev = entry : List<T>
->entry.next.prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 48, 25))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 48, 25))
+>entry.next.prev : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>prev : List<T>
+>entry : List<T>
         }
 
         public push(data: T): void {
->push : (data: T) => void, Symbol(push, Decl(genericClassWithStaticFactory.ts, 54, 9))
->data : T, Symbol(data, Decl(genericClassWithStaticFactory.ts, 56, 20))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
+>push : (data: T) => void
+>data : T
+>T : T
 
             var entry = this.listFactory.MakeEntry(data);
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 57, 15))
+>entry : List<T>
 >this.listFactory.MakeEntry(data) : List<T>
->this.listFactory.MakeEntry : <T>(data: T) => List<T>, Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
->this.listFactory : ListFactory<T>, Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->listFactory : ListFactory<T>, Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
->MakeEntry : <T>(data: T) => List<T>, Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
->data : T, Symbol(data, Decl(genericClassWithStaticFactory.ts, 56, 20))
+>this.listFactory.MakeEntry : <T>(data: T) => List<T>
+>this.listFactory : ListFactory<T>
+>this : List<T>
+>listFactory : ListFactory<T>
+>MakeEntry : <T>(data: T) => List<T>
+>data : T
 
             entry.data = data;
 >entry.data = data : T
->entry.data : T, Symbol(data, Decl(genericClassWithStaticFactory.ts, 7, 43))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 57, 15))
->data : T, Symbol(data, Decl(genericClassWithStaticFactory.ts, 7, 43))
->data : T, Symbol(data, Decl(genericClassWithStaticFactory.ts, 56, 20))
+>entry.data : T
+>entry : List<T>
+>data : T
+>data : T
 
             entry.isHead = false;
 >entry.isHead = false : boolean
->entry.isHead : boolean, Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 57, 15))
->isHead : boolean, Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
+>entry.isHead : boolean
+>entry : List<T>
+>isHead : boolean
 >false : boolean
 
             entry.next = this.next;
 >entry.next = this.next : List<T>
->entry.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 57, 15))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
 
             entry.prev = this;
 >entry.prev = this : List<T>
->entry.prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 57, 15))
->prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>this : List<T>
 
             this.next = entry;
 >this.next = entry : List<T>
->this.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 57, 15))
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
+>entry : List<T>
 
             entry.next.prev = entry;  // entry.next.prev does not show intellisense, but entry.prev.prev does
 >entry.next.prev = entry : List<T>
->entry.next.prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 57, 15))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 57, 15))
+>entry.next.prev : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>prev : List<T>
+>entry : List<T>
         }
 
         public popEntry(head: List<T>): List<T> {
->popEntry : (head: List<T>) => List<T>, Symbol(popEntry, Decl(genericClassWithStaticFactory.ts, 64, 9))
->head : List<T>, Symbol(head, Decl(genericClassWithStaticFactory.ts, 66, 24))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
+>popEntry : (head: List<T>) => List<T>
+>head : List<T>
+>List : List<T>
+>T : T
+>List : List<T>
+>T : T
 
             if (this.next.isHead) {
->this.next.isHead : boolean, Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
->this.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->isHead : boolean, Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
+>this.next.isHead : boolean
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
+>isHead : boolean
 
                 return null;
 >null : null
@@ -297,288 +297,288 @@ module Editor {
             else {
                 return this.listFactory.RemoveEntry(this.next);
 >this.listFactory.RemoveEntry(this.next) : List<T>
->this.listFactory.RemoveEntry : <T>(entry: List<T>) => List<T>, Symbol(ListFactory.RemoveEntry, Decl(genericClassWithStaticFactory.ts, 122, 9))
->this.listFactory : ListFactory<T>, Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->listFactory : ListFactory<T>, Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
->RemoveEntry : <T>(entry: List<T>) => List<T>, Symbol(ListFactory.RemoveEntry, Decl(genericClassWithStaticFactory.ts, 122, 9))
->this.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>this.listFactory.RemoveEntry : <T>(entry: List<T>) => List<T>
+>this.listFactory : ListFactory<T>
+>this : List<T>
+>listFactory : ListFactory<T>
+>RemoveEntry : <T>(entry: List<T>) => List<T>
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
             }
         }
 
         public insertEntry(entry: List<T>): List<T> {
->insertEntry : (entry: List<T>) => List<T>, Symbol(insertEntry, Decl(genericClassWithStaticFactory.ts, 73, 9))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 75, 27))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
+>insertEntry : (entry: List<T>) => List<T>
+>entry : List<T>
+>List : List<T>
+>T : T
+>List : List<T>
+>T : T
 
             entry.isHead = false;
 >entry.isHead = false : boolean
->entry.isHead : boolean, Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 75, 27))
->isHead : boolean, Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
+>entry.isHead : boolean
+>entry : List<T>
+>isHead : boolean
 >false : boolean
 
             this.prev.next = entry;
 >this.prev.next = entry : List<T>
->this.prev.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this.prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 75, 27))
+>this.prev.next : List<T>
+>this.prev : List<T>
+>this : List<T>
+>prev : List<T>
+>next : List<T>
+>entry : List<T>
 
             entry.next = this;
 >entry.next = this : List<T>
->entry.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 75, 27))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>this : List<T>
 
             entry.prev = this.prev;
 >entry.prev = this.prev : List<T>
->entry.prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 75, 27))
->prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->this.prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>this.prev : List<T>
+>this : List<T>
+>prev : List<T>
 
             this.prev = entry;
 >this.prev = entry : List<T>
->this.prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 75, 27))
+>this.prev : List<T>
+>this : List<T>
+>prev : List<T>
+>entry : List<T>
 
             return entry;
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 75, 27))
+>entry : List<T>
         }
 
         public insertAfter(data: T): List<T> {
->insertAfter : (data: T) => List<T>, Symbol(insertAfter, Decl(genericClassWithStaticFactory.ts, 82, 9))
->data : T, Symbol(data, Decl(genericClassWithStaticFactory.ts, 84, 27))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
+>insertAfter : (data: T) => List<T>
+>data : T
+>T : T
+>List : List<T>
+>T : T
 
             var entry: List<T> = this.listFactory.MakeEntry(data);
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 85, 15))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
+>entry : List<T>
+>List : List<T>
+>T : T
 >this.listFactory.MakeEntry(data) : List<T>
->this.listFactory.MakeEntry : <T>(data: T) => List<T>, Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
->this.listFactory : ListFactory<T>, Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->listFactory : ListFactory<T>, Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
->MakeEntry : <T>(data: T) => List<T>, Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
->data : T, Symbol(data, Decl(genericClassWithStaticFactory.ts, 84, 27))
+>this.listFactory.MakeEntry : <T>(data: T) => List<T>
+>this.listFactory : ListFactory<T>
+>this : List<T>
+>listFactory : ListFactory<T>
+>MakeEntry : <T>(data: T) => List<T>
+>data : T
 
             entry.next = this.next;
 >entry.next = this.next : List<T>
->entry.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 85, 15))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
 
             entry.prev = this;
 >entry.prev = this : List<T>
->entry.prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 85, 15))
->prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>this : List<T>
 
             this.next = entry;
 >this.next = entry : List<T>
->this.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 85, 15))
+>this.next : List<T>
+>this : List<T>
+>next : List<T>
+>entry : List<T>
 
             entry.next.prev = entry;// entry.next.prev does not show intellisense, but entry.prev.prev does
 >entry.next.prev = entry : List<T>
->entry.next.prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 85, 15))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 85, 15))
+>entry.next.prev : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>prev : List<T>
+>entry : List<T>
 
             return entry;
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 85, 15))
+>entry : List<T>
         }
 
         public insertEntryBefore(entry: List<T>): List<T> {
->insertEntryBefore : (entry: List<T>) => List<T>, Symbol(insertEntryBefore, Decl(genericClassWithStaticFactory.ts, 91, 9))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 93, 33))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
+>insertEntryBefore : (entry: List<T>) => List<T>
+>entry : List<T>
+>List : List<T>
+>T : T
+>List : List<T>
+>T : T
 
             this.prev.next = entry;
 >this.prev.next = entry : List<T>
->this.prev.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this.prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 93, 33))
+>this.prev.next : List<T>
+>this.prev : List<T>
+>this : List<T>
+>prev : List<T>
+>next : List<T>
+>entry : List<T>
 
             entry.next = this;
 >entry.next = this : List<T>
->entry.next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 93, 33))
->next : List<T>, Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>this : List<T>
 
             entry.prev = this.prev;
 >entry.prev = this.prev : List<T>
->entry.prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 93, 33))
->prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->this.prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>this.prev : List<T>
+>this : List<T>
+>prev : List<T>
 
             this.prev = entry;
 >this.prev = entry : List<T>
->this.prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->prev : List<T>, Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 93, 33))
+>this.prev : List<T>
+>this : List<T>
+>prev : List<T>
+>entry : List<T>
 
             return entry;
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 93, 33))
+>entry : List<T>
         }
 
         public insertBefore(data: T): List<T> {
->insertBefore : (data: T) => List<T>, Symbol(insertBefore, Decl(genericClassWithStaticFactory.ts, 100, 9))
->data : T, Symbol(data, Decl(genericClassWithStaticFactory.ts, 102, 28))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
+>insertBefore : (data: T) => List<T>
+>data : T
+>T : T
+>List : List<T>
+>T : T
 
             var entry = this.listFactory.MakeEntry(data);
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 103, 15))
+>entry : List<T>
 >this.listFactory.MakeEntry(data) : List<T>
->this.listFactory.MakeEntry : <T>(data: T) => List<T>, Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
->this.listFactory : ListFactory<T>, Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->listFactory : ListFactory<T>, Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
->MakeEntry : <T>(data: T) => List<T>, Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
->data : T, Symbol(data, Decl(genericClassWithStaticFactory.ts, 102, 28))
+>this.listFactory.MakeEntry : <T>(data: T) => List<T>
+>this.listFactory : ListFactory<T>
+>this : List<T>
+>listFactory : ListFactory<T>
+>MakeEntry : <T>(data: T) => List<T>
+>data : T
 
             return this.insertEntryBefore(entry);
 >this.insertEntryBefore(entry) : List<T>
->this.insertEntryBefore : (entry: List<T>) => List<T>, Symbol(insertEntryBefore, Decl(genericClassWithStaticFactory.ts, 91, 9))
->this : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->insertEntryBefore : (entry: List<T>) => List<T>, Symbol(insertEntryBefore, Decl(genericClassWithStaticFactory.ts, 91, 9))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 103, 15))
+>this.insertEntryBefore : (entry: List<T>) => List<T>
+>this : List<T>
+>insertEntryBefore : (entry: List<T>) => List<T>
+>entry : List<T>
         }
     }
 
     export class ListFactory<T> {
->ListFactory : ListFactory<T>, Symbol(ListFactory, Decl(genericClassWithStaticFactory.ts, 106, 5))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 108, 29))
+>ListFactory : ListFactory<T>
+>T : T
 
         public MakeHead<T>(): List<T> {
->MakeHead : <T>() => List<T>, Symbol(MakeHead, Decl(genericClassWithStaticFactory.ts, 108, 33))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 110, 24))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 110, 24))
+>MakeHead : <T>() => List<T>
+>T : T
+>List : List<T>
+>T : T
 
             var entry: List<T> = new List<T>(true, null);
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 111, 15))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 110, 24))
+>entry : List<T>
+>List : List<T>
+>T : T
 >new List<T>(true, null) : List<T>
->List : typeof List, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 110, 24))
+>List : typeof List
+>T : T
 >true : boolean
 >null : null
 
             entry.prev = entry;
 >entry.prev = entry : List<T>
->entry.prev : List<T>, Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 111, 15))
->prev : List<T>, Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 111, 15))
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>entry : List<T>
 
             entry.next = entry;
 >entry.next = entry : List<T>
->entry.next : List<T>, Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 111, 15))
->next : List<T>, Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 111, 15))
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>entry : List<T>
 
             return entry;
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 111, 15))
+>entry : List<T>
         }
 
         public MakeEntry<T>(data: T): List<T> {
->MakeEntry : <T>(data: T) => List<T>, Symbol(MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 117, 25))
->data : T, Symbol(data, Decl(genericClassWithStaticFactory.ts, 117, 28))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 117, 25))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 117, 25))
+>MakeEntry : <T>(data: T) => List<T>
+>T : T
+>data : T
+>T : T
+>List : List<T>
+>T : T
 
             var entry: List<T> = new List<T>(false, data);
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 118, 15))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 117, 25))
+>entry : List<T>
+>List : List<T>
+>T : T
 >new List<T>(false, data) : List<T>
->List : typeof List, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 117, 25))
+>List : typeof List
+>T : T
 >false : boolean
->data : T, Symbol(data, Decl(genericClassWithStaticFactory.ts, 117, 28))
+>data : T
 
             entry.prev = entry;
 >entry.prev = entry : List<T>
->entry.prev : List<T>, Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 118, 15))
->prev : List<T>, Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 118, 15))
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>entry : List<T>
 
             entry.next = entry;
 >entry.next = entry : List<T>
->entry.next : List<T>, Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 118, 15))
->next : List<T>, Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 118, 15))
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>entry : List<T>
 
             return entry;
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 118, 15))
+>entry : List<T>
         }
 
         public RemoveEntry<T>(entry: List<T>): List<T> {
->RemoveEntry : <T>(entry: List<T>) => List<T>, Symbol(RemoveEntry, Decl(genericClassWithStaticFactory.ts, 122, 9))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 124, 27))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 124, 27))
->List : List<T>, Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
->T : T, Symbol(T, Decl(genericClassWithStaticFactory.ts, 124, 27))
+>RemoveEntry : <T>(entry: List<T>) => List<T>
+>T : T
+>entry : List<T>
+>List : List<T>
+>T : T
+>List : List<T>
+>T : T
 
             if (entry == null) {
 >entry == null : boolean
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
+>entry : List<T>
 >null : null
 
                 return null;
 >null : null
             }
             else if (entry.isHead) {
->entry.isHead : boolean, Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
->isHead : boolean, Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
+>entry.isHead : boolean
+>entry : List<T>
+>isHead : boolean
 
             // Can't remove the head of a list!
                 return null;
@@ -587,28 +587,28 @@ module Editor {
             else {
                 entry.next.prev = entry.prev;
 >entry.next.prev = entry.prev : List<T>
->entry.next.prev : List<T>, Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry.next : List<T>, Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
->next : List<T>, Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->prev : List<T>, Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry.prev : List<T>, Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
->prev : List<T>, Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+>entry.next.prev : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
+>prev : List<T>
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
 
                 entry.prev.next = entry.next;
 >entry.prev.next = entry.next : List<T>
->entry.prev.next : List<T>, Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry.prev : List<T>, Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
->prev : List<T>, Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
->next : List<T>, Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry.next : List<T>, Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
->next : List<T>, Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+>entry.prev.next : List<T>
+>entry.prev : List<T>
+>entry : List<T>
+>prev : List<T>
+>next : List<T>
+>entry.next : List<T>
+>entry : List<T>
+>next : List<T>
 
                 return entry;
->entry : List<T>, Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
+>entry : List<T>
             }
         }
     }

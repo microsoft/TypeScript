@@ -1,85 +1,85 @@
 === tests/cases/compiler/declFileTypeofFunction.ts ===
 
 function f(n: typeof f): string;
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }, Symbol(f, Decl(declFileTypeofFunction.ts, 0, 0), Decl(declFileTypeofFunction.ts, 1, 32), Decl(declFileTypeofFunction.ts, 2, 32))
->n : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }, Symbol(n, Decl(declFileTypeofFunction.ts, 1, 11))
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }, Symbol(f, Decl(declFileTypeofFunction.ts, 0, 0), Decl(declFileTypeofFunction.ts, 1, 32), Decl(declFileTypeofFunction.ts, 2, 32))
+>f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
+>n : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
+>f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
 
 function f(n: typeof g): string;
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }, Symbol(f, Decl(declFileTypeofFunction.ts, 0, 0), Decl(declFileTypeofFunction.ts, 1, 32), Decl(declFileTypeofFunction.ts, 2, 32))
->n : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }, Symbol(n, Decl(declFileTypeofFunction.ts, 2, 11))
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }, Symbol(g, Decl(declFileTypeofFunction.ts, 3, 34), Decl(declFileTypeofFunction.ts, 4, 32), Decl(declFileTypeofFunction.ts, 5, 32))
+>f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
+>n : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
+>g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
 
 function f() { return undefined; }
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }, Symbol(f, Decl(declFileTypeofFunction.ts, 0, 0), Decl(declFileTypeofFunction.ts, 1, 32), Decl(declFileTypeofFunction.ts, 2, 32))
->undefined : undefined, Symbol(undefined)
+>f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
+>undefined : undefined
 
 function g(n: typeof g): number;
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }, Symbol(g, Decl(declFileTypeofFunction.ts, 3, 34), Decl(declFileTypeofFunction.ts, 4, 32), Decl(declFileTypeofFunction.ts, 5, 32))
->n : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }, Symbol(n, Decl(declFileTypeofFunction.ts, 4, 11))
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }, Symbol(g, Decl(declFileTypeofFunction.ts, 3, 34), Decl(declFileTypeofFunction.ts, 4, 32), Decl(declFileTypeofFunction.ts, 5, 32))
+>g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
+>n : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
+>g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
 
 function g(n: typeof f): number;
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }, Symbol(g, Decl(declFileTypeofFunction.ts, 3, 34), Decl(declFileTypeofFunction.ts, 4, 32), Decl(declFileTypeofFunction.ts, 5, 32))
->n : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }, Symbol(n, Decl(declFileTypeofFunction.ts, 5, 11))
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }, Symbol(f, Decl(declFileTypeofFunction.ts, 0, 0), Decl(declFileTypeofFunction.ts, 1, 32), Decl(declFileTypeofFunction.ts, 2, 32))
+>g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
+>n : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
+>f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
 
 function g() { return undefined; }
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }, Symbol(g, Decl(declFileTypeofFunction.ts, 3, 34), Decl(declFileTypeofFunction.ts, 4, 32), Decl(declFileTypeofFunction.ts, 5, 32))
->undefined : undefined, Symbol(undefined)
+>g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
+>undefined : undefined
 
 var b: () => typeof b;
->b : () => any, Symbol(b, Decl(declFileTypeofFunction.ts, 8, 3))
->b : () => any, Symbol(b, Decl(declFileTypeofFunction.ts, 8, 3))
+>b : () => any
+>b : () => any
 
 function b1() {
->b1 : () => typeof b1, Symbol(b1, Decl(declFileTypeofFunction.ts, 8, 22))
+>b1 : () => typeof b1
 
     return b1;
->b1 : () => typeof b1, Symbol(b1, Decl(declFileTypeofFunction.ts, 8, 22))
+>b1 : () => typeof b1
 }
 
 function foo(): typeof foo {
->foo : () => typeof foo, Symbol(foo, Decl(declFileTypeofFunction.ts, 12, 1))
->foo : () => typeof foo, Symbol(foo, Decl(declFileTypeofFunction.ts, 12, 1))
+>foo : () => typeof foo
+>foo : () => typeof foo
 
     return null;
 >null : null
 }
 var foo1: typeof foo;
->foo1 : () => typeof foo, Symbol(foo1, Decl(declFileTypeofFunction.ts, 17, 3))
->foo : () => typeof foo, Symbol(foo, Decl(declFileTypeofFunction.ts, 12, 1))
+>foo1 : () => typeof foo
+>foo : () => typeof foo
 
 var foo2 = foo;
->foo2 : () => typeof foo, Symbol(foo2, Decl(declFileTypeofFunction.ts, 18, 3))
->foo : () => typeof foo, Symbol(foo, Decl(declFileTypeofFunction.ts, 12, 1))
+>foo2 : () => typeof foo
+>foo : () => typeof foo
 
 var foo3 = function () {
->foo3 : () => any, Symbol(foo3, Decl(declFileTypeofFunction.ts, 20, 3))
+>foo3 : () => any
 >function () {    return foo3;} : () => any
 
     return foo3;
->foo3 : () => any, Symbol(foo3, Decl(declFileTypeofFunction.ts, 20, 3))
+>foo3 : () => any
 }
 var x = () => {
->x : () => any, Symbol(x, Decl(declFileTypeofFunction.ts, 23, 3))
+>x : () => any
 >() => {    return x;} : () => any
 
     return x;
->x : () => any, Symbol(x, Decl(declFileTypeofFunction.ts, 23, 3))
+>x : () => any
 }
 
 function foo5(x: number) {
->foo5 : (x: number) => (x: number) => number, Symbol(foo5, Decl(declFileTypeofFunction.ts, 25, 1))
->x : number, Symbol(x, Decl(declFileTypeofFunction.ts, 27, 14))
+>foo5 : (x: number) => (x: number) => number
+>x : number
 
     function bar(x: number) {
->bar : (x: number) => number, Symbol(bar, Decl(declFileTypeofFunction.ts, 27, 26))
->x : number, Symbol(x, Decl(declFileTypeofFunction.ts, 28, 17))
+>bar : (x: number) => number
+>x : number
 
         return x;
->x : number, Symbol(x, Decl(declFileTypeofFunction.ts, 28, 17))
+>x : number
     }
     return bar;
->bar : (x: number) => number, Symbol(bar, Decl(declFileTypeofFunction.ts, 27, 26))
+>bar : (x: number) => number
 }

@@ -1,5 +1,5 @@
 === tests/cases/conformance/scanner/ecmascript5/scannerUnicodeEscapeInKeyword1.ts ===
 \u0076ar x = "hello";
->x : string, Symbol(x, Decl(scannerUnicodeEscapeInKeyword1.ts, 0, 8))
+>x : string
 >"hello" : string
 

@@ -1,8 +1,8 @@
 === tests/cases/compiler/contextualTyping40.ts ===
 var foo = <{():number; (i:number):number; }> function(){return 1;};
->foo : { (): number; (i: number): number; }, Symbol(foo, Decl(contextualTyping40.ts, 0, 3))
+>foo : { (): number; (i: number): number; }
 ><{():number; (i:number):number; }> function(){return 1;} : { (): number; (i: number): number; }
->i : number, Symbol(i, Decl(contextualTyping40.ts, 0, 24))
+>i : number
 >function(){return 1;} : () => number
 >1 : number
 

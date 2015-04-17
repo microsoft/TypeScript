@@ -1,42 +1,42 @@
 === tests/cases/compiler/internalAliasClassInsideLocalModuleWithoutExport.ts ===
 export module x {
->x : typeof x, Symbol(x, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 0, 0))
+>x : typeof x
 
     export class c {
->c : c, Symbol(c, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 0, 17))
+>c : c
 
         foo(a: number) {
->foo : (a: number) => number, Symbol(foo, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 1, 20))
->a : number, Symbol(a, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 2, 12))
+>foo : (a: number) => number
+>a : number
 
             return a;
->a : number, Symbol(a, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 2, 12))
+>a : number
         }
     }
 }
 
 export module m2 {
->m2 : typeof m2, Symbol(m2, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 6, 1))
+>m2 : typeof m2
 
     export module m3 {
->m3 : typeof m3, Symbol(m3, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 8, 18))
+>m3 : typeof m3
 
         import c = x.c;
->c : typeof c, Symbol(c, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 9, 22))
->x : typeof x, Symbol(x, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 0, 0))
->c : c, Symbol(c, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 0, 17))
+>c : typeof c
+>x : typeof x
+>c : c
 
         export var cProp = new c();
->cProp : c, Symbol(cProp, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 11, 18))
+>cProp : c
 >new c() : c
->c : typeof c, Symbol(c, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 9, 22))
+>c : typeof c
 
         var cReturnVal = cProp.foo(10);
->cReturnVal : number, Symbol(cReturnVal, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 12, 11))
+>cReturnVal : number
 >cProp.foo(10) : number
->cProp.foo : (a: number) => number, Symbol(c.foo, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 1, 20))
->cProp : c, Symbol(cProp, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 11, 18))
->foo : (a: number) => number, Symbol(c.foo, Decl(internalAliasClassInsideLocalModuleWithoutExport.ts, 1, 20))
+>cProp.foo : (a: number) => number
+>cProp : c
+>foo : (a: number) => number
 >10 : number
     }
 }

@@ -3,6 +3,7 @@ interface TypeWriterResult {
     syntaxKind: number;
     sourceText: string;
     type: string;
+    symbol: string;
 }
 
 class TypeWriterWalker {
@@ -19,7 +20,7 @@ class TypeWriterWalker {
             : program.getTypeChecker();
     }
 
-    public getTypes(fileName: string): TypeWriterResult[] {
+    public getTypeAndSymbols(fileName: string): TypeWriterResult[] {
         var sourceFile = this.program.getSourceFile(fileName);
         this.currentSourceFile = sourceFile;
         this.results = [];
@@ -45,8 +46,9 @@ class TypeWriterWalker {
         var symbol = this.checker.getSymbolAtLocation(node);
 
         var typeString = this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation);
+        var symbolString: string;
         if (symbol) {
-            var symbolString = "Symbol(" + this.checker.symbolToString(symbol, node.parent);
+            symbolString = "Symbol(" + this.checker.symbolToString(symbol, node.parent);
             if (symbol.declarations) {
                 for (let declaration of symbol.declarations) {
                     symbolString += ", ";
@@ -56,15 +58,14 @@ class TypeWriterWalker {
                 }
             }
             symbolString += ")";
-
-            typeString += ", " + symbolString;
         }
 
         this.results.push({
             line: lineAndCharacter.line,
             syntaxKind: node.kind,
             sourceText: sourceText,
-            type: typeString
+            type: typeString,
+            symbol: symbolString
         });
     }
 }

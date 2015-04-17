@@ -1,29 +1,29 @@
 === tests/cases/compiler/constraintPropagationThroughReturnTypes.ts ===
 function g<T>(x: T): T {
->g : <T>(x: T) => T, Symbol(g, Decl(constraintPropagationThroughReturnTypes.ts, 0, 0))
->T : T, Symbol(T, Decl(constraintPropagationThroughReturnTypes.ts, 0, 11))
->x : T, Symbol(x, Decl(constraintPropagationThroughReturnTypes.ts, 0, 14))
->T : T, Symbol(T, Decl(constraintPropagationThroughReturnTypes.ts, 0, 11))
->T : T, Symbol(T, Decl(constraintPropagationThroughReturnTypes.ts, 0, 11))
+>g : <T>(x: T) => T
+>T : T
+>x : T
+>T : T
+>T : T
 
   return x;
->x : T, Symbol(x, Decl(constraintPropagationThroughReturnTypes.ts, 0, 14))
+>x : T
 }
  
 function f<S extends { foo: string }>(x: S) {
->f : <S extends { foo: string; }>(x: S) => void, Symbol(f, Decl(constraintPropagationThroughReturnTypes.ts, 2, 1))
->S : S, Symbol(S, Decl(constraintPropagationThroughReturnTypes.ts, 4, 11))
->foo : string, Symbol(foo, Decl(constraintPropagationThroughReturnTypes.ts, 4, 22))
->x : S, Symbol(x, Decl(constraintPropagationThroughReturnTypes.ts, 4, 38))
->S : S, Symbol(S, Decl(constraintPropagationThroughReturnTypes.ts, 4, 11))
+>f : <S extends { foo: string; }>(x: S) => void
+>S : S
+>foo : string
+>x : S
+>S : S
 
   var y = g(x);
->y : S, Symbol(y, Decl(constraintPropagationThroughReturnTypes.ts, 5, 5))
+>y : S
 >g(x) : S
->g : <T>(x: T) => T, Symbol(g, Decl(constraintPropagationThroughReturnTypes.ts, 0, 0))
->x : S, Symbol(x, Decl(constraintPropagationThroughReturnTypes.ts, 4, 38))
+>g : <T>(x: T) => T
+>x : S
 
   y;
->y : S, Symbol(y, Decl(constraintPropagationThroughReturnTypes.ts, 5, 5))
+>y : S
 }
 

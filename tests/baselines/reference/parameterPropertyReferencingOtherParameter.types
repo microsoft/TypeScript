@@ -1,10 +1,10 @@
 === tests/cases/compiler/parameterPropertyReferencingOtherParameter.ts ===
 class Foo {
->Foo : Foo, Symbol(Foo, Decl(parameterPropertyReferencingOtherParameter.ts, 0, 0))
+>Foo : Foo
 
     constructor(public x: number, public y: number = x) { }
->x : number, Symbol(x, Decl(parameterPropertyReferencingOtherParameter.ts, 1, 16))
->y : number, Symbol(y, Decl(parameterPropertyReferencingOtherParameter.ts, 1, 33))
->x : number, Symbol(x, Decl(parameterPropertyReferencingOtherParameter.ts, 1, 16))
+>x : number
+>y : number
+>x : number
 }
 

@@ -1,22 +1,22 @@
 === tests/cases/compiler/noImplicitAnyInContextuallyTypesFunctionParamter.ts ===
 
 var regexMatchList = ['', ''];
->regexMatchList : string[], Symbol(regexMatchList, Decl(noImplicitAnyInContextuallyTypesFunctionParamter.ts, 1, 3))
+>regexMatchList : string[]
 >['', ''] : string[]
 >'' : string
 >'' : string
 
 regexMatchList.forEach(match => ''.replace(match, ''));
 >regexMatchList.forEach(match => ''.replace(match, '')) : void
->regexMatchList.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void, Symbol(Array.forEach, Decl(lib.d.ts, 1108, 95))
->regexMatchList : string[], Symbol(regexMatchList, Decl(noImplicitAnyInContextuallyTypesFunctionParamter.ts, 1, 3))
->forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void, Symbol(Array.forEach, Decl(lib.d.ts, 1108, 95))
+>regexMatchList.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>regexMatchList : string[]
+>forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
 >match => ''.replace(match, '') : (match: string) => string
->match : string, Symbol(match, Decl(noImplicitAnyInContextuallyTypesFunctionParamter.ts, 2, 23))
+>match : string
 >''.replace(match, '') : string
->''.replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }, Symbol(String.replace, Decl(lib.d.ts, 329, 44), Decl(lib.d.ts, 336, 63), Decl(lib.d.ts, 343, 102), Decl(lib.d.ts, 350, 63))
+>''.replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
 >'' : string
->replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }, Symbol(String.replace, Decl(lib.d.ts, 329, 44), Decl(lib.d.ts, 336, 63), Decl(lib.d.ts, 343, 102), Decl(lib.d.ts, 350, 63))
->match : string, Symbol(match, Decl(noImplicitAnyInContextuallyTypesFunctionParamter.ts, 2, 23))
+>replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
+>match : string
 >'' : string
 

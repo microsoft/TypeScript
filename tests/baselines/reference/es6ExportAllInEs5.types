@@ -1,24 +1,24 @@
 === tests/cases/compiler/server.ts ===
 
 export class c {
->c : c, Symbol(c, Decl(server.ts, 0, 0))
+>c : c
 }
 export interface i {
->i : i, Symbol(i, Decl(server.ts, 2, 1))
+>i : i
 }
 export module m {
->m : typeof m, Symbol(m, Decl(server.ts, 4, 1))
+>m : typeof m
 
     export var x = 10;
->x : number, Symbol(x, Decl(server.ts, 6, 14))
+>x : number
 >10 : number
 }
 export var x = 10;
->x : number, Symbol(x, Decl(server.ts, 8, 10))
+>x : number
 >10 : number
 
 export module uninstantiated {
->uninstantiated : any, Symbol(uninstantiated, Decl(server.ts, 8, 18))
+>uninstantiated : any
 }
 
 === tests/cases/compiler/client.ts ===

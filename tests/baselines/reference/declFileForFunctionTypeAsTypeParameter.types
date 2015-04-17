@@ -1,16 +1,16 @@
 === tests/cases/compiler/declFileForFunctionTypeAsTypeParameter.ts ===
 
 class X<T> {
->X : X<T>, Symbol(X, Decl(declFileForFunctionTypeAsTypeParameter.ts, 0, 0))
->T : T, Symbol(T, Decl(declFileForFunctionTypeAsTypeParameter.ts, 1, 8))
+>X : X<T>
+>T : T
 }
 class C extends X<() => number> {
->C : C, Symbol(C, Decl(declFileForFunctionTypeAsTypeParameter.ts, 2, 1))
->X : X<T>, Symbol(X, Decl(declFileForFunctionTypeAsTypeParameter.ts, 0, 0))
+>C : C
+>X : X<T>
 }
 interface I extends X<() => number> {
->I : I, Symbol(I, Decl(declFileForFunctionTypeAsTypeParameter.ts, 4, 1))
->X : X<T>, Symbol(X, Decl(declFileForFunctionTypeAsTypeParameter.ts, 0, 0))
+>I : I
+>X : X<T>
 }
 
 

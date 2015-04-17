@@ -1,18 +1,18 @@
 === tests/cases/compiler/enumFromExternalModule_1.ts ===
 ///<reference path='enumFromExternalModule_0.ts'/>
 import f = require('enumFromExternalModule_0');
->f : typeof f, Symbol(f, Decl(enumFromExternalModule_1.ts, 0, 0))
+>f : typeof f
 
 var x = f.Mode.Open;
->x : f.Mode, Symbol(x, Decl(enumFromExternalModule_1.ts, 3, 3))
->f.Mode.Open : f.Mode, Symbol(f.Mode.Open, Decl(enumFromExternalModule_0.ts, 0, 18))
->f.Mode : typeof f.Mode, Symbol(f.Mode, Decl(enumFromExternalModule_0.ts, 0, 0))
->f : typeof f, Symbol(f, Decl(enumFromExternalModule_1.ts, 0, 0))
->Mode : typeof f.Mode, Symbol(f.Mode, Decl(enumFromExternalModule_0.ts, 0, 0))
->Open : f.Mode, Symbol(f.Mode.Open, Decl(enumFromExternalModule_0.ts, 0, 18))
+>x : f.Mode
+>f.Mode.Open : f.Mode
+>f.Mode : typeof f.Mode
+>f : typeof f
+>Mode : typeof f.Mode
+>Open : f.Mode
 
 === tests/cases/compiler/enumFromExternalModule_0.ts ===
 export enum Mode { Open }
->Mode : Mode, Symbol(Mode, Decl(enumFromExternalModule_0.ts, 0, 0))
->Open : Mode, Symbol(Mode.Open, Decl(enumFromExternalModule_0.ts, 0, 18))
+>Mode : Mode
+>Open : Mode
 

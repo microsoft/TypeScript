@@ -1,53 +1,53 @@
 === tests/cases/compiler/missingSelf.ts ===
 class CalcButton
->CalcButton : CalcButton, Symbol(CalcButton, Decl(missingSelf.ts, 0, 0))
+>CalcButton : CalcButton
 {
     public a() { this.onClick(); }
->a : () => void, Symbol(a, Decl(missingSelf.ts, 1, 1))
+>a : () => void
 >this.onClick() : void
->this.onClick : () => void, Symbol(onClick, Decl(missingSelf.ts, 2, 34))
->this : CalcButton, Symbol(CalcButton, Decl(missingSelf.ts, 0, 0))
->onClick : () => void, Symbol(onClick, Decl(missingSelf.ts, 2, 34))
+>this.onClick : () => void
+>this : CalcButton
+>onClick : () => void
 
     public onClick() { }
->onClick : () => void, Symbol(onClick, Decl(missingSelf.ts, 2, 34))
+>onClick : () => void
 }
 
 class CalcButton2
->CalcButton2 : CalcButton2, Symbol(CalcButton2, Decl(missingSelf.ts, 4, 1))
+>CalcButton2 : CalcButton2
 {
     public b() { () => this.onClick(); }
->b : () => void, Symbol(b, Decl(missingSelf.ts, 7, 1))
+>b : () => void
 >() => this.onClick() : () => void
 >this.onClick() : void
->this.onClick : () => void, Symbol(onClick, Decl(missingSelf.ts, 8, 40))
->this : CalcButton2, Symbol(CalcButton2, Decl(missingSelf.ts, 4, 1))
->onClick : () => void, Symbol(onClick, Decl(missingSelf.ts, 8, 40))
+>this.onClick : () => void
+>this : CalcButton2
+>onClick : () => void
 
     public onClick() { }
->onClick : () => void, Symbol(onClick, Decl(missingSelf.ts, 8, 40))
+>onClick : () => void
 }
 
 var c = new CalcButton();
->c : CalcButton, Symbol(c, Decl(missingSelf.ts, 12, 3))
+>c : CalcButton
 >new CalcButton() : CalcButton
->CalcButton : typeof CalcButton, Symbol(CalcButton, Decl(missingSelf.ts, 0, 0))
+>CalcButton : typeof CalcButton
 
 c.a();
 >c.a() : void
->c.a : () => void, Symbol(CalcButton.a, Decl(missingSelf.ts, 1, 1))
->c : CalcButton, Symbol(c, Decl(missingSelf.ts, 12, 3))
->a : () => void, Symbol(CalcButton.a, Decl(missingSelf.ts, 1, 1))
+>c.a : () => void
+>c : CalcButton
+>a : () => void
 
 var c2 = new CalcButton2();
->c2 : CalcButton2, Symbol(c2, Decl(missingSelf.ts, 14, 3))
+>c2 : CalcButton2
 >new CalcButton2() : CalcButton2
->CalcButton2 : typeof CalcButton2, Symbol(CalcButton2, Decl(missingSelf.ts, 4, 1))
+>CalcButton2 : typeof CalcButton2
 
 c2.b();
 >c2.b() : void
->c2.b : () => void, Symbol(CalcButton2.b, Decl(missingSelf.ts, 7, 1))
->c2 : CalcButton2, Symbol(c2, Decl(missingSelf.ts, 14, 3))
->b : () => void, Symbol(CalcButton2.b, Decl(missingSelf.ts, 7, 1))
+>c2.b : () => void
+>c2 : CalcButton2
+>b : () => void
 
 

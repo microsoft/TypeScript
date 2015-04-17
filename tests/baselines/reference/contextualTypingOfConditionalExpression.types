@@ -1,57 +1,57 @@
 === tests/cases/compiler/contextualTypingOfConditionalExpression.ts ===
 var x: (a: number) => void = true ? (a) => a.toExponential() : (b) => b.toFixed();
->x : (a: number) => void, Symbol(x, Decl(contextualTypingOfConditionalExpression.ts, 0, 3))
->a : number, Symbol(a, Decl(contextualTypingOfConditionalExpression.ts, 0, 8))
+>x : (a: number) => void
+>a : number
 >true ? (a) => a.toExponential() : (b) => b.toFixed() : (a: number) => string
 >true : boolean
 >(a) => a.toExponential() : (a: number) => string
->a : number, Symbol(a, Decl(contextualTypingOfConditionalExpression.ts, 0, 37))
+>a : number
 >a.toExponential() : string
->a.toExponential : (fractionDigits?: number) => string, Symbol(Number.toExponential, Decl(lib.d.ts, 469, 45))
->a : number, Symbol(a, Decl(contextualTypingOfConditionalExpression.ts, 0, 37))
->toExponential : (fractionDigits?: number) => string, Symbol(Number.toExponential, Decl(lib.d.ts, 469, 45))
+>a.toExponential : (fractionDigits?: number) => string
+>a : number
+>toExponential : (fractionDigits?: number) => string
 >(b) => b.toFixed() : (b: number) => string
->b : number, Symbol(b, Decl(contextualTypingOfConditionalExpression.ts, 0, 64))
+>b : number
 >b.toFixed() : string
->b.toFixed : (fractionDigits?: number) => string, Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
->b : number, Symbol(b, Decl(contextualTypingOfConditionalExpression.ts, 0, 64))
->toFixed : (fractionDigits?: number) => string, Symbol(Number.toFixed, Decl(lib.d.ts, 463, 37))
+>b.toFixed : (fractionDigits?: number) => string
+>b : number
+>toFixed : (fractionDigits?: number) => string
 
 class A {
->A : A, Symbol(A, Decl(contextualTypingOfConditionalExpression.ts, 0, 82))
+>A : A
 
     foo: number;
->foo : number, Symbol(foo, Decl(contextualTypingOfConditionalExpression.ts, 2, 9))
+>foo : number
 }
 class B extends A {
->B : B, Symbol(B, Decl(contextualTypingOfConditionalExpression.ts, 4, 1))
->A : A, Symbol(A, Decl(contextualTypingOfConditionalExpression.ts, 0, 82))
+>B : B
+>A : A
 
     bar: number;
->bar : number, Symbol(bar, Decl(contextualTypingOfConditionalExpression.ts, 5, 19))
+>bar : number
 }
 class C extends A {
->C : C, Symbol(C, Decl(contextualTypingOfConditionalExpression.ts, 7, 1))
->A : A, Symbol(A, Decl(contextualTypingOfConditionalExpression.ts, 0, 82))
+>C : C
+>A : A
 
     baz: number;
->baz : number, Symbol(baz, Decl(contextualTypingOfConditionalExpression.ts, 8, 19))
+>baz : number
 }
 
 var x2: (a: A) => void = true ? (a) => a.foo : (b) => b.foo;
->x2 : (a: A) => void, Symbol(x2, Decl(contextualTypingOfConditionalExpression.ts, 12, 3))
->a : A, Symbol(a, Decl(contextualTypingOfConditionalExpression.ts, 12, 9))
->A : A, Symbol(A, Decl(contextualTypingOfConditionalExpression.ts, 0, 82))
+>x2 : (a: A) => void
+>a : A
+>A : A
 >true ? (a) => a.foo : (b) => b.foo : (a: A) => number
 >true : boolean
 >(a) => a.foo : (a: A) => number
->a : A, Symbol(a, Decl(contextualTypingOfConditionalExpression.ts, 12, 33))
->a.foo : number, Symbol(A.foo, Decl(contextualTypingOfConditionalExpression.ts, 2, 9))
->a : A, Symbol(a, Decl(contextualTypingOfConditionalExpression.ts, 12, 33))
->foo : number, Symbol(A.foo, Decl(contextualTypingOfConditionalExpression.ts, 2, 9))
+>a : A
+>a.foo : number
+>a : A
+>foo : number
 >(b) => b.foo : (b: A) => number
->b : A, Symbol(b, Decl(contextualTypingOfConditionalExpression.ts, 12, 48))
->b.foo : number, Symbol(A.foo, Decl(contextualTypingOfConditionalExpression.ts, 2, 9))
->b : A, Symbol(b, Decl(contextualTypingOfConditionalExpression.ts, 12, 48))
->foo : number, Symbol(A.foo, Decl(contextualTypingOfConditionalExpression.ts, 2, 9))
+>b : A
+>b.foo : number
+>b : A
+>foo : number
 

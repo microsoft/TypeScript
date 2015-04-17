@@ -211,8 +211,10 @@ module ts {
             isCatchClauseVariableDeclaration(declaration);
     }
 
+    // Gets the nearest enclosing block scope container that has the provided node 
+    // as a descendant, that is not the provided node.
     export function getEnclosingBlockScopeContainer(node: Node): Node {
-        let current = node;
+        let current = node.parent;
         while (current) {
             if (isFunctionLike(current)) {
                 return current;
@@ -1165,6 +1167,13 @@ module ts {
         return node;
     }
 
+    export function createSynthesizedNodeArray(): NodeArray<any> {
+        var array = <NodeArray<any>>[];
+        array.pos = -1;
+        array.end = -1;
+        return array;
+    }
+
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
         let fileDiagnostics: Map<Diagnostic[]> = {};
@@ -1610,6 +1619,55 @@ module ts {
 
             return currentLineIndent;
         }
+    }
+
+    export function modifierToFlag(token: SyntaxKind): NodeFlags {
+        switch (token) {
+            case SyntaxKind.StaticKeyword: return NodeFlags.Static;
+            case SyntaxKind.PublicKeyword: return NodeFlags.Public;
+            case SyntaxKind.ProtectedKeyword: return NodeFlags.Protected;
+            case SyntaxKind.PrivateKeyword: return NodeFlags.Private;
+            case SyntaxKind.ExportKeyword: return NodeFlags.Export;
+            case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
+            case SyntaxKind.ConstKeyword: return NodeFlags.Const;
+            case SyntaxKind.DefaultKeyword: return NodeFlags.Default;
+        }
+        return 0;
+    }
+
+    export function isLeftHandSideExpression(expr: Expression): boolean {
+        if (expr) {
+            switch (expr.kind) {
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.Identifier:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateExpression:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.SuperKeyword:
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    export function isAssignmentOperator(token: SyntaxKind): boolean {
+        return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
     }
 
     // Returns false if this heritage clause element's expression contains something unsupported

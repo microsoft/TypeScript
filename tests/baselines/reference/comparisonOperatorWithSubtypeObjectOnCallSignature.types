@@ -1,1236 +1,1236 @@
 === tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithSubtypeObjectOnCallSignature.ts ===
 class Base {
->Base : Base, Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 0, 0))
+>Base : Base
 
     public a: string;
->a : string, Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 0, 12))
+>a : string
 }
 
 class Derived extends Base {
->Derived : Derived, Symbol(Derived, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 2, 1))
->Base : Base, Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 0, 0))
+>Derived : Derived
+>Base : Base
 
     public b: string;
->b : string, Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 4, 28))
+>b : string
 }
 
 var a1: { fn(): void };
->a1 : { fn(): void; }, Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 8, 3))
->fn : () => void, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 8, 9))
+>a1 : { fn(): void; }
+>fn : () => void
 
 var b1: { fn(): void };
->b1 : { fn(): void; }, Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 9, 3))
->fn : () => void, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 9, 9))
+>b1 : { fn(): void; }
+>fn : () => void
 
 var a2: { fn(a: number, b: string): void };
->a2 : { fn(a: number, b: string): void; }, Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 3))
->fn : (a: number, b: string) => void, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 9))
->a : number, Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 13))
->b : string, Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 23))
+>a2 : { fn(a: number, b: string): void; }
+>fn : (a: number, b: string) => void
+>a : number
+>b : string
 
 var b2: { fn(a: number, b: string): void };
->b2 : { fn(a: number, b: string): void; }, Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 3))
->fn : (a: number, b: string) => void, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 9))
->a : number, Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 13))
->b : string, Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 23))
+>b2 : { fn(a: number, b: string): void; }
+>fn : (a: number, b: string) => void
+>a : number
+>b : string
 
 var a3: { fn(a: number, b: string): void };
->a3 : { fn(a: number, b: string): void; }, Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 3))
->fn : (a: number, b: string) => void, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 9))
->a : number, Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 13))
->b : string, Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 23))
+>a3 : { fn(a: number, b: string): void; }
+>fn : (a: number, b: string) => void
+>a : number
+>b : string
 
 var b3: { fn(a: number): void };
->b3 : { fn(a: number): void; }, Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 15, 3))
->fn : (a: number) => void, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 15, 9))
->a : number, Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 15, 13))
+>b3 : { fn(a: number): void; }
+>fn : (a: number) => void
+>a : number
 
 var a4: { fn(a: number, b: string): void };
->a4 : { fn(a: number, b: string): void; }, Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 3))
->fn : (a: number, b: string) => void, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 9))
->a : number, Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 13))
->b : string, Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 23))
+>a4 : { fn(a: number, b: string): void; }
+>fn : (a: number, b: string) => void
+>a : number
+>b : string
 
 var b4: { fn(): void };
->b4 : { fn(): void; }, Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 18, 3))
->fn : () => void, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 18, 9))
+>b4 : { fn(): void; }
+>fn : () => void
 
 var a5: { fn(a: Base): void };
->a5 : { fn(a: Base): void; }, Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 20, 3))
->fn : (a: Base) => void, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 20, 9))
->a : Base, Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 20, 13))
->Base : Base, Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 0, 0))
+>a5 : { fn(a: Base): void; }
+>fn : (a: Base) => void
+>a : Base
+>Base : Base
 
 var b5: { fn(a: Derived): void };
->b5 : { fn(a: Derived): void; }, Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 21, 3))
->fn : (a: Derived) => void, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 21, 9))
->a : Derived, Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 21, 13))
->Derived : Derived, Symbol(Derived, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 2, 1))
+>b5 : { fn(a: Derived): void; }
+>fn : (a: Derived) => void
+>a : Derived
+>Derived : Derived
 
 var a6: { fn(a: Derived, b: Base): void };
->a6 : { fn(a: Derived, b: Base): void; }, Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 3))
->fn : (a: Derived, b: Base) => void, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 9))
->a : Derived, Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 13))
->Derived : Derived, Symbol(Derived, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 2, 1))
->b : Base, Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 24))
->Base : Base, Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 0, 0))
+>a6 : { fn(a: Derived, b: Base): void; }
+>fn : (a: Derived, b: Base) => void
+>a : Derived
+>Derived : Derived
+>b : Base
+>Base : Base
 
 var b6: { fn(a: Base, b: Derived): void };
->b6 : { fn(a: Base, b: Derived): void; }, Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 3))
->fn : (a: Base, b: Derived) => void, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 9))
->a : Base, Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 13))
->Base : Base, Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 0, 0))
->b : Derived, Symbol(b, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 21))
->Derived : Derived, Symbol(Derived, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 2, 1))
+>b6 : { fn(a: Base, b: Derived): void; }
+>fn : (a: Base, b: Derived) => void
+>a : Base
+>Base : Base
+>b : Derived
+>Derived : Derived
 
 var a7: { fn(): void };
->a7 : { fn(): void; }, Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 26, 3))
->fn : () => void, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 26, 9))
+>a7 : { fn(): void; }
+>fn : () => void
 
 var b7: { fn(): Base };
->b7 : { fn(): Base; }, Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 27, 3))
->fn : () => Base, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 27, 9))
->Base : Base, Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 0, 0))
+>b7 : { fn(): Base; }
+>fn : () => Base
+>Base : Base
 
 var a8: { fn(): Base };
->a8 : { fn(): Base; }, Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 29, 3))
->fn : () => Base, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 29, 9))
->Base : Base, Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 0, 0))
+>a8 : { fn(): Base; }
+>fn : () => Base
+>Base : Base
 
 var b8: { fn(): Base };
->b8 : { fn(): Base; }, Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 30, 3))
->fn : () => Base, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 30, 9))
->Base : Base, Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 0, 0))
+>b8 : { fn(): Base; }
+>fn : () => Base
+>Base : Base
 
 var a9: { fn(): Base };
->a9 : { fn(): Base; }, Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 32, 3))
->fn : () => Base, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 32, 9))
->Base : Base, Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 0, 0))
+>a9 : { fn(): Base; }
+>fn : () => Base
+>Base : Base
 
 var b9: { fn(): Derived };
->b9 : { fn(): Derived; }, Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 33, 3))
->fn : () => Derived, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 33, 9))
->Derived : Derived, Symbol(Derived, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 2, 1))
+>b9 : { fn(): Derived; }
+>fn : () => Derived
+>Derived : Derived
 
 var a10: { fn(a?: Base): void };
->a10 : { fn(a?: Base): void; }, Symbol(a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 35, 3))
->fn : (a?: Base) => void, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 35, 10))
->a : Base, Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 35, 14))
->Base : Base, Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 0, 0))
+>a10 : { fn(a?: Base): void; }
+>fn : (a?: Base) => void
+>a : Base
+>Base : Base
 
 var b10: { fn(a?: Derived): void };
->b10 : { fn(a?: Derived): void; }, Symbol(b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 36, 3))
->fn : (a?: Derived) => void, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 36, 10))
->a : Derived, Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 36, 14))
->Derived : Derived, Symbol(Derived, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 2, 1))
+>b10 : { fn(a?: Derived): void; }
+>fn : (a?: Derived) => void
+>a : Derived
+>Derived : Derived
 
 var a11: { fn(...a: Base[]): void };
->a11 : { fn(...a: Base[]): void; }, Symbol(a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 38, 3))
->fn : (...a: Base[]) => void, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 38, 10))
->a : Base[], Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 38, 14))
->Base : Base, Symbol(Base, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 0, 0))
+>a11 : { fn(...a: Base[]): void; }
+>fn : (...a: Base[]) => void
+>a : Base[]
+>Base : Base
 
 var b11: { fn(...a: Derived[]): void };
->b11 : { fn(...a: Derived[]): void; }, Symbol(b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 39, 3))
->fn : (...a: Derived[]) => void, Symbol(fn, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 39, 10))
->a : Derived[], Symbol(a, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 39, 14))
->Derived : Derived, Symbol(Derived, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 2, 1))
+>b11 : { fn(...a: Derived[]): void; }
+>fn : (...a: Derived[]) => void
+>a : Derived[]
+>Derived : Derived
 
 //var a12: { fn<T, U extends T>(t: T, u: U): T[] };
 //var b12: { fn<A, B extends A>(a: A, b: B): A[] };
 
 // operator <
 var r1a1 = a1 < b1;
->r1a1 : boolean, Symbol(r1a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 45, 3))
+>r1a1 : boolean
 >a1 < b1 : boolean
->a1 : { fn(): void; }, Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 8, 3))
->b1 : { fn(): void; }, Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 9, 3))
+>a1 : { fn(): void; }
+>b1 : { fn(): void; }
 
 var r1a2 = a2 < b2;
->r1a2 : boolean, Symbol(r1a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 46, 3))
+>r1a2 : boolean
 >a2 < b2 : boolean
->a2 : { fn(a: number, b: string): void; }, Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 3))
->b2 : { fn(a: number, b: string): void; }, Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 3))
+>a2 : { fn(a: number, b: string): void; }
+>b2 : { fn(a: number, b: string): void; }
 
 var r1a3 = a3 < b3;
->r1a3 : boolean, Symbol(r1a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 47, 3))
+>r1a3 : boolean
 >a3 < b3 : boolean
->a3 : { fn(a: number, b: string): void; }, Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 3))
->b3 : { fn(a: number): void; }, Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 15, 3))
+>a3 : { fn(a: number, b: string): void; }
+>b3 : { fn(a: number): void; }
 
 var r1a4 = a4 < b4;
->r1a4 : boolean, Symbol(r1a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 48, 3))
+>r1a4 : boolean
 >a4 < b4 : boolean
->a4 : { fn(a: number, b: string): void; }, Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 3))
->b4 : { fn(): void; }, Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 18, 3))
+>a4 : { fn(a: number, b: string): void; }
+>b4 : { fn(): void; }
 
 var r1a5 = a5 < b5;
->r1a5 : boolean, Symbol(r1a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 49, 3))
+>r1a5 : boolean
 >a5 < b5 : boolean
->a5 : { fn(a: Base): void; }, Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 20, 3))
->b5 : { fn(a: Derived): void; }, Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 21, 3))
+>a5 : { fn(a: Base): void; }
+>b5 : { fn(a: Derived): void; }
 
 var r1a6 = a6 < b6;
->r1a6 : boolean, Symbol(r1a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 50, 3))
+>r1a6 : boolean
 >a6 < b6 : boolean
->a6 : { fn(a: Derived, b: Base): void; }, Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 3))
->b6 : { fn(a: Base, b: Derived): void; }, Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 3))
+>a6 : { fn(a: Derived, b: Base): void; }
+>b6 : { fn(a: Base, b: Derived): void; }
 
 var r1a7 = a7 < b7;
->r1a7 : boolean, Symbol(r1a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 51, 3))
+>r1a7 : boolean
 >a7 < b7 : boolean
->a7 : { fn(): void; }, Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 26, 3))
->b7 : { fn(): Base; }, Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 27, 3))
+>a7 : { fn(): void; }
+>b7 : { fn(): Base; }
 
 var r1a8 = a8 < b8;
->r1a8 : boolean, Symbol(r1a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 52, 3))
+>r1a8 : boolean
 >a8 < b8 : boolean
->a8 : { fn(): Base; }, Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 29, 3))
->b8 : { fn(): Base; }, Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 30, 3))
+>a8 : { fn(): Base; }
+>b8 : { fn(): Base; }
 
 var r1a9 = a9 < b9;
->r1a9 : boolean, Symbol(r1a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 53, 3))
+>r1a9 : boolean
 >a9 < b9 : boolean
->a9 : { fn(): Base; }, Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 32, 3))
->b9 : { fn(): Derived; }, Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 33, 3))
+>a9 : { fn(): Base; }
+>b9 : { fn(): Derived; }
 
 var r1a10 = a10 < b10;
->r1a10 : boolean, Symbol(r1a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 54, 3))
+>r1a10 : boolean
 >a10 < b10 : boolean
->a10 : { fn(a?: Base): void; }, Symbol(a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 35, 3))
->b10 : { fn(a?: Derived): void; }, Symbol(b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 36, 3))
+>a10 : { fn(a?: Base): void; }
+>b10 : { fn(a?: Derived): void; }
 
 var r1a11 = a11 < b11;
->r1a11 : boolean, Symbol(r1a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 55, 3))
+>r1a11 : boolean
 >a11 < b11 : boolean
->a11 : { fn(...a: Base[]): void; }, Symbol(a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 38, 3))
->b11 : { fn(...a: Derived[]): void; }, Symbol(b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 39, 3))
+>a11 : { fn(...a: Base[]): void; }
+>b11 : { fn(...a: Derived[]): void; }
 
 //var r1a12 = a12 < b12;
 
 var r1b1 = b1 < a1;
->r1b1 : boolean, Symbol(r1b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 58, 3))
+>r1b1 : boolean
 >b1 < a1 : boolean
->b1 : { fn(): void; }, Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 9, 3))
->a1 : { fn(): void; }, Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 8, 3))
+>b1 : { fn(): void; }
+>a1 : { fn(): void; }
 
 var r1b2 = b2 < a2;
->r1b2 : boolean, Symbol(r1b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 59, 3))
+>r1b2 : boolean
 >b2 < a2 : boolean
->b2 : { fn(a: number, b: string): void; }, Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 3))
->a2 : { fn(a: number, b: string): void; }, Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 3))
+>b2 : { fn(a: number, b: string): void; }
+>a2 : { fn(a: number, b: string): void; }
 
 var r1b3 = b3 < a3;
->r1b3 : boolean, Symbol(r1b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 60, 3))
+>r1b3 : boolean
 >b3 < a3 : boolean
->b3 : { fn(a: number): void; }, Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 15, 3))
->a3 : { fn(a: number, b: string): void; }, Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 3))
+>b3 : { fn(a: number): void; }
+>a3 : { fn(a: number, b: string): void; }
 
 var r1b4 = b4 < a4;
->r1b4 : boolean, Symbol(r1b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 61, 3))
+>r1b4 : boolean
 >b4 < a4 : boolean
->b4 : { fn(): void; }, Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 18, 3))
->a4 : { fn(a: number, b: string): void; }, Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 3))
+>b4 : { fn(): void; }
+>a4 : { fn(a: number, b: string): void; }
 
 var r1b5 = b5 < a5;
->r1b5 : boolean, Symbol(r1b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 62, 3))
+>r1b5 : boolean
 >b5 < a5 : boolean
->b5 : { fn(a: Derived): void; }, Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 21, 3))
->a5 : { fn(a: Base): void; }, Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 20, 3))
+>b5 : { fn(a: Derived): void; }
+>a5 : { fn(a: Base): void; }
 
 var r1b6 = b6 < a6;
->r1b6 : boolean, Symbol(r1b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 63, 3))
+>r1b6 : boolean
 >b6 < a6 : boolean
->b6 : { fn(a: Base, b: Derived): void; }, Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 3))
->a6 : { fn(a: Derived, b: Base): void; }, Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 3))
+>b6 : { fn(a: Base, b: Derived): void; }
+>a6 : { fn(a: Derived, b: Base): void; }
 
 var r1b7 = b7 < a7;
->r1b7 : boolean, Symbol(r1b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 64, 3))
+>r1b7 : boolean
 >b7 < a7 : boolean
->b7 : { fn(): Base; }, Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 27, 3))
->a7 : { fn(): void; }, Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 26, 3))
+>b7 : { fn(): Base; }
+>a7 : { fn(): void; }
 
 var r1b8 = b8 < a8;
->r1b8 : boolean, Symbol(r1b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 65, 3))
+>r1b8 : boolean
 >b8 < a8 : boolean
->b8 : { fn(): Base; }, Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 30, 3))
->a8 : { fn(): Base; }, Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 29, 3))
+>b8 : { fn(): Base; }
+>a8 : { fn(): Base; }
 
 var r1b9 = b9 < a9;
->r1b9 : boolean, Symbol(r1b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 66, 3))
+>r1b9 : boolean
 >b9 < a9 : boolean
->b9 : { fn(): Derived; }, Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 33, 3))
->a9 : { fn(): Base; }, Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 32, 3))
+>b9 : { fn(): Derived; }
+>a9 : { fn(): Base; }
 
 var r1b10 = b10 < a10;
->r1b10 : boolean, Symbol(r1b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 67, 3))
+>r1b10 : boolean
 >b10 < a10 : boolean
->b10 : { fn(a?: Derived): void; }, Symbol(b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 36, 3))
->a10 : { fn(a?: Base): void; }, Symbol(a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 35, 3))
+>b10 : { fn(a?: Derived): void; }
+>a10 : { fn(a?: Base): void; }
 
 var r1b11 = b11 < a11;
->r1b11 : boolean, Symbol(r1b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 68, 3))
+>r1b11 : boolean
 >b11 < a11 : boolean
->b11 : { fn(...a: Derived[]): void; }, Symbol(b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 39, 3))
->a11 : { fn(...a: Base[]): void; }, Symbol(a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 38, 3))
+>b11 : { fn(...a: Derived[]): void; }
+>a11 : { fn(...a: Base[]): void; }
 
 //var r1b12 = b12 < a12;
 
 // operator >
 var r2a1 = a1 > b1;
->r2a1 : boolean, Symbol(r2a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 72, 3))
+>r2a1 : boolean
 >a1 > b1 : boolean
->a1 : { fn(): void; }, Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 8, 3))
->b1 : { fn(): void; }, Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 9, 3))
+>a1 : { fn(): void; }
+>b1 : { fn(): void; }
 
 var r2a2 = a2 > b2;
->r2a2 : boolean, Symbol(r2a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 73, 3))
+>r2a2 : boolean
 >a2 > b2 : boolean
->a2 : { fn(a: number, b: string): void; }, Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 3))
->b2 : { fn(a: number, b: string): void; }, Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 3))
+>a2 : { fn(a: number, b: string): void; }
+>b2 : { fn(a: number, b: string): void; }
 
 var r2a3 = a3 > b3;
->r2a3 : boolean, Symbol(r2a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 74, 3))
+>r2a3 : boolean
 >a3 > b3 : boolean
->a3 : { fn(a: number, b: string): void; }, Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 3))
->b3 : { fn(a: number): void; }, Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 15, 3))
+>a3 : { fn(a: number, b: string): void; }
+>b3 : { fn(a: number): void; }
 
 var r2a4 = a4 > b4;
->r2a4 : boolean, Symbol(r2a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 75, 3))
+>r2a4 : boolean
 >a4 > b4 : boolean
->a4 : { fn(a: number, b: string): void; }, Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 3))
->b4 : { fn(): void; }, Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 18, 3))
+>a4 : { fn(a: number, b: string): void; }
+>b4 : { fn(): void; }
 
 var r2a5 = a5 > b5;
->r2a5 : boolean, Symbol(r2a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 76, 3))
+>r2a5 : boolean
 >a5 > b5 : boolean
->a5 : { fn(a: Base): void; }, Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 20, 3))
->b5 : { fn(a: Derived): void; }, Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 21, 3))
+>a5 : { fn(a: Base): void; }
+>b5 : { fn(a: Derived): void; }
 
 var r2a6 = a6 > b6;
->r2a6 : boolean, Symbol(r2a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 77, 3))
+>r2a6 : boolean
 >a6 > b6 : boolean
->a6 : { fn(a: Derived, b: Base): void; }, Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 3))
->b6 : { fn(a: Base, b: Derived): void; }, Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 3))
+>a6 : { fn(a: Derived, b: Base): void; }
+>b6 : { fn(a: Base, b: Derived): void; }
 
 var r2a7 = a7 > b7;
->r2a7 : boolean, Symbol(r2a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 78, 3))
+>r2a7 : boolean
 >a7 > b7 : boolean
->a7 : { fn(): void; }, Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 26, 3))
->b7 : { fn(): Base; }, Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 27, 3))
+>a7 : { fn(): void; }
+>b7 : { fn(): Base; }
 
 var r2a8 = a8 > b8;
->r2a8 : boolean, Symbol(r2a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 79, 3))
+>r2a8 : boolean
 >a8 > b8 : boolean
->a8 : { fn(): Base; }, Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 29, 3))
->b8 : { fn(): Base; }, Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 30, 3))
+>a8 : { fn(): Base; }
+>b8 : { fn(): Base; }
 
 var r2a9 = a9 > b9;
->r2a9 : boolean, Symbol(r2a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 80, 3))
+>r2a9 : boolean
 >a9 > b9 : boolean
->a9 : { fn(): Base; }, Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 32, 3))
->b9 : { fn(): Derived; }, Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 33, 3))
+>a9 : { fn(): Base; }
+>b9 : { fn(): Derived; }
 
 var r2a10 = a10 > b10;
->r2a10 : boolean, Symbol(r2a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 81, 3))
+>r2a10 : boolean
 >a10 > b10 : boolean
->a10 : { fn(a?: Base): void; }, Symbol(a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 35, 3))
->b10 : { fn(a?: Derived): void; }, Symbol(b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 36, 3))
+>a10 : { fn(a?: Base): void; }
+>b10 : { fn(a?: Derived): void; }
 
 var r2a11 = a11 > b11;
->r2a11 : boolean, Symbol(r2a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 82, 3))
+>r2a11 : boolean
 >a11 > b11 : boolean
->a11 : { fn(...a: Base[]): void; }, Symbol(a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 38, 3))
->b11 : { fn(...a: Derived[]): void; }, Symbol(b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 39, 3))
+>a11 : { fn(...a: Base[]): void; }
+>b11 : { fn(...a: Derived[]): void; }
 
 //var r2a12 = a12 > b12;
 
 var r2b1 = b1 > a1;
->r2b1 : boolean, Symbol(r2b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 85, 3))
+>r2b1 : boolean
 >b1 > a1 : boolean
->b1 : { fn(): void; }, Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 9, 3))
->a1 : { fn(): void; }, Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 8, 3))
+>b1 : { fn(): void; }
+>a1 : { fn(): void; }
 
 var r2b2 = b2 > a2;
->r2b2 : boolean, Symbol(r2b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 86, 3))
+>r2b2 : boolean
 >b2 > a2 : boolean
->b2 : { fn(a: number, b: string): void; }, Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 3))
->a2 : { fn(a: number, b: string): void; }, Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 3))
+>b2 : { fn(a: number, b: string): void; }
+>a2 : { fn(a: number, b: string): void; }
 
 var r2b3 = b3 > a3;
->r2b3 : boolean, Symbol(r2b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 87, 3))
+>r2b3 : boolean
 >b3 > a3 : boolean
->b3 : { fn(a: number): void; }, Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 15, 3))
->a3 : { fn(a: number, b: string): void; }, Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 3))
+>b3 : { fn(a: number): void; }
+>a3 : { fn(a: number, b: string): void; }
 
 var r2b4 = b4 > a4;
->r2b4 : boolean, Symbol(r2b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 88, 3))
+>r2b4 : boolean
 >b4 > a4 : boolean
->b4 : { fn(): void; }, Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 18, 3))
->a4 : { fn(a: number, b: string): void; }, Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 3))
+>b4 : { fn(): void; }
+>a4 : { fn(a: number, b: string): void; }
 
 var r2b5 = b5 > a5;
->r2b5 : boolean, Symbol(r2b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 89, 3))
+>r2b5 : boolean
 >b5 > a5 : boolean
->b5 : { fn(a: Derived): void; }, Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 21, 3))
->a5 : { fn(a: Base): void; }, Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 20, 3))
+>b5 : { fn(a: Derived): void; }
+>a5 : { fn(a: Base): void; }
 
 var r2b6 = b6 > a6;
->r2b6 : boolean, Symbol(r2b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 90, 3))
+>r2b6 : boolean
 >b6 > a6 : boolean
->b6 : { fn(a: Base, b: Derived): void; }, Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 3))
->a6 : { fn(a: Derived, b: Base): void; }, Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 3))
+>b6 : { fn(a: Base, b: Derived): void; }
+>a6 : { fn(a: Derived, b: Base): void; }
 
 var r2b7 = b7 > a7;
->r2b7 : boolean, Symbol(r2b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 91, 3))
+>r2b7 : boolean
 >b7 > a7 : boolean
->b7 : { fn(): Base; }, Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 27, 3))
->a7 : { fn(): void; }, Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 26, 3))
+>b7 : { fn(): Base; }
+>a7 : { fn(): void; }
 
 var r2b8 = b8 > a8;
->r2b8 : boolean, Symbol(r2b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 92, 3))
+>r2b8 : boolean
 >b8 > a8 : boolean
->b8 : { fn(): Base; }, Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 30, 3))
->a8 : { fn(): Base; }, Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 29, 3))
+>b8 : { fn(): Base; }
+>a8 : { fn(): Base; }
 
 var r2b9 = b9 > a9;
->r2b9 : boolean, Symbol(r2b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 93, 3))
+>r2b9 : boolean
 >b9 > a9 : boolean
->b9 : { fn(): Derived; }, Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 33, 3))
->a9 : { fn(): Base; }, Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 32, 3))
+>b9 : { fn(): Derived; }
+>a9 : { fn(): Base; }
 
 var r2b10 = b10 > a10;
->r2b10 : boolean, Symbol(r2b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 94, 3))
+>r2b10 : boolean
 >b10 > a10 : boolean
->b10 : { fn(a?: Derived): void; }, Symbol(b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 36, 3))
->a10 : { fn(a?: Base): void; }, Symbol(a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 35, 3))
+>b10 : { fn(a?: Derived): void; }
+>a10 : { fn(a?: Base): void; }
 
 var r2b11 = b11 > a11;
->r2b11 : boolean, Symbol(r2b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 95, 3))
+>r2b11 : boolean
 >b11 > a11 : boolean
->b11 : { fn(...a: Derived[]): void; }, Symbol(b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 39, 3))
->a11 : { fn(...a: Base[]): void; }, Symbol(a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 38, 3))
+>b11 : { fn(...a: Derived[]): void; }
+>a11 : { fn(...a: Base[]): void; }
 
 //var r2b12 = b12 > a12;
 
 // operator <=
 var r3a1 = a1 <= b1;
->r3a1 : boolean, Symbol(r3a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 99, 3))
+>r3a1 : boolean
 >a1 <= b1 : boolean
->a1 : { fn(): void; }, Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 8, 3))
->b1 : { fn(): void; }, Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 9, 3))
+>a1 : { fn(): void; }
+>b1 : { fn(): void; }
 
 var r3a2 = a2 <= b2;
->r3a2 : boolean, Symbol(r3a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 100, 3))
+>r3a2 : boolean
 >a2 <= b2 : boolean
->a2 : { fn(a: number, b: string): void; }, Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 3))
->b2 : { fn(a: number, b: string): void; }, Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 3))
+>a2 : { fn(a: number, b: string): void; }
+>b2 : { fn(a: number, b: string): void; }
 
 var r3a3 = a3 <= b3;
->r3a3 : boolean, Symbol(r3a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 101, 3))
+>r3a3 : boolean
 >a3 <= b3 : boolean
->a3 : { fn(a: number, b: string): void; }, Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 3))
->b3 : { fn(a: number): void; }, Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 15, 3))
+>a3 : { fn(a: number, b: string): void; }
+>b3 : { fn(a: number): void; }
 
 var r3a4 = a4 <= b4;
->r3a4 : boolean, Symbol(r3a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 102, 3))
+>r3a4 : boolean
 >a4 <= b4 : boolean
->a4 : { fn(a: number, b: string): void; }, Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 3))
->b4 : { fn(): void; }, Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 18, 3))
+>a4 : { fn(a: number, b: string): void; }
+>b4 : { fn(): void; }
 
 var r3a5 = a5 <= b5;
->r3a5 : boolean, Symbol(r3a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 103, 3))
+>r3a5 : boolean
 >a5 <= b5 : boolean
->a5 : { fn(a: Base): void; }, Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 20, 3))
->b5 : { fn(a: Derived): void; }, Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 21, 3))
+>a5 : { fn(a: Base): void; }
+>b5 : { fn(a: Derived): void; }
 
 var r3a6 = a6 <= b6;
->r3a6 : boolean, Symbol(r3a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 104, 3))
+>r3a6 : boolean
 >a6 <= b6 : boolean
->a6 : { fn(a: Derived, b: Base): void; }, Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 3))
->b6 : { fn(a: Base, b: Derived): void; }, Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 3))
+>a6 : { fn(a: Derived, b: Base): void; }
+>b6 : { fn(a: Base, b: Derived): void; }
 
 var r3a7 = a7 <= b7;
->r3a7 : boolean, Symbol(r3a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 105, 3))
+>r3a7 : boolean
 >a7 <= b7 : boolean
->a7 : { fn(): void; }, Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 26, 3))
->b7 : { fn(): Base; }, Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 27, 3))
+>a7 : { fn(): void; }
+>b7 : { fn(): Base; }
 
 var r3a8 = a8 <= b8;
->r3a8 : boolean, Symbol(r3a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 106, 3))
+>r3a8 : boolean
 >a8 <= b8 : boolean
->a8 : { fn(): Base; }, Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 29, 3))
->b8 : { fn(): Base; }, Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 30, 3))
+>a8 : { fn(): Base; }
+>b8 : { fn(): Base; }
 
 var r3a9 = a9 <= b9;
->r3a9 : boolean, Symbol(r3a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 107, 3))
+>r3a9 : boolean
 >a9 <= b9 : boolean
->a9 : { fn(): Base; }, Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 32, 3))
->b9 : { fn(): Derived; }, Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 33, 3))
+>a9 : { fn(): Base; }
+>b9 : { fn(): Derived; }
 
 var r3a10 = a10 <= b10;
->r3a10 : boolean, Symbol(r3a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 108, 3))
+>r3a10 : boolean
 >a10 <= b10 : boolean
->a10 : { fn(a?: Base): void; }, Symbol(a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 35, 3))
->b10 : { fn(a?: Derived): void; }, Symbol(b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 36, 3))
+>a10 : { fn(a?: Base): void; }
+>b10 : { fn(a?: Derived): void; }
 
 var r3a11 = a11 <= b11;
->r3a11 : boolean, Symbol(r3a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 109, 3))
+>r3a11 : boolean
 >a11 <= b11 : boolean
->a11 : { fn(...a: Base[]): void; }, Symbol(a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 38, 3))
->b11 : { fn(...a: Derived[]): void; }, Symbol(b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 39, 3))
+>a11 : { fn(...a: Base[]): void; }
+>b11 : { fn(...a: Derived[]): void; }
 
 //var r3a12 = a12 <= b12;
 
 var r3b1 = b1 <= a1;
->r3b1 : boolean, Symbol(r3b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 112, 3))
+>r3b1 : boolean
 >b1 <= a1 : boolean
->b1 : { fn(): void; }, Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 9, 3))
->a1 : { fn(): void; }, Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 8, 3))
+>b1 : { fn(): void; }
+>a1 : { fn(): void; }
 
 var r3b2 = b2 <= a2;
->r3b2 : boolean, Symbol(r3b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 113, 3))
+>r3b2 : boolean
 >b2 <= a2 : boolean
->b2 : { fn(a: number, b: string): void; }, Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 3))
->a2 : { fn(a: number, b: string): void; }, Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 3))
+>b2 : { fn(a: number, b: string): void; }
+>a2 : { fn(a: number, b: string): void; }
 
 var r3b3 = b3 <= a3;
->r3b3 : boolean, Symbol(r3b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 114, 3))
+>r3b3 : boolean
 >b3 <= a3 : boolean
->b3 : { fn(a: number): void; }, Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 15, 3))
->a3 : { fn(a: number, b: string): void; }, Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 3))
+>b3 : { fn(a: number): void; }
+>a3 : { fn(a: number, b: string): void; }
 
 var r3b4 = b4 <= a4;
->r3b4 : boolean, Symbol(r3b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 115, 3))
+>r3b4 : boolean
 >b4 <= a4 : boolean
->b4 : { fn(): void; }, Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 18, 3))
->a4 : { fn(a: number, b: string): void; }, Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 3))
+>b4 : { fn(): void; }
+>a4 : { fn(a: number, b: string): void; }
 
 var r3b5 = b5 <= a5;
->r3b5 : boolean, Symbol(r3b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 116, 3))
+>r3b5 : boolean
 >b5 <= a5 : boolean
->b5 : { fn(a: Derived): void; }, Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 21, 3))
->a5 : { fn(a: Base): void; }, Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 20, 3))
+>b5 : { fn(a: Derived): void; }
+>a5 : { fn(a: Base): void; }
 
 var r3b6 = b6 <= a6;
->r3b6 : boolean, Symbol(r3b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 117, 3))
+>r3b6 : boolean
 >b6 <= a6 : boolean
->b6 : { fn(a: Base, b: Derived): void; }, Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 3))
->a6 : { fn(a: Derived, b: Base): void; }, Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 3))
+>b6 : { fn(a: Base, b: Derived): void; }
+>a6 : { fn(a: Derived, b: Base): void; }
 
 var r3b7 = b7 <= a7;
->r3b7 : boolean, Symbol(r3b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 118, 3))
+>r3b7 : boolean
 >b7 <= a7 : boolean
->b7 : { fn(): Base; }, Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 27, 3))
->a7 : { fn(): void; }, Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 26, 3))
+>b7 : { fn(): Base; }
+>a7 : { fn(): void; }
 
 var r3b8 = b8 <= a8;
->r3b8 : boolean, Symbol(r3b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 119, 3))
+>r3b8 : boolean
 >b8 <= a8 : boolean
->b8 : { fn(): Base; }, Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 30, 3))
->a8 : { fn(): Base; }, Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 29, 3))
+>b8 : { fn(): Base; }
+>a8 : { fn(): Base; }
 
 var r3b9 = b9 <= a9;
->r3b9 : boolean, Symbol(r3b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 120, 3))
+>r3b9 : boolean
 >b9 <= a9 : boolean
->b9 : { fn(): Derived; }, Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 33, 3))
->a9 : { fn(): Base; }, Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 32, 3))
+>b9 : { fn(): Derived; }
+>a9 : { fn(): Base; }
 
 var r3b10 = b10 <= a10;
->r3b10 : boolean, Symbol(r3b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 121, 3))
+>r3b10 : boolean
 >b10 <= a10 : boolean
->b10 : { fn(a?: Derived): void; }, Symbol(b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 36, 3))
->a10 : { fn(a?: Base): void; }, Symbol(a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 35, 3))
+>b10 : { fn(a?: Derived): void; }
+>a10 : { fn(a?: Base): void; }
 
 var r3b11 = b11 <= a11;
->r3b11 : boolean, Symbol(r3b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 122, 3))
+>r3b11 : boolean
 >b11 <= a11 : boolean
->b11 : { fn(...a: Derived[]): void; }, Symbol(b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 39, 3))
->a11 : { fn(...a: Base[]): void; }, Symbol(a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 38, 3))
+>b11 : { fn(...a: Derived[]): void; }
+>a11 : { fn(...a: Base[]): void; }
 
 //var r3b12 = b12 <= a12;
 
 // operator >=
 var r4a1 = a1 >= b1;
->r4a1 : boolean, Symbol(r4a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 126, 3))
+>r4a1 : boolean
 >a1 >= b1 : boolean
->a1 : { fn(): void; }, Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 8, 3))
->b1 : { fn(): void; }, Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 9, 3))
+>a1 : { fn(): void; }
+>b1 : { fn(): void; }
 
 var r4a2 = a2 >= b2;
->r4a2 : boolean, Symbol(r4a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 127, 3))
+>r4a2 : boolean
 >a2 >= b2 : boolean
->a2 : { fn(a: number, b: string): void; }, Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 3))
->b2 : { fn(a: number, b: string): void; }, Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 3))
+>a2 : { fn(a: number, b: string): void; }
+>b2 : { fn(a: number, b: string): void; }
 
 var r4a3 = a3 >= b3;
->r4a3 : boolean, Symbol(r4a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 128, 3))
+>r4a3 : boolean
 >a3 >= b3 : boolean
->a3 : { fn(a: number, b: string): void; }, Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 3))
->b3 : { fn(a: number): void; }, Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 15, 3))
+>a3 : { fn(a: number, b: string): void; }
+>b3 : { fn(a: number): void; }
 
 var r4a4 = a4 >= b4;
->r4a4 : boolean, Symbol(r4a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 129, 3))
+>r4a4 : boolean
 >a4 >= b4 : boolean
->a4 : { fn(a: number, b: string): void; }, Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 3))
->b4 : { fn(): void; }, Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 18, 3))
+>a4 : { fn(a: number, b: string): void; }
+>b4 : { fn(): void; }
 
 var r4a5 = a5 >= b5;
->r4a5 : boolean, Symbol(r4a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 130, 3))
+>r4a5 : boolean
 >a5 >= b5 : boolean
->a5 : { fn(a: Base): void; }, Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 20, 3))
->b5 : { fn(a: Derived): void; }, Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 21, 3))
+>a5 : { fn(a: Base): void; }
+>b5 : { fn(a: Derived): void; }
 
 var r4a6 = a6 >= b6;
->r4a6 : boolean, Symbol(r4a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 131, 3))
+>r4a6 : boolean
 >a6 >= b6 : boolean
->a6 : { fn(a: Derived, b: Base): void; }, Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 3))
->b6 : { fn(a: Base, b: Derived): void; }, Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 3))
+>a6 : { fn(a: Derived, b: Base): void; }
+>b6 : { fn(a: Base, b: Derived): void; }
 
 var r4a7 = a7 >= b7;
->r4a7 : boolean, Symbol(r4a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 132, 3))
+>r4a7 : boolean
 >a7 >= b7 : boolean
->a7 : { fn(): void; }, Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 26, 3))
->b7 : { fn(): Base; }, Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 27, 3))
+>a7 : { fn(): void; }
+>b7 : { fn(): Base; }
 
 var r4a8 = a8 >= b8;
->r4a8 : boolean, Symbol(r4a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 133, 3))
+>r4a8 : boolean
 >a8 >= b8 : boolean
->a8 : { fn(): Base; }, Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 29, 3))
->b8 : { fn(): Base; }, Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 30, 3))
+>a8 : { fn(): Base; }
+>b8 : { fn(): Base; }
 
 var r4a9 = a9 >= b9;
->r4a9 : boolean, Symbol(r4a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 134, 3))
+>r4a9 : boolean
 >a9 >= b9 : boolean
->a9 : { fn(): Base; }, Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 32, 3))
->b9 : { fn(): Derived; }, Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 33, 3))
+>a9 : { fn(): Base; }
+>b9 : { fn(): Derived; }
 
 var r4a10 = a10 >= b10;
->r4a10 : boolean, Symbol(r4a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 135, 3))
+>r4a10 : boolean
 >a10 >= b10 : boolean
->a10 : { fn(a?: Base): void; }, Symbol(a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 35, 3))
->b10 : { fn(a?: Derived): void; }, Symbol(b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 36, 3))
+>a10 : { fn(a?: Base): void; }
+>b10 : { fn(a?: Derived): void; }
 
 var r4a11 = a11 >= b11;
->r4a11 : boolean, Symbol(r4a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 136, 3))
+>r4a11 : boolean
 >a11 >= b11 : boolean
->a11 : { fn(...a: Base[]): void; }, Symbol(a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 38, 3))
->b11 : { fn(...a: Derived[]): void; }, Symbol(b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 39, 3))
+>a11 : { fn(...a: Base[]): void; }
+>b11 : { fn(...a: Derived[]): void; }
 
 //var r4a12 = a12 >= b12;
 
 var r4b1 = b1 >= a1;
->r4b1 : boolean, Symbol(r4b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 139, 3))
+>r4b1 : boolean
 >b1 >= a1 : boolean
->b1 : { fn(): void; }, Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 9, 3))
->a1 : { fn(): void; }, Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 8, 3))
+>b1 : { fn(): void; }
+>a1 : { fn(): void; }
 
 var r4b2 = b2 >= a2;
->r4b2 : boolean, Symbol(r4b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 140, 3))
+>r4b2 : boolean
 >b2 >= a2 : boolean
->b2 : { fn(a: number, b: string): void; }, Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 3))
->a2 : { fn(a: number, b: string): void; }, Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 3))
+>b2 : { fn(a: number, b: string): void; }
+>a2 : { fn(a: number, b: string): void; }
 
 var r4b3 = b3 >= a3;
->r4b3 : boolean, Symbol(r4b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 141, 3))
+>r4b3 : boolean
 >b3 >= a3 : boolean
->b3 : { fn(a: number): void; }, Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 15, 3))
->a3 : { fn(a: number, b: string): void; }, Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 3))
+>b3 : { fn(a: number): void; }
+>a3 : { fn(a: number, b: string): void; }
 
 var r4b4 = b4 >= a4;
->r4b4 : boolean, Symbol(r4b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 142, 3))
+>r4b4 : boolean
 >b4 >= a4 : boolean
->b4 : { fn(): void; }, Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 18, 3))
->a4 : { fn(a: number, b: string): void; }, Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 3))
+>b4 : { fn(): void; }
+>a4 : { fn(a: number, b: string): void; }
 
 var r4b5 = b5 >= a5;
->r4b5 : boolean, Symbol(r4b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 143, 3))
+>r4b5 : boolean
 >b5 >= a5 : boolean
->b5 : { fn(a: Derived): void; }, Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 21, 3))
->a5 : { fn(a: Base): void; }, Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 20, 3))
+>b5 : { fn(a: Derived): void; }
+>a5 : { fn(a: Base): void; }
 
 var r4b6 = b6 >= a6;
->r4b6 : boolean, Symbol(r4b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 144, 3))
+>r4b6 : boolean
 >b6 >= a6 : boolean
->b6 : { fn(a: Base, b: Derived): void; }, Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 3))
->a6 : { fn(a: Derived, b: Base): void; }, Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 3))
+>b6 : { fn(a: Base, b: Derived): void; }
+>a6 : { fn(a: Derived, b: Base): void; }
 
 var r4b7 = b7 >= a7;
->r4b7 : boolean, Symbol(r4b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 145, 3))
+>r4b7 : boolean
 >b7 >= a7 : boolean
->b7 : { fn(): Base; }, Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 27, 3))
->a7 : { fn(): void; }, Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 26, 3))
+>b7 : { fn(): Base; }
+>a7 : { fn(): void; }
 
 var r4b8 = b8 >= a8;
->r4b8 : boolean, Symbol(r4b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 146, 3))
+>r4b8 : boolean
 >b8 >= a8 : boolean
->b8 : { fn(): Base; }, Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 30, 3))
->a8 : { fn(): Base; }, Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 29, 3))
+>b8 : { fn(): Base; }
+>a8 : { fn(): Base; }
 
 var r4b9 = b9 >= a9;
->r4b9 : boolean, Symbol(r4b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 147, 3))
+>r4b9 : boolean
 >b9 >= a9 : boolean
->b9 : { fn(): Derived; }, Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 33, 3))
->a9 : { fn(): Base; }, Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 32, 3))
+>b9 : { fn(): Derived; }
+>a9 : { fn(): Base; }
 
 var r4b10 = b10 >= a10;
->r4b10 : boolean, Symbol(r4b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 148, 3))
+>r4b10 : boolean
 >b10 >= a10 : boolean
->b10 : { fn(a?: Derived): void; }, Symbol(b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 36, 3))
->a10 : { fn(a?: Base): void; }, Symbol(a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 35, 3))
+>b10 : { fn(a?: Derived): void; }
+>a10 : { fn(a?: Base): void; }
 
 var r4b11 = b11 >= a11;
->r4b11 : boolean, Symbol(r4b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 149, 3))
+>r4b11 : boolean
 >b11 >= a11 : boolean
->b11 : { fn(...a: Derived[]): void; }, Symbol(b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 39, 3))
->a11 : { fn(...a: Base[]): void; }, Symbol(a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 38, 3))
+>b11 : { fn(...a: Derived[]): void; }
+>a11 : { fn(...a: Base[]): void; }
 
 //var r4b12 = b12 >= a12;
 
 // operator ==
 var r5a1 = a1 == b1;
->r5a1 : boolean, Symbol(r5a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 153, 3))
+>r5a1 : boolean
 >a1 == b1 : boolean
->a1 : { fn(): void; }, Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 8, 3))
->b1 : { fn(): void; }, Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 9, 3))
+>a1 : { fn(): void; }
+>b1 : { fn(): void; }
 
 var r5a2 = a2 == b2;
->r5a2 : boolean, Symbol(r5a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 154, 3))
+>r5a2 : boolean
 >a2 == b2 : boolean
->a2 : { fn(a: number, b: string): void; }, Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 3))
->b2 : { fn(a: number, b: string): void; }, Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 3))
+>a2 : { fn(a: number, b: string): void; }
+>b2 : { fn(a: number, b: string): void; }
 
 var r5a3 = a3 == b3;
->r5a3 : boolean, Symbol(r5a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 155, 3))
+>r5a3 : boolean
 >a3 == b3 : boolean
->a3 : { fn(a: number, b: string): void; }, Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 3))
->b3 : { fn(a: number): void; }, Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 15, 3))
+>a3 : { fn(a: number, b: string): void; }
+>b3 : { fn(a: number): void; }
 
 var r5a4 = a4 == b4;
->r5a4 : boolean, Symbol(r5a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 156, 3))
+>r5a4 : boolean
 >a4 == b4 : boolean
->a4 : { fn(a: number, b: string): void; }, Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 3))
->b4 : { fn(): void; }, Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 18, 3))
+>a4 : { fn(a: number, b: string): void; }
+>b4 : { fn(): void; }
 
 var r5a5 = a5 == b5;
->r5a5 : boolean, Symbol(r5a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 157, 3))
+>r5a5 : boolean
 >a5 == b5 : boolean
->a5 : { fn(a: Base): void; }, Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 20, 3))
->b5 : { fn(a: Derived): void; }, Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 21, 3))
+>a5 : { fn(a: Base): void; }
+>b5 : { fn(a: Derived): void; }
 
 var r5a6 = a6 == b6;
->r5a6 : boolean, Symbol(r5a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 158, 3))
+>r5a6 : boolean
 >a6 == b6 : boolean
->a6 : { fn(a: Derived, b: Base): void; }, Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 3))
->b6 : { fn(a: Base, b: Derived): void; }, Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 3))
+>a6 : { fn(a: Derived, b: Base): void; }
+>b6 : { fn(a: Base, b: Derived): void; }
 
 var r5a7 = a7 == b7;
->r5a7 : boolean, Symbol(r5a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 159, 3))
+>r5a7 : boolean
 >a7 == b7 : boolean
->a7 : { fn(): void; }, Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 26, 3))
->b7 : { fn(): Base; }, Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 27, 3))
+>a7 : { fn(): void; }
+>b7 : { fn(): Base; }
 
 var r5a8 = a8 == b8;
->r5a8 : boolean, Symbol(r5a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 160, 3))
+>r5a8 : boolean
 >a8 == b8 : boolean
->a8 : { fn(): Base; }, Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 29, 3))
->b8 : { fn(): Base; }, Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 30, 3))
+>a8 : { fn(): Base; }
+>b8 : { fn(): Base; }
 
 var r5a9 = a9 == b9;
->r5a9 : boolean, Symbol(r5a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 161, 3))
+>r5a9 : boolean
 >a9 == b9 : boolean
->a9 : { fn(): Base; }, Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 32, 3))
->b9 : { fn(): Derived; }, Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 33, 3))
+>a9 : { fn(): Base; }
+>b9 : { fn(): Derived; }
 
 var r5a10 = a10 == b10;
->r5a10 : boolean, Symbol(r5a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 162, 3))
+>r5a10 : boolean
 >a10 == b10 : boolean
->a10 : { fn(a?: Base): void; }, Symbol(a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 35, 3))
->b10 : { fn(a?: Derived): void; }, Symbol(b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 36, 3))
+>a10 : { fn(a?: Base): void; }
+>b10 : { fn(a?: Derived): void; }
 
 var r5a11 = a11 == b11;
->r5a11 : boolean, Symbol(r5a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 163, 3))
+>r5a11 : boolean
 >a11 == b11 : boolean
->a11 : { fn(...a: Base[]): void; }, Symbol(a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 38, 3))
->b11 : { fn(...a: Derived[]): void; }, Symbol(b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 39, 3))
+>a11 : { fn(...a: Base[]): void; }
+>b11 : { fn(...a: Derived[]): void; }
 
 //var r5a12 = a12 == b12;
 
 var r5b1 = b1 == a1;
->r5b1 : boolean, Symbol(r5b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 166, 3))
+>r5b1 : boolean
 >b1 == a1 : boolean
->b1 : { fn(): void; }, Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 9, 3))
->a1 : { fn(): void; }, Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 8, 3))
+>b1 : { fn(): void; }
+>a1 : { fn(): void; }
 
 var r5b2 = b2 == a2;
->r5b2 : boolean, Symbol(r5b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 167, 3))
+>r5b2 : boolean
 >b2 == a2 : boolean
->b2 : { fn(a: number, b: string): void; }, Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 3))
->a2 : { fn(a: number, b: string): void; }, Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 3))
+>b2 : { fn(a: number, b: string): void; }
+>a2 : { fn(a: number, b: string): void; }
 
 var r5b3 = b3 == a3;
->r5b3 : boolean, Symbol(r5b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 168, 3))
+>r5b3 : boolean
 >b3 == a3 : boolean
->b3 : { fn(a: number): void; }, Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 15, 3))
->a3 : { fn(a: number, b: string): void; }, Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 3))
+>b3 : { fn(a: number): void; }
+>a3 : { fn(a: number, b: string): void; }
 
 var r5b4 = b4 == a4;
->r5b4 : boolean, Symbol(r5b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 169, 3))
+>r5b4 : boolean
 >b4 == a4 : boolean
->b4 : { fn(): void; }, Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 18, 3))
->a4 : { fn(a: number, b: string): void; }, Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 3))
+>b4 : { fn(): void; }
+>a4 : { fn(a: number, b: string): void; }
 
 var r5b5 = b5 == a5;
->r5b5 : boolean, Symbol(r5b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 170, 3))
+>r5b5 : boolean
 >b5 == a5 : boolean
->b5 : { fn(a: Derived): void; }, Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 21, 3))
->a5 : { fn(a: Base): void; }, Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 20, 3))
+>b5 : { fn(a: Derived): void; }
+>a5 : { fn(a: Base): void; }
 
 var r5b6 = b6 == a6;
->r5b6 : boolean, Symbol(r5b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 171, 3))
+>r5b6 : boolean
 >b6 == a6 : boolean
->b6 : { fn(a: Base, b: Derived): void; }, Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 3))
->a6 : { fn(a: Derived, b: Base): void; }, Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 3))
+>b6 : { fn(a: Base, b: Derived): void; }
+>a6 : { fn(a: Derived, b: Base): void; }
 
 var r5b7 = b7 == a7;
->r5b7 : boolean, Symbol(r5b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 172, 3))
+>r5b7 : boolean
 >b7 == a7 : boolean
->b7 : { fn(): Base; }, Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 27, 3))
->a7 : { fn(): void; }, Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 26, 3))
+>b7 : { fn(): Base; }
+>a7 : { fn(): void; }
 
 var r5b8 = b8 == a8;
->r5b8 : boolean, Symbol(r5b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 173, 3))
+>r5b8 : boolean
 >b8 == a8 : boolean
->b8 : { fn(): Base; }, Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 30, 3))
->a8 : { fn(): Base; }, Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 29, 3))
+>b8 : { fn(): Base; }
+>a8 : { fn(): Base; }
 
 var r5b9 = b9 == a9;
->r5b9 : boolean, Symbol(r5b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 174, 3))
+>r5b9 : boolean
 >b9 == a9 : boolean
->b9 : { fn(): Derived; }, Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 33, 3))
->a9 : { fn(): Base; }, Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 32, 3))
+>b9 : { fn(): Derived; }
+>a9 : { fn(): Base; }
 
 var r5b10 = b10 == a10;
->r5b10 : boolean, Symbol(r5b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 175, 3))
+>r5b10 : boolean
 >b10 == a10 : boolean
->b10 : { fn(a?: Derived): void; }, Symbol(b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 36, 3))
->a10 : { fn(a?: Base): void; }, Symbol(a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 35, 3))
+>b10 : { fn(a?: Derived): void; }
+>a10 : { fn(a?: Base): void; }
 
 var r5b11 = b11 == a11;
->r5b11 : boolean, Symbol(r5b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 176, 3))
+>r5b11 : boolean
 >b11 == a11 : boolean
->b11 : { fn(...a: Derived[]): void; }, Symbol(b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 39, 3))
->a11 : { fn(...a: Base[]): void; }, Symbol(a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 38, 3))
+>b11 : { fn(...a: Derived[]): void; }
+>a11 : { fn(...a: Base[]): void; }
 
 //var r5b12 = b12 == a12;
 
 // operator !=
 var r6a1 = a1 != b1;
->r6a1 : boolean, Symbol(r6a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 180, 3))
+>r6a1 : boolean
 >a1 != b1 : boolean
->a1 : { fn(): void; }, Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 8, 3))
->b1 : { fn(): void; }, Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 9, 3))
+>a1 : { fn(): void; }
+>b1 : { fn(): void; }
 
 var r6a2 = a2 != b2;
->r6a2 : boolean, Symbol(r6a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 181, 3))
+>r6a2 : boolean
 >a2 != b2 : boolean
->a2 : { fn(a: number, b: string): void; }, Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 3))
->b2 : { fn(a: number, b: string): void; }, Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 3))
+>a2 : { fn(a: number, b: string): void; }
+>b2 : { fn(a: number, b: string): void; }
 
 var r6a3 = a3 != b3;
->r6a3 : boolean, Symbol(r6a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 182, 3))
+>r6a3 : boolean
 >a3 != b3 : boolean
->a3 : { fn(a: number, b: string): void; }, Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 3))
->b3 : { fn(a: number): void; }, Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 15, 3))
+>a3 : { fn(a: number, b: string): void; }
+>b3 : { fn(a: number): void; }
 
 var r6a4 = a4 != b4;
->r6a4 : boolean, Symbol(r6a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 183, 3))
+>r6a4 : boolean
 >a4 != b4 : boolean
->a4 : { fn(a: number, b: string): void; }, Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 3))
->b4 : { fn(): void; }, Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 18, 3))
+>a4 : { fn(a: number, b: string): void; }
+>b4 : { fn(): void; }
 
 var r6a5 = a5 != b5;
->r6a5 : boolean, Symbol(r6a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 184, 3))
+>r6a5 : boolean
 >a5 != b5 : boolean
->a5 : { fn(a: Base): void; }, Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 20, 3))
->b5 : { fn(a: Derived): void; }, Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 21, 3))
+>a5 : { fn(a: Base): void; }
+>b5 : { fn(a: Derived): void; }
 
 var r6a6 = a6 != b6;
->r6a6 : boolean, Symbol(r6a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 185, 3))
+>r6a6 : boolean
 >a6 != b6 : boolean
->a6 : { fn(a: Derived, b: Base): void; }, Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 3))
->b6 : { fn(a: Base, b: Derived): void; }, Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 3))
+>a6 : { fn(a: Derived, b: Base): void; }
+>b6 : { fn(a: Base, b: Derived): void; }
 
 var r6a7 = a7 != b7;
->r6a7 : boolean, Symbol(r6a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 186, 3))
+>r6a7 : boolean
 >a7 != b7 : boolean
->a7 : { fn(): void; }, Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 26, 3))
->b7 : { fn(): Base; }, Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 27, 3))
+>a7 : { fn(): void; }
+>b7 : { fn(): Base; }
 
 var r6a8 = a8 != b8;
->r6a8 : boolean, Symbol(r6a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 187, 3))
+>r6a8 : boolean
 >a8 != b8 : boolean
->a8 : { fn(): Base; }, Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 29, 3))
->b8 : { fn(): Base; }, Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 30, 3))
+>a8 : { fn(): Base; }
+>b8 : { fn(): Base; }
 
 var r6a9 = a9 != b9;
->r6a9 : boolean, Symbol(r6a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 188, 3))
+>r6a9 : boolean
 >a9 != b9 : boolean
->a9 : { fn(): Base; }, Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 32, 3))
->b9 : { fn(): Derived; }, Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 33, 3))
+>a9 : { fn(): Base; }
+>b9 : { fn(): Derived; }
 
 var r6a10 = a10 != b10;
->r6a10 : boolean, Symbol(r6a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 189, 3))
+>r6a10 : boolean
 >a10 != b10 : boolean
->a10 : { fn(a?: Base): void; }, Symbol(a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 35, 3))
->b10 : { fn(a?: Derived): void; }, Symbol(b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 36, 3))
+>a10 : { fn(a?: Base): void; }
+>b10 : { fn(a?: Derived): void; }
 
 var r6a11 = a11 != b11;
->r6a11 : boolean, Symbol(r6a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 190, 3))
+>r6a11 : boolean
 >a11 != b11 : boolean
->a11 : { fn(...a: Base[]): void; }, Symbol(a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 38, 3))
->b11 : { fn(...a: Derived[]): void; }, Symbol(b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 39, 3))
+>a11 : { fn(...a: Base[]): void; }
+>b11 : { fn(...a: Derived[]): void; }
 
 //var r6a12 = a12 != b12;
 
 var r6b1 = b1 != a1;
->r6b1 : boolean, Symbol(r6b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 193, 3))
+>r6b1 : boolean
 >b1 != a1 : boolean
->b1 : { fn(): void; }, Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 9, 3))
->a1 : { fn(): void; }, Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 8, 3))
+>b1 : { fn(): void; }
+>a1 : { fn(): void; }
 
 var r6b2 = b2 != a2;
->r6b2 : boolean, Symbol(r6b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 194, 3))
+>r6b2 : boolean
 >b2 != a2 : boolean
->b2 : { fn(a: number, b: string): void; }, Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 3))
->a2 : { fn(a: number, b: string): void; }, Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 3))
+>b2 : { fn(a: number, b: string): void; }
+>a2 : { fn(a: number, b: string): void; }
 
 var r6b3 = b3 != a3;
->r6b3 : boolean, Symbol(r6b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 195, 3))
+>r6b3 : boolean
 >b3 != a3 : boolean
->b3 : { fn(a: number): void; }, Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 15, 3))
->a3 : { fn(a: number, b: string): void; }, Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 3))
+>b3 : { fn(a: number): void; }
+>a3 : { fn(a: number, b: string): void; }
 
 var r6b4 = b4 != a4;
->r6b4 : boolean, Symbol(r6b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 196, 3))
+>r6b4 : boolean
 >b4 != a4 : boolean
->b4 : { fn(): void; }, Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 18, 3))
->a4 : { fn(a: number, b: string): void; }, Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 3))
+>b4 : { fn(): void; }
+>a4 : { fn(a: number, b: string): void; }
 
 var r6b5 = b5 != a5;
->r6b5 : boolean, Symbol(r6b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 197, 3))
+>r6b5 : boolean
 >b5 != a5 : boolean
->b5 : { fn(a: Derived): void; }, Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 21, 3))
->a5 : { fn(a: Base): void; }, Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 20, 3))
+>b5 : { fn(a: Derived): void; }
+>a5 : { fn(a: Base): void; }
 
 var r6b6 = b6 != a6;
->r6b6 : boolean, Symbol(r6b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 198, 3))
+>r6b6 : boolean
 >b6 != a6 : boolean
->b6 : { fn(a: Base, b: Derived): void; }, Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 3))
->a6 : { fn(a: Derived, b: Base): void; }, Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 3))
+>b6 : { fn(a: Base, b: Derived): void; }
+>a6 : { fn(a: Derived, b: Base): void; }
 
 var r6b7 = b7 != a7;
->r6b7 : boolean, Symbol(r6b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 199, 3))
+>r6b7 : boolean
 >b7 != a7 : boolean
->b7 : { fn(): Base; }, Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 27, 3))
->a7 : { fn(): void; }, Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 26, 3))
+>b7 : { fn(): Base; }
+>a7 : { fn(): void; }
 
 var r6b8 = b8 != a8;
->r6b8 : boolean, Symbol(r6b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 200, 3))
+>r6b8 : boolean
 >b8 != a8 : boolean
->b8 : { fn(): Base; }, Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 30, 3))
->a8 : { fn(): Base; }, Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 29, 3))
+>b8 : { fn(): Base; }
+>a8 : { fn(): Base; }
 
 var r6b9 = b9 != a9;
->r6b9 : boolean, Symbol(r6b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 201, 3))
+>r6b9 : boolean
 >b9 != a9 : boolean
->b9 : { fn(): Derived; }, Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 33, 3))
->a9 : { fn(): Base; }, Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 32, 3))
+>b9 : { fn(): Derived; }
+>a9 : { fn(): Base; }
 
 var r6b10 = b10 != a10;
->r6b10 : boolean, Symbol(r6b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 202, 3))
+>r6b10 : boolean
 >b10 != a10 : boolean
->b10 : { fn(a?: Derived): void; }, Symbol(b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 36, 3))
->a10 : { fn(a?: Base): void; }, Symbol(a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 35, 3))
+>b10 : { fn(a?: Derived): void; }
+>a10 : { fn(a?: Base): void; }
 
 var r6b11 = b11 != a11;
->r6b11 : boolean, Symbol(r6b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 203, 3))
+>r6b11 : boolean
 >b11 != a11 : boolean
->b11 : { fn(...a: Derived[]): void; }, Symbol(b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 39, 3))
->a11 : { fn(...a: Base[]): void; }, Symbol(a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 38, 3))
+>b11 : { fn(...a: Derived[]): void; }
+>a11 : { fn(...a: Base[]): void; }
 
 //var r6b12 = b12 != a12;
 
 // operator ===
 var r7a1 = a1 === b1;
->r7a1 : boolean, Symbol(r7a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 207, 3))
+>r7a1 : boolean
 >a1 === b1 : boolean
->a1 : { fn(): void; }, Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 8, 3))
->b1 : { fn(): void; }, Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 9, 3))
+>a1 : { fn(): void; }
+>b1 : { fn(): void; }
 
 var r7a2 = a2 === b2;
->r7a2 : boolean, Symbol(r7a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 208, 3))
+>r7a2 : boolean
 >a2 === b2 : boolean
->a2 : { fn(a: number, b: string): void; }, Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 3))
->b2 : { fn(a: number, b: string): void; }, Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 3))
+>a2 : { fn(a: number, b: string): void; }
+>b2 : { fn(a: number, b: string): void; }
 
 var r7a3 = a3 === b3;
->r7a3 : boolean, Symbol(r7a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 209, 3))
+>r7a3 : boolean
 >a3 === b3 : boolean
->a3 : { fn(a: number, b: string): void; }, Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 3))
->b3 : { fn(a: number): void; }, Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 15, 3))
+>a3 : { fn(a: number, b: string): void; }
+>b3 : { fn(a: number): void; }
 
 var r7a4 = a4 === b4;
->r7a4 : boolean, Symbol(r7a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 210, 3))
+>r7a4 : boolean
 >a4 === b4 : boolean
->a4 : { fn(a: number, b: string): void; }, Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 3))
->b4 : { fn(): void; }, Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 18, 3))
+>a4 : { fn(a: number, b: string): void; }
+>b4 : { fn(): void; }
 
 var r7a5 = a5 === b5;
->r7a5 : boolean, Symbol(r7a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 211, 3))
+>r7a5 : boolean
 >a5 === b5 : boolean
->a5 : { fn(a: Base): void; }, Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 20, 3))
->b5 : { fn(a: Derived): void; }, Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 21, 3))
+>a5 : { fn(a: Base): void; }
+>b5 : { fn(a: Derived): void; }
 
 var r7a6 = a6 === b6;
->r7a6 : boolean, Symbol(r7a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 212, 3))
+>r7a6 : boolean
 >a6 === b6 : boolean
->a6 : { fn(a: Derived, b: Base): void; }, Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 3))
->b6 : { fn(a: Base, b: Derived): void; }, Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 3))
+>a6 : { fn(a: Derived, b: Base): void; }
+>b6 : { fn(a: Base, b: Derived): void; }
 
 var r7a7 = a7 === b7;
->r7a7 : boolean, Symbol(r7a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 213, 3))
+>r7a7 : boolean
 >a7 === b7 : boolean
->a7 : { fn(): void; }, Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 26, 3))
->b7 : { fn(): Base; }, Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 27, 3))
+>a7 : { fn(): void; }
+>b7 : { fn(): Base; }
 
 var r7a8 = a8 === b8;
->r7a8 : boolean, Symbol(r7a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 214, 3))
+>r7a8 : boolean
 >a8 === b8 : boolean
->a8 : { fn(): Base; }, Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 29, 3))
->b8 : { fn(): Base; }, Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 30, 3))
+>a8 : { fn(): Base; }
+>b8 : { fn(): Base; }
 
 var r7a9 = a9 === b9;
->r7a9 : boolean, Symbol(r7a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 215, 3))
+>r7a9 : boolean
 >a9 === b9 : boolean
->a9 : { fn(): Base; }, Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 32, 3))
->b9 : { fn(): Derived; }, Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 33, 3))
+>a9 : { fn(): Base; }
+>b9 : { fn(): Derived; }
 
 var r7a10 = a10 === b10;
->r7a10 : boolean, Symbol(r7a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 216, 3))
+>r7a10 : boolean
 >a10 === b10 : boolean
->a10 : { fn(a?: Base): void; }, Symbol(a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 35, 3))
->b10 : { fn(a?: Derived): void; }, Symbol(b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 36, 3))
+>a10 : { fn(a?: Base): void; }
+>b10 : { fn(a?: Derived): void; }
 
 var r7a11 = a11 === b11;
->r7a11 : boolean, Symbol(r7a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 217, 3))
+>r7a11 : boolean
 >a11 === b11 : boolean
->a11 : { fn(...a: Base[]): void; }, Symbol(a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 38, 3))
->b11 : { fn(...a: Derived[]): void; }, Symbol(b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 39, 3))
+>a11 : { fn(...a: Base[]): void; }
+>b11 : { fn(...a: Derived[]): void; }
 
 //var r7a12 = a12 === b12;
 
 var r7b1 = b1 === a1;
->r7b1 : boolean, Symbol(r7b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 220, 3))
+>r7b1 : boolean
 >b1 === a1 : boolean
->b1 : { fn(): void; }, Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 9, 3))
->a1 : { fn(): void; }, Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 8, 3))
+>b1 : { fn(): void; }
+>a1 : { fn(): void; }
 
 var r7b2 = b2 === a2;
->r7b2 : boolean, Symbol(r7b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 221, 3))
+>r7b2 : boolean
 >b2 === a2 : boolean
->b2 : { fn(a: number, b: string): void; }, Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 3))
->a2 : { fn(a: number, b: string): void; }, Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 3))
+>b2 : { fn(a: number, b: string): void; }
+>a2 : { fn(a: number, b: string): void; }
 
 var r7b3 = b3 === a3;
->r7b3 : boolean, Symbol(r7b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 222, 3))
+>r7b3 : boolean
 >b3 === a3 : boolean
->b3 : { fn(a: number): void; }, Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 15, 3))
->a3 : { fn(a: number, b: string): void; }, Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 3))
+>b3 : { fn(a: number): void; }
+>a3 : { fn(a: number, b: string): void; }
 
 var r7b4 = b4 === a4;
->r7b4 : boolean, Symbol(r7b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 223, 3))
+>r7b4 : boolean
 >b4 === a4 : boolean
->b4 : { fn(): void; }, Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 18, 3))
->a4 : { fn(a: number, b: string): void; }, Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 3))
+>b4 : { fn(): void; }
+>a4 : { fn(a: number, b: string): void; }
 
 var r7b5 = b5 === a5;
->r7b5 : boolean, Symbol(r7b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 224, 3))
+>r7b5 : boolean
 >b5 === a5 : boolean
->b5 : { fn(a: Derived): void; }, Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 21, 3))
->a5 : { fn(a: Base): void; }, Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 20, 3))
+>b5 : { fn(a: Derived): void; }
+>a5 : { fn(a: Base): void; }
 
 var r7b6 = b6 === a6;
->r7b6 : boolean, Symbol(r7b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 225, 3))
+>r7b6 : boolean
 >b6 === a6 : boolean
->b6 : { fn(a: Base, b: Derived): void; }, Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 3))
->a6 : { fn(a: Derived, b: Base): void; }, Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 3))
+>b6 : { fn(a: Base, b: Derived): void; }
+>a6 : { fn(a: Derived, b: Base): void; }
 
 var r7b7 = b7 === a7;
->r7b7 : boolean, Symbol(r7b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 226, 3))
+>r7b7 : boolean
 >b7 === a7 : boolean
->b7 : { fn(): Base; }, Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 27, 3))
->a7 : { fn(): void; }, Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 26, 3))
+>b7 : { fn(): Base; }
+>a7 : { fn(): void; }
 
 var r7b8 = b8 === a8;
->r7b8 : boolean, Symbol(r7b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 227, 3))
+>r7b8 : boolean
 >b8 === a8 : boolean
->b8 : { fn(): Base; }, Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 30, 3))
->a8 : { fn(): Base; }, Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 29, 3))
+>b8 : { fn(): Base; }
+>a8 : { fn(): Base; }
 
 var r7b9 = b9 === a9;
->r7b9 : boolean, Symbol(r7b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 228, 3))
+>r7b9 : boolean
 >b9 === a9 : boolean
->b9 : { fn(): Derived; }, Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 33, 3))
->a9 : { fn(): Base; }, Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 32, 3))
+>b9 : { fn(): Derived; }
+>a9 : { fn(): Base; }
 
 var r7b10 = b10 === a10;
->r7b10 : boolean, Symbol(r7b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 229, 3))
+>r7b10 : boolean
 >b10 === a10 : boolean
->b10 : { fn(a?: Derived): void; }, Symbol(b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 36, 3))
->a10 : { fn(a?: Base): void; }, Symbol(a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 35, 3))
+>b10 : { fn(a?: Derived): void; }
+>a10 : { fn(a?: Base): void; }
 
 var r7b11 = b11 === a11;
->r7b11 : boolean, Symbol(r7b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 230, 3))
+>r7b11 : boolean
 >b11 === a11 : boolean
->b11 : { fn(...a: Derived[]): void; }, Symbol(b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 39, 3))
->a11 : { fn(...a: Base[]): void; }, Symbol(a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 38, 3))
+>b11 : { fn(...a: Derived[]): void; }
+>a11 : { fn(...a: Base[]): void; }
 
 //var r7b12 = b12 === a12;
 
 // operator !==
 var r8a1 = a1 !== b1;
->r8a1 : boolean, Symbol(r8a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 234, 3))
+>r8a1 : boolean
 >a1 !== b1 : boolean
->a1 : { fn(): void; }, Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 8, 3))
->b1 : { fn(): void; }, Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 9, 3))
+>a1 : { fn(): void; }
+>b1 : { fn(): void; }
 
 var r8a2 = a2 !== b2;
->r8a2 : boolean, Symbol(r8a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 235, 3))
+>r8a2 : boolean
 >a2 !== b2 : boolean
->a2 : { fn(a: number, b: string): void; }, Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 3))
->b2 : { fn(a: number, b: string): void; }, Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 3))
+>a2 : { fn(a: number, b: string): void; }
+>b2 : { fn(a: number, b: string): void; }
 
 var r8a3 = a3 !== b3;
->r8a3 : boolean, Symbol(r8a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 236, 3))
+>r8a3 : boolean
 >a3 !== b3 : boolean
->a3 : { fn(a: number, b: string): void; }, Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 3))
->b3 : { fn(a: number): void; }, Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 15, 3))
+>a3 : { fn(a: number, b: string): void; }
+>b3 : { fn(a: number): void; }
 
 var r8a4 = a4 !== b4;
->r8a4 : boolean, Symbol(r8a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 237, 3))
+>r8a4 : boolean
 >a4 !== b4 : boolean
->a4 : { fn(a: number, b: string): void; }, Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 3))
->b4 : { fn(): void; }, Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 18, 3))
+>a4 : { fn(a: number, b: string): void; }
+>b4 : { fn(): void; }
 
 var r8a5 = a5 !== b5;
->r8a5 : boolean, Symbol(r8a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 238, 3))
+>r8a5 : boolean
 >a5 !== b5 : boolean
->a5 : { fn(a: Base): void; }, Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 20, 3))
->b5 : { fn(a: Derived): void; }, Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 21, 3))
+>a5 : { fn(a: Base): void; }
+>b5 : { fn(a: Derived): void; }
 
 var r8a6 = a6 !== b6;
->r8a6 : boolean, Symbol(r8a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 239, 3))
+>r8a6 : boolean
 >a6 !== b6 : boolean
->a6 : { fn(a: Derived, b: Base): void; }, Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 3))
->b6 : { fn(a: Base, b: Derived): void; }, Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 3))
+>a6 : { fn(a: Derived, b: Base): void; }
+>b6 : { fn(a: Base, b: Derived): void; }
 
 var r8a7 = a7 !== b7;
->r8a7 : boolean, Symbol(r8a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 240, 3))
+>r8a7 : boolean
 >a7 !== b7 : boolean
->a7 : { fn(): void; }, Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 26, 3))
->b7 : { fn(): Base; }, Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 27, 3))
+>a7 : { fn(): void; }
+>b7 : { fn(): Base; }
 
 var r8a8 = a8 !== b8;
->r8a8 : boolean, Symbol(r8a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 241, 3))
+>r8a8 : boolean
 >a8 !== b8 : boolean
->a8 : { fn(): Base; }, Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 29, 3))
->b8 : { fn(): Base; }, Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 30, 3))
+>a8 : { fn(): Base; }
+>b8 : { fn(): Base; }
 
 var r8a9 = a9 !== b9;
->r8a9 : boolean, Symbol(r8a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 242, 3))
+>r8a9 : boolean
 >a9 !== b9 : boolean
->a9 : { fn(): Base; }, Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 32, 3))
->b9 : { fn(): Derived; }, Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 33, 3))
+>a9 : { fn(): Base; }
+>b9 : { fn(): Derived; }
 
 var r8a10 = a10 !== b10;
->r8a10 : boolean, Symbol(r8a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 243, 3))
+>r8a10 : boolean
 >a10 !== b10 : boolean
->a10 : { fn(a?: Base): void; }, Symbol(a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 35, 3))
->b10 : { fn(a?: Derived): void; }, Symbol(b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 36, 3))
+>a10 : { fn(a?: Base): void; }
+>b10 : { fn(a?: Derived): void; }
 
 var r8a11 = a11 !== b11;
->r8a11 : boolean, Symbol(r8a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 244, 3))
+>r8a11 : boolean
 >a11 !== b11 : boolean
->a11 : { fn(...a: Base[]): void; }, Symbol(a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 38, 3))
->b11 : { fn(...a: Derived[]): void; }, Symbol(b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 39, 3))
+>a11 : { fn(...a: Base[]): void; }
+>b11 : { fn(...a: Derived[]): void; }
 
 //var r8a12 = a12 !== b12;
 
 var r8b1 = b1 !== a1;
->r8b1 : boolean, Symbol(r8b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 247, 3))
+>r8b1 : boolean
 >b1 !== a1 : boolean
->b1 : { fn(): void; }, Symbol(b1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 9, 3))
->a1 : { fn(): void; }, Symbol(a1, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 8, 3))
+>b1 : { fn(): void; }
+>a1 : { fn(): void; }
 
 var r8b2 = b2 !== a2;
->r8b2 : boolean, Symbol(r8b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 248, 3))
+>r8b2 : boolean
 >b2 !== a2 : boolean
->b2 : { fn(a: number, b: string): void; }, Symbol(b2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 12, 3))
->a2 : { fn(a: number, b: string): void; }, Symbol(a2, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 11, 3))
+>b2 : { fn(a: number, b: string): void; }
+>a2 : { fn(a: number, b: string): void; }
 
 var r8b3 = b3 !== a3;
->r8b3 : boolean, Symbol(r8b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 249, 3))
+>r8b3 : boolean
 >b3 !== a3 : boolean
->b3 : { fn(a: number): void; }, Symbol(b3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 15, 3))
->a3 : { fn(a: number, b: string): void; }, Symbol(a3, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 14, 3))
+>b3 : { fn(a: number): void; }
+>a3 : { fn(a: number, b: string): void; }
 
 var r8b4 = b4 !== a4;
->r8b4 : boolean, Symbol(r8b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 250, 3))
+>r8b4 : boolean
 >b4 !== a4 : boolean
->b4 : { fn(): void; }, Symbol(b4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 18, 3))
->a4 : { fn(a: number, b: string): void; }, Symbol(a4, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 17, 3))
+>b4 : { fn(): void; }
+>a4 : { fn(a: number, b: string): void; }
 
 var r8b5 = b5 !== a5;
->r8b5 : boolean, Symbol(r8b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 251, 3))
+>r8b5 : boolean
 >b5 !== a5 : boolean
->b5 : { fn(a: Derived): void; }, Symbol(b5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 21, 3))
->a5 : { fn(a: Base): void; }, Symbol(a5, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 20, 3))
+>b5 : { fn(a: Derived): void; }
+>a5 : { fn(a: Base): void; }
 
 var r8b6 = b6 !== a6;
->r8b6 : boolean, Symbol(r8b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 252, 3))
+>r8b6 : boolean
 >b6 !== a6 : boolean
->b6 : { fn(a: Base, b: Derived): void; }, Symbol(b6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 24, 3))
->a6 : { fn(a: Derived, b: Base): void; }, Symbol(a6, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 23, 3))
+>b6 : { fn(a: Base, b: Derived): void; }
+>a6 : { fn(a: Derived, b: Base): void; }
 
 var r8b7 = b7 !== a7;
->r8b7 : boolean, Symbol(r8b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 253, 3))
+>r8b7 : boolean
 >b7 !== a7 : boolean
->b7 : { fn(): Base; }, Symbol(b7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 27, 3))
->a7 : { fn(): void; }, Symbol(a7, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 26, 3))
+>b7 : { fn(): Base; }
+>a7 : { fn(): void; }
 
 var r8b8 = b8 !== a8;
->r8b8 : boolean, Symbol(r8b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 254, 3))
+>r8b8 : boolean
 >b8 !== a8 : boolean
->b8 : { fn(): Base; }, Symbol(b8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 30, 3))
->a8 : { fn(): Base; }, Symbol(a8, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 29, 3))
+>b8 : { fn(): Base; }
+>a8 : { fn(): Base; }
 
 var r8b9 = b9 !== a9;
->r8b9 : boolean, Symbol(r8b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 255, 3))
+>r8b9 : boolean
 >b9 !== a9 : boolean
->b9 : { fn(): Derived; }, Symbol(b9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 33, 3))
->a9 : { fn(): Base; }, Symbol(a9, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 32, 3))
+>b9 : { fn(): Derived; }
+>a9 : { fn(): Base; }
 
 var r8b10 = b10 !== a10;
->r8b10 : boolean, Symbol(r8b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 256, 3))
+>r8b10 : boolean
 >b10 !== a10 : boolean
->b10 : { fn(a?: Derived): void; }, Symbol(b10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 36, 3))
->a10 : { fn(a?: Base): void; }, Symbol(a10, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 35, 3))
+>b10 : { fn(a?: Derived): void; }
+>a10 : { fn(a?: Base): void; }
 
 var r8b11 = b11 !== a11;
->r8b11 : boolean, Symbol(r8b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 257, 3))
+>r8b11 : boolean
 >b11 !== a11 : boolean
->b11 : { fn(...a: Derived[]): void; }, Symbol(b11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 39, 3))
->a11 : { fn(...a: Base[]): void; }, Symbol(a11, Decl(comparisonOperatorWithSubtypeObjectOnCallSignature.ts, 38, 3))
+>b11 : { fn(...a: Derived[]): void; }
+>a11 : { fn(...a: Base[]): void; }
 
 //var r8b12 = b12 !== a12;

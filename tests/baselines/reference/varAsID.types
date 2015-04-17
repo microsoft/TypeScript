@@ -1,37 +1,37 @@
 === tests/cases/compiler/varAsID.ts ===
 
 class Foo {
->Foo : Foo, Symbol(Foo, Decl(varAsID.ts, 0, 0))
+>Foo : Foo
 
     var; // ok
->var : any, Symbol(var, Decl(varAsID.ts, 1, 11))
+>var : any
 
     x=1;
->x : number, Symbol(x, Decl(varAsID.ts, 2, 8))
+>x : number
 >1 : number
 }
 
 var f = new Foo();
->f : Foo, Symbol(f, Decl(varAsID.ts, 6, 3))
+>f : Foo
 >new Foo() : Foo
->Foo : typeof Foo, Symbol(Foo, Decl(varAsID.ts, 0, 0))
+>Foo : typeof Foo
 
 
 class Foo2 {
->Foo2 : Foo2, Symbol(Foo2, Decl(varAsID.ts, 6, 18))
+>Foo2 : Foo2
 
     var // not an error, because of ASI.
->var : any, Symbol(var, Decl(varAsID.ts, 9, 12))
+>var : any
 
     x=1;
->x : number, Symbol(x, Decl(varAsID.ts, 10, 7))
+>x : number
 >1 : number
 }
 
 var f2 = new Foo2();
->f2 : Foo2, Symbol(f2, Decl(varAsID.ts, 14, 3))
+>f2 : Foo2
 >new Foo2() : Foo2
->Foo2 : typeof Foo2, Symbol(Foo2, Decl(varAsID.ts, 6, 18))
+>Foo2 : typeof Foo2
 
 
 

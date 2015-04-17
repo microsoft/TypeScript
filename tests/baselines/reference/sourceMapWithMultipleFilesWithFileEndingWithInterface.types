@@ -1,36 +1,36 @@
 === tests/cases/compiler/a.ts ===
 module M {
->M : typeof M, Symbol(M, Decl(a.ts, 0, 0))
+>M : typeof M
 
     export var X = 1;
->X : number, Symbol(X, Decl(a.ts, 1, 14))
+>X : number
 >1 : number
 }
 interface Navigator {
->Navigator : Navigator, Symbol(Navigator, Decl(a.ts, 2, 1))
+>Navigator : Navigator
 
     getGamepads(func?: any): any;
->getGamepads : (func?: any) => any, Symbol(getGamepads, Decl(a.ts, 3, 21))
->func : any, Symbol(func, Decl(a.ts, 4, 16))
+>getGamepads : (func?: any) => any
+>func : any
 
     webkitGetGamepads(func?: any): any
->webkitGetGamepads : (func?: any) => any, Symbol(webkitGetGamepads, Decl(a.ts, 4, 33))
->func : any, Symbol(func, Decl(a.ts, 5, 22))
+>webkitGetGamepads : (func?: any) => any
+>func : any
 
     msGetGamepads(func?: any): any;
->msGetGamepads : (func?: any) => any, Symbol(msGetGamepads, Decl(a.ts, 5, 38))
->func : any, Symbol(func, Decl(a.ts, 6, 18))
+>msGetGamepads : (func?: any) => any
+>func : any
 
     webkitGamepads(func?: any): any;
->webkitGamepads : (func?: any) => any, Symbol(webkitGamepads, Decl(a.ts, 6, 35))
->func : any, Symbol(func, Decl(a.ts, 7, 19))
+>webkitGamepads : (func?: any) => any
+>func : any
 }
 
 === tests/cases/compiler/b.ts ===
 module m1 {
->m1 : typeof m1, Symbol(m1, Decl(b.ts, 0, 0))
+>m1 : typeof m1
 
     export class c1 {
->c1 : c1, Symbol(c1, Decl(b.ts, 0, 11))
+>c1 : c1
     }
 }

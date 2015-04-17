@@ -1,95 +1,95 @@
 === tests/cases/compiler/collisionCodeGenModuleWithModuleChildren.ts ===
 module M {
->M : typeof M, Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleChildren.ts, 6, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 15, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 24, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 33, 1))
+>M : typeof M
 
     export var x = 3;
->x : number, Symbol(x, Decl(collisionCodeGenModuleWithModuleChildren.ts, 1, 14))
+>x : number
 >3 : number
 
     module m1 {
->m1 : typeof m1, Symbol(m1, Decl(collisionCodeGenModuleWithModuleChildren.ts, 1, 21))
+>m1 : typeof m1
 
         var M = 10;
->M : number, Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 3, 11))
+>M : number
 >10 : number
 
         var p = x;
->p : number, Symbol(p, Decl(collisionCodeGenModuleWithModuleChildren.ts, 4, 11))
->x : number, Symbol(x, Decl(collisionCodeGenModuleWithModuleChildren.ts, 1, 14))
+>p : number
+>x : number
     }
 }
 
 module M {
->M : typeof M, Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleChildren.ts, 6, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 15, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 24, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 33, 1))
+>M : typeof M
 
     module m2 {
->m2 : typeof m2, Symbol(m2, Decl(collisionCodeGenModuleWithModuleChildren.ts, 8, 10))
+>m2 : typeof m2
 
         class M {
->M : M, Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 9, 15))
+>M : M
         }
         var p = x;
->p : number, Symbol(p, Decl(collisionCodeGenModuleWithModuleChildren.ts, 12, 11))
->x : number, Symbol(x, Decl(collisionCodeGenModuleWithModuleChildren.ts, 1, 14))
+>p : number
+>x : number
 
         var p2 = new M();
->p2 : M, Symbol(p2, Decl(collisionCodeGenModuleWithModuleChildren.ts, 13, 11))
+>p2 : M
 >new M() : M
->M : typeof M, Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 9, 15))
+>M : typeof M
     }
 }
 
 module M {
->M : typeof M, Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleChildren.ts, 6, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 15, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 24, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 33, 1))
+>M : typeof M
 
     module m3 {
->m3 : typeof m3, Symbol(m3, Decl(collisionCodeGenModuleWithModuleChildren.ts, 17, 10))
+>m3 : typeof m3
 
         function M() {
->M : () => void, Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 18, 15))
+>M : () => void
         }
         var p = x;
->p : number, Symbol(p, Decl(collisionCodeGenModuleWithModuleChildren.ts, 21, 11))
->x : number, Symbol(x, Decl(collisionCodeGenModuleWithModuleChildren.ts, 1, 14))
+>p : number
+>x : number
 
         var p2 = M();
->p2 : void, Symbol(p2, Decl(collisionCodeGenModuleWithModuleChildren.ts, 22, 11))
+>p2 : void
 >M() : void
->M : () => void, Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 18, 15))
+>M : () => void
     }
 }
 
 module M { // shouldnt be _M
->M : typeof M, Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleChildren.ts, 6, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 15, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 24, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 33, 1))
+>M : typeof M
 
     module m3 {
->m3 : typeof m3, Symbol(m3, Decl(collisionCodeGenModuleWithModuleChildren.ts, 26, 10))
+>m3 : typeof m3
 
         interface M {
->M : M, Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 27, 15))
+>M : M
         }
         var p = x;
->p : number, Symbol(p, Decl(collisionCodeGenModuleWithModuleChildren.ts, 30, 11))
->x : number, Symbol(x, Decl(collisionCodeGenModuleWithModuleChildren.ts, 1, 14))
+>p : number
+>x : number
 
         var p2: M;
->p2 : M, Symbol(p2, Decl(collisionCodeGenModuleWithModuleChildren.ts, 31, 11))
->M : M, Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 27, 15))
+>p2 : M
+>M : M
     }
 }
 
 module M {
->M : typeof M, Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleChildren.ts, 6, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 15, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 24, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 33, 1))
+>M : typeof M
 
     module m4 {
->m4 : typeof m4, Symbol(m4, Decl(collisionCodeGenModuleWithModuleChildren.ts, 35, 10))
+>m4 : typeof m4
 
         module M {
->M : typeof M, Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 36, 15))
+>M : typeof M
 
             var p = x;
->p : number, Symbol(p, Decl(collisionCodeGenModuleWithModuleChildren.ts, 38, 15))
->x : number, Symbol(x, Decl(collisionCodeGenModuleWithModuleChildren.ts, 1, 14))
+>p : number
+>x : number
         }
     }
 }

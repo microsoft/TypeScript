@@ -1,33 +1,33 @@
 === tests/cases/compiler/functionMergedWithModule.ts ===
 function foo(title: string) {
->foo : typeof foo, Symbol(foo, Decl(functionMergedWithModule.ts, 0, 0), Decl(functionMergedWithModule.ts, 2, 1), Decl(functionMergedWithModule.ts, 7, 1))
->title : string, Symbol(title, Decl(functionMergedWithModule.ts, 0, 13))
+>foo : typeof foo
+>title : string
 
     var x = 10;
->x : number, Symbol(x, Decl(functionMergedWithModule.ts, 1, 7))
+>x : number
 >10 : number
 }
 
 module foo.Bar {
->foo : typeof foo, Symbol(foo, Decl(functionMergedWithModule.ts, 0, 0), Decl(functionMergedWithModule.ts, 2, 1), Decl(functionMergedWithModule.ts, 7, 1))
->Bar : typeof Bar, Symbol(Bar, Decl(functionMergedWithModule.ts, 4, 11))
+>foo : typeof foo
+>Bar : typeof Bar
 
     export function f() {
->f : () => void, Symbol(f, Decl(functionMergedWithModule.ts, 4, 16))
+>f : () => void
     }
 }
 
 module foo.Baz {
->foo : typeof foo, Symbol(foo, Decl(functionMergedWithModule.ts, 0, 0), Decl(functionMergedWithModule.ts, 2, 1), Decl(functionMergedWithModule.ts, 7, 1))
->Baz : typeof Baz, Symbol(Baz, Decl(functionMergedWithModule.ts, 9, 11))
+>foo : typeof foo
+>Baz : typeof Baz
 
     export function g() {
->g : () => void, Symbol(g, Decl(functionMergedWithModule.ts, 9, 16))
+>g : () => void
 
         Bar.f();
 >Bar.f() : void
->Bar.f : () => void, Symbol(Bar.f, Decl(functionMergedWithModule.ts, 4, 16))
->Bar : typeof Bar, Symbol(Bar, Decl(functionMergedWithModule.ts, 4, 11))
->f : () => void, Symbol(Bar.f, Decl(functionMergedWithModule.ts, 4, 16))
+>Bar.f : () => void
+>Bar : typeof Bar
+>f : () => void
     }
 }

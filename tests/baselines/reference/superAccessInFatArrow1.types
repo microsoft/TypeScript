@@ -1,37 +1,37 @@
 === tests/cases/compiler/superAccessInFatArrow1.ts ===
 module test {
->test : typeof test, Symbol(test, Decl(superAccessInFatArrow1.ts, 0, 0))
+>test : typeof test
 
     export class A {
->A : A, Symbol(A, Decl(superAccessInFatArrow1.ts, 0, 13))
+>A : A
 
         foo() {
->foo : () => void, Symbol(foo, Decl(superAccessInFatArrow1.ts, 1, 20))
+>foo : () => void
         }
     }
     export class B extends A {
->B : B, Symbol(B, Decl(superAccessInFatArrow1.ts, 4, 5))
->A : A, Symbol(A, Decl(superAccessInFatArrow1.ts, 0, 13))
+>B : B
+>A : A
 
         bar(callback: () => void ) {
->bar : (callback: () => void) => void, Symbol(bar, Decl(superAccessInFatArrow1.ts, 5, 30))
->callback : () => void, Symbol(callback, Decl(superAccessInFatArrow1.ts, 6, 12))
+>bar : (callback: () => void) => void
+>callback : () => void
         }
         runme() {
->runme : () => void, Symbol(runme, Decl(superAccessInFatArrow1.ts, 7, 9))
+>runme : () => void
 
             this.bar(() => {
 >this.bar(() => {                super.foo();            }) : void
->this.bar : (callback: () => void) => void, Symbol(bar, Decl(superAccessInFatArrow1.ts, 5, 30))
->this : B, Symbol(B, Decl(superAccessInFatArrow1.ts, 4, 5))
->bar : (callback: () => void) => void, Symbol(bar, Decl(superAccessInFatArrow1.ts, 5, 30))
+>this.bar : (callback: () => void) => void
+>this : B
+>bar : (callback: () => void) => void
 >() => {                super.foo();            } : () => void
 
                 super.foo();
 >super.foo() : void
->super.foo : () => void, Symbol(A.foo, Decl(superAccessInFatArrow1.ts, 1, 20))
->super : A, Symbol(A, Decl(superAccessInFatArrow1.ts, 0, 13))
->foo : () => void, Symbol(A.foo, Decl(superAccessInFatArrow1.ts, 1, 20))
+>super.foo : () => void
+>super : A
+>foo : () => void
 
             });
         }

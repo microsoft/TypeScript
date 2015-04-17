@@ -1,40 +1,40 @@
 === tests/cases/compiler/mutuallyRecursiveGenericBaseTypes1.ts ===
 interface A<T> {
->A : A<T>, Symbol(A, Decl(mutuallyRecursiveGenericBaseTypes1.ts, 0, 0))
->T : T, Symbol(T, Decl(mutuallyRecursiveGenericBaseTypes1.ts, 0, 12))
+>A : A<T>
+>T : T
 
     foo(): B<T>; // instead of B does see this
->foo : { (): B<T>; (): void; }, Symbol(foo, Decl(mutuallyRecursiveGenericBaseTypes1.ts, 0, 16), Decl(mutuallyRecursiveGenericBaseTypes1.ts, 1, 16))
->B : B<T>, Symbol(B, Decl(mutuallyRecursiveGenericBaseTypes1.ts, 5, 1))
->T : T, Symbol(T, Decl(mutuallyRecursiveGenericBaseTypes1.ts, 0, 12))
+>foo : { (): B<T>; (): void; }
+>B : B<T>
+>T : T
 
     foo(): void; // instead of B does see this
->foo : { (): B<T>; (): void; }, Symbol(foo, Decl(mutuallyRecursiveGenericBaseTypes1.ts, 0, 16), Decl(mutuallyRecursiveGenericBaseTypes1.ts, 1, 16))
+>foo : { (): B<T>; (): void; }
  
     foo2(): B<number>;
->foo2 : () => B<number>, Symbol(foo2, Decl(mutuallyRecursiveGenericBaseTypes1.ts, 2, 16))
->B : B<T>, Symbol(B, Decl(mutuallyRecursiveGenericBaseTypes1.ts, 5, 1))
+>foo2 : () => B<number>
+>B : B<T>
 }
  
 interface B<T> extends A<T> {
->B : B<T>, Symbol(B, Decl(mutuallyRecursiveGenericBaseTypes1.ts, 5, 1))
->T : T, Symbol(T, Decl(mutuallyRecursiveGenericBaseTypes1.ts, 7, 12))
->A : A<T>, Symbol(A, Decl(mutuallyRecursiveGenericBaseTypes1.ts, 0, 0))
->T : T, Symbol(T, Decl(mutuallyRecursiveGenericBaseTypes1.ts, 7, 12))
+>B : B<T>
+>T : T
+>A : A<T>
+>T : T
 
     bar(): void;
->bar : () => void, Symbol(bar, Decl(mutuallyRecursiveGenericBaseTypes1.ts, 7, 29))
+>bar : () => void
 }
  
 var b: B<number>;
->b : B<number>, Symbol(b, Decl(mutuallyRecursiveGenericBaseTypes1.ts, 11, 3))
->B : B<T>, Symbol(B, Decl(mutuallyRecursiveGenericBaseTypes1.ts, 5, 1))
+>b : B<number>
+>B : B<T>
 
 b.foo(); // should not error
 >b.foo() : B<number>
->b.foo : { (): B<number>; (): void; }, Symbol(A.foo, Decl(mutuallyRecursiveGenericBaseTypes1.ts, 0, 16), Decl(mutuallyRecursiveGenericBaseTypes1.ts, 1, 16))
->b : B<number>, Symbol(b, Decl(mutuallyRecursiveGenericBaseTypes1.ts, 11, 3))
->foo : { (): B<number>; (): void; }, Symbol(A.foo, Decl(mutuallyRecursiveGenericBaseTypes1.ts, 0, 16), Decl(mutuallyRecursiveGenericBaseTypes1.ts, 1, 16))
+>b.foo : { (): B<number>; (): void; }
+>b : B<number>
+>foo : { (): B<number>; (): void; }
 
  
 

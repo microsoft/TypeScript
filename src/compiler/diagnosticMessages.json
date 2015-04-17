@@ -1419,7 +1419,7 @@
         "category": "Error",
         "code": 2495
     },
-    "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.": {
+    "The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression.": {
         "category": "Error",
         "code": 2496
     },
@@ -1438,6 +1438,10 @@
     "A class can only implement an identifier/qualified-name with optional type arguments.": {
         "category": "Error",
         "code": 2500
+    },
+    "A rest element cannot contain a binding pattern.": {
+        "category": "Error",
+        "code": 2501
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

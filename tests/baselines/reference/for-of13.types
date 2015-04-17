@@ -1,12 +1,12 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of13.ts ===
 var v: string;
->v : string, Symbol(v, Decl(for-of13.ts, 0, 3))
+>v : string
 
 for (v of [""].values()) { }
->v : string, Symbol(v, Decl(for-of13.ts, 0, 3))
+>v : string
 >[""].values() : IterableIterator<string>
->[""].values : () => IterableIterator<string>, Symbol(Array.values, Decl(lib.d.ts, 1423, 37))
+>[""].values : () => IterableIterator<string>
 >[""] : string[]
 >"" : string
->values : () => IterableIterator<string>, Symbol(Array.values, Decl(lib.d.ts, 1423, 37))
+>values : () => IterableIterator<string>
 

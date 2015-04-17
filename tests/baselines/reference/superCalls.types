@@ -1,64 +1,64 @@
 === tests/cases/conformance/expressions/superCalls/superCalls.ts ===
 class Base {
->Base : Base, Symbol(Base, Decl(superCalls.ts, 0, 0))
+>Base : Base
 
     x = 43;
->x : number, Symbol(x, Decl(superCalls.ts, 0, 12))
+>x : number
 >43 : number
 
     constructor(n: string) {
->n : string, Symbol(n, Decl(superCalls.ts, 2, 16))
+>n : string
 
     }
 }
 
 function v(): void { }
->v : () => void, Symbol(v, Decl(superCalls.ts, 5, 1))
+>v : () => void
 
 class Derived extends Base {
->Derived : Derived, Symbol(Derived, Decl(superCalls.ts, 7, 22))
->Base : Base, Symbol(Base, Decl(superCalls.ts, 0, 0))
+>Derived : Derived
+>Base : Base
 
     //super call in class constructor of derived type
     constructor(public q: number) {
->q : number, Symbol(q, Decl(superCalls.ts, 11, 16))
+>q : number
 
         super('');
 >super('') : void
->super : typeof Base, Symbol(Base, Decl(superCalls.ts, 0, 0))
+>super : typeof Base
 >'' : string
 
         //type of super call expression is void
         var p = super('');
->p : void, Symbol(p, Decl(superCalls.ts, 14, 11), Decl(superCalls.ts, 15, 11))
+>p : void
 >super('') : void
->super : typeof Base, Symbol(Base, Decl(superCalls.ts, 0, 0))
+>super : typeof Base
 >'' : string
 
         var p = v();
->p : void, Symbol(p, Decl(superCalls.ts, 14, 11), Decl(superCalls.ts, 15, 11))
+>p : void
 >v() : void
->v : () => void, Symbol(v, Decl(superCalls.ts, 5, 1))
+>v : () => void
     }
 }
 
 class OtherBase {
->OtherBase : OtherBase, Symbol(OtherBase, Decl(superCalls.ts, 17, 1))
+>OtherBase : OtherBase
 
 }
 
 class OtherDerived extends OtherBase {
->OtherDerived : OtherDerived, Symbol(OtherDerived, Decl(superCalls.ts, 21, 1))
->OtherBase : OtherBase, Symbol(OtherBase, Decl(superCalls.ts, 17, 1))
+>OtherDerived : OtherDerived
+>OtherBase : OtherBase
 
     constructor() {
         var p = '';
->p : string, Symbol(p, Decl(superCalls.ts, 25, 11))
+>p : string
 >'' : string
 
         super();
 >super() : void
->super : typeof OtherBase, Symbol(OtherBase, Decl(superCalls.ts, 17, 1))
+>super : typeof OtherBase
     }
 }
 

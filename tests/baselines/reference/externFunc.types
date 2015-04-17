@@ -1,10 +1,10 @@
 === tests/cases/compiler/externFunc.ts ===
 declare function parseInt(s:string):number;
->parseInt : { (s: string, radix?: number): number; (s: string): number; }, Symbol(parseInt, Decl(lib.d.ts, 28, 38), Decl(externFunc.ts, 0, 0))
->s : string, Symbol(s, Decl(externFunc.ts, 0, 26))
+>parseInt : { (s: string, radix?: number): number; (s: string): number; }
+>s : string
 
 parseInt("2");
 >parseInt("2") : number
->parseInt : { (s: string, radix?: number): number; (s: string): number; }, Symbol(parseInt, Decl(lib.d.ts, 28, 38), Decl(externFunc.ts, 0, 0))
+>parseInt : { (s: string, radix?: number): number; (s: string): number; }
 >"2" : string
 

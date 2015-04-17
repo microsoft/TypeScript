@@ -1,50 +1,50 @@
 === tests/cases/compiler/recursiveMods.ts ===
 export module Foo {
->Foo : typeof Foo, Symbol(Foo, Decl(recursiveMods.ts, 0, 0), Decl(recursiveMods.ts, 2, 1))
+>Foo : typeof Foo
 
 	export class C {}
->C : C, Symbol(C, Decl(recursiveMods.ts, 0, 19))
+>C : C
 }
 
 export module Foo {
->Foo : typeof Foo, Symbol(Foo, Decl(recursiveMods.ts, 0, 0), Decl(recursiveMods.ts, 2, 1))
+>Foo : typeof Foo
 
 	function Bar() : C {
->Bar : () => C, Symbol(Bar, Decl(recursiveMods.ts, 4, 19))
->C : C, Symbol(C, Decl(recursiveMods.ts, 0, 19))
+>Bar : () => C
+>C : C
 
 		if (true) { return Bar();}
 >true : boolean
 >Bar() : C
->Bar : () => C, Symbol(Bar, Decl(recursiveMods.ts, 4, 19))
+>Bar : () => C
 
 		return new C();
 >new C() : C
->C : typeof C, Symbol(C, Decl(recursiveMods.ts, 0, 19))
+>C : typeof C
 	}
 
 	function Baz() : C {
->Baz : () => C, Symbol(Baz, Decl(recursiveMods.ts, 9, 2))
->C : C, Symbol(C, Decl(recursiveMods.ts, 0, 19))
+>Baz : () => C
+>C : C
 
 		var c = Baz();
->c : C, Symbol(c, Decl(recursiveMods.ts, 12, 5))
+>c : C
 >Baz() : C
->Baz : () => C, Symbol(Baz, Decl(recursiveMods.ts, 9, 2))
+>Baz : () => C
 
 		return Bar();
 >Bar() : C
->Bar : () => C, Symbol(Bar, Decl(recursiveMods.ts, 4, 19))
+>Bar : () => C
 	}
 
 	function Gar() {
->Gar : () => void, Symbol(Gar, Decl(recursiveMods.ts, 14, 2))
+>Gar : () => void
 
 		var c : C = Baz();
->c : C, Symbol(c, Decl(recursiveMods.ts, 17, 5))
->C : C, Symbol(C, Decl(recursiveMods.ts, 0, 19))
+>c : C
+>C : C
 >Baz() : C
->Baz : () => C, Symbol(Baz, Decl(recursiveMods.ts, 9, 2))
+>Baz : () => C
 
 		return;
 	}

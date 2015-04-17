@@ -1,31 +1,31 @@
 === tests/cases/compiler/declFileRestParametersOfFunctionAndFunctionType.ts ===
 
 function f1(...args) { }
->f1 : (...args: any[]) => void, Symbol(f1, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 0, 0))
->args : any[], Symbol(args, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 1, 12))
+>f1 : (...args: any[]) => void
+>args : any[]
 
 function f2(x: (...args) => void) { }
->f2 : (x: (...args: any[]) => void) => void, Symbol(f2, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 1, 24))
->x : (...args: any[]) => void, Symbol(x, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 2, 12))
->args : any[], Symbol(args, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 2, 16))
+>f2 : (x: (...args: any[]) => void) => void
+>x : (...args: any[]) => void
+>args : any[]
 
 function f3(x: { (...args): void }) { }
->f3 : (x: (...args: any[]) => void) => void, Symbol(f3, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 2, 37))
->x : (...args: any[]) => void, Symbol(x, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 3, 12))
->args : any[], Symbol(args, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 3, 18))
+>f3 : (x: (...args: any[]) => void) => void
+>x : (...args: any[]) => void
+>args : any[]
 
 function f4<T extends (...args) => void>() { }
->f4 : <T extends (...args: any[]) => void>() => void, Symbol(f4, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 3, 39))
->T : T, Symbol(T, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 4, 12))
->args : any[], Symbol(args, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 4, 23))
+>f4 : <T extends (...args: any[]) => void>() => void
+>T : T
+>args : any[]
 
 function f5<T extends { (...args): void }>() { }
->f5 : <T extends (...args: any[]) => void>() => void, Symbol(f5, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 4, 46))
->T : T, Symbol(T, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 5, 12))
->args : any[], Symbol(args, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 5, 25))
+>f5 : <T extends (...args: any[]) => void>() => void
+>T : T
+>args : any[]
 
 var f6 = () => { return [<any>10]; }
->f6 : () => any[], Symbol(f6, Decl(declFileRestParametersOfFunctionAndFunctionType.ts, 6, 3))
+>f6 : () => any[]
 >() => { return [<any>10]; } : () => any[]
 >[<any>10] : any[]
 ><any>10 : any

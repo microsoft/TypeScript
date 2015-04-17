@@ -2,66 +2,66 @@
 // from spec
 
 class Point {
->Point : Point, Symbol(Point, Decl(instanceAndStaticDeclarations1.ts, 0, 0))
+>Point : Point
 
     constructor(public x: number, public y: number) { }
->x : number, Symbol(x, Decl(instanceAndStaticDeclarations1.ts, 3, 16))
->y : number, Symbol(y, Decl(instanceAndStaticDeclarations1.ts, 3, 33))
+>x : number
+>y : number
 
     public distance(p: Point) {
->distance : (p: Point) => number, Symbol(distance, Decl(instanceAndStaticDeclarations1.ts, 3, 55))
->p : Point, Symbol(p, Decl(instanceAndStaticDeclarations1.ts, 4, 20))
->Point : Point, Symbol(Point, Decl(instanceAndStaticDeclarations1.ts, 0, 0))
+>distance : (p: Point) => number
+>p : Point
+>Point : Point
 
         var dx = this.x - p.x;
->dx : number, Symbol(dx, Decl(instanceAndStaticDeclarations1.ts, 5, 11))
+>dx : number
 >this.x - p.x : number
->this.x : number, Symbol(x, Decl(instanceAndStaticDeclarations1.ts, 3, 16))
->this : Point, Symbol(Point, Decl(instanceAndStaticDeclarations1.ts, 0, 0))
->x : number, Symbol(x, Decl(instanceAndStaticDeclarations1.ts, 3, 16))
->p.x : number, Symbol(x, Decl(instanceAndStaticDeclarations1.ts, 3, 16))
->p : Point, Symbol(p, Decl(instanceAndStaticDeclarations1.ts, 4, 20))
->x : number, Symbol(x, Decl(instanceAndStaticDeclarations1.ts, 3, 16))
+>this.x : number
+>this : Point
+>x : number
+>p.x : number
+>p : Point
+>x : number
 
         var dy = this.y - p.y;
->dy : number, Symbol(dy, Decl(instanceAndStaticDeclarations1.ts, 6, 11))
+>dy : number
 >this.y - p.y : number
->this.y : number, Symbol(y, Decl(instanceAndStaticDeclarations1.ts, 3, 33))
->this : Point, Symbol(Point, Decl(instanceAndStaticDeclarations1.ts, 0, 0))
->y : number, Symbol(y, Decl(instanceAndStaticDeclarations1.ts, 3, 33))
->p.y : number, Symbol(y, Decl(instanceAndStaticDeclarations1.ts, 3, 33))
->p : Point, Symbol(p, Decl(instanceAndStaticDeclarations1.ts, 4, 20))
->y : number, Symbol(y, Decl(instanceAndStaticDeclarations1.ts, 3, 33))
+>this.y : number
+>this : Point
+>y : number
+>p.y : number
+>p : Point
+>y : number
 
         return Math.sqrt(dx * dx + dy * dy);
 >Math.sqrt(dx * dx + dy * dy) : number
->Math.sqrt : (x: number) => number, Symbol(Math.sqrt, Decl(lib.d.ts, 620, 27))
->Math : Math, Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11))
->sqrt : (x: number) => number, Symbol(Math.sqrt, Decl(lib.d.ts, 620, 27))
+>Math.sqrt : (x: number) => number
+>Math : Math
+>sqrt : (x: number) => number
 >dx * dx + dy * dy : number
 >dx * dx : number
->dx : number, Symbol(dx, Decl(instanceAndStaticDeclarations1.ts, 5, 11))
->dx : number, Symbol(dx, Decl(instanceAndStaticDeclarations1.ts, 5, 11))
+>dx : number
+>dx : number
 >dy * dy : number
->dy : number, Symbol(dy, Decl(instanceAndStaticDeclarations1.ts, 6, 11))
->dy : number, Symbol(dy, Decl(instanceAndStaticDeclarations1.ts, 6, 11))
+>dy : number
+>dy : number
     }
     static origin = new Point(0, 0);
->origin : Point, Symbol(Point.origin, Decl(instanceAndStaticDeclarations1.ts, 8, 5))
+>origin : Point
 >new Point(0, 0) : Point
->Point : typeof Point, Symbol(Point, Decl(instanceAndStaticDeclarations1.ts, 0, 0))
+>Point : typeof Point
 >0 : number
 >0 : number
 
     static distance(p1: Point, p2: Point) { return p1.distance(p2); }
->distance : (p1: Point, p2: Point) => number, Symbol(Point.distance, Decl(instanceAndStaticDeclarations1.ts, 9, 36))
->p1 : Point, Symbol(p1, Decl(instanceAndStaticDeclarations1.ts, 10, 20))
->Point : Point, Symbol(Point, Decl(instanceAndStaticDeclarations1.ts, 0, 0))
->p2 : Point, Symbol(p2, Decl(instanceAndStaticDeclarations1.ts, 10, 30))
->Point : Point, Symbol(Point, Decl(instanceAndStaticDeclarations1.ts, 0, 0))
+>distance : (p1: Point, p2: Point) => number
+>p1 : Point
+>Point : Point
+>p2 : Point
+>Point : Point
 >p1.distance(p2) : number
->p1.distance : (p: Point) => number, Symbol(distance, Decl(instanceAndStaticDeclarations1.ts, 3, 55))
->p1 : Point, Symbol(p1, Decl(instanceAndStaticDeclarations1.ts, 10, 20))
->distance : (p: Point) => number, Symbol(distance, Decl(instanceAndStaticDeclarations1.ts, 3, 55))
->p2 : Point, Symbol(p2, Decl(instanceAndStaticDeclarations1.ts, 10, 30))
+>p1.distance : (p: Point) => number
+>p1 : Point
+>distance : (p: Point) => number
+>p2 : Point
 }

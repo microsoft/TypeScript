@@ -3,157 +3,157 @@
 // additional optional properties do not cause errors
 
 class S implements S2 { foo: string; }
->S : S, Symbol(S, Decl(assignmentCompatWithObjectMembers3.ts, 0, 0))
->S2 : S2, Symbol(S2, Decl(assignmentCompatWithObjectMembers3.ts, 6, 9))
->foo : string, Symbol(foo, Decl(assignmentCompatWithObjectMembers3.ts, 3, 23))
+>S : S
+>S2 : S2
+>foo : string
 
 class T implements T2 { foo: string; }
->T : T, Symbol(T, Decl(assignmentCompatWithObjectMembers3.ts, 3, 38))
->T2 : T2, Symbol(T2, Decl(assignmentCompatWithObjectMembers3.ts, 8, 42))
->foo : string, Symbol(foo, Decl(assignmentCompatWithObjectMembers3.ts, 4, 23))
+>T : T
+>T2 : T2
+>foo : string
 
 var s: S;
->s : S, Symbol(s, Decl(assignmentCompatWithObjectMembers3.ts, 5, 3))
->S : S, Symbol(S, Decl(assignmentCompatWithObjectMembers3.ts, 0, 0))
+>s : S
+>S : S
 
 var t: T;
->t : T, Symbol(t, Decl(assignmentCompatWithObjectMembers3.ts, 6, 3))
->T : T, Symbol(T, Decl(assignmentCompatWithObjectMembers3.ts, 3, 38))
+>t : T
+>T : T
 
 interface S2 { foo: string; bar?: string }
->S2 : S2, Symbol(S2, Decl(assignmentCompatWithObjectMembers3.ts, 6, 9))
->foo : string, Symbol(foo, Decl(assignmentCompatWithObjectMembers3.ts, 8, 14))
->bar : string, Symbol(bar, Decl(assignmentCompatWithObjectMembers3.ts, 8, 27))
+>S2 : S2
+>foo : string
+>bar : string
 
 interface T2 { foo: string; baz?: string }
->T2 : T2, Symbol(T2, Decl(assignmentCompatWithObjectMembers3.ts, 8, 42))
->foo : string, Symbol(foo, Decl(assignmentCompatWithObjectMembers3.ts, 9, 14))
->baz : string, Symbol(baz, Decl(assignmentCompatWithObjectMembers3.ts, 9, 27))
+>T2 : T2
+>foo : string
+>baz : string
 
 var s2: S2;
->s2 : S2, Symbol(s2, Decl(assignmentCompatWithObjectMembers3.ts, 10, 3))
->S2 : S2, Symbol(S2, Decl(assignmentCompatWithObjectMembers3.ts, 6, 9))
+>s2 : S2
+>S2 : S2
 
 var t2: T2;
->t2 : T2, Symbol(t2, Decl(assignmentCompatWithObjectMembers3.ts, 11, 3))
->T2 : T2, Symbol(T2, Decl(assignmentCompatWithObjectMembers3.ts, 8, 42))
+>t2 : T2
+>T2 : T2
 
 var a: { foo: string; bar?: string }
->a : { foo: string; bar?: string; }, Symbol(a, Decl(assignmentCompatWithObjectMembers3.ts, 13, 3))
->foo : string, Symbol(foo, Decl(assignmentCompatWithObjectMembers3.ts, 13, 8))
->bar : string, Symbol(bar, Decl(assignmentCompatWithObjectMembers3.ts, 13, 21))
+>a : { foo: string; bar?: string; }
+>foo : string
+>bar : string
 
 var b: { foo: string; baz?: string }
->b : { foo: string; baz?: string; }, Symbol(b, Decl(assignmentCompatWithObjectMembers3.ts, 14, 3))
->foo : string, Symbol(foo, Decl(assignmentCompatWithObjectMembers3.ts, 14, 8))
->baz : string, Symbol(baz, Decl(assignmentCompatWithObjectMembers3.ts, 14, 21))
+>b : { foo: string; baz?: string; }
+>foo : string
+>baz : string
 
 var a2: S2 = { foo: '' };
->a2 : S2, Symbol(a2, Decl(assignmentCompatWithObjectMembers3.ts, 16, 3))
->S2 : S2, Symbol(S2, Decl(assignmentCompatWithObjectMembers3.ts, 6, 9))
+>a2 : S2
+>S2 : S2
 >{ foo: '' } : { foo: string; }
->foo : string, Symbol(foo, Decl(assignmentCompatWithObjectMembers3.ts, 16, 14))
+>foo : string
 >'' : string
 
 var b2: T2 = { foo: '' };
->b2 : T2, Symbol(b2, Decl(assignmentCompatWithObjectMembers3.ts, 17, 3))
->T2 : T2, Symbol(T2, Decl(assignmentCompatWithObjectMembers3.ts, 8, 42))
+>b2 : T2
+>T2 : T2
 >{ foo: '' } : { foo: string; }
->foo : string, Symbol(foo, Decl(assignmentCompatWithObjectMembers3.ts, 17, 14))
+>foo : string
 >'' : string
 
 s = t;
 >s = t : T
->s : S, Symbol(s, Decl(assignmentCompatWithObjectMembers3.ts, 5, 3))
->t : T, Symbol(t, Decl(assignmentCompatWithObjectMembers3.ts, 6, 3))
+>s : S
+>t : T
 
 t = s;
 >t = s : S
->t : T, Symbol(t, Decl(assignmentCompatWithObjectMembers3.ts, 6, 3))
->s : S, Symbol(s, Decl(assignmentCompatWithObjectMembers3.ts, 5, 3))
+>t : T
+>s : S
 
 s = s2;
 >s = s2 : S2
->s : S, Symbol(s, Decl(assignmentCompatWithObjectMembers3.ts, 5, 3))
->s2 : S2, Symbol(s2, Decl(assignmentCompatWithObjectMembers3.ts, 10, 3))
+>s : S
+>s2 : S2
 
 s = a2;
 >s = a2 : S2
->s : S, Symbol(s, Decl(assignmentCompatWithObjectMembers3.ts, 5, 3))
->a2 : S2, Symbol(a2, Decl(assignmentCompatWithObjectMembers3.ts, 16, 3))
+>s : S
+>a2 : S2
 
 s2 = t2;
 >s2 = t2 : T2
->s2 : S2, Symbol(s2, Decl(assignmentCompatWithObjectMembers3.ts, 10, 3))
->t2 : T2, Symbol(t2, Decl(assignmentCompatWithObjectMembers3.ts, 11, 3))
+>s2 : S2
+>t2 : T2
 
 t2 = s2;
 >t2 = s2 : S2
->t2 : T2, Symbol(t2, Decl(assignmentCompatWithObjectMembers3.ts, 11, 3))
->s2 : S2, Symbol(s2, Decl(assignmentCompatWithObjectMembers3.ts, 10, 3))
+>t2 : T2
+>s2 : S2
 
 s2 = t;
 >s2 = t : T
->s2 : S2, Symbol(s2, Decl(assignmentCompatWithObjectMembers3.ts, 10, 3))
->t : T, Symbol(t, Decl(assignmentCompatWithObjectMembers3.ts, 6, 3))
+>s2 : S2
+>t : T
 
 s2 = b;
 >s2 = b : { foo: string; baz?: string; }
->s2 : S2, Symbol(s2, Decl(assignmentCompatWithObjectMembers3.ts, 10, 3))
->b : { foo: string; baz?: string; }, Symbol(b, Decl(assignmentCompatWithObjectMembers3.ts, 14, 3))
+>s2 : S2
+>b : { foo: string; baz?: string; }
 
 s2 = a2;
 >s2 = a2 : S2
->s2 : S2, Symbol(s2, Decl(assignmentCompatWithObjectMembers3.ts, 10, 3))
->a2 : S2, Symbol(a2, Decl(assignmentCompatWithObjectMembers3.ts, 16, 3))
+>s2 : S2
+>a2 : S2
 
 a = b;
 >a = b : { foo: string; baz?: string; }
->a : { foo: string; bar?: string; }, Symbol(a, Decl(assignmentCompatWithObjectMembers3.ts, 13, 3))
->b : { foo: string; baz?: string; }, Symbol(b, Decl(assignmentCompatWithObjectMembers3.ts, 14, 3))
+>a : { foo: string; bar?: string; }
+>b : { foo: string; baz?: string; }
 
 b = a;
 >b = a : { foo: string; bar?: string; }
->b : { foo: string; baz?: string; }, Symbol(b, Decl(assignmentCompatWithObjectMembers3.ts, 14, 3))
->a : { foo: string; bar?: string; }, Symbol(a, Decl(assignmentCompatWithObjectMembers3.ts, 13, 3))
+>b : { foo: string; baz?: string; }
+>a : { foo: string; bar?: string; }
 
 a = s;
 >a = s : S
->a : { foo: string; bar?: string; }, Symbol(a, Decl(assignmentCompatWithObjectMembers3.ts, 13, 3))
->s : S, Symbol(s, Decl(assignmentCompatWithObjectMembers3.ts, 5, 3))
+>a : { foo: string; bar?: string; }
+>s : S
 
 a = s2;
 >a = s2 : S2
->a : { foo: string; bar?: string; }, Symbol(a, Decl(assignmentCompatWithObjectMembers3.ts, 13, 3))
->s2 : S2, Symbol(s2, Decl(assignmentCompatWithObjectMembers3.ts, 10, 3))
+>a : { foo: string; bar?: string; }
+>s2 : S2
 
 a = a2;
 >a = a2 : S2
->a : { foo: string; bar?: string; }, Symbol(a, Decl(assignmentCompatWithObjectMembers3.ts, 13, 3))
->a2 : S2, Symbol(a2, Decl(assignmentCompatWithObjectMembers3.ts, 16, 3))
+>a : { foo: string; bar?: string; }
+>a2 : S2
 
 a2 = b2;
 >a2 = b2 : T2
->a2 : S2, Symbol(a2, Decl(assignmentCompatWithObjectMembers3.ts, 16, 3))
->b2 : T2, Symbol(b2, Decl(assignmentCompatWithObjectMembers3.ts, 17, 3))
+>a2 : S2
+>b2 : T2
 
 b2 = a2;
 >b2 = a2 : S2
->b2 : T2, Symbol(b2, Decl(assignmentCompatWithObjectMembers3.ts, 17, 3))
->a2 : S2, Symbol(a2, Decl(assignmentCompatWithObjectMembers3.ts, 16, 3))
+>b2 : T2
+>a2 : S2
 
 a2 = b;
 >a2 = b : { foo: string; baz?: string; }
->a2 : S2, Symbol(a2, Decl(assignmentCompatWithObjectMembers3.ts, 16, 3))
->b : { foo: string; baz?: string; }, Symbol(b, Decl(assignmentCompatWithObjectMembers3.ts, 14, 3))
+>a2 : S2
+>b : { foo: string; baz?: string; }
 
 a2 = t2;
 >a2 = t2 : T2
->a2 : S2, Symbol(a2, Decl(assignmentCompatWithObjectMembers3.ts, 16, 3))
->t2 : T2, Symbol(t2, Decl(assignmentCompatWithObjectMembers3.ts, 11, 3))
+>a2 : S2
+>t2 : T2
 
 a2 = t;
 >a2 = t : T
->a2 : S2, Symbol(a2, Decl(assignmentCompatWithObjectMembers3.ts, 16, 3))
->t : T, Symbol(t, Decl(assignmentCompatWithObjectMembers3.ts, 6, 3))
+>a2 : S2
+>t : T
 

@@ -1,46 +1,46 @@
 === tests/cases/conformance/expressions/contextualTyping/taggedTemplateContextualTyping1.ts ===
 
 type FuncType = (x: <T>(p: T) => T) => typeof x;
->FuncType : (x: <T>(p: T) => T) => <T>(p: T) => T, Symbol(FuncType, Decl(taggedTemplateContextualTyping1.ts, 0, 0))
->x : <T>(p: T) => T, Symbol(x, Decl(taggedTemplateContextualTyping1.ts, 1, 17))
->T : T, Symbol(T, Decl(taggedTemplateContextualTyping1.ts, 1, 21))
->p : T, Symbol(p, Decl(taggedTemplateContextualTyping1.ts, 1, 24))
->T : T, Symbol(T, Decl(taggedTemplateContextualTyping1.ts, 1, 21))
->T : T, Symbol(T, Decl(taggedTemplateContextualTyping1.ts, 1, 21))
->x : <T>(p: T) => T, Symbol(x, Decl(taggedTemplateContextualTyping1.ts, 1, 17))
+>FuncType : (x: <T>(p: T) => T) => <T>(p: T) => T
+>x : <T>(p: T) => T
+>T : T
+>p : T
+>T : T
+>T : T
+>x : <T>(p: T) => T
 
 function tempTag1<T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T;
->tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, h: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; }, Symbol(tempTag1, Decl(taggedTemplateContextualTyping1.ts, 1, 48), Decl(taggedTemplateContextualTyping1.ts, 3, 79), Decl(taggedTemplateContextualTyping1.ts, 4, 92))
->T : T, Symbol(T, Decl(taggedTemplateContextualTyping1.ts, 3, 18))
->templateStrs : TemplateStringsArray, Symbol(templateStrs, Decl(taggedTemplateContextualTyping1.ts, 3, 21))
->TemplateStringsArray : TemplateStringsArray, Symbol(TemplateStringsArray, Decl(lib.d.ts, 518, 38))
->f : (x: <T>(p: T) => T) => <T>(p: T) => T, Symbol(f, Decl(taggedTemplateContextualTyping1.ts, 3, 56))
->FuncType : (x: <T>(p: T) => T) => <T>(p: T) => T, Symbol(FuncType, Decl(taggedTemplateContextualTyping1.ts, 0, 0))
->x : T, Symbol(x, Decl(taggedTemplateContextualTyping1.ts, 3, 69))
->T : T, Symbol(T, Decl(taggedTemplateContextualTyping1.ts, 3, 18))
->T : T, Symbol(T, Decl(taggedTemplateContextualTyping1.ts, 3, 18))
+>tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, h: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; }
+>T : T
+>templateStrs : TemplateStringsArray
+>TemplateStringsArray : TemplateStringsArray
+>f : (x: <T>(p: T) => T) => <T>(p: T) => T
+>FuncType : (x: <T>(p: T) => T) => <T>(p: T) => T
+>x : T
+>T : T
+>T : T
 
 function tempTag1<T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T;
->tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, h: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; }, Symbol(tempTag1, Decl(taggedTemplateContextualTyping1.ts, 1, 48), Decl(taggedTemplateContextualTyping1.ts, 3, 79), Decl(taggedTemplateContextualTyping1.ts, 4, 92))
->T : T, Symbol(T, Decl(taggedTemplateContextualTyping1.ts, 4, 18))
->templateStrs : TemplateStringsArray, Symbol(templateStrs, Decl(taggedTemplateContextualTyping1.ts, 4, 21))
->TemplateStringsArray : TemplateStringsArray, Symbol(TemplateStringsArray, Decl(lib.d.ts, 518, 38))
->f : (x: <T>(p: T) => T) => <T>(p: T) => T, Symbol(f, Decl(taggedTemplateContextualTyping1.ts, 4, 56))
->FuncType : (x: <T>(p: T) => T) => <T>(p: T) => T, Symbol(FuncType, Decl(taggedTemplateContextualTyping1.ts, 0, 0))
->h : (x: <T>(p: T) => T) => <T>(p: T) => T, Symbol(h, Decl(taggedTemplateContextualTyping1.ts, 4, 69))
->FuncType : (x: <T>(p: T) => T) => <T>(p: T) => T, Symbol(FuncType, Decl(taggedTemplateContextualTyping1.ts, 0, 0))
->x : T, Symbol(x, Decl(taggedTemplateContextualTyping1.ts, 4, 82))
->T : T, Symbol(T, Decl(taggedTemplateContextualTyping1.ts, 4, 18))
->T : T, Symbol(T, Decl(taggedTemplateContextualTyping1.ts, 4, 18))
+>tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, h: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; }
+>T : T
+>templateStrs : TemplateStringsArray
+>TemplateStringsArray : TemplateStringsArray
+>f : (x: <T>(p: T) => T) => <T>(p: T) => T
+>FuncType : (x: <T>(p: T) => T) => <T>(p: T) => T
+>h : (x: <T>(p: T) => T) => <T>(p: T) => T
+>FuncType : (x: <T>(p: T) => T) => <T>(p: T) => T
+>x : T
+>T : T
+>T : T
 
 function tempTag1<T>(...rest: any[]): T {
->tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, h: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; }, Symbol(tempTag1, Decl(taggedTemplateContextualTyping1.ts, 1, 48), Decl(taggedTemplateContextualTyping1.ts, 3, 79), Decl(taggedTemplateContextualTyping1.ts, 4, 92))
->T : T, Symbol(T, Decl(taggedTemplateContextualTyping1.ts, 5, 18))
->rest : any[], Symbol(rest, Decl(taggedTemplateContextualTyping1.ts, 5, 21))
->T : T, Symbol(T, Decl(taggedTemplateContextualTyping1.ts, 5, 18))
+>tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, h: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; }
+>T : T
+>rest : any[]
+>T : T
 
     return undefined;
->undefined : undefined, Symbol(undefined)
+>undefined : undefined
 }
 
 // If contextual typing takes place, these functions should work.
@@ -49,75 +49,75 @@ function tempTag1<T>(...rest: any[]): T {
 // so this test will error.
 tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ 10 }`;
 >tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ 10 }` : number
->tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, h: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; }, Symbol(tempTag1, Decl(taggedTemplateContextualTyping1.ts, 1, 48), Decl(taggedTemplateContextualTyping1.ts, 3, 79), Decl(taggedTemplateContextualTyping1.ts, 4, 92))
+>tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, h: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; }
 >`${ x => { x<number>(undefined); return x; }                   }${ 10 }` : string
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
->x : <T>(p: T) => T, Symbol(x, Decl(taggedTemplateContextualTyping1.ts, 13, 12))
+>x : <T>(p: T) => T
 >x<number>(undefined) : number
->x : <T>(p: T) => T, Symbol(x, Decl(taggedTemplateContextualTyping1.ts, 13, 12))
->undefined : undefined, Symbol(undefined)
->x : <T>(p: T) => T, Symbol(x, Decl(taggedTemplateContextualTyping1.ts, 13, 12))
+>x : <T>(p: T) => T
+>undefined : undefined
+>x : <T>(p: T) => T
 >10 : number
 
 tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ y => { y<number>(undefined); return y; }                  }${ 10 }`;
 >tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ y => { y<number>(undefined); return y; }                  }${ 10 }` : number
->tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, h: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; }, Symbol(tempTag1, Decl(taggedTemplateContextualTyping1.ts, 1, 48), Decl(taggedTemplateContextualTyping1.ts, 3, 79), Decl(taggedTemplateContextualTyping1.ts, 4, 92))
+>tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, h: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; }
 >`${ x => { x<number>(undefined); return x; }                   }${ y => { y<number>(undefined); return y; }                  }${ 10 }` : string
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
->x : <T>(p: T) => T, Symbol(x, Decl(taggedTemplateContextualTyping1.ts, 14, 12))
+>x : <T>(p: T) => T
 >x<number>(undefined) : number
->x : <T>(p: T) => T, Symbol(x, Decl(taggedTemplateContextualTyping1.ts, 14, 12))
->undefined : undefined, Symbol(undefined)
->x : <T>(p: T) => T, Symbol(x, Decl(taggedTemplateContextualTyping1.ts, 14, 12))
+>x : <T>(p: T) => T
+>undefined : undefined
+>x : <T>(p: T) => T
 >y => { y<number>(undefined); return y; } : (y: <T>(p: T) => T) => <T>(p: T) => T
->y : <T>(p: T) => T, Symbol(y, Decl(taggedTemplateContextualTyping1.ts, 14, 75))
+>y : <T>(p: T) => T
 >y<number>(undefined) : number
->y : <T>(p: T) => T, Symbol(y, Decl(taggedTemplateContextualTyping1.ts, 14, 75))
->undefined : undefined, Symbol(undefined)
->y : <T>(p: T) => T, Symbol(y, Decl(taggedTemplateContextualTyping1.ts, 14, 75))
+>y : <T>(p: T) => T
+>undefined : undefined
+>y : <T>(p: T) => T
 >10 : number
 
 tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ (y: <T>(p: T) => T) => { y<number>(undefined); return y } }${ undefined }`;
 >tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ (y: <T>(p: T) => T) => { y<number>(undefined); return y } }${ undefined }` : any
->tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, h: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; }, Symbol(tempTag1, Decl(taggedTemplateContextualTyping1.ts, 1, 48), Decl(taggedTemplateContextualTyping1.ts, 3, 79), Decl(taggedTemplateContextualTyping1.ts, 4, 92))
+>tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, h: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; }
 >`${ x => { x<number>(undefined); return x; }                   }${ (y: <T>(p: T) => T) => { y<number>(undefined); return y } }${ undefined }` : string
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
->x : <T>(p: T) => T, Symbol(x, Decl(taggedTemplateContextualTyping1.ts, 15, 12))
+>x : <T>(p: T) => T
 >x<number>(undefined) : number
->x : <T>(p: T) => T, Symbol(x, Decl(taggedTemplateContextualTyping1.ts, 15, 12))
->undefined : undefined, Symbol(undefined)
->x : <T>(p: T) => T, Symbol(x, Decl(taggedTemplateContextualTyping1.ts, 15, 12))
+>x : <T>(p: T) => T
+>undefined : undefined
+>x : <T>(p: T) => T
 >(y: <T>(p: T) => T) => { y<number>(undefined); return y } : (y: <T>(p: T) => T) => <T>(p: T) => T
->y : <T>(p: T) => T, Symbol(y, Decl(taggedTemplateContextualTyping1.ts, 15, 77))
->T : T, Symbol(T, Decl(taggedTemplateContextualTyping1.ts, 15, 81))
->p : T, Symbol(p, Decl(taggedTemplateContextualTyping1.ts, 15, 84))
->T : T, Symbol(T, Decl(taggedTemplateContextualTyping1.ts, 15, 81))
->T : T, Symbol(T, Decl(taggedTemplateContextualTyping1.ts, 15, 81))
+>y : <T>(p: T) => T
+>T : T
+>p : T
+>T : T
+>T : T
 >y<number>(undefined) : number
->y : <T>(p: T) => T, Symbol(y, Decl(taggedTemplateContextualTyping1.ts, 15, 77))
->undefined : undefined, Symbol(undefined)
->y : <T>(p: T) => T, Symbol(y, Decl(taggedTemplateContextualTyping1.ts, 15, 77))
->undefined : undefined, Symbol(undefined)
+>y : <T>(p: T) => T
+>undefined : undefined
+>y : <T>(p: T) => T
+>undefined : undefined
 
 tempTag1 `${ (x: <T>(p: T) => T) => { x<number>(undefined); return x; } }${ y => { y<number>(undefined); return y; }                  }${ undefined }`;
 >tempTag1 `${ (x: <T>(p: T) => T) => { x<number>(undefined); return x; } }${ y => { y<number>(undefined); return y; }                  }${ undefined }` : any
->tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, h: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; }, Symbol(tempTag1, Decl(taggedTemplateContextualTyping1.ts, 1, 48), Decl(taggedTemplateContextualTyping1.ts, 3, 79), Decl(taggedTemplateContextualTyping1.ts, 4, 92))
+>tempTag1 : { <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; <T>(templateStrs: TemplateStringsArray, f: (x: <T>(p: T) => T) => <T>(p: T) => T, h: (x: <T>(p: T) => T) => <T>(p: T) => T, x: T): T; }
 >`${ (x: <T>(p: T) => T) => { x<number>(undefined); return x; } }${ y => { y<number>(undefined); return y; }                  }${ undefined }` : string
 >(x: <T>(p: T) => T) => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
->x : <T>(p: T) => T, Symbol(x, Decl(taggedTemplateContextualTyping1.ts, 16, 14))
->T : T, Symbol(T, Decl(taggedTemplateContextualTyping1.ts, 16, 18))
->p : T, Symbol(p, Decl(taggedTemplateContextualTyping1.ts, 16, 21))
->T : T, Symbol(T, Decl(taggedTemplateContextualTyping1.ts, 16, 18))
->T : T, Symbol(T, Decl(taggedTemplateContextualTyping1.ts, 16, 18))
+>x : <T>(p: T) => T
+>T : T
+>p : T
+>T : T
+>T : T
 >x<number>(undefined) : number
->x : <T>(p: T) => T, Symbol(x, Decl(taggedTemplateContextualTyping1.ts, 16, 14))
->undefined : undefined, Symbol(undefined)
->x : <T>(p: T) => T, Symbol(x, Decl(taggedTemplateContextualTyping1.ts, 16, 14))
+>x : <T>(p: T) => T
+>undefined : undefined
+>x : <T>(p: T) => T
 >y => { y<number>(undefined); return y; } : (y: <T>(p: T) => T) => <T>(p: T) => T
->y : <T>(p: T) => T, Symbol(y, Decl(taggedTemplateContextualTyping1.ts, 16, 75))
+>y : <T>(p: T) => T
 >y<number>(undefined) : number
->y : <T>(p: T) => T, Symbol(y, Decl(taggedTemplateContextualTyping1.ts, 16, 75))
->undefined : undefined, Symbol(undefined)
->y : <T>(p: T) => T, Symbol(y, Decl(taggedTemplateContextualTyping1.ts, 16, 75))
->undefined : undefined, Symbol(undefined)
+>y : <T>(p: T) => T
+>undefined : undefined
+>y : <T>(p: T) => T
+>undefined : undefined
 

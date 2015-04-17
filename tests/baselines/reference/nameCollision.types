@@ -1,97 +1,97 @@
 === tests/cases/conformance/internalModules/codeGeneration/nameCollision.ts ===
 module A {
->A : typeof A, Symbol(A, Decl(nameCollision.ts, 0, 0))
+>A : typeof A
 
     // these 2 statements force an underscore before the 'A' 
     // in the generated function call.
     var A = 12;
->A : number, Symbol(A, Decl(nameCollision.ts, 3, 7))
+>A : number
 >12 : number
 
     var _A = '';
->_A : string, Symbol(_A, Decl(nameCollision.ts, 4, 7))
+>_A : string
 >'' : string
 }
 
 module B {
->B : typeof B, Symbol(B, Decl(nameCollision.ts, 5, 1), Decl(nameCollision.ts, 9, 1))
+>B : typeof B
 
     var A = 12;
->A : number, Symbol(A, Decl(nameCollision.ts, 8, 7))
+>A : number
 >12 : number
 }
 
 module B {
->B : typeof B, Symbol(B, Decl(nameCollision.ts, 5, 1), Decl(nameCollision.ts, 9, 1))
+>B : typeof B
 
     // re-opened module with colliding name
     // this should add an underscore.
     class B {
->B : B, Symbol(B, Decl(nameCollision.ts, 11, 10))
+>B : B
 
         name: string;
->name : string, Symbol(name, Decl(nameCollision.ts, 14, 13))
+>name : string
     }
 }
 
 module X {
->X : typeof X, Symbol(X, Decl(nameCollision.ts, 17, 1))
+>X : typeof X
 
     var X = 13;
->X : number, Symbol(X, Decl(nameCollision.ts, 20, 7))
+>X : number
 >13 : number
 
     export module Y {
->Y : typeof X.Y, Symbol(Y, Decl(nameCollision.ts, 20, 15))
+>Y : typeof X.Y
 
         var Y = 13;
->Y : number, Symbol(Y, Decl(nameCollision.ts, 22, 11))
+>Y : number
 >13 : number
 
         export module Z {
->Z : typeof X.Y.Z, Symbol(Z, Decl(nameCollision.ts, 22, 19))
+>Z : typeof X.Y.Z
 
             var X = 12;
->X : number, Symbol(X, Decl(nameCollision.ts, 24, 15))
+>X : number
 >12 : number
 
             var Y = 12;
->Y : number, Symbol(Y, Decl(nameCollision.ts, 25, 15))
+>Y : number
 >12 : number
 
             var Z = 12;
->Z : number, Symbol(Z, Decl(nameCollision.ts, 26, 15))
+>Z : number
 >12 : number
         }
     }
 }
 
 module Y.Y {
->Y : typeof Y, Symbol(Y, Decl(nameCollision.ts, 29, 1))
->Y : typeof Y.Y, Symbol(Y, Decl(nameCollision.ts, 31, 9))
+>Y : typeof Y
+>Y : typeof Y.Y
 
     export enum Y {
->Y : Y, Symbol(Y, Decl(nameCollision.ts, 31, 12))
+>Y : Y
 
         Red, Blue
->Red : Y, Symbol(Y.Red, Decl(nameCollision.ts, 32, 19))
->Blue : Y, Symbol(Y.Blue, Decl(nameCollision.ts, 33, 12))
+>Red : Y
+>Blue : Y
     }
 }
 
 // no collision, since interface doesn't
 // generate code.
 module D {
->D : typeof D, Symbol(D, Decl(nameCollision.ts, 35, 1))
+>D : typeof D
 
     export interface D {
->D : D, Symbol(D, Decl(nameCollision.ts, 39, 10))
+>D : D
 
         id: number;
->id : number, Symbol(id, Decl(nameCollision.ts, 40, 24))
+>id : number
     }
 
     export var E = 'hello';
->E : string, Symbol(E, Decl(nameCollision.ts, 44, 14))
+>E : string
 >'hello' : string
 }

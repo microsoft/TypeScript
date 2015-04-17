@@ -1,13 +1,13 @@
 === tests/cases/compiler/variableDeclarator1.ts ===
 var a = function () {
->a : () => number, Symbol(a, Decl(variableDeclarator1.ts, 0, 3))
+>a : () => number
 >function () {        var c = 1;        return c;    } : () => number
 
         var c = 1;
->c : number, Symbol(c, Decl(variableDeclarator1.ts, 1, 11))
+>c : number
 >1 : number
 
         return c;
->c : number, Symbol(c, Decl(variableDeclarator1.ts, 1, 11))
+>c : number
 
     };

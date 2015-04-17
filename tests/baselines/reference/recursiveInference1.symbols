@@ -1,0 +1,15 @@
+=== tests/cases/compiler/recursiveInference1.ts ===
+function fib(x:number) { return x <= 1 ? x : fib(x - 1) + fib(x - 2); }
+>fib : Symbol(fib, Decl(recursiveInference1.ts, 0, 0))
+>x : Symbol(x, Decl(recursiveInference1.ts, 0, 13))
+>x : Symbol(x, Decl(recursiveInference1.ts, 0, 13))
+>x : Symbol(x, Decl(recursiveInference1.ts, 0, 13))
+>fib : Symbol(fib, Decl(recursiveInference1.ts, 0, 0))
+>x : Symbol(x, Decl(recursiveInference1.ts, 0, 13))
+>fib : Symbol(fib, Decl(recursiveInference1.ts, 0, 0))
+>x : Symbol(x, Decl(recursiveInference1.ts, 0, 13))
+
+var result = fib(5);
+>result : Symbol(result, Decl(recursiveInference1.ts, 1, 3))
+>fib : Symbol(fib, Decl(recursiveInference1.ts, 0, 0))
+

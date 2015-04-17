@@ -54,7 +54,7 @@ EIGHT:
 
 for (; ;) {
     var fn = function () { }
->fn : () => void, Symbol(fn, Decl(forContinueStatements.ts, 33, 7))
+>fn : () => void
 >function () { } : () => void
 
     continue EIGHT;

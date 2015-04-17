@@ -1,15 +1,15 @@
 === tests/cases/compiler/nestedGenerics.ts ===
 interface Foo<T> {
->Foo : Foo<T>, Symbol(Foo, Decl(nestedGenerics.ts, 0, 0))
->T : T, Symbol(T, Decl(nestedGenerics.ts, 0, 14))
+>Foo : Foo<T>
+>T : T
 
 	t: T;
->t : T, Symbol(t, Decl(nestedGenerics.ts, 0, 18))
->T : T, Symbol(T, Decl(nestedGenerics.ts, 0, 14))
+>t : T
+>T : T
 }
 
 var f: Foo<Foo<number>>;
->f : Foo<Foo<number>>, Symbol(f, Decl(nestedGenerics.ts, 4, 3))
->Foo : Foo<T>, Symbol(Foo, Decl(nestedGenerics.ts, 0, 0))
->Foo : Foo<T>, Symbol(Foo, Decl(nestedGenerics.ts, 0, 0))
+>f : Foo<Foo<number>>
+>Foo : Foo<T>
+>Foo : Foo<T>
 

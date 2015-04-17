@@ -1,37 +1,37 @@
 === tests/cases/compiler/genericStaticAnyTypeFunction.ts ===
 class A {
->A : A, Symbol(A, Decl(genericStaticAnyTypeFunction.ts, 0, 0))
+>A : A
 
     static one<T>(source: T, value: number): T {
->one : <T>(source: T, value: number) => T, Symbol(A.one, Decl(genericStaticAnyTypeFunction.ts, 0, 9))
->T : T, Symbol(T, Decl(genericStaticAnyTypeFunction.ts, 2, 15))
->source : T, Symbol(source, Decl(genericStaticAnyTypeFunction.ts, 2, 18))
->T : T, Symbol(T, Decl(genericStaticAnyTypeFunction.ts, 2, 15))
->value : number, Symbol(value, Decl(genericStaticAnyTypeFunction.ts, 2, 28))
->T : T, Symbol(T, Decl(genericStaticAnyTypeFunction.ts, 2, 15))
+>one : <T>(source: T, value: number) => T
+>T : T
+>source : T
+>T : T
+>value : number
+>T : T
 
         return source;
->source : T, Symbol(source, Decl(genericStaticAnyTypeFunction.ts, 2, 18))
+>source : T
 
     }
     static goo() { return 0; }
->goo : () => number, Symbol(A.goo, Decl(genericStaticAnyTypeFunction.ts, 6, 5))
+>goo : () => number
 >0 : number
 
     static two<T>(source: T): T {
->two : <T>(source: T) => T, Symbol(A.two, Decl(genericStaticAnyTypeFunction.ts, 7, 30))
->T : T, Symbol(T, Decl(genericStaticAnyTypeFunction.ts, 9, 15))
->source : T, Symbol(source, Decl(genericStaticAnyTypeFunction.ts, 9, 18))
->T : T, Symbol(T, Decl(genericStaticAnyTypeFunction.ts, 9, 15))
->T : T, Symbol(T, Decl(genericStaticAnyTypeFunction.ts, 9, 15))
+>two : <T>(source: T) => T
+>T : T
+>source : T
+>T : T
+>T : T
 
         return this.one<T>(source, 42); // should not error
 >this.one<T>(source, 42) : T
->this.one : <T>(source: T, value: number) => T, Symbol(A.one, Decl(genericStaticAnyTypeFunction.ts, 0, 9))
->this : typeof A, Symbol(A, Decl(genericStaticAnyTypeFunction.ts, 0, 0))
->one : <T>(source: T, value: number) => T, Symbol(A.one, Decl(genericStaticAnyTypeFunction.ts, 0, 9))
->T : T, Symbol(T, Decl(genericStaticAnyTypeFunction.ts, 9, 15))
->source : T, Symbol(source, Decl(genericStaticAnyTypeFunction.ts, 9, 18))
+>this.one : <T>(source: T, value: number) => T
+>this : typeof A
+>one : <T>(source: T, value: number) => T
+>T : T
+>source : T
 >42 : number
 
     }

@@ -1,6 +1,6 @@
 === tests/cases/conformance/es6/templates/templateStringWithEmbeddedTemplateString.ts ===
 var x = `123${ `456 ${ " | " } 654` }321 123${ `456 ${ " | " } 654` }321`;
->x : string, Symbol(x, Decl(templateStringWithEmbeddedTemplateString.ts, 0, 3))
+>x : string
 >`123${ `456 ${ " | " } 654` }321 123${ `456 ${ " | " } 654` }321` : string
 >`456 ${ " | " } 654` : string
 >" | " : string
