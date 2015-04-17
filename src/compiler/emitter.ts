@@ -4652,6 +4652,18 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 let aliasedModuleNames: string[] = [];
                 let unaliasedModuleNames: string[] = [];
                 let importAliasNames: string[] = [];
+
+                // Fill in amd-dependency tags
+                for (let amdDependency of node.amdDependencies) {
+                    if (amdDependency.name) {
+                        aliasedModuleNames.push("\"" + amdDependency.path + "\"");
+                        importAliasNames.push(amdDependency.name);
+                    }
+                    else {
+                        unaliasedModuleNames.push("\"" + amdDependency.path + "\"");
+                    }
+                }
+
                 for (let importNode of externalImports) {
                     // Find the name of the external module
                     let externalModuleName = "";
@@ -4676,17 +4688,6 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     }
                     else {
                         unaliasedModuleNames.push(externalModuleName);
-                    }
-                }
-
-                // Fill in amd-dependency tags
-                for (let amdDependency of node.amdDependencies) {
-                    if (amdDependency.name) {
-                        aliasedModuleNames.push("\"" + amdDependency.path + "\"");
-                        importAliasNames.push(amdDependency.name);
-                    }
-                    else {
-                        unaliasedModuleNames.push("\"" + amdDependency.path + "\"");
                     }
                 }
                 

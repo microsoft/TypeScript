@@ -25,7 +25,7 @@ import "unaliasedModule2";
 ///<amd-dependency path='unaliasedModule3'/>
 ///<amd-dependency path='aliasedModule6' name='n2'/>
 ///<amd-dependency path='unaliasedModule4'/>
-define(["require", "exports", "aliasedModule1", "aliasedModule2", "aliasedModule3", "aliasedModule4", "aliasedModule5", "aliasedModule6", "unaliasedModule1", "unaliasedModule2", "unaliasedModule3", "unaliasedModule4"], function (require, exports, r1, aliasedModule2_1, aliasedModule3_1, ns, n1, n2) {
+define(["require", "exports", "aliasedModule5", "aliasedModule6", "aliasedModule1", "aliasedModule2", "aliasedModule3", "aliasedModule4", "unaliasedModule3", "unaliasedModule4", "unaliasedModule1", "unaliasedModule2"], function (require, exports, n1, n2, r1, aliasedModule2_1, aliasedModule3_1, ns) {
     r1;
     aliasedModule2_1.p1;
     aliasedModule3_1.default;
