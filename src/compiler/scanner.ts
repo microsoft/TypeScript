@@ -601,12 +601,23 @@ module ts {
 
     /* @internal */ 
     // Creates a scanner over a (possibly unspecified) range of a piece of text.
-    export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, text?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner {
-        let pos: number;       // Current position (end position of text of current token)
-        let end: number;       // end of text
+    export function createScanner(languageVersion: ScriptTarget,
+                                  skipTrivia: boolean,
+                                  text?: string,
+                                  onError?: ErrorCallback,
+                                  start?: number,
+                                  length?: number): Scanner {
+        // Current position (end position of text of current token)
+        let pos: number;       
 
-        let startPos: number;  // Start position of whitespace before current token
-        let tokenPos: number;  // Start position of text of current token
+        // end of text
+        let end: number;       
+
+        // Start position of whitespace before current token
+        let startPos: number;  
+
+        // Start position of text of current token
+        let tokenPos: number;  
         let token: SyntaxKind;
         let tokenValue: string;
         let precedingLineBreak: boolean;
