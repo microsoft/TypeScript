@@ -2452,20 +2452,21 @@ module ts {
             return result;
         }
 
-        function getBaseTypes(type: InterfaceType): ObjectType[] {
-            if (!(<InterfaceTypeWithBaseTypes>type).baseTypes) {
+        function getBaseTypes(type: InterfaceType): ObjectType[]{
+            let typeWithBaseTypes = <InterfaceTypeWithBaseTypes>type;
+            if (!typeWithBaseTypes.baseTypes) {
                 if (type.symbol.flags & SymbolFlags.Class) {
-                    resolveBaseTypesOfClass(<InterfaceTypeWithBaseTypes>type);
+                    resolveBaseTypesOfClass(typeWithBaseTypes);
                 }
                 else if (type.symbol.flags & SymbolFlags.Interface) {
-                    resolveBaseTypesOfInterface(<InterfaceTypeWithBaseTypes>type);
+                    resolveBaseTypesOfInterface(typeWithBaseTypes);
                 }
                 else {
                     Debug.fail("type must be class or interface");
                 }
             }
 
-            return (<InterfaceTypeWithBaseTypes>type).baseTypes;
+            return typeWithBaseTypes.baseTypes;
         }
 
         function resolveBaseTypesOfClass(type: InterfaceTypeWithBaseTypes): void {
@@ -2492,9 +2493,9 @@ module ts {
 
         function resolveBaseTypesOfInterface(type: InterfaceTypeWithBaseTypes): void {
             type.baseTypes = [];
-            forEach(type.symbol.declarations, declaration => {
+            for (let declaration of type.symbol.declarations) {
                 if (declaration.kind === SyntaxKind.InterfaceDeclaration && getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
-                    forEach(getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration), node => {
+                    for (let node of getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
                         let baseType = getTypeFromHeritageClauseElement(node);
 
                         if (baseType !== unknownType) {
@@ -2510,9 +2511,9 @@ module ts {
                                 error(node, Diagnostics.An_interface_may_only_extend_a_class_or_another_interface);
                             }
                         }
-                    });
+                    }
                 }
-            });
+            }
         }
 
         function getDeclaredTypeOfClass(symbol: Symbol): InterfaceType {
@@ -2674,13 +2675,13 @@ module ts {
             let baseTypes = getBaseTypes(type);
             if (baseTypes.length) {
                 members = createSymbolTable(type.declaredProperties);
-                forEach(baseTypes, baseType => {
+                for (let baseType of baseTypes) {
                     addInheritedMembers(members, getPropertiesOfObjectType(baseType));
                     callSignatures = concatenate(callSignatures, getSignaturesOfType(baseType, SignatureKind.Call));
                     constructSignatures = concatenate(constructSignatures, getSignaturesOfType(baseType, SignatureKind.Construct));
                     stringIndexType = stringIndexType || getIndexTypeOfType(baseType, IndexKind.String);
                     numberIndexType = numberIndexType || getIndexTypeOfType(baseType, IndexKind.Number);
-                });
+                }
             }
             setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
         }
@@ -10148,7 +10149,7 @@ module ts {
 
         function checkInheritedPropertiesAreIdentical(type: InterfaceType, typeNode: Node): boolean {
             let baseTypes = getBaseTypes(type);
-            if (!baseTypes.length || baseTypes.length === 1) {
+            if (baseTypes.length < 2) {
                 return true;
             }
 
