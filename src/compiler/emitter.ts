@@ -2452,7 +2452,11 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     writeLine();
                     emitStart(node);
                     if (node.flags & NodeFlags.Default) {
-                        write("exports.default");
+                        if (languageVersion === ScriptTarget.ES3) {
+                            write("exports[\"default\"]");
+                        } else {
+                            write("exports.default");
+                        }
                     }
                     else {
                         emitModuleMemberName(node);
@@ -4548,7 +4552,11 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         writeLine();
                         emitStart(node);
                         emitContainingModuleName(node);
-                        write(".default = ");
+                        if (languageVersion === ScriptTarget.ES3) {
+                            write("[\"default\"] = ");
+                        } else {
+                            write(".default = ");
+                        }
                         emit(node.expression);
                         write(";");
                         emitEnd(node);
