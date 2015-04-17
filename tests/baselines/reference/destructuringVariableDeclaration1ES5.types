@@ -1,0 +1,200 @@
+=== tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration1ES5.ts ===
+// The type T associated with a destructuring variable declaration is determined as follows:
+//      If the declaration includes a type annotation, T is that type.
+var {a1, a2}: { a1: number, a2: string } = { a1: 10, a2: "world" }
+>a1 : number, Symbol(a1, Decl(destructuringVariableDeclaration1ES5.ts, 2, 5))
+>a2 : string, Symbol(a2, Decl(destructuringVariableDeclaration1ES5.ts, 2, 8))
+>a1 : number, Symbol(a1, Decl(destructuringVariableDeclaration1ES5.ts, 2, 15))
+>a2 : string, Symbol(a2, Decl(destructuringVariableDeclaration1ES5.ts, 2, 27))
+>{ a1: 10, a2: "world" } : { a1: number; a2: string; }
+>a1 : number, Symbol(a1, Decl(destructuringVariableDeclaration1ES5.ts, 2, 44))
+>10 : number
+>a2 : string, Symbol(a2, Decl(destructuringVariableDeclaration1ES5.ts, 2, 52))
+>"world" : string
+
+var [a3, [[a4]], a5]: [number, [[string]], boolean] = [1, [["hello"]], true];
+>a3 : number, Symbol(a3, Decl(destructuringVariableDeclaration1ES5.ts, 3, 5))
+>a4 : string, Symbol(a4, Decl(destructuringVariableDeclaration1ES5.ts, 3, 11))
+>a5 : boolean, Symbol(a5, Decl(destructuringVariableDeclaration1ES5.ts, 3, 16))
+>[1, [["hello"]], true] : [number, [[string]], boolean]
+>1 : number
+>[["hello"]] : [[string]]
+>["hello"] : [string]
+>"hello" : string
+>true : boolean
+
+// The type T associated with a destructuring variable declaration is determined as follows:
+//      Otherwise, if the declaration includes an initializer expression, T is the type of that initializer expression.
+var { b1: { b11 } = { b11: "string" }  } = { b1: { b11: "world" } };
+>b1 : any
+>b11 : string, Symbol(b11, Decl(destructuringVariableDeclaration1ES5.ts, 7, 11))
+>{ b11: "string" } : { b11: string; }
+>b11 : string, Symbol(b11, Decl(destructuringVariableDeclaration1ES5.ts, 7, 21))
+>"string" : string
+>{ b1: { b11: "world" } } : { b1: { b11: string; }; }
+>b1 : { b11: string; }, Symbol(b1, Decl(destructuringVariableDeclaration1ES5.ts, 7, 44))
+>{ b11: "world" } : { b11: string; }
+>b11 : string, Symbol(b11, Decl(destructuringVariableDeclaration1ES5.ts, 7, 50))
+>"world" : string
+
+var temp = { t1: true, t2: "false" };
+>temp : { t1: boolean; t2: string; }, Symbol(temp, Decl(destructuringVariableDeclaration1ES5.ts, 8, 3))
+>{ t1: true, t2: "false" } : { t1: boolean; t2: string; }
+>t1 : boolean, Symbol(t1, Decl(destructuringVariableDeclaration1ES5.ts, 8, 12))
+>true : boolean
+>t2 : string, Symbol(t2, Decl(destructuringVariableDeclaration1ES5.ts, 8, 22))
+>"false" : string
+
+var [b2 = 3, b3 = true, b4 = temp] = [3, false, { t1: false, t2: "hello" }];
+>b2 : number, Symbol(b2, Decl(destructuringVariableDeclaration1ES5.ts, 9, 5))
+>3 : number
+>b3 : boolean, Symbol(b3, Decl(destructuringVariableDeclaration1ES5.ts, 9, 12))
+>true : boolean
+>b4 : { t1: boolean; t2: string; }, Symbol(b4, Decl(destructuringVariableDeclaration1ES5.ts, 9, 23))
+>temp : { t1: boolean; t2: string; }, Symbol(temp, Decl(destructuringVariableDeclaration1ES5.ts, 8, 3))
+>[3, false, { t1: false, t2: "hello" }] : [number, boolean, { t1: boolean; t2: string; }]
+>3 : number
+>false : boolean
+>{ t1: false, t2: "hello" } : { t1: boolean; t2: string; }
+>t1 : boolean, Symbol(t1, Decl(destructuringVariableDeclaration1ES5.ts, 9, 49))
+>false : boolean
+>t2 : string, Symbol(t2, Decl(destructuringVariableDeclaration1ES5.ts, 9, 60))
+>"hello" : string
+
+var [b5 = 3, b6 = true, b7 = temp] = [undefined, undefined, undefined];
+>b5 : any, Symbol(b5, Decl(destructuringVariableDeclaration1ES5.ts, 10, 5))
+>3 : number
+>b6 : any, Symbol(b6, Decl(destructuringVariableDeclaration1ES5.ts, 10, 12))
+>true : boolean
+>b7 : any, Symbol(b7, Decl(destructuringVariableDeclaration1ES5.ts, 10, 23))
+>temp : { t1: boolean; t2: string; }, Symbol(temp, Decl(destructuringVariableDeclaration1ES5.ts, 8, 3))
+>[undefined, undefined, undefined] : [undefined, undefined, undefined]
+>undefined : undefined, Symbol(undefined)
+>undefined : undefined, Symbol(undefined)
+>undefined : undefined, Symbol(undefined)
+
+// The type T associated with a binding element is determined as follows:
+//      If the binding element is a rest element, T is an array type with
+//          an element type E, where E is the type of the numeric index signature of S.
+var [...c1] = [1,2,3]; 
+>c1 : number[], Symbol(c1, Decl(destructuringVariableDeclaration1ES5.ts, 15, 5))
+>[1,2,3] : number[]
+>1 : number
+>2 : number
+>3 : number
+
+var [...c2] = [1,2,3, "string"]; 
+>c2 : (string | number)[], Symbol(c2, Decl(destructuringVariableDeclaration1ES5.ts, 16, 5))
+>[1,2,3, "string"] : (string | number)[]
+>1 : number
+>2 : number
+>3 : number
+>"string" : string
+
+// The type T associated with a binding element is determined as follows:
+//      Otherwise, if S is a tuple- like type (section 3.3.3):
+//          	Let N be the zero-based index of the binding element in the array binding pattern.
+// 	            If S has a property with the numerical name N, T is the type of that property.
+var [d1,d2] = [1,"string"]	
+>d1 : number, Symbol(d1, Decl(destructuringVariableDeclaration1ES5.ts, 22, 5))
+>d2 : string, Symbol(d2, Decl(destructuringVariableDeclaration1ES5.ts, 22, 8))
+>[1,"string"] : [number, string]
+>1 : number
+>"string" : string
+
+// The type T associated with a binding element is determined as follows:
+//      Otherwise, if S is a tuple- like type (section 3.3.3):
+//              Otherwise, if S has a numeric index signature, T is the type of the numeric index signature.
+var temp1 = [true, false, true]
+>temp1 : boolean[], Symbol(temp1, Decl(destructuringVariableDeclaration1ES5.ts, 27, 3))
+>[true, false, true] : boolean[]
+>true : boolean
+>false : boolean
+>true : boolean
+
+var [d3, d4] = [1, "string", ...temp1];
+>d3 : string | number | boolean, Symbol(d3, Decl(destructuringVariableDeclaration1ES5.ts, 28, 5))
+>d4 : string | number | boolean, Symbol(d4, Decl(destructuringVariableDeclaration1ES5.ts, 28, 8))
+>[1, "string", ...temp1] : (string | number | boolean)[]
+>1 : number
+>"string" : string
+>...temp1 : boolean
+>temp1 : boolean[], Symbol(temp1, Decl(destructuringVariableDeclaration1ES5.ts, 27, 3))
+
+//  Combining both forms of destructuring,
+var {e: [e1, e2, e3 = { b1: 1000, b4: 200 }]} = { e: [1, 2, { b1: 4, b4: 0 }] }; 
+>e : any
+>e1 : number, Symbol(e1, Decl(destructuringVariableDeclaration1ES5.ts, 31, 9))
+>e2 : number, Symbol(e2, Decl(destructuringVariableDeclaration1ES5.ts, 31, 12))
+>e3 : { b1: number; b4: number; }, Symbol(e3, Decl(destructuringVariableDeclaration1ES5.ts, 31, 16))
+>{ b1: 1000, b4: 200 } : { b1: number; b4: number; }
+>b1 : number, Symbol(b1, Decl(destructuringVariableDeclaration1ES5.ts, 31, 23))
+>1000 : number
+>b4 : number, Symbol(b4, Decl(destructuringVariableDeclaration1ES5.ts, 31, 33))
+>200 : number
+>{ e: [1, 2, { b1: 4, b4: 0 }] } : { e: [number, number, { b1: number; b4: number; }]; }
+>e : [number, number, { b1: number; b4: number; }], Symbol(e, Decl(destructuringVariableDeclaration1ES5.ts, 31, 49))
+>[1, 2, { b1: 4, b4: 0 }] : [number, number, { b1: number; b4: number; }]
+>1 : number
+>2 : number
+>{ b1: 4, b4: 0 } : { b1: number; b4: number; }
+>b1 : number, Symbol(b1, Decl(destructuringVariableDeclaration1ES5.ts, 31, 61))
+>4 : number
+>b4 : number, Symbol(b4, Decl(destructuringVariableDeclaration1ES5.ts, 31, 68))
+>0 : number
+
+var {f: [f1, f2, { f3: f4, f5 }, , ]} = { f: [1, 2, { f3: 4, f5: 0 }] };
+>f : any
+>f1 : number, Symbol(f1, Decl(destructuringVariableDeclaration1ES5.ts, 32, 9))
+>f2 : number, Symbol(f2, Decl(destructuringVariableDeclaration1ES5.ts, 32, 12))
+>f3 : any
+>f4 : number, Symbol(f4, Decl(destructuringVariableDeclaration1ES5.ts, 32, 18))
+>f5 : number, Symbol(f5, Decl(destructuringVariableDeclaration1ES5.ts, 32, 26))
+> : undefined
+>{ f: [1, 2, { f3: 4, f5: 0 }] } : { f: [number, number, { f3: number; f5: number; }]; }
+>f : [number, number, { f3: number; f5: number; }], Symbol(f, Decl(destructuringVariableDeclaration1ES5.ts, 32, 41))
+>[1, 2, { f3: 4, f5: 0 }] : [number, number, { f3: number; f5: number; }]
+>1 : number
+>2 : number
+>{ f3: 4, f5: 0 } : { f3: number; f5: number; }
+>f3 : number, Symbol(f3, Decl(destructuringVariableDeclaration1ES5.ts, 32, 53))
+>4 : number
+>f5 : number, Symbol(f5, Decl(destructuringVariableDeclaration1ES5.ts, 32, 60))
+>0 : number
+
+// When a destructuring variable declaration, binding property, or binding element specifies
+// an initializer expression, the type of the initializer expression is required to be assignable
+// to the widened form of the type associated with the destructuring variable declaration, binding property, or binding element.
+var {g: {g1 = [undefined, null]}}: { g: { g1: any[] } } = { g: { g1: [1, 2] } };
+>g : any
+>g1 : any[], Symbol(g1, Decl(destructuringVariableDeclaration1ES5.ts, 37, 9))
+>[undefined, null] : null[]
+>undefined : undefined, Symbol(undefined)
+>null : null
+>g : { g1: any[]; }, Symbol(g, Decl(destructuringVariableDeclaration1ES5.ts, 37, 36))
+>g1 : any[], Symbol(g1, Decl(destructuringVariableDeclaration1ES5.ts, 37, 41))
+>{ g: { g1: [1, 2] } } : { g: { g1: number[]; }; }
+>g : { g1: number[]; }, Symbol(g, Decl(destructuringVariableDeclaration1ES5.ts, 37, 59))
+>{ g1: [1, 2] } : { g1: number[]; }
+>g1 : number[], Symbol(g1, Decl(destructuringVariableDeclaration1ES5.ts, 37, 64))
+>[1, 2] : number[]
+>1 : number
+>2 : number
+
+var {h: {h1 = [undefined, null]}}: { h: { h1: number[] } } = { h: { h1: [1, 2] } };
+>h : any
+>h1 : number[], Symbol(h1, Decl(destructuringVariableDeclaration1ES5.ts, 38, 9))
+>[undefined, null] : null[]
+>undefined : undefined, Symbol(undefined)
+>null : null
+>h : { h1: number[]; }, Symbol(h, Decl(destructuringVariableDeclaration1ES5.ts, 38, 36))
+>h1 : number[], Symbol(h1, Decl(destructuringVariableDeclaration1ES5.ts, 38, 41))
+>{ h: { h1: [1, 2] } } : { h: { h1: number[]; }; }
+>h : { h1: number[]; }, Symbol(h, Decl(destructuringVariableDeclaration1ES5.ts, 38, 62))
+>{ h1: [1, 2] } : { h1: number[]; }
+>h1 : number[], Symbol(h1, Decl(destructuringVariableDeclaration1ES5.ts, 38, 67))
+>[1, 2] : number[]
+>1 : number
+>2 : number
+
+

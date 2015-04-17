@@ -1,0 +1,177 @@
+=== tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES5.ts ===
+/* AssignmentPattern:
+ *      ObjectAssignmentPattern
+ *      ArrayAssignmentPattern
+ * ArrayAssignmentPattern:
+ *      [Elision<opt>   AssignmentRestElementopt   ]
+ *      [AssignmentElementList]
+ *      [AssignmentElementList, Elision<opt>   AssignmentRestElementopt   ]
+ * AssignmentElementList:
+ *      Elision<opt>   AssignmentElement
+ *      AssignmentElementList, Elisionopt   AssignmentElement
+ * AssignmentElement:
+ *      LeftHandSideExpression   Initialiseropt
+ *      AssignmentPattern   Initialiseropt
+ * AssignmentRestElement:
+ *      ...   LeftHandSideExpression
+ */
+
+// In a destructuring assignment expression, the type of the expression on the right must be assignable to the assignment target on the left.
+// An expression of type S is considered assignable to an assignment target V if one of the following is true
+
+// V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
+//      S is the type Any, or
+
+var [a0, a1]: any = undefined;
+>a0 : any, Symbol(a0, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 23, 5))
+>a1 : any, Symbol(a1, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 23, 8))
+>undefined : undefined, Symbol(undefined)
+
+var [a2 = false, a3 = 1]: any = undefined;
+>a2 : boolean, Symbol(a2, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 24, 5))
+>false : boolean
+>a3 : number, Symbol(a3, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 24, 16))
+>1 : number
+>undefined : undefined, Symbol(undefined)
+
+// V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
+//      S is a tuple- like type (section 3.3.3) with a property named N of a type that is assignable to the target given in E,
+//        where N is the numeric index of E in the array assignment pattern, or
+var [b0, b1, b2] = [2, 3, 4];
+>b0 : number, Symbol(b0, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 29, 5))
+>b1 : number, Symbol(b1, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 29, 8))
+>b2 : number, Symbol(b2, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 29, 12))
+>[2, 3, 4] : [number, number, number]
+>2 : number
+>3 : number
+>4 : number
+
+var [b3, b4, b5]: [number, number, string] = [1, 2, "string"];
+>b3 : number, Symbol(b3, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 30, 5))
+>b4 : number, Symbol(b4, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 30, 8))
+>b5 : string, Symbol(b5, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 30, 12))
+>[1, 2, "string"] : [number, number, string]
+>1 : number
+>2 : number
+>"string" : string
+
+function foo() {
+>foo : () => number[], Symbol(foo, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 30, 62))
+
+    return [1, 2, 3];
+>[1, 2, 3] : number[]
+>1 : number
+>2 : number
+>3 : number
+}
+
+var [b6, b7] = foo();
+>b6 : number, Symbol(b6, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 36, 5))
+>b7 : number, Symbol(b7, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 36, 8))
+>foo() : number[]
+>foo : () => number[], Symbol(foo, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 30, 62))
+
+var [...b8] = foo();
+>b8 : number[], Symbol(b8, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 37, 5))
+>foo() : number[]
+>foo : () => number[], Symbol(foo, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 30, 62))
+
+//      S is not a tuple- like type and the numeric index signature type of S is assignable to the target given in E.
+var temp = [1,2,3]
+>temp : number[], Symbol(temp, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 40, 3))
+>[1,2,3] : number[]
+>1 : number
+>2 : number
+>3 : number
+
+var [c0, c1] = [...temp];
+>c0 : number, Symbol(c0, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 41, 5))
+>c1 : number, Symbol(c1, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 41, 8))
+>[...temp] : number[]
+>...temp : number
+>temp : number[], Symbol(temp, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 40, 3))
+
+var [c2] = [];
+>c2 : any, Symbol(c2, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 42, 5))
+>[] : undefined[]
+
+var [[[c3]], [[[[c4]]]]] = [[[]], [[[[]]]]]
+>c3 : any, Symbol(c3, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 43, 7))
+>c4 : any, Symbol(c4, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 43, 17))
+>[[[]], [[[[]]]]] : [[undefined[]], [[[undefined[]]]]]
+>[[]] : [undefined[]]
+>[] : undefined[]
+>[[[[]]]] : [[[undefined[]]]]
+>[[[]]] : [[undefined[]]]
+>[[]] : [undefined[]]
+>[] : undefined[]
+
+var [[c5], c6]: [[string|number], boolean] = [[1], true];
+>c5 : string | number, Symbol(c5, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 44, 6))
+>c6 : boolean, Symbol(c6, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 44, 10))
+>[[1], true] : [[number], boolean]
+>[1] : [number]
+>1 : number
+>true : boolean
+
+var [, c7] = [1, 2, 3];
+> : undefined
+>c7 : number, Symbol(c7, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 45, 6))
+>[1, 2, 3] : [number, number, number]
+>1 : number
+>2 : number
+>3 : number
+
+var [,,, c8] = [1, 2, 3, 4];
+> : undefined
+> : undefined
+> : undefined
+>c8 : number, Symbol(c8, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 46, 8))
+>[1, 2, 3, 4] : [number, number, number, number]
+>1 : number
+>2 : number
+>3 : number
+>4 : number
+
+var [,,, c9] = [1, 2, 3, 4];
+> : undefined
+> : undefined
+> : undefined
+>c9 : number, Symbol(c9, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 47, 8))
+>[1, 2, 3, 4] : [number, number, number, number]
+>1 : number
+>2 : number
+>3 : number
+>4 : number
+
+var [,,,...c10] = [1, 2, 3, 4, "hello"];
+> : undefined
+> : undefined
+> : undefined
+>c10 : (string | number)[], Symbol(c10, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 48, 8))
+>[1, 2, 3, 4, "hello"] : (string | number)[]
+>1 : number
+>2 : number
+>3 : number
+>4 : number
+>"hello" : string
+
+var [c11, c12, ...c13] = [1, 2, "string"];
+>c11 : string | number, Symbol(c11, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 49, 5))
+>c12 : string | number, Symbol(c12, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 49, 9))
+>c13 : (string | number)[], Symbol(c13, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 49, 14))
+>[1, 2, "string"] : (string | number)[]
+>1 : number
+>2 : number
+>"string" : string
+
+var [c14, c15, c16] = [1, 2, "string"];
+>c14 : number, Symbol(c14, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 50, 5))
+>c15 : number, Symbol(c15, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 50, 9))
+>c16 : string, Symbol(c16, Decl(destructuringArrayBindingPatternAndAssignment1ES5.ts, 50, 14))
+>[1, 2, "string"] : [number, number, string]
+>1 : number
+>2 : number
+>"string" : string
+
+
