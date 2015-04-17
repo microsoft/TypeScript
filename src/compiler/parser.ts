@@ -5355,7 +5355,6 @@ module ts {
                 let parameters: JSDocParameter[];
                 let returnType: JSDocType;
                 let typeParameters: TypeParameterDeclaration[];
-                // let tagCounts: Map<number>;
 
                 let pos: number;
 
@@ -5417,11 +5416,11 @@ module ts {
                 return createJSDocComment();
 
                 function createJSDocComment(): JSDocComment {
-                    if (!returnType && !type && !parameters && !typeParameters/* && !tagCounts*/) {
+                    if (!returnType && !type && !parameters && !typeParameters) {
                         return undefined;
                     }
 
-                    return { returnType, type, parameters, typeParameters/*, tagCounts */ };
+                    return { returnType, type, parameters, typeParameters };
                 }
 
                 function skipWhitespace(): void {
