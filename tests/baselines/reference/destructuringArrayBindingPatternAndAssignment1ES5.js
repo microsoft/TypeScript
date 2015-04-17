@@ -85,16 +85,16 @@ function foo() {
     return [1, 2, 3];
 }
 var _e = foo(), b6 = _e[0], b7 = _e[1];
-var _f = foo(), b8 = _f.slice(0);
+var b8 = foo().slice(0);
 //      S is not a tuple- like type and the numeric index signature type of S is assignable to the target given in E.
 var temp = [1, 2, 3];
-var _g = temp, c0 = _g[0], c1 = _g[1];
-var c2 = ([])[0];
-var _h = [[[]], [[[[]]]]], c3 = _h[0][0][0], c4 = _h[1][0][0][0][0];
-var _j = [[1], true], c5 = _j[0][0], c6 = _j[1];
-var _k = [1, 2, 3], c7 = _k[1];
-var _l = [1, 2, 3, 4], c8 = _l[3];
-var _m = [1, 2, 3, 4], c9 = _m[3];
-var _o = [1, 2, 3, 4, "hello"], c10 = _o.slice(3);
-var _p = [1, 2, "string"], c11 = _p[0], c12 = _p[1], c13 = _p.slice(2);
-var _q = [1, 2, "string"], c14 = _q[0], c15 = _q[1], c16 = _q[2];
+var _f = temp, c0 = _f[0], c1 = _f[1];
+var c2 = [][0];
+var _g = [[[]], [[[[]]]]], c3 = _g[0][0][0], c4 = _g[1][0][0][0][0];
+var _h = [[1], true], c5 = _h[0][0], c6 = _h[1];
+var _j = [1, 2, 3], c7 = _j[1];
+var _k = [1, 2, 3, 4], c8 = _k[3];
+var _l = [1, 2, 3, 4], c9 = _l[3];
+var _m = [1, 2, 3, 4, "hello"], c10 = _m.slice(3);
+var _o = [1, 2, "string"], c11 = _o[0], c12 = _o[1], c13 = _o.slice(2);
+var _p = [1, 2, "string"], c14 = _p[0], c15 = _p[1], c16 = _p[2];
