@@ -314,12 +314,12 @@ module ts {
             }
         }
 
-        function emitTypeWithNewGetSymbolAccessibilityDiagnostic(type: TypeNode | EntityName | HeritageClauseElement, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
+        function emitTypeWithNewGetSymbolAccessibilityDiagnostic(type: TypeNode | EntityName, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
             writer.getSymbolAccessibilityDiagnostic = getSymbolAccessibilityDiagnostic;
             emitType(type);
         }
 
-        function emitType(type: TypeNode | StringLiteralExpression | Identifier | QualifiedName | HeritageClauseElement) {
+        function emitType(type: TypeNode | Identifier | QualifiedName) {
             switch (type.kind) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
