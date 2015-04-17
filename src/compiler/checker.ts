@@ -11516,7 +11516,14 @@ module ts {
             let node = getDeclarationOfAliasSymbol(symbol);
             if (node) {
                 if (node.kind === SyntaxKind.ImportClause) {
-                    return getGeneratedNameForNode(<ImportDeclaration>node.parent) + ".default";
+                    let defaultKeyword: string;
+
+                    if (languageVersion === ScriptTarget.ES3) {
+                        defaultKeyword = "[\"default\"]";
+                    } else {
+                        defaultKeyword = ".default";
+                    }
+                    return getGeneratedNameForNode(<ImportDeclaration>node.parent) + defaultKeyword;
                 }
                 if (node.kind === SyntaxKind.ImportSpecifier) {
                     let moduleName = getGeneratedNameForNode(<ImportDeclaration>node.parent.parent.parent);
