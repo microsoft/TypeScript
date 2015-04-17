@@ -300,13 +300,6 @@ module ts {
             }
         }
 
-        function saveParentAndBindChildren(node: Node) {
-            let saveParent = parent;
-            parent = node;
-            forEachChild(node, bind);
-            parent = saveParent;
-        }
-
         function bindDeclaration(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags, isBlockScopeContainer: boolean) {
             switch (container.kind) {
                 case SyntaxKind.ModuleDeclaration:
@@ -475,9 +468,6 @@ module ts {
                 case SyntaxKind.Parameter:
                     bindParameter(<ParameterDeclaration>node);
                     break;
-                case SyntaxKind.VariableStatement:
-                    bindVariableStatement(<VariableStatement>node);
-                    break;
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.BindingElement:
                     if (isBindingPattern((<Declaration>node).name)) {
@@ -627,20 +617,9 @@ module ts {
                     bindChildren(node, 0, /*isBlockScopeContainer*/ true);
                     break;
                 default:
-                    saveParentAndBindChildren(node);
+                    bindChildren(node, 0, /*isBlockScopeContainer:*/ false);
+                    break;
             }
-        }
-
-        function bindVariableStatement(node: VariableStatement) {
-            let saveParent = parent;
-            parent = node;
-
-            if (isJavaScriptFile && node.jsDocComment) {
-                bindJSDocComment(node);
-            }
-
-            forEachChild(node, bind);
-            parent = saveParent;
         }
 
         function bindParameter(node: ParameterDeclaration) {
