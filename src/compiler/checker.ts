@@ -8018,7 +8018,7 @@ module ts {
 
         function checkNumericLiteral(node: LiteralExpression): Type {
             // Grammar checking
-            checkGrammarNumbericLiteral(node);
+            checkGrammarNumericLiteral(node);
             return numberType;
         }
 
@@ -12561,7 +12561,7 @@ module ts {
                     // Grammar checking for computedPropertName and shorthandPropertyAssignment
                     checkGrammarForInvalidQuestionMark(prop,(<PropertyAssignment>prop).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
                     if (name.kind === SyntaxKind.NumericLiteral) {
-                        checkGrammarNumbericLiteral(<Identifier>name);
+                        checkGrammarNumericLiteral(<Identifier>name);
                     }
                     currentKind = Property;
                 }
@@ -13113,7 +13113,7 @@ module ts {
             }
         }
 
-        function checkGrammarNumbericLiteral(node: Identifier): boolean {
+        function checkGrammarNumericLiteral(node: Identifier): boolean {
             // Grammar checking
             if (node.flags & NodeFlags.OctalLiteral) {
                 if (node.parserContextFlags & ParserContextFlags.StrictMode) {
