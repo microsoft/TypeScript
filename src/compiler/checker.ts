@@ -6131,9 +6131,7 @@ module ts {
                     }
                     else {
                         Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
-                        type = memberDecl.name.kind === SyntaxKind.ComputedPropertyName
-                            ? unknownType
-                            : checkExpression(<Identifier>memberDecl.name, contextualMapper);
+                        type = checkExpression((<ShorthandPropertyAssignment>memberDecl).name, contextualMapper);
                     }
                     typeFlags |= type.flags;
                     let prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
