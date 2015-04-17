@@ -131,6 +131,13 @@ module ts {
                     return node.flags & NodeFlags.Default ? "default" : undefined;
                 case SyntaxKind.JSDocFunctionType:
                     return isJSDocConstructSignature(<SignatureDeclaration>node) ? "__new" : "__call";
+                case SyntaxKind.Parameter:
+                    // Parameters with names are handled at the top of this function.  Parameters
+                    // without names can only come from JSDocFunctionTypes.
+                    Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType);
+                    let functionType = <JSDocFunctionType>node.parent;
+                    let index = indexOf(functionType.parameters, node);
+                    return "p" + index;
             }
         }
 
@@ -323,6 +330,7 @@ module ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
+                case SyntaxKind.JSDocFunctionType:
                     declareSymbol(container.locals, undefined, node, symbolKind, symbolExcludes);
                     break;
                 case SyntaxKind.ClassExpression:
@@ -639,9 +647,6 @@ module ts {
             if (isBindingPattern(node.name)) {
                 bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, getDestructuringParameterName(node), /*isBlockScopeContainer*/ false);
             }
-            else if (isJavaScriptFile && node.parent.kind === SyntaxKind.JSDocFunctionType) {
-                bindJSDocFunctionTypeParameter(node);
-            }
             else {
                 bindDeclaration(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes, /*isBlockScopeContainer*/ false);
             }
@@ -655,22 +660,6 @@ module ts {
                 let classDeclaration = <ClassLikeDeclaration>node.parent.parent;
                 declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
             }
-        }
-
-        function bindJSDocFunctionTypeParameter(node: ParameterDeclaration) {
-            let functionType = <JSDocFunctionType>node.parent;
-            let isConstructSignature = isJSDocConstructSignature(functionType);
-
-            if (!isConstructSignature || functionType.parameters[0] !== node) {
-                let index = indexOf(functionType.parameters, node);
-                let paramName = "p" + index;
-                let paramSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, paramName);
-                addDeclarationToSymbol(paramSymbol, node, SymbolFlags.FunctionScopedVariable);
-
-                functionType.locals[paramName] = paramSymbol;
-            }
-
-            bindChildren(node, SymbolFlags.FunctionScopedVariable, /*isBlockScopeContainer:*/ false);
         }
 
         function bindPropertyOrMethodOrAccessor(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags, isBlockScopeContainer: boolean) {
