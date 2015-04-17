@@ -4651,7 +4651,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
                 let aliasedModuleNames: string[] = [];
                 let unaliasedModuleNames: string[] = [];
-                let importAliaseNames: string[] = [];
+                let importAliasNames: string[] = [];
                 for (let importNode of externalImports) {
                     // Find the name of the external module
                     let externalModuleName = "";
@@ -4661,7 +4661,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     }
 
                     // Find the name of the module alais, if there is one
-                    var importAliasName: string;
+                    let importAliasName: string;
                     let namespaceDeclaration = getNamespaceDeclarationNode(importNode);
                     if (namespaceDeclaration && !isDefaultImport(importNode)) {
                         importAliasName = getSourceTextOfNodeFromSourceFile(currentSourceFile, namespaceDeclaration.name);
@@ -4672,7 +4672,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
                     if (importAliasName) {
                         aliasedModuleNames.push(externalModuleName);
-                        importAliaseNames.push(importAliasName);
+                        importAliasNames.push(importAliasName);
                     }
                     else {
                         unaliasedModuleNames.push(externalModuleName);
@@ -4683,7 +4683,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 for (let amdDependency of node.amdDependencies) {
                     if (amdDependency.name) {
                         aliasedModuleNames.push("\"" + amdDependency.path + "\"");
-                        importAliaseNames.push(amdDependency.name);
+                        importAliasNames.push(amdDependency.name);
                     }
                     else {
                         unaliasedModuleNames.push("\"" + amdDependency.path + "\"");
@@ -4705,9 +4705,9 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     write(unaliasedModuleNames.join(", "));
                 }
                 write("], function (require, exports");
-                if (importAliaseNames.length) {
+                if (importAliasNames.length) {
                     write(", ");
-                    write(importAliaseNames.join(", "));
+                    write(importAliasNames.join(", "));
                 }
                 write(") {");
                 increaseIndent();
