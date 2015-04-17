@@ -4646,12 +4646,16 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 /// match the position of the module name in the dependency list.
                 ///
                 /// To ensure this is true in cases of modules with no aliases, e.g.: 
-                /// `import "module"` or `<amd-dependency path= "a.css" \>` we need to add these 
-                /// modules to the end of the dependencies list
-
-                let aliasedModuleNames: string[] = [];
-                let unaliasedModuleNames: string[] = [];
-                let importAliasNames: string[] = [];
+                /// `import "module"` or `<amd-dependency path= "a.css" \>` we need to add modules
+                /// without alias names to the end of the dependencies list
+                
+                let aliasedModuleNames: string[] = [];   // names of modules with corresponding parameter in the 
+                                                         // factory function.
+                let unaliasedModuleNames: string[] = []; // names of modules with no corresponding parameters in
+                                                         // factory function.
+                let importAliasNames: string[] = [];     // names of the parameters in the factory function, these 
+                                                         // to match the indexes of the corresponding module names
+                                                         // in aliasedModuleNames
 
                 // Fill in amd-dependency tags
                 for (let amdDependency of node.amdDependencies) {
