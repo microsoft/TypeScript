@@ -2610,10 +2610,6 @@ module ts {
                             diagnostics.push(createDiagnosticForNode(parameter.questionToken, Diagnostics._0_can_only_be_used_in_a_ts_file, "?"));
                             return true;
                         }
-                        if (parameter.dotDotDotToken) {
-                            diagnostics.push(createDiagnosticForNode(parameter.dotDotDotToken, Diagnostics._0_can_only_be_used_in_a_ts_file, "..."));
-                            return true;
-                        }
                         if (parameter.type) {
                             diagnostics.push(createDiagnosticForNode(parameter.type, Diagnostics.types_can_only_be_used_in_a_ts_file));
                             return true;
