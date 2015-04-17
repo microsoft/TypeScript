@@ -7,6 +7,11 @@ module ts {
         (message: DiagnosticMessage, length: number): void;
     }
 
+    export enum ScannerType {
+        TypeScript,
+        JSDocComment,
+    }
+
     /* @internal */ 
     export interface Scanner {
         getStartPos(): number;
@@ -618,6 +623,7 @@ module ts {
 
         // Start position of text of current token
         let tokenPos: number;  
+
         let token: SyntaxKind;
         let tokenValue: string;
         let precedingLineBreak: boolean;
@@ -1487,7 +1493,7 @@ module ts {
             return speculationHelper(callback, /*isLookahead:*/ false);
         }
 
-        function setText(newText: string, start?: number, length?: number) {
+        function setText(newText: string, start: number, length: number) {
             text = newText || "";
             end = length === undefined ? text.length : start + length;
             setTextPos(start || 0);
