@@ -2464,8 +2464,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * @param features Contains a list of items separated by commas. Each item consists of an option and a value, separated by an equals sign (for example, "fullscreen=yes, toolbar=yes"). The following values are supported.
       * @param replace Specifies whether the existing entry for the document is replaced in the history list.
       */
-    open(url?: string, name?: string, features?: string, replace?: boolean): Document;
-    open(url?: string, name?: string, features?: string, replace?: boolean): Window;
+    open(url?: string, name?: string, features?: string, replace?: boolean): Document | Window;
     /** 
       * Returns a Boolean value that indicates whether a specified command can be successfully executed using execCommand, given the current state of the document.
       * @param commandId Specifies a command identifier.
@@ -3698,8 +3697,7 @@ interface HTMLCanvasElement extends HTMLElement {
       * Returns an object that provides methods and properties for drawing and manipulating images and graphics on a canvas element in a document. A context object includes information about colors, line widths, fonts, and other graphic parameters that can be drawn on a canvas.
       * @param contextId The identifier (ID) of the type of canvas to create. Internet Explorer 9 and Internet Explorer 10 support only a 2-D context using canvas.getContext("2d"); IE11 Preview also supports 3-D or WebGL context using canvas.getContext("experimental-webgl");
       */
-    getContext(contextId: string, ...args: any[]): CanvasRenderingContext2D;
-    getContext(contextId: string, ...args: any[]): WebGLRenderingContext;
+    getContext(contextId: string, ...args: any[]): CanvasRenderingContext2D | WebGLRenderingContext;
     /**
       * Returns a blob object encoded as a Portable Network Graphics (PNG) format from a canvas image or drawing.
       */
@@ -5046,7 +5044,7 @@ interface HTMLInputElement extends HTMLElement {
       * Returns the value of the data at the cursor's current position.
       */
     value: string;
-    valueAsDate: any;
+    valueAsDate: Date;
     /**
       * Returns the input field value as a number.
       */
