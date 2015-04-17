@@ -4637,25 +4637,25 @@ var __param = this.__param || function(index, decorator) { return function (targ
             function emitAMDModule(node: SourceFile, startIndex: number) {
                 collectExternalModuleInfo(node);
                 
-                /// An AMD define function has the following shape:
-                ///     define(id?, dependencies?, factory);
-                ///
-                /// This has the shape of
-                ///     define(name, ["module1", "module2"], function (module1Alias) {
-                /// The location of the alias in the parameter list in the factory function needs to 
-                /// match the position of the module name in the dependency list.
-                ///
-                /// To ensure this is true in cases of modules with no aliases, e.g.: 
-                /// `import "module"` or `<amd-dependency path= "a.css" \>` we need to add modules
-                /// without alias names to the end of the dependencies list
+                // An AMD define function has the following shape:
+                //     define(id?, dependencies?, factory);
+                //
+                // This has the shape of
+                //     define(name, ["module1", "module2"], function (module1Alias) {
+                // The location of the alias in the parameter list in the factory function needs to 
+                // match the position of the module name in the dependency list.
+                //
+                // To ensure this is true in cases of modules with no aliases, e.g.: 
+                // `import "module"` or `<amd-dependency path= "a.css" />` 
+                // we need to add modules without alias names to the end of the dependencies list
                 
                 let aliasedModuleNames: string[] = [];   // names of modules with corresponding parameter in the 
                                                          // factory function.
                 let unaliasedModuleNames: string[] = []; // names of modules with no corresponding parameters in
                                                          // factory function.
-                let importAliasNames: string[] = [];     // names of the parameters in the factory function, these 
-                                                         // to match the indexes of the corresponding module names
-                                                         // in aliasedModuleNames
+                let importAliasNames: string[] = [];     // names of the parameters in the factory function; these 
+                                                         // paramters need to match the indexes of the corresponding 
+                                                         // module names in aliasedModuleNames.
 
                 // Fill in amd-dependency tags
                 for (let amdDependency of node.amdDependencies) {
