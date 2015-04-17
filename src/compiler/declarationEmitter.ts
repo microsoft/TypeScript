@@ -258,7 +258,7 @@ module ts {
             handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning));
         }
 
-        function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode | StringLiteralExpression, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
+        function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
             writer.getSymbolAccessibilityDiagnostic = getSymbolAccessibilityDiagnostic;
             write(": ");
             if (type) {
@@ -314,12 +314,12 @@ module ts {
             }
         }
 
-        function emitTypeWithNewGetSymbolAccessibilityDiagnostic(type: TypeNode | EntityName | HeritageClauseElement, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
+        function emitTypeWithNewGetSymbolAccessibilityDiagnostic(type: TypeNode | EntityName, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
             writer.getSymbolAccessibilityDiagnostic = getSymbolAccessibilityDiagnostic;
             emitType(type);
         }
 
-        function emitType(type: TypeNode | StringLiteralExpression | Identifier | QualifiedName | HeritageClauseElement) {
+        function emitType(type: TypeNode | Identifier | QualifiedName) {
             switch (type.kind) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
@@ -1126,7 +1126,7 @@ module ts {
                 writeLine();
             }
 
-            function getTypeAnnotationFromAccessor(accessor: AccessorDeclaration): TypeNode | StringLiteralExpression {
+            function getTypeAnnotationFromAccessor(accessor: AccessorDeclaration): TypeNode {
                 if (accessor) {
                     return accessor.kind === SyntaxKind.GetAccessor
                         ? accessor.type // Getter - return type
