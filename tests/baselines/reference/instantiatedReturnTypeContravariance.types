@@ -1,23 +1,23 @@
 === tests/cases/compiler/instantiatedReturnTypeContravariance.ts ===
 interface B<T> {
->B : B<T>, Symbol(B, Decl(instantiatedReturnTypeContravariance.ts, 0, 0))
->T : T, Symbol(T, Decl(instantiatedReturnTypeContravariance.ts, 0, 12))
+>B : B<T>
+>T : T
 
 name: string;
->name : string, Symbol(name, Decl(instantiatedReturnTypeContravariance.ts, 0, 16))
+>name : string
 
 x(): T;
->x : () => T, Symbol(x, Decl(instantiatedReturnTypeContravariance.ts, 2, 13))
->T : T, Symbol(T, Decl(instantiatedReturnTypeContravariance.ts, 0, 12))
+>x : () => T
+>T : T
 
 }
  
 class c {
->c : c, Symbol(c, Decl(instantiatedReturnTypeContravariance.ts, 6, 1))
+>c : c
 
 foo(): B<void> {
->foo : () => B<void>, Symbol(foo, Decl(instantiatedReturnTypeContravariance.ts, 8, 9))
->B : B<T>, Symbol(B, Decl(instantiatedReturnTypeContravariance.ts, 0, 0))
+>foo : () => B<void>
+>B : B<T>
 
 return null;
 >null : null
@@ -27,12 +27,12 @@ return null;
 }
  
 class d extends c {
->d : d, Symbol(d, Decl(instantiatedReturnTypeContravariance.ts, 16, 1))
->c : c, Symbol(c, Decl(instantiatedReturnTypeContravariance.ts, 6, 1))
+>d : d
+>c : c
 
 foo(): B<number> {
->foo : () => B<number>, Symbol(foo, Decl(instantiatedReturnTypeContravariance.ts, 18, 19))
->B : B<T>, Symbol(B, Decl(instantiatedReturnTypeContravariance.ts, 0, 0))
+>foo : () => B<number>
+>B : B<T>
 
 return null;
 >null : null

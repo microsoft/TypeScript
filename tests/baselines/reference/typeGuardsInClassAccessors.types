@@ -5,348 +5,348 @@
 
 // variables in global
 var num: number;
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 
 var strOrNum: string | number;
->strOrNum : string | number, Symbol(strOrNum, Decl(typeGuardsInClassAccessors.ts, 6, 3))
+>strOrNum : string | number
 
 var var1: string | number;
->var1 : string | number, Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
+>var1 : string | number
 
 class ClassWithAccessors {
->ClassWithAccessors : ClassWithAccessors, Symbol(ClassWithAccessors, Decl(typeGuardsInClassAccessors.ts, 7, 26))
+>ClassWithAccessors : ClassWithAccessors
 
     // Inside public accessor getter
     get p1() {
->p1 : string | number, Symbol(p1, Decl(typeGuardsInClassAccessors.ts, 8, 26), Decl(typeGuardsInClassAccessors.ts, 19, 5))
+>p1 : string | number
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
 >num = typeof var1 === "string" && var1.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
 >typeof var1 : string
->var1 : string | number, Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
+>var1 : string | number
 >"string" : string
->var1.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->var1 : string, Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var1.length : number
+>var1 : string
+>length : number
 
         // variables in function declaration
         var var2: string | number;
->var2 : string | number, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 15, 11))
+>var2 : string | number
 
         num = typeof var2 === "string" && var2.length; // string
 >num = typeof var2 === "string" && var2.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
 >typeof var2 : string
->var2 : string | number, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 15, 11))
+>var2 : string | number
 >"string" : string
->var2.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->var2 : string, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 15, 11))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var2.length : number
+>var2 : string
+>length : number
 
         return strOrNum;
->strOrNum : string | number, Symbol(strOrNum, Decl(typeGuardsInClassAccessors.ts, 6, 3))
+>strOrNum : string | number
     }
     // Inside public accessor setter
     set p1(param: string | number) {
->p1 : string | number, Symbol(p1, Decl(typeGuardsInClassAccessors.ts, 8, 26), Decl(typeGuardsInClassAccessors.ts, 19, 5))
->param : string | number, Symbol(param, Decl(typeGuardsInClassAccessors.ts, 21, 11))
+>p1 : string | number
+>param : string | number
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
 >num = typeof var1 === "string" && var1.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
 >typeof var1 : string
->var1 : string | number, Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
+>var1 : string | number
 >"string" : string
->var1.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->var1 : string, Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var1.length : number
+>var1 : string
+>length : number
 
         // parameter of function declaration
         num = typeof param === "string" && param.length; // string
 >num = typeof param === "string" && param.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof param === "string" && param.length : number
 >typeof param === "string" : boolean
 >typeof param : string
->param : string | number, Symbol(param, Decl(typeGuardsInClassAccessors.ts, 21, 11))
+>param : string | number
 >"string" : string
->param.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->param : string, Symbol(param, Decl(typeGuardsInClassAccessors.ts, 21, 11))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>param.length : number
+>param : string
+>length : number
 
         // variables in function declaration
         var var2: string | number;
->var2 : string | number, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 29, 11))
+>var2 : string | number
 
         num = typeof var2 === "string" && var2.length; // string
 >num = typeof var2 === "string" && var2.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
 >typeof var2 : string
->var2 : string | number, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 29, 11))
+>var2 : string | number
 >"string" : string
->var2.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->var2 : string, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 29, 11))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var2.length : number
+>var2 : string
+>length : number
     }
     // Inside private accessor getter
     private get pp1() {
->pp1 : string | number, Symbol(pp1, Decl(typeGuardsInClassAccessors.ts, 31, 5), Decl(typeGuardsInClassAccessors.ts, 42, 5))
+>pp1 : string | number
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
 >num = typeof var1 === "string" && var1.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
 >typeof var1 : string
->var1 : string | number, Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
+>var1 : string | number
 >"string" : string
->var1.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->var1 : string, Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var1.length : number
+>var1 : string
+>length : number
 
         // variables in function declaration
         var var2: string | number;
->var2 : string | number, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 38, 11))
+>var2 : string | number
 
         num = typeof var2 === "string" && var2.length; // string
 >num = typeof var2 === "string" && var2.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
 >typeof var2 : string
->var2 : string | number, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 38, 11))
+>var2 : string | number
 >"string" : string
->var2.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->var2 : string, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 38, 11))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var2.length : number
+>var2 : string
+>length : number
 
         return strOrNum;
->strOrNum : string | number, Symbol(strOrNum, Decl(typeGuardsInClassAccessors.ts, 6, 3))
+>strOrNum : string | number
     }
     // Inside private accessor setter
     private set pp1(param: string | number) {
->pp1 : string | number, Symbol(pp1, Decl(typeGuardsInClassAccessors.ts, 31, 5), Decl(typeGuardsInClassAccessors.ts, 42, 5))
->param : string | number, Symbol(param, Decl(typeGuardsInClassAccessors.ts, 44, 20))
+>pp1 : string | number
+>param : string | number
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
 >num = typeof var1 === "string" && var1.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
 >typeof var1 : string
->var1 : string | number, Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
+>var1 : string | number
 >"string" : string
->var1.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->var1 : string, Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var1.length : number
+>var1 : string
+>length : number
 
         // parameter of function declaration
         num = typeof param === "string" && param.length; // string
 >num = typeof param === "string" && param.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof param === "string" && param.length : number
 >typeof param === "string" : boolean
 >typeof param : string
->param : string | number, Symbol(param, Decl(typeGuardsInClassAccessors.ts, 44, 20))
+>param : string | number
 >"string" : string
->param.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->param : string, Symbol(param, Decl(typeGuardsInClassAccessors.ts, 44, 20))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>param.length : number
+>param : string
+>length : number
 
         // variables in function declaration
         var var2: string | number;
->var2 : string | number, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 52, 11))
+>var2 : string | number
 
         num = typeof var2 === "string" && var2.length; // string
 >num = typeof var2 === "string" && var2.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
 >typeof var2 : string
->var2 : string | number, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 52, 11))
+>var2 : string | number
 >"string" : string
->var2.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->var2 : string, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 52, 11))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var2.length : number
+>var2 : string
+>length : number
     }
     // Inside static accessor getter
     static get s1() {
->s1 : string | number, Symbol(ClassWithAccessors.s1, Decl(typeGuardsInClassAccessors.ts, 54, 5), Decl(typeGuardsInClassAccessors.ts, 65, 5))
+>s1 : string | number
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
 >num = typeof var1 === "string" && var1.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
 >typeof var1 : string
->var1 : string | number, Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
+>var1 : string | number
 >"string" : string
->var1.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->var1 : string, Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var1.length : number
+>var1 : string
+>length : number
 
         // variables in function declaration
         var var2: string | number;
->var2 : string | number, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 61, 11))
+>var2 : string | number
 
         num = typeof var2 === "string" && var2.length; // string
 >num = typeof var2 === "string" && var2.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
 >typeof var2 : string
->var2 : string | number, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 61, 11))
+>var2 : string | number
 >"string" : string
->var2.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->var2 : string, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 61, 11))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var2.length : number
+>var2 : string
+>length : number
 
         return strOrNum;
->strOrNum : string | number, Symbol(strOrNum, Decl(typeGuardsInClassAccessors.ts, 6, 3))
+>strOrNum : string | number
     }
     // Inside static accessor setter
     static set s1(param: string | number) {
->s1 : string | number, Symbol(ClassWithAccessors.s1, Decl(typeGuardsInClassAccessors.ts, 54, 5), Decl(typeGuardsInClassAccessors.ts, 65, 5))
->param : string | number, Symbol(param, Decl(typeGuardsInClassAccessors.ts, 67, 18))
+>s1 : string | number
+>param : string | number
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
 >num = typeof var1 === "string" && var1.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
 >typeof var1 : string
->var1 : string | number, Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
+>var1 : string | number
 >"string" : string
->var1.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->var1 : string, Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var1.length : number
+>var1 : string
+>length : number
 
         // parameter of function declaration
         num = typeof param === "string" && param.length; // string
 >num = typeof param === "string" && param.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof param === "string" && param.length : number
 >typeof param === "string" : boolean
 >typeof param : string
->param : string | number, Symbol(param, Decl(typeGuardsInClassAccessors.ts, 67, 18))
+>param : string | number
 >"string" : string
->param.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->param : string, Symbol(param, Decl(typeGuardsInClassAccessors.ts, 67, 18))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>param.length : number
+>param : string
+>length : number
 
         // variables in function declaration
         var var2: string | number;
->var2 : string | number, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 75, 11))
+>var2 : string | number
 
         num = typeof var2 === "string" && var2.length; // string
 >num = typeof var2 === "string" && var2.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
 >typeof var2 : string
->var2 : string | number, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 75, 11))
+>var2 : string | number
 >"string" : string
->var2.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->var2 : string, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 75, 11))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var2.length : number
+>var2 : string
+>length : number
     }
     // Inside private static accessor getter
     private static get ss1() {
->ss1 : string | number, Symbol(ClassWithAccessors.ss1, Decl(typeGuardsInClassAccessors.ts, 77, 5), Decl(typeGuardsInClassAccessors.ts, 88, 5))
+>ss1 : string | number
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
 >num = typeof var1 === "string" && var1.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
 >typeof var1 : string
->var1 : string | number, Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
+>var1 : string | number
 >"string" : string
->var1.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->var1 : string, Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var1.length : number
+>var1 : string
+>length : number
 
         // variables in function declaration
         var var2: string | number;
->var2 : string | number, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 84, 11))
+>var2 : string | number
 
         num = typeof var2 === "string" && var2.length; // string
 >num = typeof var2 === "string" && var2.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
 >typeof var2 : string
->var2 : string | number, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 84, 11))
+>var2 : string | number
 >"string" : string
->var2.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->var2 : string, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 84, 11))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var2.length : number
+>var2 : string
+>length : number
 
         return strOrNum;
->strOrNum : string | number, Symbol(strOrNum, Decl(typeGuardsInClassAccessors.ts, 6, 3))
+>strOrNum : string | number
     }
     // Inside private static accessor setter
     private static set ss1(param: string | number) {
->ss1 : string | number, Symbol(ClassWithAccessors.ss1, Decl(typeGuardsInClassAccessors.ts, 77, 5), Decl(typeGuardsInClassAccessors.ts, 88, 5))
->param : string | number, Symbol(param, Decl(typeGuardsInClassAccessors.ts, 90, 27))
+>ss1 : string | number
+>param : string | number
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
 >num = typeof var1 === "string" && var1.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
 >typeof var1 : string
->var1 : string | number, Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
+>var1 : string | number
 >"string" : string
->var1.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->var1 : string, Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var1.length : number
+>var1 : string
+>length : number
 
         // parameter of function declaration
         num = typeof param === "string" && param.length; // string
 >num = typeof param === "string" && param.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof param === "string" && param.length : number
 >typeof param === "string" : boolean
 >typeof param : string
->param : string | number, Symbol(param, Decl(typeGuardsInClassAccessors.ts, 90, 27))
+>param : string | number
 >"string" : string
->param.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->param : string, Symbol(param, Decl(typeGuardsInClassAccessors.ts, 90, 27))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>param.length : number
+>param : string
+>length : number
 
         // variables in function declaration
         var var2: string | number;
->var2 : string | number, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 98, 11))
+>var2 : string | number
 
         num = typeof var2 === "string" && var2.length; // string
 >num = typeof var2 === "string" && var2.length : number
->num : number, Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
+>num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
 >typeof var2 : string
->var2 : string | number, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 98, 11))
+>var2 : string | number
 >"string" : string
->var2.length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
->var2 : string, Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 98, 11))
->length : number, Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var2.length : number
+>var2 : string
+>length : number
     }
 }
 

@@ -1,30 +1,30 @@
 === tests/cases/compiler/keywordField.ts ===
 var obj:any = {};
->obj : any, Symbol(obj, Decl(keywordField.ts, 0, 3))
+>obj : any
 >{} : {}
 
 obj.if = 1;
 >obj.if = 1 : number
 >obj.if : any
->obj : any, Symbol(obj, Decl(keywordField.ts, 0, 3))
+>obj : any
 >if : any
 >1 : number
 
 var a = { if: "test" }
->a : { if: string; }, Symbol(a, Decl(keywordField.ts, 4, 3))
+>a : { if: string; }
 >{ if: "test" } : { if: string; }
->if : string, Symbol(if, Decl(keywordField.ts, 4, 9))
+>if : string
 >"test" : string
 
 var n = a.if
->n : string, Symbol(n, Decl(keywordField.ts, 6, 3))
->a.if : string, Symbol(if, Decl(keywordField.ts, 4, 9))
->a : { if: string; }, Symbol(a, Decl(keywordField.ts, 4, 3))
->if : string, Symbol(if, Decl(keywordField.ts, 4, 9))
+>n : string
+>a.if : string
+>a : { if: string; }
+>if : string
 
 var q = a["if"];
->q : string, Symbol(q, Decl(keywordField.ts, 8, 3))
+>q : string
 >a["if"] : string
->a : { if: string; }, Symbol(a, Decl(keywordField.ts, 4, 3))
->"if" : string, Symbol(if, Decl(keywordField.ts, 4, 9))
+>a : { if: string; }
+>"if" : string
 

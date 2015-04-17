@@ -2,168 +2,168 @@
 // object types are identical structurally
 
 class A {
->A : A, Symbol(A, Decl(objectTypesIdentityWithOptionality.ts, 0, 0))
+>A : A
 
     foo: string;
->foo : string, Symbol(foo, Decl(objectTypesIdentityWithOptionality.ts, 2, 9))
+>foo : string
 }
 
 class B {
->B : B, Symbol(B, Decl(objectTypesIdentityWithOptionality.ts, 4, 1))
+>B : B
 
     foo: string;
->foo : string, Symbol(foo, Decl(objectTypesIdentityWithOptionality.ts, 6, 9))
+>foo : string
 }
 
 class C<T> {
->C : C<T>, Symbol(C, Decl(objectTypesIdentityWithOptionality.ts, 8, 1))
->T : T, Symbol(T, Decl(objectTypesIdentityWithOptionality.ts, 10, 8))
+>C : C<T>
+>T : T
 
     foo: T;
->foo : T, Symbol(foo, Decl(objectTypesIdentityWithOptionality.ts, 10, 12))
->T : T, Symbol(T, Decl(objectTypesIdentityWithOptionality.ts, 10, 8))
+>foo : T
+>T : T
 }
 
 interface I {
->I : I, Symbol(I, Decl(objectTypesIdentityWithOptionality.ts, 12, 1))
+>I : I
 
     foo?: string;
->foo : string, Symbol(foo, Decl(objectTypesIdentityWithOptionality.ts, 14, 13))
+>foo : string
 }
 
 var a: { foo?: string; }
->a : { foo?: string; }, Symbol(a, Decl(objectTypesIdentityWithOptionality.ts, 18, 3))
->foo : string, Symbol(foo, Decl(objectTypesIdentityWithOptionality.ts, 18, 8))
+>a : { foo?: string; }
+>foo : string
 
 var b = { foo: '' };
->b : { foo: string; }, Symbol(b, Decl(objectTypesIdentityWithOptionality.ts, 19, 3))
+>b : { foo: string; }
 >{ foo: '' } : { foo: string; }
->foo : string, Symbol(foo, Decl(objectTypesIdentityWithOptionality.ts, 19, 9))
+>foo : string
 >'' : string
 
 function foo2(x: I);
->foo2 : { (x: I): any; (x: I): any; }, Symbol(foo2, Decl(objectTypesIdentityWithOptionality.ts, 19, 20), Decl(objectTypesIdentityWithOptionality.ts, 21, 20), Decl(objectTypesIdentityWithOptionality.ts, 22, 20))
->x : I, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 21, 14))
->I : I, Symbol(I, Decl(objectTypesIdentityWithOptionality.ts, 12, 1))
+>foo2 : { (x: I): any; (x: I): any; }
+>x : I
+>I : I
 
 function foo2(x: I); // error
->foo2 : { (x: I): any; (x: I): any; }, Symbol(foo2, Decl(objectTypesIdentityWithOptionality.ts, 19, 20), Decl(objectTypesIdentityWithOptionality.ts, 21, 20), Decl(objectTypesIdentityWithOptionality.ts, 22, 20))
->x : I, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 22, 14))
->I : I, Symbol(I, Decl(objectTypesIdentityWithOptionality.ts, 12, 1))
+>foo2 : { (x: I): any; (x: I): any; }
+>x : I
+>I : I
 
 function foo2(x: any) { }
->foo2 : { (x: I): any; (x: I): any; }, Symbol(foo2, Decl(objectTypesIdentityWithOptionality.ts, 19, 20), Decl(objectTypesIdentityWithOptionality.ts, 21, 20), Decl(objectTypesIdentityWithOptionality.ts, 22, 20))
->x : any, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 23, 14))
+>foo2 : { (x: I): any; (x: I): any; }
+>x : any
 
 function foo3(x: typeof a);
->foo3 : { (x: { foo?: string; }): any; (x: { foo?: string; }): any; }, Symbol(foo3, Decl(objectTypesIdentityWithOptionality.ts, 23, 25), Decl(objectTypesIdentityWithOptionality.ts, 25, 27), Decl(objectTypesIdentityWithOptionality.ts, 26, 27))
->x : { foo?: string; }, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 25, 14))
->a : { foo?: string; }, Symbol(a, Decl(objectTypesIdentityWithOptionality.ts, 18, 3))
+>foo3 : { (x: { foo?: string; }): any; (x: { foo?: string; }): any; }
+>x : { foo?: string; }
+>a : { foo?: string; }
 
 function foo3(x: typeof a); // error
->foo3 : { (x: { foo?: string; }): any; (x: { foo?: string; }): any; }, Symbol(foo3, Decl(objectTypesIdentityWithOptionality.ts, 23, 25), Decl(objectTypesIdentityWithOptionality.ts, 25, 27), Decl(objectTypesIdentityWithOptionality.ts, 26, 27))
->x : { foo?: string; }, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 26, 14))
->a : { foo?: string; }, Symbol(a, Decl(objectTypesIdentityWithOptionality.ts, 18, 3))
+>foo3 : { (x: { foo?: string; }): any; (x: { foo?: string; }): any; }
+>x : { foo?: string; }
+>a : { foo?: string; }
 
 function foo3(x: any) { }
->foo3 : { (x: { foo?: string; }): any; (x: { foo?: string; }): any; }, Symbol(foo3, Decl(objectTypesIdentityWithOptionality.ts, 23, 25), Decl(objectTypesIdentityWithOptionality.ts, 25, 27), Decl(objectTypesIdentityWithOptionality.ts, 26, 27))
->x : any, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 27, 14))
+>foo3 : { (x: { foo?: string; }): any; (x: { foo?: string; }): any; }
+>x : any
 
 function foo6(x: A);
->foo6 : { (x: A): any; (x: I): any; }, Symbol(foo6, Decl(objectTypesIdentityWithOptionality.ts, 27, 25), Decl(objectTypesIdentityWithOptionality.ts, 29, 20), Decl(objectTypesIdentityWithOptionality.ts, 30, 20))
->x : A, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 29, 14))
->A : A, Symbol(A, Decl(objectTypesIdentityWithOptionality.ts, 0, 0))
+>foo6 : { (x: A): any; (x: I): any; }
+>x : A
+>A : A
 
 function foo6(x: I); // ok
->foo6 : { (x: A): any; (x: I): any; }, Symbol(foo6, Decl(objectTypesIdentityWithOptionality.ts, 27, 25), Decl(objectTypesIdentityWithOptionality.ts, 29, 20), Decl(objectTypesIdentityWithOptionality.ts, 30, 20))
->x : I, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 30, 14))
->I : I, Symbol(I, Decl(objectTypesIdentityWithOptionality.ts, 12, 1))
+>foo6 : { (x: A): any; (x: I): any; }
+>x : I
+>I : I
 
 function foo6(x: any) { }
->foo6 : { (x: A): any; (x: I): any; }, Symbol(foo6, Decl(objectTypesIdentityWithOptionality.ts, 27, 25), Decl(objectTypesIdentityWithOptionality.ts, 29, 20), Decl(objectTypesIdentityWithOptionality.ts, 30, 20))
->x : any, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 31, 14))
+>foo6 : { (x: A): any; (x: I): any; }
+>x : any
 
 function foo7(x: A);
->foo7 : { (x: A): any; (x: { foo?: string; }): any; }, Symbol(foo7, Decl(objectTypesIdentityWithOptionality.ts, 31, 25), Decl(objectTypesIdentityWithOptionality.ts, 33, 20), Decl(objectTypesIdentityWithOptionality.ts, 34, 27))
->x : A, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 33, 14))
->A : A, Symbol(A, Decl(objectTypesIdentityWithOptionality.ts, 0, 0))
+>foo7 : { (x: A): any; (x: { foo?: string; }): any; }
+>x : A
+>A : A
 
 function foo7(x: typeof a); // ok
->foo7 : { (x: A): any; (x: { foo?: string; }): any; }, Symbol(foo7, Decl(objectTypesIdentityWithOptionality.ts, 31, 25), Decl(objectTypesIdentityWithOptionality.ts, 33, 20), Decl(objectTypesIdentityWithOptionality.ts, 34, 27))
->x : { foo?: string; }, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 34, 14))
->a : { foo?: string; }, Symbol(a, Decl(objectTypesIdentityWithOptionality.ts, 18, 3))
+>foo7 : { (x: A): any; (x: { foo?: string; }): any; }
+>x : { foo?: string; }
+>a : { foo?: string; }
 
 function foo7(x: any) { }
->foo7 : { (x: A): any; (x: { foo?: string; }): any; }, Symbol(foo7, Decl(objectTypesIdentityWithOptionality.ts, 31, 25), Decl(objectTypesIdentityWithOptionality.ts, 33, 20), Decl(objectTypesIdentityWithOptionality.ts, 34, 27))
->x : any, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 35, 14))
+>foo7 : { (x: A): any; (x: { foo?: string; }): any; }
+>x : any
 
 function foo8(x: B);
->foo8 : { (x: B): any; (x: I): any; }, Symbol(foo8, Decl(objectTypesIdentityWithOptionality.ts, 35, 25), Decl(objectTypesIdentityWithOptionality.ts, 37, 20), Decl(objectTypesIdentityWithOptionality.ts, 38, 20))
->x : B, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 37, 14))
->B : B, Symbol(B, Decl(objectTypesIdentityWithOptionality.ts, 4, 1))
+>foo8 : { (x: B): any; (x: I): any; }
+>x : B
+>B : B
 
 function foo8(x: I); // ok
->foo8 : { (x: B): any; (x: I): any; }, Symbol(foo8, Decl(objectTypesIdentityWithOptionality.ts, 35, 25), Decl(objectTypesIdentityWithOptionality.ts, 37, 20), Decl(objectTypesIdentityWithOptionality.ts, 38, 20))
->x : I, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 38, 14))
->I : I, Symbol(I, Decl(objectTypesIdentityWithOptionality.ts, 12, 1))
+>foo8 : { (x: B): any; (x: I): any; }
+>x : I
+>I : I
 
 function foo8(x: any) { }
->foo8 : { (x: B): any; (x: I): any; }, Symbol(foo8, Decl(objectTypesIdentityWithOptionality.ts, 35, 25), Decl(objectTypesIdentityWithOptionality.ts, 37, 20), Decl(objectTypesIdentityWithOptionality.ts, 38, 20))
->x : any, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 39, 14))
+>foo8 : { (x: B): any; (x: I): any; }
+>x : any
 
 function foo10(x: B);
->foo10 : { (x: B): any; (x: { foo?: string; }): any; }, Symbol(foo10, Decl(objectTypesIdentityWithOptionality.ts, 39, 25), Decl(objectTypesIdentityWithOptionality.ts, 41, 21), Decl(objectTypesIdentityWithOptionality.ts, 42, 28))
->x : B, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 41, 15))
->B : B, Symbol(B, Decl(objectTypesIdentityWithOptionality.ts, 4, 1))
+>foo10 : { (x: B): any; (x: { foo?: string; }): any; }
+>x : B
+>B : B
 
 function foo10(x: typeof a); // ok
->foo10 : { (x: B): any; (x: { foo?: string; }): any; }, Symbol(foo10, Decl(objectTypesIdentityWithOptionality.ts, 39, 25), Decl(objectTypesIdentityWithOptionality.ts, 41, 21), Decl(objectTypesIdentityWithOptionality.ts, 42, 28))
->x : { foo?: string; }, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 42, 15))
->a : { foo?: string; }, Symbol(a, Decl(objectTypesIdentityWithOptionality.ts, 18, 3))
+>foo10 : { (x: B): any; (x: { foo?: string; }): any; }
+>x : { foo?: string; }
+>a : { foo?: string; }
 
 function foo10(x: any) { }
->foo10 : { (x: B): any; (x: { foo?: string; }): any; }, Symbol(foo10, Decl(objectTypesIdentityWithOptionality.ts, 39, 25), Decl(objectTypesIdentityWithOptionality.ts, 41, 21), Decl(objectTypesIdentityWithOptionality.ts, 42, 28))
->x : any, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 43, 15))
+>foo10 : { (x: B): any; (x: { foo?: string; }): any; }
+>x : any
 
 function foo12(x: I);
->foo12 : { (x: I): any; (x: C<string>): any; }, Symbol(foo12, Decl(objectTypesIdentityWithOptionality.ts, 43, 26), Decl(objectTypesIdentityWithOptionality.ts, 45, 21), Decl(objectTypesIdentityWithOptionality.ts, 46, 29))
->x : I, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 45, 15))
->I : I, Symbol(I, Decl(objectTypesIdentityWithOptionality.ts, 12, 1))
+>foo12 : { (x: I): any; (x: C<string>): any; }
+>x : I
+>I : I
 
 function foo12(x: C<string>); // ok
->foo12 : { (x: I): any; (x: C<string>): any; }, Symbol(foo12, Decl(objectTypesIdentityWithOptionality.ts, 43, 26), Decl(objectTypesIdentityWithOptionality.ts, 45, 21), Decl(objectTypesIdentityWithOptionality.ts, 46, 29))
->x : C<string>, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 46, 15))
->C : C<T>, Symbol(C, Decl(objectTypesIdentityWithOptionality.ts, 8, 1))
+>foo12 : { (x: I): any; (x: C<string>): any; }
+>x : C<string>
+>C : C<T>
 
 function foo12(x: any) { }
->foo12 : { (x: I): any; (x: C<string>): any; }, Symbol(foo12, Decl(objectTypesIdentityWithOptionality.ts, 43, 26), Decl(objectTypesIdentityWithOptionality.ts, 45, 21), Decl(objectTypesIdentityWithOptionality.ts, 46, 29))
->x : any, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 47, 15))
+>foo12 : { (x: I): any; (x: C<string>): any; }
+>x : any
 
 function foo13(x: I);
->foo13 : { (x: I): any; (x: { foo?: string; }): any; }, Symbol(foo13, Decl(objectTypesIdentityWithOptionality.ts, 47, 26), Decl(objectTypesIdentityWithOptionality.ts, 49, 21), Decl(objectTypesIdentityWithOptionality.ts, 50, 28))
->x : I, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 49, 15))
->I : I, Symbol(I, Decl(objectTypesIdentityWithOptionality.ts, 12, 1))
+>foo13 : { (x: I): any; (x: { foo?: string; }): any; }
+>x : I
+>I : I
 
 function foo13(x: typeof a); // error
->foo13 : { (x: I): any; (x: { foo?: string; }): any; }, Symbol(foo13, Decl(objectTypesIdentityWithOptionality.ts, 47, 26), Decl(objectTypesIdentityWithOptionality.ts, 49, 21), Decl(objectTypesIdentityWithOptionality.ts, 50, 28))
->x : { foo?: string; }, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 50, 15))
->a : { foo?: string; }, Symbol(a, Decl(objectTypesIdentityWithOptionality.ts, 18, 3))
+>foo13 : { (x: I): any; (x: { foo?: string; }): any; }
+>x : { foo?: string; }
+>a : { foo?: string; }
 
 function foo13(x: any) { }
->foo13 : { (x: I): any; (x: { foo?: string; }): any; }, Symbol(foo13, Decl(objectTypesIdentityWithOptionality.ts, 47, 26), Decl(objectTypesIdentityWithOptionality.ts, 49, 21), Decl(objectTypesIdentityWithOptionality.ts, 50, 28))
->x : any, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 51, 15))
+>foo13 : { (x: I): any; (x: { foo?: string; }): any; }
+>x : any
 
 function foo14(x: I);
->foo14 : { (x: I): any; (x: { foo: string; }): any; }, Symbol(foo14, Decl(objectTypesIdentityWithOptionality.ts, 51, 26), Decl(objectTypesIdentityWithOptionality.ts, 53, 21), Decl(objectTypesIdentityWithOptionality.ts, 54, 28))
->x : I, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 53, 15))
->I : I, Symbol(I, Decl(objectTypesIdentityWithOptionality.ts, 12, 1))
+>foo14 : { (x: I): any; (x: { foo: string; }): any; }
+>x : I
+>I : I
 
 function foo14(x: typeof b); // ok
->foo14 : { (x: I): any; (x: { foo: string; }): any; }, Symbol(foo14, Decl(objectTypesIdentityWithOptionality.ts, 51, 26), Decl(objectTypesIdentityWithOptionality.ts, 53, 21), Decl(objectTypesIdentityWithOptionality.ts, 54, 28))
->x : { foo: string; }, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 54, 15))
->b : { foo: string; }, Symbol(b, Decl(objectTypesIdentityWithOptionality.ts, 19, 3))
+>foo14 : { (x: I): any; (x: { foo: string; }): any; }
+>x : { foo: string; }
+>b : { foo: string; }
 
 function foo14(x: any) { }
->foo14 : { (x: I): any; (x: { foo: string; }): any; }, Symbol(foo14, Decl(objectTypesIdentityWithOptionality.ts, 51, 26), Decl(objectTypesIdentityWithOptionality.ts, 53, 21), Decl(objectTypesIdentityWithOptionality.ts, 54, 28))
->x : any, Symbol(x, Decl(objectTypesIdentityWithOptionality.ts, 55, 15))
+>foo14 : { (x: I): any; (x: { foo: string; }): any; }
+>x : any
 

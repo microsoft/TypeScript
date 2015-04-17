@@ -1,71 +1,71 @@
 === tests/cases/compiler/es6ModuleVariableStatement.ts ===
 export var a = "hello";
->a : string, Symbol(a, Decl(es6ModuleVariableStatement.ts, 0, 10))
+>a : string
 >"hello" : string
 
 export var x: string = a, y = x;
->x : string, Symbol(x, Decl(es6ModuleVariableStatement.ts, 1, 10))
->a : string, Symbol(a, Decl(es6ModuleVariableStatement.ts, 0, 10))
->y : string, Symbol(y, Decl(es6ModuleVariableStatement.ts, 1, 25))
->x : string, Symbol(x, Decl(es6ModuleVariableStatement.ts, 1, 10))
+>x : string
+>a : string
+>y : string
+>x : string
 
 var b = y;
->b : string, Symbol(b, Decl(es6ModuleVariableStatement.ts, 2, 3))
->y : string, Symbol(y, Decl(es6ModuleVariableStatement.ts, 1, 25))
+>b : string
+>y : string
 
 var c: string = b, d = c;
->c : string, Symbol(c, Decl(es6ModuleVariableStatement.ts, 3, 3))
->b : string, Symbol(b, Decl(es6ModuleVariableStatement.ts, 2, 3))
->d : string, Symbol(d, Decl(es6ModuleVariableStatement.ts, 3, 18))
->c : string, Symbol(c, Decl(es6ModuleVariableStatement.ts, 3, 3))
+>c : string
+>b : string
+>d : string
+>c : string
 
 export module m1 {
->m1 : typeof m1, Symbol(m1, Decl(es6ModuleVariableStatement.ts, 3, 25))
+>m1 : typeof m1
 
     export var k = a;
->k : string, Symbol(k, Decl(es6ModuleVariableStatement.ts, 5, 14))
->a : string, Symbol(a, Decl(es6ModuleVariableStatement.ts, 0, 10))
+>k : string
+>a : string
 
     export var l: string = b, m = k;
->l : string, Symbol(l, Decl(es6ModuleVariableStatement.ts, 6, 14))
->b : string, Symbol(b, Decl(es6ModuleVariableStatement.ts, 2, 3))
->m : string, Symbol(m, Decl(es6ModuleVariableStatement.ts, 6, 29))
->k : string, Symbol(k, Decl(es6ModuleVariableStatement.ts, 5, 14))
+>l : string
+>b : string
+>m : string
+>k : string
 
     var n = m1.k;
->n : string, Symbol(n, Decl(es6ModuleVariableStatement.ts, 7, 7))
->m1.k : string, Symbol(k, Decl(es6ModuleVariableStatement.ts, 5, 14))
->m1 : typeof m1, Symbol(m1, Decl(es6ModuleVariableStatement.ts, 3, 25))
->k : string, Symbol(k, Decl(es6ModuleVariableStatement.ts, 5, 14))
+>n : string
+>m1.k : string
+>m1 : typeof m1
+>k : string
 
     var o: string = n, p = k;
->o : string, Symbol(o, Decl(es6ModuleVariableStatement.ts, 8, 7))
->n : string, Symbol(n, Decl(es6ModuleVariableStatement.ts, 7, 7))
->p : string, Symbol(p, Decl(es6ModuleVariableStatement.ts, 8, 22))
->k : string, Symbol(k, Decl(es6ModuleVariableStatement.ts, 5, 14))
+>o : string
+>n : string
+>p : string
+>k : string
 }
 module m2 {
->m2 : typeof m2, Symbol(m2, Decl(es6ModuleVariableStatement.ts, 9, 1))
+>m2 : typeof m2
 
     export var k = a;
->k : string, Symbol(k, Decl(es6ModuleVariableStatement.ts, 11, 14))
->a : string, Symbol(a, Decl(es6ModuleVariableStatement.ts, 0, 10))
+>k : string
+>a : string
 
     export var l: string = b, m = k;
->l : string, Symbol(l, Decl(es6ModuleVariableStatement.ts, 12, 14))
->b : string, Symbol(b, Decl(es6ModuleVariableStatement.ts, 2, 3))
->m : string, Symbol(m, Decl(es6ModuleVariableStatement.ts, 12, 29))
->k : string, Symbol(k, Decl(es6ModuleVariableStatement.ts, 11, 14))
+>l : string
+>b : string
+>m : string
+>k : string
 
     var n = m1.k;
->n : string, Symbol(n, Decl(es6ModuleVariableStatement.ts, 13, 7))
->m1.k : string, Symbol(m1.k, Decl(es6ModuleVariableStatement.ts, 5, 14))
->m1 : typeof m1, Symbol(m1, Decl(es6ModuleVariableStatement.ts, 3, 25))
->k : string, Symbol(m1.k, Decl(es6ModuleVariableStatement.ts, 5, 14))
+>n : string
+>m1.k : string
+>m1 : typeof m1
+>k : string
 
     var o: string = n, p = k;
->o : string, Symbol(o, Decl(es6ModuleVariableStatement.ts, 14, 7))
->n : string, Symbol(n, Decl(es6ModuleVariableStatement.ts, 13, 7))
->p : string, Symbol(p, Decl(es6ModuleVariableStatement.ts, 14, 22))
->k : string, Symbol(k, Decl(es6ModuleVariableStatement.ts, 11, 14))
+>o : string
+>n : string
+>p : string
+>k : string
 }

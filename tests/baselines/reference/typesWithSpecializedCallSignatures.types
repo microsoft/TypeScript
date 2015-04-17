@@ -2,146 +2,146 @@
 // basic uses of specialized signatures without errors
 
 class Base { foo: string }
->Base : Base, Symbol(Base, Decl(typesWithSpecializedCallSignatures.ts, 0, 0))
->foo : string, Symbol(foo, Decl(typesWithSpecializedCallSignatures.ts, 2, 12))
+>Base : Base
+>foo : string
 
 class Derived1 extends Base { bar: string }
->Derived1 : Derived1, Symbol(Derived1, Decl(typesWithSpecializedCallSignatures.ts, 2, 26))
->Base : Base, Symbol(Base, Decl(typesWithSpecializedCallSignatures.ts, 0, 0))
->bar : string, Symbol(bar, Decl(typesWithSpecializedCallSignatures.ts, 3, 29))
+>Derived1 : Derived1
+>Base : Base
+>bar : string
 
 class Derived2 extends Base { baz: string }
->Derived2 : Derived2, Symbol(Derived2, Decl(typesWithSpecializedCallSignatures.ts, 3, 43))
->Base : Base, Symbol(Base, Decl(typesWithSpecializedCallSignatures.ts, 0, 0))
->baz : string, Symbol(baz, Decl(typesWithSpecializedCallSignatures.ts, 4, 29))
+>Derived2 : Derived2
+>Base : Base
+>baz : string
 
 class C {
->C : C, Symbol(C, Decl(typesWithSpecializedCallSignatures.ts, 4, 43))
+>C : C
 
     foo(x: 'hi'): Derived1;
->foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }, Symbol(foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
->x : 'hi', Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 7, 8))
->Derived1 : Derived1, Symbol(Derived1, Decl(typesWithSpecializedCallSignatures.ts, 2, 26))
+>foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
+>x : 'hi'
+>Derived1 : Derived1
 
     foo(x: 'bye'): Derived2;
->foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }, Symbol(foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
->x : 'bye', Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 8, 8))
->Derived2 : Derived2, Symbol(Derived2, Decl(typesWithSpecializedCallSignatures.ts, 3, 43))
+>foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
+>x : 'bye'
+>Derived2 : Derived2
 
     foo(x: string): Base;
->foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }, Symbol(foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
->x : string, Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 9, 8))
->Base : Base, Symbol(Base, Decl(typesWithSpecializedCallSignatures.ts, 0, 0))
+>foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
+>x : string
+>Base : Base
 
     foo(x) {
->foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }, Symbol(foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
->x : any, Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 10, 8))
+>foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
+>x : any
 
         return x;
->x : any, Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 10, 8))
+>x : any
     }
 }
 var c = new C();
->c : C, Symbol(c, Decl(typesWithSpecializedCallSignatures.ts, 14, 3))
+>c : C
 >new C() : C
->C : typeof C, Symbol(C, Decl(typesWithSpecializedCallSignatures.ts, 4, 43))
+>C : typeof C
 
 interface I {
->I : I, Symbol(I, Decl(typesWithSpecializedCallSignatures.ts, 14, 16))
+>I : I
 
     foo(x: 'hi'): Derived1;
->foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }, Symbol(foo, Decl(typesWithSpecializedCallSignatures.ts, 16, 13), Decl(typesWithSpecializedCallSignatures.ts, 17, 27), Decl(typesWithSpecializedCallSignatures.ts, 18, 28))
->x : 'hi', Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 17, 8))
->Derived1 : Derived1, Symbol(Derived1, Decl(typesWithSpecializedCallSignatures.ts, 2, 26))
+>foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
+>x : 'hi'
+>Derived1 : Derived1
 
     foo(x: 'bye'): Derived2;
->foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }, Symbol(foo, Decl(typesWithSpecializedCallSignatures.ts, 16, 13), Decl(typesWithSpecializedCallSignatures.ts, 17, 27), Decl(typesWithSpecializedCallSignatures.ts, 18, 28))
->x : 'bye', Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 18, 8))
->Derived2 : Derived2, Symbol(Derived2, Decl(typesWithSpecializedCallSignatures.ts, 3, 43))
+>foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
+>x : 'bye'
+>Derived2 : Derived2
 
     foo(x: string): Base;
->foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }, Symbol(foo, Decl(typesWithSpecializedCallSignatures.ts, 16, 13), Decl(typesWithSpecializedCallSignatures.ts, 17, 27), Decl(typesWithSpecializedCallSignatures.ts, 18, 28))
->x : string, Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 19, 8))
->Base : Base, Symbol(Base, Decl(typesWithSpecializedCallSignatures.ts, 0, 0))
+>foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
+>x : string
+>Base : Base
 }
 var i: I;
->i : I, Symbol(i, Decl(typesWithSpecializedCallSignatures.ts, 21, 3))
->I : I, Symbol(I, Decl(typesWithSpecializedCallSignatures.ts, 14, 16))
+>i : I
+>I : I
 
 var a: {
->a : { foo(x: 'hi'): Derived1; foo(x: 'bye'): Derived2; foo(x: string): Base; }, Symbol(a, Decl(typesWithSpecializedCallSignatures.ts, 23, 3))
+>a : { foo(x: 'hi'): Derived1; foo(x: 'bye'): Derived2; foo(x: string): Base; }
 
     foo(x: 'hi'): Derived1;
->foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }, Symbol(foo, Decl(typesWithSpecializedCallSignatures.ts, 23, 8), Decl(typesWithSpecializedCallSignatures.ts, 24, 27), Decl(typesWithSpecializedCallSignatures.ts, 25, 28))
->x : 'hi', Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 24, 8))
->Derived1 : Derived1, Symbol(Derived1, Decl(typesWithSpecializedCallSignatures.ts, 2, 26))
+>foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
+>x : 'hi'
+>Derived1 : Derived1
 
     foo(x: 'bye'): Derived2;
->foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }, Symbol(foo, Decl(typesWithSpecializedCallSignatures.ts, 23, 8), Decl(typesWithSpecializedCallSignatures.ts, 24, 27), Decl(typesWithSpecializedCallSignatures.ts, 25, 28))
->x : 'bye', Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 25, 8))
->Derived2 : Derived2, Symbol(Derived2, Decl(typesWithSpecializedCallSignatures.ts, 3, 43))
+>foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
+>x : 'bye'
+>Derived2 : Derived2
 
     foo(x: string): Base;
->foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }, Symbol(foo, Decl(typesWithSpecializedCallSignatures.ts, 23, 8), Decl(typesWithSpecializedCallSignatures.ts, 24, 27), Decl(typesWithSpecializedCallSignatures.ts, 25, 28))
->x : string, Symbol(x, Decl(typesWithSpecializedCallSignatures.ts, 26, 8))
->Base : Base, Symbol(Base, Decl(typesWithSpecializedCallSignatures.ts, 0, 0))
+>foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
+>x : string
+>Base : Base
 
 };
 
 c = i;
 >c = i : I
->c : C, Symbol(c, Decl(typesWithSpecializedCallSignatures.ts, 14, 3))
->i : I, Symbol(i, Decl(typesWithSpecializedCallSignatures.ts, 21, 3))
+>c : C
+>i : I
 
 c = a;
 >c = a : { foo(x: 'hi'): Derived1; foo(x: 'bye'): Derived2; foo(x: string): Base; }
->c : C, Symbol(c, Decl(typesWithSpecializedCallSignatures.ts, 14, 3))
->a : { foo(x: 'hi'): Derived1; foo(x: 'bye'): Derived2; foo(x: string): Base; }, Symbol(a, Decl(typesWithSpecializedCallSignatures.ts, 23, 3))
+>c : C
+>a : { foo(x: 'hi'): Derived1; foo(x: 'bye'): Derived2; foo(x: string): Base; }
 
 i = c;
 >i = c : C
->i : I, Symbol(i, Decl(typesWithSpecializedCallSignatures.ts, 21, 3))
->c : C, Symbol(c, Decl(typesWithSpecializedCallSignatures.ts, 14, 3))
+>i : I
+>c : C
 
 i = a;
 >i = a : { foo(x: 'hi'): Derived1; foo(x: 'bye'): Derived2; foo(x: string): Base; }
->i : I, Symbol(i, Decl(typesWithSpecializedCallSignatures.ts, 21, 3))
->a : { foo(x: 'hi'): Derived1; foo(x: 'bye'): Derived2; foo(x: string): Base; }, Symbol(a, Decl(typesWithSpecializedCallSignatures.ts, 23, 3))
+>i : I
+>a : { foo(x: 'hi'): Derived1; foo(x: 'bye'): Derived2; foo(x: string): Base; }
 
 a = c;
 >a = c : C
->a : { foo(x: 'hi'): Derived1; foo(x: 'bye'): Derived2; foo(x: string): Base; }, Symbol(a, Decl(typesWithSpecializedCallSignatures.ts, 23, 3))
->c : C, Symbol(c, Decl(typesWithSpecializedCallSignatures.ts, 14, 3))
+>a : { foo(x: 'hi'): Derived1; foo(x: 'bye'): Derived2; foo(x: string): Base; }
+>c : C
 
 a = i;
 >a = i : I
->a : { foo(x: 'hi'): Derived1; foo(x: 'bye'): Derived2; foo(x: string): Base; }, Symbol(a, Decl(typesWithSpecializedCallSignatures.ts, 23, 3))
->i : I, Symbol(i, Decl(typesWithSpecializedCallSignatures.ts, 21, 3))
+>a : { foo(x: 'hi'): Derived1; foo(x: 'bye'): Derived2; foo(x: string): Base; }
+>i : I
 
 var r1: Derived1 = c.foo('hi');
->r1 : Derived1, Symbol(r1, Decl(typesWithSpecializedCallSignatures.ts, 38, 3))
->Derived1 : Derived1, Symbol(Derived1, Decl(typesWithSpecializedCallSignatures.ts, 2, 26))
+>r1 : Derived1
+>Derived1 : Derived1
 >c.foo('hi') : Derived1
->c.foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }, Symbol(C.foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
->c : C, Symbol(c, Decl(typesWithSpecializedCallSignatures.ts, 14, 3))
->foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }, Symbol(C.foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
+>c.foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
+>c : C
+>foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
 >'hi' : string
 
 var r2: Derived2 = c.foo('bye');
->r2 : Derived2, Symbol(r2, Decl(typesWithSpecializedCallSignatures.ts, 39, 3))
->Derived2 : Derived2, Symbol(Derived2, Decl(typesWithSpecializedCallSignatures.ts, 3, 43))
+>r2 : Derived2
+>Derived2 : Derived2
 >c.foo('bye') : Derived2
->c.foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }, Symbol(C.foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
->c : C, Symbol(c, Decl(typesWithSpecializedCallSignatures.ts, 14, 3))
->foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }, Symbol(C.foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
+>c.foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
+>c : C
+>foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
 >'bye' : string
 
 var r3: Base = c.foo('hm');
->r3 : Base, Symbol(r3, Decl(typesWithSpecializedCallSignatures.ts, 40, 3))
->Base : Base, Symbol(Base, Decl(typesWithSpecializedCallSignatures.ts, 0, 0))
+>r3 : Base
+>Base : Base
 >c.foo('hm') : Base
->c.foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }, Symbol(C.foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
->c : C, Symbol(c, Decl(typesWithSpecializedCallSignatures.ts, 14, 3))
->foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }, Symbol(C.foo, Decl(typesWithSpecializedCallSignatures.ts, 6, 9), Decl(typesWithSpecializedCallSignatures.ts, 7, 27), Decl(typesWithSpecializedCallSignatures.ts, 8, 28), Decl(typesWithSpecializedCallSignatures.ts, 9, 25))
+>c.foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
+>c : C
+>foo : { (x: 'hi'): Derived1; (x: 'bye'): Derived2; (x: string): Base; }
 >'hm' : string
 

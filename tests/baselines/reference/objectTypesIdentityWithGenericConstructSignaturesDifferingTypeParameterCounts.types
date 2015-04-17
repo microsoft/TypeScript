@@ -2,277 +2,277 @@
 // object types are identical structurally
 
 class B<U, V> {
->B : B<U, V>, Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 0, 0))
->U : U, Symbol(U, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 2, 8))
->V : V, Symbol(V, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 2, 10))
+>B : B<U, V>
+>U : U
+>V : V
 
     constructor(x: U) { return null; }
->x : U, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 3, 16))
->U : U, Symbol(U, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 2, 8))
+>x : U
+>U : U
 >null : null
 }
 
 class C<V, W, X> {
->C : C<V, W, X>, Symbol(C, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 4, 1))
->V : V, Symbol(V, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 6, 8))
->W : W, Symbol(W, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 6, 10))
->X : X, Symbol(X, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 6, 13))
+>C : C<V, W, X>
+>V : V
+>W : W
+>X : X
 
     constructor(x: V) { return null; }
->x : V, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 7, 16))
->V : V, Symbol(V, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 6, 8))
+>x : V
+>V : V
 >null : null
 }
 
 interface I<X, Y, Z, A> {
->I : I<X, Y, Z, A>, Symbol(I, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 8, 1))
->X : X, Symbol(X, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 10, 12))
->Y : Y, Symbol(Y, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 10, 14))
->Z : Z, Symbol(Z, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 10, 17))
->A : A, Symbol(A, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 10, 20))
+>I : I<X, Y, Z, A>
+>X : X
+>Y : Y
+>Z : Z
+>A : A
 
     new(x: X): B<X,Y>;
->x : X, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 11, 8))
->X : X, Symbol(X, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 10, 12))
->B : B<U, V>, Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 0, 0))
->X : X, Symbol(X, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 10, 12))
->Y : Y, Symbol(Y, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 10, 14))
+>x : X
+>X : X
+>B : B<U, V>
+>X : X
+>Y : Y
 }
 
 interface I2 {
->I2 : I2, Symbol(I2, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 12, 1))
+>I2 : I2
 
     new <Y, Z, A, B>(x: Y): C<Y, Z, A>;
->Y : Y, Symbol(Y, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 15, 9))
->Z : Z, Symbol(Z, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 15, 11))
->A : A, Symbol(A, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 15, 14))
->B : B, Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 15, 17))
->x : Y, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 15, 21))
->Y : Y, Symbol(Y, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 15, 9))
->C : C<V, W, X>, Symbol(C, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 4, 1))
->Y : Y, Symbol(Y, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 15, 9))
->Z : Z, Symbol(Z, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 15, 11))
->A : A, Symbol(A, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 15, 14))
+>Y : Y
+>Z : Z
+>A : A
+>B : B
+>x : Y
+>Y : Y
+>C : C<V, W, X>
+>Y : Y
+>Z : Z
+>A : A
 }
 
 var a: { new <Z, A, B, CC, D>(x: Z): C<Z, A, B>; }
->a : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>, Symbol(a, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 18, 3))
->Z : Z, Symbol(Z, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 18, 14))
->A : A, Symbol(A, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 18, 16))
->B : B, Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 18, 19))
->CC : CC, Symbol(CC, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 18, 22))
->D : D, Symbol(D, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 18, 26))
->x : Z, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 18, 30))
->Z : Z, Symbol(Z, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 18, 14))
->C : C<V, W, X>, Symbol(C, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 4, 1))
->Z : Z, Symbol(Z, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 18, 14))
->A : A, Symbol(A, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 18, 16))
->B : B, Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 18, 19))
+>a : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>
+>Z : Z
+>A : A
+>B : B
+>CC : CC
+>D : D
+>x : Z
+>Z : Z
+>C : C<V, W, X>
+>Z : Z
+>A : A
+>B : B
 
 var b = { new<A, B, C, D, E, F>(x: A) { return x; } };
->b : { new<A, B, C, D, E, F>(x: A): A; }, Symbol(b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 3))
+>b : { new<A, B, C, D, E, F>(x: A): A; }
 >{ new<A, B, C, D, E, F>(x: A) { return x; } } : { new<A, B, C, D, E, F>(x: A): A; }
->new : <A, B, C, D, E, F>(x: A) => A, Symbol(new, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 9))
->A : A, Symbol(A, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 14))
->B : B, Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 16))
->C : C, Symbol(C, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 19))
->D : D, Symbol(D, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 22))
->E : E, Symbol(E, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 25))
->F : F, Symbol(F, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 28))
->x : A, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 32))
->A : A, Symbol(A, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 14))
->x : A, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 32))
+>new : <A, B, C, D, E, F>(x: A) => A
+>A : A
+>B : B
+>C : C
+>D : D
+>E : E
+>F : F
+>x : A
+>A : A
+>x : A
 
 function foo1b(x: B<string, string>);
->foo1b : { (x: B<string, string>): any; (x: B<string, string>): any; }, Symbol(foo1b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 54), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 21, 37), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 22, 37))
->x : B<string, string>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 21, 15))
->B : B<U, V>, Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 0, 0))
+>foo1b : { (x: B<string, string>): any; (x: B<string, string>): any; }
+>x : B<string, string>
+>B : B<U, V>
 
 function foo1b(x: B<string, string>); // error
->foo1b : { (x: B<string, string>): any; (x: B<string, string>): any; }, Symbol(foo1b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 54), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 21, 37), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 22, 37))
->x : B<string, string>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 22, 15))
->B : B<U, V>, Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 0, 0))
+>foo1b : { (x: B<string, string>): any; (x: B<string, string>): any; }
+>x : B<string, string>
+>B : B<U, V>
 
 function foo1b(x: any) { }
->foo1b : { (x: B<string, string>): any; (x: B<string, string>): any; }, Symbol(foo1b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 54), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 21, 37), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 22, 37))
->x : any, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 23, 15))
+>foo1b : { (x: B<string, string>): any; (x: B<string, string>): any; }
+>x : any
 
 function foo1c(x: C<string, number, boolean>);
->foo1c : { (x: C<string, number, boolean>): any; (x: C<string, number, boolean>): any; }, Symbol(foo1c, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 23, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 25, 46), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 26, 46))
->x : C<string, number, boolean>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 25, 15))
->C : C<V, W, X>, Symbol(C, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 4, 1))
+>foo1c : { (x: C<string, number, boolean>): any; (x: C<string, number, boolean>): any; }
+>x : C<string, number, boolean>
+>C : C<V, W, X>
 
 function foo1c(x: C<string, number, boolean>); // error
->foo1c : { (x: C<string, number, boolean>): any; (x: C<string, number, boolean>): any; }, Symbol(foo1c, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 23, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 25, 46), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 26, 46))
->x : C<string, number, boolean>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 26, 15))
->C : C<V, W, X>, Symbol(C, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 4, 1))
+>foo1c : { (x: C<string, number, boolean>): any; (x: C<string, number, boolean>): any; }
+>x : C<string, number, boolean>
+>C : C<V, W, X>
 
 function foo1c(x: any) { }
->foo1c : { (x: C<string, number, boolean>): any; (x: C<string, number, boolean>): any; }, Symbol(foo1c, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 23, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 25, 46), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 26, 46))
->x : any, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 27, 15))
+>foo1c : { (x: C<string, number, boolean>): any; (x: C<string, number, boolean>): any; }
+>x : any
 
 function foo2(x: I<string, boolean, number, string>);
->foo2 : { (x: I<string, boolean, number, string>): any; (x: I<string, boolean, number, string>): any; }, Symbol(foo2, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 27, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 29, 53), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 30, 53))
->x : I<string, boolean, number, string>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 29, 14))
->I : I<X, Y, Z, A>, Symbol(I, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 8, 1))
+>foo2 : { (x: I<string, boolean, number, string>): any; (x: I<string, boolean, number, string>): any; }
+>x : I<string, boolean, number, string>
+>I : I<X, Y, Z, A>
 
 function foo2(x: I<string, boolean, number, string>); // error
->foo2 : { (x: I<string, boolean, number, string>): any; (x: I<string, boolean, number, string>): any; }, Symbol(foo2, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 27, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 29, 53), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 30, 53))
->x : I<string, boolean, number, string>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 30, 14))
->I : I<X, Y, Z, A>, Symbol(I, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 8, 1))
+>foo2 : { (x: I<string, boolean, number, string>): any; (x: I<string, boolean, number, string>): any; }
+>x : I<string, boolean, number, string>
+>I : I<X, Y, Z, A>
 
 function foo2(x: any) { }
->foo2 : { (x: I<string, boolean, number, string>): any; (x: I<string, boolean, number, string>): any; }, Symbol(foo2, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 27, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 29, 53), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 30, 53))
->x : any, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 31, 14))
+>foo2 : { (x: I<string, boolean, number, string>): any; (x: I<string, boolean, number, string>): any; }
+>x : any
 
 function foo3(x: typeof a);
->foo3 : { (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }, Symbol(foo3, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 31, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 33, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 34, 27))
->x : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 33, 14))
->a : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>, Symbol(a, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 18, 3))
+>foo3 : { (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }
+>x : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>
+>a : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>
 
 function foo3(x: typeof a); // error
->foo3 : { (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }, Symbol(foo3, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 31, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 33, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 34, 27))
->x : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 34, 14))
->a : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>, Symbol(a, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 18, 3))
+>foo3 : { (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }
+>x : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>
+>a : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>
 
 function foo3(x: any) { }
->foo3 : { (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }, Symbol(foo3, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 31, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 33, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 34, 27))
->x : any, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 35, 14))
+>foo3 : { (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }
+>x : any
 
 function foo4(x: typeof b);
->foo4 : { (x: { new<A, B, C, D, E, F>(x: A): A; }): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }, Symbol(foo4, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 35, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 37, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 38, 27))
->x : { new<A, B, C, D, E, F>(x: A): A; }, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 37, 14))
->b : { new<A, B, C, D, E, F>(x: A): A; }, Symbol(b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 3))
+>foo4 : { (x: { new<A, B, C, D, E, F>(x: A): A; }): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }
+>x : { new<A, B, C, D, E, F>(x: A): A; }
+>b : { new<A, B, C, D, E, F>(x: A): A; }
 
 function foo4(x: typeof b); // error
->foo4 : { (x: { new<A, B, C, D, E, F>(x: A): A; }): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }, Symbol(foo4, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 35, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 37, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 38, 27))
->x : { new<A, B, C, D, E, F>(x: A): A; }, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 38, 14))
->b : { new<A, B, C, D, E, F>(x: A): A; }, Symbol(b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 3))
+>foo4 : { (x: { new<A, B, C, D, E, F>(x: A): A; }): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }
+>x : { new<A, B, C, D, E, F>(x: A): A; }
+>b : { new<A, B, C, D, E, F>(x: A): A; }
 
 function foo4(x: any) { }
->foo4 : { (x: { new<A, B, C, D, E, F>(x: A): A; }): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }, Symbol(foo4, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 35, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 37, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 38, 27))
->x : any, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 39, 14))
+>foo4 : { (x: { new<A, B, C, D, E, F>(x: A): A; }): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }
+>x : any
 
 function foo8(x: B<string, string>);
->foo8 : { (x: B<string, string>): any; (x: I<string, string, boolean, Date>): any; }, Symbol(foo8, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 39, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 41, 36), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 42, 51))
->x : B<string, string>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 41, 14))
->B : B<U, V>, Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 0, 0))
+>foo8 : { (x: B<string, string>): any; (x: I<string, string, boolean, Date>): any; }
+>x : B<string, string>
+>B : B<U, V>
 
 function foo8(x: I<string, string, boolean, Date>); // BUG 832086
->foo8 : { (x: B<string, string>): any; (x: I<string, string, boolean, Date>): any; }, Symbol(foo8, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 39, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 41, 36), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 42, 51))
->x : I<string, string, boolean, Date>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 42, 14))
->I : I<X, Y, Z, A>, Symbol(I, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 8, 1))
->Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>foo8 : { (x: B<string, string>): any; (x: I<string, string, boolean, Date>): any; }
+>x : I<string, string, boolean, Date>
+>I : I<X, Y, Z, A>
+>Date : Date
 
 function foo8(x: any) { }
->foo8 : { (x: B<string, string>): any; (x: I<string, string, boolean, Date>): any; }, Symbol(foo8, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 39, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 41, 36), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 42, 51))
->x : any, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 43, 14))
+>foo8 : { (x: B<string, string>): any; (x: I<string, string, boolean, Date>): any; }
+>x : any
 
 function foo9(x: B<string, number>);
->foo9 : { (x: B<string, number>): any; (x: C<string, number, B<string, string>>): any; }, Symbol(foo9, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 43, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 45, 36), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 46, 55))
->x : B<string, number>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 45, 14))
->B : B<U, V>, Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 0, 0))
+>foo9 : { (x: B<string, number>): any; (x: C<string, number, B<string, string>>): any; }
+>x : B<string, number>
+>B : B<U, V>
 
 function foo9(x: C<string, number, B<string, string>>); // error
->foo9 : { (x: B<string, number>): any; (x: C<string, number, B<string, string>>): any; }, Symbol(foo9, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 43, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 45, 36), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 46, 55))
->x : C<string, number, B<string, string>>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 46, 14))
->C : C<V, W, X>, Symbol(C, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 4, 1))
->B : B<U, V>, Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 0, 0))
+>foo9 : { (x: B<string, number>): any; (x: C<string, number, B<string, string>>): any; }
+>x : C<string, number, B<string, string>>
+>C : C<V, W, X>
+>B : B<U, V>
 
 function foo9(x: any) { }
->foo9 : { (x: B<string, number>): any; (x: C<string, number, B<string, string>>): any; }, Symbol(foo9, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 43, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 45, 36), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 46, 55))
->x : any, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 47, 14))
+>foo9 : { (x: B<string, number>): any; (x: C<string, number, B<string, string>>): any; }
+>x : any
 
 function foo10(x: B<string, boolean>);
->foo10 : { (x: B<string, boolean>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }, Symbol(foo10, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 47, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 49, 38), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 50, 28))
->x : B<string, boolean>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 49, 15))
->B : B<U, V>, Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 0, 0))
+>foo10 : { (x: B<string, boolean>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }
+>x : B<string, boolean>
+>B : B<U, V>
 
 function foo10(x: typeof a); // ok
->foo10 : { (x: B<string, boolean>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }, Symbol(foo10, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 47, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 49, 38), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 50, 28))
->x : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 50, 15))
->a : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>, Symbol(a, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 18, 3))
+>foo10 : { (x: B<string, boolean>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }
+>x : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>
+>a : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>
 
 function foo10(x: any) { }
->foo10 : { (x: B<string, boolean>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }, Symbol(foo10, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 47, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 49, 38), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 50, 28))
->x : any, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 51, 15))
+>foo10 : { (x: B<string, boolean>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }
+>x : any
 
 function foo11(x: B<string, boolean>);
->foo11 : { (x: B<string, boolean>): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }, Symbol(foo11, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 51, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 53, 38), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 54, 28))
->x : B<string, boolean>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 53, 15))
->B : B<U, V>, Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 0, 0))
+>foo11 : { (x: B<string, boolean>): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }
+>x : B<string, boolean>
+>B : B<U, V>
 
 function foo11(x: typeof b); // ok
->foo11 : { (x: B<string, boolean>): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }, Symbol(foo11, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 51, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 53, 38), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 54, 28))
->x : { new<A, B, C, D, E, F>(x: A): A; }, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 54, 15))
->b : { new<A, B, C, D, E, F>(x: A): A; }, Symbol(b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 3))
+>foo11 : { (x: B<string, boolean>): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }
+>x : { new<A, B, C, D, E, F>(x: A): A; }
+>b : { new<A, B, C, D, E, F>(x: A): A; }
 
 function foo11(x: any) { }
->foo11 : { (x: B<string, boolean>): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }, Symbol(foo11, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 51, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 53, 38), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 54, 28))
->x : any, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 55, 15))
+>foo11 : { (x: B<string, boolean>): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }
+>x : any
 
 function foo12(x: I<B<string, number>, number, Date, string>);
->foo12 : { (x: I<B<string, number>, number, Date, string>): any; (x: C<B<string, number>, number, Date>): any; }, Symbol(foo12, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 55, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 57, 62), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 58, 54))
->x : I<B<string, number>, number, Date, string>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 57, 15))
->I : I<X, Y, Z, A>, Symbol(I, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 8, 1))
->B : B<U, V>, Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 0, 0))
->Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>foo12 : { (x: I<B<string, number>, number, Date, string>): any; (x: C<B<string, number>, number, Date>): any; }
+>x : I<B<string, number>, number, Date, string>
+>I : I<X, Y, Z, A>
+>B : B<U, V>
+>Date : Date
 
 function foo12(x: C<B<string, number>, number, Date>); // ok
->foo12 : { (x: I<B<string, number>, number, Date, string>): any; (x: C<B<string, number>, number, Date>): any; }, Symbol(foo12, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 55, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 57, 62), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 58, 54))
->x : C<B<string, number>, number, Date>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 58, 15))
->C : C<V, W, X>, Symbol(C, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 4, 1))
->B : B<U, V>, Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 0, 0))
->Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>foo12 : { (x: I<B<string, number>, number, Date, string>): any; (x: C<B<string, number>, number, Date>): any; }
+>x : C<B<string, number>, number, Date>
+>C : C<V, W, X>
+>B : B<U, V>
+>Date : Date
 
 function foo12(x: any) { }
->foo12 : { (x: I<B<string, number>, number, Date, string>): any; (x: C<B<string, number>, number, Date>): any; }, Symbol(foo12, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 55, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 57, 62), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 58, 54))
->x : any, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 59, 15))
+>foo12 : { (x: I<B<string, number>, number, Date, string>): any; (x: C<B<string, number>, number, Date>): any; }
+>x : any
 
 function foo12b(x: I2);
->foo12b : { (x: I2): any; (x: C<string, string, boolean>): any; }, Symbol(foo12b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 59, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 61, 23), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 62, 47))
->x : I2, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 61, 16))
->I2 : I2, Symbol(I2, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 12, 1))
+>foo12b : { (x: I2): any; (x: C<string, string, boolean>): any; }
+>x : I2
+>I2 : I2
 
 function foo12b(x: C<string, string, boolean>); // BUG 832086
->foo12b : { (x: I2): any; (x: C<string, string, boolean>): any; }, Symbol(foo12b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 59, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 61, 23), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 62, 47))
->x : C<string, string, boolean>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 62, 16))
->C : C<V, W, X>, Symbol(C, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 4, 1))
+>foo12b : { (x: I2): any; (x: C<string, string, boolean>): any; }
+>x : C<string, string, boolean>
+>C : C<V, W, X>
 
 function foo12b(x: any) { }
->foo12b : { (x: I2): any; (x: C<string, string, boolean>): any; }, Symbol(foo12b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 59, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 61, 23), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 62, 47))
->x : any, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 63, 16))
+>foo12b : { (x: I2): any; (x: C<string, string, boolean>): any; }
+>x : any
 
 function foo13(x: I<string, Date, RegExp, Date>);
->foo13 : { (x: I<string, Date, RegExp, Date>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }, Symbol(foo13, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 63, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 65, 49), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 66, 28))
->x : I<string, Date, RegExp, Date>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 65, 15))
->I : I<X, Y, Z, A>, Symbol(I, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 8, 1))
->Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
->RegExp : RegExp, Symbol(RegExp, Decl(lib.d.ts, 825, 1), Decl(lib.d.ts, 876, 11))
->Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>foo13 : { (x: I<string, Date, RegExp, Date>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }
+>x : I<string, Date, RegExp, Date>
+>I : I<X, Y, Z, A>
+>Date : Date
+>RegExp : RegExp
+>Date : Date
 
 function foo13(x: typeof a); // ok
->foo13 : { (x: I<string, Date, RegExp, Date>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }, Symbol(foo13, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 63, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 65, 49), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 66, 28))
->x : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 66, 15))
->a : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>, Symbol(a, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 18, 3))
+>foo13 : { (x: I<string, Date, RegExp, Date>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }
+>x : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>
+>a : new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>
 
 function foo13(x: any) { }
->foo13 : { (x: I<string, Date, RegExp, Date>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }, Symbol(foo13, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 63, 27), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 65, 49), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 66, 28))
->x : any, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 67, 15))
+>foo13 : { (x: I<string, Date, RegExp, Date>): any; (x: new <Z, A, B, CC, D>(x: Z) => C<Z, A, B>): any; }
+>x : any
 
 function foo14(x: I<string, Date, RegExp, boolean>);
->foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }, Symbol(foo14, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 67, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 69, 52), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 70, 28))
->x : I<string, Date, RegExp, boolean>, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 69, 15))
->I : I<X, Y, Z, A>, Symbol(I, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 8, 1))
->Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
->RegExp : RegExp, Symbol(RegExp, Decl(lib.d.ts, 825, 1), Decl(lib.d.ts, 876, 11))
+>foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }
+>x : I<string, Date, RegExp, boolean>
+>I : I<X, Y, Z, A>
+>Date : Date
+>RegExp : RegExp
 
 function foo14(x: typeof b); // ok
->foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }, Symbol(foo14, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 67, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 69, 52), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 70, 28))
->x : { new<A, B, C, D, E, F>(x: A): A; }, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 70, 15))
->b : { new<A, B, C, D, E, F>(x: A): A; }, Symbol(b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 19, 3))
+>foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }
+>x : { new<A, B, C, D, E, F>(x: A): A; }
+>b : { new<A, B, C, D, E, F>(x: A): A; }
 
 function foo14(x: any) { }
->foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }, Symbol(foo14, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 67, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 69, 52), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 70, 28))
->x : any, Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.ts, 71, 15))
+>foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: { new<A, B, C, D, E, F>(x: A): A; }): any; }
+>x : any
 

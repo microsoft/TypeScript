@@ -1,63 +1,63 @@
 === tests/cases/compiler/hidingConstructSignatures.ts ===
 interface C {
->C : C, Symbol(C, Decl(hidingConstructSignatures.ts, 0, 0))
+>C : C
 
     (a: string): string;
->a : string, Symbol(a, Decl(hidingConstructSignatures.ts, 1, 5))
+>a : string
 }
 
 interface D extends C {
->D : D, Symbol(D, Decl(hidingConstructSignatures.ts, 2, 1))
->C : C, Symbol(C, Decl(hidingConstructSignatures.ts, 0, 0))
+>D : D
+>C : C
 
     new (a: string): number; // Should be ok
->a : string, Symbol(a, Decl(hidingConstructSignatures.ts, 5, 9))
+>a : string
 }
 
 interface E {
->E : E, Symbol(E, Decl(hidingConstructSignatures.ts, 6, 1))
+>E : E
 
     new (a: string): {};
->a : string, Symbol(a, Decl(hidingConstructSignatures.ts, 9, 9))
+>a : string
 }
 
 interface F extends E {
->F : F, Symbol(F, Decl(hidingConstructSignatures.ts, 10, 1))
->E : E, Symbol(E, Decl(hidingConstructSignatures.ts, 6, 1))
+>F : F
+>E : E
 
     new (a: string): string;
->a : string, Symbol(a, Decl(hidingConstructSignatures.ts, 13, 9))
+>a : string
 }
 
 var d: D;
->d : D, Symbol(d, Decl(hidingConstructSignatures.ts, 16, 3))
->D : D, Symbol(D, Decl(hidingConstructSignatures.ts, 2, 1))
+>d : D
+>D : D
 
 d(""); // string
 >d("") : string
->d : D, Symbol(d, Decl(hidingConstructSignatures.ts, 16, 3))
+>d : D
 >"" : string
 
 new d(""); // should be number
 >new d("") : number
->d : D, Symbol(d, Decl(hidingConstructSignatures.ts, 16, 3))
+>d : D
 >"" : string
 
 var f: F;
->f : F, Symbol(f, Decl(hidingConstructSignatures.ts, 20, 3))
->F : F, Symbol(F, Decl(hidingConstructSignatures.ts, 10, 1))
+>f : F
+>F : F
 
 new f(""); // string
 >new f("") : string
->f : F, Symbol(f, Decl(hidingConstructSignatures.ts, 20, 3))
+>f : F
 >"" : string
 
 var e: E;
->e : E, Symbol(e, Decl(hidingConstructSignatures.ts, 23, 3))
->E : E, Symbol(E, Decl(hidingConstructSignatures.ts, 6, 1))
+>e : E
+>E : E
 
 new e(""); // {}
 >new e("") : {}
->e : E, Symbol(e, Decl(hidingConstructSignatures.ts, 23, 3))
+>e : E
 >"" : string
 

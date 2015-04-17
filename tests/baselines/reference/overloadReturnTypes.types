@@ -1,39 +1,39 @@
 === tests/cases/compiler/overloadReturnTypes.ts ===
 class Accessor {}
->Accessor : Accessor, Symbol(Accessor, Decl(overloadReturnTypes.ts, 0, 0))
+>Accessor : Accessor
 
 function attr(name: string): string;
->attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }, Symbol(attr, Decl(overloadReturnTypes.ts, 0, 17), Decl(overloadReturnTypes.ts, 2, 36), Decl(overloadReturnTypes.ts, 3, 53), Decl(overloadReturnTypes.ts, 4, 34))
->name : string, Symbol(name, Decl(overloadReturnTypes.ts, 2, 14))
+>attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
+>name : string
 
 function attr(name: string, value: string): Accessor;
->attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }, Symbol(attr, Decl(overloadReturnTypes.ts, 0, 17), Decl(overloadReturnTypes.ts, 2, 36), Decl(overloadReturnTypes.ts, 3, 53), Decl(overloadReturnTypes.ts, 4, 34))
->name : string, Symbol(name, Decl(overloadReturnTypes.ts, 3, 14))
->value : string, Symbol(value, Decl(overloadReturnTypes.ts, 3, 27))
->Accessor : Accessor, Symbol(Accessor, Decl(overloadReturnTypes.ts, 0, 0))
+>attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
+>name : string
+>value : string
+>Accessor : Accessor
 
 function attr(map: any): Accessor;
->attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }, Symbol(attr, Decl(overloadReturnTypes.ts, 0, 17), Decl(overloadReturnTypes.ts, 2, 36), Decl(overloadReturnTypes.ts, 3, 53), Decl(overloadReturnTypes.ts, 4, 34))
->map : any, Symbol(map, Decl(overloadReturnTypes.ts, 4, 14))
->Accessor : Accessor, Symbol(Accessor, Decl(overloadReturnTypes.ts, 0, 0))
+>attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
+>map : any
+>Accessor : Accessor
 
 function attr(nameOrMap: any, value?: string): any {
->attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }, Symbol(attr, Decl(overloadReturnTypes.ts, 0, 17), Decl(overloadReturnTypes.ts, 2, 36), Decl(overloadReturnTypes.ts, 3, 53), Decl(overloadReturnTypes.ts, 4, 34))
->nameOrMap : any, Symbol(nameOrMap, Decl(overloadReturnTypes.ts, 5, 14))
->value : string, Symbol(value, Decl(overloadReturnTypes.ts, 5, 29))
+>attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
+>nameOrMap : any
+>value : string
 
     if (nameOrMap && typeof nameOrMap === "object") {
 >nameOrMap && typeof nameOrMap === "object" : boolean
->nameOrMap : any, Symbol(nameOrMap, Decl(overloadReturnTypes.ts, 5, 14))
+>nameOrMap : any
 >typeof nameOrMap === "object" : boolean
 >typeof nameOrMap : string
->nameOrMap : any, Symbol(nameOrMap, Decl(overloadReturnTypes.ts, 5, 14))
+>nameOrMap : any
 >"object" : string
 
         // handle map case
         return new Accessor;
 >new Accessor : Accessor
->Accessor : typeof Accessor, Symbol(Accessor, Decl(overloadReturnTypes.ts, 0, 0))
+>Accessor : typeof Accessor
     }
     else {
         // handle string case
@@ -44,21 +44,21 @@ function attr(nameOrMap: any, value?: string): any {
 
 
 interface IFace {
->IFace : IFace, Symbol(IFace, Decl(overloadReturnTypes.ts, 14, 1))
+>IFace : IFace
 
 	attr(name:string):string;
->attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }, Symbol(attr, Decl(overloadReturnTypes.ts, 17, 17), Decl(overloadReturnTypes.ts, 18, 26), Decl(overloadReturnTypes.ts, 19, 45))
->name : string, Symbol(name, Decl(overloadReturnTypes.ts, 18, 6))
+>attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
+>name : string
 
 	attr(name: string, value: string): Accessor;
->attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }, Symbol(attr, Decl(overloadReturnTypes.ts, 17, 17), Decl(overloadReturnTypes.ts, 18, 26), Decl(overloadReturnTypes.ts, 19, 45))
->name : string, Symbol(name, Decl(overloadReturnTypes.ts, 19, 6))
->value : string, Symbol(value, Decl(overloadReturnTypes.ts, 19, 19))
->Accessor : Accessor, Symbol(Accessor, Decl(overloadReturnTypes.ts, 0, 0))
+>attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
+>name : string
+>value : string
+>Accessor : Accessor
 
 	attr(map: any): Accessor;
->attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }, Symbol(attr, Decl(overloadReturnTypes.ts, 17, 17), Decl(overloadReturnTypes.ts, 18, 26), Decl(overloadReturnTypes.ts, 19, 45))
->map : any, Symbol(map, Decl(overloadReturnTypes.ts, 20, 6))
->Accessor : Accessor, Symbol(Accessor, Decl(overloadReturnTypes.ts, 0, 0))
+>attr : { (name: string): string; (name: string, value: string): Accessor; (map: any): Accessor; }
+>map : any
+>Accessor : Accessor
 }
 

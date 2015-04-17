@@ -1,31 +1,31 @@
 === tests/cases/compiler/promises.ts ===
 interface Promise<T> {
->Promise : Promise<T>, Symbol(Promise, Decl(promises.ts, 0, 0))
->T : T, Symbol(T, Decl(promises.ts, 0, 18))
+>Promise : Promise<T>
+>T : T
 
     then<U>(success?: (value: T) => U): Promise<U>;
->then : { <U>(success?: (value: T) => U): Promise<U>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }, Symbol(then, Decl(promises.ts, 0, 22), Decl(promises.ts, 1, 51))
->U : U, Symbol(U, Decl(promises.ts, 1, 9))
->success : (value: T) => U, Symbol(success, Decl(promises.ts, 1, 12))
->value : T, Symbol(value, Decl(promises.ts, 1, 23))
->T : T, Symbol(T, Decl(promises.ts, 0, 18))
->U : U, Symbol(U, Decl(promises.ts, 1, 9))
->Promise : Promise<T>, Symbol(Promise, Decl(promises.ts, 0, 0))
->U : U, Symbol(U, Decl(promises.ts, 1, 9))
+>then : { <U>(success?: (value: T) => U): Promise<U>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }
+>U : U
+>success : (value: T) => U
+>value : T
+>T : T
+>U : U
+>Promise : Promise<T>
+>U : U
 
     then<U>(success?: (value: T) => Promise<U>): Promise<U>;
->then : { <U>(success?: (value: T) => U): Promise<U>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }, Symbol(then, Decl(promises.ts, 0, 22), Decl(promises.ts, 1, 51))
->U : U, Symbol(U, Decl(promises.ts, 2, 9))
->success : (value: T) => Promise<U>, Symbol(success, Decl(promises.ts, 2, 12))
->value : T, Symbol(value, Decl(promises.ts, 2, 23))
->T : T, Symbol(T, Decl(promises.ts, 0, 18))
->Promise : Promise<T>, Symbol(Promise, Decl(promises.ts, 0, 0))
->U : U, Symbol(U, Decl(promises.ts, 2, 9))
->Promise : Promise<T>, Symbol(Promise, Decl(promises.ts, 0, 0))
->U : U, Symbol(U, Decl(promises.ts, 2, 9))
+>then : { <U>(success?: (value: T) => U): Promise<U>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }
+>U : U
+>success : (value: T) => Promise<U>
+>value : T
+>T : T
+>Promise : Promise<T>
+>U : U
+>Promise : Promise<T>
+>U : U
 
     value: T;
->value : T, Symbol(value, Decl(promises.ts, 2, 60))
->T : T, Symbol(T, Decl(promises.ts, 0, 18))
+>value : T
+>T : T
 }
 

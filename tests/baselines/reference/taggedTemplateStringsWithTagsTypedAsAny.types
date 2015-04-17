@@ -1,15 +1,15 @@
 === tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagsTypedAsAny.ts ===
 var f: any;
->f : any, Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+>f : any
 
 f `abc`
 >f `abc` : any
->f : any, Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+>f : any
 >`abc` : string
 
 f `abc${1}def${2}ghi`;
 >f `abc${1}def${2}ghi` : any
->f : any, Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+>f : any
 >`abc${1}def${2}ghi` : string
 >1 : number
 >2 : number
@@ -18,7 +18,7 @@ f.g.h `abc`
 >f.g.h `abc` : any
 >f.g.h : any
 >f.g : any
->f : any, Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+>f : any
 >g : any
 >h : any
 >`abc` : string
@@ -27,7 +27,7 @@ f.g.h `abc${1}def${2}ghi`;
 >f.g.h `abc${1}def${2}ghi` : any
 >f.g.h : any
 >f.g : any
->f : any, Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+>f : any
 >g : any
 >h : any
 >`abc${1}def${2}ghi` : string
@@ -37,14 +37,14 @@ f.g.h `abc${1}def${2}ghi`;
 f `abc`.member
 >f `abc`.member : any
 >f `abc` : any
->f : any, Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+>f : any
 >`abc` : string
 >member : any
 
 f `abc${1}def${2}ghi`.member;
 >f `abc${1}def${2}ghi`.member : any
 >f `abc${1}def${2}ghi` : any
->f : any, Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+>f : any
 >`abc${1}def${2}ghi` : string
 >1 : number
 >2 : number
@@ -53,14 +53,14 @@ f `abc${1}def${2}ghi`.member;
 f `abc`["member"];
 >f `abc`["member"] : any
 >f `abc` : any
->f : any, Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+>f : any
 >`abc` : string
 >"member" : string
 
 f `abc${1}def${2}ghi`["member"];
 >f `abc${1}def${2}ghi`["member"] : any
 >f `abc${1}def${2}ghi` : any
->f : any, Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+>f : any
 >`abc${1}def${2}ghi` : string
 >1 : number
 >2 : number
@@ -71,7 +71,7 @@ f `abc`["member"].someOtherTag `abc${1}def${2}ghi`;
 >f `abc`["member"].someOtherTag : any
 >f `abc`["member"] : any
 >f `abc` : any
->f : any, Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+>f : any
 >`abc` : string
 >"member" : string
 >someOtherTag : any
@@ -84,7 +84,7 @@ f `abc${1}def${2}ghi`["member"].someOtherTag `abc${1}def${2}ghi`;
 >f `abc${1}def${2}ghi`["member"].someOtherTag : any
 >f `abc${1}def${2}ghi`["member"] : any
 >f `abc${1}def${2}ghi` : any
->f : any, Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+>f : any
 >`abc${1}def${2}ghi` : string
 >1 : number
 >2 : number
@@ -97,14 +97,14 @@ f `abc${1}def${2}ghi`["member"].someOtherTag `abc${1}def${2}ghi`;
 f.thisIsNotATag(`abc`);
 >f.thisIsNotATag(`abc`) : any
 >f.thisIsNotATag : any
->f : any, Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+>f : any
 >thisIsNotATag : any
 >`abc` : string
 
 f.thisIsNotATag(`abc${1}def${2}ghi`);
 >f.thisIsNotATag(`abc${1}def${2}ghi`) : any
 >f.thisIsNotATag : any
->f : any, Symbol(f, Decl(taggedTemplateStringsWithTagsTypedAsAny.ts, 0, 3))
+>f : any
 >thisIsNotATag : any
 >`abc${1}def${2}ghi` : string
 >1 : number

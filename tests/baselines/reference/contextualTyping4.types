@@ -1,11 +1,11 @@
 === tests/cases/compiler/contextualTyping4.ts ===
 class foo { public bar:{id:number;} = {id:5, name:"foo"}; }
->foo : foo, Symbol(foo, Decl(contextualTyping4.ts, 0, 0))
->bar : { id: number; }, Symbol(bar, Decl(contextualTyping4.ts, 0, 11))
->id : number, Symbol(id, Decl(contextualTyping4.ts, 0, 24))
+>foo : foo
+>bar : { id: number; }
+>id : number
 >{id:5, name:"foo"} : { id: number; name: string; }
->id : number, Symbol(id, Decl(contextualTyping4.ts, 0, 39))
+>id : number
 >5 : number
->name : string, Symbol(name, Decl(contextualTyping4.ts, 0, 44))
+>name : string
 >"foo" : string
 

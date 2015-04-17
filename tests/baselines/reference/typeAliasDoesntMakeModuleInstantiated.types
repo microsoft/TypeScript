@@ -1,24 +1,24 @@
 === tests/cases/compiler/typeAliasDoesntMakeModuleInstantiated.ts ===
 declare module m {
->m : IStatic, Symbol(m, Decl(typeAliasDoesntMakeModuleInstantiated.ts, 0, 0), Decl(typeAliasDoesntMakeModuleInstantiated.ts, 9, 11))
+>m : IStatic
 
     // type alias declaration here shouldnt make the module declaration instantiated
     type Selector = string| string[] |Function;
->Selector : string | Function | string[], Symbol(Selector, Decl(typeAliasDoesntMakeModuleInstantiated.ts, 0, 18))
->Function : Function, Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11))
+>Selector : string | Function | string[]
+>Function : Function
 
     export interface IStatic {
->IStatic : IStatic, Symbol(IStatic, Decl(typeAliasDoesntMakeModuleInstantiated.ts, 2, 47))
+>IStatic : IStatic
 
         (selector: any /* Selector */): IInstance;
->selector : any, Symbol(selector, Decl(typeAliasDoesntMakeModuleInstantiated.ts, 5, 9))
->IInstance : IInstance, Symbol(IInstance, Decl(typeAliasDoesntMakeModuleInstantiated.ts, 6, 5))
+>selector : any
+>IInstance : IInstance
     }
     export interface IInstance { }
->IInstance : IInstance, Symbol(IInstance, Decl(typeAliasDoesntMakeModuleInstantiated.ts, 6, 5))
+>IInstance : IInstance
 }
 declare var m: m.IStatic; // Should be ok to have var 'm' as module is non instantiated
->m : m.IStatic, Symbol(m, Decl(typeAliasDoesntMakeModuleInstantiated.ts, 0, 0), Decl(typeAliasDoesntMakeModuleInstantiated.ts, 9, 11))
->m : any, Symbol(m, Decl(typeAliasDoesntMakeModuleInstantiated.ts, 0, 0), Decl(typeAliasDoesntMakeModuleInstantiated.ts, 9, 11))
->IStatic : m.IStatic, Symbol(m.IStatic, Decl(typeAliasDoesntMakeModuleInstantiated.ts, 2, 47))
+>m : m.IStatic
+>m : any
+>IStatic : m.IStatic
 

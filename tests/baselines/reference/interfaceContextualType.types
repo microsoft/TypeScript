@@ -1,63 +1,63 @@
 === tests/cases/compiler/interfaceContextualType.ts ===
 export interface IOptions {
->IOptions : IOptions, Symbol(IOptions, Decl(interfaceContextualType.ts, 0, 0))
+>IOptions : IOptions
 
     italic?: boolean;
->italic : boolean, Symbol(italic, Decl(interfaceContextualType.ts, 0, 27))
+>italic : boolean
 
     bold?: boolean;
->bold : boolean, Symbol(bold, Decl(interfaceContextualType.ts, 1, 21))
+>bold : boolean
 }
 export interface IMap {
->IMap : IMap, Symbol(IMap, Decl(interfaceContextualType.ts, 3, 1))
+>IMap : IMap
 
     [s: string]: IOptions;
->s : string, Symbol(s, Decl(interfaceContextualType.ts, 5, 5))
->IOptions : IOptions, Symbol(IOptions, Decl(interfaceContextualType.ts, 0, 0))
+>s : string
+>IOptions : IOptions
 }
 
 class Bug {
->Bug : Bug, Symbol(Bug, Decl(interfaceContextualType.ts, 6, 1))
+>Bug : Bug
 
     public values: IMap;
->values : IMap, Symbol(values, Decl(interfaceContextualType.ts, 8, 11))
->IMap : IMap, Symbol(IMap, Decl(interfaceContextualType.ts, 3, 1))
+>values : IMap
+>IMap : IMap
 
     ok() {
->ok : () => void, Symbol(ok, Decl(interfaceContextualType.ts, 9, 24))
+>ok : () => void
 
         this.values = {};
 >this.values = {} : { [x: string]: undefined; }
->this.values : IMap, Symbol(values, Decl(interfaceContextualType.ts, 8, 11))
->this : Bug, Symbol(Bug, Decl(interfaceContextualType.ts, 6, 1))
->values : IMap, Symbol(values, Decl(interfaceContextualType.ts, 8, 11))
+>this.values : IMap
+>this : Bug
+>values : IMap
 >{} : { [x: string]: undefined; }
 
         this.values['comments'] = { italic: true };
 >this.values['comments'] = { italic: true } : { italic: boolean; }
 >this.values['comments'] : IOptions
->this.values : IMap, Symbol(values, Decl(interfaceContextualType.ts, 8, 11))
->this : Bug, Symbol(Bug, Decl(interfaceContextualType.ts, 6, 1))
->values : IMap, Symbol(values, Decl(interfaceContextualType.ts, 8, 11))
+>this.values : IMap
+>this : Bug
+>values : IMap
 >'comments' : string
 >{ italic: true } : { italic: boolean; }
->italic : boolean, Symbol(italic, Decl(interfaceContextualType.ts, 12, 35))
+>italic : boolean
 >true : boolean
     }
     shouldBeOK() {
->shouldBeOK : () => void, Symbol(shouldBeOK, Decl(interfaceContextualType.ts, 13, 5))
+>shouldBeOK : () => void
 
         this.values = {
 >this.values = {            comments: { italic: true }        } : { [x: string]: { italic: boolean; }; comments: { italic: boolean; }; }
->this.values : IMap, Symbol(values, Decl(interfaceContextualType.ts, 8, 11))
->this : Bug, Symbol(Bug, Decl(interfaceContextualType.ts, 6, 1))
->values : IMap, Symbol(values, Decl(interfaceContextualType.ts, 8, 11))
+>this.values : IMap
+>this : Bug
+>values : IMap
 >{            comments: { italic: true }        } : { [x: string]: { italic: boolean; }; comments: { italic: boolean; }; }
 
             comments: { italic: true }
->comments : { italic: boolean; }, Symbol(comments, Decl(interfaceContextualType.ts, 15, 23))
+>comments : { italic: boolean; }
 >{ italic: true } : { italic: boolean; }
->italic : boolean, Symbol(italic, Decl(interfaceContextualType.ts, 16, 23))
+>italic : boolean
 >true : boolean
 
         };

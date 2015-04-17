@@ -1,0 +1,32 @@
+=== tests/cases/conformance/es6/destructuring/iterableArrayPattern2.ts ===
+var [a, ...b] = new SymbolIterator;
+>a : Symbol(a, Decl(iterableArrayPattern2.ts, 0, 5))
+>b : Symbol(b, Decl(iterableArrayPattern2.ts, 0, 7))
+>SymbolIterator : Symbol(SymbolIterator, Decl(iterableArrayPattern2.ts, 0, 35))
+
+class SymbolIterator {
+>SymbolIterator : Symbol(SymbolIterator, Decl(iterableArrayPattern2.ts, 0, 35))
+
+    next() {
+>next : Symbol(next, Decl(iterableArrayPattern2.ts, 1, 22))
+
+        return {
+            value: Symbol(),
+>value : Symbol(value, Decl(iterableArrayPattern2.ts, 3, 16))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+
+            done: false
+>done : Symbol(done, Decl(iterableArrayPattern2.ts, 4, 28))
+
+        };
+    }
+
+    [Symbol.iterator]() {
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+
+        return this;
+>this : Symbol(SymbolIterator, Decl(iterableArrayPattern2.ts, 0, 35))
+    }
+}

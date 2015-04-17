@@ -2,62 +2,62 @@
 /// <reference path='mergedInterfaceFromMultipleFiles1_0.ts'/>
 
 interface D { bar(): number; }
->D : D, Symbol(D, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 0, 0))
->bar : () => number, Symbol(bar, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 2, 13))
+>D : D
+>bar : () => number
 
 interface C extends D {
->C : C, Symbol(C, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 1, 30), Decl(mergedInterfaceFromMultipleFiles1_1.ts, 2, 30))
->D : D, Symbol(D, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 0, 0))
+>C : C
+>D : D
 
 	b(): Date;
->b : () => Date, Symbol(b, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 4, 23))
->Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>b : () => Date
+>Date : Date
 }
 
 var c:C;
->c : C, Symbol(c, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 8, 3))
->C : C, Symbol(C, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 1, 30), Decl(mergedInterfaceFromMultipleFiles1_1.ts, 2, 30))
+>c : C
+>C : C
 
 var a: string = c.foo();
->a : string, Symbol(a, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 9, 3))
+>a : string
 >c.foo() : string
->c.foo : () => string, Symbol(I.foo, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 1, 13))
->c : C, Symbol(c, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 8, 3))
->foo : () => string, Symbol(I.foo, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 1, 13))
+>c.foo : () => string
+>c : C
+>foo : () => string
 
 var b: number = c.bar();
->b : number, Symbol(b, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 10, 3))
+>b : number
 >c.bar() : number
->c.bar : () => number, Symbol(D.bar, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 2, 13))
->c : C, Symbol(c, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 8, 3))
->bar : () => number, Symbol(D.bar, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 2, 13))
+>c.bar : () => number
+>c : C
+>bar : () => number
 
 var d: number = c.a();
->d : number, Symbol(d, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 11, 3))
+>d : number
 >c.a() : number
->c.a : () => number, Symbol(C.a, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 3, 23))
->c : C, Symbol(c, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 8, 3))
->a : () => number, Symbol(C.a, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 3, 23))
+>c.a : () => number
+>c : C
+>a : () => number
 
 var e: Date = c.b();
->e : Date, Symbol(e, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 12, 3))
->Date : Date, Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>e : Date
+>Date : Date
 >c.b() : Date
->c.b : () => Date, Symbol(C.b, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 4, 23))
->c : C, Symbol(c, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 8, 3))
->b : () => Date, Symbol(C.b, Decl(mergedInterfaceFromMultipleFiles1_1.ts, 4, 23))
+>c.b : () => Date
+>c : C
+>b : () => Date
 
 === tests/cases/compiler/mergedInterfaceFromMultipleFiles1_0.ts ===
 
 interface I { foo(): string; }
->I : I, Symbol(I, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 0, 0))
->foo : () => string, Symbol(foo, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 1, 13))
+>I : I
+>foo : () => string
 
 interface C extends I {
->C : C, Symbol(C, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 1, 30), Decl(mergedInterfaceFromMultipleFiles1_1.ts, 2, 30))
->I : I, Symbol(I, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 0, 0))
+>C : C
+>I : I
 
 	a(): number;
->a : () => number, Symbol(a, Decl(mergedInterfaceFromMultipleFiles1_0.ts, 3, 23))
+>a : () => number
 }
 

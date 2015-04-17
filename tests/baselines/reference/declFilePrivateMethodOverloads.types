@@ -1,76 +1,76 @@
 === tests/cases/compiler/declFilePrivateMethodOverloads.ts ===
 
 interface IContext {
->IContext : IContext, Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
+>IContext : IContext
 
     someMethod();
->someMethod : () => any, Symbol(someMethod, Decl(declFilePrivateMethodOverloads.ts, 1, 20))
+>someMethod : () => any
 }
 class c1 {
->c1 : c1, Symbol(c1, Decl(declFilePrivateMethodOverloads.ts, 3, 1))
+>c1 : c1
 
     private _forEachBindingContext(bindingContext: IContext, fn: (bindingContext: IContext) => void);
->_forEachBindingContext : { (bindingContext: IContext, fn: (bindingContext: IContext) => void): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }, Symbol(_forEachBindingContext, Decl(declFilePrivateMethodOverloads.ts, 4, 10), Decl(declFilePrivateMethodOverloads.ts, 5, 101), Decl(declFilePrivateMethodOverloads.ts, 6, 113))
->bindingContext : IContext, Symbol(bindingContext, Decl(declFilePrivateMethodOverloads.ts, 5, 35))
->IContext : IContext, Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
->fn : (bindingContext: IContext) => void, Symbol(fn, Decl(declFilePrivateMethodOverloads.ts, 5, 60))
->bindingContext : IContext, Symbol(bindingContext, Decl(declFilePrivateMethodOverloads.ts, 5, 66))
->IContext : IContext, Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
+>_forEachBindingContext : { (bindingContext: IContext, fn: (bindingContext: IContext) => void): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }
+>bindingContext : IContext
+>IContext : IContext
+>fn : (bindingContext: IContext) => void
+>bindingContext : IContext
+>IContext : IContext
 
     private _forEachBindingContext(bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void);
->_forEachBindingContext : { (bindingContext: IContext, fn: (bindingContext: IContext) => void): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }, Symbol(_forEachBindingContext, Decl(declFilePrivateMethodOverloads.ts, 4, 10), Decl(declFilePrivateMethodOverloads.ts, 5, 101), Decl(declFilePrivateMethodOverloads.ts, 6, 113))
->bindingContextArray : IContext[], Symbol(bindingContextArray, Decl(declFilePrivateMethodOverloads.ts, 6, 35))
->Array : T[], Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
->IContext : IContext, Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
->fn : (bindingContext: IContext) => void, Symbol(fn, Decl(declFilePrivateMethodOverloads.ts, 6, 72))
->bindingContext : IContext, Symbol(bindingContext, Decl(declFilePrivateMethodOverloads.ts, 6, 78))
->IContext : IContext, Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
+>_forEachBindingContext : { (bindingContext: IContext, fn: (bindingContext: IContext) => void): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }
+>bindingContextArray : IContext[]
+>Array : T[]
+>IContext : IContext
+>fn : (bindingContext: IContext) => void
+>bindingContext : IContext
+>IContext : IContext
 
     private _forEachBindingContext(context, fn: (bindingContext: IContext) => void): void {
->_forEachBindingContext : { (bindingContext: IContext, fn: (bindingContext: IContext) => void): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }, Symbol(_forEachBindingContext, Decl(declFilePrivateMethodOverloads.ts, 4, 10), Decl(declFilePrivateMethodOverloads.ts, 5, 101), Decl(declFilePrivateMethodOverloads.ts, 6, 113))
->context : any, Symbol(context, Decl(declFilePrivateMethodOverloads.ts, 7, 35))
->fn : (bindingContext: IContext) => void, Symbol(fn, Decl(declFilePrivateMethodOverloads.ts, 7, 43))
->bindingContext : IContext, Symbol(bindingContext, Decl(declFilePrivateMethodOverloads.ts, 7, 49))
->IContext : IContext, Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
+>_forEachBindingContext : { (bindingContext: IContext, fn: (bindingContext: IContext) => void): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }
+>context : any
+>fn : (bindingContext: IContext) => void
+>bindingContext : IContext
+>IContext : IContext
 
         // Function here
     }
 
     private overloadWithArityDifference(bindingContext: IContext);
->overloadWithArityDifference : { (bindingContext: IContext): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }, Symbol(overloadWithArityDifference, Decl(declFilePrivateMethodOverloads.ts, 9, 5), Decl(declFilePrivateMethodOverloads.ts, 11, 66), Decl(declFilePrivateMethodOverloads.ts, 12, 118))
->bindingContext : IContext, Symbol(bindingContext, Decl(declFilePrivateMethodOverloads.ts, 11, 40))
->IContext : IContext, Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
+>overloadWithArityDifference : { (bindingContext: IContext): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }
+>bindingContext : IContext
+>IContext : IContext
 
     private overloadWithArityDifference(bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void);
->overloadWithArityDifference : { (bindingContext: IContext): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }, Symbol(overloadWithArityDifference, Decl(declFilePrivateMethodOverloads.ts, 9, 5), Decl(declFilePrivateMethodOverloads.ts, 11, 66), Decl(declFilePrivateMethodOverloads.ts, 12, 118))
->bindingContextArray : IContext[], Symbol(bindingContextArray, Decl(declFilePrivateMethodOverloads.ts, 12, 40))
->Array : T[], Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
->IContext : IContext, Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
->fn : (bindingContext: IContext) => void, Symbol(fn, Decl(declFilePrivateMethodOverloads.ts, 12, 77))
->bindingContext : IContext, Symbol(bindingContext, Decl(declFilePrivateMethodOverloads.ts, 12, 83))
->IContext : IContext, Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
+>overloadWithArityDifference : { (bindingContext: IContext): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }
+>bindingContextArray : IContext[]
+>Array : T[]
+>IContext : IContext
+>fn : (bindingContext: IContext) => void
+>bindingContext : IContext
+>IContext : IContext
 
     private overloadWithArityDifference(context): void {
->overloadWithArityDifference : { (bindingContext: IContext): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }, Symbol(overloadWithArityDifference, Decl(declFilePrivateMethodOverloads.ts, 9, 5), Decl(declFilePrivateMethodOverloads.ts, 11, 66), Decl(declFilePrivateMethodOverloads.ts, 12, 118))
->context : any, Symbol(context, Decl(declFilePrivateMethodOverloads.ts, 13, 40))
+>overloadWithArityDifference : { (bindingContext: IContext): any; (bindingContextArray: IContext[], fn: (bindingContext: IContext) => void): any; }
+>context : any
 
         // Function here
     }
 }
 declare class c2 {
->c2 : c2, Symbol(c2, Decl(declFilePrivateMethodOverloads.ts, 16, 1))
+>c2 : c2
 
     private overload1(context, fn);
->overload1 : (context: any, fn: any) => any, Symbol(overload1, Decl(declFilePrivateMethodOverloads.ts, 17, 18))
->context : any, Symbol(context, Decl(declFilePrivateMethodOverloads.ts, 18, 22))
->fn : any, Symbol(fn, Decl(declFilePrivateMethodOverloads.ts, 18, 30))
+>overload1 : (context: any, fn: any) => any
+>context : any
+>fn : any
 
     private overload2(context);
->overload2 : { (context: any): any; (context: any, fn: any): any; }, Symbol(overload2, Decl(declFilePrivateMethodOverloads.ts, 18, 35), Decl(declFilePrivateMethodOverloads.ts, 20, 31))
->context : any, Symbol(context, Decl(declFilePrivateMethodOverloads.ts, 20, 22))
+>overload2 : { (context: any): any; (context: any, fn: any): any; }
+>context : any
 
     private overload2(context, fn);
->overload2 : { (context: any): any; (context: any, fn: any): any; }, Symbol(overload2, Decl(declFilePrivateMethodOverloads.ts, 18, 35), Decl(declFilePrivateMethodOverloads.ts, 20, 31))
->context : any, Symbol(context, Decl(declFilePrivateMethodOverloads.ts, 21, 22))
->fn : any, Symbol(fn, Decl(declFilePrivateMethodOverloads.ts, 21, 30))
+>overload2 : { (context: any): any; (context: any, fn: any): any; }
+>context : any
+>fn : any
 }

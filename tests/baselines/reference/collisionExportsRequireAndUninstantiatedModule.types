@@ -1,30 +1,30 @@
 === tests/cases/compiler/collisionExportsRequireAndUninstantiatedModule.ts ===
 export module require { // no error 
->require : any, Symbol(require, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 0, 0))
+>require : any
 
     export interface I {
->I : I, Symbol(I, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 0, 23))
+>I : I
     }
 }
 export function foo(): require.I {
->foo : () => require.I, Symbol(foo, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 3, 1))
->require : any, Symbol(require, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 0, 0))
->I : require.I, Symbol(require.I, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 0, 23))
+>foo : () => require.I
+>require : any
+>I : require.I
 
     return null;
 >null : null
 }
 export module exports { // no error
->exports : any, Symbol(exports, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 6, 1))
+>exports : any
 
     export interface I {
->I : I, Symbol(I, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 7, 23))
+>I : I
     }
 }
 export function foo2(): exports.I {
->foo2 : () => exports.I, Symbol(foo2, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 10, 1))
->exports : any, Symbol(exports, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 6, 1))
->I : exports.I, Symbol(exports.I, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 7, 23))
+>foo2 : () => exports.I
+>exports : any
+>I : exports.I
 
     return null;
 >null : null

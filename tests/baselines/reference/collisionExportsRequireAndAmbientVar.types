@@ -1,59 +1,59 @@
 === tests/cases/compiler/collisionExportsRequireAndAmbientVar_externalmodule.ts ===
 export declare var exports: number;
->exports : number, Symbol(exports, Decl(collisionExportsRequireAndAmbientVar_externalmodule.ts, 0, 18))
+>exports : number
 
 export declare var require: string;
->require : string, Symbol(require, Decl(collisionExportsRequireAndAmbientVar_externalmodule.ts, 1, 18))
+>require : string
 
 declare module m1 {
->m1 : typeof m1, Symbol(m1, Decl(collisionExportsRequireAndAmbientVar_externalmodule.ts, 1, 35))
+>m1 : typeof m1
 
     var exports: string;
->exports : string, Symbol(exports, Decl(collisionExportsRequireAndAmbientVar_externalmodule.ts, 3, 7))
+>exports : string
 
     var require: number;
->require : number, Symbol(require, Decl(collisionExportsRequireAndAmbientVar_externalmodule.ts, 4, 7))
+>require : number
 }
 module m2 {
->m2 : typeof m2, Symbol(m2, Decl(collisionExportsRequireAndAmbientVar_externalmodule.ts, 5, 1))
+>m2 : typeof m2
 
     export declare var exports: number;
->exports : number, Symbol(exports, Decl(collisionExportsRequireAndAmbientVar_externalmodule.ts, 7, 22))
+>exports : number
 
     export declare var require: string;
->require : string, Symbol(require, Decl(collisionExportsRequireAndAmbientVar_externalmodule.ts, 8, 22))
+>require : string
 
     var a = 10;
->a : number, Symbol(a, Decl(collisionExportsRequireAndAmbientVar_externalmodule.ts, 9, 7))
+>a : number
 >10 : number
 }
 
 === tests/cases/compiler/collisionExportsRequireAndAmbientVar_globalFile.ts ===
 declare var exports: number;
->exports : number, Symbol(exports, Decl(collisionExportsRequireAndAmbientVar_globalFile.ts, 0, 11))
+>exports : number
 
 declare var require: string;
->require : string, Symbol(require, Decl(collisionExportsRequireAndAmbientVar_globalFile.ts, 1, 11))
+>require : string
 
 declare module m3 {
->m3 : typeof m3, Symbol(m3, Decl(collisionExportsRequireAndAmbientVar_globalFile.ts, 1, 28))
+>m3 : typeof m3
 
     var exports: string;
->exports : string, Symbol(exports, Decl(collisionExportsRequireAndAmbientVar_globalFile.ts, 3, 7))
+>exports : string
 
     var require: number;
->require : number, Symbol(require, Decl(collisionExportsRequireAndAmbientVar_globalFile.ts, 4, 7))
+>require : number
 }
 module m4 {
->m4 : typeof m4, Symbol(m4, Decl(collisionExportsRequireAndAmbientVar_globalFile.ts, 5, 1))
+>m4 : typeof m4
 
     export declare var exports: string;
->exports : string, Symbol(exports, Decl(collisionExportsRequireAndAmbientVar_globalFile.ts, 7, 22))
+>exports : string
 
     export declare var require: number;
->require : number, Symbol(require, Decl(collisionExportsRequireAndAmbientVar_globalFile.ts, 8, 22))
+>require : number
 
     var a = 10;
->a : number, Symbol(a, Decl(collisionExportsRequireAndAmbientVar_globalFile.ts, 9, 7))
+>a : number
 >10 : number
 }

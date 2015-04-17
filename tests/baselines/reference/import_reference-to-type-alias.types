@@ -1,35 +1,35 @@
 === tests/cases/compiler/file2.ts ===
 import appJs = require("file1");
->appJs : typeof appJs, Symbol(appJs, Decl(file2.ts, 0, 0))
+>appJs : typeof appJs
 
 import Services = appJs.App.Services;
->Services : typeof Services, Symbol(Services, Decl(file2.ts, 0, 32))
->appJs : typeof appJs, Symbol(appJs, Decl(file1.ts, 0, 0))
->App : typeof appJs.App, Symbol(appJs.App, Decl(file1.ts, 0, 0))
->Services : typeof Services, Symbol(Services, Decl(file1.ts, 0, 19))
+>Services : typeof Services
+>appJs : typeof appJs
+>App : typeof appJs.App
+>Services : typeof Services
 
 var x = new Services.UserServices().getUserName();
->x : string, Symbol(x, Decl(file2.ts, 2, 3))
+>x : string
 >new Services.UserServices().getUserName() : string
->new Services.UserServices().getUserName : () => string, Symbol(Services.UserServices.getUserName, Decl(file1.ts, 2, 35))
+>new Services.UserServices().getUserName : () => string
 >new Services.UserServices() : Services.UserServices
->Services.UserServices : typeof Services.UserServices, Symbol(Services.UserServices, Decl(file1.ts, 1, 28))
->Services : typeof Services, Symbol(Services, Decl(file2.ts, 0, 32))
->UserServices : typeof Services.UserServices, Symbol(Services.UserServices, Decl(file1.ts, 1, 28))
->getUserName : () => string, Symbol(Services.UserServices.getUserName, Decl(file1.ts, 2, 35))
+>Services.UserServices : typeof Services.UserServices
+>Services : typeof Services
+>UserServices : typeof Services.UserServices
+>getUserName : () => string
 
 === tests/cases/compiler/file1.ts ===
 export module App {
->App : typeof App, Symbol(App, Decl(file1.ts, 0, 0))
+>App : typeof App
 
     export module Services {
->Services : typeof Services, Symbol(Services, Decl(file1.ts, 0, 19))
+>Services : typeof Services
 
         export class UserServices {
->UserServices : UserServices, Symbol(UserServices, Decl(file1.ts, 1, 28))
+>UserServices : UserServices
 
             public getUserName(): string {
->getUserName : () => string, Symbol(getUserName, Decl(file1.ts, 2, 35))
+>getUserName : () => string
 
                 return "Bill Gates";
 >"Bill Gates" : string

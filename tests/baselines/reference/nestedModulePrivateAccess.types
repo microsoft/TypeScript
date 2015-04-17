@@ -1,15 +1,15 @@
 === tests/cases/compiler/nestedModulePrivateAccess.ts ===
 module a{
->a : typeof a, Symbol(a, Decl(nestedModulePrivateAccess.ts, 0, 0))
+>a : typeof a
 
        var x:number;
->x : number, Symbol(x, Decl(nestedModulePrivateAccess.ts, 1, 10))
+>x : number
 
        module b{
->b : typeof b, Symbol(b, Decl(nestedModulePrivateAccess.ts, 1, 20))
+>b : typeof b
 
                var y = x; // should not be an error
->y : number, Symbol(y, Decl(nestedModulePrivateAccess.ts, 3, 18))
->x : number, Symbol(x, Decl(nestedModulePrivateAccess.ts, 1, 10))
+>y : number
+>x : number
        }
 }

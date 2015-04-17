@@ -1,42 +1,42 @@
 === tests/cases/compiler/baseIndexSignatureResolution.ts ===
 class Base { private a: string; }
->Base : Base, Symbol(Base, Decl(baseIndexSignatureResolution.ts, 0, 0))
->a : string, Symbol(a, Decl(baseIndexSignatureResolution.ts, 0, 12))
+>Base : Base
+>a : string
 
 class Derived extends Base { private b: string; }
->Derived : Derived, Symbol(Derived, Decl(baseIndexSignatureResolution.ts, 0, 33))
->Base : Base, Symbol(Base, Decl(baseIndexSignatureResolution.ts, 0, 0))
->b : string, Symbol(b, Decl(baseIndexSignatureResolution.ts, 1, 28))
+>Derived : Derived
+>Base : Base
+>b : string
 
 // Note - commmenting "extends Foo" prevents the error
 interface Foo {
->Foo : Foo, Symbol(Foo, Decl(baseIndexSignatureResolution.ts, 1, 49))
+>Foo : Foo
 
     [i: number]: Base;
->i : number, Symbol(i, Decl(baseIndexSignatureResolution.ts, 5, 5))
->Base : Base, Symbol(Base, Decl(baseIndexSignatureResolution.ts, 0, 0))
+>i : number
+>Base : Base
 }
 interface FooOf<TBase extends Base> extends Foo {
->FooOf : FooOf<TBase>, Symbol(FooOf, Decl(baseIndexSignatureResolution.ts, 6, 1))
->TBase : TBase, Symbol(TBase, Decl(baseIndexSignatureResolution.ts, 7, 16))
->Base : Base, Symbol(Base, Decl(baseIndexSignatureResolution.ts, 0, 0))
->Foo : Foo, Symbol(Foo, Decl(baseIndexSignatureResolution.ts, 1, 49))
+>FooOf : FooOf<TBase>
+>TBase : TBase
+>Base : Base
+>Foo : Foo
 
     [i: number]: TBase;
->i : number, Symbol(i, Decl(baseIndexSignatureResolution.ts, 8, 5))
->TBase : TBase, Symbol(TBase, Decl(baseIndexSignatureResolution.ts, 7, 16))
+>i : number
+>TBase : TBase
 }
 var x: FooOf<Derived> = null;
->x : FooOf<Derived>, Symbol(x, Decl(baseIndexSignatureResolution.ts, 10, 3))
->FooOf : FooOf<TBase>, Symbol(FooOf, Decl(baseIndexSignatureResolution.ts, 6, 1))
->Derived : Derived, Symbol(Derived, Decl(baseIndexSignatureResolution.ts, 0, 33))
+>x : FooOf<Derived>
+>FooOf : FooOf<TBase>
+>Derived : Derived
 >null : null
 
 var y: Derived = x[0];
->y : Derived, Symbol(y, Decl(baseIndexSignatureResolution.ts, 11, 3))
->Derived : Derived, Symbol(Derived, Decl(baseIndexSignatureResolution.ts, 0, 33))
+>y : Derived
+>Derived : Derived
 >x[0] : Derived
->x : FooOf<Derived>, Symbol(x, Decl(baseIndexSignatureResolution.ts, 10, 3))
+>x : FooOf<Derived>
 >0 : number
 
 /*

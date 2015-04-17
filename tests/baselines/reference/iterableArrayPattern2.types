@@ -1,37 +1,37 @@
 === tests/cases/conformance/es6/destructuring/iterableArrayPattern2.ts ===
 var [a, ...b] = new SymbolIterator;
->a : symbol, Symbol(a, Decl(iterableArrayPattern2.ts, 0, 5))
->b : symbol[], Symbol(b, Decl(iterableArrayPattern2.ts, 0, 7))
+>a : symbol
+>b : symbol[]
 >new SymbolIterator : SymbolIterator
->SymbolIterator : typeof SymbolIterator, Symbol(SymbolIterator, Decl(iterableArrayPattern2.ts, 0, 35))
+>SymbolIterator : typeof SymbolIterator
 
 class SymbolIterator {
->SymbolIterator : SymbolIterator, Symbol(SymbolIterator, Decl(iterableArrayPattern2.ts, 0, 35))
+>SymbolIterator : SymbolIterator
 
     next() {
->next : () => { value: symbol; done: boolean; }, Symbol(next, Decl(iterableArrayPattern2.ts, 1, 22))
+>next : () => { value: symbol; done: boolean; }
 
         return {
 >{            value: Symbol(),            done: false        } : { value: symbol; done: boolean; }
 
             value: Symbol(),
->value : symbol, Symbol(value, Decl(iterableArrayPattern2.ts, 3, 16))
+>value : symbol
 >Symbol() : symbol
->Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>Symbol : SymbolConstructor
 
             done: false
->done : boolean, Symbol(done, Decl(iterableArrayPattern2.ts, 4, 28))
+>done : boolean
 >false : boolean
 
         };
     }
 
     [Symbol.iterator]() {
->Symbol.iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
->Symbol : SymbolConstructor, Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
->iterator : symbol, Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1236, 31))
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
 
         return this;
->this : SymbolIterator, Symbol(SymbolIterator, Decl(iterableArrayPattern2.ts, 0, 35))
+>this : SymbolIterator
     }
 }

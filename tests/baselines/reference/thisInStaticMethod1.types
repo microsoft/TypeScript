@@ -1,24 +1,24 @@
 === tests/cases/compiler/thisInStaticMethod1.ts ===
 class foo {
->foo : foo, Symbol(foo, Decl(thisInStaticMethod1.ts, 0, 0))
+>foo : foo
 
  static x = 3;
->x : number, Symbol(foo.x, Decl(thisInStaticMethod1.ts, 0, 11))
+>x : number
 >3 : number
 
  static bar() {
->bar : () => number, Symbol(foo.bar, Decl(thisInStaticMethod1.ts, 1, 14))
+>bar : () => number
 
   return this.x;
->this.x : number, Symbol(foo.x, Decl(thisInStaticMethod1.ts, 0, 11))
->this : typeof foo, Symbol(foo, Decl(thisInStaticMethod1.ts, 0, 0))
->x : number, Symbol(foo.x, Decl(thisInStaticMethod1.ts, 0, 11))
+>this.x : number
+>this : typeof foo
+>x : number
  } 
 } 
 var x = foo.bar();
->x : number, Symbol(x, Decl(thisInStaticMethod1.ts, 6, 3))
+>x : number
 >foo.bar() : number
->foo.bar : () => number, Symbol(foo.bar, Decl(thisInStaticMethod1.ts, 1, 14))
->foo : typeof foo, Symbol(foo, Decl(thisInStaticMethod1.ts, 0, 0))
->bar : () => number, Symbol(foo.bar, Decl(thisInStaticMethod1.ts, 1, 14))
+>foo.bar : () => number
+>foo : typeof foo
+>bar : () => number
 

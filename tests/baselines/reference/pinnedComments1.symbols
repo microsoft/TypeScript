@@ -1,0 +1,7 @@
+=== tests/cases/compiler/pinnedComments1.ts ===
+
+/* unpinned comment */
+/*! pinned comment */
+class C {
+>C : Symbol(C, Decl(pinnedComments1.ts, 0, 0))
+}

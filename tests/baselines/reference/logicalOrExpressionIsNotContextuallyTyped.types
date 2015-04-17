@@ -6,19 +6,19 @@
 
 
 var a: (a: string) => string;
->a : (a: string) => string, Symbol(a, Decl(logicalOrExpressionIsNotContextuallyTyped.ts, 6, 3))
->a : string, Symbol(a, Decl(logicalOrExpressionIsNotContextuallyTyped.ts, 6, 8))
+>a : (a: string) => string
+>a : string
 
 // bug 786110
 var r = a || ((a) => a.toLowerCase());
->r : (a: string) => string, Symbol(r, Decl(logicalOrExpressionIsNotContextuallyTyped.ts, 9, 3))
+>r : (a: string) => string
 >a || ((a) => a.toLowerCase()) : (a: string) => string
->a : (a: string) => string, Symbol(a, Decl(logicalOrExpressionIsNotContextuallyTyped.ts, 6, 3))
+>a : (a: string) => string
 >((a) => a.toLowerCase()) : (a: string) => string
 >(a) => a.toLowerCase() : (a: string) => string
->a : string, Symbol(a, Decl(logicalOrExpressionIsNotContextuallyTyped.ts, 9, 15))
+>a : string
 >a.toLowerCase() : string
->a.toLowerCase : () => string, Symbol(String.toLowerCase, Decl(lib.d.ts, 399, 51))
->a : string, Symbol(a, Decl(logicalOrExpressionIsNotContextuallyTyped.ts, 9, 15))
->toLowerCase : () => string, Symbol(String.toLowerCase, Decl(lib.d.ts, 399, 51))
+>a.toLowerCase : () => string
+>a : string
+>toLowerCase : () => string
 

@@ -1,16 +1,16 @@
 === tests/cases/compiler/visibilityOfTypeParameters.ts ===
 
 export class MyClass {
->MyClass : MyClass, Symbol(MyClass, Decl(visibilityOfTypeParameters.ts, 0, 0))
+>MyClass : MyClass
 
     protected myMethod<T>(val: T): T {
->myMethod : <T>(val: T) => T, Symbol(myMethod, Decl(visibilityOfTypeParameters.ts, 1, 22))
->T : T, Symbol(T, Decl(visibilityOfTypeParameters.ts, 2, 23))
->val : T, Symbol(val, Decl(visibilityOfTypeParameters.ts, 2, 26))
->T : T, Symbol(T, Decl(visibilityOfTypeParameters.ts, 2, 23))
->T : T, Symbol(T, Decl(visibilityOfTypeParameters.ts, 2, 23))
+>myMethod : <T>(val: T) => T
+>T : T
+>val : T
+>T : T
+>T : T
 
         return val;
->val : T, Symbol(val, Decl(visibilityOfTypeParameters.ts, 2, 26))
+>val : T
     }
 }

@@ -1,6 +1,6 @@
 === tests/cases/compiler/stringPropCodeGen.ts ===
 var a = {
->a : { "foo": () => void; "bar": number; }, Symbol(a, Decl(stringPropCodeGen.ts, 0, 3))
+>a : { "foo": () => void; "bar": number; }
 >{  "foo" : function() { },  "bar" : 5} : { "foo": () => void; "bar": number; }
 
   "foo" : function() { },
@@ -15,15 +15,15 @@ var a = {
 
 a.foo();
 >a.foo() : void
->a.foo : () => void, Symbol("foo", Decl(stringPropCodeGen.ts, 0, 9))
->a : { "foo": () => void; "bar": number; }, Symbol(a, Decl(stringPropCodeGen.ts, 0, 3))
->foo : () => void, Symbol("foo", Decl(stringPropCodeGen.ts, 0, 9))
+>a.foo : () => void
+>a : { "foo": () => void; "bar": number; }
+>foo : () => void
 
 a.bar.toString();
 >a.bar.toString() : string
->a.bar.toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
->a.bar : number, Symbol("bar", Decl(stringPropCodeGen.ts, 2, 25))
->a : { "foo": () => void; "bar": number; }, Symbol(a, Decl(stringPropCodeGen.ts, 0, 3))
->bar : number, Symbol("bar", Decl(stringPropCodeGen.ts, 2, 25))
->toString : (radix?: number) => string, Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>a.bar.toString : (radix?: number) => string
+>a.bar : number
+>a : { "foo": () => void; "bar": number; }
+>bar : number
+>toString : (radix?: number) => string
 

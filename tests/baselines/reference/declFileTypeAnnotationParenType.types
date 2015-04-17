@@ -1,43 +1,43 @@
 === tests/cases/compiler/declFileTypeAnnotationParenType.ts ===
 
 class c {
->c : c, Symbol(c, Decl(declFileTypeAnnotationParenType.ts, 0, 0))
+>c : c
 
     private p: string;
->p : string, Symbol(p, Decl(declFileTypeAnnotationParenType.ts, 1, 9))
+>p : string
 }
 
 var x: (() => c)[] = [() => new c()];
->x : (() => c)[], Symbol(x, Decl(declFileTypeAnnotationParenType.ts, 5, 3))
->c : c, Symbol(c, Decl(declFileTypeAnnotationParenType.ts, 0, 0))
+>x : (() => c)[]
+>c : c
 >[() => new c()] : (() => c)[]
 >() => new c() : () => c
 >new c() : c
->c : typeof c, Symbol(c, Decl(declFileTypeAnnotationParenType.ts, 0, 0))
+>c : typeof c
 
 var y = [() => new c()];
->y : (() => c)[], Symbol(y, Decl(declFileTypeAnnotationParenType.ts, 6, 3))
+>y : (() => c)[]
 >[() => new c()] : (() => c)[]
 >() => new c() : () => c
 >new c() : c
->c : typeof c, Symbol(c, Decl(declFileTypeAnnotationParenType.ts, 0, 0))
+>c : typeof c
 
 var k: (() => c) | string = (() => new c()) || "";
->k : string | (() => c), Symbol(k, Decl(declFileTypeAnnotationParenType.ts, 8, 3))
->c : c, Symbol(c, Decl(declFileTypeAnnotationParenType.ts, 0, 0))
+>k : string | (() => c)
+>c : c
 >(() => new c()) || "" : string | (() => c)
 >(() => new c()) : () => c
 >() => new c() : () => c
 >new c() : c
->c : typeof c, Symbol(c, Decl(declFileTypeAnnotationParenType.ts, 0, 0))
+>c : typeof c
 >"" : string
 
 var l = (() => new c()) || "";
->l : string | (() => c), Symbol(l, Decl(declFileTypeAnnotationParenType.ts, 9, 3))
+>l : string | (() => c)
 >(() => new c()) || "" : string | (() => c)
 >(() => new c()) : () => c
 >() => new c() : () => c
 >new c() : c
->c : typeof c, Symbol(c, Decl(declFileTypeAnnotationParenType.ts, 0, 0))
+>c : typeof c
 >"" : string
 

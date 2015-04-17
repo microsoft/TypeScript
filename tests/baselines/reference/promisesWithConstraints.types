@@ -1,84 +1,84 @@
 === tests/cases/compiler/promisesWithConstraints.ts ===
 interface Promise<T> {
->Promise : Promise<T>, Symbol(Promise, Decl(promisesWithConstraints.ts, 0, 0))
->T : T, Symbol(T, Decl(promisesWithConstraints.ts, 0, 18))
+>Promise : Promise<T>
+>T : T
 
     then<U>(cb: (x: T) => Promise<U>): Promise<U>;
->then : <U>(cb: (x: T) => Promise<U>) => Promise<U>, Symbol(then, Decl(promisesWithConstraints.ts, 0, 22))
->U : U, Symbol(U, Decl(promisesWithConstraints.ts, 1, 9))
->cb : (x: T) => Promise<U>, Symbol(cb, Decl(promisesWithConstraints.ts, 1, 12))
->x : T, Symbol(x, Decl(promisesWithConstraints.ts, 1, 17))
->T : T, Symbol(T, Decl(promisesWithConstraints.ts, 0, 18))
->Promise : Promise<T>, Symbol(Promise, Decl(promisesWithConstraints.ts, 0, 0))
->U : U, Symbol(U, Decl(promisesWithConstraints.ts, 1, 9))
->Promise : Promise<T>, Symbol(Promise, Decl(promisesWithConstraints.ts, 0, 0))
->U : U, Symbol(U, Decl(promisesWithConstraints.ts, 1, 9))
+>then : <U>(cb: (x: T) => Promise<U>) => Promise<U>
+>U : U
+>cb : (x: T) => Promise<U>
+>x : T
+>T : T
+>Promise : Promise<T>
+>U : U
+>Promise : Promise<T>
+>U : U
 }
 
 interface CPromise<T extends { x: any; }> {
->CPromise : CPromise<T>, Symbol(CPromise, Decl(promisesWithConstraints.ts, 2, 1))
->T : T, Symbol(T, Decl(promisesWithConstraints.ts, 4, 19))
->x : any, Symbol(x, Decl(promisesWithConstraints.ts, 4, 30))
+>CPromise : CPromise<T>
+>T : T
+>x : any
 
     then<U extends { x: any; }>(cb: (x: T) => Promise<U>): Promise<U>;
->then : <U extends { x: any; }>(cb: (x: T) => Promise<U>) => Promise<U>, Symbol(then, Decl(promisesWithConstraints.ts, 4, 43))
->U : U, Symbol(U, Decl(promisesWithConstraints.ts, 5, 9))
->x : any, Symbol(x, Decl(promisesWithConstraints.ts, 5, 20))
->cb : (x: T) => Promise<U>, Symbol(cb, Decl(promisesWithConstraints.ts, 5, 32))
->x : T, Symbol(x, Decl(promisesWithConstraints.ts, 5, 37))
->T : T, Symbol(T, Decl(promisesWithConstraints.ts, 4, 19))
->Promise : Promise<T>, Symbol(Promise, Decl(promisesWithConstraints.ts, 0, 0))
->U : U, Symbol(U, Decl(promisesWithConstraints.ts, 5, 9))
->Promise : Promise<T>, Symbol(Promise, Decl(promisesWithConstraints.ts, 0, 0))
->U : U, Symbol(U, Decl(promisesWithConstraints.ts, 5, 9))
+>then : <U extends { x: any; }>(cb: (x: T) => Promise<U>) => Promise<U>
+>U : U
+>x : any
+>cb : (x: T) => Promise<U>
+>x : T
+>T : T
+>Promise : Promise<T>
+>U : U
+>Promise : Promise<T>
+>U : U
 }
 
 interface Foo { x; }
->Foo : Foo, Symbol(Foo, Decl(promisesWithConstraints.ts, 6, 1))
->x : any, Symbol(x, Decl(promisesWithConstraints.ts, 8, 15))
+>Foo : Foo
+>x : any
 
 interface Bar { x; y; }
->Bar : Bar, Symbol(Bar, Decl(promisesWithConstraints.ts, 8, 20))
->x : any, Symbol(x, Decl(promisesWithConstraints.ts, 9, 15))
->y : any, Symbol(y, Decl(promisesWithConstraints.ts, 9, 18))
+>Bar : Bar
+>x : any
+>y : any
 
 var a: Promise<Foo>;
->a : Promise<Foo>, Symbol(a, Decl(promisesWithConstraints.ts, 11, 3))
->Promise : Promise<T>, Symbol(Promise, Decl(promisesWithConstraints.ts, 0, 0))
->Foo : Foo, Symbol(Foo, Decl(promisesWithConstraints.ts, 6, 1))
+>a : Promise<Foo>
+>Promise : Promise<T>
+>Foo : Foo
 
 var b: Promise<Bar>;
->b : Promise<Bar>, Symbol(b, Decl(promisesWithConstraints.ts, 12, 3))
->Promise : Promise<T>, Symbol(Promise, Decl(promisesWithConstraints.ts, 0, 0))
->Bar : Bar, Symbol(Bar, Decl(promisesWithConstraints.ts, 8, 20))
+>b : Promise<Bar>
+>Promise : Promise<T>
+>Bar : Bar
 
 a = b; // ok
 >a = b : Promise<Bar>
->a : Promise<Foo>, Symbol(a, Decl(promisesWithConstraints.ts, 11, 3))
->b : Promise<Bar>, Symbol(b, Decl(promisesWithConstraints.ts, 12, 3))
+>a : Promise<Foo>
+>b : Promise<Bar>
 
 b = a; // ok
 >b = a : Promise<Foo>
->b : Promise<Bar>, Symbol(b, Decl(promisesWithConstraints.ts, 12, 3))
->a : Promise<Foo>, Symbol(a, Decl(promisesWithConstraints.ts, 11, 3))
+>b : Promise<Bar>
+>a : Promise<Foo>
 
 var a2: CPromise<Foo>;
->a2 : CPromise<Foo>, Symbol(a2, Decl(promisesWithConstraints.ts, 16, 3))
->CPromise : CPromise<T>, Symbol(CPromise, Decl(promisesWithConstraints.ts, 2, 1))
->Foo : Foo, Symbol(Foo, Decl(promisesWithConstraints.ts, 6, 1))
+>a2 : CPromise<Foo>
+>CPromise : CPromise<T>
+>Foo : Foo
 
 var b2: CPromise<Bar>;
->b2 : CPromise<Bar>, Symbol(b2, Decl(promisesWithConstraints.ts, 17, 3))
->CPromise : CPromise<T>, Symbol(CPromise, Decl(promisesWithConstraints.ts, 2, 1))
->Bar : Bar, Symbol(Bar, Decl(promisesWithConstraints.ts, 8, 20))
+>b2 : CPromise<Bar>
+>CPromise : CPromise<T>
+>Bar : Bar
 
 a2 = b2; // ok
 >a2 = b2 : CPromise<Bar>
->a2 : CPromise<Foo>, Symbol(a2, Decl(promisesWithConstraints.ts, 16, 3))
->b2 : CPromise<Bar>, Symbol(b2, Decl(promisesWithConstraints.ts, 17, 3))
+>a2 : CPromise<Foo>
+>b2 : CPromise<Bar>
 
 b2 = a2; // was error
 >b2 = a2 : CPromise<Foo>
->b2 : CPromise<Bar>, Symbol(b2, Decl(promisesWithConstraints.ts, 17, 3))
->a2 : CPromise<Foo>, Symbol(a2, Decl(promisesWithConstraints.ts, 16, 3))
+>b2 : CPromise<Bar>
+>a2 : CPromise<Foo>
 

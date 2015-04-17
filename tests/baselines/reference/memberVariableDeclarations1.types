@@ -2,88 +2,88 @@
 // from spec
 
 class Employee {
->Employee : Employee, Symbol(Employee, Decl(memberVariableDeclarations1.ts, 0, 0))
+>Employee : Employee
 
     public name: string;
->name : string, Symbol(name, Decl(memberVariableDeclarations1.ts, 2, 16))
+>name : string
 
     public address: string;
->address : string, Symbol(address, Decl(memberVariableDeclarations1.ts, 3, 24))
+>address : string
 
     public retired = false;
->retired : boolean, Symbol(retired, Decl(memberVariableDeclarations1.ts, 4, 27))
+>retired : boolean
 >false : boolean
 
     public manager: Employee = null;
->manager : Employee, Symbol(manager, Decl(memberVariableDeclarations1.ts, 5, 27))
->Employee : Employee, Symbol(Employee, Decl(memberVariableDeclarations1.ts, 0, 0))
+>manager : Employee
+>Employee : Employee
 >null : null
 
     public reports: Employee[] = [];
->reports : Employee[], Symbol(reports, Decl(memberVariableDeclarations1.ts, 6, 36))
->Employee : Employee, Symbol(Employee, Decl(memberVariableDeclarations1.ts, 0, 0))
+>reports : Employee[]
+>Employee : Employee
 >[] : undefined[]
 }
 
 class Employee2 {
->Employee2 : Employee2, Symbol(Employee2, Decl(memberVariableDeclarations1.ts, 8, 1))
+>Employee2 : Employee2
 
     public name: string;
->name : string, Symbol(name, Decl(memberVariableDeclarations1.ts, 10, 17))
+>name : string
 
     public address: string;
->address : string, Symbol(address, Decl(memberVariableDeclarations1.ts, 11, 24))
+>address : string
 
     public retired: boolean;
->retired : boolean, Symbol(retired, Decl(memberVariableDeclarations1.ts, 12, 27))
+>retired : boolean
 
     public manager: Employee;
->manager : Employee, Symbol(manager, Decl(memberVariableDeclarations1.ts, 13, 28))
->Employee : Employee, Symbol(Employee, Decl(memberVariableDeclarations1.ts, 0, 0))
+>manager : Employee
+>Employee : Employee
 
     public reports: Employee[];
->reports : Employee[], Symbol(reports, Decl(memberVariableDeclarations1.ts, 14, 29))
->Employee : Employee, Symbol(Employee, Decl(memberVariableDeclarations1.ts, 0, 0))
+>reports : Employee[]
+>Employee : Employee
 
     constructor() {
         this.retired = false;
 >this.retired = false : boolean
->this.retired : boolean, Symbol(retired, Decl(memberVariableDeclarations1.ts, 12, 27))
->this : Employee2, Symbol(Employee2, Decl(memberVariableDeclarations1.ts, 8, 1))
->retired : boolean, Symbol(retired, Decl(memberVariableDeclarations1.ts, 12, 27))
+>this.retired : boolean
+>this : Employee2
+>retired : boolean
 >false : boolean
 
         this.manager = null;
 >this.manager = null : null
->this.manager : Employee, Symbol(manager, Decl(memberVariableDeclarations1.ts, 13, 28))
->this : Employee2, Symbol(Employee2, Decl(memberVariableDeclarations1.ts, 8, 1))
->manager : Employee, Symbol(manager, Decl(memberVariableDeclarations1.ts, 13, 28))
+>this.manager : Employee
+>this : Employee2
+>manager : Employee
 >null : null
 
         this.reports = [];
 >this.reports = [] : undefined[]
->this.reports : Employee[], Symbol(reports, Decl(memberVariableDeclarations1.ts, 14, 29))
->this : Employee2, Symbol(Employee2, Decl(memberVariableDeclarations1.ts, 8, 1))
->reports : Employee[], Symbol(reports, Decl(memberVariableDeclarations1.ts, 14, 29))
+>this.reports : Employee[]
+>this : Employee2
+>reports : Employee[]
 >[] : undefined[]
     }
 }
 
 var e1: Employee;
->e1 : Employee, Symbol(e1, Decl(memberVariableDeclarations1.ts, 23, 3))
->Employee : Employee, Symbol(Employee, Decl(memberVariableDeclarations1.ts, 0, 0))
+>e1 : Employee
+>Employee : Employee
 
 var e2: Employee2;
->e2 : Employee2, Symbol(e2, Decl(memberVariableDeclarations1.ts, 24, 3))
->Employee2 : Employee2, Symbol(Employee2, Decl(memberVariableDeclarations1.ts, 8, 1))
+>e2 : Employee2
+>Employee2 : Employee2
 
 e1 = e2;
 >e1 = e2 : Employee2
->e1 : Employee, Symbol(e1, Decl(memberVariableDeclarations1.ts, 23, 3))
->e2 : Employee2, Symbol(e2, Decl(memberVariableDeclarations1.ts, 24, 3))
+>e1 : Employee
+>e2 : Employee2
 
 e2 = e1;
 >e2 = e1 : Employee
->e2 : Employee2, Symbol(e2, Decl(memberVariableDeclarations1.ts, 24, 3))
->e1 : Employee, Symbol(e1, Decl(memberVariableDeclarations1.ts, 23, 3))
+>e2 : Employee2
+>e1 : Employee
 

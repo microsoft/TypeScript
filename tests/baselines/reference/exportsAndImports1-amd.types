@@ -1,102 +1,102 @@
 === tests/cases/conformance/es6/modules/t1.ts ===
 
 var v = 1;
->v : number, Symbol(v, Decl(t1.ts, 1, 3))
+>v : number
 >1 : number
 
 function f() { }
->f : () => void, Symbol(f, Decl(t1.ts, 1, 10))
+>f : () => void
 
 class C {
->C : C, Symbol(C, Decl(t1.ts, 2, 16))
+>C : C
 }
 interface I {
->I : I, Symbol(I, Decl(t1.ts, 4, 1))
+>I : I
 }
 enum E {
->E : E, Symbol(E, Decl(t1.ts, 6, 1))
+>E : E
 
     A, B, C
->A : E, Symbol(E.A, Decl(t1.ts, 7, 8))
->B : E, Symbol(E.B, Decl(t1.ts, 8, 6))
->C : E, Symbol(E.C, Decl(t1.ts, 8, 9))
+>A : E
+>B : E
+>C : E
 }
 const enum D {
->D : D, Symbol(D, Decl(t1.ts, 9, 1))
+>D : D
 
     A, B, C
->A : D, Symbol(D.A, Decl(t1.ts, 10, 14))
->B : D, Symbol(D.B, Decl(t1.ts, 11, 6))
->C : D, Symbol(D.C, Decl(t1.ts, 11, 9))
+>A : D
+>B : D
+>C : D
 }
 module M {
->M : typeof M, Symbol(M, Decl(t1.ts, 12, 1))
+>M : typeof M
 
     export var x;
->x : any, Symbol(x, Decl(t1.ts, 14, 14))
+>x : any
 }
 module N {
->N : any, Symbol(N, Decl(t1.ts, 15, 1))
+>N : any
 
     export interface I {
->I : I, Symbol(I, Decl(t1.ts, 16, 10))
+>I : I
     }
 }
 type T = number;
->T : number, Symbol(T, Decl(t1.ts, 19, 1))
+>T : number
 
 import a = M.x;
->a : any, Symbol(a, Decl(t1.ts, 20, 16))
->M : typeof M, Symbol(M, Decl(t1.ts, 12, 1))
->x : any, Symbol(a, Decl(t1.ts, 14, 14))
+>a : any
+>M : typeof M
+>x : any
 
 export { v, f, C, I, E, D, M, N, T, a };
->v : number, Symbol(v, Decl(t1.ts, 23, 8))
->f : () => void, Symbol(f, Decl(t1.ts, 23, 11))
->C : typeof C, Symbol(C, Decl(t1.ts, 23, 14))
->I : any, Symbol(I, Decl(t1.ts, 23, 17))
->E : typeof E, Symbol(E, Decl(t1.ts, 23, 20))
->D : typeof D, Symbol(D, Decl(t1.ts, 23, 23))
->M : typeof M, Symbol(M, Decl(t1.ts, 23, 26))
->N : any, Symbol(N, Decl(t1.ts, 23, 29))
->T : any, Symbol(T, Decl(t1.ts, 23, 32))
->a : any, Symbol(a, Decl(t1.ts, 23, 35))
+>v : number
+>f : () => void
+>C : typeof C
+>I : any
+>E : typeof E
+>D : typeof D
+>M : typeof M
+>N : any
+>T : any
+>a : any
 
 === tests/cases/conformance/es6/modules/t2.ts ===
 export { v, f, C, I, E, D, M, N, T, a } from "./t1";
->v : number, Symbol(v, Decl(t2.ts, 0, 8))
->f : () => void, Symbol(f, Decl(t2.ts, 0, 11))
->C : typeof C, Symbol(C, Decl(t2.ts, 0, 14))
->I : any, Symbol(I, Decl(t2.ts, 0, 17))
->E : typeof E, Symbol(E, Decl(t2.ts, 0, 20))
->D : typeof D, Symbol(D, Decl(t2.ts, 0, 23))
->M : typeof M, Symbol(M, Decl(t2.ts, 0, 26))
->N : any, Symbol(N, Decl(t2.ts, 0, 29))
->T : any, Symbol(T, Decl(t2.ts, 0, 32))
->a : any, Symbol(a, Decl(t2.ts, 0, 35))
+>v : number
+>f : () => void
+>C : typeof C
+>I : any
+>E : typeof E
+>D : typeof D
+>M : typeof M
+>N : any
+>T : any
+>a : any
 
 === tests/cases/conformance/es6/modules/t3.ts ===
 import { v, f, C, I, E, D, M, N, T, a } from "./t1";
->v : number, Symbol(v, Decl(t3.ts, 0, 8))
->f : () => void, Symbol(f, Decl(t3.ts, 0, 11))
->C : typeof C, Symbol(C, Decl(t3.ts, 0, 14))
->I : any, Symbol(I, Decl(t3.ts, 0, 17))
->E : typeof E, Symbol(E, Decl(t3.ts, 0, 20))
->D : typeof D, Symbol(D, Decl(t3.ts, 0, 23))
->M : typeof M, Symbol(M, Decl(t3.ts, 0, 26))
->N : any, Symbol(N, Decl(t3.ts, 0, 29))
->T : any, Symbol(T, Decl(t3.ts, 0, 32))
->a : any, Symbol(a, Decl(t3.ts, 0, 35))
+>v : number
+>f : () => void
+>C : typeof C
+>I : any
+>E : typeof E
+>D : typeof D
+>M : typeof M
+>N : any
+>T : any
+>a : any
 
 export { v, f, C, I, E, D, M, N, T, a };
->v : number, Symbol(v, Decl(t3.ts, 1, 8))
->f : () => void, Symbol(f, Decl(t3.ts, 1, 11))
->C : typeof C, Symbol(C, Decl(t3.ts, 1, 14))
->I : any, Symbol(I, Decl(t3.ts, 1, 17))
->E : typeof E, Symbol(E, Decl(t3.ts, 1, 20))
->D : typeof D, Symbol(D, Decl(t3.ts, 1, 23))
->M : typeof M, Symbol(M, Decl(t3.ts, 1, 26))
->N : any, Symbol(N, Decl(t3.ts, 1, 29))
->T : any, Symbol(T, Decl(t3.ts, 1, 32))
->a : any, Symbol(a, Decl(t3.ts, 1, 35))
+>v : number
+>f : () => void
+>C : typeof C
+>I : any
+>E : typeof E
+>D : typeof D
+>M : typeof M
+>N : any
+>T : any
+>a : any
 

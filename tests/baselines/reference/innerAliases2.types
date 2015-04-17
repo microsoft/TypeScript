@@ -1,45 +1,45 @@
 === tests/cases/compiler/innerAliases2.ts ===
 module _provider {
->_provider : typeof _provider, Symbol(_provider, Decl(innerAliases2.ts, 0, 0))
+>_provider : typeof _provider
 
                 export class UsefulClass {
->UsefulClass : UsefulClass, Symbol(UsefulClass, Decl(innerAliases2.ts, 0, 18))
+>UsefulClass : UsefulClass
 
                                 public foo() {
->foo : () => void, Symbol(foo, Decl(innerAliases2.ts, 1, 42))
+>foo : () => void
                                 }
                 }
 }
 
 module consumer {
->consumer : typeof consumer, Symbol(consumer, Decl(innerAliases2.ts, 5, 1))
+>consumer : typeof consumer
 
                 import provider = _provider;
->provider : typeof provider, Symbol(provider, Decl(innerAliases2.ts, 7, 17))
->_provider : typeof provider, Symbol(provider, Decl(innerAliases2.ts, 0, 0))
+>provider : typeof provider
+>_provider : typeof provider
                 
                 var g:provider.UsefulClass= null;
->g : provider.UsefulClass, Symbol(g, Decl(innerAliases2.ts, 10, 19))
->provider : any, Symbol(provider, Decl(innerAliases2.ts, 7, 17))
->UsefulClass : provider.UsefulClass, Symbol(provider.UsefulClass, Decl(innerAliases2.ts, 0, 18))
+>g : provider.UsefulClass
+>provider : any
+>UsefulClass : provider.UsefulClass
 >null : null
                 
                 function use():provider.UsefulClass { 
->use : () => provider.UsefulClass, Symbol(use, Decl(innerAliases2.ts, 10, 49))
->provider : any, Symbol(provider, Decl(innerAliases2.ts, 7, 17))
->UsefulClass : provider.UsefulClass, Symbol(provider.UsefulClass, Decl(innerAliases2.ts, 0, 18))
+>use : () => provider.UsefulClass
+>provider : any
+>UsefulClass : provider.UsefulClass
 
                                 var p2:provider.UsefulClass= new provider.UsefulClass();
->p2 : provider.UsefulClass, Symbol(p2, Decl(innerAliases2.ts, 13, 35))
->provider : any, Symbol(provider, Decl(innerAliases2.ts, 7, 17))
->UsefulClass : provider.UsefulClass, Symbol(provider.UsefulClass, Decl(innerAliases2.ts, 0, 18))
+>p2 : provider.UsefulClass
+>provider : any
+>UsefulClass : provider.UsefulClass
 >new provider.UsefulClass() : provider.UsefulClass
->provider.UsefulClass : typeof provider.UsefulClass, Symbol(provider.UsefulClass, Decl(innerAliases2.ts, 0, 18))
->provider : typeof provider, Symbol(provider, Decl(innerAliases2.ts, 7, 17))
->UsefulClass : typeof provider.UsefulClass, Symbol(provider.UsefulClass, Decl(innerAliases2.ts, 0, 18))
+>provider.UsefulClass : typeof provider.UsefulClass
+>provider : typeof provider
+>UsefulClass : typeof provider.UsefulClass
 
                                 return p2; 
->p2 : provider.UsefulClass, Symbol(p2, Decl(innerAliases2.ts, 13, 35))
+>p2 : provider.UsefulClass
                 }
 }
 

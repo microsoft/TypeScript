@@ -1,61 +1,61 @@
 === tests/cases/compiler/generics2NoError.ts ===
 interface A { a: string; }
->A : A, Symbol(A, Decl(generics2NoError.ts, 0, 0))
->a : string, Symbol(a, Decl(generics2NoError.ts, 0, 13))
+>A : A
+>a : string
 
 interface B extends A { b: string; }
->B : B, Symbol(B, Decl(generics2NoError.ts, 0, 26))
->A : A, Symbol(A, Decl(generics2NoError.ts, 0, 0))
->b : string, Symbol(b, Decl(generics2NoError.ts, 1, 23))
+>B : B
+>A : A
+>b : string
 
 interface C extends B { c: string; }
->C : C, Symbol(C, Decl(generics2NoError.ts, 1, 36))
->B : B, Symbol(B, Decl(generics2NoError.ts, 0, 26))
->c : string, Symbol(c, Decl(generics2NoError.ts, 2, 23))
+>C : C
+>B : B
+>c : string
 
 interface G<T, U extends B> {
->G : G<T, U>, Symbol(G, Decl(generics2NoError.ts, 2, 36))
->T : T, Symbol(T, Decl(generics2NoError.ts, 3, 12))
->U : U, Symbol(U, Decl(generics2NoError.ts, 3, 14))
->B : B, Symbol(B, Decl(generics2NoError.ts, 0, 26))
+>G : G<T, U>
+>T : T
+>U : U
+>B : B
 
     x: T;
->x : T, Symbol(x, Decl(generics2NoError.ts, 3, 29))
->T : T, Symbol(T, Decl(generics2NoError.ts, 3, 12))
+>x : T
+>T : T
 
     y: U;
->y : U, Symbol(y, Decl(generics2NoError.ts, 4, 9))
->U : U, Symbol(U, Decl(generics2NoError.ts, 3, 14))
+>y : U
+>U : U
 }
 
 
 var v1: {
->v1 : { x: { a: string; }; y: { a: string; b: string; c: string; }; }, Symbol(v1, Decl(generics2NoError.ts, 9, 3))
+>v1 : { x: { a: string; }; y: { a: string; b: string; c: string; }; }
 
     x: { a: string; }
->x : { a: string; }, Symbol(x, Decl(generics2NoError.ts, 9, 9))
->a : string, Symbol(a, Decl(generics2NoError.ts, 10, 8))
+>x : { a: string; }
+>a : string
 
     y: { a: string; b: string; c: string };
->y : { a: string; b: string; c: string; }, Symbol(y, Decl(generics2NoError.ts, 10, 21))
->a : string, Symbol(a, Decl(generics2NoError.ts, 11, 8))
->b : string, Symbol(b, Decl(generics2NoError.ts, 11, 19))
->c : string, Symbol(c, Decl(generics2NoError.ts, 11, 30))
+>y : { a: string; b: string; c: string; }
+>a : string
+>b : string
+>c : string
 
 }; // Ok
 
 
 var v2: G<{ a: string }, C>;   // Ok, equivalent to G<A, C>
->v2 : G<{ a: string; }, C>, Symbol(v2, Decl(generics2NoError.ts, 15, 3))
->G : G<T, U>, Symbol(G, Decl(generics2NoError.ts, 2, 36))
->a : string, Symbol(a, Decl(generics2NoError.ts, 15, 11))
->C : C, Symbol(C, Decl(generics2NoError.ts, 1, 36))
+>v2 : G<{ a: string; }, C>
+>G : G<T, U>
+>a : string
+>C : C
 
 var v4: G<G<A, B>, C>;         // Ok
->v4 : G<G<A, B>, C>, Symbol(v4, Decl(generics2NoError.ts, 16, 3))
->G : G<T, U>, Symbol(G, Decl(generics2NoError.ts, 2, 36))
->G : G<T, U>, Symbol(G, Decl(generics2NoError.ts, 2, 36))
->A : A, Symbol(A, Decl(generics2NoError.ts, 0, 0))
->B : B, Symbol(B, Decl(generics2NoError.ts, 0, 26))
->C : C, Symbol(C, Decl(generics2NoError.ts, 1, 36))
+>v4 : G<G<A, B>, C>
+>G : G<T, U>
+>G : G<T, U>
+>A : A
+>B : B
+>C : C
 

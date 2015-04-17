@@ -1,37 +1,37 @@
 === tests/cases/conformance/expressions/typeGuards/typeGuardOfFormExpr1AndExpr2.ts ===
 var str: string;
->str : string, Symbol(str, Decl(typeGuardOfFormExpr1AndExpr2.ts, 0, 3))
+>str : string
 
 var bool: boolean;
->bool : boolean, Symbol(bool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 1, 3))
+>bool : boolean
 
 var num: number;
->num : number, Symbol(num, Decl(typeGuardOfFormExpr1AndExpr2.ts, 2, 3))
+>num : number
 
 var strOrNum: string | number;
->strOrNum : string | number, Symbol(strOrNum, Decl(typeGuardOfFormExpr1AndExpr2.ts, 3, 3))
+>strOrNum : string | number
 
 var strOrNumOrBool: string | number | boolean;
->strOrNumOrBool : string | number | boolean, Symbol(strOrNumOrBool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 4, 3))
+>strOrNumOrBool : string | number | boolean
 
 var numOrBool: number | boolean;
->numOrBool : number | boolean, Symbol(numOrBool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 5, 3))
+>numOrBool : number | boolean
 
 class C { private p; }
->C : C, Symbol(C, Decl(typeGuardOfFormExpr1AndExpr2.ts, 5, 32))
->p : any, Symbol(p, Decl(typeGuardOfFormExpr1AndExpr2.ts, 6, 9))
+>C : C
+>p : any
 
 var c: C;
->c : C, Symbol(c, Decl(typeGuardOfFormExpr1AndExpr2.ts, 7, 3))
->C : C, Symbol(C, Decl(typeGuardOfFormExpr1AndExpr2.ts, 5, 32))
+>c : C
+>C : C
 
 var cOrBool: C| boolean;
->cOrBool : boolean | C, Symbol(cOrBool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 8, 3))
->C : C, Symbol(C, Decl(typeGuardOfFormExpr1AndExpr2.ts, 5, 32))
+>cOrBool : boolean | C
+>C : C
 
 var strOrNumOrBoolOrC: string | number | boolean | C;
->strOrNumOrBoolOrC : string | number | boolean | C, Symbol(strOrNumOrBoolOrC, Decl(typeGuardOfFormExpr1AndExpr2.ts, 9, 3))
->C : C, Symbol(C, Decl(typeGuardOfFormExpr1AndExpr2.ts, 5, 32))
+>strOrNumOrBoolOrC : string | number | boolean | C
+>C : C
 
 // A type guard of the form expr1 && expr2
 //  - when true, narrows the type of x by expr1 when true and then by expr2 when true, or
@@ -43,23 +43,23 @@ if (typeof strOrNumOrBool !== "string" && typeof strOrNumOrBool !== "number") {
 >typeof strOrNumOrBool !== "string" && typeof strOrNumOrBool !== "number" : boolean
 >typeof strOrNumOrBool !== "string" : boolean
 >typeof strOrNumOrBool : string
->strOrNumOrBool : string | number | boolean, Symbol(strOrNumOrBool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 4, 3))
+>strOrNumOrBool : string | number | boolean
 >"string" : string
 >typeof strOrNumOrBool !== "number" : boolean
 >typeof strOrNumOrBool : string
->strOrNumOrBool : number | boolean, Symbol(strOrNumOrBool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 4, 3))
+>strOrNumOrBool : number | boolean
 >"number" : string
 
     bool = strOrNumOrBool; // boolean
 >bool = strOrNumOrBool : boolean
->bool : boolean, Symbol(bool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 1, 3))
->strOrNumOrBool : boolean, Symbol(strOrNumOrBool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 4, 3))
+>bool : boolean
+>strOrNumOrBool : boolean
 }
 else {
     strOrNum = strOrNumOrBool; // string | number
 >strOrNum = strOrNumOrBool : string | number
->strOrNum : string | number, Symbol(strOrNum, Decl(typeGuardOfFormExpr1AndExpr2.ts, 3, 3))
->strOrNumOrBool : string | number, Symbol(strOrNumOrBool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 4, 3))
+>strOrNum : string | number
+>strOrNumOrBool : string | number
 }
 // (typeguard1 && typeguard2 && typeguard3)
 if (typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "number" && typeof strOrNumOrBoolOrC !== "boolean") {
@@ -67,27 +67,27 @@ if (typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "numbe
 >typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "number" : boolean
 >typeof strOrNumOrBoolOrC !== "string" : boolean
 >typeof strOrNumOrBoolOrC : string
->strOrNumOrBoolOrC : string | number | boolean | C, Symbol(strOrNumOrBoolOrC, Decl(typeGuardOfFormExpr1AndExpr2.ts, 9, 3))
+>strOrNumOrBoolOrC : string | number | boolean | C
 >"string" : string
 >typeof strOrNumOrBoolOrC !== "number" : boolean
 >typeof strOrNumOrBoolOrC : string
->strOrNumOrBoolOrC : number | boolean | C, Symbol(strOrNumOrBoolOrC, Decl(typeGuardOfFormExpr1AndExpr2.ts, 9, 3))
+>strOrNumOrBoolOrC : number | boolean | C
 >"number" : string
 >typeof strOrNumOrBoolOrC !== "boolean" : boolean
 >typeof strOrNumOrBoolOrC : string
->strOrNumOrBoolOrC : boolean | C, Symbol(strOrNumOrBoolOrC, Decl(typeGuardOfFormExpr1AndExpr2.ts, 9, 3))
+>strOrNumOrBoolOrC : boolean | C
 >"boolean" : string
 
     c = strOrNumOrBoolOrC; // C
 >c = strOrNumOrBoolOrC : C
->c : C, Symbol(c, Decl(typeGuardOfFormExpr1AndExpr2.ts, 7, 3))
->strOrNumOrBoolOrC : C, Symbol(strOrNumOrBoolOrC, Decl(typeGuardOfFormExpr1AndExpr2.ts, 9, 3))
+>c : C
+>strOrNumOrBoolOrC : C
 }
 else {
     strOrNumOrBool = strOrNumOrBoolOrC; // string | number | boolean
 >strOrNumOrBool = strOrNumOrBoolOrC : string | number | boolean
->strOrNumOrBool : string | number | boolean, Symbol(strOrNumOrBool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 4, 3))
->strOrNumOrBoolOrC : string | number | boolean, Symbol(strOrNumOrBoolOrC, Decl(typeGuardOfFormExpr1AndExpr2.ts, 9, 3))
+>strOrNumOrBool : string | number | boolean
+>strOrNumOrBoolOrC : string | number | boolean
 }
 // (typeguard1 && typeguard2 && typeguard11(onAnotherType))
 if (typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "number" && typeof strOrNumOrBool === "boolean") {
@@ -95,55 +95,55 @@ if (typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "numbe
 >typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "number" : boolean
 >typeof strOrNumOrBoolOrC !== "string" : boolean
 >typeof strOrNumOrBoolOrC : string
->strOrNumOrBoolOrC : string | number | boolean | C, Symbol(strOrNumOrBoolOrC, Decl(typeGuardOfFormExpr1AndExpr2.ts, 9, 3))
+>strOrNumOrBoolOrC : string | number | boolean | C
 >"string" : string
 >typeof strOrNumOrBoolOrC !== "number" : boolean
 >typeof strOrNumOrBoolOrC : string
->strOrNumOrBoolOrC : number | boolean | C, Symbol(strOrNumOrBoolOrC, Decl(typeGuardOfFormExpr1AndExpr2.ts, 9, 3))
+>strOrNumOrBoolOrC : number | boolean | C
 >"number" : string
 >typeof strOrNumOrBool === "boolean" : boolean
 >typeof strOrNumOrBool : string
->strOrNumOrBool : string | number | boolean, Symbol(strOrNumOrBool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 4, 3))
+>strOrNumOrBool : string | number | boolean
 >"boolean" : string
 
     cOrBool = strOrNumOrBoolOrC; // C | boolean
 >cOrBool = strOrNumOrBoolOrC : boolean | C
->cOrBool : boolean | C, Symbol(cOrBool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 8, 3))
->strOrNumOrBoolOrC : boolean | C, Symbol(strOrNumOrBoolOrC, Decl(typeGuardOfFormExpr1AndExpr2.ts, 9, 3))
+>cOrBool : boolean | C
+>strOrNumOrBoolOrC : boolean | C
 
     bool = strOrNumOrBool; // boolean
 >bool = strOrNumOrBool : boolean
->bool : boolean, Symbol(bool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 1, 3))
->strOrNumOrBool : boolean, Symbol(strOrNumOrBool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 4, 3))
+>bool : boolean
+>strOrNumOrBool : boolean
 }
 else {
     var r1: string | number | boolean | C = strOrNumOrBoolOrC; // string | number | boolean | C
->r1 : string | number | boolean | C, Symbol(r1, Decl(typeGuardOfFormExpr1AndExpr2.ts, 36, 7))
->C : C, Symbol(C, Decl(typeGuardOfFormExpr1AndExpr2.ts, 5, 32))
->strOrNumOrBoolOrC : string | number | boolean | C, Symbol(strOrNumOrBoolOrC, Decl(typeGuardOfFormExpr1AndExpr2.ts, 9, 3))
+>r1 : string | number | boolean | C
+>C : C
+>strOrNumOrBoolOrC : string | number | boolean | C
 
     var r2: string | number | boolean = strOrNumOrBool;
->r2 : string | number | boolean, Symbol(r2, Decl(typeGuardOfFormExpr1AndExpr2.ts, 37, 7))
->strOrNumOrBool : string | number | boolean, Symbol(strOrNumOrBool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 4, 3))
+>r2 : string | number | boolean
+>strOrNumOrBool : string | number | boolean
 }
 // (typeguard1) && simpleExpr
 if (typeof strOrNumOrBool !== "string" && numOrBool !== strOrNumOrBool) {
 >typeof strOrNumOrBool !== "string" && numOrBool !== strOrNumOrBool : boolean
 >typeof strOrNumOrBool !== "string" : boolean
 >typeof strOrNumOrBool : string
->strOrNumOrBool : string | number | boolean, Symbol(strOrNumOrBool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 4, 3))
+>strOrNumOrBool : string | number | boolean
 >"string" : string
 >numOrBool !== strOrNumOrBool : boolean
->numOrBool : number | boolean, Symbol(numOrBool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 5, 3))
->strOrNumOrBool : number | boolean, Symbol(strOrNumOrBool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 4, 3))
+>numOrBool : number | boolean
+>strOrNumOrBool : number | boolean
 
     numOrBool = strOrNumOrBool; // number | boolean
 >numOrBool = strOrNumOrBool : number | boolean
->numOrBool : number | boolean, Symbol(numOrBool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 5, 3))
->strOrNumOrBool : number | boolean, Symbol(strOrNumOrBool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 4, 3))
+>numOrBool : number | boolean
+>strOrNumOrBool : number | boolean
 }
 else {
     var r3: string | number | boolean = strOrNumOrBool; // string | number | boolean
->r3 : string | number | boolean, Symbol(r3, Decl(typeGuardOfFormExpr1AndExpr2.ts, 44, 7))
->strOrNumOrBool : string | number | boolean, Symbol(strOrNumOrBool, Decl(typeGuardOfFormExpr1AndExpr2.ts, 4, 3))
+>r3 : string | number | boolean
+>strOrNumOrBool : string | number | boolean
 }

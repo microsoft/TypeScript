@@ -1,29 +1,29 @@
 === tests/cases/compiler/privacyCheckExportAssignmentOnExportedGenericInterface2.ts ===
 export = Foo;
->Foo : Foo<T>, Symbol(Foo, Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 0, 13), Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 3, 1), Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 7, 1))
+>Foo : Foo<T>
 
 interface Foo<T> {
->Foo : Foo<T>, Symbol(Foo, Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 0, 13), Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 3, 1), Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 7, 1))
->T : T, Symbol(T, Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 2, 14))
+>Foo : Foo<T>
+>T : T
 }
 
 function Foo<T>(array: T[]): Foo<T> {
->Foo : typeof Foo, Symbol(Foo, Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 0, 13), Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 3, 1), Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 7, 1))
->T : T, Symbol(T, Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 5, 13))
->array : T[], Symbol(array, Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 5, 16))
->T : T, Symbol(T, Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 5, 13))
->Foo : Foo<T>, Symbol(Foo, Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 0, 13), Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 3, 1), Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 7, 1))
->T : T, Symbol(T, Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 5, 13))
+>Foo : typeof Foo
+>T : T
+>array : T[]
+>T : T
+>Foo : Foo<T>
+>T : T
 
     return undefined;
->undefined : undefined, Symbol(undefined)
+>undefined : undefined
 }
 
 module Foo {
->Foo : typeof Foo, Symbol(Foo, Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 0, 13), Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 3, 1), Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 7, 1))
+>Foo : typeof Foo
 
     export var x = "hello";
->x : string, Symbol(x, Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 10, 14))
+>x : string
 >"hello" : string
 }
 

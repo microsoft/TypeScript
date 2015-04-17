@@ -1,0 +1,16 @@
+=== tests/cases/compiler/commaOperator1.ts ===
+var v1 = ((1, 2, 3), 4, 5, (6, 7));
+>v1 : Symbol(v1, Decl(commaOperator1.ts, 0, 3))
+
+function f1() {
+>f1 : Symbol(f1, Decl(commaOperator1.ts, 0, 35))
+
+    var a = 1;
+>a : Symbol(a, Decl(commaOperator1.ts, 2, 7))
+
+    return a, v1, a;
+>a : Symbol(a, Decl(commaOperator1.ts, 2, 7))
+>v1 : Symbol(v1, Decl(commaOperator1.ts, 0, 3))
+>a : Symbol(a, Decl(commaOperator1.ts, 2, 7))
+}
+

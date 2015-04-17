@@ -1,41 +1,41 @@
 === tests/cases/compiler/widenedTypes1.ts ===
 var a = null;
->a : any, Symbol(a, Decl(widenedTypes1.ts, 0, 3))
+>a : any
 >null : null
 
 var b = undefined;
->b : any, Symbol(b, Decl(widenedTypes1.ts, 1, 3))
->undefined : undefined, Symbol(undefined)
+>b : any
+>undefined : undefined
 
 var c = {x: null};
->c : { x: any; }, Symbol(c, Decl(widenedTypes1.ts, 3, 3))
+>c : { x: any; }
 >{x: null} : { x: null; }
->x : null, Symbol(x, Decl(widenedTypes1.ts, 3, 9))
+>x : null
 >null : null
 
 var d = [{x: null}];
->d : { x: any; }[], Symbol(d, Decl(widenedTypes1.ts, 4, 3))
+>d : { x: any; }[]
 >[{x: null}] : { x: null; }[]
 >{x: null} : { x: null; }
->x : null, Symbol(x, Decl(widenedTypes1.ts, 4, 10))
+>x : null
 >null : null
 
 var f = [null, null];
->f : any[], Symbol(f, Decl(widenedTypes1.ts, 5, 3))
+>f : any[]
 >[null, null] : null[]
 >null : null
 >null : null
 
 var g = [undefined, undefined];
->g : any[], Symbol(g, Decl(widenedTypes1.ts, 6, 3))
+>g : any[]
 >[undefined, undefined] : undefined[]
->undefined : undefined, Symbol(undefined)
->undefined : undefined, Symbol(undefined)
+>undefined : undefined
+>undefined : undefined
 
 var h = [{x: undefined}];
->h : { x: any; }[], Symbol(h, Decl(widenedTypes1.ts, 7, 3))
+>h : { x: any; }[]
 >[{x: undefined}] : { x: undefined; }[]
 >{x: undefined} : { x: undefined; }
->x : undefined, Symbol(x, Decl(widenedTypes1.ts, 7, 10))
->undefined : undefined, Symbol(undefined)
+>x : undefined
+>undefined : undefined
 

@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser645484.ts ===
+var c : {
+>c : Symbol(c, Decl(parser645484.ts, 0, 3))
+
+    new?(): any;
+>new : Symbol(new, Decl(parser645484.ts, 0, 9))
+}

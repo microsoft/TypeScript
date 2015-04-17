@@ -1,20 +1,20 @@
 === tests/cases/compiler/server.ts ===
 
 class c { }
->c : c, Symbol(c, Decl(server.ts, 0, 0))
+>c : c
 
 export default c;
->c : c, Symbol(c, Decl(server.ts, 0, 0))
+>c : c
 
 === tests/cases/compiler/client.ts ===
 import defaultBinding from "server";
->defaultBinding : typeof defaultBinding, Symbol(defaultBinding, Decl(client.ts, 0, 6))
+>defaultBinding : typeof defaultBinding
 
 export var x = new defaultBinding();
->x : defaultBinding, Symbol(x, Decl(client.ts, 1, 10))
+>x : defaultBinding
 >new defaultBinding() : defaultBinding
->defaultBinding : typeof defaultBinding, Symbol(defaultBinding, Decl(client.ts, 0, 6))
+>defaultBinding : typeof defaultBinding
 
 import defaultBinding2 from "server"; // elide this import since defaultBinding2 is not used
->defaultBinding2 : typeof defaultBinding, Symbol(defaultBinding2, Decl(client.ts, 2, 6))
+>defaultBinding2 : typeof defaultBinding
 

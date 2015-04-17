@@ -1,73 +1,73 @@
 === tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments.ts ===
 function f<T, U>(y: T, f: (x: T) => U, x: T): [T, U] { return [y, f(x)]; }
->f : <T, U>(y: T, f: (x: T) => U, x: T) => [T, U], Symbol(f, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 0))
->T : T, Symbol(T, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 11))
->U : U, Symbol(U, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 13))
->y : T, Symbol(y, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 17))
->T : T, Symbol(T, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 11))
->f : (x: T) => U, Symbol(f, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 22))
->x : T, Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 27))
->T : T, Symbol(T, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 11))
->U : U, Symbol(U, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 13))
->x : T, Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 38))
->T : T, Symbol(T, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 11))
->T : T, Symbol(T, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 11))
->U : U, Symbol(U, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 13))
+>f : <T, U>(y: T, f: (x: T) => U, x: T) => [T, U]
+>T : T
+>U : U
+>y : T
+>T : T
+>f : (x: T) => U
+>x : T
+>T : T
+>U : U
+>x : T
+>T : T
+>T : T
+>U : U
 >[y, f(x)] : [T, U]
->y : T, Symbol(y, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 17))
+>y : T
 >f(x) : U
->f : (x: T) => U, Symbol(f, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 22))
->x : T, Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 38))
+>f : (x: T) => U
+>x : T
 
 interface A { a: A; }
->A : A, Symbol(A, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 74))
->a : A, Symbol(a, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 1, 13))
->A : A, Symbol(A, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 74))
+>A : A
+>a : A
+>A : A
 
 interface B extends A { b; }
->B : B, Symbol(B, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 1, 21))
->A : A, Symbol(A, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 74))
->b : any, Symbol(b, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 2, 23))
+>B : B
+>A : A
+>b : any
 
 var a: A, b: B;
->a : A, Symbol(a, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 4, 3))
->A : A, Symbol(A, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 74))
->b : B, Symbol(b, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 4, 9))
->B : B, Symbol(B, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 1, 21))
+>a : A
+>A : A
+>b : B
+>B : B
 
 var d = f(b, x => x.a, a); // type [A, A]
->d : [A, A], Symbol(d, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 6, 3))
+>d : [A, A]
 >f(b, x => x.a, a) : [A, A]
->f : <T, U>(y: T, f: (x: T) => U, x: T) => [T, U], Symbol(f, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 0))
->b : B, Symbol(b, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 4, 9))
+>f : <T, U>(y: T, f: (x: T) => U, x: T) => [T, U]
+>b : B
 >x => x.a : (x: A) => A
->x : A, Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 6, 12))
->x.a : A, Symbol(A.a, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 1, 13))
->x : A, Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 6, 12))
->a : A, Symbol(A.a, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 1, 13))
->a : A, Symbol(a, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 4, 3))
+>x : A
+>x.a : A
+>x : A
+>a : A
+>a : A
 
 var d2 = f(b, x => x.a, null); // type [B, A]
->d2 : [B, A], Symbol(d2, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 7, 3))
+>d2 : [B, A]
 >f(b, x => x.a, null) : [B, A]
->f : <T, U>(y: T, f: (x: T) => U, x: T) => [T, U], Symbol(f, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 0))
->b : B, Symbol(b, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 4, 9))
+>f : <T, U>(y: T, f: (x: T) => U, x: T) => [T, U]
+>b : B
 >x => x.a : (x: B) => A
->x : B, Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 7, 13))
->x.a : A, Symbol(A.a, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 1, 13))
->x : B, Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 7, 13))
->a : A, Symbol(A.a, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 1, 13))
+>x : B
+>x.a : A
+>x : B
+>a : A
 >null : null
 
 var d3 = f(b, x => x.b, null); // type [B, any]
->d3 : [B, any], Symbol(d3, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 8, 3))
+>d3 : [B, any]
 >f(b, x => x.b, null) : [B, any]
->f : <T, U>(y: T, f: (x: T) => U, x: T) => [T, U], Symbol(f, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 0, 0))
->b : B, Symbol(b, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 4, 9))
+>f : <T, U>(y: T, f: (x: T) => U, x: T) => [T, U]
+>b : B
 >x => x.b : (x: B) => any
->x : B, Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 8, 13))
->x.b : any, Symbol(B.b, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 2, 23))
->x : B, Symbol(x, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 8, 13))
->b : any, Symbol(B.b, Decl(typeParameterFixingWithContextSensitiveArguments.ts, 2, 23))
+>x : B
+>x.b : any
+>x : B
+>b : any
 >null : null
 
