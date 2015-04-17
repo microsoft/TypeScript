@@ -3134,7 +3134,6 @@ module ts {
             return node.dotDotDotToken !== undefined;
         }
 
-
         function isOptional(node: ParameterDeclaration) {
             if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
                 if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {

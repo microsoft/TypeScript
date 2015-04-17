@@ -875,23 +875,26 @@ module ts {
     }
 
     export function hasRestParameters(s: SignatureDeclaration): boolean {
-        let lastParameter = lastOrUndefined(s.parameters);
-        if (!lastParameter) {
-            return false;
-        }
+        return isVariadic(lastOrUndefined(s.parameters));
+    }
 
-        if (s.parserContextFlags & ParserContextFlags.JavaScriptFile) {
-            if (lastParameter.type && lastParameter.type.kind === SyntaxKind.JSDocVariadicType) {
-                return true;
+    function isVariadic(node: ParameterDeclaration) {
+        if (node) {
+            if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType) {
+                    return true;
+                }
+
+                let docParam = getJSDocParameter(node);
+                if (docParam) {
+                    return docParam.type.kind === SyntaxKind.JSDocVariadicType;
+                }
             }
 
-            let parameter = getJSDocParameter(lastParameter);
-            if (parameter) {
-                return parameter.type.kind === SyntaxKind.JSDocVariadicType;
-            }
+            return node.dotDotDotToken !== undefined;
         }
 
-        return lastParameter.dotDotDotToken !== undefined;
+        return false;
     }
 
     export function isLiteralKind(kind: SyntaxKind): boolean {
