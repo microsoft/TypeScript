@@ -1739,11 +1739,11 @@ module ts {
 
             function buildParameterDisplay(p: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
                 let parameterNode = <ParameterDeclaration>p.valueDeclaration;
-                if (isVariadic(parameterNode)) {
+                if (isRestParameter(parameterNode)) {
                     writePunctuation(writer, SyntaxKind.DotDotDotToken);
                 }
                 appendSymbolNameOnly(p, writer);
-                if (isOptional(parameterNode)) {
+                if (isOptionalParameter(parameterNode)) {
                     writePunctuation(writer, SyntaxKind.QuestionToken);
                 }
                 writePunctuation(writer, SyntaxKind.ColonToken);
@@ -3115,26 +3115,11 @@ module ts {
             return result;
         }
 
-        function isVariadicOrOptional(node: ParameterDeclaration) {
-            return isVariadic(node) || isOptional(node);
+        function isRestOrOptionalParameter(node: ParameterDeclaration) {
+            return isRestParameter(node) || isOptionalParameter(node);
         }
 
-        function isVariadic(node: ParameterDeclaration) {
-            if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
-                if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType) {
-                    return true;
-                }
-
-                let docParam = getJSDocParameter(node);
-                if (docParam) {
-                    return docParam.type.kind === SyntaxKind.JSDocVariadicType;
-                }
-            }
-
-            return node.dotDotDotToken !== undefined;
-        }
-
-        function isOptional(node: ParameterDeclaration) {
+        function isOptionalParameter(node: ParameterDeclaration) {
             if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
                 if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {
                     return true;
@@ -3168,7 +3153,7 @@ module ts {
                         hasStringLiterals = true;
                     }
                     if (minArgumentCount < 0) {
-                        if (isVariadicOrOptional(param)) {
+                        if (isRestOrOptionalParameter(param)) {
                             minArgumentCount = i;
                         }
                     }
@@ -3205,7 +3190,7 @@ module ts {
                 }
 
                 links.resolvedSignature = createSignature(declaration, typeParameters, parameters, returnType,
-                    minArgumentCount, hasRestParameters(declaration), hasStringLiterals);
+                    minArgumentCount, hasRestParameter(declaration), hasStringLiterals);
             }
             return links.resolvedSignature;
         }
@@ -5849,7 +5834,7 @@ module ts {
                     let contextualSignature = getContextualSignature(func);
                     if (contextualSignature) {
 
-                        let funcHasRestParameters = hasRestParameters(func);
+                        let funcHasRestParameters = hasRestParameter(func);
                         let len = func.parameters.length - (funcHasRestParameters ? 1 : 0);
                         let indexOfParameter = indexOf(func.parameters, parameter);
                         if (indexOfParameter < len) {
@@ -9177,7 +9162,7 @@ module ts {
 
         function checkCollisionWithArgumentsInGeneratedCode(node: SignatureDeclaration) {
             // no rest parameters \ declaration context \ overload - no codegen impact
-            if (!hasRestParameters(node) || isInAmbientContext(node) || nodeIsMissing((<FunctionLikeDeclaration>node).body)) {
+            if (!hasRestParameter(node) || isInAmbientContext(node) || nodeIsMissing((<FunctionLikeDeclaration>node).body)) {
                 return;
             }
 

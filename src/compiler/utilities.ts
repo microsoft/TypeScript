@@ -874,11 +874,11 @@ module ts {
         }
     }
 
-    export function hasRestParameters(s: SignatureDeclaration): boolean {
-        return isVariadic(lastOrUndefined(s.parameters));
+    export function hasRestParameter(s: SignatureDeclaration): boolean {
+        return isRestParameter(lastOrUndefined(s.parameters));
     }
 
-    function isVariadic(node: ParameterDeclaration) {
+    export function isRestParameter(node: ParameterDeclaration) {
         if (node) {
             if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
                 if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType) {
