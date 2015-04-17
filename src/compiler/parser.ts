@@ -930,7 +930,14 @@ module ts {
 
         function createNode(kind: SyntaxKind, pos?: number): Node {
             nodeCount++;
-            return createNodeAtPosition(scanner, kind, pos);
+            let node = new (nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind)))();
+            if (!(pos >= 0)) {
+                pos = scanner.getStartPos();
+            }
+
+            node.pos = pos;
+            node.end = pos;
+            return node;
         }
 
         function finishNode<T extends Node>(node: T): T {
@@ -4941,17 +4948,6 @@ module ts {
                     || node.kind === SyntaxKind.ExportDeclaration
                     ? node
                     : undefined);
-        }
-
-        function createNodeAtPosition(scanner: Scanner, kind: SyntaxKind, pos?: number): Node {
-            let node = new (nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind)))();
-            if (!(pos >= 0)) {
-                pos = scanner.getStartPos();
-            }
-
-            node.pos = pos;
-            node.end = pos;
-            return node;
         }
 
         const enum ParsingContext {
