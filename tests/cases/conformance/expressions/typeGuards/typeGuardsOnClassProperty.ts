@@ -2,7 +2,7 @@
 // have no effect on members of objects such as properties. 
 
 // Note that the class's property must be copied to a local variable for
-// the type guard to have an affect
+// the type guard to have an effect
 class D {
     data: string | string[];
     getData() {
@@ -11,7 +11,7 @@ class D {
     }
 
     getData1() {
-        return typeof this.data === "string" ? this.data : this. data.join(" ");
+        return typeof this.data === "string" ? this.data : this.data.join(" ");
     }
 }
 

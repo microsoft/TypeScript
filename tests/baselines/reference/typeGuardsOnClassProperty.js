@@ -3,7 +3,7 @@
 // have no effect on members of objects such as properties. 
 
 // Note that the class's property must be copied to a local variable for
-// the type guard to have an affect
+// the type guard to have an effect
 class D {
     data: string | string[];
     getData() {
@@ -12,7 +12,7 @@ class D {
     }
 
     getData1() {
-        return typeof this.data === "string" ? this.data : this. data.join(" ");
+        return typeof this.data === "string" ? this.data : this.data.join(" ");
     }
 }
 
@@ -32,7 +32,7 @@ if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
 // Note that type guards affect types of variables and parameters only and 
 // have no effect on members of objects such as properties. 
 // Note that the class's property must be copied to a local variable for
-// the type guard to have an affect
+// the type guard to have an effect
 var D = (function () {
     function D() {
     }
