@@ -10610,7 +10610,7 @@ interface TextTrack extends EventTarget {
     kind: string;
     label: string;
     language: string;
-    mode: any | number;
+    mode: any;
     oncuechange: (ev: Event) => any;
     onerror: (ev: Event) => any;
     onload: (ev: Event) => any;
