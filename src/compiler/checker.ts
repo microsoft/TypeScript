@@ -6161,9 +6161,7 @@ module ts {
                     }
                     else {
                         Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
-                        type = memberDecl.name.kind === SyntaxKind.ComputedPropertyName
-                            ? unknownType
-                            : checkExpression(<Identifier>memberDecl.name, contextualMapper);
+                        type = checkExpression((<ShorthandPropertyAssignment>memberDecl).name, contextualMapper);
                     }
                     typeFlags |= type.flags;
                     let prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
@@ -8053,7 +8051,7 @@ module ts {
 
         function checkNumericLiteral(node: LiteralExpression): Type {
             // Grammar checking
-            checkGrammarNumbericLiteral(node);
+            checkGrammarNumericLiteral(node);
             return numberType;
         }
 
@@ -12017,8 +12015,8 @@ module ts {
         }
 
         // GRAMMAR CHECKING
-        function isReservedwordInStrictMode(node: Identifier): boolean {
-            // Check that originalKeywordKind is less than LastFurtureReservedWord to see if an Identifier is a strict-mode reserved word
+        function isReservedWordInStrictMode(node: Identifier): boolean {
+            // Check that originalKeywordKind is less than LastFutureReservedWord to see if an Identifier is a strict-mode reserved word
             return (node.parserContextFlags & ParserContextFlags.StrictMode) &&
                 (node.originalKeywordKind >= SyntaxKind.FirstFutureReservedWord && node.originalKeywordKind <= SyntaxKind.LastFutureReservedWord);
         }
@@ -12063,7 +12061,7 @@ module ts {
 
         function checkGrammarDeclarationNameInStrictMode(node: Declaration): boolean {
             let name = node.name;
-            if (name && name.kind === SyntaxKind.Identifier && isReservedwordInStrictMode(<Identifier>name)) {
+            if (name && name.kind === SyntaxKind.Identifier && isReservedWordInStrictMode(<Identifier>name)) {
                 let nameText = declarationNameToString(name);
                 switch (node.kind) {
                     case SyntaxKind.Parameter:
@@ -12139,7 +12137,7 @@ module ts {
 
         // The function takes an identifier itself or an expression which has SyntaxKind.Identifier.
         function checkGrammarIdentifierInStrictMode(node: Expression | Identifier, nameText?: string): boolean {
-            if (node && node.kind === SyntaxKind.Identifier && isReservedwordInStrictMode(<Identifier>node)) {
+            if (node && node.kind === SyntaxKind.Identifier && isReservedWordInStrictMode(<Identifier>node)) {
                 if (!nameText) {
                     nameText = declarationNameToString(<Identifier>node);
                 }
@@ -12154,7 +12152,7 @@ module ts {
 
         // The function takes an identifier when uses as a typeName in TypeReferenceNode
         function checkGrammarTypeNameInStrictMode(node: Identifier): boolean {
-            if (node && node.kind === SyntaxKind.Identifier && isReservedwordInStrictMode(<Identifier>node)) {
+            if (node && node.kind === SyntaxKind.Identifier && isReservedWordInStrictMode(<Identifier>node)) {
                 let nameText = declarationNameToString(<Identifier>node);
 
                 // TODO (yuisu): Fix when module is a strict mode
@@ -12606,7 +12604,7 @@ module ts {
                     // Grammar checking for computedPropertName and shorthandPropertyAssignment
                     checkGrammarForInvalidQuestionMark(prop,(<PropertyAssignment>prop).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
                     if (name.kind === SyntaxKind.NumericLiteral) {
-                        checkGrammarNumbericLiteral(<Identifier>name);
+                        checkGrammarNumericLiteral(<Identifier>name);
                     }
                     currentKind = Property;
                 }
@@ -13158,7 +13156,7 @@ module ts {
             }
         }
 
-        function checkGrammarNumbericLiteral(node: Identifier): boolean {
+        function checkGrammarNumericLiteral(node: Identifier): boolean {
             // Grammar checking
             if (node.flags & NodeFlags.OctalLiteral) {
                 if (node.parserContextFlags & ParserContextFlags.StrictMode) {
