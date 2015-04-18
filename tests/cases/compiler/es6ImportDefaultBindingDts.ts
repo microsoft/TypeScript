@@ -1,5 +1,6 @@
 // @module: commonjs
 // @declaration: true
+// @target: ES5
 
 // @filename: server.ts
 class c { }

@@ -349,7 +349,8 @@ module ts {
                             }
                             result = undefined;
                         }
-                        else if (location.kind === SyntaxKind.SourceFile) {
+                        else if (location.kind === SyntaxKind.SourceFile ||
+                            (location.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>location).name.kind === SyntaxKind.StringLiteral)) {
                             result = getSymbol(getSymbolOfNode(location).exports, "default", meaning & SymbolFlags.ModuleMember);
                             let localSymbol = getLocalSymbolForExportDefault(result);
                             if (result && (result.flags & meaning) && localSymbol && localSymbol.name === name) {
@@ -597,7 +598,7 @@ module ts {
             if (moduleSymbol.flags & SymbolFlags.Variable) {
                 let typeAnnotation = (<VariableDeclaration>moduleSymbol.valueDeclaration).type;
                 if (typeAnnotation) {
-                    return getPropertyOfType(getTypeFromTypeNodeOrHeritageClauseElement(typeAnnotation), name);
+                    return getPropertyOfType(getTypeFromTypeNode(typeAnnotation), name);
                 }
             }
         }
@@ -646,7 +647,7 @@ module ts {
             if (symbol.flags & SymbolFlags.Variable) {
                 var typeAnnotation = (<VariableDeclaration>symbol.valueDeclaration).type;
                 if (typeAnnotation) {
-                    return resolveSymbol(getPropertyOfType(getTypeFromTypeNodeOrHeritageClauseElement(typeAnnotation), name));
+                    return resolveSymbol(getPropertyOfType(getTypeFromTypeNode(typeAnnotation), name));
                 }
             }
         }
@@ -2127,7 +2128,7 @@ module ts {
             }
             // Use type from type annotation if one is present
             if (declaration.type) {
-                return getTypeFromTypeNodeOrHeritageClauseElement(declaration.type);
+                return getTypeFromTypeNode(declaration.type);
             }
             if (declaration.kind === SyntaxKind.Parameter) {
                 let func = <FunctionLikeDeclaration>declaration.parent;
@@ -2289,18 +2290,18 @@ module ts {
             return links.type;
         }
 
-        function getSetAccessorTypeAnnotationNode(accessor: AccessorDeclaration): TypeNode | LiteralExpression {
+        function getSetAccessorTypeAnnotationNode(accessor: AccessorDeclaration): TypeNode {
             return accessor && accessor.parameters.length > 0 && accessor.parameters[0].type;
         }
 
         function getAnnotatedAccessorType(accessor: AccessorDeclaration): Type {
             if (accessor) {
                 if (accessor.kind === SyntaxKind.GetAccessor) {
-                    return accessor.type && getTypeFromTypeNodeOrHeritageClauseElement(accessor.type);
+                    return accessor.type && getTypeFromTypeNode(accessor.type);
                 }
                 else {
                     let setterTypeAnnotation = getSetAccessorTypeAnnotationNode(accessor);
-                    return setterTypeAnnotation && getTypeFromTypeNodeOrHeritageClauseElement(setterTypeAnnotation);
+                    return setterTypeAnnotation && getTypeFromTypeNode(setterTypeAnnotation);
                 }
             }
             return undefined;
@@ -2423,7 +2424,7 @@ module ts {
             return check(type);
             function check(type: InterfaceType): boolean {
                 let target = <InterfaceType>getTargetType(type);
-                return target === checkBase || forEach(target.baseTypes, check);
+                return target === checkBase || forEach(getBaseTypes(target), check);
             }
         }
 
@@ -2451,6 +2452,70 @@ module ts {
             return result;
         }
 
+        function getBaseTypes(type: InterfaceType): ObjectType[]{
+            let typeWithBaseTypes = <InterfaceTypeWithBaseTypes>type;
+            if (!typeWithBaseTypes.baseTypes) {
+                if (type.symbol.flags & SymbolFlags.Class) {
+                    resolveBaseTypesOfClass(typeWithBaseTypes);
+                }
+                else if (type.symbol.flags & SymbolFlags.Interface) {
+                    resolveBaseTypesOfInterface(typeWithBaseTypes);
+                }
+                else {
+                    Debug.fail("type must be class or interface");
+                }
+            }
+
+            return typeWithBaseTypes.baseTypes;
+        }
+
+        function resolveBaseTypesOfClass(type: InterfaceTypeWithBaseTypes): void {
+            type.baseTypes = [];
+            let declaration = <ClassDeclaration>getDeclarationOfKind(type.symbol, SyntaxKind.ClassDeclaration);
+            let baseTypeNode = getClassExtendsHeritageClauseElement(declaration);
+            if (baseTypeNode) {
+                let baseType = getTypeFromHeritageClauseElement(baseTypeNode);
+                if (baseType !== unknownType) {
+                    if (getTargetType(baseType).flags & TypeFlags.Class) {
+                        if (type !== baseType && !hasBaseType(<InterfaceType>baseType, type)) {
+                            type.baseTypes.push(baseType);
+                        }
+                        else {
+                            error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
+                        }
+                    }
+                    else {
+                        error(baseTypeNode, Diagnostics.A_class_may_only_extend_another_class);
+                    }
+                }
+            }
+        }
+
+        function resolveBaseTypesOfInterface(type: InterfaceTypeWithBaseTypes): void {
+            type.baseTypes = [];
+            for (let declaration of type.symbol.declarations) {
+                if (declaration.kind === SyntaxKind.InterfaceDeclaration && getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
+                    for (let node of getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
+                        let baseType = getTypeFromHeritageClauseElement(node);
+
+                        if (baseType !== unknownType) {
+                            if (getTargetType(baseType).flags & (TypeFlags.Class | TypeFlags.Interface)) {
+                                if (type !== baseType && !hasBaseType(<InterfaceType>baseType, type)) {
+                                    type.baseTypes.push(baseType);
+                                }
+                                else {
+                                    error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
+                                }
+                            }
+                            else {
+                                error(node, Diagnostics.An_interface_may_only_extend_a_class_or_another_interface);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         function getDeclaredTypeOfClass(symbol: Symbol): InterfaceType {
             let links = getSymbolLinks(symbol);
             if (!links.declaredType) {
@@ -2464,25 +2529,7 @@ module ts {
                     (<GenericType>type).target = <GenericType>type;
                     (<GenericType>type).typeArguments = type.typeParameters;
                 }
-                type.baseTypes = [];
-                let declaration = <ClassDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ClassDeclaration);
-                let baseTypeNode = getClassExtendsHeritageClauseElement(declaration);
-                if (baseTypeNode) {
-                    let baseType = getTypeFromHeritageClauseElement(baseTypeNode);
-                    if (baseType !== unknownType) {
-                        if (getTargetType(baseType).flags & TypeFlags.Class) {
-                            if (type !== baseType && !hasBaseType(<InterfaceType>baseType, type)) {
-                                type.baseTypes.push(baseType);
-                            }
-                            else {
-                                error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
-                            }
-                        }
-                        else {
-                            error(baseTypeNode, Diagnostics.A_class_may_only_extend_another_class);
-                        }
-                    }
-                }
+                
                 type.declaredProperties = getNamedMembers(symbol.members);
                 type.declaredCallSignatures = emptyArray;
                 type.declaredConstructSignatures = emptyArray;
@@ -2505,28 +2552,7 @@ module ts {
                     (<GenericType>type).target = <GenericType>type;
                     (<GenericType>type).typeArguments = type.typeParameters;
                 }
-                type.baseTypes = [];
-                forEach(symbol.declarations, declaration => {
-                    if (declaration.kind === SyntaxKind.InterfaceDeclaration && getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
-                        forEach(getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration), node => {
-                            let baseType = getTypeFromHeritageClauseElement(node);
 
-                            if (baseType !== unknownType) {
-                                if (getTargetType(baseType).flags & (TypeFlags.Class | TypeFlags.Interface)) {
-                                    if (type !== baseType && !hasBaseType(<InterfaceType>baseType, type)) {
-                                        type.baseTypes.push(baseType);
-                                    }
-                                    else {
-                                        error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
-                                    }
-                                }
-                                else {
-                                    error(node, Diagnostics.An_interface_may_only_extend_a_class_or_another_interface);
-                                }
-                            }
-                        });
-                    }
-                });
                 type.declaredProperties = getNamedMembers(symbol.members);
                 type.declaredCallSignatures = getSignaturesOfSymbol(symbol.members["__call"]);
                 type.declaredConstructSignatures = getSignaturesOfSymbol(symbol.members["__new"]);
@@ -2541,7 +2567,7 @@ module ts {
             if (!links.declaredType) {
                 links.declaredType = resolvingType;
                 let declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
-                let type = getTypeFromTypeNodeOrHeritageClauseElement(declaration.type);
+                let type = getTypeFromTypeNode(declaration.type);
                 if (links.declaredType === resolvingType) {
                     links.declaredType = type;
                 }
@@ -2646,15 +2672,16 @@ module ts {
             let constructSignatures = type.declaredConstructSignatures;
             let stringIndexType = type.declaredStringIndexType;
             let numberIndexType = type.declaredNumberIndexType;
-            if (type.baseTypes.length) {
+            let baseTypes = getBaseTypes(type);
+            if (baseTypes.length) {
                 members = createSymbolTable(type.declaredProperties);
-                forEach(type.baseTypes, baseType => {
+                for (let baseType of baseTypes) {
                     addInheritedMembers(members, getPropertiesOfObjectType(baseType));
                     callSignatures = concatenate(callSignatures, getSignaturesOfType(baseType, SignatureKind.Call));
                     constructSignatures = concatenate(constructSignatures, getSignaturesOfType(baseType, SignatureKind.Construct));
                     stringIndexType = stringIndexType || getIndexTypeOfType(baseType, IndexKind.String);
                     numberIndexType = numberIndexType || getIndexTypeOfType(baseType, IndexKind.Number);
-                });
+                }
             }
             setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
         }
@@ -2667,7 +2694,7 @@ module ts {
             let constructSignatures = instantiateList(target.declaredConstructSignatures, mapper, instantiateSignature);
             let stringIndexType = target.declaredStringIndexType ? instantiateType(target.declaredStringIndexType, mapper) : undefined;
             let numberIndexType = target.declaredNumberIndexType ? instantiateType(target.declaredNumberIndexType, mapper) : undefined;
-            forEach(target.baseTypes, baseType => {
+            forEach(getBaseTypes(target), baseType => {
                 let instantiatedBaseType = instantiateType(baseType, mapper);
                 addInheritedMembers(members, getPropertiesOfObjectType(instantiatedBaseType));
                 callSignatures = concatenate(callSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Call));
@@ -2696,9 +2723,10 @@ module ts {
                 sig.minArgumentCount, sig.hasRestParameter, sig.hasStringLiterals);
         }
 
-        function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
-            if (classType.baseTypes.length) {
-                let baseType = classType.baseTypes[0];
+        function getDefaultConstructSignatures(classType: InterfaceType): Signature[]{
+            let baseTypes = getBaseTypes(classType);
+            if (baseTypes.length) {
+                let baseType = baseTypes[0];
                 let baseSignatures = getSignaturesOfType(getTypeOfSymbol(baseType.symbol), SignatureKind.Construct);
                 return map(baseSignatures, baseSignature => {
                     let signature = baseType.flags & TypeFlags.Reference ?
@@ -2820,9 +2848,10 @@ module ts {
                     if (!constructSignatures.length) {
                         constructSignatures = getDefaultConstructSignatures(classType);
                     }
-                    if (classType.baseTypes.length) {
+                    let baseTypes = getBaseTypes(classType);
+                    if (baseTypes.length) {
                         members = createSymbolTable(getNamedMembers(members));
-                        addInheritedMembers(members, getPropertiesOfObjectType(getTypeOfSymbol(classType.baseTypes[0].symbol)));
+                        addInheritedMembers(members, getPropertiesOfObjectType(getTypeOfSymbol(baseTypes[0].symbol)));
                     }
                 }
                 stringIndexType = undefined;
@@ -3083,7 +3112,7 @@ module ts {
                     returnType = classType;
                 }
                 else if (declaration.type) {
-                    returnType = getTypeFromTypeNodeOrHeritageClauseElement(declaration.type);
+                    returnType = getTypeFromTypeNode(declaration.type);
                 }
                 else {
                     // TypeScript 1.0 spec (April 2014):
@@ -3241,7 +3270,7 @@ module ts {
         function getIndexTypeOfSymbol(symbol: Symbol, kind: IndexKind): Type {
             let declaration = getIndexDeclarationOfSymbol(symbol, kind);
             return declaration
-                ? declaration.type ? getTypeFromTypeNodeOrHeritageClauseElement(declaration.type) : anyType
+                ? declaration.type ? getTypeFromTypeNode(declaration.type) : anyType
                 : undefined;
         }
 
@@ -3252,7 +3281,7 @@ module ts {
                     type.constraint = targetConstraint ? instantiateType(targetConstraint, type.mapper) : noConstraintType;
                 }
                 else {
-                    type.constraint = getTypeFromTypeNodeOrHeritageClauseElement((<TypeParameterDeclaration>getDeclarationOfKind(type.symbol, SyntaxKind.TypeParameter)).constraint);
+                    type.constraint = getTypeFromTypeNode((<TypeParameterDeclaration>getDeclarationOfKind(type.symbol, SyntaxKind.TypeParameter)).constraint);
                 }
             }
             return type.constraint === noConstraintType ? undefined : type.constraint;
@@ -3383,7 +3412,7 @@ module ts {
                             if (type.flags & (TypeFlags.Class | TypeFlags.Interface) && type.flags & TypeFlags.Reference) {
                                 let typeParameters = (<InterfaceType>type).typeParameters;
                                 if (node.typeArguments && node.typeArguments.length === typeParameters.length) {
-                                    type = createTypeReference(<GenericType>type, map(node.typeArguments, getTypeFromTypeNodeOrHeritageClauseElement));
+                                    type = createTypeReference(<GenericType>type, map(node.typeArguments, getTypeFromTypeNode));
                                 }
                                 else {
                                     error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), typeParameters.length);
@@ -3481,7 +3510,7 @@ module ts {
         function getTypeFromArrayTypeNode(node: ArrayTypeNode): Type {
             let links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = createArrayType(getTypeFromTypeNodeOrHeritageClauseElement(node.elementType));
+                links.resolvedType = createArrayType(getTypeFromTypeNode(node.elementType));
             }
             return links.resolvedType;
         }
@@ -3499,7 +3528,7 @@ module ts {
         function getTypeFromTupleTypeNode(node: TupleTypeNode): Type {
             let links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = createTupleType(map(node.elementTypes, getTypeFromTypeNodeOrHeritageClauseElement));
+                links.resolvedType = createTupleType(map(node.elementTypes, getTypeFromTypeNode));
             }
             return links.resolvedType;
         }
@@ -3608,7 +3637,7 @@ module ts {
         function getTypeFromUnionTypeNode(node: UnionTypeNode): Type {
             let links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNodeOrHeritageClauseElement), /*noSubtypeReduction*/ true);
+                links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode), /*noSubtypeReduction*/ true);
             }
             return links.resolvedType;
         }
@@ -3622,7 +3651,7 @@ module ts {
             return links.resolvedType;
         }
 
-        function getStringLiteralType(node: LiteralExpression): StringLiteralType {
+        function getStringLiteralType(node: StringLiteral): StringLiteralType {
             if (hasProperty(stringLiteralTypes, node.text)) {
                 return stringLiteralTypes[node.text];
             }
@@ -3632,7 +3661,7 @@ module ts {
             return type;
         }
 
-        function getTypeFromStringLiteral(node: LiteralExpression): Type {
+        function getTypeFromStringLiteral(node: StringLiteral): Type {
             let links = getNodeLinks(node);
             if (!links.resolvedType) {
                 links.resolvedType = getStringLiteralType(node);
@@ -3640,7 +3669,7 @@ module ts {
             return links.resolvedType;
         }
 
-        function getTypeFromTypeNodeOrHeritageClauseElement(node: TypeNode | LiteralExpression | HeritageClauseElement): Type {
+        function getTypeFromTypeNode(node: TypeNode): Type {
             switch (node.kind) {
                 case SyntaxKind.AnyKeyword:
                     return anyType;
@@ -3655,7 +3684,7 @@ module ts {
                 case SyntaxKind.VoidKeyword:
                     return voidType;
                 case SyntaxKind.StringLiteral:
-                    return getTypeFromStringLiteral(<LiteralExpression>node);
+                    return getTypeFromStringLiteral(<StringLiteral>node);
                 case SyntaxKind.TypeReference:
                     return getTypeFromTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.HeritageClauseElement:
@@ -3669,7 +3698,7 @@ module ts {
                 case SyntaxKind.UnionType:
                     return getTypeFromUnionTypeNode(<UnionTypeNode>node);
                 case SyntaxKind.ParenthesizedType:
-                    return getTypeFromTypeNodeOrHeritageClauseElement((<ParenthesizedTypeNode>node).type);
+                    return getTypeFromTypeNode((<ParenthesizedTypeNode>node).type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.TypeLiteral:
@@ -5550,7 +5579,8 @@ module ts {
             let baseClass: Type;
             if (enclosingClass && getClassExtendsHeritageClauseElement(enclosingClass)) {
                 let classType = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClass));
-                baseClass = classType.baseTypes.length && classType.baseTypes[0];
+                let baseTypes = getBaseTypes(classType);
+                baseClass = baseTypes.length && baseTypes[0];
             }
 
             if (!baseClass) {
@@ -5680,7 +5710,7 @@ module ts {
             let declaration = <VariableLikeDeclaration>node.parent;
             if (node === declaration.initializer) {
                 if (declaration.type) {
-                    return getTypeFromTypeNodeOrHeritageClauseElement(declaration.type);
+                    return getTypeFromTypeNode(declaration.type);
                 }
                 if (declaration.kind === SyntaxKind.Parameter) {
                     let type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
@@ -5883,7 +5913,7 @@ module ts {
                 case SyntaxKind.NewExpression:
                     return getContextualTypeForArgument(<CallExpression>parent, node);
                 case SyntaxKind.TypeAssertionExpression:
-                    return getTypeFromTypeNodeOrHeritageClauseElement((<TypeAssertion>parent).type);
+                    return getTypeFromTypeNode((<TypeAssertion>parent).type);
                 case SyntaxKind.BinaryExpression:
                     return getContextualTypeForBinaryOperand(node);
                 case SyntaxKind.PropertyAssignment:
@@ -6131,9 +6161,7 @@ module ts {
                     }
                     else {
                         Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
-                        type = memberDecl.name.kind === SyntaxKind.ComputedPropertyName
-                            ? unknownType
-                            : checkExpression(<Identifier>memberDecl.name, contextualMapper);
+                        type = checkExpression((<ShorthandPropertyAssignment>memberDecl).name, contextualMapper);
                     }
                     typeFlags |= type.flags;
                     let prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.name);
@@ -6705,7 +6733,7 @@ module ts {
             let typeArgumentsAreAssignable = true;
             for (let i = 0; i < typeParameters.length; i++) {
                 let typeArgNode = typeArguments[i];
-                let typeArgument = getTypeFromTypeNodeOrHeritageClauseElement(typeArgNode);
+                let typeArgument = getTypeFromTypeNode(typeArgNode);
                 // Do not push on this array! It has a preallocated length
                 typeArgumentResultTypes[i] = typeArgument;
                 if (typeArgumentsAreAssignable /* so far */) {
@@ -6727,9 +6755,12 @@ module ts {
                     let paramType = getTypeAtPosition(signature, i);
                     // A tagged template expression provides a special first argument, and string literals get string literal types
                     // unless we're reporting errors
-                    let argType = i === 0 && node.kind === SyntaxKind.TaggedTemplateExpression ? globalTemplateStringsArrayType :
-                        arg.kind === SyntaxKind.StringLiteral && !reportErrors ? getStringLiteralType(<LiteralExpression>arg) :
-                            checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
+                    let argType = i === 0 && node.kind === SyntaxKind.TaggedTemplateExpression
+                        ? globalTemplateStringsArrayType
+                        : arg.kind === SyntaxKind.StringLiteral && !reportErrors
+                            ? getStringLiteralType(<StringLiteral>arg)
+                            : checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
+
                     // Use argument expression as error location when reporting errors
                     if (!checkTypeRelatedTo(argType, paramType, relation, reportErrors ? arg : undefined,
                         Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1)) {
@@ -7187,7 +7218,7 @@ module ts {
 
         function checkTypeAssertion(node: TypeAssertion): Type {
             let exprType = checkExpression(node.expression);
-            let targetType = getTypeFromTypeNodeOrHeritageClauseElement(node.type);
+            let targetType = getTypeFromTypeNode(node.type);
             if (produceDiagnostics && targetType !== unknownType) {
                 let widenedType = getWidenedType(exprType);
                 if (!(isTypeAssignableTo(targetType, widenedType))) {
@@ -7361,7 +7392,7 @@ module ts {
         function checkFunctionExpressionOrObjectLiteralMethodBody(node: FunctionExpression | MethodDeclaration) {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
             if (node.type && !node.asteriskToken) {
-                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNodeOrHeritageClauseElement(node.type));
+                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
             }
 
             if (node.body) {
@@ -7371,7 +7402,7 @@ module ts {
                 else {
                     let exprType = checkExpression(<Expression>node.body);
                     if (node.type) {
-                        checkTypeAssignableTo(exprType, getTypeFromTypeNodeOrHeritageClauseElement(node.type), node.body, /*headMessage*/ undefined);
+                        checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, /*headMessage*/ undefined);
                     }
                     checkFunctionExpressionBodies(node.body);
                 }
@@ -8020,7 +8051,7 @@ module ts {
 
         function checkNumericLiteral(node: LiteralExpression): Type {
             // Grammar checking
-            checkGrammarNumbericLiteral(node);
+            checkGrammarNumericLiteral(node);
             return numberType;
         }
 
@@ -8800,12 +8831,12 @@ module ts {
         }
 
         /** Checks a type reference node as an expression. */
-        function checkTypeNodeAsExpression(node: TypeNode | LiteralExpression) {
+        function checkTypeNodeAsExpression(node: TypeNode) {
             // When we are emitting type metadata for decorators, we need to try to check the type
             // as if it were an expression so that we can emit the type in a value position when we 
             // serialize the type metadata.
             if (node && node.kind === SyntaxKind.TypeReference) {
-                let type = getTypeFromTypeNodeOrHeritageClauseElement(node);
+                let type = getTypeFromTypeNode(node);
                 let shouldCheckIfUnknownType = type === unknownType && compilerOptions.separateCompilation;
                 if (!type || (!shouldCheckIfUnknownType && type.flags & (TypeFlags.Intrinsic | TypeFlags.NumberLike | TypeFlags.StringLike))) {
                     return;
@@ -8825,7 +8856,8 @@ module ts {
                 case SyntaxKind.PropertyDeclaration:
                     checkTypeNodeAsExpression((<PropertyDeclaration>node).type);
                     break;
-                case SyntaxKind.Parameter: checkTypeNodeAsExpression((<ParameterDeclaration>node).type);
+                case SyntaxKind.Parameter:
+                    checkTypeNodeAsExpression((<ParameterDeclaration>node).type);
                     break;
                 case SyntaxKind.MethodDeclaration:
                     checkTypeNodeAsExpression((<MethodDeclaration>node).type);
@@ -8941,7 +8973,7 @@ module ts {
 
             checkSourceElement(node.body);
             if (node.type && !isAccessor(node.kind) && !node.asteriskToken) {
-                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNodeOrHeritageClauseElement(node.type));
+                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
             }
 
             // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
@@ -9829,7 +9861,7 @@ module ts {
                 errorNode = declaredNumberIndexer || declaredStringIndexer;
                 // condition 'errorNode === undefined' may appear if types does not declare nor string neither number indexer
                 if (!errorNode && (type.flags & TypeFlags.Interface)) {
-                    let someBaseTypeHasBothIndexers = forEach((<InterfaceType>type).baseTypes, base => getIndexTypeOfType(base, IndexKind.String) && getIndexTypeOfType(base, IndexKind.Number));
+                    let someBaseTypeHasBothIndexers = forEach(getBaseTypes(<InterfaceType>type), base => getIndexTypeOfType(base, IndexKind.String) && getIndexTypeOfType(base, IndexKind.Number));
                     errorNode = someBaseTypeHasBothIndexers ? undefined : type.symbol.declarations[0];
                 }
             }
@@ -9869,7 +9901,7 @@ module ts {
                     // for interfaces property and indexer might be inherited from different bases
                     // check if any base class already has both property and indexer.
                     // check should be performed only if 'type' is the first type that brings property\indexer together
-                    let someBaseClassHasBothPropertyAndIndexer = forEach((<InterfaceType>containingType).baseTypes, base => getPropertyOfObjectType(base, prop.name) && getIndexTypeOfType(base, indexKind));
+                    let someBaseClassHasBothPropertyAndIndexer = forEach(getBaseTypes(<InterfaceType>containingType), base => getPropertyOfObjectType(base, prop.name) && getIndexTypeOfType(base, indexKind));
                     errorNode = someBaseClassHasBothPropertyAndIndexer ? undefined : containingType.symbol.declarations[0];
                 }
 
@@ -9953,9 +9985,10 @@ module ts {
                 emitExtends = emitExtends || !isInAmbientContext(node);
                 checkHeritageClauseElement(baseTypeNode);
             }
-            if (type.baseTypes.length) {
+            let baseTypes = getBaseTypes(type);
+            if (baseTypes.length) {
                 if (produceDiagnostics) {
-                    let baseType = type.baseTypes[0];
+                    let baseType = baseTypes[0];
                     checkTypeAssignableTo(type, baseType, node.name || node, Diagnostics.Class_0_incorrectly_extends_base_class_1);
                     let staticBaseType = getTypeOfSymbol(baseType.symbol);
                     checkTypeAssignableTo(staticType, getTypeWithoutConstructors(staticBaseType), node.name || node,
@@ -9969,7 +10002,7 @@ module ts {
                 }
             }
 
-            if (type.baseTypes.length || (baseTypeNode && compilerOptions.separateCompilation)) {
+            if (baseTypes.length || (baseTypeNode && compilerOptions.separateCompilation)) {
                 // Check that base type can be evaluated as expression
                 checkExpressionOrQualifiedName(baseTypeNode.expression);
             }
@@ -10105,7 +10138,7 @@ module ts {
                 if (!tp1.constraint || !tp2.constraint) {
                     return false;
                 }
-                if (!isTypeIdenticalTo(getTypeFromTypeNodeOrHeritageClauseElement(tp1.constraint), getTypeFromTypeNodeOrHeritageClauseElement(tp2.constraint))) {
+                if (!isTypeIdenticalTo(getTypeFromTypeNode(tp1.constraint), getTypeFromTypeNode(tp2.constraint))) {
                     return false;
                 }
             }
@@ -10113,7 +10146,8 @@ module ts {
         }
 
         function checkInheritedPropertiesAreIdentical(type: InterfaceType, typeNode: Node): boolean {
-            if (!type.baseTypes.length || type.baseTypes.length === 1) {
+            let baseTypes = getBaseTypes(type);
+            if (baseTypes.length < 2) {
                 return true;
             }
 
@@ -10121,7 +10155,7 @@ module ts {
             forEach(type.declaredProperties, p => { seen[p.name] = { prop: p, containingType: type }; });
             let ok = true;
 
-            for (let base of type.baseTypes) {
+            for (let base of baseTypes) {
                 let properties = getPropertiesOfObjectType(base);
                 for (let prop of properties) {
                     if (!hasProperty(seen, prop.name)) {
@@ -10169,7 +10203,7 @@ module ts {
                     let type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
                     // run subsequent checks only if first set succeeded
                     if (checkInheritedPropertiesAreIdentical(type, node.name)) {
-                        forEach(type.baseTypes, baseType => {
+                        forEach(getBaseTypes(type), baseType => {
                             checkTypeAssignableTo(type, baseType, node.name, Diagnostics.Interface_0_incorrectly_extends_interface_1);
                         });
                         checkIndexConstraints(type);
@@ -11136,7 +11170,7 @@ module ts {
             return node.parent && node.parent.kind === SyntaxKind.HeritageClauseElement;
         }
 
-        function isTypeNodeOrHeritageClauseElement(node: Node): boolean {
+        function isTypeNode(node: Node): boolean {
             if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
                 return true;
             }
@@ -11385,8 +11419,8 @@ module ts {
                 return unknownType;
             }
 
-            if (isTypeNodeOrHeritageClauseElement(node)) {
-                return getTypeFromTypeNodeOrHeritageClauseElement(<TypeNode | HeritageClauseElement>node);
+            if (isTypeNode(node)) {
+                return getTypeFromTypeNode(<TypeNode>node);
             }
 
             if (isExpression(node)) {
@@ -11480,7 +11514,14 @@ module ts {
             let node = getDeclarationOfAliasSymbol(symbol);
             if (node) {
                 if (node.kind === SyntaxKind.ImportClause) {
-                    return getGeneratedNameForNode(<ImportDeclaration>node.parent) + ".default";
+                    let defaultKeyword: string;
+
+                    if (languageVersion === ScriptTarget.ES3) {
+                        defaultKeyword = "[\"default\"]";
+                    } else {
+                        defaultKeyword = ".default";
+                    }
+                    return getGeneratedNameForNode(<ImportDeclaration>node.parent) + defaultKeyword;
                 }
                 if (node.kind === SyntaxKind.ImportSpecifier) {
                     let moduleName = getGeneratedNameForNode(<ImportDeclaration>node.parent.parent.parent);
@@ -11974,8 +12015,8 @@ module ts {
         }
 
         // GRAMMAR CHECKING
-        function isReservedwordInStrictMode(node: Identifier): boolean {
-            // Check that originalKeywordKind is less than LastFurtureReservedWord to see if an Identifier is a strict-mode reserved word
+        function isReservedWordInStrictMode(node: Identifier): boolean {
+            // Check that originalKeywordKind is less than LastFutureReservedWord to see if an Identifier is a strict-mode reserved word
             return (node.parserContextFlags & ParserContextFlags.StrictMode) &&
                 (node.originalKeywordKind >= SyntaxKind.FirstFutureReservedWord && node.originalKeywordKind <= SyntaxKind.LastFutureReservedWord);
         }
@@ -12020,7 +12061,7 @@ module ts {
 
         function checkGrammarDeclarationNameInStrictMode(node: Declaration): boolean {
             let name = node.name;
-            if (name && name.kind === SyntaxKind.Identifier && isReservedwordInStrictMode(<Identifier>name)) {
+            if (name && name.kind === SyntaxKind.Identifier && isReservedWordInStrictMode(<Identifier>name)) {
                 let nameText = declarationNameToString(name);
                 switch (node.kind) {
                     case SyntaxKind.Parameter:
@@ -12096,7 +12137,7 @@ module ts {
 
         // The function takes an identifier itself or an expression which has SyntaxKind.Identifier.
         function checkGrammarIdentifierInStrictMode(node: Expression | Identifier, nameText?: string): boolean {
-            if (node && node.kind === SyntaxKind.Identifier && isReservedwordInStrictMode(<Identifier>node)) {
+            if (node && node.kind === SyntaxKind.Identifier && isReservedWordInStrictMode(<Identifier>node)) {
                 if (!nameText) {
                     nameText = declarationNameToString(<Identifier>node);
                 }
@@ -12111,7 +12152,7 @@ module ts {
 
         // The function takes an identifier when uses as a typeName in TypeReferenceNode
         function checkGrammarTypeNameInStrictMode(node: Identifier): boolean {
-            if (node && node.kind === SyntaxKind.Identifier && isReservedwordInStrictMode(<Identifier>node)) {
+            if (node && node.kind === SyntaxKind.Identifier && isReservedWordInStrictMode(<Identifier>node)) {
                 let nameText = declarationNameToString(<Identifier>node);
 
                 // TODO (yuisu): Fix when module is a strict mode
@@ -12563,7 +12604,7 @@ module ts {
                     // Grammar checking for computedPropertName and shorthandPropertyAssignment
                     checkGrammarForInvalidQuestionMark(prop,(<PropertyAssignment>prop).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
                     if (name.kind === SyntaxKind.NumericLiteral) {
-                        checkGrammarNumbericLiteral(<Identifier>name);
+                        checkGrammarNumericLiteral(<Identifier>name);
                     }
                     currentKind = Property;
                 }
@@ -13115,7 +13156,7 @@ module ts {
             }
         }
 
-        function checkGrammarNumbericLiteral(node: Identifier): boolean {
+        function checkGrammarNumericLiteral(node: Identifier): boolean {
             // Grammar checking
             if (node.flags & NodeFlags.OctalLiteral) {
                 if (node.parserContextFlags & ParserContextFlags.StrictMode) {
