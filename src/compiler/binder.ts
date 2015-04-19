@@ -111,12 +111,12 @@ module ts {
                 return (<Identifier | LiteralExpression>node.name).text;
             }
             switch (node.kind) {
-                case SyntaxKind.ConstructorType:
                 case SyntaxKind.Constructor:
                     return "__constructor";
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.CallSignature:
                     return "__call";
+                case SyntaxKind.ConstructorType:
                 case SyntaxKind.ConstructSignature:
                     return "__new";
                 case SyntaxKind.IndexSignature:
@@ -368,15 +368,14 @@ module ts {
             // We do that by making an anonymous type literal symbol, and then setting the function 
             // symbol as its sole member. To the rest of the system, this symbol will be  indistinguishable 
             // from an actual type literal symbol you would have gotten had you used the long form.
-
-            let symbol = createSymbol(SymbolFlags.Signature, getDeclarationName(node));
+            let name = getDeclarationName(node);
+            let symbol = createSymbol(SymbolFlags.Signature, name);
             addDeclarationToSymbol(symbol, node, SymbolFlags.Signature);
             bindChildren(node, SymbolFlags.Signature, /*isBlockScopeContainer:*/ false);
 
             let typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
             addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
-            typeLiteralSymbol.members = {};
-            typeLiteralSymbol.members[node.kind === SyntaxKind.FunctionType ? "__call" : "__new"] = symbol
+            typeLiteralSymbol.members = { [name]: symbol };
         }
 
         function bindAnonymousDeclaration(node: Declaration, symbolKind: SymbolFlags, name: string, isBlockScopeContainer: boolean) {
