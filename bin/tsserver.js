@@ -24642,7 +24642,7 @@ var ts;
     ts.emitTime = 0;
     ts.ioReadTime = 0;
     ts.ioWriteTime = 0;
-    ts.version = "1.5.0-alpha";
+    ts.version = "1.5.0-beta";
     function findConfigFile(searchPath) {
         var fileName = "tsconfig.json";
         while (true) {

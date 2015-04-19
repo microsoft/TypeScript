@@ -28710,7 +28710,7 @@ var ts;
     /* @internal */ ts.ioReadTime = 0;
     /* @internal */ ts.ioWriteTime = 0;
     /** The version of the TypeScript compiler release */
-    ts.version = "1.5.0-alpha";
+    ts.version = "1.5.0-beta";
     function findConfigFile(searchPath) {
         var fileName = "tsconfig.json";
         while (true) {
