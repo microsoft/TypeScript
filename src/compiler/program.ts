@@ -494,13 +494,13 @@ module ts {
             return getNormalizedPathFromPathComponents(commonPathComponents);
         }
 
-        function checkSourceFilesBelongToPath(soruceFiles: SourceFile[], rootDirectory: string): boolean {
+        function checkSourceFilesBelongToPath(sourceFiles: SourceFile[], rootDirectory: string): boolean {
             let allFilesBelongToPath = true;
-            if (soruceFiles) {
+            if (sourceFiles) {
                 let currentDirectory = host.getCurrentDirectory();
                 let absoluteRootDirectoryPath = host.getCanonicalFileName(getNormalizedAbsolutePath(rootDirectory, currentDirectory));
 
-                for (var sourceFile of soruceFiles) {
+                for (var sourceFile of sourceFiles) {
                     if (!isDeclarationFile(sourceFile)) {
                         let absoluteSourceFilePath = host.getCanonicalFileName(getNormalizedAbsolutePath(sourceFile.fileName, currentDirectory));
                         if (absoluteSourceFilePath.indexOf(absoluteRootDirectoryPath) !== 0) {
