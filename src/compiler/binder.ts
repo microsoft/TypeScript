@@ -409,17 +409,9 @@ module ts {
                     return declareSymbolAndAddToSymbolTable(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes);
                 }
                 else {
-                    return declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
-                }
-            }
-        }
+                    let result = declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
 
-        function postBindModuleDeclarationChildren(node: ModuleDeclaration) {
-            if (node.name.kind !== SyntaxKind.StringLiteral) {
-                let state = getModuleInstanceState(node);
-                if (state !== ModuleInstanceState.NonInstantiated) {
                     let currentModuleIsConstEnumOnly = state === ModuleInstanceState.ConstEnumOnly;
-
                     if (node.symbol.constEnumOnlyModule === undefined) {
                         // non-merged case - use the current state
                         node.symbol.constEnumOnlyModule = currentModuleIsConstEnumOnly;
@@ -428,6 +420,8 @@ module ts {
                         // merged case: module is const enum only if all its pieces are non-instantiated or const enum
                         node.symbol.constEnumOnlyModule = node.symbol.constEnumOnlyModule && currentModuleIsConstEnumOnly;
                     }
+
+                    return result;
                 }
             }
         }
@@ -600,8 +594,6 @@ module ts {
 
         function postBindChildren(node: Node) {
             switch (node.kind) {
-                case SyntaxKind.ModuleDeclaration:
-                    return postBindModuleDeclarationChildren(<ModuleDeclaration>node);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                     return postBindFunctionOrConstructorTypeChildren(<SignatureDeclaration>node);
