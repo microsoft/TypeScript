@@ -86,14 +86,27 @@ module ts {
             }
         }
 
-        function addDeclarationToSymbol(symbol: Symbol, node: Declaration, symbolKind: SymbolFlags) {
-            symbol.flags |= symbolKind;
-            if (!symbol.declarations) symbol.declarations = [];
-            symbol.declarations.push(node);
-            if (symbolKind & SymbolFlags.HasExports && !symbol.exports) symbol.exports = {};
-            if (symbolKind & SymbolFlags.HasMembers && !symbol.members) symbol.members = {};
+        function addDeclarationToSymbol(symbol: Symbol, node: Declaration, symbolFlags: SymbolFlags) {
+            symbol.flags |= symbolFlags;
+
             node.symbol = symbol;
-            if (symbolKind & SymbolFlags.Value && !symbol.valueDeclaration) symbol.valueDeclaration = node;
+
+            if (!symbol.declarations) {
+                symbol.declarations = [];
+            }
+            symbol.declarations.push(node);
+
+            if (symbolFlags & SymbolFlags.HasExports && !symbol.exports) {
+                symbol.exports = {};
+            }
+
+            if (symbolFlags & SymbolFlags.HasMembers && !symbol.members) {
+                symbol.members = {};
+            }
+
+            if (symbolFlags & SymbolFlags.Value && !symbol.valueDeclaration) {
+                symbol.valueDeclaration = node;
+            }
         }
 
         // Should not be called on a declaration with a computed property name,
@@ -189,14 +202,14 @@ module ts {
             return symbol;
         }
 
-        function declareModuleMember(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags) {
+        function declareModuleMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
             let hasExportModifier = getCombinedNodeFlags(node) & NodeFlags.Export;
-            if (symbolKind & SymbolFlags.Alias) {
+            if (symbolFlags & SymbolFlags.Alias) {
                 if (node.kind === SyntaxKind.ExportSpecifier || (node.kind === SyntaxKind.ImportEqualsDeclaration && hasExportModifier)) {
-                    declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
+                    declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
                 }
                 else {
-                    declareSymbol(container.locals, undefined, node, symbolKind, symbolExcludes);
+                    declareSymbol(container.locals, undefined, node, symbolFlags, symbolExcludes);
                 }
             }
             else {
@@ -212,23 +225,23 @@ module ts {
                 //      but return the export symbol (by calling getExportSymbolOfValueSymbolIfExported). That way
                 //      when the emitter comes back to it, it knows not to qualify the name if it was found in a containing scope.
                 if (hasExportModifier || container.flags & NodeFlags.ExportContext) {
-                    let exportKind = (symbolKind & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |
-                        (symbolKind & SymbolFlags.Type ? SymbolFlags.ExportType : 0) |
-                        (symbolKind & SymbolFlags.Namespace ? SymbolFlags.ExportNamespace : 0);
+                    let exportKind = (symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |
+                        (symbolFlags & SymbolFlags.Type ? SymbolFlags.ExportType : 0) |
+                        (symbolFlags & SymbolFlags.Namespace ? SymbolFlags.ExportNamespace : 0);
                     let local = declareSymbol(container.locals, undefined, node, exportKind, symbolExcludes);
-                    local.exportSymbol = declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
+                    local.exportSymbol = declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
                     node.localSymbol = local;
                 }
                 else {
-                    declareSymbol(container.locals, undefined, node, symbolKind, symbolExcludes);
+                    declareSymbol(container.locals, undefined, node, symbolFlags, symbolExcludes);
                 }
             }
         }
 
         // All container nodes are kept on a linked list in declaration order. This list is used by the getLocalNameOfContainer function
         // in the type checker to validate that the local name used for a container is unique.
-        function bindChildren(node: Node, symbolKind: SymbolFlags, isBlockScopeContainer: boolean) {
-            if (symbolKind & SymbolFlags.HasLocals) {
+        function bindChildren(node: Node, symbolFlags: SymbolFlags, isBlockScopeContainer: boolean) {
+            if (symbolFlags & SymbolFlags.HasLocals) {
                 node.locals = {};
             }
 
@@ -236,7 +249,7 @@ module ts {
             let saveContainer = container;
             let savedBlockScopeContainer = blockScopeContainer;
             parent = node;
-            if (symbolKind & SymbolFlags.IsContainer) {
+            if (symbolFlags & SymbolFlags.IsContainer) {
                 container = node;
 
                 if (lastContainer) {
@@ -253,7 +266,7 @@ module ts {
                 // these cases are:
                 // - node has locals (symbolKind & HasLocals) !== 0
                 // - node is a source file
-                setBlockScopeContainer(node, /*cleanLocals*/  (symbolKind & SymbolFlags.HasLocals) === 0 && node.kind !== SyntaxKind.SourceFile);
+                setBlockScopeContainer(node, /*cleanLocals*/  (symbolFlags & SymbolFlags.HasLocals) === 0 && node.kind !== SyntaxKind.SourceFile);
             }
 
             forEachChild(node, bind);
@@ -262,14 +275,14 @@ module ts {
             blockScopeContainer = savedBlockScopeContainer;
         }
 
-        function bindDeclaration(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags, isBlockScopeContainer: boolean) {
+        function bindDeclaration(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags, isBlockScopeContainer: boolean) {
             switch (container.kind) {
                 case SyntaxKind.ModuleDeclaration:
-                    declareModuleMember(node, symbolKind, symbolExcludes);
+                    declareModuleMember(node, symbolFlags, symbolExcludes);
                     break;
                 case SyntaxKind.SourceFile:
                     if (isExternalModule(<SourceFile>container)) {
-                        declareModuleMember(node, symbolKind, symbolExcludes);
+                        declareModuleMember(node, symbolFlags, symbolExcludes);
                         break;
                     }
                 case SyntaxKind.FunctionType:
@@ -285,29 +298,32 @@ module ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                    declareSymbol(container.locals, undefined, node, symbolKind, symbolExcludes);
+                    declareSymbol(container.locals, undefined, node, symbolFlags, symbolExcludes);
                     break;
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
                     if (node.flags & NodeFlags.Static) {
-                        declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
+                        declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
                         break;
                     }
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.InterfaceDeclaration:
-                    declareSymbol(container.symbol.members, container.symbol, node, symbolKind, symbolExcludes);
+                    declareSymbol(container.symbol.members, container.symbol, node, symbolFlags, symbolExcludes);
                     break;
                 case SyntaxKind.EnumDeclaration:
-                    declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
+                    declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
                     break;
             }
-            bindChildren(node, symbolKind, isBlockScopeContainer);
+            bindChildren(node, symbolFlags, isBlockScopeContainer);
         }
 
         function isAmbientContext(node: Node): boolean {
             while (node) {
-                if (node.flags & NodeFlags.Ambient) return true;
+                if (node.flags & NodeFlags.Ambient) {
+                    return true;
+                }
+
                 node = node.parent;
             }
             return false;
@@ -378,24 +394,24 @@ module ts {
             typeLiteralSymbol.members = { [name]: symbol };
         }
 
-        function bindAnonymousDeclaration(node: Declaration, symbolKind: SymbolFlags, name: string, isBlockScopeContainer: boolean) {
-            let symbol = createSymbol(symbolKind, name);
-            addDeclarationToSymbol(symbol, node, symbolKind);
-            bindChildren(node, symbolKind, isBlockScopeContainer);
+        function bindAnonymousDeclaration(node: Declaration, symbolFlags: SymbolFlags, name: string, isBlockScopeContainer: boolean) {
+            let symbol = createSymbol(symbolFlags, name);
+            addDeclarationToSymbol(symbol, node, symbolFlags);
+            bindChildren(node, symbolFlags, isBlockScopeContainer);
         }
 
         function bindCatchVariableDeclaration(node: CatchClause) {
             bindChildren(node, /*symbolKind:*/ 0, /*isBlockScopeContainer:*/ true);
         }
 
-        function bindBlockScopedDeclaration(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags) {
+        function bindBlockScopedDeclaration(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
             switch (blockScopeContainer.kind) {
                 case SyntaxKind.ModuleDeclaration:
-                    declareModuleMember(node, symbolKind, symbolExcludes);
+                    declareModuleMember(node, symbolFlags, symbolExcludes);
                     break;
                 case SyntaxKind.SourceFile:
                     if (isExternalModule(<SourceFile>container)) {
-                        declareModuleMember(node, symbolKind, symbolExcludes);
+                        declareModuleMember(node, symbolFlags, symbolExcludes);
                         break;
                     }
                     // fall through.
@@ -403,9 +419,9 @@ module ts {
                     if (!blockScopeContainer.locals) {
                         blockScopeContainer.locals = {};
                     }
-                    declareSymbol(blockScopeContainer.locals, undefined, node, symbolKind, symbolExcludes);
+                    declareSymbol(blockScopeContainer.locals, undefined, node, symbolFlags, symbolExcludes);
             }
-            bindChildren(node, symbolKind, /*isBlockScopeContainer*/ false);
+            bindChildren(node, symbolFlags, /*isBlockScopeContainer*/ false);
         }
 
         function bindBlockScopedVariableDeclaration(node: Declaration) {
@@ -598,12 +614,12 @@ module ts {
             }
         }
 
-        function bindPropertyOrMethodOrAccessor(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags, isBlockScopeContainer: boolean) {
+        function bindPropertyOrMethodOrAccessor(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags, isBlockScopeContainer: boolean) {
             if (hasDynamicName(node)) {
-                bindAnonymousDeclaration(node, symbolKind, "__computed", isBlockScopeContainer);
+                bindAnonymousDeclaration(node, symbolFlags, "__computed", isBlockScopeContainer);
             }
             else {
-                bindDeclaration(node, symbolKind, symbolExcludes, isBlockScopeContainer);
+                bindDeclaration(node, symbolFlags, symbolExcludes, isBlockScopeContainer);
             }
         }
     }
