@@ -347,21 +347,15 @@ module ts {
         }
 
         function declareClassMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
-            if (node.flags & NodeFlags.Static) {
-                return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
-            }
-            else {
-                return declareSymbol(container.symbol.members, container.symbol, node, symbolFlags, symbolExcludes);
-            }
+            return node.flags & NodeFlags.Static
+                ? declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes)
+                : declareSymbol(container.symbol.members, container.symbol, node, symbolFlags, symbolExcludes);
         }
 
         function declareSourceFileMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
-            if (isExternalModule(file)) {
-                return declareModuleMember(node, symbolFlags, symbolExcludes);
-            }
-            else {
-                return declareSymbol(file.locals, undefined, node, symbolFlags, symbolExcludes);
-            }
+            return isExternalModule(file)
+                ? declareModuleMember(node, symbolFlags, symbolExcludes)
+                : declareSymbol(file.locals, undefined, node, symbolFlags, symbolExcludes);
         }
 
         function isAmbientContext(node: Node): boolean {
@@ -616,12 +610,9 @@ module ts {
         }
 
         function bindImportClause(node: ImportClause) {
-            if (node.name) {
-                return declareSymbolAndAddToSymbolTable(node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
-            }
-            else {
-                return SymbolFlags.None;
-            }
+            return node.name
+                ? declareSymbolAndAddToSymbolTable(node, SymbolFlags.Alias, SymbolFlags.AliasExcludes)
+                : SymbolFlags.None;
         }
 
         function bindEnumDeclaration(node: EnumDeclaration) {
@@ -664,12 +655,9 @@ module ts {
         }
 
         function bindPropertyOrMethodOrAccessor(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): SymbolFlags {
-            if (hasDynamicName(node)) {
-                return bindAnonymousDeclaration(node, symbolFlags, "__computed");
-            }
-            else {
-                return declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
-            }
+            return hasDynamicName(node)
+                ? bindAnonymousDeclaration(node, symbolFlags, "__computed")
+                : declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
         }
     }
 }
