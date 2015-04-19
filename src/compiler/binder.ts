@@ -436,15 +436,12 @@ module ts {
             let name = getDeclarationName(node);
             let symbol = createSymbol(SymbolFlags.Signature, name);
             addDeclarationToSymbol(symbol, node, SymbolFlags.Signature);
-            return SymbolFlags.Signature;
-        }
 
-        function postBindFunctionOrConstructorTypeChildren(node: SignatureDeclaration): void {
-            let symbol = node.symbol;
-            let name = symbol.name;
             let typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
             addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
             typeLiteralSymbol.members = { [name]: symbol };
+
+            return SymbolFlags.Signature;
         }
 
         function bindAnonymousDeclaration(node: Declaration, symbolFlags: SymbolFlags, name: string): SymbolFlags {
@@ -483,6 +480,8 @@ module ts {
         }
 
         function bind(node: Node): void {
+            node.parent = parent;
+
             // First we bind declaration nodes to a symbol if possible.  We'll both create a symbol
             // and add the symbol to an appropriate symbol table.  The symbolFlags that are retuerned
             // from this help inform how we recurse into the children of this node.
@@ -493,13 +492,9 @@ module ts {
             // the current 'container' node when it changes.  This helps us know which symbol table
             // a local should go into for example.
             bindChildren(node, symbolFlags);
-
-            // Allow certain nodes to do specialized work after their children have been bound.
-            postBindChildren(node);
         }
         
         function bindWorker(node: Node): SymbolFlags {
-            node.parent = parent;
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
@@ -590,14 +585,6 @@ module ts {
             }
 
             return SymbolFlags.None;
-        }
-
-        function postBindChildren(node: Node) {
-            switch (node.kind) {
-                case SyntaxKind.FunctionType:
-                case SyntaxKind.ConstructorType:
-                    return postBindFunctionOrConstructorTypeChildren(<SignatureDeclaration>node);
-            }
         }
 
         function bindSourceFileIfExternalModule() {
