@@ -478,7 +478,7 @@ module ts {
             return "__" + indexOf((<SignatureDeclaration>node.parent).parameters, node);
         }
 
-        function bind(node: Node) {
+        function bind(node: Node): void {
             node.parent = parent;
             
             switch (node.kind) {
