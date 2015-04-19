@@ -277,16 +277,51 @@ module ts {
         }
 
         function declareSymbolForDeclarationAndBindChildren(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags, isBlockScopeContainer: boolean): void {
+            // First we declare a symbol for the provided node.  The symbol will be added to an 
+            // appropriate symbol table.  Possible symbol tables include:
+            // 
+            //  1) The 'exports' table of the current container's symbol.
+            //  2) The 'members' table of the current container's symbol.
+            //  3) The 'locals' table of the current container.
+            //
+            // Then, we recurse down the children of this declaration, seeking more declarations
+            // to bind.
+
             declareSymbolAndAddToAppropriateContainer(node, symbolFlags, symbolExcludes, isBlockScopeContainer);
             bindChildren(node, symbolFlags, isBlockScopeContainer);
         }
 
         function declareSymbolAndAddToAppropriateContainer(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags, isBlockScopeContainer: boolean): Symbol {
             switch (container.kind) {
+                // Modules, source files, and classes need specialized handling for how their 
+                // members are declared (for example, a member of a class will go into a specific
+                // symbol table depending on if it is static or not). As such, we defer to 
+                // specialized handlers to take care of declaring these child members.
                 case SyntaxKind.ModuleDeclaration:
                     return declareModuleMember(node, symbolFlags, symbolExcludes);
+
                 case SyntaxKind.SourceFile:
-                    return declareSourceFileMember(<SourceFile>container, node, symbolFlags, symbolExcludes);
+                    return declareSourceFileMember(node, symbolFlags, symbolExcludes);
+
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.ClassDeclaration:
+                    return declareClassMember(node, symbolFlags, symbolExcludes);
+
+                case SyntaxKind.EnumDeclaration:
+                    // Enum members are always put int the 'exports' of the containing enum.
+                    // They are only accessibly through their container, and are never in 
+                    // scope otherwise (even inside the body of the enum declaring them.).
+                    return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
+
+                case SyntaxKind.TypeLiteral:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.InterfaceDeclaration:
+                    // Interface/Object-types always have their children added to the 'members' of
+                    // their container.  They are only accessible through an instance of their 
+                    // container, and are never in scope otherwise (even inside the body of the 
+                    // object / type / interface declaring them).
+                    return declareSymbol(container.symbol.members, container.symbol, node, symbolFlags, symbolExcludes);
+
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.CallSignature:
@@ -300,16 +335,14 @@ module ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
+                    // All the children of these container types are never visible through another
+                    // symbol (i.e. through another symbol's 'exports' or 'members').  Instead, 
+                    // more or less, they're only accessed 'lexically' (i.e. from code that exists
+                    // underneath their container in the tree.  To accomplish this, we simply add
+                    // their declared symbol to the 'locals' of the container.  These symbols can
+                    // then be found as the type checker walks up the containers, checking them
+                    // for matching names.
                     return declareSymbol(container.locals, undefined, node, symbolFlags, symbolExcludes);
-                case SyntaxKind.ClassExpression:
-                case SyntaxKind.ClassDeclaration:
-                    return declareClassMember(node, symbolFlags, symbolExcludes);
-                case SyntaxKind.TypeLiteral:
-                case SyntaxKind.ObjectLiteralExpression:
-                case SyntaxKind.InterfaceDeclaration:
-                    return declareSymbol(container.symbol.members, container.symbol, node, symbolFlags, symbolExcludes);
-                case SyntaxKind.EnumDeclaration:
-                    return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
             }
         }
 
@@ -322,12 +355,12 @@ module ts {
             }
         }
 
-        function declareSourceFileMember(container: SourceFile, node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
-            if (isExternalModule(container)) {
+        function declareSourceFileMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
+            if (isExternalModule(file)) {
                 return declareModuleMember(node, symbolFlags, symbolExcludes);
             }
             else {
-                return declareSymbol(container.locals, undefined, node, symbolFlags, symbolExcludes);
+                return declareSymbol(file.locals, undefined, node, symbolFlags, symbolExcludes);
             }
         }
 

@@ -1360,14 +1360,15 @@ module ts {
     export interface Symbol {
         flags: SymbolFlags;                     // Symbol flags
         name: string;                           // Name of symbol
-        /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
-        /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
         declarations?: Declaration[];           // Declarations associated with this symbol
-        /* @internal */ parent?: Symbol;        // Parent symbol
+        valueDeclaration?: Declaration;         // First value declaration of the symbol
+
         members?: SymbolTable;                  // Class, interface or literal instance members
         exports?: SymbolTable;                  // Module exports
+        /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
+        /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
+        /* @internal */ parent?: Symbol;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
-        valueDeclaration?: Declaration;         // First value declaration of the symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
     }
 
