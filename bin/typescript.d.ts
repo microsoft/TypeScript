@@ -452,7 +452,8 @@ declare module "typescript" {
     interface ParenthesizedTypeNode extends TypeNode {
         type: TypeNode;
     }
-    interface StringLiteralTypeNode extends LiteralExpression, TypeNode {
+    interface StringLiteral extends LiteralExpression, TypeNode {
+        _stringLiteralBrand: any;
     }
     interface Expression extends Node {
         _expressionBrand: any;
@@ -518,9 +519,6 @@ declare module "typescript" {
         isUnterminated?: boolean;
         hasExtendedUnicodeEscape?: boolean;
     }
-    interface StringLiteralExpression extends LiteralExpression {
-        _stringLiteralExpressionBrand: any;
-    }
     interface TemplateExpression extends PrimaryExpression {
         head: LiteralExpression;
         templateSpans: NodeArray<TemplateSpan>;
@@ -555,7 +553,7 @@ declare module "typescript" {
         typeArguments?: NodeArray<TypeNode>;
         arguments: NodeArray<Expression>;
     }
-    interface HeritageClauseElement extends Node {
+    interface HeritageClauseElement extends TypeNode {
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
     }
@@ -1007,12 +1005,14 @@ declare module "typescript" {
     }
     interface InterfaceType extends ObjectType {
         typeParameters: TypeParameter[];
-        baseTypes: ObjectType[];
         declaredProperties: Symbol[];
         declaredCallSignatures: Signature[];
         declaredConstructSignatures: Signature[];
         declaredStringIndexType: Type;
         declaredNumberIndexType: Type;
+    }
+    interface InterfaceTypeWithBaseTypes extends InterfaceType {
+        baseTypes: ObjectType[];
     }
     interface TypeReference extends ObjectType {
         target: GenericType;
@@ -1214,12 +1214,8 @@ declare module "typescript" {
     function getNodeConstructor(kind: SyntaxKind): new () => Node;
     function createNode(kind: SyntaxKind): Node;
     function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T;
-    function modifierToFlag(token: SyntaxKind): NodeFlags;
-    function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
-    function isEvalOrArgumentsIdentifier(node: Node): boolean;
     function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
-    function isLeftHandSideExpression(expr: Expression): boolean;
-    function isAssignmentOperator(token: SyntaxKind): boolean;
+    function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
 }
 declare module "typescript" {
     /** The version of the TypeScript compiler release */

@@ -389,7 +389,7 @@ module ts {
 
     export interface Identifier extends PrimaryExpression {
         text: string;                                  // Text of identifier (with escapes converted to characters)
-        originalKeywordKind?: SyntaxKind;     // Original syntaxKind which get set so that we can report an error later
+        originalKeywordKind?: SyntaxKind;              // Original syntaxKind which get set so that we can report an error later
     }
 
     export interface QualifiedName extends Node {
@@ -596,7 +596,11 @@ module ts {
         type: TypeNode;
     }
 
-    export interface StringLiteralTypeNode extends LiteralExpression, TypeNode { }
+    // Note that a StringLiteral AST node is both an Expression and a TypeNode.  The latter is
+    // because string literals can appear in the type annotation of a parameter node.
+    export interface StringLiteral extends LiteralExpression, TypeNode {
+        _stringLiteralBrand: any;
+    }
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
     // Consider 'Expression'.  Without the brand, 'Expression' is actually no different
@@ -689,10 +693,6 @@ module ts {
         hasExtendedUnicodeEscape?: boolean;
     }
 
-    export interface StringLiteralExpression extends LiteralExpression {
-        _stringLiteralExpressionBrand: any;
-    }
-
     export interface TemplateExpression extends PrimaryExpression {
         head: LiteralExpression;
         templateSpans: NodeArray<TemplateSpan>;
@@ -739,7 +739,7 @@ module ts {
         arguments: NodeArray<Expression>;
     }
 
-    export interface HeritageClauseElement extends Node {
+    export interface HeritageClauseElement extends TypeNode {
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
     }
@@ -1485,12 +1485,15 @@ module ts {
     // Class and interface types (TypeFlags.Class and TypeFlags.Interface)
     export interface InterfaceType extends ObjectType {
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
-        baseTypes: ObjectType[];                   // Base types
         declaredProperties: Symbol[];              // Declared members
         declaredCallSignatures: Signature[];       // Declared call signatures
         declaredConstructSignatures: Signature[];  // Declared construct signatures
         declaredStringIndexType: Type;             // Declared string index type
         declaredNumberIndexType: Type;             // Declared numeric index type
+    }
+
+    export interface InterfaceTypeWithBaseTypes extends InterfaceType {
+        baseTypes: ObjectType[];
     }
 
     // Type references (TypeFlags.Reference)

@@ -15,6 +15,14 @@ tests/cases/compiler/reservedWords2.ts(5,10): error TS1003: Identifier expected.
 tests/cases/compiler/reservedWords2.ts(5,18): error TS1005: '=>' expected.
 tests/cases/compiler/reservedWords2.ts(6,7): error TS2300: Duplicate identifier '(Missing)'.
 tests/cases/compiler/reservedWords2.ts(6,8): error TS1003: Identifier expected.
+tests/cases/compiler/reservedWords2.ts(7,11): error TS2300: Duplicate identifier '(Missing)'.
+tests/cases/compiler/reservedWords2.ts(7,11): error TS1005: ':' expected.
+tests/cases/compiler/reservedWords2.ts(7,19): error TS2300: Duplicate identifier '(Missing)'.
+tests/cases/compiler/reservedWords2.ts(7,19): error TS1005: ':' expected.
+tests/cases/compiler/reservedWords2.ts(8,10): error TS2300: Duplicate identifier '(Missing)'.
+tests/cases/compiler/reservedWords2.ts(8,10): error TS1005: ':' expected.
+tests/cases/compiler/reservedWords2.ts(8,30): error TS2300: Duplicate identifier '(Missing)'.
+tests/cases/compiler/reservedWords2.ts(8,30): error TS1005: ':' expected.
 tests/cases/compiler/reservedWords2.ts(9,6): error TS1181: Array element destructuring pattern expected.
 tests/cases/compiler/reservedWords2.ts(9,14): error TS1005: ';' expected.
 tests/cases/compiler/reservedWords2.ts(9,18): error TS1005: '(' expected.
@@ -23,7 +31,7 @@ tests/cases/compiler/reservedWords2.ts(10,5): error TS2300: Duplicate identifier
 tests/cases/compiler/reservedWords2.ts(10,6): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/reservedWords2.ts (23 errors) ====
+==== tests/cases/compiler/reservedWords2.ts (31 errors) ====
     import while = require("dfdf");
     ~~~~~~
 !!! error TS1148: Cannot compile external modules unless the '--module' flag is provided.
@@ -65,7 +73,23 @@ tests/cases/compiler/reservedWords2.ts(10,6): error TS1003: Identifier expected.
            ~~~~
 !!! error TS1003: Identifier expected.
     var {while, return} = { while: 1, return: 2 };
+              
+!!! error TS2300: Duplicate identifier '(Missing)'.
+              ~
+!!! error TS1005: ':' expected.
+                      
+!!! error TS2300: Duplicate identifier '(Missing)'.
+                      ~
+!!! error TS1005: ':' expected.
     var {this, switch: { continue} } = { this: 1, switch: { continue: 2 }};
+             
+!!! error TS2300: Duplicate identifier '(Missing)'.
+             ~
+!!! error TS1005: ':' expected.
+                                 
+!!! error TS2300: Duplicate identifier '(Missing)'.
+                                 ~
+!!! error TS1005: ':' expected.
     var [debugger, if] = [1, 2];
          ~~~~~~~~
 !!! error TS1181: Array element destructuring pattern expected.

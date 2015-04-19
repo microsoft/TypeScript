@@ -1803,7 +1803,7 @@ module ts {
         function parseParameterType(): TypeNode {
             if (parseOptional(SyntaxKind.ColonToken)) {
                 return token === SyntaxKind.StringLiteral
-                    ? <StringLiteralTypeNode>parseLiteralNode(/*internName:*/ true)
+                    ? <StringLiteral>parseLiteralNode(/*internName:*/ true)
                     : parseType();
             }
 
@@ -3859,13 +3859,14 @@ module ts {
         function parseObjectBindingElement(): BindingElement {
             let node = <BindingElement>createNode(SyntaxKind.BindingElement);
             // TODO(andersh): Handle computed properties
-            let id = parsePropertyName();
-            if (id.kind === SyntaxKind.Identifier && token !== SyntaxKind.ColonToken) {
-                node.name = <Identifier>id;
+            let tokenIsIdentifier = isIdentifier();
+            let propertyName = parsePropertyName();
+            if (tokenIsIdentifier && token !== SyntaxKind.ColonToken) {
+                node.name = <Identifier>propertyName;
             }
             else {
                 parseExpected(SyntaxKind.ColonToken);
-                node.propertyName = <Identifier>id;
+                node.propertyName = <Identifier>propertyName;
                 node.name = parseIdentifierOrPattern();
             }
             node.initializer = parseInitializer(/*inParameter*/ false);
