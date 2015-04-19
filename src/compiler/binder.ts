@@ -575,10 +575,8 @@ module ts {
                     bindChildren(node, 0, /*isBlockScopeContainer*/ true);
                     break;
                 default:
-                    let saveParent = parent;
-                    parent = node;
-                    forEachChild(node, bind);
-                    parent = saveParent;
+                    bindChildren(node, 0, /*isBlockScopeContainer*/ false);
+                    break;
             }
         }
 
