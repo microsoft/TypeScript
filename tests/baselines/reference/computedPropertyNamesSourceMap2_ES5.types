@@ -4,6 +4,8 @@ var v = {
 >{    ["hello"]() {        debugger;    }} : {}
 
     ["hello"]() {
+>"hello" : string
+
         debugger;
     }
 }

@@ -10,6 +10,7 @@ function foo(x: number | string | boolean) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number | boolean
+>"string" : string
 
         ? x
 >x : string
@@ -28,6 +29,7 @@ function foo(x: number | string | boolean) {
 >typeof x === "boolean" : boolean
 >typeof x : string
 >x : number | boolean
+>"boolean" : string
 
                 ? x.toString() // boolean
 >x.toString() : string
@@ -52,6 +54,7 @@ function foo2(x: number | string | boolean) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number | boolean
+>"string" : string
 
         ? x
 >x : string
@@ -71,6 +74,7 @@ function foo2(x: number | string | boolean) {
 >typeof x === "boolean" : boolean
 >typeof x : string
 >x : number | boolean
+>"boolean" : string
 
                 ? x.toString() // boolean
 >x.toString() : string
@@ -96,6 +100,7 @@ function foo3(x: number | string | boolean) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number | boolean
+>"string" : string
 
         ? x
 >x : string
@@ -114,6 +119,7 @@ function foo3(x: number | string | boolean) {
 >typeof x === "boolean" : boolean
 >typeof x : string
 >x : number | boolean
+>"boolean" : string
 
                 ? x.toString() // boolean
 >x.toString() : string
@@ -138,6 +144,7 @@ function foo4(x: number | string | boolean) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number | boolean
+>"string" : string
 
         ? x
 >x : string
@@ -157,6 +164,7 @@ function foo4(x: number | string | boolean) {
 >typeof x === "boolean" : boolean
 >typeof x : string
 >x : number | boolean
+>"boolean" : string
 
                 ? x.toString() // boolean
 >x.toString() : string
@@ -182,6 +190,7 @@ function foo5(x: number | string | boolean) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number | boolean
+>"string" : string
 
         var y = x; // string;
 >y : string
@@ -216,6 +225,7 @@ module m {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number | boolean
+>"string" : string
 
             y = x // string;
 >y = x : string
@@ -230,6 +240,7 @@ module m {
 >typeof x === "boolean" : boolean
 >typeof x : string
 >x : number | boolean
+>"boolean" : string
 
             ? x.toString() // boolean
 >x.toString() : string
@@ -266,6 +277,7 @@ module m1 {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number | boolean
+>"string" : string
 
             y = x // string;
 >y = x : string
@@ -280,6 +292,7 @@ module m1 {
 >typeof x === "boolean" : boolean
 >typeof x : string
 >x : number | boolean
+>"boolean" : string
 
             ? x.toString() // boolean
 >x.toString() : string

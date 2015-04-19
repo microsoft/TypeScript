@@ -18,6 +18,7 @@ export class C implements I {
 
     prop = "hello";
 >prop : string
+>"hello" : string
 }
 export class C2 implements I2 {
 >C2 : C2
@@ -25,12 +26,13 @@ export class C2 implements I2 {
 
     prop2 = "world";
 >prop2 : string
+>"world" : string
 }
 
 === tests/cases/compiler/client.ts ===
 import { C, I, C2 } from "server"; // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
 >C : typeof C
->I : unknown
+>I : any
 >C2 : typeof C2
 
 export type cValInterface = I;

@@ -1,3 +1,4 @@
+/* @internal */
 module ts {
     // Note(cyrusn): this enum is ordered from strongest match type to weakest match type.
     export enum PatternMatchKind {

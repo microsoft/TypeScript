@@ -1,0 +1,70 @@
+=== tests/cases/compiler/es6ModuleConst.ts ===
+export const a = "hello";
+>a : Symbol(a, Decl(es6ModuleConst.ts, 0, 12))
+
+export const x: string = a, y = x;
+>x : Symbol(x, Decl(es6ModuleConst.ts, 1, 12))
+>a : Symbol(a, Decl(es6ModuleConst.ts, 0, 12))
+>y : Symbol(y, Decl(es6ModuleConst.ts, 1, 27))
+>x : Symbol(x, Decl(es6ModuleConst.ts, 1, 12))
+
+const b = y;
+>b : Symbol(b, Decl(es6ModuleConst.ts, 2, 5))
+>y : Symbol(y, Decl(es6ModuleConst.ts, 1, 27))
+
+const c: string = b, d = c;
+>c : Symbol(c, Decl(es6ModuleConst.ts, 3, 5))
+>b : Symbol(b, Decl(es6ModuleConst.ts, 2, 5))
+>d : Symbol(d, Decl(es6ModuleConst.ts, 3, 20))
+>c : Symbol(c, Decl(es6ModuleConst.ts, 3, 5))
+
+export module m1 {
+>m1 : Symbol(m1, Decl(es6ModuleConst.ts, 3, 27))
+
+    export const k = a;
+>k : Symbol(k, Decl(es6ModuleConst.ts, 5, 16))
+>a : Symbol(a, Decl(es6ModuleConst.ts, 0, 12))
+
+    export const l: string = b, m = k;
+>l : Symbol(l, Decl(es6ModuleConst.ts, 6, 16))
+>b : Symbol(b, Decl(es6ModuleConst.ts, 2, 5))
+>m : Symbol(m, Decl(es6ModuleConst.ts, 6, 31))
+>k : Symbol(k, Decl(es6ModuleConst.ts, 5, 16))
+
+    const n = m1.k;
+>n : Symbol(n, Decl(es6ModuleConst.ts, 7, 9))
+>m1.k : Symbol(k, Decl(es6ModuleConst.ts, 5, 16))
+>m1 : Symbol(m1, Decl(es6ModuleConst.ts, 3, 27))
+>k : Symbol(k, Decl(es6ModuleConst.ts, 5, 16))
+
+    const o: string = n, p = k;
+>o : Symbol(o, Decl(es6ModuleConst.ts, 8, 9))
+>n : Symbol(n, Decl(es6ModuleConst.ts, 7, 9))
+>p : Symbol(p, Decl(es6ModuleConst.ts, 8, 24))
+>k : Symbol(k, Decl(es6ModuleConst.ts, 5, 16))
+}
+module m2 {
+>m2 : Symbol(m2, Decl(es6ModuleConst.ts, 9, 1))
+
+    export const k = a;
+>k : Symbol(k, Decl(es6ModuleConst.ts, 11, 16))
+>a : Symbol(a, Decl(es6ModuleConst.ts, 0, 12))
+
+    export const l: string = b, m = k;
+>l : Symbol(l, Decl(es6ModuleConst.ts, 12, 16))
+>b : Symbol(b, Decl(es6ModuleConst.ts, 2, 5))
+>m : Symbol(m, Decl(es6ModuleConst.ts, 12, 31))
+>k : Symbol(k, Decl(es6ModuleConst.ts, 11, 16))
+
+    const n = m1.k;
+>n : Symbol(n, Decl(es6ModuleConst.ts, 13, 9))
+>m1.k : Symbol(m1.k, Decl(es6ModuleConst.ts, 5, 16))
+>m1 : Symbol(m1, Decl(es6ModuleConst.ts, 3, 27))
+>k : Symbol(m1.k, Decl(es6ModuleConst.ts, 5, 16))
+
+    const o: string = n, p = k;
+>o : Symbol(o, Decl(es6ModuleConst.ts, 14, 9))
+>n : Symbol(n, Decl(es6ModuleConst.ts, 13, 9))
+>p : Symbol(p, Decl(es6ModuleConst.ts, 14, 24))
+>k : Symbol(k, Decl(es6ModuleConst.ts, 11, 16))
+}

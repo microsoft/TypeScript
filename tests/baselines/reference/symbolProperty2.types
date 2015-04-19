@@ -10,6 +10,7 @@ var x = {
 
     [s]: 0,
 >s : symbol
+>0 : number
 
     [s]() { },
 >s : symbol
@@ -18,5 +19,6 @@ var x = {
 >s : symbol
 
         return 0;
+>0 : number
     }
 }

@@ -8,6 +8,6 @@ class C {
 >C : C
 
     @dec prop;
->dec : unknown
+>dec : (target: any, propertyKey: string) => void
 >prop : any
 }

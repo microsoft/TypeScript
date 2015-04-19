@@ -28,6 +28,7 @@ class A<T> {
 >S : S
 
         return null;
+>null : null
     }
 }
 

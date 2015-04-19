@@ -215,6 +215,7 @@ Date.prototype.setTime(0);
 >Date : DateConstructor
 >prototype : Date
 >setTime : (time: number) => number
+>0 : number
 
 Date.prototype.setMilliseconds(0);
 >Date.prototype.setMilliseconds(0) : number
@@ -223,6 +224,7 @@ Date.prototype.setMilliseconds(0);
 >Date : DateConstructor
 >prototype : Date
 >setMilliseconds : (ms: number) => number
+>0 : number
 
 Date.prototype.setUTCMilliseconds(0);
 >Date.prototype.setUTCMilliseconds(0) : number
@@ -231,6 +233,7 @@ Date.prototype.setUTCMilliseconds(0);
 >Date : DateConstructor
 >prototype : Date
 >setUTCMilliseconds : (ms: number) => number
+>0 : number
 
 Date.prototype.setSeconds(0);
 >Date.prototype.setSeconds(0) : number
@@ -239,6 +242,7 @@ Date.prototype.setSeconds(0);
 >Date : DateConstructor
 >prototype : Date
 >setSeconds : (sec: number, ms?: number) => number
+>0 : number
 
 Date.prototype.setUTCSeconds(0);
 >Date.prototype.setUTCSeconds(0) : number
@@ -247,6 +251,7 @@ Date.prototype.setUTCSeconds(0);
 >Date : DateConstructor
 >prototype : Date
 >setUTCSeconds : (sec: number, ms?: number) => number
+>0 : number
 
 Date.prototype.setMinutes(0);
 >Date.prototype.setMinutes(0) : number
@@ -255,6 +260,7 @@ Date.prototype.setMinutes(0);
 >Date : DateConstructor
 >prototype : Date
 >setMinutes : (min: number, sec?: number, ms?: number) => number
+>0 : number
 
 Date.prototype.setUTCMinutes(0);
 >Date.prototype.setUTCMinutes(0) : number
@@ -263,6 +269,7 @@ Date.prototype.setUTCMinutes(0);
 >Date : DateConstructor
 >prototype : Date
 >setUTCMinutes : (min: number, sec?: number, ms?: number) => number
+>0 : number
 
 Date.prototype.setHours(0);
 >Date.prototype.setHours(0) : number
@@ -271,6 +278,7 @@ Date.prototype.setHours(0);
 >Date : DateConstructor
 >prototype : Date
 >setHours : (hours: number, min?: number, sec?: number, ms?: number) => number
+>0 : number
 
 Date.prototype.setUTCHours(0);
 >Date.prototype.setUTCHours(0) : number
@@ -279,6 +287,7 @@ Date.prototype.setUTCHours(0);
 >Date : DateConstructor
 >prototype : Date
 >setUTCHours : (hours: number, min?: number, sec?: number, ms?: number) => number
+>0 : number
 
 Date.prototype.setDate(0);
 >Date.prototype.setDate(0) : number
@@ -287,6 +296,7 @@ Date.prototype.setDate(0);
 >Date : DateConstructor
 >prototype : Date
 >setDate : (date: number) => number
+>0 : number
 
 Date.prototype.setUTCDate(0);
 >Date.prototype.setUTCDate(0) : number
@@ -295,6 +305,7 @@ Date.prototype.setUTCDate(0);
 >Date : DateConstructor
 >prototype : Date
 >setUTCDate : (date: number) => number
+>0 : number
 
 Date.prototype.setMonth(0);
 >Date.prototype.setMonth(0) : number
@@ -303,6 +314,7 @@ Date.prototype.setMonth(0);
 >Date : DateConstructor
 >prototype : Date
 >setMonth : (month: number, date?: number) => number
+>0 : number
 
 Date.prototype.setUTCMonth(0);
 >Date.prototype.setUTCMonth(0) : number
@@ -311,6 +323,7 @@ Date.prototype.setUTCMonth(0);
 >Date : DateConstructor
 >prototype : Date
 >setUTCMonth : (month: number, date?: number) => number
+>0 : number
 
 Date.prototype.setFullYear(0);
 >Date.prototype.setFullYear(0) : number
@@ -319,6 +332,7 @@ Date.prototype.setFullYear(0);
 >Date : DateConstructor
 >prototype : Date
 >setFullYear : (year: number, month?: number, date?: number) => number
+>0 : number
 
 Date.prototype.setUTCFullYear(0);
 >Date.prototype.setUTCFullYear(0) : number
@@ -327,6 +341,7 @@ Date.prototype.setUTCFullYear(0);
 >Date : DateConstructor
 >prototype : Date
 >setUTCFullYear : (year: number, month?: number, date?: number) => number
+>0 : number
 
 Date.prototype.toUTCString();
 >Date.prototype.toUTCString() : string
@@ -351,4 +366,5 @@ Date.prototype.toJSON(null);
 >Date : DateConstructor
 >prototype : Date
 >toJSON : (key?: any) => string
+>null : null
 

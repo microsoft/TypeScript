@@ -12,6 +12,9 @@ a.test1(null, null, null);
 >a.test1 : a1.connectModule
 >a : { (): a1.connectExport; test1: a1.connectModule; test2(): a1.connectModule; }
 >test1 : a1.connectModule
+>null : null
+>null : null
+>null : null
 
 === tests/cases/compiler/declFileImportModuleWithExportAssignment_0.ts ===
 
@@ -45,17 +48,17 @@ var m2: {
 >m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
 
     (): m2.connectExport;
->m2 : unknown
+>m2 : any
 >connectExport : m2.connectExport
 
     test1: m2.connectModule;
 >test1 : m2.connectModule
->m2 : unknown
+>m2 : any
 >connectModule : m2.connectModule
 
     test2(): m2.connectModule;
 >test2 : () => m2.connectModule
->m2 : unknown
+>m2 : any
 >connectModule : m2.connectModule
 
 };

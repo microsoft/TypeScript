@@ -52,6 +52,7 @@ if (typeof strOrC === "Object") {
 >typeof strOrC === "Object" : boolean
 >typeof strOrC : string
 >strOrC : string | C
+>"Object" : string
 
     c = strOrC; // C
 >c = strOrC : C
@@ -68,6 +69,7 @@ if (typeof numOrC === "Object") {
 >typeof numOrC === "Object" : boolean
 >typeof numOrC : string
 >numOrC : number | C
+>"Object" : string
 
     c = numOrC; // C
 >c = numOrC : C
@@ -84,6 +86,7 @@ if (typeof boolOrC === "Object") {
 >typeof boolOrC === "Object" : boolean
 >typeof boolOrC : string
 >boolOrC : boolean | C
+>"Object" : string
 
     c = boolOrC; // C
 >c = boolOrC : C
@@ -102,6 +105,7 @@ if (typeof strOrNumOrBool === "Object") {
 >typeof strOrNumOrBool === "Object" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
+>"Object" : string
 
     var q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
 >q1 : string | number | boolean
@@ -120,6 +124,7 @@ if (typeof strOrC !== "Object") {
 >typeof strOrC !== "Object" : boolean
 >typeof strOrC : string
 >strOrC : string | C
+>"Object" : string
 
     var r2: string | C = strOrC; // string | C
 >r2 : string | C
@@ -136,6 +141,7 @@ if (typeof numOrC !== "Object") {
 >typeof numOrC !== "Object" : boolean
 >typeof numOrC : string
 >numOrC : number | C
+>"Object" : string
 
     var r3: number | C = numOrC; // number | C
 >r3 : number | C
@@ -152,6 +158,7 @@ if (typeof boolOrC !== "Object") {
 >typeof boolOrC !== "Object" : boolean
 >typeof boolOrC : string
 >boolOrC : boolean | C
+>"Object" : string
 
     var r4: boolean | C = boolOrC; // boolean | C
 >r4 : boolean | C
@@ -170,6 +177,7 @@ if (typeof strOrNumOrBool !== "Object") {
 >typeof strOrNumOrBool !== "Object" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
+>"Object" : string
 
     var q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
 >q1 : string | number | boolean

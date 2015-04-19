@@ -623,10 +623,6 @@
         "category": "Error",
         "code": 1200
     },
-    "A type annotation on an export statement is only allowed in an ambient external module declaration.": {
-        "category": "Error",
-        "code": 1201
-    },
     "Import assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"' or 'import d from \"mod\"' instead.": {
         "category": "Error",
         "code": 1202
@@ -661,11 +657,35 @@
     },
     "Invalid use of '{0}'. Class definitions are automatically in strict mode.": {
         "category": "Error",
-        "code":  1210
+        "code": 1210
     },
     "A class declaration without the 'default' modifier must have a name": {
         "category": "Error",
         "code": 1211
+    },
+    "Identifier expected. '{0}' is a reserved word in strict mode": {
+        "category": "Error",
+        "code": 1212
+    },
+    "Identifier expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1213
+    },
+    "Identifier expected. '{0}' is a reserved word in strict mode. External Module is automatically in strict mode.": {
+        "category": "Error",
+        "code": 1214
+    },
+    "Type expected. '{0}' is a reserved word in strict mode": {
+        "category": "Error",
+        "code": 1215
+    },
+    "Type expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode.": {
+        "category": "Error",
+        "code": 1216
+    },
+    "Type expected. '{0}' is a reserved word in strict mode. Module is automatically in strict mode.": {
+        "category": "Error",
+        "code": 1217
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1399,7 +1419,7 @@
         "category": "Error",
         "code": 2495
     },
-    "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression.": {
+    "The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression.": {
         "category": "Error",
         "code": 2496
     },
@@ -1418,6 +1438,10 @@
     "A class can only implement an identifier/qualified-name with optional type arguments.": {
         "category": "Error",
         "code": 2500
+    },
+    "A rest element cannot contain a binding pattern.": {
+        "category": "Error",
+        "code": 2501
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2023,19 +2047,19 @@
     },
     "'import ... =' can only be used in a .ts file.": {
         "category": "Error",
-        "code":  8002
+        "code": 8002
     },
     "'export=' can only be used in a .ts file.": {
         "category": "Error",
-        "code":  8003
+        "code": 8003
     },
     "'type parameter declarations' can only be used in a .ts file.": {
         "category": "Error",
-        "code":  8004
+        "code": 8004
     },
     "'implements clauses' can only be used in a .ts file.": {
         "category": "Error",
-        "code":  8005
+        "code": 8005
     },
     "'interface declarations' can only be used in a .ts file.": {
         "category": "Error",

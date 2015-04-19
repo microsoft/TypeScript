@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser642331_1.ts(4,18): error TS1003: Identifier expected.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser642331_1.ts(4,18): error TS1213: Identifier expected. 'static' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser642331_1.ts (1 errors) ====
@@ -7,6 +7,6 @@ tests/cases/conformance/parser/ecmascript5/RegressionTests/parser642331_1.ts(4,1
     class test {
         constructor (static) { }
                      ~~~~~~
-!!! error TS1003: Identifier expected.
+!!! error TS1213: Identifier expected. 'static' is a reserved word in strict mode. Class definitions are automatically in strict mode.
     }
     

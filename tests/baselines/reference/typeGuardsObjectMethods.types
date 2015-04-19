@@ -30,6 +30,7 @@ var obj1 = {
 >typeof var1 === "string" : boolean
 >typeof var1 : string
 >var1 : string | number
+>"string" : string
 >var1.length : number
 >var1 : string
 >length : number
@@ -45,6 +46,7 @@ var obj1 = {
 >typeof var2 === "string" : boolean
 >typeof var2 : string
 >var2 : string | number
+>"string" : string
 >var2.length : number
 >var2 : string
 >length : number
@@ -57,6 +59,7 @@ var obj1 = {
 >typeof param === "string" : boolean
 >typeof param : string
 >param : string | number
+>"string" : string
 >param.length : number
 >param : string
 >length : number
@@ -76,6 +79,7 @@ var obj1 = {
 >typeof var1 === "string" : boolean
 >typeof var1 : string
 >var1 : string | number
+>"string" : string
 >var1.length : number
 >var1 : string
 >length : number
@@ -91,6 +95,7 @@ var obj1 = {
 >typeof var2 === "string" : boolean
 >typeof var2 : string
 >var2 : string | number
+>"string" : string
 >var2.length : number
 >var2 : string
 >length : number
@@ -111,6 +116,7 @@ var obj1 = {
 >typeof var1 === "string" : boolean
 >typeof var1 : string
 >var1 : string | number
+>"string" : string
 >var1.length : number
 >var1 : string
 >length : number
@@ -126,6 +132,7 @@ var obj1 = {
 >typeof var2 === "string" : boolean
 >typeof var2 : string
 >var2 : string | number
+>"string" : string
 >var2.length : number
 >var2 : string
 >length : number
@@ -138,6 +145,7 @@ var obj1 = {
 >typeof param === "string" : boolean
 >typeof param : string
 >param : string | number
+>"string" : string
 >param.length : number
 >param : string
 >length : number
@@ -155,6 +163,7 @@ strOrNum = typeof obj1.method(strOrNum) === "string" && obj1.method(strOrNum);
 >obj1 : { method(param: string | number): string | number; prop: string | number; }
 >method : (param: string | number) => string | number
 >strOrNum : string | number
+>"string" : string
 >obj1.method(strOrNum) : string | number
 >obj1.method : (param: string | number) => string | number
 >obj1 : { method(param: string | number): string | number; prop: string | number; }
@@ -171,6 +180,7 @@ strOrNum = typeof obj1.prop === "string" && obj1.prop;
 >obj1.prop : string | number
 >obj1 : { method(param: string | number): string | number; prop: string | number; }
 >prop : string | number
+>"string" : string
 >obj1.prop : string | number
 >obj1 : { method(param: string | number): string | number; prop: string | number; }
 >prop : string | number

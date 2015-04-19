@@ -7,6 +7,7 @@ class foo<T>
 >bar : () => foo2<T[]>
 >foo2 : foo2<T>
 >T : T
+>null : null
 }
  
 class foo2<T> extends foo<T> {

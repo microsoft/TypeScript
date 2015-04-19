@@ -11,6 +11,6 @@ class C {
 
     method(@dec p: number) {}
 >method : (p: number) => void
->dec : unknown
+>dec : (target: Function, propertyKey: string | symbol, parameterIndex: number) => void
 >p : number
 }

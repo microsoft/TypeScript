@@ -18,9 +18,11 @@ class StringIterator {
 
             value: "",
 >value : string
+>"" : string
 
             done: false
 >done : boolean
+>false : boolean
 
         };
     }

@@ -74,6 +74,8 @@ class parser {
 >bName : string
 
                 return 1;
+>1 : number
+
             } else if (aName < bName) {
 >aName < bName : boolean
 >aName : string
@@ -81,9 +83,11 @@ class parser {
 
                 return -1;
 >-1 : number
+>1 : number
 
             } else {
                 return 0;
+>0 : number
             }
         });
 	}

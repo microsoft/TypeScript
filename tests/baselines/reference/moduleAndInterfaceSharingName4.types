@@ -4,12 +4,12 @@ declare module D3 {
 
     var x: D3.Color.Color;
 >x : Color.Color
->D3 : unknown
->Color : unknown
+>D3 : any
+>Color : any
 >Color : Color.Color
 
     module Color {
->Color : unknown
+>Color : any
 
         export interface Color {
 >Color : Color

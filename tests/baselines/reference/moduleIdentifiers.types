@@ -9,6 +9,7 @@ module M {
 
     export var a = 1
 >a : number
+>1 : number
 }
 
 //var p: M.P;

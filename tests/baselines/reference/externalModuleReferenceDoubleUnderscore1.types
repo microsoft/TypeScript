@@ -15,23 +15,30 @@ declare module '__timezonecomplete/basics' {
 
         Second = 0,
 >Second : TimeUnit
+>0 : number
 
         Minute = 1,
 >Minute : TimeUnit
+>1 : number
 
         Hour = 2,
 >Hour : TimeUnit
+>2 : number
 
         Day = 3,
 >Day : TimeUnit
+>3 : number
 
         Week = 4,
 >Week : TimeUnit
+>4 : number
 
         Month = 5,
 >Month : TimeUnit
+>5 : number
 
         Year = 6,
 >Year : TimeUnit
+>6 : number
     }
 }

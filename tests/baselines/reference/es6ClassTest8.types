@@ -36,6 +36,7 @@ class Vector {
 >v : Vector
 >Vector : Vector
 >Vector : Vector
+>null : null
 
     static minus(v1:Vector, v2:Vector):Vector {return null;}
 >minus : (v1: Vector, v2: Vector) => Vector
@@ -44,6 +45,7 @@ class Vector {
 >v2 : Vector
 >Vector : Vector
 >Vector : Vector
+>null : null
 
     static times(v1:Vector, v2:Vector):Vector {return null;}
 >times : (v1: Vector, v2: Vector) => Vector
@@ -52,6 +54,7 @@ class Vector {
 >v2 : Vector
 >Vector : Vector
 >Vector : Vector
+>null : null
 
     static cross(v1:Vector, v2:Vector):Vector {return null;}
 >cross : (v1: Vector, v2: Vector) => Vector
@@ -60,6 +63,7 @@ class Vector {
 >v2 : Vector
 >Vector : Vector
 >Vector : Vector
+>null : null
 
     constructor(public x: number,
 >x : number
@@ -78,6 +82,7 @@ class Vector {
 >v2 : Vector
 >Vector : Vector
 >Vector : Vector
+>null : null
 
 }              
 
@@ -106,7 +111,10 @@ class Camera {
 >down : Vector
 >new Vector(0.0, -1.0, 0.0) : Vector
 >Vector : typeof Vector
+>0.0 : number
 >-1.0 : number
+>1.0 : number
+>0.0 : number
 
         this.forward = Vector.norm(Vector.minus(lookAt,this.pos));
 >this.forward = Vector.norm(Vector.minus(lookAt,this.pos)) : Vector

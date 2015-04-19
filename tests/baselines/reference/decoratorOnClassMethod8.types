@@ -10,6 +10,6 @@ class C {
 >C : C
 
     @dec method() {}
->dec : unknown
+>dec : <T>(target: T) => T
 >method : () => void
 }

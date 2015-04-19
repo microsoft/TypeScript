@@ -2,4 +2,5 @@
 
 var x = /\u{DDDDD}/g;
 >x : RegExp
+>/\u{DDDDD}/g : RegExp
 

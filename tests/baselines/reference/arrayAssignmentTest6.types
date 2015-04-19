@@ -46,6 +46,7 @@ module Test {
 >ILineTokens : ILineTokens
 
             return null;
+>null : null
         }
     }    
 }

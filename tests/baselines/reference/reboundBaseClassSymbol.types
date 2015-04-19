@@ -8,6 +8,7 @@ module Foo {
 
     var A = 1;
 >A : number
+>1 : number
 
     interface B extends A { b: string; } 
 >B : B

@@ -5,5 +5,5 @@ function* foo() {
 
 //// [YieldExpression5_es6.js]
 function foo() {
-    ;
+    yield* ;
 }

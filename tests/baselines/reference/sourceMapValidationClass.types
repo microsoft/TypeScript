@@ -12,15 +12,18 @@ class Greeter {
         return "<h1>" + this.greeting + "</h1>";
 >"<h1>" + this.greeting + "</h1>" : string
 >"<h1>" + this.greeting : string
+>"<h1>" : string
 >this.greeting : string
 >this : Greeter
 >greeting : string
+>"</h1>" : string
     }
     private x: string;
 >x : string
 
     private x1: number = 10;
 >x1 : number
+>10 : number
 
     private fn() {
 >fn : () => string

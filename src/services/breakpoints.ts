@@ -3,6 +3,7 @@
 
 /// <reference path='services.ts' />
 
+/* @internal */
 module ts.BreakpointResolver {
     /**
      * Get the breakpoint span in given sourceFile
@@ -173,10 +174,6 @@ module ts.BreakpointResolver {
                         return textSpan(node, (<ThrowStatement>node).expression);
 
                     case SyntaxKind.ExportAssignment:
-                        if (!(<ExportAssignment>node).expression) {
-                            return undefined;
-                        }
-
                         // span on export = id
                         return textSpan(node, (<ExportAssignment>node).expression);
 

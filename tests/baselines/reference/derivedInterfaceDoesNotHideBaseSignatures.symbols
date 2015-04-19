@@ -1,0 +1,18 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/derivedInterfaceDoesNotHideBaseSignatures.ts ===
+// Derived interfaces no longer hide signatures from base types, so these signatures are always compatible.
+interface Base {
+>Base : Symbol(Base, Decl(derivedInterfaceDoesNotHideBaseSignatures.ts, 0, 0))
+
+    (): string;
+    new (x: string): number;
+>x : Symbol(x, Decl(derivedInterfaceDoesNotHideBaseSignatures.ts, 3, 9))
+}
+
+interface Derived extends Base {
+>Derived : Symbol(Derived, Decl(derivedInterfaceDoesNotHideBaseSignatures.ts, 4, 1))
+>Base : Symbol(Base, Decl(derivedInterfaceDoesNotHideBaseSignatures.ts, 0, 0))
+
+    (): number;
+    new (x: string): string;
+>x : Symbol(x, Decl(derivedInterfaceDoesNotHideBaseSignatures.ts, 8, 9))
+}

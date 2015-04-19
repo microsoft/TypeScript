@@ -1,6 +1,7 @@
 /// <reference path="checker.ts"/>
 /// <reference path="declarationEmitter.ts"/>
 
+/* @internal */
 module ts {
     // represents one LexicalEnvironment frame to store unique generated names
     interface ScopeFrame {
@@ -20,7 +21,6 @@ module ts {
         _n        = 0x20000000,  // Use/preference flag for '_n'
     }
 
-    // @internal
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
         // emit output for the __extends helper function
@@ -1097,6 +1097,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                                 default:
                                     return Comparison.LessThan;
                             }
+                        case SyntaxKind.YieldExpression:
                         case SyntaxKind.ConditionalExpression:
                             return Comparison.LessThan;
                         default:
@@ -1303,6 +1304,17 @@ var __param = this.__param || function(index, decorator) { return function (targ
             function emitSpreadElementExpression(node: SpreadElementExpression) {
                 write("...");
                 emit((<SpreadElementExpression>node).expression);
+            }
+
+            function emitYieldExpression(node: YieldExpression) {
+                write(tokenToString(SyntaxKind.YieldKeyword));
+                if (node.asteriskToken) {
+                    write("*");
+                }
+                if (node.expression) {
+                    write(" ");
+                    emit(node.expression);
+                }
             }
 
             function needsParenthesisForPropertyAccessOrInvocation(node: Expression) {
@@ -1577,21 +1589,38 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 return result;
             }
 
-            function createPropertyAccessExpression(expression: LeftHandSideExpression, name: Identifier): PropertyAccessExpression {
+            function createPropertyAccessExpression(expression: Expression, name: Identifier): PropertyAccessExpression {
                 let result = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
-                result.expression = expression;
+                result.expression = parenthesizeForAccess(expression);
                 result.dotToken = createSynthesizedNode(SyntaxKind.DotToken);
                 result.name = name;
 
                 return result;
-             }
+            }
 
-            function createElementAccessExpression(expression: LeftHandSideExpression, argumentExpression: Expression): ElementAccessExpression {
+            function createElementAccessExpression(expression: Expression, argumentExpression: Expression): ElementAccessExpression {
                 let result = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression);
-                result.expression = expression;
+                result.expression = parenthesizeForAccess(expression);
                 result.argumentExpression = argumentExpression;
 
                 return result;
+            }
+
+            function parenthesizeForAccess(expr: Expression): LeftHandSideExpression {
+                // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
+                // to parenthesize the expression before a dot. The known exceptions are:
+                //
+                //    NewExpression:
+                //       new C.x        -> not the same as (new C).x
+                //    NumberLiteral
+                //       1.x            -> not the same as (1).x
+                //
+                if (isLeftHandSideExpression(expr) && expr.kind !== SyntaxKind.NewExpression && expr.kind !== SyntaxKind.NumericLiteral) {
+                    return <LeftHandSideExpression>expr;
+                }
+                let node = <ParenthesizedExpression>createSynthesizedNode(SyntaxKind.ParenthesizedExpression);
+                node.expression = expr;
+                return node;
             }
 
             function emitComputedPropertyName(node: ComputedPropertyName) {
@@ -1601,6 +1630,10 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function emitMethod(node: MethodDeclaration) {
+                if (languageVersion >= ScriptTarget.ES6 && node.asteriskToken) {
+                    write("*");
+                }
+
                 emit(node.name, /*allowGeneratedIdentifiers*/ false);
                 if (languageVersion < ScriptTarget.ES6) {
                     write(": function ");
@@ -2260,7 +2293,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     if (node.initializer.kind === SyntaxKind.ArrayLiteralExpression || node.initializer.kind === SyntaxKind.ObjectLiteralExpression) {
                         // This is a destructuring pattern, so call emitDestructuring instead of emit. Calling emit will not work, because it will cause
                         // the BinaryExpression to be passed in instead of the expression statement, which will cause emitDestructuring to crash.
-                        emitDestructuring(assignmentExpression, /*isAssignmentExpressionStatement*/ true, /*value*/ undefined, /*locationForCheckingExistingName*/ node);
+                        emitDestructuring(assignmentExpression, /*isAssignmentExpressionStatement*/ true, /*value*/ undefined);
                     }
                     else {
                         emitNodeWithoutSourceMap(assignmentExpression);
@@ -2436,7 +2469,11 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     writeLine();
                     emitStart(node);
                     if (node.flags & NodeFlags.Default) {
-                        write("exports.default");
+                        if (languageVersion === ScriptTarget.ES3) {
+                            write("exports[\"default\"]");
+                        } else {
+                            write("exports.default");
+                        }
                     }
                     else {
                         emitModuleMemberName(node);
@@ -2464,16 +2501,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
             }
 
-            /**
-             * If the root has a chance of being a synthesized node, callers should also pass a value for
-             * lowestNonSynthesizedAncestor. This should be an ancestor of root, it should not be synthesized,
-             * and there should not be a lower ancestor that introduces a scope. This node will be used as the
-             * location for ensuring that temporary names are unique.
-             */
-            function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration,
-                isAssignmentExpressionStatement: boolean,
-                value?: Expression,
-                lowestNonSynthesizedAncestor?: Node) {
+            function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration, isAssignmentExpressionStatement: boolean, value?: Expression) {
                 let emitCount = 0;
                 // An exported declaration is actually emitted as an assignment (to a property on the module object), so
                 // temporary variables in an exported declaration need to have real declarations elsewhere
@@ -2504,9 +2532,6 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
                 function ensureIdentifier(expr: Expression): Expression {
                     if (expr.kind !== SyntaxKind.Identifier) {
-                        // In case the root is a synthesized node, we need to pass lowestNonSynthesizedAncestor
-                        // as the location for determining uniqueness of the variable we are about to
-                        // generate.
                         let identifier = createTempVariable(TempFlags.Auto);
                         if (!isDeclaration) {
                             recordTempDeclaration(identifier);
@@ -2545,27 +2570,22 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     return node;
                 }
 
-                function parenthesizeForAccess(expr: Expression): LeftHandSideExpression {
-                    if (expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) {
-                        return <LeftHandSideExpression>expr;
-                    }
-                    let node = <ParenthesizedExpression>createSynthesizedNode(SyntaxKind.ParenthesizedExpression);
-                    node.expression = expr;
-                    return node;
-                }
-
-                function createPropertyAccess(object: Expression, propName: Identifier): Expression {
+                function createPropertyAccessForDestructuringProperty(object: Expression, propName: Identifier | LiteralExpression): Expression {
                     if (propName.kind !== SyntaxKind.Identifier) {
-                        return createElementAccess(object, propName);
+                        return createElementAccessExpression(object, propName);
                     }
-                    return createPropertyAccessExpression(parenthesizeForAccess(object), propName);
+
+                    return createPropertyAccessExpression(object, propName);
                 }
 
-                function createElementAccess(object: Expression, index: Expression): Expression {
-                    let node = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression);
-                    node.expression = parenthesizeForAccess(object);
-                    node.argumentExpression = index;
-                    return node;
+                function createSliceCall(value: Expression, sliceIndex: number): CallExpression {
+                    let call = <CallExpression>createSynthesizedNode(SyntaxKind.CallExpression);
+                    let sliceIdentifier = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+                    sliceIdentifier.text = "slice";
+                    call.expression = createPropertyAccessExpression(value, sliceIdentifier);
+                    call.arguments = <NodeArray<LiteralExpression>>createSynthesizedNodeArray();
+                    call.arguments[0] = createNumericLiteral(sliceIndex);
+                    return call;
                 }
 
                 function emitObjectLiteralAssignment(target: ObjectLiteralExpression, value: Expression) {
@@ -2578,8 +2598,8 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     for (let p of properties) {
                         if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                             // TODO(andersh): Computed property support
-                            let propName = <Identifier>((<PropertyAssignment>p).name);
-                            emitDestructuringAssignment((<PropertyAssignment>p).initializer || propName, createPropertyAccess(value, propName));
+                            let propName = <Identifier | LiteralExpression>((<PropertyAssignment>p).name);
+                            emitDestructuringAssignment((<PropertyAssignment>p).initializer || propName, createPropertyAccessForDestructuringProperty(value, propName));
                         }
                     }
                 }
@@ -2595,14 +2615,10 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         let e = elements[i];
                         if (e.kind !== SyntaxKind.OmittedExpression) {
                             if (e.kind !== SyntaxKind.SpreadElementExpression) {
-                                emitDestructuringAssignment(e, createElementAccess(value, createNumericLiteral(i)));
+                                emitDestructuringAssignment(e, createElementAccessExpression(value, createNumericLiteral(i)));
                             }
-                            else {
-                                if (i === elements.length - 1) {
-                                    value = ensureIdentifier(value);
-                                    emitAssignment(<Identifier>(<SpreadElementExpression>e).expression, value);
-                                    write(".slice(" + i + ")");
-                                }
+                            else if (i === elements.length - 1) {
+                                emitDestructuringAssignment((<SpreadElementExpression>e).expression, createSliceCall(value, i));
                             }
                         }
                     }
@@ -2666,19 +2682,15 @@ var __param = this.__param || function(index, decorator) { return function (targ
                             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                                 // Rewrite element to a declaration with an initializer that fetches property
                                 let propName = element.propertyName || <Identifier>element.name;
-                                emitBindingElement(element, createPropertyAccess(value, propName));
+                                emitBindingElement(element, createPropertyAccessForDestructuringProperty(value, propName));
                             }
                             else if (element.kind !== SyntaxKind.OmittedExpression) {
                                 if (!element.dotDotDotToken) {
                                     // Rewrite element to a declaration that accesses array element at index i
-                                    emitBindingElement(element, createElementAccess(value, createNumericLiteral(i)));
+                                    emitBindingElement(element, createElementAccessExpression(value, createNumericLiteral(i)));
                                 }
-                                else {
-                                    if (i === elements.length - 1) {
-                                        value = ensureIdentifier(value);
-                                        emitAssignment(<Identifier>element.name, value);
-                                        write(".slice(" + i + ")");
-                                    }
+                                else if (i === elements.length - 1) {
+                                    emitBindingElement(element, createSliceCall(value, i));
                                 }
                             }
                         }
@@ -2846,6 +2858,12 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 if (languageVersion < ScriptTarget.ES6) {
                     let tempIndex = 0;
                     forEach(node.parameters, p => {
+                        // A rest parameter cannot have a binding pattern or an initializer,
+                        // so let's just ignore it.
+                        if (p.dotDotDotToken) {
+                            return;
+                        }
+
                         if (isBindingPattern(p.name)) {
                             writeLine();
                             write("var ");
@@ -2876,6 +2894,12 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 if (languageVersion < ScriptTarget.ES6 && hasRestParameters(node)) {
                     let restIndex = node.parameters.length - 1;
                     let restParam = node.parameters[restIndex];
+
+                    // A rest parameter cannot have a binding pattern, so let's just ignore it if it does.
+                    if (isBindingPattern(restParam.name)) {
+                        return;
+                    }
+
                     let tempName = createTempVariable(TempFlags._i).text;
                     writeLine();
                     emitLeadingComments(restParam);
@@ -2960,7 +2984,12 @@ var __param = this.__param || function(index, decorator) { return function (targ
                             write("default ");
                         }
                     }
-                    write("function ");
+
+                    write("function");
+                    if (languageVersion >= ScriptTarget.ES6 && node.asteriskToken) {
+                        write("*");
+                    }
+                    write(" ");
                 }
 
                 if (shouldEmitFunctionName(node)) {
@@ -3343,6 +3372,9 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         }
                         else if (member.kind === SyntaxKind.SetAccessor) {
                             write("set ");
+                        }
+                        if ((<MethodDeclaration>member).asteriskToken) {
+                            write("*");
                         }
                         emit((<MethodDeclaration>member).name);
                         emitSignatureAndBody(<MethodDeclaration>member);
@@ -4183,6 +4215,10 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 return isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.separateCompilation);
             }
 
+            function isModuleMergedWithES6Class(node: ModuleDeclaration) {
+                return languageVersion === ScriptTarget.ES6 && !!(resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalModuleMergesWithClass);
+            }
+
             function emitModuleDeclaration(node: ModuleDeclaration) {
                 // Emit only if this module is non-ambient.
                 let shouldEmit = shouldEmitModuleDeclaration(node);
@@ -4191,15 +4227,19 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     return emitOnlyPinnedOrTripleSlashComments(node);
                 }
 
-                emitStart(node);
-                if (isES6ExportedDeclaration(node)) {
-                    write("export ");
+                if (!isModuleMergedWithES6Class(node)) {
+                    emitStart(node);
+                    if (isES6ExportedDeclaration(node)) {
+                        write("export ");
+                    }
+
+                    write("var ");
+                    emit(node.name);
+                    write(";");
+                    emitEnd(node);
+                    writeLine();
                 }
-                write("var ");
-                emit(node.name);
-                write(";");
-                emitEnd(node);
-                writeLine();
+
                 emitStart(node);
                 write("(function (");
                 emitStart(node.name);
@@ -4524,7 +4564,11 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         writeLine();
                         emitStart(node);
                         emitContainingModuleName(node);
-                        write(".default = ");
+                        if (languageVersion === ScriptTarget.ES3) {
+                            write("[\"default\"] = ");
+                        } else {
+                            write(".default = ");
+                        }
                         emit(node.expression);
                         write(";");
                         emitEnd(node);
@@ -4585,19 +4629,6 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
             }
 
-            function sortAMDModules(amdModules: {name: string; path: string}[]) {
-                // AMD modules with declared variable names go first
-                return amdModules.sort((moduleA, moduleB) => {
-                    if (moduleA.name === moduleB.name) {
-                        return 0;
-                    } else if (!moduleA.name) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
-                });
-            }
-
             function emitExportStarHelper() {
                 if (hasExportStars) {
                     writeLine();
@@ -4613,44 +4644,83 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
             function emitAMDModule(node: SourceFile, startIndex: number) {
                 collectExternalModuleInfo(node);
+                
+                // An AMD define function has the following shape:
+                //     define(id?, dependencies?, factory);
+                //
+                // This has the shape of
+                //     define(name, ["module1", "module2"], function (module1Alias) {
+                // The location of the alias in the parameter list in the factory function needs to 
+                // match the position of the module name in the dependency list.
+                //
+                // To ensure this is true in cases of modules with no aliases, e.g.: 
+                // `import "module"` or `<amd-dependency path= "a.css" />` 
+                // we need to add modules without alias names to the end of the dependencies list
+                
+                let aliasedModuleNames: string[] = [];   // names of modules with corresponding parameter in the 
+                                                         // factory function.
+                let unaliasedModuleNames: string[] = []; // names of modules with no corresponding parameters in
+                                                         // factory function.
+                let importAliasNames: string[] = [];     // names of the parameters in the factory function; these 
+                                                         // paramters need to match the indexes of the corresponding 
+                                                         // module names in aliasedModuleNames.
+
+                // Fill in amd-dependency tags
+                for (let amdDependency of node.amdDependencies) {
+                    if (amdDependency.name) {
+                        aliasedModuleNames.push("\"" + amdDependency.path + "\"");
+                        importAliasNames.push(amdDependency.name);
+                    }
+                    else {
+                        unaliasedModuleNames.push("\"" + amdDependency.path + "\"");
+                    }
+                }
+
+                for (let importNode of externalImports) {
+                    // Find the name of the external module
+                    let externalModuleName = "";
+                    let moduleName = getExternalModuleName(importNode);
+                    if (moduleName.kind === SyntaxKind.StringLiteral) {
+                        externalModuleName = getLiteralText(<LiteralExpression>moduleName);
+                    }
+
+                    // Find the name of the module alais, if there is one
+                    let importAliasName: string;
+                    let namespaceDeclaration = getNamespaceDeclarationNode(importNode);
+                    if (namespaceDeclaration && !isDefaultImport(importNode)) {
+                        importAliasName = getSourceTextOfNodeFromSourceFile(currentSourceFile, namespaceDeclaration.name);
+                    }
+                    else {
+                        importAliasName = getGeneratedNameForNode(<ImportDeclaration | ExportDeclaration>importNode);
+                    }
+
+                    if (importAliasName) {
+                        aliasedModuleNames.push(externalModuleName);
+                        importAliasNames.push(importAliasName);
+                    }
+                    else {
+                        unaliasedModuleNames.push(externalModuleName);
+                    }
+                }
+                
                 writeLine();
                 write("define(");
-                sortAMDModules(node.amdDependencies);
                 if (node.amdModuleName) {
                     write("\"" + node.amdModuleName + "\", ");
                 }
                 write("[\"require\", \"exports\"");
-                for (let importNode of externalImports) {
+                if (aliasedModuleNames.length) {
                     write(", ");
-                    let moduleName = getExternalModuleName(importNode);
-                    if (moduleName.kind === SyntaxKind.StringLiteral) {
-                        emitLiteral(<LiteralExpression>moduleName);
-                    }
-                    else {
-                        write("\"\"");
-                    }
+                    write(aliasedModuleNames.join(", "));
                 }
-                for (let amdDependency of node.amdDependencies) {
-                    let text = "\"" + amdDependency.path + "\"";
+                if (unaliasedModuleNames.length) {
                     write(", ");
-                    write(text);
+                    write(unaliasedModuleNames.join(", "));
                 }
                 write("], function (require, exports");
-                for (let importNode of externalImports) {
+                if (importAliasNames.length) {
                     write(", ");
-                    let namespaceDeclaration = getNamespaceDeclarationNode(importNode);
-                    if (namespaceDeclaration && !isDefaultImport(importNode)) {
-                        emit(namespaceDeclaration.name);
-                    }
-                    else {
-                        write(getGeneratedNameForNode(<ImportDeclaration | ExportDeclaration>importNode));
-                    }
-                }
-                for (let amdDependency of node.amdDependencies) {
-                    if (amdDependency.name) {
-                        write(", ");
-                        write(amdDependency.name);
-                    }
+                    write(importAliasNames.join(", "));
                 }
                 write(") {");
                 increaseIndent();
@@ -4922,6 +4992,8 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         return emitConditionalExpression(<ConditionalExpression>node);
                     case SyntaxKind.SpreadElementExpression:
                         return emitSpreadElementExpression(<SpreadElementExpression>node);
+                    case SyntaxKind.YieldExpression:
+                        return emitYieldExpression(<YieldExpression>node);
                     case SyntaxKind.OmittedExpression:
                         return;
                     case SyntaxKind.Block:

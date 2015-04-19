@@ -1,9 +1,9 @@
 interface TypeWriterResult {
     line: number;
-    column: number;
     syntaxKind: number;
     sourceText: string;
     type: string;
+    symbol: string;
 }
 
 class TypeWriterWalker {
@@ -20,7 +20,7 @@ class TypeWriterWalker {
             : program.getTypeChecker();
     }
 
-    public getTypes(fileName: string): TypeWriterResult[] {
+    public getTypeAndSymbols(fileName: string): TypeWriterResult[] {
         var sourceFile = this.program.getSourceFile(fileName);
         this.currentSourceFile = sourceFile;
         this.results = [];
@@ -29,90 +29,43 @@ class TypeWriterWalker {
     }
 
     private visitNode(node: ts.Node): void {
-        switch (node.kind) {
-            // Should always log expressions that are not tokens
-            // Also, always log the "this" keyword
-            // TODO: Ideally we should log all expressions, but to compare to the
-            // old typeWriter baselines, suppress tokens
-            case ts.SyntaxKind.ThisKeyword:
-            case ts.SyntaxKind.SuperKeyword:
-            case ts.SyntaxKind.ArrayLiteralExpression:
-            case ts.SyntaxKind.ObjectLiteralExpression:
-            case ts.SyntaxKind.ElementAccessExpression:
-            case ts.SyntaxKind.CallExpression:
-            case ts.SyntaxKind.NewExpression:
-            case ts.SyntaxKind.TypeAssertionExpression:
-            case ts.SyntaxKind.ParenthesizedExpression:
-            case ts.SyntaxKind.FunctionExpression:
-            case ts.SyntaxKind.ArrowFunction:
-            case ts.SyntaxKind.TypeOfExpression:
-            case ts.SyntaxKind.VoidExpression:
-            case ts.SyntaxKind.DeleteExpression:
-            case ts.SyntaxKind.PrefixUnaryExpression:
-            case ts.SyntaxKind.PostfixUnaryExpression:
-            case ts.SyntaxKind.BinaryExpression:
-            case ts.SyntaxKind.ConditionalExpression:
-            case ts.SyntaxKind.SpreadElementExpression:
-                this.log(node, this.getTypeOfNode(node));
-                break;
-
-            case ts.SyntaxKind.PropertyAccessExpression:
-                for (var current = node; current.kind === ts.SyntaxKind.PropertyAccessExpression; current = current.parent) {
-                }
-                if (current.kind !== ts.SyntaxKind.HeritageClauseElement) {
-                    this.log(node, this.getTypeOfNode(node));
-                }
-                break;
-
-            // Should not change expression status (maybe expressions)
-            // TODO: Again, ideally should log number and string literals too,
-            // but to be consistent with the old typeWriter, just log identifiers
-            case ts.SyntaxKind.Identifier:
-                var identifier = <ts.Identifier>node;
-                if (!this.isLabel(identifier)) {
-                    var type = this.getTypeOfNode(identifier);
-                    this.log(node, type);
-                }
-                break;
+        if (ts.isExpression(node) || node.kind === ts.SyntaxKind.Identifier) {
+            this.logTypeAndSymbol(node);
         }
 
         ts.forEachChild(node, child => this.visitNode(child));
     }
 
-    private isLabel(identifier: ts.Identifier): boolean {
-        var parent = identifier.parent;
-        switch (parent.kind) {
-            case ts.SyntaxKind.ContinueStatement:
-            case ts.SyntaxKind.BreakStatement:
-                return (<ts.BreakOrContinueStatement>parent).label === identifier;
-            case ts.SyntaxKind.LabeledStatement:
-                return (<ts.LabeledStatement>parent).label === identifier;
-        }
-        return false;
-    }
-
-    private log(node: ts.Node, type: ts.Type): void {
+    private logTypeAndSymbol(node: ts.Node): void {
         var actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
         var lineAndCharacter = this.currentSourceFile.getLineAndCharacterOfPosition(actualPos);
         var sourceText = ts.getTextOfNodeFromSourceText(this.currentSourceFile.text, node);
-        
-        // If we got an unknown type, we temporarily want to fall back to just pretending the name
-        // (source text) of the node is the type. This is to align with the old typeWriter to make
-        // baseline comparisons easier. In the long term, we will want to just call typeToString
-        this.results.push({
-            line: lineAndCharacter.line,
-            // todo(cyrusn): Not sure why column is one-based for type-writer.  But I'm preserving 
-            // that behavior to prevent having a lot of baselines to fix up.
-            column: lineAndCharacter.character + 1,
-            syntaxKind: node.kind,
-            sourceText: sourceText,
-            type: this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.WriteOwnNameForAnyLike)
-        });
-    }
 
-    private getTypeOfNode(node: ts.Node): ts.Type {
         var type = this.checker.getTypeAtLocation(node);
         ts.Debug.assert(type !== undefined, "type doesn't exist");
-        return type;
+        var symbol = this.checker.getSymbolAtLocation(node);
+
+        var typeString = this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation);
+        var symbolString: string;
+        if (symbol) {
+            symbolString = "Symbol(" + this.checker.symbolToString(symbol, node.parent);
+            if (symbol.declarations) {
+                for (let declaration of symbol.declarations) {
+                    symbolString += ", ";
+                    let declSourceFile = declaration.getSourceFile();
+                    let declLineAndCharacter = declSourceFile.getLineAndCharacterOfPosition(declaration.pos);
+                    symbolString += `Decl(${ ts.getBaseFileName(declSourceFile.fileName) }, ${ declLineAndCharacter.line }, ${ declLineAndCharacter.character })`
+                }
+            }
+            symbolString += ")";
+        }
+
+        this.results.push({
+            line: lineAndCharacter.line,
+            syntaxKind: node.kind,
+            sourceText: sourceText,
+            type: typeString,
+            symbol: symbolString
+        });
     }
 }
