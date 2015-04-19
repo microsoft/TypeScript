@@ -513,15 +513,7 @@ module ts {
                     return bindParameter(<ParameterDeclaration>node);
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.BindingElement:
-                    if (isBindingPattern((<Declaration>node).name)) {
-                        return SymbolFlags.None;
-                    }
-                    else if (isBlockOrCatchScoped(<Declaration>node)) {
-                        return bindBlockScopedVariableDeclaration(<Declaration>node);
-                    }
-                    else {
-                        return declareSymbolForDeclarationAndBindChildren(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
-                    }
+                    return bindVariableDeclarationOrBindingElement(<VariableDeclaration | BindingElement>node);
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property | ((<PropertyDeclaration>node).questionToken ? SymbolFlags.Optional : 0), SymbolFlags.PropertyExcludes);
@@ -569,12 +561,7 @@ module ts {
                 case SyntaxKind.TypeAliasDeclaration:
                     return declareSymbolForDeclarationAndBindChildren(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
                 case SyntaxKind.EnumDeclaration:
-                    if (isConst(node)) {
-                        return declareSymbolForDeclarationAndBindChildren(<Declaration>node, SymbolFlags.ConstEnum, SymbolFlags.ConstEnumExcludes);
-                    }
-                    else {
-                        return declareSymbolForDeclarationAndBindChildren(<Declaration>node, SymbolFlags.RegularEnum, SymbolFlags.RegularEnumExcludes);
-                    }
+                    return bindEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
                     return bindModuleDeclaration(<ModuleDeclaration>node);
                 case SyntaxKind.ImportEqualsDeclaration:
@@ -583,35 +570,13 @@ module ts {
                 case SyntaxKind.ExportSpecifier:
                     return declareSymbolForDeclarationAndBindChildren(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
                 case SyntaxKind.ImportClause:
-                    if ((<ImportClause>node).name) {
-                        return declareSymbolForDeclarationAndBindChildren(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
-                    }
-                    else {
-                        return SymbolFlags.None;
-                    }
+                    return bindImportClause(<ImportClause>node);
                 case SyntaxKind.ExportDeclaration:
-                    if (!(<ExportDeclaration>node).exportClause) {
-                        // All export * declarations are collected in an __export symbol
-                        declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.ExportStar, 0);
-                    }
-                    return SymbolFlags.None;
+                    return bindExportDeclaration(<ExportDeclaration>node);
                 case SyntaxKind.ExportAssignment:
-                    if ((<ExportAssignment>node).expression.kind === SyntaxKind.Identifier) {
-                        // An export default clause with an identifier exports all meanings of that identifier
-                        declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
-                    }
-                    else {
-                        // An export default clause with an expression exports a value
-                        declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
-                    }
-                    return SymbolFlags.None;
+                    return bindExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.SourceFile:
-                    setExportContextFlag(<SourceFile>node);
-                    if (isExternalModule(<SourceFile>node)) {
-                        return bindAnonymousDeclaration(<SourceFile>node, SymbolFlags.ValueModule, '"' + removeFileExtension((<SourceFile>node).fileName) + '"');
-                    }
-                    // fall through.
-
+                    return bindSourceFileIfExternalModule();
                 case SyntaxKind.Block:
                     // do not treat function block a block-scope container
                     // all block-scope locals that reside in this block should go to the function locals.
@@ -642,6 +607,61 @@ module ts {
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                     return postBindFunctionOrConstructorTypeChildren(<SignatureDeclaration>node);
+            }
+        }
+
+        function bindSourceFileIfExternalModule() {
+            setExportContextFlag(file);
+            return isExternalModule(file)
+                ? bindAnonymousDeclaration(file, SymbolFlags.ValueModule, '"' + removeFileExtension(file.fileName) + '"')
+                : SymbolFlags.BlockScopedContainer;
+        }
+
+        function bindExportAssignment(node: ExportAssignment) {
+            if (node.expression.kind === SyntaxKind.Identifier) {
+                // An export default clause with an identifier exports all meanings of that identifier
+                declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
+            }
+            else {
+                // An export default clause with an expression exports a value
+                declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
+            }
+
+            return SymbolFlags.None;
+        }
+
+        function bindExportDeclaration(node: ExportDeclaration) {
+            if (!node.exportClause) {
+                // All export * declarations are collected in an __export symbol
+                declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.ExportStar, 0);
+            }
+            return SymbolFlags.None;
+        }
+
+        function bindImportClause(node: ImportClause) {
+            if (node.name) {
+                return declareSymbolForDeclarationAndBindChildren(node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+            }
+            else {
+                return SymbolFlags.None;
+            }
+        }
+
+        function bindEnumDeclaration(node: EnumDeclaration) {
+            return isConst(node)
+                ? declareSymbolForDeclarationAndBindChildren(node, SymbolFlags.ConstEnum, SymbolFlags.ConstEnumExcludes)
+                : declareSymbolForDeclarationAndBindChildren(node, SymbolFlags.RegularEnum, SymbolFlags.RegularEnumExcludes);
+        }
+
+        function bindVariableDeclarationOrBindingElement(node: VariableDeclaration | BindingElement) {
+            if (isBindingPattern(node.name)) {
+                return SymbolFlags.None;
+            }
+            else if (isBlockOrCatchScoped(node)) {
+                return bindBlockScopedVariableDeclaration(node);
+            }
+            else {
+                return declareSymbolForDeclarationAndBindChildren(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
             }
         }
 
