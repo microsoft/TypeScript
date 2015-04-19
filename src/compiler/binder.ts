@@ -600,8 +600,6 @@ module ts {
 
         function postBindChildren(node: Node) {
             switch (node.kind) {
-                case SyntaxKind.Parameter:
-                    return postParameterChildren(<ParameterDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
                     return postBindModuleDeclarationChildren(<ModuleDeclaration>node);
                 case SyntaxKind.FunctionType:
@@ -667,14 +665,12 @@ module ts {
 
         function bindParameter(node: ParameterDeclaration): SymbolFlags {
             if (isBindingPattern(node.name)) {
-                return bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, getDestructuringParameterName(node));
+                bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, getDestructuringParameterName(node));
             }
             else {
-                return declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
+                declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
             }
-        }
 
-        function postParameterChildren(node: ParameterDeclaration): void {
             // If this is a property-parameter, then also declare the property symbol into the 
             // containing class.
             if (node.flags & NodeFlags.AccessibilityModifier &&
@@ -684,6 +680,8 @@ module ts {
                 let classDeclaration = <ClassLikeDeclaration>node.parent.parent;
                 declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
             }
+
+            return SymbolFlags.FunctionScopedVariable;
         }
 
         function bindPropertyOrMethodOrAccessor(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): SymbolFlags {
