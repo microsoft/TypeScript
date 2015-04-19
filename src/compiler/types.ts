@@ -1279,6 +1279,7 @@ module ts {
     }
 
     export const enum SymbolFlags {
+        None                    = 0,
         FunctionScopedVariable  = 0x00000001,  // Variable (var) or parameter
         BlockScopedVariable     = 0x00000002,  // A block-scoped variable (let or const)
         Property                = 0x00000004,  // Property or enum member

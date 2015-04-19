@@ -480,7 +480,6 @@ module ts {
 
         function bind(node: Node): void {
             node.parent = parent;
-            
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
                     declareSymbolForDeclarationAndBindChildren(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
