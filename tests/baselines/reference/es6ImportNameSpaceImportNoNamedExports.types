@@ -2,6 +2,7 @@
 
 var a = 10;
 >a : number
+>10 : number
 
 export = a;
 >a : number

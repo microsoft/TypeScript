@@ -168,7 +168,6 @@ module ts {
         }
     ];
 
-    /* @internal */
     export function parseCommandLine(commandLine: string[]): ParsedCommandLine {
         var options: CompilerOptions = {};
         var fileNames: string[] = [];

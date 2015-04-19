@@ -8,7 +8,7 @@ module ts {
     /* @internal */ export let ioWriteTime = 0;
 
     /** The version of the TypeScript compiler release */
-    export let version = "1.5.0";
+    export const version = "1.5.0";
 
     export function findConfigFile(searchPath: string): string {
         var fileName = "tsconfig.json";
@@ -54,6 +54,7 @@ module ts {
                 }
                 text = "";
             }
+
             return text !== undefined ? createSourceFile(fileName, text, languageVersion, setParentNodes) : undefined;
         }
 
@@ -170,7 +171,7 @@ module ts {
             getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory: () => commonSourceDirectory,
             emit,
-            getCurrentDirectory: host.getCurrentDirectory,
+            getCurrentDirectory: () => host.getCurrentDirectory(),
             getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
             getIdentifierCount: () => getDiagnosticsProducingTypeChecker().getIdentifierCount(),
             getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
@@ -180,14 +181,15 @@ module ts {
 
         function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
             return {
-                getCanonicalFileName: host.getCanonicalFileName,
+                getCanonicalFileName: fileName => host.getCanonicalFileName(fileName),
                 getCommonSourceDirectory: program.getCommonSourceDirectory,
                 getCompilerOptions: program.getCompilerOptions,
-                getCurrentDirectory: host.getCurrentDirectory,
-                getNewLine: host.getNewLine,
+                getCurrentDirectory: () => host.getCurrentDirectory(),
+                getNewLine: () => host.getNewLine(),
                 getSourceFile: program.getSourceFile,
                 getSourceFiles: program.getSourceFiles,
-                writeFile: writeFileCallback || host.writeFile,
+                writeFile: writeFileCallback || (
+                    (fileName, data, writeByteOrderMark, onError) => host.writeFile(fileName, data, writeByteOrderMark, onError)),
             };
         }
 

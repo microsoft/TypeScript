@@ -1,5 +1,5 @@
 ///<reference path='services.ts' />
-
+/* @internal */
 module ts.SignatureHelp {
 
     // A partially written generic type expression is not guaranteed to have the correct syntax tree. the expression could be parsed as less than/greater than expression or a comma expression
@@ -178,7 +178,9 @@ module ts.SignatureHelp {
         argumentCount: number;
     }
 
-    export function getSignatureHelpItems(sourceFile: SourceFile, position: number, typeInfoResolver: TypeChecker, cancellationToken: CancellationTokenObject): SignatureHelpItems {
+    export function getSignatureHelpItems(program: Program, sourceFile: SourceFile, position: number, cancellationToken: CancellationTokenObject): SignatureHelpItems {
+        let typeChecker = program.getTypeChecker();
+
         // Decide whether to show signature help
         let startingToken = findTokenOnLeftOfPosition(sourceFile, position);
         if (!startingToken) {
@@ -196,14 +198,60 @@ module ts.SignatureHelp {
 
         let call = argumentInfo.invocation;
         let candidates = <Signature[]>[];
-        let resolvedSignature = typeInfoResolver.getResolvedSignature(call, candidates);
+        let resolvedSignature = typeChecker.getResolvedSignature(call, candidates);
         cancellationToken.throwIfCancellationRequested();
 
         if (!candidates.length) {
+            // We didn't have any sig help items produced by the TS compiler.  If this is a JS 
+            // file, then see if we can figure out anything better.
+            if (isJavaScript(sourceFile.fileName)) {
+                return createJavaScriptSignatureHelpItems(argumentInfo);
+            }
+
             return undefined;
         }
 
         return createSignatureHelpItems(candidates, resolvedSignature, argumentInfo);
+
+        function createJavaScriptSignatureHelpItems(argumentInfo: ArgumentListInfo): SignatureHelpItems {
+            if (argumentInfo.invocation.kind !== SyntaxKind.CallExpression) {
+                return undefined;
+            }
+
+            // See if we can find some symbol with the call expression name that has call signatures.
+            let callExpression = <CallExpression>argumentInfo.invocation;
+            let expression = callExpression.expression;
+            let name = expression.kind === SyntaxKind.Identifier
+                ? <Identifier> expression
+                : expression.kind === SyntaxKind.PropertyAccessExpression
+                    ? (<PropertyAccessExpression>expression).name
+                    : undefined;
+
+            if (!name || !name.text) {
+                return undefined;
+            }
+
+            let typeChecker = program.getTypeChecker();
+            for (let sourceFile of program.getSourceFiles()) {
+                let nameToDeclarations = sourceFile.getNamedDeclarations();
+                let declarations = getProperty(nameToDeclarations, name.text);
+
+                if (declarations) {
+                    for (let declaration of declarations) {
+                        let symbol = declaration.symbol;
+                        if (symbol) {
+                            let type = typeChecker.getTypeOfSymbolAtLocation(symbol, declaration);
+                            if (type) {
+                                let callSignatures = type.getCallSignatures();
+                                if (callSignatures && callSignatures.length) {
+                                    return createSignatureHelpItems(callSignatures, callSignatures[0], argumentInfo);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         /**
          * Returns relevant information for the argument list and the current argument if we are
@@ -494,8 +542,8 @@ module ts.SignatureHelp {
 
             let invocation = argumentListInfo.invocation;
             let callTarget = getInvokedExpression(invocation)
-            let callTargetSymbol = typeInfoResolver.getSymbolAtLocation(callTarget);
-            let callTargetDisplayParts = callTargetSymbol && symbolToDisplayParts(typeInfoResolver, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
+            let callTargetSymbol = typeChecker.getSymbolAtLocation(callTarget);
+            let callTargetDisplayParts = callTargetSymbol && symbolToDisplayParts(typeChecker, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined);
             let items: SignatureHelpItem[] = map(candidates, candidateSignature => {
                 let signatureHelpParameters: SignatureHelpParameter[];
                 let prefixDisplayParts: SymbolDisplayPart[] = [];
@@ -511,12 +559,12 @@ module ts.SignatureHelp {
                     signatureHelpParameters = typeParameters && typeParameters.length > 0 ? map(typeParameters, createSignatureHelpParameterForTypeParameter) : emptyArray;
                     suffixDisplayParts.push(punctuationPart(SyntaxKind.GreaterThanToken));
                     let parameterParts = mapToDisplayParts(writer =>
-                        typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForParametersAndDelimiters(candidateSignature.parameters, writer, invocation));
+                        typeChecker.getSymbolDisplayBuilder().buildDisplayForParametersAndDelimiters(candidateSignature.parameters, writer, invocation));
                     suffixDisplayParts.push.apply(suffixDisplayParts, parameterParts);
                 }
                 else {
                     let typeParameterParts = mapToDisplayParts(writer =>
-                        typeInfoResolver.getSymbolDisplayBuilder().buildDisplayForTypeParametersAndDelimiters(candidateSignature.typeParameters, writer, invocation));
+                        typeChecker.getSymbolDisplayBuilder().buildDisplayForTypeParametersAndDelimiters(candidateSignature.typeParameters, writer, invocation));
                     prefixDisplayParts.push.apply(prefixDisplayParts, typeParameterParts);
                     prefixDisplayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
 
@@ -526,7 +574,7 @@ module ts.SignatureHelp {
                 }
 
                 let returnTypeParts = mapToDisplayParts(writer =>
-                    typeInfoResolver.getSymbolDisplayBuilder().buildReturnTypeDisplay(candidateSignature, writer, invocation));
+                    typeChecker.getSymbolDisplayBuilder().buildReturnTypeDisplay(candidateSignature, writer, invocation));
                 suffixDisplayParts.push.apply(suffixDisplayParts, returnTypeParts);
                 
                 return {
@@ -561,7 +609,7 @@ module ts.SignatureHelp {
 
             function createSignatureHelpParameterForParameter(parameter: Symbol): SignatureHelpParameter {
                 let displayParts = mapToDisplayParts(writer =>
-                    typeInfoResolver.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, invocation));
+                    typeChecker.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, invocation));
 
                 let isOptional = hasQuestionToken(parameter.valueDeclaration);
 
@@ -575,7 +623,7 @@ module ts.SignatureHelp {
 
             function createSignatureHelpParameterForTypeParameter(typeParameter: TypeParameter): SignatureHelpParameter {
                 let displayParts = mapToDisplayParts(writer =>
-                    typeInfoResolver.getSymbolDisplayBuilder().buildTypeParameterDisplay(typeParameter, writer, invocation));
+                    typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplay(typeParameter, writer, invocation));
 
                 return {
                     name: typeParameter.symbol.name,

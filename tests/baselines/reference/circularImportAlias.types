@@ -10,6 +10,7 @@ module B {
 
     export class D extends a.C {
 >D : D
+>a.C : any
 >a : typeof a
 >C : a.C
 

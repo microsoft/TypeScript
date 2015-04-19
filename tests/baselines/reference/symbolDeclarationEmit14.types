@@ -2,13 +2,15 @@
 class C {
 >C : C
 
-    get [Symbol.isRegExp]() { return ""; }
->Symbol.isRegExp : symbol
+    get [Symbol.toPrimitive]() { return ""; }
+>Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
->isRegExp : symbol
+>toPrimitive : symbol
+>"" : string
 
     get [Symbol.toStringTag]() { return ""; }
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
+>"" : string
 }

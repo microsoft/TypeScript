@@ -5,5 +5,7 @@ class foo { public bar:{id:number;} = {id:5, name:"foo"}; }
 >id : number
 >{id:5, name:"foo"} : { id: number; name: string; }
 >id : number
+>5 : number
 >name : string
+>"foo" : string
 

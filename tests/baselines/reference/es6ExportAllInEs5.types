@@ -11,12 +11,14 @@ export module m {
 
     export var x = 10;
 >x : number
+>10 : number
 }
 export var x = 10;
 >x : number
+>10 : number
 
 export module uninstantiated {
->uninstantiated : unknown
+>uninstantiated : any
 }
 
 === tests/cases/compiler/client.ts ===

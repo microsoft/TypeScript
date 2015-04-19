@@ -9,6 +9,7 @@ function f<T>(arr: T[], elemnt: T): T {
 >T : T
 
     return null;
+>null : null
 }
 
 var a = f([], 3); // should be number
@@ -16,4 +17,5 @@ var a = f([], 3); // should be number
 >f([], 3) : number
 >f : <T>(arr: T[], elemnt: T) => T
 >[] : undefined[]
+>3 : number
 

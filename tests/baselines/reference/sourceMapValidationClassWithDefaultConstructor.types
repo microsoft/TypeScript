@@ -4,7 +4,9 @@ class Greeter {
 
     public a = 10;
 >a : number
+>10 : number
 
     public nameA = "Ten";
 >nameA : string
+>"Ten" : string
 }

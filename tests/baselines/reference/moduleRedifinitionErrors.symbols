@@ -1,0 +1,8 @@
+=== tests/cases/compiler/moduleRedifinitionErrors.ts ===
+class A {
+>A : Symbol(A, Decl(moduleRedifinitionErrors.ts, 0, 0), Decl(moduleRedifinitionErrors.ts, 1, 1))
+}
+module A {
+>A : Symbol(A, Decl(moduleRedifinitionErrors.ts, 0, 0), Decl(moduleRedifinitionErrors.ts, 1, 1))
+}
+

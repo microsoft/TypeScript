@@ -6,20 +6,22 @@ class C {
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
+>0 : number
 
-    static [Symbol.toPrimitive]() { }
+    static [Symbol.isConcatSpreadable]() { }
+>Symbol.isConcatSpreadable : symbol
+>Symbol : SymbolConstructor
+>isConcatSpreadable : symbol
+
+    static get [Symbol.toPrimitive]() { return ""; }
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
+>"" : string
 
-    static get [Symbol.isRegExp]() { return ""; }
->Symbol.isRegExp : symbol
+    static set [Symbol.toPrimitive](x) { }
+>Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
->isRegExp : symbol
-
-    static set [Symbol.isRegExp](x) { }
->Symbol.isRegExp : symbol
->Symbol : SymbolConstructor
->isRegExp : symbol
+>toPrimitive : symbol
 >x : string
 }

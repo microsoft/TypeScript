@@ -1,0 +1,13 @@
+=== tests/cases/compiler/externalModuleReferenceOfImportDeclarationWithExportModifier_1.ts ===
+export import file1 = require('externalModuleReferenceOfImportDeclarationWithExportModifier_0');
+>file1 : Symbol(file1, Decl(externalModuleReferenceOfImportDeclarationWithExportModifier_1.ts, 0, 0))
+
+file1.foo();
+>file1.foo : Symbol(file1.foo, Decl(externalModuleReferenceOfImportDeclarationWithExportModifier_0.ts, 0, 0))
+>file1 : Symbol(file1, Decl(externalModuleReferenceOfImportDeclarationWithExportModifier_1.ts, 0, 0))
+>foo : Symbol(file1.foo, Decl(externalModuleReferenceOfImportDeclarationWithExportModifier_0.ts, 0, 0))
+
+=== tests/cases/compiler/externalModuleReferenceOfImportDeclarationWithExportModifier_0.ts ===
+export function foo() { };
+>foo : Symbol(foo, Decl(externalModuleReferenceOfImportDeclarationWithExportModifier_0.ts, 0, 0))
+

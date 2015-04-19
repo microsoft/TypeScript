@@ -27,6 +27,7 @@ function observableArray<T>(): ObservableArray<T> { return null;}
 >T : T
 >ObservableArray : ObservableArray<T>
 >T : T
+>null : null
 
  
 
@@ -40,4 +41,5 @@ a.push('Some Value');
 >a.push : (...values: string[]) => any
 >a : ObservableArray<string>
 >push : (...values: string[]) => any
+>'Some Value' : string
 

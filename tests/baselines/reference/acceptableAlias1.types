@@ -3,15 +3,15 @@ module M {
 >M : typeof M
 
     export module N {
->N : unknown
+>N : any
     }
     export import X = N;
->X : unknown
->N : unknown
+>X : any
+>N : any
 }
 
 import r = M.X;
->r : unknown
+>r : any
 >M : typeof M
->X : unknown
+>X : any
 

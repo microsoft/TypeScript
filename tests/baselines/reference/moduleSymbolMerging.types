@@ -8,8 +8,9 @@ module B {
 
 	export function f(): A.I { return null; }
 >f : () => A.I
->A : unknown
+>A : any
 >I : A.I
+>null : null
 }
 
 

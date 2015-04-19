@@ -1,0 +1,15 @@
+=== tests/cases/compiler/modFunctionCrash.ts ===
+declare module Q {
+>Q : Symbol(Q, Decl(modFunctionCrash.ts, 0, 0))
+
+    function f(fn:()=>void); // typechecking the function type shouldnot crash the compiler
+>f : Symbol(f, Decl(modFunctionCrash.ts, 0, 18))
+>fn : Symbol(fn, Decl(modFunctionCrash.ts, 1, 15))
+}
+
+
+Q.f(function() {this;});
+>Q.f : Symbol(Q.f, Decl(modFunctionCrash.ts, 0, 18))
+>Q : Symbol(Q, Decl(modFunctionCrash.ts, 0, 0))
+>f : Symbol(Q.f, Decl(modFunctionCrash.ts, 0, 18))
+

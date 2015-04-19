@@ -4,6 +4,7 @@ function f() {
 
     var x=1;
 >x : number
+>1 : number
 }
 
 var y=f();  // error void fn

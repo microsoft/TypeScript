@@ -11,6 +11,7 @@ module M {
 
     export var y = 1;
 >y : number
+>1 : number
 }
 enum E { A }
 >E : E
@@ -83,12 +84,15 @@ var a: Foo = {
 
     a: 1,
 >a : number
+>1 : number
 
     b: '',
 >b : string
+>'' : string
 
     c: true,
 >c : boolean
+>true : boolean
 
     d: {},
 >d : {}
@@ -96,10 +100,12 @@ var a: Foo = {
 
     e: null ,
 >e : null
+>null : null
 
     f: [1],
 >f : number[]
 >[1] : number[]
+>1 : number
 
     g: {},
 >g : {}
@@ -109,6 +115,7 @@ var a: Foo = {
 >h : (x: number) => number
 >(x: number) => 1 : (x: number) => number
 >x : number
+>1 : number
 
     i: <T>(x: T) => x,
 >i : <T>(x: T) => T
@@ -122,6 +129,7 @@ var a: Foo = {
 >j : Foo
 ><Foo>null : Foo
 >Foo : Foo
+>null : null
 
     k: new C(),
 >k : C

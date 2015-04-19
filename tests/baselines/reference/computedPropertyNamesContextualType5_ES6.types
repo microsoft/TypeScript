@@ -16,7 +16,11 @@ var o: I = {
 
     [+"foo"]: "",
 >+"foo" : number
+>"foo" : string
+>"" : string
 
     [+"bar"]: 0
 >+"bar" : number
+>"bar" : string
+>0 : number
 }

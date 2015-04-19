@@ -50,6 +50,8 @@ class Point {
 >origin : Point
 >new Point(0, 0) : Point
 >Point : typeof Point
+>0 : number
+>0 : number
 
     static distance(p1: Point, p2: Point) { return p1.distance(p2); }
 >distance : (p1: Point, p2: Point) => number

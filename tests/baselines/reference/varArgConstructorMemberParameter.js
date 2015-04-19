@@ -29,7 +29,7 @@ var Foo2 = (function () {
     return Foo2;
 })();
 var Foo3 = (function () {
-    function Foo3() {
+    function Foo3(public) {
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             args[_i - 1] = arguments[_i];

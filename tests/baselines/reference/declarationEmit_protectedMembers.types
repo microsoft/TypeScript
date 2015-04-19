@@ -22,6 +22,7 @@ class C1 {
 
     protected get accessor() { return 0; }
 >accessor : number
+>0 : number
 
     protected static sx: number;
 >sx : number
@@ -41,6 +42,7 @@ class C1 {
 
     protected static get staticGetter() { return 0; }
 >staticGetter : number
+>0 : number
 }
 
 // Derived class overriding protected members
@@ -108,6 +110,7 @@ class C3 extends C2 {
 
     static get staticGetter() { return 1; }
 >staticGetter : number
+>1 : number
 }
 
 // Protected properties in constructors

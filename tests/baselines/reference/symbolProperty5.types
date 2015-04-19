@@ -1,17 +1,18 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty5.ts ===
 var x = {
->x : { [Symbol.iterator]: number; [Symbol.isRegExp](): void; [Symbol.toStringTag]: number; }
->{    [Symbol.iterator]: 0,    [Symbol.isRegExp]() { },    get [Symbol.toStringTag]() {        return 0;    }} : { [Symbol.iterator]: number; [Symbol.isRegExp](): void; [Symbol.toStringTag]: number; }
+>x : { [Symbol.iterator]: number; [Symbol.toPrimitive](): void; [Symbol.toStringTag]: number; }
+>{    [Symbol.iterator]: 0,    [Symbol.toPrimitive]() { },    get [Symbol.toStringTag]() {        return 0;    }} : { [Symbol.iterator]: number; [Symbol.toPrimitive](): void; [Symbol.toStringTag]: number; }
 
     [Symbol.iterator]: 0,
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
+>0 : number
 
-    [Symbol.isRegExp]() { },
->Symbol.isRegExp : symbol
+    [Symbol.toPrimitive]() { },
+>Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
->isRegExp : symbol
+>toPrimitive : symbol
 
     get [Symbol.toStringTag]() {
 >Symbol.toStringTag : symbol
@@ -19,5 +20,6 @@ var x = {
 >toStringTag : symbol
 
         return 0;
+>0 : number
     }
 }

@@ -1,7 +1,7 @@
 /// <reference path="types.ts"/>
 
+/* @internal */
 module ts {
-
     // Ternary values are defined such that
     // x & y is False if either x or y is False.
     // x & y is Maybe if either x or y is Maybe, but neither x or y is False.
@@ -658,10 +658,6 @@ module ts {
         "\u2029": "\\u2029", // paragraphSeparator
         "\u0085": "\\u0085"  // nextLine
     };
-
-    export function getDefaultLibFileName(options: CompilerOptions): string {
-        return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
-    }
 
     export interface ObjectAllocator {
         getNodeConstructor(kind: SyntaxKind): new () => Node;
