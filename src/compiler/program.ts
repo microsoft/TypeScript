@@ -8,7 +8,7 @@ module ts {
     /* @internal */ export let ioWriteTime = 0;
 
     /** The version of the TypeScript compiler release */
-    export const version = "1.5.0-alpha";
+    export const version = "1.5.0-beta";
 
     export function findConfigFile(searchPath: string): string {
         var fileName = "tsconfig.json";
