@@ -276,7 +276,7 @@ module ts {
             blockScopeContainer = savedBlockScopeContainer;
         }
 
-        function declareSymbolForDeclarationAndBindChildren(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): SymbolFlags {
+        function declareSymbolAndAddToSymbolTable(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): SymbolFlags {
             // First we declare a symbol for the provided node.  The symbol will be added to an 
             // appropriate symbol table.  Possible symbol tables include:
             // 
@@ -287,11 +287,11 @@ module ts {
             // Then, we recurse down the children of this declaration, seeking more declarations
             // to bind.
 
-            declareSymbolAndAddToAppropriateContainer(node, symbolFlags, symbolExcludes);
+            declareSymbolAndAddToSymbolTableWorker(node, symbolFlags, symbolExcludes);
             return symbolFlags;
         }
 
-        function declareSymbolAndAddToAppropriateContainer(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
+        function declareSymbolAndAddToSymbolTableWorker(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
             switch (container.kind) {
                 // Modules, source files, and classes need specialized handling for how their 
                 // members are declared (for example, a member of a class will go into a specific
@@ -401,15 +401,15 @@ module ts {
         function bindModuleDeclaration(node: ModuleDeclaration) {
             setExportContextFlag(node);
             if (node.name.kind === SyntaxKind.StringLiteral) {
-                return declareSymbolForDeclarationAndBindChildren(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+                return declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
             }
             else {
                 let state = getModuleInstanceState(node);
                 if (state === ModuleInstanceState.NonInstantiated) {
-                    return declareSymbolForDeclarationAndBindChildren(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes);
+                    return declareSymbolAndAddToSymbolTable(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes);
                 }
                 else {
-                    return declareSymbolForDeclarationAndBindChildren(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+                    return declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
                 }
             }
         }
@@ -508,7 +508,7 @@ module ts {
             node.parent = parent;
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
-                    return declareSymbolForDeclarationAndBindChildren(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
+                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
                 case SyntaxKind.Parameter:
                     return bindParameter(<ParameterDeclaration>node);
                 case SyntaxKind.VariableDeclaration:
@@ -525,7 +525,7 @@ module ts {
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
-                    return declareSymbolForDeclarationAndBindChildren(<Declaration>node, SymbolFlags.Signature, 0);
+                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Signature, 0);
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                     // If this is an ObjectLiteralExpression method, then it sits in the same space
@@ -535,9 +535,9 @@ module ts {
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Method | ((<MethodDeclaration>node).questionToken ? SymbolFlags.Optional : 0),
                         isObjectLiteralMethod(node) ? SymbolFlags.PropertyExcludes : SymbolFlags.MethodExcludes);
                 case SyntaxKind.FunctionDeclaration:
-                    return declareSymbolForDeclarationAndBindChildren(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
+                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
                 case SyntaxKind.Constructor:
-                    return declareSymbolForDeclarationAndBindChildren(<Declaration>node, SymbolFlags.Constructor, /*symbolExcludes:*/ 0);
+                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Constructor, /*symbolExcludes:*/ 0);
                 case SyntaxKind.GetAccessor:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.GetAccessor, SymbolFlags.GetAccessorExcludes);
                 case SyntaxKind.SetAccessor:
@@ -557,9 +557,9 @@ module ts {
                 case SyntaxKind.ClassDeclaration:
                     return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Class, SymbolFlags.ClassExcludes);
                 case SyntaxKind.InterfaceDeclaration:
-                    return declareSymbolForDeclarationAndBindChildren(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
+                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
                 case SyntaxKind.TypeAliasDeclaration:
-                    return declareSymbolForDeclarationAndBindChildren(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
                 case SyntaxKind.EnumDeclaration:
                     return bindEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
@@ -568,7 +568,7 @@ module ts {
                 case SyntaxKind.NamespaceImport:
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.ExportSpecifier:
-                    return declareSymbolForDeclarationAndBindChildren(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
                 case SyntaxKind.ImportClause:
                     return bindImportClause(<ImportClause>node);
                 case SyntaxKind.ExportDeclaration:
@@ -640,7 +640,7 @@ module ts {
 
         function bindImportClause(node: ImportClause) {
             if (node.name) {
-                return declareSymbolForDeclarationAndBindChildren(node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+                return declareSymbolAndAddToSymbolTable(node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
             }
             else {
                 return SymbolFlags.None;
@@ -649,8 +649,8 @@ module ts {
 
         function bindEnumDeclaration(node: EnumDeclaration) {
             return isConst(node)
-                ? declareSymbolForDeclarationAndBindChildren(node, SymbolFlags.ConstEnum, SymbolFlags.ConstEnumExcludes)
-                : declareSymbolForDeclarationAndBindChildren(node, SymbolFlags.RegularEnum, SymbolFlags.RegularEnumExcludes);
+                ? declareSymbolAndAddToSymbolTable(node, SymbolFlags.ConstEnum, SymbolFlags.ConstEnumExcludes)
+                : declareSymbolAndAddToSymbolTable(node, SymbolFlags.RegularEnum, SymbolFlags.RegularEnumExcludes);
         }
 
         function bindVariableDeclarationOrBindingElement(node: VariableDeclaration | BindingElement) {
@@ -661,7 +661,7 @@ module ts {
                 return bindBlockScopedVariableDeclaration(node);
             }
             else {
-                return declareSymbolForDeclarationAndBindChildren(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
+                return declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
             }
         }
 
@@ -670,7 +670,7 @@ module ts {
                 return bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, getDestructuringParameterName(node));
             }
             else {
-                return declareSymbolForDeclarationAndBindChildren(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
+                return declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
             }
         }
 
@@ -691,7 +691,7 @@ module ts {
                 return bindAnonymousDeclaration(node, symbolFlags, "__computed");
             }
             else {
-                return declareSymbolForDeclarationAndBindChildren(node, symbolFlags, symbolExcludes);
+                return declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
             }
         }
     }
