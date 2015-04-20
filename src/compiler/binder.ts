@@ -335,6 +335,7 @@ module ts {
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.JSDocRecordType:
                     declareSymbol(container.symbol.members, container.symbol, node, symbolKind, symbolExcludes);
                     break;
                 case SyntaxKind.EnumDeclaration:
@@ -482,6 +483,7 @@ module ts {
                     break;
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
+                case SyntaxKind.JSDocRecordMember:
                     bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property | ((<PropertyDeclaration>node).questionToken ? SymbolFlags.Optional : 0), SymbolFlags.PropertyExcludes, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.PropertyAssignment:
@@ -523,8 +525,9 @@ module ts {
                 case SyntaxKind.JSDocFunctionType:
                     bindFunctionOrConstructorTypeORJSDocFunctionType(<SignatureDeclaration>node);
                     break;
-
+                    
                 case SyntaxKind.TypeLiteral:
+                case SyntaxKind.JSDocRecordType:
                     bindAnonymousDeclaration(<TypeLiteralNode>node, SymbolFlags.TypeLiteral, "__type", /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.ObjectLiteralExpression:

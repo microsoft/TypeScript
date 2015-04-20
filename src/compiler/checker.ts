@@ -3773,6 +3773,10 @@ module ts {
             return createObjectType(TypeFlags.Anonymous, node.symbol);
         }
 
+        function getTypeFromJSDocRecordType(node: JSDocRecordType): Type {
+            return createObjectType(TypeFlags.Anonymous, node.symbol);
+        }
+
         function getTypeFromJSDocVariadicType(node: JSDocVariadicType): Type {
             let type = getTypeFromTypeNode(node.type);
             if (type) {
@@ -3883,8 +3887,9 @@ module ts {
                     return getTypeFromJSDocVariadicType(<JSDocVariadicType>node);
                 case SyntaxKind.JSDocConstructorType:
                     return getTypeFromTypeNode((<JSDocConstructorType>node).type);
-                case SyntaxKind.JSDocThisType:
                 case SyntaxKind.JSDocRecordType:
+                    return getTypeFromJSDocRecordType(<JSDocRecordType>node);
+                case SyntaxKind.JSDocThisType:
                 // NYI:
             }
 

@@ -1054,7 +1054,7 @@ module ts {
         type: JSDocType;
     }
 
-    export interface JSDocRecordType extends JSDocType {
+    export interface JSDocRecordType extends JSDocType, TypeLiteralNode {
         members: NodeArray<JSDocRecordMember>;
     }
 
