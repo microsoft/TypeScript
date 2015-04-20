@@ -27,24 +27,24 @@ System.register(['file1', 'file2', 'file3', 'file4', 'file5', 'file6', 'file7'],
     var x, y;
     return {
         setters:[
-            function (v_1) {
-                ns = v_1
+            function (_ns) {
+                ns = _ns
             },
-            function (v_1) {
-                file2_1 = v_1
+            function (_file2_1) {
+                file2_1 = _file2_1
             },
-            function (v_1) {
-                file3_1 = v_1
+            function (_file3_1) {
+                file3_1 = _file3_1
             },
-            function (v_1) {},
-            function (v_1) {
-                file5_1 = v_1
+            function (_) {},
+            function (_file5_1) {
+                file5_1 = _file5_1
             },
-            function (v_1) {
-                ns3 = v_1
+            function (_ns3) {
+                ns3 = _ns3
             },
-            function (v_1) {
-                for (var n in v_1) exports_1(n, v_1[n]);
+            function (_file7_1) {
+                for (var n in _file7_1) exports_1(n, _file7_1[n]);
             }],
         execute: function() {
             ns.f();

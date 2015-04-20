@@ -1934,7 +1934,10 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 const isVariableDeclarationOrBindingElement =
                     node.parent && (node.parent.kind === SyntaxKind.VariableDeclaration || node.parent.kind === SyntaxKind.BindingElement);
 
-                const targetDeclaration = isVariableDeclarationOrBindingElement ? <Declaration>node.parent : resolver.getReferencedValueDeclaration(<Identifier>node);
+                const targetDeclaration =
+                    isVariableDeclarationOrBindingElement
+                        ? <Declaration>node.parent
+                        : resolver.getReferencedValueDeclaration(<Identifier>node);
 
                 return isSourceFileLevelDeclarationInSystemExternalModule(targetDeclaration, /*isExported*/ true);
             }
@@ -1943,6 +1946,10 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 const exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.operand);
 
                 if (exportChanged) {
+                    // emit
+                    // ++x
+                    // as
+                    // exports('x', ++x)
                     write(`${exportFunctionForFile}("`);
                     emitNodeWithoutSourceMap(node.operand);
                     write(`", `);
@@ -1980,6 +1987,8 @@ var __param = this.__param || function(index, decorator) { return function (targ
             function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
                 const exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.operand);
                 if (exportChanged) {
+                    // export function returns the value that was passes as the second argument
+                    // however for postfix unary expressions result value should be the value before modification.
                     // emit 'x++' as '(export('x', ++x) - 1)' and 'x--' as '(export('x', --x) + 1)'
                     write(`(${exportFunctionForFile}("`);
                     emitNodeWithoutSourceMap(node.operand);
@@ -2001,6 +2010,16 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
             }
 
+            /* 
+             * Checks if given node is a source file level declaration (not nested in module/function).
+             * If 'isExported' is true - then declaration must also be exported.
+             * This function is used in two cases:
+             * - check if node is a exported source file level value to determine 
+             *   if we should also export the value after its it changed
+             * - check if node is a source level declaration to emit it differently, 
+             *   i.e non-exported variable statement 'var x = 1' is hoisted so 
+             *   we we emit variable statement 'var' should be dropped.
+             */
             function isSourceFileLevelDeclarationInSystemExternalModule(node: Node, isExported: boolean): boolean {
                 if (!node || languageVersion >= ScriptTarget.ES6 || !isCurrentFileSystemExternalModule()) {
                     return false;
@@ -4880,6 +4899,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 writeLine();
                 let started = false;
                 for (let importNode of externalImports) {
+                    // do not create variable declaration for exports and imports that lack import clause
                     let skipNode = 
                         importNode.kind === SyntaxKind.ExportDeclaration ||
                         (importNode.kind === SyntaxKind.ImportDeclaration && !(<ImportDeclaration>importNode).importClause)
@@ -4905,6 +4925,15 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function hoistTopLevelVariableAndFunctionDeclarations(node: SourceFile): void {
+                // per ES6 spec: 
+                // 15.2.1.16.4 ModuleDeclarationInstantiation() Concrete Method
+                // - var declarations are initialized to undefined - 14.a.ii
+                // - function/generator declarations are instantiated - 16.a.iv
+                // this means that after module is instantiated but before its evaluation
+                // exported functions are already accessible at import sites
+                // in theory we should hoist only exported functions and its dependencies
+                // in practice to simplify things we'll hoist all source level functions and variable declaration
+                // including variables declarations for module and class declarations
                 let hoistedVars: (Identifier | ClassDeclaration | ModuleDeclaration)[];
                 let hoistedFunctionDeclarations: FunctionDeclaration[];
 
@@ -4980,6 +5009,42 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function emitSystemModuleBody(node: SourceFile, startIndex: number): void {
+                // shape of the body in system modules:
+                // function (exports) {
+                //     <list of local aliases for imports>
+                //     <hoisted function declarations>
+                //     <hoisted variable declarations>
+                //     return {
+                //         setters: [
+                //             <list of setter function for imports>
+                //         ],
+                //         execute: function() {
+                //             <module statements>
+                //         }
+                //     }
+                //     <temp declarations>
+                // }
+                // I.e:
+                // import {x} from 'file1'
+                // var y = 1;
+                // export function foo() { return y + x(); }
+                // console.log(y);
+                // will be transformed to
+                // function(exports) {
+                //     var file1; // local alias
+                //     var y;
+                //     function foo() { return y + file1.x(); }
+                //     exports("foo", foo);
+                //     return {
+                //         setters: [
+                //             function(v) { file1 = v }
+                //         ],
+                //         execute(): function() {
+                //             y = 1;
+                //             console.log(y);
+                //         }
+                //     };
+                // }
                 emitVariableDeclarationsForImports();
                 writeLine();
                 hoistTopLevelVariableAndFunctionDeclarations(node);
@@ -4990,6 +5055,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 emitSetters();
                 writeLine();
                 emitExecute(node, startIndex);
+                emitTempDeclarations(/*newLine*/ true)
                 decreaseIndent();
                 writeLine();
                 write("}"); // return
@@ -4997,7 +5063,6 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
             function emitSetters() {
                 write("setters:[")
-                let setterParameterName = makeUniqueName("v");
                 for (let i = 0; i < externalImports.length; ++i) {
                     if (i !== 0) {
                         write(",");
@@ -5005,38 +5070,59 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
                     writeLine();
                     increaseIndent();
-                    write(`function (${setterParameterName}) {`);
                     let importNode = externalImports[i];
+                    let importVariableName = getLocalNameForExternalImport(importNode) || "";
+                    let parameterName = "_" + importVariableName;
+                    write(`function (${parameterName}) {`);
 
                     switch (importNode.kind) {
                         case SyntaxKind.ImportDeclaration:
                             if (!(<ImportDeclaration>importNode).importClause) {
+                                // 'import "..."' case
+                                // module is imported only for side-effects, setter body will be empty
                                 break;
                             }
                         // fall-through
                         case SyntaxKind.ImportEqualsDeclaration:
+                            Debug.assert(importVariableName !== "");
+
                             increaseIndent();
                             writeLine();
-                            write(getLocalNameForExternalImport(importNode))
-                            write(` = ${setterParameterName}`);
+                            // save import into the local
+                            write(`${importVariableName} = ${parameterName}`);
                             writeLine();
 
                             let defaultName =
                                 importNode.kind === SyntaxKind.ImportDeclaration
                                     ? (<ImportDeclaration>importNode).importClause.name
                                     : (<ImportEqualsDeclaration>importNode).name;
+
                             if (defaultName) {
+                                // emit re-export for imported default name
+                                // import n1 from 'foo1'
+                                // import n2 = require('foo2')
+                                // export {n1}
+                                // export {n2}
                                 emitExportMemberAssignments(defaultName);
                                 writeLine();
                             }
 
-                            if (importNode.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>importNode).importClause.namedBindings) {
-                                if ((<ImportDeclaration>importNode).importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-                                    emitExportMemberAssignments((<NamespaceImport>(<ImportDeclaration>importNode).importClause.namedBindings).name);
+                            if (importNode.kind === SyntaxKind.ImportDeclaration &&
+                                (<ImportDeclaration>importNode).importClause.namedBindings) {
+                                
+                                let namedBindings = (<ImportDeclaration>importNode).importClause.namedBindings;
+                                if (namedBindings.kind === SyntaxKind.NamespaceImport) {
+                                    // emit re-export for namespace
+                                    // import * as n from 'foo'
+                                    // export {n}
+                                    emitExportMemberAssignments((<NamespaceImport>namedBindings).name);
                                     writeLine();
                                 }
                                 else {
-                                    for (let element of (<NamedImports>(<ImportDeclaration>importNode).importClause.namedBindings).elements) {
+                                    // emit re-exports for named imports
+                                    // import {a, b} from 'foo'
+                                    // export {a, b as c}
+                                    for (let element of (<NamedImports>namedBindings).elements) {
                                         emitExportMemberAssignments(element.name || element.propertyName);
                                         writeLine()
                                     }
@@ -5046,22 +5132,31 @@ var __param = this.__param || function(index, decorator) { return function (targ
                             decreaseIndent();
                             break;
                         case SyntaxKind.ExportDeclaration:
+                            Debug.assert(importVariableName !== "");
+
                             increaseIndent();
 
                             if ((<ExportDeclaration>importNode).exportClause) {
+                                // export {a, b as c} from 'foo'
+                                // emit as:
+                                // exports('a', _foo["a"])
+                                // exports('c', _foo["b"])
                                 for (let e of (<ExportDeclaration>importNode).exportClause.elements) {
                                     writeLine();
                                     write(`${exportFunctionForFile}("`);
                                     emitNodeWithoutSourceMap(e.name);
-                                    write(`", ${setterParameterName}["`);
+                                    write(`", ${parameterName}["`);
                                     emitNodeWithoutSourceMap(e.propertyName || e.name);
                                     write(`"]);`);
                                 }
                             }
                             else {
                                 writeLine();
-                                // export * from
-                                write(`for (var n in ${setterParameterName}) ${exportFunctionForFile}(n, ${setterParameterName}[n]);`);
+                                // export * from 'foo'
+                                // emit as:
+                                // for (var n in _foo) exports(n, _foo[n]);
+                                // NOTE: it is safe to use name 'n' since parameter name always starts with '_'
+                                write(`for (var n in ${parameterName}) ${exportFunctionForFile}(n, ${parameterName}[n]);`);
                             }
 
                             writeLine();
@@ -5081,6 +5176,8 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 writeLine();
                 for (let i = startIndex; i < node.statements.length; ++i) {
                     let statement = node.statements[i];
+                    // - imports/exports are not emitted for system modules
+                    // - function declarations are not emitted because they were already hoisted
                     switch (statement.kind) {
                         case SyntaxKind.ExportDeclaration:
                         case SyntaxKind.ImportDeclaration:
@@ -5094,12 +5191,20 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 decreaseIndent();
                 writeLine();
                 write("}") // execute
-                emitTempDeclarations(/*newLine*/ true);
             }
 
             function emitSystemModule(node: SourceFile, startIndex: number): void {
                 collectExternalModuleInfo(node);
+                // System modules has the following shape
+                // System.register(['dep-1', ... 'dep-n'], function(exports) {/* module body function */})
+                // 'exports' here is a function 'exports<T>(name: string, value: T): T' that is used to publish exported values.
+                // 'exports' returns its 'value' argument so in most cases expressions 
+                // that mutate exported values can be rewritten as:
+                // expr -> exports('name', expr). 
+                // The only exception in this rule is postfix unary operators, 
+                // see comment to 'emitPostfixUnaryExpression' for more details
                 Debug.assert(!exportFunctionForFile);
+                // make sure that  name of 'exports' function does not conflict with existing identifiers
                 exportFunctionForFile = makeUniqueName("exports");
                 write("System.register([");
                 for (let i = 0; i < externalImports.length; ++i) {

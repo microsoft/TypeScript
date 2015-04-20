@@ -14,15 +14,15 @@ System.register(['file1', 'file2'], function(exports_1) {
     var file1_1, n2;
     return {
         setters:[
-            function (v_1) {
-                file1_1 = v_1
+            function (_file1_1) {
+                file1_1 = _file1_1
                 exports_1("n", file1_1["default"]);
                 exports_1("n1", file1_1["default"]);
                 exports_1("x", file1_1.x);
                 exports_1("y", file1_1.x);
             },
-            function (v_1) {
-                n2 = v_1
+            function (_n2) {
+                n2 = _n2
                 exports_1("n2", n2);
                 exports_1("n3", n2);
             }],

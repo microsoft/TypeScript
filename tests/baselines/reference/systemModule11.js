@@ -10,9 +10,9 @@ System.register(['foo', 'bar'], function(exports_1) {
     var bar_1;
     return {
         setters:[
-            function (v_1) {},
-            function (v_1) {
-                bar_1 = v_1
+            function (_) {},
+            function (_bar_1) {
+                bar_1 = _bar_1
             }],
         execute: function() {
             bar_1.f();
