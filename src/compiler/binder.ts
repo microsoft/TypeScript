@@ -151,7 +151,7 @@ module ts {
 
             let symbol: Symbol;
             if (name !== undefined) {
-                symbol = hasProperty(symbols, name) ? symbols[name] : (symbols[name] = createSymbol(0, name));
+                symbol = hasProperty(symbols, name) ? symbols[name] : (symbols[name] = createSymbol(SymbolFlags.None, name));
                 if (symbol.flags & excludes) {
                     if (node.name) {
                         node.name.parent = node;
@@ -168,11 +168,11 @@ module ts {
                     });
                     file.bindDiagnostics.push(createDiagnosticForNode(node.name || node, message, getDisplayName(node)));
 
-                    symbol = createSymbol(0, name);
+                    symbol = createSymbol(SymbolFlags.None, name);
                 }
             }
             else {
-                symbol = createSymbol(0, "__missing");
+                symbol = createSymbol(SymbolFlags.None, "__missing");
             }
             addDeclarationToSymbol(symbol, node, includes);
             symbol.parent = parent;
@@ -493,7 +493,7 @@ module ts {
                     return bindVariableDeclarationOrBindingElement(<VariableDeclaration | BindingElement>node);
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
-                    return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property | ((<PropertyDeclaration>node).questionToken ? SymbolFlags.Optional : 0), SymbolFlags.PropertyExcludes);
+                    return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property | ((<PropertyDeclaration>node).questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.PropertyExcludes);
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
@@ -502,19 +502,19 @@ module ts {
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
-                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Signature, 0);
+                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Signature, SymbolFlags.None);
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                     // If this is an ObjectLiteralExpression method, then it sits in the same space
                     // as other properties in the object literal.  So we use SymbolFlags.PropertyExcludes
                     // so that it will conflict with any other object literal members with the same
                     // name.
-                    return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Method | ((<MethodDeclaration>node).questionToken ? SymbolFlags.Optional : 0),
+                    return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Method | ((<MethodDeclaration>node).questionToken ? SymbolFlags.Optional : SymbolFlags.None),
                         isObjectLiteralMethod(node) ? SymbolFlags.PropertyExcludes : SymbolFlags.MethodExcludes);
                 case SyntaxKind.FunctionDeclaration:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
                 case SyntaxKind.Constructor:
-                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Constructor, /*symbolExcludes:*/ 0);
+                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Constructor, /*symbolExcludes:*/ SymbolFlags.None);
                 case SyntaxKind.GetAccessor:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.GetAccessor, SymbolFlags.GetAccessorExcludes);
                 case SyntaxKind.SetAccessor:
@@ -563,7 +563,7 @@ module ts {
                     //  let x;
                     // }
                     // 'let x' will be placed into the function locals and 'let x' - into the locals of the block
-                    return isFunctionLike(node.parent) ? 0 : SymbolFlags.BlockScopedContainer;
+                    return isFunctionLike(node.parent) ? SymbolFlags.None : SymbolFlags.BlockScopedContainer;
                 case SyntaxKind.CatchClause:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
@@ -598,7 +598,7 @@ module ts {
         function bindExportDeclaration(node: ExportDeclaration) {
             if (!node.exportClause) {
                 // All export * declarations are collected in an __export symbol
-                declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.ExportStar, 0);
+                declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.ExportStar, SymbolFlags.None);
             }
             return SymbolFlags.None;
         }
