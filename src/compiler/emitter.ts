@@ -2009,12 +2009,12 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     emitDestructuring(node, node.parent.kind === SyntaxKind.ExpressionStatement);
                 }
                 else {
-                    const emitPublishOfExportedValue =
+                    const exportChanged =
                         node.operatorToken.kind <= SyntaxKind.LastAssignment &&
                         node.operatorToken.kind <= SyntaxKind.LastAssignment &&
                         isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.left);
 
-                    if (emitPublishOfExportedValue) {
+                    if (exportChanged) {
                         write(`${exportFunctionForFile}("`);
                         emitNodeWithoutSourceMap(node.left);
                         write(`", `);
@@ -2025,7 +2025,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     let indentedAfterOperator = indentIfOnDifferentLines(node, node.operatorToken, node.right, " ");
                     emit(node.right);
                     decreaseIndentIf(indentedBeforeOperator, indentedAfterOperator);
-                    if (emitPublishOfExportedValue) {
+                    if (exportChanged) {
                         write(")");
                     }
                 }
