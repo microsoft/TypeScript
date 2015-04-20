@@ -603,9 +603,14 @@ module ts {
             let symbol = node.symbol;
 
             // TypeScript 1.0 spec (April 2014): 8.4
-            // Every class automatically contains a static property member named 'prototype', 
-            // the type of which is an instantiation of the class type with type Any supplied as a type argument for each type parameter.
-            // It is an error to explicitly declare a static property member with the name 'prototype'.
+            // Every class automatically contains a static property member named 'prototype', the 
+            // type of which is an instantiation of the class type with type Any supplied as a type
+            // argument for each type parameter. It is an error to explicitly declare a static 
+            // property member with the name 'prototype'.
+            //
+            // Note: we check for this here because this class may be merging into a module.  The
+            // module might have an exported variable called 'prototype'.  We can't allow that as
+            // that would clash with the built-in 'prototype' for the class.
             let prototypeSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Prototype, "prototype");
             if (hasProperty(symbol.exports, prototypeSymbol.name)) {
                 if (node.name) {
