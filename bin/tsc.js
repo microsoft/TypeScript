@@ -1399,6 +1399,8 @@ var ts;
         Suppress_noImplicitAny_errors_for_indexing_objects_lacking_index_signatures: { code: 6055, category: ts.DiagnosticCategory.Message, key: "Suppress noImplicitAny errors for indexing objects lacking index signatures." },
         Do_not_emit_declarations_for_code_that_has_an_internal_annotation: { code: 6056, category: ts.DiagnosticCategory.Message, key: "Do not emit declarations for code that has an '@internal' annotation." },
         Preserve_new_lines_when_emitting_code: { code: 6057, category: ts.DiagnosticCategory.Message, key: "Preserve new-lines when emitting code." },
+        Specifies_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir: { code: 6058, category: ts.DiagnosticCategory.Message, key: "Specifies the root directory of input files. Use to control the output directory structure with --outDir." },
+        File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files: { code: 6059, category: ts.DiagnosticCategory.Error, key: "File '{0}' is not under 'rootDir' '{1}'. 'rootDir' is expected to contain all source files." },
         Variable_0_implicitly_has_an_1_type: { code: 7005, category: ts.DiagnosticCategory.Error, key: "Variable '{0}' implicitly has an '{1}' type." },
         Parameter_0_implicitly_has_an_1_type: { code: 7006, category: ts.DiagnosticCategory.Error, key: "Parameter '{0}' implicitly has an '{1}' type." },
         Member_0_implicitly_has_an_1_type: { code: 7008, category: ts.DiagnosticCategory.Error, key: "Member '{0}' implicitly has an '{1}' type." },
@@ -11553,7 +11555,7 @@ var ts;
             return type;
         }
         function combineTypeMappers(mapper1, mapper2) {
-            return function (t) { return mapper2(mapper1(t)); };
+            return function (t) { return instantiateType(mapper1(t), mapper2); };
         }
         function instantiateTypeParameter(typeParameter, mapper) {
             var result = createType(512);
@@ -24663,6 +24665,53 @@ var ts;
                 return findSourceFile(fileName, false, file, nameLiteral.pos, nameLiteral.end - nameLiteral.pos);
             }
         }
+        function computeCommonSourceDirectory(sourceFiles) {
+            var commonPathComponents;
+            var currentDirectory = host.getCurrentDirectory();
+            ts.forEach(files, function (sourceFile) {
+                if (ts.isDeclarationFile(sourceFile)) {
+                    return;
+                }
+                var sourcePathComponents = ts.getNormalizedPathComponents(sourceFile.fileName, currentDirectory);
+                sourcePathComponents.pop();
+                if (!commonPathComponents) {
+                    commonPathComponents = sourcePathComponents;
+                    return;
+                }
+                for (var i = 0, n = Math.min(commonPathComponents.length, sourcePathComponents.length); i < n; i++) {
+                    if (commonPathComponents[i] !== sourcePathComponents[i]) {
+                        if (i === 0) {
+                            diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
+                            return;
+                        }
+                        commonPathComponents.length = i;
+                        break;
+                    }
+                }
+                if (sourcePathComponents.length < commonPathComponents.length) {
+                    commonPathComponents.length = sourcePathComponents.length;
+                }
+            });
+            return ts.getNormalizedPathFromPathComponents(commonPathComponents);
+        }
+        function checkSourceFilesBelongToPath(sourceFiles, rootDirectory) {
+            var allFilesBelongToPath = true;
+            if (sourceFiles) {
+                var currentDirectory = host.getCurrentDirectory();
+                var absoluteRootDirectoryPath = host.getCanonicalFileName(ts.getNormalizedAbsolutePath(rootDirectory, currentDirectory));
+                for (var _i = 0; _i < sourceFiles.length; _i++) {
+                    var sourceFile = sourceFiles[_i];
+                    if (!ts.isDeclarationFile(sourceFile)) {
+                        var absoluteSourceFilePath = host.getCanonicalFileName(ts.getNormalizedAbsolutePath(sourceFile.fileName, currentDirectory));
+                        if (absoluteSourceFilePath.indexOf(absoluteRootDirectoryPath) !== 0) {
+                            diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, sourceFile.fileName, options.rootDir));
+                            allFilesBelongToPath = false;
+                        }
+                    }
+                }
+            }
+            return allFilesBelongToPath;
+        }
         function verifyCompilerOptions() {
             if (options.separateCompilation) {
                 if (options.sourceMap) {
@@ -24710,34 +24759,13 @@ var ts;
                 options.sourceRoot ||
                 (options.mapRoot &&
                     (!options.out || firstExternalModuleSourceFile !== undefined))) {
-                var commonPathComponents;
-                ts.forEach(files, function (sourceFile) {
-                    if (!(sourceFile.flags & 2048)
-                        && !ts.fileExtensionIs(sourceFile.fileName, ".js")) {
-                        var sourcePathComponents = ts.getNormalizedPathComponents(sourceFile.fileName, host.getCurrentDirectory());
-                        sourcePathComponents.pop();
-                        if (commonPathComponents) {
-                            for (var i = 0; i < Math.min(commonPathComponents.length, sourcePathComponents.length); i++) {
-                                if (commonPathComponents[i] !== sourcePathComponents[i]) {
-                                    if (i === 0) {
-                                        diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
-                                        return;
-                                    }
-                                    commonPathComponents.length = i;
-                                    break;
-                                }
-                            }
-                            if (sourcePathComponents.length < commonPathComponents.length) {
-                                commonPathComponents.length = sourcePathComponents.length;
-                            }
-                        }
-                        else {
-                            commonPathComponents = sourcePathComponents;
-                        }
-                    }
-                });
-                commonSourceDirectory = ts.getNormalizedPathFromPathComponents(commonPathComponents);
-                if (commonSourceDirectory) {
+                if (options.rootDir && checkSourceFilesBelongToPath(files, options.rootDir)) {
+                    commonSourceDirectory = ts.getNormalizedAbsolutePath(options.rootDir, host.getCurrentDirectory());
+                }
+                else {
+                    commonSourceDirectory = computeCommonSourceDirectory(files);
+                }
+                if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== ts.directorySeparator) {
                     commonSourceDirectory += ts.directorySeparator;
                 }
             }
@@ -24863,6 +24891,13 @@ var ts;
             name: "removeComments",
             type: "boolean",
             description: ts.Diagnostics.Do_not_emit_comments_to_output
+        },
+        {
+            name: "rootDir",
+            type: "string",
+            isFilePath: true,
+            description: ts.Diagnostics.Specifies_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir,
+            paramType: ts.Diagnostics.LOCATION
         },
         {
             name: "separateCompilation",
