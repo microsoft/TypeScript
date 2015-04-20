@@ -90,6 +90,9 @@ module ts {
             symbol.flags |= symbolFlags;
 
             node.symbol = symbol;
+            if (symbolFlags & SymbolFlags.HasLocals) {
+                node.locals = {};
+            }
 
             if (!symbol.declarations) {
                 symbol.declarations = [];
@@ -242,10 +245,6 @@ module ts {
         // All container nodes are kept on a linked list in declaration order. This list is used by the getLocalNameOfContainer function
         // in the type checker to validate that the local name used for a container is unique.
         function bindChildren(node: Node, symbolFlags: SymbolFlags) {
-            if (symbolFlags & SymbolFlags.HasLocals) {
-                node.locals = {};
-            }
-
             let saveParent = parent;
             let saveContainer = container;
             let savedBlockScopeContainer = blockScopeContainer;
@@ -271,6 +270,7 @@ module ts {
             }
 
             forEachChild(node, bind);
+
             container = saveContainer;
             parent = saveParent;
             blockScopeContainer = savedBlockScopeContainer;
