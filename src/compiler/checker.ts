@@ -3890,7 +3890,7 @@ module ts {
                 case SyntaxKind.JSDocRecordType:
                     return getTypeFromJSDocRecordType(<JSDocRecordType>node);
                 case SyntaxKind.JSDocThisType:
-                // NYI:
+                    return getTypeFromTypeNode((<JSDocThisType>node).type);
             }
 
             return unknownType;
@@ -5743,7 +5743,25 @@ module ts {
                 let symbol = getSymbolOfNode(classNode);
                 return container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : getDeclaredTypeOfSymbol(symbol);
             }
+
+            if (container.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                let type = getTypeForThisExpressionFromJSDoc(container);
+                if (type && type !== unknownType) {
+                    return type;
+                }
+            }
+
             return anyType;
+        }
+
+        function getTypeForThisExpressionFromJSDoc(node: Node) {
+            var jsDocComment = node.jsDocComment;
+            if (jsDocComment && jsDocComment.type && jsDocComment.type.kind === SyntaxKind.JSDocFunctionType) {
+                let jsDocFunctionType = <JSDocFunctionType>jsDocComment.type;
+                if (jsDocFunctionType.parameters.length > 0 && jsDocFunctionType.parameters[0].type.kind === SyntaxKind.JSDocThisType) {
+                    return getTypeFromTypeNode(jsDocFunctionType.parameters[0].type);
+                }
+            }
         }
 
         function isInConstructorArgumentInitializer(node: Node, constructorDecl: Node): boolean {
