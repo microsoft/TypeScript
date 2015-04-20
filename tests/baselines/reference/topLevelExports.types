@@ -1,6 +1,7 @@
 === tests/cases/compiler/topLevelExports.ts ===
 export var foo = 3;
 >foo : number
+>3 : number
 
 function log(n:number) { return n;}
 >log : (n: number) => number

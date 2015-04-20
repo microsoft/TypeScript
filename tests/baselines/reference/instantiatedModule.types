@@ -11,6 +11,7 @@ module M {
 
     export var Point = 1;
 >Point : number
+>1 : number
 }
 
 // primary expression
@@ -44,7 +45,7 @@ var p1: { x: number; y: number; }
 
 var p1: M.Point;
 >p1 : { x: number; y: number; }
->M : unknown
+>M : any
 >Point : M.Point
 
 // making the point a class instead of an interface 
@@ -68,7 +69,9 @@ module M2 {
             return { x: 0, y: 0 };
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
+>0 : number
 >y : number
+>0 : number
         }
     }
 }
@@ -84,6 +87,7 @@ var m2 = M2;
 // static side of the class
 var a2: typeof M2.Point;
 >a2 : typeof M2.Point
+>M2.Point : typeof M2.Point
 >M2 : typeof M2
 >Point : typeof M2.Point
 
@@ -101,7 +105,7 @@ var a2 = M2.Point;
 
 var o: M2.Point = a2.Origin();
 >o : M2.Point
->M2 : unknown
+>M2 : any
 >Point : M2.Point
 >a2.Origin() : M2.Point
 >a2.Origin : () => M2.Point
@@ -115,7 +119,7 @@ var p2: { x: number; y: number }
 
 var p2: M2.Point;
 >p2 : { x: number; y: number; }
->M2 : unknown
+>M2 : any
 >Point : M2.Point
 
 var p2 = new m2.Point();
@@ -151,6 +155,7 @@ var m3 = M3;
 
 var a3: typeof M3.Color;
 >a3 : typeof M3.Color
+>M3.Color : typeof M3.Color
 >M3 : typeof M3
 >Color : typeof M3.Color
 
@@ -168,7 +173,7 @@ var a3 = M3.Color;
 
 var blue: M3.Color = a3.Blue;
 >blue : M3.Color
->M3 : unknown
+>M3 : any
 >Color : M3.Color
 >a3.Blue : M3.Color
 >a3 : typeof M3.Color
@@ -176,7 +181,7 @@ var blue: M3.Color = a3.Blue;
 
 var p3: M3.Color;
 >p3 : M3.Color
->M3 : unknown
+>M3 : any
 >Color : M3.Color
 
 var p3 = M3.Color.Red;

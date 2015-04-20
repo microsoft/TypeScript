@@ -14,12 +14,14 @@ var o: {} = c;
 c = 1;
 >c = 1 : number
 >c : C
+>1 : number
 
 c = { foo: '' }
 >c = { foo: '' } : { foo: string; }
 >c : C
 >{ foo: '' } : { foo: string; }
 >foo : string
+>'' : string
 
 c = () => { }
 >c = () => { } : () => void
@@ -31,6 +33,7 @@ class D {
 
     constructor() {
         return 1;
+>1 : number
     }
 }
 
@@ -45,12 +48,14 @@ var o: {} = d;
 d = 1;
 >d = 1 : number
 >d : D
+>1 : number
 
 d = { foo: '' }
 >d = { foo: '' } : { foo: string; }
 >d : D
 >{ foo: '' } : { foo: string; }
 >foo : string
+>'' : string
 
 d = () => { }
 >d = () => { } : () => void

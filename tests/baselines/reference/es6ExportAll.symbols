@@ -1,0 +1,24 @@
+=== tests/cases/compiler/server.ts ===
+
+export class c {
+>c : Symbol(c, Decl(server.ts, 0, 0))
+}
+export interface i {
+>i : Symbol(i, Decl(server.ts, 2, 1))
+}
+export module m {
+>m : Symbol(m, Decl(server.ts, 4, 1))
+
+    export var x = 10;
+>x : Symbol(x, Decl(server.ts, 6, 14))
+}
+export var x = 10;
+>x : Symbol(x, Decl(server.ts, 8, 10))
+
+export module uninstantiated {
+>uninstantiated : Symbol(uninstantiated, Decl(server.ts, 8, 18))
+}
+
+=== tests/cases/compiler/client.ts ===
+export * from "server";
+No type information for this code.

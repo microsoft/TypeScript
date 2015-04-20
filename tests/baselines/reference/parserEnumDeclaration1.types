@@ -4,6 +4,7 @@ enum E {
 
   Foo = 1,
 >Foo : E
+>1 : number
 
   Bar
 >Bar : E

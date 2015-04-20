@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/parserEmptyStatement1.ts ===
+; ;
+var a = 1;
+>a : Symbol(a, Decl(parserEmptyStatement1.ts, 1, 3))
+
+; 
+

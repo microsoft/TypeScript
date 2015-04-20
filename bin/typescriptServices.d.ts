@@ -124,16 +124,16 @@ declare module ts {
         VoidKeyword = 99,
         WhileKeyword = 100,
         WithKeyword = 101,
-        AsKeyword = 102,
-        ImplementsKeyword = 103,
-        InterfaceKeyword = 104,
-        LetKeyword = 105,
-        PackageKeyword = 106,
-        PrivateKeyword = 107,
-        ProtectedKeyword = 108,
-        PublicKeyword = 109,
-        StaticKeyword = 110,
-        YieldKeyword = 111,
+        ImplementsKeyword = 102,
+        InterfaceKeyword = 103,
+        LetKeyword = 104,
+        PackageKeyword = 105,
+        PrivateKeyword = 106,
+        ProtectedKeyword = 107,
+        PublicKeyword = 108,
+        StaticKeyword = 109,
+        YieldKeyword = 110,
+        AsKeyword = 111,
         AnyKeyword = 112,
         BooleanKeyword = 113,
         ConstructorKeyword = 114,
@@ -258,8 +258,8 @@ declare module ts {
         LastReservedWord = 101,
         FirstKeyword = 66,
         LastKeyword = 125,
-        FirstFutureReservedWord = 103,
-        LastFutureReservedWord = 111,
+        FirstFutureReservedWord = 102,
+        LastFutureReservedWord = 110,
         FirstTypeNode = 141,
         LastTypeNode = 149,
         FirstPunctuation = 14,
@@ -310,6 +310,7 @@ declare module ts {
     }
     interface Identifier extends PrimaryExpression {
         text: string;
+        originalKeywordKind?: SyntaxKind;
     }
     interface QualifiedName extends Node {
         left: EntityName;
@@ -451,7 +452,8 @@ declare module ts {
     interface ParenthesizedTypeNode extends TypeNode {
         type: TypeNode;
     }
-    interface StringLiteralTypeNode extends LiteralExpression, TypeNode {
+    interface StringLiteral extends LiteralExpression, TypeNode {
+        _stringLiteralBrand: any;
     }
     interface Expression extends Node {
         _expressionBrand: any;
@@ -517,9 +519,6 @@ declare module ts {
         isUnterminated?: boolean;
         hasExtendedUnicodeEscape?: boolean;
     }
-    interface StringLiteralExpression extends LiteralExpression {
-        _stringLiteralExpressionBrand: any;
-    }
     interface TemplateExpression extends PrimaryExpression {
         head: LiteralExpression;
         templateSpans: NodeArray<TemplateSpan>;
@@ -554,7 +553,7 @@ declare module ts {
         typeArguments?: NodeArray<TypeNode>;
         arguments: NodeArray<Expression>;
     }
-    interface HeritageClauseElement extends Node {
+    interface HeritageClauseElement extends TypeNode {
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
     }
@@ -1006,12 +1005,14 @@ declare module ts {
     }
     interface InterfaceType extends ObjectType {
         typeParameters: TypeParameter[];
-        baseTypes: ObjectType[];
         declaredProperties: Symbol[];
         declaredCallSignatures: Signature[];
         declaredConstructSignatures: Signature[];
         declaredStringIndexType: Type;
         declaredNumberIndexType: Type;
+    }
+    interface InterfaceTypeWithBaseTypes extends InterfaceType {
+        baseTypes: ObjectType[];
     }
     interface TypeReference extends ObjectType {
         target: GenericType;
@@ -1182,15 +1183,39 @@ declare module ts {
     function isIdentifierPart(ch: number, languageVersion: ScriptTarget): boolean;
 }
 declare module ts {
+    function getDefaultLibFileName(options: CompilerOptions): string;
+    function textSpanEnd(span: TextSpan): number;
+    function textSpanIsEmpty(span: TextSpan): boolean;
+    function textSpanContainsPosition(span: TextSpan, position: number): boolean;
+    function textSpanContainsTextSpan(span: TextSpan, other: TextSpan): boolean;
+    function textSpanOverlapsWith(span: TextSpan, other: TextSpan): boolean;
+    function textSpanOverlap(span1: TextSpan, span2: TextSpan): TextSpan;
+    function textSpanIntersectsWithTextSpan(span: TextSpan, other: TextSpan): boolean;
+    function textSpanIntersectsWith(span: TextSpan, start: number, length: number): boolean;
+    function textSpanIntersectsWithPosition(span: TextSpan, position: number): boolean;
+    function textSpanIntersection(span1: TextSpan, span2: TextSpan): TextSpan;
+    function createTextSpan(start: number, length: number): TextSpan;
+    function createTextSpanFromBounds(start: number, end: number): TextSpan;
+    function textChangeRangeNewSpan(range: TextChangeRange): TextSpan;
+    function textChangeRangeIsUnchanged(range: TextChangeRange): boolean;
+    function createTextChangeRange(span: TextSpan, newLength: number): TextChangeRange;
+    let unchangedTextChangeRange: TextChangeRange;
+    /**
+     * Called to merge all the changes that occurred across several versions of a script snapshot
+     * into a single change.  i.e. if a user keeps making successive edits to a script we will
+     * have a text change from V1 to V2, V2 to V3, ..., Vn.
+     *
+     * This function will then merge those changes into a single change range valid between V1 and
+     * Vn.
+     */
+    function collapseTextChangeRangesAcrossMultipleVersions(changes: TextChangeRange[]): TextChangeRange;
+}
+declare module ts {
     function getNodeConstructor(kind: SyntaxKind): new () => Node;
     function createNode(kind: SyntaxKind): Node;
     function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T;
-    function modifierToFlag(token: SyntaxKind): NodeFlags;
-    function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
-    function isEvalOrArgumentsIdentifier(node: Node): boolean;
     function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
-    function isLeftHandSideExpression(expr: Expression): boolean;
-    function isAssignmentOperator(token: SyntaxKind): boolean;
+    function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
 }
 declare module ts {
     /** The version of the TypeScript compiler release */
@@ -1260,7 +1285,6 @@ declare module ts {
         getDocumentationComment(): SymbolDisplayPart[];
     }
     interface SourceFile {
-        getNamedDeclarations(): Declaration[];
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineStarts(): number[];
         getPositionOfLineAndCharacter(line: number, character: number): number;

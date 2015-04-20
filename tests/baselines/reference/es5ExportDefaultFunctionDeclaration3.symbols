@@ -1,0 +1,20 @@
+=== tests/cases/compiler/es5ExportDefaultFunctionDeclaration3.ts ===
+
+var before: typeof func = func();
+>before : Symbol(before, Decl(es5ExportDefaultFunctionDeclaration3.ts, 1, 3))
+>func : Symbol(func, Decl(es5ExportDefaultFunctionDeclaration3.ts, 1, 33))
+>func : Symbol(func, Decl(es5ExportDefaultFunctionDeclaration3.ts, 1, 33))
+
+export default function func(): typeof func {
+>func : Symbol(func, Decl(es5ExportDefaultFunctionDeclaration3.ts, 1, 33))
+>func : Symbol(func, Decl(es5ExportDefaultFunctionDeclaration3.ts, 1, 33))
+
+    return func;
+>func : Symbol(func, Decl(es5ExportDefaultFunctionDeclaration3.ts, 1, 33))
+}
+
+var after: typeof func = func();
+>after : Symbol(after, Decl(es5ExportDefaultFunctionDeclaration3.ts, 7, 3))
+>func : Symbol(func, Decl(es5ExportDefaultFunctionDeclaration3.ts, 1, 33))
+>func : Symbol(func, Decl(es5ExportDefaultFunctionDeclaration3.ts, 1, 33))
+

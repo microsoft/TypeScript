@@ -20,6 +20,7 @@ export var bVal = b(10);
 >bVal : number
 >b(10) : number
 >b : (x: number) => number
+>10 : number
 
 export var bVal2 = b;
 >bVal2 : (x: number) => number

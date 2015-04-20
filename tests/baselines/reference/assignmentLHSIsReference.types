@@ -37,6 +37,7 @@ x3['a'] = value;
 >x3['a'] = value : any
 >x3['a'] : string
 >x3 : { a: string; }
+>'a' : string
 >value : any
 
 // parentheses, the contained expression is reference
@@ -70,5 +71,6 @@ function fn2(x4: number) {
 >(x3['a']) : string
 >x3['a'] : string
 >x3 : { a: string; }
+>'a' : string
 >value : any
 

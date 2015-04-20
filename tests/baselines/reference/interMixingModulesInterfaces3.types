@@ -10,6 +10,7 @@ module A {
 >B : B
 
             return null;
+>null : null
         }
     }
 
@@ -26,6 +27,7 @@ module A {
 
 var x: A.B = null;
 >x : A.B
->A : unknown
+>A : any
 >B : A.B
+>null : null
 

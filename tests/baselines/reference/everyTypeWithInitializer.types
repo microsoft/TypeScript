@@ -37,6 +37,7 @@ class D<T>{
 function F(x: string): number { return 42; }
 >F : (x: string) => number
 >x : string
+>42 : number
 
 module M {
 >M : typeof M
@@ -59,14 +60,17 @@ module M {
 
 var aNumber = 9.9;
 >aNumber : number
+>9.9 : number
 
 var aString = 'this is a string';
 >aString : string
+>'this is a string' : string
 
 var aDate = new Date(12);
 >aDate : Date
 >new Date(12) : Date
 >Date : DateConstructor
+>12 : number
 
 var anObject = new Object();
 >anObject : Object
@@ -75,6 +79,7 @@ var anObject = new Object();
 
 var anAny = null;
 >anAny : any
+>null : null
 
 var anOtherAny = <any> new C();
 >anOtherAny : any
@@ -101,6 +106,7 @@ var anObjectLiteral = { id: 12 };
 >anObjectLiteral : { id: number; }
 >{ id: 12 } : { id: number; }
 >id : number
+>12 : number
 
 var aFunction = F;
 >aFunction : (x: string) => number
@@ -110,6 +116,7 @@ var aLambda = (x) => 2;
 >aLambda : (x: any) => number
 >(x) => 2 : (x: any) => number
 >x : any
+>2 : number
 
 var aModule = M;
 >aModule : typeof M

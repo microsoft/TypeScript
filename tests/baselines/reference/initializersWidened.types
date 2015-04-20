@@ -3,6 +3,7 @@
 
 var x = null;
 >x : any
+>null : null
 
 var y = undefined;
 >y : any

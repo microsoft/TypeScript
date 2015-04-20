@@ -11,11 +11,13 @@ function foo(x: number | string) {
         x = 10;
 >x = 10 : number
 >x : string | number
+>10 : number
     }
     if (typeof x === "string") {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number
+>"string" : string
 
         f();
 >f() : void
@@ -40,6 +42,7 @@ function foo2(x: number | string) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number
+>"string" : string
 
         return x.length; // string
 >x.length : number
@@ -61,6 +64,7 @@ function foo2(x: number | string) {
     x = "hello";
 >x = "hello" : string
 >x : string | number
+>"hello" : string
 
     f();
 >f() : number
@@ -74,6 +78,7 @@ function foo3(x: number | string) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : string | number
+>"string" : string
 
         return x.length; // string
 >x.length : number
@@ -91,6 +96,7 @@ function foo3(x: number | string) {
     x = "hello";
 >x = "hello" : string
 >x : string | number
+>"hello" : string
 
     f();
 >f() : number

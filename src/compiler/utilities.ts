@@ -211,8 +211,10 @@ module ts {
             isCatchClauseVariableDeclaration(declaration);
     }
 
+    // Gets the nearest enclosing block scope container that has the provided node 
+    // as a descendant, that is not the provided node.
     export function getEnclosingBlockScopeContainer(node: Node): Node {
-        let current = node;
+        let current = node.parent;
         while (current) {
             if (isFunctionLike(current)) {
                 return current;
@@ -271,10 +273,8 @@ module ts {
         };
     }
 
-    /* @internal */
     export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan {
-        let scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.text);
-        scanner.setTextPos(pos);
+        let scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.text, /*onError:*/ undefined, pos);
         scanner.scan();
         let start = scanner.getTokenPos();
         return createTextSpanFromBounds(start, scanner.getTextPos());
@@ -408,7 +408,6 @@ module ts {
 
     export let fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/
 
-
     // Warning: This has the same semantics as the forEach family of functions,
     //          in that traversal terminates in the event that 'visitor' supplies a truthy value.
     export function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T {
@@ -439,7 +438,6 @@ module ts {
         }
     }
 
-    /* @internal */
     export function isVariableLike(node: Node): boolean {
         if (node) {
             switch (node.kind) {
@@ -1151,218 +1149,7 @@ module ts {
         }
         return false;
     }
-
-    export function textSpanEnd(span: TextSpan) {
-        return span.start + span.length
-    }
-
-    export function textSpanIsEmpty(span: TextSpan) {
-        return span.length === 0
-    }
-
-    export function textSpanContainsPosition(span: TextSpan, position: number) {
-        return position >= span.start && position < textSpanEnd(span);
-    }
-
-    // Returns true if 'span' contains 'other'.
-    export function textSpanContainsTextSpan(span: TextSpan, other: TextSpan) {
-        return other.start >= span.start && textSpanEnd(other) <= textSpanEnd(span);
-    }
-
-    export function textSpanOverlapsWith(span: TextSpan, other: TextSpan) {
-        let overlapStart = Math.max(span.start, other.start);
-        let overlapEnd = Math.min(textSpanEnd(span), textSpanEnd(other));
-        return overlapStart < overlapEnd;
-    }
-
-    export function textSpanOverlap(span1: TextSpan, span2: TextSpan) {
-        let overlapStart = Math.max(span1.start, span2.start);
-        let overlapEnd = Math.min(textSpanEnd(span1), textSpanEnd(span2));
-        if (overlapStart < overlapEnd) {
-            return createTextSpanFromBounds(overlapStart, overlapEnd);
-        }
-        return undefined;
-    }
-
-    export function textSpanIntersectsWithTextSpan(span: TextSpan, other: TextSpan) {
-        return other.start <= textSpanEnd(span) && textSpanEnd(other) >= span.start
-    }
-
-    export function textSpanIntersectsWith(span: TextSpan, start: number, length: number) {
-        let end = start + length;
-        return start <= textSpanEnd(span) && end >= span.start;
-    }
-
-    export function textSpanIntersectsWithPosition(span: TextSpan, position: number) {
-        return position <= textSpanEnd(span) && position >= span.start;
-    }
-
-    export function textSpanIntersection(span1: TextSpan, span2: TextSpan) {
-        let intersectStart = Math.max(span1.start, span2.start);
-        let intersectEnd = Math.min(textSpanEnd(span1), textSpanEnd(span2));
-        if (intersectStart <= intersectEnd) {
-            return createTextSpanFromBounds(intersectStart, intersectEnd);
-        }
-        return undefined;
-    }
-
-    export function createTextSpan(start: number, length: number): TextSpan {
-        if (start < 0) {
-            throw new Error("start < 0");
-        }
-        if (length < 0) {
-            throw new Error("length < 0");
-        }
-
-        return { start, length };
-    }
-
-    export function createTextSpanFromBounds(start: number, end: number) {
-        return createTextSpan(start, end - start);
-    }
-
-    export function textChangeRangeNewSpan(range: TextChangeRange) {
-        return createTextSpan(range.span.start, range.newLength);
-    }
-
-    export function textChangeRangeIsUnchanged(range: TextChangeRange) {
-        return textSpanIsEmpty(range.span) && range.newLength === 0;
-    }
-
-    export function createTextChangeRange(span: TextSpan, newLength: number): TextChangeRange {
-        if (newLength < 0) {
-            throw new Error("newLength < 0");
-        }
-
-        return { span, newLength };
-    }
-
-    export let unchangedTextChangeRange = createTextChangeRange(createTextSpan(0, 0), 0);
-
-    /**
-     * Called to merge all the changes that occurred across several versions of a script snapshot 
-     * into a single change.  i.e. if a user keeps making successive edits to a script we will
-     * have a text change from V1 to V2, V2 to V3, ..., Vn.  
-     * 
-     * This function will then merge those changes into a single change range valid between V1 and
-     * Vn.
-     */
-    export function collapseTextChangeRangesAcrossMultipleVersions(changes: TextChangeRange[]): TextChangeRange {
-        if (changes.length === 0) {
-            return unchangedTextChangeRange;
-        }
-
-        if (changes.length === 1) {
-            return changes[0];
-        }
-
-        // We change from talking about { { oldStart, oldLength }, newLength } to { oldStart, oldEnd, newEnd }
-        // as it makes things much easier to reason about.
-        let change0 = changes[0];
-
-        let oldStartN = change0.span.start;
-        let oldEndN = textSpanEnd(change0.span);
-        let newEndN = oldStartN + change0.newLength;
-
-        for (let i = 1; i < changes.length; i++) {
-            let nextChange = changes[i];
-
-            // Consider the following case:
-            // i.e. two edits.  The first represents the text change range { { 10, 50 }, 30 }.  i.e. The span starting
-            // at 10, with length 50 is reduced to length 30.  The second represents the text change range { { 30, 30 }, 40 }.
-            // i.e. the span starting at 30 with length 30 is increased to length 40.
-            //
-            //      0         10        20        30        40        50        60        70        80        90        100
-            //      -------------------------------------------------------------------------------------------------------
-            //                |                                                 /                                          
-            //                |                                            /----                                           
-            //  T1            |                                       /----                                                
-            //                |                                  /----                                                     
-            //                |                             /----                                                          
-            //      -------------------------------------------------------------------------------------------------------
-            //                                     |                            \                                          
-            //                                     |                               \                                       
-            //   T2                                |                                 \                                     
-            //                                     |                                   \                                   
-            //                                     |                                      \                                
-            //      -------------------------------------------------------------------------------------------------------
-            //
-            // Merging these turns out to not be too difficult.  First, determining the new start of the change is trivial
-            // it's just the min of the old and new starts.  i.e.:
-            //
-            //      0         10        20        30        40        50        60        70        80        90        100
-            //      ------------------------------------------------------------*------------------------------------------
-            //                |                                                 /                                          
-            //                |                                            /----                                           
-            //  T1            |                                       /----                                                
-            //                |                                  /----                                                     
-            //                |                             /----                                                          
-            //      ----------------------------------------$-------------------$------------------------------------------
-            //                .                    |                            \                                          
-            //                .                    |                               \                                       
-            //   T2           .                    |                                 \                                     
-            //                .                    |                                   \                                   
-            //                .                    |                                      \                                
-            //      ----------------------------------------------------------------------*--------------------------------
-            //
-            // (Note the dots represent the newly inferrred start.
-            // Determining the new and old end is also pretty simple.  Basically it boils down to paying attention to the
-            // absolute positions at the asterixes, and the relative change between the dollar signs. Basically, we see
-            // which if the two $'s precedes the other, and we move that one forward until they line up.  in this case that
-            // means:
-            //
-            //      0         10        20        30        40        50        60        70        80        90        100
-            //      --------------------------------------------------------------------------------*----------------------
-            //                |                                                                     /                      
-            //                |                                                                /----                       
-            //  T1            |                                                           /----                            
-            //                |                                                      /----                                 
-            //                |                                                 /----                                      
-            //      ------------------------------------------------------------$------------------------------------------
-            //                .                    |                            \                                          
-            //                .                    |                               \                                       
-            //   T2           .                    |                                 \                                     
-            //                .                    |                                   \                                   
-            //                .                    |                                      \                                
-            //      ----------------------------------------------------------------------*--------------------------------
-            //
-            // In other words (in this case), we're recognizing that the second edit happened after where the first edit
-            // ended with a delta of 20 characters (60 - 40).  Thus, if we go back in time to where the first edit started
-            // that's the same as if we started at char 80 instead of 60.  
-            //
-            // As it so happens, the same logic applies if the second edit precedes the first edit.  In that case rahter
-            // than pusing the first edit forward to match the second, we'll push the second edit forward to match the
-            // first.
-            //
-            // In this case that means we have { oldStart: 10, oldEnd: 80, newEnd: 70 } or, in TextChangeRange
-            // semantics: { { start: 10, length: 70 }, newLength: 60 }
-            //
-            // The math then works out as follows.
-            // If we have { oldStart1, oldEnd1, newEnd1 } and { oldStart2, oldEnd2, newEnd2 } then we can compute the 
-            // final result like so:
-            //
-            // {
-            //      oldStart3: Min(oldStart1, oldStart2),
-            //      oldEnd3  : Max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1)),
-            //      newEnd3  : Max(newEnd2, newEnd2 + (newEnd1 - oldEnd2))
-            // }
-
-            let oldStart1 = oldStartN;
-            let oldEnd1 = oldEndN;
-            let newEnd1 = newEndN;
-
-            let oldStart2 = nextChange.span.start;
-            let oldEnd2 = textSpanEnd(nextChange.span);
-            let newEnd2 = oldStart2 + nextChange.newLength;
-
-            oldStartN = Math.min(oldStart1, oldStart2);
-            oldEndN = Math.max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1));
-            newEndN = Math.max(newEnd2, newEnd2 + (newEnd1 - oldEnd2));
-        }
-
-        return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength:*/ newEndN - oldStartN);
-    }
-
+        
     export function nodeStartsNewLexicalEnvironment(n: Node): boolean {
         return isFunctionLike(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
     }
@@ -1379,7 +1166,13 @@ module ts {
         return node;
     }
 
-    /* @internal */
+    export function createSynthesizedNodeArray(): NodeArray<any> {
+        var array = <NodeArray<any>>[];
+        array.pos = -1;
+        array.end = -1;
+        return array;
+    }
+
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
         let fileDiagnostics: Map<Diagnostic[]> = {};
@@ -1827,6 +1620,55 @@ module ts {
         }
     }
 
+    export function modifierToFlag(token: SyntaxKind): NodeFlags {
+        switch (token) {
+            case SyntaxKind.StaticKeyword: return NodeFlags.Static;
+            case SyntaxKind.PublicKeyword: return NodeFlags.Public;
+            case SyntaxKind.ProtectedKeyword: return NodeFlags.Protected;
+            case SyntaxKind.PrivateKeyword: return NodeFlags.Private;
+            case SyntaxKind.ExportKeyword: return NodeFlags.Export;
+            case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
+            case SyntaxKind.ConstKeyword: return NodeFlags.Const;
+            case SyntaxKind.DefaultKeyword: return NodeFlags.Default;
+        }
+        return 0;
+    }
+
+    export function isLeftHandSideExpression(expr: Expression): boolean {
+        if (expr) {
+            switch (expr.kind) {
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.Identifier:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateExpression:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.SuperKeyword:
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    export function isAssignmentOperator(token: SyntaxKind): boolean {
+        return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
+    }
+
     // Returns false if this heritage clause element's expression contains something unsupported
     // (i.e. not a name or dotted name).
     export function isSupportedHeritageClauseElement(node: HeritageClauseElement): boolean {
@@ -1852,5 +1694,222 @@ module ts {
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
             return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
+    }
+}
+
+module ts {
+    export function getDefaultLibFileName(options: CompilerOptions): string {
+        return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
+    }
+
+    export function textSpanEnd(span: TextSpan) {
+        return span.start + span.length
+    }
+
+    export function textSpanIsEmpty(span: TextSpan) {
+        return span.length === 0
+    }
+
+    export function textSpanContainsPosition(span: TextSpan, position: number) {
+        return position >= span.start && position < textSpanEnd(span);
+    }
+
+    // Returns true if 'span' contains 'other'.
+    export function textSpanContainsTextSpan(span: TextSpan, other: TextSpan) {
+        return other.start >= span.start && textSpanEnd(other) <= textSpanEnd(span);
+    }
+
+    export function textSpanOverlapsWith(span: TextSpan, other: TextSpan) {
+        let overlapStart = Math.max(span.start, other.start);
+        let overlapEnd = Math.min(textSpanEnd(span), textSpanEnd(other));
+        return overlapStart < overlapEnd;
+    }
+
+    export function textSpanOverlap(span1: TextSpan, span2: TextSpan) {
+        let overlapStart = Math.max(span1.start, span2.start);
+        let overlapEnd = Math.min(textSpanEnd(span1), textSpanEnd(span2));
+        if (overlapStart < overlapEnd) {
+            return createTextSpanFromBounds(overlapStart, overlapEnd);
+        }
+        return undefined;
+    }
+
+    export function textSpanIntersectsWithTextSpan(span: TextSpan, other: TextSpan) {
+        return other.start <= textSpanEnd(span) && textSpanEnd(other) >= span.start
+    }
+
+    export function textSpanIntersectsWith(span: TextSpan, start: number, length: number) {
+        let end = start + length;
+        return start <= textSpanEnd(span) && end >= span.start;
+    }
+
+    export function textSpanIntersectsWithPosition(span: TextSpan, position: number) {
+        return position <= textSpanEnd(span) && position >= span.start;
+    }
+
+    export function textSpanIntersection(span1: TextSpan, span2: TextSpan) {
+        let intersectStart = Math.max(span1.start, span2.start);
+        let intersectEnd = Math.min(textSpanEnd(span1), textSpanEnd(span2));
+        if (intersectStart <= intersectEnd) {
+            return createTextSpanFromBounds(intersectStart, intersectEnd);
+        }
+        return undefined;
+    }
+
+    export function createTextSpan(start: number, length: number): TextSpan {
+        if (start < 0) {
+            throw new Error("start < 0");
+        }
+        if (length < 0) {
+            throw new Error("length < 0");
+        }
+
+        return { start, length };
+    }
+
+    export function createTextSpanFromBounds(start: number, end: number) {
+        return createTextSpan(start, end - start);
+    }
+
+    export function textChangeRangeNewSpan(range: TextChangeRange) {
+        return createTextSpan(range.span.start, range.newLength);
+    }
+
+    export function textChangeRangeIsUnchanged(range: TextChangeRange) {
+        return textSpanIsEmpty(range.span) && range.newLength === 0;
+    }
+
+    export function createTextChangeRange(span: TextSpan, newLength: number): TextChangeRange {
+        if (newLength < 0) {
+            throw new Error("newLength < 0");
+        }
+
+        return { span, newLength };
+    }
+
+    export let unchangedTextChangeRange = createTextChangeRange(createTextSpan(0, 0), 0);
+
+    /**
+     * Called to merge all the changes that occurred across several versions of a script snapshot 
+     * into a single change.  i.e. if a user keeps making successive edits to a script we will
+     * have a text change from V1 to V2, V2 to V3, ..., Vn.  
+     * 
+     * This function will then merge those changes into a single change range valid between V1 and
+     * Vn.
+     */
+    export function collapseTextChangeRangesAcrossMultipleVersions(changes: TextChangeRange[]): TextChangeRange {
+        if (changes.length === 0) {
+            return unchangedTextChangeRange;
+        }
+
+        if (changes.length === 1) {
+            return changes[0];
+        }
+
+        // We change from talking about { { oldStart, oldLength }, newLength } to { oldStart, oldEnd, newEnd }
+        // as it makes things much easier to reason about.
+        let change0 = changes[0];
+
+        let oldStartN = change0.span.start;
+        let oldEndN = textSpanEnd(change0.span);
+        let newEndN = oldStartN + change0.newLength;
+
+        for (let i = 1; i < changes.length; i++) {
+            let nextChange = changes[i];
+
+            // Consider the following case:
+            // i.e. two edits.  The first represents the text change range { { 10, 50 }, 30 }.  i.e. The span starting
+            // at 10, with length 50 is reduced to length 30.  The second represents the text change range { { 30, 30 }, 40 }.
+            // i.e. the span starting at 30 with length 30 is increased to length 40.
+            //
+            //      0         10        20        30        40        50        60        70        80        90        100
+            //      -------------------------------------------------------------------------------------------------------
+            //                |                                                 /                                          
+            //                |                                            /----                                           
+            //  T1            |                                       /----                                                
+            //                |                                  /----                                                     
+            //                |                             /----                                                          
+            //      -------------------------------------------------------------------------------------------------------
+            //                                     |                            \                                          
+            //                                     |                               \                                       
+            //   T2                                |                                 \                                     
+            //                                     |                                   \                                   
+            //                                     |                                      \                                
+            //      -------------------------------------------------------------------------------------------------------
+            //
+            // Merging these turns out to not be too difficult.  First, determining the new start of the change is trivial
+            // it's just the min of the old and new starts.  i.e.:
+            //
+            //      0         10        20        30        40        50        60        70        80        90        100
+            //      ------------------------------------------------------------*------------------------------------------
+            //                |                                                 /                                          
+            //                |                                            /----                                           
+            //  T1            |                                       /----                                                
+            //                |                                  /----                                                     
+            //                |                             /----                                                          
+            //      ----------------------------------------$-------------------$------------------------------------------
+            //                .                    |                            \                                          
+            //                .                    |                               \                                       
+            //   T2           .                    |                                 \                                     
+            //                .                    |                                   \                                   
+            //                .                    |                                      \                                
+            //      ----------------------------------------------------------------------*--------------------------------
+            //
+            // (Note the dots represent the newly inferrred start.
+            // Determining the new and old end is also pretty simple.  Basically it boils down to paying attention to the
+            // absolute positions at the asterixes, and the relative change between the dollar signs. Basically, we see
+            // which if the two $'s precedes the other, and we move that one forward until they line up.  in this case that
+            // means:
+            //
+            //      0         10        20        30        40        50        60        70        80        90        100
+            //      --------------------------------------------------------------------------------*----------------------
+            //                |                                                                     /                      
+            //                |                                                                /----                       
+            //  T1            |                                                           /----                            
+            //                |                                                      /----                                 
+            //                |                                                 /----                                      
+            //      ------------------------------------------------------------$------------------------------------------
+            //                .                    |                            \                                          
+            //                .                    |                               \                                       
+            //   T2           .                    |                                 \                                     
+            //                .                    |                                   \                                   
+            //                .                    |                                      \                                
+            //      ----------------------------------------------------------------------*--------------------------------
+            //
+            // In other words (in this case), we're recognizing that the second edit happened after where the first edit
+            // ended with a delta of 20 characters (60 - 40).  Thus, if we go back in time to where the first edit started
+            // that's the same as if we started at char 80 instead of 60.  
+            //
+            // As it so happens, the same logic applies if the second edit precedes the first edit.  In that case rahter
+            // than pusing the first edit forward to match the second, we'll push the second edit forward to match the
+            // first.
+            //
+            // In this case that means we have { oldStart: 10, oldEnd: 80, newEnd: 70 } or, in TextChangeRange
+            // semantics: { { start: 10, length: 70 }, newLength: 60 }
+            //
+            // The math then works out as follows.
+            // If we have { oldStart1, oldEnd1, newEnd1 } and { oldStart2, oldEnd2, newEnd2 } then we can compute the 
+            // final result like so:
+            //
+            // {
+            //      oldStart3: Min(oldStart1, oldStart2),
+            //      oldEnd3  : Max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1)),
+            //      newEnd3  : Max(newEnd2, newEnd2 + (newEnd1 - oldEnd2))
+            // }
+
+            let oldStart1 = oldStartN;
+            let oldEnd1 = oldEndN;
+            let newEnd1 = newEndN;
+
+            let oldStart2 = nextChange.span.start;
+            let oldEnd2 = textSpanEnd(nextChange.span);
+            let newEnd2 = oldStart2 + nextChange.newLength;
+
+            oldStartN = Math.min(oldStart1, oldStart2);
+            oldEndN = Math.max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1));
+            newEndN = Math.max(newEnd2, newEnd2 + (newEnd1 - oldEnd2));
+        }
+
+        return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength:*/ newEndN - oldStartN);
     }
 }

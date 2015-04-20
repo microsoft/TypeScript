@@ -1,6 +1,7 @@
 === tests/cases/compiler/noCollisionThisExpressionAndVarInGlobal.ts ===
 var _this = 1;
 >_this : number
+>1 : number
 
 var f = () => _this;
 >f : () => number

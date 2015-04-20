@@ -4,6 +4,7 @@ class C {
 
     x = 1;
 >x : number
+>1 : number
 }
 
 var c = new C();
@@ -16,6 +17,7 @@ c.x = 3;
 >c.x : number
 >c : C
 >x : number
+>3 : number
 
 var c2 = new C();
 >c2 : C

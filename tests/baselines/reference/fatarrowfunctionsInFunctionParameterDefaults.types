@@ -19,4 +19,5 @@ fn.call(4); // Should be 4
 >fn.call : (thisArg: any, ...argArray: any[]) => any
 >fn : (x?: () => any, y?: any) => any
 >call : (thisArg: any, ...argArray: any[]) => any
+>4 : number
 

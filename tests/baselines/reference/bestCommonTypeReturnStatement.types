@@ -17,6 +17,7 @@ function f() {
 >f : () => IPromise<void>
 
     if (true) return b();
+>true : boolean
 >b() : IPromise<void>
 >b : () => IPromise<void>
 
@@ -29,8 +30,10 @@ function f() {
 function b(): IPromise<void> { return null; }
 >b : () => IPromise<void>
 >IPromise : IPromise<T>
+>null : null
 
 function d(): IPromise<any> { return null; }
 >d : () => IPromise<any>
 >IPromise : IPromise<T>
+>null : null
 

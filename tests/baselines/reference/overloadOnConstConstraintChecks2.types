@@ -34,4 +34,5 @@ function foo(name: any): A {
 >A : A
 
     return null;
+>null : null
 }

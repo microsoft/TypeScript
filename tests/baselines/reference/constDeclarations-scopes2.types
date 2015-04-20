@@ -3,6 +3,7 @@
 // global
 const c = "string";
 >c : string
+>"string" : string
 
 var n: number;
 >n : number
@@ -13,8 +14,10 @@ var b: boolean;
 // for scope
 for (const c = 0; c < 10; n = c ) {
 >c : number
+>0 : number
 >c < 10 : boolean
 >c : number
+>10 : number
 >n = c : number
 >n : number
 >c : number
@@ -22,6 +25,7 @@ for (const c = 0; c < 10; n = c ) {
     // for block
     const c = false;
 >c : boolean
+>false : boolean
 
     b = c;
 >b = c : boolean

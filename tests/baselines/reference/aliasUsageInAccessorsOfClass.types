@@ -10,6 +10,7 @@ interface IHasVisualizationModel {
 
     VisualizationModel: typeof Backbone.Model;
 >VisualizationModel : typeof Backbone.Model
+>Backbone.Model : typeof Backbone.Model
 >Backbone : typeof Backbone
 >Model : typeof Backbone.Model
 }
@@ -52,6 +53,7 @@ import Backbone = require("aliasUsage1_backbone");
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
+>Backbone.Model : any
 >Backbone : typeof Backbone
 >Model : Backbone.Model
 

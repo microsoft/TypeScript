@@ -34,30 +34,43 @@ var xa: X[];
 foo(1, 2, "abc");
 >foo(1, 2, "abc") : void
 >foo : (x: number, y: number, ...z: string[]) => void
+>1 : number
+>2 : number
+>"abc" : string
 
 foo(1, 2, ...a);
 >foo(1, 2, ...a) : void
 >foo : (x: number, y: number, ...z: string[]) => void
+>1 : number
+>2 : number
 >...a : string
 >a : string[]
 
 foo(1, 2, ...a, "abc");
 >foo(1, 2, ...a, "abc") : void
 >foo : (x: number, y: number, ...z: string[]) => void
+>1 : number
+>2 : number
 >...a : string
 >a : string[]
+>"abc" : string
 
 obj.foo(1, 2, "abc");
 >obj.foo(1, 2, "abc") : any
 >obj.foo : (x: number, y: number, ...z: string[]) => any
 >obj : X
 >foo : (x: number, y: number, ...z: string[]) => any
+>1 : number
+>2 : number
+>"abc" : string
 
 obj.foo(1, 2, ...a);
 >obj.foo(1, 2, ...a) : any
 >obj.foo : (x: number, y: number, ...z: string[]) => any
 >obj : X
 >foo : (x: number, y: number, ...z: string[]) => any
+>1 : number
+>2 : number
 >...a : string
 >a : string[]
 
@@ -66,8 +79,11 @@ obj.foo(1, 2, ...a, "abc");
 >obj.foo : (x: number, y: number, ...z: string[]) => any
 >obj : X
 >foo : (x: number, y: number, ...z: string[]) => any
+>1 : number
+>2 : number
 >...a : string
 >a : string[]
+>"abc" : string
 
 (obj.foo)(1, 2, "abc");
 >(obj.foo)(1, 2, "abc") : any
@@ -75,6 +91,9 @@ obj.foo(1, 2, ...a, "abc");
 >obj.foo : (x: number, y: number, ...z: string[]) => any
 >obj : X
 >foo : (x: number, y: number, ...z: string[]) => any
+>1 : number
+>2 : number
+>"abc" : string
 
 (obj.foo)(1, 2, ...a);
 >(obj.foo)(1, 2, ...a) : any
@@ -82,6 +101,8 @@ obj.foo(1, 2, ...a, "abc");
 >obj.foo : (x: number, y: number, ...z: string[]) => any
 >obj : X
 >foo : (x: number, y: number, ...z: string[]) => any
+>1 : number
+>2 : number
 >...a : string
 >a : string[]
 
@@ -91,22 +112,32 @@ obj.foo(1, 2, ...a, "abc");
 >obj.foo : (x: number, y: number, ...z: string[]) => any
 >obj : X
 >foo : (x: number, y: number, ...z: string[]) => any
+>1 : number
+>2 : number
 >...a : string
 >a : string[]
+>"abc" : string
 
 xa[1].foo(1, 2, "abc");
 >xa[1].foo(1, 2, "abc") : any
 >xa[1].foo : (x: number, y: number, ...z: string[]) => any
 >xa[1] : X
 >xa : X[]
+>1 : number
 >foo : (x: number, y: number, ...z: string[]) => any
+>1 : number
+>2 : number
+>"abc" : string
 
 xa[1].foo(1, 2, ...a);
 >xa[1].foo(1, 2, ...a) : any
 >xa[1].foo : (x: number, y: number, ...z: string[]) => any
 >xa[1] : X
 >xa : X[]
+>1 : number
 >foo : (x: number, y: number, ...z: string[]) => any
+>1 : number
+>2 : number
 >...a : string
 >a : string[]
 
@@ -115,9 +146,13 @@ xa[1].foo(1, 2, ...a, "abc");
 >xa[1].foo : (x: number, y: number, ...z: string[]) => any
 >xa[1] : X
 >xa : X[]
+>1 : number
 >foo : (x: number, y: number, ...z: string[]) => any
+>1 : number
+>2 : number
 >...a : string
 >a : string[]
+>"abc" : string
 
 (<Function>xa[1].foo)(...[1, 2, "abc"]);
 >(<Function>xa[1].foo)(...[1, 2, "abc"]) : any
@@ -127,9 +162,13 @@ xa[1].foo(1, 2, ...a, "abc");
 >xa[1].foo : (x: number, y: number, ...z: string[]) => any
 >xa[1] : X
 >xa : X[]
+>1 : number
 >foo : (x: number, y: number, ...z: string[]) => any
 >...[1, 2, "abc"] : string | number
 >[1, 2, "abc"] : (string | number)[]
+>1 : number
+>2 : number
+>"abc" : string
 
 class C {
 >C : C
@@ -173,10 +212,14 @@ class D extends C {
         super(1, 2);
 >super(1, 2) : void
 >super : typeof C
+>1 : number
+>2 : number
 
         super(1, 2, ...a);
 >super(1, 2, ...a) : void
 >super : typeof C
+>1 : number
+>2 : number
 >...a : string
 >a : string[]
     }
@@ -188,12 +231,16 @@ class D extends C {
 >super.foo : (x: number, y: number, ...z: string[]) => void
 >super : C
 >foo : (x: number, y: number, ...z: string[]) => void
+>1 : number
+>2 : number
 
         super.foo(1, 2, ...a);
 >super.foo(1, 2, ...a) : void
 >super.foo : (x: number, y: number, ...z: string[]) => void
 >super : C
 >foo : (x: number, y: number, ...z: string[]) => void
+>1 : number
+>2 : number
 >...a : string
 >a : string[]
     }
@@ -204,6 +251,8 @@ var c = new C(1, 2, ...a);
 >c : C
 >new C(1, 2, ...a) : C
 >C : typeof C
+>1 : number
+>2 : number
 >...a : string
 >a : string[]
 

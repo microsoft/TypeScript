@@ -2,4 +2,6 @@
 var x = (`abc${0}abc`);
 >x : string
 >(`abc${0}abc`) : string
+>`abc${0}abc` : string
+>0 : number
 

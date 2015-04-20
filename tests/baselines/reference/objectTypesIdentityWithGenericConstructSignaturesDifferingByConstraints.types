@@ -11,6 +11,7 @@ class B<T extends Array<number>> {
     constructor(x: T) { return null; }
 >x : T
 >T : T
+>null : null
 }
 
 class C<T extends String> {
@@ -21,6 +22,7 @@ class C<T extends String> {
     constructor(x: T) { return null; }
 >x : T
 >T : T
+>null : null
 }
 
 interface I<T extends Number> {
@@ -58,6 +60,7 @@ var b = { new<T extends RegExp>(x: T) { return ''; } }; // not a construct signa
 >RegExp : RegExp
 >x : T
 >T : T
+>'' : string
 
 function foo1b(x: B<Array<number>>);
 >foo1b : { (x: B<number[]>): any; (x: B<number[]>): any; }

@@ -6,11 +6,13 @@ function outer() {
 
     const x = 0;
 >x : number
+>0 : number
 
     function inner() {
 >inner : () => void
 
         var x = "inner";
 >x : string
+>"inner" : string
     }
 }

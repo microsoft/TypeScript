@@ -50,6 +50,7 @@ var a = fun(x => x, 10);
 >x => x : (x: number) => number
 >x : number
 >x : number
+>10 : number
 
 var b = fun((x => x), 10);
 >b : number
@@ -59,6 +60,7 @@ var b = fun((x => x), 10);
 >x => x : (x: number) => number
 >x : number
 >x : number
+>10 : number
 
 var c = fun(((x => x)), 10);
 >c : number
@@ -69,6 +71,7 @@ var c = fun(((x => x)), 10);
 >x => x : (x: number) => number
 >x : number
 >x : number
+>10 : number
 
 var d = fun((((x => x))), 10);
 >d : number
@@ -80,6 +83,7 @@ var d = fun((((x => x))), 10);
 >x => x : (x: number) => number
 >x : number
 >x : number
+>10 : number
 
 var e = fun(x => x, x => x, 10);
 >e : number
@@ -91,6 +95,7 @@ var e = fun(x => x, x => x, 10);
 >x => x : (x: number) => number
 >x : number
 >x : number
+>10 : number
 
 var f = fun((x => x), (x => x), 10);
 >f : number
@@ -104,6 +109,7 @@ var f = fun((x => x), (x => x), 10);
 >x => x : (x: number) => number
 >x : number
 >x : number
+>10 : number
 
 var g = fun(((x => x)), ((x => x)), 10);
 >g : number
@@ -119,6 +125,7 @@ var g = fun(((x => x)), ((x => x)), 10);
 >x => x : (x: number) => number
 >x : number
 >x : number
+>10 : number
 
 var h = fun((((x => x))), ((x => x)), 10);
 >h : number
@@ -135,6 +142,7 @@ var h = fun((((x => x))), ((x => x)), 10);
 >x => x : (x: number) => number
 >x : number
 >x : number
+>10 : number
 
 // Ternaries in parens
 var i = fun((Math.random() < 0.5 ? x => x : x => undefined), 10);
@@ -148,12 +156,14 @@ var i = fun((Math.random() < 0.5 ? x => x : x => undefined), 10);
 >Math.random : () => number
 >Math : Math
 >random : () => number
+>0.5 : number
 >x => x : (x: number) => number
 >x : number
 >x : number
 >x => undefined : (x: number) => any
 >x : number
 >undefined : undefined
+>10 : number
 
 var j = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10);
 >j : any
@@ -166,6 +176,7 @@ var j = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10);
 >Math.random : () => number
 >Math : Math
 >random : () => number
+>0.5 : number
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
 >x : number
@@ -174,6 +185,7 @@ var j = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10);
 >x => undefined : (x: number) => any
 >x : number
 >undefined : undefined
+>10 : number
 
 var k = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10);
 >k : any
@@ -186,6 +198,7 @@ var k = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10);
 >Math.random : () => number
 >Math : Math
 >random : () => number
+>0.5 : number
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
 >x : number
@@ -197,6 +210,7 @@ var k = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10);
 >x => x : (x: any) => any
 >x : any
 >x : any
+>10 : number
 
 var l = fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)), 10);
 >l : any
@@ -210,6 +224,7 @@ var l = fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)
 >Math.random : () => number
 >Math : Math
 >random : () => number
+>0.5 : number
 >((x => x)) : (x: number) => number
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
@@ -225,6 +240,7 @@ var l = fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)
 >x => x : (x: any) => any
 >x : any
 >x : any
+>10 : number
 
 var lambda1: (x: number) => number = x => x;
 >lambda1 : (x: number) => number

@@ -4,6 +4,7 @@ class C {
 
     x: string = "Hello world";
 >x : string
+>"Hello world" : string
 }
 
 class D {
@@ -11,6 +12,7 @@ class D {
 
     x: string = "Hello world";
 >x : string
+>"Hello world" : string
 
     y: number;
 >y : number
@@ -21,6 +23,7 @@ class D {
 >this.y : number
 >this : D
 >y : number
+>10 : number
     }
 }
 
@@ -30,6 +33,7 @@ class E extends D{
 
     z: boolean = true;
 >z : boolean
+>true : boolean
 }
 
 class F extends D{
@@ -38,6 +42,7 @@ class F extends D{
 
     z: boolean = true;
 >z : boolean
+>true : boolean
 
     j: string;
 >j : string
@@ -52,5 +57,6 @@ class F extends D{
 >this.j : string
 >this : F
 >j : string
+>"HI" : string
     }
 }

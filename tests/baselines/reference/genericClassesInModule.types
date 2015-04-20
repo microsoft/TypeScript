@@ -17,6 +17,6 @@ var a = new Foo.B<Foo.A>();
 >Foo.B : typeof Foo.B
 >Foo : typeof Foo
 >B : typeof Foo.B
->Foo : unknown
+>Foo : any
 >A : Foo.A
 

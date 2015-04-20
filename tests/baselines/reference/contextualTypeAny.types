@@ -7,11 +7,13 @@ var obj: { [s: string]: number } = { p: "", q: x };
 >s : string
 >{ p: "", q: x } : { [x: string]: any; p: string; q: any; }
 >p : string
+>"" : string
 >q : any
 >x : any
 
 var arr: number[] = ["", x];
 >arr : number[]
 >["", x] : any[]
+>"" : string
 >x : any
 
