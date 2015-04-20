@@ -1485,6 +1485,7 @@ module ts {
         public static moduleName = "module name";
         public static typeParameterName = "type parameter name";
         public static typeAlias = "type alias name";
+        public static decorator = "decorator"; // TODO(rbuckton): This needs its own type name, which would require a VS update. This will have to happen after 1.5 beta.
     }
 
     /// Language Service
@@ -6022,6 +6023,10 @@ module ts {
                             token.parent.kind === SyntaxKind.ConditionalExpression) {
                             return ClassificationTypeNames.operator;
                         }
+
+                        if (tokenKind === SyntaxKind.AtToken && token.parent.kind === SyntaxKind.Decorator) {
+                            return ClassificationTypeNames.decorator;
+                        }
                     }
 
                     return ClassificationTypeNames.punctuation;
@@ -6068,6 +6073,10 @@ module ts {
                                     return ClassificationTypeNames.moduleName;
                                 }
                                 return;
+                        }
+
+                        if (token.parserContextFlags & ParserContextFlags.Decorator) {
+                            return ClassificationTypeNames.decorator;
                         }
                     }
 
