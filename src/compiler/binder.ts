@@ -293,8 +293,8 @@ module ts {
                     return declareClassMember(node, symbolFlags, symbolExcludes);
 
                 case SyntaxKind.EnumDeclaration:
-                    // Enum members are always put int the 'exports' of the containing enum.
-                    // They are only accessibly through their container, and are never in 
+                    // Enum members are always put in the 'exports' of the containing enum.
+                    // They are only accessible through their container, and are never in 
                     // scope otherwise (even inside the body of the enum declaring them.).
                     return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
 
@@ -462,7 +462,7 @@ module ts {
             node.parent = parent;
 
             // First we bind declaration nodes to a symbol if possible.  We'll both create a symbol
-            // and add the symbol to an appropriate symbol table (if appropriate).  The symbolFlags 
+            // and then potentially add the symbol to an appropriate symbol table.  The symbolFlags 
             // that are returned from this help inform how we recurse into the children of this node.
             //
             // Possible destination symbol tables are:
