@@ -277,16 +277,6 @@ module ts {
         }
 
         function declareSymbolAndAddToSymbolTable(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): SymbolFlags {
-            // First we declare a symbol for the provided node.  The symbol will be added to an 
-            // appropriate symbol table.  Possible symbol tables include:
-            // 
-            //  1) The 'exports' table of the current container's symbol.
-            //  2) The 'members' table of the current container's symbol.
-            //  3) The 'locals' table of the current container.
-            //
-            // Then, we recurse down the children of this declaration, seeking more declarations
-            // to bind.
-
             declareSymbolAndAddToSymbolTableWorker(node, symbolFlags, symbolExcludes);
             return symbolFlags;
         }
@@ -477,8 +467,17 @@ module ts {
             node.parent = parent;
 
             // First we bind declaration nodes to a symbol if possible.  We'll both create a symbol
-            // and add the symbol to an appropriate symbol table.  The symbolFlags that are retuerned
-            // from this help inform how we recurse into the children of this node.
+            // and add the symbol to an appropriate symbol table (if appropriate).  The symbolFlags 
+            // that are returned from this help inform how we recurse into the children of this node.
+            //
+            // Possible destination symbol tables are:
+            // 
+            //  1) The 'exports' table of the current container's symbol.
+            //  2) The 'members' table of the current container's symbol.
+            //  3) The 'locals' table of the current container.
+            //
+            // However, not all symbols will end up in any of these tables.  'Anonymous' symbols 
+            // (like TypeLiterals for example) will not be put in any table.
             var symbolFlags = bindWorker(node);
 
             // Then we recurse into the children of the node to bind them as well.  For certain 
