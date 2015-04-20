@@ -1577,7 +1577,7 @@ module ts {
 
     /* @internal */
     export interface TypeMapper {
-        (t: Type): Type;
+        (t: TypeParameter): Type;
     }
 
     /* @internal */
