@@ -465,30 +465,30 @@ module ts {
                 }
 
                 let sourcePathComponents = getNormalizedPathComponents(sourceFile.fileName, currentDirectory);
-                sourcePathComponents.pop(); // FileName is not part of directory
-                if (commonPathComponents) {
-                    for (let i = 0, n = Math.min(commonPathComponents.length, sourcePathComponents.length); i < n; i++) {
-                        if (commonPathComponents[i] !== sourcePathComponents[i]) {
-                            if (i === 0) {
-                                diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
-                                return;
-                            }
+                sourcePathComponents.pop(); // The base file name is not part of the common directory path
 
-                            // New common path found that is 0 -> i-1
-                            commonPathComponents.length = i;
-                            break;
-                        }
-                    }
-
-                    // If the fileComponent path completely matched and less than already found update the length
-                    if (sourcePathComponents.length < commonPathComponents.length) {
-                        commonPathComponents.length = sourcePathComponents.length;
-                    }
-                }
-                else {
+                if (!commonPathComponents) {
                     // first file
                     commonPathComponents = sourcePathComponents;
                     return;
+                }
+
+                for (let i = 0, n = Math.min(commonPathComponents.length, sourcePathComponents.length); i < n; i++) {
+                    if (commonPathComponents[i] !== sourcePathComponents[i]) {
+                        if (i === 0) {
+                            diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
+                            return;
+                        }
+
+                        // New common path found that is 0 -> i-1
+                        commonPathComponents.length = i;
+                        break;
+                    }
+                }
+
+                // If the sourcePathComponents was shorter than the commonPathComponents, truncate to the sourcePathComponents
+                if (sourcePathComponents.length < commonPathComponents.length) {
+                    commonPathComponents.length = sourcePathComponents.length;
                 }
             });
 
