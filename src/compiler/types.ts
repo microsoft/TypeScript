@@ -1084,7 +1084,7 @@ module ts {
         type: JSDocType;
     }
 
-    export interface JSDocRecordMember extends Node {
+    export interface JSDocRecordMember extends PropertyDeclaration {
         name: Identifier | LiteralExpression,
         type?: JSDocType
     }
