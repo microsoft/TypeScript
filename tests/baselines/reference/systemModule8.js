@@ -52,7 +52,7 @@ System.register([], function(exports_1) {
             for (exports_1("x", x = 15);; exports_1("x", ++x)) { }
             for (exports_1("x", x = 18);; exports_1("x", --x)) { }
             for (x_1 = 50;;) { }
-            exports_1("y", y = ([1])[0]);
+            exports_1("y", y = [1][0]);
             _a = { a: true, b: { c: "123" } }, exports_1("z0", z0 = _a.a), exports_1("z1", z1 = _a.b.c);
             for (var _i = 0, _b = [[1]]; _i < _b.length; _i++) {
                 exports_1("x", x = _b[_i][0]);

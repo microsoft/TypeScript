@@ -16,8 +16,8 @@ System.register(['file1', 'file2'], function(exports_1) {
         setters:[
             function (v_1) {
                 file1_1 = v_1
-                exports_1("n", file1_1.default);
-                exports_1("n1", file1_1.default);
+                exports_1("n", file1_1["default"]);
+                exports_1("n1", file1_1["default"]);
                 exports_1("x", file1_1.x);
                 exports_1("y", file1_1.x);
             },

@@ -4880,7 +4880,11 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 writeLine();
                 let started = false;
                 for (let importNode of externalImports) {
-                    if (importNode.kind === SyntaxKind.ExportDeclaration) {
+                    let skipNode = 
+                        importNode.kind === SyntaxKind.ExportDeclaration ||
+                        (importNode.kind === SyntaxKind.ImportDeclaration && !(<ImportDeclaration>importNode).importClause)
+
+                    if (skipNode) {
                         continue;
                     }
 

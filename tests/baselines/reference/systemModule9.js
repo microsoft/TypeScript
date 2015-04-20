@@ -3,8 +3,9 @@
 import * as ns from 'file1';
 import {a, b as c} from 'file2';
 import d from 'file3'
-import e, * as ns2 from 'file4';
-import ns3 = require('file5');
+import 'file4'
+import e, * as ns2 from 'file5';
+import ns3 = require('file6');
 
 ns.f();
 a();
@@ -14,15 +15,15 @@ e();
 ns2.f();
 ns3.f();
 
-export * from 'file6';
+export * from 'file7';
 
 var x, y = true;
 export {x};
 export {y as z};
 
 //// [systemModule9.js]
-System.register(['file1', 'file2', 'file3', 'file4', 'file5', 'file6'], function(exports_1) {
-    var ns, file2_1, file3_1, file4_1, ns3;
+System.register(['file1', 'file2', 'file3', 'file4', 'file5', 'file6', 'file7'], function(exports_1) {
+    var ns, file2_1, file3_1, file5_1, ns3;
     var x, y;
     return {
         setters:[
@@ -35,8 +36,9 @@ System.register(['file1', 'file2', 'file3', 'file4', 'file5', 'file6'], function
             function (v_1) {
                 file3_1 = v_1
             },
+            function (v_1) {},
             function (v_1) {
-                file4_1 = v_1
+                file5_1 = v_1
             },
             function (v_1) {
                 ns3 = v_1
@@ -48,8 +50,8 @@ System.register(['file1', 'file2', 'file3', 'file4', 'file5', 'file6'], function
             ns.f();
             file2_1.a();
             file2_1.b();
-            file3_1.default();
-            file4_1.default();
+            file3_1["default"]();
+            file5_1["default"]();
             ns2.f();
             ns3.f();
             y = true;
