@@ -482,6 +482,7 @@ var ts;
         NodeCheckFlags[NodeCheckFlags["BlockScopedBindingInLoop"] = 256] = "BlockScopedBindingInLoop";
         NodeCheckFlags[NodeCheckFlags["EmitDecorate"] = 512] = "EmitDecorate";
         NodeCheckFlags[NodeCheckFlags["EmitParam"] = 1024] = "EmitParam";
+        NodeCheckFlags[NodeCheckFlags["LexicalModuleMergesWithClass"] = 2048] = "LexicalModuleMergesWithClass";
     })(ts.NodeCheckFlags || (ts.NodeCheckFlags = {}));
     var NodeCheckFlags = ts.NodeCheckFlags;
     (function (TypeFlags) {
@@ -755,9 +756,9 @@ var ts;
         if (array) {
             result = [];
             for (var _i = 0; _i < array.length; _i++) {
-                var item_1 = array[_i];
-                if (f(item_1)) {
-                    result.push(item_1);
+                var item = array[_i];
+                if (f(item)) {
+                    result.push(item);
                 }
             }
         }
@@ -789,9 +790,9 @@ var ts;
         if (array) {
             result = [];
             for (var _i = 0; _i < array.length; _i++) {
-                var item_2 = array[_i];
-                if (!contains(result, item_2)) {
-                    result.push(item_2);
+                var item = array[_i];
+                if (!contains(result, item)) {
+                    result.push(item);
                 }
             }
         }
@@ -1994,11 +1995,12 @@ var ts;
         Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2: { code: 2493, category: ts.DiagnosticCategory.Error, key: "Tuple type '{0}' with length '{1}' cannot be assigned to tuple with length '{2}'." },
         Using_a_string_in_a_for_of_statement_is_only_supported_in_ECMAScript_5_and_higher: { code: 2494, category: ts.DiagnosticCategory.Error, key: "Using a string in a 'for...of' statement is only supported in ECMAScript 5 and higher." },
         Type_0_is_not_an_array_type_or_a_string_type: { code: 2495, category: ts.DiagnosticCategory.Error, key: "Type '{0}' is not an array type or a string type." },
-        The_arguments_object_cannot_be_referenced_in_an_arrow_function_Consider_using_a_standard_function_expression: { code: 2496, category: ts.DiagnosticCategory.Error, key: "The 'arguments' object cannot be referenced in an arrow function. Consider using a standard function expression." },
+        The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression: { code: 2496, category: ts.DiagnosticCategory.Error, key: "The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression." },
         External_module_0_resolves_to_a_non_module_entity_and_cannot_be_imported_using_this_construct: { code: 2497, category: ts.DiagnosticCategory.Error, key: "External module '{0}' resolves to a non-module entity and cannot be imported using this construct." },
         External_module_0_uses_export_and_cannot_be_used_with_export_Asterisk: { code: 2498, category: ts.DiagnosticCategory.Error, key: "External module '{0}' uses 'export =' and cannot be used with 'export *'." },
         An_interface_can_only_extend_an_identifier_Slashqualified_name_with_optional_type_arguments: { code: 2499, category: ts.DiagnosticCategory.Error, key: "An interface can only extend an identifier/qualified-name with optional type arguments." },
         A_class_can_only_implement_an_identifier_Slashqualified_name_with_optional_type_arguments: { code: 2500, category: ts.DiagnosticCategory.Error, key: "A class can only implement an identifier/qualified-name with optional type arguments." },
+        A_rest_element_cannot_contain_a_binding_pattern: { code: 2501, category: ts.DiagnosticCategory.Error, key: "A rest element cannot contain a binding pattern." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: ts.DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: ts.DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: { code: 4004, category: ts.DiagnosticCategory.Error, key: "Type parameter '{0}' of exported interface has or is using private name '{1}'." },
@@ -2704,10 +2706,11 @@ var ts;
             ch > 127 /* maxAsciiCharacter */ && isUnicodeIdentifierPart(ch, languageVersion);
     }
     ts.isIdentifierPart = isIdentifierPart;
+    // Creates a scanner over a (possibly unspecified) range of a piece of text.
     /* @internal */
-    function createScanner(languageVersion, skipTrivia, text, onError) {
+    function createScanner(languageVersion, skipTrivia, text, onError, start, length) {
         var pos; // Current position (end position of text of current token)
-        var len; // Length of text
+        var end; // end of text
         var startPos; // Start position of whitespace before current token
         var tokenPos; // Start position of text of current token
         var token;
@@ -2715,6 +2718,30 @@ var ts;
         var precedingLineBreak;
         var hasExtendedUnicodeEscape;
         var tokenIsUnterminated;
+        setText(text, start, length);
+        return {
+            getStartPos: function () { return startPos; },
+            getTextPos: function () { return pos; },
+            getToken: function () { return token; },
+            getTokenPos: function () { return tokenPos; },
+            getTokenText: function () { return text.substring(tokenPos, pos); },
+            getTokenValue: function () { return tokenValue; },
+            hasExtendedUnicodeEscape: function () { return hasExtendedUnicodeEscape; },
+            hasPrecedingLineBreak: function () { return precedingLineBreak; },
+            isIdentifier: function () { return token === 65 /* Identifier */ || token > 101 /* LastReservedWord */; },
+            isReservedWord: function () { return token >= 66 /* FirstReservedWord */ && token <= 101 /* LastReservedWord */; },
+            isUnterminated: function () { return tokenIsUnterminated; },
+            reScanGreaterToken: reScanGreaterToken,
+            reScanSlashToken: reScanSlashToken,
+            reScanTemplateToken: reScanTemplateToken,
+            scan: scan,
+            setText: setText,
+            setScriptTarget: setScriptTarget,
+            setOnError: setOnError,
+            setTextPos: setTextPos,
+            tryScan: tryScan,
+            lookAhead: lookAhead
+        };
         function error(message, length) {
             if (onError) {
                 onError(message, length || 0);
@@ -2807,7 +2834,7 @@ var ts;
             var result = "";
             var start = pos;
             while (true) {
-                if (pos >= len) {
+                if (pos >= end) {
                     result += text.substring(start, pos);
                     tokenIsUnterminated = true;
                     error(ts.Diagnostics.Unterminated_string_literal);
@@ -2846,7 +2873,7 @@ var ts;
             var contents = "";
             var resultingToken;
             while (true) {
-                if (pos >= len) {
+                if (pos >= end) {
                     contents += text.substring(start, pos);
                     tokenIsUnterminated = true;
                     error(ts.Diagnostics.Unterminated_template_literal);
@@ -2862,7 +2889,7 @@ var ts;
                     break;
                 }
                 // '${'
-                if (currChar === 36 /* $ */ && pos + 1 < len && text.charCodeAt(pos + 1) === 123 /* openBrace */) {
+                if (currChar === 36 /* $ */ && pos + 1 < end && text.charCodeAt(pos + 1) === 123 /* openBrace */) {
                     contents += text.substring(start, pos);
                     pos += 2;
                     resultingToken = startedWithBacktick ? 11 /* TemplateHead */ : 12 /* TemplateMiddle */;
@@ -2880,7 +2907,7 @@ var ts;
                 if (currChar === 13 /* carriageReturn */) {
                     contents += text.substring(start, pos);
                     pos++;
-                    if (pos < len && text.charCodeAt(pos) === 10 /* lineFeed */) {
+                    if (pos < end && text.charCodeAt(pos) === 10 /* lineFeed */) {
                         pos++;
                     }
                     contents += "\n";
@@ -2895,7 +2922,7 @@ var ts;
         }
         function scanEscapeSequence() {
             pos++;
-            if (pos >= len) {
+            if (pos >= end) {
                 error(ts.Diagnostics.Unexpected_end_of_text);
                 return "";
             }
@@ -2921,7 +2948,7 @@ var ts;
                     return "\"";
                 case 117 /* u */:
                     // '\u{DDDDDDDD}'
-                    if (pos < len && text.charCodeAt(pos) === 123 /* openBrace */) {
+                    if (pos < end && text.charCodeAt(pos) === 123 /* openBrace */) {
                         hasExtendedUnicodeEscape = true;
                         pos++;
                         return scanExtendedUnicodeEscape();
@@ -2934,7 +2961,7 @@ var ts;
                 // when encountering a LineContinuation (i.e. a backslash and a line terminator sequence),
                 // the line terminator is interpreted to be "the empty code unit sequence".
                 case 13 /* carriageReturn */:
-                    if (pos < len && text.charCodeAt(pos) === 10 /* lineFeed */) {
+                    if (pos < end && text.charCodeAt(pos) === 10 /* lineFeed */) {
                         pos++;
                     }
                 // fall through
@@ -2968,7 +2995,7 @@ var ts;
                 error(ts.Diagnostics.An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive);
                 isInvalidExtendedEscape = true;
             }
-            if (pos >= len) {
+            if (pos >= end) {
                 error(ts.Diagnostics.Unexpected_end_of_text);
                 isInvalidExtendedEscape = true;
             }
@@ -2998,11 +3025,11 @@ var ts;
         // Current character is known to be a backslash. Check for Unicode escape of the form '\uXXXX'
         // and return code point value if valid Unicode escape is found. Otherwise return -1.
         function peekUnicodeEscape() {
-            if (pos + 5 < len && text.charCodeAt(pos + 1) === 117 /* u */) {
-                var start = pos;
+            if (pos + 5 < end && text.charCodeAt(pos + 1) === 117 /* u */) {
+                var start_1 = pos;
                 pos += 2;
                 var value = scanExactNumberOfHexDigits(4);
-                pos = start;
+                pos = start_1;
                 return value;
             }
             return -1;
@@ -3010,7 +3037,7 @@ var ts;
         function scanIdentifierParts() {
             var result = "";
             var start = pos;
-            while (pos < len) {
+            while (pos < end) {
                 var ch = text.charCodeAt(pos);
                 if (isIdentifierPart(ch)) {
                     pos++;
@@ -3073,7 +3100,7 @@ var ts;
             tokenIsUnterminated = false;
             while (true) {
                 tokenPos = pos;
-                if (pos >= len) {
+                if (pos >= end) {
                     return token = 1 /* EndOfFileToken */;
                 }
                 var ch = text.charCodeAt(pos);
@@ -3086,7 +3113,7 @@ var ts;
                             continue;
                         }
                         else {
-                            if (ch === 13 /* carriageReturn */ && pos + 1 < len && text.charCodeAt(pos + 1) === 10 /* lineFeed */) {
+                            if (ch === 13 /* carriageReturn */ && pos + 1 < end && text.charCodeAt(pos + 1) === 10 /* lineFeed */) {
                                 // consume both CR and LF
                                 pos += 2;
                             }
@@ -3104,7 +3131,7 @@ var ts;
                             continue;
                         }
                         else {
-                            while (pos < len && isWhiteSpace(text.charCodeAt(pos))) {
+                            while (pos < end && isWhiteSpace(text.charCodeAt(pos))) {
                                 pos++;
                             }
                             return token = 5 /* WhitespaceTrivia */;
@@ -3176,7 +3203,7 @@ var ts;
                         // Single-line comment
                         if (text.charCodeAt(pos + 1) === 47 /* slash */) {
                             pos += 2;
-                            while (pos < len) {
+                            while (pos < end) {
                                 if (isLineBreak(text.charCodeAt(pos))) {
                                     break;
                                 }
@@ -3193,7 +3220,7 @@ var ts;
                         if (text.charCodeAt(pos + 1) === 42 /* asterisk */) {
                             pos += 2;
                             var commentClosed = false;
-                            while (pos < len) {
+                            while (pos < end) {
                                 var ch_2 = text.charCodeAt(pos);
                                 if (ch_2 === 42 /* asterisk */ && text.charCodeAt(pos + 1) === 47 /* slash */) {
                                     pos += 2;
@@ -3221,7 +3248,7 @@ var ts;
                         }
                         return pos++, token = 36 /* SlashToken */;
                     case 48 /* _0 */:
-                        if (pos + 2 < len && (text.charCodeAt(pos + 1) === 88 /* X */ || text.charCodeAt(pos + 1) === 120 /* x */)) {
+                        if (pos + 2 < end && (text.charCodeAt(pos + 1) === 88 /* X */ || text.charCodeAt(pos + 1) === 120 /* x */)) {
                             pos += 2;
                             var value = scanMinimumNumberOfHexDigits(1);
                             if (value < 0) {
@@ -3231,7 +3258,7 @@ var ts;
                             tokenValue = "" + value;
                             return token = 7 /* NumericLiteral */;
                         }
-                        else if (pos + 2 < len && (text.charCodeAt(pos + 1) === 66 /* B */ || text.charCodeAt(pos + 1) === 98 /* b */)) {
+                        else if (pos + 2 < end && (text.charCodeAt(pos + 1) === 66 /* B */ || text.charCodeAt(pos + 1) === 98 /* b */)) {
                             pos += 2;
                             var value = scanBinaryOrOctalDigits(2);
                             if (value < 0) {
@@ -3241,7 +3268,7 @@ var ts;
                             tokenValue = "" + value;
                             return token = 7 /* NumericLiteral */;
                         }
-                        else if (pos + 2 < len && (text.charCodeAt(pos + 1) === 79 /* O */ || text.charCodeAt(pos + 1) === 111 /* o */)) {
+                        else if (pos + 2 < end && (text.charCodeAt(pos + 1) === 79 /* O */ || text.charCodeAt(pos + 1) === 111 /* o */)) {
                             pos += 2;
                             var value = scanBinaryOrOctalDigits(8);
                             if (value < 0) {
@@ -3252,7 +3279,7 @@ var ts;
                             return token = 7 /* NumericLiteral */;
                         }
                         // Try to parse as an octal
-                        if (pos + 1 < len && isOctalDigit(text.charCodeAt(pos + 1))) {
+                        if (pos + 1 < end && isOctalDigit(text.charCodeAt(pos + 1))) {
                             tokenValue = "" + scanOctalDigits();
                             return token = 7 /* NumericLiteral */;
                         }
@@ -3364,7 +3391,7 @@ var ts;
                     default:
                         if (isIdentifierStart(ch)) {
                             pos++;
-                            while (pos < len && isIdentifierPart(ch = text.charCodeAt(pos)))
+                            while (pos < end && isIdentifierPart(ch = text.charCodeAt(pos)))
                                 pos++;
                             tokenValue = text.substring(tokenPos, pos);
                             if (ch === 92 /* backslash */) {
@@ -3414,7 +3441,7 @@ var ts;
                 while (true) {
                     // If we reach the end of a file, or hit a newline, then this is an unterminated
                     // regex.  Report error and return what we have so far.
-                    if (p >= len) {
+                    if (p >= end) {
                         tokenIsUnterminated = true;
                         error(ts.Diagnostics.Unterminated_regular_expression_literal);
                         break;
@@ -3447,7 +3474,7 @@ var ts;
                     }
                     p++;
                 }
-                while (p < len && isIdentifierPart(text.charCodeAt(p))) {
+                while (p < end && isIdentifierPart(text.charCodeAt(p))) {
                     p++;
                 }
                 pos = p;
@@ -3490,40 +3517,28 @@ var ts;
         function tryScan(callback) {
             return speculationHelper(callback, false);
         }
-        function setText(newText) {
+        function setText(newText, start, length) {
             text = newText || "";
-            len = text.length;
-            setTextPos(0);
+            end = length === undefined ? text.length : start + length;
+            setTextPos(start || 0);
+        }
+        function setOnError(errorCallback) {
+            onError = errorCallback;
+        }
+        function setScriptTarget(scriptTarget) {
+            languageVersion = scriptTarget;
         }
         function setTextPos(textPos) {
+            ts.Debug.assert(textPos >= 0);
             pos = textPos;
             startPos = textPos;
             tokenPos = textPos;
             token = 0 /* Unknown */;
             precedingLineBreak = false;
+            tokenValue = undefined;
+            hasExtendedUnicodeEscape = false;
+            tokenIsUnterminated = false;
         }
-        setText(text);
-        return {
-            getStartPos: function () { return startPos; },
-            getTextPos: function () { return pos; },
-            getToken: function () { return token; },
-            getTokenPos: function () { return tokenPos; },
-            getTokenText: function () { return text.substring(tokenPos, pos); },
-            getTokenValue: function () { return tokenValue; },
-            hasExtendedUnicodeEscape: function () { return hasExtendedUnicodeEscape; },
-            hasPrecedingLineBreak: function () { return precedingLineBreak; },
-            isIdentifier: function () { return token === 65 /* Identifier */ || token > 101 /* LastReservedWord */; },
-            isReservedWord: function () { return token >= 66 /* FirstReservedWord */ && token <= 101 /* LastReservedWord */; },
-            isUnterminated: function () { return tokenIsUnterminated; },
-            reScanGreaterToken: reScanGreaterToken,
-            reScanSlashToken: reScanSlashToken,
-            reScanTemplateToken: reScanTemplateToken,
-            scan: scan,
-            setText: setText,
-            setTextPos: setTextPos,
-            tryScan: tryScan,
-            lookAhead: lookAhead
-        };
     }
     ts.createScanner = createScanner;
 })(ts || (ts = {}));
@@ -4274,8 +4289,10 @@ var ts;
             isCatchClauseVariableDeclaration(declaration);
     }
     ts.isBlockOrCatchScoped = isBlockOrCatchScoped;
+    // Gets the nearest enclosing block scope container that has the provided node 
+    // as a descendant, that is not the provided node.
     function getEnclosingBlockScopeContainer(node) {
-        var current = node;
+        var current = node.parent;
         while (current) {
             if (isFunctionLike(current)) {
                 return current;
@@ -4334,8 +4351,7 @@ var ts;
     }
     ts.createDiagnosticForNodeFromMessageChain = createDiagnosticForNodeFromMessageChain;
     function getSpanOfTokenAtPosition(sourceFile, pos) {
-        var scanner = ts.createScanner(sourceFile.languageVersion, true, sourceFile.text);
-        scanner.setTextPos(pos);
+        var scanner = ts.createScanner(sourceFile.languageVersion, true, sourceFile.text, undefined, pos);
         scanner.scan();
         var start = scanner.getTokenPos();
         return ts.createTextSpanFromBounds(start, scanner.getTextPos());
@@ -5186,6 +5202,13 @@ var ts;
         return node;
     }
     ts.createSynthesizedNode = createSynthesizedNode;
+    function createSynthesizedNodeArray() {
+        var array = [];
+        array.pos = -1;
+        array.end = -1;
+        return array;
+    }
+    ts.createSynthesizedNodeArray = createSynthesizedNodeArray;
     function createDiagnosticCollection() {
         var nonFileDiagnostics = [];
         var fileDiagnostics = {};
@@ -5580,6 +5603,54 @@ var ts;
         }
     }
     ts.writeCommentRange = writeCommentRange;
+    function modifierToFlag(token) {
+        switch (token) {
+            case 109 /* StaticKeyword */: return 128 /* Static */;
+            case 108 /* PublicKeyword */: return 16 /* Public */;
+            case 107 /* ProtectedKeyword */: return 64 /* Protected */;
+            case 106 /* PrivateKeyword */: return 32 /* Private */;
+            case 78 /* ExportKeyword */: return 1 /* Export */;
+            case 115 /* DeclareKeyword */: return 2 /* Ambient */;
+            case 70 /* ConstKeyword */: return 8192 /* Const */;
+            case 73 /* DefaultKeyword */: return 256 /* Default */;
+        }
+        return 0;
+    }
+    ts.modifierToFlag = modifierToFlag;
+    function isLeftHandSideExpression(expr) {
+        if (expr) {
+            switch (expr.kind) {
+                case 155 /* PropertyAccessExpression */:
+                case 156 /* ElementAccessExpression */:
+                case 158 /* NewExpression */:
+                case 157 /* CallExpression */:
+                case 159 /* TaggedTemplateExpression */:
+                case 153 /* ArrayLiteralExpression */:
+                case 161 /* ParenthesizedExpression */:
+                case 154 /* ObjectLiteralExpression */:
+                case 174 /* ClassExpression */:
+                case 162 /* FunctionExpression */:
+                case 65 /* Identifier */:
+                case 9 /* RegularExpressionLiteral */:
+                case 7 /* NumericLiteral */:
+                case 8 /* StringLiteral */:
+                case 10 /* NoSubstitutionTemplateLiteral */:
+                case 171 /* TemplateExpression */:
+                case 80 /* FalseKeyword */:
+                case 89 /* NullKeyword */:
+                case 93 /* ThisKeyword */:
+                case 95 /* TrueKeyword */:
+                case 91 /* SuperKeyword */:
+                    return true;
+            }
+        }
+        return false;
+    }
+    ts.isLeftHandSideExpression = isLeftHandSideExpression;
+    function isAssignmentOperator(token) {
+        return token >= 53 /* FirstAssignment */ && token <= 64 /* LastAssignment */;
+    }
+    ts.isAssignmentOperator = isAssignmentOperator;
     // Returns false if this heritage clause element's expression contains something unsupported
     // (i.e. not a name or dotted name).
     function isSupportedHeritageClauseElement(node) {
@@ -6130,398 +6201,14 @@ var ts;
         }
     }
     ts.forEachChild = forEachChild;
-    var ParsingContext;
-    (function (ParsingContext) {
-        ParsingContext[ParsingContext["SourceElements"] = 0] = "SourceElements";
-        ParsingContext[ParsingContext["ModuleElements"] = 1] = "ModuleElements";
-        ParsingContext[ParsingContext["BlockStatements"] = 2] = "BlockStatements";
-        ParsingContext[ParsingContext["SwitchClauses"] = 3] = "SwitchClauses";
-        ParsingContext[ParsingContext["SwitchClauseStatements"] = 4] = "SwitchClauseStatements";
-        ParsingContext[ParsingContext["TypeMembers"] = 5] = "TypeMembers";
-        ParsingContext[ParsingContext["ClassMembers"] = 6] = "ClassMembers";
-        ParsingContext[ParsingContext["EnumMembers"] = 7] = "EnumMembers";
-        ParsingContext[ParsingContext["HeritageClauseElement"] = 8] = "HeritageClauseElement";
-        ParsingContext[ParsingContext["VariableDeclarations"] = 9] = "VariableDeclarations";
-        ParsingContext[ParsingContext["ObjectBindingElements"] = 10] = "ObjectBindingElements";
-        ParsingContext[ParsingContext["ArrayBindingElements"] = 11] = "ArrayBindingElements";
-        ParsingContext[ParsingContext["ArgumentExpressions"] = 12] = "ArgumentExpressions";
-        ParsingContext[ParsingContext["ObjectLiteralMembers"] = 13] = "ObjectLiteralMembers";
-        ParsingContext[ParsingContext["ArrayLiteralMembers"] = 14] = "ArrayLiteralMembers";
-        ParsingContext[ParsingContext["Parameters"] = 15] = "Parameters";
-        ParsingContext[ParsingContext["TypeParameters"] = 16] = "TypeParameters";
-        ParsingContext[ParsingContext["TypeArguments"] = 17] = "TypeArguments";
-        ParsingContext[ParsingContext["TupleElementTypes"] = 18] = "TupleElementTypes";
-        ParsingContext[ParsingContext["HeritageClauses"] = 19] = "HeritageClauses";
-        ParsingContext[ParsingContext["ImportOrExportSpecifiers"] = 20] = "ImportOrExportSpecifiers";
-        ParsingContext[ParsingContext["Count"] = 21] = "Count"; // Number of parsing contexts
-    })(ParsingContext || (ParsingContext = {}));
-    var Tristate;
-    (function (Tristate) {
-        Tristate[Tristate["False"] = 0] = "False";
-        Tristate[Tristate["True"] = 1] = "True";
-        Tristate[Tristate["Unknown"] = 2] = "Unknown";
-    })(Tristate || (Tristate = {}));
-    function parsingContextErrors(context) {
-        switch (context) {
-            case 0 /* SourceElements */: return ts.Diagnostics.Declaration_or_statement_expected;
-            case 1 /* ModuleElements */: return ts.Diagnostics.Declaration_or_statement_expected;
-            case 2 /* BlockStatements */: return ts.Diagnostics.Statement_expected;
-            case 3 /* SwitchClauses */: return ts.Diagnostics.case_or_default_expected;
-            case 4 /* SwitchClauseStatements */: return ts.Diagnostics.Statement_expected;
-            case 5 /* TypeMembers */: return ts.Diagnostics.Property_or_signature_expected;
-            case 6 /* ClassMembers */: return ts.Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
-            case 7 /* EnumMembers */: return ts.Diagnostics.Enum_member_expected;
-            case 8 /* HeritageClauseElement */: return ts.Diagnostics.Expression_expected;
-            case 9 /* VariableDeclarations */: return ts.Diagnostics.Variable_declaration_expected;
-            case 10 /* ObjectBindingElements */: return ts.Diagnostics.Property_destructuring_pattern_expected;
-            case 11 /* ArrayBindingElements */: return ts.Diagnostics.Array_element_destructuring_pattern_expected;
-            case 12 /* ArgumentExpressions */: return ts.Diagnostics.Argument_expression_expected;
-            case 13 /* ObjectLiteralMembers */: return ts.Diagnostics.Property_assignment_expected;
-            case 14 /* ArrayLiteralMembers */: return ts.Diagnostics.Expression_or_comma_expected;
-            case 15 /* Parameters */: return ts.Diagnostics.Parameter_declaration_expected;
-            case 16 /* TypeParameters */: return ts.Diagnostics.Type_parameter_declaration_expected;
-            case 17 /* TypeArguments */: return ts.Diagnostics.Type_argument_expected;
-            case 18 /* TupleElementTypes */: return ts.Diagnostics.Type_expected;
-            case 19 /* HeritageClauses */: return ts.Diagnostics.Unexpected_token_expected;
-            case 20 /* ImportOrExportSpecifiers */: return ts.Diagnostics.Identifier_expected;
-        }
+    function createSourceFile(fileName, sourceText, languageVersion, setParentNodes) {
+        if (setParentNodes === void 0) { setParentNodes = false; }
+        var start = new Date().getTime();
+        var result = Parser.parseSourceFile(fileName, sourceText, languageVersion, undefined, setParentNodes);
+        ts.parseTime += new Date().getTime() - start;
+        return result;
     }
-    ;
-    function modifierToFlag(token) {
-        switch (token) {
-            case 109 /* StaticKeyword */: return 128 /* Static */;
-            case 108 /* PublicKeyword */: return 16 /* Public */;
-            case 107 /* ProtectedKeyword */: return 64 /* Protected */;
-            case 106 /* PrivateKeyword */: return 32 /* Private */;
-            case 78 /* ExportKeyword */: return 1 /* Export */;
-            case 115 /* DeclareKeyword */: return 2 /* Ambient */;
-            case 70 /* ConstKeyword */: return 8192 /* Const */;
-            case 73 /* DefaultKeyword */: return 256 /* Default */;
-        }
-        return 0;
-    }
-    ts.modifierToFlag = modifierToFlag;
-    function fixupParentReferences(sourceFile) {
-        // normally parent references are set during binding. However, for clients that only need
-        // a syntax tree, and no semantic features, then the binding process is an unnecessary
-        // overhead.  This functions allows us to set all the parents, without all the expense of
-        // binding.
-        var parent = sourceFile;
-        forEachChild(sourceFile, visitNode);
-        return;
-        function visitNode(n) {
-            // walk down setting parents that differ from the parent we think it should be.  This
-            // allows us to quickly bail out of setting parents for subtrees during incremental
-            // parsing
-            if (n.parent !== parent) {
-                n.parent = parent;
-                var saveParent = parent;
-                parent = n;
-                forEachChild(n, visitNode);
-                parent = saveParent;
-            }
-        }
-    }
-    function shouldCheckNode(node) {
-        switch (node.kind) {
-            case 8 /* StringLiteral */:
-            case 7 /* NumericLiteral */:
-            case 65 /* Identifier */:
-                return true;
-        }
-        return false;
-    }
-    function moveElementEntirelyPastChangeRange(element, isArray, delta, oldText, newText, aggressiveChecks) {
-        if (isArray) {
-            visitArray(element);
-        }
-        else {
-            visitNode(element);
-        }
-        return;
-        function visitNode(node) {
-            if (aggressiveChecks && shouldCheckNode(node)) {
-                var text = oldText.substring(node.pos, node.end);
-            }
-            // Ditch any existing LS children we may have created.  This way we can avoid
-            // moving them forward.
-            node._children = undefined;
-            node.pos += delta;
-            node.end += delta;
-            if (aggressiveChecks && shouldCheckNode(node)) {
-                ts.Debug.assert(text === newText.substring(node.pos, node.end));
-            }
-            forEachChild(node, visitNode, visitArray);
-            checkNodePositions(node, aggressiveChecks);
-        }
-        function visitArray(array) {
-            array._children = undefined;
-            array.pos += delta;
-            array.end += delta;
-            for (var _i = 0; _i < array.length; _i++) {
-                var node = array[_i];
-                visitNode(node);
-            }
-        }
-    }
-    function adjustIntersectingElement(element, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta) {
-        ts.Debug.assert(element.end >= changeStart, "Adjusting an element that was entirely before the change range");
-        ts.Debug.assert(element.pos <= changeRangeOldEnd, "Adjusting an element that was entirely after the change range");
-        ts.Debug.assert(element.pos <= element.end);
-        // We have an element that intersects the change range in some way.  It may have its
-        // start, or its end (or both) in the changed range.  We want to adjust any part
-        // that intersects such that the final tree is in a consistent state.  i.e. all
-        // chlidren have spans within the span of their parent, and all siblings are ordered
-        // properly.
-        // We may need to update both the 'pos' and the 'end' of the element.
-        // If the 'pos' is before the start of the change, then we don't need to touch it.
-        // If it isn't, then the 'pos' must be inside the change.  How we update it will
-        // depend if delta is  positive or negative.  If delta is positive then we have
-        // something like:
-        //
-        //  -------------------AAA-----------------
-        //  -------------------BBBCCCCCCC-----------------
-        //
-        // In this case, we consider any node that started in the change range to still be
-        // starting at the same position.
-        //
-        // however, if the delta is negative, then we instead have something like this:
-        //
-        //  -------------------XXXYYYYYYY-----------------
-        //  -------------------ZZZ-----------------
-        //
-        // In this case, any element that started in the 'X' range will keep its position.
-        // However any element htat started after that will have their pos adjusted to be
-        // at the end of the new range.  i.e. any node that started in the 'Y' range will
-        // be adjusted to have their start at the end of the 'Z' range.
-        //
-        // The element will keep its position if possible.  Or Move backward to the new-end
-        // if it's in the 'Y' range.
-        element.pos = Math.min(element.pos, changeRangeNewEnd);
-        // If the 'end' is after the change range, then we always adjust it by the delta
-        // amount.  However, if the end is in the change range, then how we adjust it
-        // will depend on if delta is  positive or negative.  If delta is positive then we
-        // have something like:
-        //
-        //  -------------------AAA-----------------
-        //  -------------------BBBCCCCCCC-----------------
-        //
-        // In this case, we consider any node that ended inside the change range to keep its
-        // end position.
-        //
-        // however, if the delta is negative, then we instead have something like this:
-        //
-        //  -------------------XXXYYYYYYY-----------------
-        //  -------------------ZZZ-----------------
-        //
-        // In this case, any element that ended in the 'X' range will keep its position.
-        // However any element htat ended after that will have their pos adjusted to be
-        // at the end of the new range.  i.e. any node that ended in the 'Y' range will
-        // be adjusted to have their end at the end of the 'Z' range.
-        if (element.end >= changeRangeOldEnd) {
-            // Element ends after the change range.  Always adjust the end pos.
-            element.end += delta;
-        }
-        else {
-            // Element ends in the change range.  The element will keep its position if
-            // possible. Or Move backward to the new-end if it's in the 'Y' range.
-            element.end = Math.min(element.end, changeRangeNewEnd);
-        }
-        ts.Debug.assert(element.pos <= element.end);
-        if (element.parent) {
-            ts.Debug.assert(element.pos >= element.parent.pos);
-            ts.Debug.assert(element.end <= element.parent.end);
-        }
-    }
-    function checkNodePositions(node, aggressiveChecks) {
-        if (aggressiveChecks) {
-            var pos = node.pos;
-            forEachChild(node, function (child) {
-                ts.Debug.assert(child.pos >= pos);
-                pos = child.end;
-            });
-            ts.Debug.assert(pos <= node.end);
-        }
-    }
-    function updateTokenPositionsAndMarkElements(sourceFile, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta, oldText, newText, aggressiveChecks) {
-        visitNode(sourceFile);
-        return;
-        function visitNode(child) {
-            ts.Debug.assert(child.pos <= child.end);
-            if (child.pos > changeRangeOldEnd) {
-                // Node is entirely past the change range.  We need to move both its pos and
-                // end, forward or backward appropriately.
-                moveElementEntirelyPastChangeRange(child, false, delta, oldText, newText, aggressiveChecks);
-                return;
-            }
-            // Check if the element intersects the change range.  If it does, then it is not
-            // reusable.  Also, we'll need to recurse to see what constituent portions we may
-            // be able to use.
-            var fullEnd = child.end;
-            if (fullEnd >= changeStart) {
-                child.intersectsChange = true;
-                child._children = undefined;
-                // Adjust the pos or end (or both) of the intersecting element accordingly.
-                adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                forEachChild(child, visitNode, visitArray);
-                checkNodePositions(child, aggressiveChecks);
-                return;
-            }
-            // Otherwise, the node is entirely before the change range.  No need to do anything with it.
-            ts.Debug.assert(fullEnd < changeStart);
-        }
-        function visitArray(array) {
-            ts.Debug.assert(array.pos <= array.end);
-            if (array.pos > changeRangeOldEnd) {
-                // Array is entirely after the change range.  We need to move it, and move any of
-                // its children.
-                moveElementEntirelyPastChangeRange(array, true, delta, oldText, newText, aggressiveChecks);
-                return;
-            }
-            // Check if the element intersects the change range.  If it does, then it is not
-            // reusable.  Also, we'll need to recurse to see what constituent portions we may
-            // be able to use.
-            var fullEnd = array.end;
-            if (fullEnd >= changeStart) {
-                array.intersectsChange = true;
-                array._children = undefined;
-                // Adjust the pos or end (or both) of the intersecting array accordingly.
-                adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                for (var _i = 0; _i < array.length; _i++) {
-                    var node = array[_i];
-                    visitNode(node);
-                }
-                return;
-            }
-            // Otherwise, the array is entirely before the change range.  No need to do anything with it.
-            ts.Debug.assert(fullEnd < changeStart);
-        }
-    }
-    function extendToAffectedRange(sourceFile, changeRange) {
-        // Consider the following code:
-        //      void foo() { /; }
-        //
-        // If the text changes with an insertion of / just before the semicolon then we end up with:
-        //      void foo() { //; }
-        //
-        // If we were to just use the changeRange a is, then we would not rescan the { token
-        // (as it does not intersect the actual original change range).  Because an edit may
-        // change the token touching it, we actually need to look back *at least* one token so
-        // that the prior token sees that change.
-        var maxLookahead = 1;
-        var start = changeRange.span.start;
-        // the first iteration aligns us with the change start. subsequent iteration move us to
-        // the left by maxLookahead tokens.  We only need to do this as long as we're not at the
-        // start of the tree.
-        for (var i = 0; start > 0 && i <= maxLookahead; i++) {
-            var nearestNode = findNearestNodeStartingBeforeOrAtPosition(sourceFile, start);
-            ts.Debug.assert(nearestNode.pos <= start);
-            var position = nearestNode.pos;
-            start = Math.max(0, position - 1);
-        }
-        var finalSpan = ts.createTextSpanFromBounds(start, ts.textSpanEnd(changeRange.span));
-        var finalLength = changeRange.newLength + (changeRange.span.start - start);
-        return ts.createTextChangeRange(finalSpan, finalLength);
-    }
-    function findNearestNodeStartingBeforeOrAtPosition(sourceFile, position) {
-        var bestResult = sourceFile;
-        var lastNodeEntirelyBeforePosition;
-        forEachChild(sourceFile, visit);
-        if (lastNodeEntirelyBeforePosition) {
-            var lastChildOfLastEntireNodeBeforePosition = getLastChild(lastNodeEntirelyBeforePosition);
-            if (lastChildOfLastEntireNodeBeforePosition.pos > bestResult.pos) {
-                bestResult = lastChildOfLastEntireNodeBeforePosition;
-            }
-        }
-        return bestResult;
-        function getLastChild(node) {
-            while (true) {
-                var lastChild = getLastChildWorker(node);
-                if (lastChild) {
-                    node = lastChild;
-                }
-                else {
-                    return node;
-                }
-            }
-        }
-        function getLastChildWorker(node) {
-            var last = undefined;
-            forEachChild(node, function (child) {
-                if (ts.nodeIsPresent(child)) {
-                    last = child;
-                }
-            });
-            return last;
-        }
-        function visit(child) {
-            if (ts.nodeIsMissing(child)) {
-                // Missing nodes are effectively invisible to us.  We never even consider them
-                // When trying to find the nearest node before us.
-                return;
-            }
-            // If the child intersects this position, then this node is currently the nearest
-            // node that starts before the position.
-            if (child.pos <= position) {
-                if (child.pos >= bestResult.pos) {
-                    // This node starts before the position, and is closer to the position than
-                    // the previous best node we found.  It is now the new best node.
-                    bestResult = child;
-                }
-                // Now, the node may overlap the position, or it may end entirely before the
-                // position.  If it overlaps with the position, then either it, or one of its
-                // children must be the nearest node before the position.  So we can just
-                // recurse into this child to see if we can find something better.
-                if (position < child.end) {
-                    // The nearest node is either this child, or one of the children inside
-                    // of it.  We've already marked this child as the best so far.  Recurse
-                    // in case one of the children is better.
-                    forEachChild(child, visit);
-                    // Once we look at the children of this node, then there's no need to
-                    // continue any further.
-                    return true;
-                }
-                else {
-                    ts.Debug.assert(child.end <= position);
-                    // The child ends entirely before this position.  Say you have the following
-                    // (where $ is the position)
-                    //
-                    //      <complex expr 1> ? <complex expr 2> $ : <...> <...>
-                    //
-                    // We would want to find the nearest preceding node in "complex expr 2".
-                    // To support that, we keep track of this node, and once we're done searching
-                    // for a best node, we recurse down this node to see if we can find a good
-                    // result in it.
-                    //
-                    // This approach allows us to quickly skip over nodes that are entirely
-                    // before the position, while still allowing us to find any nodes in the
-                    // last one that might be what we want.
-                    lastNodeEntirelyBeforePosition = child;
-                }
-            }
-            else {
-                ts.Debug.assert(child.pos > position);
-                // We're now at a node that is entirely past the position we're searching for.
-                // This node (and all following nodes) could never contribute to the result,
-                // so just skip them by returning 'true' here.
-                return true;
-            }
-        }
-    }
-    function checkChangeRange(sourceFile, newText, textChangeRange, aggressiveChecks) {
-        var oldText = sourceFile.text;
-        if (textChangeRange) {
-            ts.Debug.assert((oldText.length - textChangeRange.span.length + textChangeRange.newLength) === newText.length);
-            if (aggressiveChecks || ts.Debug.shouldAssert(3 /* VeryAggressive */)) {
-                var oldTextPrefix = oldText.substr(0, textChangeRange.span.start);
-                var newTextPrefix = newText.substr(0, textChangeRange.span.start);
-                ts.Debug.assert(oldTextPrefix === newTextPrefix);
-                var oldTextSuffix = oldText.substring(ts.textSpanEnd(textChangeRange.span), oldText.length);
-                var newTextSuffix = newText.substring(ts.textSpanEnd(ts.textChangeRangeNewSpan(textChangeRange)), newText.length);
-                ts.Debug.assert(oldTextSuffix === newTextSuffix);
-            }
-        }
-    }
+    ts.createSourceFile = createSourceFile;
     // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter
     // indicates what changed between the 'text' that this SourceFile has and the 'newText'.
     // The SourceFile will be created with the compiler attempting to reuse as many nodes from
@@ -6532,205 +6219,26 @@ var ts;
     // becoming detached from any SourceFile).  It is recommended that this SourceFile not
     // be used once 'update' is called on it.
     function updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks) {
-        aggressiveChecks = aggressiveChecks || ts.Debug.shouldAssert(2 /* Aggressive */);
-        checkChangeRange(sourceFile, newText, textChangeRange, aggressiveChecks);
-        if (ts.textChangeRangeIsUnchanged(textChangeRange)) {
-            // if the text didn't change, then we can just return our current source file as-is.
-            return sourceFile;
-        }
-        if (sourceFile.statements.length === 0) {
-            // If we don't have any statements in the current source file, then there's no real
-            // way to incrementally parse.  So just do a full parse instead.
-            return parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, undefined, true);
-        }
-        // Make sure we're not trying to incrementally update a source file more than once.  Once
-        // we do an update the original source file is considered unusbale from that point onwards.
-        //
-        // This is because we do incremental parsing in-place.  i.e. we take nodes from the old
-        // tree and give them new positions and parents.  From that point on, trusting the old
-        // tree at all is not possible as far too much of it may violate invariants.
-        var incrementalSourceFile = sourceFile;
-        ts.Debug.assert(!incrementalSourceFile.hasBeenIncrementallyParsed);
-        incrementalSourceFile.hasBeenIncrementallyParsed = true;
-        var oldText = sourceFile.text;
-        var syntaxCursor = createSyntaxCursor(sourceFile);
-        // Make the actual change larger so that we know to reparse anything whose lookahead
-        // might have intersected the change.
-        var changeRange = extendToAffectedRange(sourceFile, textChangeRange);
-        checkChangeRange(sourceFile, newText, changeRange, aggressiveChecks);
-        // Ensure that extending the affected range only moved the start of the change range
-        // earlier in the file.
-        ts.Debug.assert(changeRange.span.start <= textChangeRange.span.start);
-        ts.Debug.assert(ts.textSpanEnd(changeRange.span) === ts.textSpanEnd(textChangeRange.span));
-        ts.Debug.assert(ts.textSpanEnd(ts.textChangeRangeNewSpan(changeRange)) === ts.textSpanEnd(ts.textChangeRangeNewSpan(textChangeRange)));
-        // The is the amount the nodes after the edit range need to be adjusted.  It can be
-        // positive (if the edit added characters), negative (if the edit deleted characters)
-        // or zero (if this was a pure overwrite with nothing added/removed).
-        var delta = ts.textChangeRangeNewSpan(changeRange).length - changeRange.span.length;
-        // If we added or removed characters during the edit, then we need to go and adjust all
-        // the nodes after the edit.  Those nodes may move forward (if we inserted chars) or they
-        // may move backward (if we deleted chars).
-        //
-        // Doing this helps us out in two ways.  First, it means that any nodes/tokens we want
-        // to reuse are already at the appropriate position in the new text.  That way when we
-        // reuse them, we don't have to figure out if they need to be adjusted.  Second, it makes
-        // it very easy to determine if we can reuse a node.  If the node's position is at where
-        // we are in the text, then we can reuse it.  Otherwise we can't.  If the node's position
-        // is ahead of us, then we'll need to rescan tokens.  If the node's position is behind
-        // us, then we'll need to skip it or crumble it as appropriate
-        //
-        // We will also adjust the positions of nodes that intersect the change range as well.
-        // By doing this, we ensure that all the positions in the old tree are consistent, not
-        // just the positions of nodes entirely before/after the change range.  By being
-        // consistent, we can then easily map from positions to nodes in the old tree easily.
-        //
-        // Also, mark any syntax elements that intersect the changed span.  We know, up front,
-        // that we cannot reuse these elements.
-        updateTokenPositionsAndMarkElements(incrementalSourceFile, changeRange.span.start, ts.textSpanEnd(changeRange.span), ts.textSpanEnd(ts.textChangeRangeNewSpan(changeRange)), delta, oldText, newText, aggressiveChecks);
-        // Now that we've set up our internal incremental state just proceed and parse the
-        // source file in the normal fashion.  When possible the parser will retrieve and
-        // reuse nodes from the old tree.
-        //
-        // Note: passing in 'true' for setNodeParents is very important.  When incrementally
-        // parsing, we will be reusing nodes from the old tree, and placing it into new
-        // parents.  If we don't set the parents now, we'll end up with an observably
-        // inconsistent tree.  Setting the parents on the new tree should be very fast.  We
-        // will immediately bail out of walking any subtrees when we can see that their parents
-        // are already correct.
-        var result = parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, true);
-        return result;
+        return IncrementalParser.updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
     }
     ts.updateSourceFile = updateSourceFile;
-    function isEvalOrArgumentsIdentifier(node) {
-        return node.kind === 65 /* Identifier */ &&
-            (node.text === "eval" || node.text === "arguments");
-    }
-    ts.isEvalOrArgumentsIdentifier = isEvalOrArgumentsIdentifier;
-    /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
-    function isUseStrictPrologueDirective(sourceFile, node) {
-        ts.Debug.assert(ts.isPrologueDirective(node));
-        var nodeText = ts.getSourceTextOfNodeFromSourceFile(sourceFile, node.expression);
-        // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
-        // string to contain unicode escapes (as per ES5).
-        return nodeText === '"use strict"' || nodeText === "'use strict'";
-    }
-    var InvalidPosition;
-    (function (InvalidPosition) {
-        InvalidPosition[InvalidPosition["Value"] = -1] = "Value";
-    })(InvalidPosition || (InvalidPosition = {}));
-    function createSyntaxCursor(sourceFile) {
-        var currentArray = sourceFile.statements;
-        var currentArrayIndex = 0;
-        ts.Debug.assert(currentArrayIndex < currentArray.length);
-        var current = currentArray[currentArrayIndex];
-        var lastQueriedPosition = -1 /* Value */;
-        return {
-            currentNode: function (position) {
-                // Only compute the current node if the position is different than the last time
-                // we were asked.  The parser commonly asks for the node at the same position
-                // twice.  Once to know if can read an appropriate list element at a certain point,
-                // and then to actually read and consume the node.
-                if (position !== lastQueriedPosition) {
-                    // Much of the time the parser will need the very next node in the array that
-                    // we just returned a node from.So just simply check for that case and move
-                    // forward in the array instead of searching for the node again.
-                    if (current && current.end === position && currentArrayIndex < (currentArray.length - 1)) {
-                        currentArrayIndex++;
-                        current = currentArray[currentArrayIndex];
-                    }
-                    // If we don't have a node, or the node we have isn't in the right position,
-                    // then try to find a viable node at the position requested.
-                    if (!current || current.pos !== position) {
-                        findHighestListElementThatStartsAtPosition(position);
-                    }
-                }
-                // Cache this query so that we don't do any extra work if the parser calls back
-                // into us.  Note: this is very common as the parser will make pairs of calls like
-                // 'isListElement -> parseListElement'.  If we were unable to find a node when
-                // called with 'isListElement', we don't want to redo the work when parseListElement
-                // is called immediately after.
-                lastQueriedPosition = position;
-                // Either we don'd have a node, or we have a node at the position being asked for.
-                ts.Debug.assert(!current || current.pos === position);
-                return current;
-            }
-        };
-        // Finds the highest element in the tree we can find that starts at the provided position.
-        // The element must be a direct child of some node list in the tree.  This way after we
-        // return it, we can easily return its next sibling in the list.
-        function findHighestListElementThatStartsAtPosition(position) {
-            // Clear out any cached state about the last node we found.
-            currentArray = undefined;
-            currentArrayIndex = -1 /* Value */;
-            current = undefined;
-            // Recurse into the source file to find the highest node at this position.
-            forEachChild(sourceFile, visitNode, visitArray);
-            return;
-            function visitNode(node) {
-                if (position >= node.pos && position < node.end) {
-                    // Position was within this node.  Keep searching deeper to find the node.
-                    forEachChild(node, visitNode, visitArray);
-                    // don't procede any futher in the search.
-                    return true;
-                }
-                // position wasn't in this node, have to keep searching.
-                return false;
-            }
-            function visitArray(array) {
-                if (position >= array.pos && position < array.end) {
-                    // position was in this array.  Search through this array to see if we find a
-                    // viable element.
-                    for (var i = 0, n = array.length; i < n; i++) {
-                        var child = array[i];
-                        if (child) {
-                            if (child.pos === position) {
-                                // Found the right node.  We're done.
-                                currentArray = array;
-                                currentArrayIndex = i;
-                                current = child;
-                                return true;
-                            }
-                            else {
-                                if (child.pos < position && position < child.end) {
-                                    // Position in somewhere within this child.  Search in it and
-                                    // stop searching in this array.
-                                    forEachChild(child, visitNode, visitArray);
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
-                // position wasn't in this array, have to keep searching.
-                return false;
-            }
-        }
-    }
-    function createSourceFile(fileName, sourceText, languageVersion, setParentNodes) {
-        if (setParentNodes === void 0) { setParentNodes = false; }
-        var start = new Date().getTime();
-        var result = parseSourceFile(fileName, sourceText, languageVersion, undefined, setParentNodes);
-        ts.parseTime += new Date().getTime() - start;
-        return result;
-    }
-    ts.createSourceFile = createSourceFile;
-    function parseSourceFile(fileName, sourceText, languageVersion, syntaxCursor, setParentNodes) {
-        if (setParentNodes === void 0) { setParentNodes = false; }
+    // Implement the parser as a singleton module.  We do this for perf reasons because creating
+    // parser instances can actually be expensive enough to impact us on projects with many source
+    // files.
+    var Parser;
+    (function (Parser) {
+        // Share a single scanner across all calls to parse a source file.  This helps speed things
+        // up by avoiding the cost of creating/compiling scanners over and over again.
+        var scanner = ts.createScanner(2 /* Latest */, true);
         var disallowInAndDecoratorContext = 2 /* DisallowIn */ | 16 /* Decorator */;
-        var parsingContext = 0;
-        var identifiers = {};
-        var identifierCount = 0;
-        var nodeCount = 0;
+        var sourceFile;
+        var syntaxCursor;
         var token;
-        var sourceFile = createNode(227 /* SourceFile */, 0);
-        sourceFile.pos = 0;
-        sourceFile.end = sourceText.length;
-        sourceFile.text = sourceText;
-        sourceFile.parseDiagnostics = [];
-        sourceFile.bindDiagnostics = [];
-        sourceFile.languageVersion = languageVersion;
-        sourceFile.fileName = ts.normalizePath(fileName);
-        sourceFile.flags = ts.fileExtensionIs(sourceFile.fileName, ".d.ts") ? 2048 /* DeclarationFile */ : 0;
+        var sourceText;
+        var nodeCount;
+        var identifiers;
+        var identifierCount;
+        var parsingContext;
         // Flags that dictate what parsing context we're in.  For example:
         // Whether or not we are in strict parsing mode.  All that changes in strict parsing mode is
         // that some tokens that would be considered identifiers may be considered keywords.
@@ -6806,22 +6314,77 @@ var ts;
         // Note: any errors at the end of the file that do not precede a regular node, should get
         // attached to the EOF token.
         var parseErrorBeforeNextFinishedNode = false;
-        // Create and prime the scanner before parsing the source elements.
-        var scanner = ts.createScanner(languageVersion, true, sourceText, scanError);
-        token = nextToken();
-        processReferenceComments(sourceFile);
-        sourceFile.statements = parseList(0 /* SourceElements */, true, parseSourceElement);
-        ts.Debug.assert(token === 1 /* EndOfFileToken */);
-        sourceFile.endOfFileToken = parseTokenNode();
-        setExternalModuleIndicator(sourceFile);
-        sourceFile.nodeCount = nodeCount;
-        sourceFile.identifierCount = identifierCount;
-        sourceFile.identifiers = identifiers;
-        if (setParentNodes) {
-            fixupParentReferences(sourceFile);
+        function parseSourceFile(fileName, _sourceText, languageVersion, _syntaxCursor, setParentNodes) {
+            sourceText = _sourceText;
+            syntaxCursor = _syntaxCursor;
+            parsingContext = 0;
+            identifiers = {};
+            identifierCount = 0;
+            nodeCount = 0;
+            contextFlags = 0;
+            parseErrorBeforeNextFinishedNode = false;
+            createSourceFile(fileName, languageVersion);
+            // Initialize and prime the scanner before parsing the source elements.
+            scanner.setText(sourceText);
+            scanner.setOnError(scanError);
+            scanner.setScriptTarget(languageVersion);
+            token = nextToken();
+            processReferenceComments(sourceFile);
+            sourceFile.statements = parseList(0 /* SourceElements */, true, parseSourceElement);
+            ts.Debug.assert(token === 1 /* EndOfFileToken */);
+            sourceFile.endOfFileToken = parseTokenNode();
+            setExternalModuleIndicator(sourceFile);
+            sourceFile.nodeCount = nodeCount;
+            sourceFile.identifierCount = identifierCount;
+            sourceFile.identifiers = identifiers;
+            if (setParentNodes) {
+                fixupParentReferences(sourceFile);
+            }
+            syntaxCursor = undefined;
+            // Clear out the text the scanner is pointing at, so it doesn't keep anything alive unnecessarily.
+            scanner.setText("");
+            scanner.setOnError(undefined);
+            var result = sourceFile;
+            // Clear any data.  We don't want to accidently hold onto it for too long.
+            sourceFile = undefined;
+            identifiers = undefined;
+            syntaxCursor = undefined;
+            sourceText = undefined;
+            return result;
         }
-        syntaxCursor = undefined;
-        return sourceFile;
+        Parser.parseSourceFile = parseSourceFile;
+        function fixupParentReferences(sourceFile) {
+            // normally parent references are set during binding. However, for clients that only need
+            // a syntax tree, and no semantic features, then the binding process is an unnecessary
+            // overhead.  This functions allows us to set all the parents, without all the expense of
+            // binding.
+            var parent = sourceFile;
+            forEachChild(sourceFile, visitNode);
+            return;
+            function visitNode(n) {
+                // walk down setting parents that differ from the parent we think it should be.  This
+                // allows us to quickly bail out of setting parents for subtrees during incremental
+                // parsing
+                if (n.parent !== parent) {
+                    n.parent = parent;
+                    var saveParent = parent;
+                    parent = n;
+                    forEachChild(n, visitNode);
+                    parent = saveParent;
+                }
+            }
+        }
+        function createSourceFile(fileName, languageVersion) {
+            sourceFile = createNode(227 /* SourceFile */, 0);
+            sourceFile.pos = 0;
+            sourceFile.end = sourceText.length;
+            sourceFile.text = sourceText;
+            sourceFile.parseDiagnostics = [];
+            sourceFile.bindDiagnostics = [];
+            sourceFile.languageVersion = languageVersion;
+            sourceFile.fileName = ts.normalizePath(fileName);
+            sourceFile.flags = ts.fileExtensionIs(sourceFile.fileName, ".d.ts") ? 2048 /* DeclarationFile */ : 0;
+        }
         function setContextFlag(val, flag) {
             if (val) {
                 contextFlags |= flag;
@@ -7414,6 +6977,14 @@ var ts;
             parsingContext = saveParsingContext;
             return result;
         }
+        /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
+        function isUseStrictPrologueDirective(sourceFile, node) {
+            ts.Debug.assert(ts.isPrologueDirective(node));
+            var nodeText = ts.getSourceTextOfNodeFromSourceFile(sourceFile, node.expression);
+            // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
+            // string to contain unicode escapes (as per ES5).
+            return nodeText === '"use strict"' || nodeText === "'use strict'";
+        }
         function parseListElement(parsingContext, parseElement) {
             var node = currentNode(parsingContext);
             if (node) {
@@ -7659,6 +7230,32 @@ var ts;
             nextToken();
             return false;
         }
+        function parsingContextErrors(context) {
+            switch (context) {
+                case 0 /* SourceElements */: return ts.Diagnostics.Declaration_or_statement_expected;
+                case 1 /* ModuleElements */: return ts.Diagnostics.Declaration_or_statement_expected;
+                case 2 /* BlockStatements */: return ts.Diagnostics.Statement_expected;
+                case 3 /* SwitchClauses */: return ts.Diagnostics.case_or_default_expected;
+                case 4 /* SwitchClauseStatements */: return ts.Diagnostics.Statement_expected;
+                case 5 /* TypeMembers */: return ts.Diagnostics.Property_or_signature_expected;
+                case 6 /* ClassMembers */: return ts.Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
+                case 7 /* EnumMembers */: return ts.Diagnostics.Enum_member_expected;
+                case 8 /* HeritageClauseElement */: return ts.Diagnostics.Expression_expected;
+                case 9 /* VariableDeclarations */: return ts.Diagnostics.Variable_declaration_expected;
+                case 10 /* ObjectBindingElements */: return ts.Diagnostics.Property_destructuring_pattern_expected;
+                case 11 /* ArrayBindingElements */: return ts.Diagnostics.Array_element_destructuring_pattern_expected;
+                case 12 /* ArgumentExpressions */: return ts.Diagnostics.Argument_expression_expected;
+                case 13 /* ObjectLiteralMembers */: return ts.Diagnostics.Property_assignment_expected;
+                case 14 /* ArrayLiteralMembers */: return ts.Diagnostics.Expression_or_comma_expected;
+                case 15 /* Parameters */: return ts.Diagnostics.Parameter_declaration_expected;
+                case 16 /* TypeParameters */: return ts.Diagnostics.Type_parameter_declaration_expected;
+                case 17 /* TypeArguments */: return ts.Diagnostics.Type_argument_expected;
+                case 18 /* TupleElementTypes */: return ts.Diagnostics.Type_expected;
+                case 19 /* HeritageClauses */: return ts.Diagnostics.Unexpected_token_expected;
+                case 20 /* ImportOrExportSpecifiers */: return ts.Diagnostics.Identifier_expected;
+            }
+        }
+        ;
         // Parses a comma-delimited list of elements
         function parseDelimitedList(kind, parseElement, considerSemicolonAsDelimeter) {
             var saveParsingContext = parsingContext;
@@ -8475,7 +8072,7 @@ var ts;
             //
             // Note: we call reScanGreaterToken so that we get an appropriately merged token
             // for cases like > > =  becoming >>=
-            if (isLeftHandSideExpression(expr) && isAssignmentOperator(reScanGreaterToken())) {
+            if (ts.isLeftHandSideExpression(expr) && ts.isAssignmentOperator(reScanGreaterToken())) {
                 return makeBinaryExpression(expr, parseTokenNode(), parseAssignmentExpressionOrHigher());
             }
             // It wasn't an assignment or a lambda.  This is a conditional expression:
@@ -8854,7 +8451,7 @@ var ts;
         }
         function parsePostfixExpressionOrHigher() {
             var expression = parseLeftHandSideExpressionOrHigher();
-            ts.Debug.assert(isLeftHandSideExpression(expression));
+            ts.Debug.assert(ts.isLeftHandSideExpression(expression));
             if ((token === 38 /* PlusPlusToken */ || token === 39 /* MinusMinusToken */) && !scanner.hasPrecedingLineBreak()) {
                 var node = createNode(168 /* PostfixUnaryExpression */, expression.pos);
                 node.operand = expression;
@@ -9674,13 +9271,14 @@ var ts;
         function parseObjectBindingElement() {
             var node = createNode(152 /* BindingElement */);
             // TODO(andersh): Handle computed properties
-            var id = parsePropertyName();
-            if (id.kind === 65 /* Identifier */ && token !== 51 /* ColonToken */) {
-                node.name = id;
+            var tokenIsIdentifier = isIdentifier();
+            var propertyName = parsePropertyName();
+            if (tokenIsIdentifier && token !== 51 /* ColonToken */) {
+                node.name = propertyName;
             }
             else {
                 parseExpected(51 /* ColonToken */);
-                node.propertyName = id;
+                node.propertyName = propertyName;
                 node.name = parseIdentifierOrPattern();
             }
             node.initializer = parseInitializer(false);
@@ -9936,7 +9534,7 @@ var ts;
                     modifiers = [];
                     modifiers.pos = modifierStart;
                 }
-                flags |= modifierToFlag(modifierKind);
+                flags |= ts.modifierToFlag(modifierKind);
                 modifiers.push(finishNode(createNode(modifierKind, modifierStart)));
             }
             if (modifiers) {
@@ -10516,41 +10114,503 @@ var ts;
                     : undefined;
             });
         }
-    }
-    function isLeftHandSideExpression(expr) {
-        if (expr) {
-            switch (expr.kind) {
-                case 155 /* PropertyAccessExpression */:
-                case 156 /* ElementAccessExpression */:
-                case 158 /* NewExpression */:
-                case 157 /* CallExpression */:
-                case 159 /* TaggedTemplateExpression */:
-                case 153 /* ArrayLiteralExpression */:
-                case 161 /* ParenthesizedExpression */:
-                case 154 /* ObjectLiteralExpression */:
-                case 174 /* ClassExpression */:
-                case 162 /* FunctionExpression */:
-                case 65 /* Identifier */:
-                case 9 /* RegularExpressionLiteral */:
-                case 7 /* NumericLiteral */:
-                case 8 /* StringLiteral */:
-                case 10 /* NoSubstitutionTemplateLiteral */:
-                case 171 /* TemplateExpression */:
-                case 80 /* FalseKeyword */:
-                case 89 /* NullKeyword */:
-                case 93 /* ThisKeyword */:
-                case 95 /* TrueKeyword */:
-                case 91 /* SuperKeyword */:
-                    return true;
+        var ParsingContext;
+        (function (ParsingContext) {
+            ParsingContext[ParsingContext["SourceElements"] = 0] = "SourceElements";
+            ParsingContext[ParsingContext["ModuleElements"] = 1] = "ModuleElements";
+            ParsingContext[ParsingContext["BlockStatements"] = 2] = "BlockStatements";
+            ParsingContext[ParsingContext["SwitchClauses"] = 3] = "SwitchClauses";
+            ParsingContext[ParsingContext["SwitchClauseStatements"] = 4] = "SwitchClauseStatements";
+            ParsingContext[ParsingContext["TypeMembers"] = 5] = "TypeMembers";
+            ParsingContext[ParsingContext["ClassMembers"] = 6] = "ClassMembers";
+            ParsingContext[ParsingContext["EnumMembers"] = 7] = "EnumMembers";
+            ParsingContext[ParsingContext["HeritageClauseElement"] = 8] = "HeritageClauseElement";
+            ParsingContext[ParsingContext["VariableDeclarations"] = 9] = "VariableDeclarations";
+            ParsingContext[ParsingContext["ObjectBindingElements"] = 10] = "ObjectBindingElements";
+            ParsingContext[ParsingContext["ArrayBindingElements"] = 11] = "ArrayBindingElements";
+            ParsingContext[ParsingContext["ArgumentExpressions"] = 12] = "ArgumentExpressions";
+            ParsingContext[ParsingContext["ObjectLiteralMembers"] = 13] = "ObjectLiteralMembers";
+            ParsingContext[ParsingContext["ArrayLiteralMembers"] = 14] = "ArrayLiteralMembers";
+            ParsingContext[ParsingContext["Parameters"] = 15] = "Parameters";
+            ParsingContext[ParsingContext["TypeParameters"] = 16] = "TypeParameters";
+            ParsingContext[ParsingContext["TypeArguments"] = 17] = "TypeArguments";
+            ParsingContext[ParsingContext["TupleElementTypes"] = 18] = "TupleElementTypes";
+            ParsingContext[ParsingContext["HeritageClauses"] = 19] = "HeritageClauses";
+            ParsingContext[ParsingContext["ImportOrExportSpecifiers"] = 20] = "ImportOrExportSpecifiers";
+            ParsingContext[ParsingContext["Count"] = 21] = "Count"; // Number of parsing contexts
+        })(ParsingContext || (ParsingContext = {}));
+        var Tristate;
+        (function (Tristate) {
+            Tristate[Tristate["False"] = 0] = "False";
+            Tristate[Tristate["True"] = 1] = "True";
+            Tristate[Tristate["Unknown"] = 2] = "Unknown";
+        })(Tristate || (Tristate = {}));
+    })(Parser || (Parser = {}));
+    var IncrementalParser;
+    (function (IncrementalParser) {
+        function updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks) {
+            aggressiveChecks = aggressiveChecks || ts.Debug.shouldAssert(2 /* Aggressive */);
+            checkChangeRange(sourceFile, newText, textChangeRange, aggressiveChecks);
+            if (ts.textChangeRangeIsUnchanged(textChangeRange)) {
+                // if the text didn't change, then we can just return our current source file as-is.
+                return sourceFile;
+            }
+            if (sourceFile.statements.length === 0) {
+                // If we don't have any statements in the current source file, then there's no real
+                // way to incrementally parse.  So just do a full parse instead.
+                return Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, undefined, true);
+            }
+            // Make sure we're not trying to incrementally update a source file more than once.  Once
+            // we do an update the original source file is considered unusbale from that point onwards.
+            //
+            // This is because we do incremental parsing in-place.  i.e. we take nodes from the old
+            // tree and give them new positions and parents.  From that point on, trusting the old
+            // tree at all is not possible as far too much of it may violate invariants.
+            var incrementalSourceFile = sourceFile;
+            ts.Debug.assert(!incrementalSourceFile.hasBeenIncrementallyParsed);
+            incrementalSourceFile.hasBeenIncrementallyParsed = true;
+            var oldText = sourceFile.text;
+            var syntaxCursor = createSyntaxCursor(sourceFile);
+            // Make the actual change larger so that we know to reparse anything whose lookahead
+            // might have intersected the change.
+            var changeRange = extendToAffectedRange(sourceFile, textChangeRange);
+            checkChangeRange(sourceFile, newText, changeRange, aggressiveChecks);
+            // Ensure that extending the affected range only moved the start of the change range
+            // earlier in the file.
+            ts.Debug.assert(changeRange.span.start <= textChangeRange.span.start);
+            ts.Debug.assert(ts.textSpanEnd(changeRange.span) === ts.textSpanEnd(textChangeRange.span));
+            ts.Debug.assert(ts.textSpanEnd(ts.textChangeRangeNewSpan(changeRange)) === ts.textSpanEnd(ts.textChangeRangeNewSpan(textChangeRange)));
+            // The is the amount the nodes after the edit range need to be adjusted.  It can be
+            // positive (if the edit added characters), negative (if the edit deleted characters)
+            // or zero (if this was a pure overwrite with nothing added/removed).
+            var delta = ts.textChangeRangeNewSpan(changeRange).length - changeRange.span.length;
+            // If we added or removed characters during the edit, then we need to go and adjust all
+            // the nodes after the edit.  Those nodes may move forward (if we inserted chars) or they
+            // may move backward (if we deleted chars).
+            //
+            // Doing this helps us out in two ways.  First, it means that any nodes/tokens we want
+            // to reuse are already at the appropriate position in the new text.  That way when we
+            // reuse them, we don't have to figure out if they need to be adjusted.  Second, it makes
+            // it very easy to determine if we can reuse a node.  If the node's position is at where
+            // we are in the text, then we can reuse it.  Otherwise we can't.  If the node's position
+            // is ahead of us, then we'll need to rescan tokens.  If the node's position is behind
+            // us, then we'll need to skip it or crumble it as appropriate
+            //
+            // We will also adjust the positions of nodes that intersect the change range as well.
+            // By doing this, we ensure that all the positions in the old tree are consistent, not
+            // just the positions of nodes entirely before/after the change range.  By being
+            // consistent, we can then easily map from positions to nodes in the old tree easily.
+            //
+            // Also, mark any syntax elements that intersect the changed span.  We know, up front,
+            // that we cannot reuse these elements.
+            updateTokenPositionsAndMarkElements(incrementalSourceFile, changeRange.span.start, ts.textSpanEnd(changeRange.span), ts.textSpanEnd(ts.textChangeRangeNewSpan(changeRange)), delta, oldText, newText, aggressiveChecks);
+            // Now that we've set up our internal incremental state just proceed and parse the
+            // source file in the normal fashion.  When possible the parser will retrieve and
+            // reuse nodes from the old tree.
+            //
+            // Note: passing in 'true' for setNodeParents is very important.  When incrementally
+            // parsing, we will be reusing nodes from the old tree, and placing it into new
+            // parents.  If we don't set the parents now, we'll end up with an observably
+            // inconsistent tree.  Setting the parents on the new tree should be very fast.  We
+            // will immediately bail out of walking any subtrees when we can see that their parents
+            // are already correct.
+            var result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, true);
+            return result;
+        }
+        IncrementalParser.updateSourceFile = updateSourceFile;
+        function moveElementEntirelyPastChangeRange(element, isArray, delta, oldText, newText, aggressiveChecks) {
+            if (isArray) {
+                visitArray(element);
+            }
+            else {
+                visitNode(element);
+            }
+            return;
+            function visitNode(node) {
+                if (aggressiveChecks && shouldCheckNode(node)) {
+                    var text = oldText.substring(node.pos, node.end);
+                }
+                // Ditch any existing LS children we may have created.  This way we can avoid
+                // moving them forward.
+                node._children = undefined;
+                node.pos += delta;
+                node.end += delta;
+                if (aggressiveChecks && shouldCheckNode(node)) {
+                    ts.Debug.assert(text === newText.substring(node.pos, node.end));
+                }
+                forEachChild(node, visitNode, visitArray);
+                checkNodePositions(node, aggressiveChecks);
+            }
+            function visitArray(array) {
+                array._children = undefined;
+                array.pos += delta;
+                array.end += delta;
+                for (var _i = 0; _i < array.length; _i++) {
+                    var node = array[_i];
+                    visitNode(node);
+                }
             }
         }
-        return false;
-    }
-    ts.isLeftHandSideExpression = isLeftHandSideExpression;
-    function isAssignmentOperator(token) {
-        return token >= 53 /* FirstAssignment */ && token <= 64 /* LastAssignment */;
-    }
-    ts.isAssignmentOperator = isAssignmentOperator;
+        function shouldCheckNode(node) {
+            switch (node.kind) {
+                case 8 /* StringLiteral */:
+                case 7 /* NumericLiteral */:
+                case 65 /* Identifier */:
+                    return true;
+            }
+            return false;
+        }
+        function adjustIntersectingElement(element, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta) {
+            ts.Debug.assert(element.end >= changeStart, "Adjusting an element that was entirely before the change range");
+            ts.Debug.assert(element.pos <= changeRangeOldEnd, "Adjusting an element that was entirely after the change range");
+            ts.Debug.assert(element.pos <= element.end);
+            // We have an element that intersects the change range in some way.  It may have its
+            // start, or its end (or both) in the changed range.  We want to adjust any part
+            // that intersects such that the final tree is in a consistent state.  i.e. all
+            // chlidren have spans within the span of their parent, and all siblings are ordered
+            // properly.
+            // We may need to update both the 'pos' and the 'end' of the element.
+            // If the 'pos' is before the start of the change, then we don't need to touch it.
+            // If it isn't, then the 'pos' must be inside the change.  How we update it will
+            // depend if delta is  positive or negative.  If delta is positive then we have
+            // something like:
+            //
+            //  -------------------AAA-----------------
+            //  -------------------BBBCCCCCCC-----------------
+            //
+            // In this case, we consider any node that started in the change range to still be
+            // starting at the same position.
+            //
+            // however, if the delta is negative, then we instead have something like this:
+            //
+            //  -------------------XXXYYYYYYY-----------------
+            //  -------------------ZZZ-----------------
+            //
+            // In this case, any element that started in the 'X' range will keep its position.
+            // However any element htat started after that will have their pos adjusted to be
+            // at the end of the new range.  i.e. any node that started in the 'Y' range will
+            // be adjusted to have their start at the end of the 'Z' range.
+            //
+            // The element will keep its position if possible.  Or Move backward to the new-end
+            // if it's in the 'Y' range.
+            element.pos = Math.min(element.pos, changeRangeNewEnd);
+            // If the 'end' is after the change range, then we always adjust it by the delta
+            // amount.  However, if the end is in the change range, then how we adjust it
+            // will depend on if delta is  positive or negative.  If delta is positive then we
+            // have something like:
+            //
+            //  -------------------AAA-----------------
+            //  -------------------BBBCCCCCCC-----------------
+            //
+            // In this case, we consider any node that ended inside the change range to keep its
+            // end position.
+            //
+            // however, if the delta is negative, then we instead have something like this:
+            //
+            //  -------------------XXXYYYYYYY-----------------
+            //  -------------------ZZZ-----------------
+            //
+            // In this case, any element that ended in the 'X' range will keep its position.
+            // However any element htat ended after that will have their pos adjusted to be
+            // at the end of the new range.  i.e. any node that ended in the 'Y' range will
+            // be adjusted to have their end at the end of the 'Z' range.
+            if (element.end >= changeRangeOldEnd) {
+                // Element ends after the change range.  Always adjust the end pos.
+                element.end += delta;
+            }
+            else {
+                // Element ends in the change range.  The element will keep its position if
+                // possible. Or Move backward to the new-end if it's in the 'Y' range.
+                element.end = Math.min(element.end, changeRangeNewEnd);
+            }
+            ts.Debug.assert(element.pos <= element.end);
+            if (element.parent) {
+                ts.Debug.assert(element.pos >= element.parent.pos);
+                ts.Debug.assert(element.end <= element.parent.end);
+            }
+        }
+        function checkNodePositions(node, aggressiveChecks) {
+            if (aggressiveChecks) {
+                var pos = node.pos;
+                forEachChild(node, function (child) {
+                    ts.Debug.assert(child.pos >= pos);
+                    pos = child.end;
+                });
+                ts.Debug.assert(pos <= node.end);
+            }
+        }
+        function updateTokenPositionsAndMarkElements(sourceFile, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta, oldText, newText, aggressiveChecks) {
+            visitNode(sourceFile);
+            return;
+            function visitNode(child) {
+                ts.Debug.assert(child.pos <= child.end);
+                if (child.pos > changeRangeOldEnd) {
+                    // Node is entirely past the change range.  We need to move both its pos and
+                    // end, forward or backward appropriately.
+                    moveElementEntirelyPastChangeRange(child, false, delta, oldText, newText, aggressiveChecks);
+                    return;
+                }
+                // Check if the element intersects the change range.  If it does, then it is not
+                // reusable.  Also, we'll need to recurse to see what constituent portions we may
+                // be able to use.
+                var fullEnd = child.end;
+                if (fullEnd >= changeStart) {
+                    child.intersectsChange = true;
+                    child._children = undefined;
+                    // Adjust the pos or end (or both) of the intersecting element accordingly.
+                    adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
+                    forEachChild(child, visitNode, visitArray);
+                    checkNodePositions(child, aggressiveChecks);
+                    return;
+                }
+                // Otherwise, the node is entirely before the change range.  No need to do anything with it.
+                ts.Debug.assert(fullEnd < changeStart);
+            }
+            function visitArray(array) {
+                ts.Debug.assert(array.pos <= array.end);
+                if (array.pos > changeRangeOldEnd) {
+                    // Array is entirely after the change range.  We need to move it, and move any of
+                    // its children.
+                    moveElementEntirelyPastChangeRange(array, true, delta, oldText, newText, aggressiveChecks);
+                    return;
+                }
+                // Check if the element intersects the change range.  If it does, then it is not
+                // reusable.  Also, we'll need to recurse to see what constituent portions we may
+                // be able to use.
+                var fullEnd = array.end;
+                if (fullEnd >= changeStart) {
+                    array.intersectsChange = true;
+                    array._children = undefined;
+                    // Adjust the pos or end (or both) of the intersecting array accordingly.
+                    adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
+                    for (var _i = 0; _i < array.length; _i++) {
+                        var node = array[_i];
+                        visitNode(node);
+                    }
+                    return;
+                }
+                // Otherwise, the array is entirely before the change range.  No need to do anything with it.
+                ts.Debug.assert(fullEnd < changeStart);
+            }
+        }
+        function extendToAffectedRange(sourceFile, changeRange) {
+            // Consider the following code:
+            //      void foo() { /; }
+            //
+            // If the text changes with an insertion of / just before the semicolon then we end up with:
+            //      void foo() { //; }
+            //
+            // If we were to just use the changeRange a is, then we would not rescan the { token
+            // (as it does not intersect the actual original change range).  Because an edit may
+            // change the token touching it, we actually need to look back *at least* one token so
+            // that the prior token sees that change.
+            var maxLookahead = 1;
+            var start = changeRange.span.start;
+            // the first iteration aligns us with the change start. subsequent iteration move us to
+            // the left by maxLookahead tokens.  We only need to do this as long as we're not at the
+            // start of the tree.
+            for (var i = 0; start > 0 && i <= maxLookahead; i++) {
+                var nearestNode = findNearestNodeStartingBeforeOrAtPosition(sourceFile, start);
+                ts.Debug.assert(nearestNode.pos <= start);
+                var position = nearestNode.pos;
+                start = Math.max(0, position - 1);
+            }
+            var finalSpan = ts.createTextSpanFromBounds(start, ts.textSpanEnd(changeRange.span));
+            var finalLength = changeRange.newLength + (changeRange.span.start - start);
+            return ts.createTextChangeRange(finalSpan, finalLength);
+        }
+        function findNearestNodeStartingBeforeOrAtPosition(sourceFile, position) {
+            var bestResult = sourceFile;
+            var lastNodeEntirelyBeforePosition;
+            forEachChild(sourceFile, visit);
+            if (lastNodeEntirelyBeforePosition) {
+                var lastChildOfLastEntireNodeBeforePosition = getLastChild(lastNodeEntirelyBeforePosition);
+                if (lastChildOfLastEntireNodeBeforePosition.pos > bestResult.pos) {
+                    bestResult = lastChildOfLastEntireNodeBeforePosition;
+                }
+            }
+            return bestResult;
+            function getLastChild(node) {
+                while (true) {
+                    var lastChild = getLastChildWorker(node);
+                    if (lastChild) {
+                        node = lastChild;
+                    }
+                    else {
+                        return node;
+                    }
+                }
+            }
+            function getLastChildWorker(node) {
+                var last = undefined;
+                forEachChild(node, function (child) {
+                    if (ts.nodeIsPresent(child)) {
+                        last = child;
+                    }
+                });
+                return last;
+            }
+            function visit(child) {
+                if (ts.nodeIsMissing(child)) {
+                    // Missing nodes are effectively invisible to us.  We never even consider them
+                    // When trying to find the nearest node before us.
+                    return;
+                }
+                // If the child intersects this position, then this node is currently the nearest
+                // node that starts before the position.
+                if (child.pos <= position) {
+                    if (child.pos >= bestResult.pos) {
+                        // This node starts before the position, and is closer to the position than
+                        // the previous best node we found.  It is now the new best node.
+                        bestResult = child;
+                    }
+                    // Now, the node may overlap the position, or it may end entirely before the
+                    // position.  If it overlaps with the position, then either it, or one of its
+                    // children must be the nearest node before the position.  So we can just
+                    // recurse into this child to see if we can find something better.
+                    if (position < child.end) {
+                        // The nearest node is either this child, or one of the children inside
+                        // of it.  We've already marked this child as the best so far.  Recurse
+                        // in case one of the children is better.
+                        forEachChild(child, visit);
+                        // Once we look at the children of this node, then there's no need to
+                        // continue any further.
+                        return true;
+                    }
+                    else {
+                        ts.Debug.assert(child.end <= position);
+                        // The child ends entirely before this position.  Say you have the following
+                        // (where $ is the position)
+                        //
+                        //      <complex expr 1> ? <complex expr 2> $ : <...> <...>
+                        //
+                        // We would want to find the nearest preceding node in "complex expr 2".
+                        // To support that, we keep track of this node, and once we're done searching
+                        // for a best node, we recurse down this node to see if we can find a good
+                        // result in it.
+                        //
+                        // This approach allows us to quickly skip over nodes that are entirely
+                        // before the position, while still allowing us to find any nodes in the
+                        // last one that might be what we want.
+                        lastNodeEntirelyBeforePosition = child;
+                    }
+                }
+                else {
+                    ts.Debug.assert(child.pos > position);
+                    // We're now at a node that is entirely past the position we're searching for.
+                    // This node (and all following nodes) could never contribute to the result,
+                    // so just skip them by returning 'true' here.
+                    return true;
+                }
+            }
+        }
+        function checkChangeRange(sourceFile, newText, textChangeRange, aggressiveChecks) {
+            var oldText = sourceFile.text;
+            if (textChangeRange) {
+                ts.Debug.assert((oldText.length - textChangeRange.span.length + textChangeRange.newLength) === newText.length);
+                if (aggressiveChecks || ts.Debug.shouldAssert(3 /* VeryAggressive */)) {
+                    var oldTextPrefix = oldText.substr(0, textChangeRange.span.start);
+                    var newTextPrefix = newText.substr(0, textChangeRange.span.start);
+                    ts.Debug.assert(oldTextPrefix === newTextPrefix);
+                    var oldTextSuffix = oldText.substring(ts.textSpanEnd(textChangeRange.span), oldText.length);
+                    var newTextSuffix = newText.substring(ts.textSpanEnd(ts.textChangeRangeNewSpan(textChangeRange)), newText.length);
+                    ts.Debug.assert(oldTextSuffix === newTextSuffix);
+                }
+            }
+        }
+        function createSyntaxCursor(sourceFile) {
+            var currentArray = sourceFile.statements;
+            var currentArrayIndex = 0;
+            ts.Debug.assert(currentArrayIndex < currentArray.length);
+            var current = currentArray[currentArrayIndex];
+            var lastQueriedPosition = -1 /* Value */;
+            return {
+                currentNode: function (position) {
+                    // Only compute the current node if the position is different than the last time
+                    // we were asked.  The parser commonly asks for the node at the same position
+                    // twice.  Once to know if can read an appropriate list element at a certain point,
+                    // and then to actually read and consume the node.
+                    if (position !== lastQueriedPosition) {
+                        // Much of the time the parser will need the very next node in the array that
+                        // we just returned a node from.So just simply check for that case and move
+                        // forward in the array instead of searching for the node again.
+                        if (current && current.end === position && currentArrayIndex < (currentArray.length - 1)) {
+                            currentArrayIndex++;
+                            current = currentArray[currentArrayIndex];
+                        }
+                        // If we don't have a node, or the node we have isn't in the right position,
+                        // then try to find a viable node at the position requested.
+                        if (!current || current.pos !== position) {
+                            findHighestListElementThatStartsAtPosition(position);
+                        }
+                    }
+                    // Cache this query so that we don't do any extra work if the parser calls back
+                    // into us.  Note: this is very common as the parser will make pairs of calls like
+                    // 'isListElement -> parseListElement'.  If we were unable to find a node when
+                    // called with 'isListElement', we don't want to redo the work when parseListElement
+                    // is called immediately after.
+                    lastQueriedPosition = position;
+                    // Either we don'd have a node, or we have a node at the position being asked for.
+                    ts.Debug.assert(!current || current.pos === position);
+                    return current;
+                }
+            };
+            // Finds the highest element in the tree we can find that starts at the provided position.
+            // The element must be a direct child of some node list in the tree.  This way after we
+            // return it, we can easily return its next sibling in the list.
+            function findHighestListElementThatStartsAtPosition(position) {
+                // Clear out any cached state about the last node we found.
+                currentArray = undefined;
+                currentArrayIndex = -1 /* Value */;
+                current = undefined;
+                // Recurse into the source file to find the highest node at this position.
+                forEachChild(sourceFile, visitNode, visitArray);
+                return;
+                function visitNode(node) {
+                    if (position >= node.pos && position < node.end) {
+                        // Position was within this node.  Keep searching deeper to find the node.
+                        forEachChild(node, visitNode, visitArray);
+                        // don't procede any futher in the search.
+                        return true;
+                    }
+                    // position wasn't in this node, have to keep searching.
+                    return false;
+                }
+                function visitArray(array) {
+                    if (position >= array.pos && position < array.end) {
+                        // position was in this array.  Search through this array to see if we find a
+                        // viable element.
+                        for (var i = 0, n = array.length; i < n; i++) {
+                            var child = array[i];
+                            if (child) {
+                                if (child.pos === position) {
+                                    // Found the right node.  We're done.
+                                    currentArray = array;
+                                    currentArrayIndex = i;
+                                    current = child;
+                                    return true;
+                                }
+                                else {
+                                    if (child.pos < position && position < child.end) {
+                                        // Position in somewhere within this child.  Search in it and
+                                        // stop searching in this array.
+                                        forEachChild(child, visitNode, visitArray);
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // position wasn't in this array, have to keep searching.
+                    return false;
+                }
+            }
+        }
+        var InvalidPosition;
+        (function (InvalidPosition) {
+            InvalidPosition[InvalidPosition["Value"] = -1] = "Value";
+        })(InvalidPosition || (InvalidPosition = {}));
+    })(IncrementalParser || (IncrementalParser = {}));
 })(ts || (ts = {}));
 /// <reference path="binder.ts"/>
 /* @internal */
@@ -10890,7 +10950,8 @@ var ts;
                             }
                             result = undefined;
                         }
-                        else if (location.kind === 227 /* SourceFile */) {
+                        else if (location.kind === 227 /* SourceFile */ ||
+                            (location.kind === 205 /* ModuleDeclaration */ && location.name.kind === 8 /* StringLiteral */)) {
                             result = getSymbol(getSymbolOfNode(location).exports, "default", meaning & 8914931 /* ModuleMember */);
                             var localSymbol = ts.getLocalSymbolForExportDefault(result);
                             if (result && (result.flags & meaning) && localSymbol && localSymbol.name === name) {
@@ -11120,7 +11181,7 @@ var ts;
             if (moduleSymbol.flags & 3 /* Variable */) {
                 var typeAnnotation = moduleSymbol.valueDeclaration.type;
                 if (typeAnnotation) {
-                    return getPropertyOfType(getTypeFromTypeNodeOrHeritageClauseElement(typeAnnotation), name);
+                    return getPropertyOfType(getTypeFromTypeNode(typeAnnotation), name);
                 }
             }
         }
@@ -11169,7 +11230,7 @@ var ts;
             if (symbol.flags & 3 /* Variable */) {
                 var typeAnnotation = symbol.valueDeclaration.type;
                 if (typeAnnotation) {
-                    return resolveSymbol(getPropertyOfType(getTypeFromTypeNodeOrHeritageClauseElement(typeAnnotation), name));
+                    return resolveSymbol(getPropertyOfType(getTypeFromTypeNode(typeAnnotation), name));
                 }
             }
         }
@@ -12506,7 +12567,7 @@ var ts;
             }
             // Use type from type annotation if one is present
             if (declaration.type) {
-                return getTypeFromTypeNodeOrHeritageClauseElement(declaration.type);
+                return getTypeFromTypeNode(declaration.type);
             }
             if (declaration.kind === 129 /* Parameter */) {
                 var func = declaration.parent;
@@ -12573,24 +12634,7 @@ var ts;
             }
             else if (hasSpreadElement) {
                 var unionOfElements = getUnionType(elementTypes);
-                if (languageVersion >= 2 /* ES6 */) {
-                    // If the user has something like:
-                    //
-                    //     function fun(...[a, ...b]) { }
-                    //
-                    // Normally, in ES6, the implied type of an array binding pattern with a rest element is
-                    // an iterable. However, there is a requirement in our type system that all rest
-                    // parameters be array types. To satisfy this, we have an exception to the rule that
-                    // says the type of an array binding pattern with a rest element is an array type
-                    // if it is *itself* in a rest parameter. It will still be compatible with a spreaded
-                    // iterable argument, but within the function it will be an array.
-                    var parent_3 = pattern.parent;
-                    var isRestParameter = parent_3.kind === 129 /* Parameter */ &&
-                        pattern === parent_3.name &&
-                        parent_3.dotDotDotToken !== undefined;
-                    return isRestParameter ? createArrayType(unionOfElements) : createIterableType(unionOfElements);
-                }
-                return createArrayType(unionOfElements);
+                return languageVersion >= 2 /* ES6 */ ? createIterableType(unionOfElements) : createArrayType(unionOfElements);
             }
             // If the pattern has at least one element, and no rest element, then it should imply a tuple type.
             return createTupleType(elementTypes);
@@ -12683,11 +12727,11 @@ var ts;
         function getAnnotatedAccessorType(accessor) {
             if (accessor) {
                 if (accessor.kind === 136 /* GetAccessor */) {
-                    return accessor.type && getTypeFromTypeNodeOrHeritageClauseElement(accessor.type);
+                    return accessor.type && getTypeFromTypeNode(accessor.type);
                 }
                 else {
                     var setterTypeAnnotation = getSetAccessorTypeAnnotationNode(accessor);
-                    return setterTypeAnnotation && getTypeFromTypeNodeOrHeritageClauseElement(setterTypeAnnotation);
+                    return setterTypeAnnotation && getTypeFromTypeNode(setterTypeAnnotation);
                 }
             }
             return undefined;
@@ -12796,7 +12840,7 @@ var ts;
             return check(type);
             function check(type) {
                 var target = getTargetType(type);
-                return target === checkBase || ts.forEach(target.baseTypes, check);
+                return target === checkBase || ts.forEach(getBaseTypes(target), check);
             }
         }
         // Return combined list of type parameters from all declarations of a class or interface. Elsewhere we check they're all
@@ -12822,6 +12866,67 @@ var ts;
             });
             return result;
         }
+        function getBaseTypes(type) {
+            var typeWithBaseTypes = type;
+            if (!typeWithBaseTypes.baseTypes) {
+                if (type.symbol.flags & 32 /* Class */) {
+                    resolveBaseTypesOfClass(typeWithBaseTypes);
+                }
+                else if (type.symbol.flags & 64 /* Interface */) {
+                    resolveBaseTypesOfInterface(typeWithBaseTypes);
+                }
+                else {
+                    ts.Debug.fail("type must be class or interface");
+                }
+            }
+            return typeWithBaseTypes.baseTypes;
+        }
+        function resolveBaseTypesOfClass(type) {
+            type.baseTypes = [];
+            var declaration = ts.getDeclarationOfKind(type.symbol, 201 /* ClassDeclaration */);
+            var baseTypeNode = ts.getClassExtendsHeritageClauseElement(declaration);
+            if (baseTypeNode) {
+                var baseType = getTypeFromHeritageClauseElement(baseTypeNode);
+                if (baseType !== unknownType) {
+                    if (getTargetType(baseType).flags & 1024 /* Class */) {
+                        if (type !== baseType && !hasBaseType(baseType, type)) {
+                            type.baseTypes.push(baseType);
+                        }
+                        else {
+                            error(declaration, ts.Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, undefined, 1 /* WriteArrayAsGenericType */));
+                        }
+                    }
+                    else {
+                        error(baseTypeNode, ts.Diagnostics.A_class_may_only_extend_another_class);
+                    }
+                }
+            }
+        }
+        function resolveBaseTypesOfInterface(type) {
+            type.baseTypes = [];
+            for (var _i = 0, _a = type.symbol.declarations; _i < _a.length; _i++) {
+                var declaration = _a[_i];
+                if (declaration.kind === 202 /* InterfaceDeclaration */ && ts.getInterfaceBaseTypeNodes(declaration)) {
+                    for (var _b = 0, _c = ts.getInterfaceBaseTypeNodes(declaration); _b < _c.length; _b++) {
+                        var node = _c[_b];
+                        var baseType = getTypeFromHeritageClauseElement(node);
+                        if (baseType !== unknownType) {
+                            if (getTargetType(baseType).flags & (1024 /* Class */ | 2048 /* Interface */)) {
+                                if (type !== baseType && !hasBaseType(baseType, type)) {
+                                    type.baseTypes.push(baseType);
+                                }
+                                else {
+                                    error(declaration, ts.Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, undefined, 1 /* WriteArrayAsGenericType */));
+                                }
+                            }
+                            else {
+                                error(node, ts.Diagnostics.An_interface_may_only_extend_a_class_or_another_interface);
+                            }
+                        }
+                    }
+                }
+            }
+        }
         function getDeclaredTypeOfClass(symbol) {
             var links = getSymbolLinks(symbol);
             if (!links.declaredType) {
@@ -12834,25 +12939,6 @@ var ts;
                     type.instantiations[getTypeListId(type.typeParameters)] = type;
                     type.target = type;
                     type.typeArguments = type.typeParameters;
-                }
-                type.baseTypes = [];
-                var declaration = ts.getDeclarationOfKind(symbol, 201 /* ClassDeclaration */);
-                var baseTypeNode = ts.getClassExtendsHeritageClauseElement(declaration);
-                if (baseTypeNode) {
-                    var baseType = getTypeFromHeritageClauseElement(baseTypeNode);
-                    if (baseType !== unknownType) {
-                        if (getTargetType(baseType).flags & 1024 /* Class */) {
-                            if (type !== baseType && !hasBaseType(baseType, type)) {
-                                type.baseTypes.push(baseType);
-                            }
-                            else {
-                                error(declaration, ts.Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, undefined, 1 /* WriteArrayAsGenericType */));
-                            }
-                        }
-                        else {
-                            error(baseTypeNode, ts.Diagnostics.A_class_may_only_extend_another_class);
-                        }
-                    }
                 }
                 type.declaredProperties = getNamedMembers(symbol.members);
                 type.declaredCallSignatures = emptyArray;
@@ -12875,27 +12961,6 @@ var ts;
                     type.target = type;
                     type.typeArguments = type.typeParameters;
                 }
-                type.baseTypes = [];
-                ts.forEach(symbol.declarations, function (declaration) {
-                    if (declaration.kind === 202 /* InterfaceDeclaration */ && ts.getInterfaceBaseTypeNodes(declaration)) {
-                        ts.forEach(ts.getInterfaceBaseTypeNodes(declaration), function (node) {
-                            var baseType = getTypeFromHeritageClauseElement(node);
-                            if (baseType !== unknownType) {
-                                if (getTargetType(baseType).flags & (1024 /* Class */ | 2048 /* Interface */)) {
-                                    if (type !== baseType && !hasBaseType(baseType, type)) {
-                                        type.baseTypes.push(baseType);
-                                    }
-                                    else {
-                                        error(declaration, ts.Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, undefined, 1 /* WriteArrayAsGenericType */));
-                                    }
-                                }
-                                else {
-                                    error(node, ts.Diagnostics.An_interface_may_only_extend_a_class_or_another_interface);
-                                }
-                            }
-                        });
-                    }
-                });
                 type.declaredProperties = getNamedMembers(symbol.members);
                 type.declaredCallSignatures = getSignaturesOfSymbol(symbol.members["__call"]);
                 type.declaredConstructSignatures = getSignaturesOfSymbol(symbol.members["__new"]);
@@ -12909,7 +12974,7 @@ var ts;
             if (!links.declaredType) {
                 links.declaredType = resolvingType;
                 var declaration = ts.getDeclarationOfKind(symbol, 203 /* TypeAliasDeclaration */);
-                var type = getTypeFromTypeNodeOrHeritageClauseElement(declaration.type);
+                var type = getTypeFromTypeNode(declaration.type);
                 if (links.declaredType === resolvingType) {
                     links.declaredType = type;
                 }
@@ -13009,15 +13074,17 @@ var ts;
             var constructSignatures = type.declaredConstructSignatures;
             var stringIndexType = type.declaredStringIndexType;
             var numberIndexType = type.declaredNumberIndexType;
-            if (type.baseTypes.length) {
+            var baseTypes = getBaseTypes(type);
+            if (baseTypes.length) {
                 members = createSymbolTable(type.declaredProperties);
-                ts.forEach(type.baseTypes, function (baseType) {
+                for (var _i = 0; _i < baseTypes.length; _i++) {
+                    var baseType = baseTypes[_i];
                     addInheritedMembers(members, getPropertiesOfObjectType(baseType));
                     callSignatures = ts.concatenate(callSignatures, getSignaturesOfType(baseType, 0 /* Call */));
                     constructSignatures = ts.concatenate(constructSignatures, getSignaturesOfType(baseType, 1 /* Construct */));
                     stringIndexType = stringIndexType || getIndexTypeOfType(baseType, 0 /* String */);
                     numberIndexType = numberIndexType || getIndexTypeOfType(baseType, 1 /* Number */);
-                });
+                }
             }
             setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
         }
@@ -13029,7 +13096,7 @@ var ts;
             var constructSignatures = instantiateList(target.declaredConstructSignatures, mapper, instantiateSignature);
             var stringIndexType = target.declaredStringIndexType ? instantiateType(target.declaredStringIndexType, mapper) : undefined;
             var numberIndexType = target.declaredNumberIndexType ? instantiateType(target.declaredNumberIndexType, mapper) : undefined;
-            ts.forEach(target.baseTypes, function (baseType) {
+            ts.forEach(getBaseTypes(target), function (baseType) {
                 var instantiatedBaseType = instantiateType(baseType, mapper);
                 addInheritedMembers(members, getPropertiesOfObjectType(instantiatedBaseType));
                 callSignatures = ts.concatenate(callSignatures, getSignaturesOfType(instantiatedBaseType, 0 /* Call */));
@@ -13054,8 +13121,9 @@ var ts;
             return createSignature(sig.declaration, sig.typeParameters, sig.parameters, sig.resolvedReturnType, sig.minArgumentCount, sig.hasRestParameter, sig.hasStringLiterals);
         }
         function getDefaultConstructSignatures(classType) {
-            if (classType.baseTypes.length) {
-                var baseType = classType.baseTypes[0];
+            var baseTypes = getBaseTypes(classType);
+            if (baseTypes.length) {
+                var baseType = baseTypes[0];
                 var baseSignatures = getSignaturesOfType(getTypeOfSymbol(baseType.symbol), 1 /* Construct */);
                 return ts.map(baseSignatures, function (baseSignature) {
                     var signature = baseType.flags & 4096 /* Reference */ ?
@@ -13171,9 +13239,10 @@ var ts;
                     if (!constructSignatures.length) {
                         constructSignatures = getDefaultConstructSignatures(classType);
                     }
-                    if (classType.baseTypes.length) {
+                    var baseTypes = getBaseTypes(classType);
+                    if (baseTypes.length) {
                         members = createSymbolTable(getNamedMembers(members));
-                        addInheritedMembers(members, getPropertiesOfObjectType(getTypeOfSymbol(classType.baseTypes[0].symbol)));
+                        addInheritedMembers(members, getPropertiesOfObjectType(getTypeOfSymbol(baseTypes[0].symbol)));
                     }
                 }
                 stringIndexType = undefined;
@@ -13417,7 +13486,7 @@ var ts;
                     returnType = classType;
                 }
                 else if (declaration.type) {
-                    returnType = getTypeFromTypeNodeOrHeritageClauseElement(declaration.type);
+                    returnType = getTypeFromTypeNode(declaration.type);
                 }
                 else {
                     // TypeScript 1.0 spec (April 2014):
@@ -13564,7 +13633,7 @@ var ts;
         function getIndexTypeOfSymbol(symbol, kind) {
             var declaration = getIndexDeclarationOfSymbol(symbol, kind);
             return declaration
-                ? declaration.type ? getTypeFromTypeNodeOrHeritageClauseElement(declaration.type) : anyType
+                ? declaration.type ? getTypeFromTypeNode(declaration.type) : anyType
                 : undefined;
         }
         function getConstraintOfTypeParameter(type) {
@@ -13574,7 +13643,7 @@ var ts;
                     type.constraint = targetConstraint ? instantiateType(targetConstraint, type.mapper) : noConstraintType;
                 }
                 else {
-                    type.constraint = getTypeFromTypeNodeOrHeritageClauseElement(ts.getDeclarationOfKind(type.symbol, 128 /* TypeParameter */).constraint);
+                    type.constraint = getTypeFromTypeNode(ts.getDeclarationOfKind(type.symbol, 128 /* TypeParameter */).constraint);
                 }
             }
             return type.constraint === noConstraintType ? undefined : type.constraint;
@@ -13692,7 +13761,7 @@ var ts;
                             if (type.flags & (1024 /* Class */ | 2048 /* Interface */) && type.flags & 4096 /* Reference */) {
                                 var typeParameters = type.typeParameters;
                                 if (node.typeArguments && node.typeArguments.length === typeParameters.length) {
-                                    type = createTypeReference(type, ts.map(node.typeArguments, getTypeFromTypeNodeOrHeritageClauseElement));
+                                    type = createTypeReference(type, ts.map(node.typeArguments, getTypeFromTypeNode));
                                 }
                                 else {
                                     error(node, ts.Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, undefined, 1 /* WriteArrayAsGenericType */), typeParameters.length);
@@ -13779,7 +13848,7 @@ var ts;
         function getTypeFromArrayTypeNode(node) {
             var links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = createArrayType(getTypeFromTypeNodeOrHeritageClauseElement(node.elementType));
+                links.resolvedType = createArrayType(getTypeFromTypeNode(node.elementType));
             }
             return links.resolvedType;
         }
@@ -13795,7 +13864,7 @@ var ts;
         function getTypeFromTupleTypeNode(node) {
             var links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = createTupleType(ts.map(node.elementTypes, getTypeFromTypeNodeOrHeritageClauseElement));
+                links.resolvedType = createTupleType(ts.map(node.elementTypes, getTypeFromTypeNode));
             }
             return links.resolvedType;
         }
@@ -13898,7 +13967,7 @@ var ts;
         function getTypeFromUnionTypeNode(node) {
             var links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getUnionType(ts.map(node.types, getTypeFromTypeNodeOrHeritageClauseElement), true);
+                links.resolvedType = getUnionType(ts.map(node.types, getTypeFromTypeNode), true);
             }
             return links.resolvedType;
         }
@@ -13925,7 +13994,7 @@ var ts;
             }
             return links.resolvedType;
         }
-        function getTypeFromTypeNodeOrHeritageClauseElement(node) {
+        function getTypeFromTypeNode(node) {
             switch (node.kind) {
                 case 112 /* AnyKeyword */:
                     return anyType;
@@ -13954,7 +14023,7 @@ var ts;
                 case 148 /* UnionType */:
                     return getTypeFromUnionTypeNode(node);
                 case 149 /* ParenthesizedType */:
-                    return getTypeFromTypeNodeOrHeritageClauseElement(node.type);
+                    return getTypeFromTypeNode(node.type);
                 case 142 /* FunctionType */:
                 case 143 /* ConstructorType */:
                 case 145 /* TypeLiteral */:
@@ -14249,6 +14318,7 @@ var ts;
                             return -1 /* True */;
                     }
                 }
+                var saveErrorInfo = errorInfo;
                 if (source.flags & 16384 /* Union */ || target.flags & 16384 /* Union */) {
                     if (relation === identityRelation) {
                         if (source.flags & 16384 /* Union */ && target.flags & 16384 /* Union */) {
@@ -14287,22 +14357,29 @@ var ts;
                         return result;
                     }
                 }
-                else {
-                    var saveErrorInfo = errorInfo;
-                    if (source.flags & 4096 /* Reference */ && target.flags & 4096 /* Reference */ && source.target === target.target) {
-                        // We have type references to same target type, see if relationship holds for all type arguments
-                        if (result = typesRelatedTo(source.typeArguments, target.typeArguments, reportErrors)) {
-                            return result;
-                        }
+                else if (source.flags & 4096 /* Reference */ && target.flags & 4096 /* Reference */ && source.target === target.target) {
+                    // We have type references to same target type, see if relationship holds for all type arguments
+                    if (result = typesRelatedTo(source.typeArguments, target.typeArguments, reportErrors)) {
+                        return result;
                     }
-                    // Even if relationship doesn't hold for type arguments, it may hold in a structural comparison
-                    // Report structural errors only if we haven't reported any errors yet
-                    var reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
-                    // identity relation does not use apparent type
-                    var sourceOrApparentType = relation === identityRelation ? source : getApparentType(source);
-                    if (sourceOrApparentType.flags & 48128 /* ObjectType */ && target.flags & 48128 /* ObjectType */ &&
-                        (result = objectTypeRelatedTo(sourceOrApparentType, target, reportStructuralErrors))) {
+                }
+                // Even if relationship doesn't hold for unions, type parameters, or generic type references,
+                // it may hold in a structural comparison.
+                // Report structural errors only if we haven't reported any errors yet
+                var reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
+                // identity relation does not use apparent type
+                var sourceOrApparentType = relation === identityRelation ? source : getApparentType(source);
+                if (sourceOrApparentType.flags & 48128 /* ObjectType */ && target.flags & 48128 /* ObjectType */) {
+                    if (result = objectTypeRelatedTo(sourceOrApparentType, target, reportStructuralErrors)) {
                         errorInfo = saveErrorInfo;
+                        return result;
+                    }
+                }
+                else if (source.flags & 512 /* TypeParameter */ && sourceOrApparentType.flags & 16384 /* Union */) {
+                    // We clear the errors first because the following check often gives a better error than
+                    // the union comparison above if it is applicable.
+                    errorInfo = saveErrorInfo;
+                    if (result = isRelatedTo(sourceOrApparentType, target, reportErrors)) {
                         return result;
                     }
                 }
@@ -15369,10 +15446,10 @@ var ts;
             // Resolve location from top down towards node if it is a context sensitive expression
             // That helps in making sure not assigning types as any when resolved out of order
             var containerNodes = [];
-            for (var parent_4 = node.parent; parent_4; parent_4 = parent_4.parent) {
-                if ((ts.isExpression(parent_4) || ts.isObjectLiteralMethod(node)) &&
-                    isContextSensitive(parent_4)) {
-                    containerNodes.unshift(parent_4);
+            for (var parent_3 = node.parent; parent_3; parent_3 = parent_3.parent) {
+                if ((ts.isExpression(parent_3) || ts.isObjectLiteralMethod(node)) &&
+                    isContextSensitive(parent_3)) {
+                    containerNodes.unshift(parent_3);
                 }
             }
             ts.forEach(containerNodes, function (node) { getTypeOfNode(node); });
@@ -15584,8 +15661,8 @@ var ts;
             // will be bound to non-arrow function that contain this arrow function. This results in inconsistent behavior.
             // To avoid that we will give an error to users if they use arguments objects in arrow function so that they
             // can explicitly bound arguments objects
-            if (symbol === argumentsSymbol && ts.getContainingFunction(node).kind === 163 /* ArrowFunction */) {
-                error(node, ts.Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_Consider_using_a_standard_function_expression);
+            if (symbol === argumentsSymbol && ts.getContainingFunction(node).kind === 163 /* ArrowFunction */ && languageVersion < 2 /* ES6 */) {
+                error(node, ts.Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression);
             }
             if (symbol.flags & 8388608 /* Alias */ && !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveAlias(symbol))) {
                 markAliasSymbolAsReferenced(symbol);
@@ -15709,7 +15786,8 @@ var ts;
             var baseClass;
             if (enclosingClass && ts.getClassExtendsHeritageClauseElement(enclosingClass)) {
                 var classType = getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingClass));
-                baseClass = classType.baseTypes.length && classType.baseTypes[0];
+                var baseTypes = getBaseTypes(classType);
+                baseClass = baseTypes.length && baseTypes[0];
             }
             if (!baseClass) {
                 error(node, ts.Diagnostics.super_can_only_be_referenced_in_a_derived_class);
@@ -15823,7 +15901,7 @@ var ts;
             var declaration = node.parent;
             if (node === declaration.initializer) {
                 if (declaration.type) {
-                    return getTypeFromTypeNodeOrHeritageClauseElement(declaration.type);
+                    return getTypeFromTypeNode(declaration.type);
                 }
                 if (declaration.kind === 129 /* Parameter */) {
                     var type = getContextuallyTypedParameterType(declaration);
@@ -16009,7 +16087,7 @@ var ts;
                 case 158 /* NewExpression */:
                     return getContextualTypeForArgument(parent, node);
                 case 160 /* TypeAssertionExpression */:
-                    return getTypeFromTypeNodeOrHeritageClauseElement(parent.type);
+                    return getTypeFromTypeNode(parent.type);
                 case 169 /* BinaryExpression */:
                     return getContextualTypeForBinaryOperand(node);
                 case 224 /* PropertyAssignment */:
@@ -16134,15 +16212,38 @@ var ts;
             }
             var hasSpreadElement = false;
             var elementTypes = [];
+            var inDestructuringPattern = isAssignmentTarget(node);
             for (var _i = 0; _i < elements.length; _i++) {
                 var e = elements[_i];
-                var type = checkExpression(e, contextualMapper);
-                elementTypes.push(type);
+                if (inDestructuringPattern && e.kind === 173 /* SpreadElementExpression */) {
+                    // Given the following situation:
+                    //    var c: {};
+                    //    [...c] = ["", 0];
+                    //
+                    // c is represented in the tree as a spread element in an array literal.
+                    // But c really functions as a rest element, and its purpose is to provide
+                    // a contextual type for the right hand side of the assignment. Therefore,
+                    // instead of calling checkExpression on "...c", which will give an error 
+                    // if c is not iterable/array-like, we need to act as if we are trying to
+                    // get the contextual element type from it. So we do something similar to
+                    // getContextualTypeForElementExpression, which will crucially not error
+                    // if there is no index type / iterated type.
+                    var restArrayType = checkExpression(e.expression, contextualMapper);
+                    var restElementType = getIndexTypeOfType(restArrayType, 1 /* Number */) ||
+                        (languageVersion >= 2 /* ES6 */ ? checkIteratedType(restArrayType, undefined) : undefined);
+                    if (restElementType) {
+                        elementTypes.push(restElementType);
+                    }
+                }
+                else {
+                    var type = checkExpression(e, contextualMapper);
+                    elementTypes.push(type);
+                }
                 hasSpreadElement = hasSpreadElement || e.kind === 173 /* SpreadElementExpression */;
             }
             if (!hasSpreadElement) {
                 var contextualType = getContextualType(node);
-                if (contextualType && contextualTypeIsTupleLikeType(contextualType) || isAssignmentTarget(node)) {
+                if (contextualType && contextualTypeIsTupleLikeType(contextualType) || inDestructuringPattern) {
                     return createTupleType(elementTypes);
                 }
             }
@@ -16217,9 +16318,7 @@ var ts;
                     }
                     else {
                         ts.Debug.assert(memberDecl.kind === 225 /* ShorthandPropertyAssignment */);
-                        type = memberDecl.name.kind === 127 /* ComputedPropertyName */
-                            ? unknownType
-                            : checkExpression(memberDecl.name, contextualMapper);
+                        type = checkExpression(memberDecl.name, contextualMapper);
                     }
                     typeFlags |= type.flags;
                     var prop = createSymbol(4 /* Property */ | 67108864 /* Transient */ | member.flags, member.name);
@@ -16548,13 +16647,13 @@ var ts;
             for (var _i = 0; _i < signatures.length; _i++) {
                 var signature = signatures[_i];
                 var symbol = signature.declaration && getSymbolOfNode(signature.declaration);
-                var parent_5 = signature.declaration && signature.declaration.parent;
+                var parent_4 = signature.declaration && signature.declaration.parent;
                 if (!lastSymbol || symbol === lastSymbol) {
-                    if (lastParent && parent_5 === lastParent) {
+                    if (lastParent && parent_4 === lastParent) {
                         index++;
                     }
                     else {
-                        lastParent = parent_5;
+                        lastParent = parent_4;
                         index = cutoffIndex;
                     }
                 }
@@ -16562,7 +16661,7 @@ var ts;
                     // current declaration belongs to a different symbol
                     // set cutoffIndex so re-orderings in the future won't change result set from 0 to cutoffIndex
                     index = cutoffIndex = result.length;
-                    lastParent = parent_5;
+                    lastParent = parent_4;
                 }
                 lastSymbol = symbol;
                 // specialized signatures always need to be placed before non-specialized signatures regardless
@@ -16732,7 +16831,7 @@ var ts;
             var typeArgumentsAreAssignable = true;
             for (var i = 0; i < typeParameters.length; i++) {
                 var typeArgNode = typeArguments[i];
-                var typeArgument = getTypeFromTypeNodeOrHeritageClauseElement(typeArgNode);
+                var typeArgument = getTypeFromTypeNode(typeArgNode);
                 // Do not push on this array! It has a preallocated length
                 typeArgumentResultTypes[i] = typeArgument;
                 if (typeArgumentsAreAssignable /* so far */) {
@@ -16752,9 +16851,11 @@ var ts;
                     var paramType = getTypeAtPosition(signature, i);
                     // A tagged template expression provides a special first argument, and string literals get string literal types
                     // unless we're reporting errors
-                    var argType = i === 0 && node.kind === 159 /* TaggedTemplateExpression */ ? globalTemplateStringsArrayType :
-                        arg.kind === 8 /* StringLiteral */ && !reportErrors ? getStringLiteralType(arg) :
-                            checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
+                    var argType = i === 0 && node.kind === 159 /* TaggedTemplateExpression */
+                        ? globalTemplateStringsArrayType
+                        : arg.kind === 8 /* StringLiteral */ && !reportErrors
+                            ? getStringLiteralType(arg)
+                            : checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
                     // Use argument expression as error location when reporting errors
                     if (!checkTypeRelatedTo(argType, paramType, relation, reportErrors ? arg : undefined, ts.Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1)) {
                         return false;
@@ -17163,7 +17264,7 @@ var ts;
         }
         function checkTypeAssertion(node) {
             var exprType = checkExpression(node.expression);
-            var targetType = getTypeFromTypeNodeOrHeritageClauseElement(node.type);
+            var targetType = getTypeFromTypeNode(node.type);
             if (produceDiagnostics && targetType !== unknownType) {
                 var widenedType = getWidenedType(exprType);
                 if (!(isTypeAssignableTo(targetType, widenedType))) {
@@ -17316,7 +17417,7 @@ var ts;
         function checkFunctionExpressionOrObjectLiteralMethodBody(node) {
             ts.Debug.assert(node.kind !== 134 /* MethodDeclaration */ || ts.isObjectLiteralMethod(node));
             if (node.type && !node.asteriskToken) {
-                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNodeOrHeritageClauseElement(node.type));
+                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
             }
             if (node.body) {
                 if (node.body.kind === 179 /* Block */) {
@@ -17325,7 +17426,7 @@ var ts;
                 else {
                     var exprType = checkExpression(node.body);
                     if (node.type) {
-                        checkTypeAssignableTo(exprType, getTypeFromTypeNodeOrHeritageClauseElement(node.type), node.body, undefined);
+                        checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, undefined);
                     }
                     checkFunctionExpressionBodies(node.body);
                 }
@@ -17569,7 +17670,7 @@ var ts;
             // This elementType will be used if the specific property corresponding to this index is not
             // present (aka the tuple element property). This call also checks that the parentType is in
             // fact an iterable or array (depending on target language).
-            var elementType = checkIteratedTypeOrElementType(sourceType, node, false);
+            var elementType = checkIteratedTypeOrElementType(sourceType, node, false) || unknownType;
             var elements = node.elements;
             for (var i = 0; i < elements.length; i++) {
                 var e = elements[i];
@@ -17593,11 +17694,17 @@ var ts;
                         }
                     }
                     else {
-                        if (i === elements.length - 1) {
-                            checkReferenceAssignment(e.expression, createArrayType(elementType), contextualMapper);
+                        if (i < elements.length - 1) {
+                            error(e, ts.Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
                         }
                         else {
-                            error(e, ts.Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
+                            var restExpression = e.expression;
+                            if (restExpression.kind === 169 /* BinaryExpression */ && restExpression.operatorToken.kind === 53 /* EqualsToken */) {
+                                error(restExpression.operatorToken, ts.Diagnostics.A_rest_element_cannot_have_an_initializer);
+                            }
+                            else {
+                                checkDestructuringAssignment(restExpression, createArrayType(elementType), contextualMapper);
+                            }
                         }
                     }
                 }
@@ -17912,7 +18019,7 @@ var ts;
         }
         function checkNumericLiteral(node) {
             // Grammar checking
-            checkGrammarNumbericLiteral(node);
+            checkGrammarNumericLiteral(node);
             return numberType;
         }
         function checkExpressionWorker(node, contextualMapper) {
@@ -18017,10 +18124,10 @@ var ts;
             if (node.questionToken && ts.isBindingPattern(node.name) && func.body) {
                 error(node, ts.Diagnostics.A_binding_pattern_parameter_cannot_be_optional_in_an_implementation_signature);
             }
-            if (node.dotDotDotToken) {
-                if (!isArrayType(getTypeOfSymbol(node.symbol))) {
-                    error(node, ts.Diagnostics.A_rest_parameter_must_be_of_an_array_type);
-                }
+            // Only check rest parameter type if it's not a binding pattern. Since binding patterns are
+            // not allowed in a rest parameter, we already have an error from checkGrammarParameterList.
+            if (node.dotDotDotToken && !ts.isBindingPattern(node.name) && !isArrayType(getTypeOfSymbol(node.symbol))) {
+                error(node, ts.Diagnostics.A_rest_parameter_must_be_of_an_array_type);
             }
         }
         function checkSignatureDeclaration(node) {
@@ -18606,7 +18713,7 @@ var ts;
             // as if it were an expression so that we can emit the type in a value position when we 
             // serialize the type metadata.
             if (node && node.kind === 141 /* TypeReference */) {
-                var type = getTypeFromTypeNodeOrHeritageClauseElement(node);
+                var type = getTypeFromTypeNode(node);
                 var shouldCheckIfUnknownType = type === unknownType && compilerOptions.separateCompilation;
                 if (!type || (!shouldCheckIfUnknownType && type.flags & (1048703 /* Intrinsic */ | 132 /* NumberLike */ | 258 /* StringLike */))) {
                     return;
@@ -18727,7 +18834,7 @@ var ts;
             }
             checkSourceElement(node.body);
             if (node.type && !isAccessor(node.kind) && !node.asteriskToken) {
-                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNodeOrHeritageClauseElement(node.type));
+                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
             }
             // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
             // in an ambient context
@@ -19162,6 +19269,9 @@ var ts;
             return checkIteratedTypeOrElementType(expressionType, rhsExpression, true);
         }
         function checkIteratedTypeOrElementType(inputType, errorNode, allowStringInput) {
+            if (inputType.flags & 1 /* Any */) {
+                return inputType;
+            }
             if (languageVersion >= 2 /* ES6 */) {
                 return checkIteratedType(inputType, errorNode) || anyType;
             }
@@ -19499,7 +19609,7 @@ var ts;
                 errorNode = declaredNumberIndexer || declaredStringIndexer;
                 // condition 'errorNode === undefined' may appear if types does not declare nor string neither number indexer
                 if (!errorNode && (type.flags & 2048 /* Interface */)) {
-                    var someBaseTypeHasBothIndexers = ts.forEach(type.baseTypes, function (base) { return getIndexTypeOfType(base, 0 /* String */) && getIndexTypeOfType(base, 1 /* Number */); });
+                    var someBaseTypeHasBothIndexers = ts.forEach(getBaseTypes(type), function (base) { return getIndexTypeOfType(base, 0 /* String */) && getIndexTypeOfType(base, 1 /* Number */); });
                     errorNode = someBaseTypeHasBothIndexers ? undefined : type.symbol.declarations[0];
                 }
             }
@@ -19527,7 +19637,7 @@ var ts;
                     // for interfaces property and indexer might be inherited from different bases
                     // check if any base class already has both property and indexer.
                     // check should be performed only if 'type' is the first type that brings property\indexer together
-                    var someBaseClassHasBothPropertyAndIndexer = ts.forEach(containingType.baseTypes, function (base) { return getPropertyOfObjectType(base, prop.name) && getIndexTypeOfType(base, indexKind); });
+                    var someBaseClassHasBothPropertyAndIndexer = ts.forEach(getBaseTypes(containingType), function (base) { return getPropertyOfObjectType(base, prop.name) && getIndexTypeOfType(base, indexKind); });
                     errorNode = someBaseClassHasBothPropertyAndIndexer ? undefined : containingType.symbol.declarations[0];
                 }
                 if (errorNode && !isTypeAssignableTo(propertyType, indexType)) {
@@ -19601,9 +19711,10 @@ var ts;
                 emitExtends = emitExtends || !ts.isInAmbientContext(node);
                 checkHeritageClauseElement(baseTypeNode);
             }
-            if (type.baseTypes.length) {
+            var baseTypes = getBaseTypes(type);
+            if (baseTypes.length) {
                 if (produceDiagnostics) {
-                    var baseType = type.baseTypes[0];
+                    var baseType = baseTypes[0];
                     checkTypeAssignableTo(type, baseType, node.name || node, ts.Diagnostics.Class_0_incorrectly_extends_base_class_1);
                     var staticBaseType = getTypeOfSymbol(baseType.symbol);
                     checkTypeAssignableTo(staticType, getTypeWithoutConstructors(staticBaseType), node.name || node, ts.Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
@@ -19613,7 +19724,7 @@ var ts;
                     checkKindsOfPropertyMemberOverrides(type, baseType);
                 }
             }
-            if (type.baseTypes.length || (baseTypeNode && compilerOptions.separateCompilation)) {
+            if (baseTypes.length || (baseTypeNode && compilerOptions.separateCompilation)) {
                 // Check that base type can be evaluated as expression
                 checkExpressionOrQualifiedName(baseTypeNode.expression);
             }
@@ -19735,24 +19846,25 @@ var ts;
                 if (!tp1.constraint || !tp2.constraint) {
                     return false;
                 }
-                if (!isTypeIdenticalTo(getTypeFromTypeNodeOrHeritageClauseElement(tp1.constraint), getTypeFromTypeNodeOrHeritageClauseElement(tp2.constraint))) {
+                if (!isTypeIdenticalTo(getTypeFromTypeNode(tp1.constraint), getTypeFromTypeNode(tp2.constraint))) {
                     return false;
                 }
             }
             return true;
         }
         function checkInheritedPropertiesAreIdentical(type, typeNode) {
-            if (!type.baseTypes.length || type.baseTypes.length === 1) {
+            var baseTypes = getBaseTypes(type);
+            if (baseTypes.length < 2) {
                 return true;
             }
             var seen = {};
             ts.forEach(type.declaredProperties, function (p) { seen[p.name] = { prop: p, containingType: type }; });
             var ok = true;
-            for (var _i = 0, _a = type.baseTypes; _i < _a.length; _i++) {
-                var base = _a[_i];
+            for (var _i = 0; _i < baseTypes.length; _i++) {
+                var base = baseTypes[_i];
                 var properties = getPropertiesOfObjectType(base);
-                for (var _b = 0; _b < properties.length; _b++) {
-                    var prop = properties[_b];
+                for (var _a = 0; _a < properties.length; _a++) {
+                    var prop = properties[_a];
                     if (!ts.hasProperty(seen, prop.name)) {
                         seen[prop.name] = { prop: prop, containingType: base };
                     }
@@ -19791,7 +19903,7 @@ var ts;
                     var type = getDeclaredTypeOfSymbol(symbol);
                     // run subsequent checks only if first set succeeded
                     if (checkInheritedPropertiesAreIdentical(type, node.name)) {
-                        ts.forEach(type.baseTypes, function (baseType) {
+                        ts.forEach(getBaseTypes(type), function (baseType) {
                             checkTypeAssignableTo(type, baseType, node.name, ts.Diagnostics.Interface_0_incorrectly_extends_interface_1);
                         });
                         checkIndexConstraints(type);
@@ -20027,11 +20139,26 @@ var ts;
             var declarations = symbol.declarations;
             for (var _i = 0; _i < declarations.length; _i++) {
                 var declaration = declarations[_i];
-                if ((declaration.kind === 201 /* ClassDeclaration */ || (declaration.kind === 200 /* FunctionDeclaration */ && ts.nodeIsPresent(declaration.body))) && !ts.isInAmbientContext(declaration)) {
+                if ((declaration.kind === 201 /* ClassDeclaration */ ||
+                    (declaration.kind === 200 /* FunctionDeclaration */ && ts.nodeIsPresent(declaration.body))) &&
+                    !ts.isInAmbientContext(declaration)) {
                     return declaration;
                 }
             }
             return undefined;
+        }
+        function inSameLexicalScope(node1, node2) {
+            var container1 = ts.getEnclosingBlockScopeContainer(node1);
+            var container2 = ts.getEnclosingBlockScopeContainer(node2);
+            if (isGlobalSourceFile(container1)) {
+                return isGlobalSourceFile(container2);
+            }
+            else if (isGlobalSourceFile(container2)) {
+                return false;
+            }
+            else {
+                return container1 === container2;
+            }
         }
         function checkModuleDeclaration(node) {
             if (produceDiagnostics) {
@@ -20050,14 +20177,21 @@ var ts;
                     && symbol.declarations.length > 1
                     && !ts.isInAmbientContext(node)
                     && ts.isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.separateCompilation)) {
-                    var classOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
-                    if (classOrFunc) {
-                        if (ts.getSourceFileOfNode(node) !== ts.getSourceFileOfNode(classOrFunc)) {
+                    var firstNonAmbientClassOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
+                    if (firstNonAmbientClassOrFunc) {
+                        if (ts.getSourceFileOfNode(node) !== ts.getSourceFileOfNode(firstNonAmbientClassOrFunc)) {
                             error(node.name, ts.Diagnostics.A_module_declaration_cannot_be_in_a_different_file_from_a_class_or_function_with_which_it_is_merged);
                         }
-                        else if (node.pos < classOrFunc.pos) {
+                        else if (node.pos < firstNonAmbientClassOrFunc.pos) {
                             error(node.name, ts.Diagnostics.A_module_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged);
                         }
+                    }
+                    // if the module merges with a class declaration in the same lexical scope, 
+                    // we need to track this to ensure the correct emit.
+                    var mergedClass = ts.getDeclarationOfKind(symbol, 201 /* ClassDeclaration */);
+                    if (mergedClass &&
+                        inSameLexicalScope(node, mergedClass)) {
+                        getNodeLinks(node).flags |= 2048 /* LexicalModuleMergesWithClass */;
                     }
                 }
                 // Checks for ambient external modules.
@@ -20651,7 +20785,7 @@ var ts;
             }
             return node.parent && node.parent.kind === 177 /* HeritageClauseElement */;
         }
-        function isTypeNodeOrHeritageClauseElement(node) {
+        function isTypeNode(node) {
             if (141 /* FirstTypeNode */ <= node.kind && node.kind <= 149 /* LastTypeNode */) {
                 return true;
             }
@@ -20684,8 +20818,8 @@ var ts;
                 case 155 /* PropertyAccessExpression */:
                     // At this point, node is either a qualified name or an identifier
                     ts.Debug.assert(node.kind === 65 /* Identifier */ || node.kind === 126 /* QualifiedName */ || node.kind === 155 /* PropertyAccessExpression */, "'node' was expected to be a qualified name, identifier or property access in 'isTypeNode'.");
-                    var parent_6 = node.parent;
-                    if (parent_6.kind === 144 /* TypeQuery */) {
+                    var parent_5 = node.parent;
+                    if (parent_5.kind === 144 /* TypeQuery */) {
                         return false;
                     }
                     // Do not recursively call isTypeNode on the parent. In the example:
@@ -20694,19 +20828,19 @@ var ts;
                     //
                     // Calling isTypeNode would consider the qualified name A.B a type node. Only C or
                     // A.B.C is a type node.
-                    if (141 /* FirstTypeNode */ <= parent_6.kind && parent_6.kind <= 149 /* LastTypeNode */) {
+                    if (141 /* FirstTypeNode */ <= parent_5.kind && parent_5.kind <= 149 /* LastTypeNode */) {
                         return true;
                     }
-                    switch (parent_6.kind) {
+                    switch (parent_5.kind) {
                         case 177 /* HeritageClauseElement */:
                             return true;
                         case 128 /* TypeParameter */:
-                            return node === parent_6.constraint;
+                            return node === parent_5.constraint;
                         case 132 /* PropertyDeclaration */:
                         case 131 /* PropertySignature */:
                         case 129 /* Parameter */:
                         case 198 /* VariableDeclaration */:
-                            return node === parent_6.type;
+                            return node === parent_5.type;
                         case 200 /* FunctionDeclaration */:
                         case 162 /* FunctionExpression */:
                         case 163 /* ArrowFunction */:
@@ -20715,16 +20849,16 @@ var ts;
                         case 133 /* MethodSignature */:
                         case 136 /* GetAccessor */:
                         case 137 /* SetAccessor */:
-                            return node === parent_6.type;
+                            return node === parent_5.type;
                         case 138 /* CallSignature */:
                         case 139 /* ConstructSignature */:
                         case 140 /* IndexSignature */:
-                            return node === parent_6.type;
+                            return node === parent_5.type;
                         case 160 /* TypeAssertionExpression */:
-                            return node === parent_6.type;
+                            return node === parent_5.type;
                         case 157 /* CallExpression */:
                         case 158 /* NewExpression */:
-                            return parent_6.typeArguments && ts.indexOf(parent_6.typeArguments, node) >= 0;
+                            return parent_5.typeArguments && ts.indexOf(parent_5.typeArguments, node) >= 0;
                         case 159 /* TaggedTemplateExpression */:
                             // TODO (drosen): TaggedTemplateExpressions may eventually support type arguments.
                             return false;
@@ -20874,8 +21008,8 @@ var ts;
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return unknownType;
             }
-            if (isTypeNodeOrHeritageClauseElement(node)) {
-                return getTypeFromTypeNodeOrHeritageClauseElement(node);
+            if (isTypeNode(node)) {
+                return getTypeFromTypeNode(node);
             }
             if (ts.isExpression(node)) {
                 return getTypeOfExpression(node);
@@ -20955,7 +21089,14 @@ var ts;
             var node = getDeclarationOfAliasSymbol(symbol);
             if (node) {
                 if (node.kind === 210 /* ImportClause */) {
-                    return getGeneratedNameForNode(node.parent) + ".default";
+                    var defaultKeyword;
+                    if (languageVersion === 0 /* ES3 */) {
+                        defaultKeyword = "[\"default\"]";
+                    }
+                    else {
+                        defaultKeyword = ".default";
+                    }
+                    return getGeneratedNameForNode(node.parent) + defaultKeyword;
                 }
                 if (node.kind === 213 /* ImportSpecifier */) {
                     var moduleName = getGeneratedNameForNode(node.parent.parent.parent);
@@ -21401,8 +21542,8 @@ var ts;
             anyArrayType = createArrayType(anyType);
         }
         // GRAMMAR CHECKING
-        function isReservedwordInStrictMode(node) {
-            // Check that originalKeywordKind is less than LastFurtureReservedWord to see if an Identifier is a strict-mode reserved word
+        function isReservedWordInStrictMode(node) {
+            // Check that originalKeywordKind is less than LastFutureReservedWord to see if an Identifier is a strict-mode reserved word
             return (node.parserContextFlags & 1 /* StrictMode */) &&
                 (node.originalKeywordKind >= 102 /* FirstFutureReservedWord */ && node.originalKeywordKind <= 110 /* LastFutureReservedWord */);
         }
@@ -21445,7 +21586,7 @@ var ts;
         }
         function checkGrammarDeclarationNameInStrictMode(node) {
             var name = node.name;
-            if (name && name.kind === 65 /* Identifier */ && isReservedwordInStrictMode(name)) {
+            if (name && name.kind === 65 /* Identifier */ && isReservedWordInStrictMode(name)) {
                 var nameText = ts.declarationNameToString(name);
                 switch (node.kind) {
                     case 129 /* Parameter */:
@@ -21510,7 +21651,7 @@ var ts;
         }
         // The function takes an identifier itself or an expression which has SyntaxKind.Identifier.
         function checkGrammarIdentifierInStrictMode(node, nameText) {
-            if (node && node.kind === 65 /* Identifier */ && isReservedwordInStrictMode(node)) {
+            if (node && node.kind === 65 /* Identifier */ && isReservedWordInStrictMode(node)) {
                 if (!nameText) {
                     nameText = ts.declarationNameToString(node);
                 }
@@ -21523,7 +21664,7 @@ var ts;
         }
         // The function takes an identifier when uses as a typeName in TypeReferenceNode
         function checkGrammarTypeNameInStrictMode(node) {
-            if (node && node.kind === 65 /* Identifier */ && isReservedwordInStrictMode(node)) {
+            if (node && node.kind === 65 /* Identifier */ && isReservedWordInStrictMode(node)) {
                 var nameText = ts.declarationNameToString(node);
                 // TODO (yuisu): Fix when module is a strict mode
                 var errorReport = reportStrictModeGrammarErrorInClassDeclaration(node, ts.Diagnostics.Type_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode, nameText) ||
@@ -21706,6 +21847,9 @@ var ts;
                 if (parameter.dotDotDotToken) {
                     if (i !== (parameterCount - 1)) {
                         return grammarErrorOnNode(parameter.dotDotDotToken, ts.Diagnostics.A_rest_parameter_must_be_last_in_a_parameter_list);
+                    }
+                    if (ts.isBindingPattern(parameter.name)) {
+                        return grammarErrorOnNode(parameter.name, ts.Diagnostics.A_rest_element_cannot_contain_a_binding_pattern);
                     }
                     if (parameter.questionToken) {
                         return grammarErrorOnNode(parameter.questionToken, ts.Diagnostics.A_rest_parameter_cannot_be_optional);
@@ -21927,7 +22071,7 @@ var ts;
                     // Grammar checking for computedPropertName and shorthandPropertyAssignment
                     checkGrammarForInvalidQuestionMark(prop, prop.questionToken, ts.Diagnostics.An_object_member_cannot_be_declared_optional);
                     if (name_13.kind === 7 /* NumericLiteral */) {
-                        checkGrammarNumbericLiteral(name_13);
+                        checkGrammarNumericLiteral(name_13);
                     }
                     currentKind = Property;
                 }
@@ -22146,6 +22290,9 @@ var ts;
                 if (node !== elements[elements.length - 1]) {
                     return grammarErrorOnNode(node, ts.Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
                 }
+                if (node.name.kind === 151 /* ArrayBindingPattern */ || node.name.kind === 150 /* ObjectBindingPattern */) {
+                    return grammarErrorOnNode(node.name, ts.Diagnostics.A_rest_element_cannot_contain_a_binding_pattern);
+                }
                 if (node.initializer) {
                     // Error on equals token which immediate precedes the initializer
                     return grammarErrorAtPos(ts.getSourceFileOfNode(node), node.initializer.pos - 1, 1, ts.Diagnostics.A_rest_element_cannot_have_an_initializer);
@@ -22308,7 +22455,7 @@ var ts;
         function checkGrammarEvalOrArgumentsInStrictMode(contextNode, name) {
             if (name && name.kind === 65 /* Identifier */) {
                 var identifier = name;
-                if (contextNode && (contextNode.parserContextFlags & 1 /* StrictMode */) && ts.isEvalOrArgumentsIdentifier(identifier)) {
+                if (contextNode && (contextNode.parserContextFlags & 1 /* StrictMode */) && isEvalOrArgumentsIdentifier(identifier)) {
                     var nameText = ts.declarationNameToString(identifier);
                     // We check first if the name is inside class declaration or class expression; if so give explicit message
                     // otherwise report generic error message.
@@ -22320,6 +22467,10 @@ var ts;
                     return reportErrorInClassDeclaration;
                 }
             }
+        }
+        function isEvalOrArgumentsIdentifier(node) {
+            return node.kind === 65 /* Identifier */ &&
+                (node.text === "eval" || node.text === "arguments");
         }
         function checkGrammarConstructorTypeParameters(node) {
             if (node.typeParameters) {
@@ -22414,7 +22565,7 @@ var ts;
                 }
             }
         }
-        function checkGrammarNumbericLiteral(node) {
+        function checkGrammarNumericLiteral(node) {
             // Grammar checking
             if (node.flags & 16384 /* OctalLiteral */) {
                 if (node.parserContextFlags & 1 /* StrictMode */) {
@@ -25216,16 +25367,32 @@ var ts;
             }
             function createPropertyAccessExpression(expression, name) {
                 var result = ts.createSynthesizedNode(155 /* PropertyAccessExpression */);
-                result.expression = expression;
+                result.expression = parenthesizeForAccess(expression);
                 result.dotToken = ts.createSynthesizedNode(20 /* DotToken */);
                 result.name = name;
                 return result;
             }
             function createElementAccessExpression(expression, argumentExpression) {
                 var result = ts.createSynthesizedNode(156 /* ElementAccessExpression */);
-                result.expression = expression;
+                result.expression = parenthesizeForAccess(expression);
                 result.argumentExpression = argumentExpression;
                 return result;
+            }
+            function parenthesizeForAccess(expr) {
+                // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
+                // to parenthesize the expression before a dot. The known exceptions are:
+                //
+                //    NewExpression:
+                //       new C.x        -> not the same as (new C).x
+                //    NumberLiteral
+                //       1.x            -> not the same as (1).x
+                //
+                if (ts.isLeftHandSideExpression(expr) && expr.kind !== 158 /* NewExpression */ && expr.kind !== 7 /* NumericLiteral */) {
+                    return expr;
+                }
+                var node = ts.createSynthesizedNode(161 /* ParenthesizedExpression */);
+                node.expression = expr;
+                return node;
             }
             function emitComputedPropertyName(node) {
                 write("[");
@@ -25835,7 +26002,7 @@ var ts;
                     if (node.initializer.kind === 153 /* ArrayLiteralExpression */ || node.initializer.kind === 154 /* ObjectLiteralExpression */) {
                         // This is a destructuring pattern, so call emitDestructuring instead of emit. Calling emit will not work, because it will cause
                         // the BinaryExpression to be passed in instead of the expression statement, which will cause emitDestructuring to crash.
-                        emitDestructuring(assignmentExpression, true, undefined, node);
+                        emitDestructuring(assignmentExpression, true, undefined);
                     }
                     else {
                         emitNodeWithoutSourceMap(assignmentExpression);
@@ -25989,7 +26156,12 @@ var ts;
                     writeLine();
                     emitStart(node);
                     if (node.flags & 256 /* Default */) {
-                        write("exports.default");
+                        if (languageVersion === 0 /* ES3 */) {
+                            write("exports[\"default\"]");
+                        }
+                        else {
+                            write("exports.default");
+                        }
                     }
                     else {
                         emitModuleMemberName(node);
@@ -26016,13 +26188,7 @@ var ts;
                     }
                 }
             }
-            /**
-             * If the root has a chance of being a synthesized node, callers should also pass a value for
-             * lowestNonSynthesizedAncestor. This should be an ancestor of root, it should not be synthesized,
-             * and there should not be a lower ancestor that introduces a scope. This node will be used as the
-             * location for ensuring that temporary names are unique.
-             */
-            function emitDestructuring(root, isAssignmentExpressionStatement, value, lowestNonSynthesizedAncestor) {
+            function emitDestructuring(root, isAssignmentExpressionStatement, value) {
                 var emitCount = 0;
                 // An exported declaration is actually emitted as an assignment (to a property on the module object), so
                 // temporary variables in an exported declaration need to have real declarations elsewhere
@@ -26050,9 +26216,6 @@ var ts;
                 }
                 function ensureIdentifier(expr) {
                     if (expr.kind !== 65 /* Identifier */) {
-                        // In case the root is a synthesized node, we need to pass lowestNonSynthesizedAncestor
-                        // as the location for determining uniqueness of the variable we are about to
-                        // generate.
                         var identifier = createTempVariable(0 /* Auto */);
                         if (!isDeclaration) {
                             recordTempDeclaration(identifier);
@@ -26087,25 +26250,20 @@ var ts;
                     node.text = "" + value;
                     return node;
                 }
-                function parenthesizeForAccess(expr) {
-                    if (expr.kind === 65 /* Identifier */ || expr.kind === 155 /* PropertyAccessExpression */ || expr.kind === 156 /* ElementAccessExpression */) {
-                        return expr;
-                    }
-                    var node = ts.createSynthesizedNode(161 /* ParenthesizedExpression */);
-                    node.expression = expr;
-                    return node;
-                }
-                function createPropertyAccess(object, propName) {
+                function createPropertyAccessForDestructuringProperty(object, propName) {
                     if (propName.kind !== 65 /* Identifier */) {
-                        return createElementAccess(object, propName);
+                        return createElementAccessExpression(object, propName);
                     }
-                    return createPropertyAccessExpression(parenthesizeForAccess(object), propName);
+                    return createPropertyAccessExpression(object, propName);
                 }
-                function createElementAccess(object, index) {
-                    var node = ts.createSynthesizedNode(156 /* ElementAccessExpression */);
-                    node.expression = parenthesizeForAccess(object);
-                    node.argumentExpression = index;
-                    return node;
+                function createSliceCall(value, sliceIndex) {
+                    var call = ts.createSynthesizedNode(157 /* CallExpression */);
+                    var sliceIdentifier = ts.createSynthesizedNode(65 /* Identifier */);
+                    sliceIdentifier.text = "slice";
+                    call.expression = createPropertyAccessExpression(value, sliceIdentifier);
+                    call.arguments = ts.createSynthesizedNodeArray();
+                    call.arguments[0] = createNumericLiteral(sliceIndex);
+                    return call;
                 }
                 function emitObjectLiteralAssignment(target, value) {
                     var properties = target.properties;
@@ -26119,7 +26277,7 @@ var ts;
                         if (p.kind === 224 /* PropertyAssignment */ || p.kind === 225 /* ShorthandPropertyAssignment */) {
                             // TODO(andersh): Computed property support
                             var propName = (p.name);
-                            emitDestructuringAssignment(p.initializer || propName, createPropertyAccess(value, propName));
+                            emitDestructuringAssignment(p.initializer || propName, createPropertyAccessForDestructuringProperty(value, propName));
                         }
                     }
                 }
@@ -26134,14 +26292,10 @@ var ts;
                         var e = elements[i];
                         if (e.kind !== 175 /* OmittedExpression */) {
                             if (e.kind !== 173 /* SpreadElementExpression */) {
-                                emitDestructuringAssignment(e, createElementAccess(value, createNumericLiteral(i)));
+                                emitDestructuringAssignment(e, createElementAccessExpression(value, createNumericLiteral(i)));
                             }
-                            else {
-                                if (i === elements.length - 1) {
-                                    value = ensureIdentifier(value);
-                                    emitAssignment(e.expression, value);
-                                    write(".slice(" + i + ")");
-                                }
+                            else if (i === elements.length - 1) {
+                                emitDestructuringAssignment(e.expression, createSliceCall(value, i));
                             }
                         }
                     }
@@ -26202,19 +26356,15 @@ var ts;
                             if (pattern.kind === 150 /* ObjectBindingPattern */) {
                                 // Rewrite element to a declaration with an initializer that fetches property
                                 var propName = element.propertyName || element.name;
-                                emitBindingElement(element, createPropertyAccess(value, propName));
+                                emitBindingElement(element, createPropertyAccessForDestructuringProperty(value, propName));
                             }
                             else if (element.kind !== 175 /* OmittedExpression */) {
                                 if (!element.dotDotDotToken) {
                                     // Rewrite element to a declaration that accesses array element at index i
-                                    emitBindingElement(element, createElementAccess(value, createNumericLiteral(i)));
+                                    emitBindingElement(element, createElementAccessExpression(value, createNumericLiteral(i)));
                                 }
-                                else {
-                                    if (i === elements.length - 1) {
-                                        value = ensureIdentifier(value);
-                                        emitAssignment(element.name, value);
-                                        write(".slice(" + i + ")");
-                                    }
+                                else if (i === elements.length - 1) {
+                                    emitBindingElement(element, createSliceCall(value, i));
                                 }
                             }
                         }
@@ -26362,6 +26512,11 @@ var ts;
                 if (languageVersion < 2 /* ES6 */) {
                     var tempIndex = 0;
                     ts.forEach(node.parameters, function (p) {
+                        // A rest parameter cannot have a binding pattern or an initializer,
+                        // so let's just ignore it.
+                        if (p.dotDotDotToken) {
+                            return;
+                        }
                         if (ts.isBindingPattern(p.name)) {
                             writeLine();
                             write("var ");
@@ -26391,6 +26546,10 @@ var ts;
                 if (languageVersion < 2 /* ES6 */ && ts.hasRestParameters(node)) {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
+                    // A rest parameter cannot have a binding pattern, so let's just ignore it if it does.
+                    if (ts.isBindingPattern(restParam.name)) {
+                        return;
+                    }
                     var tempName = createTempVariable(268435456 /* _i */).text;
                     writeLine();
                     emitLeadingComments(restParam);
@@ -27594,21 +27753,26 @@ var ts;
             function shouldEmitModuleDeclaration(node) {
                 return ts.isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.separateCompilation);
             }
+            function isModuleMergedWithES6Class(node) {
+                return languageVersion === 2 /* ES6 */ && !!(resolver.getNodeCheckFlags(node) & 2048 /* LexicalModuleMergesWithClass */);
+            }
             function emitModuleDeclaration(node) {
                 // Emit only if this module is non-ambient.
                 var shouldEmit = shouldEmitModuleDeclaration(node);
                 if (!shouldEmit) {
                     return emitOnlyPinnedOrTripleSlashComments(node);
                 }
-                emitStart(node);
-                if (isES6ExportedDeclaration(node)) {
-                    write("export ");
+                if (!isModuleMergedWithES6Class(node)) {
+                    emitStart(node);
+                    if (isES6ExportedDeclaration(node)) {
+                        write("export ");
+                    }
+                    write("var ");
+                    emit(node.name);
+                    write(";");
+                    emitEnd(node);
+                    writeLine();
                 }
-                write("var ");
-                emit(node.name);
-                write(";");
-                emitEnd(node);
-                writeLine();
                 emitStart(node);
                 write("(function (");
                 emitStart(node.name);
@@ -27920,7 +28084,12 @@ var ts;
                         writeLine();
                         emitStart(node);
                         emitContainingModuleName(node);
-                        write(".default = ");
+                        if (languageVersion === 0 /* ES3 */) {
+                            write("[\"default\"] = ");
+                        }
+                        else {
+                            write(".default = ");
+                        }
                         emit(node.expression);
                         write(";");
                         emitEnd(node);
@@ -27981,20 +28150,6 @@ var ts;
                     }
                 }
             }
-            function sortAMDModules(amdModules) {
-                // AMD modules with declared variable names go first
-                return amdModules.sort(function (moduleA, moduleB) {
-                    if (moduleA.name === moduleB.name) {
-                        return 0;
-                    }
-                    else if (!moduleA.name) {
-                        return 1;
-                    }
-                    else {
-                        return -1;
-                    }
-                });
-            }
             function emitExportStarHelper() {
                 if (hasExportStars) {
                     writeLine();
@@ -28009,48 +28164,78 @@ var ts;
             }
             function emitAMDModule(node, startIndex) {
                 collectExternalModuleInfo(node);
+                // An AMD define function has the following shape:
+                //     define(id?, dependencies?, factory);
+                //
+                // This has the shape of
+                //     define(name, ["module1", "module2"], function (module1Alias) {
+                // The location of the alias in the parameter list in the factory function needs to 
+                // match the position of the module name in the dependency list.
+                //
+                // To ensure this is true in cases of modules with no aliases, e.g.: 
+                // `import "module"` or `<amd-dependency path= "a.css" />` 
+                // we need to add modules without alias names to the end of the dependencies list
+                var aliasedModuleNames = []; // names of modules with corresponding parameter in the 
+                // factory function.
+                var unaliasedModuleNames = []; // names of modules with no corresponding parameters in
+                // factory function.
+                var importAliasNames = []; // names of the parameters in the factory function; these 
+                // paramters need to match the indexes of the corresponding 
+                // module names in aliasedModuleNames.
+                // Fill in amd-dependency tags
+                for (var _a = 0, _b = node.amdDependencies; _a < _b.length; _a++) {
+                    var amdDependency = _b[_a];
+                    if (amdDependency.name) {
+                        aliasedModuleNames.push("\"" + amdDependency.path + "\"");
+                        importAliasNames.push(amdDependency.name);
+                    }
+                    else {
+                        unaliasedModuleNames.push("\"" + amdDependency.path + "\"");
+                    }
+                }
+                for (var _c = 0; _c < externalImports.length; _c++) {
+                    var importNode = externalImports[_c];
+                    // Find the name of the external module
+                    var externalModuleName = "";
+                    var moduleName = ts.getExternalModuleName(importNode);
+                    if (moduleName.kind === 8 /* StringLiteral */) {
+                        externalModuleName = getLiteralText(moduleName);
+                    }
+                    // Find the name of the module alais, if there is one
+                    var importAliasName = void 0;
+                    var namespaceDeclaration = getNamespaceDeclarationNode(importNode);
+                    if (namespaceDeclaration && !isDefaultImport(importNode)) {
+                        importAliasName = ts.getSourceTextOfNodeFromSourceFile(currentSourceFile, namespaceDeclaration.name);
+                    }
+                    else {
+                        importAliasName = getGeneratedNameForNode(importNode);
+                    }
+                    if (importAliasName) {
+                        aliasedModuleNames.push(externalModuleName);
+                        importAliasNames.push(importAliasName);
+                    }
+                    else {
+                        unaliasedModuleNames.push(externalModuleName);
+                    }
+                }
                 writeLine();
                 write("define(");
-                sortAMDModules(node.amdDependencies);
                 if (node.amdModuleName) {
                     write("\"" + node.amdModuleName + "\", ");
                 }
                 write("[\"require\", \"exports\"");
-                for (var _a = 0; _a < externalImports.length; _a++) {
-                    var importNode = externalImports[_a];
+                if (aliasedModuleNames.length) {
                     write(", ");
-                    var moduleName = ts.getExternalModuleName(importNode);
-                    if (moduleName.kind === 8 /* StringLiteral */) {
-                        emitLiteral(moduleName);
-                    }
-                    else {
-                        write("\"\"");
-                    }
+                    write(aliasedModuleNames.join(", "));
                 }
-                for (var _b = 0, _c = node.amdDependencies; _b < _c.length; _b++) {
-                    var amdDependency = _c[_b];
-                    var text = "\"" + amdDependency.path + "\"";
+                if (unaliasedModuleNames.length) {
                     write(", ");
-                    write(text);
+                    write(unaliasedModuleNames.join(", "));
                 }
                 write("], function (require, exports");
-                for (var _d = 0; _d < externalImports.length; _d++) {
-                    var importNode = externalImports[_d];
+                if (importAliasNames.length) {
                     write(", ");
-                    var namespaceDeclaration = getNamespaceDeclarationNode(importNode);
-                    if (namespaceDeclaration && !isDefaultImport(importNode)) {
-                        emit(namespaceDeclaration.name);
-                    }
-                    else {
-                        write(getGeneratedNameForNode(importNode));
-                    }
-                }
-                for (var _e = 0, _f = node.amdDependencies; _e < _f.length; _e++) {
-                    var amdDependency = _f[_e];
-                    if (amdDependency.name) {
-                        write(", ");
-                        write(amdDependency.name);
-                    }
+                    write(importAliasNames.join(", "));
                 }
                 write(") {");
                 increaseIndent();
@@ -29455,28 +29640,28 @@ var ts;
                 switch (n.kind) {
                     case 179 /* Block */:
                         if (!ts.isFunctionBlock(n)) {
-                            var parent_7 = n.parent;
+                            var parent_6 = n.parent;
                             var openBrace = ts.findChildOfKind(n, 14 /* OpenBraceToken */, sourceFile);
                             var closeBrace = ts.findChildOfKind(n, 15 /* CloseBraceToken */, sourceFile);
                             // Check if the block is standalone, or 'attached' to some parent statement.
                             // If the latter, we want to collaps the block, but consider its hint span
                             // to be the entire span of the parent.
-                            if (parent_7.kind === 184 /* DoStatement */ ||
-                                parent_7.kind === 187 /* ForInStatement */ ||
-                                parent_7.kind === 188 /* ForOfStatement */ ||
-                                parent_7.kind === 186 /* ForStatement */ ||
-                                parent_7.kind === 183 /* IfStatement */ ||
-                                parent_7.kind === 185 /* WhileStatement */ ||
-                                parent_7.kind === 192 /* WithStatement */ ||
-                                parent_7.kind === 223 /* CatchClause */) {
-                                addOutliningSpan(parent_7, openBrace, closeBrace, autoCollapse(n));
+                            if (parent_6.kind === 184 /* DoStatement */ ||
+                                parent_6.kind === 187 /* ForInStatement */ ||
+                                parent_6.kind === 188 /* ForOfStatement */ ||
+                                parent_6.kind === 186 /* ForStatement */ ||
+                                parent_6.kind === 183 /* IfStatement */ ||
+                                parent_6.kind === 185 /* WhileStatement */ ||
+                                parent_6.kind === 192 /* WithStatement */ ||
+                                parent_6.kind === 223 /* CatchClause */) {
+                                addOutliningSpan(parent_6, openBrace, closeBrace, autoCollapse(n));
                                 break;
                             }
-                            if (parent_7.kind === 196 /* TryStatement */) {
+                            if (parent_6.kind === 196 /* TryStatement */) {
                                 // Could be the try-block, or the finally-block.
-                                var tryStatement = parent_7;
+                                var tryStatement = parent_6;
                                 if (tryStatement.tryBlock === n) {
-                                    addOutliningSpan(parent_7, openBrace, closeBrace, autoCollapse(n));
+                                    addOutliningSpan(parent_6, openBrace, closeBrace, autoCollapse(n));
                                     break;
                                 }
                                 else if (tryStatement.finallyBlock === n) {
@@ -29877,18 +30062,18 @@ var ts;
                 var keyToItem = {};
                 for (var _i = 0; _i < nodes.length; _i++) {
                     var child = nodes[_i];
-                    var item_3 = createItem(child);
-                    if (item_3 !== undefined) {
-                        if (item_3.text.length > 0) {
-                            var key = item_3.text + "-" + item_3.kind + "-" + item_3.indent;
+                    var item = createItem(child);
+                    if (item !== undefined) {
+                        if (item.text.length > 0) {
+                            var key = item.text + "-" + item.kind + "-" + item.indent;
                             var itemWithSameName = keyToItem[key];
                             if (itemWithSameName) {
                                 // We had an item with the same name.  Merge these items together.
-                                merge(itemWithSameName, item_3);
+                                merge(itemWithSameName, item);
                             }
                             else {
-                                keyToItem[key] = item_3;
-                                items.push(item_3);
+                                keyToItem[key] = item;
+                                items.push(item);
                             }
                         }
                     }
@@ -31969,7 +32154,7 @@ var ts;
                     }
                     // consume leading trivia
                     scanner.scan();
-                    var item_4 = {
+                    var item = {
                         pos: pos,
                         end: scanner.getStartPos(),
                         kind: t_2
@@ -31978,7 +32163,7 @@ var ts;
                     if (!leadingTrivia) {
                         leadingTrivia = [];
                     }
-                    leadingTrivia.push(item_4);
+                    leadingTrivia.push(item);
                 }
                 savedPos = scanner.getStartPos();
             }
@@ -35274,9 +35459,9 @@ var ts;
                 return false;
             }
             // If the parent is not sourceFile or module block it is local variable
-            for (var parent_8 = declaration.parent; !ts.isFunctionBlock(parent_8); parent_8 = parent_8.parent) {
+            for (var parent_7 = declaration.parent; !ts.isFunctionBlock(parent_7); parent_7 = parent_7.parent) {
                 // Reached source file or module block
-                if (parent_8.kind === 227 /* SourceFile */ || parent_8.kind === 206 /* ModuleBlock */) {
+                if (parent_7.kind === 227 /* SourceFile */ || parent_7.kind === 206 /* ModuleBlock */) {
                     return false;
                 }
             }
@@ -36351,9 +36536,9 @@ var ts;
             // Check if the caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
             // Skip this partial identifier and adjust the contextToken to the token that precedes it.
             if (contextToken && position <= contextToken.end && ts.isWord(contextToken.kind)) {
-                var start_1 = new Date().getTime();
+                var start_2 = new Date().getTime();
                 contextToken = ts.findPrecedingToken(contextToken.getFullStart(), sourceFile);
-                log("getCompletionData: Get previous token 2: " + (new Date().getTime() - start_1));
+                log("getCompletionData: Get previous token 2: " + (new Date().getTime() - start_2));
             }
             // Check if this is a valid completion location
             if (contextToken && isCompletionListBlocker(contextToken)) {
@@ -36579,9 +36764,9 @@ var ts;
                     || ts.isTemplateLiteralKind(previousToken.kind)) {
                     // The position has to be either: 1. entirely within the token text, or 
                     // 2. at the end position of an unterminated token.
-                    var start_2 = previousToken.getStart();
+                    var start_3 = previousToken.getStart();
                     var end = previousToken.getEnd();
-                    if (start_2 < position && position < end) {
+                    if (start_3 < position && position < end) {
                         return true;
                     }
                     else if (position === end) {
@@ -36593,12 +36778,12 @@ var ts;
             function getContainingObjectLiteralApplicableForCompletion(previousToken) {
                 // The locations in an object literal expression that are applicable for completion are property name definition locations.
                 if (previousToken) {
-                    var parent_9 = previousToken.parent;
+                    var parent_8 = previousToken.parent;
                     switch (previousToken.kind) {
                         case 14 /* OpenBraceToken */: // let x = { |
                         case 23 /* CommaToken */:
-                            if (parent_9 && parent_9.kind === 154 /* ObjectLiteralExpression */) {
-                                return parent_9;
+                            if (parent_8 && parent_8.kind === 154 /* ObjectLiteralExpression */) {
+                                return parent_8;
                             }
                             break;
                     }
@@ -37668,19 +37853,19 @@ var ts;
                 function getThrowStatementOwner(throwStatement) {
                     var child = throwStatement;
                     while (child.parent) {
-                        var parent_10 = child.parent;
-                        if (ts.isFunctionBlock(parent_10) || parent_10.kind === 227 /* SourceFile */) {
-                            return parent_10;
+                        var parent_9 = child.parent;
+                        if (ts.isFunctionBlock(parent_9) || parent_9.kind === 227 /* SourceFile */) {
+                            return parent_9;
                         }
                         // A throw-statement is only owned by a try-statement if the try-statement has
                         // a catch clause, and if the throw-statement occurs within the try block.
-                        if (parent_10.kind === 196 /* TryStatement */) {
-                            var tryStatement = parent_10;
+                        if (parent_9.kind === 196 /* TryStatement */) {
+                            var tryStatement = parent_9;
                             if (tryStatement.tryBlock === child && tryStatement.catchClause) {
                                 return child;
                             }
                         }
-                        child = parent_10;
+                        child = parent_9;
                     }
                     return undefined;
                 }
