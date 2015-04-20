@@ -68,8 +68,7 @@ module ts {
 
         if (!file.locals) {
             file.locals = {};
-            container = file;
-            setBlockScopeContainer(file, /*cleanLocals*/ false);
+            container = blockScopeContainer = file;
             bind(file);
             file.symbolCount = symbolCount;
         }
@@ -77,13 +76,6 @@ module ts {
         function createSymbol(flags: SymbolFlags, name: string): Symbol {
             symbolCount++;
             return new Symbol(flags, name);
-        }
-
-        function setBlockScopeContainer(node: Node, cleanLocals: boolean) {
-            blockScopeContainer = node;
-            if (cleanLocals) {
-                blockScopeContainer.locals = undefined;
-            }
         }
 
         function addDeclarationToSymbol(symbol: Symbol, node: Declaration, symbolFlags: SymbolFlags) {
@@ -266,7 +258,10 @@ module ts {
                 // these cases are:
                 // - node has locals (symbolKind & HasLocals) !== 0
                 // - node is a source file
-                setBlockScopeContainer(node, /*cleanLocals*/  (symbolFlags & SymbolFlags.HasLocals) === 0 && node.kind !== SyntaxKind.SourceFile);
+                blockScopeContainer = node;
+                if ((symbolFlags & SymbolFlags.HasLocals) === 0 && node.kind !== SyntaxKind.SourceFile) {
+                    blockScopeContainer.locals = undefined;
+                }
             }
 
             forEachChild(node, bind);
