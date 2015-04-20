@@ -174,25 +174,9 @@ module ts {
             else {
                 symbol = createSymbol(SymbolFlags.None, "__missing");
             }
+
             addDeclarationToSymbol(symbol, node, includes);
             symbol.parent = parent;
-
-            if ((node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression) && symbol.exports) {
-                // TypeScript 1.0 spec (April 2014): 8.4
-                // Every class automatically contains a static property member named 'prototype', 
-                // the type of which is an instantiation of the class type with type Any supplied as a type argument for each type parameter.
-                // It is an error to explicitly declare a static property member with the name 'prototype'.
-                let prototypeSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Prototype, "prototype");
-                if (hasProperty(symbol.exports, prototypeSymbol.name)) {
-                    if (node.name) {
-                        node.name.parent = node;
-                    }
-                    file.bindDiagnostics.push(createDiagnosticForNode(symbol.exports[prototypeSymbol.name].declarations[0],
-                        Diagnostics.Duplicate_identifier_0, prototypeSymbol.name));
-                }
-                symbol.exports[prototypeSymbol.name] = prototypeSymbol;
-                prototypeSymbol.parent = symbol;
-            }
 
             return symbol;
         }
@@ -530,9 +514,8 @@ module ts {
                 case SyntaxKind.ArrowFunction:
                     return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, "__function");
                 case SyntaxKind.ClassExpression:
-                    return bindAnonymousDeclaration(<ClassExpression>node, SymbolFlags.Class, "__class");
                 case SyntaxKind.ClassDeclaration:
-                    return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Class, SymbolFlags.ClassExcludes);
+                    return bindClassLikeDeclaration(<ClassLikeDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
                 case SyntaxKind.TypeAliasDeclaration:
@@ -607,6 +590,35 @@ module ts {
             return node.name
                 ? declareSymbolAndAddToSymbolTable(node, SymbolFlags.Alias, SymbolFlags.AliasExcludes)
                 : SymbolFlags.None;
+        }
+
+        function bindClassLikeDeclaration(node: ClassLikeDeclaration) {
+            if (node.kind === SyntaxKind.ClassDeclaration) {
+                bindBlockScopedDeclaration(node, SymbolFlags.Class, SymbolFlags.ClassExcludes);
+            }
+            else {
+                bindAnonymousDeclaration(node, SymbolFlags.Class, "__class");
+            }
+
+            let symbol = node.symbol;
+            if (symbol.exports) {
+                // TypeScript 1.0 spec (April 2014): 8.4
+                // Every class automatically contains a static property member named 'prototype', 
+                // the type of which is an instantiation of the class type with type Any supplied as a type argument for each type parameter.
+                // It is an error to explicitly declare a static property member with the name 'prototype'.
+                let prototypeSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Prototype, "prototype");
+                if (hasProperty(symbol.exports, prototypeSymbol.name)) {
+                    if (node.name) {
+                        node.name.parent = node;
+                    }
+                    file.bindDiagnostics.push(createDiagnosticForNode(symbol.exports[prototypeSymbol.name].declarations[0],
+                        Diagnostics.Duplicate_identifier_0, prototypeSymbol.name));
+                }
+                symbol.exports[prototypeSymbol.name] = prototypeSymbol;
+                prototypeSymbol.parent = symbol;
+            }
+
+            return SymbolFlags.Class;
         }
 
         function bindEnumDeclaration(node: EnumDeclaration) {
