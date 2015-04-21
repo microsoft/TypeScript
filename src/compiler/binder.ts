@@ -53,11 +53,27 @@ module ts {
     }
 
     const enum ContainerFlags {
-        None                    = 0,
-        IsContainer             = 0x01,
-        IsBlockScopedContainer  = 0x02,
+        // The current node is not a container, and no container manipulation should happen before 
+        // recursing into it.
+        None = 0,
+
+        // The current node is a container.  It should be set as the current container (and block-
+        // container) before recursing into it.  The current node does not have locals.  Examples:
+        //
+        //      Classes, ObjectLiterals, TypeLiterals, Interfaces...
+        IsContainer = 0x01,
+
+        // The current node is a block-scoped-container.  It should be set as the current block-
+        // container before recursing into it.  Examples:
+        //
+        //      Blocks (when not parented by functions), Catch clauses, For/For-in/For-of statements...
+        IsBlockScopedContainer = 0x02,
+
         HasLocals               = 0x04,
 
+        // If the current node is a container that also container that also contains locals.  Examples:
+        //
+        //      Functions, Methods, Modules, Source-files.
         IsContainerWithLocals   = IsContainer | HasLocals
     }
 
