@@ -372,9 +372,6 @@ module ts {
                     return declareClassMember(node, symbolFlags, symbolExcludes);
 
                 case SyntaxKind.EnumDeclaration:
-                    // Enum members are always put in the 'exports' of the containing enum.
-                    // They are only accessible through their container, and are never in 
-                    // scope otherwise (even inside the body of the enum declaring them.).
                     return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
 
                 case SyntaxKind.TypeLiteral:
@@ -401,11 +398,10 @@ module ts {
                 case SyntaxKind.ArrowFunction:
                     // All the children of these container types are never visible through another
                     // symbol (i.e. through another symbol's 'exports' or 'members').  Instead, 
-                    // more or less, they're only accessed 'lexically' (i.e. from code that exists
-                    // underneath their container in the tree.  To accomplish this, we simply add
-                    // their declared symbol to the 'locals' of the container.  These symbols can
-                    // then be found as the type checker walks up the containers, checking them
-                    // for matching names.
+                    // they're only accessed 'lexically' (i.e. from code that exists underneath 
+                    // their container in the tree.  To accomplish this, we simply add their declared
+                    // symbol to the 'locals' of the container.  These symbols can then be found as 
+                    // the type checker walks up the containers, checking them for matching names.
                     return declareSymbol(container.locals, undefined, node, symbolFlags, symbolExcludes);
             }
         }
