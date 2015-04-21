@@ -1311,7 +1311,6 @@ module ts {
         UnionProperty           = 0x10000000,  // Property in union type
         Optional                = 0x20000000,  // Optional property
         ExportStar              = 0x40000000,  // Export * declaration
-        BlockScopedContainer    = 0x80000000,
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
@@ -1350,12 +1349,9 @@ module ts {
 
         ExportHasLocal = Function | Class | Enum | ValueModule,
 
-        HasLocals = Function | Module | Method | Constructor | Accessor | Signature,
         HasExports = Class | Enum | Module,
         HasMembers = Class | Interface | TypeLiteral | ObjectLiteral,
 
-        IsBlockScopedContainer = BlockScopedContainer | Module | Function | Accessor | Method | Constructor,
-        IsContainer = HasLocals | HasExports | HasMembers,
         PropertyOrAccessor = Property | Accessor,
         Export = ExportNamespace | ExportType | ExportValue,
     }
