@@ -5240,12 +5240,12 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 // we need to add modules without alias names to the end of the dependencies list
                 
                 let aliasedModuleNames: string[] = [];   // names of modules with corresponding parameter in the 
-                // factory function.
+                                                         // factory function.
                 let unaliasedModuleNames: string[] = []; // names of modules with no corresponding parameters in
-                // factory function.
+                                                         // factory function.
                 let importAliasNames: string[] = [];     // names of the parameters in the factory function; these 
-                // paramters need to match the indexes of the corresponding 
-                // module names in aliasedModuleNames.
+                                                         // parameters need to match the indexes of the corresponding 
+                                                         // module names in aliasedModuleNames.
 
                 // Fill in amd-dependency tags
                 for (let amdDependency of node.amdDependencies) {
