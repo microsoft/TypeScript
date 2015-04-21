@@ -2461,7 +2461,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         emitModuleMemberName(node);
                     }
                     write(" = ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     emitEnd(node);
                     write(";");
                 }
@@ -2927,7 +2927,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 return node.kind === SyntaxKind.ArrowFunction && languageVersion >= ScriptTarget.ES6;
             }
 
-            function emitDeclarationName(node: Declaration) {
+            function emitNameOfDeclaration(node: Declaration) {
                 if (node.name) {
                     emitNodeWithoutSourceMap(node.name);
                 }
@@ -2975,7 +2975,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
 
                 if (shouldEmitFunctionName(node)) {
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                 }
 
                 emitSignatureAndBody(node);
@@ -3242,7 +3242,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
                 else {
                     if (property.flags & NodeFlags.Static) {
-                        emitDeclarationName(node);
+                        emitNameOfDeclaration(node);
                     }
                     else {
                         write("this");
@@ -3417,7 +3417,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
                 if (languageVersion < ScriptTarget.ES6) {
                     write("function ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     emitSignatureParameters(ctor);
                 }
                 else {
@@ -3573,7 +3573,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         }
 
                         write("let ");
-                        emitDeclarationName(node);
+                        emitNameOfDeclaration(node);
                         write(" = ");
                     }
                     else if (isES6ExportedDeclaration(node)) {
@@ -3612,7 +3612,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 // check if this is an "export default class" as it may not have a name. Do not emit the name if the class is decorated.
                 if ((node.name || !(node.flags & NodeFlags.Default)) && !thisNodeIsDecorated) {
                     write(" ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                 }
 
                 var baseTypeNode = getClassExtendsHeritageClauseElement(node);
@@ -3644,9 +3644,9 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     if (node.name) {
                         writeLine();
                         write("Object.defineProperty(");
-                        emitDeclarationName(node);
+                        emitNameOfDeclaration(node);
                         write(", \"name\", { value: \"");
-                        emitDeclarationName(node);
+                        emitNameOfDeclaration(node);
                         write("\", configurable: true });");
                         writeLine();
                     }
@@ -3683,7 +3683,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     emitStart(node);
                     emitModuleMemberName(node);
                     write(" = ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     emitEnd(node);
                     write(";");
                 }
@@ -3691,7 +3691,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     // if this is a top level default export of decorated class, write the export after the declaration.
                     writeLine();
                     write("export default ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     write(";");
                 }
             }
@@ -3699,7 +3699,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
             function emitClassLikeDeclarationBelowES6(node: ClassLikeDeclaration) {
                 if (node.kind === SyntaxKind.ClassDeclaration) {
                     write("var ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     write(" = ");
                 }
 
@@ -3723,7 +3723,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     writeLine();
                     emitStart(baseTypeNode);
                     write("__extends(");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     write(", _super);");
                     emitEnd(baseTypeNode);
                 }
@@ -3736,7 +3736,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end, () => {
                     write("return ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                 });
                 write(";");
                 emitTempDeclarations(/*newLine*/ true);
@@ -3769,7 +3769,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function emitClassMemberPrefix(node: ClassLikeDeclaration, member: Node) {
-                emitDeclarationName(node);
+                emitNameOfDeclaration(node);
                 if (!(member.flags & NodeFlags.Static)) {
                     write(".prototype");
                 }
@@ -3804,7 +3804,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
                 writeLine();
                 emitStart(node);
-                emitDeclarationName(node);
+                emitNameOfDeclaration(node);
                 write(" = __decorate([");
                 increaseIndent();
                 writeLine();
@@ -3822,7 +3822,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 decreaseIndent();
                 writeLine();
                 write("], ");
-                emitDeclarationName(node);
+                emitNameOfDeclaration(node);
                 write(");");
                 emitEnd(node);
                 writeLine();
