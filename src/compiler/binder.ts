@@ -349,7 +349,7 @@ module ts {
 
                 case SyntaxKind.Block:
                     // do not treat blocks directly inside a function as a block-scoped-container.
-                    // that reside in this block should go to the function locals. Othewise 'x' 
+                    // Locals that reside in this block should go to the function locals. Othewise 'x' 
                     // would not appear to be a redeclaration of a block scoped local in the following
                     // example:
                     //
