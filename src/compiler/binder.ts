@@ -96,6 +96,8 @@ module ts {
             file.symbolCount = symbolCount;
         }
 
+        return;
+
         function createSymbol(flags: SymbolFlags, name: string): Symbol {
             symbolCount++;
             return new Symbol(flags, name);
