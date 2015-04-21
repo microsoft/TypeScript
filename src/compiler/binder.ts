@@ -278,15 +278,15 @@ module ts {
             // and block-container.   If the current node is a container, then it is automatically
             // considered the current block-container as well.  Also, for containers that we know
             // may contain locals, we proactively initialize the .locals field. We do this because
-            // it's highly likely that the .locals will be need to place some child in (for example,
+            // it's highly likely that the .locals will be needed to place some child in (for example,
             // a parameter, or variable declaration).
             // 
-            // However, we do not proactively create the locals for block-containers because it's
+            // However, we do not proactively create the .locals for block-containers because it's
             // totally normal and common for block-containers to never actually have a block-scoped 
             // variable in them.  We don't want to end up allocating an object for every 'block' we
             // run into when most of them won't be necessary.
             //
-            // Finally, if this is a block-container, then we clear out any existing locals object
+            // Finally, if this is a block-container, then we clear out any existing .locals object
             // it may contain within it.  This happens in incremental scenarios.  Because we can be
             // reusing a node from a previous compilation, that node may have had 'locals' created
             // for it.  We must clear this so we don't accidently move any stale data forward from
