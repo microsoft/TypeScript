@@ -77,13 +77,13 @@ module ts {
         IsContainerWithLocals   = IsContainer | HasLocals
     }
 
-    export function bindSourceFile(file: SourceFile): void {
+    export function bindSourceFile(file: SourceFile) {
         let start = new Date().getTime();
         bindSourceFileWorker(file);
         bindTime += new Date().getTime() - start;
     }
 
-    function bindSourceFileWorker(file: SourceFile): void {
+    function bindSourceFileWorker(file: SourceFile) {
         let parent: Node;
         let container: Node;
         let blockScopeContainer: Node;
@@ -263,7 +263,7 @@ module ts {
         // All container nodes are kept on a linked list in declaration order. This list is used by 
         // the getLocalNameOfContainer function in the type checker to validate that the local name 
         // used for a container is unique.
-        function bindChildren(node: Node): void {
+        function bindChildren(node: Node) {
             // Before we recurse into a node's chilren, we first save the existing parent, container 
             // and block-container.  Then after we pop out of processing the children, we restore
             // these saved values.
@@ -378,11 +378,11 @@ module ts {
             lastContainer = container;
         }
 
-        function declareSymbolAndAddToSymbolTable(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): void {
+        function declareSymbolAndAddToSymbolTable(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
             declareSymbolAndAddToSymbolTableWorker(node, symbolFlags, symbolExcludes);
         }
 
-        function declareSymbolAndAddToSymbolTableWorker(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
+        function declareSymbolAndAddToSymbolTableWorker(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
             switch (container.kind) {
                 // Modules, source files, and classes need specialized handling for how their 
                 // members are declared (for example, a member of a class will go into a specific
@@ -479,7 +479,7 @@ module ts {
             }
         }
 
-        function bindModuleDeclaration(node: ModuleDeclaration): void {
+        function bindModuleDeclaration(node: ModuleDeclaration) {
             setExportContextFlag(node);
             if (node.name.kind === SyntaxKind.StringLiteral) {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
@@ -505,7 +505,7 @@ module ts {
             }
         }
 
-        function bindFunctionOrConstructorType(node: SignatureDeclaration): void {
+        function bindFunctionOrConstructorType(node: SignatureDeclaration) {
             // For a given function symbol "<...>(...) => T" we want to generate a symbol identical
             // to the one we would get for: { <...>(...): T }
             //
@@ -521,12 +521,12 @@ module ts {
             typeLiteralSymbol.members = { [name]: symbol };
         }
 
-        function bindAnonymousDeclaration(node: Declaration, symbolFlags: SymbolFlags, name: string): void {
+        function bindAnonymousDeclaration(node: Declaration, symbolFlags: SymbolFlags, name: string) {
             let symbol = createSymbol(symbolFlags, name);
             addDeclarationToSymbol(symbol, node, symbolFlags);
         }
 
-        function bindBlockScopedDeclaration(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): void {
+        function bindBlockScopedDeclaration(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
             switch (blockScopeContainer.kind) {
                 case SyntaxKind.ModuleDeclaration:
                     declareModuleMember(node, symbolFlags, symbolExcludes);
@@ -545,7 +545,7 @@ module ts {
             }
         }
 
-        function bindBlockScopedVariableDeclaration(node: Declaration): void {
+        function bindBlockScopedVariableDeclaration(node: Declaration) {
             bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
         }
 
@@ -553,14 +553,12 @@ module ts {
             return "__" + indexOf((<SignatureDeclaration>node.parent).parameters, node);
         }
 
-        function bind(node: Node): void {
+        function bind(node: Node) {
             node.parent = parent;
 
             // First we bind declaration nodes to a symbol if possible.  We'll both create a symbol
-            // and then potentially add the symbol to an appropriate symbol table.  The symbolFlags 
-            // that are returned from this help inform how we recurse into the children of this node.
-            //
-            // Possible destination symbol tables are:
+            // and then potentially add the symbol to an appropriate symbol table. Possible 
+            // destination symbol tables are:
             // 
             //  1) The 'exports' table of the current container's symbol.
             //  2) The 'members' table of the current container's symbol.
@@ -577,7 +575,7 @@ module ts {
             bindChildren(node);
         }
         
-        function bindWorker(node: Node): void {
+        function bindWorker(node: Node) {
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
@@ -651,14 +649,14 @@ module ts {
             }
         }
 
-        function bindSourceFileIfExternalModule(): void {
+        function bindSourceFileIfExternalModule() {
             setExportContextFlag(file);
             if (isExternalModule(file)) {
                 bindAnonymousDeclaration(file, SymbolFlags.ValueModule, '"' + removeFileExtension(file.fileName) + '"');
             }
         }
 
-        function bindExportAssignment(node: ExportAssignment): void {
+        function bindExportAssignment(node: ExportAssignment) {
             if (node.expression.kind === SyntaxKind.Identifier) {
                 // An export default clause with an identifier exports all meanings of that identifier
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
@@ -669,20 +667,20 @@ module ts {
             }
         }
 
-        function bindExportDeclaration(node: ExportDeclaration): void {
+        function bindExportDeclaration(node: ExportDeclaration) {
             if (!node.exportClause) {
                 // All export * declarations are collected in an __export symbol
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.ExportStar, SymbolFlags.None);
             }
         }
 
-        function bindImportClause(node: ImportClause): void {
+        function bindImportClause(node: ImportClause) {
             if (node.name) {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
             }
         }
 
-        function bindClassLikeDeclaration(node: ClassLikeDeclaration): void {
+        function bindClassLikeDeclaration(node: ClassLikeDeclaration) {
             if (node.kind === SyntaxKind.ClassDeclaration) {
                 bindBlockScopedDeclaration(node, SymbolFlags.Class, SymbolFlags.ClassExcludes);
             }
@@ -713,13 +711,13 @@ module ts {
             prototypeSymbol.parent = symbol;
         }
 
-        function bindEnumDeclaration(node: EnumDeclaration): void {
+        function bindEnumDeclaration(node: EnumDeclaration) {
             return isConst(node)
                 ? declareSymbolAndAddToSymbolTable(node, SymbolFlags.ConstEnum, SymbolFlags.ConstEnumExcludes)
                 : declareSymbolAndAddToSymbolTable(node, SymbolFlags.RegularEnum, SymbolFlags.RegularEnumExcludes);
         }
 
-        function bindVariableDeclarationOrBindingElement(node: VariableDeclaration | BindingElement): void {
+        function bindVariableDeclarationOrBindingElement(node: VariableDeclaration | BindingElement) {
             if (!isBindingPattern(node.name)) {
                 if (isBlockOrCatchScoped(node)) {
                     bindBlockScopedVariableDeclaration(node);
@@ -730,7 +728,7 @@ module ts {
             }
         }
 
-        function bindParameter(node: ParameterDeclaration): void {
+        function bindParameter(node: ParameterDeclaration) {
             if (isBindingPattern(node.name)) {
                 bindAnonymousDeclaration(node, SymbolFlags.FunctionScopedVariable, getDestructuringParameterName(node));
             }
@@ -749,7 +747,7 @@ module ts {
             }
         }
 
-        function bindPropertyOrMethodOrAccessor(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): void {
+        function bindPropertyOrMethodOrAccessor(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
             return hasDynamicName(node)
                 ? bindAnonymousDeclaration(node, symbolFlags, "__computed")
                 : declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
