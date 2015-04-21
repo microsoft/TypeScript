@@ -1577,7 +1577,7 @@ module ts {
 
     /* @internal */
     export interface TypeMapper {
-        (t: Type): Type;
+        (t: TypeParameter): Type;
     }
 
     /* @internal */
@@ -1654,6 +1654,7 @@ module ts {
         preserveConstEnums?: boolean;
         project?: string;
         removeComments?: boolean;
+        rootDir?: string;
         sourceMap?: boolean;
         sourceRoot?: string;
         suppressImplicitAnyIndexErrors?: boolean;

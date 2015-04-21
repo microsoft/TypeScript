@@ -3788,7 +3788,7 @@ module ts {
         }
 
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
-            return t => mapper2(mapper1(t));
+            return t => instantiateType(mapper1(t), mapper2);
         }
 
         function instantiateTypeParameter(typeParameter: TypeParameter, mapper: TypeMapper): TypeParameter {
@@ -3859,7 +3859,7 @@ module ts {
         function instantiateType(type: Type, mapper: TypeMapper): Type {
             if (mapper !== identityMapper) {
                 if (type.flags & TypeFlags.TypeParameter) {
-                    return mapper(type);
+                    return mapper(<TypeParameter>type);
                 }
                 if (type.flags & TypeFlags.Anonymous) {
                     return type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) ?

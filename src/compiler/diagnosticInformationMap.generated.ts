@@ -496,6 +496,8 @@ module ts {
         Suppress_noImplicitAny_errors_for_indexing_objects_lacking_index_signatures: { code: 6055, category: DiagnosticCategory.Message, key: "Suppress noImplicitAny errors for indexing objects lacking index signatures." },
         Do_not_emit_declarations_for_code_that_has_an_internal_annotation: { code: 6056, category: DiagnosticCategory.Message, key: "Do not emit declarations for code that has an '@internal' annotation." },
         Preserve_new_lines_when_emitting_code: { code: 6057, category: DiagnosticCategory.Message, key: "Preserve new-lines when emitting code." },
+        Specifies_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir: { code: 6058, category: DiagnosticCategory.Message, key: "Specifies the root directory of input files. Use to control the output directory structure with --outDir." },
+        File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files: { code: 6059, category: DiagnosticCategory.Error, key: "File '{0}' is not under 'rootDir' '{1}'. 'rootDir' is expected to contain all source files." },
         Variable_0_implicitly_has_an_1_type: { code: 7005, category: DiagnosticCategory.Error, key: "Variable '{0}' implicitly has an '{1}' type." },
         Parameter_0_implicitly_has_an_1_type: { code: 7006, category: DiagnosticCategory.Error, key: "Parameter '{0}' implicitly has an '{1}' type." },
         Member_0_implicitly_has_an_1_type: { code: 7008, category: DiagnosticCategory.Error, key: "Member '{0}' implicitly has an '{1}' type." },
