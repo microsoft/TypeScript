@@ -348,19 +348,19 @@ module ts {
                     return ContainerFlags.IsBlockScopedContainer;
 
                 case SyntaxKind.Block:
-                    // do not treat function block a block-scope container. All block-scope locals 
+                    // do not treat blocks directly inside a function as a block-scoped-container.
                     // that reside in this block should go to the function locals. Otherwise this 
                     // wouldn't be considered as redeclaration of a block scoped local:
                     //
-                    //  function foo() {
-                    //      var x;
-                    //      let x;
-                    //  }
+                    //      function foo() {
+                    //          var x;
+                    //          let x;
+                    //      }
                     //
                     // If we placed 'var x' into the function locals and 'let x' - into the locals of
-                    // the block, then there would be no collision.  By doing this, we ensure that both
-                    // 'var x' and 'let x' go into the Function-container's locals, and we do get a
-                    // collision conflict.
+                    // the block, then there would be no collision.  By not creating a new block-
+                    // scoped-container here, we ensure that both 'var x' and 'let x' go into the 
+                    // Function - container's locals, and we do get a collision conflict.
                     return isFunctionLike(node.parent) ? ContainerFlags.None : ContainerFlags.IsBlockScopedContainer;
             }
 
