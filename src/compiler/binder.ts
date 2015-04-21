@@ -479,12 +479,12 @@ module ts {
         function bindModuleDeclaration(node: ModuleDeclaration): void {
             setExportContextFlag(node);
             if (node.name.kind === SyntaxKind.StringLiteral) {
-                return declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
+                declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
             }
             else {
                 let state = getModuleInstanceState(node);
                 if (state === ModuleInstanceState.NonInstantiated) {
-                    return declareSymbolAndAddToSymbolTable(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes);
+                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes);
                 }
                 else {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
@@ -543,7 +543,7 @@ module ts {
         }
 
         function bindBlockScopedVariableDeclaration(node: Declaration): void {
-            return bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
+            bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
         }
 
         function getDestructuringParameterName(node: Declaration) {
@@ -719,10 +719,10 @@ module ts {
         function bindVariableDeclarationOrBindingElement(node: VariableDeclaration | BindingElement): void {
             if (!isBindingPattern(node.name)) {
                 if (isBlockOrCatchScoped(node)) {
-                    return bindBlockScopedVariableDeclaration(node);
+                    bindBlockScopedVariableDeclaration(node);
                 }
                 else {
-                    return declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
+                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
                 }
             }
         }
