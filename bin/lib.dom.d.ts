@@ -12708,7 +12708,7 @@ interface SourceBuffer extends EventTarget {
     videoTracks: VideoTrackList;
     abort(): void;
     appendBuffer(data: ArrayBuffer): void;
-    appendBuffer(data: any): void;
+    appendBuffer(data: ArrayBufferView): void;
     appendStream(stream: MSStream, maxSize?: number): void;
     remove(start: number, end: number): void;
 }
@@ -12816,31 +12816,31 @@ declare var StyleSheetPageList: {
 }
 
 interface SubtleCrypto {
-    decrypt(algorithm: string, key: CryptoKey, data: any): any;
-    decrypt(algorithm: Algorithm, key: CryptoKey, data: any): any;
+    decrypt(algorithm: string, key: CryptoKey, data: ArrayBufferView): any;
+    decrypt(algorithm: Algorithm, key: CryptoKey, data: ArrayBufferView): any;
     deriveBits(algorithm: string, baseKey: CryptoKey, length: number): any;
     deriveBits(algorithm: Algorithm, baseKey: CryptoKey, length: number): any;
     deriveKey(algorithm: string, baseKey: CryptoKey, derivedKeyType: string, extractable: boolean, keyUsages: string[]): any;
     deriveKey(algorithm: string, baseKey: CryptoKey, derivedKeyType: Algorithm, extractable: boolean, keyUsages: string[]): any;
     deriveKey(algorithm: Algorithm, baseKey: CryptoKey, derivedKeyType: string, extractable: boolean, keyUsages: string[]): any;
     deriveKey(algorithm: Algorithm, baseKey: CryptoKey, derivedKeyType: Algorithm, extractable: boolean, keyUsages: string[]): any;
-    digest(algorithm: string, data: any): any;
-    digest(algorithm: Algorithm, data: any): any;
-    encrypt(algorithm: string, key: CryptoKey, data: any): any;
-    encrypt(algorithm: Algorithm, key: CryptoKey, data: any): any;
+    digest(algorithm: string, data: ArrayBufferView): any;
+    digest(algorithm: Algorithm, data: ArrayBufferView): any;
+    encrypt(algorithm: string, key: CryptoKey, data: ArrayBufferView): any;
+    encrypt(algorithm: Algorithm, key: CryptoKey, data: ArrayBufferView): any;
     exportKey(format: string, key: CryptoKey): any;
     generateKey(algorithm: string, extractable: boolean, keyUsages: string[]): any;
     generateKey(algorithm: Algorithm, extractable: boolean, keyUsages: string[]): any;
-    importKey(format: string, keyData: any, algorithm: string, extractable: boolean, keyUsages: string[]): any;
-    importKey(format: string, keyData: any, algorithm: Algorithm, extractable: boolean, keyUsages: string[]): any;
-    sign(algorithm: string, key: CryptoKey, data: any): any;
-    sign(algorithm: Algorithm, key: CryptoKey, data: any): any;
-    unwrapKey(format: string, wrappedKey: any, unwrappingKey: CryptoKey, unwrapAlgorithm: string, unwrappedKeyAlgorithm: string, extractable: boolean, keyUsages: string[]): any;
-    unwrapKey(format: string, wrappedKey: any, unwrappingKey: CryptoKey, unwrapAlgorithm: string, unwrappedKeyAlgorithm: Algorithm, extractable: boolean, keyUsages: string[]): any;
-    unwrapKey(format: string, wrappedKey: any, unwrappingKey: CryptoKey, unwrapAlgorithm: Algorithm, unwrappedKeyAlgorithm: string, extractable: boolean, keyUsages: string[]): any;
-    unwrapKey(format: string, wrappedKey: any, unwrappingKey: CryptoKey, unwrapAlgorithm: Algorithm, unwrappedKeyAlgorithm: Algorithm, extractable: boolean, keyUsages: string[]): any;
-    verify(algorithm: string, key: CryptoKey, signature: any, data: any): any;
-    verify(algorithm: Algorithm, key: CryptoKey, signature: any, data: any): any;
+    importKey(format: string, keyData: ArrayBufferView, algorithm: string, extractable: boolean, keyUsages: string[]): any;
+    importKey(format: string, keyData: ArrayBufferView, algorithm: Algorithm, extractable: boolean, keyUsages: string[]): any;
+    sign(algorithm: string, key: CryptoKey, data: ArrayBufferView): any;
+    sign(algorithm: Algorithm, key: CryptoKey, data: ArrayBufferView): any;
+    unwrapKey(format: string, wrappedKey: ArrayBufferView, unwrappingKey: CryptoKey, unwrapAlgorithm: string, unwrappedKeyAlgorithm: string, extractable: boolean, keyUsages: string[]): any;
+    unwrapKey(format: string, wrappedKey: ArrayBufferView, unwrappingKey: CryptoKey, unwrapAlgorithm: string, unwrappedKeyAlgorithm: Algorithm, extractable: boolean, keyUsages: string[]): any;
+    unwrapKey(format: string, wrappedKey: ArrayBufferView, unwrappingKey: CryptoKey, unwrapAlgorithm: Algorithm, unwrappedKeyAlgorithm: string, extractable: boolean, keyUsages: string[]): any;
+    unwrapKey(format: string, wrappedKey: ArrayBufferView, unwrappingKey: CryptoKey, unwrapAlgorithm: Algorithm, unwrappedKeyAlgorithm: Algorithm, extractable: boolean, keyUsages: string[]): any;
+    verify(algorithm: string, key: CryptoKey, signature: ArrayBufferView, data: ArrayBufferView): any;
+    verify(algorithm: Algorithm, key: CryptoKey, signature: ArrayBufferView, data: ArrayBufferView): any;
     wrapKey(format: string, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: string): any;
     wrapKey(format: string, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: Algorithm): any;
 }
@@ -13352,9 +13352,9 @@ interface WebGLRenderingContext {
     blendFunc(sfactor: number, dfactor: number): void;
     blendFuncSeparate(srcRGB: number, dstRGB: number, srcAlpha: number, dstAlpha: number): void;
     bufferData(target: number, size: number, usage: number): void;
+    bufferData(target: number, size: ArrayBufferView, usage: number): void;
     bufferData(target: number, size: any, usage: number): void;
-    bufferData(target: number, size: any, usage: number): void;
-    bufferSubData(target: number, offset: number, data: any): void;
+    bufferSubData(target: number, offset: number, data: ArrayBufferView): void;
     bufferSubData(target: number, offset: number, data: any): void;
     checkFramebufferStatus(target: number): number;
     clear(mask: number): void;
@@ -13363,8 +13363,8 @@ interface WebGLRenderingContext {
     clearStencil(s: number): void;
     colorMask(red: boolean, green: boolean, blue: boolean, alpha: boolean): void;
     compileShader(shader: WebGLShader): void;
-    compressedTexImage2D(target: number, level: number, internalformat: number, width: number, height: number, border: number, data: any): void;
-    compressedTexSubImage2D(target: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, data: any): void;
+    compressedTexImage2D(target: number, level: number, internalformat: number, width: number, height: number, border: number, data: ArrayBufferView): void;
+    compressedTexSubImage2D(target: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, data: ArrayBufferView): void;
     copyTexImage2D(target: number, level: number, internalformat: number, x: number, y: number, width: number, height: number, border: number): void;
     copyTexSubImage2D(target: number, level: number, xoffset: number, yoffset: number, x: number, y: number, width: number, height: number): void;
     createBuffer(): WebGLBuffer;
@@ -13432,7 +13432,7 @@ interface WebGLRenderingContext {
     linkProgram(program: WebGLProgram): void;
     pixelStorei(pname: number, param: number): void;
     polygonOffset(factor: number, units: number): void;
-    readPixels(x: number, y: number, width: number, height: number, format: number, type: number, pixels: any): void;
+    readPixels(x: number, y: number, width: number, height: number, format: number, type: number, pixels: ArrayBufferView): void;
     renderbufferStorage(target: number, internalformat: number, width: number, height: number): void;
     sampleCoverage(value: number, invert: boolean): void;
     scissor(x: number, y: number, width: number, height: number): void;
@@ -14856,7 +14856,7 @@ interface NodeSelector {
 }
 
 interface RandomSource {
-    getRandomValues(array: any): any;
+    getRandomValues(array: ArrayBufferView): ArrayBufferView;
 }
 
 interface SVGAnimatedPathData {
