@@ -292,7 +292,7 @@ module ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir 
       */
-    export function parseConfigFile(json: any, basePath?: string): ParsedCommandLine {
+    export function parseConfigFile(json: any, host: ParseConfigHost, basePath?: string): ParsedCommandLine {
         var errors: Diagnostic[] = [];
 
         return {
@@ -351,7 +351,7 @@ module ts {
                 }
             }
             else {
-                var sysFiles = sys.readDirectory(basePath, ".ts");
+                var sysFiles = host.readDirectory(basePath, ".ts");
                 for (var i = 0; i < sysFiles.length; i++) {
                     var name = sysFiles[i];
                     if (!fileExtensionIs(name, ".d.ts") || !contains(sysFiles, name.substr(0, name.length - 5) + ".ts")) {

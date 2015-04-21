@@ -213,7 +213,7 @@ module ts {
                         reportDiagnostic(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, configFileName));
                         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                     }
-                    var configParseResult = parseConfigFile(configObject, getDirectoryPath(configFileName));
+                    var configParseResult = parseConfigFile(configObject, sys, getDirectoryPath(configFileName));
                     if (configParseResult.errors.length > 0) {
                         reportDiagnostics(configParseResult.errors);
                         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
