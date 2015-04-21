@@ -2046,11 +2046,12 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
                 else {
                     const exportChanged =
-                        node.operatorToken.kind <= SyntaxKind.LastAssignment &&
+                        node.operatorToken.kind >= SyntaxKind.FirstAssignment &&
                         node.operatorToken.kind <= SyntaxKind.LastAssignment &&
                         isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.left);
 
                     if (exportChanged) {
+                        // emit assignment 'x <op> y' as 'exports("x", x <op> y)'
                         write(`${exportFunctionForFile}("`);
                         emitNodeWithoutSourceMap(node.left);
                         write(`", `);
