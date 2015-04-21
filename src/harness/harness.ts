@@ -1076,6 +1076,10 @@ module Harness {
                         case 'inlinesourcemap':
                             options.inlineSourceMap = setting.value === 'true';
                             break;
+                        
+                        case 'inlinesources':
+                            options.inlineSources = setting.value === 'true';
+                            break;
 
                         default:
                             throw new Error('Unsupported compiler setting ' + setting.flag);
@@ -1473,7 +1477,8 @@ module Harness {
             "noimplicitany", "noresolve", "newline", "newlines", "emitbom",
             "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
             "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
-            "separatecompilation", "inlinesourcemap", "maproot", "sourceroot"];
+            "separatecompilation", "inlinesourcemap", "maproot", "sourceroot",
+            "inlinesources"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

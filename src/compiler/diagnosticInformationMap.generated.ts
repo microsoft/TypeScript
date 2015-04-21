@@ -455,7 +455,7 @@ module ts {
         Option_sourceMap_cannot_be_specified_with_option_inlineSourceMap: { code: 5048, category: DiagnosticCategory.Error, key: "Option 'sourceMap' cannot be specified with option 'inlineSourceMap'." },
         Option_sourceRoot_cannot_be_specified_with_option_inlineSourceMap: { code: 5049, category: DiagnosticCategory.Error, key: "Option 'sourceRoot' cannot be specified with option 'inlineSourceMap'." },
         Option_mapRoot_cannot_be_specified_with_option_inlineSourceMap: { code: 5050, category: DiagnosticCategory.Error, key: "Option 'mapRoot' cannot be specified with option 'inlineSourceMap'." },
-        Option_out_cannot_be_specified_with_option_inlineSourceMap: { code: 5051, category: DiagnosticCategory.Error, key: "Option 'out' cannot be specified with option 'inlineSourceMap'." },
+        Option_inlineSources_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided: { code: 5051, category: DiagnosticCategory.Error, key: "Option 'inlineSources' can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided." },
         Concatenate_and_emit_output_to_single_file: { code: 6001, category: DiagnosticCategory.Message, key: "Concatenate and emit output to single file." },
         Generates_corresponding_d_ts_file: { code: 6002, category: DiagnosticCategory.Message, key: "Generates corresponding '.d.ts' file." },
         Specifies_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations: { code: 6003, category: DiagnosticCategory.Message, key: "Specifies the location where debugger should locate map files instead of generated locations." },

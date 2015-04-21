@@ -35,6 +35,10 @@ module ts {
             type: "boolean",
         },
         {
+            name: "inlineSources",
+            type: "boolean",
+        },
+        {
             name: "listFiles",
             type: "boolean",
         },

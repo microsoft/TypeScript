@@ -493,6 +493,13 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
                     // The one that can be used from program to get the actual source file
                     sourceMapData.inputSourceFileNames.push(node.fileName);
+
+                    if (compilerOptions.inlineSources) {
+                        if (!sourceMapData.sourceMapSourcesContent) {
+                            sourceMapData.sourceMapSourcesContent = [];
+                        }
+                        sourceMapData.sourceMapSourcesContent.push(node.text);
+                    }
                 }
 
                 function recordScopeNameOfNode(node: Node, scopeName?: string) {
@@ -599,7 +606,6 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 function writeJavaScriptAndSourceMapFile(emitOutput: string, writeByteOrderMark: boolean) {
                     encodeLastRecordedSourceMapSpan();
 
-                    let fileContents = compilerOptions.inlineSourceMap ? [currentSourceFile.text] : undefined;
                     let sourceMapText = serializeSourceMapContents(
                         3,
                         sourceMapData.sourceMapFile,
@@ -607,7 +613,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         sourceMapData.sourceMapSources,
                         sourceMapData.sourceMapNames,
                         sourceMapData.sourceMapMappings,
-                        fileContents);
+                        sourceMapData.sourceMapSourcesContent);
 
                     sourceMapDataList.push(sourceMapData);
 
@@ -638,6 +644,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     inputSourceFileNames: [],
                     sourceMapNames: [],
                     sourceMapMappings: "",
+                    sourceMapSourcesContent: undefined,
                     sourceMapDecodedMappings: []
                 };
 
