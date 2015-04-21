@@ -61,15 +61,15 @@ module ts {
         // container) before recursing into it.  The current node does not have locals.  Examples:
         //
         //      Classes, ObjectLiterals, TypeLiterals, Interfaces...
-        IsContainer = 0x01,
+        IsContainer = 1 << 0,
 
         // The current node is a block-scoped-container.  It should be set as the current block-
         // container before recursing into it.  Examples:
         //
         //      Blocks (when not parented by functions), Catch clauses, For/For-in/For-of statements...
-        IsBlockScopedContainer = 0x02,
+        IsBlockScopedContainer = 1 << 1,
 
-        HasLocals               = 0x04,
+        HasLocals = 1 << 2,
 
         // If the current node is a container that also container that also contains locals.  Examples:
         //
