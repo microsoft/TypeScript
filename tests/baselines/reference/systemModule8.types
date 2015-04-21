@@ -54,6 +54,26 @@ x &= 1;
 >x : any
 >1 : number
 
+x + 1;
+>x + 1 : any
+>x : any
+>1 : number
+
+x - 1;
+>x - 1 : number
+>x : any
+>1 : number
+
+x & 1;
+>x & 1 : number
+>x : any
+>1 : number
+
+x | 1;
+>x | 1 : number
+>x : any
+>1 : number
+
 for (x = 5;;x++) {}
 >x = 5 : number
 >x : any

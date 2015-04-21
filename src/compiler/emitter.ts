@@ -2190,8 +2190,9 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 emitEmbeddedStatement(node.statement);
             }
 
-            function emitStartOfVariableDeclarationList(decl: Node, startPos?: number): boolean {
-                if (isSourceFileLevelDeclarationInSystemExternalModule(decl, /*isExported*/ false)) {
+            function emitStartOfVariableDeclarationList(decl: VariableDeclarationList, startPos?: number): boolean {
+                if (shouldHoistVariable(decl, /*checkIfSourceFileLevelDecl*/ true)) {
+                    // variables in variable declaration list were already hoisted
                     return false;
                 }
 
@@ -2252,10 +2253,9 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
                 if (node.initializer && node.initializer.kind === SyntaxKind.VariableDeclarationList) {
                     let variableDeclarationList = <VariableDeclarationList>node.initializer;
-                    let declarations = variableDeclarationList.declarations;
-                    let startIsEmitted = emitStartOfVariableDeclarationList(declarations[0], endPos);
+                    let startIsEmitted = emitStartOfVariableDeclarationList(variableDeclarationList, endPos);
                     if (startIsEmitted) {
-                        emitCommaList(declarations);
+                        emitCommaList(variableDeclarationList.declarations);
                     }
                     else {
                         emitVariableDeclarationListSkippingUninitializedEntries(variableDeclarationList);
@@ -2283,9 +2283,8 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
                     let variableDeclarationList = <VariableDeclarationList>node.initializer;
                     if (variableDeclarationList.declarations.length >= 1) {
-                        let decl = variableDeclarationList.declarations[0];
-                        emitStartOfVariableDeclarationList(decl, endPos);
-                        emit(decl);
+                        emitStartOfVariableDeclarationList(variableDeclarationList, endPos);
+                        emit(variableDeclarationList.declarations[0]);
                     }
                 }
                 else {
@@ -2998,10 +2997,6 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
                 if (resolver.resolvesToSomeValue(parent, (<Identifier>node).text)) {
                     let variableId = resolver.getBlockScopedVariableId(<Identifier>node);
-                    if (blockScopedVariableToGeneratedName && blockScopedVariableToGeneratedName[variableId]) {
-                        // already renamed
-                        return;
-                    }
                     if (!blockScopedVariableToGeneratedName) {
                         blockScopedVariableToGeneratedName = [];
                     }
@@ -4983,13 +4978,14 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     }
 
                     if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
-                        let name = (<VariableDeclaration | BindingElement>node).name;
-                        if (name.kind === SyntaxKind.Identifier) {
-                            renameNonTopLevelLetAndConst(name);
-                            (hoistedVars || (hoistedVars = [])).push(<Identifier>name);
-                        }
-                        else {
-                            forEachChild(name, visit);
+                        if (shouldHoistVariable(<VariableDeclaration | BindingElement>node, /*checkIfSourceFileLevelDecl*/ false)) {
+                            let name = (<VariableDeclaration | BindingElement>node).name;
+                            if (name.kind === SyntaxKind.Identifier) {
+                                (hoistedVars || (hoistedVars = [])).push(<Identifier>name);
+                            }
+                            else {
+                                forEachChild(name, visit);
+                            }
                         }
                         return;
                     }
@@ -5003,6 +4999,19 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         forEachChild(node, visit);
                     }
                 }
+            }
+
+            function shouldHoistVariable(node: VariableDeclaration | VariableDeclarationList | BindingElement, checkIfSourceFileLevelDecl: boolean): boolean {
+                if (checkIfSourceFileLevelDecl && !isSourceFileLevelDeclarationInSystemExternalModule(node, /*isExported*/ false)) {
+                    return false;
+                }
+                // hoist variable if
+                // - it is not block scoped
+                // - it is top level block scoped
+                // if block scoped variables are nested in some another block then 
+                // no other functions can use them except ones that are defined at least in the same block
+                return (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === 0 ||
+                    getEnclosingBlockScopeContainer(node).kind === SyntaxKind.SourceFile;
             }
 
             function isCurrentFileSystemExternalModule() {

@@ -12,6 +12,10 @@ x *= 1;
 x /= 1;
 x |= 1;
 x &= 1;
+x + 1;
+x - 1;
+x & 1;
+x | 1;
 for (x = 5;;x++) {}
 for (x = 8;;x--) {}
 for (x = 15;;++x) {}
@@ -28,7 +32,7 @@ for ([x] of [[1]]) {}
 
 //// [systemModule8.js]
 System.register([], function(exports_1) {
-    var x, x_1, y, z0, z1;
+    var x, y, z0, z1;
     function foo() {
         exports_1("x", x = 100);
     }
@@ -47,11 +51,15 @@ System.register([], function(exports_1) {
             exports_1("x", x /= 1);
             exports_1("x", x |= 1);
             exports_1("x", x &= 1);
+            x + 1;
+            x - 1;
+            x & 1;
+            x | 1;
             for (exports_1("x", x = 5);; (exports_1("x", ++x) - 1)) { }
             for (exports_1("x", x = 8);; (exports_1("x", --x) + 1)) { }
             for (exports_1("x", x = 15);; exports_1("x", ++x)) { }
             for (exports_1("x", x = 18);; exports_1("x", --x)) { }
-            for (x_1 = 50;;) { }
+            for (var x_1 = 50;;) { }
             exports_1("y", y = [1][0]);
             _a = { a: true, b: { c: "123" } }, exports_1("z0", z0 = _a.a), exports_1("z1", z1 = _a.b.c);
             for (var _i = 0, _b = [[1]]; _i < _b.length; _i++) {
