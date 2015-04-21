@@ -141,8 +141,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
             let writeComment = writeCommentRange;
 
-            /** Emit a node */
-            let emit = emitNodeWithoutSourceMap;
+            let emitSourceFileStart = (node: Node) => { }
 
             /** Called just before starting emit of a node */
             let emitStart = function (node: Node) { };
@@ -653,25 +652,8 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     sourceMapDir = getDirectoryPath(normalizePath(jsFilePath));
                 }
 
-                function emitNodeWithSourceMap(node: Node, allowGeneratedIdentifiers?: boolean) {
-                    if (node) {
-                        if (nodeIsSynthesized(node)) {
-                            return emitNodeWithoutSourceMap(node, /*allowGeneratedIdentifiers*/ false);
-                        }
-                        if (node.kind != SyntaxKind.SourceFile) {
-                            recordEmitNodeStartSpan(node);
-                            emitNodeWithoutSourceMap(node, allowGeneratedIdentifiers);
-                            recordEmitNodeEndSpan(node);
-                        }
-                        else {
-                            recordNewSourceFileStart(<SourceFile>node);
-                            emitNodeWithoutSourceMap(node, /*allowGeneratedIdentifiers*/ false);
-                        }
-                    }
-                }
-
                 writeEmittedFiles = writeJavaScriptAndSourceMapFile;
-                emit = emitNodeWithSourceMap;
+                emitSourceFileStart = recordNewSourceFileStart
                 emitStart = recordEmitNodeStartSpan;
                 emitEnd = recordEmitNodeEndSpan;
                 emitToken = writeTextWithSpanRecord;
@@ -4844,7 +4826,15 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 emitLeadingComments(node.endOfFileToken);
             }
 
+            function emit(node: Node, allowGeneratedIdentifiers?: boolean): void {
+                emitNodeWorker(node, /*emitSourceMap*/ true, allowGeneratedIdentifiers);
+            }
+
             function emitNodeWithoutSourceMap(node: Node, allowGeneratedIdentifiers?: boolean): void {
+                emitNodeWorker(node, /*emitSourceMap*/ false, allowGeneratedIdentifiers);
+            }
+
+            function emitNodeWorker(node: Node, emitSourceMap: boolean, allowGeneratedIdentifiers?: boolean): void {
                 if (!node) {
                     return;
                 }
@@ -4853,12 +4843,26 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     return emitOnlyPinnedOrTripleSlashComments(node);
                 }
 
+                if (node.kind === SyntaxKind.SourceFile) {
+                    if (emitSourceMap) {
+                        emitSourceFileStart(<SourceFile>node);
+                    }
+                    return emitJavaScriptWorker(node, allowGeneratedIdentifiers);
+                }
+
                 let emitComments = shouldEmitLeadingAndTrailingComments(node);
                 if (emitComments) {
                     emitLeadingComments(node);
                 }
 
-                emitJavaScriptWorker(node, allowGeneratedIdentifiers);
+                if (!nodeIsSynthesized(node) && emitSourceMap) {
+                    emitStart(node);
+                    emitJavaScriptWorker(node, allowGeneratedIdentifiers);
+                    emitEnd(node);
+                }
+                else {
+                    emitJavaScriptWorker(node, allowGeneratedIdentifiers);
+                }
 
                 if (emitComments) {
                     emitTrailingComments(node);
