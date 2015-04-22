@@ -682,7 +682,12 @@
     "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
         "code": 1218
+    },    
+    "Generators are only available when targeting ECMAScript 6 or higher.": {
+        "category": "Error",
+        "code": 1219
     },
+
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -2149,14 +2154,6 @@
         "code": 8017
     },
 
-    "'yield' expressions are not currently supported.": {
-        "category": "Error",
-        "code": 9000
-    },
-    "Generators are not currently supported.": {
-        "category": "Error",
-        "code": 9001
-    },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.": {
         "category": "Error",
         "code": 9002

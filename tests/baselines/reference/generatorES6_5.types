@@ -1,0 +1,10 @@
+=== tests/cases/compiler/generatorES6_5.ts ===
+function* foo() {
+>foo : () => void
+
+    yield a ? b : c;
+>a ? b : c : any
+>a : any
+>b : any
+>c : any
+}

@@ -1,0 +1,10 @@
+=== tests/cases/compiler/generatorES6_2.ts ===
+class C {
+>C : C
+
+    public * foo() {
+>foo : () => void
+
+        yield 1
+    }
+}

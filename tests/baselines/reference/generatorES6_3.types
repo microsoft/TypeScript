@@ -1,0 +1,7 @@
+=== tests/cases/compiler/generatorES6_3.ts ===
+var v = function*() {
+>v : () => void
+>function*() {    yield 0} : () => void
+
+    yield 0
+}
