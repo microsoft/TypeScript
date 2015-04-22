@@ -2142,31 +2142,30 @@ sourceFile:contextualTyping.ts
 ---
 >>>// CONTEXT: Function call
 1->
-2 >
-3 >^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-  >// CONTEXT: Function call
   >
-2 >
-3 >// CONTEXT: Function call
-1->Emitted(86, 1) Source(146, 1) + SourceIndex(0)
-2 >Emitted(86, 1) Source(145, 1) + SourceIndex(0)
-3 >Emitted(86, 26) Source(145, 26) + SourceIndex(0)
+2 >// CONTEXT: Function call
+1->Emitted(86, 1) Source(145, 1) + SourceIndex(0)
+2 >Emitted(86, 26) Source(145, 26) + SourceIndex(0)
 ---
 >>>function c9t5(f) { }
-1 >^^^^^^^^^^^^^^
-2 >              ^
-3 >               ^^^^
-4 >                   ^
 1 >
-  >function c9t5(
-2 >              f: (n: number) => IFoo
-3 >               ) {
-4 >                   }
-1 >Emitted(87, 15) Source(146, 15) + SourceIndex(0)
-2 >Emitted(87, 16) Source(146, 37) + SourceIndex(0)
-3 >Emitted(87, 20) Source(146, 40) + SourceIndex(0) name (c9t5)
-4 >Emitted(87, 21) Source(146, 41) + SourceIndex(0) name (c9t5)
+2 >^^^^^^^^^^^^^^
+3 >              ^
+4 >               ^^^^
+5 >                   ^
+1 >
+  >
+2 >function c9t5(
+3 >              f: (n: number) => IFoo
+4 >               ) {
+5 >                   }
+1 >Emitted(87, 1) Source(146, 1) + SourceIndex(0)
+2 >Emitted(87, 15) Source(146, 15) + SourceIndex(0)
+3 >Emitted(87, 16) Source(146, 37) + SourceIndex(0)
+4 >Emitted(87, 20) Source(146, 40) + SourceIndex(0) name (c9t5)
+5 >Emitted(87, 21) Source(146, 41) + SourceIndex(0) name (c9t5)
 ---
 >>>;
 1 >
