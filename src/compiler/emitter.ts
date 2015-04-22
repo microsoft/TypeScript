@@ -2952,11 +2952,6 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     return emitOnlyPinnedOrTripleSlashComments(node);
                 }
 
-                if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
-                    // Methods will emit the comments as part of emitting method declaration
-                    emitLeadingComments(node);
-                }
-
                 // For targeting below es6, emit functions-like declaration including arrow function using function keyword.
                 // When targeting ES6, emit arrow function natively in ES6 by omitting function keyword and using fat arrow instead
                 if (!shouldEmitAsArrowFunction(node)) {
@@ -2981,9 +2976,6 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 emitSignatureAndBody(node);
                 if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.FunctionDeclaration && node.parent === currentSourceFile && node.name) {
                     emitExportMemberAssignments((<FunctionDeclaration>node).name);
-                }
-                if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
-                    emitTrailingComments(node);
                 }
             }
 
@@ -4874,12 +4866,14 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     // All of these entities are emitted in a specialized fashion.  As such, we allow
                     // the specialized methods for each to handle the comments on the nodes.
                     case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.ImportDeclaration:
                     case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.TypeAliasDeclaration:
                     case SyntaxKind.ExportAssignment:
                         return false;
+
+                    case SyntaxKind.FunctionDeclaration:
+                        return !!(<FunctionDeclaration>node).body;
 
                     case SyntaxKind.ModuleDeclaration:
                         // Only emit the leading/trailing comments for a module if we're actually
