@@ -802,17 +802,27 @@ module ts {
             return this.forwardJSONCall(
                 "getTSConfigFileInfo('" + fileName + "')",
                 () => {
-                    var text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
-                    var json = /\S/.test(text) ? JSON.parse(text) : {};
+                    let text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
 
-                    var configFile = parseConfigFile(json, this.host, getDirectoryPath(normalizeSlashes(fileName)));
+                    try {
+                        var json = /\S/.test(text) ? JSON.parse(text) : {};
+                    }
+                    catch (e) {
+                        return {
+                            options: {},
+                            files: [],
+                            errors: realizeDiagnostic(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, fileName), '\r\n')
+                        }
+                    }
 
-                    var realErrors = realizeDiagnostics(configFile.errors, '\r\n');
+                    if (json) {
+                        var configFile = parseConfigFile(json, this.host, getDirectoryPath(normalizeSlashes(fileName)));
+                    }
 
                     return {
                         options: configFile.options,
                         files: configFile.fileNames,
-                        errors: realErrors
+                        errors: realizeDiagnostics(configFile.errors, '\r\n')
                     };
                 });
         }
