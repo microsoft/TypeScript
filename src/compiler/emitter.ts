@@ -4819,14 +4819,14 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function emit(node: Node, allowGeneratedIdentifiers?: boolean): void {
-                emitNodeWorker(node, /*emitSourceMap*/ true, allowGeneratedIdentifiers);
+                emitNodeWorker(node, /*shouldEmitSourceMap*/ true, allowGeneratedIdentifiers);
             }
 
             function emitNodeWithoutSourceMap(node: Node, allowGeneratedIdentifiers?: boolean): void {
-                emitNodeWorker(node, /*emitSourceMap*/ false, allowGeneratedIdentifiers);
+                emitNodeWorker(node, /*shouldEmitSourceMap*/ false, allowGeneratedIdentifiers);
             }
 
-            function emitNodeWorker(node: Node, emitSourceMap: boolean, allowGeneratedIdentifiers?: boolean): void {
+            function emitNodeWorker(node: Node, shouldEmitSourceMap: boolean, allowGeneratedIdentifiers?: boolean): void {
                 if (!node) {
                     return;
                 }
@@ -4836,7 +4836,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
 
                 if (node.kind === SyntaxKind.SourceFile) {
-                    if (emitSourceMap) {
+                    if (shouldEmitSourceMap) {
                         emitSourceFileStart(<SourceFile>node);
                     }
                     return emitJavaScriptWorker(node, allowGeneratedIdentifiers);
@@ -4847,7 +4847,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     emitLeadingComments(node);
                 }
 
-                if (!nodeIsSynthesized(node) && emitSourceMap) {
+                if (!nodeIsSynthesized(node) && shouldEmitSourceMap) {
                     emitStart(node);
                     emitJavaScriptWorker(node, allowGeneratedIdentifiers);
                     emitEnd(node);
