@@ -117,6 +117,12 @@ var __param = this.__param || function(index, decorator) { return function (targ
             let decreaseIndent = writer.decreaseIndent;
 
             let currentSourceFile: SourceFile;
+            // name of an exporter function if file is a System external module
+            // System.register([...], function (<exporter>) {...})
+            // exporting in System modules looks like:
+            // export var x; ... x = 1
+            // =>
+            // var x;... exporter("x", x = 1)
             let exportFunctionForFile: string;
 
             let generatedNameSet: Map<string> = {};
@@ -2190,7 +2196,11 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 emitEmbeddedStatement(node.statement);
             }
 
-            function emitStartOfVariableDeclarationList(decl: VariableDeclarationList, startPos?: number): boolean {
+            /* Returns true if start of variable declaration list was emitted.
+             * Return false if nothing was written - this can happen for source file level variable declarations
+             * in system modules - such variable declarations are hoisted.
+             */
+            function tryEmitStartOfVariableDeclarationList(decl: VariableDeclarationList, startPos?: number): boolean {
                 if (shouldHoistVariable(decl, /*checkIfSourceFileLevelDecl*/ true)) {
                     // variables in variable declaration list were already hoisted
                     return false;
@@ -2253,7 +2263,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
                 if (node.initializer && node.initializer.kind === SyntaxKind.VariableDeclarationList) {
                     let variableDeclarationList = <VariableDeclarationList>node.initializer;
-                    let startIsEmitted = emitStartOfVariableDeclarationList(variableDeclarationList, endPos);
+                    let startIsEmitted = tryEmitStartOfVariableDeclarationList(variableDeclarationList, endPos);
                     if (startIsEmitted) {
                         emitCommaList(variableDeclarationList.declarations);
                     }
@@ -2283,7 +2293,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
                     let variableDeclarationList = <VariableDeclarationList>node.initializer;
                     if (variableDeclarationList.declarations.length >= 1) {
-                        emitStartOfVariableDeclarationList(variableDeclarationList, endPos);
+                        tryEmitStartOfVariableDeclarationList(variableDeclarationList, endPos);
                         emit(variableDeclarationList.declarations[0]);
                     }
                 }
@@ -2664,14 +2674,14 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 // temporary variables in an exported declaration need to have real declarations elsewhere
                 // Also temporary variables should be explicitly allocated for source level declarations when module target is system
                 // because actual variable declarations are hoisted
-                let canDefineTempVariablesInplace = false;
+                let canDefineTempVariablesInPlace = false;
                 if (root.kind === SyntaxKind.VariableDeclaration) {
                     let isExported = getCombinedNodeFlags(root) & NodeFlags.Export;
                     let isSourceLevelForSystemModuleKind = isSourceFileLevelDeclarationInSystemExternalModule(root, /*isExported*/ false);
-                    canDefineTempVariablesInplace = !isExported && !isSourceLevelForSystemModuleKind;
+                    canDefineTempVariablesInPlace = !isExported && !isSourceLevelForSystemModuleKind;
                 }
                 else if (root.kind === SyntaxKind.Parameter) {
-                    canDefineTempVariablesInplace = true;
+                    canDefineTempVariablesInPlace = true;
                 }
 
                 if (root.kind === SyntaxKind.BinaryExpression) {
@@ -2718,7 +2728,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 function ensureIdentifier(expr: Expression): Expression {
                     if (expr.kind !== SyntaxKind.Identifier) {
                         let identifier = createTempVariable(TempFlags.Auto);
-                        if (!canDefineTempVariablesInplace) {
+                        if (!canDefineTempVariablesInPlace) {
                             recordTempDeclaration(identifier);
                         }
                         emitAssignment(identifier, expr);
@@ -3015,12 +3025,12 @@ var __param = this.__param || function(index, decorator) { return function (targ
             function emitVariableStatement(node: VariableStatement) {
                 let startIsEmitted = true;
                 if (!(node.flags & NodeFlags.Export)) {
-                    startIsEmitted = emitStartOfVariableDeclarationList(node.declarationList);
+                    startIsEmitted = tryEmitStartOfVariableDeclarationList(node.declarationList);
                 }
                 else if (isES6ExportedDeclaration(node)) {
                     // Exported ES6 module member
                     write("export ");
-                    startIsEmitted = emitStartOfVariableDeclarationList(node.declarationList);
+                    startIsEmitted = tryEmitStartOfVariableDeclarationList(node.declarationList);
                 }
                 if (startIsEmitted) {
                     emitCommaList(node.declarationList.declarations);
@@ -3922,6 +3932,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
             function emitClassLikeDeclarationBelowES6(node: ClassLikeDeclaration) {
                 if (node.kind === SyntaxKind.ClassDeclaration) {
+                    // source file level classes in system modules are hoisted so 'var's for them are already defined
                     if (!isSourceFileLevelDeclarationInSystemExternalModule(node, /*isExported*/ false)) {
                         write("var ");
                     }
@@ -4962,18 +4973,30 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
                 function visit(node: Node): void {
                     if (node.kind === SyntaxKind.FunctionDeclaration) {
-                        (hoistedFunctionDeclarations || (hoistedFunctionDeclarations = [])).push(<FunctionDeclaration>node);
+                        if (!hoistedFunctionDeclarations) {
+                            hoistedFunctionDeclarations = [];
+                        }
+
+                        hoistedFunctionDeclarations.push(<FunctionDeclaration>node);
                         return;
                     }
 
                     if (node.kind === SyntaxKind.ClassDeclaration) {
                         // TODO: rename block scoped classes
-                        (hoistedVars || (hoistedVars = [])).push(<ClassDeclaration>node);
+                        if (!hoistedVars) {
+                            hoistedVars = [];
+                        }
+
+                        hoistedVars.push(<ClassDeclaration>node);
                         return;
                     }
 
                     if (node.kind === SyntaxKind.ModuleDeclaration && shouldEmitModuleDeclaration(<ModuleDeclaration>node)) {
-                        (hoistedVars || (hoistedVars = [])).push(<ModuleDeclaration>node);
+                        if (!hoistedVars) {
+                            hoistedVars = [];
+                        }
+
+                        hoistedVars.push(<ModuleDeclaration>node);
                         return;
                     }
 
@@ -4981,7 +5004,11 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         if (shouldHoistVariable(<VariableDeclaration | BindingElement>node, /*checkIfSourceFileLevelDecl*/ false)) {
                             let name = (<VariableDeclaration | BindingElement>node).name;
                             if (name.kind === SyntaxKind.Identifier) {
-                                (hoistedVars || (hoistedVars = [])).push(<Identifier>name);
+                                if (!hoistedVars) {
+                                    hoistedVars = [];
+                                }
+
+                                hoistedVars.push(<Identifier>name);
                             }
                             else {
                                 forEachChild(name, visit);
@@ -5072,7 +5099,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function emitSetters() {
-                write("setters:[")
+                write("setters:[");
                 for (let i = 0; i < externalImports.length; ++i) {
                     if (i !== 0) {
                         write(",");
