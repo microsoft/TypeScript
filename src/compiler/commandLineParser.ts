@@ -111,6 +111,13 @@ module ts {
             description: Diagnostics.Do_not_emit_comments_to_output,
         },
         {
+            name: "rootDir",
+            type: "string",
+            isFilePath: true,
+            description: Diagnostics.Specifies_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir,
+            paramType: Diagnostics.LOCATION,
+        },
+        {
             name: "separateCompilation",
             type: "boolean",
         },

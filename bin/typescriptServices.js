@@ -2133,6 +2133,8 @@ var ts;
         Suppress_noImplicitAny_errors_for_indexing_objects_lacking_index_signatures: { code: 6055, category: ts.DiagnosticCategory.Message, key: "Suppress noImplicitAny errors for indexing objects lacking index signatures." },
         Do_not_emit_declarations_for_code_that_has_an_internal_annotation: { code: 6056, category: ts.DiagnosticCategory.Message, key: "Do not emit declarations for code that has an '@internal' annotation." },
         Preserve_new_lines_when_emitting_code: { code: 6057, category: ts.DiagnosticCategory.Message, key: "Preserve new-lines when emitting code." },
+        Specifies_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir: { code: 6058, category: ts.DiagnosticCategory.Message, key: "Specifies the root directory of input files. Use to control the output directory structure with --outDir." },
+        File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files: { code: 6059, category: ts.DiagnosticCategory.Error, key: "File '{0}' is not under 'rootDir' '{1}'. 'rootDir' is expected to contain all source files." },
         Variable_0_implicitly_has_an_1_type: { code: 7005, category: ts.DiagnosticCategory.Error, key: "Variable '{0}' implicitly has an '{1}' type." },
         Parameter_0_implicitly_has_an_1_type: { code: 7006, category: ts.DiagnosticCategory.Error, key: "Parameter '{0}' implicitly has an '{1}' type." },
         Member_0_implicitly_has_an_1_type: { code: 7008, category: ts.DiagnosticCategory.Error, key: "Member '{0}' implicitly has an '{1}' type." },
@@ -14105,7 +14107,7 @@ var ts;
             return type;
         }
         function combineTypeMappers(mapper1, mapper2) {
-            return function (t) { return mapper2(mapper1(t)); };
+            return function (t) { return instantiateType(mapper1(t), mapper2); };
         }
         function instantiateTypeParameter(typeParameter, mapper) {
             var result = createType(512 /* TypeParameter */);
@@ -24025,9 +24027,9 @@ var ts;
         // emit output for the __extends helper function
         var extendsHelper = "\nvar __extends = this.__extends || function (d, b) {\n    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];\n    function __() { this.constructor = d; }\n    __.prototype = b.prototype;\n    d.prototype = new __();\n};";
         // emit output for the __decorate helper function
-        var decorateHelper = "\nvar __decorate = this.__decorate || (typeof Reflect === \"object\" && Reflect.decorate) || function (decorators, target, key, desc) {\n    switch (arguments.length) {\n        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);\n        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);\n        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);\n    }\n};";
+        var decorateHelper = "\nvar __decorate = this.__decorate || function (decorators, target, key, desc) {\n    if (typeof Reflect === \"object\" && typeof Reflect.decorate === \"function\") return Reflect.decorate(decorators, target, key, desc);\n    switch (arguments.length) {\n        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);\n        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);\n        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);\n    }\n};";
         // emit output for the __metadata helper function
-        var metadataHelper = "\nvar __metadata = this.__metadata || (typeof Reflect === \"object\" && Reflect.metadata) || function () { };";
+        var metadataHelper = "\nvar __metadata = this.__metadata || function (k, v) {\n    if (typeof Reflect === \"object\" && typeof Reflect.metadata === \"function\") return Reflect.metadata(k, v);\n};";
         // emit output for the __param helper function
         var paramHelper = "\nvar __param = this.__param || function(index, decorator) { return function (target, key) { decorator(target, key, index); } };";
         var compilerOptions = host.getCompilerOptions();
@@ -28855,7 +28857,7 @@ var ts;
             getDiagnosticsProducingTypeChecker: getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory: function () { return commonSourceDirectory; },
             emit: emit,
-            getCurrentDirectory: host.getCurrentDirectory,
+            getCurrentDirectory: function () { return host.getCurrentDirectory(); },
             getNodeCount: function () { return getDiagnosticsProducingTypeChecker().getNodeCount(); },
             getIdentifierCount: function () { return getDiagnosticsProducingTypeChecker().getIdentifierCount(); },
             getSymbolCount: function () { return getDiagnosticsProducingTypeChecker().getSymbolCount(); },
@@ -28864,14 +28866,14 @@ var ts;
         return program;
         function getEmitHost(writeFileCallback) {
             return {
-                getCanonicalFileName: host.getCanonicalFileName,
+                getCanonicalFileName: function (fileName) { return host.getCanonicalFileName(fileName); },
                 getCommonSourceDirectory: program.getCommonSourceDirectory,
                 getCompilerOptions: program.getCompilerOptions,
-                getCurrentDirectory: host.getCurrentDirectory,
-                getNewLine: host.getNewLine,
+                getCurrentDirectory: function () { return host.getCurrentDirectory(); },
+                getNewLine: function () { return host.getNewLine(); },
                 getSourceFile: program.getSourceFile,
                 getSourceFiles: program.getSourceFiles,
-                writeFile: writeFileCallback || host.writeFile
+                writeFile: writeFileCallback || (function (fileName, data, writeByteOrderMark, onError) { return host.writeFile(fileName, data, writeByteOrderMark, onError); })
             };
         }
         function getDiagnosticsProducingTypeChecker() {
@@ -29095,6 +29097,57 @@ var ts;
                 return findSourceFile(fileName, false, file, nameLiteral.pos, nameLiteral.end - nameLiteral.pos);
             }
         }
+        function computeCommonSourceDirectory(sourceFiles) {
+            var commonPathComponents;
+            var currentDirectory = host.getCurrentDirectory();
+            ts.forEach(files, function (sourceFile) {
+                // Each file contributes into common source file path
+                if (ts.isDeclarationFile(sourceFile)) {
+                    return;
+                }
+                var sourcePathComponents = ts.getNormalizedPathComponents(sourceFile.fileName, currentDirectory);
+                sourcePathComponents.pop(); // The base file name is not part of the common directory path
+                if (!commonPathComponents) {
+                    // first file
+                    commonPathComponents = sourcePathComponents;
+                    return;
+                }
+                for (var i = 0, n = Math.min(commonPathComponents.length, sourcePathComponents.length); i < n; i++) {
+                    if (commonPathComponents[i] !== sourcePathComponents[i]) {
+                        if (i === 0) {
+                            diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
+                            return;
+                        }
+                        // New common path found that is 0 -> i-1
+                        commonPathComponents.length = i;
+                        break;
+                    }
+                }
+                // If the sourcePathComponents was shorter than the commonPathComponents, truncate to the sourcePathComponents
+                if (sourcePathComponents.length < commonPathComponents.length) {
+                    commonPathComponents.length = sourcePathComponents.length;
+                }
+            });
+            return ts.getNormalizedPathFromPathComponents(commonPathComponents);
+        }
+        function checkSourceFilesBelongToPath(sourceFiles, rootDirectory) {
+            var allFilesBelongToPath = true;
+            if (sourceFiles) {
+                var currentDirectory = host.getCurrentDirectory();
+                var absoluteRootDirectoryPath = host.getCanonicalFileName(ts.getNormalizedAbsolutePath(rootDirectory, currentDirectory));
+                for (var _i = 0; _i < sourceFiles.length; _i++) {
+                    var sourceFile = sourceFiles[_i];
+                    if (!ts.isDeclarationFile(sourceFile)) {
+                        var absoluteSourceFilePath = host.getCanonicalFileName(ts.getNormalizedAbsolutePath(sourceFile.fileName, currentDirectory));
+                        if (absoluteSourceFilePath.indexOf(absoluteRootDirectoryPath) !== 0) {
+                            diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, sourceFile.fileName, options.rootDir));
+                            allFilesBelongToPath = false;
+                        }
+                    }
+                }
+            }
+            return allFilesBelongToPath;
+        }
         function verifyCompilerOptions() {
             if (options.separateCompilation) {
                 if (options.sourceMap) {
@@ -29147,38 +29200,15 @@ var ts;
                 options.sourceRoot ||
                 (options.mapRoot &&
                     (!options.out || firstExternalModuleSourceFile !== undefined))) {
-                var commonPathComponents;
-                ts.forEach(files, function (sourceFile) {
-                    // Each file contributes into common source file path
-                    if (!(sourceFile.flags & 2048 /* DeclarationFile */)
-                        && !ts.fileExtensionIs(sourceFile.fileName, ".js")) {
-                        var sourcePathComponents = ts.getNormalizedPathComponents(sourceFile.fileName, host.getCurrentDirectory());
-                        sourcePathComponents.pop(); // FileName is not part of directory
-                        if (commonPathComponents) {
-                            for (var i = 0; i < Math.min(commonPathComponents.length, sourcePathComponents.length); i++) {
-                                if (commonPathComponents[i] !== sourcePathComponents[i]) {
-                                    if (i === 0) {
-                                        diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
-                                        return;
-                                    }
-                                    // New common path found that is 0 -> i-1
-                                    commonPathComponents.length = i;
-                                    break;
-                                }
-                            }
-                            // If the fileComponent path completely matched and less than already found update the length
-                            if (sourcePathComponents.length < commonPathComponents.length) {
-                                commonPathComponents.length = sourcePathComponents.length;
-                            }
-                        }
-                        else {
-                            // first file
-                            commonPathComponents = sourcePathComponents;
-                        }
-                    }
-                });
-                commonSourceDirectory = ts.getNormalizedPathFromPathComponents(commonPathComponents);
-                if (commonSourceDirectory) {
+                if (options.rootDir && checkSourceFilesBelongToPath(files, options.rootDir)) {
+                    // If a rootDir is specified and is valid use it as the commonSourceDirectory
+                    commonSourceDirectory = ts.getNormalizedAbsolutePath(options.rootDir, host.getCurrentDirectory());
+                }
+                else {
+                    // Compute the commonSourceDirectory from the input files
+                    commonSourceDirectory = computeCommonSourceDirectory(files);
+                }
+                if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== ts.directorySeparator) {
                     // Make sure directory path ends with directory separator so this string can directly 
                     // used to replace with "" to get the relative path of the source file and the relative path doesn't
                     // start with / making it rooted path
@@ -29308,6 +29338,13 @@ var ts;
             name: "removeComments",
             type: "boolean",
             description: ts.Diagnostics.Do_not_emit_comments_to_output
+        },
+        {
+            name: "rootDir",
+            type: "string",
+            isFilePath: true,
+            description: ts.Diagnostics.Specifies_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir,
+            paramType: ts.Diagnostics.LOCATION
         },
         {
             name: "separateCompilation",

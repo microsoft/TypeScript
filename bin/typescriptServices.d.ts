@@ -1095,6 +1095,7 @@ declare module ts {
         preserveConstEnums?: boolean;
         project?: string;
         removeComments?: boolean;
+        rootDir?: string;
         sourceMap?: boolean;
         sourceRoot?: string;
         suppressImplicitAnyIndexErrors?: boolean;
