@@ -1485,15 +1485,18 @@ module ts {
     // Class and interface types (TypeFlags.Class and TypeFlags.Interface)
     export interface InterfaceType extends ObjectType {
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
-        declaredProperties: Symbol[];              // Declared members (computed by resolveDeclaredMembers)
-        declaredCallSignatures: Signature[];       // Declared call signatures (computed by resolveDeclaredMembers)
-        declaredConstructSignatures: Signature[];  // Declared construct signatures (computed by resolveDeclaredMembers)
-        declaredStringIndexType: Type;             // Declared string index type (computed by resolveDeclaredMembers)
-        declaredNumberIndexType: Type;             // Declared numeric index type (computed by resolveDeclaredMembers)
     }
 
     export interface InterfaceTypeWithBaseTypes extends InterfaceType {
         baseTypes: ObjectType[];
+    }
+
+    export interface InterfaceTypeWithDeclaredMembers extends InterfaceType {
+        declaredProperties: Symbol[];              // Declared members
+        declaredCallSignatures: Signature[];       // Declared call signatures
+        declaredConstructSignatures: Signature[];  // Declared construct signatures
+        declaredStringIndexType: Type;             // Declared string index type
+        declaredNumberIndexType: Type;             // Declared numeric index type
     }
 
     // Type references (TypeFlags.Reference)

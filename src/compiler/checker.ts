@@ -2635,32 +2635,28 @@ module ts {
             }
         }
 
-        function getDeclaredPropertiesOfClassOrInterface(type: InterfaceType): Symbol[] {
-            resolveDeclaredMembers(type);
-            return type.declaredProperties;
-        }
-
-        function resolveDeclaredMembers(type: InterfaceType) {
-            if (!type.declaredProperties) {
+        function resolveDeclaredMembers(type: InterfaceType): InterfaceTypeWithDeclaredMembers {
+            if (!(<InterfaceTypeWithDeclaredMembers>type).declaredProperties) {
                 var symbol = type.symbol;
-                type.declaredProperties = getNamedMembers(symbol.members);
-                type.declaredCallSignatures = getSignaturesOfSymbol(symbol.members["__call"]);
-                type.declaredConstructSignatures = getSignaturesOfSymbol(symbol.members["__new"]);
-                type.declaredStringIndexType = getIndexTypeOfSymbol(symbol, IndexKind.String);
-                type.declaredNumberIndexType = getIndexTypeOfSymbol(symbol, IndexKind.Number);
+                (<InterfaceTypeWithDeclaredMembers>type).declaredProperties = getNamedMembers(symbol.members);
+                (<InterfaceTypeWithDeclaredMembers>type).declaredCallSignatures = getSignaturesOfSymbol(symbol.members["__call"]);
+                (<InterfaceTypeWithDeclaredMembers>type).declaredConstructSignatures = getSignaturesOfSymbol(symbol.members["__new"]);
+                (<InterfaceTypeWithDeclaredMembers>type).declaredStringIndexType = getIndexTypeOfSymbol(symbol, IndexKind.String);
+                (<InterfaceTypeWithDeclaredMembers>type).declaredNumberIndexType = getIndexTypeOfSymbol(symbol, IndexKind.Number);
             }
+            return <InterfaceTypeWithDeclaredMembers>type;
         }
 
         function resolveClassOrInterfaceMembers(type: InterfaceType): void {
-            resolveDeclaredMembers(type);
-            let members = type.symbol.members;
-            let callSignatures = type.declaredCallSignatures;
-            let constructSignatures = type.declaredConstructSignatures;
-            let stringIndexType = type.declaredStringIndexType;
-            let numberIndexType = type.declaredNumberIndexType;
-            let baseTypes = getBaseTypes(type);
+            let target = resolveDeclaredMembers(type);
+            let members = target.symbol.members;
+            let callSignatures = target.declaredCallSignatures;
+            let constructSignatures = target.declaredConstructSignatures;
+            let stringIndexType = target.declaredStringIndexType;
+            let numberIndexType = target.declaredNumberIndexType;
+            let baseTypes = getBaseTypes(target);
             if (baseTypes.length) {
-                members = createSymbolTable(type.declaredProperties);
+                members = createSymbolTable(target.declaredProperties);
                 for (let baseType of baseTypes) {
                     addInheritedMembers(members, getPropertiesOfObjectType(baseType));
                     callSignatures = concatenate(callSignatures, getSignaturesOfType(baseType, SignatureKind.Call));
@@ -2673,8 +2669,7 @@ module ts {
         }
 
         function resolveTypeReferenceMembers(type: TypeReference): void {
-            let target = type.target;
-            resolveDeclaredMembers(target);
+            let target = resolveDeclaredMembers(type.target);
             let mapper = createTypeMapper(target.typeParameters, type.typeArguments);
             let members = createInstantiatedSymbolTable(target.declaredProperties, mapper);
             let callSignatures = instantiateList(target.declaredCallSignatures, mapper, instantiateSignature);
@@ -10139,7 +10134,7 @@ module ts {
             }
 
             let seen: Map<{ prop: Symbol; containingType: Type }> = {};
-            forEach(getDeclaredPropertiesOfClassOrInterface(type), p => { seen[p.name] = { prop: p, containingType: type }; });
+            forEach(resolveDeclaredMembers(type).declaredProperties, p => { seen[p.name] = { prop: p, containingType: type }; });
             let ok = true;
 
             for (let base of baseTypes) {
