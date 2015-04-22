@@ -660,7 +660,7 @@ module ts {
 
     export interface YieldExpression extends Expression {
         asteriskToken?: Node;
-        expression: Expression;
+        expression?: Expression;
     }
 
     export interface BinaryExpression extends Expression {
