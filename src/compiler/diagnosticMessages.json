@@ -687,6 +687,10 @@
         "category": "Error",
         "code": 1219
     },
+    "Generators are not allowed in an ambient context.": {
+        "category": "Error",
+        "code": 1220
+    },
 
 
     "Duplicate identifier '{0}'.": {
