@@ -299,7 +299,7 @@ module ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir 
       */
-    export function parseConfigFile(json: any, host: ParseConfigHost, basePath?: string): ParsedCommandLine {
+    export function parseConfigFile(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
         var errors: Diagnostic[] = [];
 
         return {

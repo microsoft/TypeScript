@@ -208,9 +208,12 @@ module ts {
 
             if (!cachedProgram) {
                 if (configFileName) {
-                    var configObject = readConfigFile(configFileName);
-                    if (!configObject) {
-                        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, configFileName));
+                    try {
+                        var configObject = readConfigFile(configFileName);
+                    }
+                    catch (e)
+                    {
+                        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Failed_to_parse_file_0_Colon_1, configFileName, e.message));
                         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                     }
                     var configParseResult = parseConfigFile(configObject, sys, getDirectoryPath(configFileName));

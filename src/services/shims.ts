@@ -811,7 +811,7 @@ module ts {
                         return {
                             options: {},
                             files: [],
-                            errors: realizeDiagnostic(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, fileName), '\r\n')
+                            errors: realizeDiagnostic(createCompilerDiagnostic(Diagnostics.Failed_to_parse_file_0_Colon_1, fileName, e.message), '\r\n')
                         }
                     }
 
