@@ -9349,7 +9349,7 @@ module ts {
             }
 
             if (node.condition) checkExpression(node.condition);
-            if (node.iterator) checkExpression(node.iterator);
+            if (node.incrementor) checkExpression(node.incrementor);
             checkSourceElement(node.statement);
         }
 

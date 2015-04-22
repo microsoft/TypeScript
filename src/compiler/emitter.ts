@@ -2138,7 +2138,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 write(";");
                 emitOptional(" ", node.condition);
                 write(";");
-                emitOptional(" ", node.iterator);
+                emitOptional(" ", node.incrementor);
                 write(")");
                 emitEmbeddedStatement(node.statement);
             }

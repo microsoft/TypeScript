@@ -795,7 +795,7 @@ module ts {
     export interface ForStatement extends IterationStatement {
         initializer?: VariableDeclarationList | Expression;
         condition?: Expression;
-        iterator?: Expression;
+        incrementor?: Expression;
     }
 
     export interface ForInStatement extends IterationStatement {
