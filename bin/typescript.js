@@ -541,6 +541,7 @@ var ts;
         ModuleKind[ModuleKind["None"] = 0] = "None";
         ModuleKind[ModuleKind["CommonJS"] = 1] = "CommonJS";
         ModuleKind[ModuleKind["AMD"] = 2] = "AMD";
+        ModuleKind[ModuleKind["UMD"] = 3] = "UMD";
     })(ts.ModuleKind || (ts.ModuleKind = {}));
     var ModuleKind = ts.ModuleKind;
     (function (ScriptTarget) {
@@ -960,6 +961,17 @@ var ts;
         return result;
     }
     ts.arrayToMap = arrayToMap;
+    function memoize(callback) {
+        var value;
+        return function () {
+            if (callback) {
+                value = callback();
+                callback = undefined;
+            }
+            return value;
+        };
+    }
+    ts.memoize = memoize;
     function formatStringFromArgs(text, args, baseIndex) {
         baseIndex = baseIndex || 0;
         return text.replace(/{(\d+)}/g, function (match, index) { return args[+index + baseIndex]; });
@@ -1798,7 +1810,7 @@ var ts;
         Line_terminator_not_permitted_before_arrow: { code: 1200, category: ts.DiagnosticCategory.Error, key: "Line terminator not permitted before arrow." },
         Import_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_or_import_d_from_mod_instead: { code: 1202, category: ts.DiagnosticCategory.Error, key: "Import assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"' or 'import d from \"mod\"' instead." },
         Export_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_export_default_instead: { code: 1203, category: ts.DiagnosticCategory.Error, key: "Export assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'export default' instead." },
-        Cannot_compile_external_modules_into_amd_or_commonjs_when_targeting_es6_or_higher: { code: 1204, category: ts.DiagnosticCategory.Error, key: "Cannot compile external modules into amd or commonjs when targeting es6 or higher." },
+        Cannot_compile_external_modules_into_amd_commonjs_or_umd_when_targeting_ES6_or_higher: { code: 1204, category: ts.DiagnosticCategory.Error, key: "Cannot compile external modules into 'amd', 'commonjs' or 'umd' when targeting 'ES6' or higher." },
         Decorators_are_only_available_when_targeting_ECMAScript_5_and_higher: { code: 1205, category: ts.DiagnosticCategory.Error, key: "Decorators are only available when targeting ECMAScript 5 and higher." },
         Decorators_are_not_valid_here: { code: 1206, category: ts.DiagnosticCategory.Error, key: "Decorators are not valid here." },
         Decorators_cannot_be_applied_to_multiple_get_Slashset_accessors_of_the_same_name: { code: 1207, category: ts.DiagnosticCategory.Error, key: "Decorators cannot be applied to multiple get/set accessors of the same name." },
@@ -2100,7 +2112,7 @@ var ts;
         Do_not_emit_comments_to_output: { code: 6009, category: ts.DiagnosticCategory.Message, key: "Do not emit comments to output." },
         Do_not_emit_outputs: { code: 6010, category: ts.DiagnosticCategory.Message, key: "Do not emit outputs." },
         Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES6_experimental: { code: 6015, category: ts.DiagnosticCategory.Message, key: "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES6' (experimental)" },
-        Specify_module_code_generation_Colon_commonjs_or_amd: { code: 6016, category: ts.DiagnosticCategory.Message, key: "Specify module code generation: 'commonjs' or 'amd'" },
+        Specify_module_code_generation_Colon_commonjs_amd_or_umd: { code: 6016, category: ts.DiagnosticCategory.Message, key: "Specify module code generation: 'commonjs', 'amd', or 'umd'." },
         Print_this_message: { code: 6017, category: ts.DiagnosticCategory.Message, key: "Print this message." },
         Print_the_compiler_s_version: { code: 6019, category: ts.DiagnosticCategory.Message, key: "Print the compiler's version." },
         Compile_the_project_in_the_given_directory: { code: 6020, category: ts.DiagnosticCategory.Message, key: "Compile the project in the given directory." },
@@ -2121,8 +2133,8 @@ var ts;
         Generates_corresponding_map_file: { code: 6043, category: ts.DiagnosticCategory.Message, key: "Generates corresponding '.map' file." },
         Compiler_option_0_expects_an_argument: { code: 6044, category: ts.DiagnosticCategory.Error, key: "Compiler option '{0}' expects an argument." },
         Unterminated_quoted_string_in_response_file_0: { code: 6045, category: ts.DiagnosticCategory.Error, key: "Unterminated quoted string in response file '{0}'." },
-        Argument_for_module_option_must_be_commonjs_or_amd: { code: 6046, category: ts.DiagnosticCategory.Error, key: "Argument for '--module' option must be 'commonjs' or 'amd'." },
-        Argument_for_target_option_must_be_es3_es5_or_es6: { code: 6047, category: ts.DiagnosticCategory.Error, key: "Argument for '--target' option must be 'es3', 'es5', or 'es6'." },
+        Argument_for_module_option_must_be_commonjs_amd_or_umd: { code: 6046, category: ts.DiagnosticCategory.Error, key: "Argument for '--module' option must be 'commonjs', 'amd', or 'umd'." },
+        Argument_for_target_option_must_be_ES3_ES5_or_ES6: { code: 6047, category: ts.DiagnosticCategory.Error, key: "Argument for '--target' option must be 'ES3', 'ES5', or 'ES6'." },
         Locale_must_be_of_the_form_language_or_language_territory_For_example_0_or_1: { code: 6048, category: ts.DiagnosticCategory.Error, key: "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'." },
         Unsupported_locale_0: { code: 6049, category: ts.DiagnosticCategory.Error, key: "Unsupported locale '{0}'." },
         Unable_to_open_file_0: { code: 6050, category: ts.DiagnosticCategory.Error, key: "Unable to open file '{0}'." },
@@ -2478,7 +2490,7 @@ var ts;
     function isLineBreak(ch) {
         // ES5 7.3:
         // The ECMAScript line terminator characters are listed in Table 3.
-        //     Table 3 � Line Terminator Characters
+        //     Table 3: Line Terminator Characters
         //     Code Unit Value     Name                    Formal Name
         //     \u000A              Line Feed               <LF>
         //     \u000D              Carriage Return         <CR>
@@ -3766,10 +3778,7 @@ var ts;
             parent = node;
             if (symbolKind & 262128 /* IsContainer */) {
                 container = node;
-                if (lastContainer) {
-                    lastContainer.nextContainer = container;
-                }
-                lastContainer = container;
+                addToContainerChain(container);
             }
             if (isBlockScopeContainer) {
                 // in incremental scenarios we might reuse nodes that already have locals being allocated
@@ -3784,6 +3793,12 @@ var ts;
             container = saveContainer;
             parent = saveParent;
             blockScopeContainer = savedBlockScopeContainer;
+        }
+        function addToContainerChain(node) {
+            if (lastContainer) {
+                lastContainer.nextContainer = node;
+            }
+            lastContainer = node;
         }
         function bindDeclaration(node, symbolKind, symbolExcludes, isBlockScopeContainer) {
             switch (container.kind) {
@@ -3918,6 +3933,7 @@ var ts;
                 default:
                     if (!blockScopeContainer.locals) {
                         blockScopeContainer.locals = {};
+                        addToContainerChain(blockScopeContainer);
                     }
                     declareSymbol(blockScopeContainer.locals, undefined, node, symbolKind, symbolExcludes);
             }
@@ -4820,7 +4836,7 @@ var ts;
                         var forStatement = parent_1;
                         return (forStatement.initializer === node && forStatement.initializer.kind !== 199 /* VariableDeclarationList */) ||
                             forStatement.condition === node ||
-                            forStatement.iterator === node;
+                            forStatement.incrementor === node;
                     case 187 /* ForInStatement */:
                     case 188 /* ForOfStatement */:
                         var forInStatement = parent_1;
@@ -6079,7 +6095,7 @@ var ts;
             case 186 /* ForStatement */:
                 return visitNode(cbNode, node.initializer) ||
                     visitNode(cbNode, node.condition) ||
-                    visitNode(cbNode, node.iterator) ||
+                    visitNode(cbNode, node.incrementor) ||
                     visitNode(cbNode, node.statement);
             case 187 /* ForInStatement */:
                 return visitNode(cbNode, node.initializer) ||
@@ -8953,7 +8969,7 @@ var ts;
                 }
                 parseExpected(22 /* SemicolonToken */);
                 if (token !== 17 /* CloseParenToken */) {
-                    forStatement.iterator = allowInAnd(parseExpression);
+                    forStatement.incrementor = allowInAnd(parseExpression);
                 }
                 parseExpected(17 /* CloseParenToken */);
                 forOrForInOrForOfStatement = forStatement;
@@ -10714,11 +10730,10 @@ var ts;
         var globalESSymbolType;
         var globalIterableType;
         var anyArrayType;
-        var globalTypedPropertyDescriptorType;
-        var globalClassDecoratorType;
-        var globalParameterDecoratorType;
-        var globalPropertyDecoratorType;
-        var globalMethodDecoratorType;
+        var getGlobalClassDecoratorType;
+        var getGlobalParameterDecoratorType;
+        var getGlobalPropertyDecoratorType;
+        var getGlobalMethodDecoratorType;
         var tupleTypes = {};
         var unionTypes = {};
         var stringLiteralTypes = {};
@@ -12929,10 +12944,11 @@ var ts;
                 }
             }
         }
-        function getDeclaredTypeOfClass(symbol) {
+        function getDeclaredTypeOfClassOrInterface(symbol) {
             var links = getSymbolLinks(symbol);
             if (!links.declaredType) {
-                var type = links.declaredType = createObjectType(1024 /* Class */, symbol);
+                var kind = symbol.flags & 32 /* Class */ ? 1024 /* Class */ : 2048 /* Interface */;
+                var type = links.declaredType = createObjectType(kind, symbol);
                 var typeParameters = getTypeParametersOfClassOrInterface(symbol);
                 if (typeParameters) {
                     type.flags |= 4096 /* Reference */;
@@ -12942,32 +12958,6 @@ var ts;
                     type.target = type;
                     type.typeArguments = type.typeParameters;
                 }
-                type.declaredProperties = getNamedMembers(symbol.members);
-                type.declaredCallSignatures = emptyArray;
-                type.declaredConstructSignatures = emptyArray;
-                type.declaredStringIndexType = getIndexTypeOfSymbol(symbol, 0 /* String */);
-                type.declaredNumberIndexType = getIndexTypeOfSymbol(symbol, 1 /* Number */);
-            }
-            return links.declaredType;
-        }
-        function getDeclaredTypeOfInterface(symbol) {
-            var links = getSymbolLinks(symbol);
-            if (!links.declaredType) {
-                var type = links.declaredType = createObjectType(2048 /* Interface */, symbol);
-                var typeParameters = getTypeParametersOfClassOrInterface(symbol);
-                if (typeParameters) {
-                    type.flags |= 4096 /* Reference */;
-                    type.typeParameters = typeParameters;
-                    type.instantiations = {};
-                    type.instantiations[getTypeListId(type.typeParameters)] = type;
-                    type.target = type;
-                    type.typeArguments = type.typeParameters;
-                }
-                type.declaredProperties = getNamedMembers(symbol.members);
-                type.declaredCallSignatures = getSignaturesOfSymbol(symbol.members["__call"]);
-                type.declaredConstructSignatures = getSignaturesOfSymbol(symbol.members["__new"]);
-                type.declaredStringIndexType = getIndexTypeOfSymbol(symbol, 0 /* String */);
-                type.declaredNumberIndexType = getIndexTypeOfSymbol(symbol, 1 /* Number */);
             }
             return links.declaredType;
         }
@@ -13018,11 +13008,8 @@ var ts;
         }
         function getDeclaredTypeOfSymbol(symbol) {
             ts.Debug.assert((symbol.flags & 16777216 /* Instantiated */) === 0);
-            if (symbol.flags & 32 /* Class */) {
-                return getDeclaredTypeOfClass(symbol);
-            }
-            if (symbol.flags & 64 /* Interface */) {
-                return getDeclaredTypeOfInterface(symbol);
+            if (symbol.flags & (32 /* Class */ | 64 /* Interface */)) {
+                return getDeclaredTypeOfClassOrInterface(symbol);
             }
             if (symbol.flags & 524288 /* TypeAlias */) {
                 return getDeclaredTypeOfTypeAlias(symbol);
@@ -13070,15 +13057,27 @@ var ts;
                 }
             }
         }
+        function resolveDeclaredMembers(type) {
+            if (!type.declaredProperties) {
+                var symbol = type.symbol;
+                type.declaredProperties = getNamedMembers(symbol.members);
+                type.declaredCallSignatures = getSignaturesOfSymbol(symbol.members["__call"]);
+                type.declaredConstructSignatures = getSignaturesOfSymbol(symbol.members["__new"]);
+                type.declaredStringIndexType = getIndexTypeOfSymbol(symbol, 0 /* String */);
+                type.declaredNumberIndexType = getIndexTypeOfSymbol(symbol, 1 /* Number */);
+            }
+            return type;
+        }
         function resolveClassOrInterfaceMembers(type) {
-            var members = type.symbol.members;
-            var callSignatures = type.declaredCallSignatures;
-            var constructSignatures = type.declaredConstructSignatures;
-            var stringIndexType = type.declaredStringIndexType;
-            var numberIndexType = type.declaredNumberIndexType;
-            var baseTypes = getBaseTypes(type);
+            var target = resolveDeclaredMembers(type);
+            var members = target.symbol.members;
+            var callSignatures = target.declaredCallSignatures;
+            var constructSignatures = target.declaredConstructSignatures;
+            var stringIndexType = target.declaredStringIndexType;
+            var numberIndexType = target.declaredNumberIndexType;
+            var baseTypes = getBaseTypes(target);
             if (baseTypes.length) {
-                members = createSymbolTable(type.declaredProperties);
+                members = createSymbolTable(target.declaredProperties);
                 for (var _i = 0; _i < baseTypes.length; _i++) {
                     var baseType = baseTypes[_i];
                     addInheritedMembers(members, getPropertiesOfObjectType(baseType));
@@ -13091,7 +13090,7 @@ var ts;
             setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
         }
         function resolveTypeReferenceMembers(type) {
-            var target = type.target;
+            var target = resolveDeclaredMembers(type.target);
             var mapper = createTypeMapper(target.typeParameters, type.typeArguments);
             var members = createInstantiatedSymbolTable(target.declaredProperties, mapper);
             var callSignatures = instantiateList(target.declaredCallSignatures, mapper, instantiateSignature);
@@ -13236,7 +13235,7 @@ var ts;
                     callSignatures = getSignaturesOfSymbol(symbol);
                 }
                 if (symbol.flags & 32 /* Class */) {
-                    var classType = getDeclaredTypeOfClass(symbol);
+                    var classType = getDeclaredTypeOfClassOrInterface(symbol);
                     constructSignatures = getSignaturesOfSymbol(symbol.members["__constructor"]);
                     if (!constructSignatures.length) {
                         constructSignatures = getDefaultConstructSignatures(classType);
@@ -13343,7 +13342,7 @@ var ts;
                 var type = getApparentType(current);
                 if (type !== unknownType) {
                     var prop = getPropertyOfType(type, name);
-                    if (!prop) {
+                    if (!prop || getDeclarationFlagsFromSymbol(prop) & (32 /* Private */ | 64 /* Protected */)) {
                         return undefined;
                     }
                     if (!props) {
@@ -13462,7 +13461,7 @@ var ts;
         function getSignatureFromDeclaration(declaration) {
             var links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
-                var classType = declaration.kind === 135 /* Constructor */ ? getDeclaredTypeOfClass(declaration.parent.symbol) : undefined;
+                var classType = declaration.kind === 135 /* Constructor */ ? getDeclaredTypeOfClassOrInterface(declaration.parent.symbol) : undefined;
                 var typeParameters = classType ? classType.typeParameters :
                     declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) : undefined;
                 var parameters = [];
@@ -18691,21 +18690,21 @@ var ts;
                 case 201 /* ClassDeclaration */:
                     var classSymbol = getSymbolOfNode(node.parent);
                     var classConstructorType = getTypeOfSymbol(classSymbol);
-                    var classDecoratorType = instantiateSingleCallFunctionType(globalClassDecoratorType, [classConstructorType]);
+                    var classDecoratorType = instantiateSingleCallFunctionType(getGlobalClassDecoratorType(), [classConstructorType]);
                     checkTypeAssignableTo(exprType, classDecoratorType, node);
                     break;
                 case 132 /* PropertyDeclaration */:
-                    checkTypeAssignableTo(exprType, globalPropertyDecoratorType, node);
+                    checkTypeAssignableTo(exprType, getGlobalPropertyDecoratorType(), node);
                     break;
                 case 134 /* MethodDeclaration */:
                 case 136 /* GetAccessor */:
                 case 137 /* SetAccessor */:
                     var methodType = getTypeOfNode(node.parent);
-                    var methodDecoratorType = instantiateSingleCallFunctionType(globalMethodDecoratorType, [methodType]);
+                    var methodDecoratorType = instantiateSingleCallFunctionType(getGlobalMethodDecoratorType(), [methodType]);
                     checkTypeAssignableTo(exprType, methodDecoratorType, node);
                     break;
                 case 129 /* Parameter */:
-                    checkTypeAssignableTo(exprType, globalParameterDecoratorType, node);
+                    checkTypeAssignableTo(exprType, getGlobalParameterDecoratorType(), node);
                     break;
             }
         }
@@ -19178,8 +19177,8 @@ var ts;
             }
             if (node.condition)
                 checkExpression(node.condition);
-            if (node.iterator)
-                checkExpression(node.iterator);
+            if (node.incrementor)
+                checkExpression(node.incrementor);
             checkSourceElement(node.statement);
         }
         function checkForOfStatement(node) {
@@ -19860,7 +19859,7 @@ var ts;
                 return true;
             }
             var seen = {};
-            ts.forEach(type.declaredProperties, function (p) { seen[p.name] = { prop: p, containingType: type }; });
+            ts.forEach(resolveDeclaredMembers(type).declaredProperties, function (p) { seen[p.name] = { prop: p, containingType: type }; });
             var ok = true;
             for (var _i = 0; _i < baseTypes.length; _i++) {
                 var base = baseTypes[_i];
@@ -21520,11 +21519,10 @@ var ts;
             globalNumberType = getGlobalType("Number");
             globalBooleanType = getGlobalType("Boolean");
             globalRegExpType = getGlobalType("RegExp");
-            globalTypedPropertyDescriptorType = getTypeOfGlobalSymbol(getGlobalTypeSymbol("TypedPropertyDescriptor"), 1);
-            globalClassDecoratorType = getGlobalType("ClassDecorator");
-            globalPropertyDecoratorType = getGlobalType("PropertyDecorator");
-            globalMethodDecoratorType = getGlobalType("MethodDecorator");
-            globalParameterDecoratorType = getGlobalType("ParameterDecorator");
+            getGlobalClassDecoratorType = ts.memoize(function () { return getGlobalType("ClassDecorator"); });
+            getGlobalPropertyDecoratorType = ts.memoize(function () { return getGlobalType("PropertyDecorator"); });
+            getGlobalMethodDecoratorType = ts.memoize(function () { return getGlobalType("MethodDecorator"); });
+            getGlobalParameterDecoratorType = ts.memoize(function () { return getGlobalType("ParameterDecorator"); });
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
             if (languageVersion >= 2 /* ES6 */) {
@@ -24027,11 +24025,11 @@ var ts;
         // emit output for the __extends helper function
         var extendsHelper = "\nvar __extends = this.__extends || function (d, b) {\n    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];\n    function __() { this.constructor = d; }\n    __.prototype = b.prototype;\n    d.prototype = new __();\n};";
         // emit output for the __decorate helper function
-        var decorateHelper = "\nvar __decorate = this.__decorate || function (decorators, target, key, desc) {\n    if (typeof Reflect === \"object\" && typeof Reflect.decorate === \"function\") return Reflect.decorate(decorators, target, key, desc);\n    switch (arguments.length) {\n        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);\n        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);\n        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);\n    }\n};";
+        var decorateHelper = "\nif (typeof __decorate !== \"function\") __decorate = function (decorators, target, key, desc) {\n    if (typeof Reflect === \"object\" && typeof Reflect.decorate === \"function\") return Reflect.decorate(decorators, target, key, desc);\n    switch (arguments.length) {\n        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);\n        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);\n        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);\n    }\n};";
         // emit output for the __metadata helper function
-        var metadataHelper = "\nvar __metadata = this.__metadata || function (k, v) {\n    if (typeof Reflect === \"object\" && typeof Reflect.metadata === \"function\") return Reflect.metadata(k, v);\n};";
+        var metadataHelper = "\nif (typeof __metadata !== \"function\") __metadata = function (k, v) {\n    if (typeof Reflect === \"object\" && typeof Reflect.metadata === \"function\") return Reflect.metadata(k, v);\n};";
         // emit output for the __param helper function
-        var paramHelper = "\nvar __param = this.__param || function(index, decorator) { return function (target, key) { decorator(target, key, index); } };";
+        var paramHelper = "\nif (typeof __param !== \"function\") __param = function (paramIndex, decorator) {\n    return function (target, key) { decorator(target, key, paramIndex); }\n};";
         var compilerOptions = host.getCompilerOptions();
         var languageVersion = compilerOptions.target || 0 /* ES3 */;
         var sourceMapDataList = compilerOptions.sourceMap ? [] : undefined;
@@ -25863,7 +25861,7 @@ var ts;
                 write(";");
                 emitOptional(" ", node.condition);
                 write(";");
-                emitOptional(" ", node.iterator);
+                emitOptional(" ", node.incrementor);
                 write(")");
                 emitEmbeddedStatement(node.statement);
             }
@@ -28164,25 +28162,24 @@ var ts;
                     write("}");
                 }
             }
-            function emitAMDModule(node, startIndex) {
-                collectExternalModuleInfo(node);
+            function emitAMDDependencies(node, includeNonAmdDependencies) {
                 // An AMD define function has the following shape:
                 //     define(id?, dependencies?, factory);
                 //
                 // This has the shape of
                 //     define(name, ["module1", "module2"], function (module1Alias) {
-                // The location of the alias in the parameter list in the factory function needs to 
+                // The location of the alias in the parameter list in the factory function needs to
                 // match the position of the module name in the dependency list.
                 //
-                // To ensure this is true in cases of modules with no aliases, e.g.: 
-                // `import "module"` or `<amd-dependency path= "a.css" />` 
+                // To ensure this is true in cases of modules with no aliases, e.g.:
+                // `import "module"` or `<amd-dependency path= "a.css" />`
                 // we need to add modules without alias names to the end of the dependencies list
-                var aliasedModuleNames = []; // names of modules with corresponding parameter in the 
+                var aliasedModuleNames = []; // names of modules with corresponding parameter in the
                 // factory function.
                 var unaliasedModuleNames = []; // names of modules with no corresponding parameters in
                 // factory function.
-                var importAliasNames = []; // names of the parameters in the factory function; these 
-                // paramters need to match the indexes of the corresponding 
+                var importAliasNames = []; // names of the parameters in the factory function; these
+                // parameters need to match the indexes of the corresponding
                 // module names in aliasedModuleNames.
                 // Fill in amd-dependency tags
                 for (var _a = 0, _b = node.amdDependencies; _a < _b.length; _a++) {
@@ -28203,7 +28200,7 @@ var ts;
                     if (moduleName.kind === 8 /* StringLiteral */) {
                         externalModuleName = getLiteralText(moduleName);
                     }
-                    // Find the name of the module alais, if there is one
+                    // Find the name of the module alias, if there is one
                     var importAliasName = void 0;
                     var namespaceDeclaration = getNamespaceDeclarationNode(importNode);
                     if (namespaceDeclaration && !isDefaultImport(importNode)) {
@@ -28212,18 +28209,13 @@ var ts;
                     else {
                         importAliasName = getGeneratedNameForNode(importNode);
                     }
-                    if (importAliasName) {
+                    if (includeNonAmdDependencies && importAliasName) {
                         aliasedModuleNames.push(externalModuleName);
                         importAliasNames.push(importAliasName);
                     }
                     else {
                         unaliasedModuleNames.push(externalModuleName);
                     }
-                }
-                writeLine();
-                write("define(");
-                if (node.amdModuleName) {
-                    write("\"" + node.amdModuleName + "\", ");
                 }
                 write("[\"require\", \"exports\"");
                 if (aliasedModuleNames.length) {
@@ -28239,6 +28231,15 @@ var ts;
                     write(", ");
                     write(importAliasNames.join(", "));
                 }
+            }
+            function emitAMDModule(node, startIndex) {
+                collectExternalModuleInfo(node);
+                writeLine();
+                write("define(");
+                if (node.amdModuleName) {
+                    write("\"" + node.amdModuleName + "\", ");
+                }
+                emitAMDDependencies(node, true);
                 write(") {");
                 increaseIndent();
                 emitExportStarHelper();
@@ -28257,6 +28258,22 @@ var ts;
                 emitLinesStartingAt(node.statements, startIndex);
                 emitTempDeclarations(true);
                 emitExportEquals(false);
+            }
+            function emitUMDModule(node, startIndex) {
+                collectExternalModuleInfo(node);
+                // Module is detected first to support Browserify users that load into a browser with an AMD loader
+                writeLines("(function (deps, factory) {\n    if (typeof module === 'object' && typeof module.exports === 'object') {\n        var v = factory(require, exports); if (v !== undefined) module.exports = v;\n    }\n    else if (typeof define === 'function' && define.amd) {\n        define(deps, factory);\n    }\n})(");
+                emitAMDDependencies(node, false);
+                write(") {");
+                increaseIndent();
+                emitExportStarHelper();
+                emitCaptureThisForNodeIfNecessary(node);
+                emitLinesStartingAt(node.statements, startIndex);
+                emitTempDeclarations(true);
+                emitExportEquals(true);
+                decreaseIndent();
+                writeLine();
+                write("});");
             }
             function emitES6Module(node, startIndex) {
                 externalImports = undefined;
@@ -28333,6 +28350,9 @@ var ts;
                     }
                     else if (compilerOptions.module === 2 /* AMD */) {
                         emitAMDModule(node, startIndex);
+                    }
+                    else if (compilerOptions.module === 3 /* UMD */) {
+                        emitUMDModule(node, startIndex);
                     }
                     else {
                         emitCommonJSModule(node, startIndex);
@@ -29192,7 +29212,7 @@ var ts;
             }
             // Cannot specify module gen target when in es6 or above
             if (options.module && languageVersion >= 2 /* ES6 */) {
-                diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Cannot_compile_external_modules_into_amd_or_commonjs_when_targeting_es6_or_higher));
+                diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Cannot_compile_external_modules_into_amd_commonjs_or_umd_when_targeting_ES6_or_higher));
             }
             // there has to be common source directory if user specified --outdir || --sourceRoot
             // if user specified --mapRoot, there needs to be common source directory if there would be multiple files being emitted
@@ -29279,11 +29299,12 @@ var ts;
             shortName: "m",
             type: {
                 "commonjs": 1 /* CommonJS */,
-                "amd": 2 /* AMD */
+                "amd": 2 /* AMD */,
+                "umd": 3 /* UMD */
             },
-            description: ts.Diagnostics.Specify_module_code_generation_Colon_commonjs_or_amd,
+            description: ts.Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_or_umd,
             paramType: ts.Diagnostics.KIND,
-            error: ts.Diagnostics.Argument_for_module_option_must_be_commonjs_or_amd
+            error: ts.Diagnostics.Argument_for_module_option_must_be_commonjs_amd_or_umd
         },
         {
             name: "noEmit",
@@ -29379,7 +29400,7 @@ var ts;
             type: { "es3": 0 /* ES3 */, "es5": 1 /* ES5 */, "es6": 2 /* ES6 */ },
             description: ts.Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES6_experimental,
             paramType: ts.Diagnostics.VERSION,
-            error: ts.Diagnostics.Argument_for_target_option_must_be_es3_es5_or_es6
+            error: ts.Diagnostics.Argument_for_target_option_must_be_ES3_ES5_or_ES6
         },
         {
             name: "version",
@@ -32804,6 +32825,10 @@ var ts;
                     case 169 /* BinaryExpression */:
                     case 170 /* ConditionalExpression */:
                         return true;
+                    // equals in binding elements: function foo([[x, y] = [1, 2]])
+                    case 152 /* BindingElement */:
+                    // equals in type X = ...
+                    case 203 /* TypeAliasDeclaration */:
                     // equal in import a = module('a');
                     case 208 /* ImportEqualsDeclaration */:
                     // equal in let a = 0;
@@ -32820,8 +32845,6 @@ var ts;
                     // Technically, "of" is not a binary operator, but format it the same way as "in"
                     case 188 /* ForOfStatement */:
                         return context.currentTokenSpan.kind === 125 /* OfKeyword */ || context.nextTokenSpan.kind === 125 /* OfKeyword */;
-                    case 152 /* BindingElement */:
-                        return context.currentTokenSpan.kind === 53 /* EqualsToken */ || context.nextTokenSpan.kind === 53 /* EqualsToken */;
                 }
                 return false;
             };
@@ -40481,8 +40504,8 @@ var ts;
                     if (forStatement.condition) {
                         return textSpan(forStatement.condition);
                     }
-                    if (forStatement.iterator) {
-                        return textSpan(forStatement.iterator);
+                    if (forStatement.incrementor) {
+                        return textSpan(forStatement.incrementor);
                     }
                 }
                 // Tokens:
