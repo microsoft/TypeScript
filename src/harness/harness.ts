@@ -967,6 +967,8 @@ module Harness {
                             if (typeof setting.value === 'string') {
                                 if (setting.value.toLowerCase() === 'amd') {
                                     options.module = ts.ModuleKind.AMD;
+                                } else if (setting.value.toLowerCase() === 'umd') {
+                                    options.module = ts.ModuleKind.UMD;
                                 } else if (setting.value.toLowerCase() === 'commonjs') {
                                     options.module = ts.ModuleKind.CommonJS;
                                 } else if (setting.value.toLowerCase() === 'unspecified') {

@@ -196,7 +196,7 @@ module ts {
             case SyntaxKind.ForStatement:
                 return visitNode(cbNode, (<ForStatement>node).initializer) ||
                     visitNode(cbNode, (<ForStatement>node).condition) ||
-                    visitNode(cbNode, (<ForStatement>node).iterator) ||
+                    visitNode(cbNode, (<ForStatement>node).incrementor) ||
                     visitNode(cbNode, (<ForStatement>node).statement);
             case SyntaxKind.ForInStatement:
                 return visitNode(cbNode, (<ForInStatement>node).initializer) ||
@@ -3624,7 +3624,7 @@ module ts {
                 }
                 parseExpected(SyntaxKind.SemicolonToken);
                 if (token !== SyntaxKind.CloseParenToken) {
-                    forStatement.iterator = allowInAnd(parseExpression);
+                    forStatement.incrementor = allowInAnd(parseExpression);
                 }
                 parseExpected(SyntaxKind.CloseParenToken);
                 forOrForInOrForOfStatement = forStatement;

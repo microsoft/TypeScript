@@ -631,7 +631,7 @@
         "category": "Error",
         "code": 1203
     },
-    "Cannot compile external modules into amd or commonjs when targeting es6 or higher.": {
+    "Cannot compile external modules into 'amd', 'commonjs' or 'umd' when targeting 'ES6' or higher.": {
         "category": "Error",
         "code": 1204
     },
@@ -1844,7 +1844,7 @@
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'commonjs' or 'amd'": {
+    "Specify module code generation: 'commonjs', 'amd', or 'umd'.": {
         "category": "Message",
         "code": 6016
     },
@@ -1928,11 +1928,11 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs' or 'amd'.": {
+    "Argument for '--module' option must be 'commonjs', 'amd', or 'umd'.": {
         "category": "Error",
         "code": 6046
     },
-    "Argument for '--target' option must be 'es3', 'es5', or 'es6'.": {
+    "Argument for '--target' option must be 'ES3', 'ES5', or 'ES6'.": {
         "category": "Error",
         "code": 6047
     },
@@ -1976,6 +1976,15 @@
         "category": "Message",
         "code": 6057
     },
+    "Specifies the root directory of input files. Use to control the output directory structure with --outDir.": {
+        "category": "Message",
+        "code": 6058
+    },
+    "File '{0}' is not under 'rootDir' '{1}'. 'rootDir' is expected to contain all source files.": {
+        "category": "Error",
+        "code": 6059
+    },
+
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

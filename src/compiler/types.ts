@@ -822,7 +822,7 @@ module ts {
     export interface ForStatement extends IterationStatement {
         initializer?: VariableDeclarationList | Expression;
         condition?: Expression;
-        iterator?: Expression;
+        incrementor?: Expression;
     }
 
     export interface ForInStatement extends IterationStatement {
@@ -1597,15 +1597,18 @@ module ts {
     // Class and interface types (TypeFlags.Class and TypeFlags.Interface)
     export interface InterfaceType extends ObjectType {
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
+    }
+
+    export interface InterfaceTypeWithBaseTypes extends InterfaceType {
+        baseTypes: ObjectType[];
+    }
+
+    export interface InterfaceTypeWithDeclaredMembers extends InterfaceType {
         declaredProperties: Symbol[];              // Declared members
         declaredCallSignatures: Signature[];       // Declared call signatures
         declaredConstructSignatures: Signature[];  // Declared construct signatures
         declaredStringIndexType: Type;             // Declared string index type
         declaredNumberIndexType: Type;             // Declared numeric index type
-    }
-
-    export interface InterfaceTypeWithBaseTypes extends InterfaceType {
-        baseTypes: ObjectType[];
     }
 
     // Type references (TypeFlags.Reference)
@@ -1689,7 +1692,7 @@ module ts {
 
     /* @internal */
     export interface TypeMapper {
-        (t: Type): Type;
+        (t: TypeParameter): Type;
     }
 
     /* @internal */
@@ -1766,6 +1769,7 @@ module ts {
         preserveConstEnums?: boolean;
         project?: string;
         removeComments?: boolean;
+        rootDir?: string;
         sourceMap?: boolean;
         sourceRoot?: string;
         suppressImplicitAnyIndexErrors?: boolean;
@@ -1782,6 +1786,7 @@ module ts {
         None = 0,
         CommonJS = 1,
         AMD = 2,
+        UMD = 3,
     }
 
     export interface LineAndCharacter {

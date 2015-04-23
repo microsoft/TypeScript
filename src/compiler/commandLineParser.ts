@@ -50,11 +50,12 @@ module ts {
             shortName: "m",
             type: {
                 "commonjs": ModuleKind.CommonJS,
-                "amd": ModuleKind.AMD
+                "amd": ModuleKind.AMD,
+                "umd": ModuleKind.UMD
             },
-            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_or_amd,
+            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_or_umd,
             paramType: Diagnostics.KIND,
-            error: Diagnostics.Argument_for_module_option_must_be_commonjs_or_amd
+            error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_or_umd
         },
         {
             name: "noEmit",
@@ -111,6 +112,13 @@ module ts {
             description: Diagnostics.Do_not_emit_comments_to_output,
         },
         {
+            name: "rootDir",
+            type: "string",
+            isFilePath: true,
+            description: Diagnostics.Specifies_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir,
+            paramType: Diagnostics.LOCATION,
+        },
+        {
             name: "separateCompilation",
             type: "boolean",
         },
@@ -143,7 +151,7 @@ module ts {
             type: { "es3": ScriptTarget.ES3, "es5": ScriptTarget.ES5, "es6": ScriptTarget.ES6 },
             description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES6_experimental,
             paramType: Diagnostics.VERSION,
-            error: Diagnostics.Argument_for_target_option_must_be_es3_es5_or_es6
+            error: Diagnostics.Argument_for_target_option_must_be_ES3_ES5_or_ES6
         },
         {
             name: "version",

@@ -249,11 +249,7 @@ module ts {
             if (symbolKind & SymbolFlags.IsContainer) {
                 container = node;
 
-                if (lastContainer) {
-                    lastContainer.nextContainer = container;
-                }
-
-                lastContainer = container;
+                addToContainerChain(container);
             }
 
             if (isBlockScopeContainer) {
@@ -275,6 +271,15 @@ module ts {
             parent = saveParent;
             blockScopeContainer = savedBlockScopeContainer;
         }
+
+        function addToContainerChain(node: Node) {
+            if (lastContainer) {
+                lastContainer.nextContainer = node;
+            }
+
+            lastContainer = node;
+        }
+
 
         function bindJSDocComment(node: Node) {
             let jsDocComment = node.jsDocComment;
@@ -445,6 +450,7 @@ module ts {
                 default:
                     if (!blockScopeContainer.locals) {
                         blockScopeContainer.locals = {};
+                        addToContainerChain(blockScopeContainer);
                     }
                     declareSymbol(blockScopeContainer.locals, undefined, node, symbolKind, symbolExcludes);
             }
