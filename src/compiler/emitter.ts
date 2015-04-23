@@ -1257,7 +1257,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
             function emitBindingElement(node: BindingElement) {
                 if (node.propertyName) {
-                    emit(node.propertyName, /*allowGeneratedIdentifiers*/ false);
+                    emitVerbatimDeclarationName(node.propertyName);
                     write(": ");
                 }
                 if (node.dotDotDotToken) {
@@ -1605,7 +1605,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     write("*");
                 }
 
-                emit(node.name, /*allowGeneratedIdentifiers*/ false);
+                emitVerbatimDeclarationName(node.name);
                 if (languageVersion < ScriptTarget.ES6) {
                     write(": function ");
                 }
@@ -1613,13 +1613,13 @@ var __param = this.__param || function(index, decorator) { return function (targ
             }
 
             function emitPropertyAssignment(node: PropertyDeclaration) {
-                emit(node.name, /*allowGeneratedIdentifiers*/ false);
+                emitVerbatimDeclarationName(node.name);
                 write(": ");
                 emit(node.initializer);
             }
 
             function emitShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
-                emit(node.name, /*allowGeneratedIdentifiers*/ false);
+                emitVerbatimDeclarationName(node.name);
                 // If short-hand property has a prefix, then regardless of the target version, we will emit it as normal property assignment. For example:
                 //  module m {
                 //      export let y;
@@ -1699,7 +1699,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 let indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
                 write(".");
                 let indentedAfterDot = indentIfOnDifferentLines(node, node.dotToken, node.name);
-                emit(node.name, /*allowGeneratedIdentifiers*/ false);
+                emitVerbatimDeclarationName(node.name);
                 decreaseIndentIf(indentedBeforeDot, indentedAfterDot);
             }
 
@@ -2908,7 +2908,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
             function emitAccessor(node: AccessorDeclaration) {
                 write(node.kind === SyntaxKind.GetAccessor ? "get " : "set ");
-                emit(node.name, /*allowGeneratedIdentifiers*/ false);
+                emitVerbatimDeclarationName(node.name);
                 emitSignatureAndBody(node);
             }
 
@@ -4811,8 +4811,8 @@ var __param = this.__param || function(index, decorator) { return function (targ
              * The standard function to emit on any Node.
              * This will take care of leading/trailing comments, and sourcemaps if applicable.
              */
-            function emit(node: Node, allowGeneratedIdentifiers?: boolean): void {
-                emitNodeWorker(node, /*shouldEmitSourceMap*/ true, allowGeneratedIdentifiers);
+            function emit(node: Node): void {
+                emitNodeWorker(node, /*allowGeneratedIdentifiers*/ true);
             }
 
             /**
@@ -4826,8 +4826,30 @@ var __param = this.__param || function(index, decorator) { return function (targ
              * the sourcemap for 'a + b' itself, but if 'emit' is called instead for nodes 'a' and 'b',
              * then both 'a' and 'b' will have sourcemaps recorded if appropriate.
              */
-            function emitWithoutSourceMap(node: Node, allowGeneratedIdentifiers?: boolean): void {
-                emitNodeWorker(node, /*shouldEmitSourceMap*/ false, allowGeneratedIdentifiers);
+            function emitWithoutSourceMap(node: Node): void {
+                emitNodeWorker(node, /*shouldEmitSourceMap*/ false, /*allowGeneratedIdentifiers*/ true);
+            }
+
+            /**
+             * Emits a node with comments and tracks sourcemaps for said node, disallowing the renaming
+             * of identifiers to be *for this node*.
+             *
+             * This is useful in scenarios when a name's usage can be non-local and it is not feasible to
+             * rename it (e.g. the declaration name of a property for a shorthand property).
+             *
+             * Note that preventing generated identifier renaming only applies if the given node is an
+             * identifier. If it is not an identifier, contained identifiers may still be replaced
+             * by their generated counterparts.
+             *
+             * For instance, given an the computed property '[a + b]' from below :
+             *      var x = {
+             *          [a + b]() {
+             *          }
+             *      }
+             * Both 'a' and 'b' may be replaced by generated counterparts in '[a + b]'.
+             */
+            function emitVerbatimDeclarationName(node: DeclarationName) {
+                emitNodeWorker(node, /*shouldEmitSourceMap*/ true, /*allowGeneratedIdentifiers*/ false);
             }
 
             /**
@@ -4836,7 +4858,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
              * This function acts as a common path to 'emit' and 'emitNodeWithoutSourceMap'
              * that is aware of ordering between comments and sourcemap spans.
              */
-            function emitNodeWorker(node: Node, shouldEmitSourceMap: boolean, allowGeneratedIdentifiers?: boolean): void {
+            function emitNodeWorker(node: Node, shouldEmitSourceMap: boolean, allowGeneratedIdentifiers: boolean): void {
                 if (!node) {
                     return;
                 }
@@ -4923,7 +4945,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
             /**
              * Emits a node without emitting comments or tracking sourcemap information.
              */
-            function emitBareNode(node: Node, allowGeneratedIdentifiers: boolean = true) {
+            function emitBareNode(node: Node, allowGeneratedIdentifiers: boolean) {
                 // Check if the node can be emitted regardless of the ScriptTarget
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
