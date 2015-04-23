@@ -2741,6 +2741,7 @@ module ts {
             let typeChecker = program.getTypeChecker();
             let syntacticStart = new Date().getTime();
             let sourceFile = getValidSourceFile(fileName);
+            let isJavaScriptFile = isJavaScript(fileName);
 
             let start = new Date().getTime();
             let currentToken = getTokenAtPosition(sourceFile, position);
@@ -2841,13 +2842,29 @@ module ts {
                 }
 
                 let type = typeChecker.getTypeAtLocation(node);
+                addTypeProperties(type);
+            }
+
+            function addTypeProperties(type: Type) {
                 if (type) {
                     // Filter private properties
-                    forEach(type.getApparentProperties(), symbol => {
+                    for (let symbol of type.getApparentProperties()) {
                         if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
                             symbols.push(symbol);
                         }
-                    });
+                    }
+
+                    if (isJavaScriptFile && type.flags & TypeFlags.Union) {
+                        // In javascript files, for union types, we don't just get the members that 
+                        // the individual types have in common, we also include all the members that
+                        // each individual type has.  This is because we're going to add all identifiers
+                        // anyways.  So we might as well elevate the members that were at least part
+                        // of the individual types to a higher status than since we know what they are.
+                        let unionType = <UnionType>type;
+                        for (let elementType of unionType.types) {
+                            addTypeProperties(elementType);
+                        }
+                    }
                 }
             }
 
