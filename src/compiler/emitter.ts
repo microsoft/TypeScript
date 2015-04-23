@@ -2188,7 +2188,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 write("var ");
                 
                 // _i = 0
-                emitNodeWithoutSourceMap(counter);
+                emitWithoutSourceMap(counter);
                 write(" = 0");
                 emitEnd(node.expression);
 
@@ -2196,9 +2196,9 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     // , _a = expr
                     write(", ");
                     emitStart(node.expression);
-                    emitNodeWithoutSourceMap(rhsReference);
+                    emitWithoutSourceMap(rhsReference);
                     write(" = ");
-                    emitNodeWithoutSourceMap(node.expression);
+                    emitWithoutSourceMap(node.expression);
                     emitEnd(node.expression);
                 }
 
@@ -2206,10 +2206,10 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 
                 // _i < _a.length;
                 emitStart(node.initializer);
-                emitNodeWithoutSourceMap(counter);
+                emitWithoutSourceMap(counter);
                 write(" < ");
 
-                emitNodeWithoutSourceMap(rhsReference);
+                emitWithoutSourceMap(rhsReference);
                 write(".length");
 
                 emitEnd(node.initializer);
@@ -2217,7 +2217,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 
                 // _i++)
                 emitStart(node.initializer);
-                emitNodeWithoutSourceMap(counter);
+                emitWithoutSourceMap(counter);
                 write("++");
                 emitEnd(node.initializer);
                 emitToken(SyntaxKind.CloseParenToken, node.expression.end);
@@ -2244,17 +2244,17 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         else {
                             // The following call does not include the initializer, so we have
                             // to emit it separately.
-                            emitNodeWithoutSourceMap(declaration);
+                            emitWithoutSourceMap(declaration);
                             write(" = ");
-                            emitNodeWithoutSourceMap(rhsIterationValue);
+                            emitWithoutSourceMap(rhsIterationValue);
                         }
                     }
                     else {
                         // It's an empty declaration list. This can only happen in an error case, if the user wrote
                         //     for (let of []) {}
-                        emitNodeWithoutSourceMap(createTempVariable(TempFlags.Auto));
+                        emitWithoutSourceMap(createTempVariable(TempFlags.Auto));
                         write(" = ");
-                        emitNodeWithoutSourceMap(rhsIterationValue);
+                        emitWithoutSourceMap(rhsIterationValue);
                     }
                 }
                 else {
@@ -2267,7 +2267,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         emitDestructuring(assignmentExpression, /*isAssignmentExpressionStatement*/ true, /*value*/ undefined);
                     }
                     else {
-                        emitNodeWithoutSourceMap(assignmentExpression);
+                        emitWithoutSourceMap(assignmentExpression);
                     }
                 }
                 emitEnd(node.initializer);
@@ -2423,7 +2423,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         write("exports.");
                     }
                 }
-                emitNodeWithoutSourceMap(node.name);
+                emitWithoutSourceMap(node.name);
                 emitEnd(node.name);
             }
 
@@ -2463,7 +2463,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         emitStart(specifier.name);
                         emitContainingModuleName(specifier);
                         write(".");
-                        emitNodeWithoutSourceMap(specifier.name);
+                        emitWithoutSourceMap(specifier.name);
                         emitEnd(specifier.name);
                         write(" = ");
                         emitExpressionIdentifier(name);
@@ -2846,14 +2846,14 @@ var __param = this.__param || function(index, decorator) { return function (targ
                             writeLine();
                             emitStart(p);
                             write("if (");
-                            emitNodeWithoutSourceMap(p.name);
+                            emitWithoutSourceMap(p.name);
                             write(" === void 0)");
                             emitEnd(p);
                             write(" { ");
                             emitStart(p);
-                            emitNodeWithoutSourceMap(p.name);
+                            emitWithoutSourceMap(p.name);
                             write(" = ");
-                            emitNodeWithoutSourceMap(p.initializer);
+                            emitWithoutSourceMap(p.initializer);
                             emitEnd(p);
                             write("; }");
                         }
@@ -2876,7 +2876,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     emitLeadingComments(restParam);
                     emitStart(restParam);
                     write("var ");
-                    emitNodeWithoutSourceMap(restParam.name);
+                    emitWithoutSourceMap(restParam.name);
                     write(" = [];");
                     emitEnd(restParam);
                     emitTrailingComments(restParam);
@@ -2897,7 +2897,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     increaseIndent();
                     writeLine();
                     emitStart(restParam);
-                    emitNodeWithoutSourceMap(restParam.name);
+                    emitWithoutSourceMap(restParam.name);
                     write("[" + tempName + " - " + restIndex + "] = arguments[" + tempName + "];");
                     emitEnd(restParam);
                     decreaseIndent();
@@ -2918,7 +2918,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
 
             function emitNameOfDeclaration(node: Declaration) {
                 if (node.name) {
-                    emitNodeWithoutSourceMap(node.name);
+                    emitWithoutSourceMap(node.name);
                 }
                 else {
                     write(getGeneratedNameForNode(node));
@@ -3170,7 +3170,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         emitStart(param);
                         emitStart(param.name);
                         write("this.");
-                        emitNodeWithoutSourceMap(param.name);
+                        emitWithoutSourceMap(param.name);
                         emitEnd(param.name);
                         write(" = ");
                         emit(param.name);
@@ -3184,7 +3184,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 // TODO: (jfreeman,drosen): comment on why this is emitNodeWithoutSourceMap instead of emit here.
                 if (memberName.kind === SyntaxKind.StringLiteral || memberName.kind === SyntaxKind.NumericLiteral) {
                     write("[");
-                    emitNodeWithoutSourceMap(memberName);
+                    emitWithoutSourceMap(memberName);
                     write("]");
                 }
                 else if (memberName.kind === SyntaxKind.ComputedPropertyName) {
@@ -3192,7 +3192,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
                 else {
                     write(".");
-                    emitNodeWithoutSourceMap(memberName);
+                    emitWithoutSourceMap(memberName);
                 }
             }
 
@@ -4440,11 +4440,11 @@ var __param = this.__param || function(index, decorator) { return function (targ
                                     emitStart(specifier);
                                     emitContainingModuleName(specifier);
                                     write(".");
-                                    emitNodeWithoutSourceMap(specifier.name);
+                                    emitWithoutSourceMap(specifier.name);
                                     write(" = ");
                                     write(generatedName);
                                     write(".");
-                                    emitNodeWithoutSourceMap(specifier.propertyName || specifier.name);
+                                    emitWithoutSourceMap(specifier.propertyName || specifier.name);
                                     write(";");
                                     emitEnd(specifier);
                                 }
@@ -4480,7 +4480,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         }
                         if (node.moduleSpecifier) {
                             write(" from ");
-                            emitNodeWithoutSourceMap(node.moduleSpecifier);
+                            emitWithoutSourceMap(node.moduleSpecifier);
                         }
                         write(";");
                         emitEnd(node);
@@ -4499,10 +4499,10 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         }
                         emitStart(specifier);
                         if (specifier.propertyName) {
-                            emitNodeWithoutSourceMap(specifier.propertyName);
+                            emitWithoutSourceMap(specifier.propertyName);
                             write(" as ");
                         }
-                        emitNodeWithoutSourceMap(specifier.name);
+                        emitWithoutSourceMap(specifier.name);
                         emitEnd(specifier);
                         needsComma = true;
                     }
@@ -4826,7 +4826,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
              * the sourcemap for 'a + b' itself, but if 'emit' is called instead for nodes 'a' and 'b',
              * then both 'a' and 'b' will have sourcemaps recorded if appropriate.
              */
-            function emitNodeWithoutSourceMap(node: Node, allowGeneratedIdentifiers?: boolean): void {
+            function emitWithoutSourceMap(node: Node, allowGeneratedIdentifiers?: boolean): void {
                 emitNodeWorker(node, /*shouldEmitSourceMap*/ false, allowGeneratedIdentifiers);
             }
 
@@ -4853,7 +4853,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     if (shouldEmitSourceMap) {
                         emitSourceFileStart(<SourceFile>node);
                     }
-                    emitJavaScriptWorker(node, allowGeneratedIdentifiers);
+                    emitBareNode(node, allowGeneratedIdentifiers);
                     return;
                 }
 
@@ -4866,11 +4866,11 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 // Synthesized nodes do not correspond to text in the original source.
                 if (shouldEmitSourceMap && !nodeIsSynthesized(node)) {
                     emitStart(node);
-                    emitJavaScriptWorker(node, allowGeneratedIdentifiers);
+                    emitBareNode(node, allowGeneratedIdentifiers);
                     emitEnd(node);
                 }
                 else {
-                    emitJavaScriptWorker(node, allowGeneratedIdentifiers);
+                    emitBareNode(node, allowGeneratedIdentifiers);
                 }
 
                 if (emitComments) {
@@ -4920,7 +4920,10 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 return true;
             }
 
-            function emitJavaScriptWorker(node: Node, allowGeneratedIdentifiers: boolean = true) {
+            /**
+             * Emits a node without emitting comments or tracking sourcemap information.
+             */
+            function emitBareNode(node: Node, allowGeneratedIdentifiers: boolean = true) {
                 // Check if the node can be emitted regardless of the ScriptTarget
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
