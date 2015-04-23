@@ -3,12 +3,6 @@
 
 /* @internal */
 module ts {
-    // represents one LexicalEnvironment frame to store unique generated names
-    interface ScopeFrame {
-        names: Map<string>;
-        previous: ScopeFrame;
-    }
-
     export function isExternalModuleOrDeclarationFile(sourceFile: SourceFile) {
         return isExternalModule(sourceFile) || isDeclarationFile(sourceFile);
     }
@@ -18,7 +12,6 @@ module ts {
         Auto      = 0x00000000,  // No preferred name
         CountMask = 0x0FFFFFFF,  // Temp variable counter
         _i        = 0x10000000,  // Use/preference flag for '_i'
-        _n        = 0x20000000,  // Use/preference flag for '_n'
     }
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
