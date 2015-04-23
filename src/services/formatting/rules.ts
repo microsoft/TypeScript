@@ -193,11 +193,15 @@ module ts.formatting {
         // Insert space after function keyword for anonymous functions
         public SpaceAfterAnonymousFunctionKeyword: Rule;
         public NoSpaceAfterAnonymousFunctionKeyword: Rule;
-
+        
         // Insert space after @ in decorator
         public SpaceBeforeAt: Rule;
         public NoSpaceAfterAt: Rule;
         public SpaceAfterDecorator: Rule;
+
+        // Generator: function*
+        public NoSpaceBetweenFunctionKeywordAndStar: Rule;
+        public SpaceAfterStarInGenerator: Rule;
 
         constructor() {
             ///
@@ -340,6 +344,9 @@ module ts.formatting {
             this.NoSpaceAfterAt = new Rule(RuleDescriptor.create3(SyntaxKind.AtToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
             this.SpaceAfterDecorator = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.ExportKeyword, SyntaxKind.DefaultKeyword, SyntaxKind.ClassKeyword, SyntaxKind.StaticKeyword, SyntaxKind.PublicKeyword, SyntaxKind.PrivateKeyword, SyntaxKind.ProtectedKeyword, SyntaxKind.GetKeyword, SyntaxKind.SetKeyword, SyntaxKind.OpenBracketToken, SyntaxKind.AsteriskToken])), RuleOperation.create2(new RuleOperationContext(Rules.IsEndOfDecoratorContextOnSameLine), RuleAction.Space));
 
+            this.NoSpaceBetweenFunctionKeywordAndStar = new Rule(RuleDescriptor.create1(SyntaxKind.FunctionKeyword, SyntaxKind.AsteriskToken), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclarationOrFunctionExpressionContext), RuleAction.Delete));
+            this.SpaceAfterStarInGenerator = new Rule(RuleDescriptor.create3(SyntaxKind.AsteriskToken, Shared.TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.OpenParenToken])), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclarationOrFunctionExpressionContext), RuleAction.Space));
+
             // These rules are higher in priority than user-configurable rules.
             this.HighPriorityCommonRules =
             [
@@ -357,6 +364,7 @@ module ts.formatting {
                 this.NoSpaceAfterCloseBrace,
                 this.SpaceAfterOpenBrace, this.SpaceBeforeCloseBrace, this.NewLineBeforeCloseBraceInBlockContext,
                 this.SpaceAfterCloseBrace, this.SpaceBetweenCloseBraceAndElse, this.SpaceBetweenCloseBraceAndWhile, this.NoSpaceBetweenEmptyBraceBrackets,
+                this.NoSpaceBetweenFunctionKeywordAndStar, this.SpaceAfterStarInGenerator,
                 this.SpaceAfterFunctionInFuncDecl, this.NewLineAfterOpenBraceInBlockContext, this.SpaceAfterGetSetInMember,
                 this.NoSpaceBetweenReturnAndSemicolon,
                 this.SpaceAfterCertainKeywords,
@@ -572,6 +580,10 @@ module ts.formatting {
             }
 
             return false;
+        }
+
+        static IsFunctionDeclarationOrFunctionExpressionContext(context: FormattingContext): boolean {
+            return context.contextNode.kind === SyntaxKind.FunctionDeclaration || context.contextNode.kind === SyntaxKind.FunctionExpression;
         }
 
         static IsTypeScriptDeclWithBlockContext(context: FormattingContext): boolean {
