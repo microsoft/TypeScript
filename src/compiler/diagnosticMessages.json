@@ -1840,7 +1840,7 @@
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'commonjs' or 'amd'": {
+    "Specify module code generation: 'commonjs', 'amd', or 'umd'": {
         "category": "Message",
         "code": 6016
     },
@@ -1924,7 +1924,7 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs' or 'amd'.": {
+    "Argument for '--module' option must be 'commonjs', 'amd', or 'umd'.": {
         "category": "Error",
         "code": 6046
     },

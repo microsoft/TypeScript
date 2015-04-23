@@ -4645,27 +4645,25 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
             }
 
-            function emitAMDModule(node: SourceFile, startIndex: number) {
-                collectExternalModuleInfo(node);
-                
+            function emitAMDDependencies(node: SourceFile, includeNonAmdDependencies: boolean) {
                 // An AMD define function has the following shape:
                 //     define(id?, dependencies?, factory);
                 //
                 // This has the shape of
                 //     define(name, ["module1", "module2"], function (module1Alias) {
-                // The location of the alias in the parameter list in the factory function needs to 
+                // The location of the alias in the parameter list in the factory function needs to
                 // match the position of the module name in the dependency list.
                 //
-                // To ensure this is true in cases of modules with no aliases, e.g.: 
-                // `import "module"` or `<amd-dependency path= "a.css" />` 
+                // To ensure this is true in cases of modules with no aliases, e.g.:
+                // `import "module"` or `<amd-dependency path= "a.css" />`
                 // we need to add modules without alias names to the end of the dependencies list
-                
-                let aliasedModuleNames: string[] = [];   // names of modules with corresponding parameter in the 
+
+                let aliasedModuleNames: string[] = [];   // names of modules with corresponding parameter in the
                                                          // factory function.
                 let unaliasedModuleNames: string[] = []; // names of modules with no corresponding parameters in
                                                          // factory function.
-                let importAliasNames: string[] = [];     // names of the parameters in the factory function; these 
-                                                         // paramters need to match the indexes of the corresponding 
+                let importAliasNames: string[] = [];     // names of the parameters in the factory function; these
+                                                         // parameters need to match the indexes of the corresponding
                                                          // module names in aliasedModuleNames.
 
                 // Fill in amd-dependency tags
@@ -4687,7 +4685,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         externalModuleName = getLiteralText(<LiteralExpression>moduleName);
                     }
 
-                    // Find the name of the module alais, if there is one
+                    // Find the name of the module alias, if there is one
                     let importAliasName: string;
                     let namespaceDeclaration = getNamespaceDeclarationNode(importNode);
                     if (namespaceDeclaration && !isDefaultImport(importNode)) {
@@ -4697,7 +4695,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         importAliasName = getGeneratedNameForNode(<ImportDeclaration | ExportDeclaration>importNode);
                     }
 
-                    if (importAliasName) {
+                    if (includeNonAmdDependencies && importAliasName) {
                         aliasedModuleNames.push(externalModuleName);
                         importAliasNames.push(importAliasName);
                     }
@@ -4705,12 +4703,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
                         unaliasedModuleNames.push(externalModuleName);
                     }
                 }
-                
-                writeLine();
-                write("define(");
-                if (node.amdModuleName) {
-                    write("\"" + node.amdModuleName + "\", ");
-                }
+
                 write("[\"require\", \"exports\"");
                 if (aliasedModuleNames.length) {
                     write(", ");
@@ -4725,6 +4718,17 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     write(", ");
                     write(importAliasNames.join(", "));
                 }
+            }
+
+            function emitAMDModule(node: SourceFile, startIndex: number) {
+                collectExternalModuleInfo(node);
+
+                writeLine();
+                write("define(");
+                if (node.amdModuleName) {
+                    write("\"" + node.amdModuleName + "\", ");
+                }
+                emitAMDDependencies(node, /*includeNonAmdDependencies*/ true);
                 write(") {");
                 increaseIndent();
                 emitExportStarHelper();
@@ -4744,6 +4748,31 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 emitLinesStartingAt(node.statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
                 emitExportEquals(/*emitAsReturn*/ false);
+            }
+
+            function emitUMDModule(node: SourceFile, startIndex: number) {
+                collectExternalModuleInfo(node);
+
+                // Module is detected first to support Browserify users that load into a browser with an AMD loader
+                writeLines(`(function (deps, factory) {
+    if (typeof module === 'object' && typeof module.exports === 'object') {
+        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+    }
+    else if (typeof define === 'function' && define.amd) {
+        define(deps, factory);
+    }
+})(`);
+                emitAMDDependencies(node, false);
+                write(") {");
+                increaseIndent();
+                emitExportStarHelper();
+                emitCaptureThisForNodeIfNecessary(node);
+                emitLinesStartingAt(node.statements, startIndex);
+                emitTempDeclarations(/*newLine*/ true);
+                emitExportEquals(/*emitAsReturn*/ true);
+                decreaseIndent();
+                writeLine();
+                write("});");
             }
 
             function emitES6Module(node: SourceFile, startIndex: number) {
@@ -4829,6 +4858,9 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     }
                     else if (compilerOptions.module === ModuleKind.AMD) {
                         emitAMDModule(node, startIndex);
+                    }
+                    else if (compilerOptions.module === ModuleKind.UMD) {
+                        emitUMDModule(node, startIndex);
                     }
                     else {
                         emitCommonJSModule(node, startIndex);
