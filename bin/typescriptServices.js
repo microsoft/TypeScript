@@ -41172,4 +41172,4 @@ var TypeScript;
     })(Services = TypeScript.Services || (TypeScript.Services = {}));
 })(TypeScript || (TypeScript = {}));
 /* @internal */
-var toolsVersion = "1.4";
+var toolsVersion = "1.5";
