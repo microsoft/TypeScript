@@ -3,10 +3,6 @@
 
 /* @internal */
 module ts {
-    export function isExternalModuleOrDeclarationFile(sourceFile: SourceFile) {
-        return isExternalModule(sourceFile) || isDeclarationFile(sourceFile);
-    }
-
     // Flags enum to track count of temp variables and a few dedicated names
     const enum TempFlags {
         Auto      = 0x00000000,  // No preferred name

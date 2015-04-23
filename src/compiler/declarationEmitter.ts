@@ -37,6 +37,10 @@ module ts {
         return diagnostics;
     }
 
+    export function isExternalModuleOrDeclarationFile(sourceFile: SourceFile) {
+        return isExternalModule(sourceFile) || isDeclarationFile(sourceFile);
+    }
+
     function emitDeclarations(host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[], jsFilePath: string, root?: SourceFile): DeclarationEmit {
         let newLine = host.getNewLine();
         let compilerOptions = host.getCompilerOptions();
