@@ -284,12 +284,13 @@ module ts {
       * Read tsconfig.json file
       * @param fileName The path to the config file
       */
-    export function readConfigFile(fileName: string): any {
+    export function readConfigFile(fileName: string): { config?: any; error?: Diagnostic } {
         try {
             var text = sys.readFile(fileName);
-            return /\S/.test(text) ? JSON.parse(text) : {};
+            return { config: /\S/.test(text) ? JSON.parse(text) : {} };
         }
         catch (e) {
+            return { error: createCompilerDiagnostic(Diagnostics.Failed_to_parse_file_0_Colon_1, fileName, e.message) };
         }
     }
 

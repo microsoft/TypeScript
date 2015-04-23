@@ -804,20 +804,17 @@ module ts {
                 () => {
                     let text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
 
-                    try {
-                        var json = /\S/.test(text) ? JSON.parse(text) : {};
-                    }
-                    catch (e) {
+                    let result = this.parseConfigFileText(fileName, text);
+
+                    if (result.error) {
                         return {
                             options: {},
                             files: [],
-                            errors: realizeDiagnostic(createCompilerDiagnostic(Diagnostics.Failed_to_parse_file_0_Colon_1, fileName, e.message), '\r\n')
-                        }
+                            errors: [realizeDiagnostic(result.error, '/r/n')]
+                        };
                     }
 
-                    if (json) {
-                        var configFile = parseConfigFile(json, this.host, getDirectoryPath(normalizeSlashes(fileName)));
-                    }
+                    var configFile = parseConfigFile(result.config, this.host, getDirectoryPath(normalizeSlashes(fileName)));
 
                     return {
                         options: configFile.options,
@@ -825,6 +822,15 @@ module ts {
                         errors: realizeDiagnostics(configFile.errors, '\r\n')
                     };
                 });
+        }
+
+        private parseConfigFileText(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
+            try {
+                return { config: /\S/.test(jsonText) ? JSON.parse(jsonText) : {} };
+            }
+            catch (e) {
+                return { error: createCompilerDiagnostic(Diagnostics.Failed_to_parse_file_0_Colon_1, fileName, e.message) };
+            }
         }
 
         public getDefaultCompilationSettings(): string {

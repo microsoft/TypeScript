@@ -208,15 +208,15 @@ module ts {
 
             if (!cachedProgram) {
                 if (configFileName) {
-                    try {
-                        var configObject = readConfigFile(configFileName);
-                    }
-                    catch (e)
-                    {
-                        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Failed_to_parse_file_0_Colon_1, configFileName, e.message));
+
+                    let result = readConfigFile(configFileName);
+                    if (result.error) {
+                        reportDiagnostic(result.error);
                         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                     }
-                    var configParseResult = parseConfigFile(configObject, sys, getDirectoryPath(configFileName));
+
+                    let configObject = result.config;
+                    let configParseResult = parseConfigFile(configObject, sys, getDirectoryPath(configFileName));
                     if (configParseResult.errors.length > 0) {
                         reportDiagnostics(configParseResult.errors);
                         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
@@ -233,7 +233,7 @@ module ts {
                 compilerHost.getSourceFile = getSourceFile;
             }
 
-            var compileResult = compile(rootFileNames, compilerOptions, compilerHost);
+            let compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
             if (!compilerOptions.watch) {
                 return sys.exit(compileResult.exitStatus);
