@@ -1,6 +1,6 @@
-=== tests/cases/compiler/es5-umd.ts ===
+=== tests/cases/compiler/es5-umd2.ts ===
 
-class A
+export class A
 >A : A
 {
     constructor ()

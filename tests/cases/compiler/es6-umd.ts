@@ -1,7 +1,9 @@
-=== tests/cases/compiler/es5-umd.ts ===
+// @target: ES6
+// @sourcemap: false
+// @declaration: false
+// @module: umd
 
 class A
->A : A
 {
     constructor ()
     {
@@ -9,10 +11,7 @@ class A
     }
 
     public B()
->B : () => number
     {
         return 42;
->42 : number
     }
 }
-

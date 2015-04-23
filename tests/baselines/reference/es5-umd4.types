@@ -1,4 +1,4 @@
-=== tests/cases/compiler/es5-umd.ts ===
+=== tests/cases/compiler/es5-umd4.ts ===
 
 class A
 >A : A
@@ -15,4 +15,7 @@ class A
 >42 : number
     }
 }
+
+export = A;
+>A : A
 
