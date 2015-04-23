@@ -287,11 +287,11 @@ module ts {
     export function readConfigFile(fileName: string): { config?: any; error?: Diagnostic }  {
         try {
             var text = sys.readFile(fileName);
-            return parseConfigFileText(fileName, text);
         }
         catch (e) {
             return { error: createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message) };
         }
+        return parseConfigFileText(fileName, text);
     }
 
     /**
