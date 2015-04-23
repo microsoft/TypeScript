@@ -533,6 +533,14 @@ module ts.server {
             throw new Error("Not Implemented Yet.");
         }
 
+        getSyntacticClassifications2(fileName: string, span: TextSpan): number[] {
+            throw new Error("Not Implemented Yet.");
+        }
+
+        getSemanticClassifications2(fileName: string, span: TextSpan): number[] {
+            throw new Error("Not Implemented Yet.");
+        }
+
         getProgram(): Program {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }
