@@ -1,0 +1,29 @@
+tests/cases/conformance/es6/modules/t2.ts(1,13): error TS1212: Identifier expected. 'set' is a reserved word in strict mode
+tests/cases/conformance/es6/modules/t3.ts(1,17): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode
+tests/cases/conformance/es6/modules/t4.ts(1,10): error TS1212: Identifier expected. 'get' is a reserved word in strict mode
+
+
+==== tests/cases/conformance/es6/modules/t1.ts (0 errors) ====
+    
+    let set = {
+        set foo(x: number) {
+        }
+    }
+    let get = 10;
+    
+    export { set, get };
+    
+==== tests/cases/conformance/es6/modules/t2.ts (1 errors) ====
+    import * as set from "./t1";
+                ~~~
+!!! error TS1212: Identifier expected. 'set' is a reserved word in strict mode
+    
+==== tests/cases/conformance/es6/modules/t3.ts (1 errors) ====
+    import { set as yield } from "./t1";
+                    ~~~~~
+!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode
+    
+==== tests/cases/conformance/es6/modules/t4.ts (1 errors) ====
+    import { get } from "./t1";
+             ~~~
+!!! error TS1212: Identifier expected. 'get' is a reserved word in strict mode
