@@ -4842,14 +4842,19 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 }
 
                 if (node.flags & NodeFlags.Ambient) {
-                    return emitOnlyPinnedOrTripleSlashComments(node);
+                    emitOnlyPinnedOrTripleSlashComments(node);
+                    return;
                 }
 
+                // Emitting on a SourceFile is a special case; there is not necessarily
+                // a corresponding start/end we're interested in, and comments will be
+                // emitted for the end-of-file
                 if (node.kind === SyntaxKind.SourceFile) {
                     if (shouldEmitSourceMap) {
                         emitSourceFileStart(<SourceFile>node);
                     }
-                    return emitJavaScriptWorker(node, allowGeneratedIdentifiers);
+                    emitJavaScriptWorker(node, allowGeneratedIdentifiers);
+                    return;
                 }
 
                 let emitComments = shouldEmitLeadingAndTrailingComments(node);
@@ -4857,7 +4862,9 @@ var __param = this.__param || function(index, decorator) { return function (targ
                     emitLeadingComments(node);
                 }
 
-                if (!nodeIsSynthesized(node) && shouldEmitSourceMap) {
+                // Only track sourcemaps on *parsed* nodes when requested.
+                // Synthesized nodes do not correspond to text in the original source.
+                if (shouldEmitSourceMap && !nodeIsSynthesized(node)) {
                     emitStart(node);
                     emitJavaScriptWorker(node, allowGeneratedIdentifiers);
                     emitEnd(node);
