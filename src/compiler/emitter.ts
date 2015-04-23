@@ -4812,7 +4812,7 @@ var __param = this.__param || function(index, decorator) { return function (targ
              * This will take care of leading/trailing comments, and sourcemaps if applicable.
              */
             function emit(node: Node): void {
-                emitNodeWorker(node, /*allowGeneratedIdentifiers*/ true);
+                emitNodeWorker(node,  /*shouldEmitSourceMap*/ true, /*allowGeneratedIdentifiers*/ true);
             }
 
             /**
