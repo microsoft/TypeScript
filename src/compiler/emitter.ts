@@ -4818,14 +4818,35 @@ var __param = this.__param || function(index, decorator) { return function (targ
                 emitLeadingComments(node.endOfFileToken);
             }
 
+            /**
+             * The standard function to emit on any Node.
+             * This will take care of leading/trailing comments, and sourcemaps if applicable.
+             */
             function emit(node: Node, allowGeneratedIdentifiers?: boolean): void {
                 emitNodeWorker(node, /*shouldEmitSourceMap*/ true, allowGeneratedIdentifiers);
             }
 
+            /**
+             * A function to be called in the case where sourcemaps should not be tracked for a single node.
+             * This will still take care of leading/trailing comments.
+             *
+             * Note, however, that sourcemap tracking may resume for child nodes within the given
+             * node depending on the specifics of how the given node will be emitted.
+             *
+             * For instance, if this function is called with the node 'a + b', then we will not track
+             * the sourcemap for 'a + b' itself, but if 'emit' is called instead for nodes 'a' and 'b',
+             * then both 'a' and 'b' will have sourcemaps recorded if appropriate.
+             */
             function emitNodeWithoutSourceMap(node: Node, allowGeneratedIdentifiers?: boolean): void {
                 emitNodeWorker(node, /*shouldEmitSourceMap*/ false, allowGeneratedIdentifiers);
             }
 
+            /**
+             * Do not call this function directly.
+             *
+             * This function acts as a common path to 'emit' and 'emitNodeWithoutSourceMap'
+             * that is aware of ordering between comments and sourcemap spans.
+             */
             function emitNodeWorker(node: Node, shouldEmitSourceMap: boolean, allowGeneratedIdentifiers?: boolean): void {
                 if (!node) {
                     return;
