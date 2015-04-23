@@ -151,7 +151,7 @@ module ts {
             type: { "es3": ScriptTarget.ES3, "es5": ScriptTarget.ES5, "es6": ScriptTarget.ES6 },
             description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES6_experimental,
             paramType: Diagnostics.VERSION,
-            error: Diagnostics.Argument_for_target_option_must_be_es3_es5_or_es6
+            error: Diagnostics.Argument_for_target_option_must_be_ES3_ES5_or_ES6
         },
         {
             name: "version",
