@@ -93,6 +93,8 @@ module ts {
 
         getSyntacticClassifications(fileName: string, start: number, length: number): string;
         getSemanticClassifications(fileName: string, start: number, length: number): string;
+        getSyntacticClassifications2(fileName: string, start: number, length: number): string;
+        getSemanticClassifications2(fileName: string, start: number, length: number): string;
 
         getCompletionsAtPosition(fileName: string, position: number): string;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): string;
@@ -304,6 +306,8 @@ module ts {
     }
 
     function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any): any {
+        return action();
+
         logger.log(actionDescription);
         var start = Date.now();
         var result = action();
@@ -436,6 +440,24 @@ module ts {
                 () => {
                     var classifications = this.languageService.getSemanticClassifications(fileName, createTextSpan(start, length));
                     return classifications;
+                });
+        }
+
+        public getSyntacticClassifications2(fileName: string, start: number, length: number): string {
+            return this.forwardJSONCall(
+                "getSyntacticClassifications('" + fileName + "', " + start + ", " + length + ")",
+                () => {
+                    var classifications = this.languageService.getSyntacticClassifications2(fileName, createTextSpan(start, length));
+                    return classifications.join(",");
+                });
+        }
+
+        public getSemanticClassifications2(fileName: string, start: number, length: number): string {
+            return this.forwardJSONCall(
+                "getSemanticClassifications('" + fileName + "', " + start + ", " + length + ")",
+                () => {
+                    var classifications = this.languageService.getSemanticClassifications2(fileName, createTextSpan(start, length));
+                    return classifications.join(",");
                 });
         }
 

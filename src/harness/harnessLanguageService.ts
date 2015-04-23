@@ -300,6 +300,12 @@ module Harness.LanguageService {
         getSemanticClassifications(fileName: string, span: ts.TextSpan): ts.ClassifiedSpan[] {
             return unwrapJSONCallResult(this.shim.getSemanticClassifications(fileName, span.start, span.length));
         }
+        getSyntacticClassifications2(fileName: string, span: ts.TextSpan): number[] {
+            return unwrapJSONCallResult(this.shim.getSyntacticClassifications2(fileName, span.start, span.length));
+        }
+        getSemanticClassifications2(fileName: string, span: ts.TextSpan): number[] {
+            return unwrapJSONCallResult(this.shim.getSemanticClassifications2(fileName, span.start, span.length));
+        }
         getCompletionsAtPosition(fileName: string, position: number): ts.CompletionInfo {
             return unwrapJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position));
         }
