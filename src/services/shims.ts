@@ -810,7 +810,7 @@ module ts {
                         return {
                             options: {},
                             files: [],
-                            errors: [realizeDiagnostic(result.error, '/r/n')]
+                            errors: [realizeDiagnostic(result.error, '\r\n')]
                         };
                     }
 
