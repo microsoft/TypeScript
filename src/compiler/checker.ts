@@ -7897,7 +7897,7 @@ module ts {
         function checkYieldExpression(node: YieldExpression): void {
             // Grammar checking
             if (!(node.parserContextFlags & ParserContextFlags.Yield)) {
-                grammarErrorOnFirstToken(node, Diagnostics.yield_expression_must_be_contained_within_a_generator_declaration);
+                grammarErrorOnFirstToken(node, Diagnostics.A_yield_expression_is_only_allowed_in_a_generator_declaration);
             }
             else {
                 grammarErrorOnFirstToken(node, Diagnostics.yield_expressions_are_not_currently_supported);
