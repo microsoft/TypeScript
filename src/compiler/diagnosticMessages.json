@@ -691,6 +691,10 @@
         "category": "Error",
         "code": 1220
     },
+    "An overload signature cannot be declared as a generator.": {
+        "category": "Error",
+        "code": 1221
+    },
 
 
     "Duplicate identifier '{0}'.": {
