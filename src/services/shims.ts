@@ -804,7 +804,7 @@ module ts {
                 () => {
                     let text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
 
-                    let result = this.parseConfigFileText(fileName, text);
+                    let result = parseConfigFileText(fileName, text);
 
                     if (result.error) {
                         return {
@@ -822,15 +822,6 @@ module ts {
                         errors: realizeDiagnostics(configFile.errors, '\r\n')
                     };
                 });
-        }
-
-        private parseConfigFileText(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
-            try {
-                return { config: /\S/.test(jsonText) ? JSON.parse(jsonText) : {} };
-            }
-            catch (e) {
-                return { error: createCompilerDiagnostic(Diagnostics.Failed_to_parse_file_0_Colon_1, fileName, e.message) };
-            }
         }
 
         public getDefaultCompilationSettings(): string {
