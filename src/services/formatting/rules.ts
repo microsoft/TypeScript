@@ -458,7 +458,11 @@ module ts.formatting {
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.ConditionalExpression:
                     return true;
-
+                
+                // equals in binding elements: function foo([[x, y] = [1, 2]])
+                case SyntaxKind.BindingElement:
+                // equals in type X = ...
+                case SyntaxKind.TypeAliasDeclaration:
                 // equal in import a = module('a');
                 case SyntaxKind.ImportEqualsDeclaration:
                 // equal in let a = 0;
@@ -475,8 +479,6 @@ module ts.formatting {
                 // Technically, "of" is not a binary operator, but format it the same way as "in"
                 case SyntaxKind.ForOfStatement:
                     return context.currentTokenSpan.kind === SyntaxKind.OfKeyword || context.nextTokenSpan.kind === SyntaxKind.OfKeyword;
-                case SyntaxKind.BindingElement:
-                    return context.currentTokenSpan.kind === SyntaxKind.EqualsToken || context.nextTokenSpan.kind === SyntaxKind.EqualsToken;
             }
             return false;
         }
