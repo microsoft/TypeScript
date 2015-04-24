@@ -990,6 +990,10 @@ module Harness {
                             }
                             break;
 
+                        case 'noemithelpers':
+                            options.noEmitHelpers = !!setting.value;
+                            break;
+
                         case 'noemitonerror':
                             options.noEmitOnError = !!setting.value;
                             break;
@@ -1477,7 +1481,7 @@ module Harness {
 
         // List of allowed metadata names
         var fileMetadataNames = ["filename", "comments", "declaration", "module",
-            "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror",
+            "nolib", "sourcemap", "target", "out", "outdir", "noemithelpers", "noemitonerror",
             "noimplicitany", "noresolve", "newline", "newlines", "emitbom",
             "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
             "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
