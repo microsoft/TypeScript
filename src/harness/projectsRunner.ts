@@ -18,6 +18,7 @@ interface ProjectRunnerTestCase {
     runTest?: boolean; // Run the resulting test
     bug?: string; // If there is any bug associated with this test case
     noResolve?: boolean;
+    rootDir?: string; // --rootDir
 }
 
 interface ProjectRunnerTestCaseResolutionInfo extends ProjectRunnerTestCase {
@@ -160,7 +161,8 @@ class ProjectRunner extends RunnerBase {
                     mapRoot: testCase.resolveMapRoot && testCase.mapRoot ? ts.sys.resolvePath(testCase.mapRoot) : testCase.mapRoot,
                     sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot ? ts.sys.resolvePath(testCase.sourceRoot) : testCase.sourceRoot,
                     module: moduleKind,
-                    noResolve: testCase.noResolve
+                    noResolve: testCase.noResolve,
+                    rootDir: testCase.rootDir
                 };
             }
 
@@ -344,6 +346,7 @@ class ProjectRunner extends RunnerBase {
                         baselineCheck: testCase.baselineCheck,
                         runTest: testCase.runTest,
                         bug: testCase.bug,
+                        rootDir: testCase.rootDir,
                         resolvedInputFiles: ts.map(compilerResult.program.getSourceFiles(), inputFile => inputFile.fileName),
                         emittedFiles: ts.map(compilerResult.outputFiles, outputFile => outputFile.emittedFileName)
                     };

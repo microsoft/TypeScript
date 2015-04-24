@@ -910,7 +910,7 @@ module ts.server {
                 return { errorMsg: "tsconfig syntax error" };
             }
             else {
-                var parsedCommandLine = ts.parseConfigFile(rawConfig, dirPath);
+                var parsedCommandLine = ts.parseConfigFile(rawConfig, ts.sys, dirPath);
                 if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
                     return { errorMsg: "tsconfig option errors" };
                 }

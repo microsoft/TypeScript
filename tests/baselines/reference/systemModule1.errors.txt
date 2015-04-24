@@ -1,7 +1,7 @@
-error TS1204: Cannot compile external modules into amd, system or commonjs when targeting es6 or higher.
+error TS1204: Cannot compile external modules into 'commonjs', 'amd', 'system' or 'umd' when targeting 'ES6' or higher.
 
 
-!!! error TS1204: Cannot compile external modules into amd, system or commonjs when targeting es6 or higher.
+!!! error TS1204: Cannot compile external modules into 'commonjs', 'amd', 'system' or 'umd' when targeting 'ES6' or higher.
 ==== tests/cases/compiler/systemModule1.ts (0 errors) ====
     
     export var x = 1;
