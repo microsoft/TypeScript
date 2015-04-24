@@ -575,7 +575,8 @@ module ts {
             if (node.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
                 return resolveExternalModuleSymbol(resolveExternalModuleName(node, getExternalModuleImportEqualsDeclarationExpression(node)));
             }
-            return getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>node.moduleReference, node);
+            let symbol = getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>node.moduleReference, node);
+            return symbol && symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol;
         }
 
         function getTargetOfImportClause(node: ImportClause): Symbol {
