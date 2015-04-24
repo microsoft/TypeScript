@@ -100,6 +100,86 @@ module ts.server {
         export var Unknown = "unknown";
     }
 
+    module Metrics {
+        var eventCounts: Map<number> = {};
+        var properties: Map<string> = {};
+
+        var sendInterval = 1000 * 60 * 5; // 5 minutes
+        var nextSendTimeMs = Date.now() + sendInterval;
+
+        export function countEvent(eventName: string, host: ts.System) {
+            eventCounts[eventName] = (eventCounts[eventName] || 0) + 1;
+
+            if (Date.now() > nextSendTimeMs) {
+                send(host);
+            }
+        }
+
+        export function registerSettings(svc: ProjectService) {
+            properties['host'] = svc.hostConfiguration.hostInfo;
+            properties['inferredProjects'] = svc.inferredProjects.length.toString();
+            properties['configuredProjects'] = svc.configuredProjects.length.toString();
+
+            var someProject: Project = undefined;
+            if (svc.configuredProjects.length > 0) {
+                someProject = svc.configuredProjects[0];
+            } else if (svc.inferredProjects.length > 0) {
+                someProject = svc.inferredProjects[0];
+            }
+            if (someProject !== undefined) {
+                var settingNames = [
+                    "allowNonTsExtensions",
+                    "declaration",
+                    "emitBOM",
+                    "module",
+                    "noEmit",
+                    "noEmitOnError",
+                    "noImplicitAny",
+                    "noLib",
+                    "noResolve",
+                    "preserveConstEnums",
+                    "removeComments",
+                    "rootDir",
+                    "suppressImplicitAnyIndexErrors",
+                    "target",
+                    "separateCompilation",
+                    "emitDecoratorMetadata"
+                ];
+                var src = someProject.projectOptions.compilerOptions;
+                for (var i = 0, n = settingNames.length; i < n; i++) {
+                    properties['project.' + settingNames[i]] = <string>src[settingNames[i]];
+                }
+            }
+        }
+
+        function send(host: ts.System) {
+            var data = [{
+                iKey: '78e2d1f3-b56d-47d8-9b9a-fa4c056a0f21',
+                name: 'Microsoft.ApplicationInsights.Event',
+                time: new Date().toUTCString(),
+                data: {
+                    baseType: 'EventData',
+                    baseData: {
+                        ver: 2,
+                        name: 'Session', // Ours
+                        measurements: eventCounts,
+                        properties: properties
+                    }
+                },
+                tags: {
+                    'ai.user.id': 'anonymous'
+                }
+            }];
+            var payload = JSON.stringify(data);
+            host.writeFile('C:/throwaway/appLog.txt', payload, false);
+            host.httpsPost('https://dc.services.visualstudio.com/v2/track', payload, 'application/json');
+
+            eventCounts = {};
+            properties = {};
+            nextSendTimeMs = Date.now() + nextSendTimeMs;
+        }
+    }
+
     module Errors { 
         export var NoProject = new Error("No Project.");
     }
@@ -806,6 +886,7 @@ module ts.server {
                 var response: any;
                 var errorMessage: string;
                 var responseRequired = true;
+                Metrics.countEvent(request.command, this.host);
                 switch (request.command) {
                     case CommandNames.Exit: {
                         this.exit();
