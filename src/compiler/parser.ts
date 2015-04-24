@@ -5038,7 +5038,6 @@ module ts {
 
             function setError(message: DiagnosticMessage) {
                 parseErrorAtCurrentToken(message);
-                // error = true;
                 if (throwOnJSDocErrors) {
                     throw new Error(message.key);
                 }
@@ -5096,10 +5095,6 @@ module ts {
 
                 return type;
             }
-
-            //return parseJSDocTypeReference();
-
-            //}
 
             function parseBasicTypeExpression(): JSDocType {
                 switch (token) {
