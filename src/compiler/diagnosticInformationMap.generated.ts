@@ -440,6 +440,7 @@ module ts {
         Cannot_find_the_common_subdirectory_path_for_the_input_files: { code: 5009, category: DiagnosticCategory.Error, key: "Cannot find the common subdirectory path for the input files." },
         Cannot_read_file_0_Colon_1: { code: 5012, category: DiagnosticCategory.Error, key: "Cannot read file '{0}': {1}" },
         Unsupported_file_encoding: { code: 5013, category: DiagnosticCategory.Error, key: "Unsupported file encoding." },
+        Failed_to_parse_file_0_Colon_1: { code: 5014, category: DiagnosticCategory.Error, key: "Failed to parse file '{0}': {1}." },
         Unknown_compiler_option_0: { code: 5023, category: DiagnosticCategory.Error, key: "Unknown compiler option '{0}'." },
         Compiler_option_0_requires_a_value_of_type_1: { code: 5024, category: DiagnosticCategory.Error, key: "Compiler option '{0}' requires a value of type {1}." },
         Could_not_write_file_0_Colon_1: { code: 5033, category: DiagnosticCategory.Error, key: "Could not write file '{0}': {1}" },

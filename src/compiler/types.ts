@@ -1144,6 +1144,10 @@ module ts {
         getCurrentDirectory(): string;
     }
 
+    export interface ParseConfigHost {
+        readDirectory(rootDir: string, extension: string): string[];
+    }
+
     export interface WriteFileCallback {
         (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
     }
