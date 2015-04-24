@@ -1,11 +1,27 @@
-//// [decoratorOnClassAccessor6.ts]
-declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
+//// [tests/cases/conformance/decorators/missingDecoratorType.ts] ////
 
+//// [a.ts]
+
+interface Object { }
+interface Array<T> { }
+interface String { }
+interface Boolean { }
+interface Number { }
+interface Function { }
+interface RegExp { }
+interface IArguments { }
+
+//// [b.ts]
+declare var dec: any;
+
+@dec
 class C {
-    public @dec set accessor(value: number) { }
 }
 
-//// [decoratorOnClassAccessor6.js]
+
+
+//// [a.js]
+//// [b.js]
 if (typeof __decorate !== "function") __decorate = function (decorators, target, key, desc) {
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
     switch (arguments.length) {
@@ -17,14 +33,8 @@ if (typeof __decorate !== "function") __decorate = function (decorators, target,
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "accessor", {
-        set: function (value) { },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, "accessor",
-        __decorate([
-            dec
-        ], C.prototype, "accessor", Object.getOwnPropertyDescriptor(C.prototype, "accessor")));
+    C = __decorate([
+        dec
+    ], C);
     return C;
 })();

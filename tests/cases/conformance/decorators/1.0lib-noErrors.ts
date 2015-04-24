@@ -1,4 +1,5 @@
-/*! *****************************************************************************
+// @target: ES5
+/* *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved. 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
@@ -84,8 +85,8 @@ interface PropertyDescriptor {
     enumerable?: boolean;
     value?: any;
     writable?: boolean;
-    get? (): any;
-    set? (v: any): void;
+    get?(): any;
+    set?(v: any): void;
 }
 
 interface PropertyDescriptorMap {
@@ -124,7 +125,10 @@ interface Object {
     propertyIsEnumerable(v: string): boolean;
 }
 
-interface ObjectConstructor {
+/**
+  * Provides functionality common to all JavaScript objects.
+  */
+declare var Object: {
     new (value?: any): Object;
     (): any;
     (value: any): any;
@@ -179,19 +183,19 @@ interface ObjectConstructor {
       * Prevents the modification of attributes of existing properties, and prevents the addition of new properties.
       * @param o Object on which to lock the attributes. 
       */
-    seal<T>(o: T): T;
+    seal(o: any): any;
 
     /**
       * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
       * @param o Object on which to lock the attributes.
       */
-    freeze<T>(o: T): T;
+    freeze(o: any): any;
 
     /**
       * Prevents the addition of new properties to an object.
       * @param o Object to make non-extensible. 
       */
-    preventExtensions<T>(o: T): T;
+    preventExtensions(o: any): any;
 
     /**
       * Returns true if existing property attributes cannot be modified in an object and new properties cannot be added to the object.
@@ -217,11 +221,6 @@ interface ObjectConstructor {
       */
     keys(o: any): string[];
 }
-
-/**
-  * Provides functionality common to all JavaScript objects.
-  */
-declare var Object: ObjectConstructor;
 
 /**
   * Creates a new function.
@@ -257,8 +256,8 @@ interface Function {
     caller: Function;
 }
 
-interface FunctionConstructor {
-    /**
+declare var Function: {
+    /** 
       * Creates a new function.
       * @param args A list of arguments the function accepts.
       */
@@ -266,8 +265,6 @@ interface FunctionConstructor {
     (...args: string[]): Function;
     prototype: Function;
 }
-
-declare var Function: FunctionConstructor;
 
 interface IArguments {
     [index: number]: any;
@@ -321,13 +318,13 @@ interface String {
       * Matches a string with a regular expression, and returns an array containing the results of that search.
       * @param regexp A variable name or string literal containing the regular expression pattern and flags.
       */
-    match(regexp: string): RegExpMatchArray;
+    match(regexp: string): string[];
 
     /** 
       * Matches a string with a regular expression, and returns an array containing the results of that search.
       * @param regexp A regular expression object that contains the regular expression pattern and applicable flags. 
       */
-    match(regexp: RegExp): RegExpMatchArray;
+    match(regexp: RegExp): string[];
 
     /**
       * Replaces text in a string, using a regular expression or search string.
@@ -425,36 +422,26 @@ interface String {
       */
     substr(from: number, length?: number): string;
 
-    /** Returns the primitive value of the specified object. */
-    valueOf(): string;
-
     [index: number]: string;
 }
 
-interface StringConstructor {
+/** 
+  * Allows manipulation and formatting of text strings and determination and location of substrings within strings. 
+  */
+declare var String: {
     new (value?: any): String;
     (value?: any): string;
     prototype: String;
     fromCharCode(...codes: number[]): string;
 }
 
-/** 
-  * Allows manipulation and formatting of text strings and determination and location of substrings within strings. 
-  */
-declare var String: StringConstructor;
-
 interface Boolean {
-    /** Returns the primitive value of the specified object. */
-    valueOf(): boolean;
 }
-
-interface BooleanConstructor {
+declare var Boolean: {
     new (value?: any): Boolean;
     (value?: any): boolean;
     prototype: Boolean;
 }
-
-declare var Boolean: BooleanConstructor;
 
 interface Number {
     /**
@@ -480,12 +467,10 @@ interface Number {
       * @param precision Number of significant digits. Must be in the range 1 - 21, inclusive.
       */
     toPrecision(precision?: number): string;
-
-    /** Returns the primitive value of the specified object. */
-    valueOf(): number;
 }
 
-interface NumberConstructor {
+/** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
+declare var Number: {
     new (value?: any): Number;
     (value?: any): number;
     prototype: Number;
@@ -513,13 +498,6 @@ interface NumberConstructor {
       * JavaScript displays POSITIVE_INFINITY values as infinity. 
       */
     POSITIVE_INFINITY: number;
-}
-
-/** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
-declare var Number: NumberConstructor;
-
-interface TemplateStringsArray extends Array<string> {
-    raw: string[];
 }
 
 interface Math {
@@ -561,7 +539,7 @@ interface Math {
       */
     atan(x: number): number;
     /**
-      * Returns the angle (in radians) from the X axis to a point.
+      * Returns the angle (in radians) from the X axis to a point (y,x).
       * @param y A numeric expression representing the cartesian y-coordinate.
       * @param x A numeric expression representing the cartesian x-coordinate.
       */
@@ -787,7 +765,7 @@ interface Date {
     toJSON(key?: any): string;
 }
 
-interface DateConstructor {
+declare var Date: {
     new (): Date;
     new (value: number): Date;
     new (value: string): Date;
@@ -813,17 +791,38 @@ interface DateConstructor {
     now(): number;
 }
 
-declare var Date: DateConstructor;
+interface RegExpExecArray {
+    [index: number]: string;
+    length: number;
 
-interface RegExpMatchArray extends Array<string> {
-    index?: number;
-    input?: string;
-}
-
-interface RegExpExecArray extends Array<string> {
     index: number;
     input: string;
+
+    toString(): string;
+    toLocaleString(): string;
+    concat(...items: string[][]): string[];
+    join(separator?: string): string;
+    pop(): string;
+    push(...items: string[]): number;
+    reverse(): string[];
+    shift(): string;
+    slice(start?: number, end?: number): string[];
+    sort(compareFn?: (a: string, b: string) => number): string[];
+    splice(start: number): string[];
+    splice(start: number, deleteCount: number, ...items: string[]): string[];
+    unshift(...items: string[]): number;
+
+    indexOf(searchElement: string, fromIndex?: number): number;
+    lastIndexOf(searchElement: string, fromIndex?: number): number;
+    every(callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any): boolean;
+    forEach(callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any): void;
+    map(callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): any[];
+    filter(callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any): string[];
+    reduce(callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: string[]) => any, initialValue?: any): any;
+    reduceRight(callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: string[]) => any, initialValue?: any): any;
 }
+
 
 interface RegExp {
     /** 
@@ -838,7 +837,7 @@ interface RegExp {
       */
     test(string: string): boolean;
 
-    /** Returns a copy of the text of the regular expression pattern. Read-only. The regExp argument is a Regular expression object. It can be a variable name or a literal. */
+    /** Returns a copy of the text of the regular expression pattern. Read-only. The rgExp argument is a Regular expression object. It can be a variable name or a literal. */
     source: string;
 
     /** Returns a Boolean value indicating the state of the global flag (g) used with a regular expression. Default is false. Read-only. */
@@ -855,11 +854,9 @@ interface RegExp {
     // Non-standard extensions
     compile(): RegExp;
 }
-
-interface RegExpConstructor {
+declare var RegExp: {
     new (pattern: string, flags?: string): RegExp;
     (pattern: string, flags?: string): RegExp;
-    prototype: RegExp;
 
     // Non-standard extensions
     $1: string;
@@ -874,86 +871,63 @@ interface RegExpConstructor {
     lastMatch: string;
 }
 
-declare var RegExp: RegExpConstructor;
-
 interface Error {
     name: string;
     message: string;
 }
-
-interface ErrorConstructor {
+declare var Error: {
     new (message?: string): Error;
     (message?: string): Error;
     prototype: Error;
 }
 
-declare var Error: ErrorConstructor;
-
 interface EvalError extends Error {
 }
-
-interface EvalErrorConstructor {
+declare var EvalError: {
     new (message?: string): EvalError;
     (message?: string): EvalError;
     prototype: EvalError;
 }
 
-declare var EvalError: EvalErrorConstructor;
-
 interface RangeError extends Error {
 }
-
-interface RangeErrorConstructor {
+declare var RangeError: {
     new (message?: string): RangeError;
     (message?: string): RangeError;
     prototype: RangeError;
 }
 
-declare var RangeError: RangeErrorConstructor;
-
 interface ReferenceError extends Error {
 }
-
-interface ReferenceErrorConstructor {
+declare var ReferenceError: {
     new (message?: string): ReferenceError;
     (message?: string): ReferenceError;
     prototype: ReferenceError;
 }
 
-declare var ReferenceError: ReferenceErrorConstructor;
-
 interface SyntaxError extends Error {
 }
-
-interface SyntaxErrorConstructor {
+declare var SyntaxError: {
     new (message?: string): SyntaxError;
     (message?: string): SyntaxError;
     prototype: SyntaxError;
 }
 
-declare var SyntaxError: SyntaxErrorConstructor;
-
 interface TypeError extends Error {
 }
-
-interface TypeErrorConstructor {
+declare var TypeError: {
     new (message?: string): TypeError;
     (message?: string): TypeError;
     prototype: TypeError;
 }
 
-declare var TypeError: TypeErrorConstructor;
-
 interface URIError extends Error {
 }
-
-interface URIErrorConstructor {
+declare var URIError: {
     new (message?: string): URIError;
     (message?: string): URIError;
     prototype: URIError;
 }
-
-declare var URIError: URIErrorConstructor;
 
 interface JSON {
     /**
@@ -1007,23 +981,10 @@ declare var JSON: JSON;
 
 interface Array<T> {
     /**
-      * Gets or sets the length of the array. This is a number one higher than the highest element defined in an array.
-      */
-    length: number;
-    /**
       * Returns a string representation of an array.
       */
     toString(): string;
     toLocaleString(): string;
-    /**
-      * Appends new elements to an array, and returns the new length of the array.
-      * @param items New elements of the Array.
-      */
-    push(...items: T[]): number;
-    /**
-      * Removes the last element from an array and returns it.
-      */
-    pop(): T;
     /**
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
@@ -1039,6 +1000,15 @@ interface Array<T> {
       * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
       */
     join(separator?: string): string;
+    /**
+      * Removes the last element from an array and returns it.
+      */
+    pop(): T;
+    /**
+      * Appends new elements to an array, and returns the new length of the array.
+      * @param items New elements of the Array.
+      */
+    push(...items: T[]): number;
     /**
       * Reverses the elements in an Array. 
       */
@@ -1155,10 +1125,14 @@ interface Array<T> {
       */
     reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U;
 
+    /**
+      * Gets or sets the length of the array. This is a number one higher than the highest element defined in an array.
+      */
+    length: number;
+
     [n: number]: T;
 }
-
-interface ArrayConstructor {
+declare var Array: {
     new (arrayLength?: number): any[];
     new <T>(arrayLength: number): T[];
     new <T>(...items: T[]): T[];
@@ -1168,19 +1142,3 @@ interface ArrayConstructor {
     isArray(arg: any): boolean;
     prototype: Array<any>;
 }
-
-declare var Array: ArrayConstructor;
-
-interface TypedPropertyDescriptor<T> {
-    enumerable?: boolean;
-    configurable?: boolean;
-    writable?: boolean;
-    value?: T;
-    get?: () => T;
-    set?: (value: T) => void;
-}
-
-declare type ClassDecorator = <TFunction extends Function>(target: TFunction) => TFunction | void;
-declare type PropertyDecorator = (target: Object, propertyKey: string | symbol) => void;
-declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
-declare type ParameterDecorator = (target: Object, propertyKey: string | symbol, parameterIndex: number) => void;

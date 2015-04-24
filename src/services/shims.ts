@@ -802,17 +802,24 @@ module ts {
             return this.forwardJSONCall(
                 "getTSConfigFileInfo('" + fileName + "')",
                 () => {
-                    var text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
-                    var json = /\S/.test(text) ? JSON.parse(text) : {};
+                    let text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
 
-                    var configFile = parseConfigFile(json, this.host, getDirectoryPath(normalizeSlashes(fileName)));
+                    let result = parseConfigFileText(fileName, text);
 
-                    var realErrors = realizeDiagnostics(configFile.errors, '\r\n');
+                    if (result.error) {
+                        return {
+                            options: {},
+                            files: [],
+                            errors: [realizeDiagnostic(result.error, '\r\n')]
+                        };
+                    }
+
+                    var configFile = parseConfigFile(result.config, this.host, getDirectoryPath(normalizeSlashes(fileName)));
 
                     return {
                         options: configFile.options,
                         files: configFile.fileNames,
-                        errors: realErrors
+                        errors: realizeDiagnostics(configFile.errors, '\r\n')
                     };
                 });
         }

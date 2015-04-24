@@ -34,7 +34,7 @@ var __extends = this.__extends || function (d, b) {
 
         // emit output for the __decorate helper function
         const decorateHelper = `
-var __decorate = this.__decorate || function (decorators, target, key, desc) {
+if (typeof __decorate !== "function") __decorate = function (decorators, target, key, desc) {
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
     switch (arguments.length) {
         case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);
@@ -45,13 +45,15 @@ var __decorate = this.__decorate || function (decorators, target, key, desc) {
 
         // emit output for the __metadata helper function
         const metadataHelper = `
-var __metadata = this.__metadata || function (k, v) {
+if (typeof __metadata !== "function") __metadata = function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };`;
 
         // emit output for the __param helper function
         const paramHelper = `
-var __param = this.__param || function(index, decorator) { return function (target, key) { decorator(target, key, index); } };`;
+if (typeof __param !== "function") __param = function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};`;
 
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
