@@ -3,22 +3,11 @@
 
 /* @internal */
 module ts {
-    // represents one LexicalEnvironment frame to store unique generated names
-    interface ScopeFrame {
-        names: Map<string>;
-        previous: ScopeFrame;
-    }
-
-    export function isExternalModuleOrDeclarationFile(sourceFile: SourceFile) {
-        return isExternalModule(sourceFile) || isDeclarationFile(sourceFile);
-    }
-
     // Flags enum to track count of temp variables and a few dedicated names
     const enum TempFlags {
         Auto      = 0x00000000,  // No preferred name
         CountMask = 0x0FFFFFFF,  // Temp variable counter
         _i        = 0x10000000,  // Use/preference flag for '_i'
-        _n        = 0x20000000,  // Use/preference flag for '_n'
     }
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
@@ -146,8 +135,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
 
             let writeComment = writeCommentRange;
 
-            /** Emit a node */
-            let emit = emitNodeWithoutSourceMap;
+            let emitSourceFileStart = (node: Node) => { }
 
             /** Called just before starting emit of a node */
             let emitStart = function (node: Node) { };
@@ -658,25 +646,8 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     sourceMapDir = getDirectoryPath(normalizePath(jsFilePath));
                 }
 
-                function emitNodeWithSourceMap(node: Node, allowGeneratedIdentifiers?: boolean) {
-                    if (node) {
-                        if (nodeIsSynthesized(node)) {
-                            return emitNodeWithoutSourceMap(node, /*allowGeneratedIdentifiers*/ false);
-                        }
-                        if (node.kind != SyntaxKind.SourceFile) {
-                            recordEmitNodeStartSpan(node);
-                            emitNodeWithoutSourceMap(node, allowGeneratedIdentifiers);
-                            recordEmitNodeEndSpan(node);
-                        }
-                        else {
-                            recordNewSourceFileStart(<SourceFile>node);
-                            emitNodeWithoutSourceMap(node, /*allowGeneratedIdentifiers*/ false);
-                        }
-                    }
-                }
-
                 writeEmittedFiles = writeJavaScriptAndSourceMapFile;
-                emit = emitNodeWithSourceMap;
+                emitSourceFileStart = recordNewSourceFileStart
                 emitStart = recordEmitNodeStartSpan;
                 emitEnd = recordEmitNodeEndSpan;
                 emitToken = writeTextWithSpanRecord;
@@ -1291,7 +1262,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
 
             function emitBindingElement(node: BindingElement) {
                 if (node.propertyName) {
-                    emit(node.propertyName, /*allowGeneratedIdentifiers*/ false);
+                    emitVerbatimDeclarationName(node.propertyName);
                     write(": ");
                 }
                 if (node.dotDotDotToken) {
@@ -1639,7 +1610,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     write("*");
                 }
 
-                emit(node.name, /*allowGeneratedIdentifiers*/ false);
+                emitVerbatimDeclarationName(node.name);
                 if (languageVersion < ScriptTarget.ES6) {
                     write(": function ");
                 }
@@ -1647,13 +1618,13 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
             }
 
             function emitPropertyAssignment(node: PropertyDeclaration) {
-                emit(node.name, /*allowGeneratedIdentifiers*/ false);
+                emitVerbatimDeclarationName(node.name);
                 write(": ");
                 emit(node.initializer);
             }
 
             function emitShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
-                emit(node.name, /*allowGeneratedIdentifiers*/ false);
+                emitVerbatimDeclarationName(node.name);
                 // If short-hand property has a prefix, then regardless of the target version, we will emit it as normal property assignment. For example:
                 //  module m {
                 //      export let y;
@@ -1733,7 +1704,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 let indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
                 write(".");
                 let indentedAfterDot = indentIfOnDifferentLines(node, node.dotToken, node.name);
-                emit(node.name, /*allowGeneratedIdentifiers*/ false);
+                emitVerbatimDeclarationName(node.name);
                 decreaseIndentIf(indentedBeforeDot, indentedAfterDot);
             }
 
@@ -2222,7 +2193,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 write("var ");
                 
                 // _i = 0
-                emitNodeWithoutSourceMap(counter);
+                emitWithoutSourceMap(counter);
                 write(" = 0");
                 emitEnd(node.expression);
 
@@ -2230,9 +2201,9 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     // , _a = expr
                     write(", ");
                     emitStart(node.expression);
-                    emitNodeWithoutSourceMap(rhsReference);
+                    emitWithoutSourceMap(rhsReference);
                     write(" = ");
-                    emitNodeWithoutSourceMap(node.expression);
+                    emitWithoutSourceMap(node.expression);
                     emitEnd(node.expression);
                 }
 
@@ -2240,10 +2211,10 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 
                 // _i < _a.length;
                 emitStart(node.initializer);
-                emitNodeWithoutSourceMap(counter);
+                emitWithoutSourceMap(counter);
                 write(" < ");
 
-                emitNodeWithoutSourceMap(rhsReference);
+                emitWithoutSourceMap(rhsReference);
                 write(".length");
 
                 emitEnd(node.initializer);
@@ -2251,7 +2222,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 
                 // _i++)
                 emitStart(node.initializer);
-                emitNodeWithoutSourceMap(counter);
+                emitWithoutSourceMap(counter);
                 write("++");
                 emitEnd(node.initializer);
                 emitToken(SyntaxKind.CloseParenToken, node.expression.end);
@@ -2278,17 +2249,17 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                         else {
                             // The following call does not include the initializer, so we have
                             // to emit it separately.
-                            emitNodeWithoutSourceMap(declaration);
+                            emitWithoutSourceMap(declaration);
                             write(" = ");
-                            emitNodeWithoutSourceMap(rhsIterationValue);
+                            emitWithoutSourceMap(rhsIterationValue);
                         }
                     }
                     else {
                         // It's an empty declaration list. This can only happen in an error case, if the user wrote
                         //     for (let of []) {}
-                        emitNodeWithoutSourceMap(createTempVariable(TempFlags.Auto));
+                        emitWithoutSourceMap(createTempVariable(TempFlags.Auto));
                         write(" = ");
-                        emitNodeWithoutSourceMap(rhsIterationValue);
+                        emitWithoutSourceMap(rhsIterationValue);
                     }
                 }
                 else {
@@ -2301,7 +2272,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                         emitDestructuring(assignmentExpression, /*isAssignmentExpressionStatement*/ true, /*value*/ undefined);
                     }
                     else {
-                        emitNodeWithoutSourceMap(assignmentExpression);
+                        emitWithoutSourceMap(assignmentExpression);
                     }
                 }
                 emitEnd(node.initializer);
@@ -2457,7 +2428,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                         write("exports.");
                     }
                 }
-                emitNodeWithoutSourceMap(node.name);
+                emitWithoutSourceMap(node.name);
                 emitEnd(node.name);
             }
 
@@ -2484,7 +2455,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                         emitModuleMemberName(node);
                     }
                     write(" = ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     emitEnd(node);
                     write(";");
                 }
@@ -2497,7 +2468,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                         emitStart(specifier.name);
                         emitContainingModuleName(specifier);
                         write(".");
-                        emitNodeWithoutSourceMap(specifier.name);
+                        emitWithoutSourceMap(specifier.name);
                         emitEnd(specifier.name);
                         write(" = ");
                         emitExpressionIdentifier(name);
@@ -2880,14 +2851,14 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                             writeLine();
                             emitStart(p);
                             write("if (");
-                            emitNodeWithoutSourceMap(p.name);
+                            emitWithoutSourceMap(p.name);
                             write(" === void 0)");
                             emitEnd(p);
                             write(" { ");
                             emitStart(p);
-                            emitNodeWithoutSourceMap(p.name);
+                            emitWithoutSourceMap(p.name);
                             write(" = ");
-                            emitNodeWithoutSourceMap(p.initializer);
+                            emitWithoutSourceMap(p.initializer);
                             emitEnd(p);
                             write("; }");
                         }
@@ -2910,7 +2881,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     emitLeadingComments(restParam);
                     emitStart(restParam);
                     write("var ");
-                    emitNodeWithoutSourceMap(restParam.name);
+                    emitWithoutSourceMap(restParam.name);
                     write(" = [];");
                     emitEnd(restParam);
                     emitTrailingComments(restParam);
@@ -2931,7 +2902,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     increaseIndent();
                     writeLine();
                     emitStart(restParam);
-                    emitNodeWithoutSourceMap(restParam.name);
+                    emitWithoutSourceMap(restParam.name);
                     write("[" + tempName + " - " + restIndex + "] = arguments[" + tempName + "];");
                     emitEnd(restParam);
                     decreaseIndent();
@@ -2942,7 +2913,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
 
             function emitAccessor(node: AccessorDeclaration) {
                 write(node.kind === SyntaxKind.GetAccessor ? "get " : "set ");
-                emit(node.name, /*allowGeneratedIdentifiers*/ false);
+                emitVerbatimDeclarationName(node.name);
                 emitSignatureAndBody(node);
             }
 
@@ -2950,9 +2921,9 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 return node.kind === SyntaxKind.ArrowFunction && languageVersion >= ScriptTarget.ES6;
             }
 
-            function emitDeclarationName(node: Declaration) {
+            function emitNameOfDeclaration(node: Declaration) {
                 if (node.name) {
-                    emitNodeWithoutSourceMap(node.name);
+                    emitWithoutSourceMap(node.name);
                 }
                 else {
                     write(getGeneratedNameForNode(node));
@@ -2975,11 +2946,6 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     return emitOnlyPinnedOrTripleSlashComments(node);
                 }
 
-                if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
-                    // Methods will emit the comments as part of emitting method declaration
-                    emitLeadingComments(node);
-                }
-
                 // For targeting below es6, emit functions-like declaration including arrow function using function keyword.
                 // When targeting ES6, emit arrow function natively in ES6 by omitting function keyword and using fat arrow instead
                 if (!shouldEmitAsArrowFunction(node)) {
@@ -2998,15 +2964,12 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 }
 
                 if (shouldEmitFunctionName(node)) {
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                 }
 
                 emitSignatureAndBody(node);
                 if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.FunctionDeclaration && node.parent === currentSourceFile && node.name) {
                     emitExportMemberAssignments((<FunctionDeclaration>node).name);
-                }
-                if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
-                    emitTrailingComments(node);
                 }
             }
 
@@ -3212,7 +3175,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                         emitStart(param);
                         emitStart(param.name);
                         write("this.");
-                        emitNodeWithoutSourceMap(param.name);
+                        emitWithoutSourceMap(param.name);
                         emitEnd(param.name);
                         write(" = ");
                         emit(param.name);
@@ -3226,7 +3189,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 // TODO: (jfreeman,drosen): comment on why this is emitNodeWithoutSourceMap instead of emit here.
                 if (memberName.kind === SyntaxKind.StringLiteral || memberName.kind === SyntaxKind.NumericLiteral) {
                     write("[");
-                    emitNodeWithoutSourceMap(memberName);
+                    emitWithoutSourceMap(memberName);
                     write("]");
                 }
                 else if (memberName.kind === SyntaxKind.ComputedPropertyName) {
@@ -3234,7 +3197,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 }
                 else {
                     write(".");
-                    emitNodeWithoutSourceMap(memberName);
+                    emitWithoutSourceMap(memberName);
                 }
             }
 
@@ -3265,7 +3228,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 }
                 else {
                     if (property.flags & NodeFlags.Static) {
-                        emitDeclarationName(node);
+                        emitNameOfDeclaration(node);
                     }
                     else {
                         write("this");
@@ -3440,7 +3403,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
 
                 if (languageVersion < ScriptTarget.ES6) {
                     write("function ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     emitSignatureParameters(ctor);
                 }
                 else {
@@ -3596,7 +3559,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                         }
 
                         write("let ");
-                        emitDeclarationName(node);
+                        emitNameOfDeclaration(node);
                         write(" = ");
                     }
                     else if (isES6ExportedDeclaration(node)) {
@@ -3635,7 +3598,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 // check if this is an "export default class" as it may not have a name. Do not emit the name if the class is decorated.
                 if ((node.name || !(node.flags & NodeFlags.Default)) && !thisNodeIsDecorated) {
                     write(" ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                 }
 
                 var baseTypeNode = getClassExtendsHeritageClauseElement(node);
@@ -3667,9 +3630,9 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     if (node.name) {
                         writeLine();
                         write("Object.defineProperty(");
-                        emitDeclarationName(node);
+                        emitNameOfDeclaration(node);
                         write(", \"name\", { value: \"");
-                        emitDeclarationName(node);
+                        emitNameOfDeclaration(node);
                         write("\", configurable: true });");
                         writeLine();
                     }
@@ -3706,7 +3669,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     emitStart(node);
                     emitModuleMemberName(node);
                     write(" = ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     emitEnd(node);
                     write(";");
                 }
@@ -3714,7 +3677,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     // if this is a top level default export of decorated class, write the export after the declaration.
                     writeLine();
                     write("export default ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     write(";");
                 }
             }
@@ -3722,7 +3685,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
             function emitClassLikeDeclarationBelowES6(node: ClassLikeDeclaration) {
                 if (node.kind === SyntaxKind.ClassDeclaration) {
                     write("var ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     write(" = ");
                 }
 
@@ -3746,7 +3709,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     writeLine();
                     emitStart(baseTypeNode);
                     write("__extends(");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     write(", _super);");
                     emitEnd(baseTypeNode);
                 }
@@ -3759,7 +3722,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end, () => {
                     write("return ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                 });
                 write(";");
                 emitTempDeclarations(/*newLine*/ true);
@@ -3792,7 +3755,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
             }
 
             function emitClassMemberPrefix(node: ClassLikeDeclaration, member: Node) {
-                emitDeclarationName(node);
+                emitNameOfDeclaration(node);
                 if (!(member.flags & NodeFlags.Static)) {
                     write(".prototype");
                 }
@@ -3827,7 +3790,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
 
                 writeLine();
                 emitStart(node);
-                emitDeclarationName(node);
+                emitNameOfDeclaration(node);
                 write(" = __decorate([");
                 increaseIndent();
                 writeLine();
@@ -3845,7 +3808,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 decreaseIndent();
                 writeLine();
                 write("], ");
-                emitDeclarationName(node);
+                emitNameOfDeclaration(node);
                 write(");");
                 emitEnd(node);
                 writeLine();
@@ -4482,11 +4445,11 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                                     emitStart(specifier);
                                     emitContainingModuleName(specifier);
                                     write(".");
-                                    emitNodeWithoutSourceMap(specifier.name);
+                                    emitWithoutSourceMap(specifier.name);
                                     write(" = ");
                                     write(generatedName);
                                     write(".");
-                                    emitNodeWithoutSourceMap(specifier.propertyName || specifier.name);
+                                    emitWithoutSourceMap(specifier.propertyName || specifier.name);
                                     write(";");
                                     emitEnd(specifier);
                                 }
@@ -4522,7 +4485,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                         }
                         if (node.moduleSpecifier) {
                             write(" from ");
-                            emitNodeWithoutSourceMap(node.moduleSpecifier);
+                            emitWithoutSourceMap(node.moduleSpecifier);
                         }
                         write(";");
                         emitEnd(node);
@@ -4541,10 +4504,10 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                         }
                         emitStart(specifier);
                         if (specifier.propertyName) {
-                            emitNodeWithoutSourceMap(specifier.propertyName);
+                            emitWithoutSourceMap(specifier.propertyName);
                             write(" as ");
                         }
-                        emitNodeWithoutSourceMap(specifier.name);
+                        emitWithoutSourceMap(specifier.name);
                         emitEnd(specifier);
                         needsComma = true;
                     }
@@ -4849,13 +4812,76 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 emitLeadingComments(node.endOfFileToken);
             }
 
-            function emitNodeWithoutSourceMap(node: Node, allowGeneratedIdentifiers?: boolean): void {
+            /**
+             * The standard function to emit on any Node.
+             * This will take care of leading/trailing comments, and sourcemaps if applicable.
+             */
+            function emit(node: Node): void {
+                emitNodeWorker(node,  /*shouldEmitSourceMap*/ true, /*allowGeneratedIdentifiers*/ true);
+            }
+
+            /**
+             * A function to be called in the case where sourcemaps should not be tracked for a single node.
+             * This will still take care of leading/trailing comments.
+             *
+             * Note, however, that sourcemap tracking may resume for child nodes within the given
+             * node depending on the specifics of how the given node will be emitted.
+             *
+             * For instance, if this function is called with the node 'a + b', then we will not track
+             * the sourcemap for 'a + b' itself, but if 'emit' is called instead for nodes 'a' and 'b',
+             * then both 'a' and 'b' will have sourcemaps recorded if appropriate.
+             */
+            function emitWithoutSourceMap(node: Node): void {
+                emitNodeWorker(node, /*shouldEmitSourceMap*/ false, /*allowGeneratedIdentifiers*/ true);
+            }
+
+            /**
+             * Emits a node with comments and tracks sourcemaps for said node, disallowing the renaming
+             * of identifiers to be *for this node*.
+             *
+             * This is useful in scenarios when a name's usage can be non-local and it is not feasible to
+             * rename it (e.g. the declaration name of a property for a shorthand property).
+             *
+             * Note that preventing generated identifier renaming only applies if the given node is an
+             * identifier. If it is not an identifier, contained identifiers may still be replaced
+             * by their generated counterparts.
+             *
+             * For instance, given an the computed property '[a + b]' from below :
+             *      var x = {
+             *          [a + b]() {
+             *          }
+             *      }
+             * Both 'a' and 'b' may be replaced by generated counterparts in '[a + b]'.
+             */
+            function emitVerbatimDeclarationName(node: DeclarationName) {
+                emitNodeWorker(node, /*shouldEmitSourceMap*/ true, /*allowGeneratedIdentifiers*/ false);
+            }
+
+            /**
+             * Do not call this function directly.
+             *
+             * This function acts as a common path to 'emit' and 'emitNodeWithoutSourceMap'
+             * that is aware of ordering between comments and sourcemap spans.
+             */
+            function emitNodeWorker(node: Node, shouldEmitSourceMap: boolean, allowGeneratedIdentifiers: boolean): void {
                 if (!node) {
                     return;
                 }
 
                 if (node.flags & NodeFlags.Ambient) {
-                    return emitOnlyPinnedOrTripleSlashComments(node);
+                    emitOnlyPinnedOrTripleSlashComments(node);
+                    return;
+                }
+
+                // Emitting on a SourceFile is a special case; there is not necessarily
+                // a corresponding start/end we're interested in, and comments will be
+                // emitted for the end-of-file
+                if (node.kind === SyntaxKind.SourceFile) {
+                    if (shouldEmitSourceMap) {
+                        emitSourceFileStart(<SourceFile>node);
+                    }
+                    emitBareNode(node, allowGeneratedIdentifiers);
+                    return;
                 }
 
                 let emitComments = shouldEmitLeadingAndTrailingComments(node);
@@ -4863,7 +4889,16 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     emitLeadingComments(node);
                 }
 
-                emitJavaScriptWorker(node, allowGeneratedIdentifiers);
+                // Only track sourcemaps on *parsed* nodes when requested.
+                // Synthesized nodes do not correspond to text in the original source.
+                if (shouldEmitSourceMap && !nodeIsSynthesized(node)) {
+                    emitStart(node);
+                    emitBareNode(node, allowGeneratedIdentifiers);
+                    emitEnd(node);
+                }
+                else {
+                    emitBareNode(node, allowGeneratedIdentifiers);
+                }
 
                 if (emitComments) {
                     emitTrailingComments(node);
@@ -4875,12 +4910,14 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     // All of these entities are emitted in a specialized fashion.  As such, we allow
                     // the specialized methods for each to handle the comments on the nodes.
                     case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.ImportDeclaration:
                     case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.TypeAliasDeclaration:
                     case SyntaxKind.ExportAssignment:
                         return false;
+
+                    case SyntaxKind.FunctionDeclaration:
+                        return !!(<FunctionDeclaration>node).body;
 
                     case SyntaxKind.ModuleDeclaration:
                         // Only emit the leading/trailing comments for a module if we're actually
@@ -4910,7 +4947,10 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 return true;
             }
 
-            function emitJavaScriptWorker(node: Node, allowGeneratedIdentifiers: boolean = true) {
+            /**
+             * Emits a node without emitting comments or tracking sourcemap information.
+             */
+            function emitBareNode(node: Node, allowGeneratedIdentifiers: boolean) {
                 // Check if the node can be emitted regardless of the ScriptTarget
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
