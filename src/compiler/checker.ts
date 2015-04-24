@@ -5850,7 +5850,7 @@ module ts {
                 let index = indexOf(arrayLiteral.elements, node);
                 return getTypeOfPropertyOfContextualType(type, "" + index)
                     || getIndexTypeOfContextualType(type, IndexKind.Number)
-                    || (languageVersion >= ScriptTarget.ES6 ? checkIteratedType(type, /*expressionForError*/ undefined) : undefined);
+                    || (languageVersion >= ScriptTarget.ES6 ? getIteratedType(type, /*expressionForError*/ undefined) : undefined);
             }
             return undefined;
         }
@@ -6037,7 +6037,7 @@ module ts {
                     // if there is no index type / iterated type.
                     let restArrayType = checkExpression((<SpreadElementExpression>e).expression, contextualMapper);
                     let restElementType = getIndexTypeOfType(restArrayType, IndexKind.Number) ||
-                        (languageVersion >= ScriptTarget.ES6 ? checkIteratedType(restArrayType, /*expressionForError*/ undefined) : undefined);
+                        (languageVersion >= ScriptTarget.ES6 ? getIteratedType(restArrayType, /*expressionForError*/ undefined) : undefined);
                     
                     if (restElementType) {
                         elementTypes.push(restElementType);
@@ -9469,7 +9469,6 @@ module ts {
          * When errorNode is undefined, it means we should not report any errors.
          */
         function checkIteratedType(iterable: Type, errorNode: Node): Type {
-            Debug.assert(languageVersion >= ScriptTarget.ES6);
             let iteratedType = getIteratedType(iterable, errorNode);
             // Now even though we have extracted the iteratedType, we will have to validate that the type
             // passed in is actually an Iterable.
@@ -9478,90 +9477,91 @@ module ts {
             }
 
             return iteratedType;
+        }
 
-            function getIteratedType(iterable: Type, errorNode: Node) {
-                // We want to treat type as an iterable, and get the type it is an iterable of. The iterable
-                // must have the following structure (annotated with the names of the variables below):
-                //
-                // { // iterable
-                //     [Symbol.iterator]: { // iteratorFunction
-                //         (): { // iterator
-                //             next: { // iteratorNextFunction
-                //                 (): { // iteratorNextResult
-                //                     value: T // iteratorNextValue
-                //                 }
-                //             }
-                //         }
-                //     }
-                // }
-                //
-                // T is the type we are after. At every level that involves analyzing return types
-                // of signatures, we union the return types of all the signatures.
-                //
-                // Another thing to note is that at any step of this process, we could run into a dead end,
-                // meaning either the property is missing, or we run into the anyType. If either of these things
-                // happens, we return undefined to signal that we could not find the iterated type. If a property
-                // is missing, and the previous step did not result in 'any', then we also give an error if the
-                // caller requested it. Then the caller can decide what to do in the case where there is no iterated
-                // type. This is different from returning anyType, because that would signify that we have matched the
-                // whole pattern and that T (above) is 'any'.
+        function getIteratedType(iterable: Type, errorNode: Node) {
+            Debug.assert(languageVersion >= ScriptTarget.ES6);
+            // We want to treat type as an iterable, and get the type it is an iterable of. The iterable
+            // must have the following structure (annotated with the names of the variables below):
+            //
+            // { // iterable
+            //     [Symbol.iterator]: { // iteratorFunction
+            //         (): { // iterator
+            //             next: { // iteratorNextFunction
+            //                 (): { // iteratorNextResult
+            //                     value: T // iteratorNextValue
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+            //
+            // T is the type we are after. At every level that involves analyzing return types
+            // of signatures, we union the return types of all the signatures.
+            //
+            // Another thing to note is that at any step of this process, we could run into a dead end,
+            // meaning either the property is missing, or we run into the anyType. If either of these things
+            // happens, we return undefined to signal that we could not find the iterated type. If a property
+            // is missing, and the previous step did not result in 'any', then we also give an error if the
+            // caller requested it. Then the caller can decide what to do in the case where there is no iterated
+            // type. This is different from returning anyType, because that would signify that we have matched the
+            // whole pattern and that T (above) is 'any'.
 
-                if (allConstituentTypesHaveKind(iterable, TypeFlags.Any)) {
-                    return undefined;
-                }
-
-                // As an optimization, if the type is instantiated directly using the globalIterableType (Iterable<number>),
-                // then just grab its type argument.
-                if ((iterable.flags & TypeFlags.Reference) && (<GenericType>iterable).target === globalIterableType) {
-                    return (<GenericType>iterable).typeArguments[0];
-                }
-
-                let iteratorFunction = getTypeOfPropertyOfType(iterable, getPropertyNameForKnownSymbolName("iterator"));
-                if (iteratorFunction && allConstituentTypesHaveKind(iteratorFunction, TypeFlags.Any)) {
-                    return undefined;
-                }
-
-                let iteratorFunctionSignatures = iteratorFunction ? getSignaturesOfType(iteratorFunction, SignatureKind.Call) : emptyArray;
-                if (iteratorFunctionSignatures.length === 0) {
-                    if (errorNode) {
-                        error(errorNode, Diagnostics.Type_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
-                    }
-                    return undefined;
-                }
-
-                let iterator = getUnionType(map(iteratorFunctionSignatures, getReturnTypeOfSignature));
-                if (allConstituentTypesHaveKind(iterator, TypeFlags.Any)) {
-                    return undefined;
-                }
-
-                let iteratorNextFunction = getTypeOfPropertyOfType(iterator, "next");
-                if (iteratorNextFunction && allConstituentTypesHaveKind(iteratorNextFunction, TypeFlags.Any)) {
-                    return undefined;
-                }
-
-                let iteratorNextFunctionSignatures = iteratorNextFunction ? getSignaturesOfType(iteratorNextFunction, SignatureKind.Call) : emptyArray;
-                if (iteratorNextFunctionSignatures.length === 0) {
-                    if (errorNode) {
-                        error(errorNode, Diagnostics.An_iterator_must_have_a_next_method);
-                    }
-                    return undefined;
-                }
-
-                let iteratorNextResult = getUnionType(map(iteratorNextFunctionSignatures, getReturnTypeOfSignature));
-                if (allConstituentTypesHaveKind(iteratorNextResult, TypeFlags.Any)) {
-                    return undefined;
-                }
-
-                let iteratorNextValue = getTypeOfPropertyOfType(iteratorNextResult, "value");
-                if (!iteratorNextValue) {
-                    if (errorNode) {
-                        error(errorNode, Diagnostics.The_type_returned_by_the_next_method_of_an_iterator_must_have_a_value_property);
-                    }
-                    return undefined;
-                }
-
-                return iteratorNextValue;
+            if (allConstituentTypesHaveKind(iterable, TypeFlags.Any)) {
+                return undefined;
             }
+
+            // As an optimization, if the type is instantiated directly using the globalIterableType (Iterable<number>),
+            // then just grab its type argument.
+            if ((iterable.flags & TypeFlags.Reference) && (<GenericType>iterable).target === globalIterableType) {
+                return (<GenericType>iterable).typeArguments[0];
+            }
+
+            let iteratorFunction = getTypeOfPropertyOfType(iterable, getPropertyNameForKnownSymbolName("iterator"));
+            if (iteratorFunction && allConstituentTypesHaveKind(iteratorFunction, TypeFlags.Any)) {
+                return undefined;
+            }
+
+            let iteratorFunctionSignatures = iteratorFunction ? getSignaturesOfType(iteratorFunction, SignatureKind.Call) : emptyArray;
+            if (iteratorFunctionSignatures.length === 0) {
+                if (errorNode) {
+                    error(errorNode, Diagnostics.Type_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
+                }
+                return undefined;
+            }
+
+            let iterator = getUnionType(map(iteratorFunctionSignatures, getReturnTypeOfSignature));
+            if (allConstituentTypesHaveKind(iterator, TypeFlags.Any)) {
+                return undefined;
+            }
+
+            let iteratorNextFunction = getTypeOfPropertyOfType(iterator, "next");
+            if (iteratorNextFunction && allConstituentTypesHaveKind(iteratorNextFunction, TypeFlags.Any)) {
+                return undefined;
+            }
+
+            let iteratorNextFunctionSignatures = iteratorNextFunction ? getSignaturesOfType(iteratorNextFunction, SignatureKind.Call) : emptyArray;
+            if (iteratorNextFunctionSignatures.length === 0) {
+                if (errorNode) {
+                    error(errorNode, Diagnostics.An_iterator_must_have_a_next_method);
+                }
+                return undefined;
+            }
+
+            let iteratorNextResult = getUnionType(map(iteratorNextFunctionSignatures, getReturnTypeOfSignature));
+            if (allConstituentTypesHaveKind(iteratorNextResult, TypeFlags.Any)) {
+                return undefined;
+            }
+
+            let iteratorNextValue = getTypeOfPropertyOfType(iteratorNextResult, "value");
+            if (!iteratorNextValue) {
+                if (errorNode) {
+                    error(errorNode, Diagnostics.The_type_returned_by_the_next_method_of_an_iterator_must_have_a_value_property);
+                }
+                return undefined;
+            }
+
+            return iteratorNextValue;
         }
 
         /**
