@@ -1950,7 +1950,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                         ? <Declaration>node.parent
                         : resolver.getReferencedValueDeclaration(<Identifier>node);
 
-                return isSourceFileLevelDeclarationInSystemExternalModule(targetDeclaration, /*isExported*/ true);
+                return isSourceFileLevelDeclarationInSystemJsModule(targetDeclaration, /*isExported*/ true);
             }
 
             function emitPrefixUnaryExpression(node: PrefixUnaryExpression) {
@@ -2021,6 +2021,10 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 }
             }
 
+            function shouldHoistDeclarationInSystemJsModule(node: Node): boolean {
+                return isSourceFileLevelDeclarationInSystemJsModule(node, /*isExported*/ false);
+            }
+
             /* 
              * Checks if given node is a source file level declaration (not nested in module/function).
              * If 'isExported' is true - then declaration must also be exported.
@@ -2031,7 +2035,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
              *   i.e non-exported variable statement 'var x = 1' is hoisted so 
              *   we we emit variable statement 'var' should be dropped.
              */
-            function isSourceFileLevelDeclarationInSystemExternalModule(node: Node, isExported: boolean): boolean {
+            function isSourceFileLevelDeclarationInSystemJsModule(node: Node, isExported: boolean): boolean {
                 if (!node || languageVersion >= ScriptTarget.ES6 || !isCurrentFileSystemExternalModule()) {
                     return false;
                 }
@@ -2682,7 +2686,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 let canDefineTempVariablesInPlace = false;
                 if (root.kind === SyntaxKind.VariableDeclaration) {
                     let isExported = getCombinedNodeFlags(root) & NodeFlags.Export;
-                    let isSourceLevelForSystemModuleKind = isSourceFileLevelDeclarationInSystemExternalModule(root, /*isExported*/ false);
+                    let isSourceLevelForSystemModuleKind = shouldHoistDeclarationInSystemJsModule(root);
                     canDefineTempVariablesInPlace = !isExported && !isSourceLevelForSystemModuleKind;
                 }
                 else if (root.kind === SyntaxKind.Parameter) {
@@ -3938,7 +3942,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
             function emitClassLikeDeclarationBelowES6(node: ClassLikeDeclaration) {
                 if (node.kind === SyntaxKind.ClassDeclaration) {
                     // source file level classes in system modules are hoisted so 'var's for them are already defined
-                    if (!isSourceFileLevelDeclarationInSystemExternalModule(node, /*isExported*/ false)) {
+                    if (!shouldHoistDeclarationInSystemJsModule(node)) {
                         write("var ");
                     }
                     emitDeclarationName(node);
@@ -4450,7 +4454,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 if (!shouldEmit) {
                     return emitOnlyPinnedOrTripleSlashComments(node);
                 }
-                let hoistedInDeclarationScope = isSourceFileLevelDeclarationInSystemExternalModule(node, /*isExported*/ false);
+                let hoistedInDeclarationScope = shouldHoistDeclarationInSystemJsModule(node);
                 let emitVarForModule = !hoistedInDeclarationScope && !isModuleMergedWithES6Class(node);
 
                 if (emitVarForModule) {
@@ -5034,7 +5038,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
             }
 
             function shouldHoistVariable(node: VariableDeclaration | VariableDeclarationList | BindingElement, checkIfSourceFileLevelDecl: boolean): boolean {
-                if (checkIfSourceFileLevelDecl && !isSourceFileLevelDeclarationInSystemExternalModule(node, /*isExported*/ false)) {
+                if (checkIfSourceFileLevelDecl && !shouldHoistDeclarationInSystemJsModule(node)) {
                     return false;
                 }
                 // hoist variable if
