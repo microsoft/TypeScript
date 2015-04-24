@@ -18,6 +18,7 @@ module ts {
         readDirectory(path: string, extension?: string): string[];
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
+        httpsPost?(url: string, data: string, contentType: string, callback?: (err: any, data: string) => void): void;
     }
 
     export interface FileWatcher {
@@ -28,6 +29,7 @@ module ts {
     declare var module: any;
     declare var process: any;
     declare var global: any;
+    declare var url: any;
     declare var __filename: string;
 
     declare class Enumerator {
@@ -179,6 +181,7 @@ module ts {
             var _fs = require("fs");
             var _path = require("path");
             var _os = require('os');
+            var _https = require('https');
 
             var platform: string = _os.platform();
             // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
@@ -247,6 +250,28 @@ module ts {
                 }
             }
 
+            function httpsPost(destUrl: string, data: string, contentType: string, callback?: (err: any, data: string) => void) {
+                var parsedUrl = url.parse(destUrl);
+                var opts = {
+                    host: parsedUrl.host,
+                    path: parsedUrl.path,
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': contentType,
+                        'Content-Length': data.length
+                    }
+                };
+                var req = _https.request(opts, response => {
+                    var body = '';
+                    response.on('data', (data: string) => {
+                        body = body + data;
+                    });
+                    response.on('end', () => callback && callback(undefined, body));
+                });
+                req.on('error', (err: any) => callback && callback(err, undefined)); 
+                req.write(data);
+            }
+
             return {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
@@ -302,7 +327,8 @@ module ts {
                 },
                 exit(exitCode?: number): void {
                     process.exit(exitCode);
-                }
+                },
+                httpsPost
             };
         }
         if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
