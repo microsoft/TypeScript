@@ -99,19 +99,19 @@ module ts {
 
         let globals: SymbolTable = {};
 
-        let globalArraySymbol: Symbol;
         let globalESSymbolConstructorSymbol: Symbol;
 
         let globalObjectType: ObjectType;
         let globalFunctionType: ObjectType;
-        let globalArrayType: ObjectType;
+        let globalArrayType: GenericType;
         let globalStringType: ObjectType;
         let globalNumberType: ObjectType;
         let globalBooleanType: ObjectType;
         let globalRegExpType: ObjectType;
         let globalTemplateStringsArrayType: ObjectType;
         let globalESSymbolType: ObjectType;
-        let globalIterableType: ObjectType;
+        let globalIterableType: GenericType;
+        let globalIterableIteratorType: GenericType;
 
         let anyArrayType: Type;
         let getGlobalClassDecoratorType: () => ObjectType;
@@ -3468,16 +3468,20 @@ module ts {
             return globalESSymbolConstructorSymbol || (globalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol"));
         }
 
+        function createTypeFromGlobalGenericType(globalGenericType: GenericType, elementType: Type): Type {
+            return <ObjectType>globalGenericType !== emptyObjectType ? createTypeReference(globalGenericType, [elementType]) : emptyObjectType;
+        }
+
         function createIterableType(elementType: Type): Type {
-            return globalIterableType !== emptyObjectType ? createTypeReference(<GenericType>globalIterableType, [elementType]) : emptyObjectType;
+            return createTypeFromGlobalGenericType(globalIterableType, elementType);
+        }
+
+        function createIterableIteratorType(elementType: Type): Type {
+            return createTypeFromGlobalGenericType(globalIterableIteratorType, elementType);
         }
 
         function createArrayType(elementType: Type): Type {
-            // globalArrayType will be undefined if we get here during creation of the Array type. This for example happens if
-            // user code augments the Array type with call or construct signatures that have an array type as the return type.
-            // We instead use globalArraySymbol to obtain the (not yet fully constructed) Array type.
-            let arrayType = globalArrayType || getDeclaredTypeOfSymbol(globalArraySymbol);
-            return arrayType !== emptyObjectType ? createTypeReference(<GenericType>arrayType, [elementType]) : emptyObjectType;
+            return createTypeFromGlobalGenericType(globalArrayType, elementType);
         }
 
         function getTypeFromArrayTypeNode(node: ArrayTypeNode): Type {
@@ -8142,6 +8146,16 @@ module ts {
             }
         }
 
+        function isSyntacticallyValidGenerator(node: SignatureDeclaration): boolean {
+            if (!(<FunctionLikeDeclaration>node).asteriskToken || !(<FunctionLikeDeclaration>node).body) {
+                return false;
+            }
+
+            return node.kind === SyntaxKind.MethodDeclaration ||
+                node.kind === SyntaxKind.FunctionDeclaration ||
+                node.kind === SyntaxKind.FunctionExpression;
+        }
+
         function checkSignatureDeclaration(node: SignatureDeclaration) {
             // Grammar checking
             if (node.kind === SyntaxKind.IndexSignature) {
@@ -11967,8 +11981,7 @@ module ts {
             getSymbolLinks(unknownSymbol).type = unknownType;
             globals[undefinedSymbol.name] = undefinedSymbol;
             // Initialize special types
-            globalArraySymbol = getGlobalTypeSymbol("Array");
-            globalArrayType = getTypeOfGlobalSymbol(globalArraySymbol, /*arity*/ 1);
+            globalArrayType = <GenericType>getGlobalType("Array", /*arity*/ 1);
             globalObjectType = getGlobalType("Object");
             globalFunctionType = getGlobalType("Function");
             globalStringType = getGlobalType("String");
@@ -11986,7 +11999,8 @@ module ts {
                 globalTemplateStringsArrayType = getGlobalType("TemplateStringsArray");
                 globalESSymbolType = getGlobalType("Symbol");
                 globalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol");
-                globalIterableType = getGlobalType("Iterable", /*arity*/ 1);
+                globalIterableType = <GenericType>getGlobalType("Iterable", /*arity*/ 1);
+                globalIterableIteratorType = <GenericType>getGlobalType("IterableIterator", /*arity*/ 1);
             }
             else {
                 globalTemplateStringsArrayType = unknownType;
