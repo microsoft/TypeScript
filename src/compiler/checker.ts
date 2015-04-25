@@ -111,6 +111,7 @@ module ts {
         let globalTemplateStringsArrayType: ObjectType;
         let globalESSymbolType: ObjectType;
         let globalIterableType: GenericType;
+        let globalIteratorType: GenericType;
         let globalIterableIteratorType: GenericType;
 
         let anyArrayType: Type;
@@ -2119,7 +2120,7 @@ module ts {
                 // checkRightHandSideOfForOf will return undefined if the for-of expression type was
                 // missing properties/signatures required to get its iteratedType (like
                 // [Symbol.iterator] or next). This may be because we accessed properties from anyType,
-                // or it may have led to an error inside getIteratedType.
+                // or it may have led to an error inside getElementTypeFromIterable.
                 return checkRightHandSideOfForOf((<ForOfStatement>declaration.parent.parent).expression) || anyType;
             }
             if (isBindingPattern(declaration.parent)) {
@@ -5854,7 +5855,7 @@ module ts {
                 let index = indexOf(arrayLiteral.elements, node);
                 return getTypeOfPropertyOfContextualType(type, "" + index)
                     || getIndexTypeOfContextualType(type, IndexKind.Number)
-                    || (languageVersion >= ScriptTarget.ES6 ? getIteratedType(type, /*expressionForError*/ undefined) : undefined);
+                    || (languageVersion >= ScriptTarget.ES6 ? getElementTypeFromIterable(type, /*expressionForError*/ undefined) : undefined);
             }
             return undefined;
         }
@@ -6041,7 +6042,7 @@ module ts {
                     // if there is no index type / iterated type.
                     let restArrayType = checkExpression((<SpreadElementExpression>e).expression, contextualMapper);
                     let restElementType = getIndexTypeOfType(restArrayType, IndexKind.Number) ||
-                        (languageVersion >= ScriptTarget.ES6 ? getIteratedType(restArrayType, /*expressionForError*/ undefined) : undefined);
+                        (languageVersion >= ScriptTarget.ES6 ? getElementTypeFromIterable(restArrayType, /*expressionForError*/ undefined) : undefined);
                     
                     if (restElementType) {
                         elementTypes.push(restElementType);
@@ -8188,6 +8189,22 @@ module ts {
                             break;
                     }
                 }
+
+                if (node.type) {
+                    if (languageVersion >= ScriptTarget.ES6 && isSyntacticallyValidGenerator(node)) {
+                        let returnType = getTypeFromTypeNode(node.type);
+                        let generatorElementType = getElementTypeFromIterableIterator(returnType, /*errorNode*/ undefined) || anyType;
+                        let iterableIteratorInstantiation = createIterableIteratorType(generatorElementType);
+
+                        // Naively, one could check that IterableIterator<any> is assignable to the return type annotation.
+                        // However, that would not catch the error in the following case.
+                        //
+                        //    interface BadGenerator extends Iterable<number>, Iterator<string> { }
+                        //    function* g(): BadGenerator { } // Iterable and Iterator have different types!
+                        //
+                        checkTypeAssignableTo(iterableIteratorInstantiation, returnType, node.type);
+                    }
+                }
             }
 
             checkSpecializedSignatureDeclaration(node);
@@ -9385,7 +9402,7 @@ module ts {
                     // iteratedType will be undefined if the rightType was missing properties/signatures
                     // required to get its iteratedType (like [Symbol.iterator] or next). This may be
                     // because we accessed properties from anyType, or it may have led to an error inside
-                    // getIteratedType.
+                    // getElementTypeFromIterable.
                     if (iteratedType) {
                         checkTypeAssignableTo(iteratedType, leftType, varExpr, /*headMessage*/ undefined);
                     }
@@ -9483,30 +9500,24 @@ module ts {
          * When errorNode is undefined, it means we should not report any errors.
          */
         function checkIteratedType(iterable: Type, errorNode: Node): Type {
-            let iteratedType = getIteratedType(iterable, errorNode);
+            let elementType = getElementTypeFromIterable(iterable, errorNode);
             // Now even though we have extracted the iteratedType, we will have to validate that the type
             // passed in is actually an Iterable.
-            if (errorNode && iteratedType) {
-                checkTypeAssignableTo(iterable, createIterableType(iteratedType), errorNode);
+            if (errorNode && elementType) {
+                checkTypeAssignableTo(iterable, createIterableType(elementType), errorNode);
             }
 
-            return iteratedType;
+            return elementType;
         }
 
-        function getIteratedType(iterable: Type, errorNode: Node) {
+        function getElementTypeFromIterable(iterable: Type, errorNode: Node): Type {
             Debug.assert(languageVersion >= ScriptTarget.ES6);
             // We want to treat type as an iterable, and get the type it is an iterable of. The iterable
             // must have the following structure (annotated with the names of the variables below):
             //
             // { // iterable
             //     [Symbol.iterator]: { // iteratorFunction
-            //         (): { // iterator
-            //             next: { // iteratorNextFunction
-            //                 (): { // iteratorNextResult
-            //                     value: T // iteratorNextValue
-            //                 }
-            //             }
-            //         }
+            //         (): Iterator<T>
             //     }
             // }
             //
@@ -9544,9 +9555,29 @@ module ts {
                 return undefined;
             }
 
-            let iterator = getUnionType(map(iteratorFunctionSignatures, getReturnTypeOfSignature));
+            return getElementTypeFromIterator(getUnionType(map(iteratorFunctionSignatures, getReturnTypeOfSignature)), errorNode);
+        }
+
+        function getElementTypeFromIterator(iterator: Type, errorNode: Node): Type {
+            // This function has very similar logic as getElementTypeFromIterable, except that it operates on
+            // Iterators instead of Iterables. Here is the structure:
+            //
+            //  { // iterator
+            //      next: { // iteratorNextFunction
+            //          (): { // iteratorNextResult
+            //              value: T // iteratorNextValue
+            //          }
+            //      }
+            //  }
+            //
             if (allConstituentTypesHaveKind(iterator, TypeFlags.Any)) {
                 return undefined;
+            }
+
+            // As an optimization, if the type is instantiated directly using the globalIteratorType (Iterator<number>),
+            // then just grab its type argument.
+            if ((iterator.flags & TypeFlags.Reference) && (<GenericType>iterator).target === globalIteratorType) {
+                return (<GenericType>iterator).typeArguments[0];
             }
 
             let iteratorNextFunction = getTypeOfPropertyOfType(iterator, "next");
@@ -9576,6 +9607,21 @@ module ts {
             }
 
             return iteratorNextValue;
+        }
+
+        function getElementTypeFromIterableIterator(iterableIterator: Type, errorNode: Node): Type {
+            if (allConstituentTypesHaveKind(iterableIterator, TypeFlags.Any)) {
+                return undefined;
+            }
+
+            // As an optimization, if the type is instantiated directly using the globalIterableIteratorType (IterableIterator<number>),
+            // then just grab its type argument.
+            if ((iterableIterator.flags & TypeFlags.Reference) && (<GenericType>iterableIterator).target === globalIterableIteratorType) {
+                return (<GenericType>iterableIterator).typeArguments[0];
+            }
+
+            return getElementTypeFromIterable(iterableIterator, errorNode) ||
+                getElementTypeFromIterator(iterableIterator, errorNode);
         }
 
         /**
@@ -12000,6 +12046,7 @@ module ts {
                 globalESSymbolType = getGlobalType("Symbol");
                 globalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol");
                 globalIterableType = <GenericType>getGlobalType("Iterable", /*arity*/ 1);
+                globalIteratorType = <GenericType>getGlobalType("Iterator", /*arity*/ 1);
                 globalIterableIteratorType = <GenericType>getGlobalType("IterableIterator", /*arity*/ 1);
             }
             else {
