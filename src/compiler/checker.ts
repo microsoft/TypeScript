@@ -575,7 +575,15 @@ module ts {
                 return resolveExternalModuleSymbol(resolveExternalModuleName(node, getExternalModuleImportEqualsDeclarationExpression(node)));
             }
             let symbol = getSymbolOfPartOfRightHandSideOfImportEquals(<EntityName>node.moduleReference, node);
-            return symbol && symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol;
+
+            // In the case of a circular reference, like here
+            //
+            // module bar { }
+            // import bar = bar;
+            // 
+            // the alias of the symbol will not yet be resolved by the call to getSymbolOfPartOfRightHandSideOfImportEquals
+            // the call to resolveAlias will ensure we will resolve the alias.
+            return symbol && (symbol.flags & SymbolFlags.Alias) ? resolveAlias(symbol) : symbol;
         }
 
         function getTargetOfImportClause(node: ImportClause): Symbol {

@@ -5,4 +5,4 @@
 
 goTo.marker("2");
 verify.quickInfoIs('module bar\nimport bar = bar');
-verify.errorExistsBetweenMarkers("1", "3");
+verify.errorExistsAfterMarker("1");
