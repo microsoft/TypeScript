@@ -374,8 +374,8 @@ module ts {
     
     /* @internal */
     // Exposed only for testing.
-    export function parseJSDocComment(content: string, start?: number, length?: number) {
-        return Parser.JSDocParser.parseJSDocCommentForTests(content, start, length);
+    export function parseJSDocCommentInfo(content: string, start?: number, length?: number) {
+        return Parser.JSDocParser.parseJSDocCommentInfoForTests(content, start, length);
     }
 
     /* @internal */
@@ -578,7 +578,7 @@ module ts {
             let comments = getLeadingCommentRangesOfNode(node, sourceFile);
             if (comments) {
                 for (let comment of comments) {
-                    let jsDocComment = JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos);
+                    let jsDocComment = JSDocParser.parseJSDocCommentInfo(node, comment.pos, comment.end - comment.pos);
                     if (jsDocComment) {
                         node.jsDocComment = jsDocComment;
                     }
@@ -5328,16 +5328,16 @@ module ts {
                 }
             }
 
-            export function parseJSDocCommentForTests(content: string, start: number, length: number) {
+            export function parseJSDocCommentInfoForTests(content: string, start: number, length: number) {
                 initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined);
-                let jsDocComment = parseJSDocComment(/*parent:*/ undefined, start, length);
+                let jsDocComment = parseJSDocCommentInfo(/*parent:*/ undefined, start, length);
                 let diagnostics = parseDiagnostics;
                 clearState();
 
                 return jsDocComment ? { jsDocComment, diagnostics } : undefined;
             }
 
-            export function parseJSDocComment(parent: Node, start: number, length: number): JSDocComment {
+            export function parseJSDocCommentInfo(parent: Node, start: number, length: number): JSDocCommentInfo {
                 let content = sourceText;
                 start = start || 0;
                 let end = length === undefined ? content.length : start + length;
@@ -5411,7 +5411,7 @@ module ts {
 
                 return createJSDocComment();
 
-                function createJSDocComment(): JSDocComment {
+                function createJSDocComment(): JSDocCommentInfo {
                     if (!returnType && !type && !parameters && !typeParameters) {
                         return undefined;
                     }

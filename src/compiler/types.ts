@@ -399,7 +399,7 @@ module ts {
         modifiers?: ModifiersArray;                     // Array of modifiers
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
         parent?: Node;                                  // Parent node (initialized by binding
-        /* @internal */ jsDocComment?: JSDocComment;    // JSDoc for the node, if it has any.  Only for .js files.
+        /* @internal */ jsDocComment?: JSDocCommentInfo;    // JSDoc for the node, if it has any.  Only for .js files.
         /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
@@ -1095,7 +1095,7 @@ module ts {
         isBracketed: boolean;
     }
 
-    export interface JSDocComment {
+    export interface JSDocCommentInfo {
         type?: JSDocType;
         parameters?: JSDocParameter[];
         returnType?: JSDocType;

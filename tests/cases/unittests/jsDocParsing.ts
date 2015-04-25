@@ -1190,7 +1190,7 @@ module ts {
 
         describe("DocComments", () => {
             function parsesCorrectly(content: string, expected: string) {
-                let comment = ts.parseJSDocComment(content);
+                let comment = ts.parseJSDocCommentInfo(content);
                 Debug.assert(comment && comment.diagnostics.length === 0);
 
                 let result = JSON.stringify(comment.jsDocComment, (k, v) => {
@@ -1202,7 +1202,7 @@ module ts {
             }
 
             function parsesIncorrectly(content: string) {
-                let type = ts.parseJSDocComment(content);
+                let type = ts.parseJSDocCommentInfo(content);
                 assert.isTrue(!type || type.diagnostics.length > 0);
             }
 
