@@ -1656,6 +1656,7 @@ module ts {
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
+		newLine?: string;
         noEmit?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
@@ -1689,6 +1690,12 @@ module ts {
         System = 4,
     }
 
+    export const enum NewLineKind {
+        DEFAULT = 0,
+		CRLF = 1,
+        LF = 2,
+    }
+	
     export interface LineAndCharacter {
         line: number;
         /*

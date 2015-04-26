@@ -91,6 +91,8 @@ module ts {
             }
         }
 
+		let newLine = [sys.newLine, "\r\n", "\n"][options.newLine ? Number(options.newLine) : 0];
+		
         return {
             getSourceFile,
             getDefaultLibFileName: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), getDefaultLibFileName(options)),
@@ -98,7 +100,7 @@ module ts {
             getCurrentDirectory: () => currentDirectory || (currentDirectory = sys.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
             getCanonicalFileName,
-            getNewLine: () => sys.newLine
+            getNewLine: () => newLine
         };
     }
 
