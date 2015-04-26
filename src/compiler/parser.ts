@@ -5033,9 +5033,6 @@ module ts {
         
                 // Prime the first token for us to start processing.
                 token = nextToken();
-                if (token !== SyntaxKind.OpenBraceToken) {
-                    return undefined;
-                }
 
                 let result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression);
 
@@ -5501,12 +5498,18 @@ module ts {
                     }
                 }
 
-                function parseTypeExpression(): JSDocTypeExpression {
+                function tryParseTypeExpression(): JSDocTypeExpression {
                     skipWhitespace();
 
                     if (content.charCodeAt(pos) !== CharacterCodes.openBrace) {
                         return undefined;
                     }
+
+                    return parseTypeExpression();
+                }
+
+                function parseTypeExpression(): JSDocTypeExpression {
+                    skipWhitespace();
 
                     let typeExpression = parseJSDocTypeExpression(pos, end - pos);
                     if (!typeExpression) {
@@ -5523,9 +5526,6 @@ module ts {
                     let typeExpression: JSDocTypeExpression;
                     if (content.charCodeAt(pos) === CharacterCodes.openBrace) {
                         typeExpression = parseTypeExpression();
-                        if (!typeExpression) {
-                            return;
-                        }
                     }
 
                     skipWhitespace();
@@ -5542,14 +5542,12 @@ module ts {
                     }
 
                     if (!name) {
-                        return;
+                        parseErrorAtPosition(pos, 0, Diagnostics.Identifier_expected);
+                        return undefined;
                     }
 
                     if (!typeExpression) {
-                        typeExpression = parseTypeExpression();
-                        if (!typeExpression) {
-                            return;
-                        }
+                        typeExpression = tryParseTypeExpression();
                     }
 
                     let result = <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos);
@@ -5566,13 +5564,8 @@ module ts {
                         parseErrorAtPosition(tagName.pos, pos - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
                     }
 
-                    let typeExpression = parseTypeExpression();
-                    if (!typeExpression) {
-                        return undefined;
-                    }
-
                     let result = <JSDocReturnTag>createNode(SyntaxKind.JSDocReturnTag, atToken.pos);
-                    result.typeExpression = typeExpression;
+                    result.typeExpression = parseTypeExpression();
                     return finishNode(result, pos);
                 }
 
@@ -5581,13 +5574,8 @@ module ts {
                         parseErrorAtPosition(tagName.pos, pos - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
                     }
 
-                    let typeExpression = parseTypeExpression();
-                    if (!typeExpression) {
-                        return undefined;
-                    }
-
                     let result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.pos);
-                    result.typeExpression = typeExpression;
+                    result.typeExpression = parseTypeExpression();
                     return finishNode(result, pos);
                 }
 

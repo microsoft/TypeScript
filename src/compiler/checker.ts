@@ -2137,9 +2137,9 @@ module ts {
             else if (declaration.kind === SyntaxKind.Parameter) {
                 // If it's a parameter, see if the parent has a jsdoc comment with an @param 
                 // annotation.
-                let parameter = getCorrespondingJSDocParameterTag(<ParameterDeclaration>declaration);
-                if (parameter) {
-                    return parameter.typeExpression.type;
+                let paramTag = getCorrespondingJSDocParameterTag(<ParameterDeclaration>declaration);
+                if (paramTag && paramTag.typeExpression) {
+                    return paramTag.typeExpression.type;
                 }
             }
 
@@ -3135,9 +3135,15 @@ module ts {
                     return true;
                 }
 
-                let docParam = getCorrespondingJSDocParameterTag(node);
-                if (docParam) {
-                    return docParam.isBracketed || docParam.typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
+                let paramTag = getCorrespondingJSDocParameterTag(node);
+                if (paramTag) {
+                    if (paramTag.isBracketed) {
+                        return true;
+                    }
+                    
+                    if (paramTag.typeExpression) {
+                        return paramTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
+                    }
                 }
             }
 

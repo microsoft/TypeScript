@@ -904,9 +904,9 @@ module ts {
                     return true;
                 }
 
-                let docParam = getCorrespondingJSDocParameterTag(node);
-                if (docParam) {
-                    return docParam.typeExpression.type.kind === SyntaxKind.JSDocVariadicType;
+                let paramTag = getCorrespondingJSDocParameterTag(node);
+                if (paramTag && paramTag.typeExpression) {
+                    return paramTag.typeExpression.type.kind === SyntaxKind.JSDocVariadicType;
                 }
             }
 

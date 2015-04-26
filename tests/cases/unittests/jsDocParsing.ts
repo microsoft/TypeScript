@@ -3,61 +3,7 @@
 /// <reference path="..\..\..\src\harness\harness.ts" />
 
 module ts {
-    interface JSDocCommentInfo {
-        type?: JSDocType;
-        parameters?: JSDocParameter[];
-        returnType?: JSDocType;
-        typeParameters?: TypeParameterDeclaration[];
-    }
-
-    interface JSDocParameter {
-        name: string;
-        type: JSDocType;
-        isBracketed: boolean;
-    }
-
     describe("JSDocParsing", () => {
-        function parseJSDocCommentInfo(content: string): { jsDocComment: JSDocCommentInfo, diagnostics: Diagnostic[] } {
-            let docCommentAndDiags = ts.parseJSDocCommentForTests(content);
-            if (!docCommentAndDiags) {
-                return undefined;
-            }
-
-            let docComment = docCommentAndDiags.jsDocComment;
-            let result = <JSDocCommentInfo>{};
-
-            let typeTag = <JSDocTypeTag>forEach(docComment.tags, t => t.kind === SyntaxKind.JSDocTypeTag ? t : undefined);
-            let parameterTags = filter(docComment.tags, t => t.kind === SyntaxKind.JSDocParameterTag);
-            let returnTag = <JSDocReturnTag>forEach(docComment.tags, t => t.kind === SyntaxKind.JSDocReturnTag ? t : undefined);
-            let templateTag = <JSDocTemplateTag>forEach(docComment.tags, t => t.kind === SyntaxKind.JSDocTemplateTag ? t : undefined);
-
-            if (!typeTag && parameterTags.length === 0 && !returnTag && !templateTag) {
-                return undefined;
-            }
-
-            if (typeTag) {
-                result.type = typeTag.typeExpression.type;
-            }
-
-            if (parameterTags.length > 0) {
-                result.parameters = map(parameterTags, t => {
-                    let paramTag = <JSDocParameterTag>t;
-                    return { name: paramTag.parameterName.text, type: paramTag.typeExpression.type, isBracketed: paramTag.isBracketed }
-                });
-            }
-
-            if (returnTag) {
-                result.returnType = returnTag.typeExpression.type;
-            }
-
-            if (templateTag) {
-                result.typeParameters = templateTag.typeParameters;
-            }
-
-            return { jsDocComment: result, diagnostics: docCommentAndDiags.diagnostics };
-        }
-
-
         describe("TypeExpressions", () => {
             function parsesCorrectly(content: string, expected: string) {
                 let typeAndDiagnostics = ts.parseJSDocTypeExpressionForTests(content);
@@ -1234,7 +1180,7 @@ module ts {
 
         describe("DocComments", () => {
             function parsesCorrectly(content: string, expected: string) {
-                let comment = parseJSDocCommentInfo(content);
+                let comment = parseJSDocCommentForTests(content);
                 Debug.assert(comment && comment.diagnostics.length === 0);
 
                 let result = JSON.stringify(comment.jsDocComment, (k, v) => {
@@ -1242,11 +1188,12 @@ module ts {
                         ? JSON.parse(Utils.sourceFileToJSON(v))
                         : v;
                 }, "    ");
+                
                 assert.equal(result, expected);
             }
 
             function parsesIncorrectly(content: string) {
-                let type = parseJSDocCommentInfo(content);
+                let type = parseJSDocCommentForTests(content);
                 assert.isTrue(!type || type.diagnostics.length > 0);
             }
 
@@ -1314,13 +1261,6 @@ module ts {
   */`);
                 });
 
-                it("paramWithoutType", () => {
-                    parsesIncorrectly(
-`/**
-  * @param foo
-  */`);
-                });
-
                 it("paramWithoutTypeOrName", () => {
                     parsesIncorrectly(
 `/**
@@ -1336,17 +1276,35 @@ module ts {
     @type {number}
   */`,
                         `{
-    "type": {
-        "kind": "JSDocTypeReference",
-        "pos": 15,
-        "end": 21,
-        "name": {
-            "kind": "Identifier",
-            "pos": 15,
-            "end": 21,
-            "originalKeywordKind": "NumberKeyword",
-            "text": "number"
-        }
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 27,
+    "tags": {
+        "0": {
+            "kind": "JSDocTypeTag",
+            "pos": 8,
+            "end": 22,
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 14,
+                "end": 22,
+                "type": {
+                    "kind": "JSDocTypeReference",
+                    "pos": 15,
+                    "end": 21,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 15,
+                        "end": 21,
+                        "originalKeywordKind": "NumberKeyword",
+                        "text": "number"
+                    }
+                }
+            }
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 22
     }
 }`);
                 });
@@ -1357,17 +1315,35 @@ module ts {
   * @type {number}
   */`,
                         `{
-    "type": {
-        "kind": "JSDocTypeReference",
-        "pos": 15,
-        "end": 21,
-        "name": {
-            "kind": "Identifier",
-            "pos": 15,
-            "end": 21,
-            "originalKeywordKind": "NumberKeyword",
-            "text": "number"
-        }
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 27,
+    "tags": {
+        "0": {
+            "kind": "JSDocTypeTag",
+            "pos": 8,
+            "end": 22,
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 14,
+                "end": 22,
+                "type": {
+                    "kind": "JSDocTypeReference",
+                    "pos": 15,
+                    "end": 21,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 15,
+                        "end": 21,
+                        "originalKeywordKind": "NumberKeyword",
+                        "text": "number"
+                    }
+                }
+            }
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 22
     }
 }`);
                 });
@@ -1378,17 +1354,35 @@ module ts {
   * @type {number}
   */`,
                         `{
-    "type": {
-        "kind": "JSDocTypeReference",
-        "pos": 15,
-        "end": 21,
-        "name": {
-            "kind": "Identifier",
-            "pos": 15,
-            "end": 21,
-            "originalKeywordKind": "NumberKeyword",
-            "text": "number"
-        }
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 27,
+    "tags": {
+        "0": {
+            "kind": "JSDocTypeTag",
+            "pos": 8,
+            "end": 22,
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 14,
+                "end": 22,
+                "type": {
+                    "kind": "JSDocTypeReference",
+                    "pos": 15,
+                    "end": 21,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 15,
+                        "end": 21,
+                        "originalKeywordKind": "NumberKeyword",
+                        "text": "number"
+                    }
+                }
+            }
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 22
     }
 }`);
                 });
@@ -1399,17 +1393,35 @@ module ts {
   * @return {number}
   */`,
                         `{
-    "returnType": {
-        "kind": "JSDocTypeReference",
-        "pos": 17,
-        "end": 23,
-        "name": {
-            "kind": "Identifier",
-            "pos": 17,
-            "end": 23,
-            "originalKeywordKind": "NumberKeyword",
-            "text": "number"
-        }
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 29,
+    "tags": {
+        "0": {
+            "kind": "JSDocReturnTag",
+            "pos": 8,
+            "end": 24,
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 16,
+                "end": 24,
+                "type": {
+                    "kind": "JSDocTypeReference",
+                    "pos": 17,
+                    "end": 23,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 17,
+                        "end": 23,
+                        "originalKeywordKind": "NumberKeyword",
+                        "text": "number"
+                    }
+                }
+            }
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 24
     }
 }`);
                 });
@@ -1420,17 +1432,35 @@ module ts {
   * @return {number} Description text follows
   */`,
                         `{
-    "returnType": {
-        "kind": "JSDocTypeReference",
-        "pos": 17,
-        "end": 23,
-        "name": {
-            "kind": "Identifier",
-            "pos": 17,
-            "end": 23,
-            "originalKeywordKind": "NumberKeyword",
-            "text": "number"
-        }
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 54,
+    "tags": {
+        "0": {
+            "kind": "JSDocReturnTag",
+            "pos": 8,
+            "end": 24,
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 16,
+                "end": 24,
+                "type": {
+                    "kind": "JSDocTypeReference",
+                    "pos": 17,
+                    "end": 23,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 17,
+                        "end": 23,
+                        "originalKeywordKind": "NumberKeyword",
+                        "text": "number"
+                    }
+                }
+            }
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 24
     }
 }`);
                 });
@@ -1441,17 +1471,35 @@ module ts {
   * @returns {number}
   */`,
                         `{
-    "returnType": {
-        "kind": "JSDocTypeReference",
-        "pos": 18,
-        "end": 24,
-        "name": {
-            "kind": "Identifier",
-            "pos": 18,
-            "end": 24,
-            "originalKeywordKind": "NumberKeyword",
-            "text": "number"
-        }
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 30,
+    "tags": {
+        "0": {
+            "kind": "JSDocReturnTag",
+            "pos": 8,
+            "end": 25,
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 17,
+                "end": 25,
+                "type": {
+                    "kind": "JSDocTypeReference",
+                    "pos": 18,
+                    "end": 24,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 18,
+                        "end": 24,
+                        "originalKeywordKind": "NumberKeyword",
+                        "text": "number"
+                    }
+                }
+            }
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 25
     }
 }`);
                 });
@@ -1462,23 +1510,53 @@ module ts {
   * @param {number} name1
   */`,
                         `{
-    "parameters": [
-        {
-            "name": "name1",
-            "type": {
-                "kind": "JSDocTypeReference",
-                "pos": 16,
-                "end": 22,
-                "name": {
-                    "kind": "Identifier",
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 34,
+    "tags": {
+        "0": {
+            "kind": "JSDocParameterTag",
+            "pos": 8,
+            "end": 29,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 14,
+                "text": "param"
+            },
+            "parameterName": {
+                "kind": "Identifier",
+                "pos": 24,
+                "end": 29,
+                "text": "name1"
+            },
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 15,
+                "end": 23,
+                "type": {
+                    "kind": "JSDocTypeReference",
                     "pos": 16,
                     "end": 22,
-                    "originalKeywordKind": "NumberKeyword",
-                    "text": "number"
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 16,
+                        "end": 22,
+                        "originalKeywordKind": "NumberKeyword",
+                        "text": "number"
+                    }
                 }
             }
-        }
-    ]
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 29
+    }
 }`);
                 });
 
@@ -1489,38 +1567,92 @@ module ts {
   * @param {number} name2
   */`,
                         `{
-    "parameters": [
-        {
-            "name": "name1",
-            "type": {
-                "kind": "JSDocTypeReference",
-                "pos": 16,
-                "end": 22,
-                "name": {
-                    "kind": "Identifier",
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 60,
+    "tags": {
+        "0": {
+            "kind": "JSDocParameterTag",
+            "pos": 8,
+            "end": 29,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 14,
+                "text": "param"
+            },
+            "parameterName": {
+                "kind": "Identifier",
+                "pos": 24,
+                "end": 29,
+                "text": "name1"
+            },
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 15,
+                "end": 23,
+                "type": {
+                    "kind": "JSDocTypeReference",
                     "pos": 16,
                     "end": 22,
-                    "originalKeywordKind": "NumberKeyword",
-                    "text": "number"
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 16,
+                        "end": 22,
+                        "originalKeywordKind": "NumberKeyword",
+                        "text": "number"
+                    }
                 }
             }
         },
-        {
-            "name": "name2",
-            "type": {
-                "kind": "JSDocTypeReference",
-                "pos": 42,
-                "end": 48,
-                "name": {
-                    "kind": "Identifier",
+        "1": {
+            "kind": "JSDocParameterTag",
+            "pos": 34,
+            "end": 55,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 34,
+                "end": 35
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 35,
+                "end": 40,
+                "text": "param"
+            },
+            "parameterName": {
+                "kind": "Identifier",
+                "pos": 50,
+                "end": 55,
+                "text": "name2"
+            },
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 41,
+                "end": 49,
+                "type": {
+                    "kind": "JSDocTypeReference",
                     "pos": 42,
                     "end": 48,
-                    "originalKeywordKind": "NumberKeyword",
-                    "text": "number"
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 42,
+                        "end": 48,
+                        "originalKeywordKind": "NumberKeyword",
+                        "text": "number"
+                    }
                 }
             }
-        }
-    ]
+        },
+        "length": 2,
+        "pos": 8,
+        "end": 55
+    }
 }`);
                 });
 
@@ -1530,23 +1662,53 @@ module ts {
   * @param {number} name1 Description text follows
   */`,
                         `{
-    "parameters": [
-        {
-            "name": "name1",
-            "type": {
-                "kind": "JSDocTypeReference",
-                "pos": 16,
-                "end": 22,
-                "name": {
-                    "kind": "Identifier",
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 59,
+    "tags": {
+        "0": {
+            "kind": "JSDocParameterTag",
+            "pos": 8,
+            "end": 29,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 14,
+                "text": "param"
+            },
+            "parameterName": {
+                "kind": "Identifier",
+                "pos": 24,
+                "end": 29,
+                "text": "name1"
+            },
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 15,
+                "end": 23,
+                "type": {
+                    "kind": "JSDocTypeReference",
                     "pos": 16,
                     "end": 22,
-                    "originalKeywordKind": "NumberKeyword",
-                    "text": "number"
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 16,
+                        "end": 22,
+                        "originalKeywordKind": "NumberKeyword",
+                        "text": "number"
+                    }
                 }
             }
-        }
-    ]
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 29
+    }
 }`);
                 });
 
@@ -1556,24 +1718,54 @@ module ts {
   * @param {number} [name1] Description text follows
   */`,
                         `{
-    "parameters": [
-        {
-            "name": "name1",
-            "type": {
-                "kind": "JSDocTypeReference",
-                "pos": 16,
-                "end": 22,
-                "name": {
-                    "kind": "Identifier",
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 61,
+    "tags": {
+        "0": {
+            "kind": "JSDocParameterTag",
+            "pos": 8,
+            "end": 30,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 14,
+                "text": "param"
+            },
+            "parameterName": {
+                "kind": "Identifier",
+                "pos": 25,
+                "end": 30,
+                "text": "name1"
+            },
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 15,
+                "end": 23,
+                "type": {
+                    "kind": "JSDocTypeReference",
                     "pos": 16,
                     "end": 22,
-                    "originalKeywordKind": "NumberKeyword",
-                    "text": "number"
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 16,
+                        "end": 22,
+                        "originalKeywordKind": "NumberKeyword",
+                        "text": "number"
+                    }
                 }
             },
             "isBracketed": true
-        }
-    ]
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 30
+    }
 }`);
                 });
 
@@ -1583,24 +1775,54 @@ module ts {
   * @param {number} [ name1 = 1] Description text follows
   */`,
                         `{
-    "parameters": [
-        {
-            "name": "name1",
-            "type": {
-                "kind": "JSDocTypeReference",
-                "pos": 16,
-                "end": 22,
-                "name": {
-                    "kind": "Identifier",
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 66,
+    "tags": {
+        "0": {
+            "kind": "JSDocParameterTag",
+            "pos": 8,
+            "end": 31,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 14,
+                "text": "param"
+            },
+            "parameterName": {
+                "kind": "Identifier",
+                "pos": 26,
+                "end": 31,
+                "text": "name1"
+            },
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 15,
+                "end": 23,
+                "type": {
+                    "kind": "JSDocTypeReference",
                     "pos": 16,
                     "end": 22,
-                    "originalKeywordKind": "NumberKeyword",
-                    "text": "number"
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 16,
+                        "end": 22,
+                        "originalKeywordKind": "NumberKeyword",
+                        "text": "number"
+                    }
                 }
             },
             "isBracketed": true
-        }
-    ]
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 31
+    }
 }`);
                 });
 
@@ -1610,23 +1832,53 @@ module ts {
   * @param {number} name1 @param {number} name2
   */`,
                         `{
-    "parameters": [
-        {
-            "name": "name1",
-            "type": {
-                "kind": "JSDocTypeReference",
-                "pos": 16,
-                "end": 22,
-                "name": {
-                    "kind": "Identifier",
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 56,
+    "tags": {
+        "0": {
+            "kind": "JSDocParameterTag",
+            "pos": 8,
+            "end": 29,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 14,
+                "text": "param"
+            },
+            "parameterName": {
+                "kind": "Identifier",
+                "pos": 24,
+                "end": 29,
+                "text": "name1"
+            },
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 15,
+                "end": 23,
+                "type": {
+                    "kind": "JSDocTypeReference",
                     "pos": 16,
                     "end": 22,
-                    "originalKeywordKind": "NumberKeyword",
-                    "text": "number"
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 16,
+                        "end": 22,
+                        "originalKeywordKind": "NumberKeyword",
+                        "text": "number"
+                    }
                 }
             }
-        }
-    ]
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 29
+    }
 }`);
                 });
 
@@ -1636,23 +1888,53 @@ module ts {
   * @param name1 {number}
   */`,
                         `{
-    "parameters": [
-        {
-            "name": "name1",
-            "type": {
-                "kind": "JSDocTypeReference",
-                "pos": 22,
-                "end": 28,
-                "name": {
-                    "kind": "Identifier",
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 34,
+    "tags": {
+        "0": {
+            "kind": "JSDocParameterTag",
+            "pos": 8,
+            "end": 29,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 14,
+                "text": "param"
+            },
+            "parameterName": {
+                "kind": "Identifier",
+                "pos": 15,
+                "end": 20,
+                "text": "name1"
+            },
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 21,
+                "end": 29,
+                "type": {
+                    "kind": "JSDocTypeReference",
                     "pos": 22,
                     "end": 28,
-                    "originalKeywordKind": "NumberKeyword",
-                    "text": "number"
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 22,
+                        "end": 28,
+                        "originalKeywordKind": "NumberKeyword",
+                        "text": "number"
+                    }
                 }
             }
-        }
-    ]
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 29
+    }
 }`);
                 });
 
@@ -1662,23 +1944,53 @@ module ts {
   * @param name1 {number} Description
   */`,
                         `{
-    "parameters": [
-        {
-            "name": "name1",
-            "type": {
-                "kind": "JSDocTypeReference",
-                "pos": 22,
-                "end": 28,
-                "name": {
-                    "kind": "Identifier",
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 46,
+    "tags": {
+        "0": {
+            "kind": "JSDocParameterTag",
+            "pos": 8,
+            "end": 29,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 14,
+                "text": "param"
+            },
+            "parameterName": {
+                "kind": "Identifier",
+                "pos": 15,
+                "end": 20,
+                "text": "name1"
+            },
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 21,
+                "end": 29,
+                "type": {
+                    "kind": "JSDocTypeReference",
                     "pos": 22,
                     "end": 28,
-                    "originalKeywordKind": "NumberKeyword",
-                    "text": "number"
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 22,
+                        "end": 28,
+                        "originalKeywordKind": "NumberKeyword",
+                        "text": "number"
+                    }
                 }
             }
-        }
-    ]
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 29
+    }
 }`);
                 });
 
@@ -1688,20 +2000,44 @@ module ts {
   * @template T
   */`,
                         `{
-    "typeParameters": {
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 24,
+    "tags": {
         "0": {
-            "kind": "TypeParameter",
-            "pos": 18,
+            "kind": "JSDocTemplateTag",
+            "pos": 8,
             "end": 19,
-            "name": {
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
                 "kind": "Identifier",
-                "pos": 18,
-                "end": 19,
-                "text": "T"
+                "pos": 9,
+                "end": 17,
+                "text": "template"
+            },
+            "typeParameters": {
+                "0": {
+                    "kind": "TypeParameter",
+                    "pos": 18,
+                    "end": 19,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 18,
+                        "end": 19,
+                        "text": "T"
+                    }
+                },
+                "length": 1,
+                "pos": 17,
+                "end": 19
             }
         },
         "length": 1,
-        "pos": 17,
+        "pos": 8,
         "end": 19
     }
 }`);
@@ -1713,31 +2049,55 @@ module ts {
   * @template K,V
   */`,
                         `{
-    "typeParameters": {
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 26,
+    "tags": {
         "0": {
-            "kind": "TypeParameter",
-            "pos": 18,
-            "end": 19,
-            "name": {
-                "kind": "Identifier",
-                "pos": 18,
-                "end": 19,
-                "text": "K"
-            }
-        },
-        "1": {
-            "kind": "TypeParameter",
-            "pos": 20,
+            "kind": "JSDocTemplateTag",
+            "pos": 8,
             "end": 21,
-            "name": {
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
                 "kind": "Identifier",
-                "pos": 20,
-                "end": 21,
-                "text": "V"
+                "pos": 9,
+                "end": 17,
+                "text": "template"
+            },
+            "typeParameters": {
+                "0": {
+                    "kind": "TypeParameter",
+                    "pos": 18,
+                    "end": 19,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 18,
+                        "end": 19,
+                        "text": "K"
+                    }
+                },
+                "1": {
+                    "kind": "TypeParameter",
+                    "pos": 20,
+                    "end": 21,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 20,
+                        "end": 21,
+                        "text": "V"
+                    }
+                },
+                "length": 2,
+                "pos": 17,
+                "end": 21
             }
         },
-        "length": 2,
-        "pos": 17,
+        "length": 1,
+        "pos": 8,
         "end": 21
     }
 }`);
@@ -1749,31 +2109,55 @@ module ts {
   * @template K ,V
   */`,
                         `{
-    "typeParameters": {
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 27,
+    "tags": {
         "0": {
-            "kind": "TypeParameter",
-            "pos": 18,
-            "end": 19,
-            "name": {
-                "kind": "Identifier",
-                "pos": 18,
-                "end": 19,
-                "text": "K"
-            }
-        },
-        "1": {
-            "kind": "TypeParameter",
-            "pos": 21,
+            "kind": "JSDocTemplateTag",
+            "pos": 8,
             "end": 22,
-            "name": {
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
                 "kind": "Identifier",
-                "pos": 21,
-                "end": 22,
-                "text": "V"
+                "pos": 9,
+                "end": 17,
+                "text": "template"
+            },
+            "typeParameters": {
+                "0": {
+                    "kind": "TypeParameter",
+                    "pos": 18,
+                    "end": 19,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 18,
+                        "end": 19,
+                        "text": "K"
+                    }
+                },
+                "1": {
+                    "kind": "TypeParameter",
+                    "pos": 21,
+                    "end": 22,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 21,
+                        "end": 22,
+                        "text": "V"
+                    }
+                },
+                "length": 2,
+                "pos": 17,
+                "end": 22
             }
         },
-        "length": 2,
-        "pos": 17,
+        "length": 1,
+        "pos": 8,
         "end": 22
     }
 }`);
@@ -1785,31 +2169,55 @@ module ts {
   * @template K, V
   */`,
                         `{
-    "typeParameters": {
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 27,
+    "tags": {
         "0": {
-            "kind": "TypeParameter",
-            "pos": 18,
-            "end": 19,
-            "name": {
-                "kind": "Identifier",
-                "pos": 18,
-                "end": 19,
-                "text": "K"
-            }
-        },
-        "1": {
-            "kind": "TypeParameter",
-            "pos": 21,
+            "kind": "JSDocTemplateTag",
+            "pos": 8,
             "end": 22,
-            "name": {
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
                 "kind": "Identifier",
-                "pos": 21,
-                "end": 22,
-                "text": "V"
+                "pos": 9,
+                "end": 17,
+                "text": "template"
+            },
+            "typeParameters": {
+                "0": {
+                    "kind": "TypeParameter",
+                    "pos": 18,
+                    "end": 19,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 18,
+                        "end": 19,
+                        "text": "K"
+                    }
+                },
+                "1": {
+                    "kind": "TypeParameter",
+                    "pos": 21,
+                    "end": 22,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 21,
+                        "end": 22,
+                        "text": "V"
+                    }
+                },
+                "length": 2,
+                "pos": 17,
+                "end": 22
             }
         },
-        "length": 2,
-        "pos": 17,
+        "length": 1,
+        "pos": 8,
         "end": 22
     }
 }`);
@@ -1821,31 +2229,55 @@ module ts {
   * @template K , V
   */`,
                         `{
-    "typeParameters": {
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 28,
+    "tags": {
         "0": {
-            "kind": "TypeParameter",
-            "pos": 18,
-            "end": 19,
-            "name": {
-                "kind": "Identifier",
-                "pos": 18,
-                "end": 19,
-                "text": "K"
-            }
-        },
-        "1": {
-            "kind": "TypeParameter",
-            "pos": 22,
+            "kind": "JSDocTemplateTag",
+            "pos": 8,
             "end": 23,
-            "name": {
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
                 "kind": "Identifier",
-                "pos": 22,
-                "end": 23,
-                "text": "V"
+                "pos": 9,
+                "end": 17,
+                "text": "template"
+            },
+            "typeParameters": {
+                "0": {
+                    "kind": "TypeParameter",
+                    "pos": 18,
+                    "end": 19,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 18,
+                        "end": 19,
+                        "text": "K"
+                    }
+                },
+                "1": {
+                    "kind": "TypeParameter",
+                    "pos": 22,
+                    "end": 23,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 22,
+                        "end": 23,
+                        "text": "V"
+                    }
+                },
+                "length": 2,
+                "pos": 17,
+                "end": 23
             }
         },
-        "length": 2,
-        "pos": 17,
+        "length": 1,
+        "pos": 8,
         "end": 23
     }
 }`);
@@ -1857,32 +2289,95 @@ module ts {
   * @template K , V Description of type parameters.
   */`,
                         `{
-    "typeParameters": {
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 60,
+    "tags": {
         "0": {
-            "kind": "TypeParameter",
-            "pos": 18,
-            "end": 19,
-            "name": {
+            "kind": "JSDocTemplateTag",
+            "pos": 8,
+            "end": 24,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
                 "kind": "Identifier",
-                "pos": 18,
-                "end": 19,
-                "text": "K"
+                "pos": 9,
+                "end": 17,
+                "text": "template"
+            },
+            "typeParameters": {
+                "0": {
+                    "kind": "TypeParameter",
+                    "pos": 18,
+                    "end": 19,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 18,
+                        "end": 19,
+                        "text": "K"
+                    }
+                },
+                "1": {
+                    "kind": "TypeParameter",
+                    "pos": 22,
+                    "end": 23,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 22,
+                        "end": 23,
+                        "text": "V"
+                    }
+                },
+                "length": 2,
+                "pos": 17,
+                "end": 24
             }
         },
-        "1": {
-            "kind": "TypeParameter",
-            "pos": 22,
-            "end": 23,
-            "name": {
-                "kind": "Identifier",
-                "pos": 22,
-                "end": 23,
-                "text": "V"
-            }
-        },
-        "length": 2,
-        "pos": 17,
+        "length": 1,
+        "pos": 8,
         "end": 24
+    }
+}`);
+                });
+
+                it("paramWithoutType", () => {
+                    parsesCorrectly(
+                        `/**
+  * @param foo
+  */`,
+                        `{
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 23,
+    "tags": {
+        "0": {
+            "kind": "JSDocParameterTag",
+            "pos": 8,
+            "end": 18,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 14,
+                "text": "param"
+            },
+            "parameterName": {
+                "kind": "Identifier",
+                "pos": 15,
+                "end": 18,
+                "text": "foo"
+            }
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 18
     }
 }`);
                 });
