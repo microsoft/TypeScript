@@ -3,20 +3,64 @@
 /// <reference path="..\..\..\src\harness\harness.ts" />
 
 module ts {
-    describe("JSDocParsing", () => {
-        //function nodeToJSON(file: ts.Node): string {
-        //    return JSON.stringify(Utils.serializeNode(file), (k, v) => {
-        //        return isNodeOrArray(v) ? Utils.serializeNode(v) : v;
-        //    }, "    ");
-        //}
+    interface JSDocCommentInfo {
+        type?: JSDocType;
+        parameters?: JSDocParameter[];
+        returnType?: JSDocType;
+        typeParameters?: TypeParameterDeclaration[];
+    }
 
-        //function isNodeOrArray(a: any): boolean {
-        //    return a !== undefined && typeof a.pos === "number";
-        //}
+    interface JSDocParameter {
+        name: string;
+        type: JSDocType;
+        isBracketed: boolean;
+    }
+
+    describe("JSDocParsing", () => {
+        function parseJSDocCommentInfo(content: string): { jsDocComment: JSDocCommentInfo, diagnostics: Diagnostic[] } {
+            let docCommentAndDiags = ts.parseJSDocCommentForTests(content);
+            if (!docCommentAndDiags) {
+                return undefined;
+            }
+
+            let docComment = docCommentAndDiags.jsDocComment;
+            let result = <JSDocCommentInfo>{};
+
+            let typeTag = <JSDocTypeTag>forEach(docComment.tags, t => t.kind === SyntaxKind.JSDocTypeTag ? t : undefined);
+            let parameterTags = filter(docComment.tags, t => t.kind === SyntaxKind.JSDocParameterTag);
+            let returnTag = <JSDocReturnTag>forEach(docComment.tags, t => t.kind === SyntaxKind.JSDocReturnTag ? t : undefined);
+            let templateTag = <JSDocTemplateTag>forEach(docComment.tags, t => t.kind === SyntaxKind.JSDocTemplateTag ? t : undefined);
+
+            if (!typeTag && parameterTags.length === 0 && !returnTag && !templateTag) {
+                return undefined;
+            }
+
+            if (typeTag) {
+                result.type = typeTag.typeExpression.type;
+            }
+
+            if (parameterTags.length > 0) {
+                result.parameters = map(parameterTags, t => {
+                    let paramTag = <JSDocParameterTag>t;
+                    return { name: paramTag.parameterName.text, type: paramTag.typeExpression.type, isBracketed: paramTag.isBracketed }
+                });
+            }
+
+            if (returnTag) {
+                result.returnType = returnTag.typeExpression.type;
+            }
+
+            if (templateTag) {
+                result.typeParameters = templateTag.typeParameters;
+            }
+
+            return { jsDocComment: result, diagnostics: docCommentAndDiags.diagnostics };
+        }
+
 
         describe("TypeExpressions", () => {
             function parsesCorrectly(content: string, expected: string) {
-                let typeAndDiagnostics = ts.parseJSDocTypeExpression(content);
+                let typeAndDiagnostics = ts.parseJSDocTypeExpressionForTests(content);
                 assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0);
 
                 let result = Utils.sourceFileToJSON(typeAndDiagnostics.jsDocTypeExpression.type);
@@ -24,7 +68,7 @@ module ts {
             }
 
             function parsesIncorrectly(content: string) {
-                let type = ts.parseJSDocTypeExpression(content);
+                let type = ts.parseJSDocTypeExpressionForTests(content);
                 assert.isTrue(!type || type.diagnostics.length > 0);
             }
 
@@ -1190,7 +1234,7 @@ module ts {
 
         describe("DocComments", () => {
             function parsesCorrectly(content: string, expected: string) {
-                let comment = ts.parseJSDocCommentInfo(content);
+                let comment = parseJSDocCommentInfo(content);
                 Debug.assert(comment && comment.diagnostics.length === 0);
 
                 let result = JSON.stringify(comment.jsDocComment, (k, v) => {
@@ -1202,7 +1246,7 @@ module ts {
             }
 
             function parsesIncorrectly(content: string) {
-                let type = ts.parseJSDocCommentInfo(content);
+                let type = parseJSDocCommentInfo(content);
                 assert.isTrue(!type || type.diagnostics.length > 0);
             }
 

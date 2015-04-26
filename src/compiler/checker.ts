@@ -2119,9 +2119,9 @@ module ts {
 
         function getJSDocTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration): JSDocType {
             // First, see if this node has an @type annotation on it directly.
-            let docComment = declaration.jsDocComment;
-            if (docComment && docComment.type) {
-                return docComment.type;
+            let typeTag = getJSDocTypeTag(declaration);
+            if (typeTag) {
+                return typeTag.typeExpression.type;
             }
 
             if (declaration.kind === SyntaxKind.VariableDeclaration &&
@@ -2129,17 +2129,17 @@ module ts {
                 declaration.parent.parent.kind === SyntaxKind.VariableStatement) {
 
                 // @type annotation might have been on the variable statement, try that instead.
-                docComment = declaration.parent.parent.jsDocComment;
-                if (docComment && docComment.type) {
-                    return docComment.type;
+                let typeTag = getJSDocTypeTag(declaration.parent.parent);
+                if (typeTag) {
+                    return typeTag.typeExpression.type;
                 }
             }
             else if (declaration.kind === SyntaxKind.Parameter) {
                 // If it's a parameter, see if the parent has a jsdoc comment with an @param 
                 // annotation.
-                let parameter = getJSDocParameter(<ParameterDeclaration>declaration);
+                let parameter = getCorrespondingJSDocParameterTag(<ParameterDeclaration>declaration);
                 if (parameter) {
-                    return parameter.type;
+                    return parameter.typeExpression.type;
                 }
             }
 
@@ -3089,9 +3089,9 @@ module ts {
 
         function getTypeParametersFromSignatureDeclaration(declaration: SignatureDeclaration): TypeParameter[] {
             if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
-                let jsDocComment = declaration.jsDocComment;
-                if (jsDocComment && jsDocComment.typeParameters) {
-                    return getTypeParametersFromTypeParameterDeclarations(jsDocComment.typeParameters);
+                let templateTag = getJSDocTemplateTag(declaration);
+                if (templateTag) {
+                    return getTypeParametersFromTypeParameterDeclarations(templateTag.typeParameters);
                 }
             }
 
@@ -3135,9 +3135,9 @@ module ts {
                     return true;
                 }
 
-                let docParam = getJSDocParameter(node);
+                let docParam = getCorrespondingJSDocParameterTag(node);
                 if (docParam) {
-                    return docParam.isBracketed || docParam.type.kind === SyntaxKind.JSDocOptionalType;
+                    return docParam.isBracketed || docParam.typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
                 }
             }
 
@@ -5736,9 +5736,9 @@ module ts {
         }
 
         function getTypeForThisExpressionFromJSDoc(node: Node) {
-            var jsDocComment = node.jsDocComment;
-            if (jsDocComment && jsDocComment.type && jsDocComment.type.kind === SyntaxKind.JSDocFunctionType) {
-                let jsDocFunctionType = <JSDocFunctionType>jsDocComment.type;
+            let typeTag = getJSDocTypeTag(node);
+            if (typeTag && typeTag.typeExpression.type.kind === SyntaxKind.JSDocFunctionType) {
+                let jsDocFunctionType = <JSDocFunctionType>typeTag.typeExpression.type;
                 if (jsDocFunctionType.parameters.length > 0 && jsDocFunctionType.parameters[0].type.kind === SyntaxKind.JSDocThisType) {
                     return getTypeFromTypeNode(jsDocFunctionType.parameters[0].type);
                 }
@@ -7431,9 +7431,9 @@ module ts {
         }
 
         function getReturnTypeFromJSDocComment(func: FunctionLikeDeclaration): Type {
-            let jsDocComment = func.jsDocComment;
-            if (jsDocComment && jsDocComment.returnType) {
-                return getTypeFromTypeNode(jsDocComment.returnType);
+            let returnTag = getJSDocReturnTag(func);
+            if (returnTag) {
+                return getTypeFromTypeNode(returnTag.typeExpression.type);
             }
         }
 

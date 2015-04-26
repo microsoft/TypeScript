@@ -263,7 +263,7 @@ module ts {
             }
 
             if (isJavaScriptFile && node.jsDocComment) {
-                bindJSDocComment(node);
+                bind(node.jsDocComment);
             }
 
             forEachChild(node, bind);
@@ -278,31 +278,6 @@ module ts {
             }
 
             lastContainer = node;
-        }
-
-
-        function bindJSDocComment(node: Node) {
-            let jsDocComment = node.jsDocComment;
-
-            if (jsDocComment.type) {
-                bind(jsDocComment.type);
-            }
-
-            if (jsDocComment.returnType) {
-                bind(jsDocComment.returnType);
-            }
-
-            forEach(jsDocComment.parameters, bindJSDocParameter);
-
-            if (node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.FunctionDeclaration) {
-                forEach(jsDocComment.typeParameters, bind);
-            }
-        }
-
-        function bindJSDocParameter(parameter: JSDocParameter) {
-            if (parameter.type) {
-                bind(parameter.type);
-            }
         }
 
         function bindDeclaration(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags, isBlockScopeContainer: boolean) {

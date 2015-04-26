@@ -857,19 +857,38 @@ module ts {
             (<JSDocFunctionType>node).parameters[0].type.kind === SyntaxKind.JSDocConstructorType;
     }
 
-    export function getJSDocParameter(parameter: ParameterDeclaration): JSDocParameter {
+    function getJSDocTag(node: Node, kind: SyntaxKind): JSDocTag {
+        if (node && node.jsDocComment) {
+            for (let tag of node.jsDocComment.tags) {
+                if (tag.kind === kind) {
+                    return tag;
+                }
+            }
+        }
+    }
+
+    export function getJSDocTypeTag(node: Node): JSDocTypeTag {
+        return <JSDocTypeTag>getJSDocTag(node, SyntaxKind.JSDocTypeTag);
+    }
+
+    export function getJSDocReturnTag(node: Node): JSDocReturnTag {
+        return <JSDocReturnTag>getJSDocTag(node, SyntaxKind.JSDocReturnTag);
+    }
+
+    export function getJSDocTemplateTag(node: Node): JSDocTemplateTag {
+        return <JSDocTemplateTag>getJSDocTag(node, SyntaxKind.JSDocTemplateTag);
+    }
+
+    export function getCorrespondingJSDocParameterTag(parameter: ParameterDeclaration): JSDocParameterTag {
         if (parameter.name && parameter.name.kind === SyntaxKind.Identifier) {
             // If it's a parameter, see if the parent has a jsdoc comment with an @param 
             // annotation.
             let parameterName = (<Identifier>parameter.name).text;
 
             let docComment = parameter.parent.jsDocComment;
-            if (docComment && docComment.parameters) {
-                for (let parameter of docComment.parameters) {
-                    if (parameter.name === parameterName) {
-                        return parameter;
-                    }
-                }
+            if (docComment) {
+                return <JSDocParameterTag>forEach(docComment.tags, t =>
+                    t.kind === SyntaxKind.JSDocParameterTag && (<JSDocParameterTag>t).parameterName.text === parameterName ? t : undefined);
             }
         }
     }
@@ -885,9 +904,9 @@ module ts {
                     return true;
                 }
 
-                let docParam = getJSDocParameter(node);
+                let docParam = getCorrespondingJSDocParameterTag(node);
                 if (docParam) {
-                    return docParam.type.kind === SyntaxKind.JSDocVariadicType;
+                    return docParam.typeExpression.type.kind === SyntaxKind.JSDocVariadicType;
                 }
             }
 

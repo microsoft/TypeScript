@@ -405,7 +405,7 @@ module ts {
         modifiers?: ModifiersArray;                     // Array of modifiers
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
         parent?: Node;                                  // Parent node (initialized by binding
-        /* @internal */ jsDocComment?: JSDocCommentInfo;    // JSDoc for the node, if it has any.  Only for .js files.
+        /* @internal */ jsDocComment?: JSDocComment;    // JSDoc for the node, if it has any.  Only for .js files.
         /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
@@ -1095,12 +1095,6 @@ module ts {
         type?: JSDocType
     }
 
-    export interface JSDocParameter {
-        name: string;
-        type: JSDocType;
-        isBracketed: boolean;
-    }
-
     export interface JSDocComment extends Node {
         tags: NodeArray<JSDocTag>;
     }
@@ -1123,16 +1117,9 @@ module ts {
     }
 
     export interface JSDocParameterTag extends JSDocTag {
-        parameterTypeExpression: JSDocTypeExpression;
+        typeExpression: JSDocTypeExpression;
         parameterName: Identifier;
         isBracketed: boolean;
-    }
-
-    export interface JSDocCommentInfo {
-        type?: JSDocType;
-        parameters?: JSDocParameter[];
-        returnType?: JSDocType;
-        typeParameters?: TypeParameterDeclaration[];
     }
 
     // Source files are declarations when they are external modules.

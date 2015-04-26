@@ -348,6 +348,17 @@ module ts {
             case SyntaxKind.JSDocRecordMember:
                 return visitNode(cbNode, (<JSDocRecordMember>node).name) ||
                     visitNode(cbNode, (<JSDocRecordMember>node).type);
+            case SyntaxKind.JSDocComment:
+                return visitNodes(cbNodes, (<JSDocComment>node).tags);
+            case SyntaxKind.JSDocParameterTag:
+                return visitNode(cbNode, (<JSDocParameterTag>node).typeExpression) ||
+                    visitNode(cbNode, (<JSDocParameterTag>node).parameterName);
+            case SyntaxKind.JSDocReturnTag:
+                return visitNode(cbNode, (<JSDocReturnTag>node).typeExpression);
+            case SyntaxKind.JSDocTypeTag:
+                return visitNode(cbNode, (<JSDocTypeTag>node).typeExpression);
+            case SyntaxKind.JSDocTemplateTag:
+                return visitNodes(cbNodes, (<JSDocTemplateTag>node).typeParameters);
         }
     }
 
@@ -374,13 +385,13 @@ module ts {
     
     /* @internal */
     // Exposed only for testing.
-    export function parseJSDocCommentInfo(content: string, start?: number, length?: number) {
-        return Parser.JSDocParser.parseJSDocCommentInfoForTests(content, start, length);
+    export function parseJSDocCommentForTests(content: string, start?: number, length?: number) {
+        return Parser.JSDocParser.parseJSDocCommentForTests(content, start, length);
     }
 
     /* @internal */
     // Exposed only for testing.
-    export function parseJSDocTypeExpression(content: string, start?: number, length?: number) {
+    export function parseJSDocTypeExpressionForTests(content: string, start?: number, length?: number) {
         return Parser.JSDocParser.parseJSDocTypeExpressionForTests(content, start, length);
     }
 
@@ -578,7 +589,7 @@ module ts {
             let comments = getLeadingCommentRangesOfNode(node, sourceFile);
             if (comments) {
                 for (let comment of comments) {
-                    let jsDocComment = JSDocParser.parseJSDocCommentInfo(node, comment.pos, comment.end - comment.pos);
+                    let jsDocComment = JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos);
                     if (jsDocComment) {
                         node.jsDocComment = jsDocComment;
                     }
@@ -5328,52 +5339,13 @@ module ts {
                 }
             }
 
-            export function parseJSDocCommentInfoForTests(content: string, start: number, length: number) {
+            export function parseJSDocCommentForTests(content: string, start: number, length: number) {
                 initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined);
-                let jsDocComment = parseJSDocCommentInfo(/*parent:*/ undefined, start, length);
+                let jsDocComment = parseJSDocComment(/*parent:*/ undefined, start, length);
                 let diagnostics = parseDiagnostics;
                 clearState();
 
                 return jsDocComment ? { jsDocComment, diagnostics } : undefined;
-            }
-
-            export function parseJSDocCommentInfo(parent: Node, start: number, length: number): JSDocCommentInfo {
-                let docComment = parseJSDocComment(parent, start, length);
-                if (!docComment) {
-                    return undefined;
-                }
-
-                let result = <JSDocCommentInfo>{};
-
-                let typeTag = <JSDocTypeTag>forEach(docComment.tags, t => t.kind === SyntaxKind.JSDocTypeTag ? t : undefined);
-                let parameterTags = filter(docComment.tags, t => t.kind === SyntaxKind.JSDocParameterTag);
-                let returnTag = <JSDocReturnTag>forEach(docComment.tags, t => t.kind === SyntaxKind.JSDocReturnTag ? t : undefined);
-                let templateTag = <JSDocTemplateTag>forEach(docComment.tags, t => t.kind === SyntaxKind.JSDocTemplateTag ? t : undefined);
-
-                if (!typeTag && parameterTags.length === 0 && !returnTag && !templateTag) {
-                    return undefined;
-                }
-
-                if (typeTag) {
-                    result.type = typeTag.typeExpression.type;
-                }
-
-                if (parameterTags.length > 0) {
-                    result.parameters = map(parameterTags, t => {
-                        let paramTag = <JSDocParameterTag>t;
-                        return { name: paramTag.parameterName.text, type: paramTag.parameterTypeExpression.type, isBracketed: paramTag.isBracketed }
-                    });
-                }
-
-                if (returnTag) {
-                    result.returnType = returnTag.typeExpression.type;
-                }
-
-                if (templateTag) {
-                    result.typeParameters = templateTag.typeParameters;
-                }
-
-                return result;
             }
 
             export function parseJSDocComment(parent: Node, start: number, length: number): JSDocComment {
@@ -5584,7 +5556,7 @@ module ts {
                     result.atToken = atToken;
                     result.tagName = tagName;
                     result.parameterName = name;
-                    result.parameterTypeExpression = typeExpression;
+                    result.typeExpression = typeExpression;
                     result.isBracketed = isBracketed;
                     return finishNode(result, pos);
                 }
