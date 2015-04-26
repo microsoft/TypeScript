@@ -5625,7 +5625,7 @@ module ts {
                     }
 
                     let typeParameters = <NodeArray<TypeParameterDeclaration>>[];
-                    //typeParameters.pos = pos;
+                    typeParameters.pos = pos;
 
                     while (true) {
                         skipWhitespace();
@@ -5651,7 +5651,7 @@ module ts {
                         pos++;
                     }
 
-                    //typeParameters.end = pos;
+                    typeParameters.end = pos;
 
                     let result = <JSDocTemplateTag>createNode(SyntaxKind.JSDocTemplateTag, atToken.pos);
                     result.atToken = atToken;

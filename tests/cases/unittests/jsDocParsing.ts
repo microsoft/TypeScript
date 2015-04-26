@@ -1644,8 +1644,8 @@ module ts {
   * @template T
   */`,
                         `{
-    "typeParameters": [
-        {
+    "typeParameters": {
+        "0": {
             "kind": "TypeParameter",
             "pos": 18,
             "end": 19,
@@ -1655,8 +1655,11 @@ module ts {
                 "end": 19,
                 "text": "T"
             }
-        }
-    ]
+        },
+        "length": 1,
+        "pos": 17,
+        "end": 19
+    }
 }`);
                 });
 
@@ -1666,8 +1669,8 @@ module ts {
   * @template K,V
   */`,
                         `{
-    "typeParameters": [
-        {
+    "typeParameters": {
+        "0": {
             "kind": "TypeParameter",
             "pos": 18,
             "end": 19,
@@ -1678,7 +1681,7 @@ module ts {
                 "text": "K"
             }
         },
-        {
+        "1": {
             "kind": "TypeParameter",
             "pos": 20,
             "end": 21,
@@ -1688,8 +1691,11 @@ module ts {
                 "end": 21,
                 "text": "V"
             }
-        }
-    ]
+        },
+        "length": 2,
+        "pos": 17,
+        "end": 21
+    }
 }`);
                 });
 
@@ -1699,8 +1705,8 @@ module ts {
   * @template K ,V
   */`,
                         `{
-    "typeParameters": [
-        {
+    "typeParameters": {
+        "0": {
             "kind": "TypeParameter",
             "pos": 18,
             "end": 19,
@@ -1711,7 +1717,7 @@ module ts {
                 "text": "K"
             }
         },
-        {
+        "1": {
             "kind": "TypeParameter",
             "pos": 21,
             "end": 22,
@@ -1721,8 +1727,11 @@ module ts {
                 "end": 22,
                 "text": "V"
             }
-        }
-    ]
+        },
+        "length": 2,
+        "pos": 17,
+        "end": 22
+    }
 }`);
                 });
 
@@ -1732,8 +1741,8 @@ module ts {
   * @template K, V
   */`,
                         `{
-    "typeParameters": [
-        {
+    "typeParameters": {
+        "0": {
             "kind": "TypeParameter",
             "pos": 18,
             "end": 19,
@@ -1744,7 +1753,7 @@ module ts {
                 "text": "K"
             }
         },
-        {
+        "1": {
             "kind": "TypeParameter",
             "pos": 21,
             "end": 22,
@@ -1754,8 +1763,11 @@ module ts {
                 "end": 22,
                 "text": "V"
             }
-        }
-    ]
+        },
+        "length": 2,
+        "pos": 17,
+        "end": 22
+    }
 }`);
                 });
 
@@ -1765,8 +1777,8 @@ module ts {
   * @template K , V
   */`,
                         `{
-    "typeParameters": [
-        {
+    "typeParameters": {
+        "0": {
             "kind": "TypeParameter",
             "pos": 18,
             "end": 19,
@@ -1777,7 +1789,7 @@ module ts {
                 "text": "K"
             }
         },
-        {
+        "1": {
             "kind": "TypeParameter",
             "pos": 22,
             "end": 23,
@@ -1787,8 +1799,11 @@ module ts {
                 "end": 23,
                 "text": "V"
             }
-        }
-    ]
+        },
+        "length": 2,
+        "pos": 17,
+        "end": 23
+    }
 }`);
                 });
 
@@ -1798,8 +1813,8 @@ module ts {
   * @template K , V Description of type parameters.
   */`,
                         `{
-    "typeParameters": [
-        {
+    "typeParameters": {
+        "0": {
             "kind": "TypeParameter",
             "pos": 18,
             "end": 19,
@@ -1810,7 +1825,7 @@ module ts {
                 "text": "K"
             }
         },
-        {
+        "1": {
             "kind": "TypeParameter",
             "pos": 22,
             "end": 23,
@@ -1820,8 +1835,11 @@ module ts {
                 "end": 23,
                 "text": "V"
             }
-        }
-    ]
+        },
+        "length": 2,
+        "pos": 17,
+        "end": 24
+    }
 }`);
                 });
             });
