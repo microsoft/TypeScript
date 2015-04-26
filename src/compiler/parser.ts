@@ -940,8 +940,8 @@ module ts {
             return node;
         }
 
-        function finishNode<T extends Node>(node: T): T {
-            node.end = scanner.getStartPos();
+        function finishNode<T extends Node>(node: T, end?: number): T {
+            node.end = end === undefined ? scanner.getStartPos() : end;
 
             if (contextFlags) {
                 node.parserContextFlags = contextFlags;
@@ -5338,6 +5338,55 @@ module ts {
             }
 
             export function parseJSDocCommentInfo(parent: Node, start: number, length: number): JSDocCommentInfo {
+                let docComment = parseJSDocComment(parent, start, length);
+                if (!docComment) {
+                    return undefined;
+                }
+
+                let result = <JSDocCommentInfo>{};
+
+                let typeTag = <JSDocTypeTag>forEach(docComment.tags, t => t.kind === SyntaxKind.JSDocTypeTag ? t : undefined);
+                let parameterTags = filter(docComment.tags, t => t.kind === SyntaxKind.JSDocParameterTag);
+                let returnTag = <JSDocReturnTag>forEach(docComment.tags, t => t.kind === SyntaxKind.JSDocReturnTag ? t : undefined);
+                let templateTag = <JSDocTemplateTag>forEach(docComment.tags, t => t.kind === SyntaxKind.JSDocTemplateTag ? t : undefined);
+
+                if (!typeTag && parameterTags.length === 0 && !returnTag && !templateTag) {
+                    return undefined;
+                }
+
+                if (typeTag) {
+                    result.type = typeTag.typeExpression.type;
+                }
+
+                if (parameterTags.length > 0) {
+                    result.parameters = map(parameterTags, t => {
+                        let paramTag = <JSDocParameterTag>t;
+                        return { name: paramTag.parameterName.text, type: paramTag.parameterTypeExpression.type, isBracketed: paramTag.isBracketed }
+                    });
+                }
+
+                if (returnTag) {
+                    result.returnType = returnTag.typeExpression.type;
+                }
+
+                if (templateTag) {
+                    result.typeParameters = templateTag.typeParameters;
+                }
+
+                return result;
+            }
+
+            export function parseJSDocComment(parent: Node, start: number, length: number): JSDocComment {
+                let comment = parseJSDocCommentWorker(start, length);
+                if (comment) {
+                    fixupParentReferences(comment);
+                    comment.parent = parent;
+                }
+
+                return comment;
+            }
+
+            export function parseJSDocCommentWorker(start: number, length: number): JSDocComment {
                 let content = sourceText;
                 start = start || 0;
                 let end = length === undefined ? content.length : start + length;
@@ -5347,13 +5396,14 @@ module ts {
                 Debug.assert(start <= end);
                 Debug.assert(end <= content.length);
 
-                let type: JSDocType;
-                let parameters: JSDocParameter[];
-                let returnType: JSDocType;
-                let typeParameters: TypeParameterDeclaration[];
-
+                let tags: NodeArray<JSDocTag>;
                 let pos: number;
-
+                
+                // NOTE(cyrusn): This is essentially a handwritten scanner for JSDocComments. I 
+                // considered using an actual Scanner, but this would complicate things.  The 
+                // scanner would need to know it was in a Doc Comment.  Otherwise, it would then
+                // produce comments *inside* the doc comment.  In the end it was just easier to
+                // write a simple scanner rather than go that route.
                 if (length >= "/** */".length) {
                     if (content.charCodeAt(start) === CharacterCodes.slash &&
                         content.charCodeAt(start + 1) === CharacterCodes.asterisk &&
@@ -5411,12 +5461,14 @@ module ts {
 
                 return createJSDocComment();
 
-                function createJSDocComment(): JSDocCommentInfo {
-                    if (!returnType && !type && !parameters && !typeParameters) {
+                function createJSDocComment(): JSDocComment {
+                    if (!tags) {
                         return undefined;
                     }
 
-                    return { returnType, type, parameters, typeParameters };
+                    let result = <JSDocComment>createNode(SyntaxKind.JSDocComment, start);
+                    result.tags = tags;
+                    return finishNode(result, end);
                 }
 
                 function skipWhitespace(): void {
@@ -5427,25 +5479,57 @@ module ts {
 
                 function parseTag(): void {
                     Debug.assert(content.charCodeAt(pos - 1) === CharacterCodes.at);
+                    let atToken = createNode(SyntaxKind.AtToken, pos - 1);
+                    atToken.end = pos;
 
                     let startPos = pos;
                     let tagName = scanIdentifier();
+                    if (!tagName) {
+                        return;
+                    }
+
+                    let tag = handleTag(atToken, tagName) || handleUnknownTag(atToken, tagName);
+                    addTag(tag);
+                }
+
+                function handleTag(atToken: Node, tagName: Identifier): JSDocTag {
                     if (tagName) {
-                        switch (tagName) {
+                        switch (tagName.text) {
                             case "param":
-                                return handleParamTag();
+                                return handleParamTag(atToken, tagName);
                             case "return":
                             case "returns":
-                                return handleReturnTag(tagName, startPos);
+                                return handleReturnTag(atToken, tagName);
                             case "template":
-                                return handleTemplateTag(tagName, startPos);
+                                return handleTemplateTag(atToken, tagName);
                             case "type":
-                                return handleTypeTag(tagName, startPos);
+                                return handleTypeTag(atToken, tagName);
                         }
+                    }
+
+                    return undefined;
+                }
+
+                function handleUnknownTag(atToken: Node, tagName: Identifier) {
+                    let result = <JSDocTag>createNode(SyntaxKind.JSDocTag, atToken.pos);
+                    result.atToken = atToken;
+                    result.tagName = tagName;
+                    return finishNode(result, pos);
+                }
+
+                function addTag(tag: JSDocTag): void {
+                    if (tag) {
+                        if (!tags) {
+                            tags = <NodeArray<JSDocTag>>[];
+                            tags.pos = tag.pos;
+                        }
+
+                        tags.push(tag);
+                        tags.end = tag.end;
                     }
                 }
 
-                function parseType(): JSDocType {
+                function parseTypeExpression(): JSDocTypeExpression {
                     skipWhitespace();
 
                     if (content.charCodeAt(pos) !== CharacterCodes.openBrace) {
@@ -5457,24 +5541,23 @@ module ts {
                         return undefined;
                     }
 
-                    typeExpression.parent = parent;
                     pos = typeExpression.end;
-                    return typeExpression.type;
+                    return typeExpression;
                 }
 
-                function handleParamTag() {
+                function handleParamTag(atToken: Node, tagName: Identifier) {
                     skipWhitespace();
 
-                    let type: JSDocType;
+                    let typeExpression: JSDocTypeExpression;
                     if (content.charCodeAt(pos) === CharacterCodes.openBrace) {
-                        type = parseType();
-                        if (!type) {
+                        typeExpression = parseTypeExpression();
+                        if (!typeExpression) {
                             return;
                         }
                     }
 
                     skipWhitespace();
-                    let name: string;
+                    let name: Identifier;
                     let isBracketed: boolean;
                     if (content.charCodeAt(pos) === CharacterCodes.openBracket) {
                         pos++;
@@ -5490,42 +5573,59 @@ module ts {
                         return;
                     }
 
-                    if (!type) {
-                        type = parseType();
-                        if (!type) {
+                    if (!typeExpression) {
+                        typeExpression = parseTypeExpression();
+                        if (!typeExpression) {
                             return;
                         }
                     }
 
-                    parameters = parameters || [];
-                    parameters.push({ name, type, isBracketed });
+                    let result = <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos);
+                    result.atToken = atToken;
+                    result.tagName = tagName;
+                    result.parameterName = name;
+                    result.parameterTypeExpression = typeExpression;
+                    result.isBracketed = isBracketed;
+                    return finishNode(result, pos);
                 }
 
-                function handleReturnTag(tag: string, startPos: number): void {
-                    if (returnType) {
-                        parseErrorAtPosition(startPos, pos - startPos, Diagnostics._0_tag_already_specified, tag);
-                        return;
+                function handleReturnTag(atToken: Node, tagName: Identifier): JSDocReturnTag {
+                    if (forEach(tags, t => t.kind === SyntaxKind.JSDocReturnTag)) {
+                        parseErrorAtPosition(tagName.pos, pos - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
                     }
 
-                    returnType = parseType();
+                    let typeExpression = parseTypeExpression();
+                    if (!typeExpression) {
+                        return undefined;
+                    }
+
+                    let result = <JSDocReturnTag>createNode(SyntaxKind.JSDocReturnTag, atToken.pos);
+                    result.typeExpression = typeExpression;
+                    return finishNode(result, pos);
                 }
 
-                function handleTypeTag(tag: string, startPos: number): void {
-                    if (type) {
-                        parseErrorAtPosition(startPos, pos - startPos, Diagnostics._0_tag_already_specified, tag);
-                        return;
+                function handleTypeTag(atToken: Node, tagName: Identifier): JSDocTypeTag {
+                    if (forEach(tags, t => t.kind === SyntaxKind.JSDocTypeTag)) {
+                        parseErrorAtPosition(tagName.pos, pos - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
                     }
 
-                    type = parseType();
+                    let typeExpression = parseTypeExpression();
+                    if (!typeExpression) {
+                        return undefined;
+                    }
+
+                    let result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.pos);
+                    result.typeExpression = typeExpression;
+                    return finishNode(result, pos);
                 }
 
-                function handleTemplateTag(tag: string, startPos: number): void {
-                    if (typeParameters) {
-                        parseErrorAtPosition(startPos, pos - startPos, Diagnostics._0_tag_already_specified, tag);
-                        return;
+                function handleTemplateTag(atToken: Node, tagName: Identifier): JSDocTemplateTag {
+                    if (forEach(tags, t => t.kind === SyntaxKind.JSDocTemplateTag)) {
+                        parseErrorAtPosition(tagName.pos, pos - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
                     }
 
-                    typeParameters = [];
+                    let typeParameters = <NodeArray<TypeParameterDeclaration>>[];
+                    //typeParameters.pos = pos;
 
                     while (true) {
                         skipWhitespace();
@@ -5534,32 +5634,33 @@ module ts {
                         let name = scanIdentifier();
                         if (!name) {
                             parseErrorAtPosition(startPos, 0, Diagnostics.Identifier_expected);
-                            return;
+                            return undefined;
                         }
 
-                        let identifier = <Identifier>createNode(SyntaxKind.Identifier);
-                        let typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
+                        let typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter, name.pos);
+                        typeParameter.name = name;
+                        finishNode(typeParameter, pos);
 
-                        identifier.text = name;
-                        typeParameter.name = identifier;
-
-                        identifier.pos = typeParameter.pos = startPos;
-                        identifier.end = typeParameter.end = pos;
-
-                        Parser.fixupParentReferences(typeParameter);
-                        typeParameter.parent = parent;
                         typeParameters.push(typeParameter);
 
                         skipWhitespace();
                         if (content.charCodeAt(pos) !== CharacterCodes.comma) {
-                            return;
+                            break;
                         }
 
                         pos++;
                     }
+
+                    //typeParameters.end = pos;
+
+                    let result = <JSDocTemplateTag>createNode(SyntaxKind.JSDocTemplateTag, atToken.pos);
+                    result.atToken = atToken;
+                    result.tagName = tagName;
+                    result.typeParameters = typeParameters;
+                    return finishNode(result, pos);
                 }
 
-                function scanIdentifier(): string {
+                function scanIdentifier(): Identifier {
                     let startPos = pos;
                     for (; pos < end; pos++) {
                         let ch = content.charCodeAt(pos);
@@ -5577,7 +5678,9 @@ module ts {
                         return undefined;
                     }
 
-                    return content.substring(startPos, pos);
+                    let result = <Identifier>createNode(SyntaxKind.Identifier, startPos);
+                    result.text = content.substring(startPos, pos);
+                    return finishNode(result, pos);
                 }
             }
         }

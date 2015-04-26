@@ -288,6 +288,12 @@ module ts {
         JSDocVariadicType,
         JSDocConstructorType,
         JSDocThisType,
+        JSDocComment,
+        JSDocTag,
+        JSDocParameterTag,
+        JSDocReturnTag,
+        JSDocTypeTag,
+        JSDocTemplateTag,
 
         // Synthesized list
         SyntaxList,
@@ -1092,6 +1098,33 @@ module ts {
     export interface JSDocParameter {
         name: string;
         type: JSDocType;
+        isBracketed: boolean;
+    }
+
+    export interface JSDocComment extends Node {
+        tags: NodeArray<JSDocTag>;
+    }
+
+    export interface JSDocTag extends Node {
+        atToken: Node;
+        tagName: Identifier;
+    }
+
+    export interface JSDocTemplateTag extends JSDocTag {
+        typeParameters: NodeArray<TypeParameterDeclaration>;
+    }
+
+    export interface JSDocReturnTag extends JSDocTag {
+        typeExpression: JSDocTypeExpression;
+    }
+
+    export interface JSDocTypeTag extends JSDocTag {
+        typeExpression: JSDocTypeExpression;
+    }
+
+    export interface JSDocParameterTag extends JSDocTag {
+        parameterTypeExpression: JSDocTypeExpression;
+        parameterName: Identifier;
         isBracketed: boolean;
     }
 
