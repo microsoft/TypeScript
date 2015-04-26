@@ -76,6 +76,7 @@ module ts {
         "interface": SyntaxKind.InterfaceKeyword,
         "let": SyntaxKind.LetKeyword,
         "module": SyntaxKind.ModuleKeyword,
+        "namespace": SyntaxKind.NamespaceKeyword,
         "new": SyntaxKind.NewKeyword,
         "null": SyntaxKind.NullKeyword,
         "number": SyntaxKind.NumberKeyword,

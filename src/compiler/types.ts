@@ -138,6 +138,7 @@ module ts {
         DeclareKeyword,
         GetKeyword,
         ModuleKeyword,
+        NamespaceKeyword,
         RequireKeyword,
         NumberKeyword,
         SetKeyword,
@@ -312,8 +313,9 @@ module ts {
         DeclarationFile =   0x00000800,  // Node is a .d.ts file
         Let =               0x00001000,  // Variable declaration
         Const =             0x00002000,  // Variable declaration
-        OctalLiteral =      0x00004000,
-        ExportContext =     0x00008000,  // Export context (initialized by binding)
+        OctalLiteral =      0x00004000,  // Octal numeric literal
+        Namespace =         0x00008000,  // Namespace declaration
+        ExportContext =     0x00010000,  // Export context (initialized by binding)
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Default,
         AccessibilityModifier = Public | Private | Protected,
