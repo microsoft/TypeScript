@@ -91,7 +91,7 @@ module ts {
             }
         }
 
-		let newLine = [sys.newLine, "\r\n", "\n"][options.newLine ? Number(options.newLine) : 0];
+        let newLine = [sys.newLine, "\r\n", "\n"][options.newLine ? Number(options.newLine) : 0];
 		
         return {
             getSourceFile,

@@ -1656,7 +1656,7 @@ module ts {
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
-		newLine?: string;
+        newLine?: string;
         noEmit?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
@@ -1692,7 +1692,7 @@ module ts {
 
     export const enum NewLineKind {
         DEFAULT = 0,
-		CRLF = 1,
+        CRLF = 1,
         LF = 2,
     }
 	
