@@ -159,7 +159,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
             // Source maps?
             it('Correct sourcemap content for ' + fileName, () => {
-                if (options.sourceMap) {
+                if (options.sourceMap || options.inlineSourceMap) {
                     Harness.Baseline.runBaseline('Correct sourcemap content for ' + fileName, justName.replace(/\.ts$/, '.sourcemap.txt'), () => {
                         var record = result.getSourceMapRecord();
                         if (options.noEmitOnError && result.errors.length !== 0 && record === undefined) {
@@ -228,7 +228,13 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             it('Correct Sourcemap output for ' + fileName, () => {
-                if (options.sourceMap) {
+                if (options.inlineSourceMap) {
+                    if (result.sourceMaps.length > 0) {
+                        throw new Error('No sourcemap files should be generated if inlineSourceMaps was set.');
+                    }
+                    return null;
+                }
+                else if (options.sourceMap) {
                     if (result.sourceMaps.length !== result.files.length) {
                         throw new Error('Number of sourcemap files should be same as js files.');
                     }

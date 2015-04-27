@@ -57,7 +57,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
 
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
-        let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap ? [] : undefined;
+        let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         let diagnostics: Diagnostic[] = [];
         let newLine = host.getNewLine();
 
@@ -181,7 +181,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
             /** Sourcemap data that will get encoded */
             let sourceMapData: SourceMapData;
 
-            if (compilerOptions.sourceMap) {
+            if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
                 initializeEmitterWithSourceMaps();
             }
 
@@ -506,6 +506,13 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
 
                     // The one that can be used from program to get the actual source file
                     sourceMapData.inputSourceFileNames.push(node.fileName);
+
+                    if (compilerOptions.inlineSources) {
+                        if (!sourceMapData.sourceMapSourcesContent) {
+                            sourceMapData.sourceMapSourcesContent = [];
+                        }
+                        sourceMapData.sourceMapSourcesContent.push(node.text);
+                    }
                 }
 
                 function recordScopeNameOfNode(node: Node, scopeName?: string) {
@@ -577,19 +584,25 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     recordSourceMapSpan(comment.end);
                 }
 
-                function serializeSourceMapContents(version: number, file: string, sourceRoot: string, sources: string[], names: string[], mappings: string) {
+                function serializeSourceMapContents(version: number, file: string, sourceRoot: string, sources: string[], names: string[], mappings: string, sourcesContent?: string[]) {
                     if (typeof JSON !== "undefined") {
-                        return JSON.stringify({
-                            version: version,
-                            file: file,
-                            sourceRoot: sourceRoot,
-                            sources: sources,
-                            names: names,
-                            mappings: mappings
-                        });
+                        let map: any = {
+                            version,
+                            file,
+                            sourceRoot,
+                            sources,
+                            names,
+                            mappings
+                        };
+
+                        if (sourcesContent !== undefined) {
+                            map.sourcesContent = sourcesContent;
+                        }
+
+                        return JSON.stringify(map);
                     }
 
-                    return "{\"version\":" + version + ",\"file\":\"" + escapeString(file) + "\",\"sourceRoot\":\"" + escapeString(sourceRoot) + "\",\"sources\":[" + serializeStringArray(sources) + "],\"names\":[" + serializeStringArray(names) + "],\"mappings\":\"" + escapeString(mappings) + "\"}";
+                    return "{\"version\":" + version + ",\"file\":\"" + escapeString(file) + "\",\"sourceRoot\":\"" + escapeString(sourceRoot) + "\",\"sources\":[" + serializeStringArray(sources) + "],\"names\":[" + serializeStringArray(names) + "],\"mappings\":\"" + escapeString(mappings) + "\" " + (sourcesContent !== undefined ? ",\"sourcesContent\":[" + serializeStringArray(sourcesContent) + "]" : "") + "}";
 
                     function serializeStringArray(list: string[]): string {
                         let output = "";
@@ -604,19 +617,33 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 }
 
                 function writeJavaScriptAndSourceMapFile(emitOutput: string, writeByteOrderMark: boolean) {
-                    // Write source map file
                     encodeLastRecordedSourceMapSpan();
-                    writeFile(host, diagnostics, sourceMapData.sourceMapFilePath, serializeSourceMapContents(
+
+                    let sourceMapText = serializeSourceMapContents(
                         3,
                         sourceMapData.sourceMapFile,
                         sourceMapData.sourceMapSourceRoot,
                         sourceMapData.sourceMapSources,
                         sourceMapData.sourceMapNames,
-                        sourceMapData.sourceMapMappings), /*writeByteOrderMark*/ false);
+                        sourceMapData.sourceMapMappings,
+                        sourceMapData.sourceMapSourcesContent);
+
                     sourceMapDataList.push(sourceMapData);
 
+                    let sourceMapUrl: string;
+                    if (compilerOptions.inlineSourceMap) {
+                        // Encode the sourceMap into the sourceMap url
+                        let base64SourceMapText = convertToBase64(sourceMapText);
+                        sourceMapUrl = `//# sourceMappingURL=data:application/json;base64,${base64SourceMapText}`;
+                    }
+                    else {
+                        // Write source map file
+                        writeFile(host, diagnostics, sourceMapData.sourceMapFilePath, sourceMapText, /*writeByteOrderMark*/ false);
+                        sourceMapUrl = `//# sourceMappingURL=${sourceMapData.jsSourceMappingURL}`;
+                    }
+
                     // Write sourcemap url to the js file and write the js file
-                    writeJavaScriptFile(emitOutput + "//# sourceMappingURL=" + sourceMapData.jsSourceMappingURL, writeByteOrderMark);
+                    writeJavaScriptFile(emitOutput + sourceMapUrl, writeByteOrderMark);
                 }
 
                 // Initialize source map data
@@ -630,6 +657,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     inputSourceFileNames: [],
                     sourceMapNames: [],
                     sourceMapMappings: "",
+                    sourceMapSourcesContent: undefined,
                     sourceMapDecodedMappings: []
                 };
 
@@ -874,7 +902,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
             function emitLiteral(node: LiteralExpression) {
                 let text = getLiteralText(node);
 
-                if (compilerOptions.sourceMap && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
+                if ((compilerOptions.sourceMap || compilerOptions.inlineSourceMap) && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
                 }
                 // For versions below ES6, emit binary & octal literals in their canonical decimal form.
