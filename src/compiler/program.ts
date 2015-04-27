@@ -534,6 +534,25 @@ module ts {
                 }
             }
 
+            if (options.inlineSourceMap) {
+                if (options.sourceMap) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_sourceMap_cannot_be_specified_with_option_inlineSourceMap));
+                }
+                if (options.mapRoot) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_mapRoot_cannot_be_specified_with_option_inlineSourceMap));
+                }
+                if (options.sourceRoot) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_sourceRoot_cannot_be_specified_with_option_inlineSourceMap));
+                }
+            }
+
+
+            if (options.inlineSources) {
+                if (!options.sourceMap && !options.inlineSourceMap) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_inlineSources_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided));
+                }
+            }
+
             if (!options.sourceMap && (options.mapRoot || options.sourceRoot)) {
                 // Error to specify --mapRoot or --sourceRoot without mapSourceFiles
                 if (options.mapRoot) {
@@ -567,7 +586,7 @@ module ts {
 
             // Cannot specify module gen target when in es6 or above
             if (options.module && languageVersion >= ScriptTarget.ES6) {
-                diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_external_modules_into_amd_commonjs_or_umd_when_targeting_ES6_or_higher));
+                diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_external_modules_into_commonjs_amd_system_or_umd_when_targeting_ES6_or_higher));
             }
 
             // there has to be common source directory if user specified --outdir || --sourceRoot

@@ -971,6 +971,8 @@ module Harness {
                                     options.module = ts.ModuleKind.UMD;
                                 } else if (setting.value.toLowerCase() === 'commonjs') {
                                     options.module = ts.ModuleKind.CommonJS;
+                                } else if (setting.value.toLowerCase() === 'system') {
+                                    options.module = ts.ModuleKind.System;
                                 } else if (setting.value.toLowerCase() === 'unspecified') {
                                     options.module = ts.ModuleKind.None;
                                 } else {
@@ -1028,6 +1030,10 @@ module Harness {
                             options.sourceRoot = setting.value;
                             break;
 
+                        case 'maproot':
+                            options.mapRoot = setting.value;
+                            break;
+
                         case 'sourcemap':
                             options.sourceMap = !!setting.value;
                             break;
@@ -1079,6 +1085,14 @@ module Harness {
                         case 'includebuiltfile':
                             let builtFileName = libFolder + setting.value;
                             includeBuiltFiles.push({ unitName: builtFileName, content: normalizeLineEndings(IO.readFile(builtFileName), newLine) });
+                            break;
+
+                        case 'inlinesourcemap':
+                            options.inlineSourceMap = setting.value === 'true';
+                            break;
+                        
+                        case 'inlinesources':
+                            options.inlineSources = setting.value === 'true';
                             break;
 
                         default:
@@ -1477,7 +1491,8 @@ module Harness {
             "noimplicitany", "noresolve", "newline", "newlines", "emitbom",
             "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
             "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
-            "separatecompilation"];
+            "separatecompilation", "inlinesourcemap", "maproot", "sourceroot",
+            "inlinesources"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

@@ -237,6 +237,9 @@ module Harness.SourceMapRecoder {
             sourceMapRecoder.WriteLine("mapUrl: " + sourceMapData.jsSourceMappingURL);
             sourceMapRecoder.WriteLine("sourceRoot: " + sourceMapData.sourceMapSourceRoot);
             sourceMapRecoder.WriteLine("sources: " + sourceMapData.sourceMapSources);
+            if (sourceMapData.sourceMapSourcesContent) {
+                sourceMapRecoder.WriteLine("sourcesContent: " + JSON.stringify(sourceMapData.sourceMapSourcesContent));
+            }
             sourceMapRecoder.WriteLine("===================================================================");
         }
 

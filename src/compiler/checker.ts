@@ -10911,9 +10911,15 @@ module ts {
             }
             checkExternalModuleExports(container);
 
-            if (node.isExportEquals && languageVersion >= ScriptTarget.ES6) {
-                // export assignment is deprecated in es6 or above
-                grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_export_default_instead);
+            if (node.isExportEquals) {
+                if (languageVersion >= ScriptTarget.ES6) {
+                    // export assignment is deprecated in es6 or above
+                    grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_export_default_instead);
+                }
+                else if (compilerOptions.module === ModuleKind.System) {
+                    // system modules does not support export assignment
+                    grammarErrorOnNode(node, Diagnostics.Export_assignment_is_not_supported_when_module_flag_is_system);
+                }
             }
         }
 
@@ -11736,9 +11742,11 @@ module ts {
 
         function getExportNameSubstitution(symbol: Symbol, location: Node, getGeneratedNameForNode: (Node: Node) => string): string {
             if (isExternalModuleSymbol(symbol.parent)) {
-                // If this is es6 or higher, just use the name of the export
+                // 1. If this is es6 or higher, just use the name of the export
                 // no need to qualify it.
-                if (languageVersion >= ScriptTarget.ES6) {
+                // 2. export mechanism for System modules is different from CJS\AMD
+                // and it does not need qualifications for exports
+                if (languageVersion >= ScriptTarget.ES6 || compilerOptions.module === ModuleKind.System) {
                     return undefined;
                 }
                 return "exports." + unescapeIdentifier(symbol.name);
@@ -12099,6 +12107,15 @@ module ts {
             return !!resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
         }
 
+        function getReferencedValueDeclaration(reference: Identifier): Declaration {
+            Debug.assert(!nodeIsSynthesized(reference));
+            let symbol =
+                getNodeLinks(reference).resolvedSymbol ||
+                resolveName(reference, reference.text, SymbolFlags.Value | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+
+            return symbol && getExportSymbolOfValueSymbolIfExported(symbol).valueDeclaration;
+        }
+
         function getBlockScopedVariableId(n: Identifier): number {
             Debug.assert(!nodeIsSynthesized(n));
 
@@ -12157,6 +12174,7 @@ module ts {
                 resolvesToSomeValue,
                 collectLinkedAliases,
                 getBlockScopedVariableId,
+                getReferencedValueDeclaration,
                 serializeTypeOfNode,
                 serializeParameterTypesOfNode,
                 serializeReturnTypeOfNode,
