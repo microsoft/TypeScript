@@ -31,7 +31,6 @@ function runTests(runners: RunnerBase[]) {
 }
 
 var runners: RunnerBase[] = [];
-global.runners = runners;
 var reverse: boolean = false;
 var iterations: number = 1;
 
