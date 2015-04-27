@@ -2000,15 +2000,15 @@
     },
     "Emit newline: 'CRLF' (dos) or 'LF' (unix).": {
         "category": "Message",
-        "code": 6061
+        "code": 6060
     },
     "NEWLINE": { 
         "category": "Message", 
-        "code": 6062
+        "code": 6061
     },
     "Argument for 'newLine' option must be 'CRLF' or 'LF'.": {
         "category": "Error", 
-        "code": 6063
+        "code": 6062
     },
 
 
