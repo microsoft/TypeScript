@@ -10689,7 +10689,7 @@ module ts {
             }
             checkExternalModuleExports(container);
 
-            if (node.isExportEquals) {
+            if (node.isExportEquals && !isInAmbientContext(node)) {
                 if (languageVersion >= ScriptTarget.ES6) {
                     // export assignment is deprecated in es6 or above
                     grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_export_default_instead);
