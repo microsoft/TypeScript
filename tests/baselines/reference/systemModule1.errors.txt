@@ -2,17 +2,6 @@ error TS1204: Cannot compile external modules into 'commonjs', 'amd', 'system' o
 
 
 !!! error TS1204: Cannot compile external modules into 'commonjs', 'amd', 'system' or 'umd' when targeting 'ES6' or higher.
-==== tests/cases/compiler/es6-declaration-amd.ts (0 errors) ====
+==== tests/cases/compiler/systemModule1.ts (0 errors) ====
     
-    class A
-    {
-        constructor ()
-        {
-    
-        }
-    
-        public B()
-        {
-            return 42;
-        }
-    }
+    export var x = 1;

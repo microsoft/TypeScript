@@ -51,11 +51,12 @@ module ts {
             type: {
                 "commonjs": ModuleKind.CommonJS,
                 "amd": ModuleKind.AMD,
-                "umd": ModuleKind.UMD
+                "system": ModuleKind.System,
+                "umd": ModuleKind.UMD,
             },
-            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_or_umd,
+            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_or_umd,
             paramType: Diagnostics.KIND,
-            error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_or_umd
+            error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_or_umd
         },
         {
             name: "noEmit",

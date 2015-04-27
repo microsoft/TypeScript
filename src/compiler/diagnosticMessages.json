@@ -631,7 +631,7 @@
         "category": "Error",
         "code": 1203
     },
-    "Cannot compile external modules into 'amd', 'commonjs' or 'umd' when targeting 'ES6' or higher.": {
+    "Cannot compile external modules into 'commonjs', 'amd', 'system' or 'umd' when targeting 'ES6' or higher.": {
         "category": "Error",
         "code": 1204
     },
@@ -687,6 +687,10 @@
         "category": "Error",
         "code": 1217
     },
+    "Export assignment is not supported when '--module' flag is 'system'.": {
+        "category": "Error",
+        "code": 1218
+    },    
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1844,7 +1848,7 @@
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'commonjs', 'amd', or 'umd'.": {
+    "Specify module code generation: 'commonjs', 'amd', 'system' or 'umd'": {
         "category": "Message",
         "code": 6016
     },
@@ -1928,7 +1932,7 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs', 'amd', or 'umd'.": {
+    "Argument for '--module' option must be 'commonjs', 'amd', 'system' or 'umd'.": {
         "category": "Error",
         "code": 6046
     },
