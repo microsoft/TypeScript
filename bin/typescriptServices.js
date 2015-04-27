@@ -960,6 +960,17 @@ var ts;
         return result;
     }
     ts.arrayToMap = arrayToMap;
+    function memoize(callback) {
+        var value;
+        return function () {
+            if (callback) {
+                value = callback();
+                callback = undefined;
+            }
+            return value;
+        };
+    }
+    ts.memoize = memoize;
     function formatStringFromArgs(text, args, baseIndex) {
         baseIndex = baseIndex || 0;
         return text.replace(/{(\d+)}/g, function (match, index) { return args[+index + baseIndex]; });
@@ -10714,11 +10725,10 @@ var ts;
         var globalESSymbolType;
         var globalIterableType;
         var anyArrayType;
-        var globalTypedPropertyDescriptorType;
-        var globalClassDecoratorType;
-        var globalParameterDecoratorType;
-        var globalPropertyDecoratorType;
-        var globalMethodDecoratorType;
+        var getGlobalClassDecoratorType;
+        var getGlobalParameterDecoratorType;
+        var getGlobalPropertyDecoratorType;
+        var getGlobalMethodDecoratorType;
         var tupleTypes = {};
         var unionTypes = {};
         var stringLiteralTypes = {};
@@ -18691,21 +18701,21 @@ var ts;
                 case 201 /* ClassDeclaration */:
                     var classSymbol = getSymbolOfNode(node.parent);
                     var classConstructorType = getTypeOfSymbol(classSymbol);
-                    var classDecoratorType = instantiateSingleCallFunctionType(globalClassDecoratorType, [classConstructorType]);
+                    var classDecoratorType = instantiateSingleCallFunctionType(getGlobalClassDecoratorType(), [classConstructorType]);
                     checkTypeAssignableTo(exprType, classDecoratorType, node);
                     break;
                 case 132 /* PropertyDeclaration */:
-                    checkTypeAssignableTo(exprType, globalPropertyDecoratorType, node);
+                    checkTypeAssignableTo(exprType, getGlobalPropertyDecoratorType(), node);
                     break;
                 case 134 /* MethodDeclaration */:
                 case 136 /* GetAccessor */:
                 case 137 /* SetAccessor */:
                     var methodType = getTypeOfNode(node.parent);
-                    var methodDecoratorType = instantiateSingleCallFunctionType(globalMethodDecoratorType, [methodType]);
+                    var methodDecoratorType = instantiateSingleCallFunctionType(getGlobalMethodDecoratorType(), [methodType]);
                     checkTypeAssignableTo(exprType, methodDecoratorType, node);
                     break;
                 case 129 /* Parameter */:
-                    checkTypeAssignableTo(exprType, globalParameterDecoratorType, node);
+                    checkTypeAssignableTo(exprType, getGlobalParameterDecoratorType(), node);
                     break;
             }
         }
@@ -21520,11 +21530,10 @@ var ts;
             globalNumberType = getGlobalType("Number");
             globalBooleanType = getGlobalType("Boolean");
             globalRegExpType = getGlobalType("RegExp");
-            globalTypedPropertyDescriptorType = getTypeOfGlobalSymbol(getGlobalTypeSymbol("TypedPropertyDescriptor"), 1);
-            globalClassDecoratorType = getGlobalType("ClassDecorator");
-            globalPropertyDecoratorType = getGlobalType("PropertyDecorator");
-            globalMethodDecoratorType = getGlobalType("MethodDecorator");
-            globalParameterDecoratorType = getGlobalType("ParameterDecorator");
+            getGlobalClassDecoratorType = ts.memoize(function () { return getGlobalType("ClassDecorator"); });
+            getGlobalPropertyDecoratorType = ts.memoize(function () { return getGlobalType("PropertyDecorator"); });
+            getGlobalMethodDecoratorType = ts.memoize(function () { return getGlobalType("MethodDecorator"); });
+            getGlobalParameterDecoratorType = ts.memoize(function () { return getGlobalType("ParameterDecorator"); });
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
             if (languageVersion >= 2 /* ES6 */) {
@@ -21547,7 +21556,7 @@ var ts;
         function isReservedWordInStrictMode(node) {
             // Check that originalKeywordKind is less than LastFutureReservedWord to see if an Identifier is a strict-mode reserved word
             return (node.parserContextFlags & 1 /* StrictMode */) &&
-                (node.originalKeywordKind >= 102 /* FirstFutureReservedWord */ && node.originalKeywordKind <= 110 /* LastFutureReservedWord */);
+                (102 /* FirstFutureReservedWord */ <= node.originalKeywordKind && node.originalKeywordKind <= 110 /* LastFutureReservedWord */);
         }
         function reportStrictModeGrammarErrorInClassDeclaration(identifier, message, arg0, arg1, arg2) {
             // We are checking if this name is inside class declaration or class expression (which are under class definitions inside ES6 spec.)
@@ -21565,7 +21574,7 @@ var ts;
                     var nameBindings = impotClause.namedBindings;
                     if (nameBindings.kind === 211 /* NamespaceImport */) {
                         var name_11 = nameBindings.name;
-                        if (name_11.originalKeywordKind) {
+                        if (isReservedWordInStrictMode(name_11)) {
                             var nameText = ts.declarationNameToString(name_11);
                             return grammarErrorOnNode(name_11, ts.Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
                         }
@@ -21575,7 +21584,7 @@ var ts;
                         for (var _i = 0, _a = nameBindings.elements; _i < _a.length; _i++) {
                             var element = _a[_i];
                             var name_12 = element.name;
-                            if (name_12.originalKeywordKind) {
+                            if (isReservedWordInStrictMode(name_12)) {
                                 var nameText = ts.declarationNameToString(name_12);
                                 reportError = reportError || grammarErrorOnNode(name_12, ts.Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
                             }
@@ -22602,6 +22611,10 @@ var ts;
         return diagnostics;
     }
     ts.getDeclarationDiagnostics = getDeclarationDiagnostics;
+    function isExternalModuleOrDeclarationFile(sourceFile) {
+        return ts.isExternalModule(sourceFile) || ts.isDeclarationFile(sourceFile);
+    }
+    ts.isExternalModuleOrDeclarationFile = isExternalModuleOrDeclarationFile;
     function emitDeclarations(host, resolver, diagnostics, jsFilePath, root) {
         var newLine = host.getNewLine();
         var compilerOptions = host.getCompilerOptions();
@@ -22634,7 +22647,7 @@ var ts;
                         ts.shouldEmitToOwnFile(referencedFile, compilerOptions) ||
                         !addedGlobalFileReference)) {
                         writeReferencePath(referencedFile);
-                        if (!ts.isExternalModuleOrDeclarationFile(referencedFile)) {
+                        if (!isExternalModuleOrDeclarationFile(referencedFile)) {
                             addedGlobalFileReference = true;
                         }
                     }
@@ -22660,13 +22673,13 @@ var ts;
             // Emit references corresponding to this file
             var emittedReferencedFiles = [];
             ts.forEach(host.getSourceFiles(), function (sourceFile) {
-                if (!ts.isExternalModuleOrDeclarationFile(sourceFile)) {
+                if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                     // Check what references need to be added
                     if (!compilerOptions.noResolve) {
                         ts.forEach(sourceFile.referencedFiles, function (fileReference) {
                             var referencedFile = ts.tryResolveScriptReference(host, sourceFile, fileReference);
                             // If the reference file is a declaration file or an external module, emit that reference
-                            if (referencedFile && (ts.isExternalModuleOrDeclarationFile(referencedFile) &&
+                            if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
                                 !ts.contains(emittedReferencedFiles, referencedFile))) {
                                 writeReferencePath(referencedFile);
                                 emittedReferencedFiles.push(referencedFile);
@@ -24010,28 +24023,23 @@ var ts;
 /* @internal */
 var ts;
 (function (ts) {
-    function isExternalModuleOrDeclarationFile(sourceFile) {
-        return ts.isExternalModule(sourceFile) || ts.isDeclarationFile(sourceFile);
-    }
-    ts.isExternalModuleOrDeclarationFile = isExternalModuleOrDeclarationFile;
     // Flags enum to track count of temp variables and a few dedicated names
     var TempFlags;
     (function (TempFlags) {
         TempFlags[TempFlags["Auto"] = 0] = "Auto";
         TempFlags[TempFlags["CountMask"] = 268435455] = "CountMask";
         TempFlags[TempFlags["_i"] = 268435456] = "_i";
-        TempFlags[TempFlags["_n"] = 536870912] = "_n";
     })(TempFlags || (TempFlags = {}));
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     function emitFiles(resolver, host, targetSourceFile) {
         // emit output for the __extends helper function
         var extendsHelper = "\nvar __extends = this.__extends || function (d, b) {\n    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];\n    function __() { this.constructor = d; }\n    __.prototype = b.prototype;\n    d.prototype = new __();\n};";
         // emit output for the __decorate helper function
-        var decorateHelper = "\nvar __decorate = this.__decorate || function (decorators, target, key, desc) {\n    if (typeof Reflect === \"object\" && typeof Reflect.decorate === \"function\") return Reflect.decorate(decorators, target, key, desc);\n    switch (arguments.length) {\n        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);\n        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);\n        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);\n    }\n};";
+        var decorateHelper = "\nif (typeof __decorate !== \"function\") __decorate = function (decorators, target, key, desc) {\n    if (typeof Reflect === \"object\" && typeof Reflect.decorate === \"function\") return Reflect.decorate(decorators, target, key, desc);\n    switch (arguments.length) {\n        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);\n        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);\n        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);\n    }\n};";
         // emit output for the __metadata helper function
-        var metadataHelper = "\nvar __metadata = this.__metadata || function (k, v) {\n    if (typeof Reflect === \"object\" && typeof Reflect.metadata === \"function\") return Reflect.metadata(k, v);\n};";
+        var metadataHelper = "\nif (typeof __metadata !== \"function\") __metadata = function (k, v) {\n    if (typeof Reflect === \"object\" && typeof Reflect.metadata === \"function\") return Reflect.metadata(k, v);\n};";
         // emit output for the __param helper function
-        var paramHelper = "\nvar __param = this.__param || function(index, decorator) { return function (target, key) { decorator(target, key, index); } };";
+        var paramHelper = "\nif (typeof __param !== \"function\") __param = function (paramIndex, decorator) {\n    return function (target, key) { decorator(target, key, paramIndex); }\n};";
         var compilerOptions = host.getCompilerOptions();
         var languageVersion = compilerOptions.target || 0 /* ES3 */;
         var sourceMapDataList = compilerOptions.sourceMap ? [] : undefined;
@@ -24110,8 +24118,7 @@ var ts;
             var writeEmittedFiles = writeJavaScriptFile;
             var detachedCommentsInfo;
             var writeComment = ts.writeCommentRange;
-            /** Emit a node */
-            var emit = emitNodeWithoutSourceMap;
+            var emitSourceFileStart = function (node) { };
             /** Called just before starting emit of a node */
             var emitStart = function (node) { };
             /** Called once the emit of the node is done */
@@ -24140,7 +24147,7 @@ var ts;
             }
             else {
                 ts.forEach(host.getSourceFiles(), function (sourceFile) {
-                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                    if (!ts.isExternalModuleOrDeclarationFile(sourceFile)) {
                         emitSourceFile(sourceFile);
                     }
                 });
@@ -24545,24 +24552,8 @@ var ts;
                 else {
                     sourceMapDir = ts.getDirectoryPath(ts.normalizePath(jsFilePath));
                 }
-                function emitNodeWithSourceMap(node, allowGeneratedIdentifiers) {
-                    if (node) {
-                        if (ts.nodeIsSynthesized(node)) {
-                            return emitNodeWithoutSourceMap(node, false);
-                        }
-                        if (node.kind != 227 /* SourceFile */) {
-                            recordEmitNodeStartSpan(node);
-                            emitNodeWithoutSourceMap(node, allowGeneratedIdentifiers);
-                            recordEmitNodeEndSpan(node);
-                        }
-                        else {
-                            recordNewSourceFileStart(node);
-                            emitNodeWithoutSourceMap(node, false);
-                        }
-                    }
-                }
                 writeEmittedFiles = writeJavaScriptAndSourceMapFile;
-                emit = emitNodeWithSourceMap;
+                emitSourceFileStart = recordNewSourceFileStart;
                 emitStart = recordEmitNodeStartSpan;
                 emitEnd = recordEmitNodeEndSpan;
                 emitToken = writeTextWithSpanRecord;
@@ -25100,7 +25091,7 @@ var ts;
             }
             function emitBindingElement(node) {
                 if (node.propertyName) {
-                    emit(node.propertyName, false);
+                    emitVerbatimDeclarationName(node.propertyName);
                     write(": ");
                 }
                 if (node.dotDotDotToken) {
@@ -25405,19 +25396,19 @@ var ts;
                 if (languageVersion >= 2 /* ES6 */ && node.asteriskToken) {
                     write("*");
                 }
-                emit(node.name, false);
+                emitVerbatimDeclarationName(node.name);
                 if (languageVersion < 2 /* ES6 */) {
                     write(": function ");
                 }
                 emitSignatureAndBody(node);
             }
             function emitPropertyAssignment(node) {
-                emit(node.name, false);
+                emitVerbatimDeclarationName(node.name);
                 write(": ");
                 emit(node.initializer);
             }
             function emitShorthandPropertyAssignment(node) {
-                emit(node.name, false);
+                emitVerbatimDeclarationName(node.name);
                 // If short-hand property has a prefix, then regardless of the target version, we will emit it as normal property assignment. For example:
                 //  module m {
                 //      export let y;
@@ -25490,7 +25481,7 @@ var ts;
                 var indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
                 write(".");
                 var indentedAfterDot = indentIfOnDifferentLines(node, node.dotToken, node.name);
-                emit(node.name, false);
+                emitVerbatimDeclarationName(node.name);
                 decreaseIndentIf(indentedBeforeDot, indentedAfterDot);
             }
             function emitQualifiedName(node) {
@@ -25936,30 +25927,30 @@ var ts;
                 emitStart(node.expression);
                 write("var ");
                 // _i = 0
-                emitNodeWithoutSourceMap(counter);
+                emitWithoutSourceMap(counter);
                 write(" = 0");
                 emitEnd(node.expression);
                 if (!rhsIsIdentifier) {
                     // , _a = expr
                     write(", ");
                     emitStart(node.expression);
-                    emitNodeWithoutSourceMap(rhsReference);
+                    emitWithoutSourceMap(rhsReference);
                     write(" = ");
-                    emitNodeWithoutSourceMap(node.expression);
+                    emitWithoutSourceMap(node.expression);
                     emitEnd(node.expression);
                 }
                 write("; ");
                 // _i < _a.length;
                 emitStart(node.initializer);
-                emitNodeWithoutSourceMap(counter);
+                emitWithoutSourceMap(counter);
                 write(" < ");
-                emitNodeWithoutSourceMap(rhsReference);
+                emitWithoutSourceMap(rhsReference);
                 write(".length");
                 emitEnd(node.initializer);
                 write("; ");
                 // _i++)
                 emitStart(node.initializer);
-                emitNodeWithoutSourceMap(counter);
+                emitWithoutSourceMap(counter);
                 write("++");
                 emitEnd(node.initializer);
                 emitToken(17 /* CloseParenToken */, node.expression.end);
@@ -25984,17 +25975,17 @@ var ts;
                         else {
                             // The following call does not include the initializer, so we have
                             // to emit it separately.
-                            emitNodeWithoutSourceMap(declaration);
+                            emitWithoutSourceMap(declaration);
                             write(" = ");
-                            emitNodeWithoutSourceMap(rhsIterationValue);
+                            emitWithoutSourceMap(rhsIterationValue);
                         }
                     }
                     else {
                         // It's an empty declaration list. This can only happen in an error case, if the user wrote
                         //     for (let of []) {}
-                        emitNodeWithoutSourceMap(createTempVariable(0 /* Auto */));
+                        emitWithoutSourceMap(createTempVariable(0 /* Auto */));
                         write(" = ");
-                        emitNodeWithoutSourceMap(rhsIterationValue);
+                        emitWithoutSourceMap(rhsIterationValue);
                     }
                 }
                 else {
@@ -26007,7 +25998,7 @@ var ts;
                         emitDestructuring(assignmentExpression, true, undefined);
                     }
                     else {
-                        emitNodeWithoutSourceMap(assignmentExpression);
+                        emitWithoutSourceMap(assignmentExpression);
                     }
                 }
                 emitEnd(node.initializer);
@@ -26143,7 +26134,7 @@ var ts;
                         write("exports.");
                     }
                 }
-                emitNodeWithoutSourceMap(node.name);
+                emitWithoutSourceMap(node.name);
                 emitEnd(node.name);
             }
             function createVoidZero() {
@@ -26169,7 +26160,7 @@ var ts;
                         emitModuleMemberName(node);
                     }
                     write(" = ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     emitEnd(node);
                     write(";");
                 }
@@ -26182,7 +26173,7 @@ var ts;
                         emitStart(specifier.name);
                         emitContainingModuleName(specifier);
                         write(".");
-                        emitNodeWithoutSourceMap(specifier.name);
+                        emitWithoutSourceMap(specifier.name);
                         emitEnd(specifier.name);
                         write(" = ");
                         emitExpressionIdentifier(name);
@@ -26530,14 +26521,14 @@ var ts;
                             writeLine();
                             emitStart(p);
                             write("if (");
-                            emitNodeWithoutSourceMap(p.name);
+                            emitWithoutSourceMap(p.name);
                             write(" === void 0)");
                             emitEnd(p);
                             write(" { ");
                             emitStart(p);
-                            emitNodeWithoutSourceMap(p.name);
+                            emitWithoutSourceMap(p.name);
                             write(" = ");
-                            emitNodeWithoutSourceMap(p.initializer);
+                            emitWithoutSourceMap(p.initializer);
                             emitEnd(p);
                             write("; }");
                         }
@@ -26557,7 +26548,7 @@ var ts;
                     emitLeadingComments(restParam);
                     emitStart(restParam);
                     write("var ");
-                    emitNodeWithoutSourceMap(restParam.name);
+                    emitWithoutSourceMap(restParam.name);
                     write(" = [];");
                     emitEnd(restParam);
                     emitTrailingComments(restParam);
@@ -26578,7 +26569,7 @@ var ts;
                     increaseIndent();
                     writeLine();
                     emitStart(restParam);
-                    emitNodeWithoutSourceMap(restParam.name);
+                    emitWithoutSourceMap(restParam.name);
                     write("[" + tempName + " - " + restIndex + "] = arguments[" + tempName + "];");
                     emitEnd(restParam);
                     decreaseIndent();
@@ -26588,15 +26579,15 @@ var ts;
             }
             function emitAccessor(node) {
                 write(node.kind === 136 /* GetAccessor */ ? "get " : "set ");
-                emit(node.name, false);
+                emitVerbatimDeclarationName(node.name);
                 emitSignatureAndBody(node);
             }
             function shouldEmitAsArrowFunction(node) {
                 return node.kind === 163 /* ArrowFunction */ && languageVersion >= 2 /* ES6 */;
             }
-            function emitDeclarationName(node) {
+            function emitNameOfDeclaration(node) {
                 if (node.name) {
-                    emitNodeWithoutSourceMap(node.name);
+                    emitWithoutSourceMap(node.name);
                 }
                 else {
                     write(getGeneratedNameForNode(node));
@@ -26616,10 +26607,6 @@ var ts;
                 if (ts.nodeIsMissing(node.body)) {
                     return emitOnlyPinnedOrTripleSlashComments(node);
                 }
-                if (node.kind !== 134 /* MethodDeclaration */ && node.kind !== 133 /* MethodSignature */) {
-                    // Methods will emit the comments as part of emitting method declaration
-                    emitLeadingComments(node);
-                }
                 // For targeting below es6, emit functions-like declaration including arrow function using function keyword.
                 // When targeting ES6, emit arrow function natively in ES6 by omitting function keyword and using fat arrow instead
                 if (!shouldEmitAsArrowFunction(node)) {
@@ -26636,14 +26623,11 @@ var ts;
                     write(" ");
                 }
                 if (shouldEmitFunctionName(node)) {
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                 }
                 emitSignatureAndBody(node);
                 if (languageVersion < 2 /* ES6 */ && node.kind === 200 /* FunctionDeclaration */ && node.parent === currentSourceFile && node.name) {
                     emitExportMemberAssignments(node.name);
-                }
-                if (node.kind !== 134 /* MethodDeclaration */ && node.kind !== 133 /* MethodSignature */) {
-                    emitTrailingComments(node);
                 }
             }
             function emitCaptureThisForNodeIfNecessary(node) {
@@ -26821,7 +26805,7 @@ var ts;
                         emitStart(param);
                         emitStart(param.name);
                         write("this.");
-                        emitNodeWithoutSourceMap(param.name);
+                        emitWithoutSourceMap(param.name);
                         emitEnd(param.name);
                         write(" = ");
                         emit(param.name);
@@ -26834,7 +26818,7 @@ var ts;
                 // TODO: (jfreeman,drosen): comment on why this is emitNodeWithoutSourceMap instead of emit here.
                 if (memberName.kind === 8 /* StringLiteral */ || memberName.kind === 7 /* NumericLiteral */) {
                     write("[");
-                    emitNodeWithoutSourceMap(memberName);
+                    emitWithoutSourceMap(memberName);
                     write("]");
                 }
                 else if (memberName.kind === 127 /* ComputedPropertyName */) {
@@ -26842,7 +26826,7 @@ var ts;
                 }
                 else {
                     write(".");
-                    emitNodeWithoutSourceMap(memberName);
+                    emitWithoutSourceMap(memberName);
                 }
             }
             function getInitializedProperties(node, static) {
@@ -26871,7 +26855,7 @@ var ts;
                 }
                 else {
                     if (property.flags & 128 /* Static */) {
-                        emitDeclarationName(node);
+                        emitNameOfDeclaration(node);
                     }
                     else {
                         write("this");
@@ -27033,7 +27017,7 @@ var ts;
                 emitStart(ctor || node);
                 if (languageVersion < 2 /* ES6 */) {
                     write("function ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     emitSignatureParameters(ctor);
                 }
                 else {
@@ -27183,7 +27167,7 @@ var ts;
                             write("export ");
                         }
                         write("let ");
-                        emitDeclarationName(node);
+                        emitNameOfDeclaration(node);
                         write(" = ");
                     }
                     else if (isES6ExportedDeclaration(node)) {
@@ -27218,7 +27202,7 @@ var ts;
                 // check if this is an "export default class" as it may not have a name. Do not emit the name if the class is decorated.
                 if ((node.name || !(node.flags & 256 /* Default */)) && !thisNodeIsDecorated) {
                     write(" ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                 }
                 var baseTypeNode = ts.getClassExtendsHeritageClauseElement(node);
                 if (baseTypeNode) {
@@ -27247,9 +27231,9 @@ var ts;
                     if (node.name) {
                         writeLine();
                         write("Object.defineProperty(");
-                        emitDeclarationName(node);
+                        emitNameOfDeclaration(node);
                         write(", \"name\", { value: \"");
-                        emitDeclarationName(node);
+                        emitNameOfDeclaration(node);
                         write("\", configurable: true });");
                         writeLine();
                     }
@@ -27284,7 +27268,7 @@ var ts;
                     emitStart(node);
                     emitModuleMemberName(node);
                     write(" = ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     emitEnd(node);
                     write(";");
                 }
@@ -27292,14 +27276,14 @@ var ts;
                     // if this is a top level default export of decorated class, write the export after the declaration.
                     writeLine();
                     write("export default ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     write(";");
                 }
             }
             function emitClassLikeDeclarationBelowES6(node) {
                 if (node.kind === 201 /* ClassDeclaration */) {
                     write("var ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     write(" = ");
                 }
                 write("(function (");
@@ -27322,7 +27306,7 @@ var ts;
                     writeLine();
                     emitStart(baseTypeNode);
                     write("__extends(");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     write(", _super);");
                     emitEnd(baseTypeNode);
                 }
@@ -27335,7 +27319,7 @@ var ts;
                 writeLine();
                 emitToken(15 /* CloseBraceToken */, node.members.end, function () {
                     write("return ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                 });
                 write(";");
                 emitTempDeclarations(true);
@@ -27365,7 +27349,7 @@ var ts;
                 }
             }
             function emitClassMemberPrefix(node, member) {
-                emitDeclarationName(node);
+                emitNameOfDeclaration(node);
                 if (!(member.flags & 128 /* Static */)) {
                     write(".prototype");
                 }
@@ -27395,7 +27379,7 @@ var ts;
                 //
                 writeLine();
                 emitStart(node);
-                emitDeclarationName(node);
+                emitNameOfDeclaration(node);
                 write(" = __decorate([");
                 increaseIndent();
                 writeLine();
@@ -27410,7 +27394,7 @@ var ts;
                 decreaseIndent();
                 writeLine();
                 write("], ");
-                emitDeclarationName(node);
+                emitNameOfDeclaration(node);
                 write(");");
                 emitEnd(node);
                 writeLine();
@@ -28001,11 +27985,11 @@ var ts;
                                     emitStart(specifier);
                                     emitContainingModuleName(specifier);
                                     write(".");
-                                    emitNodeWithoutSourceMap(specifier.name);
+                                    emitWithoutSourceMap(specifier.name);
                                     write(" = ");
                                     write(generatedName);
                                     write(".");
-                                    emitNodeWithoutSourceMap(specifier.propertyName || specifier.name);
+                                    emitWithoutSourceMap(specifier.propertyName || specifier.name);
                                     write(";");
                                     emitEnd(specifier);
                                 }
@@ -28041,7 +28025,7 @@ var ts;
                         }
                         if (node.moduleSpecifier) {
                             write(" from ");
-                            emitNodeWithoutSourceMap(node.moduleSpecifier);
+                            emitWithoutSourceMap(node.moduleSpecifier);
                         }
                         write(";");
                         emitEnd(node);
@@ -28059,10 +28043,10 @@ var ts;
                         }
                         emitStart(specifier);
                         if (specifier.propertyName) {
-                            emitNodeWithoutSourceMap(specifier.propertyName);
+                            emitWithoutSourceMap(specifier.propertyName);
                             write(" as ");
                         }
-                        emitNodeWithoutSourceMap(specifier.name);
+                        emitWithoutSourceMap(specifier.name);
                         emitEnd(specifier);
                         needsComma = true;
                     }
@@ -28349,18 +28333,86 @@ var ts;
                 }
                 emitLeadingComments(node.endOfFileToken);
             }
-            function emitNodeWithoutSourceMap(node, allowGeneratedIdentifiers) {
+            /**
+             * The standard function to emit on any Node.
+             * This will take care of leading/trailing comments, and sourcemaps if applicable.
+             */
+            function emit(node) {
+                emitNodeWorker(node, true, true);
+            }
+            /**
+             * A function to be called in the case where sourcemaps should not be tracked for a single node.
+             * This will still take care of leading/trailing comments.
+             *
+             * Note, however, that sourcemap tracking may resume for child nodes within the given
+             * node depending on the specifics of how the given node will be emitted.
+             *
+             * For instance, if this function is called with the node 'a + b', then we will not track
+             * the sourcemap for 'a + b' itself, but if 'emit' is called instead for nodes 'a' and 'b',
+             * then both 'a' and 'b' will have sourcemaps recorded if appropriate.
+             */
+            function emitWithoutSourceMap(node) {
+                emitNodeWorker(node, false, true);
+            }
+            /**
+             * Emits a node with comments and tracks sourcemaps for said node, disallowing the renaming
+             * of identifiers to be *for this node*.
+             *
+             * This is useful in scenarios when a name's usage can be non-local and it is not feasible to
+             * rename it (e.g. the declaration name of a property for a shorthand property).
+             *
+             * Note that preventing generated identifier renaming only applies if the given node is an
+             * identifier. If it is not an identifier, contained identifiers may still be replaced
+             * by their generated counterparts.
+             *
+             * For instance, given an the computed property '[a + b]' from below :
+             *      var x = {
+             *          [a + b]() {
+             *          }
+             *      }
+             * Both 'a' and 'b' may be replaced by generated counterparts in '[a + b]'.
+             */
+            function emitVerbatimDeclarationName(node) {
+                emitNodeWorker(node, true, false);
+            }
+            /**
+             * Do not call this function directly.
+             *
+             * This function acts as a common path to 'emit' and 'emitNodeWithoutSourceMap'
+             * that is aware of ordering between comments and sourcemap spans.
+             */
+            function emitNodeWorker(node, shouldEmitSourceMap, allowGeneratedIdentifiers) {
                 if (!node) {
                     return;
                 }
                 if (node.flags & 2 /* Ambient */) {
-                    return emitOnlyPinnedOrTripleSlashComments(node);
+                    emitOnlyPinnedOrTripleSlashComments(node);
+                    return;
+                }
+                // Emitting on a SourceFile is a special case; there is not necessarily
+                // a corresponding start/end we're interested in, and comments will be
+                // emitted for the end-of-file
+                if (node.kind === 227 /* SourceFile */) {
+                    if (shouldEmitSourceMap) {
+                        emitSourceFileStart(node);
+                    }
+                    emitBareNode(node, allowGeneratedIdentifiers);
+                    return;
                 }
                 var emitComments = shouldEmitLeadingAndTrailingComments(node);
                 if (emitComments) {
                     emitLeadingComments(node);
                 }
-                emitJavaScriptWorker(node, allowGeneratedIdentifiers);
+                // Only track sourcemaps on *parsed* nodes when requested.
+                // Synthesized nodes do not correspond to text in the original source.
+                if (shouldEmitSourceMap && !ts.nodeIsSynthesized(node)) {
+                    emitStart(node);
+                    emitBareNode(node, allowGeneratedIdentifiers);
+                    emitEnd(node);
+                }
+                else {
+                    emitBareNode(node, allowGeneratedIdentifiers);
+                }
                 if (emitComments) {
                     emitTrailingComments(node);
                 }
@@ -28370,12 +28422,13 @@ var ts;
                     // All of these entities are emitted in a specialized fashion.  As such, we allow
                     // the specialized methods for each to handle the comments on the nodes.
                     case 202 /* InterfaceDeclaration */:
-                    case 200 /* FunctionDeclaration */:
                     case 209 /* ImportDeclaration */:
                     case 208 /* ImportEqualsDeclaration */:
                     case 203 /* TypeAliasDeclaration */:
                     case 214 /* ExportAssignment */:
                         return false;
+                    case 200 /* FunctionDeclaration */:
+                        return !!node.body;
                     case 205 /* ModuleDeclaration */:
                         // Only emit the leading/trailing comments for a module if we're actually
                         // emitting the module as well.
@@ -28399,8 +28452,10 @@ var ts;
                 // Emit comments for everything else.
                 return true;
             }
-            function emitJavaScriptWorker(node, allowGeneratedIdentifiers) {
-                if (allowGeneratedIdentifiers === void 0) { allowGeneratedIdentifiers = true; }
+            /**
+             * Emits a node without emitting comments or tracking sourcemap information.
+             */
+            function emitBareNode(node, allowGeneratedIdentifiers) {
                 // Check if the node can be emitted regardless of the ScriptTarget
                 switch (node.kind) {
                     case 65 /* Identifier */:

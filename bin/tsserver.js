@@ -275,6 +275,17 @@ var ts;
         return result;
     }
     ts.arrayToMap = arrayToMap;
+    function memoize(callback) {
+        var value;
+        return function () {
+            if (callback) {
+                value = callback();
+                callback = undefined;
+            }
+            return value;
+        };
+    }
+    ts.memoize = memoize;
     function formatStringFromArgs(text, args, baseIndex) {
         baseIndex = baseIndex || 0;
         return text.replace(/{(\d+)}/g, function (match, index) { return args[+index + baseIndex]; });
@@ -8866,11 +8877,10 @@ var ts;
         var globalESSymbolType;
         var globalIterableType;
         var anyArrayType;
-        var globalTypedPropertyDescriptorType;
-        var globalClassDecoratorType;
-        var globalParameterDecoratorType;
-        var globalPropertyDecoratorType;
-        var globalMethodDecoratorType;
+        var getGlobalClassDecoratorType;
+        var getGlobalParameterDecoratorType;
+        var getGlobalPropertyDecoratorType;
+        var getGlobalMethodDecoratorType;
         var tupleTypes = {};
         var unionTypes = {};
         var stringLiteralTypes = {};
@@ -15759,21 +15769,21 @@ var ts;
                 case 201:
                     var classSymbol = getSymbolOfNode(node.parent);
                     var classConstructorType = getTypeOfSymbol(classSymbol);
-                    var classDecoratorType = instantiateSingleCallFunctionType(globalClassDecoratorType, [classConstructorType]);
+                    var classDecoratorType = instantiateSingleCallFunctionType(getGlobalClassDecoratorType(), [classConstructorType]);
                     checkTypeAssignableTo(exprType, classDecoratorType, node);
                     break;
                 case 132:
-                    checkTypeAssignableTo(exprType, globalPropertyDecoratorType, node);
+                    checkTypeAssignableTo(exprType, getGlobalPropertyDecoratorType(), node);
                     break;
                 case 134:
                 case 136:
                 case 137:
                     var methodType = getTypeOfNode(node.parent);
-                    var methodDecoratorType = instantiateSingleCallFunctionType(globalMethodDecoratorType, [methodType]);
+                    var methodDecoratorType = instantiateSingleCallFunctionType(getGlobalMethodDecoratorType(), [methodType]);
                     checkTypeAssignableTo(exprType, methodDecoratorType, node);
                     break;
                 case 129:
-                    checkTypeAssignableTo(exprType, globalParameterDecoratorType, node);
+                    checkTypeAssignableTo(exprType, getGlobalParameterDecoratorType(), node);
                     break;
             }
         }
@@ -18232,11 +18242,10 @@ var ts;
             globalNumberType = getGlobalType("Number");
             globalBooleanType = getGlobalType("Boolean");
             globalRegExpType = getGlobalType("RegExp");
-            globalTypedPropertyDescriptorType = getTypeOfGlobalSymbol(getGlobalTypeSymbol("TypedPropertyDescriptor"), 1);
-            globalClassDecoratorType = getGlobalType("ClassDecorator");
-            globalPropertyDecoratorType = getGlobalType("PropertyDecorator");
-            globalMethodDecoratorType = getGlobalType("MethodDecorator");
-            globalParameterDecoratorType = getGlobalType("ParameterDecorator");
+            getGlobalClassDecoratorType = ts.memoize(function () { return getGlobalType("ClassDecorator"); });
+            getGlobalPropertyDecoratorType = ts.memoize(function () { return getGlobalType("PropertyDecorator"); });
+            getGlobalMethodDecoratorType = ts.memoize(function () { return getGlobalType("MethodDecorator"); });
+            getGlobalParameterDecoratorType = ts.memoize(function () { return getGlobalType("ParameterDecorator"); });
             if (languageVersion >= 2) {
                 globalTemplateStringsArrayType = getGlobalType("TemplateStringsArray");
                 globalESSymbolType = getGlobalType("Symbol");
@@ -18252,7 +18261,7 @@ var ts;
         }
         function isReservedWordInStrictMode(node) {
             return (node.parserContextFlags & 1) &&
-                (node.originalKeywordKind >= 102 && node.originalKeywordKind <= 110);
+                (102 <= node.originalKeywordKind && node.originalKeywordKind <= 110);
         }
         function reportStrictModeGrammarErrorInClassDeclaration(identifier, message, arg0, arg1, arg2) {
             if (ts.getAncestor(identifier, 201) || ts.getAncestor(identifier, 174)) {
@@ -18267,7 +18276,7 @@ var ts;
                     var nameBindings = impotClause.namedBindings;
                     if (nameBindings.kind === 211) {
                         var name_11 = nameBindings.name;
-                        if (name_11.originalKeywordKind) {
+                        if (isReservedWordInStrictMode(name_11)) {
                             var nameText = ts.declarationNameToString(name_11);
                             return grammarErrorOnNode(name_11, ts.Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
                         }
@@ -18277,7 +18286,7 @@ var ts;
                         for (var _i = 0, _a = nameBindings.elements; _i < _a.length; _i++) {
                             var element = _a[_i];
                             var name_12 = element.name;
-                            if (name_12.originalKeywordKind) {
+                            if (isReservedWordInStrictMode(name_12)) {
                                 var nameText = ts.declarationNameToString(name_12);
                                 reportError = reportError || grammarErrorOnNode(name_12, ts.Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
                             }
@@ -19208,6 +19217,10 @@ var ts;
         return diagnostics;
     }
     ts.getDeclarationDiagnostics = getDeclarationDiagnostics;
+    function isExternalModuleOrDeclarationFile(sourceFile) {
+        return ts.isExternalModule(sourceFile) || ts.isDeclarationFile(sourceFile);
+    }
+    ts.isExternalModuleOrDeclarationFile = isExternalModuleOrDeclarationFile;
     function emitDeclarations(host, resolver, diagnostics, jsFilePath, root) {
         var newLine = host.getNewLine();
         var compilerOptions = host.getCompilerOptions();
@@ -19235,7 +19248,7 @@ var ts;
                         ts.shouldEmitToOwnFile(referencedFile, compilerOptions) ||
                         !addedGlobalFileReference)) {
                         writeReferencePath(referencedFile);
-                        if (!ts.isExternalModuleOrDeclarationFile(referencedFile)) {
+                        if (!isExternalModuleOrDeclarationFile(referencedFile)) {
                             addedGlobalFileReference = true;
                         }
                     }
@@ -19259,11 +19272,11 @@ var ts;
         else {
             var emittedReferencedFiles = [];
             ts.forEach(host.getSourceFiles(), function (sourceFile) {
-                if (!ts.isExternalModuleOrDeclarationFile(sourceFile)) {
+                if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                     if (!compilerOptions.noResolve) {
                         ts.forEach(sourceFile.referencedFiles, function (fileReference) {
                             var referencedFile = ts.tryResolveScriptReference(host, sourceFile, fileReference);
-                            if (referencedFile && (ts.isExternalModuleOrDeclarationFile(referencedFile) &&
+                            if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
                                 !ts.contains(emittedReferencedFiles, referencedFile))) {
                                 writeReferencePath(referencedFile);
                                 emittedReferencedFiles.push(referencedFile);
@@ -20502,15 +20515,11 @@ var ts;
 /// <reference path="declarationEmitter.ts"/>
 var ts;
 (function (ts) {
-    function isExternalModuleOrDeclarationFile(sourceFile) {
-        return ts.isExternalModule(sourceFile) || ts.isDeclarationFile(sourceFile);
-    }
-    ts.isExternalModuleOrDeclarationFile = isExternalModuleOrDeclarationFile;
     function emitFiles(resolver, host, targetSourceFile) {
         var extendsHelper = "\nvar __extends = this.__extends || function (d, b) {\n    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];\n    function __() { this.constructor = d; }\n    __.prototype = b.prototype;\n    d.prototype = new __();\n};";
-        var decorateHelper = "\nvar __decorate = this.__decorate || function (decorators, target, key, desc) {\n    if (typeof Reflect === \"object\" && typeof Reflect.decorate === \"function\") return Reflect.decorate(decorators, target, key, desc);\n    switch (arguments.length) {\n        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);\n        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);\n        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);\n    }\n};";
-        var metadataHelper = "\nvar __metadata = this.__metadata || function (k, v) {\n    if (typeof Reflect === \"object\" && typeof Reflect.metadata === \"function\") return Reflect.metadata(k, v);\n};";
-        var paramHelper = "\nvar __param = this.__param || function(index, decorator) { return function (target, key) { decorator(target, key, index); } };";
+        var decorateHelper = "\nif (typeof __decorate !== \"function\") __decorate = function (decorators, target, key, desc) {\n    if (typeof Reflect === \"object\" && typeof Reflect.decorate === \"function\") return Reflect.decorate(decorators, target, key, desc);\n    switch (arguments.length) {\n        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);\n        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);\n        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);\n    }\n};";
+        var metadataHelper = "\nif (typeof __metadata !== \"function\") __metadata = function (k, v) {\n    if (typeof Reflect === \"object\" && typeof Reflect.metadata === \"function\") return Reflect.metadata(k, v);\n};";
+        var paramHelper = "\nif (typeof __param !== \"function\") __param = function (paramIndex, decorator) {\n    return function (target, key) { decorator(target, key, paramIndex); }\n};";
         var compilerOptions = host.getCompilerOptions();
         var languageVersion = compilerOptions.target || 0;
         var sourceMapDataList = compilerOptions.sourceMap ? [] : undefined;
@@ -20585,7 +20594,7 @@ var ts;
             var writeEmittedFiles = writeJavaScriptFile;
             var detachedCommentsInfo;
             var writeComment = ts.writeCommentRange;
-            var emit = emitNodeWithoutSourceMap;
+            var emitSourceFileStart = function (node) { };
             var emitStart = function (node) { };
             var emitEnd = function (node) { };
             var emitToken = emitTokenText;
@@ -20600,7 +20609,7 @@ var ts;
             }
             else {
                 ts.forEach(host.getSourceFiles(), function (sourceFile) {
-                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                    if (!ts.isExternalModuleOrDeclarationFile(sourceFile)) {
                         emitSourceFile(sourceFile);
                     }
                 });
@@ -20949,24 +20958,8 @@ var ts;
                 else {
                     sourceMapDir = ts.getDirectoryPath(ts.normalizePath(jsFilePath));
                 }
-                function emitNodeWithSourceMap(node, allowGeneratedIdentifiers) {
-                    if (node) {
-                        if (ts.nodeIsSynthesized(node)) {
-                            return emitNodeWithoutSourceMap(node, false);
-                        }
-                        if (node.kind != 227) {
-                            recordEmitNodeStartSpan(node);
-                            emitNodeWithoutSourceMap(node, allowGeneratedIdentifiers);
-                            recordEmitNodeEndSpan(node);
-                        }
-                        else {
-                            recordNewSourceFileStart(node);
-                            emitNodeWithoutSourceMap(node, false);
-                        }
-                    }
-                }
                 writeEmittedFiles = writeJavaScriptAndSourceMapFile;
-                emit = emitNodeWithSourceMap;
+                emitSourceFileStart = recordNewSourceFileStart;
                 emitStart = recordEmitNodeStartSpan;
                 emitEnd = recordEmitNodeEndSpan;
                 emitToken = writeTextWithSpanRecord;
@@ -21437,7 +21430,7 @@ var ts;
             }
             function emitBindingElement(node) {
                 if (node.propertyName) {
-                    emit(node.propertyName, false);
+                    emitVerbatimDeclarationName(node.propertyName);
                     write(": ");
                 }
                 if (node.dotDotDotToken) {
@@ -21717,19 +21710,19 @@ var ts;
                 if (languageVersion >= 2 && node.asteriskToken) {
                     write("*");
                 }
-                emit(node.name, false);
+                emitVerbatimDeclarationName(node.name);
                 if (languageVersion < 2) {
                     write(": function ");
                 }
                 emitSignatureAndBody(node);
             }
             function emitPropertyAssignment(node) {
-                emit(node.name, false);
+                emitVerbatimDeclarationName(node.name);
                 write(": ");
                 emit(node.initializer);
             }
             function emitShorthandPropertyAssignment(node) {
-                emit(node.name, false);
+                emitVerbatimDeclarationName(node.name);
                 if (languageVersion < 2) {
                     write(": ");
                     var generatedName = getGeneratedNameForIdentifier(node.name);
@@ -21783,7 +21776,7 @@ var ts;
                 var indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
                 write(".");
                 var indentedAfterDot = indentIfOnDifferentLines(node, node.dotToken, node.name);
-                emit(node.name, false);
+                emitVerbatimDeclarationName(node.name);
                 decreaseIndentIf(indentedBeforeDot, indentedAfterDot);
             }
             function emitQualifiedName(node) {
@@ -22187,27 +22180,27 @@ var ts;
                 var rhsReference = rhsIsIdentifier ? node.expression : createTempVariable(0);
                 emitStart(node.expression);
                 write("var ");
-                emitNodeWithoutSourceMap(counter);
+                emitWithoutSourceMap(counter);
                 write(" = 0");
                 emitEnd(node.expression);
                 if (!rhsIsIdentifier) {
                     write(", ");
                     emitStart(node.expression);
-                    emitNodeWithoutSourceMap(rhsReference);
+                    emitWithoutSourceMap(rhsReference);
                     write(" = ");
-                    emitNodeWithoutSourceMap(node.expression);
+                    emitWithoutSourceMap(node.expression);
                     emitEnd(node.expression);
                 }
                 write("; ");
                 emitStart(node.initializer);
-                emitNodeWithoutSourceMap(counter);
+                emitWithoutSourceMap(counter);
                 write(" < ");
-                emitNodeWithoutSourceMap(rhsReference);
+                emitWithoutSourceMap(rhsReference);
                 write(".length");
                 emitEnd(node.initializer);
                 write("; ");
                 emitStart(node.initializer);
-                emitNodeWithoutSourceMap(counter);
+                emitWithoutSourceMap(counter);
                 write("++");
                 emitEnd(node.initializer);
                 emitToken(17, node.expression.end);
@@ -22225,15 +22218,15 @@ var ts;
                             emitDestructuring(declaration, false, rhsIterationValue);
                         }
                         else {
-                            emitNodeWithoutSourceMap(declaration);
+                            emitWithoutSourceMap(declaration);
                             write(" = ");
-                            emitNodeWithoutSourceMap(rhsIterationValue);
+                            emitWithoutSourceMap(rhsIterationValue);
                         }
                     }
                     else {
-                        emitNodeWithoutSourceMap(createTempVariable(0));
+                        emitWithoutSourceMap(createTempVariable(0));
                         write(" = ");
-                        emitNodeWithoutSourceMap(rhsIterationValue);
+                        emitWithoutSourceMap(rhsIterationValue);
                     }
                 }
                 else {
@@ -22242,7 +22235,7 @@ var ts;
                         emitDestructuring(assignmentExpression, true, undefined);
                     }
                     else {
-                        emitNodeWithoutSourceMap(assignmentExpression);
+                        emitWithoutSourceMap(assignmentExpression);
                     }
                 }
                 emitEnd(node.initializer);
@@ -22378,7 +22371,7 @@ var ts;
                         write("exports.");
                     }
                 }
-                emitNodeWithoutSourceMap(node.name);
+                emitWithoutSourceMap(node.name);
                 emitEnd(node.name);
             }
             function createVoidZero() {
@@ -22404,7 +22397,7 @@ var ts;
                         emitModuleMemberName(node);
                     }
                     write(" = ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     emitEnd(node);
                     write(";");
                 }
@@ -22417,7 +22410,7 @@ var ts;
                         emitStart(specifier.name);
                         emitContainingModuleName(specifier);
                         write(".");
-                        emitNodeWithoutSourceMap(specifier.name);
+                        emitWithoutSourceMap(specifier.name);
                         emitEnd(specifier.name);
                         write(" = ");
                         emitExpressionIdentifier(name);
@@ -22731,14 +22724,14 @@ var ts;
                             writeLine();
                             emitStart(p);
                             write("if (");
-                            emitNodeWithoutSourceMap(p.name);
+                            emitWithoutSourceMap(p.name);
                             write(" === void 0)");
                             emitEnd(p);
                             write(" { ");
                             emitStart(p);
-                            emitNodeWithoutSourceMap(p.name);
+                            emitWithoutSourceMap(p.name);
                             write(" = ");
-                            emitNodeWithoutSourceMap(p.initializer);
+                            emitWithoutSourceMap(p.initializer);
                             emitEnd(p);
                             write("; }");
                         }
@@ -22757,7 +22750,7 @@ var ts;
                     emitLeadingComments(restParam);
                     emitStart(restParam);
                     write("var ");
-                    emitNodeWithoutSourceMap(restParam.name);
+                    emitWithoutSourceMap(restParam.name);
                     write(" = [];");
                     emitEnd(restParam);
                     emitTrailingComments(restParam);
@@ -22778,7 +22771,7 @@ var ts;
                     increaseIndent();
                     writeLine();
                     emitStart(restParam);
-                    emitNodeWithoutSourceMap(restParam.name);
+                    emitWithoutSourceMap(restParam.name);
                     write("[" + tempName + " - " + restIndex + "] = arguments[" + tempName + "];");
                     emitEnd(restParam);
                     decreaseIndent();
@@ -22788,15 +22781,15 @@ var ts;
             }
             function emitAccessor(node) {
                 write(node.kind === 136 ? "get " : "set ");
-                emit(node.name, false);
+                emitVerbatimDeclarationName(node.name);
                 emitSignatureAndBody(node);
             }
             function shouldEmitAsArrowFunction(node) {
                 return node.kind === 163 && languageVersion >= 2;
             }
-            function emitDeclarationName(node) {
+            function emitNameOfDeclaration(node) {
                 if (node.name) {
-                    emitNodeWithoutSourceMap(node.name);
+                    emitWithoutSourceMap(node.name);
                 }
                 else {
                     write(getGeneratedNameForNode(node));
@@ -22814,9 +22807,6 @@ var ts;
                 if (ts.nodeIsMissing(node.body)) {
                     return emitOnlyPinnedOrTripleSlashComments(node);
                 }
-                if (node.kind !== 134 && node.kind !== 133) {
-                    emitLeadingComments(node);
-                }
                 if (!shouldEmitAsArrowFunction(node)) {
                     if (isES6ExportedDeclaration(node)) {
                         write("export ");
@@ -22831,14 +22821,11 @@ var ts;
                     write(" ");
                 }
                 if (shouldEmitFunctionName(node)) {
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                 }
                 emitSignatureAndBody(node);
                 if (languageVersion < 2 && node.kind === 200 && node.parent === currentSourceFile && node.name) {
                     emitExportMemberAssignments(node.name);
-                }
-                if (node.kind !== 134 && node.kind !== 133) {
-                    emitTrailingComments(node);
                 }
             }
             function emitCaptureThisForNodeIfNecessary(node) {
@@ -23002,7 +22989,7 @@ var ts;
                         emitStart(param);
                         emitStart(param.name);
                         write("this.");
-                        emitNodeWithoutSourceMap(param.name);
+                        emitWithoutSourceMap(param.name);
                         emitEnd(param.name);
                         write(" = ");
                         emit(param.name);
@@ -23014,7 +23001,7 @@ var ts;
             function emitMemberAccessForPropertyName(memberName) {
                 if (memberName.kind === 8 || memberName.kind === 7) {
                     write("[");
-                    emitNodeWithoutSourceMap(memberName);
+                    emitWithoutSourceMap(memberName);
                     write("]");
                 }
                 else if (memberName.kind === 127) {
@@ -23022,7 +23009,7 @@ var ts;
                 }
                 else {
                     write(".");
-                    emitNodeWithoutSourceMap(memberName);
+                    emitWithoutSourceMap(memberName);
                 }
             }
             function getInitializedProperties(node, static) {
@@ -23051,7 +23038,7 @@ var ts;
                 }
                 else {
                     if (property.flags & 128) {
-                        emitDeclarationName(node);
+                        emitNameOfDeclaration(node);
                     }
                     else {
                         write("this");
@@ -23206,7 +23193,7 @@ var ts;
                 emitStart(ctor || node);
                 if (languageVersion < 2) {
                     write("function ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     emitSignatureParameters(ctor);
                 }
                 else {
@@ -23298,7 +23285,7 @@ var ts;
                             write("export ");
                         }
                         write("let ");
-                        emitDeclarationName(node);
+                        emitNameOfDeclaration(node);
                         write(" = ");
                     }
                     else if (isES6ExportedDeclaration(node)) {
@@ -23321,7 +23308,7 @@ var ts;
                 write("class");
                 if ((node.name || !(node.flags & 256)) && !thisNodeIsDecorated) {
                     write(" ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                 }
                 var baseTypeNode = ts.getClassExtendsHeritageClauseElement(node);
                 if (baseTypeNode) {
@@ -23343,9 +23330,9 @@ var ts;
                     if (node.name) {
                         writeLine();
                         write("Object.defineProperty(");
-                        emitDeclarationName(node);
+                        emitNameOfDeclaration(node);
                         write(", \"name\", { value: \"");
-                        emitDeclarationName(node);
+                        emitNameOfDeclaration(node);
                         write("\", configurable: true });");
                         writeLine();
                     }
@@ -23373,21 +23360,21 @@ var ts;
                     emitStart(node);
                     emitModuleMemberName(node);
                     write(" = ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     emitEnd(node);
                     write(";");
                 }
                 else if (isES6ExportedDeclaration(node) && (node.flags & 256) && thisNodeIsDecorated) {
                     writeLine();
                     write("export default ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     write(";");
                 }
             }
             function emitClassLikeDeclarationBelowES6(node) {
                 if (node.kind === 201) {
                     write("var ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     write(" = ");
                 }
                 write("(function (");
@@ -23410,7 +23397,7 @@ var ts;
                     writeLine();
                     emitStart(baseTypeNode);
                     write("__extends(");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                     write(", _super);");
                     emitEnd(baseTypeNode);
                 }
@@ -23423,7 +23410,7 @@ var ts;
                 writeLine();
                 emitToken(15, node.members.end, function () {
                     write("return ");
-                    emitDeclarationName(node);
+                    emitNameOfDeclaration(node);
                 });
                 write(";");
                 emitTempDeclarations(true);
@@ -23453,7 +23440,7 @@ var ts;
                 }
             }
             function emitClassMemberPrefix(node, member) {
-                emitDeclarationName(node);
+                emitNameOfDeclaration(node);
                 if (!(member.flags & 128)) {
                     write(".prototype");
                 }
@@ -23472,7 +23459,7 @@ var ts;
                 }
                 writeLine();
                 emitStart(node);
-                emitDeclarationName(node);
+                emitNameOfDeclaration(node);
                 write(" = __decorate([");
                 increaseIndent();
                 writeLine();
@@ -23487,7 +23474,7 @@ var ts;
                 decreaseIndent();
                 writeLine();
                 write("], ");
-                emitDeclarationName(node);
+                emitNameOfDeclaration(node);
                 write(");");
                 emitEnd(node);
                 writeLine();
@@ -24011,11 +23998,11 @@ var ts;
                                     emitStart(specifier);
                                     emitContainingModuleName(specifier);
                                     write(".");
-                                    emitNodeWithoutSourceMap(specifier.name);
+                                    emitWithoutSourceMap(specifier.name);
                                     write(" = ");
                                     write(generatedName);
                                     write(".");
-                                    emitNodeWithoutSourceMap(specifier.propertyName || specifier.name);
+                                    emitWithoutSourceMap(specifier.propertyName || specifier.name);
                                     write(";");
                                     emitEnd(specifier);
                                 }
@@ -24049,7 +24036,7 @@ var ts;
                         }
                         if (node.moduleSpecifier) {
                             write(" from ");
-                            emitNodeWithoutSourceMap(node.moduleSpecifier);
+                            emitWithoutSourceMap(node.moduleSpecifier);
                         }
                         write(";");
                         emitEnd(node);
@@ -24067,10 +24054,10 @@ var ts;
                         }
                         emitStart(specifier);
                         if (specifier.propertyName) {
-                            emitNodeWithoutSourceMap(specifier.propertyName);
+                            emitWithoutSourceMap(specifier.propertyName);
                             write(" as ");
                         }
-                        emitNodeWithoutSourceMap(specifier.name);
+                        emitWithoutSourceMap(specifier.name);
                         emitEnd(specifier);
                         needsComma = true;
                     }
@@ -24323,18 +24310,42 @@ var ts;
                 }
                 emitLeadingComments(node.endOfFileToken);
             }
-            function emitNodeWithoutSourceMap(node, allowGeneratedIdentifiers) {
+            function emit(node) {
+                emitNodeWorker(node, true, true);
+            }
+            function emitWithoutSourceMap(node) {
+                emitNodeWorker(node, false, true);
+            }
+            function emitVerbatimDeclarationName(node) {
+                emitNodeWorker(node, true, false);
+            }
+            function emitNodeWorker(node, shouldEmitSourceMap, allowGeneratedIdentifiers) {
                 if (!node) {
                     return;
                 }
                 if (node.flags & 2) {
-                    return emitOnlyPinnedOrTripleSlashComments(node);
+                    emitOnlyPinnedOrTripleSlashComments(node);
+                    return;
+                }
+                if (node.kind === 227) {
+                    if (shouldEmitSourceMap) {
+                        emitSourceFileStart(node);
+                    }
+                    emitBareNode(node, allowGeneratedIdentifiers);
+                    return;
                 }
                 var emitComments = shouldEmitLeadingAndTrailingComments(node);
                 if (emitComments) {
                     emitLeadingComments(node);
                 }
-                emitJavaScriptWorker(node, allowGeneratedIdentifiers);
+                if (shouldEmitSourceMap && !ts.nodeIsSynthesized(node)) {
+                    emitStart(node);
+                    emitBareNode(node, allowGeneratedIdentifiers);
+                    emitEnd(node);
+                }
+                else {
+                    emitBareNode(node, allowGeneratedIdentifiers);
+                }
                 if (emitComments) {
                     emitTrailingComments(node);
                 }
@@ -24342,12 +24353,13 @@ var ts;
             function shouldEmitLeadingAndTrailingComments(node) {
                 switch (node.kind) {
                     case 202:
-                    case 200:
                     case 209:
                     case 208:
                     case 203:
                     case 214:
                         return false;
+                    case 200:
+                        return !!node.body;
                     case 205:
                         return shouldEmitModuleDeclaration(node);
                     case 204:
@@ -24362,8 +24374,7 @@ var ts;
                 }
                 return true;
             }
-            function emitJavaScriptWorker(node, allowGeneratedIdentifiers) {
-                if (allowGeneratedIdentifiers === void 0) { allowGeneratedIdentifiers = true; }
+            function emitBareNode(node, allowGeneratedIdentifiers) {
                 switch (node.kind) {
                     case 65:
                         return emitIdentifier(node, allowGeneratedIdentifiers);
