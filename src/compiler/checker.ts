@@ -3772,16 +3772,6 @@ module ts {
         }
 
         function getTypeForJSDocTypeReference(node: JSDocTypeReference): Type {
-            if (node.name.kind === SyntaxKind.Identifier) {
-                switch ((<Identifier>node.name).text) {
-                    case "any":     return anyType;
-                    case "boolean": return booleanType;
-                    case "number":  return numberType;
-                    case "string":  return stringType;
-                    case "symbol":  return esSymbolType;
-                }
-            }
-
             let symbol = resolveEntityName(node.name, SymbolFlags.Type);
             if (symbol) {
                 let type = createTypeReferenceIfGeneric(

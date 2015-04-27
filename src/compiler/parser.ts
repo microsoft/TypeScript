@@ -5126,6 +5126,13 @@ module ts {
                         return parseJSDocConstructorType();
                     case SyntaxKind.ThisKeyword:
                         return parseJSDocThisType();
+                    case SyntaxKind.AnyKeyword:
+                    case SyntaxKind.StringKeyword:
+                    case SyntaxKind.NumberKeyword:
+                    case SyntaxKind.BooleanKeyword:
+                    case SyntaxKind.SymbolKeyword:
+                    case SyntaxKind.VoidKeyword:
+                        return parseTokenNode<JSDocType>();
                 }
 
                 return parseJSDocTypeReference();

@@ -44,16 +44,9 @@ module ts {
     "pos": 1,
     "end": 8,
     "type": {
-        "kind": "JSDocTypeReference",
+        "kind": "NumberKeyword",
         "pos": 2,
-        "end": 8,
-        "name": {
-            "kind": "Identifier",
-            "pos": 2,
-            "end": 8,
-            "originalKeywordKind": "NumberKeyword",
-            "text": "number"
-        }
+        "end": 8
     }
 }`)
                 });
@@ -65,16 +58,9 @@ module ts {
     "pos": 1,
     "end": 8,
     "type": {
-        "kind": "JSDocTypeReference",
+        "kind": "NumberKeyword",
         "pos": 1,
-        "end": 7,
-        "name": {
-            "kind": "Identifier",
-            "pos": 1,
-            "end": 7,
-            "originalKeywordKind": "NumberKeyword",
-            "text": "number"
-        }
+        "end": 7
     }
 }`)
                 });
@@ -86,16 +72,9 @@ module ts {
     "pos": 1,
     "end": 8,
     "type": {
-        "kind": "JSDocTypeReference",
+        "kind": "NumberKeyword",
         "pos": 2,
-        "end": 8,
-        "name": {
-            "kind": "Identifier",
-            "pos": 2,
-            "end": 8,
-            "originalKeywordKind": "NumberKeyword",
-            "text": "number"
-        }
+        "end": 8
     }
 }`)
                 });
@@ -107,16 +86,9 @@ module ts {
     "pos": 1,
     "end": 8,
     "type": {
-        "kind": "JSDocTypeReference",
+        "kind": "NumberKeyword",
         "pos": 1,
-        "end": 7,
-        "name": {
-            "kind": "Identifier",
-            "pos": 1,
-            "end": 7,
-            "originalKeywordKind": "NumberKeyword",
-            "text": "number"
-        }
+        "end": 7
     }
 }`)
                 });
@@ -178,16 +150,9 @@ module ts {
                 "text": "foo"
             },
             "type": {
-                "kind": "JSDocTypeReference",
+                "kind": "NumberKeyword",
                 "pos": 6,
-                "end": 13,
-                "name": {
-                    "kind": "Identifier",
-                    "pos": 6,
-                    "end": 13,
-                    "originalKeywordKind": "NumberKeyword",
-                    "text": "number"
-                }
+                "end": 13
             }
         },
         "length": 1,
@@ -251,16 +216,9 @@ module ts {
                 "text": "foo"
             },
             "type": {
-                "kind": "JSDocTypeReference",
+                "kind": "NumberKeyword",
                 "pos": 6,
-                "end": 13,
-                "name": {
-                    "kind": "Identifier",
-                    "pos": 6,
-                    "end": 13,
-                    "originalKeywordKind": "NumberKeyword",
-                    "text": "number"
-                }
+                "end": 13
             }
         },
         "1": {
@@ -310,16 +268,9 @@ module ts {
                 "text": "bar"
             },
             "type": {
-                "kind": "JSDocTypeReference",
+                "kind": "NumberKeyword",
                 "pos": 11,
-                "end": 18,
-                "name": {
-                    "kind": "Identifier",
-                    "pos": 11,
-                    "end": 18,
-                    "originalKeywordKind": "NumberKeyword",
-                    "text": "number"
-                }
+                "end": 18
             }
         },
         "length": 2,
@@ -347,16 +298,9 @@ module ts {
                 "text": "foo"
             },
             "type": {
-                "kind": "JSDocTypeReference",
+                "kind": "NumberKeyword",
                 "pos": 6,
-                "end": 13,
-                "name": {
-                    "kind": "Identifier",
-                    "pos": 6,
-                    "end": 13,
-                    "originalKeywordKind": "NumberKeyword",
-                    "text": "number"
-                }
+                "end": 13
             }
         },
         "1": {
@@ -370,16 +314,9 @@ module ts {
                 "text": "bar"
             },
             "type": {
-                "kind": "JSDocTypeReference",
+                "kind": "NumberKeyword",
                 "pos": 19,
-                "end": 26,
-                "name": {
-                    "kind": "Identifier",
-                    "pos": 19,
-                    "end": 26,
-                    "originalKeywordKind": "NumberKeyword",
-                    "text": "number"
-                }
+                "end": 26
             }
         },
         "length": 2,
@@ -423,28 +360,14 @@ module ts {
     "end": 16,
     "types": {
         "0": {
-            "kind": "JSDocTypeReference",
+            "kind": "NumberKeyword",
             "pos": 2,
-            "end": 8,
-            "name": {
-                "kind": "Identifier",
-                "pos": 2,
-                "end": 8,
-                "originalKeywordKind": "NumberKeyword",
-                "text": "number"
-            }
+            "end": 8
         },
         "1": {
-            "kind": "JSDocTypeReference",
+            "kind": "StringKeyword",
             "pos": 9,
-            "end": 15,
-            "name": {
-                "kind": "Identifier",
-                "pos": 9,
-                "end": 15,
-                "originalKeywordKind": "StringKeyword",
-                "text": "string"
-            }
+            "end": 15
         },
         "length": 2,
         "pos": 2,
@@ -461,28 +384,14 @@ module ts {
     "end": 14,
     "types": {
         "0": {
-            "kind": "JSDocTypeReference",
+            "kind": "NumberKeyword",
             "pos": 1,
-            "end": 7,
-            "name": {
-                "kind": "Identifier",
-                "pos": 1,
-                "end": 7,
-                "originalKeywordKind": "NumberKeyword",
-                "text": "number"
-            }
+            "end": 7
         },
         "1": {
-            "kind": "JSDocTypeReference",
+            "kind": "StringKeyword",
             "pos": 8,
-            "end": 14,
-            "name": {
-                "kind": "Identifier",
-                "pos": 8,
-                "end": 14,
-                "originalKeywordKind": "StringKeyword",
-                "text": "string"
-            }
+            "end": 14
         },
         "length": 2,
         "pos": 1,
@@ -517,16 +426,9 @@ module ts {
             "pos": 10,
             "end": 16,
             "type": {
-                "kind": "JSDocTypeReference",
+                "kind": "StringKeyword",
                 "pos": 10,
-                "end": 16,
-                "name": {
-                    "kind": "Identifier",
-                    "pos": 10,
-                    "end": 16,
-                    "originalKeywordKind": "StringKeyword",
-                    "text": "string"
-                }
+                "end": 16
             }
         },
         "1": {
@@ -534,16 +436,9 @@ module ts {
             "pos": 17,
             "end": 25,
             "type": {
-                "kind": "JSDocTypeReference",
+                "kind": "BooleanKeyword",
                 "pos": 17,
-                "end": 25,
-                "name": {
-                    "kind": "Identifier",
-                    "pos": 17,
-                    "end": 25,
-                    "originalKeywordKind": "BooleanKeyword",
-                    "text": "boolean"
-                }
+                "end": 25
             }
         },
         "length": 2,
@@ -565,16 +460,9 @@ module ts {
             "pos": 10,
             "end": 16,
             "type": {
-                "kind": "JSDocTypeReference",
+                "kind": "StringKeyword",
                 "pos": 10,
-                "end": 16,
-                "name": {
-                    "kind": "Identifier",
-                    "pos": 10,
-                    "end": 16,
-                    "originalKeywordKind": "StringKeyword",
-                    "text": "string"
-                }
+                "end": 16
             }
         },
         "1": {
@@ -582,16 +470,9 @@ module ts {
             "pos": 17,
             "end": 25,
             "type": {
-                "kind": "JSDocTypeReference",
+                "kind": "BooleanKeyword",
                 "pos": 17,
-                "end": 25,
-                "name": {
-                    "kind": "Identifier",
-                    "pos": 17,
-                    "end": 25,
-                    "originalKeywordKind": "BooleanKeyword",
-                    "text": "boolean"
-                }
+                "end": 25
             }
         },
         "length": 2,
@@ -670,16 +551,9 @@ module ts {
     "pos": 1,
     "end": 10,
     "type": {
-        "kind": "JSDocTypeReference",
+        "kind": "NumberKeyword",
         "pos": 4,
-        "end": 10,
-        "name": {
-            "kind": "Identifier",
-            "pos": 4,
-            "end": 10,
-            "originalKeywordKind": "NumberKeyword",
-            "text": "number"
-        }
+        "end": 10
     }
 }`);
                 });
@@ -691,16 +565,9 @@ module ts {
     "pos": 1,
     "end": 8,
     "type": {
-        "kind": "JSDocTypeReference",
+        "kind": "NumberKeyword",
         "pos": 1,
-        "end": 7,
-        "name": {
-            "kind": "Identifier",
-            "pos": 1,
-            "end": 7,
-            "originalKeywordKind": "NumberKeyword",
-            "text": "number"
-        }
+        "end": 7
     }
 }`);
                 });
@@ -733,16 +600,9 @@ module ts {
     },
     "typeArguments": {
         "0": {
-            "kind": "JSDocTypeReference",
+            "kind": "NumberKeyword",
             "pos": 4,
-            "end": 10,
-            "name": {
-                "kind": "Identifier",
-                "pos": 4,
-                "end": 10,
-                "originalKeywordKind": "NumberKeyword",
-                "text": "number"
-            }
+            "end": 10
         },
         "length": 1,
         "pos": 4,
@@ -765,28 +625,14 @@ module ts {
     },
     "typeArguments": {
         "0": {
-            "kind": "JSDocTypeReference",
+            "kind": "NumberKeyword",
             "pos": 4,
-            "end": 10,
-            "name": {
-                "kind": "Identifier",
-                "pos": 4,
-                "end": 10,
-                "originalKeywordKind": "NumberKeyword",
-                "text": "number"
-            }
+            "end": 10
         },
         "1": {
-            "kind": "JSDocTypeReference",
+            "kind": "StringKeyword",
             "pos": 11,
-            "end": 17,
-            "name": {
-                "kind": "Identifier",
-                "pos": 11,
-                "end": 17,
-                "originalKeywordKind": "StringKeyword",
-                "text": "string"
-            }
+            "end": 17
         },
         "length": 2,
         "pos": 4,
@@ -974,16 +820,9 @@ module ts {
     "end": 9,
     "types": {
         "0": {
-            "kind": "JSDocTypeReference",
+            "kind": "NumberKeyword",
             "pos": 2,
-            "end": 8,
-            "name": {
-                "kind": "Identifier",
-                "pos": 2,
-                "end": 8,
-                "originalKeywordKind": "NumberKeyword",
-                "text": "number"
-            }
+            "end": 8
         },
         "length": 1,
         "pos": 2,
@@ -1001,28 +840,14 @@ module ts {
     "end": 16,
     "types": {
         "0": {
-            "kind": "JSDocTypeReference",
+            "kind": "NumberKeyword",
             "pos": 2,
-            "end": 8,
-            "name": {
-                "kind": "Identifier",
-                "pos": 2,
-                "end": 8,
-                "originalKeywordKind": "NumberKeyword",
-                "text": "number"
-            }
+            "end": 8
         },
         "1": {
-            "kind": "JSDocTypeReference",
+            "kind": "StringKeyword",
             "pos": 9,
-            "end": 15,
-            "name": {
-                "kind": "Identifier",
-                "pos": 9,
-                "end": 15,
-                "originalKeywordKind": "StringKeyword",
-                "text": "string"
-            }
+            "end": 15
         },
         "length": 2,
         "pos": 2,
@@ -1040,40 +865,19 @@ module ts {
     "end": 24,
     "types": {
         "0": {
-            "kind": "JSDocTypeReference",
+            "kind": "NumberKeyword",
             "pos": 2,
-            "end": 8,
-            "name": {
-                "kind": "Identifier",
-                "pos": 2,
-                "end": 8,
-                "originalKeywordKind": "NumberKeyword",
-                "text": "number"
-            }
+            "end": 8
         },
         "1": {
-            "kind": "JSDocTypeReference",
+            "kind": "StringKeyword",
             "pos": 9,
-            "end": 15,
-            "name": {
-                "kind": "Identifier",
-                "pos": 9,
-                "end": 15,
-                "originalKeywordKind": "StringKeyword",
-                "text": "string"
-            }
+            "end": 15
         },
         "2": {
-            "kind": "JSDocTypeReference",
+            "kind": "BooleanKeyword",
             "pos": 16,
-            "end": 23,
-            "name": {
-                "kind": "Identifier",
-                "pos": 16,
-                "end": 23,
-                "originalKeywordKind": "BooleanKeyword",
-                "text": "boolean"
-            }
+            "end": 23
         },
         "length": 3,
         "pos": 2,
@@ -1289,16 +1093,9 @@ module ts {
                 "pos": 14,
                 "end": 22,
                 "type": {
-                    "kind": "JSDocTypeReference",
+                    "kind": "NumberKeyword",
                     "pos": 15,
-                    "end": 21,
-                    "name": {
-                        "kind": "Identifier",
-                        "pos": 15,
-                        "end": 21,
-                        "originalKeywordKind": "NumberKeyword",
-                        "text": "number"
-                    }
+                    "end": 21
                 }
             }
         },
@@ -1328,16 +1125,9 @@ module ts {
                 "pos": 14,
                 "end": 22,
                 "type": {
-                    "kind": "JSDocTypeReference",
+                    "kind": "NumberKeyword",
                     "pos": 15,
-                    "end": 21,
-                    "name": {
-                        "kind": "Identifier",
-                        "pos": 15,
-                        "end": 21,
-                        "originalKeywordKind": "NumberKeyword",
-                        "text": "number"
-                    }
+                    "end": 21
                 }
             }
         },
@@ -1367,16 +1157,9 @@ module ts {
                 "pos": 14,
                 "end": 22,
                 "type": {
-                    "kind": "JSDocTypeReference",
+                    "kind": "NumberKeyword",
                     "pos": 15,
-                    "end": 21,
-                    "name": {
-                        "kind": "Identifier",
-                        "pos": 15,
-                        "end": 21,
-                        "originalKeywordKind": "NumberKeyword",
-                        "text": "number"
-                    }
+                    "end": 21
                 }
             }
         },
@@ -1406,16 +1189,9 @@ module ts {
                 "pos": 16,
                 "end": 24,
                 "type": {
-                    "kind": "JSDocTypeReference",
+                    "kind": "NumberKeyword",
                     "pos": 17,
-                    "end": 23,
-                    "name": {
-                        "kind": "Identifier",
-                        "pos": 17,
-                        "end": 23,
-                        "originalKeywordKind": "NumberKeyword",
-                        "text": "number"
-                    }
+                    "end": 23
                 }
             }
         },
@@ -1445,16 +1221,9 @@ module ts {
                 "pos": 16,
                 "end": 24,
                 "type": {
-                    "kind": "JSDocTypeReference",
+                    "kind": "NumberKeyword",
                     "pos": 17,
-                    "end": 23,
-                    "name": {
-                        "kind": "Identifier",
-                        "pos": 17,
-                        "end": 23,
-                        "originalKeywordKind": "NumberKeyword",
-                        "text": "number"
-                    }
+                    "end": 23
                 }
             }
         },
@@ -1484,16 +1253,9 @@ module ts {
                 "pos": 17,
                 "end": 25,
                 "type": {
-                    "kind": "JSDocTypeReference",
+                    "kind": "NumberKeyword",
                     "pos": 18,
-                    "end": 24,
-                    "name": {
-                        "kind": "Identifier",
-                        "pos": 18,
-                        "end": 24,
-                        "originalKeywordKind": "NumberKeyword",
-                        "text": "number"
-                    }
+                    "end": 24
                 }
             }
         },
@@ -1540,16 +1302,9 @@ module ts {
                 "pos": 15,
                 "end": 23,
                 "type": {
-                    "kind": "JSDocTypeReference",
+                    "kind": "NumberKeyword",
                     "pos": 16,
-                    "end": 22,
-                    "name": {
-                        "kind": "Identifier",
-                        "pos": 16,
-                        "end": 22,
-                        "originalKeywordKind": "NumberKeyword",
-                        "text": "number"
-                    }
+                    "end": 22
                 }
             }
         },
@@ -1597,16 +1352,9 @@ module ts {
                 "pos": 15,
                 "end": 23,
                 "type": {
-                    "kind": "JSDocTypeReference",
+                    "kind": "NumberKeyword",
                     "pos": 16,
-                    "end": 22,
-                    "name": {
-                        "kind": "Identifier",
-                        "pos": 16,
-                        "end": 22,
-                        "originalKeywordKind": "NumberKeyword",
-                        "text": "number"
-                    }
+                    "end": 22
                 }
             }
         },
@@ -1636,16 +1384,9 @@ module ts {
                 "pos": 41,
                 "end": 49,
                 "type": {
-                    "kind": "JSDocTypeReference",
+                    "kind": "NumberKeyword",
                     "pos": 42,
-                    "end": 48,
-                    "name": {
-                        "kind": "Identifier",
-                        "pos": 42,
-                        "end": 48,
-                        "originalKeywordKind": "NumberKeyword",
-                        "text": "number"
-                    }
+                    "end": 48
                 }
             }
         },
@@ -1692,16 +1433,9 @@ module ts {
                 "pos": 15,
                 "end": 23,
                 "type": {
-                    "kind": "JSDocTypeReference",
+                    "kind": "NumberKeyword",
                     "pos": 16,
-                    "end": 22,
-                    "name": {
-                        "kind": "Identifier",
-                        "pos": 16,
-                        "end": 22,
-                        "originalKeywordKind": "NumberKeyword",
-                        "text": "number"
-                    }
+                    "end": 22
                 }
             }
         },
@@ -1748,16 +1482,9 @@ module ts {
                 "pos": 15,
                 "end": 23,
                 "type": {
-                    "kind": "JSDocTypeReference",
+                    "kind": "NumberKeyword",
                     "pos": 16,
-                    "end": 22,
-                    "name": {
-                        "kind": "Identifier",
-                        "pos": 16,
-                        "end": 22,
-                        "originalKeywordKind": "NumberKeyword",
-                        "text": "number"
-                    }
+                    "end": 22
                 }
             },
             "isBracketed": true
@@ -1805,16 +1532,9 @@ module ts {
                 "pos": 15,
                 "end": 23,
                 "type": {
-                    "kind": "JSDocTypeReference",
+                    "kind": "NumberKeyword",
                     "pos": 16,
-                    "end": 22,
-                    "name": {
-                        "kind": "Identifier",
-                        "pos": 16,
-                        "end": 22,
-                        "originalKeywordKind": "NumberKeyword",
-                        "text": "number"
-                    }
+                    "end": 22
                 }
             },
             "isBracketed": true
@@ -1862,16 +1582,9 @@ module ts {
                 "pos": 15,
                 "end": 23,
                 "type": {
-                    "kind": "JSDocTypeReference",
+                    "kind": "NumberKeyword",
                     "pos": 16,
-                    "end": 22,
-                    "name": {
-                        "kind": "Identifier",
-                        "pos": 16,
-                        "end": 22,
-                        "originalKeywordKind": "NumberKeyword",
-                        "text": "number"
-                    }
+                    "end": 22
                 }
             }
         },
@@ -1918,16 +1631,9 @@ module ts {
                 "pos": 21,
                 "end": 29,
                 "type": {
-                    "kind": "JSDocTypeReference",
+                    "kind": "NumberKeyword",
                     "pos": 22,
-                    "end": 28,
-                    "name": {
-                        "kind": "Identifier",
-                        "pos": 22,
-                        "end": 28,
-                        "originalKeywordKind": "NumberKeyword",
-                        "text": "number"
-                    }
+                    "end": 28
                 }
             }
         },
@@ -1974,16 +1680,9 @@ module ts {
                 "pos": 21,
                 "end": 29,
                 "type": {
-                    "kind": "JSDocTypeReference",
+                    "kind": "NumberKeyword",
                     "pos": 22,
-                    "end": 28,
-                    "name": {
-                        "kind": "Identifier",
-                        "pos": 22,
-                        "end": 28,
-                        "originalKeywordKind": "NumberKeyword",
-                        "text": "number"
-                    }
+                    "end": 28
                 }
             }
         },
