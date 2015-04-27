@@ -1656,7 +1656,7 @@ module ts {
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
-        newLine?: string;
+        newLine?: NewLineKind;
         noEmit?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;

@@ -91,7 +91,7 @@ module ts {
             }
         }
 
-        let newLine = 
+		let newLine =
             options.newLine === NewLineKind.CarriageReturnLineFeed ? "\r\n" :
             options.newLine === NewLineKind.LineFeed ? "\n" :
             sys.newLine;

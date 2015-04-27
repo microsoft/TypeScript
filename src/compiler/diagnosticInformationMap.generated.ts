@@ -504,7 +504,7 @@ module ts {
         File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files: { code: 6059, category: DiagnosticCategory.Error, key: "File '{0}' is not under 'rootDir' '{1}'. 'rootDir' is expected to contain all source files." },
         Emit_newline_Colon_CRLF_dos_or_LF_unix: { code: 6061, category: DiagnosticCategory.Message, key: "Emit newline: 'CRLF' (dos) or 'LF' (unix)." },
         NEWLINE: { code: 6062, category: DiagnosticCategory.Message, key: "NEWLINE" },
-        Argument_for_newLine_option_must_be_CRLF_or_LF: { code: 6063, category: DiagnosticCategory.Error, key: "Argument for --newLine option must be 'CRLF' or 'LF'." },
+        Argument_for_newLine_option_must_be_CRLF_or_LF: { code: 6063, category: DiagnosticCategory.Error, key: "Argument for 'newLine' option must be 'CRLF' or 'LF'." },
         Variable_0_implicitly_has_an_1_type: { code: 7005, category: DiagnosticCategory.Error, key: "Variable '{0}' implicitly has an '{1}' type." },
         Parameter_0_implicitly_has_an_1_type: { code: 7006, category: DiagnosticCategory.Error, key: "Parameter '{0}' implicitly has an '{1}' type." },
         Member_0_implicitly_has_an_1_type: { code: 7008, category: DiagnosticCategory.Error, key: "Member '{0}' implicitly has an '{1}' type." },
