@@ -7899,11 +7899,14 @@ module ts {
             }
         }
 
-        function checkYieldExpression(node: YieldExpression): void {
+        function checkYieldExpression(node: YieldExpression): Type {
             // Grammar checking
             if (!(node.parserContextFlags & ParserContextFlags.Yield)) {
                 grammarErrorOnFirstToken(node, Diagnostics.A_yield_expression_is_only_allowed_in_a_generator_declaration);
             }
+
+            // Both yield and yield* expressions are any
+            return anyType;
         }
 
         function checkConditionalExpression(node: ConditionalExpression, contextualMapper?: TypeMapper): Type {
@@ -8093,8 +8096,7 @@ module ts {
                 case SyntaxKind.OmittedExpression:
                     return undefinedType;
                 case SyntaxKind.YieldExpression:
-                    checkYieldExpression(<YieldExpression>node);
-                    return unknownType;
+                    return checkYieldExpression(<YieldExpression>node);
             }
             return unknownType;
         }
