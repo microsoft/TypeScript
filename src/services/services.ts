@@ -1485,6 +1485,9 @@ module ts {
         public static moduleName = "module name";
         public static typeParameterName = "type parameter name";
         public static typeAlias = "type alias name";
+        public static parameterName = "parameter name";
+
+        public static docCommentTagName = "doc comment tag name";
     }
 
     /// Language Service
@@ -5925,11 +5928,7 @@ module ts {
                         }
 
                         if (isComment(kind)) {
-                            // Simple comment.  Just add as is.
-                            result.push({
-                                textSpan: createTextSpan(start, width),
-                                classificationType: ClassificationTypeNames.comment
-                            })
+                            classifyComment(token, kind, start, width);
                             continue;
                         }
 
@@ -5953,6 +5952,106 @@ module ts {
                             classifyDisabledMergeCode(text, start, end);
                         }
                     }
+                }
+            }
+
+            function classifyComment(token: Node, kind: SyntaxKind, start: number, width: number) {
+                if (kind === SyntaxKind.MultiLineCommentTrivia) {
+                    // See if this is a doc comment.  If so, we'll classify certain portions of it
+                    // specially.
+                    let jsDocComment = parseIsolatedJSDocComment(sourceFile.text, start, width);
+                    if (jsDocComment && jsDocComment.jsDocComment) {
+                        jsDocComment.jsDocComment.parent = token;
+                        classifyJSDocComment(jsDocComment.jsDocComment);
+                        return;
+                    }
+                }
+
+                // Simple comment.  Just add as is.
+                pushCommentRange(start, width);
+            }
+
+            function pushCommentRange(start: number, width: number) {
+                result.push({
+                    textSpan: createTextSpan(start, width),
+                    classificationType: ClassificationTypeNames.comment
+                })
+            }
+
+            function classifyJSDocComment(docComment: JSDocComment) {
+                let pos = docComment.pos;
+
+                for (let tag of docComment.tags) {
+                    if (tag.pos !== pos) {
+                        pushCommentRange(pos, tag.pos - pos);
+                    }
+
+                    result.push({
+                        textSpan: createTextSpanFromBounds(tag.atToken.pos, tag.atToken.end),
+                        classificationType: ClassificationTypeNames.punctuation
+                    });
+
+                    result.push({
+                        textSpan: createTextSpanFromBounds(tag.tagName.pos, tag.tagName.end),
+                        classificationType: ClassificationTypeNames.docCommentTagName
+                    }); 
+
+                    pos = tag.tagName.end;
+
+                    switch (tag.kind) {
+                        case SyntaxKind.JSDocParameterTag:
+                            processJSDocParameterTag(<JSDocParameterTag>tag);
+                            break;
+                        case SyntaxKind.JSDocTemplateTag:
+                            processJSDocTemplateTag(<JSDocTemplateTag>tag);
+                            break;
+                        case SyntaxKind.JSDocTypeTag:
+                            processElement((<JSDocTypeTag>tag).typeExpression);
+                            break;
+                        case SyntaxKind.JSDocReturnTag:
+                            processElement((<JSDocReturnTag>tag).typeExpression);
+                            break;
+                    }
+
+                    pos = tag.end;
+                }
+
+                if (pos !== docComment.end) {
+                    pushCommentRange(pos, docComment.end - pos);
+                }
+
+                return;
+
+                function processJSDocParameterTag(tag: JSDocParameterTag) {
+                    if (tag.preParameterName) {
+                        pushCommentRange(pos, tag.preParameterName.pos - pos);
+                        result.push({
+                            textSpan: createTextSpanFromBounds(tag.preParameterName.pos, tag.preParameterName.end),
+                            classificationType: ClassificationTypeNames.parameterName
+                        });
+                        pos = tag.preParameterName.end;
+                    }
+
+                    if (tag.typeExpression) {
+                        pushCommentRange(pos, tag.typeExpression.pos - pos);
+                        processElement(tag.typeExpression);
+                        pos = tag.typeExpression.end;
+                    }
+
+                    if (tag.postParameterName) {
+                        pushCommentRange(pos, tag.postParameterName.pos - pos);
+                        result.push({
+                            textSpan: createTextSpanFromBounds(tag.postParameterName.pos, tag.postParameterName.end),
+                            classificationType: ClassificationTypeNames.parameterName
+                        });
+                        pos = tag.postParameterName.end;
+                    }
+                }
+            }
+
+            function processJSDocTemplateTag(tag: JSDocTemplateTag) {
+                for (let child of tag.getChildren()) {
+                    processElement(child);
                 }
             }
 
@@ -6085,6 +6184,11 @@ module ts {
                                     return ClassificationTypeNames.moduleName;
                                 }
                                 return;
+                            case SyntaxKind.Parameter:
+                                if ((<ParameterDeclaration>token.parent).name === token) {
+                                    return ClassificationTypeNames.parameterName;
+                                }
+                                return;
                         }
                     }
 
@@ -6093,9 +6197,13 @@ module ts {
             }
 
             function processElement(element: Node) {
+                if (!element) {
+                    return;
+                }
+
                 // Ignore nodes that don't intersect the original span to classify.
                 if (textSpanIntersectsWith(span, element.getFullStart(), element.getFullWidth())) {
-                    let children = element.getChildren();
+                    let children = element.getChildren(sourceFile);
                     for (let child of children) {
                         if (isToken(child)) {
                             classifyToken(child);

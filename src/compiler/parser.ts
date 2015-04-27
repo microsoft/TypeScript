@@ -351,8 +351,9 @@ module ts {
             case SyntaxKind.JSDocComment:
                 return visitNodes(cbNodes, (<JSDocComment>node).tags);
             case SyntaxKind.JSDocParameterTag:
-                return visitNode(cbNode, (<JSDocParameterTag>node).typeExpression) ||
-                    visitNode(cbNode, (<JSDocParameterTag>node).parameterName);
+                return visitNode(cbNode, (<JSDocParameterTag>node).preParameterName) ||
+                    visitNode(cbNode, (<JSDocParameterTag>node).typeExpression) ||
+                    visitNode(cbNode, (<JSDocParameterTag>node).postParameterName);
             case SyntaxKind.JSDocReturnTag:
                 return visitNode(cbNode, (<JSDocReturnTag>node).typeExpression);
             case SyntaxKind.JSDocTypeTag:
@@ -384,9 +385,8 @@ module ts {
     }
     
     /* @internal */
-    // Exposed only for testing.
-    export function parseJSDocCommentForTests(content: string, start?: number, length?: number) {
-        return Parser.JSDocParser.parseJSDocCommentForTests(content, start, length);
+    export function parseIsolatedJSDocComment(content: string, start?: number, length?: number) {
+        return Parser.JSDocParser.parseIsolatedJSDocComment(content, start, length);
     }
 
     /* @internal */
@@ -5343,7 +5343,7 @@ module ts {
                 }
             }
 
-            export function parseJSDocCommentForTests(content: string, start: number, length: number) {
+            export function parseIsolatedJSDocComment(content: string, start: number, length: number) {
                 initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined);
                 let jsDocComment = parseJSDocComment(/*parent:*/ undefined, start, length);
                 let diagnostics = parseDiagnostics;
@@ -5512,28 +5512,13 @@ module ts {
                         return undefined;
                     }
 
-                    return parseTypeExpression();
-                }
-
-                function parseTypeExpression(): JSDocTypeExpression {
-                    skipWhitespace();
-
                     let typeExpression = parseJSDocTypeExpression(pos, end - pos);
-                    if (!typeExpression) {
-                        return undefined;
-                    }
-
                     pos = typeExpression.end;
                     return typeExpression;
                 }
 
                 function handleParamTag(atToken: Node, tagName: Identifier) {
-                    skipWhitespace();
-
-                    let typeExpression: JSDocTypeExpression;
-                    if (content.charCodeAt(pos) === CharacterCodes.openBrace) {
-                        typeExpression = parseTypeExpression();
-                    }
+                    let typeExpression = tryParseTypeExpression();
 
                     skipWhitespace();
                     let name: Identifier;
@@ -5553,6 +5538,14 @@ module ts {
                         return undefined;
                     }
 
+                    let preName: Identifier, postName: Identifier;
+                    if (typeExpression) {
+                        postName = name;
+                    }
+                    else {
+                        preName = name;
+                    }
+
                     if (!typeExpression) {
                         typeExpression = tryParseTypeExpression();
                     }
@@ -5560,8 +5553,9 @@ module ts {
                     let result = <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
-                    result.parameterName = name;
+                    result.preParameterName = preName;
                     result.typeExpression = typeExpression;
+                    result.postParameterName = postName;
                     result.isBracketed = isBracketed;
                     return finishNode(result, pos);
                 }
@@ -5572,7 +5566,9 @@ module ts {
                     }
 
                     let result = <JSDocReturnTag>createNode(SyntaxKind.JSDocReturnTag, atToken.pos);
-                    result.typeExpression = parseTypeExpression();
+                    result.atToken = atToken;
+                    result.tagName = tagName;
+                    result.typeExpression = tryParseTypeExpression();
                     return finishNode(result, pos);
                 }
 
@@ -5582,7 +5578,9 @@ module ts {
                     }
 
                     let result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.pos);
-                    result.typeExpression = parseTypeExpression();
+                    result.atToken = atToken;
+                    result.tagName = tagName;
+                    result.typeExpression = tryParseTypeExpression();
                     return finishNode(result, pos);
                 }
 

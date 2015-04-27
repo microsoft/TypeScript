@@ -1117,8 +1117,9 @@ module ts {
     }
 
     export interface JSDocParameterTag extends JSDocTag {
+        preParameterName?: Identifier;
         typeExpression?: JSDocTypeExpression;
-        parameterName: Identifier;
+        postParameterName?: Identifier;
         isBracketed: boolean;
     }
 

@@ -887,8 +887,15 @@ module ts {
 
             let docComment = parameter.parent.jsDocComment;
             if (docComment) {
-                return <JSDocParameterTag>forEach(docComment.tags, t =>
-                    t.kind === SyntaxKind.JSDocParameterTag && (<JSDocParameterTag>t).parameterName.text === parameterName ? t : undefined);
+                return <JSDocParameterTag>forEach(docComment.tags, t => {
+                    if (t.kind === SyntaxKind.JSDocParameterTag) {
+                        let parameterTag = <JSDocParameterTag>t;
+                        let name = parameterTag.preParameterName || parameterTag.postParameterName;
+                        if (name.text === parameterName) {
+                            return t;
+                        }
+                    }
+                });
             }
         }
     }

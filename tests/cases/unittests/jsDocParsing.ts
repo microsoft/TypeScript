@@ -984,7 +984,7 @@ module ts {
 
         describe("DocComments", () => {
             function parsesCorrectly(content: string, expected: string) {
-                let comment = parseJSDocCommentForTests(content);
+                let comment = parseIsolatedJSDocComment(content);
                 Debug.assert(comment && comment.diagnostics.length === 0);
 
                 let result = JSON.stringify(comment.jsDocComment, (k, v) => {
@@ -997,7 +997,7 @@ module ts {
             }
 
             function parsesIncorrectly(content: string) {
-                let type = parseJSDocCommentForTests(content);
+                let type = parseIsolatedJSDocComment(content);
                 assert.isTrue(!type || type.diagnostics.length > 0);
             }
 
@@ -1014,13 +1014,6 @@ module ts {
                     parsesIncorrectly("/** * @type {number} */");
                 });
 
-                it("noType", () => {
-                    parsesIncorrectly(
-`/**
-  * @type
-  */`);
-                });
-
                 it("multipleTypes", () => {
                     parsesIncorrectly(
 `/**
@@ -1034,13 +1027,6 @@ module ts {
 `/**
   * @return {number}
   * @return {string}
-  */`);
-                });
-
-                it("noReturnType", () => {
-                    parsesIncorrectly(
-`/**
-  * @return
   */`);
                 });
 
@@ -1088,6 +1074,17 @@ module ts {
             "kind": "JSDocTypeTag",
             "pos": 8,
             "end": 22,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 13,
+                "text": "type"
+            },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 14,
@@ -1106,6 +1103,72 @@ module ts {
 }`);
                 });
 
+                it("noType", () => {
+                    parsesCorrectly(
+                        `/**
+  * @type
+  */`,
+                        `{
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 18,
+    "tags": {
+        "0": {
+            "kind": "JSDocTypeTag",
+            "pos": 8,
+            "end": 13,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 13,
+                "text": "type"
+            }
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 13
+    }
+}`);
+                });
+
+                it("noReturnType", () => {
+                    parsesCorrectly(
+                        `/**
+  * @return
+  */`,
+                        `{
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 20,
+    "tags": {
+        "0": {
+            "kind": "JSDocReturnTag",
+            "pos": 8,
+            "end": 15,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 15,
+                "text": "return"
+            }
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 15
+    }
+}`);
+                });
+
                 it("leadingAsterisk", () => {
                     parsesCorrectly(
 `/**
@@ -1120,6 +1183,17 @@ module ts {
             "kind": "JSDocTypeTag",
             "pos": 8,
             "end": 22,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 13,
+                "text": "type"
+            },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 14,
@@ -1152,6 +1226,17 @@ module ts {
             "kind": "JSDocTypeTag",
             "pos": 8,
             "end": 22,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 13,
+                "text": "type"
+            },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 14,
@@ -1184,6 +1269,17 @@ module ts {
             "kind": "JSDocReturnTag",
             "pos": 8,
             "end": 24,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 15,
+                "text": "return"
+            },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 16,
@@ -1216,6 +1312,17 @@ module ts {
             "kind": "JSDocReturnTag",
             "pos": 8,
             "end": 24,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 15,
+                "text": "return"
+            },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 16,
@@ -1248,6 +1355,17 @@ module ts {
             "kind": "JSDocReturnTag",
             "pos": 8,
             "end": 25,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 16,
+                "text": "returns"
+            },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 17,
@@ -1291,12 +1409,6 @@ module ts {
                 "end": 14,
                 "text": "param"
             },
-            "parameterName": {
-                "kind": "Identifier",
-                "pos": 24,
-                "end": 29,
-                "text": "name1"
-            },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 15,
@@ -1306,6 +1418,12 @@ module ts {
                     "pos": 16,
                     "end": 22
                 }
+            },
+            "postParameterName": {
+                "kind": "Identifier",
+                "pos": 24,
+                "end": 29,
+                "text": "name1"
             }
         },
         "length": 1,
@@ -1341,12 +1459,6 @@ module ts {
                 "end": 14,
                 "text": "param"
             },
-            "parameterName": {
-                "kind": "Identifier",
-                "pos": 24,
-                "end": 29,
-                "text": "name1"
-            },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 15,
@@ -1356,6 +1468,12 @@ module ts {
                     "pos": 16,
                     "end": 22
                 }
+            },
+            "postParameterName": {
+                "kind": "Identifier",
+                "pos": 24,
+                "end": 29,
+                "text": "name1"
             }
         },
         "1": {
@@ -1373,12 +1491,6 @@ module ts {
                 "end": 40,
                 "text": "param"
             },
-            "parameterName": {
-                "kind": "Identifier",
-                "pos": 50,
-                "end": 55,
-                "text": "name2"
-            },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 41,
@@ -1388,6 +1500,12 @@ module ts {
                     "pos": 42,
                     "end": 48
                 }
+            },
+            "postParameterName": {
+                "kind": "Identifier",
+                "pos": 50,
+                "end": 55,
+                "text": "name2"
             }
         },
         "length": 2,
@@ -1422,12 +1540,6 @@ module ts {
                 "end": 14,
                 "text": "param"
             },
-            "parameterName": {
-                "kind": "Identifier",
-                "pos": 24,
-                "end": 29,
-                "text": "name1"
-            },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 15,
@@ -1437,6 +1549,12 @@ module ts {
                     "pos": 16,
                     "end": 22
                 }
+            },
+            "postParameterName": {
+                "kind": "Identifier",
+                "pos": 24,
+                "end": 29,
+                "text": "name1"
             }
         },
         "length": 1,
@@ -1471,12 +1589,6 @@ module ts {
                 "end": 14,
                 "text": "param"
             },
-            "parameterName": {
-                "kind": "Identifier",
-                "pos": 25,
-                "end": 30,
-                "text": "name1"
-            },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 15,
@@ -1486,6 +1598,12 @@ module ts {
                     "pos": 16,
                     "end": 22
                 }
+            },
+            "postParameterName": {
+                "kind": "Identifier",
+                "pos": 25,
+                "end": 30,
+                "text": "name1"
             },
             "isBracketed": true
         },
@@ -1521,12 +1639,6 @@ module ts {
                 "end": 14,
                 "text": "param"
             },
-            "parameterName": {
-                "kind": "Identifier",
-                "pos": 26,
-                "end": 31,
-                "text": "name1"
-            },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 15,
@@ -1536,6 +1648,12 @@ module ts {
                     "pos": 16,
                     "end": 22
                 }
+            },
+            "postParameterName": {
+                "kind": "Identifier",
+                "pos": 26,
+                "end": 31,
+                "text": "name1"
             },
             "isBracketed": true
         },
@@ -1571,12 +1689,6 @@ module ts {
                 "end": 14,
                 "text": "param"
             },
-            "parameterName": {
-                "kind": "Identifier",
-                "pos": 24,
-                "end": 29,
-                "text": "name1"
-            },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 15,
@@ -1586,6 +1698,12 @@ module ts {
                     "pos": 16,
                     "end": 22
                 }
+            },
+            "postParameterName": {
+                "kind": "Identifier",
+                "pos": 24,
+                "end": 29,
+                "text": "name1"
             }
         },
         "length": 1,
@@ -1620,7 +1738,7 @@ module ts {
                 "end": 14,
                 "text": "param"
             },
-            "parameterName": {
+            "preParameterName": {
                 "kind": "Identifier",
                 "pos": 15,
                 "end": 20,
@@ -1669,7 +1787,7 @@ module ts {
                 "end": 14,
                 "text": "param"
             },
-            "parameterName": {
+            "preParameterName": {
                 "kind": "Identifier",
                 "pos": 15,
                 "end": 20,
@@ -2067,7 +2185,7 @@ module ts {
                 "end": 14,
                 "text": "param"
             },
-            "parameterName": {
+            "preParameterName": {
                 "kind": "Identifier",
                 "pos": 15,
                 "end": 18,
