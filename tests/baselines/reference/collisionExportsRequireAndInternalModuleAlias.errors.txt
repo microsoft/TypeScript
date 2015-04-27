@@ -1,5 +1,5 @@
-tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts(5,8): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of an external module.
-tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts(6,8): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of an external module.
+tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts(5,8): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
+tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts(6,8): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
 
 
 ==== tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts (2 errors) ====
@@ -9,10 +9,10 @@ tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts(6,8): erro
     }
     import exports = m.c;
            ~~~~~~~
-!!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of an external module.
+!!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
     import require = m.c;
            ~~~~~~~
-!!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of an external module.
+!!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
     new exports();
     new require();
     

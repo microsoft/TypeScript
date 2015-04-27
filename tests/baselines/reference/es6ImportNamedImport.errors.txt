@@ -1,7 +1,7 @@
-error TS1204: Cannot compile external modules into 'amd', 'commonjs' or 'umd' when targeting 'ES6' or higher.
+error TS1204: Cannot compile modules into 'amd', 'commonjs' or 'umd' when targeting 'ES6' or higher.
 
 
-!!! error TS1204: Cannot compile external modules into 'amd', 'commonjs' or 'umd' when targeting 'ES6' or higher.
+!!! error TS1204: Cannot compile modules into 'amd', 'commonjs' or 'umd' when targeting 'ES6' or higher.
 ==== tests/cases/compiler/es6ImportNamedImport_0.ts (0 errors) ====
     
     export var a = 10;
