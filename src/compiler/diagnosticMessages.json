@@ -631,7 +631,7 @@
         "category": "Error",
         "code": 1203
     },
-    "Cannot compile external modules into amd or commonjs when targeting es6 or higher.": {
+    "Cannot compile external modules into 'commonjs', 'amd', 'system' or 'umd' when targeting 'ES6' or higher.": {
         "category": "Error",
         "code": 1204
     },
@@ -687,6 +687,10 @@
         "category": "Error",
         "code": 1217
     },
+    "Export assignment is not supported when '--module' flag is 'system'.": {
+        "category": "Error",
+        "code": 1218
+    },    
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1744,6 +1748,10 @@
         "category": "Error",
         "code": 5013
     },
+    "Failed to parse file '{0}': {1}.": {
+        "category": "Error",
+        "code": 5014
+    },
     "Unknown compiler option '{0}'.": {
         "category": "Error",
         "code": 5023
@@ -1857,7 +1865,7 @@
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'commonjs' or 'amd'": {
+    "Specify module code generation: 'commonjs', 'amd', 'system' or 'umd'": {
         "category": "Message",
         "code": 6016
     },
@@ -1941,11 +1949,11 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs' or 'amd'.": {
+    "Argument for '--module' option must be 'commonjs', 'amd', 'system' or 'umd'.": {
         "category": "Error",
         "code": 6046
     },
-    "Argument for '--target' option must be 'es3', 'es5', or 'es6'.": {
+    "Argument for '--target' option must be 'ES3', 'ES5', or 'ES6'.": {
         "category": "Error",
         "code": 6047
     },
@@ -1989,6 +1997,15 @@
         "category": "Message",
         "code": 6057
     },
+    "Specifies the root directory of input files. Use to control the output directory structure with --outDir.": {
+        "category": "Message",
+        "code": 6058
+    },
+    "File '{0}' is not under 'rootDir' '{1}'. 'rootDir' is expected to contain all source files.": {
+        "category": "Error",
+        "code": 6059
+    },
+
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

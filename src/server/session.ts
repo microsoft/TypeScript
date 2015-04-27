@@ -527,6 +527,9 @@ module ts.server {
                                 if (lineText.charAt(i) == " ") {
                                     indentPosition--;
                                 }
+                                else if (lineText.charAt(i) == "\t") {
+                                    indentPosition -= editorOptions.IndentSize;
+                                }
                                 else {
                                     break;
                                 }

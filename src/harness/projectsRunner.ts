@@ -18,6 +18,7 @@ interface ProjectRunnerTestCase {
     runTest?: boolean; // Run the resulting test
     bug?: string; // If there is any bug associated with this test case
     noResolve?: boolean;
+    rootDir?: string; // --rootDir
 }
 
 interface ProjectRunnerTestCaseResolutionInfo extends ProjectRunnerTestCase {
@@ -160,7 +161,8 @@ class ProjectRunner extends RunnerBase {
                     mapRoot: testCase.resolveMapRoot && testCase.mapRoot ? ts.sys.resolvePath(testCase.mapRoot) : testCase.mapRoot,
                     sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot ? ts.sys.resolvePath(testCase.sourceRoot) : testCase.sourceRoot,
                     module: moduleKind,
-                    noResolve: testCase.noResolve
+                    noResolve: testCase.noResolve,
+                    rootDir: testCase.rootDir
                 };
             }
 
@@ -326,7 +328,9 @@ class ProjectRunner extends RunnerBase {
             return Harness.Compiler.getErrorBaseline(inputFiles, diagnostics);
         }
 
-        describe('Compiling project for ' + testCase.scenario + ': testcase ' + testCaseFileName, () => {
+        var name = 'Compiling project for ' + testCase.scenario + ': testcase ' + testCaseFileName;
+
+        describe(name, () => {
             function verifyCompilerResults(compilerResult: BatchCompileProjectTestCaseResult) {
                 function getCompilerResolutionInfo() {
                     var resolutionInfo: ProjectRunnerTestCaseResolutionInfo = {
@@ -344,6 +348,7 @@ class ProjectRunner extends RunnerBase {
                         baselineCheck: testCase.baselineCheck,
                         runTest: testCase.runTest,
                         bug: testCase.bug,
+                        rootDir: testCase.rootDir,
                         resolvedInputFiles: ts.map(compilerResult.program.getSourceFiles(), inputFile => inputFile.fileName),
                         emittedFiles: ts.map(compilerResult.outputFiles, outputFile => outputFile.emittedFileName)
                     };
@@ -402,51 +407,67 @@ class ProjectRunner extends RunnerBase {
                 }
             }
 
-            // Compile using node
-            var nodeCompilerResult = batchCompilerProjectTestCase(ts.ModuleKind.CommonJS);
-            verifyCompilerResults(nodeCompilerResult);
+            var nodeCompilerResult: BatchCompileProjectTestCaseResult;
+            var amdCompilerResult: BatchCompileProjectTestCaseResult;
 
-            // Compile using amd
-            var amdCompilerResult = batchCompilerProjectTestCase(ts.ModuleKind.AMD);
-            verifyCompilerResults(amdCompilerResult);
+            it(name + ": node", () => {
+                // Compile using node
+                nodeCompilerResult = batchCompilerProjectTestCase(ts.ModuleKind.CommonJS);
+                verifyCompilerResults(nodeCompilerResult);
+            });
+
+
+            it(name + ": amd", () => {
+                // Compile using amd
+                amdCompilerResult = batchCompilerProjectTestCase(ts.ModuleKind.AMD);
+                verifyCompilerResults(amdCompilerResult);
+            });
 
             if (testCase.runTest) {
-                //TODO(ryanca/danquirk): Either support this or remove this option from the interface as well as test case json files
-                // Node results
-                assert.isTrue(!nodeCompilerResult.nonSubfolderDiskFiles, "Cant run test case that generates parent folders/absolute path");
-                //it("runs without error: (" + moduleNameToString(nodeCompilerResult.moduleKind) + ')', function (done: any) {
-                //    Exec.exec("node.exe", ['"' + baseLineLocalPath(nodeCompilerResult.outputFiles[0].diskRelativeName, nodeCompilerResult.moduleKind) + '"'], function (res) {
-                //        Harness.Assert.equal(res.stdout, "");
-                //        Harness.Assert.equal(res.stderr, "");
-                //        done();
-                //    })
-                //});
+                it(name + ": runTest", () => {
+                    if (!nodeCompilerResult || !amdCompilerResult) {
+                        return;
+                    }
+                    //TODO(ryanca/danquirk): Either support this or remove this option from the interface as well as test case json files
+                    // Node results
+                    assert.isTrue(!nodeCompilerResult.nonSubfolderDiskFiles, "Cant run test case that generates parent folders/absolute path");
+                    //it("runs without error: (" + moduleNameToString(nodeCompilerResult.moduleKind) + ')', function (done: any) {
+                    //    Exec.exec("node.exe", ['"' + baseLineLocalPath(nodeCompilerResult.outputFiles[0].diskRelativeName, nodeCompilerResult.moduleKind) + '"'], function (res) {
+                    //        Harness.Assert.equal(res.stdout, "");
+                    //        Harness.Assert.equal(res.stderr, "");
+                    //        done();
+                    //    })
+                    //});
 
-                // Amd results
-                assert.isTrue(!amdCompilerResult.nonSubfolderDiskFiles, "Cant run test case that generates parent folders/absolute path");
-                //var amdDriverTemplate = "var requirejs = require('../r.js');\n\n" +
-                //    "requirejs.config({\n" +
-                //    "    nodeRequire: require\n" +
-                //    "});\n\n" +
-                //    "requirejs(['{0}'],\n" +
-                //    "function ({0}) {\n" +
-                //    "});";
-                //var moduleName = baseLineLocalPath(amdCompilerResult.outputFiles[0].diskRelativeName, amdCompilerResult.moduleKind).replace(/\.js$/, "");
-                //sys.writeFile(testCase.projectRoot + '/driver.js', amdDriverTemplate.replace(/\{0}/g, moduleName));
-                //it("runs without error (" + moduleNameToString(amdCompilerResult.moduleKind) + ')', function (done: any) {
-                //    Exec.exec("node.exe", ['"' + testCase.projectRoot + '/driver.js"'], function (res) {
-                //        Harness.Assert.equal(res.stdout, "");
-                //        Harness.Assert.equal(res.stderr, "");
-                //        done();
-                //    })
-                //});
+                    // Amd results
+                    assert.isTrue(!amdCompilerResult.nonSubfolderDiskFiles, "Cant run test case that generates parent folders/absolute path");
+                    //var amdDriverTemplate = "var requirejs = require('../r.js');\n\n" +
+                    //    "requirejs.config({\n" +
+                    //    "    nodeRequire: require\n" +
+                    //    "});\n\n" +
+                    //    "requirejs(['{0}'],\n" +
+                    //    "function ({0}) {\n" +
+                    //    "});";
+                    //var moduleName = baseLineLocalPath(amdCompilerResult.outputFiles[0].diskRelativeName, amdCompilerResult.moduleKind).replace(/\.js$/, "");
+                    //sys.writeFile(testCase.projectRoot + '/driver.js', amdDriverTemplate.replace(/\{0}/g, moduleName));
+                    //it("runs without error (" + moduleNameToString(amdCompilerResult.moduleKind) + ')', function (done: any) {
+                    //    Exec.exec("node.exe", ['"' + testCase.projectRoot + '/driver.js"'], function (res) {
+                    //        Harness.Assert.equal(res.stdout, "");
+                    //        Harness.Assert.equal(res.stderr, "");
+                    //        done();
+                    //    })
+                    //});
+                });
+
+                after(() => {
+                    nodeCompilerResult = undefined;
+                    amdCompilerResult = undefined;
+                });
             }
 
             after(() => {
                 // Mocha holds onto the closure environment of the describe callback even after the test is done.
                 // Therefore we have to clean out large objects after the test is done.
-                nodeCompilerResult = undefined;
-                amdCompilerResult = undefined;
                 testCase = undefined;
                 testFileText = undefined;
                 testCaseJustName = undefined;

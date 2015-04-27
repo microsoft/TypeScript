@@ -281,6 +281,17 @@ module ts {
         return result;
     }
 
+    export function memoize<T>(callback: () => T): () => T {
+        let value: T;
+        return () => {
+            if (callback) {
+                value = callback();
+                callback = undefined;
+            }
+            return value;
+        };
+    }
+
     function formatStringFromArgs(text: string, args: { [index: number]: any; }, baseIndex?: number): string {
         baseIndex = baseIndex || 0;
 

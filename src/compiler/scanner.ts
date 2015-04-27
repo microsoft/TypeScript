@@ -352,7 +352,7 @@ module ts {
     export function isLineBreak(ch: number): boolean {
         // ES5 7.3:
         // The ECMAScript line terminator characters are listed in Table 3.
-        //     Table 3 — Line Terminator Characters
+        //     Table 3: Line Terminator Characters
         //     Code Unit Value     Name                    Formal Name
         //     \u000A              Line Feed               <LF>
         //     \u000D              Carriage Return         <CR>

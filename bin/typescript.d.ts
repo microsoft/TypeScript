@@ -597,7 +597,7 @@ declare module "typescript" {
     interface ForStatement extends IterationStatement {
         initializer?: VariableDeclarationList | Expression;
         condition?: Expression;
-        iterator?: Expression;
+        incrementor?: Expression;
     }
     interface ForInStatement extends IterationStatement {
         initializer: VariableDeclarationList | Expression;
@@ -1005,14 +1005,16 @@ declare module "typescript" {
     }
     interface InterfaceType extends ObjectType {
         typeParameters: TypeParameter[];
+    }
+    interface InterfaceTypeWithBaseTypes extends InterfaceType {
+        baseTypes: ObjectType[];
+    }
+    interface InterfaceTypeWithDeclaredMembers extends InterfaceType {
         declaredProperties: Symbol[];
         declaredCallSignatures: Signature[];
         declaredConstructSignatures: Signature[];
         declaredStringIndexType: Type;
         declaredNumberIndexType: Type;
-    }
-    interface InterfaceTypeWithBaseTypes extends InterfaceType {
-        baseTypes: ObjectType[];
     }
     interface TypeReference extends ObjectType {
         target: GenericType;
@@ -1095,6 +1097,7 @@ declare module "typescript" {
         preserveConstEnums?: boolean;
         project?: string;
         removeComments?: boolean;
+        rootDir?: string;
         sourceMap?: boolean;
         sourceRoot?: string;
         suppressImplicitAnyIndexErrors?: boolean;
@@ -1109,6 +1112,7 @@ declare module "typescript" {
         None = 0,
         CommonJS = 1,
         AMD = 2,
+        UMD = 3,
     }
     interface LineAndCharacter {
         line: number;
