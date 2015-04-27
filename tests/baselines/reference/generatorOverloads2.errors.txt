@@ -1,17 +1,17 @@
-tests/cases/conformance/es6/yieldExpressions/generatorOverloads2.ts(2,13): error TS1219: Generators are not allowed in an ambient context.
-tests/cases/conformance/es6/yieldExpressions/generatorOverloads2.ts(3,13): error TS1219: Generators are not allowed in an ambient context.
-tests/cases/conformance/es6/yieldExpressions/generatorOverloads2.ts(4,13): error TS1219: Generators are not allowed in an ambient context.
+tests/cases/conformance/es6/yieldExpressions/generatorOverloads2.ts(2,13): error TS1220: Generators are not allowed in an ambient context.
+tests/cases/conformance/es6/yieldExpressions/generatorOverloads2.ts(3,13): error TS1220: Generators are not allowed in an ambient context.
+tests/cases/conformance/es6/yieldExpressions/generatorOverloads2.ts(4,13): error TS1220: Generators are not allowed in an ambient context.
 
 
 ==== tests/cases/conformance/es6/yieldExpressions/generatorOverloads2.ts (3 errors) ====
     declare module M {
         function* f(s: string): Iterable<any>;
                 ~
-!!! error TS1219: Generators are not allowed in an ambient context.
+!!! error TS1220: Generators are not allowed in an ambient context.
         function* f(s: number): Iterable<any>;
                 ~
-!!! error TS1219: Generators are not allowed in an ambient context.
+!!! error TS1220: Generators are not allowed in an ambient context.
         function* f(s: any): Iterable<any>;
                 ~
-!!! error TS1219: Generators are not allowed in an ambient context.
+!!! error TS1220: Generators are not allowed in an ambient context.
     }

@@ -1,9 +1,9 @@
-tests/cases/conformance/es6/yieldExpressions/YieldExpression9_es6.ts(1,17): error TS1218: Generators are only available when targeting ECMAScript 6 or higher.
+tests/cases/conformance/es6/yieldExpressions/YieldExpression9_es6.ts(1,17): error TS1219: Generators are only available when targeting ECMAScript 6 or higher.
 
 
 ==== tests/cases/conformance/es6/yieldExpressions/YieldExpression9_es6.ts (1 errors) ====
     var v = function*() {
                     ~
-!!! error TS1218: Generators are only available when targeting ECMAScript 6 or higher.
+!!! error TS1219: Generators are only available when targeting ECMAScript 6 or higher.
       yield(foo);
     }
