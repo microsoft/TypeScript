@@ -2006,7 +2006,7 @@
         "category": "Message", 
         "code": 6062
     },
-    "Argument for --newLine option must be 'CRLF' or 'LF'.": {
+    "Argument for 'newLine' option must be 'CRLF' or 'LF'.": {
         "category": "Error", 
         "code": 6063
     },

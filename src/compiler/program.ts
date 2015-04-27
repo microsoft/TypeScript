@@ -91,8 +91,11 @@ module ts {
             }
         }
 
-        let newLine = [sys.newLine, "\r\n", "\n"][options.newLine ? Number(options.newLine) : 0];
-		
+        let newLine = 
+            options.newLine === NewLineKind.CarriageReturnLineFeed ? "\r\n" :
+            options.newLine === NewLineKind.LineFeed ? "\n" :
+            sys.newLine;
+
         return {
             getSourceFile,
             getDefaultLibFileName: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), getDefaultLibFileName(options)),

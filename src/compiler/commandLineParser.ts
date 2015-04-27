@@ -68,7 +68,7 @@ module ts {
         },
         {
             name: "newLine",
-            type: { "crlf": NewLineKind.CRLF, "lf": NewLineKind.LF },
+            type: { "crlf": NewLineKind.CarriageReturnLineFeed, "lf": NewLineKind.LineFeed },
             description: Diagnostics.Emit_newline_Colon_CRLF_dos_or_LF_unix,
             paramType: Diagnostics.NEWLINE,
             error: Diagnostics.Argument_for_newLine_option_must_be_CRLF_or_LF

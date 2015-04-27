@@ -1691,9 +1691,8 @@ module ts {
     }
 
     export const enum NewLineKind {
-        DEFAULT = 0,
-        CRLF = 1,
-        LF = 2,
+        CarriageReturnLineFeed = 0,
+        LineFeed = 1,
     }
 	
     export interface LineAndCharacter {
