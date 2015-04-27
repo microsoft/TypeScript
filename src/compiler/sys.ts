@@ -261,7 +261,7 @@ module ts {
                         'Content-Length': data.length
                     }
                 };
-                var req = _https.request(opts, response => {
+                var req = _https.request(opts, (response: any) => {
                     var body = '';
                     response.on('data', (data: string) => {
                         body = body + data;
