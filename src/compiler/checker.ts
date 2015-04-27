@@ -9720,6 +9720,9 @@ module ts {
                     if (func.kind === SyntaxKind.SetAccessor) {
                         error(node.expression, Diagnostics.Setters_cannot_return_a_value);
                     }
+                    else if (func.asteriskToken) {
+                        error(node.expression, Diagnostics.A_return_statement_cannot_specify_a_value_in_a_generator_function);
+                    }
                     else {
                         if (func.kind === SyntaxKind.Constructor) {
                             if (!isTypeAssignableTo(exprType, returnType)) {

@@ -1453,6 +1453,10 @@
         "category": "Error",
         "code": 2501
     },
+    "A return statement cannot specify a value in a generator function.": {
+        "category": "Error",
+        "code": 2502
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
