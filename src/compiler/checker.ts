@@ -7905,6 +7905,26 @@ module ts {
                 grammarErrorOnFirstToken(node, Diagnostics.A_yield_expression_is_only_allowed_in_a_generator_declaration);
             }
 
+            if (node.expression) {
+                let func = getContainingFunction(node);
+                // If this is correct code, the func should always have a star. After all,
+                // we are in a yield context.
+                // Also, there is no point in doing an assignability check if the function
+                // has no explicit return type, because the return type is directly computed
+                // from the yield expressions.
+                if (func.asteriskToken && func.type) {
+                    let signatureElementType = getElementTypeFromIterableIterator(getTypeFromTypeNode(func.type), /*errorNode*/ undefined) || unknownType;
+                    let expressionType = checkExpressionCached(node.expression, /*contextualMapper*/ undefined);
+                    if (node.asteriskToken) {
+                        let expressionElementType = checkIteratedType(expressionType, node.expression);
+                        checkTypeAssignableTo(expressionElementType, signatureElementType, node.expression, /*headMessage*/ undefined);
+                    }
+                    else {
+                        checkTypeAssignableTo(expressionType, signatureElementType, node.expression, /*headMessage*/ undefined);
+                    }
+                }
+            }
+
             // Both yield and yield* expressions are any
             return anyType;
         }
@@ -9480,7 +9500,7 @@ module ts {
             }
 
             if (languageVersion >= ScriptTarget.ES6) {
-                return checkIteratedType(inputType, errorNode) || anyType;
+                return checkIteratedType(inputType, errorNode);
             }
 
             if (allowStringInput) {
@@ -9509,7 +9529,7 @@ module ts {
                 checkTypeAssignableTo(iterable, createIterableType(elementType), errorNode);
             }
 
-            return elementType;
+            return elementType || anyType;
         }
 
         function getElementTypeFromIterable(iterable: Type, errorNode: Node): Type {
