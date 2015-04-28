@@ -1,0 +1,11 @@
+=== tests/cases/compiler/abstractIdentifierName.ts ===
+var abstract = true;
+>abstract : Symbol(abstract, Decl(abstractIdentifierName.ts, 0, 3))
+
+function foo() {
+>foo : Symbol(foo, Decl(abstractIdentifierName.ts, 0, 20))
+
+    "use strict";
+    var abstract = true;
+>abstract : Symbol(abstract, Decl(abstractIdentifierName.ts, 4, 7))
+}

@@ -131,6 +131,7 @@ module ts {
         StaticKeyword,
         YieldKeyword,
         // Contextual keywords
+        AbstractKeyword,
         AsKeyword,
         AnyKeyword,
         BooleanKeyword,
@@ -307,15 +308,16 @@ module ts {
         Protected =         0x00000040,  // Property/Method
         Static =            0x00000080,  // Property/Method
         Default =           0x00000100,  // Function/Class (export default declaration)
-        MultiLine =         0x00000200,  // Multi-line array or object literal
-        Synthetic =         0x00000400,  // Synthetic node (for full fidelity)
-        DeclarationFile =   0x00000800,  // Node is a .d.ts file
-        Let =               0x00001000,  // Variable declaration
-        Const =             0x00002000,  // Variable declaration
-        OctalLiteral =      0x00004000,
-        ExportContext =     0x00008000,  // Export context (initialized by binding)
+        Abstract =          0x00000200,
+        MultiLine =         0x00000400,  // Multi-line array or object literal
+        Synthetic =         0x00000800,  // Synthetic node (for full fidelity)
+        DeclarationFile =   0x00001000,  // Node is a .d.ts file
+        Let =               0x00002000,  // Variable declaration
+        Const =             0x00004000,  // Variable declaration
+        OctalLiteral =      0x00008000,
+        ExportContext =     0x00010000,  // Export context (initialized by binding)
 
-        Modifier = Export | Ambient | Public | Private | Protected | Static | Default,
+        Modifier = Export | Ambient | Public | Private | Protected | Static | Default | Abstract,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const
     }
