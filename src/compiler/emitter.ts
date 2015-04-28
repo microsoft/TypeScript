@@ -5015,22 +5015,20 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     }
                 }
 
-                if (externalImports) {
-                    for (let externalImport of externalImports) {
-                        if (externalImport.kind !== SyntaxKind.ExportDeclaration) {
-                            continue;
-                        }
+                for (let externalImport of externalImports) {
+                    if (externalImport.kind !== SyntaxKind.ExportDeclaration) {
+                        continue;
+                    }
 
-                        let exportDecl = <ExportDeclaration>externalImport;
-                        if (!exportDecl.exportClause) {
-                            // export * from ...
-                            continue;
-                        }
+                    let exportDecl = <ExportDeclaration>externalImport;
+                    if (!exportDecl.exportClause) {
+                        // export * from ...
+                        continue;
+                    }
 
-                        for (let element of exportDecl.exportClause.elements) {
-                            // write name of indirectly exported entry, i.e. 'export {x} from ...'
-                            writeExportedName(element.name || element.propertyName);
-                        }
+                    for (let element of exportDecl.exportClause.elements) {
+                        // write name of indirectly exported entry, i.e. 'export {x} from ...'
+                        writeExportedName(element.name || element.propertyName);
                     }
                 }
 
