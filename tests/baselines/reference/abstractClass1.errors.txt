@@ -1,0 +1,47 @@
+tests/cases/compiler/abstractClass1.ts(15,9): error TS2501: Cannot create an instance of the abstract class 'undefined'
+tests/cases/compiler/abstractClass1.ts(16,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/abstractClass1.ts(16,9): error TS2501: Cannot create an instance of the abstract class 'undefined'
+tests/cases/compiler/abstractClass1.ts(28,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/abstractClass1.ts(28,1): error TS2501: Cannot create an instance of the abstract class 'undefined'
+
+
+==== tests/cases/compiler/abstractClass1.ts (5 errors) ====
+    
+    abstract class Foo {
+        constructor(f: any) { }
+        public static bar(): void { }
+    
+        public empty() { }
+    }
+    
+    class Bar extends Foo {
+        constructor(f: any) {
+            super(f);
+        }
+    }
+    
+    var a = new Foo(1); // Error
+            ~~~~~~~~~~
+!!! error TS2501: Cannot create an instance of the abstract class 'undefined'
+    var b = new Foo(); // Error because of invalid constructor arguments
+            ~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+            ~~~~~~~~~
+!!! error TS2501: Cannot create an instance of the abstract class 'undefined'
+    
+    
+    // Valid
+    
+    var c = new Bar(1);
+    c.empty();
+    
+    // Calling a static method on a abstract class is valid
+    Foo.bar();
+    
+    var Copy = Foo;
+    new Copy();
+    ~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+    ~~~~~~~~~~
+!!! error TS2501: Cannot create an instance of the abstract class 'undefined'
+    
