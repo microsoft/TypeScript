@@ -5615,7 +5615,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     paramEmitted = true;
                 }
 
-                if (isExternalModule(node)) {
+                if (isExternalModule(node) || compilerOptions.separateCompilation) {
                     if (languageVersion >= ScriptTarget.ES6) {
                         emitES6Module(node, startIndex);
                     }
