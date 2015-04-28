@@ -1,21 +1,113 @@
-//// [systemModule11.ts]
+//// [tests/cases/compiler/systemModule11.ts] ////
 
-import 'foo'
-import {f} from 'bar';
+//// [file1.ts]
 
-f();
+// set of tests cases that checks generation of local storage for exported names
 
-//// [systemModule11.js]
-System.register(['foo', 'bar'], function(exports_1) {
-    var bar_1;
+
+export var x;
+export function foo() {}
+export * from 'bar';
+
+//// [file2.ts]
+
+var x;
+var y;
+export {x};
+export {y as y1}
+
+export * from 'bar';
+
+//// [file3.ts]
+
+export {x, y as z} from 'a';
+export * from 'bar';
+
+//// [file4.ts]
+
+export var x;
+export function foo() {}
+
+var z, z1;
+export {z, z1 as z2};
+
+export {s, s1 as s2} from 'a'
+
+//// [file1.js]
+// set of tests cases that checks generation of local storage for exported names
+System.register(['bar'], function(exports_1) {
+    var x;
+    function foo() { }
+    exports_1("foo", foo);
+    var exportedNames_1 = { 
+        'x': true,
+        'foo': true
+    };
     return {
         setters:[
-            function (_) {},
             function (_bar_1) {
-                bar_1 = _bar_1
+                for (var n in _bar_1)
+                    if (!exportedNames_1.hasOwnProperty(n)) exports_1(n, _bar_1[n]);
             }],
         execute: function() {
-            bar_1.f();
+            exports_1("x", x);
+        }
+    }
+});
+//// [file2.js]
+System.register(['bar'], function(exports_1) {
+    var x, y;
+    var exportedNames_1 = { 
+        'x': true,
+        'y1': true
+    };
+    return {
+        setters:[
+            function (_bar_1) {
+                for (var n in _bar_1)
+                    if (!exportedNames_1.hasOwnProperty(n)) exports_1(n, _bar_1[n]);
+            }],
+        execute: function() {
+            exports_1("x", x);
+            exports_1("y1", y);
+        }
+    }
+});
+//// [file3.js]
+System.register(['a', 'bar'], function(exports_1) {
+    var exportedNames_1 = { 
+        'x': true,
+        'z': true
+    };
+    return {
+        setters:[
+            function (_a_1) {
+                exports_1("x", _a_1["x"]);
+                exports_1("z", _a_1["y"]);
+            },
+            function (_bar_1) {
+                for (var n in _bar_1)
+                    if (!exportedNames_1.hasOwnProperty(n)) exports_1(n, _bar_1[n]);
+            }],
+        execute: function() {
+        }
+    }
+});
+//// [file4.js]
+System.register(['a'], function(exports_1) {
+    var x, z, z1;
+    function foo() { }
+    exports_1("foo", foo);
+    return {
+        setters:[
+            function (_a_1) {
+                exports_1("s", _a_1["s"]);
+                exports_1("s2", _a_1["s1"]);
+            }],
+        execute: function() {
+            exports_1("x", x);
+            exports_1("z", z);
+            exports_1("z2", z1);
         }
     }
 });

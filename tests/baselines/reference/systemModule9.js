@@ -25,26 +25,31 @@ export {y as z};
 System.register(['file1', 'file2', 'file3', 'file4', 'file5', 'file6', 'file7'], function(exports_1) {
     var ns, file2_1, file3_1, file5_1, ns3;
     var x, y;
+    var exportedNames_1 = { 
+        'x': true,
+        'z': true
+    };
     return {
         setters:[
             function (_ns) {
-                ns = _ns
+                ns = _ns;
             },
             function (_file2_1) {
-                file2_1 = _file2_1
+                file2_1 = _file2_1;
             },
             function (_file3_1) {
-                file3_1 = _file3_1
+                file3_1 = _file3_1;
             },
             function (_) {},
             function (_file5_1) {
-                file5_1 = _file5_1
+                file5_1 = _file5_1;
             },
             function (_ns3) {
-                ns3 = _ns3
+                ns3 = _ns3;
             },
             function (_file7_1) {
-                for (var n in _file7_1) exports_1(n, _file7_1[n]);
+                for (var n in _file7_1)
+                    if (!exportedNames_1.hasOwnProperty(n)) exports_1(n, _file7_1[n]);
             }],
         execute: function() {
             ns.f();
