@@ -1,11 +1,13 @@
-tests/cases/compiler/abstractClass1.ts(15,9): error TS2501: Cannot create an instance of the abstract class 'undefined'
+tests/cases/compiler/abstractClass1.ts(15,9): error TS2502: Cannot create an instance of the abstract class 'Foo'
 tests/cases/compiler/abstractClass1.ts(16,9): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/abstractClass1.ts(16,9): error TS2501: Cannot create an instance of the abstract class 'undefined'
-tests/cases/compiler/abstractClass1.ts(28,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/abstractClass1.ts(28,1): error TS2501: Cannot create an instance of the abstract class 'undefined'
+tests/cases/compiler/abstractClass1.ts(16,9): error TS2502: Cannot create an instance of the abstract class 'Foo'
+tests/cases/compiler/abstractClass1.ts(18,1): error TS1127: Invalid character.
+tests/cases/compiler/abstractClass1.ts(25,1): error TS2502: Cannot create an instance of the abstract class 'Qux'
+tests/cases/compiler/abstractClass1.ts(35,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/abstractClass1.ts(35,1): error TS2502: Cannot create an instance of the abstract class 'Foo'
 
 
-==== tests/cases/compiler/abstractClass1.ts (5 errors) ====
+==== tests/cases/compiler/abstractClass1.ts (7 errors) ====
     
     abstract class Foo {
         constructor(f: any) { }
@@ -22,16 +24,27 @@ tests/cases/compiler/abstractClass1.ts(28,1): error TS2501: Cannot create an ins
     
     var a = new Foo(1); // Error
             ~~~~~~~~~~
-!!! error TS2501: Cannot create an instance of the abstract class 'undefined'
+!!! error TS2502: Cannot create an instance of the abstract class 'Foo'
     var b = new Foo(); // Error because of invalid constructor arguments
             ~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
             ~~~~~~~~~
-!!! error TS2501: Cannot create an instance of the abstract class 'undefined'
+!!! error TS2502: Cannot create an instance of the abstract class 'Foo'
     
+    module baz {
+    
+!!! error TS1127: Invalid character.
+        export abstract class Qux {
+        }
+        export class Quz extends Qux {
+        }
+    }
+    
+    new baz.Qux();
+    ~~~~~~~~~~~~~
+!!! error TS2502: Cannot create an instance of the abstract class 'Qux'
     
     // Valid
-    
     var c = new Bar(1);
     c.empty();
     
@@ -43,5 +56,5 @@ tests/cases/compiler/abstractClass1.ts(28,1): error TS2501: Cannot create an ins
     ~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
     ~~~~~~~~~~
-!!! error TS2501: Cannot create an instance of the abstract class 'undefined'
+!!! error TS2502: Cannot create an instance of the abstract class 'Foo'
     

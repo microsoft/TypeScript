@@ -16,9 +16,16 @@ class Bar extends Foo {
 var a = new Foo(1); // Error
 var b = new Foo(); // Error because of invalid constructor arguments
 
+module baz {
+    export abstract class Qux {
+    }
+    export class Quz extends Qux {
+    }
+}
+
+new baz.Qux();
 
 // Valid
-
 var c = new Bar(1);
 c.empty();
 
@@ -52,6 +59,24 @@ var Bar = (function (_super) {
 })(Foo);
 var a = new Foo(1); // Error
 var b = new Foo(); // Error because of invalid constructor arguments
+var baz;
+(function (baz) {
+    var Qux = (function () {
+        function Qux() {
+        }
+        return Qux;
+    })();
+    baz.Qux = Qux;
+    var Quz = (function (_super) {
+        __extends(Quz, _super);
+        function Quz() {
+            _super.apply(this, arguments);
+        }
+        return Quz;
+    })(Qux);
+    baz.Quz = Quz;
+})(baz || (baz = {}));
+new baz.Qux();
 // Valid
 var c = new Bar(1);
 c.empty();
@@ -72,5 +97,11 @@ declare class Bar extends Foo {
 }
 declare var a: Foo;
 declare var b: any;
+declare module baz {
+    abstract class Qux {
+    }
+    class Quz extends Qux {
+    }
+}
 declare var c: Bar;
 declare var Copy: typeof Foo;
