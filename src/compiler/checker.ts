@@ -7092,9 +7092,9 @@ module ts {
                 return resolveErrorCall(node);
             }
 
-            var valueDecl = (expressionType.symbol ? expressionType.symbol.valueDeclaration : null);
+            var valueDecl = (expressionType.symbol ? expressionType.symbol.valueDeclaration : undefined);
             if (valueDecl && valueDecl.flags & NodeFlags.Abstract) {
-                error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_1, valueDecl.name);
+                error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(valueDecl.name));
             }
 
             // Technically, this signatures list may be incomplete. We are taking the apparent type,

@@ -43,6 +43,7 @@ module ts {
     }
 
     let textToToken: Map<SyntaxKind> = {
+        "abstract": SyntaxKind.AbstractKeyword,
         "any": SyntaxKind.AnyKeyword,
         "as": SyntaxKind.AsKeyword,
         "boolean": SyntaxKind.BooleanKeyword,
@@ -83,7 +84,6 @@ module ts {
         "private": SyntaxKind.PrivateKeyword,
         "protected": SyntaxKind.ProtectedKeyword,
         "public": SyntaxKind.PublicKeyword,
-        "abstract": SyntaxKind.AbstractKeyword,
         "require": SyntaxKind.RequireKeyword,
         "return": SyntaxKind.ReturnKeyword,
         "set": SyntaxKind.SetKeyword,

@@ -1447,9 +1447,9 @@
         "category": "Error",
         "code": 2501
     },
-    "Cannot create an instance of the abstract class '{1}'": {
+    "Cannot create an instance of the abstract class '{0}'": {
         "category": "Error",
-        "code": 2501
+        "code": 2502
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

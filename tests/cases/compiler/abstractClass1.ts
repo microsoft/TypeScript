@@ -16,9 +16,16 @@ class Bar extends Foo {
 var a = new Foo(1); // Error
 var b = new Foo(); // Error because of invalid constructor arguments
 
+module baz {
+    export abstract class Qux {
+    }
+    export class Quz extends Qux {
+    }
+}
+
+new baz.Qux();
 
 // Valid
-
 var c = new Bar(1);
 c.empty();
 

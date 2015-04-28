@@ -128,10 +128,10 @@ module ts {
         PrivateKeyword,
         ProtectedKeyword,
         PublicKeyword,
-        AbstractKeyword,
         StaticKeyword,
         YieldKeyword,
         // Contextual keywords
+        AbstractKeyword,
         AsKeyword,
         AnyKeyword,
         BooleanKeyword,
