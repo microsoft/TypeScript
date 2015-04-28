@@ -1098,14 +1098,15 @@ module ts {
     }
 
     export interface SourceMapData {
-        sourceMapFilePath: string;       // Where the sourcemap file is written
-        jsSourceMappingURL: string;      // source map URL written in the .js file
-        sourceMapFile: string;           // Source map's file field - .js file name
-        sourceMapSourceRoot: string;     // Source map's sourceRoot field - location where the sources will be present if not ""
-        sourceMapSources: string[];      // Source map's sources field - list of sources that can be indexed in this source map
-        inputSourceFileNames: string[];  // Input source file (which one can use on program to get the file), 1:1 mapping with the sourceMapSources list
-        sourceMapNames?: string[];       // Source map's names field - list of names that can be indexed in this source map
-        sourceMapMappings: string;       // Source map's mapping field - encoded source map spans
+        sourceMapFilePath: string;           // Where the sourcemap file is written
+        jsSourceMappingURL: string;          // source map URL written in the .js file
+        sourceMapFile: string;               // Source map's file field - .js file name
+        sourceMapSourceRoot: string;         // Source map's sourceRoot field - location where the sources will be present if not ""
+        sourceMapSources: string[];          // Source map's sources field - list of sources that can be indexed in this source map
+        sourceMapSourcesContent?: string[];  // Source map's sourcesContent field - list of the sources' text to be embedded in the source map
+        inputSourceFileNames: string[];      // Input source file (which one can use on program to get the file), 1:1 mapping with the sourceMapSources list
+        sourceMapNames?: string[];           // Source map's names field - list of names that can be indexed in this source map
+        sourceMapMappings: string;           // Source map's mapping field - encoded source map spans
         sourceMapDecodedMappings: SourceMapSpan[];  // Raw source map spans that were encoded into the sourceMapMappings
     }
 
@@ -1279,6 +1280,7 @@ module ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         resolvesToSomeValue(location: Node, name: string): boolean;
         getBlockScopedVariableId(node: Identifier): number;
+        getReferencedValueDeclaration(reference: Identifier): Declaration;
         serializeTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
         serializeParameterTypesOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): (string | string[])[];
         serializeReturnTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
@@ -1648,6 +1650,8 @@ module ts {
         diagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
+        inlineSourceMap?: boolean;
+        inlineSources?: boolean;
         listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
@@ -1681,6 +1685,7 @@ module ts {
         CommonJS = 1,
         AMD = 2,
         UMD = 3,
+        System = 4,
     }
 
     export interface LineAndCharacter {

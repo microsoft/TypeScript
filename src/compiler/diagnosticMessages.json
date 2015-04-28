@@ -631,7 +631,7 @@
         "category": "Error",
         "code": 1203
     },
-    "Cannot compile modules into 'amd', 'commonjs' or 'umd' when targeting 'ES6' or higher.": {
+    "Cannot compile modules into 'commonjs', 'amd', 'system' or 'umd' when targeting 'ES6' or higher.": {
         "category": "Error",
         "code": 1204
     },
@@ -679,6 +679,11 @@
         "category": "Error",
         "code": 1216
     },
+    "Export assignment is not supported when '--module' flag is 'system'.": {
+        "category": "Error",
+        "code": 1218
+    },
+
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1792,6 +1797,23 @@
         "category": "Error",
         "code": 5047
     },
+    "Option 'sourceMap' cannot be specified with option 'inlineSourceMap'.": {
+        "category": "Error",
+        "code": 5048
+    },
+    "Option 'sourceRoot' cannot be specified with option 'inlineSourceMap'.": {
+        "category": "Error",
+        "code": 5049
+    },
+    "Option 'mapRoot' cannot be specified with option 'inlineSourceMap'.": {
+        "category": "Error",
+        "code": 5050
+    },
+     "Option 'inlineSources' can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
+        "category": "Error",
+        "code": 5051
+    },
+
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -1836,7 +1858,7 @@
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'commonjs', 'amd', or 'umd'.": {
+    "Specify module code generation: 'commonjs', 'amd', 'system' or 'umd'": {
         "category": "Message",
         "code": 6016
     },
@@ -1920,7 +1942,7 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs', 'amd', or 'umd'.": {
+    "Argument for '--module' option must be 'commonjs', 'amd', 'system' or 'umd'.": {
         "category": "Error",
         "code": 6046
     },
