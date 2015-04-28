@@ -908,6 +908,10 @@ module ts {
 
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
+            if (node.flags & NodeFlags.Abstract) {
+                write("abstract ");
+            }
+
             write("class ");
             writeTextOfNode(currentSourceFile, node.name);
             let prevEnclosingDeclaration = enclosingDeclaration;

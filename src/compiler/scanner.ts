@@ -83,6 +83,7 @@ module ts {
         "private": SyntaxKind.PrivateKeyword,
         "protected": SyntaxKind.ProtectedKeyword,
         "public": SyntaxKind.PublicKeyword,
+        "abstract": SyntaxKind.AbstractKeyword,
         "require": SyntaxKind.RequireKeyword,
         "return": SyntaxKind.ReturnKeyword,
         "set": SyntaxKind.SetKeyword,

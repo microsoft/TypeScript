@@ -1137,6 +1137,7 @@ module ts {
 
     export function isModifier(token: SyntaxKind): boolean {
         switch (token) {
+            case SyntaxKind.AbstractKeyword:
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.PrivateKeyword:
             case SyntaxKind.ProtectedKeyword:
@@ -1626,6 +1627,7 @@ module ts {
             case SyntaxKind.PublicKeyword: return NodeFlags.Public;
             case SyntaxKind.ProtectedKeyword: return NodeFlags.Protected;
             case SyntaxKind.PrivateKeyword: return NodeFlags.Private;
+            case SyntaxKind.AbstractKeyword: return NodeFlags.Abstract;
             case SyntaxKind.ExportKeyword: return NodeFlags.Export;
             case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
             case SyntaxKind.ConstKeyword: return NodeFlags.Const;
