@@ -5705,19 +5705,40 @@ module ts {
 
         function getContextualTypeForReturnExpression(node: Expression): Type {
             let func = getContainingFunction(node);
+            if (func && !func.asteriskToken) {
+                return getContextualReturnType(func);
+            }
+
+            return undefined;
+        }
+
+        function getContextualTypeForYieldOperand(node: YieldExpression): Type {
+            let func = getContainingFunction(node);
             if (func) {
-                // If the containing function has a return type annotation, is a constructor, or is a get accessor whose
-                // corresponding set accessor has a type annotation, return statements in the function are contextually typed
-                if (func.type || func.kind === SyntaxKind.Constructor || func.kind === SyntaxKind.GetAccessor && getSetAccessorTypeAnnotationNode(<AccessorDeclaration>getDeclarationOfKind(func.symbol, SyntaxKind.SetAccessor))) {
-                    return getReturnTypeOfSignature(getSignatureFromDeclaration(func));
-                }
-                // Otherwise, if the containing function is contextually typed by a function type with exactly one call signature
-                // and that call signature is non-generic, return statements are contextually typed by the return type of the signature
-                let signature = getContextualSignatureForFunctionLikeDeclaration(<FunctionExpression>func);
-                if (signature) {
-                    return getReturnTypeOfSignature(signature);
+                let contextualReturnType = getContextualReturnType(func);
+                if (contextualReturnType) {
+                    return node.asteriskToken
+                        ? contextualReturnType
+                        : getElementTypeFromIterableIterator(contextualReturnType, /*errorNode*/ undefined);
                 }
             }
+
+            return undefined;
+        }
+
+        function getContextualReturnType(functionDecl: FunctionLikeDeclaration): Type {
+            // If the containing function has a return type annotation, is a constructor, or is a get accessor whose
+            // corresponding set accessor has a type annotation, return statements in the function are contextually typed
+            if (functionDecl.type || functionDecl.kind === SyntaxKind.Constructor || functionDecl.kind === SyntaxKind.GetAccessor && getSetAccessorTypeAnnotationNode(<AccessorDeclaration>getDeclarationOfKind(functionDecl.symbol, SyntaxKind.SetAccessor))) {
+                return getReturnTypeOfSignature(getSignatureFromDeclaration(functionDecl));
+            }
+            // Otherwise, if the containing function is contextually typed by a function type with exactly one call signature
+            // and that call signature is non-generic, return statements are contextually typed by the return type of the signature
+            let signature = getContextualSignatureForFunctionLikeDeclaration(<FunctionExpression>functionDecl);
+            if (signature) {
+                return getReturnTypeOfSignature(signature);
+            }
+
             return undefined;
         }
 
@@ -5887,6 +5908,8 @@ module ts {
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.ReturnStatement:
                     return getContextualTypeForReturnExpression(node);
+                case SyntaxKind.YieldExpression:
+                    return getContextualTypeForYieldOperand(<YieldExpression>parent);
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                     return getContextualTypeForArgument(<CallExpression>parent, node);
@@ -7912,7 +7935,7 @@ module ts {
                 // Also, there is no point in doing an assignability check if the function
                 // has no explicit return type, because the return type is directly computed
                 // from the yield expressions.
-                if (func.asteriskToken && func.type) {
+                if (func && func.asteriskToken && func.type) {
                     let signatureElementType = getElementTypeFromIterableIterator(getTypeFromTypeNode(func.type), /*errorNode*/ undefined) || unknownType;
                     let expressionType = checkExpressionCached(node.expression, /*contextualMapper*/ undefined);
                     if (node.asteriskToken) {
@@ -9533,7 +9556,6 @@ module ts {
         }
 
         function getElementTypeFromIterable(iterable: Type, errorNode: Node): Type {
-            Debug.assert(languageVersion >= ScriptTarget.ES6);
             // We want to treat type as an iterable, and get the type it is an iterable of. The iterable
             // must have the following structure (annotated with the names of the variables below):
             //
