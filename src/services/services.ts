@@ -5373,7 +5373,7 @@ module ts {
                 }
                 return;
 
-                function getPropertySymbolFromTypeReference(typeReference: HeritageClauseElement) {
+                function getPropertySymbolFromTypeReference(typeReference: ExpressionWithTypeArguments) {
                     if (typeReference) {
                         let type = typeChecker.getTypeAtLocation(typeReference);
                         if (type) {
@@ -5634,7 +5634,7 @@ module ts {
                 node = node.parent;
             }
 
-            return node.parent.kind === SyntaxKind.TypeReference || node.parent.kind === SyntaxKind.HeritageClauseElement;
+            return node.parent.kind === SyntaxKind.TypeReference || node.parent.kind === SyntaxKind.ExpressionWithTypeArguments;
         }
 
         function isNamespaceReference(node: Node): boolean {
@@ -5652,7 +5652,7 @@ module ts {
                 isLastClause = (<PropertyAccessExpression>root).name === node;
             }
 
-            if (!isLastClause && root.parent.kind === SyntaxKind.HeritageClauseElement && root.parent.parent.kind === SyntaxKind.HeritageClause) {
+            if (!isLastClause && root.parent.kind === SyntaxKind.ExpressionWithTypeArguments && root.parent.parent.kind === SyntaxKind.HeritageClause) {
                 let decl = root.parent.parent.parent;
                 return (decl.kind === SyntaxKind.ClassDeclaration && (<HeritageClause>root.parent.parent).token === SyntaxKind.ImplementsKeyword) ||
                     (decl.kind === SyntaxKind.InterfaceDeclaration && (<HeritageClause>root.parent.parent).token === SyntaxKind.ExtendsKeyword);
