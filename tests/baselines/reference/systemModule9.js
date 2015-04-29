@@ -31,7 +31,7 @@ System.register(['file1', 'file2', 'file3', 'file4', 'file5', 'file6', 'file7'],
     };
     function exportStar_1(m) {
         for(var n in m) {
-            if (!exportedNames_1.hasOwnProperty(n)) exports_1(n, m[n]);
+            if (n !== "default"&& !exportedNames_1.hasOwnProperty(n)) exports_1(n, m[n]);
         }
     }
     return {

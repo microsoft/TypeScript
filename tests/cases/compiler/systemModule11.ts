@@ -21,12 +21,14 @@ export * from 'bar';
 // @filename: file3.ts
 
 export {x, y as z} from 'a';
+export default function foo() {}
 export * from 'bar';
 
 // @filename: file4.ts
 
 export var x;
 export function foo() {}
+export default function (){}
 
 var z, z1;
 export {z, z1 as z2};

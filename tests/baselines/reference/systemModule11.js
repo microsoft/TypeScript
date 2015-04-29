@@ -21,12 +21,14 @@ export * from 'bar';
 //// [file3.ts]
 
 export {x, y as z} from 'a';
+export default function foo() {}
 export * from 'bar';
 
 //// [file4.ts]
 
 export var x;
 export function foo() {}
+export default function (){}
 
 var z, z1;
 export {z, z1 as z2};
@@ -50,7 +52,7 @@ System.register(['bar'], function(exports_1) {
     };
     function exportStar_1(m) {
         for(var n in m) {
-            if (!exportedNames_1.hasOwnProperty(n)) exports_1(n, m[n]);
+            if (n !== "default"&& !exportedNames_1.hasOwnProperty(n)) exports_1(n, m[n]);
         }
     }
     return {
@@ -72,7 +74,7 @@ System.register(['bar'], function(exports_1) {
     };
     function exportStar_1(m) {
         for(var n in m) {
-            if (!exportedNames_1.hasOwnProperty(n)) exports_1(n, m[n]);
+            if (n !== "default"&& !exportedNames_1.hasOwnProperty(n)) exports_1(n, m[n]);
         }
     }
     return {
@@ -88,13 +90,15 @@ System.register(['bar'], function(exports_1) {
 });
 //// [file3.js]
 System.register(['a', 'bar'], function(exports_1) {
+    function foo() { }
+    exports_1("default", foo);
     var exportedNames_1 = {
         'x': true,
         'z': true
     };
     function exportStar_1(m) {
         for(var n in m) {
-            if (!exportedNames_1.hasOwnProperty(n)) exports_1(n, m[n]);
+            if (n !== "default"&& !exportedNames_1.hasOwnProperty(n)) exports_1(n, m[n]);
         }
     }
     return {
@@ -115,6 +119,8 @@ System.register(['a'], function(exports_1) {
     var x, z, z1;
     function foo() { }
     exports_1("foo", foo);
+    function default_1() { }
+    exports_1("default", default_1);
     return {
         setters:[
             function (_a_1) {
@@ -133,7 +139,7 @@ System.register(['a'], function(exports_1) {
     function foo() { }
     function exportStar_1(m) {
         for(var n in m) {
-            exports_1(n, m[n]);
+            if (n !== "default") exports_1(n, m[n]);
         }
     }
     return {

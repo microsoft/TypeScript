@@ -5047,11 +5047,11 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     writeLine();
                     write(`    for(var n in m) {`);
                     writeLine();
-                    write(`        `);
+                    write(`        if (n !== "default"`);
                     if (localNames) {
-                        write(`if (!${localNames}.hasOwnProperty(n)) `);
+                        write(`&& !${localNames}.hasOwnProperty(n)`);
                     }
-                    write(`${exportFunctionForFile}(n, m[n]);`);
+                    write(`) ${exportFunctionForFile}(n, m[n]);`);
                     writeLine();
                     write("    }");
                     writeLine();
@@ -5061,6 +5061,10 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 }
             
                 function writeExportedName(node: Identifier | Declaration): void {
+                    if (node.kind !== SyntaxKind.Identifier && node.flags & NodeFlags.Default) {
+                        return;
+                    }
+
                     if (started) {
                         write(",");
                     }
@@ -5072,9 +5076,6 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     write("'");
                     if (node.kind === SyntaxKind.Identifier) {
                         emitNodeWithoutSourceMap(node);
-                    }
-                    else if (node.flags & NodeFlags.Default) {
-                        write("default");
                     }
                     else {
                         emitDeclarationName(<Declaration>node);
