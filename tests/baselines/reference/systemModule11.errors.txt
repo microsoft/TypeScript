@@ -1,8 +1,8 @@
-tests/cases/compiler/file1.ts(7,15): error TS2307: Cannot find external module 'bar'.
-tests/cases/compiler/file2.ts(7,15): error TS2307: Cannot find external module 'bar'.
-tests/cases/compiler/file3.ts(2,25): error TS2307: Cannot find external module 'a'.
-tests/cases/compiler/file3.ts(3,15): error TS2307: Cannot find external module 'bar'.
-tests/cases/compiler/file4.ts(8,27): error TS2307: Cannot find external module 'a'.
+tests/cases/compiler/file1.ts(7,15): error TS2307: Cannot find module 'bar'.
+tests/cases/compiler/file2.ts(7,15): error TS2307: Cannot find module 'bar'.
+tests/cases/compiler/file3.ts(2,25): error TS2307: Cannot find module 'a'.
+tests/cases/compiler/file3.ts(3,15): error TS2307: Cannot find module 'bar'.
+tests/cases/compiler/file4.ts(8,27): error TS2307: Cannot find module 'a'.
 
 
 ==== tests/cases/compiler/file1.ts (1 errors) ====
@@ -14,7 +14,7 @@ tests/cases/compiler/file4.ts(8,27): error TS2307: Cannot find external module '
     export function foo() {}
     export * from 'bar';
                   ~~~~~
-!!! error TS2307: Cannot find external module 'bar'.
+!!! error TS2307: Cannot find module 'bar'.
     
 ==== tests/cases/compiler/file2.ts (1 errors) ====
     
@@ -25,16 +25,16 @@ tests/cases/compiler/file4.ts(8,27): error TS2307: Cannot find external module '
     
     export * from 'bar';
                   ~~~~~
-!!! error TS2307: Cannot find external module 'bar'.
+!!! error TS2307: Cannot find module 'bar'.
     
 ==== tests/cases/compiler/file3.ts (2 errors) ====
     
     export {x, y as z} from 'a';
                             ~~~
-!!! error TS2307: Cannot find external module 'a'.
+!!! error TS2307: Cannot find module 'a'.
     export * from 'bar';
                   ~~~~~
-!!! error TS2307: Cannot find external module 'bar'.
+!!! error TS2307: Cannot find module 'bar'.
     
 ==== tests/cases/compiler/file4.ts (1 errors) ====
     
@@ -46,4 +46,4 @@ tests/cases/compiler/file4.ts(8,27): error TS2307: Cannot find external module '
     
     export {s, s1 as s2} from 'a'
                               ~~~
-!!! error TS2307: Cannot find external module 'a'.
+!!! error TS2307: Cannot find module 'a'.
