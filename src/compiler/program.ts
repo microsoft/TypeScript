@@ -102,11 +102,11 @@ module ts {
         };
     }
 
-    export function getPreEmitDiagnostics(program: Program): Diagnostic[] {
-        let diagnostics = program.getSyntacticDiagnostics().concat(program.getGlobalDiagnostics()).concat(program.getSemanticDiagnostics());
+    export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile): Diagnostic[] {
+        let diagnostics = program.getSyntacticDiagnostics(sourceFile).concat(program.getGlobalDiagnostics()).concat(program.getSemanticDiagnostics(sourceFile));
 
         if (program.getCompilerOptions().declaration) {
-            diagnostics.concat(program.getDeclarationDiagnostics());
+            diagnostics.concat(program.getDeclarationDiagnostics(sourceFile));
         }
 
         return sortAndDeduplicateDiagnostics(diagnostics);
