@@ -8409,6 +8409,9 @@ module ts {
         }
 
         function checkTypeQuery(node: TypeQueryNode) {
+            // Grammar checking
+            checkGrammarTypeQuery(node);
+
             getTypeFromTypeQueryNode(node);
         }
 
@@ -12159,6 +12162,29 @@ module ts {
                 return errorReport;
             }
             return false;
+        }
+
+        function checkGrammarTypeQuery(node: TypeQueryNode): boolean {
+
+            if (node && node.exprName) {
+
+                if (checkGrammarTypeQueryExpression(node.exprName)) {
+                    return grammarErrorOnNode(node, Diagnostics.Identifier_expected);
+                }
+                return false;
+            }
+
+            return true;
+        }
+
+        function checkGrammarTypeQueryExpression(node: Expression): boolean {
+            if (node.kind === SyntaxKind.PropertyAccessExpression) {
+                return checkGrammarTypeQueryExpression((<PropertyAccessExpression>node).name);
+            }
+
+            return !(node.kind === SyntaxKind.ThisKeyword ||
+                node.kind === SyntaxKind.SuperKeyword ||
+                node.kind === SyntaxKind.Identifier);
         }
 
         function checkGrammarDecorators(node: Node): boolean {

@@ -399,7 +399,7 @@ module ts {
 
             function emitTypeQuery(type: TypeQueryNode) {
                 write("typeof ");
-                emitEntityName(type.exprName);
+                emitEntityName(<any>type);
             }
 
             function emitArrayType(type: ArrayTypeNode) {

@@ -574,7 +574,7 @@ module ts {
     }
 
     export interface TypeQueryNode extends TypeNode {
-        exprName: EntityName;
+        exprName: LeftHandSideExpression;
     }
 
     // A TypeLiteral is the declaration node for an anonymous symbol.
