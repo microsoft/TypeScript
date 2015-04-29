@@ -4968,7 +4968,6 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 // should always win over entries with similar names that were added via star exports
                 // to support this we store names of local/indirect exported entries in a set.
                 // this set is used to filter names brought by star expors.
-
                 if (!hasExportStars) {
                     // local names set is needed only in presence of star exports
                     return undefined;
@@ -4987,19 +4986,11 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     }
 
                     if (!hasExportDeclarationWithExportClause) {
-                        // nothing is exported
-                        return undefined;
+                        // we still need to emit exportStar helper
+                        return emitExportStarFunction(/*localNames*/ undefined);
                     }
                 }
 
-                // storage has the following structure
-                // { 
-                //     <exported-name-from-current-module> : void 0,
-                //     <exported-name-obtained-from star export in module 'm'>: 'm'
-                // }
-                // this allows to:
-                // - prevent star exports to overwrite locally exported names
-                // - bind star exported names to particular module so they won't be overwritten by other star exports
                 const exportedNamesStorageRef = makeUniqueName("exportedNames");
 
                 writeLine();
@@ -5044,27 +5035,31 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 writeLine();
                 write("};");
 
-                writeLine();
-
-                const exportStarFunction = makeUniqueName("exportStar");
+                return emitExportStarFunction(exportedNamesStorageRef);
                 
-                // define an export star helper function
-                write(`function ${exportStarFunction}(m, name) {`);
-                writeLine();
-                write(`    for(var n in m) {`);
-                writeLine();
-                // if name is not yet taken by either local names or names in other modules - reserve it
-                write(`        if (!${exportedNamesStorageRef}.hasOwnProperty(n)) ${exportedNamesStorageRef}[n] = name;`);
-                writeLine();
-                // only export value if it was exported from the module with name 'name';
-                write(`        if (${exportedNamesStorageRef}[n] === name) ${exportFunctionForFile}(n, m[n]);`);
-                writeLine();
-                write("    }");
-                writeLine();
-                write("}")
+                function emitExportStarFunction(localNames: string): string {
+                    const exportStarFunction = makeUniqueName("exportStar");
 
-                return exportStarFunction;
+                    writeLine();
 
+                    // define an export star helper function
+                    write(`function ${exportStarFunction}(m) {`);
+                    writeLine();
+                    write(`    for(var n in m) {`);
+                    writeLine();
+                    write(`        `);
+                    if (localNames) {
+                        write(`if (!${localNames}.hasOwnProperty(n)) `);
+                    }
+                    write(`${exportFunctionForFile}(n, m[n]);`);
+                    writeLine();
+                    write("    }");
+                    writeLine();
+                    write("}")
+
+                    return exportStarFunction;
+                }
+            
                 function writeExportedName(node: Identifier | Declaration): void {
                     if (started) {
                         write(",");
@@ -5085,7 +5080,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                         emitDeclarationName(<Declaration>node);
                     }
 
-                    write("': void 0");
+                    write("': true");
                 }
             }
 
@@ -5368,8 +5363,8 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                                 writeLine();
                                 // export * from 'foo'
                                 // emit as:
-                                // exportStar(_foo, 'foo');
-                                write(`${exportStarFunction}(${parameterName}, ${getExternalModuleNameText(importNode)});`);
+                                // exportStar(_foo);
+                                write(`${exportStarFunction}(${parameterName});`);
                             }
 
                             writeLine();

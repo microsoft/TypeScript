@@ -32,3 +32,8 @@ var z, z1;
 export {z, z1 as z2};
 
 export {s, s1 as s2} from 'a'
+
+// @filename: file5.ts
+
+function foo() {}
+export * from 'a';

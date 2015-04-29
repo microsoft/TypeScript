@@ -26,13 +26,12 @@ System.register(['file1', 'file2', 'file3', 'file4', 'file5', 'file6', 'file7'],
     var ns, file2_1, file3_1, file5_1, ns3;
     var x, y;
     var exportedNames_1 = {
-        'x': void 0,
-        'z': void 0
+        'x': true,
+        'z': true
     };
-    function exportStar_1(m, name) {
+    function exportStar_1(m) {
         for(var n in m) {
-            if (!exportedNames_1.hasOwnProperty(n)) exportedNames_1[n] = name;
-            if (exportedNames_1[n] === name) exports_1(n, m[n]);
+            if (!exportedNames_1.hasOwnProperty(n)) exports_1(n, m[n]);
         }
     }
     return {
@@ -54,7 +53,7 @@ System.register(['file1', 'file2', 'file3', 'file4', 'file5', 'file6', 'file7'],
                 ns3 = _ns3;
             },
             function (_file7_1) {
-                exportStar_1(_file7_1, 'file7');
+                exportStar_1(_file7_1);
             }],
         execute: function() {
             ns.f();
