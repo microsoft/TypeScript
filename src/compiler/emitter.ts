@@ -5044,16 +5044,20 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
 
                     // define an export star helper function
                     write(`function ${exportStarFunction}(m) {`);
+                    increaseIndent();
                     writeLine();
-                    write(`    for(var n in m) {`);
+                    write(`for(var n in m) {`);
+                    increaseIndent();
                     writeLine();
-                    write(`        if (n !== "default"`);
+                    write(`if (n !== "default"`);
                     if (localNames) {
                         write(`&& !${localNames}.hasOwnProperty(n)`);
                     }
                     write(`) ${exportFunctionForFile}(n, m[n]);`);
+                    decreaseIndent();
                     writeLine();
-                    write("    }");
+                    write("}");
+                    decreaseIndent();
                     writeLine();
                     write("}")
 
@@ -5061,6 +5065,8 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 }
             
                 function writeExportedName(node: Identifier | Declaration): void {
+                    // do not record default exports
+                    // they are local to module and never overwritten (explicitly skipped) by star export 
                     if (node.kind !== SyntaxKind.Identifier && node.flags & NodeFlags.Default) {
                         return;
                     }
