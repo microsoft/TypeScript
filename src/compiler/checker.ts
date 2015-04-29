@@ -91,6 +91,9 @@ module ts {
         let resolvingType = createIntrinsicType(TypeFlags.Any, "__resolving__");
 
         let emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        let emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        emptyGenericType.instantiations = {};
+
         let anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         let noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         
@@ -3435,16 +3438,16 @@ module ts {
             }
 
             if (!symbol) {
-                return emptyObjectType;
+                return arity ? emptyGenericType : emptyObjectType;
             }
             let type = getDeclaredTypeOfSymbol(symbol);
             if (!(type.flags & TypeFlags.ObjectType)) {
                 error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_be_a_class_or_interface_type, symbol.name);
-                return emptyObjectType;
+                return arity ? emptyGenericType : emptyObjectType;
             }
             if (((<InterfaceType>type).typeParameters ? (<InterfaceType>type).typeParameters.length : 0) !== arity) {
                 error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_have_1_type_parameter_s, symbol.name, arity);
-                return emptyObjectType;
+                return arity ? emptyGenericType : emptyObjectType;
             }
             return <ObjectType>type;
         }
@@ -3470,7 +3473,7 @@ module ts {
         }
 
         function createTypeFromGlobalGenericType(globalGenericType: GenericType, elementType: Type): Type {
-            return <ObjectType>globalGenericType !== emptyObjectType ? createTypeReference(globalGenericType, [elementType]) : emptyObjectType;
+            return <ObjectType>globalGenericType !== emptyGenericType ? createTypeReference(globalGenericType, [elementType]) : emptyObjectType;
         }
 
         function createIterableType(elementType: Type): Type {
@@ -12057,6 +12060,9 @@ module ts {
                 // a global Symbol already, particularly if it is a class.
                 globalESSymbolType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
                 globalESSymbolConstructorSymbol = undefined;
+                globalIterableType = emptyGenericType;
+                globalIteratorType = emptyGenericType;
+                globalIterableIteratorType = emptyGenericType;
             }
 
             anyArrayType = createArrayType(anyType);
