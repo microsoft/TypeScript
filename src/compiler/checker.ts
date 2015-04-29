@@ -7260,16 +7260,35 @@ module ts {
             }
             else {
                 // Aggregate the types of expressions within all the return statements.
-                let types = checkAndAggregateReturnExpressionTypes(<Block>func.body, contextualMapper);
-                if (types.length === 0) {
-                    return voidType;
+                let types: Type[];
+                if (func.asteriskToken) {
+                    types = checkAndAggregateYieldOperandTypes(<Block>func.body, contextualMapper);
+                    if (types.length === 0) {
+                        return createIterableIteratorType(anyType);
+                    }
+                }
+                else {
+                    types = checkAndAggregateReturnExpressionTypes(<Block>func.body, contextualMapper);
+                    if (types.length === 0) {
+                        return voidType;
+                    }
                 }
                 // When return statements are contextually typed we allow the return type to be a union type. Otherwise we require the
                 // return expressions to have a best common supertype.
                 type = contextualSignature ? getUnionType(types) : getCommonSupertype(types);
                 if (!type) {
-                    error(func, Diagnostics.No_best_common_type_exists_among_return_expressions);
-                    return unknownType;
+                    if (func.asteriskToken) {
+                        error(func, Diagnostics.No_best_common_type_exists_among_yield_expressions);
+                        return createIterableIteratorType(unknownType);
+                    }
+                    else {
+                        error(func, Diagnostics.No_best_common_type_exists_among_return_expressions);
+                        return unknownType;
+                    }
+                }
+
+                if (func.asteriskToken) {
+                    type = createIterableIteratorType(type);
                 }
             }
             if (!contextualSignature) {
@@ -7278,7 +7297,28 @@ module ts {
             return getWidenedType(type);
         }
 
-        /// Returns a set of types relating to every return expression relating to a function block.
+        function checkAndAggregateYieldOperandTypes(body: Block, contextualMapper?: TypeMapper): Type[] {
+            let aggregatedTypes: Type[] = [];
+
+            forEachYieldExpression(body, yieldExpression => {
+                let expr = yieldExpression.expression;
+                if (expr) {
+                    let type = checkExpressionCached(expr, contextualMapper);
+
+                    if (yieldExpression.asteriskToken) {
+                        // A yield* expression effectively yields everything that its operand yields
+                        type = checkIteratedType(type, yieldExpression.expression);
+                    }
+
+                    if (!contains(aggregatedTypes, type)) {
+                        aggregatedTypes.push(type);
+                    }
+                }
+            });
+
+            return aggregatedTypes;
+        }
+
         function checkAndAggregateReturnExpressionTypes(body: Block, contextualMapper?: TypeMapper): Type[] {
             let aggregatedTypes: Type[] = [];
 
@@ -11251,93 +11291,6 @@ module ts {
             }
 
             return node.parent && node.parent.kind === SyntaxKind.ExpressionWithTypeArguments;
-        }
-
-        function isTypeNode(node: Node): boolean {
-            if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
-                return true;
-            }
-
-            switch (node.kind) {
-                case SyntaxKind.AnyKeyword:
-                case SyntaxKind.NumberKeyword:
-                case SyntaxKind.StringKeyword:
-                case SyntaxKind.BooleanKeyword:
-                case SyntaxKind.SymbolKeyword:
-                    return true;
-                case SyntaxKind.VoidKeyword:
-                    return node.parent.kind !== SyntaxKind.VoidExpression;
-                case SyntaxKind.StringLiteral:
-                    // Specialized signatures can have string literals as their parameters' type names
-                    return node.parent.kind === SyntaxKind.Parameter;
-                case SyntaxKind.ExpressionWithTypeArguments:
-                    return true;
-
-                // Identifiers and qualified names may be type nodes, depending on their context. Climb
-                // above them to find the lowest container
-                case SyntaxKind.Identifier:
-                    // If the identifier is the RHS of a qualified name, then it's a type iff its parent is.
-                    if (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node) {
-                        node = node.parent;
-                    }
-                    else if (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node) {
-                        node = node.parent;
-                    }
-                    // fall through
-                case SyntaxKind.QualifiedName:
-                case SyntaxKind.PropertyAccessExpression:
-                    // At this point, node is either a qualified name or an identifier
-                    Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression,
-                        "'node' was expected to be a qualified name, identifier or property access in 'isTypeNode'.");
-
-                    let parent = node.parent;
-                    if (parent.kind === SyntaxKind.TypeQuery) {
-                        return false;
-                    }
-                    // Do not recursively call isTypeNode on the parent. In the example:
-                    //
-                    //     let a: A.B.C;
-                    //
-                    // Calling isTypeNode would consider the qualified name A.B a type node. Only C or
-                    // A.B.C is a type node.
-                    if (SyntaxKind.FirstTypeNode <= parent.kind && parent.kind <= SyntaxKind.LastTypeNode) {
-                        return true;
-                    }
-                    switch (parent.kind) {
-                        case SyntaxKind.ExpressionWithTypeArguments:
-                            return true;
-                        case SyntaxKind.TypeParameter:
-                            return node === (<TypeParameterDeclaration>parent).constraint;
-                        case SyntaxKind.PropertyDeclaration:
-                        case SyntaxKind.PropertySignature:
-                        case SyntaxKind.Parameter:
-                        case SyntaxKind.VariableDeclaration:
-                            return node === (<VariableLikeDeclaration>parent).type;
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.FunctionExpression:
-                        case SyntaxKind.ArrowFunction:
-                        case SyntaxKind.Constructor:
-                        case SyntaxKind.MethodDeclaration:
-                        case SyntaxKind.MethodSignature:
-                        case SyntaxKind.GetAccessor:
-                        case SyntaxKind.SetAccessor:
-                            return node === (<FunctionLikeDeclaration>parent).type;
-                        case SyntaxKind.CallSignature:
-                        case SyntaxKind.ConstructSignature:
-                        case SyntaxKind.IndexSignature:
-                            return node === (<SignatureDeclaration>parent).type;
-                        case SyntaxKind.TypeAssertionExpression:
-                            return node === (<TypeAssertion>parent).type;
-                        case SyntaxKind.CallExpression:
-                        case SyntaxKind.NewExpression:
-                            return (<CallExpression>parent).typeArguments && indexOf((<CallExpression>parent).typeArguments, node) >= 0;
-                        case SyntaxKind.TaggedTemplateExpression:
-                            // TODO (drosen): TaggedTemplateExpressions may eventually support type arguments.
-                            return false;
-                    }
-            }
-
-            return false;
         }
 
         function getLeftSideOfImportEqualsOrExportAssignment(nodeOnRightSide: EntityName): ImportEqualsDeclaration | ExportAssignment {
