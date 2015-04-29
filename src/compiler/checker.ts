@@ -12165,26 +12165,17 @@ module ts {
         }
 
         function checkGrammarTypeQuery(node: TypeQueryNode): boolean {
-
-            if (node && node.exprName) {
-
-                if (checkGrammarTypeQueryExpression(node.exprName)) {
-                    return grammarErrorOnNode(node, Diagnostics.Identifier_expected);
-                }
-                return false;
-            }
-
-            return true;
+            return checkGrammarTypeQueryExpression(node.exprName);
         }
 
-        function checkGrammarTypeQueryExpression(node: Expression): boolean {
+        function checkGrammarTypeQueryExpression(node: LeftHandSideExpression): boolean {
             if (node.kind === SyntaxKind.PropertyAccessExpression) {
-                return checkGrammarTypeQueryExpression((<PropertyAccessExpression>node).name);
+                return checkGrammarTypeQueryExpression((<PropertyAccessExpression>node).expression);
             }
-
-            return !(node.kind === SyntaxKind.ThisKeyword ||
-                node.kind === SyntaxKind.SuperKeyword ||
-                node.kind === SyntaxKind.Identifier);
+            if (node.kind !== SyntaxKind.ThisKeyword && node.kind !== SyntaxKind.SuperKeyword && node.kind !== SyntaxKind.Identifier) {
+                return grammarErrorOnNode(node, Diagnostics.Identifier_expected);
+            }
+            return false;
         }
 
         function checkGrammarDecorators(node: Node): boolean {
