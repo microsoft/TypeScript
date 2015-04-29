@@ -10934,7 +10934,10 @@ module ts {
 
         function checkSourceFile(node: SourceFile) {
             let start = new Date().getTime();
-            checkSourceFileWorker(node);
+            let skipCheck = node.fileName.indexOf("lib.d.ts") >= 0 && compilerOptions.noLibCheck;
+            if (!skipCheck) {
+                checkSourceFileWorker(node);
+            }
             checkTime += new Date().getTime() - start;
         }
 

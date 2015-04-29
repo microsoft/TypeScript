@@ -1677,6 +1677,10 @@ module ts {
         separateCompilation?: boolean;
         emitDecoratorMetadata?: boolean;
         /* @internal */ stripInternal?: boolean;
+
+        // Skip checking lib.d.ts to help speed up tests.
+        /* @internal */ noLibCheck?: boolean;
+
         [option: string]: string | number | boolean;
     }
 

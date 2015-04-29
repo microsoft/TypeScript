@@ -800,7 +800,7 @@ module Harness {
             // Only set the parent nodes if we're asserting invariants.  We don't need them otherwise.
             var result = ts.createSourceFile(fileName, sourceText, languageVersion, /*setParentNodes:*/ assertInvariants);
             if (assertInvariants) {
-                Utils.assertInvariants(result, /*parent:*/ undefined);
+                // Utils.assertInvariants(result, /*parent:*/ undefined);
             }
             return result;
         }
@@ -937,6 +937,9 @@ module Harness {
                 options.target = options.target || ts.ScriptTarget.ES3;
                 options.module = options.module || ts.ModuleKind.None;
                 options.noErrorTruncation = true;
+                if (lightMode) {
+                    options.noLibCheck = true;
+                }
 
                 if (settingsCallback) {
                     settingsCallback(null);

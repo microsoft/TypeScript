@@ -171,7 +171,6 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
             });
 
-
             it('Correct JS output for ' + fileName, () => {
                 if (!ts.fileExtensionIs(lastUnit.name, '.d.ts') && this.emit) {
                     if (result.files.length === 0 && result.errors.length === 0) {
@@ -259,7 +258,7 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             it('Correct type/symbol baselines for ' + fileName, () => {
-                if (fileName.indexOf("APISample") >= 0) {
+                if (fileName.indexOf("APISample") >= 0 || lightMode) {
                     return;
                 }
 
