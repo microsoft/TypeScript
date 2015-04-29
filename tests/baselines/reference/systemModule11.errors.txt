@@ -1,4 +1,4 @@
-tests/cases/compiler/systemModule11.ts(3,17): error TS2307: Cannot find external module 'bar'.
+tests/cases/compiler/systemModule11.ts(3,17): error TS2307: Cannot find module 'bar'.
 
 
 ==== tests/cases/compiler/systemModule11.ts (1 errors) ====
@@ -6,6 +6,6 @@ tests/cases/compiler/systemModule11.ts(3,17): error TS2307: Cannot find external
     import 'foo'
     import {f} from 'bar';
                     ~~~~~
-!!! error TS2307: Cannot find external module 'bar'.
+!!! error TS2307: Cannot find module 'bar'.
     
     f();
