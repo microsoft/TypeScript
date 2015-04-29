@@ -3641,7 +3641,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 }
             }
 
-            function emitConstructor(node: ClassLikeDeclaration, baseTypeElement: HeritageClauseElement) {
+            function emitConstructor(node: ClassLikeDeclaration, baseTypeElement: ExpressionWithTypeArguments) {
                 let saveTempFlags = tempFlags;
                 let saveTempVariables = tempVariables;
                 let saveTempParameters = tempParameters;
@@ -3656,7 +3656,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 tempParameters = saveTempParameters;
             }
 
-            function emitConstructorWorker(node: ClassLikeDeclaration, baseTypeElement: HeritageClauseElement) {
+            function emitConstructorWorker(node: ClassLikeDeclaration, baseTypeElement: ExpressionWithTypeArguments) {
                 // Check if we have property assignment inside class declaration.
                 // If there is property assignment, we need to emit constructor whether users define it or not
                 // If there is no property assignment, we can omit constructor if users do not define it

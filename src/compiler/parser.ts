@@ -308,9 +308,9 @@ module ts {
                 return visitNode(cbNode, (<ComputedPropertyName>node).expression);
             case SyntaxKind.HeritageClause:
                 return visitNodes(cbNodes, (<HeritageClause>node).types);
-            case SyntaxKind.HeritageClauseElement:
-                return visitNode(cbNode, (<HeritageClauseElement>node).expression) ||
-                    visitNodes(cbNodes, (<HeritageClauseElement>node).typeArguments);
+            case SyntaxKind.ExpressionWithTypeArguments:
+                return visitNode(cbNode, (<ExpressionWithTypeArguments>node).expression) ||
+                    visitNodes(cbNodes, (<ExpressionWithTypeArguments>node).typeArguments);
             case SyntaxKind.ExternalModuleReference:
                 return visitNode(cbNode, (<ExternalModuleReference>node).expression);
             case SyntaxKind.MissingDeclaration:
@@ -4284,15 +4284,15 @@ module ts {
                 let node = <HeritageClause>createNode(SyntaxKind.HeritageClause);
                 node.token = token;
                 nextToken();
-                node.types = parseDelimitedList(ParsingContext.HeritageClauseElement, parseHeritageClauseElement);
+                node.types = parseDelimitedList(ParsingContext.HeritageClauseElement, parseExpressionWithTypeArguments);
                 return finishNode(node);
             }
 
             return undefined;
         }
 
-        function parseHeritageClauseElement(): HeritageClauseElement {
-            let node = <HeritageClauseElement>createNode(SyntaxKind.HeritageClauseElement);
+        function parseExpressionWithTypeArguments(): ExpressionWithTypeArguments {
+            let node = <ExpressionWithTypeArguments>createNode(SyntaxKind.ExpressionWithTypeArguments);
             node.expression = parseLeftHandSideExpressionOrHigher();
             if (token === SyntaxKind.LessThanToken) {
                 node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);

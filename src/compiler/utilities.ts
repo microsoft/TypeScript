@@ -1671,16 +1671,16 @@ module ts {
 
     // Returns false if this heritage clause element's expression contains something unsupported
     // (i.e. not a name or dotted name).
-    export function isSupportedHeritageClauseElement(node: HeritageClauseElement): boolean {
-        return isSupportedHeritageClauseElementExpression(node.expression);
+    export function isSupportedExpressionWithTypeArguments(node: ExpressionWithTypeArguments): boolean {
+        return isSupportedExpressionWithTypeArgumentsRest(node.expression);
     }
 
-    function isSupportedHeritageClauseElementExpression(node: Expression): boolean {
+    function isSupportedExpressionWithTypeArgumentsRest(node: Expression): boolean {
         if (node.kind === SyntaxKind.Identifier) {
             return true;
         }
         else if (node.kind === SyntaxKind.PropertyAccessExpression) {
-            return isSupportedHeritageClauseElementExpression((<PropertyAccessExpression>node).expression);
+            return isSupportedExpressionWithTypeArgumentsRest((<PropertyAccessExpression>node).expression);
         }
         else {
             return false;
