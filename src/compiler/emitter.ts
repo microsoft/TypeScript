@@ -4992,10 +4992,18 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     }
                 }
 
+                // storage has the following structure
+                // { 
+                //     <exported-name-from-current-module> : void 0,
+                //     <exported-name-obtained-from star export in module 'm'>: 'm'
+                // }
+                // this allows to:
+                // - prevent star exports to overwrite locally exported names
+                // - bind star exported names to particular module so they won't be overwritten by other star exports
                 const exportedNamesStorageRef = makeUniqueName("exportedNames");
 
                 writeLine();
-                write(`var ${exportedNamesStorageRef} = { `);
+                write(`var ${exportedNamesStorageRef} = {`);
                 increaseIndent();
 
                 let started = false;
@@ -5036,7 +5044,26 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 writeLine();
                 write("};");
 
-                return exportedNamesStorageRef;
+                writeLine();
+
+                const exportStarFunction = makeUniqueName("exportStar");
+                
+                // define an export star helper function
+                write(`function ${exportStarFunction}(m, name) {`);
+                writeLine();
+                write(`    for(var n in m) {`);
+                writeLine();
+                // if name is not yet taken by either local names or names in other modules - reserve it
+                write(`        if (!${exportedNamesStorageRef}.hasOwnProperty(n)) ${exportedNamesStorageRef}[n] = name;`);
+                writeLine();
+                // only export value if it was exported from the module with name 'name';
+                write(`        if (${exportedNamesStorageRef}[n] === name) ${exportFunctionForFile}(n, m[n]);`);
+                writeLine();
+                write("    }");
+                writeLine();
+                write("}")
+
+                return exportStarFunction;
 
                 function writeExportedName(node: Identifier | Declaration): void {
                     if (started) {
@@ -5058,7 +5085,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                         emitDeclarationName(<Declaration>node);
                     }
 
-                    write("': true");
+                    write("': void 0");
                 }
             }
 
@@ -5234,12 +5261,12 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 emitVariableDeclarationsForImports();
                 writeLine();
                 var exportedDeclarations = processTopLevelVariableAndFunctionDeclarations(node);
-                let exportedLocalNames = emitLocalStorageForExportedNamesIfNecessary(exportedDeclarations)
+                let exportStarFunction = emitLocalStorageForExportedNamesIfNecessary(exportedDeclarations)
                 writeLine();
                 write("return {");
                 increaseIndent();
                 writeLine();
-                emitSetters(exportedLocalNames);
+                emitSetters(exportStarFunction);
                 writeLine();
                 emitExecute(node, startIndex);
                 emitTempDeclarations(/*newLine*/ true)
@@ -5248,7 +5275,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 write("}"); // return
             }
 
-            function emitSetters(exportedLocalNamesRef: string) {
+            function emitSetters(exportStarFunction: string) {
                 write("setters:[");
                 for (let i = 0; i < externalImports.length; ++i) {
                     if (i !== 0) {
@@ -5341,16 +5368,8 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                                 writeLine();
                                 // export * from 'foo'
                                 // emit as:
-                                // for (var n in _foo) exports(n, _foo[n]);
-                                // NOTE: it is safe to use name 'n' since parameter name always starts with '_'
-                                write(`for (var n in ${parameterName})`);
-                                increaseIndent();
-                                writeLine();
-                                if (exportedLocalNamesRef) {
-                                    write(`if (!${exportedLocalNamesRef}.hasOwnProperty(n))`);
-                                }
-                                write(` ${exportFunctionForFile}(n, ${parameterName}[n]);`)
-                                decreaseIndent();
+                                // exportStar(_foo, 'foo');
+                                write(`${exportStarFunction}(${parameterName}, ${getExternalModuleNameText(importNode)});`);
                             }
 
                             writeLine();

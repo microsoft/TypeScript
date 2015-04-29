@@ -39,15 +39,20 @@ System.register(['bar'], function(exports_1) {
     var x;
     function foo() { }
     exports_1("foo", foo);
-    var exportedNames_1 = { 
-        'x': true,
-        'foo': true
+    var exportedNames_1 = {
+        'x': void 0,
+        'foo': void 0
     };
+    function exportStar_1(m, name) {
+        for(var n in m) {
+            if (!exportedNames_1.hasOwnProperty(n)) exportedNames_1[n] = name;
+            if (exportedNames_1[n] === name) exports_1(n, m[n]);
+        }
+    }
     return {
         setters:[
             function (_bar_1) {
-                for (var n in _bar_1)
-                    if (!exportedNames_1.hasOwnProperty(n)) exports_1(n, _bar_1[n]);
+                exportStar_1(_bar_1, 'bar');
             }],
         execute: function() {
             exports_1("x", x);
@@ -57,15 +62,20 @@ System.register(['bar'], function(exports_1) {
 //// [file2.js]
 System.register(['bar'], function(exports_1) {
     var x, y;
-    var exportedNames_1 = { 
-        'x': true,
-        'y1': true
+    var exportedNames_1 = {
+        'x': void 0,
+        'y1': void 0
     };
+    function exportStar_1(m, name) {
+        for(var n in m) {
+            if (!exportedNames_1.hasOwnProperty(n)) exportedNames_1[n] = name;
+            if (exportedNames_1[n] === name) exports_1(n, m[n]);
+        }
+    }
     return {
         setters:[
             function (_bar_1) {
-                for (var n in _bar_1)
-                    if (!exportedNames_1.hasOwnProperty(n)) exports_1(n, _bar_1[n]);
+                exportStar_1(_bar_1, 'bar');
             }],
         execute: function() {
             exports_1("x", x);
@@ -75,10 +85,16 @@ System.register(['bar'], function(exports_1) {
 });
 //// [file3.js]
 System.register(['a', 'bar'], function(exports_1) {
-    var exportedNames_1 = { 
-        'x': true,
-        'z': true
+    var exportedNames_1 = {
+        'x': void 0,
+        'z': void 0
     };
+    function exportStar_1(m, name) {
+        for(var n in m) {
+            if (!exportedNames_1.hasOwnProperty(n)) exportedNames_1[n] = name;
+            if (exportedNames_1[n] === name) exports_1(n, m[n]);
+        }
+    }
     return {
         setters:[
             function (_a_1) {
@@ -86,8 +102,7 @@ System.register(['a', 'bar'], function(exports_1) {
                 exports_1("z", _a_1["y"]);
             },
             function (_bar_1) {
-                for (var n in _bar_1)
-                    if (!exportedNames_1.hasOwnProperty(n)) exports_1(n, _bar_1[n]);
+                exportStar_1(_bar_1, 'bar');
             }],
         execute: function() {
         }

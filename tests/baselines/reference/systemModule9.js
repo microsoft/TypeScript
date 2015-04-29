@@ -25,10 +25,16 @@ export {y as z};
 System.register(['file1', 'file2', 'file3', 'file4', 'file5', 'file6', 'file7'], function(exports_1) {
     var ns, file2_1, file3_1, file5_1, ns3;
     var x, y;
-    var exportedNames_1 = { 
-        'x': true,
-        'z': true
+    var exportedNames_1 = {
+        'x': void 0,
+        'z': void 0
     };
+    function exportStar_1(m, name) {
+        for(var n in m) {
+            if (!exportedNames_1.hasOwnProperty(n)) exportedNames_1[n] = name;
+            if (exportedNames_1[n] === name) exports_1(n, m[n]);
+        }
+    }
     return {
         setters:[
             function (_ns) {
@@ -48,8 +54,7 @@ System.register(['file1', 'file2', 'file3', 'file4', 'file5', 'file6', 'file7'],
                 ns3 = _ns3;
             },
             function (_file7_1) {
-                for (var n in _file7_1)
-                    if (!exportedNames_1.hasOwnProperty(n)) exports_1(n, _file7_1[n]);
+                exportStar_1(_file7_1, 'file7');
             }],
         execute: function() {
             ns.f();
