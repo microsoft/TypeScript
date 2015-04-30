@@ -3011,6 +3011,9 @@ module ts {
                         case SyntaxKind.TemplateMiddle:
                             return containingNodeKind === SyntaxKind.TemplateSpan; // `aa ${10} dd ${|
 
+                        case SyntaxKind.ColonToken:
+                            return containingNodeKind === SyntaxKind.BindingElement; // var {x :html|
+
                         case SyntaxKind.PublicKeyword:
                         case SyntaxKind.PrivateKeyword:
                         case SyntaxKind.ProtectedKeyword:
