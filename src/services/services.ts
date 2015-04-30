@@ -2986,7 +2986,9 @@ module ts {
                             return containingNodeKind === SyntaxKind.CallExpression               // func( |
                                 || containingNodeKind === SyntaxKind.Constructor                  // constructor( |
                                 || containingNodeKind === SyntaxKind.NewExpression                // new C(a|
-                                || containingNodeKind === SyntaxKind.ParenthesizedExpression;     // let x = (a|
+                                || containingNodeKind === SyntaxKind.ParenthesizedExpression      // let x = (a|
+                                || containingNodeKind === SyntaxKind.ParenthesizedType            // function F(pred: (a|
+                                || containingNodeKind === SyntaxKind.Parameter;                   // function F(pred: a|
 
                         case SyntaxKind.OpenBracketToken:
                             return containingNodeKind === SyntaxKind.ArrayLiteralExpression;                 // [ |
