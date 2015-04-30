@@ -300,6 +300,10 @@ module ts.server {
             });
         }
 
+        getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
+            throw new Error("Not Implemented Yet.");
+        }
+
         findReferences(fileName: string, position: number): ReferencedSymbol[]{
             // Not yet implemented.
             return [];

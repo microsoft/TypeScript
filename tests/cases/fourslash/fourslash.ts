@@ -119,6 +119,10 @@ module FourSlashInterface {
             FourSlash.currentTestState.goToDefinition(definitionIndex);
         }
 
+        public type(definitionIndex: number = 0) {
+            FourSlash.currentTestState.goToTypeDefinition(definitionIndex);
+        }
+
         public position(position: number, fileIndex?: number);
         public position(position: number, fileName?: string);
         public position(position: number, fileNameOrIndex?: any) {

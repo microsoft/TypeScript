@@ -333,6 +333,9 @@ module Harness.LanguageService {
         getDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
             return unwrapJSONCallResult(this.shim.getDefinitionAtPosition(fileName, position));
         }
+        getTypeDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[]{
+            return unwrapJSONCallResult(this.shim.getTypeDefinitionAtPosition(fileName, position));
+        }
         getReferencesAtPosition(fileName: string, position: number): ts.ReferenceEntry[] {
             return unwrapJSONCallResult(this.shim.getReferencesAtPosition(fileName, position));
         }

@@ -132,6 +132,14 @@ module ts {
 
         /**
          * Returns a JSON-encoded value of the type:
+         * { fileName: string; textSpan: { start: number; length: number}; kind: string; name: string; containerKind: string; containerName: string }
+         *
+         * Or undefined value if no definition can be found.
+         */
+        getTypeDefinitionAtPosition(fileName: string, position: number): string;
+
+        /**
+         * Returns a JSON-encoded value of the type:
          * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
          */
         getReferencesAtPosition(fileName: string, position: number): string;
@@ -554,6 +562,20 @@ module ts {
                 "getDefinitionAtPosition('" + fileName + "', " + position + ")",
                 () => {
                     return this.languageService.getDefinitionAtPosition(fileName, position);
+                });
+        }
+
+        /// GOTO Type
+
+        /**
+         * Computes the definition location of the type of the symbol
+         * at the requested position. 
+         */
+        public getTypeDefinitionAtPosition(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                "getTypeDefinitionAtPosition('" + fileName + "', " + position + ")",
+                () => {
+                    return this.languageService.getTypeDefinitionAtPosition(fileName, position);
                 });
         }
 
