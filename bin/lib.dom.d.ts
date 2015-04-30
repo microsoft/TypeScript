@@ -61,6 +61,139 @@ interface ArrayBufferView {
     byteOffset: number;
 }
 
+interface DataView {
+    buffer: ArrayBuffer;
+    byteLength: number;
+    byteOffset: number;
+    /**
+      * Gets the Float32 value at the specified byte offset from the start of the view. There is 
+      * no alignment constraint; multi-byte values may be fetched from any offset. 
+      * @param byteOffset The place in the buffer at which the value should be retrieved.
+      */
+    getFloat32(byteOffset: number, littleEndian: boolean): number;
+
+    /**
+      * Gets the Float64 value at the specified byte offset from the start of the view. There is
+      * no alignment constraint; multi-byte values may be fetched from any offset. 
+      * @param byteOffset The place in the buffer at which the value should be retrieved.
+      */
+    getFloat64(byteOffset: number, littleEndian: boolean): number;
+
+    /**
+      * Gets the Int8 value at the specified byte offset from the start of the view. There is 
+      * no alignment constraint; multi-byte values may be fetched from any offset. 
+      * @param byteOffset The place in the buffer at which the value should be retrieved.
+      */
+    getInt8(byteOffset: number): number;
+
+    /**
+      * Gets the Int16 value at the specified byte offset from the start of the view. There is 
+      * no alignment constraint; multi-byte values may be fetched from any offset. 
+      * @param byteOffset The place in the buffer at which the value should be retrieved.
+      */
+    getInt16(byteOffset: number, littleEndian: boolean): number;
+    /**
+      * Gets the Int32 value at the specified byte offset from the start of the view. There is 
+      * no alignment constraint; multi-byte values may be fetched from any offset. 
+      * @param byteOffset The place in the buffer at which the value should be retrieved.
+      */
+    getInt32(byteOffset: number, littleEndian: boolean): number;
+
+    /**
+      * Gets the Uint8 value at the specified byte offset from the start of the view. There is 
+      * no alignment constraint; multi-byte values may be fetched from any offset. 
+      * @param byteOffset The place in the buffer at which the value should be retrieved.
+      */
+    getUint8(byteOffset: number): number;
+
+    /**
+      * Gets the Uint16 value at the specified byte offset from the start of the view. There is 
+      * no alignment constraint; multi-byte values may be fetched from any offset. 
+      * @param byteOffset The place in the buffer at which the value should be retrieved.
+      */
+    getUint16(byteOffset: number, littleEndian: boolean): number;
+
+    /**
+      * Gets the Uint32 value at the specified byte offset from the start of the view. There is 
+      * no alignment constraint; multi-byte values may be fetched from any offset. 
+      * @param byteOffset The place in the buffer at which the value should be retrieved.
+      */
+    getUint32(byteOffset: number, littleEndian: boolean): number;
+
+    /**
+      * Stores an Float32 value at the specified byte offset from the start of the view. 
+      * @param byteOffset The place in the buffer at which the value should be set.
+      * @param value The value to set.
+      * @param littleEndian If false or undefined, a big-endian value should be written, 
+      * otherwise a little-endian value should be written.
+      */
+    setFloat32(byteOffset: number, value: number, littleEndian: boolean): void;
+
+    /**
+      * Stores an Float64 value at the specified byte offset from the start of the view. 
+      * @param byteOffset The place in the buffer at which the value should be set.
+      * @param value The value to set.
+      * @param littleEndian If false or undefined, a big-endian value should be written, 
+      * otherwise a little-endian value should be written.
+      */
+    setFloat64(byteOffset: number, value: number, littleEndian: boolean): void;
+
+    /**
+      * Stores an Int8 value at the specified byte offset from the start of the view. 
+      * @param byteOffset The place in the buffer at which the value should be set.
+      * @param value The value to set.
+      */
+    setInt8(byteOffset: number, value: number): void;
+
+    /**
+      * Stores an Int16 value at the specified byte offset from the start of the view. 
+      * @param byteOffset The place in the buffer at which the value should be set.
+      * @param value The value to set.
+      * @param littleEndian If false or undefined, a big-endian value should be written, 
+      * otherwise a little-endian value should be written.
+      */
+    setInt16(byteOffset: number, value: number, littleEndian: boolean): void;
+
+    /**
+      * Stores an Int32 value at the specified byte offset from the start of the view. 
+      * @param byteOffset The place in the buffer at which the value should be set.
+      * @param value The value to set.
+      * @param littleEndian If false or undefined, a big-endian value should be written, 
+      * otherwise a little-endian value should be written.
+      */
+    setInt32(byteOffset: number, value: number, littleEndian: boolean): void;
+
+    /**
+      * Stores an Uint8 value at the specified byte offset from the start of the view. 
+      * @param byteOffset The place in the buffer at which the value should be set.
+      * @param value The value to set.
+      */
+    setUint8(byteOffset: number, value: number): void;
+
+    /**
+      * Stores an Uint16 value at the specified byte offset from the start of the view. 
+      * @param byteOffset The place in the buffer at which the value should be set.
+      * @param value The value to set.
+      * @param littleEndian If false or undefined, a big-endian value should be written, 
+      * otherwise a little-endian value should be written.
+      */
+    setUint16(byteOffset: number, value: number, littleEndian: boolean): void;
+
+    /**
+      * Stores an Uint32 value at the specified byte offset from the start of the view. 
+      * @param byteOffset The place in the buffer at which the value should be set.
+      * @param value The value to set.
+      * @param littleEndian If false or undefined, a big-endian value should be written, 
+      * otherwise a little-endian value should be written.
+      */
+    setUint32(byteOffset: number, value: number, littleEndian: boolean): void;
+}
+
+interface DataViewConstructor {
+    new (buffer: ArrayBuffer, byteOffset?: number, byteLength?: number): DataView;
+}
+declare var DataView: DataViewConstructor;
+
 /**
   * A typed array of 8-bit integer values. The contents are initialized to 0. If the requested 
   * number of bytes could not be allocated an exception is raised.
@@ -14687,11 +14820,13 @@ interface DocumentEvent {
     createEvent(eventInterface:"CloseEvent"): CloseEvent;
     createEvent(eventInterface:"CommandEvent"): CommandEvent;
     createEvent(eventInterface:"CompositionEvent"): CompositionEvent;
+    createEvent(eventInterface: "CustomEvent"): CustomEvent;
     createEvent(eventInterface:"DeviceMotionEvent"): DeviceMotionEvent;
     createEvent(eventInterface:"DeviceOrientationEvent"): DeviceOrientationEvent;
     createEvent(eventInterface:"DragEvent"): DragEvent;
     createEvent(eventInterface:"ErrorEvent"): ErrorEvent;
     createEvent(eventInterface:"Event"): Event;
+    createEvent(eventInterface:"Events"): Event;
     createEvent(eventInterface:"FocusEvent"): FocusEvent;
     createEvent(eventInterface:"GamepadEvent"): GamepadEvent;
     createEvent(eventInterface:"HashChangeEvent"): HashChangeEvent;
@@ -14706,8 +14841,12 @@ interface DocumentEvent {
     createEvent(eventInterface:"MSSiteModeEvent"): MSSiteModeEvent;
     createEvent(eventInterface:"MessageEvent"): MessageEvent;
     createEvent(eventInterface:"MouseEvent"): MouseEvent;
+    createEvent(eventInterface:"MouseEvents"): MouseEvent;
     createEvent(eventInterface:"MouseWheelEvent"): MouseWheelEvent;
+    createEvent(eventInterface:"MSGestureEvent"): MSGestureEvent;
+    createEvent(eventInterface:"MSPointerEvent"): MSPointerEvent;
     createEvent(eventInterface:"MutationEvent"): MutationEvent;
+    createEvent(eventInterface:"MutationEvents"): MutationEvent;
     createEvent(eventInterface:"NavigationCompletedEvent"): NavigationCompletedEvent;
     createEvent(eventInterface:"NavigationEvent"): NavigationEvent;
     createEvent(eventInterface:"NavigationEventWithReferrer"): NavigationEventWithReferrer;
@@ -14718,6 +14857,7 @@ interface DocumentEvent {
     createEvent(eventInterface:"PopStateEvent"): PopStateEvent;
     createEvent(eventInterface:"ProgressEvent"): ProgressEvent;
     createEvent(eventInterface:"SVGZoomEvent"): SVGZoomEvent;
+    createEvent(eventInterface:"SVGZoomEvents"): SVGZoomEvent;
     createEvent(eventInterface:"ScriptNotifyEvent"): ScriptNotifyEvent;
     createEvent(eventInterface:"StorageEvent"): StorageEvent;
     createEvent(eventInterface:"TextEvent"): TextEvent;
@@ -14725,6 +14865,7 @@ interface DocumentEvent {
     createEvent(eventInterface:"TrackEvent"): TrackEvent;
     createEvent(eventInterface:"TransitionEvent"): TransitionEvent;
     createEvent(eventInterface:"UIEvent"): UIEvent;
+    createEvent(eventInterface:"UIEvents"): UIEvent;
     createEvent(eventInterface:"UnviewableContentIdentifiedEvent"): UnviewableContentIdentifiedEvent;
     createEvent(eventInterface:"WebGLContextEvent"): WebGLContextEvent;
     createEvent(eventInterface:"WheelEvent"): WheelEvent;
