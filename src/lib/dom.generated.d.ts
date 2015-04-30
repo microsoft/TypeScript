@@ -12332,11 +12332,13 @@ interface DocumentEvent {
     createEvent(eventInterface:"CloseEvent"): CloseEvent;
     createEvent(eventInterface:"CommandEvent"): CommandEvent;
     createEvent(eventInterface:"CompositionEvent"): CompositionEvent;
+    createEvent(eventInterface: "CustomEvent"): CustomEvent;
     createEvent(eventInterface:"DeviceMotionEvent"): DeviceMotionEvent;
     createEvent(eventInterface:"DeviceOrientationEvent"): DeviceOrientationEvent;
     createEvent(eventInterface:"DragEvent"): DragEvent;
     createEvent(eventInterface:"ErrorEvent"): ErrorEvent;
     createEvent(eventInterface:"Event"): Event;
+    createEvent(eventInterface:"Events"): Event;
     createEvent(eventInterface:"FocusEvent"): FocusEvent;
     createEvent(eventInterface:"GamepadEvent"): GamepadEvent;
     createEvent(eventInterface:"HashChangeEvent"): HashChangeEvent;
@@ -12351,8 +12353,12 @@ interface DocumentEvent {
     createEvent(eventInterface:"MSSiteModeEvent"): MSSiteModeEvent;
     createEvent(eventInterface:"MessageEvent"): MessageEvent;
     createEvent(eventInterface:"MouseEvent"): MouseEvent;
+    createEvent(eventInterface:"MouseEvents"): MouseEvent;
     createEvent(eventInterface:"MouseWheelEvent"): MouseWheelEvent;
+    createEvent(eventInterface:"MSGestureEvent"): MSGestureEvent;
+    createEvent(eventInterface:"MSPointerEvent"): MSPointerEvent;
     createEvent(eventInterface:"MutationEvent"): MutationEvent;
+    createEvent(eventInterface:"MutationEvents"): MutationEvent;
     createEvent(eventInterface:"NavigationCompletedEvent"): NavigationCompletedEvent;
     createEvent(eventInterface:"NavigationEvent"): NavigationEvent;
     createEvent(eventInterface:"NavigationEventWithReferrer"): NavigationEventWithReferrer;
@@ -12363,6 +12369,7 @@ interface DocumentEvent {
     createEvent(eventInterface:"PopStateEvent"): PopStateEvent;
     createEvent(eventInterface:"ProgressEvent"): ProgressEvent;
     createEvent(eventInterface:"SVGZoomEvent"): SVGZoomEvent;
+    createEvent(eventInterface:"SVGZoomEvents"): SVGZoomEvent;
     createEvent(eventInterface:"ScriptNotifyEvent"): ScriptNotifyEvent;
     createEvent(eventInterface:"StorageEvent"): StorageEvent;
     createEvent(eventInterface:"TextEvent"): TextEvent;
@@ -12370,6 +12377,7 @@ interface DocumentEvent {
     createEvent(eventInterface:"TrackEvent"): TrackEvent;
     createEvent(eventInterface:"TransitionEvent"): TransitionEvent;
     createEvent(eventInterface:"UIEvent"): UIEvent;
+    createEvent(eventInterface:"UIEvents"): UIEvent;
     createEvent(eventInterface:"UnviewableContentIdentifiedEvent"): UnviewableContentIdentifiedEvent;
     createEvent(eventInterface:"WebGLContextEvent"): WebGLContextEvent;
     createEvent(eventInterface:"WheelEvent"): WheelEvent;
