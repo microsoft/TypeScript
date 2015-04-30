@@ -651,8 +651,12 @@ module FourSlashInterface {
             return getClassification("typeParameterName", text, position);
         }
 
-        export function typeAlias(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
-            return getClassification("typeAlias", text, position);
+        export function parameterName(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("parameterName", text, position);
+        }
+
+        export function typeAliasName(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("typeAliasName", text, position);
         }
 
         function getClassification(type: string, text: string, position?: number) {
