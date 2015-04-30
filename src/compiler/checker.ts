@@ -3422,7 +3422,7 @@ module ts {
                 // The expression is processed as an identifier expression (section 4.3)
                 // or property access expression(section 4.10),
                 // the widened type(section 3.9) of which becomes the result.
-                links.resolvedType = getWidenedType(checkExpressionOrQualifiedName(node.exprName));
+                links.resolvedType = getWidenedType(checkExpressionOrQualifiedName(node.exprName.expression));
             }
             return links.resolvedType;
         }
@@ -8409,9 +8409,6 @@ module ts {
         }
 
         function checkTypeQuery(node: TypeQueryNode) {
-            // Grammar checking
-            checkGrammarTypeQuery(node);
-
             getTypeFromTypeQueryNode(node);
         }
 
@@ -12160,20 +12157,6 @@ module ts {
                 let errorReport = reportStrictModeGrammarErrorInClassDeclaration(<Identifier>node, Diagnostics.Type_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode, nameText) ||
                     grammarErrorOnNode(node, Diagnostics.Type_expected_0_is_a_reserved_word_in_strict_mode, nameText);
                 return errorReport;
-            }
-            return false;
-        }
-
-        function checkGrammarTypeQuery(node: TypeQueryNode): boolean {
-            return checkGrammarTypeQueryExpression(node.exprName);
-        }
-
-        function checkGrammarTypeQueryExpression(node: LeftHandSideExpression): boolean {
-            if (node.kind === SyntaxKind.PropertyAccessExpression) {
-                return checkGrammarTypeQueryExpression((<PropertyAccessExpression>node).expression);
-            }
-            if (node.kind !== SyntaxKind.ThisKeyword && node.kind !== SyntaxKind.SuperKeyword && node.kind !== SyntaxKind.Identifier) {
-                return grammarErrorOnNode(node, Diagnostics.Identifier_expected);
             }
             return false;
         }

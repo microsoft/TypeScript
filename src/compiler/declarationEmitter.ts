@@ -404,7 +404,7 @@ module ts {
                 write("typeof ");
 
                 //if (isValidTypeQueryExpression(type.exprName)) {
-                    emitEntityName(type.exprName);
+                    emitEntityName(type.exprName.expression);
                 //}
             }
 

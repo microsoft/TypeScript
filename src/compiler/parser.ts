@@ -1764,7 +1764,7 @@ module ts {
         function parseTypeQuery(): TypeQueryNode {
             let node = <TypeQueryNode>createNode(SyntaxKind.TypeQuery);
             parseExpected(SyntaxKind.TypeOfKeyword);
-            node.exprName = parseLeftHandSideExpressionOrHigher();
+            node.exprName = parseExpressionWithTypeArguments();
             return finishNode(node);
         }
 
