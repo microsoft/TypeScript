@@ -8283,16 +8283,21 @@ module ts {
                 if (node.type) {
                     if (languageVersion >= ScriptTarget.ES6 && isSyntacticallyValidGenerator(node)) {
                         let returnType = getTypeFromTypeNode(node.type);
-                        let generatorElementType = getElementTypeFromIterableIterator(returnType, /*errorNode*/ undefined) || anyType;
-                        let iterableIteratorInstantiation = createIterableIteratorType(generatorElementType);
+                        if (returnType === voidType) {
+                            error(node.type, Diagnostics.A_generator_cannot_have_a_void_type_annotation);
+                        }
+                        else {
+                            let generatorElementType = getElementTypeFromIterableIterator(returnType, /*errorNode*/ undefined) || anyType;
+                            let iterableIteratorInstantiation = createIterableIteratorType(generatorElementType);
 
-                        // Naively, one could check that IterableIterator<any> is assignable to the return type annotation.
-                        // However, that would not catch the error in the following case.
-                        //
-                        //    interface BadGenerator extends Iterable<number>, Iterator<string> { }
-                        //    function* g(): BadGenerator { } // Iterable and Iterator have different types!
-                        //
-                        checkTypeAssignableTo(iterableIteratorInstantiation, returnType, node.type);
+                            // Naively, one could check that IterableIterator<any> is assignable to the return type annotation.
+                            // However, that would not catch the error in the following case.
+                            //
+                            //    interface BadGenerator extends Iterable<number>, Iterator<string> { }
+                            //    function* g(): BadGenerator { } // Iterable and Iterator have different types!
+                            //
+                            checkTypeAssignableTo(iterableIteratorInstantiation, returnType, node.type);
+                        }
                     }
                 }
             }

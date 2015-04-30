@@ -368,6 +368,7 @@ module ts {
         A_rest_element_cannot_contain_a_binding_pattern: { code: 2501, category: DiagnosticCategory.Error, key: "A rest element cannot contain a binding pattern." },
         A_return_statement_cannot_specify_a_value_in_a_generator_function: { code: 2502, category: DiagnosticCategory.Error, key: "A return statement cannot specify a value in a generator function." },
         No_best_common_type_exists_among_yield_expressions: { code: 2503, category: DiagnosticCategory.Error, key: "No best common type exists among yield expressions." },
+        A_generator_cannot_have_a_void_type_annotation: { code: 2504, category: DiagnosticCategory.Error, key: "A generator cannot have a 'void' type annotation." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: { code: 4004, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported interface has or is using private name '{1}'." },
