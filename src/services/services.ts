@@ -3460,19 +3460,6 @@ module ts {
             return ScriptElementKind.unknown;
         }
 
-        function getTypeKind(type: Type): string {
-            let flags = type.getFlags();
-
-            if (flags & TypeFlags.Enum) return ScriptElementKind.enumElement;
-            if (flags & TypeFlags.Class) return ScriptElementKind.classElement;
-            if (flags & TypeFlags.Interface) return ScriptElementKind.interfaceElement;
-            if (flags & TypeFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
-            if (flags & TypeFlags.Intrinsic) return ScriptElementKind.primitiveType;
-            if (flags & TypeFlags.StringLiteral) return ScriptElementKind.primitiveType;
-
-            return ScriptElementKind.unknown;
-        }
-
         function getSymbolModifiers(symbol: Symbol): string {
             return symbol && symbol.declarations && symbol.declarations.length > 0
                 ? getNodeModifiers(symbol.declarations[0])
@@ -3887,6 +3874,72 @@ module ts {
             };
         }
 
+        function getDefintionFromSymbol(symbol: Symbol, node: Node): DefinitionInfo[]{
+            let typeChecker = program.getTypeChecker();
+            let result: DefinitionInfo[] = [];
+            let declarations = symbol.getDeclarations();
+            let symbolName = typeChecker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
+            let symbolKind = getSymbolKind(symbol, node);
+            let containerSymbol = symbol.parent;
+            let containerName = containerSymbol ? typeChecker.symbolToString(containerSymbol, node) : "";
+
+            if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
+                !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
+                // Just add all the declarations. 
+                forEach(declarations, declaration => {
+                    result.push(createDefinitionInfo(declaration, symbolKind, symbolName, containerName));
+                });
+            }
+
+            return result;
+
+            function tryAddConstructSignature(symbol: Symbol, location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+                // Applicable only if we are in a new expression, or we are on a constructor declaration
+                // and in either case the symbol has a construct signature definition, i.e. class
+                if (isNewExpressionTarget(location) || location.kind === SyntaxKind.ConstructorKeyword) {
+                    if (symbol.flags & SymbolFlags.Class) {
+                        let classDeclaration = <ClassDeclaration>symbol.getDeclarations()[0];
+                        Debug.assert(classDeclaration && classDeclaration.kind === SyntaxKind.ClassDeclaration);
+
+                        return tryAddSignature(classDeclaration.members, /*selectConstructors*/ true, symbolKind, symbolName, containerName, result);
+                    }
+                }
+                return false;
+            }
+
+            function tryAddCallSignature(symbol: Symbol, location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+                if (isCallExpressionTarget(location) || isNewExpressionTarget(location) || isNameOfFunctionDeclaration(location)) {
+                    return tryAddSignature(symbol.declarations, /*selectConstructors*/ false, symbolKind, symbolName, containerName, result);
+                }
+                return false;
+            }
+
+            function tryAddSignature(signatureDeclarations: Declaration[], selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+                let declarations: Declaration[] = [];
+                let definition: Declaration;
+
+                forEach(signatureDeclarations, d => {
+                    if ((selectConstructors && d.kind === SyntaxKind.Constructor) ||
+                        (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.MethodDeclaration || d.kind === SyntaxKind.MethodSignature))) {
+                        declarations.push(d);
+                        if ((<FunctionLikeDeclaration>d).body) definition = d;
+                    }
+                });
+
+                if (definition) {
+                    result.push(createDefinitionInfo(definition, symbolKind, symbolName, containerName));
+                    return true;
+                }
+                else if (declarations.length) {
+                    result.push(createDefinitionInfo(declarations[declarations.length - 1], symbolKind, symbolName, containerName));
+                    return true;
+                }
+
+                return false;
+            }
+        
+        }
+
         /// Goto definition
         function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
@@ -3961,67 +4014,7 @@ module ts {
                     declaration => createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
             }
 
-            let result: DefinitionInfo[] = [];
-            let declarations = symbol.getDeclarations();
-            let symbolName = typeChecker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-            let symbolKind = getSymbolKind(symbol, node);
-            let containerSymbol = symbol.parent;
-            let containerName = containerSymbol ? typeChecker.symbolToString(containerSymbol, node) : "";
-
-            if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
-                !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
-                // Just add all the declarations. 
-                forEach(declarations, declaration => {
-                    result.push(createDefinitionInfo(declaration, symbolKind, symbolName, containerName));
-                });
-            }
-
-            return result;
-
-            function tryAddConstructSignature(symbol: Symbol, location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
-                // Applicable only if we are in a new expression, or we are on a constructor declaration
-                // and in either case the symbol has a construct signature definition, i.e. class
-                if (isNewExpressionTarget(location) || location.kind === SyntaxKind.ConstructorKeyword) {
-                    if (symbol.flags & SymbolFlags.Class) {
-                        let classDeclaration = <ClassDeclaration>symbol.getDeclarations()[0];
-                        Debug.assert(classDeclaration && classDeclaration.kind === SyntaxKind.ClassDeclaration);
-
-                        return tryAddSignature(classDeclaration.members, /*selectConstructors*/ true, symbolKind, symbolName, containerName, result);
-                    }
-                }
-                return false;
-            }
-
-            function tryAddCallSignature(symbol: Symbol, location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
-                if (isCallExpressionTarget(location) || isNewExpressionTarget(location) || isNameOfFunctionDeclaration(location)) {
-                    return tryAddSignature(symbol.declarations, /*selectConstructors*/ false, symbolKind, symbolName, containerName, result);
-                }
-                return false;
-            }
-
-            function tryAddSignature(signatureDeclarations: Declaration[], selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
-                let declarations: Declaration[] = [];
-                let definition: Declaration;
-
-                forEach(signatureDeclarations, d => {
-                    if ((selectConstructors && d.kind === SyntaxKind.Constructor) ||
-                        (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.MethodDeclaration || d.kind === SyntaxKind.MethodSignature))) {
-                        declarations.push(d);
-                        if ((<FunctionLikeDeclaration>d).body) definition = d;
-                    }
-                });
-
-                if (definition) {
-                    result.push(createDefinitionInfo(definition, symbolKind, symbolName, containerName));
-                    return true;
-                }
-                else if (declarations.length) {
-                    result.push(createDefinitionInfo(declarations[declarations.length - 1], symbolKind, symbolName, containerName));
-                    return true;
-                }
-
-                return false;
-            }
+            return getDefintionFromSymbol(symbol, node);
         }
 
         function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
