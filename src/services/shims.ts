@@ -326,18 +326,16 @@ module ts {
         }
     }
 
-    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any): any {
-        return action();
-
-        if (logger) {
+    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any, noPerfLogging: boolean): any {
+        if (!noPerfLogging) {
             logger.log(actionDescription);
+            var start = Date.now();
         }
 
-        var start = Date.now();
         var result = action();
-        var end = Date.now();
 
-        if (logger) {
+        if (!noPerfLogging) {
+            var end = Date.now();
             logger.log(actionDescription + " completed in " + (end - start) + " msec");
             if (typeof (result) === "string") {
                 var str = <string>result;
@@ -351,9 +349,9 @@ module ts {
         return result;
     }
 
-    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any): string {
+    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any, noPerfLogging: boolean): string {
         try {
-            var result = simpleForwardCall(logger, actionDescription, action);
+            var result = simpleForwardCall(logger, actionDescription, action, noPerfLogging);
             return JSON.stringify({ result: result });
         }
         catch (err) {
@@ -401,7 +399,7 @@ module ts {
         }
 
         public forwardJSONCall(actionDescription: string, action: () => any): string {
-            return forwardJSONCall(this.logger, actionDescription, action);
+            return forwardJSONCall(this.logger, actionDescription, action, /*noPerfLogging:*/ false);
         }
 
         /// DISPOSE
@@ -777,14 +775,15 @@ module ts {
     class ClassifierShimObject extends ShimBase implements ClassifierShim {
         public classifier: Classifier;
 
-        constructor(factory: ShimFactory) {
+        constructor(factory: ShimFactory, private logger: Logger) {
             super(factory);
             this.classifier = createClassifier();
         }
 
         public getLexicalClassifications2(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string {
-            return forwardJSONCall(/*logger:*/ undefined, "getLexicalClassifications2",
-                () => convertClassifications(this.classifier.getLexicalClassifications2(text, lexState, syntacticClassifierAbsent)));
+            return forwardJSONCall(this.logger, "getLexicalClassifications2",
+                () => convertClassifications(this.classifier.getLexicalClassifications2(text, lexState, syntacticClassifierAbsent)),
+                /*noPerfLogging:*/ true);
         }
 
         /// COLORIZATION
@@ -808,7 +807,7 @@ module ts {
         }
 
         private forwardJSONCall(actionDescription: string, action: () => any): any {
-            return forwardJSONCall(this.logger, actionDescription, action);
+            return forwardJSONCall(this.logger, actionDescription, action, /*noPerfLogging:*/ false);
         }
 
         public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
@@ -901,7 +900,7 @@ module ts {
 
         public createClassifierShim(logger: Logger): ClassifierShim {
             try {
-                return new ClassifierShimObject(this);
+                return new ClassifierShimObject(this, logger);
             }
             catch (err) {
                 logInternalError(logger, err);
