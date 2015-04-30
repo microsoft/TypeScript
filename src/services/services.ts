@@ -3138,6 +3138,9 @@ module ts {
                                 (previousToken.parent && previousToken.parent.parent &&
                                     previousToken.parent.parent.kind === SyntaxKind.ArrayBindingPattern);  // var [ ...z|
 
+                        case SyntaxKind.TypeKeyword:  // type htm|
+                            return true;
+
                         case SyntaxKind.PublicKeyword:
                         case SyntaxKind.PrivateKeyword:
                         case SyntaxKind.ProtectedKeyword:
