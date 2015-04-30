@@ -1004,6 +1004,14 @@ module ts {
         amdModuleName: string;
         referencedFiles: FileReference[];
 
+        /**
+         * lib.d.ts should have a reference comment like
+         *
+         *  /// <reference no-default-lib="true"/>
+         *
+         * which serves the purpose of ignoring the file in certain ways in the
+         * presence of compiler options like '--noLib' and '--noLibCheck'.
+         */
         hasNoDefaultLib: boolean;
 
         languageVersion: ScriptTarget;
@@ -1042,7 +1050,7 @@ module ts {
         (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
     }
 
-    export interface Program extends ScriptReferenceHost {
+    export interface Program extends ScriptReferenceHost, TypeCheckerHost {
         /**
          * Get a list of files in the program
          */
