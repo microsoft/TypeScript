@@ -171,7 +171,7 @@
         "category": "Error",
         "code": 1061
     },
-    "An export assignment cannot be used in an internal module.": {
+    "An export assignment cannot be used in a namespace.": {
         "category": "Error",
         "code": 1063
     },
@@ -415,11 +415,11 @@
         "category": "Error",
         "code": 1146
     },
-    "Import declarations in an internal module cannot reference an external module.": {
+    "Import declarations in a namespace cannot reference a module.": {
         "category": "Error",
         "code": 1147
     },
-    "Cannot compile external modules unless the '--module' flag is provided.": {
+    "Cannot compile modules unless the '--module' flag is provided.": {
         "category": "Error",
         "code": 1148
     },
@@ -587,7 +587,7 @@
         "category": "Error",
         "code": 1191
     },
-    "External module '{0}' has no default export.": {
+    "Module '{0}' has no default export.": {
         "category": "Error",
         "code": 1192
     },
@@ -595,7 +595,7 @@
         "category": "Error",
         "code": 1193
     },
-    "Export declarations are not permitted in an internal module.": {
+    "Export declarations are not permitted in a namespace.": {
         "category": "Error",
         "code": 1194
     },
@@ -631,7 +631,7 @@
         "category": "Error",
         "code": 1203
     },
-    "Cannot compile external modules into amd or commonjs when targeting es6 or higher.": {
+    "Cannot compile modules into 'commonjs', 'amd', 'system' or 'umd' when targeting 'ES6' or higher.": {
         "category": "Error",
         "code": 1204
     },
@@ -647,7 +647,7 @@
         "category": "Error",
         "code": 1207
     },
-    "Cannot compile non-external modules when the '--separateCompilation' flag is provided.": {
+    "Cannot compile namespaces when the '--separateCompilation' flag is provided.": {
         "category": "Error",
         "code": 1208
     },
@@ -671,10 +671,6 @@
         "category": "Error",
         "code": 1213
     },
-    "Identifier expected. '{0}' is a reserved word in strict mode. External Module is automatically in strict mode.": {
-        "category": "Error",
-        "code": 1214
-    },
     "Type expected. '{0}' is a reserved word in strict mode": {
         "category": "Error",
         "code": 1215
@@ -683,10 +679,11 @@
         "category": "Error",
         "code": 1216
     },
-    "Type expected. '{0}' is a reserved word in strict mode. Module is automatically in strict mode.": {
+    "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
-        "code": 1217
+        "code": 1218
     },
+
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -711,11 +708,11 @@
         "category": "Error",
         "code": 2305
     },
-    "File '{0}' is not an external module.": {
+    "File '{0}' is not a module.": {
         "category": "Error",
         "code": 2306
     },
-    "Cannot find external module '{0}'.": {
+    "Cannot find module '{0}'.": {
         "category": "Error",
         "code": 2307
     },
@@ -807,7 +804,7 @@
         "category": "Error",
         "code": 2330
     },
-    "'this' cannot be referenced in a module body.": {
+    "'this' cannot be referenced in a module or namespace body.": {
         "category": "Error",
         "code": 2331
     },
@@ -1175,19 +1172,19 @@
         "category": "Error",
         "code": 2432
     },
-    "A module declaration cannot be in a different file from a class or function with which it is merged": {
+    "A namespace declaration cannot be in a different file from a class or function with which it is merged": {
         "category": "Error",
         "code": 2433
     },
-    "A module declaration cannot be located prior to a class or function with which it is merged": {
+    "A namespace declaration cannot be located prior to a class or function with which it is merged": {
         "category": "Error",
         "code": 2434
     },
-    "Ambient external modules cannot be nested in other modules.": {
+    "Ambient modules cannot be nested in other modules.": {
         "category": "Error",
         "code": 2435
     },
-    "Ambient external module declaration cannot specify relative module name.": {
+    "Ambient module declaration cannot specify relative module name.": {
         "category": "Error",
         "code": 2436
     },
@@ -1199,7 +1196,7 @@
         "category": "Error",
         "code": 2438
     },
-    "Import or export declaration in an ambient external module declaration cannot reference external module through relative external module name.": {
+    "Import or export declaration in an ambient module declaration cannot reference module through relative module name.": {
         "category": "Error",
         "code": 2439
     },
@@ -1207,7 +1204,7 @@
         "category": "Error",
         "code": 2440
     },
-    "Duplicate identifier '{0}'. Compiler reserves name '{1}' in top level scope of an external module.": {
+    "Duplicate identifier '{0}'. Compiler reserves name '{1}' in top level scope of a module.": {
         "category": "Error",
         "code": 2441
     },
@@ -1423,11 +1420,11 @@
         "category": "Error",
         "code": 2496
     },
-    "External module '{0}' resolves to a non-module entity and cannot be imported using this construct.": {
+    "Module '{0}' resolves to a non-module entity and cannot be imported using this construct.": {
         "category": "Error",
         "code": 2497
     },
-    "External module '{0}' uses 'export =' and cannot be used with 'export *'.": {
+    "Module '{0}' uses 'export =' and cannot be used with 'export *'.": {
         "category": "Error",
         "code": 2498
     },
@@ -1744,6 +1741,10 @@
         "category": "Error",
         "code": 5013
     },
+    "Failed to parse file '{0}': {1}.": {
+        "category": "Error",
+        "code": 5014
+    },
     "Unknown compiler option '{0}'.": {
         "category": "Error",
         "code": 5023
@@ -1796,6 +1797,23 @@
         "category": "Error",
         "code": 5047
     },
+    "Option 'sourceMap' cannot be specified with option 'inlineSourceMap'.": {
+        "category": "Error",
+        "code": 5048
+    },
+    "Option 'sourceRoot' cannot be specified with option 'inlineSourceMap'.": {
+        "category": "Error",
+        "code": 5049
+    },
+    "Option 'mapRoot' cannot be specified with option 'inlineSourceMap'.": {
+        "category": "Error",
+        "code": 5050
+    },
+     "Option 'inlineSources' can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
+        "category": "Error",
+        "code": 5051
+    },
+
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -1840,7 +1858,7 @@
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'commonjs' or 'amd'": {
+    "Specify module code generation: 'commonjs', 'amd', 'system' or 'umd'": {
         "category": "Message",
         "code": 6016
     },
@@ -1924,11 +1942,11 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs' or 'amd'.": {
+    "Argument for '--module' option must be 'commonjs', 'amd', 'system' or 'umd'.": {
         "category": "Error",
         "code": 6046
     },
-    "Argument for '--target' option must be 'es3', 'es5', or 'es6'.": {
+    "Argument for '--target' option must be 'ES3', 'ES5', or 'ES6'.": {
         "category": "Error",
         "code": 6047
     },

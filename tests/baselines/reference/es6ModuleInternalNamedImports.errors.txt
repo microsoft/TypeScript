@@ -1,11 +1,11 @@
-tests/cases/compiler/es6ModuleInternalNamedImports.ts(23,5): error TS1194: Export declarations are not permitted in an internal module.
-tests/cases/compiler/es6ModuleInternalNamedImports.ts(24,5): error TS1194: Export declarations are not permitted in an internal module.
-tests/cases/compiler/es6ModuleInternalNamedImports.ts(25,5): error TS1194: Export declarations are not permitted in an internal module.
-tests/cases/compiler/es6ModuleInternalNamedImports.ts(26,5): error TS1194: Export declarations are not permitted in an internal module.
-tests/cases/compiler/es6ModuleInternalNamedImports.ts(27,5): error TS1194: Export declarations are not permitted in an internal module.
-tests/cases/compiler/es6ModuleInternalNamedImports.ts(28,5): error TS1194: Export declarations are not permitted in an internal module.
-tests/cases/compiler/es6ModuleInternalNamedImports.ts(29,5): error TS1194: Export declarations are not permitted in an internal module.
-tests/cases/compiler/es6ModuleInternalNamedImports.ts(30,5): error TS1194: Export declarations are not permitted in an internal module.
+tests/cases/compiler/es6ModuleInternalNamedImports.ts(23,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es6ModuleInternalNamedImports.ts(24,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es6ModuleInternalNamedImports.ts(25,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es6ModuleInternalNamedImports.ts(26,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es6ModuleInternalNamedImports.ts(27,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es6ModuleInternalNamedImports.ts(28,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es6ModuleInternalNamedImports.ts(29,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es6ModuleInternalNamedImports.ts(30,5): error TS1194: Export declarations are not permitted in a namespace.
 
 
 ==== tests/cases/compiler/es6ModuleInternalNamedImports.ts (8 errors) ====
@@ -33,27 +33,27 @@ tests/cases/compiler/es6ModuleInternalNamedImports.ts(30,5): error TS1194: Expor
         // Reexports
         export {M_V as v};
         ~~~~~~~~~~~~~~~~~~
-!!! error TS1194: Export declarations are not permitted in an internal module.
+!!! error TS1194: Export declarations are not permitted in a namespace.
         export {M_I as i};
         ~~~~~~~~~~~~~~~~~~
-!!! error TS1194: Export declarations are not permitted in an internal module.
+!!! error TS1194: Export declarations are not permitted in a namespace.
         export {M_C as c};
         ~~~~~~~~~~~~~~~~~~
-!!! error TS1194: Export declarations are not permitted in an internal module.
+!!! error TS1194: Export declarations are not permitted in a namespace.
         export {M_M as m};
         ~~~~~~~~~~~~~~~~~~
-!!! error TS1194: Export declarations are not permitted in an internal module.
+!!! error TS1194: Export declarations are not permitted in a namespace.
         export {M_MU as mu};
         ~~~~~~~~~~~~~~~~~~~~
-!!! error TS1194: Export declarations are not permitted in an internal module.
+!!! error TS1194: Export declarations are not permitted in a namespace.
         export {M_F as f};
         ~~~~~~~~~~~~~~~~~~
-!!! error TS1194: Export declarations are not permitted in an internal module.
+!!! error TS1194: Export declarations are not permitted in a namespace.
         export {M_E as e};
         ~~~~~~~~~~~~~~~~~~
-!!! error TS1194: Export declarations are not permitted in an internal module.
+!!! error TS1194: Export declarations are not permitted in a namespace.
         export {M_A as a};
         ~~~~~~~~~~~~~~~~~~
-!!! error TS1194: Export declarations are not permitted in an internal module.
+!!! error TS1194: Export declarations are not permitted in a namespace.
     }
     

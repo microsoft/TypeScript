@@ -138,6 +138,7 @@ module ts {
         DeclareKeyword,
         GetKeyword,
         ModuleKeyword,
+        NamespaceKeyword,
         RequireKeyword,
         NumberKeyword,
         SetKeyword,
@@ -205,9 +206,9 @@ module ts {
         SpreadElementExpression,
         ClassExpression,
         OmittedExpression,
+        ExpressionWithTypeArguments,
         // Misc
         TemplateSpan,
-        HeritageClauseElement,
         SemicolonClassElement,
         // Element
         Block,
@@ -312,8 +313,9 @@ module ts {
         DeclarationFile =   0x00000800,  // Node is a .d.ts file
         Let =               0x00001000,  // Variable declaration
         Const =             0x00002000,  // Variable declaration
-        OctalLiteral =      0x00004000,
-        ExportContext =     0x00008000,  // Export context (initialized by binding)
+        OctalLiteral =      0x00004000,  // Octal numeric literal
+        Namespace =         0x00008000,  // Namespace declaration
+        ExportContext =     0x00010000,  // Export context (initialized by binding)
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Default,
         AccessibilityModifier = Public | Private | Protected,
@@ -739,7 +741,7 @@ module ts {
         arguments: NodeArray<Expression>;
     }
 
-    export interface HeritageClauseElement extends TypeNode {
+    export interface ExpressionWithTypeArguments extends TypeNode {
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
     }
@@ -891,7 +893,7 @@ module ts {
 
     export interface HeritageClause extends Node {
         token: SyntaxKind;
-        types?: NodeArray<HeritageClauseElement>;
+        types?: NodeArray<ExpressionWithTypeArguments>;
     }
 
     export interface TypeAliasDeclaration extends Declaration, ModuleElement {
@@ -1032,6 +1034,10 @@ module ts {
         getCurrentDirectory(): string;
     }
 
+    export interface ParseConfigHost {
+        readDirectory(rootDir: string, extension: string): string[];
+    }
+
     export interface WriteFileCallback {
         (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
     }
@@ -1092,14 +1098,15 @@ module ts {
     }
 
     export interface SourceMapData {
-        sourceMapFilePath: string;       // Where the sourcemap file is written
-        jsSourceMappingURL: string;      // source map URL written in the .js file
-        sourceMapFile: string;           // Source map's file field - .js file name
-        sourceMapSourceRoot: string;     // Source map's sourceRoot field - location where the sources will be present if not ""
-        sourceMapSources: string[];      // Source map's sources field - list of sources that can be indexed in this source map
-        inputSourceFileNames: string[];  // Input source file (which one can use on program to get the file), 1:1 mapping with the sourceMapSources list
-        sourceMapNames?: string[];       // Source map's names field - list of names that can be indexed in this source map
-        sourceMapMappings: string;       // Source map's mapping field - encoded source map spans
+        sourceMapFilePath: string;           // Where the sourcemap file is written
+        jsSourceMappingURL: string;          // source map URL written in the .js file
+        sourceMapFile: string;               // Source map's file field - .js file name
+        sourceMapSourceRoot: string;         // Source map's sourceRoot field - location where the sources will be present if not ""
+        sourceMapSources: string[];          // Source map's sources field - list of sources that can be indexed in this source map
+        sourceMapSourcesContent?: string[];  // Source map's sourcesContent field - list of the sources' text to be embedded in the source map
+        inputSourceFileNames: string[];      // Input source file (which one can use on program to get the file), 1:1 mapping with the sourceMapSources list
+        sourceMapNames?: string[];           // Source map's names field - list of names that can be indexed in this source map
+        sourceMapMappings: string;           // Source map's mapping field - encoded source map spans
         sourceMapDecodedMappings: SourceMapSpan[];  // Raw source map spans that were encoded into the sourceMapMappings
     }
 
@@ -1273,6 +1280,7 @@ module ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         resolvesToSomeValue(location: Node, name: string): boolean;
         getBlockScopedVariableId(node: Identifier): number;
+        getReferencedValueDeclaration(reference: Identifier): Declaration;
         serializeTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
         serializeParameterTypesOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): (string | string[])[];
         serializeReturnTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
@@ -1642,6 +1650,8 @@ module ts {
         diagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
+        inlineSourceMap?: boolean;
+        inlineSources?: boolean;
         listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
@@ -1674,6 +1684,8 @@ module ts {
         None = 0,
         CommonJS = 1,
         AMD = 2,
+        UMD = 3,
+        System = 4,
     }
 
     export interface LineAndCharacter {

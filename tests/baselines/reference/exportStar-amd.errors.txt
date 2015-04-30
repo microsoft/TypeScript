@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/modules/main.ts(1,8): error TS1192: External module '"tests/cases/conformance/es6/modules/t4"' has no default export.
+tests/cases/conformance/es6/modules/main.ts(1,8): error TS1192: Module '"tests/cases/conformance/es6/modules/t4"' has no default export.
 
 
 ==== tests/cases/conformance/es6/modules/t1.ts (0 errors) ====
@@ -24,7 +24,7 @@ tests/cases/conformance/es6/modules/main.ts(1,8): error TS1192: External module 
 ==== tests/cases/conformance/es6/modules/main.ts (1 errors) ====
     import hello, { x, y, z, foo } from "./t4";
            ~~~~~
-!!! error TS1192: External module '"tests/cases/conformance/es6/modules/t4"' has no default export.
+!!! error TS1192: Module '"tests/cases/conformance/es6/modules/t4"' has no default export.
     hello;
     x;
     y;
