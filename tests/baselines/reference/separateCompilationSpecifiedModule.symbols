@@ -1,0 +1,4 @@
+=== tests/cases/compiler/separateCompilationSpecifiedModule.ts ===
+export var x;
+>x : Symbol(x, Decl(separateCompilationSpecifiedModule.ts, 0, 10))
+

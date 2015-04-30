@@ -5,7 +5,7 @@ import Foo = require('exportAssignClassAndModule_0');
 
 var z: Foo.Bar;
 >z : Foo.Bar
->Foo : unknown
+>Foo : any
 >Bar : Foo.Bar
 
 var zz: Foo;
@@ -23,7 +23,7 @@ class Foo {
 
     x: Foo.Bar;
 >x : Foo.Bar
->Foo : unknown
+>Foo : any
 >Bar : Foo.Bar
 }
 module Foo {

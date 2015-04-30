@@ -2,6 +2,7 @@
 
 var x : any = 0;
 >x : any
+>0 : number
 
 var z = <number> x;
 >z : number
@@ -17,23 +18,28 @@ var y = x + z;
 var a = <any>0;
 >a : any
 ><any>0 : any
+>0 : number
 
 var b = <boolean>true;
 >b : boolean
 ><boolean>true : boolean
+>true : boolean
 
 var s = <string>"";
 >s : string
 ><string>"" : string
+>"" : string
 
 var ar = <any[]>null;
 >ar : any[]
 ><any[]>null : any[]
+>null : null
 
 var f = <(res : number) => void>null;
 >f : (res: number) => void
 ><(res : number) => void>null : (res: number) => void
 >res : number
+>null : null
 
 declare class Point
 >Point : Point
@@ -70,9 +76,11 @@ var p_cast = <Point> ({
 
     x: 0,
 >x : number
+>0 : number
 
     y: 0,
 >y : number
+>0 : number
 
     add: function(dx, dy) {
 >add : (dx: number, dy: number) => Point

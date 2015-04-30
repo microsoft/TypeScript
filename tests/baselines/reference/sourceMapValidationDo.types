@@ -1,6 +1,7 @@
 === tests/cases/compiler/sourceMapValidationDo.ts ===
 var i = 0;
 >i : number
+>0 : number
 
 do
 {
@@ -11,6 +12,7 @@ do
 } while (i < 10);
 >i < 10 : boolean
 >i : number
+>10 : number
 
 do {
     i++;
@@ -20,4 +22,5 @@ do {
 } while (i < 20);
 >i < 20 : boolean
 >i : number
+>20 : number
 

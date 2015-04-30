@@ -9,6 +9,7 @@ class Base {
 >a : number
 
         return null;
+>null : null
     }
 }
 
@@ -25,6 +26,7 @@ class Derived extends Base {
 >b : number
 
         return null;
+>null : null
     }
 
     bar() {
@@ -38,6 +40,7 @@ class Derived extends Base {
 >foo : (x: { a: number; }) => { a: number; }
 >{ a: 1 } : { a: number; }
 >a : number
+>1 : number
 
         var r2 = super.foo({ a: 1, b: 2 }); // { a: number }
 >r2 : { a: number; }
@@ -47,7 +50,9 @@ class Derived extends Base {
 >foo : (x: { a: number; }) => { a: number; }
 >{ a: 1, b: 2 } : { a: number; b: number; }
 >a : number
+>1 : number
 >b : number
+>2 : number
 
         var r3 = this.foo({ a: 1, b: 2 }); // { a: number; b: number; }
 >r3 : { a: number; b: number; }
@@ -57,6 +62,8 @@ class Derived extends Base {
 >foo : (x: { a: number; b: number; }) => { a: number; b: number; }
 >{ a: 1, b: 2 } : { a: number; b: number; }
 >a : number
+>1 : number
 >b : number
+>2 : number
     }
 }

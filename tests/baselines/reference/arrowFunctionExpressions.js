@@ -13,6 +13,17 @@ var d = n => c = n;
 var d = (n) => c = n;
 var d: (n: any) => any;
 
+// Binding patterns in arrow functions
+var p1 = ([a]) => { };
+var p2 = ([...a]) => { };
+var p3 = ([, a]) => { };
+var p4 = ([, ...a]) => { };
+var p5 = ([a = 1]) => { };
+var p6 = ({ a }) => { };
+var p7 = ({ a: { b } }) => { };
+var p8 = ({ a = 1 }) => { };
+var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
+var p10 = ([{ value, done }]) => { };
 
 // Arrow function used in class member initializer
 // Arrow function used in class member function
@@ -100,6 +111,37 @@ var c;
 var d = function (n) { return c = n; };
 var d = function (n) { return c = n; };
 var d;
+// Binding patterns in arrow functions
+var p1 = function (_a) {
+    var a = _a[0];
+};
+var p2 = function (_a) {
+    var a = _a.slice(0);
+};
+var p3 = function (_a) {
+    var a = _a[1];
+};
+var p4 = function (_a) {
+    var a = _a.slice(1);
+};
+var p5 = function (_a) {
+    var _b = _a[0], a = _b === void 0 ? 1 : _b;
+};
+var p6 = function (_a) {
+    var a = _a.a;
+};
+var p7 = function (_a) {
+    var b = _a.a.b;
+};
+var p8 = function (_a) {
+    var _b = _a.a, a = _b === void 0 ? 1 : _b;
+};
+var p9 = function (_a) {
+    var _b = _a.a, _c = (_b === void 0 ? { b: 1 } : _b).b, b = _c === void 0 ? 1 : _c;
+};
+var p10 = function (_a) {
+    var _b = _a[0], value = _b.value, done = _b.done;
+};
 // Arrow function used in class member initializer
 // Arrow function used in class member function
 var MyClass = (function () {

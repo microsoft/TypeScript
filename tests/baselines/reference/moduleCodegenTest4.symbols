@@ -1,0 +1,11 @@
+=== tests/cases/compiler/moduleCodegenTest4.ts ===
+export module Baz { export var x = "hello"; }
+>Baz : Symbol(Baz, Decl(moduleCodegenTest4.ts, 0, 0))
+>x : Symbol(x, Decl(moduleCodegenTest4.ts, 0, 30))
+
+Baz.x = "goodbye";
+>Baz.x : Symbol(Baz.x, Decl(moduleCodegenTest4.ts, 0, 30))
+>Baz : Symbol(Baz, Decl(moduleCodegenTest4.ts, 0, 0))
+>x : Symbol(Baz.x, Decl(moduleCodegenTest4.ts, 0, 30))
+
+void 0;

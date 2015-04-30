@@ -2,6 +2,7 @@
 class A { private x = 1} 
 >A : A
 >x : number
+>1 : number
 
 class B extends A {}
 >B : B
@@ -35,5 +36,6 @@ function foo(name: any): A {
 >A : A
 
     return null;
+>null : null
 }
 

@@ -24,6 +24,8 @@ var o = new Point(3, 4);
 >o : any
 >new Point(3, 4) : any
 >Point : (x: any, y: any) => void
+>3 : number
+>4 : number
 
 var xx = o.x;
 >xx : any

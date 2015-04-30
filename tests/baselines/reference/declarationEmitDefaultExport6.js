@@ -12,4 +12,5 @@ export default new A();
 //// [declarationEmitDefaultExport6.d.ts]
 export declare class A {
 }
-export default : A;
+declare var _default: A;
+export default _default;

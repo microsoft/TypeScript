@@ -53,6 +53,7 @@ class TestClass2 {
 >x : any
 
         return 0;
+>0 : number
     }
  
     public foo(x: string): number;

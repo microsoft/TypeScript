@@ -16,5 +16,6 @@ module M {
 >C2 : C2
 >f : () => I
 >I : I
+>null : null
 }
 

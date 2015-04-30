@@ -1,7 +1,7 @@
 /// <reference path="types.ts"/>
 
+/* @internal */
 module ts {
-
     // Ternary values are defined such that
     // x & y is False if either x or y is False.
     // x & y is Maybe if either x or y is Maybe, but neither x or y is False.
@@ -281,6 +281,17 @@ module ts {
         return result;
     }
 
+    export function memoize<T>(callback: () => T): () => T {
+        let value: T;
+        return () => {
+            if (callback) {
+                value = callback();
+                callback = undefined;
+            }
+            return value;
+        };
+    }
+
     function formatStringFromArgs(text: string, args: { [index: number]: any; }, baseIndex?: number): string {
         baseIndex = baseIndex || 0;
 
@@ -434,7 +445,7 @@ module ts {
         return path.replace(/\\/g, "/");
     }
 
-    // Returns length of path root (i.e. length of "/", "x:/", "//server/share/")
+    // Returns length of path root (i.e. length of "/", "x:/", "//server/share/, file:///user/files")
     export function getRootLength(path: string): number {
         if (path.charCodeAt(0) === CharacterCodes.slash) {
             if (path.charCodeAt(1) !== CharacterCodes.slash) return 1;
@@ -448,6 +459,8 @@ module ts {
             if (path.charCodeAt(2) === CharacterCodes.slash) return 3;
             return 2;
         }
+        let idx = path.indexOf('://');
+        if (idx !== -1) return idx + 3
         return 0;
     }
 
@@ -656,10 +669,6 @@ module ts {
         "\u2029": "\\u2029", // paragraphSeparator
         "\u0085": "\\u0085"  // nextLine
     };
-
-    export function getDefaultLibFileName(options: CompilerOptions): string {
-        return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
-    }
 
     export interface ObjectAllocator {
         getNodeConstructor(kind: SyntaxKind): new () => Node;

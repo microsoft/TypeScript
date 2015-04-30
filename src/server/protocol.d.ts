@@ -166,6 +166,25 @@ declare module ts.server.protocol {
     }
 
     /**
+      * Get occurrences request; value of command field is
+      * "occurrences". Return response giving spans that are relevant
+      * in the file at a given line and column.
+      */
+    export interface OccurrencesRequest extends FileLocationRequest {
+    }
+
+    export interface OccurrencesResponseItem extends FileSpan {
+        /**
+          * True if the occurrence is a write location, false otherwise.
+          */
+        isWriteAccess: boolean;
+    }
+
+    export interface OccurrencesResponse extends Response {
+        body?: OccurrencesResponseItem[];
+    }
+
+    /**
       * Find references request; value of command field is
       * "references". Return response giving the file locations that
       * reference the symbol found in file at location line, col.

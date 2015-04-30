@@ -186,6 +186,7 @@ module Harness.LanguageService {
             var script = this.getScriptInfo(fileName);
             return script ? script.version.toString() : undefined;
         }
+
         log(s: string): void { }
         trace(s: string): void { }
         error(s: string): void { }
@@ -203,7 +204,7 @@ module Harness.LanguageService {
     }
 
     /// Shim adapter
-    class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceShimHost {
+    class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceShimHost, ts.CoreServicesShimHost {
         private nativeHost: NativeLanguageServiceHost;
         constructor(cancellationToken?: ts.CancellationToken, options?: ts.CompilerOptions) {
             super(cancellationToken, options);
@@ -227,6 +228,11 @@ module Harness.LanguageService {
         }
         getScriptVersion(fileName: string): string { return this.nativeHost.getScriptVersion(fileName); }
         getLocalizedDiagnosticMessages(): string { return JSON.stringify({}); }
+
+        readDirectory(rootDir: string, extension: string): string {
+            throw new Error("NYI");
+        }
+
         log(s: string): void { this.nativeHost.log(s); }
         trace(s: string): void { this.nativeHost.trace(s); }
         error(s: string): void { this.nativeHost.error(s); }
@@ -335,6 +341,9 @@ module Harness.LanguageService {
         }
         getOccurrencesAtPosition(fileName: string, position: number): ts.ReferenceEntry[] {
             return unwrapJSONCallResult(this.shim.getOccurrencesAtPosition(fileName, position));
+        }
+        getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): ts.DocumentHighlights[] {
+            return unwrapJSONCallResult(this.shim.getDocumentHighlights(fileName, position, JSON.stringify(filesToSearch)));
         }
         getNavigateToItems(searchValue: string): ts.NavigateToItem[] {
             return unwrapJSONCallResult(this.shim.getNavigateToItems(searchValue));

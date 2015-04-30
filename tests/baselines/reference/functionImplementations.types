@@ -101,11 +101,14 @@ var n = function () {
 >function () {    return 3;} : () => number
 
     return 3;
+>3 : number
+
 } ();
 
 // FunctionExpression with no return type annotation and returns null
 var nu = null;
 >nu : any
+>null : null
 
 var nu = function () {
 >nu : any
@@ -113,6 +116,8 @@ var nu = function () {
 >function () {    return null;} : () => any
 
     return null;
+>null : null
+
 } ();
 
 // FunctionExpression with no return type annotation and returns undefined
@@ -143,6 +148,7 @@ var n = function <T>(x: T) {
 >x : T
 
 } (4);
+>4 : number
 
 // FunctionExpression with no return type annotation and returns a constrained type parameter type
 var n = function <T extends {}>(x: T) {
@@ -157,6 +163,7 @@ var n = function <T extends {}>(x: T) {
 >x : T
 
 } (4);
+>4 : number
 
 // FunctionExpression with no return type annotation with multiple return statements with identical types
 var n = function () {
@@ -165,7 +172,11 @@ var n = function () {
 >function () {    return 3;    return 5;} : () => number
 
     return 3;
+>3 : number
+
     return 5;
+>5 : number
+
 }();
 
 // Otherwise, the inferred return type is the first of the types of the return statement expressions
@@ -243,6 +254,7 @@ function thisFunc() {
 function opt1(n = 4) {
 >opt1 : (n?: number) => void
 >n : number
+>4 : number
 
     var m = n;
 >m : number
@@ -258,6 +270,7 @@ function opt2(n = { x: null, y: undefined }) {
 >n : { x: any; y: any; }
 >{ x: null, y: undefined } : { x: null; y: undefined; }
 >x : null
+>null : null
 >y : undefined
 >undefined : undefined
 
@@ -317,6 +330,7 @@ var f7: (x: number) => string | number = x => { // should be (x: number) => numb
     if (x < 0) { return x; }
 >x < 0 : boolean
 >x : number
+>0 : number
 >x : number
 
     return x.toString();

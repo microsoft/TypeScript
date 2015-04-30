@@ -12,6 +12,7 @@ module EndGate {
 
 interface Number extends EndGate.ICloneable { }
 >Number : Number
+>EndGate.ICloneable : any
 >EndGate : typeof EndGate
 >ICloneable : EndGate.ICloneable
 

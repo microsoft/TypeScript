@@ -1,4 +1,5 @@
 // @module: amd
+// @target: ES5
 
 // @filename: t1.ts
 export var x = "x";

@@ -51,25 +51,20 @@ interface SymbolConstructor {
     isConcatSpreadable: symbol;
 
     /** 
-      * A Boolean value that if true indicates that an object may be used as a regular expression. 
-      */
-    isRegExp: symbol;
-
-    /** 
       * A method that returns the default iterator for an object.Called by the semantics of the 
-      * for-of statement. 
+      * for-of statement.
       */
     iterator: symbol;
 
     /** 
       * A method that converts an object to a corresponding primitive value.Called by the ToPrimitive
-      * abstract operation. 
+      * abstract operation.
       */
     toPrimitive: symbol;
 
     /** 
-      * A String value that is used in the creation of the default string description of an object. 
-      * Called by the built- in method Object.prototype.toString. 
+      * A String value that is used in the creation of the default string description of an object.
+      * Called by the built-in method Object.prototype.toString.
       */
     toStringTag: symbol;
 
@@ -111,7 +106,7 @@ interface ObjectConstructor {
     getOwnPropertySymbols(o: any): symbol[];
 
     /**
-      *  Returns true if the values are the same value, false otherwise.
+      * Returns true if the values are the same value, false otherwise.
       * @param value1 The first value.
       * @param value2 The second value.
       */
@@ -447,7 +442,7 @@ interface IteratorResult<T> {
 }
 
 interface Iterator<T> {
-    next(): IteratorResult<T>;
+    next(value?: any): IteratorResult<T>;
     return?(value?: any): IteratorResult<T>;
     throw?(e?: any): IteratorResult<T>;
 }
@@ -598,8 +593,6 @@ interface Math {
 }
 
 interface RegExp {
-    [Symbol.isRegExp]: boolean;
-
     /** 
       * Matches a string with a regular expression, and returns an array containing the results of 
       * that search.
@@ -630,6 +623,20 @@ interface RegExp {
       * than limit elements.
       */
     split(string: string, limit?: number): string[];
+
+    /**
+      * Returns a string indicating the flags of the regular expression in question. This field is read-only.
+      * The characters in this string are sequenced and concatenated in the following order:
+      *
+      *    - "g" for global
+      *    - "i" for ignoreCase
+      *    - "m" for multiline
+      *    - "u" for unicode
+      *    - "y" for sticky
+      *
+      * If no flags are set, the value is the empty string.
+      */
+    flags: string;
 
     /** 
       * Returns a Boolean value indicating the state of the sticky flag (y) used with a regular 

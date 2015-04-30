@@ -13,13 +13,17 @@ var varWithArrayType: number[];
 
 var varWithInitialValue = 30;
 >varWithInitialValue : number
+>30 : number
 
 var withComplicatedValue = { x: 30, y: 70, desc: "position" };
 >withComplicatedValue : { x: number; y: number; desc: string; }
 >{ x: 30, y: 70, desc: "position" } : { x: number; y: number; desc: string; }
 >x : number
+>30 : number
 >y : number
+>70 : number
 >desc : string
+>"position" : string
 
 declare var declaredVar;
 >declaredVar : any
@@ -36,6 +40,8 @@ declare var deckareVarWithType: number;
 var arrayVar: string[] = ['a', 'b'];
 >arrayVar : string[]
 >['a', 'b'] : string[]
+>'a' : string
+>'b' : string
 
 var complicatedArrayVar: { x: number; y: string; }[] ;
 >complicatedArrayVar : { x: number; y: string; }[]
@@ -49,7 +55,9 @@ complicatedArrayVar.push({ x: 30, y : 'hello world' });
 >push : (...items: { x: number; y: string; }[]) => number
 >{ x: 30, y : 'hello world' } : { x: number; y: string; }
 >x : number
+>30 : number
 >y : string
+>'hello world' : string
 
 var n1: { [s: string]: number; };
 >n1 : { [s: string]: number; }
@@ -137,6 +145,7 @@ module m2 {
     export var a, b2: number = 10, b;
 >a : any
 >b2 : number
+>10 : number
 >b : any
 
     var m1;
@@ -145,6 +154,7 @@ module m2 {
     var a2, b22: number = 10, b222;
 >a2 : any
 >b22 : number
+>10 : number
 >b222 : any
 
     var m3;
@@ -195,7 +205,9 @@ module m2 {
 var a22, b22 = 10, c22 = 30;
 >a22 : any
 >b22 : number
+>10 : number
 >c22 : number
+>30 : number
 
 var nn;
 >nn : any
@@ -225,13 +237,17 @@ function foo(a2) {
 
     var a = 10;
 >a : number
+>10 : number
 }
 
 for (var i = 0, j = 0; i < 10; i++) {
 >i : number
+>0 : number
 >j : number
+>0 : number
 >i < 10 : boolean
 >i : number
+>10 : number
 >i++ : number
 >i : number
 
@@ -243,8 +259,10 @@ for (var i = 0, j = 0; i < 10; i++) {
 
 for (var k = 0; k < 30; k++) {
 >k : number
+>0 : number
 >k < 30 : boolean
 >k : number
+>30 : number
 >k++ : number
 >k : number
 
@@ -254,4 +272,5 @@ for (var k = 0; k < 30; k++) {
 }
 var b = 10;
 >b : number
+>10 : number
 

@@ -1,3 +1,4 @@
+/* @internal */
 module ts.NavigateTo {
     type RawNavigateToItem = { name: string; fileName: string; matchKind: PatternMatchKind; isCaseSensitive: boolean; declaration: Declaration };
 
@@ -9,11 +10,10 @@ module ts.NavigateTo {
         forEach(program.getSourceFiles(), sourceFile => {
             cancellationToken.throwIfCancellationRequested();
 
-            let declarations = sourceFile.getNamedDeclarations();
-            for (let declaration of declarations) {
-                var name = getDeclarationName(declaration);
-                if (name !== undefined) {
-
+            let nameToDeclarations = sourceFile.getNamedDeclarations();
+            for (let name in nameToDeclarations) {
+                let declarations = getProperty(nameToDeclarations, name);
+                if (declarations) {
                     // First do a quick check to see if the name of the declaration matches the 
                     // last portion of the (possibly) dotted name they're searching for.
                     let matches = patternMatcher.getMatchesForLastSegmentOfPattern(name);
@@ -22,24 +22,26 @@ module ts.NavigateTo {
                         continue;
                     }
 
-                    // It was a match!  If the pattern has dots in it, then also see if the 
-                    // declaration container matches as well.
-                    if (patternMatcher.patternContainsDots) {
-                        let containers = getContainers(declaration);
-                        if (!containers) {
-                            return undefined;
+                    for (let declaration of declarations) {
+                        // It was a match!  If the pattern has dots in it, then also see if the 
+                        // declaration container matches as well.
+                        if (patternMatcher.patternContainsDots) {
+                            let containers = getContainers(declaration);
+                            if (!containers) {
+                                return undefined;
+                            }
+
+                            matches = patternMatcher.getMatches(containers, name);
+
+                            if (!matches) {
+                                continue;
+                            }
                         }
 
-                        matches = patternMatcher.getMatches(containers, name);
-
-                        if (!matches) {
-                            continue;
-                        }
+                        let fileName = sourceFile.fileName;
+                        let matchKind = bestMatchKind(matches);
+                        rawItems.push({ name, fileName, matchKind, isCaseSensitive: allMatchesAreCaseSensitive(matches), declaration });
                     }
-
-                    let fileName = sourceFile.fileName;
-                    let matchKind = bestMatchKind(matches);
-                    rawItems.push({ name, fileName, matchKind, isCaseSensitive: allMatchesAreCaseSensitive(matches), declaration });
                 }
             }
         });
@@ -66,30 +68,14 @@ module ts.NavigateTo {
             return true;
         }
 
-        function getDeclarationName(declaration: Declaration): string {
-            let result = getTextOfIdentifierOrLiteral(declaration.name);
-            if (result !== undefined) {
-                return result;
-            }
-
-            if (declaration.name.kind === SyntaxKind.ComputedPropertyName) {
-                let expr = (<ComputedPropertyName>declaration.name).expression;
-                if (expr.kind === SyntaxKind.PropertyAccessExpression) {
-                    return (<PropertyAccessExpression>expr).name.text;
-                }
-
-                return getTextOfIdentifierOrLiteral(expr);
-            }
-
-            return undefined;
-        }
-
         function getTextOfIdentifierOrLiteral(node: Node) {
-            if (node.kind === SyntaxKind.Identifier ||
-                node.kind === SyntaxKind.StringLiteral ||
-                node.kind === SyntaxKind.NumericLiteral) {
+            if (node) {
+                if (node.kind === SyntaxKind.Identifier ||
+                    node.kind === SyntaxKind.StringLiteral ||
+                    node.kind === SyntaxKind.NumericLiteral) {
 
-                return (<Identifier | LiteralExpression>node).text;
+                    return (<Identifier | LiteralExpression>node).text;
+                }
             }
 
             return undefined;

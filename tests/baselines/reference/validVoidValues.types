@@ -10,4 +10,5 @@ x = undefined;
 x = null;
 >x = null : null
 >x : void
+>null : null
 

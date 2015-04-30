@@ -1,5 +1,5 @@
 error TS5046: Option 'out' cannot be specified with option 'separateCompilation'.
-tests/cases/compiler/file2.ts(1,1): error TS1208: Cannot compile non-external modules when the '--separateCompilation' flag is provided.
+tests/cases/compiler/file2.ts(1,1): error TS1208: Cannot compile namespaces when the '--separateCompilation' flag is provided.
 
 
 !!! error TS5046: Option 'out' cannot be specified with option 'separateCompilation'.
@@ -9,4 +9,4 @@ tests/cases/compiler/file2.ts(1,1): error TS1208: Cannot compile non-external mo
 ==== tests/cases/compiler/file2.ts (1 errors) ====
     var y;
     ~~~
-!!! error TS1208: Cannot compile non-external modules when the '--separateCompilation' flag is provided.
+!!! error TS1208: Cannot compile namespaces when the '--separateCompilation' flag is provided.

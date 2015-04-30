@@ -20,12 +20,16 @@ function f4(): string {
 >f4 : () => string
 
     return '';
+>'' : string
+
     return;
 }
 function f5(): string {
 >f5 : () => string
 
     return '';
+>'' : string
+
     return undefined;
 >undefined : undefined
 }

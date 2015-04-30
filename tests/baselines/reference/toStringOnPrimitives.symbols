@@ -1,0 +1,17 @@
+=== tests/cases/compiler/toStringOnPrimitives.ts ===
+true.toString()
+>true.toString : Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>toString : Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+
+var aBool = false;
+>aBool : Symbol(aBool, Decl(toStringOnPrimitives.ts, 1, 3))
+
+aBool.toString();
+>aBool.toString : Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>aBool : Symbol(aBool, Decl(toStringOnPrimitives.ts, 1, 3))
+>toString : Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+
+1..toString();
+>1..toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+

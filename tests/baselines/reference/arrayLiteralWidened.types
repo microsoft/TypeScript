@@ -8,6 +8,8 @@ var a = []; // any[]
 var a = [null, null];
 >a : any[]
 >[null, null] : null[]
+>null : null
+>null : null
 
 var a = [undefined, undefined];
 >a : any[]
@@ -20,6 +22,8 @@ var b = [[], [null, null]]; // any[][]
 >[[], [null, null]] : null[][]
 >[] : undefined[]
 >[null, null] : null[]
+>null : null
+>null : null
 
 var b = [[], []];
 >b : any[][]
@@ -45,6 +49,7 @@ var c = [[[null]],[undefined]]
 >[[[null]],[undefined]] : null[][][]
 >[[null]] : null[][]
 >[null] : null[]
+>null : null
 >[undefined] : undefined[]
 >undefined : undefined
 

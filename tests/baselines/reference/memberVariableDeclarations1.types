@@ -12,10 +12,12 @@ class Employee {
 
     public retired = false;
 >retired : boolean
+>false : boolean
 
     public manager: Employee = null;
 >manager : Employee
 >Employee : Employee
+>null : null
 
     public reports: Employee[] = [];
 >reports : Employee[]
@@ -49,12 +51,14 @@ class Employee2 {
 >this.retired : boolean
 >this : Employee2
 >retired : boolean
+>false : boolean
 
         this.manager = null;
 >this.manager = null : null
 >this.manager : Employee
 >this : Employee2
 >manager : Employee
+>null : null
 
         this.reports = [];
 >this.reports = [] : undefined[]

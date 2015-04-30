@@ -7,6 +7,7 @@ class A {
     foo(x: string): string { return null; }
 >foo : (x: string) => string
 >x : string
+>null : null
 }
 
 class B {
@@ -15,6 +16,7 @@ class B {
     foo(x: string): string { return null; }
 >foo : (x: string) => string
 >x : string
+>null : null
 }
 
 class C<T> {
@@ -26,6 +28,7 @@ class C<T> {
 >x : T
 >T : T
 >T : T
+>null : null
 }
 
 interface I {
@@ -57,6 +60,7 @@ var b = { foo(x: string) { return ''; } };
 >{ foo(x: string) { return ''; } } : { foo(x: string): string; }
 >foo : (x: string) => string
 >x : string
+>'' : string
 
 function foo1(x: A);
 >foo1 : { (x: A): any; (x: A): any; }
