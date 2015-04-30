@@ -18,7 +18,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
     public options: string;
 
-    constructor(public testType?: CompilerTestType) {
+    constructor(public testType: CompilerTestType) {
         super();
         this.errors = true;
         this.emit = true;
@@ -258,7 +258,7 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             it('Correct type/symbol baselines for ' + fileName, () => {
-                if (fileName.indexOf("APISample") >= 0 || lightMode) {
+                if (fileName.indexOf("APISample") >= 0) {
                     return;
                 }
 
