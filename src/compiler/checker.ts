@@ -5952,8 +5952,10 @@ module ts {
         }
 
         function getContextualSignatureForFunctionLikeDeclaration(node: FunctionLikeDeclaration): Signature {
-            // Only function expressions and arrow functions are contextually typed.
-            return isFunctionExpressionOrArrowFunction(node) ? getContextualSignature(<FunctionExpression>node) : undefined;
+            // Only function expressions, arrow functions, and object literal methods are contextually typed.
+            return isFunctionExpressionOrArrowFunction(node) || isObjectLiteralMethod(node)
+                ? getContextualSignature(<FunctionExpression>node)
+                : undefined;
         }
 
         // Return the contextual signature for a given expression node. A contextual type provides a
