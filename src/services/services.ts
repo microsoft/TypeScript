@@ -1505,7 +1505,8 @@ module ts {
         public static interfaceName = "interface name";
         public static moduleName = "module name";
         public static typeParameterName = "type parameter name";
-        public static typeAlias = "type alias name";
+        public static typeAliasName = "type alias name";
+        public static parameterName = "type alias name";
     }
 
     export const enum ClassificationType {
@@ -1524,7 +1525,7 @@ module ts {
         interfaceName = 13,
         moduleName = 14,
         typeParameterName = 15,
-        typeAlias = 16,
+        typeAliasName = 16,
         parameterName = 17
     }
 
@@ -5873,7 +5874,7 @@ module ts {
                     return ClassificationType.enumName;
                 }
                 else if (flags & SymbolFlags.TypeAlias) {
-                    return ClassificationType.typeAlias;
+                    return ClassificationType.typeAliasName;
                 }
                 else if (meaningAtPosition & SemanticMeaning.Type) {
                     if (flags & SymbolFlags.Interface) {
@@ -5939,7 +5940,8 @@ module ts {
                 case ClassificationType.interfaceName: return ClassificationTypeNames.interfaceName;
                 case ClassificationType.moduleName: return ClassificationTypeNames.moduleName;
                 case ClassificationType.typeParameterName: return ClassificationTypeNames.typeParameterName;
-                case ClassificationType.typeAlias: return ClassificationTypeNames.typeAlias;
+                case ClassificationType.typeAliasName: return ClassificationTypeNames.typeAliasName;
+                case ClassificationType.parameterName: return ClassificationTypeNames.parameterName;
             }
         }
 
@@ -6144,6 +6146,12 @@ module ts {
                                     return ClassificationType.moduleName;
                                 }
                                 return;
+                            case SyntaxKind.Parameter:
+                                if ((<ParameterDeclaration>token.parent).name === token) {
+                                    return ClassificationType.parameterName;
+                                }
+                                return;
+
                         }
                     }
 
@@ -6666,7 +6674,7 @@ module ts {
                 case ClassificationType.interfaceName:
                 case ClassificationType.moduleName:
                 case ClassificationType.typeParameterName:
-                case ClassificationType.typeAlias:
+                case ClassificationType.typeAliasName:
                 case ClassificationType.text:
                 case ClassificationType.parameterName:
                 default:
