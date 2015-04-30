@@ -5351,17 +5351,39 @@ module ts {
                 }
                 // Target type is type of prototype property
                 let prototypeProperty = getPropertyOfType(rightType, "prototype");
-                if (!prototypeProperty) {
-                    return type;
+                if (prototypeProperty) {
+                    let targetType = getTypeOfSymbol(prototypeProperty);
+                    if (targetType !== anyType) {
+                        // Narrow to target type if it is a subtype of current type
+                        if (isTypeSubtypeOf(targetType, type)) {
+                            return targetType;
+                        }
+                        // If current type is a union type, remove all constituents that aren't subtypes of target type
+                        if (type.flags & TypeFlags.Union) {
+                            return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, targetType)));
+                        }
+                    }
                 }
-                let targetType = getTypeOfSymbol(prototypeProperty);
-                // Narrow to target type if it is a subtype of current type
-                if (isTypeSubtypeOf(targetType, type)) {
-                    return targetType;
+                // Target type is type of constructor signiture
+                let constructorSignitures: Signature[];
+                if (rightType.flags & TypeFlags.Interface) {
+                    constructorSignitures = (<InterfaceTypeWithDeclaredMembers>rightType).declaredConstructSignatures;
                 }
-                // If current type is a union type, remove all constituents that aren't subtypes of target type
-                if (type.flags & TypeFlags.Union) {
-                    return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, targetType)));
+                if (rightType.flags & TypeFlags.Anonymous) {
+                    constructorSignitures = (<ResolvedType>rightType).constructSignatures;
+                }
+                if (constructorSignitures) {
+                    let constructorType = getUnionType(map(constructorSignitures, constructorSignature => {
+                        if (constructorSignature.typeParameters && constructorSignature.typeParameters.length !== 0) {
+                            // TODO convert type parameters to any or empty object types. e.g. Sample<T> -> Sample<any> or Sample<{}>.
+                        }
+                        return constructorSignature.resolvedReturnType;
+                    }));
+                    // Pickup type from union types
+                    if (type.flags & TypeFlags.Union) {
+                        return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, constructorType)));
+                    }
+                    return constructorType;
                 }
                 return type;
             }
