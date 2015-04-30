@@ -7084,6 +7084,11 @@ module ts {
                 return resolveErrorCall(node);
             }
 
+            var valueDecl = (expressionType.symbol ? expressionType.symbol.valueDeclaration : undefined);
+            if (valueDecl && valueDecl.flags & NodeFlags.Abstract) {
+                error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(valueDecl.name));
+            }
+
             // Technically, this signatures list may be incomplete. We are taking the apparent type,
             // but we are not including construct signatures that may have been added to the Object or
             // Function interface, since they have none by default. This is a bit of a leap of faith
