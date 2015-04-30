@@ -533,11 +533,11 @@ module ts.server {
             throw new Error("Not Implemented Yet.");
         }
 
-        getSyntacticClassifications2(fileName: string, span: TextSpan): number[] {
+        getSyntacticClassifications2(fileName: string, span: TextSpan): Classifications {
             throw new Error("Not Implemented Yet.");
         }
 
-        getSemanticClassifications2(fileName: string, span: TextSpan): number[] {
+        getSemanticClassifications2(fileName: string, span: TextSpan): Classifications {
             throw new Error("Not Implemented Yet.");
         }
 

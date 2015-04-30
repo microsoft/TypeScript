@@ -972,12 +972,19 @@ module ts {
         getSemanticDiagnostics(fileName: string): Diagnostic[];
         getCompilerOptionsDiagnostics(): Diagnostic[];
 
+        /** 
+         * @deprecated Use getSyntacticClassifications2 instead.
+         */
         getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+
+        /** 
+         * @deprecated Use getSemanticClassifications2 instead.
+         */
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
 
         // Encoded as triples of [start, length, ClassificationType].  
-        getSyntacticClassifications2(fileName: string, span: TextSpan): number[];
-        getSemanticClassifications2(fileName: string, span: TextSpan): number[];
+        getSyntacticClassifications2(fileName: string, span: TextSpan): Classifications;
+        getSemanticClassifications2(fileName: string, span: TextSpan): Classifications;
 
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
@@ -1020,6 +1027,11 @@ module ts {
         getSourceFile(fileName: string): SourceFile;
 
         dispose(): void;
+    }
+
+    export interface Classifications {
+        spans: number[],
+        endOfLineState: EndOfLineState
     }
 
     export interface ClassifiedSpan {
@@ -1265,7 +1277,7 @@ module ts {
     }
 
     export const enum EndOfLineState {
-        Start,
+        None,
         InMultiLineCommentTrivia,
         InSingleQuoteStringLiteral,
         InDoubleQuoteStringLiteral,
@@ -1315,8 +1327,10 @@ module ts {
          *                                  classifications which may be incorrectly categorized will be given
          *                                  back as Identifiers in order to allow the syntactic classifier to
          *                                  subsume the classification.
+         * @deprecated Use getLexicalClassifications instead.
          */
         getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult;
+        getLexicalClassifications2(text: string, endOfLineState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications;
     }
 
     /**
@@ -1501,15 +1515,17 @@ module ts {
         numericLiteral = 4,
         operator = 5,
         stringLiteral = 6,
-        whiteSpace = 7,
-        text = 8,
-        punctuation = 9,
-        className = 10,
-        enumName = 11,
-        interfaceName = 12,
-        moduleName = 13,
-        typeParameterName = 14,
-        typeAlias = 15,
+        regularExpressionLiteral = 7,
+        whiteSpace = 8,
+        text = 9,
+        punctuation = 10,
+        className = 11,
+        enumName = 12,
+        interfaceName = 13,
+        moduleName = 14,
+        typeParameterName = 15,
+        typeAlias = 16,
+        parameterName = 17
     }
 
     /// Language Service
@@ -5830,7 +5846,7 @@ module ts {
             return convertClassifications(getSemanticClassifications2(fileName, span));
         }
 
-        function getSemanticClassifications2(fileName: string, span: TextSpan): number[] {
+        function getSemanticClassifications2(fileName: string, span: TextSpan): Classifications {
             synchronizeHostData();
 
             let sourceFile = getValidSourceFile(fileName);
@@ -5839,7 +5855,7 @@ module ts {
             let result: number[] = [];
             processNode(sourceFile);
 
-            return result;
+            return { spans: result, endOfLineState: EndOfLineState.None };
 
             function pushClassification(start: number, length: number, type: ClassificationType) {
                 result.push(start);
@@ -5927,8 +5943,9 @@ module ts {
             }
         }
 
-        function convertClassifications(dense: number[]): ClassifiedSpan[] {
-            Debug.assert(dense.length % 3 === 0);
+        function convertClassifications(classifications: Classifications): ClassifiedSpan[] {
+            Debug.assert(classifications.spans.length % 3 === 0);
+            let dense = classifications.spans;
             let result: ClassifiedSpan[] = [];
             for (let i = 0, n = dense.length; i < n; i += 3) {
                 result.push({
@@ -5944,7 +5961,7 @@ module ts {
             return convertClassifications(getSyntacticClassifications2(fileName, span));
         }
 
-        function getSyntacticClassifications2(fileName: string, span: TextSpan): number[] {
+        function getSyntacticClassifications2(fileName: string, span: TextSpan): Classifications {
             // doesn't use compiler - no need to synchronize with host
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
@@ -5955,7 +5972,7 @@ module ts {
             let result: number[] = [];
             processElement(sourceFile);
 
-            return result;
+            return { spans: result, endOfLineState: EndOfLineState.None };
 
             function pushClassification(start: number, length: number, type: ClassificationType) {
                 result.push(start);
@@ -6603,10 +6620,67 @@ module ts {
             // if there are more cases we want the classifier to be better at.
             return true;
         }
-        
+
+        function convertClassifications(classifications: Classifications, text: string): ClassificationResult {
+            var entries: ClassificationInfo[] = [];
+            let dense = classifications.spans;
+            let lastEnd = 0;
+
+            for (let i = 0, n = dense.length; i < n; i += 3) {
+                let start = dense[i];
+                let length = dense[i + 1];
+                let type = <ClassificationType>dense[i + 2];
+
+                // Make a whitespace entry between the last item and this one.
+                if (lastEnd >= 0) {
+                    let whitespaceLength = start - lastEnd;
+                    if (whitespaceLength > 0) {
+                        entries.push({ length: whitespaceLength, classification: TokenClass.Whitespace });
+                    }
+                }
+
+                entries.push({ length, classification: convertClassification(type) });
+                lastEnd = start + length;
+            }
+
+            let whitespaceLength = text.length - lastEnd;
+            if (whitespaceLength > 0) {
+                entries.push({ length: whitespaceLength, classification: TokenClass.Whitespace });
+            }
+
+            return { entries, finalLexState: classifications.endOfLineState };
+        }
+
+        function convertClassification(type: ClassificationType): TokenClass {
+            switch (type) {
+                case ClassificationType.comment: return TokenClass.Comment;
+                case ClassificationType.keyword: return TokenClass.Keyword;
+                case ClassificationType.numericLiteral: return TokenClass.NumberLiteral;
+                case ClassificationType.operator: return TokenClass.Operator;
+                case ClassificationType.stringLiteral: return TokenClass.StringLiteral;
+                case ClassificationType.whiteSpace: return TokenClass.Whitespace;
+                case ClassificationType.punctuation: return TokenClass.Punctuation;
+                case ClassificationType.identifier: 
+                case ClassificationType.className:
+                case ClassificationType.enumName:
+                case ClassificationType.interfaceName:
+                case ClassificationType.moduleName:
+                case ClassificationType.typeParameterName:
+                case ClassificationType.typeAlias:
+                case ClassificationType.text:
+                case ClassificationType.parameterName:
+                default:
+                    return TokenClass.Identifier;
+            }
+        }
+
+        function getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult {
+            return convertClassifications(getLexicalClassifications2(text, lexState, syntacticClassifierAbsent), text);
+        }
+                
         // If there is a syntactic classifier ('syntacticClassifierAbsent' is false),
         // we will be more conservative in order to avoid conflicting with the syntactic classifier.
-        function getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult {
+        function getLexicalClassifications2(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications {
             let offset = 0;
             let token = SyntaxKind.Unknown;
             let lastNonTriviaToken = SyntaxKind.Unknown;
@@ -6649,9 +6723,9 @@ module ts {
 
             scanner.setText(text);
 
-            let result: ClassificationResult = {
-                finalLexState: EndOfLineState.Start,
-                entries: []
+            let result: Classifications = {
+                endOfLineState: EndOfLineState.None,
+                spans: []
             };
 
             // We can run into an unfortunate interaction between the lexical and syntactic classifier
@@ -6764,7 +6838,7 @@ module ts {
                 let start = scanner.getTokenPos();
                 let end = scanner.getTextPos();
 
-                addResult(end - start, classFromKind(token));
+                addResult(start, end, classFromKind(token));
 
                 if (end >= text.length) {
                     if (token === SyntaxKind.StringLiteral) {
@@ -6781,7 +6855,7 @@ module ts {
                             // If we have an odd number of backslashes, then the multiline string is unclosed
                             if (numBackslashes & 1) {
                                 let quoteChar = tokenText.charCodeAt(0);
-                                result.finalLexState = quoteChar === CharacterCodes.doubleQuote
+                                result.endOfLineState = quoteChar === CharacterCodes.doubleQuote
                                     ? EndOfLineState.InDoubleQuoteStringLiteral
                                     : EndOfLineState.InSingleQuoteStringLiteral;
                             }
@@ -6790,16 +6864,16 @@ module ts {
                     else if (token === SyntaxKind.MultiLineCommentTrivia) {
                         // Check to see if the multiline comment was unclosed.
                         if (scanner.isUnterminated()) {
-                            result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
+                            result.endOfLineState = EndOfLineState.InMultiLineCommentTrivia;
                         }
                     }
                     else if (isTemplateLiteralKind(token)) {
                         if (scanner.isUnterminated()) {
                             if (token === SyntaxKind.TemplateTail) {
-                                result.finalLexState = EndOfLineState.InTemplateMiddleOrTail;
+                                result.endOfLineState = EndOfLineState.InTemplateMiddleOrTail;
                             }
                             else if (token === SyntaxKind.NoSubstitutionTemplateLiteral) {
-                                result.finalLexState = EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate;
+                                result.endOfLineState = EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate;
                             }
                             else {
                                 Debug.fail("Only 'NoSubstitutionTemplateLiteral's and 'TemplateTail's can be unterminated; got SyntaxKind #" + token);
@@ -6807,20 +6881,34 @@ module ts {
                         }
                     }
                     else if (templateStack.length > 0 && lastOrUndefined(templateStack) === SyntaxKind.TemplateHead) {
-                        result.finalLexState = EndOfLineState.InTemplateSubstitutionPosition;
+                        result.endOfLineState = EndOfLineState.InTemplateSubstitutionPosition;
                     }
                 }
             }
 
-            function addResult(length: number, classification: TokenClass): void {
-                if (length > 0) {
-                    // If this is the first classification we're adding to the list, then remove any 
-                    // offset we have if we were continuing a construct from the previous line.
-                    if (result.entries.length === 0) {
-                        length -= offset;
-                    }
+            function addResult(start: number, end: number, classification: ClassificationType): void {
+                if (classification === ClassificationType.whiteSpace) {
+                    // Don't bother with whitespace classifications.  They're not needed.
+                    return;
+                }
 
-                    result.entries.push({ length: length, classification: classification });
+                if (start === 0 && offset > 0) {
+                    // We're classifying the first token, and this was a case where we prepended 
+                    // text.  We should consider the start of this token to be at the start of 
+                    // the original text.
+                    start += offset;
+                }
+
+                // All our tokens are in relation to the augmented text.  Move them back to be
+                // relative to the original text.
+                start -= offset;
+                end -= offset;
+                let length = end - start;
+
+                if (length > 0) {
+                    result.spans.push(start);
+                    result.spans.push(length);
+                    result.spans.push(classification);
                 }
             }
         }
@@ -6887,41 +6975,44 @@ module ts {
             return token >= SyntaxKind.FirstKeyword && token <= SyntaxKind.LastKeyword;
         }
 
-        function classFromKind(token: SyntaxKind) {
+        function classFromKind(token: SyntaxKind): ClassificationType {
             if (isKeyword(token)) {
-                return TokenClass.Keyword;
+                return ClassificationType.keyword;
             }
             else if (isBinaryExpressionOperatorToken(token) || isPrefixUnaryExpressionOperatorToken(token)) {
-                return TokenClass.Operator;
+                return ClassificationType.operator;
             }
             else if (token >= SyntaxKind.FirstPunctuation && token <= SyntaxKind.LastPunctuation) {
-                return TokenClass.Punctuation;
+                return ClassificationType.punctuation;
             }
 
             switch (token) {
                 case SyntaxKind.NumericLiteral:
-                    return TokenClass.NumberLiteral;
+                    return ClassificationType.numericLiteral;
                 case SyntaxKind.StringLiteral:
-                    return TokenClass.StringLiteral;
+                    return ClassificationType.stringLiteral;
                 case SyntaxKind.RegularExpressionLiteral:
-                    return TokenClass.RegExpLiteral;
+                    return ClassificationType.regularExpressionLiteral;
                 case SyntaxKind.ConflictMarkerTrivia:
                 case SyntaxKind.MultiLineCommentTrivia:
                 case SyntaxKind.SingleLineCommentTrivia:
-                    return TokenClass.Comment;
+                    return ClassificationType.comment;
                 case SyntaxKind.WhitespaceTrivia:
                 case SyntaxKind.NewLineTrivia:
-                    return TokenClass.Whitespace;
+                    return ClassificationType.whiteSpace;
                 case SyntaxKind.Identifier:
                 default:
                     if (isTemplateLiteralKind(token)) {
-                        return TokenClass.StringLiteral;
+                        return ClassificationType.stringLiteral;
                     }
-                    return TokenClass.Identifier;
+                    return ClassificationType.identifier;
             }
         }
 
-        return { getClassificationsForLine };
+        return {
+            getClassificationsForLine,
+            getLexicalClassifications2
+        };
     }
 
     /// getDefaultLibraryFilePath

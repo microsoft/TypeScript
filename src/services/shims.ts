@@ -185,6 +185,7 @@ module ts {
     }
 
     export interface ClassifierShim extends Shim {
+        getLexicalClassifications2(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string;
         getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string;
     }
 
@@ -194,7 +195,9 @@ module ts {
     }
 
     function logInternalError(logger: Logger, err: Error) {
-        logger.log("*INTERNAL ERROR* - Exception in typescript services: " + err.message);
+        if (logger) {
+            logger.log("*INTERNAL ERROR* - Exception in typescript services: " + err.message);
+        }
     }
 
     class ScriptSnapshotShimAdapter implements IScriptSnapshot {
@@ -308,18 +311,25 @@ module ts {
     function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any): any {
         return action();
 
-        logger.log(actionDescription);
+        if (logger) {
+            logger.log(actionDescription);
+        }
+
         var start = Date.now();
         var result = action();
         var end = Date.now();
-        logger.log(actionDescription + " completed in " + (end - start) + " msec");
-        if (typeof (result) === "string") {
-            var str = <string>result;
-            if (str.length > 128) {
-                str = str.substring(0, 128) + "...";
+
+        if (logger) {
+            logger.log(actionDescription + " completed in " + (end - start) + " msec");
+            if (typeof (result) === "string") {
+                var str = <string>result;
+                if (str.length > 128) {
+                    str = str.substring(0, 128) + "...";
+                }
+                logger.log("  result.length=" + str.length + ", result='" + JSON.stringify(str) + "'");
             }
-            logger.log("  result.length=" + str.length + ", result='" + JSON.stringify(str) + "'");
         }
+
         return result;
     }
 
@@ -447,8 +457,9 @@ module ts {
             return this.forwardJSONCall(
                 "getSyntacticClassifications('" + fileName + "', " + start + ", " + length + ")",
                 () => {
-                    var classifications = this.languageService.getSyntacticClassifications2(fileName, createTextSpan(start, length));
-                    return classifications.join(",");
+                    // directly serialize the spans out to a string.  This is much faster to decode
+                    // on the managed side versus a full JSON array.
+                    return convertClassifications(this.languageService.getSyntacticClassifications2(fileName, createTextSpan(start, length)));
                 });
         }
 
@@ -456,8 +467,9 @@ module ts {
             return this.forwardJSONCall(
                 "getSemanticClassifications('" + fileName + "', " + start + ", " + length + ")",
                 () => {
-                    var classifications = this.languageService.getSemanticClassifications2(fileName, createTextSpan(start, length));
-                    return classifications.join(",");
+                    // directly serialize the spans out to a string.  This is much faster to decode
+                    // on the managed side versus a full JSON array.
+                    return convertClassifications(this.languageService.getSemanticClassifications2(fileName, createTextSpan(start, length)));
                 });
         }
 
@@ -740,12 +752,21 @@ module ts {
         }
     }
 
+    function convertClassifications(classifications: Classifications): { spans: string, endOfLineState: EndOfLineState } {
+        return { spans: classifications.spans.join(","), endOfLineState: classifications.endOfLineState };
+    }
+
     class ClassifierShimObject extends ShimBase implements ClassifierShim {
         public classifier: Classifier;
 
         constructor(factory: ShimFactory) {
             super(factory);
             this.classifier = createClassifier();
+        }
+
+        public getLexicalClassifications2(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string {
+            return forwardJSONCall(/*logger:*/ undefined, "getLexicalClassifications2",
+                () => convertClassifications(this.classifier.getLexicalClassifications2(text, lexState, syntacticClassifierAbsent)));
         }
 
         /// COLORIZATION
