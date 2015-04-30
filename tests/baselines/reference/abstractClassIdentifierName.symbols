@@ -1,0 +1,8 @@
+=== tests/cases/compiler/abstractClassIdentifierName.ts ===
+class abstract {
+>abstract : Symbol(abstract, Decl(abstractClassIdentifierName.ts, 0, 0))
+
+    abstract(): void { }
+>abstract : Symbol(abstract, Decl(abstractClassIdentifierName.ts, 0, 16))
+}
+

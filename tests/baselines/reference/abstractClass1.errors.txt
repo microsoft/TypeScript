@@ -1,0 +1,57 @@
+tests/cases/compiler/abstractClass1.ts(15,9): error TS2502: Cannot create an instance of the abstract class 'Foo'
+tests/cases/compiler/abstractClass1.ts(16,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/abstractClass1.ts(16,9): error TS2502: Cannot create an instance of the abstract class 'Foo'
+tests/cases/compiler/abstractClass1.ts(25,1): error TS2502: Cannot create an instance of the abstract class 'Qux'
+tests/cases/compiler/abstractClass1.ts(35,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/abstractClass1.ts(35,1): error TS2502: Cannot create an instance of the abstract class 'Foo'
+
+
+==== tests/cases/compiler/abstractClass1.ts (6 errors) ====
+    
+    abstract class Foo {
+        constructor(f: any) { }
+        public static bar(): void { }
+    
+        public empty() { }
+    }
+    
+    class Bar extends Foo {
+        constructor(f: any) {
+            super(f);
+        }
+    }
+    
+    var a = new Foo(1); // Error
+            ~~~~~~~~~~
+!!! error TS2502: Cannot create an instance of the abstract class 'Foo'
+    var b = new Foo(); // Error because of invalid constructor arguments
+            ~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+            ~~~~~~~~~
+!!! error TS2502: Cannot create an instance of the abstract class 'Foo'
+    
+    module baz {
+        export abstract class Qux {
+        }
+        export class Quz extends Qux {
+        }
+    }
+    
+    new baz.Qux();
+    ~~~~~~~~~~~~~
+!!! error TS2502: Cannot create an instance of the abstract class 'Qux'
+    
+    // Valid
+    var c = new Bar(1);
+    c.empty();
+    
+    // Calling a static method on a abstract class is valid
+    Foo.bar();
+    
+    var Copy = Foo;
+    new Copy();
+    ~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+    ~~~~~~~~~~
+!!! error TS2502: Cannot create an instance of the abstract class 'Foo'
+    
