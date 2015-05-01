@@ -2988,9 +2988,6 @@ module ts {
                                 || containingNodeKind === SyntaxKind.ParenthesizedExpression      // let x = (a|
                                 || containingNodeKind === SyntaxKind.ParenthesizedType;            // function F(pred: (a
 
-                        case SyntaxKind.ColonToken:
-                            return containingNodeKind === SyntaxKind.Parameter;                   // function F(pred: a|
-
                         case SyntaxKind.OpenBracketToken:
                             return containingNodeKind === SyntaxKind.ArrayLiteralExpression;                 // [ |
 
