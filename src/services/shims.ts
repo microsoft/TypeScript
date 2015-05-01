@@ -99,8 +99,8 @@ module ts {
 
         getSyntacticClassifications(fileName: string, start: number, length: number): string;
         getSemanticClassifications(fileName: string, start: number, length: number): string;
-        getSyntacticClassifications2(fileName: string, start: number, length: number): string;
-        getSemanticClassifications2(fileName: string, start: number, length: number): string;
+        getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string;
+        getEncodedSemanticClassifications(fileName: string, start: number, length: number): string;
 
         getCompletionsAtPosition(fileName: string, position: number): string;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): string;
@@ -191,7 +191,7 @@ module ts {
     }
 
     export interface ClassifierShim extends Shim {
-        getLexicalClassifications2(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string;
+        getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string;
         getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string;
     }
 
@@ -469,23 +469,23 @@ module ts {
                 });
         }
 
-        public getSyntacticClassifications2(fileName: string, start: number, length: number): string {
+        public getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string {
             return this.forwardJSONCall(
-                "getSyntacticClassifications('" + fileName + "', " + start + ", " + length + ")",
+                "getEncodedSyntacticClassifications('" + fileName + "', " + start + ", " + length + ")",
                 () => {
                     // directly serialize the spans out to a string.  This is much faster to decode
                     // on the managed side versus a full JSON array.
-                    return convertClassifications(this.languageService.getSyntacticClassifications2(fileName, createTextSpan(start, length)));
+                    return convertClassifications(this.languageService.getEncodedSyntacticClassifications(fileName, createTextSpan(start, length)));
                 });
         }
 
-        public getSemanticClassifications2(fileName: string, start: number, length: number): string {
+        public getEncodedSemanticClassifications(fileName: string, start: number, length: number): string {
             return this.forwardJSONCall(
-                "getSemanticClassifications('" + fileName + "', " + start + ", " + length + ")",
+                "getEncodedSemanticClassifications('" + fileName + "', " + start + ", " + length + ")",
                 () => {
                     // directly serialize the spans out to a string.  This is much faster to decode
                     // on the managed side versus a full JSON array.
-                    return convertClassifications(this.languageService.getSemanticClassifications2(fileName, createTextSpan(start, length)));
+                    return convertClassifications(this.languageService.getEncodedSemanticClassifications(fileName, createTextSpan(start, length)));
                 });
         }
 
@@ -780,9 +780,9 @@ module ts {
             this.classifier = createClassifier();
         }
 
-        public getLexicalClassifications2(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string {
-            return forwardJSONCall(this.logger, "getLexicalClassifications2",
-                () => convertClassifications(this.classifier.getLexicalClassifications2(text, lexState, syntacticClassifierAbsent)),
+        public getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string {
+            return forwardJSONCall(this.logger, "getEncodedLexicalClassifications",
+                () => convertClassifications(this.classifier.getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent)),
                 /*noPerfLogging:*/ true);
         }
 

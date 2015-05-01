@@ -973,18 +973,18 @@ module ts {
         getCompilerOptionsDiagnostics(): Diagnostic[];
 
         /** 
-         * @deprecated Use getSyntacticClassifications2 instead.
+         * @deprecated Use getEncodedSyntacticClassifications instead.
          */
         getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
 
         /** 
-         * @deprecated Use getSemanticClassifications2 instead.
+         * @deprecated Use getEncodedSemanticClassifications instead.
          */
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
 
         // Encoded as triples of [start, length, ClassificationType].  
-        getSyntacticClassifications2(fileName: string, span: TextSpan): Classifications;
-        getSemanticClassifications2(fileName: string, span: TextSpan): Classifications;
+        getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
+        getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
 
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
@@ -1330,7 +1330,7 @@ module ts {
          * @deprecated Use getLexicalClassifications instead.
          */
         getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult;
-        getLexicalClassifications2(text: string, endOfLineState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications;
+        getEncodedLexicalClassifications(text: string, endOfLineState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications;
     }
 
     /**
@@ -5847,10 +5847,10 @@ module ts {
         }
 
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[]{
-            return convertClassifications(getSemanticClassifications2(fileName, span));
+            return convertClassifications(getEncodedSemanticClassifications(fileName, span));
         }
 
-        function getSemanticClassifications2(fileName: string, span: TextSpan): Classifications {
+        function getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
             synchronizeHostData();
 
             let sourceFile = getValidSourceFile(fileName);
@@ -5963,10 +5963,10 @@ module ts {
         }
 
         function getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[]{
-            return convertClassifications(getSyntacticClassifications2(fileName, span));
+            return convertClassifications(getEncodedSyntacticClassifications(fileName, span));
         }
 
-        function getSyntacticClassifications2(fileName: string, span: TextSpan): Classifications {
+        function getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications {
             // doesn't use compiler - no need to synchronize with host
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
@@ -6489,8 +6489,8 @@ module ts {
             getCompilerOptionsDiagnostics,
             getSyntacticClassifications,
             getSemanticClassifications,
-            getSyntacticClassifications2,
-            getSemanticClassifications2,
+            getEncodedSyntacticClassifications,
+            getEncodedSemanticClassifications,
             getCompletionsAtPosition,
             getCompletionEntryDetails,
             getSignatureHelpItems,
@@ -6686,12 +6686,12 @@ module ts {
         }
 
         function getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult {
-            return convertClassifications(getLexicalClassifications2(text, lexState, syntacticClassifierAbsent), text);
+            return convertClassifications(getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent), text);
         }
                 
         // If there is a syntactic classifier ('syntacticClassifierAbsent' is false),
         // we will be more conservative in order to avoid conflicting with the syntactic classifier.
-        function getLexicalClassifications2(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications {
+        function getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications {
             let offset = 0;
             let token = SyntaxKind.Unknown;
             let lastNonTriviaToken = SyntaxKind.Unknown;
@@ -7022,7 +7022,7 @@ module ts {
 
         return {
             getClassificationsForLine,
-            getLexicalClassifications2
+            getEncodedLexicalClassifications
         };
     }
 
