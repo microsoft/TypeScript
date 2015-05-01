@@ -258,7 +258,7 @@ interface Function {
 }
 
 interface FunctionConstructor {
-    /**
+    /** 
       * Creates a new function.
       * @param args A list of arguments the function accepts.
       */
@@ -1164,3 +1164,11 @@ interface ArrayConstructor {
 }
 
 declare var Array: ArrayConstructor;
+
+interface IPromise<T> {
+    then<TResult>(onfulfilled: (value: T) => TResult | IPromise<TResult>, onrejected: (reason: any) => TResult | IPromise<TResult>): IPromise<TResult>;
+}
+
+interface IPromiseConstructor {
+    new <T>(init: (resolve: (value: T | IPromise<T>) => void, reject: (reason: any) => void) => void): IPromise<T>;
+}

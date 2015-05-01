@@ -32,6 +32,11 @@ declare module "typescript" {
     function countWhere<T>(array: T[], predicate: (x: T) => boolean): number;
     function filter<T>(array: T[], f: (x: T) => boolean): T[];
     function map<T, U>(array: T[], f: (x: T) => U): U[];
+    function flatMap<T, U>(array: T[], f: (x: T) => U[]): U[];
+    function foldLeft<T>(array: T[], f: (a: T, x: T) => T): T;
+    function foldLeft<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
+    function foldRight<T>(array: T[], f: (a: T, x: T) => T): T;
+    function foldRight<T, U>(array: T[], f: (a: U, x: T) => U, initial: U): U;
     function concatenate<T>(array1: T[], array2: T[]): T[];
     function deduplicate<T>(array: T[]): T[];
     function sum(array: any[], prop: string): number;
@@ -158,11 +163,16 @@ declare module "typescript" {
     function releaseStringWriter(writer: StringSymbolWriter): void;
     function getFullWidth(node: Node): number;
     function containsParseError(node: Node): boolean;
+    function isAwaitOrYield(node: Node): boolean;
+    function hasAwaitOrYield(node: Node): boolean;
     function getSourceFileOfNode(node: Node): SourceFile;
     function nodePosToString(node: Node): string;
     function getStartPosOfNode(node: Node): number;
     function nodeIsMissing(node: Node): boolean;
+    function nodeIsGenerated(node: Node): boolean;
+    function nodeIsMissingOrGenerated(node: Node): boolean;
     function nodeIsPresent(node: Node): boolean;
+    function nodeIsPresentOrGenerated(node: Node): boolean;
     function getTokenPosOfNode(node: Node, sourceFile?: SourceFile): number;
     function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node): string;
     function getTextOfNodeFromSourceText(sourceText: string, node: Node): string;
@@ -187,11 +197,19 @@ declare module "typescript" {
     function isAnyFunction(node: Node): boolean;
     function isFunctionBlock(node: Node): boolean;
     function isObjectLiteralMethod(node: Node): boolean;
+    function isObjectLiteralElement(node: Node): boolean;
     function getContainingFunction(node: Node): FunctionLikeDeclaration;
+    function getContainingParameter(node: Node): ParameterDeclaration;
     function getThisContainer(node: Node, includeArrowFunctions: boolean): Node;
     function getSuperContainer(node: Node, includeFunctions: boolean): Node;
     function getInvokedExpression(node: CallLikeExpression): Expression;
     function isExpression(node: Node): boolean;
+    function isUnaryExpression(node: Node): boolean;
+    function isLabeledOrIterationOrSwitchStatement(node: Node): boolean;
+    function isLogicalBinary(node: BinaryExpression): boolean;
+    function isAssignment(node: BinaryExpression): boolean;
+    function isDestructuringAssignment(node: BinaryExpression): boolean;
+    function isAnyAccessor(node: Node): boolean;
     function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean): boolean;
     function isExternalModuleImportDeclaration(node: Node): boolean;
     function getExternalModuleImportDeclarationExpression(node: Node): Expression;
@@ -202,10 +220,13 @@ declare module "typescript" {
     function isLiteralKind(kind: SyntaxKind): boolean;
     function isTextualLiteralKind(kind: SyntaxKind): boolean;
     function isTemplateLiteralKind(kind: SyntaxKind): boolean;
+    function isTemplateLiteralOrTemplateExpression(node: Node): boolean;
     function isBindingPattern(node: Node): boolean;
+    function isIdentifierOrBindingPattern(node: Node): boolean;
     function isInAmbientContext(node: Node): boolean;
     function isDeclaration(node: Node): boolean;
     function isStatement(n: Node): boolean;
+    function needsParenthesisForPropertyAccess(expression: Expression): boolean;
     function isDeclarationOrFunctionExpressionOrCatchVariableName(name: Node): boolean;
     function getClassBaseTypeNode(node: ClassDeclaration): TypeReferenceNode;
     function getClassImplementedTypeNodes(node: ClassDeclaration): NodeArray<TypeReferenceNode>;
@@ -216,6 +237,7 @@ declare module "typescript" {
     function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult;
     function isKeyword(token: SyntaxKind): boolean;
     function isTrivia(token: SyntaxKind): boolean;
+    function isAsyncFunction(node: SignatureDeclaration): boolean;
     function isModifier(token: SyntaxKind): boolean;
     function textSpanEnd(span: TextSpan): number;
     function textSpanIsEmpty(span: TextSpan): boolean;
@@ -242,6 +264,8 @@ declare module "typescript" {
      * Vn.
      */
     function collapseTextChangeRangesAcrossMultipleVersions(changes: TextChangeRange[]): TextChangeRange;
+    function reportUnexpectedNode(node: Node): void;
+    function reportUnexpectedNodeAfterVisit(visited: Node, node: Node): void;
 }
 declare module "typescript" {
     var optionDeclarations: CommandLineOption[];
