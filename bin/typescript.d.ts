@@ -1095,6 +1095,7 @@ declare module "typescript" {
         mapRoot?: string;
         module?: ModuleKind;
         noEmit?: boolean;
+        noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
