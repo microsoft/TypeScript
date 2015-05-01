@@ -2981,14 +2981,16 @@ module ts {
                                 || containingNodeKind === SyntaxKind.ArrayLiteralExpression                 // [a, |
                                 || containingNodeKind === SyntaxKind.BinaryExpression;                      // let x = (a, |
 
-              
                         case SyntaxKind.OpenParenToken:
                             return containingNodeKind === SyntaxKind.CallExpression               // func( |
                                 || containingNodeKind === SyntaxKind.Constructor                  // constructor( |
                                 || containingNodeKind === SyntaxKind.NewExpression                // new C(a|
                                 || containingNodeKind === SyntaxKind.ParenthesizedExpression      // let x = (a|
                                 || containingNodeKind === SyntaxKind.ParenthesizedType            // function F(pred: (a|
-                                || containingNodeKind === SyntaxKind.Parameter;                   // function F(pred: a|
+                                || containingNodeKind == SyntaxKind.FunctionType;                 // function F(pred: (a| // todo: figure out why fourslash and the IDE don't agree on node kind here
+
+                        case SyntaxKind.ColonToken:
+                            return containingNodeKind === SyntaxKind.Parameter;                   // function F(pred: a|
 
                         case SyntaxKind.OpenBracketToken:
                             return containingNodeKind === SyntaxKind.ArrayLiteralExpression;                 // [ |
@@ -3012,9 +3014,6 @@ module ts {
 
                         case SyntaxKind.TemplateMiddle:
                             return containingNodeKind === SyntaxKind.TemplateSpan; // `aa ${10} dd ${|
-
-                        case SyntaxKind.ColonToken:
-                            return containingNodeKind === SyntaxKind.BindingElement; // var {x :html|
 
                         case SyntaxKind.PublicKeyword:
                         case SyntaxKind.PrivateKeyword:
@@ -3107,10 +3106,13 @@ module ts {
                                 containingNodeKind === SyntaxKind.ObjectBindingPattern;        // function func({ x, y|
 
                         case SyntaxKind.DotToken:
-                            return containingNodeKind === SyntaxKind.ArrayBindingPattern;       // var [.|
+                            return containingNodeKind === SyntaxKind.ArrayBindingPattern;      // var [.|
+
+                        case SyntaxKind.ColonToken:
+                            return containingNodeKind === SyntaxKind.BindingElement;           // var {x :html|
 
                         case SyntaxKind.OpenBracketToken:
-                            return containingNodeKind === SyntaxKind.ArrayBindingPattern;         //  var [x|
+                            return containingNodeKind === SyntaxKind.ArrayBindingPattern;      //  var [x|
 
                         case SyntaxKind.OpenParenToken:
                             return containingNodeKind === SyntaxKind.CatchClause ||

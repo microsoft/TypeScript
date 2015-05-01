@@ -3,4 +3,4 @@
 ////var { x:html/*1*/
 
 goTo.marker("1");
-verify.completionListAllowsNewIdentifier();
+verify.completionListIsEmpty();
