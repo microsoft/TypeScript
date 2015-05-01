@@ -2101,6 +2101,10 @@
         "category": "Error",
         "code": 7024
     },
+    "Generator implicitly has type '{0}' because it does not yield any values. Consider supplying a return type.": {
+        "category": "Error",
+        "code": 7025
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000

@@ -7269,7 +7269,12 @@ module ts {
                 if (func.asteriskToken) {
                     types = checkAndAggregateYieldOperandTypes(<Block>func.body, contextualMapper);
                     if (types.length === 0) {
-                        return createIterableIteratorType(anyType);
+                        let iterableIteratorAny = createIterableIteratorType(anyType);
+                        if (compilerOptions.noImplicitAny) {
+                            error(func.asteriskToken,
+                                Diagnostics.Generator_implicitly_has_type_0_because_it_does_not_yield_any_values_Consider_supplying_a_return_type, typeToString(iterableIteratorAny));
+                        }
+                        return iterableIteratorAny;
                     }
                 }
                 else {
@@ -9074,8 +9079,16 @@ module ts {
 
             // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
             // in an ambient context
-            if (compilerOptions.noImplicitAny && nodeIsMissing(node.body) && !node.type && !isPrivateWithinAmbient(node)) {
-                reportImplicitAnyError(node, anyType);
+            if (produceDiagnostics && compilerOptions.noImplicitAny && !node.type && !isPrivateWithinAmbient(node)) {
+                if (nodeIsMissing(node.body)) {
+                    reportImplicitAnyError(node, anyType);
+                }
+                else if (node.asteriskToken) {
+                    // A generator with a body and no type annotation can still cause an implicit any if it is has
+                    // no yield expressions, or its yield expressions do not have operands. The only way to find out
+                    // is to try checking its return type.
+                    getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+                }
             }
         }
 
