@@ -31086,7 +31086,8 @@ var ts;
         ClassificationTypeNames.interfaceName = "interface name";
         ClassificationTypeNames.moduleName = "module name";
         ClassificationTypeNames.typeParameterName = "type parameter name";
-        ClassificationTypeNames.typeAlias = "type alias name";
+        ClassificationTypeNames.typeAliasName = "type alias name";
+        ClassificationTypeNames.parameterName = "parameter name";
         return ClassificationTypeNames;
     })();
     ts.ClassificationTypeNames = ClassificationTypeNames;
@@ -34330,35 +34331,43 @@ var ts;
             return ts.NavigationBar.getNavigationBarItems(sourceFile);
         }
         function getSemanticClassifications(fileName, span) {
+            return convertClassifications(getEncodedSemanticClassifications(fileName, span));
+        }
+        function getEncodedSemanticClassifications(fileName, span) {
             synchronizeHostData();
             var sourceFile = getValidSourceFile(fileName);
             var typeChecker = program.getTypeChecker();
             var result = [];
             processNode(sourceFile);
-            return result;
+            return { spans: result, endOfLineState: 0 };
+            function pushClassification(start, length, type) {
+                result.push(start);
+                result.push(length);
+                result.push(type);
+            }
             function classifySymbol(symbol, meaningAtPosition) {
                 var flags = symbol.getFlags();
                 if (flags & 32) {
-                    return ClassificationTypeNames.className;
+                    return 11;
                 }
                 else if (flags & 384) {
-                    return ClassificationTypeNames.enumName;
+                    return 12;
                 }
                 else if (flags & 524288) {
-                    return ClassificationTypeNames.typeAlias;
+                    return 16;
                 }
                 else if (meaningAtPosition & 2) {
                     if (flags & 64) {
-                        return ClassificationTypeNames.interfaceName;
+                        return 13;
                     }
                     else if (flags & 262144) {
-                        return ClassificationTypeNames.typeParameterName;
+                        return 15;
                     }
                 }
                 else if (flags & 1536) {
                     if (meaningAtPosition & 4 ||
                         (meaningAtPosition & 1 && hasValueSideModule(symbol))) {
-                        return ClassificationTypeNames.moduleName;
+                        return 14;
                     }
                 }
                 return undefined;
@@ -34375,10 +34384,7 @@ var ts;
                         if (symbol) {
                             var type = classifySymbol(symbol, getMeaningFromLocation(node));
                             if (type) {
-                                result.push({
-                                    textSpan: ts.createTextSpan(node.getStart(), node.getWidth()),
-                                    classificationType: type
-                                });
+                                pushClassification(node.getStart(), node.getWidth(), type);
                             }
                         }
                     }
@@ -34386,13 +34392,53 @@ var ts;
                 }
             }
         }
+        function getClassificationTypeName(type) {
+            switch (type) {
+                case 1: return ClassificationTypeNames.comment;
+                case 2: return ClassificationTypeNames.identifier;
+                case 3: return ClassificationTypeNames.keyword;
+                case 4: return ClassificationTypeNames.numericLiteral;
+                case 5: return ClassificationTypeNames.operator;
+                case 6: return ClassificationTypeNames.stringLiteral;
+                case 8: return ClassificationTypeNames.whiteSpace;
+                case 9: return ClassificationTypeNames.text;
+                case 10: return ClassificationTypeNames.punctuation;
+                case 11: return ClassificationTypeNames.className;
+                case 12: return ClassificationTypeNames.enumName;
+                case 13: return ClassificationTypeNames.interfaceName;
+                case 14: return ClassificationTypeNames.moduleName;
+                case 15: return ClassificationTypeNames.typeParameterName;
+                case 16: return ClassificationTypeNames.typeAliasName;
+                case 17: return ClassificationTypeNames.parameterName;
+            }
+        }
+        function convertClassifications(classifications) {
+            ts.Debug.assert(classifications.spans.length % 3 === 0);
+            var dense = classifications.spans;
+            var result = [];
+            for (var i = 0, n = dense.length; i < n; i += 3) {
+                result.push({
+                    textSpan: ts.createTextSpan(dense[i], dense[i + 1]),
+                    classificationType: getClassificationTypeName(dense[i + 2])
+                });
+            }
+            return result;
+        }
         function getSyntacticClassifications(fileName, span) {
+            return convertClassifications(getEncodedSyntacticClassifications(fileName, span));
+        }
+        function getEncodedSyntacticClassifications(fileName, span) {
             var sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             var triviaScanner = ts.createScanner(2, false, sourceFile.text);
             var mergeConflictScanner = ts.createScanner(2, false, sourceFile.text);
             var result = [];
             processElement(sourceFile);
-            return result;
+            return { spans: result, endOfLineState: 0 };
+            function pushClassification(start, length, type) {
+                result.push(start);
+                result.push(length);
+                result.push(type);
+            }
             function classifyLeadingTrivia(token) {
                 var tokenStart = ts.skipTrivia(sourceFile.text, token.pos, false);
                 if (tokenStart === token.pos) {
@@ -34409,20 +34455,14 @@ var ts;
                             return;
                         }
                         if (ts.isComment(kind)) {
-                            result.push({
-                                textSpan: ts.createTextSpan(start, width),
-                                classificationType: ClassificationTypeNames.comment
-                            });
+                            pushClassification(start, width, 1);
                             continue;
                         }
                         if (kind === 6) {
                             var text = sourceFile.text;
                             var ch = text.charCodeAt(start);
                             if (ch === 60 || ch === 62) {
-                                result.push({
-                                    textSpan: ts.createTextSpan(start, width),
-                                    classificationType: ClassificationTypeNames.comment
-                                });
+                                pushClassification(start, width, 1);
                                 continue;
                             }
                             ts.Debug.assert(ch === 61);
@@ -34437,10 +34477,7 @@ var ts;
                         break;
                     }
                 }
-                result.push({
-                    textSpan: ts.createTextSpanFromBounds(start, i),
-                    classificationType: ClassificationTypeNames.comment
-                });
+                pushClassification(start, i - start, 1);
                 mergeConflictScanner.setTextPos(i);
                 while (mergeConflictScanner.getTextPos() < end) {
                     classifyDisabledCodeToken();
@@ -34452,10 +34489,7 @@ var ts;
                 var end = mergeConflictScanner.getTextPos();
                 var type = classifyTokenType(tokenKind);
                 if (type) {
-                    result.push({
-                        textSpan: ts.createTextSpanFromBounds(start, end),
-                        classificationType: type
-                    });
+                    pushClassification(start, end - start, type);
                 }
             }
             function classifyToken(token) {
@@ -34463,20 +34497,17 @@ var ts;
                 if (token.getWidth() > 0) {
                     var type = classifyTokenType(token.kind, token);
                     if (type) {
-                        result.push({
-                            textSpan: ts.createTextSpan(token.getStart(), token.getWidth()),
-                            classificationType: type
-                        });
+                        pushClassification(token.getStart(), token.getWidth(), type);
                     }
                 }
             }
             function classifyTokenType(tokenKind, token) {
                 if (ts.isKeyword(tokenKind)) {
-                    return ClassificationTypeNames.keyword;
+                    return 3;
                 }
                 if (tokenKind === 24 || tokenKind === 25) {
                     if (token && ts.getTypeArgumentOrTypeParameterList(token.parent)) {
-                        return ClassificationTypeNames.punctuation;
+                        return 10;
                     }
                 }
                 if (ts.isPunctuation(tokenKind)) {
@@ -34485,61 +34516,66 @@ var ts;
                             if (token.parent.kind === 199 ||
                                 token.parent.kind === 133 ||
                                 token.parent.kind === 130) {
-                                return ClassificationTypeNames.operator;
+                                return 5;
                             }
                         }
                         if (token.parent.kind === 170 ||
                             token.parent.kind === 168 ||
                             token.parent.kind === 169 ||
                             token.parent.kind === 171) {
-                            return ClassificationTypeNames.operator;
+                            return 5;
                         }
                     }
-                    return ClassificationTypeNames.punctuation;
+                    return 10;
                 }
                 else if (tokenKind === 7) {
-                    return ClassificationTypeNames.numericLiteral;
+                    return 4;
                 }
                 else if (tokenKind === 8) {
-                    return ClassificationTypeNames.stringLiteral;
+                    return 6;
                 }
                 else if (tokenKind === 9) {
-                    return ClassificationTypeNames.stringLiteral;
+                    return 6;
                 }
                 else if (ts.isTemplateLiteralKind(tokenKind)) {
-                    return ClassificationTypeNames.stringLiteral;
+                    return 6;
                 }
                 else if (tokenKind === 65) {
                     if (token) {
                         switch (token.parent.kind) {
                             case 202:
                                 if (token.parent.name === token) {
-                                    return ClassificationTypeNames.className;
+                                    return 11;
                                 }
                                 return;
                             case 129:
                                 if (token.parent.name === token) {
-                                    return ClassificationTypeNames.typeParameterName;
+                                    return 15;
                                 }
                                 return;
                             case 203:
                                 if (token.parent.name === token) {
-                                    return ClassificationTypeNames.interfaceName;
+                                    return 13;
                                 }
                                 return;
                             case 205:
                                 if (token.parent.name === token) {
-                                    return ClassificationTypeNames.enumName;
+                                    return 12;
                                 }
                                 return;
                             case 206:
                                 if (token.parent.name === token) {
-                                    return ClassificationTypeNames.moduleName;
+                                    return 14;
+                                }
+                                return;
+                            case 130:
+                                if (token.parent.name === token) {
+                                    return 17;
                                 }
                                 return;
                         }
                     }
-                    return ClassificationTypeNames.text;
+                    return 9;
                 }
             }
             function processElement(element) {
@@ -34748,6 +34784,8 @@ var ts;
             getCompilerOptionsDiagnostics: getCompilerOptionsDiagnostics,
             getSyntacticClassifications: getSyntacticClassifications,
             getSemanticClassifications: getSemanticClassifications,
+            getEncodedSyntacticClassifications: getEncodedSyntacticClassifications,
+            getEncodedSemanticClassifications: getEncodedSemanticClassifications,
             getCompletionsAtPosition: getCompletionsAtPosition,
             getCompletionEntryDetails: getCompletionEntryDetails,
             getSignatureHelpItems: getSignatureHelpItems,
@@ -34839,7 +34877,55 @@ var ts;
             }
             return true;
         }
+        function convertClassifications(classifications, text) {
+            var entries = [];
+            var dense = classifications.spans;
+            var lastEnd = 0;
+            for (var i = 0, n = dense.length; i < n; i += 3) {
+                var start = dense[i];
+                var length_1 = dense[i + 1];
+                var type = dense[i + 2];
+                if (lastEnd >= 0) {
+                    var whitespaceLength_1 = start - lastEnd;
+                    if (whitespaceLength_1 > 0) {
+                        entries.push({ length: whitespaceLength_1, classification: TokenClass.Whitespace });
+                    }
+                }
+                entries.push({ length: length_1, classification: convertClassification(type) });
+                lastEnd = start + length_1;
+            }
+            var whitespaceLength = text.length - lastEnd;
+            if (whitespaceLength > 0) {
+                entries.push({ length: whitespaceLength, classification: TokenClass.Whitespace });
+            }
+            return { entries: entries, finalLexState: classifications.endOfLineState };
+        }
+        function convertClassification(type) {
+            switch (type) {
+                case 1: return TokenClass.Comment;
+                case 3: return TokenClass.Keyword;
+                case 4: return TokenClass.NumberLiteral;
+                case 5: return TokenClass.Operator;
+                case 6: return TokenClass.StringLiteral;
+                case 8: return TokenClass.Whitespace;
+                case 10: return TokenClass.Punctuation;
+                case 2:
+                case 11:
+                case 12:
+                case 13:
+                case 14:
+                case 15:
+                case 16:
+                case 9:
+                case 17:
+                default:
+                    return TokenClass.Identifier;
+            }
+        }
         function getClassificationsForLine(text, lexState, syntacticClassifierAbsent) {
+            return convertClassifications(getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent), text);
+        }
+        function getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent) {
             var offset = 0;
             var token = 0;
             var lastNonTriviaToken = 0;
@@ -34872,8 +34958,8 @@ var ts;
             }
             scanner.setText(text);
             var result = {
-                finalLexState: 0,
-                entries: []
+                endOfLineState: 0,
+                spans: []
             };
             var angleBracketStack = 0;
             do {
@@ -34940,7 +35026,7 @@ var ts;
             function processToken() {
                 var start = scanner.getTokenPos();
                 var end = scanner.getTextPos();
-                addResult(end - start, classFromKind(token));
+                addResult(start, end, classFromKind(token));
                 if (end >= text.length) {
                     if (token === 8) {
                         var tokenText = scanner.getTokenText();
@@ -34952,7 +35038,7 @@ var ts;
                             }
                             if (numBackslashes & 1) {
                                 var quoteChar = tokenText.charCodeAt(0);
-                                result.finalLexState = quoteChar === 34
+                                result.endOfLineState = quoteChar === 34
                                     ? 3
                                     : 2;
                             }
@@ -34960,16 +35046,16 @@ var ts;
                     }
                     else if (token === 3) {
                         if (scanner.isUnterminated()) {
-                            result.finalLexState = 1;
+                            result.endOfLineState = 1;
                         }
                     }
                     else if (ts.isTemplateLiteralKind(token)) {
                         if (scanner.isUnterminated()) {
                             if (token === 13) {
-                                result.finalLexState = 5;
+                                result.endOfLineState = 5;
                             }
                             else if (token === 10) {
-                                result.finalLexState = 4;
+                                result.endOfLineState = 4;
                             }
                             else {
                                 ts.Debug.fail("Only 'NoSubstitutionTemplateLiteral's and 'TemplateTail's can be unterminated; got SyntaxKind #" + token);
@@ -34977,16 +35063,24 @@ var ts;
                         }
                     }
                     else if (templateStack.length > 0 && ts.lastOrUndefined(templateStack) === 11) {
-                        result.finalLexState = 6;
+                        result.endOfLineState = 6;
                     }
                 }
             }
-            function addResult(length, classification) {
+            function addResult(start, end, classification) {
+                if (classification === 8) {
+                    return;
+                }
+                if (start === 0 && offset > 0) {
+                    start += offset;
+                }
+                start -= offset;
+                end -= offset;
+                var length = end - start;
                 if (length > 0) {
-                    if (result.entries.length === 0) {
-                        length -= offset;
-                    }
-                    result.entries.push({ length: length, classification: classification });
+                    result.spans.push(start);
+                    result.spans.push(length);
+                    result.spans.push(classification);
                 }
             }
         }
@@ -35051,37 +35145,40 @@ var ts;
         }
         function classFromKind(token) {
             if (isKeyword(token)) {
-                return TokenClass.Keyword;
+                return 3;
             }
             else if (isBinaryExpressionOperatorToken(token) || isPrefixUnaryExpressionOperatorToken(token)) {
-                return TokenClass.Operator;
+                return 5;
             }
             else if (token >= 14 && token <= 64) {
-                return TokenClass.Punctuation;
+                return 10;
             }
             switch (token) {
                 case 7:
-                    return TokenClass.NumberLiteral;
+                    return 4;
                 case 8:
-                    return TokenClass.StringLiteral;
+                    return 6;
                 case 9:
-                    return TokenClass.RegExpLiteral;
+                    return 7;
                 case 6:
                 case 3:
                 case 2:
-                    return TokenClass.Comment;
+                    return 1;
                 case 5:
                 case 4:
-                    return TokenClass.Whitespace;
+                    return 8;
                 case 65:
                 default:
                     if (ts.isTemplateLiteralKind(token)) {
-                        return TokenClass.StringLiteral;
+                        return 6;
                     }
-                    return TokenClass.Identifier;
+                    return 2;
             }
         }
-        return { getClassificationsForLine: getClassificationsForLine };
+        return {
+            getClassificationsForLine: getClassificationsForLine,
+            getEncodedLexicalClassifications: getEncodedLexicalClassifications
+        };
     }
     ts.createClassifier = createClassifier;
     function getDefaultLibFilePath(options) {

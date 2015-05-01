@@ -1361,8 +1361,16 @@ declare module ts {
         getSyntacticDiagnostics(fileName: string): Diagnostic[];
         getSemanticDiagnostics(fileName: string): Diagnostic[];
         getCompilerOptionsDiagnostics(): Diagnostic[];
+        /**
+         * @deprecated Use getEncodedSyntacticClassifications instead.
+         */
         getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+        /**
+         * @deprecated Use getEncodedSemanticClassifications instead.
+         */
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+        getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
+        getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
@@ -1390,6 +1398,10 @@ declare module ts {
         getProgram(): Program;
         getSourceFile(fileName: string): SourceFile;
         dispose(): void;
+    }
+    interface Classifications {
+        spans: number[];
+        endOfLineState: EndOfLineState;
     }
     interface ClassifiedSpan {
         textSpan: TextSpan;
@@ -1602,7 +1614,7 @@ declare module ts {
         text: string;
     }
     const enum EndOfLineState {
-        Start = 0,
+        None = 0,
         InMultiLineCommentTrivia = 1,
         InSingleQuoteStringLiteral = 2,
         InDoubleQuoteStringLiteral = 3,
@@ -1648,8 +1660,10 @@ declare module ts {
          *                                  classifications which may be incorrectly categorized will be given
          *                                  back as Identifiers in order to allow the syntactic classifier to
          *                                  subsume the classification.
+         * @deprecated Use getLexicalClassifications instead.
          */
         getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult;
+        getEncodedLexicalClassifications(text: string, endOfLineState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications;
     }
     /**
       * The document registry represents a store of SourceFile objects that can be shared between
@@ -1760,7 +1774,27 @@ declare module ts {
         static interfaceName: string;
         static moduleName: string;
         static typeParameterName: string;
-        static typeAlias: string;
+        static typeAliasName: string;
+        static parameterName: string;
+    }
+    const enum ClassificationType {
+        comment = 1,
+        identifier = 2,
+        keyword = 3,
+        numericLiteral = 4,
+        operator = 5,
+        stringLiteral = 6,
+        regularExpressionLiteral = 7,
+        whiteSpace = 8,
+        text = 9,
+        punctuation = 10,
+        className = 11,
+        enumName = 12,
+        interfaceName = 13,
+        moduleName = 14,
+        typeParameterName = 15,
+        typeAliasName = 16,
+        parameterName = 17,
     }
     interface DisplayPartsSymbolWriter extends SymbolWriter {
         displayParts(): SymbolDisplayPart[];
