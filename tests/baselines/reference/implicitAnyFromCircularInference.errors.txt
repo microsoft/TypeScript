@@ -1,6 +1,6 @@
-tests/cases/compiler/implicitAnyFromCircularInference.ts(3,5): error TS7021: 'a' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
-tests/cases/compiler/implicitAnyFromCircularInference.ts(7,5): error TS7021: 'c' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
-tests/cases/compiler/implicitAnyFromCircularInference.ts(10,5): error TS7021: 'd' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
+tests/cases/compiler/implicitAnyFromCircularInference.ts(3,5): error TS2502: 'a' is referenced directly or indirectly in its own type annotation.
+tests/cases/compiler/implicitAnyFromCircularInference.ts(7,5): error TS2502: 'c' is referenced directly or indirectly in its own type annotation.
+tests/cases/compiler/implicitAnyFromCircularInference.ts(10,5): error TS2502: 'd' is referenced directly or indirectly in its own type annotation.
 tests/cases/compiler/implicitAnyFromCircularInference.ts(15,10): error TS7023: 'g' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 tests/cases/compiler/implicitAnyFromCircularInference.ts(18,10): error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 tests/cases/compiler/implicitAnyFromCircularInference.ts(23,10): error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
@@ -14,18 +14,18 @@ tests/cases/compiler/implicitAnyFromCircularInference.ts(46,5): error TS7023: 'x
     // Error expected
     var a: typeof a;
         ~
-!!! error TS7021: 'a' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
+!!! error TS2502: 'a' is referenced directly or indirectly in its own type annotation.
     
     // Error expected on b or c
     var b: typeof c;
     var c: typeof b;
         ~
-!!! error TS7021: 'c' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
+!!! error TS2502: 'c' is referenced directly or indirectly in its own type annotation.
     
     // Error expected
     var d: Array<typeof d>;
         ~
-!!! error TS7021: 'd' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.
+!!! error TS2502: 'd' is referenced directly or indirectly in its own type annotation.
     
     function f() { return f; }
     
