@@ -3572,14 +3572,14 @@ declare module Reflect {
     function setPrototypeOf(target: any, proto: any): boolean;
 }
 
-interface IPromise<T> {
+interface PromiseLike<T> {
     /**
     * Attaches callbacks for the resolution and/or rejection of the Promise.
     * @param onfulfilled The callback to execute when the Promise is resolved.
     * @param onrejected The callback to execute when the Promise is rejected.
     * @returns A Promise for the completion of which ever callback is executed.
     */
-    then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): IPromise<TResult>;
+    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): PromiseLike<TResult>;
 }
 
 /**
@@ -3592,14 +3592,14 @@ interface Promise<T> {
     * @param onrejected The callback to execute when the Promise is rejected.
     * @returns A Promise for the completion of which ever callback is executed.
     */
-    then<TResult>(onfulfilled?: (value: T) => TResult | IPromise<TResult>, onrejected?: (reason: any) => TResult | IPromise<TResult>): Promise<TResult>;
+    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>;
 
     /**
      * Attaches a callback for only the rejection of the Promise.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of the callback.
      */
-    catch(onrejected?: (reason: any) => T | IPromise<T>): Promise<T>;
+    catch(onrejected?: (reason: any) => T | PromiseLike<T>): Promise<T>;
 
     [Symbol.toStringTag]: string;
 }
@@ -3616,7 +3616,7 @@ interface PromiseConstructor {
      * a resolve callback used resolve the promise with a value or the result of another promise, 
      * and a reject callback used to reject the promise with a provided reason or error.
      */
-    new <T>(executor: (resolve: (value?: T | IPromise<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
+    new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
 
     /**
      * Creates a Promise that is resolved with an array of results when all of the provided Promises 
@@ -3624,7 +3624,7 @@ interface PromiseConstructor {
      * @param values An array of Promises.
      * @returns A new Promise.
      */
-    all<T>(values: Iterable<T | IPromise<T>>): Promise<T[]>;
+    all<T>(values: Iterable<T | PromiseLike<T>>): Promise<T[]>;
 
     /**
      * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved 
@@ -3632,7 +3632,7 @@ interface PromiseConstructor {
      * @param values An array of Promises.
      * @returns A new Promise.
      */
-    race<T>(values: Iterable<T | IPromise<T>>): Promise<T>;
+    race<T>(values: Iterable<T | PromiseLike<T>>): Promise<T>;
 
     /**
      * Creates a new rejected promise for the provided reason.
@@ -3653,7 +3653,7 @@ interface PromiseConstructor {
       * @param value A promise.
       * @returns A promise whose internal state matches the provided promise.
       */
-    resolve<T>(value: T | IPromise<T>): Promise<T>;
+    resolve<T>(value: T | PromiseLike<T>): Promise<T>;
 
     /**
      * Creates a new resolved promise .
