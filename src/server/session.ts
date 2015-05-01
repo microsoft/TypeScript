@@ -97,7 +97,7 @@ module ts.server {
         export var Rename = "rename";
         export var Saveto = "saveto";
         export var SignatureHelp = "signatureHelp";        
-        export var Type = "type";        
+        export var TypeDefinition = "typeDefinition";        
         export var Unknown = "unknown";
     }
 
@@ -840,7 +840,7 @@ module ts.server {
                         response = this.getDefinition(defArgs.line, defArgs.offset, defArgs.file);
                         break;
                     }
-                    case CommandNames.Type: {
+                    case CommandNames.TypeDefinition: {
                         var defArgs = <protocol.FileLocationRequestArgs>request.arguments;
                         response = this.getTypeDefinition(defArgs.line, defArgs.offset, defArgs.file);
                         break;

@@ -127,7 +127,7 @@ declare module ts.server.protocol {
 
     /**
       * Go to type request; value of command field is
-      * "type". Return response giving the file locations that
+      * "typeDefinition". Return response giving the file locations that
       * define the type for the symbol found in file at location line, col.
       */
     export interface TypeDefinitionRequest extends FileLocationRequest {

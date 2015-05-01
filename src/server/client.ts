@@ -308,7 +308,7 @@ module ts.server {
                 offset: lineOffset.offset,
             };
 
-            var request = this.processRequest<protocol.TypeDefinitionRequest>(CommandNames.Type, args);
+            var request = this.processRequest<protocol.TypeDefinitionRequest>(CommandNames.TypeDefinition, args);
             var response = this.processResponse<protocol.TypeDefinitionResponse>(request);
 
             return response.body.map(entry => {
