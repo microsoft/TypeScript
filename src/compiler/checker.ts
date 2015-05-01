@@ -2278,12 +2278,19 @@ module ts {
                 }
             }
             else if (links.type === resolvingType) {
-                links.type = anyType;
-                if (compilerOptions.noImplicitAny) {
-                    let diagnostic = (<VariableLikeDeclaration>symbol.valueDeclaration).type ?
-                        Diagnostics._0_implicitly_has_type_any_because_it_is_referenced_directly_or_indirectly_in_its_own_type_annotation :
-                        Diagnostics._0_implicitly_has_type_any_because_it_is_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer;
-                    error(symbol.valueDeclaration, diagnostic, symbolToString(symbol));
+                if ((<VariableLikeDeclaration>symbol.valueDeclaration).type) {
+                    // Variable has type annotation that circularly references the variable itself
+                    links.type = unknownType;
+                    error(symbol.valueDeclaration, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_type_annotation,
+                        symbolToString(symbol));
+                }
+                else {
+                    // Variable has initializer that circularly references the variable itself
+                    links.type = anyType;
+                    if (compilerOptions.noImplicitAny) {
+                        error(symbol.valueDeclaration, Diagnostics._0_implicitly_has_type_any_because_it_is_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer,
+                            symbolToString(symbol));
+                    }
                 }
             }
             return links.type;
