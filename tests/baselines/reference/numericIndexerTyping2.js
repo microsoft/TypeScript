@@ -13,7 +13,7 @@ var i2: I2;
 var r2: string = i2[1]; // error: numeric indexer returns the type of the string indexere
 
 //// [numericIndexerTyping2.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
