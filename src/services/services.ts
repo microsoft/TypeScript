@@ -3876,7 +3876,7 @@ module ts {
             };
         }
 
-        function getDefintionFromSymbol(symbol: Symbol, node: Node): DefinitionInfo[]{
+        function getDefinitionFromSymbol(symbol: Symbol, node: Node): DefinitionInfo[] {
             let typeChecker = program.getTypeChecker();
             let result: DefinitionInfo[] = [];
             let declarations = symbol.getDeclarations();
@@ -3939,7 +3939,6 @@ module ts {
 
                 return false;
             }
-        
         }
 
         /// Goto definition
@@ -4016,7 +4015,7 @@ module ts {
                     declaration => createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
             }
 
-            return getDefintionFromSymbol(symbol, node);
+            return getDefinitionFromSymbol(symbol, node);
         }
 
         /// Goto type
@@ -4046,7 +4045,7 @@ module ts {
                 var result: DefinitionInfo[] = [];
                 forEach((<UnionType>type).types, t => {
                     if (t.symbol) {
-                        result.push(...getDefintionFromSymbol(t.symbol, node));
+                        result.push(...getDefinitionFromSymbol(t.symbol, node));
                     }
                 });
                 return result;
@@ -4056,7 +4055,7 @@ module ts {
                 return undefined;
             }
 
-            return getDefintionFromSymbol(type.symbol, node);
+            return getDefinitionFromSymbol(type.symbol, node);
         }
 
         function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {

@@ -1573,7 +1573,8 @@ module FourSlash {
         public goToTypeDefinition(definitionIndex: number) {
             if (definitionIndex === 0) {
                 this.scenarioActions.push('<GoToTypeDefinition />');
-            } else {
+            }
+            else {
                 this.taoInvalidReason = 'GoToTypeDefinition not supported for non-zero definition indices';
             }
 
@@ -1610,8 +1611,18 @@ module FourSlash {
             var assertFn = negative ? assert.notEqual : assert.equal;
 
             var definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            var actualCount = definitions && definitions.length || 0;
 
-            assertFn(definitions.length, expectedCount, this.messageAtLastKnownMarker("Definitions Count"));
+            assertFn(actualCount, expectedCount, this.messageAtLastKnownMarker("Definitions Count"));
+        }
+
+        public verifyTypeDefinitionsCount(negative: boolean, expectedCount: number) {
+            var assertFn = negative ? assert.notEqual : assert.equal;
+
+            var definitions = this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            var actualCount = definitions && definitions.length || 0;
+
+            assertFn(actualCount, expectedCount, this.messageAtLastKnownMarker("Type definitions Count"));
         }
 
         public verifyDefinitionsName(negative: boolean, expectedName: string, expectedContainerName: string) {

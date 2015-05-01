@@ -238,6 +238,10 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyDefinitionsCount(this.negative, expectedCount);
         }
 
+        public typeDefinitionCountIs(expectedCount: number) {
+            FourSlash.currentTestState.verifyTypeDefinitionsCount(this.negative, expectedCount);
+        }
+
         public definitionLocationExists() {
             FourSlash.currentTestState.verifyDefinitionLocationExists(this.negative);
         }

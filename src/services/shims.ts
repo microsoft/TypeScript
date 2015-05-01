@@ -561,7 +561,7 @@ module ts {
             return this.forwardJSONCall(
                 "getDefinitionAtPosition('" + fileName + "', " + position + ")",
                 () => {
-                    return this.languageService.getDefinitionAtPosition(fileName, position);
+                    return this.languageService.getTypeDefinitionAtPosition(fileName, position);
                 });
         }
 
