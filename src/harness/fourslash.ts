@@ -2192,38 +2192,62 @@ module FourSlash {
         xmlData.push(xml);
     }
 
+    // We don't want to recompile 'fourslash.ts' for every test, so
+    // here we cache the JS output and reuse it for every test.
+    let fourslashJsOutput: string;
+    {
+        let host = Harness.Compiler.createCompilerHost([{ unitName: Harness.Compiler.fourslashFileName, content: undefined }],
+            (fn, contents) => fourslashJsOutput = contents,
+            ts.ScriptTarget.Latest,
+            ts.sys.useCaseSensitiveFileNames);
+
+        let program = ts.createProgram([Harness.Compiler.fourslashFileName], { noResolve: true, target: ts.ScriptTarget.ES3 }, host);
+
+        program.emit(host.getSourceFile(Harness.Compiler.fourslashFileName, ts.ScriptTarget.ES3));
+    }
+
+
     export function runFourSlashTestContent(basePath: string, testType: FourSlashTestType, content: string, fileName: string): TestXmlData {
         // Parse out the files and their metadata
-        var testData = parseTestData(basePath, content, fileName);
+        let testData = parseTestData(basePath, content, fileName);
 
         currentTestState = new TestState(basePath, testType, testData);
 
-        var result = '';
-        var host = Harness.Compiler.createCompilerHost([{ unitName: Harness.Compiler.fourslashFileName, content: undefined },
-            { unitName: fileName, content: content }],
+        let result = '';
+        let host = Harness.Compiler.createCompilerHost(
+            [
+                { unitName: Harness.Compiler.fourslashFileName, content: undefined },
+                { unitName: fileName, content: content }
+            ],
             (fn, contents) => result = contents,
             ts.ScriptTarget.Latest,
             ts.sys.useCaseSensitiveFileNames);
-        // TODO (drosen): We need to enforce checking on these tests.
-        var program = ts.createProgram([Harness.Compiler.fourslashFileName, fileName], { out: "fourslashTestOutput.js", noResolve: true, target: ts.ScriptTarget.ES3 }, host);
 
-        var diagnostics = ts.getPreEmitDiagnostics(program);
+        let program = ts.createProgram([Harness.Compiler.fourslashFileName, fileName], { out: "fourslashTestOutput.js", noResolve: true, target: ts.ScriptTarget.ES3 }, host);
+
+        let sourceFile = host.getSourceFile(fileName, ts.ScriptTarget.ES3);
+
+        let diagnostics = ts.getPreEmitDiagnostics(program, sourceFile);
         if (diagnostics.length > 0) {
             throw new Error('Error compiling ' + fileName + ': ' +
                 diagnostics.map(e => ts.flattenDiagnosticMessageText(e.messageText, ts.sys.newLine)).join('\r\n'));
         }
-        program.emit();
+
+        program.emit(sourceFile);
         result = result || ''; // Might have an empty fourslash file
+
+        result = fourslashJsOutput + "\r\n" + result;
 
         // Compile and execute the test
         try {
             eval(result);
-        } catch (err) {
+        }
+        catch (err) {
             // Debugging: FourSlash.currentTestState.printCurrentFileState();
             throw err;
         }
 
-        var xmlData = currentTestState.getTestXmlData();
+        let xmlData = currentTestState.getTestXmlData();
         xmlData.originalName = fileName;
         return xmlData;
     }

@@ -1,14 +1,14 @@
 /// <reference path='fourslash.ts'/>
 
-////module /*1*/m {
-////    var /*2*/moduleElemWithoutExport = 10;
-////    export var /*3*/moduleElemWithExport = 10;
+////namespace /*1*/m {
+////    var /*2*/namespaceElemWithoutExport = 10;
+////    export var /*3*/namespaceElemWithExport = 10;
 ////}
 ////var /*4*/a = /*5*/m;
 ////var /*6*/b: typeof /*7*/m;
-////module /*8*/m1./*9*/m2 {
-////    var /*10*/moduleElemWithoutExport = 10;
-////    export var /*11*/moduleElemWithExport = 10;
+////namespace /*8*/m1./*9*/m2 {
+////    var /*10*/namespaceElemWithoutExport = 10;
+////    export var /*11*/namespaceElemWithExport = 10;
 ////}
 ////var /*12*/x = /*13*/m1./*14*/m2;
 ////var /*15*/y: typeof /*16*/m1./*17*/m2;
@@ -19,14 +19,14 @@ function goToMarker() {
     goTo.marker(marker.toString());
 }
 
-function verifyModule(name: string, optionalParentName?: string) {
+function verifyNamespace(name: string, optionalParentName?: string) {
     goToMarker();
-    var moduleNameDisplay = [{ text: name, kind: "moduleName" }];
+    var namespaceNameDisplay = [{ text: name, kind: "moduleName" }];
     if (optionalParentName) {
-        moduleNameDisplay = [{ text: optionalParentName, kind: "moduleName" }, { text: ".", kind: "punctuation" }].concat(moduleNameDisplay);
+        namespaceNameDisplay = [{ text: optionalParentName, kind: "moduleName" }, { text: ".", kind: "punctuation" }].concat(namespaceNameDisplay);
     }
     verify.verifyQuickInfoDisplayParts("module", optionalParentName ? "export" : "", { start: test.markerByName(marker.toString()).position, length: name.length },
-        [{ text: "module", kind: "keyword" }, { text: " ", kind: "space" }].concat(moduleNameDisplay),
+        [{ text: "namespace", kind: "keyword" }, { text: " ", kind: "space" }].concat(namespaceNameDisplay),
         []);
 }
 
@@ -39,25 +39,25 @@ function verifyVar(name: string, optionalFullName?: ts.SymbolDisplayPart[], type
         []);
 }
 
-verifyModule("m");
-verifyVar("moduleElemWithoutExport");
-verifyVar("moduleElemWithExport", [{ text: "m", kind: "moduleName" }, { text: ".", kind: "punctuation" }, { text: "moduleElemWithExport", kind: "localName" }]);
+verifyNamespace("m");
+verifyVar("namespaceElemWithoutExport");
+verifyVar("namespaceElemWithExport", [{ text: "m", kind: "moduleName" }, { text: ".", kind: "punctuation" }, { text: "namespaceElemWithExport", kind: "localName" }]);
 
 verifyVar("a", /*optionalFullName*/ undefined, [{ text: "typeof", kind: "keyword" }, { text: " ", kind: "space" }, { text: "m", kind: "moduleName" }]);
-verifyModule("m");
+verifyNamespace("m");
 verifyVar("b", /*optionalFullName*/ undefined, [{ text: "typeof", kind: "keyword" }, { text: " ", kind: "space" }, { text: "m", kind: "moduleName" }]);
-verifyModule("m");
+verifyNamespace("m");
 
-verifyModule("m1");
-verifyModule("m2", "m1");
-verifyVar("moduleElemWithoutExport");
-verifyVar("moduleElemWithExport", [{ text: "m1", kind: "moduleName" }, { text: ".", kind: "punctuation" },
-    { text: "m2", kind: "moduleName" }, { text: ".", kind: "punctuation" }, { text: "moduleElemWithExport", kind: "localName" }]);
+verifyNamespace("m1");
+verifyNamespace("m2", "m1");
+verifyVar("namespaceElemWithoutExport");
+verifyVar("namespaceElemWithExport", [{ text: "m1", kind: "moduleName" }, { text: ".", kind: "punctuation" },
+    { text: "m2", kind: "moduleName" }, { text: ".", kind: "punctuation" }, { text: "namespaceElemWithExport", kind: "localName" }]);
 verifyVar("x", /*optionalFullName*/ undefined, [{ text: "typeof", kind: "keyword" }, { text: " ", kind: "space" },
     { text: "m1", kind: "moduleName" }, { text: ".", kind: "punctuation" }, { text: "m2", kind: "moduleName" }]);
-verifyModule("m1");
-verifyModule("m2", "m1");
+verifyNamespace("m1");
+verifyNamespace("m2", "m1");
 verifyVar("y", /*optionalFullName*/ undefined, [{ text: "typeof", kind: "keyword" }, { text: " ", kind: "space" },
     { text: "m1", kind: "moduleName" }, { text: ".", kind: "punctuation" }, { text: "m2", kind: "moduleName" }]);
-verifyModule("m1");
-verifyModule("m2", "m1");
+verifyNamespace("m1");
+verifyNamespace("m2", "m1");

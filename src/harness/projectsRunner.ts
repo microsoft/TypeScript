@@ -331,7 +331,7 @@ class ProjectRunner extends RunnerBase {
         var name = 'Compiling project for ' + testCase.scenario + ': testcase ' + testCaseFileName;
 
         describe(name, () => {
-            function verifyCompilerResults(compilerResult: BatchCompileProjectTestCaseResult) {
+            function verifyCompilerResults(moduleKind: ts.ModuleKind) {
                 function getCompilerResolutionInfo() {
                     var resolutionInfo: ProjectRunnerTestCaseResolutionInfo = {
                         scenario: testCase.scenario,
@@ -356,23 +356,33 @@ class ProjectRunner extends RunnerBase {
                     return resolutionInfo;
                 }
 
-                it('Resolution information of (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, () => {
+                var compilerResult: BatchCompileProjectTestCaseResult;
+
+                it(name + ": " + moduleNameToString(moduleKind) , () => {
+                    // Compile using node
+                    compilerResult = batchCompilerProjectTestCase(moduleKind);
+                });
+
+                it('Resolution information of (' + moduleNameToString(moduleKind) + '): ' + testCaseFileName, () => {
                     Harness.Baseline.runBaseline('Resolution information of (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + '.json', () => {
                         return JSON.stringify(getCompilerResolutionInfo(), undefined, "    ");
                     });
                 });
 
-                if (compilerResult.errors.length) {
-                    it('Errors for (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, () => {
+
+                it('Errors for (' + moduleNameToString(moduleKind) + '): ' + testCaseFileName, () => {
+                    if (compilerResult.errors.length) {
                         Harness.Baseline.runBaseline('Errors for (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + '.errors.txt', () => {
                             return getErrorsBaseline(compilerResult);
                         });
-                    });
-                }
+                    }
+                });
 
-                if (testCase.baselineCheck) {
-                    ts.forEach(compilerResult.outputFiles, outputFile => {
-                        it('Baseline of emitted result (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, () => {
+
+                it('Baseline of emitted result (' + moduleNameToString(moduleKind) + '): ' + testCaseFileName, () => {
+                    if (testCase.baselineCheck) {
+                        ts.forEach(compilerResult.outputFiles, outputFile => {
+
                             Harness.Baseline.runBaseline('Baseline of emitted result (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + outputFile.fileName, () => {
                                 try {
                                     return ts.sys.readFile(getProjectOutputFolder(outputFile.fileName, compilerResult.moduleKind));
@@ -382,88 +392,38 @@ class ProjectRunner extends RunnerBase {
                                 }
                             });
                         });
-                    });
+                    }
+                });
 
+
+                it('SourceMapRecord for (' + moduleNameToString(moduleKind) + '): ' + testCaseFileName, () => {
                     if (compilerResult.sourceMapData) {
-                        it('SourceMapRecord for (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, () => {
-                            Harness.Baseline.runBaseline('SourceMapRecord for (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + '.sourcemap.txt', () => {
-                                return Harness.SourceMapRecoder.getSourceMapRecord(compilerResult.sourceMapData, compilerResult.program,
-                                    ts.filter(compilerResult.outputFiles, outputFile => Harness.Compiler.isJS(outputFile.emittedFileName)));
-                            });
+                        Harness.Baseline.runBaseline('SourceMapRecord for (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + '.sourcemap.txt', () => {
+                            return Harness.SourceMapRecoder.getSourceMapRecord(compilerResult.sourceMapData, compilerResult.program,
+                                ts.filter(compilerResult.outputFiles, outputFile => Harness.Compiler.isJS(outputFile.emittedFileName)));
                         });
                     }
+                });
 
-                    // Verify that all the generated .d.ts files compile
+                // Verify that all the generated .d.ts files compile
+                  
+                it('Errors in generated Dts files for (' + moduleNameToString(moduleKind) + '): ' + testCaseFileName, () => {
                     if (!compilerResult.errors.length && testCase.declaration) {
                         var dTsCompileResult = compileCompileDTsFiles(compilerResult);
                         if (dTsCompileResult.errors.length) {
-                            it('Errors in generated Dts files for (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, () => {
-                                Harness.Baseline.runBaseline('Errors in generated Dts files for (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + '.dts.errors.txt', () => {
-                                    return getErrorsBaseline(dTsCompileResult);
-                                });
+                            Harness.Baseline.runBaseline('Errors in generated Dts files for (' + moduleNameToString(compilerResult.moduleKind) + '): ' + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + '.dts.errors.txt', () => {
+                                return getErrorsBaseline(dTsCompileResult);
                             });
                         }
                     }
-                }
-            }
-
-            var nodeCompilerResult: BatchCompileProjectTestCaseResult;
-            var amdCompilerResult: BatchCompileProjectTestCaseResult;
-
-            it(name + ": node", () => {
-                // Compile using node
-                nodeCompilerResult = batchCompilerProjectTestCase(ts.ModuleKind.CommonJS);
-                verifyCompilerResults(nodeCompilerResult);
-            });
-
-
-            it(name + ": amd", () => {
-                // Compile using amd
-                amdCompilerResult = batchCompilerProjectTestCase(ts.ModuleKind.AMD);
-                verifyCompilerResults(amdCompilerResult);
-            });
-
-            if (testCase.runTest) {
-                it(name + ": runTest", () => {
-                    if (!nodeCompilerResult || !amdCompilerResult) {
-                        return;
-                    }
-                    //TODO(ryanca/danquirk): Either support this or remove this option from the interface as well as test case json files
-                    // Node results
-                    assert.isTrue(!nodeCompilerResult.nonSubfolderDiskFiles, "Cant run test case that generates parent folders/absolute path");
-                    //it("runs without error: (" + moduleNameToString(nodeCompilerResult.moduleKind) + ')', function (done: any) {
-                    //    Exec.exec("node.exe", ['"' + baseLineLocalPath(nodeCompilerResult.outputFiles[0].diskRelativeName, nodeCompilerResult.moduleKind) + '"'], function (res) {
-                    //        Harness.Assert.equal(res.stdout, "");
-                    //        Harness.Assert.equal(res.stderr, "");
-                    //        done();
-                    //    })
-                    //});
-
-                    // Amd results
-                    assert.isTrue(!amdCompilerResult.nonSubfolderDiskFiles, "Cant run test case that generates parent folders/absolute path");
-                    //var amdDriverTemplate = "var requirejs = require('../r.js');\n\n" +
-                    //    "requirejs.config({\n" +
-                    //    "    nodeRequire: require\n" +
-                    //    "});\n\n" +
-                    //    "requirejs(['{0}'],\n" +
-                    //    "function ({0}) {\n" +
-                    //    "});";
-                    //var moduleName = baseLineLocalPath(amdCompilerResult.outputFiles[0].diskRelativeName, amdCompilerResult.moduleKind).replace(/\.js$/, "");
-                    //sys.writeFile(testCase.projectRoot + '/driver.js', amdDriverTemplate.replace(/\{0}/g, moduleName));
-                    //it("runs without error (" + moduleNameToString(amdCompilerResult.moduleKind) + ')', function (done: any) {
-                    //    Exec.exec("node.exe", ['"' + testCase.projectRoot + '/driver.js"'], function (res) {
-                    //        Harness.Assert.equal(res.stdout, "");
-                    //        Harness.Assert.equal(res.stderr, "");
-                    //        done();
-                    //    })
-                    //});
                 });
-
                 after(() => {
-                    nodeCompilerResult = undefined;
-                    amdCompilerResult = undefined;
+                    compilerResult = undefined;
                 });
             }
+
+            verifyCompilerResults(ts.ModuleKind.CommonJS);
+            verifyCompilerResults(ts.ModuleKind.AMD);
 
             after(() => {
                 // Mocha holds onto the closure environment of the describe callback even after the test is done.
