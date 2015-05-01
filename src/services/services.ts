@@ -1506,7 +1506,7 @@ module ts {
         public static moduleName = "module name";
         public static typeParameterName = "type parameter name";
         public static typeAliasName = "type alias name";
-        public static parameterName = "type alias name";
+        public static parameterName = "parameter name";
     }
 
     export const enum ClassificationType {
