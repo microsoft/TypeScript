@@ -1453,17 +1453,13 @@
         "category": "Error",
         "code": 2501
     },
-    "A return statement cannot specify a value in a generator function.": {
+    "No best common type exists among yield expressions.": {
         "category": "Error",
         "code": 2502
     },
-    "No best common type exists among yield expressions.": {
-        "category": "Error",
-        "code": 2503
-    },
     "A generator cannot have a 'void' type annotation.": {
         "category": "Error",
-        "code": 2504
+        "code": 2503
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

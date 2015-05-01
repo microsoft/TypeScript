@@ -9822,21 +9822,25 @@ module ts {
                 if (func) {
                     let returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(func));
                     let exprType = checkExpressionCached(node.expression);
+                    
+                    if (func.asteriskToken) {
+                        // A generator does not need its return expressions checked against its return type.
+                        // Instead, the yield expressions are checked against the element type.
+                        // TODO: Check return expressions of generators when return type tracking is added
+                        // for generators.
+                        return;
+                    }
+
                     if (func.kind === SyntaxKind.SetAccessor) {
                         error(node.expression, Diagnostics.Setters_cannot_return_a_value);
                     }
-                    else if (func.asteriskToken) {
-                        error(node.expression, Diagnostics.A_return_statement_cannot_specify_a_value_in_a_generator_function);
+                    else if (func.kind === SyntaxKind.Constructor) {
+                        if (!isTypeAssignableTo(exprType, returnType)) {
+                            error(node.expression, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
+                        }
                     }
-                    else {
-                        if (func.kind === SyntaxKind.Constructor) {
-                            if (!isTypeAssignableTo(exprType, returnType)) {
-                                error(node.expression, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
-                            }
-                        }
-                        else if (func.type || isGetAccessorWithAnnotatatedSetAccessor(func)) {
-                            checkTypeAssignableTo(exprType, returnType, node.expression, /*headMessage*/ undefined);
-                        }
+                    else if (func.type || isGetAccessorWithAnnotatatedSetAccessor(func)) {
+                        checkTypeAssignableTo(exprType, returnType, node.expression, /*headMessage*/ undefined);
                     }
                 }
             }
