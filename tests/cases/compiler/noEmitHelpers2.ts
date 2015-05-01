@@ -1,10 +1,11 @@
 // @noemithelpers: true
+// @emitdecoratormetadata: true
 // @target: es5
 
 function decorator() { }
 
 @decorator
 class A {
-    constructor(a: number, b: string) {
+    constructor(a: number, @decorator b: string) {
     }
 }

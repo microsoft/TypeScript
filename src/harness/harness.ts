@@ -990,8 +990,12 @@ module Harness {
                             }
                             break;
 
+                        case 'emitdecoratormetadata':
+                            options.emitDecoratorMetadata = setting.value === 'true';
+                            break;
+
                         case 'noemithelpers':
-                            options.noEmitHelpers = !!setting.value;
+                            options.noEmitHelpers = setting.value === 'true';
                             break;
 
                         case 'noemitonerror':
@@ -1486,7 +1490,7 @@ module Harness {
             "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
             "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
             "separatecompilation", "inlinesourcemap", "maproot", "sourceroot",
-            "inlinesources"];
+            "inlinesources", "emitdecoratormetadata"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
