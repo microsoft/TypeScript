@@ -2986,8 +2986,7 @@ module ts {
                                 || containingNodeKind === SyntaxKind.Constructor                  // constructor( |
                                 || containingNodeKind === SyntaxKind.NewExpression                // new C(a|
                                 || containingNodeKind === SyntaxKind.ParenthesizedExpression      // let x = (a|
-                                || containingNodeKind === SyntaxKind.ParenthesizedType            // function F(pred: (a|
-                                || containingNodeKind == SyntaxKind.FunctionType;                 // function F(pred: (a| // todo: figure out why fourslash and the IDE don't agree on node kind here
+                                || containingNodeKind === SyntaxKind.ParenthesizedType;            // function F(pred: (a
 
                         case SyntaxKind.ColonToken:
                             return containingNodeKind === SyntaxKind.Parameter;                   // function F(pred: a|
