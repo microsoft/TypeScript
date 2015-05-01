@@ -235,7 +235,7 @@ module Harness.LanguageService {
     class ClassifierShimProxy implements ts.Classifier { 
         constructor(private shim: ts.ClassifierShim) {
         }
-        getLexicalClassifications2(text: string, lexState: ts.EndOfLineState, classifyKeywordsInGenerics?: boolean): ts.Classifications {
+        getEncodedLexicalClassifications(text: string, lexState: ts.EndOfLineState, classifyKeywordsInGenerics?: boolean): ts.Classifications {
             throw new Error("NYI");
         }
         getClassificationsForLine(text: string, lexState: ts.EndOfLineState, classifyKeywordsInGenerics?: boolean): ts.ClassificationResult {
@@ -303,11 +303,11 @@ module Harness.LanguageService {
         getSemanticClassifications(fileName: string, span: ts.TextSpan): ts.ClassifiedSpan[] {
             return unwrapJSONCallResult(this.shim.getSemanticClassifications(fileName, span.start, span.length));
         }
-        getSyntacticClassifications2(fileName: string, span: ts.TextSpan): ts.Classifications {
-            return unwrapJSONCallResult(this.shim.getSyntacticClassifications2(fileName, span.start, span.length));
+        getEncodedSyntacticClassifications(fileName: string, span: ts.TextSpan): ts.Classifications {
+            return unwrapJSONCallResult(this.shim.getEncodedSyntacticClassifications(fileName, span.start, span.length));
         }
-        getSemanticClassifications2(fileName: string, span: ts.TextSpan): ts.Classifications {
-            return unwrapJSONCallResult(this.shim.getSemanticClassifications2(fileName, span.start, span.length));
+        getEncodedSemanticClassifications(fileName: string, span: ts.TextSpan): ts.Classifications {
+            return unwrapJSONCallResult(this.shim.getEncodedSemanticClassifications(fileName, span.start, span.length));
         }
         getCompletionsAtPosition(fileName: string, position: number): ts.CompletionInfo {
             return unwrapJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position));
