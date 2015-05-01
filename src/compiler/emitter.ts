@@ -5487,9 +5487,6 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 }
 
                 write("[\"require\", \"exports\"");
-                if (compilerOptions.noEmitHelpers) {
-                    write(", \"__extends\"");
-                }
                 if (aliasedModuleNames.length) {
                     write(", ");
                     write(aliasedModuleNames.join(", "));
@@ -5499,9 +5496,6 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     write(unaliasedModuleNames.join(", "));
                 }
                 write("], function (require, exports");
-                if (compilerOptions.noEmitHelpers) {
-                    write(", __extends");
-                }
                 if (importAliasNames.length) {
                     write(", ");
                     write(importAliasNames.join(", "));
@@ -5623,7 +5617,6 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
 
                 // Only emit helpers if the user did not say otherwise.
                 if (!compilerOptions.noEmitHelpers) {
-
                     // Only Emit __extends function when target ES5.
                     // For target ES6 and above, we can emit classDeclaration as is.
                     if ((languageVersion < ScriptTarget.ES6) && (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends)) {
@@ -5643,7 +5636,6 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                         writeLines(paramHelper);
                         paramEmitted = true;
                     }
-
                 }
 
                 if (isExternalModule(node) || compilerOptions.separateCompilation) {
