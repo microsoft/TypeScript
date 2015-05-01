@@ -3698,6 +3698,7 @@ interface HTMLCanvasElement extends HTMLElement {
       * @param contextId The identifier (ID) of the type of canvas to create. Internet Explorer 9 and Internet Explorer 10 support only a 2-D context using canvas.getContext("2d"); IE11 Preview also supports 3-D or WebGL context using canvas.getContext("experimental-webgl");
       */
     getContext(contextId: "2d"): CanvasRenderingContext2D;
+    getContext(contextId: "experimental-webgl"): WebGLRenderingContext;
     getContext(contextId: string, ...args: any[]): CanvasRenderingContext2D | WebGLRenderingContext;
     /**
       * Returns a blob object encoded as a Portable Network Graphics (PNG) format from a canvas image or drawing.
