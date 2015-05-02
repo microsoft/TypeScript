@@ -419,7 +419,9 @@ module ts.formatting {
                 // if node is located on the same line with the parent
                 // - inherit indentation from the parent
                 // - push children if either parent of node itself has non-zero delta
-                indentation =  startLine === lastIndentedLine ? indentationOnLastIndentedLine : parentDynamicIndentation.getIndentation();
+                indentation =  startLine === lastIndentedLine 
+                    ? indentationOnLastIndentedLine 
+                    : parentDynamicIndentation.getIndentation();
                 delta = Math.min(options.IndentSize, parentDynamicIndentation.getDelta() + delta);
             }
             return {
