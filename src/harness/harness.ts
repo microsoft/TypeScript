@@ -805,6 +805,9 @@ module Harness {
             return result;
         }
 
+        const NEWLINE_CRLF = "\r\n";
+        const NEWLINE_LF = "\n";
+
         export var defaultLibFileName = 'lib.d.ts';
         export var defaultLibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
         export var defaultES6LibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + 'lib.core.es6.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
@@ -822,7 +825,8 @@ module Harness {
             scriptTarget: ts.ScriptTarget,
             useCaseSensitiveFileNames: boolean,
             // the currentDirectory is needed for rwcRunner to passed in specified current directory to compiler host
-            currentDirectory?: string): ts.CompilerHost {
+            currentDirectory?: string,
+			newLineKind?: ts.NewLineKind): ts.CompilerHost {
 
             // Local get canonical file name function, that depends on passed in parameter for useCaseSensitiveFileNames
             function getCanonicalFileName(fileName: string): string {
@@ -840,6 +844,11 @@ module Harness {
                 }
             };
             inputFiles.forEach(register);
+
+            let newLine =
+                newLineKind === ts.NewLineKind.CarriageReturnLineFeed ? NEWLINE_CRLF :
+                newLineKind === ts.NewLineKind.LineFeed ? NEWLINE_LF :
+                ts.sys.newLine;
 
             return {
                 getCurrentDirectory,
@@ -869,7 +878,7 @@ module Harness {
                 writeFile,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
-                getNewLine: () => ts.sys.newLine
+                getNewLine: () => newLine
             };
         }
 
@@ -1042,7 +1051,16 @@ module Harness {
 
                         case 'newline':
                         case 'newlines':
-                            newLine = setting.value;
+                            if (setting.value.toLowerCase() === 'crlf') {
+                                options.newLine = ts.NewLineKind.CarriageReturnLineFeed;
+                            } else if (setting.value.toLowerCase() === 'lf') {
+                                options.newLine = ts.NewLineKind.LineFeed;
+                            } else if (setting.value === '\\n') {
+                                // Handle old usage, e.g. contextualTyping.ts:// @newline: \n
+                                newLine = setting.value;
+                            } else {
+                                throw new Error('Unknown option for newLine: ' + setting.value);
+                            }
                             break;
 
                         case 'comments':
@@ -1103,7 +1121,7 @@ module Harness {
                 var programFiles = inputFiles.concat(includeBuiltFiles).map(file => file.unitName);
                 var program = ts.createProgram(programFiles, options, createCompilerHost(inputFiles.concat(includeBuiltFiles).concat(otherFiles),
                     (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark }),
-                    options.target, useCaseSensitiveFileNames, currentDirectory));
+                    options.target, useCaseSensitiveFileNames, currentDirectory, options.newLine));
 
                 var emitResult = program.emit();
 
