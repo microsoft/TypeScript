@@ -826,7 +826,7 @@ module Harness {
             useCaseSensitiveFileNames: boolean,
             // the currentDirectory is needed for rwcRunner to passed in specified current directory to compiler host
             currentDirectory?: string,
-			newLineKind?: ts.NewLineKind): ts.CompilerHost {
+            newLineKind?: ts.NewLineKind): ts.CompilerHost {
 
             // Local get canonical file name function, that depends on passed in parameter for useCaseSensitiveFileNames
             function getCanonicalFileName(fileName: string): string {
@@ -1050,15 +1050,15 @@ module Harness {
                             break;
 
                         case 'newline':
-                        case 'newlines':
                             if (setting.value.toLowerCase() === 'crlf') {
                                 options.newLine = ts.NewLineKind.CarriageReturnLineFeed;
-                            } else if (setting.value.toLowerCase() === 'lf') {
-                                options.newLine = ts.NewLineKind.LineFeed;
-                            } else if (setting.value === '\\n') {
-                                // Handle old usage, e.g. contextualTyping.ts:// @newline: \n
                                 newLine = setting.value;
-                            } else {
+                            }
+                            else if (setting.value.toLowerCase() === 'lf') {
+                                options.newLine = ts.NewLineKind.LineFeed;
+                                newLine = setting.value;
+                            }
+                            else {
                                 throw new Error('Unknown option for newLine: ' + setting.value);
                             }
                             break;
