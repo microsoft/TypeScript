@@ -953,7 +953,32 @@ module Harness {
                 var includeBuiltFiles: { unitName: string; content: string }[] = [];
 
                 var useCaseSensitiveFileNames = ts.sys.useCaseSensitiveFileNames;
-                this.settings.forEach(setting => {
+                this.settings.forEach(setOptionForSetting);
+
+                var fileOutputs: GeneratedFile[] = [];
+
+                var programFiles = inputFiles.concat(includeBuiltFiles).map(file => file.unitName);
+                var program = ts.createProgram(programFiles, options, createCompilerHost(inputFiles.concat(includeBuiltFiles).concat(otherFiles),
+                    (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark }),
+                    options.target, useCaseSensitiveFileNames, currentDirectory));
+
+                var emitResult = program.emit();
+
+                var errors: HarnessDiagnostic[] = [];
+                ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics).forEach(err => {
+                    // TODO: new compiler formats errors after this point to add . and newlines so we'll just do it manually for now
+                    errors.push(getMinimalDiagnostic(err));
+                });
+                this.lastErrors = errors;
+
+                var result = new CompilerResult(fileOutputs, errors, program, ts.sys.getCurrentDirectory(), emitResult.sourceMaps);
+                onComplete(result, program);
+
+                // reset what newline means in case the last test changed it
+                ts.sys.newLine = newLine;
+                return options;
+
+                function setOptionForSetting(setting: Harness.TestCaseParser.CompilerSetting) {
                     switch (setting.flag.toLowerCase()) {
                         // "fileName", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve"
                         case "module":
@@ -1084,7 +1109,7 @@ module Harness {
                         case 'inlinesourcemap':
                             options.inlineSourceMap = setting.value === 'true';
                             break;
-                        
+
                         case 'inlinesources':
                             options.inlineSources = setting.value === 'true';
                             break;
@@ -1092,30 +1117,7 @@ module Harness {
                         default:
                             throw new Error('Unsupported compiler setting ' + setting.flag);
                     }
-                });
-                
-                var fileOutputs: GeneratedFile[] = [];
-                
-                var programFiles = inputFiles.concat(includeBuiltFiles).map(file => file.unitName);
-                var program = ts.createProgram(programFiles, options, createCompilerHost(inputFiles.concat(includeBuiltFiles).concat(otherFiles),
-                    (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark }),
-                    options.target, useCaseSensitiveFileNames, currentDirectory));
-
-                var emitResult = program.emit();
-
-                var errors: HarnessDiagnostic[] = [];
-                ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics).forEach(err => {
-                    // TODO: new compiler formats errors after this point to add . and newlines so we'll just do it manually for now
-                    errors.push(getMinimalDiagnostic(err));
-                });
-                this.lastErrors = errors;
-
-                var result = new CompilerResult(fileOutputs, errors, program, ts.sys.getCurrentDirectory(), emitResult.sourceMaps);
-                onComplete(result, program);
-
-                // reset what newline means in case the last test changed it
-                ts.sys.newLine = newLine;
-                return options;
+                }
             }
 
             public compileDeclarationFiles(inputFiles: { unitName: string; content: string; }[],
