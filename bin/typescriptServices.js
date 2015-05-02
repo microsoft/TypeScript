@@ -542,6 +542,7 @@ var ts;
         ModuleKind[ModuleKind["CommonJS"] = 1] = "CommonJS";
         ModuleKind[ModuleKind["AMD"] = 2] = "AMD";
         ModuleKind[ModuleKind["UMD"] = 3] = "UMD";
+        ModuleKind[ModuleKind["System"] = 4] = "System";
     })(ts.ModuleKind || (ts.ModuleKind = {}));
     var ModuleKind = ts.ModuleKind;
     (function (ScriptTarget) {
@@ -1810,7 +1811,7 @@ var ts;
         Line_terminator_not_permitted_before_arrow: { code: 1200, category: ts.DiagnosticCategory.Error, key: "Line terminator not permitted before arrow." },
         Import_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_or_import_d_from_mod_instead: { code: 1202, category: ts.DiagnosticCategory.Error, key: "Import assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"' or 'import d from \"mod\"' instead." },
         Export_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_export_default_instead: { code: 1203, category: ts.DiagnosticCategory.Error, key: "Export assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'export default' instead." },
-        Cannot_compile_external_modules_into_amd_commonjs_or_umd_when_targeting_ES6_or_higher: { code: 1204, category: ts.DiagnosticCategory.Error, key: "Cannot compile external modules into 'amd', 'commonjs' or 'umd' when targeting 'ES6' or higher." },
+        Cannot_compile_external_modules_into_commonjs_amd_system_or_umd_when_targeting_ES6_or_higher: { code: 1204, category: ts.DiagnosticCategory.Error, key: "Cannot compile external modules into 'commonjs', 'amd', 'system' or 'umd' when targeting 'ES6' or higher." },
         Decorators_are_only_available_when_targeting_ECMAScript_5_and_higher: { code: 1205, category: ts.DiagnosticCategory.Error, key: "Decorators are only available when targeting ECMAScript 5 and higher." },
         Decorators_are_not_valid_here: { code: 1206, category: ts.DiagnosticCategory.Error, key: "Decorators are not valid here." },
         Decorators_cannot_be_applied_to_multiple_get_Slashset_accessors_of_the_same_name: { code: 1207, category: ts.DiagnosticCategory.Error, key: "Decorators cannot be applied to multiple get/set accessors of the same name." },
@@ -1824,6 +1825,7 @@ var ts;
         Type_expected_0_is_a_reserved_word_in_strict_mode: { code: 1215, category: ts.DiagnosticCategory.Error, key: "Type expected. '{0}' is a reserved word in strict mode" },
         Type_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode: { code: 1216, category: ts.DiagnosticCategory.Error, key: "Type expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode." },
         Type_expected_0_is_a_reserved_word_in_strict_mode_Module_is_automatically_in_strict_mode: { code: 1217, category: ts.DiagnosticCategory.Error, key: "Type expected. '{0}' is a reserved word in strict mode. Module is automatically in strict mode." },
+        Export_assignment_is_not_supported_when_module_flag_is_system: { code: 1218, category: ts.DiagnosticCategory.Error, key: "Export assignment is not supported when '--module' flag is 'system'." },
         Duplicate_identifier_0: { code: 2300, category: ts.DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: ts.DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: ts.DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },
@@ -2088,6 +2090,7 @@ var ts;
         Cannot_find_the_common_subdirectory_path_for_the_input_files: { code: 5009, category: ts.DiagnosticCategory.Error, key: "Cannot find the common subdirectory path for the input files." },
         Cannot_read_file_0_Colon_1: { code: 5012, category: ts.DiagnosticCategory.Error, key: "Cannot read file '{0}': {1}" },
         Unsupported_file_encoding: { code: 5013, category: ts.DiagnosticCategory.Error, key: "Unsupported file encoding." },
+        Failed_to_parse_file_0_Colon_1: { code: 5014, category: ts.DiagnosticCategory.Error, key: "Failed to parse file '{0}': {1}." },
         Unknown_compiler_option_0: { code: 5023, category: ts.DiagnosticCategory.Error, key: "Unknown compiler option '{0}'." },
         Compiler_option_0_requires_a_value_of_type_1: { code: 5024, category: ts.DiagnosticCategory.Error, key: "Compiler option '{0}' requires a value of type {1}." },
         Could_not_write_file_0_Colon_1: { code: 5033, category: ts.DiagnosticCategory.Error, key: "Could not write file '{0}': {1}" },
@@ -2101,6 +2104,10 @@ var ts;
         Option_noEmitOnError_cannot_be_specified_with_option_separateCompilation: { code: 5045, category: ts.DiagnosticCategory.Error, key: "Option 'noEmitOnError' cannot be specified with option 'separateCompilation'." },
         Option_out_cannot_be_specified_with_option_separateCompilation: { code: 5046, category: ts.DiagnosticCategory.Error, key: "Option 'out' cannot be specified with option 'separateCompilation'." },
         Option_separateCompilation_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES6_or_higher: { code: 5047, category: ts.DiagnosticCategory.Error, key: "Option 'separateCompilation' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher." },
+        Option_sourceMap_cannot_be_specified_with_option_inlineSourceMap: { code: 5048, category: ts.DiagnosticCategory.Error, key: "Option 'sourceMap' cannot be specified with option 'inlineSourceMap'." },
+        Option_sourceRoot_cannot_be_specified_with_option_inlineSourceMap: { code: 5049, category: ts.DiagnosticCategory.Error, key: "Option 'sourceRoot' cannot be specified with option 'inlineSourceMap'." },
+        Option_mapRoot_cannot_be_specified_with_option_inlineSourceMap: { code: 5050, category: ts.DiagnosticCategory.Error, key: "Option 'mapRoot' cannot be specified with option 'inlineSourceMap'." },
+        Option_inlineSources_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided: { code: 5051, category: ts.DiagnosticCategory.Error, key: "Option 'inlineSources' can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided." },
         Concatenate_and_emit_output_to_single_file: { code: 6001, category: ts.DiagnosticCategory.Message, key: "Concatenate and emit output to single file." },
         Generates_corresponding_d_ts_file: { code: 6002, category: ts.DiagnosticCategory.Message, key: "Generates corresponding '.d.ts' file." },
         Specifies_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations: { code: 6003, category: ts.DiagnosticCategory.Message, key: "Specifies the location where debugger should locate map files instead of generated locations." },
@@ -2112,7 +2119,7 @@ var ts;
         Do_not_emit_comments_to_output: { code: 6009, category: ts.DiagnosticCategory.Message, key: "Do not emit comments to output." },
         Do_not_emit_outputs: { code: 6010, category: ts.DiagnosticCategory.Message, key: "Do not emit outputs." },
         Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES6_experimental: { code: 6015, category: ts.DiagnosticCategory.Message, key: "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES6' (experimental)" },
-        Specify_module_code_generation_Colon_commonjs_amd_or_umd: { code: 6016, category: ts.DiagnosticCategory.Message, key: "Specify module code generation: 'commonjs', 'amd', or 'umd'." },
+        Specify_module_code_generation_Colon_commonjs_amd_system_or_umd: { code: 6016, category: ts.DiagnosticCategory.Message, key: "Specify module code generation: 'commonjs', 'amd', 'system' or 'umd'" },
         Print_this_message: { code: 6017, category: ts.DiagnosticCategory.Message, key: "Print this message." },
         Print_the_compiler_s_version: { code: 6019, category: ts.DiagnosticCategory.Message, key: "Print the compiler's version." },
         Compile_the_project_in_the_given_directory: { code: 6020, category: ts.DiagnosticCategory.Message, key: "Compile the project in the given directory." },
@@ -2133,7 +2140,7 @@ var ts;
         Generates_corresponding_map_file: { code: 6043, category: ts.DiagnosticCategory.Message, key: "Generates corresponding '.map' file." },
         Compiler_option_0_expects_an_argument: { code: 6044, category: ts.DiagnosticCategory.Error, key: "Compiler option '{0}' expects an argument." },
         Unterminated_quoted_string_in_response_file_0: { code: 6045, category: ts.DiagnosticCategory.Error, key: "Unterminated quoted string in response file '{0}'." },
-        Argument_for_module_option_must_be_commonjs_amd_or_umd: { code: 6046, category: ts.DiagnosticCategory.Error, key: "Argument for '--module' option must be 'commonjs', 'amd', or 'umd'." },
+        Argument_for_module_option_must_be_commonjs_amd_system_or_umd: { code: 6046, category: ts.DiagnosticCategory.Error, key: "Argument for '--module' option must be 'commonjs', 'amd', 'system' or 'umd'." },
         Argument_for_target_option_must_be_ES3_ES5_or_ES6: { code: 6047, category: ts.DiagnosticCategory.Error, key: "Argument for '--target' option must be 'ES3', 'ES5', or 'ES6'." },
         Locale_must_be_of_the_form_language_or_language_territory_For_example_0_or_1: { code: 6048, category: ts.DiagnosticCategory.Error, key: "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'." },
         Unsupported_locale_0: { code: 6049, category: ts.DiagnosticCategory.Error, key: "Unsupported locale '{0}'." },
@@ -5695,6 +5702,73 @@ var ts;
         return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & 256 /* Default */) ? symbol.valueDeclaration.localSymbol : undefined;
     }
     ts.getLocalSymbolForExportDefault = getLocalSymbolForExportDefault;
+    /**
+     * Replace each instance of non-ascii characters by one, two, three, or four escape sequences
+     * representing the UTF-8 encoding of the character, and return the expanded char code list.
+     */
+    function getExpandedCharCodes(input) {
+        var output = [];
+        var length = input.length;
+        var leadSurrogate = undefined;
+        for (var i = 0; i < length; i++) {
+            var charCode = input.charCodeAt(i);
+            // handel utf8
+            if (charCode < 0x80) {
+                output.push(charCode);
+            }
+            else if (charCode < 0x800) {
+                output.push((charCode >> 6) | 192);
+                output.push((charCode & 63) | 128);
+            }
+            else if (charCode < 0x10000) {
+                output.push((charCode >> 12) | 224);
+                output.push(((charCode >> 6) & 63) | 128);
+                output.push((charCode & 63) | 128);
+            }
+            else if (charCode < 0x20000) {
+                output.push((charCode >> 18) | 240);
+                output.push(((charCode >> 12) & 63) | 128);
+                output.push(((charCode >> 6) & 63) | 128);
+                output.push((charCode & 63) | 128);
+            }
+            else {
+                ts.Debug.assert(false, "Unexpected code point");
+            }
+        }
+        return output;
+    }
+    var base64Digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+    /**
+     * Converts a string to a base-64 encoded ASCII string.
+     */
+    function convertToBase64(input) {
+        var result = "";
+        var charCodes = getExpandedCharCodes(input);
+        var i = 0;
+        var length = charCodes.length;
+        var byte1, byte2, byte3, byte4;
+        while (i < length) {
+            // Convert every 6-bits in the input 3 character points
+            // into a base64 digit
+            byte1 = charCodes[i] >> 2;
+            byte2 = (charCodes[i] & 3) << 4 | charCodes[i + 1] >> 4;
+            byte3 = (charCodes[i + 1] & 15) << 2 | charCodes[i + 2] >> 6;
+            byte4 = charCodes[i + 2] & 63;
+            // We are out of characters in the input, set the extra
+            // digits to 64 (padding character).
+            if (i + 1 >= length) {
+                byte3 = byte4 = 64;
+            }
+            else if (i + 2 >= length) {
+                byte4 = 64;
+            }
+            // Write to the ouput
+            result += base64Digits.charAt(byte1) + base64Digits.charAt(byte2) + base64Digits.charAt(byte3) + base64Digits.charAt(byte4);
+            i += 3;
+        }
+        return result;
+    }
+    ts.convertToBase64 = convertToBase64;
 })(ts || (ts = {}));
 var ts;
 (function (ts) {
@@ -20362,9 +20436,15 @@ var ts;
                 checkExpressionCached(node.expression);
             }
             checkExternalModuleExports(container);
-            if (node.isExportEquals && languageVersion >= 2 /* ES6 */) {
-                // export assignment is deprecated in es6 or above
-                grammarErrorOnNode(node, ts.Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_export_default_instead);
+            if (node.isExportEquals) {
+                if (languageVersion >= 2 /* ES6 */) {
+                    // export assignment is deprecated in es6 or above
+                    grammarErrorOnNode(node, ts.Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_export_default_instead);
+                }
+                else if (compilerOptions.module === 4 /* System */) {
+                    // system modules does not support export assignment
+                    grammarErrorOnNode(node, ts.Diagnostics.Export_assignment_is_not_supported_when_module_flag_is_system);
+                }
             }
         }
         function getModuleStatements(node) {
@@ -21108,9 +21188,11 @@ var ts;
         }
         function getExportNameSubstitution(symbol, location, getGeneratedNameForNode) {
             if (isExternalModuleSymbol(symbol.parent)) {
-                // If this is es6 or higher, just use the name of the export
+                // 1. If this is es6 or higher, just use the name of the export
                 // no need to qualify it.
-                if (languageVersion >= 2 /* ES6 */) {
+                // 2. export mechanism for System modules is different from CJS\AMD
+                // and it does not need qualifications for exports
+                if (languageVersion >= 2 /* ES6 */ || compilerOptions.module === 4 /* System */) {
                     return undefined;
                 }
                 return "exports." + ts.unescapeIdentifier(symbol.name);
@@ -21442,6 +21524,12 @@ var ts;
             ts.Debug.assert(!ts.nodeIsSynthesized(location), "resolvesToSomeValue called with a synthesized location");
             return !!resolveName(location, name, 107455 /* Value */, undefined, undefined);
         }
+        function getReferencedValueDeclaration(reference) {
+            ts.Debug.assert(!ts.nodeIsSynthesized(reference));
+            var symbol = getNodeLinks(reference).resolvedSymbol ||
+                resolveName(reference, reference.text, 107455 /* Value */ | 8388608 /* Alias */, undefined, undefined);
+            return symbol && getExportSymbolOfValueSymbolIfExported(symbol).valueDeclaration;
+        }
         function getBlockScopedVariableId(n) {
             ts.Debug.assert(!ts.nodeIsSynthesized(n));
             var isVariableDeclarationOrBindingElement = n.parent.kind === 152 /* BindingElement */ || (n.parent.kind === 198 /* VariableDeclaration */ && n.parent.name === n);
@@ -21489,6 +21577,7 @@ var ts;
                 resolvesToSomeValue: resolvesToSomeValue,
                 collectLinkedAliases: collectLinkedAliases,
                 getBlockScopedVariableId: getBlockScopedVariableId,
+                getReferencedValueDeclaration: getReferencedValueDeclaration,
                 serializeTypeOfNode: serializeTypeOfNode,
                 serializeParameterTypesOfNode: serializeParameterTypesOfNode,
                 serializeReturnTypeOfNode: serializeReturnTypeOfNode
@@ -21545,7 +21634,7 @@ var ts;
         function isReservedWordInStrictMode(node) {
             // Check that originalKeywordKind is less than LastFutureReservedWord to see if an Identifier is a strict-mode reserved word
             return (node.parserContextFlags & 1 /* StrictMode */) &&
-                (node.originalKeywordKind >= 102 /* FirstFutureReservedWord */ && node.originalKeywordKind <= 110 /* LastFutureReservedWord */);
+                (102 /* FirstFutureReservedWord */ <= node.originalKeywordKind && node.originalKeywordKind <= 110 /* LastFutureReservedWord */);
         }
         function reportStrictModeGrammarErrorInClassDeclaration(identifier, message, arg0, arg1, arg2) {
             // We are checking if this name is inside class declaration or class expression (which are under class definitions inside ES6 spec.)
@@ -21563,7 +21652,7 @@ var ts;
                     var nameBindings = impotClause.namedBindings;
                     if (nameBindings.kind === 211 /* NamespaceImport */) {
                         var name_11 = nameBindings.name;
-                        if (name_11.originalKeywordKind) {
+                        if (isReservedWordInStrictMode(name_11)) {
                             var nameText = ts.declarationNameToString(name_11);
                             return grammarErrorOnNode(name_11, ts.Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
                         }
@@ -21573,7 +21662,7 @@ var ts;
                         for (var _i = 0, _a = nameBindings.elements; _i < _a.length; _i++) {
                             var element = _a[_i];
                             var name_12 = element.name;
-                            if (name_12.originalKeywordKind) {
+                            if (isReservedWordInStrictMode(name_12)) {
                                 var nameText = ts.declarationNameToString(name_12);
                                 reportError = reportError || grammarErrorOnNode(name_12, ts.Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
                             }
@@ -24032,7 +24121,7 @@ var ts;
         var paramHelper = "\nif (typeof __param !== \"function\") __param = function (paramIndex, decorator) {\n    return function (target, key) { decorator(target, key, paramIndex); }\n};";
         var compilerOptions = host.getCompilerOptions();
         var languageVersion = compilerOptions.target || 0 /* ES3 */;
-        var sourceMapDataList = compilerOptions.sourceMap ? [] : undefined;
+        var sourceMapDataList = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         var diagnostics = [];
         var newLine = host.getNewLine();
         if (targetSourceFile === undefined) {
@@ -24090,6 +24179,13 @@ var ts;
             var increaseIndent = writer.increaseIndent;
             var decreaseIndent = writer.decreaseIndent;
             var currentSourceFile;
+            // name of an exporter function if file is a System external module
+            // System.register([...], function (<exporter>) {...})
+            // exporting in System modules looks like:
+            // export var x; ... x = 1
+            // =>
+            // var x;... exporter("x", x = 1)
+            var exportFunctionForFile;
             var generatedNameSet = {};
             var nodeToGeneratedName = [];
             var blockScopedVariableToGeneratedName;
@@ -24129,7 +24225,7 @@ var ts;
             var scopeEmitEnd = function () { };
             /** Sourcemap data that will get encoded */
             var sourceMapData;
-            if (compilerOptions.sourceMap) {
+            if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
                 initializeEmitterWithSourceMaps();
             }
             if (root) {
@@ -24148,6 +24244,7 @@ var ts;
             return;
             function emitSourceFile(sourceFile) {
                 currentSourceFile = sourceFile;
+                exportFunctionForFile = undefined;
                 emit(sourceFile);
             }
             function isUniqueName(name) {
@@ -24408,6 +24505,12 @@ var ts;
                     sourceMapSourceIndex = sourceMapData.sourceMapSources.length - 1;
                     // The one that can be used from program to get the actual source file
                     sourceMapData.inputSourceFileNames.push(node.fileName);
+                    if (compilerOptions.inlineSources) {
+                        if (!sourceMapData.sourceMapSourcesContent) {
+                            sourceMapData.sourceMapSourcesContent = [];
+                        }
+                        sourceMapData.sourceMapSourcesContent.push(node.text);
+                    }
                 }
                 function recordScopeNameOfNode(node, scopeName) {
                     function recordScopeNameIndex(scopeNameIndex) {
@@ -24473,18 +24576,22 @@ var ts;
                     ts.writeCommentRange(currentSourceFile, writer, comment, newLine);
                     recordSourceMapSpan(comment.end);
                 }
-                function serializeSourceMapContents(version, file, sourceRoot, sources, names, mappings) {
+                function serializeSourceMapContents(version, file, sourceRoot, sources, names, mappings, sourcesContent) {
                     if (typeof JSON !== "undefined") {
-                        return JSON.stringify({
+                        var map_1 = {
                             version: version,
                             file: file,
                             sourceRoot: sourceRoot,
                             sources: sources,
                             names: names,
                             mappings: mappings
-                        });
+                        };
+                        if (sourcesContent !== undefined) {
+                            map_1.sourcesContent = sourcesContent;
+                        }
+                        return JSON.stringify(map_1);
                     }
-                    return "{\"version\":" + version + ",\"file\":\"" + ts.escapeString(file) + "\",\"sourceRoot\":\"" + ts.escapeString(sourceRoot) + "\",\"sources\":[" + serializeStringArray(sources) + "],\"names\":[" + serializeStringArray(names) + "],\"mappings\":\"" + ts.escapeString(mappings) + "\"}";
+                    return "{\"version\":" + version + ",\"file\":\"" + ts.escapeString(file) + "\",\"sourceRoot\":\"" + ts.escapeString(sourceRoot) + "\",\"sources\":[" + serializeStringArray(sources) + "],\"names\":[" + serializeStringArray(names) + "],\"mappings\":\"" + ts.escapeString(mappings) + "\" " + (sourcesContent !== undefined ? ",\"sourcesContent\":[" + serializeStringArray(sourcesContent) + "]" : "") + "}";
                     function serializeStringArray(list) {
                         var output = "";
                         for (var i = 0, n = list.length; i < n; i++) {
@@ -24497,12 +24604,22 @@ var ts;
                     }
                 }
                 function writeJavaScriptAndSourceMapFile(emitOutput, writeByteOrderMark) {
-                    // Write source map file
                     encodeLastRecordedSourceMapSpan();
-                    ts.writeFile(host, diagnostics, sourceMapData.sourceMapFilePath, serializeSourceMapContents(3, sourceMapData.sourceMapFile, sourceMapData.sourceMapSourceRoot, sourceMapData.sourceMapSources, sourceMapData.sourceMapNames, sourceMapData.sourceMapMappings), false);
+                    var sourceMapText = serializeSourceMapContents(3, sourceMapData.sourceMapFile, sourceMapData.sourceMapSourceRoot, sourceMapData.sourceMapSources, sourceMapData.sourceMapNames, sourceMapData.sourceMapMappings, sourceMapData.sourceMapSourcesContent);
                     sourceMapDataList.push(sourceMapData);
+                    var sourceMapUrl;
+                    if (compilerOptions.inlineSourceMap) {
+                        // Encode the sourceMap into the sourceMap url
+                        var base64SourceMapText = ts.convertToBase64(sourceMapText);
+                        sourceMapUrl = "//# sourceMappingURL=data:application/json;base64," + base64SourceMapText;
+                    }
+                    else {
+                        // Write source map file
+                        ts.writeFile(host, diagnostics, sourceMapData.sourceMapFilePath, sourceMapText, false);
+                        sourceMapUrl = "//# sourceMappingURL=" + sourceMapData.jsSourceMappingURL;
+                    }
                     // Write sourcemap url to the js file and write the js file
-                    writeJavaScriptFile(emitOutput + "//# sourceMappingURL=" + sourceMapData.jsSourceMappingURL, writeByteOrderMark);
+                    writeJavaScriptFile(emitOutput + sourceMapUrl, writeByteOrderMark);
                 }
                 // Initialize source map data
                 var sourceMapJsFile = ts.getBaseFileName(ts.normalizeSlashes(jsFilePath));
@@ -24515,6 +24632,7 @@ var ts;
                     inputSourceFileNames: [],
                     sourceMapNames: [],
                     sourceMapMappings: "",
+                    sourceMapSourcesContent: undefined,
                     sourceMapDecodedMappings: []
                 };
                 // Normalize source root and make sure it has trailing "/" so that it can be used to combine paths with the
@@ -24722,7 +24840,7 @@ var ts;
             }
             function emitLiteral(node) {
                 var text = getLiteralText(node);
-                if (compilerOptions.sourceMap && (node.kind === 8 /* StringLiteral */ || ts.isTemplateLiteralKind(node.kind))) {
+                if ((compilerOptions.sourceMap || compilerOptions.inlineSourceMap) && (node.kind === 8 /* StringLiteral */ || ts.isTemplateLiteralKind(node.kind))) {
                     writer.writeLiteral(text);
                 }
                 else if (languageVersion < 2 /* ES6 */ && isBinaryOrOctalIntegerLiteral(node, text)) {
@@ -25666,7 +25784,27 @@ var ts;
                 write(" ");
                 emit(node.expression);
             }
+            function isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node) {
+                if (!isCurrentFileSystemExternalModule() || node.kind !== 65 /* Identifier */ || ts.nodeIsSynthesized(node)) {
+                    return false;
+                }
+                var isVariableDeclarationOrBindingElement = node.parent && (node.parent.kind === 198 /* VariableDeclaration */ || node.parent.kind === 152 /* BindingElement */);
+                var targetDeclaration = isVariableDeclarationOrBindingElement
+                    ? node.parent
+                    : resolver.getReferencedValueDeclaration(node);
+                return isSourceFileLevelDeclarationInSystemJsModule(targetDeclaration, true);
+            }
             function emitPrefixUnaryExpression(node) {
+                var exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.operand);
+                if (exportChanged) {
+                    // emit
+                    // ++x
+                    // as
+                    // exports('x', ++x)
+                    write(exportFunctionForFile + "(\"");
+                    emitNodeWithoutSourceMap(node.operand);
+                    write("\", ");
+                }
                 write(ts.tokenToString(node.operator));
                 // In some cases, we need to emit a space between the operator and the operand. One obvious case
                 // is when the operator is an identifier, like delete or typeof. We also need to do this for plus
@@ -25690,10 +25828,62 @@ var ts;
                     }
                 }
                 emit(node.operand);
+                if (exportChanged) {
+                    write(")");
+                }
             }
             function emitPostfixUnaryExpression(node) {
-                emit(node.operand);
-                write(ts.tokenToString(node.operator));
+                var exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.operand);
+                if (exportChanged) {
+                    // export function returns the value that was passes as the second argument
+                    // however for postfix unary expressions result value should be the value before modification.
+                    // emit 'x++' as '(export('x', ++x) - 1)' and 'x--' as '(export('x', --x) + 1)'
+                    write("(" + exportFunctionForFile + "(\"");
+                    emitNodeWithoutSourceMap(node.operand);
+                    write("\", ");
+                    write(ts.tokenToString(node.operator));
+                    emit(node.operand);
+                    if (node.operator === 38 /* PlusPlusToken */) {
+                        write(") - 1)");
+                    }
+                    else {
+                        write(") + 1)");
+                    }
+                }
+                else {
+                    emit(node.operand);
+                    write(ts.tokenToString(node.operator));
+                }
+            }
+            function shouldHoistDeclarationInSystemJsModule(node) {
+                return isSourceFileLevelDeclarationInSystemJsModule(node, false);
+            }
+            /*
+             * Checks if given node is a source file level declaration (not nested in module/function).
+             * If 'isExported' is true - then declaration must also be exported.
+             * This function is used in two cases:
+             * - check if node is a exported source file level value to determine
+             *   if we should also export the value after its it changed
+             * - check if node is a source level declaration to emit it differently,
+             *   i.e non-exported variable statement 'var x = 1' is hoisted so
+             *   we we emit variable statement 'var' should be dropped.
+             */
+            function isSourceFileLevelDeclarationInSystemJsModule(node, isExported) {
+                if (!node || languageVersion >= 2 /* ES6 */ || !isCurrentFileSystemExternalModule()) {
+                    return false;
+                }
+                var current = node;
+                while (current) {
+                    if (current.kind === 227 /* SourceFile */) {
+                        return !isExported || ((ts.getCombinedNodeFlags(node) & 1 /* Export */) !== 0);
+                    }
+                    else if (ts.isFunctionLike(current) || current.kind === 206 /* ModuleBlock */) {
+                        return false;
+                    }
+                    else {
+                        current = current.parent;
+                    }
+                }
             }
             function emitBinaryExpression(node) {
                 if (languageVersion < 2 /* ES6 */ && node.operatorToken.kind === 53 /* EqualsToken */ &&
@@ -25701,12 +25891,24 @@ var ts;
                     emitDestructuring(node, node.parent.kind === 182 /* ExpressionStatement */);
                 }
                 else {
+                    var exportChanged = node.operatorToken.kind >= 53 /* FirstAssignment */ &&
+                        node.operatorToken.kind <= 64 /* LastAssignment */ &&
+                        isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.left);
+                    if (exportChanged) {
+                        // emit assignment 'x <op> y' as 'exports("x", x <op> y)'
+                        write(exportFunctionForFile + "(\"");
+                        emitNodeWithoutSourceMap(node.left);
+                        write("\", ");
+                    }
                     emit(node.left);
                     var indentedBeforeOperator = indentIfOnDifferentLines(node, node.left, node.operatorToken, node.operatorToken.kind !== 23 /* CommaToken */ ? " " : undefined);
                     write(ts.tokenToString(node.operatorToken.kind));
                     var indentedAfterOperator = indentIfOnDifferentLines(node, node.operatorToken, node.right, " ");
                     emit(node.right);
                     decreaseIndentIf(indentedBeforeOperator, indentedAfterOperator);
+                    if (exportChanged) {
+                        write(")");
+                    }
                 }
             }
             function synthesizedNodeStartsOnNewLine(node) {
@@ -25820,7 +26022,15 @@ var ts;
                 write(")");
                 emitEmbeddedStatement(node.statement);
             }
-            function emitStartOfVariableDeclarationList(decl, startPos) {
+            /* Returns true if start of variable declaration list was emitted.
+             * Return false if nothing was written - this can happen for source file level variable declarations
+             * in system modules - such variable declarations are hoisted.
+             */
+            function tryEmitStartOfVariableDeclarationList(decl, startPos) {
+                if (shouldHoistVariable(decl, true)) {
+                    // variables in variable declaration list were already hoisted
+                    return false;
+                }
                 var tokenKind = 98 /* VarKeyword */;
                 if (decl && languageVersion >= 2 /* ES6 */) {
                     if (ts.isLet(decl)) {
@@ -25832,17 +26042,39 @@ var ts;
                 }
                 if (startPos !== undefined) {
                     emitToken(tokenKind, startPos);
+                    write(" ");
                 }
                 else {
                     switch (tokenKind) {
                         case 98 /* VarKeyword */:
-                            return write("var ");
+                            write("var ");
+                            break;
                         case 104 /* LetKeyword */:
-                            return write("let ");
+                            write("let ");
+                            break;
                         case 70 /* ConstKeyword */:
-                            return write("const ");
+                            write("const ");
+                            break;
                     }
                 }
+                return true;
+            }
+            function emitVariableDeclarationListSkippingUninitializedEntries(list) {
+                var started = false;
+                for (var _a = 0, _b = list.declarations; _a < _b.length; _a++) {
+                    var decl = _b[_a];
+                    if (!decl.initializer) {
+                        continue;
+                    }
+                    if (!started) {
+                        started = true;
+                    }
+                    else {
+                        write(", ");
+                    }
+                    emit(decl);
+                }
+                return started;
             }
             function emitForStatement(node) {
                 var endPos = emitToken(82 /* ForKeyword */, node.pos);
@@ -25850,10 +26082,13 @@ var ts;
                 endPos = emitToken(16 /* OpenParenToken */, endPos);
                 if (node.initializer && node.initializer.kind === 199 /* VariableDeclarationList */) {
                     var variableDeclarationList = node.initializer;
-                    var declarations = variableDeclarationList.declarations;
-                    emitStartOfVariableDeclarationList(declarations[0], endPos);
-                    write(" ");
-                    emitCommaList(declarations);
+                    var startIsEmitted = tryEmitStartOfVariableDeclarationList(variableDeclarationList, endPos);
+                    if (startIsEmitted) {
+                        emitCommaList(variableDeclarationList.declarations);
+                    }
+                    else {
+                        emitVariableDeclarationListSkippingUninitializedEntries(variableDeclarationList);
+                    }
                 }
                 else if (node.initializer) {
                     emit(node.initializer);
@@ -25875,10 +26110,8 @@ var ts;
                 if (node.initializer.kind === 199 /* VariableDeclarationList */) {
                     var variableDeclarationList = node.initializer;
                     if (variableDeclarationList.declarations.length >= 1) {
-                        var decl = variableDeclarationList.declarations[0];
-                        emitStartOfVariableDeclarationList(decl, endPos);
-                        write(" ");
-                        emit(decl);
+                        tryEmitStartOfVariableDeclarationList(variableDeclarationList, endPos);
+                        emit(variableDeclarationList.declarations[0]);
                     }
                 }
                 else {
@@ -26137,7 +26370,7 @@ var ts;
                         write(getGeneratedNameForNode(container));
                         write(".");
                     }
-                    else if (languageVersion < 2 /* ES6 */) {
+                    else if (languageVersion < 2 /* ES6 */ && compilerOptions.module !== 4 /* System */) {
                         write("exports.");
                     }
                 }
@@ -26155,19 +26388,35 @@ var ts;
                 if (node.flags & 1 /* Export */) {
                     writeLine();
                     emitStart(node);
-                    if (node.flags & 256 /* Default */) {
-                        if (languageVersion === 0 /* ES3 */) {
-                            write("exports[\"default\"]");
+                    if (compilerOptions.module === 4 /* System */) {
+                        // emit export default <smth> as
+                        // export("default", <smth>)
+                        write(exportFunctionForFile + "(\"");
+                        if (node.flags & 256 /* Default */) {
+                            write("default");
                         }
                         else {
-                            write("exports.default");
+                            emitNodeWithoutSourceMap(node.name);
                         }
+                        write("\", ");
+                        emitDeclarationName(node);
+                        write(")");
                     }
                     else {
-                        emitModuleMemberName(node);
+                        if (node.flags & 256 /* Default */) {
+                            if (languageVersion === 0 /* ES3 */) {
+                                write("exports[\"default\"]");
+                            }
+                            else {
+                                write("exports.default");
+                            }
+                        }
+                        else {
+                            emitModuleMemberName(node);
+                        }
+                        write(" = ");
+                        emitDeclarationName(node);
                     }
-                    write(" = ");
-                    emitDeclarationName(node);
                     emitEnd(node);
                     write(";");
                 }
@@ -26178,12 +26427,21 @@ var ts;
                         var specifier = _b[_a];
                         writeLine();
                         emitStart(specifier.name);
-                        emitContainingModuleName(specifier);
-                        write(".");
-                        emitNodeWithoutSourceMap(specifier.name);
-                        emitEnd(specifier.name);
-                        write(" = ");
-                        emitExpressionIdentifier(name);
+                        if (compilerOptions.module === 4 /* System */) {
+                            write(exportFunctionForFile + "(\"");
+                            emitNodeWithoutSourceMap(specifier.name);
+                            write("\", ");
+                            emitExpressionIdentifier(name);
+                            write(")");
+                        }
+                        else {
+                            emitContainingModuleName(specifier);
+                            write(".");
+                            emitNodeWithoutSourceMap(specifier.name);
+                            emitEnd(specifier.name);
+                            write(" = ");
+                            emitExpressionIdentifier(name);
+                        }
                         write(";");
                     }
                 }
@@ -26192,7 +26450,17 @@ var ts;
                 var emitCount = 0;
                 // An exported declaration is actually emitted as an assignment (to a property on the module object), so
                 // temporary variables in an exported declaration need to have real declarations elsewhere
-                var isDeclaration = (root.kind === 198 /* VariableDeclaration */ && !(ts.getCombinedNodeFlags(root) & 1 /* Export */)) || root.kind === 129 /* Parameter */;
+                // Also temporary variables should be explicitly allocated for source level declarations when module target is system
+                // because actual variable declarations are hoisted
+                var canDefineTempVariablesInPlace = false;
+                if (root.kind === 198 /* VariableDeclaration */) {
+                    var isExported = ts.getCombinedNodeFlags(root) & 1 /* Export */;
+                    var isSourceLevelForSystemModuleKind = shouldHoistDeclarationInSystemJsModule(root);
+                    canDefineTempVariablesInPlace = !isExported && !isSourceLevelForSystemModuleKind;
+                }
+                else if (root.kind === 129 /* Parameter */) {
+                    canDefineTempVariablesInPlace = true;
+                }
                 if (root.kind === 169 /* BinaryExpression */) {
                     emitAssignmentExpression(root);
                 }
@@ -26205,7 +26473,14 @@ var ts;
                         write(", ");
                     }
                     renameNonTopLevelLetAndConst(name);
-                    if (name.parent && (name.parent.kind === 198 /* VariableDeclaration */ || name.parent.kind === 152 /* BindingElement */)) {
+                    var isVariableDeclarationOrBindingElement = name.parent && (name.parent.kind === 198 /* VariableDeclaration */ || name.parent.kind === 152 /* BindingElement */);
+                    var exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(name);
+                    if (exportChanged) {
+                        write(exportFunctionForFile + "(\"");
+                        emitNodeWithoutSourceMap(name);
+                        write("\", ");
+                    }
+                    if (isVariableDeclarationOrBindingElement) {
                         emitModuleMemberName(name.parent);
                     }
                     else {
@@ -26213,11 +26488,14 @@ var ts;
                     }
                     write(" = ");
                     emit(value);
+                    if (exportChanged) {
+                        write(")");
+                    }
                 }
                 function ensureIdentifier(expr) {
                     if (expr.kind !== 65 /* Identifier */) {
                         var identifier = createTempVariable(0 /* Auto */);
-                        if (!isDeclaration) {
+                        if (!canDefineTempVariablesInPlace) {
                             recordTempDeclaration(identifier);
                         }
                         emitAssignment(identifier, expr);
@@ -26386,7 +26664,6 @@ var ts;
                 }
                 else {
                     renameNonTopLevelLetAndConst(node.name);
-                    emitModuleMemberName(node);
                     var initializer = node.initializer;
                     if (!initializer && languageVersion < 2 /* ES6 */) {
                         // downlevel emit for non-initialized let bindings defined in loops
@@ -26404,7 +26681,17 @@ var ts;
                             initializer = createVoidZero();
                         }
                     }
+                    var exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.name);
+                    if (exportChanged) {
+                        write(exportFunctionForFile + "(\"");
+                        emitNodeWithoutSourceMap(node.name);
+                        write("\", ");
+                    }
+                    emitModuleMemberName(node);
                     emitOptional(" = ", initializer);
+                    if (exportChanged) {
+                        write(")");
+                    }
                 }
             }
             function emitExportVariableAssignments(node) {
@@ -26472,16 +26759,25 @@ var ts;
                     node.parent.kind === 227 /* SourceFile */;
             }
             function emitVariableStatement(node) {
+                var startIsEmitted = true;
                 if (!(node.flags & 1 /* Export */)) {
-                    emitStartOfVariableDeclarationList(node.declarationList);
+                    startIsEmitted = tryEmitStartOfVariableDeclarationList(node.declarationList);
                 }
                 else if (isES6ExportedDeclaration(node)) {
                     // Exported ES6 module member
                     write("export ");
-                    emitStartOfVariableDeclarationList(node.declarationList);
+                    startIsEmitted = tryEmitStartOfVariableDeclarationList(node.declarationList);
                 }
-                emitCommaList(node.declarationList.declarations);
-                write(";");
+                if (startIsEmitted) {
+                    emitCommaList(node.declarationList.declarations);
+                    write(";");
+                }
+                else {
+                    var atLeastOneItem = emitVariableDeclarationListSkippingUninitializedEntries(node.declarationList);
+                    if (atLeastOneItem) {
+                        write(";");
+                    }
+                }
                 if (languageVersion < 2 /* ES6 */ && node.parent === currentSourceFile) {
                     ts.forEach(node.declarationList.declarations, emitExportVariableAssignments);
                 }
@@ -27296,7 +27592,10 @@ var ts;
             }
             function emitClassLikeDeclarationBelowES6(node) {
                 if (node.kind === 201 /* ClassDeclaration */) {
-                    write("var ");
+                    // source file level classes in system modules are hoisted so 'var's for them are already defined
+                    if (!shouldHoistDeclarationInSystemJsModule(node)) {
+                        write("var ");
+                    }
                     emitDeclarationName(node);
                     write(" = ");
                 }
@@ -27762,7 +28061,9 @@ var ts;
                 if (!shouldEmit) {
                     return emitOnlyPinnedOrTripleSlashComments(node);
                 }
-                if (!isModuleMergedWithES6Class(node)) {
+                var hoistedInDeclarationScope = shouldHoistDeclarationInSystemJsModule(node);
+                var emitVarForModule = !hoistedInDeclarationScope && !isModuleMergedWithES6Class(node);
+                if (emitVarForModule) {
                     emitStart(node);
                     if (isES6ExportedDeclaration(node)) {
                         write("export ");
@@ -27813,6 +28114,14 @@ var ts;
                 write(" = {}));");
                 emitEnd(node);
                 if (!isES6ExportedDeclaration(node) && node.name.kind === 65 /* Identifier */ && node.parent === currentSourceFile) {
+                    if (compilerOptions.module === 4 /* System */ && (node.flags & 1 /* Export */)) {
+                        writeLine();
+                        write(exportFunctionForFile + "(\"");
+                        emitDeclarationName(node);
+                        write("\", ");
+                        emitDeclarationName(node);
+                        write(")");
+                    }
                     emitExportMemberAssignments(node.name);
                 }
             }
@@ -27979,6 +28288,7 @@ var ts;
                 }
             }
             function emitExportDeclaration(node) {
+                ts.Debug.assert(compilerOptions.module !== 4 /* System */);
                 if (languageVersion < 2 /* ES6 */) {
                     if (node.moduleSpecifier && (!node.exportClause || resolver.isValueAliasDeclaration(node))) {
                         emitStart(node);
@@ -28083,14 +28393,21 @@ var ts;
                     else {
                         writeLine();
                         emitStart(node);
-                        emitContainingModuleName(node);
-                        if (languageVersion === 0 /* ES3 */) {
-                            write("[\"default\"] = ");
+                        if (compilerOptions.module === 4 /* System */) {
+                            write(exportFunctionForFile + "(\"default\",");
+                            emit(node.expression);
+                            write(")");
                         }
                         else {
-                            write(".default = ");
+                            emitContainingModuleName(node);
+                            if (languageVersion === 0 /* ES3 */) {
+                                write("[\"default\"] = ");
+                            }
+                            else {
+                                write(".default = ");
+                            }
+                            emit(node.expression);
                         }
-                        emit(node.expression);
                         write(";");
                         emitEnd(node);
                     }
@@ -28162,6 +28479,349 @@ var ts;
                     write("}");
                 }
             }
+            function getLocalNameForExternalImport(importNode) {
+                var namespaceDeclaration = getNamespaceDeclarationNode(importNode);
+                if (namespaceDeclaration && !isDefaultImport(importNode)) {
+                    return ts.getSourceTextOfNodeFromSourceFile(currentSourceFile, namespaceDeclaration.name);
+                }
+                else {
+                    return getGeneratedNameForNode(importNode);
+                }
+            }
+            function getExternalModuleNameText(importNode) {
+                var moduleName = ts.getExternalModuleName(importNode);
+                if (moduleName.kind === 8 /* StringLiteral */) {
+                    return getLiteralText(moduleName);
+                }
+                return undefined;
+            }
+            function emitVariableDeclarationsForImports() {
+                if (externalImports.length === 0) {
+                    return;
+                }
+                writeLine();
+                var started = false;
+                for (var _a = 0; _a < externalImports.length; _a++) {
+                    var importNode = externalImports[_a];
+                    // do not create variable declaration for exports and imports that lack import clause
+                    var skipNode = importNode.kind === 215 /* ExportDeclaration */ ||
+                        (importNode.kind === 209 /* ImportDeclaration */ && !importNode.importClause);
+                    if (skipNode) {
+                        continue;
+                    }
+                    if (!started) {
+                        write("var ");
+                        started = true;
+                    }
+                    else {
+                        write(", ");
+                    }
+                    write(getLocalNameForExternalImport(importNode));
+                }
+                if (started) {
+                    write(";");
+                }
+            }
+            function hoistTopLevelVariableAndFunctionDeclarations(node) {
+                // per ES6 spec: 
+                // 15.2.1.16.4 ModuleDeclarationInstantiation() Concrete Method
+                // - var declarations are initialized to undefined - 14.a.ii
+                // - function/generator declarations are instantiated - 16.a.iv
+                // this means that after module is instantiated but before its evaluation
+                // exported functions are already accessible at import sites
+                // in theory we should hoist only exported functions and its dependencies
+                // in practice to simplify things we'll hoist all source level functions and variable declaration
+                // including variables declarations for module and class declarations
+                var hoistedVars;
+                var hoistedFunctionDeclarations;
+                visit(node);
+                if (hoistedVars) {
+                    writeLine();
+                    write("var ");
+                    for (var i = 0; i < hoistedVars.length; ++i) {
+                        var local = hoistedVars[i];
+                        if (i !== 0) {
+                            write(", ");
+                        }
+                        if (local.kind === 201 /* ClassDeclaration */ || local.kind === 205 /* ModuleDeclaration */) {
+                            emitDeclarationName(local);
+                        }
+                        else {
+                            emit(local);
+                        }
+                    }
+                    write(";");
+                }
+                if (hoistedFunctionDeclarations) {
+                    for (var _a = 0; _a < hoistedFunctionDeclarations.length; _a++) {
+                        var f = hoistedFunctionDeclarations[_a];
+                        writeLine();
+                        emit(f);
+                    }
+                }
+                function visit(node) {
+                    if (node.kind === 200 /* FunctionDeclaration */) {
+                        if (!hoistedFunctionDeclarations) {
+                            hoistedFunctionDeclarations = [];
+                        }
+                        hoistedFunctionDeclarations.push(node);
+                        return;
+                    }
+                    if (node.kind === 201 /* ClassDeclaration */) {
+                        // TODO: rename block scoped classes
+                        if (!hoistedVars) {
+                            hoistedVars = [];
+                        }
+                        hoistedVars.push(node);
+                        return;
+                    }
+                    if (node.kind === 205 /* ModuleDeclaration */ && shouldEmitModuleDeclaration(node)) {
+                        if (!hoistedVars) {
+                            hoistedVars = [];
+                        }
+                        hoistedVars.push(node);
+                        return;
+                    }
+                    if (node.kind === 198 /* VariableDeclaration */ || node.kind === 152 /* BindingElement */) {
+                        if (shouldHoistVariable(node, false)) {
+                            var name_21 = node.name;
+                            if (name_21.kind === 65 /* Identifier */) {
+                                if (!hoistedVars) {
+                                    hoistedVars = [];
+                                }
+                                hoistedVars.push(name_21);
+                            }
+                            else {
+                                ts.forEachChild(name_21, visit);
+                            }
+                        }
+                        return;
+                    }
+                    if (ts.isBindingPattern(node)) {
+                        ts.forEach(node.elements, visit);
+                        return;
+                    }
+                    if (!ts.isDeclaration(node)) {
+                        ts.forEachChild(node, visit);
+                    }
+                }
+            }
+            function shouldHoistVariable(node, checkIfSourceFileLevelDecl) {
+                if (checkIfSourceFileLevelDecl && !shouldHoistDeclarationInSystemJsModule(node)) {
+                    return false;
+                }
+                // hoist variable if
+                // - it is not block scoped
+                // - it is top level block scoped
+                // if block scoped variables are nested in some another block then 
+                // no other functions can use them except ones that are defined at least in the same block
+                return (ts.getCombinedNodeFlags(node) & 12288 /* BlockScoped */) === 0 ||
+                    ts.getEnclosingBlockScopeContainer(node).kind === 227 /* SourceFile */;
+            }
+            function isCurrentFileSystemExternalModule() {
+                return compilerOptions.module === 4 /* System */ && ts.isExternalModule(currentSourceFile);
+            }
+            function emitSystemModuleBody(node, startIndex) {
+                // shape of the body in system modules:
+                // function (exports) {
+                //     <list of local aliases for imports>
+                //     <hoisted function declarations>
+                //     <hoisted variable declarations>
+                //     return {
+                //         setters: [
+                //             <list of setter function for imports>
+                //         ],
+                //         execute: function() {
+                //             <module statements>
+                //         }
+                //     }
+                //     <temp declarations>
+                // }
+                // I.e:
+                // import {x} from 'file1'
+                // var y = 1;
+                // export function foo() { return y + x(); }
+                // console.log(y);
+                // will be transformed to
+                // function(exports) {
+                //     var file1; // local alias
+                //     var y;
+                //     function foo() { return y + file1.x(); }
+                //     exports("foo", foo);
+                //     return {
+                //         setters: [
+                //             function(v) { file1 = v }
+                //         ],
+                //         execute(): function() {
+                //             y = 1;
+                //             console.log(y);
+                //         }
+                //     };
+                // }
+                emitVariableDeclarationsForImports();
+                writeLine();
+                hoistTopLevelVariableAndFunctionDeclarations(node);
+                writeLine();
+                write("return {");
+                increaseIndent();
+                writeLine();
+                emitSetters();
+                writeLine();
+                emitExecute(node, startIndex);
+                emitTempDeclarations(true);
+                decreaseIndent();
+                writeLine();
+                write("}"); // return
+            }
+            function emitSetters() {
+                write("setters:[");
+                for (var i = 0; i < externalImports.length; ++i) {
+                    if (i !== 0) {
+                        write(",");
+                    }
+                    writeLine();
+                    increaseIndent();
+                    var importNode = externalImports[i];
+                    var importVariableName = getLocalNameForExternalImport(importNode) || "";
+                    var parameterName = "_" + importVariableName;
+                    write("function (" + parameterName + ") {");
+                    switch (importNode.kind) {
+                        case 209 /* ImportDeclaration */:
+                            if (!importNode.importClause) {
+                                // 'import "..."' case
+                                // module is imported only for side-effects, setter body will be empty
+                                break;
+                            }
+                        // fall-through
+                        case 208 /* ImportEqualsDeclaration */:
+                            ts.Debug.assert(importVariableName !== "");
+                            increaseIndent();
+                            writeLine();
+                            // save import into the local
+                            write(importVariableName + " = " + parameterName);
+                            writeLine();
+                            var defaultName = importNode.kind === 209 /* ImportDeclaration */
+                                ? importNode.importClause.name
+                                : importNode.name;
+                            if (defaultName) {
+                                // emit re-export for imported default name
+                                // import n1 from 'foo1'
+                                // import n2 = require('foo2')
+                                // export {n1}
+                                // export {n2}
+                                emitExportMemberAssignments(defaultName);
+                                writeLine();
+                            }
+                            if (importNode.kind === 209 /* ImportDeclaration */ &&
+                                importNode.importClause.namedBindings) {
+                                var namedBindings = importNode.importClause.namedBindings;
+                                if (namedBindings.kind === 211 /* NamespaceImport */) {
+                                    // emit re-export for namespace
+                                    // import * as n from 'foo'
+                                    // export {n}
+                                    emitExportMemberAssignments(namedBindings.name);
+                                    writeLine();
+                                }
+                                else {
+                                    // emit re-exports for named imports
+                                    // import {a, b} from 'foo'
+                                    // export {a, b as c}
+                                    for (var _a = 0, _b = namedBindings.elements; _a < _b.length; _a++) {
+                                        var element = _b[_a];
+                                        emitExportMemberAssignments(element.name || element.propertyName);
+                                        writeLine();
+                                    }
+                                }
+                            }
+                            decreaseIndent();
+                            break;
+                        case 215 /* ExportDeclaration */:
+                            ts.Debug.assert(importVariableName !== "");
+                            increaseIndent();
+                            if (importNode.exportClause) {
+                                // export {a, b as c} from 'foo'
+                                // emit as:
+                                // exports('a', _foo["a"])
+                                // exports('c', _foo["b"])
+                                for (var _c = 0, _d = importNode.exportClause.elements; _c < _d.length; _c++) {
+                                    var e = _d[_c];
+                                    writeLine();
+                                    write(exportFunctionForFile + "(\"");
+                                    emitNodeWithoutSourceMap(e.name);
+                                    write("\", " + parameterName + "[\"");
+                                    emitNodeWithoutSourceMap(e.propertyName || e.name);
+                                    write("\"]);");
+                                }
+                            }
+                            else {
+                                writeLine();
+                                // export * from 'foo'
+                                // emit as:
+                                // for (var n in _foo) exports(n, _foo[n]);
+                                // NOTE: it is safe to use name 'n' since parameter name always starts with '_'
+                                write("for (var n in " + parameterName + ") " + exportFunctionForFile + "(n, " + parameterName + "[n]);");
+                            }
+                            writeLine();
+                            decreaseIndent();
+                            break;
+                    }
+                    write("}");
+                    decreaseIndent();
+                }
+                write("],");
+            }
+            function emitExecute(node, startIndex) {
+                write("execute: function() {");
+                increaseIndent();
+                writeLine();
+                for (var i = startIndex; i < node.statements.length; ++i) {
+                    var statement = node.statements[i];
+                    // - imports/exports are not emitted for system modules
+                    // - function declarations are not emitted because they were already hoisted
+                    switch (statement.kind) {
+                        case 215 /* ExportDeclaration */:
+                        case 209 /* ImportDeclaration */:
+                        case 208 /* ImportEqualsDeclaration */:
+                        case 200 /* FunctionDeclaration */:
+                            continue;
+                    }
+                    writeLine();
+                    emit(statement);
+                }
+                decreaseIndent();
+                writeLine();
+                write("}"); // execute
+            }
+            function emitSystemModule(node, startIndex) {
+                collectExternalModuleInfo(node);
+                // System modules has the following shape
+                // System.register(['dep-1', ... 'dep-n'], function(exports) {/* module body function */})
+                // 'exports' here is a function 'exports<T>(name: string, value: T): T' that is used to publish exported values.
+                // 'exports' returns its 'value' argument so in most cases expressions 
+                // that mutate exported values can be rewritten as:
+                // expr -> exports('name', expr). 
+                // The only exception in this rule is postfix unary operators, 
+                // see comment to 'emitPostfixUnaryExpression' for more details
+                ts.Debug.assert(!exportFunctionForFile);
+                // make sure that  name of 'exports' function does not conflict with existing identifiers
+                exportFunctionForFile = makeUniqueName("exports");
+                write("System.register([");
+                for (var i = 0; i < externalImports.length; ++i) {
+                    var text = getExternalModuleNameText(externalImports[i]);
+                    if (i !== 0) {
+                        write(", ");
+                    }
+                    write(text);
+                }
+                write("], function(" + exportFunctionForFile + ") {");
+                writeLine();
+                increaseIndent();
+                emitCaptureThisForNodeIfNecessary(node);
+                emitSystemModuleBody(node, startIndex);
+                decreaseIndent();
+                writeLine();
+                write("});");
+            }
             function emitAMDDependencies(node, includeNonAmdDependencies) {
                 // An AMD define function has the following shape:
                 //     define(id?, dependencies?, factory);
@@ -28178,8 +28838,8 @@ var ts;
                 // factory function.
                 var unaliasedModuleNames = []; // names of modules with no corresponding parameters in
                 // factory function.
-                var importAliasNames = []; // names of the parameters in the factory function; these
-                // parameters need to match the indexes of the corresponding
+                var importAliasNames = []; // names of the parameters in the factory function; these 
+                // parameters need to match the indexes of the corresponding 
                 // module names in aliasedModuleNames.
                 // Fill in amd-dependency tags
                 for (var _a = 0, _b = node.amdDependencies; _a < _b.length; _a++) {
@@ -28195,20 +28855,9 @@ var ts;
                 for (var _c = 0; _c < externalImports.length; _c++) {
                     var importNode = externalImports[_c];
                     // Find the name of the external module
-                    var externalModuleName = "";
-                    var moduleName = ts.getExternalModuleName(importNode);
-                    if (moduleName.kind === 8 /* StringLiteral */) {
-                        externalModuleName = getLiteralText(moduleName);
-                    }
+                    var externalModuleName = getExternalModuleNameText(importNode);
                     // Find the name of the module alias, if there is one
-                    var importAliasName = void 0;
-                    var namespaceDeclaration = getNamespaceDeclarationNode(importNode);
-                    if (namespaceDeclaration && !isDefaultImport(importNode)) {
-                        importAliasName = ts.getSourceTextOfNodeFromSourceFile(currentSourceFile, namespaceDeclaration.name);
-                    }
-                    else {
-                        importAliasName = getGeneratedNameForNode(importNode);
-                    }
+                    var importAliasName = getLocalNameForExternalImport(importNode);
                     if (includeNonAmdDependencies && importAliasName) {
                         aliasedModuleNames.push(externalModuleName);
                         importAliasNames.push(importAliasName);
@@ -28344,12 +28993,15 @@ var ts;
                     writeLines(paramHelper);
                     paramEmitted = true;
                 }
-                if (ts.isExternalModule(node)) {
+                if (ts.isExternalModule(node) || compilerOptions.separateCompilation) {
                     if (languageVersion >= 2 /* ES6 */) {
                         emitES6Module(node, startIndex);
                     }
                     else if (compilerOptions.module === 2 /* AMD */) {
                         emitAMDModule(node, startIndex);
+                    }
+                    else if (compilerOptions.module === 4 /* System */) {
+                        emitSystemModule(node, startIndex);
                     }
                     else if (compilerOptions.module === 3 /* UMD */) {
                         emitUMDModule(node, startIndex);
@@ -29183,6 +29835,22 @@ var ts;
                     diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Option_out_cannot_be_specified_with_option_separateCompilation));
                 }
             }
+            if (options.inlineSourceMap) {
+                if (options.sourceMap) {
+                    diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Option_sourceMap_cannot_be_specified_with_option_inlineSourceMap));
+                }
+                if (options.mapRoot) {
+                    diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Option_mapRoot_cannot_be_specified_with_option_inlineSourceMap));
+                }
+                if (options.sourceRoot) {
+                    diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Option_sourceRoot_cannot_be_specified_with_option_inlineSourceMap));
+                }
+            }
+            if (options.inlineSources) {
+                if (!options.sourceMap && !options.inlineSourceMap) {
+                    diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Option_inlineSources_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided));
+                }
+            }
             if (!options.sourceMap && (options.mapRoot || options.sourceRoot)) {
                 // Error to specify --mapRoot or --sourceRoot without mapSourceFiles
                 if (options.mapRoot) {
@@ -29212,7 +29880,7 @@ var ts;
             }
             // Cannot specify module gen target when in es6 or above
             if (options.module && languageVersion >= 2 /* ES6 */) {
-                diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Cannot_compile_external_modules_into_amd_commonjs_or_umd_when_targeting_ES6_or_higher));
+                diagnostics.add(ts.createCompilerDiagnostic(ts.Diagnostics.Cannot_compile_external_modules_into_commonjs_amd_system_or_umd_when_targeting_ES6_or_higher));
             }
             // there has to be common source directory if user specified --outdir || --sourceRoot
             // if user specified --mapRoot, there needs to be common source directory if there would be multiple files being emitted
@@ -29280,6 +29948,14 @@ var ts;
             description: ts.Diagnostics.Print_this_message
         },
         {
+            name: "inlineSourceMap",
+            type: "boolean"
+        },
+        {
+            name: "inlineSources",
+            type: "boolean"
+        },
+        {
             name: "listFiles",
             type: "boolean"
         },
@@ -29300,11 +29976,12 @@ var ts;
             type: {
                 "commonjs": 1 /* CommonJS */,
                 "amd": 2 /* AMD */,
+                "system": 4 /* System */,
                 "umd": 3 /* UMD */
             },
-            description: ts.Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_or_umd,
+            description: ts.Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_or_umd,
             paramType: ts.Diagnostics.KIND,
-            error: ts.Diagnostics.Argument_for_module_option_must_be_commonjs_amd_or_umd
+            error: ts.Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_or_umd
         },
         {
             name: "noEmit",
@@ -29531,19 +30208,34 @@ var ts;
     function readConfigFile(fileName) {
         try {
             var text = ts.sys.readFile(fileName);
-            return /\S/.test(text) ? JSON.parse(text) : {};
         }
         catch (e) {
+            return { error: ts.createCompilerDiagnostic(ts.Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message) };
         }
+        return parseConfigFileText(fileName, text);
     }
     ts.readConfigFile = readConfigFile;
+    /**
+      * Parse the text of the tsconfig.json file
+      * @param fileName The path to the config file
+      * @param jsonText The text of the config file
+      */
+    function parseConfigFileText(fileName, jsonText) {
+        try {
+            return { config: /\S/.test(jsonText) ? JSON.parse(jsonText) : {} };
+        }
+        catch (e) {
+            return { error: ts.createCompilerDiagnostic(ts.Diagnostics.Failed_to_parse_file_0_Colon_1, fileName, e.message) };
+        }
+    }
+    ts.parseConfigFileText = parseConfigFileText;
     /**
       * Parse the contents of a config file (tsconfig.json).
       * @param json The contents of the config file to parse
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    function parseConfigFile(json, basePath) {
+    function parseConfigFile(json, host, basePath) {
         var errors = [];
         return {
             options: getCompilerOptions(),
@@ -29599,7 +30291,7 @@ var ts;
                 }
             }
             else {
-                var sysFiles = ts.sys.readDirectory(basePath, ".ts");
+                var sysFiles = host.readDirectory(basePath, ".ts");
                 for (var i = 0; i < sysFiles.length; i++) {
                     var name = sysFiles[i];
                     if (!ts.fileExtensionIs(name, ".d.ts") || !ts.contains(sysFiles, name.substr(0, name.length - 5) + ".ts")) {
@@ -29786,12 +30478,12 @@ var ts;
             ts.forEach(program.getSourceFiles(), function (sourceFile) {
                 cancellationToken.throwIfCancellationRequested();
                 var nameToDeclarations = sourceFile.getNamedDeclarations();
-                for (var name_21 in nameToDeclarations) {
-                    var declarations = ts.getProperty(nameToDeclarations, name_21);
+                for (var name_22 in nameToDeclarations) {
+                    var declarations = ts.getProperty(nameToDeclarations, name_22);
                     if (declarations) {
                         // First do a quick check to see if the name of the declaration matches the 
                         // last portion of the (possibly) dotted name they're searching for.
-                        var matches = patternMatcher.getMatchesForLastSegmentOfPattern(name_21);
+                        var matches = patternMatcher.getMatchesForLastSegmentOfPattern(name_22);
                         if (!matches) {
                             continue;
                         }
@@ -29804,14 +30496,14 @@ var ts;
                                 if (!containers) {
                                     return undefined;
                                 }
-                                matches = patternMatcher.getMatches(containers, name_21);
+                                matches = patternMatcher.getMatches(containers, name_22);
                                 if (!matches) {
                                     continue;
                                 }
                             }
                             var fileName = sourceFile.fileName;
                             var matchKind = bestMatchKind(matches);
-                            rawItems.push({ name: name_21, fileName: fileName, matchKind: matchKind, isCaseSensitive: allMatchesAreCaseSensitive(matches), declaration: declaration });
+                            rawItems.push({ name: name_22, fileName: fileName, matchKind: matchKind, isCaseSensitive: allMatchesAreCaseSensitive(matches), declaration: declaration });
                         }
                     }
                 }
@@ -30194,9 +30886,9 @@ var ts;
                     case 198 /* VariableDeclaration */:
                     case 152 /* BindingElement */:
                         var variableDeclarationNode;
-                        var name_22;
+                        var name_23;
                         if (node.kind === 152 /* BindingElement */) {
-                            name_22 = node.name;
+                            name_23 = node.name;
                             variableDeclarationNode = node;
                             // binding elements are added only for variable declarations
                             // bubble up to the containing variable declaration
@@ -30208,16 +30900,16 @@ var ts;
                         else {
                             ts.Debug.assert(!ts.isBindingPattern(node.name));
                             variableDeclarationNode = node;
-                            name_22 = node.name;
+                            name_23 = node.name;
                         }
                         if (ts.isConst(variableDeclarationNode)) {
-                            return createItem(node, getTextOfNode(name_22), ts.ScriptElementKind.constElement);
+                            return createItem(node, getTextOfNode(name_23), ts.ScriptElementKind.constElement);
                         }
                         else if (ts.isLet(variableDeclarationNode)) {
-                            return createItem(node, getTextOfNode(name_22), ts.ScriptElementKind.letElement);
+                            return createItem(node, getTextOfNode(name_23), ts.ScriptElementKind.letElement);
                         }
                         else {
-                            return createItem(node, getTextOfNode(name_22), ts.ScriptElementKind.variableElement);
+                            return createItem(node, getTextOfNode(name_23), ts.ScriptElementKind.variableElement);
                         }
                     case 135 /* Constructor */:
                         return createItem(node, "constructor", ts.ScriptElementKind.constructorImplementationElement);
@@ -32804,9 +33496,9 @@ var ts;
             }
             Rules.prototype.getRuleName = function (rule) {
                 var o = this;
-                for (var name_23 in o) {
-                    if (o[name_23] === rule) {
-                        return name_23;
+                for (var name_24 in o) {
+                    if (o[name_24] === rule) {
+                        return name_24;
                     }
                 }
                 throw new Error("Unknown rule");
@@ -37023,10 +37715,10 @@ var ts;
                 for (var _i = 0, _a = program.getSourceFiles(); _i < _a.length; _i++) {
                     var sourceFile = _a[_i];
                     var nameTable = getNameTable(sourceFile);
-                    for (var name_24 in nameTable) {
-                        if (!allNames[name_24]) {
-                            allNames[name_24] = name_24;
-                            var displayName = getCompletionEntryDisplayName(name_24, target, true);
+                    for (var name_25 in nameTable) {
+                        if (!allNames[name_25]) {
+                            allNames[name_25] = name_25;
+                            var displayName = getCompletionEntryDisplayName(name_25, target, true);
                             if (displayName) {
                                 var entry = {
                                     name: displayName,
@@ -38887,19 +39579,19 @@ var ts;
                 if (isNameOfPropertyAssignment(node)) {
                     var objectLiteral = node.parent.parent;
                     var contextualType = typeChecker.getContextualType(objectLiteral);
-                    var name_25 = node.text;
+                    var name_26 = node.text;
                     if (contextualType) {
                         if (contextualType.flags & 16384 /* Union */) {
                             // This is a union type, first see if the property we are looking for is a union property (i.e. exists in all types)
                             // if not, search the constituent types for the property
-                            var unionProperty = contextualType.getProperty(name_25);
+                            var unionProperty = contextualType.getProperty(name_26);
                             if (unionProperty) {
                                 return [unionProperty];
                             }
                             else {
                                 var result_4 = [];
                                 ts.forEach(contextualType.types, function (t) {
-                                    var symbol = t.getProperty(name_25);
+                                    var symbol = t.getProperty(name_26);
                                     if (symbol) {
                                         result_4.push(symbol);
                                     }
@@ -38908,7 +39600,7 @@ var ts;
                             }
                         }
                         else {
-                            var symbol_1 = contextualType.getProperty(name_25);
+                            var symbol_1 = contextualType.getProperty(name_26);
                             if (symbol_1) {
                                 return [symbol_1];
                             }
@@ -40726,6 +41418,17 @@ var ts;
         return LanguageServiceShimHostAdapter;
     })();
     ts.LanguageServiceShimHostAdapter = LanguageServiceShimHostAdapter;
+    var CoreServicesShimHostAdapter = (function () {
+        function CoreServicesShimHostAdapter(shimHost) {
+            this.shimHost = shimHost;
+        }
+        CoreServicesShimHostAdapter.prototype.readDirectory = function (rootDir, extension) {
+            var encoded = this.shimHost.readDirectory(rootDir, extension);
+            return JSON.parse(encoded);
+        };
+        return CoreServicesShimHostAdapter;
+    })();
+    ts.CoreServicesShimHostAdapter = CoreServicesShimHostAdapter;
     function simpleForwardCall(logger, actionDescription, action) {
         logger.log(actionDescription);
         var start = Date.now();
@@ -41082,9 +41785,10 @@ var ts;
     })(ShimBase);
     var CoreServicesShimObject = (function (_super) {
         __extends(CoreServicesShimObject, _super);
-        function CoreServicesShimObject(factory, logger) {
+        function CoreServicesShimObject(factory, logger, host) {
             _super.call(this, factory);
             this.logger = logger;
+            this.host = host;
         }
         CoreServicesShimObject.prototype.forwardJSONCall = function (actionDescription, action) {
             return forwardJSONCall(this.logger, actionDescription, action);
@@ -41112,6 +41816,26 @@ var ts;
                     });
                 });
                 return convertResult;
+            });
+        };
+        CoreServicesShimObject.prototype.getTSConfigFileInfo = function (fileName, sourceTextSnapshot) {
+            var _this = this;
+            return this.forwardJSONCall("getTSConfigFileInfo('" + fileName + "')", function () {
+                var text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
+                var result = ts.parseConfigFileText(fileName, text);
+                if (result.error) {
+                    return {
+                        options: {},
+                        files: [],
+                        errors: [realizeDiagnostic(result.error, '\r\n')]
+                    };
+                }
+                var configFile = ts.parseConfigFile(result.config, _this.host, ts.getDirectoryPath(ts.normalizeSlashes(fileName)));
+                return {
+                    options: configFile.options,
+                    files: configFile.fileNames,
+                    errors: realizeDiagnostics(configFile.errors, '\r\n')
+                };
             });
         };
         CoreServicesShimObject.prototype.getDefaultCompilationSettings = function () {
@@ -41152,12 +41876,13 @@ var ts;
                 throw err;
             }
         };
-        TypeScriptServicesFactory.prototype.createCoreServicesShim = function (logger) {
+        TypeScriptServicesFactory.prototype.createCoreServicesShim = function (host) {
             try {
-                return new CoreServicesShimObject(this, logger);
+                var adapter = new CoreServicesShimHostAdapter(host);
+                return new CoreServicesShimObject(this, host, adapter);
             }
             catch (err) {
-                logInternalError(logger, err);
+                logInternalError(host, err);
                 throw err;
             }
         };

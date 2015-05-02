@@ -756,6 +756,9 @@ declare module "typescript" {
         getSourceFile(fileName: string): SourceFile;
         getCurrentDirectory(): string;
     }
+    interface ParseConfigHost {
+        readDirectory(rootDir: string, extension: string): string[];
+    }
     interface WriteFileCallback {
         (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
     }
@@ -804,6 +807,7 @@ declare module "typescript" {
         sourceMapFile: string;
         sourceMapSourceRoot: string;
         sourceMapSources: string[];
+        sourceMapSourcesContent?: string[];
         inputSourceFileNames: string[];
         sourceMapNames?: string[];
         sourceMapMappings: string;
@@ -1082,6 +1086,8 @@ declare module "typescript" {
         diagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
+        inlineSourceMap?: boolean;
+        inlineSources?: boolean;
         listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
@@ -1113,6 +1119,7 @@ declare module "typescript" {
         CommonJS = 1,
         AMD = 2,
         UMD = 3,
+        System = 4,
     }
     interface LineAndCharacter {
         line: number;
@@ -1236,14 +1243,26 @@ declare module "typescript" {
       * Read tsconfig.json file
       * @param fileName The path to the config file
       */
-    function readConfigFile(fileName: string): any;
+    function readConfigFile(fileName: string): {
+        config?: any;
+        error?: Diagnostic;
+    };
+    /**
+      * Parse the text of the tsconfig.json file
+      * @param fileName The path to the config file
+      * @param jsonText The text of the config file
+      */
+    function parseConfigFileText(fileName: string, jsonText: string): {
+        config?: any;
+        error?: Diagnostic;
+    };
     /**
       * Parse the contents of a config file (tsconfig.json).
       * @param json The contents of the config file to parse
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    function parseConfigFile(json: any, basePath?: string): ParsedCommandLine;
+    function parseConfigFile(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine;
 }
 declare module "typescript" {
     /** The version of the language service API */
