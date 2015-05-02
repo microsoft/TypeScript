@@ -97,7 +97,7 @@ module Utils {
         }
 
         try {
-            var content = ts.sys.readFile(Harness.userSpecifiedroot + path);
+            var content = ts.sys.readFile(Harness.userSpecifiedRoot + path);
         }
         catch (err) {
             return undefined;
@@ -720,7 +720,8 @@ module Harness {
     }
 
     // Settings 
-    export var userSpecifiedroot = "";
+    export let userSpecifiedRoot = "";
+    export let lightMode = false;
 
     /** Functionality for compiling TypeScript code */
     export module Compiler {
@@ -1610,9 +1611,9 @@ module Harness {
 
         function baselinePath(fileName: string, type: string, baselineFolder: string, subfolder?: string) {
             if (subfolder !== undefined) {
-                return Harness.userSpecifiedroot + baselineFolder + '/' +  subfolder + '/' + type + '/' + fileName;
+                return Harness.userSpecifiedRoot + baselineFolder + '/' +  subfolder + '/' + type + '/' + fileName;
             } else {
-                return Harness.userSpecifiedroot + baselineFolder + '/'  + type + '/' + fileName;
+                return Harness.userSpecifiedRoot + baselineFolder + '/'  + type + '/' + fileName;
             }
         }
 
@@ -1728,7 +1729,7 @@ module Harness {
     }
 
     export function getDefaultLibraryFile(): { unitName: string, content: string } {
-        var libFile = Harness.userSpecifiedroot + Harness.libFolder + "/" + "lib.d.ts";
+        var libFile = Harness.userSpecifiedRoot + Harness.libFolder + "/" + "lib.d.ts";
         return {
             unitName: libFile,
             content: IO.readFile(libFile)

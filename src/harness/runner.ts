@@ -18,6 +18,7 @@
 /// <reference path='fourslashRunner.ts' />
 /// <reference path='projectsRunner.ts' />
 /// <reference path='rwcRunner.ts' />
+/// <reference path='harness.ts' />
 
 function runTests(runners: RunnerBase[]) {
     for (var i = iterations; i > 0; i--) {
@@ -36,7 +37,6 @@ var testconfig = 'test.config';
 var testConfigFile =
     Harness.IO.fileExists(mytestconfig) ? Harness.IO.readFile(mytestconfig) :
     (Harness.IO.fileExists(testconfig) ? Harness.IO.readFile(testconfig) : '');
-var lightMode: boolean;
 
 if (testConfigFile !== '') {
     // TODO: not sure why this is crashing mocha
@@ -44,7 +44,7 @@ if (testConfigFile !== '') {
     //var testConfig = testConfigFile.match(/test:\s\['(.*)'\]/);
     //var options = testConfig ? [testConfig[1]] : [];
     if (testConfig.light) {
-        lightMode = true;
+        Harness.lightMode = true;
     }
 
     if (testConfig.test && testConfig.test.length > 0) {
