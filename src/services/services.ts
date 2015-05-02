@@ -848,7 +848,7 @@ module ts {
                                 // Overwrite the last declaration if it was an overload
                                 // and this one is an implementation.
                                 if (functionDeclaration.body && !(<FunctionLikeDeclaration>lastDeclaration).body) {
-                                    lastOrUndefined(declarations) = functionDeclaration;
+                                    declarations[declarations.length - 1] = functionDeclaration;
                                 }
                             }
                             else {
