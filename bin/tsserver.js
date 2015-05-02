@@ -2776,6 +2776,10 @@ var ts;
             description: ts.Diagnostics.Do_not_emit_outputs
         },
         {
+            name: "noEmitHelpers",
+            type: "boolean"
+        },
+        {
             name: "noEmitOnError",
             type: "boolean",
             description: ts.Diagnostics.Do_not_emit_outputs_if_any_type_checking_errors_were_reported
@@ -20599,10 +20603,10 @@ var ts;
     }
     ts.isExternalModuleOrDeclarationFile = isExternalModuleOrDeclarationFile;
     function emitFiles(resolver, host, targetSourceFile) {
-        var extendsHelper = "\nvar __extends = this.__extends || function (d, b) {\n    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];\n    function __() { this.constructor = d; }\n    __.prototype = b.prototype;\n    d.prototype = new __();\n};";
-        var decorateHelper = "\nif (typeof __decorate !== \"function\") __decorate = function (decorators, target, key, desc) {\n    if (typeof Reflect === \"object\" && typeof Reflect.decorate === \"function\") return Reflect.decorate(decorators, target, key, desc);\n    switch (arguments.length) {\n        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);\n        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);\n        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);\n    }\n};";
-        var metadataHelper = "\nif (typeof __metadata !== \"function\") __metadata = function (k, v) {\n    if (typeof Reflect === \"object\" && typeof Reflect.metadata === \"function\") return Reflect.metadata(k, v);\n};";
-        var paramHelper = "\nif (typeof __param !== \"function\") __param = function (paramIndex, decorator) {\n    return function (target, key) { decorator(target, key, paramIndex); }\n};";
+        var extendsHelper = "\nvar __extends = (this && this.__extends) || function (d, b) {\n    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];\n    function __() { this.constructor = d; }\n    __.prototype = b.prototype;\n    d.prototype = new __();\n};";
+        var decorateHelper = "\nvar __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {\n    if (typeof Reflect === \"object\" && typeof Reflect.decorate === \"function\") return Reflect.decorate(decorators, target, key, desc);\n    switch (arguments.length) {\n        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);\n        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);\n        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);\n    }\n};";
+        var metadataHelper = "\nvar __metadata = (this && this.__metadata) || function (k, v) {\n    if (typeof Reflect === \"object\" && typeof Reflect.metadata === \"function\") return Reflect.metadata(k, v);\n};";
+        var paramHelper = "\nvar __param = (this && this.__param) || function (paramIndex, decorator) {\n    return function (target, key) { decorator(target, key, paramIndex); }\n};";
         var compilerOptions = host.getCompilerOptions();
         var languageVersion = compilerOptions.target || 0;
         var sourceMapDataList = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
@@ -24960,20 +24964,22 @@ var ts;
                 writeLine();
                 emitDetachedComments(node);
                 var startIndex = emitDirectivePrologues(node.statements, false);
-                if ((languageVersion < 2) && (!extendsEmitted && resolver.getNodeCheckFlags(node) & 8)) {
-                    writeLines(extendsHelper);
-                    extendsEmitted = true;
-                }
-                if (!decorateEmitted && resolver.getNodeCheckFlags(node) & 512) {
-                    writeLines(decorateHelper);
-                    if (compilerOptions.emitDecoratorMetadata) {
-                        writeLines(metadataHelper);
+                if (!compilerOptions.noEmitHelpers) {
+                    if ((languageVersion < 2) && (!extendsEmitted && resolver.getNodeCheckFlags(node) & 8)) {
+                        writeLines(extendsHelper);
+                        extendsEmitted = true;
                     }
-                    decorateEmitted = true;
-                }
-                if (!paramEmitted && resolver.getNodeCheckFlags(node) & 1024) {
-                    writeLines(paramHelper);
-                    paramEmitted = true;
+                    if (!decorateEmitted && resolver.getNodeCheckFlags(node) & 512) {
+                        writeLines(decorateHelper);
+                        if (compilerOptions.emitDecoratorMetadata) {
+                            writeLines(metadataHelper);
+                        }
+                        decorateEmitted = true;
+                    }
+                    if (!paramEmitted && resolver.getNodeCheckFlags(node) & 1024) {
+                        writeLines(paramHelper);
+                        paramEmitted = true;
+                    }
                 }
                 if (ts.isExternalModule(node) || compilerOptions.separateCompilation) {
                     if (languageVersion >= 2) {
@@ -30337,7 +30343,7 @@ var ts;
     })(formatting = ts.formatting || (ts.formatting = {}));
 })(ts || (ts = {}));
 /// <reference path="..\compiler\program.ts"/>
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
