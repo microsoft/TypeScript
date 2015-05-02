@@ -5365,25 +5365,25 @@ module ts {
                     }
                 }
                 // Target type is type of constructor signiture
-                let constructorSignitures: Signature[];
+                let constructSignitures: Signature[];
                 if (rightType.flags & TypeFlags.Interface) {
-                    constructorSignitures = (<InterfaceTypeWithDeclaredMembers>rightType).declaredConstructSignatures;
+                    constructSignitures = (<InterfaceTypeWithDeclaredMembers>rightType).declaredConstructSignatures;
                 }
                 if (rightType.flags & TypeFlags.Anonymous) {
-                    constructorSignitures = (<ResolvedType>rightType).constructSignatures;
+                    constructSignitures = (<ResolvedType>rightType).constructSignatures;
                 }
-                if (constructorSignitures) {
-                    let constructorType = getUnionType(map(constructorSignitures, constructorSignature => {
-                        if (constructorSignature.typeParameters && constructorSignature.typeParameters.length !== 0) {
-                            // TODO convert type parameters to any or empty object types. e.g. Sample<T> -> Sample<any> or Sample<{}>.
+                if (constructSignitures) {
+                    let instanceType = getUnionType(map(constructSignitures, constructSignature => {
+                        if (constructSignature.typeParameters && constructSignature.typeParameters.length !== 0) {
+                            constructSignature = instantiateSignature(constructSignature, createTypeMapper(constructSignature.typeParameters, map(constructSignature.typeParameters, _ => anyType)), true)
                         }
-                        return constructorSignature.resolvedReturnType;
+                        return constructSignature.resolvedReturnType;
                     }));
                     // Pickup type from union types
                     if (type.flags & TypeFlags.Union) {
-                        return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, constructorType)));
+                        return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, instanceType)));
                     }
-                    return constructorType;
+                    return instanceType;
                 }
                 return type;
             }
