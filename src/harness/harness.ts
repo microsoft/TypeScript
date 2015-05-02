@@ -1052,15 +1052,17 @@ module Harness {
                         case 'newline':
                             if (setting.value.toLowerCase() === 'crlf') {
                                 options.newLine = ts.NewLineKind.CarriageReturnLineFeed;
-                                newLine = setting.value;
                             }
                             else if (setting.value.toLowerCase() === 'lf') {
                                 options.newLine = ts.NewLineKind.LineFeed;
-                                newLine = setting.value;
                             }
                             else {
                                 throw new Error('Unknown option for newLine: ' + setting.value);
                             }
+                            break;
+
+                        case 'normalizenewline':
+                            newLine = setting.value;
                             break;
 
                         case 'comments':
@@ -1504,7 +1506,7 @@ module Harness {
         // List of allowed metadata names
         var fileMetadataNames = ["filename", "comments", "declaration", "module",
             "nolib", "sourcemap", "target", "out", "outdir", "noemithelpers", "noemitonerror",
-            "noimplicitany", "noresolve", "newline", "newlines", "emitbom",
+            "noimplicitany", "noresolve", "newline", "normalizenewline", "emitbom",
             "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
             "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
             "separatecompilation", "inlinesourcemap", "maproot", "sourceroot",
