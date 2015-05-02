@@ -856,7 +856,7 @@ module ts {
     }
 
     export function hasRestParameters(s: SignatureDeclaration): boolean {
-        return s.parameters.length > 0 && s.parameters[s.parameters.length - 1].dotDotDotToken !== undefined;
+        return s.parameters.length > 0 && lastOrUndefined(s.parameters).dotDotDotToken !== undefined;
     }
 
     export function isLiteralKind(kind: SyntaxKind): boolean {
@@ -1362,7 +1362,7 @@ module ts {
                 let lineStartsOfS = computeLineStarts(s);
                 if (lineStartsOfS.length > 1) {
                     lineCount = lineCount + lineStartsOfS.length - 1;
-                    linePos = output.length - s.length + lineStartsOfS[lineStartsOfS.length - 1];
+                    linePos = output.length - s.length + lastOrUndefined(lineStartsOfS);
                 }
             }
         }

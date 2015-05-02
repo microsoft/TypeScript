@@ -3182,7 +3182,7 @@ module ts {
 
         function getRestTypeOfSignature(signature: Signature): Type {
             if (signature.hasRestParameter) {
-                let type = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
+                let type = getTypeOfSymbol(lastOrUndefined(signature.parameters));
                 if (type.flags & TypeFlags.Reference && (<TypeReference>type).target === globalArrayType) {
                     return (<TypeReference>type).typeArguments[0];
                 }
@@ -5666,7 +5666,7 @@ module ts {
                         // If last parameter is contextually rest parameter get its type
                         if (indexOfParameter === (func.parameters.length - 1) &&
                             funcHasRestParameters && contextualSignature.hasRestParameter && func.parameters.length >= contextualSignature.parameters.length) {
-                            return getTypeOfSymbol(contextualSignature.parameters[contextualSignature.parameters.length - 1]);
+                            return getTypeOfSymbol(lastOrUndefined(contextualSignature.parameters));
                         }
                     }
                 }
@@ -7215,9 +7215,9 @@ module ts {
                 links.type = instantiateType(getTypeAtPosition(context, i), mapper);
             }
             if (signature.hasRestParameter && context.hasRestParameter && signature.parameters.length >= context.parameters.length) {
-                let parameter = signature.parameters[signature.parameters.length - 1];
+                let parameter = lastOrUndefined(signature.parameters);
                 let links = getSymbolLinks(parameter);
-                links.type = instantiateType(getTypeOfSymbol(context.parameters[context.parameters.length - 1]), mapper);
+                links.type = instantiateType(getTypeOfSymbol(lastOrUndefined(context.parameters)), mapper);
             }
         }
 
@@ -12829,7 +12829,7 @@ module ts {
         function checkGrammarBindingElement(node: BindingElement) {
             if (node.dotDotDotToken) {
                 let elements = (<BindingPattern>node.parent).elements;
-                if (node !== elements[elements.length - 1]) {
+                if (node !== lastOrUndefined(elements)) {
                     return grammarErrorOnNode(node, Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
                 }
 

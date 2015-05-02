@@ -336,7 +336,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 let sourceMapNameIndexMap: Map<number> = {};
                 let sourceMapNameIndices: number[] = [];
                 function getSourceMapNameIndex() {
-                    return sourceMapNameIndices.length ? sourceMapNameIndices[sourceMapNameIndices.length - 1] : -1;
+                    return sourceMapNameIndices.length ? lastOrUndefined(sourceMapNameIndices) : -1;
                 }
 
                 // Last recorded and encoded spans
@@ -5890,13 +5890,13 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function hasDetachedComments(pos: number) {
-                return detachedCommentsInfo !== undefined && detachedCommentsInfo[detachedCommentsInfo.length - 1].nodePos === pos;
+                return detachedCommentsInfo !== undefined && lastOrUndefined(detachedCommentsInfo).nodePos === pos;
             }
 
             function getLeadingCommentsWithoutDetachedComments() {
                 // get the leading comments from detachedPos
                 let leadingComments = getLeadingCommentRanges(currentSourceFile.text,
-                    detachedCommentsInfo[detachedCommentsInfo.length - 1].detachedCommentEndPos);
+                    lastOrUndefined(detachedCommentsInfo).detachedCommentEndPos);
                 if (detachedCommentsInfo.length - 1) {
                     detachedCommentsInfo.pop();
                 }
@@ -6017,13 +6017,13 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         // All comments look like they could have been part of the copyright header.  Make
                         // sure there is at least one blank line between it and the node.  If not, it's not
                         // a copyright header.
-                        let lastCommentLine = getLineOfLocalPosition(currentSourceFile, detachedComments[detachedComments.length - 1].end);
+                        let lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastOrUndefined(detachedComments).end);
                         let nodeLine = getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
                         if (nodeLine >= lastCommentLine + 2) {
                             // Valid detachedComments
                             emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
                             emitComments(currentSourceFile, writer, detachedComments, /*trailingSeparator*/ true, newLine, writeComment);
-                            let currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: detachedComments[detachedComments.length - 1].end };
+                            let currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: lastOrUndefined(detachedComments).end };
                             if (detachedCommentsInfo) {
                                 detachedCommentsInfo.push(currentDetachedCommentInfo);
                             }

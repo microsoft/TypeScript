@@ -1691,7 +1691,7 @@ module ts {
             do {
                 templateSpans.push(parseTemplateSpan());
             }
-            while (templateSpans[templateSpans.length - 1].literal.kind === SyntaxKind.TemplateMiddle)
+            while (lastOrUndefined(templateSpans).literal.kind === SyntaxKind.TemplateMiddle)
 
             templateSpans.end = getNodeEnd();
             template.templateSpans = templateSpans;
