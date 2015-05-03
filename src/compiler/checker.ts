@@ -88,7 +88,6 @@ module ts {
         let undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
         let nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsUndefinedOrNull, "null");
         let unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
-        let resolvingType = createIntrinsicType(TypeFlags.Any, "__resolving__");
 
         let emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         let anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -7373,10 +7372,9 @@ module ts {
                         if (isContextSensitive(node)) {
                             assignContextualParameterTypes(signature, contextualSignature, contextualMapper || identityMapper);
                         }
-                        if (!node.type) {
-                            signature.resolvedReturnType = resolvingType;
+                        if (!node.type && !signature.resolvedReturnType) {
                             let returnType = getReturnTypeFromBody(node, contextualMapper);
-                            if (signature.resolvedReturnType === resolvingType) {
+                            if (!signature.resolvedReturnType) {
                                 signature.resolvedReturnType = returnType;
                             }
                         }
