@@ -1,3 +1,4 @@
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(7,18): error TS1005: ':' expected.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(9,14): error TS1181: Array element destructuring pattern expected.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(9,19): error TS1005: '(' expected.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(9,21): error TS1109: Expression expected.
@@ -10,7 +11,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(12,13): error TS2370: A rest parameter must be of an array type.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts (10 errors) ====
+==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts (11 errors) ====
     // A parameter declaration may specify either an identifier or a binding pattern.
     
     // Reserved words are not allowed to be used as an identifier in parameter declaration
@@ -18,6 +19,8 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration6.ts(
     
     // Error
     function a({while}) { }
+                     ~
+!!! error TS1005: ':' expected.
     function a1({public}) { }
     function a4([while, for, public]){ }
                  ~~~~~

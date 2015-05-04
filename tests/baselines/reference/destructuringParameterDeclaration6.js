@@ -27,7 +27,7 @@ b2({ while: 1 });
 "use strict";
 // Error
 function a(_a) {
-    var while = _a.while;
+    var  = _a.while;
 }
 function a1(_a) {
     var public = _a.public;
