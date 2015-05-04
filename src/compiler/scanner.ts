@@ -2,12 +2,10 @@
 /// <reference path="diagnosticInformationMap.generated.ts"/>
 
 module ts {
-    /* @internal */ 
     export interface ErrorCallback {
         (message: DiagnosticMessage, length: number): void;
     }
 
-    /* @internal */ 
     export interface Scanner {
         getStartPos(): number;
         getToken(): SyntaxKind;
@@ -76,6 +74,7 @@ module ts {
         "interface": SyntaxKind.InterfaceKeyword,
         "let": SyntaxKind.LetKeyword,
         "module": SyntaxKind.ModuleKeyword,
+        "namespace": SyntaxKind.NamespaceKeyword,
         "new": SyntaxKind.NewKeyword,
         "null": SyntaxKind.NullKeyword,
         "number": SyntaxKind.NumberKeyword,
@@ -521,7 +520,7 @@ module ts {
                     }
                     collecting = true;
                     if (result && result.length) {
-                        result[result.length - 1].hasTrailingNewLine = true;
+                        lastOrUndefined(result).hasTrailingNewLine = true;
                     }
                     continue;
                 case CharacterCodes.tab:
@@ -568,7 +567,7 @@ module ts {
                 default:
                     if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch) || isLineBreak(ch))) {
                         if (result && result.length && isLineBreak(ch)) {
-                            result[result.length - 1].hasTrailingNewLine = true;
+                            lastOrUndefined(result).hasTrailingNewLine = true;
                         }
                         pos++;
                         continue;

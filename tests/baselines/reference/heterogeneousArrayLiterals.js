@@ -133,7 +133,7 @@ function foo4<T extends Base, U extends Base>(t: T, u: U) {
 
 //// [heterogeneousArrayLiterals.js]
 // type of an array is the best common type of its elements (plus its contextual type if it exists)
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;

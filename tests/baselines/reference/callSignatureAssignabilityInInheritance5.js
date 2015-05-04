@@ -51,7 +51,7 @@ interface I extends B {
 //// [callSignatureAssignabilityInInheritance5.js]
 // checking subtype relations for function types as it relates to contextual signature instantiation
 // same as subtypingWithCallSignatures2 just with an extra level of indirection in the inheritance chain
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;

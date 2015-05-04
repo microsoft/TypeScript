@@ -519,7 +519,7 @@ module ts.server {
                                 IndentSize: formatOptions.IndentSize,
                                 TabSize: formatOptions.TabSize,
                                 NewLineCharacter: "\n",
-                                ConvertTabsToSpaces: true,
+                                ConvertTabsToSpaces: formatOptions.ConvertTabsToSpaces,
                             };
                             var indentPosition =
                                 compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);

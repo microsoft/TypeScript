@@ -197,6 +197,9 @@ module ts {
             let list = createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, NodeFlags.Synthetic, this);
             list._children = [];
             let pos = nodes.pos;
+
+            
+            
             for (let node of nodes) {
                 if (pos < node.pos) {
                     pos = this.addSyntheticNodes(list._children, pos, node.pos);
@@ -969,8 +972,19 @@ module ts {
         getSemanticDiagnostics(fileName: string): Diagnostic[];
         getCompilerOptionsDiagnostics(): Diagnostic[];
 
+        /** 
+         * @deprecated Use getEncodedSyntacticClassifications instead.
+         */
         getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+
+        /** 
+         * @deprecated Use getEncodedSemanticClassifications instead.
+         */
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+
+        // Encoded as triples of [start, length, ClassificationType].  
+        getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
+        getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
 
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
@@ -1013,6 +1027,11 @@ module ts {
         getSourceFile(fileName: string): SourceFile;
 
         dispose(): void;
+    }
+
+    export interface Classifications {
+        spans: number[],
+        endOfLineState: EndOfLineState
     }
 
     export interface ClassifiedSpan {
@@ -1258,7 +1277,7 @@ module ts {
     }
 
     export const enum EndOfLineState {
-        Start,
+        None,
         InMultiLineCommentTrivia,
         InSingleQuoteStringLiteral,
         InDoubleQuoteStringLiteral,
@@ -1308,8 +1327,10 @@ module ts {
          *                                  classifications which may be incorrectly categorized will be given
          *                                  back as Identifiers in order to allow the syntactic classifier to
          *                                  subsume the classification.
+         * @deprecated Use getLexicalClassifications instead.
          */
         getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult;
+        getEncodedLexicalClassifications(text: string, endOfLineState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications;
     }
 
     /**
@@ -1484,10 +1505,30 @@ module ts {
         public static interfaceName = "interface name";
         public static moduleName = "module name";
         public static typeParameterName = "type parameter name";
-        public static typeAlias = "type alias name";
+        public static typeAliasName = "type alias name";
         public static parameterName = "parameter name";
-
         public static docCommentTagName = "doc comment tag name";
+    }
+
+    export const enum ClassificationType {
+        comment = 1,
+        identifier = 2,
+        keyword = 3,
+        numericLiteral = 4,
+        operator = 5,
+        stringLiteral = 6,
+        regularExpressionLiteral = 7,
+        whiteSpace = 8,
+        text = 9,
+        punctuation = 10,
+        className = 11,
+        enumName = 12,
+        interfaceName = 13,
+        moduleName = 14,
+        typeParameterName = 15,
+        typeAliasName = 16,
+        parameterName = 17,
+        docCommentTagName = 18,
     }
 
     /// Language Service
@@ -3011,7 +3052,8 @@ module ts {
                         case SyntaxKind.OpenBracketToken:
                             return containingNodeKind === SyntaxKind.ArrayLiteralExpression;                 // [ |
 
-                        case SyntaxKind.ModuleKeyword:                               // module | 
+                        case SyntaxKind.ModuleKeyword:                               // module |
+                        case SyntaxKind.NamespaceKeyword:                            // namespace |
                             return true;
 
                         case SyntaxKind.DotToken:
@@ -3664,7 +3706,9 @@ module ts {
             }
             if (symbolFlags & SymbolFlags.Module) {
                 addNewLineIfDisplayPartsExist();
-                displayParts.push(keywordPart(SyntaxKind.ModuleKeyword));
+                let declaration = <ModuleDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ModuleDeclaration);
+                let isNamespace = declaration && declaration.name && declaration.name.kind === SyntaxKind.Identifier;
+                displayParts.push(keywordPart(isNamespace ? SyntaxKind.NamespaceKeyword : SyntaxKind.ModuleKeyword));
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
             }
@@ -4033,7 +4077,7 @@ module ts {
                     return true;
                 }
                 else if (declarations.length) {
-                    result.push(createDefinitionInfo(declarations[declarations.length - 1], symbolKind, symbolName, containerName));
+                    result.push(createDefinitionInfo(lastOrUndefined(declarations), symbolKind, symbolName, containerName));
                     return true;
                 }
 
@@ -5390,7 +5434,7 @@ module ts {
                 }
                 return;
 
-                function getPropertySymbolFromTypeReference(typeReference: HeritageClauseElement) {
+                function getPropertySymbolFromTypeReference(typeReference: ExpressionWithTypeArguments) {
                     if (typeReference) {
                         let type = typeChecker.getTypeAtLocation(typeReference);
                         if (type) {
@@ -5651,7 +5695,7 @@ module ts {
                 node = node.parent;
             }
 
-            return node.parent.kind === SyntaxKind.TypeReference || node.parent.kind === SyntaxKind.HeritageClauseElement;
+            return node.parent.kind === SyntaxKind.TypeReference || node.parent.kind === SyntaxKind.ExpressionWithTypeArguments;
         }
 
         function isNamespaceReference(node: Node): boolean {
@@ -5669,7 +5713,7 @@ module ts {
                 isLastClause = (<PropertyAccessExpression>root).name === node;
             }
 
-            if (!isLastClause && root.parent.kind === SyntaxKind.HeritageClauseElement && root.parent.parent.kind === SyntaxKind.HeritageClause) {
+            if (!isLastClause && root.parent.kind === SyntaxKind.ExpressionWithTypeArguments && root.parent.parent.kind === SyntaxKind.HeritageClause) {
                 let decl = root.parent.parent.parent;
                 return (decl.kind === SyntaxKind.ClassDeclaration && (<HeritageClause>root.parent.parent).token === SyntaxKind.ImplementsKeyword) ||
                     (decl.kind === SyntaxKind.InterfaceDeclaration && (<HeritageClause>root.parent.parent).token === SyntaxKind.ExtendsKeyword);
@@ -5821,35 +5865,45 @@ module ts {
             return NavigationBar.getNavigationBarItems(sourceFile);
         }
 
-        function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+        function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[]{
+            return convertClassifications(getEncodedSemanticClassifications(fileName, span));
+        }
+
+        function getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
             synchronizeHostData();
 
             let sourceFile = getValidSourceFile(fileName);
             let typeChecker = program.getTypeChecker();
 
-            let result: ClassifiedSpan[] = [];
+            let result: number[] = [];
             processNode(sourceFile);
 
-            return result;
+            return { spans: result, endOfLineState: EndOfLineState.None };
 
-            function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning) {
+            function pushClassification(start: number, length: number, type: ClassificationType) {
+                result.push(start);
+                result.push(length);
+                result.push(type);
+            }
+
+            function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning): ClassificationType {
                 let flags = symbol.getFlags();
 
                 if (flags & SymbolFlags.Class) {
-                    return ClassificationTypeNames.className;
+                    return ClassificationType.className;
                 }
                 else if (flags & SymbolFlags.Enum) {
-                    return ClassificationTypeNames.enumName;
+                    return ClassificationType.enumName;
                 }
                 else if (flags & SymbolFlags.TypeAlias) {
-                    return ClassificationTypeNames.typeAlias;
+                    return ClassificationType.typeAliasName;
                 }
                 else if (meaningAtPosition & SemanticMeaning.Type) {
                     if (flags & SymbolFlags.Interface) {
-                        return ClassificationTypeNames.interfaceName;
+                        return ClassificationType.interfaceName;
                     }
                     else if (flags & SymbolFlags.TypeParameter) {
-                        return ClassificationTypeNames.typeParameterName;
+                        return ClassificationType.typeParameterName;
                     }
                 }
                 else if (flags & SymbolFlags.Module) {
@@ -5858,7 +5912,7 @@ module ts {
                     //  - There exists a module declaration which actually impacts the value side.
                     if (meaningAtPosition & SemanticMeaning.Namespace ||
                         (meaningAtPosition & SemanticMeaning.Value && hasValueSideModule(symbol))) {
-                        return ClassificationTypeNames.moduleName;
+                        return ClassificationType.moduleName;
                     }
                 }
 
@@ -5882,10 +5936,7 @@ module ts {
                         if (symbol) {
                             let type = classifySymbol(symbol, getMeaningFromLocation(node));
                             if (type) {
-                                result.push({
-                                    textSpan: createTextSpan(node.getStart(), node.getWidth()),
-                                    classificationType: type
-                                });
+                                pushClassification(node.getStart(), node.getWidth(), type);
                             }
                         }
                     }
@@ -5895,7 +5946,47 @@ module ts {
             }
         }
 
-        function getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+        function getClassificationTypeName(type: ClassificationType) {
+            switch (type) {
+                case ClassificationType.comment: return ClassificationTypeNames.comment;
+                case ClassificationType.identifier: return ClassificationTypeNames.identifier;
+                case ClassificationType.keyword: return ClassificationTypeNames.keyword;
+                case ClassificationType.numericLiteral: return ClassificationTypeNames.numericLiteral;
+                case ClassificationType.operator: return ClassificationTypeNames.operator;
+                case ClassificationType.stringLiteral: return ClassificationTypeNames.stringLiteral;
+                case ClassificationType.whiteSpace: return ClassificationTypeNames.whiteSpace;
+                case ClassificationType.text: return ClassificationTypeNames.text;
+                case ClassificationType.punctuation: return ClassificationTypeNames.punctuation;
+                case ClassificationType.className: return ClassificationTypeNames.className;
+                case ClassificationType.enumName: return ClassificationTypeNames.enumName;
+                case ClassificationType.interfaceName: return ClassificationTypeNames.interfaceName;
+                case ClassificationType.moduleName: return ClassificationTypeNames.moduleName;
+                case ClassificationType.typeParameterName: return ClassificationTypeNames.typeParameterName;
+                case ClassificationType.typeAliasName: return ClassificationTypeNames.typeAliasName;
+                case ClassificationType.parameterName: return ClassificationTypeNames.parameterName;
+                case ClassificationType.docCommentTagName: return ClassificationTypeNames.docCommentTagName;
+            }
+        }
+
+        function convertClassifications(classifications: Classifications): ClassifiedSpan[] {
+            Debug.assert(classifications.spans.length % 3 === 0);
+            let dense = classifications.spans;
+            let result: ClassifiedSpan[] = [];
+            for (let i = 0, n = dense.length; i < n; i += 3) {
+                result.push({
+                    textSpan: createTextSpan(dense[i], dense[i + 1]),
+                    classificationType: getClassificationTypeName(dense[i + 2])
+                });
+            }
+
+            return result;
+        }
+
+        function getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[]{
+            return convertClassifications(getEncodedSyntacticClassifications(fileName, span));
+        }
+
+        function getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications {
             // doesn't use compiler - no need to synchronize with host
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
@@ -5903,10 +5994,16 @@ module ts {
             let triviaScanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ false, sourceFile.text);
             let mergeConflictScanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ false, sourceFile.text);
 
-            let result: ClassifiedSpan[] = [];
+            let result: number[] = [];
             processElement(sourceFile);
 
-            return result;
+            return { spans: result, endOfLineState: EndOfLineState.None };
+
+            function pushClassification(start: number, length: number, type: ClassificationType) {
+                result.push(start);
+                result.push(length);
+                result.push(type);
+            }
 
             function classifyLeadingTrivia(token: Node): void {
                 let tokenStart = skipTrivia(sourceFile.text, token.pos, /*stopAfterLineBreak:*/ false);
@@ -5939,10 +6036,7 @@ module ts {
                             // for the <<<<<<< and >>>>>>> markers, we just add them in as comments
                             // in the classification stream.
                             if (ch === CharacterCodes.lessThan || ch === CharacterCodes.greaterThan) {
-                                result.push({
-                                    textSpan: createTextSpan(start, width),
-                                    classificationType: ClassificationTypeNames.comment
-                                });
+                                pushClassification(start, width, ClassificationType.comment);
                                 continue;
                             }
 
@@ -5972,10 +6066,7 @@ module ts {
             }
 
             function pushCommentRange(start: number, width: number) {
-                result.push({
-                    textSpan: createTextSpan(start, width),
-                    classificationType: ClassificationTypeNames.comment
-                })
+                pushClassification(start, width, ClassificationType.comment);
             }
 
             function classifyJSDocComment(docComment: JSDocComment) {
@@ -5986,15 +6077,8 @@ module ts {
                         pushCommentRange(pos, tag.pos - pos);
                     }
 
-                    result.push({
-                        textSpan: createTextSpanFromBounds(tag.atToken.pos, tag.atToken.end),
-                        classificationType: ClassificationTypeNames.punctuation
-                    });
-
-                    result.push({
-                        textSpan: createTextSpanFromBounds(tag.tagName.pos, tag.tagName.end),
-                        classificationType: ClassificationTypeNames.docCommentTagName
-                    }); 
+                    pushClassification(tag.atToken.pos, tag.atToken.getWidth(), ClassificationType.punctuation);
+                    pushClassification(tag.tagName.pos, tag.tagName.getWidth(), ClassificationType.docCommentTagName);
 
                     pos = tag.tagName.end;
 
@@ -6025,10 +6109,7 @@ module ts {
                 function processJSDocParameterTag(tag: JSDocParameterTag) {
                     if (tag.preParameterName) {
                         pushCommentRange(pos, tag.preParameterName.pos - pos);
-                        result.push({
-                            textSpan: createTextSpanFromBounds(tag.preParameterName.pos, tag.preParameterName.end),
-                            classificationType: ClassificationTypeNames.parameterName
-                        });
+                        pushClassification(tag.preParameterName.pos, tag.preParameterName.getWidth(), ClassificationType.parameterName);
                         pos = tag.preParameterName.end;
                     }
 
@@ -6040,10 +6121,7 @@ module ts {
 
                     if (tag.postParameterName) {
                         pushCommentRange(pos, tag.postParameterName.pos - pos);
-                        result.push({
-                            textSpan: createTextSpanFromBounds(tag.postParameterName.pos, tag.postParameterName.end),
-                            classificationType: ClassificationTypeNames.parameterName
-                        });
+                        pushClassification(tag.postParameterName.pos, tag.postParameterName.getWidth(), ClassificationType.parameterName);
                         pos = tag.postParameterName.end;
                     }
                 }
@@ -6063,11 +6141,7 @@ module ts {
                         break;
                     }
                 }
-                result.push({
-                    textSpan: createTextSpanFromBounds(start, i),
-                    classificationType: ClassificationTypeNames.comment
-                });
-
+                pushClassification(start, i - start, ClassificationType.comment);
                 mergeConflictScanner.setTextPos(i);
 
                 while (mergeConflictScanner.getTextPos() < end) {
@@ -6082,10 +6156,7 @@ module ts {
 
                 let type = classifyTokenType(tokenKind);
                 if (type) {
-                    result.push({
-                        textSpan: createTextSpanFromBounds(start, end),
-                        classificationType: type
-                    });
+                    pushClassification(start, end - start, type);
                 }
             }
 
@@ -6095,10 +6166,7 @@ module ts {
                 if (token.getWidth() > 0) {
                     let type = classifyTokenType(token.kind, token);
                     if (type) {
-                        result.push({
-                            textSpan: createTextSpan(token.getStart(), token.getWidth()),
-                            classificationType: type
-                        });
+                        pushClassification(token.getStart(), token.getWidth(), type);
                     }
                 }
             }
@@ -6106,9 +6174,9 @@ module ts {
             // for accurate classification, the actual token should be passed in.  however, for 
             // cases like 'disabled merge code' classification, we just get the token kind and
             // classify based on that instead.
-            function classifyTokenType(tokenKind: SyntaxKind, token?: Node): string {
+            function classifyTokenType(tokenKind: SyntaxKind, token?: Node): ClassificationType {
                 if (isKeyword(tokenKind)) {
-                    return ClassificationTypeNames.keyword;
+                    return ClassificationType.keyword;
                 }
 
                 // Special case < and >  If they appear in a generic context they are punctuation,
@@ -6117,7 +6185,7 @@ module ts {
                     // If the node owning the token has a type argument list or type parameter list, then
                     // we can effectively assume that a '<' and '>' belong to those lists.
                     if (token && getTypeArgumentOrTypeParameterList(token.parent)) {
-                        return ClassificationTypeNames.punctuation;
+                        return ClassificationType.punctuation;
                     }
                 }
 
@@ -6128,7 +6196,7 @@ module ts {
                             if (token.parent.kind === SyntaxKind.VariableDeclaration ||
                                 token.parent.kind === SyntaxKind.PropertyDeclaration ||
                                 token.parent.kind === SyntaxKind.Parameter) {
-                                return ClassificationTypeNames.operator;
+                                return ClassificationType.operator;
                             }
                         }
 
@@ -6136,63 +6204,63 @@ module ts {
                             token.parent.kind === SyntaxKind.PrefixUnaryExpression ||
                             token.parent.kind === SyntaxKind.PostfixUnaryExpression ||
                             token.parent.kind === SyntaxKind.ConditionalExpression) {
-                            return ClassificationTypeNames.operator;
+                            return ClassificationType.operator;
                         }
                     }
 
-                    return ClassificationTypeNames.punctuation;
+                    return ClassificationType.punctuation;
                 }
                 else if (tokenKind === SyntaxKind.NumericLiteral) {
-                    return ClassificationTypeNames.numericLiteral;
+                    return ClassificationType.numericLiteral;
                 }
                 else if (tokenKind === SyntaxKind.StringLiteral) {
-                    return ClassificationTypeNames.stringLiteral;
+                    return ClassificationType.stringLiteral;
                 }
                 else if (tokenKind === SyntaxKind.RegularExpressionLiteral) {
                     // TODO: we should get another classification type for these literals.
-                    return ClassificationTypeNames.stringLiteral;
+                    return ClassificationType.stringLiteral;
                 }
                 else if (isTemplateLiteralKind(tokenKind)) {
                     // TODO (drosen): we should *also* get another classification type for these literals.
-                    return ClassificationTypeNames.stringLiteral;
+                    return ClassificationType.stringLiteral;
                 }
                 else if (tokenKind === SyntaxKind.Identifier) {
                     if (token) {
                         switch (token.parent.kind) {
                             case SyntaxKind.ClassDeclaration:
                                 if ((<ClassDeclaration>token.parent).name === token) {
-                                    return ClassificationTypeNames.className;
+                                    return ClassificationType.className;
                                 }
                                 return;
                             case SyntaxKind.TypeParameter:
                                 if ((<TypeParameterDeclaration>token.parent).name === token) {
-                                    return ClassificationTypeNames.typeParameterName;
+                                    return ClassificationType.typeParameterName;
                                 }
                                 return;
                             case SyntaxKind.InterfaceDeclaration:
                                 if ((<InterfaceDeclaration>token.parent).name === token) {
-                                    return ClassificationTypeNames.interfaceName;
+                                    return ClassificationType.interfaceName;
                                 }
                                 return;
                             case SyntaxKind.EnumDeclaration:
                                 if ((<EnumDeclaration>token.parent).name === token) {
-                                    return ClassificationTypeNames.enumName;
+                                    return ClassificationType.enumName;
                                 }
                                 return;
                             case SyntaxKind.ModuleDeclaration:
                                 if ((<ModuleDeclaration>token.parent).name === token) {
-                                    return ClassificationTypeNames.moduleName;
+                                    return ClassificationType.moduleName;
                                 }
                                 return;
                             case SyntaxKind.Parameter:
                                 if ((<ParameterDeclaration>token.parent).name === token) {
-                                    return ClassificationTypeNames.parameterName;
+                                    return ClassificationType.parameterName;
                                 }
                                 return;
                         }
                     }
 
-                    return ClassificationTypeNames.text;
+                    return ClassificationType.text;
                 }
             }
 
@@ -6527,6 +6595,8 @@ module ts {
             getCompilerOptionsDiagnostics,
             getSyntacticClassifications,
             getSemanticClassifications,
+            getEncodedSyntacticClassifications,
+            getEncodedSemanticClassifications,
             getCompletionsAtPosition,
             getCompletionEntryDetails,
             getSignatureHelpItems,
@@ -6667,10 +6737,67 @@ module ts {
             // if there are more cases we want the classifier to be better at.
             return true;
         }
-        
+
+        function convertClassifications(classifications: Classifications, text: string): ClassificationResult {
+            var entries: ClassificationInfo[] = [];
+            let dense = classifications.spans;
+            let lastEnd = 0;
+
+            for (let i = 0, n = dense.length; i < n; i += 3) {
+                let start = dense[i];
+                let length = dense[i + 1];
+                let type = <ClassificationType>dense[i + 2];
+
+                // Make a whitespace entry between the last item and this one.
+                if (lastEnd >= 0) {
+                    let whitespaceLength = start - lastEnd;
+                    if (whitespaceLength > 0) {
+                        entries.push({ length: whitespaceLength, classification: TokenClass.Whitespace });
+                    }
+                }
+
+                entries.push({ length, classification: convertClassification(type) });
+                lastEnd = start + length;
+            }
+
+            let whitespaceLength = text.length - lastEnd;
+            if (whitespaceLength > 0) {
+                entries.push({ length: whitespaceLength, classification: TokenClass.Whitespace });
+            }
+
+            return { entries, finalLexState: classifications.endOfLineState };
+        }
+
+        function convertClassification(type: ClassificationType): TokenClass {
+            switch (type) {
+                case ClassificationType.comment: return TokenClass.Comment;
+                case ClassificationType.keyword: return TokenClass.Keyword;
+                case ClassificationType.numericLiteral: return TokenClass.NumberLiteral;
+                case ClassificationType.operator: return TokenClass.Operator;
+                case ClassificationType.stringLiteral: return TokenClass.StringLiteral;
+                case ClassificationType.whiteSpace: return TokenClass.Whitespace;
+                case ClassificationType.punctuation: return TokenClass.Punctuation;
+                case ClassificationType.identifier: 
+                case ClassificationType.className:
+                case ClassificationType.enumName:
+                case ClassificationType.interfaceName:
+                case ClassificationType.moduleName:
+                case ClassificationType.typeParameterName:
+                case ClassificationType.typeAliasName:
+                case ClassificationType.text:
+                case ClassificationType.parameterName:
+                default:
+                    return TokenClass.Identifier;
+            }
+        }
+
+        function getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult {
+            return convertClassifications(getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent), text);
+        }
+                
         // If there is a syntactic classifier ('syntacticClassifierAbsent' is false),
         // we will be more conservative in order to avoid conflicting with the syntactic classifier.
-        function getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult {
+        function getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications {
             let offset = 0;
             let token = SyntaxKind.Unknown;
             let lastNonTriviaToken = SyntaxKind.Unknown;
@@ -6713,9 +6840,9 @@ module ts {
 
             scanner.setText(text);
 
-            let result: ClassificationResult = {
-                finalLexState: EndOfLineState.Start,
-                entries: []
+            let result: Classifications = {
+                endOfLineState: EndOfLineState.None,
+                spans: []
             };
 
             // We can run into an unfortunate interaction between the lexical and syntactic classifier
@@ -6828,7 +6955,7 @@ module ts {
                 let start = scanner.getTokenPos();
                 let end = scanner.getTextPos();
 
-                addResult(end - start, classFromKind(token));
+                addResult(start, end, classFromKind(token));
 
                 if (end >= text.length) {
                     if (token === SyntaxKind.StringLiteral) {
@@ -6845,7 +6972,7 @@ module ts {
                             // If we have an odd number of backslashes, then the multiline string is unclosed
                             if (numBackslashes & 1) {
                                 let quoteChar = tokenText.charCodeAt(0);
-                                result.finalLexState = quoteChar === CharacterCodes.doubleQuote
+                                result.endOfLineState = quoteChar === CharacterCodes.doubleQuote
                                     ? EndOfLineState.InDoubleQuoteStringLiteral
                                     : EndOfLineState.InSingleQuoteStringLiteral;
                             }
@@ -6854,16 +6981,16 @@ module ts {
                     else if (token === SyntaxKind.MultiLineCommentTrivia) {
                         // Check to see if the multiline comment was unclosed.
                         if (scanner.isUnterminated()) {
-                            result.finalLexState = EndOfLineState.InMultiLineCommentTrivia;
+                            result.endOfLineState = EndOfLineState.InMultiLineCommentTrivia;
                         }
                     }
                     else if (isTemplateLiteralKind(token)) {
                         if (scanner.isUnterminated()) {
                             if (token === SyntaxKind.TemplateTail) {
-                                result.finalLexState = EndOfLineState.InTemplateMiddleOrTail;
+                                result.endOfLineState = EndOfLineState.InTemplateMiddleOrTail;
                             }
                             else if (token === SyntaxKind.NoSubstitutionTemplateLiteral) {
-                                result.finalLexState = EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate;
+                                result.endOfLineState = EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate;
                             }
                             else {
                                 Debug.fail("Only 'NoSubstitutionTemplateLiteral's and 'TemplateTail's can be unterminated; got SyntaxKind #" + token);
@@ -6871,20 +6998,34 @@ module ts {
                         }
                     }
                     else if (templateStack.length > 0 && lastOrUndefined(templateStack) === SyntaxKind.TemplateHead) {
-                        result.finalLexState = EndOfLineState.InTemplateSubstitutionPosition;
+                        result.endOfLineState = EndOfLineState.InTemplateSubstitutionPosition;
                     }
                 }
             }
 
-            function addResult(length: number, classification: TokenClass): void {
-                if (length > 0) {
-                    // If this is the first classification we're adding to the list, then remove any 
-                    // offset we have if we were continuing a construct from the previous line.
-                    if (result.entries.length === 0) {
-                        length -= offset;
-                    }
+            function addResult(start: number, end: number, classification: ClassificationType): void {
+                if (classification === ClassificationType.whiteSpace) {
+                    // Don't bother with whitespace classifications.  They're not needed.
+                    return;
+                }
 
-                    result.entries.push({ length: length, classification: classification });
+                if (start === 0 && offset > 0) {
+                    // We're classifying the first token, and this was a case where we prepended 
+                    // text.  We should consider the start of this token to be at the start of 
+                    // the original text.
+                    start += offset;
+                }
+
+                // All our tokens are in relation to the augmented text.  Move them back to be
+                // relative to the original text.
+                start -= offset;
+                end -= offset;
+                let length = end - start;
+
+                if (length > 0) {
+                    result.spans.push(start);
+                    result.spans.push(length);
+                    result.spans.push(classification);
                 }
             }
         }
@@ -6951,41 +7092,44 @@ module ts {
             return token >= SyntaxKind.FirstKeyword && token <= SyntaxKind.LastKeyword;
         }
 
-        function classFromKind(token: SyntaxKind) {
+        function classFromKind(token: SyntaxKind): ClassificationType {
             if (isKeyword(token)) {
-                return TokenClass.Keyword;
+                return ClassificationType.keyword;
             }
             else if (isBinaryExpressionOperatorToken(token) || isPrefixUnaryExpressionOperatorToken(token)) {
-                return TokenClass.Operator;
+                return ClassificationType.operator;
             }
             else if (token >= SyntaxKind.FirstPunctuation && token <= SyntaxKind.LastPunctuation) {
-                return TokenClass.Punctuation;
+                return ClassificationType.punctuation;
             }
 
             switch (token) {
                 case SyntaxKind.NumericLiteral:
-                    return TokenClass.NumberLiteral;
+                    return ClassificationType.numericLiteral;
                 case SyntaxKind.StringLiteral:
-                    return TokenClass.StringLiteral;
+                    return ClassificationType.stringLiteral;
                 case SyntaxKind.RegularExpressionLiteral:
-                    return TokenClass.RegExpLiteral;
+                    return ClassificationType.regularExpressionLiteral;
                 case SyntaxKind.ConflictMarkerTrivia:
                 case SyntaxKind.MultiLineCommentTrivia:
                 case SyntaxKind.SingleLineCommentTrivia:
-                    return TokenClass.Comment;
+                    return ClassificationType.comment;
                 case SyntaxKind.WhitespaceTrivia:
                 case SyntaxKind.NewLineTrivia:
-                    return TokenClass.Whitespace;
+                    return ClassificationType.whiteSpace;
                 case SyntaxKind.Identifier:
                 default:
                     if (isTemplateLiteralKind(token)) {
-                        return TokenClass.StringLiteral;
+                        return ClassificationType.stringLiteral;
                     }
-                    return TokenClass.Identifier;
+                    return ClassificationType.identifier;
             }
         }
 
-        return { getClassificationsForLine };
+        return {
+            getClassificationsForLine,
+            getEncodedLexicalClassifications
+        };
     }
 
     /// getDefaultLibraryFilePath

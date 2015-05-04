@@ -41,7 +41,7 @@ var d5 = new D(); // error
 var d6 = new D(1); // ok
 
 //// [classWithBaseClassButNoConstructor.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
