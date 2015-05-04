@@ -1571,6 +1571,28 @@ module FourSlash {
             this.currentCaretPosition = definition.textSpan.start;
         }
 
+        public goToTypeDefinition(definitionIndex: number) {
+            if (definitionIndex === 0) {
+                this.scenarioActions.push('<GoToTypeDefinition />');
+            }
+            else {
+                this.taoInvalidReason = 'GoToTypeDefinition not supported for non-zero definition indices';
+            }
+
+            var definitions = this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            if (!definitions || !definitions.length) {
+                this.raiseError('goToTypeDefinition failed - expected to at least one definition location but got 0');
+            }
+
+            if (definitionIndex >= definitions.length) {
+                this.raiseError('goToTypeDefinition failed - definitionIndex value (' + definitionIndex + ') exceeds definition list size (' + definitions.length + ')');
+            }
+
+            var definition = definitions[definitionIndex];
+            this.openFile(definition.fileName);
+            this.currentCaretPosition = definition.textSpan.start;
+        }
+
         public verifyDefinitionLocationExists(negative: boolean) {
             this.taoInvalidReason = 'verifyDefinitionLocationExists NYI';
 
@@ -1590,8 +1612,18 @@ module FourSlash {
             var assertFn = negative ? assert.notEqual : assert.equal;
 
             var definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            var actualCount = definitions && definitions.length || 0;
 
-            assertFn(definitions.length, expectedCount, this.messageAtLastKnownMarker("Definitions Count"));
+            assertFn(actualCount, expectedCount, this.messageAtLastKnownMarker("Definitions Count"));
+        }
+
+        public verifyTypeDefinitionsCount(negative: boolean, expectedCount: number) {
+            var assertFn = negative ? assert.notEqual : assert.equal;
+
+            var definitions = this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            var actualCount = definitions && definitions.length || 0;
+
+            assertFn(actualCount, expectedCount, this.messageAtLastKnownMarker("Type definitions Count"));
         }
 
         public verifyDefinitionsName(negative: boolean, expectedName: string, expectedContainerName: string) {

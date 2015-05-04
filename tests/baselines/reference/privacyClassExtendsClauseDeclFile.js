@@ -98,7 +98,7 @@ class publicClassExtendingPublicClassInGlobal extends publicClassInGlobal {
 
 
 //// [privacyClassExtendsClauseDeclFile_externalModule.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -285,7 +285,7 @@ var publicClassExtendingFromPrivateModuleClass = (function (_super) {
 })(privateModule.publicClassInPrivateModule);
 exports.publicClassExtendingFromPrivateModuleClass = publicClassExtendingFromPrivateModuleClass;
 //// [privacyClassExtendsClauseDeclFile_GlobalFile.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;

@@ -856,7 +856,7 @@ module ts {
     }
 
     export function hasRestParameters(s: SignatureDeclaration): boolean {
-        return s.parameters.length > 0 && s.parameters[s.parameters.length - 1].dotDotDotToken !== undefined;
+        return s.parameters.length > 0 && lastOrUndefined(s.parameters).dotDotDotToken !== undefined;
     }
 
     export function isLiteralKind(kind: SyntaxKind): boolean {
@@ -1362,7 +1362,7 @@ module ts {
                 let lineStartsOfS = computeLineStarts(s);
                 if (lineStartsOfS.length > 1) {
                     lineCount = lineCount + lineStartsOfS.length - 1;
-                    linePos = output.length - s.length + lineStartsOfS[lineStartsOfS.length - 1];
+                    linePos = output.length - s.length + lastOrUndefined(lineStartsOfS);
                 }
             }
         }
@@ -1671,16 +1671,16 @@ module ts {
 
     // Returns false if this heritage clause element's expression contains something unsupported
     // (i.e. not a name or dotted name).
-    export function isSupportedHeritageClauseElement(node: HeritageClauseElement): boolean {
-        return isSupportedHeritageClauseElementExpression(node.expression);
+    export function isSupportedExpressionWithTypeArguments(node: ExpressionWithTypeArguments): boolean {
+        return isSupportedExpressionWithTypeArgumentsRest(node.expression);
     }
 
-    function isSupportedHeritageClauseElementExpression(node: Expression): boolean {
+    function isSupportedExpressionWithTypeArgumentsRest(node: Expression): boolean {
         if (node.kind === SyntaxKind.Identifier) {
             return true;
         }
         else if (node.kind === SyntaxKind.PropertyAccessExpression) {
-            return isSupportedHeritageClauseElementExpression((<PropertyAccessExpression>node).expression);
+            return isSupportedExpressionWithTypeArgumentsRest((<PropertyAccessExpression>node).expression);
         }
         else {
             return false;

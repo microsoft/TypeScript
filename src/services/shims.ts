@@ -99,6 +99,8 @@ module ts {
 
         getSyntacticClassifications(fileName: string, start: number, length: number): string;
         getSemanticClassifications(fileName: string, start: number, length: number): string;
+        getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string;
+        getEncodedSemanticClassifications(fileName: string, start: number, length: number): string;
 
         getCompletionsAtPosition(fileName: string, position: number): string;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): string;
@@ -129,6 +131,14 @@ module ts {
          * Or undefined value if no definition can be found.
          */
         getDefinitionAtPosition(fileName: string, position: number): string;
+
+        /**
+         * Returns a JSON-encoded value of the type:
+         * { fileName: string; textSpan: { start: number; length: number}; kind: string; name: string; containerKind: string; containerName: string }
+         *
+         * Or undefined value if no definition can be found.
+         */
+        getTypeDefinitionAtPosition(fileName: string, position: number): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -189,6 +199,7 @@ module ts {
     }
 
     export interface ClassifierShim extends Shim {
+        getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string;
         getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string;
     }
 
@@ -199,7 +210,9 @@ module ts {
     }
 
     function logInternalError(logger: Logger, err: Error) {
-        logger.log("*INTERNAL ERROR* - Exception in typescript services: " + err.message);
+        if (logger) {
+            logger.log("*INTERNAL ERROR* - Exception in typescript services: " + err.message);
+        }
     }
 
     class ScriptSnapshotShimAdapter implements IScriptSnapshot {
@@ -321,25 +334,32 @@ module ts {
         }
     }
 
-    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any): any {
-        logger.log(actionDescription);
-        var start = Date.now();
-        var result = action();
-        var end = Date.now();
-        logger.log(actionDescription + " completed in " + (end - start) + " msec");
-        if (typeof (result) === "string") {
-            var str = <string>result;
-            if (str.length > 128) {
-                str = str.substring(0, 128) + "...";
-            }
-            logger.log("  result.length=" + str.length + ", result='" + JSON.stringify(str) + "'");
+    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any, noPerfLogging: boolean): any {
+        if (!noPerfLogging) {
+            logger.log(actionDescription);
+            var start = Date.now();
         }
+
+        var result = action();
+
+        if (!noPerfLogging) {
+            var end = Date.now();
+            logger.log(actionDescription + " completed in " + (end - start) + " msec");
+            if (typeof (result) === "string") {
+                var str = <string>result;
+                if (str.length > 128) {
+                    str = str.substring(0, 128) + "...";
+                }
+                logger.log("  result.length=" + str.length + ", result='" + JSON.stringify(str) + "'");
+            }
+        }
+
         return result;
     }
 
-    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any): string {
+    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any, noPerfLogging: boolean): string {
         try {
-            var result = simpleForwardCall(logger, actionDescription, action);
+            var result = simpleForwardCall(logger, actionDescription, action, noPerfLogging);
             return JSON.stringify({ result: result });
         }
         catch (err) {
@@ -387,7 +407,7 @@ module ts {
         }
 
         public forwardJSONCall(actionDescription: string, action: () => any): string {
-            return forwardJSONCall(this.logger, actionDescription, action);
+            return forwardJSONCall(this.logger, actionDescription, action, /*noPerfLogging:*/ false);
         }
 
         /// DISPOSE
@@ -454,6 +474,26 @@ module ts {
                 () => {
                     var classifications = this.languageService.getSemanticClassifications(fileName, createTextSpan(start, length));
                     return classifications;
+                });
+        }
+
+        public getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string {
+            return this.forwardJSONCall(
+                "getEncodedSyntacticClassifications('" + fileName + "', " + start + ", " + length + ")",
+                () => {
+                    // directly serialize the spans out to a string.  This is much faster to decode
+                    // on the managed side versus a full JSON array.
+                    return convertClassifications(this.languageService.getEncodedSyntacticClassifications(fileName, createTextSpan(start, length)));
+                });
+        }
+
+        public getEncodedSemanticClassifications(fileName: string, start: number, length: number): string {
+            return this.forwardJSONCall(
+                "getEncodedSemanticClassifications('" + fileName + "', " + start + ", " + length + ")",
+                () => {
+                    // directly serialize the spans out to a string.  This is much faster to decode
+                    // on the managed side versus a full JSON array.
+                    return convertClassifications(this.languageService.getEncodedSemanticClassifications(fileName, createTextSpan(start, length)));
                 });
         }
 
@@ -554,6 +594,20 @@ module ts {
                 "getDefinitionAtPosition('" + fileName + "', " + position + ")",
                 () => {
                     return this.languageService.getDefinitionAtPosition(fileName, position);
+                });
+        }
+
+        /// GOTO Type
+
+        /**
+         * Computes the definition location of the type of the symbol
+         * at the requested position. 
+         */
+        public getTypeDefinitionAtPosition(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                "getTypeDefinitionAtPosition('" + fileName + "', " + position + ")",
+                () => {
+                    return this.languageService.getTypeDefinitionAtPosition(fileName, position);
                 });
         }
 
@@ -736,12 +790,22 @@ module ts {
         }
     }
 
+    function convertClassifications(classifications: Classifications): { spans: string, endOfLineState: EndOfLineState } {
+        return { spans: classifications.spans.join(","), endOfLineState: classifications.endOfLineState };
+    }
+
     class ClassifierShimObject extends ShimBase implements ClassifierShim {
         public classifier: Classifier;
 
-        constructor(factory: ShimFactory) {
+        constructor(factory: ShimFactory, private logger: Logger) {
             super(factory);
             this.classifier = createClassifier();
+        }
+
+        public getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string {
+            return forwardJSONCall(this.logger, "getEncodedLexicalClassifications",
+                () => convertClassifications(this.classifier.getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent)),
+                /*noPerfLogging:*/ true);
         }
 
         /// COLORIZATION
@@ -765,7 +829,7 @@ module ts {
         }
 
         private forwardJSONCall(actionDescription: string, action: () => any): any {
-            return forwardJSONCall(this.logger, actionDescription, action);
+            return forwardJSONCall(this.logger, actionDescription, action, /*noPerfLogging:*/ false);
         }
 
         public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
@@ -858,7 +922,7 @@ module ts {
 
         public createClassifierShim(logger: Logger): ClassifierShim {
             try {
-                return new ClassifierShimObject(this);
+                return new ClassifierShimObject(this, logger);
             }
             catch (err) {
                 logInternalError(logger, err);

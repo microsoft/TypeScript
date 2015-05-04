@@ -51,7 +51,7 @@ module ts.formatting {
             if (isStarted) {
                 if (trailingTrivia) {
                     Debug.assert(trailingTrivia.length !== 0);
-                    wasNewLine = trailingTrivia[trailingTrivia.length - 1].kind === SyntaxKind.NewLineTrivia;
+                    wasNewLine = lastOrUndefined(trailingTrivia).kind === SyntaxKind.NewLineTrivia;
                 }
                 else {
                     wasNewLine = false;

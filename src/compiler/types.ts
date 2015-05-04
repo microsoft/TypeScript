@@ -206,9 +206,9 @@ module ts {
         SpreadElementExpression,
         ClassExpression,
         OmittedExpression,
+        ExpressionWithTypeArguments,
         // Misc
         TemplateSpan,
-        HeritageClauseElement,
         SemicolonClassElement,
         // Element
         Block,
@@ -741,7 +741,7 @@ module ts {
         arguments: NodeArray<Expression>;
     }
 
-    export interface HeritageClauseElement extends TypeNode {
+    export interface ExpressionWithTypeArguments extends TypeNode {
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
     }
@@ -893,7 +893,7 @@ module ts {
 
     export interface HeritageClause extends Node {
         token: SyntaxKind;
-        types?: NodeArray<HeritageClauseElement>;
+        types?: NodeArray<ExpressionWithTypeArguments>;
     }
 
     export interface TypeAliasDeclaration extends Declaration, ModuleElement {
@@ -1664,7 +1664,9 @@ module ts {
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
+        newLine?: NewLineKind;
         noEmit?: boolean;
+        noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
@@ -1700,6 +1702,11 @@ module ts {
         System = 4,
     }
 
+    export const enum NewLineKind {
+        CarriageReturnLineFeed = 0,
+        LineFeed = 1,
+    }
+	
     export interface LineAndCharacter {
         line: number;
         /*

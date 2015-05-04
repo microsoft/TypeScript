@@ -3,12 +3,6 @@
 
 /* @internal */
 module ts {
-    // represents one LexicalEnvironment frame to store unique generated names
-    interface ScopeFrame {
-        names: Map<string>;
-        previous: ScopeFrame;
-    }
-
     export function isExternalModuleOrDeclarationFile(sourceFile: SourceFile) {
         return isExternalModule(sourceFile) || isDeclarationFile(sourceFile);
     }
@@ -18,14 +12,13 @@ module ts {
         Auto      = 0x00000000,  // No preferred name
         CountMask = 0x0FFFFFFF,  // Temp variable counter
         _i        = 0x10000000,  // Use/preference flag for '_i'
-        _n        = 0x20000000,  // Use/preference flag for '_n'
     }
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
         // emit output for the __extends helper function
         const extendsHelper = `
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -34,7 +27,7 @@ var __extends = this.__extends || function (d, b) {
 
         // emit output for the __decorate helper function
         const decorateHelper = `
-if (typeof __decorate !== "function") __decorate = function (decorators, target, key, desc) {
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
     switch (arguments.length) {
         case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);
@@ -45,13 +38,13 @@ if (typeof __decorate !== "function") __decorate = function (decorators, target,
 
         // emit output for the __metadata helper function
         const metadataHelper = `
-if (typeof __metadata !== "function") __metadata = function (k, v) {
+var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };`;
 
         // emit output for the __param helper function
         const paramHelper = `
-if (typeof __param !== "function") __param = function (paramIndex, decorator) {
+var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };`;
 
@@ -343,7 +336,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 let sourceMapNameIndexMap: Map<number> = {};
                 let sourceMapNameIndices: number[] = [];
                 function getSourceMapNameIndex() {
-                    return sourceMapNameIndices.length ? sourceMapNameIndices[sourceMapNameIndices.length - 1] : -1;
+                    return sourceMapNameIndices.length ? lastOrUndefined(sourceMapNameIndices) : -1;
                 }
 
                 // Last recorded and encoded spans
@@ -2683,15 +2676,17 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 if (!exportEquals && exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
                     for (let specifier of exportSpecifiers[name.text]) {
                         writeLine();
-                        emitStart(specifier.name);
                         if (compilerOptions.module === ModuleKind.System) {
+                            emitStart(specifier.name);
                             write(`${exportFunctionForFile}("`);
                             emitNodeWithoutSourceMap(specifier.name);
                             write(`", `);
                             emitExpressionIdentifier(name);
                             write(")")
+                            emitEnd(specifier.name);
                         }
                         else {
+                            emitStart(specifier.name);
                             emitContainingModuleName(specifier);
                             write(".");
                             emitNodeWithoutSourceMap(specifier.name);
@@ -3486,10 +3481,10 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 }
             }
 
-            function getInitializedProperties(node: ClassLikeDeclaration, static: boolean) {
+            function getInitializedProperties(node: ClassLikeDeclaration, isStatic: boolean) {
                 let properties: PropertyDeclaration[] = [];
                 for (let member of node.members) {
-                    if (member.kind === SyntaxKind.PropertyDeclaration && static === ((member.flags & NodeFlags.Static) !== 0) && (<PropertyDeclaration>member).initializer) {
+                    if (member.kind === SyntaxKind.PropertyDeclaration && isStatic === ((member.flags & NodeFlags.Static) !== 0) && (<PropertyDeclaration>member).initializer) {
                         properties.push(<PropertyDeclaration>member);
                     }
                 }
@@ -3641,7 +3636,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 }
             }
 
-            function emitConstructor(node: ClassLikeDeclaration, baseTypeElement: HeritageClauseElement) {
+            function emitConstructor(node: ClassLikeDeclaration, baseTypeElement: ExpressionWithTypeArguments) {
                 let saveTempFlags = tempFlags;
                 let saveTempVariables = tempVariables;
                 let saveTempParameters = tempParameters;
@@ -3656,7 +3651,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 tempParameters = saveTempParameters;
             }
 
-            function emitConstructorWorker(node: ClassLikeDeclaration, baseTypeElement: HeritageClauseElement) {
+            function emitConstructorWorker(node: ClassLikeDeclaration, baseTypeElement: ExpressionWithTypeArguments) {
                 // Check if we have property assignment inside class declaration.
                 // If there is property assignment, we need to emit constructor whether users define it or not
                 // If there is no property assignment, we can omit constructor if users do not define it
@@ -4968,7 +4963,135 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 }
             }
 
-            function hoistTopLevelVariableAndFunctionDeclarations(node: SourceFile): void {
+            function emitLocalStorageForExportedNamesIfNecessary(exportedDeclarations: (Identifier | Declaration)[]): string {
+                // when resolving exports local exported entries/indirect exported entries in the module
+                // should always win over entries with similar names that were added via star exports
+                // to support this we store names of local/indirect exported entries in a set.
+                // this set is used to filter names brought by star expors.
+                if (!hasExportStars) {
+                    // local names set is needed only in presence of star exports
+                    return undefined;
+                }
+
+                // local names set should only be added if we have anything exported
+                if (!exportedDeclarations && isEmpty(exportSpecifiers)) {
+                    // no exported declarations (export var ...) or export specifiers (export {x})
+                    // check if we have any non star export declarations.
+                    let hasExportDeclarationWithExportClause = false;
+                    for (let externalImport of externalImports) {
+                        if (externalImport.kind === SyntaxKind.ExportDeclaration && (<ExportDeclaration>externalImport).exportClause) {
+                            hasExportDeclarationWithExportClause = true;
+                            break;
+                        }
+                    }
+
+                    if (!hasExportDeclarationWithExportClause) {
+                        // we still need to emit exportStar helper
+                        return emitExportStarFunction(/*localNames*/ undefined);
+                    }
+                }
+
+                const exportedNamesStorageRef = makeUniqueName("exportedNames");
+
+                writeLine();
+                write(`var ${exportedNamesStorageRef} = {`);
+                increaseIndent();
+
+                let started = false;
+                if (exportedDeclarations) {
+                    for (let i = 0; i < exportedDeclarations.length; ++i) {
+                        // write name of exported declaration, i.e 'export var x...'
+                        writeExportedName(exportedDeclarations[i]);
+                    }
+                }
+
+                if (exportSpecifiers) {
+                    for (let n in exportSpecifiers) {
+                        for (let specifier of exportSpecifiers[n]) {
+                            // write name of export specified, i.e. 'export {x}'
+                            writeExportedName(specifier.name);
+                        }
+                    }
+                }
+
+                for (let externalImport of externalImports) {
+                    if (externalImport.kind !== SyntaxKind.ExportDeclaration) {
+                        continue;
+                    }
+
+                    let exportDecl = <ExportDeclaration>externalImport;
+                    if (!exportDecl.exportClause) {
+                        // export * from ...
+                        continue;
+                    }
+
+                    for (let element of exportDecl.exportClause.elements) {
+                        // write name of indirectly exported entry, i.e. 'export {x} from ...'
+                        writeExportedName(element.name || element.propertyName);
+                    }
+                }
+
+                decreaseIndent();
+                writeLine();
+                write("};");
+
+                return emitExportStarFunction(exportedNamesStorageRef);
+                
+                function emitExportStarFunction(localNames: string): string {
+                    const exportStarFunction = makeUniqueName("exportStar");
+
+                    writeLine();
+
+                    // define an export star helper function
+                    write(`function ${exportStarFunction}(m) {`);
+                    increaseIndent();
+                    writeLine();
+                    write(`for(var n in m) {`);
+                    increaseIndent();
+                    writeLine();
+                    write(`if (n !== "default"`);
+                    if (localNames) {
+                        write(`&& !${localNames}.hasOwnProperty(n)`);
+                    }
+                    write(`) ${exportFunctionForFile}(n, m[n]);`);
+                    decreaseIndent();
+                    writeLine();
+                    write("}");
+                    decreaseIndent();
+                    writeLine();
+                    write("}")
+
+                    return exportStarFunction;
+                }
+            
+                function writeExportedName(node: Identifier | Declaration): void {
+                    // do not record default exports
+                    // they are local to module and never overwritten (explicitly skipped) by star export 
+                    if (node.kind !== SyntaxKind.Identifier && node.flags & NodeFlags.Default) {
+                        return;
+                    }
+
+                    if (started) {
+                        write(",");
+                    }
+                    else {
+                        started = true;
+                    }
+
+                    writeLine();
+                    write("'");
+                    if (node.kind === SyntaxKind.Identifier) {
+                        emitNodeWithoutSourceMap(node);
+                    }
+                    else {
+                        emitDeclarationName(<Declaration>node);
+                    }
+
+                    write("': true");
+                }
+            }
+
+            function processTopLevelVariableAndFunctionDeclarations(node: SourceFile): (Identifier | Declaration)[] {
                 // per ES6 spec: 
                 // 15.2.1.16.4 ModuleDeclarationInstantiation() Concrete Method
                 // - var declarations are initialized to undefined - 14.a.ii
@@ -4980,6 +5103,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 // including variables declarations for module and class declarations
                 let hoistedVars: (Identifier | ClassDeclaration | ModuleDeclaration)[];
                 let hoistedFunctionDeclarations: FunctionDeclaration[];
+                let exportedDeclarations: (Identifier | Declaration)[];
 
                 visit(node);
 
@@ -4997,6 +5121,14 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                         else {
                             emit(local);
                         }
+
+                        let flags = getCombinedNodeFlags(local.kind === SyntaxKind.Identifier ? local.parent : local);
+                        if (flags & NodeFlags.Export) {
+                            if (!exportedDeclarations) {
+                                exportedDeclarations = [];
+                            }
+                            exportedDeclarations.push(local);
+                        }
                     }
                     write(";")
                 }
@@ -5005,8 +5137,17 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                     for (let f of hoistedFunctionDeclarations) {
                         writeLine();
                         emit(f);
+
+                        if (f.flags & NodeFlags.Export) {
+                            if (!exportedDeclarations) {
+                                exportedDeclarations = [];
+                            }
+                            exportedDeclarations.push(f);
+                        }
                     }
                 }
+
+                return exportedDeclarations;
 
                 function visit(node: Node): void {
                     if (node.kind === SyntaxKind.FunctionDeclaration) {
@@ -5121,12 +5262,13 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 // }
                 emitVariableDeclarationsForImports();
                 writeLine();
-                hoistTopLevelVariableAndFunctionDeclarations(node);
+                var exportedDeclarations = processTopLevelVariableAndFunctionDeclarations(node);
+                let exportStarFunction = emitLocalStorageForExportedNamesIfNecessary(exportedDeclarations)
                 writeLine();
                 write("return {");
                 increaseIndent();
                 writeLine();
-                emitSetters();
+                emitSetters(exportStarFunction);
                 writeLine();
                 emitExecute(node, startIndex);
                 emitTempDeclarations(/*newLine*/ true)
@@ -5135,7 +5277,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                 write("}"); // return
             }
 
-            function emitSetters() {
+            function emitSetters(exportStarFunction: string) {
                 write("setters:[");
                 for (let i = 0; i < externalImports.length; ++i) {
                     if (i !== 0) {
@@ -5163,7 +5305,7 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                             increaseIndent();
                             writeLine();
                             // save import into the local
-                            write(`${importVariableName} = ${parameterName}`);
+                            write(`${importVariableName} = ${parameterName};`);
                             writeLine();
 
                             let defaultName =
@@ -5228,9 +5370,8 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                                 writeLine();
                                 // export * from 'foo'
                                 // emit as:
-                                // for (var n in _foo) exports(n, _foo[n]);
-                                // NOTE: it is safe to use name 'n' since parameter name always starts with '_'
-                                write(`for (var n in ${parameterName}) ${exportFunctionForFile}(n, ${parameterName}[n]);`);
+                                // exportStar(_foo);
+                                write(`${exportStarFunction}(${parameterName});`);
                             }
 
                             writeLine();
@@ -5473,24 +5614,28 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
 
                 // emit prologue directives prior to __extends
                 var startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
-                // Only Emit __extends function when target ES5.
-                // For target ES6 and above, we can emit classDeclaration as is.
-                if ((languageVersion < ScriptTarget.ES6) && (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends)) {
-                    writeLines(extendsHelper);
-                    extendsEmitted = true;
-                }
 
-                if (!decorateEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitDecorate) {
-                    writeLines(decorateHelper);
-                    if (compilerOptions.emitDecoratorMetadata) {
-                        writeLines(metadataHelper);
+                // Only emit helpers if the user did not say otherwise.
+                if (!compilerOptions.noEmitHelpers) {
+                    // Only Emit __extends function when target ES5.
+                    // For target ES6 and above, we can emit classDeclaration as is.
+                    if ((languageVersion < ScriptTarget.ES6) && (!extendsEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitExtends)) {
+                        writeLines(extendsHelper);
+                        extendsEmitted = true;
                     }
-                    decorateEmitted = true;
-                }
 
-                if (!paramEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitParam) {
-                    writeLines(paramHelper);
-                    paramEmitted = true;
+                    if (!decorateEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitDecorate) {
+                        writeLines(decorateHelper);
+                        if (compilerOptions.emitDecoratorMetadata) {
+                            writeLines(metadataHelper);
+                        }
+                        decorateEmitted = true;
+                    }
+
+                    if (!paramEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitParam) {
+                        writeLines(paramHelper);
+                        paramEmitted = true;
+                    }
                 }
 
                 if (isExternalModule(node) || compilerOptions.separateCompilation) {
@@ -5745,13 +5890,13 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
             }
 
             function hasDetachedComments(pos: number) {
-                return detachedCommentsInfo !== undefined && detachedCommentsInfo[detachedCommentsInfo.length - 1].nodePos === pos;
+                return detachedCommentsInfo !== undefined && lastOrUndefined(detachedCommentsInfo).nodePos === pos;
             }
 
             function getLeadingCommentsWithoutDetachedComments() {
                 // get the leading comments from detachedPos
                 let leadingComments = getLeadingCommentRanges(currentSourceFile.text,
-                    detachedCommentsInfo[detachedCommentsInfo.length - 1].detachedCommentEndPos);
+                    lastOrUndefined(detachedCommentsInfo).detachedCommentEndPos);
                 if (detachedCommentsInfo.length - 1) {
                     detachedCommentsInfo.pop();
                 }
@@ -5872,13 +6017,13 @@ if (typeof __param !== "function") __param = function (paramIndex, decorator) {
                         // All comments look like they could have been part of the copyright header.  Make
                         // sure there is at least one blank line between it and the node.  If not, it's not
                         // a copyright header.
-                        let lastCommentLine = getLineOfLocalPosition(currentSourceFile, detachedComments[detachedComments.length - 1].end);
+                        let lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastOrUndefined(detachedComments).end);
                         let nodeLine = getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
                         if (nodeLine >= lastCommentLine + 2) {
                             // Valid detachedComments
                             emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
                             emitComments(currentSourceFile, writer, detachedComments, /*trailingSeparator*/ true, newLine, writeComment);
-                            let currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: detachedComments[detachedComments.length - 1].end };
+                            let currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: lastOrUndefined(detachedComments).end };
                             if (detachedCommentsInfo) {
                                 detachedCommentsInfo.push(currentDetachedCommentInfo);
                             }
