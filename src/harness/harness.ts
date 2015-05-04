@@ -1509,15 +1509,6 @@ module Harness {
         // Regex for parsing options in the format "@Alpha: Value of any sort"
         var optionRegex = /^[\/]{2}\s*@(\w+)\s*:\s*(\S*)/gm;  // multiple matches on multiple lines
 
-        // List of allowed metadata names
-        var fileMetadataNames = ["filename", "comments", "declaration", "module",
-            "nolib", "sourcemap", "target", "out", "outdir", "noemithelpers", "noemitonerror",
-            "noimplicitany", "noresolve", "newline", "normalizenewline", "emitbom",
-            "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
-            "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
-            "separatecompilation", "inlinesourcemap", "maproot", "sourceroot",
-            "inlinesources", "emitdecoratormetadata"];
-
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
             var opts: CompilerSetting[] = [];
@@ -1551,10 +1542,8 @@ module Harness {
                 if (testMetaData) {
                     // Comment line, check for global/file @options and record them
                     optionRegex.lastIndex = 0;
-                    var fileNameIndex = fileMetadataNames.indexOf(testMetaData[1].toLowerCase());
-                    if (fileNameIndex === -1) {
-                        throw new Error('Unrecognized metadata name "' + testMetaData[1] + '". Available file metadata names are: ' + fileMetadataNames.join(', '));
-                    } else if (fileNameIndex === 0) {
+                    var metaDataName = testMetaData[1].toLowerCase();
+                    if (metaDataName === "filename") {
                         currentFileOptions[testMetaData[1]] = testMetaData[2];
                     } else {
                         continue;
