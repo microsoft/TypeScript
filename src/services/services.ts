@@ -6077,8 +6077,8 @@ module ts {
                         pushCommentRange(pos, tag.pos - pos);
                     }
 
-                    pushClassification(tag.atToken.pos, tag.atToken.getWidth(), ClassificationType.punctuation);
-                    pushClassification(tag.tagName.pos, tag.tagName.getWidth(), ClassificationType.docCommentTagName);
+                    pushClassification(tag.atToken.pos, tag.atToken.end - tag.atToken.pos, ClassificationType.punctuation);
+                    pushClassification(tag.tagName.pos, tag.tagName.end - tag.tagName.pos, ClassificationType.docCommentTagName);
 
                     pos = tag.tagName.end;
 
@@ -6109,7 +6109,7 @@ module ts {
                 function processJSDocParameterTag(tag: JSDocParameterTag) {
                     if (tag.preParameterName) {
                         pushCommentRange(pos, tag.preParameterName.pos - pos);
-                        pushClassification(tag.preParameterName.pos, tag.preParameterName.getWidth(), ClassificationType.parameterName);
+                        pushClassification(tag.preParameterName.pos, tag.preParameterName.end - tag.preParameterName.pos, ClassificationType.parameterName);
                         pos = tag.preParameterName.end;
                     }
 
@@ -6121,7 +6121,7 @@ module ts {
 
                     if (tag.postParameterName) {
                         pushCommentRange(pos, tag.postParameterName.pos - pos);
-                        pushClassification(tag.postParameterName.pos, tag.postParameterName.getWidth(), ClassificationType.parameterName);
+                        pushClassification(tag.postParameterName.pos, tag.postParameterName.end - tag.postParameterName.pos, ClassificationType.parameterName);
                         pos = tag.postParameterName.end;
                     }
                 }
