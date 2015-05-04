@@ -773,7 +773,7 @@ module ts.server {
         findConfigFile(searchPath: string): string {
             while (true) {
                 var fileName = ts.combinePaths(searchPath, "tsconfig.json");
-                if (sys.fileExists(fileName)) {
+                if (this.host.fileExists(fileName)) {
                     return fileName;
                 }
                 var parentPath = ts.getDirectoryPath(searchPath);
@@ -923,7 +923,7 @@ module ts.server {
                     var proj = this.createProject(configFilename, projectOptions);
                     for (var i = 0, len = parsedCommandLine.fileNames.length; i < len; i++) {
                         var rootFilename = parsedCommandLine.fileNames[i];
-                        if (ts.sys.fileExists(rootFilename)) {
+                        if (this.host.fileExists(rootFilename)) {
                             var info = this.openFile(rootFilename, clientFileName == rootFilename);
                             proj.addRoot(info);
                         }
