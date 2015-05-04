@@ -9,6 +9,9 @@ module ts {
 
     /** The version of the TypeScript compiler release */
     export const version = "1.5.0";
+	
+	const NEWLINE_CRLF = "\r\n";
+	const NEWLINE_LF = "\n";
 
     export function findConfigFile(searchPath: string): string {
         var fileName = "tsconfig.json";
@@ -91,6 +94,11 @@ module ts {
             }
         }
 
+        let newLine =
+            options.newLine === NewLineKind.CarriageReturnLineFeed ? NEWLINE_CRLF :
+            options.newLine === NewLineKind.LineFeed ? NEWLINE_LF :
+            sys.newLine;
+
         return {
             getSourceFile,
             getDefaultLibFileName: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), getDefaultLibFileName(options)),
@@ -98,7 +106,7 @@ module ts {
             getCurrentDirectory: () => currentDirectory || (currentDirectory = sys.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
             getCanonicalFileName,
-            getNewLine: () => sys.newLine
+            getNewLine: () => newLine
         };
     }
 
