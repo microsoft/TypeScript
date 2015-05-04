@@ -260,7 +260,7 @@ var r8b11 = b11 !== a11;
 //var r8b12 = b12 !== a12;
 
 //// [comparisonOperatorWithSubtypeObjectOnCallSignature.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;

@@ -5,3 +5,4 @@ src
 tests
 Jakefile
 .travis.yml
+.settings/

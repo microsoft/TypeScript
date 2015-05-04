@@ -72,6 +72,10 @@ module ts {
             description: Diagnostics.Do_not_emit_outputs,
         },
         {
+            name: "noEmitHelpers",
+            type: "boolean"
+        },
+        {
             name: "noEmitOnError",
             type: "boolean",
             description: Diagnostics.Do_not_emit_outputs_if_any_type_checking_errors_were_reported,

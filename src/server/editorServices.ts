@@ -424,7 +424,7 @@ module ts.server {
         
         getFormatCodeOptions(file?: string) {
             if (file) {
-                var info = this.filenameToScriptInfo[file];                
+                var info = this.filenameToScriptInfo[file];
                 if (info) {
                     return info.formatCodeOptions;
                 }
@@ -750,6 +750,7 @@ module ts.server {
                 if (content !== undefined) {
                     var indentSize: number;
                     info = new ScriptInfo(this.host, fileName, content, openedByClient);
+                    info.setFormatOptions(this.getFormatCodeOptions());
                     this.filenameToScriptInfo[fileName] = info;
                     if (!info.isOpen) {
                         info.fileWatcher = this.host.watchFile(fileName, _ => { this.watchedFileChanged(fileName); });

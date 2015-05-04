@@ -559,6 +559,14 @@ module ts.server {
             throw new Error("Not Implemented Yet.");
         }
 
+        getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications {
+            throw new Error("Not Implemented Yet.");
+        }
+
+        getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
+            throw new Error("Not Implemented Yet.");
+        }
+
         getProgram(): Program {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }

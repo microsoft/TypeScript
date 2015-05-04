@@ -990,6 +990,14 @@ module Harness {
                             }
                             break;
 
+                        case 'emitdecoratormetadata':
+                            options.emitDecoratorMetadata = setting.value === 'true';
+                            break;
+
+                        case 'noemithelpers':
+                            options.noEmitHelpers = setting.value === 'true';
+                            break;
+
                         case 'noemitonerror':
                             options.noEmitOnError = !!setting.value;
                             break;
@@ -1477,12 +1485,12 @@ module Harness {
 
         // List of allowed metadata names
         var fileMetadataNames = ["filename", "comments", "declaration", "module",
-            "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror",
+            "nolib", "sourcemap", "target", "out", "outdir", "noemithelpers", "noemitonerror",
             "noimplicitany", "noresolve", "newline", "newlines", "emitbom",
             "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
             "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
             "separatecompilation", "inlinesourcemap", "maproot", "sourceroot",
-            "inlinesources"];
+            "inlinesources", "emitdecoratormetadata"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
