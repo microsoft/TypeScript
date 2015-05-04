@@ -201,7 +201,9 @@ module ts.formatting {
 
         // Generator: function*
         public NoSpaceBetweenFunctionKeywordAndStar: Rule;
-        public SpaceAfterStarInGenerator: Rule;
+        public SpaceAfterStarInGeneratorDeclaration: Rule;
+        public NoSpaceBetweenYieldKeywordAndStar: Rule;
+        public SpaceBetweenYieldOrYieldStarAndOperand: Rule;
 
         constructor() {
             ///
@@ -345,7 +347,9 @@ module ts.formatting {
             this.SpaceAfterDecorator = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.ExportKeyword, SyntaxKind.DefaultKeyword, SyntaxKind.ClassKeyword, SyntaxKind.StaticKeyword, SyntaxKind.PublicKeyword, SyntaxKind.PrivateKeyword, SyntaxKind.ProtectedKeyword, SyntaxKind.GetKeyword, SyntaxKind.SetKeyword, SyntaxKind.OpenBracketToken, SyntaxKind.AsteriskToken])), RuleOperation.create2(new RuleOperationContext(Rules.IsEndOfDecoratorContextOnSameLine), RuleAction.Space));
 
             this.NoSpaceBetweenFunctionKeywordAndStar = new Rule(RuleDescriptor.create1(SyntaxKind.FunctionKeyword, SyntaxKind.AsteriskToken), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclarationOrFunctionExpressionContext), RuleAction.Delete));
-            this.SpaceAfterStarInGenerator = new Rule(RuleDescriptor.create3(SyntaxKind.AsteriskToken, Shared.TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.OpenParenToken])), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclarationOrFunctionExpressionContext), RuleAction.Space));
+            this.SpaceAfterStarInGeneratorDeclaration = new Rule(RuleDescriptor.create3(SyntaxKind.AsteriskToken, Shared.TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.OpenParenToken])), RuleOperation.create2(new RuleOperationContext(Rules.IsFunctionDeclarationOrFunctionExpressionContext), RuleAction.Space));
+            this.NoSpaceBetweenYieldKeywordAndStar = new Rule(RuleDescriptor.create1(SyntaxKind.YieldKeyword, SyntaxKind.AsteriskToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsYieldOrYieldStarWithOperand), RuleAction.Delete));
+            this.SpaceBetweenYieldOrYieldStarAndOperand = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.YieldKeyword, SyntaxKind.AsteriskToken]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsYieldOrYieldStarWithOperand), RuleAction.Space));
 
             // These rules are higher in priority than user-configurable rules.
             this.HighPriorityCommonRules =
@@ -364,8 +368,9 @@ module ts.formatting {
                 this.NoSpaceAfterCloseBrace,
                 this.SpaceAfterOpenBrace, this.SpaceBeforeCloseBrace, this.NewLineBeforeCloseBraceInBlockContext,
                 this.SpaceAfterCloseBrace, this.SpaceBetweenCloseBraceAndElse, this.SpaceBetweenCloseBraceAndWhile, this.NoSpaceBetweenEmptyBraceBrackets,
-                this.NoSpaceBetweenFunctionKeywordAndStar, this.SpaceAfterStarInGenerator,
+                this.NoSpaceBetweenFunctionKeywordAndStar, this.SpaceAfterStarInGeneratorDeclaration,
                 this.SpaceAfterFunctionInFuncDecl, this.NewLineAfterOpenBraceInBlockContext, this.SpaceAfterGetSetInMember,
+                this.NoSpaceBetweenYieldKeywordAndStar, this.SpaceBetweenYieldOrYieldStarAndOperand,
                 this.NoSpaceBetweenReturnAndSemicolon,
                 this.SpaceAfterCertainKeywords,
                 this.SpaceAfterLetConstInVariableDeclaration,
@@ -724,6 +729,10 @@ module ts.formatting {
 
         static IsVoidOpContext(context: FormattingContext): boolean {
             return context.currentTokenSpan.kind === SyntaxKind.VoidKeyword && context.currentTokenParent.kind === SyntaxKind.VoidExpression;
+        }
+
+        static IsYieldOrYieldStarWithOperand(context: FormattingContext): boolean {
+            return context.contextNode.kind === SyntaxKind.YieldExpression && (<YieldExpression>context.contextNode).expression !== undefined;
         }
     }
 }
