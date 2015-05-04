@@ -1,0 +1,27 @@
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck39.ts(5,5): error TS1129: Statement expected.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck39.ts(5,6): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck39.ts(5,16): error TS2304: Cannot find name 'yield'.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck39.ts(5,22): error TS1005: ',' expected.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck39.ts(9,1): error TS1128: Declaration or statement expected.
+
+
+==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck39.ts (5 errors) ====
+    function decorator(x: any) {
+        return y => { };
+    }
+    function* g() {
+        @decorator(yield 0)
+        ~
+!!! error TS1129: Statement expected.
+         ~~~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+                   ~~~~~
+!!! error TS2304: Cannot find name 'yield'.
+                         ~
+!!! error TS1005: ',' expected.
+        class C {
+            x = yield 0;
+        }
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
