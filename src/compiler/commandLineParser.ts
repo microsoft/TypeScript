@@ -68,8 +68,11 @@ module ts {
         },
         {
             name: "newLine",
-            type: { "crlf": NewLineKind.CarriageReturnLineFeed, "lf": NewLineKind.LineFeed },
-            description: Diagnostics.Emit_newline_Colon_CRLF_dos_or_LF_unix,
+            type: {
+                "crlf": NewLineKind.CarriageReturnLineFeed,
+                "lf": NewLineKind.LineFeed
+            },
+            description: Diagnostics.Specifies_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
             paramType: Diagnostics.NEWLINE,
             error: Diagnostics.Argument_for_newLine_option_must_be_CRLF_or_LF
         },

@@ -9,9 +9,9 @@ module ts {
 
     /** The version of the TypeScript compiler release */
     export const version = "1.5.0";
-	
-	const NEWLINE_CRLF = "\r\n";
-	const NEWLINE_LF = "\n";
+
+    const carriageReturnLineFeed = "\r\n";
+    const lineFeed = "\n";
 
     export function findConfigFile(searchPath: string): string {
         var fileName = "tsconfig.json";
@@ -95,8 +95,8 @@ module ts {
         }
 
         let newLine =
-            options.newLine === NewLineKind.CarriageReturnLineFeed ? NEWLINE_CRLF :
-            options.newLine === NewLineKind.LineFeed ? NEWLINE_LF :
+            options.newLine === NewLineKind.CarriageReturnLineFeed ? carriageReturnLineFeed :
+            options.newLine === NewLineKind.LineFeed ? lineFeed :
             sys.newLine;
 
         return {

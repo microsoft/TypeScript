@@ -805,8 +805,8 @@ module Harness {
             return result;
         }
 
-        const NEWLINE_CRLF = "\r\n";
-        const NEWLINE_LF = "\n";
+        const carriageReturnLineFeed = "\r\n";
+        const lineFeed = "\n";
 
         export var defaultLibFileName = 'lib.d.ts';
         export var defaultLibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
@@ -846,9 +846,9 @@ module Harness {
             inputFiles.forEach(register);
 
             let newLine =
-                newLineKind === ts.NewLineKind.CarriageReturnLineFeed ? NEWLINE_CRLF :
-                newLineKind === ts.NewLineKind.LineFeed ? NEWLINE_LF :
-                ts.sys.newLine;
+                newLineKind === ts.NewLineKind.CarriageReturnLineFeed ? carriageReturnLineFeed :
+                    newLineKind === ts.NewLineKind.LineFeed ? lineFeed :
+                        ts.sys.newLine;
 
             return {
                 getCurrentDirectory,

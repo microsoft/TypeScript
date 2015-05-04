@@ -1998,7 +1998,7 @@
         "category": "Error",
         "code": 6059
     },
-    "Emit newline: 'CRLF' (dos) or 'LF' (unix).": {
+    "Specifies the end of line sequence to be used when emitting files: 'CRLF' (dos) or 'LF' (unix).": {
         "category": "Message",
         "code": 6060
     },
@@ -2006,7 +2006,7 @@
         "category": "Message", 
         "code": 6061
     },
-    "Argument for 'newLine' option must be 'CRLF' or 'LF'.": {
+    "Argument for '--newLine' option must be 'CRLF' or 'LF'.": {
         "category": "Error", 
         "code": 6062
     },
