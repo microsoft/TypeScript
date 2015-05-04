@@ -7317,7 +7317,7 @@ module ts {
 
                     if (yieldExpression.asteriskToken) {
                         // A yield* expression effectively yields everything that its operand yields
-                        type = checkIteratedType(type, yieldExpression.expression);
+                        type = checkElementTypeOfIterable(type, yieldExpression.expression);
                     }
 
                     if (!contains(aggregatedTypes, type)) {
@@ -7989,7 +7989,7 @@ module ts {
                     let signatureElementType = getElementTypeFromIterableIterator(getTypeFromTypeNode(func.type), /*errorNode*/ undefined) || unknownType;
                     let expressionType = checkExpressionCached(node.expression, /*contextualMapper*/ undefined);
                     if (node.asteriskToken) {
-                        let expressionElementType = checkIteratedType(expressionType, node.expression);
+                        let expressionElementType = checkElementTypeOfIterable(expressionType, node.expression);
                         checkTypeAssignableTo(expressionElementType, signatureElementType, node.expression, /*headMessage*/ undefined);
                     }
                     else {
@@ -9586,7 +9586,7 @@ module ts {
             }
 
             if (languageVersion >= ScriptTarget.ES6) {
-                return checkIteratedType(inputType, errorNode);
+                return checkElementTypeOfIterable(inputType, errorNode);
             }
 
             if (allowStringInput) {
@@ -9607,7 +9607,7 @@ module ts {
         /**
          * When errorNode is undefined, it means we should not report any errors.
          */
-        function checkIteratedType(iterable: Type, errorNode: Node): Type {
+        function checkElementTypeOfIterable(iterable: Type, errorNode: Node): Type {
             let elementType = getElementTypeFromIterable(iterable, errorNode);
             // Now even though we have extracted the iteratedType, we will have to validate that the type
             // passed in is actually an Iterable.
@@ -9643,26 +9643,32 @@ module ts {
                 return undefined;
             }
 
-            // As an optimization, if the type is instantiated directly using the globalIterableType (Iterable<number>),
-            // then just grab its type argument.
-            if ((iterable.flags & TypeFlags.Reference) && (<GenericType>iterable).target === globalIterableType) {
-                return (<GenericType>iterable).typeArguments[0];
-            }
-
-            let iteratorFunction = getTypeOfPropertyOfType(iterable, getPropertyNameForKnownSymbolName("iterator"));
-            if (iteratorFunction && allConstituentTypesHaveKind(iteratorFunction, TypeFlags.Any)) {
-                return undefined;
-            }
-
-            let iteratorFunctionSignatures = iteratorFunction ? getSignaturesOfType(iteratorFunction, SignatureKind.Call) : emptyArray;
-            if (iteratorFunctionSignatures.length === 0) {
-                if (errorNode) {
-                    error(errorNode, Diagnostics.Type_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
+            let typeAsIterable = <IterableOrIteratorType>iterable;
+            if (!typeAsIterable.iterableElementType) {
+                // As an optimization, if the type is instantiated directly using the globalIterableType (Iterable<number>),
+                // then just grab its type argument.
+                if ((iterable.flags & TypeFlags.Reference) && (<GenericType>iterable).target === globalIterableType) {
+                    typeAsIterable.iterableElementType = (<GenericType>iterable).typeArguments[0];
                 }
-                return undefined;
+                else {
+                    let iteratorFunction = getTypeOfPropertyOfType(iterable, getPropertyNameForKnownSymbolName("iterator"));
+                    if (iteratorFunction && allConstituentTypesHaveKind(iteratorFunction, TypeFlags.Any)) {
+                        return undefined;
+                    }
+
+                    let iteratorFunctionSignatures = iteratorFunction ? getSignaturesOfType(iteratorFunction, SignatureKind.Call) : emptyArray;
+                    if (iteratorFunctionSignatures.length === 0) {
+                        if (errorNode) {
+                            error(errorNode, Diagnostics.Type_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
+                        }
+                        return undefined;
+                    }
+
+                    typeAsIterable.iterableElementType = getElementTypeFromIterator(getUnionType(map(iteratorFunctionSignatures, getReturnTypeOfSignature)), errorNode);
+                }
             }
 
-            return getElementTypeFromIterator(getUnionType(map(iteratorFunctionSignatures, getReturnTypeOfSignature)), errorNode);
+            return typeAsIterable.iterableElementType;
         }
 
         function getElementTypeFromIterator(iterator: Type, errorNode: Node): Type {
@@ -9681,39 +9687,45 @@ module ts {
                 return undefined;
             }
 
-            // As an optimization, if the type is instantiated directly using the globalIteratorType (Iterator<number>),
-            // then just grab its type argument.
-            if ((iterator.flags & TypeFlags.Reference) && (<GenericType>iterator).target === globalIteratorType) {
-                return (<GenericType>iterator).typeArguments[0];
-            }
-
-            let iteratorNextFunction = getTypeOfPropertyOfType(iterator, "next");
-            if (iteratorNextFunction && allConstituentTypesHaveKind(iteratorNextFunction, TypeFlags.Any)) {
-                return undefined;
-            }
-
-            let iteratorNextFunctionSignatures = iteratorNextFunction ? getSignaturesOfType(iteratorNextFunction, SignatureKind.Call) : emptyArray;
-            if (iteratorNextFunctionSignatures.length === 0) {
-                if (errorNode) {
-                    error(errorNode, Diagnostics.An_iterator_must_have_a_next_method);
+            let typeAsIterator = <IterableOrIteratorType>iterator;
+            if (!typeAsIterator.iteratorElementType) {
+                // As an optimization, if the type is instantiated directly using the globalIteratorType (Iterator<number>),
+                // then just grab its type argument.
+                if ((iterator.flags & TypeFlags.Reference) && (<GenericType>iterator).target === globalIteratorType) {
+                    typeAsIterator.iteratorElementType = (<GenericType>iterator).typeArguments[0];
                 }
-                return undefined;
-            }
+                else {
+                    let iteratorNextFunction = getTypeOfPropertyOfType(iterator, "next");
+                    if (iteratorNextFunction && allConstituentTypesHaveKind(iteratorNextFunction, TypeFlags.Any)) {
+                        return undefined;
+                    }
 
-            let iteratorNextResult = getUnionType(map(iteratorNextFunctionSignatures, getReturnTypeOfSignature));
-            if (allConstituentTypesHaveKind(iteratorNextResult, TypeFlags.Any)) {
-                return undefined;
-            }
+                    let iteratorNextFunctionSignatures = iteratorNextFunction ? getSignaturesOfType(iteratorNextFunction, SignatureKind.Call) : emptyArray;
+                    if (iteratorNextFunctionSignatures.length === 0) {
+                        if (errorNode) {
+                            error(errorNode, Diagnostics.An_iterator_must_have_a_next_method);
+                        }
+                        return undefined;
+                    }
 
-            let iteratorNextValue = getTypeOfPropertyOfType(iteratorNextResult, "value");
-            if (!iteratorNextValue) {
-                if (errorNode) {
-                    error(errorNode, Diagnostics.The_type_returned_by_the_next_method_of_an_iterator_must_have_a_value_property);
+                    let iteratorNextResult = getUnionType(map(iteratorNextFunctionSignatures, getReturnTypeOfSignature));
+                    if (allConstituentTypesHaveKind(iteratorNextResult, TypeFlags.Any)) {
+                        return undefined;
+                    }
+
+                    let iteratorNextValue = getTypeOfPropertyOfType(iteratorNextResult, "value");
+                    if (!iteratorNextValue) {
+                        if (errorNode) {
+                            error(errorNode, Diagnostics.The_type_returned_by_the_next_method_of_an_iterator_must_have_a_value_property);
+                        }
+                        return undefined;
+                    }
+
+                    typeAsIterator.iteratorElementType = iteratorNextValue;
                 }
-                return undefined;
             }
 
-            return iteratorNextValue;
+            return typeAsIterator.iteratorElementType;
         }
 
         function getElementTypeFromIterableIterator(iterableIterator: Type, errorNode: Node): Type {

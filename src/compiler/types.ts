@@ -1543,6 +1543,13 @@ module ts {
         numberIndexType: Type;             // Numeric index type
     }
 
+    /* @internal */
+    // Just a place to cache element types of iterables and iterators
+    export interface IterableOrIteratorType extends ObjectType, UnionType {
+        iterableElementType?: Type;
+        iteratorElementType?: Type;
+    }
+
     // Type parameters (TypeFlags.TypeParameter)
     export interface TypeParameter extends Type {
         constraint: Type;        // Constraint
