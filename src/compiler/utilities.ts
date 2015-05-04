@@ -1435,8 +1435,11 @@ module ts {
 
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
         if (!isDeclarationFile(sourceFile)) {
-            if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.fileName, ".js")) {
-                return true;
+            if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
+                // 1. in-browser single file compilation scenario
+                // 2. non .js file
+                return (compilerOptions.separateCompilation && compilerOptions.allowNonTsExtensions) ||
+                    !fileExtensionIs(sourceFile.fileName, ".js");
             }
             return false;
         }
