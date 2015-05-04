@@ -522,7 +522,7 @@ module ts {
                     }
                     collecting = true;
                     if (result && result.length) {
-                        result[result.length - 1].hasTrailingNewLine = true;
+                        lastOrUndefined(result).hasTrailingNewLine = true;
                     }
                     continue;
                 case CharacterCodes.tab:
@@ -569,7 +569,7 @@ module ts {
                 default:
                     if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch) || isLineBreak(ch))) {
                         if (result && result.length && isLineBreak(ch)) {
-                            result[result.length - 1].hasTrailingNewLine = true;
+                            lastOrUndefined(result).hasTrailingNewLine = true;
                         }
                         pos++;
                         continue;

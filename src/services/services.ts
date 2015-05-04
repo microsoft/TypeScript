@@ -4058,7 +4058,7 @@ module ts {
                     return true;
                 }
                 else if (declarations.length) {
-                    result.push(createDefinitionInfo(declarations[declarations.length - 1], symbolKind, symbolName, containerName));
+                    result.push(createDefinitionInfo(lastOrUndefined(declarations), symbolKind, symbolName, containerName));
                     return true;
                 }
 
