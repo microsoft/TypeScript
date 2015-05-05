@@ -9149,13 +9149,6 @@ module ts {
             }
         }
 
-        function isParameterDeclaration(node: VariableLikeDeclaration) {
-            while (node.kind === SyntaxKind.BindingElement) {
-                node = <VariableLikeDeclaration>node.parent.parent;
-            }
-            return node.kind === SyntaxKind.Parameter;
-        }
-
         // Check that a parameter initializer contains no references to parameters declared to the right of itself
         function checkParameterInitializer(node: VariableLikeDeclaration): void {
             if (getRootDeclaration(node).kind !== SyntaxKind.Parameter) {

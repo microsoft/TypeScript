@@ -1149,6 +1149,13 @@ module ts {
         }
         return false;
     }
+
+    export function isParameterDeclaration(node: VariableLikeDeclaration) {
+        while (node.kind === SyntaxKind.BindingElement) {
+            node = <VariableLikeDeclaration>node.parent.parent;
+        }
+        return node.kind === SyntaxKind.Parameter;
+    }
         
     export function nodeStartsNewLexicalEnvironment(n: Node): boolean {
         return isFunctionLike(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
