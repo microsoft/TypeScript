@@ -45,10 +45,10 @@ module Utils {
     export function getExecutionEnvironment() {
         if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
             return ExecutionEnvironment.CScript;
-        } else if (process && process.execPath && process.execPath.indexOf("node") !== -1) {
-            return ExecutionEnvironment.Node;
-        } else {
+        } else if (typeof window !== "undefined") {
             return ExecutionEnvironment.Browser;
+        } else {
+            return ExecutionEnvironment.Node;
         }
     }
 
