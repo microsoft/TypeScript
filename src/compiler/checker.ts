@@ -5372,7 +5372,8 @@ module ts {
                 let constructSignatures: Signature[];
                 if (rightType.flags & TypeFlags.Interface) {
                     constructSignatures = (<InterfaceTypeWithDeclaredMembers>rightType).declaredConstructSignatures;
-                } else if (rightType.flags & TypeFlags.Anonymous) {
+                }
+                else if (rightType.flags & TypeFlags.Anonymous) {
                     constructSignatures = (<ResolvedType>rightType).constructSignatures;
                 }
 
