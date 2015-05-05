@@ -1702,9 +1702,9 @@ module Harness {
                 expected = IO.readFile(refFileName);
             }
 
-            var lineEndingSensitive = opts && opts.LineEndingSensitive;
+            var lineEndingInsensitive = opts && opts.LineEndingSensitive === false; // default is true
 
-            if (!lineEndingSensitive) {
+            if (lineEndingInsensitive) {
                 expected = expected.replace(/\r\n?/g, '\n');
                 actual = actual.replace(/\r\n?/g, '\n');
             }
