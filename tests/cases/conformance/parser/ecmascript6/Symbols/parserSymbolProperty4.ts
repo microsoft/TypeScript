@@ -1,4 +1,4 @@
 //@target: ES6
 declare class C {
-    [Symbol.isRegExp]: string;
+    [Symbol.toPrimitive]: string;
 }

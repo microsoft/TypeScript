@@ -4,6 +4,7 @@ module m {
 
   export var m = '';
 >m : string
+>'' : string
 }
 
 import x = m.m;
@@ -19,5 +20,6 @@ class C {
 
     var x = '';
 >x : string
+>'' : string
   }
 }

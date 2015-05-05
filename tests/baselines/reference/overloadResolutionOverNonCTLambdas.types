@@ -18,6 +18,7 @@ module Bugs {
 >message.replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
 >message : string
 >replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
+>/\{(\d+)\}/g : RegExp
 >function(match, ...rest) {      var index= rest[0];      return typeof args[index] !== 'undefined'        ? args[index]        : match;    } : (match: string, ...rest: any[]) => any
 >match : string
 >rest : any[]
@@ -26,6 +27,7 @@ module Bugs {
 >index : any
 >rest[0] : any
 >rest : any[]
+>0 : number
 
       return typeof args[index] !== 'undefined'
 >typeof args[index] !== 'undefined'        ? args[index]        : match : any
@@ -34,6 +36,7 @@ module Bugs {
 >args[index] : any
 >args : any[]
 >index : any
+>'undefined' : string
 
         ? args[index]
 >args[index] : any
@@ -55,6 +58,7 @@ function bug3(f:(x:string)=>string) { return f("s") }
 >x : string
 >f("s") : string
 >f : (x: string) => string
+>"s" : string
 
 function fprime(x:string):string { return x; }
 >fprime : (x: string) => string

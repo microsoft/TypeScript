@@ -1,0 +1,7 @@
+=== tests/cases/compiler/duplicateVariableDeclaration1.ts ===
+var v
+>v : Symbol(v, Decl(duplicateVariableDeclaration1.ts, 0, 3), Decl(duplicateVariableDeclaration1.ts, 1, 3))
+
+var v
+>v : Symbol(v, Decl(duplicateVariableDeclaration1.ts, 0, 3), Decl(duplicateVariableDeclaration1.ts, 1, 3))
+

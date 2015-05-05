@@ -3,6 +3,8 @@ class C {
 >C : C
 
     ["hello"]() {
+>"hello" : string
+
         debugger;
     }
 }

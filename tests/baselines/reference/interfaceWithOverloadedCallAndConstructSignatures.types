@@ -25,6 +25,7 @@ var r2 = f('');
 >r2 : number
 >f('') : number
 >f : Foo
+>'' : string
 
 var r3 = new f();
 >r3 : any
@@ -35,4 +36,5 @@ var r4 = new f('');
 >r4 : Object
 >new f('') : Object
 >f : Foo
+>'' : string
 

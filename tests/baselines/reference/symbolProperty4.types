@@ -6,6 +6,7 @@ var x = {
     [Symbol()]: 0,
 >Symbol() : symbol
 >Symbol : SymbolConstructor
+>0 : number
 
     [Symbol()]() { },
 >Symbol() : symbol
@@ -16,5 +17,6 @@ var x = {
 >Symbol : SymbolConstructor
 
         return 0;
+>0 : number
     }
 }

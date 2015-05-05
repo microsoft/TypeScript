@@ -8,9 +8,12 @@ module ts {
     /* @internal */ export let ioWriteTime = 0;
 
     /** The version of the TypeScript compiler release */
-    export let version = "1.5.0";
+    export const version = "1.5.0";
 
-    export var supportedExtensions = [".ts", ".d.ts", ".es6", ".js"];
+    const carriageReturnLineFeed = "\r\n";
+    const lineFeed = "\n";
+
+    //export var supportedExtensions = [".ts", ".d.ts", ".es6", ".js"];
     export function findConfigFile(searchPath: string): string {
         var fileName = "tsconfig.json";
         while (true) {
@@ -55,6 +58,7 @@ module ts {
                 }
                 text = "";
             }
+
             return text !== undefined ? createSourceFile(fileName, text, languageVersion, setParentNodes) : undefined;
         }
 
@@ -91,6 +95,11 @@ module ts {
             }
         }
 
+        let newLine =
+            options.newLine === NewLineKind.CarriageReturnLineFeed ? carriageReturnLineFeed :
+            options.newLine === NewLineKind.LineFeed ? lineFeed :
+            sys.newLine;
+
         return {
             getSourceFile,
             getDefaultLibFileName: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), getDefaultLibFileName(options)),
@@ -98,15 +107,15 @@ module ts {
             getCurrentDirectory: () => currentDirectory || (currentDirectory = sys.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
             getCanonicalFileName,
-            getNewLine: () => sys.newLine
+            getNewLine: () => newLine
         };
     }
 
-    export function getPreEmitDiagnostics(program: Program): Diagnostic[] {
-        let diagnostics = program.getSyntacticDiagnostics().concat(program.getGlobalDiagnostics()).concat(program.getSemanticDiagnostics());
+    export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile): Diagnostic[] {
+        let diagnostics = program.getSyntacticDiagnostics(sourceFile).concat(program.getGlobalDiagnostics()).concat(program.getSemanticDiagnostics(sourceFile));
 
         if (program.getCompilerOptions().declaration) {
-            diagnostics.concat(program.getDeclarationDiagnostics());
+            diagnostics.concat(program.getDeclarationDiagnostics(sourceFile));
         }
 
         return sortAndDeduplicateDiagnostics(diagnostics);
@@ -171,7 +180,7 @@ module ts {
             getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory: () => commonSourceDirectory,
             emit,
-            getCurrentDirectory: host.getCurrentDirectory,
+            getCurrentDirectory: () => host.getCurrentDirectory(),
             getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
             getIdentifierCount: () => getDiagnosticsProducingTypeChecker().getIdentifierCount(),
             getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
@@ -181,14 +190,15 @@ module ts {
 
         function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
             return {
-                getCanonicalFileName: host.getCanonicalFileName,
+                getCanonicalFileName: fileName => host.getCanonicalFileName(fileName),
                 getCommonSourceDirectory: program.getCommonSourceDirectory,
                 getCompilerOptions: program.getCompilerOptions,
-                getCurrentDirectory: host.getCurrentDirectory,
-                getNewLine: host.getNewLine,
+                getCurrentDirectory: () => host.getCurrentDirectory(),
+                getNewLine: () => host.getNewLine(),
                 getSourceFile: program.getSourceFile,
                 getSourceFiles: program.getSourceFiles,
-                writeFile: writeFileCallback || host.writeFile,
+                writeFile: writeFileCallback || (
+                    (fileName, data, writeByteOrderMark, onError) => host.writeFile(fileName, data, writeByteOrderMark, onError)),
             };
         }
 
@@ -451,6 +461,66 @@ module ts {
             }
         }
 
+        function computeCommonSourceDirectory(sourceFiles: SourceFile[]): string {
+            let commonPathComponents: string[];
+            let currentDirectory = host.getCurrentDirectory();
+            forEach(files, sourceFile => {
+                // Each file contributes into common source file path
+                if (isDeclarationFile(sourceFile)) {
+                    return;
+                }
+
+                let sourcePathComponents = getNormalizedPathComponents(sourceFile.fileName, currentDirectory);
+                sourcePathComponents.pop(); // The base file name is not part of the common directory path
+
+                if (!commonPathComponents) {
+                    // first file
+                    commonPathComponents = sourcePathComponents;
+                    return;
+                }
+
+                for (let i = 0, n = Math.min(commonPathComponents.length, sourcePathComponents.length); i < n; i++) {
+                    if (commonPathComponents[i] !== sourcePathComponents[i]) {
+                        if (i === 0) {
+                            diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
+                            return;
+                        }
+
+                        // New common path found that is 0 -> i-1
+                        commonPathComponents.length = i;
+                        break;
+                    }
+                }
+
+                // If the sourcePathComponents was shorter than the commonPathComponents, truncate to the sourcePathComponents
+                if (sourcePathComponents.length < commonPathComponents.length) {
+                    commonPathComponents.length = sourcePathComponents.length;
+                }
+            });
+
+            return getNormalizedPathFromPathComponents(commonPathComponents);
+        }
+
+        function checkSourceFilesBelongToPath(sourceFiles: SourceFile[], rootDirectory: string): boolean {
+            let allFilesBelongToPath = true;
+            if (sourceFiles) {
+                let currentDirectory = host.getCurrentDirectory();
+                let absoluteRootDirectoryPath = host.getCanonicalFileName(getNormalizedAbsolutePath(rootDirectory, currentDirectory));
+
+                for (var sourceFile of sourceFiles) {
+                    if (!isDeclarationFile(sourceFile)) {
+                        let absoluteSourceFilePath = host.getCanonicalFileName(getNormalizedAbsolutePath(sourceFile.fileName, currentDirectory));
+                        if (absoluteSourceFilePath.indexOf(absoluteRootDirectoryPath) !== 0) {
+                            diagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, sourceFile.fileName, options.rootDir));
+                            allFilesBelongToPath = false;
+                        }
+                    }
+                }
+            }
+
+            return allFilesBelongToPath;
+        }
+
         function verifyCompilerOptions() {
             if (options.separateCompilation) {
                 if (options.sourceMap) {
@@ -467,6 +537,25 @@ module ts {
 
                 if (options.out) {
                     diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_out_cannot_be_specified_with_option_separateCompilation));
+                }
+            }
+
+            if (options.inlineSourceMap) {
+                if (options.sourceMap) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_sourceMap_cannot_be_specified_with_option_inlineSourceMap));
+                }
+                if (options.mapRoot) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_mapRoot_cannot_be_specified_with_option_inlineSourceMap));
+                }
+                if (options.sourceRoot) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_sourceRoot_cannot_be_specified_with_option_inlineSourceMap));
+                }
+            }
+
+
+            if (options.inlineSources) {
+                if (!options.sourceMap && !options.inlineSourceMap) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_inlineSources_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided));
                 }
             }
 
@@ -492,18 +581,18 @@ module ts {
                 let firstNonExternalModuleSourceFile = forEach(files, f => !isExternalModule(f) && !isDeclarationFile(f) ? f : undefined);
                 if (firstNonExternalModuleSourceFile) {
                     let span = getErrorSpanForNode(firstNonExternalModuleSourceFile, firstNonExternalModuleSourceFile);
-                    diagnostics.add(createFileDiagnostic(firstNonExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_non_external_modules_when_the_separateCompilation_flag_is_provided));
+                    diagnostics.add(createFileDiagnostic(firstNonExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_namespaces_when_the_separateCompilation_flag_is_provided));
                 }
             }
             else if (firstExternalModuleSourceFile && languageVersion < ScriptTarget.ES6 && !options.module) {
                 // We cannot use createDiagnosticFromNode because nodes do not have parents yet 
                 let span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
-                diagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_external_modules_unless_the_module_flag_is_provided));
+                diagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_unless_the_module_flag_is_provided));
             }
 
             // Cannot specify module gen target when in es6 or above
             if (options.module && languageVersion >= ScriptTarget.ES6) {
-                diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_external_modules_into_amd_or_commonjs_when_targeting_es6_or_higher));
+                diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_modules_into_commonjs_amd_system_or_umd_when_targeting_ES6_or_higher));
             }
 
             // there has to be common source directory if user specified --outdir || --sourceRoot
@@ -513,41 +602,16 @@ module ts {
                 (options.mapRoot &&  // there is --mapRoot specified and there would be multiple js files generated
                     (!options.out || firstExternalModuleSourceFile !== undefined))) {
 
-                let commonPathComponents: string[];
-                forEach(files, sourceFile => {
-                    // Each file contributes into common source file path
-                    if (!(sourceFile.flags & NodeFlags.DeclarationFile)
-                        && !fileExtensionIs(sourceFile.fileName, ".js")) {
-                        let sourcePathComponents = getNormalizedPathComponents(sourceFile.fileName, host.getCurrentDirectory());
-                        sourcePathComponents.pop(); // FileName is not part of directory
-                        if (commonPathComponents) {
-                            for (let i = 0; i < Math.min(commonPathComponents.length, sourcePathComponents.length); i++) {
-                                if (commonPathComponents[i] !== sourcePathComponents[i]) {
-                                    if (i === 0) {
-                                        diagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
-                                        return;
-                                    }
+                if (options.rootDir && checkSourceFilesBelongToPath(files, options.rootDir)) {
+                    // If a rootDir is specified and is valid use it as the commonSourceDirectory
+                    commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, host.getCurrentDirectory());
+                }
+                else {
+                    // Compute the commonSourceDirectory from the input files
+                    commonSourceDirectory = computeCommonSourceDirectory(files);
+                }
 
-                                    // New common path found that is 0 -> i-1
-                                    commonPathComponents.length = i;
-                                    break;
-                                }
-                            }
-
-                            // If the fileComponent path completely matched and less than already found update the length
-                            if (sourcePathComponents.length < commonPathComponents.length) {
-                                commonPathComponents.length = sourcePathComponents.length;
-                            }
-                        }
-                        else {
-                            // first file
-                            commonPathComponents = sourcePathComponents;
-                        }
-                    }
-                });
-
-                commonSourceDirectory = getNormalizedPathFromPathComponents(commonPathComponents);
-                if (commonSourceDirectory) {
+                if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
                     // Make sure directory path ends with directory separator so this string can directly 
                     // used to replace with "" to get the relative path of the source file and the relative path doesn't
                     // start with / making it rooted path

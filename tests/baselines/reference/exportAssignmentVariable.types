@@ -9,6 +9,7 @@ var n: number = y;
 === tests/cases/compiler/exportAssignmentVariable_A.ts ===
 var x = 0;
 >x : number
+>0 : number
 
 export = x;
 >x : number

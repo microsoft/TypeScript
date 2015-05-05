@@ -126,6 +126,14 @@ declare module ts.server.protocol {
     }
 
     /**
+      * Go to type request; value of command field is
+      * "typeDefinition". Return response giving the file locations that
+      * define the type for the symbol found in file at location line, col.
+      */
+    export interface TypeDefinitionRequest extends FileLocationRequest {
+    }
+
+    /**
       * Location in source code expressed as (one-based) line and character offset.
       */
     export interface Location {
@@ -163,6 +171,32 @@ declare module ts.server.protocol {
       */
     export interface DefinitionResponse extends Response {
         body?: FileSpan[];
+    }
+
+    /**
+      * Definition response message.  Gives text range for definition.
+      */
+    export interface TypeDefinitionResponse extends Response {
+        body?: FileSpan[];
+    }
+
+    /**
+      * Get occurrences request; value of command field is
+      * "occurrences". Return response giving spans that are relevant
+      * in the file at a given line and column.
+      */
+    export interface OccurrencesRequest extends FileLocationRequest {
+    }
+
+    export interface OccurrencesResponseItem extends FileSpan {
+        /**
+          * True if the occurrence is a write location, false otherwise.
+          */
+        isWriteAccess: boolean;
+    }
+
+    export interface OccurrencesResponse extends Response {
+        body?: OccurrencesResponseItem[];
     }
 
     /**
@@ -403,6 +437,13 @@ declare module ts.server.protocol {
       */
     export interface OpenRequest extends Request {
         arguments: OpenRequestArgs;
+    }
+
+    /**
+      *  Exit request; value of command field is "exit".  Ask the server process
+      *  to exit.
+      */
+    export interface ExitRequest extends Request {
     }
 
     /**

@@ -17,5 +17,6 @@ function f() {
 >(c + 1) : any
 >c + 1 : any
 >c : any
+>1 : number
 }
 

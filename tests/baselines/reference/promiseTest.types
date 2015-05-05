@@ -33,6 +33,7 @@ interface Promise<T> {
 var p: Promise<number> = null;
 >p : Promise<number>
 >Promise : Promise<T>
+>null : null
 
 var p2 = p.then(function (x) {
 >p2 : Promise<number>

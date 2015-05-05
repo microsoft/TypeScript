@@ -9,6 +9,7 @@ export class c1 {
 >p3 : number
 
         return 10;
+>10 : number
     }
     /** setter property*/
     public set p3(/** this is value*/value: number) {
@@ -20,6 +21,7 @@ export class c1 {
 >pp3 : number
 
         return 10;
+>10 : number
     }
     /** private setter property*/
     private set pp3(/** this is value*/value: number) {
@@ -31,6 +33,7 @@ export class c1 {
 >s3 : number
 
         return 10;
+>10 : number
     }
     /** setter property*/
     static set s3( /** this is value*/value: number) {
@@ -41,6 +44,7 @@ export class c1 {
 >nc_p3 : number
 
         return 10;
+>10 : number
     }
     public set nc_p3(value: number) {
 >nc_p3 : number
@@ -50,6 +54,7 @@ export class c1 {
 >nc_pp3 : number
 
         return 10;
+>10 : number
     }
     private set nc_pp3(value: number) {
 >nc_pp3 : number
@@ -59,6 +64,7 @@ export class c1 {
 >nc_s3 : string
 
         return "";
+>"" : string
     }
     static set nc_s3(value: string) {
 >nc_s3 : string
@@ -70,6 +76,7 @@ export class c1 {
 >onlyGetter : number
 
         return 10;
+>10 : number
     }
 
     // Only setter property
@@ -89,6 +96,7 @@ class c2 {
 >p3 : number
 
         return 10;
+>10 : number
     }
     /** setter property*/
     public set p3(/** this is value*/value: number) {
@@ -100,6 +108,7 @@ class c2 {
 >pp3 : number
 
         return 10;
+>10 : number
     }
     /** private setter property*/
     private set pp3(/** this is value*/value: number) {
@@ -111,6 +120,7 @@ class c2 {
 >s3 : number
 
         return 10;
+>10 : number
     }
     /** setter property*/
     static set s3( /** this is value*/value: number) {
@@ -121,6 +131,7 @@ class c2 {
 >nc_p3 : number
 
         return 10;
+>10 : number
     }
     public set nc_p3(value: number) {
 >nc_p3 : number
@@ -130,6 +141,7 @@ class c2 {
 >nc_pp3 : number
 
         return 10;
+>10 : number
     }
     private set nc_pp3(value: number) {
 >nc_pp3 : number
@@ -139,6 +151,7 @@ class c2 {
 >nc_s3 : string
 
         return "";
+>"" : string
     }
     static set nc_s3(value: string) {
 >nc_s3 : string
@@ -150,6 +163,7 @@ class c2 {
 >onlyGetter : number
 
         return 10;
+>10 : number
     }
 
     // Only setter property

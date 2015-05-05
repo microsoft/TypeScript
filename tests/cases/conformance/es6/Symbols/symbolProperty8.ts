@@ -1,5 +1,5 @@
 //@target: ES6
 interface I {
     [Symbol.unscopables]: number;
-    [Symbol.isRegExp]();
+    [Symbol.toPrimitive]();
 }

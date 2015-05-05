@@ -2,6 +2,7 @@
 function foo():any[]{return [1];} 
 >foo : () => any[]
 >[1] : number[]
+>1 : number
 
 var x = foo();
 >x : any[]

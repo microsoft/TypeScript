@@ -1,7 +1,8 @@
 /// <reference path="parser.ts"/>
 
+/* @internal */
 module ts {
-    /* @internal */ export let bindTime = 0;
+    export let bindTime = 0;
 
     export const enum ModuleInstanceState {
         NonInstantiated = 0,
@@ -238,11 +239,7 @@ module ts {
             if (symbolKind & SymbolFlags.IsContainer) {
                 container = node;
 
-                if (lastContainer) {
-                    lastContainer.nextContainer = container;
-                }
-
-                lastContainer = container;
+                addToContainerChain(container);
             }
 
             if (isBlockScopeContainer) {
@@ -259,6 +256,14 @@ module ts {
             container = saveContainer;
             parent = saveParent;
             blockScopeContainer = savedBlockScopeContainer;
+        }
+
+        function addToContainerChain(node: Node) {
+            if (lastContainer) {
+                lastContainer.nextContainer = node;
+            }
+
+            lastContainer = node;
         }
 
         function bindDeclaration(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags, isBlockScopeContainer: boolean) {
@@ -402,6 +407,7 @@ module ts {
                 default:
                     if (!blockScopeContainer.locals) {
                         blockScopeContainer.locals = {};
+                        addToContainerChain(blockScopeContainer);
                     }
                     declareSymbol(blockScopeContainer.locals, undefined, node, symbolKind, symbolExcludes);
             }
@@ -539,7 +545,7 @@ module ts {
                     bindChildren(node, 0, /*isBlockScopeContainer*/ false);
                     break;
                 case SyntaxKind.ExportAssignment:
-                    if ((<ExportAssignment>node).expression && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier) {
+                    if ((<ExportAssignment>node).expression.kind === SyntaxKind.Identifier) {
                         // An export default clause with an identifier exports all meanings of that identifier
                         declareSymbol(container.symbol.exports, container.symbol, <Declaration>node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
                     }

@@ -3,6 +3,7 @@
 /** Variable comments*/
 var myVariable = 10;
 >myVariable : number
+>10 : number
 
 /** function comments*/
 function foo(/** parameter comment*/p: number) {
@@ -17,6 +18,7 @@ var fooVar: () => void;
 foo(50);
 >foo(50) : void
 >foo : (p: number) => void
+>50 : number
 
 fooVar();
 >fooVar() : void
@@ -33,6 +35,7 @@ class c {
     /** property comment */
     public b = 10;
 >b : number
+>10 : number
 
     /** function comment */
     public myFoo() {
@@ -143,7 +146,7 @@ module m1 {
 
     /// module m2
     export module m2 {
->m2 : unknown
+>m2 : any
     }
 }
 

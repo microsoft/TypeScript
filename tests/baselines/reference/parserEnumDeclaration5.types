@@ -4,12 +4,14 @@ enum E {
 
     A = 1,
 >A : E
+>1 : number
 
     B,
 >B : E
 
     C = 2,
 >C : E
+>2 : number
 
     D
 >D : E

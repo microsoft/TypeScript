@@ -1,5 +1,6 @@
 /// <reference path="binder.ts" />
 
+/* @internal */
 module ts {
     export interface ReferencePathMatchResult {
         fileReference?: FileReference
@@ -160,6 +161,14 @@ module ts {
         return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
     }
 
+    export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
+        if (nodeIsMissing(node) || !node.decorators) {
+            return getTokenPosOfNode(node, sourceFile);
+        }
+
+        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.decorators.end);        
+    }
+
     export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node): string {
         if (nodeIsMissing(node)) {
             return "";
@@ -202,8 +211,10 @@ module ts {
             isCatchClauseVariableDeclaration(declaration);
     }
 
+    // Gets the nearest enclosing block scope container that has the provided node 
+    // as a descendant, that is not the provided node.
     export function getEnclosingBlockScopeContainer(node: Node): Node {
-        let current = node;
+        let current = node.parent;
         while (current) {
             if (isFunctionLike(current)) {
                 return current;
@@ -262,10 +273,8 @@ module ts {
         };
     }
 
-    /* @internal */
     export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan {
-        let scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.text);
-        scanner.setTextPos(pos);
+        let scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.text, /*onError:*/ undefined, pos);
         scanner.scan();
         let start = scanner.getTokenPos();
         return createTextSpanFromBounds(start, scanner.getTextPos());
@@ -399,7 +408,6 @@ module ts {
 
     export let fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/
 
-
     // Warning: This has the same semantics as the forEach family of functions,
     //          in that traversal terminates in the event that 'visitor' supplies a truthy value.
     export function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T {
@@ -430,7 +438,6 @@ module ts {
         }
     }
 
-    /* @internal */
     export function isVariableLike(node: Node): boolean {
         if (node) {
             switch (node.kind) {
@@ -526,6 +533,19 @@ module ts {
                     // the *body* of the container.
                     node = node.parent;
                     break;
+                case SyntaxKind.Decorator:
+                    // Decorators are always applied outside of the body of a class or method. 
+                    if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
+                        // If the decorator's parent is a Parameter, we resolve the this container from
+                        // the grandparent class declaration.
+                        node = node.parent.parent;
+                    }
+                    else if (isClassElement(node.parent)) {
+                        // If the decorator's parent is a class element, we resolve the 'this' container
+                        // from the parent class declaration.
+                        node = node.parent;
+                    }
+                    break;
                 case SyntaxKind.ArrowFunction:
                     if (!includeArrowFunctions) {
                         continue;
@@ -567,6 +587,19 @@ module ts {
                     // such a parent to be a super container, the reference must be in
                     // the *body* of the container.
                     node = node.parent;
+                    break;
+                case SyntaxKind.Decorator:
+                    // Decorators are always applied outside of the body of a class or method. 
+                    if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
+                        // If the decorator's parent is a Parameter, we resolve the this container from
+                        // the grandparent class declaration.
+                        node = node.parent.parent;
+                    }
+                    else if (isClassElement(node.parent)) {
+                        // If the decorator's parent is a class element, we resolve the 'this' container
+                        // from the parent class declaration.
+                        node = node.parent;
+                    }
                     break;
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
@@ -742,7 +775,7 @@ module ts {
                         let forStatement = <ForStatement>parent;
                         return (forStatement.initializer === node && forStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
                             forStatement.condition === node ||
-                            forStatement.iterator === node;
+                            forStatement.incrementor === node;
                     case SyntaxKind.ForInStatement:
                     case SyntaxKind.ForOfStatement:
                         let forInStatement = <ForInStatement | ForOfStatement>parent;
@@ -754,6 +787,8 @@ module ts {
                         return node === (<TemplateSpan>parent).expression;
                     case SyntaxKind.ComputedPropertyName:
                         return node === (<ComputedPropertyName>parent).expression;
+                    case SyntaxKind.Decorator:
+                        return true;
                     default:
                         if (isExpression(parent)) {
                             return true;
@@ -821,7 +856,7 @@ module ts {
     }
 
     export function hasRestParameters(s: SignatureDeclaration): boolean {
-        return s.parameters.length > 0 && s.parameters[s.parameters.length - 1].dotDotDotToken !== undefined;
+        return s.parameters.length > 0 && lastOrUndefined(s.parameters).dotDotDotToken !== undefined;
     }
 
     export function isLiteralKind(kind: SyntaxKind): boolean {
@@ -919,6 +954,7 @@ module ts {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.MethodSignature:
             case SyntaxKind.IndexSignature:
                 return true;
             default:
@@ -1112,6 +1148,637 @@ module ts {
                 return true;
         }
         return false;
+    }
+        
+    export function nodeStartsNewLexicalEnvironment(n: Node): boolean {
+        return isFunctionLike(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
+    }
+
+    export function nodeIsSynthesized(node: Node): boolean {
+        return node.pos === -1;
+    }
+
+    export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
+        let node = <SynthesizedNode>createNode(kind);
+        node.pos = -1;
+        node.end = -1;
+        node.startsOnNewLine = startsOnNewLine;
+        return node;
+    }
+
+    export function createSynthesizedNodeArray(): NodeArray<any> {
+        var array = <NodeArray<any>>[];
+        array.pos = -1;
+        array.end = -1;
+        return array;
+    }
+
+    export function createDiagnosticCollection(): DiagnosticCollection {
+        let nonFileDiagnostics: Diagnostic[] = [];
+        let fileDiagnostics: Map<Diagnostic[]> = {};
+
+        let diagnosticsModified = false;
+        let modificationCount = 0;
+
+        return {
+            add,
+            getGlobalDiagnostics,
+            getDiagnostics,
+            getModificationCount
+        };
+
+        function getModificationCount() {
+            return modificationCount;
+        }
+
+        function add(diagnostic: Diagnostic): void {
+            let diagnostics: Diagnostic[];
+            if (diagnostic.file) {
+                diagnostics = fileDiagnostics[diagnostic.file.fileName];
+                if (!diagnostics) {
+                    diagnostics = [];
+                    fileDiagnostics[diagnostic.file.fileName] = diagnostics;
+                }
+            }
+            else {
+                diagnostics = nonFileDiagnostics;
+            }
+
+            diagnostics.push(diagnostic);
+            diagnosticsModified = true;
+            modificationCount++;
+        }
+
+        function getGlobalDiagnostics(): Diagnostic[] {
+            sortAndDeduplicate();
+            return nonFileDiagnostics;
+        }
+
+        function getDiagnostics(fileName?: string): Diagnostic[] {
+            sortAndDeduplicate();
+            if (fileName) {
+                return fileDiagnostics[fileName] || [];
+            }
+
+            let allDiagnostics: Diagnostic[] = [];
+            function pushDiagnostic(d: Diagnostic) {
+                allDiagnostics.push(d);
+            }
+
+            forEach(nonFileDiagnostics, pushDiagnostic);
+
+            for (let key in fileDiagnostics) {
+                if (hasProperty(fileDiagnostics, key)) {
+                    forEach(fileDiagnostics[key], pushDiagnostic);
+                }
+            }
+
+            return sortAndDeduplicateDiagnostics(allDiagnostics);
+        }
+
+        function sortAndDeduplicate() {
+            if (!diagnosticsModified) {
+                return;
+            }
+
+            diagnosticsModified = false;
+            nonFileDiagnostics = sortAndDeduplicateDiagnostics(nonFileDiagnostics);
+
+            for (let key in fileDiagnostics) {
+                if (hasProperty(fileDiagnostics, key)) {
+                    fileDiagnostics[key] = sortAndDeduplicateDiagnostics(fileDiagnostics[key]);
+                }
+            }
+        }
+    }
+    
+    // This consists of the first 19 unprintable ASCII characters, canonical escapes, lineSeparator,
+    // paragraphSeparator, and nextLine. The latter three are just desirable to suppress new lines in
+    // the language service. These characters should be escaped when printing, and if any characters are added,
+    // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
+    // There is no reason for this other than that JSON.stringify does not handle it either.
+    let escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+    let escapedCharsMap: Map<string> = {
+        "\0": "\\0",
+        "\t": "\\t",
+        "\v": "\\v",
+        "\f": "\\f",
+        "\b": "\\b",
+        "\r": "\\r",
+        "\n": "\\n",
+        "\\": "\\\\",
+        "\"": "\\\"",
+        "\u2028": "\\u2028", // lineSeparator
+        "\u2029": "\\u2029", // paragraphSeparator
+        "\u0085": "\\u0085"  // nextLine
+    };
+
+    /**
+     * Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
+     * but augmented for a few select characters (e.g. lineSeparator, paragraphSeparator, nextLine)
+     * Note that this doesn't actually wrap the input in double quotes.
+     */
+    export function escapeString(s: string): string {
+        s = escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, getReplacement) : s;
+
+        return s;
+
+        function getReplacement(c: string) {
+            return escapedCharsMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
+        }
+    }
+
+    function get16BitUnicodeEscapeSequence(charCode: number): string {
+        let hexCharCode = charCode.toString(16).toUpperCase();
+        let paddedHexCode = ("0000" + hexCharCode).slice(-4);
+        return "\\u" + paddedHexCode;
+    }
+
+    let nonAsciiCharacters = /[^\u0000-\u007F]/g;
+    export function escapeNonAsciiCharacters(s: string): string {
+        // Replace non-ASCII characters with '\uNNNN' escapes if any exist.
+        // Otherwise just return the original string.
+        return nonAsciiCharacters.test(s) ?
+            s.replace(nonAsciiCharacters, c => get16BitUnicodeEscapeSequence(c.charCodeAt(0))) :
+            s;
+    }
+
+    export interface EmitTextWriter {
+        write(s: string): void;
+        writeTextOfNode(sourceFile: SourceFile, node: Node): void;
+        writeLine(): void;
+        increaseIndent(): void;
+        decreaseIndent(): void;
+        getText(): string;
+        rawWrite(s: string): void;
+        writeLiteral(s: string): void;
+        getTextPos(): number;
+        getLine(): number;
+        getColumn(): number;
+        getIndent(): number;
+    }
+
+    let indentStrings: string[] = ["", "    "];
+    export function getIndentString(level: number) {
+        if (indentStrings[level] === undefined) {
+            indentStrings[level] = getIndentString(level - 1) + indentStrings[1];
+        }
+        return indentStrings[level];
+    }
+
+    export function getIndentSize() {
+        return indentStrings[1].length;
+    }
+
+    export function createTextWriter(newLine: String): EmitTextWriter {
+        let output = "";
+        let indent = 0;
+        let lineStart = true;
+        let lineCount = 0;
+        let linePos = 0;
+
+        function write(s: string) {
+            if (s && s.length) {
+                if (lineStart) {
+                    output += getIndentString(indent);
+                    lineStart = false;
+                }
+                output += s;
+            }
+        }
+
+        function rawWrite(s: string) {
+            if (s !== undefined) {
+                if (lineStart) {
+                    lineStart = false;
+                }
+                output += s;
+            }
+        }
+
+        function writeLiteral(s: string) {
+            if (s && s.length) {
+                write(s);
+                let lineStartsOfS = computeLineStarts(s);
+                if (lineStartsOfS.length > 1) {
+                    lineCount = lineCount + lineStartsOfS.length - 1;
+                    linePos = output.length - s.length + lastOrUndefined(lineStartsOfS);
+                }
+            }
+        }
+
+        function writeLine() {
+            if (!lineStart) {
+                output += newLine;
+                lineCount++;
+                linePos = output.length;
+                lineStart = true;
+            }
+        }
+
+        function writeTextOfNode(sourceFile: SourceFile, node: Node) {
+            write(getSourceTextOfNodeFromSourceFile(sourceFile, node));
+        }
+
+        return {
+            write,
+            rawWrite,
+            writeTextOfNode,
+            writeLiteral,
+            writeLine,
+            increaseIndent: () => indent++,
+            decreaseIndent: () => indent--,
+            getIndent: () => indent,
+            getTextPos: () => output.length,
+            getLine: () => lineCount + 1,
+            getColumn: () => lineStart ? indent * getIndentSize() + 1 : output.length - linePos + 1,
+            getText: () => output,
+        };
+    }
+
+    export function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string) {
+        let compilerOptions = host.getCompilerOptions();
+        let emitOutputFilePathWithoutExtension: string;
+        if (compilerOptions.outDir) {
+            emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, host, compilerOptions.outDir));
+        }
+        else {
+            emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.fileName);
+        }
+
+        return emitOutputFilePathWithoutExtension + extension;
+    }
+
+    export function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
+        let sourceFilePath = getNormalizedAbsolutePath(sourceFile.fileName, host.getCurrentDirectory());
+        sourceFilePath = sourceFilePath.replace(host.getCommonSourceDirectory(), "");
+        return combinePaths(newDirPath, sourceFilePath);
+    }
+
+    export function writeFile(host: EmitHost, diagnostics: Diagnostic[], fileName: string, data: string, writeByteOrderMark: boolean) {
+        host.writeFile(fileName, data, writeByteOrderMark, hostErrorMessage => {
+            diagnostics.push(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, hostErrorMessage));
+        });
+    }
+
+    export function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number) {
+        return getLineAndCharacterOfPosition(currentSourceFile, pos).line;
+    }
+
+    export function getFirstConstructorWithBody(node: ClassLikeDeclaration): ConstructorDeclaration {
+        return forEach(node.members, member => {
+            if (member.kind === SyntaxKind.Constructor && nodeIsPresent((<ConstructorDeclaration>member).body)) {
+                return <ConstructorDeclaration>member;
+            }
+        });
+    }
+
+    export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
+        if (!isDeclarationFile(sourceFile)) {
+            if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
+                // 1. in-browser single file compilation scenario
+                // 2. non .js file
+                return compilerOptions.separateCompilation || !fileExtensionIs(sourceFile.fileName, ".js");
+            }
+            return false;
+        }
+        return false;
+    }
+
+    export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration) {
+        let firstAccessor: AccessorDeclaration;
+        let secondAccessor: AccessorDeclaration;
+        let getAccessor: AccessorDeclaration;
+        let setAccessor: AccessorDeclaration;
+        if (hasDynamicName(accessor)) {
+            firstAccessor = accessor;
+            if (accessor.kind === SyntaxKind.GetAccessor) {
+                getAccessor = accessor;
+            }
+            else if (accessor.kind === SyntaxKind.SetAccessor) {
+                setAccessor = accessor;
+            }
+            else {
+                Debug.fail("Accessor has wrong kind");
+            }
+        }
+        else {
+            forEach(declarations, (member: Declaration) => {
+                if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor)
+                    && (member.flags & NodeFlags.Static) === (accessor.flags & NodeFlags.Static)) {
+                    let memberName = getPropertyNameForPropertyNameNode(member.name);
+                    let accessorName = getPropertyNameForPropertyNameNode(accessor.name);
+                    if (memberName === accessorName) {
+                        if (!firstAccessor) {
+                            firstAccessor = <AccessorDeclaration>member;
+                        }
+                        else if (!secondAccessor) {
+                            secondAccessor = <AccessorDeclaration>member;
+                        }
+
+                        if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
+                            getAccessor = <AccessorDeclaration>member;
+                        }
+
+                        if (member.kind === SyntaxKind.SetAccessor && !setAccessor) {
+                            setAccessor = <AccessorDeclaration>member;
+                        }
+                    }
+                }
+            });
+        }
+        return {
+            firstAccessor,
+            secondAccessor,
+            getAccessor,
+            setAccessor
+        };
+    }
+
+    export function emitNewLineBeforeLeadingComments(currentSourceFile: SourceFile, writer: EmitTextWriter, node: TextRange, leadingComments: CommentRange[]) {
+        // If the leading comments start on different line than the start of node, write new line
+        if (leadingComments && leadingComments.length && node.pos !== leadingComments[0].pos &&
+            getLineOfLocalPosition(currentSourceFile, node.pos) !== getLineOfLocalPosition(currentSourceFile, leadingComments[0].pos)) {
+            writer.writeLine();
+        }
+    }
+
+    export function emitComments(currentSourceFile: SourceFile, writer: EmitTextWriter, comments: CommentRange[], trailingSeparator: boolean, newLine: string,
+        writeComment: (currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) => void) {
+        let emitLeadingSpace = !trailingSeparator;
+        forEach(comments, comment => {
+            if (emitLeadingSpace) {
+                writer.write(" ");
+                emitLeadingSpace = false;
+            }
+            writeComment(currentSourceFile, writer, comment, newLine);
+            if (comment.hasTrailingNewLine) {
+                writer.writeLine();
+            }
+            else if (trailingSeparator) {
+                writer.write(" ");
+            }
+            else {
+                // Emit leading space to separate comment during next comment emit
+                emitLeadingSpace = true;
+            }
+        });
+    }
+
+    export function writeCommentRange(currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) {
+        if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
+            let firstCommentLineAndCharacter = getLineAndCharacterOfPosition(currentSourceFile, comment.pos);
+            let lineCount = getLineStarts(currentSourceFile).length;
+            let firstCommentLineIndent: number;
+            for (let pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
+                let nextLineStart = (currentLine + 1) === lineCount
+                    ? currentSourceFile.text.length + 1
+                    : getStartPositionOfLine(currentLine + 1, currentSourceFile);
+
+                if (pos !== comment.pos) {
+                    // If we are not emitting first line, we need to write the spaces to adjust the alignment
+                    if (firstCommentLineIndent === undefined) {
+                        firstCommentLineIndent = calculateIndent(getStartPositionOfLine(firstCommentLineAndCharacter.line, currentSourceFile), comment.pos);
+                    }
+
+                    // These are number of spaces writer is going to write at current indent
+                    let currentWriterIndentSpacing = writer.getIndent() * getIndentSize();
+
+                    // Number of spaces we want to be writing
+                    // eg: Assume writer indent
+                    // module m {
+                    //         /* starts at character 9 this is line 1
+                    //    * starts at character pos 4 line                        --1  = 8 - 8 + 3
+                    //   More left indented comment */                            --2  = 8 - 8 + 2
+                    //     class c { }
+                    // }
+                    // module m {
+                    //     /* this is line 1 -- Assume current writer indent 8
+                    //      * line                                                --3 = 8 - 4 + 5
+                    //            More right indented comment */                  --4 = 8 - 4 + 11
+                    //     class c { }
+                    // }
+                    let spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(pos, nextLineStart);
+                    if (spacesToEmit > 0) {
+                        let numberOfSingleSpacesToEmit = spacesToEmit % getIndentSize();
+                        let indentSizeSpaceString = getIndentString((spacesToEmit - numberOfSingleSpacesToEmit) / getIndentSize());
+
+                        // Write indent size string ( in eg 1: = "", 2: "" , 3: string with 8 spaces 4: string with 12 spaces
+                        writer.rawWrite(indentSizeSpaceString);
+
+                        // Emit the single spaces (in eg: 1: 3 spaces, 2: 2 spaces, 3: 1 space, 4: 3 spaces)
+                        while (numberOfSingleSpacesToEmit) {
+                            writer.rawWrite(" ");
+                            numberOfSingleSpacesToEmit--;
+                        }
+                    }
+                    else {
+                        // No spaces to emit write empty string
+                        writer.rawWrite("");
+                    }
+                }
+
+                // Write the comment line text
+                writeTrimmedCurrentLine(pos, nextLineStart);
+
+                pos = nextLineStart;
+            }
+        }
+        else {
+            // Single line comment of style //....
+            writer.write(currentSourceFile.text.substring(comment.pos, comment.end));
+        }
+
+        function writeTrimmedCurrentLine(pos: number, nextLineStart: number) {
+            let end = Math.min(comment.end, nextLineStart - 1);
+            let currentLineText = currentSourceFile.text.substring(pos, end).replace(/^\s+|\s+$/g, '');
+            if (currentLineText) {
+                // trimmed forward and ending spaces text
+                writer.write(currentLineText);
+                if (end !== comment.end) {
+                    writer.writeLine();
+                }
+            }
+            else {
+                // Empty string - make sure we write empty line
+                writer.writeLiteral(newLine);
+            }
+        }
+
+        function calculateIndent(pos: number, end: number) {
+            let currentLineIndent = 0;
+            for (; pos < end && isWhiteSpace(currentSourceFile.text.charCodeAt(pos)); pos++) {
+                if (currentSourceFile.text.charCodeAt(pos) === CharacterCodes.tab) {
+                    // Tabs = TabSize = indent size and go to next tabStop
+                    currentLineIndent += getIndentSize() - (currentLineIndent % getIndentSize());
+                }
+                else {
+                    // Single space
+                    currentLineIndent++;
+                }
+            }
+
+            return currentLineIndent;
+        }
+    }
+
+    export function modifierToFlag(token: SyntaxKind): NodeFlags {
+        switch (token) {
+            case SyntaxKind.StaticKeyword: return NodeFlags.Static;
+            case SyntaxKind.PublicKeyword: return NodeFlags.Public;
+            case SyntaxKind.ProtectedKeyword: return NodeFlags.Protected;
+            case SyntaxKind.PrivateKeyword: return NodeFlags.Private;
+            case SyntaxKind.ExportKeyword: return NodeFlags.Export;
+            case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
+            case SyntaxKind.ConstKeyword: return NodeFlags.Const;
+            case SyntaxKind.DefaultKeyword: return NodeFlags.Default;
+        }
+        return 0;
+    }
+
+    export function isLeftHandSideExpression(expr: Expression): boolean {
+        if (expr) {
+            switch (expr.kind) {
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.Identifier:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateExpression:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.SuperKeyword:
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    export function isAssignmentOperator(token: SyntaxKind): boolean {
+        return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
+    }
+
+    // Returns false if this heritage clause element's expression contains something unsupported
+    // (i.e. not a name or dotted name).
+    export function isSupportedExpressionWithTypeArguments(node: ExpressionWithTypeArguments): boolean {
+        return isSupportedExpressionWithTypeArgumentsRest(node.expression);
+    }
+
+    function isSupportedExpressionWithTypeArgumentsRest(node: Expression): boolean {
+        if (node.kind === SyntaxKind.Identifier) {
+            return true;
+        }
+        else if (node.kind === SyntaxKind.PropertyAccessExpression) {
+            return isSupportedExpressionWithTypeArgumentsRest((<PropertyAccessExpression>node).expression);
+        }
+        else {
+            return false;
+        }
+    }
+
+    export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
+        return (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node) ||
+            (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node);
+    }
+
+    export function getLocalSymbolForExportDefault(symbol: Symbol) {
+            return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
+    }
+
+    /**
+     * Replace each instance of non-ascii characters by one, two, three, or four escape sequences 
+     * representing the UTF-8 encoding of the character, and return the expanded char code list.
+     */
+    function getExpandedCharCodes(input: string): number[] {
+        let output: number[] = [];
+        let length = input.length;
+        let leadSurrogate: number = undefined;
+
+        for (let i = 0; i < length; i++) {
+            let charCode = input.charCodeAt(i);
+
+            // handel utf8
+            if (charCode < 0x80) {
+                output.push(charCode);
+            }
+            else if (charCode < 0x800) {
+                output.push((charCode >> 6) | 0B11000000);
+                output.push((charCode & 0B00111111) | 0B10000000);
+            }
+            else if (charCode < 0x10000) {
+                output.push((charCode >> 12) | 0B11100000);
+                output.push(((charCode >> 6) & 0B00111111) | 0B10000000);
+                output.push((charCode & 0B00111111) | 0B10000000);
+            }
+            else if (charCode < 0x20000) {
+                output.push((charCode >> 18) | 0B11110000);
+                output.push(((charCode >> 12) & 0B00111111) | 0B10000000);
+                output.push(((charCode >> 6) & 0B00111111) | 0B10000000);
+                output.push((charCode & 0B00111111) | 0B10000000);
+            }
+            else {
+                Debug.assert(false, "Unexpected code point");
+            }
+        }
+
+        return output;
+    }
+
+    const base64Digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+    /**
+     * Converts a string to a base-64 encoded ASCII string.
+     */
+    export function convertToBase64(input: string): string {
+        var result = "";
+        let charCodes = getExpandedCharCodes(input);
+        let i = 0;
+        let length = charCodes.length;
+        let byte1: number, byte2: number, byte3: number, byte4: number;
+
+        while (i < length) {
+            // Convert every 6-bits in the input 3 character points
+            // into a base64 digit
+            byte1 = charCodes[i] >> 2;
+            byte2 = (charCodes[i] & 0B00000011) << 4 | charCodes[i + 1] >> 4;
+            byte3 = (charCodes[i + 1] & 0B00001111) << 2 | charCodes[i + 2] >> 6;
+            byte4 = charCodes[i + 2] & 0B00111111;
+
+            // We are out of characters in the input, set the extra
+            // digits to 64 (padding character).
+            if (i + 1 >= length) {
+                byte3 = byte4 = 64;
+            }
+            else if (i + 2 >= length) {
+                byte4 = 64;
+            }
+
+            // Write to the ouput
+            result += base64Digits.charAt(byte1) + base64Digits.charAt(byte2) + base64Digits.charAt(byte3) + base64Digits.charAt(byte4);
+
+            i += 3;
+        }
+
+        return result;
+    }
+}
+
+module ts {
+    export function getDefaultLibFileName(options: CompilerOptions): string {
+        return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
     }
 
     export function textSpanEnd(span: TextSpan) {
@@ -1323,496 +1990,5 @@ module ts {
         }
 
         return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength:*/ newEndN - oldStartN);
-    }
-
-    export function nodeStartsNewLexicalEnvironment(n: Node): boolean {
-        return isFunctionLike(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
-    }
-
-    export function nodeIsSynthesized(node: Node): boolean {
-        return node.pos === -1;
-    }
-
-    export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
-        let node = <SynthesizedNode>createNode(kind);
-        node.pos = -1;
-        node.end = -1;
-        node.startsOnNewLine = startsOnNewLine;
-        return node;
-    }
-
-    // @internal
-    export function createDiagnosticCollection(): DiagnosticCollection {
-        let nonFileDiagnostics: Diagnostic[] = [];
-        let fileDiagnostics: Map<Diagnostic[]> = {};
-
-        let diagnosticsModified = false;
-        let modificationCount = 0;
-
-        return {
-            add,
-            getGlobalDiagnostics,
-            getDiagnostics,
-            getModificationCount
-        };
-
-        function getModificationCount() {
-            return modificationCount;
-        }
-
-        function add(diagnostic: Diagnostic): void {
-            let diagnostics: Diagnostic[];
-            if (diagnostic.file) {
-                diagnostics = fileDiagnostics[diagnostic.file.fileName];
-                if (!diagnostics) {
-                    diagnostics = [];
-                    fileDiagnostics[diagnostic.file.fileName] = diagnostics;
-                }
-            }
-            else {
-                diagnostics = nonFileDiagnostics;
-            }
-
-            diagnostics.push(diagnostic);
-            diagnosticsModified = true;
-            modificationCount++;
-        }
-
-        function getGlobalDiagnostics(): Diagnostic[] {
-            sortAndDeduplicate();
-            return nonFileDiagnostics;
-        }
-
-        function getDiagnostics(fileName?: string): Diagnostic[] {
-            sortAndDeduplicate();
-            if (fileName) {
-                return fileDiagnostics[fileName] || [];
-            }
-
-            let allDiagnostics: Diagnostic[] = [];
-            function pushDiagnostic(d: Diagnostic) {
-                allDiagnostics.push(d);
-            }
-
-            forEach(nonFileDiagnostics, pushDiagnostic);
-
-            for (let key in fileDiagnostics) {
-                if (hasProperty(fileDiagnostics, key)) {
-                    forEach(fileDiagnostics[key], pushDiagnostic);
-                }
-            }
-
-            return sortAndDeduplicateDiagnostics(allDiagnostics);
-        }
-
-        function sortAndDeduplicate() {
-            if (!diagnosticsModified) {
-                return;
-            }
-
-            diagnosticsModified = false;
-            nonFileDiagnostics = sortAndDeduplicateDiagnostics(nonFileDiagnostics);
-
-            for (let key in fileDiagnostics) {
-                if (hasProperty(fileDiagnostics, key)) {
-                    fileDiagnostics[key] = sortAndDeduplicateDiagnostics(fileDiagnostics[key]);
-                }
-            }
-        }
-    }
-    
-    // This consists of the first 19 unprintable ASCII characters, canonical escapes, lineSeparator,
-    // paragraphSeparator, and nextLine. The latter three are just desirable to suppress new lines in
-    // the language service. These characters should be escaped when printing, and if any characters are added,
-    // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
-    // There is no reason for this other than that JSON.stringify does not handle it either.
-    let escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    let escapedCharsMap: Map<string> = {
-        "\0": "\\0",
-        "\t": "\\t",
-        "\v": "\\v",
-        "\f": "\\f",
-        "\b": "\\b",
-        "\r": "\\r",
-        "\n": "\\n",
-        "\\": "\\\\",
-        "\"": "\\\"",
-        "\u2028": "\\u2028", // lineSeparator
-        "\u2029": "\\u2029", // paragraphSeparator
-        "\u0085": "\\u0085"  // nextLine
-    };
-
-    /**
-     * Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
-     * but augmented for a few select characters (e.g. lineSeparator, paragraphSeparator, nextLine)
-     * Note that this doesn't actually wrap the input in double quotes.
-     */
-    export function escapeString(s: string): string {
-        s = escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, getReplacement) : s;
-
-        return s;
-
-        function getReplacement(c: string) {
-            return escapedCharsMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
-        }
-    }
-
-    function get16BitUnicodeEscapeSequence(charCode: number): string {
-        let hexCharCode = charCode.toString(16).toUpperCase();
-        let paddedHexCode = ("0000" + hexCharCode).slice(-4);
-        return "\\u" + paddedHexCode;
-    }
-
-    let nonAsciiCharacters = /[^\u0000-\u007F]/g;
-    export function escapeNonAsciiCharacters(s: string): string {
-        // Replace non-ASCII characters with '\uNNNN' escapes if any exist.
-        // Otherwise just return the original string.
-        return nonAsciiCharacters.test(s) ?
-            s.replace(nonAsciiCharacters, c => get16BitUnicodeEscapeSequence(c.charCodeAt(0))) :
-            s;
-    }
-
-    export interface EmitTextWriter {
-        write(s: string): void;
-        writeTextOfNode(sourceFile: SourceFile, node: Node): void;
-        writeLine(): void;
-        increaseIndent(): void;
-        decreaseIndent(): void;
-        getText(): string;
-        rawWrite(s: string): void;
-        writeLiteral(s: string): void;
-        getTextPos(): number;
-        getLine(): number;
-        getColumn(): number;
-        getIndent(): number;
-    }
-
-    let indentStrings: string[] = ["", "    "];
-    export function getIndentString(level: number) {
-        if (indentStrings[level] === undefined) {
-            indentStrings[level] = getIndentString(level - 1) + indentStrings[1];
-        }
-        return indentStrings[level];
-    }
-
-    export function getIndentSize() {
-        return indentStrings[1].length;
-    }
-
-    export function createTextWriter(newLine: String): EmitTextWriter {
-        let output = "";
-        let indent = 0;
-        let lineStart = true;
-        let lineCount = 0;
-        let linePos = 0;
-
-        function write(s: string) {
-            if (s && s.length) {
-                if (lineStart) {
-                    output += getIndentString(indent);
-                    lineStart = false;
-                }
-                output += s;
-            }
-        }
-
-        function rawWrite(s: string) {
-            if (s !== undefined) {
-                if (lineStart) {
-                    lineStart = false;
-                }
-                output += s;
-            }
-        }
-
-        function writeLiteral(s: string) {
-            if (s && s.length) {
-                write(s);
-                let lineStartsOfS = computeLineStarts(s);
-                if (lineStartsOfS.length > 1) {
-                    lineCount = lineCount + lineStartsOfS.length - 1;
-                    linePos = output.length - s.length + lineStartsOfS[lineStartsOfS.length - 1];
-                }
-            }
-        }
-
-        function writeLine() {
-            if (!lineStart) {
-                output += newLine;
-                lineCount++;
-                linePos = output.length;
-                lineStart = true;
-            }
-        }
-
-        function writeTextOfNode(sourceFile: SourceFile, node: Node) {
-            write(getSourceTextOfNodeFromSourceFile(sourceFile, node));
-        }
-
-        return {
-            write,
-            rawWrite,
-            writeTextOfNode,
-            writeLiteral,
-            writeLine,
-            increaseIndent: () => indent++,
-            decreaseIndent: () => indent--,
-            getIndent: () => indent,
-            getTextPos: () => output.length,
-            getLine: () => lineCount + 1,
-            getColumn: () => lineStart ? indent * getIndentSize() + 1 : output.length - linePos + 1,
-            getText: () => output,
-        };
-    }
-
-    export function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string) {
-        let compilerOptions = host.getCompilerOptions();
-        let emitOutputFilePathWithoutExtension: string;
-        if (compilerOptions.outDir) {
-            emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, host, compilerOptions.outDir));
-        }
-        else {
-            emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.fileName);
-        }
-
-        return emitOutputFilePathWithoutExtension + extension;
-    }
-
-    export function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
-        let sourceFilePath = getNormalizedAbsolutePath(sourceFile.fileName, host.getCurrentDirectory());
-        sourceFilePath = sourceFilePath.replace(host.getCommonSourceDirectory(), "");
-        return combinePaths(newDirPath, sourceFilePath);
-    }
-
-    export function writeFile(host: EmitHost, diagnostics: Diagnostic[], fileName: string, data: string, writeByteOrderMark: boolean) {
-        host.writeFile(fileName, data, writeByteOrderMark, hostErrorMessage => {
-            diagnostics.push(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, hostErrorMessage));
-        });
-    }
-
-    export function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number) {
-        return getLineAndCharacterOfPosition(currentSourceFile, pos).line;
-    }
-
-    export function getFirstConstructorWithBody(node: ClassLikeDeclaration): ConstructorDeclaration {
-        return forEach(node.members, member => {
-            if (member.kind === SyntaxKind.Constructor && nodeIsPresent((<ConstructorDeclaration>member).body)) {
-                return <ConstructorDeclaration>member;
-            }
-        });
-    }
-
-    export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
-        if (!isDeclarationFile(sourceFile)) {
-            if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.fileName, ".js")) {
-                return true;
-            }
-            return false;
-        }
-        return false;
-    }
-
-    export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration) {
-        let firstAccessor: AccessorDeclaration;
-        let secondAccessor: AccessorDeclaration;
-        let getAccessor: AccessorDeclaration;
-        let setAccessor: AccessorDeclaration;
-        if (hasDynamicName(accessor)) {
-            firstAccessor = accessor;
-            if (accessor.kind === SyntaxKind.GetAccessor) {
-                getAccessor = accessor;
-            }
-            else if (accessor.kind === SyntaxKind.SetAccessor) {
-                setAccessor = accessor;
-            }
-            else {
-                Debug.fail("Accessor has wrong kind");
-            }
-        }
-        else {
-            forEach(declarations, (member: Declaration) => {
-                if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor)
-                    && (member.flags & NodeFlags.Static) === (accessor.flags & NodeFlags.Static)) {
-                    let memberName = getPropertyNameForPropertyNameNode(member.name);
-                    let accessorName = getPropertyNameForPropertyNameNode(accessor.name);
-                    if (memberName === accessorName) {
-                        if (!firstAccessor) {
-                            firstAccessor = <AccessorDeclaration>member;
-                        }
-                        else if (!secondAccessor) {
-                            secondAccessor = <AccessorDeclaration>member;
-                        }
-
-                        if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
-                            getAccessor = <AccessorDeclaration>member;
-                        }
-
-                        if (member.kind === SyntaxKind.SetAccessor && !setAccessor) {
-                            setAccessor = <AccessorDeclaration>member;
-                        }
-                    }
-                }
-            });
-        }
-        return {
-            firstAccessor,
-            secondAccessor,
-            getAccessor,
-            setAccessor
-        };
-    }
-
-    export function emitNewLineBeforeLeadingComments(currentSourceFile: SourceFile, writer: EmitTextWriter, node: TextRange, leadingComments: CommentRange[]) {
-        // If the leading comments start on different line than the start of node, write new line
-        if (leadingComments && leadingComments.length && node.pos !== leadingComments[0].pos &&
-            getLineOfLocalPosition(currentSourceFile, node.pos) !== getLineOfLocalPosition(currentSourceFile, leadingComments[0].pos)) {
-            writer.writeLine();
-        }
-    }
-
-    export function emitComments(currentSourceFile: SourceFile, writer: EmitTextWriter, comments: CommentRange[], trailingSeparator: boolean, newLine: string,
-        writeComment: (currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) => void) {
-        let emitLeadingSpace = !trailingSeparator;
-        forEach(comments, comment => {
-            if (emitLeadingSpace) {
-                writer.write(" ");
-                emitLeadingSpace = false;
-            }
-            writeComment(currentSourceFile, writer, comment, newLine);
-            if (comment.hasTrailingNewLine) {
-                writer.writeLine();
-            }
-            else if (trailingSeparator) {
-                writer.write(" ");
-            }
-            else {
-                // Emit leading space to separate comment during next comment emit
-                emitLeadingSpace = true;
-            }
-        });
-    }
-
-    export function writeCommentRange(currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) {
-        if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
-            let firstCommentLineAndCharacter = getLineAndCharacterOfPosition(currentSourceFile, comment.pos);
-            let lineCount = getLineStarts(currentSourceFile).length;
-            let firstCommentLineIndent: number;
-            for (let pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
-                let nextLineStart = (currentLine + 1) === lineCount
-                    ? currentSourceFile.text.length + 1
-                    : getStartPositionOfLine(currentLine + 1, currentSourceFile);
-
-                if (pos !== comment.pos) {
-                    // If we are not emitting first line, we need to write the spaces to adjust the alignment
-                    if (firstCommentLineIndent === undefined) {
-                        firstCommentLineIndent = calculateIndent(getStartPositionOfLine(firstCommentLineAndCharacter.line, currentSourceFile), comment.pos);
-                    }
-
-                    // These are number of spaces writer is going to write at current indent
-                    let currentWriterIndentSpacing = writer.getIndent() * getIndentSize();
-
-                    // Number of spaces we want to be writing
-                    // eg: Assume writer indent
-                    // module m {
-                    //         /* starts at character 9 this is line 1
-                    //    * starts at character pos 4 line                        --1  = 8 - 8 + 3
-                    //   More left indented comment */                            --2  = 8 - 8 + 2
-                    //     class c { }
-                    // }
-                    // module m {
-                    //     /* this is line 1 -- Assume current writer indent 8
-                    //      * line                                                --3 = 8 - 4 + 5
-                    //            More right indented comment */                  --4 = 8 - 4 + 11
-                    //     class c { }
-                    // }
-                    let spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(pos, nextLineStart);
-                    if (spacesToEmit > 0) {
-                        let numberOfSingleSpacesToEmit = spacesToEmit % getIndentSize();
-                        let indentSizeSpaceString = getIndentString((spacesToEmit - numberOfSingleSpacesToEmit) / getIndentSize());
-
-                        // Write indent size string ( in eg 1: = "", 2: "" , 3: string with 8 spaces 4: string with 12 spaces
-                        writer.rawWrite(indentSizeSpaceString);
-
-                        // Emit the single spaces (in eg: 1: 3 spaces, 2: 2 spaces, 3: 1 space, 4: 3 spaces)
-                        while (numberOfSingleSpacesToEmit) {
-                            writer.rawWrite(" ");
-                            numberOfSingleSpacesToEmit--;
-                        }
-                    }
-                    else {
-                        // No spaces to emit write empty string
-                        writer.rawWrite("");
-                    }
-                }
-
-                // Write the comment line text
-                writeTrimmedCurrentLine(pos, nextLineStart);
-
-                pos = nextLineStart;
-            }
-        }
-        else {
-            // Single line comment of style //....
-            writer.write(currentSourceFile.text.substring(comment.pos, comment.end));
-        }
-
-        function writeTrimmedCurrentLine(pos: number, nextLineStart: number) {
-            let end = Math.min(comment.end, nextLineStart - 1);
-            let currentLineText = currentSourceFile.text.substring(pos, end).replace(/^\s+|\s+$/g, '');
-            if (currentLineText) {
-                // trimmed forward and ending spaces text
-                writer.write(currentLineText);
-                if (end !== comment.end) {
-                    writer.writeLine();
-                }
-            }
-            else {
-                // Empty string - make sure we write empty line
-                writer.writeLiteral(newLine);
-            }
-        }
-
-        function calculateIndent(pos: number, end: number) {
-            let currentLineIndent = 0;
-            for (; pos < end && isWhiteSpace(currentSourceFile.text.charCodeAt(pos)); pos++) {
-                if (currentSourceFile.text.charCodeAt(pos) === CharacterCodes.tab) {
-                    // Tabs = TabSize = indent size and go to next tabStop
-                    currentLineIndent += getIndentSize() - (currentLineIndent % getIndentSize());
-                }
-                else {
-                    // Single space
-                    currentLineIndent++;
-                }
-            }
-
-            return currentLineIndent;
-        }
-    }
-
-    // Returns false if this heritage clause element's expression contains something unsupported
-    // (i.e. not a name or dotted name).
-    export function isSupportedHeritageClauseElement(node: HeritageClauseElement): boolean {
-        return isSupportedHeritageClauseElementExpression(node.expression);
-    }
-
-    function isSupportedHeritageClauseElementExpression(node: Expression): boolean {
-        if (node.kind === SyntaxKind.Identifier) {
-            return true;
-        }
-        else if (node.kind === SyntaxKind.PropertyAccessExpression) {
-            return isSupportedHeritageClauseElementExpression((<PropertyAccessExpression>node).expression);
-        }
-        else {
-            return false;
-        }
-    }
-
-    export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
-        return (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node) ||
-            (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node);
-    }
-
-    export function getLocalSymbolForExportDefault(symbol: Symbol) {
-            return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 }

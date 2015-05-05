@@ -76,25 +76,28 @@ module ts.server {
     }
 
     export module CommandNames {
+        export var Brace = "brace";
         export var Change = "change";
         export var Close = "close";
         export var Completions = "completions";
         export var CompletionDetails = "completionEntryDetails";
-        export var SignatureHelp = "signatureHelp";        
         export var Configure = "configure";
         export var Definition = "definition";
+        export var Exit = "exit";
         export var Format = "format";
         export var Formatonkey = "formatonkey";
         export var Geterr = "geterr";
         export var NavBar = "navbar";
         export var Navto = "navto";
+        export var Occurrences = "occurrences";
         export var Open = "open";
         export var Quickinfo = "quickinfo";
         export var References = "references";
         export var Reload = "reload";
         export var Rename = "rename";
         export var Saveto = "saveto";
-        export var Brace = "brace";
+        export var SignatureHelp = "signatureHelp";        
+        export var TypeDefinition = "typeDefinition";        
         export var Unknown = "unknown";
     }
 
@@ -283,6 +286,58 @@ module ts.server {
             }));
         }
 
+        getTypeDefinition(line: number, offset: number, fileName: string): protocol.FileSpan[] {
+            var file = ts.normalizePath(fileName);
+            var project = this.projectService.getProjectForFile(file);
+            if (!project) {
+                throw Errors.NoProject;
+            }
+
+            var compilerService = project.compilerService;
+            var position = compilerService.host.lineOffsetToPosition(file, line, offset);
+
+            var definitions = compilerService.languageService.getTypeDefinitionAtPosition(file, position);
+            if (!definitions) {
+                return undefined;
+            }
+
+            return definitions.map(def => ({
+                file: def.fileName,
+                start: compilerService.host.positionToLineOffset(def.fileName, def.textSpan.start),
+                end: compilerService.host.positionToLineOffset(def.fileName, ts.textSpanEnd(def.textSpan))
+            }));
+        }
+
+        getOccurrences(line: number, offset: number, fileName: string): protocol.OccurrencesResponseItem[]{
+            fileName = ts.normalizePath(fileName);
+            let project = this.projectService.getProjectForFile(fileName);
+
+            if (!project) {
+                throw Errors.NoProject;
+            }
+
+            let { compilerService } = project;
+            let position = compilerService.host.lineOffsetToPosition(fileName, line, offset);
+
+            let occurrences = compilerService.languageService.getOccurrencesAtPosition(fileName, position);
+
+            if (!occurrences) {
+                return undefined;
+            }
+
+            return occurrences.map(occurrence => {
+                let { fileName, isWriteAccess, textSpan } = occurrence;
+                let start = compilerService.host.positionToLineOffset(fileName, textSpan.start);
+                let end = compilerService.host.positionToLineOffset(fileName, ts.textSpanEnd(textSpan));
+                return {
+                    start,
+                    end,
+                    file: fileName,
+                    isWriteAccess
+                }
+            });
+        }
+
         getRenameLocations(line: number, offset: number, fileName: string,findInComments: boolean, findInStrings: boolean): protocol.RenameResponseBody {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
@@ -377,7 +432,7 @@ module ts.server {
             var nameSpan = nameInfo.textSpan;
             var nameColStart = compilerService.host.positionToLineOffset(file, nameSpan.start).offset;
             var nameText = compilerService.host.getScriptSnapshot(file).getText(nameSpan.start, ts.textSpanEnd(nameSpan));
-            var bakedRefs: protocol.ReferencesResponseItem[] = references.map((ref) => {
+            var bakedRefs: protocol.ReferencesResponseItem[] = references.map(ref => {
                 var start = compilerService.host.positionToLineOffset(ref.fileName, ref.textSpan.start);
                 var refLineSpan = compilerService.host.lineToTextSpan(ref.fileName, start.line - 1);
                 var snap = compilerService.host.getScriptSnapshot(ref.fileName);
@@ -487,13 +542,16 @@ module ts.server {
                                 IndentSize: formatOptions.IndentSize,
                                 TabSize: formatOptions.TabSize,
                                 NewLineCharacter: "\n",
-                                ConvertTabsToSpaces: true,
+                                ConvertTabsToSpaces: formatOptions.ConvertTabsToSpaces,
                             };
                             var indentPosition =
                                 compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);
                             for (var i = 0, len = lineText.length; i < len; i++) {
                                 if (lineText.charAt(i) == " ") {
                                     indentPosition--;
+                                }
+                                else if (lineText.charAt(i) == "\t") {
+                                    indentPosition -= editorOptions.IndentSize;
                                 }
                                 else {
                                     break;
@@ -758,6 +816,9 @@ module ts.server {
             }));
         }
 
+        exit() {
+        }
+
         onMessage(message: string) {
             if (this.logger.isVerbose()) {
                 this.logger.info("request: " + message);
@@ -769,9 +830,19 @@ module ts.server {
                 var errorMessage: string;
                 var responseRequired = true;
                 switch (request.command) {
+                    case CommandNames.Exit: {
+                        this.exit();
+                        responseRequired = false;
+                        break;
+                    }
                     case CommandNames.Definition: { 
                         var defArgs = <protocol.FileLocationRequestArgs>request.arguments;
                         response = this.getDefinition(defArgs.line, defArgs.offset, defArgs.file);
+                        break;
+                    }
+                    case CommandNames.TypeDefinition: {
+                        var defArgs = <protocol.FileLocationRequestArgs>request.arguments;
+                        response = this.getTypeDefinition(defArgs.line, defArgs.offset, defArgs.file);
                         break;
                     }
                     case CommandNames.References: { 
@@ -873,6 +944,11 @@ module ts.server {
                     case CommandNames.NavBar: {
                         var navBarArgs = <protocol.FileRequestArgs>request.arguments;
                         response = this.getNavigationBarItems(navBarArgs.file);
+                        break;
+                    }
+                    case CommandNames.Occurrences: {
+                        var { line, offset, file: fileName } = <protocol.FileLocationRequestArgs>request.arguments;
+                        response = this.getOccurrences(line, offset, fileName);
                         break;
                     }
                     default: {

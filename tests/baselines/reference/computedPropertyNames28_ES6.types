@@ -20,6 +20,7 @@ class C extends Base {
 >super(), "prop" : string
 >super() : void
 >super : typeof Base
+>"prop" : string
 
         };
     }

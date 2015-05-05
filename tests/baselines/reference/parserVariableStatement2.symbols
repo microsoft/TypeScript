@@ -1,0 +1,10 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserVariableStatement2.ts ===
+var a
+>a : Symbol(a, Decl(parserVariableStatement2.ts, 0, 3))
+
+  , b
+>b : Symbol(b, Decl(parserVariableStatement2.ts, 1, 3))
+
+  , c
+>c : Symbol(c, Decl(parserVariableStatement2.ts, 2, 3))
+

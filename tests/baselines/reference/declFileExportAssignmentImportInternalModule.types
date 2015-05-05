@@ -3,7 +3,7 @@ module m3 {
 >m3 : typeof m3
 
     export module m2 {
->m2 : unknown
+>m2 : any
 
         export interface connectModule {
 >connectModule : connectModule
@@ -33,17 +33,17 @@ module m3 {
 >server : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
 
         (): m2.connectExport;
->m2 : unknown
+>m2 : any
 >connectExport : m2.connectExport
 
         test1: m2.connectModule;
 >test1 : m2.connectModule
->m2 : unknown
+>m2 : any
 >connectModule : m2.connectModule
 
         test2(): m2.connectModule;
 >test2 : () => m2.connectModule
->m2 : unknown
+>m2 : any
 >connectModule : m2.connectModule
 
     };

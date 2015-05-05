@@ -6,7 +6,9 @@ var a = () => <Error>{ name: "foo", message: "bar" };
 >Error : Error
 >{ name: "foo", message: "bar" } : { name: string; message: string; }
 >name : string
+>"foo" : string
 >message : string
+>"bar" : string
 
 var b = () => (<Error>{ name: "foo", message: "bar" });    
 >b : () => Error
@@ -16,7 +18,9 @@ var b = () => (<Error>{ name: "foo", message: "bar" });
 >Error : Error
 >{ name: "foo", message: "bar" } : { name: string; message: string; }
 >name : string
+>"foo" : string
 >message : string
+>"bar" : string
 
 var c = () => ({ name: "foo", message: "bar" });           
 >c : () => { name: string; message: string; }
@@ -24,7 +28,9 @@ var c = () => ({ name: "foo", message: "bar" });
 >({ name: "foo", message: "bar" }) : { name: string; message: string; }
 >{ name: "foo", message: "bar" } : { name: string; message: string; }
 >name : string
+>"foo" : string
 >message : string
+>"bar" : string
 
 var d = () => ((<Error>({ name: "foo", message: "bar" })));
 >d : () => Error
@@ -36,5 +42,7 @@ var d = () => ((<Error>({ name: "foo", message: "bar" })));
 >({ name: "foo", message: "bar" }) : { name: string; message: string; }
 >{ name: "foo", message: "bar" } : { name: string; message: string; }
 >name : string
+>"foo" : string
 >message : string
+>"bar" : string
 

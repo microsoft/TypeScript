@@ -1,7 +1,7 @@
 /// <reference path="types.ts"/>
 
+/* @internal */
 module ts {
-
     // Ternary values are defined such that
     // x & y is False if either x or y is False.
     // x & y is Maybe if either x or y is Maybe, but neither x or y is False.
@@ -281,6 +281,17 @@ module ts {
         return result;
     }
 
+    export function memoize<T>(callback: () => T): () => T {
+        let value: T;
+        return () => {
+            if (callback) {
+                value = callback();
+                callback = undefined;
+            }
+            return value;
+        };
+    }
+
     function formatStringFromArgs(text: string, args: { [index: number]: any; }, baseIndex?: number): string {
         baseIndex = baseIndex || 0;
 
@@ -434,7 +445,7 @@ module ts {
         return path.replace(/\\/g, "/");
     }
 
-    // Returns length of path root (i.e. length of "/", "x:/", "//server/share/")
+    // Returns length of path root (i.e. length of "/", "x:/", "//server/share/, file:///user/files")
     export function getRootLength(path: string): number {
         if (path.charCodeAt(0) === CharacterCodes.slash) {
             if (path.charCodeAt(1) !== CharacterCodes.slash) return 1;
@@ -448,6 +459,8 @@ module ts {
             if (path.charCodeAt(2) === CharacterCodes.slash) return 3;
             return 2;
         }
+        let idx = path.indexOf('://');
+        if (idx !== -1) return idx + 3
         return 0;
     }
 
@@ -457,7 +470,7 @@ module ts {
         let normalized: string[] = [];
         for (let part of parts) {
             if (part !== ".") {
-                if (part === ".." && normalized.length > 0 && normalized[normalized.length - 1] !== "..") {
+                if (part === ".." && normalized.length > 0 && lastOrUndefined(normalized) !== "..") {
                     normalized.pop();
                 }
                 else {
@@ -573,7 +586,7 @@ module ts {
     export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, getCanonicalFileName: (fileName: string) => string, isAbsolutePathAnUrl: boolean) {
         let pathComponents = getNormalizedPathOrUrlComponents(relativeOrAbsolutePath, currentDirectory);
         let directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, currentDirectory);
-        if (directoryComponents.length > 1 && directoryComponents[directoryComponents.length - 1] === "") {
+        if (directoryComponents.length > 1 && lastOrUndefined(directoryComponents) === "") {
             // If the directory path given was of type test/cases/ then we really need components of directory to be only till its name
             // that is  ["test", "cases", ""] needs to be actually ["test", "cases"]
             directoryComponents.length--;
@@ -627,6 +640,7 @@ module ts {
         return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
     }
 
+    export var supportedExtensions = [".ts", ".d.ts", ".es6", ".js"];
     export function removeFileExtension(path: string): string {
         for (let ext of supportedExtensions) {
             if (fileExtensionIs(path, ext)) {
@@ -653,10 +667,6 @@ module ts {
         "\u2029": "\\u2029", // paragraphSeparator
         "\u0085": "\\u0085"  // nextLine
     };
-
-    export function getDefaultLibFileName(options: CompilerOptions): string {
-        return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
-    }
 
     export interface ObjectAllocator {
         getNodeConstructor(kind: SyntaxKind): new () => Node;

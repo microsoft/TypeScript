@@ -1,5 +1,7 @@
 === tests/cases/compiler/downlevelLetConst19.ts ===
 'use strict'
+>'use strict' : string
+
 declare function use(a: any);
 >use : (a: any) => any
 >a : any

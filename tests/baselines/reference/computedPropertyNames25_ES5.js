@@ -14,7 +14,7 @@ class C extends Base {
 }
 
 //// [computedPropertyNames25_ES5.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -36,7 +36,8 @@ var C = (function (_super) {
     C.prototype.foo = function () {
         var obj = (_a = {},
             _a[_super.prototype.bar.call(this)] = function () { },
-            _a);
+            _a
+        );
         return 0;
         var _a;
     };

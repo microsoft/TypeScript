@@ -2,10 +2,11 @@
 class C {
 >C : C
 
-    get [Symbol.isRegExp]() { return ""; }
->Symbol.isRegExp : symbol
+    get [Symbol.toPrimitive]() { return ""; }
+>Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
->isRegExp : symbol
+>toPrimitive : symbol
+>"" : string
 
     set [Symbol.toStringTag](x) { }
 >Symbol.toStringTag : symbol

@@ -104,7 +104,7 @@ module ts.server {
                 var response: T = JSON.parse(responseBody);
             }
             catch (e) {
-                throw new Error("Malformed response: Failed to parse server response: " + lastMessage + ". \r\n  Error detailes: " + e.message);
+                throw new Error("Malformed response: Failed to parse server response: " + lastMessage + ". \r\n  Error details: " + e.message);
             }
 
             // verify the sequence numbers
@@ -300,6 +300,32 @@ module ts.server {
             });
         }
 
+        getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
+            var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
+            var args: protocol.FileLocationRequestArgs = {
+                file: fileName,
+                line: lineOffset.line,
+                offset: lineOffset.offset,
+            };
+
+            var request = this.processRequest<protocol.TypeDefinitionRequest>(CommandNames.TypeDefinition, args);
+            var response = this.processResponse<protocol.TypeDefinitionResponse>(request);
+
+            return response.body.map(entry => {
+                var fileName = entry.file;
+                var start = this.lineOffsetToPosition(fileName, entry.start);
+                var end = this.lineOffsetToPosition(fileName, entry.end);
+                return {
+                    containerKind: "",
+                    containerName: "",
+                    fileName: fileName,
+                    textSpan: ts.createTextSpanFromBounds(start, end),
+                    kind: "",
+                    name: ""
+                };
+            });
+        }
+
         findReferences(fileName: string, position: number): ReferencedSymbol[]{
             // Not yet implemented.
             return [];
@@ -446,6 +472,7 @@ module ts.server {
             if (!response.body) {
                 return undefined;
             }
+
             var helpItems: protocol.SignatureHelpItems = response.body;
             var span = helpItems.applicableSpan;
             var start = this.lineOffsetToPosition(fileName, span.start);
@@ -465,6 +492,29 @@ module ts.server {
         }
 
         getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
+            var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
+            var args: protocol.FileLocationRequestArgs = {
+                file: fileName,
+                line: lineOffset.line,
+                offset: lineOffset.offset,
+            };
+
+            var request = this.processRequest<protocol.OccurrencesRequest>(CommandNames.Occurrences, args);
+            var response = this.processResponse<protocol.OccurrencesResponse>(request);
+
+            return response.body.map(entry => {
+                var fileName = entry.file;
+                var start = this.lineOffsetToPosition(fileName, entry.start);
+                var end = this.lineOffsetToPosition(fileName, entry.end);
+                return {
+                    fileName,
+                    textSpan: ts.createTextSpanFromBounds(start, end),
+                    isWriteAccess: entry.isWriteAccess,
+                };
+            });
+        }
+
+        getDocumentHighlights(fileName: string, position: number): DocumentHighlights[] {
             throw new Error("Not Implemented Yet.");
         }
 
@@ -506,6 +556,14 @@ module ts.server {
         }
 
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+            throw new Error("Not Implemented Yet.");
+        }
+
+        getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications {
+            throw new Error("Not Implemented Yet.");
+        }
+
+        getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
             throw new Error("Not Implemented Yet.");
         }
 

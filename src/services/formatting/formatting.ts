@@ -3,6 +3,7 @@
 ///<reference path='rulesProvider.ts' />
 ///<reference path='references.ts' />
 
+/* @internal */
 module ts.formatting {
 
     export interface TextRangeWithKind extends TextRange {
@@ -322,14 +323,22 @@ module ts.formatting {
         let previousParent: Node;
         let previousRangeStartLine: number;
 
+        let lastIndentedLine: number;
+        let indentationOnLastIndentedLine: number;
+        
         let edits: TextChange[] = [];
 
         formattingScanner.advance();
 
         if (formattingScanner.isOnToken()) {
             let startLine = sourceFile.getLineAndCharacterOfPosition(enclosingNode.getStart(sourceFile)).line;
+            let undecoratedStartLine = startLine;
+            if (enclosingNode.decorators) {
+                undecoratedStartLine = sourceFile.getLineAndCharacterOfPosition(getNonDecoratorTokenPosOfNode(enclosingNode, sourceFile)).line;
+            }
+
             let delta = getOwnOrInheritedDelta(enclosingNode, options, sourceFile);
-            processNode(enclosingNode, enclosingNode, startLine, initialIndentation, delta);
+            processNode(enclosingNode, enclosingNode, startLine, undecoratedStartLine, initialIndentation, delta);
         }
 
         formattingScanner.close();
@@ -410,7 +419,9 @@ module ts.formatting {
                 // if node is located on the same line with the parent
                 // - inherit indentation from the parent
                 // - push children if either parent of node itself has non-zero delta
-                indentation = parentDynamicIndentation.getIndentation();
+                indentation = startLine === lastIndentedLine 
+                    ? indentationOnLastIndentedLine 
+                    : parentDynamicIndentation.getIndentation();
                 delta = Math.min(options.IndentSize, parentDynamicIndentation.getDelta() + delta);
             }
             return {
@@ -500,7 +511,7 @@ module ts.formatting {
             }
         }
 
-        function processNode(node: Node, contextNode: Node, nodeStartLine: number, indentation: number, delta: number) {
+        function processNode(node: Node, contextNode: Node, nodeStartLine: number, undecoratedNodeStartLine: number, indentation: number, delta: number) {
             if (!rangeOverlapsWithStartEnd(originalRange, node.getStart(sourceFile), node.getEnd())) {
                 return;
             }
@@ -526,7 +537,7 @@ module ts.formatting {
             forEachChild(
                 node,
                 child => {
-                    processChildNode(child, /*inheritedIndentation*/ Constants.Unknown, node, nodeDynamicIndentation, nodeStartLine, /*isListElement*/ false)
+                    processChildNode(child, /*inheritedIndentation*/ Constants.Unknown, node, nodeDynamicIndentation, nodeStartLine, undecoratedNodeStartLine, /*isListElement*/ false)
                 },
                 (nodes: NodeArray<Node>) => {
                     processChildNodes(nodes, node, nodeStartLine, nodeDynamicIndentation);
@@ -547,11 +558,17 @@ module ts.formatting {
                 parent: Node,
                 parentDynamicIndentation: DynamicIndentation,
                 parentStartLine: number,
+                undecoratedParentStartLine: number,
                 isListItem: boolean): number {
 
                 let childStartPos = child.getStart(sourceFile);
 
-                let childStart = sourceFile.getLineAndCharacterOfPosition(childStartPos);
+                let childStartLine = sourceFile.getLineAndCharacterOfPosition(childStartPos).line;
+
+                let undecoratedChildStartLine = childStartLine;
+                if (child.decorators) {
+                    undecoratedChildStartLine = sourceFile.getLineAndCharacterOfPosition(getNonDecoratorTokenPosOfNode(child, sourceFile)).line;
+                }
 
                 // if child is a list item - try to get its indentation
                 let childIndentationAmount = Constants.Unknown;
@@ -594,9 +611,10 @@ module ts.formatting {
                     return inheritedIndentation;
                 }
 
-                let childIndentation = computeIndentation(child, childStart.line, childIndentationAmount, node, parentDynamicIndentation, parentStartLine);
+                let effectiveParentStartLine = child.kind === SyntaxKind.Decorator ? childStartLine : undecoratedParentStartLine;
+                let childIndentation = computeIndentation(child, childStartLine, childIndentationAmount, node, parentDynamicIndentation, effectiveParentStartLine);
 
-                processNode(child, childContextNode, childStart.line, childIndentation.indentation, childIndentation.delta);
+                processNode(child, childContextNode, childStartLine, undecoratedChildStartLine, childIndentation.indentation, childIndentation.delta);
 
                 childContextNode = node;
 
@@ -640,7 +658,7 @@ module ts.formatting {
 
                 let inheritedIndentation = Constants.Unknown;
                 for (let child of nodes) {
-                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, /*isListElement*/ true)
+                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListElement*/ true)
                 }
 
                 if (listEndToken !== SyntaxKind.Unknown) {
@@ -703,7 +721,6 @@ module ts.formatting {
                                 continue;
                             }
 
-                            let triviaStartLine = sourceFile.getLineAndCharacterOfPosition(triviaItem.pos).line;
                             switch (triviaItem.kind) {
                                 case SyntaxKind.MultiLineCommentTrivia:
                                     let commentIndentation = dynamicIndentation.getIndentationForComment(currentTokenInfo.token.kind);
@@ -728,6 +745,9 @@ module ts.formatting {
                     if (isTokenInRange && !rangeContainsError(currentTokenInfo.token)) {
                         let tokenIndentation = dynamicIndentation.getIndentationForToken(tokenStart.line, currentTokenInfo.token.kind);
                         insertIndentation(currentTokenInfo.token.pos, tokenIndentation, lineAdded);
+                        
+                        lastIndentedLine = tokenStart.line;
+                        indentationOnLastIndentedLine = tokenIndentation;
                     }
                 }
 

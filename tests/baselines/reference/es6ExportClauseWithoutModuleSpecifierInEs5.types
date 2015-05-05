@@ -11,12 +11,14 @@ export module m {
 
     export var x = 10;
 >x : number
+>10 : number
 }
 export var x = 10;
 >x : number
+>10 : number
 
 export module uninstantiated {
->uninstantiated : unknown
+>uninstantiated : any
 }
 
 === tests/cases/compiler/client.ts ===
@@ -28,12 +30,12 @@ export { c as c2 } from "server";
 >c2 : typeof c
 
 export { i, m as instantiatedModule } from "server";
->i : unknown
+>i : any
 >m : typeof instantiatedModule
 >instantiatedModule : typeof instantiatedModule
 
 export { uninstantiated } from "server";
->uninstantiated : unknown
+>uninstantiated : any
 
 export { x } from "server";
 >x : number

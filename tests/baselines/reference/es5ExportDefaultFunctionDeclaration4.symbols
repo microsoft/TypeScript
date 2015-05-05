@@ -1,0 +1,15 @@
+=== tests/cases/compiler/es5ExportDefaultFunctionDeclaration4.ts ===
+
+declare module "bar" {
+    var before: typeof func;
+>before : Symbol(before, Decl(es5ExportDefaultFunctionDeclaration4.ts, 2, 7))
+>func : Symbol(func, Decl(es5ExportDefaultFunctionDeclaration4.ts, 2, 28))
+
+    export default function func(): typeof func;
+>func : Symbol(func, Decl(es5ExportDefaultFunctionDeclaration4.ts, 2, 28))
+>func : Symbol(func, Decl(es5ExportDefaultFunctionDeclaration4.ts, 2, 28))
+
+    var after: typeof func;
+>after : Symbol(after, Decl(es5ExportDefaultFunctionDeclaration4.ts, 6, 7))
+>func : Symbol(func, Decl(es5ExportDefaultFunctionDeclaration4.ts, 2, 28))
+}

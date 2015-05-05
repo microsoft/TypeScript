@@ -1,0 +1,16 @@
+=== tests/cases/conformance/es6/restParameters/emitRestParametersFunctionProperty.ts ===
+var obj: {
+>obj : Symbol(obj, Decl(emitRestParametersFunctionProperty.ts, 0, 3))
+
+    func1: (...rest) => void
+>func1 : Symbol(func1, Decl(emitRestParametersFunctionProperty.ts, 0, 10))
+>rest : Symbol(rest, Decl(emitRestParametersFunctionProperty.ts, 1, 12))
+}
+
+var obj2 = {
+>obj2 : Symbol(obj2, Decl(emitRestParametersFunctionProperty.ts, 4, 3))
+
+    func(...rest) { }
+>func : Symbol(func, Decl(emitRestParametersFunctionProperty.ts, 4, 12))
+>rest : Symbol(rest, Decl(emitRestParametersFunctionProperty.ts, 5, 9))
+}

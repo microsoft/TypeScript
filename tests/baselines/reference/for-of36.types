@@ -2,6 +2,8 @@
 var tuple: [string, boolean] = ["", true];
 >tuple : [string, boolean]
 >["", true] : [string, boolean]
+>"" : string
+>true : boolean
 
 for (var v of tuple) {
 >v : string | boolean

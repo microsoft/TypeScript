@@ -424,7 +424,7 @@ module ts.server {
         
         getFormatCodeOptions(file?: string) {
             if (file) {
-                var info = this.filenameToScriptInfo[file];                
+                var info = this.filenameToScriptInfo[file];
                 if (info) {
                     return info.formatCodeOptions;
                 }
@@ -458,7 +458,7 @@ module ts.server {
                 var info = this.filenameToScriptInfo[args.file];
                 if (info) {
                     info.setFormatOptions(args.formatOptions);  
-                    this.log("Host configuration update for file " + args.file);
+                    this.log("Host configuration update for file " + args.file, "Info");
                 }
             }
             else {
@@ -750,6 +750,7 @@ module ts.server {
                 if (content !== undefined) {
                     var indentSize: number;
                     info = new ScriptInfo(this.host, fileName, content, openedByClient);
+                    info.setFormatOptions(this.getFormatCodeOptions());
                     this.filenameToScriptInfo[fileName] = info;
                     if (!info.isOpen) {
                         info.fileWatcher = this.host.watchFile(fileName, _ => { this.watchedFileChanged(fileName); });
@@ -772,7 +773,7 @@ module ts.server {
         findConfigFile(searchPath: string): string {
             while (true) {
                 var fileName = ts.combinePaths(searchPath, "tsconfig.json");
-                if (sys.fileExists(fileName)) {
+                if (this.host.fileExists(fileName)) {
                     return fileName;
                 }
                 var parentPath = ts.getDirectoryPath(searchPath);
@@ -823,7 +824,6 @@ module ts.server {
          */
 
         closeClientFile(filename: string) {
-            // TODO: tsconfig check
             var info = ts.lookUp(this.filenameToScriptInfo, filename);
             if (info) {
                 this.closeOpenFile(info);
@@ -856,6 +856,9 @@ module ts.server {
         }
 
         printProjects() {
+            if (!this.psLogger.isVerbose()) {
+                return;
+            }
             this.psLogger.startGroup();
             for (var i = 0, len = this.inferredProjects.length; i < len; i++) {
                 var project = this.inferredProjects[i];
@@ -908,7 +911,7 @@ module ts.server {
                 return { errorMsg: "tsconfig syntax error" };
             }
             else {
-                var parsedCommandLine = ts.parseConfigFile(rawConfig, dirPath);
+                var parsedCommandLine = ts.parseConfigFile(rawConfig, ts.sys, dirPath);
                 if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
                     return { errorMsg: "tsconfig option errors" };
                 }
@@ -920,7 +923,7 @@ module ts.server {
                     var proj = this.createProject(configFilename, projectOptions);
                     for (var i = 0, len = parsedCommandLine.fileNames.length; i < len; i++) {
                         var rootFilename = parsedCommandLine.fileNames[i];
-                        if (ts.sys.fileExists(rootFilename)) {
+                        if (this.host.fileExists(rootFilename)) {
                             var info = this.openFile(rootFilename, clientFileName == rootFilename);
                             proj.addRoot(info);
                         }

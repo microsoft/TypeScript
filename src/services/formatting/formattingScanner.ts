@@ -1,6 +1,7 @@
 /// <reference path="formatting.ts"/>
 /// <reference path="..\..\compiler\scanner.ts"/>
 
+/* @internal */
 module ts.formatting {
     let scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
 
@@ -50,7 +51,7 @@ module ts.formatting {
             if (isStarted) {
                 if (trailingTrivia) {
                     Debug.assert(trailingTrivia.length !== 0);
-                    wasNewLine = trailingTrivia[trailingTrivia.length - 1].kind === SyntaxKind.NewLineTrivia;
+                    wasNewLine = lastOrUndefined(trailingTrivia).kind === SyntaxKind.NewLineTrivia;
                 }
                 else {
                     wasNewLine = false;

@@ -6,15 +6,19 @@ export class c {
     }
     private x = 10;
 >x : number
+>10 : number
 
     public y = 30;
 >y : number
+>30 : number
 
     static k = 20;
 >k : number
+>20 : number
 
     private static l = 30;
 >l : number
+>30 : number
 
     private method1() {
 >method1 : () => void
@@ -36,15 +40,19 @@ class c2 {
     }
     private x = 10;
 >x : number
+>10 : number
 
     public y = 30;
 >y : number
+>30 : number
 
     static k = 20;
 >k : number
+>20 : number
 
     private static l = 30;
 >l : number
+>30 : number
 
     private method1() {
 >method1 : () => void
@@ -77,15 +85,19 @@ export module m1 {
         }
         private x = 10;
 >x : number
+>10 : number
 
         public y = 30;
 >y : number
+>30 : number
 
         static k = 20;
 >k : number
+>20 : number
 
         private static l = 30;
 >l : number
+>30 : number
 
         private method1() {
 >method1 : () => void
@@ -107,15 +119,19 @@ export module m1 {
         }
         private x = 10;
 >x : number
+>10 : number
 
         public y = 30;
 >y : number
+>30 : number
 
         static k = 20;
 >k : number
+>20 : number
 
         private static l = 30;
 >l : number
+>30 : number
 
         private method1() {
 >method1 : () => void
@@ -156,15 +172,19 @@ module m2 {
         }
         private x = 10;
 >x : number
+>10 : number
 
         public y = 30;
 >y : number
+>30 : number
 
         static k = 20;
 >k : number
+>20 : number
 
         private static l = 30;
 >l : number
+>30 : number
 
         private method1() {
 >method1 : () => void
@@ -186,15 +206,19 @@ module m2 {
         }
         private x = 10;
 >x : number
+>10 : number
 
         public y = 30;
 >y : number
+>30 : number
 
         static k = 20;
 >k : number
+>20 : number
 
         private static l = 30;
 >l : number
+>30 : number
 
         private method1() {
 >method1 : () => void

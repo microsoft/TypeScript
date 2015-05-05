@@ -1,0 +1,12 @@
+=== tests/cases/compiler/functionWithDefaultParameterWithNoStatements15.ts ===
+var v: any[];
+>v : Symbol(v, Decl(functionWithDefaultParameterWithNoStatements15.ts, 0, 3))
+
+function foo(a = (1 + 1)) { }
+>foo : Symbol(foo, Decl(functionWithDefaultParameterWithNoStatements15.ts, 0, 13))
+>a : Symbol(a, Decl(functionWithDefaultParameterWithNoStatements15.ts, 2, 13))
+
+function bar(a = (1 + 1)) {
+>bar : Symbol(bar, Decl(functionWithDefaultParameterWithNoStatements15.ts, 2, 29))
+>a : Symbol(a, Decl(functionWithDefaultParameterWithNoStatements15.ts, 4, 13))
+}

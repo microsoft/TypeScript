@@ -74,5 +74,6 @@ class D implements MyDoc {
 >Base : Base
 
         return null;
+>null : null
     }
 }
