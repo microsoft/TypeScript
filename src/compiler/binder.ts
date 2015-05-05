@@ -445,7 +445,7 @@ module ts {
                         // Using ParameterExcludes flag allows the compiler to report an error on duplicate identifiers in Parameter Declaration
                         // For example:
                         //      function foo([a,a]) {} // Duplicate Identifier error
-                        //      function bar(a,a) {}   // Duplicate Identifier error, binding parameter declaration in this case is handled in bindParameter
+                        //      function bar(a,a) {}   // Duplicate Identifier error, parameter declaration in this case is handled in bindParameter
                         //                             // which correctly set excluded symbols
                         bindDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes, /*isBlockScopeContainer*/ false);
                     }
