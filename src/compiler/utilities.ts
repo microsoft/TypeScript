@@ -1438,8 +1438,7 @@ module ts {
             if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
                 // 1. in-browser single file compilation scenario
                 // 2. non .js file
-                return (compilerOptions.separateCompilation && compilerOptions.allowNonTsExtensions) ||
-                    !fileExtensionIs(sourceFile.fileName, ".js");
+                return compilerOptions.separateCompilation || !fileExtensionIs(sourceFile.fileName, ".js");
             }
             return false;
         }
