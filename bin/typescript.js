@@ -547,6 +547,11 @@ var ts;
         ModuleKind[ModuleKind["System"] = 4] = "System";
     })(ts.ModuleKind || (ts.ModuleKind = {}));
     var ModuleKind = ts.ModuleKind;
+    (function (NewLineKind) {
+        NewLineKind[NewLineKind["CarriageReturnLineFeed"] = 0] = "CarriageReturnLineFeed";
+        NewLineKind[NewLineKind["LineFeed"] = 1] = "LineFeed";
+    })(ts.NewLineKind || (ts.NewLineKind = {}));
+    var NewLineKind = ts.NewLineKind;
     (function (ScriptTarget) {
         ScriptTarget[ScriptTarget["ES3"] = 0] = "ES3";
         ScriptTarget[ScriptTarget["ES5"] = 1] = "ES5";
@@ -1137,7 +1142,7 @@ var ts;
         for (var _i = 0; _i < parts.length; _i++) {
             var part = parts[_i];
             if (part !== ".") {
-                if (part === ".." && normalized.length > 0 && normalized[normalized.length - 1] !== "..") {
+                if (part === ".." && normalized.length > 0 && lastOrUndefined(normalized) !== "..") {
                     normalized.pop();
                 }
                 else {
@@ -1244,7 +1249,7 @@ var ts;
     function getRelativePathToDirectoryOrUrl(directoryPathOrUrl, relativeOrAbsolutePath, currentDirectory, getCanonicalFileName, isAbsolutePathAnUrl) {
         var pathComponents = getNormalizedPathOrUrlComponents(relativeOrAbsolutePath, currentDirectory);
         var directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, currentDirectory);
-        if (directoryComponents.length > 1 && directoryComponents[directoryComponents.length - 1] === "") {
+        if (directoryComponents.length > 1 && lastOrUndefined(directoryComponents) === "") {
             // If the directory path given was of type test/cases/ then we really need components of directory to be only till its name
             // that is  ["test", "cases", ""] needs to be actually ["test", "cases"]
             directoryComponents.length--;
@@ -2154,6 +2159,9 @@ var ts;
         Preserve_new_lines_when_emitting_code: { code: 6057, category: ts.DiagnosticCategory.Message, key: "Preserve new-lines when emitting code." },
         Specifies_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir: { code: 6058, category: ts.DiagnosticCategory.Message, key: "Specifies the root directory of input files. Use to control the output directory structure with --outDir." },
         File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files: { code: 6059, category: ts.DiagnosticCategory.Error, key: "File '{0}' is not under 'rootDir' '{1}'. 'rootDir' is expected to contain all source files." },
+        Specifies_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix: { code: 6060, category: ts.DiagnosticCategory.Message, key: "Specifies the end of line sequence to be used when emitting files: 'CRLF' (dos) or 'LF' (unix)." },
+        NEWLINE: { code: 6061, category: ts.DiagnosticCategory.Message, key: "NEWLINE" },
+        Argument_for_newLine_option_must_be_CRLF_or_LF: { code: 6062, category: ts.DiagnosticCategory.Error, key: "Argument for '--newLine' option must be 'CRLF' or 'LF'." },
         Variable_0_implicitly_has_an_1_type: { code: 7005, category: ts.DiagnosticCategory.Error, key: "Variable '{0}' implicitly has an '{1}' type." },
         Parameter_0_implicitly_has_an_1_type: { code: 7006, category: ts.DiagnosticCategory.Error, key: "Parameter '{0}' implicitly has an '{1}' type." },
         Member_0_implicitly_has_an_1_type: { code: 7008, category: ts.DiagnosticCategory.Error, key: "Member '{0}' implicitly has an '{1}' type." },
@@ -2652,7 +2660,7 @@ var ts;
                     }
                     collecting = true;
                     if (result && result.length) {
-                        result[result.length - 1].hasTrailingNewLine = true;
+                        ts.lastOrUndefined(result).hasTrailingNewLine = true;
                     }
                     continue;
                 case 9 /* tab */:
@@ -2698,7 +2706,7 @@ var ts;
                 default:
                     if (ch > 127 /* maxAsciiCharacter */ && (isWhiteSpace(ch) || isLineBreak(ch))) {
                         if (result && result.length && isLineBreak(ch)) {
-                            result[result.length - 1].hasTrailingNewLine = true;
+                            ts.lastOrUndefined(result).hasTrailingNewLine = true;
                         }
                         pos++;
                         continue;
@@ -2728,8 +2736,7 @@ var ts;
             ch > 127 /* maxAsciiCharacter */ && isUnicodeIdentifierPart(ch, languageVersion);
     }
     ts.isIdentifierPart = isIdentifierPart;
-    // Creates a scanner over a (possibly unspecified) range of a piece of text.
-    /* @internal */
+    /** Creates a scanner over a (possibly unspecified) range of a piece of text. */
     function createScanner(languageVersion, skipTrivia, text, onError, start, length) {
         var pos; // Current position (end position of text of current token)
         var end; // end of text
@@ -4924,7 +4931,7 @@ var ts;
     }
     ts.hasQuestionToken = hasQuestionToken;
     function hasRestParameters(s) {
-        return s.parameters.length > 0 && s.parameters[s.parameters.length - 1].dotDotDotToken !== undefined;
+        return s.parameters.length > 0 && ts.lastOrUndefined(s.parameters).dotDotDotToken !== undefined;
     }
     ts.hasRestParameters = hasRestParameters;
     function isLiteralKind(kind) {
@@ -5388,7 +5395,7 @@ var ts;
                 var lineStartsOfS = ts.computeLineStarts(s);
                 if (lineStartsOfS.length > 1) {
                     lineCount = lineCount + lineStartsOfS.length - 1;
-                    linePos = output.length - s.length + lineStartsOfS[lineStartsOfS.length - 1];
+                    linePos = output.length - s.length + ts.lastOrUndefined(lineStartsOfS);
                 }
             }
         }
@@ -5457,8 +5464,10 @@ var ts;
     ts.getFirstConstructorWithBody = getFirstConstructorWithBody;
     function shouldEmitToOwnFile(sourceFile, compilerOptions) {
         if (!isDeclarationFile(sourceFile)) {
-            if ((isExternalModule(sourceFile) || !compilerOptions.out) && !ts.fileExtensionIs(sourceFile.fileName, ".js")) {
-                return true;
+            if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
+                // 1. in-browser single file compilation scenario
+                // 2. non .js file
+                return compilerOptions.separateCompilation || !ts.fileExtensionIs(sourceFile.fileName, ".js");
             }
             return false;
         }
@@ -7465,7 +7474,7 @@ var ts;
             templateSpans.pos = getNodePos();
             do {
                 templateSpans.push(parseTemplateSpan());
-            } while (templateSpans[templateSpans.length - 1].literal.kind === 12 /* TemplateMiddle */);
+            } while (ts.lastOrUndefined(templateSpans).literal.kind === 12 /* TemplateMiddle */);
             templateSpans.end = getNodeEnd();
             template.templateSpans = templateSpans;
             return finishNode(template);
@@ -13656,7 +13665,7 @@ var ts;
         }
         function getRestTypeOfSignature(signature) {
             if (signature.hasRestParameter) {
-                var type = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
+                var type = getTypeOfSymbol(ts.lastOrUndefined(signature.parameters));
                 if (type.flags & 4096 /* Reference */ && type.target === globalArrayType) {
                     return type.typeArguments[0];
                 }
@@ -15965,7 +15974,7 @@ var ts;
                         // If last parameter is contextually rest parameter get its type
                         if (indexOfParameter === (func.parameters.length - 1) &&
                             funcHasRestParameters && contextualSignature.hasRestParameter && func.parameters.length >= contextualSignature.parameters.length) {
-                            return getTypeOfSymbol(contextualSignature.parameters[contextualSignature.parameters.length - 1]);
+                            return getTypeOfSymbol(ts.lastOrUndefined(contextualSignature.parameters));
                         }
                     }
                 }
@@ -17366,9 +17375,9 @@ var ts;
                 links.type = instantiateType(getTypeAtPosition(context, i), mapper);
             }
             if (signature.hasRestParameter && context.hasRestParameter && signature.parameters.length >= context.parameters.length) {
-                var parameter = signature.parameters[signature.parameters.length - 1];
+                var parameter = ts.lastOrUndefined(signature.parameters);
                 var links = getSymbolLinks(parameter);
-                links.type = instantiateType(getTypeOfSymbol(context.parameters[context.parameters.length - 1]), mapper);
+                links.type = instantiateType(getTypeOfSymbol(ts.lastOrUndefined(context.parameters)), mapper);
             }
         }
         function getReturnTypeFromBody(func, contextualMapper) {
@@ -22381,7 +22390,7 @@ var ts;
         function checkGrammarBindingElement(node) {
             if (node.dotDotDotToken) {
                 var elements = node.parent.elements;
-                if (node !== elements[elements.length - 1]) {
+                if (node !== ts.lastOrUndefined(elements)) {
                     return grammarErrorOnNode(node, ts.Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
                 }
                 if (node.name.kind === 152 /* ArrayBindingPattern */ || node.name.kind === 151 /* ObjectBindingPattern */) {
@@ -24373,7 +24382,7 @@ var ts;
                 var sourceMapNameIndexMap = {};
                 var sourceMapNameIndices = [];
                 function getSourceMapNameIndex() {
-                    return sourceMapNameIndices.length ? sourceMapNameIndices[sourceMapNameIndices.length - 1] : -1;
+                    return sourceMapNameIndices.length ? ts.lastOrUndefined(sourceMapNameIndices) : -1;
                 }
                 // Last recorded and encoded spans
                 var lastRecordedSourceMapSpan;
@@ -27145,11 +27154,11 @@ var ts;
                     emitNodeWithoutSourceMap(memberName);
                 }
             }
-            function getInitializedProperties(node, static) {
+            function getInitializedProperties(node, isStatic) {
                 var properties = [];
                 for (var _a = 0, _b = node.members; _a < _b.length; _a++) {
                     var member = _b[_a];
-                    if (member.kind === 133 /* PropertyDeclaration */ && static === ((member.flags & 128 /* Static */) !== 0) && member.initializer) {
+                    if (member.kind === 133 /* PropertyDeclaration */ && isStatic === ((member.flags & 128 /* Static */) !== 0) && member.initializer) {
                         properties.push(member);
                     }
                 }
@@ -29368,11 +29377,11 @@ var ts;
                 }
             }
             function hasDetachedComments(pos) {
-                return detachedCommentsInfo !== undefined && detachedCommentsInfo[detachedCommentsInfo.length - 1].nodePos === pos;
+                return detachedCommentsInfo !== undefined && ts.lastOrUndefined(detachedCommentsInfo).nodePos === pos;
             }
             function getLeadingCommentsWithoutDetachedComments() {
                 // get the leading comments from detachedPos
-                var leadingComments = ts.getLeadingCommentRanges(currentSourceFile.text, detachedCommentsInfo[detachedCommentsInfo.length - 1].detachedCommentEndPos);
+                var leadingComments = ts.getLeadingCommentRanges(currentSourceFile.text, ts.lastOrUndefined(detachedCommentsInfo).detachedCommentEndPos);
                 if (detachedCommentsInfo.length - 1) {
                     detachedCommentsInfo.pop();
                 }
@@ -29473,13 +29482,13 @@ var ts;
                         // All comments look like they could have been part of the copyright header.  Make
                         // sure there is at least one blank line between it and the node.  If not, it's not
                         // a copyright header.
-                        var lastCommentLine = ts.getLineOfLocalPosition(currentSourceFile, detachedComments[detachedComments.length - 1].end);
+                        var lastCommentLine = ts.getLineOfLocalPosition(currentSourceFile, ts.lastOrUndefined(detachedComments).end);
                         var nodeLine = ts.getLineOfLocalPosition(currentSourceFile, ts.skipTrivia(currentSourceFile.text, node.pos));
                         if (nodeLine >= lastCommentLine + 2) {
                             // Valid detachedComments
                             ts.emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
                             ts.emitComments(currentSourceFile, writer, detachedComments, true, newLine, writeComment);
-                            var currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: detachedComments[detachedComments.length - 1].end };
+                            var currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: ts.lastOrUndefined(detachedComments).end };
                             if (detachedCommentsInfo) {
                                 detachedCommentsInfo.push(currentDetachedCommentInfo);
                             }
@@ -29521,6 +29530,8 @@ var ts;
     /* @internal */ ts.ioWriteTime = 0;
     /** The version of the TypeScript compiler release */
     ts.version = "1.5.0";
+    var carriageReturnLineFeed = "\r\n";
+    var lineFeed = "\n";
     function findConfigFile(searchPath) {
         var fileName = "tsconfig.json";
         while (true) {
@@ -29594,6 +29605,9 @@ var ts;
                 }
             }
         }
+        var newLine = options.newLine === 0 /* CarriageReturnLineFeed */ ? carriageReturnLineFeed :
+            options.newLine === 1 /* LineFeed */ ? lineFeed :
+                ts.sys.newLine;
         return {
             getSourceFile: getSourceFile,
             getDefaultLibFileName: function (options) { return ts.combinePaths(ts.getDirectoryPath(ts.normalizePath(ts.sys.getExecutingFilePath())), ts.getDefaultLibFileName(options)); },
@@ -29601,7 +29615,7 @@ var ts;
             getCurrentDirectory: function () { return currentDirectory || (currentDirectory = ts.sys.getCurrentDirectory()); },
             useCaseSensitiveFileNames: function () { return ts.sys.useCaseSensitiveFileNames; },
             getCanonicalFileName: getCanonicalFileName,
-            getNewLine: function () { return ts.sys.newLine; }
+            getNewLine: function () { return newLine; }
         };
     }
     ts.createCompilerHost = createCompilerHost;
@@ -30118,6 +30132,16 @@ var ts;
             description: ts.Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_or_umd,
             paramType: ts.Diagnostics.KIND,
             error: ts.Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_or_umd
+        },
+        {
+            name: "newLine",
+            type: {
+                "crlf": 0 /* CarriageReturnLineFeed */,
+                "lf": 1 /* LineFeed */
+            },
+            description: ts.Diagnostics.Specifies_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
+            paramType: ts.Diagnostics.NEWLINE,
+            error: ts.Diagnostics.Argument_for_newLine_option_must_be_CRLF_or_LF
         },
         {
             name: "noEmit",
@@ -32529,7 +32553,7 @@ var ts;
     function nodeEndsWith(n, expectedLastToken, sourceFile) {
         var children = n.getChildren(sourceFile);
         if (children.length) {
-            var last = children[children.length - 1];
+            var last = ts.lastOrUndefined(children);
             if (last.kind === expectedLastToken) {
                 return true;
             }
@@ -33023,7 +33047,7 @@ var ts;
                 if (isStarted) {
                     if (trailingTrivia) {
                         ts.Debug.assert(trailingTrivia.length !== 0);
-                        wasNewLine = trailingTrivia[trailingTrivia.length - 1].kind === 4 /* NewLineTrivia */;
+                        wasNewLine = ts.lastOrUndefined(trailingTrivia).kind === 4 /* NewLineTrivia */;
                     }
                     else {
                         wasNewLine = false;
@@ -34482,6 +34506,8 @@ var ts;
             var previousRange;
             var previousParent;
             var previousRangeStartLine;
+            var lastIndentedLine;
+            var indentationOnLastIndentedLine;
             var edits = [];
             formattingScanner.advance();
             if (formattingScanner.isOnToken()) {
@@ -34551,7 +34577,9 @@ var ts;
                     // if node is located on the same line with the parent
                     // - inherit indentation from the parent
                     // - push children if either parent of node itself has non-zero delta
-                    indentation = parentDynamicIndentation.getIndentation();
+                    indentation = startLine === lastIndentedLine
+                        ? indentationOnLastIndentedLine
+                        : parentDynamicIndentation.getIndentation();
                     delta = Math.min(options.IndentSize, parentDynamicIndentation.getDelta() + delta);
                 }
                 return {
@@ -34799,7 +34827,6 @@ var ts;
                                 if (!ts.rangeContainsRange(originalRange, triviaItem)) {
                                     continue;
                                 }
-                                var triviaStartLine = sourceFile.getLineAndCharacterOfPosition(triviaItem.pos).line;
                                 switch (triviaItem.kind) {
                                     case 3 /* MultiLineCommentTrivia */:
                                         var commentIndentation = dynamicIndentation.getIndentationForComment(currentTokenInfo.token.kind);
@@ -34823,6 +34850,8 @@ var ts;
                         if (isTokenInRange && !rangeContainsError(currentTokenInfo.token)) {
                             var tokenIndentation = dynamicIndentation.getIndentationForToken(tokenStart.line, currentTokenInfo.token.kind);
                             insertIndentation(currentTokenInfo.token.pos, tokenIndentation, lineAdded);
+                            lastIndentedLine = tokenStart.line;
+                            indentationOnLastIndentedLine = tokenIndentation;
                         }
                     }
                     formattingScanner.advance();
@@ -38055,22 +38084,6 @@ var ts;
             }
             return ScriptElementKind.unknown;
         }
-        function getTypeKind(type) {
-            var flags = type.getFlags();
-            if (flags & 128 /* Enum */)
-                return ScriptElementKind.enumElement;
-            if (flags & 1024 /* Class */)
-                return ScriptElementKind.classElement;
-            if (flags & 2048 /* Interface */)
-                return ScriptElementKind.interfaceElement;
-            if (flags & 512 /* TypeParameter */)
-                return ScriptElementKind.typeParameterElement;
-            if (flags & 1048703 /* Intrinsic */)
-                return ScriptElementKind.primitiveType;
-            if (flags & 256 /* StringLiteral */)
-                return ScriptElementKind.primitiveType;
-            return ScriptElementKind.unknown;
-        }
         function getSymbolModifiers(symbol) {
             return symbol && symbol.declarations && symbol.declarations.length > 0
                 ? ts.getNodeModifiers(symbol.declarations[0])
@@ -38453,6 +38466,62 @@ var ts;
                 containerName: containerName
             };
         }
+        function getDefinitionFromSymbol(symbol, node) {
+            var typeChecker = program.getTypeChecker();
+            var result = [];
+            var declarations = symbol.getDeclarations();
+            var symbolName = typeChecker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
+            var symbolKind = getSymbolKind(symbol, node);
+            var containerSymbol = symbol.parent;
+            var containerName = containerSymbol ? typeChecker.symbolToString(containerSymbol, node) : "";
+            if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
+                !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
+                // Just add all the declarations. 
+                ts.forEach(declarations, function (declaration) {
+                    result.push(createDefinitionInfo(declaration, symbolKind, symbolName, containerName));
+                });
+            }
+            return result;
+            function tryAddConstructSignature(symbol, location, symbolKind, symbolName, containerName, result) {
+                // Applicable only if we are in a new expression, or we are on a constructor declaration
+                // and in either case the symbol has a construct signature definition, i.e. class
+                if (isNewExpressionTarget(location) || location.kind === 114 /* ConstructorKeyword */) {
+                    if (symbol.flags & 32 /* Class */) {
+                        var classDeclaration = symbol.getDeclarations()[0];
+                        ts.Debug.assert(classDeclaration && classDeclaration.kind === 202 /* ClassDeclaration */);
+                        return tryAddSignature(classDeclaration.members, true, symbolKind, symbolName, containerName, result);
+                    }
+                }
+                return false;
+            }
+            function tryAddCallSignature(symbol, location, symbolKind, symbolName, containerName, result) {
+                if (isCallExpressionTarget(location) || isNewExpressionTarget(location) || isNameOfFunctionDeclaration(location)) {
+                    return tryAddSignature(symbol.declarations, false, symbolKind, symbolName, containerName, result);
+                }
+                return false;
+            }
+            function tryAddSignature(signatureDeclarations, selectConstructors, symbolKind, symbolName, containerName, result) {
+                var declarations = [];
+                var definition;
+                ts.forEach(signatureDeclarations, function (d) {
+                    if ((selectConstructors && d.kind === 136 /* Constructor */) ||
+                        (!selectConstructors && (d.kind === 201 /* FunctionDeclaration */ || d.kind === 135 /* MethodDeclaration */ || d.kind === 134 /* MethodSignature */))) {
+                        declarations.push(d);
+                        if (d.body)
+                            definition = d;
+                    }
+                });
+                if (definition) {
+                    result.push(createDefinitionInfo(definition, symbolKind, symbolName, containerName));
+                    return true;
+                }
+                else if (declarations.length) {
+                    result.push(createDefinitionInfo(ts.lastOrUndefined(declarations), symbolKind, symbolName, containerName));
+                    return true;
+                }
+                return false;
+            }
+        }
         /// Goto definition
         function getDefinitionAtPosition(fileName, position) {
             synchronizeHostData();
@@ -38516,59 +38585,38 @@ var ts;
                 var shorthandContainerName = typeChecker.symbolToString(symbol.parent, node);
                 return ts.map(shorthandDeclarations, function (declaration) { return createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName); });
             }
-            var result = [];
-            var declarations = symbol.getDeclarations();
-            var symbolName = typeChecker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-            var symbolKind = getSymbolKind(symbol, node);
-            var containerSymbol = symbol.parent;
-            var containerName = containerSymbol ? typeChecker.symbolToString(containerSymbol, node) : "";
-            if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
-                !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
-                // Just add all the declarations. 
-                ts.forEach(declarations, function (declaration) {
-                    result.push(createDefinitionInfo(declaration, symbolKind, symbolName, containerName));
-                });
+            return getDefinitionFromSymbol(symbol, node);
+        }
+        /// Goto type
+        function getTypeDefinitionAtPosition(fileName, position) {
+            synchronizeHostData();
+            var sourceFile = getValidSourceFile(fileName);
+            var node = ts.getTouchingPropertyName(sourceFile, position);
+            if (!node) {
+                return undefined;
             }
-            return result;
-            function tryAddConstructSignature(symbol, location, symbolKind, symbolName, containerName, result) {
-                // Applicable only if we are in a new expression, or we are on a constructor declaration
-                // and in either case the symbol has a construct signature definition, i.e. class
-                if (isNewExpressionTarget(location) || location.kind === 114 /* ConstructorKeyword */) {
-                    if (symbol.flags & 32 /* Class */) {
-                        var classDeclaration = symbol.getDeclarations()[0];
-                        ts.Debug.assert(classDeclaration && classDeclaration.kind === 202 /* ClassDeclaration */);
-                        return tryAddSignature(classDeclaration.members, true, symbolKind, symbolName, containerName, result);
-                    }
-                }
-                return false;
+            var typeChecker = program.getTypeChecker();
+            var symbol = typeChecker.getSymbolAtLocation(node);
+            if (!symbol) {
+                return undefined;
             }
-            function tryAddCallSignature(symbol, location, symbolKind, symbolName, containerName, result) {
-                if (isCallExpressionTarget(location) || isNewExpressionTarget(location) || isNameOfFunctionDeclaration(location)) {
-                    return tryAddSignature(symbol.declarations, false, symbolKind, symbolName, containerName, result);
-                }
-                return false;
+            var type = typeChecker.getTypeOfSymbolAtLocation(symbol, node);
+            if (!type) {
+                return undefined;
             }
-            function tryAddSignature(signatureDeclarations, selectConstructors, symbolKind, symbolName, containerName, result) {
-                var declarations = [];
-                var definition;
-                ts.forEach(signatureDeclarations, function (d) {
-                    if ((selectConstructors && d.kind === 136 /* Constructor */) ||
-                        (!selectConstructors && (d.kind === 201 /* FunctionDeclaration */ || d.kind === 135 /* MethodDeclaration */ || d.kind === 134 /* MethodSignature */))) {
-                        declarations.push(d);
-                        if (d.body)
-                            definition = d;
+            if (type.flags & 16384 /* Union */) {
+                var result = [];
+                ts.forEach(type.types, function (t) {
+                    if (t.symbol) {
+                        result.push.apply(result, getDefinitionFromSymbol(t.symbol, node));
                     }
                 });
-                if (definition) {
-                    result.push(createDefinitionInfo(definition, symbolKind, symbolName, containerName));
-                    return true;
-                }
-                else if (declarations.length) {
-                    result.push(createDefinitionInfo(declarations[declarations.length - 1], symbolKind, symbolName, containerName));
-                    return true;
-                }
-                return false;
+                return result;
             }
+            if (!type.symbol) {
+                return undefined;
+            }
+            return getDefinitionFromSymbol(type.symbol, node);
         }
         function getOccurrencesAtPosition(fileName, position) {
             var results = getOccurrencesAtPositionCore(fileName, position);
@@ -40613,6 +40661,7 @@ var ts;
             getSignatureHelpItems: getSignatureHelpItems,
             getQuickInfoAtPosition: getQuickInfoAtPosition,
             getDefinitionAtPosition: getDefinitionAtPosition,
+            getTypeDefinitionAtPosition: getTypeDefinitionAtPosition,
             getReferencesAtPosition: getReferencesAtPosition,
             findReferences: findReferences,
             getOccurrencesAtPosition: getOccurrencesAtPosition,
@@ -41498,14 +41547,14 @@ var ts;
                             }
                         // fall through.
                         case 224 /* CatchClause */:
-                            return spanInNode(node.parent.statements[node.parent.statements.length - 1]);
+                            return spanInNode(ts.lastOrUndefined(node.parent.statements));
                             ;
                         case 208 /* CaseBlock */:
                             // breakpoint in last statement of the last clause
                             var caseBlock = node.parent;
-                            var lastClause = caseBlock.clauses[caseBlock.clauses.length - 1];
+                            var lastClause = ts.lastOrUndefined(caseBlock.clauses);
                             if (lastClause) {
-                                return spanInNode(lastClause.statements[lastClause.statements.length - 1]);
+                                return spanInNode(ts.lastOrUndefined(lastClause.statements));
                             }
                             return undefined;
                         // Default to parent node
@@ -41907,6 +41956,17 @@ var ts;
             var _this = this;
             return this.forwardJSONCall("getDefinitionAtPosition('" + fileName + "', " + position + ")", function () {
                 return _this.languageService.getDefinitionAtPosition(fileName, position);
+            });
+        };
+        /// GOTO Type
+        /**
+         * Computes the definition location of the type of the symbol
+         * at the requested position.
+         */
+        LanguageServiceShimObject.prototype.getTypeDefinitionAtPosition = function (fileName, position) {
+            var _this = this;
+            return this.forwardJSONCall("getTypeDefinitionAtPosition('" + fileName + "', " + position + ")", function () {
+                return _this.languageService.getTypeDefinitionAtPosition(fileName, position);
             });
         };
         LanguageServiceShimObject.prototype.getRenameInfo = function (fileName, position) {
