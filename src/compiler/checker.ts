@@ -8014,18 +8014,23 @@ module ts {
                 let func = getContainingFunction(node);
                 // If this is correct code, the func should always have a star. After all,
                 // we are in a yield context.
-                // Also, there is no point in doing an assignability check if the function
-                // has no explicit return type, because the return type is directly computed
-                // from the yield expressions.
-                if (func && func.asteriskToken && func.type) {
-                    let signatureElementType = getElementTypeFromIterableIterator(getTypeFromTypeNode(func.type), /*errorNode*/ undefined) || unknownType;
+                if (func && func.asteriskToken) {
                     let expressionType = checkExpressionCached(node.expression, /*contextualMapper*/ undefined);
+                    let expressionElementType: Type;
                     if (node.asteriskToken) {
-                        let expressionElementType = checkElementTypeOfIterable(expressionType, node.expression);
-                        checkTypeAssignableTo(expressionElementType, signatureElementType, node.expression, /*headMessage*/ undefined);
+                        expressionElementType = checkElementTypeOfIterable(expressionType, node.expression);
                     }
-                    else {
-                        checkTypeAssignableTo(expressionType, signatureElementType, node.expression, /*headMessage*/ undefined);
+                    // There is no point in doing an assignability check if the function
+                    // has no explicit return type, because the return type is directly computed
+                    // from the yield expressions.
+                    if (func.type) {
+                        let signatureElementType = getElementTypeFromIterableIterator(getTypeFromTypeNode(func.type), /*errorNode*/ undefined) || unknownType;
+                        if (node.asteriskToken) {
+                            checkTypeAssignableTo(expressionElementType, signatureElementType, node.expression, /*headMessage*/ undefined);
+                        }
+                        else {
+                            checkTypeAssignableTo(expressionType, signatureElementType, node.expression, /*headMessage*/ undefined);
+                        }
                     }
                 }
             }
@@ -9108,16 +9113,17 @@ module ts {
                 checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
             }
 
-            // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
-            // in an ambient context
-            if (produceDiagnostics && compilerOptions.noImplicitAny && !node.type && !isPrivateWithinAmbient(node)) {
-                if (nodeIsMissing(node.body)) {
+            if (produceDiagnostics && !node.type) {
+                // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
+                // in an ambient context
+                if (compilerOptions.noImplicitAny && nodeIsMissing(node.body) && !isPrivateWithinAmbient(node)) {
                     reportImplicitAnyError(node, anyType);
                 }
-                else if (node.asteriskToken) {
-                    // A generator with a body and no type annotation can still cause an implicit any if it is has
-                    // no yield expressions, or its yield expressions do not have operands. The only way to find out
-                    // is to try checking its return type.
+
+                if (node.asteriskToken && nodeIsPresent(node.body)) {
+                    // A generator with a body and no type annotation can still cause errors. It can error if the
+                    // yielded values have no common supertype, or it can give an implicit any error if it has no
+                    // yielded values. The only way to trigger these errors is to try checking its return type.
                     getReturnTypeOfSignature(getSignatureFromDeclaration(node));
                 }
             }
