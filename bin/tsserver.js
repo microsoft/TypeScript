@@ -444,7 +444,7 @@ var ts;
         for (var _i = 0; _i < parts.length; _i++) {
             var part = parts[_i];
             if (part !== ".") {
-                if (part === ".." && normalized.length > 0 && normalized[normalized.length - 1] !== "..") {
+                if (part === ".." && normalized.length > 0 && lastOrUndefined(normalized) !== "..") {
                     normalized.pop();
                 }
                 else {
@@ -536,7 +536,7 @@ var ts;
     function getRelativePathToDirectoryOrUrl(directoryPathOrUrl, relativeOrAbsolutePath, currentDirectory, getCanonicalFileName, isAbsolutePathAnUrl) {
         var pathComponents = getNormalizedPathOrUrlComponents(relativeOrAbsolutePath, currentDirectory);
         var directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, currentDirectory);
-        if (directoryComponents.length > 1 && directoryComponents[directoryComponents.length - 1] === "") {
+        if (directoryComponents.length > 1 && lastOrUndefined(directoryComponents) === "") {
             directoryComponents.length--;
         }
         for (var joinStartIndex = 0; joinStartIndex < pathComponents.length && joinStartIndex < directoryComponents.length; joinStartIndex++) {
@@ -1416,6 +1416,9 @@ var ts;
         Preserve_new_lines_when_emitting_code: { code: 6057, category: ts.DiagnosticCategory.Message, key: "Preserve new-lines when emitting code." },
         Specifies_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir: { code: 6058, category: ts.DiagnosticCategory.Message, key: "Specifies the root directory of input files. Use to control the output directory structure with --outDir." },
         File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files: { code: 6059, category: ts.DiagnosticCategory.Error, key: "File '{0}' is not under 'rootDir' '{1}'. 'rootDir' is expected to contain all source files." },
+        Specifies_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix: { code: 6060, category: ts.DiagnosticCategory.Message, key: "Specifies the end of line sequence to be used when emitting files: 'CRLF' (dos) or 'LF' (unix)." },
+        NEWLINE: { code: 6061, category: ts.DiagnosticCategory.Message, key: "NEWLINE" },
+        Argument_for_newLine_option_must_be_CRLF_or_LF: { code: 6062, category: ts.DiagnosticCategory.Error, key: "Argument for '--newLine' option must be 'CRLF' or 'LF'." },
         Variable_0_implicitly_has_an_1_type: { code: 7005, category: ts.DiagnosticCategory.Error, key: "Variable '{0}' implicitly has an '{1}' type." },
         Parameter_0_implicitly_has_an_1_type: { code: 7006, category: ts.DiagnosticCategory.Error, key: "Parameter '{0}' implicitly has an '{1}' type." },
         Member_0_implicitly_has_an_1_type: { code: 7008, category: ts.DiagnosticCategory.Error, key: "Member '{0}' implicitly has an '{1}' type." },
@@ -1844,7 +1847,7 @@ var ts;
                     }
                     collecting = true;
                     if (result && result.length) {
-                        result[result.length - 1].hasTrailingNewLine = true;
+                        ts.lastOrUndefined(result).hasTrailingNewLine = true;
                     }
                     continue;
                 case 9:
@@ -1890,7 +1893,7 @@ var ts;
                 default:
                     if (ch > 127 && (isWhiteSpace(ch) || isLineBreak(ch))) {
                         if (result && result.length && isLineBreak(ch)) {
-                            result[result.length - 1].hasTrailingNewLine = true;
+                            ts.lastOrUndefined(result).hasTrailingNewLine = true;
                         }
                         pos++;
                         continue;
@@ -2769,6 +2772,16 @@ var ts;
             description: ts.Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_or_umd,
             paramType: ts.Diagnostics.KIND,
             error: ts.Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_or_umd
+        },
+        {
+            name: "newLine",
+            type: {
+                "crlf": 0,
+                "lf": 1
+            },
+            description: ts.Diagnostics.Specifies_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
+            paramType: ts.Diagnostics.NEWLINE,
+            error: ts.Diagnostics.Argument_for_newLine_option_must_be_CRLF_or_LF
         },
         {
             name: "noEmit",
@@ -3769,7 +3782,7 @@ var ts;
     }
     ts.hasQuestionToken = hasQuestionToken;
     function hasRestParameters(s) {
-        return s.parameters.length > 0 && s.parameters[s.parameters.length - 1].dotDotDotToken !== undefined;
+        return s.parameters.length > 0 && ts.lastOrUndefined(s.parameters).dotDotDotToken !== undefined;
     }
     ts.hasRestParameters = hasRestParameters;
     function isLiteralKind(kind) {
@@ -4197,7 +4210,7 @@ var ts;
                 var lineStartsOfS = ts.computeLineStarts(s);
                 if (lineStartsOfS.length > 1) {
                     lineCount = lineCount + lineStartsOfS.length - 1;
-                    linePos = output.length - s.length + lineStartsOfS[lineStartsOfS.length - 1];
+                    linePos = output.length - s.length + ts.lastOrUndefined(lineStartsOfS);
                 }
             }
         }
@@ -4266,8 +4279,8 @@ var ts;
     ts.getFirstConstructorWithBody = getFirstConstructorWithBody;
     function shouldEmitToOwnFile(sourceFile, compilerOptions) {
         if (!isDeclarationFile(sourceFile)) {
-            if ((isExternalModule(sourceFile) || !compilerOptions.out) && !ts.fileExtensionIs(sourceFile.fileName, ".js")) {
-                return true;
+            if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
+                return compilerOptions.separateCompilation || !ts.fileExtensionIs(sourceFile.fileName, ".js");
             }
             return false;
         }
@@ -5842,7 +5855,7 @@ var ts;
             templateSpans.pos = getNodePos();
             do {
                 templateSpans.push(parseTemplateSpan());
-            } while (templateSpans[templateSpans.length - 1].literal.kind === 12);
+            } while (ts.lastOrUndefined(templateSpans).literal.kind === 12);
             templateSpans.end = getNodeEnd();
             template.templateSpans = templateSpans;
             return finishNode(template);
@@ -11499,7 +11512,7 @@ var ts;
         }
         function getRestTypeOfSignature(signature) {
             if (signature.hasRestParameter) {
-                var type = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
+                var type = getTypeOfSymbol(ts.lastOrUndefined(signature.parameters));
                 if (type.flags & 4096 && type.target === globalArrayType) {
                     return type.typeArguments[0];
                 }
@@ -13593,7 +13606,7 @@ var ts;
                         }
                         if (indexOfParameter === (func.parameters.length - 1) &&
                             funcHasRestParameters && contextualSignature.hasRestParameter && func.parameters.length >= contextualSignature.parameters.length) {
-                            return getTypeOfSymbol(contextualSignature.parameters[contextualSignature.parameters.length - 1]);
+                            return getTypeOfSymbol(ts.lastOrUndefined(contextualSignature.parameters));
                         }
                     }
                 }
@@ -14653,9 +14666,9 @@ var ts;
                 links.type = instantiateType(getTypeAtPosition(context, i), mapper);
             }
             if (signature.hasRestParameter && context.hasRestParameter && signature.parameters.length >= context.parameters.length) {
-                var parameter = signature.parameters[signature.parameters.length - 1];
+                var parameter = ts.lastOrUndefined(signature.parameters);
                 var links = getSymbolLinks(parameter);
-                links.type = instantiateType(getTypeOfSymbol(context.parameters[context.parameters.length - 1]), mapper);
+                links.type = instantiateType(getTypeOfSymbol(ts.lastOrUndefined(context.parameters)), mapper);
             }
         }
         function getReturnTypeFromBody(func, contextualMapper) {
@@ -19034,7 +19047,7 @@ var ts;
         function checkGrammarBindingElement(node) {
             if (node.dotDotDotToken) {
                 var elements = node.parent.elements;
-                if (node !== elements[elements.length - 1]) {
+                if (node !== ts.lastOrUndefined(elements)) {
                     return grammarErrorOnNode(node, ts.Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
                 }
                 if (node.name.kind === 152 || node.name.kind === 151) {
@@ -20820,7 +20833,7 @@ var ts;
                 var sourceMapNameIndexMap = {};
                 var sourceMapNameIndices = [];
                 function getSourceMapNameIndex() {
-                    return sourceMapNameIndices.length ? sourceMapNameIndices[sourceMapNameIndices.length - 1] : -1;
+                    return sourceMapNameIndices.length ? ts.lastOrUndefined(sourceMapNameIndices) : -1;
                 }
                 var lastRecordedSourceMapSpan;
                 var lastEncodedSourceMapSpan = {
@@ -23296,11 +23309,11 @@ var ts;
                     emitNodeWithoutSourceMap(memberName);
                 }
             }
-            function getInitializedProperties(node, static) {
+            function getInitializedProperties(node, isStatic) {
                 var properties = [];
                 for (var _a = 0, _b = node.members; _a < _b.length; _a++) {
                     var member = _b[_a];
-                    if (member.kind === 133 && static === ((member.flags & 128) !== 0) && member.initializer) {
+                    if (member.kind === 133 && isStatic === ((member.flags & 128) !== 0) && member.initializer) {
                         properties.push(member);
                     }
                 }
@@ -25208,10 +25221,10 @@ var ts;
                 }
             }
             function hasDetachedComments(pos) {
-                return detachedCommentsInfo !== undefined && detachedCommentsInfo[detachedCommentsInfo.length - 1].nodePos === pos;
+                return detachedCommentsInfo !== undefined && ts.lastOrUndefined(detachedCommentsInfo).nodePos === pos;
             }
             function getLeadingCommentsWithoutDetachedComments() {
-                var leadingComments = ts.getLeadingCommentRanges(currentSourceFile.text, detachedCommentsInfo[detachedCommentsInfo.length - 1].detachedCommentEndPos);
+                var leadingComments = ts.getLeadingCommentRanges(currentSourceFile.text, ts.lastOrUndefined(detachedCommentsInfo).detachedCommentEndPos);
                 if (detachedCommentsInfo.length - 1) {
                     detachedCommentsInfo.pop();
                 }
@@ -25292,12 +25305,12 @@ var ts;
                         lastComment = comment;
                     });
                     if (detachedComments.length) {
-                        var lastCommentLine = ts.getLineOfLocalPosition(currentSourceFile, detachedComments[detachedComments.length - 1].end);
+                        var lastCommentLine = ts.getLineOfLocalPosition(currentSourceFile, ts.lastOrUndefined(detachedComments).end);
                         var nodeLine = ts.getLineOfLocalPosition(currentSourceFile, ts.skipTrivia(currentSourceFile.text, node.pos));
                         if (nodeLine >= lastCommentLine + 2) {
                             ts.emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
                             ts.emitComments(currentSourceFile, writer, detachedComments, true, newLine, writeComment);
-                            var currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: detachedComments[detachedComments.length - 1].end };
+                            var currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: ts.lastOrUndefined(detachedComments).end };
                             if (detachedCommentsInfo) {
                                 detachedCommentsInfo.push(currentDetachedCommentInfo);
                             }
@@ -25338,6 +25351,8 @@ var ts;
     ts.ioReadTime = 0;
     ts.ioWriteTime = 0;
     ts.version = "1.5.0";
+    var carriageReturnLineFeed = "\r\n";
+    var lineFeed = "\n";
     function findConfigFile(searchPath) {
         var fileName = "tsconfig.json";
         while (true) {
@@ -25408,6 +25423,9 @@ var ts;
                 }
             }
         }
+        var newLine = options.newLine === 0 ? carriageReturnLineFeed :
+            options.newLine === 1 ? lineFeed :
+                ts.sys.newLine;
         return {
             getSourceFile: getSourceFile,
             getDefaultLibFileName: function (options) { return ts.combinePaths(ts.getDirectoryPath(ts.normalizePath(ts.sys.getExecutingFilePath())), ts.getDefaultLibFileName(options)); },
@@ -25415,7 +25433,7 @@ var ts;
             getCurrentDirectory: function () { return currentDirectory || (currentDirectory = ts.sys.getCurrentDirectory()); },
             useCaseSensitiveFileNames: function () { return ts.sys.useCaseSensitiveFileNames; },
             getCanonicalFileName: getCanonicalFileName,
-            getNewLine: function () { return ts.sys.newLine; }
+            getNewLine: function () { return newLine; }
         };
     }
     ts.createCompilerHost = createCompilerHost;
@@ -26136,13 +26154,13 @@ var ts;
                                 return textSpan(node);
                             }
                         case 224:
-                            return spanInNode(node.parent.statements[node.parent.statements.length - 1]);
+                            return spanInNode(ts.lastOrUndefined(node.parent.statements));
                             ;
                         case 208:
                             var caseBlock = node.parent;
-                            var lastClause = caseBlock.clauses[caseBlock.clauses.length - 1];
+                            var lastClause = ts.lastOrUndefined(caseBlock.clauses);
                             if (lastClause) {
-                                return spanInNode(lastClause.statements[lastClause.statements.length - 1]);
+                                return spanInNode(ts.lastOrUndefined(lastClause.statements));
                             }
                             return undefined;
                         default:
@@ -27786,7 +27804,7 @@ var ts;
     function nodeEndsWith(n, expectedLastToken, sourceFile) {
         var children = n.getChildren(sourceFile);
         if (children.length) {
-            var last = children[children.length - 1];
+            var last = ts.lastOrUndefined(children);
             if (last.kind === expectedLastToken) {
                 return true;
             }
@@ -28226,7 +28244,7 @@ var ts;
                 if (isStarted) {
                     if (trailingTrivia) {
                         ts.Debug.assert(trailingTrivia.length !== 0);
-                        wasNewLine = trailingTrivia[trailingTrivia.length - 1].kind === 4;
+                        wasNewLine = ts.lastOrUndefined(trailingTrivia).kind === 4;
                     }
                     else {
                         wasNewLine = false;
@@ -29468,6 +29486,8 @@ var ts;
             var previousRange;
             var previousParent;
             var previousRangeStartLine;
+            var lastIndentedLine;
+            var indentationOnLastIndentedLine;
             var edits = [];
             formattingScanner.advance();
             if (formattingScanner.isOnToken()) {
@@ -29522,7 +29542,9 @@ var ts;
                 }
                 var delta = formatting.SmartIndenter.shouldIndentChildNode(node.kind, 0) ? options.IndentSize : 0;
                 if (effectiveParentStartLine === startLine) {
-                    indentation = parentDynamicIndentation.getIndentation();
+                    indentation = startLine === lastIndentedLine
+                        ? indentationOnLastIndentedLine
+                        : parentDynamicIndentation.getIndentation();
                     delta = Math.min(options.IndentSize, parentDynamicIndentation.getDelta() + delta);
                 }
                 return {
@@ -29732,7 +29754,6 @@ var ts;
                                 if (!ts.rangeContainsRange(originalRange, triviaItem)) {
                                     continue;
                                 }
-                                var triviaStartLine = sourceFile.getLineAndCharacterOfPosition(triviaItem.pos).line;
                                 switch (triviaItem.kind) {
                                     case 3:
                                         var commentIndentation = dynamicIndentation.getIndentationForComment(currentTokenInfo.token.kind);
@@ -29755,6 +29776,8 @@ var ts;
                         if (isTokenInRange && !rangeContainsError(currentTokenInfo.token)) {
                             var tokenIndentation = dynamicIndentation.getIndentationForToken(tokenStart.line, currentTokenInfo.token.kind);
                             insertIndentation(currentTokenInfo.token.pos, tokenIndentation, lineAdded);
+                            lastIndentedLine = tokenStart.line;
+                            indentationOnLastIndentedLine = tokenIndentation;
                         }
                     }
                     formattingScanner.advance();
@@ -32554,22 +32577,6 @@ var ts;
             }
             return ScriptElementKind.unknown;
         }
-        function getTypeKind(type) {
-            var flags = type.getFlags();
-            if (flags & 128)
-                return ScriptElementKind.enumElement;
-            if (flags & 1024)
-                return ScriptElementKind.classElement;
-            if (flags & 2048)
-                return ScriptElementKind.interfaceElement;
-            if (flags & 512)
-                return ScriptElementKind.typeParameterElement;
-            if (flags & 1048703)
-                return ScriptElementKind.primitiveType;
-            if (flags & 256)
-                return ScriptElementKind.primitiveType;
-            return ScriptElementKind.unknown;
-        }
         function getSymbolModifiers(symbol) {
             return symbol && symbol.declarations && symbol.declarations.length > 0
                 ? ts.getNodeModifiers(symbol.declarations[0])
@@ -32933,6 +32940,59 @@ var ts;
                 containerName: containerName
             };
         }
+        function getDefinitionFromSymbol(symbol, node) {
+            var typeChecker = program.getTypeChecker();
+            var result = [];
+            var declarations = symbol.getDeclarations();
+            var symbolName = typeChecker.symbolToString(symbol);
+            var symbolKind = getSymbolKind(symbol, node);
+            var containerSymbol = symbol.parent;
+            var containerName = containerSymbol ? typeChecker.symbolToString(containerSymbol, node) : "";
+            if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
+                !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
+                ts.forEach(declarations, function (declaration) {
+                    result.push(createDefinitionInfo(declaration, symbolKind, symbolName, containerName));
+                });
+            }
+            return result;
+            function tryAddConstructSignature(symbol, location, symbolKind, symbolName, containerName, result) {
+                if (isNewExpressionTarget(location) || location.kind === 114) {
+                    if (symbol.flags & 32) {
+                        var classDeclaration = symbol.getDeclarations()[0];
+                        ts.Debug.assert(classDeclaration && classDeclaration.kind === 202);
+                        return tryAddSignature(classDeclaration.members, true, symbolKind, symbolName, containerName, result);
+                    }
+                }
+                return false;
+            }
+            function tryAddCallSignature(symbol, location, symbolKind, symbolName, containerName, result) {
+                if (isCallExpressionTarget(location) || isNewExpressionTarget(location) || isNameOfFunctionDeclaration(location)) {
+                    return tryAddSignature(symbol.declarations, false, symbolKind, symbolName, containerName, result);
+                }
+                return false;
+            }
+            function tryAddSignature(signatureDeclarations, selectConstructors, symbolKind, symbolName, containerName, result) {
+                var declarations = [];
+                var definition;
+                ts.forEach(signatureDeclarations, function (d) {
+                    if ((selectConstructors && d.kind === 136) ||
+                        (!selectConstructors && (d.kind === 201 || d.kind === 135 || d.kind === 134))) {
+                        declarations.push(d);
+                        if (d.body)
+                            definition = d;
+                    }
+                });
+                if (definition) {
+                    result.push(createDefinitionInfo(definition, symbolKind, symbolName, containerName));
+                    return true;
+                }
+                else if (declarations.length) {
+                    result.push(createDefinitionInfo(ts.lastOrUndefined(declarations), symbolKind, symbolName, containerName));
+                    return true;
+                }
+                return false;
+            }
+        }
         function getDefinitionAtPosition(fileName, position) {
             synchronizeHostData();
             var sourceFile = getValidSourceFile(fileName);
@@ -32982,56 +33042,37 @@ var ts;
                 var shorthandContainerName = typeChecker.symbolToString(symbol.parent, node);
                 return ts.map(shorthandDeclarations, function (declaration) { return createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName); });
             }
-            var result = [];
-            var declarations = symbol.getDeclarations();
-            var symbolName = typeChecker.symbolToString(symbol);
-            var symbolKind = getSymbolKind(symbol, node);
-            var containerSymbol = symbol.parent;
-            var containerName = containerSymbol ? typeChecker.symbolToString(containerSymbol, node) : "";
-            if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
-                !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
-                ts.forEach(declarations, function (declaration) {
-                    result.push(createDefinitionInfo(declaration, symbolKind, symbolName, containerName));
-                });
+            return getDefinitionFromSymbol(symbol, node);
+        }
+        function getTypeDefinitionAtPosition(fileName, position) {
+            synchronizeHostData();
+            var sourceFile = getValidSourceFile(fileName);
+            var node = ts.getTouchingPropertyName(sourceFile, position);
+            if (!node) {
+                return undefined;
             }
-            return result;
-            function tryAddConstructSignature(symbol, location, symbolKind, symbolName, containerName, result) {
-                if (isNewExpressionTarget(location) || location.kind === 114) {
-                    if (symbol.flags & 32) {
-                        var classDeclaration = symbol.getDeclarations()[0];
-                        ts.Debug.assert(classDeclaration && classDeclaration.kind === 202);
-                        return tryAddSignature(classDeclaration.members, true, symbolKind, symbolName, containerName, result);
-                    }
-                }
-                return false;
+            var typeChecker = program.getTypeChecker();
+            var symbol = typeChecker.getSymbolAtLocation(node);
+            if (!symbol) {
+                return undefined;
             }
-            function tryAddCallSignature(symbol, location, symbolKind, symbolName, containerName, result) {
-                if (isCallExpressionTarget(location) || isNewExpressionTarget(location) || isNameOfFunctionDeclaration(location)) {
-                    return tryAddSignature(symbol.declarations, false, symbolKind, symbolName, containerName, result);
-                }
-                return false;
+            var type = typeChecker.getTypeOfSymbolAtLocation(symbol, node);
+            if (!type) {
+                return undefined;
             }
-            function tryAddSignature(signatureDeclarations, selectConstructors, symbolKind, symbolName, containerName, result) {
-                var declarations = [];
-                var definition;
-                ts.forEach(signatureDeclarations, function (d) {
-                    if ((selectConstructors && d.kind === 136) ||
-                        (!selectConstructors && (d.kind === 201 || d.kind === 135 || d.kind === 134))) {
-                        declarations.push(d);
-                        if (d.body)
-                            definition = d;
+            if (type.flags & 16384) {
+                var result = [];
+                ts.forEach(type.types, function (t) {
+                    if (t.symbol) {
+                        result.push.apply(result, getDefinitionFromSymbol(t.symbol, node));
                     }
                 });
-                if (definition) {
-                    result.push(createDefinitionInfo(definition, symbolKind, symbolName, containerName));
-                    return true;
-                }
-                else if (declarations.length) {
-                    result.push(createDefinitionInfo(declarations[declarations.length - 1], symbolKind, symbolName, containerName));
-                    return true;
-                }
-                return false;
+                return result;
             }
+            if (!type.symbol) {
+                return undefined;
+            }
+            return getDefinitionFromSymbol(type.symbol, node);
         }
         function getOccurrencesAtPosition(fileName, position) {
             var results = getOccurrencesAtPositionCore(fileName, position);
@@ -34797,6 +34838,7 @@ var ts;
             getSignatureHelpItems: getSignatureHelpItems,
             getQuickInfoAtPosition: getQuickInfoAtPosition,
             getDefinitionAtPosition: getDefinitionAtPosition,
+            getTypeDefinitionAtPosition: getTypeDefinitionAtPosition,
             getReferencesAtPosition: getReferencesAtPosition,
             findReferences: findReferences,
             getOccurrencesAtPosition: getOccurrencesAtPosition,
@@ -35300,6 +35342,7 @@ var ts;
             CommandNames.Rename = "rename";
             CommandNames.Saveto = "saveto";
             CommandNames.SignatureHelp = "signatureHelp";
+            CommandNames.TypeDefinition = "typeDefinition";
             CommandNames.Unknown = "unknown";
         })(CommandNames = server.CommandNames || (server.CommandNames = {}));
         var Errors;
@@ -35462,6 +35505,24 @@ var ts;
                 var compilerService = project.compilerService;
                 var position = compilerService.host.lineOffsetToPosition(file, line, offset);
                 var definitions = compilerService.languageService.getDefinitionAtPosition(file, position);
+                if (!definitions) {
+                    return undefined;
+                }
+                return definitions.map(function (def) { return ({
+                    file: def.fileName,
+                    start: compilerService.host.positionToLineOffset(def.fileName, def.textSpan.start),
+                    end: compilerService.host.positionToLineOffset(def.fileName, ts.textSpanEnd(def.textSpan))
+                }); });
+            };
+            Session.prototype.getTypeDefinition = function (line, offset, fileName) {
+                var file = ts.normalizePath(fileName);
+                var project = this.projectService.getProjectForFile(file);
+                if (!project) {
+                    throw Errors.NoProject;
+                }
+                var compilerService = project.compilerService;
+                var position = compilerService.host.lineOffsetToPosition(file, line, offset);
+                var definitions = compilerService.languageService.getTypeDefinitionAtPosition(file, position);
                 if (!definitions) {
                     return undefined;
                 }
@@ -35665,7 +35726,7 @@ var ts;
                                     IndentSize: formatOptions.IndentSize,
                                     TabSize: formatOptions.TabSize,
                                     NewLineCharacter: "\n",
-                                    ConvertTabsToSpaces: true
+                                    ConvertTabsToSpaces: formatOptions.ConvertTabsToSpaces
                                 };
                                 var indentPosition = compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);
                                 for (var i = 0, len = lineText.length; i < len; i++) {
@@ -35925,6 +35986,11 @@ var ts;
                         case CommandNames.Definition: {
                             var defArgs = request.arguments;
                             response = this.getDefinition(defArgs.line, defArgs.offset, defArgs.file);
+                            break;
+                        }
+                        case CommandNames.TypeDefinition: {
+                            var defArgs = request.arguments;
+                            response = this.getTypeDefinition(defArgs.line, defArgs.offset, defArgs.file);
                             break;
                         }
                         case CommandNames.References: {
@@ -36654,6 +36720,7 @@ var ts;
                     if (content !== undefined) {
                         var indentSize;
                         info = new ScriptInfo(this.host, fileName, content, openedByClient);
+                        info.setFormatOptions(this.getFormatCodeOptions());
                         this.filenameToScriptInfo[fileName] = info;
                         if (!info.isOpen) {
                             info.fileWatcher = this.host.watchFile(fileName, function (_) { _this.watchedFileChanged(fileName); });
@@ -36670,7 +36737,7 @@ var ts;
             ProjectService.prototype.findConfigFile = function (searchPath) {
                 while (true) {
                     var fileName = ts.combinePaths(searchPath, "tsconfig.json");
-                    if (ts.sys.fileExists(fileName)) {
+                    if (this.host.fileExists(fileName)) {
                         return fileName;
                     }
                     var parentPath = ts.getDirectoryPath(searchPath);
@@ -36803,7 +36870,7 @@ var ts;
                         var proj = this.createProject(configFilename, projectOptions);
                         for (var i = 0, len = parsedCommandLine.fileNames.length; i < len; i++) {
                             var rootFilename = parsedCommandLine.fileNames[i];
-                            if (ts.sys.fileExists(rootFilename)) {
+                            if (this.host.fileExists(rootFilename)) {
                                 var info = this.openFile(rootFilename, clientFileName == rootFilename);
                                 proj.addRoot(info);
                             }
