@@ -468,6 +468,12 @@ module ts {
         return false;
     }
 
+    export function isClassLike(node: Node): boolean {
+        if (node) {
+            return node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression;
+        }
+    }
+
     export function isFunctionLike(node: Node): boolean {
         if (node) {
             switch (node.kind) {
@@ -2056,5 +2062,15 @@ module ts {
         }
 
         return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength:*/ newEndN - oldStartN);
+    }
+
+    export function getTypeParameterOwner(d: Declaration): Declaration {
+        if (d && d.kind === SyntaxKind.TypeParameter) {
+            for (let current: Node = d; current; current = current.parent) {
+                if (isFunctionLike(current) || isClassLike(current) || current.kind === SyntaxKind.InterfaceDeclaration) {
+                    return <Declaration>current;
+                }
+            }
+        }
     }
 }

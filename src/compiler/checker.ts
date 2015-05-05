@@ -3417,7 +3417,7 @@ module ts {
             // bubble up to the declaration
             let currentNode: Node = typeReferenceNode;
             // forEach === exists
-            while (!forEach(typeParameterSymbol.declarations, d => d.parent === currentNode.parent)) {
+            while (!forEach(typeParameterSymbol.declarations, d => getTypeParameterOwner(d) === currentNode.parent)) {
                 currentNode = currentNode.parent;
             }
             // if last step was made from the type parameter this means that path has started somewhere in constraint which is illegal
