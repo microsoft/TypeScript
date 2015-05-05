@@ -3599,6 +3599,10 @@ module ts {
             return type;
         }
 
+        function getUnionTypeOfSubtypeConstituents(source: UnionType, target: Type): Type {
+            return getUnionType(filter(source.types, t => isTypeSubtypeOf(t, target)));
+        }
+
         function getReducedTypeOfUnionType(type: UnionType): Type {
             // If union type was created without subtype reduction, perform the deferred reduction now
             if (!type.reducedType) {
@@ -5354,26 +5358,26 @@ module ts {
                 if (prototypeProperty) {
                     let targetType = getTypeOfSymbol(prototypeProperty);
                     if (targetType !== anyType) {
-                        // Narrow to target type if it is a subtype of current type
+                        // Narrow to the target type if it's a subtype of the current type
                         if (isTypeSubtypeOf(targetType, type)) {
                             return targetType;
                         }
-                        // If current type is a union type, remove all constituents that aren't subtypes of target type
+                        // If the current type is a union type, remove all constituents that aren't subtypes of the target.
                         if (type.flags & TypeFlags.Union) {
-                            return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, targetType)));
+                            return getUnionTypeOfSubtypeConstituents(<UnionType>type, targetType);
                         }
                     }
                 }
                 // Target type is type of constructor signiture
-                let constructSignitures: Signature[];
+                let constructSignatures: Signature[];
                 if (rightType.flags & TypeFlags.Interface) {
-                    constructSignitures = (<InterfaceTypeWithDeclaredMembers>rightType).declaredConstructSignatures;
+                    constructSignatures = (<InterfaceTypeWithDeclaredMembers>rightType).declaredConstructSignatures;
+                } else if (rightType.flags & TypeFlags.Anonymous) {
+                    constructSignatures = (<ResolvedType>rightType).constructSignatures;
                 }
-                if (rightType.flags & TypeFlags.Anonymous) {
-                    constructSignitures = (<ResolvedType>rightType).constructSignatures;
-                }
-                if (constructSignitures) {
-                    let instanceType = getUnionType(map(constructSignitures, constructSignature => {
+
+                if (constructSignatures) {
+                    let instanceType = getUnionType(map(constructSignatures, constructSignature => {
                         if (constructSignature.typeParameters && constructSignature.typeParameters.length !== 0) {
                             constructSignature = instantiateSignature(constructSignature, createTypeMapper(constructSignature.typeParameters, map(constructSignature.typeParameters, _ => anyType)), true)
                         }
@@ -5381,7 +5385,7 @@ module ts {
                     }));
                     // Pickup type from union types
                     if (type.flags & TypeFlags.Union) {
-                        return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, instanceType)));
+                        return getUnionTypeOfSubtypeConstituents(<UnionType>type, instanceType);
                     }
                     return instanceType;
                 }
