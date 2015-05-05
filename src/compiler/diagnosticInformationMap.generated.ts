@@ -363,6 +363,7 @@ module ts {
         An_interface_can_only_extend_an_identifier_Slashqualified_name_with_optional_type_arguments: { code: 2499, category: DiagnosticCategory.Error, key: "An interface can only extend an identifier/qualified-name with optional type arguments." },
         A_class_can_only_implement_an_identifier_Slashqualified_name_with_optional_type_arguments: { code: 2500, category: DiagnosticCategory.Error, key: "A class can only implement an identifier/qualified-name with optional type arguments." },
         A_rest_element_cannot_contain_a_binding_pattern: { code: 2501, category: DiagnosticCategory.Error, key: "A rest element cannot contain a binding pattern." },
+        Cannot_find_namespace_0: { code: 2502, category: DiagnosticCategory.Error, key: "Cannot find namespace '{0}'." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: { code: 4004, category: DiagnosticCategory.Error, key: "Type parameter '{0}' of exported interface has or is using private name '{1}'." },
