@@ -1610,7 +1610,6 @@ module Harness {
     export module Baseline {
 
         export interface BaselineOptions {
-            LineEndingSensitive?: boolean;
             Subfolder?: string;
             Baselinefolder?: string;
         }
@@ -1700,13 +1699,6 @@ module Harness {
             var expected = '<no content>';
             if (IO.fileExists(refFileName)) {
                 expected = IO.readFile(refFileName);
-            }
-
-            var lineEndingSensitive = opts && opts.LineEndingSensitive;
-
-            if (!lineEndingSensitive) {
-                expected = expected.replace(/\r\n?/g, '\n');
-                actual = actual.replace(/\r\n?/g, '\n');
             }
 
             return { expected, actual };
