@@ -307,6 +307,8 @@ module ts {
         function processSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
             let start: number;
             let length: number;
+            let extensions: string;
+            let diagnosticArgument: string[];
             if (refEnd !== undefined && refPos !== undefined) {
                 start = refPos;
                 length = refEnd - refPos;
@@ -314,31 +316,36 @@ module ts {
             let diagnostic: DiagnosticMessage;
             if (hasExtension(fileName)) {
                 if (!options.allowNonTsExtensions && !forEach(supportedExtensions, extension => fileExtensionIs(host.getCanonicalFileName(fileName), extension))) {
-                    diagnostic = Diagnostics.File_0_must_have_extension_ts_or_d_ts;
+                    diagnostic = Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1;
+                    diagnosticArgument = [fileName, "'" + supportedExtensions.join("', '") + "'"];
                 }
                 else if (!findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd)) {
                     diagnostic = Diagnostics.File_0_not_found;
+                    diagnosticArgument = [fileName];
                 }
                 else if (refFile && host.getCanonicalFileName(fileName) === host.getCanonicalFileName(refFile.fileName)) {
                     diagnostic = Diagnostics.A_file_cannot_have_a_reference_to_itself;
+                    diagnosticArgument = [fileName];
                 }
             }
             else {
                 if (options.allowNonTsExtensions && !findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd)) {
                     diagnostic = Diagnostics.File_0_not_found;
+                    diagnosticArgument = [fileName];
                 }
                 else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, isDefaultLib, refFile, refPos, refEnd))) {
                     diagnostic = Diagnostics.File_0_not_found;
                     fileName += ".ts";
+                    diagnosticArgument = [fileName];
                 }
             }
 
             if (diagnostic) {
                 if (refFile) {
-                    diagnostics.add(createFileDiagnostic(refFile, start, length, diagnostic, fileName));
+                    diagnostics.add(createFileDiagnostic(refFile, start, length, diagnostic, ...diagnosticArgument));
                 }
                 else {
-                    diagnostics.add(createCompilerDiagnostic(diagnostic, fileName));
+                    diagnostics.add(createCompilerDiagnostic(diagnostic, ...diagnosticArgument));
                 }
             }
         }
