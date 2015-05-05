@@ -127,7 +127,6 @@ module ts {
 
         let resolutionTargets: Object[] = [];
         let resolutionResults: boolean[] = [];
-        let resolutionCount = 0;
 
         let mergedSymbols: Symbol[] = [];
         let symbolLinks: SymbolLinks[] = [];
@@ -2020,29 +2019,33 @@ module ts {
         // Push an entry on the type resolution stack. If an entry with the given target is not already on the stack,
         // a new entry with that target and an associated result value of true is pushed on the stack, and the value
         // true is returned. Otherwise, a circularity has occurred and the result values of the existing entry and
-        // all entries pushed after it are changed to false, and the value false is returned. The target object has
-        // no significance other than to provide a unique identity for a particular type resolution result.
+        // all entries pushed after it are changed to false, and the value false is returned. The target object provides
+        // a unique identity for a particular type resolution result: Symbol instances are used to track resolution of
+        // SymbolLinks.type, SymbolLinks instances are used to track resolution of SymbolLinks.declaredType, and
+        // Signature instances are used to track resolution of Signature.resolvedReturnType.
         function pushTypeResolution(target: Object): boolean {
-            for (let i = 0; i < resolutionCount; i++) {
-                if (resolutionTargets[i] === target) {
-                    do {
-                        resolutionResults[i++] = false;
-                    }
-                    while (i < resolutionCount);
-                    return false;
-                }
+            let i = 0;
+            let count = resolutionTargets.length;
+            while (i < count && resolutionTargets[i] !== target) {
+                i++;
             }
-            resolutionTargets[resolutionCount] = target;
-            resolutionResults[resolutionCount] = true;
-            resolutionCount++;
+            if (i < count) {
+                do {
+                    resolutionResults[i++] = false;
+                }
+                while (i < count);
+                return false;
+            }
+            resolutionTargets.push(target);
+            resolutionResults.push(true);
             return true;
         }
 
         // Pop an entry from the type resolution stack and return its associated result value. The result value will
         // be true if no circularities were detected, or false if a circularity was found.
         function popTypeResolution(): boolean {
-            resolutionTargets[--resolutionCount] = undefined;
-            return resolutionResults[resolutionCount];
+            resolutionTargets.pop();
+            return resolutionResults.pop();
         }
 
         function getRootDeclaration(node: Node): Node {
