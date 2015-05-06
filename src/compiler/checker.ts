@@ -3507,20 +3507,20 @@ module ts {
             return globalESSymbolConstructorSymbol || (globalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol"));
         }
 
-        function createTypeFromGlobalGenericType(globalGenericType: GenericType, elementType: Type): Type {
-            return <ObjectType>globalGenericType !== emptyGenericType ? createTypeReference(globalGenericType, [elementType]) : emptyObjectType;
+        function createTypeFromGenericGlobalType(genericGlobalType: GenericType, elementType: Type): Type {
+            return <ObjectType>genericGlobalType !== emptyGenericType ? createTypeReference(genericGlobalType, [elementType]) : emptyObjectType;
         }
 
         function createIterableType(elementType: Type): Type {
-            return createTypeFromGlobalGenericType(globalIterableType, elementType);
+            return createTypeFromGenericGlobalType(globalIterableType, elementType);
         }
 
         function createIterableIteratorType(elementType: Type): Type {
-            return createTypeFromGlobalGenericType(globalIterableIteratorType, elementType);
+            return createTypeFromGenericGlobalType(globalIterableIteratorType, elementType);
         }
 
         function createArrayType(elementType: Type): Type {
-            return createTypeFromGlobalGenericType(globalArrayType, elementType);
+            return createTypeFromGenericGlobalType(globalArrayType, elementType);
         }
 
         function getTypeFromArrayTypeNode(node: ArrayTypeNode): Type {
@@ -5757,7 +5757,7 @@ module ts {
                 if (contextualReturnType) {
                     return node.asteriskToken
                         ? contextualReturnType
-                        : getElementTypeFromIterableIterator(contextualReturnType, /*errorNode*/ undefined);
+                        : getElementTypeFromIterableIterator(contextualReturnType);
                 }
             }
 
@@ -5914,7 +5914,7 @@ module ts {
                 let index = indexOf(arrayLiteral.elements, node);
                 return getTypeOfPropertyOfContextualType(type, "" + index)
                     || getIndexTypeOfContextualType(type, IndexKind.Number)
-                    || (languageVersion >= ScriptTarget.ES6 ? getElementTypeFromIterable(type, /*expressionForError*/ undefined) : undefined);
+                    || (languageVersion >= ScriptTarget.ES6 ? getElementTypeFromIterable(type, /*errorNode*/ undefined) : undefined);
             }
             return undefined;
         }
@@ -6105,7 +6105,7 @@ module ts {
                     // if there is no index type / iterated type.
                     let restArrayType = checkExpression((<SpreadElementExpression>e).expression, contextualMapper);
                     let restElementType = getIndexTypeOfType(restArrayType, IndexKind.Number) ||
-                        (languageVersion >= ScriptTarget.ES6 ? getElementTypeFromIterable(restArrayType, /*expressionForError*/ undefined) : undefined);
+                        (languageVersion >= ScriptTarget.ES6 ? getElementTypeFromIterable(restArrayType, /*errorNode*/ undefined) : undefined);
                     
                     if (restElementType) {
                         elementTypes.push(restElementType);
@@ -8026,7 +8026,7 @@ module ts {
                     // has no explicit return type, because the return type is directly computed
                     // from the yield expressions.
                     if (func.type) {
-                        let signatureElementType = getElementTypeFromIterableIterator(getTypeFromTypeNode(func.type), /*errorNode*/ undefined) || unknownType;
+                        let signatureElementType = getElementTypeFromIterableIterator(getTypeFromTypeNode(func.type)) || unknownType;
                         if (node.asteriskToken) {
                             checkTypeAssignableTo(expressionElementType, signatureElementType, node.expression, /*headMessage*/ undefined);
                         }
@@ -8331,7 +8331,7 @@ module ts {
                             error(node.type, Diagnostics.A_generator_cannot_have_a_void_type_annotation);
                         }
                         else {
-                            let generatorElementType = getElementTypeFromIterableIterator(returnType, /*errorNode*/ undefined) || anyType;
+                            let generatorElementType = getElementTypeFromIterableIterator(returnType) || anyType;
                             let iterableIteratorInstantiation = createIterableIteratorType(generatorElementType);
 
                             // Naively, one could check that IterableIterator<any> is assignable to the return type annotation.
@@ -9767,7 +9767,7 @@ module ts {
             return typeAsIterator.iteratorElementType;
         }
 
-        function getElementTypeFromIterableIterator(iterableIterator: Type, errorNode: Node): Type {
+        function getElementTypeFromIterableIterator(iterableIterator: Type): Type {
             if (allConstituentTypesHaveKind(iterableIterator, TypeFlags.Any)) {
                 return undefined;
             }
@@ -9778,8 +9778,8 @@ module ts {
                 return (<GenericType>iterableIterator).typeArguments[0];
             }
 
-            return getElementTypeFromIterable(iterableIterator, errorNode) ||
-                getElementTypeFromIterator(iterableIterator, errorNode);
+            return getElementTypeFromIterable(iterableIterator, /*errorNode*/ undefined) ||
+                getElementTypeFromIterator(iterableIterator, /*errorNode*/ undefined);
         }
 
         /**
