@@ -14,7 +14,7 @@ if (obj1 instanceof A) { // narrowed to A.
 }
 
 var obj2: any;
-if (obj2 instanceof A) { // can't type narrowing from any.
+if (obj2 instanceof A) { // can't narrow type from 'any'
     obj2.foo;
     obj2.bar;
 }
@@ -36,7 +36,7 @@ if (obj3 instanceof B) { // narrowed to B<number>.
 }
 
 var obj4: any;
-if (obj4 instanceof B) { // can't type narrowing from any.
+if (obj4 instanceof B) { // can't narrow type from 'any'
     obj4.foo = "str";
     obj4.foo = 1;
     obj4.bar = "str";
@@ -65,7 +65,7 @@ if (obj5 instanceof C) { // narrowed to C1.
 }
 
 var obj6: any;
-if (obj6 instanceof C) { // can't type narrowing from any.
+if (obj6 instanceof C) { // can't narrow type from 'any'
     obj6.foo;
     obj6.bar1;
     obj6.bar2;
@@ -84,7 +84,7 @@ if (obj7 instanceof D) { // narrowed to D.
 }
 
 var obj8: any;
-if (obj8 instanceof D) { // can't type narrowing from any.
+if (obj8 instanceof D) { // can't narrow type from 'any'
     obj8.foo;
     obj8.bar;
 }
@@ -111,7 +111,7 @@ if (obj9 instanceof E) { // narrowed to E1.
 }
 
 var obj10: any;
-if (obj10 instanceof E) { // can't type narrowing from any.
+if (obj10 instanceof E) { // can't narrow type from 'any'
     obj10.foo;
     obj10.bar1;
     obj10.bar2;
@@ -128,18 +128,18 @@ interface F {
 declare var F: FConstructor;
 
 var obj11: F | string;
-if (obj11 instanceof F) { // can't type narrowing, construct signiture returns any.
+if (obj11 instanceof F) { // can't type narrowing, construct signature returns any.
     obj11.foo;
     obj11.bar;
 }
 
 var obj12: any;
-if (obj12 instanceof F) { // can't type narrowing from any.
+if (obj12 instanceof F) { // can't narrow type from 'any'
     obj12.foo;
     obj12.bar;
 }
 
-// a type with a prototype, it overrides the construct signiture
+// a type with a prototype, it overrides the construct signature
 interface GConstructor {
     prototype: G1; // high priority
     new (): G2;    // low priority
@@ -159,7 +159,7 @@ if (obj13 instanceof G) { // narrowed to G1. G1 is return type of prototype prop
 }
 
 var obj14: any;
-if (obj14 instanceof G) { // can't type narrowing from any.
+if (obj14 instanceof G) { // can't narrow type from 'any'
     obj14.foo1;
     obj14.foo2;
 }
@@ -181,7 +181,7 @@ if (obj15 instanceof H) { // narrowed to H.
 }
 
 var obj16: any;
-if (obj16 instanceof H) { // can't type narrowing from any.
+if (obj16 instanceof H) { // can't narrow type from 'any'
     obj16.foo1;
     obj16.foo2;
 }

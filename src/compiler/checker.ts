@@ -5368,22 +5368,17 @@ module ts {
                         }
                     }
                 }
-                // Target type is type of constructor signiture
+                // Target type is type of construct signature
                 let constructSignatures: Signature[];
                 if (rightType.flags & TypeFlags.Interface) {
-                    constructSignatures = (<InterfaceTypeWithDeclaredMembers>rightType).declaredConstructSignatures;
+                    constructSignatures = resolveDeclaredMembers(<InterfaceType>rightType).declaredConstructSignatures;
                 }
                 else if (rightType.flags & TypeFlags.Anonymous) {
-                    constructSignatures = (<ResolvedType>rightType).constructSignatures;
+                    constructSignatures = getSignaturesOfType(rightType, SignatureKind.Construct);
                 }
 
-                if (constructSignatures) {
-                    let instanceType = getUnionType(map(constructSignatures, constructSignature => {
-                        if (constructSignature.typeParameters && constructSignature.typeParameters.length !== 0) {
-                            constructSignature = instantiateSignature(constructSignature, createTypeMapper(constructSignature.typeParameters, map(constructSignature.typeParameters, _ => anyType)), true)
-                        }
-                        return constructSignature.resolvedReturnType;
-                    }));
+                if (constructSignatures && constructSignatures.length !== 0) {
+                    let instanceType = getUnionType(map(constructSignatures, signature => getReturnTypeOfSignature(getErasedSignature(signature))));
                     // Pickup type from union types
                     if (type.flags & TypeFlags.Union) {
                         return getUnionTypeOfSubtypeConstituents(<UnionType>type, instanceType);
