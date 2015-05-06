@@ -3634,10 +3634,6 @@ module ts {
             return type;
         }
 
-        function getUnionTypeOfSubtypeConstituents(source: UnionType, target: Type): Type {
-            return getUnionType(filter(source.types, t => isTypeSubtypeOf(t, target)));
-        }
-
         function getReducedTypeOfUnionType(type: UnionType): Type {
             // If union type was created without subtype reduction, perform the deferred reduction now
             if (!type.reducedType) {
@@ -5399,7 +5395,7 @@ module ts {
                         }
                         // If the current type is a union type, remove all constituents that aren't subtypes of the target.
                         if (type.flags & TypeFlags.Union) {
-                            return getUnionTypeOfSubtypeConstituents(<UnionType>type, targetType);
+                            return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, targetType)));
                         }
                     }
                 }
@@ -5416,7 +5412,7 @@ module ts {
                     let instanceType = getUnionType(map(constructSignatures, signature => getReturnTypeOfSignature(getErasedSignature(signature))));
                     // Pickup type from union types
                     if (type.flags & TypeFlags.Union) {
-                        return getUnionTypeOfSubtypeConstituents(<UnionType>type, instanceType);
+                        return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, instanceType)));
                     }
                     return instanceType;
                 }
