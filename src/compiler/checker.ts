@@ -801,12 +801,8 @@ module ts {
 
             let symbol: Symbol;
             if (name.kind === SyntaxKind.Identifier) {
-                let message: DiagnosticMessage;
-                if (meaning === SymbolFlags.Namespace) {
-                    message = Diagnostics.Cannot_find_namespace_0;
-                } else {
-                    message = Diagnostics.Cannot_find_name_0;
-                }
+                let message = meaning === SymbolFlags.Namespace ? Diagnostics.Cannot_find_namespace_0 : Diagnostics.Cannot_find_name_0;
+
                 symbol = resolveName(name, (<Identifier>name).text, meaning, message, <Identifier>name);
                 if (!symbol) {
                     return undefined;
