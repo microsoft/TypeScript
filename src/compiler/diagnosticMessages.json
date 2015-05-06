@@ -1457,13 +1457,17 @@
         "category": "Error",
         "code": 2502
     },
-    "No best common type exists among yield expressions.": {
+    "Cannot find namespace '{0}'.": {
         "category": "Error",
         "code": 2503
     },
-    "A generator cannot have a 'void' type annotation.": {
+    "No best common type exists among yield expressions.": {
         "category": "Error",
         "code": 2504
+    },
+    "A generator cannot have a 'void' type annotation.": {
+        "category": "Error",
+        "code": 2505
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

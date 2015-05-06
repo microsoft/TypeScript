@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck22.ts(4,11): error TS2503: No best common type exists among yield expressions.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck22.ts(4,11): error TS2504: No best common type exists among yield expressions.
 
 
 ==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck22.ts (1 errors) ====
@@ -7,7 +7,7 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck22.ts(4,11): erro
     class Baz { z: number }
     function* g3() {
               ~~
-!!! error TS2503: No best common type exists among yield expressions.
+!!! error TS2504: No best common type exists among yield expressions.
         yield;
         yield new Bar;
         yield new Baz;
