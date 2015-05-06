@@ -1,3 +1,4 @@
+// @noLib: true
 /// <style requireSemi="on" />
 /// <reference no-default-lib="true"/>
 declare function foo(): void;
