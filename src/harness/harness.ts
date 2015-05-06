@@ -1372,29 +1372,30 @@ module Harness {
                 ts.sys.newLine + ts.sys.newLine + outputLines.join('\r\n');
         }
 
-        export function collateOutputs(outputFiles: Harness.Compiler.GeneratedFile[], clean?: (s: string) => string) {
+        export function collateOutputs(outputFiles: Harness.Compiler.GeneratedFile[]): string {
             // Collect, test, and sort the fileNames
-            function cleanName(fn: string) {
-                var lastSlash = ts.normalizeSlashes(fn).lastIndexOf('/');
-                return fn.substr(lastSlash + 1).toLowerCase();
-            }
             outputFiles.sort((a, b) => cleanName(a.fileName).localeCompare(cleanName(b.fileName)));
 
             // Emit them
             var result = '';
-            ts.forEach(outputFiles, outputFile => {
+            for (let outputFile of outputFiles) {
                 // Some extra spacing if this isn't the first file
-                if (result.length) result = result + '\r\n\r\n';
+                if (result.length) {
+                    result += '\r\n\r\n';
+                }
 
                 // FileName header + content
-                result = result + '/*====== ' + outputFile.fileName + ' ======*/\r\n';
-                if (clean) {
-                    result = result + clean(outputFile.code);
-                } else {
-                    result = result + outputFile.code;
-                }
-            });
+                result += '/*====== ' + outputFile.fileName + ' ======*/\r\n';
+                
+                result += outputFile.code;
+            }
+
             return result;
+
+            function cleanName(fn: string) {
+                var lastSlash = ts.normalizeSlashes(fn).lastIndexOf('/');
+                return fn.substr(lastSlash + 1).toLowerCase();
+            }
         }
 
         /** The harness' compiler instance used when tests are actually run. Reseting or changing settings of this compiler instance must be done within a test case (i.e., describe/it) */
