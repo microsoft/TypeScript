@@ -962,12 +962,19 @@ module Harness {
                 var includeBuiltFiles: { unitName: string; content: string }[] = [];
 
                 var useCaseSensitiveFileNames = ts.sys.useCaseSensitiveFileNames;
-                this.settings.forEach(setOptionForSetting);
+                this.settings.forEach(setCompilerOptionForSetting);
 
                 var fileOutputs: GeneratedFile[] = [];
 
                 var programFiles = inputFiles.concat(includeBuiltFiles).map(file => file.unitName);
-                var program = ts.createProgram(programFiles, options, createCompilerHost(inputFiles.concat(includeBuiltFiles).concat(otherFiles),
+                if (!options.noLib) {
+                    // Unless the user doesn't want a default lib at all,
+                    // always push the default lib in *last* to normalize the type/symbol baselines.
+                    programFiles.push(defaultLibFileName);
+                }
+
+                var program = ts.createProgram(programFiles, options,
+                    createCompilerHost(inputFiles.concat(includeBuiltFiles).concat(otherFiles),
                     (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark }),
                     options.target, useCaseSensitiveFileNames, currentDirectory, options.newLine));
 
@@ -987,7 +994,7 @@ module Harness {
                 ts.sys.newLine = newLine;
                 return options;
 
-                function setOptionForSetting(setting: Harness.TestCaseParser.CompilerSetting) {
+                function setCompilerOptionForSetting(setting: Harness.TestCaseParser.CompilerSetting) {
                     switch (setting.flag.toLowerCase()) {
                         // "fileName", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve"
                         case "module":

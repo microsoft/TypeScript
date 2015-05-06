@@ -10958,6 +10958,8 @@ module ts {
         function checkSourceFile(node: SourceFile) {
             let start = new Date().getTime();
 
+            // Check whether the file has declared it is the default lib,
+            // and whether the user has specifically chosen to avoid checking it.
             let skipCheck = node.hasNoDefaultLib && compilerOptions.noLibCheck;
             if (!skipCheck) {
                 checkSourceFileWorker(node);
