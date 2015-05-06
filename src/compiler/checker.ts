@@ -89,7 +89,7 @@ module ts {
         let nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsUndefinedOrNull, "null");
         let unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
         let resolvingType = createIntrinsicType(TypeFlags.Any, "__resolving__");
-
+        
         let emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         let anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         let noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -101,6 +101,8 @@ module ts {
 
         let globalArraySymbol: Symbol;
         let globalESSymbolConstructorSymbol: Symbol;
+        
+        let getGlobalPromiseSymbol: () => Symbol;
 
         let globalObjectType: ObjectType;
         let globalFunctionType: ObjectType;
@@ -118,6 +120,11 @@ module ts {
         let getGlobalParameterDecoratorType: () => ObjectType;
         let getGlobalPropertyDecoratorType: () => ObjectType;
         let getGlobalMethodDecoratorType: () => ObjectType;
+        let getGlobalPromiseType: () => ObjectType;
+        let getGlobalPromiseLikeType: () => ObjectType;
+        let getInstantiatedGlobalPromiseLikeType: () => ObjectType;
+        let getGlobalPromiseConstructorLikeType: () => ObjectType;
+        let getGlobalThenableType: () => ObjectType;
         
         let tupleTypes: Map<TupleType> = {};
         let unionTypes: Map<UnionType> = {};
@@ -125,11 +132,14 @@ module ts {
         let emitExtends = false;
         let emitDecorate = false;
         let emitParam = false;
+        let emitAwaiter = false;
+        let emitGenerator = false;
 
         let mergedSymbols: Symbol[] = [];
         let symbolLinks: SymbolLinks[] = [];
         let nodeLinks: NodeLinks[] = [];
         let potentialThisCollisions: Node[] = [];
+        var potentialArgumentsCollisions: Node[] = [];
 
         let diagnostics = createDiagnosticCollection();
 
@@ -5146,9 +5156,11 @@ module ts {
                     case SyntaxKind.ParenthesizedExpression:
                     case SyntaxKind.PrefixUnaryExpression:
                     case SyntaxKind.DeleteExpression:
+                    case SyntaxKind.AwaitExpression:
                     case SyntaxKind.TypeOfExpression:
                     case SyntaxKind.VoidExpression:
                     case SyntaxKind.PostfixUnaryExpression:
+                    case SyntaxKind.YieldExpression:
                     case SyntaxKind.ConditionalExpression:
                     case SyntaxKind.SpreadElementExpression:
                     case SyntaxKind.Block:
@@ -5406,8 +5418,14 @@ module ts {
             // will be bound to non-arrow function that contain this arrow function. This results in inconsistent behavior.
             // To avoid that we will give an error to users if they use arguments objects in arrow function so that they
             // can explicitly bound arguments objects
-            if (symbol === argumentsSymbol && getContainingFunction(node).kind === SyntaxKind.ArrowFunction && languageVersion < ScriptTarget.ES6) {
-                error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression);
+            let container = getContainingFunction(node);
+            if (symbol === argumentsSymbol) {
+                if (container.kind === SyntaxKind.ArrowFunction && languageVersion < ScriptTarget.ES6) {
+                    error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression);
+                }
+                else if (node.parserContextFlags & ParserContextFlags.Await) {
+                    captureLexicalArguments(node, container);
+                }
             }
 
             if (symbol.flags & SymbolFlags.Alias && !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveAlias(symbol))) {
@@ -5416,6 +5434,7 @@ module ts {
 
             checkCollisionWithCapturedSuperVariable(node, node);
             checkCollisionWithCapturedThisVariable(node, node);
+            checkCollisionWithCapturedArgumentsVariable(node, node);            
             checkBlockScopedBindingCapturedInLoop(node, symbol);
 
             return getNarrowedTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol), node);
@@ -5497,6 +5516,11 @@ module ts {
                 // When targeting es6, arrow function lexically bind "this" so we do not need to do the work of binding "this" in emitted code
                 needToCaptureLexicalThis = (languageVersion < ScriptTarget.ES6);
             }
+            
+            if (node.parserContextFlags & ParserContextFlags.Await) {
+                // if 'this' is part of an async function, we will need to capture 'this'
+                needToCaptureLexicalThis = true;
+            }
 
             switch (container.kind) {
                 case SyntaxKind.ModuleDeclaration:
@@ -5535,6 +5559,14 @@ module ts {
                 return container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : getDeclaredTypeOfSymbol(symbol);
             }
             return anyType;
+        }
+
+        function captureLexicalArguments(node: Node, container: Node): void {
+            if (node.parent.kind !== SyntaxKind.Parameter) {
+                getNodeLinks(node).flags |= NodeCheckFlags.LexicalArguments;
+            }
+            
+            getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
         }
 
         function isInConstructorArgumentInitializer(node: Node, constructorDecl: Node): boolean {
@@ -7220,22 +7252,42 @@ module ts {
                 links.type = instantiateType(getTypeOfSymbol(lastOrUndefined(context.parameters)), mapper);
             }
         }
+        
+        function createPromiseType(promisedType: Type, location: Node): Type {
+            // creates a `Promise<T>` type where `T` is the promisedType argument
+            let globalPromiseType = getGlobalPromiseType();
+            if (globalPromiseType !== emptyObjectType) {
+                // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
+                promisedType = getAwaitedType(promisedType);
+                return createTypeReference(<GenericType>globalPromiseType, [promisedType]);
+            }
+            
+            error(location, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+            return unknownType;
+        }
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
             let contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
             if (!func.body) {
                 return unknownType;
             }
+            
+            let isAsync = isAsyncFunctionLike(func);
             let type: Type;
             if (func.body.kind !== SyntaxKind.Block) {
-                type = checkExpressionCached(<Expression>func.body, contextualMapper);
+                type = isAsync 
+                    ? checkAwaitedExpressionCached(<Expression>func.body, contextualMapper)
+                    : checkExpressionCached(<Expression>func.body, contextualMapper);
             }
             else {
                 // Aggregate the types of expressions within all the return statements.
                 let types = checkAndAggregateReturnExpressionTypes(<Block>func.body, contextualMapper);
                 if (types.length === 0) {
-                    return voidType;
+                    return isAsync 
+                        ? createPromiseType(voidType, func)
+                        : voidType;
                 }
+                
                 // When return statements are contextually typed we allow the return type to be a union type. Otherwise we require the
                 // return expressions to have a best common supertype.
                 type = contextualSignature ? getUnionType(types) : getCommonSupertype(types);
@@ -7247,17 +7299,23 @@ module ts {
             if (!contextualSignature) {
                 reportErrorsFromWidening(func, type);
             }
-            return getWidenedType(type);
+            
+            let widenedType = getWidenedType(type);
+            return isAsync
+                ? createPromiseType(widenedType, func)
+                : type;
         }
 
         /// Returns a set of types relating to every return expression relating to a function block.
-        function checkAndAggregateReturnExpressionTypes(body: Block, contextualMapper?: TypeMapper): Type[] {
+        function checkAndAggregateReturnExpressionTypes(body: Block, contextualMapper?: TypeMapper, isAsync?: boolean): Type[] {
             let aggregatedTypes: Type[] = [];
 
             forEachReturnStatement(body, returnStatement => {
                 let expr = returnStatement.expression;
                 if (expr) {
-                    let type = checkExpressionCached(expr, contextualMapper);
+                    let type = isAsync
+                        ? checkAwaitedExpressionCached(expr, contextualMapper)
+                        : checkExpressionCached(expr, contextualMapper);
                     if (!contains(aggregatedTypes, type)) {
                         aggregatedTypes.push(type);
                     }
@@ -7327,6 +7385,12 @@ module ts {
             if (contextualMapper === identityMapper && isContextSensitive(node)) {
                 return anyFunctionType;
             }
+            
+            let isAsync = isAsyncFunctionLike(node);
+            if (isAsync) {
+                emitAwaiter = true;
+            }
+            
             let links = getNodeLinks(node);
             let type = getTypeOfSymbol(node.symbol);
             // Check if function expression is contextually typed and assign parameter types if so
@@ -7357,6 +7421,7 @@ module ts {
             if (produceDiagnostics && node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
                 checkCollisionWithCapturedSuperVariable(node, (<FunctionExpression>node).name);
                 checkCollisionWithCapturedThisVariable(node, (<FunctionExpression>node).name);
+                checkCollisionWithCapturedArgumentsVariable(node, (<FunctionExpression>node).name);
             }
 
             return type;
@@ -7364,8 +7429,21 @@ module ts {
 
         function checkFunctionExpressionOrObjectLiteralMethodBody(node: FunctionExpression | MethodDeclaration) {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
-            if (node.type && !node.asteriskToken) {
-                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
+            
+            let isAsync = isAsyncFunctionLike(node);
+            let returnType = node.type && getTypeFromTypeNode(node.type);
+            let promisedType: Type;
+            if (returnType && isAsync) {
+                // From within an async function you can return either a non-promise value or a promise. Any 
+                // Promise/A+ compatible implementation will always assimilate any foreign promise, so we 
+                // should not be checking assignability of a promise to the return type. Instead, we need to 
+                // check assignability of the awaited type of the concise body against the promised type of 
+                // its return type annotation.
+                promisedType = checkAsyncFunctionReturnType(node, returnType);
+            }
+            
+            if (returnType && !node.asteriskToken) {
+                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, isAsync ? promisedType : returnType);
             }
 
             if (node.body) {
@@ -7374,8 +7452,11 @@ module ts {
                 }
                 else {
                     let exprType = checkExpression(<Expression>node.body);
-                    if (node.type) {
-                        checkTypeAssignableTo(exprType, getTypeFromTypeNode(node.type), node.body, /*headMessage*/ undefined);
+                    if (returnType) {
+                        checkTypeAssignableTo(
+                            isAsync ? getAwaitedType(exprType) : exprType,
+                            isAsync ? promisedType : returnType, 
+                            node.body);
                     }
                     checkFunctionExpressionBodies(node.body);
                 }
@@ -7490,6 +7571,22 @@ module ts {
             return undefinedType;
         }
 
+        function checkAwaitExpression(node: AwaitExpression): Type {
+            // Grammar checking
+            if (!(node.parserContextFlags & ParserContextFlags.Await)) {
+                var parameter = getContainingParameter(node);
+                if (parameter && parameter.parserContextFlags & ParserContextFlags.Await) {
+                    grammarErrorAfterFirstToken(node, Diagnostics._0_expression_is_not_allowed_in_an_initializer, "await");
+                }
+                else {
+                    grammarErrorOnFirstToken(node, Diagnostics.await_expression_must_be_contained_within_an_async_function);
+                }
+            }
+
+            var operandType = checkExpression(node.expression);
+            return getAwaitedType(operandType);
+        }
+        
         function checkPrefixUnaryExpression(node: PrefixUnaryExpression): Type {
             // Grammar checking
             // The identifier eval or arguments may not appear as the LeftHandSideExpression of an
@@ -7897,7 +7994,13 @@ module ts {
         function checkYieldExpression(node: YieldExpression): void {
             // Grammar checking
             if (!(node.parserContextFlags & ParserContextFlags.Yield)) {
-                grammarErrorOnFirstToken(node, Diagnostics.yield_expression_must_be_contained_within_a_generator_declaration);
+                let parameter = getContainingParameter(node);
+                if (parameter && (parameter.parserContextFlags & ParserContextFlags.GeneratorParameter)) {
+                    grammarErrorAfterFirstToken(node, Diagnostics._0_expression_is_not_allowed_in_an_initializer, "yield");
+                }
+                else {
+                    grammarErrorOnFirstToken(node, Diagnostics.yield_expression_must_be_contained_within_a_generator_declaration);
+                }
             }
             else {
                 grammarErrorOnFirstToken(node, Diagnostics.yield_expressions_are_not_currently_supported);
@@ -7930,6 +8033,15 @@ module ts {
             let result = checkExpression(node, contextualMapper);
             node.contextualType = saveContextualType;
             return result;
+        }
+        
+        function checkAwaitedExpressionCached(node: Expression, contextualMapper?: TypeMapper): Type {
+            let links = getNodeLinks(node);
+            if (!links.resolvedAwaitedType) {
+                links.resolvedAwaitedType = getAwaitedType(checkExpressionCached(node, contextualMapper));
+            }
+            
+            return links.resolvedAwaitedType;
         }
 
         function checkExpressionCached(node: Expression, contextualMapper?: TypeMapper): Type {
@@ -8078,6 +8190,8 @@ module ts {
                     return checkDeleteExpression(<DeleteExpression>node);
                 case SyntaxKind.VoidExpression:
                     return checkVoidExpression(<VoidExpression>node);
+                case SyntaxKind.AwaitExpression:
+                    return checkAwaitExpression(<AwaitExpression>node);
                 case SyntaxKind.PrefixUnaryExpression:
                     return checkPrefixUnaryExpression(<PrefixUnaryExpression>node);
                 case SyntaxKind.PostfixUnaryExpression:
@@ -8166,6 +8280,7 @@ module ts {
             }
 
             if (produceDiagnostics) {
+                checkCollisionWithAwaiterVariablesInGeneratedCode(node, node.name);
                 checkCollisionWithArgumentsInGeneratedCode(node);
                 if (compilerOptions.noImplicitAny && !node.type) {
                     switch (node.kind) {
@@ -8175,6 +8290,22 @@ module ts {
                         case SyntaxKind.CallSignature:
                             error(node, Diagnostics.Call_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type);
                             break;
+                    }
+                }
+                if (isAsyncFunctionLike(node)) {
+                    var promiseConstructor = getPromiseConstructor(node);
+                    if (promiseConstructor) {
+                        var promiseIdentifier = getFirstIdentifier(promiseConstructor);
+                        var promiseName = promiseIdentifier.text;
+                        var typeSymbol = resolveName(node, promiseName, SymbolFlags.Type | SymbolFlags.Module, undefined, undefined);
+                        var valueSymbol = resolveName(node, promiseName, SymbolFlags.Value, undefined, undefined);
+                        if (typeSymbol !== valueSymbol) {
+                            var valueLinks = getNodeLinks(valueSymbol.valueDeclaration);
+                            if (!(valueLinks.flags & NodeCheckFlags.PromiseCollision)) {
+                                valueLinks.flags |= NodeCheckFlags.PromiseCollision;
+                                error(valueSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions, promiseName, getTextOfNode(promiseConstructor));
+                            }
+                        }
                     }
                 }
             }
@@ -8772,6 +8903,113 @@ module ts {
             }
         }
 
+        function getPromisedType(type: Type): Type {
+            // the "promised type" of a type is the type of the "value" argument of the "onfulfilled" callback.
+            let globalPromiseLikeType = getInstantiatedGlobalPromiseLikeType();
+            if (globalPromiseLikeType !== emptyObjectType && isTypeAssignableTo(type, globalPromiseLikeType)) {
+                let awaitedTypes: Type[] = [];
+                let thenProp = getPropertyOfType(type, "then");
+                let thenType = getTypeOfSymbol(thenProp);
+                let thenSignatures = getSignaturesOfType(thenType, SignatureKind.Call);
+                for (let thenSignature of thenSignatures) {
+                    thenSignature = getErasedSignature(thenSignature);
+                    let onfulfilledParameterType = getTypeAtPosition(thenSignature, 0);
+                    let onfulfilledParameterSignatures = getSignaturesOfType(onfulfilledParameterType, SignatureKind.Call);
+                    for (let onfulfilledParameterSignature of onfulfilledParameterSignatures) {
+                        let valueParameterType = getTypeAtPosition(onfulfilledParameterSignature, 0);
+                        if (valueParameterType !== type) {
+                            awaitedTypes.push(valueParameterType);
+                        }
+                    }
+                }
+                
+                return getUnionType(awaitedTypes);
+            }
+            
+            return emptyObjectType;
+        }
+
+        function getAwaitedType(type: Type): Type {
+            // The "awaited type" of an expression is its "promised type" if the expression is a `Promise`; otherwise, it is the type of the expression.
+            
+            let promisedType = getPromisedType(type);
+            if (promisedType === emptyObjectType) {
+                return type;
+            }
+
+            // if we have a bad actor in the form of a promise whose promised type is the same promise, return the empty type.
+            // if this were the actual case in the JavaScript, this Promise would never resolve.
+            if (promisedType === type) {
+                return emptyObjectType;
+            }
+
+            // unwrap any nested promises
+            let seen: boolean[];
+            while (true) {
+                let nestedPromisedType = getPromisedType(promisedType);
+                if (nestedPromisedType === emptyObjectType) {
+                    // if this could not be unwrapped further, return the promised type
+                    return promisedType;
+                }
+                
+                if (!seen) {
+                    // `seen` keeps track of types we've tried to await to avoid cycles
+                    seen = [];
+                    seen[type.id] = true;
+                    seen[promisedType.id] = true;
+                }
+                else if (seen[nestedPromisedType.id]) {
+                    // if we've already seen this type, this is a promise that would never resolve. As above, we return the empty type.
+                    return emptyObjectType;
+                }
+                
+                seen[nestedPromisedType.id] = true;
+                promisedType = nestedPromisedType;
+            }
+            
+            return promisedType;            
+
+            // if we didn't get a promised type, check the type does not have a callable then member.
+            if (isTypeAssignableTo(type, getGlobalThenableType())) {
+                error(null, Diagnostics.Type_for_await_does_not_have_a_valid_callable_then_member);
+                return emptyObjectType;
+            }
+
+            // if the type was not a "promise" or a "thenable", return the type.
+            return type;
+        }
+
+        function checkAsyncFunctionReturnType(node: SignatureDeclaration, returnType: Type): Type {            
+            // This checks that an async function has a valid Promise-compatible return type, and returns the *awaited type* of the promise.
+            // An async function has a valid Promise-compatible return type if the resolved value of the return type has a construct 
+            // signature that takes in an `initializer` function that in turn supplies a `resolve` function as one of its arguments
+            // and results in an object with a callable `then` signature.
+            let globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType();
+            if (globalPromiseConstructorLikeType !== emptyObjectType) {
+                if (!returnType) {
+                    returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+                }
+                                
+                // get the constructor type of the return type                
+                var declaredType = returnType.symbol ? getTypeOfSymbol(returnType.symbol) : emptyObjectType;
+                if (isTypeAssignableTo(declaredType, globalPromiseConstructorLikeType)) {
+                    var promisedType = getPromisedType(returnType);
+                    if (promisedType !== emptyObjectType) {
+                        // unwrap the promised type
+                        var promiseConstructor = getPromiseConstructor(node);
+                        if (promiseConstructor) {
+                            emitAwaiter = true;
+                            checkExpressionOrQualifiedName(promiseConstructor);
+                            return getAwaitedType(promisedType);
+                        }
+                    }
+                }
+            }
+            
+            error(node, ts.Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+            return emptyObjectType;
+        }
+                
         /** Check a decorator */
         function checkDecorator(node: Decorator): void {
             let expression: Expression = node.expression;
@@ -8904,6 +9142,7 @@ module ts {
 
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
+                checkCollisionWithCapturedArgumentsVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             }
         }
@@ -8946,7 +9185,14 @@ module ts {
 
             checkSourceElement(node.body);
             if (node.type && !isAccessor(node.kind) && !node.asteriskToken) {
-                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, getTypeFromTypeNode(node.type));
+                let returnType = getTypeFromTypeNode(node.type);
+                let isAsync = isAsyncFunctionLike(node); 
+                let promisedType: Type;
+                if (isAsync) {
+                    promisedType = checkAsyncFunctionReturnType(node, returnType);
+                }
+                
+                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, isAsync ? promisedType : returnType);
             }
 
             // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
@@ -9016,6 +9262,12 @@ module ts {
             }
         }
 
+        function checkCollisionWithCapturedArgumentsVariable(node: Node, name: Identifier): void {
+            if (needCollisionCheckForIdentifier(node, name, "_arguments")) {
+                potentialArgumentsCollisions.push(node);
+            }
+        }
+        
         // this function will run after checking the source file so 'CaptureThis' is correct for all nodes
         function checkIfThisIsCapturedInEnclosingScope(node: Node): void {
             let current = node;
@@ -9034,6 +9286,25 @@ module ts {
             }
         }
 
+        function checkIfArgumentsIsCapturedInEnclosingScope(node: Node): void {
+            let current = node;
+            while (current) {
+                if (getNodeCheckFlags(current) & NodeCheckFlags.CaptureArguments) {
+                    let isDeclaration = node.kind !== SyntaxKind.Identifier;
+                    if (isDeclaration) {
+                        error((<Declaration>node).name, Diagnostics.Duplicate_identifier_arguments_Compiler_uses_variable_declaration_arguments_to_capture_arguments_reference);
+                    }
+                    else {
+                        error(node, Diagnostics.Expression_resolves_to_variable_declaration_arguments_that_compiler_uses_to_capture_arguments_reference);
+                    }
+                    
+                    return;
+                }
+                
+                current = current.parent;
+            }
+        }
+        
         function checkCollisionWithCapturedSuperVariable(node: Node, name: Identifier) {
             if (!needCollisionCheckForIdentifier(node, name, "_super")) {
                 return;
@@ -9149,6 +9420,34 @@ module ts {
             }
         }
 
+        function getPromiseConstructor(node: SignatureDeclaration): EntityName {
+            if (node.type && node.type.kind === SyntaxKind.TypeReference) {
+                return (<TypeReferenceNode>node.type).typeName;
+            }
+            
+            let globalPromiseSymbol = getGlobalPromiseSymbol();
+            if (globalPromiseSymbol && globalPromiseSymbol === resolveName(node, "Promise", SymbolFlags.Value, undefined, undefined)) {
+                return <Identifier>globalPromiseSymbol.valueDeclaration.name;
+            }
+            
+            return undefined;
+        }
+
+        function checkCollisionWithAwaiterVariablesInGeneratedCode(node: Node, name: DeclarationName): void {
+            if (!name || name.kind !== SyntaxKind.Identifier || isTypeNode(name)) {
+                return;
+            }
+            
+            let identifier = <Identifier>name;
+            let container = getContainingFunction(name);
+            if (container && isAsyncFunctionLike(container) && node.kind !== SyntaxKind.Identifier) {
+                var promiseConstructor = getPromiseConstructor(container);
+                if (promiseConstructor && promiseConstructor.kind === SyntaxKind.Identifier && (<Identifier>promiseConstructor).text === identifier.text) {
+                    error(node, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions, identifier.text, getTextOfNode(promiseConstructor));
+                }
+            }
+        }
+                
         function isParameterDeclaration(node: VariableLikeDeclaration) {
             while (node.kind === SyntaxKind.BindingElement) {
                 node = <VariableLikeDeclaration>node.parent.parent;
@@ -9251,7 +9550,13 @@ module ts {
                 }
                 checkCollisionWithCapturedSuperVariable(node, <Identifier>node.name);
                 checkCollisionWithCapturedThisVariable(node, <Identifier>node.name);
+                checkCollisionWithCapturedArgumentsVariable(node, <Identifier>node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
+            }
+            
+            if (symbol === argumentsSymbol && (node.parserContextFlags & ParserContextFlags.Await)) {
+                let container = getContainingFunction(node);
+                captureLexicalArguments(node.name, container);
             }
         }
 
@@ -9275,7 +9580,10 @@ module ts {
         function checkGrammarDisallowedModifiersInBlockOrObjectLiteralExpression(node: Node) {
             if (node.modifiers) {
                 if (inBlockOrObjectLiteralExpression(node)) {
-                    return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
+                    // disallow all but the `async` modifier here
+                    if (isAccessor(node.kind) || !isFunctionLike(node) || (node.modifiers.flags & ~NodeFlags.Async)) {
+                        return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
+                    }
                 }
             }
         }
@@ -9288,6 +9596,8 @@ module ts {
 
                 node = node.parent;
             }
+            
+            return false;
         }
 
         function checkExpressionStatement(node: ExpressionStatement) {
@@ -9667,8 +9977,11 @@ module ts {
                                 error(node.expression, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
                             }
                         }
+                        else if (func.type && !isAccessor(func.kind) && isAsyncFunctionLike(func)) {
+                            checkTypeAssignableTo(getAwaitedType(exprType), getPromisedType(returnType), node.expression);
+                        }
                         else if (func.type || isGetAccessorWithAnnotatatedSetAccessor(func)) {
-                            checkTypeAssignableTo(exprType, returnType, node.expression, /*headMessage*/ undefined);
+                            checkTypeAssignableTo(exprType, returnType, node.expression);
                         }
                     }
                 }
@@ -9943,6 +10256,7 @@ module ts {
                 checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+                checkCollisionWithAwaiterVariablesInGeneratedCode(node, node.name);
             }
             checkTypeParameters(node.typeParameters);
             checkExportsOnMergedDeclarations(node);
@@ -10386,6 +10700,7 @@ module ts {
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
+            checkCollisionWithAwaiterVariablesInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
 
             computeEnumMemberValues(node);
@@ -10885,12 +11200,14 @@ module ts {
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.TypeOfExpression:
                 case SyntaxKind.VoidExpression:
+                case SyntaxKind.AwaitExpression:
                 case SyntaxKind.DeleteExpression:
                 case SyntaxKind.PrefixUnaryExpression:
                 case SyntaxKind.PostfixUnaryExpression:
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.ConditionalExpression:
                 case SyntaxKind.SpreadElementExpression:
+                case SyntaxKind.YieldExpression:
                 case SyntaxKind.Block:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.VariableStatement:
@@ -10941,6 +11258,7 @@ module ts {
                 emitDecorate = false;
                 emitParam = false;
                 potentialThisCollisions.length = 0;
+                potentialArgumentsCollisions.length = 0;
 
                 forEach(node.statements, checkSourceElement);
                 checkFunctionExpressionBodies(node);
@@ -10953,6 +11271,11 @@ module ts {
                     forEach(potentialThisCollisions, checkIfThisIsCapturedInEnclosingScope);
                     potentialThisCollisions.length = 0;
                 }
+                
+                if (potentialArgumentsCollisions.length) {
+                    forEach(potentialArgumentsCollisions, checkIfArgumentsIsCapturedInEnclosingScope);
+                    potentialArgumentsCollisions.length = 0;
+                }
 
                 if (emitExtends) {
                     links.flags |= NodeCheckFlags.EmitExtends;
@@ -10964,6 +11287,14 @@ module ts {
 
                 if (emitParam) {
                     links.flags |= NodeCheckFlags.EmitParam;
+                }
+                
+                if (emitAwaiter) {
+                    links.flags |= NodeCheckFlags.EmitAwaiter;
+                }
+                
+                if (emitGenerator || (emitAwaiter && languageVersion < ScriptTarget.ES6)) {
+                    links.flags |= NodeCheckFlags.EmitGenerator;
                 }
 
                 links.flags |= NodeCheckFlags.TypeChecked;
@@ -11982,6 +12313,12 @@ module ts {
             getGlobalPropertyDecoratorType = memoize(() => getGlobalType("PropertyDecorator"));
             getGlobalMethodDecoratorType = memoize(() => getGlobalType("MethodDecorator"));
             getGlobalParameterDecoratorType = memoize(() => getGlobalType("ParameterDecorator"));
+            getGlobalPromiseSymbol = memoize(() => getGlobalTypeSymbol("Promise"));
+            getGlobalPromiseType = memoize(() => getTypeOfGlobalSymbol(getGlobalPromiseSymbol(), /*arity*/ 1));
+            getGlobalPromiseLikeType = memoize(() => getGlobalType("PromiseLike", /*arity*/ 1));
+            getInstantiatedGlobalPromiseLikeType = memoize(createInstantiatedPromiseLikeType);
+            getGlobalPromiseConstructorLikeType = memoize(() => getGlobalType("PromiseConstructorLike"));
+            getGlobalThenableType = memoize(createThenableType);
 
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
@@ -12002,6 +12339,26 @@ module ts {
             }
 
             anyArrayType = createArrayType(anyType);
+        }
+        
+        function createInstantiatedPromiseLikeType(): ObjectType {
+            let promiseLikeType = getGlobalPromiseLikeType();
+            if (promiseLikeType !== emptyObjectType) {
+                return createTypeReference(<GenericType>promiseLikeType, [anyType]);
+            }
+            
+            return emptyObjectType;
+        }
+        
+        function createThenableType() {
+            // build the thenable type that is used to verify against a non-promise "thenable" operand to `await`.
+            let thenPropertySymbol = createSymbol(SymbolFlags.Transient | SymbolFlags.Property, "then");
+            getSymbolLinks(thenPropertySymbol).type = globalFunctionType;
+            
+            let thenableType = <ResolvedType>createObjectType(TypeFlags.ObjectType);
+            thenableType.properties = [thenPropertySymbol];
+            thenableType.members = createSymbolTable(thenableType.properties);
+            return thenableType;
         }
 
         // GRAMMAR CHECKING
@@ -12203,7 +12560,7 @@ module ts {
                 return;
             }
 
-            let lastStatic: Node, lastPrivate: Node, lastProtected: Node, lastDeclare: Node;
+            let lastStatic: Node, lastPrivate: Node, lastProtected: Node, lastDeclare: Node, lastAsync: Node;
             let flags = 0;
             for (let modifier of node.modifiers) {
                 switch (modifier.kind) {
@@ -12229,6 +12586,9 @@ module ts {
                         else if (flags & NodeFlags.Static) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "static");
                         }
+                        else if (flags & NodeFlags.Async) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "async");
+                        }
                         else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_element, text);
                         }
@@ -12238,6 +12598,9 @@ module ts {
                     case SyntaxKind.StaticKeyword:
                         if (flags & NodeFlags.Static) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "static");
+                        }
+                        else if (flags & NodeFlags.Async) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "async");
                         }
                         else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_element, "static");
@@ -12256,6 +12619,9 @@ module ts {
                         else if (flags & NodeFlags.Ambient) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "declare");
                         }
+                        else if (flags & NodeFlags.Async) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "async");
+                        }
                         else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "export");
                         }
@@ -12269,6 +12635,9 @@ module ts {
                         if (flags & NodeFlags.Ambient) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "declare");
                         }
+                        else if (flags & NodeFlags.Async) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
+                        }
                         else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "declare");
                         }
@@ -12280,6 +12649,20 @@ module ts {
                         }
                         flags |= NodeFlags.Ambient;
                         lastDeclare = modifier
+                        break;
+
+                    case SyntaxKind.AsyncKeyword:
+                        if (flags & NodeFlags.Async) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "async");
+                        }
+                        else if (flags & NodeFlags.Ambient || isInAmbientContext(node.parent)) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
+                        }
+                        else if (node.kind === SyntaxKind.Parameter) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "async");
+                        }
+                        flags |= NodeFlags.Async;
+                        lastAsync = modifier;
                         break;
                 }
             }
@@ -12294,16 +12677,42 @@ module ts {
                 else if (flags & NodeFlags.Private) {
                     return grammarErrorOnNode(lastPrivate, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "private");
                 }
+                else if (flags & NodeFlags.Async) {
+                    return grammarErrorOnNode(lastAsync, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "async");
+                }
+                return;
             }
             else if ((node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration) && flags & NodeFlags.Ambient) {
-                return grammarErrorOnNode(lastDeclare, Diagnostics.A_declare_modifier_cannot_be_used_with_an_import_declaration, "declare");
+                return grammarErrorOnNode(lastDeclare, Diagnostics.A_0_modifier_cannot_be_used_with_an_import_declaration, "declare");
             }
             else if (node.kind === SyntaxKind.InterfaceDeclaration && flags & NodeFlags.Ambient) {
-                return grammarErrorOnNode(lastDeclare, Diagnostics.A_declare_modifier_cannot_be_used_with_an_interface_declaration, "declare");
+                return grammarErrorOnNode(lastDeclare, Diagnostics.A_0_modifier_cannot_be_used_with_an_interface_declaration, "declare");
             }
             else if (node.kind === SyntaxKind.Parameter && (flags & NodeFlags.AccessibilityModifier) && isBindingPattern((<ParameterDeclaration>node).name)) {
                 return grammarErrorOnNode(node, Diagnostics.A_parameter_property_may_not_be_a_binding_pattern);
             }
+            if (flags & NodeFlags.Async) {
+                return checkGrammarAsyncModifier(node, lastAsync);
+            }
+        }
+
+        function checkGrammarAsyncModifier(node: Node, asyncModifier: Node): boolean {
+            if (languageVersion < ScriptTarget.ES6) {
+                return grammarErrorOnNode(asyncModifier, Diagnostics.Async_functions_are_only_available_when_targeting_ECMAScript_6_and_higher);
+            }
+
+            switch (node.kind) {
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                    if (!(<FunctionLikeDeclaration>node).asteriskToken) {
+                        return false;
+                    }
+                    break;
+            }
+
+            return grammarErrorOnNode(asyncModifier, Diagnostics._0_modifier_cannot_be_used_here, "async");
         }
 
         function checkGrammarForDisallowedTrailingComma(list: NodeArray<Node>): boolean {

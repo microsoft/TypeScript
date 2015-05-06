@@ -511,6 +511,19 @@ module ts {
         }
     }
 
+    export function getContainingParameter(node: Node): ParameterDeclaration {
+        while (true) {
+            node = node.parent;
+            if (!node || isFunctionLike(node)) {
+                return undefined;
+            }
+
+            if (node.kind === SyntaxKind.Parameter) {
+                return <ParameterDeclaration>node;
+            }
+        }
+    }
+    
     export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
         while (true) {
             node = node.parent;
@@ -1087,6 +1100,10 @@ module ts {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
 
+    export function isAsyncFunctionLike(node: Node): boolean {
+        return isFunctionLike(node) && !isAccessor(node) && (node.flags & NodeFlags.Async) === NodeFlags.Async;
+    }
+
     /**
      * A declaration has a dynamic name if both of the following are true:
      *   1. The declaration has a computed property name
@@ -1145,6 +1162,7 @@ module ts {
             case SyntaxKind.DeclareKeyword:
             case SyntaxKind.ConstKeyword:
             case SyntaxKind.DefaultKeyword:
+            case SyntaxKind.AsyncKeyword:
                 return true;
         }
         return false;
@@ -1630,6 +1648,7 @@ module ts {
             case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
             case SyntaxKind.ConstKeyword: return NodeFlags.Const;
             case SyntaxKind.DefaultKeyword: return NodeFlags.Default;
+            case SyntaxKind.AsyncKeyword: return NodeFlags.Async;
         }
         return 0;
     }

@@ -123,11 +123,27 @@
         "category": "Error",
         "code": 1039
     },
+    "'{0}' modifier cannot be used in an ambient context.": {
+        "category": "Error",
+        "code": 1040
+    },
+    "'{0}' modifier cannot be used with a class declaration.": {
+        "category": "Error",
+        "code": 1041
+    },
+    "'{0}' modifier cannot be used here.": {
+        "category": "Error",
+        "code": 1042
+    },
+    "'{0}' modifier cannot appear on a data property.": {
+        "category": "Error",
+        "code": 1043
+    },
     "'{0}' modifier cannot appear on a module element.": {
         "category": "Error",
         "code": 1044
     },
-    "A 'declare' modifier cannot be used with an interface declaration.": {
+    "A '{0}' modifier cannot be used with an interface declaration.": {
         "category": "Error",
         "code": 1045
     },
@@ -167,6 +183,14 @@
         "category": "Error",
         "code": 1056
     },
+    "An async function or method must have a valid awaitable return type.": {
+        "category": "Error",
+        "code": 1057
+    },
+    "Type for 'await' does not have a valid callable 'then' member.": {
+        "category": "Error",
+        "code": 1058
+    },
     "Enum member must have initializer.": {
         "category": "Error",
         "code": 1061
@@ -183,7 +207,7 @@
         "category": "Error",
         "code": 1068
     },
-    "A 'declare' modifier cannot be used with an import declaration.": {
+    "A '{0}' modifier cannot be used with an import declaration.": {
         "category": "Error",
         "code": 1079
     },
@@ -467,7 +491,7 @@
         "category": "Error",
         "code": 1162
     },
-    "'yield' expression must be contained_within a generator declaration.": {
+    "'yield' expression must be contained within a generator declaration.": {
         "category": "Error",
         "code": 1163
     },
@@ -682,6 +706,55 @@
     "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
         "code": 1218
+    },
+
+    "'with' statements are not allowed in an async function block.": {
+        "category": "Error",
+        "code": 1300
+    },
+    "'{0}' modifier cannot be used with a generator.": {
+        "category": "Error",
+        "code": 1301
+    },
+    "'{0}' modifier cannot be used with a module declaration.": {
+        "category": "Error",
+        "code": 1302
+    },
+    "'{0}' modifier cannot be used with an enum declaration.": {
+        "category": "Error",
+        "code": 1303
+    },
+    "'{0}' modifier cannot be used with an export assignment declaration.": {
+        "category": "Error",
+        "code": 1304
+    },
+    "'{0}' modifier cannot be used on a variable statement.": {
+        "category": "Error",
+        "code": 1305
+    },
+    "'{0}' modifier cannot be used with a type declaration.": {
+        "category": "Error",
+        "code": 1306
+    },
+    "'{0}' modifier cannot be used with a parameter declaration.": {
+        "category": "Error",
+        "code": 1307
+    },
+    "'await' expression must be contained within an async function.": {
+        "category": "Error",
+        "code": 1308
+    },
+    "'{0}' modifier cannot be used on an object literal element.": {
+        "category": "Error",
+        "code": 1309
+    },
+    "'{0}' expression is not allowed in an initializer.": {
+        "category": "Error",
+        "code": 1310
+    },
+    "Async functions are only available when targeting ECMAScript 6 and higher.": {
+        "category": "Error",
+        "code": 1311
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1441,6 +1514,23 @@
         "code": 2501
     },
 
+    "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
+        "category": "Error",
+        "code": 2520
+    },
+    "Expression resolves to variable declaration '{0}' that compiler uses to support async functions.": {
+        "category": "Error",
+        "code": 2521
+    },
+    "Duplicate identifier '_arguments'. Compiler uses variable declaration '_arguments' to capture 'arguments' reference.": {
+        "category": "Error",
+        "code": 2522
+    },
+    "Expression resolves to variable declaration '_arguments' that compiler uses to capture 'arguments' reference.": {
+        "category": "Error",
+        "code": 2523
+    },
+
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -2010,7 +2100,10 @@
         "category": "Error", 
         "code": 6062
     },
-
+    "Emit async functions when ECMAScript target version is lower than 'ES6'.": {
+        "category": "Message",
+        "code": 6063
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
