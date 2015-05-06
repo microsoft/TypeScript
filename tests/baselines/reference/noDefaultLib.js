@@ -1,5 +1,4 @@
 //// [noDefaultLib.ts]
-/// <reference no-default-lib="true"/>
 var x;
 
 interface Array {}
@@ -11,5 +10,4 @@ interface Function {}
 interface RegExp {}
 
 //// [noDefaultLib.js]
-/// <reference no-default-lib="true"/>
 var x;

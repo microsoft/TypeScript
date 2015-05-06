@@ -18,7 +18,6 @@ error TS2318: Cannot find global type 'Array'.
 !!! error TS2318: Cannot find global type 'Array'.
 ==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509698.ts (0 errors) ====
     /// <style requireSemi="on" />
-    /// <reference no-default-lib="true"/>
     declare function foo(): void;
     declare function bar(): void;
     
