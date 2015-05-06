@@ -1,7 +1,6 @@
 /// <reference path='harness.ts' />
 /// <reference path='runnerbase.ts' />
 /// <reference path='typeWriter.ts' />
-/// <reference path='syntacticCleaner.ts' />
 
 const enum CompilerTestType {
     Conformance,
@@ -194,8 +193,6 @@ class CompilerBaselineRunner extends RunnerBase {
                             jsCode += '//// [' + Harness.Path.getFileName(result.files[i].fileName) + ']\r\n';
                             jsCode += getByteOrderMarkText(result.files[i]);
                             jsCode += result.files[i].code;
-                            // Re-enable this if we want to do another comparison of old vs new compiler baselines
-                            // jsCode += SyntacticCleaner.clean(result.files[i].code);
                         }
 
                         if (result.declFilesCode.length > 0) {

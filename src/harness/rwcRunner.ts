@@ -1,6 +1,5 @@
 /// <reference path='harness.ts'/>
 /// <reference path='runnerbase.ts' />
-/// <reference path='syntacticCleaner.ts' />
 /// <reference path='loggedIO.ts' />
 /// <reference path='..\compiler\commandLineParser.ts'/>
 
@@ -132,7 +131,7 @@ module RWC {
 
             it('has the expected emitted code', () => {
                 Harness.Baseline.runBaseline('has the expected emitted code', baseName + '.output.js', () => {
-                    return Harness.Compiler.collateOutputs(compilerResult.files, s => SyntacticCleaner.clean(s));
+                    return Harness.Compiler.collateOutputs(compilerResult.files);
                 }, false, baselineOpts);
             });
 
