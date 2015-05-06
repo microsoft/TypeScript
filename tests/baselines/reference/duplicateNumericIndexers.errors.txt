@@ -1,14 +1,14 @@
+lib.d.ts(431,5): error TS2375: Duplicate number index signature.
+lib.d.ts(1158,5): error TS2375: Duplicate number index signature.
 tests/cases/conformance/types/members/duplicateNumericIndexers.ts(5,5): error TS2375: Duplicate number index signature.
-tests/cases/conformance/types/members/duplicateNumericIndexers.ts(9,5): error TS2375: Duplicate number index signature.
 tests/cases/conformance/types/members/duplicateNumericIndexers.ts(10,5): error TS2375: Duplicate number index signature.
-tests/cases/conformance/types/members/duplicateNumericIndexers.ts(14,5): error TS2375: Duplicate number index signature.
 tests/cases/conformance/types/members/duplicateNumericIndexers.ts(15,5): error TS2375: Duplicate number index signature.
 tests/cases/conformance/types/members/duplicateNumericIndexers.ts(20,5): error TS2375: Duplicate number index signature.
 tests/cases/conformance/types/members/duplicateNumericIndexers.ts(25,5): error TS2375: Duplicate number index signature.
 tests/cases/conformance/types/members/duplicateNumericIndexers.ts(30,5): error TS2375: Duplicate number index signature.
 
 
-==== tests/cases/conformance/types/members/duplicateNumericIndexers.ts (8 errors) ====
+==== tests/cases/conformance/types/members/duplicateNumericIndexers.ts (6 errors) ====
     // it is an error to have duplicate index signatures of the same kind in a type
     
     interface Number {
@@ -20,8 +20,6 @@ tests/cases/conformance/types/members/duplicateNumericIndexers.ts(30,5): error T
     
     interface String {
         [x: number]: string;
-        ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2375: Duplicate number index signature.
         [x: number]: string;
         ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2375: Duplicate number index signature.
@@ -29,8 +27,6 @@ tests/cases/conformance/types/members/duplicateNumericIndexers.ts(30,5): error T
     
     interface Array<T> {
         [x: number]: T;
-        ~~~~~~~~~~~~~~~
-!!! error TS2375: Duplicate number index signature.
         [x: number]: T;
         ~~~~~~~~~~~~~~~
 !!! error TS2375: Duplicate number index signature.

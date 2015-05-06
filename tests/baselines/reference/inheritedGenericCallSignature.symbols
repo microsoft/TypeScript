@@ -13,7 +13,7 @@ interface I1<T> {
 
 
 interface Object {}
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11), Decl(inheritedGenericCallSignature.ts, 5, 1))
+>Object : Symbol(Object, Decl(inheritedGenericCallSignature.ts, 5, 1), Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
 
  
 
