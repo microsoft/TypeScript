@@ -1,5 +1,5 @@
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2304: Cannot find name 'module'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2502: Cannot find namespace 'module'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2503: Cannot find namespace 'module'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(11,19): error TS1005: ';' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(22,35): error TS1005: ')' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(22,39): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
@@ -98,7 +98,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
                 ~~~~~~
 !!! error TS2304: Cannot find name 'module'.
                 ~~~~~~
-!!! error TS2502: Cannot find namespace 'module'.
+!!! error TS2503: Cannot find namespace 'module'.
                       ~
 !!! error TS1005: ';' expected.
     

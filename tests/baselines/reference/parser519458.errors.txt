@@ -1,5 +1,5 @@
 tests/cases/conformance/parser/ecmascript5/RegressionTests/parser519458.ts(1,15): error TS2304: Cannot find name 'module'.
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser519458.ts(1,15): error TS2502: Cannot find namespace 'module'.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser519458.ts(1,15): error TS2503: Cannot find namespace 'module'.
 tests/cases/conformance/parser/ecmascript5/RegressionTests/parser519458.ts(1,21): error TS1005: ';' expected.
 
 
@@ -8,7 +8,7 @@ tests/cases/conformance/parser/ecmascript5/RegressionTests/parser519458.ts(1,21)
                   ~~~~~~
 !!! error TS2304: Cannot find name 'module'.
                   ~~~~~~
-!!! error TS2502: Cannot find namespace 'module'.
+!!! error TS2503: Cannot find namespace 'module'.
                         ~
 !!! error TS1005: ';' expected.
     
