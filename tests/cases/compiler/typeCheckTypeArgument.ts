@@ -1,4 +1,4 @@
-/// <reference no-default-lib="true"/>
+// @noLib: true
 
 var f: <T extends UNKNOWN>() => void;
 

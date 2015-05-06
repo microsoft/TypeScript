@@ -1,5 +1,4 @@
 // @noLib: true
-/// <reference no-default-lib="true"/>
 var x;
 
 interface Array {}

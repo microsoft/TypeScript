@@ -1,4 +1,4 @@
-/// <reference no-default-lib="true"/>
+// @noLib: true
 
 var x: Array<number>;
 
