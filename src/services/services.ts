@@ -4227,7 +4227,7 @@ module ts {
                     isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
                     isNameOfExternalModuleImportOrDeclaration(node)) {
 
-                    let referencedSymbols = getReferencedSymbolsForNodes(node, sourceFilesToSearch, /*findInStrings:*/ false, /*findInComments:*/ false);
+                    let referencedSymbols = getReferencedSymbolsForNode(node, sourceFilesToSearch, /*findInStrings:*/ false, /*findInComments:*/ false);
                     return convertReferencedSymbols(referencedSymbols);
                 }
 
@@ -4879,10 +4879,10 @@ module ts {
             }
 
             Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.NumericLiteral || node.kind === SyntaxKind.StringLiteral);
-            return getReferencedSymbolsForNodes(node, program.getSourceFiles(), findInStrings, findInComments);
+            return getReferencedSymbolsForNode(node, program.getSourceFiles(), findInStrings, findInComments);
         }
 
-        function getReferencedSymbolsForNodes(node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] {
+        function getReferencedSymbolsForNode(node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] {
             let typeChecker = program.getTypeChecker();
 
             // Labels
