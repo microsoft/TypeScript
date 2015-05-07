@@ -26,7 +26,7 @@ sourceFile:recursiveClassReferenceTest.ts
 1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
 2 >Emitted(2, 75) Source(2, 75) + SourceIndex(0)
 ---
->>>var __extends = this.__extends || function (d, b) {
+>>>var __extends = (this && this.__extends) || function (d, b) {
 >>>    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 >>>    function __() { this.constructor = d; }
 >>>    __.prototype = b.prototype;
@@ -738,14 +738,18 @@ sourceFile:recursiveClassReferenceTest.ts
 ---
 >>>                    // scenario 1
 1 >^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^^^^^^^^^
-3 >                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >                    
+3 >                    ^^^^^^^^^^^^^
+4 >                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >		constructor(private codeThing: Sample.Thing.ICodeThing) {
+  >		    // scenario 1
   >		    
-2 >                    // scenario 1
-1 >Emitted(41, 21) Source(51, 7) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget.constructor)
-2 >Emitted(41, 34) Source(51, 20) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget.constructor)
+2 >                    
+3 >                    // scenario 1
+1 >Emitted(41, 21) Source(52, 7) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget.constructor)
+2 >Emitted(41, 21) Source(51, 7) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget.constructor)
+3 >Emitted(41, 34) Source(51, 20) + SourceIndex(0) name (Sample.Thing.Widgets.FindWidget.constructor)
 ---
 >>>                    codeThing.addWidget("addWidget", this);
 1->^^^^^^^^^^^^^^^^^^^^

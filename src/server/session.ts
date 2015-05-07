@@ -97,6 +97,7 @@ module ts.server {
         export var Rename = "rename";
         export var Saveto = "saveto";
         export var SignatureHelp = "signatureHelp";        
+        export var TypeDefinition = "typeDefinition";        
         export var Unknown = "unknown";
     }
 
@@ -285,7 +286,29 @@ module ts.server {
             }));
         }
 
-        getOccurrences(line: number, offset: number, fileName: string): protocol.OccurrencesResponseItem[] {
+        getTypeDefinition(line: number, offset: number, fileName: string): protocol.FileSpan[] {
+            var file = ts.normalizePath(fileName);
+            var project = this.projectService.getProjectForFile(file);
+            if (!project) {
+                throw Errors.NoProject;
+            }
+
+            var compilerService = project.compilerService;
+            var position = compilerService.host.lineOffsetToPosition(file, line, offset);
+
+            var definitions = compilerService.languageService.getTypeDefinitionAtPosition(file, position);
+            if (!definitions) {
+                return undefined;
+            }
+
+            return definitions.map(def => ({
+                file: def.fileName,
+                start: compilerService.host.positionToLineOffset(def.fileName, def.textSpan.start),
+                end: compilerService.host.positionToLineOffset(def.fileName, ts.textSpanEnd(def.textSpan))
+            }));
+        }
+
+        getOccurrences(line: number, offset: number, fileName: string): protocol.OccurrencesResponseItem[]{
             fileName = ts.normalizePath(fileName);
             let project = this.projectService.getProjectForFile(fileName);
 
@@ -519,7 +542,7 @@ module ts.server {
                                 IndentSize: formatOptions.IndentSize,
                                 TabSize: formatOptions.TabSize,
                                 NewLineCharacter: "\n",
-                                ConvertTabsToSpaces: true,
+                                ConvertTabsToSpaces: formatOptions.ConvertTabsToSpaces,
                             };
                             var indentPosition =
                                 compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);
@@ -815,6 +838,11 @@ module ts.server {
                     case CommandNames.Definition: { 
                         var defArgs = <protocol.FileLocationRequestArgs>request.arguments;
                         response = this.getDefinition(defArgs.line, defArgs.offset, defArgs.file);
+                        break;
+                    }
+                    case CommandNames.TypeDefinition: {
+                        var defArgs = <protocol.FileLocationRequestArgs>request.arguments;
+                        response = this.getTypeDefinition(defArgs.line, defArgs.offset, defArgs.file);
                         break;
                     }
                     case CommandNames.References: { 

@@ -3,7 +3,7 @@ tests/cases/conformance/es6/spread/iteratorSpreadInArray9.ts(1,17): error TS2322
     Type '() => SymbolIterator' is not assignable to type '() => Iterator<symbol>'.
       Type 'SymbolIterator' is not assignable to type 'Iterator<symbol>'.
         Types of property 'next' are incompatible.
-          Type '() => { value: symbol; }' is not assignable to type '() => IteratorResult<symbol>'.
+          Type '() => { value: symbol; }' is not assignable to type '(value?: any) => IteratorResult<symbol>'.
             Type '{ value: symbol; }' is not assignable to type 'IteratorResult<symbol>'.
               Property 'done' is missing in type '{ value: symbol; }'.
 
@@ -16,7 +16,7 @@ tests/cases/conformance/es6/spread/iteratorSpreadInArray9.ts(1,17): error TS2322
 !!! error TS2322:     Type '() => SymbolIterator' is not assignable to type '() => Iterator<symbol>'.
 !!! error TS2322:       Type 'SymbolIterator' is not assignable to type 'Iterator<symbol>'.
 !!! error TS2322:         Types of property 'next' are incompatible.
-!!! error TS2322:           Type '() => { value: symbol; }' is not assignable to type '() => IteratorResult<symbol>'.
+!!! error TS2322:           Type '() => { value: symbol; }' is not assignable to type '(value?: any) => IteratorResult<symbol>'.
 !!! error TS2322:             Type '{ value: symbol; }' is not assignable to type 'IteratorResult<symbol>'.
 !!! error TS2322:               Property 'done' is missing in type '{ value: symbol; }'.
     

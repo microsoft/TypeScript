@@ -37,10 +37,6 @@ module ts {
         return diagnostics;
     }
 
-    export function isExternalModuleOrDeclarationFile(sourceFile: SourceFile) {
-        return isExternalModule(sourceFile) || isDeclarationFile(sourceFile);
-    }
-
     function emitDeclarations(host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[], jsFilePath: string, root?: SourceFile): DeclarationEmit {
         let newLine = host.getNewLine();
         let compilerOptions = host.getCompilerOptions();
@@ -333,8 +329,8 @@ module ts {
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.StringLiteral:
                     return writeTextOfNode(currentSourceFile, type);
-                case SyntaxKind.HeritageClauseElement:
-                    return emitHeritageClauseElement(<HeritageClauseElement>type);
+                case SyntaxKind.ExpressionWithTypeArguments:
+                    return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>type);
                 case SyntaxKind.TypeReference:
                     return emitTypeReference(<TypeReferenceNode>type);
                 case SyntaxKind.TypeQuery:
@@ -380,8 +376,8 @@ module ts {
                 }
             }
 
-            function emitHeritageClauseElement(node: HeritageClauseElement) {
-                if (isSupportedHeritageClauseElement(node)) {
+            function emitExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
+                if (isSupportedExpressionWithTypeArguments(node)) {
                     Debug.assert(node.expression.kind === SyntaxKind.Identifier || node.expression.kind === SyntaxKind.PropertyAccessExpression);
                     emitEntityName(<Identifier | PropertyAccessExpression>node.expression);
                     if (node.typeArguments) {
@@ -865,14 +861,14 @@ module ts {
             }
         }
 
-        function emitHeritageClause(typeReferences: HeritageClauseElement[], isImplementsList: boolean) {
+        function emitHeritageClause(typeReferences: ExpressionWithTypeArguments[], isImplementsList: boolean) {
             if (typeReferences) {
                 write(isImplementsList ? " implements " : " extends ");
                 emitCommaList(typeReferences, emitTypeOfTypeReference);
             }
 
-            function emitTypeOfTypeReference(node: HeritageClauseElement) {
-                if (isSupportedHeritageClauseElement(node)) {
+            function emitTypeOfTypeReference(node: ExpressionWithTypeArguments) {
+                if (isSupportedExpressionWithTypeArguments(node)) {
                     emitTypeWithNewGetSymbolAccessibilityDiagnostic(node, getHeritageClauseVisibilityError);
                 }
 

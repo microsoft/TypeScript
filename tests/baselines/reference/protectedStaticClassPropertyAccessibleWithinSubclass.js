@@ -44,7 +44,7 @@ Derived2.x;     // Error, neither within their declaring class nor classes deriv
 Derived3.x;     // Error, neither within their declaring class nor classes derived from their declaring class
 
 //// [protectedStaticClassPropertyAccessibleWithinSubclass.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;

@@ -126,6 +126,14 @@ declare module ts.server.protocol {
     }
 
     /**
+      * Go to type request; value of command field is
+      * "typeDefinition". Return response giving the file locations that
+      * define the type for the symbol found in file at location line, col.
+      */
+    export interface TypeDefinitionRequest extends FileLocationRequest {
+    }
+
+    /**
       * Location in source code expressed as (one-based) line and character offset.
       */
     export interface Location {
@@ -162,6 +170,13 @@ declare module ts.server.protocol {
       * Definition response message.  Gives text range for definition.
       */
     export interface DefinitionResponse extends Response {
+        body?: FileSpan[];
+    }
+
+    /**
+      * Definition response message.  Gives text range for definition.
+      */
+    export interface TypeDefinitionResponse extends Response {
         body?: FileSpan[];
     }
 

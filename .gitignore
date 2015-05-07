@@ -46,3 +46,4 @@ scripts/*.js.map
 coverage/
 internal/
 **/.DS_Store
+.settings/

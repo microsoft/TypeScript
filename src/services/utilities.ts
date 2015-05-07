@@ -200,7 +200,7 @@ module ts {
     function nodeEndsWith(n: Node, expectedLastToken: SyntaxKind, sourceFile: SourceFile): boolean {
         let children = n.getChildren(sourceFile);
         if (children.length) {
-            let last = children[children.length - 1];
+            let last = lastOrUndefined(children);
             if (last.kind === expectedLastToken) {
                 return true;
             }

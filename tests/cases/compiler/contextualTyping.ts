@@ -1,4 +1,4 @@
-// @newline: \n
+// @normalizenewline: \n
 // @sourcemap: true
 // DEFAULT INTERFACES
 interface IFoo {
