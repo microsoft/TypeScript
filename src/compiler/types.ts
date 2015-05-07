@@ -1678,6 +1678,9 @@ module ts {
         watch?: boolean;
         separateCompilation?: boolean;
         emitDecoratorMetadata?: boolean;
+        packageMain?: string;
+        packageName?: string;
+        packageDeclaration?: string;
         /* @internal */ stripInternal?: boolean;
         [option: string]: string | number | boolean;
     }

@@ -17,6 +17,24 @@ module ts {
             description: Diagnostics.Generates_corresponding_d_ts_file,
         },
         {
+            name: "packageMain",
+            type: "string",
+            isFilePath: true,
+            experimental: true
+        },
+        {
+            name: "packageName",
+            type: "string",
+            isFilePath: true,
+            experimental: true
+        },
+        {
+            name: "packageDeclaration",
+            type: "string",
+            isFilePath: true,
+            experimental: true
+        },
+        {
             name: "diagnostics",
             type: "boolean",
         },

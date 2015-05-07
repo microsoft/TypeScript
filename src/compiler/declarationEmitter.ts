@@ -42,6 +42,8 @@ module ts {
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
 
+        let isPackage = (compilerOptions.packageMain && compilerOptions.packageName && compilerOptions.packageDeclaration) != undefined;
+        let packageMainFile: string;
         let write: (s: string) => void;
         let writeLine: () => void;
         let increaseIndent: () => void;
@@ -63,6 +65,10 @@ module ts {
         // Collecting this separately because reference paths need to be first thing in the declaration file
         // and we could be collecting these paths from multiple files into single one with --out option
         let referencePathsOutput = "";
+        
+        if (isPackage) {
+            packageMainFile = host.getCanonicalFileName(compilerOptions.packageMain);
+        }
 
         if (root) {
             // Emitting just a single file, so emit references in this file only
@@ -83,9 +89,9 @@ module ts {
                     }
                 });
             }
-
+            
             emitSourceFile(root);
-
+            
             // create asynchronous output for the importDeclarations
             if (moduleElementDeclarationEmitInfo.length) {
                 let oldWriter = writer;
@@ -104,11 +110,11 @@ module ts {
         else {
             // Emit references corresponding to this file
             let emittedReferencedFiles: SourceFile[] = [];
-            forEach(host.getSourceFiles(), sourceFile => {
-                if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+            for (let sourceFile of sortSourceFiles(host.getSourceFiles())) {
+                if (!isExternalModuleOrDeclarationFile(sourceFile) || (isPackage && isExternalModule(sourceFile))) {
                     // Check what references need to be added
                     if (!compilerOptions.noResolve) {
-                        forEach(sourceFile.referencedFiles, fileReference => {
+                        for (let fileReference of sourceFile.referencedFiles) {
                             let referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
 
                             // If the reference file is a declaration file or an external module, emit that reference
@@ -117,20 +123,50 @@ module ts {
 
                                 writeReferencePath(referencedFile);
                                 emittedReferencedFiles.push(referencedFile);
-                            }
-                        });
+                            }                            
+                        }
                     }
 
+                    writeLine();
                     emitSourceFile(sourceFile);
-                }
-            });
+                }                
+            }
         }
-
+        
         return {
             reportedDeclarationError,
             moduleElementDeclarationEmitInfo,
             synchronousDeclarationOutput: writer.getText(),
             referencePathsOutput,
+        }
+
+        function sortSourceFiles(sourceFiles: SourceFile[]) {
+            if (isPackage) {
+                let indices = new Array<number>(sourceFiles.length);
+                for (let i = 0; i < sourceFiles.length; ++i) indices[i] = i;
+                indices.sort((left, right) => {
+                   let leftFile = sourceFiles[left];
+                   if (leftFile.fileName === packageMainFile) {
+                       return -1;
+                   }
+                   
+                   let rightFile = sourceFiles[right];
+                   if (rightFile.fileName === packageMainFile) {
+                       return +1;
+                   }
+                   
+                   return left - right; 
+                });
+                
+                let sorted = new Array<SourceFile>(sourceFiles.length);
+                for (let i = 0; i < sourceFiles.length; ++i) {
+                    sorted[i] = sourceFiles[indices[i]];
+                }
+                
+                return sorted;
+            }
+            
+            return sourceFiles;
         }
 
         function hasInternalAnnotation(range: CommentRange) {
@@ -439,7 +475,29 @@ module ts {
         function emitSourceFile(node: SourceFile) {
             currentSourceFile = node;
             enclosingDeclaration = node;
+
+            if (isPackage) {
+                // compute file name relative to main
+                let packageQualifiedModuleName: string;
+                if (packageMainFile === node.fileName) {
+                    packageQualifiedModuleName = compilerOptions.packageName;
+                }
+                else {
+                    let sourcePath = removeFileExtension(node.fileName);
+                    packageQualifiedModuleName = getPackageQualifiedPath(host, sourcePath, ".");
+                }
+                write(`declare module "${packageQualifiedModuleName}" {`);
+                increaseIndent();
+                writeLine();
+            }
+
             emitLines(node.statements);
+
+            if (isPackage) {
+                decreaseIndent();
+                writeLine();
+                write("}");
+            }
         }
 
         // Return a temp variable name to be used in `export default` statements.
@@ -563,7 +621,7 @@ module ts {
 
         function emitModuleElementDeclarationFlags(node: Node) {
             // If the node is parented in the current source file we need to emit export declare or just export
-            if (node.parent === currentSourceFile) {
+            if (node.parent === currentSourceFile && !isPackage) {
                 // If the node is exported
                 if (node.flags & NodeFlags.Export) {
                     write("export ");
@@ -686,7 +744,7 @@ module ts {
             // write each of these declarations asynchronously
             writeAsynchronousModuleElements(nodes);
         }
-
+        
         function emitExportDeclaration(node: ExportDeclaration) {
             emitJsDocComments(node);
             write("export ");
@@ -700,7 +758,21 @@ module ts {
             }
             if (node.moduleSpecifier) {
                 write(" from ");
-                writeTextOfNode(currentSourceFile, node.moduleSpecifier);
+                if (isPackage) {
+                    let moduleNameText = (<LiteralExpression>node.moduleSpecifier).text;
+                    let searchPath = getDirectoryPath(currentSourceFile.fileName);
+                    let searchName = normalizePath(combinePaths(searchPath, moduleNameText));
+                    if (host.getSourceFile(searchName + ".ts") || host.getSourceFile(searchName + ".d.ts")) {
+                        let packageQualifiedPath = getPackageQualifiedPath(host, moduleNameText, searchPath);
+                        write(`"${packageQualifiedPath}"`);                        
+                    }
+                    else {
+                        writeTextOfNode(currentSourceFile, node.moduleSpecifier);
+                    }
+                }
+                else {
+                    writeTextOfNode(currentSourceFile, node.moduleSpecifier);
+                }
             }
             write(";");
             writer.writeLine();
@@ -1560,7 +1632,46 @@ module ts {
             referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
         }
     }
-    
+
+    function getPackageQualifiedPath(host: EmitHost, moduleName: string, basePath: string) {
+        let compilerOptions = host.getCompilerOptions();
+        let modulePath = normalizePath(combinePaths(basePath, moduleName));
+        let packageRelativePath = getRelativePathToDirectoryOrUrl(
+            getDirectoryPath(host.getCanonicalFileName(compilerOptions.packageMain)),
+            modulePath,
+            host.getCurrentDirectory(),
+            host.getCanonicalFileName,
+            false);
+        return `package://${compilerOptions.packageName}/${packageRelativePath}`;
+    }
+        
+    function getDeclarationOutput(synchronousDeclarationOutput: string, moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[]) {
+        let appliedSyncOutputPos = 0;
+        let declarationOutput = "";
+        // apply asynchronous additions to the synchronous output
+        forEach(moduleElementDeclarationEmitInfo, aliasEmitInfo => {
+            if (aliasEmitInfo.asynchronousOutput) {
+                declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos, aliasEmitInfo.outputPos);
+                declarationOutput += getDeclarationOutput(aliasEmitInfo.asynchronousOutput, aliasEmitInfo.subModuleElementDeclarationEmitInfo);
+                appliedSyncOutputPos = aliasEmitInfo.outputPos;
+            }
+        });
+        declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos);
+        return declarationOutput;
+    }
+        
+    /* @internal */
+    export function writePackageDeclarationFile(dtsFilePath: string, host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[]) {
+        let compilerOptions = host.getCompilerOptions();
+        let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, dtsFilePath);
+        if (!emitDeclarationResult.reportedDeclarationError) {
+            let declarationOutput = emitDeclarationResult.referencePathsOutput
+                + getDeclarationOutput(emitDeclarationResult.synchronousDeclarationOutput, emitDeclarationResult.moduleElementDeclarationEmitInfo);
+
+            writeFile(host, diagnostics, dtsFilePath, declarationOutput, compilerOptions.emitBOM);
+        }
+    }
+
     /* @internal */
     export function writeDeclarationFile(jsFilePath: string, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[]) {
         let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, jsFilePath, sourceFile);
@@ -1569,22 +1680,8 @@ module ts {
         if (!emitDeclarationResult.reportedDeclarationError) {
             let declarationOutput = emitDeclarationResult.referencePathsOutput
                 + getDeclarationOutput(emitDeclarationResult.synchronousDeclarationOutput, emitDeclarationResult.moduleElementDeclarationEmitInfo);
-            writeFile(host, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, host.getCompilerOptions().emitBOM);
-        }
 
-        function getDeclarationOutput(synchronousDeclarationOutput: string, moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[]) {
-            let appliedSyncOutputPos = 0;
-            let declarationOutput = "";
-            // apply asynchronous additions to the synchronous output
-            forEach(moduleElementDeclarationEmitInfo, aliasEmitInfo => {
-                if (aliasEmitInfo.asynchronousOutput) {
-                    declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos, aliasEmitInfo.outputPos);
-                    declarationOutput += getDeclarationOutput(aliasEmitInfo.asynchronousOutput, aliasEmitInfo.subModuleElementDeclarationEmitInfo);
-                    appliedSyncOutputPos = aliasEmitInfo.outputPos;
-                }
-            });
-            declarationOutput += synchronousDeclarationOutput.substring(appliedSyncOutputPos);
-            return declarationOutput;
+            writeFile(host, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, host.getCompilerOptions().emitBOM);
         }
     }
 }

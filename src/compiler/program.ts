@@ -540,6 +540,18 @@ module ts {
                 if (options.out) {
                     diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_out_cannot_be_specified_with_option_separateCompilation));
                 }
+                
+                if (options.packageName) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_separateCompilation, "packageName"));
+                }
+                
+                if (options.packageMain) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_separateCompilation, "packageMain"));
+                }
+                
+                if (options.packageDeclaration) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_separateCompilation, "packageDeclaration"));
+                }
             }
 
             if (options.inlineSourceMap) {
@@ -570,6 +582,27 @@ module ts {
                     diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_sourceRoot_cannot_be_specified_without_specifying_sourcemap_option));
                 }
                 return;
+            }
+            
+            if (options.packageMain || options.packageName || options.packageDeclaration) {
+                if (!options.packageMain) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Options_packageName_packageMain_and_packageDeclaration_must_all_be_specified_with_option_0, "packageMain"));
+                    return;
+                }
+                if (!options.packageName) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Options_packageName_packageMain_and_packageDeclaration_must_all_be_specified_with_option_0, "packageName"));
+                    return;
+                }
+                if (!options.packageDeclaration) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Options_packageName_packageMain_and_packageDeclaration_must_all_be_specified_with_option_0, "packageDeclaration"));
+                    return;
+                }
+                if (options.module === ModuleKind.None && options.target < ScriptTarget.ES6) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Options_packageName_packageMain_and_packageDeclaration_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES6_or_higher));
+                }
+                if (!options.declaration) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_declaration_must_be_specified_with_options_packageName_packageMain_and_packageDeclaration));
+                }
             }
 
             let languageVersion = options.target || ScriptTarget.ES3;

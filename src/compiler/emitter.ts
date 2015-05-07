@@ -65,6 +65,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             if (compilerOptions.out) {
                 emitFile(compilerOptions.out);
             }
+            
+            if (compilerOptions.packageMain && compilerOptions.packageName && compilerOptions.packageDeclaration) {
+                writePackageDeclarationFile(compilerOptions.packageDeclaration, host, resolver, diagnostics);
+            }
         }
         else {
             // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
@@ -6047,7 +6051,14 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             emitJavaScript(jsFilePath, sourceFile);
 
             if (compilerOptions.declaration) {
-                writeDeclarationFile(jsFilePath, sourceFile, host, resolver, diagnostics);
+                if (compilerOptions.packageMain && compilerOptions.packageName && compilerOptions.packageDeclaration) {
+                    if (sourceFile.fileName === host.getCanonicalFileName(compilerOptions.packageMain)) {
+                        writeDeclarationFile(jsFilePath, sourceFile, host, resolver, diagnostics);
+                    }
+                }
+                else {
+                    writeDeclarationFile(jsFilePath, sourceFile, host, resolver, diagnostics);
+                }                
             }
         }
     }
