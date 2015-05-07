@@ -102,7 +102,7 @@ module ts {
         let globalArraySymbol: Symbol;
         let globalESSymbolConstructorSymbol: Symbol;
         
-        let getGlobalPromiseSymbol: () => Symbol;
+        let getGlobalPromiseConstructorSymbol: () => Symbol;
 
         let globalObjectType: ObjectType;
         let globalFunctionType: ObjectType;
@@ -139,7 +139,6 @@ module ts {
         let symbolLinks: SymbolLinks[] = [];
         let nodeLinks: NodeLinks[] = [];
         let potentialThisCollisions: Node[] = [];
-        var potentialArgumentsCollisions: Node[] = [];
 
         let diagnostics = createDiagnosticCollection();
 
@@ -5420,11 +5419,13 @@ module ts {
             // can explicitly bound arguments objects
             let container = getContainingFunction(node);
             if (symbol === argumentsSymbol) {
-                if (container.kind === SyntaxKind.ArrowFunction && languageVersion < ScriptTarget.ES6) {
-                    error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression);
-                }
-                else if (node.parserContextFlags & ParserContextFlags.Await) {
-                    captureLexicalArguments(node, container);
+                if (container.kind === SyntaxKind.ArrowFunction) {
+                    if (languageVersion < ScriptTarget.ES6) {
+                        error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression);
+                    }
+                    else if (node.parserContextFlags & ParserContextFlags.Await) {
+                        error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_async_arrow_function_Consider_using_a_standard_async_function_expression);
+                    }
                 }
             }
 
@@ -5434,7 +5435,6 @@ module ts {
 
             checkCollisionWithCapturedSuperVariable(node, node);
             checkCollisionWithCapturedThisVariable(node, node);
-            checkCollisionWithCapturedArgumentsVariable(node, node);            
             checkBlockScopedBindingCapturedInLoop(node, symbol);
 
             return getNarrowedTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol), node);
@@ -5516,10 +5516,9 @@ module ts {
                 // When targeting es6, arrow function lexically bind "this" so we do not need to do the work of binding "this" in emitted code
                 needToCaptureLexicalThis = (languageVersion < ScriptTarget.ES6);
             }
-            
-            if (node.parserContextFlags & ParserContextFlags.Await) {
+            else if (node.parserContextFlags & ParserContextFlags.Await) {
                 // if 'this' is part of an async function, we will need to capture 'this'
-                needToCaptureLexicalThis = true;
+                needToCaptureLexicalThis = (languageVersion < ScriptTarget.ES6);
             }
 
             switch (container.kind) {
@@ -5559,14 +5558,6 @@ module ts {
                 return container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : getDeclaredTypeOfSymbol(symbol);
             }
             return anyType;
-        }
-
-        function captureLexicalArguments(node: Node, container: Node): void {
-            if (node.parent.kind !== SyntaxKind.Parameter) {
-                getNodeLinks(node).flags |= NodeCheckFlags.LexicalArguments;
-            }
-            
-            getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
         }
 
         function isInConstructorArgumentInitializer(node: Node, constructorDecl: Node): boolean {
@@ -7303,7 +7294,7 @@ module ts {
             let widenedType = getWidenedType(type);
             return isAsync
                 ? createPromiseType(widenedType, func)
-                : type;
+                : widenedType;
         }
 
         /// Returns a set of types relating to every return expression relating to a function block.
@@ -7421,7 +7412,6 @@ module ts {
             if (produceDiagnostics && node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
                 checkCollisionWithCapturedSuperVariable(node, (<FunctionExpression>node).name);
                 checkCollisionWithCapturedThisVariable(node, (<FunctionExpression>node).name);
-                checkCollisionWithCapturedArgumentsVariable(node, (<FunctionExpression>node).name);
             }
 
             return type;
@@ -7574,13 +7564,7 @@ module ts {
         function checkAwaitExpression(node: AwaitExpression): Type {
             // Grammar checking
             if (!(node.parserContextFlags & ParserContextFlags.Await)) {
-                var parameter = getContainingParameter(node);
-                if (parameter && parameter.parserContextFlags & ParserContextFlags.Await) {
-                    grammarErrorAfterFirstToken(node, Diagnostics._0_expression_is_not_allowed_in_an_initializer, "await");
-                }
-                else {
-                    grammarErrorOnFirstToken(node, Diagnostics.await_expression_must_be_contained_within_an_async_function);
-                }
+                grammarErrorOnFirstToken(node, Diagnostics.await_expression_must_be_contained_within_an_async_function);
             }
 
             var operandType = checkExpression(node.expression);
@@ -7994,13 +7978,7 @@ module ts {
         function checkYieldExpression(node: YieldExpression): void {
             // Grammar checking
             if (!(node.parserContextFlags & ParserContextFlags.Yield)) {
-                let parameter = getContainingParameter(node);
-                if (parameter && (parameter.parserContextFlags & ParserContextFlags.GeneratorParameter)) {
-                    grammarErrorAfterFirstToken(node, Diagnostics._0_expression_is_not_allowed_in_an_initializer, "yield");
-                }
-                else {
-                    grammarErrorOnFirstToken(node, Diagnostics.yield_expression_must_be_contained_within_a_generator_declaration);
-                }
+                grammarErrorOnFirstToken(node, Diagnostics.yield_expression_must_be_contained_within_a_generator_declaration);
             }
             else {
                 grammarErrorOnFirstToken(node, Diagnostics.yield_expressions_are_not_currently_supported);
@@ -8907,23 +8885,25 @@ module ts {
             // the "promised type" of a type is the type of the "value" argument of the "onfulfilled" callback.
             let globalPromiseLikeType = getInstantiatedGlobalPromiseLikeType();
             if (globalPromiseLikeType !== emptyObjectType && isTypeAssignableTo(type, globalPromiseLikeType)) {
-                let awaitedTypes: Type[] = [];
                 let thenProp = getPropertyOfType(type, "then");
-                let thenType = getTypeOfSymbol(thenProp);
-                let thenSignatures = getSignaturesOfType(thenType, SignatureKind.Call);
-                for (let thenSignature of thenSignatures) {
-                    thenSignature = getErasedSignature(thenSignature);
-                    let onfulfilledParameterType = getTypeAtPosition(thenSignature, 0);
-                    let onfulfilledParameterSignatures = getSignaturesOfType(onfulfilledParameterType, SignatureKind.Call);
-                    for (let onfulfilledParameterSignature of onfulfilledParameterSignatures) {
-                        let valueParameterType = getTypeAtPosition(onfulfilledParameterSignature, 0);
-                        if (valueParameterType !== type) {
-                            awaitedTypes.push(valueParameterType);
+                if (thenProp) {
+                    let awaitedTypes: Type[] = [];
+                    let thenType = getTypeOfSymbol(thenProp);
+                    let thenSignatures = getSignaturesOfType(thenType, SignatureKind.Call);
+                    for (let thenSignature of thenSignatures) {
+                        thenSignature = getErasedSignature(thenSignature);
+                        let onfulfilledParameterType = getTypeAtPosition(thenSignature, 0);
+                        let onfulfilledParameterSignatures = getSignaturesOfType(onfulfilledParameterType, SignatureKind.Call);
+                        for (let onfulfilledParameterSignature of onfulfilledParameterSignatures) {
+                            let valueParameterType = getTypeAtPosition(onfulfilledParameterSignature, 0);
+                            if (valueParameterType !== type) {
+                                awaitedTypes.push(valueParameterType);
+                            }
                         }
                     }
-                }
-                
-                return getUnionType(awaitedTypes);
+
+                    return getUnionType(awaitedTypes);
+                }                
             }
             
             return emptyObjectType;
@@ -9142,7 +9122,6 @@ module ts {
 
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
-                checkCollisionWithCapturedArgumentsVariable(node, node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             }
         }
@@ -9262,12 +9241,6 @@ module ts {
             }
         }
 
-        function checkCollisionWithCapturedArgumentsVariable(node: Node, name: Identifier): void {
-            if (needCollisionCheckForIdentifier(node, name, "_arguments")) {
-                potentialArgumentsCollisions.push(node);
-            }
-        }
-        
         // this function will run after checking the source file so 'CaptureThis' is correct for all nodes
         function checkIfThisIsCapturedInEnclosingScope(node: Node): void {
             let current = node;
@@ -9286,25 +9259,6 @@ module ts {
             }
         }
 
-        function checkIfArgumentsIsCapturedInEnclosingScope(node: Node): void {
-            let current = node;
-            while (current) {
-                if (getNodeCheckFlags(current) & NodeCheckFlags.CaptureArguments) {
-                    let isDeclaration = node.kind !== SyntaxKind.Identifier;
-                    if (isDeclaration) {
-                        error((<Declaration>node).name, Diagnostics.Duplicate_identifier_arguments_Compiler_uses_variable_declaration_arguments_to_capture_arguments_reference);
-                    }
-                    else {
-                        error(node, Diagnostics.Expression_resolves_to_variable_declaration_arguments_that_compiler_uses_to_capture_arguments_reference);
-                    }
-                    
-                    return;
-                }
-                
-                current = current.parent;
-            }
-        }
-        
         function checkCollisionWithCapturedSuperVariable(node: Node, name: Identifier) {
             if (!needCollisionCheckForIdentifier(node, name, "_super")) {
                 return;
@@ -9421,15 +9375,17 @@ module ts {
         }
 
         function getPromiseConstructor(node: SignatureDeclaration): EntityName {
-            if (node.type && node.type.kind === SyntaxKind.TypeReference) {
-                return (<TypeReferenceNode>node.type).typeName;
+            if (isAsyncFunctionLike(node)) {
+                let links = getNodeLinks(node);
+                if (!links.promiseConstructor) {
+                    if (node.type && node.type.kind === SyntaxKind.TypeReference) {
+                        links.promiseConstructor = (<TypeReferenceNode>node.type).typeName;
+                    }
+                }
+
+                return links.promiseConstructor;
             }
-            
-            let globalPromiseSymbol = getGlobalPromiseSymbol();
-            if (globalPromiseSymbol && globalPromiseSymbol === resolveName(node, "Promise", SymbolFlags.Value, undefined, undefined)) {
-                return <Identifier>globalPromiseSymbol.valueDeclaration.name;
-            }
-            
+
             return undefined;
         }
 
@@ -9550,13 +9506,7 @@ module ts {
                 }
                 checkCollisionWithCapturedSuperVariable(node, <Identifier>node.name);
                 checkCollisionWithCapturedThisVariable(node, <Identifier>node.name);
-                checkCollisionWithCapturedArgumentsVariable(node, <Identifier>node.name);
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
-            }
-            
-            if (symbol === argumentsSymbol && (node.parserContextFlags & ParserContextFlags.Await)) {
-                let container = getContainingFunction(node);
-                captureLexicalArguments(node.name, container);
             }
         }
 
@@ -11258,7 +11208,6 @@ module ts {
                 emitDecorate = false;
                 emitParam = false;
                 potentialThisCollisions.length = 0;
-                potentialArgumentsCollisions.length = 0;
 
                 forEach(node.statements, checkSourceElement);
                 checkFunctionExpressionBodies(node);
@@ -11272,11 +11221,6 @@ module ts {
                     potentialThisCollisions.length = 0;
                 }
                 
-                if (potentialArgumentsCollisions.length) {
-                    forEach(potentialArgumentsCollisions, checkIfArgumentsIsCapturedInEnclosingScope);
-                    potentialArgumentsCollisions.length = 0;
-                }
-
                 if (emitExtends) {
                     links.flags |= NodeCheckFlags.EmitExtends;
                 }
@@ -12279,6 +12223,7 @@ module ts {
                 serializeTypeOfNode,
                 serializeParameterTypesOfNode,
                 serializeReturnTypeOfNode,
+                getPromiseConstructor,
             };
         }
 
@@ -12313,10 +12258,10 @@ module ts {
             getGlobalPropertyDecoratorType = memoize(() => getGlobalType("PropertyDecorator"));
             getGlobalMethodDecoratorType = memoize(() => getGlobalType("MethodDecorator"));
             getGlobalParameterDecoratorType = memoize(() => getGlobalType("ParameterDecorator"));
-            getGlobalPromiseSymbol = memoize(() => getGlobalTypeSymbol("Promise"));
-            getGlobalPromiseType = memoize(() => getTypeOfGlobalSymbol(getGlobalPromiseSymbol(), /*arity*/ 1));
+            getGlobalPromiseType = memoize(() => getGlobalType("Promise", /*arity*/ 1));
             getGlobalPromiseLikeType = memoize(() => getGlobalType("PromiseLike", /*arity*/ 1));
             getInstantiatedGlobalPromiseLikeType = memoize(createInstantiatedPromiseLikeType);
+            getGlobalPromiseConstructorSymbol = memoize(() => getGlobalValueSymbol("Promise"));
             getGlobalPromiseConstructorLikeType = memoize(() => getGlobalType("PromiseConstructorLike"));
             getGlobalThenableType = memoize(createThenableType);
 

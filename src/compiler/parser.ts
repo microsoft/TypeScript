@@ -568,11 +568,11 @@ module ts {
         }
         
         function doOutsideOfContext<T>(context: ParserContextFlags, func: () => T): T {
-            let currentContextFlags = contextFlags & context;
-            if (currentContextFlags) {
-                setContextFlag(false, currentContextFlags);
+            let setContextFlags = context & contextFlags;
+            if (setContextFlags) {
+                setContextFlag(false, setContextFlags);
                 let result = func();
-                setContextFlag(true, currentContextFlags);
+                setContextFlag(true, setContextFlags);
                 return result;
             }
 
@@ -582,7 +582,7 @@ module ts {
         
         function doInsideOfContext<T>(context: ParserContextFlags, func: () => T): T {
             let unsetContextFlags = context & ~contextFlags;
-            if (!unsetContextFlags) {
+            if (unsetContextFlags) {
                 setContextFlag(true, unsetContextFlags);
                 let result = func();
                 setContextFlag(false, unsetContextFlags);
@@ -594,11 +594,11 @@ module ts {
         }
 
         function allowInAnd<T>(func: () => T): T {
-            return doInsideOfContext(ParserContextFlags.DisallowIn, func);
+            return doOutsideOfContext(ParserContextFlags.DisallowIn, func);
         }
 
         function disallowInAnd<T>(func: () => T): T {
-            return doOutsideOfContext(ParserContextFlags.DisallowIn, func);
+            return doInsideOfContext(ParserContextFlags.DisallowIn, func);
         }
         
         function doInYieldContext<T>(func: () => T): T {
@@ -770,6 +770,12 @@ module ts {
             // If we have a 'yield' keyword, and we're in the [yield] context, then 'yield' is
             // considered a keyword and is not an identifier.
             if (token === SyntaxKind.YieldKeyword && inYieldContext()) {
+                return false;
+            }
+            
+            // If we have a 'await' keyword, and we're in the [Await] context, then 'await' is
+            // considered a keyword and is not an identifier.
+            if (token === SyntaxKind.AwaitKeyword && inAwaitContext()) {
                 return false;
             }
 
@@ -2642,12 +2648,11 @@ module ts {
 
         function tryParseParenthesizedArrowFunctionExpression(): Expression {
             let triState = isParenthesizedArrowFunctionExpression();
-
             if (triState === Tristate.False) {
                 // It's definitely not a parenthesized arrow function expression.
                 return undefined;
             }
-
+            
             // If we definitely have an arrow function, then we can just parse one, not requiring a
             // following => or { token. Otherwise, we *might* have an arrow function.  Try to parse
             // it out, but don't allow any ambiguity, and return 'undefined' if this could be an

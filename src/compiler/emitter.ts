@@ -48,6 +48,21 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };`;
 
+        const awaiterHelper = `
+var __awaiter = (this && this.__awaiter) || function (generator, ctor) {
+    function resolve(value) { return step(generator.next(value)); }
+    function reject(reason) { return step(generator["throw"](reason)); }
+    function step(result) {
+        while (true) {
+            var done = result.done, value = result.value, then;
+            if (done) return value;
+            if (value && typeof (then = value.then) === "function") return then.call(value, resolve, reject);
+            result = generator.next(value);
+        }
+    }
+    return new (ctor || Promise)(function (resolver) { resolver(resolve(undefined)); });
+}`;
+
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
         let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
@@ -131,6 +146,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             let extendsEmitted = false;
             let decorateEmitted = false;
             let paramEmitted = false;
+            let awaiterEmitted = false;
             let tempFlags = 0;
             let tempVariables: Identifier[];
             let tempParameters: Identifier[];
@@ -1349,6 +1365,31 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write(" ");
                     emit(node.expression);
                 }
+            }
+            
+            function emitAwaitExpression(node: AwaitExpression) {
+                let needsParenthesis = needsParenthesisForAwaitExpressionAsYield(node);
+                if (needsParenthesis) {
+                    write("(");
+                }
+                write(tokenToString(SyntaxKind.YieldKeyword));
+                write(" ");
+                emit(node.expression);
+                if (needsParenthesis) {
+                    write(")");
+                }
+            }
+
+            function needsParenthesisForAwaitExpressionAsYield(node: AwaitExpression) {
+                for (let current: Node = node; isExpression(current.parent); current = current.parent) {
+                    if (current.parent.kind === SyntaxKind.BinaryExpression) {
+                        if ((<BinaryExpression>current.parent).left === current) {
+                            return true;
+                        }
+                    }
+                }
+                
+                return false;
             }
 
             function needsParenthesisForPropertyAccessOrInvocation(node: Expression) {
@@ -3280,7 +3321,69 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     emit(node.parameters[0]);
                     return;
                 }
+                
                 emitSignatureParameters(node);
+            }
+
+            function emitAsyncSignatureAndBodyForES6(node: FunctionLikeDeclaration) {                
+                let promiseConstructor = resolver.getPromiseConstructor(node);
+                let resolve = makeUniqueName("resolve");
+                let isArrowFunction = node.kind === SyntaxKind.ArrowFunction;
+                let args: string;
+                if (isArrowFunction) {
+                    if (node.parameters.length) {
+                        args = makeUniqueName("arguments");
+                        write(`(...${args}) => `);
+                    }
+                    else {
+                        write("() => ");
+                    }
+                }
+                else {
+                    args = "arguments";
+                    write("() {");
+                    increaseIndent();
+                    writeLine();
+                    write("return ");
+                }
+                
+                write("__awaiter(function *");
+                
+                emitSignatureParameters(node);
+                emitFunctionBody(node);
+                write(".apply(this");
+                if (args) {
+                    write(`, ${args}`);
+                }
+                write(")");
+                if (promiseConstructor) {
+                    write(", ");
+                    emit(promiseConstructor);
+                }
+                write(")");
+                
+                if (!isArrowFunction) {
+                    write(";");
+                    decreaseIndent();
+                    writeLine();
+                    write("}");
+                }    
+            }
+                        
+            function emitFunctionBody(node: FunctionLikeDeclaration) {
+                if (!node.body) {
+                    // There can be no body when there are parse errors.  Just emit an empty block 
+                    // in that case.
+                    write(" { }");
+                }
+                else {
+                    if (node.body.kind === SyntaxKind.Block) {
+                        emitBlockFunctionBody(node, <Block>node.body);
+                    }
+                    else {
+                        emitExpressionFunctionBody(node, <Expression>node.body);
+                    }
+                }            
             }
 
             function emitSignatureAndBody(node: FunctionLikeDeclaration) {
@@ -3291,27 +3394,23 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 tempVariables = undefined;
                 tempParameters = undefined;
 
-                // When targeting ES6, emit arrow function natively in ES6
-                if (shouldEmitAsArrowFunction(node)) {
-                    emitSignatureParametersForArrow(node);
-                    write(" =>");
+                let isAsync = isAsyncFunctionLike(node);
+                if (isAsync && languageVersion === ScriptTarget.ES6) {
+                    emitAsyncSignatureAndBodyForES6(node);
                 }
                 else {
-                    emitSignatureParameters(node);
+                    // When targeting ES6, emit arrow function natively in ES6
+                    if (shouldEmitAsArrowFunction(node)) {
+                        emitSignatureParametersForArrow(node);
+                        write(" =>");
+                    }
+                    else {
+                        emitSignatureParameters(node);
+                    }
+                    
+                    emitFunctionBody(node);
                 }
-
-                if (!node.body) {
-                    // There can be no body when there are parse errors.  Just emit an empty block 
-                    // in that case.
-                    write(" { }");
-                }
-                else if (node.body.kind === SyntaxKind.Block) {
-                    emitBlockFunctionBody(node, <Block>node.body);
-                }
-                else {
-                    emitExpressionFunctionBody(node, <Expression>node.body);
-                }
-
+                
                 if (!isES6ExportedDeclaration(node)) {
                     emitExportMemberAssignment(node);
                 }
@@ -3329,7 +3428,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function emitExpressionFunctionBody(node: FunctionLikeDeclaration, body: Expression) {
-                if (languageVersion < ScriptTarget.ES6) {
+                if (languageVersion < ScriptTarget.ES6 || node.flags & NodeFlags.Async) {
                     emitDownLevelExpressionFunctionBody(node, body);
                     return;
                 }
@@ -5636,6 +5735,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         writeLines(paramHelper);
                         paramEmitted = true;
                     }
+                    
+                    if (!awaiterEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitAwaiter) {
+                        writeLines(awaiterHelper);
+                        awaiterEmitted = true;
+                    }
                 }
 
                 if (isExternalModule(node) || compilerOptions.separateCompilation) {
@@ -5806,6 +5910,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         return emitTypeOfExpression(<TypeOfExpression>node);
                     case SyntaxKind.VoidExpression:
                         return emitVoidExpression(<VoidExpression>node);
+                    case SyntaxKind.AwaitExpression:
+                        return emitAwaitExpression(<AwaitExpression>node);
                     case SyntaxKind.PrefixUnaryExpression:
                         return emitPrefixUnaryExpression(<PrefixUnaryExpression>node);
                     case SyntaxKind.PostfixUnaryExpression:

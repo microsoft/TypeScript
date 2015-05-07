@@ -1522,13 +1522,9 @@
         "category": "Error",
         "code": 2521
     },
-    "Duplicate identifier '_arguments'. Compiler uses variable declaration '_arguments' to capture 'arguments' reference.": {
+    "The 'arguments' object cannot be referenced in an async arrow function Consider using a standard async function expression.": {
         "category": "Error",
         "code": 2522
-    },
-    "Expression resolves to variable declaration '_arguments' that compiler uses to capture 'arguments' reference.": {
-        "category": "Error",
-        "code": 2523
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

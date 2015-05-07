@@ -1304,6 +1304,7 @@ module ts {
         serializeTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
         serializeParameterTypesOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): (string | string[])[];
         serializeReturnTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
+        getPromiseConstructor(node: SignatureDeclaration): EntityName;
     }
 
     export const enum SymbolFlags {
@@ -1423,22 +1424,20 @@ module ts {
         TypeChecked                 = 0x00000001,  // Node has been type checked
         LexicalThis                 = 0x00000002,  // Lexical 'this' reference
         CaptureThis                 = 0x00000004,  // Lexical 'this' used in body
-        LexicalArguments            = 0x00000008,  // Lexical 'arguments' reference
-        CaptureArguments            = 0x00000010,  // Lexical 'arguments' used in body
-        EmitExtends                 = 0x00000020,  // Emit __extends
-        EmitDecorate                = 0x00000040,  // Emit __decorate
-        EmitParam                   = 0x00000080,  // Emit __param helper for decorators
-        EmitAwaiter                 = 0x00000100,  // Emit __awaiter
-        EmitGenerator               = 0x00000200,  // Emit __generator
-        SuperInstance               = 0x00000400,  // Instance 'super' reference
-        SuperStatic                 = 0x00000800,  // Static 'super' reference
-        ContextChecked              = 0x00001000,  // Contextual types have been assigned
-        PromiseCollision            = 0x00002000,  // Declaration collides with the global 'Promise'
+        EmitExtends                 = 0x00000008,  // Emit __extends
+        EmitDecorate                = 0x00000010,  // Emit __decorate
+        EmitParam                   = 0x00000020,  // Emit __param helper for decorators
+        EmitAwaiter                 = 0x00000040,  // Emit __awaiter
+        EmitGenerator               = 0x00000080,  // Emit __generator
+        SuperInstance               = 0x00000100,  // Instance 'super' reference
+        SuperStatic                 = 0x00000200,  // Static 'super' reference
+        ContextChecked              = 0x00000400,  // Contextual types have been assigned
+        PromiseCollision            = 0x00000800,  // Declaration collides with the global 'Promise'
 
         // Values for enum members have been computed, and any errors have been reported for them.
-        EnumValuesComputed          = 0x00004000,
-        BlockScopedBindingInLoop    = 0x00008000,
-        LexicalModuleMergesWithClass= 0x00010000,  // Instantiated lexical module declaration is merged with a previous class declaration.
+        EnumValuesComputed          = 0x00001000,
+        BlockScopedBindingInLoop    = 0x00002000,
+        LexicalModuleMergesWithClass= 0x00004000,  // Instantiated lexical module declaration is merged with a previous class declaration.
     }
 
     /* @internal */ 
@@ -1456,6 +1455,7 @@ module ts {
         assignmentChecks?: Map<boolean>;  // Cache of assignment checks
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
+        promiseConstructor?: EntityName;
     }
 
     export const enum TypeFlags {
