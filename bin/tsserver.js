@@ -25376,7 +25376,7 @@ var ts;
     ts.emitTime = 0;
     ts.ioReadTime = 0;
     ts.ioWriteTime = 0;
-    ts.version = "1.5.0";
+    ts.version = "1.5.2";
     var carriageReturnLineFeed = "\r\n";
     var lineFeed = "\n";
     function findConfigFile(searchPath) {
@@ -31202,8 +31202,9 @@ var ts;
     })();
     ts.CancellationTokenObject = CancellationTokenObject;
     var HostCache = (function () {
-        function HostCache(host) {
+        function HostCache(host, getCanonicalFileName) {
             this.host = host;
+            this.getCanonicalFileName = getCanonicalFileName;
             this.fileNameToEntry = {};
             var rootFileNames = host.getScriptFileNames();
             for (var _i = 0; _i < rootFileNames.length; _i++) {
@@ -31215,6 +31216,9 @@ var ts;
         HostCache.prototype.compilationSettings = function () {
             return this._compilationSettings;
         };
+        HostCache.prototype.normalizeFileName = function (fileName) {
+            return this.getCanonicalFileName(ts.normalizeSlashes(fileName));
+        };
         HostCache.prototype.createEntry = function (fileName) {
             var entry;
             var scriptSnapshot = this.host.getScriptSnapshot(fileName);
@@ -31225,13 +31229,13 @@ var ts;
                     scriptSnapshot: scriptSnapshot
                 };
             }
-            return this.fileNameToEntry[ts.normalizeSlashes(fileName)] = entry;
+            return this.fileNameToEntry[this.normalizeFileName(fileName)] = entry;
         };
         HostCache.prototype.getEntry = function (fileName) {
-            return ts.lookUp(this.fileNameToEntry, ts.normalizeSlashes(fileName));
+            return ts.lookUp(this.fileNameToEntry, this.normalizeFileName(fileName));
         };
         HostCache.prototype.contains = function (fileName) {
-            return ts.hasProperty(this.fileNameToEntry, ts.normalizeSlashes(fileName));
+            return ts.hasProperty(this.fileNameToEntry, this.normalizeFileName(fileName));
         };
         HostCache.prototype.getOrCreateEntry = function (fileName) {
             if (this.contains(fileName)) {
@@ -31243,8 +31247,10 @@ var ts;
             var _this = this;
             var fileNames = [];
             ts.forEachKey(this.fileNameToEntry, function (key) {
-                if (ts.hasProperty(_this.fileNameToEntry, key) && _this.fileNameToEntry[key])
-                    fileNames.push(key);
+                var entry = _this.getEntry(key);
+                if (entry) {
+                    fileNames.push(entry.hostFileName);
+                }
             });
             return fileNames;
         };
@@ -31774,7 +31780,7 @@ var ts;
             return ruleProvider;
         }
         function synchronizeHostData() {
-            var hostCache = new HostCache(host);
+            var hostCache = new HostCache(host, getCanonicalFileName);
             if (programUpToDate()) {
                 return;
             }
@@ -31784,7 +31790,7 @@ var ts;
             var newProgram = ts.createProgram(hostCache.getRootFileNames(), newSettings, {
                 getSourceFile: getOrCreateSourceFile,
                 getCancellationToken: function () { return cancellationToken; },
-                getCanonicalFileName: function (fileName) { return useCaseSensitivefileNames ? fileName : fileName.toLowerCase(); },
+                getCanonicalFileName: getCanonicalFileName,
                 useCaseSensitiveFileNames: function () { return useCaseSensitivefileNames; },
                 getNewLine: function () { return host.getNewLine ? host.getNewLine() : "\r\n"; },
                 getDefaultLibFileName: function (options) { return host.getDefaultLibFileName(options); },

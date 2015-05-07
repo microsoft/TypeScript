@@ -29571,7 +29571,7 @@ var ts;
     /* @internal */ ts.ioReadTime = 0;
     /* @internal */ ts.ioWriteTime = 0;
     /** The version of the TypeScript compiler release */
-    ts.version = "1.5.0";
+    ts.version = "1.5.2";
     var carriageReturnLineFeed = "\r\n";
     var lineFeed = "\n";
     function findConfigFile(searchPath) {
@@ -36487,8 +36487,9 @@ var ts;
     // at each language service public entry point, since we don't know when 
     // set of scripts handled by the host changes.
     var HostCache = (function () {
-        function HostCache(host) {
+        function HostCache(host, getCanonicalFileName) {
             this.host = host;
+            this.getCanonicalFileName = getCanonicalFileName;
             // script id => script index
             this.fileNameToEntry = {};
             // Initialize the list with the root file names
@@ -36503,6 +36504,9 @@ var ts;
         HostCache.prototype.compilationSettings = function () {
             return this._compilationSettings;
         };
+        HostCache.prototype.normalizeFileName = function (fileName) {
+            return this.getCanonicalFileName(ts.normalizeSlashes(fileName));
+        };
         HostCache.prototype.createEntry = function (fileName) {
             var entry;
             var scriptSnapshot = this.host.getScriptSnapshot(fileName);
@@ -36513,13 +36517,13 @@ var ts;
                     scriptSnapshot: scriptSnapshot
                 };
             }
-            return this.fileNameToEntry[ts.normalizeSlashes(fileName)] = entry;
+            return this.fileNameToEntry[this.normalizeFileName(fileName)] = entry;
         };
         HostCache.prototype.getEntry = function (fileName) {
-            return ts.lookUp(this.fileNameToEntry, ts.normalizeSlashes(fileName));
+            return ts.lookUp(this.fileNameToEntry, this.normalizeFileName(fileName));
         };
         HostCache.prototype.contains = function (fileName) {
-            return ts.hasProperty(this.fileNameToEntry, ts.normalizeSlashes(fileName));
+            return ts.hasProperty(this.fileNameToEntry, this.normalizeFileName(fileName));
         };
         HostCache.prototype.getOrCreateEntry = function (fileName) {
             if (this.contains(fileName)) {
@@ -36531,8 +36535,10 @@ var ts;
             var _this = this;
             var fileNames = [];
             ts.forEachKey(this.fileNameToEntry, function (key) {
-                if (ts.hasProperty(_this.fileNameToEntry, key) && _this.fileNameToEntry[key])
-                    fileNames.push(key);
+                var entry = _this.getEntry(key);
+                if (entry) {
+                    fileNames.push(entry.hostFileName);
+                }
             });
             return fileNames;
         };
@@ -37151,7 +37157,7 @@ var ts;
         }
         function synchronizeHostData() {
             // Get a fresh cache of the host information
-            var hostCache = new HostCache(host);
+            var hostCache = new HostCache(host, getCanonicalFileName);
             // If the program is already up-to-date, we can reuse it
             if (programUpToDate()) {
                 return;
@@ -37168,7 +37174,7 @@ var ts;
             var newProgram = ts.createProgram(hostCache.getRootFileNames(), newSettings, {
                 getSourceFile: getOrCreateSourceFile,
                 getCancellationToken: function () { return cancellationToken; },
-                getCanonicalFileName: function (fileName) { return useCaseSensitivefileNames ? fileName : fileName.toLowerCase(); },
+                getCanonicalFileName: getCanonicalFileName,
                 useCaseSensitiveFileNames: function () { return useCaseSensitivefileNames; },
                 getNewLine: function () { return host.getNewLine ? host.getNewLine() : "\r\n"; },
                 getDefaultLibFileName: function (options) { return host.getDefaultLibFileName(options); },
