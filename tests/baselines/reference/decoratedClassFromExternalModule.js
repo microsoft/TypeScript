@@ -21,7 +21,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 function decorate() { }
 let Decorated = class {
 };
-Object.defineProperty(Decorated, "name", { value: "Decorated", configurable: true });
 Decorated = __decorate([
     decorate
 ], Decorated);
