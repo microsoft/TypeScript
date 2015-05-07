@@ -1632,7 +1632,7 @@ module ts {
         private fileNameToEntry: Map<HostFileInformation>;
         private _compilationSettings: CompilerOptions;
 
-        constructor(private host: LanguageServiceHost) {
+        constructor(private host: LanguageServiceHost, private getCanonicalFileName: (fileName: string) => string) {
             // script id => script index
             this.fileNameToEntry = {};
 
@@ -1650,6 +1650,10 @@ module ts {
             return this._compilationSettings;
         }
 
+        private normalizeFileName(fileName: string): string {
+            return this.getCanonicalFileName(normalizeSlashes(fileName));
+        }
+
         private createEntry(fileName: string) {
             let entry: HostFileInformation;
             let scriptSnapshot = this.host.getScriptSnapshot(fileName);
@@ -1661,15 +1665,15 @@ module ts {
                 };
             }
 
-            return this.fileNameToEntry[normalizeSlashes(fileName)] = entry;
+            return this.fileNameToEntry[this.normalizeFileName(fileName)] = entry;
         }
 
-        public getEntry(fileName: string): HostFileInformation {
-            return lookUp(this.fileNameToEntry, normalizeSlashes(fileName));
+        private getEntry(fileName: string): HostFileInformation {
+            return lookUp(this.fileNameToEntry, this.normalizeFileName(fileName));
         }
 
-        public contains(fileName: string): boolean {
-            return hasProperty(this.fileNameToEntry, normalizeSlashes(fileName));
+        private contains(fileName: string): boolean {
+            return hasProperty(this.fileNameToEntry, this.normalizeFileName(fileName));
         }
 
         public getOrCreateEntry(fileName: string): HostFileInformation {
@@ -1684,8 +1688,10 @@ module ts {
             let fileNames: string[] = [];
 
             forEachKey(this.fileNameToEntry, key => {
-                if (hasProperty(this.fileNameToEntry, key) && this.fileNameToEntry[key])
-                    fileNames.push(key);
+                let entry = this.getEntry(key);
+                if (entry) {
+                    fileNames.push(entry.hostFileName);
+                }
             });
 
             return fileNames;
@@ -2387,7 +2393,7 @@ module ts {
 
         function synchronizeHostData(): void {
             // Get a fresh cache of the host information
-            let hostCache = new HostCache(host);
+            let hostCache = new HostCache(host, getCanonicalFileName);
 
             // If the program is already up-to-date, we can reuse it
             if (programUpToDate()) {
@@ -2408,7 +2414,7 @@ module ts {
             let newProgram = createProgram(hostCache.getRootFileNames(), newSettings, {
                 getSourceFile: getOrCreateSourceFile,
                 getCancellationToken: () => cancellationToken,
-                getCanonicalFileName: (fileName) => useCaseSensitivefileNames ? fileName : fileName.toLowerCase(),
+                getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitivefileNames,
                 getNewLine: () => host.getNewLine ? host.getNewLine() : "\r\n",
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
