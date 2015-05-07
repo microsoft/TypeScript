@@ -592,7 +592,7 @@ module ts {
             // no need to do anything special as we are already in all of the requested contexts
             return func();
         }
-
+                
         function allowInAnd<T>(func: () => T): T {
             return doOutsideOfContext(ParserContextFlags.DisallowIn, func);
         }
@@ -621,12 +621,16 @@ module ts {
             return doOutsideOfContext(ParserContextFlags.Await, func);
         }
         
+        function doInYieldAndAwaitContext<T>(func: () => T): T {
+            return doInsideOfContext(ParserContextFlags.Yield | ParserContextFlags.Await, func);
+        }
+        
         function doOutsideOfYieldAndAwaitContext<T>(func: () => T): T {
             return doOutsideOfContext(ParserContextFlags.Yield | ParserContextFlags.Await, func);
         }
         
         function inContext(flags: ParserContextFlags) {
-            return (contextFlags & flags) === flags;
+            return (contextFlags & flags) !== 0;
         }
 
         function inYieldContext() {
@@ -957,8 +961,8 @@ module ts {
             // says that only an assignment expression is allowed, so the grammar checker
             // will error if it sees a comma expression.
             node.expression = inGeneratorParameterOrAsyncParameterContext() 
-                ? doOutsideOfYieldAndAwaitContext(parseExpression) 
-                : parseExpression();
+                ? doOutsideOfYieldAndAwaitContext(allowInAndParseExpression) 
+                : allowInAnd(parseExpression);
 
             parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(node);
@@ -1857,8 +1861,8 @@ module ts {
         function parseParameter(): ParameterDeclaration {
             let node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
             node.decorators = parseDecorators();
-            setModifiers(node, parseModifiers());
             node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
+            setModifiers(node, parseModifiers());
 
             // FormalParameter[Yield,GeneratorParameter,Await,AsyncParameter] : (Modified) See 14.1
             //      BindingElement[?Yield,?GeneratorParameter,?Await,?AsyncParameter]
@@ -1901,7 +1905,6 @@ module ts {
             //      [+GeneratorParameter] BindingIdentifier[Yield] Initializer[In]opt
             //      [+AsyncParameter] BindingIdentifier[Await] Initializer[In]opt
             //      [~GeneratorParameter,~AsyncParameter] BindingIdentifier[?Yield,?Await] Initializer[In,?Yield,?Await]opt
-            
             let parseInitializer = inParameter ? parseParameterInitializer : parseNonParameterInitializer;
             return inGeneratorParameterOrAsyncParameterContext() 
                 ? doOutsideOfYieldAndAwaitContext(parseInitializer) 
@@ -1957,27 +1960,19 @@ module ts {
                 let savedGeneratorParameterContext = inGeneratorParameterContext();
                 let savedAwaitContext = inAwaitContext();
                 let savedAsyncParameterContext = inAsyncParameterContext();
-
-                if (yieldAndGeneratorParameterContext) {
-                    setYieldContext(true);
-                }
                 
+                setYieldContext(yieldAndGeneratorParameterContext);
                 setGeneratorParameterContext(yieldAndGeneratorParameterContext);
-                
-                if (awaitAndAsyncParameterContext) {
-                    setAwaitContext(true);
-                }
-                
+                setAwaitContext(awaitAndAsyncParameterContext);
                 setAsyncParameterContext(awaitAndAsyncParameterContext);
-
+                
                 let result = parseDelimitedList(ParsingContext.Parameters, parseParameter);
-
+                
                 setYieldContext(savedYieldContext);
                 setGeneratorParameterContext(savedGeneratorParameterContext);
-                
                 setAwaitContext(savedAwaitContext);
                 setAsyncParameterContext(savedAsyncParameterContext);
-
+                
                 if (!parseExpected(SyntaxKind.CloseParenToken) && requireCompleteParameterList) {
                     // Caller insisted that we had to end with a )   We didn't.  So just return
                     // undefined here.
@@ -1992,7 +1987,7 @@ module ts {
             // then just return an empty set of parameters.
             return requireCompleteParameterList ? undefined : createMissingList<ParameterDeclaration>();
         }
-
+        
         function parseTypeMemberSemicolon() {
             // We allow type members to be separated by commas or (possibly ASI) semicolons.
             // First check if it was a comma.  If so, we're done with the member.
@@ -2368,7 +2363,7 @@ module ts {
         function parseType(): TypeNode {
             // The rules about 'yield' only apply to actual code/expression contexts.  They don't
             // apply to 'type' contexts.  So we disable these parameters here before moving on.            
-            return doOutsideOfContext(ParserContextFlags.ContextParameterFlags, parseTypeWorker);
+            return doOutsideOfContext(ParserContextFlags.AllParameterFlags, parseTypeWorker);
         }
 
         function parseTypeWorker(): TypeNode {
@@ -2454,6 +2449,10 @@ module ts {
                 token !== SyntaxKind.ClassKeyword &&
                 token !== SyntaxKind.AtToken &&
                 isStartOfExpression();
+        }
+        
+        function allowInAndParseExpression(): Expression {
+            return allowInAnd(parseExpression);
         }
 
         function parseExpression(): Expression {
@@ -3449,20 +3448,15 @@ module ts {
             let node = <FunctionExpression>createNode(SyntaxKind.FunctionExpression);
             setModifiers(node, parseModifiers());
             parseExpected(SyntaxKind.FunctionKeyword);
-            node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);                         
+            node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             
-            let savedYieldContext = inYieldContext();
             let isGenerator = node.asteriskToken != undefined;
-            setYieldContext(isGenerator);
-            
-            let savedAwaitContext = inAwaitContext();
             let isAsync = isAsyncFunctionLike(node);
-            setAwaitContext(isAsync);
-            
-            node.name = parseOptionalIdentifier();
-            
-            setYieldContext(savedYieldContext);
-            setAwaitContext(savedAwaitContext);
+            node.name =
+                isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalIdentifier) :
+                isGenerator ? doInYieldContext(parseOptionalIdentifier) :
+                isAsync ? doInAwaitContext(parseOptionalIdentifier) :
+                parseOptionalIdentifier();
             
             fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ isGenerator, /*awaitAndAsyncParameterContext*/ isAsync, /*requireCompleteParameterList*/ false, node);
             node.body = parseFunctionBlock(/*allowYield*/ isGenerator, /*allowAwait*/ isAsync, /*ignoreMissingOpenBrace*/ false);

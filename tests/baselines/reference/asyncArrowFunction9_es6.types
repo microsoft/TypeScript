@@ -1,0 +1,10 @@
+=== tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction9_es6.ts ===
+var foo = async (a = await => await): Promise<void> => {
+>foo : (a?: (await: any) => any) => Promise<void>
+>async (a = await => await): Promise<void> => {} : (a?: (await: any) => any) => Promise<void>
+>a : (await: any) => any
+>await => await : (await: any) => any
+>await : any
+>await : any
+>Promise : Promise<T>
+}

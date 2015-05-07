@@ -1,6 +1,6 @@
 tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration7_es6.ts(1,9): error TS9001: Generators are not currently supported.
 tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration7_es6.ts(3,11): error TS9001: Generators are not currently supported.
-tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration7_es6.ts(3,20): error TS9000: 'yield' expressions are not currently supported.
+tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration7_es6.ts(3,20): error TS2304: Cannot find name 'yield'.
 
 
 ==== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration7_es6.ts (3 errors) ====
@@ -12,6 +12,6 @@ tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration7_es6.ts(3,2
               ~
 !!! error TS9001: Generators are not currently supported.
                        ~~~~~
-!!! error TS9000: 'yield' expressions are not currently supported.
+!!! error TS2304: Cannot find name 'yield'.
       }
     }

@@ -359,7 +359,9 @@ module ts {
         ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | Decorator | ThisNodeHasError | AsyncParameter | Await,
 
         // Context flags passed as part of the modified ES6 grammar.
-        ContextParameterFlags = Yield | GeneratorParameter | AsyncParameter | Await,
+        YieldAndGeneratorParameterFlags = Yield | GeneratorParameter,
+        AwaitAndAsyncParameterFlags = Await | AsyncParameter,
+        AllParameterFlags = YieldAndGeneratorParameterFlags | AwaitAndAsyncParameterFlags,       
         
         // Context flags computed by aggregating child flags upwards.
 

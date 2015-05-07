@@ -10,7 +10,7 @@ function bar() {
     return __awaiter(function *() {
         // 'await' here is an identifier, and not a yield expression.
         function foo() {
-            return __awaiter(function *(a = yield ) {
+            return __awaiter(function *(a = await) {
             }.apply(this, arguments), Promise);
         }
     }.apply(this, arguments), Promise);
