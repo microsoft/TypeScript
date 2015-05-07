@@ -14668,6 +14668,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     overrideMimeType(mime: string): void;
     send(data?: Document): void;
     send(data?: string): void;
+    send(data?: any): void;
     setRequestHeader(header: string, value: string): void;
     DONE: number;
     HEADERS_RECEIVED: number;

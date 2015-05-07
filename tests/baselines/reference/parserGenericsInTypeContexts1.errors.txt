@@ -2,8 +2,8 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts(1,33): error TS2304: Cannot find name 'B'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts(4,9): error TS2315: Type 'C' is not generic.
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts(5,9): error TS2304: Cannot find name 'D'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts(6,9): error TS2304: Cannot find name 'E'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts(7,9): error TS2304: Cannot find name 'G'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts(6,9): error TS2503: Cannot find namespace 'E'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts(7,9): error TS2503: Cannot find namespace 'G'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts(8,9): error TS2304: Cannot find name 'K'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts(11,16): error TS2304: Cannot find name 'E'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts(14,16): error TS2304: Cannot find name 'F'.
@@ -26,10 +26,10 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts
 !!! error TS2304: Cannot find name 'D'.
     var v3: E.F<T>;
             ~
-!!! error TS2304: Cannot find name 'E'.
+!!! error TS2503: Cannot find namespace 'E'.
     var v3: G.H.I<T>;
             ~
-!!! error TS2304: Cannot find name 'G'.
+!!! error TS2503: Cannot find namespace 'G'.
     var v6: K<T>[];
             ~
 !!! error TS2304: Cannot find name 'K'.

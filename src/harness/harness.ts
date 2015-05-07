@@ -45,10 +45,10 @@ module Utils {
     export function getExecutionEnvironment() {
         if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
             return ExecutionEnvironment.CScript;
-        } else if (process && process.execPath && process.execPath.indexOf("node") !== -1) {
-            return ExecutionEnvironment.Node;
-        } else {
+        } else if (typeof window !== "undefined") {
             return ExecutionEnvironment.Browser;
+        } else {
+            return ExecutionEnvironment.Node;
         }
     }
 
@@ -1610,7 +1610,6 @@ module Harness {
     export module Baseline {
 
         export interface BaselineOptions {
-            LineEndingSensitive?: boolean;
             Subfolder?: string;
             Baselinefolder?: string;
         }
@@ -1700,13 +1699,6 @@ module Harness {
             var expected = '<no content>';
             if (IO.fileExists(refFileName)) {
                 expected = IO.readFile(refFileName);
-            }
-
-            var lineEndingSensitive = opts && opts.LineEndingSensitive;
-
-            if (!lineEndingSensitive) {
-                expected = expected.replace(/\r\n?/g, '\n');
-                actual = actual.replace(/\r\n?/g, '\n');
             }
 
             return { expected, actual };
