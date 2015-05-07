@@ -13005,15 +13005,30 @@ var ts;
                     return type;
                 }
                 var prototypeProperty = getPropertyOfType(rightType, "prototype");
-                if (!prototypeProperty) {
-                    return type;
+                if (prototypeProperty) {
+                    var targetType = getTypeOfSymbol(prototypeProperty);
+                    if (targetType !== anyType) {
+                        if (isTypeSubtypeOf(targetType, type)) {
+                            return targetType;
+                        }
+                        if (type.flags & 16384) {
+                            return getUnionType(ts.filter(type.types, function (t) { return isTypeSubtypeOf(t, targetType); }));
+                        }
+                    }
                 }
-                var targetType = getTypeOfSymbol(prototypeProperty);
-                if (isTypeSubtypeOf(targetType, type)) {
-                    return targetType;
+                var constructSignatures;
+                if (rightType.flags & 2048) {
+                    constructSignatures = resolveDeclaredMembers(rightType).declaredConstructSignatures;
                 }
-                if (type.flags & 16384) {
-                    return getUnionType(ts.filter(type.types, function (t) { return isTypeSubtypeOf(t, targetType); }));
+                else if (rightType.flags & 32768) {
+                    constructSignatures = getSignaturesOfType(rightType, 1);
+                }
+                if (constructSignatures && constructSignatures.length !== 0) {
+                    var instanceType = getUnionType(ts.map(constructSignatures, function (signature) { return getReturnTypeOfSignature(getErasedSignature(signature)); }));
+                    if (type.flags & 16384) {
+                        return getUnionType(ts.filter(type.types, function (t) { return isTypeSubtypeOf(t, instanceType); }));
+                    }
+                    return instanceType;
                 }
                 return type;
             }
@@ -23260,15 +23275,6 @@ var ts;
                 scopeEmitEnd();
                 if (thisNodeIsDecorated) {
                     write(";");
-                    if (node.name) {
-                        writeLine();
-                        write("Object.defineProperty(");
-                        emitDeclarationName(node);
-                        write(", \"name\", { value: \"");
-                        emitDeclarationName(node);
-                        write("\", configurable: true });");
-                        writeLine();
-                    }
                 }
                 if (isClassExpressionWithStaticProperties) {
                     for (var _a = 0; _a < staticProperties.length; _a++) {
