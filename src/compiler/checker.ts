@@ -5404,6 +5404,7 @@ module ts {
                     else if (rightType.flags & TypeFlags.Anonymous) {
                         constructSignatures = getSignaturesOfType(rightType, SignatureKind.Construct);
                     }
+
                     if (constructSignatures && constructSignatures.length) {
                         targetType = getUnionType(map(constructSignatures, signature => getReturnTypeOfSignature(getErasedSignature(signature))));
                     }
