@@ -8,7 +8,7 @@ module ts {
     /* @internal */ export let ioWriteTime = 0;
 
     /** The version of the TypeScript compiler release */
-    export const version = "1.5.0-beta";
+    export const version = "1.5.2";
 
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
