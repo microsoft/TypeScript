@@ -4,5 +4,5 @@ var foo = async (a = await => await): Promise<void> => {
 >a : Symbol(a, Decl(asyncArrowFunction9_es6.ts, 0, 17))
 >await : Symbol(await, Decl(asyncArrowFunction9_es6.ts, 0, 20))
 >await : Symbol(await, Decl(asyncArrowFunction9_es6.ts, 0, 20))
->Promise : Symbol(Promise, Decl(lib.d.ts, 4769, 1), Decl(lib.d.ts, 4853, 11))
+>Promise : Symbol(Promise, Decl(lib.d.ts, 4770, 1), Decl(lib.d.ts, 4855, 11))
 }
