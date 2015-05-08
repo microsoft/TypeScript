@@ -568,11 +568,15 @@ module ts {
         }
         
         function doOutsideOfContext<T>(context: ParserContextFlags, func: () => T): T {
-            let setContextFlags = context & contextFlags;
-            if (setContextFlags) {
-                setContextFlag(false, setContextFlags);
+            // contextFlagsToClear will contain only the context flags that are 
+            // currently set that we need to temporarily clear
+            let contextFlagsToClear = context & contextFlags;
+            if (contextFlagsToClear) {
+                // clear the requested context flags
+                setContextFlag(false, contextFlagsToClear);
                 let result = func();
-                setContextFlag(true, setContextFlags);
+                // restore the context flags we just cleared
+                setContextFlag(true, contextFlagsToClear);
                 return result;
             }
 
@@ -581,11 +585,15 @@ module ts {
         }
         
         function doInsideOfContext<T>(context: ParserContextFlags, func: () => T): T {
-            let unsetContextFlags = context & ~contextFlags;
-            if (unsetContextFlags) {
-                setContextFlag(true, unsetContextFlags);
+            // contextFlagsToSet will contain only the context flags that
+            // are not currently set that we need to temporarily enable
+            let contextFlagsToSet = context & ~contextFlags;
+            if (contextFlagsToSet) {
+                // set the requested context flags
+                setContextFlag(true, contextFlagsToSet);
                 let result = func();
-                setContextFlag(false, unsetContextFlags);
+                // reset the context flags we just set
+                setContextFlag(false, contextFlagsToSet);
                 return result;
             }
             
@@ -1013,6 +1021,11 @@ module ts {
         }
 
         function canFollowModifier(isArrowFunction?: boolean): boolean {
+            // Arrow functions can have an `async` modifier, but the rules for what can follow that modifier
+            // differ from the rules for any other declaration.
+            // The `async` modifier on an async function can only be followed by an open parenthesis,
+            // or a less than token (in the case of a generic arrow function).
+            // In addition, the `async` modifier must appear on the same line as the following token.
             if (isArrowFunction) {
                 if (scanner.hasPrecedingLineBreak()) {
                     return false;
@@ -1898,12 +1911,12 @@ module ts {
         
         function parseBindingElementInitializer(inParameter: boolean) {
             // BindingElement[Yield,GeneratorParameter,Await,AsyncParameter] : 
-            //      [+GeneratorParameter] BindingPattern[?Yield,?Await,GeneratorParameter] Initializer[In]opt
-            //      [+AsyncParameter] BindingPattern[?Yield,?Await,AsyncParameter] Initializer[In]opt
+            //      [+GeneratorParameter] BindingPattern[?Yield,?Await,?AsyncParameter,GeneratorParameter] Initializer[In]opt
+            //      [+AsyncParameter] BindingPattern[?Yield,?GeneratorParameter,?Await,AsyncParameter] Initializer[In]opt
             //      [~GeneratorParameter,~AsyncParameter] BindingPattern[?Yield,?Await] Initializer[In,?Yield,?Await]opt
             // SingleNameBinding[Yield,GeneratorParameter,Await,AsyncParameter] : 
-            //      [+GeneratorParameter] BindingIdentifier[Yield] Initializer[In]opt
-            //      [+AsyncParameter] BindingIdentifier[Await] Initializer[In]opt
+            //      [+GeneratorParameter] BindingIdentifier[Yield, ?Await] Initializer[In]opt
+            //      [+AsyncParameter] BindingIdentifier[Await, ?Yield] Initializer[In]opt
             //      [~GeneratorParameter,~AsyncParameter] BindingIdentifier[?Yield,?Await] Initializer[In,?Yield,?Await]opt
             let parseInitializer = inParameter ? parseParameterInitializer : parseNonParameterInitializer;
             return inGeneratorParameterOrAsyncParameterContext() 
@@ -2425,9 +2438,9 @@ module ts {
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.AwaitKeyword:
                 case SyntaxKind.YieldKeyword:
-                    // Yield always starts an expression.  Either it is an identifier (in which case
+                    // Yield/await always starts an expression.  Either it is an identifier (in which case
                     // it is definitely an expression).  Or it's a keyword (either because we're in
-                    // a generator, or in strict mode (or both)) and it started a yield expression.
+                    // a generator or async function, or in strict mode (or both)) and it started a yield or await expression.
                     return true;
                 default:
                     // Error tolerance.  If we see the start of some binary operator, we consider
@@ -3317,6 +3330,9 @@ module ts {
                 case SyntaxKind.OpenBraceToken:
                     return parseObjectLiteralExpression();
                 case SyntaxKind.AsyncKeyword:
+                    // Async arrow functions are parsed earlier in parseAssignmentExpressionOrHigher. 
+                    // If we encounter `async [no LineTerminator here] function` then this is an async
+                    // function; otherwise, its an identifier.
                     if (!lookAhead(nextTokenIsFunctionKeywordOnSameLine)) {
                         break;
                     }
@@ -3450,7 +3466,7 @@ module ts {
             parseExpected(SyntaxKind.FunctionKeyword);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             
-            let isGenerator = node.asteriskToken != undefined;
+            let isGenerator = !!node.asteriskToken;
             let isAsync = isAsyncFunctionLike(node);
             node.name =
                 isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalIdentifier) :
@@ -4092,7 +4108,7 @@ module ts {
             parseExpected(SyntaxKind.FunctionKeyword);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             node.name = node.flags & NodeFlags.Default ? parseOptionalIdentifier() : parseIdentifier();
-            let isGenerator = node.asteriskToken != undefined;
+            let isGenerator = !!node.asteriskToken;
             let isAsync = isAsyncFunctionLike(node);
             fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ isGenerator, /*awaitAndAsyncParameterContext*/ isAsync, /*requireCompleteParameterList:*/ false, node);
             node.body = parseFunctionBlockOrSemicolon(isGenerator, isAsync, Diagnostics.or_expected);
@@ -4116,7 +4132,7 @@ module ts {
             method.asteriskToken = asteriskToken;
             method.name = name;
             method.questionToken = questionToken;
-            let isGenerator = asteriskToken != undefined;
+            let isGenerator = !!asteriskToken;
             let isAsync = isAsyncFunctionLike(method);
             fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ isGenerator, /*awaitAndAsyncParameterContext*/ isAsync, /*requireCompleteParameterList:*/ false, method);
             method.body = parseFunctionBlockOrSemicolon(isGenerator, isAsync, diagnosticMessage);

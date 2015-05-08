@@ -344,16 +344,16 @@ module ts {
         // If this node was parsed as part of a decorator
         Decorator = 1 << 4,
 
+        // If this node was parsed in the parameters of an async function.
+        AsyncParameter = 1 << 5,
+
+        // If this node was parsed in the 'await' context created when parsing an async function.
+        Await = 1 << 6,
+
         // If the parser encountered an error when parsing the code that created this node.  Note
         // the parser only sets this directly on the node it creates right after encountering the
         // error.
-        ThisNodeHasError = 1 << 5,
-
-        // If this node was parsed in the parameters of an async function.
-        AsyncParameter = 1 << 6,
-
-        // If this node was parsed in the 'await' context created when parsing an async function.
-        Await = 1 << 7,
+        ThisNodeHasError = 1 << 7,
 
         // Context flags set directly by the parser.
         ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | Decorator | ThisNodeHasError | AsyncParameter | Await,

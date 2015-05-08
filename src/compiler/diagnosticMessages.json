@@ -187,7 +187,7 @@
         "category": "Error",
         "code": 1057
     },
-    "Type for 'await' does not have a valid callable 'then' member.": {
+    "Operand for 'await' does not have a valid callable 'then' member.": {
         "category": "Error",
         "code": 1058
     },
