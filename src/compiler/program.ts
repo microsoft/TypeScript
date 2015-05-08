@@ -219,7 +219,12 @@ module ts {
             // Create the emit resolver outside of the "emitTime" tracking code below.  That way
             // any cost associated with it (like type checking) are appropriate associated with
             // the type-checking counter.
-            let emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile);
+            //
+            // If the -out option is specified, we should not pass the source file to getEmitResolver.
+            // This is because in the -out scenario all files need to be emitted, and therefore all
+            // files need to be type checked. And the way to specify that all files need to be type
+            // checked is to not pass the file to getEmitResolver.
+            let emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver(options.out ? undefined : sourceFile);
 
             let start = new Date().getTime();
 
