@@ -3801,6 +3801,13 @@ module ts {
 
         function getTypeForJSDocTypeReference(node: JSDocTypeReference): Type {
             let symbol = resolveEntityName(node.name, SymbolFlags.Type);
+            if (!symbol) {
+                // If the reference didn't resolve to a type, try seeing if results to a 
+                // value.  If it does, get the type of that value.
+                symbol = resolveEntityName(node.name, SymbolFlags.Value);
+                return symbol && getTypeOfSymbol(symbol);
+            }
+
             if (symbol) {
                 let type = createTypeReferenceIfGeneric(
                     getDeclaredTypeOfSymbol(symbol),
