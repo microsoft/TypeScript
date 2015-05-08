@@ -21,10 +21,3 @@ export class A {
         return 42;
     }
 }
-//# sourceMappingURL=es6-umd2.js.map
-
-//// [es6-umd2.d.ts]
-export declare class A {
-    constructor();
-    B(): number;
-}
