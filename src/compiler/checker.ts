@@ -7323,7 +7323,6 @@ module ts {
                 type = checkExpressionCached(<Expression>func.body, contextualMapper);
             }
             else {
-                // Aggregate the types of expressions within all the return statements.
                 let types: Type[];
                 if (func.asteriskToken) {
                     types = checkAndAggregateYieldOperandTypes(<Block>func.body, contextualMapper);
@@ -7342,8 +7341,9 @@ module ts {
                         return voidType;
                     }
                 }
-                // When return statements are contextually typed we allow the return type to be a union type. Otherwise we require the
-                // return expressions to have a best common supertype.
+
+                // When yield/return statements are contextually typed we allow the return type to be a union type.
+                // Otherwise we require the yield/return expressions to have a best common supertype.
                 type = contextualSignature ? getUnionType(types) : getCommonSupertype(types);
                 if (!type) {
                     if (func.asteriskToken) {
