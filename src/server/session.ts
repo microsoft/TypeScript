@@ -21,21 +21,6 @@ module ts.server {
         }  
         return spaceCache[n];
     }
-    
-    export function generateIndentString(n: number, editorOptions: EditorOptions): string {
-        if (editorOptions.ConvertTabsToSpaces) {
-            return generateSpaces(n);
-        } else {
-            var result = "";
-            for (var i = 0; i < Math.floor(n / editorOptions.TabSize); i++) {
-                result += "\t";
-            }
-            for (var i = 0; i < n % editorOptions.TabSize; i++) {
-                result += " ";
-            }
-            return result;
-        }
-    }
 
     interface FileStart {
         file: string;
@@ -556,29 +541,31 @@ module ts.server {
                             var editorOptions: ts.EditorOptions = {
                                 IndentSize: formatOptions.IndentSize,
                                 TabSize: formatOptions.TabSize,
-                                NewLineCharacter: formatOptions.NewLineCharacter,
+                                NewLineCharacter: "\n",
                                 ConvertTabsToSpaces: formatOptions.ConvertTabsToSpaces,
                             };
-                            var preferredIndent = compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);
-                            var hasIndent = 0;
+                            var indentPosition =
+                                compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);
                             for (var i = 0, len = lineText.length; i < len; i++) {
                                 if (lineText.charAt(i) == " ") {
-                                    hasIndent++;
+                                    indentPosition--;
                                 }
                                 else if (lineText.charAt(i) == "\t") {
-                                    hasIndent += editorOptions.TabSize;
+                                    indentPosition -= editorOptions.IndentSize;
                                 }
                                 else {
                                     break;
                                 }
                             }
-                            // i points to the first non whitespace character
-                            if (preferredIndent !== hasIndent) {
-                                var firstNoWhiteSpacePosition = lineInfo.offset + i;
-                                edits.push({ 
-                                    span: ts.createTextSpanFromBounds(lineInfo.offset, firstNoWhiteSpacePosition), 
-                                    newText: generateIndentString(preferredIndent, editorOptions)
-                                });                                
+                            if (indentPosition > 0) {
+                                var spaces = generateSpaces(indentPosition);
+                                edits.push({ span: ts.createTextSpanFromBounds(position, position), newText: spaces });
+                            }
+                            else if (indentPosition < 0) {
+                                edits.push({
+                                    span: ts.createTextSpanFromBounds(position, position - indentPosition),
+                                    newText: ""
+                                });
                             }
                         }
                     }
