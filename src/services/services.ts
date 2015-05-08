@@ -6061,11 +6061,13 @@ module ts {
                     let end = triviaScanner.getTextPos();
                     let width = end - start;
 
-                    if (textSpanIntersectsWith(span, start, width)) {
-                        if (!isTrivia(kind)) {
-                            return;
-                        }
+                    // The moment we get something that isn't trivia, then stop processing.
+                    if (!isTrivia(kind)) {
+                        return;
+                    }
 
+                    // Only bother with the trivia if it at least intersects the span of interest.
+                    if (textSpanIntersectsWith(span, start, width)) {
                         if (isComment(kind)) {
                             classifyComment(token, kind, start, width);
                             continue;
