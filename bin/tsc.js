@@ -444,7 +444,7 @@ var ts;
         for (var _i = 0; _i < parts.length; _i++) {
             var part = parts[_i];
             if (part !== ".") {
-                if (part === ".." && normalized.length > 0 && normalized[normalized.length - 1] !== "..") {
+                if (part === ".." && normalized.length > 0 && lastOrUndefined(normalized) !== "..") {
                     normalized.pop();
                 }
                 else {
@@ -536,7 +536,7 @@ var ts;
     function getRelativePathToDirectoryOrUrl(directoryPathOrUrl, relativeOrAbsolutePath, currentDirectory, getCanonicalFileName, isAbsolutePathAnUrl) {
         var pathComponents = getNormalizedPathOrUrlComponents(relativeOrAbsolutePath, currentDirectory);
         var directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, currentDirectory);
-        if (directoryComponents.length > 1 && directoryComponents[directoryComponents.length - 1] === "") {
+        if (directoryComponents.length > 1 && lastOrUndefined(directoryComponents) === "") {
             directoryComponents.length--;
         }
         for (var joinStartIndex = 0; joinStartIndex < pathComponents.length && joinStartIndex < directoryComponents.length; joinStartIndex++) {
@@ -1277,6 +1277,8 @@ var ts;
         An_interface_can_only_extend_an_identifier_Slashqualified_name_with_optional_type_arguments: { code: 2499, category: ts.DiagnosticCategory.Error, key: "An interface can only extend an identifier/qualified-name with optional type arguments." },
         A_class_can_only_implement_an_identifier_Slashqualified_name_with_optional_type_arguments: { code: 2500, category: ts.DiagnosticCategory.Error, key: "A class can only implement an identifier/qualified-name with optional type arguments." },
         A_rest_element_cannot_contain_a_binding_pattern: { code: 2501, category: ts.DiagnosticCategory.Error, key: "A rest element cannot contain a binding pattern." },
+        _0_is_referenced_directly_or_indirectly_in_its_own_type_annotation: { code: 2502, category: ts.DiagnosticCategory.Error, key: "'{0}' is referenced directly or indirectly in its own type annotation." },
+        Cannot_find_namespace_0: { code: 2503, category: ts.DiagnosticCategory.Error, key: "Cannot find namespace '{0}'." },
         Import_declaration_0_is_using_private_name_1: { code: 4000, category: ts.DiagnosticCategory.Error, key: "Import declaration '{0}' is using private name '{1}'." },
         Type_parameter_0_of_exported_class_has_or_is_using_private_name_1: { code: 4002, category: ts.DiagnosticCategory.Error, key: "Type parameter '{0}' of exported class has or is using private name '{1}'." },
         Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1: { code: 4004, category: ts.DiagnosticCategory.Error, key: "Type parameter '{0}' of exported interface has or is using private name '{1}'." },
@@ -1416,6 +1418,9 @@ var ts;
         Preserve_new_lines_when_emitting_code: { code: 6057, category: ts.DiagnosticCategory.Message, key: "Preserve new-lines when emitting code." },
         Specifies_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir: { code: 6058, category: ts.DiagnosticCategory.Message, key: "Specifies the root directory of input files. Use to control the output directory structure with --outDir." },
         File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files: { code: 6059, category: ts.DiagnosticCategory.Error, key: "File '{0}' is not under 'rootDir' '{1}'. 'rootDir' is expected to contain all source files." },
+        Specifies_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix: { code: 6060, category: ts.DiagnosticCategory.Message, key: "Specifies the end of line sequence to be used when emitting files: 'CRLF' (dos) or 'LF' (unix)." },
+        NEWLINE: { code: 6061, category: ts.DiagnosticCategory.Message, key: "NEWLINE" },
+        Argument_for_newLine_option_must_be_CRLF_or_LF: { code: 6062, category: ts.DiagnosticCategory.Error, key: "Argument for '--newLine' option must be 'CRLF' or 'LF'." },
         Variable_0_implicitly_has_an_1_type: { code: 7005, category: ts.DiagnosticCategory.Error, key: "Variable '{0}' implicitly has an '{1}' type." },
         Parameter_0_implicitly_has_an_1_type: { code: 7006, category: ts.DiagnosticCategory.Error, key: "Parameter '{0}' implicitly has an '{1}' type." },
         Member_0_implicitly_has_an_1_type: { code: 7008, category: ts.DiagnosticCategory.Error, key: "Member '{0}' implicitly has an '{1}' type." },
@@ -1428,7 +1433,6 @@ var ts;
         Object_literal_s_property_0_implicitly_has_an_1_type: { code: 7018, category: ts.DiagnosticCategory.Error, key: "Object literal's property '{0}' implicitly has an '{1}' type." },
         Rest_parameter_0_implicitly_has_an_any_type: { code: 7019, category: ts.DiagnosticCategory.Error, key: "Rest parameter '{0}' implicitly has an 'any[]' type." },
         Call_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type: { code: 7020, category: ts.DiagnosticCategory.Error, key: "Call signature, which lacks return-type annotation, implicitly has an 'any' return type." },
-        _0_implicitly_has_type_any_because_it_is_referenced_directly_or_indirectly_in_its_own_type_annotation: { code: 7021, category: ts.DiagnosticCategory.Error, key: "'{0}' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation." },
         _0_implicitly_has_type_any_because_it_is_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer: { code: 7022, category: ts.DiagnosticCategory.Error, key: "'{0}' implicitly has type 'any' because it is does not have a type annotation and is referenced directly or indirectly in its own initializer." },
         _0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions: { code: 7023, category: ts.DiagnosticCategory.Error, key: "'{0}' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions." },
         Function_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions: { code: 7024, category: ts.DiagnosticCategory.Error, key: "Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions." },
@@ -1844,7 +1848,7 @@ var ts;
                     }
                     collecting = true;
                     if (result && result.length) {
-                        result[result.length - 1].hasTrailingNewLine = true;
+                        ts.lastOrUndefined(result).hasTrailingNewLine = true;
                     }
                     continue;
                 case 9:
@@ -1890,7 +1894,7 @@ var ts;
                 default:
                     if (ch > 127 && (isWhiteSpace(ch) || isLineBreak(ch))) {
                         if (result && result.length && isLineBreak(ch)) {
-                            result[result.length - 1].hasTrailingNewLine = true;
+                            ts.lastOrUndefined(result).hasTrailingNewLine = true;
                         }
                         pos++;
                         continue;
@@ -3908,7 +3912,7 @@ var ts;
     }
     ts.hasQuestionToken = hasQuestionToken;
     function hasRestParameters(s) {
-        return s.parameters.length > 0 && s.parameters[s.parameters.length - 1].dotDotDotToken !== undefined;
+        return s.parameters.length > 0 && ts.lastOrUndefined(s.parameters).dotDotDotToken !== undefined;
     }
     ts.hasRestParameters = hasRestParameters;
     function isLiteralKind(kind) {
@@ -4336,7 +4340,7 @@ var ts;
                 var lineStartsOfS = ts.computeLineStarts(s);
                 if (lineStartsOfS.length > 1) {
                     lineCount = lineCount + lineStartsOfS.length - 1;
-                    linePos = output.length - s.length + lineStartsOfS[lineStartsOfS.length - 1];
+                    linePos = output.length - s.length + ts.lastOrUndefined(lineStartsOfS);
                 }
             }
         }
@@ -4405,8 +4409,8 @@ var ts;
     ts.getFirstConstructorWithBody = getFirstConstructorWithBody;
     function shouldEmitToOwnFile(sourceFile, compilerOptions) {
         if (!isDeclarationFile(sourceFile)) {
-            if ((isExternalModule(sourceFile) || !compilerOptions.out) && !ts.fileExtensionIs(sourceFile.fileName, ".js")) {
-                return true;
+            if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
+                return compilerOptions.separateCompilation || !ts.fileExtensionIs(sourceFile.fileName, ".js");
             }
             return false;
         }
@@ -5981,7 +5985,7 @@ var ts;
             templateSpans.pos = getNodePos();
             do {
                 templateSpans.push(parseTemplateSpan());
-            } while (templateSpans[templateSpans.length - 1].literal.kind === 12);
+            } while (ts.lastOrUndefined(templateSpans).literal.kind === 12);
             templateSpans.end = getNodeEnd();
             template.templateSpans = templateSpans;
             return finishNode(template);
@@ -8580,7 +8584,6 @@ var ts;
         var undefinedType = createIntrinsicType(32 | 262144, "undefined");
         var nullType = createIntrinsicType(64 | 262144, "null");
         var unknownType = createIntrinsicType(1, "unknown");
-        var resolvingType = createIntrinsicType(1, "__resolving__");
         var emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         var anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         var noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -8610,6 +8613,8 @@ var ts;
         var emitExtends = false;
         var emitDecorate = false;
         var emitParam = false;
+        var resolutionTargets = [];
+        var resolutionResults = [];
         var mergedSymbols = [];
         var symbolLinks = [];
         var nodeLinks = [];
@@ -8829,9 +8834,9 @@ var ts;
                         }
                         else if (location.kind === 228 ||
                             (location.kind === 206 && location.name.kind === 8)) {
-                            result = getSymbol(getSymbolOfNode(location).exports, "default", meaning & 8914931);
+                            result = getSymbolOfNode(location).exports["default"];
                             var localSymbol = ts.getLocalSymbolForExportDefault(result);
-                            if (result && (result.flags & meaning) && localSymbol && localSymbol.name === name) {
+                            if (result && localSymbol && (result.flags & meaning) && localSymbol.name === name) {
                                 break loop;
                             }
                             result = undefined;
@@ -9160,7 +9165,8 @@ var ts;
             }
             var symbol;
             if (name.kind === 65) {
-                symbol = resolveName(name, name.text, meaning, ts.Diagnostics.Cannot_find_name_0, name);
+                var message = meaning === 1536 ? ts.Diagnostics.Cannot_find_namespace_0 : ts.Diagnostics.Cannot_find_name_0;
+                symbol = resolveName(name, name.text, meaning, message, name);
                 if (!symbol) {
                     return undefined;
                 }
@@ -10131,6 +10137,26 @@ var ts;
                 });
             }
         }
+        function pushTypeResolution(target) {
+            var i = 0;
+            var count = resolutionTargets.length;
+            while (i < count && resolutionTargets[i] !== target) {
+                i++;
+            }
+            if (i < count) {
+                do {
+                    resolutionResults[i++] = false;
+                } while (i < count);
+                return false;
+            }
+            resolutionTargets.push(target);
+            resolutionResults.push(true);
+            return true;
+        }
+        function popTypeResolution() {
+            resolutionTargets.pop();
+            return resolutionResults.pop();
+        }
         function getRootDeclaration(node) {
             while (node.kind === 153) {
                 node = node.parent.parent;
@@ -10308,20 +10334,23 @@ var ts;
                 if (declaration.kind === 215) {
                     return links.type = checkExpression(declaration.expression);
                 }
-                links.type = resolvingType;
+                if (!pushTypeResolution(symbol)) {
+                    return unknownType;
+                }
                 var type = getWidenedTypeForVariableLikeDeclaration(declaration, true);
-                if (links.type === resolvingType) {
-                    links.type = type;
+                if (!popTypeResolution()) {
+                    if (symbol.valueDeclaration.type) {
+                        type = unknownType;
+                        error(symbol.valueDeclaration, ts.Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_type_annotation, symbolToString(symbol));
+                    }
+                    else {
+                        type = anyType;
+                        if (compilerOptions.noImplicitAny) {
+                            error(symbol.valueDeclaration, ts.Diagnostics._0_implicitly_has_type_any_because_it_is_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer, symbolToString(symbol));
+                        }
+                    }
                 }
-            }
-            else if (links.type === resolvingType) {
-                links.type = anyType;
-                if (compilerOptions.noImplicitAny) {
-                    var diagnostic = symbol.valueDeclaration.type ?
-                        ts.Diagnostics._0_implicitly_has_type_any_because_it_is_referenced_directly_or_indirectly_in_its_own_type_annotation :
-                        ts.Diagnostics._0_implicitly_has_type_any_because_it_is_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer;
-                    error(symbol.valueDeclaration, diagnostic, symbolToString(symbol));
-                }
+                links.type = type;
             }
             return links.type;
         }
@@ -10342,13 +10371,10 @@ var ts;
         }
         function getTypeOfAccessors(symbol) {
             var links = getSymbolLinks(symbol);
-            checkAndStoreTypeOfAccessors(symbol, links);
-            return links.type;
-        }
-        function checkAndStoreTypeOfAccessors(symbol, links) {
-            links = links || getSymbolLinks(symbol);
             if (!links.type) {
-                links.type = resolvingType;
+                if (!pushTypeResolution(symbol)) {
+                    return unknownType;
+                }
                 var getter = ts.getDeclarationOfKind(symbol, 137);
                 var setter = ts.getDeclarationOfKind(symbol, 138);
                 var type;
@@ -10373,17 +10399,16 @@ var ts;
                         }
                     }
                 }
-                if (links.type === resolvingType) {
-                    links.type = type;
+                if (!popTypeResolution()) {
+                    type = anyType;
+                    if (compilerOptions.noImplicitAny) {
+                        var getter_1 = ts.getDeclarationOfKind(symbol, 137);
+                        error(getter_1, ts.Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, symbolToString(symbol));
+                    }
                 }
+                links.type = type;
             }
-            else if (links.type === resolvingType) {
-                links.type = anyType;
-                if (compilerOptions.noImplicitAny) {
-                    var getter = ts.getDeclarationOfKind(symbol, 137);
-                    error(getter, ts.Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, symbolToString(symbol));
-                }
-            }
+            return links.type;
         }
         function getTypeOfFuncClassEnumModule(symbol) {
             var links = getSymbolLinks(symbol);
@@ -10545,17 +10570,16 @@ var ts;
         function getDeclaredTypeOfTypeAlias(symbol) {
             var links = getSymbolLinks(symbol);
             if (!links.declaredType) {
-                links.declaredType = resolvingType;
+                if (!pushTypeResolution(links)) {
+                    return unknownType;
+                }
                 var declaration = ts.getDeclarationOfKind(symbol, 204);
                 var type = getTypeFromTypeNode(declaration.type);
-                if (links.declaredType === resolvingType) {
-                    links.declaredType = type;
+                if (!popTypeResolution()) {
+                    type = unknownType;
+                    error(declaration.name, ts.Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
                 }
-            }
-            else if (links.declaredType === resolvingType) {
-                links.declaredType = unknownType;
-                var declaration = ts.getDeclarationOfKind(symbol, 204);
-                error(declaration.name, ts.Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
+                links.declaredType = type;
             }
             return links.declaredType;
         }
@@ -11094,7 +11118,9 @@ var ts;
         }
         function getReturnTypeOfSignature(signature) {
             if (!signature.resolvedReturnType) {
-                signature.resolvedReturnType = resolvingType;
+                if (!pushTypeResolution(signature)) {
+                    return unknownType;
+                }
                 var type;
                 if (signature.target) {
                     type = instantiateType(getReturnTypeOfSignature(signature.target), signature.mapper);
@@ -11105,27 +11131,25 @@ var ts;
                 else {
                     type = getReturnTypeFromBody(signature.declaration);
                 }
-                if (signature.resolvedReturnType === resolvingType) {
-                    signature.resolvedReturnType = type;
-                }
-            }
-            else if (signature.resolvedReturnType === resolvingType) {
-                signature.resolvedReturnType = anyType;
-                if (compilerOptions.noImplicitAny) {
-                    var declaration = signature.declaration;
-                    if (declaration.name) {
-                        error(declaration.name, ts.Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, ts.declarationNameToString(declaration.name));
-                    }
-                    else {
-                        error(declaration, ts.Diagnostics.Function_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions);
+                if (!popTypeResolution()) {
+                    type = anyType;
+                    if (compilerOptions.noImplicitAny) {
+                        var declaration = signature.declaration;
+                        if (declaration.name) {
+                            error(declaration.name, ts.Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, ts.declarationNameToString(declaration.name));
+                        }
+                        else {
+                            error(declaration, ts.Diagnostics.Function_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions);
+                        }
                     }
                 }
+                signature.resolvedReturnType = type;
             }
             return signature.resolvedReturnType;
         }
         function getRestTypeOfSignature(signature) {
             if (signature.hasRestParameter) {
-                var type = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
+                var type = getTypeOfSymbol(ts.lastOrUndefined(signature.parameters));
                 if (type.flags & 4096 && type.target === globalArrayType) {
                     return type.typeArguments[0];
                 }
@@ -12981,15 +13005,30 @@ var ts;
                     return type;
                 }
                 var prototypeProperty = getPropertyOfType(rightType, "prototype");
-                if (!prototypeProperty) {
-                    return type;
+                if (prototypeProperty) {
+                    var targetType = getTypeOfSymbol(prototypeProperty);
+                    if (targetType !== anyType) {
+                        if (isTypeSubtypeOf(targetType, type)) {
+                            return targetType;
+                        }
+                        if (type.flags & 16384) {
+                            return getUnionType(ts.filter(type.types, function (t) { return isTypeSubtypeOf(t, targetType); }));
+                        }
+                    }
                 }
-                var targetType = getTypeOfSymbol(prototypeProperty);
-                if (isTypeSubtypeOf(targetType, type)) {
-                    return targetType;
+                var constructSignatures;
+                if (rightType.flags & 2048) {
+                    constructSignatures = resolveDeclaredMembers(rightType).declaredConstructSignatures;
                 }
-                if (type.flags & 16384) {
-                    return getUnionType(ts.filter(type.types, function (t) { return isTypeSubtypeOf(t, targetType); }));
+                else if (rightType.flags & 32768) {
+                    constructSignatures = getSignaturesOfType(rightType, 1);
+                }
+                if (constructSignatures && constructSignatures.length !== 0) {
+                    var instanceType = getUnionType(ts.map(constructSignatures, function (signature) { return getReturnTypeOfSignature(getErasedSignature(signature)); }));
+                    if (type.flags & 16384) {
+                        return getUnionType(ts.filter(type.types, function (t) { return isTypeSubtypeOf(t, instanceType); }));
+                    }
+                    return instanceType;
                 }
                 return type;
             }
@@ -13219,7 +13258,7 @@ var ts;
                         }
                         if (indexOfParameter === (func.parameters.length - 1) &&
                             funcHasRestParameters && contextualSignature.hasRestParameter && func.parameters.length >= contextualSignature.parameters.length) {
-                            return getTypeOfSymbol(contextualSignature.parameters[contextualSignature.parameters.length - 1]);
+                            return getTypeOfSymbol(ts.lastOrUndefined(contextualSignature.parameters));
                         }
                     }
                 }
@@ -14279,9 +14318,9 @@ var ts;
                 links.type = instantiateType(getTypeAtPosition(context, i), mapper);
             }
             if (signature.hasRestParameter && context.hasRestParameter && signature.parameters.length >= context.parameters.length) {
-                var parameter = signature.parameters[signature.parameters.length - 1];
+                var parameter = ts.lastOrUndefined(signature.parameters);
                 var links = getSymbolLinks(parameter);
-                links.type = instantiateType(getTypeOfSymbol(context.parameters[context.parameters.length - 1]), mapper);
+                links.type = instantiateType(getTypeOfSymbol(ts.lastOrUndefined(context.parameters)), mapper);
             }
         }
         function getReturnTypeFromBody(func, contextualMapper) {
@@ -14369,10 +14408,9 @@ var ts;
                         if (isContextSensitive(node)) {
                             assignContextualParameterTypes(signature, contextualSignature, contextualMapper || identityMapper);
                         }
-                        if (!node.type) {
-                            signature.resolvedReturnType = resolvingType;
+                        if (!node.type && !signature.resolvedReturnType) {
                             var returnType = getReturnTypeFromBody(node, contextualMapper);
-                            if (signature.resolvedReturnType === resolvingType) {
+                            if (!signature.resolvedReturnType) {
                                 signature.resolvedReturnType = returnType;
                             }
                         }
@@ -15153,7 +15191,7 @@ var ts;
                         }
                     }
                 }
-                checkAndStoreTypeOfAccessors(getSymbolOfNode(node));
+                getTypeOfAccessors(getSymbolOfNode(node));
             }
             checkFunctionLikeDeclaration(node);
         }
@@ -18660,7 +18698,7 @@ var ts;
         function checkGrammarBindingElement(node) {
             if (node.dotDotDotToken) {
                 var elements = node.parent.elements;
-                if (node !== elements[elements.length - 1]) {
+                if (node !== ts.lastOrUndefined(elements)) {
                     return grammarErrorOnNode(node, ts.Diagnostics.A_rest_element_must_be_last_in_an_array_destructuring_pattern);
                 }
                 if (node.name.kind === 152 || node.name.kind === 151) {
@@ -20446,7 +20484,7 @@ var ts;
                 var sourceMapNameIndexMap = {};
                 var sourceMapNameIndices = [];
                 function getSourceMapNameIndex() {
-                    return sourceMapNameIndices.length ? sourceMapNameIndices[sourceMapNameIndices.length - 1] : -1;
+                    return sourceMapNameIndices.length ? ts.lastOrUndefined(sourceMapNameIndices) : -1;
                 }
                 var lastRecordedSourceMapSpan;
                 var lastEncodedSourceMapSpan = {
@@ -22922,11 +22960,11 @@ var ts;
                     emitNodeWithoutSourceMap(memberName);
                 }
             }
-            function getInitializedProperties(node, static) {
+            function getInitializedProperties(node, isStatic) {
                 var properties = [];
                 for (var _a = 0, _b = node.members; _a < _b.length; _a++) {
                     var member = _b[_a];
-                    if (member.kind === 133 && static === ((member.flags & 128) !== 0) && member.initializer) {
+                    if (member.kind === 133 && isStatic === ((member.flags & 128) !== 0) && member.initializer) {
                         properties.push(member);
                     }
                 }
@@ -23237,15 +23275,6 @@ var ts;
                 scopeEmitEnd();
                 if (thisNodeIsDecorated) {
                     write(";");
-                    if (node.name) {
-                        writeLine();
-                        write("Object.defineProperty(");
-                        emitDeclarationName(node);
-                        write(", \"name\", { value: \"");
-                        emitDeclarationName(node);
-                        write("\", configurable: true });");
-                        writeLine();
-                    }
                 }
                 if (isClassExpressionWithStaticProperties) {
                     for (var _a = 0; _a < staticProperties.length; _a++) {
@@ -24834,10 +24863,10 @@ var ts;
                 }
             }
             function hasDetachedComments(pos) {
-                return detachedCommentsInfo !== undefined && detachedCommentsInfo[detachedCommentsInfo.length - 1].nodePos === pos;
+                return detachedCommentsInfo !== undefined && ts.lastOrUndefined(detachedCommentsInfo).nodePos === pos;
             }
             function getLeadingCommentsWithoutDetachedComments() {
-                var leadingComments = ts.getLeadingCommentRanges(currentSourceFile.text, detachedCommentsInfo[detachedCommentsInfo.length - 1].detachedCommentEndPos);
+                var leadingComments = ts.getLeadingCommentRanges(currentSourceFile.text, ts.lastOrUndefined(detachedCommentsInfo).detachedCommentEndPos);
                 if (detachedCommentsInfo.length - 1) {
                     detachedCommentsInfo.pop();
                 }
@@ -24918,12 +24947,12 @@ var ts;
                         lastComment = comment;
                     });
                     if (detachedComments.length) {
-                        var lastCommentLine = ts.getLineOfLocalPosition(currentSourceFile, detachedComments[detachedComments.length - 1].end);
+                        var lastCommentLine = ts.getLineOfLocalPosition(currentSourceFile, ts.lastOrUndefined(detachedComments).end);
                         var nodeLine = ts.getLineOfLocalPosition(currentSourceFile, ts.skipTrivia(currentSourceFile.text, node.pos));
                         if (nodeLine >= lastCommentLine + 2) {
                             ts.emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
                             ts.emitComments(currentSourceFile, writer, detachedComments, true, newLine, writeComment);
-                            var currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: detachedComments[detachedComments.length - 1].end };
+                            var currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: ts.lastOrUndefined(detachedComments).end };
                             if (detachedCommentsInfo) {
                                 detachedCommentsInfo.push(currentDetachedCommentInfo);
                             }
@@ -24964,6 +24993,8 @@ var ts;
     ts.ioReadTime = 0;
     ts.ioWriteTime = 0;
     ts.version = "1.5.0";
+    var carriageReturnLineFeed = "\r\n";
+    var lineFeed = "\n";
     function findConfigFile(searchPath) {
         var fileName = "tsconfig.json";
         while (true) {
@@ -25034,6 +25065,9 @@ var ts;
                 }
             }
         }
+        var newLine = options.newLine === 0 ? carriageReturnLineFeed :
+            options.newLine === 1 ? lineFeed :
+                ts.sys.newLine;
         return {
             getSourceFile: getSourceFile,
             getDefaultLibFileName: function (options) { return ts.combinePaths(ts.getDirectoryPath(ts.normalizePath(ts.sys.getExecutingFilePath())), ts.getDefaultLibFileName(options)); },
@@ -25041,7 +25075,7 @@ var ts;
             getCurrentDirectory: function () { return currentDirectory || (currentDirectory = ts.sys.getCurrentDirectory()); },
             useCaseSensitiveFileNames: function () { return ts.sys.useCaseSensitiveFileNames; },
             getCanonicalFileName: getCanonicalFileName,
-            getNewLine: function () { return ts.sys.newLine; }
+            getNewLine: function () { return newLine; }
         };
     }
     ts.createCompilerHost = createCompilerHost;
@@ -25525,6 +25559,16 @@ var ts;
             description: ts.Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_or_umd,
             paramType: ts.Diagnostics.KIND,
             error: ts.Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_or_umd
+        },
+        {
+            name: "newLine",
+            type: {
+                "crlf": 0,
+                "lf": 1
+            },
+            description: ts.Diagnostics.Specifies_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
+            paramType: ts.Diagnostics.NEWLINE,
+            error: ts.Diagnostics.Argument_for_newLine_option_must_be_CRLF_or_LF
         },
         {
             name: "noEmit",

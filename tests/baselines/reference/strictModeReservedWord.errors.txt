@@ -19,19 +19,19 @@ tests/cases/compiler/strictModeReservedWord.ts(13,28): error TS1212: Identifier 
 tests/cases/compiler/strictModeReservedWord.ts(15,25): error TS9003: 'class' expressions are not currently supported.
 tests/cases/compiler/strictModeReservedWord.ts(17,9): error TS2300: Duplicate identifier 'b'.
 tests/cases/compiler/strictModeReservedWord.ts(17,12): error TS1215: Type expected. 'public' is a reserved word in strict mode
-tests/cases/compiler/strictModeReservedWord.ts(17,12): error TS2304: Cannot find name 'public'.
+tests/cases/compiler/strictModeReservedWord.ts(17,12): error TS2503: Cannot find namespace 'public'.
 tests/cases/compiler/strictModeReservedWord.ts(19,21): error TS1215: Type expected. 'private' is a reserved word in strict mode
-tests/cases/compiler/strictModeReservedWord.ts(19,21): error TS2304: Cannot find name 'private'.
+tests/cases/compiler/strictModeReservedWord.ts(19,21): error TS2503: Cannot find namespace 'private'.
 tests/cases/compiler/strictModeReservedWord.ts(20,22): error TS1215: Type expected. 'private' is a reserved word in strict mode
-tests/cases/compiler/strictModeReservedWord.ts(20,22): error TS2304: Cannot find name 'private'.
+tests/cases/compiler/strictModeReservedWord.ts(20,22): error TS2503: Cannot find namespace 'private'.
 tests/cases/compiler/strictModeReservedWord.ts(20,30): error TS1215: Type expected. 'package' is a reserved word in strict mode
 tests/cases/compiler/strictModeReservedWord.ts(21,22): error TS1215: Type expected. 'private' is a reserved word in strict mode
-tests/cases/compiler/strictModeReservedWord.ts(21,22): error TS2304: Cannot find name 'private'.
+tests/cases/compiler/strictModeReservedWord.ts(21,22): error TS2503: Cannot find namespace 'private'.
 tests/cases/compiler/strictModeReservedWord.ts(21,30): error TS1215: Type expected. 'package' is a reserved word in strict mode
 tests/cases/compiler/strictModeReservedWord.ts(21,38): error TS1215: Type expected. 'protected' is a reserved word in strict mode
 tests/cases/compiler/strictModeReservedWord.ts(22,9): error TS2300: Duplicate identifier 'b'.
 tests/cases/compiler/strictModeReservedWord.ts(22,12): error TS1215: Type expected. 'interface' is a reserved word in strict mode
-tests/cases/compiler/strictModeReservedWord.ts(22,12): error TS2304: Cannot find name 'interface'.
+tests/cases/compiler/strictModeReservedWord.ts(22,12): error TS2503: Cannot find namespace 'interface'.
 tests/cases/compiler/strictModeReservedWord.ts(22,22): error TS1215: Type expected. 'package' is a reserved word in strict mode
 tests/cases/compiler/strictModeReservedWord.ts(22,30): error TS1215: Type expected. 'implements' is a reserved word in strict mode
 tests/cases/compiler/strictModeReservedWord.ts(23,5): error TS2304: Cannot find name 'ublic'.
@@ -100,25 +100,25 @@ tests/cases/compiler/strictModeReservedWord.ts(24,5): error TS2349: Cannot invok
                ~~~~~~
 !!! error TS1215: Type expected. 'public' is a reserved word in strict mode
                ~~~~~~
-!!! error TS2304: Cannot find name 'public'.
+!!! error TS2503: Cannot find namespace 'public'.
     
         function foo(x: private.x) { }
                         ~~~~~~~
 !!! error TS1215: Type expected. 'private' is a reserved word in strict mode
                         ~~~~~~~
-!!! error TS2304: Cannot find name 'private'.
+!!! error TS2503: Cannot find namespace 'private'.
         function foo1(x: private.package.x) { }
                          ~~~~~~~
 !!! error TS1215: Type expected. 'private' is a reserved word in strict mode
                          ~~~~~~~
-!!! error TS2304: Cannot find name 'private'.
+!!! error TS2503: Cannot find namespace 'private'.
                                  ~~~~~~~
 !!! error TS1215: Type expected. 'package' is a reserved word in strict mode
         function foo2(x: private.package.protected) { }
                          ~~~~~~~
 !!! error TS1215: Type expected. 'private' is a reserved word in strict mode
                          ~~~~~~~
-!!! error TS2304: Cannot find name 'private'.
+!!! error TS2503: Cannot find namespace 'private'.
                                  ~~~~~~~
 !!! error TS1215: Type expected. 'package' is a reserved word in strict mode
                                          ~~~~~~~~~
@@ -129,7 +129,7 @@ tests/cases/compiler/strictModeReservedWord.ts(24,5): error TS2349: Cannot invok
                ~~~~~~~~~
 !!! error TS1215: Type expected. 'interface' is a reserved word in strict mode
                ~~~~~~~~~
-!!! error TS2304: Cannot find name 'interface'.
+!!! error TS2503: Cannot find namespace 'interface'.
                          ~~~~~~~
 !!! error TS1215: Type expected. 'package' is a reserved word in strict mode
                                  ~~~~~~~~~~

@@ -1180,4 +1180,5 @@ interface PromiseLike<T> {
     * @returns A Promise for the completion of which ever callback is executed.
     */
     then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): PromiseLike<TResult>;
+    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): PromiseLike<TResult>;
 }
