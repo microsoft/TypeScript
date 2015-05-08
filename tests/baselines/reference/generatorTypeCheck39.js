@@ -27,7 +27,6 @@ let C = class {
         this.x = yield 0;
     }
 };
-Object.defineProperty(C, "name", { value: "C", configurable: true });
 C = __decorate([
     decorator(yield, 0)
 ], C);
