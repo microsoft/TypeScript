@@ -883,7 +883,7 @@ module ts {
                     return {
                         options: configFile.options,
                         files: configFile.fileNames,
-                        errors: [realizeDiagnostics(configFile.errors, '\r\n')]
+                        errors: realizeDiagnostics(configFile.errors, '\r\n')
                     };
                 });
         }
