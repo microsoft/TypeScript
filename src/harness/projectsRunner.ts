@@ -189,7 +189,8 @@ class ProjectRunner extends RunnerBase {
                     getCurrentDirectory,
                     getCanonicalFileName: Harness.Compiler.getCanonicalFileName,
                     useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
-                    getNewLine: () => ts.sys.newLine
+                    getNewLine: () => ts.sys.newLine,
+                    getPackagePath: getCurrentDirectory
                 };
             }
         }

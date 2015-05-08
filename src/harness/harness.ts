@@ -878,7 +878,8 @@ module Harness {
                 writeFile,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
-                getNewLine: () => newLine
+                getNewLine: () => newLine,
+                getPackagePath: getCurrentDirectory
             };
         }
 
@@ -1048,6 +1049,18 @@ module Harness {
                         case 'declaration':
                             options.declaration = !!setting.value;
                             break;
+                            
+                        case 'packagename':
+                            options.packageName = setting.value;
+                            break;
+                            
+                        case 'packagemain':
+                            options.packageMain = setting.value;
+                            break;
+                            
+                        case 'packagedeclaration':
+                            options.packageDeclaration = setting.value;
+                            break;
 
                         case 'newline':
                             if (setting.value.toLowerCase() === 'crlf') {
@@ -1149,7 +1162,7 @@ module Harness {
                 options?: ts.CompilerOptions,
                 // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
                 currentDirectory?: string) {
-                if (options.declaration && result.errors.length === 0 && result.declFilesCode.length !== result.files.length) {
+                if (options.declaration && result.errors.length === 0 && (options.packageDeclaration ? result.declFilesCode.length !== 1 : result.declFilesCode.length !== result.files.length)) {
                     throw new Error('There were no errors and declFiles generated did not match number of js files generated');
                 }
 
@@ -1158,12 +1171,27 @@ module Harness {
                     var declInputFiles: { unitName: string; content: string }[] = [];
                     var declOtherFiles: { unitName: string; content: string }[] = [];
                     var declResult: Harness.Compiler.CompilerResult;
-
-                    ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
-                    ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
+                    if (options.packageDeclaration) {
+                        let file = ts.forEach(result.declFilesCode, declFile => declFile.fileName === options.packageDeclaration ? declFile : undefined);
+                        declInputFiles.push({ unitName: file.fileName, content: file.code });
+                        ts.forEach(inputFiles, file => {
+                           if (isDTS(file.unitName)) {
+                               declInputFiles.push(file);
+                           } 
+                        });
+                        ts.forEach(otherFiles, file => {
+                           if (isDTS(file.unitName)) {
+                               declOtherFiles.push(file);
+                           } 
+                        });
+                    }
+                    else {    
+                        ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
+                        ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
+                    }
+                    
                     this.compileFiles(declInputFiles, declOtherFiles, function (compileResult) { declResult = compileResult; },
                         settingsCallback, options, currentDirectory);
-
                     return { declInputFiles, declOtherFiles, declResult };
                 }
 
@@ -1510,7 +1538,8 @@ module Harness {
             "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
             "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
             "separatecompilation", "inlinesourcemap", "maproot", "sourceroot",
-            "inlinesources", "emitdecoratormetadata"];
+            "inlinesources", "emitdecoratormetadata", "packagemain", "packagename",
+            "packagedeclaration"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

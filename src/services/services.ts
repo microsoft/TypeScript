@@ -1794,6 +1794,7 @@ module ts {
             useCaseSensitiveFileNames: () => false,
             getCanonicalFileName: fileName => fileName,
             getCurrentDirectory: () => "",
+            getPackagePath: () => "",
             getNewLine: () => (sys && sys.newLine) || "\r\n"
         };
 
@@ -2419,7 +2420,8 @@ module ts {
                 getNewLine: () => host.getNewLine ? host.getNewLine() : "\r\n",
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: (fileName, data, writeByteOrderMark) => { },
-                getCurrentDirectory: () => host.getCurrentDirectory()
+                getCurrentDirectory: () => host.getCurrentDirectory(),
+                getPackagePath: (emitHost?: EmitHost) => (emitHost && emitHost.getCommonSourceDirectory()) || host.getCurrentDirectory()
             });
 
             // Release any files we have acquired in the old program but are 
