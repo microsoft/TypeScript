@@ -28,6 +28,25 @@ module ts {
         }
         return undefined;
     }
+    
+    export function findPackageFile(searchPath: string): string {
+        let fileName = "package.json";
+        while (true) {
+            if (sys.fileExists(fileName)) {
+                return fileName;
+            }
+
+            let parentPath = getDirectoryPath(searchPath);
+            if (parentPath === searchPath) {
+                break;
+            }
+            
+            searchPath = parentPath;
+            fileName = "../" + fileName;
+        }
+
+        return undefined;
+    }
 
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
         let currentDirectory: string;
@@ -93,6 +112,24 @@ module ts {
                 }
             }
         }
+        
+        function getCurrentDirectory(): string {
+            return currentDirectory || (currentDirectory = sys.getCurrentDirectory());
+        }
+        
+        function getPackagePath(host?: EmitHost): string {
+            let searchPath = getCurrentDirectory();
+            let packageFile = findPackageFile(searchPath);
+            if (packageFile) {
+                return getDirectoryPath(normalizePath(packageFile));
+            }
+            
+            if (host) {
+                return host.getCommonSourceDirectory();
+            }
+
+            return searchPath;
+        }
 
         let newLine =
             options.newLine === NewLineKind.CarriageReturnLineFeed ? carriageReturnLineFeed :
@@ -103,7 +140,8 @@ module ts {
             getSourceFile,
             getDefaultLibFileName: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), getDefaultLibFileName(options)),
             writeFile,
-            getCurrentDirectory: () => currentDirectory || (currentDirectory = sys.getCurrentDirectory()),
+            getCurrentDirectory,
+            getPackagePath,
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
             getCanonicalFileName,
             getNewLine: () => newLine
@@ -178,6 +216,7 @@ module ts {
             getTypeChecker,
             getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory: () => commonSourceDirectory,
+            getPackagePath: () => host.getPackagePath(),
             emit,
             getCurrentDirectory: () => host.getCurrentDirectory(),
             getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
@@ -186,19 +225,21 @@ module ts {
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
         };
         return program;
-
+        
         function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
-            return {
+            let emitHost: EmitHost = {
                 getCanonicalFileName: fileName => host.getCanonicalFileName(fileName),
                 getCommonSourceDirectory: program.getCommonSourceDirectory,
                 getCompilerOptions: program.getCompilerOptions,
                 getCurrentDirectory: () => host.getCurrentDirectory(),
+                getPackagePath: () => host.getPackagePath(emitHost),
                 getNewLine: () => host.getNewLine(),
                 getSourceFile: program.getSourceFile,
                 getSourceFiles: program.getSourceFiles,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError) => host.writeFile(fileName, data, writeByteOrderMark, onError)),
             };
+            return emitHost;
         }
 
         function getDiagnosticsProducingTypeChecker() {

@@ -35,8 +35,10 @@ module ts {
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;
+        /*@internal*/ getPackagePath(): string;
 
         writeFile: WriteFileCallback;
+
     }
 
     // Pool writers to avoid needing to allocate them for every symbol we write.

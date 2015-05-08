@@ -1632,17 +1632,21 @@ module ts {
             referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
         }
     }
-
+    
     function getPackageQualifiedPath(host: EmitHost, moduleName: string, basePath: string) {
         let compilerOptions = host.getCompilerOptions();
         let modulePath = normalizePath(combinePaths(basePath, moduleName));
         let packageRelativePath = getRelativePathToDirectoryOrUrl(
-            getDirectoryPath(host.getCanonicalFileName(compilerOptions.packageMain)),
+            host.getPackagePath(),
             modulePath,
             host.getCurrentDirectory(),
             host.getCanonicalFileName,
             false);
-        return `package://${compilerOptions.packageName}/${packageRelativePath}`;
+        if (host.getCanonicalFileName(packageRelativePath + ".ts") === host.getCanonicalFileName(compilerOptions.packageMain) || 
+            host.getCanonicalFileName(packageRelativePath + ".d.ts") === host.getCanonicalFileName(compilerOptions.packageMain)) {
+            return compilerOptions.packageName;
+        }        
+        return combinePaths(compilerOptions.packageName, packageRelativePath);
     }
         
     function getDeclarationOutput(synchronousDeclarationOutput: string, moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[]) {

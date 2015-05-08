@@ -1881,6 +1881,7 @@ module ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
+        /*@internal*/ getPackagePath(host?: EmitHost): string;
     }
 
     export interface TextSpan {
