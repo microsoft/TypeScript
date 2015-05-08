@@ -490,9 +490,6 @@ module ts {
                 case SyntaxKind.IndexSignature:
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ArrowFunction:
-                case SyntaxKind.FunctionDeclaration:
                     return true;
             }
         }
@@ -1505,8 +1502,10 @@ module ts {
 
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
         if (!isDeclarationFile(sourceFile)) {
-            if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.fileName, ".js")) {
-                return true;
+            if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
+                // 1. in-browser single file compilation scenario
+                // 2. non .js file
+                return compilerOptions.separateCompilation || !fileExtensionIs(sourceFile.fileName, ".js");
             }
             return false;
         }
@@ -1763,7 +1762,7 @@ module ts {
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-            return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
+        return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 
     export function isJavaScript(fileName: string) {

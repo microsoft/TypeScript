@@ -1001,6 +1001,8 @@ module ts {
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[];
 
         getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
+        getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[];
+
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[];
         findReferences(fileName: string, position: number): ReferencedSymbol[];
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[];
@@ -1632,7 +1634,7 @@ module ts {
         private fileNameToEntry: Map<HostFileInformation>;
         private _compilationSettings: CompilerOptions;
 
-        constructor(private host: LanguageServiceHost) {
+        constructor(private host: LanguageServiceHost, private getCanonicalFileName: (fileName: string) => string) {
             // script id => script index
             this.fileNameToEntry = {};
 
@@ -1650,6 +1652,10 @@ module ts {
             return this._compilationSettings;
         }
 
+        private normalizeFileName(fileName: string): string {
+            return this.getCanonicalFileName(normalizeSlashes(fileName));
+        }
+
         private createEntry(fileName: string) {
             let entry: HostFileInformation;
             let scriptSnapshot = this.host.getScriptSnapshot(fileName);
@@ -1661,15 +1667,15 @@ module ts {
                 };
             }
 
-            return this.fileNameToEntry[normalizeSlashes(fileName)] = entry;
+            return this.fileNameToEntry[this.normalizeFileName(fileName)] = entry;
         }
 
-        public getEntry(fileName: string): HostFileInformation {
-            return lookUp(this.fileNameToEntry, normalizeSlashes(fileName));
+        private getEntry(fileName: string): HostFileInformation {
+            return lookUp(this.fileNameToEntry, this.normalizeFileName(fileName));
         }
 
-        public contains(fileName: string): boolean {
-            return hasProperty(this.fileNameToEntry, normalizeSlashes(fileName));
+        private contains(fileName: string): boolean {
+            return hasProperty(this.fileNameToEntry, this.normalizeFileName(fileName));
         }
 
         public getOrCreateEntry(fileName: string): HostFileInformation {
@@ -1684,8 +1690,10 @@ module ts {
             let fileNames: string[] = [];
 
             forEachKey(this.fileNameToEntry, key => {
-                if (hasProperty(this.fileNameToEntry, key) && this.fileNameToEntry[key])
-                    fileNames.push(key);
+                let entry = this.getEntry(key);
+                if (entry) {
+                    fileNames.push(entry.hostFileName);
+                }
             });
 
             return fileNames;
@@ -2387,7 +2395,7 @@ module ts {
 
         function synchronizeHostData(): void {
             // Get a fresh cache of the host information
-            let hostCache = new HostCache(host);
+            let hostCache = new HostCache(host, getCanonicalFileName);
 
             // If the program is already up-to-date, we can reuse it
             if (programUpToDate()) {
@@ -2408,7 +2416,7 @@ module ts {
             let newProgram = createProgram(hostCache.getRootFileNames(), newSettings, {
                 getSourceFile: getOrCreateSourceFile,
                 getCancellationToken: () => cancellationToken,
-                getCanonicalFileName: (fileName) => useCaseSensitivefileNames ? fileName : fileName.toLowerCase(),
+                getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitivefileNames,
                 getNewLine: () => host.getNewLine ? host.getNewLine() : "\r\n",
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
@@ -3521,19 +3529,6 @@ module ts {
             return ScriptElementKind.unknown;
         }
 
-        function getTypeKind(type: Type): string {
-            let flags = type.getFlags();
-
-            if (flags & TypeFlags.Enum) return ScriptElementKind.enumElement;
-            if (flags & TypeFlags.Class) return ScriptElementKind.classElement;
-            if (flags & TypeFlags.Interface) return ScriptElementKind.interfaceElement;
-            if (flags & TypeFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
-            if (flags & TypeFlags.Intrinsic) return ScriptElementKind.primitiveType;
-            if (flags & TypeFlags.StringLiteral) return ScriptElementKind.primitiveType;
-
-            return ScriptElementKind.unknown;
-        }
-
         function getSymbolModifiers(symbol: Symbol): string {
             return symbol && symbol.declarations && symbol.declarations.length > 0
                 ? getNodeModifiers(symbol.declarations[0])
@@ -3950,6 +3945,71 @@ module ts {
             };
         }
 
+        function getDefinitionFromSymbol(symbol: Symbol, node: Node): DefinitionInfo[] {
+            let typeChecker = program.getTypeChecker();
+            let result: DefinitionInfo[] = [];
+            let declarations = symbol.getDeclarations();
+            let symbolName = typeChecker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
+            let symbolKind = getSymbolKind(symbol, node);
+            let containerSymbol = symbol.parent;
+            let containerName = containerSymbol ? typeChecker.symbolToString(containerSymbol, node) : "";
+
+            if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
+                !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
+                // Just add all the declarations. 
+                forEach(declarations, declaration => {
+                    result.push(createDefinitionInfo(declaration, symbolKind, symbolName, containerName));
+                });
+            }
+
+            return result;
+
+            function tryAddConstructSignature(symbol: Symbol, location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+                // Applicable only if we are in a new expression, or we are on a constructor declaration
+                // and in either case the symbol has a construct signature definition, i.e. class
+                if (isNewExpressionTarget(location) || location.kind === SyntaxKind.ConstructorKeyword) {
+                    if (symbol.flags & SymbolFlags.Class) {
+                        let classDeclaration = <ClassDeclaration>symbol.getDeclarations()[0];
+                        Debug.assert(classDeclaration && classDeclaration.kind === SyntaxKind.ClassDeclaration);
+
+                        return tryAddSignature(classDeclaration.members, /*selectConstructors*/ true, symbolKind, symbolName, containerName, result);
+                    }
+                }
+                return false;
+            }
+
+            function tryAddCallSignature(symbol: Symbol, location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+                if (isCallExpressionTarget(location) || isNewExpressionTarget(location) || isNameOfFunctionDeclaration(location)) {
+                    return tryAddSignature(symbol.declarations, /*selectConstructors*/ false, symbolKind, symbolName, containerName, result);
+                }
+                return false;
+            }
+
+            function tryAddSignature(signatureDeclarations: Declaration[], selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+                let declarations: Declaration[] = [];
+                let definition: Declaration;
+
+                forEach(signatureDeclarations, d => {
+                    if ((selectConstructors && d.kind === SyntaxKind.Constructor) ||
+                        (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.MethodDeclaration || d.kind === SyntaxKind.MethodSignature))) {
+                        declarations.push(d);
+                        if ((<FunctionLikeDeclaration>d).body) definition = d;
+                    }
+                });
+
+                if (definition) {
+                    result.push(createDefinitionInfo(definition, symbolKind, symbolName, containerName));
+                    return true;
+                }
+                else if (declarations.length) {
+                    result.push(createDefinitionInfo(lastOrUndefined(declarations), symbolKind, symbolName, containerName));
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
         /// Goto definition
         function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
@@ -4024,67 +4084,47 @@ module ts {
                     declaration => createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
             }
 
-            let result: DefinitionInfo[] = [];
-            let declarations = symbol.getDeclarations();
-            let symbolName = typeChecker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-            let symbolKind = getSymbolKind(symbol, node);
-            let containerSymbol = symbol.parent;
-            let containerName = containerSymbol ? typeChecker.symbolToString(containerSymbol, node) : "";
+            return getDefinitionFromSymbol(symbol, node);
+        }
 
-            if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
-                !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
-                // Just add all the declarations. 
-                forEach(declarations, declaration => {
-                    result.push(createDefinitionInfo(declaration, symbolKind, symbolName, containerName));
-                });
+        /// Goto type
+        function getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
+            synchronizeHostData();
+
+            let sourceFile = getValidSourceFile(fileName);
+
+            let node = getTouchingPropertyName(sourceFile, position);
+            if (!node) {
+                return undefined;
             }
 
-            return result;
+            let typeChecker = program.getTypeChecker();
 
-            function tryAddConstructSignature(symbol: Symbol, location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
-                // Applicable only if we are in a new expression, or we are on a constructor declaration
-                // and in either case the symbol has a construct signature definition, i.e. class
-                if (isNewExpressionTarget(location) || location.kind === SyntaxKind.ConstructorKeyword) {
-                    if (symbol.flags & SymbolFlags.Class) {
-                        let classDeclaration = <ClassDeclaration>symbol.getDeclarations()[0];
-                        Debug.assert(classDeclaration && classDeclaration.kind === SyntaxKind.ClassDeclaration);
-
-                        return tryAddSignature(classDeclaration.members, /*selectConstructors*/ true, symbolKind, symbolName, containerName, result);
-                    }
-                }
-                return false;
+            let symbol = typeChecker.getSymbolAtLocation(node);
+            if (!symbol) {
+                return undefined;
             }
 
-            function tryAddCallSignature(symbol: Symbol, location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
-                if (isCallExpressionTarget(location) || isNewExpressionTarget(location) || isNameOfFunctionDeclaration(location)) {
-                    return tryAddSignature(symbol.declarations, /*selectConstructors*/ false, symbolKind, symbolName, containerName, result);
-                }
-                return false;
+            let type = typeChecker.getTypeOfSymbolAtLocation(symbol, node);
+            if (!type) {
+                return undefined;
             }
 
-            function tryAddSignature(signatureDeclarations: Declaration[], selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
-                let declarations: Declaration[] = [];
-                let definition: Declaration;
-
-                forEach(signatureDeclarations, d => {
-                    if ((selectConstructors && d.kind === SyntaxKind.Constructor) ||
-                        (!selectConstructors && (d.kind === SyntaxKind.FunctionDeclaration || d.kind === SyntaxKind.MethodDeclaration || d.kind === SyntaxKind.MethodSignature))) {
-                        declarations.push(d);
-                        if ((<FunctionLikeDeclaration>d).body) definition = d;
+            if (type.flags & TypeFlags.Union) {
+                var result: DefinitionInfo[] = [];
+                forEach((<UnionType>type).types, t => {
+                    if (t.symbol) {
+                        result.push(...getDefinitionFromSymbol(t.symbol, node));
                     }
                 });
-
-                if (definition) {
-                    result.push(createDefinitionInfo(definition, symbolKind, symbolName, containerName));
-                    return true;
-                }
-                else if (declarations.length) {
-                    result.push(createDefinitionInfo(lastOrUndefined(declarations), symbolKind, symbolName, containerName));
-                    return true;
-                }
-
-                return false;
+                return result;
             }
+
+            if (!type.symbol) {
+                return undefined;
+            }
+
+            return getDefinitionFromSymbol(type.symbol, node);
         }
 
         function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
@@ -6604,6 +6644,7 @@ module ts {
             getSignatureHelpItems,
             getQuickInfoAtPosition,
             getDefinitionAtPosition,
+            getTypeDefinitionAtPosition,
             getReferencesAtPosition,
             findReferences,
             getOccurrencesAtPosition,

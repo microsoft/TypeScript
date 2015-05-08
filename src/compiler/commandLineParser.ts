@@ -67,6 +67,16 @@ module ts {
             error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_or_umd
         },
         {
+            name: "newLine",
+            type: {
+                "crlf": NewLineKind.CarriageReturnLineFeed,
+                "lf": NewLineKind.LineFeed
+            },
+            description: Diagnostics.Specifies_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
+            paramType: Diagnostics.NEWLINE,
+            error: Diagnostics.Argument_for_newLine_option_must_be_CRLF_or_LF
+        },
+        {
             name: "noEmit",
             type: "boolean",
             description: Diagnostics.Do_not_emit_outputs,
