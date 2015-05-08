@@ -144,10 +144,10 @@ module FourSlash {
             if (globalOptions.hasOwnProperty(prop)) {
                 switch (prop) {
                     case metadataOptionNames.allowNonTsExtensions:
-                        settings.allowNonTsExtensions = true;
+                        settings.allowNonTsExtensions = globalOptions[prop] === "true";
                         break;
                     case metadataOptionNames.declaration:
-                        settings.declaration = true;
+                        settings.declaration = globalOptions[prop] === "true";
                         break;
                     case metadataOptionNames.mapRoot:
                         settings.mapRoot = globalOptions[prop];
@@ -174,7 +174,7 @@ module FourSlash {
                         settings.outDir = globalOptions[prop];
                         break;
                     case metadataOptionNames.sourceMap:
-                        settings.sourceMap = true;
+                        settings.sourceMap = globalOptions[prop] === "true";
                         break;
                     case metadataOptionNames.sourceRoot:
                         settings.sourceRoot = globalOptions[prop];
@@ -308,7 +308,7 @@ module FourSlash {
             ts.forEach(testData.files, file => {
                 // Create map between fileName and its content for easily looking up when resolveReference flag is specified
                 this.inputFiles[file.fileName] = file.content;
-                if (!startResolveFileRef && file.fileOptions[metadataOptionNames.resolveReference]) {
+                if (!startResolveFileRef && file.fileOptions[metadataOptionNames.resolveReference] === "true") {
                     startResolveFileRef = file;
                 } else if (startResolveFileRef) {
                     // If entry point for resolving file references is already specified, report duplication error
@@ -1158,7 +1158,7 @@ module FourSlash {
             var allFourSlashFiles = this.testData.files;
             for (var idx = 0; idx < allFourSlashFiles.length; ++idx) {
                 var file = allFourSlashFiles[idx];
-                if (file.fileOptions[metadataOptionNames.emitThisFile]) {
+                if (file.fileOptions[metadataOptionNames.emitThisFile] === "true") {
                     // Find a file with the flag emitThisFile turned on
                     emitFiles.push(file);
                 }

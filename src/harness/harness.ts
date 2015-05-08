@@ -1008,19 +1008,19 @@ module Harness {
                             break;
 
                         case 'noemitonerror':
-                            options.noEmitOnError = !!setting.value;
+                            options.noEmitOnError = setting.value === 'true';
                             break;
 
                         case 'noresolve':
-                            options.noResolve = !!setting.value;
+                            options.noResolve = setting.value === 'true';
                             break;
 
                         case 'noimplicitany':
-                            options.noImplicitAny = !!setting.value;
+                            options.noImplicitAny = setting.value === 'true';
                             break;
 
                         case 'nolib':
-                            options.noLib = !!setting.value;
+                            options.noLib = setting.value === 'true';
                             break;
 
                         case 'out':
@@ -1042,11 +1042,11 @@ module Harness {
                             break;
 
                         case 'sourcemap':
-                            options.sourceMap = !!setting.value;
+                            options.sourceMap = setting.value === 'true';
                             break;
 
                         case 'declaration':
-                            options.declaration = !!setting.value;
+                            options.declaration = setting.value === 'true';
                             break;
 
                         case 'newline':
@@ -1070,7 +1070,7 @@ module Harness {
                             break;
 
                         case 'stripinternal':
-                            options.stripInternal = !!setting.value;
+                            options.stripInternal = setting.value === 'true';
 
                         case 'usecasesensitivefilenames':
                             useCaseSensitiveFileNames = setting.value === 'true';
@@ -1081,7 +1081,7 @@ module Harness {
                             break;
 
                         case 'emitbom':
-                            options.emitBOM = !!setting.value;
+                            options.emitBOM = setting.value === 'true';
                             break;
 
                         case 'errortruncation':
