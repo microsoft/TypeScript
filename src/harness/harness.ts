@@ -1173,17 +1173,11 @@ module Harness {
                     var declResult: Harness.Compiler.CompilerResult;
                     if (options.packageDeclaration) {
                         let file = ts.forEach(result.declFilesCode, declFile => declFile.fileName === options.packageDeclaration ? declFile : undefined);
-                        declInputFiles.push({ unitName: file.fileName, content: file.code });
-                        ts.forEach(inputFiles, file => {
-                           if (isDTS(file.unitName)) {
-                               declInputFiles.push(file);
-                           } 
-                        });
-                        ts.forEach(otherFiles, file => {
-                           if (isDTS(file.unitName)) {
-                               declOtherFiles.push(file);
-                           } 
-                        });
+                        if (file) {
+                            declInputFiles.push({ unitName: file.fileName, content: file.code });
+                        }
+                        ts.forEach(inputFiles, file => isDTS(file.unitName) && declInputFiles.push(file));
+                        ts.forEach(otherFiles, file => isDTS(file.unitName) && declOtherFiles.push(file));
                     }
                     else {    
                         ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
