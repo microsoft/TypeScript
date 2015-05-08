@@ -503,7 +503,7 @@ module ts {
         Corrupted_locale_file_0: { code: 6051, category: DiagnosticCategory.Error, key: "Corrupted locale file {0}." },
         Raise_error_on_expressions_and_declarations_with_an_implied_any_type: { code: 6052, category: DiagnosticCategory.Message, key: "Raise error on expressions and declarations with an implied 'any' type." },
         File_0_not_found: { code: 6053, category: DiagnosticCategory.Error, key: "File '{0}' not found." },
-        File_0_must_have_extension_ts_or_d_ts: { code: 6054, category: DiagnosticCategory.Error, key: "File '{0}' must have extension '.ts' or '.d.ts'." },
+        File_0_has_unsupported_extension_The_only_supported_extensions_are_1: { code: 6054, category: DiagnosticCategory.Error, key: "File '{0}' has unsupported extension. The only supported extensions are {1}." },
         Suppress_noImplicitAny_errors_for_indexing_objects_lacking_index_signatures: { code: 6055, category: DiagnosticCategory.Message, key: "Suppress noImplicitAny errors for indexing objects lacking index signatures." },
         Do_not_emit_declarations_for_code_that_has_an_internal_annotation: { code: 6056, category: DiagnosticCategory.Message, key: "Do not emit declarations for code that has an '@internal' annotation." },
         Preserve_new_lines_when_emitting_code: { code: 6057, category: DiagnosticCategory.Message, key: "Preserve new-lines when emitting code." },
