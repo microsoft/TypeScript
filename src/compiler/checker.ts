@@ -7635,7 +7635,7 @@ module ts {
         function checkAwaitExpression(node: AwaitExpression): Type {
             // Grammar checking
             if (!(node.parserContextFlags & ParserContextFlags.Await)) {
-                grammarErrorOnFirstToken(node, Diagnostics.await_expression_must_be_contained_within_an_async_function);
+                grammarErrorOnFirstToken(node, Diagnostics.await_expression_is_only_allowed_within_an_async_function);
             }
 
             let operandType = checkExpression(node.expression);
@@ -10068,6 +10068,9 @@ module ts {
             if (!checkGrammarStatementInAmbientContext(node)) {
                 if (node.parserContextFlags & ParserContextFlags.StrictMode) {
                     grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
+                }
+                else if (node.parserContextFlags & ParserContextFlags.Await) {
+                    grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_an_async_function_block);
                 }
             }
 

@@ -712,45 +712,9 @@
         "category": "Error",
         "code": 1300
     },
-    "'{0}' modifier cannot be used with a generator.": {
-        "category": "Error",
-        "code": 1301
-    },
-    "'{0}' modifier cannot be used with a module declaration.": {
-        "category": "Error",
-        "code": 1302
-    },
-    "'{0}' modifier cannot be used with an enum declaration.": {
-        "category": "Error",
-        "code": 1303
-    },
-    "'{0}' modifier cannot be used with an export assignment declaration.": {
-        "category": "Error",
-        "code": 1304
-    },
-    "'{0}' modifier cannot be used on a variable statement.": {
-        "category": "Error",
-        "code": 1305
-    },
-    "'{0}' modifier cannot be used with a type declaration.": {
-        "category": "Error",
-        "code": 1306
-    },
-    "'{0}' modifier cannot be used with a parameter declaration.": {
-        "category": "Error",
-        "code": 1307
-    },
-    "'await' expression must be contained within an async function.": {
+    "'await' expression is only allowed within an async function.": {
         "category": "Error",
         "code": 1308
-    },
-    "'{0}' modifier cannot be used on an object literal element.": {
-        "category": "Error",
-        "code": 1309
-    },
-    "'{0}' expression is not allowed in an initializer.": {
-        "category": "Error",
-        "code": 1310
     },
     "Async functions are only available when targeting ECMAScript 6 and higher.": {
         "category": "Error",
