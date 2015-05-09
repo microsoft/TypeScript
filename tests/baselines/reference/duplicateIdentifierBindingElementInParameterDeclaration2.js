@@ -7,9 +7,8 @@ function f2({b}, {b}) { }
 function f3([c, [c], [[c]]]) { }
 function f4({d, d: {d}}) { }
 function f5({e, e: {e}}, {e}, [d, e, [[e]]], ...e) { }
-
-
-
+function f6([f, ...f]) { }
+function f7(a, func = (a) => { return 1 }){ }  // not error
 
 //// [duplicateIdentifierBindingElementInParameterDeclaration2.js]
 "use strict";
@@ -39,3 +38,9 @@ function f5(_a, _b, _c) {
         e[_i - 3] = arguments[_i];
     }
 }
+function f6(_a) {
+    var f = _a[0], f = _a.slice(1);
+}
+function f7(a, func) {
+    if (func === void 0) { func = function (a) { return 1; }; }
+} // not error
