@@ -983,25 +983,22 @@ module ts {
         }
         
         function nextTokenCanFollowModifierForArrowFunction() {
-            return nextTokenCanFollowModifier(/*isArrowFunction*/ true);
+            nextToken();
+            return canFollowModifierForArrowFunction();
         }
 
-        function nextTokenCanFollowModifier(isArrowFunction?: boolean) {
+        function nextTokenCanFollowModifier() {
             nextToken();
-            return canFollowModifier(isArrowFunction);
+            return canFollowModifier();
         }
 
         function parseAnyContextualModifier(isArrowFunction?: boolean): boolean {
             return isModifier(token) && tryParse(isArrowFunction
-                ? nextTokenCanFollowContextualModifierForArrowFunction
+                ? nextTokenCanFollowModifierForArrowFunction
                 : nextTokenCanFollowContextualModifier);
         }
         
-        function nextTokenCanFollowContextualModifierForArrowFunction() {
-            return nextTokenCanFollowContextualModifier(/*isArrowFunction*/ true);
-        }
-
-        function nextTokenCanFollowContextualModifier(isArrowFunction?: boolean) {
+        function nextTokenCanFollowContextualModifier() {
             if (token === SyntaxKind.ConstKeyword) {
                 // 'const' is only a modifier if followed by 'enum'.
                 return nextToken() === SyntaxKind.EnumKeyword;
@@ -1017,24 +1014,24 @@ module ts {
                 return nextTokenIsClassOrFunction();
             }
             nextToken();
-            return canFollowModifier(isArrowFunction);
+            return canFollowModifier();
         }
-
-        function canFollowModifier(isArrowFunction?: boolean): boolean {
+        
+        function canFollowModifierForArrowFunction(): boolean {
             // Arrow functions can have an `async` modifier, but the rules for what can follow that modifier
             // differ from the rules for any other declaration.
             // The `async` modifier on an async function can only be followed by an open parenthesis,
             // or a less than token (in the case of a generic arrow function).
             // In addition, the `async` modifier must appear on the same line as the following token.
-            if (isArrowFunction) {
-                if (scanner.hasPrecedingLineBreak()) {
-                    return false;
-                }
-            
-                return token === SyntaxKind.OpenParenToken
-                    || token === SyntaxKind.LessThanToken;
+            if (scanner.hasPrecedingLineBreak()) {
+                return false;
             }
-            
+        
+            return token === SyntaxKind.OpenParenToken
+                || token === SyntaxKind.LessThanToken;
+        }
+
+        function canFollowModifier(): boolean {
             return token === SyntaxKind.OpenBracketToken
                 || token === SyntaxKind.OpenBraceToken
                 || token === SyntaxKind.AsteriskToken

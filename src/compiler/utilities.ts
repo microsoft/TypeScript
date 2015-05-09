@@ -1101,7 +1101,7 @@ module ts {
     }
 
     export function isAsyncFunctionLike(node: Node): boolean {
-        return isFunctionLike(node) && !isAccessor(node) && (node.flags & NodeFlags.Async) === NodeFlags.Async;
+        return isFunctionLike(node) && (node.flags & NodeFlags.Async) !== 0 && !isAccessor(node);
     }
 
     /**
