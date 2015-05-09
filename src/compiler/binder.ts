@@ -441,6 +441,9 @@ module ts {
                         bindBlockScopedVariableDeclaration(<Declaration>node);
                     }
                     else if (isParameterDeclaration(<VariableLikeDeclaration>node)) {
+                        // It is safe to walk up parent chain to find whether the node is a destructing parameter declaration
+                        // because its parent chain has already been set up, since parents are set before descending into children.
+                        //
                         // If node is a binding element in parameter declaration, we need to use ParameterExcludes.
                         // Using ParameterExcludes flag allows the compiler to report an error on duplicate identifiers in Parameter Declaration
                         // For example:

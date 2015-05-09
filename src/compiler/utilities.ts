@@ -1151,10 +1151,15 @@ module ts {
     }
 
     export function isParameterDeclaration(node: VariableLikeDeclaration) {
+        let root = getRootDeclaration(node);
+        return root.kind === SyntaxKind.Parameter;
+    }
+
+    export function getRootDeclaration(node: Node): Node {
         while (node.kind === SyntaxKind.BindingElement) {
-            node = <VariableLikeDeclaration>node.parent.parent;
+            node = node.parent.parent;
         }
-        return node.kind === SyntaxKind.Parameter;
+        return node;
     }
         
     export function nodeStartsNewLexicalEnvironment(n: Node): boolean {

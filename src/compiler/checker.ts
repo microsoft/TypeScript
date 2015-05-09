@@ -2048,13 +2048,6 @@ module ts {
             return resolutionResults.pop();
         }
 
-        function getRootDeclaration(node: Node): Node {
-            while (node.kind === SyntaxKind.BindingElement) {
-                node = node.parent.parent;
-            }
-            return node;
-        }
-
         function getDeclarationContainer(node: Node): Node {
             node = getRootDeclaration(node);
 
