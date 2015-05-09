@@ -2051,13 +2051,6 @@ module ts {
             return resolutionResults.pop();
         }
 
-        function getRootDeclaration(node: Node): Node {
-            while (node.kind === SyntaxKind.BindingElement) {
-                node = node.parent.parent;
-            }
-            return node;
-        }
-
         function getDeclarationContainer(node: Node): Node {
             node = getRootDeclaration(node);
 
@@ -9204,13 +9197,6 @@ module ts {
                     }
                 }
             }
-        }
-
-        function isParameterDeclaration(node: VariableLikeDeclaration) {
-            while (node.kind === SyntaxKind.BindingElement) {
-                node = <VariableLikeDeclaration>node.parent.parent;
-            }
-            return node.kind === SyntaxKind.Parameter;
         }
 
         // Check that a parameter initializer contains no references to parameters declared to the right of itself

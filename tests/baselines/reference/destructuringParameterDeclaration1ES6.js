@@ -94,7 +94,7 @@ function e3({x}: { x?: number }) { }  // x is an optional with type number
 function e4({x: [number,string,any] }) { }  // x has type [any, any, any]
 function e5({x: [a, b, c]}: { x: [number, number, number] }) { }  // x has type [any, any, any]
 
-function e6({x: [number, number, number]}) { }  // should be an error, duplicate identifier;
+function e6({x: [number, number, number]}) { }  // error, duplicate identifier;
 
 
 
@@ -166,4 +166,4 @@ function e2({ x }) { } // x is type number
 function e3({ x }) { } // x is an optional with type number
 function e4({ x: [number, string, any] }) { } // x has type [any, any, any]
 function e5({ x: [a, b, c] }) { } // x has type [any, any, any]
-function e6({ x: [number, number, number] }) { } // should be an error, duplicate identifier;
+function e6({ x: [number, number, number] }) { } // error, duplicate identifier;

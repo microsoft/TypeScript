@@ -63,7 +63,7 @@ class C4 implements F2 {
 // as such annotations would conflict with the already established meaning of colons in object literals.
 // Type annotations must instead be written on the top- level parameter declaration
 
-function e0({x: [number, number, number]}) { }  // should be an error, duplicate identifier;
+function e0({x: [number, number, number]}) { }  // error, duplicate identifier;
 
 
 
@@ -146,4 +146,4 @@ var C4 = (function () {
 // Type annotations must instead be written on the top- level parameter declaration
 function e0(_a) {
     var _b = _a.x, number = _b[0], number = _b[1], number = _b[2];
-} // should be an error, duplicate identifier;
+} // error, duplicate identifier;
