@@ -2,6 +2,6 @@
 
 var foo = async (): Promise<void> => {
 >foo : Symbol(foo, Decl(asyncArrowFunction1_es6.ts, 1, 3))
->Promise : Symbol(Promise, Decl(lib.d.ts, 4770, 1), Decl(lib.d.ts, 4855, 11))
+>Promise : Symbol(Promise, Decl(lib.d.ts, 4770, 1), Decl(lib.d.ts, 4856, 11))
 
 };

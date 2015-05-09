@@ -3591,6 +3591,7 @@ interface Promise<T> {
      * @returns A Promise for the completion of the callback.
      */
     catch(onrejected?: (reason: any) => T | PromiseLike<T>): Promise<T>;
+    catch(onrejected?: (reason: any) => void): Promise<T>;
 
     [Symbol.toStringTag]: string;
 }
