@@ -2068,10 +2068,6 @@
         "category": "Error", 
         "code": 6062
     },
-    "Emit async functions when ECMAScript target version is lower than 'ES6'.": {
-        "category": "Message",
-        "code": 6063
-    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
