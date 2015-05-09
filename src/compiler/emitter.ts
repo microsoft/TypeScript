@@ -79,6 +79,14 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
                 emitFile(compilerOptions.out);
             }
+
+            if (compilerOptions.packageMain && compilerOptions.packageName && compilerOptions.packageDeclaration) {
+                let packageMainPath = host.getCanonicalFileName(normalizePath(combinePaths(host.getCurrentDirectory(), compilerOptions.packageMain)));
+                if (targetSourceFile.fileName === packageMainPath) {
+                    let packageDeclarationPath = host.getCanonicalFileName(normalizePath(combinePaths(host.getCurrentDirectory(), compilerOptions.packageDeclaration)));
+                    writePackageDeclarationFile(packageDeclarationPath, host, resolver, diagnostics);
+                }
+            }
         }
 
         // Sort and make the unique list of diagnostics
@@ -6051,14 +6059,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             emitJavaScript(jsFilePath, sourceFile);
 
             if (compilerOptions.declaration) {
-                if (compilerOptions.packageMain && compilerOptions.packageName && compilerOptions.packageDeclaration) {
-                    if (sourceFile.fileName === host.getCanonicalFileName(compilerOptions.packageMain)) {
-                        writeDeclarationFile(jsFilePath, sourceFile, host, resolver, diagnostics);
-                    }
-                }
-                else {
-                    writeDeclarationFile(jsFilePath, sourceFile, host, resolver, diagnostics);
-                }                
+                writeDeclarationFile(jsFilePath, sourceFile, host, resolver, diagnostics);
             }
         }
     }

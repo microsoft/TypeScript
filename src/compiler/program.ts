@@ -627,22 +627,19 @@ module ts {
             
             if (options.packageMain || options.packageName || options.packageDeclaration) {
                 if (!options.packageMain) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Options_packageName_packageMain_and_packageDeclaration_must_all_be_specified_with_option_0, "packageMain"));
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Options_0_and_1_must_also_be_specified_with_option_2, "packageName", "packageDeclaration", "packageMain"));
                     return;
                 }
                 if (!options.packageName) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Options_packageName_packageMain_and_packageDeclaration_must_all_be_specified_with_option_0, "packageName"));
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Options_0_and_1_must_also_be_specified_with_option_2, "packageDeclaration", "packageMain", "packageName"));
                     return;
                 }
                 if (!options.packageDeclaration) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Options_packageName_packageMain_and_packageDeclaration_must_all_be_specified_with_option_0, "packageDeclaration"));
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Options_0_and_1_must_also_be_specified_with_option_2, "packageMain", "packageName", "packageDeclaration"));
                     return;
                 }
                 if (options.module === ModuleKind.None && options.target < ScriptTarget.ES6) {
                     diagnostics.add(createCompilerDiagnostic(Diagnostics.Options_packageName_packageMain_and_packageDeclaration_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES6_or_higher));
-                }
-                if (!options.declaration) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_declaration_must_be_specified_with_options_packageName_packageMain_and_packageDeclaration));
                 }
             }
 

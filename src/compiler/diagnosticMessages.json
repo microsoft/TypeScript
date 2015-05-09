@@ -1821,13 +1821,9 @@
         "category": "Error",
         "code": 5051
     },
-    "Options 'packageName', 'packageMain', and 'packageDeclaration' must all be specified with option '{0}'.": {
+    "Options '{0}' and '{1}' must also be specified with option '{2}'.": {
         "category": "Error",
         "code": 5052
-    },
-    "Option 'declaration' must be specified with options 'packageName', 'packageMain', and 'packageDeclaration'.": {
-        "category": "Error",
-        "code": 5053
     },
     "Options 'packageName', 'packageMain', and 'packageDeclaration' can only be used when either option 'module' is provided or option 'target' is 'ES6' or higher.": {
         "category": "Error",
