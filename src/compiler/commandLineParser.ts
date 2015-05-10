@@ -308,7 +308,10 @@ module ts {
       * Read tsconfig.json file
       * @param fileName The path to the config file
       */
-    export function readConfigFile(fileName: string): { config?: any; error?: Diagnostic }  {
+    export function readConfigFile(fileName: string): { config?: any; error?: Diagnostic } {
+        if (!sys.fileExists(fileName)) {
+            return { error: createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, fileName) };
+        }
         try {
             var text = sys.readFile(fileName);
         }
