@@ -1,11 +1,22 @@
-tests/cases/compiler/enumWithoutInitializerAfterComputedMember.ts(4,5): error TS1061: Enum member must have initializer.
+tests/cases/compiler/enumWithoutInitializerAfterComputedMember.ts(9,9): error TS2304: Cannot find name 'bad'.
 
 
 ==== tests/cases/compiler/enumWithoutInitializerAfterComputedMember.ts (1 errors) ====
+    const z = 6;
+    
     enum E {
         a,
         b = a,
-        c
-        ~
-!!! error TS1061: Enum member must have initializer.
+        c,
+        d = f,
+        f,
+        g = bad,
+            ~~~
+!!! error TS2304: Cannot find name 'bad'.
+        h = E.b,
+        i = E["b"],
+        j = z,
+        k = 3,
+        l,
+        m = (Math.random() > 0.5 ? 1 : 2),
     }

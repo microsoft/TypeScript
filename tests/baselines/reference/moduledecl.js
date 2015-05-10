@@ -479,9 +479,9 @@ declare module mAmbient {
         y: C;
     }
     enum e {
-        x,
-        y,
-        z,
+        x = 0,
+        y = 1,
+        z = 2,
     }
     module m3 {
         class C {
@@ -494,9 +494,9 @@ declare module mAmbient {
             y: C;
         }
         enum e {
-            x,
-            y,
-            z,
+            x = 0,
+            y = 1,
+            z = 2,
         }
     }
 }

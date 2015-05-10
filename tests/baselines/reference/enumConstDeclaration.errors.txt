@@ -1,0 +1,52 @@
+tests/cases/compiler/enumConstDeclaration.ts(10,9): error TS1066: Ambient enum initializer must be a constant expression.
+tests/cases/compiler/enumConstDeclaration.ts(12,9): error TS1066: Ambient enum initializer must be a constant expression.
+tests/cases/compiler/enumConstDeclaration.ts(13,9): error TS1066: Ambient enum initializer must be a constant expression.
+tests/cases/compiler/enumConstDeclaration.ts(24,9): error TS2474: 'const' enum initializer must be a constant expression.
+tests/cases/compiler/enumConstDeclaration.ts(26,9): error TS2474: 'const' enum initializer must be a constant expression.
+tests/cases/compiler/enumConstDeclaration.ts(27,9): error TS2474: 'const' enum initializer must be a constant expression.
+
+
+==== tests/cases/compiler/enumConstDeclaration.ts (6 errors) ====
+    
+    var val1 = 1;
+    const val2 = 2;
+    
+    declare enum test {
+        a = 10,
+        b = a,
+        c = 10 << 2 * 8,
+        d = 1.4,
+        e = Math.PI,
+            ~~~~~~~
+!!! error TS1066: Ambient enum initializer must be a constant expression.
+        f,
+        g = val1,
+            ~~~~
+!!! error TS1066: Ambient enum initializer must be a constant expression.
+        h = val2,
+            ~~~~
+!!! error TS1066: Ambient enum initializer must be a constant expression.
+    }
+    
+    test.a;
+    test.f;
+    
+    const enum test2 {
+        a = 10,
+        b = a,
+        c = 10 << 2 * 8,
+        d = 1.4,
+        e = Math.PI,
+            ~~~~~~~
+!!! error TS2474: 'const' enum initializer must be a constant expression.
+        f,
+        g = val1,
+            ~~~~
+!!! error TS2474: 'const' enum initializer must be a constant expression.
+        h = val2,
+            ~~~~
+!!! error TS2474: 'const' enum initializer must be a constant expression.
+    }
+    
+    test2.a;
+    test2.f;

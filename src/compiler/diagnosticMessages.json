@@ -167,15 +167,11 @@
         "category": "Error",
         "code": 1056
     },
-    "Enum member must have initializer.": {
-        "category": "Error",
-        "code": 1061
-    },
     "An export assignment cannot be used in a namespace.": {
         "category": "Error",
         "code": 1063
     },
-    "Ambient enum elements can only have integer literal initializers.": {
+    "Ambient enum initializer must be a constant expression.": {
         "category": "Error",
         "code": 1066
     },
@@ -1332,15 +1328,15 @@
         "category": "Error",
         "code": 2473
     },
-    "In 'const' enum declarations member initializer must be constant expression.": {
+    "'const' enum initializer must be a constant expression.": {
         "category": "Error",
         "code": 2474
     },
-    "'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.": {
+    "'const' enum can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.": {
         "category": "Error",
         "code": 2475
     },
-    "A const enum member can only be accessed using a string literal.": {
+    "'const' enum member can only be accessed using a string literal.": {
         "category": "Error",
         "code": 2476
     },
