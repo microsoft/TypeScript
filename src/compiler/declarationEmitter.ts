@@ -34,6 +34,15 @@ module ts {
         let diagnostics: Diagnostic[] = [];
         let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
         emitDeclarations(host, resolver, diagnostics, jsFilePath, targetSourceFile);
+        
+        let packageDeclaration = getPackageDeclaration(host);
+        let compilerOptions = host.getCompilerOptions();
+        if (packageDeclaration) {
+            if (!targetSourceFile || isPackageMain(targetSourceFile, host)) {
+                writePackageDeclarationFile(packageDeclaration, host, resolver, diagnostics);
+            }
+        }
+        
         return diagnostics;
     }
 
@@ -42,7 +51,6 @@ module ts {
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
 
-        let packageMainFile: string;
         let write: (s: string) => void;
         let writeLine: () => void;
         let increaseIndent: () => void;
@@ -66,10 +74,30 @@ module ts {
         let referencePathsOutput = "";
         
         if (isPackageDeclaration) {
-            packageMainFile = host.getCanonicalFileName(normalizePath(combinePaths(host.getCurrentDirectory(), compilerOptions.packageMain)));
-        }
+            // Emitting a package declaration, so emit all of the source declarations
+            let emittedReferencedFiles: SourceFile[] = [];
+            for (let sourceFile of sortSourceFiles(host.getSourceFiles())) {
+                if (!isDeclarationFile(sourceFile)) {
+                    // Check what references need to be added
+                    if (!compilerOptions.noResolve) {
+                        for (let fileReference of sourceFile.referencedFiles) {
+                            let referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
 
-        if (root) {
+                            // If the reference file is a declaration file or an external module, emit that reference
+                            if (referencedFile && (isDeclarationFile(referencedFile) &&
+                                !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
+                                writeReferencePath(referencedFile);
+                                emittedReferencedFiles.push(referencedFile);
+                            }
+                        }
+                    }
+
+                    writeLine();
+                    emitSourceFile(sourceFile);
+                }
+            }             
+        }
+        else if (root) {
             // Emitting just a single file, so emit references in this file only
             if (!compilerOptions.noResolve) {
                 let addedGlobalFileReference = false;
@@ -109,8 +137,8 @@ module ts {
         else {
             // Emit references corresponding to this file
             let emittedReferencedFiles: SourceFile[] = [];
-            for (let sourceFile of sortSourceFiles(host.getSourceFiles())) {
-                if (!isExternalModuleOrDeclarationFile(sourceFile) || (isPackageDeclaration && isExternalModule(sourceFile))) {
+            for (let sourceFile of host.getSourceFiles()) {
+                if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                     // Check what references need to be added
                     if (!compilerOptions.noResolve) {
                         for (let fileReference of sourceFile.referencedFiles) {
@@ -140,32 +168,28 @@ module ts {
         }
 
         function sortSourceFiles(sourceFiles: SourceFile[]) {
-            if (isPackageDeclaration) {
-                let indices = new Array<number>(sourceFiles.length);
-                for (let i = 0; i < sourceFiles.length; ++i) indices[i] = i;
-                indices.sort((left, right) => {
-                   let leftFile = sourceFiles[left];
-                   if (leftFile.fileName === packageMainFile) {
-                       return -1;
-                   }
-                   
-                   let rightFile = sourceFiles[right];
-                   if (rightFile.fileName === packageMainFile) {
-                       return +1;
-                   }
-                   
-                   return left - right; 
-                });
-                
-                let sorted = new Array<SourceFile>(sourceFiles.length);
-                for (let i = 0; i < sourceFiles.length; ++i) {
-                    sorted[i] = sourceFiles[indices[i]];
-                }
-                
-                return sorted;
+            let indices = new Array<number>(sourceFiles.length);
+            for (let i = 0; i < sourceFiles.length; ++i) indices[i] = i;
+            indices.sort((left, right) => {
+               let leftFile = sourceFiles[left];
+               if (isPackageMain(leftFile, host)) {
+                   return -1;
+               }
+               
+               let rightFile = sourceFiles[right];
+               if (isPackageMain(rightFile, host)) {
+                   return +1;
+               }
+               
+               return left - right; 
+            });
+            
+            let sorted = new Array<SourceFile>(sourceFiles.length);
+            for (let i = 0; i < sourceFiles.length; ++i) {
+                sorted[i] = sourceFiles[indices[i]];
             }
             
-            return sourceFiles;
+            return sorted;
         }
 
         function hasInternalAnnotation(range: CommentRange) {
@@ -1631,18 +1655,24 @@ module ts {
     }
     
     function getPackageQualifiedPath(host: EmitHost, moduleName: string, basePath: string) {
-        let compilerOptions = host.getCompilerOptions();
-        let modulePath = normalizePath(combinePaths(basePath, moduleName));
+        let packageRoot = getPackageDirectory(host);
+        let modulePath = combinePaths(basePath, moduleName);
         let packageRelativePath = getRelativePathToDirectoryOrUrl(
-            host.getPackagePath(),
+            packageRoot,
             modulePath,
             host.getCurrentDirectory(),
             host.getCanonicalFileName,
             false);
-        if (host.getCanonicalFileName(packageRelativePath + ".ts") === host.getCanonicalFileName(compilerOptions.packageMain) || 
-            host.getCanonicalFileName(packageRelativePath + ".d.ts") === host.getCanonicalFileName(compilerOptions.packageMain)) {
+        
+        let compilerOptions = host.getCompilerOptions();
+        let packageMain = getPackageMain(host);
+        let packageAbsolutePath = getNormalizedAbsolutePath(packageRelativePath, packageRoot);
+        
+        if (host.getSourceFile(packageAbsolutePath + ".ts") === packageMain || 
+            host.getSourceFile(packageAbsolutePath + ".d.ts") === packageMain) {
             return compilerOptions.packageName;
-        }        
+        }
+        
         return combinePaths(compilerOptions.packageName, packageRelativePath);
     }
         

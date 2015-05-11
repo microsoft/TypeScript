@@ -1032,6 +1032,7 @@ module ts {
         getCompilerOptions(): CompilerOptions;
         getSourceFile(fileName: string): SourceFile;
         getCurrentDirectory(): string;
+        /*@internal*/ getPackageDirectory?(): string;
     }
 
     export interface ParseConfigHost {
@@ -1881,7 +1882,7 @@ module ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
-        /*@internal*/ getPackagePath(host?: EmitHost): string;
+        /*@internal*/ getPackageDirectory(): string;
     }
 
     export interface TextSpan {

@@ -117,17 +117,13 @@ module ts {
             return currentDirectory || (currentDirectory = sys.getCurrentDirectory());
         }
         
-        function getPackagePath(host?: EmitHost): string {
+        function getPackageDirectory(): string {
             let searchPath = getCurrentDirectory();
             let packageFile = findPackageFile(searchPath);
             if (packageFile) {
                 return getDirectoryPath(normalizePath(packageFile));
             }
             
-            if (host) {
-                return host.getCommonSourceDirectory();
-            }
-
             return searchPath;
         }
 
@@ -141,7 +137,7 @@ module ts {
             getDefaultLibFileName: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), getDefaultLibFileName(options)),
             writeFile,
             getCurrentDirectory,
-            getPackagePath,
+            getPackageDirectory,
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
             getCanonicalFileName,
             getNewLine: () => newLine
@@ -216,9 +212,9 @@ module ts {
             getTypeChecker,
             getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory: () => commonSourceDirectory,
-            getPackagePath: () => host.getPackagePath(),
             emit,
             getCurrentDirectory: () => host.getCurrentDirectory(),
+            getPackageDirectory: host.getPackageDirectory ? () => host.getPackageDirectory() : () => host.getCurrentDirectory(),
             getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
             getIdentifierCount: () => getDiagnosticsProducingTypeChecker().getIdentifierCount(),
             getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
@@ -227,19 +223,18 @@ module ts {
         return program;
         
         function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
-            let emitHost: EmitHost = {
+            return {
                 getCanonicalFileName: fileName => host.getCanonicalFileName(fileName),
                 getCommonSourceDirectory: program.getCommonSourceDirectory,
                 getCompilerOptions: program.getCompilerOptions,
                 getCurrentDirectory: () => host.getCurrentDirectory(),
-                getPackagePath: () => host.getPackagePath(emitHost),
+                getPackageDirectory: host.getPackageDirectory ? () => host.getPackageDirectory() : () => host.getCurrentDirectory(),
                 getNewLine: () => host.getNewLine(),
                 getSourceFile: program.getSourceFile,
                 getSourceFiles: program.getSourceFiles,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError) => host.writeFile(fileName, data, writeByteOrderMark, onError)),
             };
-            return emitHost;
         }
 
         function getDiagnosticsProducingTypeChecker() {

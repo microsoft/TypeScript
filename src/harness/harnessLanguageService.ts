@@ -186,6 +186,7 @@ module Harness.LanguageService {
             var script = this.getScriptInfo(fileName);
             return script ? script.version.toString() : undefined;
         }
+        getPackageDirectory(): string { return ""; }
 
         log(s: string): void { }
         trace(s: string): void { }

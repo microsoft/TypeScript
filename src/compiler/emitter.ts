@@ -53,6 +53,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
         let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         let diagnostics: Diagnostic[] = [];
         let newLine = host.getNewLine();
+        let packageDeclaration = getPackageDeclaration(host);
 
         if (targetSourceFile === undefined) {
             forEach(host.getSourceFiles(), sourceFile => {
@@ -66,8 +67,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 emitFile(compilerOptions.out);
             }
             
-            if (compilerOptions.packageMain && compilerOptions.packageName && compilerOptions.packageDeclaration) {
-                writePackageDeclarationFile(compilerOptions.packageDeclaration, host, resolver, diagnostics);
+            if (packageDeclaration) {
+                writePackageDeclarationFile(packageDeclaration, host, resolver, diagnostics);
             }
         }
         else {
@@ -80,12 +81,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 emitFile(compilerOptions.out);
             }
 
-            if (compilerOptions.packageMain && compilerOptions.packageName && compilerOptions.packageDeclaration) {
-                let packageMainPath = host.getCanonicalFileName(normalizePath(combinePaths(host.getCurrentDirectory(), compilerOptions.packageMain)));
-                if (targetSourceFile.fileName === packageMainPath) {
-                    let packageDeclarationPath = host.getCanonicalFileName(normalizePath(combinePaths(host.getCurrentDirectory(), compilerOptions.packageDeclaration)));
-                    writePackageDeclarationFile(packageDeclarationPath, host, resolver, diagnostics);
-                }
+            if (packageDeclaration && isPackageMain(targetSourceFile, host)) {
+                writePackageDeclarationFile(packageDeclaration, host, resolver, diagnostics);
             }
         }
 

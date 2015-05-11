@@ -55,6 +55,7 @@ module ts {
         getCurrentDirectory(): string;
         getDefaultLibFileName(options: string): string;
         getNewLine?(): string;
+        getPackageDirectory?(): string;
     }
 
     /** Public interface of the the of a config service shim instance.*/
@@ -309,6 +310,14 @@ module ts {
 
         public getCurrentDirectory(): string {
             return this.shimHost.getCurrentDirectory();
+        }
+        
+        public getPackageDirectory(): string {
+            if (this.shimHost.getPackageDirectory) {
+                return this.shimHost.getPackageDirectory();
+            }
+            
+            return this.getCurrentDirectory();
         }
 
         public getDefaultLibFileName(options: CompilerOptions): string {

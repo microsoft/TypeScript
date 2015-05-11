@@ -879,7 +879,7 @@ module Harness {
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => newLine,
-                getPackagePath: getCurrentDirectory
+                getPackageDirectory: getCurrentDirectory
             };
         }
 

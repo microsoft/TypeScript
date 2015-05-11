@@ -35,7 +35,6 @@ module ts {
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;
-        /*@internal*/ getPackagePath(): string;
 
         writeFile: WriteFileCallback;
 
@@ -1698,6 +1697,36 @@ module ts {
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
         return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
+    }
+    
+    export function getPackageDirectory(host: ScriptReferenceHost) {
+        return host.getPackageDirectory ? host.getPackageDirectory() : host.getCurrentDirectory();
+    }
+    
+    export function getPackageDeclaration(host: ScriptReferenceHost) {
+        let options = host.getCompilerOptions();
+        if (options.packageDeclaration) {
+            let packageDeclaration = getNormalizedAbsolutePath(options.packageDeclaration, getPackageDirectory(host));
+            return removeFileExtension(packageDeclaration) + ".d.ts";
+        }
+        
+        return undefined;
+    }
+    
+    export function getPackageMain(host: ScriptReferenceHost) {
+        let options = host.getCompilerOptions();
+        if (options.packageMain) {
+            let packageMain = getNormalizedAbsolutePath(options.packageMain, getPackageDirectory(host));
+            let packageFile = host.getSourceFile(packageMain);
+            return packageFile;
+        }
+        
+        return undefined;
+    }
+    
+    export function isPackageMain(node: SourceFile, host: ScriptReferenceHost) {
+        let packageMain = getPackageMain(host);
+        return node === packageMain;
     }
 
     /**
