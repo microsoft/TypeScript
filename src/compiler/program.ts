@@ -238,7 +238,7 @@ module ts {
         }
 
         function getSourceFile(fileName: string) {
-            fileName = host.getCanonicalFileName(fileName);
+            fileName = host.getCanonicalFileName(normalizeSlashes(fileName));
             return hasProperty(filesByName, fileName) ? filesByName[fileName] : undefined;
         }
 
@@ -357,7 +357,7 @@ module ts {
 
         // Get source file from normalized fileName
         function findSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refStart?: number, refLength?: number): SourceFile {
-            let canonicalName = host.getCanonicalFileName(fileName);
+            let canonicalName = host.getCanonicalFileName(normalizeSlashes(fileName));
             if (hasProperty(filesByName, canonicalName)) {
                 // We've already looked for this file, use cached result
                 return getSourceFileFromCache(fileName, canonicalName, /*useAbsolutePath*/ false);
