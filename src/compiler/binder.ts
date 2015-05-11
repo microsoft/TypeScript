@@ -440,6 +440,18 @@ module ts {
                     else if (isBlockOrCatchScoped(<Declaration>node)) {
                         bindBlockScopedVariableDeclaration(<Declaration>node);
                     }
+                    else if (isParameterDeclaration(<VariableLikeDeclaration>node)) {
+                        // It is safe to walk up parent chain to find whether the node is a destructing parameter declaration
+                        // because its parent chain has already been set up, since parents are set before descending into children.
+                        //
+                        // If node is a binding element in parameter declaration, we need to use ParameterExcludes.
+                        // Using ParameterExcludes flag allows the compiler to report an error on duplicate identifiers in Parameter Declaration
+                        // For example:
+                        //      function foo([a,a]) {} // Duplicate Identifier error
+                        //      function bar(a,a) {}   // Duplicate Identifier error, parameter declaration in this case is handled in bindParameter
+                        //                             // which correctly set excluded symbols
+                        bindDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes, /*isBlockScopeContainer*/ false);
+                    }
                     else {
                         bindDeclaration(<Declaration>node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes, /*isBlockScopeContainer*/ false);
                     }
