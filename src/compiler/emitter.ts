@@ -2642,7 +2642,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     writeLine();
                     emitStart(node);
 
-                    // emit call to exported only for top level nodes
+                    // emit call to exporter only for top level nodes
                     if (compilerOptions.module === ModuleKind.System && node.parent === currentSourceFile) {
                         // emit export default <smth> as
                         // export("default", <smth>)
@@ -4420,7 +4420,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
                 if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile) {
                     if (compilerOptions.module === ModuleKind.System && (node.flags & NodeFlags.Export)) {
-                        // write the call to exported for enum
+                        // write the call to exporter for enum
                         writeLine();
                         write(`${exportFunctionForFile}("`);
                         emitDeclarationName(node);
