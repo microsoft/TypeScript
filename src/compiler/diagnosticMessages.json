@@ -171,10 +171,6 @@
         "category": "Error",
         "code": 1063
     },
-    "Ambient enum initializer must be a constant expression.": {
-        "category": "Error",
-        "code": 1066
-    },
     "Unexpected token. A constructor, method, accessor, or property was expected.": {
         "category": "Error",
         "code": 1068
@@ -1324,11 +1320,11 @@
         "category": "Error",
         "code": 2472
     },
-    "Enum declarations must all be const or non-const.": {
-        "category": "Error",
-        "code": 2473
-    },
-    "'const' enum initializer must be a constant expression.": {
+	"Enum declarations must all be const or non-const.": {
+		"category": "Error",
+		"code": 2473
+	},
+    "{0} enum initializer must be a constant expression.": {
         "category": "Error",
         "code": 2474
     },
@@ -1356,9 +1352,13 @@
         "category": "Error",
         "code": 2480
     },
-    "Cannot initialize outer scoped variable '{0}' in the same scope as block scoped declaration '{1}'.": {
+	"Cannot initialize outer scoped variable '{0}' in the same scope as block scoped declaration '{1}'.": {
+		"category": "Error",
+		"code": 2481
+	},
+    "Enum member '{0}' must be declared after '{1}'.": {
         "category": "Error",
-        "code": 2481
+        "code": 2482
     },
     "The left-hand side of a 'for...of' statement cannot use a type annotation.": {
         "category": "Error",
@@ -2148,7 +2148,10 @@
         "category": "Error",
         "code": 8017
     },
-
+    "Enum member '{0}' cannot reference itself.": {
+        "category": "Error",
+        "code": 8016
+    },
     "'yield' expressions are not currently supported.": {
         "category": "Error",
         "code": 9000

@@ -1,5 +1,5 @@
 //// [enumConstantMembers.ts]
-// Enum members with no initilizer increment from last valid constant value.
+// Enum members with no initializer increments from last valid constant value.
 enum E1 {
     a = 1,
     b
@@ -33,7 +33,7 @@ const enum E5 {
 
 
 //// [enumConstantMembers.js]
-// Enum members with no initilizer increment from last valid constant value.
+// Enum members with no initializer increments from last valid constant value.
 var E1;
 (function (E1) {
     E1[E1["a"] = 1] = "a";

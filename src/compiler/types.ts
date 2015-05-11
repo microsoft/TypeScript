@@ -1695,7 +1695,7 @@ module ts {
         CarriageReturnLineFeed = 0,
         LineFeed = 1,
     }
-	
+
     export interface LineAndCharacter {
         line: number;
         /*

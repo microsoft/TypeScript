@@ -1,7 +1,8 @@
+tests/cases/compiler/enumWithoutInitializerAfterComputedMember.ts(7,9): error TS2482: Enum member 'd' must be declared after 'f'.
 tests/cases/compiler/enumWithoutInitializerAfterComputedMember.ts(9,9): error TS2304: Cannot find name 'bad'.
 
 
-==== tests/cases/compiler/enumWithoutInitializerAfterComputedMember.ts (1 errors) ====
+==== tests/cases/compiler/enumWithoutInitializerAfterComputedMember.ts (2 errors) ====
     const z = 6;
     
     enum E {
@@ -9,6 +10,8 @@ tests/cases/compiler/enumWithoutInitializerAfterComputedMember.ts(9,9): error TS
         b = a,
         c,
         d = f,
+            ~
+!!! error TS2482: Enum member 'd' must be declared after 'f'.
         f,
         g = bad,
             ~~~

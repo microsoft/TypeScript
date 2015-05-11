@@ -4419,11 +4419,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function isExpressionMemberOf(expr: Expression, parent: Node) {
-                if (expr) {
-                    let memberType = resolver.getTypeOfExpression(expr);
-                    return memberType.symbol === parent.symbol;
-                }
-                return false;
+                let memberType = resolver.getTypeOfExpression(expr);
+                return memberType.symbol === parent.symbol;
             }
 
             function emitEnumMember(node: EnumMember) {
@@ -4431,8 +4428,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 emitStart(node);
 
                 // If referencing member from same type/enum, emit a reference
-                if (isExpressionMemberOf(node.initializer, node.parent)) {
-                    return emitEnumMemberReference(enumName, node, node.initializer)
+                if (node.initializer && isExpressionMemberOf(node.initializer, node.parent)) {
+                    return emitEnumMemberReference(enumName, node)
                 }
 
                 write(enumName);
@@ -4448,24 +4445,24 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 write(";");
             }
 
-            function emitEnumMemberReference(enumName: string, node: EnumMember, refNode: Expression) {
+            function emitEnumMemberReference(enumName: string, node: EnumMember) {
                 write(enumName);
                 write("[");
                 emitExpressionForPropertyName(node.name);
                 write("] = ");
-                emitEnumExpression(enumName, refNode);
+                emitEnumExpression(enumName, node.initializer);
                 emitEnd(node);
                 write(";");
             }
 
-            function emitEnumExpression(enumName: string, node: Node) {
-                switch (node.kind) {
+            function emitEnumExpression(enumName: string, initializer: Node) {
+                switch (initializer.kind) {
                     case SyntaxKind.PropertyAccessExpression:
-                        return emitPropertyAccess(<PropertyAccessExpression>node);
+                        return emitPropertyAccess(<PropertyAccessExpression>initializer);
                     case SyntaxKind.ElementAccessExpression:
-                        return emitIndexedAccess(<ElementAccessExpression>node);
+                        return emitIndexedAccess(<ElementAccessExpression>initializer);
                     case SyntaxKind.Identifier:
-                        return write(enumName + '.' + (<Identifier>node).text);
+                        return write(enumName + '.' + (<Identifier>initializer).text);
                 }
             }
 

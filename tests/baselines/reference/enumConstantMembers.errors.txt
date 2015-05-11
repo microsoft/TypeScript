@@ -1,9 +1,9 @@
-tests/cases/conformance/enums/enumConstantMembers.ts(20,9): error TS1066: Ambient enum initializer must be a constant expression.
+tests/cases/conformance/enums/enumConstantMembers.ts(20,9): error TS2474: Ambient enum initializer must be a constant expression.
 tests/cases/conformance/enums/enumConstantMembers.ts(29,9): error TS2474: 'const' enum initializer must be a constant expression.
 
 
 ==== tests/cases/conformance/enums/enumConstantMembers.ts (2 errors) ====
-    // Enum members with no initilizer increment from last valid constant value.
+    // Enum members with no initializer increments from last valid constant value.
     enum E1 {
         a = 1,
         b
@@ -24,7 +24,7 @@ tests/cases/conformance/enums/enumConstantMembers.ts(29,9): error TS2474: 'const
         d, // d is 1.1
         e = invalid,
             ~~~~~~~
-!!! error TS1066: Ambient enum initializer must be a constant expression.
+!!! error TS2474: Ambient enum initializer must be a constant expression.
         f // f is 2.1
     }
     

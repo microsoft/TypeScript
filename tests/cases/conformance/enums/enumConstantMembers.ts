@@ -1,4 +1,4 @@
-// Enum members with no initilizer increment from last valid constant value.
+// Enum members with no initializer increments from last valid constant value.
 enum E1 {
     a = 1,
     b

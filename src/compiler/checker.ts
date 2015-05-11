@@ -10251,6 +10251,7 @@ module ts {
 
         function computeEnumMemberValues(node: EnumDeclaration) {
             let nodeLinks = getNodeLinks(node);
+            let errorReported: boolean
 
             if (!(nodeLinks.flags & NodeCheckFlags.EnumValuesComputed)) {
                 let enumSymbol = getSymbolOfNode(node);
@@ -10261,6 +10262,7 @@ module ts {
                 let enumIsConst = isConst(node);
 
                 forEach(node.members, member => {
+                    errorReported = false;
                     if (member.name.kind !== SyntaxKind.ComputedPropertyName && isNumericLiteralName((<Identifier>member.name).text)) {
                         error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
                     }
@@ -10268,10 +10270,10 @@ module ts {
                     if (initializer) {
                         initValue = getConstantValueForEnumMemberInitializer(initializer);
                         if (initValue === undefined) {
-                            if (enumIsConst) {
-                                error(initializer, Diagnostics.const_enum_initializer_must_be_a_constant_expression);
+                            if (enumIsConst || ambient) {
+                                !errorReported && error(initializer, Diagnostics._0_enum_initializer_must_be_a_constant_expression, enumIsConst ? "'const'" : "Ambient");
                             }
-                            else if (!ambient) {
+                            else {
                                 // Only here do we need to check that the initializer is assignable to the enum type.
                                 // If it is a constant value (not undefined), it is syntactically constrained to be a number.
                                 // Also, we do not need to check this for ambients because there is already
@@ -10346,7 +10348,7 @@ module ts {
                         case SyntaxKind.Identifier:
                         case SyntaxKind.ElementAccessExpression:
                         case SyntaxKind.PropertyAccessExpression:
-                            let member = initializer.parent;
+                            let member = <EnumMember>initializer.parent;
                             let currentType = getTypeOfSymbol(getSymbolOfNode(member.parent));
                             let enumType: Type;
                             let propertyName: string;
@@ -10405,11 +10407,15 @@ module ts {
                             let propertyDecl = property.valueDeclaration;
                             // self references are illegal
                             if (member === propertyDecl) {
+                                errorReported = true;
+                                error(initializer, Diagnostics.Enum_member_0_cannot_reference_itself, propertyName);
                                 return undefined;
                             }
 
                             // illegal case: forward reference
                             if (!isDefinedBefore(propertyDecl, member)) {
+                                errorReported = true;
+                                error(initializer, Diagnostics.Enum_member_0_must_be_declared_after_1, getTextOfNode(member.name), propertyName);
                                 return undefined;
                             }
 
@@ -12995,10 +13001,6 @@ module ts {
                     // well known symbols.
                     if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                         hasError = grammarErrorOnNode(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
-                    } else if (inAmbientContext) {
-                        if (node.initializer && getEnumMemberValue(node) === undefined) {
-                            hasError = grammarErrorOnNode(node.initializer, Diagnostics.Ambient_enum_initializer_must_be_a_constant_expression) || hasError;
-                        }
                     }
                 }
             }
