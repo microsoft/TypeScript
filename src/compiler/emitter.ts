@@ -2639,7 +2639,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     writeLine();
                     emitStart(node);
 
-                    if (compilerOptions.module === ModuleKind.System) {
+                    // emit call to exported only for top level nodes
+                    if (compilerOptions.module === ModuleKind.System && node.parent === currentSourceFile) {
                         // emit export default <smth> as
                         // export("default", <smth>)
                         write(`${exportFunctionForFile}("`);
@@ -4403,7 +4404,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 emitModuleMemberName(node);
                 write(" = {}));");
                 emitEnd(node);
-                if (!isES6ExportedDeclaration(node) && node.flags & NodeFlags.Export) {
+                if (!isES6ExportedDeclaration(node) && node.flags & NodeFlags.Export && !shouldHoistDeclarationInSystemJsModule(node)) {
+                    // do not emit var if variable was already hoisted
                     writeLine();
                     emitStart(node);
                     write("var ");
@@ -4414,6 +4416,15 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write(";");
                 }
                 if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile) {
+                    if (compilerOptions.module === ModuleKind.System && (node.flags & NodeFlags.Export)) {
+                        // write the call to exported for enum
+                        writeLine();
+                        write(`${exportFunctionForFile}("`);
+                        emitDeclarationName(node);
+                        write(`", `);
+                        emitDeclarationName(node);
+                        write(")");
+                    }
                     emitExportMemberAssignments(node.name);
                 }
             }
@@ -5094,7 +5105,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 // in theory we should hoist only exported functions and its dependencies
                 // in practice to simplify things we'll hoist all source level functions and variable declaration
                 // including variables declarations for module and class declarations
-                let hoistedVars: (Identifier | ClassDeclaration | ModuleDeclaration)[];
+                let hoistedVars: (Identifier | ClassDeclaration | ModuleDeclaration | EnumDeclaration)[];
                 let hoistedFunctionDeclarations: FunctionDeclaration[];
                 let exportedDeclarations: (Identifier | Declaration)[];
 
@@ -5103,13 +5114,30 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 if (hoistedVars) {
                     writeLine();
                     write("var ");
+                    let seen: Map<string> = {};
                     for (let i = 0; i < hoistedVars.length; ++i) {
                         let local = hoistedVars[i];
+                        let name = local.kind === SyntaxKind.Identifier
+                            ? <Identifier>local
+                            : <Identifier>(<ClassDeclaration | ModuleDeclaration | EnumDeclaration>local).name;
+
+                        if (name) {
+                            // do not emit duplicate entries (in case of declaration merging) in the list of hoisted variables
+                            let text = unescapeIdentifier(name.text);
+                            if (hasProperty(seen, text)) {
+                                continue;
+                            }
+                            else {
+                                seen[text] = text;
+                            }
+                        }
+
                         if (i !== 0) {
                             write(", ");
                         }
-                        if (local.kind === SyntaxKind.ClassDeclaration || local.kind === SyntaxKind.ModuleDeclaration) {
-                            emitDeclarationName(<ClassDeclaration | ModuleDeclaration>local);
+
+                        if (local.kind === SyntaxKind.ClassDeclaration || local.kind === SyntaxKind.ModuleDeclaration || local.kind === SyntaxKind.EnumDeclaration) {
+                            emitDeclarationName(<ClassDeclaration | ModuleDeclaration | EnumDeclaration>local);
                         }
                         else {
                             emit(local);
@@ -5153,7 +5181,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     }
 
                     if (node.kind === SyntaxKind.ClassDeclaration) {
-                        // TODO: rename block scoped classes
                         if (!hoistedVars) {
                             hoistedVars = [];
                         }
@@ -5162,12 +5189,26 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         return;
                     }
 
-                    if (node.kind === SyntaxKind.ModuleDeclaration && shouldEmitModuleDeclaration(<ModuleDeclaration>node)) {
-                        if (!hoistedVars) {
-                            hoistedVars = [];
+                    if (node.kind === SyntaxKind.EnumDeclaration) {
+                        if (shouldEmitEnumDeclaration(<EnumDeclaration>node)) {
+                            if (!hoistedVars) {
+                                hoistedVars = [];
+                            }
+
+                            hoistedVars.push(<ModuleDeclaration>node);
                         }
 
-                        hoistedVars.push(<ModuleDeclaration>node);
+                        return;
+                    }
+
+                    if (node.kind === SyntaxKind.ModuleDeclaration) {
+                        if (shouldEmitModuleDeclaration(<ModuleDeclaration>node)) {
+                            if (!hoistedVars) {
+                                hoistedVars = [];
+                            }
+
+                            hoistedVars.push(<ModuleDeclaration>node);
+                        }
                         return;
                     }
 
