@@ -1878,7 +1878,7 @@
         "category": "Message",
         "code": 6019
     },
-    "Compile the project in the given directory.": {
+    "Compile the project by specifying a project file or its directory.": {
         "category": "Message",
         "code": 6020
     },
@@ -1933,6 +1933,10 @@
     "DIRECTORY": {
         "category": "Message",
         "code": 6038
+    },
+    "PATH": {
+        "category": "Message",
+        "code": 6039
     },
     "Compilation complete. Watching for file changes.": {
         "category": "Message",

@@ -126,8 +126,8 @@ module ts {
             shortName: "p",
             type: "string",
             isFilePath: true,
-            description: Diagnostics.Compile_the_project_in_the_given_directory,
-            paramType: Diagnostics.DIRECTORY
+            description: Diagnostics.Compile_the_project_by_specifying_a_project_file_or_its_directory,
+            paramType: Diagnostics.PATH
         },
         {
             name: "removeComments",
