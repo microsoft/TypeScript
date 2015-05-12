@@ -1,5 +1,5 @@
 === tests/cases/compiler/enumInitializersWithExponents.ts ===
-// Must be integer literals.
+
 declare enum E {
 >E : E
 
@@ -11,11 +11,11 @@ declare enum E {
 >b : E
 >1e25 : number
 
-    c = 1e-3, // error
+    c = 1e-3, // ok
 >c : E
 >1e-3 : number
 
-    d = 1e-9, // error
+    d = 1e-9, // ok
 >d : E
 >1e-9 : number
 

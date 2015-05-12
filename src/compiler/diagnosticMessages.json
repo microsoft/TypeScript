@@ -1320,10 +1320,10 @@
         "category": "Error",
         "code": 2472
     },
-	"Enum declarations must all be const or non-const.": {
-		"category": "Error",
-		"code": 2473
-	},
+    "Enum declarations must all be const or non-const.": {
+        "category": "Error",
+        "code": 2473
+    },
     "{0} enum initializer must be a constant expression.": {
         "category": "Error",
         "code": 2474
@@ -1352,10 +1352,10 @@
         "category": "Error",
         "code": 2480
     },
-	"Cannot initialize outer scoped variable '{0}' in the same scope as block scoped declaration '{1}'.": {
-		"category": "Error",
-		"code": 2481
-	},
+    "Cannot initialize outer scoped variable '{0}' in the same scope as block scoped declaration '{1}'.": {
+        "category": "Error",
+        "code": 2481
+    },
     "Enum member '{0}' must be declared after '{1}'.": {
         "category": "Error",
         "code": 2482
