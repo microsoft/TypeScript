@@ -99,6 +99,6 @@ var d3 = temp1.slice();
 var d4 = temp.concat(temp1);
 var d5 = temp3.slice();
 var d6 = temp4.slice();
-var d7 = temp1.slice().slice();
+var d7 = temp1.slice();
 var d8 = [temp1.slice()];
 var d9 = [temp1.slice()].concat(["hello"]);

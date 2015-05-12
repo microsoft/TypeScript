@@ -41,6 +41,6 @@ function f1() {
     var b;
 }
 function f2() {
-    var a = [].slice().slice().slice().slice().slice();
-    var b = [5].slice().slice().slice().slice().slice();
+    var a = [];
+    var b = [5];
 }
