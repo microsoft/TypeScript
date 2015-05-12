@@ -727,6 +727,30 @@ module ts {
             return links.target;
         }
 
+        function resolveAliasAsValue(symbol: Symbol): Symbol {
+            Debug.assert((symbol.flags & SymbolFlags.Alias) !== 0, "Should only get Alias here.");
+            let links = getSymbolLinks(symbol);
+            if (!links.aliasValueTarget) {
+                links.aliasValueTarget = resolvingSymbol;
+                let node = getDeclarationOfAliasSymbol(symbol);
+                let target = resolveAlias(symbol);
+                if ((target.flags & SymbolFlags.Alias) && !(target.flags & SymbolFlags.Value)) {
+                    target = resolveAliasAsValue(target);
+                }
+
+                if (links.aliasValueTarget === resolvingSymbol) {
+                    links.aliasValueTarget = target || unknownSymbol;
+                }
+                else {
+                    error(node, Diagnostics.Circular_definition_of_import_alias_0, symbolToString(symbol));
+                }
+            }
+            else if (links.aliasValueTarget === resolvingSymbol) {
+                links.aliasValueTarget = unknownSymbol;
+            }
+            return links.aliasValueTarget;
+        }
+
         function markExportAsReferenced(node: ImportEqualsDeclaration | ExportAssignment | ExportSpecifier) {
             let symbol = getSymbolOfNode(node);
             let target = resolveAlias(symbol);
@@ -2408,7 +2432,7 @@ module ts {
         function getTypeOfAlias(symbol: Symbol): Type {
             let links = getSymbolLinks(symbol);
             if (!links.type) {
-                links.type = getTypeOfSymbol(resolveAlias(symbol));
+                links.type = getTypeOfSymbol(resolveAliasAsValue(symbol));
             }
             return links.type;
         }
