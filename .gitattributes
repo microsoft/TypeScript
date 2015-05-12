@@ -1,1 +1,37 @@
 *.js linguist-language=TypeScript
+
+# Assume everything should be stored verbatim unless otherwise specified.
+# Note that we don't use 'binary' because it is an alias for '-text -diff'
+# '-text' means "don't try to adjust line-endings", which is what we want, but
+# '-diff' tells git "don't even try to diff these." which is undesirable.
+
+* -text
+
+src/**/*.json  text
+src/**/*.ts    text
+scripts/*.cmd  text
+scripts/*.ps1  text
+scripts/*.js   text
+scripts/*.ts   text
+
+tests/webhost/webhost.html      text
+tests/webhost/wscript.js        text
+tests/webhost/webtsc.ts         text
+tests/cases/perfsys.ts          text
+tests/cases/perftsc.ts          text
+tests/cases/test.bat            text
+tests/cases/webTestResults.html text
+tests/cases/webTestServer.ts    text
+
+.editorconfig               text
+.gitattributes              text
+.gitignore                  text
+.npmignore                  text
+.travis.yml                 text
+CONTRIBUTING.md             text
+CopyrightNotice.txt         text
+Jakefile.js                 text
+LICENSE.txt                 text
+package.json                text
+README.md                   text
+ThirdPartyNoticeText.txt    text
