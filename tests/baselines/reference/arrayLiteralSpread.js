@@ -26,7 +26,7 @@ function f2() {
 //// [arrayLiteralSpread.js]
 function f0() {
     var a = [1, 2, 3];
-    var a1 = a;
+    var a1 = a.slice();
     var a2 = [1].concat(a);
     var a3 = [1, 2].concat(a);
     var a4 = a.concat([1]);
@@ -41,6 +41,6 @@ function f1() {
     var b;
 }
 function f2() {
-    var a = [];
-    var b = [5];
+    var a = [].slice().slice().slice().slice().slice();
+    var b = [5].slice().slice().slice().slice().slice();
 }
