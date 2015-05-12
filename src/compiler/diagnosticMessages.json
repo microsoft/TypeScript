@@ -1850,7 +1850,7 @@
         "category": "Message",
         "code": 6007
     },
-    "Do not emit outputs if any type checking errors were reported.": {
+    "Do not emit outputs if any errors were reported.": {
         "category": "Message",
         "code": 6008
     },
