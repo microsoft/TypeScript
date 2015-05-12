@@ -1,6 +1,5 @@
 // @module: commonjs
 // @target: es5
-// @declaration: true
 // @packageName: app
 // @packageMain: index.ts
 // @packageDeclaration: app.d.ts
