@@ -1,1 +1,4 @@
 *.js linguist-language=TypeScript
+
+# Tell git to not mess with line endings
+* binary
