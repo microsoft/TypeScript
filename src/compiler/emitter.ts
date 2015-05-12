@@ -1383,7 +1383,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         e = (<SpreadElementExpression>e).expression;
                         emitParenthesizedIf(e, /*parenthesized*/ group === 0 && needsParenthesisForPropertyAccessOrInvocation(e));
                         pos++;
-                        if (pos === length && group === 0 && alwaysCopy) {
+                        if (pos === length && group === 0 && alwaysCopy && e.kind !== SyntaxKind.ArrayLiteralExpression) {
                             write(".slice()");
                         }
                     }
