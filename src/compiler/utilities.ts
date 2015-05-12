@@ -530,11 +530,6 @@ module ts {
         return traverse(body);
 
         function traverse(node: Node): void {
-            // Yield expressions may occur in decorators
-            if (node.decorators) {
-                forEach(node.decorators, traverse);
-            }
-
             switch (node.kind) {
                 case SyntaxKind.YieldExpression:
                     visitor(<YieldExpression>node);
@@ -546,18 +541,17 @@ module ts {
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.ClassDeclaration:
                     // These are not allowed inside a generator now, but eventually they may be allowed
                     // as local types. Regardless, any yield statements contained within them should be
                     // skipped in this traversal.
-                    return;
-                case SyntaxKind.ClassDeclaration:
-                    // A class declaration/expression may extend a yield expression
-                    forEach((<ClassDeclaration>node).heritageClauses, traverse);
                     return;
                 default:
                     if (isFunctionLike(node)) {
                         let name = (<FunctionLikeDeclaration>node).name;
                         if (name && name.kind === SyntaxKind.ComputedPropertyName) {
+                            // Note that we will not include methods/accessors of a class because they would require
+                            // first descending into the class. This is by design.
                             traverse((<ComputedPropertyName>name).expression);
                             return;
                         }

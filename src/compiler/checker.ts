@@ -8023,9 +8023,27 @@ module ts {
             }
         }
 
+        function isYieldExpressionInClass(node: YieldExpression): boolean {
+            let current: Node = node
+            let parent = node.parent;
+            while (parent) { 
+                if (isFunctionLike(parent) && current === (<FunctionLikeDeclaration>parent).body) {
+                    return false;
+                }
+                else if (current.kind === SyntaxKind.ClassDeclaration || current.kind === SyntaxKind.ClassExpression) {
+                    return true;
+                }
+
+                current = parent;
+                parent = parent.parent;
+            }
+
+            return false;
+        }
+
         function checkYieldExpression(node: YieldExpression): Type {
             // Grammar checking
-            if (!(node.parserContextFlags & ParserContextFlags.Yield)) {
+            if (!(node.parserContextFlags & ParserContextFlags.Yield) || isYieldExpressionInClass(node)) {
                 grammarErrorOnFirstToken(node, Diagnostics.A_yield_expression_is_only_allowed_in_a_generator_declaration);
             }
 
