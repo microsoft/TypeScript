@@ -8044,7 +8044,7 @@ module ts {
         function checkYieldExpression(node: YieldExpression): Type {
             // Grammar checking
             if (!(node.parserContextFlags & ParserContextFlags.Yield) || isYieldExpressionInClass(node)) {
-                grammarErrorOnFirstToken(node, Diagnostics.A_yield_expression_is_only_allowed_in_a_generator_declaration);
+                grammarErrorOnFirstToken(node, Diagnostics.A_yield_expression_is_only_allowed_in_a_generator_body);
             }
 
             if (node.expression) {

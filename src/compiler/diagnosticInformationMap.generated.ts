@@ -120,7 +120,7 @@ module ts {
         Unterminated_template_literal: { code: 1160, category: DiagnosticCategory.Error, key: "Unterminated template literal." },
         Unterminated_regular_expression_literal: { code: 1161, category: DiagnosticCategory.Error, key: "Unterminated regular expression literal." },
         An_object_member_cannot_be_declared_optional: { code: 1162, category: DiagnosticCategory.Error, key: "An object member cannot be declared optional." },
-        A_yield_expression_is_only_allowed_in_a_generator_declaration: { code: 1163, category: DiagnosticCategory.Error, key: "A 'yield' expression is only allowed in a generator declaration." },
+        A_yield_expression_is_only_allowed_in_a_generator_body: { code: 1163, category: DiagnosticCategory.Error, key: "A 'yield' expression is only allowed in a generator body." },
         Computed_property_names_are_not_allowed_in_enums: { code: 1164, category: DiagnosticCategory.Error, key: "Computed property names are not allowed in enums." },
         A_computed_property_name_in_an_ambient_context_must_directly_refer_to_a_built_in_symbol: { code: 1165, category: DiagnosticCategory.Error, key: "A computed property name in an ambient context must directly refer to a built-in symbol." },
         A_computed_property_name_in_a_class_property_declaration_must_directly_refer_to_a_built_in_symbol: { code: 1166, category: DiagnosticCategory.Error, key: "A computed property name in a class property declaration must directly refer to a built-in symbol." },
