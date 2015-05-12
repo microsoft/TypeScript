@@ -1539,6 +1539,7 @@ module ts {
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
+        noInferredEmptyObject?: boolean;
         noLib?: boolean;
         noLibCheck?: boolean;
         noResolve?: boolean;

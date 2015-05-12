@@ -72,7 +72,12 @@ module ts {
         {
             name: "noImplicitAny",
             type: "boolean",
-            description: Diagnostics.Raise_error_on_expressions_and_declarations_with_an_implied_any_type,
+            description: Diagnostics.Raise_an_error_when_the_any_type_is_inferred_for_a_declaration
+        },
+        {
+            name: "noInferredEmptyObject",
+            type: "boolean",
+            description: Diagnostics.Raise_an_error_when_inferring_for_type_arguments
         },
         {
             name: "noLib",

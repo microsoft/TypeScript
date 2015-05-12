@@ -1824,7 +1824,7 @@
         "category": "Error",
         "code": 6051
     },
-    "Raise error on expressions and declarations with an implied 'any' type.": {
+    "Raise an error when the 'any' type is inferred for a declaration.": {
         "category": "Message",
         "code": 6052
     },
@@ -1847,6 +1847,10 @@
     "Preserve new-lines when emitting code.": {
         "category": "Message",
         "code": 6057
+    },
+    "Raise an error when inferring '{}' for type arguments.": {
+        "category": "Message",
+        "code": 6058
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

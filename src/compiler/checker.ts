@@ -6558,7 +6558,7 @@ module ts {
                         if (index < 0) {
 
                             // Check for type arguments inferred as '{}'.
-                            if (originalCandidate.typeParameters && inferenceResult) {
+                            if (/*compilerOptions.noInferredEmptyObject &&*/ originalCandidate.typeParameters && inferenceResult) {
                                 for (var i = 0, len = typeArgumentTypes.length; i < len; i++) {
                                     
                                     if (typeArgumentTypes[i] === emptyObjectType && getInferenceCandidates(inferenceResult, i).length === 0) {
