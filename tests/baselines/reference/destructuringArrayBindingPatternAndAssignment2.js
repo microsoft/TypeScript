@@ -50,8 +50,8 @@ var _c = bar(), _d = _c[0], b3 = _d === void 0 ? "string" : _d, b4 = _c[1], b5 =
 // V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
 //      S is not a tuple- like type and the numeric index signature type of S is assignable to the target given in E.
 var temp = [1, 2, 3];
-var _e = temp, c0 = _e[0], c1 = _e[1]; // Error
-var _f = temp, c2 = _f[0], c3 = _f[1]; // Error
+var _e = temp.slice(), c0 = _e[0], c1 = _e[1]; // Error
+var _f = temp.slice(), c2 = _f[0], c3 = _f[1]; // Error
 function foo(idx) {
     return {
         2: true

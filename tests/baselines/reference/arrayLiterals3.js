@@ -55,6 +55,6 @@ var _a = [1, 2, "string", true], b1 = _a[0], b2 = _a[1];
 var temp = ["s", "t", "r"];
 var temp1 = [1, 2, 3];
 var temp2 = [[1, 2, 3], ["hello", "string"]];
-var c0 = temp2; // Error
-var c1 = temp1; // Error cannot assign number[] to [number, number, number]
+var c0 = temp2.slice(); // Error
+var c1 = temp1.slice(); // Error cannot assign number[] to [number, number, number]
 var c2 = temp1.concat(temp); // Error cannot assign (number|string)[] to number[]
