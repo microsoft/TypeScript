@@ -1366,7 +1366,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 return true;
             }
 
-            function emitListWithSpread(elements: Expression[], multiLine: boolean, trailingComma: boolean) {
+            function emitListWithSpread(elements: Expression[], alwaysCopy: boolean, multiLine: boolean, trailingComma: boolean) {
                 let pos = 0;
                 let group = 0;
                 let length = elements.length;
@@ -1383,6 +1383,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         e = (<SpreadElementExpression>e).expression;
                         emitParenthesizedIf(e, /*parenthesized*/ group === 0 && needsParenthesisForPropertyAccessOrInvocation(e));
                         pos++;
+                        if (pos === length && group === 0 && alwaysCopy) {
+                            write(".slice()");
+                        }
                     }
                     else {
                         let i = pos;
@@ -1422,7 +1425,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write("]");
                 }
                 else {
-                    emitListWithSpread(elements, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
+                    emitListWithSpread(elements, /*alwaysCopy*/ true, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
                         /*trailingComma*/ elements.hasTrailingComma);
                 }
             }
@@ -1847,7 +1850,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write("void 0");
                 }
                 write(", ");
-                emitListWithSpread(node.arguments, /*multiLine*/ false, /*trailingComma*/ false);
+                emitListWithSpread(node.arguments, /*alwaysCopy*/ false, /*multiLine*/ false, /*trailingComma*/ false);
                 write(")");
             }
 
