@@ -3051,7 +3051,7 @@ module ts {
                                 || containingNodeKind === SyntaxKind.Constructor                  // constructor( |
                                 || containingNodeKind === SyntaxKind.NewExpression                // new C(a|
                                 || containingNodeKind === SyntaxKind.ParenthesizedExpression      // let x = (a|
-                                || containingNodeKind === SyntaxKind.ParenthesizedType;           // function F(pred: (a
+                                || containingNodeKind === SyntaxKind.ParenthesizedType;           // function F(pred: (a| this can become an arrow function, where 'a' is the argument
 
                         case SyntaxKind.OpenBracketToken:
                             return containingNodeKind === SyntaxKind.ArrayLiteralExpression;      // [ |
