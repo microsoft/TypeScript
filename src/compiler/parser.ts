@@ -2363,7 +2363,7 @@ module ts {
         function parseType(): TypeNode {
             // The rules about 'yield' only apply to actual code/expression contexts.  They don't
             // apply to 'type' contexts.  So we disable these parameters here before moving on.            
-            return doOutsideOfContext(ParserContextFlags.AllParameterFlags, parseTypeWorker);
+            return doOutsideOfContext(ParserContextFlags.TypeExcludesFlags, parseTypeWorker);
         }
 
         function parseTypeWorker(): TypeNode {
@@ -4363,15 +4363,9 @@ module ts {
             node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause:*/ true);
 
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                // ClassTail[Yield,GeneratorParameter,Await,AsyncParameter] : (Modified) See 14.5
-                //      [~GeneratorParameter,~AsyncParameter]ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
-                //      [+GeneratorParameter] ClassHeritageopt { ClassBodyopt }
-                //      [+AsyncParameter] ClassHeritageopt { ClassBodyopt }
-                
-                node.members = inGeneratorParameterOrAsyncParameterContext()
-                    ? doOutsideOfYieldAndAwaitContext(parseClassMembers)
-                    : parseClassMembers();
-
+                // ClassTail[Yield,Await] : (Modified) See 14.5
+                //      ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }                
+                node.members = parseClassMembers();
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -4384,22 +4378,14 @@ module ts {
         }
 
         function parseHeritageClauses(isClassHeritageClause: boolean): NodeArray<HeritageClause> {
-            // ClassTail[Yield,GeneratorParameter,Await,AsyncParameter] : (Modified) See 14.5
-            //      [~GeneratorParameter,~AsyncParameter]ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
-            //      [+GeneratorParameter] ClassHeritageopt { ClassBodyopt }
-            //      [+AsyncParameter] ClassHeritageopt { ClassBodyopt }
+            // ClassTail[Yield,Await] : (Modified) See 14.5
+            //      ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
 
             if (isHeritageClause()) {
-                return isClassHeritageClause && inGeneratorParameterOrAsyncParameterContext()
-                    ? doOutsideOfYieldAndAwaitContext(parseHeritageClausesWorker)
-                    : parseHeritageClausesWorker();
+                return parseList(ParsingContext.HeritageClauses, /*checkForStrictMode:*/ false, parseHeritageClause);
             }
 
             return undefined;
-        }
-
-        function parseHeritageClausesWorker() {
-            return parseList(ParsingContext.HeritageClauses, /*checkForStrictMode:*/ false, parseHeritageClause);
         }
 
         function parseHeritageClause() {

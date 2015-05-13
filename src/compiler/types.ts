@@ -361,7 +361,9 @@ module ts {
         // Context flags passed as part of the modified ES6 grammar.
         YieldAndGeneratorParameterFlags = Yield | GeneratorParameter,
         AwaitAndAsyncParameterFlags = Await | AsyncParameter,
-        AllParameterFlags = YieldAndGeneratorParameterFlags | AwaitAndAsyncParameterFlags,       
+        
+        // Exclude these flags when parsing a Type
+        TypeExcludesFlags = YieldAndGeneratorParameterFlags | AwaitAndAsyncParameterFlags,       
         
         // Context flags computed by aggregating child flags upwards.
 
