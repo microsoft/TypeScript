@@ -1324,7 +1324,7 @@
         "category": "Error",
         "code": 2471
     },
-    "Spread operator in 'new' expressions is only available when targeting ECMAScript 6 and higher.": {
+    "Spread operator in 'new' expressions is only available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
         "code": 2472
     },

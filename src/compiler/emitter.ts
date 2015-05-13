@@ -1886,11 +1886,42 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
             function emitNewExpression(node: NewExpression) {
                 write("new ");
-                emit(node.expression);
-                if (node.arguments) {
+
+                // Spread operator logic can be supported in new expressions in ES5 using a combination
+                // of Function.prototype.bind() and Function.prototype.apply().
+                //
+                //     Example:
+                //
+                //         var arguments = [1, 2, 3, 4, 5];
+                //         new Array(...arguments);
+                //
+                //         Could be transpiled into ES5:
+                //
+                //         var arguments = [1, 2, 3, 4, 5];
+                //         new (Function.bind.apply(Array, [void 0].concat(arguments)));
+                //
+                // `[void 0]` is the first argument which represents `thisArg` to the bind method above. 
+                // And `thisArg` will be set to the return value of the constructor when instantiated 
+                // with the new operator — regardless of any value we set `thisArg` to. Thus, we set it 
+                // to an undefined, `void 0`.
+                if (languageVersion === ScriptTarget.ES5 &&
+                    node.arguments &&
+                    hasSpreadElement(node.arguments)) {
+
                     write("(");
-                    emitCommaList(node.arguments);
-                    write(")");
+                    write("Function.bind.apply(");
+                    emit(node.expression);
+                    write(", [void 0].concat(");
+                    emitListWithSpread(node.arguments, /*multiline*/false, /*trailingComma*/false);
+                    write(")))");
+                }
+                else {
+                    emit(node.expression);
+                    if (node.arguments) {
+                        write("(");
+                        emitCommaList(node.arguments);
+                        write(")");
+                    }
                 }
             }
 
