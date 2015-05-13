@@ -684,7 +684,7 @@ module ts {
             }
             else {
                 write("require(");
-                writeTextOfNode(currentSourceFile, getExternalModuleImportEqualsDeclarationExpression(node));
+                emitModuleSpecifier(getExternalModuleImportEqualsDeclarationExpression(node));
                 write(");");
             }
             writer.writeLine();
@@ -741,9 +741,29 @@ module ts {
                 }
                 write(" from ");
             }
-            writeTextOfNode(currentSourceFile, node.moduleSpecifier);
+            emitModuleSpecifier(node.moduleSpecifier);
             write(";");
             writer.writeLine();
+        }
+        
+        function emitModuleSpecifier(node: Expression) {
+            if (isPackageDeclaration) {
+                let moduleNameText = (<LiteralExpression>node).text;
+                let searchPath = getDirectoryPath(currentSourceFile.fileName);
+                let searchName = normalizePath(combinePaths(searchPath, moduleNameText));
+                if (host.getSourceFile(searchName + ".ts") || host.getSourceFile(searchName + ".d.ts")) {
+                    let packageQualifiedPath = getPackageQualifiedPath(host, moduleNameText, searchPath);
+                    write("\"");
+                    write(escapeString(packageQualifiedPath));
+                    write("\"");
+                }
+                else {
+                    writeTextOfNode(currentSourceFile, node);
+                }
+            }
+            else {
+                writeTextOfNode(currentSourceFile, node);
+            }
         }
 
         function emitImportOrExportSpecifier(node: ImportOrExportSpecifier) {
@@ -777,23 +797,7 @@ module ts {
             }
             if (node.moduleSpecifier) {
                 write(" from ");
-                if (isPackageDeclaration) {
-                    let moduleNameText = (<LiteralExpression>node.moduleSpecifier).text;
-                    let searchPath = getDirectoryPath(currentSourceFile.fileName);
-                    let searchName = normalizePath(combinePaths(searchPath, moduleNameText));
-                    if (host.getSourceFile(searchName + ".ts") || host.getSourceFile(searchName + ".d.ts")) {
-                        let packageQualifiedPath = getPackageQualifiedPath(host, moduleNameText, searchPath);
-                        write("\"");
-                        write(escapeString(packageQualifiedPath));
-                        write("\"");
-                    }
-                    else {
-                        writeTextOfNode(currentSourceFile, node.moduleSpecifier);
-                    }
-                }
-                else {
-                    writeTextOfNode(currentSourceFile, node.moduleSpecifier);
-                }
+                emitModuleSpecifier(node.moduleSpecifier);
             }
             write(";");
             writer.writeLine();
@@ -1668,8 +1672,8 @@ module ts {
         let packageMain = getPackageMain(host);
         let packageAbsolutePath = getNormalizedAbsolutePath(packageRelativePath, packageRoot);
         
-        if (host.getSourceFile(packageAbsolutePath + ".ts") === packageMain || 
-            host.getSourceFile(packageAbsolutePath + ".d.ts") === packageMain) {
+        if (packageAbsolutePath + ".ts" === packageMain || 
+            packageAbsolutePath + ".d.ts" === packageMain) {
             return compilerOptions.packageName;
         }
         

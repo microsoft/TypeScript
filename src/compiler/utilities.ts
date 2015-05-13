@@ -1700,7 +1700,12 @@ module ts {
     }
     
     export function getPackageDirectory(host: ScriptReferenceHost) {
-        return host.getPackageDirectory ? host.getPackageDirectory() : host.getCurrentDirectory();
+        let searchPath = host.getCurrentDirectory();
+        if (host.getPackageDirectory) {
+            return getNormalizedAbsolutePath(host.getPackageDirectory(), searchPath);
+        }
+        
+        return searchPath;
     }
     
     export function getPackageDeclaration(host: ScriptReferenceHost) {
@@ -1717,16 +1722,15 @@ module ts {
         let options = host.getCompilerOptions();
         if (options.packageMain) {
             let packageMain = getNormalizedAbsolutePath(options.packageMain, getPackageDirectory(host));
-            let packageFile = host.getSourceFile(packageMain);
-            return packageFile;
+            return packageMain;
         }
         
         return undefined;
     }
     
     export function isPackageMain(node: SourceFile, host: ScriptReferenceHost) {
-        let packageMain = getPackageMain(host);
-        return node === packageMain;
+        let packageMain = getPackageMain(host);        
+        return node.fileName === packageMain;
     }
 
     /**
