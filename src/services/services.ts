@@ -3043,7 +3043,8 @@ module ts {
                                 || containingNodeKind === SyntaxKind.Constructor                            // constructor( a, |   public, protected, private keywords are allowed here, so show completion
                                 || containingNodeKind === SyntaxKind.NewExpression                          // new C(a, |
                                 || containingNodeKind === SyntaxKind.ArrayLiteralExpression                 // [a, |
-                                || containingNodeKind === SyntaxKind.BinaryExpression;                      // let x = (a, |
+                                || containingNodeKind === SyntaxKind.BinaryExpression                       // let x = (a, |
+                                || containingNodeKind === SyntaxKind.FunctionType;                          // var x: (s: string, list|
 
                         case SyntaxKind.OpenParenToken:
                             return containingNodeKind === SyntaxKind.CallExpression               // func( |
@@ -3205,9 +3206,6 @@ module ts {
                                 (previousToken.parent && previousToken.parent.parent &&
                                     previousToken.parent.parent.kind === SyntaxKind.ArrayBindingPattern);  // var [ ...z|
 
-                        case SyntaxKind.TypeKeyword:  // type htm|
-                            return true;
-
                         case SyntaxKind.PublicKeyword:
                         case SyntaxKind.PrivateKeyword:
                         case SyntaxKind.ProtectedKeyword:
@@ -3224,6 +3222,7 @@ module ts {
                         case SyntaxKind.LetKeyword:
                         case SyntaxKind.ConstKeyword:
                         case SyntaxKind.YieldKeyword:
+                        case SyntaxKind.TypeKeyword:  // type htm|
                             return true;
                     }
 
