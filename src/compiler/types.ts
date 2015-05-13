@@ -1382,6 +1382,10 @@ module ts {
     /* @internal */ 
     export interface SymbolLinks {
         target?: Symbol;                    // Resolved (non-alias) target of an alias
+        aliasValueTarget?: Symbol;          // The result of resolving an alias as a value, which may be the target,
+                                            //     or something even farther down the chain of alias references.
+                                            //     This is needed when the target is simultaneously an alias and a non-value,
+                                            //     but we are looking for a value.
         type?: Type;                        // Type of value symbol
         declaredType?: Type;                // Type of class, interface, enum, or type parameter
         mapper?: TypeMapper;                // Type mapper for instantiation alias
