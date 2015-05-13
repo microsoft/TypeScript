@@ -570,6 +570,10 @@ module ts {
         function doOutsideOfContext<T>(context: ParserContextFlags, func: () => T): T {
             // contextFlagsToClear will contain only the context flags that are 
             // currently set that we need to temporarily clear
+            // We don't just blindly reset to the previous flags to ensure
+            // that we do not mutate cached flags for the incremental
+            // parser (ThisNodeHasError, ThisNodeOrAnySubNodesHasError, and 
+            // HasAggregatedChildData).
             let contextFlagsToClear = context & contextFlags;
             if (contextFlagsToClear) {
                 // clear the requested context flags
@@ -586,7 +590,11 @@ module ts {
         
         function doInsideOfContext<T>(context: ParserContextFlags, func: () => T): T {
             // contextFlagsToSet will contain only the context flags that
-            // are not currently set that we need to temporarily enable
+            // are not currently set that we need to temporarily enable.
+            // We don't just blindly reset to the previous flags to ensure
+            // that we do not mutate cached flags for the incremental
+            // parser (ThisNodeHasError, ThisNodeOrAnySubNodesHasError, and 
+            // HasAggregatedChildData).
             let contextFlagsToSet = context & ~contextFlags;
             if (contextFlagsToSet) {
                 // set the requested context flags

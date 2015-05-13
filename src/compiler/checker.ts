@@ -120,6 +120,7 @@ module ts {
         let getGlobalPropertyDecoratorType: () => ObjectType;
         let getGlobalMethodDecoratorType: () => ObjectType;
         let getGlobalPromiseType: () => ObjectType;
+        let tryGetGlobalPromiseType: () => ObjectType;
         let getGlobalPromiseLikeType: () => ObjectType;
         let getInstantiatedGlobalPromiseLikeType: () => ObjectType;
         let getGlobalPromiseConstructorLikeType: () => ObjectType;
@@ -3500,6 +3501,10 @@ module ts {
 
         function getGlobalType(name: string, arity = 0): ObjectType {
             return getTypeOfGlobalSymbol(getGlobalTypeSymbol(name), arity);
+        }
+        
+        function tryGetGlobalType(name: string, arity = 0): ObjectType {
+            return getTypeOfGlobalSymbol(getGlobalSymbol(name, SymbolFlags.Type, /*diagnostic*/ undefined), arity);
         }
 
         function getGlobalESSymbolConstructorSymbol() {
@@ -7296,7 +7301,7 @@ module ts {
             }
         }
         
-        function createPromiseType(promisedType: Type, location: Node): Type {
+        function createPromiseType(promisedType: Type): Type {
             // creates a `Promise<T>` type where `T` is the promisedType argument
             let globalPromiseType = getGlobalPromiseType();
             if (globalPromiseType !== emptyObjectType) {
@@ -7307,8 +7312,7 @@ module ts {
                 }
             }
             
-            error(location, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
-            return unknownType;
+            return undefined;
         }
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
@@ -7321,6 +7325,11 @@ module ts {
             let type: Type;
             if (func.body.kind !== SyntaxKind.Block) {
                 if (isAsync) {
+                    // From within an async function you can return either a non-promise value or a promise. Any 
+                    // Promise/A+ compatible implementation will always assimilate any foreign promise, so the 
+                    // return type of the body is not the return type of the consise body, rather it
+                    // is the awaited type of the consise body, which we will wrap in the native Promise<T> type
+                    // later in this function.
                     type = checkAwaitedExpressionCached(<Expression>func.body, contextualMapper); 
                 }
                 else {
@@ -7332,7 +7341,14 @@ module ts {
                 let types = checkAndAggregateReturnExpressionTypes(<Block>func.body, contextualMapper);
                 if (types.length === 0) {
                     if (isAsync) {
-                        return createPromiseType(voidType, func);
+                        // For an async function, the return type will not be void, but rather a Promise for void.
+                        let promiseType = createPromiseType(voidType);
+                        if (!promiseType) {
+                            error(func, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+                            return unknownType;
+                        }
+                        
+                        return promiseType;
                     }
                     else {
                         return voidType;
@@ -7354,7 +7370,16 @@ module ts {
             
             let widenedType = getWidenedType(type);
             if (isAsync) {
-                return createPromiseType(widenedType, func); 
+                // From within an async function you can return either a non-promise value or a promise. Any 
+                // Promise/A+ compatible implementation will always assimilate any foreign promise, so the 
+                // return type of the body is awaited type of the body, wrapped in a native Promise<T> type.
+                let promiseType = createPromiseType(widenedType);
+                if (!promiseType) {
+                    error(func, Diagnostics.An_async_function_or_method_must_have_a_valid_awaitable_return_type);
+                    return unknownType;
+                }
+                
+                return promiseType; 
             }
             else {
                 return widenedType;
@@ -7492,11 +7517,6 @@ module ts {
             let returnType = node.type && getTypeFromTypeNode(node.type);
             let promisedType: Type;
             if (returnType && isAsync) {
-                // From within an async function you can return either a non-promise value or a promise. Any 
-                // Promise/A+ compatible implementation will always assimilate any foreign promise, so we 
-                // should not be checking assignability of a promise to the return type. Instead, we need to 
-                // check assignability of the awaited type of the concise body against the promised type of 
-                // its return type annotation.
                 promisedType = checkAsyncFunctionReturnType(node, returnType);
             }
             
@@ -7509,6 +7529,11 @@ module ts {
                     checkSourceElement(node.body);
                 }
                 else {
+                    // From within an async function you can return either a non-promise value or a promise. Any 
+                    // Promise/A+ compatible implementation will always assimilate any foreign promise, so we 
+                    // should not be checking assignability of a promise to the return type. Instead, we need to 
+                    // check assignability of the awaited type of the concise body against the promised type of 
+                    // its return type annotation.
                     let exprType = checkExpression(<Expression>node.body);
                     if (returnType) {
                         if (isAsync) {
@@ -8340,23 +8365,6 @@ module ts {
                             break;
                     }
                 }
-                
-                if (isAsyncFunctionLike(node)) {
-                    var promiseConstructor = getPromiseConstructor(node);
-                    if (promiseConstructor) {
-                        var promiseIdentifier = getFirstIdentifier(promiseConstructor);
-                        var promiseName = promiseIdentifier.text;
-                        var typeSymbol = resolveName(node, promiseName, SymbolFlags.Type | SymbolFlags.Module, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-                        var valueSymbol = resolveName(node, promiseName, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-                        if (typeSymbol !== valueSymbol) {
-                            var valueLinks = getNodeLinks(valueSymbol.valueDeclaration);
-                            if (!(valueLinks.flags & NodeCheckFlags.PromiseCollision)) {
-                                valueLinks.flags |= NodeCheckFlags.PromiseCollision;
-                                error(valueSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions, promiseName, getTextOfNode(promiseConstructor));
-                            }
-                        }
-                    }
-                }
             }
 
             checkSpecializedSignatureDeclaration(node);
@@ -8952,7 +8960,7 @@ module ts {
         }
 
         function checkNonThenableType(type: Type, location?: Node, message?: DiagnosticMessage) {
-            if (!(type.flags & TypeFlags.Any) && isTypeAssignableTo(type, getGlobalThenableType())) {
+            if (!allConstituentTypesHaveKind(type, TypeFlags.Any) && isTypeAssignableTo(type, getGlobalThenableType())) {
                 if (location) {
                     if (!message) {
                         message = Diagnostics.Operand_for_await_does_not_have_a_valid_callable_then_member;
@@ -8970,33 +8978,58 @@ module ts {
         /**
           * Gets the "promised type" of a promise.
           * @param type The type of the promise.
-          * @remarks The "promised type" of a type is the type of the "value" argument of the "onfulfilled" callback.
+          * @remarks The "promised type" of a type is the type of the "value" parameter of the "onfulfilled" callback.
           */
-        function getPromisedType(type: Type): Type {
+        function getPromisedType(promise: Type): Type {
+            //
+            //  { // promise
+            //      then( // thenFunction
+            //          onfulfilled: ( // onfulfilledParameterType
+            //              value: T // valueParameterType
+            //          ) => any
+            //      ): any;
+            //  }
+            // 
+            
+            if (allConstituentTypesHaveKind(promise, TypeFlags.Any)) {
+                return undefined;
+            }
+            
+            if ((promise.flags & TypeFlags.Reference) && (<GenericType>promise).target === tryGetGlobalPromiseType()) {
+                return (<GenericType>promise).typeArguments[0];
+            }
+            
             let globalPromiseLikeType = getInstantiatedGlobalPromiseLikeType();
-            if (globalPromiseLikeType !== emptyObjectType && isTypeAssignableTo(type, globalPromiseLikeType)) {
-                let thenProp = getPropertyOfType(type, "then");
-                if (thenProp) {
-                    let awaitedTypes: Type[] = [];
-                    let thenType = getTypeOfSymbol(thenProp);
-                    let thenSignatures = getSignaturesOfType(thenType, SignatureKind.Call);
-                    for (let thenSignature of thenSignatures) {
-                        thenSignature = getErasedSignature(thenSignature);
-                        let onfulfilledParameterType = getTypeAtPosition(thenSignature, 0);
-                        let onfulfilledParameterSignatures = getSignaturesOfType(onfulfilledParameterType, SignatureKind.Call);
-                        for (let onfulfilledParameterSignature of onfulfilledParameterSignatures) {
-                            let valueParameterType = getTypeAtPosition(onfulfilledParameterSignature, 0);
-                            if (valueParameterType !== type) {
-                                awaitedTypes.push(valueParameterType);
-                            }
-                        }
-                    }
-
-                    return getUnionType(awaitedTypes);
-                }
+            if (globalPromiseLikeType === emptyObjectType || !isTypeAssignableTo(promise, globalPromiseLikeType)) {
+                return undefined;
             }
 
-            return unknownType;
+            let thenFunction = getTypeOfPropertyOfType(promise, "then");
+            if (thenFunction && allConstituentTypesHaveKind(thenFunction, TypeFlags.Any)) {
+                return undefined;
+            }
+            
+            let thenSignatures = thenFunction ? getSignaturesOfType(thenFunction, SignatureKind.Call) : emptyArray;
+            if (thenSignatures.length === 0) {
+                return undefined;
+            }
+            
+            let onfulfilledParameterType = getUnionType(map(thenSignatures, getTypeOfFirstParameterOfSignature));
+            if (allConstituentTypesHaveKind(onfulfilledParameterType, TypeFlags.Any)) {
+                return undefined;
+            }
+            
+            let onfulfilledParameterSignatures = getSignaturesOfType(onfulfilledParameterType, SignatureKind.Call);
+            if (onfulfilledParameterSignatures.length === 0) {
+                return undefined;
+            }
+            
+            let valueParameterType = getUnionType(map(onfulfilledParameterSignatures, getTypeOfFirstParameterOfSignature));
+            return valueParameterType;
+        }
+        
+        function getTypeOfFirstParameterOfSignature(signature: Signature) {
+            return getTypeAtPosition(signature, 0);
         }
         
         /**
@@ -9006,28 +9039,7 @@ module ts {
           * Promise-like type; otherwise, it is the type of the expression. This is used to reflect
           * The runtime behavior of the `await` keyword.
           */
-        function getAwaitedType(type: Type, location?: Node): Type {            
-            let promisedType = getPromisedType(type);
-            if (promisedType === unknownType) {
-                // if we got the unknown type, the type wasn't a promise. We need to check to
-                // ensure it is not a thenable.
-                if (checkNonThenableType(type, location)) {
-                    return type;
-                }
-                
-                return unknownType;
-            }
-            else if (promisedType === type) {
-                // if we have a bad actor in the form of a promise whose promised type is the same 
-                // promise, return the unknown type as we cannot guess the shape.
-                // if this were the actual case in the JavaScript, this Promise would never resolve.
-                if (location) {
-                    error(location, Diagnostics.Operand_for_await_does_not_have_a_valid_callable_then_member);
-                }
-                
-                return unknownType;
-            }
-
+        function getAwaitedType(type: Type, location?: Node): Type {
             // `seen` keeps track of types we've tried to await to avoid cycles.
             // This is to protect against a bad actor with a mutually recursive promised type:
             //
@@ -9039,26 +9051,34 @@ module ts {
             //  }
             // 
             let seen: boolean[];
-
-            // unwrap any nested promises
             while (true) {
-                let nestedPromisedType = getPromisedType(promisedType);
-                if (nestedPromisedType === unknownType) {
+                let promisedType = getPromisedType(type);
+                if (!promisedType) {
                     // this type could not be unwrapped further. We need to check to
                     // ensure it is not a thenable
-                    if (checkNonThenableType(promisedType, location)) {
-                        return promisedType;
+                    if (checkNonThenableType(type, location)) {
+                        return type;
                     }
                     
                     return unknownType;
                 }
                 
                 if (!seen) {
+                    if (promisedType === type) {
+                        // if we have a bad actor in the form of a promise whose promised type is the same 
+                        // promise, return the unknown type as we cannot guess the shape.
+                        // if this were the actual case in the JavaScript, this Promise would never resolve.
+                        if (location) {
+                            error(location, Diagnostics.Operand_for_await_does_not_have_a_valid_callable_then_member);
+                        }
+                        
+                        return unknownType;
+                    }
+                    
                     seen = [];
                     seen[type.id] = true;
-                    seen[promisedType.id] = true;
                 }
-                else if (seen[nestedPromisedType.id]) {
+                else if (seen[promisedType.id]) {
                     // if we've already seen this type, this is a promise that 
                     // would never resolve. As above, we return the unknown type.
                     if (location) {
@@ -9068,8 +9088,8 @@ module ts {
                     return unknownType;
                 }
                 
-                seen[nestedPromisedType.id] = true;
-                promisedType = nestedPromisedType;
+                seen[promisedType.id] = true;
+                type = promisedType;
             }
         }
 
@@ -9089,15 +9109,11 @@ module ts {
         function checkAsyncFunctionReturnType(node: SignatureDeclaration, returnType: Type): Type {
             let globalPromiseConstructorLikeType = getGlobalPromiseConstructorLikeType();
             if (globalPromiseConstructorLikeType !== emptyObjectType) {
-                if (!returnType) {
-                    returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(node));
-                }
-                                
-                // get the constructor type of the return type                
+                // get the constructor type of the return type
                 let declaredType = returnType.symbol ? getTypeOfSymbol(returnType.symbol) : emptyObjectType;
                 if (isTypeAssignableTo(declaredType, globalPromiseConstructorLikeType)) {
                     let promisedType = getPromisedType(returnType);
-                    if (promisedType !== unknownType) {
+                    if (promisedType) {
                         // unwrap the promised type
                         let promiseConstructor = getPromiseConstructor(node);
                         if (promiseConstructor) {
@@ -10045,7 +10061,7 @@ module ts {
                             }
                         }
                         else if (func.type && !isAccessor(func.kind) && isAsyncFunctionLike(func)) {
-                            checkTypeAssignableTo(getAwaitedType(exprType), getPromisedType(returnType), node.expression);
+                            checkTypeAssignableTo(getAwaitedType(exprType), getAwaitedType(returnType), node.expression);
                         }
                         else if (func.type || isGetAccessorWithAnnotatatedSetAccessor(func)) {
                             checkTypeAssignableTo(exprType, returnType, node.expression);
@@ -12379,6 +12395,7 @@ module ts {
             getGlobalMethodDecoratorType = memoize(() => getGlobalType("MethodDecorator"));
             getGlobalParameterDecoratorType = memoize(() => getGlobalType("ParameterDecorator"));
             getGlobalPromiseType = memoize(() => getGlobalType("Promise", /*arity*/ 1));
+            tryGetGlobalPromiseType = memoize(() => getGlobalSymbol("Promise", SymbolFlags.Type, /*diagnostic*/ undefined) && getGlobalPromiseType());
             getGlobalPromiseLikeType = memoize(() => getGlobalType("PromiseLike", /*arity*/ 1));
             getInstantiatedGlobalPromiseLikeType = memoize(createInstantiatedPromiseLikeType);
             getGlobalPromiseConstructorSymbol = memoize(() => getGlobalValueSymbol("Promise"));
