@@ -459,6 +459,14 @@ module ts {
             if (path.charCodeAt(2) === CharacterCodes.slash) return 3;
             return 2;
         }
+        // Per RFC 1738'file' URI schema has a shape file://<host>/<path>
+        // if <host> is omitted then it is assumed that host value is'localhost',
+        // however slash after the omitted <host> is not removed.
+        // file:///folder1/file1 - this is correct URI
+        // file://folder2/file2 - this is incorrect URI
+        if (path.lastIndexOf("file:///", 0) === 0) {
+            return "file:///".length;
+        }
         let idx = path.indexOf('://');
         if (idx !== -1) return idx + 3
         return 0;
