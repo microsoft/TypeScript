@@ -155,6 +155,7 @@ module ts {
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
+        let resolvedExternalModuleCache: Map<string> = {};
 
         let start = new Date().getTime();
 
@@ -184,6 +185,7 @@ module ts {
             getIdentifierCount: () => getDiagnosticsProducingTypeChecker().getIdentifierCount(),
             getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
+            resolveExternalModule
         };
         return program;
 
@@ -235,6 +237,60 @@ module ts {
 
             emitTime += new Date().getTime() - start;
             return emitResult;
+        }
+        
+        function resolveExternalModule(moduleName: string, searchPath: string): string {
+            let cacheLookupName = moduleName + searchPath;
+            if (resolvedExternalModuleCache[cacheLookupName]) {
+                return resolvedExternalModuleCache[cacheLookupName];
+            }
+            if (resolvedExternalModuleCache[cacheLookupName] === '') {
+                return undefined;
+            }
+            function getNameIfExists(fileName: string): string {
+                if (sys.fileExists(fileName)) {
+                    return fileName;
+                }
+            }
+            while (true) {
+                // Look at files by all extensions
+                let found = forEach(supportedExtensions,
+                    extension => getNameIfExists(normalizePath(combinePaths(searchPath, moduleName)) + extension));
+                // Also look at all files by node_modules
+                if (!found) {
+                    found = forEach(supportedExtensions,
+                        extension => getNameIfExists(normalizePath(combinePaths(combinePaths(searchPath, "node_modules"), moduleName)) + extension));
+                }
+                // Also look at package.json's main in node_modules
+                if (!found) {
+                    // If we found a package.json then look at its main field
+                    let pkgJson = getNameIfExists(normalizePath(combinePaths(combinePaths(combinePaths(searchPath, "node_modules"), moduleName), "package.json")));
+                    if (pkgJson) {
+                        let pkgFile = JSON.parse(sys.readFile(pkgJson));
+                        if (pkgFile.main) {
+                            var indexFileName = removeFileExtension(combinePaths(getDirectoryPath(pkgJson), pkgFile.main));
+                            found = forEach(supportedExtensions,
+                                extension => getNameIfExists(indexFileName + extension))
+                        }
+                    }
+                }
+                // look at node_modules index
+                if (!found) {
+                    found = forEach(supportedExtensions,
+                        extension => getNameIfExists(normalizePath(combinePaths(combinePaths(combinePaths(searchPath, "node_modules"), moduleName), "index")) + extension));
+                }
+                
+                // Finally cache and return or continue up the directory tree
+                if (found) {
+                    return resolvedExternalModuleCache[cacheLookupName] = found;
+                }
+                let parentPath = getDirectoryPath(searchPath);
+                if (parentPath === searchPath) {
+                    resolvedExternalModuleCache[cacheLookupName] = '';
+                    return undefined;
+                }
+                searchPath = parentPath;
+            }
         }
 
         function getSourceFile(fileName: string) {
@@ -428,18 +484,9 @@ module ts {
                     if (moduleNameExpr && moduleNameExpr.kind === SyntaxKind.StringLiteral) {
                         let moduleNameText = (<LiteralExpression>moduleNameExpr).text;
                         if (moduleNameText) {
-                            let searchPath = basePath;
-                            let searchName: string; 
-                            while (true) {
-                                searchName = normalizePath(combinePaths(searchPath, moduleNameText));
-                                if (forEach(supportedExtensions, extension => findModuleSourceFile(searchName + extension, moduleNameExpr))) {
-                                    break;
-                                }
-                                let parentPath = getDirectoryPath(searchPath);
-                                if (parentPath === searchPath) {
-                                    break;
-                                }
-                                searchPath = parentPath;
+                            let resolvedName: string = resolveExternalModule(moduleNameText, getDirectoryPath(file.fileName));
+                            if (resolvedName) {
+                                findModuleSourceFile(resolvedName, moduleNameExpr);
                             }
                         }
                     }
