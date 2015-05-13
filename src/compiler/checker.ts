@@ -3567,19 +3567,7 @@ module ts {
             return false;
         }
 
-        // Since removeSubtypes checks the subtype relation, and the subtype relation on a union
-        // may attempt to reduce a union, it is possible that removeSubtypes could be called
-        // recursively on the same set of types. The removeSubtypesStack is used to track which
-        // sets of types are currently undergoing subtype reduction.
-        let removeSubtypesStack: string[] = [];
         function removeSubtypes(types: Type[]) {
-            let typeListId = getTypeListId(types);
-            if (removeSubtypesStack.lastIndexOf(typeListId) >= 0) {
-                return;
-            }
-
-            removeSubtypesStack.push(typeListId);
-
             let i = types.length;
             while (i > 0) {
                 i--;
@@ -3587,8 +3575,6 @@ module ts {
                     types.splice(i, 1);
                 }
             }
-
-            removeSubtypesStack.pop();
         }
 
         function containsAnyType(types: Type[]) {
