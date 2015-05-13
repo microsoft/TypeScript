@@ -1101,7 +1101,7 @@ module ts {
     }
 
     export function isAsyncFunctionLike(node: Node): boolean {
-        return isFunctionLike(node) && !isAccessor(node) && (node.flags & NodeFlags.Async) === NodeFlags.Async;
+        return isFunctionLike(node) && (node.flags & NodeFlags.Async) !== 0 && !isAccessor(node);
     }
 
     /**
@@ -1453,8 +1453,10 @@ module ts {
 
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
         if (!isDeclarationFile(sourceFile)) {
-            if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.fileName, ".js")) {
-                return true;
+            if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
+                // 1. in-browser single file compilation scenario
+                // 2. non .js file
+                return compilerOptions.separateCompilation || !fileExtensionIs(sourceFile.fileName, ".js");
             }
             return false;
         }
@@ -1712,7 +1714,7 @@ module ts {
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-            return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
+        return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 
     /**

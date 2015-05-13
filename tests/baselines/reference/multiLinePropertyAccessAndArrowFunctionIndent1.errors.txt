@@ -1,6 +1,6 @@
 tests/cases/compiler/multiLinePropertyAccessAndArrowFunctionIndent1.ts(1,1): error TS1108: A 'return' statement can only be used within a function body.
 tests/cases/compiler/multiLinePropertyAccessAndArrowFunctionIndent1.ts(2,18): error TS2304: Cannot find name 'Role'.
-tests/cases/compiler/multiLinePropertyAccessAndArrowFunctionIndent1.ts(4,26): error TS2304: Cannot find name 'ng'.
+tests/cases/compiler/multiLinePropertyAccessAndArrowFunctionIndent1.ts(4,26): error TS2503: Cannot find namespace 'ng'.
 
 
 ==== tests/cases/compiler/multiLinePropertyAccessAndArrowFunctionIndent1.ts (3 errors) ====
@@ -13,5 +13,5 @@ tests/cases/compiler/multiLinePropertyAccessAndArrowFunctionIndent1.ts(4,26): er
             this.roleService.add(role)
                 .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data));
                              ~~
-!!! error TS2304: Cannot find name 'ng'.
+!!! error TS2503: Cannot find namespace 'ng'.
     

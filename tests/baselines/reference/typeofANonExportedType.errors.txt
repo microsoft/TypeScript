@@ -1,7 +1,8 @@
 tests/cases/conformance/types/specifyingTypes/typeQueries/typeofANonExportedType.ts(2,1): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofANonExportedType.ts(42,12): error TS2502: 'r12' is referenced directly or indirectly in its own type annotation.
 
 
-==== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofANonExportedType.ts (1 errors) ====
+==== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofANonExportedType.ts (2 errors) ====
     var x = 1;
     export var r1: typeof x;
     ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -46,6 +47,8 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/typeofANonExportedType
     export var r11: typeof E.A;
     
     export var r12: typeof r12;
+               ~~~
+!!! error TS2502: 'r12' is referenced directly or indirectly in its own type annotation.
     
     function foo() { }
     module foo {

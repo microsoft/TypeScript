@@ -187,7 +187,7 @@
         "category": "Error",
         "code": 1057
     },
-    "Type for 'await' does not have a valid callable 'then' member.": {
+    "Operand for 'await' does not have a valid callable 'then' member.": {
         "category": "Error",
         "code": 1058
     },
@@ -712,45 +712,9 @@
         "category": "Error",
         "code": 1300
     },
-    "'{0}' modifier cannot be used with a generator.": {
-        "category": "Error",
-        "code": 1301
-    },
-    "'{0}' modifier cannot be used with a module declaration.": {
-        "category": "Error",
-        "code": 1302
-    },
-    "'{0}' modifier cannot be used with an enum declaration.": {
-        "category": "Error",
-        "code": 1303
-    },
-    "'{0}' modifier cannot be used with an export assignment declaration.": {
-        "category": "Error",
-        "code": 1304
-    },
-    "'{0}' modifier cannot be used on a variable statement.": {
-        "category": "Error",
-        "code": 1305
-    },
-    "'{0}' modifier cannot be used with a type declaration.": {
-        "category": "Error",
-        "code": 1306
-    },
-    "'{0}' modifier cannot be used with a parameter declaration.": {
-        "category": "Error",
-        "code": 1307
-    },
-    "'await' expression must be contained within an async function.": {
+    "'await' expression is only allowed within an async function.": {
         "category": "Error",
         "code": 1308
-    },
-    "'{0}' modifier cannot be used on an object literal element.": {
-        "category": "Error",
-        "code": 1309
-    },
-    "'{0}' expression is not allowed in an initializer.": {
-        "category": "Error",
-        "code": 1310
     },
     "Async functions are only available when targeting ECMAScript 6 and higher.": {
         "category": "Error",
@@ -1513,6 +1477,14 @@
         "category": "Error",
         "code": 2501
     },
+    "'{0}' is referenced directly or indirectly in its own type annotation.": {
+        "category": "Error",
+        "code": 2502
+    },
+    "Cannot find namespace '{0}'.": {
+        "category": "Error",
+        "code": 2503
+    },
 
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
@@ -2096,10 +2068,6 @@
         "category": "Error", 
         "code": 6062
     },
-    "Emit async functions when ECMAScript target version is lower than 'ES6'.": {
-        "category": "Message",
-        "code": 6063
-    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -2148,10 +2116,6 @@
     "Call signature, which lacks return-type annotation, implicitly has an 'any' return type.": {
         "category": "Error",
         "code": 7020
-    },
-    "'{0}' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.": {
-        "category": "Error",
-        "code": 7021
     },
     "'{0}' implicitly has type 'any' because it is does not have a type annotation and is referenced directly or indirectly in its own initializer.": {
         "category": "Error",
