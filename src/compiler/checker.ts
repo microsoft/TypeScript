@@ -859,7 +859,7 @@ module ts {
             }
             let fileName: string;
             let sourceFile: SourceFile;
-            let resolvedName: string = host.resolveExternalModule(moduleName, searchPath);
+            let resolvedName = host.resolveExternalModule(moduleName, searchPath);
             if (resolvedName) {
                sourceFile = host.getSourceFile(resolvedName);
             }

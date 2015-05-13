@@ -484,7 +484,7 @@ module ts {
                     if (moduleNameExpr && moduleNameExpr.kind === SyntaxKind.StringLiteral) {
                         let moduleNameText = (<LiteralExpression>moduleNameExpr).text;
                         if (moduleNameText) {
-                            let resolvedName: string = resolveExternalModule(moduleNameText, getDirectoryPath(file.fileName));
+                            let resolvedName = resolveExternalModule(moduleNameText, getDirectoryPath(file.fileName));
                             if (resolvedName) {
                                 findModuleSourceFile(resolvedName, moduleNameExpr);
                             }
