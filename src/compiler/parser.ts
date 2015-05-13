@@ -984,17 +984,10 @@ module ts {
             return finishNode(node);
         }
 
-        function parseContextualModifier(t: SyntaxKind, isArrowFunction?: boolean): boolean {
-            return token === t && tryParse(isArrowFunction 
-                ? nextTokenCanFollowModifierForArrowFunction
-                : nextTokenCanFollowModifier);
+        function parseContextualModifier(t: SyntaxKind): boolean {
+            return token === t && tryParse(nextTokenCanFollowModifier);
         }
         
-        function nextTokenCanFollowModifierForArrowFunction() {
-            nextToken();
-            return canFollowModifierForArrowFunction();
-        }
-
         function nextTokenCanFollowModifier() {
             if (token === SyntaxKind.ConstKeyword) {
                 // 'const' is only a modifier if followed by 'enum'.
@@ -1014,24 +1007,8 @@ module ts {
             return canFollowModifier();
         }
         
-        function parseAnyContextualModifier(isArrowFunction?: boolean): boolean {
-            return isModifier(token) && tryParse(isArrowFunction
-                ? nextTokenCanFollowModifierForArrowFunction
-                : nextTokenCanFollowModifier);
-        }
-	
-	function canFollowModifierForArrowFunction(): boolean {
-            // Arrow functions can have an `async` modifier, but the rules for what can follow that modifier
-            // differ from the rules for any other declaration.
-            // The `async` modifier on an async function can only be followed by an open parenthesis,
-            // or a less than token (in the case of a generic arrow function).
-            // In addition, the `async` modifier must appear on the same line as the following token.
-            if (scanner.hasPrecedingLineBreak()) {
-                return false;
-            }
-        
-            return token === SyntaxKind.OpenParenToken
-                || token === SyntaxKind.LessThanToken;
+        function parseAnyContextualModifier(): boolean {
+            return isModifier(token) && tryParse(nextTokenCanFollowModifier);
         }
 
         function canFollowModifier(): boolean {
@@ -2709,8 +2686,11 @@ module ts {
         }
 
         function isParenthesizedArrowFunctionExpressionWorker() {
-            if (token === SyntaxKind.AsyncKeyword && !parseContextualModifier(SyntaxKind.AsyncKeyword, /*isArrowFunction*/ true)) {
-                return Tristate.False;
+            if (token === SyntaxKind.AsyncKeyword) {
+                nextToken();
+                if (scanner.hasPrecedingLineBreak()) {
+                    return Tristate.False;
+                }
             }
             
             let first = token;
@@ -2788,7 +2768,7 @@ module ts {
 
         function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity: boolean): ArrowFunction {
             let node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction);
-            setModifiers(node, parseModifiers(/*isArrowFunction*/ true));
+            setModifiers(node, parseModifiersForArrowFunction());
             let isAsync = isAsyncFunctionLike(node);
             
             // Arrow functions are never generators.
@@ -3451,8 +3431,8 @@ module ts {
             return finishNode(node);
         }
 
-        function parseFunctionExpression(): FunctionExpression {
             // GeneratorExpression :
+        function parseFunctionExpression(): FunctionExpression {
             //      function * BindingIdentifier[Yield]opt (FormalParameters[Yield, GeneratorParameter]) { GeneratorBody[Yield] }
             // FunctionExpression:
             //      function BindingIdentifieropt(FormalParameters) { FunctionBody }
@@ -4283,14 +4263,14 @@ module ts {
             return decorators;
         }
 
-        function parseModifiers(isArrowFunction?: boolean): ModifiersArray {
+        function parseModifiers(): ModifiersArray {
             let flags = 0;
             let modifiers: ModifiersArray;
             while (true) {
                 let modifierStart = scanner.getStartPos();
                 let modifierKind = token;
 
-                if (!parseAnyContextualModifier(isArrowFunction)) {
+                if (!parseAnyContextualModifier()) {
                     break;
                 }
 
@@ -4298,6 +4278,7 @@ module ts {
                     modifiers = <ModifiersArray>[];
                     modifiers.pos = modifierStart;
                 }
+                
                 flags |= modifierToFlag(modifierKind);
                 modifiers.push(finishNode(createNode(modifierKind, modifierStart)));
             }
@@ -4305,6 +4286,23 @@ module ts {
                 modifiers.flags = flags;
                 modifiers.end = scanner.getStartPos();
             }
+            return modifiers;
+        }
+
+        function parseModifiersForArrowFunction(): ModifiersArray {
+            let flags = 0;
+            let modifiers: ModifiersArray;
+            if (token === SyntaxKind.AsyncKeyword) {
+                let modifierStart = scanner.getStartPos();
+                let modifierKind = token;
+                modifiers = <ModifiersArray>[];
+                modifiers.pos = modifierStart;
+                flags |= modifierToFlag(modifierKind);
+                modifiers.push(finishNode(createNode(modifierKind, modifierStart)));
+                modifiers.flags = flags;
+                modifiers.end = scanner.getStartPos();
+            }
+            
             return modifiers;
         }
 
