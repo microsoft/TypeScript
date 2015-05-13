@@ -1,4 +1,4 @@
-//// [unionTypeWithRecursiveSubtypeReduction2.ts]
+//// [unionTypeWithRecursiveSubtypeReduction.ts]
 class Module {
     public members: Class[];
 }
@@ -15,17 +15,10 @@ class Property {
     public parent: Module | Class;
 }
 
-var c: Class;
-var p: Property;
-c = p;
-<<<<<<< HEAD
-p = c;
+var t: Class | Property;
+t.parent;
 
-=======
-p = c;
->>>>>>> master
-
-//// [unionTypeWithRecursiveSubtypeReduction2.js]
+//// [unionTypeWithRecursiveSubtypeReduction.js]
 var Module = (function () {
     function Module() {
     }
@@ -46,7 +39,5 @@ var Property = (function () {
     }
     return Property;
 })();
-var c;
-var p;
-c = p;
-p = c;
+var t;
+t.parent;
