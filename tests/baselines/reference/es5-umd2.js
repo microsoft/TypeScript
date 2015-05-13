@@ -33,10 +33,3 @@ export class A
     })();
     exports.A = A;
 });
-//# sourceMappingURL=es5-umd2.js.map
-
-//// [es5-umd2.d.ts]
-export declare class A {
-    constructor();
-    B(): number;
-}

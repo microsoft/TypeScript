@@ -866,10 +866,11 @@ module ts {
                     return symbol;
                 }
             }
+            let fileName: string;
             let sourceFile: SourceFile;
             while (true) {
-                let fileName = normalizePath(combinePaths(searchPath, moduleName));
-                sourceFile = host.getSourceFile(fileName + ".ts") || host.getSourceFile(fileName + ".d.ts");
+                fileName = normalizePath(combinePaths(searchPath, moduleName));
+                sourceFile = forEach(supportedExtensions, extension => host.getSourceFile(fileName + extension));
                 if (sourceFile || isRelative) {
                     break;
                 }
@@ -2057,13 +2058,6 @@ module ts {
         function popTypeResolution(): boolean {
             resolutionTargets.pop();
             return resolutionResults.pop();
-        }
-
-        function getRootDeclaration(node: Node): Node {
-            while (node.kind === SyntaxKind.BindingElement) {
-                node = node.parent.parent;
-            }
-            return node;
         }
 
         function getDeclarationContainer(node: Node): Node {
@@ -5395,38 +5389,43 @@ module ts {
                 if (!isTypeSubtypeOf(rightType, globalFunctionType)) {
                     return type;
                 }
-                // Target type is type of prototype property
+
+                let targetType: Type;
                 let prototypeProperty = getPropertyOfType(rightType, "prototype");
                 if (prototypeProperty) {
-                    let targetType = getTypeOfSymbol(prototypeProperty);
-                    if (targetType !== anyType) {
-                        // Narrow to the target type if it's a subtype of the current type
-                        if (isTypeSubtypeOf(targetType, type)) {
-                            return targetType;
-                        }
-                        // If the current type is a union type, remove all constituents that aren't subtypes of the target.
-                        if (type.flags & TypeFlags.Union) {
-                            return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, targetType)));
-                        }
+                    // Target type is type of the protoype property
+                    let prototypePropertyType = getTypeOfSymbol(prototypeProperty);
+                    if (prototypePropertyType !== anyType) {
+                        targetType = prototypePropertyType;
                     }
-                }
-                // Target type is type of construct signature
-                let constructSignatures: Signature[];
-                if (rightType.flags & TypeFlags.Interface) {
-                    constructSignatures = resolveDeclaredMembers(<InterfaceType>rightType).declaredConstructSignatures;
-                }
-                else if (rightType.flags & TypeFlags.Anonymous) {
-                    constructSignatures = getSignaturesOfType(rightType, SignatureKind.Construct);
                 }
 
-                if (constructSignatures && constructSignatures.length !== 0) {
-                    let instanceType = getUnionType(map(constructSignatures, signature => getReturnTypeOfSignature(getErasedSignature(signature))));
-                    // Pickup type from union types
-                    if (type.flags & TypeFlags.Union) {
-                        return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, instanceType)));
+                if (!targetType) {
+                    // Target type is type of construct signature
+                    let constructSignatures: Signature[];
+                    if (rightType.flags & TypeFlags.Interface) {
+                        constructSignatures = resolveDeclaredMembers(<InterfaceType>rightType).declaredConstructSignatures;
                     }
-                    return instanceType;
+                    else if (rightType.flags & TypeFlags.Anonymous) {
+                        constructSignatures = getSignaturesOfType(rightType, SignatureKind.Construct);
+                    }
+
+                    if (constructSignatures && constructSignatures.length) {
+                        targetType = getUnionType(map(constructSignatures, signature => getReturnTypeOfSignature(getErasedSignature(signature))));
+                    }
                 }
+
+                if (targetType) {
+                    // Narrow to the target type if it's a subtype of the current type
+                    if (isTypeSubtypeOf(targetType, type)) {
+                        return targetType;
+                    }
+                    // If the current type is a union type, remove all constituents that aren't subtypes of the target.
+                    if (type.flags & TypeFlags.Union) {
+                        return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, targetType)));
+                    }
+                }
+
                 return type;
             }
 
@@ -9529,13 +9528,6 @@ module ts {
             }
         }
                 
-        function isParameterDeclaration(node: VariableLikeDeclaration) {
-            while (node.kind === SyntaxKind.BindingElement) {
-                node = <VariableLikeDeclaration>node.parent.parent;
-            }
-            return node.kind === SyntaxKind.Parameter;
-        }
-
         // Check that a parameter initializer contains no references to parameters declared to the right of itself
         function checkParameterInitializer(node: VariableLikeDeclaration): void {
             if (getRootDeclaration(node).kind !== SyntaxKind.Parameter) {

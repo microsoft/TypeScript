@@ -949,6 +949,7 @@ module ts {
     export interface LanguageServiceHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
+        getProjectVersion?(): string;
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): IScriptSnapshot;
@@ -2353,6 +2354,7 @@ module ts {
         let syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         let ruleProvider: formatting.RulesProvider;
         let program: Program;
+        let lastProjectVersion: string;
 
         let useCaseSensitivefileNames = false;
         let cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
@@ -2392,6 +2394,18 @@ module ts {
         }
 
         function synchronizeHostData(): void {
+            // perform fast check if host supports it
+            if (host.getProjectVersion) {
+                let hostProjectVersion = host.getProjectVersion();
+                if (hostProjectVersion) {
+                    if (lastProjectVersion === hostProjectVersion) {
+                        return;
+                    }
+
+                    lastProjectVersion = hostProjectVersion;
+                }
+            }
+
             // Get a fresh cache of the host information
             let hostCache = new HostCache(host, getCanonicalFileName);
 
@@ -6039,11 +6053,13 @@ module ts {
                     let end = triviaScanner.getTextPos();
                     let width = end - start;
 
-                    if (textSpanIntersectsWith(span, start, width)) {
-                        if (!isTrivia(kind)) {
-                            return;
-                        }
+                    // The moment we get something that isn't trivia, then stop processing.
+                    if (!isTrivia(kind)) {
+                        return;
+                    }
 
+                    // Only bother with the trivia if it at least intersects the span of interest.
+                    if (textSpanIntersectsWith(span, start, width)) {
                         if (isComment(kind)) {
                             // Simple comment.  Just add as is.
                             pushClassification(start, width, ClassificationType.comment);

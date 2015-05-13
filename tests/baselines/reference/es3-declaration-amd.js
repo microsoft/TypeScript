@@ -22,7 +22,7 @@ var A = (function () {
     };
     return A;
 })();
-//# sourceMappingURL=es3-declaration-amd.js.map
+
 
 //// [es3-declaration-amd.d.ts]
 declare class A {

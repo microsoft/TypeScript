@@ -484,9 +484,6 @@ module ts {
                 case SyntaxKind.IndexSignature:
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ArrowFunction:
-                case SyntaxKind.FunctionDeclaration:
                     return true;
             }
         }
@@ -1166,6 +1163,18 @@ module ts {
                 return true;
         }
         return false;
+    }
+
+    export function isParameterDeclaration(node: VariableLikeDeclaration) {
+        let root = getRootDeclaration(node);
+        return root.kind === SyntaxKind.Parameter;
+    }
+
+    export function getRootDeclaration(node: Node): Node {
+        while (node.kind === SyntaxKind.BindingElement) {
+            node = node.parent.parent;
+        }
+        return node;
     }
         
     export function nodeStartsNewLexicalEnvironment(n: Node): boolean {

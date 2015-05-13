@@ -988,17 +988,6 @@ module ts {
         }
 
         function nextTokenCanFollowModifier() {
-            nextToken();
-            return canFollowModifier();
-        }
-
-        function parseAnyContextualModifier(isArrowFunction?: boolean): boolean {
-            return isModifier(token) && tryParse(isArrowFunction
-                ? nextTokenCanFollowModifierForArrowFunction
-                : nextTokenCanFollowContextualModifier);
-        }
-        
-        function nextTokenCanFollowContextualModifier() {
             if (token === SyntaxKind.ConstKeyword) {
                 // 'const' is only a modifier if followed by 'enum'.
                 return nextToken() === SyntaxKind.EnumKeyword;
@@ -1017,7 +1006,13 @@ module ts {
             return canFollowModifier();
         }
         
-        function canFollowModifierForArrowFunction(): boolean {
+        function parseAnyContextualModifier(isArrowFunction?: boolean): boolean {
+            return isModifier(token) && tryParse(isArrowFunction
+                ? nextTokenCanFollowModifierForArrowFunction
+                : nextTokenCanFollowModifier);
+        }
+	
+	function canFollowModifierForArrowFunction(): boolean {
             // Arrow functions can have an `async` modifier, but the rules for what can follow that modifier
             // differ from the rules for any other declaration.
             // The `async` modifier on an async function can only be followed by an open parenthesis,

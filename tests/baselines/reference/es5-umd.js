@@ -23,10 +23,3 @@ var A = (function () {
     };
     return A;
 })();
-//# sourceMappingURL=es5-umd.js.map
-
-//// [es5-umd.d.ts]
-declare class A {
-    constructor();
-    B(): number;
-}
