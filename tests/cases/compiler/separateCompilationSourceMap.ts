@@ -1,5 +1,5 @@
 // @separateCompilation: true
-// @sourceMap:sourcemap.map
+// @sourceMap:true
 // @target: es6
 
 // @filename: file1.ts

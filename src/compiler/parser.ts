@@ -957,15 +957,6 @@ module ts {
         }
 
         function nextTokenCanFollowModifier() {
-            nextToken();
-            return canFollowModifier();
-        }
-
-        function parseAnyContextualModifier(): boolean {
-            return isModifier(token) && tryParse(nextTokenCanFollowContextualModifier);
-        }
-
-        function nextTokenCanFollowContextualModifier() {
             if (token === SyntaxKind.ConstKeyword) {
                 // 'const' is only a modifier if followed by 'enum'.
                 return nextToken() === SyntaxKind.EnumKeyword;
@@ -982,6 +973,10 @@ module ts {
             }
             nextToken();
             return canFollowModifier();
+        }
+
+        function parseAnyContextualModifier(): boolean {
+            return isModifier(token) && tryParse(nextTokenCanFollowModifier);
         }
 
         function canFollowModifier(): boolean {
@@ -1691,7 +1686,7 @@ module ts {
             do {
                 templateSpans.push(parseTemplateSpan());
             }
-            while (templateSpans[templateSpans.length - 1].literal.kind === SyntaxKind.TemplateMiddle)
+            while (lastOrUndefined(templateSpans).literal.kind === SyntaxKind.TemplateMiddle)
 
             templateSpans.end = getNodeEnd();
             template.templateSpans = templateSpans;

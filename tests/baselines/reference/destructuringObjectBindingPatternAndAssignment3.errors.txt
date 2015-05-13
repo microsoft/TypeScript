@@ -1,0 +1,42 @@
+tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(2,7): error TS1005: ',' expected.
+tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(3,5): error TS2322: Type '{ i: number; }' is not assignable to type 'string | number'.
+  Type '{ i: number; }' is not assignable to type 'number'.
+tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(3,6): error TS2459: Type 'string | number' has no property 'i' and no string index signature.
+tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(4,6): error TS2459: Type 'string | number | {}' has no property 'i1' and no string index signature.
+tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(5,12): error TS2459: Type '{ f212: string; }' has no property 'f21' and no string index signature.
+tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(6,7): error TS1180: Property destructuring pattern expected.
+tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(9,7): error TS1005: ':' expected.
+tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(9,15): error TS1005: ':' expected.
+tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts(10,12): error TS1005: ':' expected.
+
+
+==== tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts (9 errors) ====
+    // Error
+    var {h?} = { h?: 1 };
+          ~
+!!! error TS1005: ',' expected.
+    var {i}: string | number = { i: 2 };
+        ~~~
+!!! error TS2322: Type '{ i: number; }' is not assignable to type 'string | number'.
+!!! error TS2322:   Type '{ i: number; }' is not assignable to type 'number'.
+         ~
+!!! error TS2459: Type 'string | number' has no property 'i' and no string index signature.
+    var {i1}: string | number| {} = { i1: 2 };
+         ~~
+!!! error TS2459: Type 'string | number | {}' has no property 'i1' and no string index signature.
+    var { f2: {f21} = { f212: "string" } }: any = undefined;
+               ~~~
+!!! error TS2459: Type '{ f212: string; }' has no property 'f21' and no string index signature.
+    var { ...d1 } = {
+          ~~~
+!!! error TS1180: Property destructuring pattern expected.
+        a: 1, b: 1, d1: 9, e: 10
+    }
+    var {1} = { 1 };
+          ~
+!!! error TS1005: ':' expected.
+                  ~
+!!! error TS1005: ':' expected.
+    var {"prop"} = { "prop": 1 };
+               ~
+!!! error TS1005: ':' expected.

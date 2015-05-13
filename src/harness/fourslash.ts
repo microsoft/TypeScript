@@ -144,10 +144,10 @@ module FourSlash {
             if (globalOptions.hasOwnProperty(prop)) {
                 switch (prop) {
                     case metadataOptionNames.allowNonTsExtensions:
-                        settings.allowNonTsExtensions = true;
+                        settings.allowNonTsExtensions = globalOptions[prop] === "true";
                         break;
                     case metadataOptionNames.declaration:
-                        settings.declaration = true;
+                        settings.declaration = globalOptions[prop] === "true";
                         break;
                     case metadataOptionNames.mapRoot:
                         settings.mapRoot = globalOptions[prop];
@@ -174,7 +174,7 @@ module FourSlash {
                         settings.outDir = globalOptions[prop];
                         break;
                     case metadataOptionNames.sourceMap:
-                        settings.sourceMap = true;
+                        settings.sourceMap = globalOptions[prop] === "true";
                         break;
                     case metadataOptionNames.sourceRoot:
                         settings.sourceRoot = globalOptions[prop];
@@ -308,7 +308,7 @@ module FourSlash {
             ts.forEach(testData.files, file => {
                 // Create map between fileName and its content for easily looking up when resolveReference flag is specified
                 this.inputFiles[file.fileName] = file.content;
-                if (!startResolveFileRef && file.fileOptions[metadataOptionNames.resolveReference]) {
+                if (!startResolveFileRef && file.fileOptions[metadataOptionNames.resolveReference] === "true") {
                     startResolveFileRef = file;
                 } else if (startResolveFileRef) {
                     // If entry point for resolving file references is already specified, report duplication error
@@ -1158,7 +1158,7 @@ module FourSlash {
             var allFourSlashFiles = this.testData.files;
             for (var idx = 0; idx < allFourSlashFiles.length; ++idx) {
                 var file = allFourSlashFiles[idx];
-                if (file.fileOptions[metadataOptionNames.emitThisFile]) {
+                if (file.fileOptions[metadataOptionNames.emitThisFile] === "true") {
                     // Find a file with the flag emitThisFile turned on
                     emitFiles.push(file);
                 }
@@ -1570,6 +1570,28 @@ module FourSlash {
             this.currentCaretPosition = definition.textSpan.start;
         }
 
+        public goToTypeDefinition(definitionIndex: number) {
+            if (definitionIndex === 0) {
+                this.scenarioActions.push('<GoToTypeDefinition />');
+            }
+            else {
+                this.taoInvalidReason = 'GoToTypeDefinition not supported for non-zero definition indices';
+            }
+
+            var definitions = this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            if (!definitions || !definitions.length) {
+                this.raiseError('goToTypeDefinition failed - expected to at least one definition location but got 0');
+            }
+
+            if (definitionIndex >= definitions.length) {
+                this.raiseError('goToTypeDefinition failed - definitionIndex value (' + definitionIndex + ') exceeds definition list size (' + definitions.length + ')');
+            }
+
+            var definition = definitions[definitionIndex];
+            this.openFile(definition.fileName);
+            this.currentCaretPosition = definition.textSpan.start;
+        }
+
         public verifyDefinitionLocationExists(negative: boolean) {
             this.taoInvalidReason = 'verifyDefinitionLocationExists NYI';
 
@@ -1589,8 +1611,18 @@ module FourSlash {
             var assertFn = negative ? assert.notEqual : assert.equal;
 
             var definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            var actualCount = definitions && definitions.length || 0;
 
-            assertFn(definitions.length, expectedCount, this.messageAtLastKnownMarker("Definitions Count"));
+            assertFn(actualCount, expectedCount, this.messageAtLastKnownMarker("Definitions Count"));
+        }
+
+        public verifyTypeDefinitionsCount(negative: boolean, expectedCount: number) {
+            var assertFn = negative ? assert.notEqual : assert.equal;
+
+            var definitions = this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            var actualCount = definitions && definitions.length || 0;
+
+            assertFn(actualCount, expectedCount, this.messageAtLastKnownMarker("Type definitions Count"));
         }
 
         public verifyDefinitionsName(negative: boolean, expectedName: string, expectedContainerName: string) {

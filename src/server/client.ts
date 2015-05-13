@@ -300,6 +300,32 @@ module ts.server {
             });
         }
 
+        getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
+            var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
+            var args: protocol.FileLocationRequestArgs = {
+                file: fileName,
+                line: lineOffset.line,
+                offset: lineOffset.offset,
+            };
+
+            var request = this.processRequest<protocol.TypeDefinitionRequest>(CommandNames.TypeDefinition, args);
+            var response = this.processResponse<protocol.TypeDefinitionResponse>(request);
+
+            return response.body.map(entry => {
+                var fileName = entry.file;
+                var start = this.lineOffsetToPosition(fileName, entry.start);
+                var end = this.lineOffsetToPosition(fileName, entry.end);
+                return {
+                    containerKind: "",
+                    containerName: "",
+                    fileName: fileName,
+                    textSpan: ts.createTextSpanFromBounds(start, end),
+                    kind: "",
+                    name: ""
+                };
+            });
+        }
+
         findReferences(fileName: string, position: number): ReferencedSymbol[]{
             // Not yet implemented.
             return [];
@@ -530,6 +556,14 @@ module ts.server {
         }
 
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+            throw new Error("Not Implemented Yet.");
+        }
+
+        getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications {
+            throw new Error("Not Implemented Yet.");
+        }
+
+        getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
             throw new Error("Not Implemented Yet.");
         }
 

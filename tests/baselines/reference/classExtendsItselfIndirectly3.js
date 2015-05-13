@@ -19,7 +19,7 @@ class D2<T> extends C2<T> { bar: T; }
 class E2<T> extends D2<T> { baz: T; }
 
 //// [classExtendsItselfIndirectly_file1.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -33,7 +33,7 @@ var C = (function (_super) {
     return C;
 })(E); // error
 //// [classExtendsItselfIndirectly_file2.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -47,7 +47,7 @@ var D = (function (_super) {
     return D;
 })(C);
 //// [classExtendsItselfIndirectly_file3.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -61,7 +61,7 @@ var E = (function (_super) {
     return E;
 })(D);
 //// [classExtendsItselfIndirectly_file4.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -75,7 +75,7 @@ var C2 = (function (_super) {
     return C2;
 })(E2); // error
 //// [classExtendsItselfIndirectly_file5.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -89,7 +89,7 @@ var D2 = (function (_super) {
     return D2;
 })(C2);
 //// [classExtendsItselfIndirectly_file6.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;

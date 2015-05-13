@@ -398,7 +398,7 @@ module ts.server {
 
     export class ProjectService {
         filenameToScriptInfo: ts.Map<ScriptInfo> = {};
-        // open, non-configured root files 
+        // open, non-configured root files
         openFileRoots: ScriptInfo[] = [];
         // projects built from openFileRoots
         inferredProjects: Project[] = [];
@@ -421,10 +421,10 @@ module ts.server {
                 hostInfo: "Unknown host"
             }
         }
-        
+
         getFormatCodeOptions(file?: string) {
             if (file) {
-                var info = this.filenameToScriptInfo[file];                
+                var info = this.filenameToScriptInfo[file];
                 if (info) {
                     return info.formatCodeOptions;
                 }
@@ -448,7 +448,7 @@ module ts.server {
                 }
             }
         }
-        
+
         log(msg: string, type = "Err") {
             this.psLogger.msg(msg, type);
         }
@@ -457,17 +457,17 @@ module ts.server {
             if (args.file) {
                 var info = this.filenameToScriptInfo[args.file];
                 if (info) {
-                    info.setFormatOptions(args.formatOptions);  
+                    info.setFormatOptions(args.formatOptions);
                     this.log("Host configuration update for file " + args.file, "Info");
                 }
             }
             else {
                 if (args.hostInfo !== undefined) {
                     this.hostConfiguration.hostInfo = args.hostInfo;
-                    this.log("Host information " + args.hostInfo, "Info");                    
+                    this.log("Host information " + args.hostInfo, "Info");
                 }
                 if (args.formatOptions) {
-                    mergeFormatOptions(this.hostConfiguration.formatCodeOptions, args.formatOptions);                    
+                    mergeFormatOptions(this.hostConfiguration.formatCodeOptions, args.formatOptions);
                     this.log("Format host information updated", "Info");
                 }
             }
@@ -487,7 +487,7 @@ module ts.server {
 
         fileDeletedInFilesystem(info: ScriptInfo) {
             this.psLogger.info(info.fileName + " deleted");
-            
+
             if (info.fileWatcher) {
                 info.fileWatcher.close();
                 info.fileWatcher = undefined;
@@ -537,7 +537,7 @@ module ts.server {
              }
              return false;
         }
-            
+
         addOpenFile(info: ScriptInfo) {
             if (this.setConfiguredProjectRoot(info)) {
                 this.openFileRootsConfigured.push(info);
@@ -561,7 +561,7 @@ module ts.server {
                             copyListRemovingItem(r.defaultProject, this.inferredProjects);
                             // put r in referenced open file list
                             this.openFilesReferenced.push(r);
-                            // set default project of r to the new project 
+                            // set default project of r to the new project
                             r.defaultProject = info.defaultProject;
                         }
                         else {
@@ -694,7 +694,7 @@ module ts.server {
             this.openFilesReferenced = openFilesReferenced;
 
             // Then, loop through all of the open files that are project roots.
-            // For each root file, note the project that it roots.  Then see if 
+            // For each root file, note the project that it roots.  Then see if
             // any other projects newly reference the file.  If zero projects
             // newly reference the file, keep it as a root.  If one or more
             // projects newly references the file, remove its project from the
@@ -719,7 +719,7 @@ module ts.server {
 
             // Finally, if we found any open, referenced files that are no longer
             // referenced by their default project, treat them as newly opened
-            // by the editor. 
+            // by the editor.
             for (var i = 0, len = unattachedOpenFiles.length; i < len; i++) {
                 this.addOpenFile(unattachedOpenFiles[i]);
             }
@@ -750,6 +750,7 @@ module ts.server {
                 if (content !== undefined) {
                     var indentSize: number;
                     info = new ScriptInfo(this.host, fileName, content, openedByClient);
+                    info.setFormatOptions(this.getFormatCodeOptions());
                     this.filenameToScriptInfo[fileName] = info;
                     if (!info.isOpen) {
                         info.fileWatcher = this.host.watchFile(fileName, _ => { this.watchedFileChanged(fileName); });
@@ -772,7 +773,7 @@ module ts.server {
         findConfigFile(searchPath: string): string {
             while (true) {
                 var fileName = ts.combinePaths(searchPath, "tsconfig.json");
-                if (sys.fileExists(fileName)) {
+                if (this.host.fileExists(fileName)) {
                     return fileName;
                 }
                 var parentPath = ts.getDirectoryPath(searchPath);
@@ -808,7 +809,7 @@ module ts.server {
                 }
                 else {
                     this.log("Opened configuration file " + configFileName,"Info");
-                    this.configuredProjects.push(configResult.project);                    
+                    this.configuredProjects.push(configResult.project);
                 }
             }
             var info = this.openFile(fileName, true);
@@ -900,29 +901,29 @@ module ts.server {
             }
             return false;
         }
-        
+
         openConfigFile(configFilename: string, clientFileName?: string): ProjectOpenResult {
             configFilename = ts.normalizePath(configFilename);
             // file references will be relative to dirPath (or absolute)
             var dirPath = ts.getDirectoryPath(configFilename);
-            var rawConfig = <ProjectOptions>ts.readConfigFile(configFilename);
-            if (!rawConfig) {
-                return { errorMsg: "tsconfig syntax error" };
+            var rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.readConfigFile(configFilename);
+            if (rawConfig.error) {
+                return rawConfig.error;
             }
             else {
-                var parsedCommandLine = ts.parseConfigFile(rawConfig, ts.sys, dirPath);
+                var parsedCommandLine = ts.parseConfigFile(rawConfig.config, ts.sys, dirPath);
                 if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
                     return { errorMsg: "tsconfig option errors" };
                 }
                 else if (parsedCommandLine.fileNames) {
-                    var projectOptions: ProjectOptions = { 
+                    var projectOptions: ProjectOptions = {
                         files: parsedCommandLine.fileNames,
                         compilerOptions: parsedCommandLine.options
                     };
                     var proj = this.createProject(configFilename, projectOptions);
                     for (var i = 0, len = parsedCommandLine.fileNames.length; i < len; i++) {
                         var rootFilename = parsedCommandLine.fileNames[i];
-                        if (ts.sys.fileExists(rootFilename)) {
+                        if (this.host.fileExists(rootFilename)) {
                             var info = this.openFile(rootFilename, clientFileName == rootFilename);
                             proj.addRoot(info);
                         }
@@ -1039,7 +1040,7 @@ module ts.server {
         startPath: LineCollection[];
         endBranch: LineCollection[] = [];
         branchNode: LineNode;
-        // path to current node 
+        // path to current node
         stack: LineNode[];
         state = CharRangeSection.Entire;
         lineCollectionAtBranch: LineCollection;
@@ -1241,7 +1242,7 @@ module ts.server {
         }
     }
 
-    // text change information 
+    // text change information
     class TextChange {
         constructor(public pos: number, public deleteLen: number, public insertedText?: string) {
         }
@@ -1289,7 +1290,7 @@ module ts.server {
             if (cb)
                 cb();
         }
-    
+
         // reload whole script, leaving no change history behind reload
         reload(script: string) {
             this.currentVersion++;
@@ -1299,7 +1300,7 @@ module ts.server {
             snap.index = new LineIndex();
             var lm = LineIndex.linesFromText(script);
             snap.index.load(lm.lines);
-            // REVIEW: could use linked list 
+            // REVIEW: could use linked list
             for (var i = this.minVersion; i < this.currentVersion; i++) {
                 this.versions[i] = undefined;
             }
@@ -1380,7 +1381,7 @@ module ts.server {
             return this.index.root.charCount();
         }
 
-        // this requires linear space so don't hold on to these 
+        // this requires linear space so don't hold on to these
         getLineStartPositions(): number[] {
             var starts: number[] = [-1];
             var count = 1;
@@ -1642,7 +1643,7 @@ module ts.server {
         }
 
         walk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker) {
-            // assume (rangeStart < this.totalChars) && (rangeLength <= this.totalChars) 
+            // assume (rangeStart < this.totalChars) && (rangeLength <= this.totalChars)
             var childIndex = 0;
             var child = this.children[0];
             var childCharCount = child.charCount();
@@ -1728,7 +1729,7 @@ module ts.server {
                     line: lineNumber,
                     offset: charOffset
                 }
-            } 
+            }
             else if (childInfo.child.isLeaf()) {
                 return {
                     line: lineNumber,

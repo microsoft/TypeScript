@@ -22,10 +22,3 @@ var A = (function () {
     };
     return A;
 })();
-//# sourceMappingURL=es5-amd.js.map
-
-//// [es5-amd.d.ts]
-declare class A {
-    constructor();
-    B(): number;
-}

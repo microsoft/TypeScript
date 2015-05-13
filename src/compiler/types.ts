@@ -1656,7 +1656,9 @@ module ts {
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
+        newLine?: NewLineKind;
         noEmit?: boolean;
+        noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
@@ -1688,6 +1690,11 @@ module ts {
         System = 4,
     }
 
+    export const enum NewLineKind {
+        CarriageReturnLineFeed = 0,
+        LineFeed = 1,
+    }
+	
     export interface LineAndCharacter {
         line: number;
         /*

@@ -1440,6 +1440,14 @@
         "category": "Error",
         "code": 2501
     },
+    "'{0}' is referenced directly or indirectly in its own type annotation.": {
+        "category": "Error",
+        "code": 2502
+    },
+    "Cannot find namespace '{0}'.": {
+        "category": "Error",
+        "code": 2503
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -1757,11 +1765,11 @@
         "category": "Error",
         "code": 5033
     },
-    "Option 'mapRoot' cannot be specified without specifying 'sourcemap' option.": {
+    "Option 'mapRoot' cannot be specified without specifying 'sourceMap' option.": {
         "category": "Error",
         "code": 5038
     },
-    "Option 'sourceRoot' cannot be specified without specifying 'sourcemap' option.": {
+    "Option 'sourceRoot' cannot be specified without specifying 'sourceMap' option.": {
         "category": "Error",
         "code": 5039
     },
@@ -1842,7 +1850,7 @@
         "category": "Message",
         "code": 6007
     },
-    "Do not emit outputs if any type checking errors were reported.": {
+    "Do not emit outputs if any errors were reported.": {
         "category": "Message",
         "code": 6008
     },
@@ -1974,7 +1982,7 @@
         "category": "Error",
         "code": 6053
     },
-    "File '{0}' must have extension '.ts' or '.d.ts'.": {
+    "File '{0}' has unsupported extension. The only supported extensions are {1}.": {
         "category": "Error",
         "code": 6054
     },
@@ -1997,6 +2005,18 @@
     "File '{0}' is not under 'rootDir' '{1}'. 'rootDir' is expected to contain all source files.": {
         "category": "Error",
         "code": 6059
+    },
+    "Specifies the end of line sequence to be used when emitting files: 'CRLF' (dos) or 'LF' (unix).": {
+        "category": "Message",
+        "code": 6060
+    },
+    "NEWLINE": { 
+        "category": "Message", 
+        "code": 6061
+    },
+    "Argument for '--newLine' option must be 'CRLF' or 'LF'.": {
+        "category": "Error", 
+        "code": 6062
     },
 
 
@@ -2047,10 +2067,6 @@
     "Call signature, which lacks return-type annotation, implicitly has an 'any' return type.": {
         "category": "Error",
         "code": 7020
-    },
-    "'{0}' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.": {
-        "category": "Error",
-        "code": 7021
     },
     "'{0}' implicitly has type 'any' because it is does not have a type annotation and is referenced directly or indirectly in its own initializer.": {
         "category": "Error",

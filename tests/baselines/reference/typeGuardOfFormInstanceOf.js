@@ -36,7 +36,7 @@ var r2: D1 | C2 = c2Ord1 instanceof C1 && c2Ord1; // C2 | D1
 //  - when true, narrows the type of x to the type of the 'prototype' property in C provided 
 //    it is a subtype of the type of x, or
 //  - when false, has no effect on the type of x.
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;

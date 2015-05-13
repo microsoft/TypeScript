@@ -1,0 +1,8 @@
+=== tests/cases/compiler/newLineFlagWithCRLF.ts ===
+var x=1;
+>x : Symbol(x, Decl(newLineFlagWithCRLF.ts, 0, 3))
+
+x=2;
+>x : Symbol(x, Decl(newLineFlagWithCRLF.ts, 0, 3))
+
+
