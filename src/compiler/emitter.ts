@@ -1381,14 +1381,13 @@ var __awaiter = (this && this.__awaiter) || function (generator, ctor) {
             }
 
             function needsParenthesisForAwaitExpressionAsYield(node: AwaitExpression) {
-                for (let current: Node = node; isExpression(current.parent); current = current.parent) {
-                    if (current.parent.kind === SyntaxKind.BinaryExpression) {
-                        if ((<BinaryExpression>current.parent).left === current) {
-                            return true;
-                        }
-                    }
+                if (node.parent.kind === SyntaxKind.BinaryExpression && !isAssignmentOperator((<BinaryExpression>node.parent).operatorToken.kind)) {
+                    return true;
                 }
-                
+                else if (node.parent.kind === SyntaxKind.ConditionalExpression && (<ConditionalExpression>node.parent).condition === node) {
+                    return true;
+                }
+
                 return false;
             }
 
