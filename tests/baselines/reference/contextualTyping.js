@@ -283,7 +283,6 @@ var C4T5 = (function () {
 // CONTEXT: Module property assignment
 var C5T5;
 (function (C5T5) {
-    C5T5.foo;
     C5T5.foo = function (i, s) {
         return s;
     };

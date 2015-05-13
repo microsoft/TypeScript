@@ -39,14 +39,12 @@ var A;
 (function (A) {
     var B;
     (function (B) {
-        B.x;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
 var A;
 (function (A) {
     var B;
     (function (B) {
-        B.x;
     })(B || (B = {}));
 })(A || (A = {}));
 // ensure the right var decl is exported

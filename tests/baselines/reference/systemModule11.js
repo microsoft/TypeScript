@@ -61,7 +61,6 @@ System.register(['bar'], function(exports_1) {
                 exportStar_1(_bar_1);
             }],
         execute: function() {
-            exports_1("x", x);
         }
     }
 });
@@ -128,7 +127,6 @@ System.register(['a'], function(exports_1) {
                 exports_1("s2", _a_1["s1"]);
             }],
         execute: function() {
-            exports_1("x", x);
             exports_1("z", z);
             exports_1("z2", z1);
         }

@@ -52,7 +52,7 @@ var M;
             return Window;
         })();
         N.Window = Window;
-        N.p; // Should report error that W is private
+         // Should report error that W is private
     })(N = M.N || (M.N = {}));
 })(M || (M = {}));
 var M1;
@@ -65,7 +65,7 @@ var M1;
             return Window;
         })();
         N.Window = Window;
-        N.p; // No error
+         // No error
     })(N = M1.N || (M1.N = {}));
 })(M1 || (M1 = {}));
 var M2;

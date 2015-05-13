@@ -102,7 +102,6 @@ new m7.m8.m9.c();
 var m1;
 (function (m1) {
     /** b's comment*/
-    m1.b;
     /** foo's comment*/
     function foo() {
         return m1.b;

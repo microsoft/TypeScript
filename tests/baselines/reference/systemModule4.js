@@ -10,7 +10,6 @@ System.register([], function(exports_1) {
         setters:[],
         execute: function() {
             exports_1("x", x = 1);
-            exports_1("y", y);
         }
     }
 });

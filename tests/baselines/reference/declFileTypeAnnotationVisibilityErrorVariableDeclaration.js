@@ -50,11 +50,9 @@ var m;
     // Directly using names from this module
     var x;
     var y = new private1();
-    m.k;
     m.l = new private1();
     var x2;
     var y2 = new public1();
-    m.k2;
     m.l2 = new public1();
     var m2;
     (function (m2) {
@@ -67,6 +65,5 @@ var m;
     })(m2 || (m2 = {}));
     var x3;
     var y3 = new m2.public2();
-    m.k3;
     m.l3 = new m2.public2();
 })(m || (m = {}));

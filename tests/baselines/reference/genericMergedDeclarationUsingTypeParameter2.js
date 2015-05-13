@@ -14,6 +14,5 @@ var foo = (function () {
 })();
 var foo;
 (function (foo) {
-    foo.x;
     var y = 1;
 })(foo || (foo = {}));

@@ -117,7 +117,7 @@ var Foo = (function () {
 })();
 var Foo;
 (function (Foo) {
-    Foo.x; // error for redeclaring var in a different parent
+     // error for redeclaring var in a different parent
 })(Foo || (Foo = {}));
 var N;
 (function (N) {
