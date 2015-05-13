@@ -88,6 +88,7 @@ module ts {
         let undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
         let nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsUndefinedOrNull, "null");
         let unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
+        let resolvingType = createIntrinsicType(TypeFlags.Any, "__resolving__");
 
         let emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         let anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -3629,9 +3630,17 @@ module ts {
         }
 
         function getReducedTypeOfUnionType(type: UnionType): Type {
-            // If union type was created without subtype reduction, perform the deferred reduction now
+            // If union type was created without subtype reduction, perform the deferred reduction now. If a circularity
+            // is detected, simply use the type itself.
             if (!type.reducedType) {
-                type.reducedType = getUnionType(type.types, /*noSubtypeReduction*/ false);
+                type.reducedType = resolvingType;
+                let reducedType = getUnionType(type.types, /*noSubtypeReduction*/ false);
+                if (type.reducedType === resolvingType) {
+                    type.reducedType = reducedType;
+                }
+            }
+            else if (type.reducedType === resolvingType) {
+                type.reducedType = type;
             }
             return type.reducedType;
         }
