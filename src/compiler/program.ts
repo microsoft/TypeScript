@@ -248,7 +248,10 @@ module ts {
                 return undefined;
             }
             function getNameIfExists(fileName: string): string {
-                if (sys.fileExists(fileName)) {
+                // To detect if file exists. 
+                // Using this is to demonstrate that sys.fileExists is what is causing module resolution to fail in test driver
+                // This is just for code review
+                if (host.getSourceFile(fileName, ScriptTarget.Latest)) {
                     return fileName;
                 }
             }
