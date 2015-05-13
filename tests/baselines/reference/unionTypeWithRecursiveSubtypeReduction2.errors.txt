@@ -42,9 +42,5 @@ tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction2.ts(20,1): error TS2
 !!! error TS2322:   Types of property 'parent' are incompatible.
 !!! error TS2322:     Type 'Namespace' is not assignable to type 'Module | Class'.
 !!! error TS2322:       Type 'Namespace' is not assignable to type 'Class'.
-<<<<<<< HEAD
 !!! error TS2322:         Property 'parent' is missing in type 'Namespace'.
     
-=======
-!!! error TS2322:         Property 'parent' is missing in type 'Namespace'.
->>>>>>> master

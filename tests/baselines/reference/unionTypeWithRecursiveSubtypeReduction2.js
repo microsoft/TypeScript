@@ -18,12 +18,8 @@ class Property {
 var c: Class;
 var p: Property;
 c = p;
-<<<<<<< HEAD
 p = c;
 
-=======
-p = c;
->>>>>>> master
 
 //// [unionTypeWithRecursiveSubtypeReduction2.js]
 var Module = (function () {
