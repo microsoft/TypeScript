@@ -4295,6 +4295,7 @@ module ts {
             if (token === SyntaxKind.AsyncKeyword) {
                 let modifierStart = scanner.getStartPos();
                 let modifierKind = token;
+                nextToken();
                 modifiers = <ModifiersArray>[];
                 modifiers.pos = modifierStart;
                 flags |= modifierToFlag(modifierKind);
