@@ -3324,12 +3324,60 @@ var __awaiter = (this && this.__awaiter) || function (generator, ctor) {
                 emitSignatureParameters(node);
             }
 
-            function emitAsyncSignatureAndBodyForES6(node: FunctionLikeDeclaration) {                
+            function emitAsyncSignatureAndBodyForES6(node: FunctionLikeDeclaration) {
                 let promiseConstructor = resolver.getPromiseConstructor(node);
-                let resolve = makeUniqueName("resolve");
                 let isArrowFunction = node.kind === SyntaxKind.ArrowFunction;
                 let args: string;
+
+                // An async function is emit as an outer function that calls an inner
+                // generator function. Any arguments of the outer function must be
+                // evaluated in the context of the generator function, to ensure the correct
+                // environment and bindings for things like binding patterns in the
+                // argument list.
+                //
+                // For async function declarations and function expressions, we want to 
+                // pass the `arguments` object of the outer function to the inner generator 
+                // function in the event the async function directly manipulates the `arguments`
+                // object.
+                //
+                // For async arrow functions, the `arguments` object is not bound to the arrow
+                // but its containing function. In that case, we must collect all of the passed 
+                // arguments into an array which we then pass to the inner generator function to
+                // ensure the correct environment for any binding patterns.
+                //
+                // Async arrow functions do not have access to the lexical `arguments` of its 
+                // lexical container.
+                //
+                // The emit for an async arrow without parameters will look something like this:
+                //
+                //  let a = async () => await b;
+                //
+                //  let a = () => __awaiter(function* () {
+                //      return yield b;
+                //  }.apply(this));
+                //
+                // The emit for an async arrow with parameters will look something like this:
+                //
+                //  let a = async (b) => await b;
+                //
+                //  let a = (...arguments_1) => __awaiter(function* (b) {
+                //      return yield b;
+                //  }).apply(this, arguments_1);
+                //
+                // The emit for an async function expression will look something like this:
+                //
+                //  let a = async function () {
+                //      return await b;
+                //  }
+                //
+                //  let a = function () {
+                //      return __awaiter(function* () {
+                //          return yield b;
+                //      }.apply(this, arguments));
+                //  }
+                //
                 if (isArrowFunction) {
+                    // Emit the outer signature for the async arrow
                     if (node.parameters.length) {
                         args = makeUniqueName("arguments");
                         write(`(...${args}) => `);
@@ -3339,6 +3387,7 @@ var __awaiter = (this && this.__awaiter) || function (generator, ctor) {
                     }
                 }
                 else {
+                    // Emit the outer signature for the async function expression or declaration
                     args = "arguments";
                     write("() {");
                     increaseIndent();
@@ -3346,29 +3395,37 @@ var __awaiter = (this && this.__awaiter) || function (generator, ctor) {
                     write("return ");
                 }
                 
+                // Emit the call to __awaiter
                 write("__awaiter(function *");
                 
+                // Emit the signature and body for the inner generator function
                 emitSignatureParameters(node);
                 emitFunctionBody(node);
+                
+                // Emit the call to `apply` to ensure the correct `this` and arguments.
                 write(".apply(this");
                 if (args) {
                     write(`, ${args}`);
                 }
                 write(")");
+                
+                // If the function has an explicit type annotation for a promise, emit the 
+                // constructor.
                 if (promiseConstructor) {
                     write(", ");
                     emit(promiseConstructor);
                 }
                 write(")");
                 
+                // If this is not an async arrow, emit the closing brace of the outer function body
                 if (!isArrowFunction) {
                     write(";");
                     decreaseIndent();
                     writeLine();
                     write("}");
-                }    
+                }
             }
-                        
+            
             function emitFunctionBody(node: FunctionLikeDeclaration) {
                 if (!node.body) {
                     // There can be no body when there are parse errors.  Just emit an empty block 
