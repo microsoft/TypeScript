@@ -19,7 +19,6 @@ var B = (function () {
 })();
 exports.B = B;
 //// [importDeclarationUsedAsTypeQuery_1.js]
-exports.x;
 
 
 //// [importDeclarationUsedAsTypeQuery_require.d.ts]

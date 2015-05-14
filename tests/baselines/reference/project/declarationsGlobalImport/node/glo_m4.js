@@ -5,7 +5,6 @@ var d = (function () {
 })();
 exports.d = d;
 ;
-exports.x;
 function foo() {
     return new d();
 }

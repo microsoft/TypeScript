@@ -2,4 +2,3 @@
 export var x;
 
 //// [separateCompilationUnspecifiedModule.js]
-exports.x;
