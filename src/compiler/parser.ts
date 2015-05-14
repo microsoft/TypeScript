@@ -2691,6 +2691,9 @@ module ts {
                 if (scanner.hasPrecedingLineBreak()) {
                     return Tristate.False;
                 }
+                if (token !== SyntaxKind.OpenParenToken && token !== SyntaxKind.LessThanToken) {
+                    return Tristate.False;
+                }
             }
             
             let first = token;
