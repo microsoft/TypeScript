@@ -2503,8 +2503,6 @@ var Harness;
     (function (Perf) {
         var Clock;
         (function (Clock) {
-            Clock.now;
-            Clock.resolution;
             if (typeof WScript !== "undefined" && typeof global['WScript'].InitializeProjection !== "undefined") {
                 // Running in JSHost.
                 global['WScript'].InitializeProjection();

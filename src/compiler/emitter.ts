@@ -139,7 +139,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             let exportEquals: ExportAssignment;
             let hasExportStars: boolean;
 
-            /** write emitted output to disk*/
+            /** Write emitted output to disk */
             let writeEmittedFiles = writeJavaScriptFile;
 
             let detachedCommentsInfo: { nodePos: number; detachedCommentEndPos: number }[];
@@ -3059,13 +3059,15 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function emitVariableStatement(node: VariableStatement) {
-                let startIsEmitted = true;
-                if (!(node.flags & NodeFlags.Export)) {
-                    startIsEmitted = tryEmitStartOfVariableDeclarationList(node.declarationList);
+                let startIsEmitted = false;
+                if (node.flags & NodeFlags.Export) {
+                    if (isES6ExportedDeclaration(node)) {
+                        // Exported ES6 module member
+                        write("export ");
+                        startIsEmitted = tryEmitStartOfVariableDeclarationList(node.declarationList);
+                    }
                 }
-                else if (isES6ExportedDeclaration(node)) {
-                    // Exported ES6 module member
-                    write("export ");
+                else {
                     startIsEmitted = tryEmitStartOfVariableDeclarationList(node.declarationList);
                 }
                 if (startIsEmitted) {

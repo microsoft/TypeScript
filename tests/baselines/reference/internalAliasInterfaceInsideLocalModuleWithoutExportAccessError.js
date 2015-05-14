@@ -15,7 +15,6 @@ var x: c.b;
 define(["require", "exports"], function (require, exports) {
     var c;
     (function (c) {
-        c.x;
     })(c = exports.c || (exports.c = {}));
     var x;
 });

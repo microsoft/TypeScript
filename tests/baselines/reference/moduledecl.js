@@ -272,11 +272,9 @@ var m;
     var m2;
     (function (m2) {
         var a = 10;
-        m2.b;
     })(m2 = m.m2 || (m.m2 = {}));
     var m3;
     (function (m3) {
-        m3.c;
     })(m3 = m.m3 || (m.m3 = {}));
 })(m || (m = {}));
 var m;
@@ -285,7 +283,6 @@ var m;
     (function (m25) {
         var m5;
         (function (m5) {
-            m5.c;
         })(m5 = m25.m5 || (m25.m5 = {}));
     })(m25 = m.m25 || (m.m25 = {}));
 })(m || (m = {}));
@@ -297,7 +294,6 @@ var m13;
         (function (m2) {
             var m3;
             (function (m3) {
-                m3.c;
             })(m3 = m2.m3 || (m2.m3 = {}));
         })(m2 = m4.m2 || (m4.m2 = {}));
         function f() {

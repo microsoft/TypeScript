@@ -12,7 +12,6 @@ export import b = a;
 var z = b.x;
 
 //// [declFileForExportedImport_0.js]
-exports.x;
 //// [declFileForExportedImport_1.js]
 ///<reference path='declFileForExportedImport_0.ts'/>
 exports.a = require('declFileForExportedImport_0');

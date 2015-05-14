@@ -459,8 +459,7 @@ var privateClassWithWithPublicPropertyTypes = (function () {
     }
     return privateClassWithWithPublicPropertyTypes;
 })();
-exports.publicVarWithPrivatePropertyTypes; // Error
-exports.publicVarWithPublicPropertyTypes;
+ // Error
 var privateVarWithPrivatePropertyTypes;
 var privateVarWithPublicPropertyTypes;
 var publicClassWithPrivateModulePropertyTypes = (function () {
@@ -469,7 +468,7 @@ var publicClassWithPrivateModulePropertyTypes = (function () {
     return publicClassWithPrivateModulePropertyTypes;
 })();
 exports.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
-exports.publicVarWithPrivateModulePropertyTypes; // Error
+ // Error
 var privateClassWithPrivateModulePropertyTypes = (function () {
     function privateClassWithPrivateModulePropertyTypes() {
     }
@@ -511,8 +510,7 @@ var publicModule;
         }
         return privateClassWithWithPublicPropertyTypes;
     })();
-    publicModule.publicVarWithPrivatePropertyTypes; // Error
-    publicModule.publicVarWithPublicPropertyTypes;
+     // Error
     var privateVarWithPrivatePropertyTypes;
     var privateVarWithPublicPropertyTypes;
     var publicClassWithPrivateModulePropertyTypes = (function () {
@@ -521,7 +519,7 @@ var publicModule;
         return publicClassWithPrivateModulePropertyTypes;
     })();
     publicModule.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
-    publicModule.publicVarWithPrivateModulePropertyTypes; // Error
+     // Error
     var privateClassWithPrivateModulePropertyTypes = (function () {
         function privateClassWithPrivateModulePropertyTypes() {
         }
@@ -564,8 +562,6 @@ var privateModule;
         }
         return privateClassWithWithPublicPropertyTypes;
     })();
-    privateModule.publicVarWithPrivatePropertyTypes;
-    privateModule.publicVarWithPublicPropertyTypes;
     var privateVarWithPrivatePropertyTypes;
     var privateVarWithPublicPropertyTypes;
     var publicClassWithPrivateModulePropertyTypes = (function () {
@@ -574,7 +570,6 @@ var privateModule;
         return publicClassWithPrivateModulePropertyTypes;
     })();
     privateModule.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
-    privateModule.publicVarWithPrivateModulePropertyTypes;
     var privateClassWithPrivateModulePropertyTypes = (function () {
         function privateClassWithPrivateModulePropertyTypes() {
         }
@@ -642,8 +637,6 @@ var publicModuleInGlobal;
             }
             return privateClassWithWithPublicPropertyTypes;
         })();
-        privateModule.publicVarWithPrivatePropertyTypes;
-        privateModule.publicVarWithPublicPropertyTypes;
         var privateVarWithPrivatePropertyTypes;
         var privateVarWithPublicPropertyTypes;
         var publicClassWithPrivateModulePropertyTypes = (function () {
@@ -652,7 +645,6 @@ var publicModuleInGlobal;
             return publicClassWithPrivateModulePropertyTypes;
         })();
         privateModule.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
-        privateModule.publicVarWithPrivateModulePropertyTypes;
         var privateClassWithPrivateModulePropertyTypes = (function () {
             function privateClassWithPrivateModulePropertyTypes() {
             }
@@ -682,8 +674,7 @@ var publicModuleInGlobal;
         }
         return privateClassWithWithPublicPropertyTypes;
     })();
-    publicModuleInGlobal.publicVarWithPrivatePropertyTypes; // Error
-    publicModuleInGlobal.publicVarWithPublicPropertyTypes;
+     // Error
     var privateVarWithPrivatePropertyTypes;
     var privateVarWithPublicPropertyTypes;
     var publicClassWithPrivateModulePropertyTypes = (function () {
@@ -692,7 +683,7 @@ var publicModuleInGlobal;
         return publicClassWithPrivateModulePropertyTypes;
     })();
     publicModuleInGlobal.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
-    publicModuleInGlobal.publicVarWithPrivateModulePropertyTypes; // Error
+     // Error
     var privateClassWithPrivateModulePropertyTypes = (function () {
         function privateClassWithPrivateModulePropertyTypes() {
         }

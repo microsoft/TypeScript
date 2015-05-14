@@ -163,7 +163,6 @@ var m1;
         return C5;
     })();
     m1.C5 = C5;
-    m1.v2;
 })(m1 || (m1 = {}));
 var C2 = (function () {
     function C2() {

@@ -20,8 +20,6 @@ export var z: c.b.I;
 define(["require", "exports"], function (require, exports) {
     var c;
     (function (c) {
-        c.x;
         c.x.foo();
     })(c = exports.c || (exports.c = {}));
-    exports.z;
 });

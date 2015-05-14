@@ -156,7 +156,6 @@ this += value;
 // identifiers: module, class, enum, function
 var M;
 (function (M) {
-    M.a;
 })(M || (M = {}));
 M *= value;
 M += value;
