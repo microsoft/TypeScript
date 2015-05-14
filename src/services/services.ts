@@ -949,6 +949,7 @@ module ts {
     export interface LanguageServiceHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
+        getProjectVersion?(): string;
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): IScriptSnapshot;
@@ -2353,6 +2354,7 @@ module ts {
         let syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         let ruleProvider: formatting.RulesProvider;
         let program: Program;
+        let lastProjectVersion: string;
 
         let useCaseSensitivefileNames = false;
         let cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
@@ -2392,6 +2394,18 @@ module ts {
         }
 
         function synchronizeHostData(): void {
+            // perform fast check if host supports it
+            if (host.getProjectVersion) {
+                let hostProjectVersion = host.getProjectVersion();
+                if (hostProjectVersion) {
+                    if (lastProjectVersion === hostProjectVersion) {
+                        return;
+                    }
+
+                    lastProjectVersion = hostProjectVersion;
+                }
+            }
+
             // Get a fresh cache of the host information
             let hostCache = new HostCache(host, getCanonicalFileName);
 
@@ -3025,46 +3039,47 @@ module ts {
                     let containingNodeKind = previousToken.parent.kind;
                     switch (previousToken.kind) {
                         case SyntaxKind.CommaToken:
-                            return containingNodeKind === SyntaxKind.CallExpression                         // func( a, |
-                                || containingNodeKind === SyntaxKind.Constructor                            // constructor( a, |   public, protected, private keywords are allowed here, so show completion
-                                || containingNodeKind === SyntaxKind.NewExpression                          // new C(a, |
-                                || containingNodeKind === SyntaxKind.ArrayLiteralExpression                 // [a, |
-                                || containingNodeKind === SyntaxKind.BinaryExpression;                      // let x = (a, |
+                            return containingNodeKind === SyntaxKind.CallExpression               // func( a, |
+                                || containingNodeKind === SyntaxKind.Constructor                  // constructor( a, |   public, protected, private keywords are allowed here, so show completion
+                                || containingNodeKind === SyntaxKind.NewExpression                // new C(a, |
+                                || containingNodeKind === SyntaxKind.ArrayLiteralExpression       // [a, |
+                                || containingNodeKind === SyntaxKind.BinaryExpression             // let x = (a, |
+                                || containingNodeKind === SyntaxKind.FunctionType;                // var x: (s: string, list|
 
-              
                         case SyntaxKind.OpenParenToken:
                             return containingNodeKind === SyntaxKind.CallExpression               // func( |
                                 || containingNodeKind === SyntaxKind.Constructor                  // constructor( |
                                 || containingNodeKind === SyntaxKind.NewExpression                // new C(a|
-                                || containingNodeKind === SyntaxKind.ParenthesizedExpression;     // let x = (a|
+                                || containingNodeKind === SyntaxKind.ParenthesizedExpression      // let x = (a|
+                                || containingNodeKind === SyntaxKind.ParenthesizedType;           // function F(pred: (a| this can become an arrow function, where 'a' is the argument
 
                         case SyntaxKind.OpenBracketToken:
-                            return containingNodeKind === SyntaxKind.ArrayLiteralExpression;                 // [ |
+                            return containingNodeKind === SyntaxKind.ArrayLiteralExpression;      // [ |
 
-                        case SyntaxKind.ModuleKeyword:                               // module |
-                        case SyntaxKind.NamespaceKeyword:                            // namespace |
+                        case SyntaxKind.ModuleKeyword:                                            // module |
+                        case SyntaxKind.NamespaceKeyword:                                         // namespace |
                             return true;
 
                         case SyntaxKind.DotToken:
-                            return containingNodeKind === SyntaxKind.ModuleDeclaration; // module A.|
+                            return containingNodeKind === SyntaxKind.ModuleDeclaration;           // module A.|
 
                         case SyntaxKind.OpenBraceToken:
-                            return containingNodeKind === SyntaxKind.ClassDeclaration;  // class A{ |
+                            return containingNodeKind === SyntaxKind.ClassDeclaration;            // class A{ |
 
                         case SyntaxKind.EqualsToken:
-                            return containingNodeKind === SyntaxKind.VariableDeclaration // let x = a|
-                                || containingNodeKind === SyntaxKind.BinaryExpression;   // x = a|
+                            return containingNodeKind === SyntaxKind.VariableDeclaration          // let x = a|
+                                || containingNodeKind === SyntaxKind.BinaryExpression;            // x = a|
 
                         case SyntaxKind.TemplateHead:
-                            return containingNodeKind === SyntaxKind.TemplateExpression; // `aa ${|
+                            return containingNodeKind === SyntaxKind.TemplateExpression;          // `aa ${|
 
                         case SyntaxKind.TemplateMiddle:
-                            return containingNodeKind === SyntaxKind.TemplateSpan; // `aa ${10} dd ${|
+                            return containingNodeKind === SyntaxKind.TemplateSpan;                // `aa ${10} dd ${|
 
                         case SyntaxKind.PublicKeyword:
                         case SyntaxKind.PrivateKeyword:
                         case SyntaxKind.ProtectedKeyword:
-                            return containingNodeKind === SyntaxKind.PropertyDeclaration; // class A{ public |
+                            return containingNodeKind === SyntaxKind.PropertyDeclaration;         // class A{ public |
                     }
 
                     // Previous token may have been a keyword that was converted to an identifier.
@@ -3143,40 +3158,43 @@ module ts {
                             return containingNodeKind === SyntaxKind.VariableDeclaration ||
                                 containingNodeKind === SyntaxKind.VariableDeclarationList ||
                                 containingNodeKind === SyntaxKind.VariableStatement ||
-                                containingNodeKind === SyntaxKind.EnumDeclaration ||           // enum a { foo, |
+                                containingNodeKind === SyntaxKind.EnumDeclaration ||                        // enum a { foo, |
                                 isFunction(containingNodeKind) ||
-                                containingNodeKind === SyntaxKind.ClassDeclaration ||          // class A<T, |
-                                containingNodeKind === SyntaxKind.FunctionDeclaration ||       // function A<T, |
-                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||      // interface A<T, |
-                                containingNodeKind === SyntaxKind.ArrayBindingPattern ||       //  var [x, y|
-                                containingNodeKind === SyntaxKind.ObjectBindingPattern;        // function func({ x, y|
-
+                                containingNodeKind === SyntaxKind.ClassDeclaration ||                       // class A<T, |
+                                containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A<T, |
+                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A<T, |
+                                containingNodeKind === SyntaxKind.ArrayBindingPattern ||                    // var [x, y|
+                                containingNodeKind === SyntaxKind.ObjectBindingPattern;                     // function func({ x, y|
+                                                                                                          
                         case SyntaxKind.DotToken:
-                            return containingNodeKind === SyntaxKind.ArrayBindingPattern;       // var [.|
-
+                            return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [.|
+                                                                                                          
+                        case SyntaxKind.ColonToken:
+                            return containingNodeKind === SyntaxKind.BindingElement;                        // var {x :html|
+                                                                                                          
                         case SyntaxKind.OpenBracketToken:
-                            return containingNodeKind === SyntaxKind.ArrayBindingPattern;         //  var [x|
-
+                            return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [x|
+                                                                                                          
                         case SyntaxKind.OpenParenToken:
                             return containingNodeKind === SyntaxKind.CatchClause ||
                                 isFunction(containingNodeKind);
 
                         case SyntaxKind.OpenBraceToken:
-                            return containingNodeKind === SyntaxKind.EnumDeclaration ||        // enum a { |
-                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||      // interface a { |
-                                containingNodeKind === SyntaxKind.TypeLiteral ||               // let x : { |
-                                containingNodeKind === SyntaxKind.ObjectBindingPattern;        // function func({ x|
+                            return containingNodeKind === SyntaxKind.EnumDeclaration ||                     // enum a { |
+                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface a { |
+                                containingNodeKind === SyntaxKind.TypeLiteral ||                            // let x : { |
+                                containingNodeKind === SyntaxKind.ObjectBindingPattern;                     // function func({ x|
 
                         case SyntaxKind.SemicolonToken:
                             return containingNodeKind === SyntaxKind.PropertySignature &&
                                 previousToken.parent && previousToken.parent.parent &&
                                 (previousToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration ||    // interface a { f; |
-                                    previousToken.parent.parent.kind === SyntaxKind.TypeLiteral);           //  let x : { a; |
+                                    previousToken.parent.parent.kind === SyntaxKind.TypeLiteral);           // let x : { a; |
 
                         case SyntaxKind.LessThanToken:
-                            return containingNodeKind === SyntaxKind.ClassDeclaration ||        // class A< |
-                                containingNodeKind === SyntaxKind.FunctionDeclaration ||        // function A< |
-                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||       // interface A< |
+                            return containingNodeKind === SyntaxKind.ClassDeclaration ||                    // class A< |
+                                containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A< |
+                                containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A< |
                                 isFunction(containingNodeKind);
 
                         case SyntaxKind.StaticKeyword:
@@ -3186,7 +3204,7 @@ module ts {
                             return containingNodeKind === SyntaxKind.Parameter ||
                                 containingNodeKind === SyntaxKind.Constructor ||
                                 (previousToken.parent && previousToken.parent.parent &&
-                                    previousToken.parent.parent.kind === SyntaxKind.ArrayBindingPattern);  // var [ ...z|
+                                    previousToken.parent.parent.kind === SyntaxKind.ArrayBindingPattern);  // var [...z|
 
                         case SyntaxKind.PublicKeyword:
                         case SyntaxKind.PrivateKeyword:
@@ -3204,6 +3222,7 @@ module ts {
                         case SyntaxKind.LetKeyword:
                         case SyntaxKind.ConstKeyword:
                         case SyntaxKind.YieldKeyword:
+                        case SyntaxKind.TypeKeyword:  // type htm|
                             return true;
                     }
 
@@ -6039,11 +6058,13 @@ module ts {
                     let end = triviaScanner.getTextPos();
                     let width = end - start;
 
-                    if (textSpanIntersectsWith(span, start, width)) {
-                        if (!isTrivia(kind)) {
-                            return;
-                        }
+                    // The moment we get something that isn't trivia, then stop processing.
+                    if (!isTrivia(kind)) {
+                        return;
+                    }
 
+                    // Only bother with the trivia if it at least intersects the span of interest.
+                    if (textSpanIntersectsWith(span, start, width)) {
                         if (isComment(kind)) {
                             // Simple comment.  Just add as is.
                             pushClassification(start, width, ClassificationType.comment);

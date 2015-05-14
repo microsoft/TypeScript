@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "http://typescriptlang.org/",
-    "version": "1.5.0",
+    "version": "1.5.2",
     "licenses": [
         {
             "type": "Apache License 2.0",

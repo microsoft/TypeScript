@@ -50,9 +50,12 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
         Type '{ x: any; y: any; c: any; }' is not assignable to type '{ x: any; y: any; z: any; }'.
           Property 'z' is missing in type '{ x: any; y: any; c: any; }'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(56,8): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(65,18): error TS2300: Duplicate identifier 'number'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(65,26): error TS2300: Duplicate identifier 'number'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(65,34): error TS2300: Duplicate identifier 'number'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts (19 errors) ====
+==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts (22 errors) ====
     // A parameter declaration may specify either an identifier or a binding pattern.
     // The identifiers specified in parameter declarations and binding patterns
     // in a parameter list must be unique within that parameter list.
@@ -188,7 +191,13 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
     // as such annotations would conflict with the already established meaning of colons in object literals.
     // Type annotations must instead be written on the top- level parameter declaration
     
-    function e0({x: [number, number, number]}) { }  // should be an error, duplicate identifier;
+    function e0({x: [number, number, number]}) { }  // error, duplicate identifier;
+                     ~~~~~~
+!!! error TS2300: Duplicate identifier 'number'.
+                             ~~~~~~
+!!! error TS2300: Duplicate identifier 'number'.
+                                     ~~~~~~
+!!! error TS2300: Duplicate identifier 'number'.
     
     
     
