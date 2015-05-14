@@ -35,10 +35,11 @@ module ts {
         let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
         emitDeclarations(host, resolver, diagnostics, jsFilePath, targetSourceFile);
         
-        let packageDeclaration = getPackageDeclaration(host);
-        let compilerOptions = host.getCompilerOptions();
+        let packageDeclaration = host.getPackageDeclaration();
         if (packageDeclaration) {
-            if (!targetSourceFile || isPackageMain(targetSourceFile, host)) {
+            let packageMain = host.getPackageMain();
+            if (!targetSourceFile || 
+                comparePaths(targetSourceFile.fileName, host.getPackageMain(), host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo) {
                 writePackageDeclarationFile(packageDeclaration, host, resolver, diagnostics);
             }
         }
@@ -67,6 +68,7 @@ module ts {
 
         let moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
         let asynchronousSubModuleDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[];
+        let packageMain = isPackageDeclaration ? host.getPackageMain() : undefined;
 
         // Contains the reference paths that needs to go in the declaration file.
         // Collecting this separately because reference paths need to be first thing in the declaration file
@@ -170,14 +172,16 @@ module ts {
         function sortSourceFiles(sourceFiles: SourceFile[]) {
             let indices = new Array<number>(sourceFiles.length);
             for (let i = 0; i < sourceFiles.length; ++i) indices[i] = i;
+            let currentDirectory = host.getCurrentDirectory();
+            let ignoreCase = !host.useCaseSensitiveFileNames();
             indices.sort((left, right) => {
                let leftFile = sourceFiles[left];
-               if (isPackageMain(leftFile, host)) {
+               if (comparePaths(leftFile.fileName, packageMain, currentDirectory, ignoreCase) === Comparison.EqualTo) {
                    return -1;
                }
                
                let rightFile = sourceFiles[right];
-               if (isPackageMain(rightFile, host)) {
+               if (comparePaths(rightFile.fileName, packageMain, currentDirectory, ignoreCase) === Comparison.EqualTo) {
                    return +1;
                }
                
@@ -1659,21 +1663,23 @@ module ts {
     }
     
     function getPackageQualifiedPath(host: EmitHost, moduleName: string, basePath: string) {
-        let packageRoot = getPackageDirectory(host);
+        let currentDirectory = host.getCurrentDirectory();
+        let ignoreCase = !host.useCaseSensitiveFileNames();
+        let packageRoot = host.getPackageDirectory();
         let modulePath = combinePaths(basePath, moduleName);
         let packageRelativePath = getRelativePathToDirectoryOrUrl(
             packageRoot,
             modulePath,
-            host.getCurrentDirectory(),
+            currentDirectory,
             host.getCanonicalFileName,
             false);
         
         let compilerOptions = host.getCompilerOptions();
-        let packageMain = getPackageMain(host);
+        let packageMain = host.getPackageMain();
         let packageAbsolutePath = getNormalizedAbsolutePath(packageRelativePath, packageRoot);
         
-        if (packageAbsolutePath + ".ts" === packageMain || 
-            packageAbsolutePath + ".d.ts" === packageMain) {
+        if (comparePaths(packageAbsolutePath + ".ts", packageMain, currentDirectory, ignoreCase) === Comparison.EqualTo || 
+            comparePaths(packageAbsolutePath + ".d.ts", packageMain, currentDirectory, ignoreCase) === Comparison.EqualTo) {
             return compilerOptions.packageName;
         }
         

@@ -31,13 +31,13 @@ module ts {
 
     export interface EmitHost extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
-
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;
-
+        useCaseSensitiveFileNames(): boolean;
+        getPackageMain(): string;
+        getPackageDeclaration(): string;
         writeFile: WriteFileCallback;
-
     }
 
     // Pool writers to avoid needing to allocate them for every symbol we write.
@@ -1697,40 +1697,6 @@ module ts {
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
         return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
-    }
-    
-    export function getPackageDirectory(host: ScriptReferenceHost) {
-        let searchPath = host.getCurrentDirectory();
-        if (host.getPackageDirectory) {
-            return getNormalizedAbsolutePath(host.getPackageDirectory(), searchPath);
-        }
-        
-        return searchPath;
-    }
-    
-    export function getPackageDeclaration(host: ScriptReferenceHost) {
-        let options = host.getCompilerOptions();
-        if (options.packageDeclaration) {
-            let packageDeclaration = getNormalizedAbsolutePath(options.packageDeclaration, getPackageDirectory(host));
-            return removeFileExtension(packageDeclaration) + ".d.ts";
-        }
-        
-        return undefined;
-    }
-    
-    export function getPackageMain(host: ScriptReferenceHost) {
-        let options = host.getCompilerOptions();
-        if (options.packageMain) {
-            let packageMain = getNormalizedAbsolutePath(options.packageMain, getPackageDirectory(host));
-            return packageMain;
-        }
-        
-        return undefined;
-    }
-    
-    export function isPackageMain(node: SourceFile, host: ScriptReferenceHost) {
-        let packageMain = getPackageMain(host);        
-        return node.fileName === packageMain;
     }
 
     /**

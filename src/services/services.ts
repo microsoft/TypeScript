@@ -956,7 +956,6 @@ module ts {
         getCancellationToken?(): CancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFileName(options: CompilerOptions): string;
-        /*@internal*/ getPackageDirectory?(): string;
         log? (s: string): void;
         trace? (s: string): void;
         error? (s: string): void;
@@ -1795,7 +1794,6 @@ module ts {
             useCaseSensitiveFileNames: () => false,
             getCanonicalFileName: fileName => fileName,
             getCurrentDirectory: () => "",
-            getPackageDirectory: () => "",
             getNewLine: () => (sys && sys.newLine) || "\r\n"
         };
 
@@ -2421,8 +2419,7 @@ module ts {
                 getNewLine: () => host.getNewLine ? host.getNewLine() : "\r\n",
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: (fileName, data, writeByteOrderMark) => { },
-                getCurrentDirectory: () => host.getCurrentDirectory(),
-                getPackageDirectory: () => host.getPackageDirectory ? host.getPackageDirectory() : host.getCurrentDirectory()
+                getCurrentDirectory: () => host.getCurrentDirectory()
             });
 
             // Release any files we have acquired in the old program but are 

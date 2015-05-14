@@ -53,7 +53,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
         let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         let diagnostics: Diagnostic[] = [];
         let newLine = host.getNewLine();
-        let packageDeclaration = getPackageDeclaration(host);
+        let packageDeclaration = host.getPackageDeclaration();
 
         if (targetSourceFile === undefined) {
             forEach(host.getSourceFiles(), sourceFile => {
@@ -81,7 +81,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 emitFile(compilerOptions.out);
             }
 
-            if (packageDeclaration && isPackageMain(targetSourceFile, host)) {
+            if (packageDeclaration && 
+                comparePaths(targetSourceFile.fileName, host.getPackageMain(), host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo) {
                 writePackageDeclarationFile(packageDeclaration, host, resolver, diagnostics);
             }
         }

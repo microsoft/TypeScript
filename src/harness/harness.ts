@@ -878,8 +878,7 @@ module Harness {
                 writeFile,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
-                getNewLine: () => newLine,
-                getPackageDirectory: getCurrentDirectory
+                getNewLine: () => newLine
             };
         }
 
@@ -1061,6 +1060,10 @@ module Harness {
                         case 'packagedeclaration':
                             options.packageDeclaration = setting.value;
                             break;
+                            
+                        case 'packagedir':
+                            options.packageDir = setting.value;
+                            break;
 
                         case 'newline':
                             if (setting.value.toLowerCase() === 'crlf') {
@@ -1180,7 +1183,7 @@ module Harness {
                     var declOtherFiles: { unitName: string; content: string }[] = [];
                     var declResult: Harness.Compiler.CompilerResult;
                     if (options.packageDeclaration) {
-                        let file = ts.forEach(result.declFilesCode, declFile => declFile.fileName === options.packageDeclaration ? declFile : undefined);
+                        let file = ts.forEach(result.declFilesCode, declFile => ts.comparePaths(declFile.fileName, options.packageDeclaration, result.currentDirectoryForProgram, true) === ts.Comparison.EqualTo ? declFile : undefined);
                         if (file) {
                             declInputFiles.push({ unitName: file.fileName, content: file.code });
                         }
