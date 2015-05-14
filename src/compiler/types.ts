@@ -1032,6 +1032,7 @@ module ts {
         getCompilerOptions(): CompilerOptions;
         getSourceFile(fileName: string): SourceFile;
         getCurrentDirectory(): string;
+        /*@internal*/ getPackageDirectory(): string;
     }
 
     export interface ParseConfigHost {
@@ -1678,6 +1679,10 @@ module ts {
         watch?: boolean;
         separateCompilation?: boolean;
         emitDecoratorMetadata?: boolean;
+        packageMain?: string;
+        packageName?: string;
+        packageDeclaration?: string;
+        packageDir?: string;
         /* @internal */ stripInternal?: boolean;
         [option: string]: string | number | boolean;
     }
@@ -1726,6 +1731,13 @@ module ts {
         paramType?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter
         error?: DiagnosticMessage;          // The error given when the argument does not fit a customized 'type'
         experimental?: boolean;
+    }
+    
+    /* @internal */
+    export interface PackageFile {
+        name: string;
+        main: string;
+        typings: string;
     }
 
     /* @internal */

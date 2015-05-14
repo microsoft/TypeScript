@@ -53,6 +53,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
         let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         let diagnostics: Diagnostic[] = [];
         let newLine = host.getNewLine();
+        let packageDeclaration = host.getPackageDeclaration();
 
         if (targetSourceFile === undefined) {
             forEach(host.getSourceFiles(), sourceFile => {
@@ -65,6 +66,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             if (compilerOptions.out) {
                 emitFile(compilerOptions.out);
             }
+            
+            if (packageDeclaration) {
+                writePackageDeclarationFile(packageDeclaration, host, resolver, diagnostics);
+            }
         }
         else {
             // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
@@ -74,6 +79,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
             else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
                 emitFile(compilerOptions.out);
+            }
+
+            if (packageDeclaration && 
+                comparePaths(targetSourceFile.fileName, host.getPackageMain(), host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo) {
+                writePackageDeclarationFile(packageDeclaration, host, resolver, diagnostics);
             }
         }
 

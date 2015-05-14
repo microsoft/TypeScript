@@ -20,6 +20,12 @@ module ts {
         EqualTo     = 0,
         GreaterThan = 1
     }
+    
+    export const enum StringComparison {
+        Ordinal = 0,
+        IgnoreCase = 1,
+        CurrentCultureIgnoreCase = 2
+    }
 
     export interface StringSet extends Map<any> { }
 
@@ -484,6 +490,38 @@ module ts {
         }
 
         return normalized;
+    }
+    
+    export function compareStrings(x: string, y: string, comparison?: StringComparison): Comparison {
+        if (x === y) return Comparison.EqualTo;
+        if (x === undefined) return Comparison.LessThan;
+        if (y === undefined) return Comparison.GreaterThan;
+        if (comparison === StringComparison.CurrentCultureIgnoreCase) {
+            x = x.toLocaleLowerCase();
+            y = y.toLocaleLowerCase();
+        }
+        else if (comparison === StringComparison.IgnoreCase) {
+            x = x.toLowerCase();
+            y = y.toLowerCase();
+        }
+        
+        return x === y ? Comparison.EqualTo : x < y ? Comparison.LessThan : Comparison.GreaterThan;
+    }
+    
+    export function comparePaths(path1: string, path2: string, currentDirectory: string, ignoreCase?: boolean): Comparison {
+        let pathComponents1 = getNormalizedPathComponents(path1, currentDirectory);
+        let pathComponents2 = getNormalizedPathComponents(path2, currentDirectory);
+        let sharedLength = Math.min(pathComponents1.length, pathComponents2.length);
+        for (let i = 0; i < sharedLength; i++) {
+            let component1 = pathComponents1[i];
+            let component2 = pathComponents2[i];
+            let result = compareStrings(component1, component2, ignoreCase ? StringComparison.IgnoreCase : StringComparison.Ordinal);
+            if (result !== Comparison.EqualTo) {
+                return result;
+            }
+        }
+        
+        return compareValues(pathComponents1.length, pathComponents2.length);
     }
 
     export function normalizePath(path: string): string {

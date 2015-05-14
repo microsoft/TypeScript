@@ -17,6 +17,37 @@ module ts {
             description: Diagnostics.Generates_corresponding_d_ts_file,
         },
         {
+            name: "packageName",
+            type: "string",
+            experimental: true,
+            description: Diagnostics.Specifies_the_name_of_the_package,
+            paramType: Diagnostics.NAME
+        },
+        {
+            name: "packageMain",
+            type: "string",
+            isFilePath: true,
+            experimental: true,
+            description: Diagnostics.Specifies_the_main_module_for_the_package,
+            paramType: Diagnostics.FILE
+        },
+        {
+            name: "packageDeclaration",
+            type: "string",
+            isFilePath: true,
+            experimental: true,
+            description: Diagnostics.Specifies_the_output_path_for_the_package_declaration,
+            paramType: Diagnostics.FILE
+        },
+        {
+            name: "packageDir",
+            type: "string",
+            isFilePath: true,
+            experimental: true,
+            description: Diagnostics.Specifies_the_root_directory_of_the_package,
+            paramType: Diagnostics.DIRECTORY
+        },
+        {
             name: "diagnostics",
             type: "boolean",
         },

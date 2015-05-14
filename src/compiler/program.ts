@@ -28,6 +28,25 @@ module ts {
         }
         return undefined;
     }
+    
+    export function findPackageFile(searchPath: string): string {
+        let fileName = "package.json";
+        while (true) {
+            if (sys.fileExists(fileName)) {
+                return fileName;
+            }
+
+            let parentPath = getDirectoryPath(searchPath);
+            if (parentPath === searchPath) {
+                break;
+            }
+            
+            searchPath = parentPath;
+            fileName = "../" + fileName;
+        }
+
+        return undefined;
+    }
 
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
         let currentDirectory: string;
@@ -93,6 +112,10 @@ module ts {
                 }
             }
         }
+        
+        function getCurrentDirectory(): string {
+            return currentDirectory || (currentDirectory = sys.getCurrentDirectory());
+        }
 
         let newLine =
             options.newLine === NewLineKind.CarriageReturnLineFeed ? carriageReturnLineFeed :
@@ -103,7 +126,7 @@ module ts {
             getSourceFile,
             getDefaultLibFileName: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), getDefaultLibFileName(options)),
             writeFile,
-            getCurrentDirectory: () => currentDirectory || (currentDirectory = sys.getCurrentDirectory()),
+            getCurrentDirectory,
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
             getCanonicalFileName,
             getNewLine: () => newLine
@@ -155,6 +178,9 @@ module ts {
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
+        let packageDirectory: string;
+        let packageMain: string;
+        let packageDeclaration: string;
 
         let start = new Date().getTime();
 
@@ -180,27 +206,32 @@ module ts {
             getCommonSourceDirectory: () => commonSourceDirectory,
             emit,
             getCurrentDirectory: () => host.getCurrentDirectory(),
+            getPackageDirectory: () => packageDirectory,
             getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
             getIdentifierCount: () => getDiagnosticsProducingTypeChecker().getIdentifierCount(),
             getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
         };
         return program;
-
+        
         function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
             return {
                 getCanonicalFileName: fileName => host.getCanonicalFileName(fileName),
                 getCommonSourceDirectory: program.getCommonSourceDirectory,
                 getCompilerOptions: program.getCompilerOptions,
                 getCurrentDirectory: () => host.getCurrentDirectory(),
+                getPackageDirectory: () => packageDirectory,
+                getPackageMain: () => packageMain,
+                getPackageDeclaration: () => packageDeclaration,
                 getNewLine: () => host.getNewLine(),
+                useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
                 getSourceFile: program.getSourceFile,
                 getSourceFiles: program.getSourceFiles,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError) => host.writeFile(fileName, data, writeByteOrderMark, onError)),
             };
         }
-
+        
         function getDiagnosticsProducingTypeChecker() {
             return diagnosticsProducingTypeChecker || (diagnosticsProducingTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ true));
         }
@@ -550,6 +581,18 @@ module ts {
                 if (options.out) {
                     diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_out_cannot_be_specified_with_option_separateCompilation));
                 }
+                
+                if (options.packageName) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_separateCompilation, "packageName"));
+                }
+                
+                if (options.packageMain) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_separateCompilation, "packageMain"));
+                }
+                
+                if (options.packageDeclaration) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_separateCompilation, "packageDeclaration"));
+                }
             }
 
             if (options.inlineSourceMap) {
@@ -581,7 +624,7 @@ module ts {
                 }
                 return;
             }
-
+            
             let languageVersion = options.target || ScriptTarget.ES3;
 
             let firstExternalModuleSourceFile = forEach(files, f => isExternalModule(f) ? f : undefined);
@@ -631,6 +674,34 @@ module ts {
                 }
             }
 
+            if (options.packageMain || options.packageName || options.packageDeclaration) {
+                if (!options.packageMain) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Options_0_and_1_must_also_be_specified_with_option_2, "packageName", "packageDeclaration", "packageMain"));
+                    return;
+                }
+                if (!options.packageName) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Options_0_and_1_must_also_be_specified_with_option_2, "packageDeclaration", "packageMain", "packageName"));
+                    return;
+                }
+                if (!options.packageDeclaration) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Options_0_and_1_must_also_be_specified_with_option_2, "packageMain", "packageName", "packageDeclaration"));
+                    return;
+                }
+                if (options.module === ModuleKind.None && options.target < ScriptTarget.ES6) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Options_packageName_packageMain_and_packageDeclaration_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES6_or_higher));
+                }
+                
+                if (options.packageDir) {
+                    packageDirectory = getNormalizedAbsolutePath(options.packageDir, host.getCurrentDirectory());
+                }
+                else {
+                    packageDirectory = commonSourceDirectory ? commonSourceDirectory : host.getCurrentDirectory();
+                }
+                
+                packageMain = getNormalizedAbsolutePath(options.packageMain, packageDirectory);
+                packageDeclaration = removeFileExtension(getNormalizedAbsolutePath(options.packageDeclaration, packageDirectory)) + ".d.ts";
+            }
+
             if (options.noEmit) {
                 if (options.out || options.outDir) {
                     diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_noEmit_cannot_be_specified_with_option_out_or_outDir));
@@ -638,6 +709,10 @@ module ts {
 
                 if (options.declaration) {
                     diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_noEmit_cannot_be_specified_with_option_declaration));
+                }
+                
+                if (options.packageDeclaration) {
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_noEmit_cannot_be_specified_with_option_packageDeclaration));
                 }
             }
         }

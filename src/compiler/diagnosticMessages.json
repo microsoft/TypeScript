@@ -1801,7 +1801,7 @@
         "category": "Error",
         "code": 5046
     },
-    "Option 'separateCompilation' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher.": {
+    "Option 'separateCompilation' can only be used when either option 'module' is provided or option 'target' is 'ES6' or higher.": {
         "category": "Error",
         "code": 5047
     },
@@ -1817,9 +1817,25 @@
         "category": "Error",
         "code": 5050
     },
-     "Option 'inlineSources' can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
+    "Option 'inlineSources' can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
         "category": "Error",
         "code": 5051
+    },
+    "Options '{0}' and '{1}' must also be specified with option '{2}'.": {
+        "category": "Error",
+        "code": 5052
+    },
+    "Options 'packageName', 'packageMain', and 'packageDeclaration' can only be used when either option 'module' is provided or option 'target' is 'ES6' or higher.": {
+        "category": "Error",
+        "code": 5054
+    },
+    "Option '{0}' cannot be specified with option 'separateCompilation'.": {
+        "category": "Error",
+        "code": 5055
+    },
+    "Option 'noEmit' cannot be specified with option 'packageDeclaration'.": {
+        "category": "Error",
+        "code": 5056
     },
 
     "Concatenate and emit output to single file.": {
@@ -2018,7 +2034,26 @@
         "category": "Error", 
         "code": 6062
     },
-
+    "Specifies the main module for the package": {
+        "category": "Message",
+        "code": 6100
+    },
+    "Specifies the name of the package": {
+        "category": "Message",
+        "code": 6101
+    },
+    "Specifies the output path for the package declaration": {
+        "category": "Message",
+        "code": 6102
+    },
+    "Specifies the root directory of the package": {
+        "category": "Message",
+        "code": 6103
+    },
+    "NAME": {
+        "category": "Message",
+        "code": 6104
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

@@ -31,11 +31,12 @@ module ts {
 
     export interface EmitHost extends ScriptReferenceHost {
         getSourceFiles(): SourceFile[];
-
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;
-
+        useCaseSensitiveFileNames(): boolean;
+        getPackageMain(): string;
+        getPackageDeclaration(): string;
         writeFile: WriteFileCallback;
     }
 

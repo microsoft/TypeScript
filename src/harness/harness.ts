@@ -1048,6 +1048,22 @@ module Harness {
                         case 'declaration':
                             options.declaration = setting.value === 'true';
                             break;
+                            
+                        case 'packagename':
+                            options.packageName = setting.value;
+                            break;
+                            
+                        case 'packagemain':
+                            options.packageMain = setting.value;
+                            break;
+                            
+                        case 'packagedeclaration':
+                            options.packageDeclaration = setting.value;
+                            break;
+                            
+                        case 'packagedir':
+                            options.packageDir = setting.value;
+                            break;
 
                         case 'newline':
                             if (setting.value.toLowerCase() === 'crlf') {
@@ -1149,21 +1165,35 @@ module Harness {
                 options?: ts.CompilerOptions,
                 // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
                 currentDirectory?: string) {
-                if (options.declaration && result.errors.length === 0 && result.declFilesCode.length !== result.files.length) {
+                let expectedDeclFileCount = 0;
+                if (options.declaration) {
+                    expectedDeclFileCount += result.files.length;
+                }
+                if (options.packageDeclaration) {
+                    expectedDeclFileCount++;
+                }
+                
+                if ((options.declaration || options.packageDeclaration) && result.errors.length === 0 && (result.declFilesCode.length !== expectedDeclFileCount)) {
                     throw new Error('There were no errors and declFiles generated did not match number of js files generated');
                 }
 
                 // if the .d.ts is non-empty, confirm it compiles correctly as well
-                if (options.declaration && result.errors.length === 0 && result.declFilesCode.length > 0) {
+                if ((options.declaration || options.packageDeclaration) && result.errors.length === 0 && result.declFilesCode.length > 0) {
                     var declInputFiles: { unitName: string; content: string }[] = [];
                     var declOtherFiles: { unitName: string; content: string }[] = [];
                     var declResult: Harness.Compiler.CompilerResult;
+                    if (options.packageDeclaration) {
+                        let file = ts.forEach(result.declFilesCode, declFile => ts.comparePaths(declFile.fileName, options.packageDeclaration, result.currentDirectoryForProgram, true) === ts.Comparison.EqualTo ? declFile : undefined);
+                        if (file) {
+                            declInputFiles.push({ unitName: file.fileName, content: file.code });
+                        }
+                    }
 
                     ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
                     ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
+                    
                     this.compileFiles(declInputFiles, declOtherFiles, function (compileResult) { declResult = compileResult; },
                         settingsCallback, options, currentDirectory);
-
                     return { declInputFiles, declOtherFiles, declResult };
                 }
 
@@ -1171,7 +1201,7 @@ module Harness {
                     if (isDTS(file.unitName)) {
                         dtsFiles.push(file);
                     }
-                    else if (isTS(file.unitName)) {
+                    else if (isTS(file.unitName) && options.declaration) {
                         var declFile = findResultCodeFile(file.unitName);
                         if (!findUnit(declFile.fileName, declInputFiles) && !findUnit(declFile.fileName, declOtherFiles)) {
                             dtsFiles.push({ unitName: declFile.fileName, content: declFile.code });
@@ -1510,7 +1540,8 @@ module Harness {
             "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
             "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
             "separatecompilation", "inlinesourcemap", "maproot", "sourceroot",
-            "inlinesources", "emitdecoratormetadata"];
+            "inlinesources", "emitdecoratormetadata", "packagemain", "packagename",
+            "packagedeclaration"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
