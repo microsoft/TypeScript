@@ -1853,6 +1853,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 emitListWithSpread(node.arguments, /*alwaysCopy*/ false, /*multiLine*/ false, /*trailingComma*/ false);
                 write(")");
             }
+            
+            function emitBracedEnclosedCommaList(nodes: Node[]) {
+                write("(");
+                emitCommaList(nodes);
+                write(")");
+            }
 
             function emitCallExpression(node: CallExpression) {
                 if (languageVersion < ScriptTarget.ES6 && hasSpreadElement(node.arguments)) {
@@ -1865,7 +1871,14 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     superCall = true;
                 }
                 else {
-                    emit(node.expression);
+                    if (node.expression.kind === SyntaxKind.NewExpression) {
+                        emitNewExpression(<NewExpression>node.expression, /*emitCallHelper*/true);
+                        emitBracedEnclosedCommaList(node.arguments);
+                        return;
+                    }
+                    else {
+                        emit(node.expression);
+                    }
                     superCall = node.expression.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.expression).expression.kind === SyntaxKind.SuperKeyword;
                 }
                 if (superCall && languageVersion < ScriptTarget.ES6) {
@@ -1878,13 +1891,27 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write(")");
                 }
                 else {
-                    write("(");
-                    emitCommaList(node.arguments);
-                    write(")");
+                    emitBracedEnclosedCommaList(node.arguments);
                 }
             }
-
-            function emitNewExpression(node: NewExpression) {
+            
+            /** Emit a new expression. 
+              * 
+              * Emit call helper:
+              * When we are emitting a call expression from a new expressions with spread syntax in ES5 
+              * we need an argument to help this function decide whether it should emit a pair of extra 
+              * braces "()" at the end. These extra braces are there to help the expression to not be 
+              * consumed by the new expression directly.
+              * 
+              *   Example:
+              * 
+              *     new Array(...arguments)();
+              *
+              *     Should be transpiled into ES5:
+              *
+              *     new (Array.bind.apply(Array, [void 0].concat(arguments)))()()
+              */
+            function emitNewExpression(node: NewExpression, emitCallHelper = false) {
                 write("new ");
 
                 // Spread operator logic can be supported in new expressions in ES5 using a combination
@@ -1898,7 +1925,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 //         Could be transpiled into ES5:
                 //
                 //         var arguments = [1, 2, 3, 4, 5];
-                //         new (Function.bind.apply(Array, [void 0].concat(arguments)));
+                //         new (Array.bind.apply(Array, [void 0].concat(arguments)));
                 //
                 // `[void 0]` is the first argument which represents `thisArg` to the bind method above. 
                 // And `thisArg` will be set to the return value of the constructor when instantiated 
@@ -1909,11 +1936,15 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     hasSpreadElement(node.arguments)) {
 
                     write("(");
-                    write("Function.bind.apply(");
-                    emit(node.expression);
+                    let target = emitCallTarget(node.expression);
+                    write(".bind.apply(");
+                    emit(target);
                     write(", [void 0].concat(");
                     emitListWithSpread(node.arguments, /*multiline*/false, /*trailingComma*/false);
                     write(")))");
+                    if (emitCallHelper) {
+                        write("()");
+                    }
                 }
                 else {
                     emit(node.expression);
