@@ -44,7 +44,8 @@ module ts {
             type: "string",
             isFilePath: true,
             experimental: true,
-            description: Diagnostics.Specifies_the_root_directory_of_the_package
+            description: Diagnostics.Specifies_the_root_directory_of_the_package,
+            paramType: Diagnostics.DIRECTORY
         },
         {
             name: "diagnostics",
