@@ -169,6 +169,14 @@ module ts {
             experimental: true
         },
         {
+            name: "imports",
+            longName: "import",
+            shortName: "i",
+            type: "string",
+            many: true,
+            experimental: true
+        },
+        {
             name: "target",
             shortName: "t",
             type: { "es3": ScriptTarget.ES3, "es5": ScriptTarget.ES5, "es6": ScriptTarget.ES6 },
@@ -203,7 +211,11 @@ module ts {
         var optionNameMap: Map<CommandLineOption> = {};
 
         forEach(optionDeclarations, option => {
-            optionNameMap[option.name.toLowerCase()] = option;
+            if (!option.longName) {
+                option.longName = option.name;
+            }
+
+            optionNameMap[option.longName.toLowerCase()] = option;
             if (option.shortName) {
                 shortOptionNames[option.shortName] = option.name;
             }
@@ -238,26 +250,40 @@ module ts {
                             errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_expects_an_argument, opt.name));
                         }
 
+                        var value: string | number | boolean;
                         switch (opt.type) {
                             case "number":
-                                options[opt.name] = parseInt(args[i++]);
+                                value = parseInt(args[i++]);
                                 break;
                             case "boolean":
-                                options[opt.name] = true;
+                                value = true;
                                 break;
                             case "string":
-                                options[opt.name] = args[i++] || "";
+                                value = args[i++] || "";
                                 break;
                             // If not a primitive, the possible types are specified in what is effectively a map of options.
                             default:
                                 var map = <Map<number>>opt.type;
                                 var key = (args[i++] || "").toLowerCase();
                                 if (hasProperty(map, key)) {
-                                    options[opt.name] = map[key];
+                                    value = map[key];
                                 }
                                 else {
                                     errors.push(createCompilerDiagnostic(opt.error));
+                                    continue;
                                 }
+                        }
+
+                        if (opt.many) {
+                            let optionValues = <(string | number | boolean)[]>options[opt.name];
+                            if (!optionValues) {
+                                options[opt.name] = optionValues = [];
+                            }
+
+                            optionValues.push(value);
+                        }
+                        else {
+                            options[opt.name] = value;
                         }
                     }
                     else {
@@ -348,37 +374,30 @@ module ts {
         };
 
         function getCompilerOptions(): CompilerOptions {
-            var options: CompilerOptions = {};
-            var optionNameMap: Map<CommandLineOption> = {};
+            let options: CompilerOptions = {};
+            let optionNameMap: Map<CommandLineOption> = {};
             forEach(optionDeclarations, option => {
                 optionNameMap[option.name] = option;
             });
-            var jsonOptions = json["compilerOptions"];
+            let jsonOptions = json["compilerOptions"];
             if (jsonOptions) {
-                for (var id in jsonOptions) {
+                for (let id in jsonOptions) {
                     if (hasProperty(optionNameMap, id)) {
-                        var opt = optionNameMap[id];
-                        var optType = opt.type;
-                        var value = jsonOptions[id];
-                        var expectedType = typeof optType === "string" ? optType : "string";
-                        if (typeof value === expectedType) {
-                            if (typeof optType !== "string") {
-                                var key = value.toLowerCase();
-                                if (hasProperty(optType, key)) {
-                                    value = optType[key];
-                                }
-                                else {
-                                    errors.push(createCompilerDiagnostic(opt.error));
-                                    value = 0;
+                        let opt = optionNameMap[id];
+                        let value = jsonOptions[id];
+                        if (opt.many) {
+                            if (value instanceof Array) {
+                                let values = <any[]>value;
+                                for (let value of values) {
+                                    readOptionValue(id, value, opt);
                                 }
                             }
-                            if (opt.isFilePath) {
-                                value = normalizePath(combinePaths(basePath, value));
+                            else {
+                                errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, id, "string[]"));
                             }
-                            options[opt.name] = value;
                         }
                         else {
-                            errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, id, expectedType));
+                            readOptionValue(id, value, opt);
                         }
                     }
                     else {
@@ -387,8 +406,42 @@ module ts {
                 }
             }
             return options;
-        }
 
+            function readOptionValue(id: string, value: any, opt: CommandLineOption) {
+                let optType = opt.type;
+                let expectedType = typeof optType === "string" ? optType : "string";
+                if (typeof value === expectedType) {
+                    if (typeof optType !== "string") {
+                        let key = value.toLowerCase();
+                        if (hasProperty(optType, key)) {
+                            value = optType[key];
+                        }
+                        else {
+                            errors.push(createCompilerDiagnostic(opt.error));
+                            return;
+                        }
+                    }
+                    if (opt.isFilePath) {
+                        value = normalizePath(combinePaths(basePath, value));
+                    }
+                    if (opt.many) {
+                        let optionValues = <(string | number | boolean)[]>options[opt.name];
+                        if (!optionValues) {
+                            options[opt.name] = optionValues = [];
+                        }
+
+                        optionValues.push(value);
+                    }
+                    else {
+                        options[opt.name] = value;
+                    }
+                }
+                else {
+                    errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, id, expectedType));
+                }
+            }
+        }
+        
         function getFiles(): string[] {
             var files: string[] = [];
             if (hasProperty(json, "files")) {

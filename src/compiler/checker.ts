@@ -880,6 +880,20 @@ module ts {
             }
             error(moduleReferenceLiteral, Diagnostics.Cannot_find_module_0, moduleName);
         }
+        
+        function resolveCompilerImports(node: SourceFile) {
+            let basePath = host.getCurrentDirectory();
+            for (let compilerImport of compilerOptions.imports) {
+                resolveCompilerImport(compilerImport, basePath, node);
+            }
+        }
+        
+        function resolveCompilerImport(compilerImport: string, searchPath: string, node: SourceFile) {
+            let symbol = getSymbol(globals, '"' + escapeString(compilerImport) + '"', SymbolFlags.ValueModule);
+            if (!symbol) {
+                error(node, Diagnostics.Cannot_find_module_0, compilerImport);
+            }
+        }
 
         // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
         // and an external module with no 'export =' declaration resolves to the module itself.
@@ -10998,6 +11012,10 @@ module ts {
                 emitDecorate = false;
                 emitParam = false;
                 potentialThisCollisions.length = 0;
+                
+                if (isExternalModule(node) && compilerOptions.imports) {
+                    resolveCompilerImports(node);
+                }
 
                 forEach(node.statements, checkSourceElement);
                 checkFunctionExpressionBodies(node);

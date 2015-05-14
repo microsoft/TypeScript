@@ -5530,6 +5530,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     }
                 }
 
+                if (compilerOptions.imports) {
+                    for (let compilerImport of compilerOptions.imports) {
+                        unaliasedModuleNames.push("\"" + escapeString(compilerImport) + "\"");
+                    }
+                }
+                
                 write("[\"require\", \"exports\"");
                 if (aliasedModuleNames.length) {
                     write(", ");
@@ -5569,6 +5575,14 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
             function emitCommonJSModule(node: SourceFile, startIndex: number) {
                 collectExternalModuleInfo(node);
+
+                if (compilerOptions.imports) {
+                    for (let compilerImport of compilerOptions.imports) {
+                        writeLine();
+                        write("require(\"" + escapeString(compilerImport) + "\");");
+                    }
+                }
+
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
@@ -5591,6 +5605,14 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 emitAMDDependencies(node, false);
                 write(") {");
                 increaseIndent();
+
+                if (compilerOptions.imports) {
+                    for (let compilerImport of compilerOptions.imports) {
+                        writeLine();
+                        write("require(\"" + escapeString(compilerImport) + "\");");
+                    }
+                }
+                
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
@@ -5601,15 +5623,23 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 write("});");
             }
 
-            function emitES6Module(node: SourceFile, startIndex: number) {
+            function emitScriptOrES6Module(node: SourceFile, startIndex: number) {
                 externalImports = undefined;
                 exportSpecifiers = undefined;
                 exportEquals = undefined;
                 hasExportStars = false;
+
+                if (languageVersion >= ScriptTarget.ES6 && compilerOptions.imports) {
+                    for (let compilerImport of compilerOptions.imports) {
+                        writeLine();
+                        write("import \"" + escapeString(compilerImport) + "\";");
+                    }
+                }
+
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
-                // Emit exportDefault if it exists will happen as part 
+                // For ES6, emit exportDefault if it exists will happen as part 
                 // or normal statement emit.
             }
 
@@ -5684,7 +5714,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
                 if (isExternalModule(node) || compilerOptions.separateCompilation) {
                     if (languageVersion >= ScriptTarget.ES6) {
-                        emitES6Module(node, startIndex);
+                        emitScriptOrES6Module(node, startIndex);
                     }
                     else if (compilerOptions.module === ModuleKind.AMD) {
                         emitAMDModule(node, startIndex);
@@ -5700,13 +5730,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     }
                 }
                 else {
-                    externalImports = undefined;
-                    exportSpecifiers = undefined;
-                    exportEquals = undefined;
-                    hasExportStars = false;
-                    emitCaptureThisForNodeIfNecessary(node);
-                    emitLinesStartingAt(node.statements, startIndex);
-                    emitTempDeclarations(/*newLine*/ true);
+                    emitScriptOrES6Module(node, startIndex);
                 }
 
                 emitLeadingComments(node.endOfFileToken);

@@ -160,6 +160,11 @@ module ts {
 
         host = host || createCompilerHost(options);
         forEach(rootNames, name => processRootFile(name, false));
+        
+        if (options.imports) {
+            processCompilerImports();
+        }
+        
         if (!seenNoDefaultLib) {
             processRootFile(host.getDefaultLibFileName(options), true);
         }
@@ -390,6 +395,7 @@ module ts {
                         processReferencedFiles(file, basePath);
                         processImportedModules(file, basePath);
                     }
+
                     if (isDefaultLib) {
                         files.unshift(file);
                     }
@@ -419,6 +425,31 @@ module ts {
                 let referencedFileName = isRootedDiskPath(ref.fileName) ? ref.fileName : combinePaths(basePath, ref.fileName);
                 processSourceFile(normalizePath(referencedFileName), /* isDefaultLib */ false, file, ref.pos, ref.end);
             });
+        }
+
+        function processCompilerImports() {
+            let basePath = host.getCurrentDirectory();
+            for (let compilerImport of options.imports) {
+                processCompilerImport(compilerImport, basePath);
+            }
+        }
+        
+        function processCompilerImport(compilerImport: string, searchPath: string) {
+            while (true) {
+                let searchName = normalizePath(combinePaths(searchPath, compilerImport));
+                for (let extension of supportedExtensions) {
+                    if (findSourceFile(searchName + extension, /*isDefaultLib*/ false)) {
+                        return;
+                    }
+                }
+                
+                let parentPath = getDirectoryPath(searchPath);
+                if (parentPath === searchPath) {
+                    break;
+                }
+                
+                searchPath = parentPath;
+            }
         }
 
         function processImportedModules(file: SourceFile, basePath: string) {

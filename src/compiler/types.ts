@@ -1132,7 +1132,7 @@ module ts {
 
     export interface TypeCheckerHost {
         getCompilerOptions(): CompilerOptions;
-
+        getCurrentDirectory(): string;
         getSourceFiles(): SourceFile[];
         getSourceFile(fileName: string): SourceFile;
     }
@@ -1679,7 +1679,8 @@ module ts {
         separateCompilation?: boolean;
         emitDecoratorMetadata?: boolean;
         /* @internal */ stripInternal?: boolean;
-        [option: string]: string | number | boolean;
+        /* @internal */ imports?: string[];
+        [option: string]: string | number | boolean | (string | number | boolean)[];
     }
 
     export const enum ModuleKind {
@@ -1720,8 +1721,10 @@ module ts {
     export interface CommandLineOption {
         name: string;
         type: string | Map<number>;         // "string", "number", "boolean", or an object literal mapping named values to actual values
+        many?: boolean;                     // True if the option can be defined multiple times
         isFilePath?: boolean;               // True if option value is a path or fileName
         shortName?: string;                 // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
+        longName?: string;                  // When present, this value is used on the command line instead of name
         description?: DiagnosticMessage;    // The message describing what the command line switch does
         paramType?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter
         error?: DiagnosticMessage;          // The error given when the argument does not fit a customized 'type'

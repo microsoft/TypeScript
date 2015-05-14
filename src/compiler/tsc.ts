@@ -449,7 +449,7 @@ module ts {
                 usageText += ", ";
             }
 
-            usageText += "--" + option.name;
+            usageText += "--" + (option.longName || option.name);
             usageText += getParamType(option);
 
             usageColumn.push(usageText);
