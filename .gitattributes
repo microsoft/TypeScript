@@ -1,1 +1,23 @@
 *.js linguist-language=TypeScript
+
+*.docx              -text
+*.svg               -text
+*.pdf               -text
+*.json              eol=crlf
+*.md                eol=crlf
+*.txt               eol=crlf
+*.cmd               eol=crlf
+
+src/**/*.ts         eol=crlf
+scripts/**/*.js     eol=crlf
+scripts/**/*.js.map eol=crlf
+scripts/**/*.ts     eol=crlf
+
+.editorconfig       eol=crlf
+.gitattributes      eol=crlf
+.gitignore          eol=crlf
+.npmignore          eol=crlf
+.travis.yml         eol=crlf
+Jakefile.js         eol=crlf
+
+tests/**/*          crlf=false
