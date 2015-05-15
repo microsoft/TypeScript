@@ -88,6 +88,7 @@ module ts {
         let undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
         let nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsUndefinedOrNull, "null");
         let unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
+        let circularType = createIntrinsicType(TypeFlags.Any, "__circular__");
 
         let emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         let anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -3575,19 +3576,7 @@ module ts {
             return false;
         }
 
-        // Since removeSubtypes checks the subtype relation, and the subtype relation on a union
-        // may attempt to reduce a union, it is possible that removeSubtypes could be called
-        // recursively on the same set of types. The removeSubtypesStack is used to track which
-        // sets of types are currently undergoing subtype reduction.
-        let removeSubtypesStack: string[] = [];
         function removeSubtypes(types: Type[]) {
-            let typeListId = getTypeListId(types);
-            if (removeSubtypesStack.lastIndexOf(typeListId) >= 0) {
-                return;
-            }
-
-            removeSubtypesStack.push(typeListId);
-
             let i = types.length;
             while (i > 0) {
                 i--;
@@ -3595,8 +3584,6 @@ module ts {
                     types.splice(i, 1);
                 }
             }
-
-            removeSubtypesStack.pop();
         }
 
         function containsAnyType(types: Type[]) {
@@ -3651,10 +3638,20 @@ module ts {
             return type;
         }
 
+        // Subtype reduction is basically an optimization we do to avoid excessively large union types, which take longer
+        // to process and look strange in quick info and error messages. Semantically there is no difference between the
+        // reduced type and the type itself. So, when we detect a circularity we simply say that the reduced type is the
+        // type itself.
         function getReducedTypeOfUnionType(type: UnionType): Type {
-            // If union type was created without subtype reduction, perform the deferred reduction now
             if (!type.reducedType) {
-                type.reducedType = getUnionType(type.types, /*noSubtypeReduction*/ false);
+                type.reducedType = circularType;
+                let reducedType = getUnionType(type.types, /*noSubtypeReduction*/ false);
+                if (type.reducedType === circularType) {
+                    type.reducedType = reducedType;
+                }
+            }
+            else if (type.reducedType === circularType) {
+                type.reducedType = type;
             }
             return type.reducedType;
         }
