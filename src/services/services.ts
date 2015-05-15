@@ -1829,7 +1829,34 @@ module ts {
             if (version !== sourceFile.version) {
                 // Once incremental parsing is ready, then just call into this function.
                 if (!disableIncrementalParsing) {
-                    let newSourceFile = updateSourceFile(sourceFile, scriptSnapshot.getText(0, scriptSnapshot.getLength()), textChangeRange, aggressiveChecks);
+                    let newText: string;
+                    
+                    // grab the fragment from the beginning of the original text to the beginning of the span
+                    let prefix = textChangeRange.span.start !== 0
+                        ? sourceFile.text.substr(0, textChangeRange.span.start)
+                        : "";
+                    
+                    // grab the fragment from the end of the span till the end of the original text
+                    let suffix = textChangeRange.span.start + textChangeRange.span.length !== sourceFile.text.length
+                            ? sourceFile.text.substr(textChangeRange.span.start + textChangeRange.span.length)
+                            : "";
+
+                    if (textChangeRange.newLength === 0) {
+                        // edit was a deletion - just combine prefix and suffix
+                        newText = prefix && suffix ? prefix + suffix : prefix || suffix;
+                    }
+                    else {
+                        // it was actual edit, fetch the fragment of new text that correspond to new span
+                        let changedText = scriptSnapshot.getText(textChangeRange.span.start, textChangeRange.span.start + textChangeRange.newLength);
+                        // combine prefix, changed text and suffix
+                        newText = prefix && suffix 
+                            ? prefix + changedText + suffix
+                            : prefix
+                                ? (prefix + changedText) 
+                                : (changedText + suffix);
+                    }
+
+                    let newSourceFile = updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
                     setSourceFileFields(newSourceFile, scriptSnapshot, version);
                     // after incremental parsing nameTable might not be up-to-date
                     // drop it so it can be lazily recreated later
