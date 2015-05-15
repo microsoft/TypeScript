@@ -2229,9 +2229,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 emitEmbeddedStatement(node.statement);
             }
 
-            /* Returns true if start of variable declaration list was emitted.
-             * Return false if nothing was written - this can happen for source file level variable declarations
-             * in system modules - such variable declarations are hoisted.
+            /**
+             * Returns true if start of variable declaration list was emitted.
+             * Returns false if nothing was written - this can happen for source file level variable declarations
+             *     in system modules where such variable declarations are hoisted.
              */
             function tryEmitStartOfVariableDeclarationList(decl: VariableDeclarationList, startPos?: number): boolean {
                 if (shouldHoistVariable(decl, /*checkIfSourceFileLevelDecl*/ true)) {
@@ -3060,6 +3061,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
             function emitVariableStatement(node: VariableStatement) {
                 let startIsEmitted = false;
+
                 if (node.flags & NodeFlags.Export) {
                     if (isES6ExportedDeclaration(node)) {
                         // Exported ES6 module member
@@ -3070,6 +3072,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 else {
                     startIsEmitted = tryEmitStartOfVariableDeclarationList(node.declarationList);
                 }
+
                 if (startIsEmitted) {
                     emitCommaList(node.declarationList.declarations);
                     write(";");
@@ -3083,6 +3086,28 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile) {
                     forEach(node.declarationList.declarations, emitExportVariableAssignments);
                 }
+            }
+
+            function shouldEmitLeadingAndTrailingCommentsForVariableStatement(node: VariableStatement) {
+                // If we're not exporting the variables, there's nothing special here.
+                // Always emit comments for these nodes.
+                if (!(node.flags & NodeFlags.Export)) {
+                    return true;
+                }
+
+                // If we are exporting, but it's a top-level ES6 module exports,
+                // we'll emit the declaration list verbatim, so emit comments too.
+                if (isES6ExportedDeclaration(node)) {
+                    return true;
+                }
+
+                // Otherwise, only emit if we have at least one initializer present.
+                for (let declaration of node.declarationList.declarations) {
+                    if (declaration.initializer) {
+                        return true;
+                    }
+                }
+                return false;
             }
 
             function emitParameter(node: ParameterDeclaration) {
@@ -5746,6 +5771,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     case SyntaxKind.TypeAliasDeclaration:
                     case SyntaxKind.ExportAssignment:
                         return false;
+
+                    case SyntaxKind.VariableStatement:
+                        return shouldEmitLeadingAndTrailingCommentsForVariableStatement(<VariableStatement>node);
 
                     case SyntaxKind.ModuleDeclaration:
                         // Only emit the leading/trailing comments for a module if we're actually
