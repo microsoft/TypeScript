@@ -1913,7 +1913,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write(".bind.apply(");
                     emit(target);
                     write(", [void 0].concat(");
-                    emitListWithSpread(node.arguments, /*multiline*/false, /*trailingComma*/false);
+                    emitListWithSpread(node.arguments, /*alwaysCopy*/true, /*multiline*/false, /*trailingComma*/false);
                     write(")))");
                     write("()");
                 }
