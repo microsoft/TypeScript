@@ -960,6 +960,9 @@ module ts {
         log? (s: string): void;
         trace? (s: string): void;
         error? (s: string): void;
+        
+        // Needed for mocking support
+        fileExists? (s: string): boolean;
     }
 
     //
@@ -2436,7 +2439,7 @@ module ts {
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: (fileName, data, writeByteOrderMark) => { },
                 readFile: (fileName) => sys.readFile(fileName),
-                fileExists: (fileName) => !!hostCache.getOrCreateEntry(fileName),
+                fileExists: host.fileExists ? (fn) => host.fileExists(fn) : sys.fileExists,
                 getCurrentDirectory: () => host.getCurrentDirectory(),
             });
 

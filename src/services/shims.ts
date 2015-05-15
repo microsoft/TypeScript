@@ -56,6 +56,7 @@ module ts {
         getDefaultLibFileName(options: string): string;
         getNewLine?(): string;
         getProjectVersion?(): string;
+        fileExists(fileName: string): boolean;
     }
 
     /** Public interface of the the of a config service shim instance.*/
@@ -259,6 +260,10 @@ module ts {
 
         public error(s: string): void {
             this.shimHost.error(s);
+        }
+        
+        public fileExists(fn: string): boolean {
+            return this.shimHost.fileExists(fn);
         }
 
         public getProjectVersion(): string {

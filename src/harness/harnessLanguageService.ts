@@ -190,6 +190,7 @@ module Harness.LanguageService {
         log(s: string): void { }
         trace(s: string): void { }
         error(s: string): void { }
+        fileExists = (fn: string) => this.getFilenames().some(serviceAdaptorFileName=> serviceAdaptorFileName === fn);
     }
 
     export class NativeLanugageServiceAdapter implements LanguageServiceAdapter {
@@ -236,6 +237,7 @@ module Harness.LanguageService {
         log(s: string): void { this.nativeHost.log(s); }
         trace(s: string): void { this.nativeHost.trace(s); }
         error(s: string): void { this.nativeHost.error(s); }
+        fileExists(fn: string) { return this.nativeHost.fileExists(fn); }
     }
 
     class ClassifierShimProxy implements ts.Classifier { 
