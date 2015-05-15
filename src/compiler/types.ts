@@ -1881,6 +1881,8 @@ module ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
+        readFile(path: string): string;
+        fileExists(path: string): boolean;
     }
 
     export interface TextSpan {

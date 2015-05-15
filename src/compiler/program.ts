@@ -106,7 +106,9 @@ module ts {
             getCurrentDirectory: () => currentDirectory || (currentDirectory = sys.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
             getCanonicalFileName,
-            getNewLine: () => newLine
+            getNewLine: () => newLine,
+            readFile: sys.readFile,
+            fileExists: sys.fileExists
         };
     }
 
@@ -239,8 +241,8 @@ module ts {
             return emitResult;
         }
         
-        function resolveExternalModule(moduleName: string, searchPath: string): string {
-            let cacheLookupName = moduleName + searchPath;
+        function resolveExternalModule(moduleName: string, containingFile: string): string {
+            let cacheLookupName = moduleName + containingFile;
             if (resolvedExternalModuleCache[cacheLookupName]) {
                 return resolvedExternalModuleCache[cacheLookupName];
             }
@@ -248,28 +250,25 @@ module ts {
                 return undefined;
             }
             function getNameIfExists(fileName: string): string {
-                // To detect if file exists. 
-                // Using this is to demonstrate that sys.fileExists is what is causing module resolution to fail in test driver
-                // This is just for code review
-                if (host.getSourceFile(fileName, ScriptTarget.Latest)) {
+                if (host.fileExists(fileName)) {
                     return fileName;
                 }
             }
             while (true) {
                 // Look at files by all extensions
                 let found = forEach(supportedExtensions,
-                    extension => getNameIfExists(normalizePath(combinePaths(searchPath, moduleName)) + extension));
+                    extension => getNameIfExists(normalizePath(combinePaths(containingFile, moduleName)) + extension));
                 // Also look at all files by node_modules
                 if (!found) {
                     found = forEach(supportedExtensions,
-                        extension => getNameIfExists(normalizePath(combinePaths(combinePaths(searchPath, "node_modules"), moduleName)) + extension));
+                        extension => getNameIfExists(normalizePath(combinePaths(combinePaths(containingFile, "node_modules"), moduleName)) + extension));
                 }
                 // Also look at package.json's main in node_modules
                 if (!found) {
                     // If we found a package.json then look at its main field
-                    let pkgJson = getNameIfExists(normalizePath(combinePaths(combinePaths(combinePaths(searchPath, "node_modules"), moduleName), "package.json")));
+                    let pkgJson = getNameIfExists(normalizePath(combinePaths(combinePaths(combinePaths(containingFile, "node_modules"), moduleName), "package.json")));
                     if (pkgJson) {
-                        let pkgFile = JSON.parse(sys.readFile(pkgJson));
+                        let pkgFile = JSON.parse(host.readFile(pkgJson));
                         if (pkgFile.main) {
                             var indexFileName = removeFileExtension(combinePaths(getDirectoryPath(pkgJson), pkgFile.main));
                             found = forEach(supportedExtensions,
@@ -280,19 +279,19 @@ module ts {
                 // look at node_modules index
                 if (!found) {
                     found = forEach(supportedExtensions,
-                        extension => getNameIfExists(normalizePath(combinePaths(combinePaths(combinePaths(searchPath, "node_modules"), moduleName), "index")) + extension));
+                        extension => getNameIfExists(normalizePath(combinePaths(combinePaths(combinePaths(containingFile, "node_modules"), moduleName), "index")) + extension));
                 }
                 
                 // Finally cache and return or continue up the directory tree
                 if (found) {
                     return resolvedExternalModuleCache[cacheLookupName] = found;
                 }
-                let parentPath = getDirectoryPath(searchPath);
-                if (parentPath === searchPath) {
+                let parentPath = getDirectoryPath(containingFile);
+                if (parentPath === containingFile) {
                     resolvedExternalModuleCache[cacheLookupName] = '';
                     return undefined;
                 }
-                searchPath = parentPath;
+                containingFile = parentPath;
             }
         }
 
@@ -487,8 +486,8 @@ module ts {
                     if (moduleNameExpr && moduleNameExpr.kind === SyntaxKind.StringLiteral) {
                         let moduleNameText = (<LiteralExpression>moduleNameExpr).text;
                         if (moduleNameText) {
-                            let resolvedName = resolveExternalModule(moduleNameText, getDirectoryPath(file.fileName));
-                            if (resolvedName) {
+                            let resolvedName = resolveExternalModule(moduleNameText, basePath);
+                            if (resolvedName) {                                
                                 findModuleSourceFile(resolvedName, moduleNameExpr);
                             }
                         }

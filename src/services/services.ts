@@ -1795,7 +1795,9 @@ module ts {
             useCaseSensitiveFileNames: () => false,
             getCanonicalFileName: fileName => fileName,
             getCurrentDirectory: () => "",
-            getNewLine: () => (sys && sys.newLine) || "\r\n"
+            getNewLine: () => (sys && sys.newLine) || "\r\n",
+            readFile: sys.readFile,
+            fileExists: sys.fileExists
         };
 
         var program = createProgram([inputFileName], options, compilerHost);
@@ -2433,7 +2435,9 @@ module ts {
                 getNewLine: () => host.getNewLine ? host.getNewLine() : "\r\n",
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: (fileName, data, writeByteOrderMark) => { },
-                getCurrentDirectory: () => host.getCurrentDirectory()
+                readFile: (fileName) => sys.readFile(fileName),
+                fileExists: (fileName) => !!hostCache.getOrCreateEntry(fileName),
+                getCurrentDirectory: () => host.getCurrentDirectory(),
             });
 
             // Release any files we have acquired in the old program but are 

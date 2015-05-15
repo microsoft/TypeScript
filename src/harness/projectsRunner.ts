@@ -125,7 +125,10 @@ class ProjectRunner extends RunnerBase {
 
         function compileProjectFiles(moduleKind: ts.ModuleKind, getInputFiles: ()=> string[],
             getSourceFileText: (fileName: string) => string,
-            writeFile: (fileName: string, data: string, writeByteOrderMark: boolean) => void): CompileProjectFilesResult {
+            writeFile: (fileName: string, data: string, writeByteOrderMark: boolean) => void,
+            readFile: (fn: string) => string,
+            fileExists: (fn: string) => boolean
+            ): CompileProjectFilesResult {
 
             var program = ts.createProgram(getInputFiles(), createCompilerOptions(), createCompilerHost());
             var errors = ts.getPreEmitDiagnostics(program);
@@ -186,6 +189,8 @@ class ProjectRunner extends RunnerBase {
                     getSourceFile,
                     getDefaultLibFileName: options => Harness.Compiler.defaultLibFileName,
                     writeFile,
+                    readFile,
+                    fileExists,
                     getCurrentDirectory,
                     getCanonicalFileName: Harness.Compiler.getCanonicalFileName,
                     useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
@@ -199,7 +204,7 @@ class ProjectRunner extends RunnerBase {
 
             var outputFiles: BatchCompileProjectTestCaseEmittedFile[] = [];
 
-            var projectCompilerResult = compileProjectFiles(moduleKind, () => testCase.inputFiles, getSourceFileText, writeFile);
+            var projectCompilerResult = compileProjectFiles(moduleKind, () => testCase.inputFiles, getSourceFileText, writeFile, readFile, fileExists);
             return {
                 moduleKind,
                 program: projectCompilerResult.program,
@@ -269,6 +274,22 @@ class ProjectRunner extends RunnerBase {
 
                 outputFiles.push({ emittedFileName: fileName, code: data, fileName: diskRelativeName, writeByteOrderMark: writeByteOrderMark });
             }
+            
+            function getFullDiskFileName(fileName: string): string {
+                return ts.isRootedDiskPath(fileName)
+                    ? fileName
+                    : ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(fileName);
+            }
+
+            function readFile(fileName: string) {
+                fileName = getFullDiskFileName(fileName);
+                return ts.sys.readFile(fileName);
+            }
+
+            function fileExists(fileName: string) {
+                fileName = getFullDiskFileName(fileName);
+                return ts.sys.fileExists(fileName);
+            }
         }
 
         function compileCompileDTsFiles(compilerResult: BatchCompileProjectTestCaseResult) {
@@ -301,7 +322,7 @@ class ProjectRunner extends RunnerBase {
                 }
             });
 
-            return compileProjectFiles(compilerResult.moduleKind,getInputFiles, getSourceFileText, writeFile);
+            return compileProjectFiles(compilerResult.moduleKind,getInputFiles, getSourceFileText, writeFile, readFile, fileExists);
 
             function findOutpuDtsFile(fileName: string) {
                 return ts.forEach(compilerResult.outputFiles, outputFile => outputFile.emittedFileName === fileName ? outputFile : undefined);
@@ -314,6 +335,20 @@ class ProjectRunner extends RunnerBase {
             }
 
             function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
+            }
+
+            function getFullDiskFileName(fileName: string): string {
+                return ts.isRootedDiskPath(fileName)
+                    ? fileName
+                    : ts.normalizeSlashes(getCurrentDirectory()) + "/" + ts.normalizeSlashes(fileName);
+            }
+
+            function readFile(fileName: string) {
+                return ts.sys.readFile(getFullDiskFileName(fileName));
+            }
+
+            function fileExists(fileName: string) {                
+                return ts.forEach(allInputFiles, inputFile => inputFile.emittedFileName === fileName ? true : false);
             }
         }
 

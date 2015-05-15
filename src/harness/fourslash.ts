@@ -2230,6 +2230,8 @@ module FourSlash {
     {
         let host = Harness.Compiler.createCompilerHost([{ unitName: Harness.Compiler.fourslashFileName, content: undefined }],
             (fn, contents) => fourslashJsOutput = contents,
+            (fn) => undefined,
+            (fn) => true,
             ts.ScriptTarget.Latest,
             ts.sys.useCaseSensitiveFileNames);
 
@@ -2252,6 +2254,8 @@ module FourSlash {
                 { unitName: fileName, content: content }
             ],
             (fn, contents) => result = contents,
+            (fn) => result,
+            (fn) => true,
             ts.ScriptTarget.Latest,
             ts.sys.useCaseSensitiveFileNames);
 
