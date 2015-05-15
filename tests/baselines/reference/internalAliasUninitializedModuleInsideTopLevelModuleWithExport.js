@@ -14,7 +14,6 @@ x.foo();
 
 //// [internalAliasUninitializedModuleInsideTopLevelModuleWithExport.js]
 define(["require", "exports"], function (require, exports) {
-    exports.x;
     exports.x.foo();
 });
 

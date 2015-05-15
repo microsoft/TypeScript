@@ -1216,6 +1216,18 @@ module ts {
         }
         return false;
     }
+
+    export function isParameterDeclaration(node: VariableLikeDeclaration) {
+        let root = getRootDeclaration(node);
+        return root.kind === SyntaxKind.Parameter;
+    }
+
+    export function getRootDeclaration(node: Node): Node {
+        while (node.kind === SyntaxKind.BindingElement) {
+            node = node.parent.parent;
+        }
+        return node;
+    }
         
     export function nodeStartsNewLexicalEnvironment(n: Node): boolean {
         return isFunctionLike(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;

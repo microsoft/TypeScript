@@ -34,7 +34,6 @@ module M {
 //// [declFileTypeAnnotationTypeAlias.js]
 var M;
 (function (M) {
-    M.x;
     var c = (function () {
         function c() {
         }
@@ -61,7 +60,6 @@ var M;
             return Window;
         })();
         N.Window = Window;
-        N.p;
     })(N = M.N || (M.N = {}));
 })(M || (M = {}));
 

@@ -1768,11 +1768,11 @@
         "category": "Error",
         "code": 5033
     },
-    "Option 'mapRoot' cannot be specified without specifying 'sourcemap' option.": {
+    "Option 'mapRoot' cannot be specified without specifying 'sourceMap' option.": {
         "category": "Error",
         "code": 5038
     },
-    "Option 'sourceRoot' cannot be specified without specifying 'sourcemap' option.": {
+    "Option 'sourceRoot' cannot be specified without specifying 'sourceMap' option.": {
         "category": "Error",
         "code": 5039
     },
@@ -1853,7 +1853,7 @@
         "category": "Message",
         "code": 6007
     },
-    "Do not emit outputs if any type checking errors were reported.": {
+    "Do not emit outputs if any errors were reported.": {
         "category": "Message",
         "code": 6008
     },

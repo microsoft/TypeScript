@@ -14,7 +14,6 @@ export module c {
 define(["require", "exports"], function (require, exports) {
     var c;
     (function (c) {
-        c.x;
     })(c = exports.c || (exports.c = {}));
 });
 

@@ -16,7 +16,6 @@ export class Test1 {
 }
 
 //// [classMemberInitializerWithLamdaScoping3_0.js]
-exports.field1;
 //// [classMemberInitializerWithLamdaScoping3_1.js]
 var Test1 = (function () {
     function Test1(field1) {

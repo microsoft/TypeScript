@@ -2052,13 +2052,6 @@ module ts {
             return resolutionResults.pop();
         }
 
-        function getRootDeclaration(node: Node): Node {
-            while (node.kind === SyntaxKind.BindingElement) {
-                node = node.parent.parent;
-            }
-            return node;
-        }
-
         function getDeclarationContainer(node: Node): Node {
             node = getRootDeclaration(node);
 
@@ -2463,7 +2456,16 @@ module ts {
         function getTypeOfAlias(symbol: Symbol): Type {
             let links = getSymbolLinks(symbol);
             if (!links.type) {
-                links.type = getTypeOfSymbol(resolveAlias(symbol));
+                let targetSymbol = resolveAlias(symbol);
+
+                // It only makes sense to get the type of a value symbol. If the result of resolving
+                // the alias is not a value, then it has no type. To get the type associated with a
+                // type symbol, call getDeclaredTypeOfSymbol.
+                // This check is important because without it, a call to getTypeOfSymbol could end
+                // up recursively calling getTypeOfAlias, causing a stack overflow.
+                links.type = targetSymbol.flags & SymbolFlags.Value
+                    ? getTypeOfSymbol(targetSymbol)
+                    : unknownType;
             }
             return links.type;
         }
@@ -3678,7 +3680,19 @@ module ts {
             return false;
         }
 
+        // Since removeSubtypes checks the subtype relation, and the subtype relation on a union
+        // may attempt to reduce a union, it is possible that removeSubtypes could be called
+        // recursively on the same set of types. The removeSubtypesStack is used to track which
+        // sets of types are currently undergoing subtype reduction.
+        let removeSubtypesStack: string[] = [];
         function removeSubtypes(types: Type[]) {
+            let typeListId = getTypeListId(types);
+            if (removeSubtypesStack.lastIndexOf(typeListId) >= 0) {
+                return;
+            }
+
+            removeSubtypesStack.push(typeListId);
+
             let i = types.length;
             while (i > 0) {
                 i--;
@@ -3686,6 +3700,8 @@ module ts {
                     types.splice(i, 1);
                 }
             }
+
+            removeSubtypesStack.pop();
         }
 
         function containsAnyType(types: Type[]) {
@@ -9423,13 +9439,6 @@ module ts {
                     }
                 }
             }
-        }
-
-        function isParameterDeclaration(node: VariableLikeDeclaration) {
-            while (node.kind === SyntaxKind.BindingElement) {
-                node = <VariableLikeDeclaration>node.parent.parent;
-            }
-            return node.kind === SyntaxKind.Parameter;
         }
 
         // Check that a parameter initializer contains no references to parameters declared to the right of itself

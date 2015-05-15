@@ -45,9 +45,11 @@ module Utils {
     export function getExecutionEnvironment() {
         if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
             return ExecutionEnvironment.CScript;
-        } else if (typeof window !== "undefined") {
+        }
+        else if (typeof window !== "undefined") {
             return ExecutionEnvironment.Browser;
-        } else {
+        }
+        else {
             return ExecutionEnvironment.Node;
         }
     }
@@ -955,6 +957,7 @@ module Harness {
                 options = options || { noResolve: false };
                 options.target = options.target || ts.ScriptTarget.ES3;
                 options.module = options.module || ts.ModuleKind.None;
+                options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
                 options.noErrorTruncation = true;
 
                 if (settingsCallback) {
@@ -1018,19 +1021,19 @@ module Harness {
                             break;
 
                         case 'noemitonerror':
-                            options.noEmitOnError = !!setting.value;
+                            options.noEmitOnError = setting.value === 'true';
                             break;
 
                         case 'noresolve':
-                            options.noResolve = !!setting.value;
+                            options.noResolve = setting.value === 'true';
                             break;
 
                         case 'noimplicitany':
-                            options.noImplicitAny = !!setting.value;
+                            options.noImplicitAny = setting.value === 'true';
                             break;
 
                         case 'nolib':
-                            options.noLib = !!setting.value;
+                            options.noLib = setting.value === 'true';
                             break;
 
                         case 'out':
@@ -1052,11 +1055,11 @@ module Harness {
                             break;
 
                         case 'sourcemap':
-                            options.sourceMap = !!setting.value;
+                            options.sourceMap = setting.value === 'true';
                             break;
 
                         case 'declaration':
-                            options.declaration = !!setting.value;
+                            options.declaration = setting.value === 'true';
                             break;
 
                         case 'newline':
@@ -1080,7 +1083,7 @@ module Harness {
                             break;
 
                         case 'stripinternal':
-                            options.stripInternal = !!setting.value;
+                            options.stripInternal = setting.value === 'true';
 
                         case 'usecasesensitivefilenames':
                             useCaseSensitiveFileNames = setting.value === 'true';
@@ -1091,7 +1094,7 @@ module Harness {
                             break;
 
                         case 'emitbom':
-                            options.emitBOM = !!setting.value;
+                            options.emitBOM = setting.value === 'true';
                             break;
 
                         case 'errortruncation':

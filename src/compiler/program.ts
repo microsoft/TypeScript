@@ -8,7 +8,7 @@ module ts {
     /* @internal */ export let ioWriteTime = 0;
 
     /** The version of the TypeScript compiler release */
-    export const version = "1.5.0";
+    export const version = "1.5.2";
 
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
@@ -219,7 +219,12 @@ module ts {
             // Create the emit resolver outside of the "emitTime" tracking code below.  That way
             // any cost associated with it (like type checking) are appropriate associated with
             // the type-checking counter.
-            let emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile);
+            //
+            // If the -out option is specified, we should not pass the source file to getEmitResolver.
+            // This is because in the -out scenario all files need to be emitted, and therefore all
+            // files need to be type checked. And the way to specify that all files need to be type
+            // checked is to not pass the file to getEmitResolver.
+            let emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver(options.out ? undefined : sourceFile);
 
             let start = new Date().getTime();
 
@@ -233,7 +238,7 @@ module ts {
         }
 
         function getSourceFile(fileName: string) {
-            fileName = host.getCanonicalFileName(fileName);
+            fileName = host.getCanonicalFileName(normalizeSlashes(fileName));
             return hasProperty(filesByName, fileName) ? filesByName[fileName] : undefined;
         }
 
@@ -352,7 +357,7 @@ module ts {
 
         // Get source file from normalized fileName
         function findSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refStart?: number, refLength?: number): SourceFile {
-            let canonicalName = host.getCanonicalFileName(fileName);
+            let canonicalName = host.getCanonicalFileName(normalizeSlashes(fileName));
             if (hasProperty(filesByName, canonicalName)) {
                 // We've already looked for this file, use cached result
                 return getSourceFileFromCache(fileName, canonicalName, /*useAbsolutePath*/ false);
@@ -569,10 +574,10 @@ module ts {
             if (!options.sourceMap && (options.mapRoot || options.sourceRoot)) {
                 // Error to specify --mapRoot or --sourceRoot without mapSourceFiles
                 if (options.mapRoot) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_mapRoot_cannot_be_specified_without_specifying_sourcemap_option));
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_mapRoot_cannot_be_specified_without_specifying_sourceMap_option));
                 }
                 if (options.sourceRoot) {
-                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_sourceRoot_cannot_be_specified_without_specifying_sourcemap_option));
+                    diagnostics.add(createCompilerDiagnostic(Diagnostics.Option_sourceRoot_cannot_be_specified_without_specifying_sourceMap_option));
                 }
                 return;
             }

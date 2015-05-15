@@ -27,7 +27,6 @@ var A = (function () {
 })();
 var A;
 (function (A) {
-    A.v;
 })(A || (A = {}));
 var Foo;
 (function (Foo) {
