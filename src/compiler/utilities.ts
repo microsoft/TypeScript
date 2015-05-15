@@ -282,7 +282,7 @@ module ts {
     }
 
     export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): Span {
-        var errorNode = node;
+        let errorNode = node;
         switch (node.kind) {
             case SyntaxKind.SourceFile:
                 let pos = skipTrivia(sourceFile.text, 0, /*stopAfterLineBreak*/ false);
@@ -1146,217 +1146,6 @@ module ts {
         return false;
     }
 
-    export function spanEnd(span: Span) {
-        return span.start + span.length
-    }
-
-    export function spanIsEmpty(span: Span) {
-        return span.length === 0
-    }
-
-    export function spanContainsPosition(span: Span, position: number) {
-        return position >= span.start && position < spanEnd(span);
-    }
-
-    // Returns true if 'span' contains 'other'.
-    export function spanContainsSpan(span: Span, other: Span) {
-        return other.start >= span.start && spanEnd(other) <= spanEnd(span);
-    }
-
-    export function spanOverlapsWith(span: Span, other: Span) {
-        let overlapStart = Math.max(span.start, other.start);
-        let overlapEnd = Math.min(spanEnd(span), spanEnd(other));
-        return overlapStart < overlapEnd;
-    }
-
-    export function spanOverlap(span1: Span, span2: Span) {
-        let overlapStart = Math.max(span1.start, span2.start);
-        let overlapEnd = Math.min(spanEnd(span1), spanEnd(span2));
-        if (overlapStart < overlapEnd) {
-            return createSpanFromBounds(overlapStart, overlapEnd);
-        }
-        return undefined;
-    }
-
-    export function spanIntersectsWithSpan(span: Span, other: Span) {
-        return other.start <= spanEnd(span) && spanEnd(other) >= span.start
-    }
-
-    export function spanIntersectsWith(span: Span, start: number, length: number) {
-        let end = start + length;
-        return start <= spanEnd(span) && end >= span.start;
-    }
-
-    export function spanIntersectsWithPosition(span: Span, position: number) {
-        return position <= spanEnd(span) && position >= span.start;
-    }
-
-    export function spanIntersection(span1: Span, span2: Span) {
-        let intersectStart = Math.max(span1.start, span2.start);
-        let intersectEnd = Math.min(spanEnd(span1), spanEnd(span2));
-        if (intersectStart <= intersectEnd) {
-            return createSpanFromBounds(intersectStart, intersectEnd);
-        }
-        return undefined;
-    }
-
-    export function createSpan(start: number, length: number): Span {
-        if (start < 0) {
-            throw new Error("start < 0");
-        }
-        if (length < 0) {
-            throw new Error("length < 0");
-        }
-
-        return { start, length };
-    }
-
-    export function createSpanFromBounds(start: number, end: number) {
-        return createSpan(start, end - start);
-    }
-
-    //export function textChangeRangeNewSpan(range: TextChangeRange) {
-    //    return createSpan(range.span.start, range.newLength);
-    //}
-
-    //export function textChangeRangeIsUnchanged(range: TextChangeRange) {
-    //    return spanIsEmpty(range.span) && range.newLength === 0;
-    //}
-
-    //export function createTextChangeRange(span: Span, newLength: number): TextChangeRange {
-    //    if (newLength < 0) {
-    //        throw new Error("newLength < 0");
-    //    }
-
-    //    return { span, newLength };
-    //}
-
-    //export let unchangedTextChangeRange = createTextChangeRange(createSpan(0, 0), 0);
-
-    /**
-     * Called to merge all the changes that occurred across several versions of a script snapshot 
-     * into a single change.  i.e. if a user keeps making successive edits to a script we will
-     * have a text change from V1 to V2, V2 to V3, ..., Vn.  
-     * 
-     * This function will then merge those changes into a single change range valid between V1 and
-     * Vn.
-     */
-    //export function collapseTextChangeRangesAcrossMultipleVersions(changes: TextChangeRange[]): TextChangeRange {
-    //    if (changes.length === 0) {
-    //        return unchangedTextChangeRange;
-    //    }
-
-    //    if (changes.length === 1) {
-    //        return changes[0];
-    //    }
-
-    //    // We change from talking about { { oldStart, oldLength }, newLength } to { oldStart, oldEnd, newEnd }
-    //    // as it makes things much easier to reason about.
-    //    let change0 = changes[0];
-
-    //    let oldStartN = change0.span.start;
-    //    let oldEndN = spanEnd(change0.span);
-    //    let newEndN = oldStartN + change0.newLength;
-
-    //    for (let i = 1; i < changes.length; i++) {
-    //        let nextChange = changes[i];
-
-    //        // Consider the following case:
-    //        // i.e. two edits.  The first represents the text change range { { 10, 50 }, 30 }.  i.e. The span starting
-    //        // at 10, with length 50 is reduced to length 30.  The second represents the text change range { { 30, 30 }, 40 }.
-    //        // i.e. the span starting at 30 with length 30 is increased to length 40.
-    //        //
-    //        //      0         10        20        30        40        50        60        70        80        90        100
-    //        //      -------------------------------------------------------------------------------------------------------
-    //        //                |                                                 /                                          
-    //        //                |                                            /----                                           
-    //        //  T1            |                                       /----                                                
-    //        //                |                                  /----                                                     
-    //        //                |                             /----                                                          
-    //        //      -------------------------------------------------------------------------------------------------------
-    //        //                                     |                            \                                          
-    //        //                                     |                               \                                       
-    //        //   T2                                |                                 \                                     
-    //        //                                     |                                   \                                   
-    //        //                                     |                                      \                                
-    //        //      -------------------------------------------------------------------------------------------------------
-    //        //
-    //        // Merging these turns out to not be too difficult.  First, determining the new start of the change is trivial
-    //        // it's just the min of the old and new starts.  i.e.:
-    //        //
-    //        //      0         10        20        30        40        50        60        70        80        90        100
-    //        //      ------------------------------------------------------------*------------------------------------------
-    //        //                |                                                 /                                          
-    //        //                |                                            /----                                           
-    //        //  T1            |                                       /----                                                
-    //        //                |                                  /----                                                     
-    //        //                |                             /----                                                          
-    //        //      ----------------------------------------$-------------------$------------------------------------------
-    //        //                .                    |                            \                                          
-    //        //                .                    |                               \                                       
-    //        //   T2           .                    |                                 \                                     
-    //        //                .                    |                                   \                                   
-    //        //                .                    |                                      \                                
-    //        //      ----------------------------------------------------------------------*--------------------------------
-    //        //
-    //        // (Note the dots represent the newly inferrred start.
-    //        // Determining the new and old end is also pretty simple.  Basically it boils down to paying attention to the
-    //        // absolute positions at the asterixes, and the relative change between the dollar signs. Basically, we see
-    //        // which if the two $'s precedes the other, and we move that one forward until they line up.  in this case that
-    //        // means:
-    //        //
-    //        //      0         10        20        30        40        50        60        70        80        90        100
-    //        //      --------------------------------------------------------------------------------*----------------------
-    //        //                |                                                                     /                      
-    //        //                |                                                                /----                       
-    //        //  T1            |                                                           /----                            
-    //        //                |                                                      /----                                 
-    //        //                |                                                 /----                                      
-    //        //      ------------------------------------------------------------$------------------------------------------
-    //        //                .                    |                            \                                          
-    //        //                .                    |                               \                                       
-    //        //   T2           .                    |                                 \                                     
-    //        //                .                    |                                   \                                   
-    //        //                .                    |                                      \                                
-    //        //      ----------------------------------------------------------------------*--------------------------------
-    //        //
-    //        // In other words (in this case), we're recognizing that the second edit happened after where the first edit
-    //        // ended with a delta of 20 characters (60 - 40).  Thus, if we go back in time to where the first edit started
-    //        // that's the same as if we started at char 80 instead of 60.  
-    //        //
-    //        // As it so happens, the same logic applies if the second edit precedes the first edit.  In that case rahter
-    //        // than pusing the first edit forward to match the second, we'll push the second edit forward to match the
-    //        // first.
-    //        //
-    //        // In this case that means we have { oldStart: 10, oldEnd: 80, newEnd: 70 } or, in TextChangeRange
-    //        // semantics: { { start: 10, length: 70 }, newLength: 60 }
-    //        //
-    //        // The math then works out as follows.
-    //        // If we have { oldStart1, oldEnd1, newEnd1 } and { oldStart2, oldEnd2, newEnd2 } then we can compute the 
-    //        // final result like so:
-    //        //
-    //        // {
-    //        //      oldStart3: Min(oldStart1, oldStart2),
-    //        //      oldEnd3  : Max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1)),
-    //        //      newEnd3  : Max(newEnd2, newEnd2 + (newEnd1 - oldEnd2))
-    //        // }
-
-    //        let oldStart1 = oldStartN;
-    //        let oldEnd1 = oldEndN;
-    //        let newEnd1 = newEndN;
-
-    //        let oldStart2 = nextChange.span.start;
-    //        let oldEnd2 = spanEnd(nextChange.span);
-    //        let newEnd2 = oldStart2 + nextChange.newLength;
-
-    //        oldStartN = Math.min(oldStart1, oldStart2);
-    //        oldEndN = Math.max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1));
-    //        newEndN = Math.max(newEnd2, newEnd2 + (newEnd1 - oldEnd2));
-    //    }
-
-    //    return createTextChangeRange(createSpanFromBounds(oldStartN, oldEndN), /*newLength:*/ newEndN - oldStartN);
-    //}
-
     export function nodeArrayEnd(array: NodeArray<Node>) {
         var end = array.length === 0 ? array.start : spanEnd(lastOrUndefined(array));
         if (!array.hasTrailingComma) {
@@ -1392,7 +1181,7 @@ module ts {
     }
 
     export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
-        var node = <SynthesizedNode>createNode(kind);
+        let node = <SynthesizedNode>createNode(kind);
         node.start = -1;
         node.length = 0;
         node.startsOnNewLine = startsOnNewLine;
@@ -1400,7 +1189,7 @@ module ts {
     }
 
     export function createSynthesizedNodeArray(): NodeArray<any> {
-        var array = <NodeArray<any>>[];
+        let array = <NodeArray<any>>[];
         array.start = -1;
         return array;
     }
@@ -2011,6 +1800,75 @@ module ts {
 module ts {
     export function getDefaultLibFileName(options: CompilerOptions): string {
         return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
+    }
+
+    export function spanEnd(span: Span) {
+        return span.start + span.length
+    }
+
+    export function spanIsEmpty(span: Span) {
+        return span.length === 0
+    }
+
+    export function spanContainsPosition(span: Span, position: number) {
+        return position >= span.start && position < spanEnd(span);
+    }
+
+    // Returns true if 'span' contains 'other'.
+    export function spanContainsSpan(span: Span, other: Span) {
+        return other.start >= span.start && spanEnd(other) <= spanEnd(span);
+    }
+
+    export function spanOverlapsWith(span: Span, other: Span) {
+        let overlapStart = Math.max(span.start, other.start);
+        let overlapEnd = Math.min(spanEnd(span), spanEnd(other));
+        return overlapStart < overlapEnd;
+    }
+
+    export function spanOverlap(span1: Span, span2: Span) {
+        let overlapStart = Math.max(span1.start, span2.start);
+        let overlapEnd = Math.min(spanEnd(span1), spanEnd(span2));
+        if (overlapStart < overlapEnd) {
+            return createSpanFromBounds(overlapStart, overlapEnd);
+        }
+        return undefined;
+    }
+
+    export function spanIntersectsWithSpan(span: Span, other: Span) {
+        return other.start <= spanEnd(span) && spanEnd(other) >= span.start
+    }
+
+    export function spanIntersectsWith(span: Span, start: number, length: number) {
+        let end = start + length;
+        return start <= spanEnd(span) && end >= span.start;
+    }
+
+    export function spanIntersectsWithPosition(span: Span, position: number) {
+        return position <= spanEnd(span) && position >= span.start;
+    }
+
+    export function spanIntersection(span1: Span, span2: Span) {
+        let intersectStart = Math.max(span1.start, span2.start);
+        let intersectEnd = Math.min(spanEnd(span1), spanEnd(span2));
+        if (intersectStart <= intersectEnd) {
+            return createSpanFromBounds(intersectStart, intersectEnd);
+        }
+        return undefined;
+    }
+
+    export function createSpan(start: number, length: number): Span {
+        if (start < 0) {
+            throw new Error("start < 0");
+        }
+        if (length < 0) {
+            throw new Error("length < 0");
+        }
+
+        return { start, length };
+    }
+
+    export function createSpanFromBounds(start: number, end: number) {
+        return createSpan(start, end - start);
     }
 
     export function textChangeRangeNewSpan(range: TextChangeRange) {
