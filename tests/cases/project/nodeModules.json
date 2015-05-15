@@ -1,0 +1,9 @@
+{
+    "scenario": "nodeModules",
+    "projectRoot": "tests/cases/projects/nodeModules",
+    "inputFiles": [
+        "consumeNodeModules.ts"
+    ],
+    "baselineCheck": true,
+    "runTest": true
+}
