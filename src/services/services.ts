@@ -1835,11 +1835,10 @@ module ts {
                         ? sourceFile.text.substr(0, textChangeRange.span.start)
                         : "";
                     
-                    let textChangeRangeEnd = textChangeRange.span.start + textChangeRange.span.length;
                     // grab the fragment from the end of the span till the end of the original text
-                    let suffix = textChangeRangeEnd !== sourceFile.text.length
-                            ? sourceFile.text.substr(textChangeRangeEnd)
-                            : "";
+                    let suffix = textSpanEnd(textChangeRange.span) !== sourceFile.text.length
+                        ? sourceFile.text.substr(textSpanEnd(textChangeRange.span))
+                        : "";
 
                     if (textChangeRange.newLength === 0) {
                         // edit was a deletion - just combine prefix and suffix
