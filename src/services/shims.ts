@@ -1,6 +1,6 @@
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -55,6 +55,7 @@ module ts {
         getCurrentDirectory(): string;
         getDefaultLibFileName(options: string): string;
         getNewLine?(): string;
+        getProjectVersion?(): string;
     }
 
     /** Public interface of the the of a config service shim instance.*/
@@ -83,7 +84,7 @@ module ts {
     export interface Shim {
         dispose(dummy: any): void;
     }
-    
+
     export interface LanguageServiceShim extends Shim {
         languageService: LanguageService;
 
@@ -145,7 +146,7 @@ module ts {
          * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
          */
         getReferencesAtPosition(fileName: string, position: number): string;
-        
+
         /**
          * Returns a JSON-encoded value of the type:
          * { definition: <encoded>; references: <encoded>[] }[]
@@ -162,8 +163,8 @@ module ts {
         /**
          * Returns a JSON-encoded value of the type:
          * { fileName: string; highlights: { start: number; length: number, isDefinition: boolean }[] }[]
-         * 
-         * @param fileToSearch A JSON encoded string[] containing the file names that should be 
+         *
+         * @param fileToSearch A JSON encoded string[] containing the file names that should be
          *  considered when searching.
          */
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string): string;
@@ -244,7 +245,7 @@ module ts {
 
     export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
         private files: string[];
-        
+
         constructor(private shimHost: LanguageServiceShimHost) {
         }
 
@@ -255,9 +256,18 @@ module ts {
         public trace(s: string): void {
             this.shimHost.trace(s);
         }
-        
+
         public error(s: string): void {
             this.shimHost.error(s);
+        }
+
+        public getProjectVersion(): string {
+            if (!this.shimHost.getProjectVersion) {
+                // shimmed host does not support getProjectVersion
+                return undefined;
+            }
+
+            return this.shimHost.getProjectVersion();
         }
 
         public getCompilationSettings(): CompilerOptions {
@@ -322,7 +332,7 @@ module ts {
             }
         }
     }
-    
+
     export class CoreServicesShimHostAdapter implements ParseConfigHost {
 
         constructor(private shimHost: CoreServicesShimHost) {
@@ -587,7 +597,7 @@ module ts {
 
         /**
          * Computes the definition location and file for the symbol
-         * at the requested position. 
+         * at the requested position.
          */
         public getDefinitionAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
@@ -601,7 +611,7 @@ module ts {
 
         /**
          * Computes the definition location of the type of the symbol
-         * at the requested position. 
+         * at the requested position.
          */
         public getTypeDefinitionAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
@@ -684,8 +694,8 @@ module ts {
         /// COMPLETION LISTS
 
         /**
-         * Get a string based representation of the completions 
-         * to provide at the given source position and providing a member completion 
+         * Get a string based representation of the completions
+         * to provide at the given source position and providing a member completion
          * list if requested.
          */
         public getCompletionsAtPosition(fileName: string, position: number) {

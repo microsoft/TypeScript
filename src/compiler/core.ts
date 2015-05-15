@@ -459,8 +459,18 @@ module ts {
             if (path.charCodeAt(2) === CharacterCodes.slash) return 3;
             return 2;
         }
+        // Per RFC 1738 'file' URI schema has the shape file://<host>/<path>
+        // if <host> is omitted then it is assumed that host value is 'localhost',
+        // however slash after the omitted <host> is not removed.
+        // file:///folder1/file1 - this is a correct URI
+        // file://folder2/file2 - this is an incorrect URI
+        if (path.lastIndexOf("file:///", 0) === 0) {
+            return "file:///".length;
+        }
         let idx = path.indexOf('://');
-        if (idx !== -1) return idx + 3
+        if (idx !== -1) {
+            return idx + "://".length;
+        }
         return 0;
     }
 
@@ -640,16 +650,18 @@ module ts {
         return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
     }
 
-    let supportedExtensions = [".d.ts", ".ts", ".js"];
+    /**
+     *  List of supported extensions in order of file resolution precedence.
+     */
+    export const supportedExtensions = [".ts", ".d.ts"];
 
+    const extensionsToRemove = [".d.ts", ".ts", ".js"];
     export function removeFileExtension(path: string): string {
-        for (let ext of supportedExtensions) {
-
+        for (let ext of extensionsToRemove) {
             if (fileExtensionIs(path, ext)) {
                 return path.substr(0, path.length - ext.length);
             }
         }
-
         return path;
     }
 

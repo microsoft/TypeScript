@@ -33,10 +33,3 @@ export default class A
     })();
     exports.default = A;
 });
-//# sourceMappingURL=es5-umd3.js.map
-
-//// [es5-umd3.d.ts]
-export default class A {
-    constructor();
-    B(): number;
-}

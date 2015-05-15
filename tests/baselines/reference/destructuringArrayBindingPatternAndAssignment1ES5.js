@@ -88,7 +88,7 @@ var _e = foo(), b6 = _e[0], b7 = _e[1];
 var b8 = foo().slice(0);
 //      S is not a tuple- like type and the numeric index signature type of S is assignable to the target given in E.
 var temp = [1, 2, 3];
-var _f = temp, c0 = _f[0], c1 = _f[1];
+var _f = temp.slice(), c0 = _f[0], c1 = _f[1];
 var c2 = [][0];
 var _g = [[[]], [[[[]]]]], c3 = _g[0][0][0], c4 = _g[1][0][0][0][0];
 var _h = [[1], true], c5 = _h[0][0], c6 = _h[1];

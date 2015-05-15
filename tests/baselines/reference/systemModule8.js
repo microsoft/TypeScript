@@ -39,7 +39,6 @@ System.register([], function(exports_1) {
     return {
         setters:[],
         execute: function() {
-            exports_1("x", x);
             exports_1("x", x = 1);
             (exports_1("x", ++x) - 1);
             (exports_1("x", --x) + 1);

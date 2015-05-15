@@ -53,7 +53,6 @@ var A = (function () {
 })();
 var M;
 (function (M) {
-    M.n;
 })(M || (M = {}));
 var objA = new A();
 // string type var

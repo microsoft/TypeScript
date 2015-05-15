@@ -51,7 +51,6 @@ var m;
         })();
         m2.public1 = public1;
     })(m2 || (m2 = {}));
-    m.x;
     m.x2 = {
         x: new private1(),
         y: new m2.public1(),
@@ -61,9 +60,7 @@ var m;
     };
     m.x3 = m.x;
     // Function type
-    m.y;
     m.y2 = m.y;
     // constructor type
-    m.z;
     m.z2 = m.z;
 })(m || (m = {}));

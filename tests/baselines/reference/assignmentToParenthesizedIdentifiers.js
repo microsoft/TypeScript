@@ -79,7 +79,6 @@ x = ''; // Error
 (x) = ''; // Error
 var M;
 (function (M) {
-    M.y;
 })(M || (M = {}));
 M.y = 3; // OK
 (M).y = 3; // OK
@@ -93,7 +92,6 @@ var M2;
 (function (M2) {
     var M3;
     (function (M3) {
-        M3.x;
     })(M3 = M2.M3 || (M2.M3 = {}));
     M3 = { x: 3 }; // Error
 })(M2 || (M2 = {}));

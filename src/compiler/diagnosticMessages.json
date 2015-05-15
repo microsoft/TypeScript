@@ -1444,6 +1444,10 @@
         "category": "Error",
         "code": 2502
     },
+    "Cannot find namespace '{0}'.": {
+        "category": "Error",
+        "code": 2503
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -1761,11 +1765,11 @@
         "category": "Error",
         "code": 5033
     },
-    "Option 'mapRoot' cannot be specified without specifying 'sourcemap' option.": {
+    "Option 'mapRoot' cannot be specified without specifying 'sourceMap' option.": {
         "category": "Error",
         "code": 5038
     },
-    "Option 'sourceRoot' cannot be specified without specifying 'sourcemap' option.": {
+    "Option 'sourceRoot' cannot be specified without specifying 'sourceMap' option.": {
         "category": "Error",
         "code": 5039
     },
@@ -1846,7 +1850,7 @@
         "category": "Message",
         "code": 6007
     },
-    "Do not emit outputs if any type checking errors were reported.": {
+    "Do not emit outputs if any errors were reported.": {
         "category": "Message",
         "code": 6008
     },
@@ -1978,7 +1982,7 @@
         "category": "Error",
         "code": 6053
     },
-    "File '{0}' must have extension '.ts' or '.d.ts'.": {
+    "File '{0}' has unsupported extension. The only supported extensions are {1}.": {
         "category": "Error",
         "code": 6054
     },

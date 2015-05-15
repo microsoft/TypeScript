@@ -35,11 +35,3 @@ export = A;
     })();
     return A;
 });
-//# sourceMappingURL=es5-umd4.js.map
-
-//// [es5-umd4.d.ts]
-declare class A {
-    constructor();
-    B(): number;
-}
-export = A;

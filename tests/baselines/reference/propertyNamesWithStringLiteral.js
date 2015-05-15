@@ -24,7 +24,6 @@ var _Color = (function () {
 })();
 var Color;
 (function (Color) {
-    Color.namedColors;
 })(Color || (Color = {}));
 var a = Color.namedColors["azure"];
 var a = Color.namedColors.blue; // Should not error

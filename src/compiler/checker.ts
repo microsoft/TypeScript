@@ -88,6 +88,7 @@ module ts {
         let undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
         let nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsUndefinedOrNull, "null");
         let unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
+        let circularType = createIntrinsicType(TypeFlags.Any, "__circular__");
 
         let emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         let anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -803,7 +804,9 @@ module ts {
 
             let symbol: Symbol;
             if (name.kind === SyntaxKind.Identifier) {
-                symbol = resolveName(name, (<Identifier>name).text, meaning, Diagnostics.Cannot_find_name_0, <Identifier>name);
+                let message = meaning === SymbolFlags.Namespace ? Diagnostics.Cannot_find_namespace_0 : Diagnostics.Cannot_find_name_0;
+
+                symbol = resolveName(name, (<Identifier>name).text, meaning, message, <Identifier>name);
                 if (!symbol) {
                     return undefined;
                 }
@@ -855,10 +858,11 @@ module ts {
                     return symbol;
                 }
             }
+            let fileName: string;
             let sourceFile: SourceFile;
             while (true) {
-                let fileName = normalizePath(combinePaths(searchPath, moduleName));
-                sourceFile = host.getSourceFile(fileName + ".ts") || host.getSourceFile(fileName + ".d.ts");
+                fileName = normalizePath(combinePaths(searchPath, moduleName));
+                sourceFile = forEach(supportedExtensions, extension => host.getSourceFile(fileName + extension));
                 if (sourceFile || isRelative) {
                     break;
                 }
@@ -2048,13 +2052,6 @@ module ts {
             return resolutionResults.pop();
         }
 
-        function getRootDeclaration(node: Node): Node {
-            while (node.kind === SyntaxKind.BindingElement) {
-                node = node.parent.parent;
-            }
-            return node;
-        }
-
         function getDeclarationContainer(node: Node): Node {
             node = getRootDeclaration(node);
 
@@ -2412,7 +2409,16 @@ module ts {
         function getTypeOfAlias(symbol: Symbol): Type {
             let links = getSymbolLinks(symbol);
             if (!links.type) {
-                links.type = getTypeOfSymbol(resolveAlias(symbol));
+                let targetSymbol = resolveAlias(symbol);
+
+                // It only makes sense to get the type of a value symbol. If the result of resolving
+                // the alias is not a value, then it has no type. To get the type associated with a
+                // type symbol, call getDeclaredTypeOfSymbol.
+                // This check is important because without it, a call to getTypeOfSymbol could end
+                // up recursively calling getTypeOfAlias, causing a stack overflow.
+                links.type = targetSymbol.flags & SymbolFlags.Value
+                    ? getTypeOfSymbol(targetSymbol)
+                    : unknownType;
             }
             return links.type;
         }
@@ -3632,10 +3638,20 @@ module ts {
             return type;
         }
 
+        // Subtype reduction is basically an optimization we do to avoid excessively large union types, which take longer
+        // to process and look strange in quick info and error messages. Semantically there is no difference between the
+        // reduced type and the type itself. So, when we detect a circularity we simply say that the reduced type is the
+        // type itself.
         function getReducedTypeOfUnionType(type: UnionType): Type {
-            // If union type was created without subtype reduction, perform the deferred reduction now
             if (!type.reducedType) {
-                type.reducedType = getUnionType(type.types, /*noSubtypeReduction*/ false);
+                type.reducedType = circularType;
+                let reducedType = getUnionType(type.types, /*noSubtypeReduction*/ false);
+                if (type.reducedType === circularType) {
+                    type.reducedType = reducedType;
+                }
+            }
+            else if (type.reducedType === circularType) {
+                type.reducedType = type;
             }
             return type.reducedType;
         }
@@ -5382,20 +5398,43 @@ module ts {
                 if (!isTypeSubtypeOf(rightType, globalFunctionType)) {
                     return type;
                 }
-                // Target type is type of prototype property
+
+                let targetType: Type;
                 let prototypeProperty = getPropertyOfType(rightType, "prototype");
-                if (!prototypeProperty) {
-                    return type;
+                if (prototypeProperty) {
+                    // Target type is type of the protoype property
+                    let prototypePropertyType = getTypeOfSymbol(prototypeProperty);
+                    if (prototypePropertyType !== anyType) {
+                        targetType = prototypePropertyType;
+                    }
                 }
-                let targetType = getTypeOfSymbol(prototypeProperty);
-                // Narrow to target type if it is a subtype of current type
-                if (isTypeSubtypeOf(targetType, type)) {
-                    return targetType;
+
+                if (!targetType) {
+                    // Target type is type of construct signature
+                    let constructSignatures: Signature[];
+                    if (rightType.flags & TypeFlags.Interface) {
+                        constructSignatures = resolveDeclaredMembers(<InterfaceType>rightType).declaredConstructSignatures;
+                    }
+                    else if (rightType.flags & TypeFlags.Anonymous) {
+                        constructSignatures = getSignaturesOfType(rightType, SignatureKind.Construct);
+                    }
+
+                    if (constructSignatures && constructSignatures.length) {
+                        targetType = getUnionType(map(constructSignatures, signature => getReturnTypeOfSignature(getErasedSignature(signature))));
+                    }
                 }
-                // If current type is a union type, remove all constituents that aren't subtypes of target type
-                if (type.flags & TypeFlags.Union) {
-                    return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, targetType)));
+
+                if (targetType) {
+                    // Narrow to the target type if it's a subtype of the current type
+                    if (isTypeSubtypeOf(targetType, type)) {
+                        return targetType;
+                    }
+                    // If the current type is a union type, remove all constituents that aren't subtypes of the target.
+                    if (type.flags & TypeFlags.Union) {
+                        return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, targetType)));
+                    }
                 }
+
                 return type;
             }
 
@@ -9178,13 +9217,6 @@ module ts {
                     }
                 }
             }
-        }
-
-        function isParameterDeclaration(node: VariableLikeDeclaration) {
-            while (node.kind === SyntaxKind.BindingElement) {
-                node = <VariableLikeDeclaration>node.parent.parent;
-            }
-            return node.kind === SyntaxKind.Parameter;
         }
 
         // Check that a parameter initializer contains no references to parameters declared to the right of itself

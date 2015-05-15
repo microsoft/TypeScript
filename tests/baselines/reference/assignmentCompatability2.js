@@ -19,7 +19,6 @@ var __test1__;
 })(__test1__ || (__test1__ = {}));
 var __test2__;
 (function (__test2__) {
-    __test2__.aa;
     ;
     __test2__.__val__aa = __test2__.aa;
 })(__test2__ || (__test2__ = {}));
