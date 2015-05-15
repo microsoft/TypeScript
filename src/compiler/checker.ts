@@ -88,7 +88,7 @@ module ts {
         let undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
         let nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsUndefinedOrNull, "null");
         let unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
-        let resolvingType = createIntrinsicType(TypeFlags.Any, "__resolving__");
+        let circularType = createIntrinsicType(TypeFlags.Any, "__circular__");
 
         let emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         let anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -3629,17 +3629,19 @@ module ts {
             return type;
         }
 
+        // Subtype reduction is basically an optimization we do to avoid excessively large union types, which take longer
+        // to process and look strange in quick info and error messages. Semantically there is no difference between the
+        // reduced type and the type itself. So, when we detect a circularity we simply say that the reduced type is the
+        // type itself.
         function getReducedTypeOfUnionType(type: UnionType): Type {
-            // If union type was created without subtype reduction, perform the deferred reduction now. If a circularity
-            // is detected, simply use the type itself.
             if (!type.reducedType) {
-                type.reducedType = resolvingType;
+                type.reducedType = circularType;
                 let reducedType = getUnionType(type.types, /*noSubtypeReduction*/ false);
-                if (type.reducedType === resolvingType) {
+                if (type.reducedType === circularType) {
                     type.reducedType = reducedType;
                 }
             }
-            else if (type.reducedType === resolvingType) {
+            else if (type.reducedType === circularType) {
                 type.reducedType = type;
             }
             return type.reducedType;
