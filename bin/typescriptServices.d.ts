@@ -1379,6 +1379,7 @@ declare module ts {
     interface LanguageServiceHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
+        getProjectVersion?(): string;
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): IScriptSnapshot;
