@@ -4,6 +4,7 @@ class B {
 
     x = 10;
 >x : number
+>10 : number
 
     constructor() {
         this.x = 10;
@@ -11,6 +12,7 @@ class B {
 >this.x : number
 >this : B
 >x : number
+>10 : number
     }
     static log(a: number) { }
 >log : (a: number) => void

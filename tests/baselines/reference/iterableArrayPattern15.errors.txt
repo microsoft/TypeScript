@@ -1,0 +1,22 @@
+tests/cases/conformance/es6/destructuring/iterableArrayPattern15.ts(1,17): error TS2501: A rest element cannot contain a binding pattern.
+
+
+==== tests/cases/conformance/es6/destructuring/iterableArrayPattern15.ts (1 errors) ====
+    function fun(...[a, b]: Bar[]) { }
+                    ~~~~~~
+!!! error TS2501: A rest element cannot contain a binding pattern.
+    fun(...new FooIterator);
+    class Bar { x }
+    class Foo extends Bar { y }
+    class FooIterator {
+        next() {
+            return {
+                value: new Foo,
+                done: false
+            };
+        }
+    
+        [Symbol.iterator]() {
+            return this;
+        }
+    }

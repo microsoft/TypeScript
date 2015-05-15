@@ -4,6 +4,7 @@ const enum E {
 
     Value = 1, Value2 = Value
 >Value : E
+>1 : number
 >Value2 : E
 >Value : E
 }

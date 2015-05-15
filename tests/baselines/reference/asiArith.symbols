@@ -1,0 +1,45 @@
+=== tests/cases/compiler/asiArith.ts ===
+var x = 1;
+>x : Symbol(x, Decl(asiArith.ts, 0, 3))
+
+var y = 1;
+>y : Symbol(y, Decl(asiArith.ts, 2, 3))
+
+var z =
+>z : Symbol(z, Decl(asiArith.ts, 4, 3))
+
+x
+>x : Symbol(x, Decl(asiArith.ts, 0, 3))
+
++
+
++
+
++
+
+y
+>y : Symbol(y, Decl(asiArith.ts, 2, 3))
+
+
+var a = 1;
+>a : Symbol(a, Decl(asiArith.ts, 17, 3))
+
+var b = 1;
+>b : Symbol(b, Decl(asiArith.ts, 19, 3))
+
+var c =
+>c : Symbol(c, Decl(asiArith.ts, 21, 3))
+
+x
+>x : Symbol(x, Decl(asiArith.ts, 0, 3))
+
+-
+
+-
+
+-
+
+y
+>y : Symbol(y, Decl(asiArith.ts, 2, 3))
+
+

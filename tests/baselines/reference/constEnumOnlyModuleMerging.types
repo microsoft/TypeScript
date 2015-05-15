@@ -4,6 +4,7 @@ module Outer {
 
     export var x = 1;
 >x : number
+>1 : number
 }
 
 module Outer {

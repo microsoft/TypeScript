@@ -1,7 +1,7 @@
 === tests/cases/compiler/a.ts ===
 /// <reference path="b.ts" />
 import ITest = require('ITest');
->ITest : unknown
+>ITest : any
 
 var testData: ITest[];
 >testData : ITest[]
@@ -12,6 +12,7 @@ var p = testData[0].name;
 >testData[0].name : string
 >testData[0] : ITest
 >testData : ITest[]
+>0 : number
 >name : string
  
 === tests/cases/compiler/b.ts ===

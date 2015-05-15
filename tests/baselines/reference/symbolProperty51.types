@@ -3,7 +3,7 @@ module M {
 >M : typeof M
 
     module Symbol { }
->Symbol : unknown
+>Symbol : any
 
     class C {
 >C : C

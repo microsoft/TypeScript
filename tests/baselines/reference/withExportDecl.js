@@ -61,7 +61,6 @@ export var eVar3 = 10, eVar4, eVar5;
 //// [withExportDecl.js]
 define(["require", "exports"], function (require, exports) {
     var simpleVar;
-    exports.exportedSimpleVar;
     var anotherVar;
     var varWithSimpleType;
     var varWithArrayType;
@@ -70,7 +69,6 @@ define(["require", "exports"], function (require, exports) {
     var withComplicatedValue = { x: 30, y: 70, desc: "position" };
     exports.exportedWithComplicatedValue = { x: 30, y: 70, desc: "position" };
     var arrayVar = ['a', 'b'];
-    exports.exportedArrayVar;
     exports.exportedArrayVar.push({ x: 30, y: 'hello world' });
     function simpleFunction() {
         return {
@@ -97,9 +95,9 @@ define(["require", "exports"], function (require, exports) {
         }
         m3.foo = foo;
     })(m3 = exports.m3 || (exports.m3 = {}));
-    exports.eVar1, exports.eVar2 = 10;
+    exports.eVar2 = 10;
     var eVar22;
-    exports.eVar3 = 10, exports.eVar4, exports.eVar5;
+    exports.eVar3 = 10;
 });
 
 

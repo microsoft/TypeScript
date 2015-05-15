@@ -119,6 +119,10 @@ module FourSlashInterface {
             FourSlash.currentTestState.goToDefinition(definitionIndex);
         }
 
+        public type(definitionIndex: number = 0) {
+            FourSlash.currentTestState.goToTypeDefinition(definitionIndex);
+        }
+
         public position(position: number, fileIndex?: number);
         public position(position: number, fileName?: string);
         public position(position: number, fileNameOrIndex?: any) {
@@ -232,6 +236,10 @@ module FourSlashInterface {
 
         public definitionCountIs(expectedCount: number) {
             FourSlash.currentTestState.verifyDefinitionsCount(this.negative, expectedCount);
+        }
+
+        public typeDefinitionCountIs(expectedCount: number) {
+            FourSlash.currentTestState.verifyTypeDefinitionsCount(this.negative, expectedCount);
         }
 
         public definitionLocationExists() {
@@ -651,8 +659,12 @@ module FourSlashInterface {
             return getClassification("typeParameterName", text, position);
         }
 
-        export function typeAlias(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
-            return getClassification("typeAlias", text, position);
+        export function parameterName(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("parameterName", text, position);
+        }
+
+        export function typeAliasName(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("typeAliasName", text, position);
         }
 
         function getClassification(type: string, text: string, position?: number) {

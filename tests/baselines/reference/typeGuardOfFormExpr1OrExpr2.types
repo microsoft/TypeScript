@@ -44,9 +44,11 @@ if (typeof strOrNumOrBool === "string" || typeof strOrNumOrBool === "number") {
 >typeof strOrNumOrBool === "string" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
+>"string" : string
 >typeof strOrNumOrBool === "number" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : number | boolean
+>"number" : string
 
     strOrNum = strOrNumOrBool; // string | number
 >strOrNum = strOrNumOrBool : string | number
@@ -66,12 +68,15 @@ if (typeof strOrNumOrBoolOrC === "string" || typeof strOrNumOrBoolOrC === "numbe
 >typeof strOrNumOrBoolOrC === "string" : boolean
 >typeof strOrNumOrBoolOrC : string
 >strOrNumOrBoolOrC : string | number | boolean | C
+>"string" : string
 >typeof strOrNumOrBoolOrC === "number" : boolean
 >typeof strOrNumOrBoolOrC : string
 >strOrNumOrBoolOrC : number | boolean | C
+>"number" : string
 >typeof strOrNumOrBoolOrC === "boolean" : boolean
 >typeof strOrNumOrBoolOrC : string
 >strOrNumOrBoolOrC : boolean | C
+>"boolean" : string
 
     strOrNumOrBool = strOrNumOrBoolOrC; // string | number | boolean
 >strOrNumOrBool = strOrNumOrBoolOrC : string | number | boolean
@@ -91,12 +96,15 @@ if (typeof strOrNumOrBoolOrC === "string" || typeof strOrNumOrBoolOrC === "numbe
 >typeof strOrNumOrBoolOrC === "string" : boolean
 >typeof strOrNumOrBoolOrC : string
 >strOrNumOrBoolOrC : string | number | boolean | C
+>"string" : string
 >typeof strOrNumOrBoolOrC === "number" : boolean
 >typeof strOrNumOrBoolOrC : string
 >strOrNumOrBoolOrC : number | boolean | C
+>"number" : string
 >typeof strOrNumOrBool !== "boolean" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
+>"boolean" : string
 
     var r1: string | number | boolean | C = strOrNumOrBoolOrC; // string | number | boolean | C
 >r1 : string | number | boolean | C
@@ -124,6 +132,7 @@ if (typeof strOrNumOrBool === "string" || numOrBool !== strOrNumOrBool) {
 >typeof strOrNumOrBool === "string" : boolean
 >typeof strOrNumOrBool : string
 >strOrNumOrBool : string | number | boolean
+>"string" : string
 >numOrBool !== strOrNumOrBool : boolean
 >numOrBool : number | boolean
 >strOrNumOrBool : number | boolean

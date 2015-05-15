@@ -13,6 +13,7 @@ function h<R>(func: (x: number) => R): R { return null; }
 >x : number
 >R : R
 >R : R
+>null : null
 
 var z: number = h<number>(f);
 >z : number

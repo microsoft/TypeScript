@@ -12,6 +12,7 @@ class foo {
    private bar(foo?: any){ return "foo" }
 >bar : { (): any; (foo: string): any; }
 >foo : any
+>"foo" : string
 
    public n() {
 >n : () => void
@@ -30,6 +31,7 @@ class foo {
 >this.bar : { (): any; (foo: string): any; }
 >this : foo
 >bar : { (): any; (foo: string): any; }
+>"test" : string
    }
 }
 

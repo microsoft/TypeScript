@@ -401,8 +401,9 @@ module ts.BreakpointResolver {
                 if (forStatement.condition) {
                     return span(forStatement.condition);
                 }
-                if (forStatement.iterator) {
-                    return span(forStatement.iterator);
+
+                if (forStatement.incrementor) {
+                    return span(forStatement.incrementor);
                 }
             }
 
@@ -446,14 +447,14 @@ module ts.BreakpointResolver {
                         // fall through.
 
                     case SyntaxKind.CatchClause:
-                        return spanInNode((<Block>node.parent).statements[(<Block>node.parent).statements.length - 1]);;
+                        return spanInNode(lastOrUndefined((<Block>node.parent).statements));;
 
                     case SyntaxKind.CaseBlock:
                         // breakpoint in last statement of the last clause
                         let caseBlock = <CaseBlock>node.parent;
-                        let lastClause = caseBlock.clauses[caseBlock.clauses.length - 1];
+                        let lastClause = lastOrUndefined(caseBlock.clauses);
                         if (lastClause) {
-                            return spanInNode(lastClause.statements[lastClause.statements.length - 1]);
+                            return spanInNode(lastOrUndefined(lastClause.statements));
                         }
                         return undefined;
 

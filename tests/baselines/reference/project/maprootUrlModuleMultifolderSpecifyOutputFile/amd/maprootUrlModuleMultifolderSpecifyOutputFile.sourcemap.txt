@@ -353,20 +353,6 @@ emittedFile:test.js
 sourceFile:file:///tests/cases/projects/outputdir_module_multifolder/test.ts
 -------------------------------------------------------------------
 >>>define(["require", "exports", "ref/m1", "../outputdir_module_multifolder_ref/m2"], function (require, exports, m1, m2) {
-1 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-2 >                                                                                                               ^^
-3 >                                                                                                                 ^^
-4 >                                                                                                                   ^^
-1 >import 
-2 >                                                                                                               m1
-3 >                                                                                                                  = require("ref/m1");
-  >                                                                                                                 import 
-4 >                                                                                                                   m2
-1 >Emitted(1, 112) Source(1, 8) + SourceIndex(0)
-2 >Emitted(1, 114) Source(1, 10) + SourceIndex(0)
-3 >Emitted(1, 116) Source(2, 8) + SourceIndex(0)
-4 >Emitted(1, 118) Source(2, 10) + SourceIndex(0)
----
 >>>    exports.a1 = 10;
 1 >^^^^
 2 >    ^^^^^^^^^^
@@ -374,7 +360,8 @@ sourceFile:file:///tests/cases/projects/outputdir_module_multifolder/test.ts
 4 >                 ^^
 5 >                   ^
 6 >                    ^^^^^^^^->
-1 > = require("../outputdir_module_multifolder_ref/m2");
+1 >import m1 = require("ref/m1");
+  >import m2 = require("../outputdir_module_multifolder_ref/m2");
   >export var 
 2 >    a1
 3 >               = 

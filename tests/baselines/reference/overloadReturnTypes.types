@@ -28,6 +28,7 @@ function attr(nameOrMap: any, value?: string): any {
 >typeof nameOrMap === "object" : boolean
 >typeof nameOrMap : string
 >nameOrMap : any
+>"object" : string
 
         // handle map case
         return new Accessor;
@@ -37,6 +38,7 @@ function attr(nameOrMap: any, value?: string): any {
     else {
         // handle string case
         return "s";
+>"s" : string
     }
 }
 

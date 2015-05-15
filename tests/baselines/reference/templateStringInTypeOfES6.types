@@ -2,4 +2,6 @@
 var x = typeof `abc${ 123 }def`;
 >x : string
 >typeof `abc${ 123 }def` : string
+>`abc${ 123 }def` : string
+>123 : number
 

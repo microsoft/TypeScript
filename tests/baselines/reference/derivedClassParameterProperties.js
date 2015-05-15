@@ -96,7 +96,7 @@ class Derived10<T> extends Base2<T> {
 
 //// [derivedClassParameterProperties.js]
 // ordering of super calls in derived constructors matters depending on other class contents
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;

@@ -28,4 +28,5 @@ module A {
 >Point : Point
 
     } = null;
+>null : null
 }

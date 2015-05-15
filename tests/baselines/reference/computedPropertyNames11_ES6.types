@@ -14,6 +14,7 @@ var v = {
 
     get [s]() { return 0; },
 >s : string
+>0 : number
 
     set [n](v) { },
 >n : number
@@ -23,6 +24,7 @@ var v = {
 >s + s : string
 >s : string
 >s : string
+>0 : number
 
     set [s + n](v) { },
 >s + n : string
@@ -33,21 +35,31 @@ var v = {
     get [+s]() { return 0; },
 >+s : number
 >s : string
+>0 : number
 
     set [""](v) { },
+>"" : string
 >v : any
 
     get [0]() { return 0; },
+>0 : number
+>0 : number
+
     set [a](v) { },
 >a : any
 >v : any
 
     get [<any>true]() { return 0; },
 ><any>true : any
+>true : boolean
+>0 : number
 
     set [`hello bye`](v) { },
+>`hello bye` : string
 >v : any
 
     get [`hello ${a} bye`]() { return 0; }
+>`hello ${a} bye` : string
 >a : any
+>0 : number
 }

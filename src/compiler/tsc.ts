@@ -208,12 +208,15 @@ module ts {
 
             if (!cachedProgram) {
                 if (configFileName) {
-                    var configObject = readConfigFile(configFileName);
-                    if (!configObject) {
-                        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, configFileName));
+
+                    let result = readConfigFile(configFileName);
+                    if (result.error) {
+                        reportDiagnostic(result.error);
                         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                     }
-                    var configParseResult = parseConfigFile(configObject, getDirectoryPath(configFileName));
+
+                    let configObject = result.config;
+                    let configParseResult = parseConfigFile(configObject, sys, getDirectoryPath(configFileName));
                     if (configParseResult.errors.length > 0) {
                         reportDiagnostics(configParseResult.errors);
                         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
@@ -230,7 +233,7 @@ module ts {
                 compilerHost.getSourceFile = getSourceFile;
             }
 
-            var compileResult = compile(rootFileNames, compilerOptions, compilerHost);
+            let compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
             if (!compilerOptions.watch) {
                 return sys.exit(compileResult.exitStatus);

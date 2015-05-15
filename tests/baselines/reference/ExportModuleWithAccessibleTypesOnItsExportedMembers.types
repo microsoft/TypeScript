@@ -18,6 +18,8 @@ module A {
 >Point : Point
 >new Point(0, 0) : Point
 >Point : typeof Point
+>0 : number
+>0 : number
 
         export class Line {
 >Line : Line
@@ -40,7 +42,9 @@ module A {
 >Line : typeof Line
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
+>0 : number
 >y : number
+>0 : number
 >p : Point
             }
         }

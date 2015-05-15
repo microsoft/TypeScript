@@ -1,9 +1,9 @@
 === tests/cases/compiler/moduleAndInterfaceSharingName.ts ===
 module X {
->X : unknown
+>X : any
 
     export module Y {
->Y : unknown
+>Y : any
 
         export interface Z { }
 >Z : Z
@@ -13,12 +13,13 @@ module X {
 }
 var z: X.Y.Z = null;
 >z : X.Y.Z
->X : unknown
->Y : unknown
+>X : any
+>Y : any
 >Z : X.Y.Z
+>null : null
 
 var z2: X.Y;
 >z2 : X.Y
->X : unknown
+>X : any
 >Y : X.Y
 

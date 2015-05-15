@@ -211,8 +211,10 @@ module ts {
             isCatchClauseVariableDeclaration(declaration);
     }
 
+    // Gets the nearest enclosing block scope container that has the provided node 
+    // as a descendant, that is not the provided node.
     export function getEnclosingBlockScopeContainer(node: Node): Node {
-        let current = node;
+        let current = node.parent;
         while (current) {
             if (isFunctionLike(current)) {
                 return current;
@@ -273,8 +275,7 @@ module ts {
 
     /* @internal */
     export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): Span {
-        let scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.text);
-        scanner.setTextPos(pos);
+        let scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.text, /*onError:*/ undefined, pos);
         scanner.scan();
         let start = scanner.getTokenPos();
         return createSpanFromBounds(start, scanner.getTextPos());
@@ -408,7 +409,6 @@ module ts {
 
     export let fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/
 
-
     // Warning: This has the same semantics as the forEach family of functions,
     //          in that traversal terminates in the event that 'visitor' supplies a truthy value.
     export function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T {
@@ -439,7 +439,6 @@ module ts {
         }
     }
 
-    /* @internal */
     export function isVariableLike(node: Node): boolean {
         if (node) {
             switch (node.kind) {
@@ -486,9 +485,6 @@ module ts {
                 case SyntaxKind.IndexSignature:
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ArrowFunction:
-                case SyntaxKind.FunctionDeclaration:
                     return true;
             }
         }
@@ -777,7 +773,7 @@ module ts {
                         let forStatement = <ForStatement>parent;
                         return (forStatement.initializer === node && forStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
                             forStatement.condition === node ||
-                            forStatement.iterator === node;
+                            forStatement.incrementor === node;
                     case SyntaxKind.ForInStatement:
                     case SyntaxKind.ForOfStatement:
                         let forInStatement = <ForInStatement | ForOfStatement>parent;
@@ -858,7 +854,7 @@ module ts {
     }
 
     export function hasRestParameters(s: SignatureDeclaration): boolean {
-        return s.parameters.length > 0 && s.parameters[s.parameters.length - 1].dotDotDotToken !== undefined;
+        return s.parameters.length > 0 && lastOrUndefined(s.parameters).dotDotDotToken !== undefined;
     }
 
     export function isLiteralKind(kind: SyntaxKind): boolean {
@@ -1219,23 +1215,23 @@ module ts {
         return createSpan(start, end - start);
     }
 
-    export function textChangeRangeNewSpan(range: TextChangeRange) {
-        return createSpan(range.span.start, range.newLength);
-    }
+    //export function textChangeRangeNewSpan(range: TextChangeRange) {
+    //    return createSpan(range.span.start, range.newLength);
+    //}
 
-    export function textChangeRangeIsUnchanged(range: TextChangeRange) {
-        return spanIsEmpty(range.span) && range.newLength === 0;
-    }
+    //export function textChangeRangeIsUnchanged(range: TextChangeRange) {
+    //    return spanIsEmpty(range.span) && range.newLength === 0;
+    //}
 
-    export function createTextChangeRange(span: Span, newLength: number): TextChangeRange {
-        if (newLength < 0) {
-            throw new Error("newLength < 0");
-        }
+    //export function createTextChangeRange(span: Span, newLength: number): TextChangeRange {
+    //    if (newLength < 0) {
+    //        throw new Error("newLength < 0");
+    //    }
 
-        return { span, newLength };
-    }
+    //    return { span, newLength };
+    //}
 
-    export let unchangedTextChangeRange = createTextChangeRange(createSpan(0, 0), 0);
+    //export let unchangedTextChangeRange = createTextChangeRange(createSpan(0, 0), 0);
 
     /**
      * Called to merge all the changes that occurred across several versions of a script snapshot 
@@ -1245,121 +1241,121 @@ module ts {
      * This function will then merge those changes into a single change range valid between V1 and
      * Vn.
      */
-    export function collapseTextChangeRangesAcrossMultipleVersions(changes: TextChangeRange[]): TextChangeRange {
-        if (changes.length === 0) {
-            return unchangedTextChangeRange;
-        }
+    //export function collapseTextChangeRangesAcrossMultipleVersions(changes: TextChangeRange[]): TextChangeRange {
+    //    if (changes.length === 0) {
+    //        return unchangedTextChangeRange;
+    //    }
 
-        if (changes.length === 1) {
-            return changes[0];
-        }
+    //    if (changes.length === 1) {
+    //        return changes[0];
+    //    }
 
-        // We change from talking about { { oldStart, oldLength }, newLength } to { oldStart, oldEnd, newEnd }
-        // as it makes things much easier to reason about.
-        let change0 = changes[0];
+    //    // We change from talking about { { oldStart, oldLength }, newLength } to { oldStart, oldEnd, newEnd }
+    //    // as it makes things much easier to reason about.
+    //    let change0 = changes[0];
 
-        let oldStartN = change0.span.start;
-        let oldEndN = spanEnd(change0.span);
-        let newEndN = oldStartN + change0.newLength;
+    //    let oldStartN = change0.span.start;
+    //    let oldEndN = spanEnd(change0.span);
+    //    let newEndN = oldStartN + change0.newLength;
 
-        for (let i = 1; i < changes.length; i++) {
-            let nextChange = changes[i];
+    //    for (let i = 1; i < changes.length; i++) {
+    //        let nextChange = changes[i];
 
-            // Consider the following case:
-            // i.e. two edits.  The first represents the text change range { { 10, 50 }, 30 }.  i.e. The span starting
-            // at 10, with length 50 is reduced to length 30.  The second represents the text change range { { 30, 30 }, 40 }.
-            // i.e. the span starting at 30 with length 30 is increased to length 40.
-            //
-            //      0         10        20        30        40        50        60        70        80        90        100
-            //      -------------------------------------------------------------------------------------------------------
-            //                |                                                 /                                          
-            //                |                                            /----                                           
-            //  T1            |                                       /----                                                
-            //                |                                  /----                                                     
-            //                |                             /----                                                          
-            //      -------------------------------------------------------------------------------------------------------
-            //                                     |                            \                                          
-            //                                     |                               \                                       
-            //   T2                                |                                 \                                     
-            //                                     |                                   \                                   
-            //                                     |                                      \                                
-            //      -------------------------------------------------------------------------------------------------------
-            //
-            // Merging these turns out to not be too difficult.  First, determining the new start of the change is trivial
-            // it's just the min of the old and new starts.  i.e.:
-            //
-            //      0         10        20        30        40        50        60        70        80        90        100
-            //      ------------------------------------------------------------*------------------------------------------
-            //                |                                                 /                                          
-            //                |                                            /----                                           
-            //  T1            |                                       /----                                                
-            //                |                                  /----                                                     
-            //                |                             /----                                                          
-            //      ----------------------------------------$-------------------$------------------------------------------
-            //                .                    |                            \                                          
-            //                .                    |                               \                                       
-            //   T2           .                    |                                 \                                     
-            //                .                    |                                   \                                   
-            //                .                    |                                      \                                
-            //      ----------------------------------------------------------------------*--------------------------------
-            //
-            // (Note the dots represent the newly inferrred start.
-            // Determining the new and old end is also pretty simple.  Basically it boils down to paying attention to the
-            // absolute positions at the asterixes, and the relative change between the dollar signs. Basically, we see
-            // which if the two $'s precedes the other, and we move that one forward until they line up.  in this case that
-            // means:
-            //
-            //      0         10        20        30        40        50        60        70        80        90        100
-            //      --------------------------------------------------------------------------------*----------------------
-            //                |                                                                     /                      
-            //                |                                                                /----                       
-            //  T1            |                                                           /----                            
-            //                |                                                      /----                                 
-            //                |                                                 /----                                      
-            //      ------------------------------------------------------------$------------------------------------------
-            //                .                    |                            \                                          
-            //                .                    |                               \                                       
-            //   T2           .                    |                                 \                                     
-            //                .                    |                                   \                                   
-            //                .                    |                                      \                                
-            //      ----------------------------------------------------------------------*--------------------------------
-            //
-            // In other words (in this case), we're recognizing that the second edit happened after where the first edit
-            // ended with a delta of 20 characters (60 - 40).  Thus, if we go back in time to where the first edit started
-            // that's the same as if we started at char 80 instead of 60.  
-            //
-            // As it so happens, the same logic applies if the second edit precedes the first edit.  In that case rahter
-            // than pusing the first edit forward to match the second, we'll push the second edit forward to match the
-            // first.
-            //
-            // In this case that means we have { oldStart: 10, oldEnd: 80, newEnd: 70 } or, in TextChangeRange
-            // semantics: { { start: 10, length: 70 }, newLength: 60 }
-            //
-            // The math then works out as follows.
-            // If we have { oldStart1, oldEnd1, newEnd1 } and { oldStart2, oldEnd2, newEnd2 } then we can compute the 
-            // final result like so:
-            //
-            // {
-            //      oldStart3: Min(oldStart1, oldStart2),
-            //      oldEnd3  : Max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1)),
-            //      newEnd3  : Max(newEnd2, newEnd2 + (newEnd1 - oldEnd2))
-            // }
+    //        // Consider the following case:
+    //        // i.e. two edits.  The first represents the text change range { { 10, 50 }, 30 }.  i.e. The span starting
+    //        // at 10, with length 50 is reduced to length 30.  The second represents the text change range { { 30, 30 }, 40 }.
+    //        // i.e. the span starting at 30 with length 30 is increased to length 40.
+    //        //
+    //        //      0         10        20        30        40        50        60        70        80        90        100
+    //        //      -------------------------------------------------------------------------------------------------------
+    //        //                |                                                 /                                          
+    //        //                |                                            /----                                           
+    //        //  T1            |                                       /----                                                
+    //        //                |                                  /----                                                     
+    //        //                |                             /----                                                          
+    //        //      -------------------------------------------------------------------------------------------------------
+    //        //                                     |                            \                                          
+    //        //                                     |                               \                                       
+    //        //   T2                                |                                 \                                     
+    //        //                                     |                                   \                                   
+    //        //                                     |                                      \                                
+    //        //      -------------------------------------------------------------------------------------------------------
+    //        //
+    //        // Merging these turns out to not be too difficult.  First, determining the new start of the change is trivial
+    //        // it's just the min of the old and new starts.  i.e.:
+    //        //
+    //        //      0         10        20        30        40        50        60        70        80        90        100
+    //        //      ------------------------------------------------------------*------------------------------------------
+    //        //                |                                                 /                                          
+    //        //                |                                            /----                                           
+    //        //  T1            |                                       /----                                                
+    //        //                |                                  /----                                                     
+    //        //                |                             /----                                                          
+    //        //      ----------------------------------------$-------------------$------------------------------------------
+    //        //                .                    |                            \                                          
+    //        //                .                    |                               \                                       
+    //        //   T2           .                    |                                 \                                     
+    //        //                .                    |                                   \                                   
+    //        //                .                    |                                      \                                
+    //        //      ----------------------------------------------------------------------*--------------------------------
+    //        //
+    //        // (Note the dots represent the newly inferrred start.
+    //        // Determining the new and old end is also pretty simple.  Basically it boils down to paying attention to the
+    //        // absolute positions at the asterixes, and the relative change between the dollar signs. Basically, we see
+    //        // which if the two $'s precedes the other, and we move that one forward until they line up.  in this case that
+    //        // means:
+    //        //
+    //        //      0         10        20        30        40        50        60        70        80        90        100
+    //        //      --------------------------------------------------------------------------------*----------------------
+    //        //                |                                                                     /                      
+    //        //                |                                                                /----                       
+    //        //  T1            |                                                           /----                            
+    //        //                |                                                      /----                                 
+    //        //                |                                                 /----                                      
+    //        //      ------------------------------------------------------------$------------------------------------------
+    //        //                .                    |                            \                                          
+    //        //                .                    |                               \                                       
+    //        //   T2           .                    |                                 \                                     
+    //        //                .                    |                                   \                                   
+    //        //                .                    |                                      \                                
+    //        //      ----------------------------------------------------------------------*--------------------------------
+    //        //
+    //        // In other words (in this case), we're recognizing that the second edit happened after where the first edit
+    //        // ended with a delta of 20 characters (60 - 40).  Thus, if we go back in time to where the first edit started
+    //        // that's the same as if we started at char 80 instead of 60.  
+    //        //
+    //        // As it so happens, the same logic applies if the second edit precedes the first edit.  In that case rahter
+    //        // than pusing the first edit forward to match the second, we'll push the second edit forward to match the
+    //        // first.
+    //        //
+    //        // In this case that means we have { oldStart: 10, oldEnd: 80, newEnd: 70 } or, in TextChangeRange
+    //        // semantics: { { start: 10, length: 70 }, newLength: 60 }
+    //        //
+    //        // The math then works out as follows.
+    //        // If we have { oldStart1, oldEnd1, newEnd1 } and { oldStart2, oldEnd2, newEnd2 } then we can compute the 
+    //        // final result like so:
+    //        //
+    //        // {
+    //        //      oldStart3: Min(oldStart1, oldStart2),
+    //        //      oldEnd3  : Max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1)),
+    //        //      newEnd3  : Max(newEnd2, newEnd2 + (newEnd1 - oldEnd2))
+    //        // }
 
-            let oldStart1 = oldStartN;
-            let oldEnd1 = oldEndN;
-            let newEnd1 = newEndN;
+    //        let oldStart1 = oldStartN;
+    //        let oldEnd1 = oldEndN;
+    //        let newEnd1 = newEndN;
 
-            let oldStart2 = nextChange.span.start;
-            let oldEnd2 = spanEnd(nextChange.span);
-            let newEnd2 = oldStart2 + nextChange.newLength;
+    //        let oldStart2 = nextChange.span.start;
+    //        let oldEnd2 = spanEnd(nextChange.span);
+    //        let newEnd2 = oldStart2 + nextChange.newLength;
 
-            oldStartN = Math.min(oldStart1, oldStart2);
-            oldEndN = Math.max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1));
-            newEndN = Math.max(newEnd2, newEnd2 + (newEnd1 - oldEnd2));
-        }
+    //        oldStartN = Math.min(oldStart1, oldStart2);
+    //        oldEndN = Math.max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1));
+    //        newEndN = Math.max(newEnd2, newEnd2 + (newEnd1 - oldEnd2));
+    //    }
 
-        return createTextChangeRange(createSpanFromBounds(oldStartN, oldEndN), /*newLength:*/ newEndN - oldStartN);
-    }
+    //    return createTextChangeRange(createSpanFromBounds(oldStartN, oldEndN), /*newLength:*/ newEndN - oldStartN);
+    //}
 
     export function nodeArrayEnd(array: NodeArray<Node>) {
         var end = array.length === 0 ? array.start : spanEnd(lastOrUndefined(array));
@@ -1375,6 +1371,18 @@ module ts {
         return scanner.getTextPos();
     }
 
+    export function isParameterDeclaration(node: VariableLikeDeclaration) {
+        let root = getRootDeclaration(node);
+        return root.kind === SyntaxKind.Parameter;
+    }
+
+    export function getRootDeclaration(node: Node): Node {
+        while (node.kind === SyntaxKind.BindingElement) {
+            node = node.parent.parent;
+        }
+        return node;
+    }
+        
     export function nodeStartsNewLexicalEnvironment(n: Node): boolean {
         return isFunctionLike(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
     }
@@ -1391,7 +1399,12 @@ module ts {
         return node;
     }
 
-    /* @internal */
+    export function createSynthesizedNodeArray(): NodeArray<any> {
+        var array = <NodeArray<any>>[];
+        array.start = -1;
+        return array;
+    }
+
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
         let fileDiagnostics: Map<Diagnostic[]> = {};
@@ -1581,7 +1594,7 @@ module ts {
                 let lineStartsOfS = computeLineStarts(s);
                 if (lineStartsOfS.length > 1) {
                     lineCount = lineCount + lineStartsOfS.length - 1;
-                    linePos = output.length - s.length + lineStartsOfS[lineStartsOfS.length - 1];
+                    linePos = output.length - s.length + lastOrUndefined(lineStartsOfS);
                 }
             }
         }
@@ -1654,8 +1667,10 @@ module ts {
 
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
         if (!isDeclarationFile(sourceFile)) {
-            if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.fileName, ".js")) {
-                return true;
+            if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
+                // 1. in-browser single file compilation scenario
+                // 2. non .js file
+                return compilerOptions.separateCompilation || !fileExtensionIs(sourceFile.fileName, ".js");
             }
             return false;
         }
@@ -1839,18 +1854,67 @@ module ts {
         }
     }
 
-    // Returns false if this heritage clause element's expression contains something unsupported
-    // (i.e. not a name or dotted name).
-    export function isSupportedHeritageClauseElement(node: HeritageClauseElement): boolean {
-        return isSupportedHeritageClauseElementExpression(node.expression);
+    export function modifierToFlag(token: SyntaxKind): NodeFlags {
+        switch (token) {
+            case SyntaxKind.StaticKeyword: return NodeFlags.Static;
+            case SyntaxKind.PublicKeyword: return NodeFlags.Public;
+            case SyntaxKind.ProtectedKeyword: return NodeFlags.Protected;
+            case SyntaxKind.PrivateKeyword: return NodeFlags.Private;
+            case SyntaxKind.ExportKeyword: return NodeFlags.Export;
+            case SyntaxKind.DeclareKeyword: return NodeFlags.Ambient;
+            case SyntaxKind.ConstKeyword: return NodeFlags.Const;
+            case SyntaxKind.DefaultKeyword: return NodeFlags.Default;
+        }
+        return 0;
     }
 
-    function isSupportedHeritageClauseElementExpression(node: Expression): boolean {
+    export function isLeftHandSideExpression(expr: Expression): boolean {
+        if (expr) {
+            switch (expr.kind) {
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.Identifier:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateExpression:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.SuperKeyword:
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    export function isAssignmentOperator(token: SyntaxKind): boolean {
+        return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
+    }
+
+    // Returns false if this heritage clause element's expression contains something unsupported
+    // (i.e. not a name or dotted name).
+    export function isSupportedExpressionWithTypeArguments(node: ExpressionWithTypeArguments): boolean {
+        return isSupportedExpressionWithTypeArgumentsRest(node.expression);
+    }
+
+    function isSupportedExpressionWithTypeArgumentsRest(node: Expression): boolean {
         if (node.kind === SyntaxKind.Identifier) {
             return true;
         }
         else if (node.kind === SyntaxKind.PropertyAccessExpression) {
-            return isSupportedHeritageClauseElementExpression((<PropertyAccessExpression>node).expression);
+            return isSupportedExpressionWithTypeArgumentsRest((<PropertyAccessExpression>node).expression);
         }
         else {
             return false;
@@ -1863,6 +1927,231 @@ module ts {
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-            return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
+        return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
+    }
+
+    /**
+     * Replace each instance of non-ascii characters by one, two, three, or four escape sequences 
+     * representing the UTF-8 encoding of the character, and return the expanded char code list.
+     */
+    function getExpandedCharCodes(input: string): number[] {
+        let output: number[] = [];
+        let length = input.length;
+        let leadSurrogate: number = undefined;
+
+        for (let i = 0; i < length; i++) {
+            let charCode = input.charCodeAt(i);
+
+            // handel utf8
+            if (charCode < 0x80) {
+                output.push(charCode);
+            }
+            else if (charCode < 0x800) {
+                output.push((charCode >> 6) | 0B11000000);
+                output.push((charCode & 0B00111111) | 0B10000000);
+            }
+            else if (charCode < 0x10000) {
+                output.push((charCode >> 12) | 0B11100000);
+                output.push(((charCode >> 6) & 0B00111111) | 0B10000000);
+                output.push((charCode & 0B00111111) | 0B10000000);
+            }
+            else if (charCode < 0x20000) {
+                output.push((charCode >> 18) | 0B11110000);
+                output.push(((charCode >> 12) & 0B00111111) | 0B10000000);
+                output.push(((charCode >> 6) & 0B00111111) | 0B10000000);
+                output.push((charCode & 0B00111111) | 0B10000000);
+            }
+            else {
+                Debug.assert(false, "Unexpected code point");
+            }
+        }
+
+        return output;
+    }
+
+    const base64Digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+    /**
+     * Converts a string to a base-64 encoded ASCII string.
+     */
+    export function convertToBase64(input: string): string {
+        var result = "";
+        let charCodes = getExpandedCharCodes(input);
+        let i = 0;
+        let length = charCodes.length;
+        let byte1: number, byte2: number, byte3: number, byte4: number;
+
+        while (i < length) {
+            // Convert every 6-bits in the input 3 character points
+            // into a base64 digit
+            byte1 = charCodes[i] >> 2;
+            byte2 = (charCodes[i] & 0B00000011) << 4 | charCodes[i + 1] >> 4;
+            byte3 = (charCodes[i + 1] & 0B00001111) << 2 | charCodes[i + 2] >> 6;
+            byte4 = charCodes[i + 2] & 0B00111111;
+
+            // We are out of characters in the input, set the extra
+            // digits to 64 (padding character).
+            if (i + 1 >= length) {
+                byte3 = byte4 = 64;
+            }
+            else if (i + 2 >= length) {
+                byte4 = 64;
+            }
+
+            // Write to the ouput
+            result += base64Digits.charAt(byte1) + base64Digits.charAt(byte2) + base64Digits.charAt(byte3) + base64Digits.charAt(byte4);
+
+            i += 3;
+        }
+
+        return result;
+    }
+}
+
+module ts {
+    export function getDefaultLibFileName(options: CompilerOptions): string {
+        return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
+    }
+
+    export function textChangeRangeNewSpan(range: TextChangeRange) {
+        return createSpan(range.span.start, range.newLength);
+    }
+
+    export function textChangeRangeIsUnchanged(range: TextChangeRange) {
+        return spanIsEmpty(range.span) && range.newLength === 0;
+    }
+
+    export function createTextChangeRange(span: Span, newLength: number): TextChangeRange {
+        if (newLength < 0) {
+            throw new Error("newLength < 0");
+        }
+
+        return { span, newLength };
+    }
+
+    export let unchangedTextChangeRange = createTextChangeRange(createSpan(0, 0), 0);
+
+    /**
+     * Called to merge all the changes that occurred across several versions of a script snapshot 
+     * into a single change.  i.e. if a user keeps making successive edits to a script we will
+     * have a text change from V1 to V2, V2 to V3, ..., Vn.  
+     * 
+     * This function will then merge those changes into a single change range valid between V1 and
+     * Vn.
+     */
+    export function collapseTextChangeRangesAcrossMultipleVersions(changes: TextChangeRange[]): TextChangeRange {
+        if (changes.length === 0) {
+            return unchangedTextChangeRange;
+        }
+
+        if (changes.length === 1) {
+            return changes[0];
+        }
+
+        // We change from talking about { { oldStart, oldLength }, newLength } to { oldStart, oldEnd, newEnd }
+        // as it makes things much easier to reason about.
+        let change0 = changes[0];
+
+        let oldStartN = change0.span.start;
+        let oldEndN = spanEnd(change0.span);
+        let newEndN = oldStartN + change0.newLength;
+
+        for (let i = 1; i < changes.length; i++) {
+            let nextChange = changes[i];
+
+            // Consider the following case:
+            // i.e. two edits.  The first represents the text change range { { 10, 50 }, 30 }.  i.e. The span starting
+            // at 10, with length 50 is reduced to length 30.  The second represents the text change range { { 30, 30 }, 40 }.
+            // i.e. the span starting at 30 with length 30 is increased to length 40.
+            //
+            //      0         10        20        30        40        50        60        70        80        90        100
+            //      -------------------------------------------------------------------------------------------------------
+            //                |                                                 /                                          
+            //                |                                            /----                                           
+            //  T1            |                                       /----                                                
+            //                |                                  /----                                                     
+            //                |                             /----                                                          
+            //      -------------------------------------------------------------------------------------------------------
+            //                                     |                            \                                          
+            //                                     |                               \                                       
+            //   T2                                |                                 \                                     
+            //                                     |                                   \                                   
+            //                                     |                                      \                                
+            //      -------------------------------------------------------------------------------------------------------
+            //
+            // Merging these turns out to not be too difficult.  First, determining the new start of the change is trivial
+            // it's just the min of the old and new starts.  i.e.:
+            //
+            //      0         10        20        30        40        50        60        70        80        90        100
+            //      ------------------------------------------------------------*------------------------------------------
+            //                |                                                 /                                          
+            //                |                                            /----                                           
+            //  T1            |                                       /----                                                
+            //                |                                  /----                                                     
+            //                |                             /----                                                          
+            //      ----------------------------------------$-------------------$------------------------------------------
+            //                .                    |                            \                                          
+            //                .                    |                               \                                       
+            //   T2           .                    |                                 \                                     
+            //                .                    |                                   \                                   
+            //                .                    |                                      \                                
+            //      ----------------------------------------------------------------------*--------------------------------
+            //
+            // (Note the dots represent the newly inferrred start.
+            // Determining the new and old end is also pretty simple.  Basically it boils down to paying attention to the
+            // absolute positions at the asterixes, and the relative change between the dollar signs. Basically, we see
+            // which if the two $'s precedes the other, and we move that one forward until they line up.  in this case that
+            // means:
+            //
+            //      0         10        20        30        40        50        60        70        80        90        100
+            //      --------------------------------------------------------------------------------*----------------------
+            //                |                                                                     /                      
+            //                |                                                                /----                       
+            //  T1            |                                                           /----                            
+            //                |                                                      /----                                 
+            //                |                                                 /----                                      
+            //      ------------------------------------------------------------$------------------------------------------
+            //                .                    |                            \                                          
+            //                .                    |                               \                                       
+            //   T2           .                    |                                 \                                     
+            //                .                    |                                   \                                   
+            //                .                    |                                      \                                
+            //      ----------------------------------------------------------------------*--------------------------------
+            //
+            // In other words (in this case), we're recognizing that the second edit happened after where the first edit
+            // ended with a delta of 20 characters (60 - 40).  Thus, if we go back in time to where the first edit started
+            // that's the same as if we started at char 80 instead of 60.  
+            //
+            // As it so happens, the same logic applies if the second edit precedes the first edit.  In that case rahter
+            // than pusing the first edit forward to match the second, we'll push the second edit forward to match the
+            // first.
+            //
+            // In this case that means we have { oldStart: 10, oldEnd: 80, newEnd: 70 } or, in TextChangeRange
+            // semantics: { { start: 10, length: 70 }, newLength: 60 }
+            //
+            // The math then works out as follows.
+            // If we have { oldStart1, oldEnd1, newEnd1 } and { oldStart2, oldEnd2, newEnd2 } then we can compute the 
+            // final result like so:
+            //
+            // {
+            //      oldStart3: Min(oldStart1, oldStart2),
+            //      oldEnd3  : Max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1)),
+            //      newEnd3  : Max(newEnd2, newEnd2 + (newEnd1 - oldEnd2))
+            // }
+
+            let oldStart1 = oldStartN;
+            let oldEnd1 = oldEndN;
+            let newEnd1 = newEndN;
+
+            let oldStart2 = nextChange.span.start;
+            let oldEnd2 = spanEnd(nextChange.span);
+            let newEnd2 = oldStart2 + nextChange.newLength;
+
+            oldStartN = Math.min(oldStart1, oldStart2);
+            oldEndN = Math.max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1));
+            newEndN = Math.max(newEnd2, newEnd2 + (newEnd1 - oldEnd2));
+        }
+
+        return createTextChangeRange(createSpanFromBounds(oldStartN, oldEndN), /*newLength:*/ newEndN - oldStartN);
     }
 }

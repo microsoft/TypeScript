@@ -1,15 +1,21 @@
 tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(4,6): error TS2456: Type alias 'T0' circularly references itself.
+tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(5,6): error TS2456: Type alias 'T0_1' circularly references itself.
 tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(6,6): error TS2456: Type alias 'T0_2' circularly references itself.
+tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(7,6): error TS2456: Type alias 'T0_3' circularly references itself.
 tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(11,6): error TS2456: Type alias 'T1' circularly references itself.
 tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(14,6): error TS2456: Type alias 'T2' circularly references itself.
 tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(16,6): error TS2456: Type alias 'T2_1' circularly references itself.
 tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(19,6): error TS2456: Type alias 'T3' circularly references itself.
 tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(22,6): error TS2456: Type alias 'T4' circularly references itself.
+tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(25,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
 tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(26,6): error TS2456: Type alias 'T5' circularly references itself.
+tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(29,6): error TS2456: Type alias 'T6' circularly references itself.
 tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(30,6): error TS2456: Type alias 'T7' circularly references itself.
+tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(31,5): error TS2502: 'yy' is referenced directly or indirectly in its own type annotation.
+tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(32,6): error TS2456: Type alias 'T8' circularly references itself.
 
 
-==== tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts (9 errors) ====
+==== tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts (15 errors) ====
     // It is an error for the type specified in a type alias to depend on that type alias
     
     // A type alias directly depends on the type it aliases.
@@ -17,10 +23,14 @@ tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(
          ~~
 !!! error TS2456: Type alias 'T0' circularly references itself.
     type T0_1 = T0_2
+         ~~~~
+!!! error TS2456: Type alias 'T0_1' circularly references itself.
     type T0_2 = T0_3
          ~~~~
 !!! error TS2456: Type alias 'T0_2' circularly references itself.
     type T0_3 = T0_1
+         ~~~~
+!!! error TS2456: Type alias 'T0_3' circularly references itself.
     
     // A type reference directly depends on the referenced type and each of the type arguments, if any.
     interface I<T> {}
@@ -49,17 +59,25 @@ tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(
     
     // A type query directly depends on the type of the referenced entity.
     var x: T5[] = []
+        ~
+!!! error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
     type T5 = typeof x
          ~~
 !!! error TS2456: Type alias 'T5' circularly references itself.
     
     class C1<T> {}
     type T6 = T7 | number
+         ~~
+!!! error TS2456: Type alias 'T6' circularly references itself.
     type T7 = typeof yy
          ~~
 !!! error TS2456: Type alias 'T7' circularly references itself.
     var yy: [string, T8[]];
+        ~~
+!!! error TS2502: 'yy' is referenced directly or indirectly in its own type annotation.
     type T8 = C<T6>
+         ~~
+!!! error TS2456: Type alias 'T8' circularly references itself.
     
     // legal cases
     type T9 = () => T9

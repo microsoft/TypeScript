@@ -22,7 +22,6 @@ var m;
         })();
         c_1.c = c;
     })(c = m.c || (m.c = {}));
-    m.a;
 })(m || (m = {}));
 module.exports = m;
 

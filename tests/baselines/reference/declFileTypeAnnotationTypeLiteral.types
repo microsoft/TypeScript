@@ -35,7 +35,7 @@ var x: {
 
     new (a: string): m.c;
 >a : string
->m : unknown
+>m : any
 >c : m.c
 
     // Indexers
@@ -80,6 +80,6 @@ var y: (a: string) => string;
 var z: new (a: string) => m.c;
 >z : new (a: string) => m.c
 >a : string
->m : unknown
+>m : any
 >c : m.c
 

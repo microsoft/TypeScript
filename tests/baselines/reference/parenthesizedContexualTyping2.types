@@ -54,6 +54,7 @@ var a = fun(x => { x<number>(undefined); return x; }, 10);
 >x : <T>(p: T) => T
 >undefined : undefined
 >x : <T>(p: T) => T
+>10 : number
 
 var b = fun((x => { x<number>(undefined); return x; }), 10);
 >b : number
@@ -66,6 +67,7 @@ var b = fun((x => { x<number>(undefined); return x; }), 10);
 >x : <T>(p: T) => T
 >undefined : undefined
 >x : <T>(p: T) => T
+>10 : number
 
 var c = fun(((x => { x<number>(undefined); return x; })), 10);
 >c : number
@@ -79,6 +81,7 @@ var c = fun(((x => { x<number>(undefined); return x; })), 10);
 >x : <T>(p: T) => T
 >undefined : undefined
 >x : <T>(p: T) => T
+>10 : number
 
 var d = fun((((x => { x<number>(undefined); return x; }))), 10);
 >d : number
@@ -93,6 +96,7 @@ var d = fun((((x => { x<number>(undefined); return x; }))), 10);
 >x : <T>(p: T) => T
 >undefined : undefined
 >x : <T>(p: T) => T
+>10 : number
 
 var e = fun(x => { x<number>(undefined); return x; }, x => { x<number>(undefined); return x; }, 10);
 >e : number
@@ -110,6 +114,7 @@ var e = fun(x => { x<number>(undefined); return x; }, x => { x<number>(undefined
 >x : <T>(p: T) => T
 >undefined : undefined
 >x : <T>(p: T) => T
+>10 : number
 
 var f = fun((x => { x<number>(undefined); return x; }),(x => { x<number>(undefined); return x; }), 10);
 >f : number
@@ -129,6 +134,7 @@ var f = fun((x => { x<number>(undefined); return x; }),(x => { x<number>(undefin
 >x : <T>(p: T) => T
 >undefined : undefined
 >x : <T>(p: T) => T
+>10 : number
 
 var g = fun(((x => { x<number>(undefined); return x; })),((x => { x<number>(undefined); return x; })), 10);
 >g : number
@@ -150,6 +156,7 @@ var g = fun(((x => { x<number>(undefined); return x; })),((x => { x<number>(unde
 >x : <T>(p: T) => T
 >undefined : undefined
 >x : <T>(p: T) => T
+>10 : number
 
 var h = fun((((x => { x<number>(undefined); return x; }))),((x => { x<number>(undefined); return x; })), 10);
 >h : number
@@ -172,6 +179,7 @@ var h = fun((((x => { x<number>(undefined); return x; }))),((x => { x<number>(un
 >x : <T>(p: T) => T
 >undefined : undefined
 >x : <T>(p: T) => T
+>10 : number
 
 // Ternaries in parens
 var i = fun((Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x => undefined), 10);
@@ -185,6 +193,7 @@ var i = fun((Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x 
 >Math.random : () => number
 >Math : Math
 >random : () => number
+>0.5 : number
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x : <T>(p: T) => T
 >x<number>(undefined) : number
@@ -194,6 +203,7 @@ var i = fun((Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x 
 >x => undefined : (x: <T>(p: T) => T) => any
 >x : <T>(p: T) => T
 >undefined : undefined
+>10 : number
 
 var j = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)), 10);
 >j : number
@@ -206,6 +216,7 @@ var j = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : 
 >Math.random : () => number
 >Math : Math
 >random : () => number
+>0.5 : number
 >(x => { x<number>(undefined); return x; }) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x : <T>(p: T) => T
@@ -217,6 +228,7 @@ var j = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : 
 >x => undefined : (x: <T>(p: T) => T) => any
 >x : <T>(p: T) => T
 >undefined : undefined
+>10 : number
 
 var k = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)), x => { x<number>(undefined); return x; }, 10);
 >k : number
@@ -229,6 +241,7 @@ var k = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : 
 >Math.random : () => number
 >Math : Math
 >random : () => number
+>0.5 : number
 >(x => { x<number>(undefined); return x; }) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x : <T>(p: T) => T
@@ -246,6 +259,7 @@ var k = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : 
 >x : <T>(p: T) => T
 >undefined : undefined
 >x : <T>(p: T) => T
+>10 : number
 
 var l = fun(((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined)))),((x => { x<number>(undefined); return x; })), 10);
 >l : number
@@ -259,6 +273,7 @@ var l = fun(((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; }))
 >Math.random : () => number
 >Math : Math
 >random : () => number
+>0.5 : number
 >((x => { x<number>(undefined); return x; })) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >(x => { x<number>(undefined); return x; }) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
@@ -280,6 +295,7 @@ var l = fun(((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; }))
 >x : <T>(p: T) => T
 >undefined : undefined
 >x : <T>(p: T) => T
+>10 : number
 
 var lambda1: FuncType = x => { x<number>(undefined); return x; };
 >lambda1 : (x: <T>(p: T) => T) => <T>(p: T) => T

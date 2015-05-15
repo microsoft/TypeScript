@@ -121,7 +121,6 @@ module ts {
         WhileKeyword,
         WithKeyword,
         // Strict mode reserved words
-        AsKeyword,
         ImplementsKeyword,
         InterfaceKeyword,
         LetKeyword,
@@ -132,12 +131,14 @@ module ts {
         StaticKeyword,
         YieldKeyword,
         // Contextual keywords
+        AsKeyword,
         AnyKeyword,
         BooleanKeyword,
         ConstructorKeyword,
         DeclareKeyword,
         GetKeyword,
         ModuleKeyword,
+        NamespaceKeyword,
         RequireKeyword,
         NumberKeyword,
         SetKeyword,
@@ -205,9 +206,9 @@ module ts {
         SpreadElementExpression,
         ClassExpression,
         OmittedExpression,
+        ExpressionWithTypeArguments,
         // Misc
         TemplateSpan,
-        HeritageClauseElement,
         SemicolonClassElement,
         // Element
         Block,
@@ -312,8 +313,9 @@ module ts {
         DeclarationFile =   0x00000800,  // Node is a .d.ts file
         Let =               0x00001000,  // Variable declaration
         Const =             0x00002000,  // Variable declaration
-        OctalLiteral =      0x00004000,
-        ExportContext =     0x00008000,  // Export context (initialized by binding)
+        OctalLiteral =      0x00004000,  // Octal numeric literal
+        Namespace =         0x00008000,  // Namespace declaration
+        ExportContext =     0x00010000,  // Export context (initialized by binding)
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Default,
         AccessibilityModifier = Public | Private | Protected,
@@ -391,7 +393,7 @@ module ts {
 
     export interface Identifier extends PrimaryExpression {
         text: string;                                  // Text of identifier (with escapes converted to characters)
-        originalKeywordKind?: SyntaxKind;     // Original syntaxKind which get set so that we can report an error later
+        originalKeywordKind?: SyntaxKind;              // Original syntaxKind which get set so that we can report an error later
     }
 
     export interface QualifiedName extends Node {
@@ -598,7 +600,11 @@ module ts {
         type: TypeNode;
     }
 
-    export interface StringLiteralTypeNode extends LiteralExpression, TypeNode { }
+    // Note that a StringLiteral AST node is both an Expression and a TypeNode.  The latter is
+    // because string literals can appear in the type annotation of a parameter node.
+    export interface StringLiteral extends LiteralExpression, TypeNode {
+        _stringLiteralBrand: any;
+    }
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
     // Consider 'Expression'.  Without the brand, 'Expression' is actually no different
@@ -691,10 +697,6 @@ module ts {
         hasExtendedUnicodeEscape?: boolean;
     }
 
-    export interface StringLiteralExpression extends LiteralExpression {
-        _stringLiteralExpressionBrand: any;
-    }
-
     export interface TemplateExpression extends PrimaryExpression {
         head: LiteralExpression;
         templateSpans: NodeArray<TemplateSpan>;
@@ -741,7 +743,7 @@ module ts {
         arguments: NodeArray<Expression>;
     }
 
-    export interface HeritageClauseElement extends Node {
+    export interface ExpressionWithTypeArguments extends TypeNode {
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
     }
@@ -797,7 +799,7 @@ module ts {
     export interface ForStatement extends IterationStatement {
         initializer?: VariableDeclarationList | Expression;
         condition?: Expression;
-        iterator?: Expression;
+        incrementor?: Expression;
     }
 
     export interface ForInStatement extends IterationStatement {
@@ -893,7 +895,7 @@ module ts {
 
     export interface HeritageClause extends Node {
         token: SyntaxKind;
-        types?: NodeArray<HeritageClauseElement>;
+        types?: NodeArray<ExpressionWithTypeArguments>;
     }
 
     export interface TypeAliasDeclaration extends Declaration, ModuleElement {
@@ -1034,6 +1036,10 @@ module ts {
         getCurrentDirectory(): string;
     }
 
+    export interface ParseConfigHost {
+        readDirectory(rootDir: string, extension: string): string[];
+    }
+
     export interface WriteFileCallback {
         (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
     }
@@ -1094,14 +1100,15 @@ module ts {
     }
 
     export interface SourceMapData {
-        sourceMapFilePath: string;       // Where the sourcemap file is written
-        jsSourceMappingURL: string;      // source map URL written in the .js file
-        sourceMapFile: string;           // Source map's file field - .js file name
-        sourceMapSourceRoot: string;     // Source map's sourceRoot field - location where the sources will be present if not ""
-        sourceMapSources: string[];      // Source map's sources field - list of sources that can be indexed in this source map
-        inputSourceFileNames: string[];  // Input source file (which one can use on program to get the file), 1:1 mapping with the sourceMapSources list
-        sourceMapNames?: string[];       // Source map's names field - list of names that can be indexed in this source map
-        sourceMapMappings: string;       // Source map's mapping field - encoded source map spans
+        sourceMapFilePath: string;           // Where the sourcemap file is written
+        jsSourceMappingURL: string;          // source map URL written in the .js file
+        sourceMapFile: string;               // Source map's file field - .js file name
+        sourceMapSourceRoot: string;         // Source map's sourceRoot field - location where the sources will be present if not ""
+        sourceMapSources: string[];          // Source map's sources field - list of sources that can be indexed in this source map
+        sourceMapSourcesContent?: string[];  // Source map's sourcesContent field - list of the sources' text to be embedded in the source map
+        inputSourceFileNames: string[];      // Input source file (which one can use on program to get the file), 1:1 mapping with the sourceMapSources list
+        sourceMapNames?: string[];           // Source map's names field - list of names that can be indexed in this source map
+        sourceMapMappings: string;           // Source map's mapping field - encoded source map spans
         sourceMapDecodedMappings: SourceMapSpan[];  // Raw source map spans that were encoded into the sourceMapMappings
     }
 
@@ -1275,6 +1282,7 @@ module ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         resolvesToSomeValue(location: Node, name: string): boolean;
         getBlockScopedVariableId(node: Identifier): number;
+        getReferencedValueDeclaration(reference: Identifier): Declaration;
         serializeTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
         serializeParameterTypesOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): (string | string[])[];
         serializeReturnTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
@@ -1407,6 +1415,7 @@ module ts {
         BlockScopedBindingInLoop    = 0x00000100,
         EmitDecorate                = 0x00000200,  // Emit __decorate
         EmitParam                   = 0x00000400,  // Emit __param helper for decorators
+        LexicalModuleMergesWithClass = 0x00000800,  // Instantiated lexical module declaration is merged with a previous class declaration.
     }
 
     /* @internal */ 
@@ -1486,7 +1495,13 @@ module ts {
     // Class and interface types (TypeFlags.Class and TypeFlags.Interface)
     export interface InterfaceType extends ObjectType {
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
-        baseTypes: ObjectType[];                   // Base types
+    }
+
+    export interface InterfaceTypeWithBaseTypes extends InterfaceType {
+        baseTypes: ObjectType[];
+    }
+
+    export interface InterfaceTypeWithDeclaredMembers extends InterfaceType {
         declaredProperties: Symbol[];              // Declared members
         declaredCallSignatures: Signature[];       // Declared call signatures
         declaredConstructSignatures: Signature[];  // Declared construct signatures
@@ -1513,6 +1528,8 @@ module ts {
 
     export interface UnionType extends Type {
         types: Type[];                    // Constituent types
+        /* @internal */
+        reducedType: Type;                // Reduced union type (all subtypes removed)
         /* @internal */
         resolvedProperties: SymbolTable;  // Cache of resolved properties
     }
@@ -1573,7 +1590,7 @@ module ts {
 
     /* @internal */
     export interface TypeMapper {
-        (t: Type): Type;
+        (t: TypeParameter): Type;
     }
 
     /* @internal */
@@ -1635,11 +1652,15 @@ module ts {
         diagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
+        inlineSourceMap?: boolean;
+        inlineSources?: boolean;
         listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
+        newLine?: NewLineKind;
         noEmit?: boolean;
+        noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
@@ -1650,6 +1671,7 @@ module ts {
         preserveConstEnums?: boolean;
         project?: string;
         removeComments?: boolean;
+        rootDir?: string;
         sourceMap?: boolean;
         sourceRoot?: string;
         suppressImplicitAnyIndexErrors?: boolean;
@@ -1666,8 +1688,15 @@ module ts {
         None = 0,
         CommonJS = 1,
         AMD = 2,
+        UMD = 3,
+        System = 4,
     }
 
+    export const enum NewLineKind {
+        CarriageReturnLineFeed = 0,
+        LineFeed = 1,
+    }
+	
     export interface LineAndCharacter {
         line: number;
         /*

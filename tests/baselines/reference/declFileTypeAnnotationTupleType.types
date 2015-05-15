@@ -23,7 +23,7 @@ class g<T> {
 var k: [c, m.c] = [new c(), new m.c()];
 >k : [c, m.c]
 >c : c
->m : unknown
+>m : any
 >c : m.c
 >[new c(), new m.c()] : [c, m.c]
 >new c() : c
@@ -40,7 +40,7 @@ var l = k;
 var x: [g<string>, m.g<number>, () => c] = [new g<string>(), new m.g<number>(), () => new c()];
 >x : [g<string>, m.g<number>, () => c]
 >g : g<T>
->m : unknown
+>m : any
 >g : m.g<T>
 >c : c
 >[new g<string>(), new m.g<number>(), () => new c()] : [g<string>, m.g<number>, () => c]

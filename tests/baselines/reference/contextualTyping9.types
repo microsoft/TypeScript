@@ -5,7 +5,10 @@ var foo:{id:number;}[] = [{id:1}, {id:2, name:"foo"}];
 >[{id:1}, {id:2, name:"foo"}] : { id: number; }[]
 >{id:1} : { id: number; }
 >id : number
+>1 : number
 >{id:2, name:"foo"} : { id: number; name: string; }
 >id : number
+>2 : number
 >name : string
+>"foo" : string
 

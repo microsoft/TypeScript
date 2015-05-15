@@ -204,7 +204,7 @@ module ts {
     function nodeEndsWith(n: Node, expectedLastToken: SyntaxKind, sourceFile: SourceFile): boolean {
         let children = n.getChildren(sourceFile);
         if (children.length) {
-            let last = children[children.length - 1];
+            let last = lastOrUndefined(children);
             if (last.kind === expectedLastToken) {
                 return true;
             }
@@ -655,5 +655,9 @@ module ts {
         return mapToDisplayParts(writer => {
             typechecker.getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags);
         });
+    }
+
+    export function isJavaScript(fileName: string) {
+        return fileExtensionIs(fileName, ".js");
     }
 }

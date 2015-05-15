@@ -281,6 +281,17 @@ module ts {
         return result;
     }
 
+    export function memoize<T>(callback: () => T): () => T {
+        let value: T;
+        return () => {
+            if (callback) {
+                value = callback();
+                callback = undefined;
+            }
+            return value;
+        };
+    }
+
     function formatStringFromArgs(text: string, args: { [index: number]: any; }, baseIndex?: number): string {
         baseIndex = baseIndex || 0;
 
@@ -459,7 +470,7 @@ module ts {
         let normalized: string[] = [];
         for (let part of parts) {
             if (part !== ".") {
-                if (part === ".." && normalized.length > 0 && normalized[normalized.length - 1] !== "..") {
+                if (part === ".." && normalized.length > 0 && lastOrUndefined(normalized) !== "..") {
                     normalized.pop();
                 }
                 else {
@@ -575,7 +586,7 @@ module ts {
     export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, getCanonicalFileName: (fileName: string) => string, isAbsolutePathAnUrl: boolean) {
         let pathComponents = getNormalizedPathOrUrlComponents(relativeOrAbsolutePath, currentDirectory);
         let directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, currentDirectory);
-        if (directoryComponents.length > 1 && directoryComponents[directoryComponents.length - 1] === "") {
+        if (directoryComponents.length > 1 && lastOrUndefined(directoryComponents) === "") {
             // If the directory path given was of type test/cases/ then we really need components of directory to be only till its name
             // that is  ["test", "cases", ""] needs to be actually ["test", "cases"]
             directoryComponents.length--;
@@ -629,16 +640,18 @@ module ts {
         return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
     }
 
-    let supportedExtensions = [".d.ts", ".ts", ".js"];
+    /**
+     *  List of supported extensions in order of file resolution precedence.
+     */
+    export const supportedExtensions = [".ts", ".d.ts"];
 
+    const extensionsToRemove = [".d.ts", ".ts", ".js"];
     export function removeFileExtension(path: string): string {
-        for (let ext of supportedExtensions) {
-
+        for (let ext of extensionsToRemove) {
             if (fileExtensionIs(path, ext)) {
                 return path.substr(0, path.length - ext.length);
             }
         }
-
         return path;
     }
 
@@ -658,10 +671,6 @@ module ts {
         "\u2029": "\\u2029", // paragraphSeparator
         "\u0085": "\\u0085"  // nextLine
     };
-
-    export function getDefaultLibFileName(options: CompilerOptions): string {
-        return options.target === ScriptTarget.ES6 ? "lib.es6.d.ts" : "lib.d.ts";
-    }
 
     export interface ObjectAllocator {
         getNodeConstructor(kind: SyntaxKind): new () => Node;

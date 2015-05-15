@@ -70,6 +70,7 @@ var zs = [list, null]; // List<number>[]
 >zs : List<number>[]
 >[list, null] : List<number>[]
 >list : List<number>
+>null : null
 
 var myDerivedList: DerivedList<number>;
 >myDerivedList : DerivedList<number>

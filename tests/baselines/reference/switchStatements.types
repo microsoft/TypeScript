@@ -7,6 +7,7 @@ module M {
 >x : number
 
         return '';
+>'' : string
     }
 }
 
@@ -17,21 +18,32 @@ switch (x) {
 >x : any
 
     case '':
+>'' : string
+
     case 12:
+>12 : number
+
     case true:
+>true : boolean
+
     case null:
+>null : null
+
     case undefined:
 >undefined : undefined
 
     case new Date(12):
 >new Date(12) : Date
 >Date : DateConstructor
+>12 : number
 
     case new Object():
 >new Object() : Object
 >Object : ObjectConstructor
 
     case /[a-z]/:
+>/[a-z]/ : RegExp
+
     case[]:
 >[] : undefined[]
 
@@ -41,9 +53,11 @@ switch (x) {
     case { id: 12 }:
 >{ id: 12 } : { id: number; }
 >id : number
+>12 : number
 
     case['a']:
 >['a'] : string[]
+>'a' : string
 
     case typeof x:
 >typeof x : string
@@ -58,11 +72,13 @@ switch (x) {
 >M.fn : (x: number) => string
 >M : typeof M
 >fn : (x: number) => string
+>1 : number
 
     case <T>(x: number) => '':
 ><T>(x: number) => '' : <T>(x: number) => string
 >T : T
 >x : number
+>'' : string
 
     case (<T>(x: number) => '')(2):
 >(<T>(x: number) => '')(2) : string
@@ -70,6 +86,8 @@ switch (x) {
 ><T>(x: number) => '' : <T>(x: number) => string
 >T : T
 >x : number
+>'' : string
+>2 : number
 
     default:
 }
@@ -95,7 +113,9 @@ switch (new C()) {
     case { id: 12, name: '' }:
 >{ id: 12, name: '' } : { id: number; name: string; }
 >id : number
+>12 : number
 >name : string
+>'' : string
 
     case new C():
 >new C() : C
@@ -103,21 +123,32 @@ switch (new C()) {
 }
 
 switch ('') { }
+>'' : string
+
 switch (12) { }
+>12 : number
+
 switch (true) { }
+>true : boolean
+
 switch (null) { }
+>null : null
+
 switch (undefined) { }
 >undefined : undefined
 
 switch (new Date(12)) { }
 >new Date(12) : Date
 >Date : DateConstructor
+>12 : number
 
 switch (new Object()) { }
 >new Object() : Object
 >Object : ObjectConstructor
 
 switch (/[a-z]/) { }
+>/[a-z]/ : RegExp
+
 switch ([]) { }
 >[] : undefined[]
 
@@ -127,14 +158,17 @@ switch ({}) { }
 switch ({ id: 12 }) { }
 >{ id: 12 } : { id: number; }
 >id : number
+>12 : number
 
 switch (['a']) { }
 >['a'] : string[]
+>'a' : string
 
 switch (<T>(x: number) => '') { }
 ><T>(x: number) => '' : <T>(x: number) => string
 >T : T
 >x : number
+>'' : string
 
 switch ((<T>(x: T) => '')(1)) { }
 >(<T>(x: T) => '')(1) : string
@@ -143,6 +177,8 @@ switch ((<T>(x: T) => '')(1)) { }
 >T : T
 >x : T
 >T : T
+>'' : string
+>1 : number
 
 
 

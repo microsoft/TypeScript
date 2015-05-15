@@ -258,7 +258,7 @@ module ts {
             handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning));
         }
 
-        function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode | StringLiteralExpression, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
+        function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
             writer.getSymbolAccessibilityDiagnostic = getSymbolAccessibilityDiagnostic;
             write(": ");
             if (type) {
@@ -314,12 +314,12 @@ module ts {
             }
         }
 
-        function emitTypeWithNewGetSymbolAccessibilityDiagnostic(type: TypeNode | EntityName | HeritageClauseElement, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
+        function emitTypeWithNewGetSymbolAccessibilityDiagnostic(type: TypeNode | EntityName, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
             writer.getSymbolAccessibilityDiagnostic = getSymbolAccessibilityDiagnostic;
             emitType(type);
         }
 
-        function emitType(type: TypeNode | StringLiteralExpression | Identifier | QualifiedName | HeritageClauseElement) {
+        function emitType(type: TypeNode | Identifier | QualifiedName) {
             switch (type.kind) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
@@ -329,8 +329,8 @@ module ts {
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.StringLiteral:
                     return writeTextOfNode(currentSourceFile, type);
-                case SyntaxKind.HeritageClauseElement:
-                    return emitHeritageClauseElement(<HeritageClauseElement>type);
+                case SyntaxKind.ExpressionWithTypeArguments:
+                    return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>type);
                 case SyntaxKind.TypeReference:
                     return emitTypeReference(<TypeReferenceNode>type);
                 case SyntaxKind.TypeQuery:
@@ -376,8 +376,8 @@ module ts {
                 }
             }
 
-            function emitHeritageClauseElement(node: HeritageClauseElement) {
-                if (isSupportedHeritageClauseElement(node)) {
+            function emitExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
+                if (isSupportedExpressionWithTypeArguments(node)) {
                     Debug.assert(node.expression.kind === SyntaxKind.Identifier || node.expression.kind === SyntaxKind.PropertyAccessExpression);
                     emitEntityName(<Identifier | PropertyAccessExpression>node.expression);
                     if (node.typeArguments) {
@@ -861,14 +861,14 @@ module ts {
             }
         }
 
-        function emitHeritageClause(typeReferences: HeritageClauseElement[], isImplementsList: boolean) {
+        function emitHeritageClause(typeReferences: ExpressionWithTypeArguments[], isImplementsList: boolean) {
             if (typeReferences) {
                 write(isImplementsList ? " implements " : " extends ");
                 emitCommaList(typeReferences, emitTypeOfTypeReference);
             }
 
-            function emitTypeOfTypeReference(node: HeritageClauseElement) {
-                if (isSupportedHeritageClauseElement(node)) {
+            function emitTypeOfTypeReference(node: ExpressionWithTypeArguments) {
+                if (isSupportedExpressionWithTypeArguments(node)) {
                     emitTypeWithNewGetSymbolAccessibilityDiagnostic(node, getHeritageClauseVisibilityError);
                 }
 
@@ -1126,7 +1126,7 @@ module ts {
                 writeLine();
             }
 
-            function getTypeAnnotationFromAccessor(accessor: AccessorDeclaration): TypeNode | StringLiteralExpression {
+            function getTypeAnnotationFromAccessor(accessor: AccessorDeclaration): TypeNode {
                 if (accessor) {
                     return accessor.kind === SyntaxKind.GetAccessor
                         ? accessor.type // Getter - return type

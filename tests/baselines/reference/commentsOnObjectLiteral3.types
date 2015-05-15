@@ -7,6 +7,7 @@ var v = {
  //property
  prop: 1 /* multiple trailing comments */ /*trailing comments*/,
 >prop : number
+>1 : number
 
  //property
  func: function () {

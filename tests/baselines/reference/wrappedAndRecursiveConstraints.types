@@ -33,6 +33,7 @@ interface Foo extends Date {
 var y: Foo = null;
 >y : Foo
 >Foo : Foo
+>null : null
 
 var c = new C(y);
 >c : C<Foo>

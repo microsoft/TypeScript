@@ -136,6 +136,7 @@ module ts {
                             // Block was a standalone block.  In this case we want to only collapse
                             // the span of the block, independent of any parent span.
                             let span = createSpanFromBounds(n.getStart(), spanEnd(n));
+
                             elements.push({
                                 textSpan: span,
                                 hintSpan: span,

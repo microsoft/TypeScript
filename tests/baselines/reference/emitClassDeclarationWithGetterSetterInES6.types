@@ -17,21 +17,33 @@ class C {
 >name2 : string
 
         return "BYE";
+>"BYE" : string
     }
     static get ["computedname"]() {
+>"computedname" : string
+
         return "";
+>"" : string
     }
     get ["computedname"]() {
+>"computedname" : string
+
         return "";
+>"" : string
     }
     get ["computedname"]() {
+>"computedname" : string
+
         return "";
+>"" : string
     }
 
     set ["computedname"](x: any) {
+>"computedname" : string
 >x : any
     }
     set ["computedname"](y: string) {
+>"computedname" : string
 >y : string
     }
 
@@ -44,5 +56,6 @@ class C {
 >b : number
 
     static set ["computedname"](b: string) { }
+>"computedname" : string
 >b : string
 }

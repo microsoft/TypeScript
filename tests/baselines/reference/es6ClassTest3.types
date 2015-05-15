@@ -26,12 +26,14 @@ module M {
 >this.x : number
 >this : Visibility
 >x : number
+>1 : number
 
 	        this.y = 2;
 >this.y = 2 : number
 >this.y : number
 >this : Visibility
 >y : number
+>2 : number
 	    }
 	}
 }

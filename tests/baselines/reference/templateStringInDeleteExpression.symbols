@@ -1,0 +1,3 @@
+=== tests/cases/conformance/es6/templates/templateStringInDeleteExpression.ts ===
+delete `abc${0}abc`;
+No type information for this code.

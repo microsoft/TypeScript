@@ -218,9 +218,8 @@ var m1;
         return C4_public;
     })();
     var m1_v1_private;
-    m1.m1_v2_public;
     var m1_v3_private;
-    m1.m1_v4_public; // error
+     // error
     var m1_v11_private = new C1_public();
     m1.m1_v12_public = new C1_public();
     var m1_v13_private = new C2_private();
@@ -273,9 +272,7 @@ var m2;
         return m2_C4_public;
     })();
     var m2_v1_private;
-    m2.m2_v2_public;
     var m2_v3_private;
-    m2.m2_v4_public;
     var m2_v11_private = new m2_C1_public();
     m2.m2_v12_public = new m2_C1_public();
     var m2_v13_private = new m2_C2_private();
@@ -326,9 +323,8 @@ var glo_C4_public = (function () {
     return glo_C4_public;
 })();
 var glo_v1_private;
-exports.glo_v2_public;
 var glo_v3_private;
-exports.glo_v4_public; // error
+ // error
 var glo_v11_private = new glo_C1_public();
 exports.glo_v12_public = new glo_C1_public();
 var glo_v13_private = new glo_C2_private();

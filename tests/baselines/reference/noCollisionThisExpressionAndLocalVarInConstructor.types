@@ -15,6 +15,7 @@ class class1 {
 
                 var _this = 2;
 >_this : number
+>2 : number
 
                 return callback(_this);
 >callback(_this) : any
@@ -31,6 +32,7 @@ class class2 {
     constructor() {
         var _this = 2;
 >_this : number
+>2 : number
 
         var x2 = {
 >x2 : { doStuff: (callback: any) => () => any; }

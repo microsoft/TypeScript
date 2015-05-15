@@ -1,6 +1,6 @@
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -55,6 +55,13 @@ module ts {
         getCurrentDirectory(): string;
         getDefaultLibFileName(options: string): string;
         getNewLine?(): string;
+        getProjectVersion?(): string;
+    }
+
+    /** Public interface of the the of a config service shim instance.*/
+    export interface CoreServicesShimHost extends Logger {
+        /** Returns a JSON-encoded value of the type: string[] */
+        readDirectory(rootDir: string, extension: string): string;
     }
 
     ///
@@ -93,6 +100,8 @@ module ts {
 
         getSyntacticClassifications(fileName: string, start: number, length: number): string;
         getSemanticClassifications(fileName: string, start: number, length: number): string;
+        getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string;
+        getEncodedSemanticClassifications(fileName: string, start: number, length: number): string;
 
         getCompletionsAtPosition(fileName: string, position: number): string;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string): string;
@@ -126,10 +135,18 @@ module ts {
 
         /**
          * Returns a JSON-encoded value of the type:
+         * { fileName: string; textSpan: { start: number; length: number}; kind: string; name: string; containerKind: string; containerName: string }
+         *
+         * Or undefined value if no definition can be found.
+         */
+        getTypeDefinitionAtPosition(fileName: string, position: number): string;
+
+        /**
+         * Returns a JSON-encoded value of the type:
          * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
          */
         getReferencesAtPosition(fileName: string, position: number): string;
-        
+
         /**
          * Returns a JSON-encoded value of the type:
          * { definition: <encoded>; references: <encoded>[] }[]
@@ -146,8 +163,8 @@ module ts {
         /**
          * Returns a JSON-encoded value of the type:
          * { fileName: string; highlights: { start: number; length: number, isDefinition: boolean }[] }[]
-         * 
-         * @param fileToSearch A JSON encoded string[] containing the file names that should be 
+         *
+         * @param fileToSearch A JSON encoded string[] containing the file names that should be
          *  considered when searching.
          */
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string): string;
@@ -183,16 +200,20 @@ module ts {
     }
 
     export interface ClassifierShim extends Shim {
+        getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string;
         getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string;
     }
 
     export interface CoreServicesShim extends Shim {
         getPreProcessedFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
+        getTSConfigFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getDefaultCompilationSettings(): string;
     }
 
     function logInternalError(logger: Logger, err: Error) {
-        logger.log("*INTERNAL ERROR* - Exception in typescript services: " + err.message);
+        if (logger) {
+            logger.log("*INTERNAL ERROR* - Exception in typescript services: " + err.message);
+        }
     }
 
     class ScriptSnapshotShimAdapter implements IScriptSnapshot {
@@ -224,7 +245,7 @@ module ts {
 
     export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
         private files: string[];
-        
+
         constructor(private shimHost: LanguageServiceShimHost) {
         }
 
@@ -235,9 +256,18 @@ module ts {
         public trace(s: string): void {
             this.shimHost.trace(s);
         }
-        
+
         public error(s: string): void {
             this.shimHost.error(s);
+        }
+
+        public getProjectVersion(): string {
+            if (!this.shimHost.getProjectVersion) {
+                // shimmed host does not support getProjectVersion
+                return undefined;
+            }
+
+            return this.shimHost.getProjectVersion();
         }
 
         public getCompilationSettings(): CompilerOptions {
@@ -303,25 +333,43 @@ module ts {
         }
     }
 
-    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any): any {
-        logger.log(actionDescription);
-        var start = Date.now();
-        var result = action();
-        var end = Date.now();
-        logger.log(actionDescription + " completed in " + (end - start) + " msec");
-        if (typeof (result) === "string") {
-            var str = <string>result;
-            if (str.length > 128) {
-                str = str.substring(0, 128) + "...";
-            }
-            logger.log("  result.length=" + str.length + ", result='" + JSON.stringify(str) + "'");
+    export class CoreServicesShimHostAdapter implements ParseConfigHost {
+
+        constructor(private shimHost: CoreServicesShimHost) {
         }
+
+        public readDirectory(rootDir: string, extension: string): string[] {
+            var encoded = this.shimHost.readDirectory(rootDir, extension);
+            return JSON.parse(encoded);
+        }
+    }
+
+    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any, noPerfLogging: boolean): any {
+        if (!noPerfLogging) {
+            logger.log(actionDescription);
+            var start = Date.now();
+        }
+
+        var result = action();
+
+        if (!noPerfLogging) {
+            var end = Date.now();
+            logger.log(actionDescription + " completed in " + (end - start) + " msec");
+            if (typeof (result) === "string") {
+                var str = <string>result;
+                if (str.length > 128) {
+                    str = str.substring(0, 128) + "...";
+                }
+                logger.log("  result.length=" + str.length + ", result='" + JSON.stringify(str) + "'");
+            }
+        }
+
         return result;
     }
 
-    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any): string {
+    function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any, noPerfLogging: boolean): string {
         try {
-            var result = simpleForwardCall(logger, actionDescription, action);
+            var result = simpleForwardCall(logger, actionDescription, action, noPerfLogging);
             return JSON.stringify({ result: result });
         }
         catch (err) {
@@ -369,7 +417,7 @@ module ts {
         }
 
         public forwardJSONCall(actionDescription: string, action: () => any): string {
-            return forwardJSONCall(this.logger, actionDescription, action);
+            return forwardJSONCall(this.logger, actionDescription, action, /*noPerfLogging:*/ false);
         }
 
         /// DISPOSE
@@ -436,6 +484,26 @@ module ts {
                 () => {
                     var classifications = this.languageService.getSemanticClassifications(fileName, createSpan(start, length));
                     return classifications;
+                });
+        }
+
+        public getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string {
+            return this.forwardJSONCall(
+                "getEncodedSyntacticClassifications('" + fileName + "', " + start + ", " + length + ")",
+                () => {
+                    // directly serialize the spans out to a string.  This is much faster to decode
+                    // on the managed side versus a full JSON array.
+                    return convertClassifications(this.languageService.getEncodedSyntacticClassifications(fileName, createSpan(start, length)));
+                });
+        }
+
+        public getEncodedSemanticClassifications(fileName: string, start: number, length: number): string {
+            return this.forwardJSONCall(
+                "getEncodedSemanticClassifications('" + fileName + "', " + start + ", " + length + ")",
+                () => {
+                    // directly serialize the spans out to a string.  This is much faster to decode
+                    // on the managed side versus a full JSON array.
+                    return convertClassifications(this.languageService.getEncodedSemanticClassifications(fileName, createSpan(start, length)));
                 });
         }
 
@@ -529,13 +597,27 @@ module ts {
 
         /**
          * Computes the definition location and file for the symbol
-         * at the requested position. 
+         * at the requested position.
          */
         public getDefinitionAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 "getDefinitionAtPosition('" + fileName + "', " + position + ")",
                 () => {
                     return this.languageService.getDefinitionAtPosition(fileName, position);
+                });
+        }
+
+        /// GOTO Type
+
+        /**
+         * Computes the definition location of the type of the symbol
+         * at the requested position.
+         */
+        public getTypeDefinitionAtPosition(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                "getTypeDefinitionAtPosition('" + fileName + "', " + position + ")",
+                () => {
+                    return this.languageService.getTypeDefinitionAtPosition(fileName, position);
                 });
         }
 
@@ -612,8 +694,8 @@ module ts {
         /// COMPLETION LISTS
 
         /**
-         * Get a string based representation of the completions 
-         * to provide at the given source position and providing a member completion 
+         * Get a string based representation of the completions
+         * to provide at the given source position and providing a member completion
          * list if requested.
          */
         public getCompletionsAtPosition(fileName: string, position: number) {
@@ -718,12 +800,22 @@ module ts {
         }
     }
 
+    function convertClassifications(classifications: Classifications): { spans: string, endOfLineState: EndOfLineState } {
+        return { spans: classifications.spans.join(","), endOfLineState: classifications.endOfLineState };
+    }
+
     class ClassifierShimObject extends ShimBase implements ClassifierShim {
         public classifier: Classifier;
 
-        constructor(factory: ShimFactory) {
+        constructor(factory: ShimFactory, private logger: Logger) {
             super(factory);
             this.classifier = createClassifier();
+        }
+
+        public getEncodedLexicalClassifications(text: string, lexState: EndOfLineState, syntacticClassifierAbsent?: boolean): string {
+            return forwardJSONCall(this.logger, "getEncodedLexicalClassifications",
+                () => convertClassifications(this.classifier.getEncodedLexicalClassifications(text, lexState, syntacticClassifierAbsent)),
+                /*noPerfLogging:*/ true);
         }
 
         /// COLORIZATION
@@ -741,12 +833,13 @@ module ts {
     }
 
     class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
-        constructor(factory: ShimFactory, public logger: Logger) {
+
+        constructor(factory: ShimFactory, public logger: Logger, private host: CoreServicesShimHostAdapter) {
             super(factory);
         }
 
         private forwardJSONCall(actionDescription: string, action: () => any): any {
-            return forwardJSONCall(this.logger, actionDescription, action);
+            return forwardJSONCall(this.logger, actionDescription, action, /*noPerfLogging:*/ false);
         }
 
         public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
@@ -776,6 +869,32 @@ module ts {
                         });
                     });
                     return convertResult;
+                });
+        }
+
+        public getTSConfigFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
+            return this.forwardJSONCall(
+                "getTSConfigFileInfo('" + fileName + "')",
+                () => {
+                    let text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
+
+                    let result = parseConfigFileText(fileName, text);
+
+                    if (result.error) {
+                        return {
+                            options: {},
+                            files: [],
+                            errors: [realizeDiagnostic(result.error, '\r\n')]
+                        };
+                    }
+
+                    var configFile = parseConfigFile(result.config, this.host, getDirectoryPath(normalizeSlashes(fileName)));
+
+                    return {
+                        options: configFile.options,
+                        files: configFile.fileNames,
+                        errors: realizeDiagnostics(configFile.errors, '\r\n')
+                    };
                 });
         }
 
@@ -813,7 +932,7 @@ module ts {
 
         public createClassifierShim(logger: Logger): ClassifierShim {
             try {
-                return new ClassifierShimObject(this);
+                return new ClassifierShimObject(this, logger);
             }
             catch (err) {
                 logInternalError(logger, err);
@@ -821,12 +940,13 @@ module ts {
             }
         }
 
-        public createCoreServicesShim(logger: Logger): CoreServicesShim {
+        public createCoreServicesShim(host: CoreServicesShimHost): CoreServicesShim {
             try {
-                return new CoreServicesShimObject(this, logger);
+                var adapter = new CoreServicesShimHostAdapter(host);
+                return new CoreServicesShimObject(this, <Logger>host, adapter);
             }
             catch (err) {
-                logInternalError(logger, err);
+                logInternalError(<Logger>host, err);
                 throw err;
             }
         }

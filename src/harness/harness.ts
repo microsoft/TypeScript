@@ -45,10 +45,12 @@ module Utils {
     export function getExecutionEnvironment() {
         if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
             return ExecutionEnvironment.CScript;
-        } else if (process && process.execPath && process.execPath.indexOf("node") !== -1) {
-            return ExecutionEnvironment.Node;
-        } else {
+        }
+        else if (typeof window !== "undefined") {
             return ExecutionEnvironment.Browser;
+        }
+        else {
+            return ExecutionEnvironment.Node;
         }
     }
 
@@ -804,6 +806,9 @@ module Harness {
             return result;
         }
 
+        const carriageReturnLineFeed = "\r\n";
+        const lineFeed = "\n";
+
         export var defaultLibFileName = 'lib.d.ts';
         export var defaultLibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
         export var defaultES6LibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + 'lib.core.es6.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
@@ -821,7 +826,8 @@ module Harness {
             scriptTarget: ts.ScriptTarget,
             useCaseSensitiveFileNames: boolean,
             // the currentDirectory is needed for rwcRunner to passed in specified current directory to compiler host
-            currentDirectory?: string): ts.CompilerHost {
+            currentDirectory?: string,
+            newLineKind?: ts.NewLineKind): ts.CompilerHost {
 
             // Local get canonical file name function, that depends on passed in parameter for useCaseSensitiveFileNames
             function getCanonicalFileName(fileName: string): string {
@@ -839,6 +845,11 @@ module Harness {
                 }
             };
             inputFiles.forEach(register);
+
+            let newLine =
+                newLineKind === ts.NewLineKind.CarriageReturnLineFeed ? carriageReturnLineFeed :
+                    newLineKind === ts.NewLineKind.LineFeed ? lineFeed :
+                        ts.sys.newLine;
 
             return {
                 getCurrentDirectory,
@@ -868,7 +879,7 @@ module Harness {
                 writeFile,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
-                getNewLine: () => ts.sys.newLine
+                getNewLine: () => newLine
             };
         }
 
@@ -935,6 +946,7 @@ module Harness {
                 options = options || { noResolve: false };
                 options.target = options.target || ts.ScriptTarget.ES3;
                 options.module = options.module || ts.ModuleKind.None;
+                options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
                 options.noErrorTruncation = true;
 
                 if (settingsCallback) {
@@ -956,8 +968,12 @@ module Harness {
                             if (typeof setting.value === 'string') {
                                 if (setting.value.toLowerCase() === 'amd') {
                                     options.module = ts.ModuleKind.AMD;
+                                } else if (setting.value.toLowerCase() === 'umd') {
+                                    options.module = ts.ModuleKind.UMD;
                                 } else if (setting.value.toLowerCase() === 'commonjs') {
                                     options.module = ts.ModuleKind.CommonJS;
+                                } else if (setting.value.toLowerCase() === 'system') {
+                                    options.module = ts.ModuleKind.System;
                                 } else if (setting.value.toLowerCase() === 'unspecified') {
                                     options.module = ts.ModuleKind.None;
                                 } else {
@@ -985,20 +1001,28 @@ module Harness {
                             }
                             break;
 
+                        case 'emitdecoratormetadata':
+                            options.emitDecoratorMetadata = setting.value === 'true';
+                            break;
+
+                        case 'noemithelpers':
+                            options.noEmitHelpers = setting.value === 'true';
+                            break;
+
                         case 'noemitonerror':
-                            options.noEmitOnError = !!setting.value;
+                            options.noEmitOnError = setting.value === 'true';
                             break;
 
                         case 'noresolve':
-                            options.noResolve = !!setting.value;
+                            options.noResolve = setting.value === 'true';
                             break;
 
                         case 'noimplicitany':
-                            options.noImplicitAny = !!setting.value;
+                            options.noImplicitAny = setting.value === 'true';
                             break;
 
                         case 'nolib':
-                            options.noLib = !!setting.value;
+                            options.noLib = setting.value === 'true';
                             break;
 
                         case 'out':
@@ -1015,16 +1039,31 @@ module Harness {
                             options.sourceRoot = setting.value;
                             break;
 
+                        case 'maproot':
+                            options.mapRoot = setting.value;
+                            break;
+
                         case 'sourcemap':
-                            options.sourceMap = !!setting.value;
+                            options.sourceMap = setting.value === 'true';
                             break;
 
                         case 'declaration':
-                            options.declaration = !!setting.value;
+                            options.declaration = setting.value === 'true';
                             break;
 
                         case 'newline':
-                        case 'newlines':
+                            if (setting.value.toLowerCase() === 'crlf') {
+                                options.newLine = ts.NewLineKind.CarriageReturnLineFeed;
+                            }
+                            else if (setting.value.toLowerCase() === 'lf') {
+                                options.newLine = ts.NewLineKind.LineFeed;
+                            }
+                            else {
+                                throw new Error('Unknown option for newLine: ' + setting.value);
+                            }
+                            break;
+
+                        case 'normalizenewline':
                             newLine = setting.value;
                             break;
 
@@ -1033,7 +1072,7 @@ module Harness {
                             break;
 
                         case 'stripinternal':
-                            options.stripInternal = !!setting.value;
+                            options.stripInternal = setting.value === 'true';
 
                         case 'usecasesensitivefilenames':
                             useCaseSensitiveFileNames = setting.value === 'true';
@@ -1044,7 +1083,7 @@ module Harness {
                             break;
 
                         case 'emitbom':
-                            options.emitBOM = !!setting.value;
+                            options.emitBOM = setting.value === 'true';
                             break;
 
                         case 'errortruncation':
@@ -1068,6 +1107,14 @@ module Harness {
                             includeBuiltFiles.push({ unitName: builtFileName, content: normalizeLineEndings(IO.readFile(builtFileName), newLine) });
                             break;
 
+                        case 'inlinesourcemap':
+                            options.inlineSourceMap = setting.value === 'true';
+                            break;
+                        
+                        case 'inlinesources':
+                            options.inlineSources = setting.value === 'true';
+                            break;
+
                         default:
                             throw new Error('Unsupported compiler setting ' + setting.flag);
                     }
@@ -1078,7 +1125,7 @@ module Harness {
                 var programFiles = inputFiles.concat(includeBuiltFiles).map(file => file.unitName);
                 var program = ts.createProgram(programFiles, options, createCompilerHost(inputFiles.concat(includeBuiltFiles).concat(otherFiles),
                     (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark }),
-                    options.target, useCaseSensitiveFileNames, currentDirectory));
+                    options.target, useCaseSensitiveFileNames, currentDirectory, options.newLine));
 
                 var emitResult = program.emit();
 
@@ -1460,11 +1507,12 @@ module Harness {
 
         // List of allowed metadata names
         var fileMetadataNames = ["filename", "comments", "declaration", "module",
-            "nolib", "sourcemap", "target", "out", "outdir", "noemitonerror",
-            "noimplicitany", "noresolve", "newline", "newlines", "emitbom",
+            "nolib", "sourcemap", "target", "out", "outdir", "noemithelpers", "noemitonerror",
+            "noimplicitany", "noresolve", "newline", "normalizenewline", "emitbom",
             "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
             "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
-            "separatecompilation"];
+            "separatecompilation", "inlinesourcemap", "maproot", "sourceroot",
+            "inlinesources", "emitdecoratormetadata"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
@@ -1564,7 +1612,6 @@ module Harness {
     export module Baseline {
 
         export interface BaselineOptions {
-            LineEndingSensitive?: boolean;
             Subfolder?: string;
             Baselinefolder?: string;
         }
@@ -1654,13 +1701,6 @@ module Harness {
             var expected = '<no content>';
             if (IO.fileExists(refFileName)) {
                 expected = IO.readFile(refFileName);
-            }
-
-            var lineEndingSensitive = opts && opts.LineEndingSensitive;
-
-            if (!lineEndingSensitive) {
-                expected = expected.replace(/\r\n?/g, '\n');
-                actual = actual.replace(/\r\n?/g, '\n');
             }
 
             return { expected, actual };

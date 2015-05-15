@@ -144,10 +144,10 @@ module FourSlash {
             if (globalOptions.hasOwnProperty(prop)) {
                 switch (prop) {
                     case metadataOptionNames.allowNonTsExtensions:
-                        settings.allowNonTsExtensions = true;
+                        settings.allowNonTsExtensions = globalOptions[prop] === "true";
                         break;
                     case metadataOptionNames.declaration:
-                        settings.declaration = true;
+                        settings.declaration = globalOptions[prop] === "true";
                         break;
                     case metadataOptionNames.mapRoot:
                         settings.mapRoot = globalOptions[prop];
@@ -174,7 +174,7 @@ module FourSlash {
                         settings.outDir = globalOptions[prop];
                         break;
                     case metadataOptionNames.sourceMap:
-                        settings.sourceMap = true;
+                        settings.sourceMap = globalOptions[prop] === "true";
                         break;
                     case metadataOptionNames.sourceRoot:
                         settings.sourceRoot = globalOptions[prop];
@@ -308,7 +308,7 @@ module FourSlash {
             ts.forEach(testData.files, file => {
                 // Create map between fileName and its content for easily looking up when resolveReference flag is specified
                 this.inputFiles[file.fileName] = file.content;
-                if (!startResolveFileRef && file.fileOptions[metadataOptionNames.resolveReference]) {
+                if (!startResolveFileRef && file.fileOptions[metadataOptionNames.resolveReference] === "true") {
                     startResolveFileRef = file;
                 } else if (startResolveFileRef) {
                     // If entry point for resolving file references is already specified, report duplication error
@@ -1158,7 +1158,7 @@ module FourSlash {
             var allFourSlashFiles = this.testData.files;
             for (var idx = 0; idx < allFourSlashFiles.length; ++idx) {
                 var file = allFourSlashFiles[idx];
-                if (file.fileOptions[metadataOptionNames.emitThisFile]) {
+                if (file.fileOptions[metadataOptionNames.emitThisFile] === "true") {
                     // Find a file with the flag emitThisFile turned on
                     emitFiles.push(file);
                 }
@@ -1571,6 +1571,28 @@ module FourSlash {
             this.currentCaretPosition = definition.textSpan.start;
         }
 
+        public goToTypeDefinition(definitionIndex: number) {
+            if (definitionIndex === 0) {
+                this.scenarioActions.push('<GoToTypeDefinition />');
+            }
+            else {
+                this.taoInvalidReason = 'GoToTypeDefinition not supported for non-zero definition indices';
+            }
+
+            var definitions = this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            if (!definitions || !definitions.length) {
+                this.raiseError('goToTypeDefinition failed - expected to at least one definition location but got 0');
+            }
+
+            if (definitionIndex >= definitions.length) {
+                this.raiseError('goToTypeDefinition failed - definitionIndex value (' + definitionIndex + ') exceeds definition list size (' + definitions.length + ')');
+            }
+
+            var definition = definitions[definitionIndex];
+            this.openFile(definition.fileName);
+            this.currentCaretPosition = definition.textSpan.start;
+        }
+
         public verifyDefinitionLocationExists(negative: boolean) {
             this.taoInvalidReason = 'verifyDefinitionLocationExists NYI';
 
@@ -1590,8 +1612,18 @@ module FourSlash {
             var assertFn = negative ? assert.notEqual : assert.equal;
 
             var definitions = this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            var actualCount = definitions && definitions.length || 0;
 
-            assertFn(definitions.length, expectedCount, this.messageAtLastKnownMarker("Definitions Count"));
+            assertFn(actualCount, expectedCount, this.messageAtLastKnownMarker("Definitions Count"));
+        }
+
+        public verifyTypeDefinitionsCount(negative: boolean, expectedCount: number) {
+            var assertFn = negative ? assert.notEqual : assert.equal;
+
+            var definitions = this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition);
+            var actualCount = definitions && definitions.length || 0;
+
+            assertFn(actualCount, expectedCount, this.messageAtLastKnownMarker("Type definitions Count"));
         }
 
         public verifyDefinitionsName(negative: boolean, expectedName: string, expectedContainerName: string) {
@@ -2193,38 +2225,62 @@ module FourSlash {
         xmlData.push(xml);
     }
 
+    // We don't want to recompile 'fourslash.ts' for every test, so
+    // here we cache the JS output and reuse it for every test.
+    let fourslashJsOutput: string;
+    {
+        let host = Harness.Compiler.createCompilerHost([{ unitName: Harness.Compiler.fourslashFileName, content: undefined }],
+            (fn, contents) => fourslashJsOutput = contents,
+            ts.ScriptTarget.Latest,
+            ts.sys.useCaseSensitiveFileNames);
+
+        let program = ts.createProgram([Harness.Compiler.fourslashFileName], { noResolve: true, target: ts.ScriptTarget.ES3 }, host);
+
+        program.emit(host.getSourceFile(Harness.Compiler.fourslashFileName, ts.ScriptTarget.ES3));
+    }
+
+
     export function runFourSlashTestContent(basePath: string, testType: FourSlashTestType, content: string, fileName: string): TestXmlData {
         // Parse out the files and their metadata
-        var testData = parseTestData(basePath, content, fileName);
+        let testData = parseTestData(basePath, content, fileName);
 
         currentTestState = new TestState(basePath, testType, testData);
 
-        var result = '';
-        var host = Harness.Compiler.createCompilerHost([{ unitName: Harness.Compiler.fourslashFileName, content: undefined },
-            { unitName: fileName, content: content }],
+        let result = '';
+        let host = Harness.Compiler.createCompilerHost(
+            [
+                { unitName: Harness.Compiler.fourslashFileName, content: undefined },
+                { unitName: fileName, content: content }
+            ],
             (fn, contents) => result = contents,
             ts.ScriptTarget.Latest,
             ts.sys.useCaseSensitiveFileNames);
-        // TODO (drosen): We need to enforce checking on these tests.
-        var program = ts.createProgram([Harness.Compiler.fourslashFileName, fileName], { out: "fourslashTestOutput.js", noResolve: true, target: ts.ScriptTarget.ES3 }, host);
 
-        var diagnostics = ts.getPreEmitDiagnostics(program);
+        let program = ts.createProgram([Harness.Compiler.fourslashFileName, fileName], { out: "fourslashTestOutput.js", noResolve: true, target: ts.ScriptTarget.ES3 }, host);
+
+        let sourceFile = host.getSourceFile(fileName, ts.ScriptTarget.ES3);
+
+        let diagnostics = ts.getPreEmitDiagnostics(program, sourceFile);
         if (diagnostics.length > 0) {
             throw new Error('Error compiling ' + fileName + ': ' +
                 diagnostics.map(e => ts.flattenDiagnosticMessageText(e.messageText, ts.sys.newLine)).join('\r\n'));
         }
-        program.emit();
+
+        program.emit(sourceFile);
         result = result || ''; // Might have an empty fourslash file
+
+        result = fourslashJsOutput + "\r\n" + result;
 
         // Compile and execute the test
         try {
             eval(result);
-        } catch (err) {
+        }
+        catch (err) {
             // Debugging: FourSlash.currentTestState.printCurrentFileState();
             throw err;
         }
 
-        var xmlData = currentTestState.getTestXmlData();
+        let xmlData = currentTestState.getTestXmlData();
         xmlData.originalName = fileName;
         return xmlData;
     }
