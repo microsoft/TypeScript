@@ -26,7 +26,7 @@ module ts.formatting {
                 precedingToken.kind === SyntaxKind.TemplateHead ||
                 precedingToken.kind === SyntaxKind.TemplateMiddle ||
                 precedingToken.kind === SyntaxKind.TemplateTail;
-            if (precedingTokenIsLiteral && precedingToken.getStart(sourceFile) <= position &&  precedingToken.end > position) {
+            if (precedingTokenIsLiteral && precedingToken.getStart(sourceFile) <= position && precedingToken.end > position) {
                 return 0;
             }
 
@@ -107,6 +107,12 @@ module ts.formatting {
                 if (useActualIndentation) {
                     // check if current node is a list item - if yes, take indentation from it
                     let actualIndentation = getActualIndentationForListItem(current, sourceFile, options);
+                    if (actualIndentation !== Value.Unknown) {
+                        return actualIndentation + indentationDelta;
+                    }
+                    
+                    // check if current node is a block-form item - if yes, take indentation from it
+                    actualIndentation = getActualIndentationForBlockFormItem(current, sourceFile, options);
                     if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
                     }
@@ -277,6 +283,15 @@ module ts.formatting {
             return undefined;
         }
 
+        function getActualIndentationForBlockFormItem(node: Node, sourceFile: SourceFile, options: EditorOptions): number {
+            if (isPassableBlockForm(node.kind)) {
+                let firstChild = node.getChildAt(0);
+                let lineAndCharacter = getStartLineAndCharacterForNode(firstChild, sourceFile);
+                return findColumnForFirstNonWhitespaceCharacterInLine(lineAndCharacter, sourceFile, options);
+            }
+            return Value.Unknown;
+        }
+
         function getActualIndentationForListItem(node: Node, sourceFile: SourceFile, options: EditorOptions): number {
             let containingList = getContainingList(node, sourceFile);
             return containingList ? getActualIndentationFromList(containingList) : Value.Unknown;
@@ -399,6 +414,17 @@ module ts.formatting {
                 default:
                     return false;
             }
+        }
+
+        export function isPassableBlockForm(kind: SyntaxKind): boolean {
+            switch (kind) {
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                    return true;
+            }
+            return false;
         }
     }
 }

@@ -17,6 +17,8 @@ goTo.marker('1');
 edit.insertLine('');
 goTo.marker('2');
 verify.currentLineContentIs('        ""');
+edit.insertLine('');
+verify.indentationIs(8);
 goTo.marker('4');
 edit.insertLine('');
 goTo.marker('3');
