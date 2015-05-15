@@ -1366,7 +1366,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 return true;
             }
 
-            function emitListWithSpread(elements: Expression[], alwaysCopy: boolean, multiLine: boolean, trailingComma: boolean) {
+            function emitListWithSpread(elements: Expression[], needsUniqueCopy: boolean, multiLine: boolean, trailingComma: boolean) {
                 let pos = 0;
                 let group = 0;
                 let length = elements.length;
@@ -1383,7 +1383,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         e = (<SpreadElementExpression>e).expression;
                         emitParenthesizedIf(e, /*parenthesized*/ group === 0 && needsParenthesisForPropertyAccessOrInvocation(e));
                         pos++;
-                        if (pos === length && group === 0 && alwaysCopy && e.kind !== SyntaxKind.ArrayLiteralExpression) {
+                        if (pos === length && group === 0 && needsUniqueCopy && e.kind !== SyntaxKind.ArrayLiteralExpression) {
                             write(".slice()");
                         }
                     }
@@ -1425,7 +1425,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write("]");
                 }
                 else {
-                    emitListWithSpread(elements, /*alwaysCopy*/ true, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
+                    emitListWithSpread(elements, /*needsUniqueCopy*/ true, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
                         /*trailingComma*/ elements.hasTrailingComma);
                 }
             }
@@ -1850,7 +1850,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write("void 0");
                 }
                 write(", ");
-                emitListWithSpread(node.arguments, /*alwaysCopy*/ false, /*multiLine*/ false, /*trailingComma*/ false);
+                emitListWithSpread(node.arguments, /*needsUniqueCopy*/ false, /*multiLine*/ false, /*trailingComma*/ false);
                 write(")");
             }
 
@@ -1913,7 +1913,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write(".bind.apply(");
                     emit(target);
                     write(", [void 0].concat(");
-                    emitListWithSpread(node.arguments, /*alwaysCopy*/true, /*multiline*/false, /*trailingComma*/false);
+                    emitListWithSpread(node.arguments, /*needsUniqueCopy*/false, /*multiline*/false, /*trailingComma*/false);
                     write(")))");
                     write("()");
                 }
