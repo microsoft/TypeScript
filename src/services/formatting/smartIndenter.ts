@@ -281,7 +281,7 @@ module ts.formatting {
             let containingList = getContainingList(node, sourceFile);
 
             if (containingList) {
-                let lineIndentation = getLineIndentationWhenExpressionIsInMultiLine();
+                let lineIndentation = getLineIndentationWhenExpressionIsInMultiLine(node, sourceFile, options);
                 if (lineIndentation !== Value.Unknown)
                     return lineIndentation;
                 return getActualIndentationFromList(containingList);
@@ -292,28 +292,28 @@ module ts.formatting {
                 let index = indexOf(list, node);
                 return index !== -1 ? deriveActualIndentationFromList(list, index, sourceFile, options) : Value.Unknown;
             }
+        }
 
-            function getLineIndentationWhenExpressionIsInMultiLine() {
-                if (node.parent.kind === SyntaxKind.CallExpression) {
-                    let parentExpression = (<CallExpression>node.parent).expression;
-                    let startingExpression = getStartingExpression(<CallExpression>parentExpression);
+        function getLineIndentationWhenExpressionIsInMultiLine(node: Node, sourceFile: SourceFile, options: EditorOptions): number {
+            if (node.parent.kind === SyntaxKind.CallExpression) {
+                let parentExpression = (<CallExpression>node.parent).expression;
+                let startingExpression = getStartingExpression(<CallExpression>parentExpression);
 
-                    if (parentExpression === startingExpression) {
-                        return Value.Unknown;
-                    }
-
-                    let parentExpressionEnd = sourceFile.getLineAndCharacterOfPosition(parentExpression.end);
-                    let startingExpressionEnd = sourceFile.getLineAndCharacterOfPosition(startingExpression.end);
-
-                    if (parentExpressionEnd.line === startingExpressionEnd.line) {
-                        return Value.Unknown;
-                    }
-
-                    return findColumnForFirstNonWhitespaceCharacterInLine(parentExpressionEnd, sourceFile, options);
+                if (parentExpression === startingExpression) {
+                    return Value.Unknown;
                 }
-                return Value.Unknown;
-            }
 
+                let parentExpressionEnd = sourceFile.getLineAndCharacterOfPosition(parentExpression.end);
+                let startingExpressionEnd = sourceFile.getLineAndCharacterOfPosition(startingExpression.end);
+
+                if (parentExpressionEnd.line === startingExpressionEnd.line) {
+                    return Value.Unknown;
+                }
+
+                return findColumnForFirstNonWhitespaceCharacterInLine(parentExpressionEnd, sourceFile, options);
+            }
+            return Value.Unknown;
+            
             function getStartingExpression(expression: CallExpression) {
                 while (expression.expression)
                     expression = <CallExpression>expression.expression;
