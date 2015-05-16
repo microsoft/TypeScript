@@ -343,7 +343,7 @@ module ts {
 
         return {
             options: getCompilerOptions(),
-            fileNames: getFiles(),
+            fileNames: getFileNames(),
             errors
         };
 
@@ -389,23 +389,24 @@ module ts {
             return options;
         }
 
-        function getFiles(): string[] {
-            var files: string[] = [];
+        function getFileNames(): string[] {
+            var fileNames: string[] = [];
             if (hasProperty(json, "files")) {
                 if (json["files"] instanceof Array) {
-                    var files = map(<string[]>json["files"], s => combinePaths(basePath, s));
+                    fileNames = map(<string[]>json["files"], s => combinePaths(basePath, s));
                 }
             }
             else {
-                var sysFiles = host.readDirectory(basePath, ".ts");
+                var exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
+                var sysFiles = host.readDirectory(basePath, ".ts", exclude);
                 for (var i = 0; i < sysFiles.length; i++) {
                     var name = sysFiles[i];
                     if (!fileExtensionIs(name, ".d.ts") || !contains(sysFiles, name.substr(0, name.length - 5) + ".ts")) {
-                        files.push(name);
+                        fileNames.push(name);
                     }
                 }
             }
-            return files;
+            return fileNames;
         }
     }
 }
