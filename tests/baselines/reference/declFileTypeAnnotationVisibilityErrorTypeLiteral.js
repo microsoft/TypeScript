@@ -59,8 +59,6 @@ var m;
         }
     };
     m.x3 = m.x;
-    // Function type
     m.y2 = m.y;
-    // constructor type
     m.z2 = m.z;
 })(m || (m = {}));
