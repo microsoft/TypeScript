@@ -1,4 +1,4 @@
-=== tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction.ts ===
+=== tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction1.ts ===
 class Module {
 >Module : Module
 

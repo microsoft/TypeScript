@@ -1,4 +1,4 @@
-//// [unionTypeWithRecursiveSubtypeReduction.ts]
+//// [unionTypeWithRecursiveSubtypeReduction1.ts]
 class Module {
     public members: Class[];
 }
@@ -18,7 +18,8 @@ class Property {
 var t: Class | Property;
 t.parent;
 
-//// [unionTypeWithRecursiveSubtypeReduction.js]
+
+//// [unionTypeWithRecursiveSubtypeReduction1.js]
 var Module = (function () {
     function Module() {
     }
