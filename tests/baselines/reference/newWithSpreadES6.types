@@ -7,6 +7,11 @@ function f(x: number, y: number, ...z: string[]) {
 >z : string[]
 }
 
+function f2(...x: string[]) {
+>f2 : (...x: string[]) => void
+>x : string[]
+}
+
 interface A {
 >A : A
 
@@ -100,6 +105,25 @@ new f(1, 2, ...a, "string");
 >...a : string
 >a : string[]
 >"string" : string
+
+// Multiple spreads arguments
+new f2(...a, ...a);
+>new f2(...a, ...a) : any
+>f2 : (...x: string[]) => void
+>...a : string
+>a : string[]
+>...a : string
+>a : string[]
+
+new f(1 ,2, ...a, ...a);
+>new f(1 ,2, ...a, ...a) : any
+>f : (x: number, y: number, ...z: string[]) => void
+>1 : number
+>2 : number
+>...a : string
+>a : string[]
+>...a : string
+>a : string[]
 
 // Call expression
 new f(1, 2, "string")();

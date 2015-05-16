@@ -3,6 +3,9 @@
 function f(x: number, y: number, ...z: string[]) {
 }
 
+function f2(...x: string[]) {
+}
+
 interface A {
     f: {
         new (x: number, y: number, ...z: string[]);
@@ -34,6 +37,10 @@ var i: C[][];
 new f(1, 2, "string");
 new f(1, 2, ...a);
 new f(1, 2, ...a, "string");
+
+// Multiple spreads arguments
+new f2(...a, ...a);
+new f(1 ,2, ...a, ...a);
 
 // Call expression
 new f(1, 2, "string")();
@@ -97,6 +104,12 @@ function f(x, y) {
         z[_i - 2] = arguments[_i];
     }
 }
+function f2() {
+    var x = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        x[_i - 0] = arguments[_i];
+    }
+}
 var B = (function () {
     function B(x, y) {
         var z = [];
@@ -118,6 +131,9 @@ var i;
 new f(1, 2, "string");
 new f(1, 2, ...a);
 new f(1, 2, ...a, "string");
+// Multiple spreads arguments
+new f2(...a, ...a);
+new f(1, 2, ...a, ...a);
 // Call expression
 new f(1, 2, "string")();
 new f(1, 2, ...a)();

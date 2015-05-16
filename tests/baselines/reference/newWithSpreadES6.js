@@ -3,6 +3,9 @@
 function f(x: number, y: number, ...z: string[]) {
 }
 
+function f2(...x: string[]) {
+}
+
 interface A {
     f: {
         new (x: number, y: number, ...z: string[]);
@@ -34,6 +37,10 @@ var i: C[][];
 new f(1, 2, "string");
 new f(1, 2, ...a);
 new f(1, 2, ...a, "string");
+
+// Multiple spreads arguments
+new f2(...a, ...a);
+new f(1 ,2, ...a, ...a);
 
 // Call expression
 new f(1, 2, "string")();
@@ -93,6 +100,8 @@ new i["a-b"][1](1, 2, ...a, "string");
 //// [newWithSpreadES6.js]
 function f(x, y, ...z) {
 }
+function f2(...x) {
+}
 class B {
     constructor(x, y, ...z) {
     }
@@ -109,6 +118,9 @@ var i;
 new f(1, 2, "string");
 new f(1, 2, ...a);
 new f(1, 2, ...a, "string");
+// Multiple spreads arguments
+new f2(...a, ...a);
+new f(1, 2, ...a, ...a);
 // Call expression
 new f(1, 2, "string")();
 new f(1, 2, ...a)();

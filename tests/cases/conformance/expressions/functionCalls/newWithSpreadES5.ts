@@ -3,7 +3,7 @@
 function f(x: number, y: number, ...z: string[]) {
 }
 
-function f2(...a: string[]) {}
+function f2(...x: string[]) {}
 
 interface A {
     f: {
@@ -39,6 +39,7 @@ new f(1, 2, ...a, "string");
 
 // Multiple spreads arguments
 new f2(...a, ...a);
+new f(1 ,2, ...a, ...a);
 
 // Call expression
 new f(1, 2, "string")();

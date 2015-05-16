@@ -1366,14 +1366,19 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 return true;
             }
 
-            function emitListWithSpread(elements: Expression[], needsUniqueCopy: boolean, multiLine: boolean, trailingComma: boolean) {
+            function emitListWithSpread(elements: Expression[], needsUniqueCopy: boolean, multiLine: boolean, trailingComma: boolean, useConcat: boolean) {
                 let pos = 0;
                 let group = 0;
                 let length = elements.length;
                 while (pos < length) {
                     // Emit using the pattern <group0>.concat(<group1>, <group2>, ...)
                     if (group === 1) {
-                        write(".concat(");
+                        if(useConcat) {
+                            write(".concat(");
+                        }
+                        else { 
+                            write(", ");
+                        }
                     }
                     else if (group > 1) {
                         write(", ");
@@ -1406,7 +1411,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     group++;
                 }
                 if (group > 1) {
-                    write(")");
+                    if(useConcat) {
+                        write(")");
+                    }
                 }
             }
 
@@ -1426,7 +1433,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
                 else {
                     emitListWithSpread(elements, /*needsUniqueCopy*/ true, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
-                        /*trailingComma*/ elements.hasTrailingComma);
+                        /*trailingComma*/ elements.hasTrailingComma, /*useConcat*/ true);
                 }
             }
 
@@ -1850,7 +1857,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write("void 0");
                 }
                 write(", ");
-                emitListWithSpread(node.arguments, /*needsUniqueCopy*/ false, /*multiLine*/ false, /*trailingComma*/ false);
+                emitListWithSpread(node.arguments, /*needsUniqueCopy*/ false, /*multiLine*/ false, /*trailingComma*/ false, /*useConcat*/ true);
                 write(")");
             }
 
@@ -1913,7 +1920,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write(".bind.apply(");
                     emit(target);
                     write(", [void 0].concat(");
-                    emitListWithSpread(node.arguments, /*needsUniqueCopy*/false, /*multiline*/false, /*trailingComma*/false);
+                    emitListWithSpread(node.arguments, /*needsUniqueCopy*/ false, /*multiline*/ false, /*trailingComma*/ false, /*useConcat*/ false);
                     write(")))");
                     write("()");
                 }
