@@ -1372,15 +1372,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 let length = elements.length;
                 while (pos < length) {
                     // Emit using the pattern <group0>.concat(<group1>, <group2>, ...)
-                    if (group === 1) {
-                        if(useConcat) {
-                            write(".concat(");
-                        }
-                        else { 
-                            write(", ");
-                        }
+                    if (group === 1 && useConcat) {
+                        write(".concat(");
                     }
-                    else if (group > 1) {
+                    else if (group > 0) {
                         write(", ");
                     }
                     let e = elements[pos];
