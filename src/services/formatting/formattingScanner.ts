@@ -234,7 +234,7 @@ module ts.formatting {
         // then kind needs to be fixed. This might happen in cases 
         // when parser interprets token differently, i.e keyword treated as identifier
         function fixTokenKind(tokenInfo: TokenInfo, container: Node): TokenInfo {
-            if (isToken(container) && tokenInfo.token.kind !== container.kind) {
+            if (isReservedWord(container) && tokenInfo.token.kind !== container.kind) {
                 tokenInfo.token.kind = container.kind;
             }
             return tokenInfo;

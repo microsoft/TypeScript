@@ -57,6 +57,8 @@ module ts {
             getReturnTypeOfSignature,
             getSymbolsInScope,
             getSymbolAtLocation,
+            getSymbolFromDeclarationKeyword,
+            getContextualSignature,
             getShorthandAssignmentValueSymbol,
             getTypeAtLocation,
             typeToString,
@@ -11376,6 +11378,33 @@ module ts {
 
             // Do we want to return undefined here?
             return undefined;
+        }
+
+        function getSymbolFromDeclarationKeyword(node: Node): Symbol {
+            switch(node.kind) {
+                case SyntaxKind.ClassKeyword:
+                case SyntaxKind.EnumKeyword:
+                case SyntaxKind.FunctionKeyword:
+                case SyntaxKind.InterfaceKeyword:
+                case SyntaxKind.ModuleKeyword:
+                case SyntaxKind.NamespaceKeyword:
+                    if (node.parent.symbol) {
+                        return node.parent.symbol;
+                    }
+                    return undefined;
+                
+                case SyntaxKind.ConstKeyword:
+                case SyntaxKind.LetKeyword:
+                case SyntaxKind.VarKeyword:
+                    if (node.parent.kind === SyntaxKind.VariableDeclarationList) {
+                        // We only want to show quick info for declaration list of length 1 and on a non-binding pattern.
+                        if ((<VariableDeclarationList>node.parent).declarations.length === 1 &&
+                            (<VariableDeclarationList>node.parent).declarations[0].name.kind === SyntaxKind.Identifier) {
+                            return getSymbolOfEntityNameOrPropertyAccessExpression(<Identifier>(<VariableDeclarationList>node.parent).declarations[0].name);
+                        }
+                    }
+                    return undefined;
+            }
         }
 
         function getSymbolInfo(node: Node) {

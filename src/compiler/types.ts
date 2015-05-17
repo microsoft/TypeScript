@@ -1148,11 +1148,13 @@ module ts {
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
+        getSymbolFromDeclarationKeyword(node: Node): Symbol;
         getShorthandAssignmentValueSymbol(location: Node): Symbol;
         getTypeAtLocation(node: Node): Type;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string;
         getSymbolDisplayBuilder(): SymbolDisplayBuilder;
+        getContextualSignature(node: FunctionExpression | MethodDeclaration): Signature;
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
@@ -1377,6 +1379,7 @@ module ts {
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
         valueDeclaration?: Declaration;         // First value declaration of the symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
+        isAnonymous?: boolean;                  // True if declaration is anonymous
     }
 
     /* @internal */ 
@@ -1455,7 +1458,7 @@ module ts {
         /* @internal */ 
         ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
         /* @internal */ 
-        ContainsObjectLiteral = 0x00080000,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 0x00080000,  // Type is or contains object literal type
         ESSymbol                = 0x00100000,  // Type of symbol primitive introduced in ES6
 
         /* @internal */ 

@@ -197,8 +197,6 @@ module ts {
             let list = createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, NodeFlags.Synthetic, this);
             list._children = [];
             let pos = nodes.pos;
-
-            
             
             for (let node of nodes) {
                 if (pos < node.pos) {
@@ -3672,7 +3670,7 @@ module ts {
                 addFullSymbolName(symbol);
                 writeTypeParametersOfSymbol(symbol, sourceFile);
             }
-            if ((symbolFlags & SymbolFlags.Interface) && (semanticMeaning & SemanticMeaning.Type)) {
+            if (symbolFlags & SymbolFlags.Interface) {
                 addNewLineIfDisplayPartsExist();
                 displayParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
                 displayParts.push(spacePart());
@@ -3839,7 +3837,9 @@ module ts {
                 if (symbolKind) {
                     pushTypePart(symbolKind);
                     displayParts.push(spacePart());
-                    addFullSymbolName(symbol);
+                    if (!symbol.isAnonymous) {
+                        addFullSymbolName(symbol);
+                    }
                 }
             }
 
@@ -3851,6 +3851,9 @@ module ts {
                     case ScriptElementKind.constElement:
                     case ScriptElementKind.constructorImplementationElement:
                         displayParts.push(textOrKeywordPart(symbolKind));
+                        return;
+                    case ScriptElementKind.localFunctionElement:
+                        displayParts.push(textOrKeywordPart(ScriptElementKind.functionElement));
                         return;
                     default:
                         displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
@@ -3882,11 +3885,22 @@ module ts {
             }
         }
 
+        function getQuickInfoNodeBySkippingModifiersAndHeritageKeywords(sourceFile: SourceFile, position: number, beignWithLastTokenPath = false): Node {
+            let node = getTouchingPropertyName(sourceFile, position, beignWithLastTokenPath);
+            if (!node) {
+                return undefined;
+            }
+            else if (isModifier(node.kind) || isHeritageKeyword(node)) {
+                node = getQuickInfoNodeBySkippingModifiersAndHeritageKeywords(sourceFile, node.end + 1, /*beignWithLastTokenPath*/ true);
+            }
+            return node;
+        }
+
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
             synchronizeHostData();
 
             let sourceFile = getValidSourceFile(fileName);
-            let node = getTouchingPropertyName(sourceFile, position);
+            let node = getQuickInfoNodeBySkippingModifiersAndHeritageKeywords(sourceFile, position);
             if (!node) {
                 return undefined;
             }
@@ -3897,6 +3911,9 @@ module ts {
 
             let typeChecker = program.getTypeChecker();
             let symbol = typeChecker.getSymbolAtLocation(node);
+            if(!symbol && isDeclarationKeyword(node)) {
+                symbol = typeChecker.getSymbolFromDeclarationKeyword(node);
+            }
 
             if (!symbol) {
                 // Try getting just type at this position and show
@@ -6228,7 +6245,7 @@ module ts {
                 if (textSpanIntersectsWith(span, element.getFullStart(), element.getFullWidth())) {
                     let children = element.getChildren();
                     for (let child of children) {
-                        if (isToken(child)) {
+                        if (isReservedWord(child)) {
                             classifyToken(child);
                         }
                         else {
