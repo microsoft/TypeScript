@@ -12,8 +12,8 @@
 goTo.marker("1");
 verify.quickInfoIs('function foo(): void');
 goTo.marker("2");
-verify.quickInfoIs('(local function) bar2(): void');
+verify.quickInfoIs('function bar2(): void');
 goTo.marker("3");
-verify.quickInfoIs('(local function) bar3(): void');
+verify.quickInfoIs('function bar3(): void');
 goTo.marker("4");
-verify.quickInfoIs('(local function) bar4(): void');
+verify.quickInfoIs('function bar4(): void');

@@ -277,7 +277,7 @@ goToMarkAndGeneralVerify('mod1');
 // from function in mod1
 goToMarkAndGeneralVerify('function');
 verify.completionListContains('bar', '(local var) bar: number');
-verify.completionListContains('foob', '(local function) foob(): void');
+verify.completionListContains('foob', 'function foob(): void');
 
 // from class in mod1
 goToMarkAndGeneralVerify('class');
@@ -303,7 +303,7 @@ verify.completionListContains('m1eMod', 'namespace mod1mod.m1eMod');
 // from exported function in mod1
 goToMarkAndGeneralVerify('exportedFunction');
 verify.completionListContains('bar', '(local var) bar: number');
-verify.completionListContains('foob', '(local function) foob(): void');
+verify.completionListContains('foob', 'function foob(): void');
 
 // from exported class in mod1
 goToMarkAndGeneralVerify('exportedClass');
