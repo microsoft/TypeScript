@@ -5840,6 +5840,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         return emitTaggedTemplateExpression(<TaggedTemplateExpression>node);
                     case SyntaxKind.TypeAssertionExpression:
                         return emit((<TypeAssertion>node).expression);
+                    case SyntaxKind.AsExpression:
+                        return emit((<AsExpression>node).left);
                     case SyntaxKind.ParenthesizedExpression:
                         return emitParenExpression(<ParenthesizedExpression>node);
                     case SyntaxKind.FunctionDeclaration:

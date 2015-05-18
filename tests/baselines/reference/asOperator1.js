@@ -7,6 +7,6 @@ var z = Date as any as string;
 
 //// [asOperator1.js]
 var as = 43;
-var x = ;
-var y = ().length;
-var z = ;
+var x = undefined;
+var y = (null).length;
+var z = Date;
