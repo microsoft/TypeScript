@@ -207,6 +207,7 @@ module ts {
         ClassExpression,
         OmittedExpression,
         ExpressionWithTypeArguments,
+        AsExpression,
         // Misc
         TemplateSpan,
         SemicolonClassElement,
@@ -667,6 +668,12 @@ module ts {
         left: Expression;
         operatorToken: Node;
         right: Expression;
+    }
+
+    export interface AsExpression extends Expression {
+        left: Expression;
+        asToken: Node;
+        right: TypeNode;
     }
 
     export interface ConditionalExpression extends Expression {

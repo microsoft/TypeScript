@@ -1,0 +1,20 @@
+=== tests/cases/conformance/expressions/asOperator/asOperator1.ts ===
+var as = 43;
+>as : number
+>43 : number
+
+var x = undefined as number;
+>x : number
+>undefined : any
+
+var y = (null as string).length;
+>y : number
+>(null as string).length : number
+>(null as string) : string
+>null : null
+>length : number
+
+var z = Date as any as string;
+>z : string
+>Date : any
+

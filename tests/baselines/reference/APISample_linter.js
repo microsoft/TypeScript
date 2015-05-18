@@ -75,22 +75,22 @@ function delint(sourceFile) {
     delintNode(sourceFile);
     function delintNode(node) {
         switch (node.kind) {
-            case 187 /* ForStatement */:
-            case 188 /* ForInStatement */:
-            case 186 /* WhileStatement */:
-            case 185 /* DoStatement */:
-                if (node.statement.kind !== 180 /* Block */) {
+            case 188 /* ForStatement */:
+            case 189 /* ForInStatement */:
+            case 187 /* WhileStatement */:
+            case 186 /* DoStatement */:
+                if (node.statement.kind !== 181 /* Block */) {
                     report(node, "A looping statement's contents should be wrapped in a block body.");
                 }
                 break;
-            case 184 /* IfStatement */:
+            case 185 /* IfStatement */:
                 var ifStatement = node;
-                if (ifStatement.thenStatement.kind !== 180 /* Block */) {
+                if (ifStatement.thenStatement.kind !== 181 /* Block */) {
                     report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
                 }
                 if (ifStatement.elseStatement &&
-                    ifStatement.elseStatement.kind !== 180 /* Block */ &&
-                    ifStatement.elseStatement.kind !== 184 /* IfStatement */) {
+                    ifStatement.elseStatement.kind !== 181 /* Block */ &&
+                    ifStatement.elseStatement.kind !== 185 /* IfStatement */) {
                     report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.");
                 }
                 break;

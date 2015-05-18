@@ -7264,6 +7264,16 @@ module ts {
         function checkTypeAssertion(node: TypeAssertion): Type {
             let exprType = checkExpression(node.expression);
             let targetType = getTypeFromTypeNode(node.type);
+            return checkAssertion(node, exprType, targetType);
+        }
+
+        function checkAsExpression(node: AsExpression) {
+            let exprType = checkExpression(node.left);
+            let targetType = getTypeFromTypeNode(node.right);
+            return checkAssertion(node, exprType, targetType);
+        }
+
+        function checkAssertion(node: Node, exprType: Type, targetType: Type) {
             if (produceDiagnostics && targetType !== unknownType) {
                 let widenedType = getWidenedType(exprType);
                 if (!(isTypeAssignableTo(targetType, widenedType))) {
@@ -8145,6 +8155,8 @@ module ts {
                     return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression>node, contextualMapper);
                 case SyntaxKind.TypeOfExpression:
                     return checkTypeOfExpression(<TypeOfExpression>node);
+                case SyntaxKind.AsExpression:
+                    return checkAsExpression(<AsExpression>node);
                 case SyntaxKind.DeleteExpression:
                     return checkDeleteExpression(<DeleteExpression>node);
                 case SyntaxKind.VoidExpression:
