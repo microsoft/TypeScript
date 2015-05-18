@@ -160,9 +160,8 @@ module ts {
                     visitNode(cbNode, (<BinaryExpression>node).operatorToken) ||
                     visitNode(cbNode, (<BinaryExpression>node).right);
             case SyntaxKind.AsExpression:
-                return visitNode(cbNode, (<AsExpression>node).left) ||
-                    visitNode(cbNode, (<AsExpression>node).asToken) ||
-                    visitNode(cbNode, (<AsExpression>node).right);
+                return visitNode(cbNode, (<AsExpression>node).expression) ||
+                    visitNode(cbNode, (<AsExpression>node).type);
             case SyntaxKind.ConditionalExpression:
                 return visitNode(cbNode, (<ConditionalExpression>node).condition) ||
                     visitNode(cbNode, (<ConditionalExpression>node).questionToken) ||
@@ -2823,7 +2822,8 @@ module ts {
                 }
 
                 if (token === SyntaxKind.AsKeyword) {
-                    leftOperand = makeAsExpression(leftOperand, parseTokenNode(), parseType());
+                    parseTokenNode();
+                    leftOperand = makeAsExpression(leftOperand, parseType());
                 } else {
                     leftOperand = makeBinaryExpression(leftOperand, parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence));
                 }
@@ -2891,11 +2891,10 @@ module ts {
             return finishNode(node);
         }
 
-        function makeAsExpression(left: Expression, operatorToken: Node, right: TypeNode): AsExpression {
+        function makeAsExpression(left: Expression, right: TypeNode): AsExpression {
             let node = <AsExpression>createNode(SyntaxKind.AsExpression, left.pos);
-            node.left = left;
-            node.asToken = operatorToken;
-            node.right = right;
+            node.expression = left;
+            node.type = right;
             return finishNode(node);
         }
 

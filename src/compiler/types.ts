@@ -671,9 +671,9 @@ module ts {
     }
 
     export interface AsExpression extends Expression {
-        left: Expression;
+        expression: Expression;
         asToken: Node;
-        right: TypeNode;
+        type: TypeNode;
     }
 
     export interface ConditionalExpression extends Expression {
