@@ -7261,8 +7261,7 @@ module ts {
             return getReturnTypeOfSignature(getResolvedSignature(node));
         }
 
-
-        function checkAssertion(node: AsExpression|TypeAssertion) {
+        function checkAssertion(node: AssertionExpression) {
             let exprType = checkExpression(node.expression);
             let targetType = getTypeFromTypeNode(node.type);
             if (produceDiagnostics && targetType !== unknownType) {
@@ -8146,7 +8145,7 @@ module ts {
                     return checkTypeOfExpression(<TypeOfExpression>node);
                 case SyntaxKind.TypeAssertionExpression:
                 case SyntaxKind.AsExpression:
-                    return checkAssertion(<TypeAssertion|AsExpression>node);
+                    return checkAssertion(<AssertionExpression>node);
                 case SyntaxKind.DeleteExpression:
                     return checkDeleteExpression(<DeleteExpression>node);
                 case SyntaxKind.VoidExpression:

@@ -405,6 +405,8 @@ module ts {
 
     export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName | BindingPattern;
 
+    export type AssertionExpression = TypeAssertion | AsExpression;
+
     export interface Declaration extends Node {
         _declarationBrand: any;
         name?: DeclarationName;
