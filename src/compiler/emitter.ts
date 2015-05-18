@@ -1791,7 +1791,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
             function skipParentheses(node: Expression): Expression {
                 while (node.kind === SyntaxKind.ParenthesizedExpression || node.kind === SyntaxKind.TypeAssertionExpression || node.kind === SyntaxKind.AsExpression) {
-                    node = (<ParenthesizedExpression | TypeAssertion>node).expression;
+                    node = (<ParenthesizedExpression | AssertionExpression>node).expression;
                 }
                 return node;
             }
@@ -1907,13 +1907,13 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
             function emitParenExpression(node: ParenthesizedExpression) {
                 if (!node.parent || node.parent.kind !== SyntaxKind.ArrowFunction) {
-                    if (node.expression.kind === SyntaxKind.TypeAssertionExpression) {
-                        let operand = (<TypeAssertion>node.expression).expression;
+                    if (node.expression.kind === SyntaxKind.TypeAssertionExpression || node.expression.kind === SyntaxKind.AsExpression) {
+                        let operand = (<AssertionExpression>node.expression).expression;
 
                         // Make sure we consider all nested cast expressions, e.g.:
                         // (<any><number><any>-A).x;
-                        while (operand.kind == SyntaxKind.TypeAssertionExpression) {
-                            operand = (<TypeAssertion>operand).expression;
+                        while (operand.kind === SyntaxKind.TypeAssertionExpression || operand.kind === SyntaxKind.AsExpression) {
+                            operand = (<AssertionExpression>operand).expression;
                         }
 
                         // We have an expression of the form: (<Type>SubExpr)
