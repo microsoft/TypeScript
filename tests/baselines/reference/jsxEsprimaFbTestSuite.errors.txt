@@ -1,0 +1,115 @@
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(2,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(8,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(10,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(11,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(14,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(16,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(22,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(24,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(26,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(28,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(30,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(32,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(34,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(36,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(38,2): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(38,13): error TS2304: Cannot find name 'x'.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(40,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(42,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(44,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(46,1): error TS17005: JSX elements are not currently supported.
+
+
+==== tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx (20 errors) ====
+    
+    <a />;
+    ~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    //<n:a n:v />; Namespace unsuported
+    
+    //<a n:foo="bar"> {value} <b><c /></b></a>;  Namespace unsuported
+    
+    <a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;" />;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <a b="&notanentity;" />;
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    <a
+    ~~
+    />;
+    ~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <日本語></日本語>;
+    ~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <AbC_def
+    ~~~~~~~~
+      test="&#x0026;&#38;">
+    ~~~~~~~~~~~~~~~~~~~~~~~
+    bar
+    ~~~
+    baz
+    ~~~
+    </AbC_def>;
+    ~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <a b={x ? <c /> : <d />} />;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <a>{}</a>;
+    ~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <a>{/* this is a comment */}</a>;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <div>@test content</div>;
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <div><br />7x invalid-js-identifier</div>;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <LeftRight left=<a /> right=<b>monkeys /> gorillas</b> />;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <a.b></a.b>;
+    ~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <a.b.c></a.b.c>;
+    ~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    (<div />) < x;
+     ~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+                ~
+!!! error TS2304: Cannot find name 'x'.
+    
+    <div {...props} />;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <div {...props} post="attribute" />;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <div pre="leading" pre2="attribute" {...props}></div>;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <a>    </a>;
+    ~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    

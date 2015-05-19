@@ -1,0 +1,19 @@
+tests/cases/conformance/jsx/jsxClosingTagMapsRelaxingRules.tsx(1,4): error TS17002: Expected corresponding JSX closing tag for 'a'.
+tests/cases/conformance/jsx/jsxClosingTagMapsRelaxingRules.tsx(2,11): error TS17002: Expected corresponding JSX closing tag for 'a'.
+tests/cases/conformance/jsx/jsxClosingTagMapsRelaxingRules.tsx(3,12): error TS17002: Expected corresponding JSX closing tag for 'a'.
+
+
+==== tests/cases/conformance/jsx/jsxClosingTagMapsRelaxingRules.tsx (3 errors) ====
+    <a></b>;
+       ~~~~
+!!! error TS17002: Expected corresponding JSX closing tag for 'a'.
+    <a> foo {}</b>;
+              ~~~~
+!!! error TS17002: Expected corresponding JSX closing tag for 'a'.
+    <a> foo bar</b>;
+               ~~~~
+!!! error TS17002: Expected corresponding JSX closing tag for 'a'.
+    <MyElement.myProperty> Hello </
+    MyElement.
+       myProperty
+    >

@@ -1,0 +1,36 @@
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(2,15): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(4,6): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(6,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(8,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(10,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(12,1): error TS17005: JSX elements are not currently supported.
+
+
+==== tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx (6 errors) ====
+    
+    <any> { test: <any></any> };
+                  ~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <any><any></any>;
+         ~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+     
+    <foo>hello {<foo>{}} </foo>;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <foo test={<foo>{}}>hello</foo>;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <foo test={<foo>{}}>hello{<foo>{}}</foo>;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+        
+    
