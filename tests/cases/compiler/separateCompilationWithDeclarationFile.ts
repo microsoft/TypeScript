@@ -1,4 +1,4 @@
-// @separateCompilation: true
+// @isolatedModules: true
 // @target: es6
 
 // @filename: file1.d.ts

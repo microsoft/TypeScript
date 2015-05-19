@@ -142,7 +142,7 @@ module ts {
             paramType: Diagnostics.LOCATION,
         },
         {
-            name: "separateCompilation",
+            name: "isolatedModules",
             type: "boolean",
         },
         {

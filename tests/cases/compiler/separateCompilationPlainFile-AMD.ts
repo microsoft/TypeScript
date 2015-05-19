@@ -1,6 +1,6 @@
 // @target: es5
 // @module: amd
-// @separateCompilation: true
+// @isolatedModules: true
 
 declare function run(a: number): void;
 run(1);

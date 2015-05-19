@@ -1,4 +1,4 @@
-// @separateCompilation: true
+// @isolatedModules: true
 // @target: es5
 // @module: commonjs
 

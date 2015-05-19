@@ -732,7 +732,7 @@ module ts {
             let target = resolveAlias(symbol);
             if (target) {
                 let markAlias =
-                    (target === unknownSymbol && compilerOptions.separateCompilation) ||
+                    (target === unknownSymbol && compilerOptions.isolatedModules) ||
                     (target !== unknownSymbol && (target.flags & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target));
 
                 if (markAlias) {
@@ -8889,7 +8889,7 @@ module ts {
             // serialize the type metadata.
             if (node && node.kind === SyntaxKind.TypeReference) {
                 let type = getTypeFromTypeNode(node);
-                let shouldCheckIfUnknownType = type === unknownType && compilerOptions.separateCompilation;
+                let shouldCheckIfUnknownType = type === unknownType && compilerOptions.isolatedModules;
                 if (!type || (!shouldCheckIfUnknownType && type.flags & (TypeFlags.Intrinsic | TypeFlags.NumberLike | TypeFlags.StringLike))) {
                     return;
                 }
@@ -10054,7 +10054,7 @@ module ts {
                 }
             }
 
-            if (baseTypes.length || (baseTypeNode && compilerOptions.separateCompilation)) {
+            if (baseTypes.length || (baseTypeNode && compilerOptions.isolatedModules)) {
                 // Check that base type can be evaluated as expression
                 checkExpressionOrQualifiedName(baseTypeNode.expression);
             }
@@ -10470,8 +10470,8 @@ module ts {
             computeEnumMemberValues(node);
 
             let enumIsConst = isConst(node);
-            if (compilerOptions.separateCompilation && enumIsConst && isInAmbientContext(node)) {
-                error(node.name, Diagnostics.Ambient_const_enums_are_not_allowed_when_the_separateCompilation_flag_is_provided);
+            if (compilerOptions.isolatedModules && enumIsConst && isInAmbientContext(node)) {
+                error(node.name, Diagnostics.Ambient_const_enums_are_not_allowed_when_the_isolatedModules_flag_is_provided);
             }
 
             // Spec 2014 - Section 9.3:
@@ -10561,7 +10561,7 @@ module ts {
                 if (symbol.flags & SymbolFlags.ValueModule
                     && symbol.declarations.length > 1
                     && !isInAmbientContext(node)
-                    && isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.separateCompilation)) {
+                    && isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.isolatedModules)) {
                     let firstNonAmbientClassOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
                     if (firstNonAmbientClassOrFunc) {
                         if (getSourceFileOfNode(node) !== getSourceFileOfNode(firstNonAmbientClassOrFunc)) {
@@ -11661,7 +11661,7 @@ module ts {
 
         function isAliasResolvedToValue(symbol: Symbol): boolean {
             let target = resolveAlias(symbol);
-            if (target === unknownSymbol && compilerOptions.separateCompilation) {
+            if (target === unknownSymbol && compilerOptions.isolatedModules) {
                 return true;
             }
             // const enums and modules that contain only const enums are not considered values from the emit perespective

@@ -647,11 +647,11 @@
         "category": "Error",
         "code": 1207
     },
-    "Cannot compile namespaces when the '--separateCompilation' flag is provided.": {
+    "Cannot compile namespaces when the '--isolatedModules' flag is provided.": {
         "category": "Error",
         "code": 1208
     },
-    "Ambient const enums are not allowed when the '--separateCompilation' flag is provided.": {
+    "Ambient const enums are not allowed when the '--isolatedModules' flag is provided.": {
         "category": "Error",
         "code": 1209
     },
@@ -1785,23 +1785,23 @@
         "category": "Error",
         "code": 5042
     },
-    "Option 'sourceMap' cannot be specified with option 'separateCompilation'.": {
+    "Option 'sourceMap' cannot be specified with option 'isolatedModules'.": {
         "category": "Error",
         "code": 5043
     },
-    "Option 'declaration' cannot be specified with option 'separateCompilation'.": {
+    "Option 'declaration' cannot be specified with option 'isolatedModules'.": {
         "category": "Error",
         "code": 5044
     },
-    "Option 'noEmitOnError' cannot be specified with option 'separateCompilation'.": {
+    "Option 'noEmitOnError' cannot be specified with option 'isolatedModules'.": {
         "category": "Error",
         "code": 5045
     },
-    "Option 'out' cannot be specified with option 'separateCompilation'.": {
+    "Option 'out' cannot be specified with option 'isolatedModules'.": {
         "category": "Error",
         "code": 5046
     },
-    "Option 'separateCompilation' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher.": {
+    "Option 'isolatedModules' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher.": {
         "category": "Error",
         "code": 5047
     },

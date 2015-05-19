@@ -1,4 +1,4 @@
-tests/cases/compiler/separateCompilationAmbientConstEnum.ts(3,20): error TS1209: Ambient const enums are not allowed when the '--separateCompilation' flag is provided.
+tests/cases/compiler/separateCompilationAmbientConstEnum.ts(3,20): error TS1209: Ambient const enums are not allowed when the '--isolatedModules' flag is provided.
 
 
 ==== tests/cases/compiler/separateCompilationAmbientConstEnum.ts (1 errors) ====
@@ -6,5 +6,5 @@ tests/cases/compiler/separateCompilationAmbientConstEnum.ts(3,20): error TS1209:
     
     declare const enum E { X = 1}
                        ~
-!!! error TS1209: Ambient const enums are not allowed when the '--separateCompilation' flag is provided.
+!!! error TS1209: Ambient const enums are not allowed when the '--isolatedModules' flag is provided.
     export var y;

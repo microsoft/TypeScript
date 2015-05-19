@@ -1,4 +1,4 @@
-// @separateCompilation: true
+// @isolatedModules: true
 // @declaration: true
 // @target: es6
 

@@ -1760,13 +1760,13 @@ module ts {
      * This function will compile source text from 'input' argument using specified compiler options.
      * If not options are provided - it will use a set of default compiler options.
      * Extra compiler options that will unconditionally be used bu this function are:
-     * - separateCompilation = true
+     * - isolatedModules = true
      * - allowNonTsExtensions = true
      */
     export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[]): string {
         let options = compilerOptions ? clone(compilerOptions) : getDefaultCompilerOptions();
 
-        options.separateCompilation = true;
+        options.isolatedModules = true;
 
         // Filename can be non-ts file.
         options.allowNonTsExtensions = true;
