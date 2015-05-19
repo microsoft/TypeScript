@@ -6266,6 +6266,11 @@ module ts {
             }
         }
 
+        function checkJSXElement(node: JSXElement) {
+            checkGrammarJSXElement(node);
+            grammarErrorOnNode(node, Diagnostics.JSX_elements_are_not_currently_supported);
+        }
+
         // If a symbol is a synthesized symbol with no value declaration, we assume it is a property. Example of this are the synthesized
         // '.prototype' property as well as synthesized tuple index properties.
         function getDeclarationKindFromSymbol(s: Symbol) {
@@ -8163,6 +8168,9 @@ module ts {
                     return undefinedType;
                 case SyntaxKind.YieldExpression:
                     checkYieldExpression(<YieldExpression>node);
+                    return unknownType;
+                case SyntaxKind.JSXElement:
+                    checkJSXElement(<JSXElement>node);
                     return unknownType;
             }
             return unknownType;
@@ -12695,6 +12703,29 @@ module ts {
                     else {
                         return grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name);
                     }
+                }
+            }
+        }
+
+        function checkGrammarJSXElement(node: JSXElement) {
+            const seen: Map<boolean> = {};
+            for (let attr of node.openingElement.attributes) {
+                if (attr.kind === SyntaxKind.JSXSpreadAttribute) {
+                    continue;
+                }
+
+                let jsxAttr = (<JSXAttribute>attr);
+                let name = jsxAttr.name;
+                if (!hasProperty(seen, name.text)) {
+                    seen[name.text] = true;
+                }
+                else {
+                    return grammarErrorOnNode(name, Diagnostics.JSX_elements_cannot_have_multiple_attributes_with_the_same_name);
+                }
+
+                let initializer = jsxAttr.initializer;
+                if (initializer && initializer.kind === SyntaxKind.JSXExpression && !(<JSXExpression>initializer).expression) {
+                    return grammarErrorOnNode(jsxAttr.initializer, Diagnostics.JSX_attributes_must_only_be_assigned_a_non_empty_expression);
                 }
             }
         }
