@@ -344,7 +344,7 @@ module ts {
         
         return {
             options,
-            fileNames: getFiles(),
+            fileNames: getFileNames(),
             errors
         };
 
@@ -390,29 +390,31 @@ module ts {
             return options;
         }
 
-        function getFiles(): string[] {
+        function getFileNames(): string[] {
+            var exclude = json["exclude"] instanceof Array ? <string[]>json["exclude"] : undefined;
             if (hasProperty(json, "files")) {
                 if (json["files"] instanceof Array) {
-                    var files = <string[]>json["files"];
-                    
-                    var exclude: string[];
-                    if (hasProperty(json, "exclude") && json["exclude"] instanceof Array) {
-                        exclude = <string[]>json["exclude"];
-                    }
-                    
-                    return expandFiles(files, exclude);
+                    var fileNames = <string[]>json["files"];
+                    return expandFiles(fileNames, exclude, /*literalFiles*/ false);
                 }
+                
+                return [];
             }
             else {
-                var files: string[] = [];
+                var fileNames: string[] = [];
                 var sysFiles = host.readDirectory(basePath, ".ts");
                 for (var i = 0; i < sysFiles.length; i++) {
                     var name = sysFiles[i];
                     if (!fileExtensionIs(name, ".d.ts") || !contains(sysFiles, name.substr(0, name.length - 5) + ".ts")) {
-                        files.push(name);
+                        fileNames.push(name);
                     }
                 }
-                return files;
+                
+                if (!exclude) {
+                    return fileNames;
+                }
+
+                return expandFiles(fileNames, exclude, /*literalFiles*/ true);
             }
         }
         
@@ -420,8 +422,9 @@ module ts {
           * Expands an array of file specifications.
           * @param files The file specifications to expand.
           * @param exclude Any file specifications to exclude.
+          * @param literalFiles A value indicating whether the files array are literal files and not wildcards.
           */
-        function expandFiles(files: string[], exclude: string[]): string[] {
+        function expandFiles(files: string[], exclude: string[], literalFiles: boolean): string[] {
             // Used to verify the file specification does not have multiple recursive directory wildcards.
             let invalidRecursiveWildcardPattern = /(^|\/)\*\*\/(.*\/)?\*\*(\/|$)/;
             
@@ -493,15 +496,25 @@ module ts {
             // populate the exclusion list
             let excludePattern = createExcludePattern(prefix, exclude);
             
-            // expand and include the provided files into the file set.
-            for (let fileSpec of files) {
-                let normalizedFileSpec = normalizePath(fileSpec);
-                normalizedFileSpec = removeTrailingDirectorySeparator(normalizedFileSpec);
-                if (invalidRecursiveWildcardPattern.test(normalizedFileSpec)) {
-                    errors.push(createCompilerDiagnostic(Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, fileSpec))
+            if (literalFiles) {
+                // process each file spec as a literal file entry.
+                for (let fileSpec of files) {
+                    let normalizedFileSpec = normalizePath(fileSpec);
+                    normalizedFileSpec = combinePaths(basePath, normalizedFileSpec);
+                    includeFile(normalizedFileSpec);
                 }
-                else {
-                    expandDirectory(prefix, normalizedFileSpec, 0);
+            }
+            else {
+                // expand and include the provided files into the file set.
+                for (let fileSpec of files) {
+                    let normalizedFileSpec = normalizePath(fileSpec);
+                    normalizedFileSpec = removeTrailingDirectorySeparator(normalizedFileSpec);
+                    if (invalidRecursiveWildcardPattern.test(normalizedFileSpec)) {
+                        errors.push(createCompilerDiagnostic(Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, fileSpec))
+                    }
+                    else {
+                        expandDirectory(prefix, normalizedFileSpec, 0);
+                    }
                 }
             }
             
