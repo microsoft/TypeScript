@@ -315,6 +315,22 @@ module ts {
                 return visitNode(cbNode, (<ExternalModuleReference>node).expression);
             case SyntaxKind.MissingDeclaration:
                 return visitNodes(cbNodes, node.decorators);
+            case SyntaxKind.JSXElement:
+                return visitNode(cbNode, (<JSXElement>node).openingElement) ||
+                    visitNodes(cbNodes, (<JSXElement>node).children) ||
+                    visitNode(cbNode, (<JSXElement>node).closingElement);
+            case SyntaxKind.JSXOpeningElement:
+                return visitNode(cbNode, (<JSXOpeningElement>node).tagName) ||
+                    visitNodes(cbNodes, (<JSXOpeningElement>node).attributes);
+            case SyntaxKind.JSXAttribute:
+                return visitNode(cbNode, (<JSXAttribute>node).name) ||
+                    visitNode(cbNode, (<JSXAttribute>node).initializer);
+            case SyntaxKind.JSXSpreadAttribute:
+                return visitNode(cbNode, (<JSXSpreadAttribute>node).expression);
+            case SyntaxKind.JSXExpression:
+                return visitNode(cbNode, (<JSXExpression>node).expression);
+            case SyntaxKind.JSXClosingElement:
+                return visitNode(cbNode, (<JSXClosingElement>node).tagName);
         }
     }
 
@@ -436,6 +452,8 @@ module ts {
         // attached to the EOF token.
         let parseErrorBeforeNextFinishedNode: boolean = false;
 
+        let closingTagsMap: Map<number[]>;
+
         export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
             sourceText = _sourceText;
             syntaxCursor = _syntaxCursor;
@@ -447,6 +465,7 @@ module ts {
 
             contextFlags = 0;
             parseErrorBeforeNextFinishedNode = false;
+            closingTagsMap = null;
 
             createSourceFile(fileName, languageVersion);
 
@@ -526,6 +545,7 @@ module ts {
             sourceFile.languageVersion = languageVersion;
             sourceFile.fileName = normalizePath(fileName);
             sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
+            sourceFile.isTSXFile = fileExtensionIs(sourceFile.fileName, ".tsx");
         }
 
         function setContextFlag(val: Boolean, flag: ParserContextFlags) {
@@ -702,6 +722,14 @@ module ts {
             return token = scanner.reScanTemplateToken();
         }
 
+        function reScanJSXIdentifier(): SyntaxKind {
+            return token = scanner.reScanJSXIdentifier();
+        }
+        
+        function reScanLessThanToken(): SyntaxKind {
+            return token = scanner.reScanLessThanToken();
+        }
+        
         function speculationHelper<T>(callback: () => T, isLookAhead: boolean): T {
             // Keep track of the state we'll need to rollback to if lookahead fails (or if the
             // caller asked us to always reset our state).
@@ -1057,6 +1085,8 @@ module ts {
                     return isHeritageClause();
                 case ParsingContext.ImportOrExportSpecifiers:
                     return isIdentifierOrKeyword();
+                case ParsingContext.JSXAttributes:
+                    return isIdentifier() || token === SyntaxKind.OpenBraceToken;
             }
 
             Debug.fail("Non-exhaustive case in 'isListElement'.");
@@ -1142,6 +1172,8 @@ module ts {
                     return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.OpenParenToken;
                 case ParsingContext.HeritageClauses:
                     return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.CloseBraceToken;
+                case ParsingContext.JSXAttributes:
+                    return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.SlashToken || token === SyntaxKind.CloseBraceToken;
             }
         }
 
@@ -1547,6 +1579,7 @@ module ts {
                 case ParsingContext.TupleElementTypes: return Diagnostics.Type_expected;
                 case ParsingContext.HeritageClauses: return Diagnostics.Unexpected_token_expected;
                 case ParsingContext.ImportOrExportSpecifiers: return Diagnostics.Identifier_expected;
+                case ParsingContext.JSXAttributes: return Diagnostics.Identifier_expected;
             }
         };
 
@@ -2927,7 +2960,7 @@ module ts {
                 case SyntaxKind.VoidKeyword:
                     return parseVoidExpression();
                 case SyntaxKind.LessThanToken:
-                    return parseTypeAssertion();
+                    return (sourceFile.isTSXFile && tryParse(() => parseJSXElement(true))) || parseTypeAssertion();
                 default:
                     return parsePostfixExpressionOrHigher();
             }
@@ -3052,6 +3085,215 @@ module ts {
             node.expression = expression;
             node.dotToken = parseExpectedToken(SyntaxKind.DotToken, /*reportAtCurrentPosition:*/ false, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
             node.name = parseRightSideOfDot(/*allowIdentifierNames:*/ true);
+            return finishNode(node);
+        }
+        
+        // Return a string representation of an EntityName
+        function entityNameToString(entityName: EntityName): string {
+            if (entityName.kind === SyntaxKind.Identifier) {
+                return (<Identifier>entityName).text;
+            } else {
+                let qualifiedName = <QualifiedName>entityName;
+                return entityNameToString(qualifiedName.left) + '.' + entityNameToString(qualifiedName.right);
+            }
+            return "";
+        }
+
+        function hasClosingTagAfterPos(tagName: string, currentPos: number): boolean {
+            if (!closingTagsMap) {
+                closingTagsMap = retrieveClosingTagsMap(sourceText, sourceFile.languageVersion);
+            }
+            return hasProperty(closingTagsMap, tagName) && forEach(closingTagsMap[tagName], p => p >= currentPos);
+        }
+
+        function parseJSXElement(speculative = false): JSXElement {
+            let node = <JSXElement>createNode(SyntaxKind.JSXElement);
+
+            node.openingElement = parseJSXOpeningElement();
+
+            let tagName = entityNameToString(node.openingElement.tagName);
+
+            if (node.openingElement.attributes.length && tagName) {
+                // if there is tagName and attribute it's sure that we are in a JSXElement and not a type assertion
+                speculative = false;
+            }
+
+            node.children = <NodeArray<JSXText | JSXExpression | JSXElement>>[];
+            node.children.pos = getNodePos();
+
+            if (node.openingElement.isSelfClosing) {
+                node.children.end = getNodeEnd();
+                // if it's a self closing tag it's a JSXElement and not a type assertion
+                speculative = false;
+            } 
+            else {
+                if (speculative && !hasClosingTagAfterPos(tagName, scanner.getStartPos())) {
+                    // we are in speculative parsing and we were not able to find a corresponding closing tag
+                    // farther in the source text, we try to determine if the following tokens look like normal
+                    // part of jsx children to decide if we continue parsing the JSXElement children
+                    let shouldContinueJSXParsing = lookAhead(() => {
+                        const t = token;
+                        const next = nextToken();
+                        return t === SyntaxKind.LessThanToken ||// <foo><...
+                            (t >= SyntaxKind.Identifier && next === SyntaxKind.OpenBraceToken) || // '<foo> bar {...
+                            (t >= SyntaxKind.Identifier && next >= SyntaxKind.Identifier) // '<foo> foo bar ...
+                    });
+                    if (!shouldContinueJSXParsing) {
+                        return null;
+                    }
+                }
+                //we can't use parseList we need to intercept '}‘ token in speculative mode
+                let savedStrictModeContext = inStrictModeContext();
+
+                while (true) {
+                    if (token === SyntaxKind.OpenBraceToken) {
+                        node.children.push(parseJSXExpression());
+                    }
+                    else if (token === SyntaxKind.LessThanToken) {
+                        if (reScanLessThanToken() === SyntaxKind.LessThanSlashToken) {
+                            break;
+                        }
+                        node.children.push(parseJSXElement());
+                    }
+                    else if (token === SyntaxKind.CloseBraceToken || token === SyntaxKind.EndOfFileToken) {
+                        if (speculative) {
+                            // that means that we are generaly in case like 
+                            // <div> {<div> {}}</div> to desambiguate those cases
+                            // we forbid the } token in jsx text (use entity);
+                            return null;
+                        }
+                        parseErrorAtCurrentToken(Diagnostics.Unexpected_token);
+                        break;
+                    }
+                    else {
+                        node.children.push(parseJSXText())
+                    }
+                }
+
+                setStrictModeContext(savedStrictModeContext);
+                node.children.end = getNodeEnd();
+
+                if (token === SyntaxKind.LessThanSlashToken) {
+
+                    let start = scanner.getStartPos();
+                    node.closingElement = parseJSXClosingElement();
+                    if (!node.closingElement.tagName || tagName !== entityNameToString(node.closingElement.tagName)) {
+                        var length = scanner.getTokenPos() - start;
+                        parseErrorAtPosition(start, length, Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, tagName);
+                    }
+                    speculative = false;
+                } 
+                else {
+                    node.closingElement = <JSXClosingElement>createMissingNode(SyntaxKind.JSXClosingElement, /*reportAtCurrentPosition:*/ true, 
+                        Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, tagName);
+                    node.children.end = getNodeEnd();
+                }
+            } 
+
+            if (speculative) {
+                return null;
+            }
+
+            return finishNode(node);
+        }
+        
+        function parseJSXText(): JSXText {
+            let node = <JSXText>createNode(SyntaxKind.JSXText);
+            while (token !== SyntaxKind.OpenBraceToken &&
+                token !== SyntaxKind.CloseBraceToken &&
+                token !== SyntaxKind.LessThanToken && 
+                token !== SyntaxKind.EndOfFileToken) {
+                nextToken();
+            }
+            return finishNode(node);
+        }
+
+        function parseJSXOpeningElement(): JSXOpeningElement {
+            let node = <JSXOpeningElement>createNode(SyntaxKind.JSXOpeningElement);
+
+            parseExpected(SyntaxKind.LessThanToken);
+            node.tagName = parseJSXElementName();
+            node.attributes = parseList(ParsingContext.JSXAttributes, /*checkForStrictMode*/ false, parseJSXAttribute);
+            if (token === SyntaxKind.SlashToken) {
+                node.isSelfClosing = true;
+                nextToken();
+            }
+            parseExpected(SyntaxKind.GreaterThanToken);
+            return finishNode(node);
+        }
+        
+        function parseJSXElementName(): EntityName {
+            reScanJSXIdentifier();
+            let elementName: EntityName = parseIdentifier();
+            while (parseOptional(SyntaxKind.DotToken)) {
+                reScanJSXIdentifier();
+                let node = <QualifiedName>createNode(SyntaxKind.QualifiedName, elementName.pos);
+                node.left = elementName;
+                node.right = parseIdentifierName();
+                elementName = finishNode(node);
+            }
+            return elementName;
+        }
+
+        function parseJSXExpression(): JSXExpression {
+            let node = <JSXExpression>createNode(SyntaxKind.JSXExpression)
+            let isExpressionEmpty = lookAhead(() => {
+                do {
+                    nextToken();
+                    if (token === SyntaxKind.CloseBraceToken) {
+                        return true;
+                    }
+                    else if (!isTrivia(token)) {
+                        return false;
+                    }
+                } while (token != SyntaxKind.EndOfFileToken);
+                return true;
+            });
+            parseExpected(SyntaxKind.OpenBraceToken);
+            if (!isExpressionEmpty) {
+                node.expression = parseExpression();
+            }
+            parseExpected(SyntaxKind.CloseBraceToken);
+            return finishNode(node);
+        }
+
+        function parseJSXAttribute(): JSXAttribute | JSXSpreadAttribute {
+            if (token === SyntaxKind.OpenBraceToken) {
+                return parseJSXSPreadAttribute();
+            }
+            reScanJSXIdentifier();
+            let node = <JSXAttribute>createNode(SyntaxKind.JSXAttribute);
+            node.name = parseIdentifierName();
+            if (parseOptional(SyntaxKind.EqualsToken)) {
+                switch (token) {
+                    case SyntaxKind.LessThanToken:
+                        node.initializer = parseJSXElement();
+                        break;
+                    case SyntaxKind.StringLiteral:
+                        node.initializer = parseLiteralNode();
+                        break;
+                    default:
+                        node.initializer = parseJSXExpression();
+                        break;
+                }
+            }
+            return finishNode(node);
+        }
+
+        function parseJSXSPreadAttribute(): JSXSpreadAttribute {
+            let node = <JSXSpreadAttribute>createNode(SyntaxKind.JSXSpreadAttribute);
+            parseExpected(SyntaxKind.OpenBraceToken);
+            parseExpected(SyntaxKind.DotDotDotToken);
+            node.expression = parseExpression();
+            parseExpected(SyntaxKind.CloseBraceToken);
+            return finishNode(node);
+        }
+
+        function parseJSXClosingElement(): JSXClosingElement {
+            let node = <JSXClosingElement>createNode(SyntaxKind.JSXClosingElement);
+            parseExpected(SyntaxKind.LessThanSlashToken);
+            node.tagName = parseJSXElementName();
+            parseExpected(SyntaxKind.GreaterThanToken);
             return finishNode(node);
         }
 
@@ -4844,6 +5086,7 @@ module ts {
             ArrayBindingElements,      // Binding elements in array binding list
             ArgumentExpressions,       // Expressions in argument list
             ObjectLiteralMembers,      // Members in object literal
+            JSXAttributes,             // Attributes in jsx element
             ArrayLiteralMembers,       // Members in array literal
             Parameters,                // Parameters in parameter list
             TypeParameters,            // Type parameters in type parameter list
