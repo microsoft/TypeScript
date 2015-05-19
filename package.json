@@ -3,12 +3,7 @@
     "author": "Microsoft Corp.",
     "homepage": "http://typescriptlang.org/",
     "version": "1.5.2",
-    "licenses": [
-        {
-            "type": "Apache License 2.0",
-            "url": "https://github.com/Microsoft/TypeScript/blob/master/LICENSE.txt"
-        }
-    ],
+    "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
         "TypeScript",
