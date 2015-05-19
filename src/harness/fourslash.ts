@@ -882,6 +882,14 @@ module FourSlash {
                     this.activeFile.fileName, this.currentCaretPosition, findInStrings, findInComments);
 
                 var ranges = this.getRanges();
+
+                if (!references) {
+                    if (ranges.length !== 0) {
+                        this.raiseError(`Expected ${ranges.length} rename locations; got none.`);
+                    }
+                    return;
+                }
+
                 if (ranges.length !== references.length) {
                     this.raiseError(this.assertionMessage("Rename locations", references.length, ranges.length));
                 }
