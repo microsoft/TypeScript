@@ -40,6 +40,7 @@ module ts {
         SemicolonToken,
         CommaToken,
         LessThanToken,
+        LessThanSlashToken,
         GreaterThanToken,
         LessThanEqualsToken,
         GreaterThanEqualsToken,
@@ -251,6 +252,15 @@ module ts {
         NamedExports,
         ExportSpecifier,
         MissingDeclaration,
+
+        //JSX
+        JSXElement,
+        JSXOpeningElement,
+        JSXText,
+        JSXClosingElement,
+        JSXAttribute,
+        JSXSpreadAttribute,
+        JSXExpression,
 
         // Module references
         ExternalModuleReference,
@@ -895,6 +905,39 @@ module ts {
         token: SyntaxKind;
         types?: NodeArray<ExpressionWithTypeArguments>;
     }
+    
+    export interface JSXElement extends PrimaryExpression {
+        openingElement: JSXOpeningElement;
+        children?: NodeArray<JSXElement | JSXExpression | JSXText>;
+        closingElement?: JSXClosingElement;
+    }
+
+    export interface JSXOpeningElement extends Node {
+        tagName: EntityName;
+        attributes: NodeArray<JSXAttribute | JSXSpreadAttribute>;
+        isSelfClosing: boolean;
+    }
+
+    export interface JSXAttribute extends Node {
+        name: Identifier;
+        initializer?: Expression;
+    }
+
+    export interface JSXSpreadAttribute extends Node {
+        expression: Expression;
+    }
+
+    export interface JSXClosingElement extends Node {
+        tagName: EntityName;
+    }
+
+    export interface JSXExpression extends Expression {
+        expression?: Expression;
+    }
+
+    export interface JSXText extends Node {
+        _jsxTextBrand: any;
+    }
 
     export interface TypeAliasDeclaration extends Declaration, ModuleElement {
         name: Identifier;
@@ -1003,6 +1046,7 @@ module ts {
         amdDependencies: {path: string; name: string}[];
         amdModuleName: string;
         referencedFiles: FileReference[];
+        isTSXFile: boolean;
 
         hasNoDefaultLib: boolean;
 

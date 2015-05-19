@@ -737,6 +737,7 @@ module ts {
         public amdDependencies: { name: string; path: string }[];
         public amdModuleName: string;
         public referencedFiles: FileReference[];
+        public isTSXFile: boolean;
 
         public syntacticDiagnostics: Diagnostic[];
         public referenceDiagnostics: Diagnostic[];
