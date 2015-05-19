@@ -47,4 +47,5 @@ scripts/*.js.map
 coverage/
 internal/
 **/.DS_Store
-.settings/
+.settings/*
+!.settings/tasks.json
