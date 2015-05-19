@@ -45,9 +45,11 @@ module Utils {
     export function getExecutionEnvironment() {
         if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
             return ExecutionEnvironment.CScript;
-        } else if (typeof window !== "undefined") {
+        }
+        else if (typeof window !== "undefined") {
             return ExecutionEnvironment.Browser;
-        } else {
+        }
+        else {
             return ExecutionEnvironment.Node;
         }
     }
@@ -945,6 +947,7 @@ module Harness {
                 options = options || { noResolve: false };
                 options.target = options.target || ts.ScriptTarget.ES3;
                 options.module = options.module || ts.ModuleKind.None;
+                options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
                 options.noErrorTruncation = true;
 
                 if (settingsCallback) {

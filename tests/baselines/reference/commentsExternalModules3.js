@@ -65,8 +65,6 @@ export var newVar2 = new extMod.m4.m2.c();
 /** Module comment*/
 var m1;
 (function (m1) {
-    /** b's comment*/
-    m1.b;
     /** foo's comment*/
     function foo() {
         return m1.b;
@@ -96,8 +94,6 @@ var myvar = new m1.m2.c();
 /** Module comment */
 var m4;
 (function (m4) {
-    /** b's comment */
-    m4.b;
     /** foo's comment
     */
     function foo() {

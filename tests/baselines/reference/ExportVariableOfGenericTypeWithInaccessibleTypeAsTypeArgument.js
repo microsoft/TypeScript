@@ -16,6 +16,5 @@ var A;
         }
         return B;
     })();
-    A.beez;
     A.beez2 = new Array();
 })(A || (A = {}));

@@ -88,6 +88,7 @@ module ts {
         let undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
         let nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsUndefinedOrNull, "null");
         let unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
+        let circularType = createIntrinsicType(TypeFlags.Any, "__circular__");
 
         let emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         let emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -2412,7 +2413,16 @@ module ts {
         function getTypeOfAlias(symbol: Symbol): Type {
             let links = getSymbolLinks(symbol);
             if (!links.type) {
-                links.type = getTypeOfSymbol(resolveAlias(symbol));
+                let targetSymbol = resolveAlias(symbol);
+
+                // It only makes sense to get the type of a value symbol. If the result of resolving
+                // the alias is not a value, then it has no type. To get the type associated with a
+                // type symbol, call getDeclaredTypeOfSymbol.
+                // This check is important because without it, a call to getTypeOfSymbol could end
+                // up recursively calling getTypeOfAlias, causing a stack overflow.
+                links.type = targetSymbol.flags & SymbolFlags.Value
+                    ? getTypeOfSymbol(targetSymbol)
+                    : unknownType;
             }
             return links.type;
         }
@@ -3636,10 +3646,20 @@ module ts {
             return type;
         }
 
+        // Subtype reduction is basically an optimization we do to avoid excessively large union types, which take longer
+        // to process and look strange in quick info and error messages. Semantically there is no difference between the
+        // reduced type and the type itself. So, when we detect a circularity we simply say that the reduced type is the
+        // type itself.
         function getReducedTypeOfUnionType(type: UnionType): Type {
-            // If union type was created without subtype reduction, perform the deferred reduction now
             if (!type.reducedType) {
-                type.reducedType = getUnionType(type.types, /*noSubtypeReduction*/ false);
+                type.reducedType = circularType;
+                let reducedType = getUnionType(type.types, /*noSubtypeReduction*/ false);
+                if (type.reducedType === circularType) {
+                    type.reducedType = reducedType;
+                }
+            }
+            else if (type.reducedType === circularType) {
+                type.reducedType = type;
             }
             return type.reducedType;
         }
@@ -7140,10 +7160,10 @@ module ts {
         }
 
         function resolveNewExpression(node: NewExpression, candidatesOutArray: Signature[]): Signature {
-            if (node.arguments && languageVersion < ScriptTarget.ES6) {
+            if (node.arguments && languageVersion < ScriptTarget.ES5) {
                 let spreadIndex = getSpreadArgumentIndex(node.arguments);
                 if (spreadIndex >= 0) {
-                    error(node.arguments[spreadIndex], Diagnostics.Spread_operator_in_new_expressions_is_only_available_when_targeting_ECMAScript_6_and_higher);
+                    error(node.arguments[spreadIndex], Diagnostics.Spread_operator_in_new_expressions_is_only_available_when_targeting_ECMAScript_5_and_higher);
                 }
             }
 
@@ -7161,7 +7181,7 @@ module ts {
             // If ConstructExpr's apparent type(section 3.8.1) is an object type with one or
             // more construct signatures, the expression is processed in the same manner as a
             // function call, but using the construct signatures as the initial set of candidate
-            // signatures for overload resolution.The result type of the function call becomes
+            // signatures for overload resolution. The result type of the function call becomes
             // the result type of the operation.
             expressionType = getApparentType(expressionType);
             if (expressionType === unknownType) {
@@ -12464,9 +12484,6 @@ module ts {
             }
             else if ((node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration) && flags & NodeFlags.Ambient) {
                 return grammarErrorOnNode(lastDeclare, Diagnostics.A_declare_modifier_cannot_be_used_with_an_import_declaration, "declare");
-            }
-            else if (node.kind === SyntaxKind.InterfaceDeclaration && flags & NodeFlags.Ambient) {
-                return grammarErrorOnNode(lastDeclare, Diagnostics.A_declare_modifier_cannot_be_used_with_an_interface_declaration, "declare");
             }
             else if (node.kind === SyntaxKind.Parameter && (flags & NodeFlags.AccessibilityModifier) && isBindingPattern((<ParameterDeclaration>node).name)) {
                 return grammarErrorOnNode(node, Diagnostics.A_parameter_property_may_not_be_a_binding_pattern);
