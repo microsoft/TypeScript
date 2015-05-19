@@ -5177,6 +5177,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 return exportedDeclarations;
 
                 function visit(node: Node): void {
+                    if (node.flags & NodeFlags.Ambient) {
+                        return;
+                    }
+
                     if (node.kind === SyntaxKind.FunctionDeclaration) {
                         if (!hoistedFunctionDeclarations) {
                             hoistedFunctionDeclarations = [];
