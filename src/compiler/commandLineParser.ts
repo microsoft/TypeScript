@@ -455,7 +455,6 @@ module ts {
             //                              - At the end of the wildcard, preceeded by `/`.
             //                              - Anywhere in the pattern if preceeded and followed by `/`.
             //                            These tokens, if matched, will be stored in capture group $1. 
-            //                            the pattern and followed by a directory separator
             //  `*`                     - Matches zero or more characters. This token, if matched, will be 
             //                            stored in capture group $2.
             //  `?`                     - Matches zero or one character. This token, if matched, will be
