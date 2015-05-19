@@ -191,6 +191,14 @@
         "category": "Error",
         "code": 1058
     },
+    "Return expression in async function does not have a valid callable 'then' member.": {
+        "category": "Error",
+        "code": 1059
+    },
+    "Expression body for async arrow function does not have a valid callable 'then' member.": {
+        "category": "Error",
+        "code": 1060
+    },
     "Enum member must have initializer.": {
         "category": "Error",
         "code": 1061
@@ -1494,7 +1502,7 @@
         "category": "Error",
         "code": 2521
     },
-    "The 'arguments' object cannot be referenced in an async arrow function Consider using a standard async function expression.": {
+    "The 'arguments' object cannot be referenced in an async arrow function. Consider using a standard async function expression.": {
         "category": "Error",
         "code": 2522
     },

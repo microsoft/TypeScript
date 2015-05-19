@@ -1,4 +1,4 @@
-tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunctionCapturesArguments_es6.ts(4,52): error TS2522: The 'arguments' object cannot be referenced in an async arrow function Consider using a standard async function expression.
+tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunctionCapturesArguments_es6.ts(4,52): error TS2522: The 'arguments' object cannot be referenced in an async arrow function. Consider using a standard async function expression.
 
 
 ==== tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunctionCapturesArguments_es6.ts (1 errors) ====
@@ -7,7 +7,7 @@ tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunctionCapturesA
           function other() {}
           var fn = async () => await other.apply(this, arguments);      
                                                        ~~~~~~~~~
-!!! error TS2522: The 'arguments' object cannot be referenced in an async arrow function Consider using a standard async function expression.
+!!! error TS2522: The 'arguments' object cannot be referenced in an async arrow function. Consider using a standard async function expression.
        }
     }
     
