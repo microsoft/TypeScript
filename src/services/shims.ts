@@ -55,6 +55,7 @@ module ts {
         getCurrentDirectory(): string;
         getDefaultLibFileName(options: string): string;
         getNewLine?(): string;
+        getProjectVersion?(): string;
     }
 
     /** Public interface of the the of a config service shim instance.*/
@@ -258,6 +259,15 @@ module ts {
 
         public error(s: string): void {
             this.shimHost.error(s);
+        }
+
+        public getProjectVersion(): string {
+            if (!this.shimHost.getProjectVersion) {
+                // shimmed host does not support getProjectVersion
+                return undefined;
+            }
+
+            return this.shimHost.getProjectVersion();
         }
 
         public getCompilationSettings(): CompilerOptions {
