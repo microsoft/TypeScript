@@ -1,4 +1,5 @@
 node_modules/
+!tests/**/node_modules/
 built/*
 tests/cases/*.js
 tests/cases/*/*.js

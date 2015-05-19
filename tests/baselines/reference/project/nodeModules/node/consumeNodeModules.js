@@ -1,0 +1,12 @@
+var file_at_root_1 = require("file-at-root");
+var fileAtRoot = new file_at_root_1.FileAtRoot();
+fileAtRoot.fileAtRoot = '123';
+var nested_file_1 = require("somemodule/nested-file");
+var nestedFile = new nested_file_1.NestedFile();
+nestedFile.nestedFile = '123';
+var find_by_index_1 = require("find-by-index");
+var findByIndex = new find_by_index_1.FindByIndex();
+findByIndex.findByIndex = '123';
+var find_by_package_main_1 = require("find-by-package-main");
+var findByPackageMain = new find_by_package_main_1.FindByPackageMain();
+findByPackageMain.findByPackageMain = '123';

@@ -824,6 +824,8 @@ module Harness {
 
         export function createCompilerHost(inputFiles: { unitName: string; content: string; }[],
             writeFile: (fn: string, contents: string, writeByteOrderMark: boolean) => void,
+            readFile: (fn: string) => string,
+            fileExists: (fn: string) => boolean,
             scriptTarget: ts.ScriptTarget,
             useCaseSensitiveFileNames: boolean,
             // the currentDirectory is needed for rwcRunner to passed in specified current directory to compiler host
@@ -878,6 +880,8 @@ module Harness {
                 },
                 getDefaultLibFileName: options => defaultLibFileName,
                 writeFile,
+                readFile,
+                fileExists,
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => newLine
@@ -1124,8 +1128,16 @@ module Harness {
                 var fileOutputs: GeneratedFile[] = [];
                 
                 var programFiles = inputFiles.concat(includeBuiltFiles).map(file => file.unitName);
-                var program = ts.createProgram(programFiles, options, createCompilerHost(inputFiles.concat(includeBuiltFiles).concat(otherFiles),
+                var compilerHostInputFiles = inputFiles.concat(includeBuiltFiles).concat(otherFiles);
+                var program = ts.createProgram(programFiles, options, createCompilerHost(compilerHostInputFiles,
                     (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark }),
+                    (fn) => {
+                        var found = compilerHostInputFiles.filter(f=>f.unitName === fn)[0];
+                        return found ? found.content : undefined;
+                    },
+                    (fn) => {
+                        return !!compilerHostInputFiles.some(f=> f.unitName === fn)
+                    },
                     options.target, useCaseSensitiveFileNames, currentDirectory, options.newLine));
 
                 var emitResult = program.emit();

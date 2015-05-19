@@ -1,0 +1,20 @@
+{
+    "scenario": "nodeModules",
+    "projectRoot": "tests/cases/projects/nodeModules",
+    "inputFiles": [
+        "consumeNodeModules.ts"
+    ],
+    "baselineCheck": true,
+    "runTest": true,
+    "resolvedInputFiles": [
+        "lib.d.ts",
+        "node_modules/file-at-root.d.ts",
+        "node_modules/somemodule/nested-file.d.ts",
+        "node_modules/find-by-index/index.d.ts",
+        "node_modules/find-by-package-main/dist/findByPackageMain.d.ts",
+        "consumeNodeModules.ts"
+    ],
+    "emittedFiles": [
+        "consumeNodeModules.js"
+    ]
+}

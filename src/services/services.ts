@@ -960,6 +960,9 @@ module ts {
         log? (s: string): void;
         trace? (s: string): void;
         error? (s: string): void;
+        
+        // Needed for mocking support
+        fileExists? (s: string): boolean;
     }
 
     //
@@ -1795,7 +1798,9 @@ module ts {
             useCaseSensitiveFileNames: () => false,
             getCanonicalFileName: fileName => fileName,
             getCurrentDirectory: () => "",
-            getNewLine: () => (sys && sys.newLine) || "\r\n"
+            getNewLine: () => (sys && sys.newLine) || "\r\n",
+            readFile: sys.readFile,
+            fileExists: sys.fileExists
         };
 
         var program = createProgram([inputFileName], options, compilerHost);
@@ -2460,7 +2465,9 @@ module ts {
                 getNewLine: () => host.getNewLine ? host.getNewLine() : "\r\n",
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: (fileName, data, writeByteOrderMark) => { },
-                getCurrentDirectory: () => host.getCurrentDirectory()
+                readFile: (fileName) => sys.readFile(fileName),
+                fileExists: host.fileExists ? (fn) => host.fileExists(fn) : sys.fileExists,
+                getCurrentDirectory: () => host.getCurrentDirectory(),
             });
 
             // Release any files we have acquired in the old program but are 

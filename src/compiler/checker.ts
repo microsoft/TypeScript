@@ -860,17 +860,9 @@ module ts {
             }
             let fileName: string;
             let sourceFile: SourceFile;
-            while (true) {
-                fileName = normalizePath(combinePaths(searchPath, moduleName));
-                sourceFile = forEach(supportedExtensions, extension => host.getSourceFile(fileName + extension));
-                if (sourceFile || isRelative) {
-                    break;
-                }
-                let parentPath = getDirectoryPath(searchPath);
-                if (parentPath === searchPath) {
-                    break;
-                }
-                searchPath = parentPath;
+            let resolvedName = host.resolveExternalModule(moduleName, searchPath);
+            if (resolvedName) {
+               sourceFile = host.getSourceFile(resolvedName);
             }
             if (sourceFile) {
                 if (sourceFile.symbol) {
