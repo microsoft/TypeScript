@@ -339,10 +339,11 @@ module ts {
       *    file to. e.g. outDir 
       */
     export function parseConfigFile(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
-        var errors: Diagnostic[] = [];
-
+        let errors: Diagnostic[] = [];
+        let options = getCompilerOptions();
+        
         return {
-            options: getCompilerOptions(),
+            options,
             fileNames: getFiles(),
             errors
         };
@@ -390,13 +391,20 @@ module ts {
         }
 
         function getFiles(): string[] {
-            var files: string[] = [];
             if (hasProperty(json, "files")) {
                 if (json["files"] instanceof Array) {
-                    var files = map(<string[]>json["files"], s => combinePaths(basePath, s));
+                    var files = <string[]>json["files"];
+                    
+                    var exclude: string[];
+                    if (hasProperty(json, "exclude") && json["exclude"] instanceof Array) {
+                        exclude = <string[]>json["exclude"];
+                    }
+                    
+                    return expandFiles(files, exclude);
                 }
             }
             else {
+                var files: string[] = [];
                 var sysFiles = host.readDirectory(basePath, ".ts");
                 for (var i = 0; i < sysFiles.length; i++) {
                     var name = sysFiles[i];
@@ -404,8 +412,346 @@ module ts {
                         files.push(name);
                     }
                 }
+                return files;
             }
-            return files;
+        }
+        
+        /**
+          * Expands an array of file specifications.
+          * @param files The file specifications to expand.
+          * @param exclude Any file specifications to exclude.
+          */
+        function expandFiles(files: string[], exclude: string[]): string[] {
+            // Used to verify the file specification does not have multiple recursive directory wildcards.
+            let invalidRecursiveWildcardPattern = /(^|\/)\*\*\/(.*\/)?\*\*(\/|$)/;
+            
+            // Used to parse glob-style wildcards, this pattern matches the following tokens:
+            // 
+            //  `*`                     - Matches zero or more characters. This token, if matched, will be 
+            //                            stored in capture group $1.
+            //  `?`                     - Matches zero or one character. This token, if matched, will be
+            //                            stored in capture group $2.
+            //  `[` RangeCharacters `]` - Matches a zero or one character in the specified range of  
+            //                            characters, where RangeCharacters consists of any character not 
+            //                            in the set { `*`, `?`, `]` }. These tokens, if matched, will be 
+            //                            stored in capture group $3.
+            //  ReservedCharacters      - Where ReservedCharacters are tokens with special meaning in
+            //                            the regular expression grammar that need to be escaped. 
+            //                            This includes characters in the set { `+`, `.`, `^`, `$`, `(`, `)`,
+            //                            `{`, `}`, `[`, `]`, `|` }. These tokens, if matched, will be stored
+            //                            in capture group $4.
+            //  DirectorySeparators     - Characters in the set { `/`, `\` }.
+            let wildcardParserPattern = /(\*)|(\?)|(\[[^?*\]]*\])|([+.^$(){}\[\]|])/g;
+        
+            // Used to parse glob-style wildcards for exclude paths, this pattern matches the following tokens:
+            // 
+            //  `**`                    - Matches a recursive directory, but only when found in the following
+            //                            context: 
+            //                              - As the whole wildcard.
+            //                              - At the start of the wildcard, followed by `/`.
+            //                              - At the end of the wildcard, preceeded by `/`.
+            //                              - Anywhere in the pattern if preceeded and followed by `/`.
+            //                            These tokens, if matched, will be stored in capture group $1. 
+            //                            the pattern and followed by a directory separator
+            //  `*`                     - Matches zero or more characters. This token, if matched, will be 
+            //                            stored in capture group $2.
+            //  `?`                     - Matches zero or one character. This token, if matched, will be
+            //                            stored in capture group $3.
+            //  `[` RangeCharacters `]` - Matches a zero or one character in the specified range of  
+            //                            characters, where RangeCharacters consists of any character not 
+            //                            in the set { `*`, `?`, `]` }. These tokens, if matched, will be 
+            //                            stored in capture group $4.
+            //  ReservedCharacters      - Where ReservedCharacters are tokens with special meaning in
+            //                            the regular expression grammar that need to be escaped. 
+            //                            This includes characters in the set { `+`, `.`, `^`, `$`, `(`, `)`,
+            //                            `{`, `}`, `[`, `]`, `|` }. These tokens, if matched, will be stored
+            //                            in capture group $5.
+            let excludeWildcardParserPattern = /((?:^|\/)\*\*(?:\/|$))|(\*)|(\?)|(\[[^?*\/\]]*\])|([+.^$(){}\[\]|])/g;
+            
+            // Used to parse a glob-style character range, this pattern matches the following tokens:
+            //
+            //  `[`                 - The opening bracket of the range, if at the start of the string. 
+            //                        This token, if matched, will be stored in capture group $1.
+            //  `!`                 - Indicates the range should match any character except those listed in 
+            //                        the range, if found immediately following the opening bracket of the 
+            //                        range. This token, if matched, will be stored in capture group $2. 
+            //  ReservedCharacters  - Where ReservedCharacters are tokens with special meaning in the
+            //                        regular expression grammar that need to be escaped. This includes
+            //                        characters in the set { `^`, `[` }. These tokens, if matched,
+            //                        will be stored in capture group $3.
+            //  `]`                 - Matches the closing bracket of the range, if at the end of the string. 
+            //                        This token, if matched, will be stored in capture group $4.
+            let rangeParserPattern = /(^\[)(!)?|([\^\[])|(\]$)/g;
+            
+            // Used to match characters with special meaning in a regular expression.
+            let regExpReservedCharacterPattern = /[?*+.^$(){}\[\]|]/;
+            
+            let prefix = normalizePath(basePath);            
+            let ignoreCase = !host.useCaseSensitiveFileNames;
+            let fileSet: Map<string> = {};
+            
+            // populate the exclusion list
+            let excludePattern = createExcludePattern(prefix, exclude);
+            
+            // expand and include the provided files into the file set.
+            for (let fileSpec of files) {
+                let normalizedFileSpec = normalizePath(fileSpec);
+                normalizedFileSpec = removeTrailingDirectorySeparator(normalizedFileSpec);
+                if (invalidRecursiveWildcardPattern.test(normalizedFileSpec)) {
+                    errors.push(createCompilerDiagnostic(Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, fileSpec))
+                }
+                else {
+                    expandDirectory(prefix, normalizedFileSpec, 0);
+                }
+            }
+            
+            let result: string[] = [];
+            forEachValue(fileSet, value => { result.push(value); });
+            return result;
+            
+            /**
+              * Expands a wildcard portion of a file specification.
+              * @param prefix The prefix path.
+              * @param fileSpec The file specification.
+              * @param offset The offset in the file specification.
+              */
+            function expandWildcard(prefix: string, fileSpec: string, offset: number): void {
+                // find the offset of the next directory separator to extract the wildcard path segment. 
+                let endOffset = fileSpec.indexOf(directorySeparator, offset);
+                let endOfLine = endOffset < 0;
+                let wildcard = fileSpec.substring(offset, endOfLine ? fileSpec.length : endOffset);
+                if (wildcard === "**") {
+                    // If the path contains only "**", then this is a recursive directory pattern.
+                    if (endOfLine) {
+                        // If there is no file specification following the recursive directory pattern, 
+                        // we cannot match any files, so we will ignore this pattern
+                        return;
+                    }
+                    
+                    // expand the recursive directory pattern
+                    expandRecursiveDirectory(prefix, fileSpec, endOffset + 1);
+                }
+                else {
+                    // match the entries in the directory against the wildcard pattern.
+                    let entries = host.readDirectoryFlat(prefix);
+                    let pattern = createPatternFromWildcard(wildcard);
+                    for (let entry of entries) {
+                        // skip the entry if it does not match the pattern.
+                        if (!pattern.test(entry)) {
+                            continue;
+                        }
+                        
+                        let path = combinePaths(prefix, entry);
+                        if (endOfLine) {
+                            // This wildcard has no further directory so process the match.
+                            includeFile(path);
+                        }
+                        else if (host.directoryExists(path)) {
+                            // If this was a directory, process the directory.
+                            expandDirectory(path, fileSpec, endOffset + 1);
+                        }
+                    }
+                }
+            }
+            
+            /**
+              * Expands a `**` recursive directory wildcard.
+              * @param prefix The directory to recursively expand
+              * @param fileSpec The original file specification
+              * @param offset The offset into the file specification
+              */
+            function expandRecursiveDirectory(prefix: string, fileSpec: string, offset: number): void {
+                // expand the non-recursive part of the file specification against the prefix path.
+                expandDirectory(prefix, fileSpec, offset);
+                
+                // recursively expand each subdirectory.
+                let entries = host.readDirectoryFlat(prefix);
+                for (let entry of entries) {
+                    let path = combinePaths(prefix, entry);
+                    if (host.directoryExists(path)) {
+                        expandRecursiveDirectory(path, fileSpec, offset);
+                    }
+                }
+            }
+            
+            /**
+              * Expands a directory with wildcards.
+              * @param prefix The directory to expand.
+              * @param fileSpec The original file specification.
+              * @param offset The offset into the file specification.
+              */
+            function expandDirectory(prefix: string, fileSpec: string, offset: number): void {
+                 // find the offset of the next wildcard in the file specification
+                 let wildcardOffset = indexOfWildcard(fileSpec, offset);
+                 if (wildcardOffset < 0) {
+                     // There were no more wildcards, so process the match if the file exists and was not excluded.
+                     let path = combinePaths(prefix, fileSpec.substring(offset));
+                     includeFile(path);
+                     return;
+                 }
+                 
+                 // find the last directory separator before the wildcard to get the leading path.
+                 let endOffset = fileSpec.lastIndexOf(directorySeparator, wildcardOffset);
+                 if (endOffset > offset) {
+                     // wildcard occurs in a later segment, include remaining path up to wildcard in prefix
+                     prefix = combinePaths(prefix, fileSpec.substring(offset, endOffset));
+                     offset = endOffset + 1;
+                 }
+                 
+                 // Expand the wildcard portion of the path.
+                 expandWildcard(prefix, fileSpec, offset);
+            }
+            
+            /**
+              * Includes a file in a file set.
+              * @param file The file to include.
+              */
+            function includeFile(file: string): void {
+                let key = ignoreCase ? file.toLowerCase() : file;
+                // ignore the file if we've already matched it.
+                if (hasProperty(fileSet, key)) {
+                    return;
+                }
+                
+                // ignore the file if it matches an exclude pattern
+                if (excludePattern && excludePattern.test(file)) {
+                    return;
+                }
+                
+                // ignore the file if it doesn't exist or is a directory
+                if (!host.fileExists(file) || host.directoryExists(file)) {
+                    return;
+                }
+                
+                // ignore the file if it does not have a supported extension
+                if (!options.allowNonTsExtensions && !hasSupportedFileExtension(file)) {
+                    return;
+                }
+                
+                fileSet[key] = file;
+            }
+            
+            /**
+              * Gets the index of the next wildcard character in a file specification.
+              * @param fileSpec The file specification.
+              * @param start The offset at which to start the search.
+              */
+            function indexOfWildcard(fileSpec: string, start: number): number {
+                const len = fileSpec.length;
+                for (let i = start; i < len; ++i) {
+                    let charCode = fileSpec.charCodeAt(i);
+                    if (charCode === 42 /*asterisk*/ ||
+                        charCode === 63 /*question*/ ||
+                        charCode === 91 /*openBracket*/) {
+                        return i;
+                    }
+                }
+                return -1;
+            }
+            
+            /**
+              * Creates a regular expression from a glob-style wildcard.
+              * @param wildcard The wildcard
+              */
+            function createPatternFromWildcard(wildcard: string): RegExp {
+                return new RegExp("^" + wildcard.replace(wildcardParserPattern, wildcardTokenReplacer) + "$", ignoreCase ? "i" : "");
+            }
+            
+            /**
+              * Creates a regular expression from a glob-style wildcard used to exclude a file.
+              * @param prefix The prefix path 
+              * @param exclude The file specifications to exclude.
+              */
+            function createExcludePattern(prefix: string, exclude: string[]): RegExp {
+                // ignore an empty exclusion list
+                if (!exclude || exclude.length === 0) {
+                    return undefined;
+                }
+                
+                prefix = regExpEscape(prefix);
+                
+                let pattern = "";
+                for (let excludeSpec of exclude) {
+                    // skip empty entries.
+                    if (!excludeSpec) continue;
+                    
+                    let normalizedExcludeSpec = normalizePath(excludeSpec);
+                    if (invalidRecursiveWildcardPattern.test(normalizedExcludeSpec)) {
+                        errors.push(createCompilerDiagnostic(Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, excludeSpec));
+                    }
+                    else {
+                        if (pattern) {
+                            pattern += "|";
+                        }
+
+                        normalizedExcludeSpec = normalizedExcludeSpec.replace(excludeWildcardParserPattern, excludeWildcardTokenReplacer);
+                        pattern += "(" + combinePaths(prefix, normalizedExcludeSpec) + ")";
+                    }
+                }
+        
+                if (pattern) {
+                    return new RegExp("^(" + pattern + ")$", ignoreCase ? "i" : "");
+                }
+                
+                return undefined;
+            }
+            
+            /**
+              * Replaces a wildcard token with an encoded regular expression pattern.
+              * @param raw The raw matched string
+              * @param multiChar The match for the multi-character wildcard token ('*').
+              * @param singleChar The match for the single-character wildcard token ('?').
+              * @param range The match for a character-range wildcard token ('[a-z]').
+              * @param meta A token that needs to be encoded in a regular expression.
+              */
+            function wildcardTokenReplacer(raw: string, multiChar: string, singleChar: string, range: string, meta: string) {
+                if (multiChar) return ".*";
+                if (singleChar) return ".?";
+                if (range) return range.replace(rangeParserPattern, rangeTokenReplacer)
+                if (meta) return "\\" + meta;
+                return raw;
+            }
+            
+            /**
+              * Replaces a wildcard token with an encoded regular expression pattern.
+              * @param raw The raw matched string
+              * @param recursive The match for the recursive directory wildcard token ('**'). Capture group $1
+              * @param multiChar The match for the multi-character wildcard token ('*'). Capture group $2
+              * @param singleChar The match for the single-character wildcard token ('?'). Capture group $3
+              * @param range The match for a character-range wildcard token ('[a-z]'). Capture group $4
+              * @param meta A token that needs to be encoded in a regular expression. Capture group $5
+              */
+            function excludeWildcardTokenReplacer(raw: string, recursive: string, multiChar: string, singleChar: string, range: string, meta: string) {
+                if (recursive) return "(^|/)(.*(/|$))?";
+                if (multiChar) return ".*";
+                if (singleChar) return ".?";
+                if (range) return range.replace(rangeParserPattern, rangeTokenReplacer)
+                if (meta) return "\\" + meta;
+                return raw;
+            }
+        
+            /**
+              * Replaces a range token with an encoded regular expression pattern.
+              * @param raw The raw matched string.
+              * @param open The opening bracket of the range ('[').
+              * @param not The negation token for a range ('!').
+              * @param meta A token that needs to be encoded in a regular expression.
+              * @param close The closing bracket of the range (']').
+              */
+            function rangeTokenReplacer(raw: string, open: string, not: string, meta: string, close: string) {
+                if (open) return not ? "[^" : "[";
+                if (meta) return "\\" + meta;
+                if (close) return "]";
+                return raw;
+            }
+            
+            /**
+              * Escape regular expression reserved tokens.
+              * @param text The text to escape.
+              */
+            function regExpEscape(text: string) {
+                return text.replace(regExpReservedCharacterPattern, token => "\\" + token);
+            }
         }
     }
 }

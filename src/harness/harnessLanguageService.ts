@@ -232,6 +232,10 @@ module Harness.LanguageService {
         readDirectory(rootDir: string, extension: string): string {
             throw new Error("NYI");
         }
+        
+        readDirectoryFlat(path: string): string {
+            throw new Error("NYI");
+        }
 
         log(s: string): void { this.nativeHost.log(s); }
         trace(s: string): void { this.nativeHost.trace(s); }
@@ -534,6 +538,10 @@ module Harness.LanguageService {
         }
 
         readDirectory(path: string, extension?: string): string[] {
+            throw new Error("Not implemented Yet.");
+        }
+        
+        readDirectoryFlat(path: string): string[] {
             throw new Error("Not implemented Yet.");
         }
         
