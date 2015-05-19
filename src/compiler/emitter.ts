@@ -1717,7 +1717,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function tryEmitConstantValue(node: PropertyAccessExpression | ElementAccessExpression): boolean {
-                if (compilerOptions.separateCompilation) {
+                if (compilerOptions.isolatedModules) {
                     // do not inline enum values in separate compilation mode
                     return false;
                 }
@@ -4368,7 +4368,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
             function shouldEmitEnumDeclaration(node: EnumDeclaration) {
                 let isConstEnum = isConst(node);
-                return !isConstEnum || compilerOptions.preserveConstEnums || compilerOptions.separateCompilation;
+                return !isConstEnum || compilerOptions.preserveConstEnums || compilerOptions.isolatedModules;
             }
 
             function emitEnumDeclaration(node: EnumDeclaration) {
@@ -4473,7 +4473,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function shouldEmitModuleDeclaration(node: ModuleDeclaration) {
-                return isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.separateCompilation);
+                return isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.isolatedModules);
             }
 
             function isModuleMergedWithES6Class(node: ModuleDeclaration) {
@@ -5682,7 +5682,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     }
                 }
 
-                if (isExternalModule(node) || compilerOptions.separateCompilation) {
+                if (isExternalModule(node) || compilerOptions.isolatedModules) {
                     if (languageVersion >= ScriptTarget.ES6) {
                         emitES6Module(node, startIndex);
                     }

@@ -1092,8 +1092,8 @@ module Harness {
                             options.preserveConstEnums = setting.value === 'true';
                             break;
 
-                        case 'separatecompilation':
-                            options.separateCompilation = setting.value === 'true';
+                        case 'isolatedmodules':
+                            options.isolatedModules = setting.value === 'true';
                             break;
 
                         case 'suppressimplicitanyindexerrors':
@@ -1509,7 +1509,7 @@ module Harness {
             "noimplicitany", "noresolve", "newline", "normalizenewline", "emitbom",
             "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
             "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
-            "separatecompilation", "inlinesourcemap", "maproot", "sourceroot",
+            "isolatedmodules", "inlinesourcemap", "maproot", "sourceroot",
             "inlinesources", "emitdecoratormetadata"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
