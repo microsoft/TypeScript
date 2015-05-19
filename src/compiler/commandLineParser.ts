@@ -397,10 +397,21 @@ module ts {
                 }
             }
             else {
-                var sysFiles = host.readDirectory(basePath, ".ts");
+                var sysFiles = host.readDirectory(basePath, ".ts").concat(host.readDirectory(basePath, ".tsx"));
                 for (var i = 0; i < sysFiles.length; i++) {
                     var name = sysFiles[i];
-                    if (!fileExtensionIs(name, ".d.ts") || !contains(sysFiles, name.substr(0, name.length - 5) + ".ts")) {
+                    if (fileExtensionIs(name, ".d.ts")) {
+                        let baseName = name.substr(0, name.length - ".d.ts".length);
+                        if (!contains(sysFiles, baseName + ".tsx") && !contains(sysFiles, baseName + ".ts")) {
+                            files.push(name);
+                        }
+                    }
+                    else if (fileExtensionIs(name, ".ts")) {
+                        if (!contains(sysFiles, name + "x")) {
+                            files.push(name)
+                        }
+                    }
+                    else {
                         files.push(name);
                     }
                 }
