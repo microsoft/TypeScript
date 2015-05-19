@@ -4954,19 +4954,6 @@ module ts {
             }
 
             function getDeclaredName(symbol: Symbol, location: Node) {
-                // Special case for function expressions, whose names are solely local to their bodies.
-                let functionExpression = forEach(symbol.declarations, d => d.kind === SyntaxKind.FunctionExpression ? <FunctionExpression>d : undefined);
-
-                // When a name gets interned into a SourceFile's 'identifiers' Map,
-                // its name is escaped and stored in the same way its symbol name/identifier
-                // name should be stored. Function expressions, however, are a special case,
-                // because despite sometimes having a name, the binder unconditionally binds them
-                // to a symbol with the name "__function".
-                let name: string;
-                if (functionExpression && functionExpression.name) {
-                    name = functionExpression.name.text;
-                }
-
                 // If this is an export or import specifier it could have been renamed using the as syntax.
                 // if so we want to search for whatever under the cursor, the symbol is pointing to the alias (name)
                 // so check for the propertyName.
@@ -4974,7 +4961,7 @@ module ts {
                     return location.getText();
                 }
 
-                name = typeChecker.symbolToString(symbol);
+                let name = typeChecker.symbolToString(symbol);
 
                 return stripQuotes(name);
             }
@@ -4988,7 +4975,12 @@ module ts {
                 }
 
                 // Special case for function expressions, whose names are solely local to their bodies.
-                let functionExpression = forEach(declarations, d => d.kind === SyntaxKind.FunctionExpression ? <FunctionExpression>d : undefined);
+                // TODO (drosen): Why would we have to lookup the interned name for a function expression?
+                //                Shouldn't we have found a scope? Consider a 'Debug.fail()'.
+                let functionExpression: FunctionExpression;
+                if (symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.FunctionExpression) {
+                    functionExpression = <FunctionExpression>symbol.valueDeclaration;
+                }
 
                 // When a name gets interned into a SourceFile's 'identifiers' Map,
                 // its name is escaped and stored in the same way its symbol name/identifier
