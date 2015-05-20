@@ -2822,8 +2822,12 @@ module ts {
                 }
 
                 if (token === SyntaxKind.AsKeyword) {
-                    parseTokenNode();
-                    leftOperand = makeAsExpression(leftOperand, parseType());
+                    if (canParseSemicolon()) {
+                        break;
+                    } else {
+                        parseTokenNode();
+                        leftOperand = makeAsExpression(leftOperand, parseType());
+                    }
                 } else {
                     leftOperand = makeBinaryExpression(leftOperand, parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence));
                 }
