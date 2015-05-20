@@ -674,7 +674,6 @@ module ts {
 
     export interface AsExpression extends Expression {
         expression: Expression;
-        asToken: Node;
         type: TypeNode;
     }
 
