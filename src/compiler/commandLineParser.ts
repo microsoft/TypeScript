@@ -506,7 +506,8 @@ module ts {
                 
                 // match the entries in the directory against the wildcard pattern.
                 let entries = host.readDirectoryFlat(basePath);
-                let pattern = createRegularExpressionFromWildcard(fileSpec, start, isEndOfLine ? fileSpec.length : offset);
+                let end = isEndOfLine ? fileSpec.length : offset;
+                let pattern = createRegularExpressionFromWildcard(fileSpec, start, end);
                 for (let entry of entries) {
                     // skip the entry if it does not match the pattern.
                     if (!pattern.test(entry)) {
