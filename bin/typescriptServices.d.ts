@@ -1114,7 +1114,7 @@ declare module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
-        separateCompilation?: boolean;
+        isolatedModules?: boolean;
         emitDecoratorMetadata?: boolean;
         [option: string]: string | number | boolean;
     }
@@ -1379,6 +1379,7 @@ declare module ts {
     interface LanguageServiceHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
+        getProjectVersion?(): string;
         getScriptFileNames(): string[];
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): IScriptSnapshot;
