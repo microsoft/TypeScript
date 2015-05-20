@@ -2823,16 +2823,19 @@ module ts {
 
                 if (token === SyntaxKind.AsKeyword) {
                     // Make sure we *do* perform ASI for constructs like this:
-                    // var x = foo
-                    // as (Bar)
-                    // This should be parsed as an initialized variable, followed by a function call to 'as' with the argument 'Bar'
+                    //    var x = foo
+                    //    as (Bar)
+                    // This should be parsed as an initialized variable, followed
+                    // by a function call to 'as' with the argument 'Bar'
                     if (canParseSemicolon()) {
                         break;
-                    } else {
+                    }
+                    else {
                         nextToken();
                         leftOperand = makeAsExpression(leftOperand, parseType());
                     }
-                } else {
+                }
+                else {
                     leftOperand = makeBinaryExpression(leftOperand, parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence));
                 }
             }
