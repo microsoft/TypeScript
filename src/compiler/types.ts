@@ -1586,9 +1586,15 @@ module ts {
         Number,
     }
 
+    export interface TypeMapping {
+        type: Type;
+        result: Type;
+    }
+
     /* @internal */
     export interface TypeMapper {
         (t: TypeParameter): Type;
+        mappings?: TypeMapping[];  // Type mapping cache
     }
 
     /* @internal */
