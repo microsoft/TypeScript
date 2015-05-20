@@ -2154,7 +2154,7 @@ module ts {
                 // checkRightHandSideOfForOf will return undefined if the for-of expression type was
                 // missing properties/signatures required to get its iteratedType (like
                 // [Symbol.iterator] or next). This may be because we accessed properties from anyType,
-                // or it may have led to an error inside getElementTypeFromIterable.
+                // or it may have led to an error inside getElementTypeOfIterable.
                 return checkRightHandSideOfForOf((<ForOfStatement>declaration.parent.parent).expression) || anyType;
             }
             if (isBindingPattern(declaration.parent)) {
@@ -3511,6 +3511,9 @@ module ts {
             return globalESSymbolConstructorSymbol || (globalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol"));
         }
 
+        /**
+         * Instantiates a global type that is generic with some element type, and returns that instantiation.
+         */
         function createTypeFromGenericGlobalType(genericGlobalType: GenericType, elementType: Type): Type {
             return <ObjectType>genericGlobalType !== emptyGenericType ? createTypeReference(genericGlobalType, [elementType]) : emptyObjectType;
         }
@@ -5794,7 +5797,7 @@ module ts {
                 if (contextualReturnType) {
                     return node.asteriskToken
                         ? contextualReturnType
-                        : getElementTypeFromIterableIterator(contextualReturnType);
+                        : getElementTypeOfIterableIterator(contextualReturnType);
                 }
             }
 
@@ -5804,9 +5807,12 @@ module ts {
         function getContextualReturnType(functionDecl: FunctionLikeDeclaration): Type {
             // If the containing function has a return type annotation, is a constructor, or is a get accessor whose
             // corresponding set accessor has a type annotation, return statements in the function are contextually typed
-            if (functionDecl.type || functionDecl.kind === SyntaxKind.Constructor || functionDecl.kind === SyntaxKind.GetAccessor && getSetAccessorTypeAnnotationNode(<AccessorDeclaration>getDeclarationOfKind(functionDecl.symbol, SyntaxKind.SetAccessor))) {
+            if (functionDecl.type ||
+                functionDecl.kind === SyntaxKind.Constructor ||
+                functionDecl.kind === SyntaxKind.GetAccessor && getSetAccessorTypeAnnotationNode(<AccessorDeclaration>getDeclarationOfKind(functionDecl.symbol, SyntaxKind.SetAccessor))) {
                 return getReturnTypeOfSignature(getSignatureFromDeclaration(functionDecl));
             }
+
             // Otherwise, if the containing function is contextually typed by a function type with exactly one call signature
             // and that call signature is non-generic, return statements are contextually typed by the return type of the signature
             let signature = getContextualSignatureForFunctionLikeDeclaration(<FunctionExpression>functionDecl);
@@ -5951,7 +5957,7 @@ module ts {
                 let index = indexOf(arrayLiteral.elements, node);
                 return getTypeOfPropertyOfContextualType(type, "" + index)
                     || getIndexTypeOfContextualType(type, IndexKind.Number)
-                    || (languageVersion >= ScriptTarget.ES6 ? getElementTypeFromIterable(type, /*errorNode*/ undefined) : undefined);
+                    || (languageVersion >= ScriptTarget.ES6 ? getElementTypeOfIterable(type, /*errorNode*/ undefined) : undefined);
             }
             return undefined;
         }
@@ -6142,7 +6148,7 @@ module ts {
                     // if there is no index type / iterated type.
                     let restArrayType = checkExpression((<SpreadElementExpression>e).expression, contextualMapper);
                     let restElementType = getIndexTypeOfType(restArrayType, IndexKind.Number) ||
-                        (languageVersion >= ScriptTarget.ES6 ? getElementTypeFromIterable(restArrayType, /*errorNode*/ undefined) : undefined);
+                        (languageVersion >= ScriptTarget.ES6 ? getElementTypeOfIterable(restArrayType, /*errorNode*/ undefined) : undefined);
                     
                     if (restElementType) {
                         elementTypes.push(restElementType);
@@ -7337,7 +7343,8 @@ module ts {
             }
             else {
                 let types: Type[];
-                if (func.asteriskToken) {
+                let funcIsGenerator = !!func.asteriskToken;
+                if (funcIsGenerator) {
                     types = checkAndAggregateYieldOperandTypes(<Block>func.body, contextualMapper);
                     if (types.length === 0) {
                         let iterableIteratorAny = createIterableIteratorType(anyType);
@@ -7359,7 +7366,7 @@ module ts {
                 // Otherwise we require the yield/return expressions to have a best common supertype.
                 type = contextualSignature ? getUnionType(types) : getCommonSupertype(types);
                 if (!type) {
-                    if (func.asteriskToken) {
+                    if (funcIsGenerator) {
                         error(func, Diagnostics.No_best_common_type_exists_among_yield_expressions);
                         return createIterableIteratorType(unknownType);
                     }
@@ -7369,7 +7376,7 @@ module ts {
                     }
                 }
 
-                if (func.asteriskToken) {
+                if (funcIsGenerator) {
                     type = createIterableIteratorType(type);
                 }
             }
@@ -8069,20 +8076,21 @@ module ts {
 
             if (node.expression) {
                 let func = getContainingFunction(node);
-                // If this is correct code, the func should always have a star. After all,
+                // If the user's code is syntactically correct, the func should always have a star. After all,
                 // we are in a yield context.
                 if (func && func.asteriskToken) {
                     let expressionType = checkExpressionCached(node.expression, /*contextualMapper*/ undefined);
                     let expressionElementType: Type;
-                    if (node.asteriskToken) {
+                    let nodeIsYieldStar = !!node.asteriskToken;
+                    if (nodeIsYieldStar) {
                         expressionElementType = checkElementTypeOfIterable(expressionType, node.expression);
                     }
                     // There is no point in doing an assignability check if the function
-                    // has no explicit return type, because the return type is directly computed
+                    // has no explicit return type because the return type is directly computed
                     // from the yield expressions.
                     if (func.type) {
-                        let signatureElementType = getElementTypeFromIterableIterator(getTypeFromTypeNode(func.type)) || unknownType;
-                        if (node.asteriskToken) {
+                        let signatureElementType = getElementTypeOfIterableIterator(getTypeFromTypeNode(func.type)) || anyType;
+                        if (nodeIsYieldStar) {
                             checkTypeAssignableTo(expressionElementType, signatureElementType, node.expression, /*headMessage*/ undefined);
                         }
                         else {
@@ -8092,7 +8100,7 @@ module ts {
                 }
             }
 
-            // Both yield and yield* expressions are any
+            // Both yield and yield* expressions have type 'any'
             return anyType;
         }
 
@@ -8386,7 +8394,7 @@ module ts {
                             error(node.type, Diagnostics.A_generator_cannot_have_a_void_type_annotation);
                         }
                         else {
-                            let generatorElementType = getElementTypeFromIterableIterator(returnType) || anyType;
+                            let generatorElementType = getElementTypeOfIterableIterator(returnType) || anyType;
                             let iterableIteratorInstantiation = createIterableIteratorType(generatorElementType);
 
                             // Naively, one could check that IterableIterator<any> is assignable to the return type annotation.
@@ -9597,7 +9605,7 @@ module ts {
                     // iteratedType will be undefined if the rightType was missing properties/signatures
                     // required to get its iteratedType (like [Symbol.iterator] or next). This may be
                     // because we accessed properties from anyType, or it may have led to an error inside
-                    // getElementTypeFromIterable.
+                    // getElementTypeOfIterable.
                     if (iteratedType) {
                         checkTypeAssignableTo(iteratedType, leftType, varExpr, /*headMessage*/ undefined);
                     }
@@ -9695,7 +9703,7 @@ module ts {
          * When errorNode is undefined, it means we should not report any errors.
          */
         function checkElementTypeOfIterable(iterable: Type, errorNode: Node): Type {
-            let elementType = getElementTypeFromIterable(iterable, errorNode);
+            let elementType = getElementTypeOfIterable(iterable, errorNode);
             // Now even though we have extracted the iteratedType, we will have to validate that the type
             // passed in is actually an Iterable.
             if (errorNode && elementType) {
@@ -9705,7 +9713,7 @@ module ts {
             return elementType || anyType;
         }
 
-        function getElementTypeFromIterable(iterable: Type, errorNode: Node): Type {
+        function getElementTypeOfIterable(iterable: Type, errorNode: Node): Type {
             // We want to treat type as an iterable, and get the type it is an iterable of. The iterable
             // must have the following structure (annotated with the names of the variables below):
             //
@@ -9751,15 +9759,15 @@ module ts {
                         return undefined;
                     }
 
-                    typeAsIterable.iterableElementType = getElementTypeFromIterator(getUnionType(map(iteratorFunctionSignatures, getReturnTypeOfSignature)), errorNode);
+                    typeAsIterable.iterableElementType = getElementTypeOfIterator(getUnionType(map(iteratorFunctionSignatures, getReturnTypeOfSignature)), errorNode);
                 }
             }
 
             return typeAsIterable.iterableElementType;
         }
 
-        function getElementTypeFromIterator(iterator: Type, errorNode: Node): Type {
-            // This function has very similar logic as getElementTypeFromIterable, except that it operates on
+        function getElementTypeOfIterator(iterator: Type, errorNode: Node): Type {
+            // This function has very similar logic as getElementTypeOfIterable, except that it operates on
             // Iterators instead of Iterables. Here is the structure:
             //
             //  { // iterator
@@ -9815,7 +9823,7 @@ module ts {
             return typeAsIterator.iteratorElementType;
         }
 
-        function getElementTypeFromIterableIterator(iterableIterator: Type): Type {
+        function getElementTypeOfIterableIterator(iterableIterator: Type): Type {
             if (allConstituentTypesHaveKind(iterableIterator, TypeFlags.Any)) {
                 return undefined;
             }
@@ -9826,8 +9834,8 @@ module ts {
                 return (<GenericType>iterableIterator).typeArguments[0];
             }
 
-            return getElementTypeFromIterable(iterableIterator, /*errorNode*/ undefined) ||
-                getElementTypeFromIterator(iterableIterator, /*errorNode*/ undefined);
+            return getElementTypeOfIterable(iterableIterator, /*errorNode*/ undefined) ||
+                getElementTypeOfIterator(iterableIterator, /*errorNode*/ undefined);
         }
 
         /**
