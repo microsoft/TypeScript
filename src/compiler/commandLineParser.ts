@@ -693,7 +693,7 @@ module ts {
                             pattern += "|";
                         }
                         
-                        pattern += "(" + combinePaths(basePath, excludePattern) + ")";
+                        pattern += "(" + combinePaths(basePath, excludePattern) + "($|/.*))";
                     }
                 }
                 
