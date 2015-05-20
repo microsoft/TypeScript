@@ -6,6 +6,7 @@ declare function tag(...x: any[]): any;
 var a = `${123 + 456 as number}`;
 >a : string
 >`${123 + 456 as number}` : string
+>123 + 456 as number : number
 >123 + 456 : number
 >123 : number
 >456 : number
@@ -13,6 +14,7 @@ var a = `${123 + 456 as number}`;
 var b = `leading ${123 + 456 as number}`;
 >b : string
 >`leading ${123 + 456 as number}` : string
+>123 + 456 as number : number
 >123 + 456 : number
 >123 : number
 >456 : number
@@ -20,21 +22,25 @@ var b = `leading ${123 + 456 as number}`;
 var c = `${123 + 456 as number} trailing`;
 >c : string
 >`${123 + 456 as number} trailing` : string
+>123 + 456 as number : number
 >123 + 456 : number
 >123 : number
 >456 : number
 
 var d = `Hello ${123} World` as string;
 >d : string
+>`Hello ${123} World` as string : string
 >`Hello ${123} World` : string
 >123 : number
 
 var e = `Hello` as string;
 >e : string
+>`Hello` as string : string
 >`Hello` : string
 
 var f = 1 + `${1} end of string` as string;
 >f : string
+>1 + `${1} end of string` as string : string
 >1 + `${1} end of string` : string
 >1 : number
 >`${1} end of string` : string
@@ -42,6 +48,7 @@ var f = 1 + `${1} end of string` as string;
 
 var g = tag `Hello ${123} World` as string;
 >g : string
+>tag `Hello ${123} World` as string : string
 >tag `Hello ${123} World` : any
 >tag : (...x: any[]) => any
 >`Hello ${123} World` : string
@@ -49,6 +56,7 @@ var g = tag `Hello ${123} World` as string;
 
 var h = tag `Hello` as string;
 >h : string
+>tag `Hello` as string : string
 >tag `Hello` : any
 >tag : (...x: any[]) => any
 >`Hello` : string

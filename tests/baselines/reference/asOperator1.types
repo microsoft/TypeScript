@@ -5,16 +5,20 @@ var as = 43;
 
 var x = undefined as number;
 >x : number
->undefined : any
+>undefined as number : number
+>undefined : undefined
 
 var y = (null as string).length;
 >y : number
 >(null as string).length : number
 >(null as string) : string
+>null as string : string
 >null : null
 >length : number
 
 var z = Date as any as string;
 >z : string
->Date : any
+>Date as any as string : string
+>Date as any : any
+>Date : DateConstructor
 
