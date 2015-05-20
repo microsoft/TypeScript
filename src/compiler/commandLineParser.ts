@@ -791,7 +791,8 @@ module ts {
               * @param offset The offset into the file specification. 
               */
             function isDirectorySeparatorOrEndOfLine(fileSpec: string, offset: number) {
-                return offset === fileSpec.length || (offset < fileSpec.length && fileSpec.charCodeAt(offset) === CharacterCodes.slash);
+                return offset === fileSpec.length || 
+                    (offset < fileSpec.length && fileSpec.charCodeAt(offset) === CharacterCodes.slash);
             }
             
             /**
