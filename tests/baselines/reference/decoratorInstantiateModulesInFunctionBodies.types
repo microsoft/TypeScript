@@ -1,0 +1,40 @@
+=== tests/cases/conformance/decorators/class/a.ts ===
+
+// from #3108
+export var test = 'abc';
+>test : string
+>'abc' : string
+
+=== tests/cases/conformance/decorators/class/b.ts ===
+import { test } from './a';
+>test : string
+
+function filter(handler: any) {
+>filter : (handler: any) => (target: any) => void
+>handler : any
+
+    return function (target: any) {
+>function (target: any) {        // ...    } : (target: any) => void
+>target : any
+
+        // ...
+    };
+}
+
+class Wat {
+>Wat : Wat
+
+    @filter(() => test == 'abc')
+>filter(() => test == 'abc') : (target: any) => void
+>filter : (handler: any) => (target: any) => void
+>() => test == 'abc' : () => boolean
+>test == 'abc' : boolean
+>test : string
+>'abc' : string
+
+    static whatever() {
+>whatever : () => void
+
+        // ...
+    }
+}

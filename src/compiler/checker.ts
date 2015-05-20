@@ -10914,6 +10914,7 @@ module ts {
                     break;
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
+                    forEach(node.decorators, checkFunctionExpressionBodies);
                     forEach((<MethodDeclaration>node).parameters, checkFunctionExpressionBodies);
                     if (isObjectLiteralMethod(node)) {
                         checkFunctionExpressionOrObjectLiteralMethodBody(<MethodDeclaration>node);
@@ -10928,6 +10929,7 @@ module ts {
                 case SyntaxKind.WithStatement:
                     checkFunctionExpressionBodies((<WithStatement>node).expression);
                     break;
+                case SyntaxKind.Decorator:
                 case SyntaxKind.Parameter:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
