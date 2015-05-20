@@ -804,7 +804,7 @@ module ts {
                 for (let i = start; i < len; ++i) {
                     let charCode = fileSpec.charCodeAt(i);
                     if (charCode === CharacterCodes.asterisk ||
-                        charCode === CharacterCodes.question /*question*/ ||
+                        charCode === CharacterCodes.question ||
                         charCode === CharacterCodes.openBracket) {
                         return i;
                     }
