@@ -288,7 +288,7 @@ module ts {
                     return _path.resolve(path);
                 },
                 fileExists(path: string): boolean {
-                    return _fs.existsSync(path);
+                    return _fs.existsSync(path) && _fs.statSync(path).isFile();
                 },
                 directoryExists(path: string) {
                     return _fs.existsSync(path) && _fs.statSync(path).isDirectory();
