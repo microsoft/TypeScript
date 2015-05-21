@@ -2231,6 +2231,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     writeLine();
                     write("}");
                 }
+                write("})();");
             }
             function emitIterationEmbeddedStatement(node: IterationStatement) {
                 if (languageVersion >= ScriptTarget.ES6) {
