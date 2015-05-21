@@ -7,10 +7,6 @@
 ////var x: typeof [|DefaultExportedFunction|];
 ////
 ////var y = [|DefaultExportedFunction|]();
-////
-////namespace [|DefaultExportedFunction|] {
-////    var local = 100;
-////}
 
 let ranges = test.ranges()
 for (let range of ranges) {
