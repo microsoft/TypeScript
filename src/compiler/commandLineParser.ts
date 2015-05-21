@@ -396,453 +396,448 @@ module ts {
         }
 
         function getFileNames(): string[] {
-            var exclude = json["exclude"] instanceof Array ? <string[]>json["exclude"] : undefined;
+            let fileNames: string[];
             if (hasProperty(json, "files")) {
-                var fileNames = json["files"] instanceof Array ? <string[]>json["files"] : undefined; 
-                return expandFiles(fileNames, exclude, /*literalFiles*/ false);
+                fileNames = json["files"] instanceof Array ? <string[]>json["files"] : []; 
             }
-            else {
-                var fileNames: string[] = [];
-                var sysFiles = host.readDirectory(basePath, ".ts");
-                for (var i = 0; i < sysFiles.length; i++) {
-                    var name = sysFiles[i];
-                    if (!fileExtensionIs(name, ".d.ts") || !contains(sysFiles, name.substr(0, name.length - 5) + ".ts")) {
-                        fileNames.push(name);
-                    }
-                }
-                
-                if (!exclude) {
-                    return fileNames;
-                }
-
-                return expandFiles(fileNames, exclude, /*literalFiles*/ true);
+            
+            let includeSpecs = json["include"] instanceof Array ? <string[]>json["include"] : undefined;
+            if (!fileNames && !includeSpecs) {
+                includeSpecs = ["**/*.ts"]; 
+            }
+            
+            let excludeSpecs = json["exclude"] instanceof Array ? <string[]>json["exclude"] : undefined;
+            return expandFiles(basePath, fileNames, includeSpecs, excludeSpecs, options, host, errors);
+        }
+    }
+        
+    /**
+      * Expands an array of file specifications.
+      * @param basePath The base path for any relative file specifications.
+      * @param fileNames The literal file names to include.
+      * @param includeSpecs The file specifications to expand.
+      * @param excludeSpecs The file specifications to exclude.
+      * @param options Compiler options.
+      * @param host The host used to resolve files and directories.
+      * @param errors An array for diagnostic reporting.
+      */
+    export function expandFiles(basePath: string, fileNames: string[], includeSpecs: string[], excludeSpecs: string[], options: CompilerOptions, host: ParseConfigHost, errors?: Diagnostic[]): string[] {
+        const wildcardCharacterPattern = /[\*\?\[]/g;
+        const reservedCharacterPattern = /[^\w\-]/g;
+        
+        let output: string[] = [];
+        basePath = normalizePath(basePath);
+        basePath = removeTrailingDirectorySeparator(basePath);
+        
+        let ignoreCase = !host.useCaseSensitiveFileNames;
+        let isExpandingRecursiveDirectory = false;
+        let fileSet: Map<string> = {};
+        let excludePattern: RegExp;
+        
+        // include every literal file
+        if (fileNames) {
+            for (let fileName of fileNames) {
+                let path = getNormalizedAbsolutePath(fileName, basePath);
+                includeFile(path, /*isLiteralFile*/ true);
             }
         }
         
-        /**
-          * Expands an array of file specifications.
-          * @param fileSpecs The file specifications to expand.
-          * @param excludeSpecs Any file specifications to exclude.
-          * @param literalFiles A value indicating whether the fileSpecs array contains only literal file names and not wildcards.
-          */
-        function expandFiles(fileSpecs: string[], excludeSpecs: string[], literalFiles: boolean): string[] {
-            let output: string[] = [];
-            if (!fileSpecs) {
-                return output;
-            }
-
-            let normalizedBasePath = normalizePath(basePath);
-            let ignoreCase = !host.useCaseSensitiveFileNames;
-            let isExpandingRecursiveDirectory = false;
-            let fileSet: StringSet = {};
-            
+        // expand and include the provided files into the file set.
+        if (includeSpecs) {
             // populate the file exclusion pattern
-            let excludePattern = createExcludeRegularExpression(normalizedBasePath, excludeSpecs);
+            excludePattern = createExcludeRegularExpression(basePath, excludeSpecs);
             
-            // expand and include the provided files into the file set.
-            for (let fileSpec of fileSpecs) {
-                let normalizedFileSpec = normalizePath(fileSpec);
-                if (literalFiles) {
-                    normalizedFileSpec = combinePaths(basePath, normalizedFileSpec);
-                    includeFile(normalizedFileSpec);
-                }
-                else {
-                    normalizedFileSpec = removeTrailingDirectorySeparator(normalizedFileSpec);
-                    expandDirectory(normalizedBasePath, normalizedFileSpec, 0);
-                }
+            for (let includeSpec of includeSpecs) {
+                includeSpec = normalizePath(includeSpec);
+                includeSpec = removeTrailingDirectorySeparator(includeSpec);
+                expandFileSpec(basePath, includeSpec, 0, includeSpec.length);
             }
-            
-            return output;
-            
-            /**
-              * Expands a directory with wildcards.
-              * @param basePath The directory to expand.
-              * @param fileSpec The original file specification.
-              * @param start The starting offset in the file specification.
-              */
-            function expandDirectory(basePath: string, fileSpec: string, start: number): ExpandResult {
-                 // find the offset of the next wildcard in the file specification
-                 let offset = indexOfWildcard(fileSpec, start);
-                 if (offset < 0) {
-                     // There were no more wildcards, so process the match if the file exists and was not excluded.
-                     let path = combinePaths(basePath, fileSpec.substring(start));
-                     includeFile(path);
-                     return ExpandResult.Ok;
-                 }
-                 
-                 // find the last directory separator before the wildcard to get the leading path.
-                 let end = fileSpec.lastIndexOf(directorySeparator, offset);
-                 if (end > start) {
-                     // wildcard occurs in a later segment, include remaining path up to wildcard in prefix
-                     basePath = combinePaths(basePath, fileSpec.substring(start, end));
-                     start = end + 1;
-                 }
-                 
-                 // Expand the wildcard portion of the path.
-                 return expandWildcard(basePath, fileSpec, start);
-            }
-
-            /**
-              * Expands a wildcard portion of a file specification.
-              * @param basePath The prefix path.
-              * @param fileSpec The file specification.
-              * @param start The starting offset in the file specification.
-              */
-            function expandWildcard(basePath: string, fileSpec: string, start: number): ExpandResult {
-                // find the offset of the next directory separator to extract the wildcard path segment. 
-                let offset = fileSpec.indexOf(directorySeparator, start);
-                let isEndOfLine = offset < 0;
-                if (isRecursiveDirectoryWildcard(fileSpec, start)) {
-                    // If the path contains only "**", then this is a recursive directory pattern.
-                    if (isEndOfLine) {
-                        // If there is no file specification following the recursive directory pattern
-                        // we cannot match any files, so we will ignore this pattern.
-                        return ExpandResult.Ok;
-                    }
-
-                    // expand the recursive directory pattern
-                    return expandRecursiveDirectory(basePath, fileSpec, offset + 1);
-                }
-                
-                // match the entries in the directory against the wildcard pattern.
-                let entries = host.readDirectoryFlat(basePath);
-                let end = isEndOfLine ? fileSpec.length : offset;
-                let pattern = createRegularExpressionFromWildcard(fileSpec, start, end);
-                for (let entry of entries) {
-                    // skip the entry if it does not match the pattern.
-                    if (!pattern.test(entry)) {
-                        continue;
-                    }
-                    
-                    let path = combinePaths(basePath, entry);
-                    if (isEndOfLine) {
-                        // This wildcard has no further directory to process, so include the file.
-                        includeFile(path);
-                    }
-                    else if (host.directoryExists(path)) {
-                        // If this was a directory, process the directory.
-                        if (expandDirectory(path, fileSpec, offset + 1) === ExpandResult.Error) {
-                            return ExpandResult.Error;
-                        }
-                    }
-                }
-                
+        }
+        
+        return output;
+        
+        /**
+          * Expands a directory with wildcards.
+          * @param basePath The directory to expand.
+          * @param fileSpec The original file specification.
+          * @param start The starting offset in the file specification.
+          * @param end The end offset in the file specification.
+          */
+        function expandFileSpec(basePath: string, fileSpec: string, start: number, end: number): ExpandResult {
+            // Skip expansion if the base path matches an exclude pattern.
+            if (isExcludedPath(basePath)) {
                 return ExpandResult.Ok;
             }
             
-            /**
-              * Expands a `**` recursive directory wildcard.
-              * @param basePath The directory to recursively expand.
-              * @param fileSpec The original file specification.
-              * @param start The starting offset in the file specification.
-              */
-            function expandRecursiveDirectory(basePath: string, fileSpec: string, start: number): ExpandResult {
-                if (isExpandingRecursiveDirectory) {
-                    errors.push(createCompilerDiagnostic(Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, fileSpec))
-                    return ExpandResult.Error;
-                }
-                
-                // expand the non-recursive part of the file specification against the prefix path.
-                isExpandingRecursiveDirectory = true;
-                let result = expandDirectory(basePath, fileSpec, start);
-                isExpandingRecursiveDirectory = false;
-                
-                if (result !== ExpandResult.Error) {
-                    // Recursively expand each subdirectory.
-                    let entries = host.readDirectoryFlat(basePath);
-                    for (let entry of entries) {
-                        let path = combinePaths(basePath, entry);
-                        if (host.directoryExists(path)) {
-                            if (expandRecursiveDirectory(path, fileSpec, start) === ExpandResult.Error) {
-                                result = ExpandResult.Error;
-                                break;
-                            }
-                        }
-                    }
-                }
-                
-                return result;
+            // Find the offset of the next wildcard in the file specification
+            let offset = indexOfWildcard(fileSpec, start);
+            if (offset < 0) {
+                // There were no more wildcards, so include the file.
+                let path = combinePaths(basePath, fileSpec.substring(start));
+                includeFile(path, /*isLiteralFile*/ false);
+                return ExpandResult.Ok;
             }
             
-            /**
-              * Includes a file in a file set.
-              * @param file The file to include.
-              */
-            function includeFile(file: string): void {
-                let key = ignoreCase ? file.toLowerCase() : file;
-                // ignore the file if we've already matched it.
-                if (hasProperty(fileSet, key)) {
-                    return;
+            // Find the last directory separator before the wildcard to get the leading path.
+            offset = fileSpec.lastIndexOf(directorySeparator, offset);
+            if (offset > start) {
+                // The wildcard occurs in a later segment, include remaining path up to 
+                // wildcard in prefix.
+                basePath = combinePaths(basePath, fileSpec.substring(start, offset));
+                
+                // Skip this wildcard path if the base path now matches an exclude pattern.
+                if (isExcludedPath(basePath)) {
+                    return ExpandResult.Ok;
                 }
                 
-                // ignore the file if it matches an exclude pattern
-                if (excludePattern && excludePattern.test(file)) {
-                    return;
-                }
-                
-                // ignore the file if it doesn't exist or is a directory
-                if (!host.fileExists(file) || host.directoryExists(file)) {
-                    return;
-                }
-                
-                // ignore the file if it does not have a supported extension
-                if (!options.allowNonTsExtensions && !hasSupportedFileExtension(file)) {
-                    return;
-                }
-                
-                fileSet[key] = true;
-                output.push(file);
+                start = offset + 1;
             }
             
-            /**
-              * Creates a regular expression from a glob-style wildcard.
-              * @param fileSpec The file specification.
-              * @param start The starting offset in the file specification.
-              * @param end The end offset in the file specification.
-              */
-            function createRegularExpressionFromWildcard(fileSpec: string, start: number, end: number): RegExp {
-                let pattern = createPatternFromWildcard(fileSpec, start, end);
-                return new RegExp("^" + pattern + "$", ignoreCase ? "i" : "");
-            }
+            // Find the offset of the next directory separator to extract the wildcard path segment. 
+            offset = getEndOfPathSegment(fileSpec, start, end);
+            
+            // Check if the current offset is the beginning of a recursive directory pattern.
+            if (isRecursiveDirectoryWildcard(fileSpec, start, offset)) {
+                if (offset >= end) {
+                    // If there is no file specification following the recursive directory pattern
+                    // we cannot match any files, so we will ignore this pattern.
+                    return ExpandResult.Ok;
+                }
 
-            /**
-              * Creates a pattern from a wildcard segment 
-              * @param fileSpec The file specification.
-              * @param start The starting offset in the file specification.
-              * @param end The end offset in the file specification.
-              */
-            function createPatternFromWildcard(fileSpec: string, start: number, end: number): string {
-                let pattern = "";
-                let offset = indexOfWildcard(fileSpec, start);
-                while (offset >= 0 && offset < end) {
-                    if (offset > start) {
-                        // Escape and append the non-wildcard portion to the regular expression
-                        pattern += escapeRegularExpressionText(fileSpec, start, offset);
-                    }
-                    
-                    let charCode = fileSpec.charCodeAt(offset);
-                    if (charCode === CharacterCodes.asterisk) {
-                        // Append a multi-character (zero or more characters) pattern to the regular expression 
-                        pattern += ".*";
-                    }
-                    else if (charCode === CharacterCodes.question) {
-                        // Append a single-character (one character) pattern to the regular expression
-                        pattern += ".";
-                    }
-                    else if (charCode === CharacterCodes.openBracket) {
-                        // Append a character range (one character) pattern to the regular expression
-                        pattern += "[";
-                        
-                        // If the next character is an exclamation token, append a caret (^) to negate the 
-                        // character range and advance the start of the range by one.
-                        start = offset + 1; 
-                        charCode = fileSpec.charCodeAt(start);
-                        if (charCode === CharacterCodes.exclamation) {
-                            pattern += "^";
-                            start++;
-                        }
-                        
-                        // Find the end of the character range. If it can't be found, fix up the range
-                        // to the end of the wildcard
-                        offset = fileSpec.indexOf(']', start);
-                        if (offset < 0 || offset > end) {
-                            offset = end;
-                        }
-                        
-                        // Escape and append the character range
-                        pattern += escapeRegularExpressionText(fileSpec, start, offset);
-                        pattern += "]";
-                    }
-                    
-                    start = offset + 1;
-                    offset = indexOfWildcard(fileSpec, start);
-                }
-                
-                // Escape and append any remaining non-wildcard portion.
-                if (start < end) {
-                    pattern += escapeRegularExpressionText(fileSpec, start, end);
-                }
-                
-                return pattern;
+                // Expand the recursive directory pattern.
+                return expandRecursiveDirectory(basePath, fileSpec, offset + 1, end);
             }
             
-            /**
-              * Creates a regular expression from a glob-style wildcard used to exclude a file.
-              * @param basePath The prefix path 
-              * @param excludeSpecs The file specifications to exclude.
-              */
-            function createExcludeRegularExpression(basePath: string, excludeSpecs: string[]): RegExp {
-                // ignore an empty exclusion list
-                if (!excludeSpecs || excludeSpecs.length === 0) {
-                    return undefined;
+            // Match the entries in the directory against the wildcard pattern.
+            let pattern = createRegularExpressionFromWildcard(fileSpec, start, offset);
+            let entries = host.readDirectoryFlat(basePath);
+            for (let entry of entries) {
+                // Skip the entry if it does not match the pattern.
+                if (!pattern.test(entry)) {
+                    continue;
                 }
                 
-                basePath = escapeRegularExpressionText(basePath, 0, basePath.length);
-                
-                let pattern = "";
-                for (let excludeSpec of excludeSpecs) {
-                    // skip empty entries.
-                    if (!excludeSpec) {
+                let path = combinePaths(basePath, entry);
+                if (offset >= end) {
+                    // If the entry is a declaration file and there is a source file with the
+                    // same name in this directory, skip the file.
+                    if (fileExtensionIs(entry, ".d.ts") && 
+                        contains(entries, entry.substr(0, entry.length - 5) + ".ts")) {
                         continue;
                     }
                     
-                    let normalizedExcludeSpec = normalizePath(excludeSpec);
-                    let excludePattern = createExcludePattern(normalizedExcludeSpec);
-                    if (excludePattern) {
-                        if (pattern) {
-                            pattern += "|";
-                        }
-                        
-                        pattern += "(" + combinePaths(basePath, excludePattern) + "($|/.*))";
+                    // This wildcard has no further directory to process, so include the file.
+                    includeFile(path, /*isLiteralFile*/ false);
+                }
+                else if (host.directoryExists(path)) {
+                    // If this was a directory, process the directory.
+                    if (expandFileSpec(path, fileSpec, offset + 1, end) === ExpandResult.Error) {
+                        return ExpandResult.Error;
                     }
                 }
-                
-                if (pattern) {
-                    return new RegExp("^(" + pattern + ")$", ignoreCase ? "i" : "");
+            }
+            
+            return ExpandResult.Ok;
+        }
+        
+        /**
+          * Expands a `**` recursive directory wildcard.
+          * @param basePath The directory to recursively expand.
+          * @param fileSpec The original file specification.
+          * @param start The starting offset in the file specification.
+          * @param end The end offset in the file specification.
+          */
+        function expandRecursiveDirectory(basePath: string, fileSpec: string, start: number, end: number): ExpandResult {
+            if (isExpandingRecursiveDirectory) {
+                if (errors) {
+                    errors.push(createCompilerDiagnostic(Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, fileSpec))
+                }
+                return ExpandResult.Error;
+            }
+            
+            // expand the non-recursive part of the file specification against the prefix path.
+            isExpandingRecursiveDirectory = true;
+            let result = expandFileSpec(basePath, fileSpec, start, end);
+            isExpandingRecursiveDirectory = false;
+            
+            if (result !== ExpandResult.Error) {
+                // Recursively expand each subdirectory.
+                let entries = host.readDirectoryFlat(basePath);
+                for (let entry of entries) {
+                    let path = combinePaths(basePath, entry);
+                    if (host.directoryExists(path)) {
+                        if (expandRecursiveDirectory(path, fileSpec, start, end) === ExpandResult.Error) {
+                            result = ExpandResult.Error;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            return result;
+        }
+        
+        /**
+          * Includes a file in a file set.
+          * @param file The file to include.
+          * @param isLiteralFile A value indicating whether the file to be added is 
+          *                      a literal file, or the result of matching a file specification.
+          */
+        function includeFile(file: string, isLiteralFile: boolean): void {
+            if (!isLiteralFile) {
+                // Ignore the file if it should be excluded
+                if (isExcludedPath(file)) {
+                    return;
                 }
                 
+                // Ignore the file if it doesn't exist.
+                if (!host.fileExists(file)) {
+                    return;
+                }
+                
+                // Ignore the file if it does not have a supported extension.
+                if (!options.allowNonTsExtensions && !hasSupportedFileExtension(file)) {
+                    return;
+                }
+            }
+            
+            // Ignore the file if we've already included it.
+            let key = ignoreCase ? file.toLowerCase() : file;
+            if (hasProperty(fileSet, key)) {
+                return;
+            }
+            
+            fileSet[key] = file;
+            output.push(file);
+        }
+        
+        /**
+          * Determines whether a path should be excluded. 
+          */
+        function isExcludedPath(path: string) {
+            return excludePattern ? excludePattern.test(path) : false;
+        }
+        
+        /**
+          * Creates a regular expression from a glob-style wildcard.
+          * @param fileSpec The file specification.
+          * @param start The starting offset in the file specification.
+          * @param end The end offset in the file specification.
+          */
+        function createRegularExpressionFromWildcard(fileSpec: string, start: number, end: number): RegExp {
+            let pattern = createPatternFromWildcard(fileSpec, start, end);
+            return new RegExp("^" + pattern + "$", ignoreCase ? "i" : "");
+        }
+
+        /**
+          * Creates a pattern from a wildcard segment 
+          * @param fileSpec The file specification.
+          * @param start The starting offset in the file specification.
+          * @param end The end offset in the file specification.
+          */
+        function createPatternFromWildcard(fileSpec: string, start: number, end: number): string {
+            let pattern = "";
+            let offset = indexOfWildcard(fileSpec, start);
+            while (offset >= 0 && offset < end) {
+                if (offset > start) {
+                    // Escape and append the non-wildcard portion to the regular expression
+                    pattern += escapeRegularExpressionText(fileSpec, start, offset);
+                }
+                
+                let charCode = fileSpec.charCodeAt(offset);
+                if (charCode === CharacterCodes.asterisk) {
+                    // Append a multi-character (zero or more characters) pattern to the regular expression 
+                    pattern += "[^/]*";
+                }
+                else if (charCode === CharacterCodes.question) {
+                    // Append a single-character (one character) pattern to the regular expression
+                    pattern += "[^/]";
+                }
+                else if (charCode === CharacterCodes.openBracket) {
+                    // Append a character range (one character) pattern to the regular expression
+                    pattern += "(?!/)[";
+                    
+                    // If the next character is an exclamation token, append a caret (^) to negate the 
+                    // character range and advance the start of the range by one.
+                    start = offset + 1; 
+                    charCode = fileSpec.charCodeAt(start);
+                    if (charCode === CharacterCodes.exclamation) {
+                        pattern += "^";
+                        start++;
+                    }
+                    
+                    // Find the end of the character range. If it can't be found, fix up the range
+                    // to the end of the wildcard
+                    offset = fileSpec.indexOf(']', start);
+                    if (offset < 0 || offset > end) {
+                        offset = end;
+                    }
+                    
+                    // Escape and append the character range
+                    pattern += escapeRegularExpressionText(fileSpec, start, offset);
+                    pattern += "]";
+                }
+                
+                start = offset + 1;
+                offset = indexOfWildcard(fileSpec, start);
+            }
+            
+            // Escape and append any remaining non-wildcard portion.
+            if (start < end) {
+                pattern += escapeRegularExpressionText(fileSpec, start, end);
+            }
+            
+            return pattern;
+        }
+        
+        /**
+          * Creates a regular expression from a glob-style wildcard used to exclude a file.
+          * @param basePath The prefix path 
+          * @param excludeSpecs The file specifications to exclude.
+          */
+        function createExcludeRegularExpression(basePath: string, excludeSpecs: string[]): RegExp {
+            // Ignore an empty exclusion list
+            if (!excludeSpecs || excludeSpecs.length === 0) {
                 return undefined;
             }
+            
+            basePath = escapeRegularExpressionText(basePath, 0, basePath.length);
+            
+            let pattern = "";
+            for (let excludeSpec of excludeSpecs) {
+                let excludePattern = createExcludePattern(basePath, excludeSpec);
+                if (excludePattern) {
+                    if (pattern) {
+                        pattern += "|";
+                    }
+                    
+                    pattern += "(" + excludePattern + ")";
+                }
+            }
+            
+            if (pattern) {
+                return new RegExp("^(" + pattern + ")($|/)", ignoreCase ? "i" : "");
+            }
+            
+            return undefined;
+        }
 
-            /**
-              * Creates a pattern for the excludePattern regular expression used to exclude a file.
-              * @param excludeSpec The file specification to exclude. 
-              */
-            function createExcludePattern(excludeSpec: string): string {
-                let hasRecursiveDirectoryWildcard = false;
-                let pattern = "";
-                let start = 0;
-                let end = excludeSpec.length;
-                let offset = excludeSpec.indexOf(directorySeparator, start);
-                while (offset >= 0 && offset < end) {
-                    if (isRecursiveDirectoryWildcard(excludeSpec, start)) {
-                        if (hasRecursiveDirectoryWildcard) {
+        /**
+          * Creates a pattern for used to exclude a file.
+          * @param excludeSpec The file specification to exclude. 
+          */
+        function createExcludePattern(basePath: string, excludeSpec: string): string {
+            if (!excludeSpec) {
+                return undefined;
+            }
+            
+            excludeSpec = normalizePath(excludeSpec);
+            excludeSpec = removeTrailingDirectorySeparator(excludeSpec);
+
+            let pattern = isRootedDiskPath(excludeSpec) ? "" : basePath;
+            let hasRecursiveDirectoryWildcard = false;
+            let start = 0;
+            let end = excludeSpec.length;
+            let offset = getEndOfPathSegment(excludeSpec, start, end);
+            while (start < offset) {
+                if (isRecursiveDirectoryWildcard(excludeSpec, start, offset)) {
+                    if (hasRecursiveDirectoryWildcard) {
+                        if (errors) {
                             errors.push(createCompilerDiagnostic(Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, excludeSpec));
-                            return undefined;
                         }
-                        
-                        hasRecursiveDirectoryWildcard = true;
+                        return undefined;
                     }
                     
-                    if (offset > start) {
-                        pattern += createPatternFromWildcard(excludeSpec, start, offset);
-                    }
+                    // As an optimization, if the recursive directory is the last
+                    // wildcard, or is followed by only `*` or `*.ts`, don't add the 
+                    // remaining pattern and exit the loop.
+                    if (canElideRecursiveDirectorySegment(excludeSpec, offset, end)) {
+                        break; 
+                    } 
                     
-                    pattern += excludeSpec.charAt(offset);
-                    start = offset + 1;
-                    offset = excludeSpec.indexOf(directorySeparator, start);
+                    hasRecursiveDirectoryWildcard = true;
+                    pattern += "(/.+)?";;
+                }
+                else {
+                    if (pattern) {
+                        pattern += directorySeparator; 
+                    }
+
+                    pattern += createPatternFromWildcard(excludeSpec, start, offset);
                 }
                 
-                if (start < end) {
-                    pattern += createPatternFromWildcard(excludeSpec, start, end);
-                }
-                
-                return pattern;
+                start = offset + 1;
+                offset = getEndOfPathSegment(excludeSpec, start, end);
             }
             
-            /**
-              * Escape regular expression reserved tokens.
-              * @param text The text to escape.
-              */
-            function escapeRegularExpressionText(text: string, start: number, end: number) {
-                let offset = indexOfReservedCharacter(text, start);
-                if (offset < 0) {
-                    return text;
-                }
-                
-                let escaped: string = "";
-                while (offset >= 0 && offset < end) {
-                    if (offset > start) {
-                        escaped += text.substring(start, offset);
-                    }
-                    
-                    escaped += "\\";
-                    escaped += text.charAt(offset);
-                    start = offset + 1;
-                    offset = indexOfReservedCharacter(text, start);
-                }
-                
-                if (start < end) {
-                    escaped += text.substring(start, end);
-                }
-                
-                return escaped;
+            return pattern;
+        }
+        
+        function canElideRecursiveDirectorySegment(excludeSpec: string, offset: number, end: number) {
+            if (offset === end || offset + 1 === end) {
+                return true;
             }
             
-            /**
-              * Determines whether the wildcard at the current offset is a recursive directory wildcard.
-              * @param fileSpec The file specification.
-              * @param offset The offset into the file specification. 
-              */
-            function isRecursiveDirectoryWildcard(fileSpec: string, offset: number) {
-                if (offset + 2 <= fileSpec.length &&
-                    fileSpec.charCodeAt(offset) === CharacterCodes.asterisk &&
-                    fileSpec.charCodeAt(offset + 1) === CharacterCodes.asterisk &&
-                    isDirectorySeparatorOrEndOfLine(fileSpec, offset + 2)) {
+            return canElideWildcardSegment(excludeSpec, offset + 1, end);
+        }
+        
+        function canElideWildcardSegment(excludeSpec: string, start: number, end: number) {
+            let charCode = excludeSpec.charCodeAt(start);
+            if (charCode === CharacterCodes.asterisk) {
+                if (start + 1 === end) {
                     return true;
-                } 
-                
-                return false;
-            }
-            
-            /**
-              * Determines whether the provided offset points to a directory separator or the end of the line. 
-              * @param fileSpec The file specification.
-              * @param offset The offset into the file specification. 
-              */
-            function isDirectorySeparatorOrEndOfLine(fileSpec: string, offset: number) {
-                return offset === fileSpec.length || 
-                    (offset < fileSpec.length && fileSpec.charCodeAt(offset) === CharacterCodes.slash);
-            }
-            
-            /**
-              * Gets the index of the next wildcard character in a file specification.
-              * @param fileSpec The file specification.
-              * @param start The offset at which to start the search.
-              */
-            function indexOfWildcard(fileSpec: string, start: number): number {
-                const len = fileSpec.length;
-                for (let i = start; i < len; ++i) {
-                    let charCode = fileSpec.charCodeAt(i);
-                    if (charCode === CharacterCodes.asterisk ||
-                        charCode === CharacterCodes.question ||
-                        charCode === CharacterCodes.openBracket) {
-                        return i;
-                    }
                 }
                 
-                return -1;
-            }
-            
-            /**
-              * Gets the index of the next reserved character in a regular expression.
-              * @param text The text to search.
-              * @param start The offset at which to start the search. 
-              */
-            function indexOfReservedCharacter(text: string, start: number) {
-                const len = text.length;
-                for (let i = start; i < len; ++i) {
-                    let charCode = text.charCodeAt(i);
-                    switch (charCode) {
-                        case CharacterCodes.question:
-                        case CharacterCodes.asterisk:
-                        case CharacterCodes.plus:
-                        case CharacterCodes.dot:
-                        case CharacterCodes.caret:
-                        case CharacterCodes.$:
-                        case CharacterCodes.openParen:
-                        case CharacterCodes.closeParen:
-                        case CharacterCodes.openBrace:
-                        case CharacterCodes.closeBrace:
-                        case CharacterCodes.openBracket:
-                        case CharacterCodes.closeBracket:
-                        case CharacterCodes.bar:
-                            return i;
-                    }
+                if (start + 4 === end && 
+                    !options.allowNonTsExtensions && 
+                    fileExtensionIs(excludeSpec, ".ts")) {
+                    return true;
                 }
-                
-                return -1;
             }
+            return false;
+        }
+        
+        /**
+          * Escape regular expression reserved tokens.
+          * @param fileSpec The file specification.
+          * @param start The starting offset in the file specification. 
+          * @param end The ending offset in the file specification.
+          */
+        function escapeRegularExpressionText(text: string, start: number, end: number) {
+            return text.substring(start, end).replace(reservedCharacterPattern, "\\$&");
+        }
+        
+        /**
+          * Determines whether the wildcard at the current offset is a recursive directory wildcard.  
+          * @param fileSpec The file specification.  
+          * @param start The starting offset in the file specification. 
+          * @param end The ending offset in the file specification.
+          */
+        function isRecursiveDirectoryWildcard(fileSpec: string, start: number, end: number) {
+            return end - start === 2 &&
+                fileSpec.charCodeAt(start) === CharacterCodes.asterisk &&
+                fileSpec.charCodeAt(start + 1) === CharacterCodes.asterisk;
+        }  
+        
+        
+        /**
+          * Gets the index of the next wildcard character in a file specification.
+          * @param fileSpec The file specification.
+          * @param start The starting offset in the file specification.
+          */
+        function indexOfWildcard(fileSpec: string, start: number): number {
+            wildcardCharacterPattern.lastIndex = start;
+            wildcardCharacterPattern.test(fileSpec);
+            return wildcardCharacterPattern.lastIndex - 1;
+        }
+        
+        function getEndOfPathSegment(fileSpec: string, start: number, end: number): number {
+            if (start >= end) {
+                return end;
+            }
+
+            let offset = fileSpec.indexOf(directorySeparator, start);
+            return offset < 0 || offset > end ? end : offset;
         }
     }
 }

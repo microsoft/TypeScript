@@ -681,10 +681,12 @@ module ts {
         return path;
     }
 
-    export function compareNormalizedPaths(a: string, b: string, currentDirectory: string, ignoreCase?: boolean) {
+    export function comparePaths(a: string, b: string, currentDirectory: string, ignoreCase?: boolean) {
         if (a === b) return Comparison.EqualTo;
         if (a === undefined) return Comparison.LessThan;
         if (b === undefined) return Comparison.GreaterThan;
+        a = removeTrailingDirectorySeparator(a);
+        b = removeTrailingDirectorySeparator(b);
         let aComponents = getNormalizedPathComponents(a, currentDirectory);
         let bComponents = getNormalizedPathComponents(b, currentDirectory);
         let sharedLength = Math.min(aComponents.length, bComponents.length);
@@ -692,7 +694,7 @@ module ts {
             let result = compareStrings(aComponents[i], bComponents[i], ignoreCase);
             if (result) return result;
         }
-        
+
         return compareValues(aComponents.length, bComponents.length);
     }
     
