@@ -2217,6 +2217,43 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     decreaseIndent();
                 }
             }
+            function emitDownlevelIterationEmbeddedStatement(node: Node) {
+                write(" (function() ");
+                if (node.kind === SyntaxKind.Block) {
+                    emit(<Block>node);
+                }
+                else {
+                    write("{");
+                    increaseIndent();
+                    writeLine();
+                    emit(node);
+                    decreaseIndent();
+                    writeLine();
+                    write("}");
+                }
+            }
+            function emitIterationEmbeddedStatement(node: IterationStatement) {
+                if (languageVersion >= ScriptTarget.ES6) {
+                    emitEmbeddedStatement(node.statement);
+                    return;
+                }
+                
+                let needsDownlevelEmit = false;
+                
+                for (const declaration of node.iterationScopedDeclarations) {
+                    if (declaration.blockScopedBindingInLoop) {
+                        needsDownlevelEmit = true;
+                        break;
+                    }
+                }
+                
+                if (!needsDownlevelEmit) {
+                    emitEmbeddedStatement(node.statement);
+                }
+                else {
+                    emitDownlevelIterationEmbeddedStatement(node.statement);
+                }
+            }
 
             function emitExpressionStatement(node: ExpressionStatement) {
                 emitParenthesizedIf(node.expression, /*parenthesized*/ node.expression.kind === SyntaxKind.ArrowFunction);
