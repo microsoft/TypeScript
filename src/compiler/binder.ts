@@ -599,6 +599,7 @@ module ts {
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:
                 case SyntaxKind.WhileStatement:
+                case SyntaxKind.DoStatement:
                     bindChildren(node, 0, /*isBlockScopeContainer*/ true, /*isIteration*/ true);
                     break;
                 case SyntaxKind.CatchClause:
