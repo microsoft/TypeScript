@@ -891,7 +891,7 @@ module FourSlash {
                 }
 
                 if (ranges.length !== references.length) {
-                    this.raiseError(this.assertionMessage("Rename locations", references.length, ranges.length));
+                    this.raiseError("Rename location count does not match result.\n\nExpected: " + JSON.stringify(ranges) + "\n\nActual:" + JSON.stringify(references));
                 }
 
                 ranges = ranges.sort((r1, r2) => r1.start - r2.start);
@@ -904,9 +904,7 @@ module FourSlash {
                     if (reference.textSpan.start !== range.start ||
                         ts.textSpanEnd(reference.textSpan) !== range.end) {
 
-                        this.raiseError(this.assertionMessage("Rename location",
-                            "[" + reference.textSpan.start + "," + ts.textSpanEnd(reference.textSpan) + ")",
-                            "[" + range.start + "," + range.end + ")"));
+                        this.raiseError("Rename location results do not match.\n\nExpected: " + JSON.stringify(ranges) + "\n\nActual:" + JSON.stringify(references));
                     }
                 }
             }
