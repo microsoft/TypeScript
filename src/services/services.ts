@@ -4915,7 +4915,6 @@ module ts {
                 return undefined;
             }
 
-
             let declarations = symbol.declarations;
 
             // The symbol was an internal symbol and does not have a declaration e.g. undefined symbol
@@ -4923,17 +4922,13 @@ module ts {
                 return undefined;
             }
 
-            // Try to get the local symbol if we're dealing with an 'export default'
-            // since that symbol has the "true" name and we need to account for other declarations.
-            let localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
-
             let result: ReferencedSymbol[];
 
             // Compute the meaning from the location and the symbol it references
             let searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), declarations);
 
             // Get the text to search for, we need to normalize it as external module names will have quotes
-            let declaredName = getDeclaredName(localExportDefaultSymbol || symbol, node);
+            let declaredName = getDeclaredName(typeChecker, symbol, node);
 
             // Try to get the smallest valid scope that we can limit our search to;
             // otherwise we'll need to search globally (i.e. include each file).
@@ -4947,7 +4942,7 @@ module ts {
                 getReferencesInNode(scope, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
             }
             else {
-                let internedName = getInternedName(localExportDefaultSymbol || symbol, node, declarations)
+                let internedName = getInternedName(symbol, node, declarations)
                 for (let sourceFile of sourceFiles) {
                     cancellationToken.throwIfCancellationRequested();
 
@@ -4980,28 +4975,10 @@ module ts {
                 };
             }
 
-            function isImportOrExportSpecifierName(location: Node): boolean {
-                return location.parent &&
-                    (location.parent.kind === SyntaxKind.ImportSpecifier || location.parent.kind === SyntaxKind.ExportSpecifier) &&
-                    (<ImportOrExportSpecifier>location.parent).propertyName === location;
-            }
-
             function isImportOrExportSpecifierImportSymbol(symbol: Symbol) {
                 return (symbol.flags & SymbolFlags.Alias) && forEach(symbol.declarations, declaration => {
                     return declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ExportSpecifier;
                 });
-            }
-
-            function getDeclaredName(symbol: Symbol, location: Node) {
-                // If this is an export or import specifier it could have been renamed using the 'as' syntax.
-                // If so we want to search for whatever is under the cursor.
-                if (isImportOrExportSpecifierName(location)) {
-                    return location.getText();
-                }
-
-                let name = typeChecker.symbolToString(symbol);
-
-                return stripQuotes(name);
             }
 
             function getInternedName(symbol: Symbol, location: Node, declarations: Declaration[]) {
@@ -5023,15 +5000,12 @@ module ts {
                     }
                 }
 
-                return stripQuotes(symbol.name);
-            }
+                // Try to get the local symbol if we're dealing with an 'export default'
+                // since that symbol has the "true" name.
+                let localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
+                symbol = localExportDefaultSymbol || symbol;
 
-            function stripQuotes(name: string) {
-                let length = name.length;
-                if (length >= 2 && name.charCodeAt(0) === CharacterCodes.doubleQuote && name.charCodeAt(length - 1) === CharacterCodes.doubleQuote) {
-                    return name.substring(1, length - 1);
-                };
-                return name;
+                return stripQuotes(symbol.name);
             }
 
             function getSymbolScope(symbol: Symbol): Node {
@@ -6647,12 +6621,13 @@ module ts {
                             }
                         }
 
+                        let displayName = getDeclaredName(typeChecker, symbol, node);
                         let kind = getSymbolKind(symbol, node);
                         if (kind) {
                             return {
                                 canRename: true,
                                 localizedErrorMessage: undefined,
-                                displayName: symbol.name,
+                                displayName,
                                 fullDisplayName: typeChecker.getFullyQualifiedName(symbol),
                                 kind: kind,
                                 kindModifiers: getSymbolModifiers(symbol),
