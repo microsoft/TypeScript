@@ -168,7 +168,6 @@ var m1;
         }
         m1_M1_public.f1 = f1;
         m1_M1_public.v1 = c1;
-        m1_M1_public.v2;
     })(m1_M1_public = m1.m1_M1_public || (m1.m1_M1_public = {}));
     var m1_M2_private;
     (function (m1_M2_private) {
@@ -183,7 +182,6 @@ var m1;
         }
         m1_M2_private.f1 = f1;
         m1_M2_private.v1 = c1;
-        m1_M2_private.v2;
     })(m1_M2_private || (m1_M2_private = {}));
     //export declare module "m1_M3_public" {
     //    export function f1();
@@ -251,7 +249,6 @@ var glo_M1_public;
     }
     glo_M1_public.f1 = f1;
     glo_M1_public.v1 = c1;
-    glo_M1_public.v2;
 })(glo_M1_public || (glo_M1_public = {}));
 var m2;
 (function (m2) {

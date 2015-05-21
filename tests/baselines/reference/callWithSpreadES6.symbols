@@ -158,9 +158,3 @@ class D extends C {
     }
 }
 
-// Only supported in when target is ES6
-var c = new C(1, 2, ...a);
->c : Symbol(c, Decl(callWithSpreadES6.ts, 52, 3))
->C : Symbol(C, Decl(callWithSpreadES6.ts, 29, 40))
->a : Symbol(a, Decl(callWithSpreadES6.ts, 8, 3))
-

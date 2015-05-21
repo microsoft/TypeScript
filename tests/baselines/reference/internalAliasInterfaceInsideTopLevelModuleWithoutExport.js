@@ -10,7 +10,6 @@ export var x: b;
 
 //// [internalAliasInterfaceInsideTopLevelModuleWithoutExport.js]
 define(["require", "exports"], function (require, exports) {
-    exports.x;
 });
 
 

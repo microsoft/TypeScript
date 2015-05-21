@@ -47,7 +47,6 @@ define(["require", "exports", "declFileExportImportChain2_b"], function (require
 });
 //// [declFileExportImportChain2_d.js]
 define(["require", "exports"], function (require, exports) {
-    exports.x;
 });
 
 

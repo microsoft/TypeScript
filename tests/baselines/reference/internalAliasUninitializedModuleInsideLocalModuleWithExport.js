@@ -16,7 +16,6 @@ export module c {
 //// [internalAliasUninitializedModuleInsideLocalModuleWithExport.js]
 var c;
 (function (c) {
-    c.x;
     c.x.foo();
 })(c = exports.c || (exports.c = {}));
 
