@@ -4881,20 +4881,25 @@ module ts {
                 return undefined;
             }
 
+
             let declarations = symbol.declarations;
 
-            // The symbol was an internal symbol and does not have a declaration e.g.undefined symbol
+            // The symbol was an internal symbol and does not have a declaration e.g. undefined symbol
             if (!declarations || !declarations.length) {
                 return undefined;
             }
+
+            // Try to get the local symbol if we're dealing with an 'export default'
+            // since that symbol has the "true" name and we need to account for other declarations.
+            let localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
 
             let result: ReferencedSymbol[];
 
             // Compute the meaning from the location and the symbol it references
             let searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), declarations);
 
-            // Get the text to search for, we need to normalize it as external module names will have quote
-            let declaredName = getDeclaredName(symbol, node);
+            // Get the text to search for, we need to normalize it as external module names will have quotes
+            let declaredName = getDeclaredName(localExportDefaultSymbol || symbol, node);
 
             // Try to get the smallest valid scope that we can limit our search to;
             // otherwise we'll need to search globally (i.e. include each file).
@@ -4908,7 +4913,7 @@ module ts {
                 getReferencesInNode(scope, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
             }
             else {
-                let internedName = getInternedName(symbol, node, declarations)
+                let internedName = getInternedName(localExportDefaultSymbol || symbol, node, declarations)
                 for (let sourceFile of sourceFiles) {
                     cancellationToken.throwIfCancellationRequested();
 
@@ -4954,9 +4959,8 @@ module ts {
             }
 
             function getDeclaredName(symbol: Symbol, location: Node) {
-                // If this is an export or import specifier it could have been renamed using the as syntax.
-                // if so we want to search for whatever under the cursor, the symbol is pointing to the alias (name)
-                // so check for the propertyName.
+                // If this is an export or import specifier it could have been renamed using the 'as' syntax.
+                // If so we want to search for whatever is under the cursor.
                 if (isImportOrExportSpecifierName(location)) {
                     return location.getText();
                 }
@@ -4966,10 +4970,9 @@ module ts {
                 return stripQuotes(name);
             }
 
-            function getInternedName(symbol: Symbol, location: Node, declarations: Declaration[]): string {
-                // If this is an export or import specifier it could have been renamed using the as syntax.
-                // if so we want to search for whatever under the cursor, the symbol is pointing to the alias (name)
-                // so check for the propertyName.
+            function getInternedName(symbol: Symbol, location: Node, declarations: Declaration[]) {
+                // If this is an export or import specifier it could have been renamed using the 'as' syntax.
+                // If so we want to search for whatever under the cursor.
                 if (isImportOrExportSpecifierName(location)) {
                     return location.getText();
                 }
@@ -4980,18 +4983,13 @@ module ts {
                 let functionExpression: FunctionExpression;
                 if (symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.FunctionExpression) {
                     functionExpression = <FunctionExpression>symbol.valueDeclaration;
+
+                    if (functionExpression.name) {
+                        return functionExpression.name.text;
+                    }
                 }
 
-                // When a name gets interned into a SourceFile's 'identifiers' Map,
-                // its name is escaped and stored in the same way its symbol name/identifier
-                // name should be stored. Function expressions, however, are a special case,
-                // because despite sometimes having a name, the binder unconditionally binds them
-                // to a symbol with the name "__function".
-                let name = functionExpression && functionExpression.name
-                    ? functionExpression.name.text
-                    : symbol.name;
-
-                return stripQuotes(name);
+                return stripQuotes(symbol.name);
             }
 
             function stripQuotes(name: string) {
