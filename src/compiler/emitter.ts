@@ -2282,7 +2282,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
             function emitDoStatement(node: DoStatement) {
                 write("do");
-                emitEmbeddedStatement(node.statement);
+                emitIterationEmbeddedStatement(node);
                 if (node.statement.kind === SyntaxKind.Block) {
                     write(" ");
                 }
@@ -2298,7 +2298,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 write("while (");
                 emit(node.expression);
                 write(")");
-                emitEmbeddedStatement(node.statement);
+                emitIterationEmbeddedStatement(node);
             }
 
             /**
@@ -2385,7 +2385,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 write(";");
                 emitOptional(" ", node.incrementor);
                 write(")");
-                emitEmbeddedStatement(node.statement);
+                emitIterationEmbeddedStatement(node);
             }
 
             function emitForInOrForOfStatement(node: ForInStatement | ForOfStatement) {
@@ -2415,7 +2415,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
                 emit(node.expression);
                 emitToken(SyntaxKind.CloseParenToken, node.expression.end);
-                emitEmbeddedStatement(node.statement);
+                emitIterationEmbeddedStatement(node);
             }
 
             function emitDownLevelForOfStatement(node: ForOfStatement) {
