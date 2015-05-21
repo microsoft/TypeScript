@@ -11,4 +11,4 @@
 ////var y = new /**/[|DefaultExportedClass|];
 
 goTo.marker();
-verify.renameInfoSucceeded("DefaultExportedClass", "DefaultExportedClass");
+verify.renameInfoSucceeded("DefaultExportedClass");

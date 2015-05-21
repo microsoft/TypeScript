@@ -12,4 +12,4 @@
 ////var y = DefaultExportedFunction();
 
 goTo.marker();
-verify.renameInfoSucceeded("DefaultExportedFunction", "DefaultExportedFunction");
+verify.renameInfoSucceeded("DefaultExportedFunction");
