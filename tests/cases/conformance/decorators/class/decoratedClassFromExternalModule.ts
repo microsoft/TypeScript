@@ -1,6 +1,6 @@
 // @target: es6
 // @Filename: decorated.ts
-function decorate() { }
+function decorate(target: any) { }
 
 @decorate
 export default class Decorated { }

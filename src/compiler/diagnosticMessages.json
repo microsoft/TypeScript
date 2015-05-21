@@ -683,6 +683,14 @@
         "category": "Error",
         "code": 1218
     },
+    "The return type of a {0} decorator function must be either 'void' or 'any'.": {
+        "category": "Error",
+        "code": 1219
+    },
+    "Invalid expression for {0} decorator.": {
+        "category": "Error",
+        "code": 1220
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

@@ -5,7 +5,7 @@ function func(s: string): void {
 }
 
 class A {
-    @(x => {
+    @((x, p) => {
         var a = 3;
         func(a);
         return x; 

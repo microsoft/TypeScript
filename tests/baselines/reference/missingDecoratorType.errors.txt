@@ -1,7 +1,17 @@
-error TS2318: Cannot find global type 'ClassDecorator'.
+error TS2318: Cannot find global type 'TypedPropertyDescriptor'.
 
 
-!!! error TS2318: Cannot find global type 'ClassDecorator'.
+!!! error TS2318: Cannot find global type 'TypedPropertyDescriptor'.
+==== tests/cases/conformance/decorators/b.ts (0 errors) ====
+    /// <reference path="a.ts" />
+    declare function dec(t, k, d);
+    
+    class C {
+        @dec
+        method() {}
+    }
+    
+    
 ==== tests/cases/conformance/decorators/a.ts (0 errors) ====
     
     interface Object { }
@@ -12,12 +22,4 @@ error TS2318: Cannot find global type 'ClassDecorator'.
     interface Function { }
     interface RegExp { }
     interface IArguments { }
-    
-==== tests/cases/conformance/decorators/b.ts (0 errors) ====
-    declare var dec: any;
-    
-    @dec
-    class C {
-    }
-    
     

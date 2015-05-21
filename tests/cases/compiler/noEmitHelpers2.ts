@@ -2,7 +2,7 @@
 // @emitdecoratormetadata: true
 // @target: es5
 
-function decorator() { }
+declare var decorator: any;
 
 @decorator
 class A {

@@ -12,10 +12,12 @@ interface RegExp { }
 interface IArguments { }
 
 //// [b.ts]
-declare var dec: any;
+/// <reference path="a.ts" />
+declare function dec(t, k, d);
 
-@dec
 class C {
+    @dec
+    method() {}
 }
 
 
@@ -30,11 +32,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
         case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
     }
 };
+/// <reference path="a.ts" />
 var C = (function () {
     function C() {
     }
-    C = __decorate([
-        dec
-    ], C);
+    C.prototype.method = function () { };
+    Object.defineProperty(C.prototype, "method",
+        __decorate([
+            dec
+        ], C.prototype, "method", Object.getOwnPropertyDescriptor(C.prototype, "method")));
     return C;
 })();
