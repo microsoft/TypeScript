@@ -5536,7 +5536,6 @@ module ts {
                 if (isIterationStatement(current, /*lookInLabeledStatements*/ false)) {
                     if (inFunction) {
                         symbol.valueDeclaration.blockScopedBindingInLoop = true;
-                        grammarErrorOnFirstToken(current, Diagnostics.Loop_contains_block_scoped_variable_0_referenced_by_a_function_in_the_loop_This_is_only_supported_in_ECMAScript_6_or_higher, declarationNameToString(node));
                     }
                     // mark value declaration so during emit they can have a special handling
                     getNodeLinks(<VariableDeclaration>symbol.valueDeclaration).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
