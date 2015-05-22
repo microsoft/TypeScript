@@ -2223,7 +2223,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
             }
             
-            function emitIteration<T extends IterationStatement>(node: T, headDeclarations: Declaration[], emitHead: (node: T) => void, emitBody?: (node: T) => void, emitFooter?: (node: T, downlevel: boolean) => void) {
+            function emitIteration<T extends IterationStatement>(node: T, headDeclarations: Declaration[], emitHead: (node: T) => void, emitBody?: (node: T, downlevel: boolean) => void, emitFooter?: (node: T, downlevel: boolean) => void) {
                 let needsDownlevelEmit = false;
                 const closureVariables: Identifier[] = [];
                 
@@ -2248,7 +2248,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write(") ");
                     
                     if (emitBody) {
-                        emitBody(node);
+                        emitBody(node, true);
                     } else {
                         emitEmbeddedStatement(node.statement, true);
                     }
@@ -2270,7 +2270,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     emitHead(node);
                     
                     if (emitBody) {
-                        emitBody(node);
+                        emitBody(node, false);
                     } else {
                         emitEmbeddedStatement(node.statement);
                     }
@@ -2468,7 +2468,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 emitIteration(node, variables, emitForInOrForOfStatementHead);
             }
 
-            function emitDownLevelForOfStatement(node: ForOfStatement) {
+            function emitDownLevelForOfStatementHead(node: ForOfStatement) {
                 // The following ES6 code:
                 //
                 //    for (let v of expr) { }
@@ -2597,7 +2597,14 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
                 emitEnd(node.initializer);
                 write(";");
-
+            }
+            
+            function emitDownLevelForOfStatementBody(node: ForOfStatement, isDownLevelLoopFunction: boolean) {
+                if (isDownLevelLoopFunction) {
+                    emitEmbeddedStatement(node.statement, true);
+                    return;
+                }
+                
                 if (node.statement.kind === SyntaxKind.Block) {
                     emitLines((<Block>node.statement).statements);
                 }
@@ -2605,10 +2612,20 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     writeLine();
                     emit(node.statement);
                 }
-
+            }
+            
+            function emitDownLevelForOfStatementFooter(node: ForOfStatement) {
                 writeLine();
                 decreaseIndent();
                 write("}");
+            }
+            
+            function emitDownLevelForOfStatement(node: ForOfStatement) {
+                let variables: Declaration[] = [];
+                if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
+                    variables = (<VariableDeclarationList> node.initializer).declarations;
+                }
+                emitIteration(node, variables, emitDownLevelForOfStatementHead, emitDownLevelForOfStatementBody, emitDownLevelForOfStatementFooter);
             }
 
             function emitBreakOrContinueStatement(node: BreakOrContinueStatement) {
