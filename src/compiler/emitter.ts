@@ -2223,7 +2223,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
             }
             
-            function emitIteration<T extends IterationStatement>(node: T, headDeclarations: Declaration[], emitHead: (node: T) => void, emitBody?: (node: T) => void, emitFooter?: (node: T) => void) {
+            function emitIteration<T extends IterationStatement>(node: T, headDeclarations: Declaration[], emitHead: (node: T) => void, emitBody?: (node: T) => void, emitFooter?: (node: T, downlevel: boolean) => void) {
                 let needsDownlevelEmit = false;
                 const closureVariables: Identifier[] = [];
                 
@@ -2264,8 +2264,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write(");");
                     
                     if (emitFooter) {
-                        writeLine();
-                        emitFooter(node);
+                        emitFooter(node, true);
                     }
                 } else {
                     emitHead(node);
@@ -2277,7 +2276,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     }
                     
                     if (emitFooter) {
-                        emitFooter(node);
+                        emitFooter(node, false);
                     }
                     return;
                 }
@@ -2311,8 +2310,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             function emitDoStatementHead(node: DoStatement) {
                 write("do");
             }
-            function emitDoStatementFooter(node: DoStatement) {
-                if (node.statement.kind === SyntaxKind.Block) {
+            function emitDoStatementFooter(node: DoStatement, downlevel: boolean) {
+                if (node.statement.kind === SyntaxKind.Block || downlevel) {
                     write(" ");
                 }
                 else {
