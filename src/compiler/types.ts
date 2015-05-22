@@ -407,6 +407,7 @@ module ts {
     export interface Declaration extends Node {
         _declarationBrand: any;
         name?: DeclarationName;
+        blockScopedBindingInLoop?: boolean;
     }
 
     export interface ComputedPropertyName extends Node {
@@ -784,6 +785,8 @@ module ts {
 
     export interface IterationStatement extends Statement {
         statement: Statement;
+        // Block scoped declarations that are declared in this loop, but not in a subloop.
+        iterationScopedDeclarations: Declaration[];
     }
 
     export interface DoStatement extends IterationStatement {

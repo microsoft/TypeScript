@@ -62,6 +62,7 @@ module ts {
         let parent: Node;
         let container: Node;
         let blockScopeContainer: Node;
+        let iteration: IterationStatement;
         let lastContainer: Node;
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
@@ -227,7 +228,7 @@ module ts {
 
         // All container nodes are kept on a linked list in declaration order. This list is used by the getLocalNameOfContainer function
         // in the type checker to validate that the local name used for a container is unique.
-        function bindChildren(node: Node, symbolKind: SymbolFlags, isBlockScopeContainer: boolean) {
+        function bindChildren(node: Node, symbolKind: SymbolFlags, isBlockScopeContainer: boolean, isIteration: boolean = false) {
             if (symbolKind & SymbolFlags.HasLocals) {
                 node.locals = {};
             }
@@ -235,6 +236,7 @@ module ts {
             let saveParent = parent;
             let saveContainer = container;
             let savedBlockScopeContainer = blockScopeContainer;
+            let savedIteration = iteration;
             parent = node;
             if (symbolKind & SymbolFlags.IsContainer) {
                 container = node;
@@ -251,11 +253,17 @@ module ts {
                 // - node is a source file
                 setBlockScopeContainer(node, /*cleanLocals*/  (symbolKind & SymbolFlags.HasLocals) === 0 && node.kind !== SyntaxKind.SourceFile);
             }
+            
+            if (isIteration) {
+                iteration = <IterationStatement> node;
+                iteration.iterationScopedDeclarations = [];
+            }
 
             forEachChild(node, bind);
             container = saveContainer;
             parent = saveParent;
             blockScopeContainer = savedBlockScopeContainer;
+            iteration = savedIteration;
         }
 
         function addToContainerChain(node: Node) {
@@ -266,7 +274,7 @@ module ts {
             lastContainer = node;
         }
 
-        function bindDeclaration(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags, isBlockScopeContainer: boolean) {
+        function bindDeclaration(node: Declaration, symbolKind: SymbolFlags, symbolExcludes: SymbolFlags, isBlockScopeContainer: boolean, isIteration: boolean = false) {
             switch (container.kind) {
                 case SyntaxKind.ModuleDeclaration:
                     declareModuleMember(node, symbolKind, symbolExcludes);
@@ -306,7 +314,7 @@ module ts {
                     declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
                     break;
             }
-            bindChildren(node, symbolKind, isBlockScopeContainer);
+            bindChildren(node, symbolKind, isBlockScopeContainer, isIteration);
         }
 
         function isAmbientContext(node: Node): boolean {
@@ -410,6 +418,9 @@ module ts {
                         addToContainerChain(blockScopeContainer);
                     }
                     declareSymbol(blockScopeContainer.locals, undefined, node, symbolKind, symbolExcludes);
+            }
+            if (iteration) {
+                iteration.iterationScopedDeclarations.push(node);
             }
             bindChildren(node, symbolKind, /*isBlockScopeContainer*/ false);
         }
@@ -584,10 +595,14 @@ module ts {
                     // 'let x' will be placed into the function locals and 'let x' - into the locals of the block
                     bindChildren(node, 0, /*isBlockScopeContainer*/ !isFunctionLike(node.parent));
                     break;
-                case SyntaxKind.CatchClause:
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.DoStatement:
+                    bindChildren(node, 0, /*isBlockScopeContainer*/ true, /*isIteration*/ true);
+                    break;
+                case SyntaxKind.CatchClause:
                 case SyntaxKind.CaseBlock:
                     bindChildren(node, 0, /*isBlockScopeContainer*/ true);
                     break;
