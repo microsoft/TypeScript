@@ -2212,7 +2212,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
                 else {
                     increaseIndent();
-                    if (block) write("{");
+                    if (block) write(" {");
                     writeLine();
                     emit(node);
                     decreaseIndent();
@@ -2245,7 +2245,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write(" = ");
                     write("function(");
                     emitList(closureVariables, 0, closureVariables.length, false, false);
-                    write(") ");
+                    write(")");
                     
                     if (emitBody) {
                         emitBody(node, true);
