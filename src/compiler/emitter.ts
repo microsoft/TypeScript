@@ -2205,54 +2205,81 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 scopeEmitEnd();
             }
 
-            function emitEmbeddedStatement(node: Node) {
+            function emitEmbeddedStatement(node: Node, block?: boolean) {
                 if (node.kind === SyntaxKind.Block) {
                     write(" ");
                     emit(<Block>node);
                 }
                 else {
                     increaseIndent();
+                    if (block) write("{");
                     writeLine();
                     emit(node);
                     decreaseIndent();
+                    if (block) {
+                        writeLine();
+                        write("}");
+                    }
                 }
             }
-            function emitDownlevelIterationEmbeddedStatement(node: Node) {
-                write(" (function() ");
-                if (node.kind === SyntaxKind.Block) {
-                    emit(<Block>node);
-                }
-                else {
-                    write("{");
-                    increaseIndent();
-                    writeLine();
-                    emit(node);
-                    decreaseIndent();
-                    writeLine();
-                    write("}");
-                }
-                write("})();");
-            }
-            function emitIterationEmbeddedStatement(node: IterationStatement) {
-                if (languageVersion >= ScriptTarget.ES6) {
-                    emitEmbeddedStatement(node.statement);
-                    return;
-                }
-                
+            
+            function emitIteration<T extends IterationStatement>(node: T, headDeclarations: Declaration[], emitHead: (node: T) => void, emitBody?: (node: T) => void, emitFooter?: (node: T) => void) {
                 let needsDownlevelEmit = false;
+                const closureVariables: Identifier[] = [];
                 
-                for (const declaration of node.iterationScopedDeclarations) {
-                    if (declaration.blockScopedBindingInLoop) {
-                        needsDownlevelEmit = true;
-                        break;
+                if (languageVersion < ScriptTarget.ES6) {
+                    for (const declaration of node.iterationScopedDeclarations) {
+                        if (declaration.blockScopedBindingInLoop) {
+                            needsDownlevelEmit = true;
+                            if (headDeclarations.indexOf(declaration) !== -1) {
+                                closureVariables.push(<Identifier> declaration.name);
+                            }
+                        }
                     }
                 }
                 
-                if (!needsDownlevelEmit) {
-                    emitEmbeddedStatement(node.statement);
-                }
-                else {
-                    emitDownlevelIterationEmbeddedStatement(node.statement);
+                if (needsDownlevelEmit) {
+                    let tempVariable = createTempVariable(TempFlags.Auto);
+                    write("var ");
+                    emit(tempVariable);
+                    write(" = ");
+                    write("function(");
+                    emitList(closureVariables, 0, closureVariables.length, false, false);
+                    write(") ");
+                    
+                    if (emitBody) {
+                        emitBody(node);
+                    } else {
+                        emitEmbeddedStatement(node.statement, true);
+                    }
+                    
+                    write(";");
+                    writeLine();
+                    
+                    emitHead(node);
+                    write(" ");
+                    emit(tempVariable);
+                    write("(");
+                    emitList(closureVariables, 0, closureVariables.length, false, false);
+                    write(");");
+                    
+                    if (emitFooter) {
+                        writeLine();
+                        emitFooter(node);
+                    }
+                } else {
+                    emitHead(node);
+                    
+                    if (emitBody) {
+                        emitBody(node);
+                    } else {
+                        emitEmbeddedStatement(node.statement);
+                    }
+                    
+                    if (emitFooter) {
+                        emitFooter(node);
+                    }
+                    return;
                 }
             }
 
@@ -2281,9 +2308,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
             }
 
-            function emitDoStatement(node: DoStatement) {
+            function emitDoStatementHead(node: DoStatement) {
                 write("do");
-                emitIterationEmbeddedStatement(node);
+            }
+            function emitDoStatementFooter(node: DoStatement) {
                 if (node.statement.kind === SyntaxKind.Block) {
                     write(" ");
                 }
@@ -2294,12 +2322,17 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 emit(node.expression);
                 write(");");
             }
+            function emitDoStatement(node: DoStatement) {
+                emitIteration(node, [], emitDoStatementHead, undefined, emitDoStatementFooter)
+            }
 
-            function emitWhileStatement(node: WhileStatement) {
+            function emitWhileStatementHead(node: WhileStatement) {
                 write("while (");
                 emit(node.expression);
                 write(")");
-                emitIterationEmbeddedStatement(node);
+            }
+            function emitWhileStatement(node: WhileStatement) {
+                emitIteration(node, [], emitWhileStatementHead);
             }
 
             /**
@@ -2364,7 +2397,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 return started;
             }
 
-            function emitForStatement(node: ForStatement) {
+            function emitForStatementHead(node: ForStatement) {
+                let variables: Declaration[] = [];
                 let endPos = emitToken(SyntaxKind.ForKeyword, node.pos);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
@@ -2377,6 +2411,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     else {
                         emitVariableDeclarationListSkippingUninitializedEntries(variableDeclarationList);
                     }
+                    variables = variableDeclarationList.declarations;
                 }
                 else if (node.initializer) {
                     emit(node.initializer);
@@ -2386,14 +2421,17 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 write(";");
                 emitOptional(" ", node.incrementor);
                 write(")");
-                emitIterationEmbeddedStatement(node);
+            }
+            function emitForStatement(node: ForStatement) {
+                let variables: Declaration[] = [];
+                if (node.initializer && node.initializer.kind === SyntaxKind.VariableDeclarationList) {
+                    variables = (<VariableDeclarationList>node.initializer).declarations;
+                }
+                
+                emitIteration(node, variables, emitForStatementHead);
             }
 
-            function emitForInOrForOfStatement(node: ForInStatement | ForOfStatement) {
-                if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.ForOfStatement) {
-                    return emitDownLevelForOfStatement(node);
-                }
-
+            function emitForInOrForOfStatementHead(node: ForInStatement | ForOfStatement) {
                 let endPos = emitToken(SyntaxKind.ForKeyword, node.pos);
                 write(" ");
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
@@ -2416,7 +2454,19 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
                 emit(node.expression);
                 emitToken(SyntaxKind.CloseParenToken, node.expression.end);
-                emitIterationEmbeddedStatement(node);
+            }
+            function emitForInOrForOfStatement(node: ForInStatement | ForOfStatement) {
+                if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.ForOfStatement) {
+                    return emitDownLevelForOfStatement(node);
+                }
+                
+                let variables: Declaration[] = [];
+
+                if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
+                    variables = (<VariableDeclarationList>node.initializer).declarations;
+                }
+
+                emitIteration(node, variables, emitForInOrForOfStatementHead);
             }
 
             function emitDownLevelForOfStatement(node: ForOfStatement) {
