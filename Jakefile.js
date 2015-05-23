@@ -549,7 +549,7 @@ desc("Generates code coverage data via instanbul")
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
     //var cmd = 'istanbul cover node_modules/mocha/bin/_mocha -- -R min -t 5000' + ' ' + run;
     fs.appendFileSync('built/local/typescriptServices.js', '\nmodule.exports = ts');
-    var cmd = 'istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec -t ' + testTimeout + ' ' + run + ' && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage'
+    var cmd = 'istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R min -t ' + testTimeout + ' ' + run + ' && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage'
     console.log(cmd);
     exec(cmd);
 }, { async: true });
