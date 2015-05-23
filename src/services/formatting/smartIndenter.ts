@@ -295,9 +295,11 @@ module ts.formatting {
         }
 
         function getLineIndentationWhenExpressionIsInMultiLine(node: Node, sourceFile: SourceFile, options: EditorOptions): number {
-            if (node.parent.kind === SyntaxKind.CallExpression) {
-                let parentExpression = (<CallExpression>node.parent).expression;
-                let startingExpression = getStartingExpression(<CallExpression>parentExpression);
+            if (node.parent.kind === SyntaxKind.CallExpression ||
+                node.parent.kind === SyntaxKind.NewExpression) {
+
+                let parentExpression = (<CallExpression | NewExpression>node.parent).expression;
+                let startingExpression = getStartingExpression(<PropertyAccessExpression | CallExpression | ElementAccessExpression>parentExpression);
 
                 if (parentExpression === startingExpression) {
                     return Value.Unknown;
@@ -314,9 +316,9 @@ module ts.formatting {
             }
             return Value.Unknown;
             
-            function getStartingExpression(expression: CallExpression) {
+            function getStartingExpression(expression: PropertyAccessExpression | CallExpression | ElementAccessExpression) {
                 while (expression.expression)
-                    expression = <CallExpression>expression.expression;
+                    expression = <PropertyAccessExpression | CallExpression | ElementAccessExpression>expression.expression;
                 return expression;
             }
         }
