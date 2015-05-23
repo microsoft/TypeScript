@@ -620,12 +620,9 @@ module ts {
         if (node.kind === SyntaxKind.TaggedTemplateExpression) {
             return (<TaggedTemplateExpression>node).tag;
         }
-        else if (node.kind === SyntaxKind.Decorator) {
-            return (<Decorator>node).expression;
-        }
         
-        // Will either be a CallExpression or NewExpression.
-        return (<CallExpression>node).expression;
+        // Will either be a CallExpression, NewExpression, or Decorator.
+        return (<CallExpression | Decorator>node).expression;
     }
 
     export function nodeCanBeDecorated(node: Node): boolean {

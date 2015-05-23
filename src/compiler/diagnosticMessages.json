@@ -687,7 +687,7 @@
         "category": "Error",
         "code": 1219
     },
-    "Invalid expression for {0} decorator.": {
+    "Unable to resolve signature of {0} decorator when called as an expression.": {
         "category": "Error",
         "code": 1220
     },
