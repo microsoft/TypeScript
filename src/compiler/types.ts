@@ -300,6 +300,12 @@ module ts {
         FirstNode = QualifiedName,
     }
 
+    export const enum StatementFlags {
+        Statement = 1,
+        ModuleElement = 2,
+        StatementOrModuleElement = Statement | ModuleElement
+    }
+
     export const enum NodeFlags {
         Export =            0x00000001,  // Declarations
         Ambient =           0x00000002,  // Declarations
