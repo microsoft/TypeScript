@@ -3654,18 +3654,15 @@ module ts {
                 switch (token) {
                     case SyntaxKind.VarKeyword:
                     case SyntaxKind.LetKeyword:
+                    case SyntaxKind.ConstKeyword:
                     case SyntaxKind.FunctionKeyword:
                     case SyntaxKind.ClassKeyword:
-                        return StatementFlags.Statement;
                     case SyntaxKind.EnumKeyword:
-                        return StatementFlags.ModuleElement;
-                    case SyntaxKind.ConstKeyword:
-                        nextToken();
-                        return token === SyntaxKind.EnumKeyword ? StatementFlags.ModuleElement : StatementFlags.Statement;
+                        return StatementFlags.Statement;
                     case SyntaxKind.InterfaceKeyword:
                     case SyntaxKind.TypeKeyword:
                         nextToken();
-                        return isIdentifierOrKeyword() ? StatementFlags.ModuleElement : 0;
+                        return isIdentifierOrKeyword() ? StatementFlags.Statement : 0;
                     case SyntaxKind.ModuleKeyword:
                     case SyntaxKind.NamespaceKeyword:
                         nextToken();
@@ -3708,6 +3705,7 @@ module ts {
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.FunctionKeyword:
                 case SyntaxKind.ClassKeyword:
+                case SyntaxKind.EnumKeyword:
                 case SyntaxKind.IfKeyword:
                 case SyntaxKind.DoKeyword:
                 case SyntaxKind.WhileKeyword:
@@ -3725,9 +3723,6 @@ module ts {
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
                     return StatementFlags.Statement;
-
-                case SyntaxKind.EnumKeyword:
-                    return StatementFlags.ModuleElement;
 
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.ExportKeyword:
