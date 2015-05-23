@@ -345,7 +345,7 @@ module ts {
     module Parser {
         // Share a single scanner across all calls to parse a source file.  This helps speed things
         // up by avoiding the cost of creating/compiling scanners over and over again.
-        const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ true);
+        const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
         const disallowInAndDecoratorContext = ParserContextFlags.DisallowIn | ParserContextFlags.Decorator;
 
         let sourceFile: SourceFile;
@@ -739,7 +739,7 @@ module ts {
         // was in immediately prior to invoking the callback.  The result of invoking the callback
         // is returned from this function.
         function lookAhead<T>(callback: () => T): T {
-            return speculationHelper(callback, /*isLookAhead:*/ true);
+            return speculationHelper(callback, /*isLookAhead*/ true);
         }
 
         // Invokes the provided callback.  If the callback returns something falsy, then it restores
@@ -747,7 +747,7 @@ module ts {
         // callback returns something truthy, then the parser state is not rolled back.  The result
         // of invoking the callback is returned from this function.
         function tryParse<T>(callback: () => T): T {
-            return speculationHelper(callback, /*isLookAhead:*/ false);
+            return speculationHelper(callback, /*isLookAhead*/ false);
         }
 
         // Ignore strict mode flag because we will report an error in type checker instead.
@@ -896,7 +896,7 @@ module ts {
                 return finishNode(node);
             }
 
-            return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition:*/ false, diagnosticMessage || Diagnostics.Identifier_expected);
+            return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false, diagnosticMessage || Diagnostics.Identifier_expected);
         }
 
         function parseIdentifier(diagnosticMessage?: DiagnosticMessage): Identifier {
@@ -915,7 +915,7 @@ module ts {
 
         function parsePropertyName(): DeclarationName {
             if (token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral) {
-                return parseLiteralNode(/*internName:*/ true);
+                return parseLiteralNode(/*internName*/ true);
             }
             if (token === SyntaxKind.OpenBracketToken) {
                 return parseComputedPropertyName();
@@ -1667,7 +1667,7 @@ module ts {
                     // Report that we need an identifier.  However, report it right after the dot,
                     // and not on the next token.  This is because the next token might actually
                     // be an identifier and the error woudl be quite confusing.
-                    return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentToken:*/ true, Diagnostics.Identifier_expected);
+                    return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentToken*/ true, Diagnostics.Identifier_expected);
                 }
             }
 
@@ -1705,7 +1705,7 @@ module ts {
                 literal = parseLiteralNode();
             }
             else {
-                literal = <LiteralExpression>parseExpectedToken(SyntaxKind.TemplateTail, /*reportAtCurrentPosition:*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken));
+                literal = <LiteralExpression>parseExpectedToken(SyntaxKind.TemplateTail, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken));
             }
 
             span.literal = literal;
@@ -1798,7 +1798,7 @@ module ts {
         function parseParameterType(): TypeNode {
             if (parseOptional(SyntaxKind.ColonToken)) {
                 return token === SyntaxKind.StringLiteral
-                    ? <StringLiteral>parseLiteralNode(/*internName:*/ true)
+                    ? <StringLiteral>parseLiteralNode(/*internName*/ true)
                     : parseType();
             }
 
@@ -1939,7 +1939,7 @@ module ts {
             if (kind === SyntaxKind.ConstructSignature) {
                 parseExpected(SyntaxKind.NewKeyword);
             }
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ false, node);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ false, /*requireCompleteParameterList*/ false, node);
             parseTypeMemberSemicolon();
             return finishNode(node);
         }
@@ -2029,7 +2029,7 @@ module ts {
 
                 // Method signatues don't exist in expression contexts.  So they have neither
                 // [Yield] nor [GeneratorParameter]
-                fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ false, method);
+                fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ false, /*requireCompleteParameterList*/ false, method);
                 parseTypeMemberSemicolon();
                 return finishNode(method);
             }
@@ -2168,7 +2168,7 @@ module ts {
             if (kind === SyntaxKind.ConstructorType) {
                 parseExpected(SyntaxKind.NewKeyword);
             }
-            fillSignature(SyntaxKind.EqualsGreaterThanToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ false, node);
+            fillSignature(SyntaxKind.EqualsGreaterThanToken, /*yieldAndGeneratorParameterContext*/ false, /*requireCompleteParameterList*/ false, node);
             return finishNode(node);
         }
 
@@ -2477,7 +2477,7 @@ module ts {
             // Otherwise, we try to parse out the conditional expression bit.  We want to allow any
             // binary expression here, so we pass in the 'lowest' precedence here so that it matches
             // and consumes anything.
-            let expr = parseBinaryExpressionOrHigher(/*precedence:*/ 0);
+            let expr = parseBinaryExpressionOrHigher(/*precedence*/ 0);
 
             // To avoid a look-ahead, we did not handle the case of an arrow function with a single un-parenthesized
             // parameter ('x => ...') above. We handle it here by checking if the parsed expression was a single
@@ -2593,7 +2593,7 @@ module ts {
             // it out, but don't allow any ambiguity, and return 'undefined' if this could be an
             // expression instead.
             let arrowFunction = triState === Tristate.True
-                ? parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity:*/ true)
+                ? parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity*/ true)
                 : tryParse(parsePossibleParenthesizedArrowFunctionExpressionHead);
 
             if (!arrowFunction) {
@@ -2604,7 +2604,7 @@ module ts {
             // If we have an arrow, then try to parse the body. Even if not, try to parse if we
             // have an opening brace, just in case we're in an error state.
             var lastToken = token;
-            arrowFunction.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, /*reportAtCurrentPosition:*/false, Diagnostics._0_expected, "=>");
+            arrowFunction.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, /*reportAtCurrentPosition*/false, Diagnostics._0_expected, "=>");
             arrowFunction.body = (lastToken === SyntaxKind.EqualsGreaterThanToken || lastToken === SyntaxKind.OpenBraceToken)
                 ? parseArrowFunctionExpressionBody()
                 : parseIdentifier();
@@ -2702,7 +2702,7 @@ module ts {
         }
 
         function parsePossibleParenthesizedArrowFunctionExpressionHead(): ArrowFunction {
-            return parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity:*/ false);
+            return parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity*/ false);
         }
 
         function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity: boolean): ArrowFunction {
@@ -2714,7 +2714,7 @@ module ts {
             // a => (b => c)
             // And think that "(b =>" was actually a parenthesized arrow function with a missing
             // close paren.
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ !allowAmbiguity, node);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ false, /*requireCompleteParameterList*/ !allowAmbiguity, node);
 
             // If we couldn't get parameters, we definitely could not parse out an arrow function.
             if (!node.parameters) {
@@ -2780,7 +2780,7 @@ module ts {
             node.condition = leftOperand;
             node.questionToken = questionToken;
             node.whenTrue = doOutsideOfContext(disallowInAndDecoratorContext, parseAssignmentExpressionOrHigher);
-            node.colonToken = parseExpectedToken(SyntaxKind.ColonToken, /*reportAtCurrentPosition:*/ false,
+            node.colonToken = parseExpectedToken(SyntaxKind.ColonToken, /*reportAtCurrentPosition*/ false,
                 Diagnostics._0_expected, tokenToString(SyntaxKind.ColonToken));
             node.whenFalse = parseAssignmentExpressionOrHigher();
             return finishNode(node);
@@ -3044,8 +3044,8 @@ module ts {
             // If it wasn't then just try to parse out a '.' and report an error.
             let node = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
             node.expression = expression;
-            node.dotToken = parseExpectedToken(SyntaxKind.DotToken, /*reportAtCurrentPosition:*/ false, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
-            node.name = parseRightSideOfDot(/*allowIdentifierNames:*/ true);
+            node.dotToken = parseExpectedToken(SyntaxKind.DotToken, /*reportAtCurrentPosition*/ false, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
+            node.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
             return finishNode(node);
         }
 
@@ -3065,7 +3065,7 @@ module ts {
                     let propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
                     propertyAccess.expression = expression;
                     propertyAccess.dotToken = dotToken;
-                    propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames:*/ true);
+                    propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true);
                     expression = finishNode(propertyAccess);
                     continue;
                 }
@@ -3328,7 +3328,7 @@ module ts {
                 node.flags |= NodeFlags.MultiLine;
             }
 
-            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimeter:*/ true);
+            node.properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimeter*/ true);
             parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(node);
         }
@@ -3346,8 +3346,8 @@ module ts {
             parseExpected(SyntaxKind.FunctionKeyword);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             node.name = node.asteriskToken ? doInYieldContext(parseOptionalIdentifier) : parseOptionalIdentifier();
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!node.asteriskToken, /*requireCompleteParameterList:*/ false, node);
-            node.body = parseFunctionBlock(/*allowYield:*/ !!node.asteriskToken, /* ignoreMissingOpenBrace */ false);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ !!node.asteriskToken, /*requireCompleteParameterList*/ false, node);
+            node.body = parseFunctionBlock(/*allowYield*/ !!node.asteriskToken, /* ignoreMissingOpenBrace */ false);
             if (saveDecoratorContext) {
                 setDecoratorContext(true);
             }
@@ -3457,7 +3457,7 @@ module ts {
             let initializer: VariableDeclarationList | Expression = undefined;
             if (token !== SyntaxKind.SemicolonToken) {
                 if (token === SyntaxKind.VarKeyword || token === SyntaxKind.LetKeyword || token === SyntaxKind.ConstKeyword) {
-                    initializer = parseVariableDeclarationList(/*inForStatementInitializer:*/ true);
+                    initializer = parseVariableDeclarationList(/*inForStatementInitializer*/ true);
                 }
                 else {
                     initializer = disallowInAnd(parseExpression);
@@ -3587,14 +3587,14 @@ module ts {
             let node = <TryStatement>createNode(SyntaxKind.TryStatement);
 
             parseExpected(SyntaxKind.TryKeyword);
-            node.tryBlock = parseBlock(/*ignoreMissingOpenBrace:*/ false, /*checkForStrictMode*/ false);
+            node.tryBlock = parseBlock(/*ignoreMissingOpenBrace*/ false, /*checkForStrictMode*/ false);
             node.catchClause = token === SyntaxKind.CatchKeyword ? parseCatchClause() : undefined;
 
             // If we don't have a catch clause, then we must have a finally clause.  Try to parse
             // one out no matter what.
             if (!node.catchClause || token === SyntaxKind.FinallyKeyword) {
                 parseExpected(SyntaxKind.FinallyKeyword);
-                node.finallyBlock = parseBlock(/*ignoreMissingOpenBrace:*/ false, /*checkForStrictMode*/ false);
+                node.finallyBlock = parseBlock(/*ignoreMissingOpenBrace*/ false, /*checkForStrictMode*/ false);
             }
 
             return finishNode(node);
@@ -3608,7 +3608,7 @@ module ts {
             }
 
             parseExpected(SyntaxKind.CloseParenToken);
-            result.block = parseBlock(/*ignoreMissingOpenBrace:*/ false, /*checkForStrictMode:*/ false);
+            result.block = parseBlock(/*ignoreMissingOpenBrace*/ false, /*checkForStrictMode*/ false);
             return finishNode(result);
         }
 
@@ -3900,7 +3900,7 @@ module ts {
                 return;
             }
 
-            return parseFunctionBlock(isGenerator, /*ignoreMissingOpenBrace:*/ false, diagnosticMessage);
+            return parseFunctionBlock(isGenerator, /*ignoreMissingOpenBrace*/ false, diagnosticMessage);
         }
 
         // DECLARATIONS
@@ -4023,7 +4023,7 @@ module ts {
             let node = <VariableStatement>createNode(SyntaxKind.VariableStatement, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
-            node.declarationList = parseVariableDeclarationList(/*inForStatementInitializer:*/ false);
+            node.declarationList = parseVariableDeclarationList(/*inForStatementInitializer*/ false);
             parseSemicolon();
             return finishNode(node);
         }
@@ -4035,7 +4035,7 @@ module ts {
             parseExpected(SyntaxKind.FunctionKeyword);
             node.asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             node.name = node.flags & NodeFlags.Default ? parseOptionalIdentifier() : parseIdentifier();
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!node.asteriskToken, /*requireCompleteParameterList:*/ false, node);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ !!node.asteriskToken, /*requireCompleteParameterList*/ false, node);
             node.body = parseFunctionBlockOrSemicolon(!!node.asteriskToken, Diagnostics.or_expected);
             return finishNode(node);
         }
@@ -4045,8 +4045,8 @@ module ts {
             node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ConstructorKeyword);
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ false, node);
-            node.body = parseFunctionBlockOrSemicolon(/*isGenerator:*/ false, Diagnostics.or_expected);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ false, /*requireCompleteParameterList*/ false, node);
+            node.body = parseFunctionBlockOrSemicolon(/*isGenerator*/ false, Diagnostics.or_expected);
             return finishNode(node);
         }
 
@@ -4057,7 +4057,7 @@ module ts {
             method.asteriskToken = asteriskToken;
             method.name = name;
             method.questionToken = questionToken;
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ !!asteriskToken, /*requireCompleteParameterList:*/ false, method);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ !!asteriskToken, /*requireCompleteParameterList*/ false, method);
             method.body = parseFunctionBlockOrSemicolon(!!asteriskToken, diagnosticMessage);
             return finishNode(method);
         }
@@ -4098,8 +4098,8 @@ module ts {
             node.decorators = decorators;
             setModifiers(node, modifiers);
             node.name = parsePropertyName();
-            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext:*/ false, /*requireCompleteParameterList:*/ false, node);
-            node.body = parseFunctionBlockOrSemicolon(/*isGenerator:*/ false);
+            fillSignature(SyntaxKind.ColonToken, /*yieldAndGeneratorParameterContext*/ false, /*requireCompleteParameterList*/ false, node);
+            node.body = parseFunctionBlockOrSemicolon(/*isGenerator*/ false);
             return finishNode(node);
         }
 
@@ -4299,7 +4299,7 @@ module ts {
             parseExpected(SyntaxKind.ClassKeyword);
             node.name = parseOptionalIdentifier();
             node.typeParameters = parseTypeParameters();
-            node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause:*/ true);
+            node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause*/ true);
 
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 // ClassTail[Yield,GeneratorParameter] : See 14.5
@@ -4335,7 +4335,7 @@ module ts {
         }
 
         function parseHeritageClausesWorker() {
-            return parseList(ParsingContext.HeritageClauses, /*checkForStrictMode:*/ false, parseHeritageClause);
+            return parseList(ParsingContext.HeritageClauses, /*checkForStrictMode*/ false, parseHeritageClause);
         }
 
         function parseHeritageClause() {
@@ -4375,7 +4375,7 @@ module ts {
             parseExpected(SyntaxKind.InterfaceKeyword);
             node.name = parseIdentifier();
             node.typeParameters = parseTypeParameters();
-            node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause:*/ false);
+            node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause*/ false);
             node.members = parseObjectTypeMembers();
             return finishNode(node);
         }
@@ -4447,7 +4447,7 @@ module ts {
             let node = <ModuleDeclaration>createNode(SyntaxKind.ModuleDeclaration, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
-            node.name = parseLiteralNode(/*internName:*/ true);
+            node.name = parseLiteralNode(/*internName*/ true);
             node.body = parseModuleBlock();
             return finishNode(node);
         }
@@ -5016,7 +5016,7 @@ module ts {
                 if (child.pos > changeRangeOldEnd) {
                     // Node is entirely past the change range.  We need to move both its pos and
                     // end, forward or backward appropriately.
-                    moveElementEntirelyPastChangeRange(child, /*isArray:*/ false, delta, oldText, newText, aggressiveChecks);
+                    moveElementEntirelyPastChangeRange(child, /*isArray*/ false, delta, oldText, newText, aggressiveChecks);
                     return;
                 }
 
@@ -5045,7 +5045,7 @@ module ts {
                 if (array.pos > changeRangeOldEnd) {
                     // Array is entirely after the change range.  We need to move it, and move any of
                     // its children.
-                    moveElementEntirelyPastChangeRange(array, /*isArray:*/ true, delta, oldText, newText, aggressiveChecks);
+                    moveElementEntirelyPastChangeRange(array, /*isArray*/ true, delta, oldText, newText, aggressiveChecks);
                     return;
                 }
 
