@@ -66,6 +66,10 @@ module ts.formatting {
                 if (actualIndentation !== Value.Unknown) {
                     return actualIndentation;
                 }
+                actualIndentation = getLineIndentationWhenExpressionIsInMultiLine(current, sourceFile, options);
+                if (actualIndentation !== Value.Unknown) {
+                    return actualIndentation + options.IndentSize;
+                }
 
                 previous = current;
                 current = current.parent;
@@ -119,6 +123,10 @@ module ts.formatting {
                 if (useActualIndentation) {
                     // try to fetch actual indentation for current node from source text
                     let actualIndentation = getActualIndentationForNode(current, parent, currentStart, parentAndChildShareLine, sourceFile, options);
+                    if (actualIndentation !== Value.Unknown) {
+                        return actualIndentation + indentationDelta;
+                    }
+                    actualIndentation = getLineIndentationWhenExpressionIsInMultiLine(current, sourceFile, options);
                     if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
                     }
@@ -279,14 +287,7 @@ module ts.formatting {
 
         function getActualIndentationForListItem(node: Node, sourceFile: SourceFile, options: EditorOptions): number {
             let containingList = getContainingList(node, sourceFile);
-
-            if (containingList) {
-                let lineIndentation = getLineIndentationWhenExpressionIsInMultiLine(node, sourceFile, options);
-                if (lineIndentation !== Value.Unknown)
-                    return lineIndentation;
-                return getActualIndentationFromList(containingList);
-            }
-            return Value.Unknown;
+            return containingList ? getActualIndentationFromList(containingList) : Value.Unknown;
 
             function getActualIndentationFromList(list: Node[]): number {
                 let index = indexOf(list, node);
@@ -295,8 +296,9 @@ module ts.formatting {
         }
 
         function getLineIndentationWhenExpressionIsInMultiLine(node: Node, sourceFile: SourceFile, options: EditorOptions): number {
-            if (node.parent.kind === SyntaxKind.CallExpression ||
-                node.parent.kind === SyntaxKind.NewExpression) {
+            if (node.parent && (
+                node.parent.kind === SyntaxKind.CallExpression ||
+                node.parent.kind === SyntaxKind.NewExpression)) {
 
                 let parentExpression = (<CallExpression | NewExpression>node.parent).expression;
                 let startingExpression = getStartingExpression(<PropertyAccessExpression | CallExpression | ElementAccessExpression>parentExpression);
