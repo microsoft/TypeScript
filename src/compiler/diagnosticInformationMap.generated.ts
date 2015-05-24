@@ -544,6 +544,5 @@ module ts {
         Generators_are_not_currently_supported: { code: 9001, category: DiagnosticCategory.Error, key: "Generators are not currently supported." },
         Only_identifiers_Slashqualified_names_with_optional_type_arguments_are_currently_supported_in_a_class_extends_clauses: { code: 9002, category: DiagnosticCategory.Error, key: "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses." },
         class_expressions_are_not_currently_supported: { code: 9003, category: DiagnosticCategory.Error, key: "'class' expressions are not currently supported." },
-        class_declarations_are_only_supported_directly_inside_a_module_or_as_a_top_level_declaration: { code: 9004, category: DiagnosticCategory.Error, key: "'class' declarations are only supported directly inside a module or as a top level declaration." },
     };
 }

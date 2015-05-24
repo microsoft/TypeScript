@@ -1499,6 +1499,8 @@ module ts {
     // Class and interface types (TypeFlags.Class and TypeFlags.Interface)
     export interface InterfaceType extends ObjectType {
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
+        outerTypeParameters: TypeParameter[];      // Outer type parameters (undefined if none)
+        localTypeParameters: TypeParameter[];      // Local type parameters (undefined if none)
     }
 
     export interface InterfaceTypeWithBaseTypes extends InterfaceType {

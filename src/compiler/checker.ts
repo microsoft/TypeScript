@@ -2465,28 +2465,59 @@ module ts {
             }
         }
 
+        function appendTypeParameters(typeParameters: TypeParameter[], declarations: TypeParameterDeclaration[]): TypeParameter[] {
+            for (let declaration of declarations) {
+                let tp = getDeclaredTypeOfTypeParameter(getSymbolOfNode(declaration));
+                if (!typeParameters) {
+                    typeParameters = [tp];
+                }
+                else if (!contains(typeParameters, tp)) {
+                    typeParameters.push(tp);
+                }
+            }
+            return typeParameters;
+        }
+
+        function appendOuterTypeParameters(typeParameters: TypeParameter[], node: Node): TypeParameter[]{
+            while (true) {
+                node = node.parent;
+                if (!node) {
+                    return typeParameters;
+                }
+                if (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.FunctionDeclaration ||
+                    node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.MethodDeclaration ||
+                    node.kind === SyntaxKind.ArrowFunction) {
+                    let declarations = (<ClassDeclaration | FunctionLikeDeclaration>node).typeParameters;
+                    if (declarations) {
+                        return appendTypeParameters(appendOuterTypeParameters(typeParameters, node), declarations);
+                    }
+                }
+            }
+        }
+
+        function getOuterTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] {
+            var kind = symbol.flags & SymbolFlags.Class ? SyntaxKind.ClassDeclaration : SyntaxKind.InterfaceDeclaration;
+            return appendOuterTypeParameters(undefined, getDeclarationOfKind(symbol, kind));
+        }
+
         // Return combined list of type parameters from all declarations of a class or interface. Elsewhere we check they're all
         // the same, but even if they're not we still need the complete list to ensure instantiations supply type arguments
         // for all type parameters.
-        function getTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] {
+        function getLocalTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] {
             let result: TypeParameter[];
-            forEach(symbol.declarations, node => {
+            for (let node of symbol.declarations) {
                 if (node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.ClassDeclaration) {
                     let declaration = <InterfaceDeclaration>node;
-                    if (declaration.typeParameters && declaration.typeParameters.length) {
-                        forEach(declaration.typeParameters, node => {
-                            let tp = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node));
-                            if (!result) {
-                                result = [tp];
-                            }
-                            else if (!contains(result, tp)) {
-                                result.push(tp);
-                            }
-                        });
+                    if (declaration.typeParameters) {
+                        result = appendTypeParameters(result, declaration.typeParameters);
                     }
                 }
-            });
+            }
             return result;
+        }
+
+        function getTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] {
+            return concatenate(getOuterTypeParametersOfClassOrInterface(symbol), getLocalTypeParametersOfClassOrInterface(symbol));
         }
 
         function getBaseTypes(type: InterfaceType): ObjectType[] {
@@ -2558,10 +2589,13 @@ module ts {
             if (!links.declaredType) {
                 let kind = symbol.flags & SymbolFlags.Class ? TypeFlags.Class : TypeFlags.Interface;
                 let type = links.declaredType = <InterfaceType>createObjectType(kind, symbol);
-                let typeParameters = getTypeParametersOfClassOrInterface(symbol);
-                if (typeParameters) {
+                let outerTypeParameters = getOuterTypeParametersOfClassOrInterface(symbol);
+                let localTypeParameters = getLocalTypeParametersOfClassOrInterface(symbol);
+                if (outerTypeParameters || localTypeParameters) {
                     type.flags |= TypeFlags.Reference;
-                    type.typeParameters = typeParameters;
+                    type.typeParameters = concatenate(outerTypeParameters, localTypeParameters);
+                    type.outerTypeParameters = outerTypeParameters;
+                    type.localTypeParameters = localTypeParameters;
                     (<GenericType>type).instantiations = {};
                     (<GenericType>type).instantiations[getTypeListId(type.typeParameters)] = <GenericType>type;
                     (<GenericType>type).target = <GenericType>type;
@@ -2751,12 +2785,12 @@ module ts {
                 return map(baseSignatures, baseSignature => {
                     let signature = baseType.flags & TypeFlags.Reference ?
                         getSignatureInstantiation(baseSignature, (<TypeReference>baseType).typeArguments) : cloneSignature(baseSignature);
-                    signature.typeParameters = classType.typeParameters;
+                    signature.typeParameters = classType.localTypeParameters;
                     signature.resolvedReturnType = classType;
                     return signature;
                 });
             }
-            return [createSignature(undefined, classType.typeParameters, emptyArray, classType, 0, false, false)];
+            return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, 0, false, false)];
         }
 
         function createTupleTypeMemberSymbols(memberTypes: Type[]): SymbolTable {
@@ -3105,7 +3139,7 @@ module ts {
             let links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
                 let classType = declaration.kind === SyntaxKind.Constructor ? getDeclaredTypeOfClassOrInterface((<ClassDeclaration>declaration.parent).symbol) : undefined;
-                let typeParameters = classType ? classType.typeParameters :
+                let typeParameters = classType ? classType.localTypeParameters :
                     declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) : undefined;
                 let parameters: Symbol[] = [];
                 let hasStringLiterals = false;
@@ -3423,11 +3457,14 @@ module ts {
                             type = getDeclaredTypeOfSymbol(symbol);
                             if (type.flags & (TypeFlags.Class | TypeFlags.Interface) && type.flags & TypeFlags.Reference) {
                                 let typeParameters = (<InterfaceType>type).typeParameters;
-                                if (node.typeArguments && node.typeArguments.length === typeParameters.length) {
-                                    type = createTypeReference(<GenericType>type, map(node.typeArguments, getTypeFromTypeNode));
+                                let outerTypeParameters = (<InterfaceType>type).outerTypeParameters;
+                                let expectedTypeArgCount = typeParameters.length - (outerTypeParameters ? outerTypeParameters.length : 0);
+                                let typeArgCount = node.typeArguments ? node.typeArguments.length : 0;
+                                if (typeArgCount === expectedTypeArgCount) {
+                                    type = createTypeReference(<GenericType>type, concatenate(outerTypeParameters, map(node.typeArguments, getTypeFromTypeNode)));
                                 }
                                 else {
-                                    error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), typeParameters.length);
+                                    error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), expectedTypeArgCount);
                                     type = undefined;
                                 }
                             }
@@ -3884,7 +3921,7 @@ module ts {
                     return mapper(<TypeParameter>type);
                 }
                 if (type.flags & TypeFlags.Anonymous) {
-                    return type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) ?
+                    return type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) ?
                         instantiateAnonymousType(<ObjectType>type, mapper) : type;
                 }
                 if (type.flags & TypeFlags.Reference) {
@@ -9991,10 +10028,6 @@ module ts {
         function checkClassDeclaration(node: ClassDeclaration) {
             checkGrammarDeclarationNameInStrictMode(node);
             // Grammar checking
-            if (node.parent.kind !== SyntaxKind.ModuleBlock && node.parent.kind !== SyntaxKind.SourceFile) {
-                grammarErrorOnNode(node, Diagnostics.class_declarations_are_only_supported_directly_inside_a_module_or_as_a_top_level_declaration);
-            }
-
             if (!node.name && !(node.flags & NodeFlags.Default)) {
                 grammarErrorOnFirstToken(node, Diagnostics.A_class_declaration_without_the_default_modifier_must_have_a_name);
             }
