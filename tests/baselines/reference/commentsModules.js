@@ -101,7 +101,6 @@ new m7.m8.m9.c();
 /** Module comment*/
 var m1;
 (function (m1) {
-    /** b's comment*/
     /** foo's comment*/
     function foo() {
         return m1.b;

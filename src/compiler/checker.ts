@@ -3866,6 +3866,18 @@ module ts {
         }
 
         function instantiateAnonymousType(type: ObjectType, mapper: TypeMapper): ObjectType {
+            // If this type has already been instantiated using this mapper, returned the cached result. This guards against
+            // infinite instantiations of cyclic types, e.g. "var x: { a: T, b: typeof x };"
+            if (mapper.mappings) {
+                let cached = <ObjectType>mapper.mappings[type.id];
+                if (cached) {
+                    return cached;
+                }
+            }
+            else {
+                mapper.mappings = {};
+            }
+            // Instantiate the given type using the given mapper and cache the result
             let result = <ResolvedType>createObjectType(TypeFlags.Anonymous, type.symbol);
             result.properties = instantiateList(getPropertiesOfObjectType(type), mapper, instantiateSymbol);
             result.members = createSymbolTable(result.properties);
@@ -3875,6 +3887,7 @@ module ts {
             let numberIndexType = getIndexTypeOfType(type, IndexKind.Number);
             if (stringIndexType) result.stringIndexType = instantiateType(stringIndexType, mapper);
             if (numberIndexType) result.numberIndexType = instantiateType(numberIndexType, mapper);
+            mapper.mappings[type.id] = result;
             return result;
         }
 
@@ -7127,10 +7140,10 @@ module ts {
         }
 
         function resolveNewExpression(node: NewExpression, candidatesOutArray: Signature[]): Signature {
-            if (node.arguments && languageVersion < ScriptTarget.ES6) {
+            if (node.arguments && languageVersion < ScriptTarget.ES5) {
                 let spreadIndex = getSpreadArgumentIndex(node.arguments);
                 if (spreadIndex >= 0) {
-                    error(node.arguments[spreadIndex], Diagnostics.Spread_operator_in_new_expressions_is_only_available_when_targeting_ECMAScript_6_and_higher);
+                    error(node.arguments[spreadIndex], Diagnostics.Spread_operator_in_new_expressions_is_only_available_when_targeting_ECMAScript_5_and_higher);
                 }
             }
 
@@ -7148,7 +7161,7 @@ module ts {
             // If ConstructExpr's apparent type(section 3.8.1) is an object type with one or
             // more construct signatures, the expression is processed in the same manner as a
             // function call, but using the construct signatures as the initial set of candidate
-            // signatures for overload resolution.The result type of the function call becomes
+            // signatures for overload resolution. The result type of the function call becomes
             // the result type of the operation.
             expressionType = getApparentType(expressionType);
             if (expressionType === unknownType) {
@@ -10914,6 +10927,7 @@ module ts {
                     break;
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
+                    forEach(node.decorators, checkFunctionExpressionBodies);
                     forEach((<MethodDeclaration>node).parameters, checkFunctionExpressionBodies);
                     if (isObjectLiteralMethod(node)) {
                         checkFunctionExpressionOrObjectLiteralMethodBody(<MethodDeclaration>node);
@@ -10928,6 +10942,7 @@ module ts {
                 case SyntaxKind.WithStatement:
                     checkFunctionExpressionBodies((<WithStatement>node).expression);
                     break;
+                case SyntaxKind.Decorator:
                 case SyntaxKind.Parameter:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
@@ -12360,9 +12375,6 @@ module ts {
             }
             else if ((node.kind === SyntaxKind.ImportDeclaration || node.kind === SyntaxKind.ImportEqualsDeclaration) && flags & NodeFlags.Ambient) {
                 return grammarErrorOnNode(lastDeclare, Diagnostics.A_declare_modifier_cannot_be_used_with_an_import_declaration, "declare");
-            }
-            else if (node.kind === SyntaxKind.InterfaceDeclaration && flags & NodeFlags.Ambient) {
-                return grammarErrorOnNode(lastDeclare, Diagnostics.A_declare_modifier_cannot_be_used_with_an_interface_declaration, "declare");
             }
             else if (node.kind === SyntaxKind.Parameter && (flags & NodeFlags.AccessibilityModifier) && isBindingPattern((<ParameterDeclaration>node).name)) {
                 return grammarErrorOnNode(node, Diagnostics.A_parameter_property_may_not_be_a_binding_pattern);
