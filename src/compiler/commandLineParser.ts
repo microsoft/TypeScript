@@ -126,8 +126,8 @@ module ts {
             shortName: "p",
             type: "string",
             isFilePath: true,
-            description: Diagnostics.Compile_the_project_in_the_given_directory,
-            paramType: Diagnostics.DIRECTORY
+            description: Diagnostics.Compile_the_project_by_specifying_a_project_file_or_its_directory,
+            paramType: Diagnostics.PATH
         },
         {
             name: "removeComments",
@@ -308,7 +308,10 @@ module ts {
       * Read tsconfig.json file
       * @param fileName The path to the config file
       */
-    export function readConfigFile(fileName: string): { config?: any; error?: Diagnostic }  {
+    export function readConfigFile(fileName: string): { config?: any; error?: Diagnostic } {
+        if (!sys.fileExists(fileName)) {
+            return { error: createCompilerDiagnostic(Diagnostics.Unable_to_open_file_0, fileName) };
+        }
         try {
             var text = sys.readFile(fileName);
         }
