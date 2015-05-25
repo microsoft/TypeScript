@@ -2495,14 +2495,13 @@ module ts {
             }
         }
 
+        // The outer type parameters are those defined by enclosing generic classes, methods, or functions.
         function getOuterTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] {
             var kind = symbol.flags & SymbolFlags.Class ? SyntaxKind.ClassDeclaration : SyntaxKind.InterfaceDeclaration;
             return appendOuterTypeParameters(undefined, getDeclarationOfKind(symbol, kind));
         }
 
-        // Return combined list of type parameters from all declarations of a class or interface. Elsewhere we check they're all
-        // the same, but even if they're not we still need the complete list to ensure instantiations supply type arguments
-        // for all type parameters.
+        // The local type parameters are the combined set of type parameters from all declarations of the class or interface.
         function getLocalTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] {
             let result: TypeParameter[];
             for (let node of symbol.declarations) {
@@ -2516,6 +2515,8 @@ module ts {
             return result;
         }
 
+        // The full set of type parameters for a generic class or interface type consists of its outer type parameters plus
+        // its locally declared type parameters.
         function getTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] {
             return concatenate(getOuterTypeParametersOfClassOrInterface(symbol), getLocalTypeParametersOfClassOrInterface(symbol));
         }
@@ -3456,12 +3457,15 @@ module ts {
                         else {
                             type = getDeclaredTypeOfSymbol(symbol);
                             if (type.flags & (TypeFlags.Class | TypeFlags.Interface) && type.flags & TypeFlags.Reference) {
-                                let typeParameters = (<InterfaceType>type).typeParameters;
-                                let outerTypeParameters = (<InterfaceType>type).outerTypeParameters;
-                                let expectedTypeArgCount = typeParameters.length - (outerTypeParameters ? outerTypeParameters.length : 0);
+                                // In a type reference, the outer type parameters of the referenced class or interface are automatically
+                                // supplied as type arguments and the type reference only specifies arguments for the local type parameters
+                                // of the class or interface.
+                                let localTypeParameters = (<InterfaceType>type).localTypeParameters;
+                                let expectedTypeArgCount = localTypeParameters ? localTypeParameters.length : 0;
                                 let typeArgCount = node.typeArguments ? node.typeArguments.length : 0;
                                 if (typeArgCount === expectedTypeArgCount) {
-                                    type = createTypeReference(<GenericType>type, concatenate(outerTypeParameters, map(node.typeArguments, getTypeFromTypeNode)));
+                                    type = createTypeReference(<GenericType>type, concatenate((<InterfaceType>type).outerTypeParameters,
+                                        map(node.typeArguments, getTypeFromTypeNode)));
                                 }
                                 else {
                                     error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), expectedTypeArgCount);
