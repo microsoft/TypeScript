@@ -300,12 +300,6 @@ module ts {
         FirstNode = QualifiedName,
     }
 
-    export const enum StatementFlags {
-        Statement = 1,
-        ModuleElement = 2,
-        StatementOrModuleElement = Statement | ModuleElement
-    }
-
     export const enum NodeFlags {
         Export =            0x00000001,  // Declarations
         Ambient =           0x00000002,  // Declarations
@@ -890,7 +884,7 @@ module ts {
         _classElementBrand: any;
     }
 
-    export interface InterfaceDeclaration extends Declaration, ModuleElement {
+    export interface InterfaceDeclaration extends Declaration, Statement {
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
@@ -902,7 +896,7 @@ module ts {
         types?: NodeArray<ExpressionWithTypeArguments>;
     }
 
-    export interface TypeAliasDeclaration extends Declaration, ModuleElement {
+    export interface TypeAliasDeclaration extends Declaration, Statement {
         name: Identifier;
         type: TypeNode;
     }
@@ -914,7 +908,7 @@ module ts {
         initializer?: Expression;
     }
 
-    export interface EnumDeclaration extends Declaration, ModuleElement {
+    export interface EnumDeclaration extends Declaration, Statement {
         name: Identifier;
         members: NodeArray<EnumMember>;
     }

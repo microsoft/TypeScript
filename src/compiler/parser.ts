@@ -436,6 +436,13 @@ module ts {
         // attached to the EOF token.
         let parseErrorBeforeNextFinishedNode: boolean = false;
 
+        export const enum StatementFlags {
+            None = 0,
+            Statement = 1,
+            ModuleElement = 2,
+            StatementOrModuleElement = Statement | ModuleElement
+        }
+
         export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
             sourceText = _sourceText;
             syntaxCursor = _syntaxCursor;
@@ -1001,9 +1008,11 @@ module ts {
             switch (parsingContext) {
                 case ParsingContext.SourceElements:
                 case ParsingContext.ModuleElements:
+                    // During error recovery we don't treat empty statements as statements
                     return !(token === SyntaxKind.SemicolonToken && inErrorRecovery) && isModuleElement();
                 case ParsingContext.BlockStatements:
                 case ParsingContext.SwitchClauseStatements:
+                    // During error recovery we don't treat empty statements as statements
                     return !(token === SyntaxKind.SemicolonToken && inErrorRecovery) && isStatement();
                 case ParsingContext.SwitchClauses:
                     return token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
@@ -3374,7 +3383,7 @@ module ts {
         function parseBlock(ignoreMissingOpenBrace: boolean, checkForStrictMode: boolean, diagnosticMessage?: DiagnosticMessage): Block {
             let node = <Block>createNode(SyntaxKind.Block);
             if (parseExpected(SyntaxKind.OpenBraceToken, diagnosticMessage) || ignoreMissingOpenBrace) {
-                node.statements = <NodeArray<Statement>>parseList(ParsingContext.BlockStatements, checkForStrictMode, parseStatement);
+                node.statements = parseList(ParsingContext.BlockStatements, checkForStrictMode, parseStatement);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -3662,16 +3671,16 @@ module ts {
                     case SyntaxKind.InterfaceKeyword:
                     case SyntaxKind.TypeKeyword:
                         nextToken();
-                        return isIdentifierOrKeyword() ? StatementFlags.Statement : 0;
+                        return isIdentifierOrKeyword() ? StatementFlags.Statement : StatementFlags.None;
                     case SyntaxKind.ModuleKeyword:
                     case SyntaxKind.NamespaceKeyword:
                         nextToken();
-                        return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral ? StatementFlags.ModuleElement : 0;
+                        return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral ? StatementFlags.ModuleElement : StatementFlags.None;
                     case SyntaxKind.ImportKeyword:
                         nextToken();
                         return token === SyntaxKind.StringLiteral || token === SyntaxKind.AsteriskToken ||
                             token === SyntaxKind.OpenBraceToken || isIdentifierOrKeyword() ?
-                            StatementFlags.ModuleElement : 0;
+                            StatementFlags.ModuleElement : StatementFlags.None;
                     case SyntaxKind.ExportKeyword:
                         nextToken();
                         if (token === SyntaxKind.EqualsToken || token === SyntaxKind.AsteriskToken ||
@@ -3687,7 +3696,7 @@ module ts {
                         nextToken();
                         continue;
                     default:
-                        return 0;
+                        return StatementFlags.None;
                 }
             }
         }
@@ -3734,17 +3743,20 @@ module ts {
                 case SyntaxKind.ModuleKeyword:
                 case SyntaxKind.NamespaceKeyword:
                 case SyntaxKind.TypeKeyword:
+                    // When these don't start a declaration, they're an identifier in an expression statement
                     return getDeclarationFlags() || StatementFlags.Statement;
 
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.StaticKeyword:
+                    // When these don't start a declaration, they may be the start of a class member if an identifier
+                    // immediately follows. Otherwise they're an identifier in an expression statement.
                     return getDeclarationFlags() ||
-                        (!lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine) ? StatementFlags.Statement : 0);
+                        (lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine) ? StatementFlags.None : StatementFlags.Statement);
 
                 default:
-                    return isStartOfExpression() ? StatementFlags.Statement : 0;
+                    return isStartOfExpression() ? StatementFlags.Statement : StatementFlags.None;
             }
         }
 

@@ -340,8 +340,10 @@ module ts {
                     if (result = getSymbol(location.locals, name, meaning)) {
                         // Type parameters of a function are in scope in the entire function declaration, including the parameter
                         // list and return type. However, local types are only in scope in the function body.
-                        if (!(meaning & SymbolFlags.Type) || !(result.flags & (SymbolFlags.Type & ~SymbolFlags.TypeParameter)) ||
-                            !isFunctionLike(location) || lastLocation === (<FunctionLikeDeclaration>location).body) {
+                        if (!(meaning & SymbolFlags.Type) ||
+                            !(result.flags & (SymbolFlags.Type & ~SymbolFlags.TypeParameter)) ||
+                            !isFunctionLike(location) ||
+                            lastLocation === (<FunctionLikeDeclaration>location).body) {
                             break loop;
                         }
                         result = undefined;
