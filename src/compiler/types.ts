@@ -1159,6 +1159,10 @@ module ts {
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: number[];
+        
+        // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
+        // Content of this fiels should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
+        /* @internal */ resolvedModules: Map<string>;
     }
 
     export interface ScriptReferenceHost {

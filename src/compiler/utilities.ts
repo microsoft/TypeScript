@@ -78,6 +78,30 @@ module ts {
         return node.end - node.pos;
     }
 
+    export function ensureResolvedModuleNamesAreUptoDate(sourceFile: SourceFile, imports: LiteralExpression[]): void {
+        if (!sourceFile.resolvedModules) {
+            return;
+        }
+        // TOOD: check that imports are consistent
+    }
+
+    export function hasResolvedModuleName(sourceFile: SourceFile, moduleReferenceLiteral: LiteralExpression): boolean {
+        return sourceFile.resolvedModules && hasProperty(sourceFile.resolvedModules, moduleReferenceLiteral.text);
+    }
+
+    export function getResolvedModuleFileName(sourceFile: SourceFile, moduleReferenceLiteral: LiteralExpression): string {
+        return sourceFile.resolvedModules && sourceFile.resolvedModules[moduleReferenceLiteral.text];
+    }
+
+    export function setResolvedModuleName(sourceFile: SourceFile, moduleReferenceLiteral: LiteralExpression, resolvedFileName: string): void {
+        if (!sourceFile.resolvedModules) {
+            sourceFile.resolvedModules = {};
+        }
+
+        // TODO: check if value for the given key already exists and if yes - that it is the same as new value
+        sourceFile.resolvedModules[moduleReferenceLiteral.text] = resolvedFileName;
+    }
+
     // Returns true if this node contains a parse error anywhere underneath it.
     export function containsParseError(node: Node): boolean {
         aggregateChildData(node);

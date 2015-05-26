@@ -862,7 +862,9 @@ module ts {
             // Escape the name in the "require(...)" clause to ensure we find the right symbol.
             let moduleName = escapeIdentifier(moduleReferenceLiteral.text);
 
-            if (!moduleName) return;
+            if (!moduleName) {
+                return;
+            }
             let isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
                 let symbol = getSymbol(globals, '"' + moduleName + '"', SymbolFlags.ValueModule);
@@ -870,20 +872,9 @@ module ts {
                     return symbol;
                 }
             }
-            let fileName: string;
-            let sourceFile: SourceFile;
-            while (true) {
-                fileName = normalizePath(combinePaths(searchPath, moduleName));
-                sourceFile = forEach(supportedExtensions, extension => host.getSourceFile(fileName + extension));
-                if (sourceFile || isRelative) {
-                    break;
-                }
-                let parentPath = getDirectoryPath(searchPath);
-                if (parentPath === searchPath) {
-                    break;
-                }
-                searchPath = parentPath;
-            }
+
+            let fileName = getResolvedModuleFileName(getSourceFile(location), moduleReferenceLiteral);
+            let sourceFile = fileName && host.getSourceFile(fileName);
             if (sourceFile) {
                 if (sourceFile.symbol) {
                     return sourceFile.symbol;
