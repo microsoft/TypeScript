@@ -2473,6 +2473,9 @@ module ts {
             }
         }
 
+        // Appends the type parameters given by a list of declarations to a set of type parameters and returns the resulting set.
+        // The function allocates a new array if the input type parameter set is undefined, but otherwise it modifies the set
+        // in-place and returns the same array.
         function appendTypeParameters(typeParameters: TypeParameter[], declarations: TypeParameterDeclaration[]): TypeParameter[] {
             for (let declaration of declarations) {
                 let tp = getDeclaredTypeOfTypeParameter(getSymbolOfNode(declaration));
@@ -2486,6 +2489,9 @@ module ts {
             return typeParameters;
         }
 
+        // Appends the outer type parameters of a node to a set of type parameters and returns the resulting set. The function
+        // allocates a new array if the input type parameter set is undefined, but otherwise it modifies the set in-place and
+        // returns the same array.
         function appendOuterTypeParameters(typeParameters: TypeParameter[], node: Node): TypeParameter[]{
             while (true) {
                 node = node.parent;
