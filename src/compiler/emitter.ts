@@ -1366,16 +1366,16 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 return true;
             }
 
-            function emitListWithSpread(elements: Expression[], alwaysCopy: boolean, multiLine: boolean, trailingComma: boolean) {
+            function emitListWithSpread(elements: Expression[], needsUniqueCopy: boolean, multiLine: boolean, trailingComma: boolean, useConcat: boolean) {
                 let pos = 0;
                 let group = 0;
                 let length = elements.length;
                 while (pos < length) {
                     // Emit using the pattern <group0>.concat(<group1>, <group2>, ...)
-                    if (group === 1) {
+                    if (group === 1 && useConcat) {
                         write(".concat(");
                     }
-                    else if (group > 1) {
+                    else if (group > 0) {
                         write(", ");
                     }
                     let e = elements[pos];
@@ -1383,7 +1383,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         e = (<SpreadElementExpression>e).expression;
                         emitParenthesizedIf(e, /*parenthesized*/ group === 0 && needsParenthesisForPropertyAccessOrInvocation(e));
                         pos++;
-                        if (pos === length && group === 0 && alwaysCopy && e.kind !== SyntaxKind.ArrayLiteralExpression) {
+                        if (pos === length && group === 0 && needsUniqueCopy && e.kind !== SyntaxKind.ArrayLiteralExpression) {
                             write(".slice()");
                         }
                     }
@@ -1406,7 +1406,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     group++;
                 }
                 if (group > 1) {
-                    write(")");
+                    if(useConcat) {
+                        write(")");
+                    }
                 }
             }
 
@@ -1425,8 +1427,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write("]");
                 }
                 else {
-                    emitListWithSpread(elements, /*alwaysCopy*/ true, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
-                        /*trailingComma*/ elements.hasTrailingComma);
+                    emitListWithSpread(elements, /*needsUniqueCopy*/ true, /*multiLine*/(node.flags & NodeFlags.MultiLine) !== 0,
+                        /*trailingComma*/ elements.hasTrailingComma, /*useConcat*/ true);
                 }
             }
 
@@ -1850,7 +1852,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write("void 0");
                 }
                 write(", ");
-                emitListWithSpread(node.arguments, /*alwaysCopy*/ false, /*multiLine*/ false, /*trailingComma*/ false);
+                emitListWithSpread(node.arguments, /*needsUniqueCopy*/ false, /*multiLine*/ false, /*trailingComma*/ false, /*useConcat*/ true);
                 write(")");
             }
 
@@ -1886,11 +1888,44 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
             function emitNewExpression(node: NewExpression) {
                 write("new ");
-                emit(node.expression);
-                if (node.arguments) {
+
+                // Spread operator logic can be supported in new expressions in ES5 using a combination
+                // of Function.prototype.bind() and Function.prototype.apply().
+                //
+                //     Example:
+                //
+                //         var arguments = [1, 2, 3, 4, 5];
+                //         new Array(...arguments);
+                //
+                //         Could be transpiled into ES5:
+                //
+                //         var arguments = [1, 2, 3, 4, 5];
+                //         new (Array.bind.apply(Array, [void 0].concat(arguments)));
+                //
+                // `[void 0]` is the first argument which represents `thisArg` to the bind method above. 
+                // And `thisArg` will be set to the return value of the constructor when instantiated 
+                // with the new operator — regardless of any value we set `thisArg` to. Thus, we set it 
+                // to an undefined, `void 0`.
+                if (languageVersion === ScriptTarget.ES5 &&
+                    node.arguments &&
+                    hasSpreadElement(node.arguments)) {
+
                     write("(");
-                    emitCommaList(node.arguments);
-                    write(")");
+                    let target = emitCallTarget(node.expression);
+                    write(".bind.apply(");
+                    emit(target);
+                    write(", [void 0].concat(");
+                    emitListWithSpread(node.arguments, /*needsUniqueCopy*/ false, /*multiline*/ false, /*trailingComma*/ false, /*useConcat*/ false);
+                    write(")))");
+                    write("()");
+                }
+                else {
+                    emit(node.expression);
+                    if (node.arguments) {
+                        write("(");
+                        emitCommaList(node.arguments);
+                        write(")");
+                    }
                 }
             }
 
@@ -2229,9 +2264,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 emitEmbeddedStatement(node.statement);
             }
 
-            /* Returns true if start of variable declaration list was emitted.
-             * Return false if nothing was written - this can happen for source file level variable declarations
-             * in system modules - such variable declarations are hoisted.
+            /**
+             * Returns true if start of variable declaration list was emitted.
+             * Returns false if nothing was written - this can happen for source file level variable declarations
+             *     in system modules where such variable declarations are hoisted.
              */
             function tryEmitStartOfVariableDeclarationList(decl: VariableDeclarationList, startPos?: number): boolean {
                 if (shouldHoistVariable(decl, /*checkIfSourceFileLevelDecl*/ true)) {
@@ -2500,7 +2536,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 write(";");
             }
 
-            function emitWithStatement(node: WhileStatement) {
+            function emitWithStatement(node: WithStatement) {
                 write("with (");
                 emit(node.expression);
                 write(")");
@@ -3060,6 +3096,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
             function emitVariableStatement(node: VariableStatement) {
                 let startIsEmitted = false;
+
                 if (node.flags & NodeFlags.Export) {
                     if (isES6ExportedDeclaration(node)) {
                         // Exported ES6 module member
@@ -3070,6 +3107,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 else {
                     startIsEmitted = tryEmitStartOfVariableDeclarationList(node.declarationList);
                 }
+
                 if (startIsEmitted) {
                     emitCommaList(node.declarationList.declarations);
                     write(";");
@@ -3083,6 +3121,28 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile) {
                     forEach(node.declarationList.declarations, emitExportVariableAssignments);
                 }
+            }
+
+            function shouldEmitLeadingAndTrailingCommentsForVariableStatement(node: VariableStatement) {
+                // If we're not exporting the variables, there's nothing special here.
+                // Always emit comments for these nodes.
+                if (!(node.flags & NodeFlags.Export)) {
+                    return true;
+                }
+
+                // If we are exporting, but it's a top-level ES6 module exports,
+                // we'll emit the declaration list verbatim, so emit comments too.
+                if (isES6ExportedDeclaration(node)) {
+                    return true;
+                }
+
+                // Otherwise, only emit if we have at least one initializer present.
+                for (let declaration of node.declarationList.declarations) {
+                    if (declaration.initializer) {
+                        return true;
+                    }
+                }
+                return false;
             }
 
             function emitParameter(node: ParameterDeclaration) {
@@ -5746,6 +5806,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     case SyntaxKind.TypeAliasDeclaration:
                     case SyntaxKind.ExportAssignment:
                         return false;
+
+                    case SyntaxKind.VariableStatement:
+                        return shouldEmitLeadingAndTrailingCommentsForVariableStatement(<VariableStatement>node);
 
                     case SyntaxKind.ModuleDeclaration:
                         // Only emit the leading/trailing comments for a module if we're actually

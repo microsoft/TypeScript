@@ -14,5 +14,4 @@ var Outer;
     var Inner;
     (function (Inner) {
     })(Inner || (Inner = {}));
-     // Since we dont unwind inner any more, it is error here
 })(Outer || (Outer = {}));
