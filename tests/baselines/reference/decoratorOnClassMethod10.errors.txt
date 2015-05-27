@@ -1,6 +1,5 @@
-tests/cases/conformance/decorators/class/method/decoratorOnClassMethod10.ts(4,6): error TS1220: Unable to resolve signature of method decorator when called as an expression.
-  Argument of type 'C' is not assignable to parameter of type 'Function'.
-    Property 'apply' is missing in type 'C'.
+tests/cases/conformance/decorators/class/method/decoratorOnClassMethod10.ts(4,6): error TS2345: Argument of type 'C' is not assignable to parameter of type 'Function'.
+  Property 'apply' is missing in type 'C'.
 
 
 ==== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod10.ts (1 errors) ====
@@ -9,7 +8,6 @@ tests/cases/conformance/decorators/class/method/decoratorOnClassMethod10.ts(4,6)
     class C {
         @dec method() {}
          ~~~
-!!! error TS1220: Unable to resolve signature of method decorator when called as an expression.
-!!! error TS1220:   Argument of type 'C' is not assignable to parameter of type 'Function'.
-!!! error TS1220:     Property 'apply' is missing in type 'C'.
+!!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'Function'.
+!!! error TS2345:   Property 'apply' is missing in type 'C'.
     }

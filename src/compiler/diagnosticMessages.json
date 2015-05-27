@@ -683,13 +683,30 @@
         "category": "Error",
         "code": 1218
     },
-    "The return type of a {0} decorator function must be either 'void' or 'any'.": {
+    "The return type of a property decorator function must be either 'void' or 'any'.": {
         "category": "Error",
         "code": 1219
     },
-    "Unable to resolve signature of {0} decorator when called as an expression.": {
+    "The return type of a parameter decorator function must be either 'void' or 'any'.": {
         "category": "Error",
         "code": 1220
+    },
+    
+    "Unable to resolve signature of class decorator when called as an expression.": {
+        "category": "Error",
+        "code": 1221
+    },
+    "Unable to resolve signature of parameter decorator when called as an expression.": {
+        "category": "Error",
+        "code": 1222
+    },
+    "Unable to resolve signature of property decorator when called as an expression.": {
+        "category": "Error",
+        "code": 1223
+    },
+    "Unable to resolve signature of method decorator when called as an expression.": {
+        "category": "Error",
+        "code": 1224
     },
 
     "Duplicate identifier '{0}'.": {

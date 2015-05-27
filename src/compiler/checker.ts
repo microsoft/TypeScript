@@ -3504,6 +3504,16 @@ module ts {
             return globalESSymbolConstructorSymbol || (globalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol"));
         }
 
+        /**
+          * Creates a TypeReference for a generic `TypedPropertyDescriptor<T>`.
+          */
+        function createTypedPropertyDescriptorType(propertyType: Type): Type {
+            let globalTypedPropertyDescriptorType = getGlobalTypedPropertyDescriptorType();
+            return globalTypedPropertyDescriptorType !== emptyObjectType 
+                ? createTypeReference(<GenericType>globalTypedPropertyDescriptorType, [propertyType]) 
+                : emptyObjectType;
+        }
+        
         function createIterableType(elementType: Type): Type {
             return globalIterableType !== emptyObjectType ? createTypeReference(<GenericType>globalIterableType, [elementType]) : emptyObjectType;
         }
@@ -6605,7 +6615,8 @@ module ts {
 
         function getSpreadArgumentIndex(args: Expression[]): number {
             for (let i = 0; i < args.length; i++) {
-                if (args[i].kind === SyntaxKind.SpreadElementExpression) {
+                let arg = args[i];
+                if (arg && arg.kind === SyntaxKind.SpreadElementExpression) {
                     return i;
                 }
             }
@@ -6616,7 +6627,8 @@ module ts {
             let adjustedArgCount: number;            // Apparent number of arguments we will have in this call
             let typeArguments: NodeArray<TypeNode>;  // Type arguments (undefined if none)
             let callIsIncomplete: boolean;           // In incomplete call we want to be lenient when we have too few arguments
-
+            let isDecorator: boolean;
+            
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                 let tagExpression = <TaggedTemplateExpression>node;
 
@@ -6643,39 +6655,9 @@ module ts {
                 }
             }
             else if (node.kind === SyntaxKind.Decorator) {
-                let decorator = <Decorator>node;
-                switch (decorator.parent.kind) {
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.ClassExpression:
-                        // A class decorator will have one argument (see `ClassDecorator` in core.d.ts)
-                        adjustedArgCount = 1;
-                        typeArguments = undefined;
-                        break;
-
-                    case SyntaxKind.PropertyDeclaration:
-                        // A property declaration decorator will have two arguments (see 
-                        // `PropertyDecorator` in core.d.ts)
-                        adjustedArgCount = 2;
-                        typeArguments = undefined;
-                        break;
-
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                        // A method or accessor declaration decorator will have two or three arguments (see 
-                        // `MethodDecorator` in core.d.ts)
-                        adjustedArgCount = signature.parameters.length >= 3 ? 3 : 2;
-                        typeArguments = undefined;
-                        break;
-
-                    case SyntaxKind.Parameter:
-                        // A parameter declaration decorator will have three arguments (see 
-                        // `ParameterDecorator` in core.d.ts)
-
-                        adjustedArgCount = 3;
-                        typeArguments = undefined;
-                        break;
-                }
+                isDecorator = true;
+                typeArguments = undefined;
+                adjustedArgCount = getEffectiveArgumentCount(node, /*args*/ undefined, signature);
             }
             else {
                 let callExpression = <CallExpression>node;
@@ -6705,7 +6687,7 @@ module ts {
 
             // If spread arguments are present, check that they correspond to a rest parameter. If so, no
             // further checking is necessary.
-            let spreadArgIndex = getSpreadArgumentIndex(args);
+            let spreadArgIndex = !isDecorator ? getSpreadArgumentIndex(args) : -1;
             if (spreadArgIndex >= 0) {
                 return signature.hasRestParameter && spreadArgIndex >= signature.parameters.length - 1;
             }
@@ -6742,7 +6724,7 @@ module ts {
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        function inferTypeArguments(signature: Signature, args: Expression[], excludeArgument: boolean[], context: InferenceContext): void {
+        function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: Expression[], excludeArgument: boolean[], context: InferenceContext): void {
             let typeParameters = signature.typeParameters;
             let inferenceMapper = createInferenceMapper(context);
 
@@ -6770,33 +6752,12 @@ module ts {
 
             // We perform two passes over the arguments. In the first pass we infer from all arguments, but use
             // wildcards for all context sensitive function expressions.
-            for (let i = 0; i < args.length; i++) {
-                let arg = args[i];
-                if (arg.kind !== SyntaxKind.OmittedExpression) {
+            let argCount = getEffectiveArgumentCount(node, args, signature);
+            for (let i = 0; i < argCount; i++) {
+                let arg = getEffectiveArgument(node, args, i);
+                if (!arg || arg.kind !== SyntaxKind.OmittedExpression) {
                     let paramType = getTypeAtPosition(signature, i);
-                    let argType: Type;
-                    if (arg.parent.kind === SyntaxKind.Decorator) {
-                        if (i === 0) {
-                            argType = getDecoratorTargetArgumentType(arg.parent.parent);
-                        }
-                        else if (i === 1) {
-                            argType = getDecoratorPropertyKeyArgumentType(arg.parent.parent);
-                        }
-                        else if (i === 2) {
-                            argType = getDecoratorPropertyIndexOrDescriptorArgumentType(arg.parent.parent);
-                        }
-                    }
-                    else if (i === 0 && arg.parent.kind === SyntaxKind.TaggedTemplateExpression) {
-                        argType = globalTemplateStringsArrayType;
-                    }
-
-                    if (argType === undefined) {
-                        // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
-                        // context sensitive function expressions as wildcards
-                        let mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : inferenceMapper;
-                        argType = checkExpressionWithContextualType(arg, paramType, mapper);
-                    }
-
+                    let argType = getEffectiveArgumentType(node, i, arg, paramType, excludeArgument, inferenceMapper, /*reportErrors*/ false);
                     inferTypes(context, argType, paramType);
                 }
             }
@@ -6804,8 +6765,10 @@ module ts {
             // In the second pass we visit only context sensitive arguments, and only those that aren't excluded, this
             // time treating function expressions normally (which may cause previously inferred type arguments to be fixed
             // as we construct types for contextually typed parameters)
+            // Decorators will not have `excludeArgument`, as their arguments cannot be contextually typed.
+            // Tagged template expressions will always have `undefined` for `excludeArgument[0]`.
             if (excludeArgument) {
-                for (let i = 0; i < args.length; i++) {
+                for (let i = 0; i < argCount; i++) {
                     // No need to check for omitted args and template expressions, their exlusion value is always undefined
                     if (excludeArgument[i] === false) {
                         let arg = args[i];
@@ -6818,7 +6781,7 @@ module ts {
             getInferredTypes(context);
         }
 
-        function checkTypeArguments(signature: Signature, typeArguments: TypeNode[], typeArgumentResultTypes: Type[], reportErrors: boolean, containingMessageChain?: DiagnosticMessageChain): boolean {
+        function checkTypeArguments(signature: Signature, typeArguments: TypeNode[], typeArgumentResultTypes: Type[], reportErrors: boolean, headMessage?: DiagnosticMessage): boolean {
             let typeParameters = signature.typeParameters;
             let typeArgumentsAreAssignable = true;
             for (let i = 0; i < typeParameters.length; i++) {
@@ -6829,180 +6792,44 @@ module ts {
                 if (typeArgumentsAreAssignable /* so far */) {
                     let constraint = getConstraintOfTypeParameter(typeParameters[i]);
                     if (constraint) {
-                        typeArgumentsAreAssignable = checkTypeAssignableTo(typeArgument, constraint, reportErrors ? typeArgNode : undefined,
-                            Diagnostics.Type_0_does_not_satisfy_the_constraint_1, containingMessageChain);
+                        let errorInfo: DiagnosticMessageChain;
+                        let typeArgumentHeadMessage = Diagnostics.Type_0_does_not_satisfy_the_constraint_1;
+                        if (reportErrors && headMessage) {
+                            errorInfo = chainDiagnosticMessages(errorInfo, typeArgumentHeadMessage);
+                            typeArgumentHeadMessage = headMessage;
+                        }
+                        
+                        typeArgumentsAreAssignable = checkTypeAssignableTo(
+                            typeArgument, 
+                            constraint, 
+                            reportErrors ? typeArgNode : undefined,
+                            typeArgumentHeadMessage, 
+                            errorInfo);
                     }
                 }
             }
+            
             return typeArgumentsAreAssignable;
         }
-        
-        function getTypeOfParentOfClassElement(node: ClassElement) {
-            let classSymbol = getSymbolOfNode(node.parent);
-            if (node.flags & NodeFlags.Static) {
-                return getTypeOfSymbol(classSymbol);
-            }
-            else {
-                return getDeclaredTypeOfSymbol(classSymbol);
-            }
-        }
-        
-        function createTypedPropertyDescriptorType(propertyType: Type): Type {
-            let globalTypedPropertyDescriptorType = getGlobalTypedPropertyDescriptorType();
-            return globalTypedPropertyDescriptorType !== emptyObjectType 
-                ? createTypeReference(<GenericType>globalTypedPropertyDescriptorType, [propertyType]) 
-                : emptyObjectType;
-        }
-        
-        function getDecoratorTargetArgumentType(target: Node): Type {
-            // The first argument to a decorator is its `target`.
-            switch (target.kind) {
-                case SyntaxKind.ClassDeclaration:
-                    // For a class decorator, the `target` is the type of the class (e.g. the 
-                    // "static" or "constructor" side of the class)
-                    let classSymbol = getSymbolOfNode(target);
-                    return getTypeOfSymbol(classSymbol);
-                
-                case SyntaxKind.Parameter:
-                    // For a parameter decorator, the `target` is the parent type of the 
-                    // parameter's containing method. 
-                    target = target.parent;
-                    if (target.kind === SyntaxKind.Constructor) {
-                        let classSymbol = getSymbolOfNode(target);
-                        return getTypeOfSymbol(classSymbol);
-                    }
-                    
-                    // fall-through
-                    
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    // For a property or method decorator, the `target` is the
-                    // "static"-side type of the parent of the member if the member is
-                    // declared "static"; otherwise, it is the "instance"-side type of the 
-                    // parent of the member.
-                    return getTypeOfParentOfClassElement(<ClassElement>target);
-                    
-                default:
-                    return undefined;
-            }
-        }
-        
-        function getDecoratorPropertyKeyArgumentType(target: Node) {
-            // The second argument to a decorator is its `propertyKey`
-            switch (target.kind) {
-                case SyntaxKind.ClassDeclaration:
-                    Debug.fail("Class decorators should not have a second synthetic argument.");
-                        
-                case SyntaxKind.Parameter:
-                    target = target.parent;
-                    if (target.kind === SyntaxKind.Constructor) {
-                        // For a constructor parameter decorator, the `propertyKey` will be `undefined`.
-                        return anyType;
-                    }
-                    
-                    // For a non-constructor parameter decorator, the `propertyKey` will be either
-                    // a string or a symbol, based on the name of the parameter's containing method.
-                    
-                    // fall-through
-                    
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    // The `propertyKey` for a property or method decorator will be a
-                    // string literal type if the member name is an identifier, number, or string; 
-                    // otherwise, if the member name is a computed property name it will
-                    // be either string or symbol.
-                    let element = <ClassElement>target;
-                    switch (element.name.kind) {
-                        case SyntaxKind.Identifier:
-                        case SyntaxKind.NumericLiteral:
-                        case SyntaxKind.StringLiteral:
-                            return getStringLiteralType(<StringLiteral>element.name);
-                            
-                        case SyntaxKind.ComputedPropertyName:
-                            let nameType = checkComputedPropertyName(<ComputedPropertyName>element.name);
-                            if (allConstituentTypesHaveKind(nameType, TypeFlags.ESSymbol)) {
-                                return nameType;
-                            }
-                            else {
-                                return stringType;
-                            }
-                    }
-            }
-        }
-        
-        function getDecoratorPropertyIndexOrDescriptorArgumentType(parent: Node) {
-            // The third argument to a decorator is either its `descriptor` for a method decorator
-            // or its `parameterIndex` for a paramter decorator
-            switch (parent.kind) {
-                case SyntaxKind.ClassDeclaration:
-                    Debug.fail("Class decorators should not have a third synthetic argument.");
-                    break;
 
-                case SyntaxKind.Parameter:
-                    // The `parameterIndex` for a parameter decorator is always a number
-                    return numberType;
-
-                case SyntaxKind.PropertyDeclaration:
-                    Debug.fail("Property decorators should not have a third synthetic argument.");
-                    break;
-
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    // The `descriptor` for a method decorator will be a `TypedPropertyDescriptor<T>`
-                    // for the type of the member.
-                    let propertyType: Type = getTypeOfNode(parent);
-                    return createTypedPropertyDescriptorType(propertyType);
-            }
-        }
-        
-        function checkApplicableSignature(node: CallLikeExpression, args: Expression[], signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[], reportErrors: boolean, containingMessageChain?: DiagnosticMessageChain) {
-            for (let i = 0; i < args.length; i++) {
-                let arg = args[i];
-                if (arg.kind !== SyntaxKind.OmittedExpression) {
+        function checkApplicableSignature(node: CallLikeExpression, args: Expression[], signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[], reportErrors: boolean) {
+            let argCount = getEffectiveArgumentCount(node, args, signature);
+            for (let i = 0; i < argCount; i++) {
+                let arg = getEffectiveArgument(node, args, i);
+                if (!arg || arg.kind !== SyntaxKind.OmittedExpression) {
                     // Check spread elements against rest type (from arity check we know spread argument corresponds to a rest parameter)
                     let paramType = getTypeAtPosition(signature, i);
-
-                    // Decorators provide special arguments, a tagged template expression provides 
-                    // a special first argument, and string literals get string literal types
-                    // unless we're reporting errors
-                    let argType: Type;
-                    if (arg.parent.kind === SyntaxKind.Decorator) {
-                        if (i === 0) {
-                            argType = getDecoratorTargetArgumentType(arg.parent.parent);
-                        }
-                        else if (i === 1) {
-                            argType = getDecoratorPropertyKeyArgumentType(arg.parent.parent);
-                        }
-                        else if (i === 2) {
-                            argType = getDecoratorPropertyIndexOrDescriptorArgumentType(arg.parent.parent);
-                        }
-                    }
-                    else if (i === 0 && arg.parent.kind === SyntaxKind.TaggedTemplateExpression) {
-                        argType = globalTemplateStringsArrayType;
-                    }
-
-                    if (argType === undefined) {
-                        if (arg.kind === SyntaxKind.StringLiteral && !reportErrors) {
-                            argType = getStringLiteralType(<StringLiteral>arg);
-                        }
-                        else {
-                            argType = checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
-                        }
-                    }
+                    let argType = getEffectiveArgumentType(node, i, arg, paramType, excludeArgument, /*inferenceMapper*/ undefined, reportErrors);
 
                     // Use argument expression as error location when reporting errors
-                    let errorNode = reportErrors ? arg : undefined;
+                    let errorNode = reportErrors ? getEffectiveArgumentErrorNode(node, i, arg) : undefined;
                     let headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
-                    if (!checkTypeRelatedTo(argType, paramType, relation, errorNode, headMessage, containingMessageChain)) {
+                    if (!checkTypeRelatedTo(argType, paramType, relation, errorNode, headMessage)) {
                         return false;
                     }
                 }
             }
+            
             return true;
         }
 
@@ -7011,17 +6838,15 @@ module ts {
          *
          * If 'node' is a CallExpression or a NewExpression, then its argument list is returned.
          * If 'node' is a TaggedTemplateExpression, a new argument list is constructed from the substitution
-         *    expressions, where the first element of the list is the template for error reporting purposes.
-         * If 'node' is a Decorator, a new argument list is constructed with the decorator
-         *    expression as a placeholder to help when choosing an applicable signature and
-         *    for error reporting purposes.
+         *    expressions, where the first element of the list is `undefined`.
+         * If 'node' is a Decorator, the argument list will be `undefined`, and its arguments and types
+         *    will be supplied from calls to `getEffectiveArgumentCount` and `getEffectiveArgumentType`.
          */
         function getEffectiveCallArguments(node: CallLikeExpression): Expression[] {
             let args: Expression[];
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                 let template = (<TaggedTemplateExpression>node).template;
-                args = [template];
-
+                args = [undefined];
                 if (template.kind === SyntaxKind.TemplateExpression) {
                     forEach((<TemplateExpression>template).templateSpans, span => {
                         args.push(span.expression);
@@ -7029,21 +6854,10 @@ module ts {
                 }
             }
             else if (node.kind === SyntaxKind.Decorator) {
-                let decorator = <Decorator>node;
-                switch (decorator.parent.kind) {
-                    case SyntaxKind.ClassDeclaration:
-                        args = [decorator.expression];
-                        break;
-                    case SyntaxKind.PropertyDeclaration:
-                        args = [decorator.expression, decorator.expression];
-                        break;
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.Parameter:
-                        args = [decorator.expression, decorator.expression, decorator.expression];
-                        break;
-                }
+                // For a decorator, we return undefined as we will determine
+                // the number and types of arguments for a decorator using
+                // `getEffectiveArgumentCount` and `getEffectiveArgumentType` below.
+                return undefined;
             }
             else {
                 args = (<CallExpression>node).arguments || emptyArray;
@@ -7074,7 +6888,287 @@ module ts {
             }
         }
         
-        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], containingMessageChain?: DiagnosticMessageChain): Signature {
+        /**
+          * Returns the effective argument count for a node that works like a function invocation.
+          * If 'node' is a Decorator, the number of arguments is derived from the decoration
+          *    target and the signature:
+          *    If 'node.target' is a class declaration or class expression, the effective argument 
+          *       count is 1.
+          *    If 'node.target' is a parameter declaration, the effective argument count is 3.
+          *    If 'node.target' is a property declaration, the effective argument count is 2.
+          *    If 'node.target' is a method or accessor declaration, the effective argument count 
+          *       is 3, although it can be 2 if the signature only accepts two arguments, allowing
+          *       us to match a property decorator. 
+          * Otherwise, the argument count is the length of the 'args' array.
+          */
+        function getEffectiveArgumentCount(node: CallLikeExpression, args: Expression[], signature: Signature) {
+            if (node.kind === SyntaxKind.Decorator) {
+                switch (node.parent.kind) {
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.ClassExpression:
+                        // A class decorator will have one argument (see `ClassDecorator` in core.d.ts)
+                        return 1;
+
+                    case SyntaxKind.PropertyDeclaration:
+                        // A property declaration decorator will have two arguments (see 
+                        // `PropertyDecorator` in core.d.ts)
+                        return 2;
+
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        // A method or accessor declaration decorator will have two or three arguments (see
+                        // `PropertyDecorator` and `MethodDecorator` in core.d.ts)
+                        // If the method decorator signature only accepts a target and a key, we will only  
+                        // type check those arguments.
+                        return signature.parameters.length >= 3 ? 3 : 2;
+
+                    case SyntaxKind.Parameter:
+                        // A parameter declaration decorator will have three arguments (see 
+                        // `ParameterDecorator` in core.d.ts)
+
+                        return 3;
+                }
+            }
+            else {
+                return args.length;
+            }
+        }
+        
+        /**
+          * Returns the effective type of the first argument to a decorator.
+          * If 'node' is a class declaration or class expression, the effective argument type
+          *    is the type of the static side of the class.
+          * If 'node' is a parameter declaration, the effective argument type is either the type
+          *    of the static or instance side of the class for the parameter's parent method, 
+          *    depending on whether the method is declared static.
+          *    For a constructor, the type is always the type of the static side of the class.
+          * If 'node' is a property, method, or accessor declaration, the effective argument 
+          *    type is the type of the static or instance side of the parent class for class 
+          *    element, depending on whether the element is declared static. 
+          */
+        function getEffectiveDecoratorFirstArgumentType(node: Node): Type {
+            // The first argument to a decorator is its `target`.
+            switch (node.kind) {
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
+                    // For a class decorator, the `target` is the type of the class (e.g. the 
+                    // "static" or "constructor" side of the class)
+                    let classSymbol = getSymbolOfNode(node);
+                    return getTypeOfSymbol(classSymbol);
+                
+                case SyntaxKind.Parameter:
+                    // For a parameter decorator, the `target` is the parent type of the 
+                    // parameter's containing method. 
+                    node = node.parent;
+                    if (node.kind === SyntaxKind.Constructor) {
+                        let classSymbol = getSymbolOfNode(node);
+                        return getTypeOfSymbol(classSymbol);
+                    }
+                    
+                    // fall-through
+                    
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    // For a property or method decorator, the `target` is the
+                    // "static"-side type of the parent of the member if the member is
+                    // declared "static"; otherwise, it is the "instance"-side type of the 
+                    // parent of the member.
+                    return getParentTypeOfClassElement(<ClassElement>node);
+                    
+                default:
+                    Debug.fail("Unsupported decorator target.");
+                    return unknownType;
+            }
+        }
+        
+        /**
+          * Returns the effective type for the second argument to a decorator.
+          * If 'node' is a parameter, its effective argument type is one of the following:
+          *    If 'node.parent' is a constructor, the effective argument type is 'any', as we 
+          *       will emit `undefined`.
+          *    If 'node.parent' is a member with an identifier, numeric, or string literal name, 
+          *       the effective argument type will be a string literal type for the member name.
+          *    If 'node.parent' is a computed property name, the effective argument type will 
+          *       either be a symbol type or the string type.
+          * If 'node' is a member with an identifier, numeric, or string literal name, the 
+          *    effective argument type will be a string literal type for the member name.
+          * If 'node' is a computed property name, the effective argument type will either 
+          *    be a symbol type or the string type.
+          * A class decorator does not have a second argument type.
+          */
+        function getEffectiveDecoratorSecondArgumentType(node: Node) {
+            // The second argument to a decorator is its `propertyKey`
+            switch (node.kind) {
+                case SyntaxKind.ClassDeclaration:
+                    Debug.fail("Class decorators should not have a second synthetic argument.");
+                    return unknownType;
+                    
+                case SyntaxKind.Parameter:
+                    node = node.parent;
+                    if (node.kind === SyntaxKind.Constructor) {
+                        // For a constructor parameter decorator, the `propertyKey` will be `undefined`.
+                        return anyType;
+                    }
+                    
+                    // For a non-constructor parameter decorator, the `propertyKey` will be either
+                    // a string or a symbol, based on the name of the parameter's containing method.
+                    
+                    // fall-through
+                    
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    // The `propertyKey` for a property or method decorator will be a
+                    // string literal type if the member name is an identifier, number, or string; 
+                    // otherwise, if the member name is a computed property name it will
+                    // be either string or symbol.
+                    let element = <ClassElement>node;
+                    switch (element.name.kind) {
+                        case SyntaxKind.Identifier:
+                        case SyntaxKind.NumericLiteral:
+                        case SyntaxKind.StringLiteral:
+                            return getStringLiteralType(<StringLiteral>element.name);
+                            
+                        case SyntaxKind.ComputedPropertyName:
+                            let nameType = checkComputedPropertyName(<ComputedPropertyName>element.name);
+                            if (allConstituentTypesHaveKind(nameType, TypeFlags.ESSymbol)) {
+                                return nameType;
+                            }
+                            else {
+                                return stringType;
+                            }
+                            
+                        default:
+                            Debug.fail("Unsupported property name.");
+                            return unknownType;
+                    }
+
+                    
+                default:
+                    Debug.fail("Unsupported decorator target.");
+                    return unknownType;
+            }
+        }
+        
+        /**
+          * Returns the effective argument type for the third argument to a decorator.
+          * If 'node' is a parameter, the effective argument type is the number type.
+          * If 'node' is a method or accessor, the effective argument type is a 
+          *    `TypedPropertyDescriptor<T>` instantiated with the type of the member.
+          * Class and property decorators do not have a third effective argument.
+          */
+        function getEffectiveDecoratorThirdArgumentType(node: Node) {
+            // The third argument to a decorator is either its `descriptor` for a method decorator
+            // or its `parameterIndex` for a paramter decorator
+            switch (node.kind) {
+                case SyntaxKind.ClassDeclaration:
+                    Debug.fail("Class decorators should not have a third synthetic argument.");
+                    return unknownType;
+
+                case SyntaxKind.Parameter:
+                    // The `parameterIndex` for a parameter decorator is always a number
+                    return numberType;
+
+                case SyntaxKind.PropertyDeclaration:
+                    Debug.fail("Property decorators should not have a third synthetic argument.");
+                    return unknownType;
+
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    // The `descriptor` for a method decorator will be a `TypedPropertyDescriptor<T>`
+                    // for the type of the member.
+                    let propertyType = getTypeOfNode(node);
+                    return createTypedPropertyDescriptorType(propertyType);
+                    
+                default:
+                    Debug.fail("Unsupported decorator target.");
+                    return unknownType;
+            }
+        }
+        
+        /**
+          * Returns the effective argument type for the provided argument to a decorator.
+          */
+        function getEffectiveDecoratorArgumentType(node: Decorator, argIndex: number): Type {
+            if (argIndex === 0) {
+                return getEffectiveDecoratorFirstArgumentType(node.parent);
+            }
+            else if (argIndex === 1) {
+                return getEffectiveDecoratorSecondArgumentType(node.parent);
+            }
+            else if (argIndex === 2) {
+                return getEffectiveDecoratorThirdArgumentType(node.parent);
+            }
+
+            Debug.fail("Decorators should not have a fourth synthetic argument.");
+            return unknownType;
+        }
+        
+        /**
+          * Gets the effective argument type for an argument in a call expression.
+          */
+        function getEffectiveArgumentType(node: CallLikeExpression, argIndex: number, arg: Expression, paramType: Type, excludeArgument: boolean[], inferenceMapper: TypeMapper, reportErrors: boolean): Type {
+            // Decorators provide special arguments, a tagged template expression provides 
+            // a special first argument, and string literals get string literal types
+            // unless we're reporting errors
+            if (node.kind === SyntaxKind.Decorator) {
+                return getEffectiveDecoratorArgumentType(<Decorator>node, argIndex);
+            }
+            else if (argIndex === 0 && node.kind === SyntaxKind.TaggedTemplateExpression) {
+                return globalTemplateStringsArrayType;
+            }
+            else if (!inferenceMapper && !reportErrors && arg.kind === SyntaxKind.StringLiteral) {
+                return getStringLiteralType(<StringLiteral>arg);
+            }
+            else {
+                let mapper: TypeMapper;
+                if (inferenceMapper) {
+                    mapper = excludeArgument && excludeArgument[argIndex] !== undefined ? identityMapper : inferenceMapper; 
+                }
+                else {
+                    mapper = excludeArgument && excludeArgument[argIndex] ? identityMapper : undefined;
+                }
+
+                return checkExpressionWithContextualType(arg, paramType, mapper);
+            }
+        }
+        
+        /**
+          * Gets the effective argument expression for an argument in a call expression. 
+          */
+        function getEffectiveArgument(node: CallLikeExpression, args: Expression[], argIndex: number) {
+            // For a decorator or the first argument of a tagged template expression we return undefined.
+            if (node.kind === SyntaxKind.Decorator ||
+                (argIndex === 0 && node.kind === SyntaxKind.TaggedTemplateExpression)) {
+                return undefined;
+            }
+            
+            return args[argIndex];
+        }
+
+        /**
+          * Gets the error node to use when reporting errors for an effective argument.
+          */
+        function getEffectiveArgumentErrorNode(node: CallLikeExpression, argIndex: number, arg: Expression) {
+            if (node.kind === SyntaxKind.Decorator) {
+                // For a decorator, we use the expression of the decorator for error reporting.
+                return (<Decorator>node).expression;
+            }
+            else if (argIndex === 0 && node.kind === SyntaxKind.TaggedTemplateExpression) {
+                // For a the first argument of a tagged template expression, we use the template of the tag for error reporting.
+                return (<TaggedTemplateExpression>node).template;
+            }
+            else {
+                return arg;
+            }
+        }
+        
+        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], headMessage?: DiagnosticMessage): Signature {
             let isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             let isDecorator = node.kind === SyntaxKind.Decorator;
 
@@ -7115,6 +7209,8 @@ module ts {
             // decorators are applied to a declaration by the emitter, and not to an expression.
             let excludeArgument: boolean[];
             if (!isDecorator) {
+                // We do not need to call `getEffectiveArgumentCount` here as it only
+                // applies when calculating the number of arguments for a decorator.
                 for (let i = isTaggedTemplate ? 1 : 0; i < args.length; i++) {
                     if (isContextSensitive(args[i])) {
                         if (!excludeArgument) {
@@ -7185,11 +7281,11 @@ module ts {
                 // in arguments too early. If possible, we'd like to only type them once we know the correct
                 // overload. However, this matters for the case where the call is correct. When the call is
                 // an error, we don't need to exclude any arguments, although it would cause no harm to do so.
-                checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true, containingMessageChain);
+                checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
             }
             else if (candidateForTypeArgumentError) {
                 if (!isTaggedTemplate && !isDecorator && (<CallExpression>node).typeArguments) {
-                    checkTypeArguments(candidateForTypeArgumentError, (<CallExpression>node).typeArguments, [], /*reportErrors*/ true, containingMessageChain)
+                    checkTypeArguments(candidateForTypeArgumentError, (<CallExpression>node).typeArguments, [], /*reportErrors*/ true, headMessage)
                 }
                 else {
                     Debug.assert(resultOfFailedInference.failedTypeParameterIndex >= 0);
@@ -7200,8 +7296,8 @@ module ts {
                         Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
                         typeToString(failedTypeParameter));
                         
-                    if (containingMessageChain) {
-                        diagnosticChainHead = concatenateDiagnosticMessageChains(containingMessageChain, diagnosticChainHead);
+                    if (headMessage) {
+                        diagnosticChainHead = chainDiagnosticMessages(diagnosticChainHead, headMessage);
                     }
 
                     reportNoCommonSupertypeError(inferenceCandidates, (<CallExpression>node).expression || (<TaggedTemplateExpression>node).tag, diagnosticChainHead);
@@ -7227,9 +7323,10 @@ module ts {
             return resolveErrorCall(node);
             
             function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
-                let errorInfo = chainDiagnosticMessages(/*details*/ undefined, message, arg0, arg1, arg2);
-                if (containingMessageChain) {
-                    errorInfo = concatenateDiagnosticMessageChains(containingMessageChain, errorInfo);
+                let errorInfo: DiagnosticMessageChain;
+                errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2);
+                if (headMessage) {
+                    errorInfo = chainDiagnosticMessages(errorInfo, headMessage);
                 }
 
                 diagnostics.add(createDiagnosticForNodeFromMessageChain(node, errorInfo));
@@ -7256,7 +7353,7 @@ module ts {
                                 typeArgumentsAreValid = checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false)
                             }
                             else {
-                                inferTypeArguments(candidate, args, excludeArgument, inferenceContext);
+                                inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
                                 typeArgumentsAreValid = inferenceContext.failedTypeParameterIndex === undefined;
                                 typeArgumentTypes = inferenceContext.inferredTypes;
                             }
@@ -7433,7 +7530,32 @@ module ts {
 
             return resolveCall(node, callSignatures, candidatesOutArray);
         }
+        
+        /**
+          * Gets the localized diagnostic head message to use for errors when resolving a decorator as a call expression.
+          */
+        function getDiagnosticHeadMessageForDecoratorResolution(node: Decorator) {
+            switch (node.parent.kind) {
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
+                    return Diagnostics.Unable_to_resolve_signature_of_class_decorator_when_called_as_an_expression;
+                
+                case SyntaxKind.Parameter:
+                    return Diagnostics.Unable_to_resolve_signature_of_parameter_decorator_when_called_as_an_expression;
+                    
+                case SyntaxKind.PropertyDeclaration:
+                    return Diagnostics.Unable_to_resolve_signature_of_property_decorator_when_called_as_an_expression;
+                    
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return Diagnostics.Unable_to_resolve_signature_of_method_decorator_when_called_as_an_expression;
+            }
+        }
 
+        /**
+          * Resolves a decorator as if it were a call expression.
+          */
         function resolveDecorator(node: Decorator, candidatesOutArray: Signature[]): Signature {
             let funcType = checkExpression(node.expression);
             let apparentType = getApparentType(funcType);
@@ -7446,43 +7568,16 @@ module ts {
                 return resolveUntypedCall(node);
             }
             
-            let decoratorKind: string;
-            switch (node.parent.kind) {
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression:
-                    decoratorKind = "class";
-                    break;
-                    
-                case SyntaxKind.Parameter:
-                    decoratorKind = "parameter";
-                    break;
-                
-                case SyntaxKind.PropertyDeclaration:
-                    decoratorKind = "property";
-                    break;
-                    
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    decoratorKind = "method";
-                    break;
-                
-                default:
-                    Debug.fail("Invalid decorator target.");
-                    break;
-            }
-            
-            let diagnosticChainHead = chainDiagnosticMessages(
-                /*details*/ undefined, 
-                Diagnostics.Unable_to_resolve_signature_of_0_decorator_when_called_as_an_expression, decoratorKind);
+            let headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
             if (!callSignatures.length) {
-                let errorInfo = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature);
-                errorInfo = concatenateDiagnosticMessageChains(diagnosticChainHead, errorInfo);
+                let errorInfo: DiagnosticMessageChain;
+                errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature);
+                errorInfo = chainDiagnosticMessages(errorInfo, headMessage);
                 diagnostics.add(createDiagnosticForNodeFromMessageChain(node, errorInfo));
                 return resolveErrorCall(node);
             }
             
-            return resolveCall(node, callSignatures, candidatesOutArray, diagnosticChainHead);
+            return resolveCall(node, callSignatures, candidatesOutArray, headMessage);
         }
 
         // candidatesOutArray is passed by signature help in the language service, and collectCandidates
@@ -9134,24 +9229,28 @@ module ts {
             }
             
             let expectedReturnType: Type; 
-            let diagnosticChainHead: DiagnosticMessageChain;
-            let decoratorKind: string;
+            let headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
+            let errorInfo: DiagnosticMessageChain;
             switch (node.parent.kind) {
                 case SyntaxKind.ClassDeclaration:
                     let classSymbol = getSymbolOfNode(node.parent);
                     let classConstructorType = getTypeOfSymbol(classSymbol);
                     expectedReturnType = getUnionType([classConstructorType, voidType]);
-                    decoratorKind = "class";
                     break;
 
                 case SyntaxKind.Parameter:
                     expectedReturnType = voidType;
-                    decoratorKind = "parameter";
-                    break;
+                    errorInfo = chainDiagnosticMessages(
+                        errorInfo,
+                        Diagnostics.The_return_type_of_a_parameter_decorator_function_must_be_either_void_or_any);
 
+                    break;
+                    
                 case SyntaxKind.PropertyDeclaration:
                     expectedReturnType = voidType;
-                    decoratorKind = "property";
+                    errorInfo = chainDiagnosticMessages(
+                        errorInfo,
+                        Diagnostics.The_return_type_of_a_property_decorator_function_must_be_either_void_or_any);
                     break;
 
                 case SyntaxKind.MethodDeclaration:
@@ -9160,23 +9259,15 @@ module ts {
                     let methodType = getTypeOfNode(node.parent);
                     let descriptorType = createTypedPropertyDescriptorType(methodType);
                     expectedReturnType = getUnionType([descriptorType, voidType]);
-                    decoratorKind = "method";
                     break;
             }
             
-            if (expectedReturnType === voidType) {
-                diagnosticChainHead = chainDiagnosticMessages(
-                    diagnosticChainHead, 
-                    Diagnostics.The_return_type_of_a_0_decorator_function_must_be_either_void_or_any,
-                    decoratorKind);
-            }
-            
-            diagnosticChainHead = chainDiagnosticMessages(
-                diagnosticChainHead,
-                Diagnostics.Unable_to_resolve_signature_of_0_decorator_when_called_as_an_expression,
-                decoratorKind);
-                
-            checkTypeAssignableTo(returnType, expectedReturnType, node, /*headMessage*/ undefined, diagnosticChainHead);
+            checkTypeAssignableTo(
+                returnType, 
+                expectedReturnType, 
+                node, 
+                headMessage, 
+                errorInfo);
         }
         
         /** Checks a type reference node as an expression. */
@@ -11815,6 +11906,17 @@ module ts {
             return checkExpression(expr);
         }
 
+        /**
+          * Gets either the static or instance type of a class element, based on 
+          * whether the element is declared as "static".
+          */
+        function getParentTypeOfClassElement(node: ClassElement) {
+            let classSymbol = getSymbolOfNode(node.parent);
+            return node.flags & NodeFlags.Static 
+                ? getTypeOfSymbol(classSymbol)
+                : getDeclaredTypeOfSymbol(classSymbol);
+        }
+        
         // Return the list of properties of the given type, augmented with properties from Function
         // if the type has call or construct signatures
         function getAugmentedPropertiesOfType(type: Type): Symbol[] {
