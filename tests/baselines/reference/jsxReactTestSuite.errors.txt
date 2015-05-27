@@ -1,0 +1,225 @@
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(1,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(3,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(7,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(14,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(18,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(23,3): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(41,3): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(55,3): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(65,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(67,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(69,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(71,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(73,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(75,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(77,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(80,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(83,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(85,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(87,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(89,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(91,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(93,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(95,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(98,1): error TS17005: JSX elements are not currently supported.
+tests/cases/conformance/jsx/jsxReactTestSuite.tsx(100,1): error TS17005: JSX elements are not currently supported.
+
+
+==== tests/cases/conformance/jsx/jsxReactTestSuite.tsx (25 errors) ====
+    <div>text</div>;
+    ~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <div>
+    ~~~~~
+      {this.props.children}
+    ~~~~~~~~~~~~~~~~~~~~~~~
+    </div>;
+    ~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <div>
+    ~~~~~
+      <div><br /></div>
+    ~~~~~~~~~~~~~~~~~~~
+      <Component>{foo}<br />{bar}</Component>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      <br />
+    ~~~~~~~~
+    </div>;
+    ~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    
+    <Composite>
+    ~~~~~~~~~~~
+        {this.props.children}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    </Composite>;
+    ~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <Composite>
+    ~~~~~~~~~~~
+        <Composite2 />
+    ~~~~~~~~~~~~~~~~~~
+    </Composite>;
+    ~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    var x =
+      <div
+      ~~~~
+        attr1={
+    ~~~~~~~~~~~
+          "foo" + "bar"
+    ~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+        attr2={
+    ~~~~~~~~~~~
+          "foo" + "bar" +
+    ~~~~~~~~~~~~~~~~~~~~~
+          
+    ~~~~~~
+          "baz" + "bug"
+    ~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+        attr3={
+    ~~~~~~~~~~~
+          "foo" + "bar" +
+    ~~~~~~~~~~~~~~~~~~~~~
+          "baz" + "bug"
+    ~~~~~~~~~~~~~~~~~~~
+          // Extra line here.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+        attr4="baz">
+    ~~~~~~~~~~~~~~~~
+      </div>;
+    ~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    (
+      <div>
+      ~~~~~
+        {/* A comment at the beginning */}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        {/* A second comment at the beginning */}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        <span>
+    ~~~~~~~~~~
+          {/* A nested comment */}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        </span>
+    ~~~~~~~~~~~
+        {/* A sandwiched comment */}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        <br />
+    ~~~~~~~~~~
+        {/* A comment at the end */}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        {/* A second comment at the end */}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      </div>
+    ~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    );
+    
+    (
+      <div
+      ~~~~
+        /* a multi-line
+    ~~~~~~~~~~~~~~~~~~~
+           comment */
+    ~~~~~~~~~~~~~~~~~
+        attr1="foo">
+    ~~~~~~~~~~~~~~~~
+        <span // a double-slash comment
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          attr2="bar"
+    ~~~~~~~~~~~~~~~~~
+        />
+    ~~~~~~
+      </div>
+    ~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    );
+    
+    <div>&nbsp;</div>;
+    ~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <div>&nbsp; </div>;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <hasOwnProperty>testing</hasOwnProperty>;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <Component constructor="foo" />;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <Namespace.Component />;
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <Namespace.DeepNamespace.Component />;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <Component { ... x } y
+    ~~~~~~~~~~~~~~~~~~~~~~
+    ={2 } z />;
+    ~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <Component
+    ~~~~~~~~~~
+        {...this.props} sound="moo" />;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <font-face />;
+    ~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <Component x={y} />;
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <x-component />;
+    ~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <Component {...x} />;
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <Component { ...x } y={2} />;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <Component { ... x } y={2} z />;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <Component x={1} {...y} />;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    
+    <Component x={1} y="2" {...z} {...z}><Child /></Component>;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    <Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component>;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17005: JSX elements are not currently supported.
+    
+    
+    

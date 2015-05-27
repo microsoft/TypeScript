@@ -733,6 +733,8 @@ module ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.OmittedExpression:
+            case SyntaxKind.JSXElement:
+            case SyntaxKind.JSXExpression:
                 return true;
             case SyntaxKind.QualifiedName:
                 while (node.parent.kind === SyntaxKind.QualifiedName) {
@@ -1652,6 +1654,7 @@ module ts {
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.CallExpression:
+                case SyntaxKind.JSXElement:
                 case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.ParenthesizedExpression:

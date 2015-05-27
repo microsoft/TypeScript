@@ -2172,5 +2172,29 @@
     "'class' declarations are only supported directly inside a module or as a top level declaration.": {
         "category": "Error",
         "code": 9004
+    },
+    "JSX attributes must only be assigned a non-empty 'expression'.": {
+        "category": "Error",
+        "code": 17000
+    },
+    "JSX elements cannot have multiple attributes with the same name.": {
+        "category": "Error",
+        "code": 17001
+    },
+    "Expected corresponding JSX closing tag for '{0}'.": {
+        "category": "Error",
+        "code": 17002
+    },
+    "JSX attribute expected.": {
+        "category": "Error",
+        "code": 17003
+    },
+    "JSX factory cannot have multiple assignments.": {
+        "category": "Error",
+        "code": 17004
+    },
+     "JSX elements are not currently supported.": {
+        "category": "Error",
+        "code" : 17005
     }
 }
