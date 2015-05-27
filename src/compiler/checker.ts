@@ -422,19 +422,18 @@ module ts {
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.ArrowFunction:
-                        if (meaning & SymbolFlags.Value) {
-                            if (name === "arguments") {
-                                result = argumentsSymbol;
-                                break loop;
-                            }
+                        if (meaning & SymbolFlags.Variable && name === "arguments") {
+                            result = argumentsSymbol;
+                            break loop;
                         }
                         break;
                     case SyntaxKind.FunctionExpression:
-                        if (meaning & SymbolFlags.Value) {
-                            if (name === "arguments") {
-                                result = argumentsSymbol;
-                                break loop;
-                            }
+                        if (meaning & SymbolFlags.Variable && name === "arguments") {
+                            result = argumentsSymbol;
+                            break loop;
+                        }
+
+                        if (meaning & SymbolFlags.Function) {
                             let functionName = (<FunctionExpression>location).name;
                             if (functionName && name === functionName.text) {
                                 result = location.symbol;
@@ -443,7 +442,7 @@ module ts {
                         }
                         break;
                     case SyntaxKind.ClassExpression:
-                        if (meaning & (SymbolFlags.Value | SymbolFlags.Type)) {
+                        if (meaning & SymbolFlags.Class) {
                             let className = (<ClassExpression>location).name;
                             if (className && name === className.text) {
                                 result = location.symbol;
