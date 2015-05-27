@@ -551,15 +551,15 @@ task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
     fs.appendFileSync('built/local/typescriptServices.js', '\nmodule.exports = ts');
     var cmd = 'istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R dot -t ' + testTimeout + ' ' + run + ' && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage'
     console.log(cmd);
-    exec(cmd);
-
-    // Remove typescriptServices.js from coverage report since its data is wrong due to harness design
-    var lcovIndexFile = 'coverage/lcov-report/local/index.html';
-    var coverageContents = fs.readFileSync(lcovIndexFile).toString();
-    var removePattern = /<tr>(.|\n)*?<\/tr>/g
-    var TRs = coverageContents.match(removePattern);
-    var cleanedContents = coverageContents.replace(TRs[2], '');
-    fs.writeFileSync(lcovIndexFile, cleanedContents);
+    exec(cmd, () => {
+        // Remove typescriptServices.js from coverage report since its data is wrong due to harness design
+        var lcovIndexFile = 'coverage/lcov-report/local/index.html';
+        var coverageContents = fs.readFileSync(lcovIndexFile).toString();
+        var removePattern = /<tr>(.|\n)*?<\/tr>/g
+        var TRs = coverageContents.match(removePattern);
+        var cleanedContents = coverageContents.replace(TRs[2], '');
+        fs.writeFileSync(lcovIndexFile, cleanedContents);
+    });
 }, { async: true });
 
 // Browser tests
