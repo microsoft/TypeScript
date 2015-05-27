@@ -7,10 +7,10 @@ module ts {
             let diagnostics: Diagnostic[] = [];
             let result = transpile(input, compilerOptions, "file.ts", diagnostics);
 
-            assert.equal(diagnostics.length, expectedDiagnosticCodes.length);
-            for (let diagnostic of diagnostics) {
-                assert.isTrue(expectedDiagnosticCodes.indexOf(diagnostic.code) >= 0, `Found an unexpected diagnostic: ${ diagnostic.code }`);
+            for (let i = 0; i < expectedDiagnosticCodes.length; i++) {
+                assert.equal(expectedDiagnosticCodes[i], diagnostics[i] && diagnostics[i].code, `Could not find expeced diagnostic.`);
             }
+            assert.equal(diagnostics.length, expectedDiagnosticCodes.length, "Resuting diagnostics count does not match expected");
 
             if (expectedOutput !== undefined) {
                 assert.equal(result, expectedOutput);

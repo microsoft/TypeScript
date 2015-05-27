@@ -286,7 +286,7 @@ module ts {
             }
         }
 
-        function getCompilerOptionsDiagnostics(): Diagnostic[]{
+        function getCompilerOptionsDiagnostics(): Diagnostic[] {
             let allDiagnostics: Diagnostic[] = [];
             addRange(allDiagnostics, diagnostics.getGlobalDiagnostics());
             return sortAndDeduplicateDiagnostics(allDiagnostics);

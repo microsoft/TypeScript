@@ -1763,6 +1763,8 @@ module ts {
      * Extra compiler options that will unconditionally be used bu this function are:
      * - isolatedModules = true
      * - allowNonTsExtensions = true
+     * - noLib = true
+     * - noResolve = true
      */
     export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[]): string {
         let options = compilerOptions ? clone(compilerOptions) : getDefaultCompilerOptions();
@@ -1772,11 +1774,12 @@ module ts {
         // Filename can be non-ts file.
         options.allowNonTsExtensions = true;
 
-        // We are not returning a lib file when asked, so pass this flag to
-        // avoid reporting a file not found error
+        // We are not returning a sourceFile for lib file when asked by the program, 
+        // so pass --noLib to avoid reporting a file not found error.
         options.noLib = true;
 
-        // Similar to the library, we are not returning any refrenced files
+        // We are not doing a full typecheck, we are not resolving the whole context,
+        // so pass --noResolve to avoid reporting missing file errors.
         options.noResolve = true;
 
         // Parse
