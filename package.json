@@ -38,6 +38,6 @@
         "mocha-lcov-reporter": "0.0.2"
     },
     "scripts": {
-        "test": "travis_wait jake generate-code-coverage"
+        "test": "jake generate-code-coverage"
     }
 }
