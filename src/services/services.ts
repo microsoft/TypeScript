@@ -1772,14 +1772,23 @@ module ts {
         // Filename can be non-ts file.
         options.allowNonTsExtensions = true;
 
+        // We are not returning a lib file when asked, so pass this flag to
+        // avoid reporting a file not found error
+        options.noLib = true;
+
+        // Similar to the library, we are not returning any refrenced files
+        options.noResolve = true;
+
         // Parse
-        var inputFileName = fileName || "module.ts";
-        var sourceFile = createSourceFile(inputFileName, input, options.target);
+        let inputFileName = fileName || "module.ts";
+        let sourceFile = createSourceFile(inputFileName, input, options.target);
 
         // Store syntactic diagnostics
         if (diagnostics && sourceFile.parseDiagnostics) {
             diagnostics.push(...sourceFile.parseDiagnostics);
         }
+
+        let newLine = getNewLineCharacter(options);
 
         // Output
         let outputText: string;
@@ -1795,13 +1804,13 @@ module ts {
             useCaseSensitiveFileNames: () => false,
             getCanonicalFileName: fileName => fileName,
             getCurrentDirectory: () => "",
-            getNewLine: () => (sys && sys.newLine) || "\r\n"
+            getNewLine: () => newLine
         };
 
         var program = createProgram([inputFileName], options, compilerHost);
 
         if (diagnostics) {
-            diagnostics.push(...program.getGlobalDiagnostics());
+            diagnostics.push(...program.getCompilerOptionsDiagnostics());
         }
 
         // Emit
