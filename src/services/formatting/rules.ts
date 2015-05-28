@@ -231,7 +231,7 @@ module ts.formatting {
             this.NoSpaceBeforeOpenBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.OpenBracketToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
             this.NoSpaceAfterOpenBracket = new Rule(RuleDescriptor.create3(SyntaxKind.OpenBracketToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
             this.NoSpaceBeforeCloseBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.CloseBracketToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
-            this.NoSpaceAfterCloseBracket = new Rule(RuleDescriptor.create3(SyntaxKind.CloseBracketToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+            this.NoSpaceAfterCloseBracket = new Rule(RuleDescriptor.create3(SyntaxKind.CloseBracketToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBeforeBlockInFunctionDeclarationContext), RuleAction.Delete));
 
             // Place a space before open brace in a function declaration
             this.FunctionOpenBraceLeftTokenRange = Shared.TokenRange.AnyIncludingMultilineComments;
@@ -648,6 +648,10 @@ module ts.formatting {
 
         static IsSameLineTokenContext(context: FormattingContext): boolean {
             return context.TokensAreOnSameLine();
+        }
+
+        static IsNotBeforeBlockInFunctionDeclarationContext(context: FormattingContext): boolean {
+            return !Rules.IsFunctionDeclContext(context) && !Rules.IsBeforeBlockContext(context)
         }
 
         static IsEndOfDecoratorContextOnSameLine(context: FormattingContext): boolean {
