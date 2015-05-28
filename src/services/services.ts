@@ -4954,18 +4954,6 @@ module ts {
                     return location.getText();
                 }
 
-                // Special case for function expressions, whose names are solely local to their bodies.
-                // TODO (drosen): Why would we have to lookup the interned name for a function expression?
-                //                Shouldn't we have found a scope? Consider a 'Debug.fail()'.
-                let functionExpression: FunctionExpression;
-                if (symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.FunctionExpression) {
-                    functionExpression = <FunctionExpression>symbol.valueDeclaration;
-
-                    if (functionExpression.name) {
-                        return functionExpression.name.text;
-                    }
-                }
-
                 // Try to get the local symbol if we're dealing with an 'export default'
                 // since that symbol has the "true" name.
                 let localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
@@ -4974,7 +4962,20 @@ module ts {
                 return stripQuotes(symbol.name);
             }
 
+            /**
+             * Determines the smallest scope in which a symbol may have named references.
+             *
+             * Returns undefined if the scope cannot be determined, often implying that
+             * a reference to a symbol can occur anywhere.
+             */
             function getSymbolScope(symbol: Symbol): Node {
+                // If this is the symbol of a function expression, then named references
+                // are limited to its own scope.
+                let valueDeclaration = symbol.valueDeclaration;
+                if (valueDeclaration && valueDeclaration.kind === SyntaxKind.FunctionExpression) {
+                    return valueDeclaration;
+                }
+
                 // If this is private property or method, the scope is the containing class
                 if (symbol.flags & (SymbolFlags.Property | SymbolFlags.Method)) {
                     let privateDeclaration = forEach(symbol.getDeclarations(), d => (d.flags & NodeFlags.Private) ? d : undefined);
