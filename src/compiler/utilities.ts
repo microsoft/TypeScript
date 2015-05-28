@@ -854,6 +854,29 @@ module ts {
         return false;
     }
 
+    export function hasRestParameter(s: SignatureDeclaration): boolean {
+        return isRestParameter(lastOrUndefined(s.parameters));
+    }
+
+    export function isRestParameter(node: ParameterDeclaration) {
+        if (node) {
+            if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType) {
+                    return true;
+                }
+
+                let paramTag = getCorrespondingJSDocParameterTag(node);
+                if (paramTag && paramTag.typeExpression) {
+                    return paramTag.typeExpression.type.kind === SyntaxKind.JSDocVariadicType;
+                }
+            }
+
+            return node.dotDotDotToken !== undefined;
+        }
+
+        return false;
+    }
+
     export function isJSDocConstructSignature(node: Node) {
         return node.kind === SyntaxKind.JSDocFunctionType &&
             (<JSDocFunctionType>node).parameters.length > 0 &&
@@ -901,29 +924,6 @@ module ts {
                 });
             }
         }
-    }
-
-    export function hasRestParameter(s: SignatureDeclaration): boolean {
-        return isRestParameter(lastOrUndefined(s.parameters));
-    }
-
-    export function isRestParameter(node: ParameterDeclaration) {
-        if (node) {
-            if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
-                if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType) {
-                    return true;
-                }
-
-                let paramTag = getCorrespondingJSDocParameterTag(node);
-                if (paramTag && paramTag.typeExpression) {
-                    return paramTag.typeExpression.type.kind === SyntaxKind.JSDocVariadicType;
-                }
-            }
-
-            return node.dotDotDotToken !== undefined;
-        }
-
-        return false;
     }
 
     export function isLiteralKind(kind: SyntaxKind): boolean {

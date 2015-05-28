@@ -2700,7 +2700,7 @@ module ts {
                             return true;
                         }
                         if (parameter.questionToken) {
-                            diagnostics.push(createDiagnosticForNode(parameter.questionToken, Diagnostics._0_can_only_be_used_in_a_ts_file, "?"));
+                            diagnostics.push(createDiagnosticForNode(parameter.questionToken, Diagnostics._0_can_only_be_used_in_a_ts_file, '?'));
                             return true;
                         }
                         if (parameter.type) {
