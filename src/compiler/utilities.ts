@@ -468,6 +468,12 @@ module ts {
         return false;
     }
 
+    export function isClassLike(node: Node): boolean {
+        if (node) {
+            return node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression;
+        }
+    }
+
     export function isFunctionLike(node: Node): boolean {
         if (node) {
             switch (node.kind) {
@@ -830,7 +836,7 @@ module ts {
     }
 
     export function hasDotDotDotToken(node: Node) {
-        return node && node.kind === SyntaxKind.Parameter && (<ParameterDeclaration>node).dotDotDotToken !== undefined;
+         return node && node.kind === SyntaxKind.Parameter && (<ParameterDeclaration>node).dotDotDotToken !== undefined;
     }
 
     export function hasQuestionToken(node: Node) {
@@ -854,6 +860,78 @@ module ts {
 
     export function hasRestParameters(s: SignatureDeclaration): boolean {
         return s.parameters.length > 0 && lastOrUndefined(s.parameters).dotDotDotToken !== undefined;
+    }
+
+    export function isJSDocConstructSignature(node: Node) {
+        return node.kind === SyntaxKind.JSDocFunctionType &&
+            (<JSDocFunctionType>node).parameters.length > 0 &&
+            (<JSDocFunctionType>node).parameters[0].type.kind === SyntaxKind.JSDocConstructorType;
+    }
+
+    function getJSDocTag(node: Node, kind: SyntaxKind): JSDocTag {
+        if (node && node.jsDocComment) {
+            for (let tag of node.jsDocComment.tags) {
+                if (tag.kind === kind) {
+                    return tag;
+                }
+            }
+        }
+    }
+
+    export function getJSDocTypeTag(node: Node): JSDocTypeTag {
+        return <JSDocTypeTag>getJSDocTag(node, SyntaxKind.JSDocTypeTag);
+    }
+
+    export function getJSDocReturnTag(node: Node): JSDocReturnTag {
+        return <JSDocReturnTag>getJSDocTag(node, SyntaxKind.JSDocReturnTag);
+    }
+
+    export function getJSDocTemplateTag(node: Node): JSDocTemplateTag {
+        return <JSDocTemplateTag>getJSDocTag(node, SyntaxKind.JSDocTemplateTag);
+    }
+
+    export function getCorrespondingJSDocParameterTag(parameter: ParameterDeclaration): JSDocParameterTag {
+        if (parameter.name && parameter.name.kind === SyntaxKind.Identifier) {
+            // If it's a parameter, see if the parent has a jsdoc comment with an @param 
+            // annotation.
+            let parameterName = (<Identifier>parameter.name).text;
+
+            let docComment = parameter.parent.jsDocComment;
+            if (docComment) {
+                return <JSDocParameterTag>forEach(docComment.tags, t => {
+                    if (t.kind === SyntaxKind.JSDocParameterTag) {
+                        let parameterTag = <JSDocParameterTag>t;
+                        let name = parameterTag.preParameterName || parameterTag.postParameterName;
+                        if (name.text === parameterName) {
+                            return t;
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    export function hasRestParameter(s: SignatureDeclaration): boolean {
+        return isRestParameter(lastOrUndefined(s.parameters));
+    }
+
+    export function isRestParameter(node: ParameterDeclaration) {
+        if (node) {
+            if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType) {
+                    return true;
+                }
+
+                let paramTag = getCorrespondingJSDocParameterTag(node);
+                if (paramTag && paramTag.typeExpression) {
+                    return paramTag.typeExpression.type.kind === SyntaxKind.JSDocVariadicType;
+                }
+            }
+
+            return node.dotDotDotToken !== undefined;
+        }
+
+        return false;
     }
 
     export function isLiteralKind(kind: SyntaxKind): boolean {
@@ -1707,6 +1785,10 @@ module ts {
         return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 
+    export function isJavaScript(fileName: string) {
+        return fileExtensionIs(fileName, ".js");
+    }
+
     /**
      * Replace each instance of non-ascii characters by one, two, three, or four escape sequences 
      * representing the UTF-8 encoding of the character, and return the expanded char code list.
@@ -1999,5 +2081,15 @@ module ts {
         }
 
         return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength:*/ newEndN - oldStartN);
+    }
+
+    export function getTypeParameterOwner(d: Declaration): Declaration {
+        if (d && d.kind === SyntaxKind.TypeParameter) {
+            for (let current: Node = d; current; current = current.parent) {
+                if (isFunctionLike(current) || isClassLike(current) || current.kind === SyntaxKind.InterfaceDeclaration) {
+                    return <Declaration>current;
+                }
+            }
+        }
     }
 }
