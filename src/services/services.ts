@@ -1510,6 +1510,7 @@ module ts {
         public static typeParameterName = "type parameter name";
         public static typeAliasName = "type alias name";
         public static parameterName = "parameter name";
+        public static docCommentTagName = "doc comment tag name";
     }
 
     export const enum ClassificationType {
@@ -1529,7 +1530,8 @@ module ts {
         moduleName = 14,
         typeParameterName = 15,
         typeAliasName = 16,
-        parameterName = 17
+        parameterName = 17,
+        docCommentTagName = 18,
     }
 
     /// Language Service
@@ -1813,7 +1815,8 @@ module ts {
     }
 
     export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile {
-        let sourceFile = createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), scriptTarget, setNodeParents);
+        let text = scriptSnapshot.getText(0, scriptSnapshot.getLength());
+        let sourceFile = createSourceFile(fileName, text, scriptTarget, setNodeParents, /*includeDocComments:*/ true);
         setSourceFileFields(sourceFile, scriptSnapshot, version);
         // after full parsing we can use table with interned strings as name table
         sourceFile.nameTable = sourceFile.identifiers;
@@ -2832,6 +2835,7 @@ module ts {
             let typeChecker = program.getTypeChecker();
             let syntacticStart = new Date().getTime();
             let sourceFile = getValidSourceFile(fileName);
+            let isJavaScriptFile = isJavaScript(fileName);
 
             let start = new Date().getTime();
             let currentToken = getTokenAtPosition(sourceFile, position);
@@ -2932,13 +2936,29 @@ module ts {
                 }
 
                 let type = typeChecker.getTypeAtLocation(node);
+                addTypeProperties(type);
+            }
+
+            function addTypeProperties(type: Type) {
                 if (type) {
                     // Filter private properties
-                    forEach(type.getApparentProperties(), symbol => {
+                    for (let symbol of type.getApparentProperties()) {
                         if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
                             symbols.push(symbol);
                         }
-                    });
+                    }
+
+                    if (isJavaScriptFile && type.flags & TypeFlags.Union) {
+                        // In javascript files, for union types, we don't just get the members that 
+                        // the individual types have in common, we also include all the members that
+                        // each individual type has.  This is because we're going to add all identifiers
+                        // anyways.  So we might as well elevate the members that were at least part
+                        // of the individual types to a higher status than since we know what they are.
+                        let unionType = <UnionType>type;
+                        for (let elementType of unionType.types) {
+                            addTypeProperties(elementType);
+                        }
+                    }
                 }
             }
 
@@ -6031,6 +6051,7 @@ module ts {
                 case ClassificationType.typeParameterName: return ClassificationTypeNames.typeParameterName;
                 case ClassificationType.typeAliasName: return ClassificationTypeNames.typeAliasName;
                 case ClassificationType.parameterName: return ClassificationTypeNames.parameterName;
+                case ClassificationType.docCommentTagName: return ClassificationTypeNames.docCommentTagName;
             }
         }
 
@@ -6093,8 +6114,7 @@ module ts {
                     // Only bother with the trivia if it at least intersects the span of interest.
                     if (textSpanIntersectsWith(span, start, width)) {
                         if (isComment(kind)) {
-                            // Simple comment.  Just add as is.
-                            pushClassification(start, width, ClassificationType.comment);
+                            classifyComment(token, kind, start, width);
                             continue;
                         }
 
@@ -6115,6 +6135,90 @@ module ts {
                             classifyDisabledMergeCode(text, start, end);
                         }
                     }
+                }
+            }
+
+            function classifyComment(token: Node, kind: SyntaxKind, start: number, width: number) {
+                if (kind === SyntaxKind.MultiLineCommentTrivia) {
+                    // See if this is a doc comment.  If so, we'll classify certain portions of it
+                    // specially.
+                    let jsDocComment = parseIsolatedJSDocComment(sourceFile.text, start, width);
+                    if (jsDocComment && jsDocComment.jsDocComment) {
+                        jsDocComment.jsDocComment.parent = token;
+                        classifyJSDocComment(jsDocComment.jsDocComment);
+                        return;
+                    }
+                }
+
+                // Simple comment.  Just add as is.
+                pushCommentRange(start, width);
+            }
+
+            function pushCommentRange(start: number, width: number) {
+                pushClassification(start, width, ClassificationType.comment);
+            }
+
+            function classifyJSDocComment(docComment: JSDocComment) {
+                let pos = docComment.pos;
+
+                for (let tag of docComment.tags) {
+                    if (tag.pos !== pos) {
+                        pushCommentRange(pos, tag.pos - pos);
+                    }
+
+                    pushClassification(tag.atToken.pos, tag.atToken.end - tag.atToken.pos, ClassificationType.punctuation);
+                    pushClassification(tag.tagName.pos, tag.tagName.end - tag.tagName.pos, ClassificationType.docCommentTagName);
+
+                    pos = tag.tagName.end;
+
+                    switch (tag.kind) {
+                        case SyntaxKind.JSDocParameterTag:
+                            processJSDocParameterTag(<JSDocParameterTag>tag);
+                            break;
+                        case SyntaxKind.JSDocTemplateTag:
+                            processJSDocTemplateTag(<JSDocTemplateTag>tag);
+                            break;
+                        case SyntaxKind.JSDocTypeTag:
+                            processElement((<JSDocTypeTag>tag).typeExpression);
+                            break;
+                        case SyntaxKind.JSDocReturnTag:
+                            processElement((<JSDocReturnTag>tag).typeExpression);
+                            break;
+                    }
+
+                    pos = tag.end;
+                }
+
+                if (pos !== docComment.end) {
+                    pushCommentRange(pos, docComment.end - pos);
+                }
+
+                return;
+
+                function processJSDocParameterTag(tag: JSDocParameterTag) {
+                    if (tag.preParameterName) {
+                        pushCommentRange(pos, tag.preParameterName.pos - pos);
+                        pushClassification(tag.preParameterName.pos, tag.preParameterName.end - tag.preParameterName.pos, ClassificationType.parameterName);
+                        pos = tag.preParameterName.end;
+                    }
+
+                    if (tag.typeExpression) {
+                        pushCommentRange(pos, tag.typeExpression.pos - pos);
+                        processElement(tag.typeExpression);
+                        pos = tag.typeExpression.end;
+                    }
+
+                    if (tag.postParameterName) {
+                        pushCommentRange(pos, tag.postParameterName.pos - pos);
+                        pushClassification(tag.postParameterName.pos, tag.postParameterName.end - tag.postParameterName.pos, ClassificationType.parameterName);
+                        pos = tag.postParameterName.end;
+                    }
+                }
+            }
+
+            function processJSDocTemplateTag(tag: JSDocTemplateTag) {
+                for (let child of tag.getChildren()) {
+                    processElement(child);
                 }
             }
 
@@ -6251,9 +6355,13 @@ module ts {
             }
 
             function processElement(element: Node) {
+                if (!element) {
+                    return;
+                }
+
                 // Ignore nodes that don't intersect the original span to classify.
                 if (textSpanIntersectsWith(span, element.getFullStart(), element.getFullWidth())) {
-                    let children = element.getChildren();
+                    let children = element.getChildren(sourceFile);
                     for (let child of children) {
                         if (isToken(child)) {
                             classifyToken(child);

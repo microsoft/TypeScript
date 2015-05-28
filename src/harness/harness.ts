@@ -167,7 +167,7 @@ module Utils {
                     continue;
                 }
                 var child = (<any>node)[childName];
-                if (isNodeOrArray(child)) {
+                if (isNodeOrArray(child) && childName !== "jsDocComment") {
                     assert.isFalse(childNodesAndArrays.indexOf(child) < 0,
                         "Missing child when forEach'ing over node: " + (<any>ts).SyntaxKind[node.kind] + "-" + childName);
                 }
