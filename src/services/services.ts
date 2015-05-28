@@ -1816,7 +1816,7 @@ module ts {
 
     export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile {
         let text = scriptSnapshot.getText(0, scriptSnapshot.getLength());
-        let sourceFile = createSourceFile(fileName, text, scriptTarget, setNodeParents, /*includeDocComments:*/ true);
+        let sourceFile = createSourceFile(fileName, text, scriptTarget, setNodeParents);
         setSourceFileFields(sourceFile, scriptSnapshot, version);
         // after full parsing we can use table with interned strings as name table
         sourceFile.nameTable = sourceFile.identifiers;

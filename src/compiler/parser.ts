@@ -361,9 +361,9 @@ module ts {
         }
     }
 
-    export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, includeDocComments = false): SourceFile {
+    export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false): SourceFile {
         let start = new Date().getTime();
-        let result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, includeDocComments);
+        let result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes);
 
         parseTime += new Date().getTime() - start;
         return result;
@@ -491,10 +491,10 @@ module ts {
         // attached to the EOF token.
         let parseErrorBeforeNextFinishedNode: boolean = false;
 
-        export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean, includeDocComments?: boolean): SourceFile {
+        export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
             initializeState(fileName, _sourceText, languageVersion, _syntaxCursor);
 
-            let result = parseSourceFileWorker(fileName, languageVersion, setParentNodes, includeDocComments);
+            let result = parseSourceFileWorker(fileName, languageVersion, setParentNodes);
 
             clearState();
 
@@ -533,7 +533,7 @@ module ts {
             sourceText = undefined;
         }
 
-        function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean, includeDocComments: boolean): SourceFile {
+        function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean): SourceFile {
             sourceFile = createSourceFile(fileName, languageVersion);
 
             // Prime the scanner.
@@ -558,7 +558,7 @@ module ts {
             // If this is a javascript file, proactively see if we can get JSDoc comments for 
             // relevant nodes in the file.  We'll use these to provide typing informaion if they're
             // available.
-            if (includeDocComments || isJavaScript(fileName)) {
+            if (isJavaScript(fileName)) {
                 addJSDocComments();
             }
 
