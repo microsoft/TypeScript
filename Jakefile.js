@@ -549,15 +549,15 @@ desc("Generates code coverage data via instanbul")
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
     // fix typescriptServices so we can do an actual require on it instead of eval, eval no good for code coverage tools
     fs.appendFileSync('built/local/typescriptServices.js', '\nmodule.exports = ts');
-    var cmd = 'istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R dot -t ' + testTimeout + ' ' + run + ' && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage'
+    var cmd = 'istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R dot -t ' + testTimeout + ' ' + ' && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage'
     console.log(cmd);
     exec(cmd, function()  {
-        // Remove typescriptServices.js from coverage report since its data is wrong due to harness design
-        var lcovIndexFile = 'coverage/lcov-report/local/index.html';
+        var lcovIndexFile = 'coverage/lcov.info';
         var coverageContents = fs.readFileSync(lcovIndexFile).toString();
-        var removePattern = /<tr>(.|\n)*?<\/tr>/g
-        var TRs = coverageContents.match(removePattern);
-        var cleanedContents = coverageContents.replace(TRs[2], '');
+        // Remove typescriptServices.js from coverage report since its data is wrong due to harness design
+        var removePattern = /(SF:.*typescriptServices.js(.|\n)*?)(SF:.*.js|end_of_record)/g
+        var fileRecords = coverageContents.match(removePattern);
+        var cleanedContents = coverageContents.replace(fileRecords[1], '');
         fs.writeFileSync(lcovIndexFile, cleanedContents);
     });
 }, { async: true });
