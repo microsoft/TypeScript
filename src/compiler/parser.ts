@@ -2,8 +2,6 @@
 /// <reference path="utilities.ts"/>
 
 module ts {
-    export var throwOnJSDocErrors = false;
-
     let nodeConstructors = new Array<new () => Node>(SyntaxKind.Count);
     /* @internal */ export let parseTime = 0;
 
@@ -5047,13 +5045,6 @@ module ts {
 
                 fixupParentReferences(result);
                 return finishNode(result);
-            }
-
-            function setError(message: DiagnosticMessage) {
-                parseErrorAtCurrentToken(message);
-                if (throwOnJSDocErrors) {
-                    throw new Error(message.key);
-                }
             }
 
             function parseJSDocTopLevelType(): JSDocType {
