@@ -6628,6 +6628,7 @@ module ts {
             let typeArguments: NodeArray<TypeNode>;  // Type arguments (undefined if none)
             let callIsIncomplete: boolean;           // In incomplete call we want to be lenient when we have too few arguments
             let isDecorator: boolean;
+            let spreadArgIndex = -1;
             
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                 let tagExpression = <TaggedTemplateExpression>node;
@@ -6675,6 +6676,7 @@ module ts {
                 callIsIncomplete = (<CallExpression>callExpression).arguments.end === callExpression.end;
 
                 typeArguments = callExpression.typeArguments;
+                spreadArgIndex = getSpreadArgumentIndex(args);
             }
 
             // If the user supplied type arguments, but the number of type arguments does not match
@@ -6687,7 +6689,6 @@ module ts {
 
             // If spread arguments are present, check that they correspond to a rest parameter. If so, no
             // further checking is necessary.
-            let spreadArgIndex = !isDecorator ? getSpreadArgumentIndex(args) : -1;
             if (spreadArgIndex >= 0) {
                 return signature.hasRestParameter && spreadArgIndex >= signature.parameters.length - 1;
             }

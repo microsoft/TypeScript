@@ -691,7 +691,6 @@
         "category": "Error",
         "code": 1220
     },
-    
     "Unable to resolve signature of class decorator when called as an expression.": {
         "category": "Error",
         "code": 1221
