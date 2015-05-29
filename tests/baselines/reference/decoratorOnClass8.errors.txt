@@ -1,4 +1,4 @@
-tests/cases/conformance/decorators/class/decoratorOnClass8.ts(3,1): error TS1221: Unable to resolve signature of class decorator when called as an expression.
+tests/cases/conformance/decorators/class/decoratorOnClass8.ts(3,1): error TS1222: Unable to resolve signature of class decorator when called as an expression.
   Supplied parameters do not match any signature of call target.
 
 
@@ -7,7 +7,7 @@ tests/cases/conformance/decorators/class/decoratorOnClass8.ts(3,1): error TS1221
     
     @dec()
     ~~~~~~
-!!! error TS1221: Unable to resolve signature of class decorator when called as an expression.
-!!! error TS1221:   Supplied parameters do not match any signature of call target.
+!!! error TS1222: Unable to resolve signature of class decorator when called as an expression.
+!!! error TS1222:   Supplied parameters do not match any signature of call target.
     class C {
     }

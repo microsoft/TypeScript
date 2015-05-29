@@ -2536,7 +2536,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 write(";");
             }
 
-            function emitWithStatement(node: WhileStatement) {
+            function emitWithStatement(node: WithStatement) {
                 write("with (");
                 emit(node.expression);
                 write(")");
