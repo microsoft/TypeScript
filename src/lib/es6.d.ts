@@ -316,6 +316,11 @@ interface Array<T> {
     copyWithin(target: number, start: number, end?: number): T[];
 }
 
+interface IArguments {
+    /** Iterator */
+    [Symbol.iterator](): IterableIterator<any>;
+}
+
 interface ArrayConstructor {
     /**
       * Creates an array from an array-like object.
