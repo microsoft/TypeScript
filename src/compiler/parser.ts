@@ -1008,12 +1008,17 @@ module ts {
             switch (parsingContext) {
                 case ParsingContext.SourceElements:
                 case ParsingContext.ModuleElements:
-                    // During error recovery we don't treat empty statements as statements
-                    return !(token === SyntaxKind.SemicolonToken && inErrorRecovery) && isModuleElement();
+                    // If we're in error recovery, then we don't want to treat ';' as an empty statement.
+                    // The problem is that ';' can show up in far too many contexts, and if we see one
+                    // and assume it's a statement, then we may bail out inappropriately from whatever
+                    // we're parsing.  For example, if we have a semicolon in the middle of a class, then
+                    // we really don't want to assume the class is over and we're on a statement in the
+                    // outer module.  We just want to consume and move on.
+                    return !(token === SyntaxKind.SemicolonToken && inErrorRecovery) && isStartOfModuleElement();
                 case ParsingContext.BlockStatements:
                 case ParsingContext.SwitchClauseStatements:
                     // During error recovery we don't treat empty statements as statements
-                    return !(token === SyntaxKind.SemicolonToken && inErrorRecovery) && isStatement();
+                    return !(token === SyntaxKind.SemicolonToken && inErrorRecovery) && isStartOfStatement();
                 case ParsingContext.SwitchClauses:
                     return token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
                 case ParsingContext.TypeMembers:
@@ -2754,7 +2759,7 @@ module ts {
             if (token !== SyntaxKind.SemicolonToken &&
                 token !== SyntaxKind.FunctionKeyword &&
                 token !== SyntaxKind.ClassKeyword &&
-                isStatement() &&
+                isStartOfStatement() &&
                 !isStartOfExpressionStatement()) {
                 // Check if we got a plain statement (i.e. no expression-statements, no function/class expressions/declarations)
                 //
@@ -3760,11 +3765,11 @@ module ts {
             }
         }
 
-        function isStatement(): boolean {
+        function isStartOfStatement(): boolean {
             return (getStatementFlags() & StatementFlags.Statement) !== 0;
         }
 
-        function isModuleElement(): boolean {
+        function isStartOfModuleElement(): boolean {
             return (getStatementFlags() & StatementFlags.StatementOrModuleElement) !== 0;
         }
 
