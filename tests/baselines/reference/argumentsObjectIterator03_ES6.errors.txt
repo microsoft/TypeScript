@@ -1,0 +1,14 @@
+tests/cases/compiler/argumentsObjectIterator03_ES6.ts(3,9): error TS2488: Type must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== tests/cases/compiler/argumentsObjectIterator03_ES6.ts (1 errors) ====
+    
+    function asReversedTuple(a: number, b: string, c: boolean): [boolean, string, number] {
+        let [x, y, z] = arguments;
+            ~~~~~~~~~
+!!! error TS2488: Type must have a '[Symbol.iterator]()' method that returns an iterator.
+        
+        return [z, y, x];
+    }
+    
+    
