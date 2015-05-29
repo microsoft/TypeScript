@@ -1,4 +1,4 @@
-=== tests/cases/compiler/argumentsObjectIterator02_ES6.ts ===
+=== tests/cases/compiler/argumentsObjectIterator01_ES6.ts ===
 
 function doubleAndReturnAsArray(x: number, y: number, z: number): [number, number, number] {
 >doubleAndReturnAsArray : (x: number, y: number, z: number) => [number, number, number]
@@ -6,22 +6,13 @@ function doubleAndReturnAsArray(x: number, y: number, z: number): [number, numbe
 >y : number
 >z : number
 
-    let blah = arguments[Symbol.iterator];
->blah : () => IterableIterator<any>
->arguments[Symbol.iterator] : () => IterableIterator<any>
->arguments : IArguments
->Symbol.iterator : symbol
->Symbol : SymbolConstructor
->iterator : symbol
-
     let result = [];
 >result : any[]
 >[] : undefined[]
 
-    for (let arg of blah()) {
+    for (let arg of arguments) {
 >arg : any
->blah() : IterableIterator<any>
->blah : () => IterableIterator<any>
+>arguments : IArguments
 
         result.push(arg + arg);
 >result.push(arg + arg) : number
@@ -36,5 +27,3 @@ function doubleAndReturnAsArray(x: number, y: number, z: number): [number, numbe
 ><[any, any, any]>result : [any, any, any]
 >result : any[]
 }
-
-
