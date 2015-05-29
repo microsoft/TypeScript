@@ -743,7 +743,7 @@ module FourSlash {
                 var reference = references[i];
                 if (reference && reference.fileName === fileName && reference.textSpan.start === start && ts.textSpanEnd(reference.textSpan) === end) {
                     if (typeof isWriteAccess !== "undefined" && reference.isWriteAccess !== isWriteAccess) {
-                        this.raiseError('verifyReferencesAtPositionListContains failed - item isWriteAccess value doe not match, actual: ' + reference.isWriteAccess + ', expected: ' + isWriteAccess + '.');
+                        this.raiseError('verifyReferencesAtPositionListContains failed - item isWriteAccess value does not match, actual: ' + reference.isWriteAccess + ', expected: ' + isWriteAccess + '.');
                     }
                     return;
                 }
