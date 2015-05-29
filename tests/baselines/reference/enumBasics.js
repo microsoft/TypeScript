@@ -145,7 +145,7 @@ var E8;
 var E9;
 (function (E9) {
     E9[E9["A"] = 0] = "A";
-    E9[E9["B"] = 0] = "B";
+    E9["B"] = E9.A;
 })(E9 || (E9 = {}));
 // (refer to .js to validate)
 // Enum constant members are propagated

@@ -68,6 +68,7 @@ module ts {
             getFullyQualifiedName,
             getResolvedSignature,
             getConstantValue,
+            getTypeOfExpression,
             isValidPropertyAccess,
             getSignatureFromDeclaration,
             isImplementationOfOverload,
@@ -6421,7 +6422,7 @@ module ts {
             let isConstEnum = isConstEnumObjectType(objectType);
             if (isConstEnum &&
                 (!node.argumentExpression || node.argumentExpression.kind !== SyntaxKind.StringLiteral)) {
-                error(node.argumentExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
+                error(node.argumentExpression, Diagnostics.const_enum_member_can_only_be_accessed_using_a_string_literal);
                 return unknownType;
             }
 
@@ -8100,7 +8101,7 @@ module ts {
                     ((node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) && isInRightSideOfImportOrExportAssignment(<Identifier>node));
 
                 if (!ok) {
-                    error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment);
+                    error(node, Diagnostics.const_enum_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment);
                 }
             }
             return type;
@@ -10283,45 +10284,47 @@ module ts {
 
         function computeEnumMemberValues(node: EnumDeclaration) {
             let nodeLinks = getNodeLinks(node);
+            let errorReported: boolean
 
             if (!(nodeLinks.flags & NodeCheckFlags.EnumValuesComputed)) {
                 let enumSymbol = getSymbolOfNode(node);
                 let enumType = getDeclaredTypeOfSymbol(enumSymbol);
                 let autoValue = 0;
+                let initValue: number;
                 let ambient = isInAmbientContext(node);
                 let enumIsConst = isConst(node);
 
                 forEach(node.members, member => {
+                    errorReported = false;
                     if (member.name.kind !== SyntaxKind.ComputedPropertyName && isNumericLiteralName((<Identifier>member.name).text)) {
                         error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
                     }
                     let initializer = member.initializer;
                     if (initializer) {
-                        autoValue = getConstantValueForEnumMemberInitializer(initializer);
-                        if (autoValue === undefined) {
-                            if (enumIsConst) {
-                                error(initializer, Diagnostics.In_const_enum_declarations_member_initializer_must_be_constant_expression);
+                        initValue = getConstantValueForEnumMemberInitializer(initializer);
+                        if (initValue === undefined) {
+                            if (enumIsConst || ambient) {
+                                !errorReported && error(initializer, Diagnostics._0_enum_initializer_must_be_a_constant_expression, enumIsConst ? "'const'" : "Ambient");
                             }
-                            else if (!ambient) {
+                            else {
                                 // Only here do we need to check that the initializer is assignable to the enum type.
                                 // If it is a constant value (not undefined), it is syntactically constrained to be a number.
                                 // Also, we do not need to check this for ambients because there is already
                                 // a syntax error if it is not a constant.
                                 checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*headMessage*/ undefined);
                             }
+                            return;
                         }
                         else if (enumIsConst) {
-                            if (isNaN(autoValue)) {
-                                error(initializer, Diagnostics.const_enum_member_initializer_was_evaluated_to_disallowed_value_NaN);
+                            if (isNaN(initValue)) {
+                                return error(initializer, Diagnostics.const_enum_member_initializer_was_evaluated_to_disallowed_value_NaN);
                             }
-                            else if (!isFinite(autoValue)) {
-                                error(initializer, Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_value);
+                            else if (!isFinite(initValue)) {
+                                return error(initializer, Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_value);
                             }
+                            
                         }
-
-                    }
-                    else if (ambient && !enumIsConst) {
-                        autoValue = undefined;
+                        autoValue = initValue;
                     }
 
                     if (autoValue !== undefined) {
@@ -10378,7 +10381,7 @@ module ts {
                         case SyntaxKind.Identifier:
                         case SyntaxKind.ElementAccessExpression:
                         case SyntaxKind.PropertyAccessExpression:
-                            let member = initializer.parent;
+                            let member = <EnumMember>initializer.parent;
                             let currentType = getTypeOfSymbol(getSymbolOfNode(member.parent));
                             let enumType: Type;
                             let propertyName: string;
@@ -10437,11 +10440,15 @@ module ts {
                             let propertyDecl = property.valueDeclaration;
                             // self references are illegal
                             if (member === propertyDecl) {
+                                errorReported = true;
+                                error(initializer, Diagnostics.Enum_member_0_cannot_reference_itself, propertyName);
                                 return undefined;
                             }
 
                             // illegal case: forward reference
                             if (!isDefinedBefore(propertyDecl, member)) {
+                                errorReported = true;
+                                error(initializer, Diagnostics.Enum_member_0_must_be_declared_after_1, getTextOfNode(member.name), propertyName);
                                 return undefined;
                             }
 
@@ -10456,6 +10463,8 @@ module ts {
                 return;
             }
 
+            computeEnumMemberValues(node);
+
             // Grammar checking
             checkGrammarDeclarationNameInStrictMode(node) || checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarEnumDeclaration(node);
 
@@ -10463,8 +10472,6 @@ module ts {
             checkCollisionWithCapturedThisVariable(node, node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
-
-            computeEnumMemberValues(node);
 
             let enumIsConst = isConst(node);
             if (compilerOptions.separateCompilation && enumIsConst && isInAmbientContext(node)) {
@@ -12019,6 +12026,7 @@ module ts {
                 isSymbolAccessible,
                 isEntityNameVisible,
                 getConstantValue,
+                getTypeOfExpression,
                 resolvesToSomeValue,
                 collectLinkedAliases,
                 getBlockScopedVariableId,
@@ -13010,25 +13018,6 @@ module ts {
             }
         }
 
-        function isIntegerLiteral(expression: Expression): boolean {
-            if (expression.kind === SyntaxKind.PrefixUnaryExpression) {
-                let unaryExpression = <PrefixUnaryExpression>expression;
-                if (unaryExpression.operator === SyntaxKind.PlusToken || unaryExpression.operator === SyntaxKind.MinusToken) {
-                    expression = unaryExpression.operand;
-                }
-            }
-            if (expression.kind === SyntaxKind.NumericLiteral) {
-                // Allows for scientific notation since literalExpression.text was formed by
-                // coercing a number to a string. Sometimes this coercion can yield a string
-                // in scientific notation.
-                // We also don't need special logic for hex because a hex integer is converted
-                // to decimal when it is coerced.
-                return /^[0-9]+([eE]\+?[0-9]+)?$/.test((<LiteralExpression>expression).text);
-            }
-
-            return false;
-        }
-
         function checkGrammarEnumDeclaration(enumDecl: EnumDeclaration): boolean {
             let enumIsConst = (enumDecl.flags & NodeFlags.Const) !== 0;
 
@@ -13037,7 +13026,6 @@ module ts {
             // skip checks below for const enums  - they allow arbitrary initializers as long as they can be evaluated to constant expressions.
             // since all values are known in compile time - it is not necessary to check that constant enum section precedes computed enum members.
             if (!enumIsConst) {
-                let inConstantEnumMemberSection = true;
                 let inAmbientContext = isInAmbientContext(enumDecl);
                 for (let node of enumDecl.members) {
                     // Do not use hasDynamicName here, because that returns false for well known symbols.
@@ -13045,17 +13033,6 @@ module ts {
                     // well known symbols.
                     if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                         hasError = grammarErrorOnNode(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
-                    }
-                    else if (inAmbientContext) {
-                        if (node.initializer && !isIntegerLiteral(node.initializer)) {
-                            hasError = grammarErrorOnNode(node.name, Diagnostics.Ambient_enum_elements_can_only_have_integer_literal_initializers) || hasError;
-                        }
-                    }
-                    else if (node.initializer) {
-                        inConstantEnumMemberSection = isIntegerLiteral(node.initializer);
-                    }
-                    else if (!inConstantEnumMemberSection) {
-                        hasError = grammarErrorOnNode(node.name, Diagnostics.Enum_member_must_have_initializer) || hasError;
                     }
                 }
             }

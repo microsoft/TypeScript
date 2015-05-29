@@ -1,0 +1,89 @@
+tests/cases/conformance/enums/enumsMembersWithInitializersThatReferenceLaterMembers.ts(2,9): error TS2482: Enum member 'a' must be declared after 'c'.
+tests/cases/conformance/enums/enumsMembersWithInitializersThatReferenceLaterMembers.ts(8,9): error TS2482: Enum member 'a' must be declared after 'c'.
+tests/cases/conformance/enums/enumsMembersWithInitializersThatReferenceLaterMembers.ts(14,9): error TS2482: Enum member 'a' must be declared after 'c'.
+tests/cases/conformance/enums/enumsMembersWithInitializersThatReferenceLaterMembers.ts(20,9): error TS2482: Enum member 'a' must be declared after 'c'.
+tests/cases/conformance/enums/enumsMembersWithInitializersThatReferenceLaterMembers.ts(26,9): error TS2482: Enum member 'a' must be declared after 'c'.
+tests/cases/conformance/enums/enumsMembersWithInitializersThatReferenceLaterMembers.ts(32,9): error TS2482: Enum member 'a' must be declared after 'c'.
+tests/cases/conformance/enums/enumsMembersWithInitializersThatReferenceLaterMembers.ts(38,9): error TS2482: Enum member 'a' must be declared after 'c'.
+tests/cases/conformance/enums/enumsMembersWithInitializersThatReferenceLaterMembers.ts(44,9): error TS2482: Enum member 'a' must be declared after 'c'.
+tests/cases/conformance/enums/enumsMembersWithInitializersThatReferenceLaterMembers.ts(50,9): error TS2482: Enum member 'a' must be declared after 'd'.
+tests/cases/conformance/enums/enumsMembersWithInitializersThatReferenceLaterMembers.ts(54,9): error TS8016: Enum member 'e' cannot reference itself.
+
+
+==== tests/cases/conformance/enums/enumsMembersWithInitializersThatReferenceLaterMembers.ts (10 errors) ====
+    enum E1 {
+        a = c,
+            ~
+!!! error TS2482: Enum member 'a' must be declared after 'c'.
+        b = 2,
+        c = 3,
+    }
+    
+    declare enum E2 {
+        a = c,
+            ~
+!!! error TS2482: Enum member 'a' must be declared after 'c'.
+        b = 2,
+        c = 3,
+    }
+    
+    const enum E3 {
+        a = c,
+            ~
+!!! error TS2482: Enum member 'a' must be declared after 'c'.
+        b = 2,
+        c = 3,
+    }
+    
+    declare const enum E4 {
+        a = c,
+            ~
+!!! error TS2482: Enum member 'a' must be declared after 'c'.
+        b = 2,
+        c = 3,
+    }
+    
+    enum E5 {
+        a = c,
+            ~
+!!! error TS2482: Enum member 'a' must be declared after 'c'.
+        b,
+        c,
+    }
+    
+    declare enum E6 {
+        a = c,
+            ~
+!!! error TS2482: Enum member 'a' must be declared after 'c'.
+        b,
+        c,
+    }
+    
+    const enum E7 {
+        a = c,
+            ~
+!!! error TS2482: Enum member 'a' must be declared after 'c'.
+        b,
+        c,
+    }
+    
+    declare const enum E8 {
+        a = c,
+            ~
+!!! error TS2482: Enum member 'a' must be declared after 'c'.
+        b,
+        c,
+    }
+    
+    enum cycles {
+        a = d,
+            ~
+!!! error TS2482: Enum member 'a' must be declared after 'd'.
+        b = a,
+        d,
+        c,
+        e = e
+            ~
+!!! error TS8016: Enum member 'e' cannot reference itself.
+    }
+    

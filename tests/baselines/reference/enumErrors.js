@@ -53,7 +53,7 @@ var E5;
 var E9;
 (function (E9) {
     E9[E9["A"] = 0] = "A";
-    E9[E9["B"] = 0] = "B";
+    E9["B"] = E9.A;
 })(E9 || (E9 = {}));
 //Enum with computed member intializer of different enum type
 // Bug 707850: This should be allowed

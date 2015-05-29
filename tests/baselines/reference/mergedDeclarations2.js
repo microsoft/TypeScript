@@ -17,7 +17,7 @@ var Foo;
 })(Foo || (Foo = {}));
 var Foo;
 (function (Foo) {
-    Foo[Foo["a"] = 0] = "a";
+    Foo["a"] = Foo.b;
 })(Foo || (Foo = {}));
 var Foo;
 (function (Foo) {

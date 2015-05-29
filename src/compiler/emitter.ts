@@ -4497,12 +4497,23 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
             }
 
+            function isExpressionMemberOf(expr: Expression, parent: Node) {
+                let memberType = resolver.getTypeOfExpression(expr);
+                return memberType.symbol === parent.symbol;
+            }
+
             function emitEnumMember(node: EnumMember) {
-                let enumParent = <EnumDeclaration>node.parent;
+                let enumName = getGeneratedNameForNode(<EnumDeclaration>node.parent);
                 emitStart(node);
-                write(getGeneratedNameForNode(enumParent));
+
+                // If referencing member from same type/enum, emit a reference
+                if (node.initializer && isExpressionMemberOf(node.initializer, node.parent)) {
+                    return emitEnumMemberReference(enumName, node)
+                }
+
+                write(enumName);
                 write("[");
-                write(getGeneratedNameForNode(enumParent));
+                write(enumName);
                 write("[");
                 emitExpressionForPropertyName(node.name);
                 write("] = ");
@@ -4511,6 +4522,27 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 emitExpressionForPropertyName(node.name);
                 emitEnd(node);
                 write(";");
+            }
+
+            function emitEnumMemberReference(enumName: string, node: EnumMember) {
+                write(enumName);
+                write("[");
+                emitExpressionForPropertyName(node.name);
+                write("] = ");
+                emitEnumExpression(enumName, node.initializer);
+                emitEnd(node);
+                write(";");
+            }
+
+            function emitEnumExpression(enumName: string, initializer: Node) {
+                switch (initializer.kind) {
+                    case SyntaxKind.PropertyAccessExpression:
+                        return emitPropertyAccess(<PropertyAccessExpression>initializer);
+                    case SyntaxKind.ElementAccessExpression:
+                        return emitIndexedAccess(<ElementAccessExpression>initializer);
+                    case SyntaxKind.Identifier:
+                        return write(enumName + '.' + (<Identifier>initializer).text);
+                }
             }
 
             function writeEnumMemberDeclarationValue(member: EnumMember) {

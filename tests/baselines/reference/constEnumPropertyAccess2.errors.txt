@@ -1,5 +1,5 @@
-tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(14,9): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.
-tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(15,12): error TS2476: A const enum member can only be accessed using a string literal.
+tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(14,9): error TS2475: 'const' enum can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.
+tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(15,12): error TS2476: 'const' enum member can only be accessed using a string literal.
 tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(17,1): error TS2322: Type 'string' is not assignable to type 'G'.
 tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(19,1): error TS2364: Invalid left-hand side of assignment expression.
 
@@ -20,10 +20,10 @@ tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(19,1): error TS23
     // Error from referring constant enum in any other context than a property access
     var z = G;
             ~
-!!! error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.
+!!! error TS2475: 'const' enum can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.
     var z1 = G[G.A];
                ~~~
-!!! error TS2476: A const enum member can only be accessed using a string literal.
+!!! error TS2476: 'const' enum member can only be accessed using a string literal.
     var g: G;
     g = "string";
     ~
