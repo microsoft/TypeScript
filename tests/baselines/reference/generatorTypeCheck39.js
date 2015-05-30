@@ -21,12 +21,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 function decorator(x) {
     return y => { };
 }
-function* g() { }
-let C = class {
-    constructor() {
-        this.x = yield 0;
-    }
-};
-C = __decorate([
-    decorator(yield, 0)
-], C);
+function* g() {
+    let C = class {
+        constructor() {
+            this.x = yield 0;
+        }
+    };
+    C = __decorate([
+        decorator(yield 0)
+    ], C);
+}

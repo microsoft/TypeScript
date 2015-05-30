@@ -1,12 +1,9 @@
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck40.ts(2,11): error TS9004: 'class' declarations are only supported directly inside a module or as a top level declaration.
 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck40.ts(2,21): error TS9002: Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.
 
 
-==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck40.ts (2 errors) ====
+==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck40.ts (1 errors) ====
     function* g() {
         class C extends (yield 0) { }
-              ~
-!!! error TS9004: 'class' declarations are only supported directly inside a module or as a top level declaration.
                         ~~~~~~~~~
 !!! error TS9002: Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.
     }
