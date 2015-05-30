@@ -87,6 +87,28 @@ declare module ts.server.protocol {
         file: string;
     }
 
+    /** 
+      * Arguments for ProjectInfo messages.
+      */
+    export interface ProjectInfoRequestArgs {
+        /**
+          * The file for the request (absolute pathname required).
+          */
+        file: string;
+        /**
+          * Indicate if the file name list of the project is needed
+          */
+        needFileNameList: boolean;
+    }
+
+    /** 
+      * Response message for "projectInfo" request
+      */
+    export interface ProjectInfo {
+        configFileName: string;
+        fileNameList?: string[];
+    }
+
     /**
       * Request whose sole parameter is a file name.
       */

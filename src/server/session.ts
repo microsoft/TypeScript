@@ -96,8 +96,9 @@ module ts.server {
         export var Reload = "reload";
         export var Rename = "rename";
         export var Saveto = "saveto";
-        export var SignatureHelp = "signatureHelp";        
-        export var TypeDefinition = "typeDefinition";        
+        export var SignatureHelp = "signatureHelp";
+        export var TypeDefinition = "typeDefinition";
+        export var ProjectInfo = "projectInfo";
         export var Unknown = "unknown";
     }
 
@@ -336,6 +337,20 @@ module ts.server {
                     isWriteAccess
                 }
             });
+        }
+
+        getProjectInfo(fileName: string, needFileNameList: boolean): protocol.ProjectInfo {
+            fileName = ts.normalizePath(fileName)
+            let project = this.projectService.getProjectForFile(fileName)
+
+            let projectInfo: protocol.ProjectInfo = {
+                configFileName: project.projectFilename
+            }
+
+            if (needFileNameList) {
+                projectInfo.fileNameList = project.getFileNameList();
+            }
+            return projectInfo;
         }
 
         getRenameLocations(line: number, offset: number, fileName: string,findInComments: boolean, findInStrings: boolean): protocol.RenameResponseBody {
@@ -949,6 +964,11 @@ module ts.server {
                     case CommandNames.Occurrences: {
                         var { line, offset, file: fileName } = <protocol.FileLocationRequestArgs>request.arguments;
                         response = this.getOccurrences(line, offset, fileName);
+                        break;
+                    }
+                    case CommandNames.ProjectInfo: {
+                        var { file, needFileNameList } = <protocol.ProjectInfoRequestArgs>request.arguments;
+                        response = this.getProjectInfo(file, needFileNameList);
                         break;
                     }
                     default: {
