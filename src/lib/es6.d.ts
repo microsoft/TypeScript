@@ -505,14 +505,6 @@ interface GeneratorFunctionConstructor {
 }
 declare var GeneratorFunction: GeneratorFunctionConstructor;
 
-interface Generator<T> extends IterableIterator<T> {
-    next(value?: any): IteratorResult<T>;
-    throw(exception: any): IteratorResult<T>;
-    return(value: T): IteratorResult<T>;
-    [Symbol.iterator](): Generator<T>;
-    [Symbol.toStringTag]: string;
-}
-
 interface Math {
     /**
       * Returns the number of leading zero bits in the 32-bit binary representation of a number.

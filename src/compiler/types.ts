@@ -693,7 +693,7 @@ module ts {
 
     export interface YieldExpression extends Expression {
         asteriskToken?: Node;
-        expression: Expression;
+        expression?: Expression;
     }
 
     export interface BinaryExpression extends Expression {
@@ -1674,6 +1674,13 @@ module ts {
         constructSignatures: Signature[];  // Construct signatures of type
         stringIndexType: Type;             // String index type
         numberIndexType: Type;             // Numeric index type
+    }
+
+    // Just a place to cache element types of iterables and iterators
+    /* @internal */
+    export interface IterableOrIteratorType extends ObjectType, UnionType {
+        iterableElementType?: Type;
+        iteratorElementType?: Type;
     }
 
     // Type parameters (TypeFlags.TypeParameter)
