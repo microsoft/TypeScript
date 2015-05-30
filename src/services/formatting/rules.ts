@@ -457,6 +457,7 @@ module ts.formatting {
             switch (context.contextNode.kind) {
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.AsExpression:
                     return true;
                 
                 // equals in binding elements: function foo([[x, y] = [1, 2]])

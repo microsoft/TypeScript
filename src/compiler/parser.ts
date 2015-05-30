@@ -161,6 +161,9 @@ module ts {
                 return visitNode(cbNode, (<BinaryExpression>node).left) ||
                     visitNode(cbNode, (<BinaryExpression>node).operatorToken) ||
                     visitNode(cbNode, (<BinaryExpression>node).right);
+            case SyntaxKind.AsExpression:
+                return visitNode(cbNode, (<AsExpression>node).expression) ||
+                    visitNode(cbNode, (<AsExpression>node).type);
             case SyntaxKind.ConditionalExpression:
                 return visitNode(cbNode, (<ConditionalExpression>node).condition) ||
                     visitNode(cbNode, (<ConditionalExpression>node).questionToken) ||
@@ -2956,7 +2959,23 @@ module ts {
                     break;
                 }
 
-                leftOperand = makeBinaryExpression(leftOperand, parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence));
+                if (token === SyntaxKind.AsKeyword) {
+                    // Make sure we *do* perform ASI for constructs like this:
+                    //    var x = foo
+                    //    as (Bar)
+                    // This should be parsed as an initialized variable, followed
+                    // by a function call to 'as' with the argument 'Bar'
+                    if (canParseSemicolon()) {
+                        break;
+                    }
+                    else {
+                        nextToken();
+                        leftOperand = makeAsExpression(leftOperand, parseType());
+                    }
+                }
+                else {
+                    leftOperand = makeBinaryExpression(leftOperand, parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence));
+                }
             }
 
             return leftOperand;
@@ -2993,6 +3012,7 @@ module ts {
                 case SyntaxKind.GreaterThanEqualsToken:
                 case SyntaxKind.InstanceOfKeyword:
                 case SyntaxKind.InKeyword:
+                case SyntaxKind.AsKeyword:
                     return 7;
                 case SyntaxKind.LessThanLessThanToken:
                 case SyntaxKind.GreaterThanGreaterThanToken:
@@ -3017,6 +3037,13 @@ module ts {
             node.left = left;
             node.operatorToken = operatorToken;
             node.right = right;
+            return finishNode(node);
+        }
+
+        function makeAsExpression(left: Expression, right: TypeNode): AsExpression {
+            let node = <AsExpression>createNode(SyntaxKind.AsExpression, left.pos);
+            node.expression = left;
+            node.type = right;
             return finishNode(node);
         }
 

@@ -723,6 +723,7 @@ module ts {
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
             case SyntaxKind.TaggedTemplateExpression:
+            case SyntaxKind.AsExpression:
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.FunctionExpression:
@@ -785,7 +786,8 @@ module ts {
                         return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
                             forInStatement.expression === node;
                     case SyntaxKind.TypeAssertionExpression:
-                        return node === (<TypeAssertion>parent).expression;
+                    case SyntaxKind.AsExpression:
+                        return node === (<AssertionExpression>parent).expression;
                     case SyntaxKind.TemplateSpan:
                         return node === (<TemplateSpan>parent).expression;
                     case SyntaxKind.ComputedPropertyName:

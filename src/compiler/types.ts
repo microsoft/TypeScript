@@ -207,6 +207,7 @@ module ts {
         ClassExpression,
         OmittedExpression,
         ExpressionWithTypeArguments,
+        AsExpression,
         // Misc
         TemplateSpan,
         SemicolonClassElement,
@@ -436,6 +437,8 @@ module ts {
     export type EntityName = Identifier | QualifiedName;
 
     export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName | BindingPattern;
+
+    export type AssertionExpression = TypeAssertion | AsExpression;
 
     export interface Declaration extends Node {
         _declarationBrand: any;
@@ -700,6 +703,11 @@ module ts {
         left: Expression;
         operatorToken: Node;
         right: Expression;
+    }
+
+    export interface AsExpression extends Expression {
+        expression: Expression;
+        type: TypeNode;
     }
 
     export interface ConditionalExpression extends Expression {
