@@ -88,7 +88,7 @@ declare module ts.server.protocol {
     }
 
     /** 
-      * Arguments for ProjectInfo messages.
+      * Arguments for ProjectInfoResponse messages.
       */
     export interface ProjectInfoRequestArgs {
         /**
@@ -104,7 +104,7 @@ declare module ts.server.protocol {
     /** 
       * Response message for "projectInfo" request
       */
-    export interface ProjectInfo {
+    export interface ProjectInfoResponse {
         configFileName: string;
         fileNameList?: string[];
     }
