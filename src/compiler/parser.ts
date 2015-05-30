@@ -2,6 +2,8 @@
 /// <reference path="utilities.ts"/>
 
 module ts {
+    export var throwOnJSDocErrors = false;
+
     let nodeConstructors = new Array<new () => Node>(SyntaxKind.Count);
     /* @internal */ export let parseTime = 0;
 
@@ -315,6 +317,49 @@ module ts {
                 return visitNode(cbNode, (<ExternalModuleReference>node).expression);
             case SyntaxKind.MissingDeclaration:
                 return visitNodes(cbNodes, node.decorators);
+            case SyntaxKind.JSDocTypeExpression:
+                return visitNode(cbNode, (<JSDocTypeExpression>node).type);
+            case SyntaxKind.JSDocUnionType:
+                return visitNodes(cbNodes, (<JSDocUnionType>node).types);
+            case SyntaxKind.JSDocTupleType:
+                return visitNodes(cbNodes, (<JSDocTupleType>node).types);
+            case SyntaxKind.JSDocArrayType:
+                return visitNode(cbNode, (<JSDocArrayType>node).elementType);
+            case SyntaxKind.JSDocNonNullableType:
+                return visitNode(cbNode, (<JSDocNonNullableType>node).type);
+            case SyntaxKind.JSDocNullableType:
+                return visitNode(cbNode, (<JSDocNullableType>node).type);
+            case SyntaxKind.JSDocRecordType:
+                return visitNodes(cbNodes, (<JSDocRecordType>node).members);
+            case SyntaxKind.JSDocTypeReference:
+                return visitNode(cbNode, (<JSDocTypeReference>node).name) ||
+                    visitNodes(cbNodes, (<JSDocTypeReference>node).typeArguments);
+            case SyntaxKind.JSDocOptionalType:
+                return visitNode(cbNode, (<JSDocOptionalType>node).type);
+            case SyntaxKind.JSDocFunctionType:
+                return visitNodes(cbNodes, (<JSDocFunctionType>node).parameters) ||
+                    visitNode(cbNode, (<JSDocFunctionType>node).type);
+            case SyntaxKind.JSDocVariadicType:
+                return visitNode(cbNode, (<JSDocVariadicType>node).type);
+            case SyntaxKind.JSDocConstructorType:
+                return visitNode(cbNode, (<JSDocConstructorType>node).type);
+            case SyntaxKind.JSDocThisType:
+                return visitNode(cbNode, (<JSDocThisType>node).type);
+            case SyntaxKind.JSDocRecordMember:
+                return visitNode(cbNode, (<JSDocRecordMember>node).name) ||
+                    visitNode(cbNode, (<JSDocRecordMember>node).type);
+            case SyntaxKind.JSDocComment:
+                return visitNodes(cbNodes, (<JSDocComment>node).tags);
+            case SyntaxKind.JSDocParameterTag:
+                return visitNode(cbNode, (<JSDocParameterTag>node).preParameterName) ||
+                    visitNode(cbNode, (<JSDocParameterTag>node).typeExpression) ||
+                    visitNode(cbNode, (<JSDocParameterTag>node).postParameterName);
+            case SyntaxKind.JSDocReturnTag:
+                return visitNode(cbNode, (<JSDocReturnTag>node).typeExpression);
+            case SyntaxKind.JSDocTypeTag:
+                return visitNode(cbNode, (<JSDocTypeTag>node).typeExpression);
+            case SyntaxKind.JSDocTemplateTag:
+                return visitNodes(cbNodes, (<JSDocTemplateTag>node).typeParameters);
         }
     }
 
@@ -338,6 +383,17 @@ module ts {
     export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile {
         return IncrementalParser.updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
     }
+    
+    /* @internal */
+    export function parseIsolatedJSDocComment(content: string, start?: number, length?: number) {
+        return Parser.JSDocParser.parseIsolatedJSDocComment(content, start, length);
+    }
+
+    /* @internal */
+    // Exposed only for testing.
+    export function parseJSDocTypeExpressionForTests(content: string, start?: number, length?: number) {
+        return Parser.JSDocParser.parseJSDocTypeExpressionForTests(content, start, length);
+    }
 
     // Implement the parser as a singleton module.  We do this for perf reasons because creating
     // parser instances can actually be expensive enough to impact us on projects with many source
@@ -349,6 +405,7 @@ module ts {
         const disallowInAndDecoratorContext = ParserContextFlags.DisallowIn | ParserContextFlags.Decorator;
 
         let sourceFile: SourceFile;
+        let parseDiagnostics: Diagnostic[];
         let syntaxCursor: IncrementalParser.SyntaxCursor;
 
         let token: SyntaxKind;
@@ -405,7 +462,7 @@ module ts {
         // Note: it should not be necessary to save/restore these flags during speculative/lookahead
         // parsing.  These context flags are naturally stored and restored through normal recursive
         // descent parsing and unwinding.
-        let contextFlags: ParserContextFlags = 0;
+        let contextFlags: ParserContextFlags;
 
         // Whether or not we've had a parse error since creating the last AST node.  If we have
         // encountered an error, it will be stored on the next AST node we create.  Parse errors
@@ -444,25 +501,52 @@ module ts {
         }
 
         export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
+            initializeState(fileName, _sourceText, languageVersion, _syntaxCursor);
+
+            let result = parseSourceFileWorker(fileName, languageVersion, setParentNodes);
+
+            clearState();
+
+            return result;
+        }
+
+        function initializeState(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor) {
             sourceText = _sourceText;
             syntaxCursor = _syntaxCursor;
 
+            parseDiagnostics = [];
             parsingContext = 0;
             identifiers = {};
             identifierCount = 0;
             nodeCount = 0;
 
-            contextFlags = 0;
+            contextFlags = isJavaScript(fileName) ? ParserContextFlags.JavaScriptFile : ParserContextFlags.None;
             parseErrorBeforeNextFinishedNode = false;
-
-            createSourceFile(fileName, languageVersion);
 
             // Initialize and prime the scanner before parsing the source elements.
             scanner.setText(sourceText);
             scanner.setOnError(scanError);
             scanner.setScriptTarget(languageVersion);
-            token = nextToken();
+        }
 
+        function clearState() {
+            // Clear out the text the scanner is pointing at, so it doesn't keep anything alive unnecessarily.
+            scanner.setText("");
+            scanner.setOnError(undefined);
+
+            // Clear any data.  We don't want to accidently hold onto it for too long.
+            parseDiagnostics = undefined;
+            sourceFile = undefined;
+            identifiers = undefined;
+            syntaxCursor = undefined;
+            sourceText = undefined;
+        }
+
+        function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean): SourceFile {
+            sourceFile = createSourceFile(fileName, languageVersion);
+
+            // Prime the scanner.
+            token = nextToken();
             processReferenceComments(sourceFile);
 
             sourceFile.statements = parseList(ParsingContext.SourceElements, /*checkForStrictMode*/ true, parseSourceElement);
@@ -474,29 +558,53 @@ module ts {
             sourceFile.nodeCount = nodeCount;
             sourceFile.identifierCount = identifierCount;
             sourceFile.identifiers = identifiers;
+            sourceFile.parseDiagnostics = parseDiagnostics;
 
             if (setParentNodes) {
                 fixupParentReferences(sourceFile);
             }
 
-            syntaxCursor = undefined;
+            // If this is a javascript file, proactively see if we can get JSDoc comments for 
+            // relevant nodes in the file.  We'll use these to provide typing informaion if they're
+            // available.
+            if (isJavaScript(fileName)) {
+                addJSDocComments();
+            }
 
-            // Clear out the text the scanner is pointing at, so it doesn't keep anything alive unnecessarily.
-            scanner.setText("");
-            scanner.setOnError(undefined);
-
-            let result = sourceFile;
-
-            // Clear any data.  We don't want to accidently hold onto it for too long.
-            sourceFile = undefined;
-            identifiers = undefined;
-            syntaxCursor = undefined;
-            sourceText = undefined;
-
-            return result;
+            return sourceFile;
         }
 
-        function fixupParentReferences(sourceFile: SourceFile) {
+        function addJSDocComments() {
+            forEachChild(sourceFile, visit);
+            return;
+
+            function visit(node: Node) {
+                // Add additional cases as necessary depending on how we see JSDoc comments used
+                // in the wild.
+                switch (node.kind) {
+                    case SyntaxKind.VariableStatement:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.Parameter:
+                        addJSDocComment(node);
+                }
+
+                forEachChild(node, visit);
+            }
+        }
+
+        function addJSDocComment(node: Node) {
+            let comments = getLeadingCommentRangesOfNode(node, sourceFile);
+            if (comments) {
+                for (let comment of comments) {
+                    let jsDocComment = JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos);
+                    if (jsDocComment) {
+                        node.jsDocComment = jsDocComment;
+                    }
+                }
+            }
+        }
+
+        export function fixupParentReferences(sourceFile: Node) {
             // normally parent references are set during binding. However, for clients that only need
             // a syntax tree, and no semantic features, then the binding process is an unnecessary
             // overhead.  This functions allows us to set all the parents, without all the expense of
@@ -521,18 +629,18 @@ module ts {
             }
         }
 
-        function createSourceFile(fileName: string, languageVersion: ScriptTarget) {
-            sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, /*pos*/ 0);
+        function createSourceFile(fileName: string, languageVersion: ScriptTarget): SourceFile {
+            let sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, /*pos*/ 0);
 
             sourceFile.pos = 0;
             sourceFile.end = sourceText.length;
             sourceFile.text = sourceText;
-
-            sourceFile.parseDiagnostics = [];
             sourceFile.bindDiagnostics = [];
             sourceFile.languageVersion = languageVersion;
             sourceFile.fileName = normalizePath(fileName);
             sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
+
+            return sourceFile;
         }
 
         function setContextFlag(val: Boolean, flag: ParserContextFlags) {
@@ -666,9 +774,9 @@ module ts {
 
         function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any): void {
             // Don't report another error if it would just be at the same position as the last error.
-            let lastError = lastOrUndefined(sourceFile.parseDiagnostics);
+            let lastError = lastOrUndefined(parseDiagnostics);
             if (!lastError || start !== lastError.start) {
-                sourceFile.parseDiagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0));
+                parseDiagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0));
             }
 
             // Mark that we've encountered an error.  We'll set an appropriate bit on the next
@@ -713,7 +821,7 @@ module ts {
             // Keep track of the state we'll need to rollback to if lookahead fails (or if the
             // caller asked us to always reset our state).
             let saveToken = token;
-            let saveParseDiagnosticsLength = sourceFile.parseDiagnostics.length;
+            let saveParseDiagnosticsLength = parseDiagnostics.length;
             let saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
 
             // Note: it is not actually necessary to save/restore the context flags here.  That's
@@ -735,7 +843,7 @@ module ts {
             // then unconditionally restore us to where we were.
             if (!result || isLookAhead) {
                 token = saveToken;
-                sourceFile.parseDiagnostics.length = saveParseDiagnosticsLength;
+                parseDiagnostics.length = saveParseDiagnosticsLength;
                 parseErrorBeforeNextFinishedNode = saveParseErrorBeforeNextFinishedNode;
             }
 
@@ -850,8 +958,8 @@ module ts {
             return node;
         }
 
-        function finishNode<T extends Node>(node: T): T {
-            node.end = scanner.getStartPos();
+        function finishNode<T extends Node>(node: T, end?: number): T {
+            node.end = end === undefined ? scanner.getStartPos() : end;
 
             if (contextFlags) {
                 node.parserContextFlags = contextFlags;
@@ -920,14 +1028,26 @@ module ts {
                 token === SyntaxKind.NumericLiteral;
         }
 
-        function parsePropertyName(): DeclarationName {
+        function parsePropertyNameWorker(allowComputedPropertyNames: boolean): DeclarationName {
             if (token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral) {
                 return parseLiteralNode(/*internName*/ true);
             }
-            if (token === SyntaxKind.OpenBracketToken) {
+            if (allowComputedPropertyNames && token === SyntaxKind.OpenBracketToken) {
                 return parseComputedPropertyName();
             }
             return parseIdentifierName();
+        }
+
+        function parsePropertyName(): DeclarationName {
+            return parsePropertyNameWorker(/*allowComputedPropertyNames:*/ true);
+        }
+
+        function parseSimplePropertyName(): Identifier | LiteralExpression {
+            return <Identifier | LiteralExpression>parsePropertyNameWorker(/*allowComputedPropertyNames:*/ false);
+        }
+
+        function isSimplePropertyName() {
+            return token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral || isIdentifierOrKeyword();
         }
 
         function parseComputedPropertyName(): ComputedPropertyName {
@@ -1071,6 +1191,12 @@ module ts {
                     return isHeritageClause();
                 case ParsingContext.ImportOrExportSpecifiers:
                     return isIdentifierOrKeyword();
+                case ParsingContext.JSDocFunctionParameters:
+                case ParsingContext.JSDocTypeArguments:
+                case ParsingContext.JSDocTupleTypes:
+                    return JSDocParser.isJSDocType();
+                case ParsingContext.JSDocRecordMembers:
+                    return isSimplePropertyName();
             }
 
             Debug.fail("Non-exhaustive case in 'isListElement'.");
@@ -1156,6 +1282,14 @@ module ts {
                     return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.OpenParenToken;
                 case ParsingContext.HeritageClauses:
                     return token === SyntaxKind.OpenBraceToken || token === SyntaxKind.CloseBraceToken;
+                case ParsingContext.JSDocFunctionParameters:
+                    return token === SyntaxKind.CloseParenToken || token === SyntaxKind.ColonToken || token === SyntaxKind.CloseBraceToken;
+                case ParsingContext.JSDocTypeArguments:
+                    return token === SyntaxKind.GreaterThanToken || token === SyntaxKind.CloseBraceToken;
+                case ParsingContext.JSDocTupleTypes:
+                    return token === SyntaxKind.CloseBracketToken || token === SyntaxKind.CloseBraceToken;
+                case ParsingContext.JSDocRecordMembers:
+                    return token === SyntaxKind.CloseBraceToken;
             }
         }
 
@@ -1213,7 +1347,7 @@ module ts {
                     // test elements only if we are not already in strict mode
                     if (checkForStrictMode && !inStrictModeContext()) {
                         if (isPrologueDirective(element)) {
-                            if (isUseStrictPrologueDirective(sourceFile, element)) {
+                            if (isUseStrictPrologueDirective(element)) {
                                 setStrictModeContext(true);
                                 checkForStrictMode = false;
                             }
@@ -1238,9 +1372,9 @@ module ts {
         }
 
         /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
-        function isUseStrictPrologueDirective(sourceFile: SourceFile, node: Node): boolean {
+        function isUseStrictPrologueDirective(node: Node): boolean {
             Debug.assert(isPrologueDirective(node));
-            let nodeText = getSourceTextOfNodeFromSourceFile(sourceFile, (<ExpressionStatement>node).expression);
+            let nodeText = getTextOfNodeFromSourceText(sourceText, (<ExpressionStatement>node).expression);
 
             // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
             // string to contain unicode escapes (as per ES5).
@@ -1561,6 +1695,10 @@ module ts {
                 case ParsingContext.TupleElementTypes: return Diagnostics.Type_expected;
                 case ParsingContext.HeritageClauses: return Diagnostics.Unexpected_token_expected;
                 case ParsingContext.ImportOrExportSpecifiers: return Diagnostics.Identifier_expected;
+                case ParsingContext.JSDocFunctionParameters: return Diagnostics.Parameter_declaration_expected;
+                case ParsingContext.JSDocTypeArguments: return Diagnostics.Type_argument_expected;
+                case ParsingContext.JSDocTupleTypes: return Diagnostics.Type_expected;
+                case ParsingContext.JSDocRecordMembers: return Diagnostics.Property_assignment_expected;
             }
         };
 
@@ -4081,7 +4219,20 @@ module ts {
             property.name = name;
             property.questionToken = questionToken;
             property.type = parseTypeAnnotation();
-            property.initializer = allowInAnd(parseNonParameterInitializer);
+
+            // For instance properties specifically, since they are evaluated inside the constructor,
+            // we do *not * want to parse yield expressions, so we specifically turn the yield context
+            // off. The grammar would look something like this:
+            //
+            //    MemberVariableDeclaration[Yield]:
+            //        AccessibilityModifier_opt   PropertyName   TypeAnnotation_opt   Initialiser_opt[In];
+            //        AccessibilityModifier_opt  static_opt  PropertyName   TypeAnnotation_opt   Initialiser_opt[In, ?Yield];
+            //
+            // The checker may still error in the static case to explicitly disallow the yield expression.
+            property.initializer = modifiers && modifiers.flags & NodeFlags.Static
+                ? allowInAnd(parseNonParameterInitializer)
+                : doOutsideOfContext(ParserContextFlags.Yield | ParserContextFlags.DisallowIn, parseNonParameterInitializer);
+
             parseSemicolon();
             return finishNode(property);
         }
@@ -4716,7 +4867,7 @@ module ts {
                         referencedFiles.push(fileReference);
                     }
                     if (diagnosticMessage) {
-                        sourceFile.parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
+                        parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
                     }
                 }
                 else {
@@ -4724,7 +4875,7 @@ module ts {
                     let amdModuleNameMatchResult = amdModuleNameRegEx.exec(comment);
                     if (amdModuleNameMatchResult) {
                         if (amdModuleName) {
-                            sourceFile.parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
+                            parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments));
                         }
                         amdModuleName = amdModuleNameMatchResult[2];
                     }
@@ -4782,6 +4933,10 @@ module ts {
             TupleElementTypes,         // Element types in tuple element type list
             HeritageClauses,           // Heritage clauses for a class or interface declaration.
             ImportOrExportSpecifiers,  // Named import clause's import specifier list
+            JSDocFunctionParameters,
+            JSDocTypeArguments,
+            JSDocRecordMembers,
+            JSDocTupleTypes,
             Count                      // Number of parsing contexts
         }
 
@@ -4789,6 +4944,659 @@ module ts {
             False,
             True,
             Unknown
+        }
+
+        export module JSDocParser {
+            export function isJSDocType() {
+                switch (token) {
+                    case SyntaxKind.AsteriskToken:
+                    case SyntaxKind.QuestionToken:
+                    case SyntaxKind.OpenParenToken:
+                    case SyntaxKind.OpenBracketToken:
+                    case SyntaxKind.ExclamationToken:
+                    case SyntaxKind.OpenBraceToken:
+                    case SyntaxKind.FunctionKeyword:
+                    case SyntaxKind.DotDotDotToken:
+                    case SyntaxKind.NewKeyword:
+                    case SyntaxKind.ThisKeyword:
+                        return true;
+                }
+
+                return isIdentifierOrKeyword();
+            }
+
+            export function parseJSDocTypeExpressionForTests(content: string, start: number, length: number) {
+                initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined);
+                let jsDocTypeExpression = parseJSDocTypeExpression(start, length);
+                let diagnostics = parseDiagnostics;
+                clearState();
+
+                return jsDocTypeExpression ? { jsDocTypeExpression, diagnostics } : undefined;
+            }
+
+            // Parses out a JSDoc type expression.  The starting position should be right at the open
+            // curly in the type expression.  Returns 'undefined' if it encounters any errors while parsing.
+            /* @internal */
+            export function parseJSDocTypeExpression(start: number, length: number): JSDocTypeExpression {
+                scanner.setText(sourceText, start, length);
+        
+                // Prime the first token for us to start processing.
+                token = nextToken();
+
+                let result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression);
+
+                parseExpected(SyntaxKind.OpenBraceToken);
+                result.type = parseJSDocTopLevelType();
+                parseExpected(SyntaxKind.CloseBraceToken);
+
+                fixupParentReferences(result);
+                return finishNode(result);
+            }
+
+            function setError(message: DiagnosticMessage) {
+                parseErrorAtCurrentToken(message);
+                if (throwOnJSDocErrors) {
+                    throw new Error(message.key);
+                }
+            }
+
+            function parseJSDocTopLevelType(): JSDocType {
+                var type = parseJSDocType();
+                if (token === SyntaxKind.BarToken) {
+                    var unionType = <JSDocUnionType>createNode(SyntaxKind.JSDocUnionType, type.pos);
+                    unionType.types = parseJSDocTypeList(type);
+                    type = finishNode(unionType);
+                }
+
+                if (token === SyntaxKind.EqualsToken) {
+                    var optionalType = <JSDocOptionalType>createNode(SyntaxKind.JSDocOptionalType, type.pos);
+                    nextToken();
+                    optionalType.type = type;
+                    type = finishNode(optionalType);
+                }
+
+                return type;
+            }
+
+            function parseJSDocType(): JSDocType {
+                let type = parseBasicTypeExpression();
+
+                while (true) {
+                    if (token === SyntaxKind.OpenBracketToken) {
+                        let arrayType = <JSDocArrayType>createNode(SyntaxKind.JSDocArrayType, type.pos);
+                        arrayType.elementType = type;
+
+                        nextToken();
+                        parseExpected(SyntaxKind.CloseBracketToken);
+
+                        type = finishNode(arrayType);
+                    }
+                    else if (token === SyntaxKind.QuestionToken) {
+                        let nullableType = <JSDocNullableType>createNode(SyntaxKind.JSDocNullableType, type.pos);
+                        nullableType.type = type;
+
+                        nextToken();
+                        type = finishNode(nullableType);
+                    }
+                    else if (token === SyntaxKind.ExclamationToken) {
+                        let nonNullableType = <JSDocNonNullableType>createNode(SyntaxKind.JSDocNonNullableType, type.pos);
+                        nonNullableType.type = type;
+
+                        nextToken();
+                        type = finishNode(nonNullableType);
+                    }
+                    else {
+                        break;
+                    }
+                }
+
+                return type;
+            }
+
+            function parseBasicTypeExpression(): JSDocType {
+                switch (token) {
+                    case SyntaxKind.AsteriskToken:
+                        return parseJSDocAllType();
+                    case SyntaxKind.QuestionToken:
+                        return parseJSDocUnknownOrNullableType();
+                    case SyntaxKind.OpenParenToken:
+                        return parseJSDocUnionType();
+                    case SyntaxKind.OpenBracketToken:
+                        return parseJSDocTupleType();
+                    case SyntaxKind.ExclamationToken:
+                        return parseJSDocNonNullableType();
+                    case SyntaxKind.OpenBraceToken:
+                        return parseJSDocRecordType();
+                    case SyntaxKind.FunctionKeyword:
+                        return parseJSDocFunctionType();
+                    case SyntaxKind.DotDotDotToken:
+                        return parseJSDocVariadicType();
+                    case SyntaxKind.NewKeyword:
+                        return parseJSDocConstructorType();
+                    case SyntaxKind.ThisKeyword:
+                        return parseJSDocThisType();
+                    case SyntaxKind.AnyKeyword:
+                    case SyntaxKind.StringKeyword:
+                    case SyntaxKind.NumberKeyword:
+                    case SyntaxKind.BooleanKeyword:
+                    case SyntaxKind.SymbolKeyword:
+                    case SyntaxKind.VoidKeyword:
+                        return parseTokenNode<JSDocType>();
+                }
+
+                return parseJSDocTypeReference();
+            }
+
+            function parseJSDocThisType(): JSDocThisType {
+                let result = <JSDocThisType>createNode(SyntaxKind.JSDocThisType);
+                nextToken();
+                parseExpected(SyntaxKind.ColonToken);
+                result.type = parseJSDocType();
+                return finishNode(result);
+            }
+
+            function parseJSDocConstructorType(): JSDocConstructorType {
+                let result = <JSDocConstructorType>createNode(SyntaxKind.JSDocConstructorType);
+                nextToken();
+                parseExpected(SyntaxKind.ColonToken);
+                result.type = parseJSDocType();
+                return finishNode(result);
+            }
+
+            function parseJSDocVariadicType(): JSDocVariadicType {
+                let result = <JSDocVariadicType>createNode(SyntaxKind.JSDocVariadicType);
+                nextToken();
+                result.type = parseJSDocType();
+                return finishNode(result);
+            }
+
+            function parseJSDocFunctionType(): JSDocFunctionType {
+                let result = <JSDocFunctionType>createNode(SyntaxKind.JSDocFunctionType);
+                nextToken();
+
+                parseExpected(SyntaxKind.OpenParenToken);
+                result.parameters = parseDelimitedList(ParsingContext.JSDocFunctionParameters, parseJSDocParameter);
+                checkForTrailingComma(result.parameters);
+                parseExpected(SyntaxKind.CloseParenToken);
+
+                if (token === SyntaxKind.ColonToken) {
+                    nextToken();
+                    result.type = parseJSDocType();
+                }
+
+                return finishNode(result);
+            }
+
+            function parseJSDocParameter(): ParameterDeclaration {
+                let parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
+                parameter.type = parseJSDocType();
+                return finishNode(parameter);
+            }
+
+            function parseJSDocOptionalType(type: JSDocType): JSDocOptionalType {
+                let result = <JSDocOptionalType>createNode(SyntaxKind.JSDocOptionalType, type.pos);
+                nextToken();
+                result.type = type;
+                return finishNode(result);
+            }
+
+            function parseJSDocTypeReference(): JSDocTypeReference {
+                let result = <JSDocTypeReference>createNode(SyntaxKind.JSDocTypeReference);
+                result.name = parseSimplePropertyName();
+
+                while (parseOptional(SyntaxKind.DotToken)) {
+                    if (token === SyntaxKind.LessThanToken) {
+                        result.typeArguments = parseTypeArguments();
+                        break;
+                    }
+                    else {
+                        result.name = parseQualifiedName(result.name);
+                    }
+                }
+
+                return finishNode(result);
+            }
+
+            function parseTypeArguments() {
+                // Move past the <
+                nextToken();
+                let typeArguments = parseDelimitedList(ParsingContext.JSDocTypeArguments, parseJSDocType);
+                checkForTrailingComma(typeArguments);
+                checkForEmptyTypeArgumentList(typeArguments);
+                parseExpected(SyntaxKind.GreaterThanToken);
+
+                return typeArguments;
+            }
+
+            function checkForEmptyTypeArgumentList(typeArguments: NodeArray<Node>) {
+                if (parseDiagnostics.length === 0 &&  typeArguments && typeArguments.length === 0) {
+                    let start = typeArguments.pos - "<".length;
+                    let end = skipTrivia(sourceText, typeArguments.end) + ">".length;
+                    return parseErrorAtPosition(start, end - start, Diagnostics.Type_argument_list_cannot_be_empty);
+                }
+            }
+
+            function parseQualifiedName(left: EntityName): QualifiedName {
+                let result = <QualifiedName>createNode(SyntaxKind.QualifiedName, left.pos);
+                result.left = left;
+                result.right = parseIdentifierName();
+
+                return finishNode(result);
+            }
+
+            function parseJSDocRecordType(): JSDocRecordType {
+                let result = <JSDocRecordType>createNode(SyntaxKind.JSDocRecordType);
+                nextToken();
+                result.members = parseDelimitedList(ParsingContext.JSDocRecordMembers, parseJSDocRecordMember);
+                checkForTrailingComma(result.members);
+                parseExpected(SyntaxKind.CloseBraceToken);
+                return finishNode(result);
+            }
+
+            function parseJSDocRecordMember(): JSDocRecordMember {
+                let result = <JSDocRecordMember>createNode(SyntaxKind.JSDocRecordMember);
+                result.name = parseSimplePropertyName();
+
+                if (token === SyntaxKind.ColonToken) {
+                    nextToken();
+                    result.type = parseJSDocType();
+                }
+
+                return finishNode(result);
+            }
+
+            function parseJSDocNonNullableType(): JSDocNonNullableType {
+                let result = <JSDocNonNullableType>createNode(SyntaxKind.JSDocNonNullableType);
+                nextToken();
+                result.type = parseJSDocType();
+                return finishNode(result);
+            }
+
+            function parseJSDocTupleType(): JSDocTupleType {
+                let result = <JSDocTupleType>createNode(SyntaxKind.JSDocTupleType);
+                nextToken();
+                result.types = parseDelimitedList(ParsingContext.JSDocTupleTypes, parseJSDocType);
+                checkForTrailingComma(result.types);
+                parseExpected(SyntaxKind.CloseBracketToken);
+
+                return finishNode(result);
+            }
+
+            function checkForTrailingComma(list: NodeArray<Node>) {
+                if (parseDiagnostics.length === 0 && list.hasTrailingComma) {
+                    let start = list.end - ",".length;
+                    parseErrorAtPosition(start, ",".length, Diagnostics.Trailing_comma_not_allowed);
+                }
+            }
+
+            function parseJSDocUnionType(): JSDocUnionType {
+                let result = <JSDocUnionType>createNode(SyntaxKind.JSDocUnionType);
+                nextToken();
+                result.types = parseJSDocTypeList(parseJSDocType());
+
+                parseExpected(SyntaxKind.CloseParenToken);
+
+                return finishNode(result);
+            }
+
+            function parseJSDocTypeList(firstType: JSDocType) {
+                Debug.assert(!!firstType);
+
+                let types = <NodeArray<JSDocType>>[];
+                types.pos = firstType.pos;
+
+                types.push(firstType);
+                while (parseOptional(SyntaxKind.BarToken)) {
+                    types.push(parseJSDocType());
+                }
+
+                types.end = scanner.getStartPos();
+                return types;
+            }
+
+            function parseJSDocAllType(): JSDocAllType {
+                let result = <JSDocAllType>createNode(SyntaxKind.JSDocAllType);
+                nextToken();
+                return finishNode(result);
+            }
+
+            function parseJSDocUnknownOrNullableType(): JSDocUnknownType | JSDocNullableType {
+                let pos = scanner.getStartPos();
+                // skip the ?
+                nextToken();
+
+                // Need to lookahead to decide if this is a nullable or unknown type.
+
+                // Here are cases where we'll pick the unknown type:
+                //
+                //      Foo(?,
+                //      { a: ? }
+                //      Foo(?)
+                //      Foo<?>
+                //      Foo(?=
+                //      (?|
+                if (token === SyntaxKind.CommaToken ||
+                    token === SyntaxKind.CloseBraceToken ||
+                    token === SyntaxKind.CloseParenToken ||
+                    token === SyntaxKind.GreaterThanToken ||
+                    token === SyntaxKind.EqualsToken ||
+                    token === SyntaxKind.BarToken) {
+
+                    let result = <JSDocUnknownType>createNode(SyntaxKind.JSDocUnknownType, pos);
+                    return finishNode(result);
+                }
+                else {
+                    let result = <JSDocNullableType>createNode(SyntaxKind.JSDocNullableType, pos);
+                    result.type = parseJSDocType();
+                    return finishNode(result);
+                }
+            }
+
+            export function parseIsolatedJSDocComment(content: string, start: number, length: number) {
+                initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined);
+                let jsDocComment = parseJSDocComment(/*parent:*/ undefined, start, length);
+                let diagnostics = parseDiagnostics;
+                clearState();
+
+                return jsDocComment ? { jsDocComment, diagnostics } : undefined;
+            }
+
+            export function parseJSDocComment(parent: Node, start: number, length: number): JSDocComment {
+                let comment = parseJSDocCommentWorker(start, length);
+                if (comment) {
+                    fixupParentReferences(comment);
+                    comment.parent = parent;
+                }
+
+                return comment;
+            }
+
+            export function parseJSDocCommentWorker(start: number, length: number): JSDocComment {
+                let content = sourceText;
+                start = start || 0;
+                let end = length === undefined ? content.length : start + length;
+                length = end - start;
+
+                Debug.assert(start >= 0);
+                Debug.assert(start <= end);
+                Debug.assert(end <= content.length);
+
+                let tags: NodeArray<JSDocTag>;
+                let pos: number;
+                
+                // NOTE(cyrusn): This is essentially a handwritten scanner for JSDocComments. I 
+                // considered using an actual Scanner, but this would complicate things.  The 
+                // scanner would need to know it was in a Doc Comment.  Otherwise, it would then
+                // produce comments *inside* the doc comment.  In the end it was just easier to
+                // write a simple scanner rather than go that route.
+                if (length >= "/** */".length) {
+                    if (content.charCodeAt(start) === CharacterCodes.slash &&
+                        content.charCodeAt(start + 1) === CharacterCodes.asterisk &&
+                        content.charCodeAt(start + 2) === CharacterCodes.asterisk &&
+                        content.charCodeAt(start + 3) !== CharacterCodes.asterisk) {
+
+                        // Initially we can parse out a tag.  We also have seen a starting asterisk.
+                        // This is so that /** * @type */ doesn't parse.
+                        let canParseTag = true;
+                        let seenAsterisk = true;
+
+                        for (pos = start + "/**".length; pos < end;) {
+                            let ch = content.charCodeAt(pos);
+                            pos++;
+
+                            if (ch === CharacterCodes.at && canParseTag) {
+                                parseTag();
+                        
+                                // Once we parse out a tag, we cannot keep parsing out tags on this line.
+                                canParseTag = false;
+                                continue;
+                            }
+
+                            if (isLineBreak(ch)) {
+                                // After a line break, we can parse a tag, and we haven't seen as asterisk
+                                // on the next line yet.
+                                canParseTag = true;
+                                seenAsterisk = false;
+                                continue;
+                            }
+
+                            if (isWhiteSpace(ch)) {
+                                // Whitespace doesn't affect any of our parsing.
+                                continue;
+                            }
+
+                            // Ignore the first asterisk on a line.
+                            if (ch === CharacterCodes.asterisk) {
+                                if (seenAsterisk) {
+                                    // If we've already seen an asterisk, then we can no longer parse a tag
+                                    // on this line.
+                                    canParseTag = false;
+                                }
+                                seenAsterisk = true;
+                                continue;
+                            }
+
+                            // Anything else is doc comment text.  We can't do anything with it.  Because it
+                            // wasn't a tag, we can no longer parse a tag on this line until we hit the next
+                            // line break.
+                            canParseTag = false;
+                        }
+                    }
+                }
+
+                return createJSDocComment();
+
+                function createJSDocComment(): JSDocComment {
+                    if (!tags) {
+                        return undefined;
+                    }
+
+                    let result = <JSDocComment>createNode(SyntaxKind.JSDocComment, start);
+                    result.tags = tags;
+                    return finishNode(result, end);
+                }
+
+                function skipWhitespace(): void {
+                    while (pos < end && isWhiteSpace(content.charCodeAt(pos))) {
+                        pos++;
+                    }
+                }
+
+                function parseTag(): void {
+                    Debug.assert(content.charCodeAt(pos - 1) === CharacterCodes.at);
+                    let atToken = createNode(SyntaxKind.AtToken, pos - 1);
+                    atToken.end = pos;
+
+                    let startPos = pos;
+                    let tagName = scanIdentifier();
+                    if (!tagName) {
+                        return;
+                    }
+
+                    let tag = handleTag(atToken, tagName) || handleUnknownTag(atToken, tagName);
+                    addTag(tag);
+                }
+
+                function handleTag(atToken: Node, tagName: Identifier): JSDocTag {
+                    if (tagName) {
+                        switch (tagName.text) {
+                            case "param":
+                                return handleParamTag(atToken, tagName);
+                            case "return":
+                            case "returns":
+                                return handleReturnTag(atToken, tagName);
+                            case "template":
+                                return handleTemplateTag(atToken, tagName);
+                            case "type":
+                                return handleTypeTag(atToken, tagName);
+                        }
+                    }
+
+                    return undefined;
+                }
+
+                function handleUnknownTag(atToken: Node, tagName: Identifier) {
+                    let result = <JSDocTag>createNode(SyntaxKind.JSDocTag, atToken.pos);
+                    result.atToken = atToken;
+                    result.tagName = tagName;
+                    return finishNode(result, pos);
+                }
+
+                function addTag(tag: JSDocTag): void {
+                    if (tag) {
+                        if (!tags) {
+                            tags = <NodeArray<JSDocTag>>[];
+                            tags.pos = tag.pos;
+                        }
+
+                        tags.push(tag);
+                        tags.end = tag.end;
+                    }
+                }
+
+                function tryParseTypeExpression(): JSDocTypeExpression {
+                    skipWhitespace();
+
+                    if (content.charCodeAt(pos) !== CharacterCodes.openBrace) {
+                        return undefined;
+                    }
+
+                    let typeExpression = parseJSDocTypeExpression(pos, end - pos);
+                    pos = typeExpression.end;
+                    return typeExpression;
+                }
+
+                function handleParamTag(atToken: Node, tagName: Identifier) {
+                    let typeExpression = tryParseTypeExpression();
+
+                    skipWhitespace();
+                    let name: Identifier;
+                    let isBracketed: boolean;
+                    if (content.charCodeAt(pos) === CharacterCodes.openBracket) {
+                        pos++;
+                        skipWhitespace();
+                        name = scanIdentifier();
+                        isBracketed = true;
+                    }
+                    else {
+                        name = scanIdentifier();
+                    }
+
+                    if (!name) {
+                        parseErrorAtPosition(pos, 0, Diagnostics.Identifier_expected);
+                        return undefined;
+                    }
+
+                    let preName: Identifier, postName: Identifier;
+                    if (typeExpression) {
+                        postName = name;
+                    }
+                    else {
+                        preName = name;
+                    }
+
+                    if (!typeExpression) {
+                        typeExpression = tryParseTypeExpression();
+                    }
+
+                    let result = <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos);
+                    result.atToken = atToken;
+                    result.tagName = tagName;
+                    result.preParameterName = preName;
+                    result.typeExpression = typeExpression;
+                    result.postParameterName = postName;
+                    result.isBracketed = isBracketed;
+                    return finishNode(result, pos);
+                }
+
+                function handleReturnTag(atToken: Node, tagName: Identifier): JSDocReturnTag {
+                    if (forEach(tags, t => t.kind === SyntaxKind.JSDocReturnTag)) {
+                        parseErrorAtPosition(tagName.pos, pos - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
+                    }
+
+                    let result = <JSDocReturnTag>createNode(SyntaxKind.JSDocReturnTag, atToken.pos);
+                    result.atToken = atToken;
+                    result.tagName = tagName;
+                    result.typeExpression = tryParseTypeExpression();
+                    return finishNode(result, pos);
+                }
+
+                function handleTypeTag(atToken: Node, tagName: Identifier): JSDocTypeTag {
+                    if (forEach(tags, t => t.kind === SyntaxKind.JSDocTypeTag)) {
+                        parseErrorAtPosition(tagName.pos, pos - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
+                    }
+
+                    let result = <JSDocTypeTag>createNode(SyntaxKind.JSDocTypeTag, atToken.pos);
+                    result.atToken = atToken;
+                    result.tagName = tagName;
+                    result.typeExpression = tryParseTypeExpression();
+                    return finishNode(result, pos);
+                }
+
+                function handleTemplateTag(atToken: Node, tagName: Identifier): JSDocTemplateTag {
+                    if (forEach(tags, t => t.kind === SyntaxKind.JSDocTemplateTag)) {
+                        parseErrorAtPosition(tagName.pos, pos - tagName.pos, Diagnostics._0_tag_already_specified, tagName.text);
+                    }
+
+                    let typeParameters = <NodeArray<TypeParameterDeclaration>>[];
+                    typeParameters.pos = pos;
+
+                    while (true) {
+                        skipWhitespace();
+
+                        let startPos = pos;
+                        let name = scanIdentifier();
+                        if (!name) {
+                            parseErrorAtPosition(startPos, 0, Diagnostics.Identifier_expected);
+                            return undefined;
+                        }
+
+                        let typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter, name.pos);
+                        typeParameter.name = name;
+                        finishNode(typeParameter, pos);
+
+                        typeParameters.push(typeParameter);
+
+                        skipWhitespace();
+                        if (content.charCodeAt(pos) !== CharacterCodes.comma) {
+                            break;
+                        }
+
+                        pos++;
+                    }
+
+                    typeParameters.end = pos;
+
+                    let result = <JSDocTemplateTag>createNode(SyntaxKind.JSDocTemplateTag, atToken.pos);
+                    result.atToken = atToken;
+                    result.tagName = tagName;
+                    result.typeParameters = typeParameters;
+                    return finishNode(result, pos);
+                }
+
+                function scanIdentifier(): Identifier {
+                    let startPos = pos;
+                    for (; pos < end; pos++) {
+                        let ch = content.charCodeAt(pos);
+                        if (pos === startPos && isIdentifierStart(ch, ScriptTarget.Latest)) {
+                            continue;
+                        }
+                        else if (pos > startPos && isIdentifierPart(ch, ScriptTarget.Latest)) {
+                            continue;
+                        }
+
+                        break;
+                    }
+
+                    if (startPos === pos) {
+                        return undefined;
+                    }
+
+                    let result = <Identifier>createNode(SyntaxKind.Identifier, startPos);
+                    result.text = content.substring(startPos, pos);
+                    return finishNode(result, pos);
+                }
+            }
         }
     }
 
@@ -4890,7 +5698,14 @@ module ts {
 
                 // Ditch any existing LS children we may have created.  This way we can avoid
                 // moving them forward.
-                node._children = undefined;
+                if (node._children) {
+                    node._children = undefined;
+                }
+
+                if (node.jsDocComment) {
+                    node.jsDocComment = undefined;
+                }
+
                 node.pos += delta;
                 node.end += delta;
 

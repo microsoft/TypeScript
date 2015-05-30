@@ -1,0 +1,14 @@
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck57.ts(2,11): error TS9004: 'class' declarations are only supported directly inside a module or as a top level declaration.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck57.ts(3,13): error TS1163: A 'yield' expression is only allowed in a generator body.
+
+
+==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck57.ts (2 errors) ====
+    function* g() {
+        class C {
+              ~
+!!! error TS9004: 'class' declarations are only supported directly inside a module or as a top level declaration.
+            x = yield 0;
+                ~~~~~
+!!! error TS1163: A 'yield' expression is only allowed in a generator body.
+        };
+    }
