@@ -4006,9 +4006,9 @@ module ts {
             property.questionToken = questionToken;
             property.type = parseTypeAnnotation();
 
-            // For initializers, we always want to allow 'in' expressions. For instance properties specifically,
-            // since they are evaluated inside the constructor, we do *not* want to parse yield expressions,
-            // so we specifically turn the yield context off. The grammar would look something like this:
+            // For instance properties specifically, since they are evaluated inside the constructor,
+            // we do *not * want to parse yield expressions, so we specifically turn the yield context
+            // off. The grammar would look something like this:
             //
             //    MemberVariableDeclaration[Yield]:
             //        AccessibilityModifier_opt   PropertyName   TypeAnnotation_opt   Initialiser_opt[In];

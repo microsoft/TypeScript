@@ -9725,42 +9725,43 @@ module ts {
 
             return elementType || anyType;
         }
-
-        function getElementTypeOfIterable(iterable: Type, errorNode: Node): Type {
-            // We want to treat type as an iterable, and get the type it is an iterable of. The iterable
-            // must have the following structure (annotated with the names of the variables below):
-            //
-            // { // iterable
-            //     [Symbol.iterator]: { // iteratorFunction
-            //         (): Iterator<T>
-            //     }
-            // }
-            //
-            // T is the type we are after. At every level that involves analyzing return types
-            // of signatures, we union the return types of all the signatures.
-            //
-            // Another thing to note is that at any step of this process, we could run into a dead end,
-            // meaning either the property is missing, or we run into the anyType. If either of these things
-            // happens, we return undefined to signal that we could not find the iterated type. If a property
-            // is missing, and the previous step did not result in 'any', then we also give an error if the
-            // caller requested it. Then the caller can decide what to do in the case where there is no iterated
-            // type. This is different from returning anyType, because that would signify that we have matched the
-            // whole pattern and that T (above) is 'any'.
-
-            if (allConstituentTypesHaveKind(iterable, TypeFlags.Any)) {
+        
+        /**
+         * We want to treat type as an iterable, and get the type it is an iterable of. The iterable
+         * must have the following structure (annotated with the names of the variables below):
+         *
+         * { // iterable
+         *     [Symbol.iterator]: { // iteratorFunction
+         *         (): Iterator<T>
+         *     }
+         * }
+         *
+         * T is the type we are after. At every level that involves analyzing return types
+         * of signatures, we union the return types of all the signatures.
+         *
+         * Another thing to note is that at any step of this process, we could run into a dead end,
+         * meaning either the property is missing, or we run into the anyType. If either of these things
+         * happens, we return undefined to signal that we could not find the iterated type. If a property
+         * is missing, and the previous step did not result in 'any', then we also give an error if the
+         * caller requested it. Then the caller can decide what to do in the case where there is no iterated
+         * type. This is different from returning anyType, because that would signify that we have matched the
+         * whole pattern and that T (above) is 'any'.
+         */
+        function getElementTypeOfIterable(type: Type, errorNode: Node): Type {
+            if (type.flags & TypeFlags.Any) {
                 return undefined;
             }
 
-            let typeAsIterable = <IterableOrIteratorType>iterable;
+            let typeAsIterable = <IterableOrIteratorType>type;
             if (!typeAsIterable.iterableElementType) {
                 // As an optimization, if the type is instantiated directly using the globalIterableType (Iterable<number>),
                 // then just grab its type argument.
-                if ((iterable.flags & TypeFlags.Reference) && (<GenericType>iterable).target === globalIterableType) {
-                    typeAsIterable.iterableElementType = (<GenericType>iterable).typeArguments[0];
+                if ((type.flags & TypeFlags.Reference) && (<GenericType>type).target === globalIterableType) {
+                    typeAsIterable.iterableElementType = (<GenericType>type).typeArguments[0];
                 }
                 else {
-                    let iteratorFunction = getTypeOfPropertyOfType(iterable, getPropertyNameForKnownSymbolName("iterator"));
-                    if (iteratorFunction && allConstituentTypesHaveKind(iteratorFunction, TypeFlags.Any)) {
+                    let iteratorFunction = getTypeOfPropertyOfType(type, getPropertyNameForKnownSymbolName("iterator"));
+                    if (iteratorFunction && iteratorFunction.flags & TypeFlags.Any) {
                         return undefined;
                     }
 
@@ -9779,32 +9780,34 @@ module ts {
             return typeAsIterable.iterableElementType;
         }
 
-        function getElementTypeOfIterator(iterator: Type, errorNode: Node): Type {
-            // This function has very similar logic as getElementTypeOfIterable, except that it operates on
-            // Iterators instead of Iterables. Here is the structure:
-            //
-            //  { // iterator
-            //      next: { // iteratorNextFunction
-            //          (): { // iteratorNextResult
-            //              value: T // iteratorNextValue
-            //          }
-            //      }
-            //  }
-            //
-            if (allConstituentTypesHaveKind(iterator, TypeFlags.Any)) {
+        /**
+         * This function has very similar logic as getElementTypeOfIterable, except that it operates on
+         * Iterators instead of Iterables. Here is the structure:
+         *
+         *  { // iterator
+         *      next: { // iteratorNextFunction
+         *          (): { // iteratorNextResult
+         *              value: T // iteratorNextValue
+         *          }
+         *      }
+         *  }
+         *
+         */
+        function getElementTypeOfIterator(type: Type, errorNode: Node): Type {
+            if (type.flags & TypeFlags.Any) {
                 return undefined;
             }
 
-            let typeAsIterator = <IterableOrIteratorType>iterator;
+            let typeAsIterator = <IterableOrIteratorType>type;
             if (!typeAsIterator.iteratorElementType) {
                 // As an optimization, if the type is instantiated directly using the globalIteratorType (Iterator<number>),
                 // then just grab its type argument.
-                if ((iterator.flags & TypeFlags.Reference) && (<GenericType>iterator).target === globalIteratorType) {
-                    typeAsIterator.iteratorElementType = (<GenericType>iterator).typeArguments[0];
+                if ((type.flags & TypeFlags.Reference) && (<GenericType>type).target === globalIteratorType) {
+                    typeAsIterator.iteratorElementType = (<GenericType>type).typeArguments[0];
                 }
                 else {
-                    let iteratorNextFunction = getTypeOfPropertyOfType(iterator, "next");
-                    if (iteratorNextFunction && allConstituentTypesHaveKind(iteratorNextFunction, TypeFlags.Any)) {
+                    let iteratorNextFunction = getTypeOfPropertyOfType(type, "next");
+                    if (iteratorNextFunction && iteratorNextFunction.flags & TypeFlags.Any) {
                         return undefined;
                     }
 
@@ -9817,7 +9820,7 @@ module ts {
                     }
 
                     let iteratorNextResult = getUnionType(map(iteratorNextFunctionSignatures, getReturnTypeOfSignature));
-                    if (allConstituentTypesHaveKind(iteratorNextResult, TypeFlags.Any)) {
+                    if (iteratorNextResult.flags & TypeFlags.Any) {
                         return undefined;
                     }
 
@@ -9836,19 +9839,19 @@ module ts {
             return typeAsIterator.iteratorElementType;
         }
 
-        function getElementTypeOfIterableIterator(iterableIterator: Type): Type {
-            if (allConstituentTypesHaveKind(iterableIterator, TypeFlags.Any)) {
+        function getElementTypeOfIterableIterator(type: Type): Type {
+            if (type.flags & TypeFlags.Any) {
                 return undefined;
             }
 
             // As an optimization, if the type is instantiated directly using the globalIterableIteratorType (IterableIterator<number>),
             // then just grab its type argument.
-            if ((iterableIterator.flags & TypeFlags.Reference) && (<GenericType>iterableIterator).target === globalIterableIteratorType) {
-                return (<GenericType>iterableIterator).typeArguments[0];
+            if ((type.flags & TypeFlags.Reference) && (<GenericType>type).target === globalIterableIteratorType) {
+                return (<GenericType>type).typeArguments[0];
             }
 
-            return getElementTypeOfIterable(iterableIterator, /*errorNode*/ undefined) ||
-                getElementTypeOfIterator(iterableIterator, /*errorNode*/ undefined);
+            return getElementTypeOfIterable(type, /*errorNode*/ undefined) ||
+                getElementTypeOfIterator(type, /*errorNode*/ undefined);
         }
 
         /**
