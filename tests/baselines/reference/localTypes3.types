@@ -54,7 +54,7 @@ function f2() {
 >X : X
 
         class C<Y> {
->C : C<X, Y>
+>C : C<Y>
 >Y : Y
 
             public x = x;
@@ -75,21 +75,21 @@ function f2() {
 >10 : number
 
     let v = new C("hello");
->v : C<number, string>
->new C("hello") : C<number, string>
+>v : f<number>.C<string>
+>new C("hello") : f<number>.C<string>
 >C : typeof C
 >"hello" : string
 
     let x = v.x;
 >x : number
 >v.x : number
->v : C<number, string>
+>v : f<number>.C<string>
 >x : number
 
     let y = v.y;
 >y : string
 >v.y : string
->v : C<number, string>
+>v : f<number>.C<string>
 >y : string
 }
 
@@ -106,7 +106,7 @@ function f3() {
 >Y : Y
 
         class C {
->C : C<X, Y>
+>C : C
 
             public x = x;
 >x : X
@@ -127,20 +127,20 @@ function f3() {
 >"hello" : string
 
     let v = new C();
->v : C<number, string>
->new C() : C<number, string>
+>v : f<number, string>.C
+>new C() : f<number, string>.C
 >C : typeof C
 
     let x = v.x;
 >x : number
 >v.x : number
->v : C<number, string>
+>v : f<number, string>.C
 >x : number
 
     let y = v.y;
 >y : string
 >v.y : string
->v : C<number, string>
+>v : f<number, string>.C
 >y : string
 }
 
