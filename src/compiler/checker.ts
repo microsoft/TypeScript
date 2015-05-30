@@ -1561,7 +1561,6 @@ module ts {
                         let i = 0;
                         if (outerTypeParameters) {
                             let length = outerTypeParameters.length;
-                            let group = 0;
                             while (i < length) {
                                 // Find group of type arguments for type parameters with the same declaring container.
                                 let start = i;
@@ -1572,15 +1571,9 @@ module ts {
                                 // When type parameters are their own type arguments for the whole group (i.e. we have
                                 // the default outer type arguments), we don't show the group.
                                 if (!rangeEquals(outerTypeParameters, typeArguments, start, i)) {
-                                    if (group) {
-                                        writePunctuation(writer, SyntaxKind.DotToken);
-                                    }
                                     writeSymbolTypeReference(parent, typeArguments, start, i);
-                                    group++;
+                                    writePunctuation(writer, SyntaxKind.DotToken);
                                 }
-                            }
-                            if (group) {
-                                writePunctuation(writer, SyntaxKind.DotToken);
                             }
                         }
                         writeSymbolTypeReference(type.symbol, typeArguments, i, typeArguments.length);
