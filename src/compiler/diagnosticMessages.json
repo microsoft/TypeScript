@@ -699,7 +699,7 @@
 
     "'{0}' tag already specified.": {
         "category": "Error",
-        "code": 1219
+        "code": 1222
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
