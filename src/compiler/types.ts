@@ -270,6 +270,32 @@ module ts {
         // Top-level nodes
         SourceFile,
 
+        // JSDoc nodes.
+        JSDocTypeExpression,
+        // The * type.
+        JSDocAllType,
+        // The ? type.
+        JSDocUnknownType,
+        JSDocArrayType,
+        JSDocUnionType,
+        JSDocTupleType,
+        JSDocNullableType,
+        JSDocNonNullableType,
+        JSDocRecordType,
+        JSDocRecordMember,
+        JSDocTypeReference,
+        JSDocOptionalType,
+        JSDocFunctionType,
+        JSDocVariadicType,
+        JSDocConstructorType,
+        JSDocThisType,
+        JSDocComment,
+        JSDocTag,
+        JSDocParameterTag,
+        JSDocReturnTag,
+        JSDocTypeTag,
+        JSDocTemplateTag,
+
         // Synthesized list
         SyntaxList,
         // Enum value count
@@ -324,6 +350,8 @@ module ts {
 
     /* @internal */
     export const enum ParserContextFlags {
+        None = 0,
+
         // Set if this node was parsed in strict mode.  Used for grammar error checks, as well as
         // checking if the node can be reused in incremental settings.
         StrictMode = 1 << 0,
@@ -345,6 +373,10 @@ module ts {
         // error.
         ThisNodeHasError = 1 << 5,
 
+        // This node was parsed in a JavaScript file and can be processed differently.  For example
+        // its type can be specified usign a JSDoc comment.
+        JavaScriptFile = 1 << 6,
+
         // Context flags set directly by the parser.
         ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | Decorator | ThisNodeHasError,
 
@@ -352,10 +384,10 @@ module ts {
 
         // Used during incremental parsing to determine if this node or any of its children had an
         // error.  Computed only once and then cached.
-        ThisNodeOrAnySubNodesHasError = 1 << 6,
+        ThisNodeOrAnySubNodesHasError = 1 << 7,
 
         // Used to know if we've computed data from children and cached it in this node.
-        HasAggregatedChildData = 1 << 7
+        HasAggregatedChildData = 1 << 8
     }
 
     /* @internal */
@@ -371,14 +403,15 @@ module ts {
         // Specific context the parser was in when this node was created.  Normally undefined.
         // Only set when the parser was in some interesting context (like async/yield).
         /* @internal */ parserContextFlags?: ParserContextFlags;
-        decorators?: NodeArray<Decorator>;    // Array of decorators (in document order)
-        modifiers?: ModifiersArray;           // Array of modifiers
-        /* @internal */ id?: number;          // Unique id (used to look up NodeLinks)
-        parent?: Node;                        // Parent node (initialized by binding)
-        /* @internal */ symbol?: Symbol;      // Symbol declared by node (initialized by binding)
-        /* @internal */ locals?: SymbolTable; // Locals associated with node (initialized by binding)
-        /* @internal */ nextContainer?: Node; // Next container in declaration order (initialized by binding)
-        /* @internal */ localSymbol?: Symbol; // Local symbol declared by node (initialized by binding only for exported nodes)
+        decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
+        modifiers?: ModifiersArray;                     // Array of modifiers
+        /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
+        parent?: Node;                                  // Parent node (initialized by binding
+        /* @internal */ jsDocComment?: JSDocComment;    // JSDoc for the node, if it has any.  Only for .js files.
+        /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
+        /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
+        /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
+        /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange {
@@ -990,6 +1023,106 @@ module ts {
     export interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
         kind: SyntaxKind;
+    }
+
+    // represents a top level: { type } expression in a JSDoc comment.
+    export interface JSDocTypeExpression extends Node {
+        type: JSDocType;
+    }
+
+    export interface JSDocType extends TypeNode {
+        _jsDocTypeBrand: any;
+    }
+
+    export interface JSDocAllType extends JSDocType {
+        _JSDocAllTypeBrand: any;
+    }
+
+    export interface JSDocUnknownType extends JSDocType {
+        _JSDocUnknownTypeBrand: any;
+    }
+
+    export interface JSDocArrayType extends JSDocType {
+        elementType: JSDocType;
+    }
+
+    export interface JSDocUnionType extends JSDocType {
+        types: NodeArray<JSDocType>;
+    }
+
+    export interface JSDocTupleType extends JSDocType {
+        types: NodeArray<JSDocType>;
+    }
+
+    export interface JSDocNonNullableType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocNullableType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocRecordType extends JSDocType, TypeLiteralNode {
+        members: NodeArray<JSDocRecordMember>;
+    }
+
+    export interface JSDocTypeReference extends JSDocType {
+        name: EntityName;
+        typeArguments: NodeArray<JSDocType>
+    }
+
+    export interface JSDocOptionalType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocFunctionType extends JSDocType, SignatureDeclaration {
+        parameters: NodeArray<ParameterDeclaration>;
+        type: JSDocType;
+    }
+
+    export interface JSDocVariadicType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocConstructorType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocThisType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocRecordMember extends PropertyDeclaration {
+        name: Identifier | LiteralExpression,
+        type?: JSDocType
+    }
+
+    export interface JSDocComment extends Node {
+        tags: NodeArray<JSDocTag>;
+    }
+
+    export interface JSDocTag extends Node {
+        atToken: Node;
+        tagName: Identifier;
+    }
+
+    export interface JSDocTemplateTag extends JSDocTag {
+        typeParameters: NodeArray<TypeParameterDeclaration>;
+    }
+
+    export interface JSDocReturnTag extends JSDocTag {
+        typeExpression: JSDocTypeExpression;
+    }
+
+    export interface JSDocTypeTag extends JSDocTag {
+        typeExpression: JSDocTypeExpression;
+    }
+
+    export interface JSDocParameterTag extends JSDocTag {
+        preParameterName?: Identifier;
+        typeExpression?: JSDocTypeExpression;
+        postParameterName?: Identifier;
+        isBracketed: boolean;
     }
 
     // Source files are declarations when they are external modules.

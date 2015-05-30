@@ -697,6 +697,10 @@
     },
 
 
+    "'{0}' tag already specified.": {
+        "category": "Error",
+        "code": 1219
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -2156,10 +2160,6 @@
     "'parameter modifiers' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8012
-    },
-    "'?' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8013
     },
     "'property declarations' can only be used in a .ts file.": {
         "category": "Error",
