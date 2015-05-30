@@ -1530,17 +1530,60 @@ module ts {
                     }
                 }
 
+                function writeSymbolTypeReference(symbol: Symbol, typeArguments: Type[], pos: number, end: number) {
+                    if (!isReservedMemberName(symbol.name)) {
+                        buildSymbolDisplay(symbol, writer, enclosingDeclaration, SymbolFlags.Type);
+                    }
+                    if (pos < end) {
+                        writePunctuation(writer, SyntaxKind.LessThanToken);
+                        writeType(typeArguments[pos++], TypeFormatFlags.None);
+                        while (pos < end) {
+                            writePunctuation(writer, SyntaxKind.CommaToken);
+                            writeSpace(writer);
+                            writeType(typeArguments[pos++], TypeFormatFlags.None);
+                        }
+                        writePunctuation(writer, SyntaxKind.GreaterThanToken);
+                    }
+                }
+
                 function writeTypeReference(type: TypeReference, flags: TypeFormatFlags) {
+                    let typeArguments = type.typeArguments;
                     if (type.target === globalArrayType && !(flags & TypeFormatFlags.WriteArrayAsGenericType)) {
-                        writeType(type.typeArguments[0], TypeFormatFlags.InElementType);
+                        writeType(typeArguments[0], TypeFormatFlags.InElementType);
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
                     }
                     else {
-                        buildSymbolDisplay(type.target.symbol, writer, enclosingDeclaration, SymbolFlags.Type);
-                        writePunctuation(writer, SyntaxKind.LessThanToken);
-                        writeTypeList(type.typeArguments, /*union*/ false);
-                        writePunctuation(writer, SyntaxKind.GreaterThanToken);
+                        // Write the type reference in the format f<A>.g<B>.C<X, Y> where A and B are type arguments
+                        // for outer type parameters, and f and g are the respective declaring containers of those
+                        // type parameters.
+                        let outerTypeParameters = type.target.outerTypeParameters;
+                        let i = 0;
+                        if (outerTypeParameters) {
+                            let length = outerTypeParameters.length;
+                            let group = 0;
+                            while (i < length) {
+                                // Find group of type arguments for type parameters with the same declaring container.
+                                let start = i;
+                                let parent = getParentSymbolOfTypeParameter(outerTypeParameters[i]);
+                                do {
+                                    i++;
+                                } while (i < length && getParentSymbolOfTypeParameter(outerTypeParameters[i]) === parent);
+                                // When type parameters are their own type arguments for the whole group (i.e. we have
+                                // the default outer type arguments), we don't show the group.
+                                if (!rangeEquals(outerTypeParameters, typeArguments, start, i)) {
+                                    if (group) {
+                                        writePunctuation(writer, SyntaxKind.DotToken);
+                                    }
+                                    writeSymbolTypeReference(parent, typeArguments, start, i);
+                                    group++;
+                                }
+                            }
+                            if (group) {
+                                writePunctuation(writer, SyntaxKind.DotToken);
+                            }
+                        }
+                        writeSymbolTypeReference(type.symbol, typeArguments, i, typeArguments.length);
                     }
                 }
 
@@ -1736,7 +1779,7 @@ module ts {
             function buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags) {
                 let targetSymbol = getTargetSymbol(symbol);
                 if (targetSymbol.flags & SymbolFlags.Class || targetSymbol.flags & SymbolFlags.Interface) {
-                    buildDisplayForTypeParametersAndDelimiters(getTypeParametersOfClassOrInterface(symbol), writer, enclosingDeclaraiton, flags);
+                    buildDisplayForTypeParametersAndDelimiters(getLocalTypeParametersOfClassOrInterface(symbol), writer, enclosingDeclaraiton, flags);
                 }
             }
 
@@ -3354,6 +3397,10 @@ module ts {
                 }
             }
             return type.constraint === noConstraintType ? undefined : type.constraint;
+        }
+
+        function getParentSymbolOfTypeParameter(typeParameter: TypeParameter): Symbol {
+            return getSymbolOfNode(getDeclarationOfKind(typeParameter.symbol, SyntaxKind.TypeParameter).parent);
         }
 
         function getTypeListId(types: Type[]) {
