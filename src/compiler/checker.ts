@@ -1472,7 +1472,7 @@ module ts {
                 return appendParentTypeArgumentsAndSymbolName(symbol);
             }
 
-            function buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, typeStack?: Type[]) {
+            function buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 let globalFlagsToPass = globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike;
                 return writeType(type, globalFlags);
 
@@ -1557,49 +1557,54 @@ module ts {
                 }
 
                 function writeAnonymousType(type: ObjectType, flags: TypeFormatFlags) {
-                    // Always use 'typeof T' for type of class, enum, and module objects
-                    if (type.symbol && type.symbol.flags & (SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
-                        writeTypeofSymbol(type, flags);
-                    }
-                    // Use 'typeof T' for types of functions and methods that circularly reference themselves
-                    else if (shouldWriteTypeOfFunctionSymbol()) {
-                        writeTypeofSymbol(type, flags);
-                    }
-                    else if (typeStack && contains(typeStack, type)) {
-                        // If type is an anonymous type literal in a type alias declaration, use type alias name
-                        let typeAlias = getTypeAliasForTypeLiteral(type);
-                        if (typeAlias) {
-                            // The specified symbol flags need to be reinterpreted as type flags
-                            buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, flags);
+                    let symbol = type.symbol;
+                    if (symbol) {
+                        // Always use 'typeof T' for type of class, enum, and module objects
+                        if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
+                            writeTypeofSymbol(type, flags);
+                        }
+                        else if (shouldWriteTypeOfFunctionSymbol()) {
+                            writeTypeofSymbol(type, flags);
+                        }
+                        else if (contains(symbolStack, symbol)) {
+                            // If type is an anonymous type literal in a type alias declaration, use type alias name
+                            let typeAlias = getTypeAliasForTypeLiteral(type);
+                            if (typeAlias) {
+                                // The specified symbol flags need to be reinterpreted as type flags
+                                buildSymbolDisplay(typeAlias, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, flags);
+                            }
+                            else {
+                                // Recursive usage, use any
+                                writeKeyword(writer, SyntaxKind.AnyKeyword);
+                            }
                         }
                         else {
-                            // Recursive usage, use any
-                            writeKeyword(writer, SyntaxKind.AnyKeyword);
+                            // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
+                            // of types allows us to catch circular references to instantiations of the same anonymous type
+                            if (!symbolStack) {
+                                symbolStack = [];
+                            }
+                            symbolStack.push(symbol);
+                            writeLiteralType(type, flags);
+                            symbolStack.pop();
                         }
                     }
                     else {
-                        if (!typeStack) {
-                            typeStack = [];
-                        }
-                        typeStack.push(type);
+                        // Anonymous types with no symbol are never circular
                         writeLiteralType(type, flags);
-                        typeStack.pop();
                     }
 
                     function shouldWriteTypeOfFunctionSymbol() {
-                        if (type.symbol) {
-                            let isStaticMethodSymbol = !!(type.symbol.flags & SymbolFlags.Method &&  // typeof static method
-                                ts.forEach(type.symbol.declarations, declaration => declaration.flags & NodeFlags.Static));
-                            let isNonLocalFunctionSymbol = !!(type.symbol.flags & SymbolFlags.Function) &&
-                                (type.symbol.parent || // is exported function symbol
-                                    ts.forEach(type.symbol.declarations, declaration =>
-                                        declaration.parent.kind === SyntaxKind.SourceFile || declaration.parent.kind === SyntaxKind.ModuleBlock));
-
-                            if (isStaticMethodSymbol || isNonLocalFunctionSymbol) {
-                                // typeof is allowed only for static/non local functions
-                                return !!(flags & TypeFormatFlags.UseTypeOfFunction) || // use typeof if format flags specify it
-                                    (typeStack && contains(typeStack, type)); // it is type of the symbol uses itself recursively
-                            }
+                        let isStaticMethodSymbol = !!(symbol.flags & SymbolFlags.Method &&  // typeof static method
+                            forEach(symbol.declarations, declaration => declaration.flags & NodeFlags.Static));
+                        let isNonLocalFunctionSymbol = !!(symbol.flags & SymbolFlags.Function) &&
+                            (symbol.parent || // is exported function symbol
+                                forEach(symbol.declarations, declaration =>
+                                    declaration.parent.kind === SyntaxKind.SourceFile || declaration.parent.kind === SyntaxKind.ModuleBlock));
+                        if (isStaticMethodSymbol || isNonLocalFunctionSymbol) {
+                            // typeof is allowed only for static/non local functions
+                            return !!(flags & TypeFormatFlags.UseTypeOfFunction) || // use typeof if format flags specify it
+                                (contains(symbolStack, symbol)); // it is type of the symbol uses itself recursively
                         }
                     }
                 }
@@ -1634,7 +1639,7 @@ module ts {
                             if (flags & TypeFormatFlags.InElementType) {
                                 writePunctuation(writer, SyntaxKind.OpenParenToken);
                             }
-                            buildSignatureDisplay(resolved.callSignatures[0], writer, enclosingDeclaration, globalFlagsToPass | TypeFormatFlags.WriteArrowStyleSignature, typeStack);
+                            buildSignatureDisplay(resolved.callSignatures[0], writer, enclosingDeclaration, globalFlagsToPass | TypeFormatFlags.WriteArrowStyleSignature, symbolStack);
                             if (flags & TypeFormatFlags.InElementType) {
                                 writePunctuation(writer, SyntaxKind.CloseParenToken);
                             }
@@ -1646,7 +1651,7 @@ module ts {
                             }
                             writeKeyword(writer, SyntaxKind.NewKeyword);
                             writeSpace(writer);
-                            buildSignatureDisplay(resolved.constructSignatures[0], writer, enclosingDeclaration, globalFlagsToPass | TypeFormatFlags.WriteArrowStyleSignature, typeStack);
+                            buildSignatureDisplay(resolved.constructSignatures[0], writer, enclosingDeclaration, globalFlagsToPass | TypeFormatFlags.WriteArrowStyleSignature, symbolStack);
                             if (flags & TypeFormatFlags.InElementType) {
                                 writePunctuation(writer, SyntaxKind.CloseParenToken);
                             }
@@ -1658,7 +1663,7 @@ module ts {
                     writer.writeLine();
                     writer.increaseIndent();
                     for (let signature of resolved.callSignatures) {
-                        buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, typeStack);
+                        buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, symbolStack);
                         writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
@@ -1666,7 +1671,7 @@ module ts {
                         writeKeyword(writer, SyntaxKind.NewKeyword);
                         writeSpace(writer);
 
-                        buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, typeStack);
+                        buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, symbolStack);
                         writePunctuation(writer, SyntaxKind.SemicolonToken);
                         writer.writeLine();
                     }
@@ -1707,7 +1712,7 @@ module ts {
                                 if (p.flags & SymbolFlags.Optional) {
                                     writePunctuation(writer, SyntaxKind.QuestionToken);
                                 }
-                                buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, typeStack);
+                                buildSignatureDisplay(signature, writer, enclosingDeclaration, globalFlagsToPass, symbolStack);
                                 writePunctuation(writer, SyntaxKind.SemicolonToken);
                                 writer.writeLine();
                             }
@@ -1736,18 +1741,18 @@ module ts {
                 }
             }
 
-            function buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
+            function buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 appendSymbolNameOnly(tp.symbol, writer);
                 let constraint = getConstraintOfTypeParameter(tp);
                 if (constraint) {
                     writeSpace(writer);
                     writeKeyword(writer, SyntaxKind.ExtendsKeyword);
                     writeSpace(writer);
-                    buildTypeDisplay(constraint, writer, enclosingDeclaration, flags, typeStack);
+                    buildTypeDisplay(constraint, writer, enclosingDeclaration, flags, symbolStack);
                 }
             }
 
-            function buildParameterDisplay(p: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
+            function buildParameterDisplay(p: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 if (hasDotDotDotToken(p.valueDeclaration)) {
                     writePunctuation(writer, SyntaxKind.DotDotDotToken);
                 }
@@ -1758,10 +1763,10 @@ module ts {
                 writePunctuation(writer, SyntaxKind.ColonToken);
                 writeSpace(writer);
 
-                buildTypeDisplay(getTypeOfSymbol(p), writer, enclosingDeclaration, flags, typeStack);
+                buildTypeDisplay(getTypeOfSymbol(p), writer, enclosingDeclaration, flags, symbolStack);
             }
 
-            function buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
+            function buildDisplayForTypeParametersAndDelimiters(typeParameters: TypeParameter[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 if (typeParameters && typeParameters.length) {
                     writePunctuation(writer, SyntaxKind.LessThanToken);
                     for (let i = 0; i < typeParameters.length; i++) {
@@ -1769,13 +1774,13 @@ module ts {
                             writePunctuation(writer, SyntaxKind.CommaToken);
                             writeSpace(writer);
                         }
-                        buildTypeParameterDisplay(typeParameters[i], writer, enclosingDeclaration, flags, typeStack);
+                        buildTypeParameterDisplay(typeParameters[i], writer, enclosingDeclaration, flags, symbolStack);
                     }
                     writePunctuation(writer, SyntaxKind.GreaterThanToken);
                 }
             }
 
-            function buildDisplayForTypeArgumentsAndDelimiters(typeParameters: TypeParameter[], mapper: TypeMapper, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
+            function buildDisplayForTypeArgumentsAndDelimiters(typeParameters: TypeParameter[], mapper: TypeMapper, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 if (typeParameters && typeParameters.length) {
                     writePunctuation(writer, SyntaxKind.LessThanToken);
                     for (let i = 0; i < typeParameters.length; i++) {
@@ -1789,19 +1794,19 @@ module ts {
                 }
             }
 
-            function buildDisplayForParametersAndDelimiters(parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
+            function buildDisplayForParametersAndDelimiters(parameters: Symbol[], writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 writePunctuation(writer, SyntaxKind.OpenParenToken);
                 for (let i = 0; i < parameters.length; i++) {
                     if (i > 0) {
                         writePunctuation(writer, SyntaxKind.CommaToken);
                         writeSpace(writer);
                     }
-                    buildParameterDisplay(parameters[i], writer, enclosingDeclaration, flags, typeStack);
+                    buildParameterDisplay(parameters[i], writer, enclosingDeclaration, flags, symbolStack);
                 }
                 writePunctuation(writer, SyntaxKind.CloseParenToken);
             }
 
-            function buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
+            function buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 if (flags & TypeFormatFlags.WriteArrowStyleSignature) {
                     writeSpace(writer);
                     writePunctuation(writer, SyntaxKind.EqualsGreaterThanToken);
@@ -1810,21 +1815,21 @@ module ts {
                     writePunctuation(writer, SyntaxKind.ColonToken);
                 }
                 writeSpace(writer);
-                buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags, typeStack);
+                buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags, symbolStack);
             }
 
-            function buildSignatureDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
+            function buildSignatureDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 if (signature.target && (flags & TypeFormatFlags.WriteTypeArgumentsOfSignature)) {
                     // Instantiated signature, write type arguments instead
                     // This is achieved by passing in the mapper separately
                     buildDisplayForTypeArgumentsAndDelimiters(signature.target.typeParameters, signature.mapper, writer, enclosingDeclaration);
                 }
                 else {
-                    buildDisplayForTypeParametersAndDelimiters(signature.typeParameters, writer, enclosingDeclaration, flags, typeStack);
+                    buildDisplayForTypeParametersAndDelimiters(signature.typeParameters, writer, enclosingDeclaration, flags, symbolStack);
                 }
 
-                buildDisplayForParametersAndDelimiters(signature.parameters, writer, enclosingDeclaration, flags, typeStack);
-                buildReturnTypeDisplay(signature, writer, enclosingDeclaration, flags, typeStack);
+                buildDisplayForParametersAndDelimiters(signature.parameters, writer, enclosingDeclaration, flags, symbolStack);
+                buildReturnTypeDisplay(signature, writer, enclosingDeclaration, flags, symbolStack);
             }
 
             return _displayBuilder || (_displayBuilder = {
@@ -3889,7 +3894,7 @@ module ts {
                 mapper.mappings = {};
             }
             // Instantiate the given type using the given mapper and cache the result
-            let result = <ResolvedType>createObjectType(TypeFlags.Anonymous, type.symbol);
+            let result = <ResolvedType>createObjectType(TypeFlags.Anonymous | TypeFlags.Instantiated, type.symbol);
             result.properties = instantiateList(getPropertiesOfObjectType(type), mapper, instantiateSymbol);
             result.members = createSymbolTable(result.properties);
             result.callSignatures = instantiateList(getSignaturesOfType(type, SignatureKind.Call), mapper, instantiateSignature);
@@ -4313,12 +4318,12 @@ module ts {
             // Effectively, we will generate a false positive when two types are structurally equal to at least 10 levels, but unequal at
             // some level beyond that.
             function isDeeplyNestedGeneric(type: ObjectType, stack: ObjectType[]): boolean {
-                if (type.flags & TypeFlags.Reference && depth >= 10) {
-                    let target = (<TypeReference>type).target;
+                if (type.flags & (TypeFlags.Reference | TypeFlags.Instantiated) && depth >= 10) {
+                    let symbol = type.symbol;
                     let count = 0;
                     for (let i = 0; i < depth; i++) {
                         let t = stack[i];
-                        if (t.flags & TypeFlags.Reference && (<TypeReference>t).target === target) {
+                        if (t.flags & (TypeFlags.Reference | TypeFlags.Instantiated) && t.symbol === symbol) {
                             count++;
                             if (count >= 10) return true;
                         }
