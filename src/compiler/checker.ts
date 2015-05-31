@@ -1535,6 +1535,8 @@ module ts {
                 }
 
                 function writeSymbolTypeReference(symbol: Symbol, typeArguments: Type[], pos: number, end: number) {
+                    // Unnamed function expressions, arrow functions, and unnamed class expressions have reserved names that
+                    // we don't want to display
                     if (!isReservedMemberName(symbol.name)) {
                         buildSymbolDisplay(symbol, writer, enclosingDeclaration, SymbolFlags.Type);
                     }
@@ -3522,8 +3524,12 @@ module ts {
                                 let expectedTypeArgCount = localTypeParameters ? localTypeParameters.length : 0;
                                 let typeArgCount = node.typeArguments ? node.typeArguments.length : 0;
                                 if (typeArgCount === expectedTypeArgCount) {
-                                    type = createTypeReference(<GenericType>type, concatenate((<InterfaceType>type).outerTypeParameters,
-                                        map(node.typeArguments, getTypeFromTypeNode)));
+                                    // When no type arguments are expected we already have the right type because all outer type parameters
+                                    // have themselves as default type arguments.
+                                    if (typeArgCount) {
+                                        type = createTypeReference(<GenericType>type, concatenate((<InterfaceType>type).outerTypeParameters,
+                                            map(node.typeArguments, getTypeFromTypeNode)));
+                                    }
                                 }
                                 else {
                                     error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), expectedTypeArgCount);
