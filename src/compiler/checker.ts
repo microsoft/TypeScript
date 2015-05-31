@@ -3882,18 +3882,7 @@ module ts {
         }
 
         function instantiateAnonymousType(type: ObjectType, mapper: TypeMapper): ObjectType {
-            // If this type has already been instantiated using this mapper, returned the cached result. This guards against
-            // infinite instantiations of cyclic types, e.g. "var x: { a: T, b: typeof x };"
-            if (mapper.mappings) {
-                let cached = <ObjectType>mapper.mappings[type.id];
-                if (cached) {
-                    return cached;
-                }
-            }
-            else {
-                mapper.mappings = {};
-            }
-            // Instantiate the given type using the given mapper and cache the result
+            // Mark the anonymous type as instantiated such that our infinite instantiation detection logic can recognize it
             let result = <ResolvedType>createObjectType(TypeFlags.Anonymous | TypeFlags.Instantiated, type.symbol);
             result.properties = instantiateList(getPropertiesOfObjectType(type), mapper, instantiateSymbol);
             result.members = createSymbolTable(result.properties);
@@ -3903,7 +3892,6 @@ module ts {
             let numberIndexType = getIndexTypeOfType(type, IndexKind.Number);
             if (stringIndexType) result.stringIndexType = instantiateType(stringIndexType, mapper);
             if (numberIndexType) result.numberIndexType = instantiateType(numberIndexType, mapper);
-            mapper.mappings[type.id] = result;
             return result;
         }
 
