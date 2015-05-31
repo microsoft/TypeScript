@@ -1,0 +1,395 @@
+=== tests/cases/conformance/types/localTypes/localTypes1.ts ===
+
+function f1() {
+>f1 : () => I[]
+
+    enum E {
+>E : E
+
+        A, B, C
+>A : E
+>B : E
+>C : E
+    }
+    class C {
+>C : C
+
+        x: E;
+>x : E
+>E : E
+    }
+    interface I {
+>I : I
+
+        x: E;
+>x : E
+>E : E
+    }
+    type A = I[];
+>A : I[]
+>I : I
+
+    let a: A = [new C()];
+>a : I[]
+>A : I[]
+>[new C()] : C[]
+>new C() : C
+>C : typeof C
+
+    a[0].x = E.B;
+>a[0].x = E.B : E
+>a[0].x : E
+>a[0] : I
+>a : I[]
+>0 : number
+>x : E
+>E.B : E
+>E : typeof E
+>B : E
+
+    return a;
+>a : I[]
+}
+
+function f2() {
+>f2 : () => I[]
+
+    function g() {
+>g : () => I[]
+
+        enum E {
+>E : E
+
+            A, B, C
+>A : E
+>B : E
+>C : E
+        }
+        class C {
+>C : C
+
+            x: E;
+>x : E
+>E : E
+        }
+        interface I {
+>I : I
+
+            x: E;
+>x : E
+>E : E
+        }
+        type A = I[];
+>A : I[]
+>I : I
+
+        let a: A = [new C()];
+>a : I[]
+>A : I[]
+>[new C()] : C[]
+>new C() : C
+>C : typeof C
+
+        a[0].x = E.B;
+>a[0].x = E.B : E
+>a[0].x : E
+>a[0] : I
+>a : I[]
+>0 : number
+>x : E
+>E.B : E
+>E : typeof E
+>B : E
+
+        return a;
+>a : I[]
+    }
+    return g();
+>g() : I[]
+>g : () => I[]
+}
+
+function f3(b: boolean) {
+>f3 : (b: boolean) => I[]
+>b : boolean
+
+    if (true) {
+>true : boolean
+
+        enum E {
+>E : E
+
+            A, B, C
+>A : E
+>B : E
+>C : E
+        }
+        if (b) {
+>b : boolean
+
+            class C {
+>C : C
+
+                x: E;
+>x : E
+>E : E
+            }
+            interface I {
+>I : I
+
+                x: E;
+>x : E
+>E : E
+            }
+            type A = I[];
+>A : I[]
+>I : I
+
+            let a: A = [new C()];
+>a : I[]
+>A : I[]
+>[new C()] : C[]
+>new C() : C
+>C : typeof C
+
+            a[0].x = E.B;
+>a[0].x = E.B : E
+>a[0].x : E
+>a[0] : I
+>a : I[]
+>0 : number
+>x : E
+>E.B : E
+>E : typeof E
+>B : E
+
+            return a;
+>a : I[]
+        }
+        else {
+            class A {
+>A : A
+
+                x: E;
+>x : E
+>E : E
+            }
+            interface J {
+>J : J
+
+                x: E;
+>x : E
+>E : E
+            }
+            type C = J[];
+>C : J[]
+>J : J
+
+            let c: C = [new A()];
+>c : J[]
+>C : J[]
+>[new A()] : A[]
+>new A() : A
+>A : typeof A
+
+            c[0].x = E.B;
+>c[0].x = E.B : E
+>c[0].x : E
+>c[0] : J
+>c : J[]
+>0 : number
+>x : E
+>E.B : E
+>E : typeof E
+>B : E
+
+            return c;
+>c : J[]
+        }
+    }
+}
+
+function f5() {
+>f5 : () => void
+
+    var z1 = function () {
+>z1 : () => C
+>function () {        enum E {            A, B, C        }        class C {            x: E;        }        return new C();    } : () => C
+
+        enum E {
+>E : E
+
+            A, B, C
+>A : E
+>B : E
+>C : E
+        }
+        class C {
+>C : C
+
+            x: E;
+>x : E
+>E : E
+        }
+        return new C();
+>new C() : C
+>C : typeof C
+    }
+    var z2 = () => {
+>z2 : () => C
+>() => {        enum E {            A, B, C        }        class C {            x: E;        }        return new C();    } : () => C
+
+        enum E {
+>E : E
+
+            A, B, C
+>A : E
+>B : E
+>C : E
+        }
+        class C {
+>C : C
+
+            x: E;
+>x : E
+>E : E
+        }
+        return new C();
+>new C() : C
+>C : typeof C
+    }
+}
+
+class A {
+>A : A
+
+    constructor() {
+        enum E {
+>E : E
+
+            A, B, C
+>A : E
+>B : E
+>C : E
+        }
+        class C {
+>C : C
+
+            x: E;
+>x : E
+>E : E
+        }
+    }
+    m() {
+>m : () => C
+
+        enum E {
+>E : E
+
+            A, B, C
+>A : E
+>B : E
+>C : E
+        }
+        class C {
+>C : C
+
+            x: E;
+>x : E
+>E : E
+        }
+        return new C();
+>new C() : C
+>C : typeof C
+    }
+    get p() {
+>p : C
+
+        enum E {
+>E : E
+
+            A, B, C
+>A : E
+>B : E
+>C : E
+        }
+        class C {
+>C : C
+
+            x: E;
+>x : E
+>E : E
+        }
+        return new C();
+>new C() : C
+>C : typeof C
+    }
+}
+
+function f6() {
+>f6 : () => C
+
+    class A {
+>A : A
+
+        a: string;
+>a : string
+    }
+    function g() {
+>g : () => C
+
+        class B extends A {
+>B : B
+>A : A
+
+            b: string;
+>b : string
+        }
+        function h() {
+>h : () => C
+
+            class C extends B {
+>C : C
+>B : B
+
+                c: string;
+>c : string
+            }
+            var x = new C();
+>x : C
+>new C() : C
+>C : typeof C
+
+            x.a = "a";
+>x.a = "a" : string
+>x.a : string
+>x : C
+>a : string
+>"a" : string
+
+            x.b = "b";
+>x.b = "b" : string
+>x.b : string
+>x : C
+>b : string
+>"b" : string
+
+            x.c = "c";
+>x.c = "c" : string
+>x.c : string
+>x : C
+>c : string
+>"c" : string
+
+            return x;
+>x : C
+        }
+        return h();
+>h() : C
+>h : () => C
+    }
+    return g();
+>g() : C
+>g : () => C
+}
+

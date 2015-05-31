@@ -1,22 +1,10 @@
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck61.ts(2,5): error TS1129: Statement expected.
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck61.ts(2,12): error TS1146: Declaration expected.
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck61.ts(2,13): error TS1005: ')' expected.
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck61.ts(2,14): error TS1005: ';' expected.
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck61.ts(4,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck61.ts(2,7): error TS1163: A 'yield' expression is only allowed in a generator body.
 
 
-==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck61.ts (5 errors) ====
+==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck61.ts (1 errors) ====
     function * g() {
         @(yield 0)
-        ~
-!!! error TS1129: Statement expected.
-               
-!!! error TS1146: Declaration expected.
-                ~
-!!! error TS1005: ')' expected.
-                 ~
-!!! error TS1005: ';' expected.
+          ~~~~~
+!!! error TS1163: A 'yield' expression is only allowed in a generator body.
         class C {};
     }
-    ~
-!!! error TS1128: Declaration or statement expected.
