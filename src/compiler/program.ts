@@ -479,6 +479,68 @@ module ts {
                 }
             }
 
+            function generateImportMap(relativeStartDirectory: string): Map<string> {
+                // find all of the map files between startDirectory and the project root directory
+                let foundMaps: Map<string>[] = [];
+                let currentDirectory = relativeStartDirectory;
+                while (true) {
+                    let map = tryGetImportMap(currentDirectory);
+                    if (map)
+                        foundMaps.push(map);
+                    // end of the line
+                    if (!currentDirectory)
+                        break;
+                    currentDirectory = getDirectoryPath(currentDirectory);
+                }
+
+                // merge all of the found maps, in reverse order, into the final map
+                let finalMap: Map<string> = {};
+                forEach(foundMaps.reverse(), foundMap => {
+                    for (let key in foundMap)
+                        finalMap[key] = foundMap[key];
+                });
+
+                return finalMap;
+            }
+
+            function tryGetImportMap(directory: string): Map<string> {
+                directory = normalizePath(directory);
+                let mapFilePath = normalizePath(combinePaths(directory, 'typescript-definition-map.json'));
+                let absoluteMapFilePath = combinePaths(host.getCurrentDirectory(), mapFilePath);
+                if (!sys.fileExists(absoluteMapFilePath))
+                    return null;
+
+                let map: Map<string> = JSON.parse(sys.readFile(absoluteMapFilePath));
+                let rootRelativeRoot: Map<string> = {};
+                for (let key in map) {
+                    rootRelativeRoot[key] = combinePaths(directory, map[key]);
+                }
+
+                return rootRelativeRoot;
+            }
+
+            function tryResolveImportFromMap(importMap: Map<string>, moduleNameExpr: LiteralExpression): string {
+                let seenKeys: Map<boolean> = {};
+                let currentName = moduleNameExpr.text;
+                while (true) {
+                    // cycle detection
+                    if (seenKeys[currentName])
+                        return null;
+                    seenKeys[currentName] = true;
+
+                    // follow the key in the map to an alias, file or nothing
+                    currentName = importMap[currentName];
+                    if (!currentName)
+                        // TODO: add file globbing support as fallback when exact match isn't found
+                        return null;
+
+                    // if we find a file then we are done
+                    //if (sys.fileExists(combinePaths(host.getCurrentDirectory(), currentName)))
+                    if (findModuleSourceFile(currentName, moduleNameExpr))
+                        return currentName;
+                }
+            }
+
             function resolveModule(moduleNameExpr: LiteralExpression): void {
                 let searchPath = basePath;
                 let searchName: string;
@@ -488,6 +550,13 @@ module ts {
                     if (fileName) {
                         findModuleSourceFile(fileName, moduleNameExpr);
                     }
+                    return;
+                }
+
+                let importMap = generateImportMap(searchPath);
+                let importFromMap = tryResolveImportFromMap(importMap, moduleNameExpr);
+                if (importFromMap) {
+                    setResolvedModuleName(file, <LiteralExpression>moduleNameExpr, importFromMap);
                     return;
                 }
 
