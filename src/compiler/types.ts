@@ -693,7 +693,7 @@ module ts {
 
     export interface YieldExpression extends Expression {
         asteriskToken?: Node;
-        expression: Expression;
+        expression?: Expression;
     }
 
     export interface BinaryExpression extends Expression {
@@ -917,7 +917,7 @@ module ts {
         _classElementBrand: any;
     }
 
-    export interface InterfaceDeclaration extends Declaration, ModuleElement {
+    export interface InterfaceDeclaration extends Declaration, Statement {
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
@@ -929,7 +929,7 @@ module ts {
         types?: NodeArray<ExpressionWithTypeArguments>;
     }
 
-    export interface TypeAliasDeclaration extends Declaration, ModuleElement {
+    export interface TypeAliasDeclaration extends Declaration, Statement {
         name: Identifier;
         type: TypeNode;
     }
@@ -941,7 +941,7 @@ module ts {
         initializer?: Expression;
     }
 
-    export interface EnumDeclaration extends Declaration, ModuleElement {
+    export interface EnumDeclaration extends Declaration, Statement {
         name: Identifier;
         members: NodeArray<EnumMember>;
     }
@@ -1626,6 +1626,8 @@ module ts {
     // Class and interface types (TypeFlags.Class and TypeFlags.Interface)
     export interface InterfaceType extends ObjectType {
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
+        outerTypeParameters: TypeParameter[];      // Outer type parameters (undefined if none)
+        localTypeParameters: TypeParameter[];      // Local type parameters (undefined if none)
     }
 
     export interface InterfaceTypeWithBaseTypes extends InterfaceType {
@@ -1674,6 +1676,13 @@ module ts {
         constructSignatures: Signature[];  // Construct signatures of type
         stringIndexType: Type;             // String index type
         numberIndexType: Type;             // Numeric index type
+    }
+
+    // Just a place to cache element types of iterables and iterators
+    /* @internal */
+    export interface IterableOrIteratorType extends ObjectType, UnionType {
+        iterableElementType?: Type;
+        iteratorElementType?: Type;
     }
 
     // Type parameters (TypeFlags.TypeParameter)

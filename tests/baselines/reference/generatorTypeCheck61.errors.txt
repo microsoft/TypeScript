@@ -1,0 +1,10 @@
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck61.ts(2,7): error TS1163: A 'yield' expression is only allowed in a generator body.
+
+
+==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck61.ts (1 errors) ====
+    function * g() {
+        @(yield 0)
+          ~~~~~
+!!! error TS1163: A 'yield' expression is only allowed in a generator body.
+        class C {};
+    }

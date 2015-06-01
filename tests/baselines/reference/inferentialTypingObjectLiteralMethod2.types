@@ -1,0 +1,43 @@
+=== tests/cases/compiler/inferentialTypingObjectLiteralMethod2.ts ===
+interface Int<T, U> {
+>Int : Int<T, U>
+>T : T
+>U : U
+
+    [s: string]: (x: T) => U;
+>s : string
+>x : T
+>T : T
+>U : U
+}
+declare function foo<T, U>(x: T, y: Int<T, U>, z: Int<U, T>): T;
+>foo : <T, U>(x: T, y: Int<T, U>, z: Int<U, T>) => T
+>T : T
+>U : U
+>x : T
+>T : T
+>y : Int<T, U>
+>Int : Int<T, U>
+>T : T
+>U : U
+>z : Int<U, T>
+>Int : Int<T, U>
+>U : U
+>T : T
+>T : T
+
+foo("", { method(p1) { return p1.length } }, { method(p2) { return undefined } });
+>foo("", { method(p1) { return p1.length } }, { method(p2) { return undefined } }) : string
+>foo : <T, U>(x: T, y: Int<T, U>, z: Int<U, T>) => T
+>"" : string
+>{ method(p1) { return p1.length } } : { [x: string]: (p1: string) => number; method(p1: string): number; }
+>method : (p1: string) => number
+>p1 : string
+>p1.length : number
+>p1 : string
+>length : number
+>{ method(p2) { return undefined } } : { [x: string]: (p2: number) => any; method(p2: number): any; }
+>method : (p2: number) => any
+>p2 : number
+>undefined : undefined
+

@@ -408,6 +408,93 @@ module ts {
 
     export let fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/
 
+    export function isTypeNode(node: Node): boolean {
+        if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
+            return true;
+        }
+
+        switch (node.kind) {
+            case SyntaxKind.AnyKeyword:
+            case SyntaxKind.NumberKeyword:
+            case SyntaxKind.StringKeyword:
+            case SyntaxKind.BooleanKeyword:
+            case SyntaxKind.SymbolKeyword:
+                return true;
+            case SyntaxKind.VoidKeyword:
+                return node.parent.kind !== SyntaxKind.VoidExpression;
+            case SyntaxKind.StringLiteral:
+                // Specialized signatures can have string literals as their parameters' type names
+                return node.parent.kind === SyntaxKind.Parameter;
+            case SyntaxKind.ExpressionWithTypeArguments:
+                return true;
+
+            // Identifiers and qualified names may be type nodes, depending on their context. Climb
+            // above them to find the lowest container
+            case SyntaxKind.Identifier:
+                // If the identifier is the RHS of a qualified name, then it's a type iff its parent is.
+                if (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node) {
+                    node = node.parent;
+                }
+                else if (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node) {
+                    node = node.parent;
+                }
+            // fall through
+            case SyntaxKind.QualifiedName:
+            case SyntaxKind.PropertyAccessExpression:
+                // At this point, node is either a qualified name or an identifier
+                Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression,
+                    "'node' was expected to be a qualified name, identifier or property access in 'isTypeNode'.");
+
+                let parent = node.parent;
+                if (parent.kind === SyntaxKind.TypeQuery) {
+                    return false;
+                }
+                // Do not recursively call isTypeNode on the parent. In the example:
+                //
+                //     let a: A.B.C;
+                //
+                // Calling isTypeNode would consider the qualified name A.B a type node. Only C or
+                // A.B.C is a type node.
+                if (SyntaxKind.FirstTypeNode <= parent.kind && parent.kind <= SyntaxKind.LastTypeNode) {
+                    return true;
+                }
+                switch (parent.kind) {
+                    case SyntaxKind.ExpressionWithTypeArguments:
+                        return true;
+                    case SyntaxKind.TypeParameter:
+                        return node === (<TypeParameterDeclaration>parent).constraint;
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.PropertySignature:
+                    case SyntaxKind.Parameter:
+                    case SyntaxKind.VariableDeclaration:
+                        return node === (<VariableLikeDeclaration>parent).type;
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        return node === (<FunctionLikeDeclaration>parent).type;
+                    case SyntaxKind.CallSignature:
+                    case SyntaxKind.ConstructSignature:
+                    case SyntaxKind.IndexSignature:
+                        return node === (<SignatureDeclaration>parent).type;
+                    case SyntaxKind.TypeAssertionExpression:
+                        return node === (<TypeAssertion>parent).type;
+                    case SyntaxKind.CallExpression:
+                    case SyntaxKind.NewExpression:
+                        return (<CallExpression>parent).typeArguments && indexOf((<CallExpression>parent).typeArguments, node) >= 0;
+                    case SyntaxKind.TaggedTemplateExpression:
+                        // TODO (drosen): TaggedTemplateExpressions may eventually support type arguments.
+                        return false;
+                }
+        }
+
+        return false;
+    }
+
     // Warning: This has the same semantics as the forEach family of functions,
     //          in that traversal terminates in the event that 'visitor' supplies a truthy value.
     export function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T {
@@ -434,6 +521,46 @@ module ts {
                 case SyntaxKind.TryStatement:
                 case SyntaxKind.CatchClause:
                     return forEachChild(node, traverse);
+            }
+        }
+    }
+
+    export function forEachYieldExpression(body: Block, visitor: (expr: YieldExpression) => void): void {
+
+        return traverse(body);
+
+        function traverse(node: Node): void {
+            switch (node.kind) {
+                case SyntaxKind.YieldExpression:
+                    visitor(<YieldExpression>node);
+                    let operand = (<YieldExpression>node).expression;
+                    if (operand) {
+                        traverse(operand);
+                    }
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                    // These are not allowed inside a generator now, but eventually they may be allowed
+                    // as local types. Regardless, any yield statements contained within them should be
+                    // skipped in this traversal.
+                    return;
+                default:
+                    if (isFunctionLike(node)) {
+                        let name = (<FunctionLikeDeclaration>node).name;
+                        if (name && name.kind === SyntaxKind.ComputedPropertyName) {
+                            // Note that we will not include methods/accessors of a class because they would require
+                            // first descending into the class. This is by design.
+                            traverse((<ComputedPropertyName>name).expression);
+                            return;
+                        }
+                    }
+                    else if (!isTypeNode(node)) {
+                        // This is the general case, which should include mostly expressions and statements.
+                        // Also includes NodeArrays.
+                        forEachChild(node, traverse);
+                    }
             }
         }
     }
@@ -739,6 +866,7 @@ module ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.OmittedExpression:
+            case SyntaxKind.YieldExpression:
                 return true;
             case SyntaxKind.QualifiedName:
                 while (node.parent.kind === SyntaxKind.QualifiedName) {

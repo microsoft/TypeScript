@@ -129,6 +129,16 @@ module ts {
         }
     } 
 
+    export function rangeEquals<T>(array1: T[], array2: T[], pos: number, end: number) {
+        while (pos < end) {
+            if (array1[pos] !== array2[pos]) {
+                return false;
+            }
+            pos++;
+        }
+        return true;
+    }
+
     /**
      * Returns the last element of an array if non-empty, undefined otherwise.
      */
