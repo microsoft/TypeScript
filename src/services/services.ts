@@ -2487,6 +2487,10 @@ module ts {
                 }
             }
 
+            // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
+            // It needs to be cleared to allow all collected snapshots to be released
+            hostCache = undefined;
+
             program = newProgram;
 
             // Make sure all the nodes in the program are both bound, and have their parent 
@@ -2495,6 +2499,7 @@ module ts {
             return;
 
             function getOrCreateSourceFile(fileName: string): SourceFile {
+                Debug.assert(hostCache !== undefined);
                 // The program is asking for this file, check first if the host can locate it.
                 // If the host can not locate the file, then it does not exist. return undefined
                 // to the program to allow reporting of errors for missing files.
