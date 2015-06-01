@@ -1115,6 +1115,7 @@ declare module "typescript" {
         version?: boolean;
         watch?: boolean;
         isolatedModules?: boolean;
+        experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
         [option: string]: string | number | boolean;
     }
