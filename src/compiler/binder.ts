@@ -164,10 +164,10 @@ module ts {
             let symbol: Symbol;
             if (name !== undefined) {
                 symbol = hasProperty(symbols, name) ? symbols[name] : (symbols[name] = createSymbol(0, name));
-                if (symbol.flags & excludes || (node.kind === SyntaxKind.InterfaceDeclaration && hasNonAmbientClass(symbol)) ) {
-                        if (node.name) {
-                            node.name.parent = node;
-                        }
+                if (symbol.flags & excludes || (node.kind === SyntaxKind.InterfaceDeclaration && hasNonAmbientClass(symbol))) {
+                    if (node.name) {
+                        node.name.parent = node;
+                    }
 
                     // Report errors every position with duplicate declaration
                     // Report errors on previous encountered declarations
@@ -269,7 +269,7 @@ module ts {
                 // these cases are:
                 // - node has locals (symbolKind & HasLocals) !== 0
                 // - node is a source file
-                setBlockScopeContainer(node, /*cleanLocals*/(symbolKind & SymbolFlags.HasLocals) === 0 && node.kind !== SyntaxKind.SourceFile);
+                setBlockScopeContainer(node, /*cleanLocals*/ (symbolKind & SymbolFlags.HasLocals) === 0 && node.kind !== SyntaxKind.SourceFile);
             }
 
             forEachChild(node, bind);
