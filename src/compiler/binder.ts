@@ -6,8 +6,8 @@ module ts {
 
     export const enum ModuleInstanceState {
         NonInstantiated = 0,
-        Instantiated    = 1,
-        ConstEnumOnly   = 2
+        Instantiated = 1,
+        ConstEnumOnly = 2
     }
 
     export function getModuleInstanceState(node: Node): ModuleInstanceState {
@@ -135,6 +135,26 @@ module ts {
             return node.name ? declarationNameToString(node.name) : getDeclarationName(node);
         }
 
+        /* internal */
+        /**
+         * Checks if the symbol contains a class declaration declaration that is non-ambient.
+         */
+        function hasNonAmbientClass(symbol: Symbol): boolean {
+            if (symbol) {
+                return !! forEach(symbol.declarations, (element: Declaration, index: number) => {
+                    return (element.kind === SyntaxKind.ClassDeclaration && !(element.flags & NodeFlags.Ambient))
+                });
+            }
+        }
+
+        /**
+         * Declares a Symbol for the Node and add it to symbols. Reports errors for conflicting identifier names,
+         * @param symbols - The symbolTable which node will be added to.
+         * @param parent - If node is in a class, parent denotes the parent declaration.
+         * @param node - The declaration to be added to the symbol table
+         * @param includes - The SymbolFlags that node has in addition to its declaration type (eg: export, ambient, etc.)
+         * @param excludes - The flags which node cannot be declared alongside in a symbol table. Used to report forbidden declarations. 
+         */
         function declareSymbol(symbols: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
             Debug.assert(!hasDynamicName(node));
 
@@ -144,15 +164,15 @@ module ts {
             let symbol: Symbol;
             if (name !== undefined) {
                 symbol = hasProperty(symbols, name) ? symbols[name] : (symbols[name] = createSymbol(0, name));
-                if (symbol.flags & excludes) {
-                    if (node.name) {
-                        node.name.parent = node;
-                    }
+                if (symbol.flags & excludes || (node.kind === SyntaxKind.InterfaceDeclaration && hasNonAmbientClass(symbol)) ) {
+                        if (node.name) {
+                            node.name.parent = node;
+                        }
 
                     // Report errors every position with duplicate declaration
                     // Report errors on previous encountered declarations
                     let message = symbol.flags & SymbolFlags.BlockScopedVariable
-                        ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 
+                        ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
                         : Diagnostics.Duplicate_identifier_0;
 
                     forEach(symbol.declarations, declaration => {
@@ -249,7 +269,7 @@ module ts {
                 // these cases are:
                 // - node has locals (symbolKind & HasLocals) !== 0
                 // - node is a source file
-                setBlockScopeContainer(node, /*cleanLocals*/  (symbolKind & SymbolFlags.HasLocals) === 0 && node.kind !== SyntaxKind.SourceFile);
+                setBlockScopeContainer(node, /*cleanLocals*/(symbolKind & SymbolFlags.HasLocals) === 0 && node.kind !== SyntaxKind.SourceFile);
             }
 
             forEachChild(node, bind);
@@ -403,7 +423,7 @@ module ts {
                         declareModuleMember(node, symbolKind, symbolExcludes);
                         break;
                     }
-                    // fall through.
+                // fall through.
                 default:
                     if (!blockScopeContainer.locals) {
                         blockScopeContainer.locals = {};
@@ -424,7 +444,7 @@ module ts {
 
         function bind(node: Node) {
             node.parent = parent;
-            
+
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
                     bindDeclaration(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes, /*isBlockScopeContainer*/ false);
@@ -516,7 +536,7 @@ module ts {
                     bindCatchVariableDeclaration(<CatchClause>node);
                     break;
                 case SyntaxKind.ClassDeclaration:
-                    bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Class, SymbolFlags.ClassExcludes);
+                    bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Class, isAmbientContext(node) ? SymbolFlags.AmbientClassExcludes : SymbolFlags.ClassExcludes);
                     break;
                 case SyntaxKind.InterfaceDeclaration:
                     bindDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes, /*isBlockScopeContainer*/ false);

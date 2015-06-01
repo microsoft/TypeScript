@@ -1340,7 +1340,8 @@ module ts {
         EnumMemberExcludes = Value,
         FunctionExcludes = Value & ~(Function | ValueModule),
         ClassExcludes = (Value | Type) & ~ValueModule,
-        InterfaceExcludes = Type & ~Interface,
+        AmbientClassExcludes = (Value | Type) & ~(ValueModule | Interface),
+        InterfaceExcludes = Type & ~(Interface | Class),
         RegularEnumExcludes = (Value | Type) & ~(RegularEnum | ValueModule), // regular enums merge only with regular enums and modules
         ConstEnumExcludes = (Value | Type) & ~ConstEnum, // const enums merge only with const enums
         ValueModuleExcludes = Value & ~(Function | Class | RegularEnum | ValueModule),
