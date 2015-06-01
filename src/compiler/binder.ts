@@ -6,8 +6,8 @@ module ts {
 
     export const enum ModuleInstanceState {
         NonInstantiated = 0,
-        Instantiated = 1,
-        ConstEnumOnly = 2
+        Instantiated    = 1,
+        ConstEnumOnly   = 2
     }
 
     export function getModuleInstanceState(node: Node): ModuleInstanceState {
