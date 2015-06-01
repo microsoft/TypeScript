@@ -1115,6 +1115,7 @@ declare module ts {
         version?: boolean;
         watch?: boolean;
         isolatedModules?: boolean;
+        experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
         [option: string]: string | number | boolean;
     }
