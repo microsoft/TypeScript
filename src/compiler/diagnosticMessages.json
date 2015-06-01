@@ -683,6 +683,10 @@
         "category": "Error",
         "code": 1218
     },
+    "Experimental support for decorators is a feature that is subject to change in a future release. Specify '--experimentalDecorators' to remove this warning.": {
+        "category": "Error",
+        "code": 1219
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -2018,7 +2022,18 @@
         "category": "Error", 
         "code": 6062
     },
-
+    "Option 'experimentalDecorators' must also be specified when option 'emitDecoratorMetadata' is specified.": {
+        "category": "Error",
+        "code": 6064
+    },
+    "Enables experimental support for ES7 decorators.": {
+        "category": "Message",
+        "code": 6065
+    },
+    "Enables experimental support for emitting type metadata for decorators.": {
+        "category": "Message",
+        "code": 6066
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

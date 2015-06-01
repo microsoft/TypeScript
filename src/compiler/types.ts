@@ -1677,6 +1677,7 @@ module ts {
         version?: boolean;
         watch?: boolean;
         isolatedModules?: boolean;
+        experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
         /* @internal */ stripInternal?: boolean;
         [option: string]: string | number | boolean;

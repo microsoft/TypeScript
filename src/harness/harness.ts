@@ -998,6 +998,10 @@ module Harness {
                                 options.target = <any>setting.value;
                             }
                             break;
+                            
+                        case 'experimentaldecorators':
+                            options.experimentalDecorators = setting.value === 'true';
+                            break;
 
                         case 'emitdecoratormetadata':
                             options.emitDecoratorMetadata = setting.value === 'true';
@@ -1510,7 +1514,7 @@ module Harness {
             "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
             "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
             "isolatedmodules", "inlinesourcemap", "maproot", "sourceroot",
-            "inlinesources", "emitdecoratormetadata"];
+            "inlinesources", "emitdecoratormetadata", "experimentaldecorators"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

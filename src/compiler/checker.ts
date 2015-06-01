@@ -8942,6 +8942,10 @@ module ts {
             if (!nodeCanBeDecorated(node)) {
                 return;
             }
+            
+            if (!compilerOptions.experimentalDecorators) {
+                error(node, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Specify_experimentalDecorators_to_remove_this_warning);
+            }
 
             if (compilerOptions.emitDecoratorMetadata) {
                 // we only need to perform these checks if we are emitting serialized type metadata for the target of a decorator.
