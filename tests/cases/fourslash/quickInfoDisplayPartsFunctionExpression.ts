@@ -25,7 +25,7 @@ function verifyNamedFunctionExpression(functionName: string) {
     marker++;
     goTo.marker(marker.toString());
     verify.verifyQuickInfoDisplayParts("local function", "", { start: test.markerByName(marker.toString()).position, length: functionName.length },
-        [{ text: "(", kind: "punctuation" }, { text: "local function", kind: "text" }, { text: ")", kind: "punctuation" },
+        [{ text: "function", kind: "keyword" },
             { text: " ", kind: "space" }, { text: functionName, kind: "functionName" }, { text: "(", kind: "punctuation" },
             { text: ")", kind: "punctuation" }, { text: ":", kind: "punctuation" }, { text: " ", kind: "space" }, { text: "void", kind: "keyword" }],
         []);

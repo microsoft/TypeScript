@@ -1123,8 +1123,8 @@ module ts {
         return false;
     }
 
-    export function isStatement(n: Node): boolean {
-        switch (n.kind) {
+    export function isStatement(node: Node): boolean {
+        switch (node.kind) {
             case SyntaxKind.BreakStatement:
             case SyntaxKind.ContinueStatement:
             case SyntaxKind.DebuggerStatement:
@@ -1150,8 +1150,8 @@ module ts {
         }
     }
 
-    export function isClassElement(n: Node): boolean {
-        switch (n.kind) {
+    export function isClassElement(node: Node): boolean {
+        switch (node.kind) {
             case SyntaxKind.Constructor:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.MethodDeclaration:
@@ -1163,6 +1163,30 @@ module ts {
             default:
                 return false;
         }
+    }
+
+    export function isHeritageKeyword(node: Node): boolean {
+        return node.kind === SyntaxKind.ImplementsKeyword || node.kind === SyntaxKind.ExtendsKeyword;
+    }
+
+    export function isDeclarationKeyword(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.ClassKeyword:
+            case SyntaxKind.ConstKeyword:
+            case SyntaxKind.DefaultKeyword:
+            case SyntaxKind.EnumKeyword:
+            case SyntaxKind.ExtendsKeyword:
+            case SyntaxKind.FunctionKeyword:
+            case SyntaxKind.InterfaceKeyword:
+            case SyntaxKind.ImplementsKeyword:
+            case SyntaxKind.LetKeyword:
+            case SyntaxKind.ModuleKeyword:
+            case SyntaxKind.NamespaceKeyword:
+            case SyntaxKind.SetKeyword:
+            case SyntaxKind.VarKeyword:
+                return true;
+        }
+        return false;
     }
 
     // True if the given identifier, string literal, or number literal is the name of a declaration node

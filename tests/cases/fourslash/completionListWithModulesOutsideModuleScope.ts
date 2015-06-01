@@ -275,7 +275,7 @@ verifyNotContainInterfaceMembers();
 // from function scope
 goToMarkAndGeneralVerify('function');
 verify.completionListContains('sfvar', '(local var) sfvar: number');
-verify.completionListContains('sffn', '(local function) sffn(): void');
+verify.completionListContains('sffn', 'function sffn(): void');
 
 verifyNotContainClassMembers();
 verifyNotContainInterfaceMembers();

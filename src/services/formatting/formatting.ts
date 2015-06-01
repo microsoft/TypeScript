@@ -603,7 +603,7 @@ module ts.formatting {
                     return inheritedIndentation;
                 }
 
-                if (isToken(child)) {
+                if (isReservedWord(child)) {
                     // if child node is a token, it does not impact indentation, proceed it using parent indentation scope rules
                     let tokenInfo = formattingScanner.readTokenInfo(child);
                     Debug.assert(tokenInfo.token.end === child.end);

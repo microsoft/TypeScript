@@ -166,6 +166,9 @@ module ts {
             else {
                 symbol = createSymbol(0, "__missing");
             }
+            if (!node.name) {
+                symbol.isAnonymous = true;
+            }
             addDeclarationToSymbol(symbol, node, includes);
             symbol.parent = parent;
 
@@ -385,6 +388,9 @@ module ts {
 
         function bindAnonymousDeclaration(node: Declaration, symbolKind: SymbolFlags, name: string, isBlockScopeContainer: boolean) {
             let symbol = createSymbol(symbolKind, name);
+            if (!node.name) {
+                symbol.isAnonymous = true;
+            }
             addDeclarationToSymbol(symbol, node, symbolKind);
             bindChildren(node, symbolKind, isBlockScopeContainer);
         }
@@ -424,7 +430,7 @@ module ts {
 
         function bind(node: Node) {
             node.parent = parent;
-            
+
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
                     bindDeclaration(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes, /*isBlockScopeContainer*/ false);

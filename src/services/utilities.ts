@@ -266,30 +266,36 @@ module ts {
     /* Gets the token whose text has range [start, end) and position >= start 
      * and (position < end or (position === end && token is keyword or identifier or numeric\string litera))
      */
-    export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
-        return getTouchingToken(sourceFile, position, n => isPropertyName(n.kind));
+    export function getTouchingPropertyName(sourceFile: SourceFile, position: number, beignWithLastTokenPath = false): Node {
+        return getTouchingToken(sourceFile, position, n => isPropertyName(n.kind), /*beignWithLastTokenPath*/ beignWithLastTokenPath);
     }
 
     /** Returns the token if position is in [start, end) or if position === end and includeItemAtEndPosition(token) === true */
-    export function getTouchingToken(sourceFile: SourceFile, position: number, includeItemAtEndPosition?: (n: Node) => boolean): Node {
-        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, includeItemAtEndPosition);
+    export function getTouchingToken(sourceFile: SourceFile, position: number, includeItemAtEndPosition?: (n: Node) => boolean, beignWithLastTokenPath = false): Node {
+        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, includeItemAtEndPosition, /*beignWithLastTokenPath*/ beignWithLastTokenPath);
     }
 
     /** Returns a token if position is in [start-of-leading-trivia, end) */
     export function getTokenAtPosition(sourceFile: SourceFile, position: number): Node {
         return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includeItemAtEndPosition*/ undefined);
     }
+    
+    export let lastTokenPath: { [depth: number]: number } = {};
 
     /** Get the token whose text contains the position */
-    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includeItemAtEndPosition: (n: Node) => boolean): Node {
+    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includeItemAtEndPosition: (n: Node) => boolean, beignWithLastTokenPath = false): Node {
         let current: Node = sourceFile;
+        let depthLevel = 0;
+        if(!beignWithLastTokenPath) {
+            lastTokenPath = {};
+        }
         outer: while (true) {
-            if (isToken(current)) {
-                // exit early
+            if (isReservedWord(current)) {
                 return current;
             }
-
-            // find the child that contains 'position'
+            
+            // Find the child that contains 'position' and it will begin with the old token path if specified.
+            let start = beignWithLastTokenPath && lastTokenPath[depthLevel] ? lastTokenPath[depthLevel] : 0;
             for (let i = 0, n = current.getChildCount(sourceFile); i < n; i++) {
                 let child = current.getChildAt(i);
                 let start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile);
@@ -297,6 +303,8 @@ module ts {
                     let end = child.getEnd();
                     if (position < end || (position === end && child.kind === SyntaxKind.EndOfFileToken)) {
                         current = child;
+                        lastTokenPath[depthLevel] = i;
+                        depthLevel++;
                         continue outer;
                     }
                     else if (includeItemAtEndPosition && end === position) {
@@ -323,7 +331,7 @@ module ts {
         // Ideally, getTokenAtPosition should return a token. However, it is currently
         // broken, so we do a check to make sure the result was indeed a token.
         let tokenAtPosition = getTokenAtPosition(file, position);
-        if (isToken(tokenAtPosition) && position > tokenAtPosition.getStart(file) && position < tokenAtPosition.getEnd()) {
+        if (isReservedWord(tokenAtPosition) && position > tokenAtPosition.getStart(file) && position < tokenAtPosition.getEnd()) {
             return tokenAtPosition;
         }
 
@@ -334,7 +342,7 @@ module ts {
         return find(parent);
 
         function find(n: Node): Node {
-            if (isToken(n) && n.pos === previousToken.end) {
+            if (isReservedWord(n) && n.pos === previousToken.end) {
                 // this is token that starts at the end of previous token - return it
                 return n;
             }
@@ -360,7 +368,7 @@ module ts {
         return find(startNode || sourceFile);
 
         function findRightmostToken(n: Node): Node {
-            if (isToken(n)) {
+            if (isReservedWord(n)) {
                 return n;
             }
 
@@ -371,7 +379,7 @@ module ts {
         }
 
         function find(n: Node): Node {
-            if (isToken(n)) {
+            if (isReservedWord(n)) {
                 return n;
             }
 
@@ -447,7 +455,7 @@ module ts {
         return undefined;
     }
 
-    export function isToken(n: Node): boolean {
+    export function isReservedWord(n: Node): boolean {
         return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
     }
 
