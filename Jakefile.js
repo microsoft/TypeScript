@@ -549,7 +549,7 @@ desc("Generates code coverage data via instanbul")
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
     // fix typescriptServices so we can do an actual require on it instead of eval, eval no good for code coverage tools
     fs.appendFileSync('built/local/typescriptServices.js', '\nmodule.exports = ts');
-    var cmd = 'istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R dot -t ' + testTimeout + ' ' + ' && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage'
+    var cmd = 'istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R dot -t ' + testTimeout + ' ' + run;// + ' && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage'
     console.log(cmd);
     exec(cmd, function()  {
         var lcovIndexFile = 'coverage/lcov.info';
