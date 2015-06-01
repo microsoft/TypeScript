@@ -467,7 +467,7 @@
         "category": "Error",
         "code": 1162
     },
-    "'yield' expression must be contained_within a generator declaration.": {
+    "A 'yield' expression is only allowed in a generator body.": {
         "category": "Error",
         "code": 1163
     },
@@ -682,8 +682,25 @@
     "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
         "code": 1218
+    },    
+    "Generators are only available when targeting ECMAScript 6 or higher.": {
+        "category": "Error",
+        "code": 1219
+    },
+    "Generators are not allowed in an ambient context.": {
+        "category": "Error",
+        "code": 1220
+    },
+    "An overload signature cannot be declared as a generator.": {
+        "category": "Error",
+        "code": 1221
     },
 
+
+    "'{0}' tag already specified.": {
+        "category": "Error",
+        "code": 1222
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1448,6 +1465,14 @@
         "category": "Error",
         "code": 2503
     },
+    "No best common type exists among yield expressions.": {
+        "category": "Error",
+        "code": 2504
+    },
+    "A generator cannot have a 'void' type annotation.": {
+        "category": "Error",
+        "code": 2505
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2080,6 +2105,10 @@
         "category": "Error",
         "code": 7024
     },
+    "Generator implicitly has type '{0}' because it does not yield any values. Consider supplying a return type.": {
+        "category": "Error",
+        "code": 7025
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -2132,10 +2161,6 @@
         "category": "Error",
         "code": 8012
     },
-    "'?' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8013
-    },
     "'property declarations' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8014
@@ -2153,14 +2178,6 @@
         "code": 8017
     },
 
-    "'yield' expressions are not currently supported.": {
-        "category": "Error",
-        "code": 9000
-    },
-    "Generators are not currently supported.": {
-        "category": "Error",
-        "code": 9001
-    },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.": {
         "category": "Error",
         "code": 9002
@@ -2168,9 +2185,5 @@
     "'class' expressions are not currently supported.": {
         "category": "Error",
         "code": 9003
-    },
-    "'class' declarations are only supported directly inside a module or as a top level declaration.": {
-        "category": "Error",
-        "code": 9004
     }
 }

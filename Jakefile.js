@@ -123,6 +123,7 @@ var harnessSources = [
     return path.join(harnessDirectory, f);
 }).concat([
     "incrementalParser.ts",
+    "jsDocParsing.ts",
     "services/colorization.ts",
     "services/documentRegistry.ts",
     "services/preProcessFile.ts",
