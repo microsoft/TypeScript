@@ -11784,76 +11784,39 @@ module ts {
 
         // Emitter support
 
-        function isExternalModuleSymbol(symbol: Symbol): boolean {
-            return symbol.flags & SymbolFlags.ValueModule && symbol.declarations.length === 1 && symbol.declarations[0].kind === SyntaxKind.SourceFile;
-        }
-
-        function getAliasNameSubstitution(symbol: Symbol, getGeneratedNameForNode: (node: Node) => string): string {
-            // If this is es6 or higher, just use the name of the export
-            // no need to qualify it.
-            if (languageVersion >= ScriptTarget.ES6) {
-                return undefined;
-            }
-
-            let node = getDeclarationOfAliasSymbol(symbol);
-            if (node) {
-                if (node.kind === SyntaxKind.ImportClause) {
-                    let defaultKeyword: string;
-
-                    if (languageVersion === ScriptTarget.ES3) {
-                        defaultKeyword = "[\"default\"]";
-                    } else {
-                        defaultKeyword = ".default";
-                    }
-                    return getGeneratedNameForNode(<ImportDeclaration>node.parent) + defaultKeyword;
-                }
-                if (node.kind === SyntaxKind.ImportSpecifier) {
-                    let moduleName = getGeneratedNameForNode(<ImportDeclaration>node.parent.parent.parent);
-                    let propertyName = (<ImportSpecifier>node).propertyName || (<ImportSpecifier>node).name;
-                    return moduleName + "." + unescapeIdentifier(propertyName.text);
-                }
-            }
-        }
-
-        function getExportNameSubstitution(symbol: Symbol, location: Node, getGeneratedNameForNode: (Node: Node) => string): string {
-            if (isExternalModuleSymbol(symbol.parent)) {
-                // 1. If this is es6 or higher, just use the name of the export
-                // no need to qualify it.
-                // 2. export mechanism for System modules is different from CJS\AMD
-                // and it does not need qualifications for exports
-                if (languageVersion >= ScriptTarget.ES6 || compilerOptions.module === ModuleKind.System) {
-                    return undefined;
-                }
-                return "exports." + unescapeIdentifier(symbol.name);
-            }
-            let node = location;
-            let containerSymbol = getParentOfSymbol(symbol);
-            while (node) {
-                if ((node.kind === SyntaxKind.ModuleDeclaration || node.kind === SyntaxKind.EnumDeclaration) && getSymbolOfNode(node) === containerSymbol) {
-                    return getGeneratedNameForNode(<ModuleDeclaration | EnumDeclaration>node) + "." + unescapeIdentifier(symbol.name);
-                }
-                node = node.parent;
-            }
-        }
-
-        function getExpressionNameSubstitution(node: Identifier, getGeneratedNameForNode: (Node: Node) => string): string {
-            let symbol = getNodeLinks(node).resolvedSymbol || (isDeclarationName(node) ? getSymbolOfNode(node.parent) : undefined);
+        // When resolved as an expression identifier, if the given node references an exported entity, return the declaration
+        // node of the exported entity's container. Otherwise, return undefined.
+        function getReferencedExportContainer(node: Identifier): SourceFile | ModuleDeclaration | EnumDeclaration {
+            let symbol = getReferencedValueSymbol(node);
             if (symbol) {
-                // Whan an identifier resolves to a parented symbol, it references an exported entity from
-                // another declaration of the same internal module.
-                if (symbol.parent) {
-                    return getExportNameSubstitution(symbol, node.parent, getGeneratedNameForNode);
+                if (symbol.flags & SymbolFlags.ExportValue) {
+                    let exportSymbol = getMergedSymbol(symbol.exportSymbol);
+                    if (!(exportSymbol.flags & SymbolFlags.ExportHasLocal)) {
+                        symbol = exportSymbol;
+                    }
                 }
-                // If we reference an exported entity within the same module declaration, then whether
-                // we prefix depends on the kind of entity. SymbolFlags.ExportHasLocal encompasses all the
-                // kinds that we do NOT prefix.
-                let exportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
-                if (symbol !== exportSymbol && !(exportSymbol.flags & SymbolFlags.ExportHasLocal)) {
-                    return getExportNameSubstitution(exportSymbol, node.parent, getGeneratedNameForNode);
+                let parentSymbol = getParentOfSymbol(symbol);
+                if (parentSymbol) {
+                    if (parentSymbol.flags & SymbolFlags.ValueModule && parentSymbol.valueDeclaration.kind === SyntaxKind.SourceFile) {
+                        return <SourceFile>parentSymbol.valueDeclaration;
+                    }
+                    for (let n = node.parent; n; n = n.parent) {
+                        if ((n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.EnumDeclaration) && getSymbolOfNode(n) === parentSymbol) {
+                            return <ModuleDeclaration | EnumDeclaration>n;
+                        }
+                    }
                 }
-                // Named imports from ES6 import declarations are rewritten
-                if (symbol.flags & SymbolFlags.Alias) {
-                    return getAliasNameSubstitution(symbol, getGeneratedNameForNode);
+            }
+        }
+
+        // When resolved as an expression identifier, if the given node references a default import or a named import, return
+        // the declaration node of that import. Otherwise, return undefined.
+        function getReferencedImportDeclaration(node: Identifier): ImportClause | ImportSpecifier {
+            let symbol = getReferencedValueSymbol(node);
+            if (symbol && symbol.flags & SymbolFlags.Alias) {
+                let declaration = getDeclarationOfAliasSymbol(symbol);
+                if (declaration.kind === SyntaxKind.ImportClause || declaration.kind === SyntaxKind.ImportSpecifier) {
+                    return <ImportClause | ImportSpecifier>declaration;
                 }
             }
         }
@@ -12182,12 +12145,15 @@ module ts {
             return !!resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
         }
 
+        function getReferencedValueSymbol(reference: Identifier): Symbol {
+            return getNodeLinks(reference).resolvedSymbol ||
+                resolveName(reference, reference.text, SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias,
+                    /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+        }
+
         function getReferencedValueDeclaration(reference: Identifier): Declaration {
             Debug.assert(!nodeIsSynthesized(reference));
-            let symbol =
-                getNodeLinks(reference).resolvedSymbol ||
-                resolveName(reference, reference.text, SymbolFlags.Value | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-
+            let symbol = getReferencedValueSymbol(reference);
             return symbol && getExportSymbolOfValueSymbolIfExported(symbol).valueDeclaration;
         }
 
@@ -12233,6 +12199,8 @@ module ts {
         function createResolver(): EmitResolver {
             return {
                 getExpressionNameSubstitution,
+                getReferencedExportContainer,
+                getReferencedImportDeclaration,
                 isValueAliasDeclaration,
                 hasGlobalName,
                 isReferencedAliasDeclaration,

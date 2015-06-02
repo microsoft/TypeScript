@@ -249,81 +249,42 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
             }
 
-            function assignGeneratedName(node: Node, name: string) {
-                nodeToGeneratedName[getNodeId(node)] = unescapeIdentifier(name);
-            }
-
-            function generateNameForFunctionOrClassDeclaration(node: Declaration) {
-                if (!node.name) {
-                    assignGeneratedName(node, makeUniqueName("default"));
-                }
-            }
-
             function generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration) {
-                if (node.name.kind === SyntaxKind.Identifier) {
-                    let name = node.name.text;
-                    // Use module/enum name itself if it is unique, otherwise make a unique variation
-                    assignGeneratedName(node, isUniqueLocalName(name, node) ? name : makeUniqueName(name));
-                }
+                let name = node.name.text;
+                // Use module/enum name itself if it is unique, otherwise make a unique variation
+                return isUniqueLocalName(name, node) ? name : makeUniqueName(name);
             }
 
             function generateNameForImportOrExportDeclaration(node: ImportDeclaration | ExportDeclaration) {
                 let expr = getExternalModuleName(node);
                 let baseName = expr.kind === SyntaxKind.StringLiteral ?
                     escapeIdentifier(makeIdentifierFromModuleName((<LiteralExpression>expr).text)) : "module";
-                assignGeneratedName(node, makeUniqueName(baseName));
+                return makeUniqueName(baseName);
             }
 
-            function generateNameForImportDeclaration(node: ImportDeclaration) {
-                if (node.importClause) {
-                    generateNameForImportOrExportDeclaration(node);
-                }
-            }
-
-            function generateNameForExportDeclaration(node: ExportDeclaration) {
-                if (node.moduleSpecifier) {
-                    generateNameForImportOrExportDeclaration(node);
-                }
-            }
-
-            function generateNameForExportAssignment(node: ExportAssignment) {
-                if (node.expression && node.expression.kind !== SyntaxKind.Identifier) {
-                    assignGeneratedName(node, makeUniqueName("default"));
-                }
+            function generateNameForExportDefault() {
+                return makeUniqueName("default");
             }
 
             function generateNameForNode(node: Node) {
                 switch (node.kind) {
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                        return generateNameForModuleOrEnum(<ModuleDeclaration | EnumDeclaration>node);
+                    case SyntaxKind.ImportDeclaration:
+                    case SyntaxKind.ExportDeclaration:
+                        return generateNameForImportOrExportDeclaration(<ImportDeclaration | ExportDeclaration>node);
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.ClassExpression:
-                        generateNameForFunctionOrClassDeclaration(<Declaration>node);
-                        break;
-                    case SyntaxKind.ModuleDeclaration:
-                        generateNameForModuleOrEnum(<ModuleDeclaration>node);
-                        generateNameForNode((<ModuleDeclaration>node).body);
-                        break;
-                    case SyntaxKind.EnumDeclaration:
-                        generateNameForModuleOrEnum(<EnumDeclaration>node);
-                        break;
-                    case SyntaxKind.ImportDeclaration:
-                        generateNameForImportDeclaration(<ImportDeclaration>node);
-                        break;
-                    case SyntaxKind.ExportDeclaration:
-                        generateNameForExportDeclaration(<ExportDeclaration>node);
-                        break;
                     case SyntaxKind.ExportAssignment:
-                        generateNameForExportAssignment(<ExportAssignment>node);
-                        break;
+                        return generateNameForExportDefault();
                 }
             }
 
             function getGeneratedNameForNode(node: Node) {
-                let nodeId = getNodeId(node);
-                if (!nodeToGeneratedName[nodeId]) {
-                    generateNameForNode(node);
-                }
-                return nodeToGeneratedName[nodeId];
+                let id = getNodeId(node);
+                return nodeToGeneratedName[id] || (nodeToGeneratedName[id] = unescapeIdentifier(generateNameForNode(node)));
             }
 
             function initializeEmitterWithSourceMaps() {
@@ -1201,51 +1162,96 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
             }
 
-            function isNotExpressionIdentifier(node: Identifier) {
+            function isExpressionIdentifier(node: Node): boolean {
                 let parent = node.parent;
                 switch (parent.kind) {
-                    case SyntaxKind.Parameter:
-                    case SyntaxKind.VariableDeclaration:
-                    case SyntaxKind.BindingElement:
-                    case SyntaxKind.PropertyDeclaration:
-                    case SyntaxKind.PropertySignature:
-                    case SyntaxKind.PropertyAssignment:
-                    case SyntaxKind.ShorthandPropertyAssignment:
-                    case SyntaxKind.EnumMember:
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.MethodSignature:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.EnumDeclaration:
-                    case SyntaxKind.ModuleDeclaration:
-                    case SyntaxKind.ImportEqualsDeclaration:
-                    case SyntaxKind.ImportClause:
-                    case SyntaxKind.NamespaceImport:
-                        return (<Declaration>parent).name === node;
-                    case SyntaxKind.ImportSpecifier:
-                    case SyntaxKind.ExportSpecifier:
-                        return (<ImportOrExportSpecifier>parent).name === node || (<ImportOrExportSpecifier>parent).propertyName === node;
-                    case SyntaxKind.BreakStatement:
-                    case SyntaxKind.ContinueStatement:
+                    case SyntaxKind.ArrayLiteralExpression:
+                    case SyntaxKind.BinaryExpression:
+                    case SyntaxKind.CallExpression:
+                    case SyntaxKind.CaseClause:
+                    case SyntaxKind.ComputedPropertyName:
+                    case SyntaxKind.ConditionalExpression:
+                    case SyntaxKind.Decorator:
+                    case SyntaxKind.DeleteExpression:
+                    case SyntaxKind.DoStatement:
+                    case SyntaxKind.ElementAccessExpression:
                     case SyntaxKind.ExportAssignment:
-                        return false;
-                    case SyntaxKind.LabeledStatement:
-                        return (<LabeledStatement>node.parent).label === node;
+                    case SyntaxKind.ExpressionStatement:
+                    case SyntaxKind.ExpressionWithTypeArguments:
+                    case SyntaxKind.ForStatement:
+                    case SyntaxKind.ForInStatement:
+                    case SyntaxKind.ForOfStatement:
+                    case SyntaxKind.IfStatement:
+                    case SyntaxKind.NewExpression:
+                    case SyntaxKind.ParenthesizedExpression:
+                    case SyntaxKind.PostfixUnaryExpression:
+                    case SyntaxKind.PrefixUnaryExpression:
+                    case SyntaxKind.ReturnStatement:
+                    case SyntaxKind.SpreadElementExpression:
+                    case SyntaxKind.SwitchStatement:
+                    case SyntaxKind.TaggedTemplateExpression:
+                    case SyntaxKind.TemplateSpan:
+                    case SyntaxKind.ThrowStatement:
+                    case SyntaxKind.TypeAssertionExpression:
+                    case SyntaxKind.TypeOfExpression:
+                    case SyntaxKind.VoidExpression:
+                    case SyntaxKind.WhileStatement:
+                    case SyntaxKind.WithStatement:
+                    case SyntaxKind.YieldExpression:
+                        return true;
+                    case SyntaxKind.BindingElement:
+                    case SyntaxKind.EnumMember:
+                    case SyntaxKind.Parameter:
+                    case SyntaxKind.PropertyAssignment:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.VariableDeclaration:
+                        return (<BindingElement | EnumMember | ParameterDeclaration | PropertyAssignment | PropertyDeclaration | VariableDeclaration>parent).initializer === node;
+                    case SyntaxKind.PropertyAccessExpression:
+                        return (<ExpressionStatement>parent).expression === node;
+                    case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.FunctionExpression:
+                        return (<FunctionLikeDeclaration>parent).body === node;
+                    case SyntaxKind.ImportEqualsDeclaration:
+                        return (<ImportEqualsDeclaration>parent).moduleReference === node;
+                    case SyntaxKind.QualifiedName:
+                        return (<QualifiedName>parent).left === node;
                 }
+                return false;
             }
 
             function emitExpressionIdentifier(node: Identifier) {
-                let substitution = resolver.getExpressionNameSubstitution(node, getGeneratedNameForNode);
-                if (substitution) {
-                    write(substitution);
+                let container = resolver.getReferencedExportContainer(node);
+                if (container) {
+                    if (container.kind === SyntaxKind.SourceFile) {
+                        // Identifier references module export
+                        if (languageVersion < ScriptTarget.ES6 && compilerOptions.module !== ModuleKind.System) {
+                            write("exports.");
+                        }
+                    }
+                    else {
+                        // Identifier references namespace export
+                        write(getGeneratedNameForNode(container));
+                        write(".");
+                    }
                 }
-                else {
-                    writeTextOfNode(currentSourceFile, node);
+                else if (languageVersion < ScriptTarget.ES6) {
+                    let declaration = resolver.getReferencedImportDeclaration(node);
+                    if (declaration) {
+                        if (declaration.kind === SyntaxKind.ImportClause) {
+                            // Identifier references default import
+                            write(getGeneratedNameForNode(<ImportDeclaration>declaration.parent));
+                            write(languageVersion === ScriptTarget.ES3 ? '["default"]' : ".default");
+                        }
+                        else {
+                            // Identifier references named import
+                            write(getGeneratedNameForNode(<ImportDeclaration>declaration.parent.parent.parent));
+                            write(".");
+                            writeTextOfNode(currentSourceFile, (<ImportSpecifier>declaration).propertyName || (<ImportSpecifier>declaration).name);
+                        }
+                        return;
+                    }
                 }
+                writeTextOfNode(currentSourceFile, node);
             }
 
             function getGeneratedNameForIdentifier(node: Identifier): string {
@@ -1272,7 +1278,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 if (!node.parent) {
                     write(node.text);
                 }
-                else if (!isNotExpressionIdentifier(node)) {
+                else if (isExpressionIdentifier(node)) {
                     emitExpressionIdentifier(node);
                 }
                 else {
@@ -1709,12 +1715,15 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         emitExpressionIdentifier(node.name);
                     }
                 }
-                else if (resolver.getExpressionNameSubstitution(node.name, getGeneratedNameForNode)) {
-                    // Emit identifier as an identifier
-                    write(": ");
-                    // Even though this is stored as identifier treat it as an expression
-                    // Short-hand, { x }, is equivalent of normal form { x: x }
-                    emitExpressionIdentifier(node.name);
+                else {
+                    let container = resolver.getReferencedExportContainer(node.name);
+                    if (container && container.kind !== SyntaxKind.SourceFile) {
+                        // Emit identifier as an identifier
+                        write(": ");
+                        // Even though this is stored as identifier treat it as an expression
+                        // Short-hand, { x }, is equivalent of normal form { x: x }
+                        emitExpressionIdentifier(node.name);
+                    }
                 }
             }
 
@@ -4983,13 +4992,16 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
             }
 
-            function getLocalNameForExternalImport(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): string {
-                let namespaceDeclaration = getNamespaceDeclarationNode(importNode);
-                if (namespaceDeclaration && !isDefaultImport(importNode)) {
+            function getLocalNameForExternalImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): string {
+                let namespaceDeclaration = getNamespaceDeclarationNode(node);
+                if (namespaceDeclaration && !isDefaultImport(node)) {
                     return getSourceTextOfNodeFromSourceFile(currentSourceFile, namespaceDeclaration.name);
                 }
-                else {
-                    return getGeneratedNameForNode(<ImportDeclaration | ExportDeclaration>importNode);
+                if (node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).importClause) {
+                    return getGeneratedNameForNode(node);
+                }
+                if (node.kind === SyntaxKind.ExportDeclaration && (<ExportDeclaration>node).moduleSpecifier) {
+                    return getGeneratedNameForNode(node);
                 }
             }
 
