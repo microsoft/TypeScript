@@ -14,6 +14,6 @@ verify.getSyntacticDiagnostics(`[
     "start": 26,
     "length": 4,
     "category": "error",
-    "code": 1222
+    "code": 1223
   }
 ]`);
