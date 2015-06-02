@@ -145,7 +145,7 @@ module ts {
         }
 
         /**
-         * Declares a Symbol for the Node and add it to symbols. Reports errors for conflicting identifier names,
+         * Declares a Symbol for the Node and add it to symbols. Reports errors for conflicting identifier names.
          * @param symbols - The symbolTable which node will be added to.
          * @param parent - If node is in a class, parent denotes the parent declaration.
          * @param node - The declaration to be added to the symbol table
@@ -162,7 +162,7 @@ module ts {
             if (name !== undefined) {
                 symbol = hasProperty(symbols, name) ? symbols[name] : (symbols[name] = createSymbol(0, name));
                 
-                // Check for declarations node cannot be merged with. 
+                // Check for declarations 'node' cannot be merged with. 
                 // Interfaces declarations cannot be merged with non-ambient class declarations, which isn't encoded in SymbolFlags.
                 if (symbol.flags & excludes || (node.kind === SyntaxKind.InterfaceDeclaration && hasNonAmbientClass(symbol))) {
                     if (node.name) {
