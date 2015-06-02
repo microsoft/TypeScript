@@ -12,7 +12,7 @@
 
 module ts {
     /** The version of the language service API */
-    export let servicesVersion = "0.4"
+    export let servicesVersion = "0.5"
 
     export interface Node {
         getSourceFile(): SourceFile;
