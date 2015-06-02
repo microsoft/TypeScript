@@ -448,6 +448,10 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation);
         }
 
+        public getSyntacticDiagnostics(expected: string) {
+            FourSlash.currentTestState.getSyntacticDiagnostics(expected);
+        }
+
         public getSemanticDiagnostics(expected: string) {
             FourSlash.currentTestState.getSemanticDiagnostics(expected);
         }

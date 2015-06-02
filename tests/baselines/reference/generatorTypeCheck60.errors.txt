@@ -1,0 +1,9 @@
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck60.ts(2,21): error TS9002: Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.
+
+
+==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck60.ts (1 errors) ====
+    function* g() {
+        class C extends (yield) {};
+                        ~~~~~~~
+!!! error TS9002: Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.
+    }
