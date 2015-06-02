@@ -10614,9 +10614,7 @@ module ts {
 
                 checkExpressionWithTypeArguments(heritageElement);
             });
-            
 
-            
             forEach(node.members, checkSourceElement);
 
             if (produceDiagnostics) {
