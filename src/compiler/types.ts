@@ -137,6 +137,7 @@ module ts {
         ConstructorKeyword,
         DeclareKeyword,
         GetKeyword,
+        IsKeyword,
         ModuleKeyword,
         NamespaceKeyword,
         RequireKeyword,
@@ -169,6 +170,7 @@ module ts {
         ConstructSignature,
         IndexSignature,
         // Type
+        TypePredicate,
         TypeReference,
         FunctionType,
         ConstructorType,
@@ -462,6 +464,7 @@ module ts {
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         parameters: NodeArray<ParameterDeclaration>;
         type?: TypeNode;
+        typePredicate?: TypePredicateNode;
     }
 
     // SyntaxKind.VariableDeclaration
@@ -604,6 +607,11 @@ module ts {
     export interface TypeReferenceNode extends TypeNode {
         typeName: EntityName;
         typeArguments?: NodeArray<TypeNode>;
+    }
+    
+    export interface TypePredicateNode extends TypeNode {
+        parameterName?: Identifier;
+        type: TypeNode;
     }
 
     export interface TypeQueryNode extends TypeNode {
@@ -1376,6 +1384,12 @@ module ts {
         NotAccessible,
         CannotBeNamed
     }
+    
+    export interface TypePredicate {
+        parameterName: string;
+        parameterIndex?: number;
+        type: Type;
+    }
 
     /* @internal */
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
@@ -1563,6 +1577,8 @@ module ts {
         assignmentChecks?: Map<boolean>;  // Cache of assignment checks
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
+        typePredicateParameterIndex?: number; // Index of type predicate parameter
+        typeFromTypePredicate?: Type;     // Type from TypePredicate
     }
 
     export const enum TypeFlags {
@@ -1588,7 +1604,7 @@ module ts {
         /* @internal */ 
         ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
         /* @internal */ 
-        ContainsObjectLiteral = 0x00080000,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 0x00080000,  // Type is or contains object literal type
         ESSymbol                = 0x00100000,  // Type of symbol primitive introduced in ES6
 
         /* @internal */ 
@@ -1703,6 +1719,7 @@ module ts {
         declaration: SignatureDeclaration;  // Originating declaration
         typeParameters: TypeParameter[];    // Type parameters (undefined if non-generic)
         parameters: Symbol[];               // Parameters
+        typePredicate?: TypePredicate;      // Type predicate
         /* @internal */
         resolvedReturnType: Type;           // Resolved return type
         /* @internal */

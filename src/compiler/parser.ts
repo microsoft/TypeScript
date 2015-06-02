@@ -81,7 +81,8 @@ module ts {
                     visitNodes(cbNodes, node.modifiers) ||
                     visitNodes(cbNodes, (<SignatureDeclaration>node).typeParameters) ||
                     visitNodes(cbNodes, (<SignatureDeclaration>node).parameters) ||
-                    visitNode(cbNode, (<SignatureDeclaration>node).type);
+                    visitNode(cbNode, (<SignatureDeclaration>node).type) ||
+                    visitNode(cbNode, (<SignatureDeclaration>node).typePredicate);
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
             case SyntaxKind.Constructor:
@@ -98,11 +99,15 @@ module ts {
                     visitNodes(cbNodes, (<FunctionLikeDeclaration>node).typeParameters) ||
                     visitNodes(cbNodes, (<FunctionLikeDeclaration>node).parameters) ||
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).type) ||
+                    visitNode(cbNode, (<FunctionLikeDeclaration>node).typePredicate) ||
                     visitNode(cbNode, (<ArrowFunction>node).equalsGreaterThanToken) ||
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).body);
             case SyntaxKind.TypeReference:
                 return visitNode(cbNode, (<TypeReferenceNode>node).typeName) ||
                     visitNodes(cbNodes, (<TypeReferenceNode>node).typeArguments);
+            case SyntaxKind.TypePredicate:
+                return visitNode(cbNode, (<TypePredicateNode>node).parameterName) ||
+                    visitNode(cbNode, (<TypePredicateNode>node).type);
             case SyntaxKind.TypeQuery:
                 return visitNode(cbNode, (<TypeQueryNode>node).exprName);
             case SyntaxKind.TypeLiteral:
@@ -763,7 +768,7 @@ module ts {
             return (contextFlags & ParserContextFlags.Decorator) !== 0;
         }
 
-        function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): void {
+        function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any) {
             let start = scanner.getTokenPos();
             let length = scanner.getTextPos() - start;
 
@@ -2024,6 +2029,17 @@ module ts {
             }
             else if (parseOptional(returnToken)) {
                 signature.type = parseType();
+            }
+            if (token === SyntaxKind.IsKeyword) {
+                let node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate);
+                node.pos = signature.type.pos;
+                node.parameterName = <Identifier>(<TypeReferenceNode>signature.type).typeName;
+
+                nextToken();
+
+                node.type = parseType();
+                signature.type = undefined;
+                signature.typePredicate = finishNode(node);
             }
         }
 

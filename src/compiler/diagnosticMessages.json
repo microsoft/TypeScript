@@ -703,6 +703,27 @@
         "category": "Error",
         "code": 1223
     },
+    "A non-type guard function is not assignable to a type guard function.": {
+        "category": "Error",
+        "code": 1224
+    },
+    "A type-guard function can only return a boolean.": {
+        "category": "Error",
+        "code": 1225
+    },
+    "Cannot find parameter '{0}'.": {
+        "category": "Error",
+        "code": 1226
+    },
+    "Type-guard annotation '{0}' is not assignable to '{1}'.": {
+        "category": "Error",
+        "code": 1227
+    },
+    "Parameter index from '{0}' does not match the parameter index from '{1}'.": {
+        "category": "Error",
+        "code": 1228
+    },
+
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

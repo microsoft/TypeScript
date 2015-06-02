@@ -97,8 +97,8 @@ module ts {
         let anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         let noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
-        let anySignature = createSignature(undefined, undefined, emptyArray, anyType, 0, false, false);
-        let unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, 0, false, false);
+        let anySignature = createSignature(undefined, undefined, emptyArray, anyType, undefined, 0, false, false);
+        let unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, undefined, 0, false, false);
 
         let globals: SymbolTable = {};
 
@@ -2772,7 +2772,7 @@ module ts {
 
         function resolveDeclaredMembers(type: InterfaceType): InterfaceTypeWithDeclaredMembers {
             if (!(<InterfaceTypeWithDeclaredMembers>type).declaredProperties) {
-                var symbol = type.symbol;
+                let symbol = type.symbol;
                 (<InterfaceTypeWithDeclaredMembers>type).declaredProperties = getNamedMembers(symbol.members);
                 (<InterfaceTypeWithDeclaredMembers>type).declaredCallSignatures = getSignaturesOfSymbol(symbol.members["__call"]);
                 (<InterfaceTypeWithDeclaredMembers>type).declaredConstructSignatures = getSignaturesOfSymbol(symbol.members["__new"]);
@@ -2782,7 +2782,7 @@ module ts {
             return <InterfaceTypeWithDeclaredMembers>type;
         }
 
-        function resolveClassOrInterfaceMembers(type: InterfaceType): void {
+        function resolveClassOrInterfaceMembers(type: InterfaceType) {
             let target = resolveDeclaredMembers(type);
             let members = target.symbol.members;
             let callSignatures = target.declaredCallSignatures;
@@ -2823,12 +2823,13 @@ module ts {
         }
 
         function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], parameters: Symbol[],
-            resolvedReturnType: Type, minArgumentCount: number, hasRestParameter: boolean, hasStringLiterals: boolean): Signature {
+            resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasStringLiterals: boolean): Signature {
             let sig = new Signature(checker);
             sig.declaration = declaration;
             sig.typeParameters = typeParameters;
             sig.parameters = parameters;
             sig.resolvedReturnType = resolvedReturnType;
+            sig.typePredicate = typePredicate;
             sig.minArgumentCount = minArgumentCount;
             sig.hasRestParameter = hasRestParameter;
             sig.hasStringLiterals = hasStringLiterals;
@@ -2836,7 +2837,7 @@ module ts {
         }
 
         function cloneSignature(sig: Signature): Signature {
-            return createSignature(sig.declaration, sig.typeParameters, sig.parameters, sig.resolvedReturnType,
+            return createSignature(sig.declaration, sig.typeParameters, sig.parameters, sig.resolvedReturnType, sig.typePredicate,
                 sig.minArgumentCount, sig.hasRestParameter, sig.hasStringLiterals);
         }
 
@@ -2853,7 +2854,7 @@ module ts {
                     return signature;
                 });
             }
-            return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, 0, false, false)];
+            return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, undefined, 0, false, false)];
         }
 
         function createTupleTypeMemberSymbols(memberTypes: Type[]): SymbolTable {
@@ -3229,7 +3230,24 @@ module ts {
                 }
 
                 let returnType: Type;
-                if (classType) {
+                let typePredicate: TypePredicate;
+                if (declaration.typePredicate) {
+                    returnType = booleanType;
+                    let typePredicateNode = declaration.typePredicate;
+                    let links = getNodeLinks(typePredicateNode);
+                    if (links.typePredicateParameterIndex === undefined) {
+                        links.typePredicateParameterIndex = getTypePredicateParameterIndex(declaration.parameters, typePredicateNode.parameterName);
+                    }
+                    if (!links.typeFromTypePredicate) {
+                        links.typeFromTypePredicate = getTypeFromTypeNode(declaration.typePredicate.type);
+                    }
+                    typePredicate = {
+                      parameterName: typePredicateNode.parameterName ? typePredicateNode.parameterName.text : undefined,
+                      parameterIndex: typePredicateNode.parameterName ? links.typePredicateParameterIndex : undefined,
+                      type: links.typeFromTypePredicate
+                    };
+                }
+                else if (classType) {
                     returnType = classType;
                 }
                 else if (declaration.type) {
@@ -3248,8 +3266,8 @@ module ts {
                     }
                 }
 
-                links.resolvedSignature = createSignature(declaration, typeParameters, parameters, returnType,
-                    minArgumentCount, hasRestParameter(declaration), hasStringLiterals);
+                links.resolvedSignature = createSignature(declaration, typeParameters, parameters, returnType, typePredicate,
+                    minArgumentCount, hasRestParameters(declaration), hasStringLiterals);
             }
             return links.resolvedSignature;
         }
@@ -3962,9 +3980,13 @@ module ts {
                 freshTypeParameters = instantiateList(signature.typeParameters, mapper, instantiateTypeParameter);
                 mapper = combineTypeMappers(createTypeMapper(signature.typeParameters, freshTypeParameters), mapper);
             }
+            if (signature.typePredicate) {
+                signature.typePredicate.type = instantiateType(signature.typePredicate.type, mapper);
+            }
             let result = createSignature(signature.declaration, freshTypeParameters,
                 instantiateList(signature.parameters, mapper, instantiateSymbol),
                 signature.resolvedReturnType ? instantiateType(signature.resolvedReturnType, mapper) : undefined,
+                signature.typePredicate,
                 signature.minArgumentCount, signature.hasRestParameter, signature.hasStringLiterals);
             result.target = signature;
             result.mapper = mapper;
@@ -4632,6 +4654,43 @@ module ts {
                     }
                     result &= related;
                 }
+
+                if (source.typePredicate && target.typePredicate) {
+                    if (source.typePredicate.parameterIndex !== target.typePredicate.parameterIndex || 
+                        source.typePredicate.type.symbol !== target.typePredicate.type.symbol) {
+
+                        if (reportErrors) {
+                            let sourceParamText = source.typePredicate.parameterName;
+                            let targetParamText = target.typePredicate.parameterName;
+                            let sourceTypeText = typeToString(source.typePredicate.type);
+                            let targetTypeText = typeToString(target.typePredicate.type);
+
+                            if (source.typePredicate.parameterIndex !== target.typePredicate.parameterIndex) {
+                                reportError(Diagnostics.Parameter_index_from_0_does_not_match_the_parameter_index_from_1, 
+                                    sourceParamText,
+                                    targetParamText);
+                            }
+                            if (source.typePredicate.type.symbol !== target.typePredicate.type.symbol) {
+                                reportError(Diagnostics.Type_0_is_not_assignable_to_type_1, 
+                                    sourceTypeText,
+                                    targetTypeText);
+                            }
+
+                            reportError(Diagnostics.Type_guard_annotation_0_is_not_assignable_to_1,
+                                `${sourceParamText} is ${sourceTypeText}`,
+                                `${targetParamText} is ${targetTypeText}`);
+                        }
+
+                        return Ternary.False;
+                    }
+                }
+                else if (!source.typePredicate && target.typePredicate) {
+                    if (reportErrors) {
+                        reportError(Diagnostics.A_non_type_guard_function_is_not_assignable_to_a_type_guard_function);
+                    }
+                    return Ternary.False;
+                }
+
                 let t = getReturnTypeOfSignature(target);
                 if (t === voidType) return result;
                 let s = getReturnTypeOfSignature(source);
@@ -5164,6 +5223,13 @@ module ts {
 
             function inferFromSignature(source: Signature, target: Signature) {
                 forEachMatchingParameterType(source, target, inferFromTypes);
+                if (source.typePredicate &&
+                    target.typePredicate && 
+                    target.typePredicate.parameterIndex === source.typePredicate.parameterIndex) {
+
+                    inferFromTypes(source.typePredicate.type, target.typePredicate.type);
+                    return;
+                }
                 inferFromTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
             }
 
@@ -5545,7 +5611,7 @@ module ts {
                 let targetType: Type;
                 let prototypeProperty = getPropertyOfType(rightType, "prototype");
                 if (prototypeProperty) {
-                    // Target type is type of the protoype property
+                    // Target type is type of the prototype property
                     let prototypePropertyType = getTypeOfSymbol(prototypeProperty);
                     if (prototypePropertyType !== anyType) {
                         targetType = prototypePropertyType;
@@ -5561,7 +5627,6 @@ module ts {
                     else if (rightType.flags & TypeFlags.Anonymous) {
                         constructSignatures = getSignaturesOfType(rightType, SignatureKind.Construct);
                     }
-
                     if (constructSignatures && constructSignatures.length) {
                         targetType = getUnionType(map(constructSignatures, signature => getReturnTypeOfSignature(getErasedSignature(signature))));
                     }
@@ -5581,10 +5646,38 @@ module ts {
                 return type;
             }
 
+            function narrowTypeByTypePredicate(type: Type, expr: CallExpression, assumeTrue: boolean): Type {
+                if (type.flags & TypeFlags.Any) {
+                    return type;
+                }
+                let signature = getResolvedSignature(expr);
+                if (!assumeTrue) {
+                    if (type.flags & TypeFlags.Union && signature.typePredicate) {
+                        return getUnionType(filter((<UnionType>type).types, t => !isTypeSubtypeOf(t, signature.typePredicate.type)));
+                    }
+                    return type;
+                }
+                if (signature.typePredicate) {
+                    if (expr.arguments && expr.arguments[signature.typePredicate.parameterIndex]) {
+                        if (getSymbolAtLocation(expr.arguments[signature.typePredicate.parameterIndex]) === symbol) {
+                            if (isTypeSubtypeOf(signature.typePredicate.type, type)) {
+                                return signature.typePredicate.type;
+                            }
+                            if (type.flags & TypeFlags.Union) {
+                                return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, signature.typePredicate.type)));
+                            }
+                        }
+                    }
+                }
+                return type;
+            }
+
             // Narrow the given type based on the given expression having the assumed boolean value. The returned type
             // will be a subtype or the same type as the argument.
             function narrowType(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 switch (expr.kind) {
+                    case SyntaxKind.CallExpression:
+                        return narrowTypeByTypePredicate(type, <CallExpression>expr, assumeTrue);
                     case SyntaxKind.ParenthesizedExpression:
                         return narrowType(type, (<ParenthesizedExpression>expr).expression, assumeTrue);
                     case SyntaxKind.BinaryExpression:
@@ -8486,6 +8579,20 @@ module ts {
                 node.kind === SyntaxKind.FunctionExpression;
         }
 
+        function getTypePredicateParameterIndex(parameterList: NodeArray<ParameterDeclaration>, parameter: Identifier): number {
+            let index = -1;
+            if (parameterList) {
+                for (let i = 0; i < parameterList.length; i++) {
+                    let param = parameterList[i];
+                    if (param.name.kind === SyntaxKind.Identifier &&
+                        (<Identifier>param.name).text === parameter.text) {
+
+                        return i;
+                    }
+                }
+            }
+        }
+
         function checkSignatureDeclaration(node: SignatureDeclaration) {
             // Grammar checking
             if (node.kind === SyntaxKind.IndexSignature) {
@@ -8504,6 +8611,27 @@ module ts {
 
             if (node.type) {
                 checkSourceElement(node.type);
+            }
+
+            if (node.typePredicate) {
+                let links = getNodeLinks(node.typePredicate);
+                if (links.typePredicateParameterIndex === undefined) {
+                    links.typePredicateParameterIndex = getTypePredicateParameterIndex(node.parameters, node.typePredicate.parameterName);
+                }
+                if (!links.typeFromTypePredicate) {
+                    links.typeFromTypePredicate = getTypeFromTypeNode(node.typePredicate.type);
+                }
+                if (links.typePredicateParameterIndex >= 0) {
+                    checkTypeAssignableTo(
+                        links.typeFromTypePredicate,
+                        getTypeAtLocation(node.parameters[links.typePredicateParameterIndex]),
+                        node.typePredicate.type);
+                }
+                else if(node.typePredicate.parameterName) {
+                    error(node.typePredicate.parameterName,
+                        Diagnostics.Cannot_find_parameter_0,
+                        node.typePredicate.parameterName.text);
+                }
             }
 
             if (produceDiagnostics) {
@@ -10065,9 +10193,6 @@ module ts {
             if (node.expression) {
                 let func = getContainingFunction(node);
                 if (func) {
-                    let returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(func));
-                    let exprType = checkExpressionCached(node.expression);
-                    
                     if (func.asteriskToken) {
                         // A generator does not need its return expressions checked against its return type.
                         // Instead, the yield expressions are checked against the element type.
@@ -10075,6 +10200,13 @@ module ts {
                         // for generators.
                         return;
                     }
+
+                    let signature = getSignatureFromDeclaration(func);
+                    let exprType = checkExpressionCached(node.expression);
+                    if (signature.typePredicate && exprType !== booleanType) {
+                        error(node.expression, Diagnostics.A_type_guard_function_can_only_return_a_boolean);
+                    }
+                    let returnType = getReturnTypeOfSignature(signature);
 
                     if (func.kind === SyntaxKind.SetAccessor) {
                         error(node.expression, Diagnostics.Setters_cannot_return_a_value);
