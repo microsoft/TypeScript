@@ -135,14 +135,14 @@ module ts {
             return node.name ? declarationNameToString(node.name) : getDeclarationName(node);
         }
 
-        /**
-         * Checks if the symbol contains a class declaration that is non-ambient.
-         */
-        function hasNonAmbientClass(symbol: Symbol): boolean {
-            return symbol && forEach(symbol.declarations, (element: Declaration) => {
-                return element.kind === SyntaxKind.ClassDeclaration && !(element.flags & NodeFlags.Ambient);
-            });
-        }
+        // /**
+        //  * Checks if the symbol contains a class declaration that is non-ambient.
+        //  */
+        // function hasNonAmbientClass(symbol: Symbol): boolean {
+        //     return symbol && forEach(symbol.declarations, (element: Declaration) => {
+        //         return element.kind === SyntaxKind.ClassDeclaration && !(element.flags & NodeFlags.Ambient);
+        //     });
+        // }
 
         /**
          * Declares a Symbol for the Node and add it to symbols. Reports errors for conflicting identifier names.
@@ -164,7 +164,7 @@ module ts {
                 
                 // Check for declarations 'node' cannot be merged with. 
                 // Interfaces declarations cannot be merged with non-ambient class declarations, which isn't encoded in SymbolFlags.
-                if (symbol.flags & excludes || (node.kind === SyntaxKind.InterfaceDeclaration && hasNonAmbientClass(symbol))) {
+                if (symbol.flags & excludes) {
                     if (node.name) {
                         node.name.parent = node;
                     }
@@ -536,7 +536,7 @@ module ts {
                     bindCatchVariableDeclaration(<CatchClause>node);
                     break;
                 case SyntaxKind.ClassDeclaration:
-                    bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Class, isAmbientContext(node) ? SymbolFlags.AmbientClassExcludes : SymbolFlags.ClassExcludes);
+                    bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Class, SymbolFlags.ClassExcludes);
                     break;
                 case SyntaxKind.InterfaceDeclaration:
                     bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
