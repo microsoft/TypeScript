@@ -1,0 +1,13 @@
+=== tests/cases/conformance/internalModules/moduleDeclarations/asiPreventsParsingAsNamespace02.ts ===
+
+var module: number;
+>module : Symbol(module, Decl(asiPreventsParsingAsNamespace02.ts, 1, 3))
+
+var m: string;
+>m : Symbol(m, Decl(asiPreventsParsingAsNamespace02.ts, 2, 3), Decl(asiPreventsParsingAsNamespace02.ts, 2, 14))
+
+module       // this is the identifier 'namespace'
+m            // this is the identifier 'm'
+>m : Symbol(m, Decl(asiPreventsParsingAsNamespace02.ts, 2, 3), Decl(asiPreventsParsingAsNamespace02.ts, 2, 14))
+
+{ }          // this is a block body

@@ -1,0 +1,12 @@
+=== tests/cases/conformance/externalModules/asiPreventsParsingAsAmbientExternalModule01.ts ===
+
+var declare: number;
+>declare : Symbol(declare, Decl(asiPreventsParsingAsAmbientExternalModule01.ts, 1, 3))
+
+var module: string;
+>module : Symbol(module, Decl(asiPreventsParsingAsAmbientExternalModule01.ts, 2, 3))
+
+declare                // this is the identifier 'declare'
+module                 // this is the identifier 'module'
+"my external module"   // this is just a string
+{ }                    // this is a block body
