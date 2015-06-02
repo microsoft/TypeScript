@@ -296,7 +296,12 @@ module ts.formatting {
         }
 
         function getLineIndentationWhenExpressionIsInMultiLine(node: Node, sourceFile: SourceFile, options: EditorOptions): number {
-            if (node.parent && (
+            // actual indentation should not be used when:
+            // - node is close parenthesis - this is the end of the expression
+            // - node is property access expression
+            if (node.kind !== SyntaxKind.CloseParenToken &&
+                node.kind !== SyntaxKind.PropertyAccessExpression &&
+                node.parent && (
                 node.parent.kind === SyntaxKind.CallExpression ||
                 node.parent.kind === SyntaxKind.NewExpression)) {
 

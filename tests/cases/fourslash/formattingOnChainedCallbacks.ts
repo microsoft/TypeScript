@@ -13,6 +13,14 @@
 ////    })/*b*/
 ////}
 
+////Promise
+////    .then(
+////    /*n1*/
+////        )
+////    /*n2*/
+////    .then();
+
+
 goTo.marker('1');
 edit.insertLine('');
 goTo.marker('2');
@@ -37,3 +45,8 @@ verify.currentLineContentIs('            "";');
 goTo.marker('b');
 edit.insert(';');
 verify.currentLineContentIs('        });');
+
+goTo.marker('n1');
+verify.indentationIs(8);
+goTo.marker('n2');
+verify.indentationIs(4);
