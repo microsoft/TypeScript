@@ -175,7 +175,7 @@ module ts.server {
         getProjectInfo(fileName: string, needFileNameList: boolean): protocol.ProjectInfo {
             var args: protocol.ProjectInfoRequestArgs = {
                 file: fileName,
-                needFileNameList: !!needFileNameList
+                needFileNameList: needFileNameList
             };
 
             var request = this.processRequest<protocol.ProjectInfoRequest>(CommandNames.ProjectInfo, args);
