@@ -3288,12 +3288,6 @@ module ts {
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
             let links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
-//<<<<<<< HEAD
-//=======
-//                let classType = declaration.kind === SyntaxKind.Constructor ? getDeclaredTypeOfClassOrInterface((<ClassDeclaration>declaration.parent).symbol) : undefined;
-//                let typeParameters = classType ? classType.localTypeParameters :
-//                    declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) : undefined;
-//>>>>>>> master
                 let parameters: Symbol[] = [];
                 let hasStringLiterals = false;
                 let minArgumentCount = -1;
@@ -3633,6 +3627,7 @@ module ts {
 
                 links.resolvedType = type || unknownType;
             }
+
             return links.resolvedType;
         }
 
