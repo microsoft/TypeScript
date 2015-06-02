@@ -1,0 +1,159 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardFunction.ts ===
+
+class A {
+>A : A
+
+    propA: number;
+>propA : number
+}
+
+class B {
+>B : B
+
+    propB: number;
+>propB : number
+}
+
+class C extends A {
+>C : C
+>A : A
+
+    propC: number;
+>propC : number
+}
+
+declare function isA(p1: any): p1 is A;
+>isA : (p1: any) => boolean
+>p1 : any
+>p1 : any
+>A : A
+
+declare function isB(p1: any): p1 is B;
+>isB : (p1: any) => boolean
+>p1 : any
+>p1 : any
+>B : B
+
+declare function isC(p1: any): p1 is C;
+>isC : (p1: any) => boolean
+>p1 : any
+>p1 : any
+>C : C
+
+declare function retC(): C;
+>retC : () => C
+>C : C
+
+var a: A;
+>a : A
+>A : A
+
+var b: B;
+>b : B
+>B : B
+
+// Basic.
+if (isC(a)) {
+>isC(a) : boolean
+>isC : (p1: any) => boolean
+>a : A
+
+    a.propC;
+>a.propC : number
+>a : C
+>propC : number
+}
+
+// Sub type.
+var subType: C;
+>subType : C
+>C : C
+
+if(isA(subType)) {
+>isA(subType) : boolean
+>isA : (p1: any) => boolean
+>subType : C
+
+    subType.propC;
+>subType.propC : number
+>subType : C
+>propC : number
+}
+
+// Union type.
+var union: A | B;
+>union : A | B
+>A : A
+>B : B
+
+if(isA(union)) {
+>isA(union) : boolean
+>isA : (p1: any) => boolean
+>union : A | B
+
+    union.propA;
+>union.propA : number
+>union : A
+>propA : number
+}
+
+// The parameter index and argument index for the type guard target is matching.
+// The type predicate type is assignable to the parameter type.
+declare function isC_multipleParams(p1, p2): p1 is C;
+>isC_multipleParams : (p1: any, p2: any) => boolean
+>p1 : any
+>p2 : any
+>p1 : any
+>C : C
+
+if (isC_multipleParams(a, 0)) {
+>isC_multipleParams(a, 0) : boolean
+>isC_multipleParams : (p1: any, p2: any) => boolean
+>a : A
+>0 : number
+
+    a.propC;
+>a.propC : number
+>a : C
+>propC : number
+}
+
+// Evaluations are asssignable to boolean.
+declare function acceptingBoolean(a: boolean);
+>acceptingBoolean : (a: boolean) => any
+>a : boolean
+
+acceptingBoolean(isA(a));
+>acceptingBoolean(isA(a)) : any
+>acceptingBoolean : (a: boolean) => any
+>isA(a) : boolean
+>isA : (p1: any) => boolean
+>a : A
+
+// Type predicates with different parameter name.
+declare function acceptingTypeGuardFunction(p1: (item) => item is A);
+>acceptingTypeGuardFunction : (p1: (item: any) => boolean) => any
+>p1 : (item: any) => boolean
+>item : any
+>item : any
+>A : A
+
+acceptingTypeGuardFunction(isA);
+>acceptingTypeGuardFunction(isA) : any
+>acceptingTypeGuardFunction : (p1: (item: any) => boolean) => any
+>isA : (p1: any) => boolean
+
+let union2: C | B;
+>union2 : B | C
+>C : C
+>B : B
+
+let union3: boolean | B = isA(union2) || union2;
+>union3 : boolean | B
+>B : B
+>isA(union2) || union2 : boolean | B
+>isA(union2) : boolean
+>isA : (p1: any) => boolean
+>union2 : B | C
+>union2 : B
+
