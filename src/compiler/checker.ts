@@ -10393,6 +10393,15 @@ module ts {
                 });
             }
 
+            // Non-ambient classes cannot merge with interfaces.
+            if (!(node.flags & NodeFlags.Ambient)) {
+                if (forEach(symbol.declarations, (element: Declaration) => {
+                    return element.kind === SyntaxKind.InterfaceDeclaration;
+                })) {
+                    error(node, Diagnostics.A_non_ambient_class_cannot_be_merged_with_an_interface)
+                }
+            }
+
             forEach(node.members, checkSourceElement);
             if (produceDiagnostics) {
                 checkIndexConstraints(type);
@@ -10544,6 +10553,15 @@ module ts {
             return ok;
         }
 
+        /**
+         * Checks if the symbol contains a class declaration that is non-ambient.
+         */
+        function hasNonAmbientClass(symbol: Symbol): boolean {
+            return symbol && forEach(symbol.declarations, (element: Declaration) => {
+                return element.kind === SyntaxKind.ClassDeclaration && !(element.flags & NodeFlags.Ambient);
+            });
+        }
+
         function checkInterfaceDeclaration(node: InterfaceDeclaration) {
             // Grammar checking
             checkGrammarDeclarationNameInStrictMode(node) || checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarInterfaceDeclaration(node);
@@ -10572,6 +10590,13 @@ module ts {
                         checkIndexConstraints(type);
                     }
                 }
+
+                // Interfaces cannot merge with non-ambient classes.
+                if (!(node.flags & NodeFlags.Ambient)) {
+                    if (hasNonAmbientClass(symbol)) {
+                        error(node, Diagnostics.An_interface_cannot_merge_with_a_non_ambient_class);
+                    }
+                }
             }
             forEach(getInterfaceBaseTypeNodes(node), heritageElement => {
                 if (!isSupportedExpressionWithTypeArguments(heritageElement)) {
@@ -10580,6 +10605,9 @@ module ts {
 
                 checkExpressionWithTypeArguments(heritageElement);
             });
+            
+
+            
             forEach(node.members, checkSourceElement);
 
             if (produceDiagnostics) {

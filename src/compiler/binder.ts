@@ -135,15 +135,6 @@ module ts {
             return node.name ? declarationNameToString(node.name) : getDeclarationName(node);
         }
 
-        // /**
-        //  * Checks if the symbol contains a class declaration that is non-ambient.
-        //  */
-        // function hasNonAmbientClass(symbol: Symbol): boolean {
-        //     return symbol && forEach(symbol.declarations, (element: Declaration) => {
-        //         return element.kind === SyntaxKind.ClassDeclaration && !(element.flags & NodeFlags.Ambient);
-        //     });
-        // }
-
         /**
          * Declares a Symbol for the Node and add it to symbols. Reports errors for conflicting identifier names.
          * @param symbols - The symbolTable which node will be added to.
@@ -162,8 +153,7 @@ module ts {
             if (name !== undefined) {
                 symbol = hasProperty(symbols, name) ? symbols[name] : (symbols[name] = createSymbol(0, name));
                 
-                // Check for declarations 'node' cannot be merged with. 
-                // Interfaces declarations cannot be merged with non-ambient class declarations, which isn't encoded in SymbolFlags.
+                // Check for declarations 'node' cannot be merged with.
                 if (symbol.flags & excludes) {
                     if (node.name) {
                         node.name.parent = node;
