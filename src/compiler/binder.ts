@@ -135,14 +135,13 @@ module ts {
             return node.name ? declarationNameToString(node.name) : getDeclarationName(node);
         }
 
-        /* internal */
         /**
-         * Checks if the symbol contains a class declaration declaration that is non-ambient.
+         * Checks if the symbol contains a class declaration that is non-ambient.
          */
         function hasNonAmbientClass(symbol: Symbol): boolean {
             if (symbol) {
-                return !! forEach(symbol.declarations, (element: Declaration, index: number) => {
-                    return (element.kind === SyntaxKind.ClassDeclaration && !(element.flags & NodeFlags.Ambient))
+                return forEach(symbol.declarations, (element: Declaration) => {
+                    return element.kind === SyntaxKind.ClassDeclaration && !(element.flags & NodeFlags.Ambient);
                 });
             }
         }
@@ -164,6 +163,9 @@ module ts {
             let symbol: Symbol;
             if (name !== undefined) {
                 symbol = hasProperty(symbols, name) ? symbols[name] : (symbols[name] = createSymbol(0, name));
+                
+                // Check for declarations node cannot be merged with. 
+                // Interfaces declarations cannot be merged with non-ambient class declarations, which isn't encoded in SymbolFlags.
                 if (symbol.flags & excludes || (node.kind === SyntaxKind.InterfaceDeclaration && hasNonAmbientClass(symbol))) {
                     if (node.name) {
                         node.name.parent = node;
@@ -423,7 +425,7 @@ module ts {
                         declareModuleMember(node, symbolKind, symbolExcludes);
                         break;
                     }
-                // fall through.
+                    // fall through.
                 default:
                     if (!blockScopeContainer.locals) {
                         blockScopeContainer.locals = {};
