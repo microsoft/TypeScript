@@ -139,11 +139,9 @@ module ts {
          * Checks if the symbol contains a class declaration that is non-ambient.
          */
         function hasNonAmbientClass(symbol: Symbol): boolean {
-            if (symbol) {
-                return forEach(symbol.declarations, (element: Declaration) => {
-                    return element.kind === SyntaxKind.ClassDeclaration && !(element.flags & NodeFlags.Ambient);
-                });
-            }
+            return symbol && forEach(symbol.declarations, (element: Declaration) => {
+                return element.kind === SyntaxKind.ClassDeclaration && !(element.flags & NodeFlags.Ambient);
+            });
         }
 
         /**
