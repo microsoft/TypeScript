@@ -1,11 +1,15 @@
-tests/cases/conformance/classes/classDeclarations/declaredClassMergedwithSelf.ts(1,15): error TS2300: Duplicate identifier 'C1'.
-tests/cases/conformance/classes/classDeclarations/declaredClassMergedwithSelf.ts(3,15): error TS2300: Duplicate identifier 'C1'.
-tests/cases/conformance/classes/classDeclarations/declaredClassMergedwithSelf.ts(5,15): error TS2300: Duplicate identifier 'C2'.
-tests/cases/conformance/classes/classDeclarations/declaredClassMergedwithSelf.ts(7,11): error TS2300: Duplicate identifier 'C2'.
-tests/cases/conformance/classes/classDeclarations/declaredClassMergedwithSelf.ts(9,15): error TS2300: Duplicate identifier 'C2'.
+tests/cases/conformance/classes/classDeclarations/file1.ts(3,15): error TS2300: Duplicate identifier 'C1'.
+tests/cases/conformance/classes/classDeclarations/file1.ts(5,15): error TS2300: Duplicate identifier 'C1'.
+tests/cases/conformance/classes/classDeclarations/file1.ts(7,15): error TS2300: Duplicate identifier 'C2'.
+tests/cases/conformance/classes/classDeclarations/file1.ts(9,11): error TS2300: Duplicate identifier 'C2'.
+tests/cases/conformance/classes/classDeclarations/file1.ts(11,15): error TS2300: Duplicate identifier 'C2'.
+tests/cases/conformance/classes/classDeclarations/file2.ts(2,15): error TS2300: Duplicate identifier 'C3'.
+tests/cases/conformance/classes/classDeclarations/file3.ts(2,15): error TS2300: Duplicate identifier 'C3'.
 
 
-==== tests/cases/conformance/classes/classDeclarations/declaredClassMergedwithSelf.ts (5 errors) ====
+==== tests/cases/conformance/classes/classDeclarations/file1.ts (5 errors) ====
+    
+    
     declare class C1 {}
                   ~~
 !!! error TS2300: Duplicate identifier 'C1'.
@@ -25,3 +29,15 @@ tests/cases/conformance/classes/classDeclarations/declaredClassMergedwithSelf.ts
     declare class C2 {}
                   ~~
 !!! error TS2300: Duplicate identifier 'C2'.
+    
+==== tests/cases/conformance/classes/classDeclarations/file2.ts (1 errors) ====
+    
+    declare class C3 { }
+                  ~~
+!!! error TS2300: Duplicate identifier 'C3'.
+    
+==== tests/cases/conformance/classes/classDeclarations/file3.ts (1 errors) ====
+    
+    declare class C3 { }
+                  ~~
+!!! error TS2300: Duplicate identifier 'C3'.
