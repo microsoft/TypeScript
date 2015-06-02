@@ -1,0 +1,4 @@
+=== tests/cases/compiler/isolatedModulesES6.ts ===
+export var x;
+>x : any
+

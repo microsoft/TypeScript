@@ -1,4 +1,0 @@
-=== tests/cases/compiler/separateCompilationSpecifiedModule.ts ===
-export var x;
->x : any
-

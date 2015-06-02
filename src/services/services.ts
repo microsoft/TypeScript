@@ -1763,13 +1763,13 @@ module ts {
      * This function will compile source text from 'input' argument using specified compiler options.
      * If not options are provided - it will use a set of default compiler options.
      * Extra compiler options that will unconditionally be used bu this function are:
-     * - separateCompilation = true
+     * - isolatedModules = true
      * - allowNonTsExtensions = true
      */
     export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[]): string {
         let options = compilerOptions ? clone(compilerOptions) : getDefaultCompilerOptions();
 
-        options.separateCompilation = true;
+        options.isolatedModules = true;
 
         // Filename can be non-ts file.
         options.allowNonTsExtensions = true;
@@ -1815,7 +1815,8 @@ module ts {
     }
 
     export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile {
-        let sourceFile = createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), scriptTarget, setNodeParents);
+        let text = scriptSnapshot.getText(0, scriptSnapshot.getLength());
+        let sourceFile = createSourceFile(fileName, text, scriptTarget, setNodeParents);
         setSourceFileFields(sourceFile, scriptSnapshot, version);
         // after full parsing we can use table with interned strings as name table
         sourceFile.nameTable = sourceFile.identifiers;
@@ -2477,6 +2478,10 @@ module ts {
                 }
             }
 
+            // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
+            // It needs to be cleared to allow all collected snapshots to be released
+            hostCache = undefined;
+
             program = newProgram;
 
             // Make sure all the nodes in the program are both bound, and have their parent 
@@ -2485,6 +2490,7 @@ module ts {
             return;
 
             function getOrCreateSourceFile(fileName: string): SourceFile {
+                Debug.assert(hostCache !== undefined);
                 // The program is asking for this file, check first if the host can locate it.
                 // If the host can not locate the file, then it does not exist. return undefined
                 // to the program to allow reporting of errors for missing files.
@@ -2952,7 +2958,7 @@ module ts {
                         // the individual types have in common, we also include all the members that
                         // each individual type has.  This is because we're going to add all identifiers
                         // anyways.  So we might as well elevate the members that were at least part
-                        // of the individual types to a higher status than since we know what they are.
+                        // of the individual types to a higher status since we know what they are.
                         let unionType = <UnionType>type;
                         for (let elementType of unionType.types) {
                             addTypeProperties(elementType);
@@ -3144,16 +3150,20 @@ module ts {
                 if (previousToken.kind === SyntaxKind.StringLiteral
                     || previousToken.kind === SyntaxKind.RegularExpressionLiteral
                     || isTemplateLiteralKind(previousToken.kind)) {
-                    // The position has to be either: 1. entirely within the token text, or 
-                    // 2. at the end position of an unterminated token.
                     let start = previousToken.getStart();
                     let end = previousToken.getEnd();
 
+                    // To be "in" one of these literals, the position has to be:
+                    //   1. entirely within the token text.
+                    //   2. at the end position of an unterminated token.
+                    //   3. at the end of a regular expression (due to trailing flags like '/foo/g').
                     if (start < position && position < end) {
                         return true;
                     }
-                    else if (position === end) {
-                        return !!(<LiteralExpression>previousToken).isUnterminated;
+
+                    if (position === end) {
+                        return !!(<LiteralExpression>previousToken).isUnterminated ||
+                            previousToken.kind === SyntaxKind.RegularExpressionLiteral;
                     }
                 }
 
@@ -6143,10 +6153,10 @@ module ts {
                 if (kind === SyntaxKind.MultiLineCommentTrivia) {
                     // See if this is a doc comment.  If so, we'll classify certain portions of it
                     // specially.
-                    let jsDocComment = parseIsolatedJSDocComment(sourceFile.text, start, width);
-                    if (jsDocComment && jsDocComment.jsDocComment) {
-                        jsDocComment.jsDocComment.parent = token;
-                        classifyJSDocComment(jsDocComment.jsDocComment);
+                    let docCommentAndDiagnostics = parseIsolatedJSDocComment(sourceFile.text, start, width);
+                    if (docCommentAndDiagnostics && docCommentAndDiagnostics.jsDocComment) {
+                        docCommentAndDiagnostics.jsDocComment.parent = token;
+                        classifyJSDocComment(docCommentAndDiagnostics.jsDocComment);
                         return;
                     }
                 }
@@ -6163,6 +6173,8 @@ module ts {
                 let pos = docComment.pos;
 
                 for (let tag of docComment.tags) {
+                    // As we walk through each tag, classify the portion of text from the end of
+                    // the last tag (or the start of the entire doc comment) as 'comment'.  
                     if (tag.pos !== pos) {
                         pushCommentRange(pos, tag.pos - pos);
                     }

@@ -643,6 +643,10 @@ module FourSlashInterface {
             return getClassification("punctuation", text, position);
         }
 
+        export function docCommentTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("docCommentTagName", text, position);
+        }
+
         export function className(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
             return getClassification("className", text, position);
         }
