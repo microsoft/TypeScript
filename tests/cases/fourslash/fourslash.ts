@@ -455,6 +455,10 @@ module FourSlashInterface {
         public getSemanticDiagnostics(expected: string) {
             FourSlash.currentTestState.getSemanticDiagnostics(expected);
         }
+
+        public ProjectInfo(expected: string []) {
+            FourSlash.currentTestState.verifyProjectInfo(expected);
+        }
     }
 
     export class edit {

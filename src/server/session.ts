@@ -339,18 +339,19 @@ module ts.server {
             });
         }
 
-        getProjectInfo(fileName: string, needFileNameList: boolean): protocol.ProjectInfoResponse {
+        getProjectInfo(fileName: string, needFileNameList: boolean): protocol.ProjectInfo {
             fileName = ts.normalizePath(fileName)
             let project = this.projectService.getProjectForFile(fileName)
 
-            let projectInfoResponse: protocol.ProjectInfoResponse = {
+            let projectInfo: protocol.ProjectInfo = {
                 configFileName: project.projectFilename
             }
 
             if (needFileNameList) {
-                projectInfoResponse.fileNameList = project.getFileNameList();
+                projectInfo.fileNameList = project.getFileNameList();
             }
-            return projectInfoResponse;
+
+            return projectInfo;
         }
 
         getRenameLocations(line: number, offset: number, fileName: string,findInComments: boolean, findInStrings: boolean): protocol.RenameResponseBody {
