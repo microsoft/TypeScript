@@ -422,27 +422,32 @@ module ts {
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.ArrowFunction:
-                        if (name === "arguments") {
+                        if (meaning & SymbolFlags.Variable && name === "arguments") {
                             result = argumentsSymbol;
                             break loop;
                         }
                         break;
                     case SyntaxKind.FunctionExpression:
-                        if (name === "arguments") {
+                        if (meaning & SymbolFlags.Variable && name === "arguments") {
                             result = argumentsSymbol;
                             break loop;
                         }
-                        let functionName = (<FunctionExpression>location).name;
-                        if (functionName && name === functionName.text) {
-                            result = location.symbol;
-                            break loop;
+
+                        if (meaning & SymbolFlags.Function) {
+                            let functionName = (<FunctionExpression>location).name;
+                            if (functionName && name === functionName.text) {
+                                result = location.symbol;
+                                break loop;
+                            }
                         }
                         break;
                     case SyntaxKind.ClassExpression:
-                        let className = (<ClassExpression>location).name;
-                        if (className && name === className.text) {
-                            result = location.symbol;
-                            break loop;
+                        if (meaning & SymbolFlags.Class) {
+                            let className = (<ClassExpression>location).name;
+                            if (className && name === className.text) {
+                                result = location.symbol;
+                                break loop;
+                            }
                         }
                         break;
                     case SyntaxKind.Decorator:
