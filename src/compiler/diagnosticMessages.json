@@ -1476,7 +1476,6 @@
         "category": "Error",
         "code": 2505
     },
-<<<<<<< HEAD
     "A non-ambient class cannot be merged with an interface.": {
         "category": "Error",
         "code": 2506
@@ -1485,9 +1484,6 @@
         "category": "Error",
         "code": 2507
     },
-=======
-
->>>>>>> master
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
