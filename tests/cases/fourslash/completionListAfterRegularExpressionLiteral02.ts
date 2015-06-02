@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+////let v = 100;
 ////let x = /absidey//**/
 
 // Should get nothing at the marker since it's

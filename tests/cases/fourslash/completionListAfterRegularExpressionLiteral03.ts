@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+////let v = 100;
 ////let x = /absidey/
 /////**/
 
@@ -7,4 +8,4 @@
 // newline separating us from the regex flags.
 
 goTo.marker();
-verify.not.completionListIsEmpty();
+verify.completionListContains("v");
