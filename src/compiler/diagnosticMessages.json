@@ -723,6 +723,10 @@
         "category": "Error",
         "code": 1228
     },
+    "Type '{0}' and type '{1}' are disjoint types.": {
+        "category": "Error",
+        "code": 1229
+    },
 
 
     "Duplicate identifier '{0}'.": {

@@ -2014,6 +2014,34 @@ module ts {
             return parseInitializer(/*inParameter*/ true);
         }
 
+        function parseTypePredicate(signature: SignatureDeclaration) {
+            let node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate);
+            if (token !== SyntaxKind.ThisKeyword) {
+                node.pos = signature.type.pos;
+                node.parameterName = <Identifier>(<TypeReferenceNode>signature.type).typeName;
+                signature.type = undefined;
+            }
+            else {
+                // Swallow `this`
+                nextToken();
+            }
+
+            // Swallow `is`
+            nextToken();
+
+            node.type = parseType();
+            signature.typePredicate = finishNode(node);
+        }
+
+        function parseTypePredicateOrReturnType(signature: SignatureDeclaration) {
+            if (token === SyntaxKind.ThisKeyword) {
+                parseTypePredicate(signature);
+            }
+            else {
+                signature.type = parseType();
+            }
+        }
+
         function fillSignature(
             returnToken: SyntaxKind,
             yieldAndGeneratorParameterContext: boolean,
@@ -2025,21 +2053,13 @@ module ts {
 
             if (returnTokenRequired) {
                 parseExpected(returnToken);
-                signature.type = parseType();
+                parseTypePredicateOrReturnType(signature);
             }
             else if (parseOptional(returnToken)) {
-                signature.type = parseType();
+                parseTypePredicateOrReturnType(signature);
             }
             if (token === SyntaxKind.IsKeyword) {
-                let node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate);
-                node.pos = signature.type.pos;
-                node.parameterName = <Identifier>(<TypeReferenceNode>signature.type).typeName;
-
-                nextToken();
-
-                node.type = parseType();
-                signature.type = undefined;
-                signature.typePredicate = finishNode(node);
+                parseTypePredicate(signature);
             }
         }
 

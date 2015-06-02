@@ -184,6 +184,7 @@ module ts {
         Cannot_find_parameter_0: { code: 1226, category: DiagnosticCategory.Error, key: "Cannot find parameter '{0}'." },
         Type_guard_annotation_0_is_not_assignable_to_1: { code: 1227, category: DiagnosticCategory.Error, key: "Type-guard annotation '{0}' is not assignable to '{1}'." },
         Parameter_index_from_0_does_not_match_the_parameter_index_from_1: { code: 1228, category: DiagnosticCategory.Error, key: "Parameter index from '{0}' does not match the parameter index from '{1}'." },
+        Type_0_and_type_1_are_disjoint_types: { code: 1229, category: DiagnosticCategory.Error, key: "Type '{0}' and type '{1}' are disjoint types." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },

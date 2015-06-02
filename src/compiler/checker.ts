@@ -5646,6 +5646,24 @@ module ts {
                 return type;
             }
 
+            function shouldNarrowTypeByTypePredicate(signature: Signature, expr: CallExpression): boolean {
+                if (!signature.typePredicate) {
+                    return false;
+                }
+                if (expr.arguments &&
+                    expr.arguments[signature.typePredicate.parameterIndex] &&
+                    getSymbolAtLocation(expr.arguments[signature.typePredicate.parameterIndex]) === symbol) {
+
+                    return true;
+                }
+                if (expr.expression.kind === SyntaxKind.PropertyAccessExpression &&
+                    getSymbolAtLocation((<PropertyAccessExpression>expr.expression).expression) === symbol) {
+
+                    return true;
+                }
+                return false;
+            }
+
             function narrowTypeByTypePredicate(type: Type, expr: CallExpression, assumeTrue: boolean): Type {
                 if (type.flags & TypeFlags.Any) {
                     return type;
@@ -5657,16 +5675,12 @@ module ts {
                     }
                     return type;
                 }
-                if (signature.typePredicate) {
-                    if (expr.arguments && expr.arguments[signature.typePredicate.parameterIndex]) {
-                        if (getSymbolAtLocation(expr.arguments[signature.typePredicate.parameterIndex]) === symbol) {
-                            if (isTypeSubtypeOf(signature.typePredicate.type, type)) {
-                                return signature.typePredicate.type;
-                            }
-                            if (type.flags & TypeFlags.Union) {
-                                return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, signature.typePredicate.type)));
-                            }
-                        }
+                if (shouldNarrowTypeByTypePredicate(signature, expr)) {
+                    if (isTypeSubtypeOf(signature.typePredicate.type, type)) {
+                        return signature.typePredicate.type;
+                    }
+                    if (type.flags & TypeFlags.Union) {
+                        return getUnionType(filter((<UnionType>type).types, t => isTypeSubtypeOf(t, signature.typePredicate.type)));
                     }
                 }
                 return type;
@@ -8622,8 +8636,7 @@ module ts {
                     links.typeFromTypePredicate = getTypeFromTypeNode(node.typePredicate.type);
                 }
                 if (links.typePredicateParameterIndex >= 0) {
-                    checkTypeAssignableTo(
-                        links.typeFromTypePredicate,
+                    checkTypeAssignableTo(links.typeFromTypePredicate,
                         getTypeAtLocation(node.parameters[links.typePredicateParameterIndex]),
                         node.typePredicate.type);
                 }
@@ -8631,6 +8644,17 @@ module ts {
                     error(node.typePredicate.parameterName,
                         Diagnostics.Cannot_find_parameter_0,
                         node.typePredicate.parameterName.text);
+                }
+                else {
+                    let typeOfClass = getTypeAtLocation(node.parent);
+                    if (!isTypeSubtypeOf(links.typeFromTypePredicate, typeOfClass) &&
+                        !isTypeSubtypeOf(typeOfClass, links.typeFromTypePredicate)) {
+
+                        error(node.typePredicate,
+                            Diagnostics.Type_0_and_type_1_are_disjoint_types,
+                            typeToString(links.typeFromTypePredicate),
+                            typeToString(typeOfClass));
+                    }
                 }
             }
 
