@@ -2958,7 +2958,7 @@ module ts {
                         // the individual types have in common, we also include all the members that
                         // each individual type has.  This is because we're going to add all identifiers
                         // anyways.  So we might as well elevate the members that were at least part
-                        // of the individual types to a higher status than since we know what they are.
+                        // of the individual types to a higher status since we know what they are.
                         let unionType = <UnionType>type;
                         for (let elementType of unionType.types) {
                             addTypeProperties(elementType);
@@ -6147,10 +6147,10 @@ module ts {
                 if (kind === SyntaxKind.MultiLineCommentTrivia) {
                     // See if this is a doc comment.  If so, we'll classify certain portions of it
                     // specially.
-                    let jsDocComment = parseIsolatedJSDocComment(sourceFile.text, start, width);
-                    if (jsDocComment && jsDocComment.jsDocComment) {
-                        jsDocComment.jsDocComment.parent = token;
-                        classifyJSDocComment(jsDocComment.jsDocComment);
+                    let docCommentAndDiagnostics = parseIsolatedJSDocComment(sourceFile.text, start, width);
+                    if (docCommentAndDiagnostics && docCommentAndDiagnostics.jsDocComment) {
+                        docCommentAndDiagnostics.jsDocComment.parent = token;
+                        classifyJSDocComment(docCommentAndDiagnostics.jsDocComment);
                         return;
                     }
                 }
@@ -6167,6 +6167,8 @@ module ts {
                 let pos = docComment.pos;
 
                 for (let tag of docComment.tags) {
+                    // As we walk through each tag, classify the portion of text from the end of
+                    // the last tag (or the start of the entire doc comment) as 'comment'.  
                     if (tag.pos !== pos) {
                         pushCommentRange(pos, tag.pos - pos);
                     }
