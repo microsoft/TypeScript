@@ -1,5 +1,5 @@
 // @module: system
-// @separateCompilation: true
+// @isolatedModules: true
 
 import n, {x} from 'file1'
 import n2 = require('file2');
