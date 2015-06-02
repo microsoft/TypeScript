@@ -3130,16 +3130,20 @@ module ts {
                 if (previousToken.kind === SyntaxKind.StringLiteral
                     || previousToken.kind === SyntaxKind.RegularExpressionLiteral
                     || isTemplateLiteralKind(previousToken.kind)) {
-                    // The position has to be either: 1. entirely within the token text, or 
-                    // 2. at the end position of an unterminated token.
                     let start = previousToken.getStart();
                     let end = previousToken.getEnd();
 
+                    // To be "in" one of these literals, the position has to be:
+                    //   1. entirely within the token text.
+                    //   2. at the end position of an unterminated token.
+                    //   3. at the end of a regular expression (due to trailing flags like '/foo/g').
                     if (start < position && position < end) {
                         return true;
                     }
-                    else if (position === end) {
-                        return !!(<LiteralExpression>previousToken).isUnterminated;
+
+                    if (position === end) {
+                        return !!(<LiteralExpression>previousToken).isUnterminated ||
+                            previousToken.kind === SyntaxKind.RegularExpressionLiteral;
                     }
                 }
 
