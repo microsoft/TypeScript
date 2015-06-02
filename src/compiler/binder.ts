@@ -111,12 +111,12 @@ module ts {
                 return (<Identifier | LiteralExpression>node.name).text;
             }
             switch (node.kind) {
-                case SyntaxKind.ConstructorType:
                 case SyntaxKind.Constructor:
                     return "__constructor";
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.CallSignature:
                     return "__call";
+                case SyntaxKind.ConstructorType:
                 case SyntaxKind.ConstructSignature:
                     return "__new";
                 case SyntaxKind.IndexSignature:
@@ -380,7 +380,7 @@ module ts {
             let typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
             addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
             typeLiteralSymbol.members = {};
-            typeLiteralSymbol.members[node.kind === SyntaxKind.FunctionType ? "__call" : "__new"] = symbol
+            typeLiteralSymbol.members[symbol.name] = symbol
         }
 
         function bindAnonymousDeclaration(node: Declaration, symbolKind: SymbolFlags, name: string, isBlockScopeContainer: boolean) {
@@ -592,10 +592,8 @@ module ts {
                     bindChildren(node, 0, /*isBlockScopeContainer*/ true);
                     break;
                 default:
-                    let saveParent = parent;
-                    parent = node;
-                    forEachChild(node, bind);
-                    parent = saveParent;
+                    bindChildren(node, 0, /*isBlockScopeContainer:*/ false);
+                    break;
             }
         }
 

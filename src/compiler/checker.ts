@@ -1799,11 +1799,12 @@ module ts {
             }
 
             function buildParameterDisplay(p: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, typeStack?: Type[]) {
-                if (hasDotDotDotToken(p.valueDeclaration)) {
+                let parameterNode = <ParameterDeclaration>p.valueDeclaration;
+                if (isRestParameter(parameterNode)) {
                     writePunctuation(writer, SyntaxKind.DotDotDotToken);
                 }
                 appendSymbolNameOnly(p, writer);
-                if (hasQuestionToken(p.valueDeclaration) || (<ParameterDeclaration>p.valueDeclaration).initializer) {
+                if (isOptionalParameter(parameterNode)) {
                     writePunctuation(writer, SyntaxKind.QuestionToken);
                 }
                 writePunctuation(writer, SyntaxKind.ColonToken);
@@ -3197,6 +3198,10 @@ module ts {
             return result;
         }
 
+        function isOptionalParameter(node: ParameterDeclaration) {
+            return hasQuestionToken(node) || !!node.initializer;
+        }
+
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
             let links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
@@ -3244,7 +3249,7 @@ module ts {
                 }
 
                 links.resolvedSignature = createSignature(declaration, typeParameters, parameters, returnType,
-                    minArgumentCount, hasRestParameters(declaration), hasStringLiterals);
+                    minArgumentCount, hasRestParameter(declaration), hasStringLiterals);
             }
             return links.resolvedSignature;
         }
@@ -3520,40 +3525,48 @@ module ts {
                             type = unknownType;
                         }
                         else {
-                            type = getDeclaredTypeOfSymbol(symbol);
-                            if (type.flags & (TypeFlags.Class | TypeFlags.Interface) && type.flags & TypeFlags.Reference) {
-                                // In a type reference, the outer type parameters of the referenced class or interface are automatically
-                                // supplied as type arguments and the type reference only specifies arguments for the local type parameters
-                                // of the class or interface.
-                                let localTypeParameters = (<InterfaceType>type).localTypeParameters;
-                                let expectedTypeArgCount = localTypeParameters ? localTypeParameters.length : 0;
-                                let typeArgCount = node.typeArguments ? node.typeArguments.length : 0;
-                                if (typeArgCount === expectedTypeArgCount) {
-                                    // When no type arguments are expected we already have the right type because all outer type parameters
-                                    // have themselves as default type arguments.
-                                    if (typeArgCount) {
-                                        type = createTypeReference(<GenericType>type, concatenate((<InterfaceType>type).outerTypeParameters,
-                                            map(node.typeArguments, getTypeFromTypeNode)));
-                                    }
-                                }
-                                else {
-                                    error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), expectedTypeArgCount);
-                                    type = undefined;
-                                }
-                            }
-                            else {
-                                if (node.typeArguments) {
-                                    error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
-                                    type = undefined;
-                                }
-                            }
+                            type = createTypeReferenceIfGeneric(
+                                getDeclaredTypeOfSymbol(symbol),
+                                node, node.typeArguments);
                         }
                     }
                 }
 
                 links.resolvedType = type || unknownType;
             }
+
             return links.resolvedType;
+        }
+
+        function createTypeReferenceIfGeneric(type: Type, node: Node, typeArguments: NodeArray<TypeNode>): Type {
+            if (type.flags & (TypeFlags.Class | TypeFlags.Interface) && type.flags & TypeFlags.Reference) {
+                // In a type reference, the outer type parameters of the referenced class or interface are automatically
+                // supplied as type arguments and the type reference only specifies arguments for the local type parameters
+                // of the class or interface.
+                let localTypeParameters = (<InterfaceType>type).localTypeParameters;
+                let expectedTypeArgCount = localTypeParameters ? localTypeParameters.length : 0;
+                let typeArgCount = typeArguments ? typeArguments.length : 0;
+                if (typeArgCount === expectedTypeArgCount) {
+                    // When no type arguments are expected we already have the right type because all outer type parameters
+                    // have themselves as default type arguments.
+                    if (typeArgCount) {
+                        return createTypeReference(<GenericType>type, concatenate((<InterfaceType>type).outerTypeParameters,
+                            map(typeArguments, getTypeFromTypeNode)));
+                    }
+                }
+                else {
+                    error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), expectedTypeArgCount);
+                    return undefined;
+                }
+            }
+            else {
+                if (typeArguments) {
+                    error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
+                    return undefined;
+                }
+            }
+
+            return type;
         }
 
         function getTypeFromTypeQueryNode(node: TypeQueryNode): Type {
@@ -5858,7 +5871,7 @@ module ts {
                     let contextualSignature = getContextualSignature(func);
                     if (contextualSignature) {
 
-                        let funcHasRestParameters = hasRestParameters(func);
+                        let funcHasRestParameters = hasRestParameter(func);
                         let len = func.parameters.length - (funcHasRestParameters ? 1 : 0);
                         let indexOfParameter = indexOf(func.parameters, parameter);
                         if (indexOfParameter < len) {
@@ -9330,7 +9343,7 @@ module ts {
 
         function checkCollisionWithArgumentsInGeneratedCode(node: SignatureDeclaration) {
             // no rest parameters \ declaration context \ overload - no codegen impact
-            if (!hasRestParameters(node) || isInAmbientContext(node) || nodeIsMissing((<FunctionLikeDeclaration>node).body)) {
+            if (!hasRestParameter(node) || isInAmbientContext(node) || nodeIsMissing((<FunctionLikeDeclaration>node).body)) {
                 return;
             }
 
