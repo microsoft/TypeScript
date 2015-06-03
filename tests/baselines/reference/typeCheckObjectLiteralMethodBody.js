@@ -1,5 +1,5 @@
-//// [typeCheckReturnExpressionMethodBody.ts]
+//// [typeCheckObjectLiteralMethodBody.ts]
 var foo = { bar() { return undefined } };
 
-//// [typeCheckReturnExpressionMethodBody.js]
+//// [typeCheckObjectLiteralMethodBody.js]
 var foo = { bar: function () { return undefined; } };
