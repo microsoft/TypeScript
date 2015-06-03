@@ -393,6 +393,19 @@ module ts {
         if (b === undefined) return Comparison.GreaterThan;
         return a < b ? Comparison.LessThan : Comparison.GreaterThan;
     }
+    
+    export function compareStrings(a: string, b: string, ignoreCase?: boolean) {
+        if (a === b) return Comparison.EqualTo;
+        if (a === undefined) return Comparison.LessThan;
+        if (b === undefined) return Comparison.GreaterThan;
+        if (ignoreCase) {
+            a = a.toLowerCase();
+            b = b.toLowerCase();
+            if (a === b) return Comparison.EqualTo;
+        }
+        
+        return a < b ? Comparison.LessThan : Comparison.GreaterThan;
+    }
 
     function getDiagnosticFileName(diagnostic: Diagnostic): string {
         return diagnostic.file ? diagnostic.file.fileName : undefined;
@@ -656,7 +669,48 @@ module ts {
         if (path1.charAt(path1.length - 1) === directorySeparator) return path1 + path2;
         return path1 + directorySeparator + path2;
     }
+    
+    /**
+      * Removes a trailing directory separator from a path.
+      * @param path The path.
+      */
+    export function removeTrailingDirectorySeparator(path: string) {
+        if (path.charAt(path.length - 1) === directorySeparator) {
+            return path.substr(0, path.length - 1);
+        }
+        
+        return path;
+    }
+    
+    /**
+      * Adds a trailing directory separator to a path, if it does not already have one.
+      * @param path The path.
+      */
+    export function ensureTrailingDirectorySeparator(path: string) {
+        if (path.charAt(path.length - 1) !== directorySeparator) {
+            return path + directorySeparator;
+        }
+        
+        return path;
+    }
 
+    export function comparePaths(a: string, b: string, currentDirectory: string, ignoreCase?: boolean) {
+        if (a === b) return Comparison.EqualTo;
+        if (a === undefined) return Comparison.LessThan;
+        if (b === undefined) return Comparison.GreaterThan;
+        a = removeTrailingDirectorySeparator(a);
+        b = removeTrailingDirectorySeparator(b);
+        let aComponents = getNormalizedPathComponents(a, currentDirectory);
+        let bComponents = getNormalizedPathComponents(b, currentDirectory);
+        let sharedLength = Math.min(aComponents.length, bComponents.length);
+        for (let i = 0; i < sharedLength; ++i) {
+            let result = compareStrings(aComponents[i], bComponents[i], ignoreCase);
+            if (result) return result;
+        }
+
+        return compareValues(aComponents.length, bComponents.length);
+    }
+    
     export function fileExtensionIs(path: string, extension: string): boolean {
         let pathLen = path.length;
         let extLen = extension.length;
@@ -667,6 +721,10 @@ module ts {
      *  List of supported extensions in order of file resolution precedence.
      */
     export const supportedExtensions = [".ts", ".d.ts"];
+    
+    export function hasSupportedFileExtension(file: string) {
+        return forEach(supportedExtensions, extension => fileExtensionIs(file, extension));
+    }
 
     const extensionsToRemove = [".d.ts", ".ts", ".js"];
     export function removeFileExtension(path: string): string {

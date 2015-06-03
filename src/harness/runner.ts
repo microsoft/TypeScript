@@ -37,11 +37,19 @@ var testConfigFile =
     Harness.IO.fileExists(mytestconfig) ? Harness.IO.readFile(mytestconfig) :
     (Harness.IO.fileExists(testconfig) ? Harness.IO.readFile(testconfig) : '');
 
+var unitTestsRequested = false;
+
 if (testConfigFile !== '') {
-    // TODO: not sure why this is crashing mocha
-    //var testConfig = JSON.parse(testConfigRaw);
-    var testConfig = testConfigFile.match(/test:\s\['(.*)'\]/);
-    var options = testConfig ? [testConfig[1]] : [];
+    var options: string[];
+    try {
+        let testConfigJson = JSON.parse(testConfigFile);
+        options = testConfigJson.test instanceof Array ? testConfigJson.test : [];
+    }
+    catch (e) {
+        let testConfig = testConfigFile.match(/test:\s\['(.*)'\]/);
+        options = testConfig ? [testConfig[1]] : [];
+    }
+    
     for (var i = 0; i < options.length; i++) {
         switch (options[i]) {
             case 'compiler':
@@ -73,11 +81,14 @@ if (testConfigFile !== '') {
             case 'test262':
                 runners.push(new Test262BaselineRunner());
                 break;
+            case 'unit':
+                unitTestsRequested = true;
+                break;
         }
     }
 }
 
-if (runners.length === 0) {
+if (runners.length === 0 && !unitTestsRequested) {
     // compiler
     runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
     runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));

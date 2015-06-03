@@ -171,5 +171,8 @@ declare module chai {
         function isFalse(value: any, message?: string): void;
         function isNull(value: any, message?: string): void;
         function isNotNull(value: any, message?: string): void;
+        function deepEqual(actual: any, expected: any, message?: string): void;
+        function notDeepEqual(actual: any, expected: any, message?: string): void;
+        function lengthOf(object: any[], length: number, message?: string): void;
     }
 }

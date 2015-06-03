@@ -445,6 +445,7 @@ module ts {
         Loop_contains_block_scoped_variable_0_referenced_by_a_function_in_the_loop_This_is_only_supported_in_ECMAScript_6_or_higher: { code: 4091, category: DiagnosticCategory.Error, key: "Loop contains block-scoped variable '{0}' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher." },
         The_current_host_does_not_support_the_0_option: { code: 5001, category: DiagnosticCategory.Error, key: "The current host does not support the '{0}' option." },
         Cannot_find_the_common_subdirectory_path_for_the_input_files: { code: 5009, category: DiagnosticCategory.Error, key: "Cannot find the common subdirectory path for the input files." },
+        File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0: { code: 5011, category: DiagnosticCategory.Error, key: "File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'." },
         Cannot_read_file_0_Colon_1: { code: 5012, category: DiagnosticCategory.Error, key: "Cannot read file '{0}': {1}" },
         Unsupported_file_encoding: { code: 5013, category: DiagnosticCategory.Error, key: "Unsupported file encoding." },
         Failed_to_parse_file_0_Colon_1: { code: 5014, category: DiagnosticCategory.Error, key: "Failed to parse file '{0}': {1}." },

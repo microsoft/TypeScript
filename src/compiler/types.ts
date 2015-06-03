@@ -1160,7 +1160,7 @@ module ts {
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: number[];
     }
-
+    
     export interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
         getSourceFile(fileName: string): SourceFile;
@@ -1168,7 +1168,27 @@ module ts {
     }
 
     export interface ParseConfigHost {
+        useCaseSensitiveFileNames: boolean;
+
         readDirectory(rootDir: string, extension: string): string[];
+        
+        /**
+          * Gets a value indicating whether the specified path exists.
+          * @param path The path to test.
+          */
+        fileExists(path: string): boolean;
+    
+        /**
+          * Gets a value indicating whether the specified path exists and is a directory.
+          * @param path The path to test.
+          */
+        directoryExists(path: string): boolean;
+    
+        /**
+         * Reads the files in the directory.
+         * @param path The directory path.
+         */
+        readDirectoryFlat(path: string): string[];
     }
 
     export interface WriteFileCallback {

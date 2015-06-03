@@ -16,6 +16,7 @@ module ts {
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
         readDirectory(path: string, extension?: string): string[];
+        readDirectoryFlat(path: string): string[];
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
     }
@@ -135,6 +136,11 @@ module ts {
                     }
                 }
             }
+            
+            function readDirectoryFlat(path: string): string[] {
+                var folder = fso.GetFolder(path || ".");
+                return [...getNames(folder.files), ...getNames(folder.subfolders)];
+            }
 
             return {
                 args,
@@ -166,6 +172,7 @@ module ts {
                     return new ActiveXObject("WScript.Shell").CurrentDirectory;
                 },
                 readDirectory,
+                readDirectoryFlat,
                 exit(exitCode?: number): void {
                     try {
                         WScript.Quit(exitCode);
@@ -246,6 +253,10 @@ module ts {
                     }
                 }
             }
+            
+            function readDirectoryFlat(path: string): string[] {
+                return _fs.readdirSync(path || ".").sort();
+            }
 
             return {
                 args: process.argv.slice(2),
@@ -277,7 +288,7 @@ module ts {
                     return _path.resolve(path);
                 },
                 fileExists(path: string): boolean {
-                    return _fs.existsSync(path);
+                    return _fs.existsSync(path) && _fs.statSync(path).isFile();
                 },
                 directoryExists(path: string) {
                     return _fs.existsSync(path) && _fs.statSync(path).isDirectory();
@@ -294,6 +305,7 @@ module ts {
                     return process.cwd();
                 },
                 readDirectory,
+                readDirectoryFlat,
                 getMemoryUsage() {
                     if (global.gc) {
                         global.gc();

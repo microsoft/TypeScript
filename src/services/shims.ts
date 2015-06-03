@@ -62,6 +62,10 @@ module ts {
     export interface CoreServicesShimHost extends Logger {
         /** Returns a JSON-encoded value of the type: string[] */
         readDirectory(rootDir: string, extension: string): string;
+        readDirectoryFlat?(path: string): string;
+        useCaseSensitiveFileNames?: boolean;
+        fileExists?(path: string): boolean;
+        directoryExists?(path: string): boolean;
     }
 
     ///
@@ -335,12 +339,52 @@ module ts {
 
     export class CoreServicesShimHostAdapter implements ParseConfigHost {
 
-        constructor(private shimHost: CoreServicesShimHost) {
-        }
+        public useCaseSensitiveFileNames: boolean;
 
+        constructor(private shimHost: CoreServicesShimHost) {
+            if (typeof shimHost.useCaseSensitiveFileNames === "boolean") {
+                this.useCaseSensitiveFileNames = shimHost.useCaseSensitiveFileNames;
+            }
+            else if (sys) {
+                this.useCaseSensitiveFileNames = sys.useCaseSensitiveFileNames;
+            }
+            else {
+                this.useCaseSensitiveFileNames = true;
+            }
+        }
+        
         public readDirectory(rootDir: string, extension: string): string[] {
             var encoded = this.shimHost.readDirectory(rootDir, extension);
             return JSON.parse(encoded);
+        }
+        
+        public readDirectoryFlat(path: string): string[] {
+            path = normalizePath(path);
+            path = ensureTrailingDirectorySeparator(path);
+            if (this.shimHost.readDirectoryFlat) {
+                var encoded = this.shimHost.readDirectoryFlat(path);
+                return JSON.parse(encoded);
+            }
+            
+            return sys ? sys.readDirectoryFlat(path): [];
+        }
+        
+        public fileExists(path: string): boolean {
+            path = normalizePath(path);
+            if (this.shimHost.fileExists) {
+                return this.shimHost.fileExists(path);
+            }
+            
+            return sys ? sys.fileExists(path) : undefined;
+        }
+        
+        public directoryExists(path: string): boolean {
+            path = normalizePath(path);
+            if (this.shimHost.directoryExists) {
+                return this.shimHost.directoryExists(path);
+            }
+            
+            return sys ? sys.directoryExists(path) : undefined;
         }
     }
 

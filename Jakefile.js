@@ -129,7 +129,8 @@ var harnessSources = [
     "services/preProcessFile.ts",
     "services/patternMatcher.ts",
     "versionCache.ts",
-    "convertToBase64.ts"
+    "convertToBase64.ts",
+    "expandFiles.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -506,7 +507,9 @@ function cleanTestDirs() {
 // used to pass data from jake command line directly to run.js
 function writeTestConfigFile(tests, testConfigFile) {
     console.log('Running test(s): ' + tests);
-    var testConfigContents = '{\n' + '\ttest: [\'' + tests + '\']\n}';
+    var testConfigContents = JSON.stringify({
+        "test": [tests]
+    });
     fs.writeFileSync('test.config', testConfigContents);
 }
 
