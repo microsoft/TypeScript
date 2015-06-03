@@ -10416,7 +10416,7 @@ module ts {
             }
 
             // Non-ambient classes cannot merge with interfaces.
-            if (!(node.flags & NodeFlags.Ambient) && getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration)) {
+            if (!(node.flags & NodeFlags.Ambient) && symbol.flags & SymbolFlags.Interface) {
                 error(node, Diagnostics.A_non_ambient_class_cannot_be_merged_with_an_interface)
             }
 
