@@ -1818,7 +1818,7 @@ module ts {
                 if (matchesPattern) {
                     // Report that we need an identifier.  However, report it right after the dot,
                     // and not on the next token.  This is because the next token might actually
-                    // be an identifier and the error woudl be quite confusing.
+                    // be an identifier and the error would be quite confusing.
                     return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentToken*/ true, Diagnostics.Identifier_expected);
                 }
             }
@@ -3981,19 +3981,31 @@ module ts {
                     return parseDebuggerStatement();
                 case SyntaxKind.AtToken:
                     return parseDeclaration();
-                case SyntaxKind.ConstKeyword:
                 case SyntaxKind.DeclareKeyword:
+                    if (lookAhead(isFollowedByIdentifierOrKeywordOnSameLine) && getDeclarationFlags() & flags) {
+                        return parseDeclaration();
+                    }
+                    break;
+                case SyntaxKind.ModuleKeyword:
+                    if (lookAhead(isFollowedByIdentifierOrStringOnSameLine) && getDeclarationFlags() & flags) {
+                        return parseDeclaration();
+                    }
+                    break;
+                case SyntaxKind.NamespaceKeyword:
+                case SyntaxKind.TypeKeyword:
+                    if (lookAhead(isFollowedByIdentifierOnSameLine) && getDeclarationFlags() & flags) {
+                        return parseDeclaration();
+                    }
+                    break;
+                case SyntaxKind.ConstKeyword:
                 case SyntaxKind.EnumKeyword:
                 case SyntaxKind.ExportKeyword:
                 case SyntaxKind.ImportKeyword:
                 case SyntaxKind.InterfaceKeyword:
-                case SyntaxKind.ModuleKeyword:
-                case SyntaxKind.NamespaceKeyword:
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.StaticKeyword:
-                case SyntaxKind.TypeKeyword:
                     if (getDeclarationFlags() & flags) {
                         return parseDeclaration();
                     }
@@ -4042,6 +4054,21 @@ module ts {
                         return finishNode(node);
                     }
             }
+        }
+
+        function isFollowedByIdentifierOrKeywordOnSameLine() {
+            nextToken();
+            return !scanner.hasPrecedingLineBreak() && isIdentifierOrKeyword();
+        }
+
+        function isFollowedByIdentifierOrStringOnSameLine() {
+            nextToken();
+            return !scanner.hasPrecedingLineBreak() && (isIdentifier() || token === SyntaxKind.StringLiteral);
+        }
+
+        function isFollowedByIdentifierOnSameLine() {
+            nextToken();
+            return !scanner.hasPrecedingLineBreak() && isIdentifier();
         }
 
         function parseFunctionBlockOrSemicolon(isGenerator: boolean, diagnosticMessage?: DiagnosticMessage): Block {
