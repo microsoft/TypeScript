@@ -7657,6 +7657,10 @@ module ts {
             }
 
             if (node.body) {
+                if (!node.type) {
+                    getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+                }
+
                 if (node.body.kind === SyntaxKind.Block) {
                     checkSourceElement(node.body);
                 }
