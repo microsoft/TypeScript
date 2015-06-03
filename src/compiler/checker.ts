@@ -11821,6 +11821,38 @@ module ts {
             }
         }
 
+        function isStatementWithLocals(node: Node) {
+            switch (node.kind) {
+                case SyntaxKind.Block:
+                case SyntaxKind.CaseBlock:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
+                    return true;
+            }
+            return false;
+        }
+
+        function getIsNestedRedeclaration(symbol: Symbol): boolean {
+            let links = getSymbolLinks(symbol);
+            if (links.isNestedRedeclaration === undefined) {
+                let container = getEnclosingBlockScopeContainer(symbol.valueDeclaration);
+                links.isNestedRedeclaration = isStatementWithLocals(container) &&
+                    !!resolveName(container.parent, symbol.name, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+            }
+            return links.isNestedRedeclaration;
+        }
+
+        function getReferencedNestedRedeclaration(node: Identifier): Declaration {
+            let symbol = getReferencedValueSymbol(node);
+            return symbol && symbol.flags & SymbolFlags.BlockScoped && getIsNestedRedeclaration(symbol) ? symbol.valueDeclaration : undefined;
+        }
+
+        function isNestedRedeclaration(node: Declaration): boolean {
+            let symbol = getSymbolOfNode(node);
+            return symbol.flags & SymbolFlags.BlockScoped && getIsNestedRedeclaration(symbol);
+        }
+
         function isValueAliasDeclaration(node: Node): boolean {
             switch (node.kind) {
                 case SyntaxKind.ImportEqualsDeclaration:
@@ -11924,8 +11956,10 @@ module ts {
         /** Serializes an EntityName (with substitutions) to an appropriate JS constructor value. Used by the __metadata decorator. */
         function serializeEntityName(node: EntityName, getGeneratedNameForNode: (Node: Node) => string, fallbackPath?: string[]): string {
             if (node.kind === SyntaxKind.Identifier) {
-                var substitution = getExpressionNameSubstitution(<Identifier>node, getGeneratedNameForNode);
-                var text = substitution || (<Identifier>node).text;
+                // TODO(andersh): Fix this
+                // var substitution = getExpressionNameSubstitution(<Identifier>node, getGeneratedNameForNode);
+                // var text = substitution || (<Identifier>node).text;
+                var text = (<Identifier>node).text;
                 if (fallbackPath) {
                     fallbackPath.push(text);
                 }
@@ -12140,11 +12174,6 @@ module ts {
             return hasProperty(globals, name);
         }
 
-        function resolvesToSomeValue(location: Node, name: string): boolean {
-            Debug.assert(!nodeIsSynthesized(location), "resolvesToSomeValue called with a synthesized location");
-            return !!resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-        }
-
         function getReferencedValueSymbol(reference: Identifier): Symbol {
             return getNodeLinks(reference).resolvedSymbol ||
                 resolveName(reference, reference.text, SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias,
@@ -12198,9 +12227,10 @@ module ts {
 
         function createResolver(): EmitResolver {
             return {
-                getExpressionNameSubstitution,
                 getReferencedExportContainer,
                 getReferencedImportDeclaration,
+                getReferencedNestedRedeclaration,
+                isNestedRedeclaration,
                 isValueAliasDeclaration,
                 hasGlobalName,
                 isReferencedAliasDeclaration,
@@ -12214,7 +12244,6 @@ module ts {
                 isSymbolAccessible,
                 isEntityNameVisible,
                 getConstantValue,
-                resolvesToSomeValue,
                 collectLinkedAliases,
                 getBlockScopedVariableId,
                 getReferencedValueDeclaration,
