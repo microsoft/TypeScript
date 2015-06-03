@@ -1493,8 +1493,9 @@ module ts {
                     // Write undefined/null type as any
                     if (type.flags & TypeFlags.Intrinsic) {
                         // Special handling for unknown / resolving types, they should show up as any and not unknown or __resolving
-                        writer.writeKeyword(!(globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike) &&
-                            (type.flags & TypeFlags.Any) ? "any" : (<IntrinsicType>type).intrinsicName);
+                        writer.writeKeyword(!(globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike) && isTypeAny(type)
+                            ? "any"
+                            : (<IntrinsicType>type).intrinsicName);
                     }
                     else if (type.flags & TypeFlags.Reference) {
                         writeTypeReference(<TypeReference>type, flags);
@@ -2131,8 +2132,8 @@ module ts {
             return prop ? getTypeOfSymbol(prop) : undefined;
         }
 
-        function isTheAnyType(type: Type) {
-            return type === anyType;
+        function isTypeAny(type: Type) {
+            return type && type.flags & TypeFlags.Any;
         }
 
         // Return the inferred type for a binding element
@@ -2146,7 +2147,7 @@ module ts {
             // If no type was specified or inferred for parent, or if the specified or inferred type is any,
             // infer from the initializer of the binding element if one is present. Otherwise, go with the
             // undefined or any type of the parent.
-            if (!parentType || isTheAnyType(parentType)) {
+            if (!parentType || isTypeAny(parentType)) {
                 if (declaration.initializer) {
                     return checkExpressionCached(declaration.initializer);
                 }
@@ -2173,7 +2174,7 @@ module ts {
                 // fact an iterable or array (depending on target language).
                 let elementType = checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false);
                 if (!declaration.dotDotDotToken) {
-                    if (elementType.flags & TypeFlags.Any) {
+                    if (isTypeAny(elementType)) {
                         return elementType;
                     }
 
@@ -3720,9 +3721,9 @@ module ts {
             }
         }
 
-        function containsAnyType(types: Type[]) {
+        function containsTypeAny(types: Type[]) {
             for (let type of types) {
-                if (type.flags & TypeFlags.Any) {
+                if (isTypeAny(type)) {
                     return true;
                 }
             }
@@ -3750,7 +3751,7 @@ module ts {
             let sortedTypes: Type[] = [];
             addTypesToSortedSet(sortedTypes, types);
             if (noSubtypeReduction) {
-                if (containsAnyType(sortedTypes)) {
+                if (containsTypeAny(sortedTypes)) {
                     return anyType;
                 }
                 removeAllButLast(sortedTypes, undefinedType);
@@ -4186,13 +4187,13 @@ module ts {
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
                 if (relation !== identityRelation) {
-                    if (target.flags & TypeFlags.Any) return Ternary.True;
+                    if (isTypeAny(target)) return Ternary.True;
                     if (source === undefinedType) return Ternary.True;
                     if (source === nullType && target !== undefinedType) return Ternary.True;
                     if (source.flags & TypeFlags.Enum && target === numberType) return Ternary.True;
                     if (source.flags & TypeFlags.StringLiteral && target === stringType) return Ternary.True;
                     if (relation === assignableRelation) {
-                        if (source.flags & TypeFlags.Any) return Ternary.True;
+                        if (isTypeAny(source)) return Ternary.True;
                         if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
                     }
                 }
@@ -5537,7 +5538,7 @@ module ts {
 
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 // Check that type is not any, assumed result is true, and we have variable symbol on the left
-                if (type.flags & TypeFlags.Any || !assumeTrue || expr.left.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>expr.left) !== symbol) {
+                if (isTypeAny(type) || !assumeTrue || expr.left.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>expr.left) !== symbol) {
                     return type;
                 }
                 // Check that right operand is a function type with a prototype property
@@ -5551,7 +5552,7 @@ module ts {
                 if (prototypeProperty) {
                     // Target type is type of the protoype property
                     let prototypePropertyType = getTypeOfSymbol(prototypeProperty);
-                    if (!isTheAnyType(prototypePropertyType)) {
+                    if (!isTypeAny(prototypePropertyType)) {
                         targetType = prototypePropertyType;
                     }
                 }
@@ -6499,39 +6500,39 @@ module ts {
 
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
             let type = checkExpressionOrQualifiedName(left);
-            if (type === unknownType) return type;
-            if (!isTheAnyType(type)) {
-                let apparentType = getApparentType(getWidenedType(type));
-                if (apparentType === unknownType) {
-                    // handle cases when type is Type parameter with invalid constraint
-                    return unknownType;
-                }
-                let prop = getPropertyOfType(apparentType, right.text);
-                if (!prop) {
-                    if (right.text) {
-                        error(right, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(right), typeToString(type));
-                    }
-                    return unknownType;
-                }
-                getNodeLinks(node).resolvedSymbol = prop;
-                if (prop.parent && prop.parent.flags & SymbolFlags.Class) {
-                    // TS 1.0 spec (April 2014): 4.8.2
-                    // - In a constructor, instance member function, instance member accessor, or
-                    //   instance member variable initializer where this references a derived class instance,
-                    //   a super property access is permitted and must specify a public instance member function of the base class.
-                    // - In a static member function or static member accessor
-                    //   where this references the constructor function object of a derived class,
-                    //   a super property access is permitted and must specify a public static member function of the base class.
-                    if (left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) {
-                        error(right, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
-                    }
-                    else {
-                        checkClassPropertyAccess(node, left, type, prop);
-                    }
-                }
-                return getTypeOfSymbol(prop);
+            if (isTypeAny(type)) {
+                return type;
             }
-            return anyType;
+
+            let apparentType = getApparentType(getWidenedType(type));
+            if (apparentType === unknownType) {
+                // handle cases when type is Type parameter with invalid constraint
+                return unknownType;
+            }
+            let prop = getPropertyOfType(apparentType, right.text);
+            if (!prop) {
+                if (right.text) {
+                    error(right, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(right), typeToString(type));
+                }
+                return unknownType;
+            }
+            getNodeLinks(node).resolvedSymbol = prop;
+            if (prop.parent && prop.parent.flags & SymbolFlags.Class) {
+                // TS 1.0 spec (April 2014): 4.8.2
+                // - In a constructor, instance member function, instance member accessor, or
+                //   instance member variable initializer where this references a derived class instance,
+                //   a super property access is permitted and must specify a public instance member function of the base class.
+                // - In a static member function or static member accessor
+                //   where this references the constructor function object of a derived class,
+                //   a super property access is permitted and must specify a public static member function of the base class.
+                if (left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) {
+                    error(right, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
+                }
+                else {
+                    checkClassPropertyAccess(node, left, type, prop);
+                }
+            }
+            return getTypeOfSymbol(prop);
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean {
@@ -6540,7 +6541,7 @@ module ts {
                 : (<QualifiedName>node).left;
 
             let type = checkExpressionOrQualifiedName(left);
-            if (type !== unknownType && !isTheAnyType(type)) {
+            if (type !== unknownType && !isTypeAny(type)) {
                 let prop = getPropertyOfType(getWidenedType(type), propertyName);
                 if (prop && prop.parent && prop.parent.flags & SymbolFlags.Class) {
                     if (left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) {
@@ -6630,7 +6631,7 @@ module ts {
                 }
 
                 // Fall back to any.
-                if (compilerOptions.noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && !isTheAnyType(objectType)) {
+                if (compilerOptions.noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && !isTypeAny(objectType)) {
                     error(node, Diagnostics.Index_signature_of_object_type_implicitly_has_an_any_type);
                 }
 
@@ -7280,8 +7281,10 @@ module ts {
             // types are provided for the argument expressions, and the result is always of type Any.
             // We exclude union types because we may have a union of function types that happen to have
             // no common signatures.
-            if (isTheAnyType(funcType) || (!callSignatures.length && !constructSignatures.length && !(funcType.flags & TypeFlags.Union) && isTypeAssignableTo(funcType, globalFunctionType))) {
-                if (node.typeArguments) {
+            if (isTypeAny(funcType) || (!callSignatures.length && !constructSignatures.length && !(funcType.flags & TypeFlags.Union) && isTypeAssignableTo(funcType, globalFunctionType))) {
+                // The unknownType indicates that an error already occured (and was reported).  No
+                // need to report another error in this case.
+                if (funcType !== unknownType && node.typeArguments) {
                     error(node, Diagnostics.Untyped_function_calls_may_not_accept_type_arguments);
                 }
                 return resolveUntypedCall(node);
@@ -7310,15 +7313,6 @@ module ts {
             }
 
             let expressionType = checkExpression(node.expression);
-            // TS 1.0 spec: 4.11
-            // If ConstructExpr is of type Any, Args can be any argument
-            // list and the result of the operation is of type Any.
-            if (isTheAnyType(expressionType)) {
-                if (node.typeArguments) {
-                    error(node, Diagnostics.Untyped_function_calls_may_not_accept_type_arguments);
-                }
-                return resolveUntypedCall(node);
-            }
 
             // If ConstructExpr's apparent type(section 3.8.1) is an object type with one or
             // more construct signatures, the expression is processed in the same manner as a
@@ -7329,6 +7323,16 @@ module ts {
             if (expressionType === unknownType) {
                 // Another error has already been reported
                 return resolveErrorCall(node);
+            }
+
+            // TS 1.0 spec: 4.11
+            // If ConstructExpr is of type Any, Args can be any argument
+            // list and the result of the operation is of type Any.
+            if (isTypeAny(expressionType)) {
+                if (node.typeArguments) {
+                    error(node, Diagnostics.Untyped_function_calls_may_not_accept_type_arguments);
+                }
+                return resolveUntypedCall(node);
             }
 
             // Technically, this signatures list may be incomplete. We are taking the apparent type,
@@ -7368,7 +7372,7 @@ module ts {
 
             let callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
 
-            if (isTheAnyType(tagType) || (!callSignatures.length && !(tagType.flags & TypeFlags.Union) && isTypeAssignableTo(tagType, globalFunctionType))) {
+            if (isTypeAny(tagType) || (!callSignatures.length && !(tagType.flags & TypeFlags.Union) && isTypeAssignableTo(tagType, globalFunctionType))) {
                 return resolveUntypedCall(node);
             }
 
@@ -7580,7 +7584,7 @@ module ts {
             }
 
             // Functions that return 'void' or 'any' don't need any return expressions.
-            if (returnType === voidType || isTheAnyType(returnType)) {
+            if (returnType === voidType || isTypeAny(returnType)) {
                 return;
             }
 
@@ -7896,7 +7900,7 @@ module ts {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
-            if (!(rightType.flags & TypeFlags.Any || isTypeSubtypeOf(rightType, globalFunctionType))) {
+            if (!(isTypeAny(rightType) || isTypeSubtypeOf(rightType, globalFunctionType))) {
                 error(node.right, Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_of_type_any_or_of_a_type_assignable_to_the_Function_interface_type);
             }
             return booleanType;
@@ -7922,10 +7926,11 @@ module ts {
                 if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                     // TODO(andersh): Computed property support
                     let name = <Identifier>(<PropertyAssignment>p).name;
-                    let type = sourceType.flags & TypeFlags.Any ? sourceType :
-                        getTypeOfPropertyOfType(sourceType, name.text) ||
-                        isNumericLiteralName(name.text) && getIndexTypeOfType(sourceType, IndexKind.Number) ||
-                        getIndexTypeOfType(sourceType, IndexKind.String);
+                    let type = isTypeAny(sourceType)
+                        ? sourceType
+                        : getTypeOfPropertyOfType(sourceType, name.text) ||
+                            isNumericLiteralName(name.text) && getIndexTypeOfType(sourceType, IndexKind.Number) ||
+                            getIndexTypeOfType(sourceType, IndexKind.String);
                     if (type) {
                         checkDestructuringAssignment((<PropertyAssignment>p).initializer || name, type);
                     }
@@ -7951,8 +7956,9 @@ module ts {
                 if (e.kind !== SyntaxKind.OmittedExpression) {
                     if (e.kind !== SyntaxKind.SpreadElementExpression) {
                         let propName = "" + i;
-                        let type = sourceType.flags & TypeFlags.Any ? sourceType :
-                            isTupleLikeType(sourceType)
+                        let type = isTypeAny(sourceType)
+                            ? sourceType
+                            : isTupleLikeType(sourceType)
                                 ? getTypeOfPropertyOfType(sourceType, propName)
                                 : elementType;
                         if (type) {
@@ -8091,10 +8097,10 @@ module ts {
                             // If one or both operands are of the String primitive type, the result is of the String primitive type.
                             resultType = stringType;
                         }
-                        else if (leftType.flags & TypeFlags.Any || rightType.flags & TypeFlags.Any) {
+                        else if (isTypeAny(leftType) || isTypeAny(rightType)) {
                             // Otherwise, the result is of type Any.
                             // NOTE: unknown type here denotes error type. Old compiler treated this case as any type so do we.
-                            resultType = anyType;
+                            resultType = leftType === unknownType || rightType === unknownType ? unknownType : anyType;
                         }
 
                         // Symbols are not allowed at all in arithmetic expressions
@@ -9824,7 +9830,7 @@ module ts {
         }
 
         function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean): Type {
-            if (inputType.flags & TypeFlags.Any) {
+            if (isTypeAny(inputType)) {
                 return inputType;
             }
 
@@ -9883,7 +9889,7 @@ module ts {
          * whole pattern and that T (above) is 'any'.
          */
         function getElementTypeOfIterable(type: Type, errorNode: Node): Type {
-            if (type.flags & TypeFlags.Any) {
+            if (isTypeAny(type)) {
                 return undefined;
             }
 
@@ -9896,7 +9902,7 @@ module ts {
                 }
                 else {
                     let iteratorFunction = getTypeOfPropertyOfType(type, getPropertyNameForKnownSymbolName("iterator"));
-                    if (iteratorFunction && iteratorFunction.flags & TypeFlags.Any) {
+                    if (isTypeAny(iteratorFunction)) {
                         return undefined;
                     }
 
@@ -9929,7 +9935,7 @@ module ts {
          *
          */
         function getElementTypeOfIterator(type: Type, errorNode: Node): Type {
-            if (type.flags & TypeFlags.Any) {
+            if (isTypeAny(type)) {
                 return undefined;
             }
 
@@ -9942,7 +9948,7 @@ module ts {
                 }
                 else {
                     let iteratorNextFunction = getTypeOfPropertyOfType(type, "next");
-                    if (iteratorNextFunction && iteratorNextFunction.flags & TypeFlags.Any) {
+                    if (isTypeAny(iteratorNextFunction)) {
                         return undefined;
                     }
 
@@ -9955,7 +9961,7 @@ module ts {
                     }
 
                     let iteratorNextResult = getUnionType(map(iteratorNextFunctionSignatures, getReturnTypeOfSignature));
-                    if (iteratorNextResult.flags & TypeFlags.Any) {
+                    if (isTypeAny(iteratorNextResult)) {
                         return undefined;
                     }
 
@@ -9975,7 +9981,7 @@ module ts {
         }
 
         function getElementTypeOfIterableIterator(type: Type): Type {
-            if (type.flags & TypeFlags.Any) {
+            if (isTypeAny(type)) {
                 return undefined;
             }
 

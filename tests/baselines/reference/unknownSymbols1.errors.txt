@@ -2,7 +2,6 @@ tests/cases/compiler/unknownSymbols1.ts(1,9): error TS2304: Cannot find name 'as
 tests/cases/compiler/unknownSymbols1.ts(2,8): error TS2304: Cannot find name 'asdf'.
 tests/cases/compiler/unknownSymbols1.ts(4,17): error TS2304: Cannot find name 'asdf'.
 tests/cases/compiler/unknownSymbols1.ts(4,35): error TS2304: Cannot find name 'asdf'.
-tests/cases/compiler/unknownSymbols1.ts(4,35): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
 tests/cases/compiler/unknownSymbols1.ts(6,12): error TS2304: Cannot find name 'asdf'.
 tests/cases/compiler/unknownSymbols1.ts(9,10): error TS2304: Cannot find name 'asdf'.
 tests/cases/compiler/unknownSymbols1.ts(12,10): error TS2304: Cannot find name 'asdf'.
@@ -14,7 +13,7 @@ tests/cases/compiler/unknownSymbols1.ts(30,14): error TS2339: Property 'asdf' do
 tests/cases/compiler/unknownSymbols1.ts(30,21): error TS2304: Cannot find name 'asdf'.
 
 
-==== tests/cases/compiler/unknownSymbols1.ts (14 errors) ====
+==== tests/cases/compiler/unknownSymbols1.ts (13 errors) ====
     var x = asdf;
             ~~~~
 !!! error TS2304: Cannot find name 'asdf'.
@@ -27,8 +26,6 @@ tests/cases/compiler/unknownSymbols1.ts(30,21): error TS2304: Cannot find name '
 !!! error TS2304: Cannot find name 'asdf'.
                                       ~~~~
 !!! error TS2304: Cannot find name 'asdf'.
-                                      ~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
     function foo2() {
         return asdf;
                ~~~~
