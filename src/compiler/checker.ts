@@ -10417,7 +10417,7 @@ module ts {
 
             // Non-ambient classes cannot merge with interfaces.
             if (!(node.flags & NodeFlags.Ambient) && symbol.flags & SymbolFlags.Interface) {
-                error(node, Diagnostics.A_non_ambient_class_cannot_be_merged_with_an_interface)
+                error(node, Diagnostics.Only_an_ambient_class_can_be_merged_with_an_interface)
             }
 
             forEach(node.members, checkSourceElement);
@@ -10600,10 +10600,11 @@ module ts {
                     }
                 }
 
+                // Interfaces cannot merge with non-ambient classes.
                 if (symbol && symbol.declarations) {
                     for (let declaration of symbol.declarations) {
                         if (declaration.kind === SyntaxKind.ClassDeclaration && !(declaration.flags & NodeFlags.Ambient)) {
-                            error(node, Diagnostics.An_interface_cannot_merge_with_a_non_ambient_class);
+                            error(node, Diagnostics.Only_an_ambient_class_can_be_merged_with_an_interface);
                             break;
                         }
                     }
