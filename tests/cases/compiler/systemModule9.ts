@@ -1,5 +1,5 @@
 // @module: system
-// @separateCompilation: true
+// @isolatedModules: true
 
 import * as ns from 'file1';
 import {a, b as c} from 'file2';

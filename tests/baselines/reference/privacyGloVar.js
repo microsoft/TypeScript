@@ -125,7 +125,6 @@ var m1;
     })();
     var m1_v1_private;
     var m1_v3_private;
-     // error
     var m1_v11_private = new C1_public();
     m1.m1_v12_public = new C1_public();
     var m1_v13_private = new C2_private();

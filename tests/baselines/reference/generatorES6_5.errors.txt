@@ -1,12 +1,15 @@
-tests/cases/compiler/generatorES6_5.ts(1,9): error TS9001: Generators are not currently supported.
-tests/cases/compiler/generatorES6_5.ts(2,5): error TS9000: 'yield' expressions are not currently supported.
+tests/cases/compiler/generatorES6_5.ts(2,11): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/generatorES6_5.ts(2,15): error TS2304: Cannot find name 'b'.
+tests/cases/compiler/generatorES6_5.ts(2,19): error TS2304: Cannot find name 'c'.
 
 
-==== tests/cases/compiler/generatorES6_5.ts (2 errors) ====
+==== tests/cases/compiler/generatorES6_5.ts (3 errors) ====
     function* foo() {
-            ~
-!!! error TS9001: Generators are not currently supported.
         yield a ? b : c;
-        ~~~~~
-!!! error TS9000: 'yield' expressions are not currently supported.
+              ~
+!!! error TS2304: Cannot find name 'a'.
+                  ~
+!!! error TS2304: Cannot find name 'b'.
+                      ~
+!!! error TS2304: Cannot find name 'c'.
     }

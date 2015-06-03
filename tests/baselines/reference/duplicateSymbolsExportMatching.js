@@ -83,9 +83,7 @@ define(["require", "exports"], function (require, exports) {
     var M2;
     (function (M2) {
         var v;
-         // one error (visibility)
         var w;
-         // two errors (visibility and type mismatch)
     })(M2 || (M2 = {}));
     var M;
     (function (M) {
