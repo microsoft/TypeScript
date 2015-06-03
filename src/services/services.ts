@@ -735,7 +735,7 @@ module ts {
         public endOfFileToken: Node;
 
         public amdDependencies: { name: string; path: string }[];
-        public amdModuleName: string;
+        public moduleName: string;
         public referencedFiles: FileReference[];
 
         public syntacticDiagnostics: Diagnostic[];
@@ -1766,7 +1766,7 @@ module ts {
      * - noLib = true
      * - noResolve = true
      */
-    export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[]): string {
+    export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[], moduleName?: string): string {
         let options = compilerOptions ? clone(compilerOptions) : getDefaultCompilerOptions();
 
         options.isolatedModules = true;
@@ -1785,6 +1785,9 @@ module ts {
         // Parse
         let inputFileName = fileName || "module.ts";
         let sourceFile = createSourceFile(inputFileName, input, options.target);
+        if (moduleName) {
+            sourceFile.moduleName = moduleName;
+        }
 
         // Store syntactic diagnostics
         if (diagnostics && sourceFile.parseDiagnostics) {
