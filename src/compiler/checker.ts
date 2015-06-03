@@ -4306,6 +4306,7 @@ module ts {
             // Effectively, we will generate a false positive when two types are structurally equal to at least 10 levels, but unequal at
             // some level beyond that.
             function isDeeplyNestedGeneric(type: ObjectType, stack: ObjectType[]): boolean {
+                // We track type references (created by createTypeReference) and instantiated types (created by instantiateType)
                 if (type.flags & (TypeFlags.Reference | TypeFlags.Instantiated) && depth >= 10) {
                     let symbol = type.symbol;
                     let count = 0;
