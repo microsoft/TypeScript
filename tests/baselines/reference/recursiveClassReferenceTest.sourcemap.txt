@@ -26,7 +26,7 @@ sourceFile:recursiveClassReferenceTest.ts
 1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
 2 >Emitted(2, 75) Source(2, 75) + SourceIndex(0)
 ---
->>>var __extends = this.__extends || function (d, b) {
+>>>var __extends = (this && this.__extends) || function (d, b) {
 >>>    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
 >>>    function __() { this.constructor = d; }
 >>>    __.prototype = b.prototype;

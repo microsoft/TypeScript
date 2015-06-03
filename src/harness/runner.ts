@@ -20,9 +20,6 @@
 /// <reference path='rwcRunner.ts' />
 
 function runTests(runners: RunnerBase[]) {
-    if (reverse) {
-        runners = runners.reverse();
-    }
     for (var i = iterations; i > 0; i--) {
         for (var j = 0; j < runners.length; j++) {
             runners[j].initializeTests();
@@ -31,8 +28,6 @@ function runTests(runners: RunnerBase[]) {
 }
 
 var runners: RunnerBase[] = [];
-global.runners = runners;
-var reverse: boolean = false;
 var iterations: number = 1;
 
 // users can define tests to run in mytest.config that will override cmd line args, otherwise use cmd line args (test.config), otherwise no options
@@ -77,9 +72,6 @@ if (testConfigFile !== '') {
                 break;
             case 'test262':
                 runners.push(new Test262BaselineRunner());
-                break;
-            case 'reverse':
-                reverse = true;
                 break;
         }
     }

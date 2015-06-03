@@ -97,7 +97,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     program = _program;
                 }, function (settings) {
                         harnessCompiler.setCompilerSettings(tcSettings);
-                });
+                    });
             });
 
             beforeEach(() => {
@@ -159,7 +159,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
             // Source maps?
             it('Correct sourcemap content for ' + fileName, () => {
-                if (options.sourceMap) {
+                if (options.sourceMap || options.inlineSourceMap) {
                     Harness.Baseline.runBaseline('Correct sourcemap content for ' + fileName, justName.replace(/\.ts$/, '.sourcemap.txt'), () => {
                         var record = result.getSourceMapRecord();
                         if (options.noEmitOnError && result.errors.length !== 0 && record === undefined) {
@@ -228,7 +228,13 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             it('Correct Sourcemap output for ' + fileName, () => {
-                if (options.sourceMap) {
+                if (options.inlineSourceMap) {
+                    if (result.sourceMaps.length > 0) {
+                        throw new Error('No sourcemap files should be generated if inlineSourceMaps was set.');
+                    }
+                    return null;
+                }
+                else if (options.sourceMap) {
                     if (result.sourceMaps.length !== result.files.length) {
                         throw new Error('Number of sourcemap files should be same as js files.');
                     }
@@ -252,7 +258,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
             });
 
-            it('Correct type baselines for ' + fileName, () => {
+            it('Correct type/symbol baselines for ' + fileName, () => {
                 if (fileName.indexOf("APISample") >= 0) {
                     return;
                 }
@@ -289,8 +295,26 @@ class CompilerBaselineRunner extends RunnerBase {
 
                     // Produce baselines.  The first gives the types for all expressions.
                     // The second gives symbols for all identifiers.
-                    checkBaseLines(/*isSymbolBaseLine:*/ false);
-                    checkBaseLines(/*isSymbolBaseLine:*/ true);
+                    var e1: Error, e2: Error;
+                    try {
+                        checkBaseLines(/*isSymbolBaseLine:*/ false);
+                    }
+                    catch (e) {
+                        e1 = e;
+                    }
+
+                    try {
+                        checkBaseLines(/*isSymbolBaseLine:*/ true);
+                    }
+                    catch (e) {
+                        e2 = e;
+                    }
+
+                    if (e1 || e2) {
+                        throw e1 || e2;
+                    }
+
+                    return;
 
                     function checkBaseLines(isSymbolBaseLine: boolean) {
                         let fullBaseLine = generateBaseLine(fullResults, isSymbolBaseLine);

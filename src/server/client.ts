@@ -171,6 +171,21 @@ module ts.server {
                 documentation: [{ kind: "text", text: response.body.documentation }]
             };
         }
+
+        getProjectInfo(fileName: string, needFileNameList: boolean): protocol.ProjectInfo {
+            var args: protocol.ProjectInfoRequestArgs = {
+                file: fileName,
+                needFileNameList: needFileNameList
+            };
+
+            var request = this.processRequest<protocol.ProjectInfoRequest>(CommandNames.ProjectInfo, args);
+            var response = this.processResponse<protocol.ProjectInfoResponse>(request);
+
+            return {
+                configFileName: response.body.configFileName,
+                fileNameList: response.body.fileNameList
+            };
+        }
         
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
@@ -284,6 +299,32 @@ module ts.server {
 
             var request = this.processRequest<protocol.DefinitionRequest>(CommandNames.Definition, args);
             var response = this.processResponse<protocol.DefinitionResponse>(request);
+
+            return response.body.map(entry => {
+                var fileName = entry.file;
+                var start = this.lineOffsetToPosition(fileName, entry.start);
+                var end = this.lineOffsetToPosition(fileName, entry.end);
+                return {
+                    containerKind: "",
+                    containerName: "",
+                    fileName: fileName,
+                    textSpan: ts.createTextSpanFromBounds(start, end),
+                    kind: "",
+                    name: ""
+                };
+            });
+        }
+
+        getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
+            var lineOffset = this.positionToOneBasedLineOffset(fileName, position);
+            var args: protocol.FileLocationRequestArgs = {
+                file: fileName,
+                line: lineOffset.line,
+                offset: lineOffset.offset,
+            };
+
+            var request = this.processRequest<protocol.TypeDefinitionRequest>(CommandNames.TypeDefinition, args);
+            var response = this.processResponse<protocol.TypeDefinitionResponse>(request);
 
             return response.body.map(entry => {
                 var fileName = entry.file;
@@ -530,6 +571,14 @@ module ts.server {
         }
 
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+            throw new Error("Not Implemented Yet.");
+        }
+
+        getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications {
+            throw new Error("Not Implemented Yet.");
+        }
+
+        getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
             throw new Error("Not Implemented Yet.");
         }
 

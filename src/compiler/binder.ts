@@ -299,7 +299,7 @@ module ts {
                     container.locals = {};
                 }
 
-                addContainerToEndOfChain();
+                addToContainerChain(container);
             }
             else if (containerFlags & ContainerFlags.IsBlockScopedContainer) {
                 blockScopeContainer = node;
@@ -370,19 +370,20 @@ module ts {
             return ContainerFlags.None;
         }
 
-        function addContainerToEndOfChain() {
+        function addToContainerChain(next: Node) {
             if (lastContainer) {
-                lastContainer.nextContainer = container;
+                lastContainer.nextContainer = next;
             }
 
-            lastContainer = container;
+            lastContainer = next;
         }
 
-        function declareSymbolAndAddToSymbolTable(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
+        function declareSymbolAndAddToSymbolTable(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): void {
+            // Just call this directly so that the return type of this function stays "void".
             declareSymbolAndAddToSymbolTableWorker(node, symbolFlags, symbolExcludes);
         }
 
-        function declareSymbolAndAddToSymbolTableWorker(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
+        function declareSymbolAndAddToSymbolTableWorker(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
             switch (container.kind) {
                 // Modules, source files, and classes need specialized handling for how their 
                 // members are declared (for example, a member of a class will go into a specific
@@ -540,6 +541,7 @@ module ts {
                 default:
                     if (!blockScopeContainer.locals) {
                         blockScopeContainer.locals = {};
+                        addToContainerChain(blockScopeContainer);
                     }
                     declareSymbol(blockScopeContainer.locals, undefined, node, symbolFlags, symbolExcludes);
             }
@@ -626,9 +628,9 @@ module ts {
                 case SyntaxKind.ClassDeclaration:
                     return bindClassLikeDeclaration(<ClassLikeDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:
-                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
+                    return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
                 case SyntaxKind.TypeAliasDeclaration:
-                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                    return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
                 case SyntaxKind.EnumDeclaration:
                     return bindEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
@@ -713,14 +715,26 @@ module ts {
 
         function bindEnumDeclaration(node: EnumDeclaration) {
             return isConst(node)
-                ? declareSymbolAndAddToSymbolTable(node, SymbolFlags.ConstEnum, SymbolFlags.ConstEnumExcludes)
-                : declareSymbolAndAddToSymbolTable(node, SymbolFlags.RegularEnum, SymbolFlags.RegularEnumExcludes);
+                ? bindBlockScopedDeclaration(node, SymbolFlags.ConstEnum, SymbolFlags.ConstEnumExcludes)
+                : bindBlockScopedDeclaration(node, SymbolFlags.RegularEnum, SymbolFlags.RegularEnumExcludes);
         }
 
         function bindVariableDeclarationOrBindingElement(node: VariableDeclaration | BindingElement) {
             if (!isBindingPattern(node.name)) {
                 if (isBlockOrCatchScoped(node)) {
                     bindBlockScopedVariableDeclaration(node);
+                }
+                else if (isParameterDeclaration(node)) {
+                    // It is safe to walk up parent chain to find whether the node is a destructing parameter declaration
+                    // because its parent chain has already been set up, since parents are set before descending into children.
+                    //
+                    // If node is a binding element in parameter declaration, we need to use ParameterExcludes.
+                    // Using ParameterExcludes flag allows the compiler to report an error on duplicate identifiers in Parameter Declaration
+                    // For example:
+                    //      function foo([a,a]) {} // Duplicate Identifier error
+                    //      function bar(a,a) {}   // Duplicate Identifier error, parameter declaration in this case is handled in bindParameter
+                    //                             // which correctly set excluded symbols
+                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
                 }
                 else {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);

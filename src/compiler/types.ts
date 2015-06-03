@@ -138,6 +138,7 @@ module ts {
         DeclareKeyword,
         GetKeyword,
         ModuleKeyword,
+        NamespaceKeyword,
         RequireKeyword,
         NumberKeyword,
         SetKeyword,
@@ -205,9 +206,9 @@ module ts {
         SpreadElementExpression,
         ClassExpression,
         OmittedExpression,
+        ExpressionWithTypeArguments,
         // Misc
         TemplateSpan,
-        HeritageClauseElement,
         SemicolonClassElement,
         // Element
         Block,
@@ -269,6 +270,32 @@ module ts {
         // Top-level nodes
         SourceFile,
 
+        // JSDoc nodes.
+        JSDocTypeExpression,
+        // The * type.
+        JSDocAllType,
+        // The ? type.
+        JSDocUnknownType,
+        JSDocArrayType,
+        JSDocUnionType,
+        JSDocTupleType,
+        JSDocNullableType,
+        JSDocNonNullableType,
+        JSDocRecordType,
+        JSDocRecordMember,
+        JSDocTypeReference,
+        JSDocOptionalType,
+        JSDocFunctionType,
+        JSDocVariadicType,
+        JSDocConstructorType,
+        JSDocThisType,
+        JSDocComment,
+        JSDocTag,
+        JSDocParameterTag,
+        JSDocReturnTag,
+        JSDocTypeTag,
+        JSDocTemplateTag,
+
         // Synthesized list
         SyntaxList,
         // Enum value count
@@ -312,8 +339,9 @@ module ts {
         DeclarationFile =   0x00000800,  // Node is a .d.ts file
         Let =               0x00001000,  // Variable declaration
         Const =             0x00002000,  // Variable declaration
-        OctalLiteral =      0x00004000,
-        ExportContext =     0x00008000,  // Export context (initialized by binding)
+        OctalLiteral =      0x00004000,  // Octal numeric literal
+        Namespace =         0x00008000,  // Namespace declaration
+        ExportContext =     0x00010000,  // Export context (initialized by binding)
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Default,
         AccessibilityModifier = Public | Private | Protected,
@@ -322,6 +350,8 @@ module ts {
 
     /* @internal */
     export const enum ParserContextFlags {
+        None = 0,
+
         // Set if this node was parsed in strict mode.  Used for grammar error checks, as well as
         // checking if the node can be reused in incremental settings.
         StrictMode = 1 << 0,
@@ -343,6 +373,10 @@ module ts {
         // error.
         ThisNodeHasError = 1 << 5,
 
+        // This node was parsed in a JavaScript file and can be processed differently.  For example
+        // its type can be specified usign a JSDoc comment.
+        JavaScriptFile = 1 << 6,
+
         // Context flags set directly by the parser.
         ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | Decorator | ThisNodeHasError,
 
@@ -350,10 +384,10 @@ module ts {
 
         // Used during incremental parsing to determine if this node or any of its children had an
         // error.  Computed only once and then cached.
-        ThisNodeOrAnySubNodesHasError = 1 << 6,
+        ThisNodeOrAnySubNodesHasError = 1 << 7,
 
         // Used to know if we've computed data from children and cached it in this node.
-        HasAggregatedChildData = 1 << 7
+        HasAggregatedChildData = 1 << 8
     }
 
     /* @internal */
@@ -369,14 +403,15 @@ module ts {
         // Specific context the parser was in when this node was created.  Normally undefined.
         // Only set when the parser was in some interesting context (like async/yield).
         /* @internal */ parserContextFlags?: ParserContextFlags;
-        decorators?: NodeArray<Decorator>;    // Array of decorators (in document order)
-        modifiers?: ModifiersArray;           // Array of modifiers
-        /* @internal */ id?: number;          // Unique id (used to look up NodeLinks)
-        parent?: Node;                        // Parent node (initialized by binding)
-        /* @internal */ symbol?: Symbol;      // Symbol declared by node (initialized by binding)
-        /* @internal */ locals?: SymbolTable; // Locals associated with node (initialized by binding)
-        /* @internal */ nextContainer?: Node; // Next container in declaration order (initialized by binding)
-        /* @internal */ localSymbol?: Symbol; // Local symbol declared by node (initialized by binding only for exported nodes)
+        decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
+        modifiers?: ModifiersArray;                     // Array of modifiers
+        /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
+        parent?: Node;                                  // Parent node (initialized by binding
+        /* @internal */ jsDocComment?: JSDocComment;    // JSDoc for the node, if it has any.  Only for .js files.
+        /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
+        /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
+        /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
+        /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange {
@@ -658,7 +693,7 @@ module ts {
 
     export interface YieldExpression extends Expression {
         asteriskToken?: Node;
-        expression: Expression;
+        expression?: Expression;
     }
 
     export interface BinaryExpression extends Expression {
@@ -739,7 +774,7 @@ module ts {
         arguments: NodeArray<Expression>;
     }
 
-    export interface HeritageClauseElement extends TypeNode {
+    export interface ExpressionWithTypeArguments extends TypeNode {
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
     }
@@ -795,7 +830,7 @@ module ts {
     export interface ForStatement extends IterationStatement {
         initializer?: VariableDeclarationList | Expression;
         condition?: Expression;
-        iterator?: Expression;
+        incrementor?: Expression;
     }
 
     export interface ForInStatement extends IterationStatement {
@@ -882,7 +917,7 @@ module ts {
         _classElementBrand: any;
     }
 
-    export interface InterfaceDeclaration extends Declaration, ModuleElement {
+    export interface InterfaceDeclaration extends Declaration, Statement {
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
@@ -891,10 +926,10 @@ module ts {
 
     export interface HeritageClause extends Node {
         token: SyntaxKind;
-        types?: NodeArray<HeritageClauseElement>;
+        types?: NodeArray<ExpressionWithTypeArguments>;
     }
 
-    export interface TypeAliasDeclaration extends Declaration, ModuleElement {
+    export interface TypeAliasDeclaration extends Declaration, Statement {
         name: Identifier;
         type: TypeNode;
     }
@@ -906,7 +941,7 @@ module ts {
         initializer?: Expression;
     }
 
-    export interface EnumDeclaration extends Declaration, ModuleElement {
+    export interface EnumDeclaration extends Declaration, Statement {
         name: Identifier;
         members: NodeArray<EnumMember>;
     }
@@ -990,6 +1025,106 @@ module ts {
         kind: SyntaxKind;
     }
 
+    // represents a top level: { type } expression in a JSDoc comment.
+    export interface JSDocTypeExpression extends Node {
+        type: JSDocType;
+    }
+
+    export interface JSDocType extends TypeNode {
+        _jsDocTypeBrand: any;
+    }
+
+    export interface JSDocAllType extends JSDocType {
+        _JSDocAllTypeBrand: any;
+    }
+
+    export interface JSDocUnknownType extends JSDocType {
+        _JSDocUnknownTypeBrand: any;
+    }
+
+    export interface JSDocArrayType extends JSDocType {
+        elementType: JSDocType;
+    }
+
+    export interface JSDocUnionType extends JSDocType {
+        types: NodeArray<JSDocType>;
+    }
+
+    export interface JSDocTupleType extends JSDocType {
+        types: NodeArray<JSDocType>;
+    }
+
+    export interface JSDocNonNullableType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocNullableType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocRecordType extends JSDocType, TypeLiteralNode {
+        members: NodeArray<JSDocRecordMember>;
+    }
+
+    export interface JSDocTypeReference extends JSDocType {
+        name: EntityName;
+        typeArguments: NodeArray<JSDocType>
+    }
+
+    export interface JSDocOptionalType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocFunctionType extends JSDocType, SignatureDeclaration {
+        parameters: NodeArray<ParameterDeclaration>;
+        type: JSDocType;
+    }
+
+    export interface JSDocVariadicType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocConstructorType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocThisType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocRecordMember extends PropertyDeclaration {
+        name: Identifier | LiteralExpression,
+        type?: JSDocType
+    }
+
+    export interface JSDocComment extends Node {
+        tags: NodeArray<JSDocTag>;
+    }
+
+    export interface JSDocTag extends Node {
+        atToken: Node;
+        tagName: Identifier;
+    }
+
+    export interface JSDocTemplateTag extends JSDocTag {
+        typeParameters: NodeArray<TypeParameterDeclaration>;
+    }
+
+    export interface JSDocReturnTag extends JSDocTag {
+        typeExpression: JSDocTypeExpression;
+    }
+
+    export interface JSDocTypeTag extends JSDocTag {
+        typeExpression: JSDocTypeExpression;
+    }
+
+    export interface JSDocParameterTag extends JSDocTag {
+        preParameterName?: Identifier;
+        typeExpression?: JSDocTypeExpression;
+        postParameterName?: Identifier;
+        isBracketed: boolean;
+    }
+
     // Source files are declarations when they are external modules.
     export interface SourceFile extends Declaration {
         statements: NodeArray<ModuleElement>;
@@ -1030,6 +1165,10 @@ module ts {
         getCompilerOptions(): CompilerOptions;
         getSourceFile(fileName: string): SourceFile;
         getCurrentDirectory(): string;
+    }
+
+    export interface ParseConfigHost {
+        readDirectory(rootDir: string, extension: string): string[];
     }
 
     export interface WriteFileCallback {
@@ -1092,14 +1231,15 @@ module ts {
     }
 
     export interface SourceMapData {
-        sourceMapFilePath: string;       // Where the sourcemap file is written
-        jsSourceMappingURL: string;      // source map URL written in the .js file
-        sourceMapFile: string;           // Source map's file field - .js file name
-        sourceMapSourceRoot: string;     // Source map's sourceRoot field - location where the sources will be present if not ""
-        sourceMapSources: string[];      // Source map's sources field - list of sources that can be indexed in this source map
-        inputSourceFileNames: string[];  // Input source file (which one can use on program to get the file), 1:1 mapping with the sourceMapSources list
-        sourceMapNames?: string[];       // Source map's names field - list of names that can be indexed in this source map
-        sourceMapMappings: string;       // Source map's mapping field - encoded source map spans
+        sourceMapFilePath: string;           // Where the sourcemap file is written
+        jsSourceMappingURL: string;          // source map URL written in the .js file
+        sourceMapFile: string;               // Source map's file field - .js file name
+        sourceMapSourceRoot: string;         // Source map's sourceRoot field - location where the sources will be present if not ""
+        sourceMapSources: string[];          // Source map's sources field - list of sources that can be indexed in this source map
+        sourceMapSourcesContent?: string[];  // Source map's sourcesContent field - list of the sources' text to be embedded in the source map
+        inputSourceFileNames: string[];      // Input source file (which one can use on program to get the file), 1:1 mapping with the sourceMapSources list
+        sourceMapNames?: string[];           // Source map's names field - list of names that can be indexed in this source map
+        sourceMapMappings: string;           // Source map's mapping field - encoded source map spans
         sourceMapDecodedMappings: SourceMapSpan[];  // Raw source map spans that were encoded into the sourceMapMappings
     }
 
@@ -1273,6 +1413,7 @@ module ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         resolvesToSomeValue(location: Node, name: string): boolean;
         getBlockScopedVariableId(node: Identifier): number;
+        getReferencedValueDeclaration(reference: Identifier): Declaration;
         serializeTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
         serializeParameterTypesOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): (string | string[])[];
         serializeReturnTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
@@ -1485,15 +1626,20 @@ module ts {
     // Class and interface types (TypeFlags.Class and TypeFlags.Interface)
     export interface InterfaceType extends ObjectType {
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
+        outerTypeParameters: TypeParameter[];      // Outer type parameters (undefined if none)
+        localTypeParameters: TypeParameter[];      // Local type parameters (undefined if none)
+    }
+
+    export interface InterfaceTypeWithBaseTypes extends InterfaceType {
+        baseTypes: ObjectType[];
+    }
+
+    export interface InterfaceTypeWithDeclaredMembers extends InterfaceType {
         declaredProperties: Symbol[];              // Declared members
         declaredCallSignatures: Signature[];       // Declared call signatures
         declaredConstructSignatures: Signature[];  // Declared construct signatures
         declaredStringIndexType: Type;             // Declared string index type
         declaredNumberIndexType: Type;             // Declared numeric index type
-    }
-
-    export interface InterfaceTypeWithBaseTypes extends InterfaceType {
-        baseTypes: ObjectType[];
     }
 
     // Type references (TypeFlags.Reference)
@@ -1530,6 +1676,13 @@ module ts {
         constructSignatures: Signature[];  // Construct signatures of type
         stringIndexType: Type;             // String index type
         numberIndexType: Type;             // Numeric index type
+    }
+
+    // Just a place to cache element types of iterables and iterators
+    /* @internal */
+    export interface IterableOrIteratorType extends ObjectType, UnionType {
+        iterableElementType?: Type;
+        iteratorElementType?: Type;
     }
 
     // Type parameters (TypeFlags.TypeParameter)
@@ -1578,6 +1731,7 @@ module ts {
     /* @internal */
     export interface TypeMapper {
         (t: TypeParameter): Type;
+        mappings?: Map<Type>;  // Type mapping cache
     }
 
     /* @internal */
@@ -1639,11 +1793,15 @@ module ts {
         diagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
+        inlineSourceMap?: boolean;
+        inlineSources?: boolean;
         listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
+        newLine?: NewLineKind;
         noEmit?: boolean;
+        noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;
         noImplicitAny?: boolean;
@@ -1661,7 +1819,8 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
-        separateCompilation?: boolean;
+        isolatedModules?: boolean;
+        experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
         /* @internal */ stripInternal?: boolean;
         [option: string]: string | number | boolean;
@@ -1671,8 +1830,15 @@ module ts {
         None = 0,
         CommonJS = 1,
         AMD = 2,
+        UMD = 3,
+        System = 4,
     }
 
+    export const enum NewLineKind {
+        CarriageReturnLineFeed = 0,
+        LineFeed = 1,
+    }
+	
     export interface LineAndCharacter {
         line: number;
         /*

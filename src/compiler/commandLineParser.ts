@@ -31,6 +31,14 @@ module ts {
             description: Diagnostics.Print_this_message,
         },
         {
+            name: "inlineSourceMap",
+            type: "boolean",
+        },
+        {
+            name: "inlineSources",
+            type: "boolean",
+        },
+        {
             name: "listFiles",
             type: "boolean",
         },
@@ -50,11 +58,23 @@ module ts {
             shortName: "m",
             type: {
                 "commonjs": ModuleKind.CommonJS,
-                "amd": ModuleKind.AMD
+                "amd": ModuleKind.AMD,
+                "system": ModuleKind.System,
+                "umd": ModuleKind.UMD,
             },
-            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_or_amd,
+            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_or_umd,
             paramType: Diagnostics.KIND,
-            error: Diagnostics.Argument_for_module_option_must_be_commonjs_or_amd
+            error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_or_umd
+        },
+        {
+            name: "newLine",
+            type: {
+                "crlf": NewLineKind.CarriageReturnLineFeed,
+                "lf": NewLineKind.LineFeed
+            },
+            description: Diagnostics.Specifies_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
+            paramType: Diagnostics.NEWLINE,
+            error: Diagnostics.Argument_for_newLine_option_must_be_CRLF_or_LF
         },
         {
             name: "noEmit",
@@ -62,9 +82,13 @@ module ts {
             description: Diagnostics.Do_not_emit_outputs,
         },
         {
+            name: "noEmitHelpers",
+            type: "boolean"
+        },
+        {
             name: "noEmitOnError",
             type: "boolean",
-            description: Diagnostics.Do_not_emit_outputs_if_any_type_checking_errors_were_reported,
+            description: Diagnostics.Do_not_emit_outputs_if_any_errors_were_reported,
         },
         {
             name: "noImplicitAny",
@@ -118,7 +142,7 @@ module ts {
             paramType: Diagnostics.LOCATION,
         },
         {
-            name: "separateCompilation",
+            name: "isolatedModules",
             type: "boolean",
         },
         {
@@ -150,7 +174,7 @@ module ts {
             type: { "es3": ScriptTarget.ES3, "es5": ScriptTarget.ES5, "es6": ScriptTarget.ES6 },
             description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES6_experimental,
             paramType: Diagnostics.VERSION,
-            error: Diagnostics.Argument_for_target_option_must_be_es3_es5_or_es6
+            error: Diagnostics.Argument_for_target_option_must_be_ES3_ES5_or_ES6
         },
         {
             name: "version",
@@ -165,9 +189,15 @@ module ts {
             description: Diagnostics.Watch_input_files,
         },
         {
+            name: "experimentalDecorators",
+            type: "boolean",
+            description: Diagnostics.Enables_experimental_support_for_ES7_decorators
+        },
+        {
             name: "emitDecoratorMetadata",
             type: "boolean",
-            experimental: true
+            experimental: true,
+            description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
         }
     ];
 
@@ -284,12 +314,27 @@ module ts {
       * Read tsconfig.json file
       * @param fileName The path to the config file
       */
-    export function readConfigFile(fileName: string): any {
+    export function readConfigFile(fileName: string): { config?: any; error?: Diagnostic }  {
         try {
             var text = sys.readFile(fileName);
-            return /\S/.test(text) ? JSON.parse(text) : {};
         }
         catch (e) {
+            return { error: createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message) };
+        }
+        return parseConfigFileText(fileName, text);
+    }
+
+    /**
+      * Parse the text of the tsconfig.json file
+      * @param fileName The path to the config file
+      * @param jsonText The text of the config file
+      */
+    export function parseConfigFileText(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
+        try {
+            return { config: /\S/.test(jsonText) ? JSON.parse(jsonText) : {} };
+        }
+        catch (e) {
+            return { error: createCompilerDiagnostic(Diagnostics.Failed_to_parse_file_0_Colon_1, fileName, e.message) };
         }
     }
 
@@ -299,7 +344,7 @@ module ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir 
       */
-    export function parseConfigFile(json: any, basePath?: string): ParsedCommandLine {
+    export function parseConfigFile(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
         var errors: Diagnostic[] = [];
 
         return {
@@ -358,7 +403,7 @@ module ts {
                 }
             }
             else {
-                var sysFiles = sys.readDirectory(basePath, ".ts");
+                var sysFiles = host.readDirectory(basePath, ".ts");
                 for (var i = 0; i < sysFiles.length; i++) {
                     var name = sysFiles[i];
                     if (!fileExtensionIs(name, ".d.ts") || !contains(sysFiles, name.substr(0, name.length - 5) + ".ts")) {

@@ -107,8 +107,6 @@ var m1;
     else {
         num = var2; // number
     }
-    // exported variable in the module
-    m1.var3;
     if (typeof m1.var3 === "string") {
         strOrNum = m1.var3; // string | number
     }
@@ -120,7 +118,6 @@ var m1;
 var m2;
 (function (m2) {
     var var2;
-    m2.var3;
     var m3;
     (function (m3) {
         // global vars in function declaration
@@ -137,8 +134,6 @@ var m2;
         else {
             num = var4; // number
         }
-        // exported variable in the module
-        m3.var5;
         if (typeof m3.var5 === "string") {
             strOrNum = m3.var5; // string | number
         }
@@ -162,8 +157,6 @@ var m3;
         else {
             num = var2; // number
         }
-        // exported variable in the module
-        m4.var3;
         if (typeof m4.var3 === "string") {
             strOrNum = m4.var3; // string | number
         }

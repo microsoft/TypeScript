@@ -561,7 +561,7 @@ interface Math {
       */
     atan(x: number): number;
     /**
-      * Returns the angle (in radians) from the X axis to a point (y,x).
+      * Returns the angle (in radians) from the X axis to a point.
       * @param y A numeric expression representing the cartesian y-coordinate.
       * @param x A numeric expression representing the cartesian x-coordinate.
       */
@@ -1237,10 +1237,40 @@ interface SymbolConstructor {
     isConcatSpreadable: symbol;
 
     /** 
-      * A method that returns the default iterator for an object.Called by the semantics of the 
+      * A method that returns the default iterator for an object. Called by the semantics of the 
       * for-of statement.
       */
     iterator: symbol;
+
+    /**
+      * A regular expression method that matches the regular expression against a string. Called 
+      * by the String.prototype.match method. 
+      */
+    match: symbol;
+
+    /** 
+      * A regular expression method that replaces matched substrings of a string. Called by the 
+      * String.prototype.replace method.
+      */
+    replace: symbol;
+
+    /**
+      * A regular expression method that returns the index within a string that matches the 
+      * regular expression. Called by the String.prototype.search method.
+      */
+    search: symbol;
+
+    /** 
+      * A function valued property that is the constructor function that is used to create 
+      * derived objects.
+      */
+    species: symbol;
+
+    /**
+      * A regular expression method that splits a string at the indices that match the regular 
+      * expression. Called by the String.prototype.split method.
+      */
+    split: symbol;
 
     /** 
       * A method that converts an object to a corresponding primitive value.Called by the ToPrimitive
@@ -1472,6 +1502,11 @@ interface Array<T> {
     copyWithin(target: number, start: number, end?: number): T[];
 }
 
+interface IArguments {
+    /** Iterator */
+    [Symbol.iterator](): IterableIterator<any>;
+}
+
 interface ArrayConstructor {
     /**
       * Creates an array from an array-like object.
@@ -1628,7 +1663,7 @@ interface IteratorResult<T> {
 }
 
 interface Iterator<T> {
-    next(): IteratorResult<T>;
+    next(value?: any): IteratorResult<T>;
     return?(value?: any): IteratorResult<T>;
     throw?(e?: any): IteratorResult<T>;
 }
@@ -1655,14 +1690,6 @@ interface GeneratorFunctionConstructor {
     prototype: GeneratorFunction;
 }
 declare var GeneratorFunction: GeneratorFunctionConstructor;
-
-interface Generator<T> extends IterableIterator<T> {
-    next(value?: any): IteratorResult<T>;
-    throw(exception: any): IteratorResult<T>;
-    return(value: T): IteratorResult<T>;
-    [Symbol.iterator](): Generator<T>;
-    [Symbol.toStringTag]: string;
-}
 
 interface Math {
     /**
@@ -4728,6 +4755,17 @@ declare module Reflect {
     function setPrototypeOf(target: any, proto: any): boolean;
 }
 
+interface PromiseLike<T> {
+    /**
+    * Attaches callbacks for the resolution and/or rejection of the Promise.
+    * @param onfulfilled The callback to execute when the Promise is resolved.
+    * @param onrejected The callback to execute when the Promise is rejected.
+    * @returns A Promise for the completion of which ever callback is executed.
+    */
+    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): PromiseLike<TResult>;
+    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): PromiseLike<TResult>;
+}
+
 /**
  * Represents the completion of an asynchronous operation
  */
@@ -4738,14 +4776,17 @@ interface Promise<T> {
     * @param onrejected The callback to execute when the Promise is rejected.
     * @returns A Promise for the completion of which ever callback is executed.
     */
-    then<TResult>(onfulfilled?: (value: T) => TResult | Promise<TResult>, onrejected?: (reason: any) => TResult | Promise<TResult>): Promise<TResult>;
+    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>;
+    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): Promise<TResult>;
 
     /**
      * Attaches a callback for only the rejection of the Promise.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of the callback.
      */
-    catch(onrejected?: (reason: any) => T | Promise<T>): Promise<T>;
+    catch(onrejected?: (reason: any) => T | PromiseLike<T>): Promise<T>;
+
+    [Symbol.toStringTag]: string;
 }
 
 interface PromiseConstructor {
@@ -4756,13 +4797,11 @@ interface PromiseConstructor {
 
     /**
      * Creates a new Promise.
-     * @param init A callback used to initialize the promise. This callback is passed two arguments: 
+     * @param executor A callback used to initialize the promise. This callback is passed two arguments: 
      * a resolve callback used resolve the promise with a value or the result of another promise, 
      * and a reject callback used to reject the promise with a provided reason or error.
      */
-    new <T>(init: (resolve: (value?: T | Promise<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
-
-    <T>(init: (resolve: (value?: T | Promise<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
+    new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
 
     /**
      * Creates a Promise that is resolved with an array of results when all of the provided Promises 
@@ -4770,15 +4809,7 @@ interface PromiseConstructor {
      * @param values An array of Promises.
      * @returns A new Promise.
      */
-    all<T>(values: (T | Promise<T>)[]): Promise<T[]>;
-
-    /**
-     * Creates a Promise that is resolved with an array of results when all of the provided Promises
-     * resolve, or rejected when any Promise is rejected.
-     * @param values An array of values.
-     * @returns A new Promise.
-     */
-    all(values: Promise<void>[]): Promise<void>;
+    all<T>(values: Iterable<T | PromiseLike<T>>): Promise<T[]>;
 
     /**
      * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved 
@@ -4786,7 +4817,7 @@ interface PromiseConstructor {
      * @param values An array of Promises.
      * @returns A new Promise.
      */
-    race<T>(values: (T | Promise<T>)[]): Promise<T>;
+    race<T>(values: Iterable<T | PromiseLike<T>>): Promise<T>;
 
     /**
      * Creates a new rejected promise for the provided reason.
@@ -4807,13 +4838,15 @@ interface PromiseConstructor {
       * @param value A promise.
       * @returns A promise whose internal state matches the provided promise.
       */
-    resolve<T>(value: T | Promise<T>): Promise<T>;
+    resolve<T>(value: T | PromiseLike<T>): Promise<T>;
 
     /**
      * Creates a new resolved promise .
      * @returns A resolved promise.
      */
     resolve(): Promise<void>;
+
+    [Symbol.species]: Function;
 }
 
 declare var Promise: PromiseConstructor;
@@ -4897,10 +4930,10 @@ declare module Intl {
         resolvedOptions(): ResolvedNumberFormatOptions;
     }
     var NumberFormat: {
-        new (locales?: string[], options?: NumberFormatOptions): Collator;
-        new (locale?: string, options?: NumberFormatOptions): Collator;
-        (locales?: string[], options?: NumberFormatOptions): Collator;
-        (locale?: string, options?: NumberFormatOptions): Collator;
+        new (locales?: string[], options?: NumberFormatOptions): NumberFormat;
+        new (locale?: string, options?: NumberFormatOptions): NumberFormat;
+        (locales?: string[], options?: NumberFormatOptions): NumberFormat;
+        (locale?: string, options?: NumberFormatOptions): NumberFormat;
         supportedLocalesOf(locales: string[], options?: NumberFormatOptions): string[];
         supportedLocalesOf(locale: string, options?: NumberFormatOptions): string[];
     }
@@ -4942,10 +4975,10 @@ declare module Intl {
         resolvedOptions(): ResolvedDateTimeFormatOptions;
     }
     var DateTimeFormat: {
-        new (locales?: string[], options?: DateTimeFormatOptions): Collator;
-        new (locale?: string, options?: DateTimeFormatOptions): Collator;
-        (locales?: string[], options?: DateTimeFormatOptions): Collator;
-        (locale?: string, options?: DateTimeFormatOptions): Collator;
+        new (locales?: string[], options?: DateTimeFormatOptions): DateTimeFormat;
+        new (locale?: string, options?: DateTimeFormatOptions): DateTimeFormat;
+        (locales?: string[], options?: DateTimeFormatOptions): DateTimeFormat;
+        (locale?: string, options?: DateTimeFormatOptions): DateTimeFormat;
         supportedLocalesOf(locales: string[], options?: DateTimeFormatOptions): string[];
         supportedLocalesOf(locale: string, options?: DateTimeFormatOptions): string[];
     }
@@ -8700,6 +8733,8 @@ interface HTMLCanvasElement extends HTMLElement {
       * Returns an object that provides methods and properties for drawing and manipulating images and graphics on a canvas element in a document. A context object includes information about colors, line widths, fonts, and other graphic parameters that can be drawn on a canvas.
       * @param contextId The identifier (ID) of the type of canvas to create. Internet Explorer 9 and Internet Explorer 10 support only a 2-D context using canvas.getContext("2d"); IE11 Preview also supports 3-D or WebGL context using canvas.getContext("experimental-webgl");
       */
+    getContext(contextId: "2d"): CanvasRenderingContext2D;
+    getContext(contextId: "experimental-webgl"): WebGLRenderingContext;
     getContext(contextId: string, ...args: any[]): CanvasRenderingContext2D | WebGLRenderingContext;
     /**
       * Returns a blob object encoded as a Portable Network Graphics (PNG) format from a canvas image or drawing.
@@ -15356,7 +15391,7 @@ interface SourceBuffer extends EventTarget {
     videoTracks: VideoTrackList;
     abort(): void;
     appendBuffer(data: ArrayBuffer): void;
-    appendBuffer(data: any): void;
+    appendBuffer(data: ArrayBufferView): void;
     appendStream(stream: MSStream, maxSize?: number): void;
     remove(start: number, end: number): void;
 }
@@ -15464,31 +15499,31 @@ declare var StyleSheetPageList: {
 }
 
 interface SubtleCrypto {
-    decrypt(algorithm: string, key: CryptoKey, data: any): any;
-    decrypt(algorithm: Algorithm, key: CryptoKey, data: any): any;
+    decrypt(algorithm: string, key: CryptoKey, data: ArrayBufferView): any;
+    decrypt(algorithm: Algorithm, key: CryptoKey, data: ArrayBufferView): any;
     deriveBits(algorithm: string, baseKey: CryptoKey, length: number): any;
     deriveBits(algorithm: Algorithm, baseKey: CryptoKey, length: number): any;
     deriveKey(algorithm: string, baseKey: CryptoKey, derivedKeyType: string, extractable: boolean, keyUsages: string[]): any;
     deriveKey(algorithm: string, baseKey: CryptoKey, derivedKeyType: Algorithm, extractable: boolean, keyUsages: string[]): any;
     deriveKey(algorithm: Algorithm, baseKey: CryptoKey, derivedKeyType: string, extractable: boolean, keyUsages: string[]): any;
     deriveKey(algorithm: Algorithm, baseKey: CryptoKey, derivedKeyType: Algorithm, extractable: boolean, keyUsages: string[]): any;
-    digest(algorithm: string, data: any): any;
-    digest(algorithm: Algorithm, data: any): any;
-    encrypt(algorithm: string, key: CryptoKey, data: any): any;
-    encrypt(algorithm: Algorithm, key: CryptoKey, data: any): any;
+    digest(algorithm: string, data: ArrayBufferView): any;
+    digest(algorithm: Algorithm, data: ArrayBufferView): any;
+    encrypt(algorithm: string, key: CryptoKey, data: ArrayBufferView): any;
+    encrypt(algorithm: Algorithm, key: CryptoKey, data: ArrayBufferView): any;
     exportKey(format: string, key: CryptoKey): any;
     generateKey(algorithm: string, extractable: boolean, keyUsages: string[]): any;
     generateKey(algorithm: Algorithm, extractable: boolean, keyUsages: string[]): any;
-    importKey(format: string, keyData: any, algorithm: string, extractable: boolean, keyUsages: string[]): any;
-    importKey(format: string, keyData: any, algorithm: Algorithm, extractable: boolean, keyUsages: string[]): any;
-    sign(algorithm: string, key: CryptoKey, data: any): any;
-    sign(algorithm: Algorithm, key: CryptoKey, data: any): any;
-    unwrapKey(format: string, wrappedKey: any, unwrappingKey: CryptoKey, unwrapAlgorithm: string, unwrappedKeyAlgorithm: string, extractable: boolean, keyUsages: string[]): any;
-    unwrapKey(format: string, wrappedKey: any, unwrappingKey: CryptoKey, unwrapAlgorithm: string, unwrappedKeyAlgorithm: Algorithm, extractable: boolean, keyUsages: string[]): any;
-    unwrapKey(format: string, wrappedKey: any, unwrappingKey: CryptoKey, unwrapAlgorithm: Algorithm, unwrappedKeyAlgorithm: string, extractable: boolean, keyUsages: string[]): any;
-    unwrapKey(format: string, wrappedKey: any, unwrappingKey: CryptoKey, unwrapAlgorithm: Algorithm, unwrappedKeyAlgorithm: Algorithm, extractable: boolean, keyUsages: string[]): any;
-    verify(algorithm: string, key: CryptoKey, signature: any, data: any): any;
-    verify(algorithm: Algorithm, key: CryptoKey, signature: any, data: any): any;
+    importKey(format: string, keyData: ArrayBufferView, algorithm: string, extractable: boolean, keyUsages: string[]): any;
+    importKey(format: string, keyData: ArrayBufferView, algorithm: Algorithm, extractable: boolean, keyUsages: string[]): any;
+    sign(algorithm: string, key: CryptoKey, data: ArrayBufferView): any;
+    sign(algorithm: Algorithm, key: CryptoKey, data: ArrayBufferView): any;
+    unwrapKey(format: string, wrappedKey: ArrayBufferView, unwrappingKey: CryptoKey, unwrapAlgorithm: string, unwrappedKeyAlgorithm: string, extractable: boolean, keyUsages: string[]): any;
+    unwrapKey(format: string, wrappedKey: ArrayBufferView, unwrappingKey: CryptoKey, unwrapAlgorithm: string, unwrappedKeyAlgorithm: Algorithm, extractable: boolean, keyUsages: string[]): any;
+    unwrapKey(format: string, wrappedKey: ArrayBufferView, unwrappingKey: CryptoKey, unwrapAlgorithm: Algorithm, unwrappedKeyAlgorithm: string, extractable: boolean, keyUsages: string[]): any;
+    unwrapKey(format: string, wrappedKey: ArrayBufferView, unwrappingKey: CryptoKey, unwrapAlgorithm: Algorithm, unwrappedKeyAlgorithm: Algorithm, extractable: boolean, keyUsages: string[]): any;
+    verify(algorithm: string, key: CryptoKey, signature: ArrayBufferView, data: ArrayBufferView): any;
+    verify(algorithm: Algorithm, key: CryptoKey, signature: ArrayBufferView, data: ArrayBufferView): any;
     wrapKey(format: string, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: string): any;
     wrapKey(format: string, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: Algorithm): any;
 }
@@ -16000,9 +16035,9 @@ interface WebGLRenderingContext {
     blendFunc(sfactor: number, dfactor: number): void;
     blendFuncSeparate(srcRGB: number, dstRGB: number, srcAlpha: number, dstAlpha: number): void;
     bufferData(target: number, size: number, usage: number): void;
+    bufferData(target: number, size: ArrayBufferView, usage: number): void;
     bufferData(target: number, size: any, usage: number): void;
-    bufferData(target: number, size: any, usage: number): void;
-    bufferSubData(target: number, offset: number, data: any): void;
+    bufferSubData(target: number, offset: number, data: ArrayBufferView): void;
     bufferSubData(target: number, offset: number, data: any): void;
     checkFramebufferStatus(target: number): number;
     clear(mask: number): void;
@@ -16011,8 +16046,8 @@ interface WebGLRenderingContext {
     clearStencil(s: number): void;
     colorMask(red: boolean, green: boolean, blue: boolean, alpha: boolean): void;
     compileShader(shader: WebGLShader): void;
-    compressedTexImage2D(target: number, level: number, internalformat: number, width: number, height: number, border: number, data: any): void;
-    compressedTexSubImage2D(target: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, data: any): void;
+    compressedTexImage2D(target: number, level: number, internalformat: number, width: number, height: number, border: number, data: ArrayBufferView): void;
+    compressedTexSubImage2D(target: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, data: ArrayBufferView): void;
     copyTexImage2D(target: number, level: number, internalformat: number, x: number, y: number, width: number, height: number, border: number): void;
     copyTexSubImage2D(target: number, level: number, xoffset: number, yoffset: number, x: number, y: number, width: number, height: number): void;
     createBuffer(): WebGLBuffer;
@@ -16080,7 +16115,7 @@ interface WebGLRenderingContext {
     linkProgram(program: WebGLProgram): void;
     pixelStorei(pname: number, param: number): void;
     polygonOffset(factor: number, units: number): void;
-    readPixels(x: number, y: number, width: number, height: number, format: number, type: number, pixels: any): void;
+    readPixels(x: number, y: number, width: number, height: number, format: number, type: number, pixels: ArrayBufferView): void;
     renderbufferStorage(target: number, internalformat: number, width: number, height: number): void;
     sampleCoverage(value: number, invert: boolean): void;
     scissor(x: number, y: number, width: number, height: number): void;
@@ -17181,6 +17216,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     overrideMimeType(mime: string): void;
     send(data?: Document): void;
     send(data?: string): void;
+    send(data?: any): void;
     setRequestHeader(header: string, value: string): void;
     DONE: number;
     HEADERS_RECEIVED: number;
@@ -17335,11 +17371,13 @@ interface DocumentEvent {
     createEvent(eventInterface:"CloseEvent"): CloseEvent;
     createEvent(eventInterface:"CommandEvent"): CommandEvent;
     createEvent(eventInterface:"CompositionEvent"): CompositionEvent;
+    createEvent(eventInterface: "CustomEvent"): CustomEvent;
     createEvent(eventInterface:"DeviceMotionEvent"): DeviceMotionEvent;
     createEvent(eventInterface:"DeviceOrientationEvent"): DeviceOrientationEvent;
     createEvent(eventInterface:"DragEvent"): DragEvent;
     createEvent(eventInterface:"ErrorEvent"): ErrorEvent;
     createEvent(eventInterface:"Event"): Event;
+    createEvent(eventInterface:"Events"): Event;
     createEvent(eventInterface:"FocusEvent"): FocusEvent;
     createEvent(eventInterface:"GamepadEvent"): GamepadEvent;
     createEvent(eventInterface:"HashChangeEvent"): HashChangeEvent;
@@ -17354,8 +17392,12 @@ interface DocumentEvent {
     createEvent(eventInterface:"MSSiteModeEvent"): MSSiteModeEvent;
     createEvent(eventInterface:"MessageEvent"): MessageEvent;
     createEvent(eventInterface:"MouseEvent"): MouseEvent;
+    createEvent(eventInterface:"MouseEvents"): MouseEvent;
     createEvent(eventInterface:"MouseWheelEvent"): MouseWheelEvent;
+    createEvent(eventInterface:"MSGestureEvent"): MSGestureEvent;
+    createEvent(eventInterface:"MSPointerEvent"): MSPointerEvent;
     createEvent(eventInterface:"MutationEvent"): MutationEvent;
+    createEvent(eventInterface:"MutationEvents"): MutationEvent;
     createEvent(eventInterface:"NavigationCompletedEvent"): NavigationCompletedEvent;
     createEvent(eventInterface:"NavigationEvent"): NavigationEvent;
     createEvent(eventInterface:"NavigationEventWithReferrer"): NavigationEventWithReferrer;
@@ -17366,6 +17408,7 @@ interface DocumentEvent {
     createEvent(eventInterface:"PopStateEvent"): PopStateEvent;
     createEvent(eventInterface:"ProgressEvent"): ProgressEvent;
     createEvent(eventInterface:"SVGZoomEvent"): SVGZoomEvent;
+    createEvent(eventInterface:"SVGZoomEvents"): SVGZoomEvent;
     createEvent(eventInterface:"ScriptNotifyEvent"): ScriptNotifyEvent;
     createEvent(eventInterface:"StorageEvent"): StorageEvent;
     createEvent(eventInterface:"TextEvent"): TextEvent;
@@ -17373,6 +17416,7 @@ interface DocumentEvent {
     createEvent(eventInterface:"TrackEvent"): TrackEvent;
     createEvent(eventInterface:"TransitionEvent"): TransitionEvent;
     createEvent(eventInterface:"UIEvent"): UIEvent;
+    createEvent(eventInterface:"UIEvents"): UIEvent;
     createEvent(eventInterface:"UnviewableContentIdentifiedEvent"): UnviewableContentIdentifiedEvent;
     createEvent(eventInterface:"WebGLContextEvent"): WebGLContextEvent;
     createEvent(eventInterface:"WheelEvent"): WheelEvent;
@@ -17504,7 +17548,7 @@ interface NodeSelector {
 }
 
 interface RandomSource {
-    getRandomValues(array: any): any;
+    getRandomValues(array: ArrayBufferView): ArrayBufferView;
 }
 
 interface SVGAnimatedPathData {

@@ -408,6 +408,93 @@ module ts {
 
     export let fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/
 
+    export function isTypeNode(node: Node): boolean {
+        if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
+            return true;
+        }
+
+        switch (node.kind) {
+            case SyntaxKind.AnyKeyword:
+            case SyntaxKind.NumberKeyword:
+            case SyntaxKind.StringKeyword:
+            case SyntaxKind.BooleanKeyword:
+            case SyntaxKind.SymbolKeyword:
+                return true;
+            case SyntaxKind.VoidKeyword:
+                return node.parent.kind !== SyntaxKind.VoidExpression;
+            case SyntaxKind.StringLiteral:
+                // Specialized signatures can have string literals as their parameters' type names
+                return node.parent.kind === SyntaxKind.Parameter;
+            case SyntaxKind.ExpressionWithTypeArguments:
+                return true;
+
+            // Identifiers and qualified names may be type nodes, depending on their context. Climb
+            // above them to find the lowest container
+            case SyntaxKind.Identifier:
+                // If the identifier is the RHS of a qualified name, then it's a type iff its parent is.
+                if (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node) {
+                    node = node.parent;
+                }
+                else if (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node) {
+                    node = node.parent;
+                }
+            // fall through
+            case SyntaxKind.QualifiedName:
+            case SyntaxKind.PropertyAccessExpression:
+                // At this point, node is either a qualified name or an identifier
+                Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression,
+                    "'node' was expected to be a qualified name, identifier or property access in 'isTypeNode'.");
+
+                let parent = node.parent;
+                if (parent.kind === SyntaxKind.TypeQuery) {
+                    return false;
+                }
+                // Do not recursively call isTypeNode on the parent. In the example:
+                //
+                //     let a: A.B.C;
+                //
+                // Calling isTypeNode would consider the qualified name A.B a type node. Only C or
+                // A.B.C is a type node.
+                if (SyntaxKind.FirstTypeNode <= parent.kind && parent.kind <= SyntaxKind.LastTypeNode) {
+                    return true;
+                }
+                switch (parent.kind) {
+                    case SyntaxKind.ExpressionWithTypeArguments:
+                        return true;
+                    case SyntaxKind.TypeParameter:
+                        return node === (<TypeParameterDeclaration>parent).constraint;
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.PropertySignature:
+                    case SyntaxKind.Parameter:
+                    case SyntaxKind.VariableDeclaration:
+                        return node === (<VariableLikeDeclaration>parent).type;
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        return node === (<FunctionLikeDeclaration>parent).type;
+                    case SyntaxKind.CallSignature:
+                    case SyntaxKind.ConstructSignature:
+                    case SyntaxKind.IndexSignature:
+                        return node === (<SignatureDeclaration>parent).type;
+                    case SyntaxKind.TypeAssertionExpression:
+                        return node === (<TypeAssertion>parent).type;
+                    case SyntaxKind.CallExpression:
+                    case SyntaxKind.NewExpression:
+                        return (<CallExpression>parent).typeArguments && indexOf((<CallExpression>parent).typeArguments, node) >= 0;
+                    case SyntaxKind.TaggedTemplateExpression:
+                        // TODO (drosen): TaggedTemplateExpressions may eventually support type arguments.
+                        return false;
+                }
+        }
+
+        return false;
+    }
+
     // Warning: This has the same semantics as the forEach family of functions,
     //          in that traversal terminates in the event that 'visitor' supplies a truthy value.
     export function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T {
@@ -434,6 +521,46 @@ module ts {
                 case SyntaxKind.TryStatement:
                 case SyntaxKind.CatchClause:
                     return forEachChild(node, traverse);
+            }
+        }
+    }
+
+    export function forEachYieldExpression(body: Block, visitor: (expr: YieldExpression) => void): void {
+
+        return traverse(body);
+
+        function traverse(node: Node): void {
+            switch (node.kind) {
+                case SyntaxKind.YieldExpression:
+                    visitor(<YieldExpression>node);
+                    let operand = (<YieldExpression>node).expression;
+                    if (operand) {
+                        traverse(operand);
+                    }
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                    // These are not allowed inside a generator now, but eventually they may be allowed
+                    // as local types. Regardless, any yield statements contained within them should be
+                    // skipped in this traversal.
+                    return;
+                default:
+                    if (isFunctionLike(node)) {
+                        let name = (<FunctionLikeDeclaration>node).name;
+                        if (name && name.kind === SyntaxKind.ComputedPropertyName) {
+                            // Note that we will not include methods/accessors of a class because they would require
+                            // first descending into the class. This is by design.
+                            traverse((<ComputedPropertyName>name).expression);
+                            return;
+                        }
+                    }
+                    else if (!isTypeNode(node)) {
+                        // This is the general case, which should include mostly expressions and statements.
+                        // Also includes NodeArrays.
+                        forEachChild(node, traverse);
+                    }
             }
         }
     }
@@ -468,6 +595,12 @@ module ts {
         return false;
     }
 
+    export function isClassLike(node: Node): boolean {
+        if (node) {
+            return node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression;
+        }
+    }
+
     export function isFunctionLike(node: Node): boolean {
         if (node) {
             switch (node.kind) {
@@ -484,9 +617,6 @@ module ts {
                 case SyntaxKind.IndexSignature:
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ArrowFunction:
-                case SyntaxKind.FunctionDeclaration:
                     return true;
             }
         }
@@ -736,6 +866,7 @@ module ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.OmittedExpression:
+            case SyntaxKind.YieldExpression:
                 return true;
             case SyntaxKind.QualifiedName:
                 while (node.parent.kind === SyntaxKind.QualifiedName) {
@@ -775,7 +906,7 @@ module ts {
                         let forStatement = <ForStatement>parent;
                         return (forStatement.initializer === node && forStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
                             forStatement.condition === node ||
-                            forStatement.iterator === node;
+                            forStatement.incrementor === node;
                     case SyntaxKind.ForInStatement:
                     case SyntaxKind.ForOfStatement:
                         let forInStatement = <ForInStatement | ForOfStatement>parent;
@@ -832,10 +963,6 @@ module ts {
         }
     }
 
-    export function hasDotDotDotToken(node: Node) {
-        return node && node.kind === SyntaxKind.Parameter && (<ParameterDeclaration>node).dotDotDotToken !== undefined;
-    }
-
     export function hasQuestionToken(node: Node) {
         if (node) {
             switch (node.kind) {
@@ -855,8 +982,76 @@ module ts {
         return false;
     }
 
-    export function hasRestParameters(s: SignatureDeclaration): boolean {
-        return s.parameters.length > 0 && s.parameters[s.parameters.length - 1].dotDotDotToken !== undefined;
+    export function isJSDocConstructSignature(node: Node) {
+        return node.kind === SyntaxKind.JSDocFunctionType &&
+            (<JSDocFunctionType>node).parameters.length > 0 &&
+            (<JSDocFunctionType>node).parameters[0].type.kind === SyntaxKind.JSDocConstructorType;
+    }
+
+    function getJSDocTag(node: Node, kind: SyntaxKind): JSDocTag {
+        if (node && node.jsDocComment) {
+            for (let tag of node.jsDocComment.tags) {
+                if (tag.kind === kind) {
+                    return tag;
+                }
+            }
+        }
+    }
+
+    export function getJSDocTypeTag(node: Node): JSDocTypeTag {
+        return <JSDocTypeTag>getJSDocTag(node, SyntaxKind.JSDocTypeTag);
+    }
+
+    export function getJSDocReturnTag(node: Node): JSDocReturnTag {
+        return <JSDocReturnTag>getJSDocTag(node, SyntaxKind.JSDocReturnTag);
+    }
+
+    export function getJSDocTemplateTag(node: Node): JSDocTemplateTag {
+        return <JSDocTemplateTag>getJSDocTag(node, SyntaxKind.JSDocTemplateTag);
+    }
+
+    export function getCorrespondingJSDocParameterTag(parameter: ParameterDeclaration): JSDocParameterTag {
+        if (parameter.name && parameter.name.kind === SyntaxKind.Identifier) {
+            // If it's a parameter, see if the parent has a jsdoc comment with an @param 
+            // annotation.
+            let parameterName = (<Identifier>parameter.name).text;
+
+            let docComment = parameter.parent.jsDocComment;
+            if (docComment) {
+                return <JSDocParameterTag>forEach(docComment.tags, t => {
+                    if (t.kind === SyntaxKind.JSDocParameterTag) {
+                        let parameterTag = <JSDocParameterTag>t;
+                        let name = parameterTag.preParameterName || parameterTag.postParameterName;
+                        if (name.text === parameterName) {
+                            return t;
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    export function hasRestParameter(s: SignatureDeclaration): boolean {
+        return isRestParameter(lastOrUndefined(s.parameters));
+    }
+
+    export function isRestParameter(node: ParameterDeclaration) {
+        if (node) {
+            if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                if (node.type && node.type.kind === SyntaxKind.JSDocVariadicType) {
+                    return true;
+                }
+
+                let paramTag = getCorrespondingJSDocParameterTag(node);
+                if (paramTag && paramTag.typeExpression) {
+                    return paramTag.typeExpression.type.kind === SyntaxKind.JSDocVariadicType;
+                }
+            }
+
+            return node.dotDotDotToken !== undefined;
+        }
+
+        return false;
     }
 
     export function isLiteralKind(kind: SyntaxKind): boolean {
@@ -1149,6 +1344,18 @@ module ts {
         }
         return false;
     }
+
+    export function isParameterDeclaration(node: VariableLikeDeclaration) {
+        let root = getRootDeclaration(node);
+        return root.kind === SyntaxKind.Parameter;
+    }
+
+    export function getRootDeclaration(node: Node): Node {
+        while (node.kind === SyntaxKind.BindingElement) {
+            node = node.parent.parent;
+        }
+        return node;
+    }
         
     export function nodeStartsNewLexicalEnvironment(n: Node): boolean {
         return isFunctionLike(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
@@ -1362,7 +1569,7 @@ module ts {
                 let lineStartsOfS = computeLineStarts(s);
                 if (lineStartsOfS.length > 1) {
                     lineCount = lineCount + lineStartsOfS.length - 1;
-                    linePos = output.length - s.length + lineStartsOfS[lineStartsOfS.length - 1];
+                    linePos = output.length - s.length + lastOrUndefined(lineStartsOfS);
                 }
             }
         }
@@ -1435,8 +1642,10 @@ module ts {
 
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
         if (!isDeclarationFile(sourceFile)) {
-            if ((isExternalModule(sourceFile) || !compilerOptions.out) && !fileExtensionIs(sourceFile.fileName, ".js")) {
-                return true;
+            if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
+                // 1. in-browser single file compilation scenario
+                // 2. non .js file
+                return compilerOptions.isolatedModules || !fileExtensionIs(sourceFile.fileName, ".js");
             }
             return false;
         }
@@ -1671,16 +1880,16 @@ module ts {
 
     // Returns false if this heritage clause element's expression contains something unsupported
     // (i.e. not a name or dotted name).
-    export function isSupportedHeritageClauseElement(node: HeritageClauseElement): boolean {
-        return isSupportedHeritageClauseElementExpression(node.expression);
+    export function isSupportedExpressionWithTypeArguments(node: ExpressionWithTypeArguments): boolean {
+        return isSupportedExpressionWithTypeArgumentsRest(node.expression);
     }
 
-    function isSupportedHeritageClauseElementExpression(node: Expression): boolean {
+    function isSupportedExpressionWithTypeArgumentsRest(node: Expression): boolean {
         if (node.kind === SyntaxKind.Identifier) {
             return true;
         }
         else if (node.kind === SyntaxKind.PropertyAccessExpression) {
-            return isSupportedHeritageClauseElementExpression((<PropertyAccessExpression>node).expression);
+            return isSupportedExpressionWithTypeArgumentsRest((<PropertyAccessExpression>node).expression);
         }
         else {
             return false;
@@ -1693,7 +1902,88 @@ module ts {
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-            return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
+        return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
+    }
+
+    export function isJavaScript(fileName: string) {
+        return fileExtensionIs(fileName, ".js");
+    }
+
+    /**
+     * Replace each instance of non-ascii characters by one, two, three, or four escape sequences 
+     * representing the UTF-8 encoding of the character, and return the expanded char code list.
+     */
+    function getExpandedCharCodes(input: string): number[] {
+        let output: number[] = [];
+        let length = input.length;
+        let leadSurrogate: number = undefined;
+
+        for (let i = 0; i < length; i++) {
+            let charCode = input.charCodeAt(i);
+
+            // handel utf8
+            if (charCode < 0x80) {
+                output.push(charCode);
+            }
+            else if (charCode < 0x800) {
+                output.push((charCode >> 6) | 0B11000000);
+                output.push((charCode & 0B00111111) | 0B10000000);
+            }
+            else if (charCode < 0x10000) {
+                output.push((charCode >> 12) | 0B11100000);
+                output.push(((charCode >> 6) & 0B00111111) | 0B10000000);
+                output.push((charCode & 0B00111111) | 0B10000000);
+            }
+            else if (charCode < 0x20000) {
+                output.push((charCode >> 18) | 0B11110000);
+                output.push(((charCode >> 12) & 0B00111111) | 0B10000000);
+                output.push(((charCode >> 6) & 0B00111111) | 0B10000000);
+                output.push((charCode & 0B00111111) | 0B10000000);
+            }
+            else {
+                Debug.assert(false, "Unexpected code point");
+            }
+        }
+
+        return output;
+    }
+
+    const base64Digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+    /**
+     * Converts a string to a base-64 encoded ASCII string.
+     */
+    export function convertToBase64(input: string): string {
+        var result = "";
+        let charCodes = getExpandedCharCodes(input);
+        let i = 0;
+        let length = charCodes.length;
+        let byte1: number, byte2: number, byte3: number, byte4: number;
+
+        while (i < length) {
+            // Convert every 6-bits in the input 3 character points
+            // into a base64 digit
+            byte1 = charCodes[i] >> 2;
+            byte2 = (charCodes[i] & 0B00000011) << 4 | charCodes[i + 1] >> 4;
+            byte3 = (charCodes[i + 1] & 0B00001111) << 2 | charCodes[i + 2] >> 6;
+            byte4 = charCodes[i + 2] & 0B00111111;
+
+            // We are out of characters in the input, set the extra
+            // digits to 64 (padding character).
+            if (i + 1 >= length) {
+                byte3 = byte4 = 64;
+            }
+            else if (i + 2 >= length) {
+                byte4 = 64;
+            }
+
+            // Write to the ouput
+            result += base64Digits.charAt(byte1) + base64Digits.charAt(byte2) + base64Digits.charAt(byte3) + base64Digits.charAt(byte4);
+
+            i += 3;
+        }
+
+        return result;
     }
 }
 
@@ -1911,5 +2201,15 @@ module ts {
         }
 
         return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength:*/ newEndN - oldStartN);
+    }
+
+    export function getTypeParameterOwner(d: Declaration): Declaration {
+        if (d && d.kind === SyntaxKind.TypeParameter) {
+            for (let current: Node = d; current; current = current.parent) {
+                if (isFunctionLike(current) || isClassLike(current) || current.kind === SyntaxKind.InterfaceDeclaration) {
+                    return <Declaration>current;
+                }
+            }
+        }
     }
 }

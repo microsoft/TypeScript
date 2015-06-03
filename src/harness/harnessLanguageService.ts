@@ -186,6 +186,7 @@ module Harness.LanguageService {
             var script = this.getScriptInfo(fileName);
             return script ? script.version.toString() : undefined;
         }
+
         log(s: string): void { }
         trace(s: string): void { }
         error(s: string): void { }
@@ -203,7 +204,7 @@ module Harness.LanguageService {
     }
 
     /// Shim adapter
-    class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceShimHost {
+    class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceShimHost, ts.CoreServicesShimHost {
         private nativeHost: NativeLanguageServiceHost;
         constructor(cancellationToken?: ts.CancellationToken, options?: ts.CompilerOptions) {
             super(cancellationToken, options);
@@ -227,6 +228,11 @@ module Harness.LanguageService {
         }
         getScriptVersion(fileName: string): string { return this.nativeHost.getScriptVersion(fileName); }
         getLocalizedDiagnosticMessages(): string { return JSON.stringify({}); }
+
+        readDirectory(rootDir: string, extension: string): string {
+            throw new Error("NYI");
+        }
+
         log(s: string): void { this.nativeHost.log(s); }
         trace(s: string): void { this.nativeHost.trace(s); }
         error(s: string): void { this.nativeHost.error(s); }
@@ -234,6 +240,9 @@ module Harness.LanguageService {
 
     class ClassifierShimProxy implements ts.Classifier { 
         constructor(private shim: ts.ClassifierShim) {
+        }
+        getEncodedLexicalClassifications(text: string, lexState: ts.EndOfLineState, classifyKeywordsInGenerics?: boolean): ts.Classifications {
+            throw new Error("NYI");
         }
         getClassificationsForLine(text: string, lexState: ts.EndOfLineState, classifyKeywordsInGenerics?: boolean): ts.ClassificationResult {
             var result = this.shim.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics).split('\n');
@@ -300,6 +309,12 @@ module Harness.LanguageService {
         getSemanticClassifications(fileName: string, span: ts.TextSpan): ts.ClassifiedSpan[] {
             return unwrapJSONCallResult(this.shim.getSemanticClassifications(fileName, span.start, span.length));
         }
+        getEncodedSyntacticClassifications(fileName: string, span: ts.TextSpan): ts.Classifications {
+            return unwrapJSONCallResult(this.shim.getEncodedSyntacticClassifications(fileName, span.start, span.length));
+        }
+        getEncodedSemanticClassifications(fileName: string, span: ts.TextSpan): ts.Classifications {
+            return unwrapJSONCallResult(this.shim.getEncodedSemanticClassifications(fileName, span.start, span.length));
+        }
         getCompletionsAtPosition(fileName: string, position: number): ts.CompletionInfo {
             return unwrapJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position));
         }
@@ -326,6 +341,9 @@ module Harness.LanguageService {
         }
         getDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
             return unwrapJSONCallResult(this.shim.getDefinitionAtPosition(fileName, position));
+        }
+        getTypeDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[]{
+            return unwrapJSONCallResult(this.shim.getTypeDefinitionAtPosition(fileName, position));
         }
         getReferencesAtPosition(fileName: string, position: number): ts.ReferenceEntry[] {
             return unwrapJSONCallResult(this.shim.getReferencesAtPosition(fileName, position));

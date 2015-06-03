@@ -231,7 +231,7 @@ module ts {
                     var directories: string[] = [];
                     for (let current of files) {
                         var name = combinePaths(path, current);
-                        var stat = _fs.lstatSync(name);
+                        var stat = _fs.statSync(name);
                         if (stat.isFile()) {
                             if (!extension || fileExtensionIs(name, extension)) {
                                 result.push(name);

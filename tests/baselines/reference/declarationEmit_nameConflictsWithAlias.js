@@ -9,7 +9,6 @@ export module M {
 //// [declarationEmit_nameConflictsWithAlias.js]
 var M;
 (function (M) {
-    M.w; // Gets emitted as C.I, which is the wrong interface
 })(M = exports.M || (exports.M = {}));
 
 

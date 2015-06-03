@@ -2,12 +2,10 @@
 /// <reference path="diagnosticInformationMap.generated.ts"/>
 
 module ts {
-    /* @internal */ 
     export interface ErrorCallback {
         (message: DiagnosticMessage, length: number): void;
     }
 
-    /* @internal */ 
     export interface Scanner {
         getStartPos(): number;
         getToken(): SyntaxKind;
@@ -76,6 +74,7 @@ module ts {
         "interface": SyntaxKind.InterfaceKeyword,
         "let": SyntaxKind.LetKeyword,
         "module": SyntaxKind.ModuleKeyword,
+        "namespace": SyntaxKind.NamespaceKeyword,
         "new": SyntaxKind.NewKeyword,
         "null": SyntaxKind.NullKeyword,
         "number": SyntaxKind.NumberKeyword,
@@ -352,7 +351,7 @@ module ts {
     export function isLineBreak(ch: number): boolean {
         // ES5 7.3:
         // The ECMAScript line terminator characters are listed in Table 3.
-        //     Table 3 — Line Terminator Characters
+        //     Table 3: Line Terminator Characters
         //     Code Unit Value     Name                    Formal Name
         //     \u000A              Line Feed               <LF>
         //     \u000D              Carriage Return         <CR>
@@ -521,7 +520,7 @@ module ts {
                     }
                     collecting = true;
                     if (result && result.length) {
-                        result[result.length - 1].hasTrailingNewLine = true;
+                        lastOrUndefined(result).hasTrailingNewLine = true;
                     }
                     continue;
                 case CharacterCodes.tab:
@@ -568,7 +567,7 @@ module ts {
                 default:
                     if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch) || isLineBreak(ch))) {
                         if (result && result.length && isLineBreak(ch)) {
-                            result[result.length - 1].hasTrailingNewLine = true;
+                            lastOrUndefined(result).hasTrailingNewLine = true;
                         }
                         pos++;
                         continue;
@@ -599,13 +598,26 @@ module ts {
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
 
-    // Creates a scanner over a (possibly unspecified) range of a piece of text.
     /* @internal */ 
-    export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, text?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner {
-        let pos: number;       // Current position (end position of text of current token)
-        let end: number;       // end of text
-        let startPos: number;  // Start position of whitespace before current token
-        let tokenPos: number;  // Start position of text of current token
+    // Creates a scanner over a (possibly unspecified) range of a piece of text.
+    export function createScanner(languageVersion: ScriptTarget,
+                                  skipTrivia: boolean,
+                                  text?: string,
+                                  onError?: ErrorCallback,
+                                  start?: number,
+                                  length?: number): Scanner {
+        // Current position (end position of text of current token)
+        let pos: number;       
+
+        // end of text
+        let end: number;       
+
+        // Start position of whitespace before current token
+        let startPos: number;  
+
+        // Start position of text of current token
+        let tokenPos: number;  
+
         let token: SyntaxKind;
         let tokenValue: string;
         let precedingLineBreak: boolean;

@@ -171,7 +171,7 @@
         "category": "Error",
         "code": 1061
     },
-    "An export assignment cannot be used in an internal module.": {
+    "An export assignment cannot be used in a namespace.": {
         "category": "Error",
         "code": 1063
     },
@@ -415,11 +415,11 @@
         "category": "Error",
         "code": 1146
     },
-    "Import declarations in an internal module cannot reference an external module.": {
+    "Import declarations in a namespace cannot reference a module.": {
         "category": "Error",
         "code": 1147
     },
-    "Cannot compile external modules unless the '--module' flag is provided.": {
+    "Cannot compile modules unless the '--module' flag is provided.": {
         "category": "Error",
         "code": 1148
     },
@@ -467,7 +467,7 @@
         "category": "Error",
         "code": 1162
     },
-    "'yield' expression must be contained_within a generator declaration.": {
+    "A 'yield' expression is only allowed in a generator body.": {
         "category": "Error",
         "code": 1163
     },
@@ -587,7 +587,7 @@
         "category": "Error",
         "code": 1191
     },
-    "External module '{0}' has no default export.": {
+    "Module '{0}' has no default export.": {
         "category": "Error",
         "code": 1192
     },
@@ -595,7 +595,7 @@
         "category": "Error",
         "code": 1193
     },
-    "Export declarations are not permitted in an internal module.": {
+    "Export declarations are not permitted in a namespace.": {
         "category": "Error",
         "code": 1194
     },
@@ -631,7 +631,7 @@
         "category": "Error",
         "code": 1203
     },
-    "Cannot compile external modules into amd or commonjs when targeting es6 or higher.": {
+    "Cannot compile modules into 'commonjs', 'amd', 'system' or 'umd' when targeting 'ES6' or higher.": {
         "category": "Error",
         "code": 1204
     },
@@ -647,11 +647,11 @@
         "category": "Error",
         "code": 1207
     },
-    "Cannot compile non-external modules when the '--separateCompilation' flag is provided.": {
+    "Cannot compile namespaces when the '--isolatedModules' flag is provided.": {
         "category": "Error",
         "code": 1208
     },
-    "Ambient const enums are not allowed when the '--separateCompilation' flag is provided.": {
+    "Ambient const enums are not allowed when the '--isolatedModules' flag is provided.": {
         "category": "Error",
         "code": 1209
     },
@@ -671,10 +671,6 @@
         "category": "Error",
         "code": 1213
     },
-    "Identifier expected. '{0}' is a reserved word in strict mode. External Module is automatically in strict mode.": {
-        "category": "Error",
-        "code": 1214
-    },
     "Type expected. '{0}' is a reserved word in strict mode": {
         "category": "Error",
         "code": 1215
@@ -683,10 +679,31 @@
         "category": "Error",
         "code": 1216
     },
-    "Type expected. '{0}' is a reserved word in strict mode. Module is automatically in strict mode.": {
+    "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
-        "code": 1217
+        "code": 1218
     },
+    "Experimental support for decorators is a feature that is subject to change in a future release. Specify '--experimentalDecorators' to remove this warning.": {
+        "category": "Error",
+        "code": 1219
+    },    
+    "Generators are only available when targeting ECMAScript 6 or higher.": {
+        "category": "Error",
+        "code": 1220
+    },
+    "Generators are not allowed in an ambient context.": {
+        "category": "Error",
+        "code": 1221
+    },
+    "An overload signature cannot be declared as a generator.": {
+        "category": "Error",
+        "code": 1222
+    },
+    "'{0}' tag already specified.": {
+        "category": "Error",
+        "code": 1223
+    },
+
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -711,11 +728,11 @@
         "category": "Error",
         "code": 2305
     },
-    "File '{0}' is not an external module.": {
+    "File '{0}' is not a module.": {
         "category": "Error",
         "code": 2306
     },
-    "Cannot find external module '{0}'.": {
+    "Cannot find module '{0}'.": {
         "category": "Error",
         "code": 2307
     },
@@ -807,7 +824,7 @@
         "category": "Error",
         "code": 2330
     },
-    "'this' cannot be referenced in a module body.": {
+    "'this' cannot be referenced in a module or namespace body.": {
         "category": "Error",
         "code": 2331
     },
@@ -1175,19 +1192,19 @@
         "category": "Error",
         "code": 2432
     },
-    "A module declaration cannot be in a different file from a class or function with which it is merged": {
+    "A namespace declaration cannot be in a different file from a class or function with which it is merged": {
         "category": "Error",
         "code": 2433
     },
-    "A module declaration cannot be located prior to a class or function with which it is merged": {
+    "A namespace declaration cannot be located prior to a class or function with which it is merged": {
         "category": "Error",
         "code": 2434
     },
-    "Ambient external modules cannot be nested in other modules.": {
+    "Ambient modules cannot be nested in other modules.": {
         "category": "Error",
         "code": 2435
     },
-    "Ambient external module declaration cannot specify relative module name.": {
+    "Ambient module declaration cannot specify relative module name.": {
         "category": "Error",
         "code": 2436
     },
@@ -1199,7 +1216,7 @@
         "category": "Error",
         "code": 2438
     },
-    "Import or export declaration in an ambient external module declaration cannot reference external module through relative external module name.": {
+    "Import or export declaration in an ambient module declaration cannot reference module through relative module name.": {
         "category": "Error",
         "code": 2439
     },
@@ -1207,7 +1224,7 @@
         "category": "Error",
         "code": 2440
     },
-    "Duplicate identifier '{0}'. Compiler reserves name '{1}' in top level scope of an external module.": {
+    "Duplicate identifier '{0}'. Compiler reserves name '{1}' in top level scope of a module.": {
         "category": "Error",
         "code": 2441
     },
@@ -1327,7 +1344,7 @@
         "category": "Error",
         "code": 2471
     },
-    "Spread operator in 'new' expressions is only available when targeting ECMAScript 6 and higher.": {
+    "Spread operator in 'new' expressions is only available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
         "code": 2472
     },
@@ -1423,11 +1440,11 @@
         "category": "Error",
         "code": 2496
     },
-    "External module '{0}' resolves to a non-module entity and cannot be imported using this construct.": {
+    "Module '{0}' resolves to a non-module entity and cannot be imported using this construct.": {
         "category": "Error",
         "code": 2497
     },
-    "External module '{0}' uses 'export =' and cannot be used with 'export *'.": {
+    "Module '{0}' uses 'export =' and cannot be used with 'export *'.": {
         "category": "Error",
         "code": 2498
     },
@@ -1442,6 +1459,22 @@
     "A rest element cannot contain a binding pattern.": {
         "category": "Error",
         "code": 2501
+    },
+    "'{0}' is referenced directly or indirectly in its own type annotation.": {
+        "category": "Error",
+        "code": 2502
+    },
+    "Cannot find namespace '{0}'.": {
+        "category": "Error",
+        "code": 2503
+    },
+    "No best common type exists among yield expressions.": {
+        "category": "Error",
+        "code": 2504
+    },
+    "A generator cannot have a 'void' type annotation.": {
+        "category": "Error",
+        "code": 2505
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -1744,6 +1777,10 @@
         "category": "Error",
         "code": 5013
     },
+    "Failed to parse file '{0}': {1}.": {
+        "category": "Error",
+        "code": 5014
+    },
     "Unknown compiler option '{0}'.": {
         "category": "Error",
         "code": 5023
@@ -1756,11 +1793,11 @@
         "category": "Error",
         "code": 5033
     },
-    "Option 'mapRoot' cannot be specified without specifying 'sourcemap' option.": {
+    "Option 'mapRoot' cannot be specified without specifying 'sourceMap' option.": {
         "category": "Error",
         "code": 5038
     },
-    "Option 'sourceRoot' cannot be specified without specifying 'sourcemap' option.": {
+    "Option 'sourceRoot' cannot be specified without specifying 'sourceMap' option.": {
         "category": "Error",
         "code": 5039
     },
@@ -1776,26 +1813,43 @@
         "category": "Error",
         "code": 5042
     },
-    "Option 'sourceMap' cannot be specified with option 'separateCompilation'.": {
+    "Option 'sourceMap' cannot be specified with option 'isolatedModules'.": {
         "category": "Error",
         "code": 5043
     },
-    "Option 'declaration' cannot be specified with option 'separateCompilation'.": {
+    "Option 'declaration' cannot be specified with option 'isolatedModules'.": {
         "category": "Error",
         "code": 5044
     },
-    "Option 'noEmitOnError' cannot be specified with option 'separateCompilation'.": {
+    "Option 'noEmitOnError' cannot be specified with option 'isolatedModules'.": {
         "category": "Error",
         "code": 5045
     },
-    "Option 'out' cannot be specified with option 'separateCompilation'.": {
+    "Option 'out' cannot be specified with option 'isolatedModules'.": {
         "category": "Error",
         "code": 5046
     },
-    "Option 'separateCompilation' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher.": {
+    "Option 'isolatedModules' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher.": {
         "category": "Error",
         "code": 5047
     },
+    "Option 'sourceMap' cannot be specified with option 'inlineSourceMap'.": {
+        "category": "Error",
+        "code": 5048
+    },
+    "Option 'sourceRoot' cannot be specified with option 'inlineSourceMap'.": {
+        "category": "Error",
+        "code": 5049
+    },
+    "Option 'mapRoot' cannot be specified with option 'inlineSourceMap'.": {
+        "category": "Error",
+        "code": 5050
+    },
+     "Option 'inlineSources' can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
+        "category": "Error",
+        "code": 5051
+    },
+
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -1824,7 +1878,7 @@
         "category": "Message",
         "code": 6007
     },
-    "Do not emit outputs if any type checking errors were reported.": {
+    "Do not emit outputs if any errors were reported.": {
         "category": "Message",
         "code": 6008
     },
@@ -1840,7 +1894,7 @@
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'commonjs' or 'amd'": {
+    "Specify module code generation: 'commonjs', 'amd', 'system' or 'umd'": {
         "category": "Message",
         "code": 6016
     },
@@ -1924,11 +1978,11 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs' or 'amd'.": {
+    "Argument for '--module' option must be 'commonjs', 'amd', 'system' or 'umd'.": {
         "category": "Error",
         "code": 6046
     },
-    "Argument for '--target' option must be 'es3', 'es5', or 'es6'.": {
+    "Argument for '--target' option must be 'ES3', 'ES5', or 'ES6'.": {
         "category": "Error",
         "code": 6047
     },
@@ -1956,7 +2010,7 @@
         "category": "Error",
         "code": 6053
     },
-    "File '{0}' must have extension '.ts' or '.d.ts'.": {
+    "File '{0}' has unsupported extension. The only supported extensions are {1}.": {
         "category": "Error",
         "code": 6054
     },
@@ -1980,7 +2034,30 @@
         "category": "Error",
         "code": 6059
     },
-
+    "Specifies the end of line sequence to be used when emitting files: 'CRLF' (dos) or 'LF' (unix).": {
+        "category": "Message",
+        "code": 6060
+    },
+    "NEWLINE": { 
+        "category": "Message", 
+        "code": 6061
+    },
+    "Argument for '--newLine' option must be 'CRLF' or 'LF'.": {
+        "category": "Error", 
+        "code": 6062
+    },
+    "Option 'experimentalDecorators' must also be specified when option 'emitDecoratorMetadata' is specified.": {
+        "category": "Error",
+        "code": 6064
+    },
+    "Enables experimental support for ES7 decorators.": {
+        "category": "Message",
+        "code": 6065
+    },
+    "Enables experimental support for emitting type metadata for decorators.": {
+        "category": "Message",
+        "code": 6066
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -2030,10 +2107,6 @@
         "category": "Error",
         "code": 7020
     },
-    "'{0}' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.": {
-        "category": "Error",
-        "code": 7021
-    },
     "'{0}' implicitly has type 'any' because it is does not have a type annotation and is referenced directly or indirectly in its own initializer.": {
         "category": "Error",
         "code": 7022
@@ -2045,6 +2118,10 @@
     "Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.": {
         "category": "Error",
         "code": 7024
+    },
+    "Generator implicitly has type '{0}' because it does not yield any values. Consider supplying a return type.": {
+        "category": "Error",
+        "code": 7025
     },
     "You cannot rename this element.": {
         "category": "Error",
@@ -2098,10 +2175,6 @@
         "category": "Error",
         "code": 8012
     },
-    "'?' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8013
-    },
     "'property declarations' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8014
@@ -2119,14 +2192,6 @@
         "code": 8017
     },
 
-    "'yield' expressions are not currently supported.": {
-        "category": "Error",
-        "code": 9000
-    },
-    "Generators are not currently supported.": {
-        "category": "Error",
-        "code": 9001
-    },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.": {
         "category": "Error",
         "code": 9002
@@ -2134,9 +2199,5 @@
     "'class' expressions are not currently supported.": {
         "category": "Error",
         "code": 9003
-    },
-    "'class' declarations are only supported directly inside a module or as a top level declaration.": {
-        "category": "Error",
-        "code": 9004
     }
 }
