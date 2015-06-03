@@ -429,6 +429,7 @@ var ts;
     })(ts.SymbolAccessibility || (ts.SymbolAccessibility = {}));
     var SymbolAccessibility = ts.SymbolAccessibility;
     (function (SymbolFlags) {
+        SymbolFlags[SymbolFlags["None"] = 0] = "None";
         SymbolFlags[SymbolFlags["FunctionScopedVariable"] = 1] = "FunctionScopedVariable";
         SymbolFlags[SymbolFlags["BlockScopedVariable"] = 2] = "BlockScopedVariable";
         SymbolFlags[SymbolFlags["Property"] = 4] = "Property";
@@ -491,10 +492,8 @@ var ts;
         SymbolFlags[SymbolFlags["AliasExcludes"] = 8388608] = "AliasExcludes";
         SymbolFlags[SymbolFlags["ModuleMember"] = 8914931] = "ModuleMember";
         SymbolFlags[SymbolFlags["ExportHasLocal"] = 944] = "ExportHasLocal";
-        SymbolFlags[SymbolFlags["HasLocals"] = 255504] = "HasLocals";
         SymbolFlags[SymbolFlags["HasExports"] = 1952] = "HasExports";
         SymbolFlags[SymbolFlags["HasMembers"] = 6240] = "HasMembers";
-        SymbolFlags[SymbolFlags["IsContainer"] = 262128] = "IsContainer";
         SymbolFlags[SymbolFlags["PropertyOrAccessor"] = 98308] = "PropertyOrAccessor";
         SymbolFlags[SymbolFlags["Export"] = 7340032] = "Export";
     })(ts.SymbolFlags || (ts.SymbolFlags = {}));
@@ -3688,6 +3687,27 @@ var ts;
         }
     }
     ts.getModuleInstanceState = getModuleInstanceState;
+    var ContainerFlags;
+    (function (ContainerFlags) {
+        // The current node is not a container, and no container manipulation should happen before 
+        // recursing into it.
+        ContainerFlags[ContainerFlags["None"] = 0] = "None";
+        // The current node is a container.  It should be set as the current container (and block-
+        // container) before recursing into it.  The current node does not have locals.  Examples:
+        //
+        //      Classes, ObjectLiterals, TypeLiterals, Interfaces...
+        ContainerFlags[ContainerFlags["IsContainer"] = 1] = "IsContainer";
+        // The current node is a block-scoped-container.  It should be set as the current block-
+        // container before recursing into it.  Examples:
+        //
+        //      Blocks (when not parented by functions), Catch clauses, For/For-in/For-of statements...
+        ContainerFlags[ContainerFlags["IsBlockScopedContainer"] = 2] = "IsBlockScopedContainer";
+        ContainerFlags[ContainerFlags["HasLocals"] = 4] = "HasLocals";
+        // If the current node is a container that also container that also contains locals.  Examples:
+        //
+        //      Functions, Methods, Modules, Source-files.
+        ContainerFlags[ContainerFlags["IsContainerWithLocals"] = 5] = "IsContainerWithLocals";
+    })(ContainerFlags || (ContainerFlags = {}));
     function bindSourceFile(file) {
         var start = new Date().getTime();
         bindSourceFileWorker(file);
@@ -3702,34 +3722,30 @@ var ts;
         var symbolCount = 0;
         var Symbol = ts.objectAllocator.getSymbolConstructor();
         if (!file.locals) {
-            file.locals = {};
-            container = file;
-            setBlockScopeContainer(file, false);
             bind(file);
             file.symbolCount = symbolCount;
         }
+        return;
         function createSymbol(flags, name) {
             symbolCount++;
             return new Symbol(flags, name);
         }
-        function setBlockScopeContainer(node, cleanLocals) {
-            blockScopeContainer = node;
-            if (cleanLocals) {
-                blockScopeContainer.locals = undefined;
-            }
-        }
-        function addDeclarationToSymbol(symbol, node, symbolKind) {
-            symbol.flags |= symbolKind;
-            if (!symbol.declarations)
-                symbol.declarations = [];
-            symbol.declarations.push(node);
-            if (symbolKind & 1952 /* HasExports */ && !symbol.exports)
-                symbol.exports = {};
-            if (symbolKind & 6240 /* HasMembers */ && !symbol.members)
-                symbol.members = {};
+        function addDeclarationToSymbol(symbol, node, symbolFlags) {
+            symbol.flags |= symbolFlags;
             node.symbol = symbol;
-            if (symbolKind & 107455 /* Value */ && !symbol.valueDeclaration)
+            if (!symbol.declarations) {
+                symbol.declarations = [];
+            }
+            symbol.declarations.push(node);
+            if (symbolFlags & 1952 /* HasExports */ && !symbol.exports) {
+                symbol.exports = {};
+            }
+            if (symbolFlags & 6240 /* HasMembers */ && !symbol.members) {
+                symbol.members = {};
+            }
+            if (symbolFlags & 107455 /* Value */ && !symbol.valueDeclaration) {
                 symbol.valueDeclaration = node;
+            }
         }
         // Should not be called on a declaration with a computed property name,
         // unless it is a well known Symbol.
@@ -3746,12 +3762,12 @@ var ts;
                 return node.name.text;
             }
             switch (node.kind) {
-                case 144 /* ConstructorType */:
                 case 136 /* Constructor */:
                     return "__constructor";
                 case 143 /* FunctionType */:
                 case 139 /* CallSignature */:
                     return "__call";
+                case 144 /* ConstructorType */:
                 case 140 /* ConstructSignature */:
                     return "__new";
                 case 141 /* IndexSignature */:
@@ -3768,13 +3784,33 @@ var ts;
         function getDisplayName(node) {
             return node.name ? ts.declarationNameToString(node.name) : getDeclarationName(node);
         }
-        function declareSymbol(symbols, parent, node, includes, excludes) {
+        function declareSymbol(symbolTable, parent, node, includes, excludes) {
             ts.Debug.assert(!ts.hasDynamicName(node));
             // The exported symbol for an export default function/class node is always named "default"
             var name = node.flags & 256 /* Default */ && parent ? "default" : getDeclarationName(node);
             var symbol;
             if (name !== undefined) {
-                symbol = ts.hasProperty(symbols, name) ? symbols[name] : (symbols[name] = createSymbol(0, name));
+                // Check and see if the symbol table already has a symbol with this name.  If not,
+                // create a new symbol with this name and add it to the table.  Note that we don't
+                // give the new symbol any flags *yet*.  This ensures that it will not conflict 
+                // witht he 'excludes' flags we pass in.
+                //
+                // If we do get an existing symbol, see if it conflicts with the new symbol we're
+                // creating.  For example, a 'var' symbol and a 'class' symbol will conflict within
+                // the same symbol table.  If we have a conflict, report the issue on each 
+                // declaration we have for this symbol, and then create a new symbol for this 
+                // declaration.
+                //
+                // If we created a new symbol, either because we didn't have a symbol with this name
+                // in the symbol table, or we conflicted with an existing symbol, then just add this
+                // node as the sole declaration of the new symbol.
+                //
+                // Otherwise, we'll be merging into a compatible existing symbol (for example when
+                // you have multiple 'vars' with the same name in the same container).  In this case
+                // just add this node into the declarations list of the symbol.
+                symbol = ts.hasProperty(symbolTable, name)
+                    ? symbolTable[name]
+                    : (symbolTable[name] = createSymbol(0 /* None */, name));
                 if (symbol.flags & excludes) {
                     if (node.name) {
                         node.name.parent = node;
@@ -3788,39 +3824,24 @@ var ts;
                         file.bindDiagnostics.push(ts.createDiagnosticForNode(declaration.name || declaration, message, getDisplayName(declaration)));
                     });
                     file.bindDiagnostics.push(ts.createDiagnosticForNode(node.name || node, message, getDisplayName(node)));
-                    symbol = createSymbol(0, name);
+                    symbol = createSymbol(0 /* None */, name);
                 }
             }
             else {
-                symbol = createSymbol(0, "__missing");
+                symbol = createSymbol(0 /* None */, "__missing");
             }
             addDeclarationToSymbol(symbol, node, includes);
             symbol.parent = parent;
-            if ((node.kind === 202 /* ClassDeclaration */ || node.kind === 175 /* ClassExpression */) && symbol.exports) {
-                // TypeScript 1.0 spec (April 2014): 8.4
-                // Every class automatically contains a static property member named 'prototype', 
-                // the type of which is an instantiation of the class type with type Any supplied as a type argument for each type parameter.
-                // It is an error to explicitly declare a static property member with the name 'prototype'.
-                var prototypeSymbol = createSymbol(4 /* Property */ | 134217728 /* Prototype */, "prototype");
-                if (ts.hasProperty(symbol.exports, prototypeSymbol.name)) {
-                    if (node.name) {
-                        node.name.parent = node;
-                    }
-                    file.bindDiagnostics.push(ts.createDiagnosticForNode(symbol.exports[prototypeSymbol.name].declarations[0], ts.Diagnostics.Duplicate_identifier_0, prototypeSymbol.name));
-                }
-                symbol.exports[prototypeSymbol.name] = prototypeSymbol;
-                prototypeSymbol.parent = symbol;
-            }
             return symbol;
         }
-        function declareModuleMember(node, symbolKind, symbolExcludes) {
+        function declareModuleMember(node, symbolFlags, symbolExcludes) {
             var hasExportModifier = ts.getCombinedNodeFlags(node) & 1 /* Export */;
-            if (symbolKind & 8388608 /* Alias */) {
+            if (symbolFlags & 8388608 /* Alias */) {
                 if (node.kind === 218 /* ExportSpecifier */ || (node.kind === 209 /* ImportEqualsDeclaration */ && hasExportModifier)) {
-                    declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
+                    return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
                 }
                 else {
-                    declareSymbol(container.locals, undefined, node, symbolKind, symbolExcludes);
+                    return declareSymbol(container.locals, undefined, node, symbolFlags, symbolExcludes);
                 }
             }
             else {
@@ -3836,62 +3857,150 @@ var ts;
                 //      but return the export symbol (by calling getExportSymbolOfValueSymbolIfExported). That way
                 //      when the emitter comes back to it, it knows not to qualify the name if it was found in a containing scope.
                 if (hasExportModifier || container.flags & 65536 /* ExportContext */) {
-                    var exportKind = (symbolKind & 107455 /* Value */ ? 1048576 /* ExportValue */ : 0) |
-                        (symbolKind & 793056 /* Type */ ? 2097152 /* ExportType */ : 0) |
-                        (symbolKind & 1536 /* Namespace */ ? 4194304 /* ExportNamespace */ : 0);
+                    var exportKind = (symbolFlags & 107455 /* Value */ ? 1048576 /* ExportValue */ : 0) |
+                        (symbolFlags & 793056 /* Type */ ? 2097152 /* ExportType */ : 0) |
+                        (symbolFlags & 1536 /* Namespace */ ? 4194304 /* ExportNamespace */ : 0);
                     var local = declareSymbol(container.locals, undefined, node, exportKind, symbolExcludes);
-                    local.exportSymbol = declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
+                    local.exportSymbol = declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
                     node.localSymbol = local;
+                    return local;
                 }
                 else {
-                    declareSymbol(container.locals, undefined, node, symbolKind, symbolExcludes);
+                    return declareSymbol(container.locals, undefined, node, symbolFlags, symbolExcludes);
                 }
             }
         }
-        // All container nodes are kept on a linked list in declaration order. This list is used by the getLocalNameOfContainer function
-        // in the type checker to validate that the local name used for a container is unique.
-        function bindChildren(node, symbolKind, isBlockScopeContainer) {
-            if (symbolKind & 255504 /* HasLocals */) {
-                node.locals = {};
-            }
+        // All container nodes are kept on a linked list in declaration order. This list is used by 
+        // the getLocalNameOfContainer function in the type checker to validate that the local name 
+        // used for a container is unique.
+        function bindChildren(node) {
+            // Before we recurse into a node's chilren, we first save the existing parent, container 
+            // and block-container.  Then after we pop out of processing the children, we restore
+            // these saved values.
             var saveParent = parent;
             var saveContainer = container;
             var savedBlockScopeContainer = blockScopeContainer;
+            // This node will now be set as the parent of all of its children as we recurse into them.
             parent = node;
-            if (symbolKind & 262128 /* IsContainer */) {
-                container = node;
+            // Depending on what kind of node this is, we may have to adjust the current container
+            // and block-container.   If the current node is a container, then it is automatically
+            // considered the current block-container as well.  Also, for containers that we know
+            // may contain locals, we proactively initialize the .locals field. We do this because
+            // it's highly likely that the .locals will be needed to place some child in (for example,
+            // a parameter, or variable declaration).
+            // 
+            // However, we do not proactively create the .locals for block-containers because it's
+            // totally normal and common for block-containers to never actually have a block-scoped 
+            // variable in them.  We don't want to end up allocating an object for every 'block' we
+            // run into when most of them won't be necessary.
+            //
+            // Finally, if this is a block-container, then we clear out any existing .locals object
+            // it may contain within it.  This happens in incremental scenarios.  Because we can be
+            // reusing a node from a previous compilation, that node may have had 'locals' created
+            // for it.  We must clear this so we don't accidently move any stale data forward from
+            // a previous compilation.
+            var containerFlags = getContainerFlags(node);
+            if (containerFlags & 1 /* IsContainer */) {
+                container = blockScopeContainer = node;
+                if (containerFlags & 4 /* HasLocals */) {
+                    container.locals = {};
+                }
                 addToContainerChain(container);
             }
-            if (isBlockScopeContainer) {
-                // in incremental scenarios we might reuse nodes that already have locals being allocated
-                // during the bind step these locals should be dropped to prevent using stale data.
-                // locals should always be dropped unless they were previously initialized by the binder
-                // these cases are:
-                // - node has locals (symbolKind & HasLocals) !== 0
-                // - node is a source file
-                setBlockScopeContainer(node, (symbolKind & 255504 /* HasLocals */) === 0 && node.kind !== 228 /* SourceFile */);
+            else if (containerFlags & 2 /* IsBlockScopedContainer */) {
+                blockScopeContainer = node;
+                blockScopeContainer.locals = undefined;
             }
             ts.forEachChild(node, bind);
             container = saveContainer;
             parent = saveParent;
             blockScopeContainer = savedBlockScopeContainer;
         }
-        function addToContainerChain(node) {
-            if (lastContainer) {
-                lastContainer.nextContainer = node;
-            }
-            lastContainer = node;
-        }
-        function bindDeclaration(node, symbolKind, symbolExcludes, isBlockScopeContainer) {
-            switch (container.kind) {
+        function getContainerFlags(node) {
+            switch (node.kind) {
+                case 175 /* ClassExpression */:
+                case 202 /* ClassDeclaration */:
+                case 203 /* InterfaceDeclaration */:
+                case 205 /* EnumDeclaration */:
+                case 146 /* TypeLiteral */:
+                case 155 /* ObjectLiteralExpression */:
+                    return 1 /* IsContainer */;
+                case 139 /* CallSignature */:
+                case 140 /* ConstructSignature */:
+                case 141 /* IndexSignature */:
+                case 135 /* MethodDeclaration */:
+                case 134 /* MethodSignature */:
+                case 201 /* FunctionDeclaration */:
+                case 136 /* Constructor */:
+                case 137 /* GetAccessor */:
+                case 138 /* SetAccessor */:
+                case 143 /* FunctionType */:
+                case 144 /* ConstructorType */:
+                case 163 /* FunctionExpression */:
+                case 164 /* ArrowFunction */:
                 case 206 /* ModuleDeclaration */:
-                    declareModuleMember(node, symbolKind, symbolExcludes);
-                    break;
                 case 228 /* SourceFile */:
-                    if (ts.isExternalModule(container)) {
-                        declareModuleMember(node, symbolKind, symbolExcludes);
-                        break;
-                    }
+                    return 5 /* IsContainerWithLocals */;
+                case 224 /* CatchClause */:
+                case 187 /* ForStatement */:
+                case 188 /* ForInStatement */:
+                case 189 /* ForOfStatement */:
+                case 208 /* CaseBlock */:
+                    return 2 /* IsBlockScopedContainer */;
+                case 180 /* Block */:
+                    // do not treat blocks directly inside a function as a block-scoped-container.
+                    // Locals that reside in this block should go to the function locals. Othewise 'x' 
+                    // would not appear to be a redeclaration of a block scoped local in the following
+                    // example:
+                    //
+                    //      function foo() {
+                    //          var x;
+                    //          let x;
+                    //      }
+                    //
+                    // If we placed 'var x' into the function locals and 'let x' into the locals of
+                    // the block, then there would be no collision.
+                    //
+                    // By not creating a new block-scoped-container here, we ensure that both 'var x'
+                    // and 'let x' go into the Function-container's locals, and we do get a collision 
+                    // conflict.
+                    return ts.isFunctionLike(node.parent) ? 0 /* None */ : 2 /* IsBlockScopedContainer */;
+            }
+            return 0 /* None */;
+        }
+        function addToContainerChain(next) {
+            if (lastContainer) {
+                lastContainer.nextContainer = next;
+            }
+            lastContainer = next;
+        }
+        function declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes) {
+            // Just call this directly so that the return type of this function stays "void".
+            declareSymbolAndAddToSymbolTableWorker(node, symbolFlags, symbolExcludes);
+        }
+        function declareSymbolAndAddToSymbolTableWorker(node, symbolFlags, symbolExcludes) {
+            switch (container.kind) {
+                // Modules, source files, and classes need specialized handling for how their 
+                // members are declared (for example, a member of a class will go into a specific
+                // symbol table depending on if it is static or not). As such, we defer to 
+                // specialized handlers to take care of declaring these child members.
+                case 206 /* ModuleDeclaration */:
+                    return declareModuleMember(node, symbolFlags, symbolExcludes);
+                case 228 /* SourceFile */:
+                    return declareSourceFileMember(node, symbolFlags, symbolExcludes);
+                case 175 /* ClassExpression */:
+                case 202 /* ClassDeclaration */:
+                    return declareClassMember(node, symbolFlags, symbolExcludes);
+                case 205 /* EnumDeclaration */:
+                    return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
+                case 146 /* TypeLiteral */:
+                case 155 /* ObjectLiteralExpression */:
+                case 203 /* InterfaceDeclaration */:
+                    // Interface/Object-types always have their children added to the 'members' of
+                    // their container.  They are only accessible through an instance of their 
+                    // container, and are never in scope otherwise (even inside the body of the 
+                    // object / type / interface declaring them).
+                    return declareSymbol(container.symbol.members, container.symbol, node, symbolFlags, symbolExcludes);
                 case 143 /* FunctionType */:
                 case 144 /* ConstructorType */:
                 case 139 /* CallSignature */:
@@ -3905,29 +4014,30 @@ var ts;
                 case 201 /* FunctionDeclaration */:
                 case 163 /* FunctionExpression */:
                 case 164 /* ArrowFunction */:
-                    declareSymbol(container.locals, undefined, node, symbolKind, symbolExcludes);
-                    break;
-                case 175 /* ClassExpression */:
-                case 202 /* ClassDeclaration */:
-                    if (node.flags & 128 /* Static */) {
-                        declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
-                        break;
-                    }
-                case 146 /* TypeLiteral */:
-                case 155 /* ObjectLiteralExpression */:
-                case 203 /* InterfaceDeclaration */:
-                    declareSymbol(container.symbol.members, container.symbol, node, symbolKind, symbolExcludes);
-                    break;
-                case 205 /* EnumDeclaration */:
-                    declareSymbol(container.symbol.exports, container.symbol, node, symbolKind, symbolExcludes);
-                    break;
+                    // All the children of these container types are never visible through another
+                    // symbol (i.e. through another symbol's 'exports' or 'members').  Instead, 
+                    // they're only accessed 'lexically' (i.e. from code that exists underneath 
+                    // their container in the tree.  To accomplish this, we simply add their declared
+                    // symbol to the 'locals' of the container.  These symbols can then be found as 
+                    // the type checker walks up the containers, checking them for matching names.
+                    return declareSymbol(container.locals, undefined, node, symbolFlags, symbolExcludes);
             }
-            bindChildren(node, symbolKind, isBlockScopeContainer);
+        }
+        function declareClassMember(node, symbolFlags, symbolExcludes) {
+            return node.flags & 128 /* Static */
+                ? declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes)
+                : declareSymbol(container.symbol.members, container.symbol, node, symbolFlags, symbolExcludes);
+        }
+        function declareSourceFileMember(node, symbolFlags, symbolExcludes) {
+            return ts.isExternalModule(file)
+                ? declareModuleMember(node, symbolFlags, symbolExcludes)
+                : declareSymbol(file.locals, undefined, node, symbolFlags, symbolExcludes);
         }
         function isAmbientContext(node) {
             while (node) {
-                if (node.flags & 2 /* Ambient */)
+                if (node.flags & 2 /* Ambient */) {
                     return true;
+                }
                 node = node.parent;
             }
             return false;
@@ -3957,15 +4067,15 @@ var ts;
         function bindModuleDeclaration(node) {
             setExportContextFlag(node);
             if (node.name.kind === 8 /* StringLiteral */) {
-                bindDeclaration(node, 512 /* ValueModule */, 106639 /* ValueModuleExcludes */, true);
+                declareSymbolAndAddToSymbolTable(node, 512 /* ValueModule */, 106639 /* ValueModuleExcludes */);
             }
             else {
                 var state = getModuleInstanceState(node);
                 if (state === 0 /* NonInstantiated */) {
-                    bindDeclaration(node, 1024 /* NamespaceModule */, 0 /* NamespaceModuleExcludes */, true);
+                    declareSymbolAndAddToSymbolTable(node, 1024 /* NamespaceModule */, 0 /* NamespaceModuleExcludes */);
                 }
                 else {
-                    bindDeclaration(node, 512 /* ValueModule */, 106639 /* ValueModuleExcludes */, true);
+                    declareSymbolAndAddToSymbolTable(node, 512 /* ValueModule */, 106639 /* ValueModuleExcludes */);
                     var currentModuleIsConstEnumOnly = state === 2 /* ConstEnumOnly */;
                     if (node.symbol.constEnumOnlyModule === undefined) {
                         // non-merged case - use the current state
@@ -3987,28 +4097,23 @@ var ts;
             // from an actual type literal symbol you would have gotten had you used the long form.
             var symbol = createSymbol(131072 /* Signature */, getDeclarationName(node));
             addDeclarationToSymbol(symbol, node, 131072 /* Signature */);
-            bindChildren(node, 131072 /* Signature */, false);
             var typeLiteralSymbol = createSymbol(2048 /* TypeLiteral */, "__type");
             addDeclarationToSymbol(typeLiteralSymbol, node, 2048 /* TypeLiteral */);
-            typeLiteralSymbol.members = {};
-            typeLiteralSymbol.members[node.kind === 143 /* FunctionType */ ? "__call" : "__new"] = symbol;
+            typeLiteralSymbol.members = (_a = {}, _a[symbol.name] = symbol, _a);
+            var _a;
         }
-        function bindAnonymousDeclaration(node, symbolKind, name, isBlockScopeContainer) {
-            var symbol = createSymbol(symbolKind, name);
-            addDeclarationToSymbol(symbol, node, symbolKind);
-            bindChildren(node, symbolKind, isBlockScopeContainer);
+        function bindAnonymousDeclaration(node, symbolFlags, name) {
+            var symbol = createSymbol(symbolFlags, name);
+            addDeclarationToSymbol(symbol, node, symbolFlags);
         }
-        function bindCatchVariableDeclaration(node) {
-            bindChildren(node, 0, true);
-        }
-        function bindBlockScopedDeclaration(node, symbolKind, symbolExcludes) {
+        function bindBlockScopedDeclaration(node, symbolFlags, symbolExcludes) {
             switch (blockScopeContainer.kind) {
                 case 206 /* ModuleDeclaration */:
-                    declareModuleMember(node, symbolKind, symbolExcludes);
+                    declareModuleMember(node, symbolFlags, symbolExcludes);
                     break;
                 case 228 /* SourceFile */:
                     if (ts.isExternalModule(container)) {
-                        declareModuleMember(node, symbolKind, symbolExcludes);
+                        declareModuleMember(node, symbolFlags, symbolExcludes);
                         break;
                     }
                 // fall through.
@@ -4017,9 +4122,8 @@ var ts;
                         blockScopeContainer.locals = {};
                         addToContainerChain(blockScopeContainer);
                     }
-                    declareSymbol(blockScopeContainer.locals, undefined, node, symbolKind, symbolExcludes);
+                    declareSymbol(blockScopeContainer.locals, undefined, node, symbolFlags, symbolExcludes);
             }
-            bindChildren(node, symbolKind, false);
         }
         function bindBlockScopedVariableDeclaration(node) {
             bindBlockScopedDeclaration(node, 2 /* BlockScopedVariable */, 107455 /* BlockScopedVariableExcludes */);
@@ -4029,182 +4133,182 @@ var ts;
         }
         function bind(node) {
             node.parent = parent;
+            // First we bind declaration nodes to a symbol if possible.  We'll both create a symbol
+            // and then potentially add the symbol to an appropriate symbol table. Possible 
+            // destination symbol tables are:
+            // 
+            //  1) The 'exports' table of the current container's symbol.
+            //  2) The 'members' table of the current container's symbol.
+            //  3) The 'locals' table of the current container.
+            //
+            // However, not all symbols will end up in any of these tables.  'Anonymous' symbols 
+            // (like TypeLiterals for example) will not be put in any table.
+            bindWorker(node);
+            // Then we recurse into the children of the node to bind them as well.  For certain 
+            // symbols we do specialized work when we recurse.  For example, we'll keep track of
+            // the current 'container' node when it changes.  This helps us know which symbol table
+            // a local should go into for example.
+            bindChildren(node);
+        }
+        function bindWorker(node) {
             switch (node.kind) {
                 case 129 /* TypeParameter */:
-                    bindDeclaration(node, 262144 /* TypeParameter */, 530912 /* TypeParameterExcludes */, false);
-                    break;
+                    return declareSymbolAndAddToSymbolTable(node, 262144 /* TypeParameter */, 530912 /* TypeParameterExcludes */);
                 case 130 /* Parameter */:
-                    bindParameter(node);
-                    break;
+                    return bindParameter(node);
                 case 199 /* VariableDeclaration */:
                 case 153 /* BindingElement */:
-                    if (ts.isBindingPattern(node.name)) {
-                        bindChildren(node, 0, false);
-                    }
-                    else if (ts.isBlockOrCatchScoped(node)) {
-                        bindBlockScopedVariableDeclaration(node);
-                    }
-                    else if (ts.isParameterDeclaration(node)) {
-                        // It is safe to walk up parent chain to find whether the node is a destructing parameter declaration
-                        // because its parent chain has already been set up, since parents are set before descending into children.
-                        //
-                        // If node is a binding element in parameter declaration, we need to use ParameterExcludes.
-                        // Using ParameterExcludes flag allows the compiler to report an error on duplicate identifiers in Parameter Declaration
-                        // For example:
-                        //      function foo([a,a]) {} // Duplicate Identifier error
-                        //      function bar(a,a) {}   // Duplicate Identifier error, parameter declaration in this case is handled in bindParameter
-                        //                             // which correctly set excluded symbols
-                        bindDeclaration(node, 1 /* FunctionScopedVariable */, 107455 /* ParameterExcludes */, false);
-                    }
-                    else {
-                        bindDeclaration(node, 1 /* FunctionScopedVariable */, 107454 /* FunctionScopedVariableExcludes */, false);
-                    }
-                    break;
+                    return bindVariableDeclarationOrBindingElement(node);
                 case 133 /* PropertyDeclaration */:
                 case 132 /* PropertySignature */:
-                    bindPropertyOrMethodOrAccessor(node, 4 /* Property */ | (node.questionToken ? 536870912 /* Optional */ : 0), 107455 /* PropertyExcludes */, false);
-                    break;
+                    return bindPropertyOrMethodOrAccessor(node, 4 /* Property */ | (node.questionToken ? 536870912 /* Optional */ : 0 /* None */), 107455 /* PropertyExcludes */);
                 case 225 /* PropertyAssignment */:
                 case 226 /* ShorthandPropertyAssignment */:
-                    bindPropertyOrMethodOrAccessor(node, 4 /* Property */, 107455 /* PropertyExcludes */, false);
-                    break;
+                    return bindPropertyOrMethodOrAccessor(node, 4 /* Property */, 107455 /* PropertyExcludes */);
                 case 227 /* EnumMember */:
-                    bindPropertyOrMethodOrAccessor(node, 8 /* EnumMember */, 107455 /* EnumMemberExcludes */, false);
-                    break;
+                    return bindPropertyOrMethodOrAccessor(node, 8 /* EnumMember */, 107455 /* EnumMemberExcludes */);
                 case 139 /* CallSignature */:
                 case 140 /* ConstructSignature */:
                 case 141 /* IndexSignature */:
-                    bindDeclaration(node, 131072 /* Signature */, 0, false);
-                    break;
+                    return declareSymbolAndAddToSymbolTable(node, 131072 /* Signature */, 0 /* None */);
                 case 135 /* MethodDeclaration */:
                 case 134 /* MethodSignature */:
                     // If this is an ObjectLiteralExpression method, then it sits in the same space
                     // as other properties in the object literal.  So we use SymbolFlags.PropertyExcludes
                     // so that it will conflict with any other object literal members with the same
                     // name.
-                    bindPropertyOrMethodOrAccessor(node, 8192 /* Method */ | (node.questionToken ? 536870912 /* Optional */ : 0), ts.isObjectLiteralMethod(node) ? 107455 /* PropertyExcludes */ : 99263 /* MethodExcludes */, true);
-                    break;
+                    return bindPropertyOrMethodOrAccessor(node, 8192 /* Method */ | (node.questionToken ? 536870912 /* Optional */ : 0 /* None */), ts.isObjectLiteralMethod(node) ? 107455 /* PropertyExcludes */ : 99263 /* MethodExcludes */);
                 case 201 /* FunctionDeclaration */:
-                    bindDeclaration(node, 16 /* Function */, 106927 /* FunctionExcludes */, true);
-                    break;
+                    return declareSymbolAndAddToSymbolTable(node, 16 /* Function */, 106927 /* FunctionExcludes */);
                 case 136 /* Constructor */:
-                    bindDeclaration(node, 16384 /* Constructor */, 0, true);
-                    break;
+                    return declareSymbolAndAddToSymbolTable(node, 16384 /* Constructor */, 0 /* None */);
                 case 137 /* GetAccessor */:
-                    bindPropertyOrMethodOrAccessor(node, 32768 /* GetAccessor */, 41919 /* GetAccessorExcludes */, true);
-                    break;
+                    return bindPropertyOrMethodOrAccessor(node, 32768 /* GetAccessor */, 41919 /* GetAccessorExcludes */);
                 case 138 /* SetAccessor */:
-                    bindPropertyOrMethodOrAccessor(node, 65536 /* SetAccessor */, 74687 /* SetAccessorExcludes */, true);
-                    break;
+                    return bindPropertyOrMethodOrAccessor(node, 65536 /* SetAccessor */, 74687 /* SetAccessorExcludes */);
                 case 143 /* FunctionType */:
                 case 144 /* ConstructorType */:
-                    bindFunctionOrConstructorType(node);
-                    break;
+                    return bindFunctionOrConstructorType(node);
                 case 146 /* TypeLiteral */:
-                    bindAnonymousDeclaration(node, 2048 /* TypeLiteral */, "__type", false);
-                    break;
+                    return bindAnonymousDeclaration(node, 2048 /* TypeLiteral */, "__type");
                 case 155 /* ObjectLiteralExpression */:
-                    bindAnonymousDeclaration(node, 4096 /* ObjectLiteral */, "__object", false);
-                    break;
+                    return bindAnonymousDeclaration(node, 4096 /* ObjectLiteral */, "__object");
                 case 163 /* FunctionExpression */:
                 case 164 /* ArrowFunction */:
-                    bindAnonymousDeclaration(node, 16 /* Function */, "__function", true);
-                    break;
+                    return bindAnonymousDeclaration(node, 16 /* Function */, "__function");
                 case 175 /* ClassExpression */:
-                    bindAnonymousDeclaration(node, 32 /* Class */, "__class", false);
-                    break;
-                case 224 /* CatchClause */:
-                    bindCatchVariableDeclaration(node);
-                    break;
                 case 202 /* ClassDeclaration */:
-                    bindBlockScopedDeclaration(node, 32 /* Class */, 899583 /* ClassExcludes */);
-                    break;
+                    return bindClassLikeDeclaration(node);
                 case 203 /* InterfaceDeclaration */:
-                    bindBlockScopedDeclaration(node, 64 /* Interface */, 792992 /* InterfaceExcludes */);
-                    break;
+                    return bindBlockScopedDeclaration(node, 64 /* Interface */, 792992 /* InterfaceExcludes */);
                 case 204 /* TypeAliasDeclaration */:
-                    bindBlockScopedDeclaration(node, 524288 /* TypeAlias */, 793056 /* TypeAliasExcludes */);
-                    break;
+                    return bindBlockScopedDeclaration(node, 524288 /* TypeAlias */, 793056 /* TypeAliasExcludes */);
                 case 205 /* EnumDeclaration */:
-                    if (ts.isConst(node)) {
-                        bindBlockScopedDeclaration(node, 128 /* ConstEnum */, 899967 /* ConstEnumExcludes */);
-                    }
-                    else {
-                        bindBlockScopedDeclaration(node, 256 /* RegularEnum */, 899327 /* RegularEnumExcludes */);
-                    }
-                    break;
+                    return bindEnumDeclaration(node);
                 case 206 /* ModuleDeclaration */:
-                    bindModuleDeclaration(node);
-                    break;
+                    return bindModuleDeclaration(node);
                 case 209 /* ImportEqualsDeclaration */:
                 case 212 /* NamespaceImport */:
                 case 214 /* ImportSpecifier */:
                 case 218 /* ExportSpecifier */:
-                    bindDeclaration(node, 8388608 /* Alias */, 8388608 /* AliasExcludes */, false);
-                    break;
+                    return declareSymbolAndAddToSymbolTable(node, 8388608 /* Alias */, 8388608 /* AliasExcludes */);
                 case 211 /* ImportClause */:
-                    if (node.name) {
-                        bindDeclaration(node, 8388608 /* Alias */, 8388608 /* AliasExcludes */, false);
-                    }
-                    else {
-                        bindChildren(node, 0, false);
-                    }
-                    break;
+                    return bindImportClause(node);
                 case 216 /* ExportDeclaration */:
-                    if (!node.exportClause) {
-                        // All export * declarations are collected in an __export symbol
-                        declareSymbol(container.symbol.exports, container.symbol, node, 1073741824 /* ExportStar */, 0);
-                    }
-                    bindChildren(node, 0, false);
-                    break;
+                    return bindExportDeclaration(node);
                 case 215 /* ExportAssignment */:
-                    if (node.expression.kind === 65 /* Identifier */) {
-                        // An export default clause with an identifier exports all meanings of that identifier
-                        declareSymbol(container.symbol.exports, container.symbol, node, 8388608 /* Alias */, 107455 /* PropertyExcludes */ | 8388608 /* AliasExcludes */);
-                    }
-                    else {
-                        // An export default clause with an expression exports a value
-                        declareSymbol(container.symbol.exports, container.symbol, node, 4 /* Property */, 107455 /* PropertyExcludes */ | 8388608 /* AliasExcludes */);
-                    }
-                    bindChildren(node, 0, false);
-                    break;
+                    return bindExportAssignment(node);
                 case 228 /* SourceFile */:
-                    setExportContextFlag(node);
-                    if (ts.isExternalModule(node)) {
-                        bindAnonymousDeclaration(node, 512 /* ValueModule */, '"' + ts.removeFileExtension(node.fileName) + '"', true);
-                        break;
-                    }
-                case 180 /* Block */:
-                    // do not treat function block a block-scope container
-                    // all block-scope locals that reside in this block should go to the function locals.
-                    // Otherwise this won't be considered as redeclaration of a block scoped local:
-                    // function foo() {
-                    //  let x;
-                    //  let x;
-                    // }
-                    // 'let x' will be placed into the function locals and 'let x' - into the locals of the block
-                    bindChildren(node, 0, !ts.isFunctionLike(node.parent));
-                    break;
-                case 224 /* CatchClause */:
-                case 187 /* ForStatement */:
-                case 188 /* ForInStatement */:
-                case 189 /* ForOfStatement */:
-                case 208 /* CaseBlock */:
-                    bindChildren(node, 0, true);
-                    break;
-                default:
-                    var saveParent = parent;
-                    parent = node;
-                    ts.forEachChild(node, bind);
-                    parent = saveParent;
+                    return bindSourceFileIfExternalModule();
+            }
+        }
+        function bindSourceFileIfExternalModule() {
+            setExportContextFlag(file);
+            if (ts.isExternalModule(file)) {
+                bindAnonymousDeclaration(file, 512 /* ValueModule */, '"' + ts.removeFileExtension(file.fileName) + '"');
+            }
+        }
+        function bindExportAssignment(node) {
+            if (node.expression.kind === 65 /* Identifier */) {
+                // An export default clause with an identifier exports all meanings of that identifier
+                declareSymbol(container.symbol.exports, container.symbol, node, 8388608 /* Alias */, 107455 /* PropertyExcludes */ | 8388608 /* AliasExcludes */);
+            }
+            else {
+                // An export default clause with an expression exports a value
+                declareSymbol(container.symbol.exports, container.symbol, node, 4 /* Property */, 107455 /* PropertyExcludes */ | 8388608 /* AliasExcludes */);
+            }
+        }
+        function bindExportDeclaration(node) {
+            if (!node.exportClause) {
+                // All export * declarations are collected in an __export symbol
+                declareSymbol(container.symbol.exports, container.symbol, node, 1073741824 /* ExportStar */, 0 /* None */);
+            }
+        }
+        function bindImportClause(node) {
+            if (node.name) {
+                declareSymbolAndAddToSymbolTable(node, 8388608 /* Alias */, 8388608 /* AliasExcludes */);
+            }
+        }
+        function bindClassLikeDeclaration(node) {
+            if (node.kind === 202 /* ClassDeclaration */) {
+                bindBlockScopedDeclaration(node, 32 /* Class */, 899583 /* ClassExcludes */);
+            }
+            else {
+                bindAnonymousDeclaration(node, 32 /* Class */, "__class");
+            }
+            var symbol = node.symbol;
+            // TypeScript 1.0 spec (April 2014): 8.4
+            // Every class automatically contains a static property member named 'prototype', the 
+            // type of which is an instantiation of the class type with type Any supplied as a type
+            // argument for each type parameter. It is an error to explicitly declare a static 
+            // property member with the name 'prototype'.
+            //
+            // Note: we check for this here because this class may be merging into a module.  The
+            // module might have an exported variable called 'prototype'.  We can't allow that as
+            // that would clash with the built-in 'prototype' for the class.
+            var prototypeSymbol = createSymbol(4 /* Property */ | 134217728 /* Prototype */, "prototype");
+            if (ts.hasProperty(symbol.exports, prototypeSymbol.name)) {
+                if (node.name) {
+                    node.name.parent = node;
+                }
+                file.bindDiagnostics.push(ts.createDiagnosticForNode(symbol.exports[prototypeSymbol.name].declarations[0], ts.Diagnostics.Duplicate_identifier_0, prototypeSymbol.name));
+            }
+            symbol.exports[prototypeSymbol.name] = prototypeSymbol;
+            prototypeSymbol.parent = symbol;
+        }
+        function bindEnumDeclaration(node) {
+            return ts.isConst(node)
+                ? bindBlockScopedDeclaration(node, 128 /* ConstEnum */, 899967 /* ConstEnumExcludes */)
+                : bindBlockScopedDeclaration(node, 256 /* RegularEnum */, 899327 /* RegularEnumExcludes */);
+        }
+        function bindVariableDeclarationOrBindingElement(node) {
+            if (!ts.isBindingPattern(node.name)) {
+                if (ts.isBlockOrCatchScoped(node)) {
+                    bindBlockScopedVariableDeclaration(node);
+                }
+                else if (ts.isParameterDeclaration(node)) {
+                    // It is safe to walk up parent chain to find whether the node is a destructing parameter declaration
+                    // because its parent chain has already been set up, since parents are set before descending into children.
+                    //
+                    // If node is a binding element in parameter declaration, we need to use ParameterExcludes.
+                    // Using ParameterExcludes flag allows the compiler to report an error on duplicate identifiers in Parameter Declaration
+                    // For example:
+                    //      function foo([a,a]) {} // Duplicate Identifier error
+                    //      function bar(a,a) {}   // Duplicate Identifier error, parameter declaration in this case is handled in bindParameter
+                    //                             // which correctly set excluded symbols
+                    declareSymbolAndAddToSymbolTable(node, 1 /* FunctionScopedVariable */, 107455 /* ParameterExcludes */);
+                }
+                else {
+                    declareSymbolAndAddToSymbolTable(node, 1 /* FunctionScopedVariable */, 107454 /* FunctionScopedVariableExcludes */);
+                }
             }
         }
         function bindParameter(node) {
             if (ts.isBindingPattern(node.name)) {
-                bindAnonymousDeclaration(node, 1 /* FunctionScopedVariable */, getDestructuringParameterName(node), false);
+                bindAnonymousDeclaration(node, 1 /* FunctionScopedVariable */, getDestructuringParameterName(node));
             }
             else {
-                bindDeclaration(node, 1 /* FunctionScopedVariable */, 107455 /* ParameterExcludes */, false);
+                declareSymbolAndAddToSymbolTable(node, 1 /* FunctionScopedVariable */, 107455 /* ParameterExcludes */);
             }
             // If this is a property-parameter, then also declare the property symbol into the 
             // containing class.
@@ -4215,13 +4319,10 @@ var ts;
                 declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, 4 /* Property */, 107455 /* PropertyExcludes */);
             }
         }
-        function bindPropertyOrMethodOrAccessor(node, symbolKind, symbolExcludes, isBlockScopeContainer) {
-            if (ts.hasDynamicName(node)) {
-                bindAnonymousDeclaration(node, symbolKind, "__computed", isBlockScopeContainer);
-            }
-            else {
-                bindDeclaration(node, symbolKind, symbolExcludes, isBlockScopeContainer);
-            }
+        function bindPropertyOrMethodOrAccessor(node, symbolFlags, symbolExcludes) {
+            return ts.hasDynamicName(node)
+                ? bindAnonymousDeclaration(node, symbolFlags, "__computed")
+                : declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
         }
     }
 })(ts || (ts = {}));
@@ -5111,10 +5212,6 @@ var ts;
         }
     }
     ts.getExternalModuleName = getExternalModuleName;
-    function hasDotDotDotToken(node) {
-        return node && node.kind === 130 /* Parameter */ && node.dotDotDotToken !== undefined;
-    }
-    ts.hasDotDotDotToken = hasDotDotDotToken;
     function hasQuestionToken(node) {
         if (node) {
             switch (node.kind) {
@@ -5133,10 +5230,6 @@ var ts;
         return false;
     }
     ts.hasQuestionToken = hasQuestionToken;
-    function hasRestParameters(s) {
-        return s.parameters.length > 0 && ts.lastOrUndefined(s.parameters).dotDotDotToken !== undefined;
-    }
-    ts.hasRestParameters = hasRestParameters;
     function isJSDocConstructSignature(node) {
         return node.kind === 241 /* JSDocFunctionType */ &&
             node.parameters.length > 0 &&
@@ -6287,7 +6380,6 @@ var ts;
 /// <reference path="utilities.ts"/>
 var ts;
 (function (ts) {
-    ts.throwOnJSDocErrors = false;
     var nodeConstructors = new Array(252 /* Count */);
     /* @internal */ ts.parseTime = 0;
     function getNodeConstructor(kind) {
@@ -10679,12 +10771,6 @@ var ts;
                 return finishNode(result);
             }
             JSDocParser.parseJSDocTypeExpression = parseJSDocTypeExpression;
-            function setError(message) {
-                parseErrorAtCurrentToken(message);
-                if (ts.throwOnJSDocErrors) {
-                    throw new Error(message.key);
-                }
-            }
             function parseJSDocTopLevelType() {
                 var type = parseJSDocType();
                 if (token === 44 /* BarToken */) {
@@ -12076,27 +12162,31 @@ var ts;
                     case 138 /* SetAccessor */:
                     case 201 /* FunctionDeclaration */:
                     case 164 /* ArrowFunction */:
-                        if (name === "arguments") {
+                        if (meaning & 3 /* Variable */ && name === "arguments") {
                             result = argumentsSymbol;
                             break loop;
                         }
                         break;
                     case 163 /* FunctionExpression */:
-                        if (name === "arguments") {
+                        if (meaning & 3 /* Variable */ && name === "arguments") {
                             result = argumentsSymbol;
                             break loop;
                         }
-                        var functionName = location.name;
-                        if (functionName && name === functionName.text) {
-                            result = location.symbol;
-                            break loop;
+                        if (meaning & 16 /* Function */) {
+                            var functionName = location.name;
+                            if (functionName && name === functionName.text) {
+                                result = location.symbol;
+                                break loop;
+                            }
                         }
                         break;
                     case 175 /* ClassExpression */:
-                        var className = location.name;
-                        if (className && name === className.text) {
-                            result = location.symbol;
-                            break loop;
+                        if (meaning & 32 /* Class */) {
+                            var className = location.name;
+                            if (className && name === className.text) {
+                                result = location.symbol;
+                                break loop;
+                            }
                         }
                         break;
                     case 131 /* Decorator */:
@@ -13307,11 +13397,12 @@ var ts;
                 }
             }
             function buildParameterDisplay(p, writer, enclosingDeclaration, flags, typeStack) {
-                if (ts.hasDotDotDotToken(p.valueDeclaration)) {
+                var parameterNode = p.valueDeclaration;
+                if (ts.isRestParameter(parameterNode)) {
                     writePunctuation(writer, 21 /* DotDotDotToken */);
                 }
                 appendSymbolNameOnly(p, writer);
-                if (ts.hasQuestionToken(p.valueDeclaration) || p.valueDeclaration.initializer) {
+                if (isOptionalParameter(parameterNode)) {
                     writePunctuation(writer, 50 /* QuestionToken */);
                 }
                 writePunctuation(writer, 51 /* ColonToken */);
@@ -14607,6 +14698,9 @@ var ts;
             }
             return result;
         }
+        function isOptionalParameter(node) {
+            return ts.hasQuestionToken(node) || !!node.initializer;
+        }
         function getSignatureFromDeclaration(declaration) {
             var links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
@@ -14649,7 +14743,7 @@ var ts;
                         returnType = anyType;
                     }
                 }
-                links.resolvedSignature = createSignature(declaration, typeParameters, parameters, returnType, minArgumentCount, ts.hasRestParameters(declaration), hasStringLiterals);
+                links.resolvedSignature = createSignature(declaration, typeParameters, parameters, returnType, minArgumentCount, ts.hasRestParameter(declaration), hasStringLiterals);
             }
             return links.resolvedSignature;
         }
@@ -14904,38 +14998,41 @@ var ts;
                             type = unknownType;
                         }
                         else {
-                            type = getDeclaredTypeOfSymbol(symbol);
-                            if (type.flags & (1024 /* Class */ | 2048 /* Interface */) && type.flags & 4096 /* Reference */) {
-                                // In a type reference, the outer type parameters of the referenced class or interface are automatically
-                                // supplied as type arguments and the type reference only specifies arguments for the local type parameters
-                                // of the class or interface.
-                                var localTypeParameters = type.localTypeParameters;
-                                var expectedTypeArgCount = localTypeParameters ? localTypeParameters.length : 0;
-                                var typeArgCount = node.typeArguments ? node.typeArguments.length : 0;
-                                if (typeArgCount === expectedTypeArgCount) {
-                                    // When no type arguments are expected we already have the right type because all outer type parameters
-                                    // have themselves as default type arguments.
-                                    if (typeArgCount) {
-                                        type = createTypeReference(type, ts.concatenate(type.outerTypeParameters, ts.map(node.typeArguments, getTypeFromTypeNode)));
-                                    }
-                                }
-                                else {
-                                    error(node, ts.Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, undefined, 1 /* WriteArrayAsGenericType */), expectedTypeArgCount);
-                                    type = undefined;
-                                }
-                            }
-                            else {
-                                if (node.typeArguments) {
-                                    error(node, ts.Diagnostics.Type_0_is_not_generic, typeToString(type));
-                                    type = undefined;
-                                }
-                            }
+                            type = createTypeReferenceIfGeneric(getDeclaredTypeOfSymbol(symbol), node, node.typeArguments);
                         }
                     }
                 }
                 links.resolvedType = type || unknownType;
             }
             return links.resolvedType;
+        }
+        function createTypeReferenceIfGeneric(type, node, typeArguments) {
+            if (type.flags & (1024 /* Class */ | 2048 /* Interface */) && type.flags & 4096 /* Reference */) {
+                // In a type reference, the outer type parameters of the referenced class or interface are automatically
+                // supplied as type arguments and the type reference only specifies arguments for the local type parameters
+                // of the class or interface.
+                var localTypeParameters = type.localTypeParameters;
+                var expectedTypeArgCount = localTypeParameters ? localTypeParameters.length : 0;
+                var typeArgCount = typeArguments ? typeArguments.length : 0;
+                if (typeArgCount === expectedTypeArgCount) {
+                    // When no type arguments are expected we already have the right type because all outer type parameters
+                    // have themselves as default type arguments.
+                    if (typeArgCount) {
+                        return createTypeReference(type, ts.concatenate(type.outerTypeParameters, ts.map(typeArguments, getTypeFromTypeNode)));
+                    }
+                }
+                else {
+                    error(node, ts.Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, undefined, 1 /* WriteArrayAsGenericType */), expectedTypeArgCount);
+                    return undefined;
+                }
+            }
+            else {
+                if (typeArguments) {
+                    error(node, ts.Diagnostics.Type_0_is_not_generic, typeToString(type));
+                    return undefined;
+                }
+            }
+            return type;
         }
         function getTypeFromTypeQueryNode(node) {
             var links = getNodeLinks(node);
@@ -17078,7 +17175,7 @@ var ts;
                 if (isContextSensitive(func)) {
                     var contextualSignature = getContextualSignature(func);
                     if (contextualSignature) {
-                        var funcHasRestParameters = ts.hasRestParameters(func);
+                        var funcHasRestParameters = ts.hasRestParameter(func);
                         var len = func.parameters.length - (funcHasRestParameters ? 1 : 0);
                         var indexOfParameter = ts.indexOf(func.parameters, parameter);
                         if (indexOfParameter < len) {
@@ -20190,7 +20287,7 @@ var ts;
         }
         function checkCollisionWithArgumentsInGeneratedCode(node) {
             // no rest parameters \ declaration context \ overload - no codegen impact
-            if (!ts.hasRestParameters(node) || ts.isInAmbientContext(node) || ts.nodeIsMissing(node.body)) {
+            if (!ts.hasRestParameter(node) || ts.isInAmbientContext(node) || ts.nodeIsMissing(node.body)) {
                 return;
             }
             ts.forEach(node.parameters, function (p) {
@@ -28138,7 +28235,7 @@ var ts;
                 }
             }
             function emitRestParameter(node) {
-                if (languageVersion < 2 /* ES6 */ && ts.hasRestParameters(node)) {
+                if (languageVersion < 2 /* ES6 */ && ts.hasRestParameter(node)) {
                     var restIndex = node.parameters.length - 1;
                     var restParam = node.parameters[restIndex];
                     // A rest parameter cannot have a binding pattern, so let's just ignore it if it does.
@@ -28252,7 +28349,7 @@ var ts;
                 write("(");
                 if (node) {
                     var parameters = node.parameters;
-                    var omitCount = languageVersion < 2 /* ES6 */ && ts.hasRestParameters(node) ? 1 : 0;
+                    var omitCount = languageVersion < 2 /* ES6 */ && ts.hasRestParameter(node) ? 1 : 0;
                     emitList(parameters, 0, parameters.length - omitCount, false, false);
                 }
                 write(")");
@@ -37707,6 +37804,7 @@ var ts;
         ClassificationTypeNames.typeParameterName = "type parameter name";
         ClassificationTypeNames.typeAliasName = "type alias name";
         ClassificationTypeNames.parameterName = "parameter name";
+        ClassificationTypeNames.docCommentTagName = "doc comment tag name";
         return ClassificationTypeNames;
     })();
     ts.ClassificationTypeNames = ClassificationTypeNames;
@@ -37728,6 +37826,7 @@ var ts;
         ClassificationType[ClassificationType["typeParameterName"] = 15] = "typeParameterName";
         ClassificationType[ClassificationType["typeAliasName"] = 16] = "typeAliasName";
         ClassificationType[ClassificationType["parameterName"] = 17] = "parameterName";
+        ClassificationType[ClassificationType["docCommentTagName"] = 18] = "docCommentTagName";
     })(ts.ClassificationType || (ts.ClassificationType = {}));
     var ClassificationType = ts.ClassificationType;
     function displayPartsToString(displayParts) {
@@ -37940,7 +38039,8 @@ var ts;
     }
     ts.transpile = transpile;
     function createLanguageServiceSourceFile(fileName, scriptSnapshot, scriptTarget, version, setNodeParents) {
-        var sourceFile = ts.createSourceFile(fileName, scriptSnapshot.getText(0, scriptSnapshot.getLength()), scriptTarget, setNodeParents);
+        var text = scriptSnapshot.getText(0, scriptSnapshot.getLength());
+        var sourceFile = ts.createSourceFile(fileName, text, scriptTarget, setNodeParents);
         setSourceFileFields(sourceFile, scriptSnapshot, version);
         // after full parsing we can use table with interned strings as name table
         sourceFile.nameTable = sourceFile.identifiers;
@@ -38534,12 +38634,16 @@ var ts;
                     }
                 }
             }
+            // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
+            // It needs to be cleared to allow all collected snapshots to be released
+            hostCache = undefined;
             program = newProgram;
             // Make sure all the nodes in the program are both bound, and have their parent 
             // pointers set property.
             program.getTypeChecker();
             return;
             function getOrCreateSourceFile(fileName) {
+                ts.Debug.assert(hostCache !== undefined);
                 // The program is asking for this file, check first if the host can locate it.
                 // If the host can not locate the file, then it does not exist. return undefined
                 // to the program to allow reporting of errors for missing files.
@@ -38847,6 +38951,7 @@ var ts;
             var typeChecker = program.getTypeChecker();
             var syntacticStart = new Date().getTime();
             var sourceFile = getValidSourceFile(fileName);
+            var isJavaScriptFile = ts.isJavaScript(fileName);
             var start = new Date().getTime();
             var currentToken = ts.getTokenAtPosition(sourceFile, position);
             log("getCompletionData: Get current token: " + (new Date().getTime() - start));
@@ -38929,13 +39034,29 @@ var ts;
                     }
                 }
                 var type = typeChecker.getTypeAtLocation(node);
+                addTypeProperties(type);
+            }
+            function addTypeProperties(type) {
                 if (type) {
                     // Filter private properties
-                    ts.forEach(type.getApparentProperties(), function (symbol) {
+                    for (var _i = 0, _a = type.getApparentProperties(); _i < _a.length; _i++) {
+                        var symbol = _a[_i];
                         if (typeChecker.isValidPropertyAccess((node.parent), symbol.name)) {
                             symbols.push(symbol);
                         }
-                    });
+                    }
+                    if (isJavaScriptFile && type.flags & 16384 /* Union */) {
+                        // In javascript files, for union types, we don't just get the members that 
+                        // the individual types have in common, we also include all the members that
+                        // each individual type has.  This is because we're going to add all identifiers
+                        // anyways.  So we might as well elevate the members that were at least part
+                        // of the individual types to a higher status since we know what they are.
+                        var unionType = type;
+                        for (var _b = 0, _c = unionType.types; _b < _c.length; _b++) {
+                            var elementType = _c[_b];
+                            addTypeProperties(elementType);
+                        }
+                    }
                 }
             }
             function tryGetGlobalSymbols() {
@@ -39096,15 +39217,18 @@ var ts;
                 if (previousToken.kind === 8 /* StringLiteral */
                     || previousToken.kind === 9 /* RegularExpressionLiteral */
                     || ts.isTemplateLiteralKind(previousToken.kind)) {
-                    // The position has to be either: 1. entirely within the token text, or 
-                    // 2. at the end position of an unterminated token.
                     var start_3 = previousToken.getStart();
                     var end = previousToken.getEnd();
+                    // To be "in" one of these literals, the position has to be:
+                    //   1. entirely within the token text.
+                    //   2. at the end position of an unterminated token.
+                    //   3. at the end of a regular expression (due to trailing flags like '/foo/g').
                     if (start_3 < position && position < end) {
                         return true;
                     }
-                    else if (position === end) {
-                        return !!previousToken.isUnterminated;
+                    if (position === end) {
+                        return !!previousToken.isUnterminated ||
+                            previousToken.kind === 9 /* RegularExpressionLiteral */;
                     }
                 }
                 return false;
@@ -41583,6 +41707,7 @@ var ts;
                 case 15 /* typeParameterName */: return ClassificationTypeNames.typeParameterName;
                 case 16 /* typeAliasName */: return ClassificationTypeNames.typeAliasName;
                 case 17 /* parameterName */: return ClassificationTypeNames.parameterName;
+                case 18 /* docCommentTagName */: return ClassificationTypeNames.docCommentTagName;
             }
         }
         function convertClassifications(classifications) {
@@ -41633,8 +41758,7 @@ var ts;
                     // Only bother with the trivia if it at least intersects the span of interest.
                     if (ts.textSpanIntersectsWith(span, start, width)) {
                         if (ts.isComment(kind)) {
-                            // Simple comment.  Just add as is.
-                            pushClassification(start, width, 1 /* comment */);
+                            classifyComment(token, kind, start, width);
                             continue;
                         }
                         if (kind === 6 /* ConflictMarkerTrivia */) {
@@ -41652,6 +41776,79 @@ var ts;
                             classifyDisabledMergeCode(text, start, end);
                         }
                     }
+                }
+            }
+            function classifyComment(token, kind, start, width) {
+                if (kind === 3 /* MultiLineCommentTrivia */) {
+                    // See if this is a doc comment.  If so, we'll classify certain portions of it
+                    // specially.
+                    var docCommentAndDiagnostics = ts.parseIsolatedJSDocComment(sourceFile.text, start, width);
+                    if (docCommentAndDiagnostics && docCommentAndDiagnostics.jsDocComment) {
+                        docCommentAndDiagnostics.jsDocComment.parent = token;
+                        classifyJSDocComment(docCommentAndDiagnostics.jsDocComment);
+                        return;
+                    }
+                }
+                // Simple comment.  Just add as is.
+                pushCommentRange(start, width);
+            }
+            function pushCommentRange(start, width) {
+                pushClassification(start, width, 1 /* comment */);
+            }
+            function classifyJSDocComment(docComment) {
+                var pos = docComment.pos;
+                for (var _i = 0, _a = docComment.tags; _i < _a.length; _i++) {
+                    var tag = _a[_i];
+                    // As we walk through each tag, classify the portion of text from the end of
+                    // the last tag (or the start of the entire doc comment) as 'comment'.  
+                    if (tag.pos !== pos) {
+                        pushCommentRange(pos, tag.pos - pos);
+                    }
+                    pushClassification(tag.atToken.pos, tag.atToken.end - tag.atToken.pos, 10 /* punctuation */);
+                    pushClassification(tag.tagName.pos, tag.tagName.end - tag.tagName.pos, 18 /* docCommentTagName */);
+                    pos = tag.tagName.end;
+                    switch (tag.kind) {
+                        case 247 /* JSDocParameterTag */:
+                            processJSDocParameterTag(tag);
+                            break;
+                        case 250 /* JSDocTemplateTag */:
+                            processJSDocTemplateTag(tag);
+                            break;
+                        case 249 /* JSDocTypeTag */:
+                            processElement(tag.typeExpression);
+                            break;
+                        case 248 /* JSDocReturnTag */:
+                            processElement(tag.typeExpression);
+                            break;
+                    }
+                    pos = tag.end;
+                }
+                if (pos !== docComment.end) {
+                    pushCommentRange(pos, docComment.end - pos);
+                }
+                return;
+                function processJSDocParameterTag(tag) {
+                    if (tag.preParameterName) {
+                        pushCommentRange(pos, tag.preParameterName.pos - pos);
+                        pushClassification(tag.preParameterName.pos, tag.preParameterName.end - tag.preParameterName.pos, 17 /* parameterName */);
+                        pos = tag.preParameterName.end;
+                    }
+                    if (tag.typeExpression) {
+                        pushCommentRange(pos, tag.typeExpression.pos - pos);
+                        processElement(tag.typeExpression);
+                        pos = tag.typeExpression.end;
+                    }
+                    if (tag.postParameterName) {
+                        pushCommentRange(pos, tag.postParameterName.pos - pos);
+                        pushClassification(tag.postParameterName.pos, tag.postParameterName.end - tag.postParameterName.pos, 17 /* parameterName */);
+                        pos = tag.postParameterName.end;
+                    }
+                }
+            }
+            function processJSDocTemplateTag(tag) {
+                for (var _i = 0, _a = tag.getChildren(); _i < _a.length; _i++) {
+                    var child = _a[_i];
+                    processElement(child);
                 }
             }
             function classifyDisabledMergeCode(text, start, end) {
@@ -41774,9 +41971,12 @@ var ts;
                 }
             }
             function processElement(element) {
+                if (!element) {
+                    return;
+                }
                 // Ignore nodes that don't intersect the original span to classify.
                 if (ts.textSpanIntersectsWith(span, element.getFullStart(), element.getFullWidth())) {
-                    var children = element.getChildren();
+                    var children = element.getChildren(sourceFile);
                     for (var _i = 0; _i < children.length; _i++) {
                         var child = children[_i];
                         if (ts.isToken(child)) {
