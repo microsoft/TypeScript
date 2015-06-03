@@ -2131,6 +2131,10 @@ module ts {
             return prop ? getTypeOfSymbol(prop) : undefined;
         }
 
+        function isTheAnyType(type: Type) {
+            return type === anyType;
+        }
+
         // Return the inferred type for a binding element
         function getTypeForBindingElement(declaration: BindingElement): Type {
             let pattern = <BindingPattern>declaration.parent;
@@ -2142,7 +2146,7 @@ module ts {
             // If no type was specified or inferred for parent, or if the specified or inferred type is any,
             // infer from the initializer of the binding element if one is present. Otherwise, go with the
             // undefined or any type of the parent.
-            if (!parentType || parentType === anyType) {
+            if (!parentType || isTheAnyType(parentType)) {
                 if (declaration.initializer) {
                     return checkExpressionCached(declaration.initializer);
                 }
@@ -5547,7 +5551,7 @@ module ts {
                 if (prototypeProperty) {
                     // Target type is type of the protoype property
                     let prototypePropertyType = getTypeOfSymbol(prototypeProperty);
-                    if (prototypePropertyType !== anyType) {
+                    if (!isTheAnyType(prototypePropertyType)) {
                         targetType = prototypePropertyType;
                     }
                 }
@@ -6496,7 +6500,7 @@ module ts {
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
             let type = checkExpressionOrQualifiedName(left);
             if (type === unknownType) return type;
-            if (type !== anyType) {
+            if (!isTheAnyType(type)) {
                 let apparentType = getApparentType(getWidenedType(type));
                 if (apparentType === unknownType) {
                     // handle cases when type is Type parameter with invalid constraint
@@ -6536,7 +6540,7 @@ module ts {
                 : (<QualifiedName>node).left;
 
             let type = checkExpressionOrQualifiedName(left);
-            if (type !== unknownType && type !== anyType) {
+            if (type !== unknownType && !isTheAnyType(type)) {
                 let prop = getPropertyOfType(getWidenedType(type), propertyName);
                 if (prop && prop.parent && prop.parent.flags & SymbolFlags.Class) {
                     if (left.kind === SyntaxKind.SuperKeyword && getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) {
@@ -6626,7 +6630,7 @@ module ts {
                 }
 
                 // Fall back to any.
-                if (compilerOptions.noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && objectType !== anyType) {
+                if (compilerOptions.noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && !isTheAnyType(objectType)) {
                     error(node, Diagnostics.Index_signature_of_object_type_implicitly_has_an_any_type);
                 }
 
@@ -7276,7 +7280,7 @@ module ts {
             // types are provided for the argument expressions, and the result is always of type Any.
             // We exclude union types because we may have a union of function types that happen to have
             // no common signatures.
-            if (funcType === anyType || (!callSignatures.length && !constructSignatures.length && !(funcType.flags & TypeFlags.Union) && isTypeAssignableTo(funcType, globalFunctionType))) {
+            if (isTheAnyType(funcType) || (!callSignatures.length && !constructSignatures.length && !(funcType.flags & TypeFlags.Union) && isTypeAssignableTo(funcType, globalFunctionType))) {
                 if (node.typeArguments) {
                     error(node, Diagnostics.Untyped_function_calls_may_not_accept_type_arguments);
                 }
@@ -7309,7 +7313,7 @@ module ts {
             // TS 1.0 spec: 4.11
             // If ConstructExpr is of type Any, Args can be any argument
             // list and the result of the operation is of type Any.
-            if (expressionType === anyType) {
+            if (isTheAnyType(expressionType)) {
                 if (node.typeArguments) {
                     error(node, Diagnostics.Untyped_function_calls_may_not_accept_type_arguments);
                 }
@@ -7364,7 +7368,7 @@ module ts {
 
             let callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
 
-            if (tagType === anyType || (!callSignatures.length && !(tagType.flags & TypeFlags.Union) && isTypeAssignableTo(tagType, globalFunctionType))) {
+            if (isTheAnyType(tagType) || (!callSignatures.length && !(tagType.flags & TypeFlags.Union) && isTypeAssignableTo(tagType, globalFunctionType))) {
                 return resolveUntypedCall(node);
             }
 
@@ -7576,7 +7580,7 @@ module ts {
             }
 
             // Functions that return 'void' or 'any' don't need any return expressions.
-            if (returnType === voidType || returnType === anyType) {
+            if (returnType === voidType || isTheAnyType(returnType)) {
                 return;
             }
 
