@@ -2688,7 +2688,7 @@ module ts {
 
         function nextTokenIsIdentifierOnSameLine() {
             nextToken();
-            return !scanner.hasPrecedingLineBreak() && isIdentifier()
+            return !scanner.hasPrecedingLineBreak() && isIdentifier();
         }
 
         function parseYieldExpression(): YieldExpression {
@@ -4009,18 +4009,18 @@ module ts {
                 // as the identifier 'namespace' on one line followed by the identifier 'n' on another.
                 // We need to look one token ahead to see if it permissible to try parsing a declaration.
                 case SyntaxKind.DeclareKeyword:
-                    if (lookAhead(isFollowedByIdentifierOrKeywordOnSameLine) && getDeclarationFlags() & flags) {
+                    if (lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine) && getDeclarationFlags() & flags) {
                         return parseDeclaration();
                     }
                     break;
                 case SyntaxKind.ModuleKeyword:
-                    if (lookAhead(isFollowedByIdentifierOrStringOnSameLine) && getDeclarationFlags() & flags) {
+                    if (lookAhead(nextTokenIsIdentifierOrStringLiteralOnSameLine) && getDeclarationFlags() & flags) {
                         return parseDeclaration();
                     }
                     break;
                 case SyntaxKind.NamespaceKeyword:
                 case SyntaxKind.TypeKeyword:
-                    if (lookAhead(isFollowedByIdentifierOnSameLine) && getDeclarationFlags() & flags) {
+                    if (lookAhead(nextTokenIsIdentifierOnSameLine) && getDeclarationFlags() & flags) {
                         return parseDeclaration();
                     }
                     break;
@@ -4070,19 +4070,9 @@ module ts {
             }
         }
 
-        function isFollowedByIdentifierOrKeywordOnSameLine() {
-            nextToken();
-            return !scanner.hasPrecedingLineBreak() && isIdentifierOrKeyword();
-        }
-
-        function isFollowedByIdentifierOrStringOnSameLine() {
+        function nextTokenIsIdentifierOrStringLiteralOnSameLine() {
             nextToken();
             return !scanner.hasPrecedingLineBreak() && (isIdentifier() || token === SyntaxKind.StringLiteral);
-        }
-
-        function isFollowedByIdentifierOnSameLine() {
-            nextToken();
-            return !scanner.hasPrecedingLineBreak() && isIdentifier();
         }
 
         function parseFunctionBlockOrSemicolon(isGenerator: boolean, diagnosticMessage?: DiagnosticMessage): Block {
