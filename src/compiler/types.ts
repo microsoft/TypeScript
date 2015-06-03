@@ -1588,7 +1588,7 @@ module ts {
         /* @internal */ 
         ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
         /* @internal */ 
-        ContainsObjectLiteral = 0x00080000,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 0x00080000,  // Type is or contains object literal type
         ESSymbol                = 0x00100000,  // Type of symbol primitive introduced in ES6
 
         /* @internal */ 
@@ -1674,8 +1674,8 @@ module ts {
         properties: Symbol[];              // Properties
         callSignatures: Signature[];       // Call signatures of type
         constructSignatures: Signature[];  // Construct signatures of type
-        stringIndexType: Type;             // String index type
-        numberIndexType: Type;             // Numeric index type
+        stringIndexType?: Type;            // String index type
+        numberIndexType?: Type;            // Numeric index type
     }
 
     // Just a place to cache element types of iterables and iterators
