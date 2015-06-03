@@ -342,7 +342,15 @@ module ts {
                 // Locals of a source file are not in scope (because they get merged into the global symbol table)
                 if (location.locals && !isGlobalSourceFile(location)) {
                     if (result = getSymbol(location.locals, name, meaning)) {
-                        break loop;
+                        // Type parameters of a function are in scope in the entire function declaration, including the parameter
+                        // list and return type. However, local types are only in scope in the function body.
+                        if (!(meaning & SymbolFlags.Type) ||
+                            !(result.flags & (SymbolFlags.Type & ~SymbolFlags.TypeParameter)) ||
+                            !isFunctionLike(location) ||
+                            lastLocation === (<FunctionLikeDeclaration>location).body) {
+                            break loop;
+                        }
+                        result = undefined;
                     }
                 }
                 switch (location.kind) {
@@ -427,27 +435,32 @@ module ts {
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.ArrowFunction:
-                        if (name === "arguments") {
+                        if (meaning & SymbolFlags.Variable && name === "arguments") {
                             result = argumentsSymbol;
                             break loop;
                         }
                         break;
                     case SyntaxKind.FunctionExpression:
-                        if (name === "arguments") {
+                        if (meaning & SymbolFlags.Variable && name === "arguments") {
                             result = argumentsSymbol;
                             break loop;
                         }
-                        let functionName = (<FunctionExpression>location).name;
-                        if (functionName && name === functionName.text) {
-                            result = location.symbol;
-                            break loop;
+
+                        if (meaning & SymbolFlags.Function) {
+                            let functionName = (<FunctionExpression>location).name;
+                            if (functionName && name === functionName.text) {
+                                result = location.symbol;
+                                break loop;
+                            }
                         }
                         break;
                     case SyntaxKind.ClassExpression:
-                        let className = (<ClassExpression>location).name;
-                        if (className && name === className.text) {
-                            result = location.symbol;
-                            break loop;
+                        if (meaning & SymbolFlags.Class) {
+                            let className = (<ClassExpression>location).name;
+                            if (className && name === className.text) {
+                                result = location.symbol;
+                                break loop;
+                            }
                         }
                         break;
                     case SyntaxKind.Decorator:
@@ -737,7 +750,7 @@ module ts {
             let target = resolveAlias(symbol);
             if (target) {
                 let markAlias =
-                    (target === unknownSymbol && compilerOptions.separateCompilation) ||
+                    (target === unknownSymbol && compilerOptions.isolatedModules) ||
                     (target !== unknownSymbol && (target.flags & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target));
 
                 if (markAlias) {
@@ -1526,17 +1539,55 @@ module ts {
                     }
                 }
 
+                function writeSymbolTypeReference(symbol: Symbol, typeArguments: Type[], pos: number, end: number) {
+                    // Unnamed function expressions, arrow functions, and unnamed class expressions have reserved names that
+                    // we don't want to display
+                    if (!isReservedMemberName(symbol.name)) {
+                        buildSymbolDisplay(symbol, writer, enclosingDeclaration, SymbolFlags.Type);
+                    }
+                    if (pos < end) {
+                        writePunctuation(writer, SyntaxKind.LessThanToken);
+                        writeType(typeArguments[pos++], TypeFormatFlags.None);
+                        while (pos < end) {
+                            writePunctuation(writer, SyntaxKind.CommaToken);
+                            writeSpace(writer);
+                            writeType(typeArguments[pos++], TypeFormatFlags.None);
+                        }
+                        writePunctuation(writer, SyntaxKind.GreaterThanToken);
+                    }
+                }
+
                 function writeTypeReference(type: TypeReference, flags: TypeFormatFlags) {
+                    let typeArguments = type.typeArguments;
                     if (type.target === globalArrayType && !(flags & TypeFormatFlags.WriteArrayAsGenericType)) {
-                        writeType(type.typeArguments[0], TypeFormatFlags.InElementType);
+                        writeType(typeArguments[0], TypeFormatFlags.InElementType);
                         writePunctuation(writer, SyntaxKind.OpenBracketToken);
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
                     }
                     else {
-                        buildSymbolDisplay(type.target.symbol, writer, enclosingDeclaration, SymbolFlags.Type);
-                        writePunctuation(writer, SyntaxKind.LessThanToken);
-                        writeTypeList(type.typeArguments, /*union*/ false);
-                        writePunctuation(writer, SyntaxKind.GreaterThanToken);
+                        // Write the type reference in the format f<A>.g<B>.C<X, Y> where A and B are type arguments
+                        // for outer type parameters, and f and g are the respective declaring containers of those
+                        // type parameters.
+                        let outerTypeParameters = type.target.outerTypeParameters;
+                        let i = 0;
+                        if (outerTypeParameters) {
+                            let length = outerTypeParameters.length;
+                            while (i < length) {
+                                // Find group of type arguments for type parameters with the same declaring container.
+                                let start = i;
+                                let parent = getParentSymbolOfTypeParameter(outerTypeParameters[i]);
+                                do {
+                                    i++;
+                                } while (i < length && getParentSymbolOfTypeParameter(outerTypeParameters[i]) === parent);
+                                // When type parameters are their own type arguments for the whole group (i.e. we have
+                                // the default outer type arguments), we don't show the group.
+                                if (!rangeEquals(outerTypeParameters, typeArguments, start, i)) {
+                                    writeSymbolTypeReference(parent, typeArguments, start, i);
+                                    writePunctuation(writer, SyntaxKind.DotToken);
+                                }
+                            }
+                        }
+                        writeSymbolTypeReference(type.symbol, typeArguments, i, typeArguments.length);
                     }
                 }
 
@@ -1737,7 +1788,7 @@ module ts {
             function buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags) {
                 let targetSymbol = getTargetSymbol(symbol);
                 if (targetSymbol.flags & SymbolFlags.Class || targetSymbol.flags & SymbolFlags.Interface) {
-                    buildDisplayForTypeParametersAndDelimiters(getTypeParametersOfClassOrInterface(symbol), writer, enclosingDeclaraiton, flags);
+                    buildDisplayForTypeParametersAndDelimiters(getLocalTypeParametersOfClassOrInterface(symbol), writer, enclosingDeclaraiton, flags);
                 }
             }
 
@@ -1753,11 +1804,12 @@ module ts {
             }
 
             function buildParameterDisplay(p: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
-                if (hasDotDotDotToken(p.valueDeclaration)) {
+                let parameterNode = <ParameterDeclaration>p.valueDeclaration;
+                if (isRestParameter(parameterNode)) {
                     writePunctuation(writer, SyntaxKind.DotDotDotToken);
                 }
                 appendSymbolNameOnly(p, writer);
-                if (hasQuestionToken(p.valueDeclaration) || (<ParameterDeclaration>p.valueDeclaration).initializer) {
+                if (isOptionalParameter(parameterNode)) {
                     writePunctuation(writer, SyntaxKind.QuestionToken);
                 }
                 writePunctuation(writer, SyntaxKind.ColonToken);
@@ -2326,7 +2378,7 @@ module ts {
                         // Variable has initializer that circularly references the variable itself
                         type = anyType;
                         if (compilerOptions.noImplicitAny) {
-                            error(symbol.valueDeclaration, Diagnostics._0_implicitly_has_type_any_because_it_is_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer,
+                            error(symbol.valueDeclaration, Diagnostics._0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer,
                                 symbolToString(symbol));
                         }
                     }
@@ -2474,28 +2526,66 @@ module ts {
             }
         }
 
-        // Return combined list of type parameters from all declarations of a class or interface. Elsewhere we check they're all
-        // the same, but even if they're not we still need the complete list to ensure instantiations supply type arguments
-        // for all type parameters.
-        function getTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] {
-            let result: TypeParameter[];
-            forEach(symbol.declarations, node => {
-                if (node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.ClassDeclaration) {
-                    let declaration = <InterfaceDeclaration>node;
-                    if (declaration.typeParameters && declaration.typeParameters.length) {
-                        forEach(declaration.typeParameters, node => {
-                            let tp = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node));
-                            if (!result) {
-                                result = [tp];
-                            }
-                            else if (!contains(result, tp)) {
-                                result.push(tp);
-                            }
-                        });
+        // Appends the type parameters given by a list of declarations to a set of type parameters and returns the resulting set.
+        // The function allocates a new array if the input type parameter set is undefined, but otherwise it modifies the set
+        // in-place and returns the same array.
+        function appendTypeParameters(typeParameters: TypeParameter[], declarations: TypeParameterDeclaration[]): TypeParameter[] {
+            for (let declaration of declarations) {
+                let tp = getDeclaredTypeOfTypeParameter(getSymbolOfNode(declaration));
+                if (!typeParameters) {
+                    typeParameters = [tp];
+                }
+                else if (!contains(typeParameters, tp)) {
+                    typeParameters.push(tp);
+                }
+            }
+            return typeParameters;
+        }
+
+        // Appends the outer type parameters of a node to a set of type parameters and returns the resulting set. The function
+        // allocates a new array if the input type parameter set is undefined, but otherwise it modifies the set in-place and
+        // returns the same array.
+        function appendOuterTypeParameters(typeParameters: TypeParameter[], node: Node): TypeParameter[]{
+            while (true) {
+                node = node.parent;
+                if (!node) {
+                    return typeParameters;
+                }
+                if (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.FunctionDeclaration ||
+                    node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.MethodDeclaration ||
+                    node.kind === SyntaxKind.ArrowFunction) {
+                    let declarations = (<ClassDeclaration | FunctionLikeDeclaration>node).typeParameters;
+                    if (declarations) {
+                        return appendTypeParameters(appendOuterTypeParameters(typeParameters, node), declarations);
                     }
                 }
-            });
+            }
+        }
+
+        // The outer type parameters are those defined by enclosing generic classes, methods, or functions.
+        function getOuterTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] {
+            var kind = symbol.flags & SymbolFlags.Class ? SyntaxKind.ClassDeclaration : SyntaxKind.InterfaceDeclaration;
+            return appendOuterTypeParameters(undefined, getDeclarationOfKind(symbol, kind));
+        }
+
+        // The local type parameters are the combined set of type parameters from all declarations of the class or interface.
+        function getLocalTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] {
+            let result: TypeParameter[];
+            for (let node of symbol.declarations) {
+                if (node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.ClassDeclaration) {
+                    let declaration = <InterfaceDeclaration>node;
+                    if (declaration.typeParameters) {
+                        result = appendTypeParameters(result, declaration.typeParameters);
+                    }
+                }
+            }
             return result;
+        }
+
+        // The full set of type parameters for a generic class or interface type consists of its outer type parameters plus
+        // its locally declared type parameters.
+        function getTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] {
+            return concatenate(getOuterTypeParametersOfClassOrInterface(symbol), getLocalTypeParametersOfClassOrInterface(symbol));
         }
 
         function getBaseTypes(type: InterfaceType): ObjectType[] {
@@ -2567,10 +2657,13 @@ module ts {
             if (!links.declaredType) {
                 let kind = symbol.flags & SymbolFlags.Class ? TypeFlags.Class : TypeFlags.Interface;
                 let type = links.declaredType = <InterfaceType>createObjectType(kind, symbol);
-                let typeParameters = getTypeParametersOfClassOrInterface(symbol);
-                if (typeParameters) {
+                let outerTypeParameters = getOuterTypeParametersOfClassOrInterface(symbol);
+                let localTypeParameters = getLocalTypeParametersOfClassOrInterface(symbol);
+                if (outerTypeParameters || localTypeParameters) {
                     type.flags |= TypeFlags.Reference;
-                    type.typeParameters = typeParameters;
+                    type.typeParameters = concatenate(outerTypeParameters, localTypeParameters);
+                    type.outerTypeParameters = outerTypeParameters;
+                    type.localTypeParameters = localTypeParameters;
                     (<GenericType>type).instantiations = {};
                     (<GenericType>type).instantiations[getTypeListId(type.typeParameters)] = <GenericType>type;
                     (<GenericType>type).target = <GenericType>type;
@@ -2760,12 +2853,12 @@ module ts {
                 return map(baseSignatures, baseSignature => {
                     let signature = baseType.flags & TypeFlags.Reference ?
                         getSignatureInstantiation(baseSignature, (<TypeReference>baseType).typeArguments) : cloneSignature(baseSignature);
-                    signature.typeParameters = classType.typeParameters;
+                    signature.typeParameters = classType.localTypeParameters;
                     signature.resolvedReturnType = classType;
                     return signature;
                 });
             }
-            return [createSignature(undefined, classType.typeParameters, emptyArray, classType, 0, false, false)];
+            return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, 0, false, false)];
         }
 
         function createTupleTypeMemberSymbols(memberTypes: Type[]): SymbolTable {
@@ -3110,11 +3203,15 @@ module ts {
             return result;
         }
 
+        function isOptionalParameter(node: ParameterDeclaration) {
+            return hasQuestionToken(node) || !!node.initializer;
+        }
+
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
             let links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
                 let classType = declaration.kind === SyntaxKind.Constructor ? getDeclaredTypeOfClassOrInterface((<ClassDeclaration>declaration.parent).symbol) : undefined;
-                let typeParameters = classType ? classType.typeParameters :
+                let typeParameters = classType ? classType.localTypeParameters :
                     declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) : undefined;
                 let parameters: Symbol[] = [];
                 let hasStringLiterals = false;
@@ -3157,7 +3254,7 @@ module ts {
                 }
 
                 links.resolvedSignature = createSignature(declaration, typeParameters, parameters, returnType,
-                    minArgumentCount, hasRestParameters(declaration), hasStringLiterals);
+                    minArgumentCount, hasRestParameter(declaration), hasStringLiterals);
             }
             return links.resolvedSignature;
         }
@@ -3316,6 +3413,10 @@ module ts {
             return type.constraint === noConstraintType ? undefined : type.constraint;
         }
 
+        function getParentSymbolOfTypeParameter(typeParameter: TypeParameter): Symbol {
+            return getSymbolOfNode(getDeclarationOfKind(typeParameter.symbol, SyntaxKind.TypeParameter).parent);
+        }
+
         function getTypeListId(types: Type[]) {
             switch (types.length) {
                 case 1:
@@ -3429,30 +3530,48 @@ module ts {
                             type = unknownType;
                         }
                         else {
-                            type = getDeclaredTypeOfSymbol(symbol);
-                            if (type.flags & (TypeFlags.Class | TypeFlags.Interface) && type.flags & TypeFlags.Reference) {
-                                let typeParameters = (<InterfaceType>type).typeParameters;
-                                if (node.typeArguments && node.typeArguments.length === typeParameters.length) {
-                                    type = createTypeReference(<GenericType>type, map(node.typeArguments, getTypeFromTypeNode));
-                                }
-                                else {
-                                    error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), typeParameters.length);
-                                    type = undefined;
-                                }
-                            }
-                            else {
-                                if (node.typeArguments) {
-                                    error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
-                                    type = undefined;
-                                }
-                            }
+                            type = createTypeReferenceIfGeneric(
+                                getDeclaredTypeOfSymbol(symbol),
+                                node, node.typeArguments);
                         }
                     }
                 }
 
                 links.resolvedType = type || unknownType;
             }
+
             return links.resolvedType;
+        }
+
+        function createTypeReferenceIfGeneric(type: Type, node: Node, typeArguments: NodeArray<TypeNode>): Type {
+            if (type.flags & (TypeFlags.Class | TypeFlags.Interface) && type.flags & TypeFlags.Reference) {
+                // In a type reference, the outer type parameters of the referenced class or interface are automatically
+                // supplied as type arguments and the type reference only specifies arguments for the local type parameters
+                // of the class or interface.
+                let localTypeParameters = (<InterfaceType>type).localTypeParameters;
+                let expectedTypeArgCount = localTypeParameters ? localTypeParameters.length : 0;
+                let typeArgCount = typeArguments ? typeArguments.length : 0;
+                if (typeArgCount === expectedTypeArgCount) {
+                    // When no type arguments are expected we already have the right type because all outer type parameters
+                    // have themselves as default type arguments.
+                    if (typeArgCount) {
+                        return createTypeReference(<GenericType>type, concatenate((<InterfaceType>type).outerTypeParameters,
+                            map(typeArguments, getTypeFromTypeNode)));
+                    }
+                }
+                else {
+                    error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), expectedTypeArgCount);
+                    return undefined;
+                }
+            }
+            else {
+                if (typeArguments) {
+                    error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
+                    return undefined;
+                }
+            }
+
+            return type;
         }
 
         function getTypeFromTypeQueryNode(node: TypeQueryNode): Type {
@@ -3901,7 +4020,7 @@ module ts {
                     return mapper(<TypeParameter>type);
                 }
                 if (type.flags & TypeFlags.Anonymous) {
-                    return type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) ?
+                    return type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) ?
                         instantiateAnonymousType(<ObjectType>type, mapper) : type;
                 }
                 if (type.flags & TypeFlags.Reference) {
@@ -5746,7 +5865,7 @@ module ts {
                     let contextualSignature = getContextualSignature(func);
                     if (contextualSignature) {
 
-                        let funcHasRestParameters = hasRestParameters(func);
+                        let funcHasRestParameters = hasRestParameter(func);
                         let len = func.parameters.length - (funcHasRestParameters ? 1 : 0);
                         let indexOfParameter = indexOf(func.parameters, parameter);
                         if (indexOfParameter < len) {
@@ -7532,6 +7651,15 @@ module ts {
             }
 
             if (node.body) {
+                if (!node.type) {
+                    // There are some checks that are only performed in getReturnTypeFromBody, that may produce errors
+                    // we need. An example is the noImplicitAny errors resulting from widening the return expression
+                    // of a function. Because checking of function expression bodies is deferred, there was never an
+                    // appropriate time to do this during the main walk of the file (see the comment at the top of
+                    // checkFunctionExpressionBodies). So it must be done now.
+                    getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+                }
+
                 if (node.body.kind === SyntaxKind.Block) {
                     checkSourceElement(node.body);
                 }
@@ -9046,7 +9174,7 @@ module ts {
             // serialize the type metadata.
             if (node && node.kind === SyntaxKind.TypeReference) {
                 let type = getTypeFromTypeNode(node);
-                let shouldCheckIfUnknownType = type === unknownType && compilerOptions.separateCompilation;
+                let shouldCheckIfUnknownType = type === unknownType && compilerOptions.isolatedModules;
                 if (!type || (!shouldCheckIfUnknownType && type.flags & (TypeFlags.Intrinsic | TypeFlags.NumberLike | TypeFlags.StringLike))) {
                     return;
                 }
@@ -9099,6 +9227,10 @@ module ts {
             if (!nodeCanBeDecorated(node)) {
                 return;
             }
+            
+            if (!compilerOptions.experimentalDecorators) {
+                error(node, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Specify_experimentalDecorators_to_remove_this_warning);
+            }
 
             if (compilerOptions.emitDecoratorMetadata) {
                 // we only need to perform these checks if we are emitting serialized type metadata for the target of a decorator.
@@ -9134,7 +9266,6 @@ module ts {
         function checkFunctionDeclaration(node: FunctionDeclaration): void {
             if (produceDiagnostics) {
                 checkFunctionLikeDeclaration(node) ||
-                checkGrammarDisallowedModifiersInBlockOrObjectLiteralExpression(node) ||
                 checkGrammarFunctionName(node.name) ||
                 checkGrammarForGenerator(node);
 
@@ -9215,7 +9346,7 @@ module ts {
 
         function checkCollisionWithArgumentsInGeneratedCode(node: SignatureDeclaration) {
             // no rest parameters \ declaration context \ overload - no codegen impact
-            if (!hasRestParameters(node) || isInAmbientContext(node) || nodeIsMissing((<FunctionLikeDeclaration>node).body)) {
+            if (!hasRestParameter(node) || isInAmbientContext(node) || nodeIsMissing((<FunctionLikeDeclaration>node).body)) {
                 return;
             }
 
@@ -9505,7 +9636,7 @@ module ts {
 
         function checkVariableStatement(node: VariableStatement) {
             // Grammar checking
-            checkGrammarDecorators(node) || checkGrammarDisallowedModifiersInBlockOrObjectLiteralExpression(node) || checkGrammarModifiers(node) || checkGrammarVariableDeclarationList(node.declarationList) || checkGrammarForDisallowedLetOrConstStatement(node);
+            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarVariableDeclarationList(node.declarationList) || checkGrammarForDisallowedLetOrConstStatement(node);
 
             forEach(node.declarationList.declarations, checkSourceElement);
         }
@@ -10217,10 +10348,6 @@ module ts {
         function checkClassDeclaration(node: ClassDeclaration) {
             checkGrammarDeclarationNameInStrictMode(node);
             // Grammar checking
-            if (node.parent.kind !== SyntaxKind.ModuleBlock && node.parent.kind !== SyntaxKind.SourceFile) {
-                grammarErrorOnNode(node, Diagnostics.class_declarations_are_only_supported_directly_inside_a_module_or_as_a_top_level_declaration);
-            }
-
             if (!node.name && !(node.flags & NodeFlags.Default)) {
                 grammarErrorOnFirstToken(node, Diagnostics.A_class_declaration_without_the_default_modifier_must_have_a_name);
             }
@@ -10263,7 +10390,7 @@ module ts {
                 }
             }
 
-            if (baseTypes.length || (baseTypeNode && compilerOptions.separateCompilation)) {
+            if (baseTypes.length || (baseTypeNode && compilerOptions.isolatedModules)) {
                 // Check that base type can be evaluated as expression
                 checkExpressionOrQualifiedName(baseTypeNode.expression);
             }
@@ -10679,8 +10806,8 @@ module ts {
             computeEnumMemberValues(node);
 
             let enumIsConst = isConst(node);
-            if (compilerOptions.separateCompilation && enumIsConst && isInAmbientContext(node)) {
-                error(node.name, Diagnostics.Ambient_const_enums_are_not_allowed_when_the_separateCompilation_flag_is_provided);
+            if (compilerOptions.isolatedModules && enumIsConst && isInAmbientContext(node)) {
+                error(node.name, Diagnostics.Ambient_const_enums_are_not_allowed_when_the_isolatedModules_flag_is_provided);
             }
 
             // Spec 2014 - Section 9.3:
@@ -10770,7 +10897,7 @@ module ts {
                 if (symbol.flags & SymbolFlags.ValueModule
                     && symbol.declarations.length > 1
                     && !isInAmbientContext(node)
-                    && isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.separateCompilation)) {
+                    && isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.isolatedModules)) {
                     let firstNonAmbientClassOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
                     if (firstNonAmbientClassOrFunc) {
                         if (getSourceFileOfNode(node) !== getSourceFileOfNode(firstNonAmbientClassOrFunc)) {
@@ -11785,7 +11912,7 @@ module ts {
 
         function isAliasResolvedToValue(symbol: Symbol): boolean {
             let target = resolveAlias(symbol);
-            if (target === unknownSymbol && compilerOptions.separateCompilation) {
+            if (target === unknownSymbol && compilerOptions.isolatedModules) {
                 return true;
             }
             // const enums and modules that contain only const enums are not considered values from the emit perespective
@@ -12389,18 +12516,27 @@ module ts {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                 case SyntaxKind.IndexSignature:
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.VariableStatement:
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.ImportDeclaration:
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.ExportDeclaration:
                 case SyntaxKind.ExportAssignment:
                 case SyntaxKind.Parameter:
+                    break;
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.VariableStatement:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
+                    if (node.modifiers && node.parent.kind !== SyntaxKind.ModuleBlock && node.parent.kind !== SyntaxKind.SourceFile) {
+                        return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
+                    }
+                    break;
+                case SyntaxKind.EnumDeclaration:
+                    if (node.modifiers && (node.modifiers.length > 1 || node.modifiers[0].kind !== SyntaxKind.ConstKeyword) &&
+                        node.parent.kind !== SyntaxKind.ModuleBlock && node.parent.kind !== SyntaxKind.SourceFile) {
+                        return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
+                    }
                     break;
                 default:
                     return false;

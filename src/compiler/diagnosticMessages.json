@@ -647,11 +647,11 @@
         "category": "Error",
         "code": 1207
     },
-    "Cannot compile namespaces when the '--separateCompilation' flag is provided.": {
+    "Cannot compile namespaces when the '--isolatedModules' flag is provided.": {
         "category": "Error",
         "code": 1208
     },
-    "Ambient const enums are not allowed when the '--separateCompilation' flag is provided.": {
+    "Ambient const enums are not allowed when the '--isolatedModules' flag is provided.": {
         "category": "Error",
         "code": 1209
     },
@@ -682,25 +682,28 @@
     "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
         "code": 1218
+    },
+    "Experimental support for decorators is a feature that is subject to change in a future release. Specify '--experimentalDecorators' to remove this warning.": {
+        "category": "Error",
+        "code": 1219
     },    
     "Generators are only available when targeting ECMAScript 6 or higher.": {
         "category": "Error",
-        "code": 1219
+        "code": 1220
     },
     "Generators are not allowed in an ambient context.": {
         "category": "Error",
-        "code": 1220
+        "code": 1221
     },
     "An overload signature cannot be declared as a generator.": {
         "category": "Error",
-        "code": 1221
-    },
-
-
-    "'{0}' tag already specified.": {
-        "category": "Error",
         "code": 1222
     },
+    "'{0}' tag already specified.": {
+        "category": "Error",
+        "code": 1223
+    },
+
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1810,23 +1813,23 @@
         "category": "Error",
         "code": 5042
     },
-    "Option 'sourceMap' cannot be specified with option 'separateCompilation'.": {
+    "Option 'sourceMap' cannot be specified with option 'isolatedModules'.": {
         "category": "Error",
         "code": 5043
     },
-    "Option 'declaration' cannot be specified with option 'separateCompilation'.": {
+    "Option 'declaration' cannot be specified with option 'isolatedModules'.": {
         "category": "Error",
         "code": 5044
     },
-    "Option 'noEmitOnError' cannot be specified with option 'separateCompilation'.": {
+    "Option 'noEmitOnError' cannot be specified with option 'isolatedModules'.": {
         "category": "Error",
         "code": 5045
     },
-    "Option 'out' cannot be specified with option 'separateCompilation'.": {
+    "Option 'out' cannot be specified with option 'isolatedModules'.": {
         "category": "Error",
         "code": 5046
     },
-    "Option 'separateCompilation' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher.": {
+    "Option 'isolatedModules' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher.": {
         "category": "Error",
         "code": 5047
     },
@@ -2043,7 +2046,18 @@
         "category": "Error", 
         "code": 6062
     },
-
+    "Option 'experimentalDecorators' must also be specified when option 'emitDecoratorMetadata' is specified.": {
+        "category": "Error",
+        "code": 6064
+    },
+    "Enables experimental support for ES7 decorators.": {
+        "category": "Message",
+        "code": 6065
+    },
+    "Enables experimental support for emitting type metadata for decorators.": {
+        "category": "Message",
+        "code": 6066
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -2093,7 +2107,7 @@
         "category": "Error",
         "code": 7020
     },
-    "'{0}' implicitly has type 'any' because it is does not have a type annotation and is referenced directly or indirectly in its own initializer.": {
+    "'{0}' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.": {
         "category": "Error",
         "code": 7022
     },
@@ -2185,9 +2199,5 @@
     "'class' expressions are not currently supported.": {
         "category": "Error",
         "code": 9003
-    },
-    "'class' declarations are only supported directly inside a module or as a top level declaration.": {
-        "category": "Error",
-        "code": 9004
     }
 }

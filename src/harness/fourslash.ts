@@ -1818,6 +1818,21 @@ module FourSlash {
             }
         }
 
+        private verifyProjectInfo(expected: string[]) {
+            if (this.testType == FourSlashTestType.Server) {
+                let actual = (<ts.server.SessionClient>this.languageService).getProjectInfo(
+                    this.activeFile.fileName,
+                    /* needFileNameList */ true
+                    );
+                assert.equal(
+                    expected.join(","),
+                    actual.fileNameList.map( file => {
+                        return file.replace(this.basePath + "/", "")
+                        }).join(",")
+                    );
+            }
+        }
+
         public verifySemanticClassifications(expected: { classificationType: string; text: string }[]) {
             var actual = this.languageService.getSemanticClassifications(this.activeFile.fileName,
                 ts.createTextSpan(0, this.activeFile.content.length));

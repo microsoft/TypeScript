@@ -1,4 +1,5 @@
 // @target: ES5
+// @experimentaldecorators: true
 // @noLib: true
 
 // @Filename: a.ts
@@ -12,7 +13,6 @@ interface RegExp { }
 interface IArguments { }
 
 // @Filename: b.ts
-/// <reference path="a.ts" />
 declare var dec: any;
 
 @dec

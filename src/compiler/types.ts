@@ -917,7 +917,7 @@ module ts {
         _classElementBrand: any;
     }
 
-    export interface InterfaceDeclaration extends Declaration, ModuleElement {
+    export interface InterfaceDeclaration extends Declaration, Statement {
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
@@ -929,7 +929,7 @@ module ts {
         types?: NodeArray<ExpressionWithTypeArguments>;
     }
 
-    export interface TypeAliasDeclaration extends Declaration, ModuleElement {
+    export interface TypeAliasDeclaration extends Declaration, Statement {
         name: Identifier;
         type: TypeNode;
     }
@@ -941,7 +941,7 @@ module ts {
         initializer?: Expression;
     }
 
-    export interface EnumDeclaration extends Declaration, ModuleElement {
+    export interface EnumDeclaration extends Declaration, Statement {
         name: Identifier;
         members: NodeArray<EnumMember>;
     }
@@ -1420,6 +1420,7 @@ module ts {
     }
 
     export const enum SymbolFlags {
+        None                    = 0,
         FunctionScopedVariable  = 0x00000001,  // Variable (var) or parameter
         BlockScopedVariable     = 0x00000002,  // A block-scoped variable (let or const)
         Property                = 0x00000004,  // Property or enum member
@@ -1489,11 +1490,9 @@ module ts {
 
         ExportHasLocal = Function | Class | Enum | ValueModule,
 
-        HasLocals = Function | Module | Method | Constructor | Accessor | Signature,
         HasExports = Class | Enum | Module,
         HasMembers = Class | Interface | TypeLiteral | ObjectLiteral,
 
-        IsContainer = HasLocals | HasExports | HasMembers,
         PropertyOrAccessor = Property | Accessor,
         Export = ExportNamespace | ExportType | ExportValue,
     }
@@ -1501,14 +1500,15 @@ module ts {
     export interface Symbol {
         flags: SymbolFlags;                     // Symbol flags
         name: string;                           // Name of symbol
-        /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
-        /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
         declarations?: Declaration[];           // Declarations associated with this symbol
-        /* @internal */ parent?: Symbol;        // Parent symbol
+        valueDeclaration?: Declaration;         // First value declaration of the symbol
+
         members?: SymbolTable;                  // Class, interface or literal instance members
         exports?: SymbolTable;                  // Module exports
+        /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
+        /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
+        /* @internal */ parent?: Symbol;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
-        valueDeclaration?: Declaration;         // First value declaration of the symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
     }
 
@@ -1627,6 +1627,8 @@ module ts {
     // Class and interface types (TypeFlags.Class and TypeFlags.Interface)
     export interface InterfaceType extends ObjectType {
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
+        outerTypeParameters: TypeParameter[];      // Outer type parameters (undefined if none)
+        localTypeParameters: TypeParameter[];      // Local type parameters (undefined if none)
     }
 
     export interface InterfaceTypeWithBaseTypes extends InterfaceType {
@@ -1673,8 +1675,8 @@ module ts {
         properties: Symbol[];              // Properties
         callSignatures: Signature[];       // Call signatures of type
         constructSignatures: Signature[];  // Construct signatures of type
-        stringIndexType: Type;             // String index type
-        numberIndexType: Type;             // Numeric index type
+        stringIndexType?: Type;            // String index type
+        numberIndexType?: Type;            // Numeric index type
     }
 
     // Just a place to cache element types of iterables and iterators
@@ -1817,7 +1819,8 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
-        separateCompilation?: boolean;
+        isolatedModules?: boolean;
+        experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
         /* @internal */ stripInternal?: boolean;
         [option: string]: string | number | boolean;

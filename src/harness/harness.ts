@@ -1011,6 +1011,10 @@ module Harness {
                                 options.target = <any>setting.value;
                             }
                             break;
+                            
+                        case 'experimentaldecorators':
+                            options.experimentalDecorators = setting.value === 'true';
+                            break;
 
                         case 'emitdecoratormetadata':
                             options.emitDecoratorMetadata = setting.value === 'true';
@@ -1105,8 +1109,8 @@ module Harness {
                             options.preserveConstEnums = setting.value === 'true';
                             break;
 
-                        case 'separatecompilation':
-                            options.separateCompilation = setting.value === 'true';
+                        case 'isolatedmodules':
+                            options.isolatedModules = setting.value === 'true';
                             break;
 
                         case 'suppressimplicitanyindexerrors':
@@ -1522,8 +1526,8 @@ module Harness {
             "noimplicitany", "noresolve", "newline", "normalizenewline", "emitbom",
             "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
             "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
-            "separatecompilation", "inlinesourcemap", "maproot", "sourceroot",
-            "inlinesources", "emitdecoratormetadata"];
+            "isolatedmodules", "inlinesourcemap", "maproot", "sourceroot",
+            "inlinesources", "emitdecoratormetadata", "experimentaldecorators"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
