@@ -17,7 +17,7 @@ tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts(24
     interface C { }
     
     declare module M {
-        
+    
         interface C1 { }
                   ~~
 !!! error TS2507: An interface cannot merge with a non-ambient class.
@@ -33,7 +33,7 @@ tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts(24
         interface C1 { }
                   ~~
 !!! error TS2507: An interface cannot merge with a non-ambient class.
-        
+    
         export class C2 { }
                      ~~
 !!! error TS2506: A non-ambient class cannot be merged with an interface.

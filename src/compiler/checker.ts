@@ -10403,12 +10403,8 @@ module ts {
             }
 
             // Non-ambient classes cannot merge with interfaces.
-            if (!(node.flags & NodeFlags.Ambient)) {
-                if (forEach(symbol.declarations, (element: Declaration) => {
-                    return element.kind === SyntaxKind.InterfaceDeclaration;
-                })) {
-                    error(node, Diagnostics.A_non_ambient_class_cannot_be_merged_with_an_interface)
-                }
+            if (!(node.flags & NodeFlags.Ambient) && getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration)) {
+                error(node, Diagnostics.A_non_ambient_class_cannot_be_merged_with_an_interface)
             }
 
             forEach(node.members, checkSourceElement);
@@ -10562,15 +10558,6 @@ module ts {
             return ok;
         }
 
-        /**
-         * Checks if the symbol contains a class declaration that is non-ambient.
-         */
-        function hasNonAmbientClass(symbol: Symbol): boolean {
-            return symbol && forEach(symbol.declarations, (element: Declaration) => {
-                return element.kind === SyntaxKind.ClassDeclaration && !(element.flags & NodeFlags.Ambient);
-            });
-        }
-
         function checkInterfaceDeclaration(node: InterfaceDeclaration) {
             // Grammar checking
             checkGrammarDeclarationNameInStrictMode(node) || checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarInterfaceDeclaration(node);
@@ -10600,10 +10587,12 @@ module ts {
                     }
                 }
 
-                // Interfaces cannot merge with non-ambient classes.
-                if (!(node.flags & NodeFlags.Ambient)) {
-                    if (hasNonAmbientClass(symbol)) {
-                        error(node, Diagnostics.An_interface_cannot_merge_with_a_non_ambient_class);
+                if (symbol && symbol.declarations) {
+                    for (let declaration of symbol.declarations) {
+                        if (declaration.kind === SyntaxKind.ClassDeclaration && !(declaration.flags & NodeFlags.Ambient)) {
+                            error(node, Diagnostics.An_interface_cannot_merge_with_a_non_ambient_class);
+                            break;
+                        }
                     }
                 }
             }
