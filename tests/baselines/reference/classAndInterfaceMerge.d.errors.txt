@@ -1,9 +1,9 @@
-tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts(12,15): error TS2507: An interface cannot merge with a non-ambient class.
-tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts(14,11): error TS2506: A non-ambient class cannot be merged with an interface.
-tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts(16,15): error TS2507: An interface cannot merge with a non-ambient class.
-tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts(18,15): error TS2507: An interface cannot merge with a non-ambient class.
-tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts(20,18): error TS2506: A non-ambient class cannot be merged with an interface.
-tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts(24,22): error TS2507: An interface cannot merge with a non-ambient class.
+tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts(12,15): error TS2506: Only an ambient class can be merged with an interface.
+tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts(14,11): error TS2506: Only an ambient class can be merged with an interface.
+tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts(16,15): error TS2506: Only an ambient class can be merged with an interface.
+tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts(18,15): error TS2506: Only an ambient class can be merged with an interface.
+tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts(20,18): error TS2506: Only an ambient class can be merged with an interface.
+tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts(24,22): error TS2506: Only an ambient class can be merged with an interface.
 
 
 ==== tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts (6 errors) ====
@@ -20,27 +20,27 @@ tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts(24
     
         interface C1 { }
                   ~~
-!!! error TS2507: An interface cannot merge with a non-ambient class.
+!!! error TS2506: Only an ambient class can be merged with an interface.
     
         class C1 { }
               ~~
-!!! error TS2506: A non-ambient class cannot be merged with an interface.
+!!! error TS2506: Only an ambient class can be merged with an interface.
     
         interface C1 { }
                   ~~
-!!! error TS2507: An interface cannot merge with a non-ambient class.
+!!! error TS2506: Only an ambient class can be merged with an interface.
     
         interface C1 { }
                   ~~
-!!! error TS2507: An interface cannot merge with a non-ambient class.
+!!! error TS2506: Only an ambient class can be merged with an interface.
     
         export class C2 { }
                      ~~
-!!! error TS2506: A non-ambient class cannot be merged with an interface.
+!!! error TS2506: Only an ambient class can be merged with an interface.
     }
     
     declare module M {
         export interface C2 { }
                          ~~
-!!! error TS2507: An interface cannot merge with a non-ambient class.
+!!! error TS2506: Only an ambient class can be merged with an interface.
     }
