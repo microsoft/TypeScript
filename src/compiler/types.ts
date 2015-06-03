@@ -1168,7 +1168,7 @@ module ts {
     }
 
     export interface ParseConfigHost {
-        readDirectory(rootDir: string, extension: string): string[];
+        readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
     }
 
     export interface WriteFileCallback {
@@ -1582,14 +1582,15 @@ module ts {
         Tuple                   = 0x00002000,  // Tuple
         Union                   = 0x00004000,  // Union
         Anonymous               = 0x00008000,  // Anonymous
+        Instantiated            = 0x00010000,  // Instantiated anonymous type
         /* @internal */ 
-        FromSignature           = 0x00010000,  // Created for signature assignment check
-        ObjectLiteral           = 0x00020000,  // Originates in an object literal
+        FromSignature           = 0x00020000,  // Created for signature assignment check
+        ObjectLiteral           = 0x00040000,  // Originates in an object literal
         /* @internal */ 
-        ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
+        ContainsUndefinedOrNull = 0x00080000,  // Type is or contains Undefined or Null type
         /* @internal */ 
-        ContainsObjectLiteral   = 0x00080000,  // Type is or contains object literal type
-        ESSymbol                = 0x00100000,  // Type of symbol primitive introduced in ES6
+        ContainsObjectLiteral   = 0x00100000,  // Type is or contains object literal type
+        ESSymbol                = 0x00200000,  // Type of symbol primitive introduced in ES6
 
         /* @internal */ 
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -1731,7 +1732,6 @@ module ts {
     /* @internal */
     export interface TypeMapper {
         (t: TypeParameter): Type;
-        mappings?: Map<Type>;  // Type mapping cache
     }
 
     /* @internal */

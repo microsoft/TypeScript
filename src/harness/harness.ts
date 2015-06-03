@@ -899,7 +899,7 @@ module Harness {
             private compileOptions: ts.CompilerOptions;
             private settings: Harness.TestCaseParser.CompilerSetting[] = [];
 
-            private lastErrors: HarnessDiagnostic[];
+            private lastErrors: ts.Diagnostic[];
 
             public reset() {
                 this.inputFiles = [];
@@ -1078,10 +1078,6 @@ module Harness {
                             }
                             break;
 
-                        case 'normalizenewline':
-                            newLine = setting.value;
-                            break;
-
                         case 'comments':
                             options.removeComments = setting.value === 'false';
                             break;
@@ -1144,11 +1140,7 @@ module Harness {
 
                 var emitResult = program.emit();
 
-                var errors: HarnessDiagnostic[] = [];
-                ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics).forEach(err => {
-                    // TODO: new compiler formats errors after this point to add . and newlines so we'll just do it manually for now
-                    errors.push(getMinimalDiagnostic(err));
-                });
+                var errors = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
                 this.lastErrors = errors;
 
                 var result = new CompilerResult(fileOutputs, errors, program, ts.sys.getCurrentDirectory(), emitResult.sourceMaps);
@@ -1235,70 +1227,50 @@ module Harness {
             return normalized;
         }
 
-        export function getMinimalDiagnostic(err: ts.Diagnostic): HarnessDiagnostic {
-            var errorLineInfo = err.file ? err.file.getLineAndCharacterOfPosition(err.start) : { line: -1, character: -1 };
-            return {
-                fileName: err.file && err.file.fileName,
-                start: err.start,
-                end: err.start + err.length,
-                line: errorLineInfo.line + 1,
-                character: errorLineInfo.character + 1,
-                message: ts.flattenDiagnosticMessageText(err.messageText, ts.sys.newLine),
-                category: ts.DiagnosticCategory[err.category].toLowerCase(),
-                code: err.code
-            };
-        }
-
-        export function minimalDiagnosticsToString(diagnostics: HarnessDiagnostic[]) {
+        export function minimalDiagnosticsToString(diagnostics: ts.Diagnostic[]) {
             // This is basically copied from tsc.ts's reportError to replicate what tsc does
             var errorOutput = "";
-            ts.forEach(diagnostics, diagnotic => {
-                if (diagnotic.fileName) {
-                    errorOutput += diagnotic.fileName + "(" + diagnotic.line + "," + diagnotic.character + "): ";
+            ts.forEach(diagnostics, diagnostic => {
+                if (diagnostic.file) {
+                    var lineAndCharacter = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+                    errorOutput += diagnostic.file.fileName + "(" + (lineAndCharacter.line + 1) + "," + (lineAndCharacter.character + 1) + "): ";
                 }
 
-                errorOutput += diagnotic.category + " TS" + diagnotic.code + ": " + diagnotic.message + ts.sys.newLine;
+                errorOutput += ts.DiagnosticCategory[diagnostic.category].toLowerCase() + " TS" + diagnostic.code + ": " + ts.flattenDiagnosticMessageText(diagnostic.messageText, ts.sys.newLine) + ts.sys.newLine;
             });
 
             return errorOutput;
         }
 
-        function compareDiagnostics(d1: HarnessDiagnostic, d2: HarnessDiagnostic) {
-            return ts.compareValues(d1.fileName, d2.fileName) ||
-                ts.compareValues(d1.start, d2.start) ||
-                ts.compareValues(d1.end, d2.end) ||
-                ts.compareValues(d1.code, d2.code) ||
-                ts.compareValues(d1.message, d2.message) ||
-                0;
-        }
-
-        export function getErrorBaseline(inputFiles: { unitName: string; content: string }[], diagnostics: HarnessDiagnostic[]) {
-            diagnostics.sort(compareDiagnostics);
+        export function getErrorBaseline(inputFiles: { unitName: string; content: string }[], diagnostics: ts.Diagnostic[]) {
+            diagnostics.sort(ts.compareDiagnostics);
             var outputLines: string[] = [];
             // Count up all the errors we find so we don't miss any
             var totalErrorsReported = 0;
 
-            function outputErrorText(error: Harness.Compiler.HarnessDiagnostic) {
-                var errLines = RunnerBase.removeFullPaths(error.message)
+            function outputErrorText(error: ts.Diagnostic) {
+                var message = ts.flattenDiagnosticMessageText(error.messageText, ts.sys.newLine);
+
+                var errLines = RunnerBase.removeFullPaths(message)
                     .split('\n')
                     .map(s => s.length > 0 && s.charAt(s.length - 1) === '\r' ? s.substr(0, s.length - 1) : s)
                     .filter(s => s.length > 0)
-                    .map(s => '!!! ' + error.category + " TS" + error.code + ": " + s);
+                    .map(s => '!!! ' + ts.DiagnosticCategory[error.category].toLowerCase() + " TS" + error.code + ": " + s);
                 errLines.forEach(e => outputLines.push(e));
 
                 totalErrorsReported++;
             }
 
             // Report global errors
-            var globalErrors = diagnostics.filter(err => !err.fileName);
+            var globalErrors = diagnostics.filter(err => !err.file);
             globalErrors.forEach(outputErrorText);
 
             // 'merge' the lines of each input file with any errors associated with it
             inputFiles.filter(f => f.content !== undefined).forEach(inputFile => {
                 // Filter down to the errors in the file
                 var fileErrors = diagnostics.filter(e => {
-                    var errFn = e.fileName;
-                    return errFn && errFn === inputFile.unitName;
+                    var errFn = e.file;
+                    return errFn && errFn.fileName === inputFile.unitName;
                 });
 
 
@@ -1334,18 +1306,19 @@ module Harness {
                     outputLines.push('    ' + line);
                     fileErrors.forEach(err => {
                         // Does any error start or continue on to this line? Emit squiggles
-                        if ((err.end >= thisLineStart) && ((err.start < nextLineStart) || (lineIndex === lines.length - 1))) {
+                        let end = ts.textSpanEnd(err);
+                        if ((end >= thisLineStart) && ((err.start < nextLineStart) || (lineIndex === lines.length - 1))) {
                             // How many characters from the start of this line the error starts at (could be positive or negative)
                             var relativeOffset = err.start - thisLineStart;
                             // How many characters of the error are on this line (might be longer than this line in reality)
-                            var length = (err.end - err.start) - Math.max(0, thisLineStart - err.start);
+                            var length = (end - err.start) - Math.max(0, thisLineStart - err.start);
                             // Calculate the start of the squiggle
                             var squiggleStart = Math.max(0, relativeOffset);
                             // TODO/REVIEW: this doesn't work quite right in the browser if a multi file test has files whose names are just the right length relative to one another
                             outputLines.push('    ' + line.substr(0, squiggleStart).replace(/[^\s]/g, ' ') + new Array(Math.min(length, line.length - squiggleStart) + 1).join('~'));
 
                             // If the error ended here, or we're at the end of the file, emit its message
-                            if ((lineIndex === lines.length - 1) || nextLineStart > err.end) {
+                            if ((lineIndex === lines.length - 1) || nextLineStart > end) {
                                 // Just like above, we need to do a split on a string instead of on a regex
                                 // because the JS engine does regexes wrong
 
@@ -1361,12 +1334,12 @@ module Harness {
             });
 
             var numLibraryDiagnostics = ts.countWhere(diagnostics, diagnostic => {
-                return diagnostic.fileName && (isLibraryFile(diagnostic.fileName) || isBuiltFile(diagnostic.fileName));
+                return diagnostic.file && (isLibraryFile(diagnostic.file.fileName) || isBuiltFile(diagnostic.file.fileName));
             });
 
             var numTest262HarnessDiagnostics = ts.countWhere(diagnostics, diagnostic => {
                 // Count an error generated from tests262-harness folder.This should only apply for test262
-                return diagnostic.fileName && diagnostic.fileName.indexOf("test262-harness") >= 0;
+                return diagnostic.file && diagnostic.file.fileName.indexOf("test262-harness") >= 0;
             });
 
             // Verify we didn't miss any errors in total
@@ -1419,17 +1392,6 @@ module Harness {
             //harnessCompiler.compileString(code, unitName, callback);
         }
 
-        export interface HarnessDiagnostic {
-            fileName: string;
-            start: number;
-            end: number;
-            line: number;
-            character: number;
-            message: string;
-            category: string;
-            code: number;
-        }
-
         export interface GeneratedFile {
             fileName: string;
             code: string;
@@ -1459,12 +1421,12 @@ module Harness {
         /** Contains the code and errors of a compilation and some helper methods to check its status. */
         export class CompilerResult {
             public files: GeneratedFile[] = [];
-            public errors: HarnessDiagnostic[] = [];
+            public errors: ts.Diagnostic[] = [];
             public declFilesCode: GeneratedFile[] = [];
             public sourceMaps: GeneratedFile[] = [];
 
             /** @param fileResults an array of strings for the fileName and an ITextWriter with its code */
-            constructor(fileResults: GeneratedFile[], errors: HarnessDiagnostic[], public program: ts.Program,
+            constructor(fileResults: GeneratedFile[], errors: ts.Diagnostic[], public program: ts.Program,
                 public currentDirectoryForProgram: string, private sourceMapData: ts.SourceMapData[]) {
 
                 fileResults.forEach(emittedFile => {
@@ -1488,15 +1450,6 @@ module Harness {
                 if (this.sourceMapData) {
                     return Harness.SourceMapRecoder.getSourceMapRecord(this.sourceMapData, this.program, this.files);
                 }
-            }
-
-            public isErrorAt(line: number, column: number, message: string) {
-                for (var i = 0; i < this.errors.length; i++) {
-                    if ((this.errors[i].line + 1) === line && (this.errors[i].character + 1) === column && this.errors[i].message === message)
-                        return true;
-                }
-
-                return false;
             }
         }
     }
