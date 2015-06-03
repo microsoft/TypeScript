@@ -10,9 +10,13 @@ var Foo;
 >Foo : any
 
 namespace container {
->container : any
+>container : typeof container
 
     type
+>type : any
+
     Foo = string;
->Foo : string
+>Foo = string : any
+>Foo : any
+>string : any
 }

@@ -7,9 +7,12 @@ var string;
 >string : Symbol(string, Decl(asiPreventsParsingAsTypeAlias01.ts, 2, 3))
 
 var Foo;
->Foo : Symbol(Foo, Decl(asiPreventsParsingAsTypeAlias01.ts, 3, 3), Decl(asiPreventsParsingAsTypeAlias01.ts, 3, 8))
+>Foo : Symbol(Foo, Decl(asiPreventsParsingAsTypeAlias01.ts, 3, 3))
 
 type
+>type : Symbol(type, Decl(asiPreventsParsingAsTypeAlias01.ts, 1, 3))
+
 Foo = string;
->Foo : Symbol(Foo, Decl(asiPreventsParsingAsTypeAlias01.ts, 3, 3), Decl(asiPreventsParsingAsTypeAlias01.ts, 3, 8))
+>Foo : Symbol(Foo, Decl(asiPreventsParsingAsTypeAlias01.ts, 3, 3))
+>string : Symbol(string, Decl(asiPreventsParsingAsTypeAlias01.ts, 2, 3))
 

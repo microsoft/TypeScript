@@ -7,6 +7,8 @@ var m: string;
 >m : string
 
 module       // this is the identifier 'namespace'
+>module : number
+
 m            // this is the identifier 'm'
 >m : string
 

@@ -13,6 +13,9 @@ namespace container {
 >container : Symbol(container, Decl(asiPreventsParsingAsTypeAlias02.ts, 3, 8))
 
     type
+>type : Symbol(type, Decl(asiPreventsParsingAsTypeAlias02.ts, 1, 3))
+
     Foo = string;
->Foo : Symbol(Foo, Decl(asiPreventsParsingAsTypeAlias02.ts, 5, 21))
+>Foo : Symbol(Foo, Decl(asiPreventsParsingAsTypeAlias02.ts, 3, 3))
+>string : Symbol(string, Decl(asiPreventsParsingAsTypeAlias02.ts, 2, 3))
 }

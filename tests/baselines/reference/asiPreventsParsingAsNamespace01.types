@@ -7,6 +7,8 @@ var n: string;
 >n : string
 
 namespace    // this is the identifier 'namespace'
+>namespace : number
+
 n            // this is the identifier 'n'
 >n : string
 

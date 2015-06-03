@@ -5,4 +5,4 @@ module in {}
 
 //// [asiPreventsParsingAsNamespace04.js]
 var module = 10;
- in {};
+module in {};
