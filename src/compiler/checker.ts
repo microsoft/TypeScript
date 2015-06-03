@@ -3267,7 +3267,7 @@ module ts {
                 }
 
                 links.resolvedSignature = createSignature(declaration, typeParameters, parameters, returnType, typePredicate,
-                    minArgumentCount, hasRestParameters(declaration), hasStringLiterals);
+                    minArgumentCount, hasRestParameter(declaration), hasStringLiterals);
             }
             return links.resolvedSignature;
         }
