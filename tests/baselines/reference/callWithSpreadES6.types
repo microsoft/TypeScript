@@ -246,13 +246,3 @@ class D extends C {
     }
 }
 
-// Only supported in when target is ES6
-var c = new C(1, 2, ...a);
->c : C
->new C(1, 2, ...a) : C
->C : typeof C
->1 : number
->2 : number
->...a : string
->a : string[]
-

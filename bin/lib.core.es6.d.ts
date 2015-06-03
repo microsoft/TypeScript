@@ -1502,6 +1502,11 @@ interface Array<T> {
     copyWithin(target: number, start: number, end?: number): T[];
 }
 
+interface IArguments {
+    /** Iterator */
+    [Symbol.iterator](): IterableIterator<any>;
+}
+
 interface ArrayConstructor {
     /**
       * Creates an array from an array-like object.
@@ -1685,14 +1690,6 @@ interface GeneratorFunctionConstructor {
     prototype: GeneratorFunction;
 }
 declare var GeneratorFunction: GeneratorFunctionConstructor;
-
-interface Generator<T> extends IterableIterator<T> {
-    next(value?: any): IteratorResult<T>;
-    throw(exception: any): IteratorResult<T>;
-    return(value: T): IteratorResult<T>;
-    [Symbol.iterator](): Generator<T>;
-    [Symbol.toStringTag]: string;
-}
 
 interface Math {
     /**
@@ -4766,6 +4763,7 @@ interface PromiseLike<T> {
     * @returns A Promise for the completion of which ever callback is executed.
     */
     then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): PromiseLike<TResult>;
+    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): PromiseLike<TResult>;
 }
 
 /**
@@ -4779,6 +4777,7 @@ interface Promise<T> {
     * @returns A Promise for the completion of which ever callback is executed.
     */
     then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>;
+    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): Promise<TResult>;
 
     /**
      * Attaches a callback for only the rejection of the Promise.

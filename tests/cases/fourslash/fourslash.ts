@@ -448,8 +448,16 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation);
         }
 
+        public getSyntacticDiagnostics(expected: string) {
+            FourSlash.currentTestState.getSyntacticDiagnostics(expected);
+        }
+
         public getSemanticDiagnostics(expected: string) {
             FourSlash.currentTestState.getSemanticDiagnostics(expected);
+        }
+
+        public ProjectInfo(expected: string []) {
+            FourSlash.currentTestState.verifyProjectInfo(expected);
         }
     }
 
@@ -637,6 +645,10 @@ module FourSlashInterface {
 
         export function punctuation(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
             return getClassification("punctuation", text, position);
+        }
+
+        export function docCommentTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {
+            return getClassification("docCommentTagName", text, position);
         }
 
         export function className(text: string, position?: number): { classificationType: string; text: string; textSpan?: TextSpan } {

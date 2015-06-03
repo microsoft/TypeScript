@@ -129,6 +129,16 @@ module ts {
         }
     } 
 
+    export function rangeEquals<T>(array1: T[], array2: T[], pos: number, end: number) {
+        while (pos < end) {
+            if (array1[pos] !== array2[pos]) {
+                return false;
+            }
+            pos++;
+        }
+        return true;
+    }
+
     /**
      * Returns the last element of an array if non-empty, undefined otherwise.
      */
@@ -312,8 +322,11 @@ module ts {
 
         Debug.assert(start >= 0, "start must be non-negative, is " + start);
         Debug.assert(length >= 0, "length must be non-negative, is " + length);
-        Debug.assert(start <= file.text.length, `start must be within the bounds of the file. ${ start } > ${ file.text.length }`);
-        Debug.assert(end <= file.text.length, `end must be the bounds of the file. ${ end } > ${ file.text.length }`);
+
+        if (file) {
+            Debug.assert(start <= file.text.length, `start must be within the bounds of the file. ${ start } > ${ file.text.length }`);
+            Debug.assert(end <= file.text.length, `end must be the bounds of the file. ${ end } > ${ file.text.length }`);
+        }
 
         let text = getLocaleSpecificMessage(message.key);
         
@@ -459,8 +472,18 @@ module ts {
             if (path.charCodeAt(2) === CharacterCodes.slash) return 3;
             return 2;
         }
+        // Per RFC 1738 'file' URI schema has the shape file://<host>/<path>
+        // if <host> is omitted then it is assumed that host value is 'localhost',
+        // however slash after the omitted <host> is not removed.
+        // file:///folder1/file1 - this is a correct URI
+        // file://folder2/file2 - this is an incorrect URI
+        if (path.lastIndexOf("file:///", 0) === 0) {
+            return "file:///".length;
+        }
         let idx = path.indexOf('://');
-        if (idx !== -1) return idx + 3
+        if (idx !== -1) {
+            return idx + "://".length;
+        }
         return 0;
     }
 

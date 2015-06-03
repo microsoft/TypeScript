@@ -20,6 +20,7 @@ var p: Property;
 c = p;
 p = c;
 
+
 //// [unionTypeWithRecursiveSubtypeReduction2.js]
 var Module = (function () {
     function Module() {

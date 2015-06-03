@@ -192,12 +192,16 @@ module Utils {
         };
     }
 
-    export function sourceFileToJSON(file: ts.SourceFile): string {
+    export function sourceFileToJSON(file: ts.Node): string {
         return JSON.stringify(file,(k, v) => {
-            return isNodeOrArray(v) ? serializeNode(v) : v;
+            return isNodeOrArray(v) ? serializeNodeOrArray(v) : v;
         }, "    ");
 
-        function getKindName(k: number): string {
+        function getKindName(k: number | string): string {
+            if (typeof k === "string") {
+                return k;
+            }
+
             return (<any>ts).SyntaxKind[k]
         }
 
@@ -228,9 +232,12 @@ module Utils {
         function getNodeFlagName(f: number) { return getFlagName((<any>ts).NodeFlags, f); }
         function getParserContextFlagName(f: number) { return getFlagName((<any>ts).ParserContextFlags, f); }
 
-        function serializeNode(n: ts.Node): any {
-            var o: any = { kind: getKindName(n.kind) };
-            o.containsParseError = ts.containsParseError(n);
+        function serializeNodeOrArray(n: ts.Node): any {
+            var o: any = { kind: getKindName(n.kind), start: n.start, length: n.length };
+
+            if (ts.containsParseError(n)) {
+                o.containsParseError = true;
+            }
 
             ts.forEach(Object.getOwnPropertyNames(n), propertyName => {
                 switch (propertyName) {
@@ -245,7 +252,13 @@ module Utils {
                     case "symbolCount":
                     case "identifierCount":
                     case "scriptSnapshot":
+                    case "start":
+                    case "length":
                         // Blacklist of items we never put in the baseline file.
+                        break;
+
+                    case "originalKeywordKind":
+                        o[propertyName] = getKindName((<any>n)[propertyName]);
                         break;
 
                     case "flags":
@@ -1000,6 +1013,10 @@ module Harness {
                                 options.target = <any>setting.value;
                             }
                             break;
+                            
+                        case 'experimentaldecorators':
+                            options.experimentalDecorators = setting.value === 'true';
+                            break;
 
                         case 'emitdecoratormetadata':
                             options.emitDecoratorMetadata = setting.value === 'true';
@@ -1094,8 +1111,8 @@ module Harness {
                             options.preserveConstEnums = setting.value === 'true';
                             break;
 
-                        case 'separatecompilation':
-                            options.separateCompilation = setting.value === 'true';
+                        case 'isolatedmodules':
+                            options.isolatedModules = setting.value === 'true';
                             break;
 
                         case 'suppressimplicitanyindexerrors':
@@ -1511,8 +1528,8 @@ module Harness {
             "noimplicitany", "noresolve", "newline", "normalizenewline", "emitbom",
             "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
             "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
-            "separatecompilation", "inlinesourcemap", "maproot", "sourceroot",
-            "inlinesources", "emitdecoratormetadata"];
+            "isolatedmodules", "inlinesourcemap", "maproot", "sourceroot",
+            "inlinesources", "emitdecoratormetadata", "experimentaldecorators"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
