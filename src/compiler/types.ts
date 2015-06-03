@@ -1134,7 +1134,7 @@ module ts {
         text: string;
 
         amdDependencies: {path: string; name: string}[];
-        amdModuleName: string;
+        moduleName: string;
         referencedFiles: FileReference[];
 
         hasNoDefaultLib: boolean;

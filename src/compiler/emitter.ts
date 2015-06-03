@@ -5527,7 +5527,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 Debug.assert(!exportFunctionForFile);
                 // make sure that  name of 'exports' function does not conflict with existing identifiers
                 exportFunctionForFile = makeUniqueName("exports");
-                write("System.register([");
+                write("System.register(");
+                if (node.moduleName) {
+                    write(`"${node.moduleName}", `);
+                }
+                write("[")
                 for (let i = 0; i < externalImports.length; ++i) {
                     let text = getExternalModuleNameText(externalImports[i]);
                     if (i !== 0) {
@@ -5613,8 +5617,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
                 writeLine();
                 write("define(");
-                if (node.amdModuleName) {
-                    write("\"" + node.amdModuleName + "\", ");
+                if (node.moduleName) {
+                    write("\"" + node.moduleName + "\", ");
                 }
                 emitAMDDependencies(node, /*includeNonAmdDependencies*/ true);
                 write(") {");
