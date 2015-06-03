@@ -15,6 +15,38 @@ module ts {
         True  = -1
     }
 
+    export class FileMap<T> {
+        private files: Map<T> = {};
+
+        constructor(private getCanonicalFileName: (fileName: string) => string) {
+        }
+
+        public set(fileName: string, value: T) {
+            this.files[this.normalizeKey(fileName)] = value;
+        }
+
+        public get(fileName: string) {
+            return this.files[this.normalizeKey(fileName)];
+        }
+
+        public contains(fileName: string) {
+            return hasProperty(this.files, this.normalizeKey(fileName));
+        }
+
+        public delete(fileName: string) {
+            let key = this.normalizeKey(fileName);
+            delete this.files[key];
+        }
+
+        public forEachValue(f: (value: T) => void) {
+            forEachValue(this.files, f);
+        }
+
+        private normalizeKey(key: string) {
+            return this.getCanonicalFileName(normalizeSlashes(key));
+        }
+    }
+
     export const enum Comparison {
         LessThan    = -1,
         EqualTo     = 0,
