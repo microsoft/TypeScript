@@ -388,6 +388,9 @@ declare module ts.server.protocol {
         
         /** Whether tabs should be converted to spaces. Default value is true. */
         convertTabsToSpaces?: boolean;        
+
+        /** Whether we send anonymous usage metrics. */
+        sendMetrics?: boolean;
     }
         
     /**

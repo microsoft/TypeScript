@@ -1114,6 +1114,7 @@ module ts {
         TabSize: number;
         NewLineCharacter: string;
         ConvertTabsToSpaces: boolean;
+        SendMetrics: boolean;
     }
 
     export interface FormatCodeOptions extends EditorOptions {

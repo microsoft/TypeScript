@@ -5,7 +5,7 @@
 /// <reference path="editorServices.ts" />
 
 module ts.server {
-    var spaceCache:string[] = [];
+    var spaceCache: string[] = [];
 
     interface StackTraceError extends Error {
         stack?: string;
@@ -18,7 +18,7 @@ module ts.server {
                 strBuilder += " ";
             }
             spaceCache[n] = strBuilder;
-        }  
+        }
         return spaceCache[n];
     }
 
@@ -52,7 +52,7 @@ module ts.server {
             return 1;
         }
     }
-       
+
     function formatDiag(fileName: string, project: Project, diag: ts.Diagnostic) {
         return {
             start: project.compilerService.host.positionToLineOffset(fileName, diag.start),
@@ -102,7 +102,94 @@ module ts.server {
         export const Unknown = "unknown";
     }
 
-    module Errors { 
+    module Metrics {
+        var eventCounts: Map<number> = {};
+        var properties: Map<string> = {};
+
+        // TODO make shorter
+        var sendInterval = 1000 * 5; // 5 seconds
+        // var sendInterval = 1000 * 60 * 5; // 5 minutes
+        var nextSendTimeMs = Date.now() + sendInterval;
+
+        var settingNames = [
+            "allowNonTsExtensions",
+            "declaration",
+            "emitBOM",
+            "module",
+            "noEmit",
+            "noEmitOnError",
+            "noImplicitAny",
+            "noLib",
+            "noResolve",
+            "preserveConstEnums",
+            "removeComments",
+            "rootDir",
+            "suppressImplicitAnyIndexErrors",
+            "target",
+            "separateCompilation",
+            "emitDecoratorMetadata"
+        ];
+
+        export function countEvent(eventName: string, projectSvc: ProjectService, host: ts.System) {
+            if (projectSvc.getFormatCodeOptions().SendMetrics) {
+                eventCounts[eventName] = (eventCounts[eventName] || 0) + 1;
+
+                if (Date.now() > nextSendTimeMs) {
+                    registerSettings(projectSvc);
+                    send(host);
+                }
+            }
+        }
+
+        function registerSettings(svc: ProjectService) {
+            properties['host'] = svc.hostConfiguration.hostInfo;
+            properties['inferredProjects'] = svc.inferredProjects.length.toString();
+            properties['configuredProjects'] = svc.configuredProjects.length.toString();
+
+            var someProject: Project = undefined;
+            if (svc.configuredProjects.length > 0) {
+                someProject = svc.configuredProjects[0];
+            } else if (svc.inferredProjects.length > 0) {
+                someProject = svc.inferredProjects[0];
+            }
+
+            var src = someProject && someProject.projectOptions && someProject.projectOptions.compilerOptions;
+            if (src) {
+                for (var i = 0, n = settingNames.length; i < n; i++) {
+                    properties['project.' + settingNames[i]] = <string>src[settingNames[i]];
+                }
+            }
+        }
+
+        function send(host: ts.System) {
+            var data = [{
+                iKey: '78e2d1f3-b56d-47d8-9b9a-fa4c056a0f21',
+                name: 'Microsoft.ApplicationInsights.Event',
+                time: new Date().toUTCString(),
+                data: {
+                    baseType: 'EventData',
+                    baseData: {
+                        ver: 2,
+                        name: 'Session', // Ours
+                        measurements: eventCounts,
+                        properties: properties
+                    }
+                },
+                tags: {
+                    'ai.user.id': 'anonymous'
+                }
+            }];
+            var payload = JSON.stringify(data);
+            host.writeFile('C:/throwaway/appLog.txt', payload, false);
+            host.httpsPost('https://dc.services.visualstudio.com/v2/track', payload, 'application/json');
+
+            eventCounts = {};
+            properties = {};
+            nextSendTimeMs = Date.now() + nextSendTimeMs;
+        }
+    }
+
+    module Errors {
         export var NoProject = new Error("No Project.");
     }
 
@@ -120,7 +207,7 @@ module ts.server {
 
         constructor(private host: ServerHost, private logger: Logger) {
             this.projectService =
-                new ProjectService(host, logger, (eventName,project,fileName) => {
+            new ProjectService(host, logger, (eventName, project, fileName) => {
                 this.handleEvent(eventName, project, fileName);
             });
         }
@@ -354,7 +441,7 @@ module ts.server {
             return projectInfo;
         }
 
-        getRenameLocations(line: number, offset: number, fileName: string,findInComments: boolean, findInStrings: boolean): protocol.RenameResponseBody {
+        getRenameLocations(line: number, offset: number, fileName: string, findInComments: boolean, findInStrings: boolean): protocol.RenameResponseBody {
             var file = ts.normalizePath(fileName);
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
@@ -655,14 +742,14 @@ module ts.server {
             if (!project) {
                 throw Errors.NoProject;
             }
-            
+
             var compilerService = project.compilerService;
             var position = compilerService.host.lineOffsetToPosition(file, line, offset);
             var helpItems = compilerService.languageService.getSignatureHelpItems(file, position);
             if (!helpItems) {
                 return undefined;
             }
-            
+
             var span = helpItems.applicableSpan;
             var result: protocol.SignatureHelpItems = {
                 items: helpItems.items,
@@ -674,10 +761,10 @@ module ts.server {
                 argumentIndex: helpItems.argumentIndex,
                 argumentCount: helpItems.argumentCount,
             }
-            
+
             return result;
         }
-                
+
         getDiagnostics(delay: number, fileNames: string[]) {
             var checkList = fileNames.reduce((accum: PendingErrorCheck[], fileName: string) => {
                 fileName = ts.normalizePath(fileName);
@@ -689,7 +776,7 @@ module ts.server {
             }, []);
 
             if (checkList.length > 0) {
-                this.updateErrorCheck(checkList, this.changeSeq,(n) => n == this.changeSeq, delay)
+                this.updateErrorCheck(checkList, this.changeSeq, (n) => n == this.changeSeq, delay)
             }
         }
 
@@ -812,20 +899,20 @@ module ts.server {
 
         getBraceMatching(line: number, offset: number, fileName: string): protocol.TextSpan[] {
             var file = ts.normalizePath(fileName);
-            
+
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
                 throw Errors.NoProject;
             }
-            
+
             var compilerService = project.compilerService;
             var position = compilerService.host.lineOffsetToPosition(file, line, offset);
-            
+
             var spans = compilerService.languageService.getBraceMatchingAtPosition(file, position);
             if (!spans) {
                 return undefined;
             }
-            
+
             return spans.map(span => ({
                 start: compilerService.host.positionToLineOffset(file, span.start),
                 end: compilerService.host.positionToLineOffset(file, span.start + span.length)
@@ -838,20 +925,21 @@ module ts.server {
         onMessage(message: string) {
             if (this.logger.isVerbose()) {
                 this.logger.info("request: " + message);
-                var start = process.hrtime();                
+                var start = process.hrtime();
             }
             try {
                 var request = <protocol.Request>JSON.parse(message);
                 var response: any;
                 var errorMessage: string;
                 var responseRequired = true;
+                Metrics.countEvent(request.command, this.projectService, this.host);
                 switch (request.command) {
                     case CommandNames.Exit: {
                         this.exit();
                         responseRequired = false;
                         break;
                     }
-                    case CommandNames.Definition: { 
+                    case CommandNames.Definition: {
                         var defArgs = <protocol.FileLocationRequestArgs>request.arguments;
                         response = this.getDefinition(defArgs.line, defArgs.offset, defArgs.file);
                         break;
@@ -900,15 +988,15 @@ module ts.server {
                     case CommandNames.CompletionDetails: {
                         var completionDetailsArgs = <protocol.CompletionDetailsRequestArgs>request.arguments;
                         response =
-                            this.getCompletionEntryDetails(completionDetailsArgs.line,completionDetailsArgs.offset,
-                                                           completionDetailsArgs.entryNames,completionDetailsArgs.file);
+                        this.getCompletionEntryDetails(completionDetailsArgs.line, completionDetailsArgs.offset,
+                            completionDetailsArgs.entryNames, completionDetailsArgs.file);
                         break;
                     }
                     case CommandNames.SignatureHelp: {
                         var signatureHelpArgs = <protocol.SignatureHelpRequestArgs>request.arguments;
                         response = this.getSignatureHelpItems(signatureHelpArgs.line, signatureHelpArgs.offset, signatureHelpArgs.file);
                         break;
-                    }    
+                    }
                     case CommandNames.Geterr: {
                         var geterrArgs = <protocol.GeterrRequestArgs>request.arguments;
                         response = this.getDiagnostics(geterrArgs.delay, geterrArgs.files);
@@ -918,7 +1006,7 @@ module ts.server {
                     case CommandNames.Change: {
                         var changeArgs = <protocol.ChangeRequestArgs>request.arguments;
                         this.change(changeArgs.line, changeArgs.offset, changeArgs.endLine, changeArgs.endOffset,
-                                    changeArgs.insertString, changeArgs.file);
+                            changeArgs.insertString, changeArgs.file);
                         responseRequired = false;
                         break;
                     }
@@ -983,7 +1071,7 @@ module ts.server {
                     var elapsed = process.hrtime(start);
                     var seconds = elapsed[0]
                     var nanoseconds = elapsed[1];
-                    var elapsedMs = ((1e9 * seconds) + nanoseconds)/1000000.0;
+                    var elapsedMs = ((1e9 * seconds) + nanoseconds) / 1000000.0;
                     var leader = "Elapsed time (in milliseconds)";
                     if (!responseRequired) {
                         leader = "Async elapsed time (in milliseconds)";
