@@ -3973,7 +3973,7 @@ module ts {
                 case SyntaxKind.ThrowKeyword:
                     return parseThrowStatement();
                 case SyntaxKind.TryKeyword:
-                // Include the next two for error recovery.
+                // Include 'catch' and 'finally' for error recovery.
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
                     return parseTryStatement();
@@ -3981,6 +3981,33 @@ module ts {
                     return parseDebuggerStatement();
                 case SyntaxKind.AtToken:
                     return parseDeclaration();
+
+                case SyntaxKind.ConstKeyword:
+                case SyntaxKind.EnumKeyword:
+                case SyntaxKind.ExportKeyword:
+                case SyntaxKind.ImportKeyword:
+                case SyntaxKind.InterfaceKeyword:
+                case SyntaxKind.PrivateKeyword:
+                case SyntaxKind.ProtectedKeyword:
+                case SyntaxKind.PublicKeyword:
+                case SyntaxKind.StaticKeyword:
+                    if (getDeclarationFlags() & flags) {
+                        return parseDeclaration();
+                    }
+                    break;
+
+                // 'declare', 'module', 'namespace', and 'type' are all legal JavaScript identifiers when ASI
+                // takes effect. In such cases, we cannot parse out the "expected" declarations. For instance, while
+                //
+                //    namespace n
+                //
+                // can be none other than the beginning of a namespace declaration, JavaScript sees
+                //
+                //    namespace
+                //    n
+                //
+                // as the identifier 'namespace' on one line followed by the identifier 'n' on another.
+                // We need to look one token ahead to see if it permissible to try parsing a declaration.
                 case SyntaxKind.DeclareKeyword:
                     if (lookAhead(isFollowedByIdentifierOrKeywordOnSameLine) && getDeclarationFlags() & flags) {
                         return parseDeclaration();
@@ -3994,19 +4021,6 @@ module ts {
                 case SyntaxKind.NamespaceKeyword:
                 case SyntaxKind.TypeKeyword:
                     if (lookAhead(isFollowedByIdentifierOnSameLine) && getDeclarationFlags() & flags) {
-                        return parseDeclaration();
-                    }
-                    break;
-                case SyntaxKind.ConstKeyword:
-                case SyntaxKind.EnumKeyword:
-                case SyntaxKind.ExportKeyword:
-                case SyntaxKind.ImportKeyword:
-                case SyntaxKind.InterfaceKeyword:
-                case SyntaxKind.PrivateKeyword:
-                case SyntaxKind.ProtectedKeyword:
-                case SyntaxKind.PublicKeyword:
-                case SyntaxKind.StaticKeyword:
-                    if (getDeclarationFlags() & flags) {
                         return parseDeclaration();
                     }
                     break;
