@@ -15,35 +15,39 @@ module ts {
         True  = -1
     }
 
-    export class FileMap<T> {
-        private files: Map<T> = {};
-
-        constructor(private getCanonicalFileName: (fileName: string) => string) {
+    export function createFileMap<T>(getCanonicalFileName: (fileName: string) => string): FileMap<T> {
+        let files: Map<T> = {};
+        return {
+            get,
+            set,
+            contains,
+            delete: deleteItem,
+            forEachValue: forEachValueInMap
         }
 
-        public set(fileName: string, value: T) {
-            this.files[this.normalizeKey(fileName)] = value;
+        function set(fileName: string, value: T) {
+            files[normalizeKey(fileName)] = value;
         }
 
-        public get(fileName: string) {
-            return this.files[this.normalizeKey(fileName)];
+        function get(fileName: string) {
+            return files[normalizeKey(fileName)];
         }
 
-        public contains(fileName: string) {
-            return hasProperty(this.files, this.normalizeKey(fileName));
+        function contains(fileName: string) {
+            return hasProperty(files, normalizeKey(fileName));
         }
 
-        public delete(fileName: string) {
-            let key = this.normalizeKey(fileName);
-            delete this.files[key];
+        function deleteItem (fileName: string) {
+            let key = normalizeKey(fileName);
+            delete files[key];
         }
 
-        public forEachValue(f: (value: T) => void) {
-            forEachValue(this.files, f);
+        function forEachValueInMap(f: (value: T) => void) {
+            forEachValue(files, f);
         }
 
-        private normalizeKey(key: string) {
-            return this.getCanonicalFileName(normalizeSlashes(key));
+        function normalizeKey(key: string) {
+            return getCanonicalFileName(normalizeSlashes(key));
         }
     }
 

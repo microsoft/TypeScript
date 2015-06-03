@@ -272,7 +272,7 @@ module ts {
         }
 
         public useCaseSensitiveFileNames(): boolean {
-            return this.shimHost.useCaseSensitiveFileNames && this.useCaseSensitiveFileNames();
+            return this.shimHost.useCaseSensitiveFileNames ? this.shimHost.useCaseSensitiveFileNames() : false;
         }
 
         public getCompilationSettings(): CompilerOptions {

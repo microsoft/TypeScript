@@ -152,7 +152,7 @@ module ts {
         let start = new Date().getTime();
 
         host = host || createCompilerHost(options);
-        let filesByName: FileMap<SourceFile> = new FileMap<SourceFile>(host.getCanonicalFileName);
+        let filesByName = createFileMap<SourceFile>(host.getCanonicalFileName);
 
         forEach(rootNames, name => processRootFile(name, false));
         if (!seenNoDefaultLib) {

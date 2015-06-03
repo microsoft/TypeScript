@@ -1636,7 +1636,7 @@ module ts {
 
         constructor(private host: LanguageServiceHost, getCanonicalFileName: (fileName: string) => string) {
             // script id => script index
-            this.fileNameToEntry = new FileMap<HostFileInformation>(getCanonicalFileName);
+            this.fileNameToEntry = createFileMap<HostFileInformation>(getCanonicalFileName);
 
             // Initialize the list with the root file names
             let rootFileNames = host.getScriptFileNames();
@@ -1893,7 +1893,7 @@ module ts {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
         let buckets: Map<FileMap<DocumentRegistryEntry>> = {};
-        let getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames || false);
+        let getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function getKeyFromCompilationSettings(settings: CompilerOptions): string {
             return "_" + settings.target; //  + "|" + settings.propagateEnumConstantoString()
@@ -1903,7 +1903,7 @@ module ts {
             let key = getKeyFromCompilationSettings(settings);
             let bucket = lookUp(buckets, key);
             if (!bucket && createIfMissing) {
-                buckets[key] = bucket = new FileMap<DocumentRegistryEntry>(getCanonicalFileName);
+                buckets[key] = bucket = createFileMap<DocumentRegistryEntry>(getCanonicalFileName);
             }
             return bucket;
         }
