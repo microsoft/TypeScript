@@ -1,0 +1,9 @@
+tests/cases/conformance/internalModules/moduleDeclarations/asiPreventsParsingAsNamespace04.ts(3,8): error TS1003: Identifier expected.
+
+
+==== tests/cases/conformance/internalModules/moduleDeclarations/asiPreventsParsingAsNamespace04.ts (1 errors) ====
+    
+    let module = 10;
+    module in {}
+           ~~
+!!! error TS1003: Identifier expected.
