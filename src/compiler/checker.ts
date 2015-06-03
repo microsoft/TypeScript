@@ -11809,16 +11809,11 @@ module ts {
             }
         }
 
-        // When resolved as an expression identifier, if the given node references a default import or a named import, return
-        // the declaration node of that import. Otherwise, return undefined.
-        function getReferencedImportDeclaration(node: Identifier): ImportClause | ImportSpecifier {
+        // When resolved as an expression identifier, if the given node references an import, return the declaration of
+        // that import. Otherwise, return undefined.
+        function getReferencedImportDeclaration(node: Identifier): Declaration {
             let symbol = getReferencedValueSymbol(node);
-            if (symbol && symbol.flags & SymbolFlags.Alias) {
-                let declaration = getDeclarationOfAliasSymbol(symbol);
-                if (declaration.kind === SyntaxKind.ImportClause || declaration.kind === SyntaxKind.ImportSpecifier) {
-                    return <ImportClause | ImportSpecifier>declaration;
-                }
-            }
+            return symbol && symbol.flags & SymbolFlags.Alias ? getDeclarationOfAliasSymbol(symbol) : undefined;
         }
 
         function isStatementWithLocals(node: Node) {
@@ -11833,24 +11828,30 @@ module ts {
             return false;
         }
 
-        function getIsNestedRedeclaration(symbol: Symbol): boolean {
-            let links = getSymbolLinks(symbol);
-            if (links.isNestedRedeclaration === undefined) {
-                let container = getEnclosingBlockScopeContainer(symbol.valueDeclaration);
-                links.isNestedRedeclaration = isStatementWithLocals(container) &&
-                    !!resolveName(container.parent, symbol.name, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+        function isNestedRedeclarationSymbol(symbol: Symbol): boolean {
+            if (symbol.flags & SymbolFlags.BlockScoped) {
+                let links = getSymbolLinks(symbol);
+                if (links.isNestedRedeclaration === undefined) {
+                    let container = getEnclosingBlockScopeContainer(symbol.valueDeclaration);
+                    links.isNestedRedeclaration = isStatementWithLocals(container) &&
+                       !!resolveName(container.parent, symbol.name, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+                }
+                return links.isNestedRedeclaration;
             }
-            return links.isNestedRedeclaration;
+            return false;
         }
 
+        // When resolved as an expression identifier, if the given node references a nested block scoped entity with
+        // a name that hides an existing name, return the declaration of that entity. Otherwise, return undefined.
         function getReferencedNestedRedeclaration(node: Identifier): Declaration {
             let symbol = getReferencedValueSymbol(node);
-            return symbol && symbol.flags & SymbolFlags.BlockScoped && getIsNestedRedeclaration(symbol) ? symbol.valueDeclaration : undefined;
+            return symbol && isNestedRedeclarationSymbol(symbol) ? symbol.valueDeclaration : undefined;
         }
 
+        // Return true if the given node is a declaration of a nested block scoped entity with a name that hides an
+        // existing name.
         function isNestedRedeclaration(node: Declaration): boolean {
-            let symbol = getSymbolOfNode(node);
-            return symbol.flags & SymbolFlags.BlockScoped && getIsNestedRedeclaration(symbol);
+            return isNestedRedeclarationSymbol(getSymbolOfNode(node));
         }
 
         function isValueAliasDeclaration(node: Node): boolean {

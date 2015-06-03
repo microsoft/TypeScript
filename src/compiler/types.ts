@@ -1397,7 +1397,7 @@ module ts {
     export interface EmitResolver {
         hasGlobalName(name: string): boolean;
         getReferencedExportContainer(node: Identifier): SourceFile | ModuleDeclaration | EnumDeclaration;
-        getReferencedImportDeclaration(node: Identifier): ImportClause | ImportSpecifier;
+        getReferencedImportDeclaration(node: Identifier): Declaration;
         getReferencedNestedRedeclaration(node: Identifier): Declaration;
         isNestedRedeclaration(node: Declaration): boolean;
         isValueAliasDeclaration(node: Node): boolean;

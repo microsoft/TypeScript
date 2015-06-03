@@ -1237,24 +1237,25 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     }
                 }
                 else if (languageVersion < ScriptTarget.ES6) {
-                    let alias = resolver.getReferencedImportDeclaration(node);
-                    if (alias) {
-                        if (alias.kind === SyntaxKind.ImportClause) {
+                    let declaration = resolver.getReferencedImportDeclaration(node);
+                    if (declaration) {
+                        if (declaration.kind === SyntaxKind.ImportClause) {
                             // Identifier references default import
-                            write(getGeneratedNameForNode(<ImportDeclaration>alias.parent));
+                            write(getGeneratedNameForNode(<ImportDeclaration>declaration.parent));
                             write(languageVersion === ScriptTarget.ES3 ? '["default"]' : ".default");
+                            return;
                         }
-                        else {
+                        else if (declaration.kind === SyntaxKind.ImportSpecifier) {
                             // Identifier references named import
-                            write(getGeneratedNameForNode(<ImportDeclaration>alias.parent.parent.parent));
+                            write(getGeneratedNameForNode(<ImportDeclaration>declaration.parent.parent.parent));
                             write(".");
-                            writeTextOfNode(currentSourceFile, (<ImportSpecifier>alias).propertyName || (<ImportSpecifier>alias).name);
+                            writeTextOfNode(currentSourceFile, (<ImportSpecifier>declaration).propertyName || (<ImportSpecifier>declaration).name);
+                            return;
                         }
-                        return;
                     }
-                    let local = resolver.getReferencedNestedRedeclaration(node);
-                    if (local) {
-                        write(getGeneratedNameForNode(local.name));
+                    declaration = resolver.getReferencedNestedRedeclaration(node);
+                    if (declaration) {
+                        write(getGeneratedNameForNode(declaration.name));
                         return;
                     }
                 }
