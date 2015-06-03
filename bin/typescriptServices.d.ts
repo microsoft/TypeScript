@@ -999,6 +999,7 @@ declare module ts {
         UseOnlyExternalAliasing = 2,
     }
     const enum SymbolFlags {
+        None = 0,
         FunctionScopedVariable = 1,
         BlockScopedVariable = 2,
         Property = 4,
@@ -1057,10 +1058,8 @@ declare module ts {
         AliasExcludes = 8388608,
         ModuleMember = 8914931,
         ExportHasLocal = 944,
-        HasLocals = 255504,
         HasExports = 1952,
         HasMembers = 6240,
-        IsContainer = 262128,
         PropertyOrAccessor = 98308,
         Export = 7340032,
     }
@@ -1068,9 +1067,9 @@ declare module ts {
         flags: SymbolFlags;
         name: string;
         declarations?: Declaration[];
+        valueDeclaration?: Declaration;
         members?: SymbolTable;
         exports?: SymbolTable;
-        valueDeclaration?: Declaration;
     }
     interface SymbolTable {
         [index: string]: Symbol;
@@ -1358,7 +1357,6 @@ declare module ts {
     function getTypeParameterOwner(d: Declaration): Declaration;
 }
 declare module ts {
-    var throwOnJSDocErrors: boolean;
     function getNodeConstructor(kind: SyntaxKind): new () => Node;
     function createNode(kind: SyntaxKind): Node;
     function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T;
@@ -1913,6 +1911,7 @@ declare module ts {
         static typeParameterName: string;
         static typeAliasName: string;
         static parameterName: string;
+        static docCommentTagName: string;
     }
     const enum ClassificationType {
         comment = 1,
@@ -1932,6 +1931,7 @@ declare module ts {
         typeParameterName = 15,
         typeAliasName = 16,
         parameterName = 17,
+        docCommentTagName = 18,
     }
     interface DisplayPartsSymbolWriter extends SymbolWriter {
         displayParts(): SymbolDisplayPart[];
