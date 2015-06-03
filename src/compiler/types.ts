@@ -1420,6 +1420,7 @@ module ts {
     }
 
     export const enum SymbolFlags {
+        None                    = 0,
         FunctionScopedVariable  = 0x00000001,  // Variable (var) or parameter
         BlockScopedVariable     = 0x00000002,  // A block-scoped variable (let or const)
         Property                = 0x00000004,  // Property or enum member
@@ -1489,11 +1490,9 @@ module ts {
 
         ExportHasLocal = Function | Class | Enum | ValueModule,
 
-        HasLocals = Function | Module | Method | Constructor | Accessor | Signature,
         HasExports = Class | Enum | Module,
         HasMembers = Class | Interface | TypeLiteral | ObjectLiteral,
 
-        IsContainer = HasLocals | HasExports | HasMembers,
         PropertyOrAccessor = Property | Accessor,
         Export = ExportNamespace | ExportType | ExportValue,
     }
@@ -1501,14 +1500,15 @@ module ts {
     export interface Symbol {
         flags: SymbolFlags;                     // Symbol flags
         name: string;                           // Name of symbol
-        /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
-        /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
         declarations?: Declaration[];           // Declarations associated with this symbol
-        /* @internal */ parent?: Symbol;        // Parent symbol
+        valueDeclaration?: Declaration;         // First value declaration of the symbol
+
         members?: SymbolTable;                  // Class, interface or literal instance members
         exports?: SymbolTable;                  // Module exports
+        /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
+        /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
+        /* @internal */ parent?: Symbol;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
-        valueDeclaration?: Declaration;         // First value declaration of the symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
     }
 
