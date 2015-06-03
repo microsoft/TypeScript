@@ -2133,7 +2133,7 @@ module ts {
         }
 
         function isTypeAny(type: Type) {
-            return type && type.flags & TypeFlags.Any;
+            return type && (type.flags & TypeFlags.Any) !== 0;
         }
 
         // Return the inferred type for a binding element
@@ -6313,7 +6313,11 @@ module ts {
         function isNumericComputedName(name: ComputedPropertyName): boolean {
             // It seems odd to consider an expression of type Any to result in a numeric name,
             // but this behavior is consistent with checkIndexedAccess
-            return allConstituentTypesHaveKind(checkComputedPropertyName(name), TypeFlags.Any | TypeFlags.NumberLike);
+            return isTypeAnyOrAllConstituentTypesHaveKind(checkComputedPropertyName(name), TypeFlags.NumberLike);
+        }
+
+        function isTypeAnyOrAllConstituentTypesHaveKind(type: Type, kind: TypeFlags): boolean {
+            return isTypeAny(type) || allConstituentTypesHaveKind(type, kind);
         }
 
         function isNumericLiteralName(name: string) {
@@ -6348,7 +6352,7 @@ module ts {
 
                 // This will allow types number, string, symbol or any. It will also allow enums, the unknown
                 // type, and any union of these types (like string | number).
-                if (!allConstituentTypesHaveKind(links.resolvedType, TypeFlags.Any | TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.ESSymbol)) {
+                if (!isTypeAnyOrAllConstituentTypesHaveKind(links.resolvedType, TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.ESSymbol)) {
                     error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_symbol_or_any);
                 }
                 else {
@@ -6614,10 +6618,10 @@ module ts {
             }
 
             // Check for compatible indexer types.
-            if (allConstituentTypesHaveKind(indexType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
+            if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
 
                 // Try to use a number indexer.
-                if (allConstituentTypesHaveKind(indexType, TypeFlags.Any | TypeFlags.NumberLike)) {
+                if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.NumberLike)) {
                     let numberIndexType = getIndexTypeOfType(objectType, IndexKind.Number);
                     if (numberIndexType) {
                         return numberIndexType;
@@ -7688,7 +7692,7 @@ module ts {
         }
 
         function checkArithmeticOperandType(operand: Node, type: Type, diagnostic: DiagnosticMessage): boolean {
-            if (!allConstituentTypesHaveKind(type, TypeFlags.Any | TypeFlags.NumberLike)) {
+            if (!isTypeAnyOrAllConstituentTypesHaveKind(type, TypeFlags.NumberLike)) {
                 error(operand, diagnostic);
                 return false;
             }
@@ -7911,10 +7915,10 @@ module ts {
             // The in operator requires the left operand to be of type Any, the String primitive type, or the Number primitive type,
             // and the right operand to be of type Any, an object type, or a type parameter type.
             // The result is always of the Boolean primitive type.
-            if (!allConstituentTypesHaveKind(leftType, TypeFlags.Any | TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
+            if (!isTypeAnyOrAllConstituentTypesHaveKind(leftType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
                 error(node.left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
             }
-            if (!allConstituentTypesHaveKind(rightType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
+            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
                 error(node.right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
@@ -9796,7 +9800,7 @@ module ts {
                 if (varExpr.kind === SyntaxKind.ArrayLiteralExpression || varExpr.kind === SyntaxKind.ObjectLiteralExpression) {
                     error(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_destructuring_pattern);
                 }
-                else if (!allConstituentTypesHaveKind(leftType, TypeFlags.Any | TypeFlags.StringLike)) {
+                else if (!isTypeAnyOrAllConstituentTypesHaveKind(leftType, TypeFlags.StringLike)) {
                     error(varExpr, Diagnostics.The_left_hand_side_of_a_for_in_statement_must_be_of_type_string_or_any);
                 }
                 else {
@@ -9808,7 +9812,7 @@ module ts {
             let rightType = checkExpression(node.expression);
             // unknownType is returned i.e. if node.expression is identifier whose name cannot be resolved
             // in this case error about missing name is already reported - do not report extra one
-            if (!allConstituentTypesHaveKind(rightType, TypeFlags.Any | TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
+            if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
                 error(node.expression, Diagnostics.The_right_hand_side_of_a_for_in_statement_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
 
