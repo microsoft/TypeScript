@@ -12340,7 +12340,6 @@ interface DocumentEvent {
     createEvent(eventInterface:"CustomEvent"): CustomEvent;
     createEvent(eventInterface:"DeviceMotionEvent"): DeviceMotionEvent;
     createEvent(eventInterface:"DeviceOrientationEvent"): DeviceOrientationEvent;
-    createEvent(eventInterface:"DocumentEvent"): DocumentEvent;
     createEvent(eventInterface:"DragEvent"): DragEvent;
     createEvent(eventInterface:"ErrorEvent"): ErrorEvent;
     createEvent(eventInterface:"Event"): Event;
