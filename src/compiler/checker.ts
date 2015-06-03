@@ -10415,8 +10415,8 @@ module ts {
                 });
             }
 
-            // Non-ambient classes cannot merge with interfaces.
-            if (!(node.flags & NodeFlags.Ambient) && symbol.flags & SymbolFlags.Interface) {
+            // Interfaces cannot be merged with non-ambient classes.
+            if (symbol.flags & SymbolFlags.Interface && !isInAmbientContext(node)) {
                 error(node, Diagnostics.Only_an_ambient_class_can_be_merged_with_an_interface)
             }
 
@@ -10603,7 +10603,7 @@ module ts {
                 // Interfaces cannot merge with non-ambient classes.
                 if (symbol && symbol.declarations) {
                     for (let declaration of symbol.declarations) {
-                        if (declaration.kind === SyntaxKind.ClassDeclaration && !(declaration.flags & NodeFlags.Ambient)) {
+                        if (declaration.kind === SyntaxKind.ClassDeclaration && !isInAmbientContext(declaration)) {
                             error(node, Diagnostics.Only_an_ambient_class_can_be_merged_with_an_interface);
                             break;
                         }
