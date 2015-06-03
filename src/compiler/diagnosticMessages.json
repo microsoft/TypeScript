@@ -2107,7 +2107,7 @@
         "category": "Error",
         "code": 7020
     },
-    "'{0}' implicitly has type 'any' because it is does not have a type annotation and is referenced directly or indirectly in its own initializer.": {
+    "'{0}' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.": {
         "category": "Error",
         "code": 7022
     },
