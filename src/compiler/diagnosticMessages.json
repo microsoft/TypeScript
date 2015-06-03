@@ -715,11 +715,11 @@
         "category": "Error",
         "code": 1226
     },
-    "Type-guard annotation '{0}' is not assignable to '{1}'.": {
+    "Type predicate '{0}' is not assignable to '{1}'.": {
         "category": "Error",
         "code": 1227
     },
-    "Parameter index from '{0}' does not match the parameter index from '{1}'.": {
+    "Parameter '{0}' is not in the same position as parameter '{1}'.": {
         "category": "Error",
         "code": 1228
     },
