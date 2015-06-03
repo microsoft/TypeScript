@@ -1,8 +1,0 @@
-tests/cases/compiler/separateCompilationNoExternalModule.ts(2,1): error TS1208: Cannot compile namespaces when the '--separateCompilation' flag is provided.
-
-
-==== tests/cases/compiler/separateCompilationNoExternalModule.ts (1 errors) ====
-    
-    var x;
-    ~~~
-!!! error TS1208: Cannot compile namespaces when the '--separateCompilation' flag is provided.

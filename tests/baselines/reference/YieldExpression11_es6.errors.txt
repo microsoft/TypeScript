@@ -1,14 +1,14 @@
-tests/cases/conformance/es6/yieldExpressions/YieldExpression11_es6.ts(2,3): error TS9001: Generators are not currently supported.
-tests/cases/conformance/es6/yieldExpressions/YieldExpression11_es6.ts(3,5): error TS9000: 'yield' expressions are not currently supported.
+tests/cases/conformance/es6/yieldExpressions/YieldExpression11_es6.ts(2,3): error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
+tests/cases/conformance/es6/yieldExpressions/YieldExpression11_es6.ts(3,11): error TS2304: Cannot find name 'foo'.
 
 
 ==== tests/cases/conformance/es6/yieldExpressions/YieldExpression11_es6.ts (2 errors) ====
     class C {
       *foo() {
       ~
-!!! error TS9001: Generators are not currently supported.
+!!! error TS1220: Generators are only available when targeting ECMAScript 6 or higher.
         yield(foo);
-        ~~~~~
-!!! error TS9000: 'yield' expressions are not currently supported.
+              ~~~
+!!! error TS2304: Cannot find name 'foo'.
       }
     }

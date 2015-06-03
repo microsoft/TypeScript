@@ -3,5 +3,5 @@
 /////a/./**/
 
 goTo.marker();
-//verify.not.memberListContains('alert');
-//verify.memberListContains('compile');
+verify.not.memberListContains('alert');
+verify.memberListContains('compile');

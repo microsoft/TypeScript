@@ -142,7 +142,7 @@ module ts {
             paramType: Diagnostics.LOCATION,
         },
         {
-            name: "separateCompilation",
+            name: "isolatedModules",
             type: "boolean",
         },
         {
@@ -189,9 +189,15 @@ module ts {
             description: Diagnostics.Watch_input_files,
         },
         {
+            name: "experimentalDecorators",
+            type: "boolean",
+            description: Diagnostics.Enables_experimental_support_for_ES7_decorators
+        },
+        {
             name: "emitDecoratorMetadata",
             type: "boolean",
-            experimental: true
+            experimental: true,
+            description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
         }
     ];
 

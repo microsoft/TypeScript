@@ -1,4 +1,5 @@
 // @target: es6
+// @experimentaldecorators: true
 // @Filename: decorated.ts
 function decorate() { }
 
