@@ -1,4 +1,5 @@
 // @target:es5
+// @experimentaldecorators: true
 
 // from #2971
 function func(s: string): void {

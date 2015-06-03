@@ -1,5 +1,6 @@
 // @sourcemap: true
 // @target: es5
+// @experimentaldecorators: true
 declare function ClassDecorator1(target: Function): void;
 declare function ClassDecorator2(x: number): (target: Function) => void;
 declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;

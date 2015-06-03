@@ -1,0 +1,14 @@
+tests/cases/compiler/classExpressionWithResolutionOfNamespaceOfSameName01.ts(6,15): error TS9003: 'class' expressions are not currently supported.
+
+
+==== tests/cases/compiler/classExpressionWithResolutionOfNamespaceOfSameName01.ts (1 errors) ====
+    namespace C {
+        export interface type {
+        }
+    }
+    
+    var x = class C {
+                  ~
+!!! error TS9003: 'class' expressions are not currently supported.
+        prop: C.type;
+    }
