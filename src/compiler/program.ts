@@ -10,9 +10,6 @@ module ts {
     /** The version of the TypeScript compiler release */
     export const version = "1.5.3";
 
-    const carriageReturnLineFeed = "\r\n";
-    const lineFeed = "\n";
-
     export function findConfigFile(searchPath: string): string {
         var fileName = "tsconfig.json";
         while (true) {
@@ -94,10 +91,7 @@ module ts {
             }
         }
 
-        let newLine =
-            options.newLine === NewLineKind.CarriageReturnLineFeed ? carriageReturnLineFeed :
-            options.newLine === NewLineKind.LineFeed ? lineFeed :
-            sys.newLine;
+        const newLine = getNewLineCharacter(options);
 
         return {
             getSourceFile,
@@ -175,6 +169,7 @@ module ts {
             getGlobalDiagnostics,
             getSemanticDiagnostics,
             getDeclarationDiagnostics,
+            getCompilerOptionsDiagnostics,
             getTypeChecker,
             getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory: () => commonSourceDirectory,
@@ -289,6 +284,12 @@ module ts {
                 var writeFile: WriteFileCallback = () => { };
                 return ts.getDeclarationDiagnostics(getEmitHost(writeFile), resolver, sourceFile);
             }
+        }
+
+        function getCompilerOptionsDiagnostics(): Diagnostic[] {
+            let allDiagnostics: Diagnostic[] = [];
+            addRange(allDiagnostics, diagnostics.getGlobalDiagnostics());
+            return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {

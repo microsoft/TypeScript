@@ -128,7 +128,8 @@ var harnessSources = [
     "services/preProcessFile.ts",
     "services/patternMatcher.ts",
     "versionCache.ts",
-    "convertToBase64.ts"
+    "convertToBase64.ts",
+    "transpile.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
