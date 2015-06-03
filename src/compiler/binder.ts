@@ -513,13 +513,12 @@ module ts {
             // We do that by making an anonymous type literal symbol, and then setting the function 
             // symbol as its sole member. To the rest of the system, this symbol will be  indistinguishable 
             // from an actual type literal symbol you would have gotten had you used the long form.
-            let name = getDeclarationName(node);
-            let symbol = createSymbol(SymbolFlags.Signature, name);
+            let symbol = createSymbol(SymbolFlags.Signature, getDeclarationName(node));
             addDeclarationToSymbol(symbol, node, SymbolFlags.Signature);
 
             let typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
             addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
-            typeLiteralSymbol.members = { [name]: symbol };
+            typeLiteralSymbol.members = { [symbol.name]: symbol };
         }
 
         function bindAnonymousDeclaration(node: Declaration, symbolFlags: SymbolFlags, name: string) {
