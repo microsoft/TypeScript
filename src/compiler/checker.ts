@@ -7658,6 +7658,11 @@ module ts {
 
             if (node.body) {
                 if (!node.type) {
+                    // There are some checks that are only performed in getReturnTypeFromBody, that may produce errors
+                    // we need. An example is the noImplicitAny errors resulting from widening the return expression
+                    // of a function. Because checking of function expression bodies is deferred, there was never an
+                    // appropriate time to do this during the main walk of the file (see the comment at the top of
+                    // checkFunctionExpressionBodies). So it must be done now.
                     getReturnTypeOfSignature(getSignatureFromDeclaration(node));
                 }
 
