@@ -25628,6 +25628,11 @@ var ts;
                 return result;
             }
             function parenthesizeForAccess(expr) {
+                // When diagnosing whether the expression needs parentheses, the decision should be based
+                // on the innermost expression in a chain of nested type assertions.
+                while (expr.kind === 161 /* TypeAssertionExpression */) {
+                    expr = expr.expression;
+                }
                 // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
                 // to parenthesize the expression before a dot. The known exceptions are:
                 //
@@ -25636,7 +25641,9 @@ var ts;
                 //    NumberLiteral
                 //       1.x            -> not the same as (1).x
                 //
-                if (ts.isLeftHandSideExpression(expr) && expr.kind !== 159 /* NewExpression */ && expr.kind !== 7 /* NumericLiteral */) {
+                if (ts.isLeftHandSideExpression(expr) &&
+                    expr.kind !== 159 /* NewExpression */ &&
+                    expr.kind !== 7 /* NumericLiteral */) {
                     return expr;
                 }
                 var node = ts.createSynthesizedNode(162 /* ParenthesizedExpression */);
@@ -25867,7 +25874,10 @@ var ts;
                 }
             }
             function emitParenExpression(node) {
-                if (!node.parent || node.parent.kind !== 164 /* ArrowFunction */) {
+                // If the node is synthesized, it means the emitter put the parentheses there,
+                // not the user. If we didn't want them, the emitter would not have put them
+                // there.
+                if (!ts.nodeIsSynthesized(node) && node.parent.kind !== 164 /* ArrowFunction */) {
                     if (node.expression.kind === 161 /* TypeAssertionExpression */) {
                         var operand = node.expression.expression;
                         // Make sure we consider all nested cast expressions, e.g.:
@@ -28149,7 +28159,7 @@ var ts;
                         emitDeclarationName(node);
                         write("\", ");
                         emitDeclarationName(node);
-                        write(")");
+                        write(");");
                     }
                     emitExportMemberAssignments(node.name);
                 }
@@ -28259,7 +28269,7 @@ var ts;
                         emitDeclarationName(node);
                         write("\", ");
                         emitDeclarationName(node);
-                        write(")");
+                        write(");");
                     }
                     emitExportMemberAssignments(node.name);
                 }
