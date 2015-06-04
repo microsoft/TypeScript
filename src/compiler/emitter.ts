@@ -1644,6 +1644,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function parenthesizeForAccess(expr: Expression): LeftHandSideExpression {
+                // When diagnosing whether the expression needs parentheses, the decision should be based
+                // on the innermost expression in a chain of nested type assertions.
+                while (expr.kind === SyntaxKind.TypeAssertionExpression) {
+                    expr = (<TypeAssertion>expr).expression;
+                }
+
                 // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
                 // to parenthesize the expression before a dot. The known exceptions are:
                 //
@@ -1652,7 +1658,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 //    NumberLiteral
                 //       1.x            -> not the same as (1).x
                 //
-                if (isLeftHandSideExpression(expr) && expr.kind !== SyntaxKind.NewExpression && expr.kind !== SyntaxKind.NumericLiteral) {
+                if (isLeftHandSideExpression(expr) &&
+                    expr.kind !== SyntaxKind.NewExpression &&
+                    expr.kind !== SyntaxKind.NumericLiteral) {
+
                     return <LeftHandSideExpression>expr;
                 }
                 let node = <ParenthesizedExpression>createSynthesizedNode(SyntaxKind.ParenthesizedExpression);
@@ -1906,7 +1915,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function emitParenExpression(node: ParenthesizedExpression) {
-                if (!node.parent || node.parent.kind !== SyntaxKind.ArrowFunction) {
+                // If the node is synthesized, it means the emitter put the parentheses there,
+                // not the user. If we didn't want them, the emitter would not have put them
+                // there.
+                if (!nodeIsSynthesized(node) && node.parent.kind !== SyntaxKind.ArrowFunction) {
                     if (node.expression.kind === SyntaxKind.TypeAssertionExpression) {
                         let operand = (<TypeAssertion>node.expression).expression;
 
