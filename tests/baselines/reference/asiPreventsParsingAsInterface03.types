@@ -5,11 +5,13 @@ var interface: number, I: string;
 >I : string
 
 namespace n {
->n : any
+>n : typeof n
 
     interface   // This should be the identifier 'interface'
+>interface : number
+
     I           // This should be the identifier 'I'
->I : I
+>I : string
 
     {}          // This should be a block body
 }

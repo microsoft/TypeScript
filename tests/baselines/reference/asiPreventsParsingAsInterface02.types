@@ -6,8 +6,10 @@ function f(interface: number, I: string) {
 >I : string
 
     interface   // This should be the identifier 'interface'
+>interface : number
+
     I           // This should be the identifier 'I'
->I : I
+>I : string
 
     {}          // This should be a block body
 }

@@ -10,3 +10,9 @@ namespace n {
 
 //// [asiPreventsParsingAsInterface03.js]
 var interface, I;
+var n;
+(function (n) {
+    interface; // This should be the identifier 'interface'
+    I; // This should be the identifier 'I'
+    { } // This should be a block body
+})(n || (n = {}));

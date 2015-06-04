@@ -8,8 +8,10 @@ namespace n {
 >n : Symbol(n, Decl(asiPreventsParsingAsInterface03.ts, 1, 33))
 
     interface   // This should be the identifier 'interface'
+>interface : Symbol(interface, Decl(asiPreventsParsingAsInterface03.ts, 1, 3))
+
     I           // This should be the identifier 'I'
->I : Symbol(I, Decl(asiPreventsParsingAsInterface03.ts, 3, 13))
+>I : Symbol(I, Decl(asiPreventsParsingAsInterface03.ts, 1, 22))
 
     {}          // This should be a block body
 }

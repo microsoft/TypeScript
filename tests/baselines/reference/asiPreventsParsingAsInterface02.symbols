@@ -3,11 +3,13 @@
 function f(interface: number, I: string) {
 >f : Symbol(f, Decl(asiPreventsParsingAsInterface02.ts, 0, 0))
 >interface : Symbol(interface, Decl(asiPreventsParsingAsInterface02.ts, 1, 11))
->I : Symbol(I, Decl(asiPreventsParsingAsInterface02.ts, 1, 29), Decl(asiPreventsParsingAsInterface02.ts, 1, 42))
+>I : Symbol(I, Decl(asiPreventsParsingAsInterface02.ts, 1, 29))
 
     interface   // This should be the identifier 'interface'
+>interface : Symbol(interface, Decl(asiPreventsParsingAsInterface02.ts, 1, 11))
+
     I           // This should be the identifier 'I'
->I : Symbol(I, Decl(asiPreventsParsingAsInterface02.ts, 1, 29), Decl(asiPreventsParsingAsInterface02.ts, 1, 42))
+>I : Symbol(I, Decl(asiPreventsParsingAsInterface02.ts, 1, 29))
 
     {}          // This should be a block body
 }
