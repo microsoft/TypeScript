@@ -1990,7 +1990,7 @@ module ts {
 
             Debug.assert(entry.languageServiceRefCount >= 0);
             if (entry.languageServiceRefCount === 0) {
-                bucket.delete(fileName);
+                bucket.remove(fileName);
             }
         }
 

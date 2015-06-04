@@ -7,7 +7,7 @@ module ts {
         get(fileName: string): T;
         set(fileName: string, value: T): void;
         contains(fileName: string): boolean;
-        delete(fileName: string): void;
+        remove(fileName: string): void;
         forEachValue(f: (v: T) => void): void;
     }
 
