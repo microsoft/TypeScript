@@ -1358,7 +1358,7 @@ module ts {
 
             return result;
         }
-        
+
         function getWriteResult<T>(data: T, enclosingDeclaration: Node, flags: TypeFormatFlags, method: (data: T, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags) => void) {
             let writer = getSingleLineStringWriter();
             method(data, writer, enclosingDeclaration, flags);
@@ -5667,11 +5667,6 @@ module ts {
                 if (expr.arguments &&
                     expr.arguments[signature.typePredicate.parameterIndex] &&
                     getSymbolAtLocation(expr.arguments[signature.typePredicate.parameterIndex]) === symbol) {
-
-                    return true;
-                }
-                if (expr.expression.kind === SyntaxKind.PropertyAccessExpression &&
-                    getSymbolAtLocation((<PropertyAccessExpression>expr.expression).expression) === symbol) {
 
                     return true;
                 }
@@ -10221,6 +10216,7 @@ module ts {
                 let func = getContainingFunction(node);
                 if (func) {
                     let signature = getSignatureFromDeclaration(func);
+                    let returnType = getReturnTypeOfSignature(signature);
                     let exprType = checkExpressionCached(node.expression);
 
                     if (func.asteriskToken) {
@@ -10231,7 +10227,6 @@ module ts {
                         return;
                     }
 
-                    let returnType = getReturnTypeOfSignature(signature);
                     if (func.kind === SyntaxKind.SetAccessor) {
                         error(node.expression, Diagnostics.Setters_cannot_return_a_value);
                     }
@@ -11292,10 +11287,6 @@ module ts {
                 links.exportsChecked = true;
             }
         }
-        
-        function checkTypePredicateNode(node: TypePredicateNode) {
-            
-        }
 
         function checkSourceElement(node: Node): void {
             if (!node) return;
@@ -11324,8 +11315,6 @@ module ts {
                     return checkAccessorDeclaration(<AccessorDeclaration>node);
                 case SyntaxKind.TypeReference:
                     return checkTypeReferenceNode(<TypeReferenceNode>node);
-                case SyntaxKind.TypePredicate:
-                    return checkTypePredicateNode(<TypePredicateNode>node);
                 case SyntaxKind.TypeQuery:
                     return checkTypeQuery(<TypeQueryNode>node);
                 case SyntaxKind.TypeLiteral:
