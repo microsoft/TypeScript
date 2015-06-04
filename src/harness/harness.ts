@@ -808,9 +808,17 @@ module Harness {
             }
         }
 
-        export function createSourceFileAndAssertInvariants(fileName: string, sourceText: string, languageVersion: ts.ScriptTarget, assertInvariants = true) {
+        export function createSourceFileAndAssertInvariants(
+            fileName: string,
+            sourceText: string,
+            languageVersion: ts.ScriptTarget,
+            assertInvariants: boolean,
+            isDefaultLib: boolean) {
+
             // Only set the parent nodes if we're asserting invariants.  We don't need them otherwise.
             var result = ts.createSourceFile(fileName, sourceText, languageVersion, /*setParentNodes:*/ assertInvariants);
+            result.isDefaultLib = isDefaultLib;
+
             if (assertInvariants) {
                 Utils.assertInvariants(result, /*parent:*/ undefined);
             }
@@ -821,8 +829,8 @@ module Harness {
         const lineFeed = "\n";
 
         export var defaultLibFileName = 'lib.d.ts';
-        export var defaultLibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
-        export var defaultES6LibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + 'lib.core.es6.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest);
+        export var defaultLibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + 'lib.core.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest, /*assertInvariants:*/ true, /*isDefaultLib:*/ true);
+        export var defaultES6LibSourceFile = createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + 'lib.core.es6.d.ts'), /*languageVersion*/ ts.ScriptTarget.Latest, /*assertInvariants:*/ true, /*isDefaultLib:*/ true);
 
         // Cache these between executions so we don't have to re-parse them for every test
         export var fourslashFileName = 'fourslash.ts';
@@ -832,13 +840,14 @@ module Harness {
             return ts.sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
         }
 
-        export function createCompilerHost(inputFiles: { unitName: string; content: string; }[],
-            writeFile: (fn: string, contents: string, writeByteOrderMark: boolean) => void,
-            scriptTarget: ts.ScriptTarget,
-            useCaseSensitiveFileNames: boolean,
-            // the currentDirectory is needed for rwcRunner to passed in specified current directory to compiler host
-            currentDirectory?: string,
-            newLineKind?: ts.NewLineKind): ts.CompilerHost {
+        export function createCompilerHost(
+                inputFiles: { unitName: string; content: string; }[],
+                writeFile: (fn: string, contents: string, writeByteOrderMark: boolean) => void,
+                scriptTarget: ts.ScriptTarget,
+                useCaseSensitiveFileNames: boolean,
+                // the currentDirectory is needed for rwcRunner to passed in specified current directory to compiler host
+                currentDirectory?: string,
+                newLineKind?: ts.NewLineKind): ts.CompilerHost {
 
             // Local get canonical file name function, that depends on passed in parameter for useCaseSensitiveFileNames
             function getCanonicalFileName(fileName: string): string {
@@ -852,7 +861,7 @@ module Harness {
             function register(file: { unitName: string; content: string; }) {
                 if (file.content !== undefined) {
                     var fileName = ts.normalizePath(file.unitName);
-                    filemap[getCanonicalFileName(fileName)] = createSourceFileAndAssertInvariants(fileName, file.content, scriptTarget);
+                    filemap[getCanonicalFileName(fileName)] = createSourceFileAndAssertInvariants(fileName, file.content, scriptTarget, /*assertInvariants:*/ true, /*isDefaultLib:*/ false);
                 }
             };
             inputFiles.forEach(register);
@@ -875,7 +884,7 @@ module Harness {
                     }
                     else if (fn === fourslashFileName) {
                         var tsFn = 'tests/cases/fourslash/' + fourslashFileName;
-                        fourslashSourceFile = fourslashSourceFile || createSourceFileAndAssertInvariants(tsFn, Harness.IO.readFile(tsFn), scriptTarget);
+                        fourslashSourceFile = fourslashSourceFile || createSourceFileAndAssertInvariants(tsFn, Harness.IO.readFile(tsFn), scriptTarget, /*assertInvariants:*/ true, /*isDefaultLib:*/ false);
                         return fourslashSourceFile;
                     }
                     else {
@@ -964,7 +973,8 @@ module Harness {
                     settingsCallback(null);
                 }
 
-                var newLine = '\r\n';
+                let newLine = '\r\n';
+                options.skipDefaultLibCheck = true;
 
                 // Files from built\local that are requested by test "@includeBuiltFiles" to be in the context.
                 // Treat them as library files, so include them in build, but not in baselines.
@@ -1048,6 +1058,10 @@ module Harness {
                         case 'outdiroption':
                         case 'outdir':
                             options.outDir = setting.value;
+                            break;
+
+                        case 'skipdefaultlibcheck':
+                            options.skipDefaultLibCheck = setting.value === "true";
                             break;
 
                         case 'sourceroot':
@@ -1134,9 +1148,11 @@ module Harness {
                 var fileOutputs: GeneratedFile[] = [];
                 
                 var programFiles = inputFiles.concat(includeBuiltFiles).map(file => file.unitName);
-                var program = ts.createProgram(programFiles, options, createCompilerHost(inputFiles.concat(includeBuiltFiles).concat(otherFiles),
+                var compilerHost = createCompilerHost(
+                    inputFiles.concat(includeBuiltFiles).concat(otherFiles),
                     (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark }),
-                    options.target, useCaseSensitiveFileNames, currentDirectory, options.newLine));
+                    options.target, useCaseSensitiveFileNames, currentDirectory, options.newLine);
+                var program = ts.createProgram(programFiles, options, compilerHost);
 
                 var emitResult = program.emit();
 
@@ -1480,7 +1496,8 @@ module Harness {
             "errortruncation", "usecasesensitivefilenames", "preserveconstenums",
             "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
             "isolatedmodules", "inlinesourcemap", "maproot", "sourceroot",
-            "inlinesources", "emitdecoratormetadata", "experimentaldecorators"];
+            "inlinesources", "emitdecoratormetadata", "experimentaldecorators",
+            "skipdefaultlibcheck"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 

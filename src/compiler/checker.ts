@@ -11368,6 +11368,12 @@ module ts {
         function checkSourceFileWorker(node: SourceFile) {
             let links = getNodeLinks(node);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
+                links.flags |= NodeCheckFlags.TypeChecked;
+
+                if (node.isDefaultLib && compilerOptions.skipDefaultLibCheck) {
+                    return;
+                }
+
                 // Grammar checking
                 checkGrammarSourceFile(node);
 
@@ -11399,8 +11405,6 @@ module ts {
                 if (emitParam) {
                     links.flags |= NodeCheckFlags.EmitParam;
                 }
-
-                links.flags |= NodeCheckFlags.TypeChecked;
             }
         }
 

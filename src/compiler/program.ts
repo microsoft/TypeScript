@@ -391,6 +391,7 @@ module ts {
                         processImportedModules(file, basePath);
                     }
                     if (isDefaultLib) {
+                        file.isDefaultLib = true;
                         files.unshift(file);
                     }
                     else {

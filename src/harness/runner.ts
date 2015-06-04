@@ -38,41 +38,45 @@ var testConfigFile =
     (Harness.IO.fileExists(testconfig) ? Harness.IO.readFile(testconfig) : '');
 
 if (testConfigFile !== '') {
-    // TODO: not sure why this is crashing mocha
-    //var testConfig = JSON.parse(testConfigRaw);
-    var testConfig = testConfigFile.match(/test:\s\['(.*)'\]/);
-    var options = testConfig ? [testConfig[1]] : [];
-    for (var i = 0; i < options.length; i++) {
-        switch (options[i]) {
-            case 'compiler':
-                runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
-                runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));
-                runners.push(new ProjectRunner());  
-                break;
-            case 'conformance':
-                runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
-                break;
-            case 'project':
-                runners.push(new ProjectRunner());
-                break;
-            case 'fourslash':
-                runners.push(new FourSlashRunner(FourSlashTestType.Native));
-                break;
-            case 'fourslash-shims':
-                runners.push(new FourSlashRunner(FourSlashTestType.Shims));
-                break;
-            case 'fourslash-server':
-                runners.push(new FourSlashRunner(FourSlashTestType.Server));
-                break;
-            case 'fourslash-generated':
-                runners.push(new GeneratedFourslashRunner(FourSlashTestType.Native));
-                break;
-            case 'rwc':
-                runners.push(new RWCRunner());
-                break;
-            case 'test262':
-                runners.push(new Test262BaselineRunner());
-                break;
+    var testConfig = JSON.parse(testConfigFile);
+
+    if (testConfig.test && testConfig.test.length > 0) {
+        for (let option of testConfig.test) {
+            if (!option) {
+                continue;
+            }
+            ts.sys.write("Option: " + option + "\r\n");
+            switch (option) {
+                case 'compiler':
+                    runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
+                    runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));
+                    runners.push(new ProjectRunner());
+                    break;
+                case 'conformance':
+                    runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
+                    break;
+                case 'project':
+                    runners.push(new ProjectRunner());
+                    break;
+                case 'fourslash':
+                    runners.push(new FourSlashRunner(FourSlashTestType.Native));
+                    break;
+                case 'fourslash-shims':
+                    runners.push(new FourSlashRunner(FourSlashTestType.Shims));
+                    break;
+                case 'fourslash-server':
+                    runners.push(new FourSlashRunner(FourSlashTestType.Server));
+                    break;
+                case 'fourslash-generated':
+                    runners.push(new GeneratedFourslashRunner(FourSlashTestType.Native));
+                    break;
+                case 'rwc':
+                    runners.push(new RWCRunner());
+                    break;
+                case 'test262':
+                    runners.push(new Test262BaselineRunner());
+                    break;
+            }
         }
     }
 }
