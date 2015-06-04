@@ -159,9 +159,9 @@ module ts {
         let start = new Date().getTime();
 
         host = host || createCompilerHost(options);
-        forEach(rootNames, name => processRootFile(name, false));
+        forEach(rootNames, name => processRootFile(name, /*isDefaultLib:*/ false));
         if (!seenNoDefaultLib) {
-            processRootFile(host.getDefaultLibFileName(options), true);
+            processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib:*/ true);
         }
         verifyCompilerOptions();
 
