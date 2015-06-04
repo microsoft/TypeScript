@@ -1349,9 +1349,9 @@ module ts {
             writer.writeSpace(" ");
         }
 
-        function getWriteResult<T, U>(data: T, enclosingDeclaration: Node, flags: U, buildDisplay: (data: T, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: U) => void): string {
+        function getWriteResult<T, U>(info: T, enclosingDeclaration: Node, flags: U, buildDisplay: (info: T, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: U) => void): string {
             let writer = getSingleLineStringWriter();
-            buildDisplay(data, writer, enclosingDeclaration, flags);
+            buildDisplay(info, writer, enclosingDeclaration, flags);
             let result = writer.string();
             releaseStringWriter(writer);
             return result;
