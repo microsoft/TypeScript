@@ -1151,7 +1151,8 @@ module ts {
 
         // The first node that causes this file to be an external module
         /* @internal */ externalModuleIndicator: Node;
-        
+
+        /* @internal */ isDefaultLib: boolean;
         /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
@@ -1832,6 +1833,7 @@ module ts {
         experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
         /* @internal */ stripInternal?: boolean;
+        /* @internal */ skipDefaultLibCheck?: boolean;
         [option: string]: string | number | boolean;
     }
 

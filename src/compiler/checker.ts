@@ -11368,6 +11368,10 @@ module ts {
         function checkSourceFileWorker(node: SourceFile) {
             let links = getNodeLinks(node);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
+                if (node.isDefaultLib && compilerOptions.skipDefaultLibCheck) {
+                    return;
+                }
+
                 // Grammar checking
                 checkGrammarSourceFile(node);
 
