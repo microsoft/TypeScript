@@ -1,0 +1,13 @@
+=== tests/cases/compiler/systemModuleEnum.ts ===
+
+export enum Foo {}
+>Foo : Foo
+
+export module Bar {
+>Bar : typeof Bar
+
+	export var baz = (): any => {}
+>baz : () => any
+>(): any => {} : () => any
+}
+

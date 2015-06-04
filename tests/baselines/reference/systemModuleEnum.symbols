@@ -1,0 +1,12 @@
+=== tests/cases/compiler/systemModuleEnum.ts ===
+
+export enum Foo {}
+>Foo : Symbol(Foo, Decl(systemModuleEnum.ts, 0, 0))
+
+export module Bar {
+>Bar : Symbol(Bar, Decl(systemModuleEnum.ts, 1, 18))
+
+	export var baz = (): any => {}
+>baz : Symbol(baz, Decl(systemModuleEnum.ts, 4, 11))
+}
+
