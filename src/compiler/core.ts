@@ -21,7 +21,7 @@ module ts {
             get,
             set,
             contains,
-            delete: deleteItem,
+            remove,
             forEachValue: forEachValueInMap
         }
 
@@ -37,7 +37,7 @@ module ts {
             return hasProperty(files, normalizeKey(fileName));
         }
 
-        function deleteItem (fileName: string) {
+        function remove (fileName: string) {
             let key = normalizeKey(fileName);
             delete files[key];
         }
