@@ -1349,28 +1349,20 @@ module ts {
             writer.writeSpace(" ");
         }
 
-        function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string {
-            let writer = getSingleLineStringWriter();
-            getSymbolDisplayBuilder().buildSymbolDisplay(symbol, writer, enclosingDeclaration, meaning);
-
-            let result = writer.string();
-            releaseStringWriter(writer);
-
-            return result;
-        }
-
-        function getWriteResult<T>(data: T, enclosingDeclaration: Node, flags: TypeFormatFlags, buildDisplay: (data: T, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags) => void) {
+        function getWriteResult<T, U>(data: T, enclosingDeclaration: Node, flags: U, buildDisplay: (data: T, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: U) => void): string {
             let writer = getSingleLineStringWriter();
             buildDisplay(data, writer, enclosingDeclaration, flags);
             let result = writer.string();
             releaseStringWriter(writer);
-            
             return result;
         }
-        
+
+        function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string {
+            return getWriteResult(symbol, enclosingDeclaration, meaning, getSymbolDisplayBuilder().buildSymbolDisplay);
+        }
+
         function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
-            let result = getWriteResult(signature, enclosingDeclaration, flags, getSymbolDisplayBuilder().buildSignatureDisplay);
-            return result;
+            return getWriteResult(signature, enclosingDeclaration, flags, getSymbolDisplayBuilder().buildSignatureDisplay);
         }
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
@@ -1379,7 +1371,6 @@ module ts {
             if (maxLength && result.length >= maxLength) {
                 result = result.substr(0, maxLength - "...".length) + "...";
             }
-
             return result;
         }
 
