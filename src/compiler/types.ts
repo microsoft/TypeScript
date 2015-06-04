@@ -3,6 +3,14 @@ module ts {
         [index: string]: T;
     }
 
+    export interface FileMap<T> {
+        get(fileName: string): T;
+        set(fileName: string, value: T): void;
+        contains(fileName: string): boolean;
+        delete(fileName: string): void;
+        forEachValue(f: (v: T) => void): void;
+    }
+
     export interface TextRange {
         pos: number;
         end: number;

@@ -960,6 +960,7 @@ module ts {
         log? (s: string): void;
         trace? (s: string): void;
         error? (s: string): void;
+        useCaseSensitiveFileNames? (): boolean;
     }
 
     //
@@ -1632,12 +1633,12 @@ module ts {
     // at each language service public entry point, since we don't know when 
     // set of scripts handled by the host changes.
     class HostCache {
-        private fileNameToEntry: Map<HostFileInformation>;
+        private fileNameToEntry: FileMap<HostFileInformation>;
         private _compilationSettings: CompilerOptions;
 
-        constructor(private host: LanguageServiceHost, private getCanonicalFileName: (fileName: string) => string) {
+        constructor(private host: LanguageServiceHost, getCanonicalFileName: (fileName: string) => string) {
             // script id => script index
-            this.fileNameToEntry = {};
+            this.fileNameToEntry = createFileMap<HostFileInformation>(getCanonicalFileName);
 
             // Initialize the list with the root file names
             let rootFileNames = host.getScriptFileNames();
@@ -1653,10 +1654,6 @@ module ts {
             return this._compilationSettings;
         }
 
-        private normalizeFileName(fileName: string): string {
-            return this.getCanonicalFileName(normalizeSlashes(fileName));
-        }
-
         private createEntry(fileName: string) {
             let entry: HostFileInformation;
             let scriptSnapshot = this.host.getScriptSnapshot(fileName);
@@ -1668,15 +1665,16 @@ module ts {
                 };
             }
 
-            return this.fileNameToEntry[this.normalizeFileName(fileName)] = entry;
+            this.fileNameToEntry.set(fileName, entry);
+            return entry;
         }
 
         private getEntry(fileName: string): HostFileInformation {
-            return lookUp(this.fileNameToEntry, this.normalizeFileName(fileName));
+            return this.fileNameToEntry.get(fileName);
         }
 
         private contains(fileName: string): boolean {
-            return hasProperty(this.fileNameToEntry, this.normalizeFileName(fileName));
+            return this.fileNameToEntry.contains(fileName);
         }
 
         public getOrCreateEntry(fileName: string): HostFileInformation {
@@ -1690,10 +1688,9 @@ module ts {
         public getRootFileNames(): string[] {
             let fileNames: string[] = [];
 
-            forEachKey(this.fileNameToEntry, key => {
-                let entry = this.getEntry(key);
-                if (entry) {
-                    fileNames.push(entry.hostFileName);
+            this.fileNameToEntry.forEachValue(value => {
+                if (value) {
+                    fileNames.push(value.hostFileName);
                 }
             });
 
@@ -1885,20 +1882,28 @@ module ts {
         return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents:*/ true);
     }
 
-    export function createDocumentRegistry(): DocumentRegistry {
+    function createGetCanonicalFileName(useCaseSensitivefileNames: boolean): (fileName: string) => string {
+        return useCaseSensitivefileNames
+            ? ((fileName) => fileName)
+            : ((fileName) => fileName.toLowerCase());
+    }
+
+
+    export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
-        let buckets: Map<Map<DocumentRegistryEntry>> = {};
+        let buckets: Map<FileMap<DocumentRegistryEntry>> = {};
+        let getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function getKeyFromCompilationSettings(settings: CompilerOptions): string {
             return "_" + settings.target; //  + "|" + settings.propagateEnumConstantoString()
         }
 
-        function getBucketForCompilationSettings(settings: CompilerOptions, createIfMissing: boolean): Map<DocumentRegistryEntry> {
+        function getBucketForCompilationSettings(settings: CompilerOptions, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
             let key = getKeyFromCompilationSettings(settings);
             let bucket = lookUp(buckets, key);
             if (!bucket && createIfMissing) {
-                buckets[key] = bucket = {};
+                buckets[key] = bucket = createFileMap<DocumentRegistryEntry>(getCanonicalFileName);
             }
             return bucket;
         }
@@ -1908,7 +1913,7 @@ module ts {
                 let entries = lookUp(buckets, name);
                 let sourceFiles: { name: string; refCount: number; references: string[]; }[] = [];
                 for (let i in entries) {
-                    let entry = entries[i];
+                    let entry = entries.get(i);
                     sourceFiles.push({
                         name: i,
                         refCount: entry.languageServiceRefCount,
@@ -1940,18 +1945,19 @@ module ts {
             acquiring: boolean): SourceFile {
 
             let bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
-            let entry = lookUp(bucket, fileName);
+            let entry = bucket.get(fileName);
             if (!entry) {
                 Debug.assert(acquiring, "How could we be trying to update a document that the registry doesn't have?");
 
                 // Have never seen this file with these settings.  Create a new source file for it.
                 let sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, compilationSettings.target, version, /*setNodeParents:*/ false);
 
-                bucket[fileName] = entry = {
+                entry = {
                     sourceFile: sourceFile,
                     languageServiceRefCount: 0,
                     owners: []
                 };
+                bucket.set(fileName, entry);
             }
             else {
                 // We have an entry for this file.  However, it may be for a different version of 
@@ -1979,12 +1985,12 @@ module ts {
             let bucket = getBucketForCompilationSettings(compilationSettings, false);
             Debug.assert(bucket !== undefined);
 
-            let entry = lookUp(bucket, fileName);
+            let entry = bucket.get(fileName);
             entry.languageServiceRefCount--;
 
             Debug.assert(entry.languageServiceRefCount >= 0);
             if (entry.languageServiceRefCount === 0) {
-                delete bucket[fileName];
+                bucket.delete(fileName);
             }
         }
 
@@ -2412,9 +2418,7 @@ module ts {
             }
         }
 
-        function getCanonicalFileName(fileName: string) {
-            return useCaseSensitivefileNames ? fileName : fileName.toLowerCase();
-        }
+        let getCanonicalFileName = createGetCanonicalFileName(useCaseSensitivefileNames);
 
         function getValidSourceFile(fileName: string): SourceFile {
             fileName = normalizeSlashes(fileName);
