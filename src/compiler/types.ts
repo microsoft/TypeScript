@@ -3,6 +3,14 @@ module ts {
         [index: string]: T;
     }
 
+    export interface FileMap<T> {
+        get(fileName: string): T;
+        set(fileName: string, value: T): void;
+        contains(fileName: string): boolean;
+        remove(fileName: string): void;
+        forEachValue(f: (v: T) => void): void;
+    }
+
     export interface TextRange {
         pos: number;
         end: number;
@@ -1198,6 +1206,7 @@ module ts {
         getGlobalDiagnostics(): Diagnostic[];
         getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        /* @internal */ getCompilerOptionsDiagnostics(): Diagnostic[];
 
         /** 
          * Gets a type checker that can be used to semantically analyze source fils in the program.
