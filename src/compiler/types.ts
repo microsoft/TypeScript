@@ -3,6 +3,14 @@ module ts {
         [index: string]: T;
     }
 
+    export interface FileMap<T> {
+        get(fileName: string): T;
+        set(fileName: string, value: T): void;
+        contains(fileName: string): boolean;
+        delete(fileName: string): void;
+        forEachValue(f: (v: T) => void): void;
+    }
+
     export interface TextRange {
         pos: number;
         end: number;
@@ -1168,7 +1176,7 @@ module ts {
     }
 
     export interface ParseConfigHost {
-        readDirectory(rootDir: string, extension: string): string[];
+        readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
     }
 
     export interface WriteFileCallback {
@@ -1197,6 +1205,7 @@ module ts {
         getGlobalDiagnostics(): Diagnostic[];
         getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        /* @internal */ getCompilerOptionsDiagnostics(): Diagnostic[];
 
         /** 
          * Gets a type checker that can be used to semantically analyze source fils in the program.
@@ -1582,14 +1591,15 @@ module ts {
         Tuple                   = 0x00002000,  // Tuple
         Union                   = 0x00004000,  // Union
         Anonymous               = 0x00008000,  // Anonymous
+        Instantiated            = 0x00010000,  // Instantiated anonymous type
         /* @internal */ 
-        FromSignature           = 0x00010000,  // Created for signature assignment check
-        ObjectLiteral           = 0x00020000,  // Originates in an object literal
+        FromSignature           = 0x00020000,  // Created for signature assignment check
+        ObjectLiteral           = 0x00040000,  // Originates in an object literal
         /* @internal */ 
-        ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
+        ContainsUndefinedOrNull = 0x00080000,  // Type is or contains Undefined or Null type
         /* @internal */ 
-        ContainsObjectLiteral = 0x00080000,  // Type is or contains object literal type
-        ESSymbol                = 0x00100000,  // Type of symbol primitive introduced in ES6
+        ContainsObjectLiteral   = 0x00100000,  // Type is or contains object literal type
+        ESSymbol                = 0x00200000,  // Type of symbol primitive introduced in ES6
 
         /* @internal */ 
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -1674,8 +1684,8 @@ module ts {
         properties: Symbol[];              // Properties
         callSignatures: Signature[];       // Call signatures of type
         constructSignatures: Signature[];  // Construct signatures of type
-        stringIndexType: Type;             // String index type
-        numberIndexType: Type;             // Numeric index type
+        stringIndexType?: Type;            // String index type
+        numberIndexType?: Type;            // Numeric index type
     }
 
     // Just a place to cache element types of iterables and iterators
@@ -1731,7 +1741,6 @@ module ts {
     /* @internal */
     export interface TypeMapper {
         (t: TypeParameter): Type;
-        mappings?: Map<Type>;  // Type mapping cache
     }
 
     /* @internal */

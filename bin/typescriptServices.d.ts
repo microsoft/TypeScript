@@ -857,7 +857,7 @@ declare module ts {
         getCurrentDirectory(): string;
     }
     interface ParseConfigHost {
-        readDirectory(rootDir: string, extension: string): string[];
+        readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
     }
     interface WriteFileCallback {
         (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
@@ -1091,8 +1091,9 @@ declare module ts {
         Tuple = 8192,
         Union = 16384,
         Anonymous = 32768,
-        ObjectLiteral = 131072,
-        ESSymbol = 1048576,
+        Instantiated = 65536,
+        ObjectLiteral = 262144,
+        ESSymbol = 2097152,
         StringLike = 258,
         NumberLike = 132,
         ObjectType = 48128,
@@ -1281,7 +1282,7 @@ declare module ts {
         createDirectory(path: string): void;
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
-        readDirectory(path: string, extension?: string): string[];
+        readDirectory(path: string, extension?: string, exclude?: string[]): string[];
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
     }
