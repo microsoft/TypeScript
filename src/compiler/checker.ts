@@ -2782,7 +2782,7 @@ module ts {
             return <InterfaceTypeWithDeclaredMembers>type;
         }
 
-        function resolveClassOrInterfaceMembers(type: InterfaceType) {
+        function resolveClassOrInterfaceMembers(type: InterfaceType): void {
             let target = resolveDeclaredMembers(type);
             let members = target.symbol.members;
             let callSignatures = target.declaredCallSignatures;
