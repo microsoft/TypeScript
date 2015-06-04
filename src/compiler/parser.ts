@@ -3986,7 +3986,6 @@ module ts {
                 case SyntaxKind.EnumKeyword:
                 case SyntaxKind.ExportKeyword:
                 case SyntaxKind.ImportKeyword:
-                case SyntaxKind.InterfaceKeyword:
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.PublicKeyword:
@@ -3996,8 +3995,8 @@ module ts {
                     }
                     break;
 
-                // 'declare', 'module', 'namespace', and 'type' are all legal JavaScript identifiers when ASI
-                // takes effect. In such cases, we cannot parse out the "expected" declarations. For instance, while
+                // 'declare', 'module', 'namespace', 'interface'* and 'type' are all legal JavaScript identifiers when
+                // ASI takes effect. In such cases, we cannot parse out the "expected" declarations. For instance, while
                 //
                 //    namespace n
                 //
@@ -4008,6 +4007,14 @@ module ts {
                 //
                 // as the identifier 'namespace' on one line followed by the identifier 'n' on another.
                 // We need to look one token ahead to see if it permissible to try parsing a declaration.
+                //
+                // *Note*: 'interface' is actually a strict mode reserved word. So while
+                //
+                //   "use strict"
+                //   interface
+                //   I {}
+                //
+                // could be legal, it would add complexity for very little gain.
                 case SyntaxKind.DeclareKeyword:
                     if (lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine) && getDeclarationFlags() & flags) {
                         return parseDeclaration();
@@ -4018,6 +4025,7 @@ module ts {
                         return parseDeclaration();
                     }
                     break;
+                case SyntaxKind.InterfaceKeyword:
                 case SyntaxKind.NamespaceKeyword:
                 case SyntaxKind.TypeKeyword:
                     if (lookAhead(nextTokenIsIdentifierOnSameLine) && getDeclarationFlags() & flags) {
@@ -4616,7 +4624,7 @@ module ts {
         function parseModuleBlock(): ModuleBlock {
             let node = <ModuleBlock>createNode(SyntaxKind.ModuleBlock, scanner.getStartPos());
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                node.statements = parseList(ParsingContext.ModuleElements, /*checkForStrictMode*/false, parseModuleElement);
+                node.statements = parseList(ParsingContext.ModuleElements, /*checkForStrictMode*/ false, parseModuleElement);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
