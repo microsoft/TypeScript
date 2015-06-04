@@ -1359,9 +1359,9 @@ module ts {
             return result;
         }
 
-        function getWriteResult<T>(data: T, enclosingDeclaration: Node, flags: TypeFormatFlags, method: (data: T, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags) => void) {
+        function getWriteResult<T>(data: T, enclosingDeclaration: Node, flags: TypeFormatFlags, buildDisplay: (data: T, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags) => void) {
             let writer = getSingleLineStringWriter();
-            method(data, writer, enclosingDeclaration, flags);
+            buildDisplay(data, writer, enclosingDeclaration, flags);
             let result = writer.string();
             releaseStringWriter(writer);
             
