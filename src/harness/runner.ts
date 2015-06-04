@@ -39,10 +39,7 @@ var testConfigFile =
     (Harness.IO.fileExists(testconfig) ? Harness.IO.readFile(testconfig) : '');
 
 if (testConfigFile !== '') {
-    // TODO: not sure why this is crashing mocha
     var testConfig = JSON.parse(testConfigFile);
-    //var testConfig = testConfigFile.match(/test:\s\['(.*)'\]/);
-    //var options = testConfig ? [testConfig[1]] : [];
     if (testConfig.light) {
         Harness.lightMode = true;
     }
