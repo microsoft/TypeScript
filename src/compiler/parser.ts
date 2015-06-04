@@ -3995,12 +3995,13 @@ module ts {
                     }
                     break;
 
-                // 'declare', 'module', 'namespace', 'interface'* and 'type' are all legal JavaScript identifiers when
-                // ASI takes effect. In such cases, we cannot parse out the "expected" declarations. For instance, while
+                // 'declare', 'module', 'namespace', 'interface'* and 'type' are all legal JavaScript identifiers;
+                // however, an identifier cannot be followed by another identifier on the same line. This is what we
+                // count on to parse out the respective declarations. For instance, we exploit this to say that
                 //
                 //    namespace n
                 //
-                // can be none other than the beginning of a namespace declaration, JavaScript sees
+                // can be none other than the beginning of a namespace declaration, but need to respect that JavaScript sees
                 //
                 //    namespace
                 //    n
