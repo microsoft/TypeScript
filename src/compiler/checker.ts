@@ -11955,9 +11955,10 @@ module ts {
         }
 
         /** Serializes an EntityName (with substitutions) to an appropriate JS constructor value. Used by the __metadata decorator. */
-        function serializeEntityName(node: EntityName, getGeneratedNameForNode: (Node: Node) => string, fallbackPath?: string[]): string {
+        function serializeEntityName(node: EntityName, fallbackPath?: string[]): string {
             if (node.kind === SyntaxKind.Identifier) {
-                // TODO(andersh): Fix this
+                // TODO(ron.buckton): The getExpressionNameSubstitution function has been removed, but calling it
+                // here has no effect anyway as an identifier in a type name is not an expression.
                 // var substitution = getExpressionNameSubstitution(<Identifier>node, getGeneratedNameForNode);
                 // var text = substitution || (<Identifier>node).text;
                 var text = (<Identifier>node).text;
@@ -11969,8 +11970,8 @@ module ts {
                 }
             }
             else {
-                var left = serializeEntityName((<QualifiedName>node).left, getGeneratedNameForNode, fallbackPath);
-                var right = serializeEntityName((<QualifiedName>node).right, getGeneratedNameForNode, fallbackPath);
+                var left = serializeEntityName((<QualifiedName>node).left, fallbackPath);
+                var right = serializeEntityName((<QualifiedName>node).right, fallbackPath);
                 if (!fallbackPath) {
                     return left + "." + right;
                 }
@@ -11978,7 +11979,7 @@ module ts {
         }
 
         /** Serializes a TypeReferenceNode to an appropriate JS constructor value. Used by the __metadata decorator. */
-        function serializeTypeReferenceNode(node: TypeReferenceNode, getGeneratedNameForNode: (Node: Node) => string): string | string[] {
+        function serializeTypeReferenceNode(node: TypeReferenceNode): string | string[] {
             // serialization of a TypeReferenceNode uses the following rules:
             //
             // * The serialized type of a TypeReference that is `void` is "void 0".
@@ -12011,11 +12012,11 @@ module ts {
             }
             else if (type === unknownType) {
                 var fallbackPath: string[] = [];
-                serializeEntityName(node.typeName, getGeneratedNameForNode, fallbackPath);
+                serializeEntityName(node.typeName, fallbackPath);
                 return fallbackPath;
             }
             else if (type.symbol && type.symbol.valueDeclaration) {
-                return serializeEntityName(node.typeName, getGeneratedNameForNode);
+                return serializeEntityName(node.typeName);
             }
             else if (typeHasCallOrConstructSignatures(type)) {
                 return "Function";
@@ -12025,7 +12026,7 @@ module ts {
         }
 
         /** Serializes a TypeNode to an appropriate JS constructor value. Used by the __metadata decorator. */
-        function serializeTypeNode(node: TypeNode | LiteralExpression, getGeneratedNameForNode: (Node: Node) => string): string | string[] {
+        function serializeTypeNode(node: TypeNode | LiteralExpression): string | string[] {
             // serialization of a TypeNode uses the following rules:
             //
             // * The serialized type of `void` is "void 0" (undefined).
@@ -12041,7 +12042,7 @@ module ts {
                     case SyntaxKind.VoidKeyword:
                         return "void 0";
                     case SyntaxKind.ParenthesizedType:
-                        return serializeTypeNode((<ParenthesizedTypeNode>node).type, getGeneratedNameForNode);
+                        return serializeTypeNode((<ParenthesizedTypeNode>node).type);
                     case SyntaxKind.FunctionType:
                     case SyntaxKind.ConstructorType:
                         return "Function";
@@ -12056,7 +12057,7 @@ module ts {
                     case SyntaxKind.NumberKeyword:
                         return "Number";
                     case SyntaxKind.TypeReference:
-                        return serializeTypeReferenceNode(<TypeReferenceNode>node, getGeneratedNameForNode);
+                        return serializeTypeReferenceNode(<TypeReferenceNode>node);
                     case SyntaxKind.TypeQuery:
                     case SyntaxKind.TypeLiteral:
                     case SyntaxKind.UnionType:
@@ -12072,7 +12073,7 @@ module ts {
         }
 
         /** Serializes the type of a declaration to an appropriate JS constructor value. Used by the __metadata decorator for a class member. */
-        function serializeTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[] {
+        function serializeTypeOfNode(node: Node): string | string[] {
             // serialization of the type of a declaration uses the following rules:
             //
             // * The serialized type of a ClassDeclaration is "Function"
@@ -12085,10 +12086,10 @@ module ts {
             // For rules on serializing type annotations, see `serializeTypeNode`.
             switch (node.kind) {
                 case SyntaxKind.ClassDeclaration:       return "Function";
-                case SyntaxKind.PropertyDeclaration:    return serializeTypeNode((<PropertyDeclaration>node).type, getGeneratedNameForNode);
-                case SyntaxKind.Parameter:              return serializeTypeNode((<ParameterDeclaration>node).type, getGeneratedNameForNode);
-                case SyntaxKind.GetAccessor:            return serializeTypeNode((<AccessorDeclaration>node).type, getGeneratedNameForNode);
-                case SyntaxKind.SetAccessor:            return serializeTypeNode(getSetAccessorTypeAnnotationNode(<AccessorDeclaration>node), getGeneratedNameForNode);
+                case SyntaxKind.PropertyDeclaration:    return serializeTypeNode((<PropertyDeclaration>node).type);
+                case SyntaxKind.Parameter:              return serializeTypeNode((<ParameterDeclaration>node).type);
+                case SyntaxKind.GetAccessor:            return serializeTypeNode((<AccessorDeclaration>node).type);
+                case SyntaxKind.SetAccessor:            return serializeTypeNode(getSetAccessorTypeAnnotationNode(<AccessorDeclaration>node));
             }
             if (isFunctionLike(node)) {
                 return "Function";
@@ -12097,7 +12098,7 @@ module ts {
         }
         
         /** Serializes the parameter types of a function or the constructor of a class. Used by the __metadata decorator for a method or set accessor. */
-        function serializeParameterTypesOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): (string | string[])[] {
+        function serializeParameterTypesOfNode(node: Node): (string | string[])[] {
             // serialization of parameter types uses the following rules:
             //
             // * If the declaration is a class, the parameters of the first constructor with a body are used.
@@ -12130,10 +12131,10 @@ module ts {
                                 else {
                                     parameterType = undefined;
                                 }
-                                result[i] = serializeTypeNode(parameterType, getGeneratedNameForNode);
+                                result[i] = serializeTypeNode(parameterType);
                             }
                             else {
-                                result[i] = serializeTypeOfNode(parameters[i], getGeneratedNameForNode);
+                                result[i] = serializeTypeOfNode(parameters[i]);
                             }
                         }
                         return result;
@@ -12144,9 +12145,9 @@ module ts {
         }
 
         /** Serializes the return type of function. Used by the __metadata decorator for a method. */
-        function serializeReturnTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[] {
+        function serializeReturnTypeOfNode(node: Node): string | string[] {
             if (node && isFunctionLike(node)) {
-                return serializeTypeNode((<FunctionLikeDeclaration>node).type, getGeneratedNameForNode);
+                return serializeTypeNode((<FunctionLikeDeclaration>node).type);
             }
             return "void 0";
         }

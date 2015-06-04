@@ -1416,9 +1416,9 @@ module ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        serializeTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
-        serializeParameterTypesOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): (string | string[])[];
-        serializeReturnTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
+        serializeTypeOfNode(node: Node): string | string[];
+        serializeParameterTypesOfNode(node: Node): (string | string[])[];
+        serializeReturnTypeOfNode(node: Node): string | string[];
     }
 
     export const enum SymbolFlags {

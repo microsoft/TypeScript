@@ -4307,7 +4307,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 let argumentsWritten = 0;
                 if (compilerOptions.emitDecoratorMetadata) {
                     if (shouldEmitTypeMetadata(node)) {
-                        var serializedType = resolver.serializeTypeOfNode(node, getGeneratedNameForNode);
+                        var serializedType = resolver.serializeTypeOfNode(node);
                         if (serializedType) {
                             if (writeComma) {
                                 write(", ");
@@ -4320,7 +4320,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         }
                     }
                     if (shouldEmitParamTypesMetadata(node)) {
-                        var serializedTypes = resolver.serializeParameterTypesOfNode(node, getGeneratedNameForNode);
+                        var serializedTypes = resolver.serializeParameterTypesOfNode(node);
                         if (serializedTypes) {
                             if (writeComma || argumentsWritten) {
                                 write(", ");
@@ -4338,7 +4338,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         }
                     }
                     if (shouldEmitReturnTypeMetadata(node)) {
-                        var serializedType = resolver.serializeReturnTypeOfNode(node, getGeneratedNameForNode);
+                        var serializedType = resolver.serializeReturnTypeOfNode(node);
                         if (serializedType) {
                             if (writeComma || argumentsWritten) {
                                 write(", ");
