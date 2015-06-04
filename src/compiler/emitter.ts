@@ -1646,9 +1646,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             function parenthesizeForAccess(expr: Expression): LeftHandSideExpression {
                 // When diagnosing whether the expression needs parentheses, the decision should be based
                 // on the innermost expression in a chain of nested type assertions.
-                let innerExpression = expr;
-                while (innerExpression.kind === SyntaxKind.TypeAssertionExpression) {
-                    innerExpression = (<TypeAssertion>innerExpression).expression;
+                while (expr.kind === SyntaxKind.TypeAssertionExpression) {
+                    expr = (<TypeAssertion>expr).expression;
                 }
 
                 // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
@@ -1659,9 +1658,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 //    NumberLiteral
                 //       1.x            -> not the same as (1).x
                 //
-                if (isLeftHandSideExpression(innerExpression) &&
-                    innerExpression.kind !== SyntaxKind.NewExpression &&
-                    innerExpression.kind !== SyntaxKind.NumericLiteral) {
+                if (isLeftHandSideExpression(expr) &&
+                    expr.kind !== SyntaxKind.NewExpression &&
+                    expr.kind !== SyntaxKind.NumericLiteral) {
 
                     return <LeftHandSideExpression>expr;
                 }
