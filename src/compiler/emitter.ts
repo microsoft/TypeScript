@@ -49,19 +49,20 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };`;
 
         const awaiterHelper = `
-var __awaiter = (this && this.__awaiter) || function (generator, ctor) {
-    function resolve(value) { return step(generator.next(value)); }
-    function reject(reason) { return step(generator["throw"](reason)); }
-    function step(result) {
-        while (true) {
-            var done = result.done, value = result.value, then;
-            if (done) return value;
-            if (value && typeof (then = value.then) === "function") return then.call(value, resolve, reject);
-            result = generator.next(value);
+var __awaiter = (this && this.__awaiter) || function (generator, thisArg, args, PromiseConstructor) {
+    PromiseConstructor || (PromiseConstructor = Promise);
+    return new PromiseConstructor(function (resolve, reject) {
+        generator = generator.call(thisArg, args);
+        function cast(value) { return value instanceof PromiseConstructor ? value : new PromiseConstructor(function (resolve) { resolve(value); }); }
+        function onfulfill(value) { try { step("next", value); } catch (e) { reject(e); } }
+        function onreject(value) { try { step("throw", value); } catch (e) { reject(e); } }
+        function step(verb, value) {
+            var result = generator[verb](value);
+            result.done ? resolve(result.value) : cast(result.value).then(onfulfill, onreject);
         }
-    }
-    return new (ctor || Promise)(function (resolver) { resolver(resolve(undefined)); });
-}`;
+        step("next", void 0);
+    });
+};`;
 
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
@@ -128,7 +129,7 @@ var __awaiter = (this && this.__awaiter) || function (generator, ctor) {
             let writeLine = writer.writeLine;
             let increaseIndent = writer.increaseIndent;
             let decreaseIndent = writer.decreaseIndent;
-
+            
             let currentSourceFile: SourceFile;
             // name of an exporter function if file is a System external module
             // System.register([...], function (<exporter>) {...})
@@ -3390,100 +3391,114 @@ var __awaiter = (this && this.__awaiter) || function (generator, ctor) {
                 emitSignatureParameters(node);
             }
 
-            function emitAsyncSignatureAndBodyForES6(node: FunctionLikeDeclaration) {
+            function emitAsyncFunctionBodyForES6(node: FunctionLikeDeclaration) {
                 let promiseConstructor = resolver.getPromiseConstructor(node);
                 let isArrowFunction = node.kind === SyntaxKind.ArrowFunction;
                 let args: string;
 
                 // An async function is emit as an outer function that calls an inner
-                // generator function. Any arguments of the outer function must be
-                // evaluated in the context of the generator function, to ensure the correct
-                // environment and bindings for things like binding patterns in the
-                // argument list.
+                // generator function. To preserve lexical bindings, we pass the current
+                // `this` and `arguments` objects to `__awaiter`. The generator function
+                // passed to `__awaiter` is executed inside of the callback to the 
+                // promise constructor.
                 //
-                // For async function declarations and function expressions, we want to 
-                // pass the `arguments` object of the outer function to the inner generator 
-                // function in the event the async function directly manipulates the `arguments`
-                // object.
+                // The emit for an async arrow without a lexical `arguments` binding might be:
                 //
-                // For async arrow functions, the `arguments` object is not bound to the arrow
-                // but its containing function. In that case, we must collect all of the passed 
-                // arguments into an array which we then pass to the inner generator function to
-                // ensure the correct environment for any binding patterns.
+                //  // input
+                //  let a = async (b) => { await b; }
                 //
-                // Async arrow functions do not have access to the lexical `arguments` of its 
-                // lexical container.
+                //  // output
+                //  let a = (b) => __awaiter(function* (b) {
+                //      yield b;
+                //  }, this);
                 //
-                // The emit for an async arrow without parameters will look something like this:
+                // The emit for an async arrow with a lexical `arguments` binding might be:
                 //
-                //  let a = async () => await b;
+                //  // input
+                //  let a = async (b) => { await arguments[0]; }
                 //
-                //  let a = () => __awaiter(function* () {
-                //      return yield b;
-                //  }.apply(this));
+                //  // output
+                //  let a = (b) => __awaiter(function* (arguments) {
+                //      yield arguments[0];
+                //  }, this, arguments);
                 //
-                // The emit for an async arrow with parameters will look something like this:
+                // The emit for an async function expression without a lexical `arguments` binding
+                // might be:
                 //
-                //  let a = async (b) => await b;
-                //
-                //  let a = (...arguments_1) => __awaiter(function* (b) {
-                //      return yield b;
-                //  }).apply(this, arguments_1);
-                //
-                // The emit for an async function expression will look something like this:
-                //
-                //  let a = async function () {
-                //      return await b;
+                //  // input
+                //  let a = async function (b) {
+                //      await b;
                 //  }
                 //
-                //  let a = function () {
+                //  // output
+                //  let a = function (b) {
                 //      return __awaiter(function* () {
-                //          return yield b;
-                //      }.apply(this, arguments));
+                //          yield b;
+                //      }, this);
                 //  }
                 //
-                if (isArrowFunction) {
-                    // Emit the outer signature for the async arrow
-                    if (node.parameters.length) {
-                        args = makeUniqueName("arguments");
-                        write(`(...${args}) => `);
-                    }
-                    else {
-                        write("() => ");
-                    }
-                }
-                else {
-                    // Emit the outer signature for the async function expression or declaration
-                    args = "arguments";
-                    write("() {");
+                // The emit for an async function expression with a lexical `arguments` binding
+                // might be:
+                //
+                //  // input
+                //  let a = async function (b) {
+                //      await arguments[0];
+                //  }
+                //
+                //  // output
+                //  let a = function (b) {
+                //      return __awaiter(function* (arguments) {
+                //          yield arguments[0];
+                //      }, this, arguments);
+                //  }
+                //
+                
+                // If this is not an async arrow, emit the opening brace of the function body
+                // and the start of the return statement.
+                if (!isArrowFunction) {
+                    write(" {");
                     increaseIndent();
                     writeLine();
-                    write("return ");
+                    write("return");
                 }
                 
-                // Emit the call to __awaiter
-                write("__awaiter(function *");
                 
-                // Emit the signature and body for the inner generator function
-                emitSignatureParameters(node);
+                // Emit the call to __awaiter.
+                let hasLexicalArguments = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureArguments) !== 0;
+                if (hasLexicalArguments) {
+                    write(" __awaiter(function* (arguments)");
+                }
+                else {
+                    write(" __awaiter(function* ()");
+                }
+                
+                // Emit the signature and body for the inner generator function.
                 emitFunctionBody(node);
                 
-                // Emit the call to `apply` to ensure the correct `this` and arguments.
-                write(".apply(this");
-                if (args) {
-                    write(`, ${args}`);
-                }
-                write(")");
+                // Emit the current `this` binding.
+                write(", this");
                 
+                // Optionally emit the lexical arguments.
+                if (hasLexicalArguments) {
+                    write(", arguments");
+                }
+
                 // If the function has an explicit type annotation for a promise, emit the 
                 // constructor.
                 if (promiseConstructor) {
+                    // If we did not have lexical arguments, supply undefined (void 0) for
+                    // the `arguments` parameter.
+                    if (!hasLexicalArguments) {
+                        write(", void 0");
+                    }
+                    
                     write(", ");
-                    emit(promiseConstructor);
+                    emitNodeWithoutSourceMap(promiseConstructor);
                 }
+                
                 write(")");
                 
-                // If this is not an async arrow, emit the closing brace of the outer function body
+                // If this is not an async arrow, emit the closing brace of the outer function body.
                 if (!isArrowFunction) {
                     write(";");
                     decreaseIndent();
@@ -3516,20 +3531,20 @@ var __awaiter = (this && this.__awaiter) || function (generator, ctor) {
                 tempVariables = undefined;
                 tempParameters = undefined;
 
-                let isAsync = isAsyncFunctionLike(node);
-                if (isAsync && languageVersion === ScriptTarget.ES6) {
-                    emitAsyncSignatureAndBodyForES6(node);
+                // When targeting ES6, emit arrow function natively in ES6
+                if (shouldEmitAsArrowFunction(node)) {
+                    emitSignatureParametersForArrow(node);
+                    write(" =>");
                 }
                 else {
-                    // When targeting ES6, emit arrow function natively in ES6
-                    if (shouldEmitAsArrowFunction(node)) {
-                        emitSignatureParametersForArrow(node);
-                        write(" =>");
-                    }
-                    else {
-                        emitSignatureParameters(node);
-                    }
+                    emitSignatureParameters(node);
+                }
                     
+                let isAsync = isAsyncFunctionLike(node);
+                if (isAsync && languageVersion === ScriptTarget.ES6) {
+                    emitAsyncFunctionBodyForES6(node);
+                }
+                else {
                     emitFunctionBody(node);
                 }
                 

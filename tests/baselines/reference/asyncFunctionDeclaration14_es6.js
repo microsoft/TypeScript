@@ -5,7 +5,7 @@ async function foo(): Promise<void> {
 
 //// [asyncFunctionDeclaration14_es6.js]
 function foo() {
-    return __awaiter(function *() {
+    return __awaiter(function* () {
         return;
-    }.apply(this, arguments), Promise);
+    }, this, void 0, Promise);
 }

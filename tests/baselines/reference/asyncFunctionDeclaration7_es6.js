@@ -7,11 +7,11 @@ async function bar(): Promise<void> {
 
 //// [asyncFunctionDeclaration7_es6.js]
 function bar() {
-    return __awaiter(function *() {
+    return __awaiter(function* () {
         // 'await' here is an identifier, and not a yield expression.
-        function foo() {
-            return __awaiter(function *(a = await) {
-            }.apply(this, arguments), Promise);
+        function foo(a = await) {
+            return __awaiter(function* () {
+            }, this, void 0, Promise);
         }
-    }.apply(this, arguments), Promise);
+    }, this, void 0, Promise);
 }

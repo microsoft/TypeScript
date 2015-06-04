@@ -4,6 +4,6 @@ async function foo(): Promise<void> {
 
 //// [asyncFunctionDeclaration1_es6.js]
 function foo() {
-    return __awaiter(function *() {
-    }.apply(this, arguments), Promise);
+    return __awaiter(function* () {
+    }, this, void 0, Promise);
 }

@@ -9,9 +9,9 @@ async function func(): Promise<void> {
 
 //// [awaitBinaryExpression2_es6.js]
 function func() {
-    return __awaiter(function *() {
+    return __awaiter(function* () {
         "before";
         var b = (yield p) && a;
         "after";
-    }.apply(this, arguments), Promise);
+    }, this, void 0, Promise);
 }

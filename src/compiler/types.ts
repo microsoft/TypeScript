@@ -1441,7 +1441,7 @@ module ts {
         serializeTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
         serializeParameterTypesOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): (string | string[])[];
         serializeReturnTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
-        getPromiseConstructor(node: SignatureDeclaration): EntityName;
+        getPromiseConstructor(node: SignatureDeclaration): EntityName | Expression;
     }
 
     export const enum SymbolFlags {
@@ -1569,7 +1569,7 @@ module ts {
         SuperInstance               = 0x00000100,  // Instance 'super' reference
         SuperStatic                 = 0x00000200,  // Static 'super' reference
         ContextChecked              = 0x00000400,  // Contextual types have been assigned
-        PromiseCollision            = 0x00000800,  // Declaration collides with the global 'Promise'
+        CaptureArguments            = 0x00000800,  // Lexical 'arguments' used in body (for async functions)
 
         // Values for enum members have been computed, and any errors have been reported for them.
         EnumValuesComputed          = 0x00001000,
@@ -1592,7 +1592,7 @@ module ts {
         assignmentChecks?: Map<boolean>;  // Cache of assignment checks
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
-        promiseConstructor?: EntityName;
+        promiseConstructor?: EntityName | Expression;
     }
 
     export const enum TypeFlags {

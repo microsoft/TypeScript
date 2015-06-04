@@ -13,9 +13,9 @@ async function func(): Promise<void> {
 
 //// [awaitCallExpression8_es6.js]
 function func() {
-    return __awaiter(function *() {
+    return __awaiter(function* () {
         "before";
         var b = (yield po).fn(a, a, a);
         "after";
-    }.apply(this, arguments), Promise);
+    }, this, void 0, Promise);
 }
