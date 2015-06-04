@@ -1,5 +1,5 @@
 // @module: system
-// @separateCompilation: true
+// @isolatedModules: true
 
 export class TopLevelClass {}
 export module TopLevelModule {var v;}

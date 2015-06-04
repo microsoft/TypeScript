@@ -1759,7 +1759,7 @@ var __awaiter = (this && this.__awaiter) || function (generator, ctor) {
             }
 
             function tryEmitConstantValue(node: PropertyAccessExpression | ElementAccessExpression): boolean {
-                if (compilerOptions.separateCompilation) {
+                if (compilerOptions.isolatedModules) {
                     // do not inline enum values in separate compilation mode
                     return false;
                 }
@@ -2576,7 +2576,7 @@ var __awaiter = (this && this.__awaiter) || function (generator, ctor) {
                 write(";");
             }
 
-            function emitWithStatement(node: WhileStatement) {
+            function emitWithStatement(node: WithStatement) {
                 write("with (");
                 emit(node.expression);
                 write(")");
@@ -3245,7 +3245,7 @@ var __awaiter = (this && this.__awaiter) || function (generator, ctor) {
             }
 
             function emitRestParameter(node: FunctionLikeDeclaration) {
-                if (languageVersion < ScriptTarget.ES6 && hasRestParameters(node)) {
+                if (languageVersion < ScriptTarget.ES6 && hasRestParameter(node)) {
                     let restIndex = node.parameters.length - 1;
                     let restParam = node.parameters[restIndex];
 
@@ -3373,7 +3373,7 @@ var __awaiter = (this && this.__awaiter) || function (generator, ctor) {
                 write("(");
                 if (node) {
                     let parameters = node.parameters;
-                    let omitCount = languageVersion < ScriptTarget.ES6 && hasRestParameters(node) ? 1 : 0;
+                    let omitCount = languageVersion < ScriptTarget.ES6 && hasRestParameter(node) ? 1 : 0;
                     emitList(parameters, 0, parameters.length - omitCount, /*multiLine*/ false, /*trailingComma*/ false);
                 }
                 write(")");
@@ -4585,7 +4585,7 @@ var __awaiter = (this && this.__awaiter) || function (generator, ctor) {
 
             function shouldEmitEnumDeclaration(node: EnumDeclaration) {
                 let isConstEnum = isConst(node);
-                return !isConstEnum || compilerOptions.preserveConstEnums || compilerOptions.separateCompilation;
+                return !isConstEnum || compilerOptions.preserveConstEnums || compilerOptions.isolatedModules;
             }
 
             function emitEnumDeclaration(node: EnumDeclaration) {
@@ -4690,7 +4690,7 @@ var __awaiter = (this && this.__awaiter) || function (generator, ctor) {
             }
 
             function shouldEmitModuleDeclaration(node: ModuleDeclaration) {
-                return isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.separateCompilation);
+                return isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.isolatedModules);
             }
 
             function isModuleMergedWithES6Class(node: ModuleDeclaration) {
@@ -5904,7 +5904,7 @@ var __awaiter = (this && this.__awaiter) || function (generator, ctor) {
                     }
                 }
 
-                if (isExternalModule(node) || compilerOptions.separateCompilation) {
+                if (isExternalModule(node) || compilerOptions.isolatedModules) {
                     if (languageVersion >= ScriptTarget.ES6) {
                         emitES6Module(node, startIndex);
                     }

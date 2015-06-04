@@ -273,6 +273,32 @@ module ts {
         // Top-level nodes
         SourceFile,
 
+        // JSDoc nodes.
+        JSDocTypeExpression,
+        // The * type.
+        JSDocAllType,
+        // The ? type.
+        JSDocUnknownType,
+        JSDocArrayType,
+        JSDocUnionType,
+        JSDocTupleType,
+        JSDocNullableType,
+        JSDocNonNullableType,
+        JSDocRecordType,
+        JSDocRecordMember,
+        JSDocTypeReference,
+        JSDocOptionalType,
+        JSDocFunctionType,
+        JSDocVariadicType,
+        JSDocConstructorType,
+        JSDocThisType,
+        JSDocComment,
+        JSDocTag,
+        JSDocParameterTag,
+        JSDocReturnTag,
+        JSDocTypeTag,
+        JSDocTemplateTag,
+
         // Synthesized list
         SyntaxList,
         // Enum value count
@@ -328,6 +354,8 @@ module ts {
 
     /* @internal */
     export const enum ParserContextFlags {
+        None = 0,
+
         // Set if this node was parsed in strict mode.  Used for grammar error checks, as well as
         // checking if the node can be reused in incremental settings.
         StrictMode = 1 << 0,
@@ -355,6 +383,10 @@ module ts {
         // error.
         ThisNodeHasError = 1 << 7,
 
+        // This node was parsed in a JavaScript file and can be processed differently.  For example
+        // its type can be specified usign a JSDoc comment.
+        JavaScriptFile = 1 << 8,
+
         // Context flags set directly by the parser.
         ParserGeneratedFlags = StrictMode | DisallowIn | Yield | GeneratorParameter | Decorator | ThisNodeHasError | Await | AsyncParameter,
 
@@ -369,13 +401,13 @@ module ts {
 
         // Used during incremental parsing to determine if this node or any of its children had an
         // error.  Computed only once and then cached.
-        ThisNodeOrAnySubNodesHasError = 1 << 8,
+        ThisNodeOrAnySubNodesHasError = 1 << 9,
 
         // Used to know if we've computed whether any children of this node are or contain an 'await' or 'yield' expression.
-        ThisNodeOrAnySubNodesHasAwaitOrYield = 1 << 9,
+        ThisNodeOrAnySubNodesHasAwaitOrYield = 1 << 10,
 
         // Used to know if we've computed data from children and cached it in this node.
-        HasAggregatedChildData = 1 << 10
+        HasAggregatedChildData = 1 << 11
     }
 
     /* @internal */
@@ -391,14 +423,15 @@ module ts {
         // Specific context the parser was in when this node was created.  Normally undefined.
         // Only set when the parser was in some interesting context (like async/yield).
         /* @internal */ parserContextFlags?: ParserContextFlags;
-        decorators?: NodeArray<Decorator>;    // Array of decorators (in document order)
-        modifiers?: ModifiersArray;           // Array of modifiers
-        /* @internal */ id?: number;          // Unique id (used to look up NodeLinks)
-        parent?: Node;                        // Parent node (initialized by binding)
-        /* @internal */ symbol?: Symbol;      // Symbol declared by node (initialized by binding)
-        /* @internal */ locals?: SymbolTable; // Locals associated with node (initialized by binding)
-        /* @internal */ nextContainer?: Node; // Next container in declaration order (initialized by binding)
-        /* @internal */ localSymbol?: Symbol; // Local symbol declared by node (initialized by binding only for exported nodes)
+        decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
+        modifiers?: ModifiersArray;                     // Array of modifiers
+        /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
+        parent?: Node;                                  // Parent node (initialized by binding
+        /* @internal */ jsDocComment?: JSDocComment;    // JSDoc for the node, if it has any.  Only for .js files.
+        /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
+        /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
+        /* @internal */ nextContainer?: Node;           // Next container in declaration order (initialized by binding)
+        /* @internal */ localSymbol?: Symbol;           // Local symbol declared by node (initialized by binding only for exported nodes)
     }
 
     export interface NodeArray<T> extends Array<T>, TextRange {
@@ -684,7 +717,7 @@ module ts {
 
     export interface YieldExpression extends Expression {
         asteriskToken?: Node;
-        expression: Expression;
+        expression?: Expression;
     }
 
     export interface BinaryExpression extends Expression {
@@ -908,7 +941,7 @@ module ts {
         _classElementBrand: any;
     }
 
-    export interface InterfaceDeclaration extends Declaration, ModuleElement {
+    export interface InterfaceDeclaration extends Declaration, Statement {
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
@@ -920,7 +953,7 @@ module ts {
         types?: NodeArray<ExpressionWithTypeArguments>;
     }
 
-    export interface TypeAliasDeclaration extends Declaration, ModuleElement {
+    export interface TypeAliasDeclaration extends Declaration, Statement {
         name: Identifier;
         type: TypeNode;
     }
@@ -932,7 +965,7 @@ module ts {
         initializer?: Expression;
     }
 
-    export interface EnumDeclaration extends Declaration, ModuleElement {
+    export interface EnumDeclaration extends Declaration, Statement {
         name: Identifier;
         members: NodeArray<EnumMember>;
     }
@@ -1014,6 +1047,106 @@ module ts {
     export interface CommentRange extends TextRange {
         hasTrailingNewLine?: boolean;
         kind: SyntaxKind;
+    }
+
+    // represents a top level: { type } expression in a JSDoc comment.
+    export interface JSDocTypeExpression extends Node {
+        type: JSDocType;
+    }
+
+    export interface JSDocType extends TypeNode {
+        _jsDocTypeBrand: any;
+    }
+
+    export interface JSDocAllType extends JSDocType {
+        _JSDocAllTypeBrand: any;
+    }
+
+    export interface JSDocUnknownType extends JSDocType {
+        _JSDocUnknownTypeBrand: any;
+    }
+
+    export interface JSDocArrayType extends JSDocType {
+        elementType: JSDocType;
+    }
+
+    export interface JSDocUnionType extends JSDocType {
+        types: NodeArray<JSDocType>;
+    }
+
+    export interface JSDocTupleType extends JSDocType {
+        types: NodeArray<JSDocType>;
+    }
+
+    export interface JSDocNonNullableType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocNullableType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocRecordType extends JSDocType, TypeLiteralNode {
+        members: NodeArray<JSDocRecordMember>;
+    }
+
+    export interface JSDocTypeReference extends JSDocType {
+        name: EntityName;
+        typeArguments: NodeArray<JSDocType>
+    }
+
+    export interface JSDocOptionalType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocFunctionType extends JSDocType, SignatureDeclaration {
+        parameters: NodeArray<ParameterDeclaration>;
+        type: JSDocType;
+    }
+
+    export interface JSDocVariadicType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocConstructorType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocThisType extends JSDocType {
+        type: JSDocType;
+    }
+
+    export interface JSDocRecordMember extends PropertyDeclaration {
+        name: Identifier | LiteralExpression,
+        type?: JSDocType
+    }
+
+    export interface JSDocComment extends Node {
+        tags: NodeArray<JSDocTag>;
+    }
+
+    export interface JSDocTag extends Node {
+        atToken: Node;
+        tagName: Identifier;
+    }
+
+    export interface JSDocTemplateTag extends JSDocTag {
+        typeParameters: NodeArray<TypeParameterDeclaration>;
+    }
+
+    export interface JSDocReturnTag extends JSDocTag {
+        typeExpression: JSDocTypeExpression;
+    }
+
+    export interface JSDocTypeTag extends JSDocTag {
+        typeExpression: JSDocTypeExpression;
+    }
+
+    export interface JSDocParameterTag extends JSDocTag {
+        preParameterName?: Identifier;
+        typeExpression?: JSDocTypeExpression;
+        postParameterName?: Identifier;
+        isBracketed: boolean;
     }
 
     // Source files are declarations when they are external modules.
@@ -1312,6 +1445,7 @@ module ts {
     }
 
     export const enum SymbolFlags {
+        None                    = 0,
         FunctionScopedVariable  = 0x00000001,  // Variable (var) or parameter
         BlockScopedVariable     = 0x00000002,  // A block-scoped variable (let or const)
         Property                = 0x00000004,  // Property or enum member
@@ -1381,11 +1515,9 @@ module ts {
 
         ExportHasLocal = Function | Class | Enum | ValueModule,
 
-        HasLocals = Function | Module | Method | Constructor | Accessor | Signature,
         HasExports = Class | Enum | Module,
         HasMembers = Class | Interface | TypeLiteral | ObjectLiteral,
 
-        IsContainer = HasLocals | HasExports | HasMembers,
         PropertyOrAccessor = Property | Accessor,
         Export = ExportNamespace | ExportType | ExportValue,
     }
@@ -1393,14 +1525,15 @@ module ts {
     export interface Symbol {
         flags: SymbolFlags;                     // Symbol flags
         name: string;                           // Name of symbol
-        /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
-        /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
         declarations?: Declaration[];           // Declarations associated with this symbol
-        /* @internal */ parent?: Symbol;        // Parent symbol
+        valueDeclaration?: Declaration;         // First value declaration of the symbol
+
         members?: SymbolTable;                  // Class, interface or literal instance members
         exports?: SymbolTable;                  // Module exports
+        /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
+        /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
+        /* @internal */ parent?: Symbol;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
-        valueDeclaration?: Declaration;         // First value declaration of the symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
     }
 
@@ -1485,7 +1618,7 @@ module ts {
         /* @internal */ 
         ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
         /* @internal */ 
-        ContainsObjectLiteral = 0x00080000,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 0x00080000,  // Type is or contains object literal type
         ESSymbol                = 0x00100000,  // Type of symbol primitive introduced in ES6
 
         /* @internal */ 
@@ -1523,6 +1656,8 @@ module ts {
     // Class and interface types (TypeFlags.Class and TypeFlags.Interface)
     export interface InterfaceType extends ObjectType {
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
+        outerTypeParameters: TypeParameter[];      // Outer type parameters (undefined if none)
+        localTypeParameters: TypeParameter[];      // Local type parameters (undefined if none)
     }
 
     export interface InterfaceTypeWithBaseTypes extends InterfaceType {
@@ -1569,8 +1704,15 @@ module ts {
         properties: Symbol[];              // Properties
         callSignatures: Signature[];       // Call signatures of type
         constructSignatures: Signature[];  // Construct signatures of type
-        stringIndexType: Type;             // String index type
-        numberIndexType: Type;             // Numeric index type
+        stringIndexType?: Type;            // String index type
+        numberIndexType?: Type;            // Numeric index type
+    }
+
+    // Just a place to cache element types of iterables and iterators
+    /* @internal */
+    export interface IterableOrIteratorType extends ObjectType, UnionType {
+        iterableElementType?: Type;
+        iteratorElementType?: Type;
     }
 
     // Type parameters (TypeFlags.TypeParameter)
@@ -1619,6 +1761,7 @@ module ts {
     /* @internal */
     export interface TypeMapper {
         (t: TypeParameter): Type;
+        mappings?: Map<Type>;  // Type mapping cache
     }
 
     /* @internal */
@@ -1706,7 +1849,8 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
-        separateCompilation?: boolean;
+        isolatedModules?: boolean;
+        experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
         /* @internal */ stripInternal?: boolean;
         [option: string]: string | number | boolean;

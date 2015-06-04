@@ -1,5 +1,5 @@
 // @module: system
-// @separateCompilation: true
+// @isolatedModules: true
 
 declare function use(a: any);
 const enum TopLevelConstEnum { X }

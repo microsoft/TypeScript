@@ -316,6 +316,11 @@ interface Array<T> {
     copyWithin(target: number, start: number, end?: number): T[];
 }
 
+interface IArguments {
+    /** Iterator */
+    [Symbol.iterator](): IterableIterator<any>;
+}
+
 interface ArrayConstructor {
     /**
       * Creates an array from an array-like object.
@@ -499,14 +504,6 @@ interface GeneratorFunctionConstructor {
     prototype: GeneratorFunction;
 }
 declare var GeneratorFunction: GeneratorFunctionConstructor;
-
-interface Generator<T> extends IterableIterator<T> {
-    next(value?: any): IteratorResult<T>;
-    throw(exception: any): IteratorResult<T>;
-    return(value: T): IteratorResult<T>;
-    [Symbol.iterator](): Generator<T>;
-    [Symbol.toStringTag]: string;
-}
 
 interface Math {
     /**
