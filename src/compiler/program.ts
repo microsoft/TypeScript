@@ -155,18 +155,19 @@ module ts {
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
 
-        // shouldExcludeDefaultLib is true if:
-        //  - The '--noLib' flag is used.
-        //  - A 'no-default-lib' reference comment is encountered in
-        //      processing the root files.
-        let shouldExcludeDefaultLib = options.noLib;
+        let encounteredTheNoDefaultLibTag = false;
 
         let start = new Date().getTime();
 
         host = host || createCompilerHost(options);
 
         forEach(rootNames, name => processRootFile(name, /*isDefaultLib */ false));
-        if (!shouldExcludeDefaultLib) {
+
+        // Do not process the default library if:
+        //  - The '--noLib' flag is used.
+        //  - A 'no-default-lib' reference comment is encountered in
+        //      processing the root files.
+        if (!(options.noLib || encounteredTheNoDefaultLibTag)) {
             processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib*/ true);
         }
 
@@ -387,7 +388,7 @@ module ts {
                     }
                 });
                 if (file) {
-                    shouldExcludeDefaultLib = shouldExcludeDefaultLib || file.hasNoDefaultLib;
+                    encounteredTheNoDefaultLibTag = encounteredTheNoDefaultLibTag || file.hasNoDefaultLib;
 
                     // Set the source file for normalized absolute path
                     filesByName[canonicalAbsolutePath] = file;
