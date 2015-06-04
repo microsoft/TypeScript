@@ -120,9 +120,7 @@ var C = (function (_super) {
 function hasANonBooleanReturnStatement(x) {
     return '';
 }
-is;
-A;
-{
+function hasTypeGuardTypeInsideTypeGuardType(x) {
     return true;
 }
 function hasMissingIsKeyword() {

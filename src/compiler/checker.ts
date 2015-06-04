@@ -1358,14 +1358,23 @@ module ts {
 
             return result;
         }
-
-        function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
+        
+        function getWriteResult<T>(data: T, enclosingDeclaration: Node, flags: TypeFormatFlags, method: (data: T, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags) => void) {
             let writer = getSingleLineStringWriter();
-            getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
-
+            method(data, writer, enclosingDeclaration, flags);
             let result = writer.string();
             releaseStringWriter(writer);
+            
+            return result;
+        }
+        
+        function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
+            let result = getWriteResult(signature, enclosingDeclaration, flags, getSymbolDisplayBuilder().buildSignatureDisplay);
+            return result;
+        }
 
+        function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
+            let result = getWriteResult(type, enclosingDeclaration, flags, getSymbolDisplayBuilder().buildTypeDisplay);
             let maxLength = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation ? undefined : 100;
             if (maxLength && result.length >= maxLength) {
                 result = result.substr(0, maxLength - "...".length) + "...";
@@ -3234,20 +3243,13 @@ module ts {
                 if (classType) {
                     returnType = classType;
                 }
-                else if (declaration.typePredicate) {
+                else if (declaration.type && declaration.type.kind === SyntaxKind.TypePredicate) {
                     returnType = booleanType;
-                    let typePredicateNode = declaration.typePredicate;
-                    let links = getNodeLinks(typePredicateNode);
-                    if (links.typePredicateParameterIndex === undefined) {
-                        links.typePredicateParameterIndex = getTypePredicateParameterIndex(declaration.parameters, typePredicateNode.parameterName);
-                    }
-                    if (!links.typeFromTypePredicate) {
-                        links.typeFromTypePredicate = getTypeFromTypeNode(declaration.typePredicate.type);
-                    }
+                    let typePredicateNode = <TypePredicateNode>declaration.type;
                     typePredicate = {
                         parameterName: typePredicateNode.parameterName ? typePredicateNode.parameterName.text : undefined,
-                        parameterIndex: typePredicateNode.parameterName ? links.typePredicateParameterIndex : undefined,
-                        type: links.typeFromTypePredicate
+                        parameterIndex: typePredicateNode.parameterName ? getTypePredicateParameterIndex(declaration.parameters, typePredicateNode.parameterName) : undefined,
+                        type: getTypeFromTypeNode(typePredicateNode.type)
                     };
                 }
                 else if (declaration.type) {
@@ -4662,8 +4664,8 @@ module ts {
 
                 if (source.typePredicate && target.typePredicate) {
                     let hasDifferentParamaterIndex = source.typePredicate.parameterIndex !== target.typePredicate.parameterIndex;
-                    let hasDifferentTypes = !isTypeIdenticalTo(source.typePredicate.type, target.typePredicate.type);
-                    if (hasDifferentParamaterIndex || hasDifferentTypes) {
+                    let hasDifferentTypes: boolean;
+                    if (hasDifferentParamaterIndex || (hasDifferentTypes = !isTypeIdenticalTo(source.typePredicate.type, target.typePredicate.type))) {
                         if (reportErrors) {
                             let sourceParamText = source.typePredicate.parameterName;
                             let targetParamText = target.typePredicate.parameterName;
@@ -4675,7 +4677,7 @@ module ts {
                                     sourceParamText,
                                     targetParamText);
                             }
-                            if (hasDifferentTypes) {
+                            else if (hasDifferentTypes) {
                                 reportError(Diagnostics.Type_0_is_not_assignable_to_type_1, 
                                     sourceTypeText,
                                     targetTypeText);
@@ -4687,11 +4689,10 @@ module ts {
                         }
                         return Ternary.False;
                     }
-                    return Ternary.True;
                 }
                 else if (!source.typePredicate && target.typePredicate) {
                     if (reportErrors) {
-                        reportError(Diagnostics.A_non_type_guard_function_is_not_assignable_to_a_type_guard_function);
+                        reportError(Diagnostics.Signature_0_must_have_a_type_predicate, signatureToString(source));
                     }
                     return Ternary.False;
                 }
@@ -5231,12 +5232,12 @@ module ts {
                 if (source.typePredicate && target.typePredicate) {
                     if (target.typePredicate.parameterIndex === source.typePredicate.parameterIndex) {
                         // Return types from type predicates are treated as booleans. In order to infer types
-                        // from type predicates we would need infer from the type from type predicates. Since
-                        // we can't infer any type information from the return types. We can just add a return
-                        // statement after the below infer statement.
+                        // from type predicates we would need to infer from the type of type predicates. Since
+                        // we can't infer any type information from the return types — we can just add a return
+                        // statement after the below infer type statement.
                         inferFromTypes(source.typePredicate.type, target.typePredicate.type);
-                        return;
                     }
+                    return;
                 }
                 inferFromTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
             }
@@ -8635,37 +8636,28 @@ module ts {
             forEach(node.parameters, checkParameter);
 
             if (node.type) {
-                checkSourceElement(node.type);
-            }
-
-            if (node.typePredicate) {
-                let links = getNodeLinks(node.typePredicate);
-                if (links.typePredicateParameterIndex === undefined) {
-                    links.typePredicateParameterIndex = getTypePredicateParameterIndex(node.parameters, node.typePredicate.parameterName);
-                }
-                if (!links.typeFromTypePredicate) {
-                    links.typeFromTypePredicate = getTypeFromTypeNode(node.typePredicate.type);
-                }
-                if (links.typePredicateParameterIndex >= 0) {
-                    checkTypeAssignableTo(links.typeFromTypePredicate,
-                        getTypeAtLocation(node.parameters[links.typePredicateParameterIndex]),
-                        node.typePredicate.type);
-                }
-                else if (node.typePredicate.parameterName) {
-                    error(node.typePredicate.parameterName,
-                        Diagnostics.Cannot_find_parameter_0,
-                        node.typePredicate.parameterName.text);
+                if (node.type.kind === SyntaxKind.TypePredicate) {
+                    let typePredicate = getSignatureFromDeclaration(node).typePredicate;
+                    if ((<TypePredicateNode>node.type).type.kind === SyntaxKind.TypePredicate) {
+                        error((<TypePredicateNode>node.type).type,
+                            Diagnostics.Cannot_define_type_predicate_0_as_a_type_to_a_type_predicate,
+                            getTextOfNode((<TypePredicateNode>node.type).type));
+                    }
+                    else {
+                        if (typePredicate.parameterIndex >= 0) {
+                            checkTypeAssignableTo(typePredicate.type,
+                                getTypeAtLocation(node.parameters[typePredicate.parameterIndex]),
+                                (<TypePredicateNode>node.type).type);
+                        }
+                        else if ((<TypePredicateNode>node.type).parameterName) {
+                            error((<TypePredicateNode>node.type).parameterName,
+                                Diagnostics.Cannot_find_parameter_0,
+                                typePredicate.parameterName);
+                        }
+                    }
                 }
                 else {
-                    let typeOfClass = getTypeAtLocation(node.parent);
-                    if (!isTypeSubtypeOf(links.typeFromTypePredicate, typeOfClass) &&
-                        !isTypeSubtypeOf(typeOfClass, links.typeFromTypePredicate)) {
-
-                        error(node.typePredicate,
-                            Diagnostics.Type_0_and_type_1_are_disjoint_types,
-                            typeToString(links.typeFromTypePredicate),
-                            typeToString(typeOfClass));
-                    }
+                    checkSourceElement(node.type);
                 }
             }
 
@@ -11300,6 +11292,10 @@ module ts {
                 links.exportsChecked = true;
             }
         }
+        
+        function checkTypePredicateNode(node: TypePredicateNode) {
+            
+        }
 
         function checkSourceElement(node: Node): void {
             if (!node) return;
@@ -11328,6 +11324,8 @@ module ts {
                     return checkAccessorDeclaration(<AccessorDeclaration>node);
                 case SyntaxKind.TypeReference:
                     return checkTypeReferenceNode(<TypeReferenceNode>node);
+                case SyntaxKind.TypePredicate:
+                    return checkTypePredicateNode(<TypePredicateNode>node);
                 case SyntaxKind.TypeQuery:
                     return checkTypeQuery(<TypeQueryNode>node);
                 case SyntaxKind.TypeLiteral:

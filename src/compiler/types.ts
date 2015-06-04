@@ -608,9 +608,9 @@ module ts {
         typeName: EntityName;
         typeArguments?: NodeArray<TypeNode>;
     }
-    
+
     export interface TypePredicateNode extends TypeNode {
-        parameterName?: Identifier;
+        parameterName: Identifier;
         type: TypeNode;
     }
 
@@ -1387,7 +1387,7 @@ module ts {
     
     export interface TypePredicate {
         parameterName: string;
-        parameterIndex?: number;
+        parameterIndex: number;
         type: Type;
     }
 
@@ -1577,8 +1577,6 @@ module ts {
         assignmentChecks?: Map<boolean>;  // Cache of assignment checks
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
-        typePredicateParameterIndex?: number; // Index of type predicate parameter
-        typeFromTypePredicate?: Type;     // Type from TypePredicate
     }
 
     export const enum TypeFlags {

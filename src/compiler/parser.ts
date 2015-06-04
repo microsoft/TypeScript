@@ -81,8 +81,7 @@ module ts {
                     visitNodes(cbNodes, node.modifiers) ||
                     visitNodes(cbNodes, (<SignatureDeclaration>node).typeParameters) ||
                     visitNodes(cbNodes, (<SignatureDeclaration>node).parameters) ||
-                    visitNode(cbNode, (<SignatureDeclaration>node).type) ||
-                    visitNode(cbNode, (<SignatureDeclaration>node).typePredicate);
+                    visitNode(cbNode, (<SignatureDeclaration>node).type);
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
             case SyntaxKind.Constructor:
@@ -99,7 +98,6 @@ module ts {
                     visitNodes(cbNodes, (<FunctionLikeDeclaration>node).typeParameters) ||
                     visitNodes(cbNodes, (<FunctionLikeDeclaration>node).parameters) ||
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).type) ||
-                    visitNode(cbNode, (<FunctionLikeDeclaration>node).typePredicate) ||
                     visitNode(cbNode, (<ArrowFunction>node).equalsGreaterThanToken) ||
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).body);
             case SyntaxKind.TypeReference:
@@ -768,7 +766,7 @@ module ts {
             return (contextFlags & ParserContextFlags.Decorator) !== 0;
         }
 
-        function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any) {
+        function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): void {
             let start = scanner.getTokenPos();
             let length = scanner.getTextPos() - start;
 
@@ -2053,13 +2051,10 @@ module ts {
 
             if (returnTokenRequired) {
                 parseExpected(returnToken);
-                parseTypePredicateOrReturnType(signature);
+                signature.type = parseType();
             }
             else if (parseOptional(returnToken)) {
-                parseTypePredicateOrReturnType(signature);
-            }
-            if (token === SyntaxKind.IsKeyword) {
-                parseTypePredicate(signature);
+                signature.type = parseType();
             }
         }
 
@@ -2497,6 +2492,22 @@ module ts {
 
             return result;
         }
+        
+        function parseTypePredicateOrHigher(): TypeNode {
+            let type = parseUnionTypeOrHigher();
+            if (token === SyntaxKind.IsKeyword &&
+                type.kind === SyntaxKind.TypeReference &&
+                (<TypeReferenceNode>type).typeName.kind === SyntaxKind.Identifier) {
+
+                nextToken();
+
+                let typePredicate = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, type.pos);
+                typePredicate.parameterName = <Identifier>(<TypeReferenceNode>type).typeName;
+                typePredicate.type = parseType();
+                return finishNode(typePredicate);
+            }
+            return type;
+        }
 
         function parseTypeWorker(): TypeNode {
             if (isStartOfFunctionType()) {
@@ -2505,7 +2516,7 @@ module ts {
             if (token === SyntaxKind.NewKeyword) {
                 return parseFunctionOrConstructorType(SyntaxKind.ConstructorType);
             }
-            return parseUnionTypeOrHigher();
+            return parseTypePredicateOrHigher();
         }
 
         function parseTypeAnnotation(): TypeNode {

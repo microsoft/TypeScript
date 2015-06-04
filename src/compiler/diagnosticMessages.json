@@ -703,29 +703,25 @@
         "category": "Error",
         "code": 1223
     },
-    "A non-type guard function is not assignable to a type guard function.": {
+    "Signature '{0}' must have a type predicate.": {
         "category": "Error",
         "code": 1224
     },
-    "A type-guard function can only return a boolean.": {
+    "Cannot find parameter '{0}'.": {
         "category": "Error",
         "code": 1225
     },
-    "Cannot find parameter '{0}'.": {
+    "Type predicate '{0}' is not assignable to '{1}'.": {
         "category": "Error",
         "code": 1226
     },
-    "Type predicate '{0}' is not assignable to '{1}'.": {
+    "Parameter '{0}' is not in the same position as parameter '{1}'.": {
         "category": "Error",
         "code": 1227
     },
-    "Parameter '{0}' is not in the same position as parameter '{1}'.": {
+    "Cannot define type predicate '{0}' as a type to a type predicate.": {
         "category": "Error",
         "code": 1228
-    },
-    "Type '{0}' and type '{1}' are disjoint types.": {
-        "category": "Error",
-        "code": 1229
     },
 
 
