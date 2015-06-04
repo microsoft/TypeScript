@@ -4441,7 +4441,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         emitDeclarationName(node);
                         write(`", `);
                         emitDeclarationName(node);
-                        write(")");
+                        write(");");
                     }
                     emitExportMemberAssignments(node.name);
                 }
@@ -4562,7 +4562,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         emitDeclarationName(node);
                         write(`", `);
                         emitDeclarationName(node);
-                        write(")");
+                        write(");");
                     }
                     emitExportMemberAssignments(<Identifier>node.name);
                 }
