@@ -378,8 +378,8 @@ module ts {
     // from this SourceFile that are being held onto may change as a result (including
     // becoming detached from any SourceFile).  It is recommended that this SourceFile not
     // be used once 'update' is called on it.
-    export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile {
-        return IncrementalParser.updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
+    export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean, tracer?: Tracer): SourceFile {
+        return IncrementalParser.updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks, (tracer || ((_, f) => f())));
     }
     
     /* @internal */
@@ -5592,10 +5592,10 @@ module ts {
     }
 
     module IncrementalParser {
-        export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks: boolean): SourceFile {
+        export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks: boolean, tracer: Tracer): SourceFile {
             aggressiveChecks = aggressiveChecks || Debug.shouldAssert(AssertionLevel.Aggressive);
 
-            checkChangeRange(sourceFile, newText, textChangeRange, aggressiveChecks);
+            tracer("updateSourceFile::checkChangeRange-1", () => checkChangeRange(sourceFile, newText, textChangeRange, aggressiveChecks));
             if (textChangeRangeIsUnchanged(textChangeRange)) {
                 // if the text didn't change, then we can just return our current source file as-is.
                 return sourceFile;
@@ -5604,7 +5604,7 @@ module ts {
             if (sourceFile.statements.length === 0) {
                 // If we don't have any statements in the current source file, then there's no real
                 // way to incrementally parse.  So just do a full parse instead.
-                return Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setNodeParents*/ true)
+                return tracer("updateSourceFile::Parser.parseSourceFile", () => Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setNodeParents*/ true));
             }
 
             // Make sure we're not trying to incrementally update a source file more than once.  Once
@@ -5618,18 +5618,20 @@ module ts {
             incrementalSourceFile.hasBeenIncrementallyParsed = true;
 
             let oldText = sourceFile.text;
-            let syntaxCursor = createSyntaxCursor(sourceFile);
+            let syntaxCursor = tracer("updateSourceFile::createSyntaxCursor", () => createSyntaxCursor(sourceFile));
 
             // Make the actual change larger so that we know to reparse anything whose lookahead
             // might have intersected the change.
-            let changeRange = extendToAffectedRange(sourceFile, textChangeRange);
-            checkChangeRange(sourceFile, newText, changeRange, aggressiveChecks);
+            let changeRange = tracer("updateSourceFile::extendToAffectedRange", () => extendToAffectedRange(sourceFile, textChangeRange));
+            tracer("updateSourceFile::checkChangeRange-2", () => checkChangeRange(sourceFile, newText, changeRange, aggressiveChecks));
 
             // Ensure that extending the affected range only moved the start of the change range
             // earlier in the file.
-            Debug.assert(changeRange.span.start <= textChangeRange.span.start);
-            Debug.assert(textSpanEnd(changeRange.span) === textSpanEnd(textChangeRange.span));
-            Debug.assert(textSpanEnd(textChangeRangeNewSpan(changeRange)) === textSpanEnd(textChangeRangeNewSpan(textChangeRange)));
+            tracer("updateSourceFile::asserts", () => {
+                Debug.assert(changeRange.span.start <= textChangeRange.span.start);
+                Debug.assert(textSpanEnd(changeRange.span) === textSpanEnd(textChangeRange.span));
+                Debug.assert(textSpanEnd(textChangeRangeNewSpan(changeRange)) === textSpanEnd(textChangeRangeNewSpan(textChangeRange)));
+            });
 
             // The is the amount the nodes after the edit range need to be adjusted.  It can be
             // positive (if the edit added characters), negative (if the edit deleted characters)
@@ -5655,8 +5657,9 @@ module ts {
             //
             // Also, mark any syntax elements that intersect the changed span.  We know, up front,
             // that we cannot reuse these elements.
-            updateTokenPositionsAndMarkElements(incrementalSourceFile,
-                changeRange.span.start, textSpanEnd(changeRange.span), textSpanEnd(textChangeRangeNewSpan(changeRange)), delta, oldText, newText, aggressiveChecks);
+            tracer("updateSourceFile::updateTokenPositionsAndMarkElements", () =>
+                updateTokenPositionsAndMarkElements(incrementalSourceFile,
+                    changeRange.span.start, textSpanEnd(changeRange.span), textSpanEnd(textChangeRangeNewSpan(changeRange)), delta, oldText, newText, aggressiveChecks));
 
             // Now that we've set up our internal incremental state just proceed and parse the
             // source file in the normal fashion.  When possible the parser will retrieve and
@@ -5668,10 +5671,25 @@ module ts {
             // inconsistent tree.  Setting the parents on the new tree should be very fast.  We
             // will immediately bail out of walking any subtrees when we can see that their parents
             // are already correct.
-            let result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /* setParentNode */ true)
 
+            let start = Date.now();
+            let result = tracer("updateSourceFile::Parser.parseSourceFile", () => Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /* setParentNode */ true));
+            if ((Date.now() - start) > 400) {
+                let path = "C:\\Sources\\TS\\__clean3\\";
+                let n = Math.random() * 100;
+                let fs = new ActiveXObject("Scripting.FileSystemObject");
+                function write(file: string, text: string) {
+                    let f = fs.CreateTextFile(file, true);
+                    f.Write(text);
+                    f.Close();
+                }
+                write(path + "oldText-" + n, oldText);
+                write(path + "newText-" + n, newText);
+                write(path + "change-" + n, JSON.stringify(textChangeRange));
+            }
             return result;
         }
+
 
         function moveElementEntirelyPastChangeRange(element: IncrementalElement, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
             if (isArray) {

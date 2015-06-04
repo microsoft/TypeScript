@@ -3,6 +3,8 @@ module ts {
         [index: string]: T;
     }
 
+    export type Tracer = (text: string, f: () => any) => any;
+
     export interface FileMap<T> {
         get(fileName: string): T;
         set(fileName: string, value: T): void;

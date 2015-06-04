@@ -1372,7 +1372,7 @@ module ts {
             fileName: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
-            version: string): SourceFile;
+            version: string, host: any): SourceFile;
 
         /**
           * Request an updated version of an already existing SourceFile with a given fileName
@@ -1390,7 +1390,7 @@ module ts {
             fileName: string,
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
-            version: string): SourceFile;
+            version: string, host: any): SourceFile;
 
         /**
           * Informs the DocumentRegistry that a file is not needed any longer.
@@ -1709,6 +1709,15 @@ module ts {
         }
     }
 
+    function trace(logger: LanguageServiceHost, text: string, f: () => any) {
+        var start = Date.now();
+        logger.log(text);
+        var r = f();
+        var end = Date.now();
+        logger.log(text + " finished in " + (end - start));
+        return r;
+    }
+
     class SyntaxTreeCache {
         // For our syntactic only features, we also keep a cache of the syntax tree for the 
         // currently edited file.  
@@ -1721,34 +1730,36 @@ module ts {
         }
 
         public getCurrentSourceFile(fileName: string): SourceFile {
-            let scriptSnapshot = this.host.getScriptSnapshot(fileName);
-            if (!scriptSnapshot) {
-                // The host does not know about this file.
-                throw new Error("Could not find file: '" + fileName + "'.");
-            }
+            return trace(this.host, "getCurrentSourceFile", () => {
+                let scriptSnapshot = trace(this.host, "this.host.getScriptSnapshot", () => this.host.getScriptSnapshot(fileName));
+                if (!scriptSnapshot) {
+                    // The host does not know about this file.
+                    throw new Error("Could not find file: '" + fileName + "'.");
+                }
 
-            let version = this.host.getScriptVersion(fileName);
-            let sourceFile: SourceFile;
+                let version = trace(this.host, "this.host.getScriptVersion", () => this.host.getScriptVersion(fileName));
+                let sourceFile: SourceFile;
 
-            if (this.currentFileName !== fileName) {
-                // This is a new file, just parse it
-                sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, ScriptTarget.Latest, version, /*setNodeParents:*/ true);
-            }
-            else if (this.currentFileVersion !== version) {
-                // This is the same file, just a newer version. Incrementally parse the file.
-                let editRange = scriptSnapshot.getChangeRange(this.currentFileScriptSnapshot);
-                sourceFile = updateLanguageServiceSourceFile(this.currentSourceFile, scriptSnapshot, version, editRange);
-            }
+                if (this.currentFileName !== fileName) {
+                    // This is a new file, just parse it
+                    sourceFile = trace(this.host, "createLanguageServiceSourceFile", () => createLanguageServiceSourceFile(fileName, scriptSnapshot, ScriptTarget.Latest, version, /*setNodeParents:*/ true));
+                }
+                else if (this.currentFileVersion !== version) {
+                    // This is the same file, just a newer version. Incrementally parse the file.
+                    let editRange = trace(this.host, "scriptSnapshot.getChangeRange", () => scriptSnapshot.getChangeRange(this.currentFileScriptSnapshot));
+                    sourceFile = trace(this.host, "updateLanguageServiceSourceFile", () => updateLanguageServiceSourceFile(this.currentSourceFile, scriptSnapshot, version, editRange, undefined, this.host));
+                }
 
-            if (sourceFile) {
-                // All done, ensure state is up to date
-                this.currentFileVersion = version;
-                this.currentFileName = fileName;
-                this.currentFileScriptSnapshot = scriptSnapshot;
-                this.currentSourceFile = sourceFile;
-            }
+                if (sourceFile) {
+                    // All done, ensure state is up to date
+                    this.currentFileVersion = version;
+                    this.currentFileName = fileName;
+                    this.currentFileScriptSnapshot = scriptSnapshot;
+                    this.currentSourceFile = sourceFile;
+                }
 
-            return this.currentSourceFile;
+                return this.currentSourceFile;
+            });
         }
     }
 
@@ -1835,41 +1846,42 @@ module ts {
 
     export let disableIncrementalParsing = false;
 
-    export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile {
+    export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean, host?: any): SourceFile {
         // If we were given a text change range, and our version or open-ness changed, then 
         // incrementally parse this file.
         if (textChangeRange) {
             if (version !== sourceFile.version) {
                 // Once incremental parsing is ready, then just call into this function.
                 if (!disableIncrementalParsing) {
-                    let newText: string;
+                    let newText: string = trace(host, "computing new text", () => { 
                     
-                    // grab the fragment from the beginning of the original text to the beginning of the span
-                    let prefix = textChangeRange.span.start !== 0
-                        ? sourceFile.text.substr(0, textChangeRange.span.start)
-                        : "";
+                        // grab the fragment from the beginning of the original text to the beginning of the span
+                        let prefix = textChangeRange.span.start !== 0
+                            ? sourceFile.text.substr(0, textChangeRange.span.start)
+                            : "";
                     
-                    // grab the fragment from the end of the span till the end of the original text
-                    let suffix = textSpanEnd(textChangeRange.span) !== sourceFile.text.length
-                        ? sourceFile.text.substr(textSpanEnd(textChangeRange.span))
-                        : "";
+                        // grab the fragment from the end of the span till the end of the original text
+                        let suffix = textSpanEnd(textChangeRange.span) !== sourceFile.text.length
+                            ? sourceFile.text.substr(textSpanEnd(textChangeRange.span))
+                            : "";
 
-                    if (textChangeRange.newLength === 0) {
-                        // edit was a deletion - just combine prefix and suffix
-                        newText = prefix && suffix ? prefix + suffix : prefix || suffix;
-                    }
-                    else {
-                        // it was actual edit, fetch the fragment of new text that correspond to new span
-                        let changedText = scriptSnapshot.getText(textChangeRange.span.start, textChangeRange.span.start + textChangeRange.newLength);
-                        // combine prefix, changed text and suffix
-                        newText = prefix && suffix 
-                            ? prefix + changedText + suffix
-                            : prefix
-                                ? (prefix + changedText) 
-                                : (changedText + suffix);
-                    }
-
-                    let newSourceFile = updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
+                        if (textChangeRange.newLength === 0) {
+                            // edit was a deletion - just combine prefix and suffix
+                            newText = prefix && suffix ? prefix + suffix : prefix || suffix;
+                        }
+                        else {
+                            // it was actual edit, fetch the fragment of new text that correspond to new span
+                            let changedText = trace(host, "scriptSnapshot.getText", () => scriptSnapshot.getText(textChangeRange.span.start, textChangeRange.span.start + textChangeRange.newLength));
+                            // combine prefix, changed text and suffix
+                            newText = prefix && suffix
+                                ? prefix + changedText + suffix
+                                : prefix
+                                    ? (prefix + changedText)
+                                    : (changedText + suffix);
+                        }
+                        return newText;
+                    });
+                    let newSourceFile = trace(host, "updateSourceFile", () => updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks, (text, f) => trace(host, text, f)));
                     setSourceFileFields(newSourceFile, scriptSnapshot, version);
                     // after incremental parsing nameTable might not be up-to-date
                     // drop it so it can be lazily recreated later
@@ -1930,12 +1942,12 @@ module ts {
             return JSON.stringify(bucketInfoArray, null, 2);
         }
 
-        function acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile {
-            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring:*/ true);
+        function acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, host: any): SourceFile {
+            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring:*/ true, host);
         }
 
-        function updateDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile {
-            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring:*/ false);
+        function updateDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, host: any): SourceFile {
+            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring:*/ false, host);
         }
 
         function acquireOrUpdateDocument(
@@ -1943,7 +1955,7 @@ module ts {
             compilationSettings: CompilerOptions,
             scriptSnapshot: IScriptSnapshot,
             version: string,
-            acquiring: boolean): SourceFile {
+            acquiring: boolean, host: any): SourceFile {
 
             let bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
             let entry = bucket.get(fileName);
@@ -1966,7 +1978,7 @@ module ts {
                 // return it as is.
                 if (entry.sourceFile.version !== version) {
                     entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version,
-                        scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot));
+                        scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot), undefined, host);
                 }
             }
 
@@ -2544,14 +2556,14 @@ module ts {
                         // it's source file any more, and instead defers to DocumentRegistry to get
                         // either version 1, version 2 (or some other version) depending on what the 
                         // host says should be used.
-                        return documentRegistry.updateDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
+                        return documentRegistry.updateDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, host);
                     }
 
                     // We didn't already have the file.  Fall through and acquire it from the registry.
                 }
 
                 // Could not find this file in the old program, create a new SourceFile for it.
-                return documentRegistry.acquireDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version);
+                return documentRegistry.acquireDocument(fileName, newSettings, hostFileInformation.scriptSnapshot, hostFileInformation.version, host);
             }
 
             function sourceFileUpToDate(sourceFile: SourceFile): boolean {

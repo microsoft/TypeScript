@@ -251,7 +251,7 @@ module ts {
         }
 
         public log(s: string): void {
-            this.shimHost.log(s);
+            this.shimHost.trace(s);
         }
 
         public trace(s: string): void {
@@ -351,7 +351,7 @@ module ts {
 
     function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any, noPerfLogging: boolean): any {
         if (!noPerfLogging) {
-            logger.log(actionDescription);
+            logger.trace(actionDescription);
             var start = Date.now();
         }
 
@@ -359,13 +359,13 @@ module ts {
 
         if (!noPerfLogging) {
             var end = Date.now();
-            logger.log(actionDescription + " completed in " + (end - start) + " msec");
+            logger.trace(actionDescription + " completed in " + (end - start) + " msec");
             if (typeof (result) === "string") {
                 var str = <string>result;
                 if (str.length > 128) {
                     str = str.substring(0, 128) + "...";
                 }
-                logger.log("  result.length=" + str.length + ", result='" + JSON.stringify(str) + "'");
+                logger.trace("  result.length=" + str.length + ", result='" + JSON.stringify(str) + "'");
             }
         }
 
