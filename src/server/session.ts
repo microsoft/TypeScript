@@ -181,7 +181,8 @@ module ts.server {
             }];
             var payload = JSON.stringify(data);
             host.writeFile('C:/throwaway/appLog.txt', payload, false);
-            host.httpsPost('https://dc.services.visualstudio.com/v2/track', payload, 'application/json');
+            // TODO: turn this back on when it's actually doing something
+            //host.httpsPost('https://dc.services.visualstudio.com/v2/track', payload, 'application/json');
 
             eventCounts = {};
             properties = {};
@@ -646,6 +647,7 @@ module ts.server {
                                 TabSize: formatOptions.TabSize,
                                 NewLineCharacter: "\n",
                                 ConvertTabsToSpaces: formatOptions.ConvertTabsToSpaces,
+                                SendMetrics: formatOptions.SendMetrics
                             };
                             var indentPosition =
                                 compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);
