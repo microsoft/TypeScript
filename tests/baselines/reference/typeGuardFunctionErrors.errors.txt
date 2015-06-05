@@ -1,5 +1,5 @@
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(15,12): error TS2322: Type 'string' is not assignable to type 'boolean'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(18,55): error TS1228: Cannot define type predicate 'x is A' as a type to a type predicate.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(18,55): error TS1228: Type predicates are only allowed in return type position.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(22,33): error TS2304: Cannot find name 'x'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(26,10): error TS2391: Function implementation is missing or not immediately following the declaration.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(27,5): error TS1131: Property or signature expected.
@@ -22,9 +22,12 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(81,1):
     Parameter 'p2' is not in the same position as parameter 'p1'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(87,1): error TS2322: Type '(p1: any, p2: any, p3: any) => boolean' is not assignable to type '(p1: any, p2: any) => boolean'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(92,56): error TS1225: Cannot find parameter 'p1'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,9): error TS1228: Type predicates are only allowed in return type position.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(96,16): error TS1228: Type predicates are only allowed in return type position.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(97,20): error TS1228: Type predicates are only allowed in return type position.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts (18 errors) ====
+==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts (21 errors) ====
     
     class A {
         propA: number;
@@ -46,7 +49,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(92,56)
     
     function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
                                                           ~~~~~~
-!!! error TS1228: Cannot define type predicate 'x is A' as a type to a type predicate.
+!!! error TS1228: Type predicates are only allowed in return type position.
         return true;
     }
     
@@ -160,3 +163,15 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(92,56)
                                                            ~~
 !!! error TS1225: Cannot find parameter 'p1'.
     
+    // Type predicates in non-return type positions
+    var b1: b is A;
+            ~~~~~~
+!!! error TS1228: Type predicates are only allowed in return type position.
+    function b2(a: b is A) {};
+                   ~~~~~~
+!!! error TS1228: Type predicates are only allowed in return type position.
+    function b3(): A | b is A {
+                       ~~~~~~
+!!! error TS1228: Type predicates are only allowed in return type position.
+        return true;
+    };

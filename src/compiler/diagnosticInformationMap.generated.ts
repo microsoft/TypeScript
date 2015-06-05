@@ -183,7 +183,7 @@ module ts {
         Cannot_find_parameter_0: { code: 1225, category: DiagnosticCategory.Error, key: "Cannot find parameter '{0}'." },
         Type_predicate_0_is_not_assignable_to_1: { code: 1226, category: DiagnosticCategory.Error, key: "Type predicate '{0}' is not assignable to '{1}'." },
         Parameter_0_is_not_in_the_same_position_as_parameter_1: { code: 1227, category: DiagnosticCategory.Error, key: "Parameter '{0}' is not in the same position as parameter '{1}'." },
-        Cannot_define_type_predicate_0_as_a_type_to_a_type_predicate: { code: 1228, category: DiagnosticCategory.Error, key: "Cannot define type predicate '{0}' as a type to a type predicate." },
+        Type_predicates_are_only_allowed_in_return_type_position: { code: 1228, category: DiagnosticCategory.Error, key: "Type predicates are only allowed in return type position." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },
         Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor: { code: 2301, category: DiagnosticCategory.Error, key: "Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor." },
         Static_members_cannot_reference_class_type_parameters: { code: 2302, category: DiagnosticCategory.Error, key: "Static members cannot reference class type parameters." },

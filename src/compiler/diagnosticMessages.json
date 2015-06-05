@@ -719,7 +719,7 @@
         "category": "Error",
         "code": 1227
     },
-    "Cannot define type predicate '{0}' as a type to a type predicate.": {
+    "Type predicates are only allowed in return type position.": {
         "category": "Error",
         "code": 1228
     },

@@ -1900,9 +1900,17 @@ module ts {
 
         // TYPES
 
-        function parseTypeReference(): TypeReferenceNode {
-            let node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
-            node.typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
+        function parseTypeReferenceOrTypePredicate(): TypeReferenceNode | TypePredicateNode {
+            let typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
+            if (typeName.kind === SyntaxKind.Identifier && token === SyntaxKind.IsKeyword) {
+                nextToken();
+                let node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typeName.pos);
+                node.parameterName = <Identifier>typeName;
+                node.type = parseType();
+                return finishNode(node);
+            }
+            let node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference, typeName.pos);
+            node.typeName = typeName;
             if (!scanner.hasPrecedingLineBreak() && token === SyntaxKind.LessThanToken) {
                 node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
             }
@@ -2339,7 +2347,7 @@ module ts {
                 case SyntaxKind.SymbolKeyword:
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     let node = tryParse(parseKeywordAndNoDot);
-                    return node || parseTypeReference();
+                    return node || parseTypeReferenceOrTypePredicate();
                 case SyntaxKind.VoidKeyword:
                     return parseTokenNode<TypeNode>();
                 case SyntaxKind.TypeOfKeyword:
@@ -2351,7 +2359,7 @@ module ts {
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedType();
                 default:
-                    return parseTypeReference();
+                    return parseTypeReferenceOrTypePredicate();
             }
         }
 
@@ -2464,22 +2472,6 @@ module ts {
 
             return result;
         }
-        
-        function parseTypePredicateOrHigher(): TypeNode {
-            let type = parseUnionTypeOrHigher();
-            if (token === SyntaxKind.IsKeyword &&
-                type.kind === SyntaxKind.TypeReference &&
-                (<TypeReferenceNode>type).typeName.kind === SyntaxKind.Identifier) {
-
-                nextToken();
-
-                let typePredicate = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, type.pos);
-                typePredicate.parameterName = <Identifier>(<TypeReferenceNode>type).typeName;
-                typePredicate.type = parseType();
-                return finishNode(typePredicate);
-            }
-            return type;
-        }
 
         function parseTypeWorker(): TypeNode {
             if (isStartOfFunctionType()) {
@@ -2488,7 +2480,7 @@ module ts {
             if (token === SyntaxKind.NewKeyword) {
                 return parseFunctionOrConstructorType(SyntaxKind.ConstructorType);
             }
-            return parseTypePredicateOrHigher();
+            return parseUnionTypeOrHigher();
         }
 
         function parseTypeAnnotation(): TypeNode {

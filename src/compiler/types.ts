@@ -464,7 +464,6 @@ module ts {
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         parameters: NodeArray<ParameterDeclaration>;
         type?: TypeNode;
-        typePredicate?: TypePredicateNode;
     }
 
     // SyntaxKind.VariableDeclaration

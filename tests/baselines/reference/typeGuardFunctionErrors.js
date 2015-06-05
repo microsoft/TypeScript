@@ -92,6 +92,12 @@ assign3 = function(p1, p2, p3): p1 is A {
 // Type guard paramater referring to a binding pattern
 declare function destructureParameter({ p1, p2, p3 }): p1 is A;
 
+// Type predicates in non-return type positions
+var b1: b is A;
+function b2(a: b is A) {};
+function b3(): A | b is A {
+    return true;
+};
 
 //// [typeGuardFunctionErrors.js]
 var __extends = (this && this.__extends) || function (d, b) {
@@ -169,3 +175,11 @@ var assign3;
 assign3 = function (p1, p2, p3) {
     return true;
 };
+// Type predicates in non-return type positions
+var b1;
+function b2(a) { }
+;
+function b3() {
+    return true;
+}
+;

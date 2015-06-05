@@ -8623,8 +8623,7 @@ module ts {
                     let typePredicateNode = <TypePredicateNode>node.type;
                     if (typePredicateNode.type.kind === SyntaxKind.TypePredicate) {
                         error(typePredicateNode.type,
-                            Diagnostics.Cannot_define_type_predicate_0_as_a_type_to_a_type_predicate,
-                            getTextOfNode(typePredicateNode.type));
+                            Diagnostics.Type_predicates_are_only_allowed_in_return_type_position);
                     }
                     else {
                         if (typePredicate.parameterIndex >= 0) {
@@ -11303,6 +11302,13 @@ module ts {
                     return checkAccessorDeclaration(<AccessorDeclaration>node);
                 case SyntaxKind.TypeReference:
                     return checkTypeReferenceNode(<TypeReferenceNode>node);
+                case SyntaxKind.TypePredicate:
+                    // Issue an error every time we encounter a type predicate. They are only allowed 
+                    // in return type positions in signature declarations. checkSignatureDeclaration(..) 
+                    // already have a specific check for type predicates, so every time we encounter a type
+                    // predicate in checkSourceElement it must be in a non return type position.
+                    error(node, Diagnostics.Type_predicates_are_only_allowed_in_return_type_position);
+                    return;
                 case SyntaxKind.TypeQuery:
                     return checkTypeQuery(<TypeQueryNode>node);
                 case SyntaxKind.TypeLiteral:
