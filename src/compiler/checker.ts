@@ -3121,9 +3121,11 @@ module ts {
             return property;
         }
 
-        // Return the symbol for the property with the given name in the given type. Creates synthetic union properties when
-        // necessary, maps primitive types and type parameters are to their apparent types, and augments with properties from
-        // Object and Function as appropriate.
+        /**
+         * Return the symbol for the property with the given name in the given type. Creates synthetic union properties when
+         * necessary, maps primitive types and type parameters to their apparent types, and augments with properties from
+         * Object and Function as appropriate.
+         */
         function getPropertyOfType(type: Type, name: string): Symbol {
             type = getApparentType(type);
             if (type.flags & TypeFlags.ObjectType) {
