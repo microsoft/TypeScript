@@ -186,7 +186,7 @@ module ts.server {
 
             eventCounts = {};
             properties = {};
-            nextSendTimeMs = Date.now() + nextSendTimeMs;
+            nextSendTimeMs = Date.now() + sendInterval;
         }
     }
 
