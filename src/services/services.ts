@@ -743,6 +743,7 @@ module ts {
         public parseDiagnostics: Diagnostic[];
         public bindDiagnostics: Diagnostic[];
 
+        public isDefaultLib: boolean;
         public hasNoDefaultLib: boolean;
         public externalModuleIndicator: Node; // The first node that causes this file to be an external module
         public nodeCount: number;
@@ -1993,7 +1994,7 @@ module ts {
 
             Debug.assert(entry.languageServiceRefCount >= 0);
             if (entry.languageServiceRefCount === 0) {
-                bucket.delete(fileName);
+                bucket.remove(fileName);
             }
         }
 
