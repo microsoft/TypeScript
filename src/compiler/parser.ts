@@ -3811,14 +3811,42 @@ module ts {
                     case SyntaxKind.ClassKeyword:
                     case SyntaxKind.EnumKeyword:
                         return StatementFlags.Statement;
+
+                    // 'declare', 'module', 'namespace', 'interface'* and 'type' are all legal JavaScript identifiers;
+                    // however, an identifier cannot be followed by another identifier on the same line. This is what we
+                    // count on to parse out the respective declarations. For instance, we exploit this to say that
+                    //
+                    //    namespace n
+                    //
+                    // can be none other than the beginning of a namespace declaration, but need to respect that JavaScript sees
+                    //
+                    //    namespace
+                    //    n
+                    //
+                    // as the identifier 'namespace' on one line followed by the identifier 'n' on another.
+                    // We need to look one token ahead to see if it permissible to try parsing a declaration.
+                    //
+                    // *Note*: 'interface' is actually a strict mode reserved word. So while
+                    //
+                    //   "use strict"
+                    //   interface
+                    //   I {}
+                    //
+                    // could be legal, it would add complexity for very little gain.
                     case SyntaxKind.InterfaceKeyword:
                     case SyntaxKind.TypeKeyword:
-                        nextToken();
-                        return isIdentifierOrKeyword() ? StatementFlags.Statement : StatementFlags.None;
+                        return nextTokenIsIdentifierOnSameLine() ? StatementFlags.Statement : StatementFlags.None;
                     case SyntaxKind.ModuleKeyword:
                     case SyntaxKind.NamespaceKeyword:
+                        return nextTokenIsIdentifierOrStringLiteralOnSameLine() ? StatementFlags.ModuleElement : StatementFlags.None;
+                    case SyntaxKind.DeclareKeyword:
                         nextToken();
-                        return isIdentifierOrKeyword() || token === SyntaxKind.StringLiteral ? StatementFlags.ModuleElement : StatementFlags.None;
+                        // ASI takes effect for this modifier.
+                        if (scanner.hasPrecedingLineBreak()) {
+                            return StatementFlags.None;
+                        }
+                        continue;
+
                     case SyntaxKind.ImportKeyword:
                         nextToken();
                         return token === SyntaxKind.StringLiteral || token === SyntaxKind.AsteriskToken ||
@@ -3831,7 +3859,6 @@ module ts {
                             return StatementFlags.ModuleElement;
                         }
                         continue;
-                    case SyntaxKind.DeclareKeyword:
                     case SyntaxKind.PublicKeyword:
                     case SyntaxKind.PrivateKeyword:
                     case SyntaxKind.ProtectedKeyword:
@@ -3982,6 +4009,11 @@ module ts {
                 case SyntaxKind.AtToken:
                     return parseDeclaration();
 
+                case SyntaxKind.InterfaceKeyword:
+                case SyntaxKind.TypeKeyword:
+                case SyntaxKind.ModuleKeyword:
+                case SyntaxKind.NamespaceKeyword:
+                case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.EnumKeyword:
                 case SyntaxKind.ExportKeyword:
@@ -3991,45 +4023,6 @@ module ts {
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.StaticKeyword:
                     if (getDeclarationFlags() & flags) {
-                        return parseDeclaration();
-                    }
-                    break;
-
-                // 'declare', 'module', 'namespace', 'interface'* and 'type' are all legal JavaScript identifiers;
-                // however, an identifier cannot be followed by another identifier on the same line. This is what we
-                // count on to parse out the respective declarations. For instance, we exploit this to say that
-                //
-                //    namespace n
-                //
-                // can be none other than the beginning of a namespace declaration, but need to respect that JavaScript sees
-                //
-                //    namespace
-                //    n
-                //
-                // as the identifier 'namespace' on one line followed by the identifier 'n' on another.
-                // We need to look one token ahead to see if it permissible to try parsing a declaration.
-                //
-                // *Note*: 'interface' is actually a strict mode reserved word. So while
-                //
-                //   "use strict"
-                //   interface
-                //   I {}
-                //
-                // could be legal, it would add complexity for very little gain.
-                case SyntaxKind.DeclareKeyword:
-                    if (lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine) && getDeclarationFlags() & flags) {
-                        return parseDeclaration();
-                    }
-                    break;
-                case SyntaxKind.ModuleKeyword:
-                    if (lookAhead(nextTokenIsIdentifierOrStringLiteralOnSameLine) && getDeclarationFlags() & flags) {
-                        return parseDeclaration();
-                    }
-                    break;
-                case SyntaxKind.InterfaceKeyword:
-                case SyntaxKind.NamespaceKeyword:
-                case SyntaxKind.TypeKeyword:
-                    if (lookAhead(nextTokenIsIdentifierOnSameLine) && getDeclarationFlags() & flags) {
                         return parseDeclaration();
                     }
                     break;
