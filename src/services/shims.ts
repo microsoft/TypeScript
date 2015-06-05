@@ -56,6 +56,7 @@ module ts {
         getDefaultLibFileName(options: string): string;
         getNewLine?(): string;
         getProjectVersion?(): string;
+        useCaseSensitiveFileNames?(): boolean;
     }
 
     /** Public interface of the the of a config service shim instance.*/
@@ -268,6 +269,10 @@ module ts {
             }
 
             return this.shimHost.getProjectVersion();
+        }
+
+        public useCaseSensitiveFileNames(): boolean {
+            return this.shimHost.useCaseSensitiveFileNames ? this.shimHost.useCaseSensitiveFileNames() : false;
         }
 
         public getCompilationSettings(): CompilerOptions {
@@ -909,7 +914,7 @@ module ts {
 
     export class TypeScriptServicesFactory implements ShimFactory {
         private _shims: Shim[] = [];
-        private documentRegistry: DocumentRegistry = createDocumentRegistry();
+        private documentRegistry: DocumentRegistry;
 
         /*
          * Returns script API version.
@@ -920,6 +925,9 @@ module ts {
 
         public createLanguageServiceShim(host: LanguageServiceShimHost): LanguageServiceShim {
             try {
+                if (this.documentRegistry === undefined) {
+                    this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
+                }
                 var hostAdapter = new LanguageServiceShimHostAdapter(host);
                 var languageService = createLanguageService(hostAdapter, this.documentRegistry);
                 return new LanguageServiceShimObject(this, host, languageService);
@@ -989,4 +997,4 @@ module TypeScript.Services {
 }
 
 /* @internal */
-let toolsVersion = "1.4";
+let toolsVersion = "1.5";

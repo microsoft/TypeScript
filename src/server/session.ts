@@ -76,29 +76,30 @@ module ts.server {
     }
 
     export module CommandNames {
-        export var Brace = "brace";
-        export var Change = "change";
-        export var Close = "close";
-        export var Completions = "completions";
-        export var CompletionDetails = "completionEntryDetails";
-        export var Configure = "configure";
-        export var Definition = "definition";
-        export var Exit = "exit";
-        export var Format = "format";
-        export var Formatonkey = "formatonkey";
-        export var Geterr = "geterr";
-        export var NavBar = "navbar";
-        export var Navto = "navto";
-        export var Occurrences = "occurrences";
-        export var Open = "open";
-        export var Quickinfo = "quickinfo";
-        export var References = "references";
-        export var Reload = "reload";
-        export var Rename = "rename";
-        export var Saveto = "saveto";
-        export var SignatureHelp = "signatureHelp";        
-        export var TypeDefinition = "typeDefinition";        
-        export var Unknown = "unknown";
+        export const Brace = "brace";
+        export const Change = "change";
+        export const Close = "close";
+        export const Completions = "completions";
+        export const CompletionDetails = "completionEntryDetails";
+        export const Configure = "configure";
+        export const Definition = "definition";
+        export const Exit = "exit";
+        export const Format = "format";
+        export const Formatonkey = "formatonkey";
+        export const Geterr = "geterr";
+        export const NavBar = "navbar";
+        export const Navto = "navto";
+        export const Occurrences = "occurrences";
+        export const Open = "open";
+        export const Quickinfo = "quickinfo";
+        export const References = "references";
+        export const Reload = "reload";
+        export const Rename = "rename";
+        export const Saveto = "saveto";
+        export const SignatureHelp = "signatureHelp";
+        export const TypeDefinition = "typeDefinition";
+        export const ProjectInfo = "projectInfo";
+        export const Unknown = "unknown";
     }
 
     module Errors { 
@@ -336,6 +337,21 @@ module ts.server {
                     isWriteAccess
                 }
             });
+        }
+
+        getProjectInfo(fileName: string, needFileNameList: boolean): protocol.ProjectInfo {
+            fileName = ts.normalizePath(fileName)
+            let project = this.projectService.getProjectForFile(fileName)
+
+            let projectInfo: protocol.ProjectInfo = {
+                configFileName: project.projectFilename
+            }
+
+            if (needFileNameList) {
+                projectInfo.fileNameList = project.getFileNameList();
+            }
+
+            return projectInfo;
         }
 
         getRenameLocations(line: number, offset: number, fileName: string,findInComments: boolean, findInStrings: boolean): protocol.RenameResponseBody {
@@ -949,6 +965,11 @@ module ts.server {
                     case CommandNames.Occurrences: {
                         var { line, offset, file: fileName } = <protocol.FileLocationRequestArgs>request.arguments;
                         response = this.getOccurrences(line, offset, fileName);
+                        break;
+                    }
+                    case CommandNames.ProjectInfo: {
+                        var { file, needFileNameList } = <protocol.ProjectInfoRequestArgs>request.arguments;
+                        response = this.getProjectInfo(file, needFileNameList);
                         break;
                     }
                     default: {

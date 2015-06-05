@@ -66,7 +66,6 @@ define(["require", "exports"], function (require, exports) {
     /** Module comment*/
     var m1;
     (function (m1) {
-        /** b's comment*/
         /** foo's comment*/
         function foo() {
             return m1.b;
@@ -96,7 +95,6 @@ define(["require", "exports"], function (require, exports) {
     /** Module comment */
     var m4;
     (function (m4) {
-        /** b's comment */
         /** foo's comment
         */
         function foo() {

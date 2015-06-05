@@ -40,8 +40,8 @@ var f = [[], [1]]; // number[][]
 >1 : number
 
 var g = [[1], ['']]; // {}[]
->g : (string[] | number[])[]
->[[1], ['']] : (string[] | number[])[]
+>g : (number[] | string[])[]
+>[[1], ['']] : (number[] | string[])[]
 >[1] : number[]
 >1 : number
 >[''] : string[]

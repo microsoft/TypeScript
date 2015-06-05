@@ -15,6 +15,42 @@ module ts {
         True  = -1
     }
 
+    export function createFileMap<T>(getCanonicalFileName: (fileName: string) => string): FileMap<T> {
+        let files: Map<T> = {};
+        return {
+            get,
+            set,
+            contains,
+            remove,
+            forEachValue: forEachValueInMap
+        }
+
+        function set(fileName: string, value: T) {
+            files[normalizeKey(fileName)] = value;
+        }
+
+        function get(fileName: string) {
+            return files[normalizeKey(fileName)];
+        }
+
+        function contains(fileName: string) {
+            return hasProperty(files, normalizeKey(fileName));
+        }
+
+        function remove (fileName: string) {
+            let key = normalizeKey(fileName);
+            delete files[key];
+        }
+
+        function forEachValueInMap(f: (value: T) => void) {
+            forEachValue(files, f);
+        }
+
+        function normalizeKey(key: string) {
+            return getCanonicalFileName(normalizeSlashes(key));
+        }
+    }
+
     export const enum Comparison {
         LessThan    = -1,
         EqualTo     = 0,
@@ -128,6 +164,16 @@ module ts {
             }
         }
     } 
+
+    export function rangeEquals<T>(array1: T[], array2: T[], pos: number, end: number) {
+        while (pos < end) {
+            if (array1[pos] !== array2[pos]) {
+                return false;
+            }
+            pos++;
+        }
+        return true;
+    }
 
     /**
      * Returns the last element of an array if non-empty, undefined otherwise.
@@ -312,8 +358,11 @@ module ts {
 
         Debug.assert(start >= 0, "start must be non-negative, is " + start);
         Debug.assert(length >= 0, "length must be non-negative, is " + length);
-        Debug.assert(start <= file.text.length, `start must be within the bounds of the file. ${ start } > ${ file.text.length }`);
-        Debug.assert(end <= file.text.length, `end must be the bounds of the file. ${ end } > ${ file.text.length }`);
+
+        if (file) {
+            Debug.assert(start <= file.text.length, `start must be within the bounds of the file. ${ start } > ${ file.text.length }`);
+            Debug.assert(end <= file.text.length, `end must be the bounds of the file. ${ end } > ${ file.text.length }`);
+        }
 
         let text = getLocaleSpecificMessage(message.key);
         

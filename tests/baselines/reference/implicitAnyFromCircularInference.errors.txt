@@ -7,7 +7,7 @@ tests/cases/compiler/implicitAnyFromCircularInference.ts(18,10): error TS7024: F
 tests/cases/compiler/implicitAnyFromCircularInference.ts(23,10): error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 tests/cases/compiler/implicitAnyFromCircularInference.ts(26,10): error TS7023: 'h' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 tests/cases/compiler/implicitAnyFromCircularInference.ts(28,14): error TS7023: 'foo' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
-tests/cases/compiler/implicitAnyFromCircularInference.ts(41,5): error TS7022: 's' implicitly has type 'any' because it is does not have a type annotation and is referenced directly or indirectly in its own initializer.
+tests/cases/compiler/implicitAnyFromCircularInference.ts(41,5): error TS7022: 's' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
 tests/cases/compiler/implicitAnyFromCircularInference.ts(46,5): error TS7023: 'x' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 
 
@@ -72,7 +72,7 @@ tests/cases/compiler/implicitAnyFromCircularInference.ts(46,5): error TS7023: 'x
         // Error expected
         s = foo(this);
         ~~~~~~~~~~~~~~
-!!! error TS7022: 's' implicitly has type 'any' because it is does not have a type annotation and is referenced directly or indirectly in its own initializer.
+!!! error TS7022: 's' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
     }
     
     class D {

@@ -15,7 +15,7 @@ module ts {
         createDirectory(path: string): void;
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
-        readDirectory(path: string, extension?: string): string[];
+        readDirectory(path: string, extension?: string, exclude?: string[]): string[];
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
     }
@@ -109,7 +109,11 @@ module ts {
                 }
             }
 
-            function getNames(collection: any): string[] {
+            function getCanonicalPath(path: string): string {
+                return path.toLowerCase();
+            }
+
+            function getNames(collection: any): string[]{
                 var result: string[] = [];
                 for (var e = new Enumerator(collection); !e.atEnd(); e.moveNext()) {
                     result.push(e.item().Name);
@@ -117,21 +121,26 @@ module ts {
                 return result.sort();
             }
 
-            function readDirectory(path: string, extension?: string): string[] {
+            function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
                 var result: string[] = [];
+                exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
                 visitDirectory(path);
                 return result;
                 function visitDirectory(path: string) {
                     var folder = fso.GetFolder(path || ".");
                     var files = getNames(folder.files);
-                    for (let name of files) {
-                        if (!extension || fileExtensionIs(name, extension)) {
-                            result.push(combinePaths(path, name));
+                    for (let current of files) {
+                        let name = combinePaths(path, current);
+                        if ((!extension || fileExtensionIs(name, extension)) && !contains(exclude, getCanonicalPath(name))) {
+                            result.push(name);
                         }
                     }
                     var subfolders = getNames(folder.subfolders);
                     for (let current of subfolders) {
-                        visitDirectory(combinePaths(path, current));
+                        let name = combinePaths(path, current);
+                        if (!contains(exclude, getCanonicalPath(name))) {
+                            visitDirectory(name);
+                        }
                     }
                 }
             }
@@ -222,8 +231,13 @@ module ts {
                 _fs.writeFileSync(fileName, data, "utf8");
             }
 
-            function readDirectory(path: string, extension?: string): string[] {
+            function getCanonicalPath(path: string): string {
+                return useCaseSensitiveFileNames ? path.toLowerCase() : path;
+            }
+
+            function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
                 var result: string[] = [];
+                exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
                 visitDirectory(path);
                 return result;
                 function visitDirectory(path: string) {
@@ -231,14 +245,16 @@ module ts {
                     var directories: string[] = [];
                     for (let current of files) {
                         var name = combinePaths(path, current);
-                        var stat = _fs.lstatSync(name);
-                        if (stat.isFile()) {
-                            if (!extension || fileExtensionIs(name, extension)) {
-                                result.push(name);
+                        if (!contains(exclude, getCanonicalPath(name))) {
+                            var stat = _fs.statSync(name);
+                            if (stat.isFile()) {
+                                if (!extension || fileExtensionIs(name, extension)) {
+                                    result.push(name);
+                                }
                             }
-                        }
-                        else if (stat.isDirectory()) {
-                            directories.push(name);
+                            else if (stat.isDirectory()) {
+                                directories.push(name);
+                            }
                         }
                     }
                     for (let current of directories) {

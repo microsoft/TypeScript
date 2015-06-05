@@ -251,8 +251,30 @@ declare module "typescript" {
         ShorthandPropertyAssignment = 226,
         EnumMember = 227,
         SourceFile = 228,
-        SyntaxList = 229,
-        Count = 230,
+        JSDocTypeExpression = 229,
+        JSDocAllType = 230,
+        JSDocUnknownType = 231,
+        JSDocArrayType = 232,
+        JSDocUnionType = 233,
+        JSDocTupleType = 234,
+        JSDocNullableType = 235,
+        JSDocNonNullableType = 236,
+        JSDocRecordType = 237,
+        JSDocRecordMember = 238,
+        JSDocTypeReference = 239,
+        JSDocOptionalType = 240,
+        JSDocFunctionType = 241,
+        JSDocVariadicType = 242,
+        JSDocConstructorType = 243,
+        JSDocThisType = 244,
+        JSDocComment = 245,
+        JSDocTag = 246,
+        JSDocParameterTag = 247,
+        JSDocReturnTag = 248,
+        JSDocTypeTag = 249,
+        JSDocTemplateTag = 250,
+        SyntaxList = 251,
+        Count = 252,
         FirstAssignment = 53,
         LastAssignment = 64,
         FirstReservedWord = 66,
@@ -495,7 +517,7 @@ declare module "typescript" {
     }
     interface YieldExpression extends Expression {
         asteriskToken?: Node;
-        expression: Expression;
+        expression?: Expression;
     }
     interface BinaryExpression extends Expression {
         left: Expression;
@@ -666,7 +688,7 @@ declare module "typescript" {
     interface ClassElement extends Declaration {
         _classElementBrand: any;
     }
-    interface InterfaceDeclaration extends Declaration, ModuleElement {
+    interface InterfaceDeclaration extends Declaration, Statement {
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
@@ -676,7 +698,7 @@ declare module "typescript" {
         token: SyntaxKind;
         types?: NodeArray<ExpressionWithTypeArguments>;
     }
-    interface TypeAliasDeclaration extends Declaration, ModuleElement {
+    interface TypeAliasDeclaration extends Declaration, Statement {
         name: Identifier;
         type: TypeNode;
     }
@@ -684,7 +706,7 @@ declare module "typescript" {
         name: DeclarationName;
         initializer?: Expression;
     }
-    interface EnumDeclaration extends Declaration, ModuleElement {
+    interface EnumDeclaration extends Declaration, Statement {
         name: Identifier;
         members: NodeArray<EnumMember>;
     }
@@ -739,6 +761,82 @@ declare module "typescript" {
         hasTrailingNewLine?: boolean;
         kind: SyntaxKind;
     }
+    interface JSDocTypeExpression extends Node {
+        type: JSDocType;
+    }
+    interface JSDocType extends TypeNode {
+        _jsDocTypeBrand: any;
+    }
+    interface JSDocAllType extends JSDocType {
+        _JSDocAllTypeBrand: any;
+    }
+    interface JSDocUnknownType extends JSDocType {
+        _JSDocUnknownTypeBrand: any;
+    }
+    interface JSDocArrayType extends JSDocType {
+        elementType: JSDocType;
+    }
+    interface JSDocUnionType extends JSDocType {
+        types: NodeArray<JSDocType>;
+    }
+    interface JSDocTupleType extends JSDocType {
+        types: NodeArray<JSDocType>;
+    }
+    interface JSDocNonNullableType extends JSDocType {
+        type: JSDocType;
+    }
+    interface JSDocNullableType extends JSDocType {
+        type: JSDocType;
+    }
+    interface JSDocRecordType extends JSDocType, TypeLiteralNode {
+        members: NodeArray<JSDocRecordMember>;
+    }
+    interface JSDocTypeReference extends JSDocType {
+        name: EntityName;
+        typeArguments: NodeArray<JSDocType>;
+    }
+    interface JSDocOptionalType extends JSDocType {
+        type: JSDocType;
+    }
+    interface JSDocFunctionType extends JSDocType, SignatureDeclaration {
+        parameters: NodeArray<ParameterDeclaration>;
+        type: JSDocType;
+    }
+    interface JSDocVariadicType extends JSDocType {
+        type: JSDocType;
+    }
+    interface JSDocConstructorType extends JSDocType {
+        type: JSDocType;
+    }
+    interface JSDocThisType extends JSDocType {
+        type: JSDocType;
+    }
+    interface JSDocRecordMember extends PropertyDeclaration {
+        name: Identifier | LiteralExpression;
+        type?: JSDocType;
+    }
+    interface JSDocComment extends Node {
+        tags: NodeArray<JSDocTag>;
+    }
+    interface JSDocTag extends Node {
+        atToken: Node;
+        tagName: Identifier;
+    }
+    interface JSDocTemplateTag extends JSDocTag {
+        typeParameters: NodeArray<TypeParameterDeclaration>;
+    }
+    interface JSDocReturnTag extends JSDocTag {
+        typeExpression: JSDocTypeExpression;
+    }
+    interface JSDocTypeTag extends JSDocTag {
+        typeExpression: JSDocTypeExpression;
+    }
+    interface JSDocParameterTag extends JSDocTag {
+        preParameterName?: Identifier;
+        typeExpression?: JSDocTypeExpression;
+        postParameterName?: Identifier;
+        isBracketed: boolean;
+    }
     interface SourceFile extends Declaration {
         statements: NodeArray<ModuleElement>;
         endOfFileToken: Node;
@@ -759,7 +857,7 @@ declare module "typescript" {
         getCurrentDirectory(): string;
     }
     interface ParseConfigHost {
-        readDirectory(rootDir: string, extension: string): string[];
+        readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
     }
     interface WriteFileCallback {
         (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
@@ -901,6 +999,7 @@ declare module "typescript" {
         UseOnlyExternalAliasing = 2,
     }
     const enum SymbolFlags {
+        None = 0,
         FunctionScopedVariable = 1,
         BlockScopedVariable = 2,
         Property = 4,
@@ -959,10 +1058,8 @@ declare module "typescript" {
         AliasExcludes = 8388608,
         ModuleMember = 8914931,
         ExportHasLocal = 944,
-        HasLocals = 255504,
         HasExports = 1952,
         HasMembers = 6240,
-        IsContainer = 262128,
         PropertyOrAccessor = 98308,
         Export = 7340032,
     }
@@ -970,9 +1067,9 @@ declare module "typescript" {
         flags: SymbolFlags;
         name: string;
         declarations?: Declaration[];
+        valueDeclaration?: Declaration;
         members?: SymbolTable;
         exports?: SymbolTable;
-        valueDeclaration?: Declaration;
     }
     interface SymbolTable {
         [index: string]: Symbol;
@@ -994,8 +1091,9 @@ declare module "typescript" {
         Tuple = 8192,
         Union = 16384,
         Anonymous = 32768,
-        ObjectLiteral = 131072,
-        ESSymbol = 1048576,
+        Instantiated = 65536,
+        ObjectLiteral = 262144,
+        ESSymbol = 2097152,
         StringLike = 258,
         NumberLike = 132,
         ObjectType = 48128,
@@ -1011,6 +1109,8 @@ declare module "typescript" {
     }
     interface InterfaceType extends ObjectType {
         typeParameters: TypeParameter[];
+        outerTypeParameters: TypeParameter[];
+        localTypeParameters: TypeParameter[];
     }
     interface InterfaceTypeWithBaseTypes extends InterfaceType {
         baseTypes: ObjectType[];
@@ -1114,7 +1214,8 @@ declare module "typescript" {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
-        separateCompilation?: boolean;
+        isolatedModules?: boolean;
+        experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
         [option: string]: string | number | boolean;
     }
@@ -1181,7 +1282,7 @@ declare module "typescript" {
         createDirectory(path: string): void;
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
-        readDirectory(path: string, extension?: string): string[];
+        readDirectory(path: string, extension?: string, exclude?: string[]): string[];
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
     }
@@ -1226,8 +1327,6 @@ declare module "typescript" {
     function getTrailingCommentRanges(text: string, pos: number): CommentRange[];
     function isIdentifierStart(ch: number, languageVersion: ScriptTarget): boolean;
     function isIdentifierPart(ch: number, languageVersion: ScriptTarget): boolean;
-    /** Creates a scanner over a (possibly unspecified) range of a piece of text. */
-    function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, text?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner;
 }
 declare module "typescript" {
     function getDefaultLibFileName(options: CompilerOptions): string;
@@ -1256,6 +1355,7 @@ declare module "typescript" {
      * Vn.
      */
     function collapseTextChangeRangesAcrossMultipleVersions(changes: TextChangeRange[]): TextChangeRange;
+    function getTypeParameterOwner(d: Declaration): Declaration;
 }
 declare module "typescript" {
     function getNodeConstructor(kind: SyntaxKind): new () => Node;
@@ -1812,6 +1912,7 @@ declare module "typescript" {
         static typeParameterName: string;
         static typeAliasName: string;
         static parameterName: string;
+        static docCommentTagName: string;
     }
     const enum ClassificationType {
         comment = 1,
@@ -1831,6 +1932,7 @@ declare module "typescript" {
         typeParameterName = 15,
         typeAliasName = 16,
         parameterName = 17,
+        docCommentTagName = 18,
     }
     interface DisplayPartsSymbolWriter extends SymbolWriter {
         displayParts(): SymbolDisplayPart[];
