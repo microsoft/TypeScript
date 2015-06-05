@@ -939,6 +939,7 @@ module ts {
 
     export interface TypeAliasDeclaration extends Declaration, Statement {
         name: Identifier;
+        typeParameters?: NodeArray<TypeParameterDeclaration>;
         type: TypeNode;
     }
 
@@ -1525,7 +1526,9 @@ module ts {
     export interface SymbolLinks {
         target?: Symbol;                    // Resolved (non-alias) target of an alias
         type?: Type;                        // Type of value symbol
-        declaredType?: Type;                // Type of class, interface, enum, or type parameter
+        declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
+        typeParameters?: TypeParameter[];   // Type parameters of type alias (empty array if none)
+        instantiations?: Map<Type>;         // Instantiations of generic type alias
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
         unionType?: UnionType;              // Containing union type for union property

@@ -338,6 +338,7 @@ module ts {
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.SourceFile:
+                case SyntaxKind.TypeAliasDeclaration:
                     return ContainerFlags.IsContainerWithLocals;
 
                 case SyntaxKind.CatchClause:
@@ -424,6 +425,7 @@ module ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
+                case SyntaxKind.TypeAliasDeclaration:
                     // All the children of these container types are never visible through another
                     // symbol (i.e. through another symbol's 'exports' or 'members').  Instead, 
                     // they're only accessed 'lexically' (i.e. from code that exists underneath 

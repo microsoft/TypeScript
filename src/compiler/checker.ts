@@ -2577,8 +2577,8 @@ module ts {
         function getLocalTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] {
             let result: TypeParameter[];
             for (let node of symbol.declarations) {
-                if (node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.ClassDeclaration) {
-                    let declaration = <InterfaceDeclaration>node;
+                if (node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.TypeAliasDeclaration) {
+                    let declaration = <InterfaceDeclaration | TypeAliasDeclaration>node;
                     if (declaration.typeParameters) {
                         result = appendTypeParameters(result, declaration.typeParameters);
                     }
@@ -2591,6 +2591,15 @@ module ts {
         // its locally declared type parameters.
         function getTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] {
             return concatenate(getOuterTypeParametersOfClassOrInterface(symbol), getLocalTypeParametersOfClassOrInterface(symbol));
+        }
+
+        function getTypeParametersOfTypeAlias(symbol: Symbol): TypeParameter[] {
+            let links = getSymbolLinks(symbol);
+            if (!links.typeParameters) {
+                let declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
+                links.typeParameters = declaration.typeParameters ? appendTypeParameters(undefined, declaration.typeParameters) : emptyArray;
+            }
+            return links.typeParameters;
         }
 
         function getBaseTypes(type: InterfaceType): ObjectType[] {
@@ -3513,70 +3522,77 @@ module ts {
             }
         }
 
-        function getTypeFromTypeReferenceOrExpressionWithTypeArguments(node: TypeReferenceNode | ExpressionWithTypeArguments): Type {
-            let links = getNodeLinks(node);
-            if (!links.resolvedType) {
-                let type: Type;
-
-                // We don't currently support heritage clauses with complex expressions in them.
-                // For these cases, we just set the type to be the unknownType.
-                if (node.kind !== SyntaxKind.ExpressionWithTypeArguments || isSupportedExpressionWithTypeArguments(<ExpressionWithTypeArguments>node)) {
-                    let typeNameOrExpression = node.kind === SyntaxKind.TypeReference
-                        ? (<TypeReferenceNode>node).typeName
-                        : (<ExpressionWithTypeArguments>node).expression;
-
-                    let symbol = resolveEntityName(typeNameOrExpression, SymbolFlags.Type);
-                    if (symbol) {
-                        if ((symbol.flags & SymbolFlags.TypeParameter) && isTypeParameterReferenceIllegalInConstraint(node, symbol)) {
-                            // TypeScript 1.0 spec (April 2014): 3.4.1
-                            // Type parameters declared in a particular type parameter list
-                            // may not be referenced in constraints in that type parameter list
-                            // Implementation: such type references are resolved to 'unknown' type that usually denotes error
-                            type = unknownType;
-                        }
-                        else {
-                            type = createTypeReferenceIfGeneric(
-                                getDeclaredTypeOfSymbol(symbol),
-                                node, node.typeArguments);
-                        }
-                    }
+        function getTypeFromClassOrInterfaceReference(node: TypeReferenceNode | ExpressionWithTypeArguments, symbol: Symbol): Type {
+            let type = getDeclaredTypeOfSymbol(symbol);
+            let typeParameters = (<InterfaceType>type).localTypeParameters;
+            if (typeParameters) {
+                if (!node.typeArguments || node.typeArguments.length !== typeParameters.length) {
+                    error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), typeParameters.length);
+                    return unknownType;
                 }
-
-                links.resolvedType = type || unknownType;
-            }
-
-            return links.resolvedType;
-        }
-
-        function createTypeReferenceIfGeneric(type: Type, node: Node, typeArguments: NodeArray<TypeNode>): Type {
-            if (type.flags & (TypeFlags.Class | TypeFlags.Interface) && type.flags & TypeFlags.Reference) {
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
                 // supplied as type arguments and the type reference only specifies arguments for the local type parameters
                 // of the class or interface.
-                let localTypeParameters = (<InterfaceType>type).localTypeParameters;
-                let expectedTypeArgCount = localTypeParameters ? localTypeParameters.length : 0;
-                let typeArgCount = typeArguments ? typeArguments.length : 0;
-                if (typeArgCount === expectedTypeArgCount) {
-                    // When no type arguments are expected we already have the right type because all outer type parameters
-                    // have themselves as default type arguments.
-                    if (typeArgCount) {
-                        return createTypeReference(<GenericType>type, concatenate((<InterfaceType>type).outerTypeParameters,
-                            map(typeArguments, getTypeFromTypeNode)));
-                    }
-                }
-                else {
-                    error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType), expectedTypeArgCount);
-                    return undefined;
-                }
+                return createTypeReference(<GenericType>type, concatenate((<InterfaceType>type).outerTypeParameters,
+                    map(node.typeArguments, getTypeFromTypeNode)));
             }
-            else {
-                if (typeArguments) {
-                    error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
-                    return undefined;
-                }
+            if (node.typeArguments) {
+                error(node, Diagnostics.Type_0_is_not_generic, typeToString(type));
+                return unknownType;
             }
-
             return type;
+        }
+
+        function getTypeFromTypeAliasReference(node: TypeReferenceNode | ExpressionWithTypeArguments, symbol: Symbol): Type {
+            let type = getDeclaredTypeOfSymbol(symbol);
+            let typeParameters = getTypeParametersOfTypeAlias(symbol);
+            if (typeParameters.length) {
+                if (!node.typeArguments || node.typeArguments.length !== typeParameters.length) {
+                    error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, symbolToString(symbol), typeParameters.length);
+                    return unknownType;
+                }
+                let typeArguments = map(node.typeArguments, getTypeFromTypeNode);
+                let id = getTypeListId(typeArguments);
+                let links = getSymbolLinks(symbol);
+                if (!links.instantiations) {
+                    links.instantiations = {};
+                    // The declared type corresponds to an instantiation with its own type parameters as type arguments
+                    links.instantiations[getTypeListId(typeParameters)] = type;
+                }
+                return links.instantiations[id] || (links.instantiations[id] = instantiateType(type, createTypeMapper(typeParameters, typeArguments)));
+            }
+            if (node.typeArguments) {
+                error(node, Diagnostics.Type_0_is_not_generic, symbolToString(symbol));
+                return unknownType;
+            }
+            return type;
+        }
+
+        function getTypeFromTypeParameterReference(node: TypeReferenceNode | ExpressionWithTypeArguments, symbol: Symbol): Type {
+            // TypeScript 1.0 spec (April 2014): 3.4.1
+            // Type parameters declared in a particular type parameter list
+            // may not be referenced in constraints in that type parameter list
+            // Implementation: such type references are resolved to 'unknown' type that usually denotes error
+            return isTypeParameterReferenceIllegalInConstraint(node, symbol) ? unknownType : getDeclaredTypeOfSymbol(symbol);
+        }
+
+        function getTypeFromTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments): Type {
+            let links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                // We only support expressions that are simple qualified names. For other expressions this produces undefined.                let typeNameOrExpression = node.kind === SyntaxKind.TypeReference ? (<TypeReferenceNode>node).typeName :
+                    isSupportedExpressionWithTypeArguments(<ExpressionWithTypeArguments>node) ? (<ExpressionWithTypeArguments>node).expression :
+                    undefined;
+                let symbol = typeNameOrExpression && resolveEntityName(typeNameOrExpression, SymbolFlags.Type) || unknownSymbol;
+                let type = symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) ? getTypeFromClassOrInterfaceReference(node, symbol) :
+                    symbol.flags & SymbolFlags.TypeParameter ? getTypeFromTypeParameterReference(node, symbol) :
+                    symbol.flags & SymbolFlags.TypeAlias ? getTypeFromTypeAliasReference(node, symbol) :
+                    getDeclaredTypeOfSymbol(symbol);
+                // Cache both the resolved symbol and the resolved type. The resolved symbol is needed in when we check the
+                // type reference in checkTypeReferenceOrExpressionWithTypeArguments.
+                links.resolvedSymbol = symbol;
+                links.resolvedType = type;
+            }
+            return links.resolvedType;
         }
 
         function getTypeFromTypeQueryNode(node: TypeQueryNode): Type {
@@ -3848,9 +3864,9 @@ module ts {
                 case SyntaxKind.StringLiteral:
                     return getTypeFromStringLiteral(<StringLiteral>node);
                 case SyntaxKind.TypeReference:
-                    return getTypeFromTypeReferenceOrExpressionWithTypeArguments(<TypeReferenceNode>node);
+                    return getTypeFromTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.ExpressionWithTypeArguments:
-                    return getTypeFromTypeReferenceOrExpressionWithTypeArguments(<ExpressionWithTypeArguments>node);
+                    return getTypeFromTypeReference(<ExpressionWithTypeArguments>node);
                 case SyntaxKind.TypeQuery:
                     return getTypeFromTypeQueryNode(<TypeQueryNode>node);
                 case SyntaxKind.ArrayType:
@@ -8766,13 +8782,15 @@ module ts {
             // Grammar checking
             checkGrammarTypeArguments(node, node.typeArguments);
 
-            let type = getTypeFromTypeReferenceOrExpressionWithTypeArguments(node);
+            let type = getTypeFromTypeReference(node);
             if (type !== unknownType && node.typeArguments) {
                 // Do type argument local checks only if referenced type is successfully resolved
+                let symbol = getNodeLinks(node).resolvedSymbol;
+                let typeParameters = symbol.flags & SymbolFlags.TypeAlias ? getTypeParametersOfTypeAlias(symbol) : (<TypeReference>type).target.localTypeParameters;
                 let len = node.typeArguments.length;
                 for (let i = 0; i < len; i++) {
                     checkSourceElement(node.typeArguments[i]);
-                    let constraint = getConstraintOfTypeParameter((<TypeReference>type).target.typeParameters[i]);
+                    let constraint = getConstraintOfTypeParameter(typeParameters[i]);
                     if (produceDiagnostics && constraint) {
                         let typeArgument = (<TypeReference>type).typeArguments[i];
                         checkTypeAssignableTo(typeArgument, constraint, node, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
