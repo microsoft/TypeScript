@@ -182,6 +182,7 @@ module ts {
             var _path = require("path");
             var _os = require('os');
             var _https = require('https');
+            var _url = require('url');
 
             var platform: string = _os.platform();
             // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
@@ -251,7 +252,7 @@ module ts {
             }
 
             function httpsPost(destUrl: string, data: string, contentType: string, callback?: (err: any, data: string) => void) {
-                var parsedUrl = url.parse(destUrl);
+                var parsedUrl = _url.parse(destUrl);
                 var opts = {
                     host: parsedUrl.host,
                     path: parsedUrl.path,
