@@ -354,7 +354,7 @@ module ts {
                     return emitEntityName(<QualifiedName>type);
             }
 
-            function emitEntityName(entityName: EntityName | PropertyAccessExpression) {
+            function emitEntityName(entityName: EntityName | PropertyAccessExpression | LeftHandSideExpression) {
                 let visibilityResult = resolver.isEntityNameVisible(entityName,
                     // Aliases can be written asynchronously so use correct enclosing declaration
                     entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration ? entityName.parent : enclosingDeclaration);
@@ -363,10 +363,13 @@ module ts {
                 writeEntityName(entityName);
 
                 function writeEntityName(entityName: EntityName | Expression) {
-                    if (entityName.kind === SyntaxKind.Identifier) {
-                        writeTextOfNode(currentSourceFile, entityName);
-                    }
-                    else {
+                    switch( entityName.kind){
+                        case SyntaxKind.Identifier:
+                        case SyntaxKind.ThisKeyword:
+                        case SyntaxKind.SuperKeyword:
+                            writeTextOfNode(currentSourceFile, entityName);
+                            break;
+                    default:
                         let left = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).left : (<PropertyAccessExpression>entityName).expression;
                         let right = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).right : (<PropertyAccessExpression>entityName).name;
                         writeEntityName(left);
@@ -399,7 +402,10 @@ module ts {
 
             function emitTypeQuery(type: TypeQueryNode) {
                 write("typeof ");
-                emitEntityName(type.exprName);
+
+                //if (isValidTypeQueryExpression(type.exprName)) {
+                    emitEntityName(type.exprName.expression);
+                //}
             }
 
             function emitArrayType(type: ArrayTypeNode) {

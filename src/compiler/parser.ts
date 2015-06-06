@@ -1909,7 +1909,7 @@ module ts {
         function parseTypeQuery(): TypeQueryNode {
             let node = <TypeQueryNode>createNode(SyntaxKind.TypeQuery);
             parseExpected(SyntaxKind.TypeOfKeyword);
-            node.exprName = parseEntityName(/*allowReservedWords*/ true);
+            node.exprName = parseExpressionWithTypeArguments();
             return finishNode(node);
         }
 
