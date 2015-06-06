@@ -1789,7 +1789,7 @@ module ts {
             function buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags) {
                 let targetSymbol = getTargetSymbol(symbol);
                 if (targetSymbol.flags & SymbolFlags.Class || targetSymbol.flags & SymbolFlags.Interface) {
-                    buildDisplayForTypeParametersAndDelimiters(getLocalTypeParametersOfClassOrInterface(symbol), writer, enclosingDeclaraiton, flags);
+                    buildDisplayForTypeParametersAndDelimiters(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol), writer, enclosingDeclaraiton, flags);
                 }
             }
 
@@ -2573,8 +2573,9 @@ module ts {
             return appendOuterTypeParameters(undefined, getDeclarationOfKind(symbol, kind));
         }
 
-        // The local type parameters are the combined set of type parameters from all declarations of the class or interface.
-        function getLocalTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] {
+        // The local type parameters are the combined set of type parameters from all declarations of the class,
+        // interface, or type alias.
+        function getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): TypeParameter[] {
             let result: TypeParameter[];
             for (let node of symbol.declarations) {
                 if (node.kind === SyntaxKind.InterfaceDeclaration || node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.TypeAliasDeclaration) {
@@ -2590,16 +2591,7 @@ module ts {
         // The full set of type parameters for a generic class or interface type consists of its outer type parameters plus
         // its locally declared type parameters.
         function getTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] {
-            return concatenate(getOuterTypeParametersOfClassOrInterface(symbol), getLocalTypeParametersOfClassOrInterface(symbol));
-        }
-
-        function getTypeParametersOfTypeAlias(symbol: Symbol): TypeParameter[] {
-            let links = getSymbolLinks(symbol);
-            if (!links.typeParameters) {
-                let declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
-                links.typeParameters = declaration.typeParameters ? appendTypeParameters(undefined, declaration.typeParameters) : emptyArray;
-            }
-            return links.typeParameters;
+            return concatenate(getOuterTypeParametersOfClassOrInterface(symbol), getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol));
         }
 
         function getBaseTypes(type: InterfaceType): ObjectType[] {
@@ -2672,7 +2664,7 @@ module ts {
                 let kind = symbol.flags & SymbolFlags.Class ? TypeFlags.Class : TypeFlags.Interface;
                 let type = links.declaredType = <InterfaceType>createObjectType(kind, symbol);
                 let outerTypeParameters = getOuterTypeParametersOfClassOrInterface(symbol);
-                let localTypeParameters = getLocalTypeParametersOfClassOrInterface(symbol);
+                let localTypeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
                 if (outerTypeParameters || localTypeParameters) {
                     type.flags |= TypeFlags.Reference;
                     type.typeParameters = concatenate(outerTypeParameters, localTypeParameters);
@@ -2697,7 +2689,16 @@ module ts {
                 }
                 let declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
                 let type = getTypeFromTypeNode(declaration.type);
-                if (!popTypeResolution()) {
+                if (popTypeResolution()) {
+                    links.typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
+                    if (links.typeParameters) {
+                        // Initialize the instantiation cache for generic type aliases. The declared type corresponds to
+                        // an instantiation of the type alias with the type parameters supplied as type arguments.
+                        links.instantiations = {};
+                        links.instantiations[getTypeListId(links.typeParameters)] = type;
+                    }
+                }
+                else {
                     type = unknownType;
                     error(declaration.name, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
                 }
@@ -3522,6 +3523,7 @@ module ts {
             }
         }
 
+        // Get type from reference to class or interface
         function getTypeFromClassOrInterfaceReference(node: TypeReferenceNode | ExpressionWithTypeArguments, symbol: Symbol): Type {
             let type = getDeclaredTypeOfSymbol(symbol);
             let typeParameters = (<InterfaceType>type).localTypeParameters;
@@ -3543,22 +3545,20 @@ module ts {
             return type;
         }
 
+        // Get type from reference to type alias. When a type alias is generic, the declared type of the type alias may include
+        // references to the type parameters of the alias. We replace those with the actual type arguments by instantiating the
+        // declared type. Instantiations are cached using the type identities of the type arguments as the key.
         function getTypeFromTypeAliasReference(node: TypeReferenceNode | ExpressionWithTypeArguments, symbol: Symbol): Type {
             let type = getDeclaredTypeOfSymbol(symbol);
-            let typeParameters = getTypeParametersOfTypeAlias(symbol);
-            if (typeParameters.length) {
+            let links = getSymbolLinks(symbol);
+            let typeParameters = links.typeParameters;
+            if (typeParameters) {
                 if (!node.typeArguments || node.typeArguments.length !== typeParameters.length) {
                     error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, symbolToString(symbol), typeParameters.length);
                     return unknownType;
                 }
                 let typeArguments = map(node.typeArguments, getTypeFromTypeNode);
                 let id = getTypeListId(typeArguments);
-                let links = getSymbolLinks(symbol);
-                if (!links.instantiations) {
-                    links.instantiations = {};
-                    // The declared type corresponds to an instantiation with its own type parameters as type arguments
-                    links.instantiations[getTypeListId(typeParameters)] = type;
-                }
                 return links.instantiations[id] || (links.instantiations[id] = instantiateType(type, createTypeMapper(typeParameters, typeArguments)));
             }
             if (node.typeArguments) {
@@ -3568,12 +3568,20 @@ module ts {
             return type;
         }
 
-        function getTypeFromTypeParameterReference(node: TypeReferenceNode | ExpressionWithTypeArguments, symbol: Symbol): Type {
-            // TypeScript 1.0 spec (April 2014): 3.4.1
-            // Type parameters declared in a particular type parameter list
-            // may not be referenced in constraints in that type parameter list
-            // Implementation: such type references are resolved to 'unknown' type that usually denotes error
-            return isTypeParameterReferenceIllegalInConstraint(node, symbol) ? unknownType : getDeclaredTypeOfSymbol(symbol);
+        // Get type from reference to named type that cannot be generic (enum or type parameter)
+        function getTypeFromNonGenericTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments, symbol: Symbol): Type {
+            if (symbol.flags & SymbolFlags.TypeParameter && isTypeParameterReferenceIllegalInConstraint(node, symbol)) {
+                // TypeScript 1.0 spec (April 2014): 3.4.1
+                // Type parameters declared in a particular type parameter list
+                // may not be referenced in constraints in that type parameter list
+                // Implementation: such type references are resolved to 'unknown' type that usually denotes error
+                return unknownType;
+            }
+            if (node.typeArguments) {
+                error(node, Diagnostics.Type_0_is_not_generic, symbolToString(symbol));
+                return unknownType;
+            }
+            return getDeclaredTypeOfSymbol(symbol);
         }
 
         function getTypeFromTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments): Type {
@@ -3583,10 +3591,10 @@ module ts {
                     isSupportedExpressionWithTypeArguments(<ExpressionWithTypeArguments>node) ? (<ExpressionWithTypeArguments>node).expression :
                     undefined;
                 let symbol = typeNameOrExpression && resolveEntityName(typeNameOrExpression, SymbolFlags.Type) || unknownSymbol;
-                let type = symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) ? getTypeFromClassOrInterfaceReference(node, symbol) :
-                    symbol.flags & SymbolFlags.TypeParameter ? getTypeFromTypeParameterReference(node, symbol) :
+                let type = symbol === unknownSymbol ? unknownType :
+                    symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) ? getTypeFromClassOrInterfaceReference(node, symbol) :
                     symbol.flags & SymbolFlags.TypeAlias ? getTypeFromTypeAliasReference(node, symbol) :
-                    getDeclaredTypeOfSymbol(symbol);
+                    getTypeFromNonGenericTypeReference(node, symbol);
                 // Cache both the resolved symbol and the resolved type. The resolved symbol is needed in when we check the
                 // type reference in checkTypeReferenceOrExpressionWithTypeArguments.
                 links.resolvedSymbol = symbol;
@@ -8786,7 +8794,7 @@ module ts {
             if (type !== unknownType && node.typeArguments) {
                 // Do type argument local checks only if referenced type is successfully resolved
                 let symbol = getNodeLinks(node).resolvedSymbol;
-                let typeParameters = symbol.flags & SymbolFlags.TypeAlias ? getTypeParametersOfTypeAlias(symbol) : (<TypeReference>type).target.localTypeParameters;
+                let typeParameters = symbol.flags & SymbolFlags.TypeAlias ? getSymbolLinks(symbol).typeParameters : (<TypeReference>type).target.localTypeParameters;
                 let len = node.typeArguments.length;
                 for (let i = 0; i < len; i++) {
                     checkSourceElement(node.typeArguments[i]);
