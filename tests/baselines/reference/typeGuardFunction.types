@@ -52,7 +52,7 @@ var b: B;
 >b : B
 >B : B
 
-// Basic.
+// Basic
 if (isC(a)) {
 >isC(a) : boolean
 >isC : (p1: any) => boolean
@@ -64,7 +64,7 @@ if (isC(a)) {
 >propC : number
 }
 
-// Sub type.
+// Sub type
 var subType: C;
 >subType : C
 >C : C
@@ -80,7 +80,7 @@ if(isA(subType)) {
 >propC : number
 }
 
-// Union type.
+// Union type
 var union: A | B;
 >union : A | B
 >A : A
@@ -118,6 +118,66 @@ if (isC_multipleParams(a, 0)) {
 >propC : number
 }
 
+// Methods
+var obj: {
+>obj : { func1(p1: A): boolean; }
+
+    func1(p1: A): p1 is C;
+>func1 : (p1: A) => boolean
+>p1 : A
+>A : A
+>p1 : any
+>C : C
+}
+class D {
+>D : D
+
+    method1(p1: A): p1 is C {
+>method1 : (p1: A) => boolean
+>p1 : A
+>A : A
+>p1 : any
+>C : C
+
+        return true;
+>true : boolean
+    }
+}
+
+// Arrow function
+let f1 = (p1: A): p1 is C => false;
+>f1 : (p1: A) => boolean
+>(p1: A): p1 is C => false : (p1: A) => boolean
+>p1 : A
+>A : A
+>p1 : any
+>C : C
+>false : boolean
+
+// Function type
+declare function f2(p1: (p1: A) => p1 is C);
+>f2 : (p1: (p1: A) => boolean) => any
+>p1 : (p1: A) => boolean
+>p1 : A
+>A : A
+>p1 : any
+>C : C
+
+// Function expressions
+f2(function(p1: A): p1 is C {
+>f2(function(p1: A): p1 is C {    return true;}) : any
+>f2 : (p1: (p1: A) => boolean) => any
+>function(p1: A): p1 is C {    return true;} : (p1: A) => boolean
+>p1 : A
+>A : A
+>p1 : any
+>C : C
+
+    return true;
+>true : boolean
+
+});
+
 // Evaluations are asssignable to boolean.
 declare function acceptingBoolean(a: boolean);
 >acceptingBoolean : (a: boolean) => any
@@ -143,6 +203,7 @@ acceptingTypeGuardFunction(isA);
 >acceptingTypeGuardFunction : (p1: (item: any) => boolean) => any
 >isA : (p1: any) => boolean
 
+// Binary expressions
 let union2: C | B;
 >union2 : B | C
 >C : C

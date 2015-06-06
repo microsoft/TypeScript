@@ -5642,13 +5642,13 @@ module ts {
                 }
 
                 if (targetType) {
-                    return getOptionalNarrowedType(type, targetType);
+                    return getNarrowedType(type, targetType);
                 }
 
                 return type;
             }
 
-            function getOptionalNarrowedType(originalType: Type, narrowedTypeCandidate: Type) {
+            function getNarrowedType(originalType: Type, narrowedTypeCandidate: Type) {
                 // Narrow to the target type if it's a subtype of the current type
                 if (isTypeSubtypeOf(narrowedTypeCandidate, originalType)) {
                     return narrowedTypeCandidate;
@@ -5675,7 +5675,7 @@ module ts {
                         } 
                         return type;
                     }
-                    return getOptionalNarrowedType(type, signature.typePredicate.type);
+                    return getNarrowedType(type, signature.typePredicate.type);
                 }
                 return type;
             }
@@ -8601,6 +8601,19 @@ module ts {
             }
         }
 
+        function isInATypePredicateCompatiblePosition(node: Node): boolean {
+            switch (node.parent.kind) {
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                    return true;
+            }
+            return false;
+        }
+
         function checkSignatureDeclaration(node: SignatureDeclaration) {
             // Grammar checking
             if (node.kind === SyntaxKind.IndexSignature) {
@@ -8621,21 +8634,27 @@ module ts {
                 if (node.type.kind === SyntaxKind.TypePredicate) {
                     let typePredicate = getSignatureFromDeclaration(node).typePredicate;
                     let typePredicateNode = <TypePredicateNode>node.type;
-                    if (typePredicateNode.type.kind === SyntaxKind.TypePredicate) {
-                        error(typePredicateNode.type,
-                            Diagnostics.Type_predicates_are_only_allowed_in_return_type_position);
-                    }
-                    else {
+                    if (isInATypePredicateCompatiblePosition(typePredicateNode)) {
                         if (typePredicate.parameterIndex >= 0) {
-                            checkTypeAssignableTo(typePredicate.type,
-                                getTypeAtLocation(node.parameters[typePredicate.parameterIndex]),
-                                typePredicateNode.type);
+                            if (node.parameters[typePredicate.parameterIndex].dotDotDotToken) {
+                                error(typePredicateNode.parameterName,
+                                    Diagnostics.Type_predicate_cannot_reference_a_spread_parameter);
+                            }
+                            else {
+                                checkTypeAssignableTo(typePredicate.type,
+                                    getTypeAtLocation(node.parameters[typePredicate.parameterIndex]),
+                                    typePredicateNode.type);
+                            }
                         }
                         else if (typePredicateNode.parameterName) {
                             error(typePredicateNode.parameterName,
                                 Diagnostics.Cannot_find_parameter_0,
                                 typePredicate.parameterName);
                         }
+                    }
+                    else {
+                        error(typePredicateNode,
+                            Diagnostics.Type_predicates_are_only_allowed_in_return_type_position_for_arrow_functions_function_expressions_function_declarations_function_types_and_method_declarations);
                     }
                 }
                 else {
@@ -11275,6 +11294,12 @@ module ts {
             }
         }
 
+        function checkTypePredicate(node: TypePredicateNode) {
+            if(!isInATypePredicateCompatiblePosition(node)) {
+                error(node, Diagnostics.Type_predicates_are_only_allowed_in_return_type_position_for_arrow_functions_function_expressions_function_declarations_function_types_and_method_declarations);
+            }
+        }
+
         function checkSourceElement(node: Node): void {
             if (!node) return;
             switch (node.kind) {
@@ -11303,12 +11328,7 @@ module ts {
                 case SyntaxKind.TypeReference:
                     return checkTypeReferenceNode(<TypeReferenceNode>node);
                 case SyntaxKind.TypePredicate:
-                    // Issue an error every time we encounter a type predicate. They are only allowed 
-                    // in return type positions in signature declarations. checkSignatureDeclaration(..) 
-                    // already have a specific check for type predicates, so every time we encounter a type
-                    // predicate in checkSourceElement it must be in a non return type position.
-                    error(node, Diagnostics.Type_predicates_are_only_allowed_in_return_type_position);
-                    return;
+                    return checkTypePredicate(<TypePredicateNode>node);
                 case SyntaxKind.TypeQuery:
                     return checkTypeQuery(<TypeQueryNode>node);
                 case SyntaxKind.TypeLiteral:

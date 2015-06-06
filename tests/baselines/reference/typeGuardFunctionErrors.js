@@ -99,6 +99,24 @@ function b3(): A | b is A {
     return true;
 };
 
+// Non-compatiable type predicate positions for signature declarations
+class D {
+    constructor(p1: A): p1 is C {
+        return true;
+    }
+    get m1(p1: A): p1 is C {
+        return true;
+    }
+    set m2(p1: A): p1 is C {
+        return true;
+    }
+}
+
+// Reference to spread parameter
+function b4(...a): a is A {
+    return true;
+}
+
 //// [typeGuardFunctionErrors.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -183,3 +201,32 @@ function b3() {
     return true;
 }
 ;
+// Non-compatiable type predicate positions for signature declarations
+var D = (function () {
+    function D(p1) {
+        return true;
+    }
+    Object.defineProperty(D.prototype, "m1", {
+        get: function (p1) {
+            return true;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(D.prototype, "m2", {
+        set: function (p1) {
+            return true;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return D;
+})();
+// Reference to spread parameter
+function b4() {
+    var a = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        a[_i - 0] = arguments[_i];
+    }
+    return true;
+}

@@ -21,18 +21,18 @@ declare function retC(): C;
 var a: A;
 var b: B;
 
-// Basic.
+// Basic
 if (isC(a)) {
     a.propC;
 }
 
-// Sub type.
+// Sub type
 var subType: C;
 if(isA(subType)) {
     subType.propC;
 }
 
-// Union type.
+// Union type
 var union: A | B;
 if(isA(union)) {
     union.propA;
@@ -45,6 +45,27 @@ if (isC_multipleParams(a, 0)) {
     a.propC;
 }
 
+// Methods
+var obj: {
+    func1(p1: A): p1 is C;
+}
+class D {
+    method1(p1: A): p1 is C {
+        return true;
+    }
+}
+
+// Arrow function
+let f1 = (p1: A): p1 is C => false;
+
+// Function type
+declare function f2(p1: (p1: A) => p1 is C);
+
+// Function expressions
+f2(function(p1: A): p1 is C {
+    return true;
+});
+
 // Evaluations are asssignable to boolean.
 declare function acceptingBoolean(a: boolean);
 acceptingBoolean(isA(a));
@@ -53,6 +74,7 @@ acceptingBoolean(isA(a));
 declare function acceptingTypeGuardFunction(p1: (item) => item is A);
 acceptingTypeGuardFunction(isA);
 
+// Binary expressions
 let union2: C | B;
 let union3: boolean | B = isA(union2) || union2;
 
@@ -82,16 +104,16 @@ var C = (function (_super) {
 })(A);
 var a;
 var b;
-// Basic.
+// Basic
 if (isC(a)) {
     a.propC;
 }
-// Sub type.
+// Sub type
 var subType;
 if (isA(subType)) {
     subType.propC;
 }
-// Union type.
+// Union type
 var union;
 if (isA(union)) {
     union.propA;
@@ -99,7 +121,24 @@ if (isA(union)) {
 if (isC_multipleParams(a, 0)) {
     a.propC;
 }
+// Methods
+var obj;
+var D = (function () {
+    function D() {
+    }
+    D.prototype.method1 = function (p1) {
+        return true;
+    };
+    return D;
+})();
+// Arrow function
+var f1 = function (p1) { return false; };
+// Function expressions
+f2(function (p1) {
+    return true;
+});
 acceptingBoolean(isA(a));
 acceptingTypeGuardFunction(isA);
+// Binary expressions
 var union2;
 var union3 = isA(union2) || union2;
