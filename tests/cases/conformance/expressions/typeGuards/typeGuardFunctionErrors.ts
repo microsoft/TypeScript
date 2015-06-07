@@ -88,9 +88,6 @@ assign3 = function(p1, p2, p3): p1 is A {
     return true;
 };
 
-// Type guard paramater referring to a binding pattern
-declare function destructureParameter({ p1, p2, p3 }): p1 is A;
-
 // Type predicates in non-return type positions
 var b1: b is A;
 function b2(a: b is A) {};
@@ -111,7 +108,24 @@ class D {
     }
 }
 
-// Reference to spread parameter
+interface I1 {
+    new (p1: A): p1 is C;
+}
+
+interface I2 {
+    [index: number]: p1 is C;
+}
+
+// Reference to rest parameter
 function b4(...a): a is A {
+    return true;
+}
+
+// Reference to binding pattern
+function b5({a, b, p1}, p2, p3): p1 is A {
+    return true;
+}
+
+function b6([a, b, p1], p2, p3): p1 is A {
     return true;
 }

@@ -8601,15 +8601,16 @@ module ts {
             }
         }
 
-        function isInATypePredicateCompatiblePosition(node: Node): boolean {
+        function isInLegalTypePredicatePosition(node: Node): boolean {
             switch (node.parent.kind) {
                 case SyntaxKind.ArrowFunction:
+                case SyntaxKind.CallSignature:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
-                    return true;
+                    return node === (<SignatureDeclaration>node.parent).type;
             }
             return false;
         }
@@ -8634,11 +8635,11 @@ module ts {
                 if (node.type.kind === SyntaxKind.TypePredicate) {
                     let typePredicate = getSignatureFromDeclaration(node).typePredicate;
                     let typePredicateNode = <TypePredicateNode>node.type;
-                    if (isInATypePredicateCompatiblePosition(typePredicateNode)) {
+                    if (isInLegalTypePredicatePosition(typePredicateNode)) {
                         if (typePredicate.parameterIndex >= 0) {
                             if (node.parameters[typePredicate.parameterIndex].dotDotDotToken) {
                                 error(typePredicateNode.parameterName,
-                                    Diagnostics.Type_predicate_cannot_reference_a_spread_parameter);
+                                    Diagnostics.Type_predicate_cannot_reference_a_rest_parameter);
                             }
                             else {
                                 checkTypeAssignableTo(typePredicate.type,
@@ -8647,14 +8648,34 @@ module ts {
                             }
                         }
                         else if (typePredicateNode.parameterName) {
-                            error(typePredicateNode.parameterName,
-                                Diagnostics.Cannot_find_parameter_0,
-                                typePredicate.parameterName);
+                            let hasReportedError = false;
+                            outer: for (let param of node.parameters) {
+                                if (param.name.kind === SyntaxKind.ObjectBindingPattern || 
+                                    param.name.kind === SyntaxKind.ArrayBindingPattern) {
+                                    
+                                    for (let element of (<BindingPattern>param.name).elements) {
+                                        if (element.name.kind === SyntaxKind.Identifier && 
+                                            (<Identifier>element.name).text === typePredicateNode.parameterName.text) {
+                                            
+                                            error(typePredicateNode.parameterName,
+                                                Diagnostics.Type_predicate_cannot_reference_element_0_in_a_binding_pattern,
+                                                typePredicate.parameterName);
+                                            hasReportedError = true;
+                                            break outer;
+                                        }
+                                    }
+                                }
+                            }
+                            if (!hasReportedError) {
+                                error(typePredicateNode.parameterName,
+                                    Diagnostics.Cannot_find_parameter_0,
+                                    typePredicate.parameterName);
+                            }
                         }
                     }
                     else {
                         error(typePredicateNode,
-                            Diagnostics.Type_predicates_are_only_allowed_in_return_type_position_for_arrow_functions_function_expressions_function_declarations_function_types_and_method_declarations);
+                            Diagnostics.Type_predicates_are_only_allowed_in_return_type_position_for_functions_and_methods);
                     }
                 }
                 else {
@@ -11295,8 +11316,8 @@ module ts {
         }
 
         function checkTypePredicate(node: TypePredicateNode) {
-            if(!isInATypePredicateCompatiblePosition(node)) {
-                error(node, Diagnostics.Type_predicates_are_only_allowed_in_return_type_position_for_arrow_functions_function_expressions_function_declarations_function_types_and_method_declarations);
+            if(!isInLegalTypePredicatePosition(node)) {
+                error(node, Diagnostics.Type_predicates_are_only_allowed_in_return_type_position_for_functions_and_methods);
             }
         }
 

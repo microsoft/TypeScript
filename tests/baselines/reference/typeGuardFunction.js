@@ -38,6 +38,11 @@ if(isA(union)) {
     union.propA;
 }
 
+// Call signature
+interface I1 {
+    (p1: A): p1 is C;
+}
+
 // The parameter index and argument index for the type guard target is matching.
 // The type predicate type is assignable to the parameter type.
 declare function isC_multipleParams(p1, p2): p1 is C;

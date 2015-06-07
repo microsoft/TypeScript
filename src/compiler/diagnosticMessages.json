@@ -719,13 +719,17 @@
         "category": "Error",
         "code": 1227
     },
-    "Type predicates are only allowed in return type position for arrow functions, function expressions, function declarations, function types and method declarations.": {
+    "Type predicates are only allowed in return type position for functions and methods.": {
         "category": "Error",
         "code": 1228
     },
-    "Type predicate cannot reference a spread parameter.": {
+    "Type predicate cannot reference a rest parameter.": {
         "category": "Error",
         "code": 1229
+    },
+    "Type predicate cannot reference element '{0}' in a binding pattern.": {
+        "category": "Error",
+        "code": 1230
     },
 
 
