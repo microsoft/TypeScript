@@ -4,12 +4,19 @@ class C { }
 interface I { }
 enum E { }
 type T = { };
-
 var v1: C<string>;
 var v2: I<string>;
 var v3: E<string>;
 var v4: T<string>;
 
 function f<U>() {
-    var x: U<string>;
+    class C { }
+    interface I { }
+    enum E { }
+    type T = {};
+    var v1: C<string>;
+    var v2: I<string>;
+    var v3: E<string>;
+    var v4: T<string>;
+    var v5: U<string>;
 }
