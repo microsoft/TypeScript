@@ -808,9 +808,7 @@ module ts {
         expression: UnaryExpression;
     }
 
-    export interface Statement extends Node, ModuleElement {
-        _statementBrand: any;
-    }
+    export interface Statement extends Node, ModuleElement { }
 
     export interface Block extends Statement {
         statements: NodeArray<Statement>;
