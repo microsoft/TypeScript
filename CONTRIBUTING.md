@@ -68,7 +68,7 @@ These files support metadata tags in the format  `// @metaDataName: value`. The 
 **Note** that if you have a test corresponding to a specific spec compliance item, you can place it in `tests\cases\conformance` in an appropriately-named subfolder. 
 **Note** that filenames here must be distinct from all other compiler testcase names, so you may have to work a bit to find a unique name if it's something common.
 
-# Tests for multiple files
+### Tests for multiple files
 
 When one needs to test for scenarios which require multiple files, it is useful to use the `fileName` metadata tag as such:
 
