@@ -719,15 +719,15 @@
         "category": "Error",
         "code": 1227
     },
-    "Type predicate are only allowed in return type position for functions and methods.": {
+    "A type predicate is only allowed in return type position for functions and methods.": {
         "category": "Error",
         "code": 1228
     },
-    "Type predicate cannot reference a rest parameter.": {
+    "A type predicate cannot reference a rest parameter.": {
         "category": "Error",
         "code": 1229
     },
-    "Type predicate cannot reference element '{0}' in a binding pattern.": {
+    "A type predicate cannot reference element '{0}' in a binding pattern.": {
         "category": "Error",
         "code": 1230
     },

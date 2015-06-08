@@ -8588,7 +8588,6 @@ module ts {
         }
 
         function getTypePredicateParameterIndex(parameterList: NodeArray<ParameterDeclaration>, parameter: Identifier): number {
-            let index = -1;
             if (parameterList) {
                 for (let i = 0; i < parameterList.length; i++) {
                     let param = parameterList[i];
@@ -8599,6 +8598,7 @@ module ts {
                     }
                 }
             }
+            return -1;
         }
 
         function isInLegalTypePredicatePosition(node: Node): boolean {
@@ -8639,7 +8639,7 @@ module ts {
                         if (typePredicate.parameterIndex >= 0) {
                             if (node.parameters[typePredicate.parameterIndex].dotDotDotToken) {
                                 error(typePredicateNode.parameterName,
-                                    Diagnostics.Type_predicate_cannot_reference_a_rest_parameter);
+                                    Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
                             }
                             else {
                                 checkTypeAssignableTo(typePredicate.type,
@@ -8656,24 +8656,24 @@ module ts {
                                 if (param.name.kind === SyntaxKind.ObjectBindingPattern || 
                                     param.name.kind === SyntaxKind.ArrayBindingPattern) {
 
-                                    (function checkBindingPattern(elements: NodeArray<BindingElement>) {
-                                        for (let element of elements) {
+                                    (function checkBindingPattern(pattern: BindingPattern) {
+                                        for (let element of pattern.elements) {
                                             if (element.name.kind === SyntaxKind.Identifier && 
                                                 (<Identifier>element.name).text === typePredicate.parameterName) {
 
                                                 error(typePredicateNode.parameterName,
-                                                    Diagnostics.Type_predicate_cannot_reference_element_0_in_a_binding_pattern,
+                                                    Diagnostics.A_type_predicate_cannot_reference_element_0_in_a_binding_pattern,
                                                     typePredicate.parameterName);
                                                 hasReportedError = true;
                                                 break;
                                             }
-                                            else if(element.name.kind === SyntaxKind.ArrayBindingPattern ||
+                                            else if (element.name.kind === SyntaxKind.ArrayBindingPattern ||
                                                 element.name.kind === SyntaxKind.ObjectBindingPattern) {
 
-                                                checkBindingPattern((<BindingPattern>element.name).elements);
+                                                checkBindingPattern(<BindingPattern>element.name);
                                             }
                                         }
-                                    })((<BindingPattern>param.name).elements);
+                                    })(<BindingPattern>param.name);
                                 }
                             }
                             if (!hasReportedError) {
@@ -8685,7 +8685,7 @@ module ts {
                     }
                     else {
                         error(typePredicateNode,
-                            Diagnostics.Type_predicate_are_only_allowed_in_return_type_position_for_functions_and_methods);
+                            Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
                     }
                 }
                 else {
@@ -11327,7 +11327,7 @@ module ts {
 
         function checkTypePredicate(node: TypePredicateNode) {
             if(!isInLegalTypePredicatePosition(node)) {
-                error(node, Diagnostics.Type_predicate_are_only_allowed_in_return_type_position_for_functions_and_methods);
+                error(node, Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
             }
         }
 
