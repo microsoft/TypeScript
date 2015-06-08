@@ -20,22 +20,23 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(81,1):
   Type predicate 'p2 is A' is not assignable to 'p1 is A'.
     Parameter 'p2' is not in the same position as parameter 'p1'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(87,1): error TS2322: Type '(p1: any, p2: any, p3: any) => boolean' is not assignable to type '(p1: any, p2: any) => boolean'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(92,9): error TS1228: Type predicates are only allowed in return type position for functions and methods.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(93,16): error TS1228: Type predicates are only allowed in return type position for functions and methods.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(94,20): error TS1228: Type predicates are only allowed in return type position for functions and methods.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(100,25): error TS1228: Type predicates are only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(92,9): error TS1228: Type predicate are only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(93,16): error TS1228: Type predicate are only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(94,20): error TS1228: Type predicate are only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(100,25): error TS1228: Type predicate are only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(101,16): error TS2409: Return type of constructor signature must be assignable to the instance type of the class
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(103,20): error TS1228: Type predicates are only allowed in return type position for functions and methods.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(106,20): error TS1228: Type predicates are only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(103,20): error TS1228: Type predicate are only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(106,20): error TS1228: Type predicate are only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(107,16): error TS2408: Setters cannot return a value.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(112,18): error TS1228: Type predicates are only allowed in return type position for functions and methods.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(116,22): error TS1228: Type predicates are only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(112,18): error TS1228: Type predicate are only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(116,22): error TS1228: Type predicate are only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(120,20): error TS1229: Type predicate cannot reference a rest parameter.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(125,34): error TS1230: Type predicate cannot reference element 'p1' in a binding pattern.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(129,34): error TS1230: Type predicate cannot reference element 'p1' in a binding pattern.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(133,39): error TS1230: Type predicate cannot reference element 'p1' in a binding pattern.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts (29 errors) ====
+==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts (30 errors) ====
     
     class A {
         propA: number;
@@ -167,13 +168,13 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(129,34
     // Type predicates in non-return type positions
     var b1: b is A;
             ~~~~~~
-!!! error TS1228: Type predicates are only allowed in return type position for functions and methods.
+!!! error TS1228: Type predicate are only allowed in return type position for functions and methods.
     function b2(a: b is A) {};
                    ~~~~~~
-!!! error TS1228: Type predicates are only allowed in return type position for functions and methods.
+!!! error TS1228: Type predicate are only allowed in return type position for functions and methods.
     function b3(): A | b is A {
                        ~~~~~~
-!!! error TS1228: Type predicates are only allowed in return type position for functions and methods.
+!!! error TS1228: Type predicate are only allowed in return type position for functions and methods.
         return true;
     };
     
@@ -181,19 +182,19 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(129,34
     class D {
         constructor(p1: A): p1 is C {
                             ~~~~~~~
-!!! error TS1228: Type predicates are only allowed in return type position for functions and methods.
+!!! error TS1228: Type predicate are only allowed in return type position for functions and methods.
             return true;
                    ~~~~
 !!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class
         }
         get m1(p1: A): p1 is C {
                        ~~~~~~~
-!!! error TS1228: Type predicates are only allowed in return type position for functions and methods.
+!!! error TS1228: Type predicate are only allowed in return type position for functions and methods.
             return true;
         }
         set m2(p1: A): p1 is C {
                        ~~~~~~~
-!!! error TS1228: Type predicates are only allowed in return type position for functions and methods.
+!!! error TS1228: Type predicate are only allowed in return type position for functions and methods.
             return true;
                    ~~~~
 !!! error TS2408: Setters cannot return a value.
@@ -203,13 +204,13 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(129,34
     interface I1 {
         new (p1: A): p1 is C;
                      ~~~~~~~
-!!! error TS1228: Type predicates are only allowed in return type position for functions and methods.
+!!! error TS1228: Type predicate are only allowed in return type position for functions and methods.
     }
     
     interface I2 {
         [index: number]: p1 is C;
                          ~~~~~~~
-!!! error TS1228: Type predicates are only allowed in return type position for functions and methods.
+!!! error TS1228: Type predicate are only allowed in return type position for functions and methods.
     }
     
     // Reference to rest parameter
@@ -228,6 +229,12 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(129,34
     
     function b6([a, b, p1], p2, p3): p1 is A {
                                      ~~
+!!! error TS1230: Type predicate cannot reference element 'p1' in a binding pattern.
+        return true;
+    }
+    
+    function b7({a, b, c: {p1}}, p2, p3): p1 is A {
+                                          ~~
 !!! error TS1230: Type predicate cannot reference element 'p1' in a binding pattern.
         return true;
     }

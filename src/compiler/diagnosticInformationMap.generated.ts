@@ -183,7 +183,7 @@ module ts {
         Cannot_find_parameter_0: { code: 1225, category: DiagnosticCategory.Error, key: "Cannot find parameter '{0}'." },
         Type_predicate_0_is_not_assignable_to_1: { code: 1226, category: DiagnosticCategory.Error, key: "Type predicate '{0}' is not assignable to '{1}'." },
         Parameter_0_is_not_in_the_same_position_as_parameter_1: { code: 1227, category: DiagnosticCategory.Error, key: "Parameter '{0}' is not in the same position as parameter '{1}'." },
-        Type_predicates_are_only_allowed_in_return_type_position_for_functions_and_methods: { code: 1228, category: DiagnosticCategory.Error, key: "Type predicates are only allowed in return type position for functions and methods." },
+        Type_predicate_are_only_allowed_in_return_type_position_for_functions_and_methods: { code: 1228, category: DiagnosticCategory.Error, key: "Type predicate are only allowed in return type position for functions and methods." },
         Type_predicate_cannot_reference_a_rest_parameter: { code: 1229, category: DiagnosticCategory.Error, key: "Type predicate cannot reference a rest parameter." },
         Type_predicate_cannot_reference_element_0_in_a_binding_pattern: { code: 1230, category: DiagnosticCategory.Error, key: "Type predicate cannot reference element '{0}' in a binding pattern." },
         Duplicate_identifier_0: { code: 2300, category: DiagnosticCategory.Error, key: "Duplicate identifier '{0}'." },

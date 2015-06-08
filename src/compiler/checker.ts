@@ -8649,21 +8649,31 @@ module ts {
                         }
                         else if (typePredicateNode.parameterName) {
                             let hasReportedError = false;
-                            outer: for (let param of node.parameters) {
+                            for (var param of node.parameters) {
+                                if (hasReportedError) {
+                                    break;
+                                }
                                 if (param.name.kind === SyntaxKind.ObjectBindingPattern || 
                                     param.name.kind === SyntaxKind.ArrayBindingPattern) {
-                                    
-                                    for (let element of (<BindingPattern>param.name).elements) {
-                                        if (element.name.kind === SyntaxKind.Identifier && 
-                                            (<Identifier>element.name).text === typePredicateNode.parameterName.text) {
-                                            
-                                            error(typePredicateNode.parameterName,
-                                                Diagnostics.Type_predicate_cannot_reference_element_0_in_a_binding_pattern,
-                                                typePredicate.parameterName);
-                                            hasReportedError = true;
-                                            break outer;
+
+                                    (function checkBindingPattern(elements: NodeArray<BindingElement>) {
+                                        for (let element of elements) {
+                                            if (element.name.kind === SyntaxKind.Identifier && 
+                                                (<Identifier>element.name).text === typePredicate.parameterName) {
+
+                                                error(typePredicateNode.parameterName,
+                                                    Diagnostics.Type_predicate_cannot_reference_element_0_in_a_binding_pattern,
+                                                    typePredicate.parameterName);
+                                                hasReportedError = true;
+                                                break;
+                                            }
+                                            else if(element.name.kind === SyntaxKind.ArrayBindingPattern ||
+                                                element.name.kind === SyntaxKind.ObjectBindingPattern) {
+
+                                                checkBindingPattern((<BindingPattern>element.name).elements);
+                                            }
                                         }
-                                    }
+                                    })((<BindingPattern>param.name).elements);
                                 }
                             }
                             if (!hasReportedError) {
@@ -8675,7 +8685,7 @@ module ts {
                     }
                     else {
                         error(typePredicateNode,
-                            Diagnostics.Type_predicates_are_only_allowed_in_return_type_position_for_functions_and_methods);
+                            Diagnostics.Type_predicate_are_only_allowed_in_return_type_position_for_functions_and_methods);
                     }
                 }
                 else {
@@ -11317,7 +11327,7 @@ module ts {
 
         function checkTypePredicate(node: TypePredicateNode) {
             if(!isInLegalTypePredicatePosition(node)) {
-                error(node, Diagnostics.Type_predicates_are_only_allowed_in_return_type_position_for_functions_and_methods);
+                error(node, Diagnostics.Type_predicate_are_only_allowed_in_return_type_position_for_functions_and_methods);
             }
         }
 

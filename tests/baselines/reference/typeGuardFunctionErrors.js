@@ -131,6 +131,10 @@ function b6([a, b, p1], p2, p3): p1 is A {
     return true;
 }
 
+function b7({a, b, c: {p1}}, p2, p3): p1 is A {
+    return true;
+}
+
 //// [typeGuardFunctionErrors.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -251,5 +255,9 @@ function b5(_a, p2, p3) {
 }
 function b6(_a, p2, p3) {
     var a = _a[0], b = _a[1], p1 = _a[2];
+    return true;
+}
+function b7(_a, p2, p3) {
+    var a = _a.a, b = _a.b, p1 = _a.c.p1;
     return true;
 }

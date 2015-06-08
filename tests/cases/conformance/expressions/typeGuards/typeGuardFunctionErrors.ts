@@ -129,3 +129,7 @@ function b5({a, b, p1}, p2, p3): p1 is A {
 function b6([a, b, p1], p2, p3): p1 is A {
     return true;
 }
+
+function b7({a, b, c: {p1}}, p2, p3): p1 is A {
+    return true;
+}

@@ -719,7 +719,7 @@
         "category": "Error",
         "code": 1227
     },
-    "Type predicates are only allowed in return type position for functions and methods.": {
+    "Type predicate are only allowed in return type position for functions and methods.": {
         "category": "Error",
         "code": 1228
     },
