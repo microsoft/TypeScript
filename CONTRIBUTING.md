@@ -73,11 +73,11 @@ These files support metadata tags in the format  `// @metaDataName: value`. The 
 When one needs to test for scenarios which require multiple files, it is useful to use the `fileName` metadata tag as such:
 
 ```TypeScript
-// @filename: file1.ts
+// @fileName: file1.ts
 export function f() {
 }
 
-// @filename: file2.ts
+// @fileName: file2.ts
 import { f as g } from "file1";
 
 var x = g();
