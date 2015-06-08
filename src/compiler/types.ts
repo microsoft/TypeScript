@@ -3,6 +3,14 @@ module ts {
         [index: string]: T;
     }
 
+    export interface FileMap<T> {
+        get(fileName: string): T;
+        set(fileName: string, value: T): void;
+        contains(fileName: string): boolean;
+        remove(fileName: string): void;
+        forEachValue(f: (v: T) => void): void;
+    }
+
     export interface TextRange {
         pos: number;
         end: number;
@@ -1134,7 +1142,7 @@ module ts {
         text: string;
 
         amdDependencies: {path: string; name: string}[];
-        amdModuleName: string;
+        moduleName: string;
         referencedFiles: FileReference[];
 
         /**
@@ -1151,7 +1159,8 @@ module ts {
 
         // The first node that causes this file to be an external module
         /* @internal */ externalModuleIndicator: Node;
-        
+
+        /* @internal */ isDefaultLib: boolean;
         /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
@@ -1205,6 +1214,7 @@ module ts {
         getGlobalDiagnostics(): Diagnostic[];
         getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        /* @internal */ getCompilerOptionsDiagnostics(): Diagnostic[];
 
         /** 
          * Gets a type checker that can be used to semantically analyze source fils in the program.
@@ -1833,7 +1843,7 @@ module ts {
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
-        /* @internal */ noLibCheck?: boolean;
+        /* @internal */ skipDefaultLibCheck?: boolean;
 
         [option: string]: string | number | boolean;
     }
