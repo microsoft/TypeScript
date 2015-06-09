@@ -12052,78 +12052,78 @@ module ts {
 
         // Emitter support
 
-        function isExternalModuleSymbol(symbol: Symbol): boolean {
-            return symbol.flags & SymbolFlags.ValueModule && symbol.declarations.length === 1 && symbol.declarations[0].kind === SyntaxKind.SourceFile;
-        }
-
-        function getAliasNameSubstitution(symbol: Symbol, getGeneratedNameForNode: (node: Node) => string): string {
-            // If this is es6 or higher, just use the name of the export
-            // no need to qualify it.
-            if (languageVersion >= ScriptTarget.ES6) {
-                return undefined;
-            }
-
-            let node = getDeclarationOfAliasSymbol(symbol);
-            if (node) {
-                if (node.kind === SyntaxKind.ImportClause) {
-                    let defaultKeyword: string;
-
-                    if (languageVersion === ScriptTarget.ES3) {
-                        defaultKeyword = "[\"default\"]";
-                    } else {
-                        defaultKeyword = ".default";
-                    }
-                    return getGeneratedNameForNode(<ImportDeclaration>node.parent) + defaultKeyword;
-                }
-                if (node.kind === SyntaxKind.ImportSpecifier) {
-                    let moduleName = getGeneratedNameForNode(<ImportDeclaration>node.parent.parent.parent);
-                    let propertyName = (<ImportSpecifier>node).propertyName || (<ImportSpecifier>node).name;
-                    return moduleName + "." + unescapeIdentifier(propertyName.text);
-                }
-            }
-        }
-
-        function getExportNameSubstitution(symbol: Symbol, location: Node, getGeneratedNameForNode: (Node: Node) => string): string {
-            if (isExternalModuleSymbol(symbol.parent)) {
-                // 1. If this is es6 or higher, just use the name of the export
-                // no need to qualify it.
-                // 2. export mechanism for System modules is different from CJS\AMD
-                // and it does not need qualifications for exports
-                if (languageVersion >= ScriptTarget.ES6 || compilerOptions.module === ModuleKind.System) {
-                    return undefined;
-                }
-                return "exports." + unescapeIdentifier(symbol.name);
-            }
-            let node = location;
-            let containerSymbol = getParentOfSymbol(symbol);
-            while (node) {
-                if ((node.kind === SyntaxKind.ModuleDeclaration || node.kind === SyntaxKind.EnumDeclaration) && getSymbolOfNode(node) === containerSymbol) {
-                    return getGeneratedNameForNode(<ModuleDeclaration | EnumDeclaration>node) + "." + unescapeIdentifier(symbol.name);
-                }
-                node = node.parent;
-            }
-        }
-
-        function getExpressionNameSubstitution(node: Identifier, getGeneratedNameForNode: (Node: Node) => string): string {
-            let symbol = getNodeLinks(node).resolvedSymbol || (isDeclarationName(node) ? getSymbolOfNode(node.parent) : undefined);
+        // When resolved as an expression identifier, if the given node references an exported entity, return the declaration
+        // node of the exported entity's container. Otherwise, return undefined.
+        function getReferencedExportContainer(node: Identifier): SourceFile | ModuleDeclaration | EnumDeclaration {
+            let symbol = getReferencedValueSymbol(node);
             if (symbol) {
-                // Whan an identifier resolves to a parented symbol, it references an exported entity from
-                // another declaration of the same internal module.
-                if (symbol.parent) {
-                    return getExportNameSubstitution(symbol, node.parent, getGeneratedNameForNode);
+                if (symbol.flags & SymbolFlags.ExportValue) {
+                    // If we reference an exported entity within the same module declaration, then whether
+                    // we prefix depends on the kind of entity. SymbolFlags.ExportHasLocal encompasses all the
+                    // kinds that we do NOT prefix.
+                    let exportSymbol = getMergedSymbol(symbol.exportSymbol);
+                    if (exportSymbol.flags & SymbolFlags.ExportHasLocal) {
+                        return undefined;
+                    }
+                    symbol = exportSymbol;
                 }
-                // If we reference an exported entity within the same module declaration, then whether
-                // we prefix depends on the kind of entity. SymbolFlags.ExportHasLocal encompasses all the
-                // kinds that we do NOT prefix.
-                let exportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
-                if (symbol !== exportSymbol && !(exportSymbol.flags & SymbolFlags.ExportHasLocal)) {
-                    return getExportNameSubstitution(exportSymbol, node.parent, getGeneratedNameForNode);
-                }
-                // Named imports from ES6 import declarations are rewritten
-                if (symbol.flags & SymbolFlags.Alias) {
-                    return getAliasNameSubstitution(symbol, getGeneratedNameForNode);
+                let parentSymbol = getParentOfSymbol(symbol);
+                if (parentSymbol) {
+                    if (parentSymbol.flags & SymbolFlags.ValueModule && parentSymbol.valueDeclaration.kind === SyntaxKind.SourceFile) {
+                        return <SourceFile>parentSymbol.valueDeclaration;
+                    }
+                    for (let n = node.parent; n; n = n.parent) {
+                        if ((n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.EnumDeclaration) && getSymbolOfNode(n) === parentSymbol) {
+                            return <ModuleDeclaration | EnumDeclaration>n;
+                        }
+                    }
                 }
             }
+        }
+
+        // When resolved as an expression identifier, if the given node references an import, return the declaration of
+        // that import. Otherwise, return undefined.
+        function getReferencedImportDeclaration(node: Identifier): Declaration {
+            let symbol = getReferencedValueSymbol(node);
+            return symbol && symbol.flags & SymbolFlags.Alias ? getDeclarationOfAliasSymbol(symbol) : undefined;
+        }
+
+        function isStatementWithLocals(node: Node) {
+            switch (node.kind) {
+                case SyntaxKind.Block:
+                case SyntaxKind.CaseBlock:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
+                    return true;
+            }
+            return false;
+        }
+
+        function isNestedRedeclarationSymbol(symbol: Symbol): boolean {
+            if (symbol.flags & SymbolFlags.BlockScoped) {
+                let links = getSymbolLinks(symbol);
+                if (links.isNestedRedeclaration === undefined) {
+                    let container = getEnclosingBlockScopeContainer(symbol.valueDeclaration);
+                    links.isNestedRedeclaration = isStatementWithLocals(container) &&
+                       !!resolveName(container.parent, symbol.name, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+                }
+                return links.isNestedRedeclaration;
+            }
+            return false;
+        }
+
+        // When resolved as an expression identifier, if the given node references a nested block scoped entity with
+        // a name that hides an existing name, return the declaration of that entity. Otherwise, return undefined.
+        function getReferencedNestedRedeclaration(node: Identifier): Declaration {
+            let symbol = getReferencedValueSymbol(node);
+            return symbol && isNestedRedeclarationSymbol(symbol) ? symbol.valueDeclaration : undefined;
+        }
+
+        // Return true if the given node is a declaration of a nested block scoped entity with a name that hides an
+        // existing name.
+        function isNestedRedeclaration(node: Declaration): boolean {
+            return isNestedRedeclarationSymbol(getSymbolOfNode(node));
         }
 
         function isValueAliasDeclaration(node: Node): boolean {
@@ -12227,10 +12227,13 @@ module ts {
         }
 
         /** Serializes an EntityName (with substitutions) to an appropriate JS constructor value. Used by the __metadata decorator. */
-        function serializeEntityName(node: EntityName, getGeneratedNameForNode: (Node: Node) => string, fallbackPath?: string[]): string {
+        function serializeEntityName(node: EntityName, fallbackPath?: string[]): string {
             if (node.kind === SyntaxKind.Identifier) {
-                var substitution = getExpressionNameSubstitution(<Identifier>node, getGeneratedNameForNode);
-                var text = substitution || (<Identifier>node).text;
+                // TODO(ron.buckton): The getExpressionNameSubstitution function has been removed, but calling it
+                // here has no effect anyway as an identifier in a type name is not an expression.
+                // var substitution = getExpressionNameSubstitution(<Identifier>node, getGeneratedNameForNode);
+                // var text = substitution || (<Identifier>node).text;
+                var text = (<Identifier>node).text;
                 if (fallbackPath) {
                     fallbackPath.push(text);
                 }
@@ -12239,8 +12242,8 @@ module ts {
                 }
             }
             else {
-                var left = serializeEntityName((<QualifiedName>node).left, getGeneratedNameForNode, fallbackPath);
-                var right = serializeEntityName((<QualifiedName>node).right, getGeneratedNameForNode, fallbackPath);
+                var left = serializeEntityName((<QualifiedName>node).left, fallbackPath);
+                var right = serializeEntityName((<QualifiedName>node).right, fallbackPath);
                 if (!fallbackPath) {
                     return left + "." + right;
                 }
@@ -12248,7 +12251,7 @@ module ts {
         }
 
         /** Serializes a TypeReferenceNode to an appropriate JS constructor value. Used by the __metadata decorator. */
-        function serializeTypeReferenceNode(node: TypeReferenceNode, getGeneratedNameForNode: (Node: Node) => string): string | string[] {
+        function serializeTypeReferenceNode(node: TypeReferenceNode): string | string[] {
             // serialization of a TypeReferenceNode uses the following rules:
             //
             // * The serialized type of a TypeReference that is `void` is "void 0".
@@ -12281,11 +12284,11 @@ module ts {
             }
             else if (type === unknownType) {
                 var fallbackPath: string[] = [];
-                serializeEntityName(node.typeName, getGeneratedNameForNode, fallbackPath);
+                serializeEntityName(node.typeName, fallbackPath);
                 return fallbackPath;
             }
             else if (type.symbol && type.symbol.valueDeclaration) {
-                return serializeEntityName(node.typeName, getGeneratedNameForNode);
+                return serializeEntityName(node.typeName);
             }
             else if (typeHasCallOrConstructSignatures(type)) {
                 return "Function";
@@ -12295,7 +12298,7 @@ module ts {
         }
 
         /** Serializes a TypeNode to an appropriate JS constructor value. Used by the __metadata decorator. */
-        function serializeTypeNode(node: TypeNode | LiteralExpression, getGeneratedNameForNode: (Node: Node) => string): string | string[] {
+        function serializeTypeNode(node: TypeNode | LiteralExpression): string | string[] {
             // serialization of a TypeNode uses the following rules:
             //
             // * The serialized type of `void` is "void 0" (undefined).
@@ -12311,7 +12314,7 @@ module ts {
                     case SyntaxKind.VoidKeyword:
                         return "void 0";
                     case SyntaxKind.ParenthesizedType:
-                        return serializeTypeNode((<ParenthesizedTypeNode>node).type, getGeneratedNameForNode);
+                        return serializeTypeNode((<ParenthesizedTypeNode>node).type);
                     case SyntaxKind.FunctionType:
                     case SyntaxKind.ConstructorType:
                         return "Function";
@@ -12326,7 +12329,7 @@ module ts {
                     case SyntaxKind.NumberKeyword:
                         return "Number";
                     case SyntaxKind.TypeReference:
-                        return serializeTypeReferenceNode(<TypeReferenceNode>node, getGeneratedNameForNode);
+                        return serializeTypeReferenceNode(<TypeReferenceNode>node);
                     case SyntaxKind.TypeQuery:
                     case SyntaxKind.TypeLiteral:
                     case SyntaxKind.UnionType:
@@ -12342,7 +12345,7 @@ module ts {
         }
 
         /** Serializes the type of a declaration to an appropriate JS constructor value. Used by the __metadata decorator for a class member. */
-        function serializeTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[] {
+        function serializeTypeOfNode(node: Node): string | string[] {
             // serialization of the type of a declaration uses the following rules:
             //
             // * The serialized type of a ClassDeclaration is "Function"
@@ -12355,10 +12358,10 @@ module ts {
             // For rules on serializing type annotations, see `serializeTypeNode`.
             switch (node.kind) {
                 case SyntaxKind.ClassDeclaration:       return "Function";
-                case SyntaxKind.PropertyDeclaration:    return serializeTypeNode((<PropertyDeclaration>node).type, getGeneratedNameForNode);
-                case SyntaxKind.Parameter:              return serializeTypeNode((<ParameterDeclaration>node).type, getGeneratedNameForNode);
-                case SyntaxKind.GetAccessor:            return serializeTypeNode((<AccessorDeclaration>node).type, getGeneratedNameForNode);
-                case SyntaxKind.SetAccessor:            return serializeTypeNode(getSetAccessorTypeAnnotationNode(<AccessorDeclaration>node), getGeneratedNameForNode);
+                case SyntaxKind.PropertyDeclaration:    return serializeTypeNode((<PropertyDeclaration>node).type);
+                case SyntaxKind.Parameter:              return serializeTypeNode((<ParameterDeclaration>node).type);
+                case SyntaxKind.GetAccessor:            return serializeTypeNode((<AccessorDeclaration>node).type);
+                case SyntaxKind.SetAccessor:            return serializeTypeNode(getSetAccessorTypeAnnotationNode(<AccessorDeclaration>node));
             }
             if (isFunctionLike(node)) {
                 return "Function";
@@ -12367,7 +12370,7 @@ module ts {
         }
         
         /** Serializes the parameter types of a function or the constructor of a class. Used by the __metadata decorator for a method or set accessor. */
-        function serializeParameterTypesOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): (string | string[])[] {
+        function serializeParameterTypesOfNode(node: Node): (string | string[])[] {
             // serialization of parameter types uses the following rules:
             //
             // * If the declaration is a class, the parameters of the first constructor with a body are used.
@@ -12400,10 +12403,10 @@ module ts {
                                 else {
                                     parameterType = undefined;
                                 }
-                                result[i] = serializeTypeNode(parameterType, getGeneratedNameForNode);
+                                result[i] = serializeTypeNode(parameterType);
                             }
                             else {
-                                result[i] = serializeTypeOfNode(parameters[i], getGeneratedNameForNode);
+                                result[i] = serializeTypeOfNode(parameters[i]);
                             }
                         }
                         return result;
@@ -12414,9 +12417,9 @@ module ts {
         }
 
         /** Serializes the return type of function. Used by the __metadata decorator for a method. */
-        function serializeReturnTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[] {
+        function serializeReturnTypeOfNode(node: Node): string | string[] {
             if (node && isFunctionLike(node)) {
-                return serializeTypeNode((<FunctionLikeDeclaration>node).type, getGeneratedNameForNode);
+                return serializeTypeNode((<FunctionLikeDeclaration>node).type);
             }
             return "void 0";
         }
@@ -12445,17 +12448,15 @@ module ts {
             return hasProperty(globals, name);
         }
 
-        function resolvesToSomeValue(location: Node, name: string): boolean {
-            Debug.assert(!nodeIsSynthesized(location), "resolvesToSomeValue called with a synthesized location");
-            return !!resolveName(location, name, SymbolFlags.Value, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+        function getReferencedValueSymbol(reference: Identifier): Symbol {
+            return getNodeLinks(reference).resolvedSymbol ||
+                resolveName(reference, reference.text, SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias,
+                    /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
         }
 
         function getReferencedValueDeclaration(reference: Identifier): Declaration {
             Debug.assert(!nodeIsSynthesized(reference));
-            let symbol =
-                getNodeLinks(reference).resolvedSymbol ||
-                resolveName(reference, reference.text, SymbolFlags.Value | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-
+            let symbol = getReferencedValueSymbol(reference);
             return symbol && getExportSymbolOfValueSymbolIfExported(symbol).valueDeclaration;
         }
 
@@ -12500,7 +12501,10 @@ module ts {
 
         function createResolver(): EmitResolver {
             return {
-                getExpressionNameSubstitution,
+                getReferencedExportContainer,
+                getReferencedImportDeclaration,
+                getReferencedNestedRedeclaration,
+                isNestedRedeclaration,
                 isValueAliasDeclaration,
                 hasGlobalName,
                 isReferencedAliasDeclaration,
@@ -12514,7 +12518,6 @@ module ts {
                 isSymbolAccessible,
                 isEntityNameVisible,
                 getConstantValue,
-                resolvesToSomeValue,
                 collectLinkedAliases,
                 getBlockScopedVariableId,
                 getReferencedValueDeclaration,
