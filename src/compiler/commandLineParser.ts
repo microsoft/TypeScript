@@ -39,6 +39,16 @@ module ts {
             type: "boolean",
         },
         {
+            name: "jsx",
+            type: {
+                "preserve": JsxEmit.Preserve,
+                "react": JsxEmit.React
+            },
+            paramType: Diagnostics.KIND,
+            description: Diagnostics.Specifies_how_to_transform_JSX_syntax_during_compilation,
+            error: Diagnostics.Argument_for_jsx_must_be_preserve_or_react
+        },
+        {
             name: "listFiles",
             type: "boolean",
         },
@@ -408,10 +418,21 @@ module ts {
             }
             else {
                 var exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
-                var sysFiles = host.readDirectory(basePath, ".ts", exclude);
+                var sysFiles = host.readDirectory(basePath, ".ts", exclude).concat(host.readDirectory(basePath, ".tsx", exclude));
                 for (var i = 0; i < sysFiles.length; i++) {
                     var name = sysFiles[i];
-                    if (!fileExtensionIs(name, ".d.ts") || !contains(sysFiles, name.substr(0, name.length - 5) + ".ts")) {
+                    if (fileExtensionIs(name, ".d.ts")) {
+                        let baseName = name.substr(0, name.length - ".d.ts".length);
+                        if (!contains(sysFiles, baseName + ".tsx") && !contains(sysFiles, baseName + ".ts")) {
+                            fileNames.push(name);
+                        }
+                    }
+                    else if (fileExtensionIs(name, ".ts")) {
+                        if (!contains(sysFiles, name + "x")) {
+                            fileNames.push(name)
+                        }
+                    }
+                    else {
                         fileNames.push(name);
                     }
                 }

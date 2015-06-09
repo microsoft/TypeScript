@@ -686,7 +686,7 @@
     "Experimental support for decorators is a feature that is subject to change in a future release. Specify '--experimentalDecorators' to remove this warning.": {
         "category": "Error",
         "code": 1219
-    },    
+    },
     "Generators are only available when targeting ECMAScript 6 or higher.": {
         "category": "Error",
         "code": 1220
@@ -1506,6 +1506,52 @@
         "code": 2505
     },
 
+    "JSX element attributes type '{0}' must be an object type.": {
+        "category": "Error",
+        "code": 2600
+    },
+    "The return type of a JSX element constructor or factory function must return an object type.": {
+        "category": "Error",
+        "code": 2601
+    },
+    "The global type 'JSX.Element' must exist when using JSX.": {
+        "category": "Error",
+        "code": 2602
+    },
+    "Property '{0}' in type '{1}' is not assignable to type '{2}'": {
+        "category": "Error",
+        "code": 2603
+    },
+    "JSX element '{0}' is not a constructor function or factory function.": {
+        "category": "Error",
+        "code": 2604
+    },
+    "JSX element '{0}' is not a constructor function or factory function for JSX elements.": {
+        "category": "Error",
+        "code": 2605
+    },
+    "Property '{0}' of JSX spread attribute is not assignable to target property.": {
+        "category": "Error",
+        "code": 2606
+    },
+    "JSX element class does not support attributes because it does not have a '{0}' property": {
+        "category": "Error",
+        "code": 2607
+    },
+    "The global type 'JSX.{0}' may not have more than one property": {
+        "category": "Error",
+        "code": 2608
+    },
+    "JSX element implicitly has type 'any' because no interface JSX.{0} exists": {
+        "category": "Error",
+        "code": 2609
+    },
+
+    "Cannot emit namespaced JSX elements in React": {
+        "category": "Error",
+        "code": 2650
+    },
+
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -1874,7 +1920,7 @@
         "category": "Error",
         "code": 5050
     },
-     "Option 'inlineSources' can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
+    "Option 'inlineSources' can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
         "category": "Error",
         "code": 5051
     },
@@ -2067,13 +2113,21 @@
         "category": "Message",
         "code": 6060
     },
-    "NEWLINE": { 
-        "category": "Message", 
+    "NEWLINE": {
+        "category": "Message",
         "code": 6061
     },
     "Argument for '--newLine' option must be 'CRLF' or 'LF'.": {
-        "category": "Error", 
+        "category": "Error",
         "code": 6062
+    },
+    "Specifies how to transform JSX syntax during compilation.": {
+        "category": "Message",
+        "code": 6080
+    },
+    "Argument for --jsx must be 'preserve' or 'react'.": {
+        "category": "Message",
+        "code": 6081
     },
     "Option 'experimentalDecorators' must also be specified when option 'emitDecoratorMetadata' is specified.": {
         "category": "Error",
@@ -2228,5 +2282,29 @@
     "'class' expressions are not currently supported.": {
         "category": "Error",
         "code": 9003
+    },
+    "'class' declarations are only supported directly inside a module or as a top level declaration.": {
+        "category": "Error",
+        "code": 9004
+    },
+    "JSX attributes must only be assigned a non-empty 'expression'.": {
+        "category": "Error",
+        "code": 17000
+    },
+    "JSX elements cannot have multiple attributes with the same name.": {
+        "category": "Error",
+        "code": 17001
+    },
+    "Expected corresponding JSX closing tag for '{0}'.": {
+        "category": "Error",
+        "code": 17002
+    },
+    "JSX attribute expected.": {
+        "category": "Error",
+        "code": 17003
+    },
+    "Cannot use JSX unless the '--jsx' flag is provided.": {
+        "category": "Error",
+        "code": 17004
     }
 }

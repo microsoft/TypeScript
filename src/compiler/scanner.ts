@@ -21,6 +21,8 @@ module ts {
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
         reScanTemplateToken(): SyntaxKind;
+        reScanJsxIdentifier(): SyntaxKind;
+        reScanLessThanToken(): SyntaxKind;
         scan(): SyntaxKind;
         // Sets the text for the scanner to scan.  An optional subrange starting point and length
         // can be provided to have the scanner only scan a portion of the text.
@@ -130,6 +132,7 @@ module ts {
         "++": SyntaxKind.PlusPlusToken,
         "--": SyntaxKind.MinusMinusToken,
         "<<": SyntaxKind.LessThanLessThanToken,
+        "</": SyntaxKind.LessThanSlashToken,
         ">>": SyntaxKind.GreaterThanGreaterThanToken,
         ">>>": SyntaxKind.GreaterThanGreaterThanGreaterThanToken,
         "&": SyntaxKind.AmpersandToken,
@@ -598,6 +601,42 @@ module ts {
             ch >= CharacterCodes._0 && ch <= CharacterCodes._9 || ch === CharacterCodes.$ || ch === CharacterCodes._ ||
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
+    
+    /* @internal */ 
+    export function retrieveClosingTagsMap(text: string, languageVersion: ScriptTarget): Map<number[]> {
+        let pos = 0;
+        let end = text.length;
+        const closingTags: Map<number[]> = {};
+        while (pos < end) {
+            if (text.charCodeAt(pos) === CharacterCodes.lessThan && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+                let p = pos + 2;
+                let ch: number;
+                while (p < end) {
+                    ch = text.charCodeAt(p);
+                    if (!isIdentifierPart(ch, languageVersion) &&
+                        ch !== CharacterCodes.minus &&
+                        ch !== CharacterCodes.dot &&
+                        ch !== CharacterCodes.backslash &&
+                        !isWhiteSpace(ch) &&
+                        !isLineBreak(ch)) {
+                        break;
+                    }
+                    p++;
+                }
+                if (ch === CharacterCodes.greaterThan) {
+                    let tagName = text.substring(pos + 2, p).replace(/\s/g, '');
+                    if (!hasProperty(closingTags, tagName)) {
+                        closingTags[tagName] = [];
+                    }
+                    closingTags[tagName].push(pos);
+                    pos = p + 1;
+                } 
+            }
+            pos++;
+        }
+        return closingTags;
+    }
+ 
 
     /* @internal */ 
     // Creates a scanner over a (possibly unspecified) range of a piece of text.
@@ -642,6 +681,8 @@ module ts {
             reScanGreaterToken,
             reScanSlashToken,
             reScanTemplateToken,
+            reScanJsxIdentifier,
+            reScanLessThanToken,
             scan,
             setText,
             setScriptTarget,
@@ -769,6 +810,25 @@ module ts {
                     result += text.substring(start, pos);
                     tokenIsUnterminated = true;
                     error(Diagnostics.Unterminated_string_literal);
+                    break;
+                }
+                pos++;
+            }
+            return result;
+        }
+
+        function scanJsxText() {
+            let result = "";
+            let start = pos;
+            while (true) {
+                if (pos >= end) {
+                    result += text.substring(start, pos);
+                    error(Diagnostics.Unexpected_end_of_text);
+                    break;
+                }
+                let ch = text.charCodeAt(pos);
+                if (ch === CharacterCodes.lessThan || ch === CharacterCodes.openBrace || ch === CharacterCodes.closeBrace) {
+                    result += text.substring(start, pos);
                     break;
                 }
                 pos++;
@@ -1456,6 +1516,33 @@ module ts {
             Debug.assert(token === SyntaxKind.CloseBraceToken, "'reScanTemplateToken' should only be called on a '}'");
             pos = tokenPos;
             return token = scanTemplateAndSetTokenValue();
+        }
+        
+        function reScanJsxIdentifier(): SyntaxKind {
+            if (token === SyntaxKind.Identifier) {
+                while (pos < end) {
+                    let ch = text.charCodeAt(pos);
+                    if (ch === CharacterCodes.minus || isIdentifierPart(ch)) {
+                        tokenValue += String.fromCharCode(ch);
+                        pos++;
+                    } 
+                    else  if (ch === CharacterCodes.backslash) {
+                        tokenValue += scanIdentifierParts();
+                    }
+                    else {
+                        break;
+                    }
+                }
+            }
+            return token;
+        }
+        
+        function reScanLessThanToken(): SyntaxKind {
+            Debug.assert(token === SyntaxKind.LessThanToken, "'reScanLessThanToken' should only be called on a '<'");
+            if (text.charCodeAt(pos) === CharacterCodes.slash) {
+                return pos++, token = SyntaxKind.LessThanSlashToken;
+            }
+            return token;
         }
 
         function speculationHelper<T>(callback: () => T, isLookahead: boolean): T {
