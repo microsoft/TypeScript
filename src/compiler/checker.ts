@@ -5215,7 +5215,8 @@ module ts {
                     inferFromIndexTypes(source, target, IndexKind.String, IndexKind.String);
                     inferFromIndexTypes(source, target, IndexKind.Number, IndexKind.Number);
                     inferFromIndexTypes(source, target, IndexKind.String, IndexKind.Number);
-                    depth--;                }
+                    depth--;
+                }
             }
 
             function inferFromProperties(source: Type, target: Type) {
