@@ -7,7 +7,7 @@ module ts {
         get(fileName: string): T;
         set(fileName: string, value: T): void;
         contains(fileName: string): boolean;
-        delete(fileName: string): void;
+        remove(fileName: string): void;
         forEachValue(f: (v: T) => void): void;
     }
 
@@ -145,6 +145,7 @@ module ts {
         ConstructorKeyword,
         DeclareKeyword,
         GetKeyword,
+        IsKeyword,
         ModuleKeyword,
         NamespaceKeyword,
         RequireKeyword,
@@ -177,6 +178,7 @@ module ts {
         ConstructSignature,
         IndexSignature,
         // Type
+        TypePredicate,
         TypeReference,
         FunctionType,
         ConstructorType,
@@ -612,6 +614,11 @@ module ts {
     export interface TypeReferenceNode extends TypeNode {
         typeName: EntityName;
         typeArguments?: NodeArray<TypeNode>;
+    }
+
+    export interface TypePredicateNode extends TypeNode {
+        parameterName: Identifier;
+        type: TypeNode;
     }
 
     export interface TypeQueryNode extends TypeNode {
@@ -1143,7 +1150,7 @@ module ts {
         text: string;
 
         amdDependencies: {path: string; name: string}[];
-        amdModuleName: string;
+        moduleName: string;
         referencedFiles: FileReference[];
 
         hasNoDefaultLib: boolean;
@@ -1152,7 +1159,8 @@ module ts {
 
         // The first node that causes this file to be an external module
         /* @internal */ externalModuleIndicator: Node;
-        
+
+        /* @internal */ isDefaultLib: boolean;
         /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
@@ -1386,6 +1394,12 @@ module ts {
         NotAccessible,
         CannotBeNamed
     }
+    
+    export interface TypePredicate {
+        parameterName: string;
+        parameterIndex: number;
+        type: Type;
+    }
 
     /* @internal */
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
@@ -1595,12 +1609,12 @@ module ts {
         Union                   = 0x00004000,  // Union
         Anonymous               = 0x00008000,  // Anonymous
         Instantiated            = 0x00010000,  // Instantiated anonymous type
-        /* @internal */ 
+        /* @internal */
         FromSignature           = 0x00020000,  // Created for signature assignment check
         ObjectLiteral           = 0x00040000,  // Originates in an object literal
-        /* @internal */ 
+        /* @internal */
         ContainsUndefinedOrNull = 0x00080000,  // Type is or contains Undefined or Null type
-        /* @internal */ 
+        /* @internal */
         ContainsObjectLiteral   = 0x00100000,  // Type is or contains object literal type
         ESSymbol                = 0x00200000,  // Type of symbol primitive introduced in ES6
 
@@ -1716,6 +1730,7 @@ module ts {
         declaration: SignatureDeclaration;  // Originating declaration
         typeParameters: TypeParameter[];    // Type parameters (undefined if non-generic)
         parameters: Symbol[];               // Parameters
+        typePredicate?: TypePredicate;      // Type predicate
         /* @internal */
         resolvedReturnType: Type;           // Resolved return type
         /* @internal */
@@ -1835,6 +1850,7 @@ module ts {
         experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
         /* @internal */ stripInternal?: boolean;
+        /* @internal */ skipDefaultLibCheck?: boolean;
         [option: string]: string | number | boolean;
     }
 

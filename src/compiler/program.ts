@@ -144,7 +144,7 @@ module ts {
         let program: Program;
         let files: SourceFile[] = [];
         let diagnostics = createDiagnosticCollection();
-        let seenNoDefaultLib = options.noLib;
+        let skipDefaultLib = options.noLib;
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
@@ -152,11 +152,11 @@ module ts {
         let start = new Date().getTime();
 
         host = host || createCompilerHost(options);
-        let filesByName = createFileMap<SourceFile>(host.getCanonicalFileName);
+        let filesByName = createFileMap<SourceFile>(fileName => host.getCanonicalFileName(fileName));
 
-        forEach(rootNames, name => processRootFile(name, false));
-        if (!seenNoDefaultLib) {
-            processRootFile(host.getDefaultLibFileName(options), true);
+        forEach(rootNames, name => processRootFile(name, /*isDefaultLib:*/ false));
+        if (!skipDefaultLib) {
+            processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib:*/ true);
         }
         verifyCompilerOptions();
 
@@ -382,7 +382,7 @@ module ts {
                 });
                 filesByName.set(canonicalName, file);
                 if (file) {
-                    seenNoDefaultLib = seenNoDefaultLib || file.hasNoDefaultLib;
+                    skipDefaultLib = skipDefaultLib || file.hasNoDefaultLib;
 
                     // Set the source file for normalized absolute path
                     filesByName.set(canonicalAbsolutePath, file);
@@ -393,6 +393,7 @@ module ts {
                         processImportedModules(file, basePath);
                     }
                     if (isDefaultLib) {
+                        file.isDefaultLib = true;
                         files.unshift(file);
                     }
                     else {
