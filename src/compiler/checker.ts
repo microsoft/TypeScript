@@ -1358,7 +1358,7 @@ module ts {
             return result;
         }
 
-        function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
+        function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
             let writer = getSingleLineStringWriter();
             getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags);
             let result = writer.string();
