@@ -103,6 +103,9 @@ module ts {
             case SyntaxKind.TypeReference:
                 return visitNode(cbNode, (<TypeReferenceNode>node).typeName) ||
                     visitNodes(cbNodes, (<TypeReferenceNode>node).typeArguments);
+            case SyntaxKind.TypePredicate:
+                return visitNode(cbNode, (<TypePredicateNode>node).parameterName) ||
+                    visitNode(cbNode, (<TypePredicateNode>node).type);
             case SyntaxKind.TypeQuery:
                 return visitNode(cbNode, (<TypeQueryNode>node).exprName);
             case SyntaxKind.TypeLiteral:
@@ -1897,9 +1900,17 @@ module ts {
 
         // TYPES
 
-        function parseTypeReference(): TypeReferenceNode {
-            let node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
-            node.typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
+        function parseTypeReferenceOrTypePredicate(): TypeReferenceNode | TypePredicateNode {
+            let typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
+            if (typeName.kind === SyntaxKind.Identifier && token === SyntaxKind.IsKeyword) {
+                nextToken();
+                let node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typeName.pos);
+                node.parameterName = <Identifier>typeName;
+                node.type = parseType();
+                return finishNode(node);
+            }
+            let node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference, typeName.pos);
+            node.typeName = typeName;
             if (!scanner.hasPrecedingLineBreak() && token === SyntaxKind.LessThanToken) {
                 node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
             }
@@ -2336,7 +2347,7 @@ module ts {
                 case SyntaxKind.SymbolKeyword:
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     let node = tryParse(parseKeywordAndNoDot);
-                    return node || parseTypeReference();
+                    return node || parseTypeReferenceOrTypePredicate();
                 case SyntaxKind.VoidKeyword:
                     return parseTokenNode<TypeNode>();
                 case SyntaxKind.TypeOfKeyword:
@@ -2348,7 +2359,7 @@ module ts {
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedType();
                 default:
-                    return parseTypeReference();
+                    return parseTypeReferenceOrTypePredicate();
             }
         }
 

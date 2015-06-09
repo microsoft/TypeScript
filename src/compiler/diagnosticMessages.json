@@ -703,6 +703,35 @@
         "category": "Error",
         "code": 1223
     },
+    "Signature '{0}' must have a type predicate.": {
+        "category": "Error",
+        "code": 1224
+    },
+    "Cannot find parameter '{0}'.": {
+        "category": "Error",
+        "code": 1225
+    },
+    "Type predicate '{0}' is not assignable to '{1}'.": {
+        "category": "Error",
+        "code": 1226
+    },
+    "Parameter '{0}' is not in the same position as parameter '{1}'.": {
+        "category": "Error",
+        "code": 1227
+    },
+    "A type predicate is only allowed in return type position for functions and methods.": {
+        "category": "Error",
+        "code": 1228
+    },
+    "A type predicate cannot reference a rest parameter.": {
+        "category": "Error",
+        "code": 1229
+    },
+    "A type predicate cannot reference element '{0}' in a binding pattern.": {
+        "category": "Error",
+        "code": 1230
+    },
+
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
