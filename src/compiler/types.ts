@@ -1435,7 +1435,7 @@ module ts {
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         resolvesToSomeValue(location: Node, name: string): boolean;
-        getBlockScopedVariableId(node: Identifier): number;
+        getBlockScopedValueId(n: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
         serializeTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
         serializeParameterTypesOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): (string | string[])[];
@@ -1518,6 +1518,7 @@ module ts {
 
         PropertyOrAccessor = Property | Accessor,
         Export = ExportNamespace | ExportType | ExportValue,
+        BlockScopedValue = BlockScopedVariable | Class,
     }
 
     export interface Symbol {

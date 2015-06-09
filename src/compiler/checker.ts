@@ -12433,23 +12433,23 @@ module ts {
             return symbol && getExportSymbolOfValueSymbolIfExported(symbol).valueDeclaration;
         }
 
-        function getBlockScopedVariableId(n: Identifier): number {
+        function getBlockScopedValueId(n: Identifier): number {
             Debug.assert(!nodeIsSynthesized(n));
 
-            let isVariableDeclarationOrBindingElement =
-                n.parent.kind === SyntaxKind.BindingElement || (n.parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>n.parent).name === n);
+            let isDeclarationOrBindingElement =
+                n.parent.kind === SyntaxKind.BindingElement || (isDeclarationName(n) && n.parent.kind !== SyntaxKind.ShorthandPropertyAssignment);
 
             let symbol = 
-                (isVariableDeclarationOrBindingElement ? getSymbolOfNode(n.parent) : undefined) ||
+                (isDeclarationOrBindingElement ? getSymbolOfNode(n.parent) : undefined) ||
                 getNodeLinks(n).resolvedSymbol ||
                 resolveName(n, n.text, SymbolFlags.Value | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
 
-            let isLetOrConst =
+            let isBlockScopedValue =
                 symbol &&
-                (symbol.flags & SymbolFlags.BlockScopedVariable) &&
-                symbol.valueDeclaration.parent.kind !== SyntaxKind.CatchClause;
+                (symbol.flags & SymbolFlags.BlockScopedValue) &&
+                (symbol.valueDeclaration.parent.kind !== SyntaxKind.CatchClause);
 
-            if (isLetOrConst) {
+            if (isBlockScopedValue) {
                 // side-effect of calling this method:
                 //   assign id to symbol if it was not yet set
                 getSymbolLinks(symbol);
@@ -12490,7 +12490,7 @@ module ts {
                 getConstantValue,
                 resolvesToSomeValue,
                 collectLinkedAliases,
-                getBlockScopedVariableId,
+                getBlockScopedValueId,
                 getReferencedValueDeclaration,
                 serializeTypeOfNode,
                 serializeParameterTypesOfNode,
