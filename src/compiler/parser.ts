@@ -1903,7 +1903,7 @@ module ts {
 
         function parseTypeReferenceOrTypePredicate(): TypeReferenceNode | TypePredicateNode {
             let typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
-            if (typeName.kind === SyntaxKind.Identifier && token === SyntaxKind.IsKeyword) {
+            if (typeName.kind === SyntaxKind.Identifier && token === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
                 nextToken();
                 let node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typeName.pos);
                 node.parameterName = <Identifier>typeName;
