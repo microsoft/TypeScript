@@ -212,7 +212,7 @@ module Utils {
             }
 
             var result = "";
-            ts.forEach(Object.getOwnPropertyNames(flags),(v: any) => {
+            ts.forEach(Object.getOwnPropertyNames(flags), (v: any) => {
                 if (isFinite(v)) {
                     v = +v;
                     if (f === +v) {
@@ -410,7 +410,7 @@ module Harness {
         deleteFile(fileName: string): void;
         listFiles(path: string, filter: RegExp, options?: { recursive?: boolean }): string[];
         log(text: string): void;
-        getMemoryUsage? (): number;
+        getMemoryUsage?(): number;
     }
 
     module IOImpl {
@@ -793,7 +793,7 @@ module Harness {
 
             public reset() { this.fileCollection = {}; }
 
-            public toArray(): { fileName: string; file: WriterAggregator; }[]{
+            public toArray(): { fileName: string; file: WriterAggregator; }[] {
                 var result: { fileName: string; file: WriterAggregator; }[] = [];
                 for (var p in this.fileCollection) {
                     if (this.fileCollection.hasOwnProperty(p)) {
@@ -939,7 +939,7 @@ module Harness {
             }
 
             public emitAll(ioHost?: IEmitterIOHost) {
-                this.compileFiles(this.inputFiles, [],(result) => {
+                this.compileFiles(this.inputFiles, [], (result) => {
                     result.files.forEach(file => {
                         ioHost.writeFile(file.fileName, file.code, false);
                     });
@@ -949,7 +949,7 @@ module Harness {
                     result.sourceMaps.forEach(file => {
                         ioHost.writeFile(file.fileName, file.code, false);
                     });
-                },() => { }, this.compileOptions);
+                }, () => { }, this.compileOptions);
             }
 
             public compileFiles(inputFiles: { unitName: string; content: string }[],
@@ -1133,18 +1133,24 @@ module Harness {
                         case 'inlinesourcemap':
                             options.inlineSourceMap = setting.value === 'true';
                             break;
-                        
+
                         case 'inlinesources':
                             options.inlineSources = setting.value === 'true';
+                            break;
+
+                        case 'jsx':
+                            options.jsx = setting.value.toLowerCase() === 'react' ? ts.JsxEmit.React :
+                                          setting.value.toLowerCase() === 'preserve' ? ts.JsxEmit.Preserve :
+                                          ts.JsxEmit.None;
                             break;
 
                         default:
                             throw new Error('Unsupported compiler setting ' + setting.flag);
                     }
                 });
-                
+
                 var fileOutputs: GeneratedFile[] = [];
-                
+
                 var programFiles = inputFiles.concat(includeBuiltFiles).map(file => file.unitName);
                 var compilerHost = createCompilerHost(
                     inputFiles.concat(includeBuiltFiles).concat(otherFiles),
@@ -1222,7 +1228,7 @@ module Harness {
                         }
 
                         var dTsFileName = ts.removeFileExtension(sourceFileName) + ".d.ts";
-                        
+
                         return ts.forEach(result.declFilesCode, declFile => declFile.fileName === dTsFileName ? declFile : undefined);
                     }
 
@@ -1420,12 +1426,19 @@ module Harness {
             return stringEndsWith(fileName, '.ts');
         }
 
+        export function isTSX(fileName: string) {
+            return stringEndsWith(fileName, '.tsx');
+        }
+
         export function isDTS(fileName: string) {
             return stringEndsWith(fileName, '.d.ts');
         }
 
         export function isJS(fileName: string) {
             return stringEndsWith(fileName, '.js');
+        }
+        export function isJSX(fileName: string) {
+            return stringEndsWith(fileName, '.jsx');
         }
 
         export function isJSMap(fileName: string) {
@@ -1447,7 +1460,7 @@ module Harness {
                     if (isDTS(emittedFile.fileName)) {
                         // .d.ts file, add to declFiles emit
                         this.declFilesCode.push(emittedFile);
-                    } else if (isJS(emittedFile.fileName)) {
+                    } else if (isJS(emittedFile.fileName) || isJSX(emittedFile.fileName)) {
                         // .js file, add to files
                         this.files.push(emittedFile);
                     } else if (isJSMap(emittedFile.fileName)) {
@@ -1495,7 +1508,7 @@ module Harness {
             "includebuiltfile", "suppressimplicitanyindexerrors", "stripinternal",
             "isolatedmodules", "inlinesourcemap", "maproot", "sourceroot",
             "inlinesources", "emitdecoratormetadata", "experimentaldecorators",
-            "skipdefaultlibcheck"];
+            "skipdefaultlibcheck", "jsx"];
 
         function extractCompilerSettings(content: string): CompilerSetting[] {
 
@@ -1619,9 +1632,9 @@ module Harness {
 
         function baselinePath(fileName: string, type: string, baselineFolder: string, subfolder?: string) {
             if (subfolder !== undefined) {
-                return Harness.userSpecifiedroot + baselineFolder + '/' +  subfolder + '/' + type + '/' + fileName;
+                return Harness.userSpecifiedroot + baselineFolder + '/' + subfolder + '/' + type + '/' + fileName;
             } else {
-                return Harness.userSpecifiedroot + baselineFolder + '/'  + type + '/' + fileName;
+                return Harness.userSpecifiedroot + baselineFolder + '/' + type + '/' + fileName;
             }
         }
 
@@ -1737,7 +1750,7 @@ module Harness {
         }
     }
 
-    if (Error) (<any>Error).stackTraceLimit = 1;
+    if (Error) (<any>Error).stackTraceLimit = 10;
 }
 
 // TODO: not sure why Utils.evalFile isn't working with this, eventually will concat it like old compiler instead of eval
