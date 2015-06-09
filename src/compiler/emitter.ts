@@ -5389,10 +5389,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 emitSetters(exportStarFunction);
                 writeLine();
                 emitExecute(node, startIndex);
-                emitTempDeclarations(/*newLine*/ true)
                 decreaseIndent();
                 writeLine();
                 write("}"); // return
+                emitTempDeclarations(/*newLine*/ true)
             }
 
             function emitSetters(exportStarFunction: string) {
