@@ -28,7 +28,6 @@
 
 // this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
 edit.insert('');
-debugger;
 goTo.marker('1');
 verify.completionListContains("multiM", "namespace multiM", "this is multi declare namespace\nthi is multi namespace 2\nthis is multi namespace 3 comment");
 
