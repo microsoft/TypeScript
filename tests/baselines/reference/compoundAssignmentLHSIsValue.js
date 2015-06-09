@@ -123,7 +123,7 @@ foo() += value;
 (foo()) += value;
 
 //// [compoundAssignmentLHSIsValue.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -156,7 +156,6 @@ this += value;
 // identifiers: module, class, enum, function
 var M;
 (function (M) {
-    M.a;
 })(M || (M = {}));
 M *= value;
 M += value;

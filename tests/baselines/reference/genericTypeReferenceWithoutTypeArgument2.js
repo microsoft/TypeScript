@@ -40,7 +40,7 @@ var k = <M.E>null;
 //// [genericTypeReferenceWithoutTypeArgument2.js]
 // it is an error to use a generic type without type arguments
 // all of these are errors 
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;

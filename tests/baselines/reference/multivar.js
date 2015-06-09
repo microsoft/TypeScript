@@ -51,7 +51,7 @@ var a, b, c;
 var x = 1, y = 2, z = 3;
 var m2;
 (function (m2) {
-    m2.a, m2.b2 = 10, m2.b;
+    m2.b2 = 10;
     var m1;
     var a2, b22 = 10, b222;
     var m3;

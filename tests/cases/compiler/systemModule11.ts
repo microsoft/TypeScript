@@ -1,5 +1,5 @@
 // @module: system
-// @separateCompilation: true
+// @isolatedModules: true
 
 // set of tests cases that checks generation of local storage for exported names
 

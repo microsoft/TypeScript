@@ -87,6 +87,45 @@ declare module ts.server.protocol {
         file: string;
     }
 
+    /** 
+      * Arguments for ProjectInfoRequest request.
+      */
+    export interface ProjectInfoRequestArgs extends FileRequestArgs {
+        /**
+          * Indicate if the file name list of the project is needed
+          */
+        needFileNameList: boolean;
+    }
+
+    /**
+      * A request to get the project information of the current file
+      */
+    export interface ProjectInfoRequest extends Request {
+        arguments: ProjectInfoRequestArgs
+    }
+
+    /** 
+      * Response message body for "projectInfo" request
+      */
+    export interface ProjectInfo {
+        /**
+          * For configured project, this is the normalized path of the 'tsconfig.json' file
+          * For inferred project, this is undefined
+          */
+        configFileName: string;
+        /**
+          * The list of normalized file name in the project, including 'lib.d.ts'
+          */
+        fileNameList?: string[];
+    }
+
+    /** 
+      * Response message for "projectInfo" request
+      */
+    export interface ProjectInfoResponse extends Response {
+        body?: ProjectInfo;
+    }
+
     /**
       * Request whose sole parameter is a file name.
       */
@@ -126,6 +165,14 @@ declare module ts.server.protocol {
     }
 
     /**
+      * Go to type request; value of command field is
+      * "typeDefinition". Return response giving the file locations that
+      * define the type for the symbol found in file at location line, col.
+      */
+    export interface TypeDefinitionRequest extends FileLocationRequest {
+    }
+
+    /**
       * Location in source code expressed as (one-based) line and character offset.
       */
     export interface Location {
@@ -162,6 +209,13 @@ declare module ts.server.protocol {
       * Definition response message.  Gives text range for definition.
       */
     export interface DefinitionResponse extends Response {
+        body?: FileSpan[];
+    }
+
+    /**
+      * Definition response message.  Gives text range for definition.
+      */
+    export interface TypeDefinitionResponse extends Response {
         body?: FileSpan[];
     }
 

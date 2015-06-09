@@ -67,14 +67,28 @@ module ts {
             error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_or_umd
         },
         {
+            name: "newLine",
+            type: {
+                "crlf": NewLineKind.CarriageReturnLineFeed,
+                "lf": NewLineKind.LineFeed
+            },
+            description: Diagnostics.Specifies_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
+            paramType: Diagnostics.NEWLINE,
+            error: Diagnostics.Argument_for_newLine_option_must_be_CRLF_or_LF
+        },
+        {
             name: "noEmit",
             type: "boolean",
             description: Diagnostics.Do_not_emit_outputs,
         },
         {
+            name: "noEmitHelpers",
+            type: "boolean"
+        },
+        {
             name: "noEmitOnError",
             type: "boolean",
-            description: Diagnostics.Do_not_emit_outputs_if_any_type_checking_errors_were_reported,
+            description: Diagnostics.Do_not_emit_outputs_if_any_errors_were_reported,
         },
         {
             name: "noImplicitAny",
@@ -87,6 +101,10 @@ module ts {
         },
         {
             name: "noResolve",
+            type: "boolean",
+        },
+        {
+            name: "skipDefaultLibCheck",
             type: "boolean",
         },
         {
@@ -128,7 +146,7 @@ module ts {
             paramType: Diagnostics.LOCATION,
         },
         {
-            name: "separateCompilation",
+            name: "isolatedModules",
             type: "boolean",
         },
         {
@@ -175,9 +193,15 @@ module ts {
             description: Diagnostics.Watch_input_files,
         },
         {
+            name: "experimentalDecorators",
+            type: "boolean",
+            description: Diagnostics.Enables_experimental_support_for_ES7_decorators
+        },
+        {
             name: "emitDecoratorMetadata",
             type: "boolean",
-            experimental: true
+            experimental: true,
+            description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
         }
     ];
 
@@ -329,7 +353,7 @@ module ts {
 
         return {
             options: getCompilerOptions(),
-            fileNames: getFiles(),
+            fileNames: getFileNames(),
             errors
         };
 
@@ -375,23 +399,24 @@ module ts {
             return options;
         }
 
-        function getFiles(): string[] {
-            var files: string[] = [];
+        function getFileNames(): string[] {
+            var fileNames: string[] = [];
             if (hasProperty(json, "files")) {
                 if (json["files"] instanceof Array) {
-                    var files = map(<string[]>json["files"], s => combinePaths(basePath, s));
+                    fileNames = map(<string[]>json["files"], s => combinePaths(basePath, s));
                 }
             }
             else {
-                var sysFiles = host.readDirectory(basePath, ".ts");
+                var exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
+                var sysFiles = host.readDirectory(basePath, ".ts", exclude);
                 for (var i = 0; i < sysFiles.length; i++) {
                     var name = sysFiles[i];
                     if (!fileExtensionIs(name, ".d.ts") || !contains(sysFiles, name.substr(0, name.length - 5) + ".ts")) {
-                        files.push(name);
+                        fileNames.push(name);
                     }
                 }
             }
-            return files;
+            return fileNames;
         }
     }
 }

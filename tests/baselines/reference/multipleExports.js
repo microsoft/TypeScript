@@ -16,7 +16,6 @@ export module M {
 var M;
 (function (M) {
     M.v = 0;
-    M.x;
 })(M = exports.M || (exports.M = {}));
 var x = 0;
 var M;

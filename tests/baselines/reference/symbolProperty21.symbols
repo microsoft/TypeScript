@@ -5,14 +5,14 @@ interface I<T, U> {
 >U : Symbol(U, Decl(symbolProperty21.ts, 0, 14))
 
     [Symbol.unscopables]: T;
->Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 1254, 24))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
->unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 1254, 24))
+>Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 1284, 24))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1292, 11))
+>unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 1284, 24))
 >T : Symbol(T, Decl(symbolProperty21.ts, 0, 12))
 
     [Symbol.isConcatSpreadable]: U;
 >Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1230, 24))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1292, 11))
 >isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1230, 24))
 >U : Symbol(U, Decl(symbolProperty21.ts, 0, 14))
 }
@@ -35,17 +35,17 @@ foo({
 
     [Symbol.isConcatSpreadable]: "",
 >Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1230, 24))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1292, 11))
 >isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 1230, 24))
 
     [Symbol.toPrimitive]: 0,
->Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 1242, 21))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
->toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 1242, 21))
+>Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 1272, 18))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1292, 11))
+>toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 1272, 18))
 
     [Symbol.unscopables]: true
->Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 1254, 24))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1262, 11))
->unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 1254, 24))
+>Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 1284, 24))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 1186, 52), Decl(lib.d.ts, 1292, 11))
+>unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 1284, 24))
 
 });

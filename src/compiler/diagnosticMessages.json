@@ -467,7 +467,7 @@
         "category": "Error",
         "code": 1162
     },
-    "'yield' expression must be contained_within a generator declaration.": {
+    "A 'yield' expression is only allowed in a generator body.": {
         "category": "Error",
         "code": 1163
     },
@@ -647,11 +647,11 @@
         "category": "Error",
         "code": 1207
     },
-    "Cannot compile namespaces when the '--separateCompilation' flag is provided.": {
+    "Cannot compile namespaces when the '--isolatedModules' flag is provided.": {
         "category": "Error",
         "code": 1208
     },
-    "Ambient const enums are not allowed when the '--separateCompilation' flag is provided.": {
+    "Ambient const enums are not allowed when the '--isolatedModules' flag is provided.": {
         "category": "Error",
         "code": 1209
     },
@@ -683,6 +683,55 @@
         "category": "Error",
         "code": 1218
     },
+    "Experimental support for decorators is a feature that is subject to change in a future release. Specify '--experimentalDecorators' to remove this warning.": {
+        "category": "Error",
+        "code": 1219
+    },    
+    "Generators are only available when targeting ECMAScript 6 or higher.": {
+        "category": "Error",
+        "code": 1220
+    },
+    "Generators are not allowed in an ambient context.": {
+        "category": "Error",
+        "code": 1221
+    },
+    "An overload signature cannot be declared as a generator.": {
+        "category": "Error",
+        "code": 1222
+    },
+    "'{0}' tag already specified.": {
+        "category": "Error",
+        "code": 1223
+    },
+    "Signature '{0}' must have a type predicate.": {
+        "category": "Error",
+        "code": 1224
+    },
+    "Cannot find parameter '{0}'.": {
+        "category": "Error",
+        "code": 1225
+    },
+    "Type predicate '{0}' is not assignable to '{1}'.": {
+        "category": "Error",
+        "code": 1226
+    },
+    "Parameter '{0}' is not in the same position as parameter '{1}'.": {
+        "category": "Error",
+        "code": 1227
+    },
+    "A type predicate is only allowed in return type position for functions and methods.": {
+        "category": "Error",
+        "code": 1228
+    },
+    "A type predicate cannot reference a rest parameter.": {
+        "category": "Error",
+        "code": 1229
+    },
+    "A type predicate cannot reference element '{0}' in a binding pattern.": {
+        "category": "Error",
+        "code": 1230
+    },
+
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1324,7 +1373,7 @@
         "category": "Error",
         "code": 2471
     },
-    "Spread operator in 'new' expressions is only available when targeting ECMAScript 6 and higher.": {
+    "Spread operator in 'new' expressions is only available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
         "code": 2472
     },
@@ -1440,11 +1489,26 @@
         "category": "Error",
         "code": 2501
     },
-    "Cannot create an instance of the abstract class '{0}'": {
+    "'{0}' is referenced directly or indirectly in its own type annotation.": {
         "category": "Error",
         "code": 2502
     },
-
+    "Cannot find namespace '{0}'.": {
+        "category": "Error",
+        "code": 2503
+    },
+    "No best common type exists among yield expressions.": {
+        "category": "Error",
+        "code": 2504
+    },
+    "A generator cannot have a 'void' type annotation.": {
+        "category": "Error",
+        "code": 2505
+    },
+    "Cannot create an instance of the abstract class '{0}'": {
+        "category": "Error",
+        "code": 2506
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -1761,11 +1825,11 @@
         "category": "Error",
         "code": 5033
     },
-    "Option 'mapRoot' cannot be specified without specifying 'sourcemap' option.": {
+    "Option 'mapRoot' cannot be specified without specifying 'sourceMap' option.": {
         "category": "Error",
         "code": 5038
     },
-    "Option 'sourceRoot' cannot be specified without specifying 'sourcemap' option.": {
+    "Option 'sourceRoot' cannot be specified without specifying 'sourceMap' option.": {
         "category": "Error",
         "code": 5039
     },
@@ -1781,23 +1845,23 @@
         "category": "Error",
         "code": 5042
     },
-    "Option 'sourceMap' cannot be specified with option 'separateCompilation'.": {
+    "Option 'sourceMap' cannot be specified with option 'isolatedModules'.": {
         "category": "Error",
         "code": 5043
     },
-    "Option 'declaration' cannot be specified with option 'separateCompilation'.": {
+    "Option 'declaration' cannot be specified with option 'isolatedModules'.": {
         "category": "Error",
         "code": 5044
     },
-    "Option 'noEmitOnError' cannot be specified with option 'separateCompilation'.": {
+    "Option 'noEmitOnError' cannot be specified with option 'isolatedModules'.": {
         "category": "Error",
         "code": 5045
     },
-    "Option 'out' cannot be specified with option 'separateCompilation'.": {
+    "Option 'out' cannot be specified with option 'isolatedModules'.": {
         "category": "Error",
         "code": 5046
     },
-    "Option 'separateCompilation' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher.": {
+    "Option 'isolatedModules' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher.": {
         "category": "Error",
         "code": 5047
     },
@@ -1846,7 +1910,7 @@
         "category": "Message",
         "code": 6007
     },
-    "Do not emit outputs if any type checking errors were reported.": {
+    "Do not emit outputs if any errors were reported.": {
         "category": "Message",
         "code": 6008
     },
@@ -1978,7 +2042,7 @@
         "category": "Error",
         "code": 6053
     },
-    "File '{0}' must have extension '.ts' or '.d.ts'.": {
+    "File '{0}' has unsupported extension. The only supported extensions are {1}.": {
         "category": "Error",
         "code": 6054
     },
@@ -2002,7 +2066,30 @@
         "category": "Error",
         "code": 6059
     },
-
+    "Specifies the end of line sequence to be used when emitting files: 'CRLF' (dos) or 'LF' (unix).": {
+        "category": "Message",
+        "code": 6060
+    },
+    "NEWLINE": { 
+        "category": "Message", 
+        "code": 6061
+    },
+    "Argument for '--newLine' option must be 'CRLF' or 'LF'.": {
+        "category": "Error", 
+        "code": 6062
+    },
+    "Option 'experimentalDecorators' must also be specified when option 'emitDecoratorMetadata' is specified.": {
+        "category": "Error",
+        "code": 6064
+    },
+    "Enables experimental support for ES7 decorators.": {
+        "category": "Message",
+        "code": 6065
+    },
+    "Enables experimental support for emitting type metadata for decorators.": {
+        "category": "Message",
+        "code": 6066
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -2052,11 +2139,7 @@
         "category": "Error",
         "code": 7020
     },
-    "'{0}' implicitly has type 'any' because it is referenced directly or indirectly in its own type annotation.": {
-        "category": "Error",
-        "code": 7021
-    },
-    "'{0}' implicitly has type 'any' because it is does not have a type annotation and is referenced directly or indirectly in its own initializer.": {
+    "'{0}' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.": {
         "category": "Error",
         "code": 7022
     },
@@ -2067,6 +2150,10 @@
     "Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.": {
         "category": "Error",
         "code": 7024
+    },
+    "Generator implicitly has type '{0}' because it does not yield any values. Consider supplying a return type.": {
+        "category": "Error",
+        "code": 7025
     },
     "You cannot rename this element.": {
         "category": "Error",
@@ -2120,10 +2207,6 @@
         "category": "Error",
         "code": 8012
     },
-    "'?' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8013
-    },
     "'property declarations' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8014
@@ -2141,14 +2224,6 @@
         "code": 8017
     },
 
-    "'yield' expressions are not currently supported.": {
-        "category": "Error",
-        "code": 9000
-    },
-    "Generators are not currently supported.": {
-        "category": "Error",
-        "code": 9001
-    },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.": {
         "category": "Error",
         "code": 9002
@@ -2156,9 +2231,5 @@
     "'class' expressions are not currently supported.": {
         "category": "Error",
         "code": 9003
-    },
-    "'class' declarations are only supported directly inside a module or as a top level declaration.": {
-        "category": "Error",
-        "code": 9004
     }
 }

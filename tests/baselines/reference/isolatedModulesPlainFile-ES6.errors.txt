@@ -1,0 +1,10 @@
+tests/cases/compiler/isolatedModulesPlainFile-ES6.ts(2,1): error TS1208: Cannot compile namespaces when the '--isolatedModules' flag is provided.
+
+
+==== tests/cases/compiler/isolatedModulesPlainFile-ES6.ts (1 errors) ====
+    
+    declare function run(a: number): void;
+    ~~~~~~~
+!!! error TS1208: Cannot compile namespaces when the '--isolatedModules' flag is provided.
+    run(1);
+    

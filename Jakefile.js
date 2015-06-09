@@ -123,12 +123,14 @@ var harnessSources = [
     return path.join(harnessDirectory, f);
 }).concat([
     "incrementalParser.ts",
+    "jsDocParsing.ts",
     "services/colorization.ts",
     "services/documentRegistry.ts",
     "services/preProcessFile.ts",
     "services/patternMatcher.ts",
     "versionCache.ts",
-    "convertToBase64.ts"
+    "convertToBase64.ts",
+    "transpile.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -147,7 +149,7 @@ var librarySourceMap = [
         { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
         { target: "lib.d.ts", sources: ["core.d.ts", "extensions.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
         { target: "lib.core.es6.d.ts", sources: ["core.d.ts", "es6.d.ts"]},
-        { target: "lib.es6.d.ts", sources: ["core.d.ts", "es6.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"]},
+        { target: "lib.es6.d.ts", sources: ["core.d.ts", "es6.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
 ];
 
 var libraryTargets = librarySourceMap.map(function (f) {
@@ -505,7 +507,7 @@ function cleanTestDirs() {
 // used to pass data from jake command line directly to run.js
 function writeTestConfigFile(tests, testConfigFile) {
     console.log('Running test(s): ' + tests);
-    var testConfigContents = '{\n' + '\ttest: [\'' + tests + '\']\n}';
+    var testConfigContents = JSON.stringify({ test: [tests]});
     fs.writeFileSync('test.config', testConfigContents);
 }
 

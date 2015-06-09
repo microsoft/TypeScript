@@ -1,0 +1,29 @@
+tests/cases/conformance/constEnums/constEnum2.ts(11,9): error TS2474: In 'const' enum declarations member initializer must be constant expression.
+tests/cases/conformance/constEnums/constEnum2.ts(12,9): error TS2474: In 'const' enum declarations member initializer must be constant expression.
+tests/cases/conformance/constEnums/constEnum2.ts(13,5): error TS1005: ',' expected.
+tests/cases/conformance/constEnums/constEnum2.ts(13,9): error TS2474: In 'const' enum declarations member initializer must be constant expression.
+
+
+==== tests/cases/conformance/constEnums/constEnum2.ts (4 errors) ====
+    
+    // An enum declaration that specifies a const modifier is a constant enum declaration.
+    // In a constant enum declaration, all members must have constant values and
+    // it is an error for a member declaration to specify an expression that isn't classified as a constant enum expression.
+    
+    // Error : not a constant enum expression
+    
+    const CONST = 9000 % 2;
+    const enum D {
+        d = 10,
+        e = 199 * Math.floor(Math.random() * 1000),
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2474: In 'const' enum declarations member initializer must be constant expression.
+        f = d - (100 * Math.floor(Math.random() % 8))
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2474: In 'const' enum declarations member initializer must be constant expression.
+        g = CONST,
+        ~
+!!! error TS1005: ',' expected.
+            ~~~~~
+!!! error TS2474: In 'const' enum declarations member initializer must be constant expression.
+    }

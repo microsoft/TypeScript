@@ -44,10 +44,5 @@ var foo;
         C2.prototype.test = function () { return true; };
         return C2;
     })();
-    // None of the types are exported, so per section 10.3, should all be errors
-    foo.e;
-    foo.f;
-    foo.g;
-    foo.h;
 })(foo || (foo = {}));
 var y = foo.g; // Exported variable 'y' has or is using private type 'foo.C2'.

@@ -49,12 +49,9 @@ class D extends C {
     }
 }
 
-// Only supported in when target is ES6
-var c = new C(1, 2, ...a);
-
 
 //// [callWithSpread.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -112,6 +109,4 @@ var D = (function (_super) {
     };
     return D;
 })(C);
-// Only supported in when target is ES6
-var c = new C(1, 2, ...a);
 var _a, _b, _c;

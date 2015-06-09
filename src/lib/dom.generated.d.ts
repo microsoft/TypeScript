@@ -3697,6 +3697,8 @@ interface HTMLCanvasElement extends HTMLElement {
       * Returns an object that provides methods and properties for drawing and manipulating images and graphics on a canvas element in a document. A context object includes information about colors, line widths, fonts, and other graphic parameters that can be drawn on a canvas.
       * @param contextId The identifier (ID) of the type of canvas to create. Internet Explorer 9 and Internet Explorer 10 support only a 2-D context using canvas.getContext("2d"); IE11 Preview also supports 3-D or WebGL context using canvas.getContext("experimental-webgl");
       */
+    getContext(contextId: "2d"): CanvasRenderingContext2D;
+    getContext(contextId: "experimental-webgl"): WebGLRenderingContext;
     getContext(contextId: string, ...args: any[]): CanvasRenderingContext2D | WebGLRenderingContext;
     /**
       * Returns a blob object encoded as a Portable Network Graphics (PNG) format from a canvas image or drawing.
@@ -7675,10 +7677,10 @@ declare var MediaQueryList: {
 interface MediaSource extends EventTarget {
     activeSourceBuffers: SourceBufferList;
     duration: number;
-    readyState: string;
+    readyState: number;
     sourceBuffers: SourceBufferList;
     addSourceBuffer(type: string): SourceBuffer;
-    endOfStream(error?: string): void;
+    endOfStream(error?: number): void;
     removeSourceBuffer(sourceBuffer: SourceBuffer): void;
 }
 
@@ -8407,7 +8409,7 @@ declare var PopStateEvent: {
 
 interface Position {
     coords: Coordinates;
-    timestamp: Date;
+    timestamp: number;
 }
 
 declare var Position: {
@@ -11088,9 +11090,17 @@ interface WebGLRenderingContext {
     stencilMaskSeparate(face: number, mask: number): void;
     stencilOp(fail: number, zfail: number, zpass: number): void;
     stencilOpSeparate(face: number, fail: number, zfail: number, zpass: number): void;
+    texImage2D(target: number, level: number, internalformat: number, width: number, height: number, border: number, format: number, type: number, pixels: ArrayBufferView): void;
+    texImage2D(target: number, level: number, internalformat: number, format: number, type: number, image: HTMLImageElement): void;
+    texImage2D(target: number, level: number, internalformat: number, format: number, type: number, canvas: HTMLCanvasElement): void;
+    texImage2D(target: number, level: number, internalformat: number, format: number, type: number, video: HTMLVideoElement): void;
     texImage2D(target: number, level: number, internalformat: number, format: number, type: number, pixels: ImageData): void;
     texParameterf(target: number, pname: number, param: number): void;
     texParameteri(target: number, pname: number, param: number): void;
+    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, type: number, pixels: ArrayBufferView): void;
+    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, image: HTMLImageElement): void;
+    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, canvas: HTMLCanvasElement): void;
+    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, video: HTMLVideoElement): void;
     texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, pixels: ImageData): void;
     uniform1f(location: WebGLUniformLocation, x: number): void;
     uniform1fv(location: WebGLUniformLocation, v: any): void;
@@ -12178,6 +12188,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     overrideMimeType(mime: string): void;
     send(data?: Document): void;
     send(data?: string): void;
+    send(data?: any): void;
     setRequestHeader(header: string, value: string): void;
     DONE: number;
     HEADERS_RECEIVED: number;
@@ -12329,14 +12340,17 @@ interface DocumentEvent {
     createEvent(eventInterface:"AriaRequestEvent"): AriaRequestEvent;
     createEvent(eventInterface:"AudioProcessingEvent"): AudioProcessingEvent;
     createEvent(eventInterface:"BeforeUnloadEvent"): BeforeUnloadEvent;
+    createEvent(eventInterface:"ClipboardEvent"): ClipboardEvent;
     createEvent(eventInterface:"CloseEvent"): CloseEvent;
     createEvent(eventInterface:"CommandEvent"): CommandEvent;
     createEvent(eventInterface:"CompositionEvent"): CompositionEvent;
+    createEvent(eventInterface:"CustomEvent"): CustomEvent;
     createEvent(eventInterface:"DeviceMotionEvent"): DeviceMotionEvent;
     createEvent(eventInterface:"DeviceOrientationEvent"): DeviceOrientationEvent;
     createEvent(eventInterface:"DragEvent"): DragEvent;
     createEvent(eventInterface:"ErrorEvent"): ErrorEvent;
     createEvent(eventInterface:"Event"): Event;
+    createEvent(eventInterface:"Events"): Event;
     createEvent(eventInterface:"FocusEvent"): FocusEvent;
     createEvent(eventInterface:"GamepadEvent"): GamepadEvent;
     createEvent(eventInterface:"HashChangeEvent"): HashChangeEvent;
@@ -12351,8 +12365,10 @@ interface DocumentEvent {
     createEvent(eventInterface:"MSSiteModeEvent"): MSSiteModeEvent;
     createEvent(eventInterface:"MessageEvent"): MessageEvent;
     createEvent(eventInterface:"MouseEvent"): MouseEvent;
+    createEvent(eventInterface:"MouseEvents"): MouseEvent;
     createEvent(eventInterface:"MouseWheelEvent"): MouseWheelEvent;
     createEvent(eventInterface:"MutationEvent"): MutationEvent;
+    createEvent(eventInterface:"MutationEvents"): MutationEvent;
     createEvent(eventInterface:"NavigationCompletedEvent"): NavigationCompletedEvent;
     createEvent(eventInterface:"NavigationEvent"): NavigationEvent;
     createEvent(eventInterface:"NavigationEventWithReferrer"): NavigationEventWithReferrer;
@@ -12363,6 +12379,7 @@ interface DocumentEvent {
     createEvent(eventInterface:"PopStateEvent"): PopStateEvent;
     createEvent(eventInterface:"ProgressEvent"): ProgressEvent;
     createEvent(eventInterface:"SVGZoomEvent"): SVGZoomEvent;
+    createEvent(eventInterface:"SVGZoomEvents"): SVGZoomEvent;
     createEvent(eventInterface:"ScriptNotifyEvent"): ScriptNotifyEvent;
     createEvent(eventInterface:"StorageEvent"): StorageEvent;
     createEvent(eventInterface:"TextEvent"): TextEvent;
@@ -12370,6 +12387,7 @@ interface DocumentEvent {
     createEvent(eventInterface:"TrackEvent"): TrackEvent;
     createEvent(eventInterface:"TransitionEvent"): TransitionEvent;
     createEvent(eventInterface:"UIEvent"): UIEvent;
+    createEvent(eventInterface:"UIEvents"): UIEvent;
     createEvent(eventInterface:"UnviewableContentIdentifiedEvent"): UnviewableContentIdentifiedEvent;
     createEvent(eventInterface:"WebGLContextEvent"): WebGLContextEvent;
     createEvent(eventInterface:"WheelEvent"): WheelEvent;

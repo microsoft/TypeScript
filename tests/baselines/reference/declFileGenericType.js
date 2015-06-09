@@ -40,7 +40,7 @@ export var j = C.F6;
 
 
 //// [declFileGenericType.js]
-var __extends = this.__extends || function (d, b) {
+var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -80,7 +80,6 @@ var C;
     })();
     C.D = D;
 })(C = exports.C || (exports.C = {}));
-exports.a;
 exports.b = C.F;
 exports.c = C.F2;
 exports.d = C.F3;
