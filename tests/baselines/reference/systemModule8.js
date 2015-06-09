@@ -65,6 +65,6 @@ System.register([], function(exports_1) {
                 exports_1("x", x = _b[_i][0]);
             }
         }
-        var _a;
     }
+    var _a;
 });
