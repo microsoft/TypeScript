@@ -3603,7 +3603,8 @@ module ts {
         function getTypeFromTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments): Type {
             let links = getNodeLinks(node);
             if (!links.resolvedType) {
-                // We only support expressions that are simple qualified names. For other expressions this produces undefined.                let typeNameOrExpression = node.kind === SyntaxKind.TypeReference ? (<TypeReferenceNode>node).typeName :
+                // We only support expressions that are simple qualified names. For other expressions this produces undefined.
+                let typeNameOrExpression = node.kind === SyntaxKind.TypeReference ? (<TypeReferenceNode>node).typeName :
                     isSupportedExpressionWithTypeArguments(<ExpressionWithTypeArguments>node) ? (<ExpressionWithTypeArguments>node).expression :
                     undefined;
                 let symbol = typeNameOrExpression && resolveEntityName(typeNameOrExpression, SymbolFlags.Type) || unknownSymbol;
@@ -5255,14 +5256,14 @@ module ts {
                 if (source.typePredicate && target.typePredicate) {
                     if (target.typePredicate.parameterIndex === source.typePredicate.parameterIndex) {
                         // Return types from type predicates are treated as booleans. In order to infer types
-                        // from type predicates we would need to infer from the type of type predicates. Since
-                        // we can't infer any type information from the return types — we can just add a return
-                        // statement after the below infer type statement.
+                        // from type predicates we would need to infer using the type within the type predicate
+                        // (i.e. 'Foo' from 'x is Foo').
                         inferFromTypes(source.typePredicate.type, target.typePredicate.type);
                     }
-                    return;
                 }
-                inferFromTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
+                else {
+                    inferFromTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
+                }
             }
 
             function inferFromIndexTypes(source: Type, target: Type, sourceKind: IndexKind, targetKind: IndexKind) {
