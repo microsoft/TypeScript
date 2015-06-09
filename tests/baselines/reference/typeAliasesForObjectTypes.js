@@ -21,6 +21,3 @@ var C1 = (function () {
     }
     return C1;
 })();
-{
-    x: T;
-}

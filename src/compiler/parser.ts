@@ -258,6 +258,7 @@ module ts {
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<TypeAliasDeclaration>node).name) ||
+                    visitNodes(cbNodes, (<TypeAliasDeclaration>node).typeParameters) ||
                     visitNode(cbNode, (<TypeAliasDeclaration>node).type);
             case SyntaxKind.EnumDeclaration:
                 return visitNodes(cbNodes, node.decorators) ||
@@ -4591,6 +4592,7 @@ module ts {
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.TypeKeyword);
             node.name = parseIdentifier();
+            node.typeParameters = parseTypeParameters();
             parseExpected(SyntaxKind.EqualsToken);
             node.type = parseType();
             parseSemicolon();
