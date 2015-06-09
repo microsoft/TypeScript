@@ -1657,6 +1657,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function parenthesizeForAccess(expr: Expression): LeftHandSideExpression {
+                // When diagnosing whether the expression needs parentheses, the decision should be based
+                // on the innermost expression in a chain of nested type assertions.
+                while (expr.kind === SyntaxKind.TypeAssertionExpression) {
+                    expr = (<TypeAssertion>expr).expression;
+                }
+
                 // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
                 // to parenthesize the expression before a dot. The known exceptions are:
                 //
@@ -1665,7 +1671,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 //    NumberLiteral
                 //       1.x            -> not the same as (1).x
                 //
-                if (isLeftHandSideExpression(expr) && expr.kind !== SyntaxKind.NewExpression && expr.kind !== SyntaxKind.NumericLiteral) {
+                if (isLeftHandSideExpression(expr) &&
+                    expr.kind !== SyntaxKind.NewExpression &&
+                    expr.kind !== SyntaxKind.NumericLiteral) {
+
                     return <LeftHandSideExpression>expr;
                 }
                 let node = <ParenthesizedExpression>createSynthesizedNode(SyntaxKind.ParenthesizedExpression);
@@ -1724,7 +1733,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function tryEmitConstantValue(node: PropertyAccessExpression | ElementAccessExpression): boolean {
-                if (compilerOptions.separateCompilation) {
+                if (compilerOptions.isolatedModules) {
                     // do not inline enum values in separate compilation mode
                     return false;
                 }
@@ -1946,7 +1955,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function emitParenExpression(node: ParenthesizedExpression) {
-                if (!node.parent || node.parent.kind !== SyntaxKind.ArrowFunction) {
+                // If the node is synthesized, it means the emitter put the parentheses there,
+                // not the user. If we didn't want them, the emitter would not have put them
+                // there.
+                if (!nodeIsSynthesized(node) && node.parent.kind !== SyntaxKind.ArrowFunction) {
                     if (node.expression.kind === SyntaxKind.TypeAssertionExpression) {
                         let operand = (<TypeAssertion>node.expression).expression;
 
@@ -3160,7 +3172,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function emitRestParameter(node: FunctionLikeDeclaration) {
-                if (languageVersion < ScriptTarget.ES6 && hasRestParameters(node)) {
+                if (languageVersion < ScriptTarget.ES6 && hasRestParameter(node)) {
                     let restIndex = node.parameters.length - 1;
                     let restParam = node.parameters[restIndex];
 
@@ -3288,7 +3300,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 write("(");
                 if (node) {
                     let parameters = node.parameters;
-                    let omitCount = languageVersion < ScriptTarget.ES6 && hasRestParameters(node) ? 1 : 0;
+                    let omitCount = languageVersion < ScriptTarget.ES6 && hasRestParameter(node) ? 1 : 0;
                     emitList(parameters, 0, parameters.length - omitCount, /*multiLine*/ false, /*trailingComma*/ false);
                 }
                 write(")");
@@ -4385,7 +4397,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
             function shouldEmitEnumDeclaration(node: EnumDeclaration) {
                 let isConstEnum = isConst(node);
-                return !isConstEnum || compilerOptions.preserveConstEnums || compilerOptions.separateCompilation;
+                return !isConstEnum || compilerOptions.preserveConstEnums || compilerOptions.isolatedModules;
             }
 
             function emitEnumDeclaration(node: EnumDeclaration) {
@@ -4446,7 +4458,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         emitDeclarationName(node);
                         write(`", `);
                         emitDeclarationName(node);
-                        write(")");
+                        write(");");
                     }
                     emitExportMemberAssignments(node.name);
                 }
@@ -4490,7 +4502,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function shouldEmitModuleDeclaration(node: ModuleDeclaration) {
-                return isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.separateCompilation);
+                return isInstantiatedModule(node, compilerOptions.preserveConstEnums || compilerOptions.isolatedModules);
             }
 
             function isModuleMergedWithES6Class(node: ModuleDeclaration) {
@@ -4567,7 +4579,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         emitDeclarationName(node);
                         write(`", `);
                         emitDeclarationName(node);
-                        write(")");
+                        write(");");
                     }
                     emitExportMemberAssignments(<Identifier>node.name);
                 }
@@ -5335,10 +5347,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 emitSetters(exportStarFunction);
                 writeLine();
                 emitExecute(node, startIndex);
-                emitTempDeclarations(/*newLine*/ true)
                 decreaseIndent();
                 writeLine();
                 write("}"); // return
+                emitTempDeclarations(/*newLine*/ true)
             }
 
             function emitSetters(exportStarFunction: string) {
@@ -5485,7 +5497,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 Debug.assert(!exportFunctionForFile);
                 // make sure that  name of 'exports' function does not conflict with existing identifiers
                 exportFunctionForFile = makeUniqueName("exports");
-                write("System.register([");
+                write("System.register(");
+                if (node.moduleName) {
+                    write(`"${node.moduleName}", `);
+                }
+                write("[")
                 for (let i = 0; i < externalImports.length; ++i) {
                     let text = getExternalModuleNameText(externalImports[i]);
                     if (i !== 0) {
@@ -5571,8 +5587,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
                 writeLine();
                 write("define(");
-                if (node.amdModuleName) {
-                    write("\"" + node.amdModuleName + "\", ");
+                if (node.moduleName) {
+                    write("\"" + node.moduleName + "\", ");
                 }
                 emitAMDDependencies(node, /*includeNonAmdDependencies*/ true);
                 write(") {");
@@ -5702,7 +5718,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     }
                 }
 
-                if (isExternalModule(node) || compilerOptions.separateCompilation) {
+                if (isExternalModule(node) || compilerOptions.isolatedModules) {
                     if (languageVersion >= ScriptTarget.ES6) {
                         emitES6Module(node, startIndex);
                     }

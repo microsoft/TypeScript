@@ -174,7 +174,7 @@ class ProjectRunner extends RunnerBase {
                 else {
                     var text = getSourceFileText(fileName);
                     if (text !== undefined) {
-                        sourceFile = Harness.Compiler.createSourceFileAndAssertInvariants(fileName, text, languageVersion);
+                        sourceFile = Harness.Compiler.createSourceFileAndAssertInvariants(fileName, text, languageVersion, /*assertInvariants:*/ true);
                     }
                 }
 
@@ -323,9 +323,8 @@ class ProjectRunner extends RunnerBase {
                 sourceFile => {
                     return { unitName: sourceFile.fileName, content: sourceFile.text };
                 });
-            var diagnostics = ts.map(compilerResult.errors, error => Harness.Compiler.getMinimalDiagnostic(error));
 
-            return Harness.Compiler.getErrorBaseline(inputFiles, diagnostics);
+            return Harness.Compiler.getErrorBaseline(inputFiles, compilerResult.errors);
         }
 
         var name = 'Compiling project for ' + testCase.scenario + ': testcase ' + testCaseFileName;

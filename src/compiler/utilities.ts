@@ -963,10 +963,6 @@ module ts {
         }
     }
 
-    export function hasDotDotDotToken(node: Node) {
-         return node && node.kind === SyntaxKind.Parameter && (<ParameterDeclaration>node).dotDotDotToken !== undefined;
-    }
-
     export function hasQuestionToken(node: Node) {
         if (node) {
             switch (node.kind) {
@@ -984,10 +980,6 @@ module ts {
         }
 
         return false;
-    }
-
-    export function hasRestParameters(s: SignatureDeclaration): boolean {
-        return s.parameters.length > 0 && lastOrUndefined(s.parameters).dotDotDotToken !== undefined;
     }
 
     export function isJSDocConstructSignature(node: Node) {
@@ -1653,7 +1645,7 @@ module ts {
             if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
                 // 1. in-browser single file compilation scenario
                 // 2. non .js file
-                return compilerOptions.separateCompilation || !fileExtensionIs(sourceFile.fileName, ".js");
+                return compilerOptions.isolatedModules || !fileExtensionIs(sourceFile.fileName, ".js");
             }
             return false;
         }
@@ -1992,6 +1984,21 @@ module ts {
         }
 
         return result;
+    }
+
+    const carriageReturnLineFeed = "\r\n";
+    const lineFeed = "\n";
+    export function getNewLineCharacter(options: CompilerOptions): string {
+        if (options.newLine === NewLineKind.CarriageReturnLineFeed) {
+            return carriageReturnLineFeed;
+        }
+        else if (options.newLine === NewLineKind.LineFeed) {
+            return lineFeed;
+        }
+        else if (sys) {
+            return sys.newLine
+        }
+        return carriageReturnLineFeed;
     }
 }
 

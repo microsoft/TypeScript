@@ -15,6 +15,42 @@ module ts {
         True  = -1
     }
 
+    export function createFileMap<T>(getCanonicalFileName: (fileName: string) => string): FileMap<T> {
+        let files: Map<T> = {};
+        return {
+            get,
+            set,
+            contains,
+            remove,
+            forEachValue: forEachValueInMap
+        }
+
+        function set(fileName: string, value: T) {
+            files[normalizeKey(fileName)] = value;
+        }
+
+        function get(fileName: string) {
+            return files[normalizeKey(fileName)];
+        }
+
+        function contains(fileName: string) {
+            return hasProperty(files, normalizeKey(fileName));
+        }
+
+        function remove (fileName: string) {
+            let key = normalizeKey(fileName);
+            delete files[key];
+        }
+
+        function forEachValueInMap(f: (value: T) => void) {
+            forEachValue(files, f);
+        }
+
+        function normalizeKey(key: string) {
+            return getCanonicalFileName(normalizeSlashes(key));
+        }
+    }
+
     export const enum Comparison {
         LessThan    = -1,
         EqualTo     = 0,

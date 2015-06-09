@@ -3,6 +3,14 @@ module ts {
         [index: string]: T;
     }
 
+    export interface FileMap<T> {
+        get(fileName: string): T;
+        set(fileName: string, value: T): void;
+        contains(fileName: string): boolean;
+        remove(fileName: string): void;
+        forEachValue(f: (v: T) => void): void;
+    }
+
     export interface TextRange {
         pos: number;
         end: number;
@@ -137,6 +145,7 @@ module ts {
         ConstructorKeyword,
         DeclareKeyword,
         GetKeyword,
+        IsKeyword,
         ModuleKeyword,
         NamespaceKeyword,
         RequireKeyword,
@@ -169,6 +178,7 @@ module ts {
         ConstructSignature,
         IndexSignature,
         // Type
+        TypePredicate,
         TypeReference,
         FunctionType,
         ConstructorType,
@@ -606,6 +616,11 @@ module ts {
         typeArguments?: NodeArray<TypeNode>;
     }
 
+    export interface TypePredicateNode extends TypeNode {
+        parameterName: Identifier;
+        type: TypeNode;
+    }
+
     export interface TypeQueryNode extends TypeNode {
         exprName: EntityName;
     }
@@ -931,6 +946,7 @@ module ts {
 
     export interface TypeAliasDeclaration extends Declaration, Statement {
         name: Identifier;
+        typeParameters?: NodeArray<TypeParameterDeclaration>;
         type: TypeNode;
     }
 
@@ -1134,7 +1150,7 @@ module ts {
         text: string;
 
         amdDependencies: {path: string; name: string}[];
-        amdModuleName: string;
+        moduleName: string;
         referencedFiles: FileReference[];
 
         hasNoDefaultLib: boolean;
@@ -1143,7 +1159,8 @@ module ts {
 
         // The first node that causes this file to be an external module
         /* @internal */ externalModuleIndicator: Node;
-        
+
+        /* @internal */ isDefaultLib: boolean;
         /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
@@ -1168,7 +1185,7 @@ module ts {
     }
 
     export interface ParseConfigHost {
-        readDirectory(rootDir: string, extension: string): string[];
+        readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
     }
 
     export interface WriteFileCallback {
@@ -1197,6 +1214,7 @@ module ts {
         getGlobalDiagnostics(): Diagnostic[];
         getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        /* @internal */ getCompilerOptionsDiagnostics(): Diagnostic[];
 
         /** 
          * Gets a type checker that can be used to semantically analyze source fils in the program.
@@ -1376,6 +1394,12 @@ module ts {
         NotAccessible,
         CannotBeNamed
     }
+    
+    export interface TypePredicate {
+        parameterName: string;
+        parameterIndex: number;
+        type: Type;
+    }
 
     /* @internal */
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
@@ -1422,6 +1446,7 @@ module ts {
     }
 
     export const enum SymbolFlags {
+        None                    = 0,
         FunctionScopedVariable  = 0x00000001,  // Variable (var) or parameter
         BlockScopedVariable     = 0x00000002,  // A block-scoped variable (let or const)
         Property                = 0x00000004,  // Property or enum member
@@ -1491,13 +1516,11 @@ module ts {
 
         ExportHasLocal = Function | Class | Enum | ValueModule,
 
-        HasLocals = Function | Module | Method | Constructor | Accessor | Signature,
         HasExports = Class | Enum | Module,
         HasMembers = Class | Interface | TypeLiteral | ObjectLiteral,
 
         BlockScoped = BlockScopedVariable | Class | Enum,
 
-        IsContainer = HasLocals | HasExports | HasMembers,
         PropertyOrAccessor = Property | Accessor,
         Export = ExportNamespace | ExportType | ExportValue,
     }
@@ -1505,14 +1528,15 @@ module ts {
     export interface Symbol {
         flags: SymbolFlags;                     // Symbol flags
         name: string;                           // Name of symbol
-        /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
-        /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
         declarations?: Declaration[];           // Declarations associated with this symbol
-        /* @internal */ parent?: Symbol;        // Parent symbol
+        valueDeclaration?: Declaration;         // First value declaration of the symbol
+
         members?: SymbolTable;                  // Class, interface or literal instance members
         exports?: SymbolTable;                  // Module exports
+        /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
+        /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
+        /* @internal */ parent?: Symbol;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
-        valueDeclaration?: Declaration;         // First value declaration of the symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
     }
 
@@ -1520,7 +1544,9 @@ module ts {
     export interface SymbolLinks {
         target?: Symbol;                    // Resolved (non-alias) target of an alias
         type?: Type;                        // Type of value symbol
-        declaredType?: Type;                // Type of class, interface, enum, or type parameter
+        declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
+        typeParameters?: TypeParameter[];   // Type parameters of type alias (undefined if non-generic)
+        instantiations?: Map<Type>;         // Instantiations of generic type alias (undefined if non-generic)
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
         unionType?: UnionType;              // Containing union type for union property
@@ -1587,14 +1613,15 @@ module ts {
         Tuple                   = 0x00002000,  // Tuple
         Union                   = 0x00004000,  // Union
         Anonymous               = 0x00008000,  // Anonymous
-        /* @internal */ 
-        FromSignature           = 0x00010000,  // Created for signature assignment check
-        ObjectLiteral           = 0x00020000,  // Originates in an object literal
-        /* @internal */ 
-        ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
-        /* @internal */ 
-        ContainsObjectLiteral = 0x00080000,  // Type is or contains object literal type
-        ESSymbol                = 0x00100000,  // Type of symbol primitive introduced in ES6
+        Instantiated            = 0x00010000,  // Instantiated anonymous type
+        /* @internal */
+        FromSignature           = 0x00020000,  // Created for signature assignment check
+        ObjectLiteral           = 0x00040000,  // Originates in an object literal
+        /* @internal */
+        ContainsUndefinedOrNull = 0x00080000,  // Type is or contains Undefined or Null type
+        /* @internal */
+        ContainsObjectLiteral   = 0x00100000,  // Type is or contains object literal type
+        ESSymbol                = 0x00200000,  // Type of symbol primitive introduced in ES6
 
         /* @internal */ 
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -1679,8 +1706,8 @@ module ts {
         properties: Symbol[];              // Properties
         callSignatures: Signature[];       // Call signatures of type
         constructSignatures: Signature[];  // Construct signatures of type
-        stringIndexType: Type;             // String index type
-        numberIndexType: Type;             // Numeric index type
+        stringIndexType?: Type;            // String index type
+        numberIndexType?: Type;            // Numeric index type
     }
 
     // Just a place to cache element types of iterables and iterators
@@ -1708,6 +1735,7 @@ module ts {
         declaration: SignatureDeclaration;  // Originating declaration
         typeParameters: TypeParameter[];    // Type parameters (undefined if non-generic)
         parameters: Symbol[];               // Parameters
+        typePredicate?: TypePredicate;      // Type predicate
         /* @internal */
         resolvedReturnType: Type;           // Resolved return type
         /* @internal */
@@ -1736,7 +1764,6 @@ module ts {
     /* @internal */
     export interface TypeMapper {
         (t: TypeParameter): Type;
-        mappings?: Map<Type>;  // Type mapping cache
     }
 
     /* @internal */
@@ -1824,9 +1851,11 @@ module ts {
         target?: ScriptTarget;
         version?: boolean;
         watch?: boolean;
-        separateCompilation?: boolean;
+        isolatedModules?: boolean;
+        experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
         /* @internal */ stripInternal?: boolean;
+        /* @internal */ skipDefaultLibCheck?: boolean;
         [option: string]: string | number | boolean;
     }
 
