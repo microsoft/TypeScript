@@ -1903,23 +1903,21 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             function emitNewExpression(node: NewExpression) {
                 write("new ");
 
-                // Spread operator logic can be supported in new expressions in ES5 using a combination
+                // Spread operator logic is supported in new expressions in ES5 using a combination
                 // of Function.prototype.bind() and Function.prototype.apply().
                 //
                 //     Example:
                 //
-                //         var arguments = [1, 2, 3, 4, 5];
-                //         new Array(...arguments);
+                //         var args = [1, 2, 3, 4, 5];
+                //         new Array(...args);
                 //
-                //         Could be transpiled into ES5:
+                //     is compiled into the following ES5:
                 //
-                //         var arguments = [1, 2, 3, 4, 5];
-                //         new (Array.bind.apply(Array, [void 0].concat(arguments)));
+                //         var args = [1, 2, 3, 4, 5];
+                //         new (Array.bind.apply(Array, [void 0].concat(args)));
                 //
-                // `[void 0]` is the first argument which represents `thisArg` to the bind method above. 
-                // And `thisArg` will be set to the return value of the constructor when instantiated 
-                // with the new operator — regardless of any value we set `thisArg` to. Thus, we set it 
-                // to an undefined, `void 0`.
+                // The 'thisArg' to 'bind' is ignored when invoking the result of 'bind' with 'new',
+                // Thus, we set it to undefined ('void 0').
                 if (languageVersion === ScriptTarget.ES5 &&
                     node.arguments &&
                     hasSpreadElement(node.arguments)) {
