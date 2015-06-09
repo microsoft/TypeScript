@@ -11790,10 +11790,14 @@ module ts {
             let symbol = getReferencedValueSymbol(node);
             if (symbol) {
                 if (symbol.flags & SymbolFlags.ExportValue) {
+                    // If we reference an exported entity within the same module declaration, then whether
+                    // we prefix depends on the kind of entity. SymbolFlags.ExportHasLocal encompasses all the
+                    // kinds that we do NOT prefix.
                     let exportSymbol = getMergedSymbol(symbol.exportSymbol);
-                    if (!(exportSymbol.flags & SymbolFlags.ExportHasLocal)) {
-                        symbol = exportSymbol;
+                    if (exportSymbol.flags & SymbolFlags.ExportHasLocal) {
+                        return undefined;
                     }
+                    symbol = exportSymbol;
                 }
                 let parentSymbol = getParentOfSymbol(symbol);
                 if (parentSymbol) {

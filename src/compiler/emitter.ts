@@ -2841,6 +2841,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 }
 
                 function createPropertyAccessForDestructuringProperty(object: Expression, propName: Identifier | LiteralExpression): Expression {
+                    // We create a synthetic copy of the identifier in order to avoid the rewriting that might
+                    // otherwise occur when the identifier is emitted.
                     let syntheticName = <Identifier | LiteralExpression>createSynthesizedNode(propName.kind);
                     syntheticName.text = propName.text;
                     if (syntheticName.kind !== SyntaxKind.Identifier) {
