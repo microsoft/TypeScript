@@ -35,7 +35,7 @@ module ts.server {
         formatCodeOptions = ts.clone(CompilerService.defaultFormatCodeOptions);
 
         constructor(private host: ServerHost, public fileName: string, public content: string, public isOpen = false) {
-            this.svc = ScriptVersionCache.fromString(content);
+            this.svc = ScriptVersionCache.fromString(host, content);
         }
 
         setFormatOptions(formatOptions: protocol.FormatOptions): void {
@@ -915,7 +915,7 @@ module ts.server {
                 return rawConfig.error;
             }
             else {
-                var parsedCommandLine = ts.parseConfigFile(rawConfig.config, ts.sys, dirPath);
+                var parsedCommandLine = ts.parseConfigFile(rawConfig.config, this.host, dirPath);
                 if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
                     return { errorMsg: "tsconfig option errors" };
                 }
@@ -984,7 +984,7 @@ module ts.server {
         static defaultFormatCodeOptions: ts.FormatCodeOptions = {
             IndentSize: 4,
             TabSize: 4,
-            NewLineCharacter: ts.sys.newLine,
+            NewLineCharacter: ts.sys ? ts.sys.newLine : '\n',
             ConvertTabsToSpaces: true,
             InsertSpaceAfterCommaDelimiter: true,
             InsertSpaceAfterSemicolonInForStatements: true,
@@ -1262,6 +1262,7 @@ module ts.server {
         versions: LineIndexSnapshot[] = [];
         minVersion = 0;  // no versions earlier than min version will maintain change history
         private currentVersion = 0;
+        private host: System;
 
         static changeNumberThreshold = 8;
         static changeLengthThreshold = 256;
@@ -1289,7 +1290,7 @@ module ts.server {
         }
 
         reloadFromFile(filename: string, cb?: () => any) {
-            var content = ts.sys.readFile(filename);
+            var content = this.host.readFile(filename);
             this.reload(content);
             if (cb)
                 cb();
@@ -1359,10 +1360,11 @@ module ts.server {
             }
         }
 
-        static fromString(script: string) {
+        static fromString(host: System, script: string) {
             var svc = new ScriptVersionCache();
             var snap = new LineIndexSnapshot(0, svc);
             svc.versions[svc.currentVersion] = snap;
+            svc.host = host;
             snap.index = new LineIndex();
             var lm = LineIndex.linesFromText(script);
             snap.index.load(lm.lines);
