@@ -1122,17 +1122,14 @@ module ts {
 
             switch (parsingContext) {
                 case ParsingContext.SourceElements:
-                case ParsingContext.ModuleElements:
+                case ParsingContext.BlockStatements:
+                case ParsingContext.SwitchClauseStatements:
                     // If we're in error recovery, then we don't want to treat ';' as an empty statement.
                     // The problem is that ';' can show up in far too many contexts, and if we see one
                     // and assume it's a statement, then we may bail out inappropriately from whatever
                     // we're parsing.  For example, if we have a semicolon in the middle of a class, then
                     // we really don't want to assume the class is over and we're on a statement in the
                     // outer module.  We just want to consume and move on.
-                    return !(token === SyntaxKind.SemicolonToken && inErrorRecovery) && isStartOfStatement();
-                case ParsingContext.BlockStatements:
-                case ParsingContext.SwitchClauseStatements:
-                    // During error recovery we don't treat empty statements as statements
                     return !(token === SyntaxKind.SemicolonToken && inErrorRecovery) && isStartOfStatement();
                 case ParsingContext.SwitchClauses:
                     return token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
@@ -1243,7 +1240,6 @@ module ts {
             }
 
             switch (kind) {
-                case ParsingContext.ModuleElements:
                 case ParsingContext.BlockStatements:
                 case ParsingContext.SwitchClauses:
                 case ParsingContext.TypeMembers:
@@ -1454,15 +1450,13 @@ module ts {
 
         function canReuseNode(node: Node, parsingContext: ParsingContext): boolean {
             switch (parsingContext) {
-                case ParsingContext.ModuleElements:
-                    return isReusableModuleElement(node);
-
                 case ParsingContext.ClassMembers:
                     return isReusableClassMember(node);
 
                 case ParsingContext.SwitchClauses:
                     return isReusableSwitchClause(node);
 
+                case ParsingContext.SourceElements:
                 case ParsingContext.BlockStatements:
                 case ParsingContext.SwitchClauseStatements:
                     return isReusableStatement(node);
@@ -1525,26 +1519,6 @@ module ts {
             return false;
         }
 
-        function isReusableModuleElement(node: Node) {
-            if (node) {
-                switch (node.kind) {
-                    case SyntaxKind.ImportDeclaration:
-                    case SyntaxKind.ImportEqualsDeclaration:
-                    case SyntaxKind.ExportDeclaration:
-                    case SyntaxKind.ExportAssignment:
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.ModuleDeclaration:
-                    case SyntaxKind.EnumDeclaration:
-                        return true;
-                }
-
-                return isReusableStatement(node);
-            }
-
-            return false;
-        }
-
         function isReusableClassMember(node: Node) {
             if (node) {
                 switch (node.kind) {
@@ -1597,6 +1571,15 @@ module ts {
                     case SyntaxKind.LabeledStatement:
                     case SyntaxKind.DoStatement:
                     case SyntaxKind.DebuggerStatement:
+                    case SyntaxKind.ImportDeclaration:
+                    case SyntaxKind.ImportEqualsDeclaration:
+                    case SyntaxKind.ExportDeclaration:
+                    case SyntaxKind.ExportAssignment:
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.TypeAliasDeclaration:
                         return true;
                 }
             }
@@ -1670,8 +1653,7 @@ module ts {
         function parsingContextErrors(context: ParsingContext): DiagnosticMessage {
             switch (context) {
                 case ParsingContext.SourceElements: return Diagnostics.Declaration_or_statement_expected;
-                case ParsingContext.ModuleElements: return Diagnostics.Declaration_or_statement_expected;
-                case ParsingContext.BlockStatements: return Diagnostics.Statement_expected;
+                case ParsingContext.BlockStatements: return Diagnostics.Declaration_or_statement_expected;
                 case ParsingContext.SwitchClauses: return Diagnostics.case_or_default_expected;
                 case ParsingContext.SwitchClauseStatements: return Diagnostics.Statement_expected;
                 case ParsingContext.TypeMembers: return Diagnostics.Property_or_signature_expected;
@@ -4600,7 +4582,7 @@ module ts {
         function parseModuleBlock(): ModuleBlock {
             let node = <ModuleBlock>createNode(SyntaxKind.ModuleBlock, scanner.getStartPos());
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                node.statements = parseList(ParsingContext.ModuleElements, /*checkForStrictMode*/ false, parseStatement);
+                node.statements = parseList(ParsingContext.BlockStatements, /*checkForStrictMode*/ false, parseStatement);
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
@@ -4928,7 +4910,6 @@ module ts {
 
         const enum ParsingContext {
             SourceElements,            // Elements in source file
-            ModuleElements,            // Elements in module declaration
             BlockStatements,           // Statements in block
             SwitchClauses,             // Clauses in switch statement
             SwitchClauseStatements,    // Statements in switch clause
