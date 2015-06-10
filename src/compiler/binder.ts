@@ -663,7 +663,7 @@ module ts {
         function bindExportAssignment(node: ExportAssignment) {
             if (!container.symbol || !container.symbol.exports) {
                 // Export assignment in some sort of block construct
-                bindAnonymousDeclaration(node, SymbolFlags.Alias, "");
+                bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node));
             }
             else if (node.expression.kind === SyntaxKind.Identifier) {
                 // An export default clause with an identifier exports all meanings of that identifier
@@ -678,7 +678,7 @@ module ts {
         function bindExportDeclaration(node: ExportDeclaration) {
             if (!container.symbol || !container.symbol.exports) {
                 // Export * in some sort of block construct
-                bindAnonymousDeclaration(node, SymbolFlags.ExportStar, "");
+                bindAnonymousDeclaration(node, SymbolFlags.ExportStar, getDeclarationName(node));
             }
             else if (!node.exportClause) {
                 // All export * declarations are collected in an __export symbol
