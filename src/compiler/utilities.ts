@@ -186,8 +186,9 @@ module ts {
         return sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
     }
 
-    export function getTextOfNode(node: Node): string {
-        return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node);
+    export function getTextOfNode(node: Node, sourceFile?: SourceFile): string {
+        return getSourceTextOfNodeFromSourceFile(
+            sourceFile || getSourceFileOfNode(node), node);
     }
 
     // Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
@@ -250,8 +251,8 @@ module ts {
     // Return display name of an identifier
     // Computed property names will just be emitted as "[<expr>]", where <expr> is the source
     // text of the expression in the computed property.
-    export function declarationNameToString(name: DeclarationName) {
-        return getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
+    export function declarationNameToString(name: DeclarationName, sourceFile?: SourceFile) {
+        return getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name, sourceFile);
     }
 
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
@@ -376,6 +377,16 @@ module ts {
 
     export function isPrologueDirective(node: Node): boolean {
         return node.kind === SyntaxKind.ExpressionStatement && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
+    }
+
+    /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
+    export function isUseStrictPrologueDirective(node: Node, sourceText: string): boolean {
+        Debug.assert(isPrologueDirective(node));
+        let nodeText = getTextOfNodeFromSourceText(sourceText, (<ExpressionStatement>node).expression);
+
+        // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
+        // string to contain unicode escapes (as per ES5).
+        return nodeText === '"use strict"' || nodeText === "'use strict'";
     }
 
     export function getLeadingCommentRangesOfNode(node: Node, sourceFileOfNode: SourceFile) {

@@ -466,6 +466,17 @@ module ts {
         // descent parsing and unwinding.
         let contextFlags: ParserContextFlags;
 
+        // Whether or not we're in strict mode.  Needed because it affects how we parse certain
+        // elements.  For example, if we're in strict mode then:
+        //
+        //      let
+        //      foo
+        //
+        // Is a lexical declaration (i.e. "let foo").
+        // However, if we're not in strict mode, then it is two expression statements.  i.e.
+        //  "let;" and "foo;"
+        let inStrictMode: boolean = false;
+
         // Whether or not we've had a parse error since creating the last AST node.  If we have
         // encountered an error, it will be stored on the next AST node we create.  Parse errors
         // can be broken down into three categories:
@@ -654,10 +665,6 @@ module ts {
             }
         }
 
-        function setStrictModeContext(val: boolean) {
-            setContextFlag(val, ParserContextFlags.StrictMode);
-        }
-
         function setDisallowInContext(val: boolean) {
             setContextFlag(val, ParserContextFlags.DisallowIn);
         }
@@ -749,10 +756,6 @@ module ts {
 
         function inYieldContext() {
             return (contextFlags & ParserContextFlags.Yield) !== 0;
-        }
-
-        function inStrictModeContext() {
-            return (contextFlags & ParserContextFlags.StrictMode) !== 0;
         }
 
         function inGeneratorParameterContext() {
@@ -1335,11 +1338,11 @@ module ts {
 
         // Parses a list of elements
         function parseList<T extends Node>(kind: ParsingContext, checkForStrictMode: boolean, parseElement: () => T): NodeArray<T> {
-            let saveParsingContext = parsingContext;
+            let savedParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             let result = <NodeArray<T>>[];
             result.pos = getNodePos();
-            let savedStrictModeContext = inStrictModeContext();
+            let savedInStrictMode = inStrictMode;
 
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, /* inErrorRecovery */ false)) {
@@ -1347,10 +1350,10 @@ module ts {
                     result.push(element);
 
                     // test elements only if we are not already in strict mode
-                    if (checkForStrictMode && !inStrictModeContext()) {
+                    if (checkForStrictMode && !inStrictMode) {
                         if (isPrologueDirective(element)) {
-                            if (isUseStrictPrologueDirective(element)) {
-                                setStrictModeContext(true);
+                            if (isUseStrictPrologueDirective(element, sourceText)) {
+                                inStrictMode = true;
                                 checkForStrictMode = false;
                             }
                         }
@@ -1367,20 +1370,11 @@ module ts {
                 }
             }
 
-            setStrictModeContext(savedStrictModeContext);
+            inStrictMode = savedInStrictMode;
+            parsingContext = savedParsingContext;
+
             result.end = getNodeEnd();
-            parsingContext = saveParsingContext;
             return result;
-        }
-
-        /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
-        function isUseStrictPrologueDirective(node: Node): boolean {
-            Debug.assert(isPrologueDirective(node));
-            let nodeText = getTextOfNodeFromSourceText(sourceText, (<ExpressionStatement>node).expression);
-
-            // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
-            // string to contain unicode escapes (as per ES5).
-            return nodeText === '"use strict"' || nodeText === "'use strict'";
         }
 
         function parseListElement<T extends Node>(parsingContext: ParsingContext, parseElement: () => T): T {
@@ -2670,7 +2664,7 @@ module ts {
                     return true;
                 }
 
-                if (inStrictModeContext()) {
+                if (inStrictMode) {
                     // If we're in strict mode, then 'yield' is a keyword, could only ever start
                     // a yield expression.
                     return true;
@@ -3957,7 +3951,7 @@ module ts {
         function isLetDeclaration() {
             // It is let declaration if in strict mode or next token is identifier\open bracket\open curly on same line.
             // otherwise it needs to be treated like identifier
-            return inStrictModeContext() || lookAhead(nextTokenIsIdentifierOrStartOfDestructuringOnTheSameLine);
+            return inStrictMode || lookAhead(nextTokenIsIdentifierOrStartOfDestructuringOnTheSameLine);
         }
 
         function parseStatement(): Statement {
@@ -4496,8 +4490,8 @@ module ts {
 
         function parseClassDeclarationOrExpression(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, kind: SyntaxKind): ClassLikeDeclaration {
             // In ES6 specification, All parts of a ClassDeclaration or a ClassExpression are strict mode code
-            let savedStrictModeContext = inStrictModeContext();
-            setStrictModeContext(true);
+            let savedInStrictMode = inStrictMode;
+            inStrictMode = true;
 
             var node = <ClassLikeDeclaration>createNode(kind, fullStart);
             node.decorators = decorators;
@@ -4521,9 +4515,8 @@ module ts {
                 node.members = createMissingList<ClassElement>();
             }
 
-            var finishedNode = finishNode(node);
-            setStrictModeContext(savedStrictModeContext);
-            return finishedNode;
+            inStrictMode = savedInStrictMode;
+            return finishNode(node);
         }
 
         function parseHeritageClauses(isClassHeritageClause: boolean): NodeArray<HeritageClause> {

@@ -88,6 +88,10 @@ module ts {
         let container: Node;
         let blockScopeContainer: Node;
         let lastContainer: Node;
+
+        let inStrictMode = false;
+        let noParseDiagnostics = file.parseDiagnostics.length === 0
+
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
 
@@ -270,6 +274,14 @@ module ts {
             let saveParent = parent;
             let saveContainer = container;
             let savedBlockScopeContainer = blockScopeContainer;
+            let savedInStrictMode = inStrictMode;
+
+            // If we're not already in strict mode, then check and see if we've entered into 
+            // strict mode.  Only bother doing this if we've gotten no parse diagnostics.  
+            // We're not going to report strict mode errors in the presense of parse diagnostics.
+            if (!inStrictMode && noParseDiagnostics) {
+                updateStrictMode(node);
+            }
 
             // This node will now be set as the parent of all of its children as we recurse into them.
             parent = node;
@@ -311,6 +323,41 @@ module ts {
             container = saveContainer;
             parent = saveParent;
             blockScopeContainer = savedBlockScopeContainer;
+            inStrictMode = savedInStrictMode;
+        }
+
+        function updateStrictMode(node: Node) {
+            switch (node.kind) {
+                case SyntaxKind.SourceFile:
+                    updateStrictModeStatements((<SourceFile>node).statements);
+                    return;
+                case SyntaxKind.ModuleBlock:
+                    updateStrictModeStatements((<ModuleBlock>node).statements);
+                    return;
+                case SyntaxKind.Block:
+                    let block = <Block>node;
+                    if (isFunctionLike(parent)) {
+                        updateStrictModeStatements((<Block>node).statements);
+                    }
+                    return;
+            }
+        }
+
+        function updateStrictModeStatements(statements: NodeArray<Node>) {
+            if (statements) {
+                for (let i = 0, n = statements.length; i < n; i++) {
+                    let statement = statements[i];
+                    if (isPrologueDirective(statement)) {
+                        if (isUseStrictPrologueDirective(statement, file.text)) {
+                            inStrictMode = true;
+                            return;
+                        }
+                    }
+                    else {
+                        return;
+                    }
+                }
+            }
         }
 
         function getContainerFlags(node: Node): ContainerFlags {
@@ -560,6 +607,12 @@ module ts {
         function bind(node: Node) {
             node.parent = parent;
 
+            // If we're in strict mode, and we didn't have any parse diagnostics, then see if this
+            // node has any strict mode issues.
+            if (inStrictMode && noParseDiagnostics) {
+                checkStrictNode(node);
+            }
+
             // First we bind declaration nodes to a symbol if possible.  We'll both create a symbol
             // and then potentially add the symbol to an appropriate symbol table. Possible 
             // destination symbol tables are:
@@ -578,7 +631,123 @@ module ts {
             // a local should go into for example.
             bindChildren(node);
         }
+
+        function grammarErrorOnNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+            let span = getErrorSpanForNode(file, node);
+            file.bindDiagnostics.push(createFileDiagnostic(
+                file, span.start, span.length, message, arg0, arg1, arg2));
+        }
+
+        function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): void {
+            let span = getSpanOfTokenAtPosition(file, node.pos);
+            file.bindDiagnostics.push(createFileDiagnostic(
+                file, span.start, span.length, message, arg0, arg1, arg2));
+        }
+
+        function isReservedWord(node: Identifier): boolean {
+            // Check that originalKeywordKind is less than LastFutureReservedWord to see if an Identifier is a strict-mode reserved word
+            return SyntaxKind.FirstFutureReservedWord <= node.originalKeywordKind &&
+                node.originalKeywordKind <= SyntaxKind.LastFutureReservedWord;
+        }
+
+        function checkStrictNode(node: Node): void {
+            switch (node.kind) {
+                case SyntaxKind.DeleteExpression:
+                    return checkDeleteExpressionInStrictMode(<DeleteExpression>node);
+                case SyntaxKind.ExpressionWithTypeArguments:
+                    return checkExpressionWithTypeArgumentsInStrictMode(<ExpressionWithTypeArguments>node);
+                case SyntaxKind.ImportDeclaration:
+                    return checkImportDeclarationInStrictMode(<ImportDeclaration>node);
+                case SyntaxKind.ImportEqualsDeclaration:
+
+                case SyntaxKind.WithStatement:
+                    return checkWithStatementInStrictMode(<WithStatement>node);
+            }
+        }
+
+
+        // The function takes an identifier itself or an expression which has SyntaxKind.Identifier.
+        function checkGrammarIdentifierInStrictMode(node: Expression | Identifier, nameText?: string): void {
+            if (node && node.kind === SyntaxKind.Identifier && isReservedWord(<Identifier>node)) {
+                if (!nameText) {
+                    nameText = declarationNameToString(<Identifier>node, file);
+                }
+
+                // TODO (yuisu): Fix when module is a strict mode
+                reportStrictModeGrammarErrorInClassDeclaration(<Identifier>node, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode, nameText) ||
+                    grammarErrorOnNode(node, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
+            }
+        }
+
+        function reportStrictModeGrammarErrorInClassDeclaration(identifier: Identifier, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
+            // We are checking if this name is inside class declaration or class expression (which are under class definitions inside ES6 spec.)
+            // if so, we would like to give more explicit invalid usage error.
+            if (getAncestor(parent, SyntaxKind.ClassDeclaration) || getAncestor(parent, SyntaxKind.ClassExpression)) {
+                grammarErrorOnNode(identifier, message, arg0);
+                return true;
+            }
+
+            return false;
+        }
+
+        function checkDeleteExpressionInStrictMode(node: DeleteExpression) {
+            if (node.expression.kind === SyntaxKind.Identifier) {
+                // When a delete operator occurs within strict mode code, a SyntaxError is thrown if its
+                // UnaryExpression is a direct reference to a variable, function argument, or function name
+                grammarErrorOnNode(node.expression, Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode);
+            }
+        }
+
+        function checkExpressionWithTypeArgumentsInStrictMode(node: ExpressionWithTypeArguments): void {
+            return checkExpressionWithTypeArgumentsExpressionInStrictMode(node.expression);
+        }
+
+        function checkExpressionWithTypeArgumentsExpressionInStrictMode(node: Expression): void {
+            // Example:
+            //      class C extends public // error at public
+            if (node && node.kind === SyntaxKind.Identifier) {
+                return checkGrammarIdentifierInStrictMode(node);
+            }
+            else if (node && node.kind === SyntaxKind.PropertyAccessExpression) {
+                // Walk from left to right in PropertyAccessExpression until we are at the left most expression
+                // in PropertyAccessExpression. According to grammar production of MemberExpression,
+                // the left component expression is a PrimaryExpression (i.e. Identifier) while the other
+                // component after dots can be IdentifierName.
+                checkExpressionWithTypeArgumentsExpressionInStrictMode((<PropertyAccessExpression>node).expression);
+            }
+        }
+
+        function checkImportDeclarationInStrictMode(node: ImportDeclaration): void {
+            // Check if the import declaration used strict-mode reserved word in its names bindings
+            if (node.importClause) {
+                let importClause = node.importClause;
+                if (importClause.namedBindings) {
+                    let nameBindings = importClause.namedBindings;
+                    if (nameBindings.kind === SyntaxKind.NamespaceImport) {
+                        let name = <Identifier>(<NamespaceImport>nameBindings).name;
+                        if (isReservedWord(name)) {
+                            let nameText = declarationNameToString(name);
+                            return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
+                        }
+                    }
+                    else if (nameBindings.kind === SyntaxKind.NamedImports) {
+                        let reportError = false;
+                        for (let element of (<NamedImports>nameBindings).elements) {
+                            let name = element.name;
+                            if (isReservedWord(name)) {
+                                let nameText = declarationNameToString(name);
+                                return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
+                            }
+                        }
+                    }
+                }
+            }
+        }
         
+        function checkWithStatementInStrictMode(node: WithStatement) {
+            grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
+        }
+
         function bindWorker(node: Node) {
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
