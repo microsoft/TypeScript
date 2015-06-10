@@ -1807,7 +1807,7 @@ module ts {
             // the code would be implicitly: "name.keyword; identifierNameOrKeyword".
             // In the first case though, ASI will not take effect because there is not a
             // line terminator after the keyword.
-            if (scanner.hasPrecedingLineBreak() && scanner.isReservedWord()) {
+            if (scanner.hasPrecedingLineBreak() && isIdentifierOrKeyword()) {
                 let matchesPattern = lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine);
 
                 if (matchesPattern) {
