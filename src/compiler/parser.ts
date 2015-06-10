@@ -4820,7 +4820,7 @@ module ts {
 
             sourceFile.referencedFiles = referencedFiles;
             sourceFile.amdDependencies = amdDependencies;
-            sourceFile.amdModuleName = amdModuleName;
+            sourceFile.moduleName = amdModuleName;
         }
 
         function setExternalModuleIndicator(sourceFile: SourceFile) {
