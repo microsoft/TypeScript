@@ -942,7 +942,8 @@ module Harness {
                         result.sourceMaps.forEach(writeFile);
                     },
                     /*settingsCallback*/ () => { },
-                    this.compileOptions);
+                    this.compileOptions,
+                    /*currentDirectory*/ undefined);
 
                 function writeFile(file: GeneratedFile) {
                     ioHost.writeFile(file.fileName, file.code, false);
@@ -955,8 +956,7 @@ module Harness {
                 settingsCallback?: (settings: ts.CompilerOptions) => void,
                 options?: ts.CompilerOptions,
                 // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
-                currentDirectory?: string,
-                assertInvariants = true) {
+                currentDirectory?: string) {
 
                 options = options || { noResolve: false };
                 options.target = options.target || ts.ScriptTarget.ES3;
