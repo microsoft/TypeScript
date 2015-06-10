@@ -11118,7 +11118,7 @@ module ts {
                 let contextErrorMessage = isAmbientExternalModule
                     ? Diagnostics.An_ambient_module_declaration_is_only_allowed_at_the_top_level_in_a_file
                     : Diagnostics.A_namespace_declaration_is_only_allowed_in_a_namespace_or_module;
-                if (!checkGrammarModuleElementContext(node, contextErrorMessage)) {
+                if (checkGrammarModuleElementContext(node, contextErrorMessage)) {
                     return;
                 }
 
@@ -11234,7 +11234,7 @@ module ts {
         }
 
         function checkImportDeclaration(node: ImportDeclaration) {
-            if (!checkGrammarModuleElementContext(node, Diagnostics.An_import_declaration_can_only_be_used_in_a_namespace_or_module)) {
+            if (checkGrammarModuleElementContext(node, Diagnostics.An_import_declaration_can_only_be_used_in_a_namespace_or_module)) {
                 return;
             }
             if (!checkGrammarImportDeclarationNameInStrictMode(node) && !checkGrammarDecorators(node) && !checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
@@ -11259,7 +11259,7 @@ module ts {
         }
 
         function checkImportEqualsDeclaration(node: ImportEqualsDeclaration) {
-            if (!checkGrammarModuleElementContext(node, Diagnostics.An_import_declaration_can_only_be_used_in_a_namespace_or_module)) {
+            if (checkGrammarModuleElementContext(node, Diagnostics.An_import_declaration_can_only_be_used_in_a_namespace_or_module)) {
                 return;
             }
 
@@ -11294,7 +11294,7 @@ module ts {
         }
 
         function checkExportDeclaration(node: ExportDeclaration) {
-            if (!checkGrammarModuleElementContext(node, Diagnostics.An_export_declaration_can_only_be_used_in_a_module)) {
+            if (checkGrammarModuleElementContext(node, Diagnostics.An_export_declaration_can_only_be_used_in_a_module)) {
                 return;
             }
 
@@ -11325,11 +11325,8 @@ module ts {
 
         function checkGrammarModuleElementContext(node: Statement, errorMessage: DiagnosticMessage): boolean {
             if (node.parent.kind !== SyntaxKind.SourceFile && node.parent.kind !== SyntaxKind.ModuleBlock && node.parent.kind !== SyntaxKind.ModuleDeclaration) {
-                grammarErrorOnFirstToken(node, errorMessage);
-                return false;
+                return grammarErrorOnFirstToken(node, errorMessage);
             }
-
-            return true;
         }
 
         function checkExportSpecifier(node: ExportSpecifier) {
@@ -11340,7 +11337,7 @@ module ts {
         }
 
         function checkExportAssignment(node: ExportAssignment) {
-            if (!checkGrammarModuleElementContext(node, Diagnostics.An_export_assignment_can_only_be_used_in_a_module)) {
+            if (checkGrammarModuleElementContext(node, Diagnostics.An_export_assignment_can_only_be_used_in_a_module)) {
                 return;
             }
 
