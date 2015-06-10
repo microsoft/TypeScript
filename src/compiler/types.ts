@@ -3,6 +3,14 @@ module ts {
         [index: string]: T;
     }
 
+    export interface FileMap<T> {
+        get(fileName: string): T;
+        set(fileName: string, value: T): void;
+        contains(fileName: string): boolean;
+        remove(fileName: string): void;
+        forEachValue(f: (v: T) => void): void;
+    }
+
     export interface TextRange {
         pos: number;
         end: number;
@@ -139,6 +147,7 @@ module ts {
         ConstructorKeyword,
         DeclareKeyword,
         GetKeyword,
+        IsKeyword,
         ModuleKeyword,
         NamespaceKeyword,
         RequireKeyword,
@@ -171,6 +180,7 @@ module ts {
         ConstructSignature,
         IndexSignature,
         // Type
+        TypePredicate,
         TypeReference,
         FunctionType,
         ConstructorType,
@@ -626,6 +636,11 @@ module ts {
         typeArguments?: NodeArray<TypeNode>;
     }
 
+    export interface TypePredicateNode extends TypeNode {
+        parameterName: Identifier;
+        type: TypeNode;
+    }
+
     export interface TypeQueryNode extends TypeNode {
         exprName: EntityName;
     }
@@ -955,6 +970,7 @@ module ts {
 
     export interface TypeAliasDeclaration extends Declaration, Statement {
         name: Identifier;
+        typeParameters?: NodeArray<TypeParameterDeclaration>;
         type: TypeNode;
     }
 
@@ -1158,7 +1174,7 @@ module ts {
         text: string;
 
         amdDependencies: {path: string; name: string}[];
-        amdModuleName: string;
+        moduleName: string;
         referencedFiles: FileReference[];
 
         hasNoDefaultLib: boolean;
@@ -1167,7 +1183,8 @@ module ts {
 
         // The first node that causes this file to be an external module
         /* @internal */ externalModuleIndicator: Node;
-        
+
+        /* @internal */ isDefaultLib: boolean;
         /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
@@ -1192,7 +1209,7 @@ module ts {
     }
 
     export interface ParseConfigHost {
-        readDirectory(rootDir: string, extension: string): string[];
+        readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
     }
 
     export interface WriteFileCallback {
@@ -1221,6 +1238,7 @@ module ts {
         getGlobalDiagnostics(): Diagnostic[];
         getSemanticDiagnostics(sourceFile?: SourceFile): Diagnostic[];
         getDeclarationDiagnostics(sourceFile?: SourceFile): Diagnostic[];
+        /* @internal */ getCompilerOptionsDiagnostics(): Diagnostic[];
 
         /** 
          * Gets a type checker that can be used to semantically analyze source fils in the program.
@@ -1400,6 +1418,12 @@ module ts {
         NotAccessible,
         CannotBeNamed
     }
+    
+    export interface TypePredicate {
+        parameterName: string;
+        parameterIndex: number;
+        type: Type;
+    }
 
     /* @internal */
     export type AnyImportSyntax = ImportDeclaration | ImportEqualsDeclaration;
@@ -1420,7 +1444,10 @@ module ts {
     /* @internal */
     export interface EmitResolver {
         hasGlobalName(name: string): boolean;
-        getExpressionNameSubstitution(node: Identifier, getGeneratedNameForNode: (node: Node) => string): string;
+        getReferencedExportContainer(node: Identifier): SourceFile | ModuleDeclaration | EnumDeclaration;
+        getReferencedImportDeclaration(node: Identifier): Declaration;
+        getReferencedNestedRedeclaration(node: Identifier): Declaration;
+        isNestedRedeclaration(node: Declaration): boolean;
         isValueAliasDeclaration(node: Node): boolean;
         isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean;
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
@@ -1435,13 +1462,11 @@ module ts {
         isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
-        resolvesToSomeValue(location: Node, name: string): boolean;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        serializeTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
-        serializeParameterTypesOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): (string | string[])[];
-        serializeReturnTypeOfNode(node: Node, getGeneratedNameForNode: (Node: Node) => string): string | string[];
-        getPromiseConstructor(node: SignatureDeclaration): EntityName | Expression;
+        serializeTypeOfNode(node: Node): string | string[];
+        serializeParameterTypesOfNode(node: Node): (string | string[])[];
+        serializeReturnTypeOfNode(node: Node): string | string[];
     }
 
     export const enum SymbolFlags {
@@ -1518,6 +1543,8 @@ module ts {
         HasExports = Class | Enum | Module,
         HasMembers = Class | Interface | TypeLiteral | ObjectLiteral,
 
+        BlockScoped = BlockScopedVariable | Class | Enum,
+
         PropertyOrAccessor = Property | Accessor,
         Export = ExportNamespace | ExportType | ExportValue,
     }
@@ -1541,12 +1568,15 @@ module ts {
     export interface SymbolLinks {
         target?: Symbol;                    // Resolved (non-alias) target of an alias
         type?: Type;                        // Type of value symbol
-        declaredType?: Type;                // Type of class, interface, enum, or type parameter
+        declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
+        typeParameters?: TypeParameter[];   // Type parameters of type alias (undefined if non-generic)
+        instantiations?: Map<Type>;         // Instantiations of generic type alias (undefined if non-generic)
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
         unionType?: UnionType;              // Containing union type for union property
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
+        isNestedRedeclaration?: boolean;    // True if symbol is block scoped redeclaration
     }
 
     /* @internal */ 
@@ -1592,7 +1622,6 @@ module ts {
         assignmentChecks?: Map<boolean>;  // Cache of assignment checks
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
-        promiseConstructor?: EntityName | Expression;
     }
 
     export const enum TypeFlags {
@@ -1612,14 +1641,15 @@ module ts {
         Tuple                   = 0x00002000,  // Tuple
         Union                   = 0x00004000,  // Union
         Anonymous               = 0x00008000,  // Anonymous
-        /* @internal */ 
-        FromSignature           = 0x00010000,  // Created for signature assignment check
-        ObjectLiteral           = 0x00020000,  // Originates in an object literal
-        /* @internal */ 
-        ContainsUndefinedOrNull = 0x00040000,  // Type is or contains Undefined or Null type
-        /* @internal */ 
-        ContainsObjectLiteral   = 0x00080000,  // Type is or contains object literal type
-        ESSymbol                = 0x00100000,  // Type of symbol primitive introduced in ES6
+        Instantiated            = 0x00010000,  // Instantiated anonymous type
+        /* @internal */
+        FromSignature           = 0x00020000,  // Created for signature assignment check
+        ObjectLiteral           = 0x00040000,  // Originates in an object literal
+        /* @internal */
+        ContainsUndefinedOrNull = 0x00080000,  // Type is or contains Undefined or Null type
+        /* @internal */
+        ContainsObjectLiteral   = 0x00100000,  // Type is or contains object literal type
+        ESSymbol                = 0x00200000,  // Type of symbol primitive introduced in ES6
 
         /* @internal */ 
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -1733,6 +1763,7 @@ module ts {
         declaration: SignatureDeclaration;  // Originating declaration
         typeParameters: TypeParameter[];    // Type parameters (undefined if non-generic)
         parameters: Symbol[];               // Parameters
+        typePredicate?: TypePredicate;      // Type predicate
         /* @internal */
         resolvedReturnType: Type;           // Resolved return type
         /* @internal */
@@ -1761,7 +1792,6 @@ module ts {
     /* @internal */
     export interface TypeMapper {
         (t: TypeParameter): Type;
-        mappings?: Map<Type>;  // Type mapping cache
     }
 
     /* @internal */
@@ -1853,6 +1883,7 @@ module ts {
         experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
         /* @internal */ stripInternal?: boolean;
+        /* @internal */ skipDefaultLibCheck?: boolean;
         [option: string]: string | number | boolean;
     }
 

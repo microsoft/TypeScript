@@ -31,44 +31,75 @@ Your pull request should:
 ## Running the Tests
 To run all tests, invoke the runtests target using jake:
 
-`jake runtests`
+```Shell
+jake runtests
+```
 
 This run will all tests; to run only a specific subset of tests, use:
 
-`jake runtests tests=<regex>`
+```Shell
+jake runtests tests=<regex>
+```
 
 e.g. to run all compiler baseline tests:
 
-`jake runtests tests=compiler`
+```Shell
+jake runtests tests=compiler
+```
 
-or to run specifc test:tests\cases\compiler\2dArrays.ts 
+or to run specifc test: `tests\cases\compiler\2dArrays.ts` 
 
-`jake runtests tests=2dArrays`
+```Shell
+jake runtests tests=2dArrays
+```
 
 ## Adding a Test
-To add a new testcase, simply place a .ts file in tests\cases\compiler containing code that exemplifies the bugfix or change you are making.
+To add a new testcase, simply place a `.ts` file in `tests\cases\compiler` containing code that exemplifies the bugfix or change you are making.
 
-These files support metadata tags in the format  // @name: value . The supported names and values are:
+These files support metadata tags in the format  `// @metaDataName: value`. The supported names and values are:
 
-* comments, sourcemap, noimplicitany, declaration: true or false (corresponds to the compiler command-line options of the same name)
-* target: ES3 or ES5 (same as compiler)
-* out, outDir: path (same as compiler)
-* module: local, commonjs, or amd (local corresponds to not passing any compiler --module flag)
+* `comments`, `sourcemap`, `noimplicitany`, `declaration`: true or false (corresponds to the compiler command-line options of the same name)
+* `target`: ES3 or ES5 (same as compiler)
+* `out`, outDir: path (same as compiler)
+* `module`: local, commonjs, or amd (local corresponds to not passing any compiler --module flag)
+* `fileName`: path
+  * These tags delimit sections of a file to be used as separate compilation units. They are useful for tests relating to modules. See below for examples.
 
-**Note** that if you have a test corresponding to a specific spec compliance item, you can place it in tests\cases\conformance in an appropriately-named subfolder. 
+**Note** that if you have a test corresponding to a specific spec compliance item, you can place it in `tests\cases\conformance` in an appropriately-named subfolder. 
 **Note** that filenames here must be distinct from all other compiler testcase names, so you may have to work a bit to find a unique name if it's something common.
 
+### Tests for multiple files
+
+When one needs to test for scenarios which require multiple files, it is useful to use the `fileName` metadata tag as such:
+
+```TypeScript
+// @fileName: file1.ts
+export function f() {
+}
+
+// @fileName: file2.ts
+import { f as g } from "file1";
+
+var x = g();
+```
+
+One can also write a project test, but it is slightly more involved.
+
 ## Managing the Baselines
-Compiler testcases generate baselines that track the emitted .js, the errors produced by the compiler, and the type of each expression in the file. Additionally, some testcases opt in to baselining the source map output.
+Compiler testcases generate baselines that track the emitted `.js`, the errors produced by the compiler, and the type of each expression in the file. Additionally, some testcases opt in to baselining the source map output.
 
 When a change in the baselines is detected, the test will fail. To inspect changes vs the expected baselines, use
 
-`jake diff`
+```Shell
+jake diff
+```
 
 After verifying that the changes in the baselines are correct, run
 
-`jake baseline-accept`
+```Shell
+jake baseline-accept
+```
 
-to establish the new baselines as the desired behavior. This will change the files in tests\baselines\reference, which should be included as part of your commit. It's important to carefully validate changes in the baselines.
+to establish the new baselines as the desired behavior. This will change the files in `tests\baselines\reference`, which should be included as part of your commit. It's important to carefully validate changes in the baselines.
 
 **Note** that baseline-accept should only be run after a full test run! Accepting baselines after running a subset of tests will delete baseline files for the tests that didn't run.

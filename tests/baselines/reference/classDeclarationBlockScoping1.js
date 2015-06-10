@@ -14,9 +14,9 @@ var C = (function () {
     return C;
 })();
 {
-    var C = (function () {
-        function C() {
+    var C_1 = (function () {
+        function C_1() {
         }
-        return C;
+        return C_1;
     })();
 }

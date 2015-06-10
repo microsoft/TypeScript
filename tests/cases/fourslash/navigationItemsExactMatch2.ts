@@ -17,7 +17,7 @@
 ////function distance2(distanceParam1): void {
 ////    var distanceLocal1;
 ////}
-debugger;
+
 goTo.marker("file1");
 verify.navigationItemsListCount(2, "point", "exact");
 verify.navigationItemsListCount(5, "distance", "prefix");

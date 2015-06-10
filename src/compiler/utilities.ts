@@ -761,6 +761,22 @@ module ts {
             }
         }
     }
+    
+    export function getEntityNameFromTypeNode(node: TypeNode): EntityName | Expression {
+        if (node) {            
+            switch (node.kind) {
+                case SyntaxKind.TypeReference:
+                    return (<TypeReferenceNode>node).typeName;
+                case SyntaxKind.ExpressionWithTypeArguments:
+                    return (<ExpressionWithTypeArguments>node).expression
+                case SyntaxKind.Identifier:
+                case SyntaxKind.QualifiedName:
+                    return (<EntityName><Node>node);
+            }
+        }
+
+        return undefined;
+    }
 
     export function getInvokedExpression(node: CallLikeExpression): Expression {
         if (node.kind === SyntaxKind.TaggedTemplateExpression) {
@@ -2003,6 +2019,21 @@ module ts {
         }
 
         return result;
+    }
+
+    const carriageReturnLineFeed = "\r\n";
+    const lineFeed = "\n";
+    export function getNewLineCharacter(options: CompilerOptions): string {
+        if (options.newLine === NewLineKind.CarriageReturnLineFeed) {
+            return carriageReturnLineFeed;
+        }
+        else if (options.newLine === NewLineKind.LineFeed) {
+            return lineFeed;
+        }
+        else if (sys) {
+            return sys.newLine
+        }
+        return carriageReturnLineFeed;
     }
 }
 
