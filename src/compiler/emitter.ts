@@ -3441,7 +3441,9 @@ var __awaiter = (this && this.__awaiter) || function (generator, thisArg, args, 
                 emitFunctionBody(node);
                 
                 // Emit the current `this` binding.
-                write(", this");
+                write(",");
+                writeLine();
+                write("this");
                 
                 // Optionally emit the lexical arguments.
                 if (hasLexicalArguments) {

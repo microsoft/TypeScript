@@ -15,5 +15,6 @@ function func() {
         var o;
         o.a = yield p;
         "after";
-    }, this, void 0, Promise);
+    },
+    this, void 0, Promise);
 }

@@ -17,5 +17,6 @@ function func() {
         "before";
         var b = (yield po).fn(a, a, a);
         "after";
-    }, this, void 0, Promise);
+    },
+    this, void 0, Promise);
 }

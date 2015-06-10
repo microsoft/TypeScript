@@ -10,5 +10,7 @@ var bar = async (): Promise<void> => {
 var bar = () => __awaiter(function* () {
     // 'await' here is an identifier, and not an await expression.
     var foo = (a = await) => __awaiter(function* () {
-    }, this, void 0, Promise);
-}, this, void 0, Promise);
+    },
+    this, void 0, Promise);
+},
+this, void 0, Promise);

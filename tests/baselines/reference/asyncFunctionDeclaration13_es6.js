@@ -10,5 +10,6 @@ function foo() {
     return __awaiter(function* () {
         // Legal to use 'await' in a type context.
         var v;
-    }, this, void 0, Promise);
+    },
+    this, void 0, Promise);
 }
