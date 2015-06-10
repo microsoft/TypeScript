@@ -11323,7 +11323,7 @@ module ts {
             }
         }
 
-        function checkGrammarModuleElementContext(node: ModuleElement, errorMessage: DiagnosticMessage): boolean {
+        function checkGrammarModuleElementContext(node: Statement, errorMessage: DiagnosticMessage): boolean {
             if (node.parent.kind !== SyntaxKind.SourceFile && node.parent.kind !== SyntaxKind.ModuleBlock && node.parent.kind !== SyntaxKind.ModuleDeclaration) {
                 grammarErrorOnFirstToken(node, errorMessage);
                 return false;
@@ -11374,7 +11374,7 @@ module ts {
             }
         }
 
-        function getModuleStatements(node: Declaration): ModuleElement[] {
+        function getModuleStatements(node: Declaration): Statement[] {
             if (node.kind === SyntaxKind.SourceFile) {
                 return (<SourceFile>node).statements;
             }

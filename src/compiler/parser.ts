@@ -4011,7 +4011,7 @@ module ts {
             return parseExpressionOrLabeledStatement();
         }
 
-        function parseDeclaration(): ModuleElement {
+        function parseDeclaration(): Statement {
             let fullStart = getNodePos();
             let decorators = parseDecorators();
             let modifiers = parseModifiers();
@@ -4044,7 +4044,7 @@ module ts {
                     if (decorators) {
                         // We reached this point because we encountered decorators and/or modifiers and assumed a declaration
                         // would follow. For recovery and error reporting purposes, return an incomplete declaration.                        
-                        let node = <ModuleElement>createMissingNode(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
+                        let node = <Statement>createMissingNode(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
                         node.pos = fullStart;
                         node.decorators = decorators;
                         setModifiers(node, modifiers);
