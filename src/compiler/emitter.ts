@@ -9,9 +9,9 @@ module ts {
 
     // Flags enum to track count of temp variables and a few dedicated names
     const enum TempFlags {
-        Auto      = 0x00000000,  // No preferred name
+        Auto = 0x00000000,  // No preferred name
         CountMask = 0x0FFFFFFF,  // Temp variable counter
-        _i        = 0x10000000,  // Use/preference flag for '_i'
+        _i = 0x10000000,  // Use/preference flag for '_i'
     }
 
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
@@ -48,16 +48,18 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };`;
 
+
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
         let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         let diagnostics: Diagnostic[] = [];
         let newLine = host.getNewLine();
+        let jsxDesugaring = host.getCompilerOptions().jsx === JsxEmit.React;
 
         if (targetSourceFile === undefined) {
             forEach(host.getSourceFiles(), sourceFile => {
                 if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, ".js");
+                    let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, (!sourceFile.isTSXFile || jsxDesugaring) ? ".js" : ".jsx");
                     emitFile(jsFilePath, sourceFile);
                 }
             });
@@ -69,7 +71,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
         else {
             // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
-                let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
+                let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, (host.getSourceFiles().every(f => !f.isTSXFile) || jsxDesugaring) ? ".js" : ".jsx");
                 emitFile(jsFilePath, targetSourceFile);
             }
             else if (!isDeclarationFile(targetSourceFile) && compilerOptions.out) {
@@ -1107,6 +1109,228 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 emit(span.literal);
             }
 
+            function jsxEmitReact(node: JsxElement) {
+                /// The parser (currently) eats the whitespace in "<Foo> {x} </Foo>", but
+                /// this is semantically relevant in React.
+                function getIntermediateTrivia(prevNode: Node, nextNode: Node) {
+                    Debug.assert(!!nextNode);
+
+                    var nextNodeContentStart = skipTrivia(currentSourceFile.text, nextNode.pos, false);
+                    if (prevNode.end + 1 === nextNodeContentStart) {
+                        return undefined;
+                    }
+                    else {
+                        return currentSourceFile.text.substr(prevNode.end, nextNodeContentStart - nextNode.pos);
+                    }
+                }
+
+                /// Emit a tag name, which is either '"div"' for lower-cased names, or
+                /// 'Div' for upper-cased or dotted names
+                function emitTagName(name: Identifier|QualifiedName) {
+                    if (name.kind === SyntaxKind.Identifier) {
+                        var ch = (<Identifier>name).text.charAt(0);
+                        if (ch.toUpperCase() === ch) {
+                            emit(name);
+                        }
+                        else {
+                            write('"');
+                            emit(name);
+                            write('"');
+                        }
+                        return ch.toUpperCase() !== ch;
+                    }
+                    else {
+                        Debug.assert(name.kind === SyntaxKind.QualifiedName);
+                        emit(name);
+                    }
+                }
+
+                /// Emit an attribute name, which is quoted if it needs to be quoted. Because
+                /// these emit into an object literal property name, we don't need to be worried
+                /// about keywords, just non-identifier characters
+                function emitAttributeName(name: Identifier) {
+                    if (/[A-Za-z_]+[\w*]/.test(name.text)) {
+                        write('"');
+                        emit(name);
+                        write('"');
+                    }
+                    else {
+                        emit(name);
+                    }
+                }
+
+                /// Emit an name/value pair for an attribute (e.g. "x: 3")
+                function emitJsxAttribute(node: JsxAttribute) {
+                    emitAttributeName(node.name);
+                    write(': ');
+                    emit(node.initializer);
+                }
+
+                function emitJsxElement(node: JsxElement) {
+                    // Call React.createElement(tag, ...
+                    emitLeadingComments(node);
+                    write('React.createElement(');
+                    emitTagName(node.openingElement.tagName);
+                    write(', ');
+
+                    // Attribute list
+                    if (node.openingElement.attributes.length === 0) {
+                        // When there are no attributes, React wants 'null'
+                        write('null');
+                    }
+                    else {
+                        // Either emit one big object literal (no spread attribs), or
+                        // a call to React.__spread
+                        let attrs = node.openingElement.attributes;
+                        if (attrs.some(attr => attr.kind === SyntaxKind.JsxSpreadAttribute)) {
+                            write('React.__spread(');
+
+                            let haveOpenedObjectLiteral = false;
+                            for (var i = 0; i < attrs.length; i++) {
+                                if (attrs[i].kind === SyntaxKind.JsxSpreadAttribute) {
+                                    if (haveOpenedObjectLiteral) {
+                                        write('}');
+                                        haveOpenedObjectLiteral = false;
+                                    }
+                                    if (i > 0) write(', ');
+                                    emit((<JsxSpreadAttribute>attrs[i]).expression);
+                                }
+                                else {
+                                    Debug.assert(attrs[i].kind === SyntaxKind.JsxAttribute);
+                                    if (haveOpenedObjectLiteral) {
+                                        write(', ');
+                                    }
+                                    else {
+                                        haveOpenedObjectLiteral = true;
+                                        if (i > 0) write(', ');
+                                        write('{');
+                                    }
+                                    emitJsxAttribute(<JsxAttribute>attrs[i]);
+                                }
+                            }
+                            if (haveOpenedObjectLiteral) write('}');
+
+                            write(')'); // closing paren to React.__spread(
+                        }
+                        else {
+                            // One object literal with all the attributes in them
+                            write('{');
+                            for (var i = 0; i < attrs.length; i++) {
+                                if (i > 0) write(', ');
+                                emitJsxAttribute(<JsxAttribute>attrs[i]);
+                            }
+                            write('}');
+                        }
+                    }
+
+                    // Children
+                    // Whitespace between the opening tag and the closing tag
+                    if (node.children.length > 0) {
+                        var leadingTrivia = getIntermediateTrivia(node.openingElement, node.children[0]);
+                        if (leadingTrivia) {
+                            write(', "' + leadingTrivia + '"');
+                        }
+                    }
+
+                    for (var i = 0; i < node.children.length; i++) {
+                        write(', ');
+                        // Manually restore the leading/trailing whitespace eaten by the parser
+                        if (node.children[i].kind === SyntaxKind.JsxText) {
+                            var nextElement = (i === node.children.length - 1) ? node.closingElement : node.children[i + 1];
+                            write('"');
+                            write(getTextOfNode(node.children[i], true));
+                            write(getIntermediateTrivia(node.children[i], nextElement) || "");
+                            write('"');
+                        }
+                        else {
+                            emit(node.children[i]);
+                        }
+                    }
+
+                    if (node.children.length > 0) {
+                        var trailingTrivia = getIntermediateTrivia(node.children[node.children.length - 1], node.closingElement);
+                        if (trailingTrivia) {
+                            write(', "' + trailingTrivia + '"');
+                        }
+                    }
+
+                    // Closing paren
+                    write(')'); // closes 'React.createElement('
+                    emitTrailingComments(node);
+                }
+
+                emitJsxElement(node);
+            }
+
+            function jsxEmitPreserve(node: JsxElement) {
+                function emitJsxAttribute(node: JsxAttribute) {
+                    emit(node.name);
+                    write('=');
+                    emit(node.initializer);
+                }
+
+                function emitJsxSpreadAttribute(node: JsxSpreadAttribute) {
+                    write('{...');
+                    emit(node.expression);
+                    write('}');
+                }
+
+                function emitJsxOpeningElement(node: JsxOpeningElement) {
+                    write('<');
+                    emit(node.tagName);
+                    if (node.attributes.length > 0 || node.isSelfClosing) {
+                        write(' ');
+                    }
+
+                    for (var i = 0, n = node.attributes.length; i < n; i++) {
+                        if (i > 0) write(' ');
+                        if (node.attributes[i].kind === SyntaxKind.JsxSpreadAttribute) {
+                            emitJsxSpreadAttribute(<JsxSpreadAttribute>node.attributes[i]);
+                        }
+                        else {
+                            Debug.assert(node.attributes[i].kind === SyntaxKind.JsxAttribute);
+                            emitJsxAttribute(<JsxAttribute>node.attributes[i]);
+                        }
+                    }
+                    if (node.isSelfClosing) {
+                        write('/>');
+                    }
+                    else {
+                        write('>');
+                    }
+                }
+
+                function emitJsxClosingElement(node: JsxClosingElement) {
+                    write('</');
+                    emit(node.tagName);
+                    write('>');
+                }
+
+                function emitJsxElement(node: JsxElement) {
+                    emitJsxOpeningElement(node.openingElement);
+
+                    // We actually need to emit all whitespace from the original file as it
+                    // appeared between the original nodes. The scanner/parser eat these.
+                    var startWs = node.openingElement.end;
+                    function emitLeadingTrivia(node: Node) {
+                        write(currentSourceFile.text.substr(startWs, skipTrivia(currentSourceFile.text, node.pos) - startWs));
+                        startWs = node.end;
+                    }
+
+                    for (var i = 0, n = node.children.length; i < n; i++) {
+                        emitLeadingTrivia(node.children[i]);
+                        emit(node.children[i]);
+                    }
+
+                    if (node.closingElement) {
+                        emitLeadingTrivia(node.closingElement);
+                        emitJsxClosingElement(node.closingElement);
+                    }
+                }
+
+                emitJsxElement(node);
+            }
+
             // This function specifically handles numeric/string literals for enum and accessor 'identifiers'.
             // In a sense, it does not actually emit identifiers as much as it declares a name for a specific property.
             // For example, this is utilized when feeding in a result to Object.defineProperty.
@@ -1183,6 +1407,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     case SyntaxKind.ForInStatement:
                     case SyntaxKind.ForOfStatement:
                     case SyntaxKind.IfStatement:
+                    case SyntaxKind.JsxOpeningElement:
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.ParenthesizedExpression:
                     case SyntaxKind.PostfixUnaryExpression:
@@ -1659,8 +1884,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             function parenthesizeForAccess(expr: Expression): LeftHandSideExpression {
                 // When diagnosing whether the expression needs parentheses, the decision should be based
                 // on the innermost expression in a chain of nested type assertions.
-                while (expr.kind === SyntaxKind.TypeAssertionExpression) {
-                    expr = (<TypeAssertion>expr).expression;
+                while (expr.kind === SyntaxKind.TypeAssertionExpression || expr.kind === SyntaxKind.AsExpression) {
+                    expr = (<AssertionExpression>expr).expression;
                 }
 
                 // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
@@ -1806,8 +2031,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
             }
 
             function skipParentheses(node: Expression): Expression {
-                while (node.kind === SyntaxKind.ParenthesizedExpression || node.kind === SyntaxKind.TypeAssertionExpression) {
-                    node = (<ParenthesizedExpression | TypeAssertion>node).expression;
+                while (node.kind === SyntaxKind.ParenthesizedExpression || node.kind === SyntaxKind.TypeAssertionExpression || node.kind === SyntaxKind.AsExpression) {
+                    node = (<ParenthesizedExpression | AssertionExpression>node).expression;
                 }
                 return node;
             }
@@ -1957,12 +2182,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 // not the user. If we didn't want them, the emitter would not have put them
                 // there.
                 if (!nodeIsSynthesized(node) && node.parent.kind !== SyntaxKind.ArrowFunction) {
-                    if (node.expression.kind === SyntaxKind.TypeAssertionExpression) {
+                    if (node.expression.kind === SyntaxKind.TypeAssertionExpression || node.expression.kind === SyntaxKind.AsExpression) {
                         let operand = (<TypeAssertion>node.expression).expression;
 
                         // Make sure we consider all nested cast expressions, e.g.:
                         // (<any><number><any>-A).x;
-                        while (operand.kind == SyntaxKind.TypeAssertionExpression) {
+                        while (operand.kind === SyntaxKind.TypeAssertionExpression || operand.kind === SyntaxKind.AsExpression) {
                             operand = (<TypeAssertion>operand).expression;
                         }
 
@@ -3637,8 +3862,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         emitOnlyPinnedOrTripleSlashComments(member);
                     }
                     else if (member.kind === SyntaxKind.MethodDeclaration ||
-                             member.kind === SyntaxKind.GetAccessor ||
-                             member.kind === SyntaxKind.SetAccessor) {
+                        member.kind === SyntaxKind.GetAccessor ||
+                        member.kind === SyntaxKind.SetAccessor) {
                         writeLine();
                         emitLeadingComments(member);
                         emitStart(member);
@@ -3808,7 +4033,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     emitClassLikeDeclarationForES6AndHigher(node);
                 }
             }
-            
+
             function emitClassLikeDeclarationForES6AndHigher(node: ClassLikeDeclaration) {
                 let thisNodeIsDecorated = nodeIsDecorated(node);
                 if (node.kind === SyntaxKind.ClassDeclaration) {
@@ -4067,7 +4292,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     write(".prototype");
                 }
             }
-            
+
             function emitDecoratorsOfClass(node: ClassLikeDeclaration) {
                 emitDecoratorsOfMembers(node, /*staticFlag*/ 0);
                 emitDecoratorsOfMembers(node, NodeFlags.Static);
@@ -4979,7 +5204,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 let started = false;
                 for (let importNode of externalImports) {
                     // do not create variable declaration for exports and imports that lack import clause
-                    let skipNode = 
+                    let skipNode =
                         importNode.kind === SyntaxKind.ExportDeclaration ||
                         (importNode.kind === SyntaxKind.ImportDeclaration && !(<ImportDeclaration>importNode).importClause)
 
@@ -5076,7 +5301,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 write("};");
 
                 return emitExportStarFunction(exportedNamesStorageRef);
-                
+
                 function emitExportStarFunction(localNames: string): string {
                     const exportStarFunction = makeUniqueName("exportStar");
 
@@ -5103,7 +5328,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
                     return exportStarFunction;
                 }
-            
+
                 function writeExportedName(node: Identifier | Declaration): void {
                     // do not record default exports
                     // they are local to module and never overwritten (explicitly skipped) by star export 
@@ -5399,7 +5624,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
                             if (importNode.kind === SyntaxKind.ImportDeclaration &&
                                 (<ImportDeclaration>importNode).importClause.namedBindings) {
-                                
+
                                 let namedBindings = (<ImportDeclaration>importNode).importClause.namedBindings;
                                 if (namedBindings.kind === SyntaxKind.NamespaceImport) {
                                     // emit re-export for namespace
@@ -5531,12 +5756,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 // we need to add modules without alias names to the end of the dependencies list
 
                 let aliasedModuleNames: string[] = [];   // names of modules with corresponding parameter in the
-                                                         // factory function.
+                // factory function.
                 let unaliasedModuleNames: string[] = []; // names of modules with no corresponding parameters in
-                                                         // factory function.
+                // factory function.
                 let importAliasNames: string[] = [];     // names of the parameters in the factory function; these 
-                                                         // parameters need to match the indexes of the corresponding 
-                                                         // module names in aliasedModuleNames.
+                // parameters need to match the indexes of the corresponding 
+                // module names in aliasedModuleNames.
 
                 // Fill in amd-dependency tags
                 for (let amdDependency of node.amdDependencies) {
@@ -5655,6 +5880,47 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     emit((<ExportAssignment>exportEquals).expression);
                     write(";");
                     emitEnd(exportEquals);
+                }
+            }
+
+            function emitJsxElement(node: JsxElement) {
+                switch (compilerOptions.jsx) {
+                    case JsxEmit.React:
+                        jsxEmitReact(node);
+                        break;
+                    // Fall back to preserve if None was specified (we'll error earlier)
+                    default:
+                        jsxEmitPreserve(node);
+                        break;
+                }
+            }
+
+            function emitJsxText(node: JsxText) {
+                switch (compilerOptions.jsx) {
+                    case JsxEmit.React:
+                        write('"');
+                        write(getTextOfNode(node));
+                        write('"');
+                        break;
+
+                    case JsxEmit.Preserve:
+                    default: // Emit JSX-preserve as default when no --jsx flag is specified
+                        write(getTextOfNode(node));
+                        break;
+                }
+            }
+
+            function emitJsxExpression(node: JsxExpression) {
+                switch (compilerOptions.jsx) {
+                    case JsxEmit.Preserve:
+                    default:
+                        write('{');
+                        emit(node.expression);
+                        write('}');
+                        break;
+                    case JsxEmit.React:
+                        emit(node.expression);
+                        break;
                 }
             }
 
@@ -5800,7 +6066,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 if (node.kind !== SyntaxKind.Block &&
                     node.parent &&
                     node.parent.kind === SyntaxKind.ArrowFunction &&
-                    (<ArrowFunction>node.parent).body === node && 
+                    (<ArrowFunction>node.parent).body === node &&
                     compilerOptions.target <= ScriptTarget.ES5) {
 
                     return false;
@@ -5845,6 +6111,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         return emitTemplateExpression(<TemplateExpression>node);
                     case SyntaxKind.TemplateSpan:
                         return emitTemplateSpan(<TemplateSpan>node);
+                    case SyntaxKind.JsxElement:
+                        return emitJsxElement(<JsxElement>node);
+                    case SyntaxKind.JsxText:
+                        return emitJsxText(<JsxText>node);
+                    case SyntaxKind.JsxExpression:
+                        return emitJsxExpression(<JsxExpression>node);
                     case SyntaxKind.QualifiedName:
                         return emitQualifiedName(<QualifiedName>node);
                     case SyntaxKind.ObjectBindingPattern:
@@ -5875,6 +6147,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         return emitTaggedTemplateExpression(<TaggedTemplateExpression>node);
                     case SyntaxKind.TypeAssertionExpression:
                         return emit((<TypeAssertion>node).expression);
+                    case SyntaxKind.AsExpression:
+                        return emit((<AsExpression>node).expression);
                     case SyntaxKind.ParenthesizedExpression:
                         return emitParenExpression(<ParenthesizedExpression>node);
                     case SyntaxKind.FunctionDeclaration:

@@ -74,6 +74,9 @@ module ts {
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
             getExportsOfModule: getExportsOfModuleAsArray,
+
+            getJsxElementAttributesType,
+            getJsxIntrinsicTagNames
         };
 
         let unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
@@ -113,6 +116,8 @@ module ts {
         let globalRegExpType: ObjectType;
         let globalTemplateStringsArrayType: ObjectType;
         let globalESSymbolType: ObjectType;
+        let jsxElementType: ObjectType;
+        let jsxIntrinsicElementsType: ObjectType;
         let globalIterableType: GenericType;
         let globalIteratorType: GenericType;
         let globalIterableIteratorType: GenericType;
@@ -157,6 +162,14 @@ module ts {
                 type: esSymbolType,
                 flags: TypeFlags.ESSymbol
             }
+        };
+
+        let JsxNames = {
+            JSX: 'JSX',
+            IntrinsicElements: 'IntrinsicElements',
+            ElementClass: 'ElementClass',
+            ElementAttributesProperty: 'ElementAttributesProperty',
+            Element: 'Element'
         };
 
         function getEmitResolver(sourceFile?: SourceFile) {
@@ -1978,7 +1991,7 @@ module ts {
                             // If the binding pattern is empty, this variable declaration is not visible
                             return false;
                         }
-                        // Otherwise fall through
+                    // Otherwise fall through
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
@@ -2867,7 +2880,7 @@ module ts {
                 sig.minArgumentCount, sig.hasRestParameter, sig.hasStringLiterals);
         }
 
-        function getDefaultConstructSignatures(classType: InterfaceType): Signature[]{
+        function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
             let baseTypes = getBaseTypes(classType);
             if (baseTypes.length) {
                 let baseType = baseTypes[0];
@@ -3677,6 +3690,12 @@ module ts {
             return getTypeOfGlobalSymbol(getGlobalTypeSymbol(name), arity);
         }
 
+        function getNamespacedType(namespace: string, name: string): Type {
+            var namespaceSymbol = getGlobalSymbol(namespace, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
+            var typeSymbol = namespaceSymbol && getSymbol(namespaceSymbol.exports, name, SymbolFlags.Type);
+            return typeSymbol && getDeclaredTypeOfSymbol(typeSymbol);
+        }
+
         function getGlobalESSymbolConstructorSymbol() {
             return globalESSymbolConstructorSymbol || (globalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol"));
         }
@@ -4168,8 +4187,8 @@ module ts {
             return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, headMessage, containingMessageChain);
         }
 
-        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage): boolean {
-            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage);
+        function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
+            return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage, containingMessageChain);
         }
 
         function isSignatureAssignableTo(source: Signature, target: Signature): boolean {
@@ -5434,6 +5453,7 @@ module ts {
                     case SyntaxKind.CallExpression:
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.TypeAssertionExpression:
+                    case SyntaxKind.AsExpression:
                     case SyntaxKind.ParenthesizedExpression:
                     case SyntaxKind.PrefixUnaryExpression:
                     case SyntaxKind.DeleteExpression:
@@ -5460,6 +5480,10 @@ module ts {
                     case SyntaxKind.ThrowStatement:
                     case SyntaxKind.TryStatement:
                     case SyntaxKind.CatchClause:
+                    case SyntaxKind.JsxElement:
+                    case SyntaxKind.JsxAttribute:
+                    case SyntaxKind.JsxSpreadAttribute:
+                    case SyntaxKind.JsxOpeningElement:
                         return forEachChild(node, isAssignedIn);
                 }
                 return false;
@@ -6228,6 +6252,26 @@ module ts {
             return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional) : undefined;
         }
 
+        function getContextualTypeForJsxExpression(expr: JsxExpression|JsxSpreadAttribute): Type {
+            // Contextual type only applies to JSX expressions that are in attribute assignments (not in 'Children' positions)
+            if (expr.parent.kind === SyntaxKind.JsxAttribute) {
+                let attrib = <JsxAttribute>expr.parent;
+                let attrsType = getJsxElementAttributesType(<JsxOpeningElement>attrib.parent);
+                if (!attrsType || isTypeAny(attrsType)) {
+                    return undefined;
+                }
+                else {
+                    return getTypeOfPropertyOfType(attrsType, attrib.name.text);
+                }
+            }
+            else if (expr.kind === SyntaxKind.JsxSpreadAttribute) {
+                return getJsxElementAttributesType(<JsxOpeningElement>expr.parent);
+            }
+            else {
+                return undefined;
+            }
+        }
+
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
         // be "pushed" onto a node using the contextualType property.
         function getContextualType(node: Expression): Type {
@@ -6255,7 +6299,8 @@ module ts {
                 case SyntaxKind.NewExpression:
                     return getContextualTypeForArgument(<CallExpression>parent, node);
                 case SyntaxKind.TypeAssertionExpression:
-                    return getTypeFromTypeNode((<TypeAssertion>parent).type);
+                case SyntaxKind.AsExpression:
+                    return getTypeFromTypeNode((<AssertionExpression>parent).type);
                 case SyntaxKind.BinaryExpression:
                     return getContextualTypeForBinaryOperand(node);
                 case SyntaxKind.PropertyAssignment:
@@ -6269,6 +6314,9 @@ module ts {
                     return getContextualTypeForSubstitutionExpression(<TemplateExpression>parent.parent, node);
                 case SyntaxKind.ParenthesizedExpression:
                     return getContextualType(<ParenthesizedExpression>parent);
+                case SyntaxKind.JsxExpression:
+                case SyntaxKind.JsxSpreadAttribute:
+                    return getContextualTypeForJsxExpression(<JsxExpression>parent);
             }
             return undefined;
         }
@@ -6409,7 +6457,6 @@ module ts {
                     let restArrayType = checkExpression((<SpreadElementExpression>e).expression, contextualMapper);
                     let restElementType = getIndexTypeOfType(restArrayType, IndexKind.Number) ||
                         (languageVersion >= ScriptTarget.ES6 ? getElementTypeOfIterable(restArrayType, /*errorNode*/ undefined) : undefined);
-                    
                     if (restElementType) {
                         elementTypes.push(restElementType);
                     }
@@ -6566,6 +6613,394 @@ module ts {
                     return result;
                 }
                 return undefined;
+            }
+        }
+
+        function checkJsxElement(node: JsxElement) {
+            if ((compilerOptions.jsx || JsxEmit.None) === JsxEmit.None) {
+                error(node, Diagnostics.Cannot_use_JSX_unless_the_jsx_flag_is_provided);
+            }
+
+            checkGrammarJsxElement(node);
+
+            if (!jsxElementType) {
+                error(node, Diagnostics.The_global_type_JSX_Element_must_exist_when_using_JSX);
+                return unknownType;
+            }
+
+            var elemType = checkJsxOpeningElement(node.openingElement);
+
+            for (var i = 0, n = node.children.length; i < n; i++) {
+                if (node.children[i].kind === SyntaxKind.JsxExpression) {
+                    checkJsxExpression(<JsxExpression>node.children[i]);
+                }
+                else if (node.children[i].kind === SyntaxKind.JsxElement) {
+                    checkJsxElement(<JsxElement>node.children[i]);
+                }
+                else {
+                    Debug.assert(node.children[i].kind === SyntaxKind.JsxText);
+                }
+            }
+
+            if (node.closingElement) {
+                checkSourceElement(node.closingElement);
+            }
+
+            return jsxElementType;
+        }
+
+        /// Returns true iff the JSX element name would be a valid identifier, ignoring restrictions about keywords not being identifiers
+        function isIdentifierLike(name: string) {
+            // - is the only character supported in JSX attribute names that isn't valid in JavaScript identifiers
+            return name.indexOf('-') < 0;
+        }
+
+        /// Returns true iff React would emit this tag name as a string rather than an identifier or qualified name
+        function isJsxIntrinsicIdentifier(tagName: Identifier|QualifiedName) {
+            if (tagName.kind === SyntaxKind.QualifiedName) {
+                return false;
+            } else {
+                let firstChar = (<Identifier>tagName).text.charAt(0);
+                return firstChar.toLowerCase() === firstChar;
+            }
+        }
+
+        function checkJsxAttribute(node: JsxAttribute, elementAttributesType: Type, nameTable: Map<boolean>) {
+            var correspondingPropType: Type = unknownType;
+
+            // Look up the corresponding property for this attribute
+            if (elementAttributesType === emptyObjectType && isIdentifierLike(node.name.text)) {
+                // If there is no 'props' property, you may not have non-"data-" attributes
+                error(node.parent, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, getJsxElementPropertiesName());
+            }
+            else if (elementAttributesType && !(elementAttributesType.flags & TypeFlags.Any)) {
+                var correspondingPropSymbol = getPropertyOfType(elementAttributesType, node.name.text);
+                correspondingPropType = correspondingPropSymbol && getTypeOfSymbol(correspondingPropSymbol);
+                if (!correspondingPropType) {
+                    // If there's no corresponding property with this name, error
+                    if (isIdentifierLike(node.name.text)) {
+                        error(node.name, Diagnostics.Property_0_does_not_exist_on_type_1, node.name.text, typeToString(elementAttributesType));
+                        return unknownType;
+                    }
+                }
+            }
+
+            let exprType: Type;
+            if (node.initializer) {
+                exprType = checkExpression(node.initializer);
+            }
+            else {
+                exprType = booleanType;
+            }
+
+            if (!isTypeAny(elementAttributesType) && correspondingPropType) {
+                checkTypeAssignableTo(exprType, correspondingPropType, node);
+            }
+
+            nameTable[node.name.text] = true;
+            return exprType;
+        }
+
+        function checkJsxSpreadAttribute(node: JsxSpreadAttribute, elementAttributesType: Type, nameTable: Map<boolean>) {
+            let type = checkExpression(node.expression);
+            let props = getPropertiesOfType(type);
+            for (var i = 0; i < props.length; i++) {
+                // Is there a corresponding property in the element attributes type? Skip checking of properties
+                // that have already been assigned to, as these are not actually pushed into the resulting type
+                if (!nameTable[props[i].name]) {
+                    let targetPropSym = getPropertyOfType(elementAttributesType, props[i].name);
+                    if (targetPropSym) {
+                        let msg = chainDiagnosticMessages(undefined, Diagnostics.Property_0_of_JSX_spread_attribute_is_not_assignable_to_target_property, props[i].name);
+                        checkTypeAssignableTo(getTypeOfSymbol(props[i]), getTypeOfSymbol(targetPropSym), node, undefined, msg);
+                    }
+
+                    nameTable[props[i].name] = true;
+                }
+            }
+        }
+
+        /// Returns the type JSX.IntrinsicElements. May return `unknownType` if that type is not present.
+        function getJsxIntrinsicElementsType() {
+            if (!jsxIntrinsicElementsType) {
+                let jsxNamespace = getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, undefined);
+                let intrinsicsSymbol = jsxNamespace && getSymbol(jsxNamespace.exports, JsxNames.IntrinsicElements, SymbolFlags.Type);
+                let intrinsicsType = intrinsicsSymbol && getDeclaredTypeOfSymbol(intrinsicsSymbol);
+                jsxIntrinsicElementsType = intrinsicsType || unknownType;
+            }
+            return jsxIntrinsicElementsType;
+        }
+
+        /// Given a JSX opening element, return the symbol of the property that the tag name points to if
+        /// this is an intrinsic tag. This might be a named
+        /// property of the IntrinsicElements interface, or its string indexer.
+        /// If this is a class-based tag (otherwise returns undefined), returns the symbol of the class
+        /// type or factory function.
+        /// Otherwise, returns unknownSymbol.
+        function getJsxElementTagSymbol(node: JsxOpeningElement): Symbol {
+            let flags: JsxFlags = JsxFlags.UnknownElement;
+            var links = getNodeLinks(node);
+            if (!links.resolvedSymbol) {
+                if (isJsxIntrinsicIdentifier(node.tagName)) {
+                    links.resolvedSymbol = lookupIntrinsicTag(node);
+                } else {
+                    links.resolvedSymbol = lookupClassTag(node);
+                }
+            }
+            return links.resolvedSymbol;
+
+            function lookupIntrinsicTag(node: JsxOpeningElement): Symbol {
+                let intrinsicElementsType = getJsxIntrinsicElementsType();
+                if (intrinsicElementsType !== unknownType) {
+                    // Property case
+                    let intrinsicProp = getPropertyOfType(intrinsicElementsType, getTextOfNode(node.tagName));
+                    if (intrinsicProp) {
+                        links.jsxFlags |= JsxFlags.IntrinsicNamedElement;
+                        return intrinsicProp;
+                    }
+
+                    // Intrinsic string indexer case
+                    let indexSignatureType = getIndexTypeOfType(intrinsicElementsType, IndexKind.String);
+                    if (indexSignatureType) {
+                        links.jsxFlags |= JsxFlags.IntrinsicIndexedElement;
+                        return intrinsicElementsType.symbol;
+                    }
+
+                    // Wasn't found
+                    error(node, Diagnostics.Property_0_does_not_exist_on_type_1, getTextOfNode(node.tagName), 'JSX.' + JsxNames.IntrinsicElements);
+                    return unknownSymbol;
+                }
+                else {
+                    if (compilerOptions.noImplicitAny) {
+                        error(node, Diagnostics.JSX_element_implicitly_has_type_any_because_no_interface_JSX_0_exists, JsxNames.IntrinsicElements);
+                    }
+                }
+            }
+
+            function lookupClassTag(node: JsxOpeningElement): Symbol {
+                let valueSym: Symbol;
+
+                // Look up the value in the current scope
+                if (node.tagName.kind === SyntaxKind.Identifier) {
+                    valueSym = getResolvedSymbol(<Identifier>node.tagName);
+                }
+                else {
+                    valueSym = checkQualifiedName(<QualifiedName>node.tagName).symbol;
+                }
+                
+                if (valueSym !== unknownSymbol) {
+                    links.jsxFlags |= JsxFlags.ClassElement;
+                }
+
+                return valueSym || unknownSymbol;
+            }
+        }
+
+        /// Given a JSX element that is a class element, finds the Element Instance Type. If the
+        /// element is not a class element, or the class element type cannot be determined, returns 'undefined'.
+        /// For example, in the element <MyClass>, the element instance type is `MyClass` (not `typeof MyClass`).
+        function getJsxElementInstanceType(node: JsxOpeningElement) {
+            if (!(getNodeLinks(node).jsxFlags & JsxFlags.ClassElement)) {
+                // There is no such thing as an instance type for a non-class element
+                return undefined;
+            }
+
+            var classSymbol = getJsxElementTagSymbol(node);
+            if (classSymbol === unknownSymbol) {
+                // Couldn't find the class instance type. Error has already been issued
+                return anyType;
+            }
+
+            var valueType = getTypeOfSymbol(classSymbol);
+            if (isTypeAny(valueType)) {
+                // Short-circuit if the class tag is using an element type 'any'
+                return anyType;
+            }
+
+            // Resolve the signatures, preferring constructors
+            var signatures = getSignaturesOfType(valueType, SignatureKind.Construct);
+            if (signatures.length === 0) {
+                // No construct signatures, try call signatures
+                signatures = getSignaturesOfType(valueType, SignatureKind.Call);
+            }
+            if (signatures.length === 0) {
+                // We found no signatures at all, which is an error
+                error(node.tagName, Diagnostics.JSX_element_0_is_not_a_constructor_function_or_factory_function, getTextOfNode(node.tagName));
+                return undefined;
+            }
+
+            else {
+                // Check that the constructor/factory returns an object type
+                var returnType = getUnionType(signatures.map(s => getReturnTypeOfSignature(s)));
+                if (!isTypeAny(returnType) && !(returnType.flags & TypeFlags.ObjectType)) {
+                    error(node.tagName, Diagnostics.The_return_type_of_a_JSX_element_constructor_or_factory_function_must_return_an_object_type);
+                    return undefined;
+                }
+
+                // Issue an error if this return type isn't assignable to JSX.ElementClass
+                // TODO: Move this to a 'check' function
+                var elemClassType = getJsxGlobalElementClassType();
+                if (elemClassType) {
+                    checkTypeRelatedTo(returnType, elemClassType, assignableRelation, node, Diagnostics.JSX_element_0_is_not_a_constructor_function_or_factory_function_for_JSX_elements);
+                }
+
+                return returnType;
+            }
+        }
+
+        /// e.g. "props" for React.d.ts,
+        /// or 'undefined' if ElementAttributesPropery doesn't exist (which means all
+        ///     non-intrinsic elements' attributes type is 'any'),
+        /// or '' if it has 0 properties (which means all
+        ///     non-instrinsic elements' attributes type is the element instance type)
+        function getJsxElementPropertiesName() {
+            let jsxNamespace = getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, /*diagnosticMessage*/undefined);
+            let attribsPropTypeSym = jsxNamespace && getSymbol(jsxNamespace.exports, JsxNames.ElementAttributesProperty, SymbolFlags.Type);
+            let attribPropType = attribsPropTypeSym && getDeclaredTypeOfSymbol(attribsPropTypeSym);
+            let attribProperties = attribPropType && getPropertiesOfType(attribPropType);
+
+            if (attribProperties) {
+                if (attribProperties.length === 0) {
+                    return '';
+                }
+                else if (attribProperties.length === 1) {
+                    return attribProperties[0].name;
+                }
+                else {
+                    error(attribsPropTypeSym.declarations[0], Diagnostics.The_global_type_JSX_0_may_not_have_more_than_one_property, JsxNames.ElementAttributesProperty);
+                    return undefined;
+                }
+            }
+            else {
+                return undefined;
+            }
+        }
+
+        /// Given an opening element, get the 'element attributes type', i.e. the type that tells
+        /// us which attributes are valid on a given element.
+        function getJsxElementAttributesType(node: JsxOpeningElement): Type {
+            let links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = lookup();
+            }
+            return links.resolvedType;
+
+            function lookup() {
+                let sym = getJsxElementTagSymbol(node);
+
+                if (links.jsxFlags & JsxFlags.ClassElement) {
+                    let elemInstanceType = getJsxElementInstanceType(node);
+
+                    if (isTypeAny(elemInstanceType)) {
+                        return anyType;
+                    }
+
+                    var propsName = getJsxElementPropertiesName();
+                    if (propsName === undefined) {
+                        // There is no type ElementAttributesProperty, return 'any'
+                        return anyType;
+                    }
+                    else if (propsName === '') {
+                        // If there is no e.g. 'props' member in ElementAttributesProperty, use the element class type instead
+                        return elemInstanceType;
+                    }
+                    else {
+                        var attributesType = getTypeOfPropertyOfType(elemInstanceType, propsName);
+
+                        if (!attributesType) {
+                            // There is no property named 'props' on this instance type
+                            return emptyObjectType;
+                        }
+                        else if (isTypeAny(attributesType) || (attributesType === unknownType)) {
+                            return attributesType;
+                        }
+                        else if (!(attributesType.flags & TypeFlags.ObjectType)) {
+                            error(node.tagName, Diagnostics.JSX_element_attributes_type_0_must_be_an_object_type, typeToString(attributesType));
+                            return anyType;
+                        }
+                        else {
+                            return attributesType;
+                        }
+                    }
+                }
+                else if (links.jsxFlags & JsxFlags.IntrinsicNamedElement) {
+                    return getTypeOfSymbol(sym);
+                }
+                else if (links.jsxFlags & JsxFlags.IntrinsicIndexedElement) {
+                    return getIndexTypeOfSymbol(sym, IndexKind.String);
+                }
+                else {
+                    // Resolution failed
+                    return anyType;
+                }
+            }
+        }
+
+        /// Given a JSX attribute, returns the symbol for the corresponds property
+        /// of the element attributes type. Will return unknownSymbol for attributes
+        /// that have no matching element attributes type property.
+        function getJsxAttributePropertySymbol(attrib: JsxAttribute): Symbol {
+            let attributesType = getJsxElementAttributesType(<JsxOpeningElement>attrib.parent);
+            let prop = getPropertyOfType(attributesType, attrib.name.text);
+            return prop || unknownSymbol;
+        }
+
+        function getJsxGlobalElementClassType(): Type {
+            var jsxNS = getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
+            if (jsxNS) {
+                let sym = getSymbol(jsxNS.exports, JsxNames.ElementClass, SymbolFlags.Type);
+                let elemClassType = sym && getDeclaredTypeOfSymbol(sym);
+                return elemClassType;
+            }
+            else {
+                return undefined;
+            }
+        }
+
+        /// Returns all the properties of the Jsx.IntrinsicElements interface
+        function getJsxIntrinsicTagNames(): Symbol[]{
+            let intrinsics = getJsxIntrinsicElementsType();
+            return intrinsics ? getPropertiesOfType(intrinsics) : [];
+        }
+
+        function checkJsxOpeningElement(node: JsxOpeningElement) {
+            var targetAttributesType = getJsxElementAttributesType(node);
+
+            var nameTable: Map<boolean> = {};
+            // Process this array in right-to-left order so we know which
+            // attributes (mostly from spreads) are being overwritten and
+            // thus should have their types ignored
+            for (var i = node.attributes.length - 1; i >= 0; i--) {
+                if (node.attributes[i].kind === SyntaxKind.JsxAttribute) {
+                    checkJsxAttribute(<JsxAttribute>(node.attributes[i]), targetAttributesType, nameTable);
+                }
+                else if (node.attributes[i].kind === SyntaxKind.JsxSpreadAttribute) {
+                    checkJsxSpreadAttribute(<JsxSpreadAttribute>(node.attributes[i]), targetAttributesType, nameTable);
+                }
+                else {
+                    throw new Error('Unknown JSX attribute kind');
+                }
+            }
+
+            // Check that all required properties have been provided
+            if (targetAttributesType) {
+                let targetProperties = getPropertiesOfType(targetAttributesType);
+                for (var i = 0; i < targetProperties.length; i++) {
+                    if (!(targetProperties[i].flags & SymbolFlags.Optional) &&
+                        nameTable[targetProperties[i].name] === undefined) {
+
+                        error(node, Diagnostics.Property_0_is_missing_in_type_1, targetProperties[i].name, typeToString(targetAttributesType));
+                    }
+                }
+            }
+        }
+
+        function checkJsxExpression(node: JsxExpression) {
+            if (node.expression) {
+                return checkExpression(node.expression);
+            }
+            else {
+                /// <Foo enabled /> is shorthand for <Foo enabled={true} />
+                return booleanType;
             }
         }
 
@@ -7314,7 +7749,7 @@ module ts {
                     if (!hasCorrectArity(node, args, originalCandidate)) {
                         continue;
                     }
-                    
+
                     let candidate: Signature;
                     let typeArgumentsAreValid: boolean;
                     let inferenceContext = originalCandidate.typeParameters
@@ -7567,7 +8002,7 @@ module ts {
             return getReturnTypeOfSignature(getResolvedSignature(node));
         }
 
-        function checkTypeAssertion(node: TypeAssertion): Type {
+        function checkAssertion(node: AssertionExpression) {
             let exprType = checkExpression(node.expression);
             let targetType = getTypeFromTypeNode(node.type);
             if (produceDiagnostics && targetType !== unknownType) {
@@ -7740,7 +8175,6 @@ module ts {
 
         function checkFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | MethodDeclaration, contextualMapper?: TypeMapper): Type {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
-
             // Grammar checking
             let hasGrammarError = checkGrammarDeclarationNameInStrictMode(node) || checkGrammarFunctionLikeDeclaration(node);
             if (!hasGrammarError && node.kind === SyntaxKind.FunctionExpression) {
@@ -8252,7 +8686,7 @@ module ts {
                     if (!checkForDisallowedESSymbolOperand(operator)) {
                         return booleanType;
                     }
-                    // Fall through
+                // Fall through
                 case SyntaxKind.EqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
@@ -8280,8 +8714,8 @@ module ts {
             function checkForDisallowedESSymbolOperand(operator: SyntaxKind): boolean {
                 let offendingSymbolOperand =
                     someConstituentTypeHasKind(leftType, TypeFlags.ESSymbol) ? node.left :
-                    someConstituentTypeHasKind(rightType, TypeFlags.ESSymbol) ? node.right :
-                    undefined;
+                        someConstituentTypeHasKind(rightType, TypeFlags.ESSymbol) ? node.right :
+                            undefined;
                 if (offendingSymbolOperand) {
                     error(offendingSymbolOperand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(operator));
                     return false;
@@ -8541,8 +8975,6 @@ module ts {
                     return checkCallExpression(<CallExpression>node);
                 case SyntaxKind.TaggedTemplateExpression:
                     return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
-                case SyntaxKind.TypeAssertionExpression:
-                    return checkTypeAssertion(<TypeAssertion>node);
                 case SyntaxKind.ParenthesizedExpression:
                     return checkExpression((<ParenthesizedExpression>node).expression, contextualMapper);
                 case SyntaxKind.ClassExpression:
@@ -8552,6 +8984,9 @@ module ts {
                     return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression>node, contextualMapper);
                 case SyntaxKind.TypeOfExpression:
                     return checkTypeOfExpression(<TypeOfExpression>node);
+                case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.AsExpression:
+                    return checkAssertion(<AssertionExpression>node);
                 case SyntaxKind.DeleteExpression:
                     return checkDeleteExpression(<DeleteExpression>node);
                 case SyntaxKind.VoidExpression:
@@ -8569,7 +9004,12 @@ module ts {
                 case SyntaxKind.OmittedExpression:
                     return undefinedType;
                 case SyntaxKind.YieldExpression:
-                    return checkYieldExpression(<YieldExpression>node);
+                    checkYieldExpression(<YieldExpression>node);
+                    return unknownType;
+                case SyntaxKind.JsxExpression:
+                    return checkJsxExpression(<JsxExpression>node);
+                case SyntaxKind.JsxElement:
+                    return checkJsxElement(<JsxElement>node);
             }
             return unknownType;
         }
@@ -9475,7 +9915,7 @@ module ts {
 
                     case SyntaxKind.MethodDeclaration:
                         checkParameterTypeAnnotationsAsExpressions(<FunctionLikeDeclaration>node);
-                        // fall-through
+                    // fall-through
 
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.GetAccessor:
@@ -10056,7 +10496,7 @@ module ts {
             if (allowStringInput) {
                 return checkElementTypeOfArrayOrString(inputType, errorNode);
             }
-            
+
             if (isArrayLikeType(inputType)) {
                 let indexType = getIndexTypeOfType(inputType, IndexKind.Number);
                 if (indexType) {
@@ -11142,7 +11582,7 @@ module ts {
 
                     // if the module merges with a class declaration in the same lexical scope, 
                     // we need to track this to ensure the correct emit.
-                    let mergedClass = getDeclarationOfKind(symbol, SyntaxKind.ClassDeclaration);                    
+                    let mergedClass = getDeclarationOfKind(symbol, SyntaxKind.ClassDeclaration);
                     if (mergedClass &&
                         inSameLexicalScope(node, mergedClass)) {
                         getNodeLinks(node).flags |= NodeCheckFlags.LexicalModuleMergesWithClass;
@@ -11539,6 +11979,7 @@ module ts {
                 case SyntaxKind.TemplateExpression:
                 case SyntaxKind.TemplateSpan:
                 case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.AsExpression:
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.TypeOfExpression:
                 case SyntaxKind.VoidExpression:
@@ -11576,6 +12017,11 @@ module ts {
                 case SyntaxKind.EnumMember:
                 case SyntaxKind.ExportAssignment:
                 case SyntaxKind.SourceFile:
+                case SyntaxKind.JsxExpression:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxAttribute:
+                case SyntaxKind.JsxSpreadAttribute:
+                case SyntaxKind.JsxOpeningElement:
                     forEachChild(node, checkFunctionExpressionBodies);
                     break;
             }
@@ -11810,6 +12256,97 @@ module ts {
             return node.parent && node.parent.kind === SyntaxKind.ExpressionWithTypeArguments;
         }
 
+// <<<<<<< HEAD
+        function isTypeNode(node: Node): boolean {
+            if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
+                return true;
+            }
+
+            switch (node.kind) {
+                case SyntaxKind.AnyKeyword:
+                case SyntaxKind.NumberKeyword:
+                case SyntaxKind.StringKeyword:
+                case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.SymbolKeyword:
+                    return true;
+                case SyntaxKind.VoidKeyword:
+                    return node.parent.kind !== SyntaxKind.VoidExpression;
+                case SyntaxKind.StringLiteral:
+                    // Specialized signatures can have string literals as their parameters' type names
+                    return node.parent.kind === SyntaxKind.Parameter;
+                case SyntaxKind.ExpressionWithTypeArguments:
+                    return true;
+
+                // Identifiers and qualified names may be type nodes, depending on their context. Climb
+                // above them to find the lowest container
+                case SyntaxKind.Identifier:
+                    // If the identifier is the RHS of a qualified name, then it's a type iff its parent is.
+                    if (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node) {
+                        node = node.parent;
+                    }
+                    else if (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node) {
+                        node = node.parent;
+                    }
+                // fall through
+                case SyntaxKind.QualifiedName:
+                case SyntaxKind.PropertyAccessExpression:
+                    // At this point, node is either a qualified name or an identifier
+                    Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression,
+                        "'node' was expected to be a qualified name, identifier or property access in 'isTypeNode'.");
+
+                    let parent = node.parent;
+                    if (parent.kind === SyntaxKind.TypeQuery) {
+                        return false;
+                    }
+                    // Do not recursively call isTypeNode on the parent. In the example:
+                    //
+                    //     let a: A.B.C;
+                    //
+                    // Calling isTypeNode would consider the qualified name A.B a type node. Only C or
+                    // A.B.C is a type node.
+                    if (SyntaxKind.FirstTypeNode <= parent.kind && parent.kind <= SyntaxKind.LastTypeNode) {
+                        return true;
+                    }
+                    switch (parent.kind) {
+                        case SyntaxKind.ExpressionWithTypeArguments:
+                            return true;
+                        case SyntaxKind.TypeParameter:
+                            return node === (<TypeParameterDeclaration>parent).constraint;
+                        case SyntaxKind.PropertyDeclaration:
+                        case SyntaxKind.PropertySignature:
+                        case SyntaxKind.Parameter:
+                        case SyntaxKind.VariableDeclaration:
+                            return node === (<VariableLikeDeclaration>parent).type;
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.FunctionExpression:
+                        case SyntaxKind.ArrowFunction:
+                        case SyntaxKind.Constructor:
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.MethodSignature:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                            return node === (<FunctionLikeDeclaration>parent).type;
+                        case SyntaxKind.CallSignature:
+                        case SyntaxKind.ConstructSignature:
+                        case SyntaxKind.IndexSignature:
+                            return node === (<SignatureDeclaration>parent).type;
+                        case SyntaxKind.TypeAssertionExpression:
+                        case SyntaxKind.AsExpression:
+                            return node === (<AssertionExpression>parent).type;
+                        case SyntaxKind.CallExpression:
+                        case SyntaxKind.NewExpression:
+                            return (<CallExpression>parent).typeArguments && indexOf((<CallExpression>parent).typeArguments, node) >= 0;
+                        case SyntaxKind.TaggedTemplateExpression:
+                            // TODO (drosen): TaggedTemplateExpressions may eventually support type arguments.
+                            return false;
+                    }
+            }
+
+            return false;
+        }
+
+//=======
+//>>>>>>> Microsoft/master
         function getLeftSideOfImportEqualsOrExportAssignment(nodeOnRightSide: EntityName): ImportEqualsDeclaration | ExportAssignment {
             while (nodeOnRightSide.parent.kind === SyntaxKind.QualifiedName) {
                 nodeOnRightSide = <QualifiedName>nodeOnRightSide.parent;
@@ -11889,6 +12426,12 @@ module ts {
                 // return the alias symbol.
                 meaning |= SymbolFlags.Alias;
                 return resolveEntityName(<EntityName>entityName, meaning);
+            }
+            else if (entityName.parent.kind === SyntaxKind.JsxOpeningElement) {
+                return getJsxElementTagSymbol(<JsxOpeningElement>entityName.parent);
+            }
+            else if (entityName.parent.kind === SyntaxKind.JsxAttribute) {
+                return getJsxAttributePropertySymbol(<JsxAttribute>entityName.parent);
             }
 
             // Do we want to return undefined here?
@@ -12341,7 +12884,7 @@ module ts {
                         break;
                 }
             }
-             
+
             return "Object";
         }
 
@@ -12467,7 +13010,7 @@ module ts {
             let isVariableDeclarationOrBindingElement =
                 n.parent.kind === SyntaxKind.BindingElement || (n.parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>n.parent).name === n);
 
-            let symbol = 
+            let symbol =
                 (isVariableDeclarationOrBindingElement ? getSymbolOfNode(n.parent) : undefined) ||
                 getNodeLinks(n).resolvedSymbol ||
                 resolveName(n, n.text, SymbolFlags.Value | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
@@ -12495,7 +13038,7 @@ module ts {
             if (!signature) {
                 return unknownType;
             }
-            
+
             let instantiatedSignature = getSignatureInstantiation(signature, typeArguments);
             return getOrCreateTypeFromSignature(instantiatedSignature);
         }
@@ -12554,6 +13097,7 @@ module ts {
             globalNumberType = getGlobalType("Number");
             globalBooleanType = getGlobalType("Boolean");
             globalRegExpType = getGlobalType("RegExp");
+            jsxElementType = getNamespacedType("JSX", JsxNames.Element);
             getGlobalClassDecoratorType = memoize(() => getGlobalType("ClassDecorator"));
             getGlobalPropertyDecoratorType = memoize(() => getGlobalType("PropertyDecorator"));
             getGlobalMethodDecoratorType = memoize(() => getGlobalType("MethodDecorator"));
@@ -12714,7 +13258,7 @@ module ts {
                 }
 
                 // TODO (yuisu): Fix when module is a strict mode
-                let errorReport = reportStrictModeGrammarErrorInClassDeclaration(<Identifier>node, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode, nameText)||
+                let errorReport = reportStrictModeGrammarErrorInClassDeclaration(<Identifier>node, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode, nameText) ||
                     grammarErrorOnNode(node, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
                 return errorReport;
             }
@@ -13191,13 +13735,13 @@ module ts {
                 let currentKind: number;
                 if (prop.kind === SyntaxKind.PropertyAssignment || prop.kind === SyntaxKind.ShorthandPropertyAssignment) {
                     // Grammar checking for computedPropertName and shorthandPropertyAssignment
-                    checkGrammarForInvalidQuestionMark(prop,(<PropertyAssignment>prop).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
+                    checkGrammarForInvalidQuestionMark(prop, (<PropertyAssignment>prop).questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
                     if (name.kind === SyntaxKind.NumericLiteral) {
                         checkGrammarNumericLiteral(<Identifier>name);
                     }
                     currentKind = Property;
                 }
-                else if ( prop.kind === SyntaxKind.MethodDeclaration) {
+                else if (prop.kind === SyntaxKind.MethodDeclaration) {
                     currentKind = Property;
                 }
                 else if (prop.kind === SyntaxKind.GetAccessor) {
@@ -13231,6 +13775,29 @@ module ts {
                     else {
                         return grammarErrorOnNode(name, Diagnostics.An_object_literal_cannot_have_property_and_accessor_with_the_same_name);
                     }
+                }
+            }
+        }
+
+        function checkGrammarJsxElement(node: JsxElement) {
+            const seen: Map<boolean> = {};
+            for (let attr of node.openingElement.attributes) {
+                if (attr.kind === SyntaxKind.JsxSpreadAttribute) {
+                    continue;
+                }
+
+                let jsxAttr = (<JsxAttribute>attr);
+                let name = jsxAttr.name;
+                if (!hasProperty(seen, name.text)) {
+                    seen[name.text] = true;
+                }
+                else {
+                    return grammarErrorOnNode(name, Diagnostics.JSX_elements_cannot_have_multiple_attributes_with_the_same_name);
+                }
+
+                let initializer = jsxAttr.initializer;
+                if (initializer && initializer.kind === SyntaxKind.JsxExpression && !(<JsxExpression>initializer).expression) {
+                    return grammarErrorOnNode(jsxAttr.initializer, Diagnostics.JSX_attributes_must_only_be_assigned_a_non_empty_expression);
                 }
             }
         }
@@ -13466,7 +14033,7 @@ module ts {
                 }
             }
 
-            let checkLetConstNames =  languageVersion >= ScriptTarget.ES6 && (isLet(node) || isConst(node));
+            let checkLetConstNames = languageVersion >= ScriptTarget.ES6 && (isLet(node) || isConst(node));
 
             // 1. LexicalDeclaration : LetOrConst BindingList ;
             // It is a Syntax Error if the BoundNames of BindingList contains "let".
@@ -13625,7 +14192,7 @@ module ts {
                     // otherwise report generic error message.
                     // reportGrammarErrorInClassDeclaration only return true if grammar error is successfully reported and false otherwise
                     let reportErrorInClassDeclaration = reportStrictModeGrammarErrorInClassDeclaration(identifier, Diagnostics.Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode, nameText);
-                    if (!reportErrorInClassDeclaration){
+                    if (!reportErrorInClassDeclaration) {
                         return grammarErrorOnNode(identifier, Diagnostics.Invalid_use_of_0_in_strict_mode, nameText);
                     }
                     return reportErrorInClassDeclaration;

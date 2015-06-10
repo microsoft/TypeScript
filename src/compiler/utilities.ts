@@ -169,13 +169,13 @@ module ts {
         return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.decorators.end);        
     }
 
-    export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node): string {
+    export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node, includeTrivia = false): string {
         if (nodeIsMissing(node)) {
             return "";
         }
 
         let text = sourceFile.text;
-        return text.substring(skipTrivia(text, node.pos), node.end);
+        return text.substring(includeTrivia ? node.pos : skipTrivia(text, node.pos), node.end);
     }
 
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node): string {
@@ -186,8 +186,8 @@ module ts {
         return sourceText.substring(skipTrivia(sourceText, node.pos), node.end);
     }
 
-    export function getTextOfNode(node: Node): string {
-        return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node);
+    export function getTextOfNode(node: Node, includeTrivia = false): string {
+        return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node, includeTrivia);
     }
 
     // Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
@@ -850,6 +850,7 @@ module ts {
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
             case SyntaxKind.TaggedTemplateExpression:
+            case SyntaxKind.AsExpression:
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.FunctionExpression:
@@ -866,6 +867,7 @@ module ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.OmittedExpression:
+            case SyntaxKind.JsxElement:
             case SyntaxKind.YieldExpression:
                 return true;
             case SyntaxKind.QualifiedName:
@@ -913,7 +915,8 @@ module ts {
                         return (forInStatement.initializer === node && forInStatement.initializer.kind !== SyntaxKind.VariableDeclarationList) ||
                             forInStatement.expression === node;
                     case SyntaxKind.TypeAssertionExpression:
-                        return node === (<TypeAssertion>parent).expression;
+                    case SyntaxKind.AsExpression:
+                        return node === (<AssertionExpression>parent).expression;
                     case SyntaxKind.TemplateSpan:
                         return node === (<TemplateSpan>parent).expression;
                     case SyntaxKind.ComputedPropertyName:
@@ -1850,6 +1853,7 @@ module ts {
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.CallExpression:
+                case SyntaxKind.JsxElement:
                 case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.ParenthesizedExpression:

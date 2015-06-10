@@ -1,0 +1,40 @@
+tests/cases/conformance/jsx/tsxAttributeErrors.tsx(14,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/tsxAttributeErrors.tsx(17,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/tsxAttributeErrors.tsx(21,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+tests/cases/conformance/jsx/tsxAttributeErrors.tsx(24,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+
+
+==== tests/cases/conformance/jsx/tsxAttributeErrors.tsx (4 errors) ====
+    
+    declare namespace JSX {
+    	interface IntrinsicElements {
+    		div: {
+    			text?: string;
+    			width?: number;
+    		}
+    
+    		span: any;
+    	}
+    }
+    
+    // Error, number is not assignable to string
+    <div text={42} />;
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+    
+    // Error, string is not assignable to number
+    <div width={'foo'} />;
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+    
+    // Error, number is not assignable to string
+    var attribs = { text: 100 };
+    <div {...attribs} />;
+    ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+    
+    // No errors here
+    <span foo='bar' bar={'foo'} />;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+    

@@ -48,6 +48,7 @@ module ts {
         SemicolonToken,
         CommaToken,
         LessThanToken,
+        LessThanSlashToken,
         GreaterThanToken,
         LessThanEqualsToken,
         GreaterThanEqualsToken,
@@ -217,6 +218,7 @@ module ts {
         ClassExpression,
         OmittedExpression,
         ExpressionWithTypeArguments,
+        AsExpression,
         // Misc
         TemplateSpan,
         SemicolonClassElement,
@@ -261,6 +263,15 @@ module ts {
         NamedExports,
         ExportSpecifier,
         MissingDeclaration,
+
+        //JSX
+        JsxElement,
+        JsxOpeningElement,
+        JsxText,
+        JsxClosingElement,
+        JsxAttribute,
+        JsxSpreadAttribute,
+        JsxExpression,
 
         // Module references
         ExternalModuleReference,
@@ -400,6 +411,16 @@ module ts {
         HasAggregatedChildData = 1 << 8
     }
 
+    export const enum JsxFlags {
+        None = 0,
+        IntrinsicNamedElement = 1 << 0,
+        IntrinsicIndexedElement = 1 << 1,
+        ClassElement = 1 << 2,
+        UnknownElement = 1 << 3,
+
+        IntrinsicElement = IntrinsicNamedElement | IntrinsicIndexedElement
+    }
+
     /* @internal */
     export const enum RelationComparisonResult {
         Succeeded = 1, // Should be truthy
@@ -446,6 +467,8 @@ module ts {
     export type EntityName = Identifier | QualifiedName;
 
     export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName | BindingPattern;
+
+    export type AssertionExpression = TypeAssertion | AsExpression;
 
     export interface Declaration extends Node {
         _declarationBrand: any;
@@ -717,6 +740,11 @@ module ts {
         right: Expression;
     }
 
+    export interface AsExpression extends Expression {
+        expression: Expression;
+        type: TypeNode;
+    }
+
     export interface ConditionalExpression extends Expression {
         condition: Expression;
         questionToken: Node;
@@ -794,6 +822,44 @@ module ts {
         typeArguments?: NodeArray<TypeNode>;
     }
 
+    export interface JsxElement extends PrimaryExpression {
+        openingElement: JsxOpeningElement;
+        children?: NodeArray<JsxElement | JsxExpression | JsxText>;
+        closingElement?: JsxClosingElement;
+    }
+
+    export interface JsxOpeningElement extends Expression {
+        tagName: EntityName;
+        attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>;
+        isSelfClosing: boolean;
+    }
+
+    export interface JsxAttribute extends Node {
+        name: Identifier;
+        initializer?: Expression;
+    }
+
+    export interface JsxSpreadAttribute extends Node {
+        expression: Expression;
+    }
+
+    export interface JsxClosingElement extends Node {
+        tagName: EntityName;
+    }
+
+    export interface JsxExpression extends Expression {
+        expression?: Expression;
+    }
+
+    export interface JsxText extends Node {
+        _jsxTextExpressionBrand: any;
+    }
+
+    export interface HeritageClauseElement extends TypeNode {
+        expression: LeftHandSideExpression;
+        typeArguments?: NodeArray<TypeNode>;
+    }
+
     export interface NewExpression extends CallExpression, PrimaryExpression { }
 
     export interface TaggedTemplateExpression extends MemberExpression {
@@ -801,7 +867,7 @@ module ts {
         template: LiteralExpression | TemplateExpression;
     }
 
-    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression;
+    export type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | JsxElement;
 
     export interface TypeAssertion extends UnaryExpression {
         type: TypeNode;
@@ -1152,6 +1218,7 @@ module ts {
         amdDependencies: {path: string; name: string}[];
         moduleName: string;
         referencedFiles: FileReference[];
+        isTSXFile: boolean;
 
         hasNoDefaultLib: boolean;
 
@@ -1318,6 +1385,9 @@ module ts {
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         getAliasedSymbol(symbol: Symbol): Symbol;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
+
+        getJsxElementAttributesType(elementNode: JsxOpeningElement): Type;
+        getJsxIntrinsicTagNames(): Symbol[];
 
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile): Diagnostic[];
@@ -1594,6 +1664,8 @@ module ts {
         assignmentChecks?: Map<boolean>;  // Cache of assignment checks
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
+        jsxFlags?: JsxFlags;              // flags for knowning what kind of element/attributes we're dealing with
+
     }
 
     export const enum TypeFlags {
@@ -1828,6 +1900,7 @@ module ts {
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         listFiles?: boolean;
+        jsx?: JsxEmit;
         locale?: string;
         mapRoot?: string;
         module?: ModuleKind;
@@ -1865,6 +1938,12 @@ module ts {
         AMD = 2,
         UMD = 3,
         System = 4,
+    }
+
+    export const enum JsxEmit {
+        None = 0,
+        Preserve = 1,
+        React = 2
     }
 
     export const enum NewLineKind {

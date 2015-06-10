@@ -198,8 +198,8 @@ module ts {
             list._children = [];
             let pos = nodes.pos;
 
-            
-            
+
+
             for (let node of nodes) {
                 if (pos < node.pos) {
                     pos = this.addSyntheticNodes(list._children, pos, node.pos);
@@ -737,6 +737,7 @@ module ts {
         public amdDependencies: { name: string; path: string }[];
         public moduleName: string;
         public referencedFiles: FileReference[];
+        public isTSXFile: boolean;
 
         public syntacticDiagnostics: Diagnostic[];
         public referenceDiagnostics: Diagnostic[];
@@ -875,7 +876,7 @@ module ts {
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.TypeLiteral:
                         addDeclaration(<Declaration>node);
-                        // fall through
+                    // fall through
                     case SyntaxKind.Constructor:
                     case SyntaxKind.VariableStatement:
                     case SyntaxKind.VariableDeclarationList:
@@ -1092,7 +1093,7 @@ module ts {
         export const definition = "definition";
         export const reference = "reference";
         export const writtenReference = "writtenReference";
-    } 
+    }
 
     export interface HighlightSpan {
         textSpan: TextSpan;
@@ -1607,6 +1608,7 @@ module ts {
         return {
             target: ScriptTarget.ES5,
             module: ModuleKind.None,
+            jsx: JsxEmit.Preserve
         };
     }
 
@@ -2898,11 +2900,18 @@ module ts {
                 return undefined;
             }
 
+            let location = getTouchingPropertyName(sourceFile, position);
+            let options = program.getCompilerOptions();
+            let jsx = options.jsx !== JsxEmit.None;
+            let target = options.target;
+
             // Find the node where completion is requested on, in the case of a completion after 
             // a dot, it is the member access expression other wise, it is a request for all 
             // visible symbols in the scope, and the node is the current location.
             let node = currentToken;
             let isRightOfDot = false;
+            let isRightOfOpenTag = false;
+
             if (contextToken && contextToken.kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.PropertyAccessExpression) {
                 node = (<PropertyAccessExpression>contextToken.parent).expression;
                 isRightOfDot = true;
@@ -2910,10 +2919,10 @@ module ts {
             else if (contextToken && contextToken.kind === SyntaxKind.DotToken && contextToken.parent.kind === SyntaxKind.QualifiedName) {
                 node = (<QualifiedName>contextToken.parent).left;
                 isRightOfDot = true;
+            } else if (contextToken && contextToken.kind === SyntaxKind.LessThanToken && sourceFile.isTSXFile) {
+                isRightOfOpenTag = true;
+                location = contextToken;
             }
-
-            let location = getTouchingPropertyName(sourceFile, position);
-            var target = program.getCompilerOptions().target;
 
             let semanticStart = new Date().getTime();
             let isMemberCompletion: boolean;
@@ -2922,6 +2931,17 @@ module ts {
 
             if (isRightOfDot) {
                 getTypeScriptMemberSymbols();
+            }
+            else if (isRightOfOpenTag) {
+                // TODO include all in-scope value identifiers
+                let tagSymbols = typeChecker.getJsxIntrinsicTagNames();;
+                if (tryGetGlobalSymbols()) {
+                    symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & SymbolFlags.Value)));
+                } else {
+                    symbols = tagSymbols;
+                }
+                isMemberCompletion = true;
+                isNewIdentifierLocation = false;
             }
             else {
                 // For JavaScript or TypeScript, if we're not after a dot, then just try to get the
@@ -2934,7 +2954,7 @@ module ts {
 
             log("getCompletionData: Semantic work: " + (new Date().getTime() - semanticStart));
 
-            return { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot };
+            return { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag) };
 
             function getTypeScriptMemberSymbols(): void {
                 // Right of dot member completion list
@@ -3024,6 +3044,16 @@ module ts {
 
                         //let exports = typeInfoResolver.getExportsOfImportDeclaration(importDeclaration);
                         symbols = exports ? filterModuleExports(exports, importDeclaration) : emptyArray;
+                    }
+                }
+                else if (getAncestor(contextToken, SyntaxKind.JsxElement)) {
+                    // Defer to global completion if we're inside an {expression}
+                    var expr = getAncestor(contextToken, SyntaxKind.JsxExpression);
+                    if (!expr) {
+                        // Cursor is inside a JSX element
+                        var t = typeChecker.getJsxElementAttributesType((<JsxElement>getAncestor(contextToken, SyntaxKind.JsxElement)).openingElement);
+                        symbols = typeChecker.getPropertiesOfType(t);
+                        isMemberCompletion = true;
                     }
                 }
                 else {
@@ -4203,7 +4233,7 @@ module ts {
 
         function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
             let results = getOccurrencesAtPositionCore(fileName, position);
-            
+
             if (results) {
                 let sourceFile = getCanonicalFileName(normalizeSlashes(fileName));
 
@@ -4872,7 +4902,7 @@ module ts {
             return convertReferences(referencedSymbols);
         }
 
-        function findReferences(fileName: string, position: number): ReferencedSymbol[]{
+        function findReferences(fileName: string, position: number): ReferencedSymbol[] {
             var referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false);
 
             // Only include referenced symbols that have a valid definition.
@@ -5807,7 +5837,7 @@ module ts {
         }
 
         function isTypeReference(node: Node): boolean {
-            if (isRightSideOfQualifiedNameOrPropertyAccess(node) ) {
+            if (isRightSideOfQualifiedNameOrPropertyAccess(node)) {
                 node = node.parent;
             }
 
@@ -5975,13 +6005,13 @@ module ts {
             return BreakpointResolver.spanInSourceFileAtLocation(sourceFile, position);
         }
 
-        function getNavigationBarItems(fileName: string): NavigationBarItem[]{
+        function getNavigationBarItems(fileName: string): NavigationBarItem[] {
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             return NavigationBar.getNavigationBarItems(sourceFile);
         }
 
-        function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[]{
+        function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
             return convertClassifications(getEncodedSemanticClassifications(fileName, span));
         }
 
@@ -6098,7 +6128,7 @@ module ts {
             return result;
         }
 
-        function getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[]{
+        function getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
             return convertClassifications(getEncodedSyntacticClassifications(fileName, span));
         }
 
@@ -6449,14 +6479,14 @@ module ts {
 
             function getMatchingTokenKind(token: Node): ts.SyntaxKind {
                 switch (token.kind) {
-                    case ts.SyntaxKind.OpenBraceToken:      return ts.SyntaxKind.CloseBraceToken
-                    case ts.SyntaxKind.OpenParenToken:      return ts.SyntaxKind.CloseParenToken;
-                    case ts.SyntaxKind.OpenBracketToken:    return ts.SyntaxKind.CloseBracketToken;
-                    case ts.SyntaxKind.LessThanToken:       return ts.SyntaxKind.GreaterThanToken;
-                    case ts.SyntaxKind.CloseBraceToken:     return ts.SyntaxKind.OpenBraceToken
-                    case ts.SyntaxKind.CloseParenToken:     return ts.SyntaxKind.OpenParenToken;
-                    case ts.SyntaxKind.CloseBracketToken:   return ts.SyntaxKind.OpenBracketToken;
-                    case ts.SyntaxKind.GreaterThanToken:    return ts.SyntaxKind.LessThanToken;
+                    case ts.SyntaxKind.OpenBraceToken: return ts.SyntaxKind.CloseBraceToken
+                    case ts.SyntaxKind.OpenParenToken: return ts.SyntaxKind.CloseParenToken;
+                    case ts.SyntaxKind.OpenBracketToken: return ts.SyntaxKind.CloseBracketToken;
+                    case ts.SyntaxKind.LessThanToken: return ts.SyntaxKind.GreaterThanToken;
+                    case ts.SyntaxKind.CloseBraceToken: return ts.SyntaxKind.OpenBraceToken
+                    case ts.SyntaxKind.CloseParenToken: return ts.SyntaxKind.OpenParenToken;
+                    case ts.SyntaxKind.CloseBracketToken: return ts.SyntaxKind.OpenBracketToken;
+                    case ts.SyntaxKind.GreaterThanToken: return ts.SyntaxKind.LessThanToken;
                 }
 
                 return undefined;
@@ -6671,6 +6701,7 @@ module ts {
                         if (defaultLibFileName) {
                             for (let current of declarations) {
                                 let sourceFile = current.getSourceFile();
+                                var canonicalName = getCanonicalFileName(ts.normalizePath(sourceFile.fileName));
                                 if (sourceFile && getCanonicalFileName(ts.normalizePath(sourceFile.fileName)) === getCanonicalFileName(ts.normalizePath(defaultLibFileName))) {
                                     return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library.key));
                                 }
@@ -6899,7 +6930,7 @@ module ts {
                 case ClassificationType.stringLiteral: return TokenClass.StringLiteral;
                 case ClassificationType.whiteSpace: return TokenClass.Whitespace;
                 case ClassificationType.punctuation: return TokenClass.Punctuation;
-                case ClassificationType.identifier: 
+                case ClassificationType.identifier:
                 case ClassificationType.className:
                 case ClassificationType.enumName:
                 case ClassificationType.interfaceName:
@@ -6954,7 +6985,7 @@ module ts {
                 case EndOfLineState.InTemplateMiddleOrTail:
                     text = "}\n" + text;
                     offset = 2;
-                    // fallthrough
+                // fallthrough
                 case EndOfLineState.InTemplateSubstitutionPosition:
                     templateStack.push(SyntaxKind.TemplateHead);
                     break;
@@ -6993,9 +7024,9 @@ module ts {
 
                 if (!isTrivia(token)) {
                     if ((token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) && !noRegexTable[lastNonTriviaToken]) {
-                         if (scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
-                             token = SyntaxKind.RegularExpressionLiteral;
-                         }
+                        if (scanner.reScanSlashToken() === SyntaxKind.RegularExpressionLiteral) {
+                            token = SyntaxKind.RegularExpressionLiteral;
+                        }
                     }
                     else if (lastNonTriviaToken === SyntaxKind.DotToken && isKeyword(token)) {
                         token = SyntaxKind.Identifier;
@@ -7008,7 +7039,7 @@ module ts {
                         token = SyntaxKind.Identifier;
                     }
                     else if (lastNonTriviaToken === SyntaxKind.Identifier &&
-                             token === SyntaxKind.LessThanToken) {
+                        token === SyntaxKind.LessThanToken) {
                         // Could be the start of something generic.  Keep track of that by bumping 
                         // up the current count of generic contexts we may be in.
                         angleBracketStack++;
@@ -7019,10 +7050,10 @@ module ts {
                         angleBracketStack--;
                     }
                     else if (token === SyntaxKind.AnyKeyword ||
-                             token === SyntaxKind.StringKeyword ||
-                             token === SyntaxKind.NumberKeyword ||
-                             token === SyntaxKind.BooleanKeyword ||
-                             token === SyntaxKind.SymbolKeyword) {
+                        token === SyntaxKind.StringKeyword ||
+                        token === SyntaxKind.NumberKeyword ||
+                        token === SyntaxKind.BooleanKeyword ||
+                        token === SyntaxKind.SymbolKeyword) {
                         if (angleBracketStack > 0 && !syntacticClassifierAbsent) {
                             // If it looks like we're could be in something generic, don't classify this 
                             // as a keyword.  We may just get overwritten by the syntactic classifier,
@@ -7258,7 +7289,7 @@ module ts {
     declare let __dirname: string;
     
     /**
-      * Get the path of the default library file (lib.d.ts) as distributed with the typescript
+      * Get the path of the default library files (lib.d.ts) as distributed with the typescript
       * node package.
       * The functionality is not supported if the ts module is consumed outside of a node module. 
       */

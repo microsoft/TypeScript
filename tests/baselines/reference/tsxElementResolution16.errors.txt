@@ -1,0 +1,15 @@
+tests/cases/conformance/jsx/tsxElementResolution16.tsx(8,1): error TS2602: The global type 'JSX.Element' must exist when using JSX.
+
+
+==== tests/cases/conformance/jsx/tsxElementResolution16.tsx (1 errors) ====
+    declare module JSX {
+    }
+    
+    interface Obj1 {
+    	new(n: string): {};
+    }
+    var obj1: Obj1;
+    <obj1 x={10} />; // Error (JSX.Element is missing)
+    ~~~~~~~~~~~~~~~
+!!! error TS2602: The global type 'JSX.Element' must exist when using JSX.
+    
