@@ -652,6 +652,13 @@ task("webhost", [webhostJsPath], function() {
     jake.cpR(path.join(builtLocalDirectory, "lib.d.ts"), "tests/webhost/", {silent: true});
 });
 
+var lstestPath = "tests/lstest/lstest.ts";
+var lstestJsPath = "tests/lstest/lstest.js";
+compileFile(lstestJsPath, [lstestPath], [servicesFile, lstestPath].concat(libraryTargets), [], /*useBuiltCompiler*/true);
+
+desc("Builds the tsc language service test");
+task("lstest", [lstestJsPath]);
+
 // Perf compiler
 var perftscPath = "tests/perftsc.ts";
 var perftscJsPath = "built/local/perftsc.js";

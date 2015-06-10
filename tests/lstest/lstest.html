@@ -1,0 +1,72 @@
+<html>
+    <head>
+        <title>WebTSC</title>
+        <style>
+            #container {
+                width: 100%;
+            }
+
+            #header {
+                height:50px;
+                text-align:center;
+            }
+
+            #content {
+                text-align:left;
+                width:950px;
+                min-height:300px;
+                margin:0px auto;
+            }
+
+            #main {
+                float:left;
+                width:700px;
+            }
+
+            #side{
+                float:right;
+                width:250px;
+                text-align:left;
+                padding-top:75px;
+            }
+        </style>
+        <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.js"></script>
+        <script src="files.js"></script>
+        <script src="lstest.js"></script>
+        <script>
+            var lsTest = prepareTestLS();
+            doClassify();
+            function appendText(str) {
+                var outputPane = $("#outputPane");
+                outputPane.val(outputPane.val() + str);
+            }
+            function doClassify() {
+                $("#outputPane").val("");
+                lsTest.runSemanticClassificationForFile("checker.ts");
+                appendText("===doClassify - done===");
+            }
+            function doModify() {
+                lsTest.incrementVersions();
+                $("#outputPane").val("");
+                appendText("=== doModify - done===");
+            }
+        </script>
+    </head>    
+    <body>
+        <div id="container">
+            <div id="header">
+                <h1>LSTest</h1>
+            </div>
+            <div id="content">
+                <div id="main">
+                    <h1>Output:</h1>
+                    <textarea id="outputPane"></textarea>
+                </div>
+                <div id="side">
+                    <button onclick="doClassify()">Run semantic classification</button>
+                    <button onclick="doModify()">Mark files as modified (causes up-to-date check to fail)</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
