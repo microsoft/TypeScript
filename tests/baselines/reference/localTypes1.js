@@ -202,12 +202,12 @@ function f3(b) {
             return a;
         }
         else {
-            var A = (function () {
-                function A() {
+            var A_1 = (function () {
+                function A_1() {
                 }
-                return A;
+                return A_1;
             })();
-            var c = [new A()];
+            var c = [new A_1()];
             c[0].x = E.B;
             return c;
         }

@@ -2,12 +2,9 @@ tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(4,22): er
 tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(5,21): error TS2422: A class may only implement another class or interface.
 tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(10,6): error TS2300: Duplicate identifier 'T2'.
 tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(11,6): error TS2300: Duplicate identifier 'T2'.
-tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(14,8): error TS1005: '=' expected.
-tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(14,12): error TS1005: '(' expected.
-tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(14,19): error TS2304: Cannot find name 'T'.
 
 
-==== tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts (7 errors) ====
+==== tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts (4 errors) ====
     type T1 = { x: string }
     
     // An interface can be named in an extends or implements clause, but a type alias for an object type literal cannot.
@@ -30,10 +27,4 @@ tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(14,19): e
     
     // An interface can have type parameters, but a type alias for an object type literal cannot.
     type T3<T> = { x: T }
-           ~
-!!! error TS1005: '=' expected.
-               ~
-!!! error TS1005: '(' expected.
-                      ~
-!!! error TS2304: Cannot find name 'T'.
     

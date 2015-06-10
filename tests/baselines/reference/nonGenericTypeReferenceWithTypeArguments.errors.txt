@@ -1,0 +1,53 @@
+tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts(7,9): error TS2315: Type 'C' is not generic.
+tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts(8,9): error TS2315: Type 'I' is not generic.
+tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts(9,9): error TS2315: Type 'E' is not generic.
+tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts(10,9): error TS2315: Type 'T' is not generic.
+tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts(17,13): error TS2315: Type 'C' is not generic.
+tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts(18,13): error TS2315: Type 'I' is not generic.
+tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts(19,13): error TS2315: Type 'E' is not generic.
+tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts(20,13): error TS2315: Type 'T' is not generic.
+tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts(21,13): error TS2315: Type 'U' is not generic.
+
+
+==== tests/cases/conformance/types/specifyingTypes/typeReferences/nonGenericTypeReferenceWithTypeArguments.ts (9 errors) ====
+    // Check that errors are reported for non-generic types with type arguments
+    
+    class C { }
+    interface I { }
+    enum E { }
+    type T = { };
+    var v1: C<string>;
+            ~~~~~~~~~
+!!! error TS2315: Type 'C' is not generic.
+    var v2: I<string>;
+            ~~~~~~~~~
+!!! error TS2315: Type 'I' is not generic.
+    var v3: E<string>;
+            ~~~~~~~~~
+!!! error TS2315: Type 'E' is not generic.
+    var v4: T<string>;
+            ~~~~~~~~~
+!!! error TS2315: Type 'T' is not generic.
+    
+    function f<U>() {
+        class C { }
+        interface I { }
+        enum E { }
+        type T = {};
+        var v1: C<string>;
+                ~~~~~~~~~
+!!! error TS2315: Type 'C' is not generic.
+        var v2: I<string>;
+                ~~~~~~~~~
+!!! error TS2315: Type 'I' is not generic.
+        var v3: E<string>;
+                ~~~~~~~~~
+!!! error TS2315: Type 'E' is not generic.
+        var v4: T<string>;
+                ~~~~~~~~~
+!!! error TS2315: Type 'T' is not generic.
+        var v5: U<string>;
+                ~~~~~~~~~
+!!! error TS2315: Type 'U' is not generic.
+    }
+    

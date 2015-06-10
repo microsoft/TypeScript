@@ -17,7 +17,6 @@
 ////    INITIATED123;
 ////    public horizon(): void;
 ////}
-debugger;
 var notFoundSearchValue = "mPointThatIJustInitiated wrongKeyWord";
 
 goTo.marker("file1");
