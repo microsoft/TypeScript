@@ -2,7 +2,6 @@
 /// <reference path="..\services\services.ts" />
 /// <reference path="protocol.d.ts" />
 /// <reference path="session.ts" />
-/// <reference path="node.d.ts" />
 
 module ts.server {
     export interface Logger {
@@ -28,7 +27,7 @@ module ts.server {
         });
     }
 
-    class ScriptInfo {
+    export class ScriptInfo {
         svc: ScriptVersionCache;
         children: ScriptInfo[] = [];     // files referenced by this file
         defaultProject: Project;      // project to use by default for file
@@ -80,7 +79,7 @@ module ts.server {
         }
     }
 
-    class LSHost implements ts.LanguageServiceHost {
+    export class LSHost implements ts.LanguageServiceHost {
         ls: ts.LanguageService = null;
         compilationSettings: ts.CompilerOptions;
         filenameToScript: ts.Map<ScriptInfo> = {};
@@ -273,7 +272,7 @@ module ts.server {
         }
     }
 
-    interface ProjectOptions {
+    export interface ProjectOptions {
         // these fields can be present in the project file
         files?: string[];
         compilerOptions?: ts.CompilerOptions;
@@ -376,7 +375,7 @@ module ts.server {
         }
     }
 
-    interface ProjectOpenResult {
+    export interface ProjectOpenResult {
         success?: boolean;
         errorMsg?: string;
         project?: Project;
@@ -392,11 +391,11 @@ module ts.server {
         return copiedList;
     }
 
-    interface ProjectServiceEventHandler {
+    export interface ProjectServiceEventHandler {
         (eventName: string, project: Project, fileName: string): void;
     }
 
-    interface HostConfiguration {
+    export interface HostConfiguration {
         formatCodeOptions: ts.FormatCodeOptions;
         hostInfo: string;
     }
@@ -953,7 +952,7 @@ module ts.server {
 
     }
 
-    class CompilerService {
+    export class CompilerService {
         host: LSHost;
         languageService: ts.LanguageService;
         classifier: ts.Classifier;
@@ -999,7 +998,7 @@ module ts.server {
 
     }
 
-    interface LineCollection {
+    export interface LineCollection {
         charCount(): number;
         lineCount(): number;
         isLeaf(): boolean;
@@ -1013,7 +1012,7 @@ module ts.server {
         leaf?: LineLeaf;
     }
 
-    enum CharRangeSection {
+    export enum CharRangeSection {
         PreStart,
         Start,
         Entire,
@@ -1022,7 +1021,7 @@ module ts.server {
         PostEnd
     }
 
-    interface ILineIndexWalker {
+    export interface ILineIndexWalker {
         goSubtree: boolean;
         done: boolean;
         leaf(relativeStart: number, relativeLength: number, lineCollection: LineLeaf): void;
@@ -1248,7 +1247,7 @@ module ts.server {
     }
 
     // text change information
-    class TextChange {
+    export class TextChange {
         constructor(public pos: number, public deleteLen: number, public insertedText?: string) {
         }
 
@@ -1371,7 +1370,7 @@ module ts.server {
         }
     }
 
-    class LineIndexSnapshot implements ts.IScriptSnapshot {
+    export class LineIndexSnapshot implements ts.IScriptSnapshot {
         index: LineIndex;
         changesSincePreviousVersion: TextChange[] = [];
 
@@ -1605,7 +1604,7 @@ module ts.server {
         }
     }
 
-    class LineNode implements LineCollection {
+    export class LineNode implements LineCollection {
         totalChars = 0;
         totalLines = 0;
         children: LineCollection[] = [];
@@ -1891,7 +1890,7 @@ module ts.server {
         }
     }
 
-    class LineLeaf implements LineCollection {
+    export class LineLeaf implements LineCollection {
         udata: any;
 
         constructor(public text: string) {

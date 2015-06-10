@@ -100,7 +100,16 @@ var serverSources = [
     "editorServices.ts",
     "protocol.d.ts",
     "session.ts",
+    "nodeimpl.ts",
     "server.ts"
+].map(function (f) {
+    return path.join(serverDirectory, f);
+});
+
+var languageServiceLibrarySources = [
+    "editorServices.ts",
+    "protocol.d.ts",
+    "session.ts"
 ].map(function (f) {
     return path.join(serverDirectory, f);
 });
@@ -137,6 +146,7 @@ var harnessSources = [
     "protocol.d.ts",
     "session.ts",
     "client.ts",
+    "nodeimpl.ts",
     "editorServices.ts",
 ].map(function (f) {
     return path.join(serverDirectory, f);
@@ -368,6 +378,20 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
+
+var lsslFile = path.join(builtLocalDirectory, "tslssl.js");
+compileFile(
+    lsslFile, 
+    languageServiceLibrarySources, 
+    [builtLocalDirectory, copyright].concat(serverSources).concat(languageServiceLibrarySources),
+    /*prefixes*/ [copyright], 
+    /*useBuiltCompiler*/ true, 
+    /*noOutFile*/ false, 
+    /*generateDeclarations*/ true);
+
+// Local target to build the language service server library
+desc("Builds language service server library");
+task("lssl", [lsslFile]);
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
