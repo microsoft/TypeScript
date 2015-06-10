@@ -7,4 +7,5 @@ var foo = async (): Promise<void> => {
 //// [asyncArrowFunction8_es6.js]
 var foo = () => __awaiter(function* () {
     var v = { [yield ]: foo };
-}, this, void 0, Promise);
+},
+this, void 0, Promise);

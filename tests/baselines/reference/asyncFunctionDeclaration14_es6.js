@@ -7,5 +7,6 @@ async function foo(): Promise<void> {
 function foo() {
     return __awaiter(function* () {
         return;
-    }, this, void 0, Promise);
+    },
+    this, void 0, Promise);
 }

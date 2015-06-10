@@ -13,5 +13,6 @@ function func() {
         "before";
         var b = yield p, a;
         "after";
-    }, this, void 0, Promise);
+    },
+    this, void 0, Promise);
 }
