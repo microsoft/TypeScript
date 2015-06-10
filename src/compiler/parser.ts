@@ -3804,7 +3804,7 @@ module ts {
             return isIdentifierOrKeyword() && !scanner.hasPrecedingLineBreak();
         }
 
-        function parseDeclarationFlags(): boolean {
+        function isDeclaration(): boolean {
             while (true) {
                 switch (token) {
                     case SyntaxKind.VarKeyword:
@@ -3873,8 +3873,8 @@ module ts {
             }
         }
 
-        function getDeclarationFlags(): boolean {
-            return lookAhead(parseDeclarationFlags);
+        function isStartOfDeclaration(): boolean {
+            return lookAhead(isDeclaration);
         }
 
         function isStartOfStatement(): boolean {
@@ -3908,7 +3908,7 @@ module ts {
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.ExportKeyword:
                 case SyntaxKind.ImportKeyword:
-                    return getDeclarationFlags();
+                    return isStartOfDeclaration();
 
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.InterfaceKeyword:
@@ -3924,7 +3924,7 @@ module ts {
                 case SyntaxKind.StaticKeyword:
                     // When these don't start a declaration, they may be the start of a class member if an identifier
                     // immediately follows. Otherwise they're an identifier in an expression statement.
-                    return getDeclarationFlags() || !lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine);
+                    return isStartOfDeclaration() || !lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine);
 
                 default:
                     return isStartOfExpression();
@@ -4003,7 +4003,7 @@ module ts {
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.StaticKeyword:
-                    if (getDeclarationFlags()) {
+                    if (isStartOfDeclaration()) {
                         return parseDeclaration();
                     }
                     break;
