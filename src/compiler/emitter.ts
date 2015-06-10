@@ -1113,12 +1113,13 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                 /// The parser (currently) eats the whitespace in "<Foo> {x} </Foo>", but
                 /// this is semantically relevant in React.
                 function getIntermediateTrivia(prevNode: Node, nextNode: Node) {
-                    if (nextNode === undefined) throw new Error('No next node of ' + getTextOfNode(prevNode));
+                    Debug.assert(!!nextNode);
 
                     var nextNodeContentStart = skipTrivia(currentSourceFile.text, nextNode.pos, false);
                     if (prevNode.end + 1 === nextNodeContentStart) {
                         return undefined;
-                    } else {
+                    }
+                    else {
                         return currentSourceFile.text.substr(prevNode.end, nextNodeContentStart - nextNode.pos);
                     }
                 }
@@ -1130,16 +1131,17 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         var ch = (<Identifier>name).text.charAt(0);
                         if (ch.toUpperCase() === ch) {
                             emit(name);
-                        } else {
+                        }
+                        else {
                             write('"');
                             emit(name);
                             write('"');
                         }
                         return ch.toUpperCase() !== ch;
-                    } else if (name.kind === SyntaxKind.QualifiedName) {
+                    }
+                    else {
+                        Debug.assert(name.kind === SyntaxKind.QualifiedName);
                         emit(name);
-                    } else {
-                        throw new Error('Unrecognized tag name syntax kind');
                     }
                 }
 
@@ -1151,7 +1153,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                         write('"');
                         emit(name);
                         write('"');
-                    } else {
+                    }
+                    else {
                         emit(name);
                     }
                 }
@@ -1174,7 +1177,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                     if (node.openingElement.attributes.length === 0) {
                         // When there are no attributes, React wants 'null'
                         write('null');
-                    } else {
+                    }
+                    else {
                         // Either emit one big object literal (no spread attribs), or
                         // a call to React.__spread
                         let attrs = node.openingElement.attributes;
@@ -1190,23 +1194,25 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                                     }
                                     if (i > 0) write(', ');
                                     emit((<JsxSpreadAttribute>attrs[i]).expression);
-                                } else if (attrs[i].kind === SyntaxKind.JsxAttribute) {
+                                }
+                                else {
+                                    Debug.assert(attrs[i].kind === SyntaxKind.JsxAttribute);
                                     if (haveOpenedObjectLiteral) {
                                         write(', ');
-                                    } else {
+                                    }
+                                    else {
                                         haveOpenedObjectLiteral = true;
                                         if (i > 0) write(', ');
                                         write('{');
                                     }
                                     emitJsxAttribute(<JsxAttribute>attrs[i]);
-                                } else {
-                                    throw new Error('Unrecognized JSX attribute type');
                                 }
                             }
                             if (haveOpenedObjectLiteral) write('}');
 
                             write(')'); // closing paren to React.__spread(
-                        } else {
+                        }
+                        else {
                             // One object literal with all the attributes in them
                             write('{');
                             for (var i = 0; i < attrs.length; i++) {
@@ -1235,7 +1241,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
                             write(getTextOfNode(node.children[i], true));
                             write(getIntermediateTrivia(node.children[i], nextElement) || "");
                             write('"');
-                        } else {
+                        }
+                        else {
                             emit(node.children[i]);
                         }
                     }
@@ -1277,20 +1284,18 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
                     for (var i = 0, n = node.attributes.length; i < n; i++) {
                         if (i > 0) write(' ');
-                        switch (node.attributes[i].kind) {
-                            case SyntaxKind.JsxSpreadAttribute:
-                                emitJsxSpreadAttribute(<JsxSpreadAttribute>node.attributes[i]);
-                                break;
-                            case SyntaxKind.JsxAttribute:
-                                emitJsxAttribute(<JsxAttribute>node.attributes[i]);
-                                break;
-                            default:
-                                throw new Error('Unrecognized attribute type');
+                        if (node.attributes[i].kind === SyntaxKind.JsxSpreadAttribute) {
+                            emitJsxSpreadAttribute(<JsxSpreadAttribute>node.attributes[i]);
+                        }
+                        else {
+                            Debug.assert(node.attributes[i].kind === SyntaxKind.JsxAttribute);
+                            emitJsxAttribute(<JsxAttribute>node.attributes[i]);
                         }
                     }
                     if (node.isSelfClosing) {
                         write('/>');
-                    } else {
+                    }
+                    else {
                         write('>');
                     }
                 }
@@ -5894,17 +5899,16 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
             function emitJsxText(node: JsxText) {
                 switch (compilerOptions.jsx) {
-                    case JsxEmit.Preserve:
-                        write(getTextOfNode(node));
-                        break;
                     case JsxEmit.React:
                         write('"');
                         write(getTextOfNode(node));
                         write('"');
                         break;
-                    default:
-                        // Should not be here
-                        throw new Error('Unrecognized JSX emit system');
+
+                    case JsxEmit.Preserve:
+                    default: // Emit JSX-preserve as default when no --jsx flag is specified
+                        write(getTextOfNode(node));
+                        break;
                 }
             }
 
