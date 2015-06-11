@@ -6046,8 +6046,8 @@ module ts {
 
             function processNode(node: Node) {
                 // Only walk into nodes that intersect the requested span.
-                if (node && textSpanIntersectsWith(span, node.getStart(), node.getWidth())) {
-                    if (node.kind === SyntaxKind.Identifier && node.getWidth() > 0) {
+                if (node && textSpanIntersectsWith(span, node.getFullStart(), node.getFullWidth())) {
+                    if (node.kind === SyntaxKind.Identifier && !nodeIsMissing(node)) {
                         let symbol = typeChecker.getSymbolAtLocation(node);
                         if (symbol) {
                             let type = classifySymbol(symbol, getMeaningFromLocation(node));
