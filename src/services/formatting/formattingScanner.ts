@@ -224,7 +224,7 @@ module ts.formatting {
         }
 
         function isOnToken(): boolean {
-            let current = (lastTokenInfo && lastTokenInfo.token.kind) ||  scanner.getToken();
+            let current = (lastTokenInfo && lastTokenInfo.token.kind) || scanner.getToken();
             let startPos = (lastTokenInfo && lastTokenInfo.token.pos) || scanner.getStartPos();
             return startPos < endPos && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
         }
