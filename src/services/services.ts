@@ -5992,6 +5992,7 @@ module ts {
             let typeChecker = program.getTypeChecker();
 
             let result: number[] = [];
+            let typeNames = program.getTypeNames();
             processNode(sourceFile);
 
             return { spans: result, endOfLineState: EndOfLineState.None };
@@ -6048,11 +6049,14 @@ module ts {
                 // Only walk into nodes that intersect the requested span.
                 if (node && textSpanIntersectsWith(span, node.getFullStart(), node.getFullWidth())) {
                     if (node.kind === SyntaxKind.Identifier && !nodeIsMissing(node)) {
-                        let symbol = typeChecker.getSymbolAtLocation(node);
-                        if (symbol) {
-                            let type = classifySymbol(symbol, getMeaningFromLocation(node));
-                            if (type) {
-                                pushClassification(node.getStart(), node.getWidth(), type);
+                        let identifier = <Identifier>node;
+                        if (typeNames[identifier.text]) {
+                            let symbol = typeChecker.getSymbolAtLocation(node);
+                            if (symbol) {
+                                let type = classifySymbol(symbol, getMeaningFromLocation(node));
+                                if (type) {
+                                    pushClassification(node.getStart(), node.getWidth(), type);
+                                }
                             }
                         }
                     }

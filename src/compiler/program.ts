@@ -148,6 +148,7 @@ module ts {
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
+        let typeNames: Map<string>;
 
         let start = new Date().getTime();
 
@@ -172,6 +173,7 @@ module ts {
             getDeclarationDiagnostics,
             getCompilerOptionsDiagnostics,
             getTypeChecker,
+            getTypeNames,
             getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory: () => commonSourceDirectory,
             emit,
@@ -182,6 +184,20 @@ module ts {
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
         };
         return program;
+
+        function getTypeNames() {
+            if (!typeNames) {
+                // Initialize a checker so that all our files are bound.
+                getTypeChecker();
+                typeNames = {};
+
+                for (let sourceFile of files) {
+                    copyMap(sourceFile.typeNames, typeNames);
+                }
+            }
+
+            return typeNames;
+        }
 
         function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
             return {
