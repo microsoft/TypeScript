@@ -1770,25 +1770,25 @@ module ts {
         }
 
         function parseRightSideOfDot(allowIdentifierNames: boolean): Identifier {
-            // Technically a keyword is valid here as all keywords are identifier names.
-            // However, often we'll encounter this in error situations when the keyword
+            // Technically a keyword is valid here as all identifiers and keywords are identifier names.
+            // However, often we'll encounter this in error situations when the identifier or keyword
             // is actually starting another valid construct.
             //
             // So, we check for the following specific case:
             //
             //      name.
-            //      keyword identifierNameOrKeyword
+            //      identifierOrKeyword identifierNameOrKeyword
             //
             // Note: the newlines are important here.  For example, if that above code
             // were rewritten into:
             //
-            //      name.keyword
+            //      name.identifierOrKeyword
             //      identifierNameOrKeyword
             //
             // Then we would consider it valid.  That's because ASI would take effect and
-            // the code would be implicitly: "name.keyword; identifierNameOrKeyword".
+            // the code would be implicitly: "name.identifierOrKeyword; identifierNameOrKeyword".
             // In the first case though, ASI will not take effect because there is not a
-            // line terminator after the keyword.
+            // line terminator after the identifier or keyword.
             if (scanner.hasPrecedingLineBreak() && isIdentifierOrKeyword()) {
                 let matchesPattern = lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine);
 

@@ -11119,6 +11119,7 @@ module ts {
                     ? Diagnostics.An_ambient_module_declaration_is_only_allowed_at_the_top_level_in_a_file
                     : Diagnostics.A_namespace_declaration_is_only_allowed_in_a_namespace_or_module;
                 if (checkGrammarModuleElementContext(node, contextErrorMessage)) {
+                    // If we hit a module declaration in an illegal context, just bail out to avoid cascading errors.
                     return;
                 }
 
@@ -11235,6 +11236,7 @@ module ts {
 
         function checkImportDeclaration(node: ImportDeclaration) {
             if (checkGrammarModuleElementContext(node, Diagnostics.An_import_declaration_can_only_be_used_in_a_namespace_or_module)) {
+                // If we hit an import declaration in an illegal context, just bail out to avoid cascading errors.
                 return;
             }
             if (!checkGrammarImportDeclarationNameInStrictMode(node) && !checkGrammarDecorators(node) && !checkGrammarModifiers(node) && (node.flags & NodeFlags.Modifier)) {
@@ -11260,6 +11262,7 @@ module ts {
 
         function checkImportEqualsDeclaration(node: ImportEqualsDeclaration) {
             if (checkGrammarModuleElementContext(node, Diagnostics.An_import_declaration_can_only_be_used_in_a_namespace_or_module)) {
+                // If we hit an import declaration in an illegal context, just bail out to avoid cascading errors.
                 return;
             }
 
@@ -11295,6 +11298,7 @@ module ts {
 
         function checkExportDeclaration(node: ExportDeclaration) {
             if (checkGrammarModuleElementContext(node, Diagnostics.An_export_declaration_can_only_be_used_in_a_module)) {
+                // If we hit an export in an illegal context, just bail out to avoid cascading errors.
                 return;
             }
 
@@ -11338,6 +11342,7 @@ module ts {
 
         function checkExportAssignment(node: ExportAssignment) {
             if (checkGrammarModuleElementContext(node, Diagnostics.An_export_assignment_can_only_be_used_in_a_module)) {
+                // If we hit an export assignment in an illegal context, just bail out to avoid cascading errors.
                 return;
             }
 
