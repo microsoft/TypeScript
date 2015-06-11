@@ -122,6 +122,8 @@ module ts.server {
         event: string;
         body?: any;
     }
+    
+    export type ProtocolHandler = (request: protocol.Request) => boolean;
 
     export class Session {
         projectService: ProjectService;
@@ -849,6 +851,14 @@ module ts.server {
         exit() {
         }
         
+        private handlers : Map<ProtocolHandler> = {};
+        addProtocolHandler(command: string, handler: ProtocolHandler) {
+            this.handlers[command] = handler;
+        }
+        removeProtocolHandler(command: string, handler: ProtocolHandler) {
+            delete this.handlers[command];
+        }
+        
         onMessageParsed(request: protocol.Request) : boolean {
             var response: any;
             var errorMessage: string;
@@ -981,8 +991,13 @@ module ts.server {
                     break;
                 }
                 default: {
-                    this.projectService.log("Unrecognized JSON command: " + JSON.stringify(request));
-                    this.output(undefined, CommandNames.Unknown, request.seq, "Unrecognized JSON command: " + request.command);
+                    if (this.handlers[request.command]) {
+                        this.logger.info(`Invoking dynamic protocol handler "${request.command}"`);
+                        return this.handlers[request.command](request);
+                    } else {
+                        this.projectService.log("Unrecognized JSON command: " + JSON.stringify(request));
+                        this.output(undefined, CommandNames.Unknown, request.seq, "Unrecognized JSON command: " + request.command);
+                    }
                     break;
                 }
             }
