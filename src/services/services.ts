@@ -6050,6 +6050,10 @@ module ts {
                 if (node && textSpanIntersectsWith(span, node.getFullStart(), node.getFullWidth())) {
                     if (node.kind === SyntaxKind.Identifier && !nodeIsMissing(node)) {
                         let identifier = <Identifier>node;
+
+                        // Only bother calling into the typechecker if this is an identifier that
+                        // could possibly resolve to a type name.  This makes classification run
+                        // in a third of the time it would normally take.
                         if (typeNames[identifier.text]) {
                             let symbol = typeChecker.getSymbolAtLocation(node);
                             if (symbol) {
