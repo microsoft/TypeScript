@@ -6735,7 +6735,7 @@ interface FormData {
 
 declare var FormData: {
     prototype: FormData;
-    new(): FormData;
+    new (form?: HTMLFormElement): FormData;
 }
 
 interface GainNode extends AudioNode {
