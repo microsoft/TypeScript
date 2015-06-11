@@ -8,14 +8,14 @@ tests/cases/compiler/classUpdateTests.ts(63,7): error TS2415: Class 'L' incorrec
 tests/cases/compiler/classUpdateTests.ts(69,7): error TS2415: Class 'M' incorrectly extends base class 'G'.
   Property 'p1' is private in type 'M' but not in type 'G'.
 tests/cases/compiler/classUpdateTests.ts(70,2): error TS2376: A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties.
-tests/cases/compiler/classUpdateTests.ts(93,3): error TS1129: Statement expected.
+tests/cases/compiler/classUpdateTests.ts(93,3): error TS1128: Declaration or statement expected.
 tests/cases/compiler/classUpdateTests.ts(95,1): error TS1128: Declaration or statement expected.
-tests/cases/compiler/classUpdateTests.ts(99,3): error TS1129: Statement expected.
+tests/cases/compiler/classUpdateTests.ts(99,3): error TS1128: Declaration or statement expected.
 tests/cases/compiler/classUpdateTests.ts(101,1): error TS1128: Declaration or statement expected.
-tests/cases/compiler/classUpdateTests.ts(105,3): error TS1129: Statement expected.
+tests/cases/compiler/classUpdateTests.ts(105,3): error TS1128: Declaration or statement expected.
 tests/cases/compiler/classUpdateTests.ts(105,14): error TS1005: ';' expected.
 tests/cases/compiler/classUpdateTests.ts(107,1): error TS1128: Declaration or statement expected.
-tests/cases/compiler/classUpdateTests.ts(111,3): error TS1129: Statement expected.
+tests/cases/compiler/classUpdateTests.ts(111,3): error TS1128: Declaration or statement expected.
 tests/cases/compiler/classUpdateTests.ts(111,15): error TS1005: ';' expected.
 tests/cases/compiler/classUpdateTests.ts(113,1): error TS1128: Declaration or statement expected.
 
@@ -139,7 +139,7 @@ tests/cases/compiler/classUpdateTests.ts(113,1): error TS1128: Declaration or st
     	constructor() {
     		public p1 = 0; // ERROR
     		~~~~~~
-!!! error TS1129: Statement expected.
+!!! error TS1128: Declaration or statement expected.
     	}
     }
     ~
@@ -149,7 +149,7 @@ tests/cases/compiler/classUpdateTests.ts(113,1): error TS1128: Declaration or st
     	constructor() {
     		private p1 = 0; // ERROR
     		~~~~~~~
-!!! error TS1129: Statement expected.
+!!! error TS1128: Declaration or statement expected.
     	}
     }
     ~
@@ -159,7 +159,7 @@ tests/cases/compiler/classUpdateTests.ts(113,1): error TS1128: Declaration or st
     	constructor() {
     		public this.p1 = 0; // ERROR
     		~~~~~~
-!!! error TS1129: Statement expected.
+!!! error TS1128: Declaration or statement expected.
     		           ~
 !!! error TS1005: ';' expected.
     	}
@@ -171,7 +171,7 @@ tests/cases/compiler/classUpdateTests.ts(113,1): error TS1128: Declaration or st
     	constructor() {
     		private this.p1 = 0; // ERROR
     		~~~~~~~
-!!! error TS1129: Statement expected.
+!!! error TS1128: Declaration or statement expected.
     		            ~
 !!! error TS1005: ';' expected.
     	}

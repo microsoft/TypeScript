@@ -262,7 +262,7 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withInsert(oldText, 0, "'strict';\r\n");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 9);
         });
 
         it('Strict mode 2',() => {
@@ -289,7 +289,7 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withDelete(oldText, 0, index);
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 9);
         });
 
         it('Strict mode 4',() => {
@@ -332,7 +332,7 @@ module ts {
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withDelete(oldText, 0, index);
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 24);
         });
 
         it('Parenthesized expression to arrow function 1',() => {
@@ -545,7 +545,7 @@ module ts {
             var index = source.lastIndexOf(";");
             var newTextAndChange = withDelete(oldText, index, 1);
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 11);
         });
 
         it('Edit after empty type parameter list',() => {
@@ -579,7 +579,7 @@ var o2 = { set Foo(val:number) { } };";
             var index = source.indexOf("set");
             var newTextAndChange = withInsert(oldText, index, "public ");
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 6);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 14);
         });
 
         it('Insert parameter ahead of parameter',() => {
@@ -700,7 +700,7 @@ module m3 { }\
             var oldText = ScriptSnapshot.fromString(source);
             var newTextAndChange = withDelete(oldText, 0, "{".length);
 
-            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+            compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 9);
         });
 
         it('Moving methods from class to object literal',() => {
