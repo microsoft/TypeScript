@@ -7,7 +7,8 @@ interface FileInfo {
 }
 
 interface TestLS {
-    runSemanticClassificationForFile(name: string):void;
+    runSemanticClassificationForFile(name: string): void;
+    runGetSemanticDiagnostics(name: string): void;
     incrementVersions(): void;
 }
 
@@ -33,7 +34,12 @@ function prepareTestLS(): TestLS {
 
     return {
         runSemanticClassificationForFile,
-        incrementVersions: () => version++
+        incrementVersions: () => version++,
+        runGetSemanticDiagnostics
+    }
+
+    function runGetSemanticDiagnostics(name: string): void {
+        ls.getSemanticDiagnostics(name);
     }
 
     function runSemanticClassificationForFile(name: string) {

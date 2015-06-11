@@ -2,6 +2,9 @@
     <head>
         <title>WebTSC</title>
         <style>
+            #outputPane {
+                width:200px;
+            }
             #container {
                 width: 100%;
             }
@@ -45,6 +48,11 @@
                 lsTest.runSemanticClassificationForFile("checker.ts");
                 appendText("===doClassify - done===");
             }
+            function doGetDiagnostics() {
+                $("#outputPane").val("");
+                lsTest.runGetSemanticDiagnostics("checker.ts");
+                appendText("===doGetDiagnostics - done===");
+            }
             function doModify() {
                 lsTest.incrementVersions();
                 $("#outputPane").val("");
@@ -65,6 +73,7 @@
                 <div id="side">
                     <button onclick="doClassify()">Run semantic classification</button>
                     <button onclick="doModify()">Mark files as modified (causes up-to-date check to fail)</button>
+                    <button onclick="doGetDiagnostics()">Get semantic diagnostics</button>
                 </div>
             </div>
         </div>
