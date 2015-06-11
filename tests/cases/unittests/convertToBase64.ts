@@ -1,4 +1,4 @@
-﻿/// <reference path="..\..\..\src\harness\harness.ts" />
+/// <reference path="..\..\..\src\harness\harness.ts" />
 
 module ts {
     describe('convertToBase64', () => {
