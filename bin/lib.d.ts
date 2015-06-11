@@ -9739,7 +9739,7 @@ interface HTMLSelectElement extends HTMLElement {
       * Sets or retrieves the name of the object.
       */
     name: string;
-    options: HTMLSelectElement;
+    options: NodeListOf<HTMLOptionElement>;
     /**
       * When present, marks an element that can't be submitted without a value.
       */
