@@ -610,7 +610,7 @@ module ts {
             // If we're in strict mode, and we didn't have any parse diagnostics, then see if this
             // node has any strict mode issues.
             if (inStrictMode && noParseDiagnostics) {
-                checkStrictNode(node);
+                checkStrictMode(node);
             }
 
             // First we bind declaration nodes to a symbol if possible.  We'll both create a symbol
@@ -644,14 +644,16 @@ module ts {
                 file, span.start, span.length, message, arg0, arg1, arg2));
         }
 
-        function isReservedWord(node: Identifier): boolean {
+        function isReservedWordInStrictMode(node: Identifier): boolean {
             // Check that originalKeywordKind is less than LastFutureReservedWord to see if an Identifier is a strict-mode reserved word
             return SyntaxKind.FirstFutureReservedWord <= node.originalKeywordKind &&
                 node.originalKeywordKind <= SyntaxKind.LastFutureReservedWord;
         }
 
-        function checkStrictNode(node: Node): void {
+        function checkStrictMode(node: Node): void {
             switch (node.kind) {
+                case SyntaxKind.ClassDeclaration:
+                    return checkClassDeclarationInStrictMode(<ClassDeclaration>node);
                 case SyntaxKind.DeleteExpression:
                     return checkDeleteExpressionInStrictMode(<DeleteExpression>node);
                 case SyntaxKind.ExpressionWithTypeArguments:
@@ -659,16 +661,56 @@ module ts {
                 case SyntaxKind.ImportDeclaration:
                     return checkImportDeclarationInStrictMode(<ImportDeclaration>node);
                 case SyntaxKind.ImportEqualsDeclaration:
-
+                    return checkImportEqualsDeclarationInStrictMode(<ImportEqualsDeclaration>node);
+                case SyntaxKind.TypeParameter:
+                    return checkTypeParameterInStrictMode(<TypeParameterDeclaration>node);
                 case SyntaxKind.WithStatement:
                     return checkWithStatementInStrictMode(<WithStatement>node);
             }
         }
 
+        function checkTypeParameterInStrictMode(node: TypeParameterDeclaration) {
+            checkGrammarDeclarationNameInStrictMode(node);
+        }
+
+        function checkImportEqualsDeclarationInStrictMode(node: ImportEqualsDeclaration) {
+            checkGrammarDeclarationNameInStrictMode(node);
+        }
+
+        function checkGrammarDeclarationNameInStrictMode(node: Declaration): void {
+            let name = node.name;
+            if (name && name.kind === SyntaxKind.Identifier && isReservedWordInStrictMode(<Identifier>name)) {
+                let nameText = declarationNameToString(name, file);
+                switch (node.kind) {
+                    case SyntaxKind.Parameter:
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.TypeParameter:
+                    case SyntaxKind.BindingElement:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.TypeAliasDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                        return checkGrammarIdentifierInStrictMode(<Identifier>name);
+
+                    case SyntaxKind.ClassDeclaration:
+                        // Report an error if the class declaration uses strict-mode reserved word.
+                        return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode, nameText);
+
+                    case SyntaxKind.ModuleDeclaration:
+                        // Report an error if the module declaration uses strict-mode reserved word.
+                        // TODO(yuisu): fix this when having external module in strict mode
+                        return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
+
+                    case SyntaxKind.ImportEqualsDeclaration:
+                        // TODO(yuisu): fix this when having external module in strict mode
+                        return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
+                }
+            }
+        }
 
         // The function takes an identifier itself or an expression which has SyntaxKind.Identifier.
         function checkGrammarIdentifierInStrictMode(node: Expression | Identifier, nameText?: string): void {
-            if (node && node.kind === SyntaxKind.Identifier && isReservedWord(<Identifier>node)) {
+            if (node && node.kind === SyntaxKind.Identifier && isReservedWordInStrictMode(<Identifier>node)) {
                 if (!nameText) {
                     nameText = declarationNameToString(<Identifier>node, file);
                 }
@@ -725,7 +767,7 @@ module ts {
                     let nameBindings = importClause.namedBindings;
                     if (nameBindings.kind === SyntaxKind.NamespaceImport) {
                         let name = <Identifier>(<NamespaceImport>nameBindings).name;
-                        if (isReservedWord(name)) {
+                        if (isReservedWordInStrictMode(name)) {
                             let nameText = declarationNameToString(name);
                             return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
                         }
@@ -734,7 +776,7 @@ module ts {
                         let reportError = false;
                         for (let element of (<NamedImports>nameBindings).elements) {
                             let name = element.name;
-                            if (isReservedWord(name)) {
+                            if (isReservedWordInStrictMode(name)) {
                                 let nameText = declarationNameToString(name);
                                 return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode, nameText);
                             }
