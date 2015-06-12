@@ -4801,14 +4801,14 @@ module ts {
         // some level beyond that.
         function isDeeplyNestedGeneric(type: Type, stack: Type[], depth: number): boolean {
             // We track type references (created by createTypeReference) and instantiated types (created by instantiateType)
-            if (type.flags & (TypeFlags.Reference | TypeFlags.Instantiated) && depth >= 10) {
+            if (type.flags & (TypeFlags.Reference | TypeFlags.Instantiated) && depth >= 5) {
                 let symbol = type.symbol;
                 let count = 0;
                 for (let i = 0; i < depth; i++) {
                     let t = stack[i];
                     if (t.flags & (TypeFlags.Reference | TypeFlags.Instantiated) && t.symbol === symbol) {
                         count++;
-                        if (count >= 10) return true;
+                        if (count >= 5) return true;
                     }
                 }
             }
