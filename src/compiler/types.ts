@@ -1026,6 +1026,8 @@ module ts {
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: number[];
+
+        /* @internal */ classifiableNames?: Map<string>;
     }
 
     export interface ScriptReferenceHost {
@@ -1076,6 +1078,8 @@ module ts {
         // For testing purposes only.  Should not be used by any other consumers (including the
         // language service).
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
+
+        /* @internal */ getClassifiableNames(): Map<string>;
 
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;
@@ -1364,6 +1368,11 @@ module ts {
         IsContainer = HasLocals | HasExports | HasMembers,
         PropertyOrAccessor = Property | Accessor,
         Export = ExportNamespace | ExportType | ExportValue,
+
+        /* @internal */
+        // The set of things we consider semantically classifiable.  Used to speed up the LS during 
+        // classification.
+        Classifiable = Class | Enum | TypeAlias | Interface | TypeParameter | Module,
     }
 
     export interface Symbol {
