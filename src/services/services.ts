@@ -6005,7 +6005,7 @@ namespace ts {
 
             function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning): ClassificationType {
                 let flags = symbol.getFlags();
-                if ((flags & SymbolFlags.Classifiable) === 0) {
+                if ((flags & SymbolFlags.Classifiable) === SymbolFlags.None) {
                     return;
                 }
 
