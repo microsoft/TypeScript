@@ -814,6 +814,7 @@ module Harness {
             sourceText: string,
             languageVersion: ts.ScriptTarget,
             assertInvariants: boolean) {
+
             // Only set the parent nodes if we're asserting invariants.  We don't need them otherwise.
             var result = ts.createSourceFile(fileName, sourceText, languageVersion, /*setParentNodes:*/ assertInvariants);
 
@@ -996,7 +997,8 @@ module Harness {
                     programFiles.push(defaultLibFileName);
                 }
 
-                var compilerHost = createCompilerHost(inputFiles.concat(includeBuiltFiles).concat(otherFiles),
+                var compilerHost = createCompilerHost(
+                    inputFiles.concat(includeBuiltFiles).concat(otherFiles),
                     (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark }),
                     options.target, useCaseSensitiveFileNames, currentDirectory, options.newLine);
                 var program = ts.createProgram(programFiles, options, compilerHost);
@@ -1012,7 +1014,7 @@ module Harness {
                 // reset what newline means in case the last test changed it
                 ts.sys.newLine = newLine;
                 return options;
-
+                
                 function setCompilerOptionForSetting(setting: Harness.TestCaseParser.CompilerSetting) {
                     switch (setting.flag.toLowerCase()) {
                         // "fileName", "comments", "declaration", "module", "nolib", "sourcemap", "target", "out", "outdir", "noimplicitany", "noresolve"
